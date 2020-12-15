@@ -1,0 +1,11 @@
+{
+  "name": "sn-table",
+  "version": "0.1.0",
+  "description": "",
+  "author": {
+    "name": "QLIK",
+  },
+  "icon": "extension",
+  "type": "visualization",
+  "supernova": true
+}

@@ -1,0 +1,69 @@
+{
+  "scriptappy": "1.0.0",
+  "info": {
+    "name": "sn-table:properties",
+    "description": "Table generic object definition",
+    "version": "1.0.0",
+    "license": "MIT",
+    "stability": "experimental",
+    "x-qlik-visibility": "public"
+  },
+  "entries": {
+    "properties": {
+      "kind": "object",
+      "entries": {
+        "footnote": {
+          "optional": true,
+          "defaultValue": "",
+          "type": "string"
+        },
+        "qHyperCubeDef": {
+          "kind": "object",
+          "entries": {
+            "qCalcCondition": {
+              "type": "NxCalcCond"
+            },
+            "qSuppressMissing": {
+              "defaultValue": true,
+              "type": "boolean"
+            },
+            "qSuppressZero": {
+              "defaultValue": true,
+              "type": "boolean"
+            }
+          }
+        },
+        "showTitles": {
+          "optional": true,
+          "defaultValue": true,
+          "type": "boolean"
+        },
+        "subtitle": {
+          "optional": true,
+          "defaultValue": "",
+          "type": "string"
+        },
+        "title": {
+          "optional": true,
+          "defaultValue": "",
+          "type": "string"
+        },
+        "totals": {
+          "kind": "object",
+          "entries": {
+            "show": {
+              "defaultValue": false,
+              "type": "boolean"
+            }
+          }
+        },
+        "version": {
+          "description": "Current version of this generic object definition",
+          "defaultValue": "1.0.0",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "definitions": {}
+}
