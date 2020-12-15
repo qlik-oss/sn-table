@@ -1,6 +1,16 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "local>qlik-oss/renovate-config"
-  ]
+    "qlik-oss"
+  ],
+  "circleci": {
+    "ignoreDeps": ["circleci/node"]
+  },
+  "semanticCommits": true,
+  "rangeStrategy": "bump",
+  "packageRules": [{
+    "depTypeList": [
+      "engines"
+    ],
+    "enabled": false
+  }]
 }
