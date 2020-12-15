@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,22 +8,21 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 
-
-
 export default function TheTable(props) {
-  const {tableData, setPageInfo, pageInfo, CellHOC, columnRenderers} = props;
+  const { tableData, setPageInfo, pageInfo, CellHOC, columnRenderers } = props;
   const { size, rows, columns } = tableData;
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(100);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(100);
 
   const handleChangePage = (event, newPage) => {
-    setPageInfo({top: newPage * rowsPerPage, height: rowsPerPage})
+    setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
     setPage(newPage);
   };
 
+  // should trigger reload
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
-    setPageInfo({top: 0, height: rowsPerPage})
+    setPageInfo({ top: 0, height: rowsPerPage });
     setPage(0);
   };
 
@@ -34,11 +33,7 @@ export default function TheTable(props) {
           <TableHead>
             <TableRow>
               {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
+                <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
                   {column.label}
                 </TableCell>
               ))}
@@ -52,15 +47,14 @@ export default function TheTable(props) {
                     const cell = row[column.id];
                     const value = cell.qText;
                     const CellRenderer = columnRenderers[i];
-                    return (
-                      CellRenderer ?
-                        <CellRenderer cell={cell} column={column} value={value} key={column.id} align={column.align}>
-                          {value}
-                        </CellRenderer>
-                        :
-                        <TableCell key={column.id} align={column.align}>
-                          {value}
-                        </TableCell>
+                    return CellRenderer ? (
+                      <CellRenderer cell={cell} column={column} value={value} key={column.id} align={column.align}>
+                        {value}
+                      </CellRenderer>
+                    ) : (
+                      <TableCell key={column.id} align={column.align}>
+                        {value}
+                      </TableCell>
                     );
                   })}
                 </TableRow>
