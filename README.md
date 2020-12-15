@@ -13,7 +13,7 @@ import table from '@nebula.js/sn-table';
 
 // 'app' is an enigma app model
 const nuked = embed(app, {
-  types: [{ // register the action button object
+  types: [{ // register the table object
     name: 'table',
     load: () => Promise.resolve(table);
   }]
