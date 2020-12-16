@@ -41,7 +41,7 @@ export function render(element, props) {
   const theme = createMuiTheme(sproutBase);
   ReactDOM.render(
     <ThemeProvider generateClassName={generateClassName} theme={theme}>
-      <TheTable {...props} columnRenderers={columnRenderers} />
+      <TheTable {...props} rootElement={element} columnRenderers={columnRenderers} />
     </ThemeProvider>,
     element
   );

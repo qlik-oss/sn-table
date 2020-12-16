@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import handleCellKeyDown from './cells/handle-cell-key-down';
 
 export default function TheTable(props) {
-  const { tableData, setPageInfo, pageInfo, CellHOC, columnRenderers } = props;
+  const { tableData, setPageInfo, pageInfo, CellHOC, columnRenderers, rootElement } = props;
   const { size, rows, columns } = tableData;
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
@@ -30,24 +30,34 @@ export default function TheTable(props) {
   return (
     <Paper>
       <TableContainer>
-        <Table stickyHeader aria-label="sticky table">
+        <Table stickyHeader aria-label="sticky table" className="sn-table">
           <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
-                  {column.label}
-                </TableCell>
-              ))}
+            <TableRow className="sn-table-row">
+              {columns.map((column, j) => {
+                // TODO replace with proper place to start focus
+                const tabIndex = j === 0 ? '0' : '-1';
+                return (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                    className="sn-table-cell"
+                    tabIndex={tabIndex}
+                    onKeyDown={(e) => handleCellKeyDown(e, rootElement, 0, j)}
+                  >
+                    {column.label}
+                  </TableCell>
+                );
+              })}
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row, i) => {
               return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                <TableRow hover role="checkbox" tabIndex={-1} key={row.code} className="sn-table-row">
                   {columns.map((column, j) => {
                     const cell = row[column.id];
                     const value = cell.qText;
-                    const tabIndex = i === 0 && j === 0 ? '0' : '-1';
                     const CellRenderer = columnRenderers[j];
                     return CellRenderer ? (
                       <CellRenderer
@@ -56,13 +66,20 @@ export default function TheTable(props) {
                         value={value}
                         key={column.id}
                         align={column.align}
-                        tabIndex={tabIndex}
-                        onKeyDown={(e) => handleCellKeyDown(e, i, j)}
+                        tabIndex={-1}
+                        onKeyDown={(e) => handleCellKeyDown(e, rootElement, i + 1, j)}
+                        className="sn-table-cell"
                       >
                         {value}
                       </CellRenderer>
                     ) : (
-                      <TableCell key={column.id} align={column.align} onKeyDown={(e) => handleCellKeyDown(e, i, j)} tabIndex={tabIndex}>
+                      <TableCell
+                        key={column.id}
+                        align={column.align}
+                        onKeyDown={(e) => handleCellKeyDown(e, rootElement, i + 1, j)}
+                        tabIndex={-1}
+                        className="sn-table-cell"
+                      >
                         {value}
                       </TableCell>
                     );
