@@ -13,7 +13,7 @@ export default function withSelections(CellComponent) {
     render() {
       const { cell, column } = this.props;
       const style = oddlyGlobalSelectionState[cell.qElemNumber] ? { 'background-color': '#00ff00' } : {};
-      return <CellComponent style={style} {...this.props} onClick={() => selectCell(cell, column)} />;
+      return <CellComponent {...this.props} style={style} onClick={() => selectCell(cell, column)} />;
     }
   }
   return HOC;
