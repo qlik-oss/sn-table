@@ -1,52 +1,112 @@
-import ReactDOM from 'react-dom';
-import React from 'react';
-import { ThemeProvider, createGenerateClassName, createMuiTheme } from '@material-ui/core/styles';
-import { sproutBase } from '@qlik/sprout-theme';
-import TheTable from './component';
-import getCellRenderer from './cells/renderer';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import handleCellKeyDown from './cells/handle-cell-key-down';
 
-export function render(element, props) {
-  const { constraints, tableData } = props;
-  sproutBase.overrides.MuiTableContainer.root.height = 'calc(100% - 52px)';
-  sproutBase.overrides.MuiTableContainer.root.overflow = !constraints.active ? 'auto' : 'hidden';
-  sproutBase.overrides.MuiPaper = { root: { height: '100%' } };
+export default function TableWrapper(props) {
+  const { tableData, setPageInfo, columnRenderers, rootElement } = props;
+  const { size, rows, columns } = tableData;
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(100);
 
-  const columnRenderers = tableData.columns.map(getCellRenderer);
+  const handleChangePage = (event, newPage) => {
+    setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
+    setPage(newPage);
+  };
 
-  function generateRandomString(keyLength) {
-    let result = '';
-    let i;
-    let j;
+  // should trigger reload
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPageInfo({ top: 0, height: rowsPerPage });
+    setPage(0);
+  };
 
-    for (i = 0; i < keyLength; i++) {
-      j = Math.floor(Math.random() * 62);
-      if (j < 10) {
-        result += j;
-      } else if (j > 9 && j < 36) {
-        result += String.fromCharCode(j + 55);
-      } else {
-        result += String.fromCharCode(j + 61);
-      }
-    }
-
-    return result;
-  }
-
-  const generateClassName = createGenerateClassName({
-    productionPrefix: 'sn-t',
-    disableGlobal: true,
-    seed: generateRandomString(6),
-  });
-
-  const theme = createMuiTheme(sproutBase);
-  ReactDOM.render(
-    <ThemeProvider generateClassName={generateClassName} theme={theme}>
-      <TheTable {...props} rootElement={element} columnRenderers={columnRenderers} />
-    </ThemeProvider>,
-    element
+  return (
+    <Paper>
+      <TableContainer>
+        <Table stickyHeader aria-label="sticky table" className="sn-table">
+          <TableHead>
+            <TableRow className="sn-table-row">
+              {columns.map((column, j) => {
+                // TODO replace with proper place to start focus
+                const tabIndex = j === 0 ? '0' : '-1';
+                return (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                    className="sn-table-cell"
+                    tabIndex={tabIndex}
+                    onKeyDown={(e) => handleCellKeyDown(e, rootElement, 0, j)}
+                  >
+                    {column.label}
+                  </TableCell>
+                );
+              })}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row, i) => {
+              return (
+                <TableRow hover role="checkbox" tabIndex={-1} key={row.code} className="sn-table-row">
+                  {columns.map((column, j) => {
+                    const cell = row[column.id];
+                    const value = cell.qText;
+                    const CellRenderer = columnRenderers[j];
+                    return CellRenderer ? (
+                      <CellRenderer
+                        cell={cell}
+                        column={column}
+                        value={value}
+                        key={column.id}
+                        align={column.align}
+                        tabIndex={-1}
+                        onKeyDown={(e) => handleCellKeyDown(e, rootElement, i + 1, j)}
+                        className="sn-table-cell"
+                      >
+                        {value}
+                      </CellRenderer>
+                    ) : (
+                      <TableCell
+                        key={column.id}
+                        align={column.align}
+                        onKeyDown={(e) => handleCellKeyDown(e, rootElement, i + 1, j)}
+                        tabIndex={-1}
+                        className="sn-table-cell"
+                      >
+                        {value}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count={size.qcy}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+      />
+    </Paper>
   );
 }
 
-export function teardown(element) {
-  ReactDOM.unmountComponentAtNode(element);
-}
+TableWrapper.propTypes = {
+  tableData: PropTypes.object.isRequired,
+  setPageInfo: PropTypes.func.isRequired,
+  columnRenderers: PropTypes.array.isRequired,
+  rootElement: PropTypes.element.isRequired,
+};

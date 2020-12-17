@@ -33,15 +33,14 @@ function getColumnInfo(layout, colIndex) {
 
 export default async function manageData(model, layout, pageInfo) {
   const columnorder = getColumnOrder(layout);
+  const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
+    { qTop: pageInfo.top, qLeft: 0, qHeight: pageInfo.height, qWidth: columnorder.length },
+  ]);
+  const matrix = dataPages[0].qMatrix;
 
   const columns = columnorder.map((c) => {
     return getColumnInfo(layout, c);
   });
-  const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
-    { qTop: pageInfo.top, qLeft: 0, qHeight: pageInfo.height, qWidth: columnorder.length },
-  ]);
-
-  const matrix = dataPages[0].qMatrix;
   const rows = matrix.map((r) => {
     const row = {};
     columns.forEach((c, i) => {
