@@ -2,7 +2,7 @@ import { useElement, useLayout, useEffect, useModel, useState, useConstraints } 
 import properties from './object-properties';
 import data from './data';
 import ext from './ext';
-import { render, teardown } from './table/table';
+import { render, teardown } from './table/root';
 import manageData from './table/handle-data';
 
 export default function supernova(env) {
