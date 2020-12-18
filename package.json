@@ -1,7 +1,7 @@
 {
   "name": "sn-table",
   "version": "0.1.0",
-  "description": "",
+  "description": "Supernova table",
   "license": "MIT",
   "author": {
     "name": "QLIK"
@@ -11,6 +11,10 @@
     "nebula",
     "stardust"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qlik-oss/sn-action-button.git"
+  },
   "files": [
     "dist"
   ],
@@ -26,6 +30,7 @@
     "start": "nebula serve --build false  --type sn-table",
     "sense": "nebula sense",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
+    "test:unit": "aw -c aw.config.js",
     "test:integration": "aw puppet --testExt '*.int.js' --glob 'test/integration/**/*.int.js'"
   },
   "devDependencies": {
@@ -33,6 +38,7 @@
     "@babel/cli": "^7.11.6",
     "@babel/core": "^7.11.6",
     "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-transform-react-jsx": "^7.10.4",
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
     "@material-ui/core": "^4.11.0",
