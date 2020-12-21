@@ -55,7 +55,7 @@ jobs:
       - image: browserless/chrome:1.37.0-puppeteer-1.20.0
     steps:
       - attach_workspace:
-          at: ~/tablef
+          at: ~/table
       - run:
           name: Build
           command: yarn run build
