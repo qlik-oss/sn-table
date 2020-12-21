@@ -1,7 +1,16 @@
+const specFiles = ['src/**/*.spec.js'];
+
 module.exports = {
+  glob: specFiles,
+  src: [],
+  watchGlob: specFiles,
   coverage: true,
+  warnings: true,
+  mocha: {
+    bail: false,
+    reporter: 'min',
+  },
   mocks: [],
-  glob: 'src/**/*.spec.js',
   nyc: {
     reportDir: 'coverage/unit',
   },
