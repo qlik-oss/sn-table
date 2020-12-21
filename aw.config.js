@@ -11,9 +11,6 @@ module.exports = {
     reporter: 'min',
   },
   mocks: [],
-  nyc: {
-    reportDir: 'coverage/unit',
-  },
   babel: {
     options: {
       presets: [
