@@ -55,7 +55,7 @@ jobs:
       - image: browserless/chrome:1.37.0-puppeteer-1.20.0
     steps:
       - attach_workspace:
-          at: ~/kpi
+          at: ~/tablef
       - run:
           name: Build
           command: yarn run build
@@ -76,7 +76,7 @@ jobs:
       # - store_test_results:
       #     path: coverage/junit
       - persist_to_workspace:
-          root: ~/kpi
+          root: ~/table
           paths:
             - dist
             - package.json
@@ -87,10 +87,10 @@ jobs:
       - image: circleci/node:10.19.0
     steps:
       - attach_workspace:
-          at: ~/kpi
-      - run: mv ./dist sn-kpi && zip -r "sn-kpi.zip" "./sn-kpi"
+          at: ~/table
+      - run: mv ./dist sn-table && zip -r "sn-table.zip" "./sn-table"
       - store_artifacts:
-          path: ./sn-kpi.zip
+          path: ./sn-table.zip
 
   publish:
     <<: *defaults
@@ -98,7 +98,7 @@ jobs:
       - image: circleci/node:10.19.0
     steps:
       - attach_workspace:
-          at: ~/kpi
+          at: ~/table
       - run:
           name: Setup npm
           command: |
