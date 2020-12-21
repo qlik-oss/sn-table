@@ -62,10 +62,16 @@ jobs:
       - run:
           name: Lint
           command: yarn run lint
-      # - run:
-      #     name: Unit tests
-      #     command: |
-      #       npx aw -c aw.config.js --mocha.bail false --mocha.reporter mocha-junit-reporter --mocha.reporterOptions.mochaFile ./coverage/junit/junit.xml
+      - run:
+          name: Run unit tests and publish to codeclimate
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-0.8.0-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+            ./cc-test-reporter before-build
+            yarn test:unit -- --mocha.bail false
+            ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
+      - store_artifacts:
+          path: coverage
       #  - run:
       #      name: Integration tests
       #      command: |
@@ -73,8 +79,8 @@ jobs:
       #        APP_ID=$DocId yarn run test:integration --chrome.browserWSEndpoint "ws://localhost:3000" --no-launch
       # - store_artifacts:
       #     path: ./test/integration/__artifacts__
-      # - store_test_results:
-      #     path: coverage/junit
+      - store_test_results:
+          path: coverage/junit
       - persist_to_workspace:
           root: ~/table
           paths:
