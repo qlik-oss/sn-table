@@ -1,7 +1,138 @@
-version: 2.1
-orbs:
-  node: circleci/node@3.0.0
+version: 2
+
+defaults: &defaults
+  working_directory: ~/table
+  # Available images https://hub.docker.com/r/circleci/node/tags/
+
+aliases:
+  - &restore_yarn_cache
+    name: Restore yarn cache
+    keys:
+      - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - yarn-packages-{{ .Branch }}
+      - yarn-packages-
+  - &save_yarn_cache
+    name: Save yarn cache
+    paths:
+      - ~/.cache/yarn
+    key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+  - &filter_master
+    branches:
+      only: master
+  - &attach
+    at: ~/project
+
+jobs:
+  install:
+    <<: *defaults
+    docker:
+      - image: circleci/node:10.19.0
+    steps:
+      - checkout
+      - restore_cache: *restore_yarn_cache
+      # - run:
+      #     name: Setup access to Artifactory
+      #     command: |
+      #       set -euo pipefail
+      #       curl -u $ARTIFACTORY_USER:$ARTIFACTORY_PWD $ARTIFACTORY_URL/api/npm/npm-local/auth/qlik > ~/.npmrc
+      - run: yarn install --frozen-lockfile
+      - save_cache: *save_yarn_cache
+
+      - store_artifacts:
+          path: package.json
+
+      - persist_to_workspace:
+          root: ~/table
+          paths:
+            - .
+
+  build:
+    <<: *defaults
+    docker:
+      - image: circleci/node:10.19.0
+      - image: qlikcore/engine:12.657.0
+        command: -S AcceptEULA=yes
+      - image: browserless/chrome:1.37.0-puppeteer-1.20.0
+    steps:
+      - attach_workspace:
+          at: ~/kpi
+      - run:
+          name: Build
+          command: yarn run build
+      - run:
+          name: Lint
+          command: yarn run lint
+      # - run:
+      #     name: Unit tests
+      #     command: |
+      #       npx aw -c aw.config.js --mocha.bail false --mocha.reporter mocha-junit-reporter --mocha.reporterOptions.mochaFile ./coverage/junit/junit.xml
+      #  - run:
+      #      name: Integration tests
+      #      command: |
+      #       DocId=$(curl -s --data-binary @data/apps/org-chart-test.qvf http://localhost:9076/v1/apps/import | jq -r '.attributes.id')
+      #        APP_ID=$DocId yarn run test:integration --chrome.browserWSEndpoint "ws://localhost:3000" --no-launch
+      # - store_artifacts:
+      #     path: ./test/integration/__artifacts__
+      # - store_test_results:
+      #     path: coverage/junit
+      - persist_to_workspace:
+          root: ~/kpi
+          paths:
+            - dist
+            - package.json
+
+  publish-dev:
+    <<: *defaults
+    docker:
+      - image: circleci/node:10.19.0
+    steps:
+      - attach_workspace:
+          at: ~/kpi
+      - run: mv ./dist sn-kpi && zip -r "sn-kpi.zip" "./sn-kpi"
+      - store_artifacts:
+          path: ./sn-kpi.zip
+
+  publish:
+    <<: *defaults
+    docker:
+      - image: circleci/node:10.19.0
+    steps:
+      - attach_workspace:
+          at: ~/kpi
+      - run:
+          name: Setup npm
+          command: |
+            set -eo pipefail
+            # Amend auth token for access to public npm registry for @nebula.js packages
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      - run:
+          name: Publish
+          command: |
+            set -euo pipefail
+            PROJ_VER=v$(cat package.json | jq -r '.version')
+            TAG_NAME=$(git tag --points-at HEAD)
+
+            if [ "$TAG_NAME" == "$PROJ_VER" ]
+            then
+              echo "Running >> npm publish"
+              npm publish
+            fi
+
 workflows:
-  node-tests:
+  version: 2
+  build-all:
     jobs:
-      - node/test
+      - install
+      - build:
+          requires:
+            - install
+      - publish-dev:
+          requires:
+            - build
+      # - publish:
+      #     requires:
+      #       - build
+      #     filters:
+      #       branches:
+      #         only:
+      #           - master
