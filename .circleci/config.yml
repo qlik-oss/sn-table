@@ -62,15 +62,16 @@ jobs:
       - run:
           name: Lint
           command: yarn run lint
-      - run:
-          name: Setup codecllimate test-reporter
-          command: |
-            # download test reporter as a static binary
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-            chmod +x ./cc-test-reporter
+      # - run:
+      #     name: Setup codecllimate test-reporter
+      #     command: |
+      #       # download test reporter as a static binary
+
       - run:
           name: Run unit tests and publish to codeclimate
           command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporte
             ./cc-test-reporter before-build
             yarn test:unit -- --mocha.bail false
             ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
