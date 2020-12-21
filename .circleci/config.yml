@@ -63,9 +63,19 @@ jobs:
           name: Lint
           command: yarn run lint
       - run:
-          name: Unit tests
+          name: Setup codecllimate test-reporter
           command: |
-            npx aw -c aw.config.js --mocha.bail false --mocha.reporter mocha-junit-reporter --mocha.reporterOptions.mochaFile ./coverage/junit/junit.xml
+            # download test reporter as a static binary
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - run:
+          name: Run unit tests and publish to codeclimate
+          command: |
+            ./cc-test-reporter before-build
+            yarn test:unit -- --mocha.bail false
+            ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
+      - store_artifacts:
+          path: coverage
       #  - run:
       #      name: Integration tests
       #      command: |
