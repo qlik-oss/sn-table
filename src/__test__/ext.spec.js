@@ -16,7 +16,7 @@ describe('ext', () => {
       index = 2;
 
       indexAdded(array, index);
-      expect(array).to.deep.equal([0, 1, 2]);
+      expect(array).to.eql([0, 1, 2]);
     });
 
     it('should add index in the end of array and increment elements that are >= index', () => {
@@ -24,7 +24,7 @@ describe('ext', () => {
       index = 1;
 
       indexAdded(array, index);
-      expect(array).to.deep.equal([2, 0, 3, 1]);
+      expect(array).to.eql([2, 0, 3, 1]);
     });
   });
 
@@ -37,7 +37,7 @@ describe('ext', () => {
       index = 2;
 
       indexRemoved(array, index);
-      expect(array).to.deep.equal([0, 1]);
+      expect(array).to.eql([0, 1]);
     });
 
     it('should remove index the array and decrement', () => {
@@ -45,7 +45,7 @@ describe('ext', () => {
       index = 2;
 
       indexRemoved(array, index);
-      expect(array).to.deep.equal([1, 0, 2]);
+      expect(array).to.eql([1, 0, 2]);
     });
 
     describe('min', () => {
@@ -87,14 +87,14 @@ describe('ext', () => {
       describe('add', () => {
         it('should update columnWidths', () => {
           measures.add(null, null, hcHandler);
-          expect(hcHandler.hcProperties.columnWidths).to.deep.equal([1, 1, -1]);
+          expect(hcHandler.hcProperties.columnWidths).to.eql([1, 1, -1]);
         });
       });
 
       describe('remove', () => {
         it('should update columnWidths', () => {
           measures.remove(null, null, hcHandler, 1);
-          expect(hcHandler.hcProperties.columnWidths).to.deep.equal([1]);
+          expect(hcHandler.hcProperties.columnWidths).to.eql([1]);
         });
       });
 
@@ -104,14 +104,14 @@ describe('ext', () => {
         describe('add', () => {
           it('should update columnWidths', () => {
             dimensions.add(null, null, hcHandler);
-            expect(hcHandler.hcProperties.columnWidths).to.deep.equal([-1, 1, 1]);
+            expect(hcHandler.hcProperties.columnWidths).to.eql([-1, 1, 1]);
           });
         });
 
         describe('remove', () => {
           it('should update columnWidths', () => {
             dimensions.remove(null, null, hcHandler, 1);
-            expect(hcHandler.hcProperties.columnWidths).to.deep.equal([1]);
+            expect(hcHandler.hcProperties.columnWidths).to.eql([1]);
           });
         });
       });

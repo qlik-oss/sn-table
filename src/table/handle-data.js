@@ -1,33 +1,23 @@
-function getColumnOrder(layout) {
+export function getColumnOrder(layout) {
   const { qColumnOrder, qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
-  if (qColumnOrder && qColumnOrder.length === qDimensionInfo.length + qMeasureInfo.length) {
+  if (qColumnOrder?.length === qDimensionInfo.length + qMeasureInfo.length) {
     return qColumnOrder;
   }
   return [...Array(qDimensionInfo.length + qMeasureInfo.length).keys()];
 }
 
-function getColumnInfo(layout, colIndex) {
+export function getColumnInfo(layout, colIndex) {
   const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
-  if (colIndex >= numDims) {
-    const m = qMeasureInfo[colIndex - numDims];
-    return {
-      isDim: false,
-      width: 200,
-      label: m.qFallbackTitle,
-      dataKey: m.cId,
-      id: m.cId,
-      align: 'right',
-    };
-  }
-  const d = qDimensionInfo[colIndex];
+  const isDim = colIndex < numDims;
+  const info = isDim ? qDimensionInfo[colIndex] : qMeasureInfo[colIndex - numDims];
   return {
-    isDim: true,
+    isDim,
     width: 200,
-    label: d.qFallbackTitle,
-    dataKey: d.cId,
-    id: d.cId,
-    align: 'left',
+    label: info.qFallbackTitle,
+    dataKey: info.cId,
+    id: info.cId,
+    align: isDim ? 'left' : 'right',
   };
 }
 
