@@ -6,11 +6,10 @@ describe('ext', () => {
       get: sinon.spy(),
     },
   };
+  let array;
+  let index;
 
   describe('indexAdded', () => {
-    let array;
-    let index;
-
     it('should add index in the end of array', () => {
       array = [0, 1];
       index = 2;
@@ -29,9 +28,6 @@ describe('ext', () => {
   });
 
   describe('indexRemoved', () => {
-    let array;
-    let index;
-
     it('should remove index from the array', () => {
       array = [0, 2, 1];
       index = 2;
