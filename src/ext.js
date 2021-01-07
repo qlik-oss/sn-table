@@ -1,4 +1,4 @@
-function indexAdded(array, index) {
+export function indexAdded(array, index) {
   /* eslint-disable no-param-reassign */
   let i;
   for (i = 0; i < array.length; ++i) {
@@ -10,7 +10,7 @@ function indexAdded(array, index) {
   /* eslint-enable no-param-reassign */
 }
 
-function indexRemoved(array, index) {
+export function indexRemoved(array, index) {
   /* eslint-disable no-param-reassign */
   let removeIndex = 0;
   let i;
@@ -24,6 +24,14 @@ function indexRemoved(array, index) {
   array.splice(removeIndex, 1);
   return removeIndex;
   /* eslint-enable no-param-reassign */
+}
+
+export function min(nDimsOrMeas) {
+  return nDimsOrMeas > 0 ? 0 : 1;
+}
+
+export function getDescription(env) {
+  return env.translator.get('Visualizations.Descriptions.Column');
 }
 
 export default function ext(env) {
@@ -164,13 +172,9 @@ export default function ext(env) {
     },
     data: {
       measures: {
-        min(nDims) {
-          return nDims > 0 ? 0 : 1;
-        },
+        min,
         max: 1000,
-        description() {
-          return env.translator.get('Visualizations.Descriptions.Column');
-        },
+        description: () => getDescription(env),
         add(measure, data, hcHandler) {
           const { qColumnOrder, columnWidths } = hcHandler.hcProperties;
           const ix = hcHandler.getDimensions().length + hcHandler.getMeasures().length - 1;
@@ -187,13 +191,9 @@ export default function ext(env) {
         },
       },
       dimensions: {
-        min(nMes) {
-          return nMes > 0 ? 0 : 1;
-        },
+        min,
         max: 1000,
-        description() {
-          return env.translator.get('Visualizations.Descriptions.Column');
-        },
+        description: () => getDescription(env),
         add(dimension, data, hcHandler) {
           const { qColumnOrder, columnWidths } = hcHandler.hcProperties;
           const ix = hcHandler.getDimensions().length - 1;

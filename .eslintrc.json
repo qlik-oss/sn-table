@@ -1,5 +1,6 @@
 {
   "root": true,
+  "parser": "babel-eslint",
   "env": {
     "browser": true
   },
@@ -15,6 +16,7 @@
     "prettier/prettier": 2,
     "no-unused-expressions": 0,
     "react/forbid-prop-types": 0,
+    "react/jsx-props-no-spreading": 0,
     "import/no-extraneous-dependencies": [2, { "devDependencies": true }],
     "prefer-destructuring": ["error", { "object": true, "array": false }]
   },
