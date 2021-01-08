@@ -6,9 +6,9 @@
 
 table supernova for nebula.js
 
-<!-- ## Installing -->
+## Installing
 
-<!-- If you use npm: `npm install @nebula.js/sn-table` -->
+If you use npm: `npm install @nebula.js/sn-table`
 
 ## Usage
 
