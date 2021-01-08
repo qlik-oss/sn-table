@@ -1,25 +1,23 @@
 ## Developing
 
 1. Install with `yarn`
-2. Transpile code: `yarn build` (or `yarn build:watch`)
-3. Link to Sense Desktop (locally on your computer):
-
-- In this repo: `yarn link`
-- In sense-client repo: `yarn link "@nebula.js/sn-kpi"`
-
-Or, render the chart in nebula: `yarn start`
+1. Transpile code: `yarn build` (or `yarn build:watch`)
+1. Link to Sense Desktop (locally on your computer):
+   1. In this repo: `yarn link`
+   1. In sense-client repo: `yarn link "@nebula.js/sn-kpi"`
+1. Or, run it using nebula with `yarn start`
 
 ## Testing
 
 Run unit tests with:
 
-- `yarn test:unit`
+`yarn test:unit`
 
 ## Linting
 
 Run lint with:
 
-- `yarn lint`
+`yarn lint`
 
 ## Publishing
 
