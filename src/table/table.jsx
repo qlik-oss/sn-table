@@ -44,7 +44,7 @@ export default function TableWrapper(props) {
             {rows.map((row) => {
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                  {columns.map((column, i) => {
+                  {columns.map((column) => {
                     const cell = row[column.id];
                     const value = cell.qText;
                     // const CellRenderer = columnRenderers[i];
