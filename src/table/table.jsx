@@ -41,26 +41,24 @@ export default function TableWrapper(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => {
-              return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                  {columns.map((column, i) => {
-                    const cell = row[column.id];
-                    const value = cell.qText;
-                    const CellRenderer = columnRenderers[i];
-                    return CellRenderer ? (
-                      <CellRenderer cell={cell} column={column} value={value} key={column.id} align={column.align}>
-                        {value}
-                      </CellRenderer>
-                    ) : (
-                      <TableCell key={column.id} align={column.align}>
-                        {value}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
+            {rows.map((row) => (
+              <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                {columns.map((column, i) => {
+                  const cell = row[column.id];
+                  const value = cell.qText;
+                  const CellRenderer = columnRenderers[i];
+                  return CellRenderer ? (
+                    <CellRenderer cell={cell} column={column} value={value} key={column.id} align={column.align}>
+                      {value}
+                    </CellRenderer>
+                  ) : (
+                    <TableCell key={column.id} align={column.align}>
+                      {value}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
