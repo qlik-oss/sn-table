@@ -10,7 +10,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 
 export default function TableWrapper(props) {
-  const { tableData, setPageInfo, columnRenderers } = props;
+  const { tableData, setPageInfo, columnRenderers, selectionObj } = props;
   const { size, rows, columns } = tableData;
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
@@ -48,7 +48,15 @@ export default function TableWrapper(props) {
                   const value = cell.qText;
                   const CellRenderer = columnRenderers[i];
                   return CellRenderer ? (
-                    <CellRenderer cell={cell} column={column} value={value} key={column.id} align={column.align}>
+                    <CellRenderer
+                      cell={cell}
+                      // roe={row}
+                      colIdx={i}
+                      value={value}
+                      key={column.id}
+                      align={column.align}
+                      selectionObj={selectionObj}
+                    >
                       {value}
                     </CellRenderer>
                   ) : (
@@ -79,4 +87,5 @@ TableWrapper.propTypes = {
   tableData: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
   columnRenderers: PropTypes.array.isRequired,
+  selectionObj: PropTypes.object.isRequired,
 };
