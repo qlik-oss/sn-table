@@ -43,7 +43,7 @@ export default function initSelections() {
   const api = useSelections();
   const [selections] = useState({
     api,
-    selectCell: (cell, colIdx) => selectCell(selections, cell, colIdx, selections),
+    selectCell: (cell) => selectCell(selections, cell),
     selected: [],
     setSelected: (selected) => {
       selections.selected = selected;

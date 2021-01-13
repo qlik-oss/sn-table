@@ -5,9 +5,9 @@ import PropTypes from 'prop-types';
 export default function withSelections(CellComponent) {
   const HOC = (props) => {
     const { cell, selections } = props;
-    const { api, selected, selectCell } = selections;
+    const { selected, selectCell } = selections;
     const isSelected = !!selected.find((s) => s.qElemNumber === cell.qElemNumber);
-    const isExcluded = api.isActive() && selected[0]?.colIdx !== cell.colIdx;
+    const isExcluded = selected.length && selected[0].colIdx !== cell.colIdx;
     const style = isSelected ? { 'background-color': '#009845' } : isExcluded ? { 'background-color': '#e8e8e8' } : {};
 
     return <CellComponent {...props} style={style} onClick={() => selectCell(cell)} />;
