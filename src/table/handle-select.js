@@ -1,54 +1,36 @@
-export default function handleSelect(qElemNumber, colIdx, selectionObj) {
-  const { api, setState } = selectionObj;
+export default function handleSelect(cell, colIdx, selectionObj) {
+  const { model, selections, selected, setSelected } = selectionObj;
+  const {dataRowIdx, qElemNumber } = cell;
   // const newState = state.concat();
   // newState.push(qText);
 
-  if (api) {
-    // let newState;
-    // if (node.data.elemNo < 0 && node.data.elemNo !== -3) {
-    //   return;
-    // }
-    // if (node.data.isLocked) {
-    //   return;
-    // }
-    // if (!api.isActive() || !state) {
-    //   api.begin('/qHyperCubeDef');
-    //   newState = [];
-    // } else {
-    //   newState = state.concat();
-    // }
+  if (model && selections) {
+    let newSelected = [];
 
-    // const ind = newState.indexOf(node.data.elemNo);
-    // const activate = ind === -1;
-    // let linkedIds = [];
-
-    // if (!singleSelect) {
-    //   linkedIds = getAllTreeElemNo(node, activate);
-    // }
-    // if (!activate) {
-    //   newState.splice(ind, 1);
-    //   linkedIds.forEach(id => {
-    //     const idInd = newState.indexOf(id);
-    //     idInd !== -1 && newState.splice(idInd, 1);
-    //   });
-    // } else {
-    //   newState.push(node.data.elemNo);
-    //   linkedIds.forEach(id => {
-    //     if (newState.indexOf(id) === -1) {
-    //       newState.push(id);
-    //     }
-    //   });
-    // }
-    const newState = [qElemNumber];
-
-    if (newState.length === 0) {
-      api.clear();
+    if (!selections.isActive() || !selected) {
+      selections.begin('/qHyperCubeDef');
+      // model.beginSelections(['/qHyperCubeDef']);
+      console.log('begin');
     } else {
-      api.select({
-        method: 'selectHyperCubeValues',
-        params: ['/qHyperCubeDef', colIdx, newState, false],
-      });
+      newSelected = selected.concat();
     }
-    setState(newState);
+
+    const alreadySelectedIdx = newSelected.findIndex((s) => s.qElemNumber === qElemNumber);
+    if (alreadySelectedIdx > -1) {
+      newSelected.splice(alreadySelectedIdx, 1);
+    } else {
+      newSelected.push({ qElemNumber, dataRowIdx })
+    }
+
+    if (newSelected.length === 0) {
+      selections.clear();
+      selections.selectionsMade = false;
+    } else {
+      const selectedRows = newSelected.map(s => s.dataRowIdx);
+      model.selectHyperCubeCells('/qHyperCubeDef', selectedRows, [colIdx]);
+      selections.selectionsMade = true;
+    }
+
+    setSelected(newSelected);
   }
 }

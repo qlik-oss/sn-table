@@ -1,16 +1,15 @@
 import { useEffect, useState, useSelections } from '@nebula.js/stardust';
 
-export default function selectionHandler() {
-  // const [singleSelect, setSingleSelect] = useState(false);
-  const selectionsAPI = useSelections();
+export default function selectionHandler(model) {
+  const selections = useSelections();
   // const isInSelections = !!useLayout().qSelectionInfo.qInSelections;
   const [selectionObj] = useState({
-    api: selectionsAPI,
-    setState: (state) => {
-      selectionObj.state = state;
+    selections,
+    model,
+    selected: [],
+    setSelected: (selected) => {
+      selectionObj.selected = selected;
     },
-    state: {},
-    singleSelect: false,
   });
 
   // useEffect(() => {
@@ -18,56 +17,27 @@ export default function selectionHandler() {
   // }, [translator]);
 
   const resetSelections = () => {
-    selectionObj.state = {};
+    selectionObj.selected = [];
   };
-  // const resetSelectionsAndSingleSelect = () => {
-  //   selectionObj.state = [];
-  //   setSingleSelect(false);
-  // };
 
   useEffect(() => {
-    if (!selectionObj.api) {
+    if (!selectionObj.selections) {
       return () => {};
     }
-    selectionObj.api = selectionsAPI;
-    selectionObj.api.on('deactivated', resetSelections);
-    selectionObj.api.on('canceled', resetSelections);
-    selectionObj.api.on('confirmed', resetSelections);
-    selectionObj.api.on('cleared', resetSelections);
+    selectionObj.selections = selections;
+    selectionObj.selections.on('deactivated', resetSelections);
+    selectionObj.selections.on('canceled', resetSelections);
+    selectionObj.selections.on('confirmed', resetSelections);
+    selectionObj.selections.on('cleared', resetSelections);
     // Return function called on unmount
     return () => {
-      selectionObj.api.removeListener('deactivated', resetSelections);
-      selectionObj.api.removeListener('canceled', resetSelections);
-      selectionObj.api.removeListener('confirmed', resetSelections);
-      selectionObj.api.removeListener('cleared', resetSelections);
+      selectionObj.selections.removeListener('deactivated', resetSelections);
+      selectionObj.selections.removeListener('canceled', resetSelections);
+      selectionObj.selections.removeListener('confirmed', resetSelections);
+      selectionObj.selections.removeListener('cleared', resetSelections);
     };
-  }, [selectionsAPI]);
+  }, [selections]);
 
-  // useEffect(() => {
-  //   selectionObj.singleSelect = singleSelect;
-  // }, [singleSelect]);
-
-  // useAction(
-  //   () => ({
-  //     action() {
-  //       setSingleSelect(!singleSelect);
-  //     },
-  //     icon: {
-  //       shapes: [
-  //         {
-  //           type: 'path',
-  //           attrs: {
-  //             d: singleSelectionIcon,
-  //           },
-  //         },
-  //       ],
-  //     },
-  //     active: singleSelect,
-  //     hidden: !isInSelections,
-  //     label: translator.get('Object.OrgChart.SingleSelect'),
-  //   }),
-  //   [singleSelect, isInSelections]
-  // );
 
   // useEffect(() => {
   //   const addKeyPress = event => {

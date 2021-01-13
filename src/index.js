@@ -23,13 +23,13 @@ export default function supernova(env) {
       const [pageInfo, setPageInfo] = useState({ top: 0, height: 100 });
       const [tableData, setTableData] = useState();
 
-      const selectionObj = selectionWrapper();
+      const selectionObj = selectionWrapper(model);
 
       useEffect(() => {
         manageData(model, layout, pageInfo).then((d) => {
           setTableData(d);
         });
-      }, [layout, pageInfo, selectionObj.state]);
+      }, [layout, pageInfo]);
 
       useEffect(
         () => () => {
@@ -42,7 +42,7 @@ export default function supernova(env) {
         if (layout && tableData) {
           render(el, { tableData, setPageInfo, pageInfo, constraints, selectionObj });
         }
-      }, [tableData]);
+      }, [tableData, selectionObj.selected]);
     },
     ext: ext(env),
   };

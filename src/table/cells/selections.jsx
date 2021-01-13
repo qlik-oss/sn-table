@@ -13,8 +13,9 @@ export default function withSelections(CellComponent) {
   class HOC extends React.Component {
     render() {
       const { cell, colIdx, selectionObj } = this.props;
-      // const style = oddlyGlobalSelectionState[cell.qElemNumber] ? { 'background-color': '#00ff00' } : {};
-      return <CellComponent {...this.props} onClick={() => handleSelect(cell.qElemNumber, colIdx, selectionObj)} />;
+      const isSelected = !!selectionObj.selected.find((s) => s.qElemNumber === cell.qElemNumber);
+      const style = isSelected ? { 'background-color': '#00ff00' } : {};
+      return <CellComponent {...this.props} style={style} onClick={() => handleSelect(cell, colIdx, selectionObj)} />;
     }
   }
   return HOC;
