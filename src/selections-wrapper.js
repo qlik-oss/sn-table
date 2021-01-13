@@ -1,11 +1,10 @@
 import { useEffect, useState, useSelections } from '@nebula.js/stardust';
 
-export default function selectionHandler(model) {
-  const selections = useSelections();
+export default function selectionsWrapper() {
+  const api = useSelections();
   // const isInSelections = !!useLayout().qSelectionInfo.qInSelections;
   const [selectionObj] = useState({
-    selections,
-    model,
+    api,
     selected: [],
     setSelected: (selected) => {
       selectionObj.selected = selected;
@@ -21,22 +20,22 @@ export default function selectionHandler(model) {
   };
 
   useEffect(() => {
-    if (!selectionObj.selections) {
+    if (!selectionObj.api) {
       return () => {};
     }
-    selectionObj.selections = selections;
-    selectionObj.selections.on('deactivated', resetSelections);
-    selectionObj.selections.on('canceled', resetSelections);
-    selectionObj.selections.on('confirmed', resetSelections);
-    selectionObj.selections.on('cleared', resetSelections);
+    selectionObj.api = api;
+    selectionObj.api.on('deactivated', resetSelections);
+    selectionObj.api.on('canceled', resetSelections);
+    selectionObj.api.on('confirmed', resetSelections);
+    selectionObj.api.on('cleared', resetSelections);
     // Return function called on unmount
     return () => {
-      selectionObj.selections.removeListener('deactivated', resetSelections);
-      selectionObj.selections.removeListener('canceled', resetSelections);
-      selectionObj.selections.removeListener('confirmed', resetSelections);
-      selectionObj.selections.removeListener('cleared', resetSelections);
+      selectionObj.api.removeListener('deactivated', resetSelections);
+      selectionObj.api.removeListener('canceled', resetSelections);
+      selectionObj.api.removeListener('confirmed', resetSelections);
+      selectionObj.api.removeListener('cleared', resetSelections);
     };
-  }, [selections]);
+  }, [api]);
 
 
   // useEffect(() => {

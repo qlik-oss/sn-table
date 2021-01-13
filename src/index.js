@@ -1,6 +1,6 @@
 import { useElement, useLayout, useEffect, useModel, useState, useConstraints } from '@nebula.js/stardust';
 import properties from './object-properties';
-import selectionWrapper from './selections-wrapper';
+import selectionsWrapper from './selections-wrapper';
 import data from './data';
 import ext from './ext';
 import { render, teardown } from './table/root';
@@ -23,7 +23,7 @@ export default function supernova(env) {
       const [pageInfo, setPageInfo] = useState({ top: 0, height: 100 });
       const [tableData, setTableData] = useState();
 
-      const selectionObj = selectionWrapper(model);
+      const selectionObj = selectionsWrapper();
 
       useEffect(() => {
         manageData(model, layout, pageInfo).then((d) => {
