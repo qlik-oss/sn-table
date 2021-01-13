@@ -17,7 +17,7 @@ export function selectCell(selections, cell) {
     return;
   }
 
-  if (!api.isActive() || !selected) {
+  if (!api.isActive()) {
     api.begin('/qHyperCubeDef');
   } else {
     newSelected = selected.concat();
