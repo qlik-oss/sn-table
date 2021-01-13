@@ -10,7 +10,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 
 export default function TableWrapper(props) {
-  const { tableData, setPageInfo, columnRenderers, selectionObj } = props;
+  const { tableData, setPageInfo, columnRenderers, selections } = props;
   const { size, rows, columns } = tableData;
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
@@ -40,6 +40,7 @@ export default function TableWrapper(props) {
               ))}
             </TableRow>
           </TableHead>
+          {/* TODO: consider making a body component */}
           <TableBody>
             {rows.map((row) => (
               <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
@@ -50,12 +51,10 @@ export default function TableWrapper(props) {
                   return CellRenderer ? (
                     <CellRenderer
                       cell={cell}
-                      // roe={row}
-                      colIdx={i}
                       value={value}
                       key={column.id}
                       align={column.align}
-                      selectionObj={selectionObj}
+                      selections={selections}
                     >
                       {value}
                     </CellRenderer>
@@ -87,5 +86,5 @@ TableWrapper.propTypes = {
   tableData: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
   columnRenderers: PropTypes.array.isRequired,
-  selectionObj: PropTypes.object.isRequired,
+  selections: PropTypes.object.isRequired,
 };
