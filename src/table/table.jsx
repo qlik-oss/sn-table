@@ -64,7 +64,7 @@ export default function TableWrapper(props) {
                       {value}
                     </CellRenderer>
                   ) : (
-                    <TableCell key={column.id} align={column.align}>
+                    <TableCell key={column.id} align={column.align} style={selections.getCellStyle(cell)}>
                       {value}
                     </TableCell>
                   );
