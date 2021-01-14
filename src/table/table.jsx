@@ -83,5 +83,4 @@ export default function TableWrapper(props) {
 TableWrapper.propTypes = {
   tableData: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
-  // columnRenderers: PropTypes.array.isRequired,
 };
