@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
-// import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
@@ -60,5 +59,4 @@ export default function TableWrapper(props) {
 TableWrapper.propTypes = {
   tableData: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
-  columnRenderers: PropTypes.array.isRequired,
 };

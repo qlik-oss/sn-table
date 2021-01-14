@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
 export default function TableBodyWrapper({ tableData, columnRenderers }) {
-  // const { tableData, columnRenderers } = props;
   const { rows, columns } = tableData;
 
   return (
