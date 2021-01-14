@@ -1,7 +1,7 @@
 import { useEffect, useState, useSelections } from '@nebula.js/stardust';
 
-export function getCellStyle(selected, cell, isDim) {
-  const isSelected = isDim && !!selected.find((s) => s.qElemNumber === cell.qElemNumber);
+export function getCellStyle(selected, cell) {
+  const isSelected = selected[0]?.colIdx === cell.colIdx && !!selected.find((s) => s.qElemNumber === cell.qElemNumber);
   const isExcluded = selected.length && selected[0].colIdx !== cell.colIdx;
 
   return isSelected ? { 'background-color': '#009845' } : isExcluded ? { 'background-color': '#e8e8e8' } : {};
@@ -50,7 +50,7 @@ export default function initSelections() {
   const api = useSelections();
   const [selections] = useState({
     api,
-    getCellStyle: (cell, isDim) => getCellStyle(selections.selected, cell, isDim),
+    getCellStyle: (cell) => getCellStyle(selections.selected, cell),
     selectCell: (cell) => selectCell(selections, cell),
     selected: [],
     setSelected: (selected) => {

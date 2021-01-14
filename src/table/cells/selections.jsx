@@ -6,7 +6,7 @@ export default function withSelections(CellComponent) {
     const { cell, selections } = props;
     const { selectCell, getCellStyle } = selections;
 
-    return <CellComponent {...props} style={getCellStyle(cell, true)} onClick={() => selectCell(cell)} />;
+    return <CellComponent {...props} style={getCellStyle(cell)} onClick={() => selectCell(cell)} />;
   };
 
   HOC.propTypes = {

@@ -34,32 +34,32 @@ describe('selections-factory', () => {
     });
 
     it('should return green background when selected', () => {
-      const style = getCellStyle(selected, cell, true);
+      const style = getCellStyle(selected, cell);
       expect(style).to.eql(greenColor);
     });
     it('should return grey background when not available to select', () => {
       cell.qElemNumber = 2;
       cell.colIdx = 2;
 
-      const style = getCellStyle(selected, cell, true);
+      const style = getCellStyle(selected, cell);
       expect(style).to.eql(greyColor);
     });
-    it('should return grey background when measure that happens to have the same qElemNumber', () => {
+    it('should return grey background when other column that happens to have the same qElemNumber', () => {
       cell.colIdx = 2;
 
-      const style = getCellStyle(selected, cell, false);
+      const style = getCellStyle(selected, cell);
       expect(style).to.eql(greyColor);
     });
     it('should return empty when available to select', () => {
       cell.qElemNumber = 2;
 
-      const style = getCellStyle(selected, cell, true);
+      const style = getCellStyle(selected, cell);
       expect(style).to.eql({});
     });
-    it('should return empty when measure and no active selections', () => {
+    it('should return empty when no active selections', () => {
       selected = [];
 
-      const style = getCellStyle(selected, cell, false);
+      const style = getCellStyle(selected, cell);
       expect(style).to.eql({});
     });
   });
