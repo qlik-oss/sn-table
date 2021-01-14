@@ -1,0 +1,8 @@
+version: "2"
+checks:
+  method-lines:
+    config:
+      threshold: 50
+  methid-complexity:
+    config:
+      threshold: 8
