@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import handleSelect from '../handle-select';
 
 export default function withSelections(CellComponent) {
   const HOC = (props) => {
