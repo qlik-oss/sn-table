@@ -63,6 +63,7 @@
     "eslint-plugin-react": "7.22.0",
     "eslint-plugin-react-hooks": "4.2.0",
     "eslint-plugin-testing-library": "3.10.1",
+    "less": "^4.1.0",
     "mocha-junit-reporter": "2.0.0",
     "prettier": "2.2.1",
     "prop-types": "^15.7.2",
@@ -72,7 +73,6 @@
     "rollup": "^2.36.1",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-postcss": "^4.0.0",
     "rollup-plugin-visualizer": "^4.2.0",
     "scriptappy-from-jsdoc": "0.7.0"
   },

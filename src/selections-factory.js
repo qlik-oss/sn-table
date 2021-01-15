@@ -1,68 +1,59 @@
 import { useEffect, useState, useSelections } from '@nebula.js/stardust';
 
-export function getCellStyle(selected, cell) {
-  const isSelected = selected[0]?.colIdx === cell.colIdx && !!selected.find((s) => s.qElemNumber === cell.qElemNumber);
-  const isExcluded = selected.length && selected[0].colIdx !== cell.colIdx;
-
-  return isSelected ? { 'background-color': '#009845' } : isExcluded ? { 'background-color': '#e8e8e8' } : {};
+export function getSelectionClasses(selections, cell) {
+  const hasSelectedElemNumber = !!selections.selected.rows?.find((r) => r.qElemNumber === cell.qElemNumber);
+  return selections.isExcluded(cell.colIdx) ? 'sn-table-excluded' : hasSelectedElemNumber ? 'sn-table-selected' : '';
 }
 
 export function selectCell(selections, cell) {
   const { api, selected, setSelected } = selections;
   const { rowIdx, colIdx, qElemNumber } = cell;
-  let newSelected = [];
-
-  // prevent selection in other column
-  if ((selected.length && selected[0].colIdx !== colIdx) || !api) {
-    return;
-  }
+  let rows = [];
 
   if (!api.isActive()) {
     api.begin('/qHyperCubeDef');
   } else {
-    newSelected = selected.concat();
+    rows = selected.rows.concat();
   }
 
-  const alreadySelectedIdx = newSelected.findIndex((s) => s.qElemNumber === qElemNumber);
+  const alreadySelectedIdx = rows.findIndex((r) => r.qElemNumber === qElemNumber);
   if (alreadySelectedIdx > -1) {
-    newSelected.splice(alreadySelectedIdx, 1);
+    rows.splice(alreadySelectedIdx, 1);
   } else {
-    newSelected.push({ qElemNumber, rowIdx, colIdx });
+    rows.push({ qElemNumber, rowIdx });
   }
 
-  if (newSelected.length) {
-    const selectedRows = newSelected.map((s) => s.rowIdx);
+  if (rows.length) {
+    const selectedRows = rows.map((r) => r.rowIdx);
     api.select({
       method: 'selectHyperCubeCells',
       params: ['/qHyperCubeDef', selectedRows, [colIdx]],
     });
   } else {
-    api.select({
-      method: 'resetMadeSelections',
-      params: [],
-    });
+    api.cancel();
   }
 
-  setSelected(newSelected);
+  setSelected({ colIdx, rows });
 }
 
-export default function initSelections() {
+export default function initSelections(el) {
   const api = useSelections();
   const [selections] = useState({
     api,
-    getCellStyle: (cell) => getCellStyle(selections.selected, cell),
+    getSelectionClasses: (cell) => getSelectionClasses(selections, cell),
     selectCell: (cell) => selectCell(selections, cell),
-    selected: [],
+    isExcluded: (colIdx) => selections.selected.rows.length && selections.selected.colIdx !== colIdx,
+    selected: { rows: [] },
     setSelected: (selected) => {
       selections.selected = selected;
     },
   });
 
-  const resetSelections = () => {
-    selections.selected = [];
-  };
-
   useEffect(() => {
+    const resetSelections = () => {
+      selections.selected = { rows: [] };
+    };
+
     if (!selections.api) {
       return () => {};
     }
@@ -80,6 +71,23 @@ export default function initSelections() {
       selections.api.removeListener('cleared', resetSelections);
     };
   }, [api]);
+
+  useEffect(() => {
+    const onClick = (e) => {
+      const classes = e.target.className;
+      // TODO: isSelectableCell is false when dragging from one cell to another
+      const isSelectableCell = classes.includes('sn-table-cell') && !classes.includes('sn-table-excluded');
+      if (selections.api.isActive() && !isSelectableCell) {
+        e.stopPropagation();
+        selections.api.confirm();
+      }
+    };
+
+    el.addEventListener('click', onClick, true);
+    return () => {
+      el.removeEventListener('click', onClick, true);
+    };
+  }, []);
 
   return selections;
 }

@@ -5,6 +5,7 @@ import data from './data';
 import ext from './ext';
 import { render, teardown } from './table/root';
 import manageData from './table/handle-data';
+import './style.less';
 
 export default function supernova(env) {
   return {
@@ -23,7 +24,7 @@ export default function supernova(env) {
       const [pageInfo, setPageInfo] = useState({ top: 0, height: 100 });
       const [tableData, setTableData] = useState();
 
-      const selections = initSelections();
+      const selections = initSelections(el);
 
       useEffect(() => {
         manageData(model, layout, pageInfo).then((d) => {
