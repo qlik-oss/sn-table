@@ -23,7 +23,7 @@ export default function TableWrapper(props) {
   // should trigger reload
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
-    setPageInfo({ top: 0, height: rowsPerPage });
+    setPageInfo({ top: 0, height: +event.target.value });
     setPage(0);
   };
 
