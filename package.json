@@ -1,11 +1,9 @@
 {
-  "name": "sn-table",
+  "name": "@nebula.js/sn-table",
   "version": "0.1.0",
-  "description": "Supernova table",
+  "description": "table supernova",
   "license": "MIT",
-  "author": {
-    "name": "QLIK"
-  },
+  "author": "QlikTech International AB",
   "keywords": [
     "qlik",
     "nebula",
@@ -13,9 +11,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/qlik-oss/sn-action-button.git"
+    "url": "https://github.com/qlik-oss/sn-table.git"
   },
   "files": [
+    "assets",
     "dist"
   ],
   "engines": {
