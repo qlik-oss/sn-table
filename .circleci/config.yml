@@ -79,8 +79,6 @@ jobs:
       #        APP_ID=$DocId yarn run test:integration --chrome.browserWSEndpoint "ws://localhost:3000" --no-launch
       # - store_artifacts:
       #     path: ./test/integration/__artifacts__
-      - store_test_results:
-          path: coverage/junit
       - persist_to_workspace:
           root: ~/table
           paths:
@@ -135,10 +133,10 @@ workflows:
       - publish-dev:
           requires:
             - build
-      # - publish:
-      #     requires:
-      #       - build
-      #     filters:
-      #       branches:
-      #         only:
-      #           - master
+      - publish:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - main
