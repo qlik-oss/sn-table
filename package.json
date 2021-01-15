@@ -9,6 +9,9 @@
     "nebula",
     "stardust"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/qlik-oss/sn-table.git"
