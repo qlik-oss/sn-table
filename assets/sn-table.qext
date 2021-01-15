@@ -2,9 +2,7 @@
   "name": "sn-table",
   "version": "0.1.0",
   "description": "",
-  "author": {
-    "name": "QLIK",
-  },
+  "author": "QlikTech International AB",
   "icon": "extension",
   "type": "visualization",
   "supernova": true
