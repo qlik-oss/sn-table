@@ -24,7 +24,11 @@ export default function supernova(env) {
       const [pageInfo, setPageInfo] = useState({ top: 0, height: 100 });
       const [tableData, setTableData] = useState();
 
+<<<<<<< HEAD
       const selections = initSelections(el);
+=======
+      const selections = initSelections();
+>>>>>>> main
 
       useEffect(() => {
         manageData(model, layout, pageInfo).then((d) => {
