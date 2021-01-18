@@ -11,7 +11,7 @@ import TableBodyWrapper from './table-body';
 
 export default function TableWrapper(props) {
   const { tableData, setPageInfo } = props;
-  const { size, columns } = tableData;
+  const { size, columns, rows } = tableData;
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
 
@@ -26,6 +26,11 @@ export default function TableWrapper(props) {
     setPageInfo({ top: 0, height: +event.target.value });
     setPage(0);
   };
+
+  if (!rows.length && page > 0) {
+    handleChangePage(null, 0);
+    return null;
+  }
 
   return (
     <Paper>

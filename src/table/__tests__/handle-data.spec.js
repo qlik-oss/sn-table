@@ -49,13 +49,14 @@ describe('handle-data', () => {
 
   describe('manageData', () => {
     const model = { getHyperCubeData: async () => generateDataPages(2, 4) };
-    const pageInfo = { top: 0, height: 100 };
+    const pageInfo = { top: 100, height: 100 };
 
     it('should return size, rows and columns correctly formatted', async () => {
       const { size, rows, columns } = await manageData(model, layout, pageInfo);
 
       expect(size).to.equal(layout.qHyperCube.qSize);
       expect(rows.length).to.equal(2);
+      expect(rows[0]['id-0'].rowIdx).to.equal(100);
       expect(columns.length).to.equal(4);
       columns.forEach((c, i) => {
         expect(c.id).to.equal(Object.keys(rows[0])[i]);

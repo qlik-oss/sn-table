@@ -4,7 +4,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
-export default function TableBodyWrapper({ tableData, columnRenderers }) {
+export default function TableBodyWrapper({ tableData, columnRenderers, selections }) {
   const { rows, columns } = tableData;
 
   return (
@@ -16,7 +16,14 @@ export default function TableBodyWrapper({ tableData, columnRenderers }) {
             const value = cell.qText;
             const CellRenderer = columnRenderers[i];
             return CellRenderer ? (
-              <CellRenderer cell={cell} column={column} value={value} key={column.id} align={column.align}>
+              <CellRenderer
+                cell={cell}
+                column={column}
+                value={value}
+                key={column.id}
+                align={column.align}
+                selections={selections}
+              >
                 {value}
               </CellRenderer>
             ) : (
@@ -34,4 +41,5 @@ export default function TableBodyWrapper({ tableData, columnRenderers }) {
 TableBodyWrapper.propTypes = {
   tableData: PropTypes.object.isRequired,
   columnRenderers: PropTypes.array.isRequired,
+  selections: PropTypes.object.isRequired,
 };
