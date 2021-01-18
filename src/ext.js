@@ -1,3 +1,138 @@
+const definition = {
+  type: 'items',
+  component: 'accordion',
+  items: {
+    data: {
+      type: 'items',
+      component: 'columns',
+      translation: 'Common.Data',
+      sortIndexRef: 'qHyperCubeDef.qColumnOrder',
+      allowMove: true,
+      allowAdd: true,
+      addTranslation: 'Common.Columns',
+      items: {
+        dimensions: {
+          type: 'array',
+          component: 'expandable-items',
+          ref: 'qHyperCubeDef.qDimensions',
+          grouped: true,
+          items: {
+            libraryId: {
+              type: 'string',
+              component: 'library-item',
+              libraryItemType: 'dimension',
+              ref: 'qLibraryId',
+              translation: 'Common.Dimension',
+              show(itemData) {
+                return itemData.qLibraryId;
+              },
+            },
+            inlineDimension: {
+              component: 'inline-dimension',
+              show(itemData) {
+                return !itemData.qLibraryId;
+              },
+            },
+            autoSort: {
+              ref: 'qDef.autoSort',
+              type: 'boolean',
+              defaultValue: true,
+              show: false,
+            },
+            cId: {
+              ref: 'qDef.cId',
+              type: 'string',
+              show: false,
+            },
+            nullSuppression: {
+              type: 'boolean',
+              ref: 'qNullSuppression',
+              defaultValue: false,
+              translation: 'properties.dimensions.showNull',
+              inverted: true,
+            },
+          },
+        },
+        measures: {
+          type: 'array',
+          component: 'expandable-items',
+          ref: 'qHyperCubeDef.qMeasures',
+          grouped: true,
+          items: {
+            libraryId: {
+              type: 'string',
+              component: 'library-item',
+              libraryItemType: 'measure',
+              ref: 'qLibraryId',
+              translation: 'Common.Measure',
+              show(itemData) {
+                return itemData.qLibraryId;
+              },
+            },
+            inlineMeasure: {
+              component: 'inline-measure',
+              show(itemData) {
+                return !itemData.qLibraryId;
+              },
+            },
+            autoSort: {
+              ref: 'qDef.autoSort',
+              type: 'boolean',
+              defaultValue: true,
+              show: false,
+            },
+            cId: {
+              ref: 'qDef.cId',
+              type: 'string',
+              show: false,
+            },
+          },
+        },
+      },
+    },
+    sorting: {
+      uses: 'sorting',
+    },
+    addOns: {
+      type: 'items',
+      component: 'expandable-items',
+      translation: 'properties.addons',
+      items: {
+        dataHandling: {
+          uses: 'dataHandling',
+          items: {
+            calcCond: {
+              uses: 'calcCond',
+            },
+          },
+        },
+      },
+    },
+    settings: {
+      uses: 'settings',
+      items: {
+        totals: {
+          ref: 'totals.show',
+          type: 'boolean',
+          translation: 'properties.totals',
+          component: 'switch',
+          options: [
+            {
+              value: true,
+              translation: 'Common.Auto',
+            },
+            {
+              value: false,
+              translation: 'Common.Custom',
+            },
+          ],
+          defaultValue: true,
+        },
+      },
+    },
+  },
+};
+
 export function indexAdded(array, index) {
   /* eslint-disable no-param-reassign */
   let i;
@@ -36,140 +171,7 @@ export function getDescription(env) {
 
 export default function ext(env) {
   return {
-    definition: {
-      type: 'items',
-      component: 'accordion',
-      items: {
-        data: {
-          type: 'items',
-          component: 'columns',
-          translation: 'Common.Data',
-          sortIndexRef: 'qHyperCubeDef.qColumnOrder',
-          allowMove: true,
-          allowAdd: true,
-          addTranslation: 'Common.Columns',
-          items: {
-            dimensions: {
-              type: 'array',
-              component: 'expandable-items',
-              ref: 'qHyperCubeDef.qDimensions',
-              grouped: true,
-              items: {
-                libraryId: {
-                  type: 'string',
-                  component: 'library-item',
-                  libraryItemType: 'dimension',
-                  ref: 'qLibraryId',
-                  translation: 'Common.Dimension',
-                  show(itemData) {
-                    return itemData.qLibraryId;
-                  },
-                },
-                inlineDimension: {
-                  component: 'inline-dimension',
-                  show(itemData) {
-                    return !itemData.qLibraryId;
-                  },
-                },
-                autoSort: {
-                  ref: 'qDef.autoSort',
-                  type: 'boolean',
-                  defaultValue: true,
-                  show: false,
-                },
-                cId: {
-                  ref: 'qDef.cId',
-                  type: 'string',
-                  show: false,
-                },
-                nullSuppression: {
-                  type: 'boolean',
-                  ref: 'qNullSuppression',
-                  defaultValue: false,
-                  translation: 'properties.dimensions.showNull',
-                  inverted: true,
-                },
-              },
-            },
-            measures: {
-              type: 'array',
-              component: 'expandable-items',
-              ref: 'qHyperCubeDef.qMeasures',
-              grouped: true,
-              items: {
-                libraryId: {
-                  type: 'string',
-                  component: 'library-item',
-                  libraryItemType: 'measure',
-                  ref: 'qLibraryId',
-                  translation: 'Common.Measure',
-                  show(itemData) {
-                    return itemData.qLibraryId;
-                  },
-                },
-                inlineMeasure: {
-                  component: 'inline-measure',
-                  show(itemData) {
-                    return !itemData.qLibraryId;
-                  },
-                },
-                autoSort: {
-                  ref: 'qDef.autoSort',
-                  type: 'boolean',
-                  defaultValue: true,
-                  show: false,
-                },
-                cId: {
-                  ref: 'qDef.cId',
-                  type: 'string',
-                  show: false,
-                },
-              },
-            },
-          },
-        },
-        sorting: {
-          uses: 'sorting',
-        },
-        addOns: {
-          type: 'items',
-          component: 'expandable-items',
-          translation: 'properties.addons',
-          items: {
-            dataHandling: {
-              uses: 'dataHandling',
-              items: {
-                calcCond: {
-                  uses: 'calcCond',
-                },
-              },
-            },
-          },
-        },
-        settings: {
-          uses: 'settings',
-          items: {
-            totals: {
-              ref: 'totals.show',
-              type: 'boolean',
-              translation: 'properties.totals',
-              component: 'switch',
-              options: [
-                {
-                  value: true,
-                  translation: 'Common.Auto',
-                },
-                {
-                  value: false,
-                  translation: 'Common.Custom',
-                },
-              ],
-              defaultValue: true,
-            },
-          },
-        },
-      },
-    },
+    definition,
     data: {
       measures: {
         min,
