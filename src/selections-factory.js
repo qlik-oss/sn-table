@@ -29,8 +29,6 @@ export function selectCell(selections, cell) {
 
   if (rows.length) {
     const selectedRows = rows.map((r) => r.rowIdx);
-    console.log(selectedRows, colIdx);
-
     api.select({
       method: 'selectHyperCubeCells',
       params: ['/qHyperCubeDef', selectedRows, [colIdx]],
