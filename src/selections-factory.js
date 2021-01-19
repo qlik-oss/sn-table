@@ -1,8 +1,12 @@
 import { useEffect, useState, useSelections } from '@nebula.js/stardust';
 
-export function getSelectionClasses(selections, cell) {
-  const hasSelectedElemNumber = !!selections.selected.rows?.find((r) => r.qElemNumber === cell.qElemNumber);
-  return selections.isExcluded(cell.colIdx) ? 'sn-table-excluded' : hasSelectedElemNumber ? 'sn-table-selected' : '';
+export function getSelectionClasses(selected, cell) {
+  const hasSelectedElemNumber = !!selected.rows?.find((r) => r.qElemNumber === cell.qElemNumber);
+  return selected.rows.length && selected.colIdx !== cell.colIdx
+    ? 'sn-table-excluded'
+    : hasSelectedElemNumber
+    ? 'sn-table-selected'
+    : '';
 }
 
 export function selectCell(selections, cell) {
@@ -25,24 +29,25 @@ export function selectCell(selections, cell) {
 
   if (rows.length) {
     const selectedRows = rows.map((r) => r.rowIdx);
+    console.log(selectedRows, colIdx);
+
     api.select({
       method: 'selectHyperCubeCells',
       params: ['/qHyperCubeDef', selectedRows, [colIdx]],
     });
+    setSelected({ colIdx, rows });
   } else {
     api.cancel();
+    setSelected({ rows });
   }
-
-  setSelected({ colIdx, rows });
 }
 
 export default function initSelections(el) {
   const api = useSelections();
   const [selections] = useState({
     api,
-    getSelectionClasses: (cell) => getSelectionClasses(selections, cell),
+    getSelectionClasses: (cell) => getSelectionClasses(selections.selected, cell),
     selectCell: (cell) => selectCell(selections, cell),
-    isExcluded: (colIdx) => selections.selected.rows.length && selections.selected.colIdx !== colIdx,
     selected: { rows: [] },
     setSelected: (selected) => {
       selections.selected = selected;

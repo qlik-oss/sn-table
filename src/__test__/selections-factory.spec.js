@@ -1,4 +1,4 @@
-import { getCellStyle, selectCell } from '../selections-factory';
+import { getSelectionClasses, selectCell } from '../selections-factory';
 
 describe('selections-factory', () => {
   // describe('initSelections', () => {
@@ -22,45 +22,43 @@ describe('selections-factory', () => {
   //   });
   // });
 
-  describe('getCellStyle', () => {
-    const greenColor = { 'background-color': '#009845' };
-    const greyColor = { 'background-color': '#e8e8e8' };
+  describe('getSelectionClasses', () => {
     let selected;
     let cell;
 
     beforeEach(() => {
-      selected = [{ qElemNumber: 1, colIdx: 1, rowIdx: 1 }];
+      selected = { colIdx: 1, rows: [{ qElemNumber: 1, rowIdx: 1 }] };
       cell = { qElemNumber: 1, colIdx: 1 };
     });
 
     it('should return green background when selected', () => {
-      const style = getCellStyle(selected, cell);
-      expect(style).to.eql(greenColor);
+      const classes = getSelectionClasses(selected, cell);
+      expect(classes).to.equal('sn-table-selected');
     });
     it('should return grey background when not available to select', () => {
       cell.qElemNumber = 2;
       cell.colIdx = 2;
 
-      const style = getCellStyle(selected, cell);
-      expect(style).to.eql(greyColor);
+      const classes = getSelectionClasses(selected, cell);
+      expect(classes).to.equal('sn-table-excluded');
     });
     it('should return grey background when other column that happens to have the same qElemNumber', () => {
       cell.colIdx = 2;
 
-      const style = getCellStyle(selected, cell);
-      expect(style).to.eql(greyColor);
+      const classes = getSelectionClasses(selected, cell);
+      expect(classes).to.equal('sn-table-excluded');
     });
     it('should return empty when available to select', () => {
       cell.qElemNumber = 2;
 
-      const style = getCellStyle(selected, cell);
-      expect(style).to.eql({});
+      const classes = getSelectionClasses(selected, cell);
+      expect(classes).to.equal('');
     });
     it('should return empty when no active selections', () => {
-      selected = [];
+      selected = { rows: [] };
 
-      const style = getCellStyle(selected, cell);
-      expect(style).to.eql({});
+      const classes = getSelectionClasses(selected, cell);
+      expect(classes).to.eql('');
     });
   });
 
@@ -72,37 +70,26 @@ describe('selections-factory', () => {
     beforeEach(() => {
       alreadyActive = false;
       selections = {
-        selected: [],
+        selected: { rows: [] },
         setSelected: sinon.spy(),
         api: {
           isActive: () => alreadyActive,
           begin: sinon.spy(),
           select: sinon.spy(),
+          cancel: sinon.spy(),
         },
       };
       cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1 };
     });
 
-    it('should return early when no api', () => {
-      selections.api = null;
-
-      selectCell(selections, cell);
-      expect(selections.setSelected).to.not.have.been.called;
-    });
-    it('should return early when wrong columns', () => {
-      selections.selected = [{ qElemNumber: 2, colIdx: 2, rowIdx: 1 }];
-
-      selectCell(selections, cell);
-      expect(selections.setSelected).to.not.have.been.called;
-    });
-    it('should not call begin, remove from selected and call resetMadeSelections when same qElemNumber', () => {
-      selections.selected = [{ qElemNumber: 1, colIdx: 1, rowIdx: 1 }];
+    it('should not call begin, remove from selected.rows and call cancel when same qElemNumber', () => {
+      selections.selected = { colIdx: 1, rows: [{ qElemNumber: 1, rowIdx: 1 }] };
       alreadyActive = true;
 
       selectCell(selections, cell);
       expect(selections.api.begin).to.not.have.been.called;
-      expect(selections.api.select).to.have.been.calledWith({ method: 'resetMadeSelections', params: [] });
-      expect(selections.setSelected).to.have.been.calledWith([]);
+      expect(selections.api.cancel).to.have.been.calledOnce;
+      expect(selections.setSelected).to.have.been.calledWith({ rows: [] });
     });
     it('should call begin, add to selected and call selectHyperCubeCells when selected empty', () => {
       const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
@@ -110,17 +97,26 @@ describe('selections-factory', () => {
       selectCell(selections, cell);
       expect(selections.api.begin).to.have.been.called;
       expect(selections.api.select).to.have.been.calledWith({ method: 'selectHyperCubeCells', params });
-      expect(selections.setSelected).to.have.been.calledWith([cell]);
+      expect(selections.setSelected).to.have.been.calledWith({
+        colIdx: cell.colIdx,
+        rows: [{ qElemNumber: 1, rowIdx: 1 }],
+      });
     });
-
     it('should not call begin, add to selected and call selectHyperCubeCells when selecting new qElemNumber', () => {
-      selections.selected = [{ qElemNumber: 2, colIdx: 1, rowIdx: 2 }];
+      selections.selected = { colIdx: 1, rows: [{ qElemNumber: 2, rowIdx: 2 }] };
       alreadyActive = true;
       const params = ['/qHyperCubeDef', [2, 1], [cell.colIdx]];
 
       selectCell(selections, cell);
       expect(selections.api.begin).to.not.have.been.called;
       expect(selections.api.select).to.have.been.calledWith({ method: 'selectHyperCubeCells', params });
+      expect(selections.setSelected).to.have.been.calledWith({
+        colIdx: cell.colIdx,
+        rows: [
+          { qElemNumber: 2, rowIdx: 2 },
+          { qElemNumber: 1, rowIdx: 1 },
+        ],
+      });
     });
   });
 });
