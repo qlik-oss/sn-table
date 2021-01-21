@@ -23,7 +23,7 @@ export default function supernova(env) {
       const [pageInfo, setPageInfo] = useState({ top: 0, height: 100 });
       const [tableData, setTableData] = useState();
 
-      const selections = initSelections();
+      const selections = initSelections(!constraints.active);
 
       useEffect(() => {
         manageData(model, layout, pageInfo).then((d) => {
@@ -42,7 +42,7 @@ export default function supernova(env) {
         if (layout && tableData) {
           render(el, { tableData, setPageInfo, pageInfo, constraints, selections });
         }
-      }, [tableData, selections.selected]);
+      }, [tableData, selections.selected, selections.enabled]);
     },
     ext: ext(env),
   };

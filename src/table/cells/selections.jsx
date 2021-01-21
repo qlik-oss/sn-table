@@ -4,9 +4,11 @@ import PropTypes from 'prop-types';
 export default function withSelections(CellComponent) {
   const HOC = (props) => {
     const { cell, selections } = props;
-    const { selectCell, getCellStyle } = selections;
-
-    return <CellComponent {...props} style={getCellStyle(cell)} onClick={() => selectCell(cell)} />;
+    return selections.enabled ? (
+      <CellComponent {...props} style={selections.getCellStyle(cell)} onClick={() => selections.selectCell(cell)} />
+    ) : (
+      <CellComponent {...props} />
+    );
   };
 
   HOC.propTypes = {
