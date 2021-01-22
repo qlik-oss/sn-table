@@ -7,7 +7,7 @@ import { generateRandomString } from './utils';
 import getCellRenderer from './cells/renderer';
 
 export function render(element, props) {
-  const { constraints, tableData } = props;
+  const { constraints, tableData, selections } = props;
 
   sproutBase.overrides.MuiTableContainer.root.height = 'calc(100% - 52px)';
   sproutBase.overrides.MuiTableContainer.root.overflow = !constraints.active ? 'auto' : 'hidden';
@@ -19,7 +19,7 @@ export function render(element, props) {
     seed: generateRandomString(6),
   });
 
-  const columnRenderers = tableData.columns.map(getCellRenderer);
+  const columnRenderers = tableData.columns.map((c) => getCellRenderer(c, selections.isEnabled));
 
   ReactDOM.render(
     <ThemeProvider generateClassName={generateClassName} theme={theme}>

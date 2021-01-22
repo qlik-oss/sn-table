@@ -46,10 +46,10 @@ export function selectCell(selections, cell) {
   setSelected(newSelected);
 }
 
-export default function initSelections(enabled) {
+export default function initSelections(isEnabled) {
   const api = useSelections();
   const [selections] = useState({
-    enabled,
+    isEnabled: !!api && isEnabled,
     api,
     getCellStyle: (cell) => getCellStyle(selections.selected, cell),
     selectCell: (cell) => selectCell(selections, cell),
@@ -82,7 +82,7 @@ export default function initSelections(enabled) {
     };
   }, [api]);
 
-  selections.enabled = enabled;
+  selections.isEnabled = !!api && isEnabled;
 
   return selections;
 }

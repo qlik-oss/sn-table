@@ -42,7 +42,7 @@ export default function supernova(env) {
         if (layout && tableData) {
           render(el, { tableData, setPageInfo, pageInfo, constraints, selections });
         }
-      }, [tableData, selections.selected, selections.enabled]);
+      }, [tableData, selections.selected, selections.isEnabled]);
     },
     ext: ext(env),
   };
