@@ -1,23 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+  selectionStyle: (props) => props,
+});
 
 export default function withSelections(CellComponent) {
   const HOC = (props) => {
     const { cell, selections } = props;
-    const { selectCell, getSelectionClasses } = selections;
+    const { selectCell, getSelectionStyles } = selections;
+    const { style, stateClass } = getSelectionStyles(cell);
+    const muiClasses = useStyles(style);
 
     return (
       <CellComponent
         {...props}
-        className={`sn-table-cell ${getSelectionClasses(cell)}`}
-        onClick={() => selectCell(cell)}
+        className={`${stateClass} ${muiClasses.selectionStyle}`}
+        onClick={() => cell.isDim && selectCell(cell)}
       />
     );
   };
 
   HOC.propTypes = {
     cell: PropTypes.object.isRequired,
-    colIdx: PropTypes.number.isRequired,
     selections: PropTypes.object.isRequired,
   };
 

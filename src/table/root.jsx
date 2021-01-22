@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import { ThemeProvider, createGenerateClassName, createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider, createGenerateClassName, createMuiTheme, StylesProvider } from '@material-ui/core/styles';
 import { sproutBase } from '@qlik/sprout-theme';
 import TableWrapper from './table';
 import { generateRandomString } from './utils';
@@ -22,9 +22,11 @@ export function render(element, props) {
   const columnRenderers = tableData.columns.map(getCellRenderer);
 
   ReactDOM.render(
-    <ThemeProvider generateClassName={generateClassName} theme={theme}>
-      <TableWrapper {...props} columnRenderers={columnRenderers} />
-    </ThemeProvider>,
+    <StylesProvider generateClassName={generateClassName}>
+      <ThemeProvider theme={theme}>
+        <TableWrapper {...props} columnRenderers={columnRenderers} />
+      </ThemeProvider>
+    </StylesProvider>,
     element
   );
 }

@@ -5,7 +5,6 @@ import data from './data';
 import ext from './ext';
 import { render, teardown } from './table/root';
 import manageData from './table/handle-data';
-import './style.less';
 
 export default function supernova(env) {
   return {

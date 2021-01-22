@@ -27,11 +27,7 @@ export default function TableBodyWrapper({ tableData, columnRenderers, selection
                 {value}
               </CellRenderer>
             ) : (
-              <TableCell
-                key={column.id}
-                align={column.align}
-                className={`sn-table-cell ${selections.getSelectionClasses(cell)}`}
-              >
+              <TableCell key={column.id} align={column.align}>
                 {value}
               </TableCell>
             );

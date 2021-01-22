@@ -1,12 +1,12 @@
 import { useEffect, useState, useSelections } from '@nebula.js/stardust';
 
-export function getSelectionClasses(selected, cell) {
+export function getSelectionStyles(selected, cell) {
   const hasSelectedElemNumber = !!selected.rows?.find((r) => r.qElemNumber === cell.qElemNumber);
   return selected.rows.length && selected.colIdx !== cell.colIdx
-    ? 'sn-table-excluded'
+    ? { style: { backgroundColor: '#e8e8e8' }, stateClass: 'excluded' }
     : hasSelectedElemNumber
-    ? 'sn-table-selected'
-    : '';
+    ? { style: { backgroundColor: '#009845' }, stateClass: 'selected' }
+    : { stateClass: 'possible' };
 }
 
 export function selectCell(selections, cell) {
@@ -44,7 +44,7 @@ export default function initSelections(el) {
   const api = useSelections();
   const [selections] = useState({
     api,
-    getSelectionClasses: (cell) => getSelectionClasses(selections.selected, cell),
+    getSelectionStyles: (cell) => getSelectionStyles(selections.selected, cell),
     selectCell: (cell) => selectCell(selections, cell),
     selected: { rows: [] },
     setSelected: (selected) => {
@@ -79,7 +79,7 @@ export default function initSelections(el) {
     const onClick = (e) => {
       const classes = e.target.className;
       // TODO: isSelectableCell is false when dragging from one cell to another
-      const isSelectableCell = classes.includes('sn-table-cell') && !classes.includes('sn-table-excluded');
+      const isSelectableCell = classes.includes('selected') || classes.includes('possible');
       if (selections.api.isActive() && !isSelectableCell) {
         e.stopPropagation();
         selections.api.confirm();
