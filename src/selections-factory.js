@@ -1,50 +1,11 @@
 import { useEffect, useState, useSelections } from '@nebula.js/stardust';
-
-export function getSelectionStyles(selected, cell) {
-  const hasSelectedElemNumber = !!selected.rows?.find((r) => r.qElemNumber === cell.qElemNumber);
-  return selected.rows.length && selected.colIdx !== cell.colIdx
-    ? { style: { backgroundColor: '#e8e8e8' }, stateClass: 'excluded' }
-    : hasSelectedElemNumber
-    ? { style: { backgroundColor: '#009845' }, stateClass: 'selected' }
-    : { stateClass: 'possible' };
-}
-
-export function selectCell(selections, cell) {
-  const { api, selected, setSelected } = selections;
-  const { rowIdx, colIdx, qElemNumber } = cell;
-  let rows = [];
-
-  if (!api.isActive()) {
-    api.begin('/qHyperCubeDef');
-  } else {
-    rows = selected.rows.concat();
-  }
-
-  const alreadySelectedIdx = rows.findIndex((r) => r.qElemNumber === qElemNumber);
-  if (alreadySelectedIdx > -1) {
-    rows.splice(alreadySelectedIdx, 1);
-  } else {
-    rows.push({ qElemNumber, rowIdx });
-  }
-
-  if (rows.length) {
-    const selectedRows = rows.map((r) => r.rowIdx);
-    api.select({
-      method: 'selectHyperCubeCells',
-      params: ['/qHyperCubeDef', selectedRows, [colIdx]],
-    });
-    setSelected({ colIdx, rows });
-  } else {
-    api.cancel();
-    setSelected({ rows });
-  }
-}
+import { getSelectionStyle, selectCell } from './selections-utils';
 
 export default function initSelections(el) {
   const api = useSelections();
   const [selections] = useState({
     api,
-    getSelectionStyles: (cell) => getSelectionStyles(selections.selected, cell),
+    getSelectionStyle: (cell) => getSelectionStyle(selections.selected, cell),
     selectCell: (cell) => selectCell(selections, cell),
     selected: { rows: [] },
     setSelected: (selected) => {

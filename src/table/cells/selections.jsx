@@ -9,15 +9,14 @@ const useStyles = makeStyles({
 export default function withSelections(CellComponent) {
   const HOC = (props) => {
     const { cell, selections } = props;
-    const { selectCell, getSelectionStyles } = selections;
-    const { style, stateClass } = getSelectionStyles(cell);
+    const { style, identifyerClass } = selections.getSelectionStyle(cell);
     const muiClasses = useStyles(style);
 
     return (
       <CellComponent
         {...props}
-        className={`${stateClass} ${muiClasses.selectionStyle}`}
-        onClick={() => cell.isDim && selectCell(cell)}
+        className={`${identifyerClass} ${muiClasses.selectionStyle}`}
+        onClick={() => cell.isDim && selections.selectCell(cell)}
       />
     );
   };

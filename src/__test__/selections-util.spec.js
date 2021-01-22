@@ -1,28 +1,7 @@
-import { getSelectionClasses, selectCell } from '../selections-factory';
+import { getSelectionStyle, selectCell } from '../selections-utils';
 
-describe('selections-factory', () => {
-  // describe('initSelections', () => {
-  //   it('should return selections object with correct properties', () => {
-  //     const selections = initSelections();
-
-  //     expect(Object.keys(selections).length).to.be(5);
-  //     expect(selections.api).to.be.an('object');
-  //     expect(selections.getCellStyle).to.be.a('function');
-  //     expect(selections.selectCell).to.be.a('function');
-  //     expect(selections.selected).to.be.an('array');
-  //     expect(selections.setSelected).to.be.a('function');
-  //   });
-
-  //   it('should set selected when running setSelected', () => {
-  //     const someSelection = [{ qElemNumber: 0, rowIdx: 0, colIdx: 0 }];
-
-  //     const selections = initSelections();
-  //     selections.setSelected(someSelection);
-  //     expect(selections.selected).to.equal(someSelection);
-  //   });
-  // });
-
-  describe('getSelectionClasses', () => {
+describe('selections-utils', () => {
+  describe('getSelectionStyle', () => {
     let selected;
     let cell;
 
@@ -31,34 +10,39 @@ describe('selections-factory', () => {
       cell = { qElemNumber: 1, colIdx: 1 };
     });
 
-    it('should return green background when selected', () => {
-      const classes = getSelectionClasses(selected, cell);
-      expect(classes).to.equal('sn-table-selected');
+    it('should return green background and selected class name when selected', () => {
+      const { style, identifyerClass } = getSelectionStyle(selected, cell);
+      expect(style.backgroundColor).to.equal('#009845');
+      expect(identifyerClass).to.equal('selected');
     });
-    it('should return grey background when not available to select', () => {
+    it('should return grey background and excluded class name when not available to select', () => {
       cell.qElemNumber = 2;
       cell.colIdx = 2;
 
-      const classes = getSelectionClasses(selected, cell);
-      expect(classes).to.equal('sn-table-excluded');
+      const { style, identifyerClass } = getSelectionStyle(selected, cell);
+      expect(style.backgroundColor).to.equal('#e8e8e8');
+      expect(identifyerClass).to.equal('excluded');
     });
-    it('should return grey background when other column that happens to have the same qElemNumber', () => {
+    it('should return grey background and excluded class name when other column that happens to have the same qElemNumber', () => {
       cell.colIdx = 2;
 
-      const classes = getSelectionClasses(selected, cell);
-      expect(classes).to.equal('sn-table-excluded');
+      const { style, identifyerClass } = getSelectionStyle(selected, cell);
+      expect(style.backgroundColor).to.equal('#e8e8e8');
+      expect(identifyerClass).to.equal('excluded');
     });
-    it('should return empty when available to select', () => {
+    it('should return no style and possible class name when available to select', () => {
       cell.qElemNumber = 2;
 
-      const classes = getSelectionClasses(selected, cell);
-      expect(classes).to.equal('');
+      const { style, identifyerClass } = getSelectionStyle(selected, cell);
+      expect(style).to.equal(undefined);
+      expect(identifyerClass).to.equal('possible');
     });
-    it('should return empty when no active selections', () => {
+    it('should return no style and possible class name when no active selections', () => {
       selected = { rows: [] };
 
-      const classes = getSelectionClasses(selected, cell);
-      expect(classes).to.eql('');
+      const { style, identifyerClass } = getSelectionStyle(selected, cell);
+      expect(style).to.equal(undefined);
+      expect(identifyerClass).to.equal('possible');
     });
   });
 
