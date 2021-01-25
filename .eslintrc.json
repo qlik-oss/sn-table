@@ -19,7 +19,8 @@
     "react/forbid-prop-types": 0,
     "react/jsx-props-no-spreading": 0,
     "import/no-extraneous-dependencies": [2, { "devDependencies": true }],
-    "prefer-destructuring": ["error", { "object": true, "array": false }]
+    "prefer-destructuring": ["error", { "object": true, "array": false }],
+    "no-console": 0
   },
 
   "overrides": [
