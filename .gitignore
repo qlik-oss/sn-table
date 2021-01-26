@@ -10,3 +10,5 @@ stats.html
 node_modules
 coverage
 dist/
+
+sn-table-ext
