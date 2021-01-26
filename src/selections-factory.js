@@ -1,11 +1,11 @@
 import { useEffect, useState, useSelections } from '@nebula.js/stardust';
-import { getSelectionStyle, selectCell } from './selections-utils';
+import { getSelectionClass, selectCell } from './selections-utils';
 
 export default function initSelections(el) {
   const api = useSelections();
   const [selections] = useState({
     api,
-    getSelectionStyle: (cell) => getSelectionStyle(selections.selected, cell),
+    getSelectionClass: (cell) => getSelectionClass(selections.selected, cell),
     selectCell: (cell) => selectCell(selections, cell),
     selected: { rows: [] },
     setSelected: (selected) => {
