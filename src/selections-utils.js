@@ -1,12 +1,15 @@
 export function getSelectionStyle(selected, cell) {
-  const isExcluded = selected.rows.length && selected.colIdx !== cell.colIdx;
-  const hasSelectedElemNumber = !!selected.rows?.find((r) => r.qElemNumber === cell.qElemNumber);
+  const { colIdx, rows } = selected;
+  if (rows.length) {
+    if (colIdx !== cell.colIdx) return { style: { backgroundColor: '#e8e8e8' }, identifyerClass: 'excluded' };
 
-  return isExcluded
-    ? { style: { backgroundColor: '#e8e8e8' }, identifyerClass: 'excluded' }
-    : hasSelectedElemNumber
-    ? { style: { backgroundColor: '#009845' }, identifyerClass: 'selected' }
-    : { identifyerClass: 'possible' };
+    for (let r = 0; r < rows.length; r++) {
+      if (rows[r].qElemNumber === cell.qElemNumber)
+        return { style: { backgroundColor: '#009845' }, identifyerClass: 'selected' };
+    }
+  }
+
+  return { identifyerClass: 'possible' };
 }
 
 export function selectCell(selections, cell) {
