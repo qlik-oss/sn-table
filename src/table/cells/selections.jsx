@@ -16,7 +16,7 @@ export default function withSelections(CellComponent) {
       <CellComponent
         {...props}
         className={`${identifyerClass} ${muiClasses.selectionStyle}`}
-        onClick={() => cell.isDim && selections.selectCell(cell)}
+        onMouseUp={() => cell.isDim && selections.selectCell(cell)}
       />
     );
   };

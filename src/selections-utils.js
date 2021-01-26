@@ -1,5 +1,6 @@
 export function getSelectionStyle(selected, cell) {
   const { colIdx, rows } = selected;
+
   if (rows.length) {
     if (colIdx !== cell.colIdx) return { style: { backgroundColor: '#e8e8e8' }, identifyerClass: 'excluded' };
 

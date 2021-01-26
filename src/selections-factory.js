@@ -37,7 +37,7 @@ export default function initSelections(el) {
   }, [api]);
 
   useEffect(() => {
-    const onClick = (e) => {
+    const onMouseUp = (e) => {
       const classes = e.target.className;
       // TODO: isSelectableCell is false when dragging from one cell to another
       const isSelectableCell = classes.includes('selected') || classes.includes('possible');
@@ -47,9 +47,9 @@ export default function initSelections(el) {
       }
     };
 
-    el.addEventListener('click', onClick, true);
+    el.addEventListener('mouseup', onMouseUp, true);
     return () => {
-      el.removeEventListener('click', onClick, true);
+      el.removeEventListener('mouseup', onMouseUp, true);
     };
   }, []);
 
