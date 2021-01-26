@@ -1,4 +1,4 @@
-import { getSelectionStyle, selectCell } from '../selections-utils';
+import { getSelectionClass, selectCell } from '../selections-utils';
 
 describe('selections-utils', () => {
   describe('getSelectionStyle', () => {
@@ -10,39 +10,34 @@ describe('selections-utils', () => {
       cell = { qElemNumber: 1, colIdx: 1 };
     });
 
-    it('should return green background and selected class name when selected', () => {
-      const { style, identifyerClass } = getSelectionStyle(selected, cell);
-      expect(style.backgroundColor).to.equal('#009845');
-      expect(identifyerClass).to.equal('selected');
+    it('should return selected when selected', () => {
+      const selectionClass = getSelectionClass(selected, cell);
+      expect(selectionClass).to.equal('selected');
     });
-    it('should return grey background and excluded class name when not available to select', () => {
+    it('should return excluded when other column', () => {
       cell.qElemNumber = 2;
       cell.colIdx = 2;
 
-      const { style, identifyerClass } = getSelectionStyle(selected, cell);
-      expect(style.backgroundColor).to.equal('#e8e8e8');
-      expect(identifyerClass).to.equal('excluded');
+      const selectionClass = getSelectionClass(selected, cell);
+      expect(selectionClass).to.equal('excluded');
     });
-    it('should return grey background and excluded class name when other column that happens to have the same qElemNumber', () => {
+    it('should return excluded when other column that happens to have the same qElemNumber', () => {
       cell.colIdx = 2;
 
-      const { style, identifyerClass } = getSelectionStyle(selected, cell);
-      expect(style.backgroundColor).to.equal('#e8e8e8');
-      expect(identifyerClass).to.equal('excluded');
+      const selectionClass = getSelectionClass(selected, cell);
+      expect(selectionClass).to.equal('excluded');
     });
-    it('should return no style and possible class name when available to select', () => {
+    it('should return possible when active and available to select', () => {
       cell.qElemNumber = 2;
 
-      const { style, identifyerClass } = getSelectionStyle(selected, cell);
-      expect(style).to.equal(undefined);
-      expect(identifyerClass).to.equal('possible');
+      const selectionClass = getSelectionClass(selected, cell);
+      expect(selectionClass).to.equal('possible');
     });
-    it('should return no style and possible class name when no active selections', () => {
+    it('should return possible when no active selections', () => {
       selected = { rows: [] };
 
-      const { style, identifyerClass } = getSelectionStyle(selected, cell);
-      expect(style).to.equal(undefined);
-      expect(identifyerClass).to.equal('possible');
+      const selectionClass = getSelectionClass(selected, cell);
+      expect(selectionClass).to.equal('possible');
     });
   });
 
