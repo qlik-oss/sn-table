@@ -39,7 +39,6 @@ export default function initSelections(el) {
   useEffect(() => {
     const onMouseUp = (e) => {
       const classes = e.target.className;
-      // TODO: isSelectableCell is false when dragging from one cell to another
       const isSelectableCell = classes.includes('selected') || classes.includes('possible');
       if (selections.api.isActive() && !isSelectableCell) {
         e.stopPropagation();
