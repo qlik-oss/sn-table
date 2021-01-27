@@ -19,7 +19,7 @@ export default function supernova(env) {
       const layout = useLayout();
       const model = useModel();
       const constraints = useConstraints();
-
+      console.log(model, 'model');
       const [pageInfo, setPageInfo] = useState({ top: 0, height: 100 });
       const [tableData, setTableData] = useState();
 
