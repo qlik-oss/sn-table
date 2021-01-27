@@ -11,47 +11,57 @@ import path from 'path';
 import jsxPlugin from '@babel/plugin-transform-react-jsx';
 import classProps from '@babel/plugin-proposal-class-properties';
 
-export default {
-  input: './src/index.js',
-  output: {
-    file: path.resolve(__dirname, 'dist', 'sn-table.js'),
-    name: 'A Table',
-    format: 'umd',
-    exports: 'named',
-    sourcemap: true,
-    globals: {
-      '@nebula.js/stardust': 'stardust',
+const config = (format = 'umd') => {
+
+  const fileName = format === 'esm' ?  'sn-table.esm.js' : 'sn-table.js';
+
+  const cfg = {
+    input: './src/index.js',
+    output: {
+      file: path.resolve(__dirname, 'dist', fileName),
+      name: 'A Table',
+      format: format,
+      exports: 'default',
+      sourcemap: true,
+      globals: {
+        '@nebula.js/stardust': 'stardust',
+      },
     },
-  },
-  external: ['@nebula.js/stardust'],
-  plugins: [
-    resolve({
-      extensions: ['.js', '.jsx'],
-    }),
-    replace({
-      'process.env.NODE_ENV': JSON.stringify('production'),
-    }),
-    external(),
-    postcss(),
-    babel({
-      babelrc: false,
-      include: ['src/**'],
-      presets: [
-        [
-          '@babel/env',
-          {
-            modules: false,
-            targets: {
-              browsers: ['last 2 Chrome versions'],
+    external: ['@nebula.js/stardust'],
+    plugins: [
+      resolve({
+        extensions: ['.js', '.jsx'],
+      }),
+      replace({
+        'process.env.NODE_ENV': JSON.stringify('production'),
+      }),
+      external(),
+      postcss(),
+      babel({
+        babelrc: false,
+        include: ['src/**'],
+        presets: [
+          [
+            '@babel/env',
+            {
+              modules: false,
+              targets: {
+                browsers: ['last 2 Chrome versions'],
+              },
             },
-          },
+          ],
+          ['@babel/react'],
         ],
-        ['@babel/react'],
-      ],
-      plugins: [[jsxPlugin], [classProps]],
-    }),
-    commonjs(),
-    image(),
-    visualizer(),
-  ],
+        plugins: [[jsxPlugin], [classProps]],
+      }),
+      commonjs(),
+      image(),
+      visualizer(),
+    ],
+  }
+return cfg;
 };
+
+const dist = [config(), config('esm')]
+
+export default dist;
