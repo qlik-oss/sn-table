@@ -1,8 +1,8 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('@nebula.js/stardust')) :
-  typeof define === 'function' && define.amd ? define(['@nebula.js/stardust'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global['A Table'] = factory(global.stardust));
-}(this, (function (stardust) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@nebula.js/stardust')) :
+  typeof define === 'function' && define.amd ? define(['exports', '@nebula.js/stardust'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global['A Table'] = {}, global.stardust));
+}(this, (function (exports, stardust) { 'use strict';
 
   /**
    * @typedef {object}
@@ -15289,8 +15289,14 @@
       ext: ext(env)
     };
   }
+  function table(env) {
+    return supernova(env);
+  }
 
-  return supernova;
+  exports.default = supernova;
+  exports.table = table;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 //# sourceMappingURL=sn-table.js.map

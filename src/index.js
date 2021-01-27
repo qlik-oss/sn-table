@@ -47,3 +47,7 @@ export default function supernova(env) {
     ext: ext(env),
   };
 }
+
+export function table(env) {
+  return supernova(env);
+}

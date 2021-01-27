@@ -15285,6 +15285,10 @@ function supernova(env) {
     ext: ext(env)
   };
 }
+function table(env) {
+  return supernova(env);
+}
 
 export default supernova;
+export { table };
 //# sourceMappingURL=sn-table.esm.js.map

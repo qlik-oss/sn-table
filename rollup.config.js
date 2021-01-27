@@ -20,8 +20,8 @@ const config = (format = 'umd') => {
     output: {
       file: path.resolve(__dirname, 'dist', fileName),
       name: 'A Table',
-      format: format,
-      exports: 'default',
+      format,
+      exports: "named",
       sourcemap: true,
       globals: {
         '@nebula.js/stardust': 'stardust',
