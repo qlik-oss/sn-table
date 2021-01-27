@@ -23,11 +23,11 @@ const config = (format = 'umd') => {
       format,
       exports: "named",
       sourcemap: true,
-      globals: {
+  /*    globals: {
         '@nebula.js/stardust': 'stardust',
-      },
+      },*/
     },
-    external: ['@nebula.js/stardust'],
+    //external: ['@nebula.js/stardust'],
     plugins: [
       resolve({
         extensions: ['.js', '.jsx'],
