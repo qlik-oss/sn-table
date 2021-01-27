@@ -1,5 +1,6 @@
 import { useElement, useLayout, useEffect, useModel, useState, useConstraints } from '@nebula.js/stardust';
 import properties from './object-properties';
+import initSelections from './selections-factory';
 import data from './data';
 import ext from './ext';
 import { render, teardown } from './table/root';
@@ -22,6 +23,8 @@ export default function supernova(env) {
       const [pageInfo, setPageInfo] = useState({ top: 0, height: 100 });
       const [tableData, setTableData] = useState();
 
+      const selections = initSelections();
+
       useEffect(() => {
         manageData(model, layout, pageInfo).then((d) => {
           setTableData(d);
@@ -37,9 +40,9 @@ export default function supernova(env) {
 
       useEffect(() => {
         if (layout && tableData) {
-          render(el, { tableData, setPageInfo, pageInfo, constraints });
+          render(el, { tableData, setPageInfo, pageInfo, constraints, selections });
         }
-      }, [tableData]);
+      }, [tableData, selections.selected]);
     },
     ext: ext(env),
   };

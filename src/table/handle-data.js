@@ -29,10 +29,10 @@ export default async function manageData(model, layout, pageInfo) {
   const matrix = dataPages[0].qMatrix;
 
   const columns = columnorder.map((c) => getColumnInfo(layout, c));
-  const rows = matrix.map((r) => {
+  const rows = matrix.map((r, rowIdx) => {
     const row = {};
-    columns.forEach((c, i) => {
-      row[c.id] = r[i];
+    columns.forEach((c, colIdx) => {
+      row[c.id] = { ...r[colIdx], rowIdx: rowIdx + pageInfo.top, colIdx };
     });
     return row;
   });

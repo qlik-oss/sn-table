@@ -1,26 +1,19 @@
 import React from 'react';
-
-const oddlyGlobalSelectionState = {};
-
-/* eslint-disable */
-function selectCell(cell, column) {
-  console.log(cell.qText);
-  oddlyGlobalSelectionState[cell.qElemNumber] = !oddlyGlobalSelectionState[cell.qElemNumber];
-}
+import PropTypes from 'prop-types';
 
 export default function withSelections(CellComponent) {
-  class HOC extends React.Component {
-    render() {
-      const { cell, column } = this.props;
-      const style = oddlyGlobalSelectionState[cell.qElemNumber] ? { 'background-color': '#00ff00' } : {};
-      return <CellComponent style={style} {...this.props} onClick={() => selectCell(cell, column)} />;
-    }
-  }
+  const HOC = (props) => {
+    const { cell, selections } = props;
+    const { selectCell, getCellStyle } = selections;
+
+    return <CellComponent {...props} style={getCellStyle(cell)} onClick={() => selectCell(cell)} />;
+  };
+
+  HOC.propTypes = {
+    cell: PropTypes.object.isRequired,
+    colIdx: PropTypes.number.isRequired,
+    selections: PropTypes.object.isRequired,
+  };
+
   return HOC;
 }
-
-/* TODO
-- move actual selection logic out, just pass it into this file through 'selections'
-- onClick runs selections.selectCell
-- how can we use useState here?
-*/

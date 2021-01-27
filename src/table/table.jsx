@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import TableBodyWrapper from './table-body';
 
 export default function TableWrapper(props) {
   const { tableData, setPageInfo } = props;
-  const { size, rows, columns } = tableData;
+  const { size, columns, rows } = tableData;
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
 
@@ -23,9 +23,14 @@ export default function TableWrapper(props) {
   // should trigger reload
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
-    setPageInfo({ top: 0, height: rowsPerPage });
+    setPageInfo({ top: 0, height: +event.target.value });
     setPage(0);
   };
+
+  if (!rows.length && page > 0) {
+    handleChangePage(null, 0);
+    return null;
+  }
 
   return (
     <Paper>
@@ -40,31 +45,7 @@ export default function TableWrapper(props) {
               ))}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                {columns.map((column) => {
-                  const cell = row[column.id];
-                  const value = cell.qText;
-                  return (
-                    <TableCell key={column.id} align={column.align}>
-                      {value}
-                    </TableCell>
-                  );
-                  // const CellRenderer = columnRenderers[i];
-                  // return CellRenderer ? (
-                  //   <CellRenderer cell={cell} column={column} value={value} key={column.id} align={column.align}>
-                  //     {value}
-                  //   </CellRenderer>
-                  // ) : (
-                  //   <TableCell key={column.id} align={column.align}>
-                  //     {value}
-                  //   </TableCell>
-                  // );
-                })}
-              </TableRow>
-            ))}
-          </TableBody>
+          <TableBodyWrapper {...props} />
         </Table>
       </TableContainer>
       <TablePagination

@@ -17,7 +17,7 @@ export default {
     file: path.resolve(__dirname, 'dist', 'sn-table.js'),
     name: 'A Table',
     format: 'umd',
-    exports: 'default',
+    exports: 'named',
     sourcemap: true,
     globals: {
       '@nebula.js/stardust': 'stardust',
