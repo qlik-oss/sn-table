@@ -7,7 +7,7 @@ import muiSetup from './mui-setup';
 import { render, teardown } from './table/root';
 import manageData from './table/handle-data';
 // This line is replaced by rollback with an import for internal builds
-const __OPIONAL_THEME_DEPS__ = {};
+const __OPIONAL_THEME_DEPS__ = {}; // eslint-disable-line no-underscore-dangle
 
 export default function supernova(env) {
   return {
