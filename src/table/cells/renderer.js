@@ -11,5 +11,6 @@ export default function getCellRenderer(column, selectionsEnabled) {
 
     return withIcon(TableCell);
   }
-  return null;
+
+  return withSelections(TableCell);
 }

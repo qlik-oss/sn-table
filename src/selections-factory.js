@@ -1,69 +1,28 @@
 import { useEffect, useState, useSelections } from '@nebula.js/stardust';
+import { getSelectionClass, selectCell } from './selections-utils';
 
-export function getCellStyle(selected, cell) {
-  const isSelected = selected[0]?.colIdx === cell.colIdx && !!selected.find((s) => s.qElemNumber === cell.qElemNumber);
-  const isExcluded = selected.length && selected[0].colIdx !== cell.colIdx;
-
-  return isSelected ? { 'background-color': '#009845' } : isExcluded ? { 'background-color': '#e8e8e8' } : {};
-}
-
-export function selectCell(selections, cell) {
-  const { api, selected, setSelected } = selections;
-  const { rowIdx, colIdx, qElemNumber } = cell;
-  let newSelected = [];
-
-  // prevent selection in other column
-  if ((selected.length && selected[0].colIdx !== colIdx) || !api) {
-    return;
-  }
-
-  if (!api.isActive()) {
-    api.begin('/qHyperCubeDef');
-  } else {
-    newSelected = selected.concat();
-  }
-
-  const alreadySelectedIdx = newSelected.findIndex((s) => s.qElemNumber === qElemNumber);
-  if (alreadySelectedIdx > -1) {
-    newSelected.splice(alreadySelectedIdx, 1);
-  } else {
-    newSelected.push({ qElemNumber, rowIdx, colIdx });
-  }
-
-  if (newSelected.length) {
-    const selectedRows = newSelected.map((s) => s.rowIdx);
-    api.select({
-      method: 'selectHyperCubeCells',
-      params: ['/qHyperCubeDef', selectedRows, [colIdx]],
-    });
-  } else {
-    api.select({
-      method: 'resetMadeSelections',
-      params: [],
-    });
-  }
-
-  setSelected(newSelected);
-}
-
-export default function initSelections(isEnabled) {
+export default function initSelections(el, constraints) {
   const api = useSelections();
   const [selections] = useState({
-    isEnabled: !!api && isEnabled,
+    isEnabled: !!api && !constraints.active,
     api,
-    getCellStyle: (cell) => getCellStyle(selections.selected, cell),
+    getSelectionClass: (cell) => getSelectionClass(selections.selected, cell),
     selectCell: (cell) => selectCell(selections, cell),
-    selected: [],
+    selected: { rows: [] },
     setSelected: (selected) => {
       selections.selected = selected;
     },
   });
 
-  const resetSelections = () => {
-    selections.selected = [];
-  };
+  useEffect(() => {
+    selections.isEnabled = !!api && !constraints.active;
+  }, [api, constraints]);
 
   useEffect(() => {
+    const resetSelections = () => {
+      selections.selected = { rows: [] };
+    };
+
     if (!selections.api) {
       return () => {};
     }
@@ -82,7 +41,21 @@ export default function initSelections(isEnabled) {
     };
   }, [api]);
 
-  selections.isEnabled = !!api && isEnabled;
+  useEffect(() => {
+    const onMouseUp = (e) => {
+      const classes = e.target.className;
+      const isSelectableCell = classes.includes('selected') || classes.includes('possible');
+      if (selections.api.isActive() && !isSelectableCell) {
+        e.stopPropagation();
+        selections.api.confirm();
+      }
+    };
+
+    el.addEventListener('mouseup', onMouseUp, true);
+    return () => {
+      el.removeEventListener('mouseup', onMouseUp, true);
+    };
+  }, []);
 
   return selections;
 }
