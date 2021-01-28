@@ -6,6 +6,8 @@ import ext from './ext';
 import muiSetup from './mui-setup';
 import { render, teardown } from './table/root';
 import manageData from './table/handle-data';
+// This line is replaced by rollback with an import for internal builds
+const __OPIONAL_THEME_DEPS__ = {};
 
 export default function supernova(env) {
   return {
@@ -23,7 +25,7 @@ export default function supernova(env) {
 
       const [pageInfo, setPageInfo] = useState({ top: 0, height: 100 });
       const [tableData, setTableData] = useState();
-      const [muiParameters] = useState(muiSetup(constraints.active));
+      const [muiParameters] = useState(muiSetup(constraints.active, __OPIONAL_THEME_DEPS__));
 
       const selections = initSelections(el);
 
@@ -43,6 +45,7 @@ export default function supernova(env) {
       useEffect(() => {
         if (layout && tableData) {
           render(el, { tableData, setPageInfo, pageInfo, constraints, selections, muiParameters });
+          render(el, { tableData, setPageInfo, pageInfo, constraints, selections });
         }
       }, [tableData, selections.selected]);
     },

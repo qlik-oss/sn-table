@@ -81,7 +81,7 @@
   "peerDependencies": {
     "@nebula.js/stardust": "^1.0"
   },
-  "dependencies": {
+  "optionalDependencies": {
     "@qlik/sprout-icons": "^0.9.2",
     "@qlik/sprout-theme": "^1.16.0"
   }
