@@ -6,7 +6,7 @@ import ext from './ext';
 import muiSetup from './mui-setup';
 import { render, teardown } from './table/root';
 import manageData from './table/handle-data';
-// This line is replaced by rollback with an import for internal builds
+// This line is replaced by rollup with an import for internal builds
 const __OPIONAL_THEME_DEPS__ = {}; // eslint-disable-line no-underscore-dangle
 
 export default function supernova(env) {
@@ -45,7 +45,6 @@ export default function supernova(env) {
       useEffect(() => {
         if (layout && tableData) {
           render(el, { tableData, setPageInfo, pageInfo, constraints, selections, muiParameters });
-          render(el, { tableData, setPageInfo, pageInfo, constraints, selections });
         }
       }, [tableData, selections.selected]);
     },
