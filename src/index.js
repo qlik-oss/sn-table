@@ -6,6 +6,8 @@ import ext from './ext';
 import muiSetup from './mui-setup';
 import { render, teardown } from './table/root';
 import manageData from './table/handle-data';
+// This line is replaced by rollup with an import for internal builds
+const __OPIONAL_THEME_DEPS__ = {}; // eslint-disable-line no-underscore-dangle
 
 export default function supernova(env) {
   return {
@@ -23,7 +25,7 @@ export default function supernova(env) {
 
       const [pageInfo, setPageInfo] = useState({ top: 0, height: 100 });
       const [tableData, setTableData] = useState();
-      const [muiParameters] = useState(muiSetup(constraints.active));
+      const [muiParameters] = useState(muiSetup(constraints.active, __OPIONAL_THEME_DEPS__));
 
       const selections = initSelections(el);
 
