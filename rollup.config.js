@@ -11,13 +11,21 @@ import path from 'path';
 import jsxPlugin from '@babel/plugin-transform-react-jsx';
 import classProps from '@babel/plugin-proposal-class-properties';
 
+import fs from 'fs';
+
+function checkInternals() {
+  // Checks if the @qlik namespace exists on disk to
+  // see if the optional dependecies can be included
+  return fs.existsSync('./node_modules/@qlik');
+}
+
 export default {
   input: './src/index.js',
   output: {
     file: path.resolve(__dirname, 'dist', 'sn-table.js'),
     name: 'A Table',
     format: 'umd',
-    exports: 'named',
+    exports: 'default',
     sourcemap: true,
     globals: {
       '@nebula.js/stardust': 'stardust',
@@ -31,6 +39,13 @@ export default {
     replace({
       'process.env.NODE_ENV': JSON.stringify('production'),
     }),
+    checkInternals()
+      ? replace({
+          'const __OPIONAL_THEME_DEPS__ = {};': "import { sproutBase } from '@qlik/sprout-theme';",
+          delimiters: ['', ''],
+          __OPIONAL_THEME_DEPS__: 'sproutBase',
+        })
+      : {},
     external(),
     postcss(),
     babel({

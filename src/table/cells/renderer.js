@@ -7,5 +7,6 @@ export default function getCellRenderer(column) {
   if (column.isDim) {
     return withSelections(withIcon(TableCell));
   }
-  return null;
+
+  return withSelections(TableCell);
 }

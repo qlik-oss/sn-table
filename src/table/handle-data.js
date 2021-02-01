@@ -32,7 +32,7 @@ export default async function manageData(model, layout, pageInfo) {
   const rows = matrix.map((r, rowIdx) => {
     const row = {};
     columns.forEach((c, colIdx) => {
-      row[c.id] = { ...r[colIdx], rowIdx: rowIdx + pageInfo.top, colIdx };
+      row[c.id] = { ...r[colIdx], rowIdx: rowIdx + pageInfo.top, colIdx, isDim: c.isDim };
     });
     return row;
   });
