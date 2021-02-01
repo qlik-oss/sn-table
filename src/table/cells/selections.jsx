@@ -4,9 +4,10 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
   excluded: {
-    backgroundColor: '#e8e8e8',
+    background: 'repeating-linear-gradient(-45deg, #fafafa, #fafafa 2px, #eee 2.5px, #fafafa 3px, #fafafa 5px)',
   },
   selected: {
+    color: '#fff',
     backgroundColor: '#009845',
   },
   possible: {},
