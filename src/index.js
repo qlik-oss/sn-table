@@ -10,7 +10,7 @@ import {
 import properties from './object-properties';
 import data from './data';
 import ext from './ext';
-import muiSetup from './index-helper';
+import muiSetup from './mui-setup';
 import { render, teardown } from './table/root';
 import manageData from './table/handle-data';
 
