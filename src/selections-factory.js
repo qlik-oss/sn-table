@@ -1,5 +1,5 @@
 import { useEffect, useState, useSelections } from '@nebula.js/stardust';
-import { getSelectionClass, selectCell } from './selections-utils';
+import { getSelectionClass, selectCell } from './utils/selections-utils';
 
 export default function initSelections(el) {
   const api = useSelections();

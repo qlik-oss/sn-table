@@ -4,6 +4,7 @@ import initSelections from './selections-factory';
 import data from './data';
 import ext from './ext';
 import muiSetup from './mui-setup';
+import shouldUpdateData from './utils/index-utils';
 import { render, teardown } from './table/root';
 import manageData from './table/handle-data';
 // This line is replaced by rollup with an import for internal builds
@@ -30,9 +31,11 @@ export default function supernova(env) {
       const selections = initSelections(el);
 
       useEffect(() => {
-        manageData(model, layout, pageInfo).then((d) => {
-          setTableData(d);
-        });
+        if (shouldUpdateData(layout, tableData)) {
+          manageData(model, layout, pageInfo).then((d) => {
+            setTableData(d);
+          });
+        }
       }, [layout, pageInfo]);
 
       useEffect(
