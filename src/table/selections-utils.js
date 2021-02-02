@@ -46,10 +46,15 @@ export function reducer(state, action) {
   }
 }
 
-export function selectCell(cell, selState, selDispatch) {
+export function selectCell(cell, selState, selDispatch, evt) {
   const { api, rows } = selState;
   const { rowIdx, colIdx, qElemNumber } = cell;
   let newRows = [];
+
+  if (evt.ctrlKey || evt.metaKey) {
+    // if the ctrl key or the ⌘ Command key (On Macintosh keyboards) or the ⊞ Windows key is pressed
+    window.console.log(evt);
+  }
 
   if (!api.isActive()) {
     api.begin('/qHyperCubeDef');
