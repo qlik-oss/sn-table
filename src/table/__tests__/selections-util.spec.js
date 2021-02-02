@@ -2,32 +2,41 @@ import { addSelectionListeners, getSelectionClass, reducer, selectCell } from '.
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {
+    const listenerNames = ['deactivated', 'canceled', 'confirmed', 'cleared'];
     let api;
     let selDispatch;
 
-    it('should call api.on and api removeListener for all listeners', () => {
-      const listenerNames = ['deactivated', 'canceled', 'confirmed', 'cleared'];
+    beforeEach(() => {
+      selDispatch = () => {};
       api = {
         on: sinon.spy(),
         removeListener: sinon.spy(),
       };
-      selDispatch = () => {};
+    });
 
+    it('should call api.on and api removeListener for all listeners', () => {
       addSelectionListeners(api, selDispatch)();
       listenerNames.forEach((name) => {
         expect(api.on).to.have.been.calledWith(name);
         expect(api.removeListener).to.have.been.calledWith(name);
       });
     });
+    it('should not call call api.on nor api.removeListener when no api', () => {
+      api = undefined;
+
+      const destroyFn = addSelectionListeners(api, selDispatch);
+      // Not a great check, but this would crash if the this case worked incorrectly
+      expect(destroyFn).to.be.a('function');
+    });
     it('should call api.on with the same callback for all listener names, that calls selDispatch', () => {
       const callbacks = [];
+      selDispatch = sinon.spy();
       api = {
         on: (name, cb) => {
           callbacks.push(cb);
         },
         removeListener: () => {},
       };
-      selDispatch = sinon.spy();
 
       addSelectionListeners(api, selDispatch);
       callbacks.forEach((cb) => {
