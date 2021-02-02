@@ -1,6 +1,6 @@
 import { createGenerateClassName, createMuiTheme } from '@material-ui/core/styles';
 
-export function muiSetup(isActive, sproutBase) {
+export default function muiSetup(isActive, sproutBase) {
   if (sproutBase.overrides) {
     /* eslint-disable no-param-reassign */
     sproutBase.overrides.MuiTableContainer.root.height = 'calc(100% - 52px)';
@@ -17,8 +17,4 @@ export function muiSetup(isActive, sproutBase) {
   });
 
   return { theme, generateClassName };
-}
-
-export function shouldUpdateData(layout, tableData) {
-  return !tableData || JSON.stringify(layout.qHyperCube.qSize) !== JSON.stringify(tableData.size);
 }

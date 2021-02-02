@@ -1,6 +1,6 @@
 import {
   useElement,
-  useLayout,
+  useStaleLayout,
   useEffect,
   useModel,
   useState,
@@ -10,7 +10,7 @@ import {
 import properties from './object-properties';
 import data from './data';
 import ext from './ext';
-import { shouldUpdateData, muiSetup } from './index-helper';
+import muiSetup from './index-helper';
 import { render, teardown } from './table/root';
 import manageData from './table/handle-data';
 
@@ -27,7 +27,7 @@ export default function supernova(env) {
     },
     component() {
       const el = useElement();
-      const layout = useLayout();
+      const layout = useStaleLayout();
       const model = useModel();
       const constraints = useConstraints();
       const selectionsAPI = useSelections();
@@ -37,11 +37,9 @@ export default function supernova(env) {
       const [muiParameters] = useState(muiSetup(constraints.active, __OPIONAL_THEME_DEPS__));
 
       useEffect(() => {
-        if (shouldUpdateData(layout, tableData)) {
-          manageData(model, layout, pageInfo).then((d) => {
-            setTableData(d);
-          });
-        }
+        manageData(model, layout, pageInfo).then((d) => {
+          setTableData(d);
+        });
       }, [layout, pageInfo]);
 
       useEffect(() => {

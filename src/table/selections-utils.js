@@ -38,13 +38,11 @@ export function getSelectionClass(cell, selState) {
 export function reducer(state, action) {
   switch (action.type) {
     case 'select':
-      // eslint-disable-next-line no-case-declarations
-      const { rows, colIdx } = action.payload;
-      return { ...state, rows, colIdx };
+      return { ...state, rows: action.payload.newRows, colIdx: action.payload.colIdx };
     case 'reset':
-      return { ...state, rows: [], colIdx: -1 };
+      return state.rows.length ? { ...state, rows: [], colIdx: -1 } : state;
     default:
-      throw new Error();
+      throw new Error('reducer called with invalid action type');
   }
 }
 
@@ -67,13 +65,12 @@ export function selectCell(cell, selState, selDispatch) {
   }
 
   if (newRows.length) {
-    selDispatch({ type: 'select', payload: { rows: newRows, colIdx } });
+    selDispatch({ type: 'select', payload: { newRows, colIdx } });
     api.select({
       method: 'selectHyperCubeCells',
       params: ['/qHyperCubeDef', newRows.map((r) => r.rowIdx), [colIdx]],
     });
   } else {
-    selDispatch({ type: 'reset' });
     api.cancel();
   }
 }
