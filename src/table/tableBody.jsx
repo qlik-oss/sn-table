@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useReducer, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
+import { addSelectionListeners, reducer } from './selections-utils';
 
-export default function TableBodyWrapper({ tableData, columnRenderers, selections }) {
+export default function TableBodyWrapper({ tableData, columnRenderers, selectionsAPI }) {
   const { rows, columns } = tableData;
+
+  const [selState, selDispatch] = useReducer(reducer, {
+    api: selectionsAPI,
+    rows: [],
+    colIdx: -1,
+  });
+
+  useEffect(() => {
+    addSelectionListeners(selectionsAPI, selDispatch);
+  }, []);
 
   return (
     <TableBody>
@@ -22,7 +33,8 @@ export default function TableBodyWrapper({ tableData, columnRenderers, selection
                 value={value}
                 key={column.id}
                 align={column.align}
-                selections={selections}
+                selState={selState}
+                selDispatch={selDispatch}
               >
                 {value}
               </CellRenderer>
@@ -41,5 +53,5 @@ export default function TableBodyWrapper({ tableData, columnRenderers, selection
 TableBodyWrapper.propTypes = {
   tableData: PropTypes.object.isRequired,
   columnRenderers: PropTypes.array.isRequired,
-  selections: PropTypes.object.isRequired,
+  selectionsAPI: PropTypes.object.isRequired,
 };
