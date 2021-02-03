@@ -46,8 +46,8 @@ export function reducer(state, action) {
   }
 }
 
-export const getSelectedRows = (selectedRows, qElemNumber, rowIdx, rows, evt) => {
-  const alreadySelectedIdx = rows.findIndex((r) => r.qElemNumber === qElemNumber);
+export const getSelectedRows = (selectedRows, qElemNumber, rowIdx, evt) => {
+  const alreadySelectedIdx = selectedRows.findIndex((r) => r.qElemNumber === qElemNumber);
   if (evt.ctrlKey || evt.metaKey) {
     // if the ctrl key or the ⌘ Command key (On Macintosh keyboards) or the ⊞ Windows key is pressed
     // get the last clicked item
@@ -76,10 +76,9 @@ export function selectCell(cell, selState, selDispatch, evt) {
     selectedRows = rows.concat();
   }
 
-  selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, rows, evt);
+  selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt);
 
   if (selectedRows.length) {
-    window.console.log(selectedRows, 'selectedRows');
     selDispatch({ type: 'select', payload: { selectedRows, colIdx } });
     api.select({
       method: 'selectHyperCubeCells',
