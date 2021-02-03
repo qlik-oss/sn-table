@@ -70,19 +70,16 @@
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-proptypes": "^1.0.0",
     "rollup": "^2.38.0",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.0",
     "rollup-plugin-visualizer": "^4.2.0",
-    "scriptappy-from-jsdoc": "0.7.0"
+    "scriptappy-from-jsdoc": "0.7.0",
+    "@qlik/sprout-icons": "^0.9.2",
+    "@qlik/sprout-theme": "^1.16.0"
   },
   "peerDependencies": {
     "@nebula.js/stardust": "^1.0"
-  },
-  "optionalDependencies": {
-    "@qlik/sprout-icons": "^0.9.2",
-    "@qlik/sprout-theme": "^1.16.0"
   }
 }
