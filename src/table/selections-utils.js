@@ -46,7 +46,7 @@ export function reducer(state, action) {
   }
 }
 
-export function selectCell(cell, selState, selDispatch) {
+export function selectCell(cell, selState, selDispatch, evt) {
   const { api, rows } = selState;
   const { rowIdx, colIdx, qElemNumber } = cell;
   let newRows = [];
@@ -58,10 +58,15 @@ export function selectCell(cell, selState, selDispatch) {
   }
 
   const alreadySelectedIdx = rows.findIndex((r) => r.qElemNumber === qElemNumber);
-  if (alreadySelectedIdx > -1) {
+  if (alreadySelectedIdx > -1 && !evt.ctrlKey && !evt.metaKey) {
+    // if the ctrl key or the ⌘ Command key (On Macintosh keyboards) or the ⊞ Windows key is pressed
+    // do not remove the clicked item
     newRows.splice(alreadySelectedIdx, 1);
   } else {
     newRows.push({ qElemNumber, rowIdx });
+    // if the ctrl key or the ⌘ Command key (On Macintosh keyboards) or the ⊞ Windows key is pressed
+    // get the last clicked item
+    (evt.ctrlKey || evt.metaKey) && (newRows = newRows.slice(-1));
   }
 
   if (newRows.length) {
