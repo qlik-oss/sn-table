@@ -103,7 +103,7 @@ describe('selections-utils', () => {
 
     it('should return state updated with rows and colIdx when action.type is select', () => {
       const newRow = { qElemNumber: 2, rowIdx: 2 };
-      action = { type: 'select', payload: { colIdx: 1, newRows: [...state.rows, newRow] } };
+      action = { type: 'select', payload: { colIdx: 1, selectedRows: [...state.rows, newRow] } };
       const expectedRows = [...state.rows, newRow];
 
       const newState = reducer(state, action);
@@ -157,7 +157,7 @@ describe('selections-utils', () => {
 
     it('should call begin, add to selected and call selectHyperCubeCells when no previous selections empty', () => {
       const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
-      const payload = { colIdx: cell.colIdx, newRows: [{ qElemNumber: 1, rowIdx: 1 }] };
+      const payload = { colIdx: cell.colIdx, selectedRows: [{ qElemNumber: 1, rowIdx: 1 }] };
 
       selectCell(cell, selState, selDispatch);
       expect(selState.api.begin).to.have.been.called;
@@ -181,7 +181,7 @@ describe('selections-utils', () => {
       const params = ['/qHyperCubeDef', [2, 1], [cell.colIdx]];
       const payload = {
         colIdx: cell.colIdx,
-        newRows: [
+        selectedRows: [
           { qElemNumber: 2, rowIdx: 2 },
           { qElemNumber: 1, rowIdx: 1 },
         ],
