@@ -63,6 +63,9 @@ jobs:
           name: Lint
           command: yarn run lint
       - run:
+          name: Update spec
+          command: yarn run spec
+      - run:
           name: Run unit tests and publish to codeclimate
           command: |
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
@@ -128,9 +131,6 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/project
-      - run:
-          name: Update spec
-          command: yarn run spec
       - run:
           name: Login for Docker
           command: echo $DOCKER_TOKEN | docker login -u "$DOCKER_USER" --password-stdin
