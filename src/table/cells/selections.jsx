@@ -35,4 +35,5 @@ function withSelections(CellComponent) {
   return HOC;
 }
 
-export default withSelections;
+// wrapping to enable sandbox.replace
+export default { withSelections };
