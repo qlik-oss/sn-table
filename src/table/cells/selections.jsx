@@ -14,7 +14,7 @@ const useStyles = makeStyles({
   possible: {},
 });
 
-export default function withSelections(CellComponent) {
+function withSelections(CellComponent) {
   const HOC = (props) => {
     const { cell, selState, selDispatch } = props;
     const classes = useStyles();
@@ -34,3 +34,5 @@ export default function withSelections(CellComponent) {
 
   return HOC;
 }
+
+export default withSelections;
