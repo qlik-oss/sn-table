@@ -1,26 +1,21 @@
 /**
- * @typedef {object}
+ * @extends {qae.GenericObjectProperties}
  * @entry
  */
 const properties = {
   /**
-   * Current version of this generic object definition
-   * @type {string}
-   */
-  version: '1.0.0',
-  /**
-   * @typedef
+   * @extends {qae.HyperCubeDef}
    */
   qHyperCubeDef: {
+    /** @type {Array<qae.NxDimension>} */
     qDimensions: [],
+    /** @type {Array<qae.NxMeasure>} */
     qMeasures: [],
     qMode: 'S',
     /** @type {boolean} */
-    qSuppressZero: true,
+    qSuppressZero: false,
     /** @type {boolean} */
     qSuppressMissing: true,
-    /** @type {NxCalcCond} */
-    qCalcCondition: undefined,
     /** @type {Array} */
     qColumnOrder: [],
     /** @type {Array} */
