@@ -5,6 +5,6 @@ checks:
       threshold: 60
   method-complexity:
     config:
-      threshold: 8
+      threshold: 9
 exclude_patterns:
   - "src/**/*.spec.js"
