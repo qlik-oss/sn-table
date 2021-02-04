@@ -1,14 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-const f = fs.readFileSync(path.resolve(__dirname, '../src/object-properties.js'), { encoding: 'utf-8' });
-const V_RX = /version: '(.+)',/;
-const v = V_RX.exec(f);
-
-if (!v) {
-  throw new Error('Could not find a version in properties');
-}
-
 const pkg = require(path.resolve(__dirname, '../package.json')); // eslint-disable-line
 
 module.exports = {
@@ -21,7 +13,7 @@ module.exports = {
     },
     visibility: 'public',
     name: `${pkg.name}:properties`,
-    version: v[1],
+    version: pkg.version,
     description: 'Table generic object definition',
   },
   output: {
@@ -29,8 +21,18 @@ module.exports = {
   },
   parse: {
     types: {
-      NxCalcCond: {},
-      StringExpression: {},
+      'qae.GenericObjectProperties': {
+        url: 'https://core.qlik.com/services/qix-engine/apis/qix/definitions/#genericobjectproperties',
+      },
+      'qae.NxDimension': {
+        url: 'https://core.qlik.com/services/qix-engine/apis/qix/definitions/#nxdimension',
+      },
+      'qae.NxMeasure': {
+        url: 'https://core.qlik.com/services/qix-engine/apis/qix/definitions/#nxmeasure',
+      },
+      'qae.HyperCubeDef': {
+        url: 'https://core.qlik.com/services/qix-engine/apis/qix/definitions/#hypercubedef',
+      },
     },
   },
 };
