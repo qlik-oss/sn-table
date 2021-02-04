@@ -18,10 +18,10 @@ describe('render', () => {
       sandbox.verifyAndRestore();
     });
 
-    it('should return table cell when selectionsEnabled is false', () => {
+    it('should return TablCell when selectionsEnabled is false', () => {
       expect(getCellRenderer(column, selectionsEnabled)).to.equal(TableCell);
     });
-    it('should return table cell when selectionsEnabled is false', () => {
+    it('should call withSelections when selectionsEnabled is true', () => {
       selectionsEnabled = true;
 
       getCellRenderer(column, selectionsEnabled);

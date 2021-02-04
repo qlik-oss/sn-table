@@ -21,7 +21,7 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
     const isEnabled = !!selectionsAPI && !constraints.active;
     selDispatch({ type: 'set-enabled', payload: { isEnabled } });
     setColumnRenderers(tableData.columns.map((c) => getCellRenderer(c, isEnabled)));
-  }, [selectionsAPI, constraints]);
+  }, [constraints]);
 
   useEffect(() => {
     addSelectionListeners(selectionsAPI, selDispatch);
