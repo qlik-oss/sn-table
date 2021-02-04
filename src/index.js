@@ -34,7 +34,7 @@ export default function supernova(env) {
 
       const [pageInfo, setPageInfo] = useState({ top: 0, height: 100 });
       const [tableData, setTableData] = useState();
-      const [muiParameters] = useState(muiSetup(constraints.active, __OPIONAL_THEME_DEPS__));
+      const [muiParameters] = useState(muiSetup(__OPIONAL_THEME_DEPS__));
 
       useEffect(() => {
         manageData(model, layout, pageInfo).then((d) => {
@@ -45,7 +45,7 @@ export default function supernova(env) {
       useEffect(() => {
         const onMouseUp = (e) => {
           const classes = e.target.className;
-          const isSelectableCell = classes.includes('selected') || classes.includes('possible');
+          const isSelectableCell = classes.includes?.('selected') || classes.includes?.('possible');
           if (selectionsAPI.isActive() && !isSelectableCell) {
             e.stopPropagation();
             selectionsAPI.confirm();
