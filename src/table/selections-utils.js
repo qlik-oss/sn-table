@@ -36,11 +36,15 @@ export function getSelectionClass(cell, selState) {
 }
 
 export function reducer(state, action) {
+  const { rows, colIdx, isEnabled } = action.payload || {};
+
   switch (action.type) {
     case 'select':
-      return { ...state, rows: action.payload.selectedRows, colIdx: action.payload.colIdx };
+      return { ...state, rows, colIdx };
     case 'reset':
       return state.rows.length ? { ...state, rows: [], colIdx: -1 } : state;
+    case 'set-enabled':
+      return { ...state, isEnabled };
     default:
       throw new Error('reducer called with invalid action type');
   }
@@ -79,7 +83,7 @@ export function selectCell(cell, selState, selDispatch, evt) {
   selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt);
 
   if (selectedRows.length) {
-    selDispatch({ type: 'select', payload: { selectedRows, colIdx } });
+    selDispatch({ type: 'select', payload: { rows: selectedRows, colIdx } });
     api.select({
       method: 'selectHyperCubeCells',
       params: ['/qHyperCubeDef', selectedRows.map((r) => r.rowIdx), [colIdx]],

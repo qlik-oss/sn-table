@@ -95,6 +95,7 @@ describe('selections-utils', () => {
         rows: [{ qElemNumber: 1, rowIdx: 1 }],
         colIdx: 1,
         api: {},
+        isEnabled: false,
       };
       action = {
         type: '',
@@ -103,7 +104,7 @@ describe('selections-utils', () => {
 
     it('should return state updated with rows and colIdx when action.type is select', () => {
       const newRow = { qElemNumber: 2, rowIdx: 2 };
-      action = { type: 'select', payload: { colIdx: 1, selectedRows: [...state.rows, newRow] } };
+      action = { type: 'select', payload: { colIdx: 1, rows: [...state.rows, newRow] } };
       const expectedRows = [...state.rows, newRow];
 
       const newState = reducer(state, action);
@@ -122,6 +123,13 @@ describe('selections-utils', () => {
       action.type = 'reset';
       const newState = reducer(state, action);
       expect(newState).to.equal(state);
+    });
+
+    it('should return state updated with isEnabled when action.type is set-enabled', () => {
+      action = { type: 'set-enabled', payload: { isEnabled: true } };
+      reducer(state, action);
+      const newState = reducer(state, action);
+      expect(newState).to.eql({ ...state, isEnabled: true });
     });
 
     it('should return error when incorrect action type', () => {
@@ -157,7 +165,7 @@ describe('selections-utils', () => {
 
     it('should call begin, add to selected and call selectHyperCubeCells when no previous selections empty', () => {
       const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
-      const payload = { colIdx: cell.colIdx, selectedRows: [{ qElemNumber: 1, rowIdx: 1 }] };
+      const payload = { colIdx: cell.colIdx, rows: [{ qElemNumber: 1, rowIdx: 1 }] };
       const event = { ctrlKey: false, metaKey: false };
 
       selectCell(cell, selState, selDispatch, event);
@@ -183,7 +191,7 @@ describe('selections-utils', () => {
       const params = ['/qHyperCubeDef', [2, 1], [cell.colIdx]];
       const payload = {
         colIdx: cell.colIdx,
-        selectedRows: [
+        rows: [
           { qElemNumber: 2, rowIdx: 2 },
           { qElemNumber: 1, rowIdx: 1 },
         ],
@@ -202,7 +210,7 @@ describe('selections-utils', () => {
       const params = ['/qHyperCubeDef', [1], [cell.colIdx]];
       const payload = {
         colIdx: cell.colIdx,
-        selectedRows: [{ qElemNumber: 1, rowIdx: 1 }],
+        rows: [{ qElemNumber: 1, rowIdx: 1 }],
       };
       const event = { ctrlKey: true, metaKey: true };
 

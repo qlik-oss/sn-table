@@ -1,18 +1,27 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useReducer, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import { addSelectionListeners, reducer } from './selections-utils';
+import getCellRenderer from './cells/renderer';
 
-export default function TableBodyWrapper({ tableData, columnRenderers, selectionsAPI }) {
+export default function TableBodyWrapper({ tableData, constraints, selectionsAPI }) {
   const { rows, columns } = tableData;
 
+  const [columnRenderers, setColumnRenderers] = useState([]);
   const [selState, selDispatch] = useReducer(reducer, {
     api: selectionsAPI,
     rows: [],
     colIdx: -1,
+    isEnabled: !!selectionsAPI && !constraints.active,
   });
+
+  useEffect(() => {
+    const isEnabled = !!selectionsAPI && !constraints.active;
+    selDispatch({ type: 'set-enabled', payload: { isEnabled } });
+    setColumnRenderers(tableData.columns.map((c) => getCellRenderer(c, isEnabled)));
+  }, [constraints]);
 
   useEffect(() => {
     addSelectionListeners(selectionsAPI, selDispatch);
@@ -52,6 +61,6 @@ export default function TableBodyWrapper({ tableData, columnRenderers, selection
 
 TableBodyWrapper.propTypes = {
   tableData: PropTypes.object.isRequired,
-  columnRenderers: PropTypes.array.isRequired,
+  constraints: PropTypes.array.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
 };

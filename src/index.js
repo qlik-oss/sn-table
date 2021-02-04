@@ -62,7 +62,7 @@ export default function supernova(env) {
         if (layout && tableData) {
           render(el, { tableData, setPageInfo, pageInfo, constraints, selectionsAPI, muiParameters });
         }
-      }, [tableData]);
+      }, [tableData, constraints]);
 
       useEffect(
         () => () => {
