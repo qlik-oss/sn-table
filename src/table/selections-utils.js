@@ -50,29 +50,43 @@ export function reducer(state, action) {
   }
 }
 
-export function selectCell(cell, selState, selDispatch) {
+export const getSelectedRows = (selectedRows, qElemNumber, rowIdx, evt) => {
+  const alreadySelectedIdx = selectedRows.findIndex((r) => r.qElemNumber === qElemNumber);
+  if (evt.ctrlKey || evt.metaKey) {
+    // if the ctrl key or the ⌘ Command key (On Macintosh keyboards) or the ⊞ Windows key is pressed
+    // get the last clicked item
+    return [{ qElemNumber, rowIdx }];
+  }
+
+  if (alreadySelectedIdx > -1) {
+    // if the selected item is clicked again, that item will be removed
+    selectedRows.splice(alreadySelectedIdx, 1);
+    return selectedRows;
+  }
+
+  // if an item was clicked, the item was selected
+  selectedRows.push({ qElemNumber, rowIdx });
+  return selectedRows;
+};
+
+export function selectCell(cell, selState, selDispatch, evt) {
   const { api, rows } = selState;
   const { rowIdx, colIdx, qElemNumber } = cell;
-  let newRows = [];
+  let selectedRows = [];
 
   if (!api.isActive()) {
     api.begin('/qHyperCubeDef');
   } else {
-    newRows = rows.concat();
+    selectedRows = rows.concat();
   }
 
-  const alreadySelectedIdx = rows.findIndex((r) => r.qElemNumber === qElemNumber);
-  if (alreadySelectedIdx > -1) {
-    newRows.splice(alreadySelectedIdx, 1);
-  } else {
-    newRows.push({ qElemNumber, rowIdx });
-  }
+  selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt);
 
-  if (newRows.length) {
-    selDispatch({ type: 'select', payload: { rows: newRows, colIdx } });
+  if (selectedRows.length) {
+    selDispatch({ type: 'select', payload: { rows: selectedRows, colIdx } });
     api.select({
       method: 'selectHyperCubeCells',
-      params: ['/qHyperCubeDef', newRows.map((r) => r.rowIdx), [colIdx]],
+      params: ['/qHyperCubeDef', selectedRows.map((r) => r.rowIdx), [colIdx]],
     });
   } else {
     api.cancel();
