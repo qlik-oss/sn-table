@@ -205,17 +205,17 @@ describe('selections-utils', () => {
       selDispatch = sinon.spy();
     });
 
-    it('should call begin, add to selected and call selectHyperCubeCells when no previous selections empty', () => {
+    it('should call begin, selDispatch and selectHyperCubeCells when no previous selections', () => {
       const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
       const payload = { colIdx: cell.colIdx, rows: [{ qElemNumber: cell.qElemNumber, rowIdx: cell.rowIdx }] };
 
       selectCell(cell, selState, selDispatch, event);
       expect(selState.api.begin).to.have.been.calledOnce;
-      expect(selState.api.select).to.have.been.calledWith({ method: 'selectHyperCbeCells', params });
+      expect(selState.api.select).to.have.been.calledWith({ method: 'selectHyperCubeCells', params });
       expect(selDispatch).to.have.been.calledWith({ type: 'select', payload });
       expect(selState.api.cancel).to.not.have.been.called;
     });
-    it('should not call begin, remove from selected.rows and call cancel when same qElemNumber', () => {
+    it('should not call begin call and call cancel when same qElemNumber (resulting in empty selectedCells)', () => {
       selState.rows = [{ qElemNumber: 1, rowIdx: 1 }];
       selState.colIdx = 1;
       alreadyActive = true;

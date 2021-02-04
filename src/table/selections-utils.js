@@ -85,7 +85,7 @@ export function selectCell(cell, selState, selDispatch, evt) {
   if (selectedRows.length) {
     selDispatch({ type: 'select', payload: { rows: selectedRows, colIdx } });
     api.select({
-      method: 'selectHyperCbeCells',
+      method: 'selectHyperCubeCells',
       params: ['/qHyperCubeDef', selectedRows.map((r) => r.rowIdx), [colIdx]],
     });
   } else {
