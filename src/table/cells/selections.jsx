@@ -18,7 +18,7 @@ export default function withSelections(CellComponent) {
   const HOC = (props) => {
     const { cell, selState, selDispatch } = props;
     const classes = useStyles();
-    const handleMouseUp = () => cell.isDim && selectCell(cell, selState, selDispatch);
+    const handleMouseUp = (evt) => cell.isDim && selectCell(cell, selState, selDispatch, evt);
     const selectionClass = getSelectionClass(cell, selState);
 
     return (
