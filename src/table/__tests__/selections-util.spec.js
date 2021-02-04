@@ -215,7 +215,7 @@ describe('selections-utils', () => {
       expect(selDispatch).to.have.been.calledWith({ type: 'select', payload });
       expect(selState.api.cancel).to.not.have.been.called;
     });
-    it('should not call begin call and call cancel when same qElemNumber (resulting in empty selectedCells)', () => {
+    it('should not call begin and call cancel when same qElemNumber (resulting in empty selectedCells)', () => {
       selState.rows = [{ qElemNumber: 1, rowIdx: 1 }];
       selState.colIdx = 1;
       alreadyActive = true;
