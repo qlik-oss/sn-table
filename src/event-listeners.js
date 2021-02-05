@@ -1,18 +1,19 @@
 export default function addEventListeners(el, selectionsAPI) {
-  let scrollbarDown = false;
+  let isScrollbarDown = false;
 
   const onMouseDown = (e) => {
-    scrollbarDown = e.offsetX > e.target.clientWidth;
+    // only true when pressing the scrollbar
+    isScrollbarDown = e.offsetX > e.target.clientWidth;
   };
 
   const onMouseUp = (e) => {
     const classes = e.target.className;
     const isSelectableCell = classes.includes?.('selected') || classes.includes?.('possible');
-    if (selectionsAPI.isActive() && !isSelectableCell && !scrollbarDown) {
+    if (selectionsAPI.isActive() && !isSelectableCell && !isScrollbarDown) {
       e.stopPropagation();
       selectionsAPI.confirm();
     }
-    scrollbarDown = false;
+    isScrollbarDown = false;
   };
 
   el.addEventListener('mousedown', onMouseDown, true);

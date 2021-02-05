@@ -19,7 +19,6 @@ describe('event-listeners', () => {
         isActive: () => alreadyActive,
         confirm: sinon.spy(),
       };
-
       remover = addEventListeners(el, selectionsApi);
     });
 
@@ -27,7 +26,6 @@ describe('event-listeners', () => {
       expect(onFunctions.mousedown).to.be.a('function');
       expect(onFunctions.mouseup).to.be.a('function');
     });
-
     it('should return function that removes event listeners', () => {
       remover();
       expect(el.removeEventListener).to.have.been.calledWith('mousedown');
