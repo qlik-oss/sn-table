@@ -215,7 +215,7 @@ export default function ext(env) {
       export: true,
       exportData: true,
       snapshot: true,
-      viewData: true,
+      viewData: false,
     },
   };
 }
