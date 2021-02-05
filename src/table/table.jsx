@@ -20,6 +20,9 @@ const useStyles = makeStyles({
   containerOverflowHidden: {
     overflow: 'hidden',
   },
+  paginationHidden: {
+    display: 'none',
+  },
 });
 
 export default function TableWrapper(props) {
@@ -29,6 +32,7 @@ export default function TableWrapper(props) {
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
+  const clientMode = constraints.active && 'paginationHidden';
 
   const handleChangePage = (event, newPage) => {
     setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
@@ -64,6 +68,7 @@ export default function TableWrapper(props) {
         </Table>
       </TableContainer>
       <TablePagination
+        className={classes[clientMode]}
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
         count={size.qcy}
