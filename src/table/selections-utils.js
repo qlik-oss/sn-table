@@ -51,13 +51,13 @@ export function reducer(state, action) {
 }
 
 export const getSelectedRows = (selectedRows, qElemNumber, rowIdx, evt) => {
-  const alreadySelectedIdx = selectedRows.findIndex((r) => r.qElemNumber === qElemNumber);
   if (evt.ctrlKey || evt.metaKey) {
     // if the ctrl key or the ⌘ Command key (On Macintosh keyboards) or the ⊞ Windows key is pressed
     // get the last clicked item
     return [{ qElemNumber, rowIdx }];
   }
 
+  const alreadySelectedIdx = selectedRows.findIndex((r) => r.qElemNumber === qElemNumber);
   if (alreadySelectedIdx > -1) {
     // if the selected item is clicked again, that item will be removed
     selectedRows.splice(alreadySelectedIdx, 1);

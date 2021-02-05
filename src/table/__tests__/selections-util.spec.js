@@ -1,4 +1,4 @@
-import { addSelectionListeners, getSelectionClass, reducer, selectCell } from '../selections-utils';
+import { addSelectionListeners, getSelectionClass, getSelectedRows, reducer, selectCell } from '../selections-utils';
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {
@@ -141,7 +141,49 @@ describe('selections-utils', () => {
     });
   });
 
+  describe('getSelectedRows', () => {
+    let selectedRows;
+    let qElemNumber;
+    let rowIdx;
+    let evt;
+
+    beforeEach(() => {
+      selectedRows = [{ qElemNumber: 1, rowIdx: 1 }];
+      qElemNumber = 0;
+      rowIdx = 0;
+      evt = {};
+    });
+
+    it('should return array with only the last clicked item when ctrlKey is pressed', () => {
+      evt.ctrlKey = true;
+
+      selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt);
+      expect(selectedRows).to.eql([{ qElemNumber, rowIdx }]);
+    });
+    it('should return array with only the last clicked item metaKey cm is pressed', () => {
+      evt.metaKey = true;
+
+      selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt);
+      expect(selectedRows).to.eql([{ qElemNumber, rowIdx }]);
+    });
+    it('should return array with selected item removed if it already was in selectedRows', () => {
+      qElemNumber = 1;
+      rowIdx = 1;
+
+      selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt);
+      expect(selectedRows).to.eql([]);
+    });
+    it('should return array with selected item added if it was not in selectedRows before', () => {
+      selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt);
+      expect(selectedRows).to.eql([
+        { qElemNumber: 1, rowIdx: 1 },
+        { qElemNumber, rowIdx },
+      ]);
+    });
+  });
+
   describe('selectCell', () => {
+    const event = {};
     let selState;
     let cell;
     let alreadyActive;
@@ -163,61 +205,26 @@ describe('selections-utils', () => {
       selDispatch = sinon.spy();
     });
 
-    it('should call begin, add to selected and call selectHyperCubeCells when no previous selections empty', () => {
+    it('should call begin, selDispatch and selectHyperCubeCells when no previous selections', () => {
       const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
-      const payload = { colIdx: cell.colIdx, rows: [{ qElemNumber: 1, rowIdx: 1 }] };
-      const event = { ctrlKey: false, metaKey: false };
+      const payload = { colIdx: cell.colIdx, rows: [{ qElemNumber: cell.qElemNumber, rowIdx: cell.rowIdx }] };
 
       selectCell(cell, selState, selDispatch, event);
-      expect(selState.api.begin).to.have.been.called;
+      expect(selState.api.begin).to.have.been.calledOnce;
       expect(selState.api.select).to.have.been.calledWith({ method: 'selectHyperCubeCells', params });
       expect(selDispatch).to.have.been.calledWith({ type: 'select', payload });
+      expect(selState.api.cancel).to.not.have.been.called;
     });
-    it('should not call begin, remove from selected.rows and call cancel when same qElemNumber', () => {
+    it('should not call begin and call cancel when same qElemNumber (resulting in empty selectedCells)', () => {
       selState.rows = [{ qElemNumber: 1, rowIdx: 1 }];
       selState.colIdx = 1;
       alreadyActive = true;
-      const event = { ctrlKey: false, metaKey: false };
 
       selectCell(cell, selState, selDispatch, event);
       expect(selState.api.begin).to.not.have.been.called;
       expect(selState.api.cancel).to.have.been.calledOnce;
       expect(selDispatch).to.not.have.been.called;
-    });
-    it('should not call begin, add to selected and call selectHyperCubeCells when selecting new qElemNumber', () => {
-      selState.rows = [{ qElemNumber: 2, rowIdx: 2 }];
-      selState.colIdx = 1;
-      alreadyActive = true;
-      const params = ['/qHyperCubeDef', [2, 1], [cell.colIdx]];
-      const payload = {
-        colIdx: cell.colIdx,
-        rows: [
-          { qElemNumber: 2, rowIdx: 2 },
-          { qElemNumber: 1, rowIdx: 1 },
-        ],
-      };
-      const event = { ctrlKey: false, metaKey: false };
-
-      selectCell(cell, selState, selDispatch, event);
-      expect(selState.api.begin).to.not.have.been.called;
-      expect(selState.api.select).to.have.been.calledWith({ method: 'selectHyperCubeCells', params });
-      expect(selDispatch).to.have.been.calledWith({ type: 'select', payload });
-    });
-    it('should not call begin, ctrl/command keyboard to add to selected and call selectHyperCubeCells when selecting new qElemNumber', () => {
-      selState.rows = [{ qElemNumber: 2, rowIdx: 2 }];
-      selState.colIdx = 1;
-      alreadyActive = true;
-      const params = ['/qHyperCubeDef', [1], [cell.colIdx]];
-      const payload = {
-        colIdx: cell.colIdx,
-        rows: [{ qElemNumber: 1, rowIdx: 1 }],
-      };
-      const event = { ctrlKey: true, metaKey: true };
-
-      selectCell(cell, selState, selDispatch, event);
-      expect(selState.api.begin).to.not.have.been.called;
-      expect(selState.api.select).to.have.been.calledWith({ method: 'selectHyperCubeCells', params });
-      expect(selDispatch).to.have.been.calledWith({ type: 'select', payload });
+      expect(selState.api.select).to.not.have.been.called;
     });
   });
 });
