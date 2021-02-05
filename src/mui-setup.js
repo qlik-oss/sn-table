@@ -1,11 +1,11 @@
 import { createGenerateClassName, createMuiTheme } from '@material-ui/core/styles';
 
-export default function muiSetup(isActive, sproutBase) {
+export default function muiSetup(sproutBase) {
   if (sproutBase.overrides) {
     /* eslint-disable no-param-reassign */
     sproutBase.overrides.MuiTableContainer.root.height = 'calc(100% - 52px)';
-    sproutBase.overrides.MuiTableContainer.root.overflow = !isActive ? 'auto' : 'hidden';
-    sproutBase.overrides.MuiPaper = { root: { height: '100%' } };
+    sproutBase.overrides.MuiListItem.root['&$selected'] = {};
+    sproutBase.overrides.MuiSelect.root['& ~i'].padding = '6px';
     /* eslint-enable no-param-reassign */
   }
 
