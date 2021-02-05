@@ -2,7 +2,7 @@ export default function addEventListeners(el, selectionsAPI) {
   let scrollbarDown = false;
 
   const onMouseDown = (e) => {
-    scrollbarDown = e.offsetX >= e.target.clientWidth;
+    scrollbarDown = e.offsetX > e.target.clientWidth;
   };
 
   const onMouseUp = (e) => {
