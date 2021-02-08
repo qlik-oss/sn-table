@@ -37,9 +37,7 @@ export default function supernova(env) {
       const [tableData, setTableData] = useState();
       const [muiParameters] = useState(muiSetup(__OPIONAL_THEME_DEPS__));
 
-      useEffect(() => {
-        addEventListeners(el, selectionsAPI);
-      }, []);
+      useEffect(() => addEventListeners(el, selectionsAPI), []);
 
       useEffect(() => {
         manageData(model, layout, pageInfo).then((d) => {
