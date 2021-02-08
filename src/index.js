@@ -11,6 +11,7 @@ import properties from './object-properties';
 import data from './data';
 import ext from './ext';
 import muiSetup from './mui-setup';
+import addEventListeners from './event-listeners';
 import { render, teardown } from './table/root';
 import manageData from './table/handle-data';
 
@@ -36,27 +37,13 @@ export default function supernova(env) {
       const [tableData, setTableData] = useState();
       const [muiParameters] = useState(muiSetup(__OPIONAL_THEME_DEPS__));
 
+      useEffect(() => addEventListeners(el, selectionsAPI), []);
+
       useEffect(() => {
         manageData(model, layout, pageInfo).then((d) => {
           setTableData(d);
         });
       }, [layout, pageInfo]);
-
-      useEffect(() => {
-        const onMouseUp = (e) => {
-          const classes = e.target.className;
-          const isSelectableCell = classes.includes?.('selected') || classes.includes?.('possible');
-          if (selectionsAPI.isActive() && !isSelectableCell) {
-            e.stopPropagation();
-            selectionsAPI.confirm();
-          }
-        };
-
-        el.addEventListener('mouseup', onMouseUp, true);
-        return () => {
-          el.removeEventListener('mouseup', onMouseUp, true);
-        };
-      }, []);
 
       useEffect(() => {
         if (layout && tableData) {
