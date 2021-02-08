@@ -36,6 +36,7 @@ describe('event-listeners', () => {
       let e;
 
       beforeEach(() => {
+        alreadyActive = true;
         e = {
           target: {
             clientWidth: 1000,
@@ -46,12 +47,6 @@ describe('event-listeners', () => {
         };
       });
 
-      it('should call stopPropagation and confirm when selections are active and clicking on non-selectable element', () => {
-        onFunctions.mousedown(e);
-        onFunctions.mouseup(e);
-        expect(e.stopPropagation).to.have.been.calledOnce;
-        expect(selectionsApi.confirm).to.have.been.calledOnce;
-      });
       it('should not call stopPropagation nor confirm when selections are not active', () => {
         alreadyActive = false;
 
@@ -61,7 +56,7 @@ describe('event-listeners', () => {
         expect(selectionsApi.confirm).to.not.have.been.called;
       });
       it('should not call stopPropagation nor confirm when clicking selectable cell', () => {
-        e.target.classes = 'possible';
+        e.target.className = 'possible';
 
         onFunctions.mousedown(e);
         onFunctions.mouseup(e);
@@ -69,12 +64,18 @@ describe('event-listeners', () => {
         expect(selectionsApi.confirm).to.not.have.been.called;
       });
       it('should not call stopPropagation nor confirm when clicking on scrollbar (scrollbarDown = true)', () => {
-        e.offsetX = 1000;
+        e.offsetX = 1100;
 
         onFunctions.mousedown(e);
         onFunctions.mouseup(e);
         expect(e.stopPropagation).to.not.have.been.called;
         expect(selectionsApi.confirm).to.not.have.been.called;
+      });
+      it('should call stopPropagation and confirm when selections are active and clicking on non-selectable element', () => {
+        onFunctions.mousedown(e);
+        onFunctions.mouseup(e);
+        expect(e.stopPropagation).to.have.been.calledOnce;
+        expect(selectionsApi.confirm).to.have.been.calledOnce;
       });
     });
   });
