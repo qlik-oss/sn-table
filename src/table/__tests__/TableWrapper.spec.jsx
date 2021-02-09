@@ -15,7 +15,7 @@ describe('<TableWrapper />', () => {
   let constraints;
   let rowsPerPage;
 
-  const mockContents = () => {
+  const mockContent = () => {
     sandbox.replace(TableBodyWrapper, 'default', () => <tbody />);
     sandbox.replace(TableHeadWrapper, 'default', () => <thead />);
   };
@@ -36,7 +36,7 @@ describe('<TableWrapper />', () => {
   });
 
   it('should render table', () => {
-    mockContents();
+    mockContent();
 
     const { queryByLabelText, queryByText } = render(
       <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} />
@@ -47,7 +47,7 @@ describe('<TableWrapper />', () => {
     expect(queryByText(rowsPerPage)).to.be.visible;
   });
   it('should call setPageInfo when clicking next page button', async () => {
-    mockContents();
+    mockContent();
 
     const { findByTitle, findByText } = render(
       <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} />
@@ -57,8 +57,8 @@ describe('<TableWrapper />', () => {
     expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
     expect(await findByText(`101-200 of ${tableData.size.qcy}`)).to.be.visible;
   });
-  it('should change back to first page when no rows', async () => {
-    mockContents();
+  it('should change back to first page when not on first page and no rows', async () => {
+    mockContent();
     tableData.rows = [];
 
     const { findByTitle } = render(
@@ -67,17 +67,18 @@ describe('<TableWrapper />', () => {
     const nextPageButton = await findByTitle('Next page');
     fireEvent.click(nextPageButton);
 
+    // Called when pressing the button
     expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
+    // Called from if statement
     expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
   });
-
   it('should call setPageInfo when changing rows per page', async () => {
-    mockContents();
+    mockContent();
 
     const { findByText } = render(
       <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} />
     );
-    fireEvent.mouseDown(await findByText('100'));
+    fireEvent.mouseDown(await findByText(rowsPerPage)); // the popover is only triggered with mouseDown for some reason
     fireEvent.click(await findByText('25'));
 
     expect(setPageInfo).to.have.been.calledWith({ top: 0, height: 25 });
