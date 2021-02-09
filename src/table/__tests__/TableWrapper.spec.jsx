@@ -15,12 +15,10 @@ describe('<TableWrapper />', () => {
   let constraints;
   let rowsPerPage;
 
-  const mockContent = () => {
+  beforeEach(() => {
     sandbox.replace(TableBodyWrapper, 'default', () => <tbody />);
     sandbox.replace(TableHeadWrapper, 'default', () => <thead />);
-  };
 
-  beforeEach(() => {
     tableData = {
       size: { qcy: 200 },
       rows: [{ qText: '1' }],
@@ -30,7 +28,7 @@ describe('<TableWrapper />', () => {
     rowsPerPage = 100;
   });
 
-  beforeEach(() => {
+  afterEach(() => {
     sandbox.verifyAndRestore();
     sandbox.resetHistory();
   });
@@ -47,8 +45,6 @@ describe('<TableWrapper />', () => {
     expect(queryByText(rowsPerPage)).to.be.visible;
   });
   it('should call setPageInfo when clicking next page button', async () => {
-    mockContent();
-
     const { findByTitle, findByText } = render(
       <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} />
     );
@@ -58,7 +54,6 @@ describe('<TableWrapper />', () => {
     expect(await findByText(`101-200 of ${tableData.size.qcy}`)).to.be.visible;
   });
   it('should change back to first page when not on first page and no rows', async () => {
-    mockContent();
     tableData.rows = [];
 
     const { findByTitle } = render(
@@ -72,8 +67,6 @@ describe('<TableWrapper />', () => {
     expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
   });
   it('should call setPageInfo when changing rows per page', async () => {
-    mockContent();
-
     const { findByText } = render(
       <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} />
     );
