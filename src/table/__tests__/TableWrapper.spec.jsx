@@ -1,6 +1,6 @@
-import '../../../test-setup'
+import '../../../test-setup';
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
@@ -16,13 +16,13 @@ describe('<TableWrapper />', () => {
   let rowsPerPage;
 
   const mockContents = () => {
-    sandbox.replace(TableBodyWrapper, 'default', () => <tbody></tbody>);
-    sandbox.replace(TableHeadWrapper, 'default', () => <thead></thead>);
-  }
+    sandbox.replace(TableBodyWrapper, 'default', () => <tbody />);
+    sandbox.replace(TableHeadWrapper, 'default', () => <thead />);
+  };
 
   beforeEach(() => {
     tableData = {
-      size: { qcy: 200},
+      size: { qcy: 200 },
       rows: [{ qText: '1' }],
     };
     setPageInfo = sinon.spy();
