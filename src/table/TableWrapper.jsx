@@ -23,53 +23,53 @@ const useStyles = makeStyles({
   },
 });
 
-  export default function TableWrapper(props) {
-    const { tableData, setPageInfo, constraints } = props;
-    const { size, rows } = tableData;
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(100);
-    const classes = useStyles();
-    const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
-    const clientMode = constraints.active && 'paginationHidden';
+export default function TableWrapper(props) {
+  const { tableData, setPageInfo, constraints } = props;
+  const { size, rows } = tableData;
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(100);
+  const classes = useStyles();
+  const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
+  const clientMode = constraints.active && 'paginationHidden';
 
-    const handleChangePage = (event, newPage) => {
-      setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
-      setPage(newPage);
-    };
+  const handleChangePage = (event, newPage) => {
+    setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
+    setPage(newPage);
+  };
 
-    // should trigger reload
-    const handleChangeRowsPerPage = (event) => {
-      setRowsPerPage(+event.target.value);
-      setPageInfo({ top: 0, height: +event.target.value });
-      setPage(0);
-    };
+  // should trigger reload
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPageInfo({ top: 0, height: +event.target.value });
+    setPage(0);
+  };
 
-    if (!rows.length && page > 0) {
-      handleChangePage(null, 0);
-      return null;
-    }
-
-    return (
-      <Paper className={classes.paper}>
-        <TableContainer className={classes[containerMode]}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHeadWrapper {...props} />
-            <TableBodyWrapper {...props} />
-          </Table>
-        </TableContainer>
-        <TablePagination
-          className={classes[clientMode]}
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={size.qcy}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
-      </Paper>
-    );
+  if (!rows.length && page > 0) {
+    handleChangePage(null, 0);
+    return null;
   }
+
+  return (
+    <Paper className={classes.paper}>
+      <TableContainer className={classes[containerMode]}>
+        <Table stickyHeader aria-label="sticky table">
+          <TableHeadWrapper {...props} />
+          <TableBodyWrapper {...props} />
+        </Table>
+      </TableContainer>
+      <TablePagination
+        className={classes[clientMode]}
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count={size.qcy}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+      />
+    </Paper>
+  );
+}
 
 TableWrapper.propTypes = {
   tableData: PropTypes.object.isRequired,
