@@ -64,12 +64,11 @@ describe('<TableWrapper />', () => {
     const { findByTitle } = render(
       <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} />
     );
-    const nextPageButton = await findByTitle('Next page');
-    fireEvent.click(nextPageButton);
+    fireEvent.click(await findByTitle('Next page'));
 
     // Called when pressing the button
     expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
-    // Called from if statement
+    // Called from if statement in TableWrapper
     expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
   });
   it('should call setPageInfo when changing rows per page', async () => {
@@ -78,7 +77,8 @@ describe('<TableWrapper />', () => {
     const { findByText } = render(
       <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} />
     );
-    fireEvent.mouseDown(await findByText(rowsPerPage)); // the popover is only triggered with mouseDown for some reason
+    // the popover is only triggered with mouseDown, according to the mui definition
+    fireEvent.mouseDown(await findByText(rowsPerPage));
     fireEvent.click(await findByText('25'));
 
     expect(setPageInfo).to.have.been.calledWith({ top: 0, height: 25 });

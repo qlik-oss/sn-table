@@ -14,5 +14,3 @@ global.navigator = {
 
 chai.use(sinonChai);
 chai.use(chaiDom);
-
-
