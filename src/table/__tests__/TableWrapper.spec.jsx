@@ -1,6 +1,6 @@
 import '../../../test-setup';
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, screen } from '@testing-library/react';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
@@ -49,13 +49,13 @@ describe('<TableWrapper />', () => {
   it('should call setPageInfo when clicking next page button', async () => {
     mockContents();
 
-    const { findByTitle } = render(
+    const { findByTitle, findByText } = render(
       <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} />
     );
-    const nextPageButton = await findByTitle('Next page');
-    fireEvent.click(nextPageButton);
+    fireEvent.click(await findByTitle('Next page'));
 
     expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
+    expect(await findByText(`101-200 of ${tableData.size.qcy}`)).to.be.visible;
   });
   it('should change back to first page when no rows', async () => {
     mockContents();
@@ -71,17 +71,16 @@ describe('<TableWrapper />', () => {
     expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
   });
 
-  // it('should call setPageInfo when changing rows per page', async () => {
-  //   mockContents();
+  it('should call setPageInfo when changing rows per page', async () => {
+    mockContents();
 
-  //   const { findByText } = render(
-  //     <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} />
-  //   );
-  //   fireEvent.click(await findByText('100'));
-  //   const rowsPerPageOption = await screen.findByText('25'); // is outside the TableWrapper in the dom
-  //   console.log(rowsPerPageOption);
-  //   fireEvent.click(rowsPerPageOption);
+    const { findByText } = render(
+      <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} />
+    );
+    fireEvent.mouseDown(await findByText('100'));
+    const rowsPerPageOption = await findByText('25'); // is outside the TableWrapper in the dom
+    fireEvent.click(rowsPerPageOption);
 
-  //   expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
-  // });
+    expect(setPageInfo).to.have.been.calledWith({ top: 0, height: 25 });
+  });
 });

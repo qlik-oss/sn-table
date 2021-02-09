@@ -69,7 +69,6 @@
     "eslint-plugin-react-hooks": "4.2.0",
     "eslint-plugin-testing-library": "3.10.1",
     "jsdom": "16.4.0",
-    "jsdom-global": "3.0.2",
     "mocha-junit-reporter": "2.0.0",
     "prettier": "2.2.1",
     "prop-types": "^15.7.2",
