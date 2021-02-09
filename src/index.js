@@ -12,7 +12,7 @@ import data from './data';
 import ext from './ext';
 import muiSetup from './mui-setup';
 import addEventListeners from './event-listeners';
-import { render, teardown } from './table/root';
+import { render, teardown } from './table/Root';
 import manageData from './table/handle-data';
 
 // This line is replaced by rollup with an import for internal builds

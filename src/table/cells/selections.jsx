@@ -14,7 +14,7 @@ const useStyles = makeStyles({
   possible: {},
 });
 
-function withSelections(CellComponent) {
+export function withSelections(CellComponent) {
   const HOC = (props) => {
     const { cell, selState, selDispatch } = props;
     const classes = useStyles();
@@ -34,6 +34,3 @@ function withSelections(CellComponent) {
 
   return HOC;
 }
-
-// wrapping to enable sandbox.replace
-export default { withSelections };

@@ -1,4 +1,4 @@
-const specFiles = ['src/**/*.spec.js'];
+const specFiles = ['src/**/*.spec.js', 'src/**/*.spec.jsx'];
 
 module.exports = {
   glob: specFiles,

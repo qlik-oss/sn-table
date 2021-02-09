@@ -3,12 +3,10 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
-import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableBodyWrapper from './tableBody';
+import TableBodyWrapper from './TableHeadWrapper';
+import TableHeadWrapper from './TableBodyWrapper';
 
 const useStyles = makeStyles({
   paper: {
@@ -27,7 +25,7 @@ const useStyles = makeStyles({
 
 export default function TableWrapper(props) {
   const { tableData, setPageInfo, constraints } = props;
-  const { size, columns, rows } = tableData;
+  const { size, rows } = tableData;
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const classes = useStyles();
@@ -55,15 +53,7 @@ export default function TableWrapper(props) {
     <Paper className={classes.paper}>
       <TableContainer className={classes[containerMode]}>
         <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
+          <TableHeadWrapper {...props} />
           <TableBodyWrapper {...props} />
         </Table>
       </TableContainer>
