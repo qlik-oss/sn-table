@@ -34,8 +34,6 @@ describe('<TableWrapper />', () => {
   });
 
   it('should render table', () => {
-    mockContent();
-
     const { queryByLabelText, queryByText } = render(
       <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} />
     );
