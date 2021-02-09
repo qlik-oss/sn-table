@@ -24,7 +24,7 @@
 
   "overrides": [
     {
-      "files": ["**/*.spec.js", ["**/*.spec.jsx"]],
+      "files": ["**/*.spec.js", "**/*.spec.jsx"],
       "env": {
         "browser": false,
         "node": true,
