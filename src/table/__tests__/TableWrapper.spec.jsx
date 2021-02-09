@@ -1,6 +1,6 @@
 import '../../../test-setup';
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
@@ -78,8 +78,7 @@ describe('<TableWrapper />', () => {
       <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} />
     );
     fireEvent.mouseDown(await findByText('100'));
-    const rowsPerPageOption = await findByText('25'); // is outside the TableWrapper in the dom
-    fireEvent.click(rowsPerPageOption);
+    fireEvent.click(await findByText('25'));
 
     expect(setPageInfo).to.have.been.calledWith({ top: 0, height: 25 });
   });
