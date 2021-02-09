@@ -85,4 +85,3 @@ describe('<TableWrapper />', () => {
   //   expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
   // });
 });
-§
