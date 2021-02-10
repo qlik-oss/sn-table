@@ -5,8 +5,8 @@ export function generateDataPages(height, width) {
     qMatrix.push([]);
 
     for (let col = 0; col < width; col++) {
-      qMatrix[0].push({
-        qNum: row * width + col,
+      qMatrix[row].push({
+        qText: (row * width + col).toString(),
       });
     }
   }

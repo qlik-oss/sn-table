@@ -4,7 +4,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import { addSelectionListeners, reducer } from './selections-utils';
-import getCellRenderer from './cells/renderer';
+import { getCellRenderer } from './cells/renderer';
 
 export default function TableBodyWrapper({ tableData, constraints, selectionsAPI }) {
   const { rows, columns } = tableData;
@@ -30,7 +30,7 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
   return (
     <TableBody>
       {rows.map((row) => (
-        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+        <TableRow hover role="checkbox" tabIndex={-1} key={row.key}>
           {columns.map((column, i) => {
             const cell = row[column.id];
             const value = cell.qText;
@@ -61,6 +61,6 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
 
 TableBodyWrapper.propTypes = {
   tableData: PropTypes.object.isRequired,
-  constraints: PropTypes.array.isRequired,
+  constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
 };

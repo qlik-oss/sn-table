@@ -13,7 +13,6 @@ describe('handle-data', () => {
       isDim,
       width: 200,
       label: `title-${colIdx}`,
-      dataKey: `id-${colIdx}`,
       id: `id-${colIdx}`,
       align: isDim ? 'left' : 'right',
     });
@@ -59,7 +58,7 @@ describe('handle-data', () => {
       expect(rows[0]['id-0'].rowIdx).to.equal(100);
       expect(columns.length).to.equal(4);
       columns.forEach((c, i) => {
-        expect(c.id).to.equal(Object.keys(rows[0])[i]);
+        expect(c.id).to.equal(Object.keys(rows[0])[i + 1]); // skip the first key
       });
     });
   });
