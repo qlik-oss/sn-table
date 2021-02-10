@@ -1,5 +1,5 @@
 import manageData, { getColumnOrder, getColumnInfo } from '../handle-data';
-import { generateDataPages, generateLayout } from '../../__test__/generate-test-data';
+import { generateDataPages, generateLayout } from './generate-test-data';
 
 describe('handle-data', () => {
   let layout;

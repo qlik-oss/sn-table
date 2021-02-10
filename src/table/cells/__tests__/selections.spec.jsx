@@ -1,4 +1,4 @@
-import '../../../../test-setup';
+import '../../__tests__/rtl-setup';
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { expect } from 'chai';

@@ -1,10 +1,10 @@
-import '../../../test-setup';
+import './rtl-setup';
 import React from 'react';
 import { render } from '@testing-library/react';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
-import { generateDataPages, generateLayout } from '../../__test__/generate-test-data';
+import { generateDataPages, generateLayout } from './generate-test-data';
 import manageData from '../handle-data';
 
 import TableBodyWrapper from '../TableBodyWrapper';
