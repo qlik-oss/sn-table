@@ -22,9 +22,8 @@ describe('<TableBodyWrapper />', async () => {
   beforeEach(async () => {
     sandbox.replace(selectionsUtils, 'addSelectionListeners', () => {});
     sandbox.replace(renderer, 'getCellRenderer', () => null);
-    tableData = await manageData(model, generateLayout(1, 1), { top: 0, height: 100 });
-    console.log(tableData.columns, tableData.rows);
 
+    tableData = await manageData(model, generateLayout(1, 1), { top: 0, height: 100 });
     constraints = {};
     selectionsAPI = {};
   });
