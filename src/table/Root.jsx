@@ -4,6 +4,7 @@ import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
 import TableWrapper from './TableWrapper';
 
 export function render(element, props) {
+  window.console.log(props, 'props');
   const { muiParameters } = props;
 
   ReactDOM.render(

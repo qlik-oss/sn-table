@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -21,16 +21,28 @@ const useStyles = makeStyles({
   paginationHidden: {
     display: 'none',
   },
+  containerMobileLayout: {
+    height: 'calc(100% - 120px)',
+  },
+  paginationMobileLayout: {
+    marginTop: '-15px',
+    '& div:nth-of-type(1)': {
+      display: 'initial',
+    },
+  },
 });
 
 export default function TableWrapper(props) {
-  const { tableData, setPageInfo, constraints } = props;
+  const { el, tableData, setPageInfo, constraints } = props;
   const { size, rows } = tableData;
+  const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const clientMode = constraints.active && 'paginationHidden';
+  const containerLayout = tableWidth < 380 && 'containerMobileLayout';
+  const paginationLayout = tableWidth < 380 && 'paginationMobileLayout';
 
   const handleChangePage = (event, newPage) => {
     setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
@@ -49,16 +61,22 @@ export default function TableWrapper(props) {
     return null;
   }
 
+  useEffect(() => {
+    const updateSize = () => setTableWidth(el.clientWidth);
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+
   return (
     <Paper className={classes.paper}>
-      <TableContainer className={classes[containerMode]}>
+      <TableContainer className={classes[(containerMode, containerLayout)]}>
         <Table stickyHeader aria-label="sticky table">
           <TableHeadWrapper {...props} />
           <TableBodyWrapper {...props} />
         </Table>
       </TableContainer>
       <TablePagination
-        className={classes[clientMode]}
+        className={classes[(clientMode, paginationLayout)]}
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
         count={size.qcy}
@@ -72,6 +90,7 @@ export default function TableWrapper(props) {
 }
 
 TableWrapper.propTypes = {
+  el: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
