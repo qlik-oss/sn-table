@@ -44,7 +44,6 @@ describe('<TableBodyWrapper />', async () => {
     expect(queryByText(tableData.rows[1]['id-0'].qText)).to.be.visible;
     expect(queryByText(tableData.rows[1]['id-1'].qText)).to.be.visible;
   });
-
   it('should render 2x2 table body and call CellRenderer', () => {
     const cellRendererSpy = sinon.spy();
     // eslint-disable-next-line react/prop-types
