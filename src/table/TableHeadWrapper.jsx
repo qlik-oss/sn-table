@@ -20,5 +20,5 @@ export default function TableHeadWrapper(props) {
 }
 
 TableHeadWrapper.propTypes = {
-  columns: PropTypes.array.isRequired,
+  tableData: PropTypes.object.isRequired,
 };

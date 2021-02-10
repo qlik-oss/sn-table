@@ -5,8 +5,8 @@ import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableContainer from '@material-ui/core/TableContainer';
 import TablePagination from '@material-ui/core/TablePagination';
-import TableBodyWrapper from './TableHeadWrapper';
-import TableHeadWrapper from './TableBodyWrapper';
+import TableHeadWrapper from './TableHeadWrapper';
+import TableBodyWrapper from './TableBodyWrapper';
 
 const useStyles = makeStyles({
   paper: {

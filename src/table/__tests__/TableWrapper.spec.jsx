@@ -34,8 +34,6 @@ describe('<TableWrapper />', () => {
   });
 
   it('should render table', () => {
-    mockContent();
-
     const { queryByLabelText, queryByText } = render(
       <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} />
     );
@@ -54,11 +52,12 @@ describe('<TableWrapper />', () => {
     expect(await findByText(`101-200 of ${tableData.size.qcy}`)).to.be.visible;
   });
   it('should change back to first page when not on first page and no rows', async () => {
-    tableData.rows = [];
-
     const { findByTitle } = render(
       <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} />
     );
+    // This is a hack to simulate when selections are made on other page than first page and
+    // rows per page is bigger than the selected rows -> handle data returns no rows.
+    tableData.rows = [];
     fireEvent.click(await findByTitle('Next page'));
 
     // Called when pressing the button
