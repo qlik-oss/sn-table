@@ -21,18 +21,43 @@ describe('<TableBodyWrapper />', async () => {
 
   beforeEach(async () => {
     sandbox.replace(selectionsUtils, 'addSelectionListeners', () => {});
-    sandbox.replace(renderer, 'getCellRenderer', () => null);
 
     tableData = await manageData(model, generateLayout(1, 1), { top: 0, height: 100 });
     constraints = {};
     selectionsAPI = {};
   });
 
-  it('should render table body', () => {
+  afterEach(() => {
+    sandbox.verifyAndRestore();
+    sandbox.resetHistory();
+  });
+
+  it('should render 2x2 table body without CellRenderer', () => {
+    sandbox.replace(renderer, 'getCellRenderer', () => {});
+
     const { queryByText } = render(
       <TableBodyWrapper tableData={tableData} constraints={constraints} selectionsAPI={selectionsAPI} />
     );
 
+    expect(queryByText(tableData.rows[0]['id-0'].qText)).to.be.visible;
+    expect(queryByText(tableData.rows[0]['id-1'].qText)).to.be.visible;
+    expect(queryByText(tableData.rows[1]['id-0'].qText)).to.be.visible;
+    expect(queryByText(tableData.rows[1]['id-1'].qText)).to.be.visible;
+  });
+
+  it('should render 2x2 table body and call CellRenderer', () => {
+    const cellRendererSpy = sinon.spy();
+    // eslint-disable-next-line react/prop-types
+    sandbox.replace(renderer, 'getCellRenderer', () => ({ value }) => {
+      cellRendererSpy();
+      return <td>{value}</td>;
+    });
+
+    const { queryByText } = render(
+      <TableBodyWrapper tableData={tableData} constraints={constraints} selectionsAPI={selectionsAPI} />
+    );
+
+    expect(cellRendererSpy).to.have.callCount(4);
     expect(queryByText(tableData.rows[0]['id-0'].qText)).to.be.visible;
     expect(queryByText(tableData.rows[0]['id-1'].qText)).to.be.visible;
     expect(queryByText(tableData.rows[1]['id-0'].qText)).to.be.visible;
