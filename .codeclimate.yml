@@ -8,3 +8,4 @@ checks:
       threshold: 8
 exclude_patterns:
   - "src/**/*.spec.js"
+  - "src/**/*.spec.jsx"
