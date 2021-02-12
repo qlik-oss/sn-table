@@ -15,7 +15,6 @@ export function getColumnInfo(layout, colIndex) {
     isDim,
     width: 200,
     label: info.qFallbackTitle,
-    dataKey: info.cId,
     id: info.cId,
     align: isDim ? 'left' : 'right',
   };
@@ -30,7 +29,7 @@ export default async function manageData(model, layout, pageInfo) {
 
   const columns = columnorder.map((c) => getColumnInfo(layout, c));
   const rows = matrix.map((r, rowIdx) => {
-    const row = {};
+    const row = { key: rowIdx };
     columns.forEach((c, colIdx) => {
       row[c.id] = { ...r[colIdx], rowIdx: rowIdx + pageInfo.top, colIdx, isDim: c.isDim };
     });
