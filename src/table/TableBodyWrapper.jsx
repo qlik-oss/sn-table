@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
-import { addSelectionListeners, reducer } from './selections-utils';
+import { handleBodyMouseUp, addSelectionListeners, reducer } from './selections-utils';
 import { getCellRenderer } from './cells/renderer';
 
 export default function TableBodyWrapper({ tableData, constraints, selectionsAPI }) {
@@ -28,7 +28,7 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
   }, []);
 
   return (
-    <TableBody>
+    <TableBody onMouseUp={(e) => handleBodyMouseUp(e, selectionsAPI)}>
       {rows.map((row) => (
         <TableRow hover role="checkbox" tabIndex={-1} key={row.key}>
           {columns.map((column, i) => {

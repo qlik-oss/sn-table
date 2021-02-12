@@ -1,3 +1,12 @@
+export function handleBodyMouseUp(e, api) {
+  const classes = e.target.className;
+  const isSelectable = classes.includes?.('selected') || classes.includes?.('possible');
+  if (api.isActive() && !isSelectable) {
+    e.stopPropagation();
+    api.confirm();
+  }
+}
+
 export function addSelectionListeners(api, selDispatch) {
   const resetSelections = () => {
     selDispatch({ type: 'reset' });

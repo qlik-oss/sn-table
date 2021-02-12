@@ -58,7 +58,7 @@ export default function TableWrapper(props) {
         </Table>
       </TableContainer>
       <TablePagination
-        className={classes[clientMode]}
+        className={`${classes[clientMode]} pagination`}
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
         count={size.qcy}
