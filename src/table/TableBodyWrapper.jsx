@@ -1,14 +1,23 @@
 import React, { useReducer, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import { addSelectionListeners, reducer } from './selections-utils';
 import { getCellRenderer } from './cells/renderer';
+import { getBodyStyle } from './styling-utils';
 
-export default function TableBodyWrapper({ tableData, constraints, selectionsAPI }) {
+const useStyles = makeStyles({
+  body: (props) => ({
+    fontSize: props.fontSize,
+    color: props.fontColor,
+  }),
+});
+
+export default function TableBodyWrapper({ tableData, constraints, selectionsAPI, layout, theme }) {
   const { rows, columns } = tableData;
-
+  const classes = useStyles(getBodyStyle(layout, theme));
   const [columnRenderers, setColumnRenderers] = useState([]);
   const [selState, selDispatch] = useReducer(reducer, {
     api: selectionsAPI,
@@ -37,6 +46,7 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
             const CellRenderer = columnRenderers[i];
             return CellRenderer ? (
               <CellRenderer
+                className={classes.body}
                 cell={cell}
                 column={column}
                 value={value}
@@ -63,4 +73,6 @@ TableBodyWrapper.propTypes = {
   tableData: PropTypes.object.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
+  layout: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
 };

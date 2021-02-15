@@ -1,14 +1,24 @@
 export function getColor(color, defaultColor, theme) {
-  const resolvedColor = theme.getColorPickerColor(color);
-  return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
+  const resolvedColor = color && theme.getColorPickerColor(color);
+  return !resolvedColor || resolvedColor === 'none' ? color || defaultColor : resolvedColor;
 }
 
 export function getHeadStyle(layout, theme) {
-  const styling = layout?.components?.[0];
-  return styling
+  const header = layout?.components?.[0]?.header;
+  return header
     ? {
-        fontColor: getColor(styling.header.fontColor, '#404040', theme),
-        fontSize: styling.header.fontSize || '14px',
+        fontColor: getColor(header.fontColor, '#404040', theme),
+        fontSize: header.fontSize || '14px',
+      }
+    : {};
+}
+
+export function getBodyStyle(layout, theme) {
+  const content = layout?.components?.[0]?.content;
+  return content
+    ? {
+        fontColor: getColor(content.fontColor, '#404040', theme),
+        fontSize: content.fontSize || '14px',
       }
     : {};
 }
