@@ -34,7 +34,7 @@ export default function supernova(env) {
       const constraints = useConstraints();
       const selectionsAPI = useSelections();
       const theme = useTheme();
-
+      window.console.log(layout, 'layout');
       const [pageInfo, setPageInfo] = useState({ top: 0, height: 100 });
       const [tableData, setTableData] = useState();
       const [muiParameters] = useState(muiSetup(__OPIONAL_THEME_DEPS__));

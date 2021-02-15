@@ -33,7 +33,8 @@
     "sense": "nebula sense",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
     "test:unit": "aw -c aw.config.js",
-    "test:integration": "aw puppet --testExt '*.int.js' --glob 'test/integration/**/*.int.js'"
+    "test:integration": "aw puppet --testExt '*.int.js' --glob 'test/integration/**/*.int.js'",
+    "extension": "yarn build && cp -r ./dist ~/Qlik/Sense/Extensions"
   },
   "devDependencies": {
     "@after-work.js/aw": "6.0.14",

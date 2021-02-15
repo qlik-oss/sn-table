@@ -44,6 +44,81 @@ const properties = {
     /** @type {boolean} */
     show: false,
   },
+  components: [
+    {
+      key: 'theme',
+      content: {
+        fontSize: null,
+        fontColor: {
+          index: -1,
+          color: null,
+        },
+        hoverEffect: false,
+        hoverColor: {
+          index: -1,
+          color: null,
+        },
+        hoverFontColor: {
+          index: -1,
+          color: null,
+        },
+      },
+      header: {
+        fontSize: null,
+        fontColor: {
+          index: -1,
+          color: null,
+        },
+      },
+    },
+  ],
+  // style: {
+  //   /**
+  //    * @type {number}
+  //    */
+  //   fontSize: null,
+  //   /**
+  //    * @type {object}
+  //    */
+  //   fontColor: {
+  //     index: -1,
+  //     color: null,
+  //   },
+  //   /**
+  //    * @type {boolean}
+  //    */
+  //   hoverEffect: false,
+  //   /**
+  //    * @type {object}
+  //    */
+  //   hoverColor: {
+  //     index: -1,
+  //     color: null,
+  //   },
+  //   /**
+  //    * @type {object}
+  //    */
+  //   hoverFontColor: {
+  //     index: -1,
+  //     color: null,
+  //   },
+  //   /**
+  //    * @type {object}
+  //    */
+  //   header: {
+  //     /**
+  //      * @type {number}
+  //      */
+  //     fontSize: null,
+  //     /**
+  //      * @type {object}
+  //      */
+  //     fontColor: {
+  //       index: -1,
+  //       color: null,
+  //     },
+  //   },
+  // },
 };
 
 export default properties;
