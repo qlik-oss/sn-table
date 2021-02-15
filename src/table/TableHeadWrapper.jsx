@@ -12,6 +12,7 @@ const useStyles = makeStyles({
     fontSize: props.fontSize,
   }),
 });
+
 export default function TableHeadWrapper({ tableData, theme, layout }) {
   const classes = useStyles(getHeadStyle(layout, theme));
 

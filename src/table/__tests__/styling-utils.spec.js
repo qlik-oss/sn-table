@@ -2,7 +2,7 @@ import { getColor, getHeadStyle } from '../styling-utils';
 
 describe('styling-utils', () => {
   let resolvedColor;
-  let theme = {
+  const theme = {
     // very simple mock of getColorPickerColor. Normally color.color has to be null for the fn to return null
     getColorPickerColor: ({ index }) => (index > -1 ? resolvedColor : null),
   };
