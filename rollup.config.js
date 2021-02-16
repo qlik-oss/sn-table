@@ -10,6 +10,7 @@ import path from 'path';
 
 import jsxPlugin from '@babel/plugin-transform-react-jsx';
 import classProps from '@babel/plugin-proposal-class-properties';
+import chaining from '@babel/plugin-proposal-optional-chaining';
 
 import fs from 'fs';
 
@@ -63,7 +64,7 @@ export default {
         ],
         ['@babel/react'],
       ],
-      plugins: [[jsxPlugin], [classProps]],
+      plugins: [[jsxPlugin], [classProps], [chaining]],
     }),
     commonjs(),
     image(),
