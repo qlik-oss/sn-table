@@ -1,4 +1,4 @@
-export function getColor(color, defaultColor, theme) {
+export function getColor(color = {}, defaultColor, theme) {
   const resolvedColor = theme.getColorPickerColor(color);
   return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
 }
