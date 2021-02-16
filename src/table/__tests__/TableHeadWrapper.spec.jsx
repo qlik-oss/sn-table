@@ -7,6 +7,8 @@ import TableHeadWrapper from '../TableHeadWrapper';
 
 describe('<TableHeadWrapper />', () => {
   let tableData;
+  let theme;
+  let layout;
 
   beforeEach(() => {
     tableData = {
@@ -15,10 +17,14 @@ describe('<TableHeadWrapper />', () => {
         { id: 2, align: 'right', label: 'someMsr' },
       ],
     };
+    theme = {
+      getColorPickerColor: () => {},
+    };
+    layout = {};
   });
 
   it('should render table head', () => {
-    const { queryByText } = render(<TableHeadWrapper tableData={tableData} />);
+    const { queryByText } = render(<TableHeadWrapper tableData={tableData} theme={theme} layout={layout} />);
 
     expect(queryByText(tableData.columns[0].label)).to.be.visible;
     expect(queryByText(tableData.columns[1].label)).to.be.visible;

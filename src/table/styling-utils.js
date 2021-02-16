@@ -4,11 +4,11 @@ export function getColor(color, defaultColor, theme) {
 }
 
 export function getHeadStyle(layout, theme) {
-  const styling = layout?.components?.[0];
-  return styling
+  const header = layout.components?.[0]?.header;
+  return header
     ? {
-        fontColor: getColor(styling.header.fontColor, '#404040', theme),
-        fontSize: styling.header.fontSize || '14px',
+        fontColor: getColor(header.fontColor, '#404040', theme),
+        fontSize: header.fontSize || '14px',
       }
     : {};
 }
