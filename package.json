@@ -41,6 +41,7 @@
     "@babel/core": "^7.12.10",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-transform-react-jsx": "^7.12.12",
+    "@babel/plugin-proposal-optional-chaining": "7.12.16",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
     "@material-ui/core": "^4.11.3",
