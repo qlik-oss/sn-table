@@ -21,7 +21,7 @@ export function getBodyStyle(layout, theme) {
     ? {
         fontColor: getColor(content.fontColor, '#404040', theme),
         fontSize: content.fontSize || '14px',
-        hoverBackGroundColor: getColor(hoverColor, 'blue', theme),
+        hoverBackGroundColor: `${getColor(hoverColor, 'blue', theme)} !important`,
         hoverFontColor: getColor(hoverFontColor, 'black', theme),
       }
     : {};

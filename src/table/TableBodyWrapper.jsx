@@ -12,12 +12,14 @@ const useStyles = makeStyles({
   tableCell: (props) => ({
     fontSize: props.fontSize,
     color: props.fontColor,
+  }),
+  hoverTableCell: (props) => ({
     '&:hover': {
       color: props.hoverFontColor,
     },
   }),
-  tableRow: (props) => ({
-    '&:hover': {
+  hoverTableRow: (props) => ({
+    '&&:hover': {
       backgroundColor: props.hoverBackGroundColor,
     },
   }),
@@ -26,7 +28,7 @@ const useStyles = makeStyles({
 export default function TableBodyWrapper({ tableData, constraints, selectionsAPI, layout, theme }) {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.hoverEffect;
-  const classes = useStyles(getBodyStyle(layout, theme));
+  const classes = useStyles(getBodyStyle(layout, theme, hoverEffect));
   const [columnRenderers, setColumnRenderers] = useState([]);
   const [selState, selDispatch] = useReducer(reducer, {
     api: selectionsAPI,
@@ -48,14 +50,21 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
   return (
     <TableBody>
       {rows.map((row) => (
-        <TableRow hover={hoverEffect} role="checkbox" tabIndex={-1} key={row.key} className={classes.tableRow}>
+        <TableRow
+          hover={hoverEffect}
+          role="checkbox"
+          tabIndex={-1}
+          key={row.key}
+          className={hoverEffect && classes.hoverTableRow}
+        >
           {columns.map((column, i) => {
             const cell = row[column.id];
             const value = cell.qText;
             const CellRenderer = columnRenderers[i];
             return CellRenderer ? (
               <CellRenderer
-                stylingClassCellName={classes.tableCell}
+                stylingClassName={classes.tableCell}
+                hoverStylingClassName={hoverEffect && classes.hoverTableCell}
                 cell={cell}
                 column={column}
                 value={value}
@@ -67,7 +76,7 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
                 {value}
               </CellRenderer>
             ) : (
-              <TableCell className={classes.tableCell} key={column.id} align={column.align}>
+              <TableCell key={column.id} align={column.align}>
                 {value}
               </TableCell>
             );

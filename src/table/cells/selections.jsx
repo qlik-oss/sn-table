@@ -17,7 +17,7 @@ const useStyles = makeStyles({
 
 export function withSelections(CellComponent) {
   const HOC = (props) => {
-    const { cell, selState, selDispatch, stylingClassCellName } = props;
+    const { cell, selState, selDispatch, stylingClassName, hoverStylingClassName } = props;
     const classes = useStyles();
     const handleMouseUp = (evt) => cell.isDim && selectCell(cell, selState, selDispatch, evt);
     const selectionClass = getSelectionClass(cell, selState);
@@ -25,14 +25,15 @@ export function withSelections(CellComponent) {
     return (
       <CellComponent
         {...props}
-        className={`${stylingClassCellName} ${selectionClass} ${classes[selectionClass]}`}
+        className={`${stylingClassName} ${hoverStylingClassName} ${selectionClass} ${classes[selectionClass]}`}
         onMouseUp={handleMouseUp}
       />
     );
   };
 
   HOC.propTypes = {
-    stylingClassCellName: PropTypes.object.isRequired,
+    stylingClassName: PropTypes.object.isRequired,
+    hoverStylingClassName: PropTypes.object.isRequired,
     cell: PropTypes.object.isRequired,
     selState: PropTypes.object.isRequired,
     selDispatch: PropTypes.func.isRequired,
