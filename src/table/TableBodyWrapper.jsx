@@ -9,14 +9,23 @@ import { getCellRenderer } from './cells/renderer';
 import { getBodyStyle } from './styling-utils';
 
 const useStyles = makeStyles({
-  body: (props) => ({
+  tableCell: (props) => ({
     fontSize: props.fontSize,
     color: props.fontColor,
+    '&:hover': {
+      color: props.hoverFontColor,
+    },
+  }),
+  tableRow: (props) => ({
+    '&:hover': {
+      backgroundColor: props.hoverBackGroundColor,
+    },
   }),
 });
 
 export default function TableBodyWrapper({ tableData, constraints, selectionsAPI, layout, theme }) {
   const { rows, columns } = tableData;
+  const hoverEffect = layout.components?.[0]?.hoverEffect;
   const classes = useStyles(getBodyStyle(layout, theme));
   const [columnRenderers, setColumnRenderers] = useState([]);
   const [selState, selDispatch] = useReducer(reducer, {
@@ -39,14 +48,14 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
   return (
     <TableBody>
       {rows.map((row) => (
-        <TableRow hover role="checkbox" tabIndex={-1} key={row.key}>
+        <TableRow hover={hoverEffect} role="checkbox" tabIndex={-1} key={row.key} className={classes.tableRow}>
           {columns.map((column, i) => {
             const cell = row[column.id];
             const value = cell.qText;
             const CellRenderer = columnRenderers[i];
             return CellRenderer ? (
               <CellRenderer
-                className={classes.body}
+                stylingClassCellName={classes.tableCell}
                 cell={cell}
                 column={column}
                 value={value}
@@ -58,7 +67,7 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
                 {value}
               </CellRenderer>
             ) : (
-              <TableCell key={column.id} align={column.align}>
+              <TableCell className={classes.tableCell} key={column.id} align={column.align}>
                 {value}
               </TableCell>
             );

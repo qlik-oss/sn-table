@@ -4,7 +4,7 @@ export function getColor(color = {}, defaultColor, theme) {
 }
 
 export function getHeadStyle(layout, theme) {
-  const header = layout?.components?.[0]?.header;
+  const header = layout.components?.[0]?.header;
   return header
     ? {
         fontColor: getColor(header.fontColor, '#404040', theme),
@@ -14,11 +14,15 @@ export function getHeadStyle(layout, theme) {
 }
 
 export function getBodyStyle(layout, theme) {
-  const content = layout?.components?.[0]?.content;
+  const content = layout.components?.[0]?.content;
+  const hoverColor = layout.components?.[0]?.hoverColor;
+  const hoverFontColor = layout.components?.[0]?.hoverFontColor;
   return content
     ? {
         fontColor: getColor(content.fontColor, '#404040', theme),
         fontSize: content.fontSize || '14px',
+        hoverBackGroundColor: getColor(hoverColor, 'blue', theme),
+        hoverFontColor: getColor(hoverFontColor, 'black', theme),
       }
     : {};
 }
