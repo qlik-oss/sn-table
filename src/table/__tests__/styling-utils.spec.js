@@ -38,6 +38,12 @@ describe('styling-utils', () => {
       const resultColor = getColor(color, defaultColor, theme);
       expect(resultColor).to.equal(defaultColor);
     });
+    it('should return a default color when color is undefined', () => {
+      color = undefined;
+
+      const resultColor = getColor(color, defaultColor, theme);
+      expect(resultColor).to.equal(defaultColor);
+    });
   });
 
   describe('getHeadStyle', () => {
