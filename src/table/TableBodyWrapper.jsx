@@ -58,7 +58,7 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
                 {value}
               </CellRenderer>
             ) : (
-              <TableCell key={column.id} align={column.align}>
+              <TableCell className={classes.body} key={column.id} align={column.align}>
                 {value}
               </TableCell>
             );
