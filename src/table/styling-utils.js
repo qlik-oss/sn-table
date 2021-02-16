@@ -1,6 +1,6 @@
-export function getColor(color, defaultColor, theme) {
-  const resolvedColor = color && theme.getColorPickerColor(color);
-  return !resolvedColor || resolvedColor === 'none' ? color || defaultColor : resolvedColor;
+export function getColor(color = {}, defaultColor, theme) {
+  const resolvedColor = theme.getColorPickerColor(color);
+  return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
 }
 
 export function getHeadStyle(layout, theme) {
