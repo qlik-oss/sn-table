@@ -29,7 +29,8 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.hoverEffect;
   const classes = useStyles(getBodyStyle(layout, theme, hoverEffect));
-  const [columnRenderers, setColumnRenderers] = useState([]);
+  const getColumnRenderers = (selectionsEnabled) => tableData.columns.map((c) => getCellRenderer(c, selectionsEnabled));
+  const [columnRenderers, setColumnRenderers] = useState(getColumnRenderers(false));
   const [selState, selDispatch] = useReducer(reducer, {
     api: selectionsAPI,
     rows: [],
@@ -38,9 +39,9 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
   });
 
   useEffect(() => {
-    const isEnabled = !!selectionsAPI && !constraints.active;
-    selDispatch({ type: 'set-enabled', payload: { isEnabled } });
-    setColumnRenderers(tableData.columns.map((c) => getCellRenderer(c, isEnabled)));
+    const selectionsEnabled = !!selectionsAPI && !constraints.active;
+    selDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
+    setColumnRenderers(getColumnRenderers(selectionsEnabled));
   }, [constraints]);
 
   useEffect(() => {
@@ -76,7 +77,8 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
                 {value}
               </CellRenderer>
             ) : (
-              <TableCell key={column.id} align={column.align}>
+              // the new added column in the edit mode, both dimension and measure
+              <TableCell className={classes.body} key={column.id} align={column.align}>
                 {value}
               </TableCell>
             );
