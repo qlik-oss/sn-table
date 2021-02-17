@@ -18,7 +18,8 @@ const useStyles = makeStyles({
 export default function TableBodyWrapper({ tableData, constraints, selectionsAPI, layout, theme }) {
   const { rows, columns } = tableData;
   const classes = useStyles(getBodyStyle(layout, theme));
-  const [columnRenderers, setColumnRenderers] = useState([]);
+  const getColumnRenderers = (selectionsEnabled) => tableData.columns.map((c) => getCellRenderer(c, selectionsEnabled));
+  const [columnRenderers, setColumnRenderers] = useState(getColumnRenderers(false));
   const [selState, selDispatch] = useReducer(reducer, {
     api: selectionsAPI,
     rows: [],
@@ -29,7 +30,7 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
   useEffect(() => {
     const selectionsEnabled = !!selectionsAPI && !constraints.active;
     selDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
-    setColumnRenderers(tableData.columns.map((c) => getCellRenderer(c, selectionsEnabled)));
+    setColumnRenderers(getColumnRenderers(selectionsEnabled));
   }, [constraints]);
 
   useEffect(() => {
@@ -58,6 +59,7 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
                 {value}
               </CellRenderer>
             ) : (
+              // the new added column in the edit mode, both dimension and measure
               <TableCell className={classes.body} key={column.id} align={column.align}>
                 {value}
               </TableCell>
