@@ -190,12 +190,10 @@ describe('selections-utils', () => {
     let selDispatch;
 
     beforeEach(() => {
-      alreadyActive = false;
       selState = {
         rows: [],
         colIdx: -1,
         api: {
-          isActive: () => alreadyActive,
           begin: sinon.spy(),
           select: sinon.spy(),
           cancel: sinon.spy(),
@@ -218,11 +216,21 @@ describe('selections-utils', () => {
     it('should not call begin and call cancel when same qElemNumber (resulting in empty selectedCells)', () => {
       selState.rows = [{ qElemNumber: 1, rowIdx: 1 }];
       selState.colIdx = 1;
-      alreadyActive = true;
 
       selectCell(cell, selState, selDispatch, event);
       expect(selState.api.begin).to.not.have.been.called;
       expect(selState.api.cancel).to.have.been.calledOnce;
+      expect(selDispatch).to.not.have.been.called;
+      expect(selState.api.select).to.not.have.been.called;
+    });
+    it('should return early when excluded columns', () => {
+      selState.rows = [{ qElemNumber: 1, rowIdx: 1 }];
+      selState.colIdx = 1;
+      cell.colIdx = 2;
+
+      selectCell(cell, selState, selDispatch, event);
+      expect(selState.api.begin).to.not.have.been.called;
+      expect(selState.api.cancel).to.not.have.been.called;
       expect(selDispatch).to.not.have.been.called;
       expect(selState.api.select).to.not.have.been.called;
     });

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
-import { handleBodyMouseUp, addSelectionListeners, reducer } from './selections-utils';
+import { addSelectionListeners, reducer } from './selections-utils';
 import { getCellRenderer } from './cells/renderer';
 
-export default function TableBodyWrapper({ tableData, constraints, selectionsAPI }) {
+export default function TableBodyWrapper({ tableData, constraints, selectionsAPI, layout }) {
   const { rows, columns } = tableData;
 
   const [columnRenderers, setColumnRenderers] = useState([]);
@@ -21,14 +21,14 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
     const isEnabled = !!selectionsAPI && !constraints.active;
     selDispatch({ type: 'set-enabled', payload: { isEnabled } });
     setColumnRenderers(tableData.columns.map((c) => getCellRenderer(c, isEnabled)));
-  }, [constraints]);
+  }, [constraints, layout]);
 
   useEffect(() => {
     addSelectionListeners(selectionsAPI, selDispatch);
   }, []);
 
   return (
-    <TableBody onMouseUp={(e) => handleBodyMouseUp(e, selectionsAPI)}>
+    <TableBody>
       {rows.map((row) => (
         <TableRow hover role="checkbox" tabIndex={-1} key={row.key}>
           {columns.map((column, i) => {
@@ -63,4 +63,5 @@ TableBodyWrapper.propTypes = {
   tableData: PropTypes.object.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
+  layout: PropTypes.object.isRequired,
 };

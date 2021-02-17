@@ -22,9 +22,7 @@ export function withSelections(CellComponent) {
     const handleMouseUp = (evt) => cell.isDim && selectCell(cell, selState, selDispatch, evt);
     const selectionClass = getSelectionClass(cell, selState);
 
-    return (
-      <CellComponent {...props} className={`${selectionClass} ${classes[selectionClass]}`} onMouseUp={handleMouseUp} />
-    );
+    return <CellComponent {...props} className={classes[selectionClass]} onMouseUp={handleMouseUp} />;
   };
 
   HOC.propTypes = {
