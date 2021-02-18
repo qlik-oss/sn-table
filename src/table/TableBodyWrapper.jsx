@@ -6,7 +6,7 @@ import TableCell from '@material-ui/core/TableCell';
 import { addSelectionListeners, reducer } from './selections-utils';
 import { getCellRenderer } from './cells/renderer';
 
-export default function TableBodyWrapper({ tableData, constraints, selectionsAPI }) {
+export default function TableBodyWrapper({ tableData, constraints, selectionsAPI, layout }) {
   const { rows, columns } = tableData;
 
   const [columnRenderers, setColumnRenderers] = useState([]);
@@ -21,7 +21,7 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
     const selectionsEnabled = !!selectionsAPI && !constraints.active;
     selDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
     setColumnRenderers(tableData.columns.map((c) => getCellRenderer(c, selectionsEnabled)));
-  }, [constraints]);
+  }, [constraints, layout]);
 
   useEffect(() => {
     addSelectionListeners(selectionsAPI, selDispatch);
@@ -63,4 +63,5 @@ TableBodyWrapper.propTypes = {
   tableData: PropTypes.object.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
+  layout: PropTypes.object.isRequired,
 };

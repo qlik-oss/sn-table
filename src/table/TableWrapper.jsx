@@ -24,7 +24,7 @@ const useStyles = makeStyles({
 });
 
 export default function TableWrapper(props) {
-  const { el, tableData, setPageInfo, constraints } = props;
+  const { el, tableData, setPageInfo, constraints, selectionsAPI } = props;
   const { size, rows } = tableData;
   const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
@@ -32,7 +32,7 @@ export default function TableWrapper(props) {
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
-  const paginationFixedRpp = tableWidth < 400;
+  const paginationFixedRpp = selectionsAPI.isActive() || tableWidth < 400;
 
   const handleChangePage = (event, newPage) => {
     setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
@@ -84,4 +84,5 @@ TableWrapper.propTypes = {
   tableData: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
+  selectionsAPI: PropTypes.object.isRequired,
 };

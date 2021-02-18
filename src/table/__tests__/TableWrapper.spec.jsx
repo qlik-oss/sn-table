@@ -15,6 +15,8 @@ describe('<TableWrapper />', () => {
   let constraints;
   let rowsPerPage;
   let el;
+  let selectionsAPI;
+  let active;
 
   beforeEach(() => {
     sandbox.replace(TableBodyWrapper, 'default', () => <tbody />);
@@ -27,6 +29,10 @@ describe('<TableWrapper />', () => {
     setPageInfo = sinon.spy();
     constraints = {};
     rowsPerPage = 100;
+    selectionsAPI = {
+      isActive: () => active,
+    };
+    active = false;
     el = {};
   });
 
@@ -37,7 +43,13 @@ describe('<TableWrapper />', () => {
 
   it('should render table', () => {
     const { queryByLabelText, queryByText } = render(
-      <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} el={el} />
+      <TableWrapper
+        tableData={tableData}
+        setPageInfo={setPageInfo}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+        el={el}
+      />
     );
 
     expect(queryByLabelText('sticky table')).to.be.visible;
@@ -46,7 +58,13 @@ describe('<TableWrapper />', () => {
   });
   it('should call setPageInfo when clicking next page button', async () => {
     const { findByTitle, findByText } = render(
-      <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} el={el} />
+      <TableWrapper
+        tableData={tableData}
+        setPageInfo={setPageInfo}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+        el={el}
+      />
     );
     fireEvent.click(await findByTitle('Next page'));
 
@@ -55,7 +73,13 @@ describe('<TableWrapper />', () => {
   });
   it('should change back to first page when not on first page and no rows', async () => {
     const { findByTitle } = render(
-      <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} el={el} />
+      <TableWrapper
+        tableData={tableData}
+        setPageInfo={setPageInfo}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+        el={el}
+      />
     );
     // This is a hack to simulate when selections are made on other page than first page and
     // rows per page is bigger than the selected rows -> handle data returns no rows.
@@ -69,12 +93,36 @@ describe('<TableWrapper />', () => {
   });
   it('should call setPageInfo when changing rows per page', async () => {
     const { findByText } = render(
-      <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} el={el} />
+      <TableWrapper
+        tableData={tableData}
+        setPageInfo={setPageInfo}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+        el={el}
+      />
     );
     // the popover is only triggered with mouseDown, according to the mui definition
     fireEvent.mouseDown(await findByText(rowsPerPage));
     fireEvent.click(await findByText('25'));
 
     expect(setPageInfo).to.have.been.calledWith({ top: 0, height: 25 });
+  });
+
+  it('should not show rows per page when selectionsAPI.isActive() returns true', async () => {
+    active = true;
+
+    const { queryByText } = render(
+      <TableWrapper
+        tableData={tableData}
+        setPageInfo={setPageInfo}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+        el={el}
+      />
+    );
+    const rppSiblingElement = queryByText(`1-${rowsPerPage} of ${tableData.size.qcy}`);
+
+    // Can't check if rows per page is not visible, so check if parent has correct amount of child elements
+    expect(rppSiblingElement.parentNode.childElementCount).to.equal(3);
   });
 });
