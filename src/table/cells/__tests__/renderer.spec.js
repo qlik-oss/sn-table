@@ -1,5 +1,5 @@
 import TableCell from '@material-ui/core/TableCell';
-import getCellRenderer from '../renderer';
+import { getCellRenderer } from '../renderer';
 import * as selections from '../selections';
 
 describe('render', () => {

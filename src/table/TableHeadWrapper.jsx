@@ -1,24 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import { getHeadStyle } from './styling-utils';
 
-export default function TableHeadWrapper(props) {
-  const { columns } = props.tableData;
+const useStyles = makeStyles({
+  head: (props) => ({
+    color: props.fontColor,
+    fontSize: props.fontSize,
+  }),
+});
+
+export default function TableHeadWrapper({ tableData, theme, layout }) {
+  const classes = useStyles(getHeadStyle(layout, theme));
 
   return (
     <TableHead>
       <TableRow>
-        {columns.map((column) => (
-          <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
+        {tableData.columns.map((column) => (
+          <TableCell
+            key={column.id}
+            align={column.align}
+            className={classes.head}
+            style={{ minWidth: column.minWidth }}
+          >
             {column.label}
           </TableCell>
         ))}
       </TableRow>
-    </TableHead>);
+    </TableHead>
+  );
 }
 
 TableHeadWrapper.propTypes = {
   tableData: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
+  layout: PropTypes.object.isRequired,
 };
