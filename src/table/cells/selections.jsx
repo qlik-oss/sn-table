@@ -9,7 +9,7 @@ const useStyles = makeStyles({
     background: 'repeating-linear-gradient(-45deg, #fafafa, #fafafa 2px, #eee 2.5px, #fafafa 3px, #fafafa 5px)',
   },
   selected: {
-    color: '#fff',
+    color: '#fff !important',
     backgroundColor: '#009845',
   },
   possible: {},
@@ -17,7 +17,7 @@ const useStyles = makeStyles({
 
 export function withSelections(CellComponent) {
   const HOC = (props) => {
-    const { cell, selState, selDispatch, className } = props;
+    const { cell, selState, selDispatch, stylingClassName } = props;
     const classes = useStyles();
     const handleMouseUp = (evt) => cell.isDim && selectCell(cell, selState, selDispatch, evt);
     const selectionClass = getSelectionClass(cell, selState);
@@ -25,14 +25,14 @@ export function withSelections(CellComponent) {
     return (
       <CellComponent
         {...props}
-        className={`${className} ${selectionClass} ${classes[selectionClass]}`}
+        className={`${selectionClass} ${stylingClassName} ${classes[selectionClass]}`}
         onMouseUp={handleMouseUp}
       />
     );
   };
 
   HOC.propTypes = {
-    className: PropTypes.object.isRequired,
+    stylingClassName: PropTypes.object.isRequired,
     cell: PropTypes.object.isRequired,
     selState: PropTypes.object.isRequired,
     selDispatch: PropTypes.func.isRequired,
