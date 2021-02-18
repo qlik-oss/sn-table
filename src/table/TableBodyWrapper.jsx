@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
 import { addSelectionListeners, reducer } from './selections-utils';
-import { getCellRenderer } from './cells/renderer';
+import getCellRenderer from './cells/renderer';
 import { getBodyStyle } from './styling-utils';
 
 const useStyles = makeStyles({
-  body: (props) => ({
+  tableCell: (props) => ({
     fontSize: props.fontSize,
     color: props.fontColor,
   }),
@@ -45,9 +44,9 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
             const cell = row[column.id];
             const value = cell.qText;
             const CellRenderer = columnRenderers[i];
-            return CellRenderer ? (
+            return (
               <CellRenderer
-                stylingClassName={classes.body}
+                stylingClassName={classes.tableCell}
                 cell={cell}
                 column={column}
                 value={value}
@@ -58,11 +57,6 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
               >
                 {value}
               </CellRenderer>
-            ) : (
-              // the new added column in the edit mode, both dimension and measure
-              <TableCell className={classes.body} key={column.id} align={column.align}>
-                {value}
-              </TableCell>
             );
           })}
         </TableRow>
