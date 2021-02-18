@@ -6,6 +6,7 @@ import {
   useState,
   useConstraints,
   useSelections,
+  useTheme,
 } from '@nebula.js/stardust';
 import properties from './object-properties';
 import data from './data';
@@ -31,6 +32,7 @@ export default function supernova(env) {
       const model = useModel();
       const constraints = useConstraints();
       const selectionsAPI = useSelections();
+      const theme = useTheme();
 
       const [pageInfo, setPageInfo] = useState({ top: 0, height: 100 });
       const [tableData, setTableData] = useState();
@@ -44,7 +46,7 @@ export default function supernova(env) {
 
       useEffect(() => {
         if (layout && tableData) {
-          render(el, { tableData, setPageInfo, pageInfo, constraints, selectionsAPI, muiParameters });
+          render(el, { layout, tableData, setPageInfo, pageInfo, constraints, selectionsAPI, muiParameters, theme });
         }
       }, [tableData, constraints, selectionsAPI.isActive()]);
 

@@ -18,9 +18,9 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
   });
 
   useEffect(() => {
-    const isEnabled = !!selectionsAPI && !constraints.active;
-    selDispatch({ type: 'set-enabled', payload: { isEnabled } });
-    setColumnRenderers(tableData.columns.map((c) => getCellRenderer(c, isEnabled)));
+    const selectionsEnabled = !!selectionsAPI && !constraints.active;
+    selDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
+    setColumnRenderers(tableData.columns.map((c) => getCellRenderer(c, selectionsEnabled)));
   }, [constraints, layout]);
 
   useEffect(() => {
