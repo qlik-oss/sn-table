@@ -2,7 +2,7 @@
 import TableCell from '@material-ui/core/TableCell';
 
 import { withSelections } from './selections';
-// import withIcon from './icon';
+import withoutSelections from './withoutSelections';
 
 // column will be needed in the future when column styling is implemented
 export function getCellRenderer(column, selectionsEnabled) {
@@ -12,5 +12,5 @@ export function getCellRenderer(column, selectionsEnabled) {
   }
 
   // the old column in the edit mode
-  return TableCell;
+  return withoutSelections(TableCell);
 }

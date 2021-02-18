@@ -13,14 +13,12 @@ const useStyles = makeStyles({
     fontSize: props.fontSize,
     color: props.fontColor,
   }),
-  hoverTableCell: (props) => ({
-    '&:hover': {
-      color: props.hoverFontColor,
-    },
-  }),
   hoverTableRow: (props) => ({
     '&&:hover': {
       backgroundColor: props.hoverBackGroundColor,
+      '& td': {
+        color: props.hoverFontColor,
+      },
     },
   }),
 });
@@ -30,6 +28,7 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
   const hoverEffect = layout.components?.[0]?.hoverEffect;
   const classes = useStyles(getBodyStyle(layout, theme, hoverEffect));
   const getColumnRenderers = (selectionsEnabled) => tableData.columns.map((c) => getCellRenderer(c, selectionsEnabled));
+  const [selectionsEnabled, setSelectionsEnabled] = useState(false);
   const [columnRenderers, setColumnRenderers] = useState(getColumnRenderers(false));
   const [selState, selDispatch] = useReducer(reducer, {
     api: selectionsAPI,
@@ -39,9 +38,10 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
   });
 
   useEffect(() => {
-    const selectionsEnabled = !!selectionsAPI && !constraints.active;
-    selDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
-    setColumnRenderers(getColumnRenderers(selectionsEnabled));
+    const isSelectionsEnabled = !!selectionsAPI && !constraints.active;
+    setSelectionsEnabled(isSelectionsEnabled);
+    selDispatch({ type: 'set-enabled', payload: { isEnabled: isSelectionsEnabled } });
+    setColumnRenderers(getColumnRenderers(isSelectionsEnabled));
   }, [constraints]);
 
   useEffect(() => {
@@ -52,11 +52,11 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
     <TableBody>
       {rows.map((row) => (
         <TableRow
-          hover={hoverEffect}
+          hover={selectionsEnabled && hoverEffect}
           role="checkbox"
           tabIndex={-1}
           key={row.key}
-          className={hoverEffect && classes.hoverTableRow}
+          className={selectionsEnabled && hoverEffect && classes.hoverTableRow}
         >
           {columns.map((column, i) => {
             const cell = row[column.id];
@@ -65,7 +65,6 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
             return CellRenderer ? (
               <CellRenderer
                 stylingClassName={classes.tableCell}
-                hoverStylingClassName={hoverEffect && classes.hoverTableCell}
                 cell={cell}
                 column={column}
                 value={value}
@@ -78,7 +77,7 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
               </CellRenderer>
             ) : (
               // the new added column in the edit mode, both dimension and measure
-              <TableCell className={classes.body} key={column.id} align={column.align}>
+              <TableCell className={classes.tableCell} key={column.id} align={column.align}>
                 {value}
               </TableCell>
             );

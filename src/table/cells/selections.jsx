@@ -3,13 +3,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { getSelectionClass, selectCell } from '../selections-utils';
+import cellLocked from '../../image/NR_Locked.png';
 
 const useStyles = makeStyles({
   excluded: {
-    background: 'repeating-linear-gradient(-45deg, #fafafa, #fafafa 2px, #eee 2.5px, #fafafa 3px, #fafafa 5px)',
+    backgroundImage: `url(${cellLocked})`,
   },
   selected: {
-    color: '#fff',
+    color: '#fff !important',
     backgroundColor: '#009845',
   },
   possible: {},
@@ -17,7 +18,7 @@ const useStyles = makeStyles({
 
 export function withSelections(CellComponent) {
   const HOC = (props) => {
-    const { cell, selState, selDispatch, stylingClassName, hoverStylingClassName } = props;
+    const { cell, selState, selDispatch, stylingClassName } = props;
     const classes = useStyles();
     const handleMouseUp = (evt) => cell.isDim && selectCell(cell, selState, selDispatch, evt);
     const selectionClass = getSelectionClass(cell, selState);
@@ -25,7 +26,7 @@ export function withSelections(CellComponent) {
     return (
       <CellComponent
         {...props}
-        className={`${stylingClassName} ${hoverStylingClassName} ${selectionClass} ${classes[selectionClass]}`}
+        className={`${stylingClassName} ${selectionClass} ${classes[selectionClass]}`}
         onMouseUp={handleMouseUp}
       />
     );
@@ -33,7 +34,6 @@ export function withSelections(CellComponent) {
 
   HOC.propTypes = {
     stylingClassName: PropTypes.object.isRequired,
-    hoverStylingClassName: PropTypes.object.isRequired,
     cell: PropTypes.object.isRequired,
     selState: PropTypes.object.isRequired,
     selDispatch: PropTypes.func.isRequired,
