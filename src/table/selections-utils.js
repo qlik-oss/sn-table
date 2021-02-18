@@ -74,10 +74,12 @@ export function selectCell(cell, selState, selDispatch, evt) {
   const { rowIdx, colIdx, qElemNumber } = cell;
   let selectedRows = [];
 
-  if (!api.isActive()) {
+  if (selState.colIdx === -1) {
     api.begin('/qHyperCubeDef');
-  } else {
+  } else if (selState.colIdx === colIdx) {
     selectedRows = rows.concat();
+  } else {
+    return;
   }
 
   selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt);

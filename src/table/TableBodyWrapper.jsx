@@ -30,8 +30,8 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
   useEffect(() => {
     const selectionsEnabled = !!selectionsAPI && !constraints.active;
     selDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
-    setColumnRenderers(getColumnRenderers(selectionsEnabled));
-  }, [constraints]);
+    setColumnRenderers(tableData.columns.map((c) => getCellRenderer(c, selectionsEnabled)));
+  }, [constraints, layout]);
 
   useEffect(() => {
     addSelectionListeners(selectionsAPI, selDispatch);

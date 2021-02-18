@@ -25,7 +25,7 @@ export function withSelections(CellComponent) {
     return (
       <CellComponent
         {...props}
-        className={`${selectionClass} ${stylingClassName} ${classes[selectionClass]}`}
+        className={`${classes[selectionClass]} ${stylingClassName}`}
         onMouseUp={handleMouseUp}
       />
     );
