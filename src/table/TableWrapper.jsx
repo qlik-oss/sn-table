@@ -24,7 +24,7 @@ const useStyles = makeStyles({
 });
 
 export default function TableWrapper(props) {
-  const { tableData, setPageInfo, constraints } = props;
+  const { tableData, setPageInfo, constraints, selectionsAPI } = props;
   const { size, rows } = tableData;
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
@@ -59,7 +59,7 @@ export default function TableWrapper(props) {
       </TableContainer>
       <TablePagination
         className={classes[clientMode]}
-        rowsPerPageOptions={[10, 25, 100]}
+        rowsPerPageOptions={selectionsAPI.isActive() ? [rowsPerPage] : [10, 25, 100]}
         component="div"
         count={size.qcy}
         rowsPerPage={rowsPerPage}
@@ -75,4 +75,5 @@ TableWrapper.propTypes = {
   tableData: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
+  selectionsAPI: PropTypes.object.isRequired,
 };

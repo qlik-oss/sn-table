@@ -12,7 +12,6 @@ import properties from './object-properties';
 import data from './data';
 import ext from './ext';
 import muiSetup from './mui-setup';
-import addEventListeners from './event-listeners';
 import { render, teardown } from './table/Root';
 import manageData from './table/handle-data';
 
@@ -39,8 +38,6 @@ export default function supernova(env) {
       const [tableData, setTableData] = useState();
       const [muiParameters] = useState(muiSetup(__OPIONAL_THEME_DEPS__));
 
-      useEffect(() => addEventListeners(el, selectionsAPI), []);
-
       useEffect(() => {
         manageData(model, layout, pageInfo).then((d) => {
           setTableData(d);
@@ -51,7 +48,7 @@ export default function supernova(env) {
         if (layout && tableData) {
           render(el, { layout, tableData, setPageInfo, pageInfo, constraints, selectionsAPI, muiParameters, theme });
         }
-      }, [tableData, constraints]);
+      }, [tableData, constraints, selectionsAPI.isActive()]);
 
       useEffect(
         () => () => {
