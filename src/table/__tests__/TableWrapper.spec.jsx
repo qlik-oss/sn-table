@@ -14,6 +14,7 @@ describe('<TableWrapper />', () => {
   let setPageInfo;
   let constraints;
   let rowsPerPage;
+  let el;
 
   beforeEach(() => {
     sandbox.replace(TableBodyWrapper, 'default', () => <tbody />);
@@ -26,6 +27,7 @@ describe('<TableWrapper />', () => {
     setPageInfo = sinon.spy();
     constraints = {};
     rowsPerPage = 100;
+    el = {};
   });
 
   afterEach(() => {
@@ -35,7 +37,7 @@ describe('<TableWrapper />', () => {
 
   it('should render table', () => {
     const { queryByLabelText, queryByText } = render(
-      <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} />
+      <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} el={el} />
     );
 
     expect(queryByLabelText('sticky table')).to.be.visible;
@@ -44,7 +46,7 @@ describe('<TableWrapper />', () => {
   });
   it('should call setPageInfo when clicking next page button', async () => {
     const { findByTitle, findByText } = render(
-      <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} />
+      <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} el={el} />
     );
     fireEvent.click(await findByTitle('Next page'));
 
@@ -53,7 +55,7 @@ describe('<TableWrapper />', () => {
   });
   it('should change back to first page when not on first page and no rows', async () => {
     const { findByTitle } = render(
-      <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} />
+      <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} el={el} />
     );
     // This is a hack to simulate when selections are made on other page than first page and
     // rows per page is bigger than the selected rows -> handle data returns no rows.
@@ -67,7 +69,7 @@ describe('<TableWrapper />', () => {
   });
   it('should call setPageInfo when changing rows per page', async () => {
     const { findByText } = render(
-      <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} />
+      <TableWrapper tableData={tableData} setPageInfo={setPageInfo} constraints={constraints} el={el} />
     );
     // the popover is only triggered with mouseDown, according to the mui definition
     fireEvent.mouseDown(await findByText(rowsPerPage));

@@ -21,15 +21,6 @@ const useStyles = makeStyles({
   paginationHidden: {
     display: 'none',
   },
-  containerMobileLayout: {
-    height: 'calc(100% - 120px)',
-  },
-  paginationMobileLayout: {
-    marginTop: '-15px',
-    '& div:nth-of-type(1)': {
-      display: 'initial',
-    },
-  },
 });
 
 export default function TableWrapper(props) {
@@ -40,9 +31,8 @@ export default function TableWrapper(props) {
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
-  const clientMode = constraints.active && 'paginationHidden';
-  const containerLayout = tableWidth < 380 && 'containerMobileLayout';
-  const paginationLayout = tableWidth < 380 && 'paginationMobileLayout';
+  const paginationHidden = constraints.active && 'paginationHidden';
+  const paginationFixedRpp = tableWidth < 400;
 
   const handleChangePage = (event, newPage) => {
     setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
@@ -69,15 +59,15 @@ export default function TableWrapper(props) {
 
   return (
     <Paper className={classes.paper}>
-      <TableContainer className={classes[(containerMode, containerLayout)]}>
+      <TableContainer className={classes[containerMode]}>
         <Table stickyHeader aria-label="sticky table">
           <TableHeadWrapper {...props} />
           <TableBodyWrapper {...props} />
         </Table>
       </TableContainer>
       <TablePagination
-        className={classes[(clientMode, paginationLayout)]}
-        rowsPerPageOptions={[10, 25, 100]}
+        className={classes[paginationHidden]}
+        rowsPerPageOptions={paginationFixedRpp ? [rowsPerPage] : [10, 25, 100]}
         component="div"
         count={size.qcy}
         rowsPerPage={rowsPerPage}
