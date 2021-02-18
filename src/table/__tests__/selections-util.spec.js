@@ -186,7 +186,6 @@ describe('selections-utils', () => {
     const event = {};
     let selState;
     let cell;
-    let alreadyActive;
     let selDispatch;
 
     beforeEach(() => {
