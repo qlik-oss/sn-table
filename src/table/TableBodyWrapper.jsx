@@ -47,7 +47,6 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
             return (
               <CellRenderer
                 className={classes.tableCell}
-                stylingClassName={classes.tableCell}
                 cell={cell}
                 column={column}
                 value={value}
