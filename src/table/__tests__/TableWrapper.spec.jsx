@@ -14,8 +14,9 @@ describe('<TableWrapper />', () => {
   let setPageInfo;
   let constraints;
   let rowsPerPage;
+  let el;
   let selectionsAPI;
-  let active;
+  let modal;
 
   beforeEach(() => {
     sandbox.replace(TableBodyWrapper, 'default', () => <tbody />);
@@ -29,9 +30,10 @@ describe('<TableWrapper />', () => {
     constraints = {};
     rowsPerPage = 100;
     selectionsAPI = {
-      isActive: () => active,
+      isModal: () => modal,
     };
-    active = false;
+    modal = false;
+    el = {};
   });
 
   afterEach(() => {
@@ -46,6 +48,7 @@ describe('<TableWrapper />', () => {
         setPageInfo={setPageInfo}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
+        el={el}
       />
     );
 
@@ -60,6 +63,7 @@ describe('<TableWrapper />', () => {
         setPageInfo={setPageInfo}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
+        el={el}
       />
     );
     fireEvent.click(await findByTitle('Next page'));
@@ -74,6 +78,7 @@ describe('<TableWrapper />', () => {
         setPageInfo={setPageInfo}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
+        el={el}
       />
     );
     // This is a hack to simulate when selections are made on other page than first page and
@@ -93,6 +98,7 @@ describe('<TableWrapper />', () => {
         setPageInfo={setPageInfo}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
+        el={el}
       />
     );
     // the popover is only triggered with mouseDown, according to the mui definition
@@ -103,7 +109,7 @@ describe('<TableWrapper />', () => {
   });
 
   it('should not show rows per page when selectionsAPI.isActive() returns true', async () => {
-    active = true;
+    modal = true;
 
     const { queryByText } = render(
       <TableWrapper
@@ -111,6 +117,7 @@ describe('<TableWrapper />', () => {
         setPageInfo={setPageInfo}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
+        el={el}
       />
     );
     const rppSiblingElement = queryByText(`1-${rowsPerPage} of ${tableData.size.qcy}`);
