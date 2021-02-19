@@ -16,7 +16,7 @@ describe('<TableWrapper />', () => {
   let rowsPerPage;
   let el;
   let selectionsAPI;
-  let active;
+  let modal;
 
   beforeEach(() => {
     sandbox.replace(TableBodyWrapper, 'default', () => <tbody />);
@@ -30,9 +30,9 @@ describe('<TableWrapper />', () => {
     constraints = {};
     rowsPerPage = 100;
     selectionsAPI = {
-      isActive: () => active,
+      isModal: () => modal,
     };
-    active = false;
+    modal = false;
     el = {};
   });
 
@@ -109,7 +109,7 @@ describe('<TableWrapper />', () => {
   });
 
   it('should not show rows per page when selectionsAPI.isActive() returns true', async () => {
-    active = true;
+    modal = true;
 
     const { queryByText } = render(
       <TableWrapper
