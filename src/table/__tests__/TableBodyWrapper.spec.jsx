@@ -9,7 +9,7 @@ import manageData from '../handle-data';
 
 import TableBodyWrapper from '../TableBodyWrapper';
 import * as selectionsUtils from '../selections-utils';
-import * as renderer from '../cells/renderer';
+import * as getCellRenderer from '../cells/renderer';
 
 describe('<TableBodyWrapper />', async () => {
   const sandbox = sinon.createSandbox();
@@ -18,6 +18,8 @@ describe('<TableBodyWrapper />', async () => {
   let tableData;
   let constraints;
   let selectionsAPI;
+  let layout;
+  let theme;
 
   beforeEach(async () => {
     sandbox.replace(selectionsUtils, 'addSelectionListeners', () => {});
@@ -25,6 +27,10 @@ describe('<TableBodyWrapper />', async () => {
     tableData = await manageData(model, generateLayout(1, 1), { top: 0, height: 100 });
     constraints = {};
     selectionsAPI = {};
+    theme = {
+      getColorPickerColor: () => {},
+    };
+    layout = {};
   });
 
   afterEach(() => {
@@ -32,31 +38,25 @@ describe('<TableBodyWrapper />', async () => {
     sandbox.resetHistory();
   });
 
-  it('should render 2x2 table body without CellRenderer', () => {
-    sandbox.replace(renderer, 'getCellRenderer', () => {});
-
-    const { queryByText } = render(
-      <TableBodyWrapper tableData={tableData} constraints={constraints} selectionsAPI={selectionsAPI} />
-    );
-
-    expect(queryByText(tableData.rows[0]['id-0'].qText)).to.be.visible;
-    expect(queryByText(tableData.rows[0]['id-1'].qText)).to.be.visible;
-    expect(queryByText(tableData.rows[1]['id-0'].qText)).to.be.visible;
-    expect(queryByText(tableData.rows[1]['id-1'].qText)).to.be.visible;
-  });
   it('should render 2x2 table body and call CellRenderer', () => {
     const cellRendererSpy = sinon.spy();
     // eslint-disable-next-line react/prop-types
-    sandbox.replace(renderer, 'getCellRenderer', () => ({ value }) => {
+    sandbox.replace(getCellRenderer, 'default', () => ({ value }) => {
       cellRendererSpy();
       return <td>{value}</td>;
     });
 
     const { queryByText } = render(
-      <TableBodyWrapper tableData={tableData} constraints={constraints} selectionsAPI={selectionsAPI} />
+      <TableBodyWrapper
+        tableData={tableData}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+        theme={theme}
+        layout={layout}
+      />
     );
 
-    expect(cellRendererSpy).to.have.callCount(4);
+    expect(cellRendererSpy).to.have.callCount(8);
     expect(queryByText(tableData.rows[0]['id-0'].qText)).to.be.visible;
     expect(queryByText(tableData.rows[0]['id-1'].qText)).to.be.visible;
     expect(queryByText(tableData.rows[1]['id-0'].qText)).to.be.visible;

@@ -4,7 +4,7 @@ import { render, fireEvent } from '@testing-library/react';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
-import { withSelections } from '../selections';
+import * as withSelections from '../selections';
 import * as selectionsUtils from '../../selections-utils';
 
 describe('withSelections', async () => {
@@ -15,7 +15,7 @@ describe('withSelections', async () => {
   let selDispatch;
 
   beforeEach(() => {
-    HOC = withSelections((props) => <div {...props}>{props.cell.value}</div>);
+    HOC = withSelections.default((props) => <div {...props}>{props.cell.value}</div>);
     sandbox.replace(selectionsUtils, 'selectCell', sinon.spy());
 
     cell = {
