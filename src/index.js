@@ -58,7 +58,7 @@ export default function supernova(env) {
             theme,
           });
         }
-      }, [tableData, constraints, selectionsAPI.isActive()]);
+      }, [tableData, constraints, selectionsAPI.isModal()]);
 
       useEffect(
         () => () => {
