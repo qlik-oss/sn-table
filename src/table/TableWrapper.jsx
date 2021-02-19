@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -24,13 +24,15 @@ const useStyles = makeStyles({
 });
 
 export default function TableWrapper(props) {
-  const { tableData, setPageInfo, constraints, selectionsAPI } = props;
+  const { el, tableData, setPageInfo, constraints, selectionsAPI } = props;
   const { size, rows } = tableData;
+  const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
-  const clientMode = constraints.active && 'paginationHidden';
+  const paginationHidden = constraints.active && 'paginationHidden';
+  const paginationFixedRpp = selectionsAPI.isModal() || tableWidth < 400;
 
   const handleChangePage = (event, newPage) => {
     setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
@@ -49,6 +51,12 @@ export default function TableWrapper(props) {
     return null;
   }
 
+  useEffect(() => {
+    const updateSize = () => setTableWidth(el.clientWidth);
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+
   return (
     <Paper className={classes.paper}>
       <TableContainer className={classes[containerMode]}>
@@ -58,8 +66,8 @@ export default function TableWrapper(props) {
         </Table>
       </TableContainer>
       <TablePagination
-        className={classes[clientMode]}
-        rowsPerPageOptions={selectionsAPI.isActive() ? [rowsPerPage] : [10, 25, 100]}
+        className={classes[paginationHidden]}
+        rowsPerPageOptions={paginationFixedRpp ? [rowsPerPage] : [10, 25, 100]}
         component="div"
         count={size.qcy}
         rowsPerPage={rowsPerPage}
@@ -72,6 +80,7 @@ export default function TableWrapper(props) {
 }
 
 TableWrapper.propTypes = {
+  el: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
