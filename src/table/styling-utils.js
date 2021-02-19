@@ -12,3 +12,13 @@ export function getHeadStyle(layout, theme) {
       }
     : {};
 }
+
+export function getBodyStyle(layout, theme) {
+  const content = layout.components?.[0]?.content;
+  return content
+    ? {
+        fontColor: getColor(content.fontColor, '#404040', theme),
+        fontSize: content.fontSize || '14px',
+      }
+    : {};
+}

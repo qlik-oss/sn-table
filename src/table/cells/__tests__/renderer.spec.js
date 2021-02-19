@@ -1,6 +1,6 @@
 import TableCell from '@material-ui/core/TableCell';
-import { getCellRenderer } from '../renderer';
-import * as selections from '../selections';
+import getCellRenderer from '../renderer';
+import * as withSelections from '../selections';
 
 describe('render', () => {
   describe('getCellRenderer', () => {
@@ -11,7 +11,7 @@ describe('render', () => {
     beforeEach(() => {
       column = {};
       selectionsEnabled = false;
-      sandbox.replace(selections, 'withSelections', sandbox.spy());
+      sandbox.replace(withSelections, 'default', sandbox.spy());
     });
 
     afterEach(() => {
@@ -25,7 +25,7 @@ describe('render', () => {
       selectionsEnabled = true;
 
       getCellRenderer(column, selectionsEnabled);
-      expect(selections.withSelections).to.have.been.calledOnce;
+      expect(withSelections.default).to.have.been.calledOnce;
     });
   });
 });

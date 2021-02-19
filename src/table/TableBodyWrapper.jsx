@@ -1,15 +1,24 @@
 import React, { useReducer, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
 import { addSelectionListeners, reducer } from './selections-utils';
-import { getCellRenderer } from './cells/renderer';
+import getCellRenderer from './cells/renderer';
+import { getBodyStyle } from './styling-utils';
 
-export default function TableBodyWrapper({ tableData, constraints, selectionsAPI, layout }) {
+const useStyles = makeStyles({
+  tableCell: (props) => ({
+    fontSize: props.fontSize,
+    color: props.fontColor,
+  }),
+});
+
+export default function TableBodyWrapper({ tableData, constraints, selectionsAPI, layout, theme }) {
   const { rows, columns } = tableData;
-
-  const [columnRenderers, setColumnRenderers] = useState([]);
+  const classes = useStyles(getBodyStyle(layout, theme));
+  const getColumnRenderers = (selectionsEnabled) => tableData.columns.map((c) => getCellRenderer(c, selectionsEnabled));
+  const [columnRenderers, setColumnRenderers] = useState(getColumnRenderers(false));
   const [selState, selDispatch] = useReducer(reducer, {
     api: selectionsAPI,
     rows: [],
@@ -35,8 +44,9 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
             const cell = row[column.id];
             const value = cell.qText;
             const CellRenderer = columnRenderers[i];
-            return CellRenderer ? (
+            return (
               <CellRenderer
+                className={classes.tableCell}
                 cell={cell}
                 column={column}
                 value={value}
@@ -47,10 +57,6 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
               >
                 {value}
               </CellRenderer>
-            ) : (
-              <TableCell key={column.id} align={column.align}>
-                {value}
-              </TableCell>
             );
           })}
         </TableRow>
@@ -64,4 +70,5 @@ TableBodyWrapper.propTypes = {
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
 };
