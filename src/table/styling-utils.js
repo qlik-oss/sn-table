@@ -15,14 +15,12 @@ export function getHeadStyle(layout, theme) {
 
 export function getBodyStyle(layout, theme) {
   const content = layout.components?.[0]?.content;
-  const hoverColor = layout.components?.[0]?.hoverColor;
-  const hoverFontColor = layout.components?.[0]?.hoverFontColor;
   return content
     ? {
         fontColor: getColor(content.fontColor, '#404040', theme),
         fontSize: content.fontSize || '14px',
-        hoverBackGroundColor: `${getColor(hoverColor, 'blue', theme)} !important`,
-        hoverFontColor: getColor(hoverFontColor, 'black', theme),
+        hoverBackGroundColor: `${getColor(content.hoverColor, '#D3D3D3', theme)} !important`,
+        hoverFontColor: getColor(content.hoverFontColor, 'black', theme),
       }
     : {};
 }

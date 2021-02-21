@@ -26,7 +26,7 @@ export default function withSelections(CellComponent) {
   };
 
   HOC.propTypes = {
-    className: PropTypes.object.isRequired,
+    className: PropTypes.string.isRequired,
     cell: PropTypes.object.isRequired,
     selState: PropTypes.object.isRequired,
     selDispatch: PropTypes.func.isRequired,
