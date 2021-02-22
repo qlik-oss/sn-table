@@ -19,8 +19,12 @@ export function getBodyStyle(layout, theme) {
     ? {
         fontColor: getColor(content.fontColor, '#404040', theme),
         fontSize: content.fontSize || '14px',
-        hoverBackGroundColor: `${getColor(content.hoverColor, '#D3D3D3', theme)} !important`,
-        hoverFontColor: getColor(content.hoverFontColor, 'black', theme),
+        hoverBackGroundColor: `${
+          content.hoverFontColor && !content.hoverColor
+            ? 'rgba(0, 0, 0, 0);'
+            : getColor(content.hoverColor, '#E5E5E5', theme)
+        } !important`,
+        hoverFontColor: getColor(content.hoverFontColor, '', theme),
       }
     : {};
 }
