@@ -5,15 +5,15 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import { addSelectionListeners, reducer } from './selections-utils';
 import getCellRenderer from './cells/renderer';
-import { getBodyStyle } from './styling-utils';
+import { STYLING_DEFAULTS, getBodyStyle } from './styling-utils';
 
 const useStyles = makeStyles({
   tableCell: (props) => ({
     fontSize: props.fontSize,
     color: props.fontColor,
     padding: props.padding,
-    height: 'auto',
-    lineHeight: '130%',
+    height: STYLING_DEFAULTS.HEIGHT,
+    lineHeight: STYLING_DEFAULTS.BODY_LINE_HEIGHT,
   }),
 });
 

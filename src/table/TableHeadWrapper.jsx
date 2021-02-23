@@ -4,15 +4,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { getHeadStyle } from './styling-utils';
+import { STYLING_DEFAULTS, getHeadStyle } from './styling-utils';
 
 const useStyles = makeStyles({
   head: (props) => ({
     color: props.fontColor,
     fontSize: props.fontSize,
     padding: props.padding,
-    height: 'auto',
-    lineHeight: '150%',
+    height: STYLING_DEFAULTS.HEIGHT,
+    lineHeight: STYLING_DEFAULTS.HEAD_LINE_HEIGHT,
   }),
 });
 
