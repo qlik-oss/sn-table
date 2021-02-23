@@ -14,7 +14,7 @@ const useStyles = makeStyles({
   }),
   hoverTableRow: (props) => ({
     '&&:hover': {
-      backgroundColor: props.hoverBackGroundColor,
+      backgroundColor: props.hoverBackgroundColor,
       '& td': {
         color: props.hoverFontColor,
       },
@@ -49,11 +49,11 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
     <TableBody>
       {rows.map((row) => (
         <TableRow
-          hover={selState.isEnabled && hoverEffect}
+          hover={hoverEffect}
           role="checkbox"
           tabIndex={-1}
           key={row.key}
-          className={selState.isEnabled && hoverEffect && classes.hoverTableRow}
+          className={hoverEffect && classes.hoverTableRow}
         >
           {columns.map((column, i) => {
             const cell = row[column.id];

@@ -1,0 +1,98 @@
+// 1. defalut
+"fontColor": {
+    "index": -1,
+    "color": null
+},
+"hoverEffect": true,
+"hoverColor": {
+    "index": -1,
+    "color": null
+},
+"hoverFontColor": {
+    "index": -1,
+    "color": null
+}
+// 2. dark hoverColor
+"fontColor": {
+    "index": -1,
+    "color": null
+},
+"hoverEffect": true,
+"hoverColor": {
+    "index": 15,
+    "color": "#000000"
+},
+"hoverFontColor": {
+    "index": -1,
+    "color": null
+}
+// 3. light hoverColor 
+"fontColor": {
+    "index": -1,
+    "color": null
+},
+"hoverEffect": true,
+"hoverColor": {
+    "index": 3,
+    "color": "#83af9b"
+},
+"hoverFontColor": {
+    "index": -1,
+    "color": null
+}
+// 4. light hoverColor with font color
+"fontColor": {
+    "index": 14,
+    "color": "#7b7a78"
+},
+"hoverEffect": true,
+"hoverColor": {
+    "index": 3,
+    "color": "#83af9b"
+},
+"hoverFontColor": {
+    "index": -1,
+    "color": null
+}
+// 5. dark hoverColor with font color
+"fontColor": {
+    "index": 14,
+    "color": "#7b7a78"
+},
+"hoverEffect": true,
+"hoverColor": {
+    "index": 15,
+    "color": "#000000"
+},
+"hoverFontColor": {
+    "index": -1,
+    "color": null
+}
+// 6. all colors
+"fontColor": {
+    "index": 14,
+    "color": "#7b7a78"
+},
+"hoverEffect": true,
+"hoverColor": {
+    "index": 15,
+    "color": "#000000"
+},
+"hoverFontColor": {
+    "index": 14,
+    "color": "#7b7a78"
+}
+// 7. all colors except font color
+"fontColor": {
+    "index": -1,
+    "color": null
+},
+"hoverEffect": true,
+"hoverColor": {
+    "index": 15,
+    "color": "#000000"
+},
+"hoverFontColor": {
+    "index": 11,
+    "color": "#e0bd8d"
+}
