@@ -8,10 +8,6 @@ import getCellRenderer from './cells/renderer';
 import { getBodyStyle } from './styling-utils';
 
 const useStyles = makeStyles({
-  // 1. hoverEffect is true, there is no font color (hover or non-hover) and a hover background color, the font color does not change when the background color is set.
-  // 2. hoverEffect is true, there is a hover font color but no hover background color, only a hover font color is applied when hovering
-  // 3. hoverEffect is true, there is a font color and a hover font colors and no hover background color
-  // 4. hoverEffect is true, there is a font color and no hover font colors and no hover background color
   tableCell: (props) => ({
     fontSize: props.fontSize,
     color: props.fontColor,

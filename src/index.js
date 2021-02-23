@@ -60,7 +60,7 @@ export default function supernova(env) {
             cellLockedImage,
           });
         }
-      }, [tableData, constraints, selectionsAPI.isActive()]);
+      }, [tableData, constraints, selectionsAPI.isModal()]);
 
       useEffect(
         () => () => {

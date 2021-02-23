@@ -32,7 +32,7 @@ export default function TableWrapper(props) {
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
-  const paginationFixedRpp = selectionsAPI.isActive() || tableWidth < 400;
+  const paginationFixedRpp = selectionsAPI.isModal() || tableWidth < 400;
 
   const handleChangePage = (event, newPage) => {
     setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
