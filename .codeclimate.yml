@@ -1,11 +1,4 @@
 version: "2"
-plugins:
-  duplication:
-    enabled: true
-    config:
-      languages:
-        javascript:
-          count_threshold: 2
 checks:
   method-lines:
     config:
