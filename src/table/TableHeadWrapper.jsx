@@ -10,6 +10,9 @@ const useStyles = makeStyles({
   head: (props) => ({
     color: props.fontColor,
     fontSize: props.fontSize,
+    padding: props.padding,
+    height: 'auto',
+    lineHeight: '150%',
   }),
 });
 

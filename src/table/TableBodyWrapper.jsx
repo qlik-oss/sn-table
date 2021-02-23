@@ -11,6 +11,9 @@ const useStyles = makeStyles({
   tableCell: (props) => ({
     fontSize: props.fontSize,
     color: props.fontColor,
+    padding: props.padding,
+    height: 'auto',
+    lineHeight: '130%',
   }),
 });
 

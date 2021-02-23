@@ -58,33 +58,35 @@ describe('styling-utils', () => {
               fontColor: {
                 index: 1,
               },
-              fontSize: '12px',
+              fontSize: 12,
             },
           },
         ],
       };
     });
 
-    it('should return empty object when no components property', () => {
+    it('should return object with only padding', () => {
       layout = {};
 
       const resultStyling = getHeadStyle(layout, theme);
-      expect(resultStyling).to.eql({});
+      expect(resultStyling).to.eql({ padding: '7px 14px' });
     });
     it('should return styling with fontColor and fontSize', () => {
       const resultStyling = getHeadStyle(layout, theme);
       expect(resultStyling).to.eql({
         fontColor: '#fff',
-        fontSize: '12px',
+        fontSize: 12,
+        padding: '6px 12px',
       });
     });
-    it('should return styling with fontColor and default fontSize', () => {
+    it('should return styling with fontColor and default fontSize and padding', () => {
       layout.components[0].header.fontSize = null;
 
       const resultStyling = getHeadStyle(layout, theme);
       expect(resultStyling).to.eql({
         fontColor: '#fff',
         fontSize: '14px',
+        padding: '7px 14px',
       });
     });
   });

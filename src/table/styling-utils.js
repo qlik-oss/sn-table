@@ -9,8 +9,9 @@ export function getHeadStyle(layout, theme) {
     ? {
         fontColor: getColor(header.fontColor, '#404040', theme),
         fontSize: header.fontSize || '14px',
+        padding: header.fontSize ? `${header.fontSize / 2}px ${header.fontSize}px` : '7px 14px',
       }
-    : {};
+    : { padding: '7px 14px' };
 }
 
 export function getBodyStyle(layout, theme) {
@@ -19,6 +20,7 @@ export function getBodyStyle(layout, theme) {
     ? {
         fontColor: getColor(content.fontColor, '#404040', theme),
         fontSize: content.fontSize || '14px',
+        padding: content.fontSize ? `${content.fontSize / 2}px ${content.fontSize}px` : '7px 14px',
       }
-    : {};
+    : { padding: '7px 14px' };
 }
