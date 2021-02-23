@@ -4,8 +4,8 @@ plugins:
     enabled: true
     config:
       languages:
-        javascript:
-          count_threshold: 3
+        filters:
+          - "(object (Identifier PropTypes))"
 checks:
   method-lines:
     config:
