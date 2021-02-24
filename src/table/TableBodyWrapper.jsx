@@ -25,7 +25,7 @@ const useStyles = makeStyles({
   }),
 });
 
-export default function TableBodyWrapper({ tableData, constraints, selectionsAPI, layout, theme, cellLockedImage }) {
+export default function TableBodyWrapper({ tableData, constraints, selectionsAPI, layout, theme }) {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const classes = useStyles(getBodyStyle(layout, theme, hoverEffect));
@@ -71,7 +71,6 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
                   value={value}
                   key={column.id}
                   align={column.align}
-                  cellLockedImage={cellLockedImage}
                   selState={selState}
                   selDispatch={selDispatch}
                 >
@@ -92,5 +91,4 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  cellLockedImage: PropTypes.string.isRequired,
 };

@@ -1,10 +1,10 @@
-import isDarkColor from './color-utils'
+import isDarkColor from './color-utils';
 
 export const STYLING_DEFAULTS = {
   FONT_SIZE: '14px',
   FONT_COLOR: '#404040',
   HOVER_BACKGROUND: '#f4f4f4',
-  TRANSPARENT_COLOR: 'rgba(0, 0, 0, 0)',
+  HOVER_TRANSPARENT: 'rgba(0, 0, 0, 0)',
   LIGHT_COLOR: '#ffffff',
   PADDING: '7px 14px',
   HEIGHT: 'auto',
@@ -37,8 +37,7 @@ export function getBodyStyle(layout, theme) {
   const content = layout.components?.[0]?.content;
   if (!content) return { padding: STYLING_DEFAULTS.PADDING };
 
-  const unsetHoverBackgroundColor = isUnset(content.hoverColor);
-  const unsetHoverFontandBackgroundColor = isUnset(content.hoverFontColor) && unsetHoverBackgroundColor;
+  const fontColor = getColor(content.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme);
 
   // Cases when hoverEffect is true:
   // 1. There is no hover font color but a hover background color,
@@ -49,11 +48,13 @@ export function getBodyStyle(layout, theme) {
   // 3. There is no hover font color and no hover background color, when hovering, the defalut hover effect (light gray backgournd)
   // 4. There are both hover font and background colors, when hovering, the hover font and background colors take effect.
 
-  const fontColor = getColor(content.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme);
+  const unsetHoverBackgroundColor = isUnset(content.hoverColor);
+  const unsetHoverFontandBackgroundColor = isUnset(content.hoverFontColor) && unsetHoverBackgroundColor;
+
   const hoverBackgroundColor = unsetHoverFontandBackgroundColor
     ? STYLING_DEFAULTS.HOVER_BACKGROUND
     : unsetHoverBackgroundColor
-    ? STYLING_DEFAULTS.TRANSPARENT_COLOR
+    ? STYLING_DEFAULTS.HOVER_TRANSPARENT
     : getColor(content.hoverColor, STYLING_DEFAULTS.HOVER_BACKGROUND, theme);
   const hoverFontColor = unsetHoverFontandBackgroundColor
     ? fontColor
