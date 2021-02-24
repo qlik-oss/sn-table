@@ -12,11 +12,20 @@ const useStyles = makeStyles({
     fontSize: props.fontSize,
     color: props.fontColor,
   }),
+  hoverTableRow: (props) => ({
+    '&&:hover': {
+      backgroundColor: props.hoverBackgroundColor,
+      '& td': {
+        color: props.hoverFontColor,
+      },
+    },
+  }),
 });
 
-export default function TableBodyWrapper({ tableData, constraints, selectionsAPI, layout, theme }) {
+export default function TableBodyWrapper({ tableData, constraints, selectionsAPI, layout, theme, cellLockedImage }) {
   const { rows, columns } = tableData;
-  const classes = useStyles(getBodyStyle(layout, theme));
+  const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
+  const classes = useStyles(getBodyStyle(layout, theme, hoverEffect));
   const getColumnRenderers = (selectionsEnabled) => tableData.columns.map((c) => getCellRenderer(c, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(getColumnRenderers(false));
   const [selState, selDispatch] = useReducer(reducer, {
@@ -29,7 +38,7 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
   useEffect(() => {
     const selectionsEnabled = !!selectionsAPI && !constraints.active;
     selDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
-    setColumnRenderers(tableData.columns.map((c) => getCellRenderer(c, selectionsEnabled)));
+    setColumnRenderers(getColumnRenderers(selectionsEnabled));
   }, [constraints, layout]);
 
   useEffect(() => {
@@ -39,24 +48,33 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
   return (
     <TableBody>
       {rows.map((row) => (
-        <TableRow hover role="checkbox" tabIndex={-1} key={row.key}>
+        <TableRow
+          hover={hoverEffect}
+          role="checkbox"
+          tabIndex={-1}
+          key={row.key}
+          className={hoverEffect && classes.hoverTableRow}
+        >
           {columns.map((column, i) => {
             const cell = row[column.id];
             const value = cell.qText;
             const CellRenderer = columnRenderers[i];
             return (
-              <CellRenderer
-                className={classes.tableCell}
-                cell={cell}
-                column={column}
-                value={value}
-                key={column.id}
-                align={column.align}
-                selState={selState}
-                selDispatch={selDispatch}
-              >
-                {value}
-              </CellRenderer>
+              CellRenderer && (
+                <CellRenderer
+                  className={classes.tableCell}
+                  cell={cell}
+                  column={column}
+                  value={value}
+                  key={column.id}
+                  align={column.align}
+                  cellLockedImage={cellLockedImage}
+                  selState={selState}
+                  selDispatch={selDispatch}
+                >
+                  {value}
+                </CellRenderer>
+              )
             );
           })}
         </TableRow>
@@ -71,4 +89,5 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  cellLockedImage: PropTypes.string.isRequired,
 };

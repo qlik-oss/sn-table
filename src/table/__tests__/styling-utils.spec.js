@@ -1,4 +1,4 @@
-import { getColor, getHeadStyle } from '../styling-utils';
+import { getColor, getHeadStyle, getBodyStyle } from '../styling-utils';
 
 describe('styling-utils', () => {
   let resolvedColor;
@@ -85,6 +85,54 @@ describe('styling-utils', () => {
       expect(resultStyling).to.eql({
         fontColor: '#fff',
         fontSize: '14px',
+      });
+    });
+  });
+
+  describe('getBodyStyle', () => {
+    let layout;
+
+    beforeEach(() => {
+      resolvedColor = '#fff';
+      layout = {};
+    });
+
+    it('should return empty object when no components property', () => {
+      layout = {};
+
+      const resultStyling = getBodyStyle(layout, theme);
+      expect(resultStyling).to.eql({});
+    });
+    it('should return styling with fontColor and fontSize', () => {
+      layout = {
+        components: [
+          {
+            content: {
+              fontSize: '22px',
+              fontColor: {
+                index: -1,
+                color: null,
+              },
+              hoverEffect: true,
+              hoverColor: {
+                index: -1,
+                color: null,
+              },
+              hoverFontColor: {
+                index: -1,
+                color: null,
+              },
+            },
+          },
+        ],
+      };
+
+      const resultStyling = getBodyStyle(layout, theme);
+      expect(resultStyling).to.eql({
+        fontSize: '22px',
+        fontColor: '#404040',
+        hoverBackgroundColor: 'rgba(0, 0, 0, 0.03) !important',
+        hoverFontColor: '#404040',
       });
     });
   });
