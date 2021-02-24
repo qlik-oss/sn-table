@@ -2,7 +2,7 @@ import { getColor, getBaseStyling, getHeadStyle, getBodyStyle } from '../styling
 
 describe('styling-utils', () => {
   let resolvedColor;
-  let altResolvedColor
+  let altResolvedColor;
   const theme = {
     // very simple mock of getColorPickerColor. Normally color.color has to be null for the fn to return null
     getColorPickerColor: ({ index }) => {
@@ -45,9 +45,8 @@ describe('styling-utils', () => {
       expect(resultColor).to.equal(defaultColor);
     });
     it('should return a default color when getColorPickerColor returns none', () => {
-      // Some palettes have none as the first value in the array of colors, i.e index === 0
+      // Some palettes have none as the first value in the array of colors
       color.index = 0;
-      // resolvedColor = 'none';
 
       const resultColor = getColor(color, defaultColor, theme);
       expect(resultColor).to.equal(defaultColor);
