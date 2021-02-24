@@ -5,7 +5,10 @@ export const STYLING_DEFAULTS = {
   FONT_COLOR: '#404040',
   HOVER_BACKGROUND: '#f4f4f4',
   HOVER_TRANSPARENT: 'rgba(0, 0, 0, 0)',
-  LIGHT_COLOR: '#ffffff',
+  SELECTED_BACKGROUND: '#009845',
+  EXCLUDED_BACKGROUND:
+    'repeating-linear-gradient(-45deg, rgba(0,0,0,0.02), rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.02) 4px, rgba(0,0,0,0.02) 6px)',
+  WHITE: '#fff',
   PADDING: '7px 14px',
   HEIGHT: 'auto',
   HEAD_LINE_HEIGHT: '150%',
@@ -17,27 +20,25 @@ export function getColor(color = {}, defaultColor, theme) {
   return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
 }
 
-export function getHeadStyle(layout, theme) {
-  const header = layout.components?.[0]?.header;
-  return header
-    ? {
-        fontColor: getColor(header.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme),
-        fontSize: header.fontSize || STYLING_DEFAULTS.FONT_SIZE,
-        padding: header.fontSize ? `${header.fontSize / 2}px ${header.fontSize}px` : STYLING_DEFAULTS.PADDING,
-      }
-    : { padding: STYLING_DEFAULTS.PADDING };
-}
+export const getBaseStyling = (styleObj, theme) => ({
+  fontColor: getColor(styleObj.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme),
+  fontSize: styleObj.fontSize || STYLING_DEFAULTS.FONT_SIZE,
+  padding: styleObj.fontSize ? `${styleObj.fontSize / 2}px ${styleObj.fontSize}px` : STYLING_DEFAULTS.PADDING,
+});
 
 // Both index === -1 and color === null must be true for the property to be unset
-export function isUnset(prop) {
-  return !prop || JSON.stringify(prop) === JSON.stringify({ index: -1, color: null });
+export const isUnset = (prop) => !prop || JSON.stringify(prop) === JSON.stringify({ index: -1, color: null });
+
+export function getHeadStyle(layout, theme) {
+  const header = layout.components?.[0]?.header;
+  return header ? getBaseStyling(header, theme) : { padding: STYLING_DEFAULTS.PADDING };
 }
 
 export function getBodyStyle(layout, theme) {
   const content = layout.components?.[0]?.content;
   if (!content) return { padding: STYLING_DEFAULTS.PADDING };
 
-  const fontColor = getColor(content.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme);
+  const baseStyling = getBaseStyling(content, theme);
 
   // Cases when hoverEffect is true:
   // 1. There is no hover font color but a hover background color,
@@ -57,18 +58,12 @@ export function getBodyStyle(layout, theme) {
     ? STYLING_DEFAULTS.HOVER_TRANSPARENT
     : getColor(content.hoverColor, STYLING_DEFAULTS.HOVER_BACKGROUND, theme);
   const hoverFontColor = unsetHoverFontandBackgroundColor
-    ? fontColor
+    ? baseStyling.fontColor
     : getColor(
         content.hoverFontColor,
-        isDarkColor(hoverBackgroundColor) ? STYLING_DEFAULTS.LIGHT_COLOR : fontColor,
+        isDarkColor(hoverBackgroundColor) ? STYLING_DEFAULTS.WHITE : baseStyling.fontColor,
         theme
       );
 
-  return {
-    fontSize: content.fontSize || STYLING_DEFAULTS.FONT_SIZE,
-    padding: content.fontSize ? `${content.fontSize / 2}px ${content.fontSize}px` : STYLING_DEFAULTS.PADDING,
-    fontColor,
-    hoverBackgroundColor,
-    hoverFontColor,
-  };
+  return { ...baseStyling, hoverBackgroundColor, hoverFontColor };
 }

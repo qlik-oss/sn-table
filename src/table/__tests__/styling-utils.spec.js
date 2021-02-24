@@ -1,10 +1,24 @@
-import { getColor, getHeadStyle, getBodyStyle } from '../styling-utils';
+import { getColor, getBaseStyling, getHeadStyle, getBodyStyle } from '../styling-utils';
 
 describe('styling-utils', () => {
   let resolvedColor;
+  let altResolvedColor
   const theme = {
     // very simple mock of getColorPickerColor. Normally color.color has to be null for the fn to return null
-    getColorPickerColor: ({ index }) => (index > -1 ? resolvedColor : null),
+    getColorPickerColor: ({ index }) => {
+      switch (index) {
+        case -1:
+          return null;
+        case 0:
+          return 'none';
+        case 1:
+          return resolvedColor;
+        case 2:
+          return altResolvedColor;
+        default:
+          return null;
+      }
+    },
   };
 
   describe('getColor', () => {
@@ -31,9 +45,9 @@ describe('styling-utils', () => {
       expect(resultColor).to.equal(defaultColor);
     });
     it('should return a default color when getColorPickerColor returns none', () => {
-      // Some palettes have none as the first value in the array of colors
+      // Some palettes have none as the first value in the array of colors, i.e index === 0
       color.index = 0;
-      resolvedColor = 'none';
+      // resolvedColor = 'none';
 
       const resultColor = getColor(color, defaultColor, theme);
       expect(resultColor).to.equal(defaultColor);
@@ -46,33 +60,22 @@ describe('styling-utils', () => {
     });
   });
 
-  describe('getHeadStyle', () => {
-    let layout;
+  describe('getBaseStyling', () => {
+    let styleObj;
 
     beforeEach(() => {
       resolvedColor = '#fff';
-      layout = {
-        components: [
-          {
-            header: {
-              fontColor: {
-                index: 1,
-              },
-              fontSize: 12,
-            },
-          },
-        ],
+      styleObj = {
+        fontColor: {
+          index: 1,
+          color: null,
+        },
+        fontSize: 12,
       };
     });
 
-    it('should return object with only padding', () => {
-      layout = {};
-
-      const resultStyling = getHeadStyle(layout, theme);
-      expect(resultStyling).to.eql({ padding: '7px 14px' });
-    });
     it('should return styling with fontColor and fontSize', () => {
-      const resultStyling = getHeadStyle(layout, theme);
+      const resultStyling = getBaseStyling(styleObj, theme);
       expect(resultStyling).to.eql({
         fontColor: '#fff',
         fontSize: 12,
@@ -80,11 +83,40 @@ describe('styling-utils', () => {
       });
     });
     it('should return styling with fontColor and default fontSize and padding', () => {
-      layout.components[0].header.fontSize = null;
+      styleObj.fontSize = null;
 
-      const resultStyling = getHeadStyle(layout, theme);
+      const resultStyling = getBaseStyling(styleObj, theme);
       expect(resultStyling).to.eql({
         fontColor: '#fff',
+        fontSize: '14px',
+        padding: '7px 14px',
+      });
+    });
+  });
+
+  describe('getHeadStyle', () => {
+    let layout;
+
+    beforeEach(() => {
+      layout = {
+        components: [
+          {
+            header: {},
+          },
+        ],
+      };
+    });
+
+    it('should return object with only padding when no header property', () => {
+      layout = {};
+
+      const resultStyling = getHeadStyle(layout, theme);
+      expect(resultStyling).to.eql({ padding: '7px 14px' });
+    });
+    it('should call default styling', () => {
+      const resultStyling = getHeadStyle(layout, theme);
+      expect(resultStyling).to.eql({
+        fontColor: '#404040',
         fontSize: '14px',
         padding: '7px 14px',
       });
@@ -95,27 +127,18 @@ describe('styling-utils', () => {
     let layout;
 
     beforeEach(() => {
-      resolvedColor = '#fff';
-      layout = {};
-    });
+      resolvedColor = '#222222'; // dark color
+      altResolvedColor = '#dddddd'; // light color
 
-    it('should return empty object when no components property', () => {
-      layout = {};
-
-      const resultStyling = getBodyStyle(layout, theme);
-      expect(resultStyling).to.eql({});
-    });
-    it('should return styling with fontColor and fontSize', () => {
       layout = {
         components: [
           {
             content: {
-              fontSize: '22px',
+              fontSize: 22,
               fontColor: {
-                index: -1,
+                index: 1,
                 color: null,
               },
-              hoverEffect: true,
               hoverColor: {
                 index: -1,
                 color: null,
@@ -128,14 +151,53 @@ describe('styling-utils', () => {
           },
         ],
       };
+    });
+
+    it('should return object with only padding when no header property', () => {
+      layout = {};
 
       const resultStyling = getBodyStyle(layout, theme);
+      expect(resultStyling).to.eql({ padding: '7px 14px' });
+    });
+    it('should return styling with fontColor, fontSize, padding plus defualt hoverBackgroundColor and hoverFontColor', () => {
+      const resultStyling = getBodyStyle(layout, theme);
       expect(resultStyling).to.eql({
-        fontSize: '22px',
-        fontColor: '#404040',
-        hoverBackgroundColor: 'rgba(0, 0, 0, 0.03) !important',
-        hoverFontColor: '#404040',
+        fontSize: 22,
+        fontColor: resolvedColor,
+        padding: '11px 22px',
+        hoverBackgroundColor: '#f4f4f4',
+        hoverFontColor: resolvedColor,
       });
+    });
+    // Only checking hover properties from here on
+    it('should return styling with no hoverBackgroundColor and the specified hoverFontColor', () => {
+      layout.components[0].content.hoverFontColor.index = 1;
+
+      const resultStyling = getBodyStyle(layout, theme);
+      expect(resultStyling.hoverBackgroundColor).to.equal('rgba(0, 0, 0, 0)');
+      expect(resultStyling.hoverFontColor).to.equal(resolvedColor);
+    });
+    it('should return styling with dark hoverBackgroundColor and white hoverFontColor', () => {
+      layout.components[0].content.hoverColor.index = 1;
+
+      const resultStyling = getBodyStyle(layout, theme);
+      expect(resultStyling.hoverBackgroundColor).to.equal(resolvedColor);
+      expect(resultStyling.hoverFontColor).to.equal('#fff');
+    });
+    it('should return styling with light hoverBackgroundColor and fontColor as hoverFontColor', () => {
+      layout.components[0].content.hoverColor.index = 2;
+
+      const resultStyling = getBodyStyle(layout, theme);
+      expect(resultStyling.hoverBackgroundColor).to.equal(altResolvedColor);
+      expect(resultStyling.hoverFontColor).to.equal(resolvedColor);
+    });
+    it('should return styling with set hoverBackgroundColor and hoverFontColor', () => {
+      layout.components[0].content.hoverColor.index = 1;
+      layout.components[0].content.hoverFontColor.index = 2;
+
+      const resultStyling = getBodyStyle(layout, theme);
+      expect(resultStyling.hoverBackgroundColor).to.equal(resolvedColor);
+      expect(resultStyling.hoverFontColor).to.equal(altResolvedColor);
     });
   });
 });
