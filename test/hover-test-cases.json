@@ -68,7 +68,21 @@
     "index": -1,
     "color": null
 }
-// 6. all colors
+// 6. a hover font color but no hover background color 
+"fontColor": {
+    "index": -1,
+    "color": null
+},
+"hoverEffect": true,
+"hoverColor": {
+    "index": -1,
+    "color": null
+},
+"hoverFontColor": {
+    "index": 11,
+    "color": "#e0bd8d"
+}
+// 7. all colors
 "fontColor": {
     "index": 14,
     "color": "#7b7a78"
@@ -82,7 +96,7 @@
     "index": 14,
     "color": "#7b7a78"
 }
-// 7. all colors except font color
+// 8. all colors except font color
 "fontColor": {
     "index": -1,
     "color": null

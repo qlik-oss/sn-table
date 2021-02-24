@@ -50,24 +50,16 @@ export function getBodyStyle(layout, theme) {
   //   "index": -1,
   //   "color": null
   // } means the hover fornt color is unset.
-  const unsetFontColor = isUnset(content.fontColor);
   const unsetHoverFontColor = isUnset(content.hoverFontColor);
   const unsetHoverBackgroundColor = isUnset(content.hoverColor);
   const unsetHoverFontandBackgroundColor = unsetHoverFontColor && unsetHoverBackgroundColor;
 
-  // 1. hoverEffect is true, there is no font color and no hover font color but a hover background color,
+  // 1. hoverEffect is true, there is no hover font color but a hover background color,
   // when hovering, the hover font color becomes white when the hover background color is a dark color
-  // or the hover font color becomes black when the hover background color is a light color.
-
-  // 2. hoverEffect is true, there is no hover font color but a font color and a hover background color ,
-  // when hovering, the hover font color stays the font color if the hover background color is light,
-  // or the hover font color becomes white if the hover background color is dark.
-
-  // 3. hoverEffect is true, there is a hover font color but no hover background color,
+  // or the hover font color stays the same as whetever the font color is when the hover background color is a light color.
+  // 2. hoverEffect is true, there is a hover font color but no hover background color,
   // when hovering, only a hover font color is applied when hovering and and the hover background color disappears.
-
-  // 4. hoverEffect is true, there is a font color but no hover font color and no hover background color, when hovering, the defalut hover effect
-
+  // 3. hoverEffect is true, there is a font color but no hover font color and no hover background color, when hovering, the defalut hover effect
   // 4. hoverEffect is true, there are all colors, when hovering, the set hover font color and the the hover background color take effect.
 
   const hoverBackgroundColor = unsetHoverFontandBackgroundColor
@@ -76,17 +68,10 @@ export function getBodyStyle(layout, theme) {
     ? 'rgba(0, 0, 0, 0)'
     : getColor(content.hoverColor, 'rgba(0, 0, 0, 0.03)', theme);
 
+  const fontColor = getColor(content.fontColor, '#404040', theme);
   const hoverFontColor = unsetHoverFontandBackgroundColor
-    ? ''
-    : unsetFontColor
-    ? isDarkColor(hoverBackgroundColor)
-      ? getColor(content.hoverFontColor, '#ffffff', theme)
-      : getColor(content.hoverFontColor, '#000000', theme)
-    : unsetHoverFontColor
-    ? isDarkColor(hoverBackgroundColor)
-      ? '#ffffff'
-      : ''
-    : getColor(content.hoverFontColor, '', theme);
+    ? fontColor
+    : getColor(content.hoverFontColor, isDarkColor(hoverBackgroundColor) ? '#ffffff' : fontColor, theme);
 
   return {
     fontColor: getColor(content.fontColor, '#404040', theme),
