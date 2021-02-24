@@ -1,4 +1,4 @@
-import React, { useReducer, useState, useEffect } from 'react';
+import React, { useReducer, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
@@ -28,7 +28,8 @@ const useStyles = makeStyles({
 export default function TableBodyWrapper({ tableData, constraints, selectionsAPI, layout, theme }) {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
-  const classes = useStyles(getBodyStyle(layout, theme, hoverEffect));
+  const styling = useMemo(() => getBodyStyle(layout, theme, hoverEffect));
+  const classes = useStyles(styling);
   const getColumnRenderers = (selectionsEnabled) => tableData.columns.map((c) => getCellRenderer(c, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(getColumnRenderers(false));
   const [selState, selDispatch] = useReducer(reducer, {
