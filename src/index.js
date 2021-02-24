@@ -14,6 +14,7 @@ import ext from './ext';
 import muiSetup from './mui-setup';
 import { render, teardown } from './table/Root';
 import manageData from './table/handle-data';
+import cellLockedImage from './image/NR_Locked.png';
 
 // This line is replaced by rollup with an import for internal builds
 const __OPIONAL_THEME_DEPS__ = {}; // eslint-disable-line no-underscore-dangle
@@ -56,6 +57,7 @@ export default function supernova(env) {
             selectionsAPI,
             muiParameters,
             theme,
+            cellLockedImage,
           });
         }
       }, [tableData, constraints, selectionsAPI.isModal()]);

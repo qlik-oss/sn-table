@@ -108,7 +108,7 @@ describe('<TableWrapper />', () => {
     expect(setPageInfo).to.have.been.calledWith({ top: 0, height: 25 });
   });
 
-  it('should not show rows per page when selectionsAPI.isActive() returns true', async () => {
+  it('should not show rows per page when selectionsAPI.isModal() returns true', async () => {
     modal = true;
 
     const { queryByText } = render(

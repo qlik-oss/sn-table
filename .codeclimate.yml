@@ -1,4 +1,11 @@
 version: "2"
+plugins:
+  duplication:
+    config:
+      languages:
+        javascript:
+          filters:
+            - "(property (Identifier propTypes))"
 checks:
   method-lines:
     config:
