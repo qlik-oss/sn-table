@@ -1,11 +1,11 @@
 version: "2"
 plugins:
   duplication:
-    enabled: true
     config:
       languages:
-        filters:
-          - "(object (Identifier PropTypes))"
+        javascript:
+          filters:
+            - "(property (Identifier propTypes))"
 checks:
   method-lines:
     config:
