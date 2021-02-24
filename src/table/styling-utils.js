@@ -19,12 +19,11 @@ function isDarkColor(color) {
   let g;
   let b;
   let matches;
-  if ((matches = /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i.exec(color))) {
-    r = parseInt(matches[1], 10);
-    g = parseInt(matches[2], 10);
-    b = parseInt(matches[3], 10);
-  } else if ((matches = /^rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d(\.\d+)?)\s*\)$/i.exec(color))) {
-    // rgba(1, 2, 3, 0.4)
+  if (
+    (matches =
+      /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i.exec(color) ||
+      /^rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d(\.\d+)?)\s*\)$/i.exec(color))
+  ) {
     r = parseInt(matches[1], 10);
     g = parseInt(matches[2], 10);
     b = parseInt(matches[3], 10);
@@ -39,6 +38,10 @@ function isDarkColor(color) {
   return 0.299 * r + 0.587 * g + 0.114 * b < 125;
 }
 
+function isUnset(prop) {
+  return !prop || JSON.stringify(prop) === JSON.stringify({ index: -1, color: null });
+}
+
 export function getBodyStyle(layout, theme) {
   const content = layout.components?.[0]?.content;
   if (!content) return {};
@@ -47,12 +50,9 @@ export function getBodyStyle(layout, theme) {
   //   "index": -1,
   //   "color": null
   // } means the hover fornt color is unset.
-  const unsetFontColor =
-    !content.fontColor || JSON.stringify(content.fontColor) === JSON.stringify({ index: -1, color: null });
-  const unsetHoverFontColor =
-    !content.hoverFontColor || JSON.stringify(content.hoverFontColor) === JSON.stringify({ index: -1, color: null });
-  const unsetHoverBackgroundColor =
-    !content.hoverColor || JSON.stringify(content.hoverColor) === JSON.stringify({ index: -1, color: null });
+  const unsetFontColor = isUnset(content.fontColor);
+  const unsetHoverFontColor = isUnset(content.hoverFontColor);
+  const unsetHoverBackgroundColor = isUnset(content.hoverColor);
   const unsetHoverFontandBackgroundColor = unsetHoverFontColor && unsetHoverBackgroundColor;
 
   // 1. hoverEffect is true, there is no font color and no hover font color but a hover background color,
@@ -70,20 +70,20 @@ export function getBodyStyle(layout, theme) {
 
   // 4. hoverEffect is true, there are all colors, when hovering, the set hover font color and the the hover background color take effect.
 
-  const getHoverBackgroundColor = unsetHoverFontandBackgroundColor
+  const hoverBackgroundColor = unsetHoverFontandBackgroundColor
     ? 'rgba(0, 0, 0, 0.03)'
     : unsetHoverBackgroundColor
     ? 'rgba(0, 0, 0, 0)'
     : getColor(content.hoverColor, 'rgba(0, 0, 0, 0.03)', theme);
 
-  const getHoverFontColor = unsetHoverFontandBackgroundColor
+  const hoverFontColor = unsetHoverFontandBackgroundColor
     ? ''
     : unsetFontColor
-    ? isDarkColor(getHoverBackgroundColor)
+    ? isDarkColor(hoverBackgroundColor)
       ? getColor(content.hoverFontColor, '#ffffff', theme)
       : getColor(content.hoverFontColor, '#000000', theme)
     : unsetHoverFontColor
-    ? isDarkColor(getHoverBackgroundColor)
+    ? isDarkColor(hoverBackgroundColor)
       ? '#ffffff'
       : ''
     : getColor(content.hoverFontColor, '', theme);
@@ -91,7 +91,7 @@ export function getBodyStyle(layout, theme) {
   return {
     fontColor: getColor(content.fontColor, '#404040', theme),
     fontSize: content.fontSize || '14px',
-    hoverBackgroundColor: `${getHoverBackgroundColor} !important`,
-    hoverFontColor: getHoverFontColor,
+    hoverBackgroundColor: `${hoverBackgroundColor} !important`,
+    hoverFontColor,
   };
 }
