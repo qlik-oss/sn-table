@@ -28,11 +28,11 @@ export function getSelectionClass(cell, selState) {
     if (colIdx !== cell.colIdx) return 'excluded';
 
     for (let i = 0; i < rows.length; i++) {
-      if (rows[i].qElemNumber === cell.qElemNumber) return 'selected';
+      return rows[i].qElemNumber === cell.qElemNumber ? 'selected' : 'possible';
     }
   }
 
-  return 'possible';
+  return '';
 }
 
 export function reducer(state, action) {

@@ -9,10 +9,14 @@ const useStyles = makeStyles({
     background: STYLING_DEFAULTS.EXCLUDED_BACKGROUND,
   },
   selected: {
+    // Having static classes here increases performance, but forces the use of !important
     color: `${STYLING_DEFAULTS.WHITE} !important`,
-    background: STYLING_DEFAULTS.SELECTED_BACKGROUND,
+    background: `${STYLING_DEFAULTS.SELECTED_BACKGROUND} !important`,
   },
-  possible: {},
+  possible: {
+    color: `${STYLING_DEFAULTS.FONT_COLOR} !important`,
+    background: `${STYLING_DEFAULTS.WHITE} !important`,
+  },
 });
 
 export default function withSelections(CellComponent) {

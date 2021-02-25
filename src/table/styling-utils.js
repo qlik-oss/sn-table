@@ -21,7 +21,7 @@ export function getColor(color = {}, defaultColor, theme) {
 }
 
 export const getBaseStyling = (styleObj, theme) => ({
-  fontColor: getColor(styleObj.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme),
+  color: getColor(styleObj.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme),
   fontSize: styleObj.fontSize || STYLING_DEFAULTS.FONT_SIZE,
   padding: styleObj.fontSize ? `${styleObj.fontSize / 2}px ${styleObj.fontSize}px` : STYLING_DEFAULTS.PADDING,
 });
@@ -66,4 +66,19 @@ export function getBodyStyle(layout, theme) {
       );
 
   return { ...baseStyling, hoverBackgroundColor, hoverFontColor };
+}
+
+export function getColumnStyling(styling, qAttrExps, stylingInfo) {
+  const props = {};
+  qAttrExps?.qValues.forEach((val, i) => {
+    props[stylingInfo[i]] = val.qText;
+  });
+
+  return {
+    ...styling,
+    color: props.cellForegroundColor || styling.color,
+    background: props.cellBackgroundColor,
+    height: STYLING_DEFAULTS.HEIGHT,
+    lineHeight: STYLING_DEFAULTS.BODY_LINE_HEIGHT,
+  };
 }
