@@ -25,10 +25,10 @@ const useStyles = makeStyles({
   }),
 });
 
-export default function TableBodyWrapper({ tableData, constraints, selectionsAPI, layout, theme }) {
+const TableBodyWrapper = ({ tableData, constraints, selectionsAPI, layout, theme }) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
-  const styling = useMemo(() => getBodyStyle(layout, theme, hoverEffect));
+  const styling = useMemo(() => getBodyStyle(layout, theme), [layout, theme]);
   const classes = useStyles(styling);
   const getColumnRenderers = (selectionsEnabled) => tableData.columns.map((c) => getCellRenderer(c, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(getColumnRenderers(false));
@@ -84,7 +84,7 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
       ))}
     </TableBody>
   );
-}
+};
 
 TableBodyWrapper.propTypes = {
   tableData: PropTypes.object.isRequired,
@@ -93,3 +93,5 @@ TableBodyWrapper.propTypes = {
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
 };
+
+export default React.memo(TableBodyWrapper);
