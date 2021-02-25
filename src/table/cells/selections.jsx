@@ -19,7 +19,7 @@ export default function withSelections(CellComponent) {
     });
 
     const classes = useStyles();
-    const handleMouseUp = (evt) => cell.isDim && selectCell(cell, selState, selDispatch, evt);
+    const handleMouseUp = (evt) => cell.isDim && evt.button === 0 && selectCell(cell, selState, selDispatch, evt);
     const selectionClass = getSelectionClass(cell, selState);
 
     return <CellComponent {...props} className={`${classes[selectionClass]} ${className}`} onMouseUp={handleMouseUp} />;
