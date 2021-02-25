@@ -1,16 +1,19 @@
-import React, { useReducer, useState, useEffect } from 'react';
+import React, { useReducer, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import { addSelectionListeners, reducer } from './selections-utils';
 import getCellRenderer from './cells/renderer';
-import { getBodyStyle } from './styling-utils';
+import { STYLING_DEFAULTS, getBodyStyle } from './styling-utils';
 
 const useStyles = makeStyles({
   tableCell: (props) => ({
     fontSize: props.fontSize,
     color: props.fontColor,
+    padding: props.padding,
+    height: STYLING_DEFAULTS.HEIGHT,
+    lineHeight: STYLING_DEFAULTS.BODY_LINE_HEIGHT,
   }),
   hoverTableRow: (props) => ({
     '&&:hover': {
@@ -22,10 +25,11 @@ const useStyles = makeStyles({
   }),
 });
 
-export default function TableBodyWrapper({ tableData, constraints, selectionsAPI, layout, theme, cellLockedImage }) {
+export default function TableBodyWrapper({ tableData, constraints, selectionsAPI, layout, theme }) {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
-  const classes = useStyles(getBodyStyle(layout, theme, hoverEffect));
+  const styling = useMemo(() => getBodyStyle(layout, theme, hoverEffect));
+  const classes = useStyles(styling);
   const getColumnRenderers = (selectionsEnabled) => tableData.columns.map((c) => getCellRenderer(c, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(getColumnRenderers(false));
   const [selState, selDispatch] = useReducer(reducer, {
@@ -68,7 +72,6 @@ export default function TableBodyWrapper({ tableData, constraints, selectionsAPI
                   value={value}
                   key={column.id}
                   align={column.align}
-                  cellLockedImage={cellLockedImage}
                   selState={selState}
                   selDispatch={selDispatch}
                 >
@@ -89,5 +92,4 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  cellLockedImage: PropTypes.string.isRequired,
 };

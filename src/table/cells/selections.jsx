@@ -2,21 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { getSelectionClass, selectCell } from '../selections-utils';
+import { STYLING_DEFAULTS } from '../styling-utils';
+
+const useStyles = makeStyles({
+  excluded: {
+    background: STYLING_DEFAULTS.EXCLUDED_BACKGROUND,
+  },
+  selected: {
+    color: `${STYLING_DEFAULTS.WHITE} !important`,
+    background: STYLING_DEFAULTS.SELECTED_BACKGROUND,
+  },
+  possible: {},
+});
 
 export default function withSelections(CellComponent) {
   const HOC = (props) => {
-    const { cell, selState, selDispatch, className, cellLockedImage } = props;
-
-    const useStyles = makeStyles({
-      excluded: {
-        backgroundImage: `url(${cellLockedImage})`,
-      },
-      selected: {
-        color: '#fff !important',
-        backgroundColor: '#009845',
-      },
-      possible: {},
-    });
+    const { cell, selState, selDispatch, className } = props;
 
     const classes = useStyles();
     const handleMouseUp = (evt) => cell.isDim && selectCell(cell, selState, selDispatch, evt);
@@ -30,7 +31,6 @@ export default function withSelections(CellComponent) {
     cell: PropTypes.object.isRequired,
     selState: PropTypes.object.isRequired,
     selDispatch: PropTypes.func.isRequired,
-    cellLockedImage: PropTypes.string.isRequired,
   };
 
   return HOC;
