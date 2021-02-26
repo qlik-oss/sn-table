@@ -6,6 +6,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { addSelectionListeners, reducer } from './selections-utils';
 import getCellRenderer from './cells/renderer';
 import { STYLING_DEFAULTS, getBodyStyle } from './styling-utils';
+import handleKeyPress from './cells/handleKeyPress';
 
 const useStyles = makeStyles({
   tableCell: (props) => ({
@@ -25,7 +26,7 @@ const useStyles = makeStyles({
   }),
 });
 
-const TableBodyWrapper = ({ tableData, constraints, selectionsAPI, layout, theme }) => {
+const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, layout, theme }) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const styling = useMemo(() => getBodyStyle(layout, theme), [layout, theme]);
@@ -51,22 +52,22 @@ const TableBodyWrapper = ({ tableData, constraints, selectionsAPI, layout, theme
 
   return (
     <TableBody>
-      {rows.map((row) => (
+      {rows.map((row, rowIndex) => (
         <TableRow
           hover={hoverEffect}
           role="checkbox"
           tabIndex={-1}
           key={row.key}
-          className={hoverEffect && classes.hoverTableRow}
+          className={`sn-table-row ${hoverEffect} && ${classes.hoverTableRow}`}
         >
-          {columns.map((column, i) => {
+          {columns.map((column, columnIndex) => {
             const cell = row[column.id];
             const value = cell.qText;
-            const CellRenderer = columnRenderers[i];
+            const CellRenderer = columnRenderers[columnIndex];
             return (
               CellRenderer && (
                 <CellRenderer
-                  className={classes.tableCell}
+                  className={`${classes.tableCell} sn-table-cell`}
                   cell={cell}
                   column={column}
                   value={value}
@@ -74,6 +75,8 @@ const TableBodyWrapper = ({ tableData, constraints, selectionsAPI, layout, theme
                   align={column.align}
                   selState={selState}
                   selDispatch={selDispatch}
+                  tabIndex={-1}
+                  onKeyDown={(e) => handleKeyPress(e, rootElement, rowIndex + 1, columnIndex)}
                 >
                   {value}
                 </CellRenderer>
@@ -87,6 +90,7 @@ const TableBodyWrapper = ({ tableData, constraints, selectionsAPI, layout, theme
 };
 
 TableBodyWrapper.propTypes = {
+  rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
