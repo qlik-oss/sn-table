@@ -17,8 +17,8 @@ const useStyles = makeStyles({
   }),
   hoverTableRow: (props) => ({
     '&&:hover': {
-      background: props.hoverBackgroundColor,
       '& td': {
+        background: props.hoverBackgroundColor,
         color: props.hoverFontColor,
       },
     },
