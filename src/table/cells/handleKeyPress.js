@@ -1,14 +1,16 @@
+import { selectCell } from '../selections-utils';
+
 const navigationEffect = (tableRows, nextRow, nextCol) => {
   const nextCell = tableRows[nextRow].getElementsByClassName('sn-table-cell')[nextCol];
   nextCell.focus();
   nextCell.setAttribute('tabIndex', '0');
 };
 
-const arrowKeysNavigation = (e, rowAndColumn, rowIndex, colIndex) => {
+const arrowKeysNavigation = (evt, rowAndColumn, rowIndex, colIndex) => {
   let nextRow = rowIndex;
   let nextCol = colIndex;
 
-  switch (e.key) {
+  switch (evt.key) {
     case 'ArrowDown':
       if (rowIndex + 1 < rowAndColumn.tableRowSize) nextRow = ++nextRow;
       break;
@@ -48,20 +50,25 @@ const handleEvent = (e) => {
   e.target.setAttribute('tabIndex', '-1');
 };
 
-const handleKeyPress = (e, rootElement, rowIndex, colIndex) => {
-  switch (e.key) {
+const handleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch) => {
+  switch (evt.key) {
     // TODO page up/down etc
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      handleEvent(e);
+      handleEvent(evt);
       const rowAndColumn = tableRowAndColumn(rootElement);
-      const { tableRows, nextRow, nextCol } = arrowKeysNavigation(e, rowAndColumn, rowIndex, colIndex);
+      const { tableRows, nextRow, nextCol } = arrowKeysNavigation(evt, rowAndColumn, rowIndex, colIndex);
       navigationEffect(tableRows, nextRow, nextCol);
       break;
     }
-    // TODO handle selections, search?, sorting...
+    // selections
+    case 'Enter': {
+      cell?.isDim && selectCell(cell, selState, selDispatch, evt);
+      break;
+    }
+    // TODO handle , search?, sorting...
     default:
       break;
   }
