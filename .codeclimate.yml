@@ -5,7 +5,7 @@ plugins:
       languages:
         javascript:
           filters:
-            - "(property (Identifier propTypes))"
+          - "s(:property, s(:Identifier, :propTypes))"
 checks:
   method-lines:
     config:
