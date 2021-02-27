@@ -5,7 +5,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 
 import TableWrapper from '../TableWrapper';
-import * as TableBodyWrapper from '../TableBodyWrapper';
+import TableBodyWrapper from '../TableBodyWrapper';
 import * as TableHeadWrapper from '../TableHeadWrapper';
 
 describe('<TableWrapper />', () => {
@@ -19,7 +19,7 @@ describe('<TableWrapper />', () => {
   let modal;
 
   beforeEach(() => {
-    sandbox.replace(TableBodyWrapper, 'default', () => <tbody />);
+    sandbox.replace(TableBodyWrapper, 'type', () => <tbody />);
     sandbox.replace(TableHeadWrapper, 'default', () => <thead />);
 
     tableData = {
@@ -108,7 +108,7 @@ describe('<TableWrapper />', () => {
     expect(setPageInfo).to.have.been.calledWith({ top: 0, height: 25 });
   });
 
-  it('should not show rows per page when selectionsAPI.isActive() returns true', async () => {
+  it('should not show rows per page when selectionsAPI.isModal() returns true', async () => {
     modal = true;
 
     const { queryByText } = render(
