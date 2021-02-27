@@ -1,48 +1,51 @@
-const navigationEffect = (e, tableRows, nextRow, nextCol) => {
-  e.target.blur();
-  e.target.setAttribute('tabIndex', '-1');
-
+const navigationEffect = (tableRows, nextRow, nextCol) => {
   const nextCell = tableRows[nextRow].getElementsByClassName('sn-table-cell')[nextCol];
   nextCell.focus();
   nextCell.setAttribute('tabIndex', '0');
 };
 
-const arrowKeysNavigation = (e, rootElement, rowIndex, colIndex) => {
-  e.stopPropagation();
-  e.preventDefault();
-  let currentCol = colIndex;
-  let nextCol = currentCol;
-  let currentRow = rowIndex;
-  let nextRow = currentRow;
+const arrowKeysNavigation = (e, rowAndColumn, rowIndex, colIndex) => {
+  let nextRow = rowIndex;
+  let nextCol = colIndex;
 
+  switch (e.key) {
+    case 'ArrowDown':
+      if (rowIndex + 1 < rowAndColumn.tableRowSize) nextRow = ++nextRow;
+      break;
+    case 'ArrowUp':
+      if (rowIndex > 0) nextRow = --nextRow;
+      break;
+    case 'ArrowRight':
+      if (colIndex < rowAndColumn.tableColumnSize - 1) nextCol = ++nextCol;
+      break;
+    case 'ArrowLeft':
+      if (colIndex > 0) nextCol = --nextCol;
+      break;
+    default:
+  }
+
+  return {
+    tableRows: rowAndColumn.tableRows,
+    nextRow,
+    nextCol,
+  };
+};
+
+const tableRowAndColumn = (rootElement) => {
   const tableRows = rootElement.getElementsByClassName('sn-table-row');
   const tableRowSize = tableRows.length;
 
   const headCells = rootElement.getElementsByClassName('sn-table-head-cell');
-  const columnSize = headCells.length;
+  const tableColumnSize = headCells.length;
 
-  switch (e.key) {
-    case 'ArrowDown':
-      if (currentRow + 1 < tableRowSize) {
-        nextRow = ++currentRow;
-      }
-      break;
-    case 'ArrowUp':
-      if (currentRow > 0) {
-        nextRow = --currentRow;
-      }
-      break;
-    case 'ArrowRight':
-      if (currentCol < columnSize - 1) nextCol = ++currentCol;
-      break;
-    case 'ArrowLeft':
-      if (currentCol > 0) nextCol = --currentCol;
-      break;
-    default:
-      return;
-  }
+  return { tableRows, tableRowSize, tableColumnSize };
+};
 
-  navigationEffect(e, tableRows, nextRow, nextCol);
+const handleEvent = (e) => {
+  e.stopPropagation();
+  e.preventDefault();
+  e.target.blur();
+  e.target.setAttribute('tabIndex', '-1');
 };
 
 const handleKeyPress = (e, rootElement, rowIndex, colIndex) => {
@@ -51,9 +54,13 @@ const handleKeyPress = (e, rootElement, rowIndex, colIndex) => {
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
-    case 'ArrowLeft':
-      arrowKeysNavigation(e, rootElement, rowIndex, colIndex);
+    case 'ArrowLeft': {
+      handleEvent(e);
+      const rowAndColumn = tableRowAndColumn(rootElement);
+      const { tableRows, nextRow, nextCol } = arrowKeysNavigation(e, rowAndColumn, rowIndex, colIndex);
+      navigationEffect(tableRows, nextRow, nextCol);
       break;
+    }
     // TODO handle selections, search?, sorting...
     default:
       break;
