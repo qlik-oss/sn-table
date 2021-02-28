@@ -4,11 +4,11 @@ const navigationEffect = (tableRows, nextRow, nextCol) => {
   nextCell.setAttribute('tabIndex', '0');
 };
 
-const arrowKeysNavigation = (e, rowAndColumn, rowIndex, colIndex) => {
+const arrowKeysNavigation = (evt, rowAndColumn, rowIndex, colIndex) => {
   let nextRow = rowIndex;
   let nextCol = colIndex;
 
-  switch (e.key) {
+  switch (evt.key) {
     case 'ArrowDown':
       if (rowIndex + 1 < rowAndColumn.tableRowSize) nextRow = ++nextRow;
       break;
@@ -41,23 +41,23 @@ const tableRowAndColumn = (rootElement) => {
   return { tableRows, tableRowSize, tableColumnSize };
 };
 
-const handleEvent = (e) => {
-  e.stopPropagation();
-  e.preventDefault();
-  e.target.blur();
-  e.target.setAttribute('tabIndex', '-1');
+const handleEvent = (evt) => {
+  evt.stopPropagation();
+  evt.preventDefault();
+  evt.target.blur();
+  evt.target.setAttribute('tabIndex', '-1');
 };
 
-const handleKeyPress = (e, rootElement, rowIndex, colIndex) => {
-  switch (e.key) {
+const handleKeyPress = (evt, rootElement, rowIndex, colIndex) => {
+  switch (evt.key) {
     // TODO page up/down etc
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      handleEvent(e);
+      handleEvent(evt);
       const rowAndColumn = tableRowAndColumn(rootElement);
-      const { tableRows, nextRow, nextCol } = arrowKeysNavigation(e, rowAndColumn, rowIndex, colIndex);
+      const { tableRows, nextRow, nextCol } = arrowKeysNavigation(evt, rowAndColumn, rowIndex, colIndex);
       navigationEffect(tableRows, nextRow, nextCol);
       break;
     }

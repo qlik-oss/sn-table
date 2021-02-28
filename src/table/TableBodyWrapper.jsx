@@ -6,7 +6,6 @@ import TableRow from '@material-ui/core/TableRow';
 import { addSelectionListeners, reducer } from './selections-utils';
 import getCellRenderer from './cells/renderer';
 import { STYLING_DEFAULTS, getBodyStyle } from './styling-utils';
-import handleKeyPress from './cells/handleKeyPress';
 
 const useStyles = makeStyles({
   tableCell: (props) => ({
@@ -76,7 +75,9 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
                   selState={selState}
                   selDispatch={selDispatch}
                   tabIndex={-1}
-                  onKeyDown={(e) => handleKeyPress(e, rootElement, rowIndex + 1, columnIndex)}
+                  rootElement={rootElement}
+                  rowIndex={rowIndex + 1}
+                  columnIndex={columnIndex}
                 >
                   {value}
                 </CellRenderer>
