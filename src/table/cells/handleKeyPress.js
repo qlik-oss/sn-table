@@ -43,11 +43,11 @@ const tableRowAndColumn = (rootElement) => {
   return { tableRows, tableRowSize, tableColumnSize };
 };
 
-const handleEvent = (e) => {
-  e.stopPropagation();
-  e.preventDefault();
-  e.target.blur();
-  e.target.setAttribute('tabIndex', '-1');
+const handleEvent = (evt) => {
+  evt.stopPropagation();
+  evt.preventDefault();
+  evt.target.blur();
+  evt.target.setAttribute('tabIndex', '-1');
 };
 
 const handleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch) => {
