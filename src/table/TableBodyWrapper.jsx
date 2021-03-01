@@ -57,7 +57,7 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
           role="checkbox"
           tabIndex={-1}
           key={row.key}
-          className={`sn-table-row ${hoverEffect} && ${classes.hoverTableRow}`}
+          className={`sn-table-row ${hoverEffect && classes.hoverTableRow}`}
         >
           {columns.map((column, columnIndex) => {
             const cell = row[column.id];
