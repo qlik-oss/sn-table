@@ -43,21 +43,25 @@ const tableRowAndColumn = (rootElement) => {
   return { tableRows, tableRowSize, tableColumnSize };
 };
 
-const handleEvent = (evt) => {
-  evt.stopPropagation();
-  evt.preventDefault();
+const removeFocus = (evt) => {
   evt.target.blur();
   evt.target.setAttribute('tabIndex', '-1');
 };
 
+const preventDefaultBehavior = (evt) => {
+  evt.stopPropagation();
+  evt.preventDefault();
+};
+
 const handleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch) => {
+  preventDefaultBehavior(evt);
   switch (evt.key) {
     // TODO page up/down etc
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      handleEvent(evt);
+      removeFocus(evt);
       const rowAndColumn = tableRowAndColumn(rootElement);
       const { tableRows, nextRow, nextCol } = arrowKeysNavigation(evt, rowAndColumn, rowIndex, colIndex);
       navigationEffect(tableRows, nextRow, nextCol);
