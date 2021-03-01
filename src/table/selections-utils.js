@@ -21,22 +21,6 @@ export function addSelectionListeners(api, selDispatch) {
   };
 }
 
-export function getSelectionClass(cell, selState) {
-  const { colIdx, rows } = selState;
-
-  if (rows.length) {
-    if (colIdx !== cell.colIdx) return 'excluded';
-
-    for (let i = 0; i < rows.length; i++) {
-      if (rows[i].qElemNumber === cell.qElemNumber) return 'selected';
-    }
-
-    return 'possible';
-  }
-
-  return '';
-}
-
 export function reducer(state, action) {
   const { rows, colIdx, isEnabled } = action.payload || {};
 

@@ -1,18 +1,18 @@
 import TableCell from '@material-ui/core/TableCell';
-import withSelections from './selections';
-import withStyling from './styling';
+import withColumnStyling from './withColumnStyling';
+import withSelections from './withSelections';
+import withStyling from './withStyling';
 
-// column will be needed in the future when column styling is implemented
-export default function getCellRenderer(column, selectionsEnabled) {
-  // the column in the analysis mode and can be selected
-  let cell = TableCell;
+export default function getCellRenderer(hasColumnStyling, selectionsEnabled) {
+  // withStyling always runs last, applying whatever styling it gets
+  let cell = withStyling(TableCell);
+
   if (selectionsEnabled) {
-    cell = withSelections(TableCell);
+    cell = withSelections(cell);
   }
-  if (column.stylingInfo.length) {
-    cell = withStyling(cell);
+  if (hasColumnStyling) {
+    cell = withColumnStyling(cell);
   }
 
-  // the column in the edit mode
   return cell;
 }

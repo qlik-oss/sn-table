@@ -7,12 +7,26 @@ export const STYLING_DEFAULTS = {
   HOVER_TRANSPARENT: 'rgba(0, 0, 0, 0)',
   SELECTED_BACKGROUND: '#009845',
   EXCLUDED_BACKGROUND:
-    'repeating-linear-gradient(-45deg, rgba(0,0,0,0.02), rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.02) 4px, rgba(0,0,0,0.02) 6px)',
+    'repeating-linear-gradient(-45deg, rgba(20,20,20,0.04), rgba(20,20,20,0.04) 2px, rgba(20,20,20,0.1) 3px, rgba(20,20,20,0.04) 4px, rgba(20,20,20,0.04) 6px)',
   WHITE: '#fff',
   PADDING: '7px 14px',
   HEIGHT: 'auto',
   HEAD_LINE_HEIGHT: '150%',
   BODY_LINE_HEIGHT: '130%',
+};
+
+const SELECTION_STYLING = {
+  EXCLUDED: {
+    background: STYLING_DEFAULTS.EXCLUDED_BACKGROUND,
+  },
+  SELECTED: {
+    color: STYLING_DEFAULTS.WHITE,
+    backgroundColor: STYLING_DEFAULTS.SELECTED_BACKGROUND,
+  },
+  POSSIBLE: {
+    color: STYLING_DEFAULTS.FONT_COLOR,
+    backgroundColor: STYLING_DEFAULTS.WHITE,
+  },
 };
 
 export function getColor(color = {}, defaultColor, theme) {
@@ -77,8 +91,35 @@ export function getColumnStyling(styling, qAttrExps, stylingInfo) {
   return {
     ...styling,
     color: props.cellForegroundColor || styling.color,
-    background: props.cellBackgroundColor,
+    backgroundColor: props.cellBackgroundColor,
     height: STYLING_DEFAULTS.HEIGHT,
     lineHeight: STYLING_DEFAULTS.BODY_LINE_HEIGHT,
+  };
+}
+
+export function getSelectionStyling(styling, cell, selState) {
+  const { colIdx, rows } = selState;
+  let selectionStyling = {};
+
+  if (rows.length) {
+    if (colIdx !== cell.colIdx) {
+      selectionStyling = SELECTION_STYLING.EXCLUDED;
+    } else {
+      for (let i = 0; i < rows.length; i++) {
+        if (rows[i].qElemNumber === cell.qElemNumber) {
+          selectionStyling = SELECTION_STYLING.SELECTED;
+          break;
+        }
+
+        selectionStyling = SELECTION_STYLING.POSSIBLE;
+      }
+    }
+  }
+
+  return {
+    ...styling,
+    color: selectionStyling.color || styling.color,
+    background: selectionStyling.background || styling.background,
+    backgroundColor: selectionStyling.backgroundColor || styling.backgroundColor,
   };
 }
