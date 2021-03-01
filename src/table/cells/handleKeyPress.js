@@ -1,6 +1,6 @@
 import { selectCell } from '../selections-utils';
 
-const navigationEffect = (tableRows, nextRow, nextCol) => {
+const moveFocus = (tableRows, nextRow, nextCol) => {
   const nextCell = tableRows[nextRow].getElementsByClassName('sn-table-cell')[nextCol];
   nextCell.focus();
   nextCell.setAttribute('tabIndex', '0');
@@ -64,7 +64,7 @@ const handleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, se
       removeFocus(evt);
       const rowAndColumn = tableRowAndColumn(rootElement);
       const { tableRows, nextRow, nextCol } = arrowKeysNavigation(evt, rowAndColumn, rowIndex, colIndex);
-      navigationEffect(tableRows, nextRow, nextCol);
+      moveFocus(tableRows, nextRow, nextCol);
       break;
     }
     // selections
