@@ -1,5 +1,11 @@
 import { selectCell } from '../selections-utils';
 
+const cellElementFocus = (rootElement, rowIndex, colIndex) => {
+  const tableRows = rootElement.getElementsByClassName('sn-table-row');
+  const cell = tableRows[rowIndex].getElementsByClassName('sn-table-cell')[colIndex];
+  cell.focus();
+};
+
 const moveFocus = (tableRows, nextRow, nextCol) => {
   const nextCell = tableRows[nextRow].getElementsByClassName('sn-table-cell')[nextCol];
   nextCell.focus();
@@ -54,13 +60,13 @@ const preventDefaultBehavior = (evt) => {
 };
 
 const handleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch) => {
-  preventDefaultBehavior(evt);
   switch (evt.key) {
     // TODO page up/down etc
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
+      preventDefaultBehavior(evt);
       removeFocus(evt);
       const rowAndColumn = tableRowAndColumn(rootElement);
       const { tableRows, nextRow, nextCol } = arrowKeysNavigation(evt, rowAndColumn, rowIndex, colIndex);
@@ -69,7 +75,16 @@ const handleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, se
     }
     // selections
     case 'Enter': {
+      preventDefaultBehavior(evt);
       cell?.isDim && selectCell(cell, selState, selDispatch, evt);
+      break;
+    }
+    case 'Escape': {
+      preventDefaultBehavior(evt);
+      cell?.isDim && selectCell(cell, selState, selDispatch, evt);
+      setTimeout(() => {
+        cellElementFocus(rootElement, rowIndex, colIndex);
+      }, 200);
       break;
     }
     // TODO handle , search?, sorting...

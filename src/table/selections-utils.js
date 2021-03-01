@@ -76,6 +76,9 @@ export function selectCell(cell, selState, selDispatch, evt) {
 
   if (selState.colIdx === -1) {
     api.begin('/qHyperCubeDef');
+    setTimeout(() => {
+      evt.target.focus();
+    }, 200);
   } else if (selState.colIdx === colIdx) {
     selectedRows = rows.concat();
   } else {
