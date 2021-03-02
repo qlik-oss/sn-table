@@ -1,4 +1,11 @@
-import { getColor, getBaseStyling, getHeadStyle, getBodyStyle } from '../styling-utils';
+import {
+  SELECTION_STYLING,
+  getColor,
+  getBaseStyling,
+  getHeadStyle,
+  getBodyStyle,
+  getSelectionColors,
+} from '../styling-utils';
 
 describe('styling-utils', () => {
   let resolvedColor;
@@ -197,6 +204,46 @@ describe('styling-utils', () => {
       const resultStyling = getBodyStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).to.equal(resolvedColor);
       expect(resultStyling.hoverFontColor).to.equal(altResolvedColor);
+    });
+  });
+
+  describe('getSelectionColors', () => {
+    let selState;
+    let cell;
+
+    beforeEach(() => {
+      selState = { colIdx: 1, rows: [{ qElemNumber: 1, rowIdx: 1 }] };
+      cell = { qElemNumber: 1, colIdx: 1 };
+    });
+
+    it('should return selected when selected', () => {
+      const selectionClass = getSelectionColors(cell, selState);
+      expect(selectionClass).to.equal(SELECTION_STYLING.SELECTED);
+    });
+    it('should return excluded when other column', () => {
+      cell.qElemNumber = 2;
+      cell.colIdx = 2;
+
+      const selectionClass = getSelectionColors(cell, selState);
+      expect(selectionClass).to.equal(SELECTION_STYLING.EXCLUDED);
+    });
+    it('should return excluded when other column that happens to have the same qElemNumber', () => {
+      cell.colIdx = 2;
+
+      const selectionClass = getSelectionColors(cell, selState);
+      expect(selectionClass).to.equal(SELECTION_STYLING.EXCLUDED);
+    });
+    it('should return possible when active and available to select', () => {
+      cell.qElemNumber = 2;
+
+      const selectionClass = getSelectionColors(cell, selState);
+      expect(selectionClass).to.equal(SELECTION_STYLING.POSSIBLE);
+    });
+    it('should return empty object when no active selections', () => {
+      selState = { rows: [] };
+
+      const selectionClass = getSelectionColors(cell, selState);
+      expect(selectionClass).to.eql({});
     });
   });
 });

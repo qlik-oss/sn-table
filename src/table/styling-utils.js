@@ -15,16 +15,16 @@ export const STYLING_DEFAULTS = {
   BODY_LINE_HEIGHT: '130%',
 };
 
-const SELECTION_STYLING = {
+export const SELECTION_STYLING = {
   EXCLUDED: {
     background: STYLING_DEFAULTS.EXCLUDED_BACKGROUND,
   },
   SELECTED: {
-    color: STYLING_DEFAULTS.WHITE,
+    fontColor: STYLING_DEFAULTS.WHITE,
     backgroundColor: STYLING_DEFAULTS.SELECTED_BACKGROUND,
   },
   POSSIBLE: {
-    color: STYLING_DEFAULTS.FONT_COLOR,
+    fontColor: STYLING_DEFAULTS.FONT_COLOR,
     backgroundColor: STYLING_DEFAULTS.WHITE,
   },
 };
@@ -35,7 +35,7 @@ export function getColor(color = {}, defaultColor, theme) {
 }
 
 export const getBaseStyling = (styleObj, theme) => ({
-  color: getColor(styleObj.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme),
+  fontColor: getColor(styleObj.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme),
   fontSize: styleObj.fontSize || STYLING_DEFAULTS.FONT_SIZE,
   padding: styleObj.fontSize ? `${styleObj.fontSize / 2}px ${styleObj.fontSize}px` : STYLING_DEFAULTS.PADDING,
 });
@@ -90,36 +90,36 @@ export function getColumnStyling(styling, qAttrExps, stylingInfo) {
 
   return {
     ...styling,
-    color: props.cellForegroundColor || styling.color,
+    fontColor: props.cellForegroundColor || styling.fontColor,
     backgroundColor: props.cellBackgroundColor,
     height: STYLING_DEFAULTS.HEIGHT,
     lineHeight: STYLING_DEFAULTS.BODY_LINE_HEIGHT,
   };
 }
 
-export function getSelectionStyling(styling, cell, selState) {
+export function getSelectionColors(cell, selState) {
   const { colIdx, rows } = selState;
-  let selectionStyling = {};
 
   if (rows.length) {
-    if (colIdx !== cell.colIdx) {
-      selectionStyling = SELECTION_STYLING.EXCLUDED;
-    } else {
-      for (let i = 0; i < rows.length; i++) {
-        if (rows[i].qElemNumber === cell.qElemNumber) {
-          selectionStyling = SELECTION_STYLING.SELECTED;
-          break;
-        }
+    if (colIdx !== cell.colIdx) return SELECTION_STYLING.EXCLUDED;
 
-        selectionStyling = SELECTION_STYLING.POSSIBLE;
-      }
+    for (let i = 0; i < rows.length; i++) {
+      if (rows[i].qElemNumber === cell.qElemNumber) return SELECTION_STYLING.SELECTED;
     }
+
+    return SELECTION_STYLING.POSSIBLE;
   }
+
+  return {};
+}
+
+export function getSelectionStyle(styling, cell, selState) {
+  const selectionColors = getSelectionColors(cell, selState);
 
   return {
     ...styling,
-    color: selectionStyling.color || styling.color,
-    background: selectionStyling.background || styling.background,
-    backgroundColor: selectionStyling.backgroundColor || styling.backgroundColor,
+    fontColor: selectionColors.fontColor || styling.fontColor,
+    background: selectionColors.background || styling.background,
+    backgroundColor: selectionColors.backgroundColor || styling.backgroundColor,
   };
 }

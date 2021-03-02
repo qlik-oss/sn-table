@@ -4,16 +4,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import { STYLING_DEFAULTS } from '../styling-utils';
 
 const useStyles = makeStyles({
+  cellBackground: (props) => ({
+    background: props.background,
+  }),
   cellStyling: (props) => ({
-    color: props.color,
+    color: props.fontColor,
     backgroundColor: props.backgroundColor,
     fontSize: props.fontSize,
     padding: props.padding,
     height: STYLING_DEFAULTS.HEIGHT,
     lineHeight: STYLING_DEFAULTS.BODY_LINE_HEIGHT,
-  }),
-  cellBackground: (props) => ({
-    background: props.background,
   }),
 });
 
