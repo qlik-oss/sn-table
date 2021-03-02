@@ -4,6 +4,7 @@ import {
   getBaseStyling,
   getHeadStyle,
   getBodyStyle,
+  getColumnStyle,
   getSelectionColors,
 } from '../styling-utils';
 
@@ -204,6 +205,50 @@ describe('styling-utils', () => {
       const resultStyling = getBodyStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).to.equal(resolvedColor);
       expect(resultStyling.hoverFontColor).to.equal(altResolvedColor);
+    });
+  });
+
+  describe('getColumnStyle', () => {
+    let styling;
+    let qAttrExps;
+    let stylingInfo;
+
+    beforeEach(() => {
+      styling = { fontColor: 'someFontColor' };
+      qAttrExps = {
+        qValues: [{ qText: 'someColumnBackground' }, { qText: 'someColumnForeground' }],
+      };
+      stylingInfo = ['cellBackgroundColor', 'cellForegroundColor'];
+    });
+
+    it('should return styling with both new fontColor and backgroundColor when selected', () => {
+      const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
+      expect(columnStyle.backgroundColor).to.equal('someColumnBackground');
+      expect(columnStyle.fontColor).to.equal('someColumnForeground');
+    });
+    it('should return styling with new fontColor', () => {
+      qAttrExps.qValues = [qAttrExps.qValues[1]];
+      stylingInfo = [stylingInfo[1]];
+
+      const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
+      expect(columnStyle.backgroundColor).to.equal(undefined);
+      expect(columnStyle.fontColor).to.equal('someColumnForeground');
+    });
+    it('should return styling with backgroundColoe', () => {
+      qAttrExps.qValues = [qAttrExps.qValues[0]];
+      stylingInfo = [stylingInfo[0]];
+
+      const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
+      expect(columnStyle.backgroundColor).to.equal('someColumnBackground');
+      expect(columnStyle.fontColor).to.equal('someFontColor');
+    });
+    it('should return styling unchanged', () => {
+      qAttrExps = undefined;
+      stylingInfo = [];
+
+      const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
+      expect(columnStyle.backgroundColor).to.equal(undefined);
+      expect(columnStyle.fontColor).to.equal('someFontColor');
     });
   });
 

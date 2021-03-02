@@ -82,18 +82,16 @@ export function getBodyStyle(layout, theme) {
   return { ...baseStyling, hoverBackgroundColor, hoverFontColor };
 }
 
-export function getColumnStyling(styling, qAttrExps, stylingInfo) {
-  const props = {};
+export function getColumnStyle(styling, qAttrExps, stylingInfo) {
+  const columnColors = {};
   qAttrExps?.qValues.forEach((val, i) => {
-    props[stylingInfo[i]] = val.qText;
+    columnColors[stylingInfo[i]] = val.qText;
   });
 
   return {
     ...styling,
-    fontColor: props.cellForegroundColor || styling.fontColor,
-    backgroundColor: props.cellBackgroundColor,
-    height: STYLING_DEFAULTS.HEIGHT,
-    lineHeight: STYLING_DEFAULTS.BODY_LINE_HEIGHT,
+    fontColor: columnColors.cellForegroundColor || styling.fontColor,
+    backgroundColor: columnColors.cellBackgroundColor,
   };
 }
 

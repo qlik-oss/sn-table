@@ -1,13 +1,11 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { getColumnStyling } from '../styling-utils';
+import { getColumnStyle } from '../styling-utils';
 
 export default function withColumnStyling(CellComponent) {
   const HOC = (props) => {
     const { cell, column, styling } = props;
-    const columnStyling = useMemo(() => getColumnStyling(styling, cell.qAttrExps, column.stylingInfo), [
-      cell.qAttrExps,
-    ]);
+    const columnStyling = useMemo(() => getColumnStyle(styling, cell.qAttrExps, column.stylingInfo), [cell.qAttrExps]);
 
     return <CellComponent {...props} styling={columnStyling} />;
   };
