@@ -24,16 +24,6 @@ describe('handle-data', () => {
       expect(columnInfo).to.eql(getExpectedInfo(colIdx, true));
     });
 
-    it('should return column info for dimension with stylingInfo', () => {
-      const colIdx = 1;
-      layout.qHyperCube.qDimensionInfo[colIdx].qAttrExprInfo = [{ id: 'someId' }];
-      const expected = getExpectedInfo(colIdx, true);
-      expected.stylingInfo = ['someId'];
-
-      const columnInfo = getColumnInfo(layout, colIdx);
-      expect(columnInfo).to.eql(expected);
-    });
-
     it('should return column info for dimension with align center', () => {
       const colIdx = 1;
       layout.qHyperCube.qDimensionInfo[colIdx].textAlign = { auto: false, align: 'center' };

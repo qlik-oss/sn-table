@@ -17,7 +17,6 @@ export function getColumnInfo(layout, colIndex) {
     label: info.qFallbackTitle,
     id: info.cId,
     align: !info.textAlign || info.textAlign.auto ? (isDim ? 'left' : 'right') : info.textAlign.align,
-    stylingInfo: info.qAttrExprInfo.map((expr) => expr.id),
   };
 }
 
