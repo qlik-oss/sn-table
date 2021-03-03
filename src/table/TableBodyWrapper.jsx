@@ -8,14 +8,15 @@ import getCellRenderer from './cells/renderer';
 import { getBodyStyle } from './styling-utils';
 
 const useStyles = makeStyles({
-  hoverTableRow: (props) => ({
+  hoverTableRow: {
     '&&:hover': {
+      backgroundColor: 'rgba(0, 0, 0, 0)',
       '& td:not(.selected)': {
-        backgroundColor: props.hoverBackgroundColor,
-        color: props.hoverFontColor,
+        backgroundColor: ({ hoverBackgroundColor }) => hoverBackgroundColor,
+        color: ({ hoverFontColor }) => hoverFontColor,
       },
     },
-  }),
+  },
 });
 
 const TableBodyWrapper = ({ tableData, constraints, selectionsAPI, layout, theme }) => {

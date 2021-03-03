@@ -173,7 +173,7 @@ describe('styling-utils', () => {
         fontColor: resolvedColor,
         padding: '11px 22px',
         hoverBackgroundColor: '#f4f4f4',
-        hoverFontColor: resolvedColor,
+        hoverFontColor: '',
         selectedCellClass: '',
       });
     });
@@ -182,7 +182,7 @@ describe('styling-utils', () => {
       layout.components[0].content.hoverFontColor.index = 1;
 
       const resultStyling = getBodyStyle(layout, theme);
-      expect(resultStyling.hoverBackgroundColor).to.equal('rgba(0, 0, 0, 0)');
+      expect(resultStyling.hoverBackgroundColor).to.equal('');
       expect(resultStyling.hoverFontColor).to.equal(resolvedColor);
     });
     it('should return styling with dark hoverBackgroundColor and white hoverFontColor', () => {
@@ -192,12 +192,12 @@ describe('styling-utils', () => {
       expect(resultStyling.hoverBackgroundColor).to.equal(resolvedColor);
       expect(resultStyling.hoverFontColor).to.equal('#fff');
     });
-    it('should return styling with light hoverBackgroundColor and fontColor as hoverFontColor', () => {
+    it('should return styling with light hoverBackgroundColor and no hoverFontColor', () => {
       layout.components[0].content.hoverColor.index = 2;
 
       const resultStyling = getBodyStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).to.equal(altResolvedColor);
-      expect(resultStyling.hoverFontColor).to.equal(resolvedColor);
+      expect(resultStyling.hoverFontColor).to.equal('');
     });
     it('should return styling with set hoverBackgroundColor and hoverFontColor', () => {
       layout.components[0].content.hoverColor.index = 1;

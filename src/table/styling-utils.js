@@ -52,8 +52,6 @@ export function getBodyStyle(layout, theme) {
   const content = layout.components?.[0]?.content;
   if (!content) return { padding: STYLING_DEFAULTS.PADDING };
 
-  const baseStyling = getBaseStyling(content, theme);
-
   // Cases when hoverEffect is true:
   // 1. There is no hover font color but a hover background color,
   // when hovering, the hover font color becomes white when the hover background color is a dark color
@@ -69,17 +67,13 @@ export function getBodyStyle(layout, theme) {
   const hoverBackgroundColor = unsetHoverFontandBackgroundColor
     ? STYLING_DEFAULTS.HOVER_BACKGROUND
     : unsetHoverBackgroundColor
-    ? STYLING_DEFAULTS.HOVER_TRANSPARENT
+    ? ''
     : getColor(content.hoverColor, STYLING_DEFAULTS.HOVER_BACKGROUND, theme);
   const hoverFontColor = unsetHoverFontandBackgroundColor
-    ? baseStyling.fontColor
-    : getColor(
-        content.hoverFontColor,
-        isDarkColor(hoverBackgroundColor) ? STYLING_DEFAULTS.WHITE : baseStyling.fontColor,
-        theme
-      );
+    ? ''
+    : getColor(content.hoverFontColor, isDarkColor(hoverBackgroundColor) ? STYLING_DEFAULTS.WHITE : '', theme);
 
-  return { ...baseStyling, hoverBackgroundColor, hoverFontColor, selectedCellClass: '' };
+  return { ...getBaseStyling(content, theme), hoverBackgroundColor, hoverFontColor, selectedCellClass: '' };
 }
 
 export function getColumnStyle(styling, qAttrExps, stylingInfo) {
