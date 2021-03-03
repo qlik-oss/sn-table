@@ -108,23 +108,5 @@ export function getSelectionColors(cell, selState) {
 }
 
 export function getSelectionStyle(styling, cell, selState) {
-  const { colIdx, rows } = selState;
-  let selectionStyle = {};
-
-  if (rows.length) {
-    if (colIdx !== cell.colIdx) {
-      selectionStyle = SELECTION_STYLING.EXCLUDED;
-    } else {
-      selectionStyle = SELECTION_STYLING.POSSIBLE;
-
-      for (let i = 0; i < rows.length; i++) {
-        if (rows[i].qElemNumber === cell.qElemNumber) {
-          selectionStyle = SELECTION_STYLING.SELECTED;
-          break;
-        }
-      }
-    }
-  }
-
-  return { ...styling, ...selectionStyle };
+  return { ...styling, ...getSelectionColors(cell, selState) };
 }
