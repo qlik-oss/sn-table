@@ -21,8 +21,12 @@ export default function withStyling(CellComponent) {
   const HOC = (props) => {
     const { styling } = props;
     const classes = useStyles(styling);
-
-    return <CellComponent {...props} className={`${classes.cellStyling} ${classes.cellBackground}`} />;
+    return (
+      <CellComponent
+        {...props}
+        className={`${classes.cellStyling} ${classes.cellBackground} ${styling.selectedCellClass}`}
+      />
+    );
   };
 
   HOC.propTypes = {

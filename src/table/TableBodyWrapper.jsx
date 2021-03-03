@@ -10,7 +10,7 @@ import { getBodyStyle } from './styling-utils';
 const useStyles = makeStyles({
   hoverTableRow: (props) => ({
     '&&:hover': {
-      '& td': {
+      '& td:not(.selected)': {
         backgroundColor: props.hoverBackgroundColor,
         color: props.hoverFontColor,
       },

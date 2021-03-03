@@ -7,7 +7,7 @@ export const STYLING_DEFAULTS = {
   HOVER_TRANSPARENT: 'rgba(0, 0, 0, 0)',
   SELECTED_BACKGROUND: '#009845',
   EXCLUDED_BACKGROUND:
-    'repeating-linear-gradient(-45deg, rgba(20,20,20,0.04), rgba(20,20,20,0.04) 2px, rgba(20,20,20,0.1) 3px, rgba(20,20,20,0.04) 4px, rgba(20,20,20,0.04) 6px)',
+    'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px)',
   WHITE: '#fff',
   PADDING: '7px 14px',
   HEIGHT: 'auto',
@@ -79,7 +79,7 @@ export function getBodyStyle(layout, theme) {
         theme
       );
 
-  return { ...baseStyling, hoverBackgroundColor, hoverFontColor };
+  return { ...baseStyling, hoverBackgroundColor, hoverFontColor, selectedCellClass: '' };
 }
 
 export function getColumnStyle(styling, qAttrExps, stylingInfo) {
@@ -113,9 +113,12 @@ export function getSelectionColors(cell, selState) {
 
 export function getSelectionStyle(styling, cell, selState) {
   const selectionColors = getSelectionColors(cell, selState);
+  // Setting a specific class for selected cells to override hover effect
+  const selectedCellClass = selectionColors.backgroundColor === STYLING_DEFAULTS.SELECTED_BACKGROUND ? 'selected' : '';
 
   return {
     ...styling,
+    selectedCellClass,
     fontColor: selectionColors.fontColor || styling.fontColor,
     background: selectionColors.background || styling.background,
     backgroundColor: selectionColors.backgroundColor || styling.backgroundColor,

@@ -174,6 +174,7 @@ describe('styling-utils', () => {
         padding: '11px 22px',
         hoverBackgroundColor: '#f4f4f4',
         hoverFontColor: resolvedColor,
+        selectedCellClass: '',
       });
     });
     // Only checking hover properties from here on
