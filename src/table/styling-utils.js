@@ -4,7 +4,7 @@ export const STYLING_DEFAULTS = {
   FONT_SIZE: '14px',
   FONT_COLOR: '#404040',
   HOVER_BACKGROUND: '#f4f4f4',
-  HOVER_TRANSPARENT: 'rgba(0, 0, 0, 0)',
+  SELECTED_CLASS: 'selected',
   SELECTED_BACKGROUND: '#009845',
   EXCLUDED_BACKGROUND:
     'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px)',
@@ -22,6 +22,8 @@ export const SELECTION_STYLING = {
   SELECTED: {
     fontColor: STYLING_DEFAULTS.WHITE,
     backgroundColor: STYLING_DEFAULTS.SELECTED_BACKGROUND,
+    // Setting a specific class for selected cells styling to override hover effect
+    selectedCellClass: STYLING_DEFAULTS.SELECTED_CLASS,
   },
   POSSIBLE: {
     fontColor: STYLING_DEFAULTS.FONT_COLOR,
@@ -106,15 +108,23 @@ export function getSelectionColors(cell, selState) {
 }
 
 export function getSelectionStyle(styling, cell, selState) {
-  const selectionColors = getSelectionColors(cell, selState);
-  // Setting a specific class for selected cells to override hover effect
-  const selectedCellClass = selectionColors.backgroundColor === STYLING_DEFAULTS.SELECTED_BACKGROUND ? 'selected' : '';
+  const { colIdx, rows } = selState;
+  let selectionStyle = {};
 
-  return {
-    ...styling,
-    selectedCellClass,
-    fontColor: selectionColors.fontColor || styling.fontColor,
-    background: selectionColors.background || styling.background,
-    backgroundColor: selectionColors.backgroundColor || styling.backgroundColor,
-  };
+  if (rows.length) {
+    if (colIdx !== cell.colIdx) {
+      selectionStyle = SELECTION_STYLING.EXCLUDED;
+    } else {
+      selectionStyle = SELECTION_STYLING.POSSIBLE;
+
+      for (let i = 0; i < rows.length; i++) {
+        if (rows[i].qElemNumber === cell.qElemNumber) {
+          selectionStyle = SELECTION_STYLING.SELECTED;
+          break;
+        }
+      }
+    }
+  }
+
+  return { ...styling, ...selectionStyle };
 }

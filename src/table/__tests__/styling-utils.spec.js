@@ -5,7 +5,7 @@ import {
   getHeadStyle,
   getBodyStyle,
   getColumnStyle,
-  getSelectionColors,
+  getSelectionStyle,
 } from '../styling-utils';
 
 describe('styling-utils', () => {
@@ -253,43 +253,48 @@ describe('styling-utils', () => {
     });
   });
 
-  describe('getSelectionColors', () => {
+  describe('getSelectionStyle', () => {
+    let styling;
     let selState;
     let cell;
 
     beforeEach(() => {
+      styling = {
+        fontColor: 'someFontColor',
+        backgroundColor: 'someBgColor',
+      };
       selState = { colIdx: 1, rows: [{ qElemNumber: 1, rowIdx: 1 }] };
       cell = { qElemNumber: 1, colIdx: 1 };
     });
 
-    it('should return selected when selected', () => {
-      const selectionClass = getSelectionColors(cell, selState);
-      expect(selectionClass).to.equal(SELECTION_STYLING.SELECTED);
+    it('should return styling updaded with selected styling', () => {
+      const selectionClass = getSelectionStyle(styling, cell, selState);
+      expect(selectionClass).to.eql({ ...styling, ...SELECTION_STYLING.SELECTED });
     });
-    it('should return excluded when other column', () => {
+    it('should return styling updaded with excluded styling when other column', () => {
       cell.qElemNumber = 2;
       cell.colIdx = 2;
 
-      const selectionClass = getSelectionColors(cell, selState);
-      expect(selectionClass).to.equal(SELECTION_STYLING.EXCLUDED);
+      const selectionClass = getSelectionStyle(styling, cell, selState);
+      expect(selectionClass).to.eql({ ...styling, ...SELECTION_STYLING.EXCLUDED });
     });
-    it('should return excluded when other column that happens to have the same qElemNumber', () => {
+    it('should return styling updaded with excluded styling when other column that happens to have the same qElemNumber', () => {
       cell.colIdx = 2;
 
-      const selectionClass = getSelectionColors(cell, selState);
-      expect(selectionClass).to.equal(SELECTION_STYLING.EXCLUDED);
+      const selectionClass = getSelectionStyle(styling, cell, selState);
+      expect(selectionClass).to.eql({ ...styling, ...SELECTION_STYLING.EXCLUDED });
     });
-    it('should return possible when active and available to select', () => {
+    it('should return styling updaded with possible styling when active and available to select', () => {
       cell.qElemNumber = 2;
 
-      const selectionClass = getSelectionColors(cell, selState);
-      expect(selectionClass).to.equal(SELECTION_STYLING.POSSIBLE);
+      const selectionClass = getSelectionStyle(styling, cell, selState);
+      expect(selectionClass).to.eql({ ...styling, ...SELECTION_STYLING.POSSIBLE });
     });
-    it('should return empty object when no active selections', () => {
+    it('should return unchanged styling when no selections', () => {
       selState = { rows: [] };
 
-      const selectionClass = getSelectionColors(cell, selState);
-      expect(selectionClass).to.eql({});
+      const selectionClass = getSelectionStyle(styling, cell, selState);
+      expect(selectionClass).to.eql(styling);
     });
   });
 });
