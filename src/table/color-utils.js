@@ -1,5 +1,39 @@
 /* eslint-disable no-cond-assign */
-export default function isDarkColor(color) {
+import cssColors from './css-colors';
+
+export function resolveExpression(input) {
+  // rgb
+  let matches = /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i.exec(input);
+  if (matches) {
+    return `rgb(${matches[1]},${matches[2]},${matches[3]})`;
+  }
+  // rgba
+  matches = /^rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d(\.\d+)?)\s*\)$/i.exec(input);
+  if (matches) {
+    return `rgba(${matches[1]},${matches[2]},${matches[3]},${matches[4]})`;
+  }
+  // argb
+  matches = /^argb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i.exec(input);
+  if (matches) {
+    const a = Math.round(matches[1] / 2.55) / 100;
+    return `rgba(${matches[2]},${matches[3]},${matches[4]},${a})`;
+  }
+  // hex
+  matches = /^#([A-f0-9]{2})([A-f0-9]{2})([A-f0-9]{2})$/i.exec(input);
+  if (matches) {
+    return input;
+  }
+  // css color
+  const color = input && cssColors[input.toLowerCase()];
+  if (color) {
+    const a = color.a !== undefined ? color.a : 1;
+    return `rgba(${color.r},${color.g},${color.b},${a})`;
+  }
+  // invalid
+  return 'none';
+};
+
+export function isDarkColor(color) {
   let r;
   let g;
   let b;
