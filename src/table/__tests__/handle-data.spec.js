@@ -11,11 +11,11 @@ describe('handle-data', () => {
 
   describe('getColumnInfo', () => {
     colIdx = 1;
-    const getExpectedInfo = (colIdx, isDim) => ({
+    const getExpectedInfo = (colIx, isDim) => ({
       isDim,
       width: 200,
-      label: `title-${colIdx}`,
-      id: `id-${colIdx}`,
+      label: `title-${colIx}`,
+      id: `id-${colIx}`,
       align: isDim ? 'left' : 'right',
       stylingInfo: [],
     });

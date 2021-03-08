@@ -31,7 +31,7 @@ export default async function manageData(model, layout, pageInfo) {
   ]);
   const matrix = dataPages[0].qMatrix;
 
-  // using filter to remove hidden hidden columns
+  // using filter to remove hidden columns (represented with false)
   const columns = columnorder.map((c) => getColumnInfo(layout, c)).filter(Boolean);
   const rows = matrix.map((r, rowIdx) => {
     const row = { key: rowIdx };
