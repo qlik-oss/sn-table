@@ -5,24 +5,18 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import { addSelectionListeners, reducer } from './selections-utils';
 import getCellRenderer from './cells/renderer';
-import { STYLING_DEFAULTS, getBodyStyle } from './styling-utils';
+import { getBodyStyle } from './styling-utils';
 
 const useStyles = makeStyles({
-  tableCell: (props) => ({
-    fontSize: props.fontSize,
-    color: props.fontColor,
-    padding: props.padding,
-    height: STYLING_DEFAULTS.HEIGHT,
-    lineHeight: STYLING_DEFAULTS.BODY_LINE_HEIGHT,
-  }),
-  hoverTableRow: (props) => ({
+  hoverTableRow: {
     '&&:hover': {
-      backgroundColor: props.hoverBackgroundColor,
-      '& td': {
-        color: props.hoverFontColor,
+      backgroundColor: 'rgba(0, 0, 0, 0)',
+      '& td:not(.selected)': {
+        backgroundColor: ({ hoverBackgroundColor }) => hoverBackgroundColor,
+        color: ({ hoverFontColor }) => hoverFontColor,
       },
     },
-  }),
+  },
 });
 
 const TableBodyWrapper = ({ tableData, constraints, selectionsAPI, layout, theme }) => {
@@ -30,7 +24,8 @@ const TableBodyWrapper = ({ tableData, constraints, selectionsAPI, layout, theme
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const styling = useMemo(() => getBodyStyle(layout, theme), [layout, theme]);
   const classes = useStyles(styling);
-  const getColumnRenderers = (selectionsEnabled) => tableData.columns.map((c) => getCellRenderer(c, selectionsEnabled));
+  const getColumnRenderers = (selectionsEnabled) =>
+    tableData.columns.map((c) => getCellRenderer(!!c.stylingInfo.length, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(getColumnRenderers(false));
   const [selState, selDispatch] = useReducer(reducer, {
     api: selectionsAPI,
@@ -66,12 +61,12 @@ const TableBodyWrapper = ({ tableData, constraints, selectionsAPI, layout, theme
             return (
               CellRenderer && (
                 <CellRenderer
-                  className={classes.tableCell}
                   cell={cell}
                   column={column}
                   value={value}
                   key={column.id}
                   align={column.align}
+                  styling={styling}
                   selState={selState}
                   selDispatch={selDispatch}
                 >

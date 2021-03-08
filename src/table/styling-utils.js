@@ -4,15 +4,31 @@ export const STYLING_DEFAULTS = {
   FONT_SIZE: '14px',
   FONT_COLOR: '#404040',
   HOVER_BACKGROUND: '#f4f4f4',
-  HOVER_TRANSPARENT: 'rgba(0, 0, 0, 0)',
+  SELECTED_CLASS: 'selected',
   SELECTED_BACKGROUND: '#009845',
   EXCLUDED_BACKGROUND:
-    'repeating-linear-gradient(-45deg, rgba(0,0,0,0.02), rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.02) 4px, rgba(0,0,0,0.02) 6px)',
+    'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px)',
   WHITE: '#fff',
   PADDING: '7px 14px',
   HEIGHT: 'auto',
   HEAD_LINE_HEIGHT: '150%',
   BODY_LINE_HEIGHT: '130%',
+};
+
+export const SELECTION_STYLING = {
+  EXCLUDED: {
+    background: STYLING_DEFAULTS.EXCLUDED_BACKGROUND,
+  },
+  SELECTED: {
+    fontColor: STYLING_DEFAULTS.WHITE,
+    backgroundColor: STYLING_DEFAULTS.SELECTED_BACKGROUND,
+    // Setting a specific class for selected cells styling to override hover effect
+    selectedCellClass: STYLING_DEFAULTS.SELECTED_CLASS,
+  },
+  POSSIBLE: {
+    fontColor: STYLING_DEFAULTS.FONT_COLOR,
+    backgroundColor: STYLING_DEFAULTS.WHITE,
+  },
 };
 
 export function getColor(color = {}, defaultColor, theme) {
@@ -38,8 +54,6 @@ export function getBodyStyle(layout, theme) {
   const content = layout.components?.[0]?.content;
   if (!content) return { padding: STYLING_DEFAULTS.PADDING };
 
-  const baseStyling = getBaseStyling(content, theme);
-
   // Cases when hoverEffect is true:
   // 1. There is no hover font color but a hover background color,
   // when hovering, the hover font color becomes white when the hover background color is a dark color
@@ -55,15 +69,44 @@ export function getBodyStyle(layout, theme) {
   const hoverBackgroundColor = unsetHoverFontandBackgroundColor
     ? STYLING_DEFAULTS.HOVER_BACKGROUND
     : unsetHoverBackgroundColor
-    ? STYLING_DEFAULTS.HOVER_TRANSPARENT
+    ? ''
     : getColor(content.hoverColor, STYLING_DEFAULTS.HOVER_BACKGROUND, theme);
   const hoverFontColor = unsetHoverFontandBackgroundColor
-    ? baseStyling.fontColor
-    : getColor(
-        content.hoverFontColor,
-        isDarkColor(hoverBackgroundColor) ? STYLING_DEFAULTS.WHITE : baseStyling.fontColor,
-        theme
-      );
+    ? ''
+    : getColor(content.hoverFontColor, isDarkColor(hoverBackgroundColor) ? STYLING_DEFAULTS.WHITE : '', theme);
 
-  return { ...baseStyling, hoverBackgroundColor, hoverFontColor };
+  return { ...getBaseStyling(content, theme), hoverBackgroundColor, hoverFontColor, selectedCellClass: '' };
+}
+
+export function getColumnStyle(styling, qAttrExps, stylingInfo) {
+  const columnColors = {};
+  qAttrExps?.qValues.forEach((val, i) => {
+    columnColors[stylingInfo[i]] = val.qText;
+  });
+
+  return {
+    ...styling,
+    fontColor: columnColors.cellForegroundColor || styling.fontColor,
+    backgroundColor: columnColors.cellBackgroundColor,
+  };
+}
+
+export function getSelectionColors(cell, selState) {
+  const { colIdx, rows } = selState;
+
+  if (rows.length) {
+    if (colIdx !== cell.colIdx) return SELECTION_STYLING.EXCLUDED;
+
+    for (let i = 0; i < rows.length; i++) {
+      if (rows[i].qElemNumber === cell.qElemNumber) return SELECTION_STYLING.SELECTED;
+    }
+
+    return SELECTION_STYLING.POSSIBLE;
+  }
+
+  return {};
+}
+
+export function getSelectionStyle(styling, cell, selState) {
+  return { ...styling, ...getSelectionColors(cell, selState) };
 }
