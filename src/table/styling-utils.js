@@ -1,4 +1,4 @@
-import isDarkColor from './color-utils';
+import { resolveExpression, isDarkColor } from './color-utils';
 
 export const STYLING_DEFAULTS = {
   FONT_SIZE: '14px',
@@ -35,6 +35,9 @@ export function getColor(color = {}, defaultColor, theme) {
   const resolvedColor = theme.getColorPickerColor(color);
   return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
 }
+
+export const getAutoFontColor = (backgroundColor) =>
+  isDarkColor(backgroundColor) ? STYLING_DEFAULTS.WHITE : STYLING_DEFAULTS.FONT_COLOR;
 
 export const getBaseStyling = (styleObj, theme) => ({
   fontColor: getColor(styleObj.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme),
@@ -73,7 +76,7 @@ export function getBodyStyle(layout, theme) {
     : getColor(content.hoverColor, STYLING_DEFAULTS.HOVER_BACKGROUND, theme);
   const hoverFontColor = unsetHoverFontandBackgroundColor
     ? ''
-    : getColor(content.hoverFontColor, isDarkColor(hoverBackgroundColor) ? STYLING_DEFAULTS.WHITE : '', theme);
+    : getColor(content.hoverFontColor, getAutoFontColor(hoverBackgroundColor), theme);
 
   return { ...getBaseStyling(content, theme), hoverBackgroundColor, hoverFontColor, selectedCellClass: '' };
 }
@@ -81,8 +84,11 @@ export function getBodyStyle(layout, theme) {
 export function getColumnStyle(styling, qAttrExps, stylingInfo) {
   const columnColors = {};
   qAttrExps?.qValues.forEach((val, i) => {
-    columnColors[stylingInfo[i]] = val.qText;
+    columnColors[stylingInfo[i]] = resolveExpression(val.qText);
   });
+
+  if (columnColors.cellBackgroundColor && !columnColors.cellForegroundColor)
+    columnColors.cellForegroundColor = getAutoFontColor(columnColors.cellBackgroundColor);
 
   return {
     ...styling,
