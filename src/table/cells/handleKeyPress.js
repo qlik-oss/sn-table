@@ -1,4 +1,4 @@
-const moveFocus = (tableRows, nextRow, nextCol) => {
+const moveToNextFocus = (tableRows, nextRow, nextCol) => {
   const nextCell = tableRows[nextRow].getElementsByClassName('sn-table-cell')[nextCol];
   nextCell.focus();
   nextCell.setAttribute('tabIndex', '0');
@@ -10,16 +10,16 @@ const arrowKeysNavigation = (evt, rowAndColumn, rowIndex, colIndex) => {
 
   switch (evt.key) {
     case 'ArrowDown':
-      if (rowIndex + 1 < rowAndColumn.tableRowSize) nextRow = ++nextRow;
+      if (rowIndex + 1 < rowAndColumn.tableRowSize) nextRow++;
       break;
     case 'ArrowUp':
-      if (rowIndex > 0) nextRow = --nextRow;
+      if (rowIndex > 0) --nextRow;
       break;
     case 'ArrowRight':
-      if (colIndex < rowAndColumn.tableColumnSize - 1) nextCol = ++nextCol;
+      if (colIndex < rowAndColumn.tableColumnSize - 1) nextCol++;
       break;
     case 'ArrowLeft':
-      if (colIndex > 0) nextCol = --nextCol;
+      if (colIndex > 0) --nextCol;
       break;
     default:
   }
@@ -31,7 +31,7 @@ const arrowKeysNavigation = (evt, rowAndColumn, rowIndex, colIndex) => {
   };
 };
 
-const tableRowAndColumn = (rootElement) => {
+const getRowAndColumn = (rootElement) => {
   const tableRows = rootElement.getElementsByClassName('sn-table-row');
   const tableRowSize = tableRows.length;
 
@@ -41,7 +41,7 @@ const tableRowAndColumn = (rootElement) => {
   return { tableRows, tableRowSize, tableColumnSize };
 };
 
-const removeFocus = (evt) => {
+const removeCurrentFocus = (evt) => {
   evt.target.blur();
   evt.target.setAttribute('tabIndex', '-1');
 };
@@ -59,10 +59,10 @@ const handleKeyPress = (evt, rootElement, rowIndex, colIndex) => {
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      removeFocus(evt);
-      const rowAndColumn = tableRowAndColumn(rootElement);
+      removeCurrentFocus(evt);
+      const rowAndColumn = getRowAndColumn(rootElement);
       const { tableRows, nextRow, nextCol } = arrowKeysNavigation(evt, rowAndColumn, rowIndex, colIndex);
-      moveFocus(tableRows, nextRow, nextCol);
+      moveToNextFocus(tableRows, nextRow, nextCol);
       break;
     }
     // TODO handle selections, search?, sorting...
