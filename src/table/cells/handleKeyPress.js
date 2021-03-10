@@ -1,44 +1,43 @@
-const moveToNextFocus = (tableRows, nextRow, nextCol) => {
-  const nextCell = tableRows[nextRow].getElementsByClassName('sn-table-cell')[nextCol];
+const moveToNextFocus = (rowElements, nextRow, nextCol) => {
+  const nextCell = rowElements[nextRow].getElementsByClassName('sn-table-cell')[nextCol];
   nextCell.focus();
   nextCell.setAttribute('tabIndex', '0');
 };
 
-const arrowKeysNavigation = (evt, rowAndColumn, rowIndex, colIndex) => {
+const arrowKeysNavigation = (evt, rowAndColumnCount, rowIndex, colIndex) => {
   let nextRow = rowIndex;
   let nextCol = colIndex;
 
   switch (evt.key) {
     case 'ArrowDown':
-      if (rowIndex + 1 < rowAndColumn.tableRowSize) nextRow++;
+      rowIndex + 1 < rowAndColumnCount.rowCount && nextRow++;
       break;
     case 'ArrowUp':
-      if (rowIndex > 0) --nextRow;
+      rowIndex > 0 && --nextRow;
       break;
     case 'ArrowRight':
-      if (colIndex < rowAndColumn.tableColumnSize - 1) nextCol++;
+      colIndex < rowAndColumnCount.columnCount - 1 && nextCol++;
       break;
     case 'ArrowLeft':
-      if (colIndex > 0) --nextCol;
+      colIndex > 0 && --nextCol;
       break;
     default:
   }
 
   return {
-    tableRows: rowAndColumn.tableRows,
     nextRow,
     nextCol,
   };
 };
 
-const getRowAndColumn = (rootElement) => {
-  const tableRows = rootElement.getElementsByClassName('sn-table-row');
-  const tableRowSize = tableRows.length;
+const getRowAndColumnCount = (rootElement) => {
+  const rowElements = rootElement.getElementsByClassName('sn-table-row');
+  const rowCount = rowElements.length;
 
-  const headCells = rootElement.getElementsByClassName('sn-table-head-cell');
-  const tableColumnSize = headCells.length;
+  const headCellElements = rootElement.getElementsByClassName('sn-table-head-cell');
+  const columnCount = headCellElements.length;
 
-  return { tableRows, tableRowSize, tableColumnSize };
+  return { rowElements, rowCount, columnCount };
 };
 
 const removeCurrentFocus = (evt) => {
@@ -60,9 +59,9 @@ const handleKeyPress = (evt, rootElement, rowIndex, colIndex) => {
     case 'ArrowRight':
     case 'ArrowLeft': {
       removeCurrentFocus(evt);
-      const rowAndColumn = getRowAndColumn(rootElement);
-      const { tableRows, nextRow, nextCol } = arrowKeysNavigation(evt, rowAndColumn, rowIndex, colIndex);
-      moveToNextFocus(tableRows, nextRow, nextCol);
+      const rowAndColumnCount = getRowAndColumnCount(rootElement);
+      const { nextRow, nextCol } = arrowKeysNavigation(evt, rowAndColumnCount, rowIndex, colIndex);
+      moveToNextFocus(rowAndColumnCount.rowElements, nextRow, nextCol);
       break;
     }
     // TODO handle selections, search?, sorting...

@@ -34,6 +34,13 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
     colIdx: -1,
     isEnabled: !!selectionsAPI && !constraints.active,
   });
+  const handleMouseUp = (evt, cell) => {
+    setTimeout(() => {
+      const rowElements = rootElement.getElementsByClassName('sn-table-row');
+      const currentCell = rowElements[cell.rowIdx + 1].getElementsByClassName('sn-table-cell')[cell.colIdx];
+      currentCell.focus();
+    }, 200);
+  };
 
   useEffect(() => {
     const selectionsEnabled = !!selectionsAPI && !constraints.active;
@@ -72,6 +79,7 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
                   selDispatch={selDispatch}
                   tabIndex={-1}
                   onKeyDown={(evt) => handleKeyPress(evt, rootElement, rowIndex + 1, columnIndex)}
+                  onMouseUp={(evt) => handleMouseUp(evt, cell)}
                 >
                   {value}
                 </CellRenderer>
