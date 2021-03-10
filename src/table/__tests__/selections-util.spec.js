@@ -1,4 +1,4 @@
-import { addSelectionListeners, getSelectionClass, getSelectedRows, reducer, selectCell } from '../selections-utils';
+import { addSelectionListeners, getSelectedRows, reducer, selectCell } from '../selections-utils';
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {
@@ -43,46 +43,6 @@ describe('selections-utils', () => {
         cb();
         expect(selDispatch).to.have.been.calledWith({ type: 'reset' });
       });
-    });
-  });
-
-  describe('getSelectionClass', () => {
-    let selState;
-    let cell;
-
-    beforeEach(() => {
-      selState = { colIdx: 1, rows: [{ qElemNumber: 1, rowIdx: 1 }] };
-      cell = { qElemNumber: 1, colIdx: 1 };
-    });
-
-    it('should return selected when selected', () => {
-      const selectionClass = getSelectionClass(cell, selState);
-      expect(selectionClass).to.equal('selected');
-    });
-    it('should return excluded when other column', () => {
-      cell.qElemNumber = 2;
-      cell.colIdx = 2;
-
-      const selectionClass = getSelectionClass(cell, selState);
-      expect(selectionClass).to.equal('excluded');
-    });
-    it('should return excluded when other column that happens to have the same qElemNumber', () => {
-      cell.colIdx = 2;
-
-      const selectionClass = getSelectionClass(cell, selState);
-      expect(selectionClass).to.equal('excluded');
-    });
-    it('should return possible when active and available to select', () => {
-      cell.qElemNumber = 2;
-
-      const selectionClass = getSelectionClass(cell, selState);
-      expect(selectionClass).to.equal('possible');
-    });
-    it('should return possible when no active selections', () => {
-      selState = { rows: [] };
-
-      const selectionClass = getSelectionClass(cell, selState);
-      expect(selectionClass).to.equal('possible');
     });
   });
 
