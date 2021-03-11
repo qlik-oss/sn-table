@@ -1,6 +1,6 @@
 import './rtl-setup';
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
@@ -10,6 +10,7 @@ import manageData from '../handle-data';
 import TableBodyWrapper from '../TableBodyWrapper';
 import * as selectionsUtils from '../selections-utils';
 import * as getCellRenderer from '../cells/renderer';
+import * as handleKeyPress from '../cells/handleKeyPress';
 
 describe('<TableBodyWrapper />', async () => {
   const sandbox = sinon.createSandbox();
@@ -61,5 +62,22 @@ describe('<TableBodyWrapper />', async () => {
     expect(queryByText(tableData.rows[0]['id-1'].qText)).to.be.visible;
     expect(queryByText(tableData.rows[1]['id-0'].qText)).to.be.visible;
     expect(queryByText(tableData.rows[1]['id-1'].qText)).to.be.visible;
+  });
+
+  it('should call handleKeyPress on keyDown', () => {
+    sandbox.replace(handleKeyPress, 'default', sinon.spy());
+
+    const { queryByText } = render(
+      <TableBodyWrapper
+        tableData={tableData}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+        theme={theme}
+        layout={layout}
+      />
+    );
+    fireEvent.keyDown(queryByText(tableData.rows[0]['id-0'].qText));
+
+    expect(handleKeyPress.default).to.have.been.calledOnce;
   });
 });

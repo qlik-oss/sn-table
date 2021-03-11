@@ -1,10 +1,10 @@
-const moveToNextFocus = (rowElements, nextRow, nextCol) => {
+export const moveToNextFocus = (rowElements, nextRow, nextCol) => {
   const nextCell = rowElements[nextRow].getElementsByClassName('sn-table-cell')[nextCol];
   nextCell.focus();
   nextCell.setAttribute('tabIndex', '0');
 };
 
-const arrowKeysNavigation = (evt, rowAndColumnCount, rowIndex, colIndex) => {
+export const arrowKeysNavigation = (evt, rowAndColumnCount, rowIndex, colIndex) => {
   let nextRow = rowIndex;
   let nextCol = colIndex;
 
@@ -30,7 +30,8 @@ const arrowKeysNavigation = (evt, rowAndColumnCount, rowIndex, colIndex) => {
   };
 };
 
-const getRowAndColumnCount = (rootElement) => {
+export const getRowAndColumnCount = (rootElement) => {
+  window.console.log(rootElement, 'rootElement');
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
   const rowCount = rowElements.length;
 
@@ -40,12 +41,12 @@ const getRowAndColumnCount = (rootElement) => {
   return { rowElements, rowCount, columnCount };
 };
 
-const removeCurrentFocus = (evt) => {
+export const removeCurrentFocus = (evt) => {
   evt.target.blur();
   evt.target.setAttribute('tabIndex', '-1');
 };
 
-const preventDefaultBehavior = (evt) => {
+export const preventDefaultBehavior = (evt) => {
   evt.stopPropagation();
   evt.preventDefault();
 };
