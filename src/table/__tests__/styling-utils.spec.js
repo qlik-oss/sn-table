@@ -1,4 +1,12 @@
-import { getColor, getBaseStyling, getHeadStyle, getBodyStyle } from '../styling-utils';
+import {
+  SELECTION_STYLING,
+  getColor,
+  getBaseStyling,
+  getHeadStyle,
+  getBodyStyle,
+  getColumnStyle,
+  getSelectionColors,
+} from '../styling-utils';
 
 describe('styling-utils', () => {
   let resolvedColor;
@@ -165,7 +173,8 @@ describe('styling-utils', () => {
         fontColor: resolvedColor,
         padding: '11px 22px',
         hoverBackgroundColor: '#f4f4f4',
-        hoverFontColor: resolvedColor,
+        hoverFontColor: '',
+        selectedCellClass: '',
       });
     });
     // Only checking hover properties from here on
@@ -173,7 +182,7 @@ describe('styling-utils', () => {
       layout.components[0].content.hoverFontColor.index = 1;
 
       const resultStyling = getBodyStyle(layout, theme);
-      expect(resultStyling.hoverBackgroundColor).to.equal('rgba(0, 0, 0, 0)');
+      expect(resultStyling.hoverBackgroundColor).to.equal('');
       expect(resultStyling.hoverFontColor).to.equal(resolvedColor);
     });
     it('should return styling with dark hoverBackgroundColor and white hoverFontColor', () => {
@@ -183,12 +192,12 @@ describe('styling-utils', () => {
       expect(resultStyling.hoverBackgroundColor).to.equal(resolvedColor);
       expect(resultStyling.hoverFontColor).to.equal('#fff');
     });
-    it('should return styling with light hoverBackgroundColor and fontColor as hoverFontColor', () => {
+    it('should return styling with light hoverBackgroundColor and no hoverFontColor', () => {
       layout.components[0].content.hoverColor.index = 2;
 
       const resultStyling = getBodyStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).to.equal(altResolvedColor);
-      expect(resultStyling.hoverFontColor).to.equal(resolvedColor);
+      expect(resultStyling.hoverFontColor).to.equal('');
     });
     it('should return styling with set hoverBackgroundColor and hoverFontColor', () => {
       layout.components[0].content.hoverColor.index = 1;
@@ -197,6 +206,90 @@ describe('styling-utils', () => {
       const resultStyling = getBodyStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).to.equal(resolvedColor);
       expect(resultStyling.hoverFontColor).to.equal(altResolvedColor);
+    });
+  });
+
+  describe('getColumnStyle', () => {
+    let styling;
+    let qAttrExps;
+    let stylingInfo;
+
+    beforeEach(() => {
+      styling = { fontColor: 'someFontColor' };
+      qAttrExps = {
+        qValues: [{ qText: 'someColumnBackground' }, { qText: 'someColumnForeground' }],
+      };
+      stylingInfo = ['cellBackgroundColor', 'cellForegroundColor'];
+    });
+
+    it('should return styling with both new fontColor and backgroundColor when selected', () => {
+      const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
+      expect(columnStyle.backgroundColor).to.equal('someColumnBackground');
+      expect(columnStyle.fontColor).to.equal('someColumnForeground');
+    });
+    it('should return styling with new fontColor', () => {
+      qAttrExps.qValues = [qAttrExps.qValues[1]];
+      stylingInfo = [stylingInfo[1]];
+
+      const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
+      expect(columnStyle.backgroundColor).to.equal(undefined);
+      expect(columnStyle.fontColor).to.equal('someColumnForeground');
+    });
+    it('should return styling with backgroundColoe', () => {
+      qAttrExps.qValues = [qAttrExps.qValues[0]];
+      stylingInfo = [stylingInfo[0]];
+
+      const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
+      expect(columnStyle.backgroundColor).to.equal('someColumnBackground');
+      expect(columnStyle.fontColor).to.equal('someFontColor');
+    });
+    it('should return styling unchanged', () => {
+      qAttrExps = undefined;
+      stylingInfo = [];
+
+      const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
+      expect(columnStyle.backgroundColor).to.equal(undefined);
+      expect(columnStyle.fontColor).to.equal('someFontColor');
+    });
+  });
+
+  describe('getSelectionStyle', () => {
+    let selState;
+    let cell;
+
+    beforeEach(() => {
+      selState = { colIdx: 1, rows: [{ qElemNumber: 1, rowIdx: 1 }] };
+      cell = { qElemNumber: 1, colIdx: 1 };
+    });
+
+    it('should return selected when selected styling', () => {
+      const selectionClass = getSelectionColors(cell, selState);
+      expect(selectionClass).to.equal(SELECTION_STYLING.SELECTED);
+    });
+    it('should return excluded styling when other column', () => {
+      cell.qElemNumber = 2;
+      cell.colIdx = 2;
+
+      const selectionClass = getSelectionColors(cell, selState);
+      expect(selectionClass).to.equal(SELECTION_STYLING.EXCLUDED);
+    });
+    it('should return excluded styling when other column that happens to have the same qElemNumber', () => {
+      cell.colIdx = 2;
+
+      const selectionClass = getSelectionColors(cell, selState);
+      expect(selectionClass).to.equal(SELECTION_STYLING.EXCLUDED);
+    });
+    it('should return possible styling when active and available to select', () => {
+      cell.qElemNumber = 2;
+
+      const selectionClass = getSelectionColors(cell, selState);
+      expect(selectionClass).to.equal(SELECTION_STYLING.POSSIBLE);
+    });
+    it('should return empty object when no active selections', () => {
+      selState = { rows: [] };
+
+      const selectionClass = getSelectionColors(cell, selState);
+      expect(selectionClass).to.eql({});
     });
   });
 });
