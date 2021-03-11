@@ -3,30 +3,29 @@ import { generateDataPages, generateLayout } from './generate-test-data';
 
 describe('handle-data', () => {
   let layout;
+  let colIdx;
 
   beforeEach(() => {
     layout = generateLayout(2, 2, [1, 2, 0, 3]);
   });
 
   describe('getColumnInfo', () => {
-    const getExpectedInfo = (colIdx, isDim) => ({
+    colIdx = 1;
+    const getExpectedInfo = (colIx, isDim) => ({
       isDim,
       width: 200,
-      label: `title-${colIdx}`,
-      id: `id-${colIdx}`,
+      label: `title-${colIx}`,
+      id: `id-${colIx}`,
       align: isDim ? 'left' : 'right',
       stylingInfo: [],
     });
 
     it('should return column info for dimension', () => {
-      const colIdx = 1;
-
       const columnInfo = getColumnInfo(layout, colIdx);
       expect(columnInfo).to.eql(getExpectedInfo(colIdx, true));
     });
 
     it('should return column info for dimension with stylingInfo', () => {
-      const colIdx = 1;
       layout.qHyperCube.qDimensionInfo[colIdx].qAttrExprInfo = [{ id: 'someId' }];
       const expected = getExpectedInfo(colIdx, true);
       expected.stylingInfo = ['someId'];
@@ -35,8 +34,15 @@ describe('handle-data', () => {
       expect(columnInfo).to.eql(expected);
     });
 
+    it('should return false for hiddenc column', () => {
+      layout.qHyperCube.qDimensionInfo[colIdx].qError = { qErrorCode: 7005 };
+
+      const columnInfo = getColumnInfo(layout, colIdx);
+      expect(columnInfo).to.be.false;
+    });
+
     it('should return column info for measure', () => {
-      const colIdx = 3;
+      colIdx = 3;
 
       const columnInfo = getColumnInfo(layout, colIdx);
       expect(columnInfo).to.eql(getExpectedInfo(colIdx, false));
