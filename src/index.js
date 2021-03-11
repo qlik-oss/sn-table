@@ -38,9 +38,7 @@ export default function supernova(env) {
       const [pageInfo, setPageInfo] = useState({ top: 0, height: 100 });
       const [muiParameters] = useState(muiSetup(__OPIONAL_THEME_DEPS__));
 
-      const [tableData] = usePromise(() => {
-        return manageData(model, layout, pageInfo);
-      }, [layout, pageInfo]);
+      const [tableData] = usePromise(() => manageData(model, layout, pageInfo), [layout, pageInfo]);
 
       useEffect(() => {
         if (layout && tableData) {
