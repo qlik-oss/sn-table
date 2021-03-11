@@ -11,14 +11,17 @@ export function getColumnInfo(layout, colIndex) {
   const numDims = qDimensionInfo.length;
   const isDim = colIndex < numDims;
   const info = isDim ? qDimensionInfo[colIndex] : qMeasureInfo[colIndex - numDims];
-  return {
-    isDim,
-    width: 200,
-    label: info.qFallbackTitle,
-    id: info.cId,
-    align: isDim ? 'left' : 'right',
-    stylingInfo: info.qAttrExprInfo.map((expr) => expr.id),
-  };
+  const isHiiden = info.qError?.qErrorCode === 7005;
+  return (
+    !isHiiden && {
+      isDim,
+      width: 200,
+      label: info.qFallbackTitle,
+      id: info.cId,
+      align: isDim ? 'left' : 'right',
+      stylingInfo: info.qAttrExprInfo.map((expr) => expr.id),
+    }
+  );
 }
 
 export default async function manageData(model, layout, pageInfo) {
@@ -28,7 +31,8 @@ export default async function manageData(model, layout, pageInfo) {
   ]);
   const matrix = dataPages[0].qMatrix;
 
-  const columns = columnorder.map((c) => getColumnInfo(layout, c));
+  // using filter to remove hidden columns (represented with false)
+  const columns = columnorder.map((c) => getColumnInfo(layout, c)).filter(Boolean);
   const rows = matrix.map((r, rowIdx) => {
     const row = { key: rowIdx };
     columns.forEach((c, colIdx) => {
