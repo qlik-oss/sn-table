@@ -6,7 +6,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { addSelectionListeners, reducer } from './selections-utils';
 import getCellRenderer from './cells/renderer';
 import { getBodyStyle } from './styling-utils';
-import handleKeyPress from './cells/handleKeyPress';
+import handleKeyPress from './cells/handle-key-press';
 
 const useStyles = makeStyles({
   hoverTableRow: {

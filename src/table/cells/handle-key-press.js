@@ -31,7 +31,6 @@ export const arrowKeysNavigation = (evt, rowAndColumnCount, rowIndex, colIndex) 
 };
 
 export const getRowAndColumnCount = (rootElement) => {
-  window.console.log(rootElement, 'rootElement');
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
   const rowCount = rowElements.length;
 

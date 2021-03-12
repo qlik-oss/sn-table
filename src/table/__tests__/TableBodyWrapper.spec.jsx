@@ -10,7 +10,7 @@ import manageData from '../handle-data';
 import TableBodyWrapper from '../TableBodyWrapper';
 import * as selectionsUtils from '../selections-utils';
 import * as getCellRenderer from '../cells/renderer';
-import * as handleKeyPress from '../cells/handleKeyPress';
+import * as handleKeyPress from '../cells/handle-key-press';
 
 describe('<TableBodyWrapper />', async () => {
   const sandbox = sinon.createSandbox();
