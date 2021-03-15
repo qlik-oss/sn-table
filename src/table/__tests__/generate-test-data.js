@@ -20,6 +20,7 @@ export function generateLayout(nDims, nMeas, qColumnOrder = []) {
     cId: `id-${idx}`,
     qAttrExprInfo: [],
     qSortIndicator: 'A',
+    qReverseSort: false,
   });
   const qDimensionInfo = [];
   const qMeasureInfo = [];
@@ -36,6 +37,7 @@ export function generateLayout(nDims, nMeas, qColumnOrder = []) {
       qDimensionInfo,
       qMeasureInfo,
       qColumnOrder,
+      qEffectiveInterColumnSortOrder: qColumnOrder, // little hack, assuming the column order is the same as the sort order
       qSize: { qcx: nDims + nMeas },
     },
   };
