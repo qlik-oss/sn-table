@@ -16,7 +16,7 @@ import ext from './ext';
 import muiSetup from './mui-setup';
 import { render, teardown } from './table/Root';
 import manageData from './table/handle-data';
-import sortingFactory from './sorting';
+import sortingFactory from './table/sorting';
 
 // This line is replaced by rollup with an import for internal builds
 const __OPIONAL_THEME_DEPS__ = {}; // eslint-disable-line no-underscore-dangle

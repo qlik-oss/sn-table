@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
@@ -18,9 +18,7 @@ const useStyles = makeStyles({
 });
 
 export default function TableHeadWrapper({ tableData, theme, layout, changeSortOrder }) {
-  const [topSort, setTopSort] = useState({});
   const classes = useStyles(getHeadStyle(layout, theme));
-  const handleClick = (isDim, idx) => setTopSort(changeSortOrder(isDim, idx));
 
   return (
     <TableHead>
@@ -33,9 +31,9 @@ export default function TableHeadWrapper({ tableData, theme, layout, changeSortO
             style={{ minWidth: column.minWidth }}
           >
             <TableSortLabel
-              active={topSort.sortIdx === idx}
-              direction={topSort.reversed ? 'desc' : 'asc'}
-              onClick={() => handleClick(column.isDim, idx)}
+              active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === idx}
+              direction={column.sortDirection}
+              onClick={() => changeSortOrder(column.isDim, idx)}
             >
               {column.label}
             </TableSortLabel>
