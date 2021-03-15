@@ -6,6 +6,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { STYLING_DEFAULTS, getHeadStyle } from './styling-utils';
+import handleKeyPress from './cells/handle-key-press';
 
 const useStyles = makeStyles({
   head: (props) => ({
@@ -17,34 +18,40 @@ const useStyles = makeStyles({
   }),
 });
 
-export default function TableHeadWrapper({ tableData, theme, layout, changeSortOrder }) {
+export default function TableHeadWrapper({ rootElement, tableData, theme, layout, changeSortOrder }) {
   const classes = useStyles(getHeadStyle(layout, theme));
 
   return (
     <TableHead>
-      <TableRow>
-        {tableData.columns.map((column, idx) => (
-          <TableCell
-            key={column.id}
-            align={column.align}
-            className={classes.head}
-            style={{ minWidth: column.minWidth }}
-          >
-            <TableSortLabel
-              active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === idx}
-              direction={column.sortDirection}
-              onClick={() => changeSortOrder(column.isDim, idx)}
+      <TableRow className="sn-table-row">
+        {tableData.columns.map((column, columnIndex) => {
+          const tabIndex = columnIndex === 0 ? '0' : '-1';
+          return (
+            <TableCell
+              key={column.id}
+              align={column.align}
+              className={`${classes.head} sn-table-head-cell sn-table-cell`}
+              style={{ minWidth: column.minWidth }}
+              tabIndex={tabIndex}
+              onKeyDown={(e) => handleKeyPress(e, rootElement, 0, columnIndex)}
             >
-              {column.label}
-            </TableSortLabel>
-          </TableCell>
-        ))}
+              <TableSortLabel
+                active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
+                direction={column.sortDirection}
+                onClick={() => changeSortOrder(column.isDim, columnIndex)}
+              >
+                {column.label}
+              </TableSortLabel>
+            </TableCell>
+          );
+        })}
       </TableRow>
     </TableHead>
   );
 }
 
 TableHeadWrapper.propTypes = {
+  rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,

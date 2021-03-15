@@ -24,7 +24,7 @@ export default function withStyling(CellComponent) {
     return (
       <CellComponent
         {...props}
-        className={`${classes.cellStyling} ${classes.cellBackground} ${styling.selectedCellClass}`}
+        className={`${classes.cellStyling} ${classes.cellBackground} ${styling.selectedCellClass} sn-table-cell`}
       />
     );
   };

@@ -30,7 +30,7 @@ export default function supernova(env) {
       data: data(env),
     },
     component() {
-      const el = useElement();
+      const rootElement = useElement();
       const layout = useStaleLayout();
       const model = useModel();
       const constraints = useConstraints();
@@ -44,8 +44,8 @@ export default function supernova(env) {
 
       useEffect(() => {
         if (layout && tableData) {
-          render(el, {
-            el,
+          render(rootElement, {
+            rootElement,
             layout,
             tableData,
             setPageInfo,
@@ -61,7 +61,7 @@ export default function supernova(env) {
 
       useEffect(
         () => () => {
-          teardown(el);
+          teardown(rootElement);
         },
         []
       );
