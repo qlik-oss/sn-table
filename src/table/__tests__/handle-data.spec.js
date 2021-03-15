@@ -25,6 +25,12 @@ describe('handle-data', () => {
       expect(columnInfo).to.eql(getExpectedInfo(colIdx, true));
     });
 
+    it('should return column info for dimension with align center', () => {
+      layout.qHyperCube.qDimensionInfo[colIdx].textAlign = { auto: false, align: 'center' };
+      const expected = getExpectedInfo(colIdx, true);
+      expected.align = 'center';
+    });
+
     it('should return column info for dimension with stylingInfo', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qAttrExprInfo = [{ id: 'someId' }];
       const expected = getExpectedInfo(colIdx, true);
@@ -34,7 +40,7 @@ describe('handle-data', () => {
       expect(columnInfo).to.eql(expected);
     });
 
-    it('should return false for hiddenc column', () => {
+    it('should return false for hidden column', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qError = { qErrorCode: 7005 };
 
       const columnInfo = getColumnInfo(layout, colIdx);

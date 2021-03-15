@@ -11,28 +11,28 @@ export function getColumnInfo(layout, colIndex) {
   const numDims = qDimensionInfo.length;
   const isDim = colIndex < numDims;
   const info = isDim ? qDimensionInfo[colIndex] : qMeasureInfo[colIndex - numDims];
-  const isHiiden = info.qError?.qErrorCode === 7005;
+  const isHidden = info.qError?.qErrorCode === 7005;
   return (
-    !isHiiden && {
+    !isHidden && {
       isDim,
       width: 200,
       label: info.qFallbackTitle,
       id: info.cId,
-      align: isDim ? 'left' : 'right',
+      align: !info.textAlign || info.textAlign.auto ? (isDim ? 'left' : 'right') : info.textAlign.align,
       stylingInfo: info.qAttrExprInfo.map((expr) => expr.id),
     }
   );
 }
 
 export default async function manageData(model, layout, pageInfo) {
-  const columnorder = getColumnOrder(layout);
+  const columnOrder = getColumnOrder(layout);
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
-    { qTop: pageInfo.top, qLeft: 0, qHeight: pageInfo.height, qWidth: columnorder.length },
+    { qTop: pageInfo.top, qLeft: 0, qHeight: pageInfo.height, qWidth: columnOrder.length },
   ]);
   const matrix = dataPages[0].qMatrix;
 
   // using filter to remove hidden columns (represented with false)
-  const columns = columnorder.map((c) => getColumnInfo(layout, c)).filter(Boolean);
+  const columns = columnOrder.map((c) => getColumnInfo(layout, c)).filter(Boolean);
   const rows = matrix.map((r, rowIdx) => {
     const row = { key: rowIdx };
     columns.forEach((c, colIdx) => {

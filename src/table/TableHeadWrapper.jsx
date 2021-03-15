@@ -5,7 +5,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { STYLING_DEFAULTS, getHeadStyle } from './styling-utils';
-import handleKeyPress from './cells/handleKeyPress';
+import handleKeyPress from './cells/handle-key-press';
 
 const useStyles = makeStyles({
   head: (props) => ({

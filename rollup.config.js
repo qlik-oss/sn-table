@@ -39,12 +39,14 @@ export default {
     }),
     replace({
       'process.env.NODE_ENV': JSON.stringify('production'),
+      preventAssignment: true,
     }),
     checkInternals()
       ? replace({
           'const __OPIONAL_THEME_DEPS__ = {};': "import { sproutBase } from '@qlik/sprout-theme';",
           delimiters: ['', ''],
           __OPIONAL_THEME_DEPS__: 'sproutBase',
+          preventAssignment: true,
         })
       : {},
     external(),
