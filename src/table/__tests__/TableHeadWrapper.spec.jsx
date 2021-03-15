@@ -2,7 +2,7 @@ import './rtl-setup';
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { expect } from 'chai';
-import sinon, { useFakeXMLHttpRequest } from 'sinon';
+import sinon from 'sinon';
 
 import TableHeadWrapper from '../TableHeadWrapper';
 
@@ -16,7 +16,7 @@ describe('<TableHeadWrapper />', () => {
     tableData = {
       columns: [
         { id: 1, align: 'left', label: 'someDim', sortDirection: 'asc', isDim: true },
-        { id: 2, align: 'right', label: 'someMsr', sortDirection: 'asc', isDim: useFakeXMLHttpRequest },
+        { id: 2, align: 'right', label: 'someMsr', sortDirection: 'asc', isDim: false },
       ],
     };
     theme = {
