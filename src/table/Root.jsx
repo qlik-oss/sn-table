@@ -3,7 +3,7 @@ import React from 'react';
 import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
 import TableWrapper from './TableWrapper';
 
-export function render(element, props) {
+export function render(rootElement, props) {
   const { muiParameters } = props;
 
   ReactDOM.render(
@@ -12,10 +12,10 @@ export function render(element, props) {
         <TableWrapper {...props} />
       </ThemeProvider>
     </StylesProvider>,
-    element
+    rootElement
   );
 }
 
-export function teardown(element) {
-  ReactDOM.unmountComponentAtNode(element);
+export function teardown(rootElement) {
+  ReactDOM.unmountComponentAtNode(rootElement);
 }

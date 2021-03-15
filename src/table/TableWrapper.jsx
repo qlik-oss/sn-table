@@ -24,7 +24,7 @@ const useStyles = makeStyles({
 });
 
 export default function TableWrapper(props) {
-  const { el, tableData, setPageInfo, constraints, selectionsAPI } = props;
+  const { rootElement, tableData, setPageInfo, constraints, selectionsAPI } = props;
   const { size, rows } = tableData;
   const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
@@ -52,7 +52,7 @@ export default function TableWrapper(props) {
   }
 
   useEffect(() => {
-    const updateSize = () => setTableWidth(el.clientWidth);
+    const updateSize = () => setTableWidth(rootElement.clientWidth);
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
   }, []);
@@ -80,7 +80,7 @@ export default function TableWrapper(props) {
 }
 
 TableWrapper.propTypes = {
-  el: PropTypes.object.isRequired,
+  rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
