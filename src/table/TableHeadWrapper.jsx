@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { STYLING_DEFAULTS, getHeadStyle } from './styling-utils';
 
 const useStyles = makeStyles({
@@ -16,20 +17,28 @@ const useStyles = makeStyles({
   }),
 });
 
-export default function TableHeadWrapper({ tableData, theme, layout }) {
+export default function TableHeadWrapper({ tableData, theme, layout, changeSortOrder }) {
+  const [topSort, setTopSort] = useState({});
   const classes = useStyles(getHeadStyle(layout, theme));
+  const handleClick = (isDim, idx) => setTopSort(changeSortOrder(isDim, idx));
 
   return (
     <TableHead>
       <TableRow>
-        {tableData.columns.map((column) => (
+        {tableData.columns.map((column, idx) => (
           <TableCell
             key={column.id}
             align={column.align}
             className={classes.head}
             style={{ minWidth: column.minWidth }}
           >
-            {column.label}
+            <TableSortLabel
+              active={topSort.sortIdx === idx}
+              direction={topSort.reversed ? 'desc' : 'asc'}
+              onClick={() => handleClick(column.isDim, idx)}
+            >
+              {column.label}
+            </TableSortLabel>
           </TableCell>
         ))}
       </TableRow>
@@ -41,4 +50,5 @@ TableHeadWrapper.propTypes = {
   tableData: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
+  changeSortOrder: PropTypes.func.isRequired,
 };

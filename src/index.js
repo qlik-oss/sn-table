@@ -8,6 +8,7 @@ import {
   useSelections,
   useTheme,
   usePromise,
+  useMemo,
 } from '@nebula.js/stardust';
 import properties from './object-properties';
 import data from './data';
@@ -15,6 +16,7 @@ import ext from './ext';
 import muiSetup from './mui-setup';
 import { render, teardown } from './table/Root';
 import manageData from './table/handle-data';
+import sortingFactory from './sorting';
 
 // This line is replaced by rollup with an import for internal builds
 const __OPIONAL_THEME_DEPS__ = {}; // eslint-disable-line no-underscore-dangle
@@ -37,8 +39,8 @@ export default function supernova(env) {
 
       const [pageInfo, setPageInfo] = useState({ top: 0, height: 100 });
       const [muiParameters] = useState(muiSetup(__OPIONAL_THEME_DEPS__));
-
       const [tableData] = usePromise(() => manageData(model, layout, pageInfo), [layout, pageInfo]);
+      const changeSortOrder = useMemo(() => sortingFactory(model, layout), [layout]);
 
       useEffect(() => {
         if (layout && tableData) {
@@ -52,6 +54,7 @@ export default function supernova(env) {
             selectionsAPI,
             muiParameters,
             theme,
+            changeSortOrder,
           });
         }
       }, [tableData, constraints, selectionsAPI.isModal()]);
