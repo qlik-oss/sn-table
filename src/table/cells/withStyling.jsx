@@ -14,6 +14,9 @@ const useStyles = makeStyles({
     padding: props.padding,
     height: STYLING_DEFAULTS.HEIGHT,
     lineHeight: STYLING_DEFAULTS.BODY_LINE_HEIGHT,
+    '&&:focus': {
+      boxShadow: STYLING_DEFAULTS.FOCUS_OUTLINE,
+    },
   }),
 });
 
