@@ -62,9 +62,9 @@ export function selectCell(cell, selState, selDispatch, evt) {
 
   if (selState.colIdx === -1) {
     api.begin('/qHyperCubeDef');
-    setTimeout(() => {
-      evt.target.focus();
-    }, 200);
+    // setTimeout(() => {
+    //   evt.target.focus();
+    // }, 200);
   } else if (selState.colIdx === colIdx) {
     selectedRows = rows.concat();
   } else {
@@ -83,3 +83,8 @@ export function selectCell(cell, selState, selDispatch, evt) {
     api.cancel();
   }
 }
+
+export const cancelSelectCell = (selState) => {
+  const { api } = selState;
+  api.cancel();
+};

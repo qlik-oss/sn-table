@@ -1,4 +1,4 @@
-import { addSelectionListeners, getSelectedRows, reducer, selectCell } from '../selections-utils';
+import { addSelectionListeners, getSelectedRows, reducer, selectCell, cancelSelectCell } from '../selections-utils';
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {
@@ -143,7 +143,9 @@ describe('selections-utils', () => {
   });
 
   describe('selectCell', () => {
-    const event = {};
+    const event = {
+      target: { focus: sinon.spy() },
+    };
     let selState;
     let cell;
     let selDispatch;
@@ -163,6 +165,8 @@ describe('selections-utils', () => {
     });
 
     it('should call begin, selDispatch and selectHyperCubeCells when no previous selections', () => {
+      const clock = sinon.useFakeTimers();
+
       const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
       const payload = { colIdx: cell.colIdx, rows: [{ qElemNumber: cell.qElemNumber, rowIdx: cell.rowIdx }] };
 
@@ -171,6 +175,9 @@ describe('selections-utils', () => {
       expect(selState.api.select).to.have.been.calledWith({ method: 'selectHyperCubeCells', params });
       expect(selDispatch).to.have.been.calledWith({ type: 'select', payload });
       expect(selState.api.cancel).to.not.have.been.called;
+      clock.tick(200);
+      expect(event.target.focus).to.have.been.calledOnce;
+      clock.restore();
     });
     it('should not call begin and call cancel when same qElemNumber (resulting in empty selectedCells)', () => {
       selState.rows = [{ qElemNumber: 1, rowIdx: 1 }];
@@ -192,6 +199,19 @@ describe('selections-utils', () => {
       expect(selState.api.cancel).to.not.have.been.called;
       expect(selDispatch).to.not.have.been.called;
       expect(selState.api.select).to.not.have.been.called;
+    });
+  });
+
+  describe('cancelSelectCell', () => {
+    const selState = {
+      api: {
+        cancel: sinon.spy(),
+      },
+    };
+    it('should cancel selection', () => {
+      cancelSelectCell(selState);
+
+      expect(selState.api.cancel).to.have.been.called;
     });
   });
 });

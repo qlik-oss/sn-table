@@ -1,6 +1,7 @@
-import { selectCell } from '../selections-utils';
+import { selectCell, cancelSelectCell } from '../selections-utils';
 
-const cellElementFocus = (rootElement, rowIndex, colIndex) => {
+const keysPressed = {};
+export const cellElementFocus = (rootElement, rowIndex, colIndex) => {
   const tableRows = rootElement.getElementsByClassName('sn-table-row');
   const cell = tableRows[rowIndex].getElementsByClassName('sn-table-cell')[colIndex];
   cell.focus();
@@ -58,29 +59,41 @@ export const preventDefaultBehavior = (evt) => {
   evt.preventDefault();
 };
 
+export const handleKeyUp = (evt) => {
+  delete keysPressed[evt.key];
+};
+
 const handleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch) => {
-  preventDefaultBehavior(evt);
+  keysPressed[evt.key] = true;
   switch (evt.key) {
-    // TODO page up/down etc
-    case 'ArrowUp':
-    case 'ArrowDown':
+    case 'ArrowUp': // Up arrow:  Navigates to the row above.
+    case 'ArrowDown': // Down arrow: Navigates to the row below.
     case 'ArrowRight':
     case 'ArrowLeft': {
+      preventDefaultBehavior(evt);
       removeCurrentFocus(evt);
       const rowAndColumnCount = getRowAndColumnCount(rootElement);
       const { nextRow, nextCol } = arrowKeysNavigation(evt, rowAndColumnCount, rowIndex, colIndex);
       moveToNextFocus(rowAndColumnCount.rowElements, nextRow, nextCol);
       break;
     }
-    // selections
-    case 'Enter': {
+    // Space bar: Selects value.
+    case ' ': {
       preventDefaultBehavior(evt);
       cell?.isDim && selectCell(cell, selState, selDispatch, evt);
+      // setTimeout(() => {
+      //   cellElementFocus(rootElement, rowIndex, colIndex);
+      // }, 200);
       break;
     }
+    // Enter: Confirms selections.
+    case 'Enter': {
+      break;
+    }
+    // Esc: Cancels selections.
     case 'Escape': {
       preventDefaultBehavior(evt);
-      cell?.isDim && selectCell(cell, selState, selDispatch, evt);
+      cancelSelectCell(selState);
       setTimeout(() => {
         cellElementFocus(rootElement, rowIndex, colIndex);
       }, 200);
@@ -88,6 +101,12 @@ const handleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, se
     }
     default:
       break;
+  }
+
+  // Shift + up/down arrows: Selects multiple values.
+  if (keysPressed.Shift && (evt.key === 'ArrowUp' || evt.key === 'ArrowDown')) {
+    window.console.log('Selects multiple values');
+    // cell?.isDim && selectCell(cell, selState, selDispatch, evt);
   }
 };
 
