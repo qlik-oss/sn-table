@@ -1,4 +1,11 @@
-import { addSelectionListeners, getSelectedRows, reducer, selectCell, cancelSelectCell } from '../selections-utils';
+import {
+  addSelectionListeners,
+  getSelectedRows,
+  reducer,
+  selectCell,
+  confirmSelections,
+  cancelSelections,
+} from '../selections-utils';
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {
@@ -195,14 +202,27 @@ describe('selections-utils', () => {
     });
   });
 
-  describe('cancelSelectCell', () => {
+  describe('confirmSelections', () => {
+    const selState = {
+      api: {
+        confirm: sinon.spy(),
+      },
+    };
+    it('should cancel selection', () => {
+      confirmSelections(selState);
+
+      expect(selState.api.confirm).to.have.been.called;
+    });
+  });
+
+  describe('cancelSelections', () => {
     const selState = {
       api: {
         cancel: sinon.spy(),
       },
     };
     it('should cancel selection', () => {
-      cancelSelectCell(selState);
+      cancelSelections(selState);
 
       expect(selState.api.cancel).to.have.been.called;
     });

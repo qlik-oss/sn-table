@@ -81,7 +81,12 @@ export function selectCell(cell, selState, selDispatch, evt) {
   }
 }
 
-export const cancelSelectCell = (selState) => {
+export const confirmSelections = (selState) => {
+  const { api } = selState;
+  api.confirm();
+};
+
+export const cancelSelections = (selState) => {
   const { api } = selState;
   api.cancel();
 };

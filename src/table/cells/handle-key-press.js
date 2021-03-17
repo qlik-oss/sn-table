@@ -1,4 +1,4 @@
-import { selectCell, cancelSelectCell } from '../selections-utils';
+import { selectCell, confirmSelections, cancelSelections } from '../selections-utils';
 
 export const moveToNextFocus = (rowElements, nextRow, nextCol) => {
   const nextCell = rowElements[nextRow].getElementsByClassName('sn-table-cell')[nextCol];
@@ -73,14 +73,14 @@ const handleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, se
     }
     // Enter: Confirms selections.
     case 'Enter': {
-      const { api } = selState;
-      api.confirm();
+      preventDefaultBehavior(evt);
+      confirmSelections(selState);
       break;
     }
     // Esc: Cancels selections.
     case 'Escape': {
       preventDefaultBehavior(evt);
-      cancelSelectCell(selState);
+      cancelSelections(selState);
       break;
     }
     default:
