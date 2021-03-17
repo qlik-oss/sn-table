@@ -1,6 +1,4 @@
-import { selectCell, cancelSelectCell, doSelectCell } from '../selections-utils';
-
-const keysPressed = {};
+import { selectCell, cancelSelectCell } from '../selections-utils';
 
 export const moveToNextFocus = (rowElements, nextRow, nextCol) => {
   const nextCell = rowElements[nextRow].getElementsByClassName('sn-table-cell')[nextCol];
@@ -54,13 +52,7 @@ export const preventDefaultBehavior = (evt) => {
   evt.preventDefault();
 };
 
-export const handleKeyUp = (evt) => {
-  delete keysPressed[evt.key];
-};
-
-const handleKeyPress = (evt, rootElement, rows, rowIndex, colIndex, colId, cell, selState, selDispatch) => {
-  keysPressed[evt.key] = true;
-
+const handleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch) => {
   switch (evt.key) {
     case 'ArrowUp': // Up arrow:  Navigates to the row above.
     case 'ArrowDown': // Down arrow: Navigates to the row below.
@@ -71,10 +63,6 @@ const handleKeyPress = (evt, rootElement, rows, rowIndex, colIndex, colId, cell,
       const rowAndColumnCount = getRowAndColumnCount(rootElement);
       const { nextRow, nextCol } = arrowKeysNavigation(evt, rowAndColumnCount, rowIndex, colIndex);
       moveToNextFocus(rowAndColumnCount.rowElements, nextRow, nextCol);
-      // Shift + up/down arrows: Selects multiple values.
-      if (keysPressed.Shift && (evt.key === 'ArrowUp' || evt.key === 'ArrowDown')) {
-        doSelectCell(evt, rows, rowIndex, colId, selState, selDispatch);
-      }
       break;
     }
     // Space bar: Selects value.
