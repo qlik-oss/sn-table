@@ -8,15 +8,7 @@ describe('handle-key-press', () => {
     let colIndex;
 
     beforeEach(() => {
-      evt = {
-        target: {
-          offsetParent: {
-            classList: {
-              contains: () => {},
-            },
-          },
-        },
-      };
+      evt = {};
       rowAndColumnCount.rowCount = 1;
       rowAndColumnCount.columnCount = 1;
       rowIndex = 0;
@@ -111,6 +103,7 @@ describe('handle-key-press', () => {
     let rootElement = {};
     let selState = {};
     let cell = [];
+    let selDispatch;
 
     beforeEach(() => {
       rowIndex = 0;
@@ -122,12 +115,6 @@ describe('handle-key-press', () => {
         target: {
           blur: sinon.spy(),
           setAttribute: sinon.spy(),
-          offsetParent: {
-            classList: {
-              remove: () => {},
-              contains: () => {},
-            },
-          },
         },
       };
       rootElement = {
@@ -137,18 +124,51 @@ describe('handle-key-press', () => {
         api: {
           confirm: sinon.spy(),
           cancel: sinon.spy(),
+          begin: sinon.spy(),
+          select: sinon.spy(),
         },
+        rows: [],
+        colIdx: -1,
       };
-      cell = [];
+      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1 };
+      selDispatch = sinon.spy();
     });
 
     describe('ArrowDown', () => {
-      it('should prevent default behavior and remove current focus', () => {
+      it('should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
         handleKeyPress(evt, rootElement, rowIndex, colIndex);
         expect(evt.preventDefault).to.have.been.calledOnce;
         expect(evt.stopPropagation).to.have.been.calledOnce;
         expect(evt.target.blur).to.have.been.calledOnce;
         expect(evt.target.setAttribute).to.have.been.calledOnce;
+      });
+    });
+
+    describe('SpaceBar', () => {
+      it('should select value for dimension', () => {
+        evt.key = ' ';
+        cell = {
+          isDim: true,
+        };
+        handleKeyPress(evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch);
+        expect(evt.preventDefault).to.have.been.calledOnce;
+        expect(evt.stopPropagation).to.have.been.calledOnce;
+        expect(selState.api.begin).to.have.been.calledOnce;
+        expect(selState.api.select).to.have.been.calledOnce;
+        expect(selDispatch).to.have.been.calledOnce;
+      });
+
+      it('should not select value for measure', () => {
+        evt.key = ' ';
+        cell = {
+          isDim: false,
+        };
+        handleKeyPress(evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch);
+        expect(evt.preventDefault).to.have.been.calledOnce;
+        expect(evt.stopPropagation).to.have.been.calledOnce;
+        expect(selState.api.begin).to.not.have.been.calledOnce;
+        expect(selState.api.select).to.not.have.been.calledOnce;
+        expect(selDispatch).to.not.have.been.calledOnce;
       });
     });
 

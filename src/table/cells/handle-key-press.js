@@ -6,16 +6,18 @@ export const moveToNextFocus = (rowElements, nextRow, nextCol) => {
   nextCell.setAttribute('tabIndex', '0');
 };
 
-export const arrowKeysNavigation = (evt, rowAndColumnCount, rowIndex, colIndex) => {
+export const arrowKeysNavigation = (evt, rowAndColumnCount, rowIndex, colIndex, selState) => {
   let nextRow = rowIndex;
   let nextCol = colIndex;
-  const isSelectedTable = evt.target.offsetParent.classList.contains('selected-table');
+  //  when selecting cell, disable navigating left/right and going into header
+  const isSelectedTable = selState && selState.rows.length > 0;
+
   switch (evt.key) {
     case 'ArrowDown':
       rowIndex + 1 < rowAndColumnCount.rowCount && nextRow++;
       break;
     case 'ArrowUp':
-      rowIndex > 0 && --nextRow;
+      rowIndex > 0 && (!isSelectedTable || !(rowIndex === 1)) && --nextRow;
       break;
     case 'ArrowRight':
       colIndex < rowAndColumnCount.columnCount - 1 && !isSelectedTable && nextCol++;
@@ -61,7 +63,7 @@ const handleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, se
       preventDefaultBehavior(evt);
       removeCurrentFocus(evt);
       const rowAndColumnCount = getRowAndColumnCount(rootElement);
-      const { nextRow, nextCol } = arrowKeysNavigation(evt, rowAndColumnCount, rowIndex, colIndex);
+      const { nextRow, nextCol } = arrowKeysNavigation(evt, rowAndColumnCount, rowIndex, colIndex, selState);
       moveToNextFocus(rowAndColumnCount.rowElements, nextRow, nextCol);
       break;
     }
@@ -75,14 +77,12 @@ const handleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, se
     case 'Enter': {
       preventDefaultBehavior(evt);
       selState.api.confirm();
-      evt.target.offsetParent.classList.remove('selected-table');
       break;
     }
     // Esc: Cancels selections.
     case 'Escape': {
       preventDefaultBehavior(evt);
       selState.api.cancel();
-      evt.target.offsetParent.classList.remove('selected-table');
       break;
     }
     default:

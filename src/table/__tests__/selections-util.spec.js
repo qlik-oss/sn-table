@@ -143,16 +143,7 @@ describe('selections-utils', () => {
   });
 
   describe('selectCell', () => {
-    const event = {
-      target: {
-        offsetParent: {
-          classList: {
-            add: () => {},
-            remove: () => {},
-          },
-        },
-      },
-    };
+    const event = {};
     let selState;
     let cell;
     let selDispatch;
