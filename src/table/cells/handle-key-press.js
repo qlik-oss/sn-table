@@ -1,4 +1,4 @@
-import { selectCell, confirmSelections, cancelSelections } from '../selections-utils';
+import { selectCell } from '../selections-utils';
 
 export const moveToNextFocus = (rowElements, nextRow, nextCol) => {
   const nextCell = rowElements[nextRow].getElementsByClassName('sn-table-cell')[nextCol];
@@ -9,7 +9,7 @@ export const moveToNextFocus = (rowElements, nextRow, nextCol) => {
 export const arrowKeysNavigation = (evt, rowAndColumnCount, rowIndex, colIndex) => {
   let nextRow = rowIndex;
   let nextCol = colIndex;
-
+  const isSelectedTable = evt.target.offsetParent.classList.contains('selected-table');
   switch (evt.key) {
     case 'ArrowDown':
       rowIndex + 1 < rowAndColumnCount.rowCount && nextRow++;
@@ -18,10 +18,10 @@ export const arrowKeysNavigation = (evt, rowAndColumnCount, rowIndex, colIndex) 
       rowIndex > 0 && --nextRow;
       break;
     case 'ArrowRight':
-      colIndex < rowAndColumnCount.columnCount - 1 && nextCol++;
+      colIndex < rowAndColumnCount.columnCount - 1 && !isSelectedTable && nextCol++;
       break;
     case 'ArrowLeft':
-      colIndex > 0 && --nextCol;
+      colIndex > 0 && !isSelectedTable && --nextCol;
       break;
     default:
   }
@@ -54,8 +54,8 @@ export const preventDefaultBehavior = (evt) => {
 
 const handleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch) => {
   switch (evt.key) {
-    case 'ArrowUp': // Up arrow:  Navigates to the row above.
-    case 'ArrowDown': // Down arrow: Navigates to the row below.
+    case 'ArrowUp':
+    case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
       preventDefaultBehavior(evt);
@@ -74,13 +74,15 @@ const handleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, se
     // Enter: Confirms selections.
     case 'Enter': {
       preventDefaultBehavior(evt);
-      confirmSelections(selState);
+      selState.api.confirm();
+      evt.target.offsetParent.classList.remove('selected-table');
       break;
     }
     // Esc: Cancels selections.
     case 'Escape': {
       preventDefaultBehavior(evt);
-      cancelSelections(selState);
+      selState.api.cancel();
+      evt.target.offsetParent.classList.remove('selected-table');
       break;
     }
     default:

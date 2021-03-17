@@ -1,11 +1,4 @@
-import {
-  addSelectionListeners,
-  getSelectedRows,
-  reducer,
-  selectCell,
-  confirmSelections,
-  cancelSelections,
-} from '../selections-utils';
+import { addSelectionListeners, getSelectedRows, reducer, selectCell } from '../selections-utils';
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {
@@ -150,7 +143,16 @@ describe('selections-utils', () => {
   });
 
   describe('selectCell', () => {
-    const event = {};
+    const event = {
+      target: {
+        offsetParent: {
+          classList: {
+            add: () => {},
+            remove: () => {},
+          },
+        },
+      },
+    };
     let selState;
     let cell;
     let selDispatch;
@@ -199,32 +201,6 @@ describe('selections-utils', () => {
       expect(selState.api.cancel).to.not.have.been.called;
       expect(selDispatch).to.not.have.been.called;
       expect(selState.api.select).to.not.have.been.called;
-    });
-  });
-
-  describe('confirmSelections', () => {
-    const selState = {
-      api: {
-        confirm: sinon.spy(),
-      },
-    };
-    it('should cancel selection', () => {
-      confirmSelections(selState);
-
-      expect(selState.api.confirm).to.have.been.called;
-    });
-  });
-
-  describe('cancelSelections', () => {
-    const selState = {
-      api: {
-        cancel: sinon.spy(),
-      },
-    };
-    it('should cancel selection', () => {
-      cancelSelections(selState);
-
-      expect(selState.api.cancel).to.have.been.called;
     });
   });
 });

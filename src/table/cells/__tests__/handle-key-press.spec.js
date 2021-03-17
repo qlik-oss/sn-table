@@ -8,7 +8,15 @@ describe('handle-key-press', () => {
     let colIndex;
 
     beforeEach(() => {
-      evt = {};
+      evt = {
+        target: {
+          offsetParent: {
+            classList: {
+              contains: () => {},
+            },
+          },
+        },
+      };
       rowAndColumnCount.rowCount = 1;
       rowAndColumnCount.columnCount = 1;
       rowIndex = 0;
@@ -97,27 +105,71 @@ describe('handle-key-press', () => {
   });
 
   describe('handleKeyPress', () => {
-    const rowIndex = 0;
-    const colIndex = 0;
-    const evt = {
-      key: 'ArrowDown',
-      stopPropagation: sinon.spy(),
-      preventDefault: sinon.spy(),
-    };
-    evt.target = {
-      blur: sinon.spy(),
-      setAttribute: sinon.spy(),
-    };
-    const rootElement = {
-      getElementsByClassName: () => [{ getElementsByClassName: () => [{ focus: () => {}, setAttribute: () => {} }] }],
-    };
+    let rowIndex;
+    let colIndex;
+    let evt = {};
+    let rootElement = {};
+    let selState = {};
+    let cell = [];
 
-    it('should prevent default behavior and remove current focus', () => {
-      handleKeyPress(evt, rootElement, rowIndex, colIndex);
-      expect(evt.preventDefault).to.have.been.calledOnce;
-      expect(evt.stopPropagation).to.have.been.calledOnce;
-      expect(evt.target.blur).to.have.been.calledOnce;
-      expect(evt.target.setAttribute).to.have.been.calledOnce;
+    beforeEach(() => {
+      rowIndex = 0;
+      colIndex = 0;
+      evt = {
+        key: 'ArrowDown',
+        stopPropagation: sinon.spy(),
+        preventDefault: sinon.spy(),
+        target: {
+          blur: sinon.spy(),
+          setAttribute: sinon.spy(),
+          offsetParent: {
+            classList: {
+              remove: () => {},
+              contains: () => {},
+            },
+          },
+        },
+      };
+      rootElement = {
+        getElementsByClassName: () => [{ getElementsByClassName: () => [{ focus: () => {}, setAttribute: () => {} }] }],
+      };
+      selState = {
+        api: {
+          confirm: sinon.spy(),
+          cancel: sinon.spy(),
+        },
+      };
+      cell = [];
+    });
+
+    describe('ArrowDown', () => {
+      it('should prevent default behavior and remove current focus', () => {
+        handleKeyPress(evt, rootElement, rowIndex, colIndex);
+        expect(evt.preventDefault).to.have.been.calledOnce;
+        expect(evt.stopPropagation).to.have.been.calledOnce;
+        expect(evt.target.blur).to.have.been.calledOnce;
+        expect(evt.target.setAttribute).to.have.been.calledOnce;
+      });
+    });
+
+    describe('Enter', () => {
+      it('should confirms selections', () => {
+        evt.key = 'Enter';
+        handleKeyPress(evt, rootElement, rowIndex, colIndex, cell, selState);
+        expect(evt.preventDefault).to.have.been.calledOnce;
+        expect(evt.stopPropagation).to.have.been.calledOnce;
+        expect(selState.api.confirm).to.have.been.calledOnce;
+      });
+    });
+
+    describe('Cancel', () => {
+      it('should cancel selection', () => {
+        evt.key = 'Escape';
+        handleKeyPress(evt, rootElement, rowIndex, colIndex, cell, selState);
+        expect(evt.preventDefault).to.have.been.calledOnce;
+        expect(evt.stopPropagation).to.have.been.calledOnce;
+        expect(selState.api.cancel).to.have.been.calledOnce;
+      });
     });
   });
 });

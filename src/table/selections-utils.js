@@ -76,17 +76,9 @@ export function selectCell(cell, selState, selDispatch, evt) {
       method: 'selectHyperCubeCells',
       params: ['/qHyperCubeDef', selectedRows.map((r) => r.rowIdx), [colIdx]],
     });
+    evt.target.offsetParent.classList.add('selected-table');
   } else {
     api.cancel();
+    evt.target.offsetParent.classList.remove('selected-table');
   }
 }
-
-export const confirmSelections = (selState) => {
-  const { api } = selState;
-  api.confirm();
-};
-
-export const cancelSelections = (selState) => {
-  const { api } = selState;
-  api.cancel();
-};
