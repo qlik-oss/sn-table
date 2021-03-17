@@ -19,11 +19,12 @@ const useStyles = makeStyles({
 
 export default function TableHeadWrapper({ rootElement, tableData, theme, layout }) {
   const classes = useStyles(getHeadStyle(layout, theme));
+  const { rows, columns } = tableData;
 
   return (
     <TableHead>
       <TableRow className="sn-table-row">
-        {tableData.columns.map((column, columnIndex) => {
+        {columns.map((column, columnIndex) => {
           const tabIndex = columnIndex === 0 ? '0' : '-1';
           return (
             <TableCell
@@ -32,7 +33,7 @@ export default function TableHeadWrapper({ rootElement, tableData, theme, layout
               className={`${classes.head} sn-table-head-cell sn-table-cell`}
               style={{ minWidth: column.minWidth }}
               tabIndex={tabIndex}
-              onKeyDown={(e) => handleKeyPress(e, rootElement, 0, columnIndex)}
+              onKeyDown={(e) => handleKeyPress(e, rootElement, rows, 0, columnIndex, column.id)}
             >
               {column.label}
             </TableCell>

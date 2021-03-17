@@ -108,12 +108,13 @@ describe('handle-key-press', () => {
       blur: sinon.spy(),
       setAttribute: sinon.spy(),
     };
+    const rows = [];
     const rootElement = {
       getElementsByClassName: () => [{ getElementsByClassName: () => [{ focus: () => {}, setAttribute: () => {} }] }],
     };
 
     it('should prevent default behavior and remove current focus', () => {
-      handleKeyPress(evt, rootElement, rowIndex, colIndex);
+      handleKeyPress(evt, rootElement, rows, rowIndex, colIndex);
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(evt.target.blur).to.have.been.calledOnce;
