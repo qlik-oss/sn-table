@@ -1,3 +1,7 @@
+import { doSelectCell } from '../selections-utils';
+
+const keysPressed = {};
+
 export const moveToNextFocus = (rowElements, nextRow, nextCol) => {
   const nextCell = rowElements[nextRow].getElementsByClassName('sn-table-cell')[nextCol];
   nextCell.focus();
@@ -50,10 +54,14 @@ export const preventDefaultBehavior = (evt) => {
   evt.preventDefault();
 };
 
-const handleKeyPress = (evt, rootElement, rowIndex, colIndex) => {
+export const handleKeyUp = (evt) => {
+  delete keysPressed[evt.key];
+};
+
+const handleKeyPress = (evt, rootElement, rows, rowIndex, colIndex, colId, selState, selDispatch) => {
+  keysPressed[evt.key] = true;
   preventDefaultBehavior(evt);
   switch (evt.key) {
-    // TODO page up/down etc
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
@@ -62,9 +70,12 @@ const handleKeyPress = (evt, rootElement, rowIndex, colIndex) => {
       const rowAndColumnCount = getRowAndColumnCount(rootElement);
       const { nextRow, nextCol } = arrowKeysNavigation(evt, rowAndColumnCount, rowIndex, colIndex);
       moveToNextFocus(rowAndColumnCount.rowElements, nextRow, nextCol);
+      // Shift + up/down arrows: Selects multiple values.
+      if (keysPressed.Shift && (evt.key === 'ArrowUp' || evt.key === 'ArrowDown')) {
+        doSelectCell(evt, rows, rowIndex, colId, selState, selDispatch);
+      }
       break;
     }
-    // TODO handle selections, search?, sorting...
     default:
       break;
   }
