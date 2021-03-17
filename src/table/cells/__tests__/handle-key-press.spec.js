@@ -1,23 +1,6 @@
-import handleKeyPress, {
-  cellElementFocus,
-  moveToNextFocus,
-  getRowAndColumnCount,
-  arrowKeysNavigation,
-} from '../handle-key-press';
+import handleKeyPress, { moveToNextFocus, getRowAndColumnCount, arrowKeysNavigation } from '../handle-key-press';
 
 describe('handle-key-press', () => {
-  describe('cellElementFocus', () => {
-    const rowIndex = 0;
-    const colIndex = 0;
-    const rootElement = {
-      getElementsByClassName: () => [{ getElementsByClassName: () => [{ focus: sinon.spy() }] }],
-    };
-    it('should focus a cell', () => {
-      cellElementFocus(rootElement, rowIndex, colIndex);
-      expect(rootElement.getElementsByClassName()[0].getElementsByClassName()[0].focus).to.have.been.calledOnce;
-    });
-  });
-
   describe('moveToNextFocus', () => {
     const nextRow = 0;
     const nextCol = 0;
@@ -153,12 +136,5 @@ describe('handle-key-press', () => {
     //   const cell = {
     //     isDim: true,
     //   };
-
-    //   handleKeyPress(evt, rootElement, rowIndex, colIndex, cell);
-    //   clock.tick(200);
-    //   // eslint-disable-next-line import/no-named-as-default-member
-    //   expect(cellElementFocus).to.have.been.calledOnce;
-    //   clock.restore();
-    // });
   });
 });

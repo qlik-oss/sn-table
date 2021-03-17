@@ -62,9 +62,6 @@ export function selectCell(cell, selState, selDispatch, evt) {
 
   if (selState.colIdx === -1) {
     api.begin('/qHyperCubeDef');
-    // setTimeout(() => {
-    //   evt.target.focus();
-    // }, 200);
   } else if (selState.colIdx === colIdx) {
     selectedRows = rows.concat();
   } else {
@@ -83,6 +80,40 @@ export function selectCell(cell, selState, selDispatch, evt) {
     api.cancel();
   }
 }
+
+export const doSelectCell = (evt, rowValues, rowIndex, colId, selState, selDispatch) => {
+  const { api, rows } = selState;
+
+  let selectedRows = [];
+  let nextRowId;
+
+  switch (evt.key) {
+    case 'ArrowDown':
+      nextRowId = rowIndex;
+      break;
+    case 'ArrowUp':
+      nextRowId = rowIndex - 2;
+      break;
+    default:
+  }
+
+  const { rowIdx, colIdx, qElemNumber } = rowValues[nextRowId][colId];
+
+  if (selState.colIdx === -1) {
+    api.begin('/qHyperCubeDef');
+  } else if (selState.colIdx === colIdx) {
+    selectedRows = rows.concat();
+  } else {
+    return;
+  }
+
+  selectedRows.push({ qElemNumber, rowIdx });
+  selDispatch({ type: 'select', payload: { rows: selectedRows, colIdx } });
+  api.select({
+    method: 'selectHyperCubeCells',
+    params: ['/qHyperCubeDef', selectedRows.map((r) => r.rowIdx), [colIdx]],
+  });
+};
 
 export const cancelSelectCell = (selState) => {
   const { api } = selState;

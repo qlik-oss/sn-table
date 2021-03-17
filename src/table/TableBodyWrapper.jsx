@@ -72,7 +72,18 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
                   selDispatch={selDispatch}
                   tabIndex={-1}
                   onKeyDown={
-                    (evt) => handleKeyPress(evt, rootElement, rowIndex + 1, columnIndex, cell, selState, selDispatch)
+                    (evt) =>
+                      handleKeyPress(
+                        evt,
+                        rootElement,
+                        rows,
+                        rowIndex + 1,
+                        columnIndex,
+                        column.id,
+                        cell,
+                        selState,
+                        selDispatch
+                      )
                     // eslint-disable-next-line react/jsx-curly-newline
                   }
                   onKeyUp={(evt) => handleKeyUp(evt)}
