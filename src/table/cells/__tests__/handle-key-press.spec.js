@@ -1,16 +1,6 @@
-import handleKeyPress, { moveToNextFocus, getRowAndColumnCount, arrowKeysNavigation } from '../handle-key-press';
+import handleKeyPress, { getRowAndColumnCount, arrowKeysNavigation } from '../handle-key-press';
 
 describe('handle-key-press', () => {
-  describe('moveToNextFocus', () => {
-    const nextRow = 0;
-    const nextCol = 0;
-    const rootElement = [{ getElementsByClassName: () => [{ focus: sinon.spy(), setAttribute: sinon.spy() }] }];
-    it('should focus and set attribute for next cell', () => {
-      moveToNextFocus(rootElement, nextRow, nextCol);
-      expect(rootElement[0].getElementsByClassName()[0].focus).to.have.been.calledOnce;
-    });
-  });
-
   describe('arrowKeysNavigation', () => {
     let evt;
     const rowAndColumnCount = {};
@@ -118,23 +108,17 @@ describe('handle-key-press', () => {
       blur: sinon.spy(),
       setAttribute: sinon.spy(),
     };
+    const rows = [];
     const rootElement = {
       getElementsByClassName: () => [{ getElementsByClassName: () => [{ focus: () => {}, setAttribute: () => {} }] }],
     };
 
     it('should prevent default behavior and remove current focus', () => {
-      handleKeyPress(evt, rootElement, rowIndex, colIndex);
+      handleKeyPress(evt, rootElement, rows, rowIndex, colIndex);
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(evt.target.blur).to.have.been.calledOnce;
       expect(evt.target.setAttribute).to.have.been.calledOnce;
     });
-
-    // it('should prevent default behavior, remove current focus and ', () => {
-    //   const clock = sinon.useFakeTimers();
-    //   // evt.key = 'Escape';
-    //   const cell = {
-    //     isDim: true,
-    //   };
   });
 });

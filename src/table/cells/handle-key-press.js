@@ -85,6 +85,8 @@ const handleKeyPress = (evt, rootElement, rows, rowIndex, colIndex, colId, cell,
     }
     // Enter: Confirms selections.
     case 'Enter': {
+      const { api } = selState;
+      api.confirm();
       break;
     }
     // Esc: Cancels selections.
