@@ -38,7 +38,7 @@ export default function TableHeadWrapper({ rootElement, tableData, theme, layout
               <TableSortLabel
                 active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
                 direction={column.sortDirection}
-                onClick={() => changeSortOrder(column.isDim, columnIndex)}
+                onClick={() => changeSortOrder(layout, column.isDim, columnIndex)}
               >
                 {column.label}
               </TableSortLabel>

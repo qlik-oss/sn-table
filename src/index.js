@@ -8,7 +8,6 @@ import {
   useSelections,
   useTheme,
   usePromise,
-  useMemo,
 } from '@nebula.js/stardust';
 import properties from './object-properties';
 import data from './data';
@@ -40,7 +39,7 @@ export default function supernova(env) {
       const [pageInfo, setPageInfo] = useState({ top: 0, height: 100 });
       const [muiParameters] = useState(muiSetup(__OPIONAL_THEME_DEPS__));
       const [tableData] = usePromise(() => manageData(model, layout, pageInfo), [layout, pageInfo]);
-      const changeSortOrder = useMemo(() => sortingFactory(model, layout), [layout]);
+      const changeSortOrder = sortingFactory(model);
 
       useEffect(() => {
         if (layout && tableData) {

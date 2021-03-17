@@ -1,5 +1,5 @@
-export default function sortingFactory(model, layout) {
-  return (isDim, sortIdx) => {
+export default function sortingFactory(model) {
+  return (layout, isDim, sortIdx) => {
     const sortOrder = [].concat(layout.qHyperCube.qEffectiveInterColumnSortOrder);
     const topSortIdx = sortOrder[0];
 

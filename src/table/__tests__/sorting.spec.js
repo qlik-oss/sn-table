@@ -12,7 +12,7 @@ describe('sorting', () => {
     model = {
       applyPatches: sinon.spy(),
     };
-    changeSortOrder = sortingFactory(model, layout);
+    changeSortOrder = sortingFactory(model);
     expectedPatches = [
       {
         qPath: '/qHyperCubeDef/qInterColumnSortOrder',
@@ -25,7 +25,7 @@ describe('sorting', () => {
   it('should call apply patches with second dimension first in sort order', () => {
     expectedPatches[0].qValue = '[1,0,2,3]';
 
-    changeSortOrder(true, 1);
+    changeSortOrder(layout, true, 1);
     expect(model.applyPatches).to.have.been.calledWith(expectedPatches, true);
   });
 
@@ -36,13 +36,12 @@ describe('sorting', () => {
       qValue: 'true',
     });
 
-    changeSortOrder(true, 0);
+    changeSortOrder(layout, true, 0);
     expect(model.applyPatches).to.have.been.calledWith(expectedPatches, true);
   });
 
   it('should call apply patches with another patch for qReverseSort for measure', () => {
     layout.qHyperCube.qEffectiveInterColumnSortOrder = [2, 0, 1, 3];
-    changeSortOrder = sortingFactory(model, layout);
     expectedPatches[0].qValue = '[2,0,1,3]';
     expectedPatches.push({
       qPath: '/qHyperCubeDef/qMeasures/0/qDef/qReverseSort',
@@ -50,7 +49,7 @@ describe('sorting', () => {
       qValue: 'true',
     });
 
-    changeSortOrder(false, 2);
+    changeSortOrder(layout, false, 2);
     expect(model.applyPatches).to.have.been.calledWith(expectedPatches, true);
   });
 });

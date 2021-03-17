@@ -45,6 +45,6 @@ describe('<TableHeadWrapper />', () => {
     );
     fireEvent.click(queryByText('someDim'));
 
-    expect(changeSortOrder).to.have.been.calledWith(true, 0);
+    expect(changeSortOrder).to.have.been.calledWith(layout, true, 0);
   });
 });
