@@ -1,3 +1,8 @@
+const directionMap = {
+  A: 'asc',
+  D: 'desc',
+};
+
 export function getColumnOrder(layout) {
   const { qColumnOrder, qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
   if (qColumnOrder?.length === qDimensionInfo.length + qMeasureInfo.length) {
@@ -20,6 +25,7 @@ export function getColumnInfo(layout, colIndex) {
       id: info.cId,
       align: !info.textAlign || info.textAlign.auto ? (isDim ? 'left' : 'right') : info.textAlign.align,
       stylingInfo: info.qAttrExprInfo.map((expr) => expr.id),
+      sortDirection: directionMap[info.qSortIndicator],
     }
   );
 }

@@ -18,6 +18,7 @@ describe('handle-data', () => {
       id: `id-${colIx}`,
       align: isDim ? 'left' : 'right',
       stylingInfo: [],
+      sortDirection: 'asc',
     });
 
     it('should return column info for dimension', () => {

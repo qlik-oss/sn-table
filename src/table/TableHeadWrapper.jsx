@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { STYLING_DEFAULTS, getHeadStyle } from './styling-utils';
 import handleKeyPress from './cells/handle-key-press';
 
@@ -17,7 +18,7 @@ const useStyles = makeStyles({
   }),
 });
 
-export default function TableHeadWrapper({ rootElement, tableData, theme, layout }) {
+export default function TableHeadWrapper({ rootElement, tableData, theme, layout, changeSortOrder }) {
   const classes = useStyles(getHeadStyle(layout, theme));
 
   return (
@@ -34,7 +35,13 @@ export default function TableHeadWrapper({ rootElement, tableData, theme, layout
               tabIndex={tabIndex}
               onKeyDown={(e) => handleKeyPress(e, rootElement, 0, columnIndex)}
             >
-              {column.label}
+              <TableSortLabel
+                active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
+                direction={column.sortDirection}
+                onClick={() => changeSortOrder(layout, column.isDim, columnIndex)}
+              >
+                {column.label}
+              </TableSortLabel>
             </TableCell>
           );
         })}
@@ -48,4 +55,5 @@ TableHeadWrapper.propTypes = {
   tableData: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
+  changeSortOrder: PropTypes.func.isRequired,
 };
