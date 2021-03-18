@@ -20,7 +20,7 @@ const useStyles = makeStyles({
   },
 });
 
-const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, layout, theme }) => {
+const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, layout, theme, setFocusedCell }) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const styling = useMemo(() => getBodyStyle(layout, theme), [layout, theme]);
@@ -71,7 +71,7 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
                   selState={selState}
                   selDispatch={selDispatch}
                   tabIndex={-1}
-                  onKeyDown={(evt) => handleKeyPress(evt, rootElement, rowIndex + 1, columnIndex)}
+                  onKeyDown={(evt) => handleKeyPress(evt, rootElement, [rowIndex + 1, columnIndex], setFocusedCell)}
                 >
                   {value}
                 </CellRenderer>
@@ -91,6 +91,7 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  setFocusedCell: PropTypes.func.isRequired,
 };
 
 export default React.memo(TableBodyWrapper);

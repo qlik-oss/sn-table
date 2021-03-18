@@ -18,33 +18,29 @@ const useStyles = makeStyles({
   }),
 });
 
-export default function TableHeadWrapper({ rootElement, tableData, theme, layout, changeSortOrder }) {
+export default function TableHeadWrapper({ rootElement, tableData, theme, layout, changeSortOrder, setFocusedCell }) {
   const classes = useStyles(getHeadStyle(layout, theme));
 
   return (
     <TableHead>
       <TableRow className="sn-table-row">
-        {tableData.columns.map((column, columnIndex) => {
-          const tabIndex = columnIndex === 0 ? '0' : '-1';
-          return (
-            <TableCell
-              key={column.id}
-              align={column.align}
-              className={`${classes.head} sn-table-head-cell sn-table-cell`}
-              style={{ minWidth: column.minWidth }}
-              tabIndex={tabIndex}
-              onKeyDown={(e) => handleKeyPress(e, rootElement, 0, columnIndex)}
+        {tableData.columns.map((column, columnIndex) => (
+          <TableCell
+            key={column.id}
+            align={column.align}
+            className={`${classes.head} sn-table-head-cell sn-table-cell`}
+            style={{ minWidth: column.minWidth }}
+            onKeyDown={(e) => handleKeyPress(e, rootElement, [0, columnIndex], setFocusedCell)}
+          >
+            <TableSortLabel
+              active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
+              direction={column.sortDirection}
+              onClick={() => changeSortOrder(layout, column.isDim, columnIndex)}
             >
-              <TableSortLabel
-                active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
-                direction={column.sortDirection}
-                onClick={() => changeSortOrder(layout, column.isDim, columnIndex)}
-              >
-                {column.label}
-              </TableSortLabel>
-            </TableCell>
-          );
-        })}
+              {column.label}
+            </TableSortLabel>
+          </TableCell>
+        ))}
       </TableRow>
     </TableHead>
   );
@@ -56,4 +52,5 @@ TableHeadWrapper.propTypes = {
   theme: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   changeSortOrder: PropTypes.func.isRequired,
+  setFocusedCell: PropTypes.func.isRequired,
 };

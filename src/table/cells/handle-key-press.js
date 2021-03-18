@@ -1,33 +1,29 @@
-export const moveToNextFocus = (rowElements, nextRow, nextCol) => {
-  const nextCell = rowElements[nextRow].getElementsByClassName('sn-table-cell')[nextCol];
+export const focusCell = (rowElements, nextCellCoord) => {
+  const nextCell = rowElements[nextCellCoord[0]].getElementsByClassName('sn-table-cell')[nextCellCoord[1]];
   nextCell.focus();
   nextCell.setAttribute('tabIndex', '0');
 };
 
-export const arrowKeysNavigation = (evt, rowAndColumnCount, rowIndex, colIndex) => {
-  let nextRow = rowIndex;
-  let nextCol = colIndex;
+export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord) => {
+  let [nextRow, nextCol] = cellCoord;
 
   switch (evt.key) {
     case 'ArrowDown':
-      rowIndex + 1 < rowAndColumnCount.rowCount && nextRow++;
+      nextRow + 1 < rowAndColumnCount.rowCount && nextRow++;
       break;
     case 'ArrowUp':
-      rowIndex > 0 && --nextRow;
+      nextRow > 0 && --nextRow;
       break;
     case 'ArrowRight':
-      colIndex < rowAndColumnCount.columnCount - 1 && nextCol++;
+      nextCol < rowAndColumnCount.columnCount - 1 && nextCol++;
       break;
     case 'ArrowLeft':
-      colIndex > 0 && --nextCol;
+      nextCol > 0 && --nextCol;
       break;
     default:
   }
 
-  return {
-    nextRow,
-    nextCol,
-  };
+  return [nextRow, nextCol];
 };
 
 export const getRowAndColumnCount = (rootElement) => {
@@ -50,7 +46,7 @@ export const preventDefaultBehavior = (evt) => {
   evt.preventDefault();
 };
 
-const handleKeyPress = (evt, rootElement, rowIndex, colIndex) => {
+const handleKeyPress = (evt, rootElement, cellCoord, setFocusedCell) => {
   preventDefaultBehavior(evt);
   switch (evt.key) {
     // TODO page up/down etc
@@ -60,11 +56,16 @@ const handleKeyPress = (evt, rootElement, rowIndex, colIndex) => {
     case 'ArrowLeft': {
       removeCurrentFocus(evt);
       const rowAndColumnCount = getRowAndColumnCount(rootElement);
-      const { nextRow, nextCol } = arrowKeysNavigation(evt, rowAndColumnCount, rowIndex, colIndex);
-      moveToNextFocus(rowAndColumnCount.rowElements, nextRow, nextCol);
+      const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord);
+      focusCell(rowAndColumnCount.rowElements, nextCellCoord);
+      setFocusedCell(nextCellCoord);
       break;
     }
     // TODO handle selections, search?, sorting...
+    case 'Escape':
+      evt.target.blur();
+      // setFocusedCell([]);
+      break;
     default:
       break;
   }

@@ -8,6 +8,7 @@ import {
   useSelections,
   useTheme,
   usePromise,
+  useAccessibility,
 } from '@nebula.js/stardust';
 import properties from './object-properties';
 import data from './data';
@@ -35,6 +36,8 @@ export default function supernova(env) {
       const constraints = useConstraints();
       const selectionsAPI = useSelections();
       const theme = useTheme();
+      const a11y = useAccessibility();
+      console.log(a11y);
 
       const [pageInfo, setPageInfo] = useState({ top: 0, height: 100 });
       const [muiParameters] = useState(muiSetup(__OPIONAL_THEME_DEPS__));
@@ -54,9 +57,10 @@ export default function supernova(env) {
             muiParameters,
             theme,
             changeSortOrder,
+            a11y,
           });
         }
-      }, [tableData, constraints, selectionsAPI.isModal()]);
+      }, [tableData, constraints, selectionsAPI.isModal(), a11y]);
 
       useEffect(
         () => () => {

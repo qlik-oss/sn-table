@@ -7,6 +7,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableHeadWrapper from './TableHeadWrapper';
 import TableBodyWrapper from './TableBodyWrapper';
+import { focusCell } from './cells/handle-key-press';
 
 const useStyles = makeStyles({
   paper: {
@@ -24,11 +25,12 @@ const useStyles = makeStyles({
 });
 
 export default function TableWrapper(props) {
-  const { rootElement, tableData, setPageInfo, constraints, selectionsAPI } = props;
+  const { rootElement, tableData, setPageInfo, constraints, selectionsAPI, a11y } = props;
   const { size, rows } = tableData;
   const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
+  const [focusedCell, setFocusedCell] = useState([]);
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
@@ -57,12 +59,25 @@ export default function TableWrapper(props) {
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
+  useEffect(() => {
+    if (a11y.focus) {
+      if (focusedCell.length) {
+        focusCell(rootElement.getElementsByClassName('sn-table-row'), focusedCell);
+      } else {
+        focusCell(rootElement.getElementsByClassName('sn-table-row'), [0, 0]);
+        setFocusedCell([0, 0]);
+      }
+    } else {
+      setFocusedCell([]);
+    }
+  }, [a11y]);
+
   return (
     <Paper className={classes.paper}>
       <TableContainer className={classes[containerMode]}>
         <Table stickyHeader aria-label="sticky table">
-          <TableHeadWrapper {...props} />
-          <TableBodyWrapper {...props} />
+          <TableHeadWrapper {...props} setFocusedCell={setFocusedCell} />
+          <TableBodyWrapper {...props} setFocusedCell={setFocusedCell} />
         </Table>
       </TableContainer>
       <TablePagination
@@ -85,4 +100,5 @@ TableWrapper.propTypes = {
   setPageInfo: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
+  a11y: PropTypes.object.isRequired,
 };
