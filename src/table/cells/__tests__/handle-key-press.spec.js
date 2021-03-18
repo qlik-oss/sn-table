@@ -97,27 +97,99 @@ describe('handle-key-press', () => {
   });
 
   describe('handleKeyPress', () => {
-    const rowIndex = 0;
-    const colIndex = 0;
-    const evt = {
-      key: 'ArrowDown',
-      stopPropagation: sinon.spy(),
-      preventDefault: sinon.spy(),
-    };
-    evt.target = {
-      blur: sinon.spy(),
-      setAttribute: sinon.spy(),
-    };
-    const rootElement = {
-      getElementsByClassName: () => [{ getElementsByClassName: () => [{ focus: () => {}, setAttribute: () => {} }] }],
-    };
+    let rowIndex;
+    let colIndex;
+    let evt = {};
+    let rootElement = {};
+    let selState = {};
+    let cell = [];
+    let selDispatch;
 
-    it('should prevent default behavior and remove current focus', () => {
-      handleKeyPress(evt, rootElement, rowIndex, colIndex);
-      expect(evt.preventDefault).to.have.been.calledOnce;
-      expect(evt.stopPropagation).to.have.been.calledOnce;
-      expect(evt.target.blur).to.have.been.calledOnce;
-      expect(evt.target.setAttribute).to.have.been.calledOnce;
+    beforeEach(() => {
+      rowIndex = 0;
+      colIndex = 0;
+      evt = {
+        key: 'ArrowDown',
+        stopPropagation: sinon.spy(),
+        preventDefault: sinon.spy(),
+        target: {
+          blur: sinon.spy(),
+          setAttribute: sinon.spy(),
+        },
+      };
+      rootElement = {
+        getElementsByClassName: () => [{ getElementsByClassName: () => [{ focus: () => {}, setAttribute: () => {} }] }],
+      };
+      selState = {
+        api: {
+          confirm: sinon.spy(),
+          cancel: sinon.spy(),
+          begin: sinon.spy(),
+          select: sinon.spy(),
+        },
+        rows: [],
+        colIdx: -1,
+      };
+      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1 };
+      selDispatch = sinon.spy();
+    });
+
+    describe('ArrowDown', () => {
+      it('should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
+        handleKeyPress(evt, rootElement, rowIndex, colIndex);
+        expect(evt.preventDefault).to.have.been.calledOnce;
+        expect(evt.stopPropagation).to.have.been.calledOnce;
+        expect(evt.target.blur).to.have.been.calledOnce;
+        expect(evt.target.setAttribute).to.have.been.calledOnce;
+      });
+    });
+
+    describe('SpaceBar', () => {
+      it('should select value for dimension', () => {
+        evt.key = ' ';
+        cell = {
+          isDim: true,
+        };
+        handleKeyPress(evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch);
+        expect(evt.preventDefault).to.have.been.calledOnce;
+        expect(evt.stopPropagation).to.have.been.calledOnce;
+        expect(selState.api.begin).to.have.been.calledOnce;
+        expect(selState.api.select).to.have.been.calledOnce;
+        expect(selDispatch).to.have.been.calledOnce;
+      });
+
+      it('should not select value for measure', () => {
+        evt.key = ' ';
+        cell = {
+          isDim: false,
+        };
+        handleKeyPress(evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch);
+        expect(evt.preventDefault).to.have.been.calledOnce;
+        expect(evt.stopPropagation).to.have.been.calledOnce;
+        expect(selState.api.begin).to.not.have.been.calledOnce;
+        expect(selState.api.select).to.not.have.been.calledOnce;
+        expect(selDispatch).to.not.have.been.calledOnce;
+      });
+    });
+
+    describe('Enter', () => {
+      it('should confirms selections', () => {
+        evt.key = 'Enter';
+        handleKeyPress(evt, rootElement, rowIndex, colIndex, cell, selState);
+        expect(evt.preventDefault).to.have.been.calledOnce;
+        expect(evt.stopPropagation).to.have.been.calledOnce;
+        expect(selState.api.confirm).to.have.been.calledOnce;
+      });
+    });
+
+    describe('Cancel', () => {
+      it('should cancel selection', () => {
+        evt.key = 'Escape';
+        handleKeyPress(evt, rootElement, rowIndex, colIndex, cell, selState);
+        expect(evt.preventDefault).to.have.been.calledOnce;
+        expect(evt.stopPropagation).to.have.been.calledOnce;
+        expect(selState.api.cancel).to.have.been.calledOnce;
+      });
     });
   });
 });

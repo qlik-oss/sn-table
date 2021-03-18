@@ -60,17 +60,23 @@ export default function TableWrapper(props) {
   }, []);
 
   useEffect(() => {
+    console.log('a11y updated');
     if (a11y.focus) {
       if (focusedCell.length) {
         focusCell(rootElement.getElementsByClassName('sn-table-row'), focusedCell);
       } else {
         focusCell(rootElement.getElementsByClassName('sn-table-row'), [0, 0]);
-        setFocusedCell([0, 0]);
       }
     } else {
       setFocusedCell([]);
     }
   }, [a11y]);
+
+  useEffect(() => {
+    if (a11y.focus && focusedCell.length) {
+      focusCell(rootElement.getElementsByClassName('sn-table-row'), focusedCell);
+    }
+  });
 
   return (
     <Paper className={classes.paper}>

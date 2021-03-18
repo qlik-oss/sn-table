@@ -1,24 +1,27 @@
+import { selectCell } from '../selections-utils';
+
 export const focusCell = (rowElements, nextCellCoord) => {
   const nextCell = rowElements[nextCellCoord[0]].getElementsByClassName('sn-table-cell')[nextCellCoord[1]];
   nextCell.focus();
   nextCell.setAttribute('tabIndex', '0');
 };
 
-export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord) => {
+export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, selState) => {
   let [nextRow, nextCol] = cellCoord;
+  const isSelectedTable = selState && selState.rows.length > 0;
 
   switch (evt.key) {
     case 'ArrowDown':
       nextRow + 1 < rowAndColumnCount.rowCount && nextRow++;
       break;
     case 'ArrowUp':
-      nextRow > 0 && --nextRow;
+      nextRow > 0 && (!isSelectedTable || nextRow !== 1) && nextRow--;
       break;
     case 'ArrowRight':
-      nextCol < rowAndColumnCount.columnCount - 1 && nextCol++;
+      nextCol < rowAndColumnCount.columnCount - 1 && !isSelectedTable && nextCol++;
       break;
     case 'ArrowLeft':
-      nextCol > 0 && --nextCol;
+      nextCol > 0 && !isSelectedTable && nextCol--;
       break;
     default:
   }
@@ -46,26 +49,42 @@ export const preventDefaultBehavior = (evt) => {
   evt.preventDefault();
 };
 
-const handleKeyPress = (evt, rootElement, cellCoord, setFocusedCell) => {
-  preventDefaultBehavior(evt);
+const handleKeyPress = (evt, rootElement, cellCoord, setFocusedCell, cell, selState, selDispatch) => {
   switch (evt.key) {
-    // TODO page up/down etc
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
+      preventDefaultBehavior(evt);
       removeCurrentFocus(evt);
       const rowAndColumnCount = getRowAndColumnCount(rootElement);
-      const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord);
+      const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selState);
       focusCell(rowAndColumnCount.rowElements, nextCellCoord);
       setFocusedCell(nextCellCoord);
       break;
     }
-    // TODO handle selections, search?, sorting...
-    case 'Escape':
-      evt.target.blur();
-      // setFocusedCell([]);
+    // Space bar: Selects value.
+    case ' ': {
+      preventDefaultBehavior(evt);
+      cell?.isDim && selectCell(cell, selState, selDispatch, evt);
       break;
+    }
+    // Enter: Confirms selections.
+    case 'Enter': {
+      preventDefaultBehavior(evt);
+      selState.api.confirm();
+      break;
+    }
+    // Esc: Cancels selections if any, otherwise blur
+    case 'Escape': {
+      preventDefaultBehavior(evt);
+      if (selState?.rows.length) {
+        selState.api.cancel();
+      } else {
+        removeCurrentFocus(evt);
+      }
+      break;
+    }
     default:
       break;
   }

@@ -71,7 +71,17 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
                   selState={selState}
                   selDispatch={selDispatch}
                   tabIndex={-1}
-                  onKeyDown={(evt) => handleKeyPress(evt, rootElement, [rowIndex + 1, columnIndex], setFocusedCell)}
+                  onKeyDown={(evt) =>
+                    handleKeyPress(
+                      evt,
+                      rootElement,
+                      [rowIndex + 1, columnIndex],
+                      setFocusedCell,
+                      cell,
+                      selState,
+                      selDispatch
+                    )
+                  }
                 >
                   {value}
                 </CellRenderer>

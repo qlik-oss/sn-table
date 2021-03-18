@@ -13,6 +13,7 @@ export const STYLING_DEFAULTS = {
   HEIGHT: 'auto',
   HEAD_LINE_HEIGHT: '150%',
   BODY_LINE_HEIGHT: '130%',
+  FOCUS_OUTLINE: '0 0 0 2px #3f8ab3 inset',
 };
 
 export const SELECTION_STYLING = {
