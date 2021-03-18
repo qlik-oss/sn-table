@@ -71,13 +71,8 @@ export const headHandleKeyPress = (evt, rootElement, rowIndex, colIndex, changeS
       moveFocus(evt, rootElement, rowIndex, colIndex);
       break;
     }
-    // Space bar: update the sorting
-    case ' ': {
-      preventDefaultBehavior(evt);
-      changeSortOrder(layout, isDim, colIndex);
-      break;
-    }
-    // Enter: update the sorting
+    // Space bar / Enter: update the sorting
+    case ' ':
     case 'Enter': {
       preventDefaultBehavior(evt);
       changeSortOrder(layout, isDim, colIndex);

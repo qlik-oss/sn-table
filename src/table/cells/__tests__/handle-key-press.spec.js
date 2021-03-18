@@ -1,4 +1,9 @@
-import handleKeyPress, { getRowAndColumnCount, arrowKeysNavigation, headHandleKeyPress } from '../handle-key-press';
+import handleKeyPress, {
+  getRowAndColumnCount,
+  arrowKeysNavigation,
+  moveFocus,
+  headHandleKeyPress,
+} from '../handle-key-press';
 
 describe('handle-key-press', () => {
   describe('arrowKeysNavigation', () => {
@@ -93,6 +98,49 @@ describe('handle-key-press', () => {
       expect(rowCount).to.equal(resolvedRowCount);
       expect(columnCount).to.equal(resolvedColumnCount);
       expect(rowElements).to.equal(resolvedRowElements);
+    });
+  });
+
+  describe('moveFocus', () => {
+    let rowIndex;
+    let colIndex;
+    let evt = {};
+    let rootElement = {};
+    let selState = {};
+
+    beforeEach(() => {
+      rowIndex = 0;
+      colIndex = 0;
+      evt = {
+        key: 'ArrowDown',
+        stopPropagation: sinon.spy(),
+        preventDefault: sinon.spy(),
+        target: {
+          blur: sinon.spy(),
+          setAttribute: sinon.spy(),
+        },
+      };
+      rootElement = {
+        getElementsByClassName: () => [{ getElementsByClassName: () => [{ focus: () => {}, setAttribute: () => {} }] }],
+      };
+      selState = {
+        api: {
+          confirm: sinon.spy(),
+          cancel: sinon.spy(),
+          begin: sinon.spy(),
+          select: sinon.spy(),
+        },
+        rows: [],
+        colIdx: -1,
+      };
+    });
+
+    it('should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
+      moveFocus(evt, rootElement, rowIndex, colIndex, selState);
+      expect(evt.preventDefault).to.have.been.calledOnce;
+      expect(evt.stopPropagation).to.have.been.calledOnce;
+      expect(evt.target.blur).to.have.been.calledOnce;
+      expect(evt.target.setAttribute).to.have.been.calledOnce;
     });
   });
 
