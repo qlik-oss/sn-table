@@ -1,4 +1,4 @@
-import handleKeyPress, { getRowAndColumnCount, arrowKeysNavigation } from '../handle-key-press';
+import handleKeyPress, { getRowAndColumnCount, arrowKeysNavigation, headHandleKeyPress } from '../handle-key-press';
 
 describe('handle-key-press', () => {
   describe('arrowKeysNavigation', () => {
@@ -189,6 +189,64 @@ describe('handle-key-press', () => {
         expect(evt.preventDefault).to.have.been.calledOnce;
         expect(evt.stopPropagation).to.have.been.calledOnce;
         expect(selState.api.cancel).to.have.been.calledOnce;
+      });
+    });
+  });
+
+  describe('headHandleKeyPress', () => {
+    let rowIndex;
+    let colIndex;
+    let evt = {};
+    let rootElement = {};
+    let changeSortOrder;
+    let layout;
+    let isDim;
+
+    beforeEach(() => {
+      rowIndex = 0;
+      colIndex = 0;
+      evt = {
+        key: 'ArrowDown',
+        stopPropagation: sinon.spy(),
+        preventDefault: sinon.spy(),
+        target: {
+          blur: sinon.spy(),
+          setAttribute: sinon.spy(),
+        },
+      };
+      rootElement = {
+        getElementsByClassName: () => [{ getElementsByClassName: () => [{ focus: () => {}, setAttribute: () => {} }] }],
+      };
+      changeSortOrder = sinon.spy();
+    });
+
+    describe('ArrowDown', () => {
+      it('should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
+        headHandleKeyPress(evt, rootElement, rowIndex, colIndex);
+        expect(evt.preventDefault).to.have.been.calledOnce;
+        expect(evt.stopPropagation).to.have.been.calledOnce;
+        expect(evt.target.blur).to.have.been.calledOnce;
+        expect(evt.target.setAttribute).to.have.been.calledOnce;
+      });
+    });
+
+    describe('SpaceBar', () => {
+      it('should update the sorting', () => {
+        evt.key = ' ';
+        headHandleKeyPress(evt, rootElement, rowIndex, colIndex, changeSortOrder, layout, isDim);
+        expect(evt.preventDefault).to.have.been.calledOnce;
+        expect(evt.stopPropagation).to.have.been.calledOnce;
+        expect(changeSortOrder).to.have.been.calledOnce;
+      });
+    });
+
+    describe('Enter', () => {
+      it('should update the sorting', () => {
+        evt.key = 'Enter';
+        headHandleKeyPress(evt, rootElement, rowIndex, colIndex, changeSortOrder, layout, isDim);
+        expect(evt.preventDefault).to.have.been.calledOnce;
+        expect(evt.stopPropagation).to.have.been.calledOnce;
+        expect(changeSortOrder).to.have.been.calledOnce;
       });
     });
   });

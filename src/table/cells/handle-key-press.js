@@ -54,17 +54,47 @@ export const preventDefaultBehavior = (evt) => {
   evt.preventDefault();
 };
 
+export const moveFocus = (evt, rootElement, rowIndex, colIndex, selState) => {
+  preventDefaultBehavior(evt);
+  removeCurrentFocus(evt);
+  const rowAndColumnCount = getRowAndColumnCount(rootElement);
+  const { nextRow, nextCol } = arrowKeysNavigation(evt, rowAndColumnCount, rowIndex, colIndex, selState);
+  moveToNextFocus(rowAndColumnCount.rowElements, nextRow, nextCol);
+};
+
+export const headHandleKeyPress = (evt, rootElement, rowIndex, colIndex, changeSortOrder, layout, isDim) => {
+  switch (evt.key) {
+    case 'ArrowUp':
+    case 'ArrowDown':
+    case 'ArrowRight':
+    case 'ArrowLeft': {
+      moveFocus(evt, rootElement, rowIndex, colIndex);
+      break;
+    }
+    // Space bar: update the sorting
+    case ' ': {
+      preventDefaultBehavior(evt);
+      changeSortOrder(layout, isDim, colIndex);
+      break;
+    }
+    // Enter: update the sorting
+    case 'Enter': {
+      preventDefaultBehavior(evt);
+      changeSortOrder(layout, isDim, colIndex);
+      break;
+    }
+    default:
+      break;
+  }
+};
+
 const handleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      preventDefaultBehavior(evt);
-      removeCurrentFocus(evt);
-      const rowAndColumnCount = getRowAndColumnCount(rootElement);
-      const { nextRow, nextCol } = arrowKeysNavigation(evt, rowAndColumnCount, rowIndex, colIndex, selState);
-      moveToNextFocus(rowAndColumnCount.rowElements, nextRow, nextCol);
+      moveFocus(evt, rootElement, rowIndex, colIndex, selState);
       break;
     }
     // Space bar: Selects value.
