@@ -17,7 +17,7 @@ export const arrowKeysNavigation = (evt, rowAndColumnCount, rowIndex, colIndex, 
       rowIndex + 1 < rowAndColumnCount.rowCount && nextRow++;
       break;
     case 'ArrowUp':
-      rowIndex > 0 && (!isSelectedTable || !(rowIndex === 1)) && --nextRow;
+      rowIndex > 0 && (!isSelectedTable || rowIndex !== 1) && --nextRow;
       break;
     case 'ArrowRight':
       colIndex < rowAndColumnCount.columnCount - 1 && !isSelectedTable && nextCol++;
