@@ -4,6 +4,7 @@ import handleKeyPress, {
   moveFocus,
   headHandleKeyPress,
 } from '../handle-key-press';
+import * as handleKeyPressObject from '../handle-key-press';
 
 describe('handle-key-press', () => {
   describe('arrowKeysNavigation', () => {
@@ -242,6 +243,7 @@ describe('handle-key-press', () => {
   });
 
   describe('headHandleKeyPress', () => {
+    const sandbox = sinon.createSandbox();
     let rowIndex;
     let colIndex;
     let evt = {};
@@ -266,11 +268,17 @@ describe('handle-key-press', () => {
         getElementsByClassName: () => [{ getElementsByClassName: () => [{ focus: () => {}, setAttribute: () => {} }] }],
       };
       changeSortOrder = sinon.spy();
+      sandbox.replace(handleKeyPressObject, 'moveFocus', sandbox.spy());
+    });
+
+    afterEach(() => {
+      sandbox.verifyAndRestore();
     });
 
     describe('ArrowDown', () => {
       it('should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
         headHandleKeyPress(evt, rootElement, rowIndex, colIndex);
+        expect(handleKeyPressObject.moveFocus).to.have.been.calledOnce;
         expect(evt.preventDefault).to.have.been.calledOnce;
         expect(evt.stopPropagation).to.have.been.calledOnce;
         expect(evt.target.blur).to.have.been.calledOnce;
