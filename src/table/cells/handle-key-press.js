@@ -6,12 +6,14 @@ export const handleKeyUp = (event) => {
 };
 
 export const updatePage = (event, totalRowSize, page, rowsPerPage, setPageInfo, setPage) => {
+  window.console.log(event.key, 'key');
   keysPressed[event.key] = true;
   const pageSize = Math.floor(totalRowSize / rowsPerPage);
   const leftRowSize = totalRowSize % rowsPerPage;
+  const isRightKeys = keysPressed.Shift && keysPressed.Control && event.key === 'ArrowRight';
   if (
-    (keysPressed.Shift && event.key === 'ArrowRight' && page + 1 < pageSize && pageSize > 0) ||
-    (keysPressed.Shift && event.key === 'ArrowRight' && leftRowSize > 0 && page + 1 === pageSize)
+    (isRightKeys && page + 1 < pageSize && pageSize > 0) ||
+    (isRightKeys && leftRowSize > 0 && page + 1 === pageSize)
   ) {
     setPageInfo({
       top: (page + 1) * rowsPerPage,
@@ -19,7 +21,7 @@ export const updatePage = (event, totalRowSize, page, rowsPerPage, setPageInfo, 
     });
     setPage(page + 1);
   }
-  if (keysPressed.Shift && event.key === 'ArrowLeft' && page > 0) {
+  if (keysPressed.Shift && keysPressed.Control && event.key === 'ArrowLeft' && page > 0) {
     setPageInfo({
       top: (page - 1) * rowsPerPage,
       height: rowsPerPage,
