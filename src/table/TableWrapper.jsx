@@ -63,7 +63,7 @@ export default function TableWrapper(props) {
   }
 
   useEffect(() => {
-    window.addEventListener('keydown', (event) =>
+    rootElement.addEventListener('keydown', (event) =>
       updatePage(
         event,
         localState.current.totalRowSize,
@@ -74,7 +74,7 @@ export default function TableWrapper(props) {
       )
     );
     return () => {
-      window.addEventListener('keydown', (event) =>
+      rootElement.addEventListener('keydown', (event) =>
         updatePage(
           event,
           localState.current.totalRowSize,
