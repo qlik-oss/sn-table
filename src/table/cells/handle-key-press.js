@@ -85,6 +85,11 @@ const handleKeyPress = (evt, rootElement, cellCoord, setFocusedCell, cell, selSt
       }
       break;
     }
+    // Tab: blur cell
+    case 'Tab': {
+      removeCurrentFocus(evt);
+      break;
+    }
     default:
       break;
   }

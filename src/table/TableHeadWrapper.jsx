@@ -34,11 +34,13 @@ export default function TableHeadWrapper({ rootElement, tableData, theme, layout
             className={`${classes.head} sn-table-head-cell sn-table-cell`}
             style={{ minWidth: column.minWidth }}
             onKeyDown={(e) => handleKeyPress(e, rootElement, [0, columnIndex], setFocusedCell)}
+            tabindex={-1}
           >
             <TableSortLabel
               active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
               direction={column.sortDirection}
               onClick={() => changeSortOrder(layout, column.isDim, columnIndex)}
+              tabindex={-1}
             >
               {column.label}
             </TableSortLabel>

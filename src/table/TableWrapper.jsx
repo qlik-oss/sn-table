@@ -35,6 +35,7 @@ export default function TableWrapper(props) {
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
   const paginationFixedRpp = selectionsAPI.isModal() || tableWidth < 400;
+  const paginationTabindex = a11y.focus ? 0 : -1;
 
   const handleChangePage = (event, newPage) => {
     setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
@@ -60,23 +61,17 @@ export default function TableWrapper(props) {
   }, []);
 
   useEffect(() => {
-    console.log('a11y updated');
     if (a11y.focus) {
-      if (focusedCell.length) {
-        focusCell(rootElement.getElementsByClassName('sn-table-row'), focusedCell);
-      } else {
-        focusCell(rootElement.getElementsByClassName('sn-table-row'), [0, 0]);
-      }
-    } else {
-      setFocusedCell([]);
+      focusCell(rootElement.getElementsByClassName('sn-table-row'), focusedCell.length ? focusedCell : [0, 0]);
     }
   }, [a11y]);
 
+  // refocus after
   useEffect(() => {
     if (a11y.focus && focusedCell.length) {
       focusCell(rootElement.getElementsByClassName('sn-table-row'), focusedCell);
     }
-  });
+  }, [tableData]);
 
   return (
     <Paper className={classes.paper}>
@@ -95,6 +90,9 @@ export default function TableWrapper(props) {
         page={page}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
+        SelectProps={{ inputProps: { tabIndex: paginationTabindex } }}
+        backIconButtonProps={{ tabIndex: paginationTabindex }}
+        nextIconButtonProps={{ tabIndex: paginationTabindex }}
       />
     </Paper>
   );
