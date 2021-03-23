@@ -73,6 +73,7 @@ const handleKeyPress = (evt, rootElement, cellCoord, setFocusedCell, cell, selSt
     case 'Enter': {
       preventDefaultBehavior(evt);
       selState.api.confirm();
+      // TODO: make sure focus is kept, or set on nebula cell
       break;
     }
     // Esc: Cancels selections if any, otherwise blur
@@ -80,14 +81,20 @@ const handleKeyPress = (evt, rootElement, cellCoord, setFocusedCell, cell, selSt
       preventDefaultBehavior(evt);
       if (selState?.rows.length) {
         selState.api.cancel();
+        // TODO: make sure focus is kept
       } else {
         removeCurrentFocus(evt);
+        // dropFocus()
       }
       break;
     }
-    // Tab: blur cell
+    // Tab: blur cell, or if shift, focus nebula cell
     case 'Tab': {
+      // dropFocus()
       removeCurrentFocus(evt);
+      if (evt.shiftKey) {
+        // go to nebula... might not be done here
+      }
       break;
     }
     default:
