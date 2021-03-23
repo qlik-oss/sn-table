@@ -74,17 +74,42 @@ export const preventDefaultBehavior = (evt) => {
   evt.preventDefault();
 };
 
-const handleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch) => {
+export const moveFocus = (evt, rootElement, rowIndex, colIndex, selState) => {
+  preventDefaultBehavior(evt);
+  removeCurrentFocus(evt);
+  const rowAndColumnCount = getRowAndColumnCount(rootElement);
+  const { nextRow, nextCol } = arrowKeysNavigation(evt, rowAndColumnCount, rowIndex, colIndex, selState);
+  moveToNextFocus(rowAndColumnCount.rowElements, nextRow, nextCol);
+};
+
+export const headHandleKeyPress = (evt, rootElement, rowIndex, colIndex, changeSortOrder, layout, isDim) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
+      moveFocus(evt, rootElement, rowIndex, colIndex);
+      break;
+    }
+    // Space bar / Enter: update the sorting
+    case ' ':
+    case 'Enter': {
       preventDefaultBehavior(evt);
-      removeCurrentFocus(evt);
-      const rowAndColumnCount = getRowAndColumnCount(rootElement);
-      const { nextRow, nextCol } = arrowKeysNavigation(evt, rowAndColumnCount, rowIndex, colIndex, selState);
-      moveToNextFocus(rowAndColumnCount.rowElements, nextRow, nextCol);
+      changeSortOrder(layout, isDim, colIndex);
+      break;
+    }
+    default:
+      break;
+  }
+};
+
+export const bodyHandleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch) => {
+  switch (evt.key) {
+    case 'ArrowUp':
+    case 'ArrowDown':
+    case 'ArrowRight':
+    case 'ArrowLeft': {
+      moveFocus(evt, rootElement, rowIndex, colIndex, selState);
       break;
     }
     // Space bar: Selects value.
@@ -109,5 +134,3 @@ const handleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, se
       break;
   }
 };
-
-export default handleKeyPress;
