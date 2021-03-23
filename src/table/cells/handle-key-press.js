@@ -1,32 +1,22 @@
 import { selectCell } from '../selections-utils';
 
-const keysPressed = {};
-export const handleKeyUp = (event) => {
-  delete keysPressed[event.key];
+const handleChangePage = (newPage, setPageInfo, rowsPerPage, setPage) => {
+  setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
+  setPage(newPage);
 };
 
 export const updatePage = (event, totalRowSize, page, rowsPerPage, setPageInfo, setPage) => {
-  window.console.log(event.key, 'key');
-  keysPressed[event.key] = true;
   const pageSize = Math.floor(totalRowSize / rowsPerPage);
   const leftRowSize = totalRowSize % rowsPerPage;
-  const isRightKeys = keysPressed.Shift && keysPressed.Control && event.key === 'ArrowRight';
+  const isRightKeys = event.shiftKey && event.ctrlKey && event.key === 'ArrowRight';
   if (
     (isRightKeys && page + 1 < pageSize && pageSize > 0) ||
     (isRightKeys && leftRowSize > 0 && page + 1 === pageSize)
   ) {
-    setPageInfo({
-      top: (page + 1) * rowsPerPage,
-      height: rowsPerPage,
-    });
-    setPage(page + 1);
+    handleChangePage(page + 1, setPageInfo, rowsPerPage, setPage);
   }
-  if (keysPressed.Shift && keysPressed.Control && event.key === 'ArrowLeft' && page > 0) {
-    setPageInfo({
-      top: (page - 1) * rowsPerPage,
-      height: rowsPerPage,
-    });
-    setPage(page - 1);
+  if (event.shiftKey && event.ctrlKey && event.key === 'ArrowLeft' && page > 0) {
+    handleChangePage(page - 1, setPageInfo, rowsPerPage, setPage);
   }
 };
 
