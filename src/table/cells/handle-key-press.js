@@ -4,7 +4,7 @@ const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
 export const updatePage = (evt, totalRowSize, page, rowsPerPage, handleChangePage) => {
   if (isCtrlShift(evt)) {
-    const lastPage = Math.floor(totalRowSize / rowsPerPage);
+    const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
     if (evt.key === 'ArrowRight' && page < lastPage) {
       handleChangePage(null, page + 1);
     } else if (evt.key === 'ArrowLeft' && page > 0) {
