@@ -1,9 +1,4 @@
-import handleKeyPress, {
-  getRowAndColumnCount,
-  arrowKeysNavigation,
-  moveFocus,
-  headHandleKeyPress,
-} from '../handle-key-press';
+import { getRowAndColumnCount, arrowKeysNavigation, bodyHandleKeyPress, headHandleKeyPress } from '../handle-key-press';
 
 describe('handle-key-press', () => {
   describe('arrowKeysNavigation', () => {
@@ -101,50 +96,7 @@ describe('handle-key-press', () => {
     });
   });
 
-  describe('moveFocus', () => {
-    let rowIndex;
-    let colIndex;
-    let evt = {};
-    let rootElement = {};
-    let selState = {};
-
-    beforeEach(() => {
-      rowIndex = 0;
-      colIndex = 0;
-      evt = {
-        key: 'ArrowDown',
-        stopPropagation: sinon.spy(),
-        preventDefault: sinon.spy(),
-        target: {
-          blur: sinon.spy(),
-          setAttribute: sinon.spy(),
-        },
-      };
-      rootElement = {
-        getElementsByClassName: () => [{ getElementsByClassName: () => [{ focus: () => {}, setAttribute: () => {} }] }],
-      };
-      selState = {
-        api: {
-          confirm: sinon.spy(),
-          cancel: sinon.spy(),
-          begin: sinon.spy(),
-          select: sinon.spy(),
-        },
-        rows: [],
-        colIdx: -1,
-      };
-    });
-
-    it('should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
-      moveFocus(evt, rootElement, rowIndex, colIndex, selState);
-      expect(evt.preventDefault).to.have.been.calledOnce;
-      expect(evt.stopPropagation).to.have.been.calledOnce;
-      expect(evt.target.blur).to.have.been.calledOnce;
-      expect(evt.target.setAttribute).to.have.been.calledOnce;
-    });
-  });
-
-  describe('handleKeyPress', () => {
+  describe('bodyHandleKeyPress', () => {
     let rowIndex;
     let colIndex;
     let evt = {};
@@ -182,62 +134,54 @@ describe('handle-key-press', () => {
       selDispatch = sinon.spy();
     });
 
-    describe('ArrowDown', () => {
-      it('should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
-        handleKeyPress(evt, rootElement, rowIndex, colIndex);
-        expect(evt.preventDefault).to.have.been.calledOnce;
-        expect(evt.stopPropagation).to.have.been.calledOnce;
-        expect(evt.target.blur).to.have.been.calledOnce;
-        expect(evt.target.setAttribute).to.have.been.calledOnce;
-      });
+    it('when press arrow-down key, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
+      bodyHandleKeyPress(evt, rootElement, rowIndex, colIndex);
+      expect(evt.preventDefault).to.have.been.calledOnce;
+      expect(evt.stopPropagation).to.have.been.calledOnce;
+      expect(evt.target.blur).to.have.been.calledOnce;
+      expect(evt.target.setAttribute).to.have.been.calledOnce;
     });
 
-    describe('SpaceBar', () => {
-      it('should select value for dimension', () => {
-        evt.key = ' ';
-        cell = {
-          isDim: true,
-        };
-        handleKeyPress(evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch);
-        expect(evt.preventDefault).to.have.been.calledOnce;
-        expect(evt.stopPropagation).to.have.been.calledOnce;
-        expect(selState.api.begin).to.have.been.calledOnce;
-        expect(selState.api.select).to.have.been.calledOnce;
-        expect(selDispatch).to.have.been.calledOnce;
-      });
-
-      it('should not select value for measure', () => {
-        evt.key = ' ';
-        cell = {
-          isDim: false,
-        };
-        handleKeyPress(evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch);
-        expect(evt.preventDefault).to.have.been.calledOnce;
-        expect(evt.stopPropagation).to.have.been.calledOnce;
-        expect(selState.api.begin).to.not.have.been.calledOnce;
-        expect(selState.api.select).to.not.have.been.calledOnce;
-        expect(selDispatch).to.not.have.been.calledOnce;
-      });
+    it('when press space bar key and dimension, should select value for dimension', () => {
+      evt.key = ' ';
+      cell = {
+        isDim: true,
+      };
+      bodyHandleKeyPress(evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch);
+      expect(evt.preventDefault).to.have.been.calledOnce;
+      expect(evt.stopPropagation).to.have.been.calledOnce;
+      expect(selState.api.begin).to.have.been.calledOnce;
+      expect(selState.api.select).to.have.been.calledOnce;
+      expect(selDispatch).to.have.been.calledOnce;
     });
 
-    describe('Enter', () => {
-      it('should confirms selections', () => {
-        evt.key = 'Enter';
-        handleKeyPress(evt, rootElement, rowIndex, colIndex, cell, selState);
-        expect(evt.preventDefault).to.have.been.calledOnce;
-        expect(evt.stopPropagation).to.have.been.calledOnce;
-        expect(selState.api.confirm).to.have.been.calledOnce;
-      });
+    it('when press space bar key and not dimension, should not select value for measure', () => {
+      evt.key = ' ';
+      cell = {
+        isDim: false,
+      };
+      bodyHandleKeyPress(evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch);
+      expect(evt.preventDefault).to.have.been.calledOnce;
+      expect(evt.stopPropagation).to.have.been.calledOnce;
+      expect(selState.api.begin).to.not.have.been.calledOnce;
+      expect(selState.api.select).to.not.have.been.calledOnce;
+      expect(selDispatch).to.not.have.been.calledOnce;
     });
 
-    describe('Cancel', () => {
-      it('should cancel selection', () => {
-        evt.key = 'Escape';
-        handleKeyPress(evt, rootElement, rowIndex, colIndex, cell, selState);
-        expect(evt.preventDefault).to.have.been.calledOnce;
-        expect(evt.stopPropagation).to.have.been.calledOnce;
-        expect(selState.api.cancel).to.have.been.calledOnce;
-      });
+    it('when press enter key, should confirms selections', () => {
+      evt.key = 'Enter';
+      bodyHandleKeyPress(evt, rootElement, rowIndex, colIndex, cell, selState);
+      expect(evt.preventDefault).to.have.been.calledOnce;
+      expect(evt.stopPropagation).to.have.been.calledOnce;
+      expect(selState.api.confirm).to.have.been.calledOnce;
+    });
+
+    it('when press cancel key, should cancel selection', () => {
+      evt.key = 'Escape';
+      bodyHandleKeyPress(evt, rootElement, rowIndex, colIndex, cell, selState);
+      expect(evt.preventDefault).to.have.been.calledOnce;
+      expect(evt.stopPropagation).to.have.been.calledOnce;
+      expect(selState.api.cancel).to.have.been.calledOnce;
     });
   });
 
@@ -268,34 +212,28 @@ describe('handle-key-press', () => {
       changeSortOrder = sinon.spy();
     });
 
-    describe('ArrowDown', () => {
-      it('should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
-        headHandleKeyPress(evt, rootElement, rowIndex, colIndex);
-        expect(evt.preventDefault).to.have.been.calledOnce;
-        expect(evt.stopPropagation).to.have.been.calledOnce;
-        expect(evt.target.blur).to.have.been.calledOnce;
-        expect(evt.target.setAttribute).to.have.been.calledOnce;
-      });
+    it('when press arrow down key, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
+      headHandleKeyPress(evt, rootElement, rowIndex, colIndex);
+      expect(evt.preventDefault).to.have.been.calledOnce;
+      expect(evt.stopPropagation).to.have.been.calledOnce;
+      expect(evt.target.blur).to.have.been.calledOnce;
+      expect(evt.target.setAttribute).to.have.been.calledOnce;
     });
 
-    describe('SpaceBar', () => {
-      it('should update the sorting', () => {
-        evt.key = ' ';
-        headHandleKeyPress(evt, rootElement, rowIndex, colIndex, changeSortOrder, layout, isDim);
-        expect(evt.preventDefault).to.have.been.calledOnce;
-        expect(evt.stopPropagation).to.have.been.calledOnce;
-        expect(changeSortOrder).to.have.been.calledOnce;
-      });
+    it('when press space bar key, should update the sorting', () => {
+      evt.key = ' ';
+      headHandleKeyPress(evt, rootElement, rowIndex, colIndex, changeSortOrder, layout, isDim);
+      expect(evt.preventDefault).to.have.been.calledOnce;
+      expect(evt.stopPropagation).to.have.been.calledOnce;
+      expect(changeSortOrder).to.have.been.calledOnce;
     });
 
-    describe('Enter', () => {
-      it('should update the sorting', () => {
-        evt.key = 'Enter';
-        headHandleKeyPress(evt, rootElement, rowIndex, colIndex, changeSortOrder, layout, isDim);
-        expect(evt.preventDefault).to.have.been.calledOnce;
-        expect(evt.stopPropagation).to.have.been.calledOnce;
-        expect(changeSortOrder).to.have.been.calledOnce;
-      });
+    it('when press enter key, should update the sorting', () => {
+      evt.key = 'Enter';
+      headHandleKeyPress(evt, rootElement, rowIndex, colIndex, changeSortOrder, layout, isDim);
+      expect(evt.preventDefault).to.have.been.calledOnce;
+      expect(evt.stopPropagation).to.have.been.calledOnce;
+      expect(changeSortOrder).to.have.been.calledOnce;
     });
   });
 });

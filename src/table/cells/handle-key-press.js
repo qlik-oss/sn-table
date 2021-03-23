@@ -83,7 +83,7 @@ export const headHandleKeyPress = (evt, rootElement, rowIndex, colIndex, changeS
   }
 };
 
-const handleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch) => {
+export const bodyHandleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
@@ -114,5 +114,3 @@ const handleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, se
       break;
   }
 };
-
-export default handleKeyPress;
