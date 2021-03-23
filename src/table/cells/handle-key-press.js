@@ -1,22 +1,15 @@
 import { selectCell } from '../selections-utils';
 
-const handleChangePage = (newPage, setPageInfo, rowsPerPage, setPage) => {
-  setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
-  setPage(newPage);
-};
+const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
-export const updatePage = (event, totalRowSize, page, rowsPerPage, setPageInfo, setPage) => {
-  const pageSize = Math.floor(totalRowSize / rowsPerPage);
-  const leftRowSize = totalRowSize % rowsPerPage;
-  const isRightKeys = event.shiftKey && event.ctrlKey && event.key === 'ArrowRight';
-  if (
-    (isRightKeys && page + 1 < pageSize && pageSize > 0) ||
-    (isRightKeys && leftRowSize > 0 && page + 1 === pageSize)
-  ) {
-    handleChangePage(page + 1, setPageInfo, rowsPerPage, setPage);
-  }
-  if (event.shiftKey && event.ctrlKey && event.key === 'ArrowLeft' && page > 0) {
-    handleChangePage(page - 1, setPageInfo, rowsPerPage, setPage);
+export const updatePage = (evt, totalRowSize, page, rowsPerPage, handleChangePage) => {
+  const lastPage = Math.floor(totalRowSize / rowsPerPage);
+  if (isCtrlShift(evt)) {
+    if (evt.key === 'ArrowRight' && page < lastPage) {
+      handleChangePage(null, page + 1);
+    } else if (evt.key === 'ArrowLeft' && page > 0) {
+      handleChangePage(null, page - 1);
+    }
   }
 };
 
@@ -88,7 +81,7 @@ export const headHandleKeyPress = (evt, rootElement, rowIndex, colIndex, changeS
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      moveFocus(evt, rootElement, rowIndex, colIndex);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, rowIndex, colIndex);
       break;
     }
     // Space bar / Enter: update the sorting
@@ -109,7 +102,7 @@ export const bodyHandleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, s
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      moveFocus(evt, rootElement, rowIndex, colIndex, selState);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, rowIndex, colIndex, selState);
       break;
     }
     // Space bar: Selects value.

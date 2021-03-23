@@ -4,7 +4,7 @@ import Table from '@material-ui/core/Table';
 import TableContainer from '@material-ui/core/TableContainer';
 import TablePagination from '@material-ui/core/TablePagination';
 import PropTypes from 'prop-types';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import { updatePage } from './cells/handle-key-press';
@@ -35,16 +35,6 @@ export default function TableWrapper(props) {
   const paginationHidden = constraints.active && 'paginationHidden';
   const paginationFixedRpp = selectionsAPI.isModal() || tableWidth < 400;
 
-  const localState = useRef();
-
-  useEffect(() => {
-    localState.current = {
-      totalRowSize: size.qcy,
-      page,
-      rowsPerPage,
-    };
-  }, [page, rowsPerPage]);
-
   const handleChangePage = (event, newPage) => {
     setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
     setPage(newPage);
@@ -63,38 +53,16 @@ export default function TableWrapper(props) {
   }
 
   useEffect(() => {
-    rootElement.addEventListener('keydown', (event) =>
-      updatePage(
-        event,
-        localState.current.totalRowSize,
-        localState.current.page,
-        localState.current.rowsPerPage,
-        setPageInfo,
-        setPage
-      )
-    );
-    return () => {
-      rootElement.addEventListener('keydown', (event) =>
-        updatePage(
-          event,
-          localState.current.totalRowSize,
-          localState.current.page,
-          localState.current.rowsPerPage,
-          setPageInfo,
-          setPage
-        )
-      );
-    };
-  }, []);
-
-  useEffect(() => {
     const updateSize = () => setTableWidth(rootElement.clientWidth);
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
   return (
-    <Paper className={classes.paper}>
+    <Paper
+      className={classes.paper}
+      onKeyDown={(evt) => updatePage(evt, size.qcy, page, rowsPerPage, handleChangePage)}
+    >
       <TableContainer className={classes[containerMode]}>
         <Table stickyHeader aria-label="sticky table">
           <TableHeadWrapper {...props} />
