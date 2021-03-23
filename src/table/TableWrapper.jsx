@@ -90,9 +90,6 @@ export default function TableWrapper(props) {
         page={page}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-        SelectProps={{ inputProps: { tabIndex: paginationTabindex } }}
-        backIconButtonProps={{ tabIndex: paginationTabindex }}
-        nextIconButtonProps={{ tabIndex: paginationTabindex }}
       />
     </Paper>
   );
