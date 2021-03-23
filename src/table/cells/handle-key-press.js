@@ -1,5 +1,33 @@
 import { selectCell } from '../selections-utils';
 
+const keysPressed = {};
+export const handleKeyUp = (event) => {
+  delete keysPressed[event.key];
+};
+
+export const updatePage = (event, totalRowSize, page, rowsPerPage, setPageInfo, setPage) => {
+  keysPressed[event.key] = true;
+  const pageSize = Math.floor(totalRowSize / rowsPerPage);
+  const leftRowSize = totalRowSize % rowsPerPage;
+  if (
+    (keysPressed.Shift && event.key === 'ArrowRight' && page + 1 < pageSize && pageSize > 0) ||
+    (keysPressed.Shift && event.key === 'ArrowRight' && leftRowSize > 0 && page + 1 === pageSize)
+  ) {
+    setPageInfo({
+      top: (page + 1) * rowsPerPage,
+      height: rowsPerPage,
+    });
+    setPage(page + 1);
+  }
+  if (keysPressed.Shift && event.key === 'ArrowLeft' && page > 0) {
+    setPageInfo({
+      top: (page - 1) * rowsPerPage,
+      height: rowsPerPage,
+    });
+    setPage(page - 1);
+  }
+};
+
 export const moveToNextFocus = (rowElements, nextRow, nextCol) => {
   const nextCell = rowElements[nextRow].getElementsByClassName('sn-table-cell')[nextCol];
   nextCell.focus();
