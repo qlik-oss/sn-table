@@ -64,8 +64,8 @@ describe('<TableBodyWrapper />', async () => {
     expect(queryByText(tableData.rows[1]['id-1'].qText)).to.be.visible;
   });
 
-  it('should call handleKeyPress on keyDown', () => {
-    sandbox.replace(handleKeyPress, 'default', sinon.spy());
+  it('should call bodyHandleKeyPress on keyDown', () => {
+    sandbox.replace(handleKeyPress, 'bodyHandleKeyPress', sinon.spy());
 
     const { queryByText } = render(
       <TableBodyWrapper
@@ -78,6 +78,6 @@ describe('<TableBodyWrapper />', async () => {
     );
     fireEvent.keyDown(queryByText(tableData.rows[0]['id-0'].qText));
 
-    expect(handleKeyPress.default).to.have.been.calledOnce;
+    expect(handleKeyPress.bodyHandleKeyPress).to.have.been.calledOnce;
   });
 });
