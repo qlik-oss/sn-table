@@ -6,7 +6,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { addSelectionListeners, reducer } from './selections-utils';
 import getCellRenderer from './cells/renderer';
 import { getBodyStyle } from './styling-utils';
-import handleKeyPress from './cells/handle-key-press';
+import { bodyHandleKeyPress } from './cells/handle-key-press';
 
 const useStyles = makeStyles({
   hoverTableRow: {
@@ -72,7 +72,7 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
                   selDispatch={selDispatch}
                   tabIndex={-1}
                   onKeyDown={(evt) =>
-                    handleKeyPress(
+                    bodyHandleKeyPress(
                       evt,
                       rootElement,
                       [rowIndex + 1, columnIndex],

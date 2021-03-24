@@ -6,7 +6,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { STYLING_DEFAULTS, getHeadStyle } from './styling-utils';
-import handleKeyPress from './cells/handle-key-press';
+import { headHandleKeyPress } from './cells/handle-key-press';
 
 const useStyles = makeStyles({
   head: (props) => ({
@@ -32,8 +32,17 @@ export default function TableHeadWrapper({ rootElement, tableData, theme, layout
             key={column.id}
             align={column.align}
             className={`${classes.head} sn-table-head-cell sn-table-cell`}
-            style={{ minWidth: column.minWidth }}
-            onKeyDown={(e) => handleKeyPress(e, rootElement, [0, columnIndex], setFocusedCell)}
+            onKeyDown={(e) =>
+              headHandleKeyPress(
+                e,
+                rootElement,
+                [0, columnIndex],
+                setFocusedCell,
+                changeSortOrder,
+                layout,
+                column.isDim
+              )
+            }
             tabindex={-1}
           >
             <TableSortLabel
