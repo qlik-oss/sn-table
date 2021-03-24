@@ -298,7 +298,7 @@ describe('handle-key-press', () => {
       expect(handleChangePage).to.not.have.been.calledOnce;
     });
 
-    it('handleChangePage should not run', () => {
+    it('when presss arrow right key on the first page which contains all rows, handleChangePage should not run', () => {
       page = 0;
       totalRowSize = 40;
       rowsPerPage = 40;
@@ -306,22 +306,16 @@ describe('handle-key-press', () => {
       expect(handleChangePage).to.not.have.been.calledOnce;
     });
 
-    it('handleChangePage should not run', () => {
+    it('when presss arrow left key on the first page, handleChangePage should not run', () => {
       evt.key = 'ArrowLeft';
       page = 0;
+      totalRowSize = 40;
+      rowsPerPage = 10;
       updatePage(evt, totalRowSize, page, rowsPerPage, handleChangePage);
       expect(handleChangePage).to.not.have.been.calledOnce;
     });
 
-    it('should change page', () => {
-      totalRowSize = 40;
-      page = 0;
-      rowsPerPage = 0;
-      updatePage(evt, totalRowSize, page, rowsPerPage, handleChangePage);
-      expect(handleChangePage).to.have.been.calledOnce;
-    });
-
-    it('should change page', () => {
+    it('when presss arrow right key on the page whose next page contains rows, should change page', () => {
       totalRowSize = 40;
       page = 0;
       rowsPerPage = 10;
@@ -329,15 +323,7 @@ describe('handle-key-press', () => {
       expect(handleChangePage).to.have.been.calledOnce;
     });
 
-    it('should change page', () => {
-      totalRowSize = 40;
-      page = 0;
-      rowsPerPage = 30;
-      updatePage(evt, totalRowSize, page, rowsPerPage, handleChangePage);
-      expect(handleChangePage).to.have.been.calledOnce;
-    });
-
-    it('should change page', () => {
+    it('when presss arrow left key not on the first page, should change page', () => {
       evt.key = 'ArrowLeft';
       totalRowSize = 40;
       page = 1;

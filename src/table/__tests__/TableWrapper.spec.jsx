@@ -7,6 +7,7 @@ import sinon from 'sinon';
 import TableWrapper from '../TableWrapper';
 import TableBodyWrapper from '../TableBodyWrapper';
 import * as TableHeadWrapper from '../TableHeadWrapper';
+import * as handleKeyPress from '../cells/handle-key-press';
 
 describe('<TableWrapper />', () => {
   const sandbox = sinon.createSandbox();
@@ -34,6 +35,7 @@ describe('<TableWrapper />', () => {
     };
     modal = false;
     el = {};
+    sandbox.replace(handleKeyPress, 'updatePage', sinon.spy());
   });
 
   afterEach(() => {
@@ -56,6 +58,22 @@ describe('<TableWrapper />', () => {
     expect(queryByText(`1-${rowsPerPage} of ${tableData.size.qcy}`)).to.be.visible;
     expect(queryByText(rowsPerPage)).to.be.visible;
   });
+
+  it('should call updatePage when press control key on the table', () => {
+    const { queryByLabelText } = render(
+      <TableWrapper
+        tableData={tableData}
+        setPageInfo={setPageInfo}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+        el={el}
+      />
+    );
+
+    fireEvent.keyDown(queryByLabelText('sticky table'), { key: 'Control', code: 'ControlLeft' });
+    expect(handleKeyPress.updatePage).to.have.been.calledOnce;
+  });
+
   it('should call setPageInfo when clicking next page button', async () => {
     const { findByTitle, findByText } = render(
       <TableWrapper
@@ -71,6 +89,7 @@ describe('<TableWrapper />', () => {
     expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
     expect(await findByText(`101-200 of ${tableData.size.qcy}`)).to.be.visible;
   });
+
   it('should change back to first page when not on first page and no rows', async () => {
     const { findByTitle } = render(
       <TableWrapper
@@ -91,6 +110,7 @@ describe('<TableWrapper />', () => {
     // Called from if statement in TableWrapper
     expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
   });
+
   it('should call setPageInfo when changing rows per page', async () => {
     const { findByText } = render(
       <TableWrapper
