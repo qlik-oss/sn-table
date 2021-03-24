@@ -1,37 +1,32 @@
 import { selectCell } from '../selections-utils';
 
-export const moveToNextFocus = (rowElements, nextRow, nextCol) => {
-  const nextCell = rowElements[nextRow].getElementsByClassName('sn-table-cell')[nextCol];
+export const focusCell = (rowElements, nextCellCoord) => {
+  const nextCell = rowElements[nextCellCoord[0]].getElementsByClassName('sn-table-cell')[nextCellCoord[1]];
   nextCell.focus();
   nextCell.setAttribute('tabIndex', '0');
 };
 
-export const arrowKeysNavigation = (evt, rowAndColumnCount, rowIndex, colIndex, selState) => {
-  let nextRow = rowIndex;
-  let nextCol = colIndex;
-  //  when selecting cell, disable navigating left/right and going into header
+export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, selState) => {
+  let [nextRow, nextCol] = cellCoord;
   const isSelectedTable = selState && selState.rows.length > 0;
 
   switch (evt.key) {
     case 'ArrowDown':
-      rowIndex + 1 < rowAndColumnCount.rowCount && nextRow++;
+      nextRow + 1 < rowAndColumnCount.rowCount && nextRow++;
       break;
     case 'ArrowUp':
-      rowIndex > 0 && (!isSelectedTable || rowIndex !== 1) && --nextRow;
+      nextRow > 0 && (!isSelectedTable || nextRow !== 1) && nextRow--;
       break;
     case 'ArrowRight':
-      colIndex < rowAndColumnCount.columnCount - 1 && !isSelectedTable && nextCol++;
+      nextCol < rowAndColumnCount.columnCount - 1 && !isSelectedTable && nextCol++;
       break;
     case 'ArrowLeft':
-      colIndex > 0 && !isSelectedTable && --nextCol;
+      nextCol > 0 && !isSelectedTable && nextCol--;
       break;
     default:
   }
 
-  return {
-    nextRow,
-    nextCol,
-  };
+  return [nextRow, nextCol];
 };
 
 export const getRowAndColumnCount = (rootElement) => {
@@ -54,28 +49,29 @@ export const preventDefaultBehavior = (evt) => {
   evt.preventDefault();
 };
 
-export const moveFocus = (evt, rootElement, rowIndex, colIndex, selState) => {
+export const moveFocus = (evt, rootElement, cellCoord, setFocusedCell, selState) => {
   preventDefaultBehavior(evt);
   removeCurrentFocus(evt);
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
-  const { nextRow, nextCol } = arrowKeysNavigation(evt, rowAndColumnCount, rowIndex, colIndex, selState);
-  moveToNextFocus(rowAndColumnCount.rowElements, nextRow, nextCol);
+  const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selState);
+  focusCell(rowAndColumnCount.rowElements, nextCellCoord);
+  setFocusedCell(nextCellCoord);
 };
 
-export const headHandleKeyPress = (evt, rootElement, rowIndex, colIndex, changeSortOrder, layout, isDim) => {
+export const headHandleKeyPress = (evt, rootElement, cellCoord, setFocusedCell, changeSortOrder, layout, isDim) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      moveFocus(evt, rootElement, rowIndex, colIndex);
+      moveFocus(evt, rootElement, cellCoord, setFocusedCell);
       break;
     }
     // Space bar / Enter: update the sorting
     case ' ':
     case 'Enter': {
       preventDefaultBehavior(evt);
-      changeSortOrder(layout, isDim, colIndex);
+      changeSortOrder(layout, isDim, cellCoord[1]);
       break;
     }
     default:
@@ -83,13 +79,13 @@ export const headHandleKeyPress = (evt, rootElement, rowIndex, colIndex, changeS
   }
 };
 
-export const bodyHandleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, selState, selDispatch) => {
+export const bodyHandleKeyPress = (evt, rootElement, cellCoord, setFocusedCell, cell, selState, selDispatch) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      moveFocus(evt, rootElement, rowIndex, colIndex, selState);
+      moveFocus(evt, rootElement, cellCoord, setFocusedCell, selState);
       break;
     }
     // Space bar: Selects value.
@@ -102,12 +98,28 @@ export const bodyHandleKeyPress = (evt, rootElement, rowIndex, colIndex, cell, s
     case 'Enter': {
       preventDefaultBehavior(evt);
       selState.api.confirm();
+      // TODO: make sure focus is kept, or set on nebula cell
       break;
     }
-    // Esc: Cancels selections.
+    // Esc: Cancels selections if any, otherwise blur
     case 'Escape': {
       preventDefaultBehavior(evt);
-      selState.api.cancel();
+      if (selState?.rows.length) {
+        selState.api.cancel();
+        // TODO: make sure focus is kept
+      } else {
+        removeCurrentFocus(evt);
+        // dropFocus()
+      }
+      break;
+    }
+    // Tab: blur cell, or if shift, focus nebula cell
+    case 'Tab': {
+      // dropFocus()
+      removeCurrentFocus(evt);
+      if (evt.shiftKey) {
+        // go to nebula... might not be done here
+      }
       break;
     }
     default:
