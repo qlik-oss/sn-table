@@ -1,4 +1,10 @@
-import { getRowAndColumnCount, arrowKeysNavigation, bodyHandleKeyPress, headHandleKeyPress } from '../handle-key-press';
+import {
+  getRowAndColumnCount,
+  arrowKeysNavigation,
+  bodyHandleKeyPress,
+  headHandleKeyPress,
+  updatePage,
+} from '../handle-key-press';
 
 describe('handle-key-press', () => {
   describe('arrowKeysNavigation', () => {
@@ -183,6 +189,16 @@ describe('handle-key-press', () => {
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(selState.api.cancel).to.have.been.calledOnce;
     });
+
+    it('when press ArrowRight and shif and ctrl key, should not update the sorting', () => {
+      evt.key = 'ArrowRight';
+      evt.shiftKey = true;
+      evt.ctrlKey = true;
+      bodyHandleKeyPress(evt, rootElement, rowIndex, colIndex, cell, selState);
+      expect(evt.preventDefault).to.not.have.been.calledOnce;
+      expect(evt.stopPropagation).to.not.have.been.calledOnce;
+      expect(selState.api.cancel).to.not.have.been.calledOnce;
+    });
   });
 
   describe('headHandleKeyPress', () => {
@@ -234,6 +250,86 @@ describe('handle-key-press', () => {
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(changeSortOrder).to.have.been.calledOnce;
+    });
+
+    it('when press ArrowRight and shif and ctrl key, should not update the sorting', () => {
+      evt.key = 'ArrowRight';
+      evt.shiftKey = true;
+      evt.ctrlKey = true;
+      headHandleKeyPress(evt, rootElement, rowIndex, colIndex, changeSortOrder, layout, isDim);
+      expect(evt.preventDefault).to.not.have.been.calledOnce;
+      expect(evt.stopPropagation).to.not.have.been.calledOnce;
+      expect(changeSortOrder).to.not.have.been.calledOnce;
+    });
+  });
+
+  describe('updatePage', () => {
+    const sandbox = sinon.createSandbox();
+    let evt = {};
+    let totalRowSize;
+    let page;
+    let rowsPerPage;
+    let handleChangePage;
+
+    beforeEach(() => {
+      evt = {
+        shiftKey: true,
+        ctrlKey: true,
+        metaKey: true,
+        key: 'ArrowRight',
+      };
+      handleChangePage = sandbox.spy();
+    });
+
+    afterEach(() => {
+      sandbox.verifyAndRestore();
+    });
+
+    it('when shift key is not pressed, handleChangePage should not run', () => {
+      evt.shiftKey = false;
+      updatePage(evt, totalRowSize, page, rowsPerPage, handleChangePage);
+      expect(handleChangePage).to.not.have.been.calledOnce;
+    });
+
+    it('when ctrl key or meta key is not pressed, handleChangePage should not run', () => {
+      evt.ctrlKey = false;
+      evt.metaKey = false;
+      updatePage(evt, totalRowSize, page, rowsPerPage, handleChangePage);
+      expect(handleChangePage).to.not.have.been.calledOnce;
+    });
+
+    it('when presss arrow right key on the first page which contains all rows, handleChangePage should not run', () => {
+      page = 0;
+      totalRowSize = 40;
+      rowsPerPage = 40;
+      updatePage(evt, totalRowSize, page, rowsPerPage, handleChangePage);
+      expect(handleChangePage).to.not.have.been.calledOnce;
+    });
+
+    it('when presss arrow left key on the first page, handleChangePage should not run', () => {
+      evt.key = 'ArrowLeft';
+      page = 0;
+      totalRowSize = 40;
+      rowsPerPage = 10;
+      updatePage(evt, totalRowSize, page, rowsPerPage, handleChangePage);
+      expect(handleChangePage).to.not.have.been.calledOnce;
+    });
+
+    it('when presss arrow right key on the page whose next page contains rows, should change page', () => {
+      totalRowSize = 40;
+      page = 0;
+      rowsPerPage = 10;
+      updatePage(evt, totalRowSize, page, rowsPerPage, handleChangePage);
+      expect(handleChangePage).to.have.been.calledOnce;
+    });
+
+    it('when presss arrow left key not on the first page, should change page', () => {
+      evt.key = 'ArrowLeft';
+      totalRowSize = 40;
+      page = 1;
+      rowsPerPage = 40;
+      updatePage(evt, totalRowSize, page, rowsPerPage, handleChangePage);
+      expect(handleChangePage).to.have.been.calledOnce;
     });
   });
 });

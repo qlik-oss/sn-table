@@ -43,7 +43,7 @@ describe('<TableHeadWrapper />', () => {
     const { queryByText } = render(
       <TableHeadWrapper tableData={tableData} theme={theme} layout={layout} changeSortOrder={changeSortOrder} />
     );
-    fireEvent.click(queryByText('someDim'));
+    fireEvent.click(queryByText(tableData.columns[0].label));
 
     expect(changeSortOrder).to.have.been.calledWith(layout, true, 0);
   });

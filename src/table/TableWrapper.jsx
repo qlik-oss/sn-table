@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableContainer from '@material-ui/core/TableContainer';
 import TablePagination from '@material-ui/core/TablePagination';
-import TableHeadWrapper from './TableHeadWrapper';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import TableBodyWrapper from './TableBodyWrapper';
+import TableHeadWrapper from './TableHeadWrapper';
+import { updatePage } from './cells/handle-key-press';
 
 const useStyles = makeStyles({
   paper: {
@@ -58,7 +59,10 @@ export default function TableWrapper(props) {
   }, []);
 
   return (
-    <Paper className={classes.paper}>
+    <Paper
+      className={classes.paper}
+      onKeyDown={(evt) => updatePage(evt, size.qcy, page, rowsPerPage, handleChangePage)}
+    >
       <TableContainer className={classes[containerMode]}>
         <Table stickyHeader aria-label="sticky table">
           <TableHeadWrapper {...props} />

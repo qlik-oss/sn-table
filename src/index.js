@@ -48,7 +48,6 @@ export default function supernova(env) {
             layout,
             tableData,
             setPageInfo,
-            pageInfo,
             constraints,
             selectionsAPI,
             muiParameters,
