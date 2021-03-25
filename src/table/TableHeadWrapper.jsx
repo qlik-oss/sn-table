@@ -29,7 +29,6 @@ export default function TableHeadWrapper({ rootElement, tableData, theme, layout
       <TableRow className="sn-table-row">
         {tableData.columns.map((column, columnIndex) => {
           const tabIndex = columnIndex === 0 ? '0' : '-1';
-          console.log(tabIndex);
           return (
             <TableCell
               key={column.id}
