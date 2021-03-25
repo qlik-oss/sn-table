@@ -39,7 +39,7 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
     const selectionsEnabled = !!selectionsAPI && !constraints.active;
     selDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
     setColumnRenderers(getColumnRenderers(selectionsEnabled));
-  }, [constraints, layout]);
+  }, [constraints]);
 
   useEffect(() => {
     addSelectionListeners(selectionsAPI, selDispatch);
