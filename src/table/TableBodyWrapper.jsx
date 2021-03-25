@@ -23,7 +23,7 @@ const useStyles = makeStyles({
 const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, layout, theme }) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
-  const styling = useMemo(() => getBodyStyle(layout, theme), [layout, theme]);
+  const styling = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(styling);
   const getColumnRenderers = (selectionsEnabled) =>
     tableData.columns.map((c) => getCellRenderer(!!c.stylingInfo.length, selectionsEnabled));

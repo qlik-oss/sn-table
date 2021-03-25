@@ -55,7 +55,7 @@ export default function supernova(env) {
             changeSortOrder,
           });
         }
-      }, [tableData, constraints, selectionsAPI.isModal()]);
+      }, [tableData, constraints, selectionsAPI.isModal(), theme.name()]);
 
       useEffect(
         () => () => {
