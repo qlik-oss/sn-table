@@ -34,7 +34,6 @@ export default function TableHeadWrapper({ rootElement, tableData, theme, layout
               key={column.id}
               align={column.align}
               className={`${classes.head} sn-table-head-cell sn-table-cell`}
-              style={{ minWidth: column.minWidth }}
               tabIndex={tabIndex}
               onKeyDown={(e) =>
                 headHandleKeyPress(e, rootElement, 0, columnIndex, changeSortOrder, layout, column.isDim)
@@ -44,6 +43,7 @@ export default function TableHeadWrapper({ rootElement, tableData, theme, layout
                 active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
                 direction={column.sortDirection}
                 onClick={() => changeSortOrder(layout, column.isDim, columnIndex)}
+                tabIndex={-1}
               >
                 {column.label}
               </TableSortLabel>
