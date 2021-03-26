@@ -6,6 +6,9 @@ export default function muiSetup(sproutBase) {
     sproutBase.overrides.MuiTableContainer.root.height = 'calc(100% - 52px)';
     sproutBase.overrides.MuiListItem.root['&$selected'] = {};
     sproutBase.overrides.MuiSelect.root['& ~i'].padding = '6px';
+    sproutBase.overrides.MuiTableSortLabel.root.color = 'inhirit';
+    sproutBase.overrides.MuiTableSortLabel.root['&$active'].color = 'inhirit';
+    sproutBase.overrides.MuiTableSortLabel.root['&:hover'].color = 'inhirit';
     /* eslint-enable no-param-reassign */
   }
 
