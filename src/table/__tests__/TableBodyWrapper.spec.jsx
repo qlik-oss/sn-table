@@ -30,6 +30,7 @@ describe('<TableBodyWrapper />', async () => {
     selectionsAPI = {};
     theme = {
       getColorPickerColor: () => {},
+      name: () => {},
     };
     layout = {};
   });

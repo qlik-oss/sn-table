@@ -5,7 +5,11 @@ import { getColumnStyle } from '../styling-utils';
 export default function withColumnStyling(CellComponent) {
   const HOC = (props) => {
     const { cell, column, styling } = props;
-    const columnStyling = useMemo(() => getColumnStyle(styling, cell.qAttrExps, column.stylingInfo), [cell.qAttrExps]);
+    const columnStyling = useMemo(() => getColumnStyle(styling, cell.qAttrExps, column.stylingInfo), [
+      styling,
+      cell.qAttrExps,
+      column.stylingInfo,
+    ]);
 
     return <CellComponent {...props} styling={columnStyling} />;
   };
