@@ -3,7 +3,6 @@ import { selectCell } from '../selections-utils';
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
 export const updatePage = (evt, totalRowSize, page, rowsPerPage, handleChangePage) => {
-  window.console.log(evt, 'evt');
   if (isCtrlShift(evt)) {
     const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
     if (evt.key === 'ArrowRight' && page < lastPage) {
