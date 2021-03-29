@@ -21,7 +21,7 @@ const useStyles = makeStyles({
   }),
 });
 
-export default function TableHeadWrapper({ rootElement, tableData, theme, layout, changeSortOrder }) {
+export default function TableHeadWrapper({ rootElement, tableData, theme, layout, changeSortOrder, constraints }) {
   const classes = useStyles(getHeadStyle(layout, theme));
 
   return (
@@ -42,7 +42,7 @@ export default function TableHeadWrapper({ rootElement, tableData, theme, layout
               <TableSortLabel
                 active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
                 direction={column.sortDirection}
-                onClick={() => changeSortOrder(layout, column.isDim, columnIndex)}
+                onClick={() => !constraints.active && changeSortOrder(layout, column.isDim, columnIndex, column.label)}
                 tabIndex={-1}
               >
                 {column.label}
@@ -61,4 +61,5 @@ TableHeadWrapper.propTypes = {
   theme: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   changeSortOrder: PropTypes.func.isRequired,
+  constraints: PropTypes.object.isRequired,
 };
