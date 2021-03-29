@@ -1,11 +1,17 @@
 export default function sortingFactory(model) {
-  return (layout, isDim, sortIdx) => {
+  return (layout, isDim, label) => {
+    const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
+    const index = isDim
+      ? qDimensionInfo.findIndex((dimensionInfo) => dimensionInfo.qFallbackTitle === label)
+      : qMeasureInfo.findIndex((measureInfo) => measureInfo.qFallbackTitle === label);
+    const idx = isDim ? index : index + qDimensionInfo.length;
+
     const sortOrder = [].concat(layout.qHyperCube.qEffectiveInterColumnSortOrder);
     const topSortIdx = sortOrder[0];
 
-    if (sortIdx !== topSortIdx) {
-      sortOrder.splice(sortOrder.indexOf(sortIdx), 1);
-      sortOrder.unshift(sortIdx);
+    if (idx !== topSortIdx) {
+      sortOrder.splice(sortOrder.indexOf(idx), 1);
+      sortOrder.unshift(idx);
     }
 
     const patches = [
@@ -17,12 +23,11 @@ export default function sortingFactory(model) {
     ];
 
     // reverse
-    if (sortIdx === topSortIdx) {
-      const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
-      const idx = isDim ? sortIdx : sortIdx - qDimensionInfo.length;
-      const { qReverseSort } = isDim ? qDimensionInfo[idx] : qMeasureInfo[idx];
-      const qPath = `/qHyperCubeDef/${isDim ? 'qDimensions' : 'qMeasures'}/${idx}/qDef/qReverseSort`;
-
+    if (idx === topSortIdx) {
+      const { qReverseSort } = isDim
+        ? qDimensionInfo.filter((dimensionInfo) => dimensionInfo.qFallbackTitle === label)[0]
+        : qMeasureInfo.filter((measureInfo) => measureInfo.qFallbackTitle === label)[0];
+      const qPath = `/qHyperCubeDef/${isDim ? 'qDimensions' : 'qMeasures'}/${index}/qDef/qReverseSort`;
       patches.push({
         qPath,
         qOp: 'replace',
