@@ -50,7 +50,6 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
       {rows.map((row, rowIndex) => (
         <TableRow
           hover={hoverEffect}
-          role="checkbox"
           tabIndex={-1}
           key={row.key}
           className={`sn-table-row ${hoverEffect && classes.hoverTableRow}`}
