@@ -57,6 +57,9 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
         >
           {columns.map((column, columnIndex) => {
             const cell = row[column.id];
+            cell.colIdx = layout.qHyperCube.qDimensionInfo.findIndex(
+              (dimensionInfo) => dimensionInfo.qFallbackTitle === column.label
+            );
             const value = cell.qText;
             const CellRenderer = columnRenderers[columnIndex];
             return (
