@@ -14,7 +14,7 @@ import data from './data';
 import ext from './ext';
 import muiSetup from './mui-setup';
 import { render, teardown } from './table/Root';
-import manageData from './table/handle-data';
+import manageData, { getColumnOrder } from './table/handle-data';
 import sortingFactory from './table/sorting';
 
 // This line is replaced by rollup with an import for internal builds
@@ -39,10 +39,11 @@ export default function supernova(env) {
       const [pageInfo, setPageInfo] = useState({ top: 0, height: 100 });
       const [muiParameters] = useState(muiSetup(__OPIONAL_THEME_DEPS__));
       const [tableData] = usePromise(() => manageData(model, layout, pageInfo), [layout, pageInfo]);
-      const changeSortOrder = sortingFactory(model);
 
       useEffect(() => {
         if (layout && tableData) {
+          const columnOrder = getColumnOrder(layout);
+          const changeSortOrder = sortingFactory(model, columnOrder);
           render(rootElement, {
             rootElement,
             layout,

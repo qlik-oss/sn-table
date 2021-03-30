@@ -1,11 +1,6 @@
-export default function sortingFactory(model) {
-  return (layout, isDim, label) => {
-    const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
-    const index = isDim
-      ? qDimensionInfo.findIndex((dimensionInfo) => dimensionInfo.qFallbackTitle === label)
-      : qMeasureInfo.findIndex((measureInfo) => measureInfo.qFallbackTitle === label);
-    const idx = isDim ? index : index + qDimensionInfo.length;
-
+export default function sortingFactory(model, columnOrder) {
+  return (layout, isDim, columnIndex) => {
+    const idx = columnOrder[columnIndex];
     const sortOrder = [].concat(layout.qHyperCube.qEffectiveInterColumnSortOrder);
     const topSortIdx = sortOrder[0];
 
@@ -24,9 +19,9 @@ export default function sortingFactory(model) {
 
     // reverse
     if (idx === topSortIdx) {
-      const { qReverseSort } = isDim
-        ? qDimensionInfo.filter((dimensionInfo) => dimensionInfo.qFallbackTitle === label)[0]
-        : qMeasureInfo.filter((measureInfo) => measureInfo.qFallbackTitle === label)[0];
+      const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
+      const index = isDim ? idx : idx - qDimensionInfo.length;
+      const { qReverseSort } = isDim ? qDimensionInfo[index] : qMeasureInfo[index];
       const qPath = `/qHyperCubeDef/${isDim ? 'qDimensions' : 'qMeasures'}/${index}/qDef/qReverseSort`;
       patches.push({
         qPath,
