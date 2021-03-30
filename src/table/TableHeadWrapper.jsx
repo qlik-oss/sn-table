@@ -36,13 +36,14 @@ export default function TableHeadWrapper({ rootElement, tableData, theme, layout
               className={`${classes.head} sn-table-head-cell sn-table-cell`}
               tabIndex={tabIndex}
               onKeyDown={(e) =>
+                !constraints.active &&
                 headHandleKeyPress(e, rootElement, 0, columnIndex, changeSortOrder, layout, column.isDim)
               }
             >
               <TableSortLabel
                 active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
                 direction={column.sortDirection}
-                onClick={() => !constraints.active && changeSortOrder(layout, column.isDim, columnIndex, column.label)}
+                onClick={() => !constraints.active && changeSortOrder(layout, column.isDim, columnIndex)}
                 tabIndex={-1}
               >
                 {column.label}
