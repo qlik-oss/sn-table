@@ -45,7 +45,7 @@ export default async function manageData(model, layout, pageInfo) {
       row[c.id] = {
         ...r[colIdx],
         rowIdx: rowIdx + pageInfo.top,
-        colIdx: layout.qHyperCube.qDimensionInfo.findIndex((dimensionInfo) => dimensionInfo.qFallbackTitle === c.label),
+        colIdx: columnOrder[colIdx],
         isDim: c.isDim,
       };
     });
