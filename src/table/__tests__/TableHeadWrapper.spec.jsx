@@ -11,7 +11,7 @@ describe('<TableHeadWrapper />', () => {
   let theme;
   let layout;
   let changeSortOrder;
-
+  let constraints;
   beforeEach(() => {
     tableData = {
       columns: [
@@ -28,6 +28,9 @@ describe('<TableHeadWrapper />', () => {
       },
     };
     changeSortOrder = sinon.spy();
+    constraints = {
+      active: false,
+    };
   });
 
   it('should render table head', () => {
@@ -41,10 +44,34 @@ describe('<TableHeadWrapper />', () => {
 
   it('should call changeSortOrder when clicking a header cell', () => {
     const { queryByText } = render(
-      <TableHeadWrapper tableData={tableData} theme={theme} layout={layout} changeSortOrder={changeSortOrder} />
+      <TableHeadWrapper
+        tableData={tableData}
+        theme={theme}
+        layout={layout}
+        changeSortOrder={changeSortOrder}
+        constraints={constraints}
+      />
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
 
     expect(changeSortOrder).to.have.been.calledWith(layout, true, 0);
+  });
+
+  it('should not call changeSortOrder when clicking a header cell', () => {
+    constraints = {
+      active: true,
+    };
+    const { queryByText } = render(
+      <TableHeadWrapper
+        tableData={tableData}
+        theme={theme}
+        layout={layout}
+        changeSortOrder={changeSortOrder}
+        constraints={constraints}
+      />
+    );
+    fireEvent.click(queryByText(tableData.columns[0].label));
+
+    expect(changeSortOrder).to.not.have.been.calledOnce;
   });
 });
