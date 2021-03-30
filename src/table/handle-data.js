@@ -45,5 +45,5 @@ export default async function manageData(model, layout, pageInfo) {
     return row;
   });
 
-  return { size: layout.qHyperCube.qSize, rows, columns };
+  return { size: layout.qHyperCube.qSize, rows, columns, columnOrder };
 }
