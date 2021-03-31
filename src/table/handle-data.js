@@ -5,9 +5,7 @@ const directionMap = {
 
 export function getColumnOrder(layout) {
   const { qColumnOrder, qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
-  if (qColumnOrder?.length === qDimensionInfo.length + qMeasureInfo.length) {
-    return qColumnOrder;
-  }
+  if (qColumnOrder?.length === qDimensionInfo.length + qMeasureInfo.length) return qColumnOrder;
   return [...Array(qDimensionInfo.length + qMeasureInfo.length).keys()];
 }
 
@@ -52,5 +50,5 @@ export default async function manageData(model, layout, pageInfo) {
     return row;
   });
 
-  return { size: layout.qHyperCube.qSize, rows, columns };
+  return { size: layout.qHyperCube.qSize, rows, columns, columnOrder };
 }
