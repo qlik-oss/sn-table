@@ -39,10 +39,10 @@ export default function supernova(env) {
       const [pageInfo, setPageInfo] = useState({ top: 0, height: 100 });
       const [muiParameters] = useState(muiSetup(__OPIONAL_THEME_DEPS__));
       const [tableData] = usePromise(() => manageData(model, layout, pageInfo), [layout, pageInfo]);
-      const changeSortOrder = sortingFactory(model);
 
       useEffect(() => {
         if (layout && tableData) {
+          const changeSortOrder = sortingFactory(model, tableData.columnOrder);
           render(rootElement, {
             rootElement,
             layout,

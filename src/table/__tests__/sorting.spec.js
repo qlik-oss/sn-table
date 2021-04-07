@@ -4,6 +4,7 @@ import { generateLayout } from './generate-test-data';
 describe('sorting', () => {
   let layout;
   let model;
+  let columnOrder;
   let changeSortOrder;
   let expectedPatches;
 
@@ -12,7 +13,8 @@ describe('sorting', () => {
     model = {
       applyPatches: sinon.spy(),
     };
-    changeSortOrder = sortingFactory(model);
+    columnOrder = [0, 1, 2, 3];
+    changeSortOrder = sortingFactory(model, columnOrder);
     expectedPatches = [
       {
         qPath: '/qHyperCubeDef/qInterColumnSortOrder',
