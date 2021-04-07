@@ -21,9 +21,16 @@ const useStyles = makeStyles({
   }),
 });
 
-export default function TableHeadWrapper({ rootElement, tableData, theme, layout, changeSortOrder, constraints }) {
+export default function TableHeadWrapper({
+  rootElement,
+  tableData,
+  theme,
+  layout,
+  changeSortOrder,
+  constraints,
+  selectionsAPI,
+}) {
   const classes = useStyles(getHeadStyle(layout, theme));
-
   return (
     <TableHead>
       <TableRow className="sn-table-row">
@@ -43,7 +50,10 @@ export default function TableHeadWrapper({ rootElement, tableData, theme, layout
               <TableSortLabel
                 active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
                 direction={column.sortDirection}
-                onClick={() => !constraints.active && changeSortOrder(layout, column.isDim, columnIndex)}
+                onClick={() =>
+                  // when cells are selected or in edit mode, it should not be able to do the sorting
+                  !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column.isDim, columnIndex)
+                }
                 tabIndex={-1}
               >
                 {column.label}
@@ -63,4 +73,5 @@ TableHeadWrapper.propTypes = {
   layout: PropTypes.object.isRequired,
   changeSortOrder: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
+  selectionsAPI: PropTypes.object.isRequired,
 };
