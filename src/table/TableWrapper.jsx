@@ -30,6 +30,7 @@ export default function TableWrapper(props) {
   const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
+  const [focusedCell, setFocusedCell] = useState([]);
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
@@ -65,8 +66,8 @@ export default function TableWrapper(props) {
     >
       <TableContainer className={classes[containerMode]}>
         <Table stickyHeader aria-label="sticky table">
-          <TableHeadWrapper {...props} />
-          <TableBodyWrapper {...props} />
+          <TableHeadWrapper {...props} focusedCell={focusedCell} setFocusedCell={setFocusedCell} />
+          <TableBodyWrapper {...props} page={page} focusedCell={focusedCell} setFocusedCell={setFocusedCell} />
         </Table>
       </TableContainer>
       <TablePagination

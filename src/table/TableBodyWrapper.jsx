@@ -20,7 +20,18 @@ const useStyles = makeStyles({
   },
 });
 
-const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, layout, theme }) => {
+const TableBodyWrapper = ({
+  rootElement,
+  pageInfo,
+  tableData,
+  constraints,
+  selectionsAPI,
+  layout,
+  theme,
+  focusedCell,
+  setFocusedCell,
+  page,
+}) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const styling = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
@@ -68,10 +79,23 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
                   align={column.align}
                   styling={styling}
                   selState={selState}
+                  focusedCell={focusedCell}
+                  setFocusedCell={setFocusedCell}
                   selDispatch={selDispatch}
+                  rootElement={rootElement}
+                  pageInfo={pageInfo}
+                  page={page}
                   tabIndex={-1}
                   onKeyDown={(evt) =>
-                    bodyHandleKeyPress(evt, rootElement, rowIndex + 1, columnIndex, cell, selState, selDispatch)
+                    bodyHandleKeyPress(
+                      evt,
+                      rootElement,
+                      [rowIndex + 1, columnIndex],
+                      setFocusedCell,
+                      cell,
+                      selState,
+                      selDispatch
+                    )
                   }
                 >
                   {value}
@@ -87,11 +111,15 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
 
 TableBodyWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
+  pageInfo: PropTypes.array.isRequired,
   tableData: PropTypes.object.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  focusedCell: PropTypes.array.isRequired,
+  setFocusedCell: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
 };
 
 export default React.memo(TableBodyWrapper);

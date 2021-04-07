@@ -21,7 +21,15 @@ const useStyles = makeStyles({
   }),
 });
 
-export default function TableHeadWrapper({ rootElement, tableData, theme, layout, changeSortOrder, constraints }) {
+export default function TableHeadWrapper({
+  rootElement,
+  tableData,
+  theme,
+  layout,
+  changeSortOrder,
+  constraints,
+  setFocusedCell,
+}) {
   const classes = useStyles(getHeadStyle(layout, theme));
 
   return (
@@ -37,7 +45,15 @@ export default function TableHeadWrapper({ rootElement, tableData, theme, layout
               tabIndex={tabIndex}
               onKeyDown={(e) =>
                 !constraints.active &&
-                headHandleKeyPress(e, rootElement, 0, columnIndex, changeSortOrder, layout, column.isDim)
+                headHandleKeyPress(
+                  e,
+                  rootElement,
+                  [0, columnIndex],
+                  setFocusedCell,
+                  changeSortOrder,
+                  layout,
+                  column.isDim
+                )
               }
             >
               <TableSortLabel
@@ -63,4 +79,5 @@ TableHeadWrapper.propTypes = {
   layout: PropTypes.object.isRequired,
   changeSortOrder: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
+  setFocusedCell: PropTypes.func.isRequired,
 };
