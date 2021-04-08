@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-cycle
 import { selectCell } from '../selections-utils';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);

@@ -111,7 +111,7 @@ const TableBodyWrapper = ({
 
 TableBodyWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
-  pageInfo: PropTypes.array.isRequired,
+  pageInfo: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,

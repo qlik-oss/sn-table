@@ -1,6 +1,3 @@
-// eslint-disable-next-line import/no-cycle
-import { focusCell } from './cells/handle-key-press';
-
 export function addSelectionListeners(api, selDispatch) {
   const resetSelections = () => {
     selDispatch({ type: 'reset' });
@@ -58,18 +55,7 @@ export const getSelectedRows = (selectedRows, qElemNumber, rowIdx, evt) => {
   return selectedRows;
 };
 
-const removeTabSequence = (rowElements, nextCellCoord) => {
-  const cell = rowElements[nextCellCoord[0]]?.getElementsByClassName('sn-table-cell')[nextCellCoord[1]];
-  cell.setAttribute('tabIndex', '-1');
-};
-
-export function selectCell(cell, selState, selDispatch, focusedCell, setFocusedCell, rootElement, pageInfo, page, evt) {
-  if (focusedCell.length === 0) {
-    removeTabSequence(rootElement.getElementsByClassName('sn-table-row'), [0, 0]);
-  } else {
-    focusedCell[2] === page && removeTabSequence(rootElement.getElementsByClassName('sn-table-row'), focusedCell);
-  }
-
+export function selectCell(cell, selState, selDispatch, evt) {
   const { api, rows } = selState;
   const { rowIdx, colIdx, qElemNumber } = cell;
   let selectedRows = [];
@@ -90,8 +76,6 @@ export function selectCell(cell, selState, selDispatch, focusedCell, setFocusedC
       method: 'selectHyperCubeCells',
       params: ['/qHyperCubeDef', selectedRows.map((r) => r.rowIdx), [colIdx]],
     });
-    setFocusedCell([rowIdx + 1 - pageInfo.height * page, colIdx, page]);
-    focusCell(rootElement.getElementsByClassName('sn-table-row'), [rowIdx + 1 - pageInfo.height * page, colIdx]);
   } else {
     api.cancel();
   }
