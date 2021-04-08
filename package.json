@@ -29,7 +29,7 @@
     "build": "rollup -c rollup.config.js && shx cp assets/* dist",
     "build:watch": "rollup -c rollup.config.js -w",
     "lint": "eslint src",
-    "start": "nebula serve --build false  --type sn-table",
+    "start": "nebula serve --build false --type sn-table",
     "sense": "nebula sense",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
     "test:unit": "aw -c aw.config.js",
