@@ -5,10 +5,22 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import { addSelectionListeners, reducer } from './selections-utils';
 import getCellRenderer from './cells/renderer';
-import { getBodyStyle } from './styling-utils';
+import { getBodyStyle, STYLING_DEFAULTS } from './styling-utils';
 import { bodyHandleKeyPress } from './cells/handle-key-press';
 
 const useStyles = makeStyles({
+  cellBase: (props) => ({
+    '& td': {
+      color: props.fontColor,
+      fontSize: props.fontSize,
+      padding: props.padding,
+      height: STYLING_DEFAULTS.HEIGHT,
+      lineHeight: STYLING_DEFAULTS.HEAD_LINE_HEIGHT,
+      '&&:focus': {
+        boxShadow: STYLING_DEFAULTS.FOCUS_OUTLINE,
+      },
+    },
+  }),
   hoverTableRow: {
     '&&:hover': {
       backgroundColor: 'rgba(0, 0, 0, 0)',
@@ -46,7 +58,7 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
   }, []);
 
   return (
-    <TableBody>
+    <TableBody class={classes.cellBase}>
       {rows.map((row, rowIndex) => (
         <TableRow
           hover={hoverEffect}
@@ -66,7 +78,7 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
                   value={value}
                   key={column.id}
                   align={column.align}
-                  styling={styling}
+                  styling={{}}
                   selState={selState}
                   selDispatch={selDispatch}
                   tabIndex={-1}
