@@ -74,6 +74,7 @@ const TableBodyWrapper = ({
                 <CellRenderer
                   cell={cell}
                   column={column}
+                  columnIndex={columnIndex}
                   value={value}
                   key={column.id}
                   align={column.align}

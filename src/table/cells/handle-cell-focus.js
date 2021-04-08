@@ -5,15 +5,21 @@ const removeTabSequence = (rowElements, nextCellCoord) => {
   cell.setAttribute('tabIndex', '-1');
 };
 
-const handleCellFocus = (cell, focusedCell, setFocusedCell, rootElement, pageInfo, page) => {
-  const { rowIdx, colIdx } = cell;
+const handleCellFocus = (columnIndex, cell, focusedCell, setFocusedCell, rootElement, pageInfo, page) => {
+  const { rowIdx } = cell;
 
   focusedCell.length === 0
     ? removeTabSequence(rootElement.getElementsByClassName('sn-table-row'), [0, 0])
     : focusedCell[2] === page && removeTabSequence(rootElement.getElementsByClassName('sn-table-row'), focusedCell);
 
-  setFocusedCell([rowIdx + 1 - pageInfo.height * page, colIdx, page]);
-  focusCell(rootElement.getElementsByClassName('sn-table-row'), [rowIdx + 1 - pageInfo.height * page, colIdx]);
+  setFocusedCell([rowIdx + 1 - pageInfo.height * page, columnIndex, page]);
+
+  // const cells = rootElement.getElementsByClassName('sn-table-cell');
+  // for (let i = 0; i < cells.length; i++) {
+  //   cells[i].setAttribute('tabIndex', '-1');
+  // }
+
+  focusCell(rootElement.getElementsByClassName('sn-table-row'), [rowIdx + 1 - pageInfo.height * page, columnIndex]);
 
   return true;
 };
