@@ -22,7 +22,6 @@ const useStyles = makeStyles({
 
 const TableBodyWrapper = ({
   rootElement,
-  pageInfo,
   tableData,
   constraints,
   selectionsAPI,
@@ -74,7 +73,6 @@ const TableBodyWrapper = ({
                 <CellRenderer
                   cell={cell}
                   column={column}
-                  columnIndex={columnIndex}
                   value={value}
                   key={column.id}
                   align={column.align}
@@ -84,7 +82,6 @@ const TableBodyWrapper = ({
                   setFocusedCell={setFocusedCell}
                   selDispatch={selDispatch}
                   rootElement={rootElement}
-                  pageInfo={pageInfo}
                   page={page}
                   tabIndex={-1}
                   onKeyDown={(evt) =>
@@ -92,10 +89,12 @@ const TableBodyWrapper = ({
                       evt,
                       rootElement,
                       [rowIndex + 1, columnIndex],
+                      focusedCell,
                       setFocusedCell,
                       cell,
                       selState,
-                      selDispatch
+                      selDispatch,
+                      page
                     )
                   }
                 >
@@ -112,7 +111,6 @@ const TableBodyWrapper = ({
 
 TableBodyWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
-  pageInfo: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,

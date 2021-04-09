@@ -1,4 +1,5 @@
 import { selectCell } from '../selections-utils';
+import { focusCell, handleCellFocus } from './handle-cell-focus';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -11,12 +12,6 @@ export const updatePage = (evt, totalRowSize, page, rowsPerPage, handleChangePag
       handleChangePage(null, page - 1);
     }
   }
-};
-
-export const focusCell = (rowElements, nextCellCoord) => {
-  const nextCell = rowElements[nextCellCoord[0]].getElementsByClassName('sn-table-cell')[nextCellCoord[1]];
-  nextCell.focus();
-  nextCell.setAttribute('tabIndex', '0');
 };
 
 export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, selState) => {
@@ -62,22 +57,32 @@ export const preventDefaultBehavior = (evt) => {
   evt.preventDefault();
 };
 
-export const moveFocus = (evt, rootElement, cellCoord, setFocusedCell, selState) => {
+export const moveFocus = (evt, rootElement, cellCoord, setFocusedCell, selState, page) => {
   preventDefaultBehavior(evt);
   removeCurrentFocus(evt);
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
   const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selState);
   focusCell(rowAndColumnCount.rowElements, nextCellCoord);
+  nextCellCoord.push(page);
   setFocusedCell(nextCellCoord);
 };
 
-export const headHandleKeyPress = (evt, rootElement, cellCoord, setFocusedCell, changeSortOrder, layout, isDim) => {
+export const headHandleKeyPress = (
+  evt,
+  rootElement,
+  cellCoord,
+  setFocusedCell,
+  changeSortOrder,
+  layout,
+  isDim,
+  page
+) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCell);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCell, page);
       break;
     }
     // Space bar / Enter: update the sorting
@@ -92,19 +97,31 @@ export const headHandleKeyPress = (evt, rootElement, cellCoord, setFocusedCell, 
   }
 };
 
-export const bodyHandleKeyPress = (evt, rootElement, cellCoord, setFocusedCell, cell, selState, selDispatch) => {
+export const bodyHandleKeyPress = (
+  evt,
+  rootElement,
+  cellCoord,
+  focusedCell,
+  setFocusedCell,
+  cell,
+  selState,
+  selDispatch,
+  page
+) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCell, selState);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCell, selState, page);
       break;
     }
     // Space bar: Selects value.
     case ' ': {
       preventDefaultBehavior(evt);
-      cell?.isDim && selectCell(cell, selState, selDispatch, evt);
+      cell?.isDim &&
+        handleCellFocus(cell, focusedCell, setFocusedCell, rootElement, page) &&
+        selectCell(cell, selState, selDispatch, evt);
       break;
     }
     // Enter: Confirms selections.

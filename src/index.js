@@ -47,7 +47,6 @@ export default function supernova(env) {
             rootElement,
             layout,
             tableData,
-            pageInfo,
             setPageInfo,
             constraints,
             selectionsAPI,

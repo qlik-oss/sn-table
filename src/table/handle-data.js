@@ -45,6 +45,8 @@ export default async function manageData(model, layout, pageInfo) {
         rowIdx: rowIdx + pageInfo.top,
         colIdx: columnOrder[colIdx],
         isDim: c.isDim,
+        rawRowIdx: rowIdx,
+        rawColIdx: colIdx,
       };
     });
     return row;
