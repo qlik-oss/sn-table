@@ -4,13 +4,11 @@ import { getColumnStyle } from '../styling-utils';
 
 export default function withColumnStyling(CellComponent) {
   const HOC = (props) => {
-    const { cell, column, styling, selState } = props;
-    console.log('column', styling);
+    const { cell, column, styling } = props;
     const columnStyling = useMemo(() => getColumnStyle(styling, cell.qAttrExps, column.stylingInfo), [
       styling,
       cell.qAttrExps,
       column.stylingInfo,
-      selState,
     ]);
 
     return <CellComponent {...props} styling={columnStyling} />;
@@ -20,7 +18,6 @@ export default function withColumnStyling(CellComponent) {
     cell: PropTypes.object.isRequired,
     column: PropTypes.object.isRequired,
     styling: PropTypes.object.isRequired,
-    selState: PropTypes.object.isRequired,
   };
 
   return HOC;
