@@ -9,18 +9,18 @@ import { getBodyStyle, STYLING_DEFAULTS } from './styling-utils';
 import { bodyHandleKeyPress } from './cells/handle-key-press';
 
 const useStyles = makeStyles({
-  cellBase: (props) => ({
+  cellBase: {
     '& td': {
-      color: props.fontColor,
-      fontSize: props.fontSize,
-      padding: props.padding,
+      color: ({ color }) => color,
+      fontSize: ({ fontSize }) => fontSize,
+      padding: ({ padding }) => padding,
       height: STYLING_DEFAULTS.HEIGHT,
       lineHeight: STYLING_DEFAULTS.HEAD_LINE_HEIGHT,
       '&&:focus': {
         boxShadow: STYLING_DEFAULTS.FOCUS_OUTLINE,
       },
     },
-  }),
+  },
   hoverTableRow: {
     '&&:hover': {
       backgroundColor: 'rgba(0, 0, 0, 0)',
