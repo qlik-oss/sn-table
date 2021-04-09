@@ -108,6 +108,7 @@ export function getSelectionColors(background, cell, selState) {
 
   if (rows.length) {
     if (colIdx !== cell.colIdx) {
+      console.log(background);
       return getExcludedBackground(background);
     }
 
