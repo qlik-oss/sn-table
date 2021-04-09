@@ -85,7 +85,7 @@ describe('styling-utils', () => {
     it('should return styling with fontColor and fontSize', () => {
       const resultStyling = getBaseStyling(styleObj, theme);
       expect(resultStyling).to.eql({
-        fontColor: '#fff',
+        color: '#fff',
         fontSize: 12,
         padding: '6px 12px',
       });
@@ -95,7 +95,7 @@ describe('styling-utils', () => {
 
       const resultStyling = getBaseStyling(styleObj, theme);
       expect(resultStyling).to.eql({
-        fontColor: '#fff',
+        color: '#fff',
         fontSize: '14px',
         padding: '7px 14px',
       });
@@ -124,7 +124,7 @@ describe('styling-utils', () => {
     it('should call default styling', () => {
       const resultStyling = getHeadStyle(layout, theme);
       expect(resultStyling).to.eql({
-        fontColor: '#404040',
+        color: '#404040',
         fontSize: '14px',
         padding: '7px 14px',
       });
@@ -171,7 +171,7 @@ describe('styling-utils', () => {
       const resultStyling = getBodyStyle(layout, theme);
       expect(resultStyling).to.eql({
         fontSize: 22,
-        fontColor: resolvedColor,
+        color: resolvedColor,
         padding: '11px 22px',
         hoverBackgroundColor: '#f4f4f4',
         hoverFontColor: '',
@@ -216,7 +216,7 @@ describe('styling-utils', () => {
     let stylingInfo;
 
     beforeEach(() => {
-      styling = { fontColor: 'someFontColor' };
+      styling = { color: 'someFontColor' };
       qAttrExps = {
         qValues: [{ qText: '#dddddd' }, { qText: '#111111' }],
       };
@@ -225,71 +225,73 @@ describe('styling-utils', () => {
 
     it('should return styling with both new fontColor and backgroundColor when selected', () => {
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
-      expect(columnStyle.backgroundColor).to.equal('#dddddd');
-      expect(columnStyle.fontColor).to.equal('#111111');
+      expect(columnStyle.background).to.equal('#dddddd');
+      expect(columnStyle.color).to.equal('#111111');
     });
     it('should return styling with new fontColor', () => {
       qAttrExps.qValues = [qAttrExps.qValues[1]];
       stylingInfo = [stylingInfo[1]];
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
-      expect(columnStyle.backgroundColor).to.equal(undefined);
-      expect(columnStyle.fontColor).to.equal('#111111');
+      expect(columnStyle.background).to.equal(undefined);
+      expect(columnStyle.color).to.equal('#111111');
     });
     it('should return styling with backgroundColor', () => {
       qAttrExps.qValues = [qAttrExps.qValues[0]];
       stylingInfo = [stylingInfo[0]];
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
-      expect(columnStyle.backgroundColor).to.equal('#dddddd');
-      expect(columnStyle.fontColor).to.equal(STYLING_DEFAULTS.FONT_COLOR);
+      expect(columnStyle.background).to.equal('#dddddd');
+      expect(columnStyle.color).to.equal(STYLING_DEFAULTS.FONT_COLOR);
     });
     it('should return styling unchanged', () => {
       qAttrExps = undefined;
       stylingInfo = [];
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
-      expect(columnStyle.backgroundColor).to.equal(undefined);
-      expect(columnStyle.fontColor).to.equal('someFontColor');
+      expect(columnStyle.background).to.equal(undefined);
+      expect(columnStyle.color).to.equal('someFontColor');
     });
   });
 
   describe('getSelectionStyle', () => {
     let selState;
     let cell;
+    let background;
 
     beforeEach(() => {
+      background = undefined;
       selState = { colIdx: 1, rows: [{ qElemNumber: 1, rowIdx: 1 }] };
       cell = { qElemNumber: 1, colIdx: 1 };
     });
 
     it('should return selected when selected styling', () => {
-      const selectionClass = getSelectionColors(cell, selState);
+      const selectionClass = getSelectionColors(background, cell, selState);
       expect(selectionClass).to.equal(SELECTION_STYLING.SELECTED);
     });
     it('should return excluded styling when other column', () => {
-      cell.qElemNumber = 2;
       cell.colIdx = 2;
 
-      const selectionClass = getSelectionColors(cell, selState);
+      const selectionClass = getSelectionColors(background, cell, selState);
       expect(selectionClass).to.equal(SELECTION_STYLING.EXCLUDED);
     });
-    it('should return excluded styling when other column that happens to have the same qElemNumber', () => {
+    it('should return excluded styling with columns background when other column and background color exists', () => {
       cell.colIdx = 2;
+      background = 'someColor';
 
-      const selectionClass = getSelectionColors(cell, selState);
-      expect(selectionClass).to.equal(SELECTION_STYLING.EXCLUDED);
+      const selectionClass = getSelectionColors(background, cell, selState);
+      expect(selectionClass).to.eql({ background: `${SELECTION_STYLING.EXCLUDED.background}, someColor` });
     });
     it('should return possible styling when active and available to select', () => {
       cell.qElemNumber = 2;
 
-      const selectionClass = getSelectionColors(cell, selState);
+      const selectionClass = getSelectionColors(background, cell, selState);
       expect(selectionClass).to.equal(SELECTION_STYLING.POSSIBLE);
     });
     it('should return empty object when no active selections', () => {
       selState = { rows: [] };
 
-      const selectionClass = getSelectionColors(cell, selState);
+      const selectionClass = getSelectionColors(background, cell, selState);
       expect(selectionClass).to.eql({});
     });
   });
