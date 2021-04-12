@@ -15,6 +15,4 @@ export const handleCellFocus = (cell, focusedCell, setFocusedCell, rootElement) 
   resetTabIndex(tableRow, focusedCell.length === 0 ? [0, 0] : focusedCell);
   setFocusedCell([rawRowIdx + 1, rawColIdx]);
   focusCell(tableRow, [rawRowIdx + 1, rawColIdx]);
-
-  return true;
 };

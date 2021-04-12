@@ -44,7 +44,6 @@ export default function TableHeadWrapper({
               className={`${classes.head} sn-table-head-cell sn-table-cell`}
               tabIndex={tabIndex}
               onKeyDown={(e) =>
-                !constraints.active &&
                 headHandleKeyPress(
                   e,
                   rootElement,
@@ -52,7 +51,8 @@ export default function TableHeadWrapper({
                   setFocusedCell,
                   changeSortOrder,
                   layout,
-                  column.isDim
+                  column.isDim,
+                  !constraints.active
                 )
               }
             >

@@ -63,10 +63,19 @@ export const moveFocus = (evt, rootElement, cellCoord, setFocusedCell, selState)
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
   const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selState);
   focusCell(rowAndColumnCount.rowElements, nextCellCoord);
-  setFocusedCell(nextCellCoord);
+  setFocusedCell([nextCellCoord]);
 };
 
-export const headHandleKeyPress = (evt, rootElement, cellCoord, setFocusedCell, changeSortOrder, layout, isDim) => {
+export const headHandleKeyPress = (
+  evt,
+  rootElement,
+  cellCoord,
+  setFocusedCell,
+  changeSortOrder,
+  layout,
+  isDim,
+  isAnalysisMode
+) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
@@ -79,7 +88,7 @@ export const headHandleKeyPress = (evt, rootElement, cellCoord, setFocusedCell, 
     case ' ':
     case 'Enter': {
       preventDefaultBehavior(evt);
-      changeSortOrder(layout, isDim, cellCoord[1]);
+      isAnalysisMode && changeSortOrder(layout, isDim, cellCoord[1]);
       break;
     }
     default:
@@ -87,7 +96,16 @@ export const headHandleKeyPress = (evt, rootElement, cellCoord, setFocusedCell, 
   }
 };
 
-export const bodyHandleKeyPress = (evt, rootElement, cellCoord, setFocusedCell, cell, selState, selDispatch) => {
+export const bodyHandleKeyPress = (
+  evt,
+  rootElement,
+  cellCoord,
+  setFocusedCell,
+  cell,
+  selState,
+  selDispatch,
+  isAnalysisMode
+) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
@@ -99,19 +117,19 @@ export const bodyHandleKeyPress = (evt, rootElement, cellCoord, setFocusedCell, 
     // Space bar: Selects value.
     case ' ': {
       preventDefaultBehavior(evt);
-      cell?.isDim && selectCell(cell, selState, selDispatch, evt);
+      cell?.isDim && isAnalysisMode && selectCell(cell, selState, selDispatch, evt);
       break;
     }
     // Enter: Confirms selections.
     case 'Enter': {
       preventDefaultBehavior(evt);
-      selState.api.confirm();
+      isAnalysisMode && selState.api.confirm();
       break;
     }
     // Esc: Cancels selections
     case 'Escape': {
       preventDefaultBehavior(evt);
-      selState.api.cancel();
+      isAnalysisMode && selState.api.cancel();
       break;
     }
     default:
