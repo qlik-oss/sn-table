@@ -29,7 +29,6 @@ const TableBodyWrapper = ({
   theme,
   focusedCell,
   setFocusedCell,
-  page,
 }) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
@@ -82,7 +81,6 @@ const TableBodyWrapper = ({
                   setFocusedCell={setFocusedCell}
                   selDispatch={selDispatch}
                   rootElement={rootElement}
-                  page={page}
                   tabIndex={-1}
                   onKeyDown={(evt) =>
                     bodyHandleKeyPress(
@@ -93,8 +91,7 @@ const TableBodyWrapper = ({
                       setFocusedCell,
                       cell,
                       selState,
-                      selDispatch,
-                      page
+                      selDispatch
                     )
                   }
                 >
@@ -118,7 +115,6 @@ TableBodyWrapper.propTypes = {
   theme: PropTypes.object.isRequired,
   focusedCell: PropTypes.array.isRequired,
   setFocusedCell: PropTypes.func.isRequired,
-  page: PropTypes.number.isRequired,
 };
 
 export default React.memo(TableBodyWrapper);

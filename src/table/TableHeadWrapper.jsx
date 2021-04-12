@@ -29,7 +29,6 @@ export default function TableHeadWrapper({
   changeSortOrder,
   constraints,
   setFocusedCell,
-  page,
 }) {
   const classes = useStyles(getHeadStyle(layout, theme));
 
@@ -53,8 +52,7 @@ export default function TableHeadWrapper({
                   setFocusedCell,
                   changeSortOrder,
                   layout,
-                  column.isDim,
-                  page
+                  column.isDim
                 )
               }
             >
@@ -82,5 +80,4 @@ TableHeadWrapper.propTypes = {
   changeSortOrder: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
   setFocusedCell: PropTypes.func.isRequired,
-  page: PropTypes.number.isRequired,
 };

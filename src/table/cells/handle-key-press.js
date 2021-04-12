@@ -57,32 +57,22 @@ export const preventDefaultBehavior = (evt) => {
   evt.preventDefault();
 };
 
-export const moveFocus = (evt, rootElement, cellCoord, setFocusedCell, selState, page) => {
+export const moveFocus = (evt, rootElement, cellCoord, setFocusedCell, selState) => {
   preventDefaultBehavior(evt);
   removeCurrentFocus(evt);
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
   const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selState);
   focusCell(rowAndColumnCount.rowElements, nextCellCoord);
-  nextCellCoord.push(page);
   setFocusedCell(nextCellCoord);
 };
 
-export const headHandleKeyPress = (
-  evt,
-  rootElement,
-  cellCoord,
-  setFocusedCell,
-  changeSortOrder,
-  layout,
-  isDim,
-  page
-) => {
+export const headHandleKeyPress = (evt, rootElement, cellCoord, setFocusedCell, changeSortOrder, layout, isDim) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCell, page);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCell);
       break;
     }
     // Space bar / Enter: update the sorting
@@ -105,22 +95,21 @@ export const bodyHandleKeyPress = (
   setFocusedCell,
   cell,
   selState,
-  selDispatch,
-  page
+  selDispatch
 ) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCell, selState, page);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCell, selState);
       break;
     }
     // Space bar: Selects value.
     case ' ': {
       preventDefaultBehavior(evt);
       cell?.isDim &&
-        handleCellFocus(cell, focusedCell, setFocusedCell, rootElement, page) &&
+        handleCellFocus(cell, focusedCell, setFocusedCell, rootElement) &&
         selectCell(cell, selState, selDispatch, evt);
       break;
     }

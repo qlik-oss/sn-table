@@ -66,8 +66,8 @@ export default function TableWrapper(props) {
     >
       <TableContainer className={classes[containerMode]}>
         <Table stickyHeader aria-label="sticky table">
-          <TableHeadWrapper {...props} page={page} focusedCell={focusedCell} setFocusedCell={setFocusedCell} />
-          <TableBodyWrapper {...props} page={page} focusedCell={focusedCell} setFocusedCell={setFocusedCell} />
+          <TableHeadWrapper {...props} focusedCell={focusedCell} setFocusedCell={setFocusedCell} />
+          <TableBodyWrapper {...props} focusedCell={focusedCell} setFocusedCell={setFocusedCell} />
         </Table>
       </TableContainer>
       <TablePagination

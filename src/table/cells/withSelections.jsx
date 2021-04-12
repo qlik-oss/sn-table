@@ -6,11 +6,11 @@ import { getSelectionStyle } from '../styling-utils';
 
 export default function withSelections(CellComponent) {
   const HOC = (props) => {
-    const { cell, selState, selDispatch, styling, focusedCell, setFocusedCell, rootElement, page } = props;
+    const { cell, selState, selDispatch, styling, focusedCell, setFocusedCell, rootElement } = props;
     const handleMouseUp = (evt) => {
       cell.isDim &&
         evt.button === 0 &&
-        handleCellFocus(cell, focusedCell, setFocusedCell, rootElement, page) &&
+        handleCellFocus(cell, focusedCell, setFocusedCell, rootElement) &&
         selectCell(cell, selState, selDispatch, evt);
     };
 
@@ -27,7 +27,6 @@ export default function withSelections(CellComponent) {
     focusedCell: PropTypes.array.isRequired,
     setFocusedCell: PropTypes.func.isRequired,
     rootElement: PropTypes.object.isRequired,
-    page: PropTypes.number.isRequired,
   };
 
   return HOC;
