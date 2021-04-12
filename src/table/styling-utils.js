@@ -95,11 +95,6 @@ export function getColumnStyle(styling, qAttrExps, stylingInfo) {
   };
 }
 
-export const getExcludedBackground = (columnBackground) =>
-  columnBackground
-    ? { background: `${SELECTION_STYLING.EXCLUDED.background}, ${columnBackground}` }
-    : SELECTION_STYLING.EXCLUDED;
-
 export function getSelectionColors(background = STYLING_DEFAULTS.WHITE, cell, selState) {
   const { colIdx, rows } = selState;
 
