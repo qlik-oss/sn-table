@@ -17,9 +17,6 @@ export const STYLING_DEFAULTS = {
 };
 
 export const SELECTION_STYLING = {
-  EXCLUDED: {
-    background: STYLING_DEFAULTS.EXCLUDED_BACKGROUND,
-  },
   SELECTED: {
     color: STYLING_DEFAULTS.WHITE,
     background: STYLING_DEFAULTS.SELECTED_BACKGROUND,
@@ -103,13 +100,12 @@ export const getExcludedBackground = (columnBackground) =>
     ? { background: `${SELECTION_STYLING.EXCLUDED.background}, ${columnBackground}` }
     : SELECTION_STYLING.EXCLUDED;
 
-export function getSelectionColors(background, cell, selState) {
+export function getSelectionColors(background = STYLING_DEFAULTS.WHITE, cell, selState) {
   const { colIdx, rows } = selState;
 
   if (rows.length) {
     if (colIdx !== cell.colIdx) {
-      console.log(background);
-      return getExcludedBackground(background);
+      return { background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${background}` };
     }
 
     for (let i = 0; i < rows.length; i++) {
