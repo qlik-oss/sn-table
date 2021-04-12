@@ -111,7 +111,7 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  focusedCell: PropTypes.array.isRequired,
+  focusedCell: PropTypes.number.isRequired,
   setFocusedCell: PropTypes.func.isRequired,
 };
 

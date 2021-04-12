@@ -30,7 +30,7 @@ export default function TableWrapper(props) {
   const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
-  const [focusedCell, setFocusedCell] = useState([]);
+  const [focusedCell, setFocusedCell] = useState(0);
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
