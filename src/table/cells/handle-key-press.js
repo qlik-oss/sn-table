@@ -1,5 +1,5 @@
 import { selectCell } from '../selections-utils';
-import { focusCell, handleCellFocus } from './handle-cell-focus';
+import { focusCell } from './handle-cell-focus';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -87,16 +87,7 @@ export const headHandleKeyPress = (evt, rootElement, cellCoord, setFocusedCell, 
   }
 };
 
-export const bodyHandleKeyPress = (
-  evt,
-  rootElement,
-  cellCoord,
-  focusedCell,
-  setFocusedCell,
-  cell,
-  selState,
-  selDispatch
-) => {
+export const bodyHandleKeyPress = (evt, rootElement, cellCoord, setFocusedCell, cell, selState, selDispatch) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
@@ -108,9 +99,7 @@ export const bodyHandleKeyPress = (
     // Space bar: Selects value.
     case ' ': {
       preventDefaultBehavior(evt);
-      cell?.isDim &&
-        handleCellFocus(cell, focusedCell, setFocusedCell, rootElement) &&
-        selectCell(cell, selState, selDispatch, evt);
+      cell?.isDim && selectCell(cell, selState, selDispatch, evt);
       break;
     }
     // Enter: Confirms selections.

@@ -87,7 +87,6 @@ const TableBodyWrapper = ({
                       evt,
                       rootElement,
                       [rowIndex + 1, columnIndex],
-                      focusedCell,
                       setFocusedCell,
                       cell,
                       selState,
