@@ -273,14 +273,14 @@ describe('styling-utils', () => {
       cell.colIdx = 2;
 
       const selectionClass = getSelectionColors(background, cell, selState);
-      expect(selectionClass).to.equal(SELECTION_STYLING.EXCLUDED);
+      expect(selectionClass).to.eql({ background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, #fff` });
     });
     it('should return excluded styling with columns background when other column and background color exists', () => {
       cell.colIdx = 2;
       background = 'someColor';
 
       const selectionClass = getSelectionColors(background, cell, selState);
-      expect(selectionClass).to.eql({ background: `${SELECTION_STYLING.EXCLUDED.background}, someColor` });
+      expect(selectionClass).to.eql({ background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, someColor` });
     });
     it('should return possible styling when active and available to select', () => {
       cell.qElemNumber = 2;

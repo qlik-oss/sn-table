@@ -25,8 +25,8 @@ const useStyles = makeStyles({
     '&&:hover': {
       backgroundColor: 'rgba(0, 0, 0, 0)',
       '& td:not(.selected)': {
-        backgroundColor: ({ hoverBackgroundColor }) => hoverBackgroundColor,
-        color: ({ hoverFontColor }) => hoverFontColor,
+        backgroundColor: ({ hoverBackgroundColor }) => `${hoverBackgroundColor} !important`,
+        color: ({ hoverFontColor }) => `${hoverFontColor} !important`,
       },
     },
   },
