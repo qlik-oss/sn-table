@@ -4,7 +4,7 @@ import Table from '@material-ui/core/Table';
 import TableContainer from '@material-ui/core/TableContainer';
 import TablePagination from '@material-ui/core/TablePagination';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import { updatePage } from './cells/handle-key-press';
@@ -30,7 +30,7 @@ export default function TableWrapper(props) {
   const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
-  const [focusedCell, setFocusedCell] = useState(0);
+  const focusedCellCoord = useRef([0, 0]);
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
@@ -66,8 +66,8 @@ export default function TableWrapper(props) {
     >
       <TableContainer className={classes[containerMode]}>
         <Table stickyHeader aria-label="sticky table">
-          <TableHeadWrapper {...props} focusedCell={focusedCell} setFocusedCell={setFocusedCell} />
-          <TableBodyWrapper {...props} focusedCell={focusedCell} setFocusedCell={setFocusedCell} />
+          <TableHeadWrapper {...props} focusedCellCoord={focusedCellCoord} />
+          <TableBodyWrapper {...props} focusedCellCoord={focusedCellCoord} />
         </Table>
       </TableContainer>
       <TablePagination

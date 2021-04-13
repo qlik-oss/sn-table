@@ -21,16 +21,7 @@ const useStyles = makeStyles({
   },
 });
 
-const TableBodyWrapper = ({
-  rootElement,
-  tableData,
-  constraints,
-  selectionsAPI,
-  layout,
-  theme,
-  focusedCell,
-  setFocusedCell,
-}) => {
+const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, layout, theme, focusedCellCoord }) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const styling = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
@@ -45,7 +36,7 @@ const TableBodyWrapper = ({
     isEnabled: !!selectionsAPI && !constraints.active,
   });
 
-  const handleMouseDown = (cell) => handleCellFocus(cell, focusedCell, setFocusedCell, rootElement);
+  const handleMouseDown = (cell) => handleCellFocus(cell, focusedCellCoord, rootElement);
 
   useEffect(() => {
     const selectionsEnabled = !!selectionsAPI && !constraints.active;
@@ -84,7 +75,7 @@ const TableBodyWrapper = ({
                       evt,
                       rootElement,
                       [rowIndex + 1, columnIndex],
-                      setFocusedCell,
+                      focusedCellCoord,
                       cell,
                       selState,
                       selDispatch,
@@ -111,8 +102,7 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  focusedCell: PropTypes.number.isRequired,
-  setFocusedCell: PropTypes.func.isRequired,
+  focusedCellCoord: PropTypes.object.isRequired,
 };
 
 export default React.memo(TableBodyWrapper);

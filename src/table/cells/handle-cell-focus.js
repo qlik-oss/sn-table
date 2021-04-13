@@ -4,17 +4,15 @@ export const focusCell = (rowElements, nextCellCoord) => {
   nextCell.setAttribute('tabIndex', '0');
 };
 
-const resetTabIndex = (tableRow, focusedCell) => {
-  for (let i = 0; i < tableRow.length; i++) {
-    const cell = tableRow[i].children[focusedCell];
-    cell && cell.setAttribute('tabIndex', '-1');
-  }
+const resetTabIndex = (rowElements, focusedCellCoord) => {
+  const cell = rowElements[focusedCellCoord[0]]?.getElementsByClassName('sn-table-cell')[focusedCellCoord[1]];
+  cell && cell.setAttribute('tabIndex', '-1');
 };
 
-export const handleCellFocus = (cell, focusedCell, setFocusedCell, rootElement) => {
+export const handleCellFocus = (cell, focusedCellCoord, rootElement) => {
   const { rawRowIdx, rawColIdx } = cell;
-  const tableRow = rootElement.getElementsByClassName('sn-table-row');
-  resetTabIndex(tableRow, focusedCell);
-  setFocusedCell(rawColIdx);
-  focusCell(tableRow, [rawRowIdx + 1, rawColIdx]);
+  const rowElements = rootElement.getElementsByClassName('sn-table-row');
+  resetTabIndex(rowElements, focusedCellCoord.current);
+  focusedCellCoord.current = [rawRowIdx + 1, rawColIdx];
+  focusCell(rowElements, [rawRowIdx + 1, rawColIdx]);
 };
