@@ -7,6 +7,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { STYLING_DEFAULTS, getHeadStyle } from './styling-utils';
 import { headHandleKeyPress } from './cells/handle-key-press';
+import { handleHeadCellFocus } from './cells/handle-cell-focus';
 
 const useStyles = makeStyles({
   head: (props) => ({
@@ -32,6 +33,8 @@ export default function TableHeadWrapper({
 }) {
   const classes = useStyles(getHeadStyle(layout, theme));
 
+  const handleMouseDown = (columnIndex) => handleHeadCellFocus(columnIndex, focusedCellCoord, rootElement);
+
   return (
     <TableHead>
       <TableRow className="sn-table-row">
@@ -55,6 +58,7 @@ export default function TableHeadWrapper({
                   !constraints.active
                 )
               }
+              onMouseDown={() => handleMouseDown(columnIndex)}
             >
               <TableSortLabel
                 active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}

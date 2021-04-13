@@ -9,10 +9,17 @@ const resetTabIndex = (rowElements, focusedCellCoord) => {
   cell && cell.setAttribute('tabIndex', '-1');
 };
 
-export const handleCellFocus = (cell, focusedCellCoord, rootElement) => {
+export const handleBodyCellFocus = (cell, focusedCellCoord, rootElement) => {
   const { rawRowIdx, rawColIdx } = cell;
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
   resetTabIndex(rowElements, focusedCellCoord.current);
   focusedCellCoord.current = [rawRowIdx + 1, rawColIdx];
   focusCell(rowElements, [rawRowIdx + 1, rawColIdx]);
+};
+
+export const handleHeadCellFocus = (columnIndex, focusedCellCoord, rootElement) => {
+  const rowElements = rootElement.getElementsByClassName('sn-table-row');
+  resetTabIndex(rowElements, focusedCellCoord.current);
+  focusedCellCoord.current = [0, columnIndex];
+  focusCell(rowElements, [0, columnIndex]);
 };
