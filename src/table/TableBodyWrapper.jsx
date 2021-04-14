@@ -46,8 +46,6 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
     addSelectionListeners(selectionsAPI, selDispatch);
   }, []);
 
-  const handleMouseDown = (cell) => handleBodyCellFocus(cell, focusedCellCoord, rootElement);
-
   return (
     <TableBody>
       {rows.map((row, rowIndex) => (
@@ -85,7 +83,7 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
                       !constraints.active
                     )
                   }
-                  onMouseDown={() => handleMouseDown(cell)}
+                  onMouseDown={() => handleBodyCellFocus(cell, focusedCellCoord, rootElement)}
                 >
                   {value}
                 </CellRenderer>

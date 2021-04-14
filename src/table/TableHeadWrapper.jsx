@@ -33,7 +33,6 @@ export default function TableHeadWrapper({
   focusedCellCoord,
 }) {
   const classes = useStyles(getHeadStyle(layout, theme));
-  const handleMouseDown = (columnIndex) => handleHeadCellFocus(columnIndex, focusedCellCoord, rootElement);
 
   return (
     <TableHead>
@@ -58,7 +57,7 @@ export default function TableHeadWrapper({
                   !constraints.active
                 )
               }
-              onMouseDown={() => handleMouseDown(columnIndex)}
+              onMouseDown={() => handleHeadCellFocus(columnIndex, focusedCellCoord, rootElement)}
             >
               <TableSortLabel
                 active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}

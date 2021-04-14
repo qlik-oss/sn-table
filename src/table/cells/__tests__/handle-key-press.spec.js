@@ -169,15 +169,26 @@ describe('handle-key-press', () => {
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(selState.api.begin).to.have.been.calledOnce;
-      // expect(selState.api.select).to.have.been.calledOnce;
-      // expect(selDispatch).to.have.been.calledOnce;
+      expect(selState.api.select).to.have.been.calledOnce;
+      expect(selDispatch).to.have.been.calledOnce;
     });
 
-    it('when press space bar key and not dimension, should not select value for measure', () => {
+    it('when press space bar key not on dimension, should not select value for measure', () => {
       evt.key = ' ';
       cell = {
         isDim: false,
       };
+      bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], focusedCellCoord, selState, cell, selDispatch);
+      expect(evt.preventDefault).to.have.been.calledOnce;
+      expect(evt.stopPropagation).to.have.been.calledOnce;
+      expect(selState.api.begin).to.not.have.been.calledOnce;
+      expect(selState.api.select).to.not.have.been.calledOnce;
+      expect(selDispatch).to.not.have.been.calledOnce;
+    });
+
+    it('when press space bar key not in analysis mode, should not select value for measure ', () => {
+      evt.key = ' ';
+      isAnalysisMode = false;
       bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], focusedCellCoord, selState, cell, selDispatch);
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
@@ -203,6 +214,24 @@ describe('handle-key-press', () => {
       expect(selState.api.confirm).to.have.been.calledOnce;
     });
 
+    it('when press enter key not in analysis mode, should not confirms selections', () => {
+      evt.key = 'Enter';
+      isAnalysisMode = false;
+      bodyHandleKeyPress(
+        evt,
+        rootElement,
+        [rowIndex, colIndex],
+        focusedCellCoord,
+        selState,
+        cell,
+        selDispatch,
+        isAnalysisMode
+      );
+      expect(evt.preventDefault).to.have.been.calledOnce;
+      expect(evt.stopPropagation).to.have.been.calledOnce;
+      expect(selState.api.confirm).to.not.have.been.calledOnce;
+    });
+
     it('when press cancel key, should cancel selection', () => {
       evt.key = 'Escape';
       bodyHandleKeyPress(
@@ -218,6 +247,24 @@ describe('handle-key-press', () => {
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(selState.api.cancel).to.have.been.calledOnce;
+    });
+
+    it('when press cancel key not in analysis mode, should not cancel selection', () => {
+      evt.key = 'Escape';
+      isAnalysisMode = false;
+      bodyHandleKeyPress(
+        evt,
+        rootElement,
+        [rowIndex, colIndex],
+        focusedCellCoord,
+        selState,
+        cell,
+        selDispatch,
+        isAnalysisMode
+      );
+      expect(evt.preventDefault).to.have.been.calledOnce;
+      expect(evt.stopPropagation).to.have.been.calledOnce;
+      expect(selState.api.cancel).to.not.have.been.calledOnce;
     });
 
     it('when press ArrowRight and shif and ctrl key, should not update the sorting', () => {
@@ -289,6 +336,24 @@ describe('handle-key-press', () => {
       expect(changeSortOrder).to.have.been.calledOnce;
     });
 
+    it('when press space bar key not in analysis mdoe, should not update the sorting', () => {
+      evt.key = ' ';
+      isAnalysisMode = false;
+      headHandleKeyPress(
+        evt,
+        rootElement,
+        [rowIndex, colIndex],
+        focusedCellCoord,
+        changeSortOrder,
+        layout,
+        isDim,
+        isAnalysisMode
+      );
+      expect(evt.preventDefault).to.have.been.calledOnce;
+      expect(evt.stopPropagation).to.have.been.calledOnce;
+      expect(changeSortOrder).to.not.have.been.calledOnce;
+    });
+
     it('when press enter key, should update the sorting', () => {
       evt.key = 'Enter';
       headHandleKeyPress(
@@ -304,6 +369,24 @@ describe('handle-key-press', () => {
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(changeSortOrder).to.have.been.calledOnce;
+    });
+
+    it('when press enter key not in analysis mdoe, should not update the sorting', () => {
+      evt.key = 'Enter';
+      isAnalysisMode = false;
+      headHandleKeyPress(
+        evt,
+        rootElement,
+        [rowIndex, colIndex],
+        focusedCellCoord,
+        changeSortOrder,
+        layout,
+        isDim,
+        isAnalysisMode
+      );
+      expect(evt.preventDefault).to.have.been.calledOnce;
+      expect(evt.stopPropagation).to.have.been.calledOnce;
+      expect(changeSortOrder).to.not.have.been.calledOnce;
     });
 
     it('when press ArrowRight and shif and ctrl key, should not update the sorting', () => {

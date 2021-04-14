@@ -11,6 +11,7 @@ import TableBodyWrapper from '../TableBodyWrapper';
 import * as selectionsUtils from '../selections-utils';
 import * as getCellRenderer from '../cells/renderer';
 import * as handleKeyPress from '../cells/handle-key-press';
+import * as handleCellFocus from '../cells/handle-cell-focus';
 
 describe('<TableBodyWrapper />', async () => {
   const sandbox = sinon.createSandbox();
@@ -80,5 +81,22 @@ describe('<TableBodyWrapper />', async () => {
     fireEvent.keyDown(queryByText(tableData.rows[0]['id-0'].qText));
 
     expect(handleKeyPress.bodyHandleKeyPress).to.have.been.calledOnce;
+  });
+
+  it('should call handleMouseDown on mouseDown', () => {
+    sandbox.replace(handleCellFocus, 'handleBodyCellFocus', sinon.spy());
+
+    const { queryByText } = render(
+      <TableBodyWrapper
+        tableData={tableData}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+        theme={theme}
+        layout={layout}
+      />
+    );
+    fireEvent.mouseDown(queryByText(tableData.rows[0]['id-0'].qText));
+
+    expect(handleCellFocus.handleBodyCellFocus).to.have.been.calledOnce;
   });
 });
