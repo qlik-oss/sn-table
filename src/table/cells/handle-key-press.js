@@ -101,8 +101,8 @@ export const bodyHandleKeyPress = (
   rootElement,
   cellCoord,
   focusedCellCoord,
-  cell,
   selState,
+  cell,
   selDispatch,
   isAnalysisMode
 ) => {
@@ -117,7 +117,7 @@ export const bodyHandleKeyPress = (
     // Space bar: Selects value.
     case ' ': {
       preventDefaultBehavior(evt);
-      cell?.isDim && isAnalysisMode && selectCell(cell, selState, selDispatch, evt);
+      cell?.isDim && isAnalysisMode && selectCell(selState, cell, selDispatch, evt);
       break;
     }
     // Enter: Confirms selections.

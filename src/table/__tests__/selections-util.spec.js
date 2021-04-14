@@ -166,7 +166,7 @@ describe('selections-utils', () => {
       const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
       const payload = { colIdx: cell.colIdx, rows: [{ qElemNumber: cell.qElemNumber, rowIdx: cell.rowIdx }] };
 
-      selectCell(cell, selState, selDispatch, event);
+      selectCell(selState, cell, selDispatch, event);
       expect(selState.api.begin).to.have.been.calledOnce;
       expect(selState.api.select).to.have.been.calledWith({ method: 'selectHyperCubeCells', params });
       expect(selDispatch).to.have.been.calledWith({ type: 'select', payload });
@@ -176,7 +176,7 @@ describe('selections-utils', () => {
       selState.rows = [{ qElemNumber: 1, rowIdx: 1 }];
       selState.colIdx = 1;
 
-      selectCell(cell, selState, selDispatch, event);
+      selectCell(selState, cell, selDispatch, event);
       expect(selState.api.begin).to.not.have.been.called;
       expect(selState.api.cancel).to.have.been.calledOnce;
       expect(selDispatch).to.not.have.been.called;
@@ -187,7 +187,7 @@ describe('selections-utils', () => {
       selState.colIdx = 1;
       cell.colIdx = 2;
 
-      selectCell(cell, selState, selDispatch, event);
+      selectCell(selState, cell, selDispatch, event);
       expect(selState.api.begin).to.not.have.been.called;
       expect(selState.api.cancel).to.not.have.been.called;
       expect(selDispatch).to.not.have.been.called;

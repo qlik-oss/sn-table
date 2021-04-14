@@ -53,8 +53,8 @@ describe('<TableBodyWrapper />', async () => {
         tableData={tableData}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
-        theme={theme}
         layout={layout}
+        theme={theme}
       />
     );
 

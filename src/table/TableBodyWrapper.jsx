@@ -76,8 +76,8 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
                       rootElement,
                       [rowIndex + 1, columnIndex],
                       focusedCellCoord,
-                      cell,
                       selState,
+                      cell,
                       selDispatch,
                       !constraints.active
                     )
