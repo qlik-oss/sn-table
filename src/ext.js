@@ -134,7 +134,6 @@ const definition = {
 };
 
 export function indexAdded(array, index) {
-  /* eslint-disable no-param-reassign */
   let i;
   for (i = 0; i < array.length; ++i) {
     if (array[i] >= 0 && array[i] >= index) {
@@ -142,11 +141,9 @@ export function indexAdded(array, index) {
     }
   }
   array.push(index);
-  /* eslint-enable no-param-reassign */
 }
 
 export function indexRemoved(array, index) {
-  /* eslint-disable no-param-reassign */
   let removeIndex = 0;
   let i;
   for (i = 0; i < array.length; ++i) {
@@ -158,7 +155,6 @@ export function indexRemoved(array, index) {
   }
   array.splice(removeIndex, 1);
   return removeIndex;
-  /* eslint-enable no-param-reassign */
 }
 
 export function min(nDimsOrMeas) {
