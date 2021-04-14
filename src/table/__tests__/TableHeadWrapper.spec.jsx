@@ -12,6 +12,8 @@ describe('<TableHeadWrapper />', () => {
   let layout;
   let changeSortOrder;
   let constraints;
+  let selectionsAPI;
+
   beforeEach(() => {
     tableData = {
       columns: [
@@ -30,6 +32,9 @@ describe('<TableHeadWrapper />', () => {
     changeSortOrder = sinon.spy();
     constraints = {
       active: false,
+    };
+    selectionsAPI = {
+      isModal: () => false,
     };
   });
 
@@ -50,6 +55,7 @@ describe('<TableHeadWrapper />', () => {
         layout={layout}
         changeSortOrder={changeSortOrder}
         constraints={constraints}
+        selectionsAPI={selectionsAPI}
       />
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
@@ -57,7 +63,7 @@ describe('<TableHeadWrapper />', () => {
     expect(changeSortOrder).to.have.been.calledWith(layout, true, 0);
   });
 
-  it('should not call changeSortOrder when clicking a header cell', () => {
+  it('should not call changeSortOrder when clicking a header cell in edit mode', () => {
     constraints = {
       active: true,
     };
@@ -68,6 +74,26 @@ describe('<TableHeadWrapper />', () => {
         layout={layout}
         changeSortOrder={changeSortOrder}
         constraints={constraints}
+        selectionsAPI={selectionsAPI}
+      />
+    );
+    fireEvent.click(queryByText(tableData.columns[0].label));
+
+    expect(changeSortOrder).to.not.have.been.calledOnce;
+  });
+
+  it('should not call changeSortOrder when clicking a header cell and cells are selected', () => {
+    selectionsAPI = {
+      isModal: () => true,
+    };
+    const { queryByText } = render(
+      <TableHeadWrapper
+        tableData={tableData}
+        theme={theme}
+        layout={layout}
+        changeSortOrder={changeSortOrder}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
       />
     );
     fireEvent.click(queryByText(tableData.columns[0].label));

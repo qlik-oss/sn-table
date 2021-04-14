@@ -29,10 +29,10 @@ export default function TableHeadWrapper({
   layout,
   changeSortOrder,
   constraints,
+  selectionsAPI,
   focusedCellCoord,
 }) {
   const classes = useStyles(getHeadStyle(layout, theme));
-
   const handleMouseDown = (columnIndex) => handleHeadCellFocus(columnIndex, focusedCellCoord, rootElement);
 
   return (
@@ -63,7 +63,10 @@ export default function TableHeadWrapper({
               <TableSortLabel
                 active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
                 direction={column.sortDirection}
-                onClick={() => !constraints.active && changeSortOrder(layout, column.isDim, columnIndex)}
+                onClick={() =>
+                  // when cells are selected or in edit mode, it should not be able to do the sorting
+                  !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column.isDim, columnIndex)
+                }
                 tabIndex={-1}
               >
                 {column.label}
@@ -84,4 +87,5 @@ TableHeadWrapper.propTypes = {
   changeSortOrder: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
   focusedCellCoord: PropTypes.object.isRequired,
+  selectionsAPI: PropTypes.object.isRequired,
 };
