@@ -63,8 +63,7 @@ export const moveFocus = (evt, rootElement, cellCoord, focusedCellCoord, selStat
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
   const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selState);
   focusCell(rowAndColumnCount.rowElements, nextCellCoord);
-  const focusedCellCoordCopy = focusedCellCoord;
-  focusedCellCoordCopy.current = nextCellCoord;
+  focusedCellCoord.current = nextCellCoord;
 };
 
 export const headHandleKeyPress = (
