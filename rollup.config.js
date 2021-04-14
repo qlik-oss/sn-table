@@ -41,7 +41,7 @@ export default {
     name: moduleName,
     format: 'umd',
     exports: 'default',
-    sourcemap: false,
+    sourcemap: true,
     globals: {
       '@nebula.js/stardust': 'stardust',
     },

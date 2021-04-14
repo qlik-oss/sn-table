@@ -7,7 +7,7 @@ import { addSelectionListeners, reducer } from './selections-utils';
 import getCellRenderer from './cells/renderer';
 import { getBodyStyle } from './styling-utils';
 import { bodyHandleKeyPress } from './cells/handle-key-press';
-import { handleCellFocus } from './cells/handle-cell-focus';
+import { handleClickToFocus } from './cells/handle-cell-focus';
 
 const useStyles = makeStyles({
   hoverTableRow: {
@@ -21,7 +21,16 @@ const useStyles = makeStyles({
   },
 });
 
-const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, layout, theme, focusedCellCoord }) => {
+const TableBodyWrapper = ({
+  rootElement,
+  tableData,
+  constraints,
+  selectionsAPI,
+  layout,
+  theme,
+  focusedCellCoord,
+  setShouldResetFocus,
+}) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const styling = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
@@ -36,7 +45,7 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
     isEnabled: !!selectionsAPI && !constraints.active,
   });
 
-  const handleMouseDown = (cell) => handleCellFocus(cell, focusedCellCoord, rootElement);
+  const handleMouseDown = (cell) => handleClickToFocus(cell, focusedCellCoord, rootElement);
 
   useEffect(() => {
     const selectionsEnabled = !!selectionsAPI && !constraints.active;
@@ -45,7 +54,7 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
   }, [constraints, columns.length]);
 
   useEffect(() => {
-    addSelectionListeners(selectionsAPI, selDispatch);
+    addSelectionListeners(selectionsAPI, setShouldResetFocus, selDispatch);
   }, []);
 
   return (
@@ -103,6 +112,7 @@ TableBodyWrapper.propTypes = {
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
   focusedCellCoord: PropTypes.object.isRequired,
+  setShouldResetFocus: PropTypes.func.isRequired,
 };
 
 export default React.memo(TableBodyWrapper);

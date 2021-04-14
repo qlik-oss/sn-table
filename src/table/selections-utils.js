@@ -1,5 +1,10 @@
-export function addSelectionListeners(api, selDispatch) {
+export function addSelectionListeners(api, setShouldResetFocus, selDispatch) {
   const resetSelections = () => {
+    selDispatch({ type: 'reset' });
+  };
+  const resetSelectionsAndRefocus = () => {
+    // eslint-disable-next-line no-param-reassign
+    setShouldResetFocus();
     selDispatch({ type: 'reset' });
   };
 
@@ -7,16 +12,15 @@ export function addSelectionListeners(api, selDispatch) {
     return () => {};
   }
 
-  // selections.api = api;
   api.on('deactivated', resetSelections);
   api.on('canceled', resetSelections);
-  api.on('confirmed', resetSelections);
+  api.on('confirmed', resetSelectionsAndRefocus);
   api.on('cleared', resetSelections);
   // Return function called on unmount
   return () => {
     api.removeListener('deactivated', resetSelections);
     api.removeListener('canceled', resetSelections);
-    api.removeListener('confirmed', resetSelections);
+    api.removeListener('confirmed', resetSelectionsAndRefocus);
     api.removeListener('cleared', resetSelections);
   };
 }
