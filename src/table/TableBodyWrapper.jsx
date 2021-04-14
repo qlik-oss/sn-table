@@ -66,6 +66,9 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
                 <CellRenderer
                   cell={cell}
                   column={column}
+                  value={value}
+                  key={column.id}
+                  align={column.align}
                   styling={styling}
                   selState={selState}
                   selDispatch={selDispatch}
