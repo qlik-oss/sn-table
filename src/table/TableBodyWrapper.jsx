@@ -73,6 +73,7 @@ const TableBodyWrapper = ({
             return (
               CellRenderer && (
                 <CellRenderer
+                  key={column.id}
                   cell={cell}
                   column={column}
                   styling={styling}
