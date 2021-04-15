@@ -108,7 +108,7 @@ describe('<TableHeadWrapper />', () => {
     expect(changeSortOrder).to.not.have.been.calledOnce;
   });
 
-  it('should call bodyHandleKeyPress when keyDown on a header cell', () => {
+  it('should call headHandleKeyPress when keyDown on a header cell', () => {
     sandbox.replace(handleKeyPress, 'headHandleKeyPress', sinon.spy());
 
     const { queryByText } = render(
