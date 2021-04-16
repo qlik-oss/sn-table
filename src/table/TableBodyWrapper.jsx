@@ -7,6 +7,7 @@ import { addSelectionListeners, reducer } from './selections-utils';
 import getCellRenderer from './cells/renderer';
 import { getBodyStyle } from './styling-utils';
 import { bodyHandleKeyPress } from './cells/handle-key-press';
+import { handleBodyCellFocus } from './cells/handle-cell-focus';
 
 const useStyles = makeStyles({
   hoverTableRow: {
@@ -20,7 +21,7 @@ const useStyles = makeStyles({
   },
 });
 
-const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, layout, theme }) => {
+const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, layout, theme, focusedCellCoord }) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const styling = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
@@ -71,8 +72,18 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
                   selDispatch={selDispatch}
                   tabIndex={-1}
                   onKeyDown={(evt) =>
-                    bodyHandleKeyPress(evt, rootElement, rowIndex + 1, columnIndex, cell, selState, selDispatch)
+                    bodyHandleKeyPress(
+                      evt,
+                      rootElement,
+                      [rowIndex + 1, columnIndex],
+                      focusedCellCoord,
+                      selState,
+                      cell,
+                      selDispatch,
+                      !constraints.active
+                    )
                   }
+                  onMouseDown={() => handleBodyCellFocus(cell, focusedCellCoord, rootElement)}
                 >
                   {value}
                 </CellRenderer>
@@ -92,6 +103,7 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  focusedCellCoord: PropTypes.object.isRequired,
 };
 
 export default React.memo(TableBodyWrapper);
