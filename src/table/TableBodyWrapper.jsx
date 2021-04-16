@@ -29,7 +29,7 @@ const TableBodyWrapper = ({
   layout,
   theme,
   focusedCellCoord,
-  setShouldResetFocus,
+  setShouldRefocus,
 }) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
@@ -52,7 +52,7 @@ const TableBodyWrapper = ({
   }, [constraints, columns.length]);
 
   useEffect(() => {
-    addSelectionListeners(selectionsAPI, setShouldResetFocus, selDispatch);
+    addSelectionListeners(selectionsAPI, setShouldRefocus, selDispatch);
   }, []);
 
   return (
@@ -71,9 +71,11 @@ const TableBodyWrapper = ({
             return (
               CellRenderer && (
                 <CellRenderer
-                  key={column.id}
                   cell={cell}
                   column={column}
+                  value={value}
+                  key={column.id}
+                  align={column.align}
                   styling={styling}
                   selState={selState}
                   selDispatch={selDispatch}
@@ -111,7 +113,7 @@ TableBodyWrapper.propTypes = {
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
   focusedCellCoord: PropTypes.object.isRequired,
-  setShouldResetFocus: PropTypes.func.isRequired,
+  setShouldRefocus: PropTypes.func.isRequired,
 };
 
 export default React.memo(TableBodyWrapper);

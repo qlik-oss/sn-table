@@ -33,13 +33,13 @@ export default function TableWrapper(props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const focusedCellCoord = useRef([0, 0]);
-  const shouldResetFocus = useRef(false);
+  const shouldRefocus = useRef(false);
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
   const paginationFixedRpp = selectionsAPI.isModal() || tableWidth < 400;
-  const setShouldResetFocus = () => {
-    shouldResetFocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
+  const setShouldRefocus = () => {
+    shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -68,18 +68,18 @@ export default function TableWrapper(props) {
   // Except for first render, whenever the size of the data changes (number of rows per page, rows or columns),
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
   useDidUpdateEffect(() => {
-    handleResetFocus(focusedCellCoord, rootElement, shouldResetFocus);
+    handleResetFocus(focusedCellCoord, rootElement, shouldRefocus, selectionsAPI.isModal());
   }, [tableData.rows.length, tableData.size.qcy, tableData.size.qcx]);
 
   return (
     <Paper
       className={classes.paper}
-      onKeyDown={(evt) => updatePage(evt, size.qcy, page, rowsPerPage, handleChangePage, setShouldResetFocus)}
+      onKeyDown={(evt) => updatePage(evt, size.qcy, page, rowsPerPage, handleChangePage, setShouldRefocus)}
     >
       <TableContainer className={classes[containerMode]}>
         <Table stickyHeader aria-label="sticky table">
           <TableHeadWrapper {...props} focusedCellCoord={focusedCellCoord} />
-          <TableBodyWrapper {...props} focusedCellCoord={focusedCellCoord} setShouldResetFocus={setShouldResetFocus} />
+          <TableBodyWrapper {...props} focusedCellCoord={focusedCellCoord} setShouldRefocus={setShouldRefocus} />
         </Table>
       </TableContainer>
       <TablePagination

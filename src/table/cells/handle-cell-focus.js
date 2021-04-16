@@ -27,14 +27,16 @@ export const handleClickToFocusHead = (columnIndex, focusedCellCoord, rootElemen
   focusCell(rowElements, [0, columnIndex]);
 };
 
-export const handleResetFocus = (focusedCellCoord, rootElement, shouldResetFocus) => {
+export const handleResetFocus = (focusedCellCoord, rootElement, shouldRefocus, hasSelections) => {
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
   resetTabIndex(rowElements, focusedCellCoord.current);
-  focusedCellCoord.current = [0, 0];
-  if (shouldResetFocus.current) {
-    focusCell(rowElements, [0, 0]);
-    shouldResetFocus.current = false;
+  // If we have selections ongoing, we want to stay on the same column
+  const nextcell = [0, hasSelections ? focusedCellCoord.current[1] : 0];
+  focusedCellCoord.current = nextcell;
+  if (shouldRefocus.current) {
+    focusCell(rowElements, nextcell);
+    shouldRefocus.current = false;
   } else {
-    rowElements[0].getElementsByClassName('sn-table-cell')[0].setAttribute('tabIndex', '0');
+    rowElements[0].getElementsByClassName('sn-table-cell')[nextcell[1]].setAttribute('tabIndex', '0');
   }
 };

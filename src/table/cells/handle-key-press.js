@@ -3,14 +3,14 @@ import { focusCell } from './handle-cell-focus';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
-export const updatePage = (evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldResetFocus) => {
+export const updatePage = (evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus) => {
   if (isCtrlShift(evt)) {
     const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
     if (evt.key === 'ArrowRight' && page < lastPage) {
-      setShouldResetFocus();
+      setShouldRefocus();
       handleChangePage(null, page + 1);
     } else if (evt.key === 'ArrowLeft' && page > 0) {
-      setShouldResetFocus();
+      setShouldRefocus();
       handleChangePage(null, page - 1);
     }
   }
