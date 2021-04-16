@@ -7,9 +7,9 @@ const properties = {
    * @extends {qae.HyperCubeDef}
    */
   qHyperCubeDef: {
-    /** @type {Array<qae.NxDimension>} */
+    /** @type {DimensionProperties[]} */
     qDimensions: [],
-    /** @type {Array<qae.NxMeasure>} */
+    /** @type {MeasureProperties[]} */
     qMeasures: [],
     qMode: 'S',
     /** @type {boolean} */
@@ -52,13 +52,27 @@ const properties = {
  * Extends `NxDimension`, see Engine API: `NxDimension`.
  * @typedef {object} DimensionProperties
  * @extends NxDimension
- * @property {QDefExtended=} qDef
+ * @property {DimensionQDef=} qDef
+ */
+
+/**
+ * Extends `NxMeasure`, see Engine API: `NxMeasure`.
+ * @typedef {object} MeasureProperties
+ * @extends NxMeasure
+ * @property {MeasureQDef=} qDef
  */
 
 /**
  * Extends `NxInlineDimensionDef`, see Engine API: `NxInlineDimensionDef`.
- * @typedef {object} QDefExtended
+ * @typedef {object} DimensionQDef
  * @extends NxInlineDimensionDef
+ * @property {TextAlign=} textAlign
+ */
+
+/**
+ * Extends `NxInlineMeasureDef`, see Engine API: `NxInlineMeasureDef`.
+ * @typedef {object} MeasureQDef
+ * @extends NxInlineMeasureDef
  * @property {TextAlign=} textAlign
  */
 
