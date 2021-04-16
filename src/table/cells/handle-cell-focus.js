@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 export const focusCell = (rowElements, nextCellCoord) => {
   const nextCell = rowElements[nextCellCoord[0]].getElementsByClassName('sn-table-cell')[nextCellCoord[1]];
   nextCell.focus();
@@ -13,7 +12,7 @@ const resetTabIndex = (rowElements, focusedCellCoord) => {
   }
 };
 
-export const handleClickToFocus = (cell, focusedCellCoord, rootElement) => {
+export const handleClickToFocusBody = (cell, focusedCellCoord, rootElement) => {
   const { rawRowIdx, rawColIdx } = cell;
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
   resetTabIndex(rowElements, focusedCellCoord.current);
@@ -21,11 +20,17 @@ export const handleClickToFocus = (cell, focusedCellCoord, rootElement) => {
   focusCell(rowElements, [rawRowIdx + 1, rawColIdx]);
 };
 
+export const handleClickToFocusHead = (columnIndex, focusedCellCoord, rootElement) => {
+  const rowElements = rootElement.getElementsByClassName('sn-table-row');
+  resetTabIndex(rowElements, focusedCellCoord.current);
+  focusedCellCoord.current = [0, columnIndex];
+  focusCell(rowElements, [0, columnIndex]);
+};
+
 export const handleResetFocus = (focusedCellCoord, rootElement, shouldResetFocus) => {
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
   resetTabIndex(rowElements, focusedCellCoord.current);
   focusedCellCoord.current = [0, 0];
-  console.log(shouldResetFocus.current);
   if (shouldResetFocus.current) {
     focusCell(rowElements, [0, 0]);
     shouldResetFocus.current = false;

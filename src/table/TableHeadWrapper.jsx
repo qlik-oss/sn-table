@@ -7,6 +7,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { STYLING_DEFAULTS, getHeadStyle } from './styling-utils';
 import { headHandleKeyPress } from './cells/handle-key-press';
+import { handleClickToFocusHead } from './cells/handle-cell-focus';
 
 const useStyles = makeStyles({
   head: (props) => ({
@@ -28,6 +29,7 @@ export default function TableHeadWrapper({
   layout,
   changeSortOrder,
   constraints,
+  selectionsAPI,
   focusedCellCoord,
 }) {
   const classes = useStyles(getHeadStyle(layout, theme));
@@ -55,11 +57,15 @@ export default function TableHeadWrapper({
                   !constraints.active
                 )
               }
+              onMouseDown={() => handleClickToFocusHead(columnIndex, focusedCellCoord, rootElement)}
             >
               <TableSortLabel
                 active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
                 direction={column.sortDirection}
-                onClick={() => !constraints.active && changeSortOrder(layout, column.isDim, columnIndex)}
+                onClick={() =>
+                  // when cells are selected or in edit mode, it should not be able to do the sorting
+                  !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column.isDim, columnIndex)
+                }
                 tabIndex={-1}
               >
                 {column.label}
@@ -80,4 +86,5 @@ TableHeadWrapper.propTypes = {
   changeSortOrder: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
   focusedCellCoord: PropTypes.object.isRequired,
+  selectionsAPI: PropTypes.object.isRequired,
 };

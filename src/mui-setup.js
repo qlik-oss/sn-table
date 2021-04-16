@@ -2,14 +2,12 @@ import { createGenerateClassName, createMuiTheme } from '@material-ui/core/style
 
 export default function muiSetup(sproutBase) {
   if (sproutBase.overrides) {
-    /* eslint-disable no-param-reassign */
     sproutBase.overrides.MuiTableContainer.root.height = 'calc(100% - 52px)';
     sproutBase.overrides.MuiListItem.root['&$selected'] = {};
     sproutBase.overrides.MuiSelect.root['& ~i'].padding = '6px';
-    sproutBase.overrides.MuiTableSortLabel.root.color = 'inhirit';
-    sproutBase.overrides.MuiTableSortLabel.root['&$active'].color = 'inhirit';
-    sproutBase.overrides.MuiTableSortLabel.root['&:hover'].color = 'inhirit';
-    /* eslint-enable no-param-reassign */
+    sproutBase.overrides.MuiTableSortLabel.root.color = 'inherit';
+    sproutBase.overrides.MuiTableSortLabel.root['&$active'].color = 'inherit';
+    sproutBase.overrides.MuiTableSortLabel.root['&:hover'].color = 'inherit';
   }
 
   const theme = createMuiTheme(sproutBase);

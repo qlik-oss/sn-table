@@ -7,7 +7,7 @@ import { addSelectionListeners, reducer } from './selections-utils';
 import getCellRenderer from './cells/renderer';
 import { getBodyStyle } from './styling-utils';
 import { bodyHandleKeyPress } from './cells/handle-key-press';
-import { handleClickToFocus } from './cells/handle-cell-focus';
+import { handleClickToFocusBody } from './cells/handle-cell-focus';
 
 const useStyles = makeStyles({
   hoverTableRow: {
@@ -44,8 +44,6 @@ const TableBodyWrapper = ({
     colIdx: -1,
     isEnabled: !!selectionsAPI && !constraints.active,
   });
-
-  const handleMouseDown = (cell) => handleClickToFocus(cell, focusedCellCoord, rootElement);
 
   useEffect(() => {
     const selectionsEnabled = !!selectionsAPI && !constraints.active;
@@ -86,13 +84,13 @@ const TableBodyWrapper = ({
                       rootElement,
                       [rowIndex + 1, columnIndex],
                       focusedCellCoord,
-                      cell,
                       selState,
+                      cell,
                       selDispatch,
                       !constraints.active
                     )
                   }
-                  onMouseDown={() => handleMouseDown(cell)}
+                  onMouseDown={() => handleClickToFocusBody(cell, focusedCellCoord, rootElement)}
                 >
                   {value}
                 </CellRenderer>

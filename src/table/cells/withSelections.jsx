@@ -5,11 +5,8 @@ import { getSelectionStyle } from '../styling-utils';
 
 export default function withSelections(CellComponent) {
   const HOC = (props) => {
-    const { cell, selState, selDispatch, styling } = props;
-    const handleMouseUp = (evt) => {
-      cell.isDim && evt.button === 0 && selectCell(cell, selState, selDispatch, evt);
-    };
-
+    const { selState, cell, selDispatch, styling } = props;
+    const handleMouseUp = (evt) => cell.isDim && evt.button === 0 && selectCell(selState, cell, selDispatch, evt);
     const selectionStyling = useMemo(() => getSelectionStyle(styling, cell, selState), [styling, cell, selState]);
 
     return <CellComponent {...props} styling={selectionStyling} onMouseUp={handleMouseUp} />;
@@ -17,8 +14,8 @@ export default function withSelections(CellComponent) {
 
   HOC.propTypes = {
     styling: PropTypes.object.isRequired,
-    cell: PropTypes.object.isRequired,
     selState: PropTypes.object.isRequired,
+    cell: PropTypes.object.isRequired,
     selDispatch: PropTypes.func.isRequired,
   };
 
