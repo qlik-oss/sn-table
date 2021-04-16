@@ -52,7 +52,7 @@ const TableBodyWrapper = ({
   }, [constraints, columns.length]);
 
   useEffect(() => {
-    addSelectionListeners(selectionsAPI, setShouldRefocus, selDispatch);
+    addSelectionListeners(selectionsAPI, selDispatch, setShouldRefocus);
   }, []);
 
   return (

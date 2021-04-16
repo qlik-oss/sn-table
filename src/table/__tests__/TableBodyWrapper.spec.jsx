@@ -83,8 +83,8 @@ describe('<TableBodyWrapper />', async () => {
     expect(handleKeyPress.bodyHandleKeyPress).to.have.been.calledOnce;
   });
 
-  it('should call handleMouseDown on mouseDown', () => {
-    sandbox.replace(handleCellFocus, 'handleBodyCellFocus', sinon.spy());
+  it('should call handleClickToFocusBody on mouseDown', () => {
+    sandbox.replace(handleCellFocus, 'handleClickToFocusBody', sinon.spy());
 
     const { queryByText } = render(
       <TableBodyWrapper
@@ -97,6 +97,6 @@ describe('<TableBodyWrapper />', async () => {
     );
     fireEvent.mouseDown(queryByText(tableData.rows[0]['id-0'].qText));
 
-    expect(handleCellFocus.handleBodyCellFocus).to.have.been.calledOnce;
+    expect(handleCellFocus.handleClickToFocusBody).to.have.been.calledOnce;
   });
 });

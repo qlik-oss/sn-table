@@ -15,7 +15,7 @@ describe('handle-key-press', () => {
   });
 
   describe('handleBodyCellFocus', () => {
-    const nextCell = { focus: sinon.spy(), setAttribute: sinon.spy() };
+    const nextCell = { focus: sinon.spy(), blur: sinon.spy(), setAttribute: sinon.spy() };
     const cell = {
       rawRowIdx: -1,
       rawColIdx: 0,
@@ -28,14 +28,15 @@ describe('handle-key-press', () => {
     };
 
     it('should call focusCell', () => {
-      handleCellFocus.handleBodyCellFocus(cell, focusedCellCoord, rootElement);
+      handleCellFocus.handleClickToFocusBody(cell, focusedCellCoord, rootElement);
       expect(nextCell.focus).to.have.been.calledOnce;
+      expect(nextCell.blur).to.have.been.calledOnce;
       expect(nextCell.setAttribute).have.been.calledTwice;
     });
   });
 
   describe('handleHeadCellFocus', () => {
-    const nextCell = { focus: sinon.spy(), setAttribute: sinon.spy() };
+    const nextCell = { focus: sinon.spy(), blur: sinon.spy(), setAttribute: sinon.spy() };
     const columnIndex = 0;
     const focusedCellCoord = {
       current: [0, 0],
@@ -45,8 +46,9 @@ describe('handle-key-press', () => {
     };
 
     it('should call focusCell', () => {
-      handleCellFocus.handleHeadCellFocus(columnIndex, focusedCellCoord, rootElement);
+      handleCellFocus.handleClickToFocusHead(columnIndex, focusedCellCoord, rootElement);
       expect(nextCell.focus).to.have.been.calledOnce;
+      expect(nextCell.blur).to.have.been.calledOnce;
       expect(nextCell.setAttribute).have.been.calledTwice;
     });
   });

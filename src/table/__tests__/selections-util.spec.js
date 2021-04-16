@@ -5,9 +5,11 @@ describe('selections-utils', () => {
     const listenerNames = ['deactivated', 'canceled', 'confirmed', 'cleared'];
     let api;
     let selDispatch;
+    let setShouldRefocus;
 
     beforeEach(() => {
       selDispatch = () => {};
+      setShouldRefocus = () => {};
       api = {
         on: sinon.spy(),
         removeListener: sinon.spy(),
@@ -15,7 +17,7 @@ describe('selections-utils', () => {
     });
 
     it('should call api.on and api removeListener for all listeners', () => {
-      addSelectionListeners(api, selDispatch)();
+      addSelectionListeners(api, selDispatch, setShouldRefocus)();
       listenerNames.forEach((name) => {
         expect(api.on).to.have.been.calledWith(name);
         expect(api.removeListener).to.have.been.calledWith(name);
@@ -24,13 +26,14 @@ describe('selections-utils', () => {
     it('should not call call api.on nor api.removeListener when no api', () => {
       api = undefined;
 
-      const destroyFn = addSelectionListeners(api, selDispatch);
+      const destroyFn = addSelectionListeners(api, selDispatch, setShouldRefocus);
       // Not a great check, but this would crash if the this case worked incorrectly
       expect(destroyFn).to.be.a('function');
     });
     it('should call api.on with the same callback for all listener names, that calls selDispatch', () => {
       const callbacks = [];
       selDispatch = sinon.spy();
+      setShouldRefocus = sinon.spy();
       api = {
         on: (name, cb) => {
           callbacks.push(cb);
@@ -38,11 +41,13 @@ describe('selections-utils', () => {
         removeListener: () => {},
       };
 
-      addSelectionListeners(api, selDispatch);
+      addSelectionListeners(api, selDispatch, setShouldRefocus);
       callbacks.forEach((cb) => {
         cb();
         expect(selDispatch).to.have.been.calledWith({ type: 'reset' });
       });
+      // only called for confirm events
+      expect(setShouldRefocus).to.have.been.calledOnce;
     });
   });
 

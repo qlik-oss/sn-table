@@ -1,4 +1,4 @@
-export function addSelectionListeners(api, setShouldRefocus, selDispatch) {
+export function addSelectionListeners(api, selDispatch, setShouldRefocus) {
   const resetSelections = () => {
     selDispatch({ type: 'reset' });
   };

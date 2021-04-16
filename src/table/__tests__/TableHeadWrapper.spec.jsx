@@ -126,8 +126,8 @@ describe('<TableHeadWrapper />', () => {
     expect(handleKeyPress.headHandleKeyPress).to.have.been.calledOnce;
   });
 
-  it('should call handleHeadCellFocus when clicking a header cell', () => {
-    sandbox.replace(handleCellFocus, 'handleHeadCellFocus', sinon.spy());
+  it('should call handleClickToFocusHead when clicking a header cell', () => {
+    sandbox.replace(handleCellFocus, 'handleClickToFocusHead', sinon.spy());
 
     const { queryByText } = render(
       <TableHeadWrapper
@@ -141,6 +141,6 @@ describe('<TableHeadWrapper />', () => {
     );
     fireEvent.mouseDown(queryByText(tableData.columns[0].label));
 
-    expect(handleCellFocus.handleHeadCellFocus).to.have.been.calledOnce;
+    expect(handleCellFocus.handleClickToFocusHead).to.have.been.calledOnce;
   });
 });
