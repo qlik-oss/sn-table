@@ -84,15 +84,6 @@ const properties = {
  */
 
 /**
- * Extends `NxMeasure`, see Engine API: `NxMeasure`.
- * @typedef {object} MeasureProperties
- * @extends NxMeasure
- * @property {qDef} coloring
- * @property {MeasureAxis} measureAxis
- * @property {ConditionalColoring} conditionalColoring
- */
-
-/**
  * @typedef {object} Styling
  * @property {string} key
  * @property {ContentStyling=} content
