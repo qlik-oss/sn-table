@@ -3,10 +3,12 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { expect } from 'chai';
 import sinon from 'sinon';
-
 import TableHeadWrapper from '../TableHeadWrapper';
+import * as handleKeyPress from '../cells/handle-key-press';
+import * as handleCellFocus from '../cells/handle-cell-focus';
 
 describe('<TableHeadWrapper />', () => {
+  const sandbox = sinon.createSandbox();
   let tableData;
   let theme;
   let layout;
@@ -36,6 +38,11 @@ describe('<TableHeadWrapper />', () => {
     selectionsAPI = {
       isModal: () => false,
     };
+  });
+
+  afterEach(() => {
+    sandbox.verifyAndRestore();
+    sandbox.resetHistory();
   });
 
   it('should render table head', () => {
@@ -99,5 +106,41 @@ describe('<TableHeadWrapper />', () => {
     fireEvent.click(queryByText(tableData.columns[0].label));
 
     expect(changeSortOrder).to.not.have.been.calledOnce;
+  });
+
+  it('should call headHandleKeyPress when keyDown on a header cell', () => {
+    sandbox.replace(handleKeyPress, 'headHandleKeyPress', sinon.spy());
+
+    const { queryByText } = render(
+      <TableHeadWrapper
+        tableData={tableData}
+        theme={theme}
+        layout={layout}
+        changeSortOrder={changeSortOrder}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+      />
+    );
+    fireEvent.keyDown(queryByText(tableData.columns[0].label));
+
+    expect(handleKeyPress.headHandleKeyPress).to.have.been.calledOnce;
+  });
+
+  it('should call handleHeadCellFocus when clicking a header cell', () => {
+    sandbox.replace(handleCellFocus, 'handleHeadCellFocus', sinon.spy());
+
+    const { queryByText } = render(
+      <TableHeadWrapper
+        tableData={tableData}
+        theme={theme}
+        layout={layout}
+        changeSortOrder={changeSortOrder}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+      />
+    );
+    fireEvent.mouseDown(queryByText(tableData.columns[0].label));
+
+    expect(handleCellFocus.handleHeadCellFocus).to.have.been.calledOnce;
   });
 });

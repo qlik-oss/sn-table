@@ -7,6 +7,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { STYLING_DEFAULTS, getHeadStyle } from './styling-utils';
 import { headHandleKeyPress } from './cells/handle-key-press';
+import { handleHeadCellFocus } from './cells/handle-cell-focus';
 
 const useStyles = makeStyles({
   head: {
@@ -29,8 +30,10 @@ export default function TableHeadWrapper({
   changeSortOrder,
   constraints,
   selectionsAPI,
+  focusedCellCoord,
 }) {
   const classes = useStyles(getHeadStyle(layout, theme));
+
   return (
     <TableHead>
       <TableRow className="sn-table-row">
@@ -43,9 +46,18 @@ export default function TableHeadWrapper({
               className={`${classes.head} sn-table-head-cell sn-table-cell`}
               tabIndex={tabIndex}
               onKeyDown={(e) =>
-                !constraints.active &&
-                headHandleKeyPress(e, rootElement, 0, columnIndex, changeSortOrder, layout, column.isDim)
+                headHandleKeyPress(
+                  e,
+                  rootElement,
+                  [0, columnIndex],
+                  focusedCellCoord,
+                  changeSortOrder,
+                  layout,
+                  column.isDim,
+                  !constraints.active
+                )
               }
+              onMouseDown={() => handleHeadCellFocus(columnIndex, focusedCellCoord, rootElement)}
             >
               <TableSortLabel
                 active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
@@ -73,5 +85,6 @@ TableHeadWrapper.propTypes = {
   layout: PropTypes.object.isRequired,
   changeSortOrder: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
+  focusedCellCoord: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
 };
