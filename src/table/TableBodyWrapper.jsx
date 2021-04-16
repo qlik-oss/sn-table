@@ -58,7 +58,7 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
   }, []);
 
   return (
-    <TableBody class={classes.cellBase}>
+    <TableBody className={classes.cellBase}>
       {rows.map((row, rowIndex) => (
         <TableRow
           hover={hoverEffect}
