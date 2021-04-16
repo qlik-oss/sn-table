@@ -1,5 +1,5 @@
 import { selectCell } from '../selections-utils';
-import { focusCell } from './handle-cell-focus';
+import { updateFocus } from './handle-cell-focus';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -64,7 +64,7 @@ export const moveFocus = (evt, rootElement, cellCoord, focusedCellCoord, selStat
   removeCurrentFocus(evt);
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
   const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selState);
-  focusCell(rowAndColumnCount.rowElements, nextCellCoord);
+  updateFocus(rowAndColumnCount.rowElements, nextCellCoord);
   focusedCellCoord.current = nextCellCoord;
 };
 
