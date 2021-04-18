@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
@@ -32,7 +32,8 @@ export default function TableHeadWrapper({
   selectionsAPI,
   focusedCellCoord,
 }) {
-  const classes = useStyles(getHeadStyle(layout, theme));
+  const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
+  const classes = useStyles(headStyle);
 
   return (
     <TableHead>
