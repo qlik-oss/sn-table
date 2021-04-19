@@ -45,23 +45,22 @@ const TableBodyWrapper = ({
 }) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
-  const styling = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
-  const classes = useStyles(styling);
-  const getColumnRenderers = (selectionsEnabled) =>
-    tableData.columns.map((c) => getCellRenderer(!!c.stylingInfo.length, selectionsEnabled));
-  const [columnRenderers, setColumnRenderers] = useState(getColumnRenderers(false));
+  const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
+  const classes = useStyles(bodyStyle);
+  const selectionsEnabled = !!selectionsAPI && !constraints.active;
+  const getColumnRenderers = tableData.columns.map((c) => getCellRenderer(!!c.stylingInfo.length, selectionsEnabled));
+  const [columnRenderers, setColumnRenderers] = useState(() => getColumnRenderers);
   const [selState, selDispatch] = useReducer(reducer, {
     api: selectionsAPI,
     rows: [],
     colIdx: -1,
-    isEnabled: !!selectionsAPI && !constraints.active,
+    isEnabled: selectionsEnabled,
   });
 
   useEffect(() => {
-    const selectionsEnabled = !!selectionsAPI && !constraints.active;
     selDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
-    setColumnRenderers(getColumnRenderers(selectionsEnabled));
-  }, [constraints, columns.length]);
+    setColumnRenderers(getColumnRenderers);
+  }, [selectionsEnabled, columns.length]);
 
   useEffect(() => {
     addSelectionListeners(selectionsAPI, selDispatch, setShouldRefocus);
@@ -101,7 +100,7 @@ const TableBodyWrapper = ({
                       selState,
                       cell,
                       selDispatch,
-                      !constraints.active
+                      selectionsEnabled
                     )
                   }
                   onMouseDown={() => handleClickToFocusBody(cell, focusedCellCoord, rootElement)}

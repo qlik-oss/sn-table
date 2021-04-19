@@ -25,6 +25,7 @@ describe('<TableHeadWrapper />', () => {
     };
     theme = {
       getColorPickerColor: () => {},
+      name: () => {},
     };
     layout = {
       qHyperCube: {
