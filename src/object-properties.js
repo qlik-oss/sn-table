@@ -52,28 +52,37 @@ const properties = {
  * Extends `NxDimension`, see Engine API: `NxDimension`.
  * @typedef {object} DimensionProperties
  * @extends NxDimension
- * @property {DimensionQDef=} qDef
+ * @property {InlineDimensionDef=} qDef
+ * @property {AttributeExpressionProperties[]} qAttributeExpressions
  */
 
 /**
  * Extends `NxMeasure`, see Engine API: `NxMeasure`.
  * @typedef {object} MeasureProperties
  * @extends NxMeasure
- * @property {MeasureQDef=} qDef
+ * @property {NxInlineMeasureDef=} qDef
+ * @property {AttributeExpressionProperties[]} qAttributeExpressions
  */
 
 /**
  * Extends `NxInlineDimensionDef`, see Engine API: `NxInlineDimensionDef`.
- * @typedef {object} DimensionQDef
+ * @typedef {object} InlineDimensionDef
  * @extends NxInlineDimensionDef
  * @property {TextAlign=} textAlign
  */
 
 /**
  * Extends `NxInlineMeasureDef`, see Engine API: `NxInlineMeasureDef`.
- * @typedef {object} MeasureQDef
+ * @typedef {object} InlineMeasureDef
  * @extends NxInlineMeasureDef
  * @property {TextAlign=} textAlign
+ */
+
+/**
+ * Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`.
+ * @typedef {object} AttributeExpressionProperties
+ * @extends NxAttrExprDef
+ * @property {('cellForegroundColor'|'cellBackgroundColor')} id
  */
 
 /**
