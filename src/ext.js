@@ -200,7 +200,7 @@ const stylingSettings = {
               ],
             },
             hoverColor: {
-              show: (data) => data.content.hoverEffect,
+              show: (data) => !!data.content.hoverEffect,
               ref: 'content.hoverColor',
               translation: 'ThemeStyleEditor.style.hoverStyle',
               type: 'object',
@@ -208,7 +208,7 @@ const stylingSettings = {
               dualOutput: true,
             },
             hoverFontColor: {
-              show: (data) => data.content.hoverEffect,
+              show: (data) => !!data.content.hoverEffect,
               ref: 'content.hoverFontColor',
               translation: 'ThemeStyleEditor.style.hoverFontStyle',
               type: 'object',
@@ -393,7 +393,7 @@ export default function ext(env) {
       measures: {
         min,
         max: 1000,
-        description: () => getDescription(env),
+        description: getDescription,
         add(measure, data, hcHandler) {
           const { qColumnOrder, columnWidths } = hcHandler.hcProperties;
           const ix = hcHandler.getDimensions().length + hcHandler.getMeasures().length - 1;
@@ -412,7 +412,7 @@ export default function ext(env) {
       dimensions: {
         min,
         max: 1000,
-        description: () => getDescription(env),
+        description: getDescription,
         add(dimension, data, hcHandler) {
           const { qColumnOrder, columnWidths } = hcHandler.hcProperties;
           const ix = hcHandler.getDimensions().length - 1;
