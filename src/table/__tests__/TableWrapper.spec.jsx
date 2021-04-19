@@ -15,9 +15,9 @@ describe('<TableWrapper />', () => {
   let setPageInfo;
   let constraints;
   let rowsPerPage;
-  let el;
   let selectionsAPI;
   let modal;
+  let rootElement;
 
   beforeEach(() => {
     sandbox.replace(TableBodyWrapper, 'type', () => <tbody />);
@@ -34,7 +34,7 @@ describe('<TableWrapper />', () => {
       isModal: () => modal,
     };
     modal = false;
-    el = {};
+    rootElement = { getElementsByClassName: () => [] };
     sandbox.replace(handleKeyPress, 'updatePage', sinon.spy());
   });
 
@@ -50,7 +50,7 @@ describe('<TableWrapper />', () => {
         setPageInfo={setPageInfo}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
-        el={el}
+        rootElement={rootElement}
       />
     );
 
@@ -66,7 +66,7 @@ describe('<TableWrapper />', () => {
         setPageInfo={setPageInfo}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
-        el={el}
+        rootElement={rootElement}
       />
     );
 
@@ -81,7 +81,7 @@ describe('<TableWrapper />', () => {
         setPageInfo={setPageInfo}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
-        el={el}
+        rootElement={rootElement}
       />
     );
     fireEvent.click(await findByTitle('Next page'));
@@ -97,7 +97,7 @@ describe('<TableWrapper />', () => {
         setPageInfo={setPageInfo}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
-        el={el}
+        rootElement={rootElement}
       />
     );
     // This is a hack to simulate when selections are made on other page than first page and
@@ -118,7 +118,7 @@ describe('<TableWrapper />', () => {
         setPageInfo={setPageInfo}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
-        el={el}
+        rootElement={rootElement}
       />
     );
     // the popover is only triggered with mouseDown, according to the mui definition
@@ -137,7 +137,7 @@ describe('<TableWrapper />', () => {
         setPageInfo={setPageInfo}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
-        el={el}
+        rootElement={rootElement}
       />
     );
     const rppSiblingElement = queryByText(`1-${rowsPerPage} of ${tableData.size.qcy}`);

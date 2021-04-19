@@ -1,14 +1,16 @@
 import { selectCell } from '../selections-utils';
-import { focusCell } from './handle-cell-focus';
+import { updateFocus } from './handle-cell-focus';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
-export const updatePage = (evt, totalRowSize, page, rowsPerPage, handleChangePage) => {
+export const updatePage = (evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus) => {
   if (isCtrlShift(evt)) {
     const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
     if (evt.key === 'ArrowRight' && page < lastPage) {
+      setShouldRefocus();
       handleChangePage(null, page + 1);
     } else if (evt.key === 'ArrowLeft' && page > 0) {
+      setShouldRefocus();
       handleChangePage(null, page - 1);
     }
   }
@@ -62,7 +64,7 @@ export const moveFocus = (evt, rootElement, cellCoord, focusedCellCoord, selStat
   removeCurrentFocus(evt);
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
   const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selState);
-  focusCell(rowAndColumnCount.rowElements, nextCellCoord);
+  updateFocus(rowAndColumnCount.rowElements, nextCellCoord);
   focusedCellCoord.current = nextCellCoord;
 };
 

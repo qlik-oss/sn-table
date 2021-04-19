@@ -7,7 +7,7 @@ import { addSelectionListeners, reducer } from './selections-utils';
 import getCellRenderer from './cells/renderer';
 import { getBodyStyle, STYLING_DEFAULTS } from './styling-utils';
 import { bodyHandleKeyPress } from './cells/handle-key-press';
-import { handleBodyCellFocus } from './cells/handle-cell-focus';
+import { handleClickToFocusBody } from './cells/handle-cell-focus';
 
 const useStyles = makeStyles({
   cellBase: {
@@ -33,7 +33,16 @@ const useStyles = makeStyles({
   },
 });
 
-const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, layout, theme, focusedCellCoord }) => {
+const TableBodyWrapper = ({
+  rootElement,
+  tableData,
+  constraints,
+  selectionsAPI,
+  layout,
+  theme,
+  focusedCellCoord,
+  setShouldRefocus,
+}) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const styling = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
@@ -55,7 +64,7 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
   }, [constraints, columns.length]);
 
   useEffect(() => {
-    addSelectionListeners(selectionsAPI, selDispatch);
+    addSelectionListeners(selectionsAPI, selDispatch, setShouldRefocus);
   }, []);
 
   return (
@@ -95,7 +104,7 @@ const TableBodyWrapper = ({ rootElement, tableData, constraints, selectionsAPI, 
                       !constraints.active
                     )
                   }
-                  onMouseDown={() => handleBodyCellFocus(cell, focusedCellCoord, rootElement)}
+                  onMouseDown={() => handleClickToFocusBody(cell, focusedCellCoord, rootElement)}
                 >
                   {value}
                 </CellRenderer>
@@ -116,6 +125,7 @@ TableBodyWrapper.propTypes = {
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
   focusedCellCoord: PropTypes.object.isRequired,
+  setShouldRefocus: PropTypes.func.isRequired,
 };
 
 export default React.memo(TableBodyWrapper);

@@ -1,22 +1,25 @@
-export function addSelectionListeners(api, selDispatch) {
+export function addSelectionListeners(api, selDispatch, setShouldRefocus) {
   const resetSelections = () => {
     selDispatch({ type: 'reset' });
+  };
+  const resetSelectionsAndSetupRefocus = () => {
+    setShouldRefocus();
+    resetSelections();
   };
 
   if (!api) {
     return () => {};
   }
 
-  // selections.api = api;
   api.on('deactivated', resetSelections);
   api.on('canceled', resetSelections);
-  api.on('confirmed', resetSelections);
+  api.on('confirmed', resetSelectionsAndSetupRefocus);
   api.on('cleared', resetSelections);
   // Return function called on unmount
   return () => {
     api.removeListener('deactivated', resetSelections);
     api.removeListener('canceled', resetSelections);
-    api.removeListener('confirmed', resetSelections);
+    api.removeListener('confirmed', resetSelectionsAndSetupRefocus);
     api.removeListener('cleared', resetSelections);
   };
 }
