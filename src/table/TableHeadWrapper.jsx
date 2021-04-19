@@ -10,16 +10,16 @@ import { headHandleKeyPress } from './cells/handle-key-press';
 import { handleClickToFocusHead } from './cells/handle-cell-focus';
 
 const useStyles = makeStyles({
-  head: (props) => ({
-    color: props.fontColor,
-    fontSize: props.fontSize,
-    padding: props.padding,
+  head: {
+    color: ({ color }) => color,
+    fontSize: ({ fontSize }) => fontSize,
+    padding: ({ padding }) => padding,
     height: STYLING_DEFAULTS.HEIGHT,
     lineHeight: STYLING_DEFAULTS.HEAD_LINE_HEIGHT,
     '&&:focus': {
       boxShadow: STYLING_DEFAULTS.FOCUS_OUTLINE,
     },
-  }),
+  },
 });
 
 export default function TableHeadWrapper({

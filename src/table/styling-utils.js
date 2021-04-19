@@ -17,18 +17,15 @@ export const STYLING_DEFAULTS = {
 };
 
 export const SELECTION_STYLING = {
-  EXCLUDED: {
-    background: STYLING_DEFAULTS.EXCLUDED_BACKGROUND,
-  },
   SELECTED: {
-    fontColor: STYLING_DEFAULTS.WHITE,
-    backgroundColor: STYLING_DEFAULTS.SELECTED_BACKGROUND,
+    color: STYLING_DEFAULTS.WHITE,
+    background: STYLING_DEFAULTS.SELECTED_BACKGROUND,
     // Setting a specific class for selected cells styling to override hover effect
     selectedCellClass: STYLING_DEFAULTS.SELECTED_CLASS,
   },
   POSSIBLE: {
     fontColor: STYLING_DEFAULTS.FONT_COLOR,
-    backgroundColor: STYLING_DEFAULTS.WHITE,
+    background: STYLING_DEFAULTS.WHITE,
   },
 };
 
@@ -41,7 +38,7 @@ export const getAutoFontColor = (backgroundColor) =>
   isDarkColor(backgroundColor) ? STYLING_DEFAULTS.WHITE : STYLING_DEFAULTS.FONT_COLOR;
 
 export const getBaseStyling = (styleObj, theme) => ({
-  fontColor: getColor(styleObj.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme),
+  color: getColor(styleObj.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme),
   fontSize: styleObj.fontSize || STYLING_DEFAULTS.FONT_SIZE,
   padding: styleObj.fontSize ? `${styleObj.fontSize / 2}px ${styleObj.fontSize}px` : STYLING_DEFAULTS.PADDING,
 });
@@ -93,19 +90,23 @@ export function getColumnStyle(styling, qAttrExps, stylingInfo) {
 
   return {
     ...styling,
-    fontColor: columnColors.cellForegroundColor || styling.fontColor,
-    backgroundColor: columnColors.cellBackgroundColor,
+    color: columnColors.cellForegroundColor || styling.color,
+    background: columnColors.cellBackgroundColor,
   };
 }
 
-export function getSelectionColors(cell, selState) {
+export function getSelectionColors(background = STYLING_DEFAULTS.WHITE, cell, selState) {
   const { colIdx, rows } = selState;
 
   if (rows.length) {
-    if (colIdx !== cell.colIdx) return SELECTION_STYLING.EXCLUDED;
+    if (colIdx !== cell.colIdx) {
+      return { background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${background}` };
+    }
 
     for (let i = 0; i < rows.length; i++) {
-      if (rows[i].qElemNumber === cell.qElemNumber) return SELECTION_STYLING.SELECTED;
+      if (rows[i].qElemNumber === cell.qElemNumber) {
+        return SELECTION_STYLING.SELECTED;
+      }
     }
 
     return SELECTION_STYLING.POSSIBLE;
@@ -115,5 +116,5 @@ export function getSelectionColors(cell, selState) {
 }
 
 export function getSelectionStyle(styling, cell, selState) {
-  return { ...styling, ...getSelectionColors(cell, selState) };
+  return { ...styling, ...getSelectionColors(styling.background, cell, selState) };
 }
