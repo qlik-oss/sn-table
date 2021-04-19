@@ -393,7 +393,7 @@ export default function ext(env) {
       measures: {
         min,
         max: 1000,
-        description: getDescription,
+        description: () => getDescription(env),
         add(measure, data, hcHandler) {
           const { qColumnOrder, columnWidths } = hcHandler.hcProperties;
           const ix = hcHandler.getDimensions().length + hcHandler.getMeasures().length - 1;
@@ -412,7 +412,7 @@ export default function ext(env) {
       dimensions: {
         min,
         max: 1000,
-        description: getDescription,
+        description: () => getDescription(env),
         add(dimension, data, hcHandler) {
           const { qColumnOrder, columnWidths } = hcHandler.hcProperties;
           const ix = hcHandler.getDimensions().length - 1;
