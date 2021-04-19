@@ -69,7 +69,7 @@ export default function TableWrapper(props) {
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
   useDidUpdateEffect(() => {
     handleResetFocus(focusedCellCoord, rootElement, shouldRefocus, selectionsAPI.isModal());
-  }, [tableData.rows.length, tableData.size.qcy, tableData.size.qcx]);
+  }, [rows.length, size.qcy, size.qcx]);
 
   return (
     <Paper
