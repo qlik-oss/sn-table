@@ -141,7 +141,7 @@ describe('ext', () => {
           data.content.hoverEffect = false;
 
           expect(stylingItems.hoverColor.show(data)).to.be.false;
-          expect(stylingItems.hoverFontColor.show(data)).to.be.true;
+          expect(stylingItems.hoverFontColor.show(data)).to.be.false;
         });
       });
     });
