@@ -134,12 +134,14 @@ describe('ext', () => {
 
         it('should return true when hoverEffect is true', () => {
           expect(stylingItems.hoverColor.show(data)).to.be.true;
+          expect(stylingItems.hoverFontColor.show(data)).to.be.true;
         });
 
         it('should return true when hoverEffect is true', () => {
           data.content.hoverEffect = false;
 
           expect(stylingItems.hoverColor.show(data)).to.be.false;
+          expect(stylingItems.hoverFontColor.show(data)).to.be.true;
         });
       });
     });
