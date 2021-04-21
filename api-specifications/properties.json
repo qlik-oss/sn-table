@@ -18,12 +18,14 @@
       "kind": "object",
       "entries": {
         "components": {
+          "description": "Holds general styling",
           "kind": "array",
           "items": {
             "type": "#/definitions/Styling"
           }
         },
         "footnote": {
+          "description": "Visualization footnote",
           "optional": true,
           "defaultValue": "",
           "type": "string"
@@ -36,9 +38,6 @@
           ],
           "kind": "object",
           "entries": {
-            "columnWidths": {
-              "type": "Array"
-            },
             "qColumnOrder": {
               "type": "Array"
             },
@@ -65,28 +64,22 @@
           }
         },
         "showTitles": {
+          "description": "Show title for the visualization",
           "optional": true,
           "defaultValue": true,
           "type": "boolean"
         },
         "subtitle": {
+          "description": "Visualization subtitle",
           "optional": true,
           "defaultValue": "",
           "type": "string"
         },
         "title": {
+          "description": "Visualization title",
           "optional": true,
           "defaultValue": "",
           "type": "string"
-        },
-        "totals": {
-          "kind": "object",
-          "entries": {
-            "show": {
-              "defaultValue": false,
-              "type": "boolean"
-            }
-          }
         }
       }
     }

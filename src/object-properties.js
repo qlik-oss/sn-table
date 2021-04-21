@@ -18,33 +18,31 @@ const properties = {
     qSuppressMissing: true,
     /** @type {Array} */
     qColumnOrder: [],
-    /** @type {Array} */
-    columnWidths: [],
   },
   /**
+   * Show title for the visualization
    * @type {boolean=}
    */
   showTitles: true,
   /**
+   * Visualization title
    * @type {string=}
    */
   title: '',
   /**
+   * Visualization subtitle
    * @type {string=}
    */
   subtitle: '',
   /**
+   * Visualization footnote
    * @type {string=}
    */
   footnote: '',
   /**
-   * @type {object}
+   * Holds general styling
+   * @type {Styling[]}
    */
-  totals: {
-    /** @type {boolean} */
-    show: false,
-  },
-  /** @type {Styling[]} */
   components: [],
 };
 
