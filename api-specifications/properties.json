@@ -93,7 +93,7 @@
   },
   "definitions": {
     "AttributeExpressionProperties": {
-      "description": "Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`.\nColumn specific styling overrides general styling, that is defined in `components`",
+      "description": "Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`. Column specific styling overrides general styling, that is defined in `components`",
       "extends": [
         {
           "type": "NxAttrExprDef"
@@ -178,7 +178,7 @@
           "optional": true,
           "type": "number"
         },
-        "fontColor-": {
+        "fontColor": {
           "description": "Defualts to `#404040` if nothing is set here or in theme",
           "optional": true,
           "type": "#/definitions/PaletteColor"
@@ -250,7 +250,7 @@
       }
     },
     "Styling": {
-      "description": "General styling for all columns. Split up into header and content (body) styling\nIf any property is not set, the theme is used for that property. If nothing is set in the theme, default values specific for each property is used",
+      "description": "General styling for all columns. Split up into header and content (body) styling. If any property is not set, the theme is used for that property. If nothing is set in the theme, default values specific for each property is used",
       "kind": "object",
       "entries": {
         "key": {

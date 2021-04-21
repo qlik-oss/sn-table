@@ -79,8 +79,7 @@ const properties = {
  */
 
 /**
- * Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`.
- * Column specific styling overrides general styling, that is defined in `components`
+ * Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`. Column specific styling overrides general styling, that is defined in `components`
  * @typedef {object} AttributeExpressionProperties
  * @extends NxAttrExprDef - expression resolving into a valid color
  * @property {('cellForegroundColor'|'cellBackgroundColor')} id - spefifying what the color applies to
@@ -95,8 +94,7 @@ const properties = {
  */
 
 /**
- * General styling for all columns. Split up into header and content (body) styling
- * If any property is not set, the theme is used for that property. If nothing is set in the theme, default values specific for each property is used
+ * General styling for all columns. Split up into header and content (body) styling. If any property is not set, the theme is used for that property. If nothing is set in the theme, default values specific for each property is used
  * @typedef {object} Styling
  * @property {string} key - This should be set to `theme`
  * @property {ContentStyling=} content
@@ -117,7 +115,7 @@ const properties = {
  * Holds properties for font size and color
  * @typedef {object} HeaderStyling
  * @property {number=} fontSize - Defualts to `14` if nothing is set here or in theme
- * @property {PaletteColor=} fontColor- Defualts to `#404040` if nothing is set here or in theme
+ * @property {PaletteColor=} fontColor - Defualts to `#404040` if nothing is set here or in theme
  */
 
 /**
