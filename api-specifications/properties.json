@@ -93,7 +93,7 @@
   },
   "definitions": {
     "AttributeExpressionProperties": {
-      "description": "Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`.",
+      "description": "Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`.\nColumn specific styling overrides general styling, that is defined in `components`",
       "extends": [
         {
           "type": "NxAttrExprDef"
@@ -102,6 +102,7 @@
       "kind": "object",
       "entries": {
         "id": {
+          "description": "spefifying what the color applies to",
           "kind": "union",
           "items": [
             {
@@ -122,12 +123,12 @@
       "kind": "object",
       "entries": {
         "fontSize": {
-          "description": "Defualts to `14` if not set",
+          "description": "Defualts to `14` if nothing is set here or in theme",
           "optional": true,
           "type": "number"
         },
         "fontColor": {
-          "description": "Defaults to `#404040` if not set",
+          "description": "Defaults to `#404040` if nothing is set here or in theme",
           "optional": true,
           "type": "#/definitions/PaletteColor"
         },
@@ -173,12 +174,12 @@
       "kind": "object",
       "entries": {
         "fontSize": {
-          "description": "Defualts to `14` if not set",
+          "description": "Defualts to `14` if nothing is set here or in theme",
           "optional": true,
           "type": "number"
         },
         "fontColor-": {
-          "description": "Defualts to `#404040` if not set",
+          "description": "Defualts to `#404040` if nothing is set here or in theme",
           "optional": true,
           "type": "#/definitions/PaletteColor"
         }
@@ -249,7 +250,7 @@
       }
     },
     "Styling": {
-      "description": "General styling for all columns. Split up into header and content (body) styling",
+      "description": "General styling for all columns. Split up into header and content (body) styling\nIf any property is not set, the theme is used for that property. If nothing is set in the theme, default values specific for each property is used",
       "kind": "object",
       "entries": {
         "key": {
@@ -267,6 +268,7 @@
       }
     },
     "TextAlign": {
+      "description": "Holds text aligmnet for a specific column",
       "extends": [
         {
           "type": "NxInlineDimensionDef"

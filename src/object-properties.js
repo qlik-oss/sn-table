@@ -80,12 +80,14 @@ const properties = {
 
 /**
  * Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`.
+ * Column specific styling overrides general styling, that is defined in `components`
  * @typedef {object} AttributeExpressionProperties
- * @extends NxAttrExprDef
- * @property {('cellForegroundColor'|'cellBackgroundColor')} id
+ * @extends NxAttrExprDef - expression resolving into a valid color
+ * @property {('cellForegroundColor'|'cellBackgroundColor')} id - spefifying what the color applies to
  */
 
 /**
+ * Holds text aligmnet for a specific column
  * @typedef {object} TextAlign
  * @extends NxInlineDimensionDef
  * @property {boolean} auto - If true, sets the alignment based on the type of column (left for dimension, right for measure)
@@ -94,6 +96,7 @@ const properties = {
 
 /**
  * General styling for all columns. Split up into header and content (body) styling
+ * If any property is not set, the theme is used for that property. If nothing is set in the theme, default values specific for each property is used
  * @typedef {object} Styling
  * @property {string} key - This should be set to `theme`
  * @property {ContentStyling=} content
@@ -103,8 +106,8 @@ const properties = {
 /**
  * Holds properties for font size, font color and hover styling
  * @typedef {object} ContentStyling
- * @property {number=} fontSize - Defualts to `14` if not set
- * @property {PaletteColor=} fontColor - Defaults to `#404040` if not set
+ * @property {number=} fontSize - Defualts to `14` if nothing is set here or in theme
+ * @property {PaletteColor=} fontColor - Defaults to `#404040` if nothing is set here or in theme
  * @property {boolean=} hoverEffect - Toggles hover effect
  * @property {PaletteColor=} hoverColor - Background hover color. Uses `#f4f4f4` if no hover colors are set, is transparent if only `hoverFontColor` is set
  * @property {PaletteColor=} hoverFontColor - When only `hoverColor` is set, this is adjusted to either `#f4f4f4` or `#ffffff` for optimal contrast
@@ -113,8 +116,8 @@ const properties = {
 /**
  * Holds properties for font size and color
  * @typedef {object} HeaderStyling
- * @property {number=} fontSize - Defualts to `14` if not set
- * @property {PaletteColor=} fontColor- Defualts to `#404040` if not set
+ * @property {number=} fontSize - Defualts to `14` if nothing is set here or in theme
+ * @property {PaletteColor=} fontColor- Defualts to `#404040` if nothing is set here or in theme
  */
 
 /**
