@@ -3,7 +3,7 @@
   "info": {
     "name": "@nebula.js/sn-table:properties",
     "description": "Table generic object definition",
-    "version": "0.1.3",
+    "version": "0.2.1",
     "license": "MIT",
     "stability": "experimental",
     "x-qlik-visibility": "public"
@@ -17,6 +17,13 @@
       ],
       "kind": "object",
       "entries": {
+        "components": {
+          "optional": true,
+          "kind": "array",
+          "items": {
+            "type": "#/definitions/Styling"
+          }
+        },
         "footnote": {
           "optional": true,
           "defaultValue": "",
@@ -39,13 +46,13 @@
             "qDimensions": {
               "kind": "array",
               "items": {
-                "type": "qae.NxDimension"
+                "type": "#/definitions/DimensionProperties"
               }
             },
             "qMeasures": {
               "kind": "array",
               "items": {
-                "type": "qae.NxMeasure"
+                "type": "#/definitions/MeasureProperties"
               }
             },
             "qSuppressMissing": {
@@ -85,5 +92,200 @@
       }
     }
   },
-  "definitions": {}
+  "definitions": {
+    "AttributeExpressionProperties": {
+      "description": "Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`.",
+      "extends": [
+        {
+          "type": "NxAttrExprDef"
+        }
+      ],
+      "kind": "object",
+      "entries": {
+        "id": {
+          "kind": "union",
+          "items": [
+            {
+              "kind": "literal",
+              "value": "'cellForegroundColor'"
+            },
+            {
+              "kind": "literal",
+              "value": "'cellBackgroundColor'"
+            }
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "ContentStyling": {
+      "kind": "object",
+      "entries": {
+        "fontSize": {
+          "optional": true,
+          "type": "number"
+        },
+        "fontColor": {
+          "optional": true,
+          "type": "#/definitions/PaletteColor"
+        },
+        "hoverEffect": {
+          "optional": true,
+          "type": "boolean"
+        },
+        "hoverColor": {
+          "optional": true,
+          "type": "#/definitions/PaletteColor"
+        },
+        "hoverFontColor": {
+          "optional": true,
+          "type": "#/definitions/PaletteColor"
+        }
+      }
+    },
+    "DimensionProperties": {
+      "description": "Extends `NxDimension`, see Engine API: `NxDimension`.",
+      "extends": [
+        {
+          "type": "NxDimension"
+        }
+      ],
+      "kind": "object",
+      "entries": {
+        "qDef": {
+          "optional": true,
+          "type": "#/definitions/InlineDimensionDef"
+        },
+        "qAttributeExpressions": {
+          "kind": "array",
+          "items": {
+            "type": "#/definitions/AttributeExpressionProperties"
+          }
+        }
+      }
+    },
+    "HeaderStyling": {
+      "kind": "object",
+      "entries": {
+        "fontSize": {
+          "optional": true,
+          "type": "number"
+        },
+        "fontColor": {
+          "optional": true,
+          "type": "#/definitions/PaletteColor"
+        }
+      }
+    },
+    "InlineDimensionDef": {
+      "description": "Extends `NxInlineDimensionDef`, see Engine API: `NxInlineDimensionDef`.",
+      "extends": [
+        {
+          "type": "NxInlineDimensionDef"
+        }
+      ],
+      "kind": "object",
+      "entries": {
+        "textAlign": {
+          "optional": true,
+          "type": "#/definitions/TextAlign"
+        }
+      }
+    },
+    "InlineMeasureDef": {
+      "description": "Extends `NxInlineMeasureDef`, see Engine API: `NxInlineMeasureDef`.",
+      "extends": [
+        {
+          "type": "NxInlineMeasureDef"
+        }
+      ],
+      "kind": "object",
+      "entries": {
+        "textAlign": {
+          "optional": true,
+          "type": "#/definitions/TextAlign"
+        }
+      }
+    },
+    "MeasureProperties": {
+      "description": "Extends `NxMeasure`, see Engine API: `NxMeasure`.",
+      "extends": [
+        {
+          "type": "NxMeasure"
+        }
+      ],
+      "kind": "object",
+      "entries": {
+        "qDef": {
+          "optional": true,
+          "type": "NxInlineMeasureDef"
+        },
+        "qAttributeExpressions": {
+          "kind": "array",
+          "items": {
+            "type": "#/definitions/AttributeExpressionProperties"
+          }
+        }
+      }
+    },
+    "PaletteColor": {
+      "kind": "object",
+      "entries": {
+        "index": {
+          "type": "number"
+        },
+        "color": {
+          "type": "string"
+        }
+      }
+    },
+    "Styling": {
+      "kind": "object",
+      "entries": {
+        "key": {
+          "type": "string"
+        },
+        "content": {
+          "optional": true,
+          "type": "#/definitions/ContentStyling"
+        },
+        "header": {
+          "optional": true,
+          "type": "#/definitions/HeaderStyling"
+        }
+      }
+    },
+    "TextAlign": {
+      "extends": [
+        {
+          "type": "NxInlineDimensionDef"
+        }
+      ],
+      "kind": "object",
+      "entries": {
+        "auto": {
+          "type": "boolean"
+        },
+        "align": {
+          "optional": true,
+          "kind": "union",
+          "items": [
+            {
+              "kind": "literal",
+              "value": "'left'"
+            },
+            {
+              "kind": "literal",
+              "value": "'center'"
+            },
+            {
+              "kind": "literal",
+              "value": "'right'"
+            }
+          ],
+          "type": "string"
+        }
+      }
+    }
+  }
 }

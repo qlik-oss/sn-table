@@ -44,7 +44,7 @@ const properties = {
     /** @type {boolean} */
     show: false,
   },
-  /** @type {Styling[]=} */
+  /** @type {(Styling[])=} */
   components: [],
 };
 
