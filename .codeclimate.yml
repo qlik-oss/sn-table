@@ -6,6 +6,7 @@ plugins:
         javascript:
           filters:
             - "(property (Identifier propTypes))"
+          mass_threshold: 65
 checks:
   method-lines:
     config:
