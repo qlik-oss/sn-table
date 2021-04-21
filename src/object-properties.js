@@ -44,7 +44,7 @@ const properties = {
     /** @type {boolean} */
     show: false,
   },
-  /** @type {(Styling[])=} */
+  /** @type {Styling[]} */
   components: [],
 };
 
@@ -52,7 +52,7 @@ const properties = {
  * Extends `NxDimension`, see Engine API: `NxDimension`.
  * @typedef {object} DimensionProperties
  * @extends NxDimension
- * @property {InlineDimensionDef=} qDef
+ * @property {InlineDimensionDef} qDef
  * @property {AttributeExpressionProperties[]} qAttributeExpressions
  */
 
@@ -60,7 +60,7 @@ const properties = {
  * Extends `NxMeasure`, see Engine API: `NxMeasure`.
  * @typedef {object} MeasureProperties
  * @extends NxMeasure
- * @property {NxInlineMeasureDef=} qDef
+ * @property {NxInlineMeasureDef} qDef
  * @property {AttributeExpressionProperties[]} qAttributeExpressions
  */
 
@@ -88,36 +88,40 @@ const properties = {
 /**
  * @typedef {object} TextAlign
  * @extends NxInlineDimensionDef
- * @property {boolean} auto
- * @property {('left'|'center'|'right')=} align
+ * @property {boolean} auto - If true, sets the alignment based on the type of column (left for dimension, right for measure)
+ * @property {('left'|'center'|'right')} align - Is used (and mandatoty) if `auto` is false
  */
 
 /**
+ * General styling for all columns. Split up into header and content (body) styling
  * @typedef {object} Styling
- * @property {string} key
+ * @property {string} key - This should be set to `theme`
  * @property {ContentStyling=} content
  * @property {HeaderStyling=} header
  */
 
 /**
+ * Holds properties for font size, font color and hover styling
  * @typedef {object} ContentStyling
- * @property {number=} fontSize
- * @property {PaletteColor=} fontColor
- * @property {boolean=} hoverEffect
- * @property {PaletteColor=} hoverColor
- * @property {PaletteColor=} hoverFontColor
+ * @property {number=} fontSize - Defualts to `14` if not set
+ * @property {PaletteColor=} fontColor - Defaults to `#404040` if not set
+ * @property {boolean=} hoverEffect - Toggles hover effect
+ * @property {PaletteColor=} hoverColor - Background hover color. Uses `#f4f4f4` if no hover colors are set, is transparent if only `hoverFontColor` is set
+ * @property {PaletteColor=} hoverFontColor - When only `hoverColor` is set, this is adjusted to either `#f4f4f4` or `#ffffff` for optimal contrast
  */
 
 /**
+ * Holds properties for font size and color
  * @typedef {object} HeaderStyling
- * @property {number=} fontSize
- * @property {PaletteColor=} fontColor
+ * @property {number=} fontSize - Defualts to `14` if not set
+ * @property {PaletteColor=} fontColor- Defualts to `#404040` if not set
  */
 
 /**
+ * Color information structure. Holds the actual color and index in palette.
  * @typedef {object} PaletteColor
- * @property {number} index
- * @property {string} color
+ * @property {string} color - Color as hex string (mandatory if index: -1)
+ * @property {number} index - Index in palette
  */
 
 export default properties;
