@@ -326,23 +326,6 @@ const definition = {
     settings: {
       uses: 'settings',
       items: {
-        totals: {
-          ref: 'totals.show',
-          type: 'boolean',
-          translation: 'properties.totals',
-          component: 'switch',
-          options: [
-            {
-              value: true,
-              translation: 'Common.Auto',
-            },
-            {
-              value: false,
-              translation: 'Common.Custom',
-            },
-          ],
-          defaultValue: true,
-        },
         presentation: {
           grouped: true,
           type: 'items',
