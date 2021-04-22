@@ -18,6 +18,7 @@ const properties = {
     qSuppressMissing: true,
     /** @type {Array} */
     qColumnOrder: [],
+    columnWidths: [],
   },
   /**
    * Show title for the visualization
