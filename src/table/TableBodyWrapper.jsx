@@ -67,7 +67,7 @@ const TableBodyWrapper = ({
   }, []);
 
   return (
-    <TableBody className={classes.cellBase}>
+    <TableBody className={classes.cellBase} style={{ height: `${rootElement.clientHeight - 102}px` }}>
       {rows.map((row, rowIndex) => (
         <TableRow
           hover={hoverEffect}
