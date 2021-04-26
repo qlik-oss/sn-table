@@ -12,17 +12,16 @@ export default function muiSetup(sproutBase) {
       },
     };
 
-    sproutBase.overrides.MuiTableSortLabel.root.color = 'inherit';
-    sproutBase.overrides.MuiTableSortLabel.root['&$active'].color = 'inherit';
-    sproutBase.overrides.MuiTableSortLabel.root['&:hover'].color = 'inherit';
-
-    sproutBase.overrides.MuiTableRow.hover['&&:hover'].backgroundColor = 'rgba(0, 0, 0, 0)';
     sproutBase.overrides.MuiTableRow.root = {
       display: 'table',
       width: '100%',
       tableLayout: 'fixed',
     };
 
+    sproutBase.overrides.MuiTableSortLabel.root.color = 'inherit';
+    sproutBase.overrides.MuiTableSortLabel.root['&$active'].color = 'inherit';
+    sproutBase.overrides.MuiTableSortLabel.root['&:hover'].color = 'inherit';
+    sproutBase.overrides.MuiTableRow.hover['&&:hover'].backgroundColor = 'rgba(0, 0, 0, 0)';
     sproutBase.overrides.MuiTableCell.root.height = 'auto';
     sproutBase.overrides.MuiTableCell.root.lineHeight = '130%';
     sproutBase.overrides.MuiTableCell.head.height = 'auto';
