@@ -22,6 +22,7 @@ describe('<TableBodyWrapper />', async () => {
   let selectionsAPI;
   let layout;
   let theme;
+  let rootElement;
 
   beforeEach(async () => {
     sandbox.replace(selectionsUtils, 'addSelectionListeners', () => {});
@@ -34,6 +35,10 @@ describe('<TableBodyWrapper />', async () => {
       name: () => {},
     };
     layout = {};
+    rootElement = {
+      clientHeight: {},
+      getElementsByTagName: () => [{ clientHeight: {} }],
+    };
   });
 
   afterEach(() => {
@@ -56,6 +61,7 @@ describe('<TableBodyWrapper />', async () => {
         selectionsAPI={selectionsAPI}
         layout={layout}
         theme={theme}
+        rootElement={rootElement}
       />
     );
 
@@ -76,6 +82,7 @@ describe('<TableBodyWrapper />', async () => {
         selectionsAPI={selectionsAPI}
         theme={theme}
         layout={layout}
+        rootElement={rootElement}
       />
     );
     fireEvent.keyDown(queryByText(tableData.rows[0]['id-0'].qText));
@@ -93,6 +100,7 @@ describe('<TableBodyWrapper />', async () => {
         selectionsAPI={selectionsAPI}
         theme={theme}
         layout={layout}
+        rootElement={rootElement}
       />
     );
     fireEvent.mouseDown(queryByText(tableData.rows[0]['id-0'].qText));
