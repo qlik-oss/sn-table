@@ -133,7 +133,6 @@ describe('styling-utils', () => {
 
   describe('getBodyStyle', () => {
     let layout;
-    let rootElement;
 
     beforeEach(() => {
       resolvedColor = '#222222'; // dark color
@@ -160,9 +159,6 @@ describe('styling-utils', () => {
           },
         ],
       };
-      rootElement = {
-        clientHeight: 102,
-      };
     });
 
     it('should return object with only padding when no header property', () => {
@@ -172,7 +168,7 @@ describe('styling-utils', () => {
       expect(resultStyling).to.eql({ padding: '7px 14px' });
     });
     it('should return styling with fontColor, fontSize, padding plus defualt hoverBackgroundColor and hoverFontColor', () => {
-      const resultStyling = getBodyStyle(layout, theme, rootElement);
+      const resultStyling = getBodyStyle(layout, theme);
       expect(resultStyling).to.eql({
         fontSize: 22,
         color: resolvedColor,
@@ -180,28 +176,27 @@ describe('styling-utils', () => {
         hoverBackgroundColor: '#f4f4f4',
         hoverFontColor: '',
         selectedCellClass: '',
-        height: 0,
       });
     });
     // Only checking hover properties from here on
     it('should return styling with no hoverBackgroundColor and the specified hoverFontColor', () => {
       layout.components[0].content.hoverFontColor.index = 1;
 
-      const resultStyling = getBodyStyle(layout, theme, rootElement);
+      const resultStyling = getBodyStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).to.equal('');
       expect(resultStyling.hoverFontColor).to.equal(resolvedColor);
     });
     it('should return styling with dark hoverBackgroundColor and white hoverFontColor', () => {
       layout.components[0].content.hoverColor.index = 1;
 
-      const resultStyling = getBodyStyle(layout, theme, rootElement);
+      const resultStyling = getBodyStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).to.equal(resolvedColor);
       expect(resultStyling.hoverFontColor).to.equal(STYLING_DEFAULTS.WHITE);
     });
     it('should return styling with light hoverBackgroundColor and no hoverFontColor', () => {
       layout.components[0].content.hoverColor.index = 2;
 
-      const resultStyling = getBodyStyle(layout, theme, rootElement);
+      const resultStyling = getBodyStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).to.equal(altResolvedColor);
       expect(resultStyling.hoverFontColor).to.equal(STYLING_DEFAULTS.FONT_COLOR);
     });
@@ -209,7 +204,7 @@ describe('styling-utils', () => {
       layout.components[0].content.hoverColor.index = 1;
       layout.components[0].content.hoverFontColor.index = 2;
 
-      const resultStyling = getBodyStyle(layout, theme, rootElement);
+      const resultStyling = getBodyStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).to.equal(resolvedColor);
       expect(resultStyling.hoverFontColor).to.equal(altResolvedColor);
     });
