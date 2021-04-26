@@ -5,7 +5,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import { STYLING_DEFAULTS, getHeadStyle } from './styling-utils';
+import { getHeadStyle } from './styling-utils';
 import { headHandleKeyPress } from './cells/handle-key-press';
 import { handleClickToFocusHead } from './cells/handle-cell-focus';
 
@@ -14,11 +14,6 @@ const useStyles = makeStyles({
     color: ({ color }) => color,
     fontSize: ({ fontSize }) => fontSize,
     padding: ({ padding }) => padding,
-    height: STYLING_DEFAULTS.HEIGHT,
-    lineHeight: STYLING_DEFAULTS.HEAD_LINE_HEIGHT,
-    '&:focus': {
-      boxShadow: STYLING_DEFAULTS.FOCUS_OUTLINE,
-    },
   },
 });
 

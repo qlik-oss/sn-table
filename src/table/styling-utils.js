@@ -10,10 +10,6 @@ export const STYLING_DEFAULTS = {
     'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px)',
   WHITE: '#fff',
   PADDING: '7px 14px',
-  HEIGHT: 'auto',
-  HEAD_LINE_HEIGHT: '150%',
-  BODY_LINE_HEIGHT: '130%',
-  FOCUS_OUTLINE: '0 0 0 2px #3f8ab3 inset',
 };
 
 export const SELECTION_STYLING = {
