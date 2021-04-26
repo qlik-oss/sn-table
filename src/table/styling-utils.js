@@ -51,7 +51,7 @@ export function getHeadStyle(layout, theme) {
   return header ? getBaseStyling(header, theme) : { padding: STYLING_DEFAULTS.PADDING };
 }
 
-export function getBodyStyle(layout, theme) {
+export function getBodyStyle(layout, theme, rootElement) {
   const content = layout.components?.[0]?.content;
   if (!content) return { padding: STYLING_DEFAULTS.PADDING };
 
@@ -76,7 +76,9 @@ export function getBodyStyle(layout, theme) {
     ? ''
     : getColor(content.hoverFontColor, getAutoFontColor(hoverBackgroundColor), theme);
 
-  return { ...getBaseStyling(content, theme), hoverBackgroundColor, hoverFontColor, selectedCellClass: '' };
+  const height = rootElement.clientHeight - 102;
+
+  return { ...getBaseStyling(content, theme), hoverBackgroundColor, hoverFontColor, selectedCellClass: '', height };
 }
 
 export function getColumnStyle(styling, qAttrExps, stylingInfo) {

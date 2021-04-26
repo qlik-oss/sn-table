@@ -10,6 +10,9 @@ import { bodyHandleKeyPress } from './cells/handle-key-press';
 import { handleClickToFocusBody } from './cells/handle-cell-focus';
 
 const useStyles = makeStyles({
+  body: {
+    height: ({ height }) => `${height}px`,
+  },
   cellBase: {
     '& td': {
       color: ({ color }) => color,
@@ -45,7 +48,7 @@ const TableBodyWrapper = ({
 }) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
-  const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
+  const bodyStyle = useMemo(() => getBodyStyle(layout, theme, rootElement), [layout, theme.name()]);
   const classes = useStyles(bodyStyle);
   const selectionsEnabled = !!selectionsAPI && !constraints.active;
   const getColumnRenderers = tableData.columns.map((c) => getCellRenderer(!!c.stylingInfo.length, selectionsEnabled));
@@ -67,7 +70,7 @@ const TableBodyWrapper = ({
   }, []);
 
   return (
-    <TableBody className={classes.cellBase} style={{ height: `${rootElement.clientHeight - 102}px` }}>
+    <TableBody className={`${classes.body} ${classes.cellBase}`}>
       {rows.map((row, rowIndex) => (
         <TableRow
           hover={hoverEffect}
