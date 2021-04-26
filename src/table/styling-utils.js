@@ -72,7 +72,12 @@ export function getBodyStyle(layout, theme) {
     ? ''
     : getColor(content.hoverFontColor, getAutoFontColor(hoverBackgroundColor), theme);
 
-  return { ...getBaseStyling(content, theme), hoverBackgroundColor, hoverFontColor, selectedCellClass: '' };
+  return {
+    ...getBaseStyling(content, theme),
+    hoverBackgroundColor: [hoverBackgroundColor, '!important'],
+    hoverFontColor: [hoverFontColor, '!important'],
+    selectedCellClass: '',
+  };
 }
 
 export function getColumnStyle(styling, qAttrExps, stylingInfo) {

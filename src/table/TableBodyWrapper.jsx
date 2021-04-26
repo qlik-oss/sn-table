@@ -19,10 +19,9 @@ const useStyles = makeStyles({
   },
   hoverTableRow: {
     '&&:hover': {
-      backgroundColor: 'rgba(0, 0, 0, 0)',
       '& td:not(.selected)': {
-        backgroundColor: ({ hoverBackgroundColor }) => `${hoverBackgroundColor} !important`,
-        color: ({ hoverFontColor }) => `${hoverFontColor} !important`,
+        backgroundColor: ({ hoverBackgroundColor }) => hoverBackgroundColor,
+        color: ({ hoverFontColor }) => hoverFontColor,
       },
     },
   },
