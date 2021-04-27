@@ -37,13 +37,13 @@ const TableBodyWrapper = ({
   selectionsAPI,
   layout,
   theme,
+  bodyHeight,
   focusedCellCoord,
   setShouldRefocus,
 }) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
-  const bodyHeight = rootElement.clientHeight - rootElement.getElementsByTagName('thead')[0]?.clientHeight - 52;
   const classes = useStyles({
     ...bodyStyle,
     height: bodyHeight,
@@ -124,6 +124,7 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  bodyHeight: PropTypes.number.isRequired,
   focusedCellCoord: PropTypes.object.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
 };
