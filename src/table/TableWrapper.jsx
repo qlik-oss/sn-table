@@ -60,13 +60,13 @@ export default function TableWrapper(props) {
     return null;
   }
   useEffect(() => {
-    setBodyHeight(rootElement.clientHeight - rootElement.getElementsByTagName('thead')[0]?.clientHeight - 52);
+    setBodyHeight(`${rootElement.clientHeight - rootElement.getElementsByTagName('thead')[0]?.clientHeight - 52}px`);
   }, [layout]);
 
   useEffect(() => {
     const updateSize = () => {
       setTableWidth(rootElement.clientWidth);
-      setBodyHeight(rootElement.clientHeight - rootElement.getElementsByTagName('thead')[0]?.clientHeight - 52);
+      setBodyHeight(`${rootElement.clientHeight - rootElement.getElementsByTagName('thead')[0]?.clientHeight - 52}px`);
     };
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);

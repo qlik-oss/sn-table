@@ -11,7 +11,7 @@ import { handleClickToFocusBody } from './cells/handle-cell-focus';
 
 const useStyles = makeStyles({
   body: {
-    height: ({ height }) => `${height}px`,
+    height: ({ height }) => height,
   },
   cellBase: {
     '& td': {
