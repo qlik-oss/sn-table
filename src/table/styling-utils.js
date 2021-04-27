@@ -20,7 +20,7 @@ export const SELECTION_STYLING = {
     selectedCellClass: STYLING_DEFAULTS.SELECTED_CLASS,
   },
   POSSIBLE: {
-    fontColor: STYLING_DEFAULTS.FONT_COLOR,
+    color: STYLING_DEFAULTS.FONT_COLOR,
     background: STYLING_DEFAULTS.WHITE,
   },
 };
