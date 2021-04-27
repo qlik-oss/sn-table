@@ -46,7 +46,7 @@ const TableBodyWrapper = ({
   const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles({
     ...bodyStyle,
-    height: bodyHeight,
+    height: `${bodyHeight}px`,
   });
   const selectionsEnabled = !!selectionsAPI && !constraints.active;
   const getColumnRenderers = tableData.columns.map((c) => getCellRenderer(!!c.stylingInfo.length, selectionsEnabled));
