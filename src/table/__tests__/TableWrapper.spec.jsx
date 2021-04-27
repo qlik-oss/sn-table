@@ -34,7 +34,11 @@ describe('<TableWrapper />', () => {
       isModal: () => modal,
     };
     modal = false;
-    rootElement = { getElementsByClassName: () => [] };
+    rootElement = {
+      getElementsByClassName: () => [],
+      clientHeight: {},
+      getElementsByTagName: () => [{ clientHeight: {} }],
+    };
     sandbox.replace(handleKeyPress, 'updatePage', sinon.spy());
   });
 
