@@ -11,7 +11,7 @@ import { handleClickToFocusBody } from './cells/handle-cell-focus';
 
 const useStyles = makeStyles({
   body: {
-    height: ({ height }) => `${height}px`,
+    height: ({ height }) => height,
   },
   cellBase: {
     '& td': {
@@ -37,16 +37,16 @@ const TableBodyWrapper = ({
   selectionsAPI,
   layout,
   theme,
+  bodyHeight,
   focusedCellCoord,
   setShouldRefocus,
 }) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
-  const bodyHeight = rootElement.clientHeight - rootElement.getElementsByTagName('thead')[0]?.clientHeight - 52;
   const classes = useStyles({
     ...bodyStyle,
-    height: bodyHeight,
+    height: `${bodyHeight}px`,
   });
   const selectionsEnabled = !!selectionsAPI && !constraints.active;
   const getColumnRenderers = tableData.columns.map((c) => getCellRenderer(!!c.stylingInfo.length, selectionsEnabled));
@@ -124,6 +124,7 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  bodyHeight: PropTypes.number.isRequired,
   focusedCellCoord: PropTypes.object.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
 };
