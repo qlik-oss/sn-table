@@ -5,7 +5,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import { addSelectionListeners, reducer } from './selections-utils';
 import getCellRenderer from './cells/renderer';
-import { getBodyStyle, STYLING_DEFAULTS } from './styling-utils';
+import { getBodyStyle } from './styling-utils';
 import { bodyHandleKeyPress } from './cells/handle-key-press';
 import { handleClickToFocusBody } from './cells/handle-cell-focus';
 
@@ -18,19 +18,13 @@ const useStyles = makeStyles({
       color: ({ color }) => color,
       fontSize: ({ fontSize }) => fontSize,
       padding: ({ padding }) => padding,
-      height: STYLING_DEFAULTS.HEIGHT,
-      lineHeight: STYLING_DEFAULTS.HEAD_LINE_HEIGHT,
-      '&:focus': {
-        boxShadow: STYLING_DEFAULTS.FOCUS_OUTLINE,
-      },
     },
   },
   hoverTableRow: {
     '&&:hover': {
-      backgroundColor: 'rgba(0, 0, 0, 0)',
       '& td:not(.selected)': {
-        backgroundColor: ({ hoverBackgroundColor }) => `${hoverBackgroundColor} !important`,
-        color: ({ hoverFontColor }) => `${hoverFontColor} !important`,
+        backgroundColor: ({ hoverBackgroundColor }) => hoverBackgroundColor,
+        color: ({ hoverFontColor }) => hoverFontColor,
       },
     },
   },
