@@ -28,6 +28,39 @@ const useStyles = makeStyles({
       },
     },
   },
+  hideScrollbar: {
+    // hide scrollbar
+    scrollbarWidth: 'none' /* Firefox */,
+    msOverflowStyle: 'none' /* IE 10+ */,
+    '&&::-webkit-scrollbar-track': {
+      webkitBoxShadow: 'none',
+      backgroundColor: 'transparent',
+    },
+    '&&::-webkit-scrollbar': {
+      width: '3px',
+      backgroundColor: 'transparent',
+    },
+    '&&::-webkit-scrollbar-thumb': {
+      backgroundColor: 'transparent',
+    },
+  },
+  showScrollbar: {
+    // show scrollbar
+    scrollbarWidth: 'thin' /* Firefox */,
+    msOverflowStyle: 'none' /* IE 10+ */,
+    '&&::-webkit-scrollbar-track': {
+      webkitBoxShadow: 'none',
+      backgroundColor: 'transparent',
+    },
+    '&&::-webkit-scrollbar': {
+      width: '6px' /* width of vertical scrollbar */,
+      height: '6px' /* height of horizontal scrollbar */,
+      backgroundColor: 'transparent',
+    },
+    '&&::-webkit-scrollbar-thumb': {
+      backgroundColor: '#acacac',
+    },
+  },
 });
 
 const TableBodyWrapper = ({
@@ -57,18 +90,43 @@ const TableBodyWrapper = ({
     colIdx: -1,
     isEnabled: selectionsEnabled,
   });
+  const [isScrollbar, setIsScrollbar] = useState(false);
 
   useEffect(() => {
     selDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
     setColumnRenderers(getColumnRenderers);
   }, [selectionsEnabled, columns.length]);
 
+  // Setup isScrolling variable
+  let isScrolling;
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
     addSelectionListeners(selectionsAPI, selDispatch, setShouldRefocus);
+    // to display scrolling bar when the user scrolls in windows
+    // if (navigator.appVersion.indexOf('Win') !== -1) {
+    const handleScroll = () => {
+      isScrollbar === false && setIsScrollbar(true);
+      // Clear our timeout throughout the scroll
+      window.clearTimeout(isScrolling);
+      // Set a timeout to run after scrolling ends
+      isScrolling = setTimeout(() => setIsScrollbar(false), 100);
+    };
+    window.addEventListener('scroll', handleScroll, true);
+    return () => window.removeEventListener('resize', handleScroll);
+    // }
   }, []);
 
   return (
-    <TableBody className={`${classes.body} ${classes.cellBase}`}>
+    <TableBody
+      className={`${classes.body} ${classes.cellBase} ${
+        // in windows, make all scrollbar button, track and thumb transparent
+        // navigator.appVersion.indexOf('Win') !== -1 &&
+        classes.hideScrollbar
+      }  ${
+        // navigator.appVersion.indexOf('Win') !== -1 &&
+        isScrollbar && classes.showScrollbar
+      }`}
+    >
       {rows.map((row, rowIndex) => (
         <TableRow
           hover={hoverEffect}
