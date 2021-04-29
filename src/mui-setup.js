@@ -8,7 +8,7 @@ export default function muiSetup(sproutBase) {
     sproutBase.overrides.MuiTableBody = {
       root: {
         display: 'block',
-        overflow: 'auto',
+        overflowY: 'overlay',
       },
     };
 
