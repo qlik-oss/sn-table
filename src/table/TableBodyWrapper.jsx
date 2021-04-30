@@ -45,14 +45,14 @@ const useStyles = makeStyles({
   showScrollbar: {
     /* total width and height */
     '&&::-webkit-scrollbar': {
-      backgroundColor: '#fff',
-      width: '16px' /* width of vertical scrollbar */,
-      height: '16px' /* height of horizontal scrollbar */,
+      backgroundColor: 'transparent',
+      width: '10px' /* width of vertical scrollbar */,
+      height: '10px' /* height of horizontal scrollbar */,
     },
 
     /* background of the scrollbar except button or resizer */
     '&&::-webkit-scrollbar-track': {
-      backgroundColor: '#fff',
+      backgroundColor: 'transparent',
     },
     '&&::-webkit-scrollbar-track:hover': {
       backgroundColor: '#f4f4f4',
@@ -62,11 +62,9 @@ const useStyles = makeStyles({
     '&&::-webkit-scrollbar-thumb': {
       backgroundColor: '#babac0',
       borderRadius: '16px',
-      border: '5px solid #fff',
     },
     '&&::-webkit-scrollbar-thumb:hover': {
       backgroundColor: '#a0a0a5',
-      border: '4px solid #f4f4f4',
     },
 
     /* set button(top and bottom of the scrollbar) */
