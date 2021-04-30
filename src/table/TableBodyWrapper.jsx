@@ -104,15 +104,13 @@ const TableBodyWrapper = ({
       isScrolling = setTimeout(() => setIsScrollbar(false), 100);
     };
     // to display scrolling bar when the user scrolls in windows
-    navigator.appVersion.indexOf('Win') !== -1 && window.addEventListener('scroll', handleScroll, true);
+    window.addEventListener('scroll', handleScroll, true);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <TableBody
-      className={`${classes.body} ${classes.cellBase} ${
-        navigator.appVersion.indexOf('Win') !== -1 && isScrollbar ? classes.showScrollbar : classes.hideScrollbar
-      }`}
+      className={`${classes.body} ${classes.cellBase} ${isScrollbar ? classes.showScrollbar : classes.hideScrollbar}`}
     >
       {rows.map((row, rowIndex) => (
         <TableRow
