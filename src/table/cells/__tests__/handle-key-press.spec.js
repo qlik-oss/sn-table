@@ -82,6 +82,13 @@ describe('handle-key-press', () => {
       expect(nextRow).to.eql(0);
       expect(nextCol).to.eql(1);
     });
+
+    it('should stay the current cell when other keys are pressed', () => {
+      evt.key = 'Control';
+      const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
+      expect(nextRow).to.eql(0);
+      expect(nextCol).to.eql(0);
+    });
   });
 
   describe('getRowAndColumnCount', () => {
@@ -274,6 +281,16 @@ describe('handle-key-press', () => {
       bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], focusedCellCoord, selState, cell, selDispatch);
       expect(evt.preventDefault).to.not.have.been.calledOnce;
       expect(evt.stopPropagation).to.not.have.been.calledOnce;
+      expect(selState.api.cancel).to.not.have.been.calledOnce;
+    });
+
+    it('when other keys are pressed, should not do anything', () => {
+      evt.key = 'Control';
+      bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], focusedCellCoord, selState, cell, selDispatch);
+      expect(evt.preventDefault).to.not.have.been.calledOnce;
+      expect(evt.stopPropagation).to.not.have.been.calledOnce;
+      expect(evt.target.blur).to.not.have.been.calledOnce;
+      expect(evt.target.setAttribute).to.not.have.been.calledOnce;
       expect(selState.api.cancel).to.not.have.been.calledOnce;
     });
   });
