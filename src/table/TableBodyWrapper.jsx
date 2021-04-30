@@ -29,9 +29,7 @@ const useStyles = makeStyles({
     },
   },
   hideScrollbar: {
-    // hide scrollbar
     scrollbarWidth: 'none' /* Firefox */,
-    msOverflowStyle: 'none' /* IE 10+ */,
     '&&::-webkit-scrollbar-track': {
       webkitBoxShadow: 'none',
       backgroundColor: 'transparent',
@@ -45,9 +43,7 @@ const useStyles = makeStyles({
     },
   },
   showScrollbar: {
-    // show scrollbar
     scrollbarWidth: 'thin' /* Firefox */,
-    msOverflowStyle: 'none' /* IE 10+ */,
     '&&::-webkit-scrollbar-track': {
       webkitBoxShadow: 'none',
       backgroundColor: 'transparent',
@@ -97,13 +93,9 @@ const TableBodyWrapper = ({
     setColumnRenderers(getColumnRenderers);
   }, [selectionsEnabled, columns.length]);
 
-  // Setup isScrolling variable
   let isScrolling;
-  // eslint-disable-next-line consistent-return
   useEffect(() => {
     addSelectionListeners(selectionsAPI, selDispatch, setShouldRefocus);
-    // to display scrolling bar when the user scrolls in windows
-    // if (navigator.appVersion.indexOf('Win') !== -1) {
     const handleScroll = () => {
       isScrollbar === false && setIsScrollbar(true);
       // Clear our timeout throughout the scroll
@@ -111,20 +103,15 @@ const TableBodyWrapper = ({
       // Set a timeout to run after scrolling ends
       isScrolling = setTimeout(() => setIsScrollbar(false), 100);
     };
-    window.addEventListener('scroll', handleScroll, true);
-    return () => window.removeEventListener('resize', handleScroll);
-    // }
+    // to display scrolling bar when the user scrolls in windows
+    navigator.appVersion.indexOf('Win') !== -1 && window.addEventListener('scroll', handleScroll, true);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <TableBody
       className={`${classes.body} ${classes.cellBase} ${
-        // in windows, make all scrollbar button, track and thumb transparent
-        // navigator.appVersion.indexOf('Win') !== -1 &&
-        classes.hideScrollbar
-      }  ${
-        // navigator.appVersion.indexOf('Win') !== -1 &&
-        isScrollbar && classes.showScrollbar
+        navigator.appVersion.indexOf('Win') !== -1 && isScrollbar ? classes.showScrollbar : classes.hideScrollbar
       }`}
     >
       {rows.map((row, rowIndex) => (
