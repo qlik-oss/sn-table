@@ -43,19 +43,34 @@ const useStyles = makeStyles({
     },
   },
   showScrollbar: {
-    scrollbarWidth: 'thin' /* Firefox */,
-    '&&::-webkit-scrollbar-track': {
-      webkitBoxShadow: 'none',
-      backgroundColor: 'transparent',
-    },
+    /* total width and height */
     '&&::-webkit-scrollbar': {
-      width: '6px' /* width of vertical scrollbar */,
-      height: '6px' /* height of horizontal scrollbar */,
-      backgroundColor: 'transparent',
+      backgroundColor: '#fff',
+      width: '16px' /* width of vertical scrollbar */,
+      height: '16px' /* height of horizontal scrollbar */,
     },
+
+    /* background of the scrollbar except button or resizer */
+    '&&::-webkit-scrollbar-track': {
+      backgroundColor: '#fff',
+    },
+    '&&::-webkit-scrollbar-track:hover': {
+      backgroundColor: '#f4f4f4',
+    },
+
+    /* scrollbar itself */
     '&&::-webkit-scrollbar-thumb': {
-      backgroundColor: '#acacac',
+      backgroundColor: '#babac0',
+      borderRadius: '16px',
+      border: '5px solid #fff',
     },
+    '&&::-webkit-scrollbar-thumb:hover': {
+      backgroundColor: '#a0a0a5',
+      border: '4px solid #f4f4f4',
+    },
+
+    /* set button(top and bottom of the scrollbar) */
+    '&&::-webkit-scrollbar-button': { display: 'none' },
   },
 });
 
@@ -93,19 +108,17 @@ const TableBodyWrapper = ({
     setColumnRenderers(getColumnRenderers);
   }, [selectionsEnabled, columns.length]);
 
-  let isScrolling;
   useEffect(() => {
     addSelectionListeners(selectionsAPI, selDispatch, setShouldRefocus);
-    const handleScroll = () => {
-      isScrollbar === false && setIsScrollbar(true);
-      // Clear our timeout throughout the scroll
-      window.clearTimeout(isScrolling);
-      // Set a timeout to run after scrolling ends
-      isScrolling = setTimeout(() => setIsScrollbar(false), 100);
+    const bodyElement = document.getElementsByTagName('tbody')[0];
+    const showScroll = () => setIsScrollbar(true);
+    const hideScroll = () => setIsScrollbar(false);
+    bodyElement.addEventListener('mouseover', showScroll, true);
+    bodyElement.addEventListener('mouseleave', hideScroll, true);
+    return () => {
+      window.removeEventListener('mouseover', showScroll);
+      window.removeEventListener('mouseleave', hideScroll);
     };
-    // to display scrolling bar when the user scrolls in windows
-    window.addEventListener('scroll', handleScroll, true);
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
