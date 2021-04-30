@@ -28,7 +28,7 @@ const useStyles = makeStyles({
 
 export default function TableWrapper(props) {
   const { rootElement, tableData, layout, setPageInfo, constraints, selectionsAPI } = props;
-  const { size, rows } = tableData;
+  const { size, rows, columns } = tableData;
   const [tableWidth, setTableWidth] = useState();
   const [bodyHeight, setBodyHeight] = useState();
   const [page, setPage] = useState(0);
@@ -84,7 +84,7 @@ export default function TableWrapper(props) {
       onKeyDown={(evt) => updatePage(evt, size.qcy, page, rowsPerPage, handleChangePage, setShouldRefocus)}
     >
       <TableContainer className={classes[containerMode]}>
-        <Table stickyHeader aria-label="sticky table">
+        <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
           <TableHeadWrapper {...props} focusedCellCoord={focusedCellCoord} />
           <TableBodyWrapper
             {...props}

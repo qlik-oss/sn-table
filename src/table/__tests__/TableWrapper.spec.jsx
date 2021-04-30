@@ -26,6 +26,7 @@ describe('<TableWrapper />', () => {
     tableData = {
       size: { qcy: 200 },
       rows: [{ qText: '1' }],
+      columns: [{}],
     };
     setPageInfo = sinon.spy();
     constraints = {};
@@ -58,7 +59,7 @@ describe('<TableWrapper />', () => {
       />
     );
 
-    expect(queryByLabelText('sticky table')).to.be.visible;
+    expect(queryByLabelText('showing 2 rows and 1 columns')).to.be.visible;
     expect(queryByText(`1-${rowsPerPage} of ${tableData.size.qcy}`)).to.be.visible;
     expect(queryByText(rowsPerPage)).to.be.visible;
   });
@@ -74,7 +75,7 @@ describe('<TableWrapper />', () => {
       />
     );
 
-    fireEvent.keyDown(queryByLabelText('sticky table'), { key: 'Control', code: 'ControlLeft' });
+    fireEvent.keyDown(queryByLabelText('showing 2 rows and 1 columns'), { key: 'Control', code: 'ControlLeft' });
     expect(handleKeyPress.updatePage).to.have.been.calledOnce;
   });
 
