@@ -27,12 +27,21 @@ const useStyles = makeStyles({
 });
 
 export default function TableWrapper(props) {
-  const { rootElement, tableData, layout, setPageInfo, constraints, selectionsAPI } = props;
+  const {
+    rootElement,
+    tableData,
+    layout,
+    setPageInfo,
+    page,
+    setPage,
+    rowsPerPage,
+    setRowsPerPage,
+    constraints,
+    selectionsAPI,
+  } = props;
   const { size, rows, columns } = tableData;
   const [tableWidth, setTableWidth] = useState();
   const [bodyHeight, setBodyHeight] = useState();
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(100);
   const focusedCellCoord = useRef([0, 0]);
   const shouldRefocus = useRef(false);
   const classes = useStyles();
@@ -42,31 +51,26 @@ export default function TableWrapper(props) {
   const setShouldRefocus = () => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   };
-
+  const getBodyHeight = (updatedRootElement) =>
+    updatedRootElement.clientHeight - updatedRootElement.getElementsByTagName('thead')[0]?.clientHeight - 52;
   const handleChangePage = (event, newPage) => {
     setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
     setPage(newPage);
   };
-
-  // should trigger reload
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPageInfo({ top: 0, height: +event.target.value });
     setPage(0);
   };
 
-  if (!rows.length && page > 0) {
-    handleChangePage(null, 0);
-    return null;
-  }
   useEffect(() => {
-    setBodyHeight(rootElement.clientHeight - rootElement.getElementsByTagName('thead')[0]?.clientHeight - 52);
+    setBodyHeight(getBodyHeight(rootElement));
   }, [layout]);
 
   useEffect(() => {
     const updateSize = () => {
       setTableWidth(rootElement.clientWidth);
-      setBodyHeight(rootElement.clientHeight - rootElement.getElementsByTagName('thead')[0]?.clientHeight - 52);
+      setBodyHeight(getBodyHeight(rootElement));
     };
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
@@ -113,6 +117,10 @@ TableWrapper.propTypes = {
   tableData: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  setPage: PropTypes.func.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+  setRowsPerPage: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
 };
