@@ -6,6 +6,7 @@ describe('selections-utils', () => {
     let api;
     let selDispatch;
     let setShouldRefocus;
+    let confirmedSelection;
 
     beforeEach(() => {
       selDispatch = () => {};
@@ -13,6 +14,9 @@ describe('selections-utils', () => {
       api = {
         on: sinon.spy(),
         removeListener: sinon.spy(),
+      };
+      confirmedSelection = {
+        current: false,
       };
     });
 
@@ -41,7 +45,7 @@ describe('selections-utils', () => {
         removeListener: () => {},
       };
 
-      addSelectionListeners(api, selDispatch, setShouldRefocus);
+      addSelectionListeners(api, selDispatch, setShouldRefocus, confirmedSelection);
       callbacks.forEach((cb) => {
         cb();
         expect(selDispatch).to.have.been.calledWith({ type: 'reset' });
