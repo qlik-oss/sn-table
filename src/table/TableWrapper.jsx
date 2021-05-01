@@ -44,6 +44,7 @@ export default function TableWrapper(props) {
   const [bodyHeight, setBodyHeight] = useState();
   const focusedCellCoord = useRef([0, 0]);
   const shouldRefocus = useRef(false);
+  const confirmedSelection = useRef(false);
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
@@ -79,7 +80,14 @@ export default function TableWrapper(props) {
   // Except for first render, whenever the size of the data changes (number of rows per page, rows or columns),
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
   useDidUpdateEffect(() => {
-    handleResetFocus(focusedCellCoord, rootElement, shouldRefocus, selectionsAPI.isModal());
+    if (confirmedSelection.current) {
+      const firstCell = rootElement.getElementsByTagName('tbody')[0].getElementsByClassName('sn-table-cell')[0];
+      firstCell.setAttribute('tabIndex', '0');
+      firstCell.focus();
+      confirmedSelection.current = false;
+    } else {
+      handleResetFocus(focusedCellCoord, rootElement, shouldRefocus, selectionsAPI.isModal());
+    }
   }, [rows.length, size.qcy, size.qcx]);
 
   return (
@@ -95,6 +103,7 @@ export default function TableWrapper(props) {
             bodyHeight={bodyHeight}
             focusedCellCoord={focusedCellCoord}
             setShouldRefocus={setShouldRefocus}
+            confirmedSelection={confirmedSelection}
           />
         </Table>
       </TableContainer>

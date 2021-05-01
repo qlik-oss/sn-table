@@ -1,10 +1,11 @@
-export function addSelectionListeners(api, selDispatch, setShouldRefocus) {
+export function addSelectionListeners(api, selDispatch, setShouldRefocus, confirmedSelection) {
   const resetSelections = () => {
     selDispatch({ type: 'reset' });
   };
   const resetSelectionsAndSetupRefocus = () => {
     setShouldRefocus();
     resetSelections();
+    confirmedSelection.current = true;
   };
 
   if (!api) {
