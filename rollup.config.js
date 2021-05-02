@@ -45,6 +45,7 @@ export default {
     globals: {
       '@nebula.js/stardust': 'stardust',
     },
+    inlineDynamicImports: true,
   },
   external: ['@nebula.js/stardust'],
   plugins: [
