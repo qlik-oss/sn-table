@@ -17,7 +17,6 @@
     "url": "https://github.com/qlik-oss/sn-table.git"
   },
   "files": [
-    "assets/sn-table.qext",
     "dist",
     "api-specifications"
   ],
