@@ -87,7 +87,7 @@ describe('<TableHeadWrapper />', () => {
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
 
-    expect(changeSortOrder).to.not.have.been.calledOnce;
+    expect(changeSortOrder).not.have.been.called;
   });
 
   it('should not call changeSortOrder when clicking a header cell and cells are selected', () => {
@@ -106,7 +106,7 @@ describe('<TableHeadWrapper />', () => {
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
 
-    expect(changeSortOrder).to.not.have.been.calledOnce;
+    expect(changeSortOrder).not.have.been.called;
   });
 
   it('should call headHandleKeyPress when keyDown on a header cell', () => {

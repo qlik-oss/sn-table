@@ -188,9 +188,9 @@ describe('handle-key-press', () => {
       bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], focusedCellCoord, selState, cell, selDispatch);
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
-      expect(selState.api.begin).to.not.have.been.calledOnce;
-      expect(selState.api.select).to.not.have.been.calledOnce;
-      expect(selDispatch).to.not.have.been.calledOnce;
+      expect(selState.api.begin).not.have.been.called;
+      expect(selState.api.select).not.have.been.called;
+      expect(selDispatch).not.have.been.called;
     });
 
     it('when press space bar key not in analysis mode, should not select value for measure ', () => {
@@ -199,9 +199,9 @@ describe('handle-key-press', () => {
       bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], focusedCellCoord, selState, cell, selDispatch);
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
-      expect(selState.api.begin).to.not.have.been.calledOnce;
-      expect(selState.api.select).to.not.have.been.calledOnce;
-      expect(selDispatch).to.not.have.been.calledOnce;
+      expect(selState.api.begin).not.have.been.called;
+      expect(selState.api.select).not.have.been.called;
+      expect(selDispatch).not.have.been.called;
     });
 
     it('when press enter key, should confirms selections', () => {
@@ -236,7 +236,7 @@ describe('handle-key-press', () => {
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
-      expect(selState.api.confirm).to.not.have.been.calledOnce;
+      expect(selState.api.confirm).not.have.been.called;
     });
 
     it('when press cancel key, should cancel selection', () => {
@@ -271,7 +271,7 @@ describe('handle-key-press', () => {
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
-      expect(selState.api.cancel).to.not.have.been.calledOnce;
+      expect(selState.api.cancel).not.have.been.called;
     });
 
     it('when press ArrowRight and shif and ctrl key, should not update the sorting', () => {
@@ -279,19 +279,19 @@ describe('handle-key-press', () => {
       evt.shiftKey = true;
       evt.ctrlKey = true;
       bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], focusedCellCoord, selState, cell, selDispatch);
-      expect(evt.preventDefault).to.not.have.been.calledOnce;
-      expect(evt.stopPropagation).to.not.have.been.calledOnce;
-      expect(selState.api.cancel).to.not.have.been.calledOnce;
+      expect(evt.preventDefault).not.have.been.called;
+      expect(evt.stopPropagation).not.have.been.called;
+      expect(selState.api.cancel).not.have.been.called;
     });
 
     it('when other keys are pressed, should not do anything', () => {
       evt.key = 'Control';
       bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], focusedCellCoord, selState, cell, selDispatch);
-      expect(evt.preventDefault).to.not.have.been.calledOnce;
-      expect(evt.stopPropagation).to.not.have.been.calledOnce;
-      expect(evt.target.blur).to.not.have.been.calledOnce;
-      expect(evt.target.setAttribute).to.not.have.been.calledOnce;
-      expect(selState.api.cancel).to.not.have.been.calledOnce;
+      expect(evt.preventDefault).not.have.been.called;
+      expect(evt.stopPropagation).not.have.been.called;
+      expect(evt.target.blur).not.have.been.called;
+      expect(evt.target.setAttribute).not.have.been.called;
+      expect(selState.api.cancel).not.have.been.called;
     });
   });
 
@@ -368,7 +368,7 @@ describe('handle-key-press', () => {
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
-      expect(changeSortOrder).to.not.have.been.calledOnce;
+      expect(changeSortOrder).not.have.been.called;
     });
 
     it('when press enter key, should update the sorting', () => {
@@ -403,7 +403,7 @@ describe('handle-key-press', () => {
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
-      expect(changeSortOrder).to.not.have.been.calledOnce;
+      expect(changeSortOrder).not.have.been.called;
     });
 
     it('when press ArrowRight and shif and ctrl key, should not update the sorting', () => {
@@ -420,9 +420,9 @@ describe('handle-key-press', () => {
         isDim,
         isAnalysisMode
       );
-      expect(evt.preventDefault).to.not.have.been.calledOnce;
-      expect(evt.stopPropagation).to.not.have.been.calledOnce;
-      expect(changeSortOrder).to.not.have.been.calledOnce;
+      expect(evt.preventDefault).not.have.been.called;
+      expect(evt.stopPropagation).not.have.been.called;
+      expect(changeSortOrder).not.have.been.called;
     });
   });
 
@@ -453,16 +453,16 @@ describe('handle-key-press', () => {
     it('when shift key is not pressed, handleChangePage should not run', () => {
       evt.shiftKey = false;
       updatePage(evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus);
-      expect(handleChangePage).to.not.have.been.calledOnce;
-      expect(setShouldRefocus).to.not.have.been.calledOnce;
+      expect(handleChangePage).not.have.been.called;
+      expect(setShouldRefocus).not.have.been.called;
     });
 
     it('when ctrl key or meta key is not pressed, handleChangePage should not run', () => {
       evt.ctrlKey = false;
       evt.metaKey = false;
       updatePage(evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus);
-      expect(handleChangePage).to.not.have.been.calledOnce;
-      expect(setShouldRefocus).to.not.have.been.calledOnce;
+      expect(handleChangePage).not.have.been.called;
+      expect(setShouldRefocus).not.have.been.called;
     });
 
     it('when presss arrow right key on the first page which contains all rows, handleChangePage should not run', () => {
@@ -470,8 +470,8 @@ describe('handle-key-press', () => {
       totalRowSize = 40;
       rowsPerPage = 40;
       updatePage(evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus);
-      expect(handleChangePage).to.not.have.been.calledOnce;
-      expect(setShouldRefocus).to.not.have.been.calledOnce;
+      expect(handleChangePage).not.have.been.called;
+      expect(setShouldRefocus).not.have.been.called;
     });
 
     it('when presss arrow left key on the first page, handleChangePage should not run', () => {
@@ -480,8 +480,8 @@ describe('handle-key-press', () => {
       totalRowSize = 40;
       rowsPerPage = 10;
       updatePage(evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus);
-      expect(handleChangePage).to.not.have.been.calledOnce;
-      expect(setShouldRefocus).to.not.have.been.calledOnce;
+      expect(handleChangePage).not.have.been.called;
+      expect(setShouldRefocus).not.have.been.called;
     });
 
     it('when presss arrow right key on the page whose next page contains rows, should change page', () => {
