@@ -28,7 +28,7 @@ const useStyles = makeStyles({
       },
     },
   },
-  hideScrollbar: {
+  scrollbar: {
     scrollbarWidth: 'none' /* Firefox */,
     '&&::-webkit-scrollbar-track': {
       webkitBoxShadow: 'none',
@@ -41,34 +41,31 @@ const useStyles = makeStyles({
     '&&::-webkit-scrollbar-thumb': {
       backgroundColor: 'transparent',
     },
-  },
-  showScrollbar: {
-    /* total width and height */
-    '&&::-webkit-scrollbar': {
-      backgroundColor: 'transparent',
-      width: '10px' /* width of vertical scrollbar */,
-      height: '10px' /* height of horizontal scrollbar */,
+    '&&:hover': {
+      /* total width and height */
+      '&&::-webkit-scrollbar': {
+        backgroundColor: 'transparent',
+        width: '10px' /* width of vertical scrollbar */,
+        height: '10px' /* height of horizontal scrollbar */,
+      },
+      /* background of the scrollbar except button or resizer */
+      '&&::-webkit-scrollbar-track': {
+        backgroundColor: 'transparent',
+      },
+      '&&::-webkit-scrollbar-track:hover': {
+        backgroundColor: '#f4f4f4',
+      },
+      /* scrollbar itself */
+      '&&::-webkit-scrollbar-thumb': {
+        backgroundColor: '#babac0',
+        borderRadius: '16px',
+      },
+      '&&::-webkit-scrollbar-thumb:hover': {
+        backgroundColor: '#a0a0a5',
+      },
+      /* set button(top and bottom of the scrollbar) */
+      '&&::-webkit-scrollbar-button': { display: 'none' },
     },
-
-    /* background of the scrollbar except button or resizer */
-    '&&::-webkit-scrollbar-track': {
-      backgroundColor: 'transparent',
-    },
-    '&&::-webkit-scrollbar-track:hover': {
-      backgroundColor: '#f4f4f4',
-    },
-
-    /* scrollbar itself */
-    '&&::-webkit-scrollbar-thumb': {
-      backgroundColor: '#babac0',
-      borderRadius: '16px',
-    },
-    '&&::-webkit-scrollbar-thumb:hover': {
-      backgroundColor: '#a0a0a5',
-    },
-
-    /* set button(top and bottom of the scrollbar) */
-    '&&::-webkit-scrollbar-button': { display: 'none' },
   },
 });
 
@@ -99,7 +96,6 @@ const TableBodyWrapper = ({
     colIdx: -1,
     isEnabled: selectionsEnabled,
   });
-  const [isScrollbar, setIsScrollbar] = useState(false);
 
   useEffect(() => {
     selDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
@@ -108,21 +104,10 @@ const TableBodyWrapper = ({
 
   useEffect(() => {
     addSelectionListeners(selectionsAPI, selDispatch, setShouldRefocus);
-    const bodyElement = document.getElementsByTagName('tbody')[0];
-    const showScroll = () => setIsScrollbar(true);
-    const hideScroll = () => setIsScrollbar(false);
-    bodyElement.addEventListener('mouseover', showScroll, true);
-    bodyElement.addEventListener('mouseleave', hideScroll, true);
-    return () => {
-      window.removeEventListener('mouseover', showScroll);
-      window.removeEventListener('mouseleave', hideScroll);
-    };
   }, []);
 
   return (
-    <TableBody
-      className={`${classes.body} ${classes.cellBase} ${isScrollbar ? classes.showScrollbar : classes.hideScrollbar}`}
-    >
+    <TableBody className={`${classes.body} ${classes.cellBase} ${classes.scrollbar}`}>
       {rows.map((row, rowIndex) => (
         <TableRow
           hover={hoverEffect}
