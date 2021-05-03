@@ -37,23 +37,36 @@ export default function supernova(env) {
       const theme = useTheme();
 
       const [pageInfo, setPageInfo] = useState(() => ({ top: 0, height: 100 }));
+      const [page, setPage] = useState(0);
+      const [rowsPerPage, setRowsPerPage] = useState(100);
       const [muiParameters] = useState(() => muiSetup(__OPIONAL_THEME_DEPS__));
       const [tableData] = usePromise(() => manageData(model, layout, pageInfo), [layout, pageInfo]);
 
       useEffect(() => {
         if (layout && tableData) {
-          const changeSortOrder = sortingFactory(model, tableData.columnOrder);
-          render(rootElement, {
-            rootElement,
-            layout,
-            tableData,
-            setPageInfo,
-            constraints,
-            selectionsAPI,
-            muiParameters,
-            theme,
-            changeSortOrder,
-          });
+          if (!tableData.rows.length && page > 0) {
+            // when selections are made on other page than first page and
+            // rows per page is bigger than the selected rows
+            setPageInfo({ top: 0, height: rowsPerPage });
+            setPage(0);
+          } else {
+            const changeSortOrder = sortingFactory(model, tableData.columnOrder);
+            render(rootElement, {
+              rootElement,
+              layout,
+              tableData,
+              setPageInfo,
+              page,
+              setPage,
+              rowsPerPage,
+              setRowsPerPage,
+              constraints,
+              selectionsAPI,
+              muiParameters,
+              theme,
+              changeSortOrder,
+            });
+          }
         }
       }, [tableData, constraints, selectionsAPI.isModal(), theme.name()]);
 

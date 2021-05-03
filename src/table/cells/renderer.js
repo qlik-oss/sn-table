@@ -10,6 +10,7 @@ export default function getCellRenderer(hasColumnStyling, selectionsEnabled) {
   if (selectionsEnabled) {
     cell = withSelections(cell);
   }
+
   if (hasColumnStyling) {
     cell = withColumnStyling(cell);
   }

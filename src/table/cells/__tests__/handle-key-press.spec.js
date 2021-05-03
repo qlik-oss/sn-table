@@ -185,7 +185,16 @@ describe('handle-key-press', () => {
       cell = {
         isDim: false,
       };
-      bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], focusedCellCoord, selState, cell, selDispatch);
+      bodyHandleKeyPress(
+        evt,
+        rootElement,
+        [rowIndex, colIndex],
+        focusedCellCoord,
+        selState,
+        cell,
+        selDispatch,
+        isAnalysisMode
+      );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(selState.api.begin).not.have.been.called;
@@ -196,7 +205,16 @@ describe('handle-key-press', () => {
     it('when press space bar key not in analysis mode, should not select value for measure ', () => {
       evt.key = ' ';
       isAnalysisMode = false;
-      bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], focusedCellCoord, selState, cell, selDispatch);
+      bodyHandleKeyPress(
+        evt,
+        rootElement,
+        [rowIndex, colIndex],
+        focusedCellCoord,
+        selState,
+        cell,
+        selDispatch,
+        isAnalysisMode
+      );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(selState.api.begin).not.have.been.called;

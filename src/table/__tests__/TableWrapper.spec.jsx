@@ -13,8 +13,11 @@ describe('<TableWrapper />', () => {
   const sandbox = sinon.createSandbox();
   let tableData;
   let setPageInfo;
-  let constraints;
+  let page;
+  let setPage;
   let rowsPerPage;
+  let setRowsPerPage;
+  let constraints;
   let selectionsAPI;
   let modal;
   let rootElement;
@@ -29,6 +32,9 @@ describe('<TableWrapper />', () => {
       columns: [{}],
     };
     setPageInfo = sinon.spy();
+    page = 0;
+    setPage = sinon.spy();
+    setRowsPerPage = sinon.spy();
     constraints = {};
     rowsPerPage = 100;
     selectionsAPI = {
@@ -53,6 +59,10 @@ describe('<TableWrapper />', () => {
       <TableWrapper
         tableData={tableData}
         setPageInfo={setPageInfo}
+        page={page}
+        setPage={setPage}
+        rowsPerPage={rowsPerPage}
+        setRowsPerPage={setRowsPerPage}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
@@ -69,6 +79,10 @@ describe('<TableWrapper />', () => {
       <TableWrapper
         tableData={tableData}
         setPageInfo={setPageInfo}
+        page={page}
+        setPage={setPage}
+        rowsPerPage={rowsPerPage}
+        setRowsPerPage={setRowsPerPage}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
@@ -79,41 +93,24 @@ describe('<TableWrapper />', () => {
     expect(handleKeyPress.updatePage).to.have.been.calledOnce;
   });
 
-  it('should call setPageInfo when clicking next page button', async () => {
-    const { findByTitle, findByText } = render(
-      <TableWrapper
-        tableData={tableData}
-        setPageInfo={setPageInfo}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        rootElement={rootElement}
-      />
-    );
-    fireEvent.click(await findByTitle('Next page'));
-
-    expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
-    expect(await findByText(`101-200 of ${tableData.size.qcy}`)).to.be.visible;
-  });
-
-  it('should change back to first page when not on first page and no rows', async () => {
+  it('should call setPageInfo and setPage when clicking next page button', async () => {
     const { findByTitle } = render(
       <TableWrapper
         tableData={tableData}
         setPageInfo={setPageInfo}
+        page={page}
+        setPage={setPage}
+        rowsPerPage={rowsPerPage}
+        setRowsPerPage={setRowsPerPage}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
       />
     );
-    // This is a hack to simulate when selections are made on other page than first page and
-    // rows per page is bigger than the selected rows -> handle data returns no rows.
-    tableData.rows = [];
     fireEvent.click(await findByTitle('Next page'));
 
-    // Called when pressing the button
     expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
-    // Called from if statement in TableWrapper
-    expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
+    expect(setPage).to.have.been.calledWith(1);
   });
 
   it('should call setPageInfo when changing rows per page', async () => {
@@ -121,6 +118,10 @@ describe('<TableWrapper />', () => {
       <TableWrapper
         tableData={tableData}
         setPageInfo={setPageInfo}
+        page={page}
+        setPage={setPage}
+        rowsPerPage={rowsPerPage}
+        setRowsPerPage={setRowsPerPage}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
@@ -131,6 +132,8 @@ describe('<TableWrapper />', () => {
     fireEvent.click(await findByText('25'));
 
     expect(setPageInfo).to.have.been.calledWith({ top: 0, height: 25 });
+    expect(setRowsPerPage).to.have.been.calledWith(25);
+    expect(setPage).to.have.been.calledWith(0);
   });
 
   it('should not show rows per page when selectionsAPI.isModal() returns true', async () => {
@@ -140,6 +143,10 @@ describe('<TableWrapper />', () => {
       <TableWrapper
         tableData={tableData}
         setPageInfo={setPageInfo}
+        page={page}
+        setPage={setPage}
+        rowsPerPage={rowsPerPage}
+        setRowsPerPage={setRowsPerPage}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
