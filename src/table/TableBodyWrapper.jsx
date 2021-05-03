@@ -28,6 +28,45 @@ const useStyles = makeStyles({
       },
     },
   },
+  scrollbar: {
+    scrollbarWidth: 'none' /* Firefox */,
+    '&&::-webkit-scrollbar-track': {
+      webkitBoxShadow: 'none',
+      backgroundColor: 'transparent',
+    },
+    '&&::-webkit-scrollbar': {
+      width: '3px',
+      backgroundColor: 'transparent',
+    },
+    '&&::-webkit-scrollbar-thumb': {
+      backgroundColor: 'transparent',
+    },
+    '&&:hover': {
+      /* total width and height */
+      '&&::-webkit-scrollbar': {
+        backgroundColor: 'transparent',
+        width: '10px' /* width of vertical scrollbar */,
+        height: '10px' /* height of horizontal scrollbar */,
+      },
+      /* background of the scrollbar except button or resizer */
+      '&&::-webkit-scrollbar-track': {
+        backgroundColor: 'transparent',
+      },
+      '&&::-webkit-scrollbar-track:hover': {
+        backgroundColor: '#f4f4f4',
+      },
+      /* scrollbar itself */
+      '&&::-webkit-scrollbar-thumb': {
+        backgroundColor: '#babac0',
+        borderRadius: '16px',
+      },
+      '&&::-webkit-scrollbar-thumb:hover': {
+        backgroundColor: '#a0a0a5',
+      },
+      /* set button(top and bottom of the scrollbar) */
+      '&&::-webkit-scrollbar-button': { display: 'none' },
+    },
+  },
 });
 
 const TableBodyWrapper = ({
@@ -68,7 +107,7 @@ const TableBodyWrapper = ({
   }, []);
 
   return (
-    <TableBody className={`${classes.body} ${classes.cellBase}`}>
+    <TableBody className={`${classes.body} ${classes.cellBase} ${classes.scrollbar}`}>
       {rows.map((row, rowIndex) => (
         <TableRow
           hover={hoverEffect}
