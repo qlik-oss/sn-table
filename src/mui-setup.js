@@ -16,6 +16,25 @@ export default function muiSetup(sproutBase) {
       display: 'table',
       width: '100%',
       tableLayout: 'fixed',
+      ...sproutBase.overrides.MuiTableRow.root,
+    };
+
+    const cellStyle = {
+      maxHeight: '3.7em',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    };
+
+    sproutBase.overrides.MuiTableCell.root = {
+      ...cellStyle,
+      ...sproutBase.overrides.MuiTableCell.root,
+    };
+
+    sproutBase.overrides.MuiTableCell.head = {
+      '& div': {
+        ...cellStyle,
+      },
+      ...sproutBase.overrides.MuiTableCell.head,
     };
 
     sproutBase.overrides.MuiTableSortLabel.root.color = 'inherit';

@@ -64,7 +64,7 @@ export default function TableHeadWrapper({
                 }
                 tabIndex={-1}
               >
-                {column.label}
+                <div>{column.label}</div>
               </TableSortLabel>
             </TableCell>
           );
