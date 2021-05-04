@@ -6,6 +6,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import image from '@rollup/plugin-image';
 import visualizer from 'rollup-plugin-visualizer';
+import { terser } from 'rollup-plugin-terser';
 import path from 'path';
 
 import jsxPlugin from '@babel/plugin-transform-react-jsx';
@@ -20,16 +21,25 @@ function checkInternals() {
   return fs.existsSync('./node_modules/@qlik');
 }
 
-// Get name from normal package, peerDependencies from core package
-const { name } = require(path.resolve(process.cwd(), 'package.json')); // eslint-disable-line  import/no-dynamic-require
+// get metadata from regular package.json
+const { name, version, license, author } = require(path.resolve(process.cwd(), 'package.json')); // eslint-disable-line  import/no-dynamic-require
 const pkg = require(path.resolve(process.cwd(), 'core/package.json')); // eslint-disable-line  import/no-dynamic-require
 
+const auth = typeof author === 'object' ? `${author.name} <${author.email}>` : author || '';
 const moduleName = name.split('/').reverse()[0];
+
+const banner = `/*
+* ${name} v${version}
+* Copyright (c) ${new Date().getFullYear()} ${auth}
+* Released under the ${license} license.
+*/
+`;
 
 export default {
   input: './src/index.js',
   output: {
-    file: path.resolve(__dirname, 'core', 'esm/sn-table.js'),
+    banner,
+    file: path.resolve(__dirname, 'core', pkg.module),
     name: moduleName,
     format: 'esm',
     exports: 'default',
