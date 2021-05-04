@@ -34,12 +34,25 @@ export default function TableWrapper(props) {
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const focusedCellCoord = useRef([0, 0]);
   const shouldRefocus = useRef(false);
+  const tableSection = useRef();
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
   const paginationFixedRpp = selectionsAPI.isModal() || tableWidth < 400;
   const setShouldRefocus = () => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
+  };
+
+  const handleScroll = (evt) => {
+    evt.stopPropagation();
+    const max = tableSection.current.scrollWidth - tableSection.current.offsetWidth;
+    if (
+      max > 0 &&
+      (tableSection.current.scrollLeft + evt.deltaX < 0 || tableSection.current.scrollLeft + evt.deltaX > max)
+    ) {
+      evt.preventDefault();
+      tableSection.current.scrollLeft = Math.max(0, Math.min(max, tableSection.current.scrollLeft + evt.deltaX));
+    }
   };
 
   const handleChangePage = (event, newPage) => {
@@ -62,7 +75,11 @@ export default function TableWrapper(props) {
   useEffect(() => {
     const updateSize = () => setTableWidth(rootElement.clientWidth);
     window.addEventListener('resize', updateSize);
-    return () => window.removeEventListener('resize', updateSize);
+    tableSection.current.addEventListener('wheel', handleScroll);
+    return () => {
+      window.removeEventListener('resize', updateSize);
+      tableSection.current.removeEventListener('wheel', handleScroll);
+    };
   }, []);
 
   // Except for first render, whenever the size of the data changes (number of rows per page, rows or columns),
@@ -76,7 +93,7 @@ export default function TableWrapper(props) {
       className={classes.paper}
       onKeyDown={(evt) => updatePage(evt, size.qcy, page, rowsPerPage, handleChangePage, setShouldRefocus)}
     >
-      <TableContainer className={classes[containerMode]}>
+      <TableContainer ref={tableSection} className={classes[containerMode]}>
         <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
           <TableHeadWrapper {...props} focusedCellCoord={focusedCellCoord} />
           <TableBodyWrapper {...props} focusedCellCoord={focusedCellCoord} setShouldRefocus={setShouldRefocus} />
