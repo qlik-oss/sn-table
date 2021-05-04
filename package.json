@@ -26,7 +26,7 @@
   "main": "dist/sn-table.js",
   "module": "dist/sn-table.esm.js",
   "scripts": {
-    "build": "rollup -c rollup.config.js && shx cp assets/* dist",
+    "build": "rollup -c rollup.config.js && rollup -c rollup-core.config.js && shx cp assets/* dist",
     "build:watch": "rollup -c rollup.config.js -w",
     "lint": "eslint src",
     "start": "nebula serve --build false --type sn-table",
