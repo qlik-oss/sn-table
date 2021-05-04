@@ -17,3 +17,4 @@ checks:
 exclude_patterns:
   - "src/**/*.spec.js"
   - "src/**/*.spec.jsx"
+  - "*config*"
