@@ -10,9 +10,6 @@ import { bodyHandleKeyPress } from './cells/handle-key-press';
 import { handleClickToFocusBody } from './cells/handle-cell-focus';
 
 const useStyles = makeStyles({
-  body: {
-    height: ({ height }) => height,
-  },
   cellBase: {
     '& td': {
       color: ({ color }) => color,
@@ -28,45 +25,6 @@ const useStyles = makeStyles({
       },
     },
   },
-  scrollbar: {
-    scrollbarWidth: 'none' /* Firefox */,
-    '&&::-webkit-scrollbar-track': {
-      webkitBoxShadow: 'none',
-      backgroundColor: 'transparent',
-    },
-    '&&::-webkit-scrollbar': {
-      width: '3px',
-      backgroundColor: 'transparent',
-    },
-    '&&::-webkit-scrollbar-thumb': {
-      backgroundColor: 'transparent',
-    },
-    '&&:hover': {
-      /* total width and height */
-      '&&::-webkit-scrollbar': {
-        backgroundColor: 'transparent',
-        width: '10px' /* width of vertical scrollbar */,
-        height: '10px' /* height of horizontal scrollbar */,
-      },
-      /* background of the scrollbar except button or resizer */
-      '&&::-webkit-scrollbar-track': {
-        backgroundColor: 'transparent',
-      },
-      '&&::-webkit-scrollbar-track:hover': {
-        backgroundColor: '#f4f4f4',
-      },
-      /* scrollbar itself */
-      '&&::-webkit-scrollbar-thumb': {
-        backgroundColor: '#babac0',
-        borderRadius: '16px',
-      },
-      '&&::-webkit-scrollbar-thumb:hover': {
-        backgroundColor: '#a0a0a5',
-      },
-      /* set button(top and bottom of the scrollbar) */
-      '&&::-webkit-scrollbar-button': { display: 'none' },
-    },
-  },
 });
 
 const TableBodyWrapper = ({
@@ -76,17 +34,13 @@ const TableBodyWrapper = ({
   selectionsAPI,
   layout,
   theme,
-  bodyHeight,
   focusedCellCoord,
   setShouldRefocus,
 }) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
-  const classes = useStyles({
-    ...bodyStyle,
-    height: `${bodyHeight}px`,
-  });
+  const classes = useStyles(bodyStyle);
   const selectionsEnabled = !!selectionsAPI && !constraints.active;
   const getColumnRenderers = tableData.columns.map((c) => getCellRenderer(!!c.stylingInfo.length, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(() => getColumnRenderers);
@@ -107,7 +61,7 @@ const TableBodyWrapper = ({
   }, []);
 
   return (
-    <TableBody className={`${classes.body} ${classes.cellBase} ${classes.scrollbar}`}>
+    <TableBody className={`${classes.cellBase}`}>
       {rows.map((row, rowIndex) => (
         <TableRow
           hover={hoverEffect}
@@ -163,7 +117,6 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  bodyHeight: PropTypes.number.isRequired,
   focusedCellCoord: PropTypes.object.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
 };
