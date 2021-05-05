@@ -2,7 +2,6 @@ import { createGenerateClassName, createMuiTheme } from '@material-ui/core/style
 
 export default function muiSetup(sproutBase) {
   if (sproutBase.overrides) {
-    sproutBase.overrides.MuiTableContainer.root.height = 'calc(100% - 52px)';
     sproutBase.overrides.MuiListItem.root['&$selected'] = {};
     sproutBase.overrides.MuiSelect.root['& ~i'].padding = '6px';
     sproutBase.overrides.MuiTableSortLabel.root.color = 'inherit';
