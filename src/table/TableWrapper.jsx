@@ -27,10 +27,9 @@ const useStyles = makeStyles({
 });
 
 export default function TableWrapper(props) {
-  const { rootElement, tableData, layout, setPageInfo, constraints, selectionsAPI } = props;
+  const { rootElement, tableData, setPageInfo, constraints, selectionsAPI } = props;
   const { size, rows, columns } = tableData;
   const [tableWidth, setTableWidth] = useState();
-  const [bodyHeight, setBodyHeight] = useState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const focusedCellCoord = useRef([0, 0]);
@@ -59,15 +58,9 @@ export default function TableWrapper(props) {
     handleChangePage(null, 0);
     return null;
   }
-  useEffect(() => {
-    setBodyHeight(rootElement.clientHeight - rootElement.getElementsByTagName('thead')[0]?.clientHeight - 52);
-  }, [layout]);
 
   useEffect(() => {
-    const updateSize = () => {
-      setTableWidth(rootElement.clientWidth);
-      setBodyHeight(rootElement.clientHeight - rootElement.getElementsByTagName('thead')[0]?.clientHeight - 52);
-    };
+    const updateSize = () => setTableWidth(rootElement.clientWidth);
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
   }, []);
@@ -86,12 +79,7 @@ export default function TableWrapper(props) {
       <TableContainer className={classes[containerMode]}>
         <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
           <TableHeadWrapper {...props} focusedCellCoord={focusedCellCoord} />
-          <TableBodyWrapper
-            {...props}
-            bodyHeight={bodyHeight}
-            focusedCellCoord={focusedCellCoord}
-            setShouldRefocus={setShouldRefocus}
-          />
+          <TableBodyWrapper {...props} focusedCellCoord={focusedCellCoord} setShouldRefocus={setShouldRefocus} />
         </Table>
       </TableContainer>
       <TablePagination
@@ -111,7 +99,6 @@ export default function TableWrapper(props) {
 TableWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
-  layout: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
