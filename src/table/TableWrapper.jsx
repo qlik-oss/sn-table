@@ -10,6 +10,7 @@ import TableHeadWrapper from './TableHeadWrapper';
 import useDidUpdateEffect from './useDidUpdateEffect';
 import { updatePage } from './cells/handle-key-press';
 import { handleResetFocus } from './cells/handle-cell-focus';
+import handleScroll from './handle-scroll';
 
 const useStyles = makeStyles({
   paper: {
@@ -43,18 +44,6 @@ export default function TableWrapper(props) {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   };
 
-  const handleScroll = (evt) => {
-    evt.stopPropagation();
-    const max = tableSection.current.scrollWidth - tableSection.current.offsetWidth;
-    if (
-      max > 0 &&
-      (tableSection.current.scrollLeft + evt.deltaX < 0 || tableSection.current.scrollLeft + evt.deltaX > max)
-    ) {
-      evt.preventDefault();
-      tableSection.current.scrollLeft = Math.max(0, Math.min(max, tableSection.current.scrollLeft + evt.deltaX));
-    }
-  };
-
   const handleChangePage = (event, newPage) => {
     setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
     setPage(newPage);
@@ -75,10 +64,10 @@ export default function TableWrapper(props) {
   useEffect(() => {
     const updateSize = () => setTableWidth(rootElement.clientWidth);
     window.addEventListener('resize', updateSize);
-    tableSection.current.addEventListener('wheel', handleScroll);
+    tableSection.current.addEventListener('wheel', (evt) => handleScroll(evt, tableSection));
     return () => {
       window.removeEventListener('resize', updateSize);
-      tableSection.current.removeEventListener('wheel', handleScroll);
+      tableSection.current.removeEventListener('wheel', (evt) => handleScroll(evt, tableSection));
     };
   }, []);
 
