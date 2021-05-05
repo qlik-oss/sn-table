@@ -10,5 +10,6 @@ stats.html
 node_modules
 coverage
 dist/
+core/esm
 
 sn-table-ext
