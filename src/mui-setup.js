@@ -12,7 +12,16 @@ export default function muiSetup(sproutBase) {
     sproutBase.overrides.MuiTableCell.root.height = 'auto';
     sproutBase.overrides.MuiTableCell.root.lineHeight = '130%';
     sproutBase.overrides.MuiTableCell.head.height = 'auto';
-    sproutBase.overrides.MuiTableCell.head.lineHeight = '150%';
+    sproutBase.overrides.MuiTableCell.head = {
+      lineHeight: '150%',
+      position: '-webkit-sticky' /* Safari */,
+      // eslint-disable-next-line no-dupe-keys
+      position: 'sticky',
+      top: '0',
+      zIndex: '1',
+      boxShadow: 'inset 0 1px 0 #D9D9D9, inset 0 -1px 0 #D9D9D9',
+      ...sproutBase.overrides.MuiTableCell.head,
+    };
     sproutBase.overrides.MuiTableCell.root['&:focus'] = {
       boxShadow: '0 0 0 2px #3f8ab3 inset',
       outline: 'none',
