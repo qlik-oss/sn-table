@@ -16,9 +16,11 @@ const useStyles = makeStyles({
     height: '100%',
   },
   containerOverflowAuto: {
+    height: 'calc(100% - 52px)',
     overflow: 'auto',
   },
   containerOverflowHidden: {
+    height: '100%',
     overflow: 'hidden',
   },
   paginationHidden: {
