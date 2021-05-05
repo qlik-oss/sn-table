@@ -18,7 +18,8 @@
   },
   "files": [
     "dist",
-    "api-specifications"
+    "api-specifications",
+    "core"
   ],
   "engines": {
     "node": ">=8"
