@@ -1,11 +1,11 @@
 const handleScroll = (evt, tableSection) => {
   evt.stopPropagation();
   let { scrollLeft } = tableSection.current;
-  const { deltaX } = evt;
+  const newScrollLeft = scrollLeft + evt.deltaX;
   const max = tableSection.current.scrollWidth - tableSection.current.offsetWidth;
-  if (max > 0 && (scrollLeft + deltaX < 0 || scrollLeft + deltaX > max)) {
+  if (max > 0 && (newScrollLeft < 0 || newScrollLeft > max)) {
     evt.preventDefault();
-    scrollLeft = Math.max(0, Math.min(max, scrollLeft + deltaX));
+    scrollLeft = Math.max(0, Math.min(max, newScrollLeft));
   }
 };
 
