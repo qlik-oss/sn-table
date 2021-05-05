@@ -7,11 +7,13 @@ export function render(rootElement, props) {
   const { muiParameters } = props;
 
   ReactDOM.render(
-    <StylesProvider generateClassName={muiParameters.generateClassName}>
-      <ThemeProvider theme={muiParameters.theme}>
-        <TableWrapper {...props} />
-      </ThemeProvider>
-    </StylesProvider>,
+    <React.StrictMode>
+      <StylesProvider generateClassName={muiParameters.generateClassName}>
+        <ThemeProvider theme={muiParameters.theme}>
+          <TableWrapper {...props} />
+        </ThemeProvider>
+      </StylesProvider>
+    </React.StrictMode>,
     rootElement
   );
 }
