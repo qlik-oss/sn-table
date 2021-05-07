@@ -80,6 +80,10 @@
           "optional": true,
           "defaultValue": "",
           "type": "string"
+        },
+        "version": {
+          "description": "Current version of this generic object definition.",
+          "type": "string"
         }
       }
     }

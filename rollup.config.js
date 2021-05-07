@@ -53,6 +53,7 @@ export default {
     }),
     replace({
       'process.env.NODE_ENV': JSON.stringify('production'),
+      'process.env.PACKAGE_VERSION': JSON.stringify(version),
       preventAssignment: true,
     }),
     checkInternals()

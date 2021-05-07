@@ -6,7 +6,6 @@ import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import image from '@rollup/plugin-image';
 import visualizer from 'rollup-plugin-visualizer';
-import { terser } from 'rollup-plugin-terser';
 import path from 'path';
 
 import jsxPlugin from '@babel/plugin-transform-react-jsx';
@@ -55,6 +54,7 @@ export default {
     }),
     replace({
       'process.env.NODE_ENV': JSON.stringify('production'),
+      'process.env.PACKAGE_VERSION': JSON.stringify(version),
       preventAssignment: true,
     }),
     checkInternals()
