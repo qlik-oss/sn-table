@@ -4,20 +4,6 @@ export default function muiSetup(sproutBase) {
   if (sproutBase.overrides) {
     sproutBase.overrides.MuiListItem.root['&$selected'] = {};
     sproutBase.overrides.MuiSelect.root['& ~i'].padding = '6px';
-
-    sproutBase.overrides.MuiTableBody = {
-      root: {
-        display: 'block',
-        overflow: 'auto',
-      },
-    };
-
-    sproutBase.overrides.MuiTableRow.root = {
-      display: 'table',
-      width: '100%',
-      tableLayout: 'fixed',
-    };
-
     sproutBase.overrides.MuiTableSortLabel.root.color = 'inherit';
     sproutBase.overrides.MuiTableSortLabel.root['&$active'].color = 'inherit';
     sproutBase.overrides.MuiTableSortLabel.root['&:hover'].color = 'inherit';

@@ -6,7 +6,6 @@ import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import image from '@rollup/plugin-image';
 import visualizer from 'rollup-plugin-visualizer';
-import { terser } from 'rollup-plugin-terser';
 import path from 'path';
 
 import jsxPlugin from '@babel/plugin-transform-react-jsx';
@@ -21,8 +20,9 @@ function checkInternals() {
   return fs.existsSync('./node_modules/@qlik');
 }
 
-const pkg = require(path.resolve(process.cwd(), 'package.json')); // eslint-disable-line  import/no-dynamic-require
-const { name, version, license, author } = pkg;
+// get metadata from regular package.json
+const { name, version, license, author } = require(path.resolve(process.cwd(), 'package.json')); // eslint-disable-line  import/no-dynamic-require
+const pkg = require(path.resolve(process.cwd(), 'core/package.json')); // eslint-disable-line  import/no-dynamic-require
 
 const auth = typeof author === 'object' ? `${author.name} <${author.email}>` : author || '';
 const moduleName = name.split('/').reverse()[0];
@@ -37,17 +37,17 @@ const banner = `/*
 export default {
   input: './src/index.js',
   output: {
-    file: path.resolve(__dirname, 'dist', 'sn-table.js'),
+    banner,
+    file: path.resolve(__dirname, 'core', pkg.module),
     name: moduleName,
-    format: 'umd',
+    format: 'esm',
     exports: 'default',
-    sourcemap: false,
+    sourcemap: true,
     globals: {
       '@nebula.js/stardust': 'stardust',
     },
-    inlineDynamicImports: true,
   },
-  external: ['@nebula.js/stardust'],
+  external: ['@nebula.js/stardust', 'react', 'react-dom'],
   plugins: [
     resolve({
       extensions: ['.js', '.jsx'],
@@ -87,10 +87,5 @@ export default {
     commonjs(),
     image(),
     visualizer(),
-    terser({
-      output: {
-        preamble: banner,
-      },
-    }),
   ],
 };

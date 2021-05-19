@@ -10,15 +10,18 @@ import TableHeadWrapper from './TableHeadWrapper';
 import useDidUpdateEffect from './useDidUpdateEffect';
 import { updatePage } from './cells/handle-key-press';
 import { handleResetFocus } from './cells/handle-cell-focus';
+import handleScroll from './handle-scroll';
 
 const useStyles = makeStyles({
   paper: {
     height: '100%',
   },
   containerOverflowAuto: {
+    height: 'calc(100% - 52px)',
     overflow: 'auto',
   },
   containerOverflowHidden: {
+    height: '100%',
     overflow: 'hidden',
   },
   paginationHidden: {
@@ -27,14 +30,14 @@ const useStyles = makeStyles({
 });
 
 export default function TableWrapper(props) {
-  const { rootElement, tableData, layout, setPageInfo, constraints, selectionsAPI } = props;
+  const { rootElement, tableData, setPageInfo, constraints, selectionsAPI } = props;
   const { size, rows, columns } = tableData;
   const [tableWidth, setTableWidth] = useState();
-  const [bodyHeight, setBodyHeight] = useState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const focusedCellCoord = useRef([0, 0]);
   const shouldRefocus = useRef(false);
+  const tableSection = useRef();
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
@@ -59,17 +62,15 @@ export default function TableWrapper(props) {
     handleChangePage(null, 0);
     return null;
   }
-  useEffect(() => {
-    setBodyHeight(rootElement.clientHeight - rootElement.getElementsByTagName('thead')[0]?.clientHeight - 52);
-  }, [layout]);
 
   useEffect(() => {
-    const updateSize = () => {
-      setTableWidth(rootElement.clientWidth);
-      setBodyHeight(rootElement.clientHeight - rootElement.getElementsByTagName('thead')[0]?.clientHeight - 52);
-    };
+    const updateSize = () => setTableWidth(rootElement.clientWidth);
     window.addEventListener('resize', updateSize);
-    return () => window.removeEventListener('resize', updateSize);
+    tableSection.current.addEventListener('wheel', (evt) => handleScroll(evt, tableSection));
+    return () => {
+      window.removeEventListener('resize', updateSize);
+      tableSection.current.removeEventListener('wheel', (evt) => handleScroll(evt, tableSection));
+    };
   }, []);
 
   // Except for first render, whenever the size of the data changes (number of rows per page, rows or columns),
@@ -83,15 +84,10 @@ export default function TableWrapper(props) {
       className={classes.paper}
       onKeyDown={(evt) => updatePage(evt, size.qcy, page, rowsPerPage, handleChangePage, setShouldRefocus)}
     >
-      <TableContainer className={classes[containerMode]}>
+      <TableContainer ref={tableSection} className={classes[containerMode]}>
         <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
           <TableHeadWrapper {...props} focusedCellCoord={focusedCellCoord} />
-          <TableBodyWrapper
-            {...props}
-            bodyHeight={bodyHeight}
-            focusedCellCoord={focusedCellCoord}
-            setShouldRefocus={setShouldRefocus}
-          />
+          <TableBodyWrapper {...props} focusedCellCoord={focusedCellCoord} setShouldRefocus={setShouldRefocus} />
         </Table>
       </TableContainer>
       <TablePagination
@@ -111,7 +107,6 @@ export default function TableWrapper(props) {
 TableWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
-  layout: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,

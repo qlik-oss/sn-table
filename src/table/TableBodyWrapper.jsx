@@ -10,9 +10,6 @@ import { bodyHandleKeyPress } from './cells/handle-key-press';
 import { handleClickToFocusBody } from './cells/handle-cell-focus';
 
 const useStyles = makeStyles({
-  body: {
-    height: ({ height }) => height,
-  },
   cellBase: {
     '& td': {
       color: ({ color }) => color,
@@ -37,17 +34,13 @@ const TableBodyWrapper = ({
   selectionsAPI,
   layout,
   theme,
-  bodyHeight,
   focusedCellCoord,
   setShouldRefocus,
 }) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
-  const classes = useStyles({
-    ...bodyStyle,
-    height: `${bodyHeight}px`,
-  });
+  const classes = useStyles(bodyStyle);
   const selectionsEnabled = !!selectionsAPI && !constraints.active;
   const getColumnRenderers = tableData.columns.map((c) => getCellRenderer(!!c.stylingInfo.length, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(() => getColumnRenderers);
@@ -68,7 +61,7 @@ const TableBodyWrapper = ({
   }, []);
 
   return (
-    <TableBody className={`${classes.body} ${classes.cellBase}`}>
+    <TableBody className={`${classes.cellBase}`}>
       {rows.map((row, rowIndex) => (
         <TableRow
           hover={hoverEffect}
@@ -124,7 +117,6 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  bodyHeight: PropTypes.number.isRequired,
   focusedCellCoord: PropTypes.object.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
 };

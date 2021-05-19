@@ -4,6 +4,12 @@
  */
 const properties = {
   /**
+   * Current version of this generic object definition.
+   * @type {string}
+   * @default
+   */
+  version: process.env.PACKAGE_VERSION,
+  /**
    * @extends {qae.HyperCubeDef}
    */
   qHyperCubeDef: {
