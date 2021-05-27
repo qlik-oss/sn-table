@@ -117,7 +117,7 @@ describe('<TableWrapper />', () => {
   });
 
   it('should call setPageInfo when changing rows per page', async () => {
-    const { findByText } = render(
+    const { getByTestId } = render(
       <TableWrapper
         tableData={tableData}
         setPageInfo={setPageInfo}
@@ -126,10 +126,7 @@ describe('<TableWrapper />', () => {
         rootElement={rootElement}
       />
     );
-    // the popover is only triggered with mouseDown, according to the mui definition
-    fireEvent.mouseDown(await findByText(rowsPerPage));
-    fireEvent.click(await findByText('25'));
-
+    fireEvent.change(getByTestId('select'), { target: { value: 25 } });
     expect(setPageInfo).to.have.been.calledWith({ top: 0, height: 25 });
   });
 
