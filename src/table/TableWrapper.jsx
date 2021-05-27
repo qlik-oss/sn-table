@@ -98,7 +98,7 @@ export default function TableWrapper(props) {
         rowsPerPage={rowsPerPage}
         page={page}
         SelectProps={{
-          inputProps: { 'aria-label': 'rows per page' },
+          inputProps: { 'aria-label': 'rows per page', 'data-testid': 'select' },
           native: true,
         }}
         onChangePage={handleChangePage}
