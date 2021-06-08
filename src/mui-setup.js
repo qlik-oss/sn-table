@@ -20,9 +20,9 @@ export default function muiSetup(sproutBase) {
 
   const theme = createMuiTheme(sproutBase);
   const generateClassName = createGenerateClassName({
-    productionPrefix: 'sn-t',
+    productionPrefix: `${process.env.PACKAGE_VERSION}`,
     disableGlobal: true,
-    seed: Date.now(),
+    seed: `sn-t-${Date.now()}`,
   });
 
   return { theme, generateClassName };
