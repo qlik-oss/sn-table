@@ -282,12 +282,6 @@ const definition = {
               component: 'inline-measure',
               show: (itemData) => !itemData.qLibraryId,
             },
-            autoSort: {
-              ref: 'qDef.autoSort',
-              type: 'boolean',
-              defaultValue: true,
-              show: false,
-            },
             ...columnCommonHidden,
             ...columnExpressionItems,
             ...textAlignItems,
