@@ -9,7 +9,7 @@ export function getColumnOrder(layout) {
   return [...Array(qDimensionInfo.length + qMeasureInfo.length).keys()];
 }
 
-export function getColumnInfo(layout, colIndex, index) {
+export function getColumnInfo(layout, colIndex) {
   const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIndex < numDims;
@@ -20,7 +20,7 @@ export function getColumnInfo(layout, colIndex, index) {
       isDim,
       width: 200,
       label: info.qFallbackTitle,
-      id: `col-${index}`,
+      id: `col-${colIndex}`,
       align: !info.textAlign || info.textAlign.auto ? (isDim ? 'left' : 'right') : info.textAlign.align,
       stylingInfo: info.qAttrExprInfo.map((expr) => expr.id),
       sortDirection: directionMap[info.qSortIndicator],
@@ -36,9 +36,9 @@ export default async function manageData(model, layout, pageInfo) {
   const matrix = dataPages[0].qMatrix;
 
   // using filter to remove hidden columns (represented with false)
-  const columns = columnOrder.map((c, index) => getColumnInfo(layout, c, index)).filter(Boolean);
+  const columns = columnOrder.map((colIndex) => getColumnInfo(layout, colIndex)).filter(Boolean);
   const rows = matrix.map((r, rowIdx) => {
-    const row = { key: `col-${rowIdx}` };
+    const row = { key: `row-${rowIdx}` };
     columns.forEach((c, colIdx) => {
       row[c.id] = {
         ...r[colIdx],

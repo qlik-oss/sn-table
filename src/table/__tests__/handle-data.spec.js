@@ -4,7 +4,6 @@ import { generateDataPages, generateLayout } from './generate-test-data';
 describe('handle-data', () => {
   let layout;
   let colIdx;
-  let index;
 
   beforeEach(() => {
     layout = generateLayout(2, 2, [1, 2, 0, 3]);
@@ -12,7 +11,7 @@ describe('handle-data', () => {
 
   describe('getColumnInfo', () => {
     colIdx = 1;
-    index = 1;
+
     const getExpectedInfo = (colIx, isDim) => ({
       isDim,
       width: 200,
@@ -24,7 +23,7 @@ describe('handle-data', () => {
     });
 
     it('should return column info for dimension', () => {
-      const columnInfo = getColumnInfo(layout, colIdx, index);
+      const columnInfo = getColumnInfo(layout, colIdx);
       expect(columnInfo).to.eql(getExpectedInfo(colIdx, true));
     });
 
@@ -39,21 +38,21 @@ describe('handle-data', () => {
       const expected = getExpectedInfo(colIdx, true);
       expected.stylingInfo = ['someId'];
 
-      const columnInfo = getColumnInfo(layout, colIdx, index);
+      const columnInfo = getColumnInfo(layout, colIdx);
       expect(columnInfo).to.eql(expected);
     });
 
     it('should return false for hidden column', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qError = { qErrorCode: 7005 };
 
-      const columnInfo = getColumnInfo(layout, colIdx, index);
+      const columnInfo = getColumnInfo(layout, colIdx);
       expect(columnInfo).to.be.false;
     });
 
     it('should return column info for measure', () => {
       colIdx = 3;
-      index = 3;
-      const columnInfo = getColumnInfo(layout, colIdx, index);
+
+      const columnInfo = getColumnInfo(layout, colIdx);
       expect(columnInfo).to.eql(getExpectedInfo(colIdx, false));
     });
   });
@@ -81,11 +80,16 @@ describe('handle-data', () => {
 
       expect(size).to.equal(layout.qHyperCube.qSize);
       expect(rows.length).to.equal(2);
-      expect(rows[0]['col-0'].qText).to.equal('0');
+      expect(rows[0]['col-0'].qText).to.equal('2');
       expect(rows[0]['col-0'].rowIdx).to.equal(100);
-      expect(rows[0]['col-0'].colIdx).to.equal(1);
+      expect(rows[0]['col-0'].colIdx).to.equal(0);
       expect(rows[0]['col-0'].rawRowIdx).to.equal(0);
-      expect(rows[0]['col-0'].rawColIdx).to.equal(0);
+      expect(rows[0]['col-0'].rawColIdx).to.equal(2);
+      expect(rows[0]['col-1'].qText).to.equal('0');
+      expect(rows[0]['col-1'].rowIdx).to.equal(100);
+      expect(rows[0]['col-1'].colIdx).to.equal(1);
+      expect(rows[0]['col-1'].rawRowIdx).to.equal(0);
+      expect(rows[0]['col-1'].rawColIdx).to.equal(0);
       expect(columns.length).to.equal(4);
       columns.forEach((c, i) => {
         expect(c.id).to.equal(Object.keys(rows[0])[i + 1]); // skip the first key
