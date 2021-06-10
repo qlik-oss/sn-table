@@ -17,7 +17,6 @@ export function generateDataPages(height, width) {
 export function generateLayout(nDims, nMeas, qColumnOrder = []) {
   const createField = (idx) => ({
     qFallbackTitle: `title-${idx}`,
-    cId: `id-${idx}`,
     qAttrExprInfo: [],
     qSortIndicator: 'A',
     qReverseSort: false,
