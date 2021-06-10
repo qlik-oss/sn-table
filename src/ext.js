@@ -5,11 +5,6 @@ const columnCommonHidden = {
     defaultValue: true,
     show: false,
   },
-  cId: {
-    ref: 'qDef.cId',
-    type: 'string',
-    show: false,
-  },
 };
 
 const columnExpressionItems = {
@@ -291,11 +286,6 @@ const definition = {
               ref: 'qDef.autoSort',
               type: 'boolean',
               defaultValue: true,
-              show: false,
-            },
-            cId: {
-              ref: 'qDef.cId',
-              type: 'string',
               show: false,
             },
             ...columnCommonHidden,
