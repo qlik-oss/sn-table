@@ -11,11 +11,12 @@ describe('handle-data', () => {
 
   describe('getColumnInfo', () => {
     colIdx = 1;
+
     const getExpectedInfo = (colIx, isDim) => ({
       isDim,
       width: 200,
       label: `title-${colIx}`,
-      id: `id-${colIx}`,
+      id: `col-${colIx}`,
       align: isDim ? 'left' : 'right',
       stylingInfo: [],
       sortDirection: 'asc',
@@ -79,11 +80,16 @@ describe('handle-data', () => {
 
       expect(size).to.equal(layout.qHyperCube.qSize);
       expect(rows.length).to.equal(2);
-      expect(rows[0]['id-0'].qText).to.equal('2');
-      expect(rows[0]['id-0'].rowIdx).to.equal(100);
-      expect(rows[0]['id-0'].colIdx).to.equal(0);
-      expect(rows[0]['id-0'].rawRowIdx).to.equal(0);
-      expect(rows[0]['id-0'].rawColIdx).to.equal(2);
+      expect(rows[0]['col-0'].qText).to.equal('2');
+      expect(rows[0]['col-0'].rowIdx).to.equal(100);
+      expect(rows[0]['col-0'].colIdx).to.equal(0);
+      expect(rows[0]['col-0'].rawRowIdx).to.equal(0);
+      expect(rows[0]['col-0'].rawColIdx).to.equal(2);
+      expect(rows[0]['col-1'].qText).to.equal('0');
+      expect(rows[0]['col-1'].rowIdx).to.equal(100);
+      expect(rows[0]['col-1'].colIdx).to.equal(1);
+      expect(rows[0]['col-1'].rawRowIdx).to.equal(0);
+      expect(rows[0]['col-1'].rawColIdx).to.equal(0);
       expect(columns.length).to.equal(4);
       columns.forEach((c, i) => {
         expect(c.id).to.equal(Object.keys(rows[0])[i + 1]); // skip the first key
