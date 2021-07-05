@@ -58,7 +58,7 @@ export default {
     }),
     checkInternals()
       ? replace({
-          'const __OPIONAL_THEME_DEPS__ = {};': "import { sproutBase } from '@qlik/sprout-theme';",
+          'const __OPIONAL_THEME_DEPS__ = {};': "import { sproutBase } from '@qlik-trial/sprout-theme';",
           delimiters: ['', ''],
           __OPIONAL_THEME_DEPS__: 'sproutBase',
           preventAssignment: true,
