@@ -32,7 +32,7 @@ jobs:
       - restore_cache: *restore_yarn_cache
       - run: 
           name: Install dependencies
-          command: yarn install --frozen-lockfile
+          command: yarn install --frozen-lockfile --ignore-optional
       - save_cache: *save_yarn_cache
 
       - store_artifacts:
