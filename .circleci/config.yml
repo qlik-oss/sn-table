@@ -26,11 +26,13 @@ jobs:
   install:
     <<: *defaults
     docker:
-      - image: circleci/node:10.19.0
+      - image: circleci/node:12.16.3
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
-      - run: yarn install --frozen-lockfile
+      - run: 
+          name: Install dependencies
+          command: yarn install --frozen-lockfile
       - save_cache: *save_yarn_cache
 
       - store_artifacts:
