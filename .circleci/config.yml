@@ -30,12 +30,6 @@ jobs:
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
-      - run:
-          name: Setup access to Artifactory
-          command: |
-            set -euo pipefail
-            echo $QLIK_NPM_DEV_ENCODED | base64 -d >> ./.npmrc
-            echo $GHCR_DOCKER_DEV_PASSWORD | docker login -u $GHCR_DOCKER_DEV_USERNAME --password-stdin $GHCR_DOCKER_DEV_REGISTRY
       - run: yarn install --frozen-lockfile
       - save_cache: *save_yarn_cache
 
