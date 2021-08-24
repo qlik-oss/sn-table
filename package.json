@@ -45,10 +45,10 @@
     "@babel/preset-react": "^7.13.13",
     "@babel/plugin-transform-react-jsx": "^7.14.3",
     "@material-ui/core": "^4.11.4",
-    "@nebula.js/cli": "1.7.0",
-    "@nebula.js/cli-build": "1.6.0",
-    "@nebula.js/cli-sense": "1.7.0",
-    "@nebula.js/cli-serve": "1.7.0",
+    "@nebula.js/cli": "1.4.0",
+    "@nebula.js/cli-build": "1.5.0",
+    "@nebula.js/cli-sense": "1.5.0",
+    "@nebula.js/cli-serve": "1.5.0",
     "@rollup/plugin-commonjs": "^19.0.0",
     "@rollup/plugin-image": "^2.0.6",
     "@rollup/plugin-node-resolve": "^13.0.0",
@@ -87,6 +87,6 @@
     "shx": "^0.3.3"
   },
   "peerDependencies": {
-    "@nebula.js/stardust": "^1.7"
+    "@nebula.js/stardust": "^1.4"
   }
 }
