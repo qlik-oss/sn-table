@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useRef, useMemo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
@@ -14,6 +14,9 @@ const useStyles = makeStyles({
     color: ({ color }) => color,
     fontSize: ({ fontSize }) => fontSize,
     padding: ({ padding }) => padding,
+    '&:focus': { // Not sure how to make this work
+      outline: "rgba(0, 0, 0, 0.87)",
+   },
   },
   visuallyHidden: {
     border: 0,
@@ -36,22 +39,47 @@ export default function TableHeadWrapper({
   changeSortOrder,
   constraints,
   selectionsAPI,
+  keyboard,
   focusedCellCoord,
 }) {
+  const checkFocus = (k)=>!k.enabled || k.inFocus;
+
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
+  const [newFocus, setNewFocus] = useState({value: checkFocus(keyboard), autoFocus: false});
+  const elementRef = useRef();
+
+  useEffect(() => {
+    console.log("effect trigger");
+  if(newFocus.value !== checkFocus(keyboard) && checkFocus(keyboard)) {
+    setNewFocus({value: checkFocus(keyboard), autoFocus: true});
+    console.log("autofocus on");
+  } else {
+    setNewFocus({value: checkFocus(keyboard), autoFocus: false});
+    console.log("autofocus off");
+  }
+  }, [keyboard]);
+
+  useEffect(() => {
+    const divElement = elementRef.current;
+    console.log(newFocus);
+    if(newFocus.autoFocus && elementRef) {
+      divElement.focus();
+    }
+  }, [newFocus, elementRef]);
 
   return (
     <TableHead>
       <TableRow className="sn-table-row">
         {tableData.columns.map((column, columnIndex) => {
-          const tabIndex = columnIndex === 0 ? '0' : '-1';
+          const tabIndex = columnIndex === 0 && checkFocus(keyboard) ? '0' : '-1';
           return (
             <TableCell
               key={column.id}
               align={column.align}
               className={`${classes.head} sn-table-head-cell sn-table-cell`}
               tabIndex={tabIndex}
+              ref={tabIndex === '0' ? elementRef : null}
               onKeyDown={(e) =>
                 headHandleKeyPress(
                   e,
