@@ -37,16 +37,24 @@ describe('handle-key-press', () => {
 
     it('should stay the current cell when move left', () => {
       evt.key = 'ArrowLeft';
+      rowAndColumnCount.rowCount = 1;
+      rowAndColumnCount.columnCount = 3;
+      rowIndex = 1;
+      colIndex = 3;
       const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
-      expect(nextRow).to.eql(0);
-      expect(nextCol).to.eql(0);
+      expect(nextRow).to.eql(1);
+      expect(nextCol).to.eql(2);
     });
 
     it('should stay the current cell when move right', () => {
       evt.key = 'ArrowRight';
+      rowAndColumnCount.rowCount = 1;
+      rowAndColumnCount.columnCount = 3;
+      rowIndex = 1;
+      colIndex = 1;
       const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
-      expect(nextRow).to.eql(0);
-      expect(nextCol).to.eql(0);
+      expect(nextRow).to.eql(1);
+      expect(nextCol).to.eql(2);
     });
 
     it('should go to one row down cell', () => {
