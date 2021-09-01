@@ -28,19 +28,23 @@ export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, selState)
       nextRow > 0 && (!isSelectedTable || nextRow !== 1) && nextRow--;
       break;
     case 'ArrowRight':
-      if (nextCol < rowAndColumnCount.columnCount - 1 && !isSelectedTable) {
-        nextCol++;
-      } else if (!isSelectedTable && nextRow < rowAndColumnCount.rowCount - 1) {
-        nextRow++;
-        nextCol = 0;
+      if (!isSelectedTable) {
+        if (nextCol < rowAndColumnCount.columnCount - 1) {
+          nextCol++;
+        } else if (nextRow < rowAndColumnCount.rowCount - 1) {
+          nextRow++;
+          nextCol = 0;
+        }
       }
       break;
     case 'ArrowLeft':
-      if (nextCol > 0 && !isSelectedTable) {
-        nextCol--;
-      } else if (!isSelectedTable && nextRow > 0) {
-        nextRow--;
-        nextCol = rowAndColumnCount.columnCount - 1;
+      if (!isSelectedTable) {
+        if (nextCol > 0) {
+          nextCol--;
+        } else if (nextRow > 0) {
+          nextRow--;
+          nextCol = rowAndColumnCount.columnCount - 1;
+        }
       }
       break;
     default:
