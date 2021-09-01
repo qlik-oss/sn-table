@@ -27,12 +27,32 @@ export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, selState)
     case 'ArrowUp':
       nextRow > 0 && (!isSelectedTable || nextRow !== 1) && nextRow--;
       break;
-    case 'ArrowRight':
-      nextCol < rowAndColumnCount.columnCount - 1 && !isSelectedTable && nextCol++;
+    case 'ArrowRight': {
+      if (nextCol < rowAndColumnCount.columnCount - 1) !isSelectedTable && nextCol++;
+      else if (!isSelectedTable) {
+        // move to the next row
+        // if we are at the end of the table do nothing
+        if (nextRow + 1 > rowAndColumnCount.rowCount - 1) break;
+        else {
+          nextRow = nextRow + 1;
+          nextCol = 0;
+        }
+      }
       break;
-    case 'ArrowLeft':
-      nextCol > 0 && !isSelectedTable && nextCol--;
+    }
+    case 'ArrowLeft': {
+      if (nextCol > 0) !isSelectedTable && nextCol--;
+      else if (!isSelectedTable) {
+        // move to the prev row
+        // if we are at the beganing of the table do nothing
+        if (nextRow - 1 < 0) break;
+        else {
+          nextRow = nextRow - 1;
+          nextCol = rowAndColumnCount.columnCount - 1;
+        }
+      }
       break;
+    }
     default:
   }
 
