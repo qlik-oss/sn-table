@@ -15,12 +15,13 @@ describe('<TableHeadWrapper />', () => {
   let changeSortOrder;
   let constraints;
   let selectionsAPI;
+  let getAriaLabelNotation;
 
   beforeEach(() => {
     tableData = {
       columns: [
         { id: 1, align: 'left', label: 'someDim', sortDirection: 'asc', isDim: true },
-        { id: 2, align: 'right', label: 'someMsr', sortDirection: 'asc', isDim: false },
+        { id: 2, align: 'right', label: 'someMsr', sortDirection: 'desc', isDim: false },
       ],
     };
     theme = {
@@ -39,6 +40,8 @@ describe('<TableHeadWrapper />', () => {
     selectionsAPI = {
       isModal: () => false,
     };
+    getAriaLabelNotation = (target, newDir) =>
+      `${target.label}. Sorted ${newDir || target.sortDirection}ending. Press space to sort on this column.`;
   });
 
   afterEach(() => {
@@ -143,5 +146,29 @@ describe('<TableHeadWrapper />', () => {
     fireEvent.mouseDown(queryByText(tableData.columns[0].label));
 
     expect(handleCellFocus.handleClickToFocusHead).to.have.been.calledOnce;
+  });
+
+  it('should has `aria-sort` property', () => {
+    const { queryByText } = render(
+      <TableHeadWrapper tableData={tableData} theme={theme} layout={layout} changeSortOrder={changeSortOrder} />
+    );
+
+    let firstColQuery = queryByText(tableData.columns[0].label).closest('th');
+    let secondColQuery = queryByText(tableData.columns[1].label).closest('th');
+
+    expect(firstColQuery).to.have.attribute('aria-sort', 'asc');
+    expect(secondColQuery).to.have.attribute('aria-sort', 'desc');
+  });
+
+  it('should has `aria-label` property', () => {
+    const { queryByText } = render(
+      <TableHeadWrapper tableData={tableData} theme={theme} layout={layout} changeSortOrder={changeSortOrder} />
+    );
+
+    let firstColQuery = queryByText(tableData.columns[0].label).closest('th');
+    let secondColQuery = queryByText(tableData.columns[1].label).closest('th');
+
+    expect(firstColQuery).to.have.attribute('aria-label', getAriaLabelNotation(tableData.columns[0]));
+    expect(secondColQuery).to.have.attribute('aria-label', getAriaLabelNotation(tableData.columns[1]));
   });
 });
