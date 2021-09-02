@@ -28,6 +28,11 @@ const useStyles = makeStyles({
   },
 });
 
+const SORT_NOTATIONS = {
+  asc: 'Sorted ascending',
+  desc: 'Sorted descending',
+};
+
 export default function TableHeadWrapper({
   rootElement,
   tableData,
@@ -46,12 +51,18 @@ export default function TableHeadWrapper({
       <TableRow className="sn-table-row">
         {tableData.columns.map((column, columnIndex) => {
           const tabIndex = columnIndex === 0 ? '0' : '-1';
+          const currentSortDir = SORT_NOTATIONS[column.sortDirection];
+          const ariaLabelText = `${column.label}. ${currentSortDir}. Press space to sort on this column.`;
+          const isTableSortActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex;
+
           return (
             <TableCell
               key={column.id}
               align={column.align}
               className={`${classes.head} sn-table-head-cell sn-table-cell`}
               tabIndex={tabIndex}
+              aria-label={ariaLabelText}
+              aria-sort={column.sortDirection}
               onKeyDown={(e) =>
                 headHandleKeyPress(
                   e,
@@ -67,7 +78,7 @@ export default function TableHeadWrapper({
               onMouseDown={() => handleClickToFocusHead(columnIndex, focusedCellCoord, rootElement)}
             >
               <TableSortLabel
-                active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
+                active={isTableSortActive}
                 direction={column.sortDirection}
                 onClick={() =>
                   // when cells are selected or in edit mode, it should not be able to do the sorting
@@ -76,11 +87,7 @@ export default function TableHeadWrapper({
                 tabIndex={-1}
               >
                 {column.label}
-                {layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex ? (
-                  <span className={classes.visuallyHidden}>
-                    {column.sortDirection === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                  </span>
-                ) : null}
+                {isTableSortActive ? <span className={classes.visuallyHidden}>{currentSortDir}</span> : null}
               </TableSortLabel>
             </TableCell>
           );
