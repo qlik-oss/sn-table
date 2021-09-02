@@ -1,4 +1,4 @@
-import React, { useReducer, useState, useEffect, useMemo } from 'react';
+import React, { useReducer, useState, useEffect, useMemo, memo } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
@@ -44,6 +44,7 @@ const TableBodyWrapper = ({
   theme,
   focusedCellCoord,
   setShouldRefocus,
+  handleFocusedCellCordsUpd,
 }) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
@@ -102,7 +103,8 @@ const TableBodyWrapper = ({
                       selState,
                       cell,
                       selDispatch,
-                      selectionsEnabled
+                      selectionsEnabled,
+                      handleFocusedCellCordsUpd
                     )
                   }
                   onMouseDown={() => handleClickToFocusBody(cell, focusedCellCoord, rootElement)}
@@ -126,8 +128,12 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  focusedCellCoord: PropTypes.object.isRequired,
+  // focusedCellCoord: PropTypes.object.isRequired,
+  handleFocusedCellCordsUpd: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
 };
 
-export default React.memo(TableBodyWrapper);
+export default memo(TableBodyWrapper, (prevProps, nextProps) => {
+  if (prevProps.setShouldRefocus.toString() === nextProps.setShouldRefocus.toString()) return true;
+  else return false;
+});

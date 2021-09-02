@@ -4,7 +4,7 @@ import Table from '@material-ui/core/Table';
 import TableContainer from '@material-ui/core/TableContainer';
 import TablePagination from '@material-ui/core/TablePagination';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback, memo } from 'react';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import useDidUpdateEffect from './useDidUpdateEffect';
@@ -36,6 +36,7 @@ export default function TableWrapper(props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const focusedCellCoord = useRef([0, 0]);
+  const [focusedCellCoordsState, setFocusedCellCoordsState] = useState([0, 0]);
   const shouldRefocus = useRef(false);
   const tableSection = useRef();
   const classes = useStyles();
@@ -73,6 +74,19 @@ export default function TableWrapper(props) {
     };
   }, []);
 
+  useEffect(() => {
+    // TODO: get the height of cell
+    // TODO: detect if going up ( by checking prev row and current row)
+    //       and if user moving up reduce the scroll top one by one as much as the height of cell
+    if (focusedCellCoordsState[0] < 2) {
+      tableSection.current.scrollTop = 0;
+    }
+  }, [tableSection, focusedCellCoordsState]);
+
+  const handleFocusedCellCordsUpd = useCallback((newCoords) => {
+    setFocusedCellCoordsState(newCoords);
+  }, []);
+
   // Except for first render, whenever the size of the data changes (number of rows per page, rows or columns),
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
   useDidUpdateEffect(() => {
@@ -86,8 +100,17 @@ export default function TableWrapper(props) {
     >
       <TableContainer ref={tableSection} className={classes[containerMode]}>
         <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
-          <TableHeadWrapper {...props} focusedCellCoord={focusedCellCoord} />
-          <TableBodyWrapper {...props} focusedCellCoord={focusedCellCoord} setShouldRefocus={setShouldRefocus} />
+          <TableHeadWrapper
+            {...props}
+            focusedCellCoord={focusedCellCoord}
+            handleFocusedCellCordsUpd={handleFocusedCellCordsUpd}
+          />
+          <TableBodyWrapper
+            {...props}
+            focusedCellCoord={focusedCellCoord}
+            handleFocusedCellCordsUpd={handleFocusedCellCordsUpd}
+            setShouldRefocus={setShouldRefocus}
+          />
         </Table>
       </TableContainer>
       <TablePagination

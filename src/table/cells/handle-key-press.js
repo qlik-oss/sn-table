@@ -59,13 +59,14 @@ export const preventDefaultBehavior = (evt) => {
   evt.preventDefault();
 };
 
-export const moveFocus = (evt, rootElement, cellCoord, focusedCellCoord, selState) => {
+export const moveFocus = (evt, rootElement, cellCoord, focusedCellCoord, selState, setFocusedCellCoordsState) => {
   preventDefaultBehavior(evt);
   removeCurrentFocus(evt);
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
   const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selState);
   updateFocus(rowAndColumnCount.rowElements, nextCellCoord);
   focusedCellCoord.current = nextCellCoord;
+  setFocusedCellCoordsState(nextCellCoord);
 };
 
 export const headHandleKeyPress = (
@@ -76,14 +77,15 @@ export const headHandleKeyPress = (
   changeSortOrder,
   layout,
   isDim,
-  isAnalysisMode
+  isAnalysisMode,
+  setFocusedCellCoordsState
 ) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, focusedCellCoord);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, focusedCellCoord, false, setFocusedCellCoordsState);
       break;
     }
     // Space bar / Enter: update the sorting
@@ -106,14 +108,16 @@ export const bodyHandleKeyPress = (
   selState,
   cell,
   selDispatch,
-  isAnalysisMode
+  isAnalysisMode,
+  setFocusedCellCoordsState
 ) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, focusedCellCoord, selState);
+      !isCtrlShift(evt) &&
+        moveFocus(evt, rootElement, cellCoord, focusedCellCoord, selState, setFocusedCellCoordsState);
       break;
     }
     // Space bar: Selects value.

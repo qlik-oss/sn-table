@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, memo } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
@@ -28,7 +28,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function TableHeadWrapper({
+function TableHeadWrapper({
   rootElement,
   tableData,
   theme,
@@ -37,6 +37,7 @@ export default function TableHeadWrapper({
   constraints,
   selectionsAPI,
   focusedCellCoord,
+  handleFocusedCellCordsUpd,
 }) {
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
@@ -61,7 +62,8 @@ export default function TableHeadWrapper({
                   changeSortOrder,
                   layout,
                   column.isDim,
-                  !constraints.active
+                  !constraints.active,
+                  handleFocusedCellCordsUpd
                 )
               }
               onMouseDown={() => handleClickToFocusHead(columnIndex, focusedCellCoord, rootElement)}
@@ -100,3 +102,5 @@ TableHeadWrapper.propTypes = {
   focusedCellCoord: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
 };
+
+export default memo(TableHeadWrapper);
