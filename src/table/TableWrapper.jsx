@@ -126,7 +126,6 @@ export default function TableWrapper(props) {
             {...props}
             focusedCellCoord={focusedCellCoordsState}
             handleFocusedCellCordsUpd={handleFocusedCellCordsUpd}
-            handleSetMovingTop={handleSetMovingTop}
           />
           <TableBodyWrapper
             {...props}
