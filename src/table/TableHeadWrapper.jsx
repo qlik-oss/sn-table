@@ -58,7 +58,6 @@ function TableHeadWrapper({
                   e,
                   rootElement,
                   [0, columnIndex],
-                  focusedCellCoord,
                   changeSortOrder,
                   layout,
                   column.isDim,
@@ -99,8 +98,11 @@ TableHeadWrapper.propTypes = {
   layout: PropTypes.object.isRequired,
   changeSortOrder: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
-  focusedCellCoord: PropTypes.object.isRequired,
+  focusedCellCoord: PropTypes.arrayOf(PropTypes.number),
   selectionsAPI: PropTypes.object.isRequired,
 };
 
-export default memo(TableHeadWrapper);
+export default memo(TableHeadWrapper, (prevProps, nextProps) => {
+  if (prevProps.focusedCellCoord.toString() !== nextProps.focusedCellCoord.toString()) return true;
+  else return false;
+});

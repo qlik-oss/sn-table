@@ -99,7 +99,6 @@ const TableBodyWrapper = ({
                       evt,
                       rootElement,
                       [rowIndex + 1, columnIndex],
-                      focusedCellCoord,
                       selState,
                       cell,
                       selDispatch,
@@ -128,12 +127,12 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  // focusedCellCoord: PropTypes.object.isRequired,
+  focusedCellCoord: PropTypes.arrayOf(PropTypes.number),
   handleFocusedCellCordsUpd: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
 };
 
 export default memo(TableBodyWrapper, (prevProps, nextProps) => {
-  if (prevProps.setShouldRefocus.toString() === nextProps.setShouldRefocus.toString()) return true;
+  if (prevProps.focusedCellCoord.toString() !== nextProps.focusedCellCoord.toString()) return true;
   else return false;
 });

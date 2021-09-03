@@ -35,7 +35,6 @@ export default function TableWrapper(props) {
   const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
-  const focusedCellCoord = useRef([0, 0]);
   const [focusedCellCoordsState, setFocusedCellCoordsState] = useState([0, 0]);
   const shouldRefocus = useRef(false);
   const tableSection = useRef();
@@ -49,6 +48,7 @@ export default function TableWrapper(props) {
 
   const handleChangePage = (event, newPage) => {
     setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
+    handleFocusedCellCordsUpd([0, 0]);
     setPage(newPage);
   };
 
@@ -90,7 +90,13 @@ export default function TableWrapper(props) {
   // Except for first render, whenever the size of the data changes (number of rows per page, rows or columns),
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
   useDidUpdateEffect(() => {
-    handleResetFocus(focusedCellCoord, rootElement, shouldRefocus, selectionsAPI.isModal());
+    handleResetFocus({
+      focusedCellCoordsState,
+      rootElement,
+      shouldRefocus,
+      setFocusedCellCoordsState,
+      hasSelections: selectionsAPI.isModal(),
+    });
   }, [rows.length, size.qcy, size.qcx]);
 
   return (
@@ -102,12 +108,12 @@ export default function TableWrapper(props) {
         <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
           <TableHeadWrapper
             {...props}
-            focusedCellCoord={focusedCellCoord}
+            focusedCellCoord={focusedCellCoordsState}
             handleFocusedCellCordsUpd={handleFocusedCellCordsUpd}
           />
           <TableBodyWrapper
             {...props}
-            focusedCellCoord={focusedCellCoord}
+            focusedCellCoord={focusedCellCoordsState}
             handleFocusedCellCordsUpd={handleFocusedCellCordsUpd}
             setShouldRefocus={setShouldRefocus}
           />

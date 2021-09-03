@@ -14,25 +14,29 @@ export const updateFocus = (rowElements, cellCoord, shouldFocus = true) => {
 export const handleClickToFocusBody = (cell, focusedCellCoord, rootElement) => {
   const { rawRowIdx, rawColIdx } = cell;
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
-  updateFocus(rowElements, focusedCellCoord.current, false);
-  focusedCellCoord.current = [rawRowIdx + 1, rawColIdx];
-  updateFocus(rowElements, [rawRowIdx + 1, rawColIdx]);
+  updateFocus(rowElements, focusedCellCoord, false);
+  updateFocus(rowElements, [rawRowIdx + 1, rawColIdx], false);
 };
 
 export const handleClickToFocusHead = (columnIndex, focusedCellCoord, rootElement) => {
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
-  updateFocus(rowElements, focusedCellCoord.current, false);
-  focusedCellCoord.current = [0, columnIndex];
-  updateFocus(rowElements, [0, columnIndex]);
+  updateFocus(rowElements, focusedCellCoord, false);
+  updateFocus(rowElements, [0, columnIndex], false);
 };
 
-export const handleResetFocus = (focusedCellCoord, rootElement, shouldRefocus, hasSelections) => {
+export const handleResetFocus = ({
+  focusedCellCoordsState,
+  rootElement,
+  shouldRefocus,
+  hasSelections,
+  setFocusedCellCoordsState,
+}) => {
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
-  updateFocus(rowElements, focusedCellCoord.current, false);
+  updateFocus(rowElements, focusedCellCoordsState, false);
 
   // If we have selections ongoing, we want to stay on the same column
-  const nextcell = [0, hasSelections ? focusedCellCoord.current[1] : 0];
-  focusedCellCoord.current = nextcell;
+  const nextcell = [0, hasSelections ? focusedCellCoordsState[1] : 0];
+  setFocusedCellCoordsState(nextcell);
 
   if (shouldRefocus.current) {
     updateFocus(rowElements, nextcell);
