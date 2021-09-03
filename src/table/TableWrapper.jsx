@@ -36,6 +36,7 @@ export default function TableWrapper(props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const [focusedCellCoordsState, setFocusedCellCoordsState] = useState([0, 0]);
+  const [isMovingTop, setIsMovingTop] = useState(false);
   const shouldRefocus = useRef(false);
   const tableSection = useRef();
   const classes = useStyles();
@@ -75,17 +76,32 @@ export default function TableWrapper(props) {
   }, []);
 
   useEffect(() => {
-    // TODO: get the height of cell
-    // TODO: detect if going up ( by checking prev row and current row)
-    //       and if user moving up reduce the scroll top one by one as much as the height of cell
     if (focusedCellCoordsState[0] < 2) {
-      tableSection.current.scrollTop = 0;
+      tableSection.current.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    } else if (isMovingTop) {
+      setIsMovingTop(false);
+
+      const rowElements = rootElement.getElementsByClassName('sn-table-row');
+      const [x, y] = focusedCellCoordsState;
+      const cell = rowElements[x]?.getElementsByClassName('sn-table-cell')[y];
+
+      if (cell.offsetTop - cell.offsetHeight * 2 < tableSection.current.scrollTop) {
+        tableSection.current.scrollTo({
+          top: tableSection.current.scrollTop - cell.offsetHeight || 0,
+          behavior: 'smooth',
+        });
+      }
     }
-  }, [tableSection, focusedCellCoordsState]);
+  }, [tableSection, focusedCellCoordsState, isMovingTop, rootElement]);
 
   const handleFocusedCellCordsUpd = useCallback((newCoords) => {
     setFocusedCellCoordsState(newCoords);
   }, []);
+
+  const handleSetMovingTop = useCallback((val) => setIsMovingTop(val), []);
 
   // Except for first render, whenever the size of the data changes (number of rows per page, rows or columns),
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
@@ -110,12 +126,14 @@ export default function TableWrapper(props) {
             {...props}
             focusedCellCoord={focusedCellCoordsState}
             handleFocusedCellCordsUpd={handleFocusedCellCordsUpd}
+            handleSetMovingTop={handleSetMovingTop}
           />
           <TableBodyWrapper
             {...props}
             focusedCellCoord={focusedCellCoordsState}
             handleFocusedCellCordsUpd={handleFocusedCellCordsUpd}
             setShouldRefocus={setShouldRefocus}
+            handleSetMovingTop={handleSetMovingTop}
           />
         </Table>
       </TableContainer>

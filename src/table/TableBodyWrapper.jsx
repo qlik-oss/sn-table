@@ -45,6 +45,7 @@ const TableBodyWrapper = ({
   focusedCellCoord,
   setShouldRefocus,
   handleFocusedCellCordsUpd,
+  handleSetMovingTop,
 }) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
@@ -103,7 +104,8 @@ const TableBodyWrapper = ({
                       cell,
                       selDispatch,
                       selectionsEnabled,
-                      handleFocusedCellCordsUpd
+                      handleFocusedCellCordsUpd,
+                      handleSetMovingTop
                     )
                   }
                   onMouseDown={() => handleClickToFocusBody(cell, focusedCellCoord, rootElement)}
@@ -130,6 +132,7 @@ TableBodyWrapper.propTypes = {
   focusedCellCoord: PropTypes.arrayOf(PropTypes.number),
   handleFocusedCellCordsUpd: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
+  handleSetMovingTop: PropTypes.func.isRequired,
 };
 
 export default memo(TableBodyWrapper, (prevProps, nextProps) => {

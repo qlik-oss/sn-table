@@ -38,6 +38,7 @@ function TableHeadWrapper({
   selectionsAPI,
   focusedCellCoord,
   handleFocusedCellCordsUpd,
+  handleSetMovingTop,
 }) {
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
@@ -62,7 +63,8 @@ function TableHeadWrapper({
                   layout,
                   column.isDim,
                   !constraints.active,
-                  handleFocusedCellCordsUpd
+                  handleFocusedCellCordsUpd,
+                  handleSetMovingTop
                 )
               }
               onMouseDown={() => handleClickToFocusHead(columnIndex, focusedCellCoord, rootElement)}
@@ -100,6 +102,7 @@ TableHeadWrapper.propTypes = {
   constraints: PropTypes.object.isRequired,
   focusedCellCoord: PropTypes.arrayOf(PropTypes.number),
   selectionsAPI: PropTypes.object.isRequired,
+  handleSetMovingTop: PropTypes.func.isRequired,
 };
 
 export default memo(TableHeadWrapper, (prevProps, nextProps) => {

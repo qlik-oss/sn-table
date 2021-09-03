@@ -76,7 +76,8 @@ export const headHandleKeyPress = (
   layout,
   isDim,
   isAnalysisMode,
-  setFocusedCellCoordsState
+  setFocusedCellCoordsState,
+  handleSetMovingTop
 ) => {
   switch (evt.key) {
     case 'ArrowUp':
@@ -106,9 +107,13 @@ export const bodyHandleKeyPress = (
   cell,
   selDispatch,
   isAnalysisMode,
-  setFocusedCellCoordsState
+  setFocusedCellCoordsState,
+  handleSetMovingTop
 ) => {
   switch (evt.key) {
+    case 'ArrowUp':
+      handleSetMovingTop(true);
+
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
