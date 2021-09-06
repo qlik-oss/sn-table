@@ -6,7 +6,7 @@ import sinon from 'sinon';
 
 import TableWrapper from '../TableWrapper';
 import TableBodyWrapper from '../TableBodyWrapper';
-import * as TableHeadWrapper from '../TableHeadWrapper';
+import TableHeadWrapper from '../TableHeadWrapper';
 import * as handleKeyPress from '../cells/handle-key-press';
 
 describe('<TableWrapper />', () => {
@@ -21,7 +21,7 @@ describe('<TableWrapper />', () => {
 
   beforeEach(() => {
     sandbox.replace(TableBodyWrapper, 'type', () => <tbody />);
-    sandbox.replace(TableHeadWrapper, 'default', () => <thead />);
+    sandbox.replace(TableHeadWrapper, 'type', () => <thead />);
 
     tableData = {
       size: { qcy: 200 },

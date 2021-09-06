@@ -36,7 +36,6 @@ export default function TableWrapper(props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const [focusedCellCoord, setfocusedCellCoord] = useState([0, 0]);
-  const [isMovingTop, setIsMovingTop] = useState(false);
   const shouldRefocus = useRef(false);
   const tableSection = useRef();
   const classes = useStyles();
@@ -76,8 +75,12 @@ export default function TableWrapper(props) {
   }, []);
 
   useEffect(() => {
-    handleNavigateTop({ tableSection, focusedCellCoord, isMovingTop, setIsMovingTop, rootElement });
-  }, [tableSection, focusedCellCoord, isMovingTop]);
+    handleNavigateTop({
+      tableSection,
+      focusedCellCoord,
+      rootElement,
+    });
+  }, [tableSection, focusedCellCoord]);
 
   // Except for first render, whenever the size of the data changes (number of rows per page, rows or columns),
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
@@ -108,7 +111,6 @@ export default function TableWrapper(props) {
             focusedCellCoord={focusedCellCoord}
             handleFocusedCellCordsUpd={setfocusedCellCoord}
             setShouldRefocus={setShouldRefocus}
-            handleSetMovingTop={setIsMovingTop}
           />
         </Table>
       </TableContainer>

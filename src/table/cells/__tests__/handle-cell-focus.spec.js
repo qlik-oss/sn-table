@@ -131,4 +131,54 @@ describe('handle-key-press', () => {
       expect(focusedCellCoord).to.eql([0, 1]);
     });
   });
+
+  describe('handleNavigateTop', () => {
+    let scrollTo;
+    let tableSection;
+    let rowHeight;
+
+    beforeEach(() => {
+      rowHeight = 100;
+      scrollTo = sinon.spy();
+      tableSection = { current: { scrollTo } };
+    });
+
+    it('should do any thing when ref is not setup yet', () => {
+      tableSection.current = {};
+
+      handleCellFocus.handleNavigateTop({ tableSection, focusedCellCoord, rootElement });
+      expect(scrollTo).to.not.have.been.called;
+    });
+
+    it('should scroll to top of the element when it dedetects cursor is behind `<TableHead />`', () => {
+      focusedCellCoord = [1, 0];
+
+      handleCellFocus.handleNavigateTop({ tableSection, focusedCellCoord, rootElement });
+      expect(scrollTo).to.have.been.calledOnce;
+    });
+
+    it('should scroll towords up automatically if it detects the cursor gets behind <TableHead />', () => {
+      let SCROLL_TOP_IDX = 7;
+      focusedCellCoord = [8, 0];
+      tableSection = { current: { scrollTo, scrollTop: SCROLL_TOP_IDX * rowHeight } };
+      rootElement = {
+        getElementsByClassName: () =>
+          Array.from(Array(10).keys()).map((idx) => {
+            let cell = {
+              offsetHeight: rowHeight,
+              offsetTop: idx * rowHeight,
+            };
+
+            return { getElementsByClassName: () => [cell] };
+          }),
+      };
+      // targetOffsetTop = tableSection.current.scrollTop - cell.offsetHeight;
+      // 700 - 100 = 600 => so our scrollTo function migth be called with 600
+      let targetOffsetTop = 600;
+
+      handleCellFocus.handleNavigateTop({ tableSection, focusedCellCoord, rootElement });
+      expect(scrollTo).to.have.been.calledOnce;
+      expect(scrollTo).to.have.been.calledWith({ top: targetOffsetTop, behavior: 'smooth' });
+    });
+  });
 });
