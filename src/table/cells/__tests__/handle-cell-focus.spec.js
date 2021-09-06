@@ -9,7 +9,7 @@ describe('handle-key-press', () => {
   beforeEach(() => {
     cell = { focus: sinon.spy(), blur: sinon.spy(), setAttribute: sinon.spy() };
     rootElement = { getElementsByClassName: () => [{ getElementsByClassName: () => [cell] }] };
-    focusedCellCoord = { current: [0, 0] };
+    focusedCellCoord = [0, 0];
   });
 
   describe('updateFocus', () => {
@@ -73,38 +73,62 @@ describe('handle-key-press', () => {
   describe('handleResetFocus', () => {
     let shouldRefocus;
     let hasSelections;
+    let setfocusedCellCoord;
 
     beforeEach(() => {
       shouldRefocus = { current: false };
       hasSelections = false;
+      setfocusedCellCoord = sinon.spy();
     });
 
     it('should set tabindex on the first cell and not focus', () => {
-      handleCellFocus.handleResetFocus(focusedCellCoord, rootElement, shouldRefocus, hasSelections);
+      handleCellFocus.handleResetFocus({
+        focusedCellCoord,
+        rootElement,
+        shouldRefocus,
+        hasSelections,
+        setfocusedCellCoord,
+      });
       expect(cell.focus).to.not.have.been.called;
       expect(cell.blur).to.have.been.calledOnce;
       expect(cell.setAttribute).have.been.calledTwice;
+      expect(setfocusedCellCoord).to.have.been.calledOnceWith(focusedCellCoord);
     });
 
     it('should set tabindex on the first cell and focus when shouldRefocus is true', () => {
       shouldRefocus.current = true;
 
-      handleCellFocus.handleResetFocus(focusedCellCoord, rootElement, shouldRefocus, hasSelections);
+      handleCellFocus.handleResetFocus({
+        focusedCellCoord,
+        rootElement,
+        shouldRefocus,
+        hasSelections,
+        setfocusedCellCoord,
+      });
       expect(cell.focus).to.have.been.calledOnce;
       expect(cell.blur).to.have.been.calledOnce;
       expect(cell.setAttribute).have.been.calledTwice;
+      expect(setfocusedCellCoord).to.have.been.calledOnceWith(focusedCellCoord);
     });
 
     it('should set tabindex on the first cell in currently focused column when hasSelections is true', () => {
-      focusedCellCoord = { current: [0, 1] };
+      focusedCellCoord = [0, 1];
       rootElement = { getElementsByClassName: () => [{ getElementsByClassName: () => [cell, cell] }] };
       hasSelections = true;
 
-      handleCellFocus.handleResetFocus(focusedCellCoord, rootElement, shouldRefocus, hasSelections);
+      handleCellFocus.handleResetFocus({
+        focusedCellCoord,
+        rootElement,
+        shouldRefocus,
+        hasSelections,
+        setfocusedCellCoord,
+      });
+
       expect(cell.focus).to.not.have.been.called;
       expect(cell.blur).to.have.been.calledOnce;
       expect(cell.setAttribute).have.been.calledTwice;
-      expect(focusedCellCoord.current).to.eql([0, 1]);
+      expect(setfocusedCellCoord).to.have.been.calledOnceWith(focusedCellCoord);
+      expect(focusedCellCoord).to.eql([0, 1]);
     });
   });
 });

@@ -35,7 +35,7 @@ export default function TableWrapper(props) {
   const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
-  const [focusedCellCoordsState, setFocusedCellCoordsState] = useState([0, 0]);
+  const [focusedCellCoord, setfocusedCellCoord] = useState([0, 0]);
   const [isMovingTop, setIsMovingTop] = useState(false);
   const shouldRefocus = useRef(false);
   const tableSection = useRef();
@@ -49,7 +49,7 @@ export default function TableWrapper(props) {
 
   const handleChangePage = (event, newPage) => {
     setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
-    setFocusedCellCoordsState([0, 0]);
+    setfocusedCellCoord([0, 0]);
     setPage(newPage);
   };
 
@@ -76,17 +76,17 @@ export default function TableWrapper(props) {
   }, []);
 
   useEffect(() => {
-    handleNavigateTop({ tableSection, focusedCellCoordsState, isMovingTop, setIsMovingTop, rootElement });
-  }, [tableSection, focusedCellCoordsState, isMovingTop]);
+    handleNavigateTop({ tableSection, focusedCellCoord, isMovingTop, setIsMovingTop, rootElement });
+  }, [tableSection, focusedCellCoord, isMovingTop]);
 
   // Except for first render, whenever the size of the data changes (number of rows per page, rows or columns),
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
   useDidUpdateEffect(() => {
     handleResetFocus({
-      focusedCellCoordsState,
+      focusedCellCoord,
       rootElement,
       shouldRefocus,
-      setFocusedCellCoordsState,
+      setfocusedCellCoord,
       hasSelections: selectionsAPI.isModal(),
     });
   }, [rows.length, size.qcy, size.qcx]);
@@ -100,13 +100,13 @@ export default function TableWrapper(props) {
         <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
           <TableHeadWrapper
             {...props}
-            focusedCellCoord={focusedCellCoordsState}
-            handleFocusedCellCordsUpd={setFocusedCellCoordsState}
+            focusedCellCoord={focusedCellCoord}
+            handleFocusedCellCordsUpd={setfocusedCellCoord}
           />
           <TableBodyWrapper
             {...props}
-            focusedCellCoord={focusedCellCoordsState}
-            handleFocusedCellCordsUpd={setFocusedCellCoordsState}
+            focusedCellCoord={focusedCellCoord}
+            handleFocusedCellCordsUpd={setfocusedCellCoord}
             setShouldRefocus={setShouldRefocus}
             handleSetMovingTop={setIsMovingTop}
           />

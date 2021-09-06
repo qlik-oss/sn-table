@@ -15,28 +15,28 @@ export const handleClickToFocusBody = (cell, focusedCellCoord, rootElement) => {
   const { rawRowIdx, rawColIdx } = cell;
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
   updateFocus(rowElements, focusedCellCoord, false);
-  updateFocus(rowElements, [rawRowIdx + 1, rawColIdx], false);
+  updateFocus(rowElements, [rawRowIdx + 1, rawColIdx], true);
 };
 
 export const handleClickToFocusHead = (columnIndex, focusedCellCoord, rootElement) => {
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
   updateFocus(rowElements, focusedCellCoord, false);
-  updateFocus(rowElements, [0, columnIndex], false);
+  updateFocus(rowElements, [0, columnIndex], true);
 };
 
 export const handleResetFocus = ({
-  focusedCellCoordsState,
+  focusedCellCoord,
   rootElement,
   shouldRefocus,
   hasSelections,
-  setFocusedCellCoordsState,
+  setfocusedCellCoord,
 }) => {
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
-  updateFocus(rowElements, focusedCellCoordsState, false);
+  updateFocus(rowElements, focusedCellCoord, false);
 
   // If we have selections ongoing, we want to stay on the same column
-  const nextcell = [0, hasSelections ? focusedCellCoordsState[1] : 0];
-  setFocusedCellCoordsState(nextcell);
+  const nextcell = [0, hasSelections ? focusedCellCoord[1] : 0];
+  setfocusedCellCoord(nextcell);
 
   if (shouldRefocus.current) {
     updateFocus(rowElements, nextcell);
@@ -46,14 +46,8 @@ export const handleResetFocus = ({
   }
 };
 
-export const handleNavigateTop = ({
-  tableSection,
-  focusedCellCoordsState,
-  isMovingTop,
-  setIsMovingTop,
-  rootElement,
-}) => {
-  if (focusedCellCoordsState[0] < 2) {
+export const handleNavigateTop = ({ tableSection, focusedCellCoord, isMovingTop, setIsMovingTop, rootElement }) => {
+  if (focusedCellCoord[0] < 2) {
     tableSection.current.scrollTo({
       top: 0,
       behavior: 'smooth',
@@ -62,7 +56,7 @@ export const handleNavigateTop = ({
     setIsMovingTop(false);
 
     const rowElements = rootElement.getElementsByClassName('sn-table-row');
-    const [x, y] = focusedCellCoordsState;
+    const [x, y] = focusedCellCoord;
     const cell = rowElements[x]?.getElementsByClassName('sn-table-cell')[y];
 
     if (cell.offsetTop - cell.offsetHeight * 2 < tableSection.current.scrollTop) {
