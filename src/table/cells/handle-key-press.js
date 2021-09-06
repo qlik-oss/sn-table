@@ -79,7 +79,6 @@ export const headHandleKeyPress = (
   setFocusedCellCoordsState
 ) => {
   switch (evt.key) {
-    case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {

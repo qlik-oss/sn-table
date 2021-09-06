@@ -33,7 +33,7 @@ export default {
     name: moduleName,
     format: 'umd',
     exports: 'default',
-    sourcemap: true,
+    sourcemap: false,
     globals: {
       '@nebula.js/stardust': 'stardust',
     },

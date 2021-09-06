@@ -102,7 +102,7 @@ TableHeadWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
 };
 
-export default memo(TableHeadWrapper, (prevProps, nextProps) => {
-  if (prevProps.focusedCellCoord.toString() !== nextProps.focusedCellCoord.toString()) return true;
-  else return false;
-});
+export default memo(
+  TableHeadWrapper,
+  (prevProps, nextProps) => prevProps.focusedCellCoord.toString() !== nextProps.focusedCellCoord.toString()
+);

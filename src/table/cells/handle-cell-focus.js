@@ -45,3 +45,32 @@ export const handleResetFocus = ({
     rowElements[0]?.getElementsByClassName('sn-table-cell')[nextcell[1]].setAttribute('tabIndex', '0');
   }
 };
+
+export const handleNavigateTop = ({
+  tableSection,
+  focusedCellCoordsState,
+  isMovingTop,
+  setIsMovingTop,
+  rootElement,
+}) => {
+  if (focusedCellCoordsState[0] < 2) {
+    tableSection.current.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  } else if (isMovingTop) {
+    setIsMovingTop(false);
+
+    const rowElements = rootElement.getElementsByClassName('sn-table-row');
+    const [x, y] = focusedCellCoordsState;
+    const cell = rowElements[x]?.getElementsByClassName('sn-table-cell')[y];
+
+    if (cell.offsetTop - cell.offsetHeight * 2 < tableSection.current.scrollTop) {
+      const targetOffsetTop = tableSection.current.scrollTop - cell.offsetHeight;
+      tableSection.current.scrollTo({
+        top: targetOffsetTop <= 0 ? 0 : targetOffsetTop,
+        behavior: 'smooth',
+      });
+    }
+  }
+};

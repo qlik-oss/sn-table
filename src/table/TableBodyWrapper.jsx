@@ -135,7 +135,7 @@ TableBodyWrapper.propTypes = {
   handleSetMovingTop: PropTypes.func.isRequired,
 };
 
-export default memo(TableBodyWrapper, (prevProps, nextProps) => {
-  if (prevProps.focusedCellCoord.toString() !== nextProps.focusedCellCoord.toString()) return true;
-  else return false;
-});
+export default memo(
+  TableBodyWrapper,
+  (prevProps, nextProps) => prevProps.focusedCellCoord.toString() !== nextProps.focusedCellCoord.toString()
+);

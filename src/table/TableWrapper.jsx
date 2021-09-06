@@ -9,7 +9,7 @@ import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import useDidUpdateEffect from './useDidUpdateEffect';
 import { updatePage } from './cells/handle-key-press';
-import { handleResetFocus } from './cells/handle-cell-focus';
+import { handleResetFocus, handleNavigateTop } from './cells/handle-cell-focus';
 import handleScroll from './handle-scroll';
 
 const useStyles = makeStyles({
@@ -49,7 +49,7 @@ export default function TableWrapper(props) {
 
   const handleChangePage = (event, newPage) => {
     setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
-    handleFocusedCellCordsUpd([0, 0]);
+    setFocusedCellCoordsState([0, 0]);
     setPage(newPage);
   };
 
@@ -76,32 +76,8 @@ export default function TableWrapper(props) {
   }, []);
 
   useEffect(() => {
-    if (focusedCellCoordsState[0] < 2) {
-      tableSection.current.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
-    } else if (isMovingTop) {
-      setIsMovingTop(false);
-
-      const rowElements = rootElement.getElementsByClassName('sn-table-row');
-      const [x, y] = focusedCellCoordsState;
-      const cell = rowElements[x]?.getElementsByClassName('sn-table-cell')[y];
-
-      if (cell.offsetTop - cell.offsetHeight * 2 < tableSection.current.scrollTop) {
-        tableSection.current.scrollTo({
-          top: tableSection.current.scrollTop - cell.offsetHeight || 0,
-          behavior: 'smooth',
-        });
-      }
-    }
-  }, [tableSection, focusedCellCoordsState, isMovingTop, rootElement]);
-
-  const handleFocusedCellCordsUpd = useCallback((newCoords) => {
-    setFocusedCellCoordsState(newCoords);
-  }, []);
-
-  const handleSetMovingTop = useCallback((val) => setIsMovingTop(val), []);
+    handleNavigateTop({ tableSection, focusedCellCoordsState, isMovingTop, setIsMovingTop, rootElement });
+  }, [tableSection, focusedCellCoordsState, isMovingTop]);
 
   // Except for first render, whenever the size of the data changes (number of rows per page, rows or columns),
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
@@ -125,14 +101,14 @@ export default function TableWrapper(props) {
           <TableHeadWrapper
             {...props}
             focusedCellCoord={focusedCellCoordsState}
-            handleFocusedCellCordsUpd={handleFocusedCellCordsUpd}
+            handleFocusedCellCordsUpd={setFocusedCellCoordsState}
           />
           <TableBodyWrapper
             {...props}
             focusedCellCoord={focusedCellCoordsState}
-            handleFocusedCellCordsUpd={handleFocusedCellCordsUpd}
+            handleFocusedCellCordsUpd={setFocusedCellCoordsState}
             setShouldRefocus={setShouldRefocus}
-            handleSetMovingTop={handleSetMovingTop}
+            handleSetMovingTop={setIsMovingTop}
           />
         </Table>
       </TableContainer>
