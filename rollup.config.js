@@ -13,6 +13,14 @@ import jsxPlugin from '@babel/plugin-transform-react-jsx';
 import classProps from '@babel/plugin-proposal-class-properties';
 import chaining from '@babel/plugin-proposal-optional-chaining';
 
+import fs from 'fs';
+
+function checkInternals() {
+  // Checks if the @qlik namespace exists on disk to
+  // see if the optional dependecies can be included
+  return fs.existsSync('./node_modules/@qlik-trial');
+}
+
 const pkg = require(path.resolve(process.cwd(), 'package.json')); // eslint-disable-line  import/no-dynamic-require
 const { name, version, license, author } = pkg;
 
@@ -33,7 +41,7 @@ export default {
     name: moduleName,
     format: 'umd',
     exports: 'default',
-    sourcemap: false,
+    sourcemap: true,
     globals: {
       '@nebula.js/stardust': 'stardust',
     },
@@ -48,6 +56,14 @@ export default {
       'process.env.PACKAGE_VERSION': JSON.stringify(version),
       preventAssignment: true,
     }),
+    checkInternals()
+      ? replace({
+          'const __OPIONAL_THEME_DEPS__ = {};': "import { sproutBase } from '@qlik-trial/sprout-theme';",
+          delimiters: ['', ''],
+          __OPIONAL_THEME_DEPS__: 'sproutBase',
+          preventAssignment: true,
+        })
+      : {},
     external(),
     postcss(),
     babel({
