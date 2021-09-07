@@ -48,6 +48,7 @@ export default function TableWrapper(props) {
 
   const handleChangePage = (event, newPage) => {
     setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
+    setfocusedCellCoord([0, 0]);
     setPage(newPage);
   };
 
