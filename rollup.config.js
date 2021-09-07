@@ -16,7 +16,7 @@ import chaining from '@babel/plugin-proposal-optional-chaining';
 import fs from 'fs';
 
 function checkInternals() {
-  // Checks if the @qlik namespace exists on disk to
+  // Checks if the @qlik-trial namespace exists on disk to
   // see if the optional dependecies can be included
   return fs.existsSync('./node_modules/@qlik-trial');
 }
@@ -41,7 +41,7 @@ export default {
     name: moduleName,
     format: 'umd',
     exports: 'default',
-    sourcemap: true,
+    sourcemap: false,
     globals: {
       '@nebula.js/stardust': 'stardust',
     },
