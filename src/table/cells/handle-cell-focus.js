@@ -11,16 +11,18 @@ export const updateFocus = (rowElements, cellCoord, shouldFocus = true) => {
   }
 };
 
-export const handleClickToFocusBody = (cell, focusedCellCoord, rootElement) => {
+export const handleClickToFocusBody = (cell, focusedCellCoord, rootElement, setfocusedCellCoord) => {
   const { rawRowIdx, rawColIdx } = cell;
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
   updateFocus(rowElements, focusedCellCoord, false);
+  setfocusedCellCoord([rawRowIdx + 1, rawColIdx]);
   updateFocus(rowElements, [rawRowIdx + 1, rawColIdx], true);
 };
 
-export const handleClickToFocusHead = (columnIndex, focusedCellCoord, rootElement) => {
+export const handleClickToFocusHead = (columnIndex, focusedCellCoord, rootElement, setfocusedCellCoord) => {
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
   updateFocus(rowElements, focusedCellCoord, false);
+  setfocusedCellCoord([0, columnIndex]);
   updateFocus(rowElements, [0, columnIndex], true);
 };
 
@@ -48,7 +50,7 @@ export const handleResetFocus = ({
 
 export const handleNavigateTop = ({ tableSection, focusedCellCoord, rootElement }) => {
   const MIN_ROW_COUNT = 2;
-  if (!tableSection.current.scrollTo) return;
+  if (!tableSection.current?.scrollTo) return;
 
   if (focusedCellCoord[0] < MIN_ROW_COUNT) {
     tableSection.current.scrollTo({

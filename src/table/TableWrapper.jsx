@@ -4,7 +4,7 @@ import Table from '@material-ui/core/Table';
 import TableContainer from '@material-ui/core/TableContainer';
 import TablePagination from '@material-ui/core/TablePagination';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState, useRef, useCallback, memo } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import useDidUpdateEffect from './useDidUpdateEffect';
@@ -48,7 +48,6 @@ export default function TableWrapper(props) {
 
   const handleChangePage = (event, newPage) => {
     setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
-    setfocusedCellCoord([0, 0]);
     setPage(newPage);
   };
 
@@ -101,15 +100,11 @@ export default function TableWrapper(props) {
     >
       <TableContainer ref={tableSection} className={classes[containerMode]}>
         <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
-          <TableHeadWrapper
-            {...props}
-            focusedCellCoord={focusedCellCoord}
-            handleFocusedCellCordsUpd={setfocusedCellCoord}
-          />
+          <TableHeadWrapper {...props} focusedCellCoord={focusedCellCoord} setfocusedCellCoord={setfocusedCellCoord} />
           <TableBodyWrapper
             {...props}
             focusedCellCoord={focusedCellCoord}
-            handleFocusedCellCordsUpd={setfocusedCellCoord}
+            setfocusedCellCoord={setfocusedCellCoord}
             setShouldRefocus={setShouldRefocus}
           />
         </Table>

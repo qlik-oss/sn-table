@@ -5,11 +5,13 @@ describe('handle-key-press', () => {
   let cell;
   let rootElement;
   let focusedCellCoord;
+  let setfocusedCellCoord;
 
   beforeEach(() => {
     cell = { focus: sinon.spy(), blur: sinon.spy(), setAttribute: sinon.spy() };
     rootElement = { getElementsByClassName: () => [{ getElementsByClassName: () => [cell] }] };
     focusedCellCoord = [0, 0];
+    setfocusedCellCoord = sinon.spy();
   });
 
   describe('updateFocus', () => {
@@ -52,10 +54,11 @@ describe('handle-key-press', () => {
     };
 
     it('should call focusCell', () => {
-      handleCellFocus.handleClickToFocusBody(cellData, focusedCellCoord, rootElement);
+      handleCellFocus.handleClickToFocusBody(cellData, focusedCellCoord, rootElement, setfocusedCellCoord);
       expect(cell.focus).to.have.been.calledOnce;
       expect(cell.blur).to.have.been.calledOnce;
       expect(cell.setAttribute).have.been.calledTwice;
+      expect(setfocusedCellCoord).to.have.been.calledOnce;
     });
   });
 
@@ -63,10 +66,11 @@ describe('handle-key-press', () => {
     const columnIndex = 0;
 
     it('should call focusCell', () => {
-      handleCellFocus.handleClickToFocusHead(columnIndex, focusedCellCoord, rootElement);
+      handleCellFocus.handleClickToFocusHead(columnIndex, focusedCellCoord, rootElement, setfocusedCellCoord);
       expect(cell.focus).to.have.been.calledOnce;
       expect(cell.blur).to.have.been.calledOnce;
       expect(cell.setAttribute).have.been.calledTwice;
+      expect(setfocusedCellCoord).to.have.been.calledOnce;
     });
   });
 
@@ -143,21 +147,21 @@ describe('handle-key-press', () => {
       tableSection = { current: { scrollTo } };
     });
 
-    it('should do any thing when ref is not setup yet', () => {
+    it('should not do anything when ref is not setup yet', () => {
       tableSection.current = {};
 
       handleCellFocus.handleNavigateTop({ tableSection, focusedCellCoord, rootElement });
       expect(scrollTo).to.not.have.been.called;
     });
 
-    it('should scroll to top of the element when it dedetects cursor is behind `<TableHead />`', () => {
+    it('should scroll to the top when you reach the top two rows', () => {
       focusedCellCoord = [1, 0];
 
       handleCellFocus.handleNavigateTop({ tableSection, focusedCellCoord, rootElement });
       expect(scrollTo).to.have.been.calledOnce;
     });
 
-    it('should scroll towords up automatically if it detects the cursor gets behind <TableHead />', () => {
+    it('should scroll upwards automatically if it detects the cursor gets behind <TableHead />', () => {
       let SCROLL_TOP_IDX = 7;
       focusedCellCoord = [8, 0];
       tableSection = { current: { scrollTo, scrollTop: SCROLL_TOP_IDX * rowHeight } };
@@ -178,7 +182,7 @@ describe('handle-key-press', () => {
 
       handleCellFocus.handleNavigateTop({ tableSection, focusedCellCoord, rootElement });
       expect(scrollTo).to.have.been.calledOnce;
-      expect(scrollTo).to.have.been.calledWith({ top: targetOffsetTop, behavior: 'smooth' });
+      expect(scrollTo).to.have.been.calledOnceWith({ top: targetOffsetTop, behavior: 'smooth' });
     });
   });
 });

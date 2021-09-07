@@ -44,7 +44,7 @@ const TableBodyWrapper = ({
   theme,
   focusedCellCoord,
   setShouldRefocus,
-  handleFocusedCellCordsUpd,
+  setfocusedCellCoord,
 }) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
@@ -103,10 +103,10 @@ const TableBodyWrapper = ({
                       cell,
                       selDispatch,
                       selectionsEnabled,
-                      handleFocusedCellCordsUpd
+                      setfocusedCellCoord
                     )
                   }
-                  onMouseDown={() => handleClickToFocusBody(cell, focusedCellCoord, rootElement)}
+                  onMouseDown={() => handleClickToFocusBody(cell, focusedCellCoord, rootElement, setfocusedCellCoord)}
                 >
                   <div className={classes.srOnly}>{column.label}</div>
                   {value}
@@ -127,12 +127,14 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  focusedCellCoord: PropTypes.arrayOf(PropTypes.number),
-  handleFocusedCellCordsUpd: PropTypes.func.isRequired,
+  focusedCellCoord: PropTypes.arrayOf(PropTypes.number).isRequired,
+  setfocusedCellCoord: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
 };
 
 export default memo(
   TableBodyWrapper,
+  // we need to check if `focusedCellCoord` updated, then no need to re-render this component
+  // because it causes unnecessary extra re-render to this component when we move the focus to another cell and we want to avoid that
   (prevProps, nextProps) => prevProps.focusedCellCoord.toString() !== nextProps.focusedCellCoord.toString()
 );

@@ -37,7 +37,7 @@ function TableHeadWrapper({
   constraints,
   selectionsAPI,
   focusedCellCoord,
-  handleFocusedCellCordsUpd,
+  setfocusedCellCoord,
 }) {
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
@@ -62,10 +62,12 @@ function TableHeadWrapper({
                   layout,
                   column.isDim,
                   !constraints.active,
-                  handleFocusedCellCordsUpd
+                  setfocusedCellCoord
                 )
               }
-              onMouseDown={() => handleClickToFocusHead(columnIndex, focusedCellCoord, rootElement)}
+              onMouseDown={() =>
+                handleClickToFocusHead(columnIndex, focusedCellCoord, rootElement, setfocusedCellCoord)
+              }
             >
               <TableSortLabel
                 active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
@@ -98,11 +100,14 @@ TableHeadWrapper.propTypes = {
   layout: PropTypes.object.isRequired,
   changeSortOrder: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
-  focusedCellCoord: PropTypes.arrayOf(PropTypes.number),
+  focusedCellCoord: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectionsAPI: PropTypes.object.isRequired,
+  setfocusedCellCoord: PropTypes.func.isRequired,
 };
 
 export default memo(
   TableHeadWrapper,
+  // we need to check if `focusedCellCoord` updated, then no need to re-render this component
+  // because it causes unnecessary extra re-render to this component when we move the focus to another cell and we want to avoid that
   (prevProps, nextProps) => prevProps.focusedCellCoord.toString() !== nextProps.focusedCellCoord.toString()
 );
