@@ -77,12 +77,10 @@ describe('handle-key-press', () => {
   describe('handleResetFocus', () => {
     let shouldRefocus;
     let hasSelections;
-    let setfocusedCellCoord;
 
     beforeEach(() => {
       shouldRefocus = { current: false };
       hasSelections = false;
-      setfocusedCellCoord = sinon.spy();
     });
 
     it('should set tabindex on the first cell and not focus', () => {
@@ -162,23 +160,23 @@ describe('handle-key-press', () => {
     });
 
     it('should scroll upwards automatically if it detects the cursor gets behind <TableHead />', () => {
-      let SCROLL_TOP_IDX = 7;
+      const SCROLL_TOP_IDX = 7;
       focusedCellCoord = [8, 0];
       tableSection = { current: { scrollTo, scrollTop: SCROLL_TOP_IDX * rowHeight } };
       rootElement = {
         getElementsByClassName: () =>
           Array.from(Array(10).keys()).map((idx) => {
-            let cell = {
+            const rowCell = {
               offsetHeight: rowHeight,
               offsetTop: idx * rowHeight,
             };
 
-            return { getElementsByClassName: () => [cell] };
+            return { getElementsByClassName: () => [rowCell] };
           }),
       };
       // targetOffsetTop = tableSection.current.scrollTop - cell.offsetHeight;
       // 700 - 100 = 600 => so our scrollTo function migth be called with 600
-      let targetOffsetTop = 600;
+      const targetOffsetTop = 600;
 
       handleCellFocus.handleNavigateTop({ tableSection, focusedCellCoord, rootElement });
       expect(scrollTo).to.have.been.calledOnce;
