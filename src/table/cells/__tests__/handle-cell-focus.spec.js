@@ -164,19 +164,24 @@ describe('handle-key-press', () => {
       focusedCellCoord = [8, 0];
       tableSection = { current: { scrollTo, scrollTop: SCROLL_TOP_IDX * rowHeight } };
       rootElement = {
-        getElementsByClassName: () =>
-          Array.from(Array(10).keys()).map((idx) => {
-            const rowCell = {
-              offsetHeight: rowHeight,
-              offsetTop: idx * rowHeight,
-            };
+        getElementsByClassName: (query) => {
+          if (query === 'sn-table-head-cell') {
+            return [{ offsetHeight: 128 }];
+          } else {
+            return Array.from(Array(10).keys()).map((idx) => {
+              const rowCell = {
+                offsetHeight: rowHeight,
+                offsetTop: idx * rowHeight,
+              };
 
-            return { getElementsByClassName: () => [rowCell] };
-          }),
+              return { getElementsByClassName: () => [rowCell] };
+            });
+          }
+        },
       };
-      // targetOffsetTop = tableSection.current.scrollTop - cell.offsetHeight;
-      // 700 - 100 = 600 => so our scrollTo function migth be called with 600
-      const targetOffsetTop = 600;
+      // targetOffsetTop = tableSection.current.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
+      // 700 - 100 - 128 = 472 => so our scrollTo function migth be called with 600
+      const targetOffsetTop = 472;
 
       handleCellFocus.handleNavigateTop({ tableSection, focusedCellCoord, rootElement });
       expect(scrollTo).to.have.been.calledOnce;

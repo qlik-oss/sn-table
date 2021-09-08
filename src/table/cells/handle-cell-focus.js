@@ -49,6 +49,7 @@ export const handleResetFocus = ({
 
 export const handleNavigateTop = ({ tableSection, focusedCellCoord, rootElement }) => {
   const MIN_ROW_COUNT = 2;
+
   if (!tableSection.current?.scrollTo) return;
 
   if (focusedCellCoord[0] < MIN_ROW_COUNT) {
@@ -58,13 +59,14 @@ export const handleNavigateTop = ({ tableSection, focusedCellCoord, rootElement 
     });
   } else {
     const [x, y] = focusedCellCoord;
+    const tableHead = rootElement.getElementsByClassName('sn-table-head-cell')[0];
     const rowElements = rootElement.getElementsByClassName('sn-table-row');
     const cell = rowElements[x]?.getElementsByClassName('sn-table-cell')[y];
 
-    if (cell.offsetTop - cell.offsetHeight * MIN_ROW_COUNT < tableSection.current.scrollTop) {
-      const targetOffsetTop = tableSection.current.scrollTop - cell.offsetHeight;
+    if (cell.offsetTop - tableHead.offsetHeight - cell.offsetHeight <= tableSection.current.scrollTop) {
+      const targetOffsetTop = tableSection.current.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
       tableSection.current.scrollTo({
-        top: targetOffsetTop <= 0 ? 0 : targetOffsetTop,
+        top: Math.max(0, targetOffsetTop),
         behavior: 'smooth',
       });
     }
