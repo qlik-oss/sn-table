@@ -482,7 +482,7 @@ describe('handle-key-press', () => {
 
     it('when shift key is not pressed, handleChangePage should not run', () => {
       evt.shiftKey = false;
-      updatePage(evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus);
+      updatePage({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.have.been.called;
       expect(setShouldRefocus).not.have.been.called;
     });
@@ -490,7 +490,7 @@ describe('handle-key-press', () => {
     it('when ctrl key or meta key is not pressed, handleChangePage should not run', () => {
       evt.ctrlKey = false;
       evt.metaKey = false;
-      updatePage(evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus);
+      updatePage({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.have.been.called;
       expect(setShouldRefocus).not.have.been.called;
     });
@@ -499,7 +499,7 @@ describe('handle-key-press', () => {
       page = 0;
       totalRowSize = 40;
       rowsPerPage = 40;
-      updatePage(evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus);
+      updatePage({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.have.been.called;
       expect(setShouldRefocus).not.have.been.called;
     });
@@ -509,7 +509,7 @@ describe('handle-key-press', () => {
       page = 0;
       totalRowSize = 40;
       rowsPerPage = 10;
-      updatePage(evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus);
+      updatePage({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.have.been.called;
       expect(setShouldRefocus).not.have.been.called;
     });
@@ -518,7 +518,7 @@ describe('handle-key-press', () => {
       totalRowSize = 40;
       page = 0;
       rowsPerPage = 10;
-      updatePage(evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus);
+      updatePage({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).to.have.been.calledOnce;
       expect(setShouldRefocus).to.have.been.calledOnce;
     });
@@ -528,7 +528,7 @@ describe('handle-key-press', () => {
       totalRowSize = 40;
       page = 1;
       rowsPerPage = 40;
-      updatePage(evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus);
+      updatePage({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).to.have.been.calledOnce;
       expect(setShouldRefocus).to.have.been.calledOnce;
     });

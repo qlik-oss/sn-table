@@ -1,32 +1,18 @@
 import { selectCell } from '../selections-utils';
-import { updateFocus, handleResetFocus } from './handle-cell-focus';
+import { updateFocus } from './handle-cell-focus';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
-export const updatePage = ({
-  evt,
-  totalRowSize,
-  page,
-  rowsPerPage,
-  handleChangePage,
-  setShouldRefocus,
-  focusedCellCoord,
-  setfocusedCellCoord,
-  hasSelections,
-  shouldRefocus,
-  rootElement,
-}) => {
+export const updatePage = ({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus }) => {
   if (isCtrlShift(evt)) {
     const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
 
     if (evt.key === 'ArrowRight' && page < lastPage) {
       setShouldRefocus();
       handleChangePage(null, page + 1);
-      handleResetFocus({ focusedCellCoord, rootElement, hasSelections, setfocusedCellCoord, shouldRefocus });
     } else if (evt.key === 'ArrowLeft' && page > 0) {
       setShouldRefocus();
       handleChangePage(null, page - 1);
-      handleResetFocus({ focusedCellCoord, rootElement, hasSelections, setfocusedCellCoord, shouldRefocus });
     }
   }
 };

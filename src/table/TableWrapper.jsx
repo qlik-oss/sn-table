@@ -91,7 +91,7 @@ export default function TableWrapper(props) {
       setfocusedCellCoord,
       hasSelections: selectionsAPI.isModal(),
     });
-  }, [rows.length, size.qcy, size.qcx]);
+  }, [rows.length, size.qcy, size.qcx, page]);
 
   return (
     <Paper
@@ -104,11 +104,6 @@ export default function TableWrapper(props) {
           rowsPerPage,
           handleChangePage,
           setShouldRefocus,
-          focusedCellCoord,
-          setfocusedCellCoord,
-          hasSelections: selectionsAPI.isModal(),
-          rootElement,
-          shouldRefocus,
         })
       }
     >
