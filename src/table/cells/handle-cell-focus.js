@@ -1,5 +1,5 @@
-export const updateFocus = (rowElements, cellCoord, shouldFocus = true) => {
-  const cell = rowElements[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[cellCoord[1]];
+export const updateFocus = (rowElements, cellCoord, shouldFocus = true, providedCell) => {
+  const cell = rowElements[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[cellCoord[1]] || providedCell;
   if (cell) {
     if (shouldFocus) {
       cell.focus();

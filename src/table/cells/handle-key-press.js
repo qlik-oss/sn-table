@@ -3,15 +3,42 @@ import { updateFocus } from './handle-cell-focus';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
-export const updatePage = (evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus) => {
+export const updatePage = (
+  evt,
+  totalRowSize,
+  page,
+  rowsPerPage,
+  handleChangePage,
+  setShouldRefocus,
+  focusedCellCoord,
+  setfocusedCellCoord,
+  hasSelections,
+  rootElement
+) => {
   if (isCtrlShift(evt)) {
     const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
+    const rowElements = rootElement.getElementsByClassName('sn-table-row');
+
+    // check if table has the active element then disable it,
+    // because it could cause some other elements to be removed of tabindexflow
+    const isTableContainsActiveElement = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
+    const [_, colIdx] = focusedCellCoord;
+    const nextCoords = [0, hasSelections ? Math.max(0, colIdx) : 0];
+
     if (evt.key === 'ArrowRight' && page < lastPage) {
       setShouldRefocus();
       handleChangePage(null, page + 1);
+
+      isTableContainsActiveElement && updateFocus({}, [], false, document.activeElement);
+      updateFocus(rowElements, nextCoords);
+      setfocusedCellCoord(nextCoords);
     } else if (evt.key === 'ArrowLeft' && page > 0) {
       setShouldRefocus();
       handleChangePage(null, page - 1);
+
+      isTableContainsActiveElement && updateFocus({}, [], false, document.activeElement);
+      updateFocus(rowElements, nextCoords);
+      setfocusedCellCoord(nextCoords);
     }
   }
 };

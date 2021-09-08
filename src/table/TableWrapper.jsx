@@ -48,7 +48,6 @@ export default function TableWrapper(props) {
 
   const handleChangePage = (event, newPage) => {
     setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
-    setfocusedCellCoord([0, 0]);
     setPage(newPage);
   };
 
@@ -97,7 +96,20 @@ export default function TableWrapper(props) {
   return (
     <Paper
       className={classes.paper}
-      onKeyDown={(evt) => updatePage(evt, size.qcy, page, rowsPerPage, handleChangePage, setShouldRefocus)}
+      onKeyDown={(evt) =>
+        updatePage(
+          evt,
+          size.qcy,
+          page,
+          rowsPerPage,
+          handleChangePage,
+          setShouldRefocus,
+          focusedCellCoord,
+          setfocusedCellCoord,
+          selectionsAPI.isModal(),
+          rootElement
+        )
+      }
     >
       <TableContainer ref={tableSection} className={classes[containerMode]}>
         <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>

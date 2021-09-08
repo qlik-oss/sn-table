@@ -42,6 +42,8 @@ function TableHeadWrapper({
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
 
+  console.log('>>>> T HEAD RERENDERED');
+
   return (
     <TableHead>
       <TableRow className="sn-table-row">
@@ -108,6 +110,6 @@ TableHeadWrapper.propTypes = {
 export default memo(
   TableHeadWrapper,
   // we need to check if `focusedCellCoord` updated, then no need to re-render this component
-  // because it causes unnecessary extra re-render to this component when we move the focus to another cell and we want to avoid that
-  (prevProps, nextProps) => prevProps.focusedCellCoord.toString() !== nextProps.focusedCellCoord.toString()
+  // NOTE: Since we are only dealing with rows when we navigating to top, it's ok to only check for rowIdx's here
+  (prevProps, nextProps) => prevProps.focusedCellCoord[0] !== nextProps.focusedCellCoord[0]
 );
