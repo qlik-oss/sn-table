@@ -42,7 +42,6 @@ export const handleResetFocus = ({
 
   if (shouldRefocus.current) {
     updateFocus({ rowElements, cellCoord: nextcell });
-    shouldRefocus.current = false;
   } else {
     rowElements[0]?.getElementsByClassName('sn-table-cell')[nextcell[1]].setAttribute('tabIndex', '0');
   }
@@ -69,18 +68,5 @@ export const handleNavigateTop = ({ tableSection, focusedCellCoord, rootElement 
         behavior: 'smooth',
       });
     }
-  }
-};
-
-export const handleRestoreFocusOnPageChange = ({ rootElement, nextCoords, setfocusedCellCoord }) => {
-  // check if table has the active element then disable it,
-  // because it could cause some other elements to be removed of tabindexflow
-  const isTableContainsActiveElement = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
-  const rowElements = rootElement.getElementsByClassName('sn-table-row');
-
-  if (isTableContainsActiveElement) {
-    updateFocus({ shouldFocus: false, providedCell: document.activeElement });
-    updateFocus({ rowElements, cellCoord: nextCoords });
-    setfocusedCellCoord(nextCoords);
   }
 };

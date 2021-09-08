@@ -108,6 +108,7 @@ export default function TableWrapper(props) {
           setfocusedCellCoord,
           hasSelections: selectionsAPI.isModal(),
           rootElement,
+          shouldRefocus,
         })
       }
     >
