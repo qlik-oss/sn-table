@@ -69,8 +69,6 @@ const TableBodyWrapper = ({
     addSelectionListeners(selectionsAPI, selDispatch, setShouldRefocus);
   }, []);
 
-  console.log('>>>> T BODY RERENDERED');
-
   return (
     <TableBody className={`${classes.cellBase}`}>
       {rows.map((row, rowIndex) => (

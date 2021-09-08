@@ -24,7 +24,7 @@ describe('handle-key-press', () => {
     });
 
     it('should focus cell and call setAttribute', () => {
-      handleCellFocus.updateFocus(rowElements, cellCoord);
+      handleCellFocus.updateFocus({ rowElements, cellCoord });
       expect(cell.focus).to.have.been.calledOnce;
       expect(cell.setAttribute).have.been.calledOnce;
     });
@@ -32,7 +32,7 @@ describe('handle-key-press', () => {
     it('should blur cell and call setAttribute when shouldBlur is true', () => {
       const shouldFocus = false;
 
-      handleCellFocus.updateFocus(rowElements, cellCoord, shouldFocus);
+      handleCellFocus.updateFocus({ rowElements, cellCoord, shouldFocus });
       expect(cell.blur).to.have.been.calledOnce;
       expect(cell.setAttribute).have.been.calledOnce;
     });
@@ -40,7 +40,7 @@ describe('handle-key-press', () => {
     it('should not focus cell nor cell setAttribute when cell is not found', () => {
       cellCoord = [1, 0];
 
-      handleCellFocus.updateFocus(rowElements, cellCoord);
+      handleCellFocus.updateFocus({ rowElements, cellCoord });
       expect(cell.focus).to.not.have.been.called;
       expect(cell.blur).to.not.have.been.called;
       expect(cell.setAttribute).to.not.have.been.called;

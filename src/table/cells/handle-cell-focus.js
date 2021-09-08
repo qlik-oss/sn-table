@@ -1,4 +1,4 @@
-export const updateFocus = (rowElements, cellCoord, shouldFocus = true, providedCell) => {
+export const updateFocus = ({ rowElements = {}, cellCoord = [], shouldFocus = true, providedCell = undefined }) => {
   const cell = rowElements[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[cellCoord[1]] || providedCell;
   if (cell) {
     if (shouldFocus) {
@@ -14,16 +14,16 @@ export const updateFocus = (rowElements, cellCoord, shouldFocus = true, provided
 export const handleClickToFocusBody = (cell, focusedCellCoord, rootElement, setfocusedCellCoord) => {
   const { rawRowIdx, rawColIdx } = cell;
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
-  updateFocus(rowElements, focusedCellCoord, false);
+  updateFocus({ rowElements, cellCoord: focusedCellCoord, shouldFocus: false });
   setfocusedCellCoord([rawRowIdx + 1, rawColIdx]);
-  updateFocus(rowElements, [rawRowIdx + 1, rawColIdx], true);
+  updateFocus({ rowElements, cellCoord: [rawRowIdx + 1, rawColIdx], shouldFocus: true });
 };
 
 export const handleClickToFocusHead = (columnIndex, focusedCellCoord, rootElement, setfocusedCellCoord) => {
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
-  updateFocus(rowElements, focusedCellCoord, false);
+  updateFocus({ rowElements, cellCoord: focusedCellCoord, shouldFocus: false });
   setfocusedCellCoord([0, columnIndex]);
-  updateFocus(rowElements, [0, columnIndex], true);
+  updateFocus({ rowElements, cellCoord: [0, columnIndex], shouldFocus: true });
 };
 
 export const handleResetFocus = ({
@@ -34,14 +34,14 @@ export const handleResetFocus = ({
   setfocusedCellCoord,
 }) => {
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
-  updateFocus(rowElements, focusedCellCoord, false);
+  updateFocus({ rowElements, cellCoord: focusedCellCoord, shouldFocus: false });
 
   // If we have selections ongoing, we want to stay on the same column
   const nextcell = [0, hasSelections ? focusedCellCoord[1] : 0];
   setfocusedCellCoord(nextcell);
 
   if (shouldRefocus.current) {
-    updateFocus(rowElements, nextcell);
+    updateFocus({ rowElements, cellCoord: nextcell });
     shouldRefocus.current = false;
   } else {
     rowElements[0]?.getElementsByClassName('sn-table-cell')[nextcell[1]].setAttribute('tabIndex', '0');
@@ -69,5 +69,18 @@ export const handleNavigateTop = ({ tableSection, focusedCellCoord, rootElement 
         behavior: 'smooth',
       });
     }
+  }
+};
+
+export const handleRestoreFocusOnPageChange = ({ rootElement, nextCoords, setfocusedCellCoord }) => {
+  // check if table has the active element then disable it,
+  // because it could cause some other elements to be removed of tabindexflow
+  const isTableContainsActiveElement = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
+  const rowElements = rootElement.getElementsByClassName('sn-table-row');
+
+  if (isTableContainsActiveElement) {
+    updateFocus({ shouldFocus: false, providedCell: document.activeElement });
+    updateFocus({ rowElements, cellCoord: nextCoords });
+    setfocusedCellCoord(nextCoords);
   }
 };

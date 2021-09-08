@@ -97,18 +97,18 @@ export default function TableWrapper(props) {
     <Paper
       className={classes.paper}
       onKeyDown={(evt) =>
-        updatePage(
+        updatePage({
           evt,
-          size.qcy,
+          totalRowSize: size.qcy,
           page,
           rowsPerPage,
           handleChangePage,
           setShouldRefocus,
           focusedCellCoord,
           setfocusedCellCoord,
-          selectionsAPI.isModal(),
-          rootElement
-        )
+          hasSelections: selectionsAPI.isModal(),
+          rootElement,
+        })
       }
     >
       <TableContainer ref={tableSection} className={classes[containerMode]}>

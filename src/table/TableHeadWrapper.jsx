@@ -42,8 +42,6 @@ function TableHeadWrapper({
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
 
-  console.log('>>>> T HEAD RERENDERED');
-
   return (
     <TableHead>
       <TableRow className="sn-table-row">
