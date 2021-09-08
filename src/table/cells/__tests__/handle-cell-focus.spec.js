@@ -167,16 +167,16 @@ describe('handle-key-press', () => {
         getElementsByClassName: (query) => {
           if (query === 'sn-table-head-cell') {
             return [{ offsetHeight: 128 }];
-          } else {
-            return Array.from(Array(10).keys()).map((idx) => {
-              const rowCell = {
-                offsetHeight: rowHeight,
-                offsetTop: idx * rowHeight,
-              };
-
-              return { getElementsByClassName: () => [rowCell] };
-            });
           }
+
+          return Array.from(Array(10).keys()).map((idx) => {
+            const rowCell = {
+              offsetHeight: rowHeight,
+              offsetTop: idx * rowHeight,
+            };
+
+            return { getElementsByClassName: () => [rowCell] };
+          });
         },
       };
       // targetOffsetTop = tableSection.current.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
