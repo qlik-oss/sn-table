@@ -16,7 +16,7 @@ export const updatePage = ({
   rootElement,
 }) => {
   if (isCtrlShift(evt)) {
-    const [_, colIdx] = focusedCellCoord;
+    const [, colIdx] = focusedCellCoord;
     const nextCoords = [0, hasSelections ? Math.max(0, colIdx) : 0];
     const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
 
