@@ -7,6 +7,11 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState, useRef } from 'react';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
+import IconButton from '@material-ui/core/IconButton';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import LastPageIcon from '@material-ui/icons/LastPage';
 import useDidUpdateEffect from './useDidUpdateEffect';
 import { updatePage } from './cells/handle-key-press';
 import { handleResetFocus } from './cells/handle-cell-focus';
@@ -28,6 +33,83 @@ const useStyles = makeStyles({
     display: 'none',
   },
 });
+
+const useStyles2 = makeStyles({
+  root: {
+    flexShrink: 0,
+  },
+  disabled: {
+    color: 'rgba(0, 0, 0, 0.3)',
+    '&:hover': {
+
+    }
+  }
+});
+
+function TablePaginationActions(props) {
+  const classes = useStyles2();
+  const { count, page, rowsPerPage, onChangePage } = props;
+
+  const handleFirstPageButtonClick = (event) => {
+    onChangePage(event, 0);
+  };
+
+  const handleBackButtonClick = (event) => {
+    onChangePage(event, page - 1);
+  };
+
+  const handleNextButtonClick = (event) => {
+    onChangePage(event, page + 1);
+  };
+
+  const handleLastPageButtonClick = (event) => {
+    onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
+
+  return (
+    <div className={classes.root}>
+      <IconButton 
+        onClick={page === 0 ? undefined : handleFirstPageButtonClick}
+        aria-disabled={page === 0}
+        aria-label="first page"
+        className={page === 0 && classes.disabled}
+      >
+        <FirstPageIcon />
+      </IconButton>
+      <IconButton 
+        onClick={page === 0 ? undefined : handleBackButtonClick}
+        aria-disabled={page === 0}
+        aria-label="previous page"
+        className={page === 0 && classes.disabled}
+      >
+        <KeyboardArrowLeft />
+      </IconButton>
+      <IconButton 
+        onClick={page >= Math.ceil(count / rowsPerPage) - 1 ? undefined : handleNextButtonClick}
+        aria-disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="next page"
+        className={page >= Math.ceil(count / rowsPerPage) - 1 && classes.disabled}
+      >
+        <KeyboardArrowRight />
+      </IconButton>
+      <IconButton 
+        onClick={page >= Math.ceil(count / rowsPerPage) - 1 ? undefined : handleLastPageButtonClick}
+        aria-disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="last page"
+        className={page >= Math.ceil(count / rowsPerPage) - 1 && classes.disabled}
+      >
+        <LastPageIcon />
+      </IconButton>
+    </div>
+  );
+}
+
+TablePaginationActions.propTypes = {
+  count: PropTypes.number.isRequired,
+  onPageChange: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+};
 
 export default function TableWrapper(props) {
   const { rootElement, tableData, setPageInfo, constraints, selectionsAPI } = props;
@@ -103,6 +185,7 @@ export default function TableWrapper(props) {
         }}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
+        ActionsComponent={TablePaginationActions}
       />
     </Paper>
   );

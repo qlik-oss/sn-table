@@ -88,5 +88,8 @@
   },
   "peerDependencies": {
     "@nebula.js/stardust": "^1.4"
+  },
+  "dependencies": {
+    "@material-ui/icons": "^4.11.2"
   }
 }
