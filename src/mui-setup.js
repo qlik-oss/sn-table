@@ -1,6 +1,8 @@
 import { createGenerateClassName, createMuiTheme } from '@material-ui/core/styles';
+import * as sproutBase from './sprout-copy.json';
 
-export default function muiSetup(sproutBase) {
+export default function muiSetup() {
+  // Currently importing a reduced copy of sprout, should be replaced with the open-source version of sprout ASAP
   if (sproutBase.overrides) {
     sproutBase.overrides.MuiListItem.root['&$selected'] = {};
     sproutBase.overrides.MuiSelect.root['& ~i'].padding = '6px';

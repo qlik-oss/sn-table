@@ -5,6 +5,8 @@ import postcss from 'rollup-plugin-postcss';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import image from '@rollup/plugin-image';
+import json from "@rollup/plugin-json";
+
 import visualizer from 'rollup-plugin-visualizer';
 import { terser } from 'rollup-plugin-terser';
 import path from 'path';
@@ -12,6 +14,14 @@ import path from 'path';
 import jsxPlugin from '@babel/plugin-transform-react-jsx';
 import classProps from '@babel/plugin-proposal-class-properties';
 import chaining from '@babel/plugin-proposal-optional-chaining';
+
+import fs from 'fs';
+
+function checkInternals() {
+  // Checks if the @qlik namespace exists on disk to
+  // see if the optional dependecies can be included
+  return fs.existsSync('./node_modules/@qlik-trial');
+}
 
 const pkg = require(path.resolve(process.cwd(), 'package.json')); // eslint-disable-line  import/no-dynamic-require
 const { name, version, license, author } = pkg;
@@ -33,7 +43,7 @@ export default {
     name: moduleName,
     format: 'umd',
     exports: 'default',
-    sourcemap: false,
+    sourcemap: true,
     globals: {
       '@nebula.js/stardust': 'stardust',
     },
@@ -41,13 +51,21 @@ export default {
   external: ['@nebula.js/stardust'],
   plugins: [
     resolve({
-      extensions: ['.js', '.jsx'],
+      extensions: ['.js', '.jsx', '.json'],
     }),
     replace({
       'process.env.NODE_ENV': JSON.stringify('production'),
       'process.env.PACKAGE_VERSION': JSON.stringify(version),
       preventAssignment: true,
     }),
+    checkInternals()
+      ? replace({
+          'const __OPIONAL_THEME_DEPS__ = {};': "import { sproutBase } from '@qlik-trial/sprout-theme';",
+          delimiters: ['', ''],
+          __OPIONAL_THEME_DEPS__: 'sproutBase',
+          preventAssignment: true,
+        })
+      : {},
     external(),
     postcss(),
     babel({
@@ -69,6 +87,7 @@ export default {
     }),
     commonjs(),
     image(),
+    json(),
     visualizer(),
     terser({
       output: {
