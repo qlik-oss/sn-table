@@ -75,6 +75,7 @@ function TablePaginationActions(props) {
         onClick={onFirstPage ? undefined : handleFirstPageButtonClick}
         aria-disabled={onFirstPage}
         aria-label="first page"
+        title="First page"
         className={onFirstPage && classes.disabled}
       >
         <FirstPageIcon />
@@ -83,6 +84,7 @@ function TablePaginationActions(props) {
         onClick={onFirstPage ? undefined : handleBackButtonClick}
         aria-disabled={onFirstPage}
         aria-label="previous page"
+        title="Previous page"
         className={onFirstPage && classes.disabled}
       >
         <KeyboardArrowLeft />
@@ -91,6 +93,7 @@ function TablePaginationActions(props) {
         onClick={onLastPage ? undefined : handleNextButtonClick}
         aria-disabled={onLastPage}
         aria-label="next page"
+        title="Next page"
         className={onLastPage && classes.disabled}
       >
         <KeyboardArrowRight />
@@ -99,6 +102,7 @@ function TablePaginationActions(props) {
         onClick={onLastPage ? undefined : handleLastPageButtonClick}
         aria-disabled={onLastPage}
         aria-label="last page"
+        title="Last page"
         className={onLastPage && classes.disabled}
       >
         <LastPageIcon />
