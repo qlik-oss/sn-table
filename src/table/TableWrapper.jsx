@@ -66,37 +66,40 @@ function TablePaginationActions(props) {
     onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
   };
 
+  const onFirstPage = page === 0;
+  const onLastPage = page >= Math.ceil(count / rowsPerPage) - 1;
+
   return (
     <div className={classes.root}>
       <IconButton 
-        onClick={page === 0 ? undefined : handleFirstPageButtonClick}
-        aria-disabled={page === 0}
+        onClick={onFirstPage ? undefined : handleFirstPageButtonClick}
+        aria-disabled={onFirstPage}
         aria-label="first page"
-        className={page === 0 && classes.disabled}
+        className={onFirstPage && classes.disabled}
       >
         <FirstPageIcon />
       </IconButton>
       <IconButton 
-        onClick={page === 0 ? undefined : handleBackButtonClick}
-        aria-disabled={page === 0}
+        onClick={onFirstPage ? undefined : handleBackButtonClick}
+        aria-disabled={onFirstPage}
         aria-label="previous page"
-        className={page === 0 && classes.disabled}
+        className={onFirstPage && classes.disabled}
       >
         <KeyboardArrowLeft />
       </IconButton>
       <IconButton 
-        onClick={page >= Math.ceil(count / rowsPerPage) - 1 ? undefined : handleNextButtonClick}
-        aria-disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        onClick={onLastPage ? undefined : handleNextButtonClick}
+        aria-disabled={onLastPage}
         aria-label="next page"
-        className={page >= Math.ceil(count / rowsPerPage) - 1 && classes.disabled}
+        className={onLastPage && classes.disabled}
       >
         <KeyboardArrowRight />
       </IconButton>
       <IconButton 
-        onClick={page >= Math.ceil(count / rowsPerPage) - 1 ? undefined : handleLastPageButtonClick}
-        aria-disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        onClick={onLastPage ? undefined : handleLastPageButtonClick}
+        aria-disabled={onLastPage}
         aria-label="last page"
-        className={page >= Math.ceil(count / rowsPerPage) - 1 && classes.disabled}
+        className={onLastPage && classes.disabled}
       >
         <LastPageIcon />
       </IconButton>
