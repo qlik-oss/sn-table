@@ -79,7 +79,7 @@ describe('<TableWrapper />', () => {
     expect(handleKeyPress.updatePage).to.have.been.calledOnce;
   });
 
-  it('should call setPageInfo when clicking next page button', async () => {
+  it('should call setPageInfo when clicking next page and previous page button', async () => {
     const { findByTitle, findByText } = render(
       <TableWrapper
         tableData={tableData}
@@ -93,6 +93,32 @@ describe('<TableWrapper />', () => {
 
     expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
     expect(await findByText(`101-200 of ${tableData.size.qcy}`)).to.be.visible;
+
+    fireEvent.click(await findByTitle('Previous page'));
+
+    expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
+    expect(await findByText(`1-100 of ${tableData.size.qcy}`)).to.be.visible;
+  });
+
+  it('should call setPageInfo when clicking last page and first page button', async () => {
+    const { findByTitle, findByText } = render(
+      <TableWrapper
+        tableData={tableData}
+        setPageInfo={setPageInfo}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+        rootElement={rootElement}
+      />
+    );
+    fireEvent.click(await findByTitle('Last page'));
+
+    expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
+    expect(await findByText(`101-200 of ${tableData.size.qcy}`)).to.be.visible;
+
+    fireEvent.click(await findByTitle('First page'));
+
+    expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
+    expect(await findByText(`1-100 of ${tableData.size.qcy}`)).to.be.visible;
   });
 
   it('should change back to first page when not on first page and no rows', async () => {
