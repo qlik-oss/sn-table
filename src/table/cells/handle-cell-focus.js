@@ -11,7 +11,9 @@ export const updateFocus = ({ rowElements = {}, cellCoord = [], shouldFocus = tr
   }
 };
 
-export const handleClickToFocusBody = (cell, focusedCellCoord, rootElement, setfocusedCellCoord) => {
+export const handleClickToFocusBody = (cell, focusedCellCoord, rootElement, setfocusedCellCoord, constraints) => {
+  if (constraints.active) return;
+
   const { rawRowIdx, rawColIdx } = cell;
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
   updateFocus({ rowElements, cellCoord: focusedCellCoord, shouldFocus: false });

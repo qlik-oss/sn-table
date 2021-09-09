@@ -109,5 +109,8 @@ export default memo(
   TableHeadWrapper,
   // we need to check if `focusedCellCoord` updated, then no need to re-render this component
   // NOTE: Since we are only dealing with rows when we navigating to top, it's ok to only check for rowIdx's here
-  (prevProps, nextProps) => prevProps.focusedCellCoord[0] !== nextProps.focusedCellCoord[0]
+  (prevProps, nextProps) => {
+    if (prevProps.constraints.active !== nextProps.constraints.active) return false;
+    return prevProps.focusedCellCoord[0] !== nextProps.focusedCellCoord[0];
+  }
 );
