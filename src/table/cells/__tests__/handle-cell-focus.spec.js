@@ -20,6 +20,8 @@ describe('handle-key-press', () => {
   describe('updateFocus', () => {
     let rowElements;
     let cellCoord;
+    let shouldFocus;
+    let providedCell;
 
     beforeEach(() => {
       rowElements = [{ getElementsByClassName: () => [cell] }];
@@ -33,7 +35,7 @@ describe('handle-key-press', () => {
     });
 
     it('should blur cell and call setAttribute when shouldBlur is true', () => {
-      const shouldFocus = false;
+      shouldFocus = false;
 
       handleCellFocus.updateFocus({ rowElements, cellCoord, shouldFocus });
       expect(cell.blur).to.have.been.calledOnce;
@@ -47,6 +49,61 @@ describe('handle-key-press', () => {
       expect(cell.focus).to.not.have.been.called;
       expect(cell.blur).to.not.have.been.called;
       expect(cell.setAttribute).to.not.have.been.called;
+    });
+
+    it('should pick up providedCell element if there was no rowElements provided', () => {
+      providedCell = cell;
+
+      handleCellFocus.updateFocus({ providedCell });
+
+      expect(cell.focus).to.have.been.calledOnce;
+      expect(cell.setAttribute).to.have.been.calledOnce;
+      expect(cell.setAttribute).to.have.been.calledOnceWith('tabIndex', '0');
+    });
+  });
+
+  describe('findCellWithTabStop', () => {
+    const elementCreator = (type, tabIdx) => {
+      const targetElement = global.document.createElement(type);
+      targetElement.setAttribute('tabIndex', tabIdx);
+      return targetElement;
+    };
+
+    beforeEach(() => {
+      rootElement = {
+        querySelector: () => {
+          if ((cell.tagName === 'TD' || cell.tagName === 'TH') && cell.getAttribute('tabIndex') === '0') return cell;
+          return null;
+        },
+      };
+    });
+
+    it('should return active td element', () => {
+      cell = elementCreator('td', '0');
+
+      const cellElement = handleCellFocus.findCellWithTabStop(rootElement);
+
+      expect(cellElement).to.not.be.null;
+      expect(cellElement.tagName).to.equal('TD');
+      expect(cellElement).to.have.attr('tabIndex').match(/0/);
+    });
+
+    it('should return active th element', () => {
+      cell = elementCreator('th', '0');
+
+      const cellElement = handleCellFocus.findCellWithTabStop(rootElement);
+
+      expect(cellElement).to.not.be.null;
+      expect(cellElement.tagName).to.equal('TH');
+      expect(cellElement).to.have.attr('tabIndex').match(/0/);
+    });
+
+    it('should return null', () => {
+      cell = elementCreator('div', '-1');
+
+      const cellElement = handleCellFocus.findCellWithTabStop(rootElement);
+
+      expect(cellElement).to.be.null;
     });
   });
 
