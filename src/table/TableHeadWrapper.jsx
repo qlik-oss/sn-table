@@ -36,7 +36,6 @@ function TableHeadWrapper({
   changeSortOrder,
   constraints,
   selectionsAPI,
-  focusedCellCoord,
   setfocusedCellCoord,
 }) {
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
@@ -65,9 +64,7 @@ function TableHeadWrapper({
                   setfocusedCellCoord
                 )
               }
-              onMouseDown={() =>
-                handleClickToFocusHead(columnIndex, focusedCellCoord, rootElement, setfocusedCellCoord)
-              }
+              onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setfocusedCellCoord)}
             >
               <TableSortLabel
                 active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
@@ -100,17 +97,8 @@ TableHeadWrapper.propTypes = {
   layout: PropTypes.object.isRequired,
   changeSortOrder: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
-  focusedCellCoord: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectionsAPI: PropTypes.object.isRequired,
   setfocusedCellCoord: PropTypes.func.isRequired,
 };
 
-export default memo(
-  TableHeadWrapper,
-  // we need to check if `focusedCellCoord` updated, then no need to re-render this component
-  // NOTE: Since we are only dealing with rows when we navigating to top, it's ok to only check for rowIdx's here
-  (prevProps, nextProps) => {
-    if (prevProps.constraints.active !== nextProps.constraints.active) return false;
-    return prevProps.focusedCellCoord[0] !== nextProps.focusedCellCoord[0];
-  }
-);
+export default TableHeadWrapper;

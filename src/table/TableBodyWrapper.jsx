@@ -1,4 +1,4 @@
-import React, { useReducer, useState, useEffect, useMemo, memo } from 'react';
+import React, { useReducer, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
@@ -42,7 +42,6 @@ const TableBodyWrapper = ({
   selectionsAPI,
   layout,
   theme,
-  focusedCellCoord,
   setShouldRefocus,
   setfocusedCellCoord,
 }) => {
@@ -106,9 +105,7 @@ const TableBodyWrapper = ({
                       setfocusedCellCoord
                     )
                   }
-                  onMouseDown={() =>
-                    handleClickToFocusBody(cell, focusedCellCoord, rootElement, setfocusedCellCoord, constraints)
-                  }
+                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setfocusedCellCoord, constraints)}
                 >
                   <div className={classes.srOnly}>{column.label}</div>
                   {value}
@@ -129,17 +126,8 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  focusedCellCoord: PropTypes.arrayOf(PropTypes.number).isRequired,
   setfocusedCellCoord: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
 };
 
-export default memo(
-  TableBodyWrapper,
-  // we need to check if `focusedCellCoord` updated, then no need to re-render this component
-  // NOTE: Since we are only dealing with rows when we navigating to top, it's ok to only check for rowIdx's here
-  (prevProps, nextProps) => {
-    if (prevProps.constraints.active !== nextProps.constraints.active) return false;
-    return prevProps.focusedCellCoord[0] !== nextProps.focusedCellCoord[0];
-  }
-);
+export default TableBodyWrapper;

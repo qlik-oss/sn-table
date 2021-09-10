@@ -1,5 +1,5 @@
 export const updateFocus = ({ rowElements = {}, cellCoord = [], shouldFocus = true, providedCell = undefined }) => {
-  const cell = rowElements[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[cellCoord[1]] || providedCell;
+  const cell = providedCell || rowElements[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[cellCoord[1]];
   if (cell) {
     if (shouldFocus) {
       cell.focus();
@@ -11,19 +11,27 @@ export const updateFocus = ({ rowElements = {}, cellCoord = [], shouldFocus = tr
   }
 };
 
-export const handleClickToFocusBody = (cell, focusedCellCoord, rootElement, setfocusedCellCoord, constraints) => {
+export const findCellWithTabStop = (rootElement) => rootElement.querySelector("td[tabindex='0'], th[tabindex='0']");
+
+export const handleClickToFocusBody = (cell, rootElement, setfocusedCellCoord, constraints) => {
   if (constraints.active) return;
 
   const { rawRowIdx, rawColIdx } = cell;
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
-  updateFocus({ rowElements, cellCoord: focusedCellCoord, shouldFocus: false });
+  updateFocus({
+    providedCell: findCellWithTabStop(rootElement),
+    shouldFocus: false,
+  });
   setfocusedCellCoord([rawRowIdx + 1, rawColIdx]);
   updateFocus({ rowElements, cellCoord: [rawRowIdx + 1, rawColIdx], shouldFocus: true });
 };
 
-export const handleClickToFocusHead = (columnIndex, focusedCellCoord, rootElement, setfocusedCellCoord) => {
+export const handleClickToFocusHead = (columnIndex, rootElement, setfocusedCellCoord) => {
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
-  updateFocus({ rowElements, cellCoord: focusedCellCoord, shouldFocus: false });
+  updateFocus({
+    providedCell: findCellWithTabStop(rootElement),
+    shouldFocus: false,
+  });
   setfocusedCellCoord([0, columnIndex]);
   updateFocus({ rowElements, cellCoord: [0, columnIndex], shouldFocus: true });
 };
