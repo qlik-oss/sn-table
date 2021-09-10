@@ -105,7 +105,7 @@ const TableBodyWrapper = ({
                       setfocusedCellCoord
                     )
                   }
-                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setfocusedCellCoord, constraints)}
+                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setfocusedCellCoord)}
                 >
                   <div className={classes.srOnly}>{column.label}</div>
                   {value}

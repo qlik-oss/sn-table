@@ -13,9 +13,7 @@ export const updateFocus = ({ rowElements = {}, cellCoord = [], shouldFocus = tr
 
 export const findCellWithTabStop = (rootElement) => rootElement.querySelector("td[tabindex='0'], th[tabindex='0']");
 
-export const handleClickToFocusBody = (cell, rootElement, setfocusedCellCoord, constraints) => {
-  if (constraints.active) return;
-
+export const handleClickToFocusBody = (cell, rootElement, setfocusedCellCoord) => {
   const { rawRowIdx, rawColIdx } = cell;
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
   updateFocus({
