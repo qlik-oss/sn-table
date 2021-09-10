@@ -5,6 +5,7 @@ import postcss from 'rollup-plugin-postcss';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import image from '@rollup/plugin-image';
+import json from '@rollup/plugin-json';
 import visualizer from 'rollup-plugin-visualizer';
 import { terser } from 'rollup-plugin-terser';
 import path from 'path';
@@ -41,7 +42,7 @@ export default {
   external: ['@nebula.js/stardust'],
   plugins: [
     resolve({
-      extensions: ['.js', '.jsx'],
+      extensions: ['.js', '.jsx', '.json'],
     }),
     replace({
       'process.env.NODE_ENV': JSON.stringify('production'),
@@ -69,6 +70,7 @@ export default {
     }),
     commonjs(),
     image(),
+    json(),
     visualizer(),
     terser({
       output: {
