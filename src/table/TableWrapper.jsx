@@ -34,20 +34,17 @@ const useStyles = makeStyles({
   },
 });
 
-const useStyles2 = makeStyles({
+const useStylesPaginationActions = makeStyles({
   root: {
     flexShrink: 0,
   },
   disabled: {
-    color: 'rgba(0, 0, 0, 0.3)',
-    '&:hover': {
-
-    }
+    color: 'rgba(0, 0, 0, 0.3)'
   }
 });
 
 function TablePaginationActions(props) {
-  const classes = useStyles2();
+  const classes = useStylesPaginationActions();
   const { count, page, rowsPerPage, onChangePage } = props;
 
   const handleFirstPageButtonClick = (event) => {
@@ -63,7 +60,7 @@ function TablePaginationActions(props) {
   };
 
   const handleLastPageButtonClick = (event) => {
-    onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+    onChangePage(event, Math.ceil(count / rowsPerPage) - 1);
   };
 
   const onFirstPage = page === 0;
@@ -72,7 +69,7 @@ function TablePaginationActions(props) {
   return (
     <div className={classes.root}>
       <IconButton 
-        onClick={onFirstPage ? undefined : handleFirstPageButtonClick}
+        onClick={!onFirstPage && handleFirstPageButtonClick}
         aria-disabled={onFirstPage}
         aria-label="first page"
         title="First page"
@@ -81,7 +78,7 @@ function TablePaginationActions(props) {
         <FirstPageIcon />
       </IconButton>
       <IconButton 
-        onClick={onFirstPage ? undefined : handleBackButtonClick}
+        onClick={!onFirstPage && handleBackButtonClick}
         aria-disabled={onFirstPage}
         aria-label="previous page"
         title="Previous page"
@@ -90,7 +87,7 @@ function TablePaginationActions(props) {
         <KeyboardArrowLeft />
       </IconButton>
       <IconButton 
-        onClick={onLastPage ? undefined : handleNextButtonClick}
+        onClick={!onLastPage && handleNextButtonClick}
         aria-disabled={onLastPage}
         aria-label="next page"
         title="Next page"
@@ -99,7 +96,7 @@ function TablePaginationActions(props) {
         <KeyboardArrowRight />
       </IconButton>
       <IconButton 
-        onClick={onLastPage ? undefined : handleLastPageButtonClick}
+        onClick={!onLastPage && handleLastPageButtonClick}
         aria-disabled={onLastPage}
         aria-label="last page"
         title="Last page"
