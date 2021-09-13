@@ -15,6 +15,17 @@ const useStyles = makeStyles({
     fontSize: ({ fontSize }) => fontSize,
     padding: ({ padding }) => padding,
   },
+  visuallyHidden: {
+    border: 0,
+    clip: 'rect(0 0 0 0)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
+    position: 'absolute',
+    top: 20,
+    width: 1,
+  },
 });
 
 export default function TableHeadWrapper({
@@ -65,6 +76,11 @@ export default function TableHeadWrapper({
                 tabIndex={-1}
               >
                 {column.label}
+                {layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex ? (
+                  <span className={classes.visuallyHidden}>
+                    {column.sortDirection === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  </span>
+                ) : null}
               </TableSortLabel>
             </TableCell>
           );

@@ -60,10 +60,10 @@ describe('<TableBodyWrapper />', async () => {
     );
 
     expect(cellRendererSpy).to.have.callCount(8);
-    expect(queryByText(tableData.rows[0]['id-0'].qText)).to.be.visible;
-    expect(queryByText(tableData.rows[0]['id-1'].qText)).to.be.visible;
-    expect(queryByText(tableData.rows[1]['id-0'].qText)).to.be.visible;
-    expect(queryByText(tableData.rows[1]['id-1'].qText)).to.be.visible;
+    expect(queryByText(tableData.rows[0]['col-0'].qText)).to.be.visible;
+    expect(queryByText(tableData.rows[0]['col-1'].qText)).to.be.visible;
+    expect(queryByText(tableData.rows[1]['col-0'].qText)).to.be.visible;
+    expect(queryByText(tableData.rows[1]['col-1'].qText)).to.be.visible;
   });
 
   it('should call bodyHandleKeyPress on keyDown', () => {
@@ -78,7 +78,7 @@ describe('<TableBodyWrapper />', async () => {
         layout={layout}
       />
     );
-    fireEvent.keyDown(queryByText(tableData.rows[0]['id-0'].qText));
+    fireEvent.keyDown(queryByText(tableData.rows[0]['col-0'].qText));
 
     expect(handleKeyPress.bodyHandleKeyPress).to.have.been.calledOnce;
   });
@@ -95,7 +95,7 @@ describe('<TableBodyWrapper />', async () => {
         layout={layout}
       />
     );
-    fireEvent.mouseDown(queryByText(tableData.rows[0]['id-0'].qText));
+    fireEvent.mouseDown(queryByText(tableData.rows[0]['col-0'].qText));
 
     expect(handleCellFocus.handleClickToFocusBody).to.have.been.calledOnce;
   });

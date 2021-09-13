@@ -5,20 +5,13 @@ import postcss from 'rollup-plugin-postcss';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import image from '@rollup/plugin-image';
+import json from '@rollup/plugin-json';
 import visualizer from 'rollup-plugin-visualizer';
 import path from 'path';
 
 import jsxPlugin from '@babel/plugin-transform-react-jsx';
 import classProps from '@babel/plugin-proposal-class-properties';
 import chaining from '@babel/plugin-proposal-optional-chaining';
-
-import fs from 'fs';
-
-function checkInternals() {
-  // Checks if the @qlik namespace exists on disk to
-  // see if the optional dependecies can be included
-  return fs.existsSync('./node_modules/@qlik');
-}
 
 // get metadata from regular package.json
 const { name, version, license, author } = require(path.resolve(process.cwd(), 'package.json')); // eslint-disable-line  import/no-dynamic-require
@@ -57,14 +50,6 @@ export default {
       'process.env.PACKAGE_VERSION': JSON.stringify(version),
       preventAssignment: true,
     }),
-    checkInternals()
-      ? replace({
-          'const __OPIONAL_THEME_DEPS__ = {};': "import { sproutBase } from '@qlik/sprout-theme';",
-          delimiters: ['', ''],
-          __OPIONAL_THEME_DEPS__: 'sproutBase',
-          preventAssignment: true,
-        })
-      : {},
     external(),
     postcss(),
     babel({
@@ -86,6 +71,7 @@ export default {
     }),
     commonjs(),
     image(),
+    json(),
     visualizer(),
   ],
 };

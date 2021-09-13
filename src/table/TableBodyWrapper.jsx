@@ -25,6 +25,14 @@ const useStyles = makeStyles({
       },
     },
   },
+  srOnly: {
+    position: 'absolute',
+    left: '-10000px',
+    top: 'auto',
+    width: '1px',
+    height: '1px',
+    overflow: 'hidden',
+  },
 });
 
 const TableBodyWrapper = ({
@@ -100,6 +108,7 @@ const TableBodyWrapper = ({
                   }
                   onMouseDown={() => handleClickToFocusBody(cell, focusedCellCoord, rootElement)}
                 >
+                  <div className={classes.srOnly}>{column.label}</div>
                   {value}
                 </CellRenderer>
               )
