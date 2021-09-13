@@ -45,6 +45,7 @@ export default function TableHeadWrapper({
 }) {
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
+  const canSortTable = !selectionsAPI.isModal() && !constraints.active;
 
   return (
     <TableHead>
@@ -52,7 +53,6 @@ export default function TableHeadWrapper({
         {tableData.columns.map((column, columnIndex) => {
           const tabIndex = columnIndex === 0 ? '0' : '-1';
           const currentSortDir = SORT_NOTATIONS[column.sortDirection];
-          const ariaLabelText = `${column.label}. ${currentSortDir}. Press space to sort on this column.`;
           const isTableSortActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex;
 
           return (
@@ -61,8 +61,9 @@ export default function TableHeadWrapper({
               align={column.align}
               className={`${classes.head} sn-table-head-cell sn-table-cell`}
               tabIndex={tabIndex}
-              aria-label={ariaLabelText}
+              role="button"
               aria-sort={column.sortDirection}
+              aria-pressed={isTableSortActive}
               onKeyDown={(e) =>
                 headHandleKeyPress(
                   e,
@@ -76,18 +77,11 @@ export default function TableHeadWrapper({
                 )
               }
               onMouseDown={() => handleClickToFocusHead(columnIndex, focusedCellCoord, rootElement)}
+              onClick={() => canSortTable && changeSortOrder(layout, column.isDim, columnIndex)}
             >
-              <TableSortLabel
-                active={isTableSortActive}
-                direction={column.sortDirection}
-                onClick={() =>
-                  // when cells are selected or in edit mode, it should not be able to do the sorting
-                  !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column.isDim, columnIndex)
-                }
-                tabIndex={-1}
-              >
+              <TableSortLabel active={isTableSortActive} direction={column.sortDirection} tabIndex={-1}>
                 {column.label}
-                {isTableSortActive ? <span className={classes.visuallyHidden}>{currentSortDir}</span> : null}
+                <span className={classes.visuallyHidden}>{currentSortDir}, Press space to sort on this column.</span>
               </TableSortLabel>
             </TableCell>
           );
