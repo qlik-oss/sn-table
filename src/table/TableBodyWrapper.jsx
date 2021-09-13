@@ -35,7 +35,7 @@ const useStyles = makeStyles({
   },
 });
 
-const TableBodyWrapper = ({
+function TableBodyWrapper({
   rootElement,
   tableData,
   constraints,
@@ -44,7 +44,7 @@ const TableBodyWrapper = ({
   theme,
   focusedCellCoord,
   setShouldRefocus,
-}) => {
+}) {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
@@ -117,7 +117,7 @@ const TableBodyWrapper = ({
       ))}
     </TableBody>
   );
-};
+}
 
 TableBodyWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
@@ -130,4 +130,4 @@ TableBodyWrapper.propTypes = {
   setShouldRefocus: PropTypes.func.isRequired,
 };
 
-export default React.memo(TableBodyWrapper);
+export default TableBodyWrapper;
