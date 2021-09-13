@@ -5,8 +5,8 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 
 import TableWrapper from '../TableWrapper';
-import TableBodyWrapper from '../TableBodyWrapper';
-import TableHeadWrapper from '../TableHeadWrapper';
+import * as TableBodyWrapper from '../TableBodyWrapper';
+import * as TableHeadWrapper from '../TableHeadWrapper';
 import * as handleKeyPress from '../cells/handle-key-press';
 
 describe('<TableWrapper />', () => {
@@ -20,8 +20,8 @@ describe('<TableWrapper />', () => {
   let rootElement;
 
   beforeEach(() => {
-    sandbox.replace(TableBodyWrapper, 'type', () => <tbody />);
-    sandbox.replace(TableHeadWrapper, 'type', () => <thead />);
+    sinon.stub(TableBodyWrapper, 'default').returns(<tbody />);
+    sinon.stub(TableHeadWrapper, 'default').returns(<thead />);
 
     tableData = {
       size: { qcy: 200 },
@@ -46,6 +46,8 @@ describe('<TableWrapper />', () => {
   afterEach(() => {
     sandbox.verifyAndRestore();
     sandbox.resetHistory();
+    TableBodyWrapper.default.restore();
+    TableHeadWrapper.default.restore();
   });
 
   it('should render table', () => {
