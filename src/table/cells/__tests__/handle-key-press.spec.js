@@ -427,7 +427,6 @@ describe('handle-key-press', () => {
   });
 
   describe('updatePage', () => {
-    const sandbox = sinon.createSandbox();
     let evt = {};
     let totalRowSize;
     let page;
@@ -442,12 +441,12 @@ describe('handle-key-press', () => {
         metaKey: true,
         key: 'ArrowRight',
       };
-      handleChangePage = sandbox.spy();
-      setShouldRefocus = sandbox.spy();
+      handleChangePage = sinon.spy();
+      setShouldRefocus = sinon.spy();
     });
 
     afterEach(() => {
-      sandbox.verifyAndRestore();
+      sinon.verifyAndRestore();
     });
 
     it('when shift key is not pressed, handleChangePage should not run', () => {
