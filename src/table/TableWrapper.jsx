@@ -8,8 +8,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import useDidUpdateEffect from './useDidUpdateEffect';
-import { updatePage } from './cells/handle-key-press';
-import { handleResetFocus } from './cells/handle-cell-focus';
+import { handleWrapperKeyDown } from './cells/handle-key-press';
+import { updateFocus, handleResetFocus } from './cells/handle-cell-focus';
 import handleScroll from './handle-scroll';
 
 const useStyles = makeStyles({
@@ -30,7 +30,7 @@ const useStyles = makeStyles({
 });
 
 export default function TableWrapper(props) {
-  const { rootElement, tableData, setPageInfo, constraints, selectionsAPI } = props;
+  const { rootElement, tableData, setPageInfo, constraints, selectionsAPI, keyboard } = props;
   const { size, rows, columns } = tableData;
   const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
@@ -38,6 +38,7 @@ export default function TableWrapper(props) {
   const focusedCellCoord = useRef([0, 0]);
   const shouldRefocus = useRef(false);
   const tableSection = useRef();
+  const tableWrapperRef = useRef();
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
@@ -73,6 +74,13 @@ export default function TableWrapper(props) {
     };
   }, []);
 
+  useEffect(() => {
+    console.log(keyboard);
+    // if (!keyboard.enabled) return;
+
+    updateFocus(rootElement.getElementsByClassName('sn-table-row'), focusedCellCoord.current, !!keyboard.inFocus);
+  }, [keyboard.inFocus]);
+
   // Except for first render, whenever the size of the data changes (number of rows per page, rows or columns),
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
   useDidUpdateEffect(() => {
@@ -82,7 +90,9 @@ export default function TableWrapper(props) {
   return (
     <Paper
       className={classes.paper}
-      onKeyDown={(evt) => updatePage(evt, size.qcy, page, rowsPerPage, handleChangePage, setShouldRefocus)}
+      onKeyDown={(evt) =>
+        handleWrapperKeyDown(evt, size.qcy, page, rowsPerPage, handleChangePage, setShouldRefocus, keyboard)
+      }
     >
       <TableContainer ref={tableSection} className={classes[containerMode]}>
         <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
@@ -114,4 +124,5 @@ TableWrapper.propTypes = {
   setPageInfo: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
+  keyboard: PropTypes.object.isRequired,
 };

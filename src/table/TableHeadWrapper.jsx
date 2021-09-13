@@ -51,7 +51,7 @@ export default function TableHeadWrapper({
               key={column.id}
               align={column.align}
               className={`${classes.head} sn-table-head-cell sn-table-cell`}
-              tabIndex={tabIndex}
+              tabIndex={-1}
               onKeyDown={(e) =>
                 headHandleKeyPress(
                   e,

@@ -3,7 +3,15 @@ import { updateFocus } from './handle-cell-focus';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
-export const updatePage = (evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus) => {
+export const handleWrapperKeyDown = (
+  evt,
+  totalRowSize,
+  page,
+  rowsPerPage,
+  handleChangePage,
+  setShouldRefocus,
+  keyboard
+) => {
   if (isCtrlShift(evt)) {
     const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
     if (evt.key === 'ArrowRight' && page < lastPage) {
@@ -13,6 +21,9 @@ export const updatePage = (evt, totalRowSize, page, rowsPerPage, handleChangePag
       setShouldRefocus();
       handleChangePage(null, page - 1);
     }
+  } else if (evt.keyCode === 27) {
+    evt.target.blur();
+    keyboard.exit();
   }
 };
 
