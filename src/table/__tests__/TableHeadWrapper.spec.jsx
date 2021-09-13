@@ -15,7 +15,6 @@ describe('<TableHeadWrapper />', () => {
   let changeSortOrder;
   let constraints;
   let selectionsAPI;
-  let getAriaLabelNotation;
 
   beforeEach(() => {
     tableData = {
@@ -40,8 +39,6 @@ describe('<TableHeadWrapper />', () => {
     selectionsAPI = {
       isModal: () => false,
     };
-    getAriaLabelNotation = (target, newDir) =>
-      `${target.label}. Sorted ${newDir || target.sortDirection}ending. Press space to sort on this column.`;
   });
 
   afterEach(() => {
@@ -160,7 +157,7 @@ describe('<TableHeadWrapper />', () => {
     expect(secondColQuery).to.have.attribute('aria-sort', 'desc');
   });
 
-  it('should has `aria-label` property', () => {
+  it('should has `aria-pressed` property', () => {
     const { queryByText } = render(
       <TableHeadWrapper tableData={tableData} theme={theme} layout={layout} changeSortOrder={changeSortOrder} />
     );
@@ -168,7 +165,7 @@ describe('<TableHeadWrapper />', () => {
     const firstColQuery = queryByText(tableData.columns[0].label).closest('th');
     const secondColQuery = queryByText(tableData.columns[1].label).closest('th');
 
-    expect(firstColQuery).to.have.attribute('aria-label', getAriaLabelNotation(tableData.columns[0]));
-    expect(secondColQuery).to.have.attribute('aria-label', getAriaLabelNotation(tableData.columns[1]));
+    expect(firstColQuery).to.have.attribute('aria-pressed', 'true');
+    expect(secondColQuery).to.have.attribute('aria-pressed', 'false');
   });
 });

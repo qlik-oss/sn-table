@@ -45,7 +45,6 @@ export default function TableHeadWrapper({
 }) {
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
-  const canSortTable = !selectionsAPI.isModal() && !constraints.active;
 
   return (
     <TableHead>
@@ -53,7 +52,7 @@ export default function TableHeadWrapper({
         {tableData.columns.map((column, columnIndex) => {
           const tabIndex = columnIndex === 0 ? '0' : '-1';
           const currentSortDir = SORT_NOTATIONS[column.sortDirection];
-          const isTableSortActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex;
+          const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex;
 
           return (
             <TableCell
@@ -63,7 +62,7 @@ export default function TableHeadWrapper({
               tabIndex={tabIndex}
               role="button"
               aria-sort={column.sortDirection}
-              aria-pressed={isTableSortActive}
+              aria-pressed={isCurrentColumnActive}
               onKeyDown={(e) =>
                 headHandleKeyPress(
                   e,
@@ -77,9 +76,11 @@ export default function TableHeadWrapper({
                 )
               }
               onMouseDown={() => handleClickToFocusHead(columnIndex, focusedCellCoord, rootElement)}
-              onClick={() => canSortTable && changeSortOrder(layout, column.isDim, columnIndex)}
+              onClick={() =>
+                !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column.isDim, columnIndex)
+              }
             >
-              <TableSortLabel active={isTableSortActive} direction={column.sortDirection} tabIndex={-1}>
+              <TableSortLabel active={isCurrentColumnActive} direction={column.sortDirection} tabIndex={-1}>
                 {column.label}
                 <span className={classes.visuallyHidden}>{currentSortDir}, Press space to sort on this column.</span>
               </TableSortLabel>
