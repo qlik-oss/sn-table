@@ -153,8 +153,8 @@ describe('<TableHeadWrapper />', () => {
     const firstColQuery = queryByText(tableData.columns[0].label).closest('th');
     const secondColQuery = queryByText(tableData.columns[1].label).closest('th');
 
-    expect(firstColQuery).to.have.attribute('aria-sort', 'asc');
-    expect(secondColQuery).to.have.attribute('aria-sort', 'desc');
+    expect(firstColQuery).to.have.attribute('aria-sort', 'ascending');
+    expect(secondColQuery).to.not.have.attribute('aria-sort');
   });
 
   it('should has `aria-pressed` property', () => {

@@ -85,7 +85,7 @@ export default function TableWrapper(props) {
       onKeyDown={(evt) => updatePage(evt, size.qcy, page, rowsPerPage, handleChangePage, setShouldRefocus)}
     >
       <TableContainer ref={tableSection} className={classes[containerMode]}>
-        <Table stickyHeader role="table" aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
+        <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
           <TableHeadWrapper {...props} focusedCellCoord={focusedCellCoord} />
           <TableBodyWrapper {...props} focusedCellCoord={focusedCellCoord} setShouldRefocus={setShouldRefocus} />
         </Table>
