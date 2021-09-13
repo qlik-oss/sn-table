@@ -10,7 +10,6 @@ import * as TableHeadWrapper from '../TableHeadWrapper';
 import * as handleKeyPress from '../cells/handle-key-press';
 
 describe('<TableWrapper />', () => {
-  const sandbox = sinon.createSandbox();
   let tableData;
   let setPageInfo;
   let constraints;
@@ -22,6 +21,7 @@ describe('<TableWrapper />', () => {
   beforeEach(() => {
     sinon.stub(TableBodyWrapper, 'default').returns(<tbody />);
     sinon.stub(TableHeadWrapper, 'default').returns(<thead />);
+    sinon.stub(handleKeyPress, 'updatePage').returns(sinon.spy());
 
     tableData = {
       size: { qcy: 200 },
@@ -40,14 +40,11 @@ describe('<TableWrapper />', () => {
       clientHeight: {},
       getElementsByTagName: () => [{ clientHeight: {} }],
     };
-    sandbox.replace(handleKeyPress, 'updatePage', sinon.spy());
   });
 
   afterEach(() => {
-    sandbox.verifyAndRestore();
-    sandbox.resetHistory();
-    TableBodyWrapper.default.restore();
-    TableHeadWrapper.default.restore();
+    sinon.verifyAndRestore();
+    sinon.resetHistory();
   });
 
   it('should render table', () => {
