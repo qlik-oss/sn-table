@@ -48,7 +48,7 @@ export default function TableHeadWrapper({
 
   return (
     <TableHead>
-      <TableRow className="sn-table-row">
+      <TableRow className="sn-table-row" role="row">
         {tableData.columns.map((column, columnIndex) => {
           const tabIndex = columnIndex === 0 ? '0' : '-1';
           const currentSortDir = SORT_NOTATIONS[column.sortDirection];
@@ -60,8 +60,9 @@ export default function TableHeadWrapper({
               align={column.align}
               className={`${classes.head} sn-table-head-cell sn-table-cell`}
               tabIndex={tabIndex}
-              role="button"
-              aria-sort={column.sortDirection}
+              role="columnheader"
+              scope="col"
+              aria-sort={isCurrentColumnActive ? `${column.sortDirection}ending` : null}
               aria-pressed={isCurrentColumnActive}
               onKeyDown={(e) =>
                 headHandleKeyPress(
@@ -82,7 +83,7 @@ export default function TableHeadWrapper({
             >
               <TableSortLabel active={isCurrentColumnActive} direction={column.sortDirection} tabIndex={-1}>
                 {column.label}
-                <span className={classes.visuallyHidden}>{currentSortDir}, Press space to sort on this column.</span>
+                <span className={classes.visuallyHidden}>{currentSortDir}. Press space to sort on this column.</span>
               </TableSortLabel>
             </TableCell>
           );
