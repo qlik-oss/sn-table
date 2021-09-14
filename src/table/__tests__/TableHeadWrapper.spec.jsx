@@ -8,7 +8,6 @@ import * as handleKeyPress from '../cells/handle-key-press';
 import * as handleCellFocus from '../cells/handle-cell-focus';
 
 describe('<TableHeadWrapper />', () => {
-  const sandbox = sinon.createSandbox();
   let tableData;
   let theme;
   let layout;
@@ -42,8 +41,8 @@ describe('<TableHeadWrapper />', () => {
   });
 
   afterEach(() => {
-    sandbox.verifyAndRestore();
-    sandbox.resetHistory();
+    sinon.verifyAndRestore();
+    sinon.resetHistory();
   });
 
   it('should render table head', () => {
@@ -110,7 +109,7 @@ describe('<TableHeadWrapper />', () => {
   });
 
   it('should call headHandleKeyPress when keyDown on a header cell', () => {
-    sandbox.replace(handleKeyPress, 'headHandleKeyPress', sinon.spy());
+    sinon.stub(handleKeyPress, 'headHandleKeyPress').returns(sinon.spy());
 
     const { queryByText } = render(
       <TableHeadWrapper
@@ -128,7 +127,7 @@ describe('<TableHeadWrapper />', () => {
   });
 
   it('should call handleClickToFocusHead when clicking a header cell', () => {
-    sandbox.replace(handleCellFocus, 'handleClickToFocusHead', sinon.spy());
+    sinon.stub(handleCellFocus, 'handleClickToFocusHead').returns(sinon.spy());
 
     const { queryByText } = render(
       <TableHeadWrapper

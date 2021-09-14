@@ -14,7 +14,6 @@ import * as handleKeyPress from '../cells/handle-key-press';
 import * as handleCellFocus from '../cells/handle-cell-focus';
 
 describe('<TableBodyWrapper />', async () => {
-  const sandbox = sinon.createSandbox();
   const model = { getHyperCubeData: async () => generateDataPages(2, 2) };
 
   let tableData;
@@ -22,9 +21,10 @@ describe('<TableBodyWrapper />', async () => {
   let selectionsAPI;
   let layout;
   let theme;
+  let cellRendererSpy;
 
   beforeEach(async () => {
-    sandbox.replace(selectionsUtils, 'addSelectionListeners', () => {});
+    sinon.stub(selectionsUtils, 'addSelectionListeners').returns(sinon.spy());
 
     tableData = await manageData(model, generateLayout(1, 1), { top: 0, height: 100 });
     constraints = {};
@@ -34,17 +34,17 @@ describe('<TableBodyWrapper />', async () => {
       name: () => {},
     };
     layout = {};
+    cellRendererSpy = sinon.spy();
   });
 
   afterEach(() => {
-    sandbox.verifyAndRestore();
-    sandbox.resetHistory();
+    sinon.verifyAndRestore();
+    sinon.resetHistory();
   });
 
   it('should render 2x2 table body and call CellRenderer', () => {
-    const cellRendererSpy = sinon.spy();
     // eslint-disable-next-line react/prop-types
-    sandbox.replace(getCellRenderer, 'default', () => ({ value }) => {
+    sinon.stub(getCellRenderer, 'default').returns(({ value }) => {
       cellRendererSpy();
       return <td>{value}</td>;
     });
@@ -67,7 +67,7 @@ describe('<TableBodyWrapper />', async () => {
   });
 
   it('should call bodyHandleKeyPress on keyDown', () => {
-    sandbox.replace(handleKeyPress, 'bodyHandleKeyPress', sinon.spy());
+    sinon.stub(handleKeyPress, 'bodyHandleKeyPress').returns(sinon.spy());
 
     const { queryByText } = render(
       <TableBodyWrapper
@@ -84,7 +84,7 @@ describe('<TableBodyWrapper />', async () => {
   });
 
   it('should call handleClickToFocusBody on mouseDown', () => {
-    sandbox.replace(handleCellFocus, 'handleClickToFocusBody', sinon.spy());
+    sinon.stub(handleCellFocus, 'handleClickToFocusBody').returns(sinon.spy());
 
     const { queryByText } = render(
       <TableBodyWrapper

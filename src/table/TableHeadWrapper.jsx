@@ -33,7 +33,7 @@ const SORT_NOTATIONS = {
   desc: 'Sorted descending',
 };
 
-export default function TableHeadWrapper({
+function TableHeadWrapper({
   rootElement,
   tableData,
   theme,
@@ -105,3 +105,5 @@ TableHeadWrapper.propTypes = {
   focusedCellCoord: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
 };
+
+export default TableHeadWrapper;
