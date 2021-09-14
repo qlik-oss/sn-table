@@ -35,20 +35,6 @@ describe('handle-key-press', () => {
       expect(nextCol).to.eql(0);
     });
 
-    it('should stay the current cell when move left', () => {
-      evt.key = 'ArrowLeft';
-      const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
-      expect(nextRow).to.eql(0);
-      expect(nextCol).to.eql(0);
-    });
-
-    it('should stay the current cell when move right', () => {
-      evt.key = 'ArrowRight';
-      const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
-      expect(nextRow).to.eql(0);
-      expect(nextCol).to.eql(0);
-    });
-
     it('should go to one row down cell', () => {
       evt.key = 'ArrowDown';
       rowAndColumnCount.rowCount = 2;
@@ -88,6 +74,50 @@ describe('handle-key-press', () => {
       const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
       expect(nextRow).to.eql(0);
       expect(nextCol).to.eql(0);
+    });
+
+    it('should move to the next row when we reach to the end of the current row', () => {
+      evt.key = 'ArrowRight';
+      rowAndColumnCount.rowCount = 3;
+      rowAndColumnCount.columnCount = 3;
+      rowIndex = 1;
+      colIndex = 3;
+      const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
+      expect(nextRow).to.eql(2);
+      expect(nextCol).to.eql(0);
+    });
+
+    it('should move to the prev row when we reach to the beganing of the current row', () => {
+      evt.key = 'ArrowLeft';
+      rowAndColumnCount.rowCount = 3;
+      rowAndColumnCount.columnCount = 3;
+      rowIndex = 2;
+      colIndex = 0;
+      const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
+      expect(nextRow).to.eql(1);
+      expect(nextCol).to.eql(2);
+    });
+
+    it('should stay at the first row and first col of table when we reached to the beganing of the table', () => {
+      evt.key = 'ArrowLeft';
+      rowAndColumnCount.rowCount = 2;
+      rowAndColumnCount.columnCount = 2;
+      rowIndex = 0;
+      colIndex = 0;
+      const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
+      expect(nextRow).to.eql(0);
+      expect(nextCol).to.eql(0);
+    });
+
+    it('should stay at the end row and end col of table when we reached to the end of the table', () => {
+      evt.key = 'ArrowRight';
+      rowAndColumnCount.rowCount = 2;
+      rowAndColumnCount.columnCount = 2;
+      rowIndex = 1;
+      colIndex = 1;
+      const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
+      expect(nextRow).to.eql(1);
+      expect(nextCol).to.eql(1);
     });
   });
 
