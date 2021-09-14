@@ -109,7 +109,7 @@ describe('handle-key-press', () => {
       expect(nextCol).to.eql(0);
     });
 
-    it.only('should stay at the end row and end col of table when we reached to the end of the table', () => {
+    it('should stay at the end row and end col of table when we reached to the end of the table', () => {
       evt.key = 'ArrowRight';
       rowAndColumnCount.rowCount = 2;
       rowAndColumnCount.columnCount = 2;
