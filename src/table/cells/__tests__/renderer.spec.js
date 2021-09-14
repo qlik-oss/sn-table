@@ -5,20 +5,19 @@ import * as withStyling from '../withStyling';
 
 describe('render', () => {
   describe('getCellRenderer', () => {
-    const sandbox = sinon.createSandbox();
     let selectionsEnabled;
     let hasColumnStyling;
 
     beforeEach(() => {
       selectionsEnabled = false;
       hasColumnStyling = false;
-      sandbox.replace(withSelections, 'default', sandbox.spy());
-      sandbox.replace(withColumnStyling, 'default', sandbox.spy());
-      sandbox.replace(withStyling, 'default', sandbox.spy());
+      sinon.stub(withSelections, 'default').returns(sinon.spy());
+      sinon.stub(withColumnStyling, 'default').returns(sinon.spy());
+      sinon.stub(withStyling, 'default').returns(sinon.spy());
     });
 
     afterEach(() => {
-      sandbox.verifyAndRestore();
+      sinon.verifyAndRestore();
     });
 
     it('should call withStyling when selectionsEnabled and hasColumnStyling is false', () => {
