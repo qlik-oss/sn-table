@@ -38,7 +38,6 @@ export default function TableWrapper(props) {
   const focusedCellCoord = useRef([0, 0]);
   const shouldRefocus = useRef(false);
   const tableSection = useRef();
-  const tableWrapperRef = useRef();
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
