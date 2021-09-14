@@ -83,8 +83,9 @@ function TableHeadWrapper({
             >
               <TableSortLabel active={isCurrentColumnActive} direction={column.sortDirection} tabIndex={-1}>
                 {column.label}
-                <span className={classes.visuallyHidden}>
-                  {isCurrentColumnActive && currentSortDir}. Press space to sort on this column.
+                <span className={classes.visuallyHidden} data-testid={`VHL-for-col-${columnIndex}`}>
+                  {isCurrentColumnActive && `${currentSortDir}. `}
+                  Press space to sort on this column.
                 </span>
               </TableSortLabel>
             </TableCell>
