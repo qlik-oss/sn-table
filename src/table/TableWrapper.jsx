@@ -30,8 +30,6 @@ const useStyles = makeStyles({
   },
 });
 
-
-
 export default function TableWrapper(props) {
   const { rootElement, tableData, setPageInfo, constraints, selectionsAPI } = props;
   const { size, rows, columns } = tableData;

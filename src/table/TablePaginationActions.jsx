@@ -1,4 +1,3 @@
-
 import IconButton from '@material-ui/core/IconButton';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
@@ -13,8 +12,8 @@ const useStyles = makeStyles({
     flexShrink: 0,
   },
   disabled: {
-    color: 'rgba(0, 0, 0, 0.3)'
-  }
+    color: 'rgba(0, 0, 0, 0.3)',
+  },
 });
 
 export default function TablePaginationActions(props) {
@@ -42,7 +41,7 @@ export default function TablePaginationActions(props) {
 
   return (
     <div className={classes.root}>
-      <IconButton 
+      <IconButton
         onClick={!onFirstPage && handleFirstPageButtonClick}
         aria-disabled={onFirstPage}
         aria-label="first page"
@@ -51,7 +50,7 @@ export default function TablePaginationActions(props) {
       >
         <FirstPageIcon />
       </IconButton>
-      <IconButton 
+      <IconButton
         onClick={!onFirstPage && handleBackButtonClick}
         aria-disabled={onFirstPage}
         aria-label="previous page"
@@ -60,7 +59,7 @@ export default function TablePaginationActions(props) {
       >
         <KeyboardArrowLeft />
       </IconButton>
-      <IconButton 
+      <IconButton
         onClick={!onLastPage && handleNextButtonClick}
         aria-disabled={onLastPage}
         aria-label="next page"
@@ -69,7 +68,7 @@ export default function TablePaginationActions(props) {
       >
         <KeyboardArrowRight />
       </IconButton>
-      <IconButton 
+      <IconButton
         onClick={!onLastPage && handleLastPageButtonClick}
         aria-disabled={onLastPage}
         aria-label="last page"
@@ -84,7 +83,7 @@ export default function TablePaginationActions(props) {
 
 TablePaginationActions.propTypes = {
   count: PropTypes.number.isRequired,
-  onPageChange: PropTypes.func.isRequired,
+  onChangePage: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
 };
