@@ -2,12 +2,10 @@ import '../../__tests__/rtl-setup';
 import React from 'react';
 import { render } from '@testing-library/react';
 import { expect } from 'chai';
-import sinon from 'sinon';
 
 import * as withStyling from '../withStyling';
 
 describe('withStyling', () => {
-  const sandbox = sinon.createSandbox();
   let HOC;
   let styling;
 
@@ -17,11 +15,6 @@ describe('withStyling', () => {
     HOC = withStyling.default((props) => <div {...props}>{props.value}</div>);
 
     styling = {};
-  });
-
-  afterEach(() => {
-    sandbox.verifyAndRestore();
-    sandbox.resetHistory();
   });
 
   it('should render table head', () => {
