@@ -85,6 +85,7 @@ const TableBodyWrapper = ({
               CellRenderer && (
                 <CellRenderer
                   scope={columnIndex === 0 ? 'row' : null}
+                  component={columnIndex === 0 ? 'th' : null}
                   cell={cell}
                   column={column}
                   value={value}
