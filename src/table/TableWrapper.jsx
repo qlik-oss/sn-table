@@ -76,7 +76,7 @@ export default function TableWrapper(props) {
 
   useEffect(() => {
     console.log(keyboard);
-    // if (!keyboard.enabled) return;
+    if (!keyboard.enabled) return;
 
     updateFocus(rootElement.getElementsByClassName('sn-table-row'), focusedCellCoord.current, !!keyboard.inFocus);
   }, [keyboard.inFocus]);
