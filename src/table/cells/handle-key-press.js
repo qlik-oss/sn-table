@@ -22,7 +22,7 @@ export const handleWrapperKeyDown = (
       handleChangePage(null, page - 1);
     }
   } else if (evt.keyCode === 27) {
-    evt.target.blur();
+    // esc
     keyboard.exit();
   }
 };
