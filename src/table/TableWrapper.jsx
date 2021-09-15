@@ -30,7 +30,7 @@ const useStyles = makeStyles({
 });
 
 export default function TableWrapper(props) {
-  const { rootElement, tableData, setPageInfo, constraints, translator, selectionsAPI } = props;
+  const { rootElement, tableData, setPageInfo, constraints, selectionsAPI } = props;
   const { size, rows, columns } = tableData;
   const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
@@ -85,10 +85,7 @@ export default function TableWrapper(props) {
       onKeyDown={(evt) => updatePage(evt, size.qcy, page, rowsPerPage, handleChangePage, setShouldRefocus)}
     >
       <TableContainer ref={tableSection} className={classes[containerMode]}>
-        <Table
-          stickyHeader
-          aria-label={translator.get('rows and columns', [`${rows.length + 1}`, `${columns.length}`])}
-        >
+        <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
           <TableHeadWrapper {...props} focusedCellCoord={focusedCellCoord} />
           <TableBodyWrapper {...props} focusedCellCoord={focusedCellCoord} setShouldRefocus={setShouldRefocus} />
         </Table>
@@ -101,10 +98,7 @@ export default function TableWrapper(props) {
         rowsPerPage={rowsPerPage}
         page={page}
         SelectProps={{
-          inputProps: {
-            'aria-label': `${translator.get('rows per page')}`,
-            'data-testid': 'select',
-          },
+          inputProps: { 'aria-label': 'rows per page', 'data-testid': 'select' },
           native: true,
         }}
         onChangePage={handleChangePage}
@@ -118,7 +112,6 @@ TableWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
-  translator: PropTypes.object.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
 };
