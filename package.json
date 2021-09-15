@@ -49,7 +49,7 @@
     "@nebula.js/cli-build": "1.7.0",
     "@nebula.js/cli-sense": "1.7.0",
     "@nebula.js/cli-serve": "1.7.0",
-    "@rollup/plugin-commonjs": "^19.0.2",
+    "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-image": "^2.1.1",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.4",
