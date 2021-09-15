@@ -18,17 +18,18 @@ export const updatePage = (evt, totalRowSize, page, rowsPerPage, handleChangePag
 
 export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, selState) => {
   let [nextRow, nextCol] = cellCoord;
-  const isSelectedTable = selState && selState.rows.length > 0;
+  // check if you have unconfirmed selections, so one or more cells are selected but not confirmed yet.
+  const hasUnconfirmedSelection = selState && selState.rows.length > 0;
 
   switch (evt.key) {
     case 'ArrowDown':
       nextRow + 1 < rowAndColumnCount.rowCount && nextRow++;
       break;
     case 'ArrowUp':
-      nextRow > 0 && (!isSelectedTable || nextRow !== 1) && nextRow--;
+      nextRow > 0 && (!hasUnconfirmedSelection || nextRow !== 1) && nextRow--;
       break;
     case 'ArrowRight':
-      if (isSelectedTable) break;
+      if (hasUnconfirmedSelection) break;
       if (nextCol < rowAndColumnCount.columnCount - 1) {
         nextCol++;
       } else if (nextRow < rowAndColumnCount.rowCount - 1) {
@@ -37,7 +38,7 @@ export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, selState)
       }
       break;
     case 'ArrowLeft':
-      if (isSelectedTable) break;
+      if (hasUnconfirmedSelection) break;
       if (nextCol > 0) {
         nextCol--;
       } else if (nextRow > 0) {
