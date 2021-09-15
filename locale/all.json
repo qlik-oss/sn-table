@@ -1,0 +1,22 @@
+{
+  "rows per page": {
+    "id": "rows per page",
+    "locale": {
+      "de-DE": "rows per page",
+      "en-US": "rows per page",
+      "es-ES": "rows per page",
+      "fr-FR": "rows per page",
+      "it-IT": "rows per page",
+      "ja-JP": "rows per page",
+      "ko-KR": "rows per page",
+      "nl-NL": "rows per page",
+      "pl-PL": "rows per page",
+      "pt-BR": "rows per page",
+      "ru-RU": "rows per page",
+      "sv-SE": "rows per page",
+      "tr-TR": "rows per page",
+      "zh-CN": "每页行数",
+      "zh-TW": "rows per page"
+    }
+  }
+}
