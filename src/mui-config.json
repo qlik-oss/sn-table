@@ -185,7 +185,6 @@
     },
     "MuiSelect": {
       "root": {
-        "height": "32px",
         "zIndex": 1,
         "borderRadius": "3px !important",
         "& em": {
