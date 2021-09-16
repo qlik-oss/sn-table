@@ -1,9 +1,9 @@
 {
-    "rows per page": {
+    "RowsPerPage": {
         "value": "每页行数",
-        "comment": "rows per page"
+        "comment": "he number of rows per page"
     },
-    "rows and columns": {
+    "RowsAndColumns": {
         "value": "展示{0}行和{1}列",
         "comment": "showing how many rows and how many columns"
     }

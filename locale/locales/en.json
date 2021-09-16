@@ -1,9 +1,9 @@
 {
-    "rows per page": {
+    "RowsPerPage": {
         "value": "rows per page",
         "comment": "the number of rows per page"
     },
-    "rows and columns": {
+    "RowsAndColumns": {
         "value": "showing {0} rows and {1} columns",
         "comment": "showing how many rows and how many columns"
     }

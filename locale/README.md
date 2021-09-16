@@ -1,16 +1,6 @@
+# Locale
 
-```sh
-pwd
-```
-
-sn-table/locale
-
-```sh
-yarn
-yarn run build
-```
-
-the core idea:
+## The core idea
 
 Registers a string in multiple locales
 
@@ -23,4 +13,18 @@ translator.add({
   },
 });
 translator.get('company.hello_user', ['John']); // Hello John
+```
+
+## Command
+
+Generate all.json
+
+```sh
+yarn  locale:generate
+```
+
+verify locale
+
+```sh
+yarn locale:verify
 ```

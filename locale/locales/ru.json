@@ -1,6 +1,6 @@
 {
-    "rows per page": {
+    "RowsPerPage": {
         "value": "rows per page",
-        "comment": "rows per page"
+        "comment": "the number of rows per page"
     }
 }
