@@ -65,15 +65,15 @@ export default function TableWrapper(props) {
   }
 
   useEffect(() => {
-    const updateSize = () => setTableWidth(rootElement.clientWidth);
+    const resizeCallback = () => setTableWidth(rootElement.clientWidth);
     const scrollCallback = (evt) => handleScroll(evt, tableSection);
     const focusOutCallback = (evt) => !TableWrapperRef.current.contains(evt.relatedTarget) && keyboard.exit(false);
 
-    window.addEventListener('resize', updateSize);
+    window.addEventListener('resize', resizeCallback);
     tableSection.current.addEventListener('wheel', scrollCallback);
     TableWrapperRef.current.addEventListener('focusout', focusOutCallback);
     return () => {
-      window.removeEventListener('resize', updateSize);
+      window.removeEventListener('resize', resizeCallback);
       tableSection.current.removeEventListener('wheel', scrollCallback);
       TableWrapperRef.current.removeEventListener('focusout', focusOutCallback);
     };

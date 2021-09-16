@@ -37,6 +37,7 @@ export default function TableHeadWrapper({
   constraints,
   selectionsAPI,
   focusedCellCoord,
+  keyboard,
 }) {
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
@@ -45,13 +46,13 @@ export default function TableHeadWrapper({
     <TableHead>
       <TableRow className="sn-table-row">
         {tableData.columns.map((column, columnIndex) => {
-          const tabIndex = columnIndex === 0 ? '0' : '-1';
+          const tabIndex = columnIndex === 0 && keyboard.enabled ? '0' : '-1';
           return (
             <TableCell
               key={column.id}
               align={column.align}
               className={`${classes.head} sn-table-head-cell sn-table-cell`}
-              tabIndex={-1}
+              tabIndex={tabIndex}
               onKeyDown={(e) =>
                 headHandleKeyPress(
                   e,
@@ -99,4 +100,5 @@ TableHeadWrapper.propTypes = {
   constraints: PropTypes.object.isRequired,
   focusedCellCoord: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
+  keyboard: PropTypes.object.isRequired,
 };

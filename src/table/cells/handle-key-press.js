@@ -3,11 +3,6 @@ import { updateFocus } from './handle-cell-focus';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
-export const removeCurrentFocus = (evt) => {
-  // evt.target.blur();
-  evt.target.setAttribute('tabIndex', '-1');
-};
-
 export const preventDefaultBehavior = (evt) => {
   evt.stopPropagation();
   evt.preventDefault();
@@ -73,7 +68,7 @@ export const getRowAndColumnCount = (rootElement) => {
 
 export const moveFocus = (evt, rootElement, cellCoord, focusedCellCoord, selState) => {
   preventDefaultBehavior(evt);
-  removeCurrentFocus(evt);
+  evt.target.setAttribute('tabIndex', '-1');
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
   const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selState);
   updateFocus(rowAndColumnCount.rowElements, nextCellCoord, 'focus');
