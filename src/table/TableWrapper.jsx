@@ -38,6 +38,7 @@ export default function TableWrapper(props) {
   const focusedCellCoord = useRef([0, 0]);
   const shouldRefocus = useRef(false);
   const tableSection = useRef();
+  const TableWrapperRef = useRef();
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
@@ -65,19 +66,27 @@ export default function TableWrapper(props) {
 
   useEffect(() => {
     const updateSize = () => setTableWidth(rootElement.clientWidth);
+    const scrollCallback = (evt) => handleScroll(evt, tableSection);
+    const focusOutCallback = (evt) => !TableWrapperRef.current.contains(evt.relatedTarget) && keyboard.exit(false);
+
     window.addEventListener('resize', updateSize);
-    tableSection.current.addEventListener('wheel', (evt) => handleScroll(evt, tableSection));
+    tableSection.current.addEventListener('wheel', scrollCallback);
+    TableWrapperRef.current.addEventListener('focusout', focusOutCallback);
     return () => {
       window.removeEventListener('resize', updateSize);
-      tableSection.current.removeEventListener('wheel', (evt) => handleScroll(evt, tableSection));
+      tableSection.current.removeEventListener('wheel', scrollCallback);
+      TableWrapperRef.current.removeEventListener('focusout', focusOutCallback);
     };
-  }, []);
+  }, [keyboard]);
 
   useEffect(() => {
-    console.log(keyboard);
     if (!keyboard.enabled) return;
 
-    updateFocus(rootElement.getElementsByClassName('sn-table-row'), focusedCellCoord.current, !!keyboard.inFocus);
+    updateFocus(
+      rootElement.getElementsByClassName('sn-table-row'),
+      focusedCellCoord.current,
+      keyboard.inFocus ? 'focus' : 'blur'
+    );
   }, [keyboard.inFocus]);
 
   // Except for first render, whenever the size of the data changes (number of rows per page, rows or columns),
@@ -89,6 +98,7 @@ export default function TableWrapper(props) {
   return (
     <Paper
       className={classes.paper}
+      ref={TableWrapperRef}
       onKeyDown={(evt) =>
         handleWrapperKeyDown(evt, size.qcy, page, rowsPerPage, handleChangePage, setShouldRefocus, keyboard)
       }

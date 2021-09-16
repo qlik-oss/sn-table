@@ -3,6 +3,16 @@ import { updateFocus } from './handle-cell-focus';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
+export const removeCurrentFocus = (evt) => {
+  // evt.target.blur();
+  evt.target.setAttribute('tabIndex', '-1');
+};
+
+export const preventDefaultBehavior = (evt) => {
+  evt.stopPropagation();
+  evt.preventDefault();
+};
+
 export const handleWrapperKeyDown = (
   evt,
   totalRowSize,
@@ -23,7 +33,8 @@ export const handleWrapperKeyDown = (
     }
   } else if (evt.keyCode === 27) {
     // esc
-    keyboard.exit();
+    preventDefaultBehavior(evt);
+    keyboard.exit(true);
   }
 };
 
@@ -60,22 +71,12 @@ export const getRowAndColumnCount = (rootElement) => {
   return { rowElements, rowCount, columnCount };
 };
 
-export const removeCurrentFocus = (evt) => {
-  evt.target.blur();
-  evt.target.setAttribute('tabIndex', '-1');
-};
-
-export const preventDefaultBehavior = (evt) => {
-  evt.stopPropagation();
-  evt.preventDefault();
-};
-
 export const moveFocus = (evt, rootElement, cellCoord, focusedCellCoord, selState) => {
   preventDefaultBehavior(evt);
   removeCurrentFocus(evt);
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
   const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selState);
-  updateFocus(rowAndColumnCount.rowElements, nextCellCoord);
+  updateFocus(rowAndColumnCount.rowElements, nextCellCoord, 'focus');
   focusedCellCoord.current = nextCellCoord;
 };
 
@@ -141,6 +142,7 @@ export const bodyHandleKeyPress = (
     }
     // Esc: Cancels selections
     case 'Escape': {
+      if (!isAnalysisMode || !selState.api.isModal()) break;
       preventDefaultBehavior(evt);
       isAnalysisMode && selState.api.cancel();
       break;
