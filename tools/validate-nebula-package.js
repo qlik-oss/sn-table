@@ -1,6 +1,18 @@
 const fs = require('fs');
 const path = require('path');
 
+const validateScripts = (pkg) => {
+  if (pkg.scripts.build !== 'node ./tools/build.js --core') {
+    throw new Error('package.json does not have correct build script');
+  }
+  if (pkg.scripts.prepublishOnly !== 'NODE_ENV=production yarn run build') {
+    throw new Error('package.json does not have correct prepublishOnly script');
+  }
+  if (pkg.scripts.prepack !== './tools/prepare-sn-pack.js') {
+    throw new Error('package.json does not have correct prepack script');
+  }
+};
+
 const validatePackageJsonContent = (pkg) => {
   // == VALIDATE package.json contents ==
   // package name
@@ -22,15 +34,7 @@ const validatePackageJsonContent = (pkg) => {
     );
   }
 
-  if (pkg.scripts.build !== 'node ./tools/build.js --core') {
-    throw new Error('package.json does not have correct build script');
-  }
-  if (pkg.scripts.prepublishOnly !== 'NODE_ENV=production yarn run build') {
-    throw new Error('package.json does not have correct prepublishOnly script');
-  }
-  if (pkg.scripts.prepack !== './tools/prepare-sn-pack.js') {
-    throw new Error('package.json does not have correct prepack script');
-  }
+  validateScripts(pkg);
 };
 
 const validateFiles = (pkg) => {
