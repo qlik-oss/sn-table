@@ -55,7 +55,7 @@ export default function supernova(env) {
             keyboard,
           });
         }
-      }, [tableData, constraints, selectionsAPI.isModal(), theme.name(), keyboard]);
+      }, [tableData, constraints, selectionsAPI.isModal(), theme.name(), keyboard.active]);
 
       useEffect(
         () => () => {

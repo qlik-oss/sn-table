@@ -29,7 +29,7 @@ export const handleWrapperKeyDown = (
   } else if (evt.keyCode === 27) {
     // esc
     preventDefaultBehavior(evt);
-    keyboard.exit(true);
+    keyboard.blur(true);
   }
 };
 

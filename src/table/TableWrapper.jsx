@@ -67,7 +67,7 @@ export default function TableWrapper(props) {
   useEffect(() => {
     const resizeCallback = () => setTableWidth(rootElement.clientWidth);
     const scrollCallback = (evt) => handleScroll(evt, tableSection);
-    const focusOutCallback = (evt) => !TableWrapperRef.current.contains(evt.relatedTarget) && keyboard.exit(false);
+    const focusOutCallback = (evt) => !TableWrapperRef.current.contains(evt.relatedTarget) && keyboard.blur(false);
 
     window.addEventListener('resize', resizeCallback);
     tableSection.current.addEventListener('wheel', scrollCallback);
@@ -85,9 +85,9 @@ export default function TableWrapper(props) {
     updateFocus(
       rootElement.getElementsByClassName('sn-table-row'),
       focusedCellCoord.current,
-      keyboard.inFocus ? 'focus' : 'blur'
+      keyboard.active ? 'focus' : 'blur'
     );
-  }, [keyboard.inFocus]);
+  }, [keyboard.active]);
 
   // Except for first render, whenever the size of the data changes (number of rows per page, rows or columns),
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.

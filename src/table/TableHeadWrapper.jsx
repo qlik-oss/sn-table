@@ -46,7 +46,7 @@ export default function TableHeadWrapper({
     <TableHead>
       <TableRow className="sn-table-row">
         {tableData.columns.map((column, columnIndex) => {
-          const tabIndex = columnIndex === 0 && keyboard.enabled ? '0' : '-1';
+          const tabIndex = columnIndex === 0 && !keyboard.enabled ? '0' : '-1';
           return (
             <TableCell
               key={column.id}

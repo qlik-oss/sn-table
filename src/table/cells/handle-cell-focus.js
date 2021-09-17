@@ -2,7 +2,7 @@ const getRowElements = (rootElement) => rootElement.getElementsByClassName('sn-t
 
 export const updateFocus = (rowElements, cellCoord, focusType) => {
   const cell = rowElements[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[cellCoord[1]];
-  if (cell) return;
+  if (!cell) return;
 
   switch (focusType) {
     case 'focus':
@@ -29,7 +29,7 @@ export const removeAndFocus = (rootElement, oldCoord, newCoord) => {
   updateFocus(rowElements, oldCoord.current, 'removeTab');
   oldCoord.current = newCoord;
   updateFocus(rowElements, newCoord, 'focus');
-}
+};
 
 export const handleClickToFocusBody = (cell, focusedCellCoord, rootElement) => {
   const { rawRowIdx, rawColIdx } = cell;
@@ -42,7 +42,7 @@ export const handleClickToFocusHead = (columnIndex, focusedCellCoord, rootElemen
 
 export const handleResetFocus = (focusedCellCoord, rootElement, shouldRefocus, hasSelections) => {
   const rowElements = getRowElements(rootElement);
-  updateFocus(rowElements, focusedCellCoord.current, 'blur');
+  updateFocus(rowElements, focusedCellCoord.current, 'removeTab');
 
   // If we have selections ongoing, we want to stay on the same column
   const nextCell = hasSelections ? [1, focusedCellCoord.current[1]] : [0, 0];
