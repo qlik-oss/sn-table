@@ -110,7 +110,12 @@ export default function TableWrapper(props) {
       <TableContainer ref={tableSection} className={classes[containerMode]}>
         <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
           <TableHeadWrapper {...props} setfocusedCellCoord={setfocusedCellCoord} />
-          <TableBodyWrapper {...props} setfocusedCellCoord={setfocusedCellCoord} setShouldRefocus={setShouldRefocus} />
+          <TableBodyWrapper
+            {...props}
+            setfocusedCellCoord={setfocusedCellCoord}
+            focusedCellCoord={focusedCellCoord}
+            setShouldRefocus={setShouldRefocus}
+          />
         </Table>
       </TableContainer>
       <TablePagination
