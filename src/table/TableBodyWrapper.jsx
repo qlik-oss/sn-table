@@ -83,11 +83,11 @@ function TableBodyWrapper({
   const getSrNotation = () => {
     if (focusedCellCoord.toString() == '0,0') return '';
 
-    const [x, y] = focusedCellCoord;
+    const [rowIdx, colIdx] = focusedCellCoord;
     const rowElements = rootElement.getElementsByClassName('sn-table-row');
-    const cell = rowElements[x]?.getElementsByClassName('sn-table-cell')[y];
+    const cell = rowElements[rowIdx]?.getElementsByClassName('sn-table-cell')[colIdx];
 
-    const tColumnName = tableData.columns[y].label;
+    const tColumnName = tableData.columns[colIdx].label;
     const tCellContent = cell && cell.innerText;
     const isCellSelected = cell && cell.classList.contains('selected');
 
