@@ -44,6 +44,7 @@ const TableBodyWrapper = ({
   theme,
   focusedCellCoord,
   setShouldRefocus,
+  keyboard,
 }) => {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
@@ -106,7 +107,7 @@ const TableBodyWrapper = ({
                       selectionsEnabled
                     )
                   }
-                  onMouseDown={() => handleClickToFocusBody(cell, focusedCellCoord, rootElement)}
+                  onMouseDown={() => handleClickToFocusBody(cell, focusedCellCoord, rootElement, keyboard)}
                 >
                   <div className={classes.srOnly}>{column.label}</div>
                   {value}
@@ -129,6 +130,7 @@ TableBodyWrapper.propTypes = {
   theme: PropTypes.object.isRequired,
   focusedCellCoord: PropTypes.object.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
+  keyboard: PropTypes.func.isRequired,
 };
 
 export default React.memo(TableBodyWrapper);

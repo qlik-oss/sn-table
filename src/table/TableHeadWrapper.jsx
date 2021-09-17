@@ -65,7 +65,7 @@ export default function TableHeadWrapper({
                   !constraints.active
                 )
               }
-              onMouseDown={() => handleClickToFocusHead(columnIndex, focusedCellCoord, rootElement)}
+              onMouseDown={() => handleClickToFocusHead(columnIndex, focusedCellCoord, rootElement, keyboard)}
             >
               <TableSortLabel
                 active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
