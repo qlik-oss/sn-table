@@ -88,7 +88,7 @@ describe('<TableWrapper />', () => {
         rootElement={rootElement}
       />
     );
-    fireEvent.click(await findByTitle('Next page'));
+    fireEvent.click(await findByTitle('Go to next page'));
 
     expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
     expect(await findByText(`101-200 of ${tableData.size.qcy}`)).to.be.visible;
@@ -107,7 +107,7 @@ describe('<TableWrapper />', () => {
     // This is a hack to simulate when selections are made on other page than first page and
     // rows per page is bigger than the selected rows -> handle data returns no rows.
     tableData.rows = [];
-    fireEvent.click(await findByTitle('Next page'));
+    fireEvent.click(await findByTitle('Go to next page'));
 
     // Called when pressing the button
     expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
