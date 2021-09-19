@@ -1,4 +1,5 @@
-import { createGenerateClassName, createMuiTheme } from '@material-ui/core/styles';
+import { createTheme } from '@mui/material/styles';
+import { createGenerateClassName } from '@mui/styles';
 import * as muiConfig from './mui-config.json';
 
 export default function muiSetup() {
@@ -20,7 +21,7 @@ export default function muiSetup() {
     };
   }
 
-  const theme = createMuiTheme(muiConfig);
+  const theme = createTheme(muiConfig);
   const generateClassName = createGenerateClassName({
     productionPrefix: `${process.env.PACKAGE_VERSION}`,
     disableGlobal: true,
