@@ -22,7 +22,7 @@
     "core"
   ],
   "engines": {
-    "node": ">=8"
+    "node": ">=14"
   },
   "main": "dist/sn-table.js",
   "scripts": {
