@@ -81,7 +81,7 @@ export const handleNavigateTop = ({ tableSection, focusedCellCoord, rootElement 
   }
 };
 
-export const getCellSrNotation = ({ focusedCellCoord, rootElement, selState }) => {
+export const getCellSrNotation = ({ focusedCellCoord, rootElement, selState, tableData }) => {
   if (focusedCellCoord.toString().startsWith('0')) return '';
 
   const [rowIdx, colIdx] = focusedCellCoord;

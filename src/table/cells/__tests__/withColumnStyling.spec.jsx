@@ -8,7 +8,6 @@ import * as withColumnStyling from '../withColumnStyling';
 import * as stylingUtils from '../../styling-utils';
 
 describe('withColumnStyling', () => {
-  const sandbox = sinon.createSandbox();
   let HOC;
   let cell;
   let column;
@@ -18,7 +17,7 @@ describe('withColumnStyling', () => {
     // This is a bit of dummy mock. value will be on props, but this is not how the value is set. That is done in tableBodyWrapper
     // But this enables testing that withStyling uses the CellComponent correctly
     HOC = withColumnStyling.default((props) => <div {...props}>{props.value}</div>);
-    sandbox.replace(stylingUtils, 'getColumnStyle', sinon.spy());
+    sinon.stub(stylingUtils, 'getColumnStyle').returns(sinon.spy());
 
     styling = {};
     cell = {
@@ -30,8 +29,8 @@ describe('withColumnStyling', () => {
   });
 
   afterEach(() => {
-    sandbox.verifyAndRestore();
-    sandbox.resetHistory();
+    sinon.verifyAndRestore();
+    sinon.resetHistory();
   });
 
   it('should render table head', () => {
