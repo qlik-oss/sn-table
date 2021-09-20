@@ -50,7 +50,7 @@ describe('<TableWrapper />', () => {
   });
 
   it('should render table', () => {
-    const { queryByText } = render(
+    const { queryByLabelText, queryByText } = render(
       <TableWrapper
         tableData={tableData}
         setPageInfo={setPageInfo}
@@ -61,6 +61,8 @@ describe('<TableWrapper />', () => {
       />
     );
 
+    expect(queryByLabelText('SNTable.RowsAndColumns')).to.be.visible;
+    expect(queryByLabelText('SNTable.RowsPerPage')).to.be.visible;
     expect(queryByText(`1-${rowsPerPage} of ${tableData.size.qcy}`)).to.be.visible;
     expect(queryByText(rowsPerPage)).to.be.visible;
   });
@@ -77,7 +79,7 @@ describe('<TableWrapper />', () => {
       />
     );
 
-    fireEvent.keyDown(queryByLabelText('RowsPerPage'), { key: 'Control', code: 'ControlLeft' });
+    fireEvent.keyDown(queryByLabelText('SNTable.RowsPerPage'), { key: 'Control', code: 'ControlLeft' });
     expect(handleKeyPress.updatePage).to.have.been.calledOnce;
   });
 
