@@ -10,8 +10,6 @@ import {
   useTheme,
   usePromise,
 } from '@nebula.js/stardust';
-// add "@nebula.js/sn-table-locale": "0.1.0" in devDependencies
-// import locale from '@qlik/la-vie-locale';
 import locale from '../locale/src';
 
 import properties from './object-properties';
@@ -43,9 +41,9 @@ export default function supernova(env) {
       const [muiParameters] = useState(() => muiSetup());
       const [tableData] = usePromise(() => manageData(model, layout, pageInfo), [layout, pageInfo]);
 
-      locale(translator);
       useEffect(() => {
         if (layout && tableData) {
+          locale(translator);
           const changeSortOrder = sortingFactory(model, tableData.columnOrder);
           render(rootElement, {
             rootElement,
@@ -60,7 +58,7 @@ export default function supernova(env) {
             changeSortOrder,
           });
         }
-      }, [tableData, constraints, selectionsAPI.isModal(), theme.name()]);
+      }, [tableData, constraints, selectionsAPI.isModal(), theme.name(), translator.language()]);
 
       useEffect(
         () => () => {

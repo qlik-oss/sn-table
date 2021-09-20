@@ -85,7 +85,10 @@ export default function TableWrapper(props) {
       onKeyDown={(evt) => updatePage(evt, size.qcy, page, rowsPerPage, handleChangePage, setShouldRefocus)}
     >
       <TableContainer ref={tableSection} className={classes[containerMode]}>
-        <Table stickyHeader aria-label={translator.get('RowsAndColumns', [`${rows.length + 1}`, `${columns.length}`])}>
+        <Table
+          stickyHeader
+          aria-label={translator.get('SNTable.RowsAndColumns', [`${rows.length + 1}`, `${columns.length}`])}
+        >
           <TableHeadWrapper {...props} focusedCellCoord={focusedCellCoord} />
           <TableBodyWrapper {...props} focusedCellCoord={focusedCellCoord} setShouldRefocus={setShouldRefocus} />
         </Table>
@@ -99,7 +102,7 @@ export default function TableWrapper(props) {
         page={page}
         SelectProps={{
           inputProps: {
-            'aria-label': `${translator.get('RowsPerPage')}`,
+            'aria-label': `${translator.get('SNTable.RowsPerPage')}`,
             'data-testid': 'select',
           },
           native: true,

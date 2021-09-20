@@ -1,9 +1,9 @@
 {
-    "RowsPerPage": {
+    "SNTable.RowsPerPage": {
         "value": "每页行数",
         "comment": "he number of rows per page"
     },
-    "RowsAndColumns": {
+    "SNTable.RowsAndColumns": {
         "value": "展示{0}行和{1}列",
         "comment": "showing how many rows and how many columns"
     }

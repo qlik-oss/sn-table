@@ -1,6 +1,6 @@
 {
-  "RowsPerPage": {
-    "id": "RowsPerPage",
+  "SNTable_RowsPerPage": {
+    "id": "SNTable.RowsPerPage",
     "locale": {
       "de-DE": "rows per page",
       "en-US": "rows per page",
@@ -19,8 +19,8 @@
       "zh-TW": "rows per page"
     }
   },
-  "RowsAndColumns": {
-    "id": "RowsAndColumns",
+  "SNTable_RowsAndColumns": {
+    "id": "SNTable.RowsAndColumns",
     "locale": {
       "en-US": "showing {0} rows and {1} columns",
       "zh-CN": "展示{0}行和{1}列"
