@@ -80,3 +80,31 @@ export const handleNavigateTop = ({ tableSection, focusedCellCoord, rootElement 
     }
   }
 };
+
+export const getCellSrNotation = ({ focusedCellCoord, rootElement, selState }) => {
+  if (focusedCellCoord.toString().startsWith('0')) return '';
+
+  const [rowIdx, colIdx] = focusedCellCoord;
+  const rowElements = rootElement.getElementsByClassName('sn-table-row');
+  const cell = rowElements[rowIdx]?.getElementsByClassName('sn-table-cell')[colIdx];
+
+  const tColumnName = tableData.columns[colIdx].label;
+  const tCellContent = cell && cell.innerText;
+  const isCellSelected = cell && cell.classList.contains('selected');
+
+  let notation = '';
+  if (!selState.rows.length) {
+    notation += 'Value is not selected';
+    return notation;
+  } else {
+    const isSingularSelection = selState.rows.length === 1;
+    const selectionNote = `There ${isSingularSelection ? 'is' : 'are'} ${selState.rows.length} selected value${
+      isSingularSelection ? '' : 's'
+    } on ${tColumnName} column currently.`;
+
+    if (isCellSelected) notation += `${tCellContent},value is selected. ${selectionNote}`;
+    else notation += `${tCellContent},value is not selected.`;
+  }
+
+  return notation;
+};

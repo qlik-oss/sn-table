@@ -7,7 +7,7 @@ import { addSelectionListeners, reducer } from './selections-utils';
 import getCellRenderer from './cells/renderer';
 import { getBodyStyle } from './styling-utils';
 import { bodyHandleKeyPress } from './cells/handle-key-press';
-import { handleClickToFocusBody } from './cells/handle-cell-focus';
+import { handleClickToFocusBody, getCellSrNotation } from './cells/handle-cell-focus';
 
 const useStyles = makeStyles({
   cellBase: {
@@ -76,7 +76,8 @@ function TableBodyWrapper({
     setSrNotation('');
 
     setTimeout(() => {
-      setSrNotation(getSrNotation());
+      // setSrNotation(getSrNotation());
+      setSrNotation(getCellSrNotation({ focusedCellCoord, rootElement, selState }));
     }, MAX_NOTATION_DELAY);
   }, [focusedCellCoord, selState]);
 
