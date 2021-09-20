@@ -20,8 +20,9 @@ describe('<TableWrapper />', () => {
   let translator;
 
   beforeEach(() => {
-    sinon.stub(TableBodyWrapper, 'default').returns(() => <tbody />);
-    sinon.stub(TableHeadWrapper, 'default').returns(() => <thead />);
+    sinon.stub(TableBodyWrapper, 'default').returns(<tbody />);
+    sinon.stub(TableHeadWrapper, 'default').returns(<thead />);
+    sinon.stub(handleKeyPress, 'updatePage').returns(sinon.spy());
 
     tableData = {
       size: { qcy: 200 },
@@ -40,7 +41,6 @@ describe('<TableWrapper />', () => {
       clientHeight: {},
       getElementsByTagName: () => [{ clientHeight: {} }],
     };
-    sinon.stub(handleKeyPress, 'updatePage').returns(sinon.spy());
     translator = { get: (s) => s };
   });
 

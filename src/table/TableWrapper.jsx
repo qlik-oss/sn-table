@@ -9,7 +9,7 @@ import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import useDidUpdateEffect from './useDidUpdateEffect';
 import { updatePage } from './cells/handle-key-press';
-import { handleResetFocus } from './cells/handle-cell-focus';
+import { handleResetFocus, handleNavigateTop } from './cells/handle-cell-focus';
 import handleScroll from './handle-scroll';
 
 const useStyles = makeStyles({
@@ -35,7 +35,7 @@ export default function TableWrapper(props) {
   const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
-  const focusedCellCoord = useRef([0, 0]);
+  const [focusedCellCoord, setfocusedCellCoord] = useState([0, 0]);
   const shouldRefocus = useRef(false);
   const tableSection = useRef();
   const classes = useStyles();
@@ -73,24 +73,47 @@ export default function TableWrapper(props) {
     };
   }, []);
 
+  useEffect(() => {
+    handleNavigateTop({
+      tableSection,
+      focusedCellCoord,
+      rootElement,
+    });
+  }, [tableSection, focusedCellCoord]);
+
   // Except for first render, whenever the size of the data changes (number of rows per page, rows or columns),
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
   useDidUpdateEffect(() => {
-    handleResetFocus(focusedCellCoord, rootElement, shouldRefocus, selectionsAPI.isModal());
-  }, [rows.length, size.qcy, size.qcx]);
+    handleResetFocus({
+      focusedCellCoord,
+      rootElement,
+      shouldRefocus,
+      setfocusedCellCoord,
+      hasSelections: selectionsAPI.isModal(),
+    });
+  }, [rows.length, size.qcy, size.qcx, page]);
 
   return (
     <Paper
       className={classes.paper}
-      onKeyDown={(evt) => updatePage(evt, size.qcy, page, rowsPerPage, handleChangePage, setShouldRefocus)}
+      onKeyDown={(evt) =>
+        updatePage({
+          evt,
+          totalRowSize: size.qcy,
+          page,
+          rowsPerPage,
+          handleChangePage,
+          setShouldRefocus,
+        })
+      }
     >
       <TableContainer ref={tableSection} className={classes[containerMode]}>
         <Table
           stickyHeader
           aria-label={translator.get('SNTable.RowsAndColumns', [`${rows.length + 1}`, `${columns.length}`])}
         >
-          <TableHeadWrapper {...props} focusedCellCoord={focusedCellCoord} />
-          <TableBodyWrapper {...props} focusedCellCoord={focusedCellCoord} setShouldRefocus={setShouldRefocus} />
+          <TableHeadWrapper {...props} setfocusedCellCoord={setfocusedCellCoord} />
+          <TableBodyWrapper {...props} setfocusedCellCoord={setfocusedCellCoord} setShouldRefocus={setShouldRefocus} />
         </Table>
       </TableContainer>
       <TablePagination
