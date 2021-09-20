@@ -5,12 +5,11 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 
 import TableWrapper from '../TableWrapper';
-import TableBodyWrapper from '../TableBodyWrapper';
+import * as TableBodyWrapper from '../TableBodyWrapper';
 import * as TableHeadWrapper from '../TableHeadWrapper';
 import * as handleKeyPress from '../cells/handle-key-press';
 
 describe('<TableWrapper />', () => {
-  const sandbox = sinon.createSandbox();
   let tableData;
   let setPageInfo;
   let constraints;
@@ -20,8 +19,9 @@ describe('<TableWrapper />', () => {
   let rootElement;
 
   beforeEach(() => {
-    sandbox.replace(TableBodyWrapper, 'type', () => <tbody />);
-    sandbox.replace(TableHeadWrapper, 'default', () => <thead />);
+    sinon.stub(TableBodyWrapper, 'default').returns(<tbody />);
+    sinon.stub(TableHeadWrapper, 'default').returns(<thead />);
+    sinon.stub(handleKeyPress, 'updatePage').returns(sinon.spy());
 
     tableData = {
       size: { qcy: 200 },
@@ -40,12 +40,11 @@ describe('<TableWrapper />', () => {
       clientHeight: {},
       getElementsByTagName: () => [{ clientHeight: {} }],
     };
-    sandbox.replace(handleKeyPress, 'updatePage', sinon.spy());
   });
 
   afterEach(() => {
-    sandbox.verifyAndRestore();
-    sandbox.resetHistory();
+    sinon.verifyAndRestore();
+    sinon.resetHistory();
   });
 
   it('should render table', () => {

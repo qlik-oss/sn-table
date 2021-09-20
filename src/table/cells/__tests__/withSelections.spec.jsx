@@ -8,7 +8,6 @@ import * as withSelections from '../withSelections';
 import * as selectionsUtils from '../../selections-utils';
 
 describe('withSelections', async () => {
-  const sandbox = sinon.createSandbox();
   let HOC;
   let cell;
   let selState;
@@ -18,7 +17,7 @@ describe('withSelections', async () => {
 
   beforeEach(() => {
     HOC = withSelections.default((props) => <div {...props}>{props.cell.value}</div>);
-    sandbox.replace(selectionsUtils, 'selectCell', sinon.spy());
+    sinon.stub(selectionsUtils, 'selectCell').returns(sinon.spy());
 
     cell = {
       isDim: true,
@@ -34,8 +33,8 @@ describe('withSelections', async () => {
   });
 
   afterEach(() => {
-    sandbox.verifyAndRestore();
-    sandbox.resetHistory();
+    sinon.verifyAndRestore();
+    sinon.resetHistory();
   });
 
   it('should render a mocked component with the passed value', () => {

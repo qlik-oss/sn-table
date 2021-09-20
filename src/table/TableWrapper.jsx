@@ -9,7 +9,7 @@ import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import useDidUpdateEffect from './useDidUpdateEffect';
 import { handleWrapperKeyDown } from './cells/handle-key-press';
-import { updateFocus, handleResetFocus } from './cells/handle-cell-focus';
+import { updateFocus, handleResetFocus, handleNavigateTop } from './cells/handle-cell-focus';
 import handleScroll from './handle-scroll';
 
 const useStyles = makeStyles({
@@ -35,10 +35,10 @@ export default function TableWrapper(props) {
   const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
-  const focusedCellCoord = useRef([0, 0]);
+  const [focusedCellCoord, setfocusedCellCoord] = useState([0, 0]);
   const shouldRefocus = useRef(false);
-  const tableSection = useRef();
-  const TableWrapperRef = useRef();
+  const tableSectionRef = useRef();
+  const tableWrapperRef = useRef();
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
@@ -66,16 +66,16 @@ export default function TableWrapper(props) {
 
   useEffect(() => {
     const resizeCallback = () => setTableWidth(rootElement.clientWidth);
-    const scrollCallback = (evt) => handleScroll(evt, tableSection);
-    const focusOutCallback = (evt) => !TableWrapperRef.current.contains(evt.relatedTarget) && keyboard.blur(false);
+    const scrollCallback = (evt) => handleScroll(evt, tableSectionRef);
+    const focusOutCallback = (evt) => !tableWrapperRef.current.contains(evt.relatedTarget) && keyboard.blur(false);
 
     window.addEventListener('resize', resizeCallback);
-    tableSection.current.addEventListener('wheel', scrollCallback);
-    TableWrapperRef.current.addEventListener('focusout', focusOutCallback);
+    tableSectionRef.current.addEventListener('wheel', scrollCallback);
+    tableWrapperRef.current.addEventListener('focusout', focusOutCallback);
     return () => {
       window.removeEventListener('resize', resizeCallback);
-      tableSection.current.removeEventListener('wheel', scrollCallback);
-      TableWrapperRef.current.removeEventListener('focusout', focusOutCallback);
+      tableSectionRef.current.removeEventListener('wheel', scrollCallback);
+      tableWrapperRef.current.removeEventListener('focusout', focusOutCallback);
     };
   }, [keyboard]);
 
@@ -89,24 +89,46 @@ export default function TableWrapper(props) {
     );
   }, [keyboard.active]);
 
+  useEffect(() => {
+    handleNavigateTop({
+      tableSectionRef,
+      focusedCellCoord,
+      rootElement,
+    });
+  }, [tableSectionRef, focusedCellCoord]);
+
   // Except for first render, whenever the size of the data changes (number of rows per page, rows or columns),
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
   useDidUpdateEffect(() => {
-    handleResetFocus(focusedCellCoord, rootElement, shouldRefocus, selectionsAPI.isModal());
-  }, [rows.length, size.qcy, size.qcx]);
+    handleResetFocus({
+      focusedCellCoord,
+      rootElement,
+      shouldRefocus,
+      setfocusedCellCoord,
+      hasSelections: selectionsAPI.isModal(),
+    });
+  }, [rows.length, size.qcy, size.qcx, page]);
 
   return (
     <Paper
       className={classes.paper}
-      ref={TableWrapperRef}
+      ref={tableWrapperRef}
       onKeyDown={(evt) =>
-        handleWrapperKeyDown(evt, size.qcy, page, rowsPerPage, handleChangePage, setShouldRefocus, keyboard)
+        handleWrapperKeyDown({
+          evt,
+          totalRowSize: size.qcy,
+          page,
+          rowsPerPage,
+          handleChangePage,
+          setShouldRefocus,
+          keyboard,
+        })
       }
     >
-      <TableContainer ref={tableSection} className={classes[containerMode]}>
+      <TableContainer ref={tableSectionRef} className={classes[containerMode]}>
         <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
-          <TableHeadWrapper {...props} focusedCellCoord={focusedCellCoord} />
-          <TableBodyWrapper {...props} focusedCellCoord={focusedCellCoord} setShouldRefocus={setShouldRefocus} />
+          <TableHeadWrapper {...props} setfocusedCellCoord={setfocusedCellCoord} />
+          <TableBodyWrapper {...props} setfocusedCellCoord={setfocusedCellCoord} setShouldRefocus={setShouldRefocus} />
         </Table>
       </TableContainer>
       <TablePagination
