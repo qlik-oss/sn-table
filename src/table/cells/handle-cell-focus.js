@@ -93,10 +93,7 @@ export const getCellSrNotation = ({ focusedCellCoord, rootElement, selState, tab
   const isCellSelected = cell && cell.classList.contains('selected');
 
   let notation = '';
-  if (!selState.rows.length) {
-    notation += 'Value is not selected';
-    return notation;
-  } else {
+  if (selState.rows.length) {
     const isSingularSelection = selState.rows.length === 1;
     const selectionNote = `There ${isSingularSelection ? 'is' : 'are'} ${selState.rows.length} selected value${
       isSingularSelection ? '' : 's'
