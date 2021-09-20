@@ -42,8 +42,8 @@ function TableBodyWrapper({
   selectionsAPI,
   layout,
   theme,
-  focusedCellCoord,
   setShouldRefocus,
+  setfocusedCellCoord,
 }) {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
@@ -100,14 +100,14 @@ function TableBodyWrapper({
                       evt,
                       rootElement,
                       [rowIndex + 1, columnIndex],
-                      focusedCellCoord,
                       selState,
                       cell,
                       selDispatch,
-                      selectionsEnabled
+                      selectionsEnabled,
+                      setfocusedCellCoord
                     )
                   }
-                  onMouseDown={() => handleClickToFocusBody(cell, focusedCellCoord, rootElement)}
+                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setfocusedCellCoord)}
                 >
                   <div className={classes.srOnly}>{column.label}</div>
                   {value}
@@ -128,7 +128,7 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  focusedCellCoord: PropTypes.object.isRequired,
+  setfocusedCellCoord: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
 };
 
