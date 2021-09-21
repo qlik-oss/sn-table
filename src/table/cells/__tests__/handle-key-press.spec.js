@@ -566,7 +566,7 @@ describe('handle-key-press', () => {
         key: 'Escape',
         stopPropagation: sinon.spy(),
         preventDefault: sinon.spy(),
-      }
+      };
       const keyboard = { enabled: true, blur: sinon.spy() };
       handleWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus, keyboard });
       expect(evt.preventDefault).to.have.been.calledOnce;
