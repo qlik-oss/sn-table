@@ -93,7 +93,7 @@ const getMemoisedSrNotation = () => {
   let prevSelectedCount = 0;
 
   return ({ focusedCellCoord, rootElement, selState }) => {
-    if (focusedCellCoord[0] === 0) return '';
+    if (!focusedCellCoord || focusedCellCoord[0] === 0) return '';
 
     const [rowIdx, colIdx] = focusedCellCoord;
     const rowElements = rootElement.getElementsByClassName('sn-table-row');
