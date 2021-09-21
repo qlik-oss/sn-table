@@ -76,7 +76,7 @@ function TableBodyWrapper({
     setSrNotation('');
 
     setTimeout(() => {
-      setSrNotation(getCellSrNotation({ focusedCellCoord, rootElement, selState, tableData }));
+      setSrNotation(getCellSrNotation({ focusedCellCoord, rootElement, selState }));
     }, MAX_NOTATION_DELAY);
   }, [focusedCellCoord, selState]);
 

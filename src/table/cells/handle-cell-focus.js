@@ -81,27 +81,48 @@ export const handleNavigateTop = ({ tableSection, focusedCellCoord, rootElement 
   }
 };
 
-export const getCellSrNotation = ({ focusedCellCoord, rootElement, selState, tableData }) => {
-  if (focusedCellCoord.toString().startsWith('0')) return '';
+const getMemoisedSrNotation = () => {
+  let prevSelectedCount = 0;
 
-  const [rowIdx, colIdx] = focusedCellCoord;
-  const rowElements = rootElement.getElementsByClassName('sn-table-row');
-  const cell = rowElements[rowIdx]?.getElementsByClassName('sn-table-cell')[colIdx];
+  return ({ focusedCellCoord, rootElement, selState }) => {
+    if (focusedCellCoord[0] === 0) return '';
 
-  const tColumnName = tableData.columns[colIdx].label;
-  const tCellContent = cell && cell.innerText;
-  const isCellSelected = cell && cell.classList.contains('selected');
+    const [rowIdx, colIdx] = focusedCellCoord;
+    const rowElements = rootElement.getElementsByClassName('sn-table-row');
+    const cell = rowElements[rowIdx]?.getElementsByClassName('sn-table-cell')[colIdx];
 
-  let notation = '';
-  if (selState.rows.length) {
-    const isSingularSelection = selState.rows.length === 1;
-    const selectionNote = `There ${isSingularSelection ? 'is' : 'are'} ${selState.rows.length} selected value${
-      isSingularSelection ? '' : 's'
-    } on ${tColumnName} column currently.`;
+    const tCellContent = cell && cell.innerText;
+    const isCellSelected = cell && cell.classList.contains('selected');
 
-    if (isCellSelected) notation += `${tCellContent},value is selected. ${selectionNote}`;
-    else notation += `${tCellContent},value is not selected.`;
-  }
+    let notation = '';
 
-  return notation;
+    if (selState.rows.length) {
+      const isSingularSelection = selState.rows.length === 1;
+      const selectionNote = `There ${isSingularSelection ? 'is' : 'are'} ${selState.rows.length} selected value${
+        isSingularSelection ? '' : 's'
+      } currently.`;
+
+      if (prevSelectedCount < selState.rows.length) {
+        // if we select cell
+        notation += `Value is selected. ${selectionNote}`;
+      } else if (prevSelectedCount > selState.rows.length) {
+        // if we deselect cell
+        notation += `Value is deselected. ${selectionNote}`;
+      } else if (isCellSelected) {
+        // if we are in selection mode and move to selected cell
+        notation += `${tCellContent},value is selected.`;
+      } else {
+        // if we are in selection mode and move to unselected cell
+        notation += `${tCellContent},value is not selected.`;
+      }
+    } else if (selState.rows.length === 0 && prevSelectedCount > 0) {
+      // if we deselect last (selected) cell which means we close the selection mode
+      notation += 'Value deselected and exited selection mode.';
+    }
+
+    prevSelectedCount = selState.rows.length;
+    return notation;
+  };
 };
+
+export const getCellSrNotation = getMemoisedSrNotation();
