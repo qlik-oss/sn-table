@@ -35,7 +35,7 @@ export default function TableWrapper(props) {
   const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
-  const [focusedCellCoord, setfocusedCellCoord] = useState([0, 0]);
+  const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
   const shouldRefocus = useRef(false);
   const tableSectionRef = useRef();
   const tableWrapperRef = useRef();
@@ -104,7 +104,7 @@ export default function TableWrapper(props) {
       focusedCellCoord,
       rootElement,
       shouldRefocus,
-      setfocusedCellCoord,
+      setFocusedCellCoord,
       hasSelections: selectionsAPI.isModal(),
     });
   }, [rows.length, size.qcy, size.qcx, page]);
@@ -127,8 +127,8 @@ export default function TableWrapper(props) {
     >
       <TableContainer ref={tableSectionRef} className={classes[containerMode]}>
         <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
-          <TableHeadWrapper {...props} setfocusedCellCoord={setfocusedCellCoord} />
-          <TableBodyWrapper {...props} setfocusedCellCoord={setfocusedCellCoord} setShouldRefocus={setShouldRefocus} />
+          <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} />
+          <TableBodyWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} setShouldRefocus={setShouldRefocus} />
         </Table>
       </TableContainer>
       <TablePagination

@@ -17,11 +17,12 @@ describe('<TableWrapper />', () => {
   let selectionsAPI;
   let modal;
   let rootElement;
+  let keyboard;
 
   beforeEach(() => {
     sinon.stub(TableBodyWrapper, 'default').returns(<tbody />);
     sinon.stub(TableHeadWrapper, 'default').returns(<thead />);
-    sinon.stub(handleKeyPress, 'updatePage').returns(sinon.spy());
+    sinon.stub(handleKeyPress, 'handleWrapperKeyDown').returns(sinon.spy());
 
     tableData = {
       size: { qcy: 200 },
@@ -39,7 +40,9 @@ describe('<TableWrapper />', () => {
       getElementsByClassName: () => [],
       clientHeight: {},
       getElementsByTagName: () => [{ clientHeight: {} }],
+      querySelector: () => {},
     };
+    keyboard = { enabled: false, active: false };
   });
 
   afterEach(() => {
@@ -55,6 +58,7 @@ describe('<TableWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
+        keyboard={keyboard}
       />
     );
 
@@ -63,7 +67,7 @@ describe('<TableWrapper />', () => {
     expect(queryByText(rowsPerPage)).to.be.visible;
   });
 
-  it('should call updatePage when press control key on the table', () => {
+  it('should call handleWrapperKeyDown when press control key on the table', () => {
     const { queryByLabelText } = render(
       <TableWrapper
         tableData={tableData}
@@ -71,11 +75,12 @@ describe('<TableWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
+        keyboard={keyboard}
       />
     );
 
     fireEvent.keyDown(queryByLabelText('showing 2 rows and 1 columns'), { key: 'Control', code: 'ControlLeft' });
-    expect(handleKeyPress.updatePage).to.have.been.calledOnce;
+    expect(handleKeyPress.handleWrapperKeyDown).to.have.been.calledOnce;
   });
 
   it('should call setPageInfo when clicking next page button', async () => {
@@ -86,6 +91,7 @@ describe('<TableWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
+        keyboard={keyboard}
       />
     );
     fireEvent.click(await findByTitle('Next page'));
@@ -102,6 +108,7 @@ describe('<TableWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
+        keyboard={keyboard}
       />
     );
     // This is a hack to simulate when selections are made on other page than first page and
@@ -123,6 +130,7 @@ describe('<TableWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
+        keyboard={keyboard}
       />
     );
     fireEvent.change(getByTestId('select'), { target: { value: 25 } });
@@ -139,6 +147,7 @@ describe('<TableWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
+        keyboard={keyboard}
       />
     );
     const rppSiblingElement = queryByText(`1-${rowsPerPage} of ${tableData.size.qcy}`);

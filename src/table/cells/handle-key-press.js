@@ -81,13 +81,13 @@ export const getRowAndColumnCount = (rootElement) => {
   return { rowElements, rowCount, columnCount };
 };
 
-export const moveFocus = (evt, rootElement, cellCoord, selState, setfocusedCellCoord) => {
+export const moveFocus = (evt, rootElement, cellCoord, selState, setFocusedCellCoord) => {
   preventDefaultBehavior(evt);
   evt.target.setAttribute('tabIndex', '-1');
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
   const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selState);
   updateFocus({ focusType: 'focus', rowElements: rowAndColumnCount.rowElements, cellCoord: nextCellCoord });
-  setfocusedCellCoord(nextCellCoord);
+  setFocusedCellCoord(nextCellCoord);
 };
 
 export const headHandleKeyPress = (
@@ -98,13 +98,13 @@ export const headHandleKeyPress = (
   layout,
   isDim,
   isAnalysisMode,
-  setfocusedCellCoord
+  setFocusedCellCoord
 ) => {
   switch (evt.key) {
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, false, setfocusedCellCoord);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, false, setFocusedCellCoord);
       break;
     }
     // Space bar / Enter: update the sorting
@@ -127,14 +127,14 @@ export const bodyHandleKeyPress = (
   cell,
   selDispatch,
   isAnalysisMode,
-  setfocusedCellCoord
+  setFocusedCellCoord
 ) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, selState, setfocusedCellCoord);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, selState, setFocusedCellCoord);
       break;
     }
     // Space bar: Selects value.
@@ -151,7 +151,7 @@ export const bodyHandleKeyPress = (
     }
     // Esc: Cancels selections
     case 'Escape': {
-      if (!isAnalysisMode || !selState.api.isModal()) break;
+      if (!isAnalysisMode || !selState.rows.length) break;
       preventDefaultBehavior(evt);
       isAnalysisMode && selState.api.cancel();
       break;

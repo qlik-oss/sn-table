@@ -3,7 +3,7 @@ import {
   arrowKeysNavigation,
   bodyHandleKeyPress,
   headHandleKeyPress,
-  updatePage,
+  handleWrapperKeyDown,
 } from '../handle-key-press';
 
 describe('handle-key-press', () => {
@@ -148,7 +148,7 @@ describe('handle-key-press', () => {
     let cell = [];
     let selDispatch;
     let isAnalysisMode;
-    let setfocusedCellCoord;
+    let setFocusedCellCoord;
 
     beforeEach(() => {
       rowIndex = 0;
@@ -178,16 +178,15 @@ describe('handle-key-press', () => {
       cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1, isDim: true };
       selDispatch = sinon.spy();
       isAnalysisMode = true;
-      setfocusedCellCoord = sinon.spy();
+      setFocusedCellCoord = sinon.spy();
     });
 
     it('when press arrow-down key, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
-      bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], selState, null, null, false, setfocusedCellCoord);
+      bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], selState, null, null, false, setFocusedCellCoord);
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
-      expect(evt.target.blur).to.have.been.calledOnce;
       expect(evt.target.setAttribute).to.have.been.calledOnce;
-      expect(setfocusedCellCoord).to.have.been.calledOnce;
+      expect(setFocusedCellCoord).to.have.been.calledOnce;
     });
 
     it('when press space bar key and dimension, should select value for dimension', () => {
@@ -200,14 +199,14 @@ describe('handle-key-press', () => {
         cell,
         selDispatch,
         isAnalysisMode,
-        setfocusedCellCoord
+        setFocusedCellCoord
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(selState.api.begin).to.have.been.calledOnce;
       expect(selState.api.select).to.have.been.calledOnce;
       expect(selDispatch).to.have.been.calledOnce;
-      expect(setfocusedCellCoord).to.not.have.been.called;
+      expect(setFocusedCellCoord).to.not.have.been.called;
     });
 
     it('when press space bar key not on dimension, should not select value for measure', () => {
@@ -223,14 +222,14 @@ describe('handle-key-press', () => {
         cell,
         selDispatch,
         false,
-        setfocusedCellCoord
+        setFocusedCellCoord
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(selState.api.begin).not.have.been.called;
       expect(selState.api.select).not.have.been.called;
       expect(selDispatch).not.have.been.called;
-      expect(setfocusedCellCoord).to.not.have.been.called;
+      expect(setFocusedCellCoord).to.not.have.been.called;
     });
 
     it('when press space bar key not in analysis mode, should not select value for measure ', () => {
@@ -244,14 +243,14 @@ describe('handle-key-press', () => {
         cell,
         selDispatch,
         false,
-        setfocusedCellCoord
+        setFocusedCellCoord
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(selState.api.begin).not.have.been.called;
       expect(selState.api.select).not.have.been.called;
       expect(selDispatch).not.have.been.called;
-      expect(setfocusedCellCoord).to.not.have.been.called;
+      expect(setFocusedCellCoord).to.not.have.been.called;
     });
 
     it('when press enter key, should confirms selections', () => {
@@ -264,12 +263,12 @@ describe('handle-key-press', () => {
         cell,
         selDispatch,
         isAnalysisMode,
-        setfocusedCellCoord
+        setFocusedCellCoord
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(selState.api.confirm).to.have.been.calledOnce;
-      expect(setfocusedCellCoord).to.not.have.been.called;
+      expect(setFocusedCellCoord).to.not.have.been.called;
     });
 
     it('when press enter key not in analysis mode, should not confirms selections', () => {
@@ -283,16 +282,17 @@ describe('handle-key-press', () => {
         cell,
         selDispatch,
         isAnalysisMode,
-        setfocusedCellCoord
+        setFocusedCellCoord
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(selState.api.confirm).not.have.been.called;
-      expect(setfocusedCellCoord).to.not.have.been.called;
+      expect(setFocusedCellCoord).to.not.have.been.called;
     });
 
     it('when press cancel key, should cancel selection', () => {
       evt.key = 'Escape';
+      selState.rows = [{}];
       bodyHandleKeyPress(
         evt,
         rootElement,
@@ -301,12 +301,12 @@ describe('handle-key-press', () => {
         cell,
         selDispatch,
         isAnalysisMode,
-        setfocusedCellCoord
+        setFocusedCellCoord
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(selState.api.cancel).to.have.been.calledOnce;
-      expect(setfocusedCellCoord).to.not.have.been.called;
+      expect(setFocusedCellCoord).to.not.have.been.called;
     });
 
     it('when press cancel key not in analysis mode, should not cancel selection', () => {
@@ -320,34 +320,34 @@ describe('handle-key-press', () => {
         cell,
         selDispatch,
         isAnalysisMode,
-        setfocusedCellCoord
+        setFocusedCellCoord
       );
-      expect(evt.preventDefault).to.have.been.calledOnce;
-      expect(evt.stopPropagation).to.have.been.calledOnce;
-      expect(selState.api.cancel).not.have.been.called;
-      expect(setfocusedCellCoord).to.not.have.been.called;
+      expect(evt.preventDefault).to.not.have.been.called;
+      expect(evt.stopPropagation).to.not.have.been.called;
+      expect(selState.api.cancel).to.not.have.been.called;
+      expect(setFocusedCellCoord).to.not.have.been.called;
     });
 
     it('when press ArrowRight and shif and ctrl key, should not update the sorting', () => {
       evt.key = 'ArrowRight';
       evt.shiftKey = true;
       evt.ctrlKey = true;
-      bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], selState, cell, selDispatch, setfocusedCellCoord);
+      bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], selState, cell, selDispatch, setFocusedCellCoord);
       expect(evt.preventDefault).not.have.been.called;
       expect(evt.stopPropagation).not.have.been.called;
       expect(selState.api.cancel).not.have.been.called;
-      expect(setfocusedCellCoord).to.not.have.been.called;
+      expect(setFocusedCellCoord).to.not.have.been.called;
     });
 
     it('when other keys are pressed, should not do anything', () => {
       evt.key = 'Control';
-      bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], selState, cell, selDispatch, setfocusedCellCoord);
+      bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], selState, cell, selDispatch, setFocusedCellCoord);
       expect(evt.preventDefault).not.have.been.called;
       expect(evt.stopPropagation).not.have.been.called;
       expect(evt.target.blur).not.have.been.called;
       expect(evt.target.setAttribute).not.have.been.called;
       expect(selState.api.cancel).not.have.been.called;
-      expect(setfocusedCellCoord).to.not.have.been.called;
+      expect(setFocusedCellCoord).to.not.have.been.called;
     });
   });
 
@@ -360,7 +360,7 @@ describe('handle-key-press', () => {
     let layout;
     let isDim;
     let isAnalysisMode;
-    let setfocusedCellCoord;
+    let setFocusedCellCoord;
 
     beforeEach(() => {
       rowIndex = 0;
@@ -379,16 +379,15 @@ describe('handle-key-press', () => {
       };
       changeSortOrder = sinon.spy();
       isAnalysisMode = true;
-      setfocusedCellCoord = sinon.spy();
+      setFocusedCellCoord = sinon.spy();
     });
 
     it('when press arrow down key, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
-      headHandleKeyPress(evt, rootElement, [rowIndex, colIndex], null, null, null, false, setfocusedCellCoord);
+      headHandleKeyPress(evt, rootElement, [rowIndex, colIndex], null, null, null, false, setFocusedCellCoord);
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
-      expect(evt.target.blur).to.have.been.calledOnce;
       expect(evt.target.setAttribute).to.have.been.calledOnce;
-      expect(setfocusedCellCoord).to.have.been.calledOnce;
+      expect(setFocusedCellCoord).to.have.been.calledOnce;
     });
 
     it('when press space bar key, should update the sorting', () => {
@@ -401,12 +400,12 @@ describe('handle-key-press', () => {
         layout,
         isDim,
         isAnalysisMode,
-        setfocusedCellCoord
+        setFocusedCellCoord
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(changeSortOrder).to.have.been.calledOnce;
-      expect(setfocusedCellCoord).to.not.have.been.called;
+      expect(setFocusedCellCoord).to.not.have.been.called;
     });
 
     it('when press space bar key not in analysis mdoe, should not update the sorting', () => {
@@ -420,12 +419,12 @@ describe('handle-key-press', () => {
         layout,
         isDim,
         isAnalysisMode,
-        setfocusedCellCoord
+        setFocusedCellCoord
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(changeSortOrder).not.have.been.called;
-      expect(setfocusedCellCoord).to.not.have.been.called;
+      expect(setFocusedCellCoord).to.not.have.been.called;
     });
 
     it('when press enter key, should update the sorting', () => {
@@ -438,12 +437,12 @@ describe('handle-key-press', () => {
         layout,
         isDim,
         isAnalysisMode,
-        setfocusedCellCoord
+        setFocusedCellCoord
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(changeSortOrder).to.have.been.calledOnce;
-      expect(setfocusedCellCoord).to.not.have.been.called;
+      expect(setFocusedCellCoord).to.not.have.been.called;
     });
 
     it('when press enter key not in analysis mdoe, should not update the sorting', () => {
@@ -457,12 +456,12 @@ describe('handle-key-press', () => {
         layout,
         isDim,
         isAnalysisMode,
-        setfocusedCellCoord
+        setFocusedCellCoord
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(changeSortOrder).not.have.been.called;
-      expect(setfocusedCellCoord).to.not.have.been.called;
+      expect(setFocusedCellCoord).to.not.have.been.called;
     });
 
     it('when press ArrowRight and shif and ctrl key, should not update the sorting', () => {
@@ -477,16 +476,16 @@ describe('handle-key-press', () => {
         layout,
         isDim,
         isAnalysisMode,
-        setfocusedCellCoord
+        setFocusedCellCoord
       );
       expect(evt.preventDefault).not.have.been.called;
       expect(evt.stopPropagation).not.have.been.called;
       expect(changeSortOrder).not.have.been.called;
-      expect(setfocusedCellCoord).to.not.have.been.called;
+      expect(setFocusedCellCoord).to.not.have.been.called;
     });
   });
 
-  describe('updatePage', () => {
+  describe('handleWrapperKeyDown', () => {
     let evt = {};
     let totalRowSize;
     let page;
@@ -511,7 +510,7 @@ describe('handle-key-press', () => {
 
     it('when shift key is not pressed, handleChangePage should not run', () => {
       evt.shiftKey = false;
-      updatePage({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.have.been.called;
       expect(setShouldRefocus).not.have.been.called;
     });
@@ -519,7 +518,7 @@ describe('handle-key-press', () => {
     it('when ctrl key or meta key is not pressed, handleChangePage should not run', () => {
       evt.ctrlKey = false;
       evt.metaKey = false;
-      updatePage({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.have.been.called;
       expect(setShouldRefocus).not.have.been.called;
     });
@@ -528,7 +527,7 @@ describe('handle-key-press', () => {
       page = 0;
       totalRowSize = 40;
       rowsPerPage = 40;
-      updatePage({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.have.been.called;
       expect(setShouldRefocus).not.have.been.called;
     });
@@ -538,7 +537,7 @@ describe('handle-key-press', () => {
       page = 0;
       totalRowSize = 40;
       rowsPerPage = 10;
-      updatePage({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.have.been.called;
       expect(setShouldRefocus).not.have.been.called;
     });
@@ -547,7 +546,7 @@ describe('handle-key-press', () => {
       totalRowSize = 40;
       page = 0;
       rowsPerPage = 10;
-      updatePage({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).to.have.been.calledOnce;
       expect(setShouldRefocus).to.have.been.calledOnce;
     });
@@ -557,7 +556,7 @@ describe('handle-key-press', () => {
       totalRowSize = 40;
       page = 1;
       rowsPerPage = 40;
-      updatePage({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).to.have.been.calledOnce;
       expect(setShouldRefocus).to.have.been.calledOnce;
     });

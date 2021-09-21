@@ -43,7 +43,7 @@ function TableBodyWrapper({
   layout,
   theme,
   setShouldRefocus,
-  setfocusedCellCoord,
+  setFocusedCellCoord,
   keyboard,
 }) {
   const { rows, columns } = tableData;
@@ -105,10 +105,10 @@ function TableBodyWrapper({
                       cell,
                       selDispatch,
                       selectionsEnabled,
-                      setfocusedCellCoord
+                      setFocusedCellCoord
                     )
                   }
-                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setfocusedCellCoord, keyboard)}
+                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
                 >
                   <div className={classes.srOnly}>{column.label}</div>
                   {value}
@@ -129,7 +129,7 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  setfocusedCellCoord: PropTypes.func.isRequired,
+  setFocusedCellCoord: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
   keyboard: PropTypes.func.isRequired,
 };
