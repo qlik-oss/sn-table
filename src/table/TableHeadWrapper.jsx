@@ -28,7 +28,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function TableHeadWrapper({
+function TableHeadWrapper({
   rootElement,
   tableData,
   theme,
@@ -36,7 +36,7 @@ export default function TableHeadWrapper({
   changeSortOrder,
   constraints,
   selectionsAPI,
-  focusedCellCoord,
+  setfocusedCellCoord,
 }) {
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
@@ -57,14 +57,14 @@ export default function TableHeadWrapper({
                   e,
                   rootElement,
                   [0, columnIndex],
-                  focusedCellCoord,
                   changeSortOrder,
                   layout,
                   column.isDim,
-                  !constraints.active
+                  !constraints.active,
+                  setfocusedCellCoord
                 )
               }
-              onMouseDown={() => handleClickToFocusHead(columnIndex, focusedCellCoord, rootElement)}
+              onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setfocusedCellCoord)}
             >
               <TableSortLabel
                 active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
@@ -97,6 +97,8 @@ TableHeadWrapper.propTypes = {
   layout: PropTypes.object.isRequired,
   changeSortOrder: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
-  focusedCellCoord: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
+  setfocusedCellCoord: PropTypes.func.isRequired,
 };
+
+export default TableHeadWrapper;

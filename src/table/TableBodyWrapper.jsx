@@ -35,16 +35,16 @@ const useStyles = makeStyles({
   },
 });
 
-const TableBodyWrapper = ({
+function TableBodyWrapper({
   rootElement,
   tableData,
   constraints,
   selectionsAPI,
   layout,
   theme,
-  focusedCellCoord,
   setShouldRefocus,
-}) => {
+  setfocusedCellCoord,
+}) {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
@@ -84,6 +84,8 @@ const TableBodyWrapper = ({
             return (
               CellRenderer && (
                 <CellRenderer
+                  scope={columnIndex === 0 ? 'row' : null}
+                  component={columnIndex === 0 ? 'th' : null}
                   cell={cell}
                   column={column}
                   value={value}
@@ -98,14 +100,14 @@ const TableBodyWrapper = ({
                       evt,
                       rootElement,
                       [rowIndex + 1, columnIndex],
-                      focusedCellCoord,
                       selState,
                       cell,
                       selDispatch,
-                      selectionsEnabled
+                      selectionsEnabled,
+                      setfocusedCellCoord
                     )
                   }
-                  onMouseDown={() => handleClickToFocusBody(cell, focusedCellCoord, rootElement)}
+                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setfocusedCellCoord)}
                 >
                   <div className={classes.srOnly}>{column.label}</div>
                   {value}
@@ -117,7 +119,7 @@ const TableBodyWrapper = ({
       ))}
     </TableBody>
   );
-};
+}
 
 TableBodyWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
@@ -126,8 +128,8 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  focusedCellCoord: PropTypes.object.isRequired,
+  setfocusedCellCoord: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
 };
 
-export default React.memo(TableBodyWrapper);
+export default TableBodyWrapper;
