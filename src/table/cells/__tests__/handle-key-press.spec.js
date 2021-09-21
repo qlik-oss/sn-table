@@ -560,5 +560,18 @@ describe('handle-key-press', () => {
       expect(handleChangePage).to.have.been.calledOnce;
       expect(setShouldRefocus).to.have.been.calledOnce;
     });
+
+    it('when presss escape is pressed and keyboard.enabled is true, should call keyboard.blur', () => {
+      evt = {
+        key: 'Escape',
+        stopPropagation: sinon.spy(),
+        preventDefault: sinon.spy(),
+      }
+      const keyboard = { enabled: true, blur: sinon.spy() };
+      handleWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus, keyboard });
+      expect(evt.preventDefault).to.have.been.calledOnce;
+      expect(evt.stopPropagation).to.have.been.calledOnce;
+      expect(keyboard.blur).to.have.been.calledOnceWith(true);
+    });
   });
 });
