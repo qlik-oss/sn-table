@@ -91,33 +91,29 @@ const getMemoisedSrNotation = () => {
     const rowElements = rootElement.getElementsByClassName('sn-table-row');
     const cell = rowElements[rowIdx]?.getElementsByClassName('sn-table-cell')[colIdx];
 
-    const tCellContent = cell && cell.innerText;
     const isCellSelected = cell && cell.classList.contains('selected');
 
     let notation = '';
 
     if (selState.rows.length) {
-      const isSingularSelection = selState.rows.length === 1;
-      const selectionNote = `There ${isSingularSelection ? 'is' : 'are'} ${selState.rows.length} selected value${
-        isSingularSelection ? '' : 's'
-      } currently.`;
+      const selectionNote = getCellSelectionStatusNote(selState.rows);
 
       if (prevSelectedCount < selState.rows.length) {
         // if we select cell
-        notation += `Value is selected. ${selectionNote}`;
+        notation += `value is selected. ${selectionNote}`;
       } else if (prevSelectedCount > selState.rows.length) {
         // if we deselect cell
-        notation += `Value is deselected. ${selectionNote}`;
+        notation += `value is deselected. ${selectionNote}`;
       } else if (isCellSelected) {
         // if we are in selection mode and move to selected cell
-        notation += `${tCellContent},value is selected.`;
+        notation += 'value is selected.';
       } else {
         // if we are in selection mode and move to unselected cell
-        notation += `${tCellContent},value is not selected.`;
+        notation += 'value is not selected.';
       }
     } else if (selState.rows.length === 0 && prevSelectedCount > 0) {
       // if we deselect last (selected) cell which means we close the selection mode
-      notation += 'Value deselected and exited selection mode.';
+      notation += 'value deselected and exited selection mode.';
     }
 
     prevSelectedCount = selState.rows.length;
@@ -126,3 +122,11 @@ const getMemoisedSrNotation = () => {
 };
 
 export const getCellSrNotation = getMemoisedSrNotation();
+
+const getCellSelectionStatusNote = (rows) => {
+  if (!Array.isArray(rows) || !rows.length) return '';
+
+  return rows.length === 1
+    ? 'There is 1 selected value currently'
+    : `There are ${rows.length} selected values currently`;
+};
