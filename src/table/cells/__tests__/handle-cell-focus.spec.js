@@ -248,4 +248,108 @@ describe('handle-key-press', () => {
       expect(scrollTo).to.have.been.calledOnceWith({ top: targetOffsetTop, behavior: 'smooth' });
     });
   });
+
+  describe('getCellSelectionStatusNote', () => {
+    let rows;
+
+    it('should return singular notation for array with single item', () => {
+      rows = [1];
+      const result = handleCellFocus.getCellSelectionStatusNote(rows);
+      expect(result).to.equal('There is 1 selected value currently');
+    });
+
+    it('should return plural notation for arrays with multiple items', () => {
+      rows = [1, 2, 3];
+      const result = handleCellFocus.getCellSelectionStatusNote(rows);
+      expect(result).to.equal(`There are ${rows.length} selected values currently`);
+    });
+  });
+
+  describe('getCellSrNotation', () => {
+    let selState;
+    let getCellSrNotation;
+
+    beforeEach(() => {
+      selState = { rows: [1, 2] };
+      getCellSrNotation = handleCellFocus.getMemoisedSrNotation();
+    });
+
+    it('should return empty string while we are in first row', () => {
+      focusedCellCoord = [0, 1];
+      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState });
+
+      expect(notation).to.equal('');
+    });
+
+    it('should return empty string while there is no selected items', () => {
+      selState = { rows: [] };
+      focusedCellCoord = [1, 1];
+      const notatino = getCellSrNotation({ focusedCellCoord, rootElement, selState });
+
+      expect(notatino).to.equal('');
+    });
+
+    it('should return `value selected` and selected rows count while we are selecting a row', () => {
+      focusedCellCoord = [1, 1];
+      selState = { rows: ['some row data'] };
+      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState });
+
+      expect(notation).to.equal('value is selected. There is 1 selected value currently');
+    });
+
+    it('should return `value selected` and selected rows count while we are selecting multiple rows', () => {
+      const focusedCellCoord = [2, 1];
+      selState = { rows: ['row#01', 'row#02'] };
+      getCellSrNotation = handleCellFocus.getMemoisedSrNotation(1);
+
+      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState });
+
+      expect(notation).to.equal('value is selected. There are 2 selected values currently');
+    });
+
+    it('should be able to deselect previously selected value', () => {
+      const focusedCellCoord = [2, 1];
+      selState = { rows: ['row#01', 'row#02'] };
+      getCellSrNotation = handleCellFocus.getMemoisedSrNotation(3);
+
+      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState });
+
+      expect(notation).to.equal('value is deselected. There are 2 selected values currently');
+    });
+
+    it('should be able to detect if cell has been selected while changing the focus to cell if we are in selection mode', () => {
+      const focusedCellCoord = [1, 1];
+      selState = { rows: ['row#01', 'row#02'] };
+      getCellSrNotation = handleCellFocus.getMemoisedSrNotation(2);
+      cell = document.createElement('td');
+      cell.classList.add('selected');
+      rootElement = {
+        getElementsByClassName: () => [{}, { getElementsByClassName: () => [null, cell] }],
+      };
+
+      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState });
+
+      expect(notation).to.equal('value is selected.');
+    });
+
+    it('should be able to detect if cell has not been selected while changing the focus to cell if we are in selection mode', () => {
+      const focusedCellCoord = [2, 1];
+      selState = { rows: ['row#01', 'row#02'] };
+      getCellSrNotation = handleCellFocus.getMemoisedSrNotation(2);
+
+      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState });
+
+      expect(notation).to.equal('value is not selected.');
+    });
+
+    it('should convey selection exited when we deselect very last selected cell in column', () => {
+      const focusedCellCoord = [2, 1];
+      selState = { rows: [] };
+      getCellSrNotation = handleCellFocus.getMemoisedSrNotation(1);
+
+      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState });
+
+      expect(notation).to.equal('value deselected and exited selection mode.');
+    });
+  });
 });
