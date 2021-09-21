@@ -88,6 +88,6 @@
     "shx": "^0.3.3"
   },
   "peerDependencies": {
-    "@nebula.js/stardust": "^2.0.0.beta.1"
+    "@nebula.js/stardust": "^2.0.0-beta.1"
   }
 }

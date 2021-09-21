@@ -54,9 +54,15 @@ export default function TableWrapper(props) {
 
   // should trigger reload
   const handleChangeRowsPerPage = (event) => {
+    setShouldRefocus();
     setRowsPerPage(+event.target.value);
     setPageInfo({ top: 0, height: +event.target.value });
     setPage(0);
+  };
+
+  const handleChangePageFromTabination = (event, newPage) => {
+    setShouldRefocus();
+    handleChangePage(event, newPage);
   };
 
   if (!rows.length && page > 0) {
@@ -82,11 +88,11 @@ export default function TableWrapper(props) {
   useEffect(() => {
     if (!keyboard.enabled) return;
 
-    updateFocus(
-      rootElement.getElementsByClassName('sn-table-row'),
-      focusedCellCoord.current,
-      keyboard.active ? 'focus' : 'blur'
-    );
+    updateFocus({
+      focusType: keyboard.active ? 'focus' : 'blur',
+      rowElements: rootElement.getElementsByClassName('sn-table-row'),
+      cellCoord: focusedCellCoord,
+    });
   }, [keyboard.active]);
 
   useEffect(() => {
@@ -142,7 +148,7 @@ export default function TableWrapper(props) {
           inputProps: { 'aria-label': 'rows per page', 'data-testid': 'select' },
           native: true,
         }}
-        onChangePage={handleChangePage}
+        onChangePage={handleChangePageFromTabination}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
     </Paper>
