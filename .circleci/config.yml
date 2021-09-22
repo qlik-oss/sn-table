@@ -60,6 +60,9 @@ jobs:
           name: Lint
           command: yarn run lint
       - run:
+          name: Locale
+          command: yarn run locale:verify
+      - run:
           name: Update spec
           command: yarn run spec
       - run:
