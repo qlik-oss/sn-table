@@ -289,16 +289,8 @@ describe('handle-key-press', () => {
       expect(notatino).to.equal('');
     });
 
-    it('should return `value selected` and selected rows count while we are selecting a row', () => {
-      focusedCellCoord = [1, 1];
-      selState = { rows: ['some row data'] };
-      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState });
-
-      expect(notation).to.equal('value is selected. There is 1 selected value currently');
-    });
-
     it('should return `value selected` and selected rows count while we are selecting multiple rows', () => {
-      const focusedCellCoord = [2, 1];
+      focusedCellCoord = [2, 1];
       selState = { rows: ['row#01', 'row#02'] };
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation(1);
 
@@ -308,7 +300,7 @@ describe('handle-key-press', () => {
     });
 
     it('should be able to deselect previously selected value', () => {
-      const focusedCellCoord = [2, 1];
+      focusedCellCoord = [2, 1];
       selState = { rows: ['row#01', 'row#02'] };
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation(3);
 
@@ -318,10 +310,10 @@ describe('handle-key-press', () => {
     });
 
     it('should be able to detect if cell has been selected while changing the focus to cell if we are in selection mode', () => {
-      const focusedCellCoord = [1, 1];
+      focusedCellCoord = [1, 1];
       selState = { rows: ['row#01', 'row#02'] };
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation(2);
-      cell = document.createElement('td');
+      cell = global.document.createElement('td');
       cell.classList.add('selected');
       rootElement = {
         getElementsByClassName: () => [{}, { getElementsByClassName: () => [null, cell] }],
@@ -333,7 +325,7 @@ describe('handle-key-press', () => {
     });
 
     it('should be able to detect if cell has not been selected while changing the focus to cell if we are in selection mode', () => {
-      const focusedCellCoord = [2, 1];
+      focusedCellCoord = [2, 1];
       selState = { rows: ['row#01', 'row#02'] };
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation(2);
 
@@ -343,7 +335,7 @@ describe('handle-key-press', () => {
     });
 
     it('should convey selection exited when we deselect very last selected cell in column', () => {
-      const focusedCellCoord = [2, 1];
+      focusedCellCoord = [2, 1];
       selState = { rows: [] };
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation(1);
 

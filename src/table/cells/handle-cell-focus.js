@@ -81,11 +81,8 @@ export const handleNavigateTop = ({ tableSection, focusedCellCoord, rootElement 
   }
 };
 
-export const getCellSelectionStatusNote = (rows) => {
-  return rows.length === 1
-    ? 'There is 1 selected value currently'
-    : `There are ${rows.length} selected values currently`;
-};
+export const getCellSelectionStatusNote = (rows) =>
+  rows.length === 1 ? 'There is 1 selected value currently' : `There are ${rows.length} selected values currently`;
 
 export const getMemoisedSrNotation = (prevCount = 0) => {
   let prevSelectedCount = prevCount || 0;
