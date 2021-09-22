@@ -60,8 +60,8 @@ function TableBodyWrapper({
     colIdx: -1,
     isEnabled: selectionsEnabled,
   });
-  const [srNotation, setSrNotation] = useState('');
-  const MAX_NOTATION_DELAY = 250;
+  // const [srNotation, setSrNotation] = useState('');
+  // const MAX_NOTATION_DELAY = 250;
 
   useEffect(() => {
     selDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
@@ -72,19 +72,19 @@ function TableBodyWrapper({
     addSelectionListeners(selectionsAPI, selDispatch, setShouldRefocus);
   }, []);
 
-  useEffect(() => {
-    setSrNotation('');
+  // useEffect(() => {
+  //   setSrNotation('');
 
-    setTimeout(() => {
-      setSrNotation(getCellSrNotation({ focusedCellCoord, rootElement, selState }));
-    }, MAX_NOTATION_DELAY);
-  }, [focusedCellCoord, selState]);
+  //   setTimeout(() => {
+  //     setSrNotation(getCellSrNotation({ focusedCellCoord, rootElement, selState }));
+  //   }, MAX_NOTATION_DELAY);
+  // }, [focusedCellCoord, selState]);
 
   return (
     <>
-      <label className={classes.srOnly} aria-live="assertive">
+      {/* <label className={classes.srOnly} aria-live="assertive">
         {srNotation}
-      </label>
+      </label> */}
       <TableBody className={`${classes.cellBase}`}>
         {rows.map((row, rowIndex) => (
           <TableRow
@@ -108,6 +108,7 @@ function TableBodyWrapper({
                     styling={{}}
                     selState={selState}
                     selDispatch={selDispatch}
+                    hasFocus={rowIndex + 1 === focusedCellCoord[0] && columnIndex === focusedCellCoord[1]}
                     tabIndex={-1}
                     onKeyDown={(evt) =>
                       bodyHandleKeyPress(
@@ -144,6 +145,7 @@ TableBodyWrapper.propTypes = {
   theme: PropTypes.object.isRequired,
   setfocusedCellCoord: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
+  focusedCellCoord: PropTypes.array.isRequired,
 };
 
 export default TableBodyWrapper;

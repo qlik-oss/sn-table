@@ -87,27 +87,59 @@ export const getCellSelectionStatusNote = (rows) => {
     : `There are ${rows.length} selected values currently`;
 };
 
+// export const getMemoisedSrNotation = (prevCount = 0) => {
+//   let prevSelectedCount = prevCount || 0;
+
+//   return ({ focusedCellCoord, rootElement, selState }) => {
+//     if (!focusedCellCoord || focusedCellCoord[0] === 0) return '';
+
+//     const [rowIdx, colIdx] = focusedCellCoord;
+//     const rowElements = rootElement.getElementsByClassName('sn-table-row');
+//     const cell = rowElements[rowIdx]?.getElementsByClassName('sn-table-cell')[colIdx];
+
+//     const isCellSelected = cell && cell.classList.contains('selected');
+
+//     let notation = '';
+
+//     if (selState.rows.length) {
+//       const selectionNote = getCellSelectionStatusNote(selState.rows);
+
+//       if (prevSelectedCount < selState.rows.length) {
+//         // if we select cell
+//         notation += `value is selected. ${selectionNote}`;
+//       } else if (prevSelectedCount > selState.rows.length) {
+//         // if we deselect cell
+//         notation += `value is deselected. ${selectionNote}`;
+//       } else if (isCellSelected) {
+//         // if we are in selection mode and move to selected cell
+//         notation += 'value is selected.';
+//       } else {
+//         // if we are in selection mode and move to unselected cell
+//         notation += 'value is not selected.';
+//       }
+//     } else if (selState.rows.length === 0 && prevSelectedCount > 0) {
+//       // if we deselect last (selected) cell which means we close the selection mode
+//       notation += 'value deselected and exited selection mode.';
+//     }
+
+//     prevSelectedCount = selState.rows.length;
+//     return notation;
+//   };
+// };
+
 export const getMemoisedSrNotation = (prevCount = 0) => {
   let prevSelectedCount = prevCount || 0;
 
-  return ({ focusedCellCoord, rootElement, selState }) => {
-    if (!focusedCellCoord || focusedCellCoord[0] === 0) return '';
-
-    const [rowIdx, colIdx] = focusedCellCoord;
-    const rowElements = rootElement.getElementsByClassName('sn-table-row');
-    const cell = rowElements[rowIdx]?.getElementsByClassName('sn-table-cell')[colIdx];
-
-    const isCellSelected = cell && cell.classList.contains('selected');
-
+  return (selectedRows, isCellSelected) => {
     let notation = '';
 
-    if (selState.rows.length) {
-      const selectionNote = getCellSelectionStatusNote(selState.rows);
+    if (selectedRows.length) {
+      const selectionNote = getCellSelectionStatusNote(selectedRows);
 
-      if (prevSelectedCount < selState.rows.length) {
+      if (prevSelectedCount < selectedRows.length) {
         // if we select cell
         notation += `value is selected. ${selectionNote}`;
-      } else if (prevSelectedCount > selState.rows.length) {
+      } else if (prevSelectedCount > selectedRows.length) {
         // if we deselect cell
         notation += `value is deselected. ${selectionNote}`;
       } else if (isCellSelected) {
@@ -117,12 +149,12 @@ export const getMemoisedSrNotation = (prevCount = 0) => {
         // if we are in selection mode and move to unselected cell
         notation += 'value is not selected.';
       }
-    } else if (selState.rows.length === 0 && prevSelectedCount > 0) {
+    } else if (selectedRows.length === 0 && prevSelectedCount > 0) {
       // if we deselect last (selected) cell which means we close the selection mode
       notation += 'value deselected and exited selection mode.';
     }
 
-    prevSelectedCount = selState.rows.length;
+    prevSelectedCount = selectedRows.length;
     return notation;
   };
 };
