@@ -60,7 +60,7 @@ export default function TableWrapper(props) {
     setPage(0);
   };
 
-  const handleChangePageFromTabination = (event, newPage) => {
+  const handleChangePageFromPagination = (event, newPage) => {
     setShouldRefocus();
     handleChangePage(event, newPage);
   };
@@ -83,7 +83,7 @@ export default function TableWrapper(props) {
       tableSectionRef.current.removeEventListener('wheel', scrollCallback);
       tableWrapperRef.current.removeEventListener('focusout', focusOutCallback);
     };
-  }, [keyboard]);
+  }, []);
 
   useEffect(() => {
     handleNavigateTop({
@@ -148,7 +148,7 @@ export default function TableWrapper(props) {
           inputProps: { 'aria-label': 'rows per page', 'data-testid': 'select' },
           native: true,
         }}
-        onPageChange={handleChangePageFromTabination}
+        onPageChange={handleChangePageFromPagination}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
