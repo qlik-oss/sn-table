@@ -86,6 +86,14 @@ export default function TableWrapper(props) {
   }, [keyboard]);
 
   useEffect(() => {
+    handleNavigateTop({
+      tableSectionRef,
+      focusedCellCoord,
+      rootElement,
+    });
+  }, [tableSectionRef, focusedCellCoord]);
+
+  useDidUpdateEffect(() => {
     if (!keyboard.enabled) return;
 
     updateFocus({
@@ -94,14 +102,6 @@ export default function TableWrapper(props) {
       cellCoord: focusedCellCoord,
     });
   }, [keyboard.active]);
-
-  useEffect(() => {
-    handleNavigateTop({
-      tableSectionRef,
-      focusedCellCoord,
-      rootElement,
-    });
-  }, [tableSectionRef, focusedCellCoord]);
 
   // Except for first render, whenever the size of the data changes (number of rows per page, rows or columns),
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
@@ -148,8 +148,8 @@ export default function TableWrapper(props) {
           inputProps: { 'aria-label': 'rows per page', 'data-testid': 'select' },
           native: true,
         }}
-        onChangePage={handleChangePageFromTabination}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
+        onPageChange={handleChangePageFromTabination}
+        onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
   );

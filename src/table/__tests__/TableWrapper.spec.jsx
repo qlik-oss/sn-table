@@ -39,7 +39,7 @@ describe('<TableWrapper />', () => {
     rootElement = {
       getElementsByClassName: () => [],
       clientHeight: {},
-      getElementsByTagName: () => [{ clientHeight: {} }],
+      getElementsByTagName: () => [{ clientHeight: {}, contains: sinon.spy() }],
       querySelector: () => {},
     };
     keyboard = { enabled: false, active: false };
