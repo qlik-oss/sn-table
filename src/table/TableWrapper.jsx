@@ -129,7 +129,7 @@ export default function TableWrapper(props) {
         }}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-        ActionsComponent={TablePaginationActions}
+        ActionsComponent={(subProps) => <TablePaginationActions {...subProps} width={rootElement.scrollWidth}/>}
       />
     </Paper>
   );
