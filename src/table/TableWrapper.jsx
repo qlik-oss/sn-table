@@ -66,7 +66,7 @@ export default function TableWrapper(props) {
   useEffect(() => {
     const updateSize = () => setTableWidth(rootElement.clientWidth);
     window.addEventListener('resize', updateSize);
-    tableSection.current?.addEventListener('wheel', (evt) => handleScroll(evt, tableSection));
+    tableSection.current && tableSection.current.addEventListener('wheel', (evt) => handleScroll(evt, tableSection));
     return () => {
       window.removeEventListener('resize', updateSize);
       tableSection.current.removeEventListener('wheel', (evt) => handleScroll(evt, tableSection));
