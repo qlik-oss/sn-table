@@ -321,7 +321,7 @@ describe('handle-key-press', () => {
 
       const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState });
 
-      expect(notation).to.equal('value is selected.');
+      expect(notation).to.equal('value is selected');
     });
 
     it('should be able to detect if cell has not been selected while changing the focus to cell if we are in selection mode', () => {
@@ -331,7 +331,7 @@ describe('handle-key-press', () => {
 
       const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState });
 
-      expect(notation).to.equal('value is not selected.');
+      expect(notation).to.equal('value is not selected');
     });
 
     it('should convey selection exited when we deselect very last selected cell in column', () => {
