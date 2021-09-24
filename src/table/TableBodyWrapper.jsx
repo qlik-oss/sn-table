@@ -61,7 +61,6 @@ function TableBodyWrapper({
     isEnabled: selectionsEnabled,
   });
   const [srNotation, setSrNotation] = useState('');
-  const MAX_NOTATION_DELAY = 250;
 
   useEffect(() => {
     selDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
@@ -73,11 +72,7 @@ function TableBodyWrapper({
   }, []);
 
   useEffect(() => {
-    setSrNotation('');
-
-    setTimeout(() => {
-      setSrNotation(getCellSrNotation({ focusedCellCoord, rootElement, selState }));
-    }, MAX_NOTATION_DELAY);
+    setSrNotation(getCellSrNotation({ focusedCellCoord, rootElement, selState }));
   }, [focusedCellCoord, selState]);
 
   return (

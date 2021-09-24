@@ -86,6 +86,7 @@ export const getCellSelectionStatusNote = (rows) =>
 
 export const getMemoisedSrNotation = (prevCount = 0) => {
   let prevSelectedCount = prevCount || 0;
+  let hasJunkChar = 0;
 
   return ({ focusedCellCoord, rootElement, selState }) => {
     if (!focusedCellCoord || focusedCellCoord[0] === 0) return '';
@@ -109,11 +110,15 @@ export const getMemoisedSrNotation = (prevCount = 0) => {
         notation += `value is deselected. ${selectionNote}`;
       } else if (isCellSelected) {
         // if we are in selection mode and move to selected cell
-        notation += 'value is selected.';
+        notation += 'value is selected';
       } else {
         // if we are in selection mode and move to unselected cell
-        notation += 'value is not selected.';
+        notation += 'value is not selected';
       }
+
+      // Junk char addition
+      if (hasJunkChar % 2) notation += ` ­`;
+      hasJunkChar++;
     } else if (selState.rows.length === 0 && prevSelectedCount > 0) {
       // if we deselect last (selected) cell which means we close the selection mode
       notation += 'value deselected and exited selection mode.';
