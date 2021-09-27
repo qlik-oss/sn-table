@@ -125,7 +125,7 @@ export default function TableWrapper(props) {
         page={page}
         SelectProps={{
           inputProps: {
-            'aria-label': `${translator.get('SNTable.RowsPerPage')}`,
+            'aria-label': translator.get('SNTable.RowsPerPage'),
             'data-testid': 'select',
           },
           native: true,
