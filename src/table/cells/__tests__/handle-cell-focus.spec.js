@@ -5,16 +5,23 @@ describe('handle-key-press', () => {
   let cell;
   let rootElement;
   let focusedCellCoord;
+  let setfocusedCellCoord;
 
   beforeEach(() => {
     cell = { focus: sinon.spy(), blur: sinon.spy(), setAttribute: sinon.spy() };
-    rootElement = { getElementsByClassName: () => [{ getElementsByClassName: () => [cell] }] };
-    focusedCellCoord = { current: [0, 0] };
+    rootElement = {
+      getElementsByClassName: () => [{ getElementsByClassName: () => [cell] }],
+      querySelector: () => cell,
+    };
+    focusedCellCoord = [0, 0];
+    setfocusedCellCoord = sinon.spy();
   });
 
   describe('updateFocus', () => {
     let rowElements;
     let cellCoord;
+    let shouldFocus;
+    let providedCell;
 
     beforeEach(() => {
       rowElements = [{ getElementsByClassName: () => [cell] }];
@@ -22,15 +29,15 @@ describe('handle-key-press', () => {
     });
 
     it('should focus cell and call setAttribute', () => {
-      handleCellFocus.updateFocus(rowElements, cellCoord);
+      handleCellFocus.updateFocus({ rowElements, cellCoord });
       expect(cell.focus).to.have.been.calledOnce;
       expect(cell.setAttribute).have.been.calledOnce;
     });
 
     it('should blur cell and call setAttribute when shouldBlur is true', () => {
-      const shouldFocus = false;
+      shouldFocus = false;
 
-      handleCellFocus.updateFocus(rowElements, cellCoord, shouldFocus);
+      handleCellFocus.updateFocus({ rowElements, cellCoord, shouldFocus });
       expect(cell.blur).to.have.been.calledOnce;
       expect(cell.setAttribute).have.been.calledOnce;
     });
@@ -38,10 +45,65 @@ describe('handle-key-press', () => {
     it('should not focus cell nor cell setAttribute when cell is not found', () => {
       cellCoord = [1, 0];
 
-      handleCellFocus.updateFocus(rowElements, cellCoord);
+      handleCellFocus.updateFocus({ rowElements, cellCoord });
       expect(cell.focus).to.not.have.been.called;
       expect(cell.blur).to.not.have.been.called;
       expect(cell.setAttribute).to.not.have.been.called;
+    });
+
+    it('should pick up providedCell element if there was no rowElements provided', () => {
+      providedCell = cell;
+
+      handleCellFocus.updateFocus({ providedCell });
+
+      expect(cell.focus).to.have.been.calledOnce;
+      expect(cell.setAttribute).to.have.been.calledOnce;
+      expect(cell.setAttribute).to.have.been.calledOnceWith('tabIndex', '0');
+    });
+  });
+
+  describe('findCellWithTabStop', () => {
+    const elementCreator = (type, tabIdx) => {
+      const targetElement = global.document.createElement(type);
+      targetElement.setAttribute('tabIndex', tabIdx);
+      return targetElement;
+    };
+
+    beforeEach(() => {
+      rootElement = {
+        querySelector: () => {
+          if ((cell.tagName === 'TD' || cell.tagName === 'TH') && cell.getAttribute('tabIndex') === '0') return cell;
+          return null;
+        },
+      };
+    });
+
+    it('should return active td element', () => {
+      cell = elementCreator('td', '0');
+
+      const cellElement = handleCellFocus.findCellWithTabStop(rootElement);
+
+      expect(cellElement).to.not.be.null;
+      expect(cellElement.tagName).to.equal('TD');
+      expect(cellElement).to.have.attr('tabIndex').match(/0/);
+    });
+
+    it('should return active th element', () => {
+      cell = elementCreator('th', '0');
+
+      const cellElement = handleCellFocus.findCellWithTabStop(rootElement);
+
+      expect(cellElement).to.not.be.null;
+      expect(cellElement.tagName).to.equal('TH');
+      expect(cellElement).to.have.attr('tabIndex').match(/0/);
+    });
+
+    it('should return null', () => {
+      cell = elementCreator('div', '-1');
+
+      const cellElement = handleCellFocus.findCellWithTabStop(rootElement);
+
+      expect(cellElement).to.be.null;
     });
   });
 
@@ -52,10 +114,11 @@ describe('handle-key-press', () => {
     };
 
     it('should call focusCell', () => {
-      handleCellFocus.handleClickToFocusBody(cellData, focusedCellCoord, rootElement);
+      handleCellFocus.handleClickToFocusBody(cellData, rootElement, setfocusedCellCoord);
       expect(cell.focus).to.have.been.calledOnce;
       expect(cell.blur).to.have.been.calledOnce;
       expect(cell.setAttribute).have.been.calledTwice;
+      expect(setfocusedCellCoord).to.have.been.calledOnce;
     });
   });
 
@@ -63,10 +126,11 @@ describe('handle-key-press', () => {
     const columnIndex = 0;
 
     it('should call focusCell', () => {
-      handleCellFocus.handleClickToFocusHead(columnIndex, focusedCellCoord, rootElement);
+      handleCellFocus.handleClickToFocusHead(columnIndex, rootElement, setfocusedCellCoord);
       expect(cell.focus).to.have.been.calledOnce;
       expect(cell.blur).to.have.been.calledOnce;
       expect(cell.setAttribute).have.been.calledTwice;
+      expect(setfocusedCellCoord).to.have.been.calledOnce;
     });
   });
 
@@ -80,31 +144,108 @@ describe('handle-key-press', () => {
     });
 
     it('should set tabindex on the first cell and not focus', () => {
-      handleCellFocus.handleResetFocus(focusedCellCoord, rootElement, shouldRefocus, hasSelections);
+      handleCellFocus.handleResetFocus({
+        focusedCellCoord,
+        rootElement,
+        shouldRefocus,
+        hasSelections,
+        setfocusedCellCoord,
+      });
       expect(cell.focus).to.not.have.been.called;
       expect(cell.blur).to.have.been.calledOnce;
       expect(cell.setAttribute).have.been.calledTwice;
+      expect(setfocusedCellCoord).to.have.been.calledOnceWith(focusedCellCoord);
     });
 
     it('should set tabindex on the first cell and focus when shouldRefocus is true', () => {
       shouldRefocus.current = true;
 
-      handleCellFocus.handleResetFocus(focusedCellCoord, rootElement, shouldRefocus, hasSelections);
+      handleCellFocus.handleResetFocus({
+        focusedCellCoord,
+        rootElement,
+        shouldRefocus,
+        hasSelections,
+        setfocusedCellCoord,
+      });
       expect(cell.focus).to.have.been.calledOnce;
       expect(cell.blur).to.have.been.calledOnce;
       expect(cell.setAttribute).have.been.calledTwice;
+      expect(setfocusedCellCoord).to.have.been.calledOnceWith(focusedCellCoord);
     });
 
     it('should set tabindex on the first cell in currently focused column when hasSelections is true', () => {
-      focusedCellCoord = { current: [0, 1] };
+      focusedCellCoord = [0, 1];
       rootElement = { getElementsByClassName: () => [{ getElementsByClassName: () => [cell, cell] }] };
       hasSelections = true;
 
-      handleCellFocus.handleResetFocus(focusedCellCoord, rootElement, shouldRefocus, hasSelections);
+      handleCellFocus.handleResetFocus({
+        focusedCellCoord,
+        rootElement,
+        shouldRefocus,
+        hasSelections,
+        setfocusedCellCoord,
+      });
+
       expect(cell.focus).to.not.have.been.called;
       expect(cell.blur).to.have.been.calledOnce;
       expect(cell.setAttribute).have.been.calledTwice;
-      expect(focusedCellCoord.current).to.eql([0, 1]);
+      expect(setfocusedCellCoord).to.have.been.calledOnceWith(focusedCellCoord);
+      expect(focusedCellCoord).to.eql([0, 1]);
+    });
+  });
+
+  describe('handleNavigateTop', () => {
+    let scrollTo;
+    let tableSection;
+    let rowHeight;
+
+    beforeEach(() => {
+      rowHeight = 100;
+      scrollTo = sinon.spy();
+      tableSection = { current: { scrollTo } };
+    });
+
+    it('should not do anything when ref is not setup yet', () => {
+      tableSection.current = {};
+
+      handleCellFocus.handleNavigateTop({ tableSection, focusedCellCoord, rootElement });
+      expect(scrollTo).to.not.have.been.called;
+    });
+
+    it('should scroll to the top when you reach the top two rows', () => {
+      focusedCellCoord = [1, 0];
+
+      handleCellFocus.handleNavigateTop({ tableSection, focusedCellCoord, rootElement });
+      expect(scrollTo).to.have.been.calledOnce;
+    });
+
+    it('should scroll upwards automatically if it detects the cursor gets behind <TableHead />', () => {
+      const SCROLL_TOP_IDX = 7;
+      focusedCellCoord = [8, 0];
+      tableSection = { current: { scrollTo, scrollTop: SCROLL_TOP_IDX * rowHeight } };
+      rootElement = {
+        getElementsByClassName: (query) => {
+          if (query === 'sn-table-head-cell') {
+            return [{ offsetHeight: 128 }];
+          }
+
+          return Array.from(Array(10).keys()).map((idx) => {
+            const rowCell = {
+              offsetHeight: rowHeight,
+              offsetTop: idx * rowHeight,
+            };
+
+            return { getElementsByClassName: () => [rowCell] };
+          });
+        },
+      };
+      // targetOffsetTop = tableSection.current.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
+      // 700 - 100 - 128 = 472 => so our scrollTo function migth be called with 600
+      const targetOffsetTop = 472;
+
+      handleCellFocus.handleNavigateTop({ tableSection, focusedCellCoord, rootElement });
+      expect(scrollTo).to.have.been.calledOnce;
+      expect(scrollTo).to.have.been.calledOnceWith({ top: targetOffsetTop, behavior: 'smooth' });
     });
   });
 });
