@@ -48,14 +48,19 @@ export const handleResetFocus = ({
   shouldRefocus,
   hasSelections,
   setFocusedCellCoord,
+  shouldAddTabstop,
 }) => {
   updateFocus({ focusType: 'removeTab', providedCell: findCellWithTabStop(rootElement) });
   // If we have selections ongoing, we want to stay on the same column
   const nextCell = hasSelections ? [1, focusedCellCoord[1]] : [0, 0];
-  const focusType = shouldRefocus.current ? 'focus' : 'addTab';
-  const rowElements = rootElement.getElementsByClassName('sn-table-row');
-  setFocusedCellCoord(nextCell);
-  updateFocus({ focusType, rowElements, cellCoord: nextCell });
+  if (shouldAddTabstop) {
+    // Only run this if updates come from inside table
+    const focusType = shouldRefocus.current ? 'focus' : 'addTab';
+    shouldRefocus.current = false;
+    const rowElements = rootElement.getElementsByClassName('sn-table-row');
+    setFocusedCellCoord(nextCell);
+    updateFocus({ focusType, rowElements, cellCoord: nextCell });
+  }
 };
 
 export const handleNavigateTop = ({ tableSectionRef, focusedCellCoord, rootElement }) => {
@@ -81,5 +86,12 @@ export const handleNavigateTop = ({ tableSectionRef, focusedCellCoord, rootEleme
         behavior: 'smooth',
       });
     }
+  }
+};
+
+export const handleFocusout = (evt, tableWrapperRef, shouldRefocus, blur) => {
+  if (!tableWrapperRef.current.contains(evt.relatedTarget) && !shouldRefocus.current) {
+    shouldRefocus.current = false;
+    blur(false);
   }
 };

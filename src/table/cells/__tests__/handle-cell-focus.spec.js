@@ -157,11 +157,13 @@ describe('handle-key-press', () => {
   describe('handleResetFocus', () => {
     let shouldRefocus;
     let hasSelections;
+    let shouldAddTabstop;
 
     beforeEach(() => {
       focusedCellCoord = [2, 1];
       shouldRefocus = { current: false };
       hasSelections = false;
+      shouldAddTabstop = true;
     });
 
     it('should set tabindex on the first cell and not focus', () => {
@@ -171,6 +173,7 @@ describe('handle-key-press', () => {
         shouldRefocus,
         hasSelections,
         setFocusedCellCoord,
+        shouldAddTabstop,
       });
       expect(cell.setAttribute).have.been.calledTwice;
       expect(setFocusedCellCoord).to.have.been.calledOnceWith([0, 0]);
@@ -186,6 +189,7 @@ describe('handle-key-press', () => {
         shouldRefocus,
         hasSelections,
         setFocusedCellCoord,
+        shouldAddTabstop,
       });
       expect(cell.setAttribute).have.been.calledTwice;
       expect(setFocusedCellCoord).to.have.been.calledOnceWith([0, 0]);
@@ -206,6 +210,7 @@ describe('handle-key-press', () => {
         shouldRefocus,
         hasSelections,
         setFocusedCellCoord,
+        shouldAddTabstop,
       });
       expect(cell.setAttribute).have.been.calledTwice;
       expect(setFocusedCellCoord).to.have.been.calledOnceWith([1, 1]);

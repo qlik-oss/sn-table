@@ -9,7 +9,7 @@ import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import useDidUpdateEffect from './useDidUpdateEffect';
 import { handleWrapperKeyDown } from './cells/handle-key-press';
-import { updateFocus, handleResetFocus, handleNavigateTop } from './cells/handle-cell-focus';
+import { updateFocus, handleResetFocus, handleNavigateTop, handleFocusout } from './cells/handle-cell-focus';
 import handleScroll from './handle-scroll';
 
 const useStyles = makeStyles({
@@ -54,15 +54,9 @@ export default function TableWrapper(props) {
 
   // should trigger reload
   const handleChangeRowsPerPage = (event) => {
-    setShouldRefocus();
     setRowsPerPage(+event.target.value);
     setPageInfo({ top: 0, height: +event.target.value });
     setPage(0);
-  };
-
-  const handleChangePageFromPagination = (event, newPage) => {
-    setShouldRefocus();
-    handleChangePage(event, newPage);
   };
 
   if (!rows.length && page > 0) {
@@ -73,7 +67,7 @@ export default function TableWrapper(props) {
   useEffect(() => {
     const resizeCallback = () => setTableWidth(rootElement.clientWidth);
     const scrollCallback = (evt) => handleScroll(evt, tableSectionRef);
-    const focusOutCallback = (evt) => !tableWrapperRef.current.contains(evt.relatedTarget) && keyboard.blur(false);
+    const focusOutCallback = (evt) => handleFocusout(evt, tableWrapperRef, shouldRefocus, keyboard.blur);
 
     window.addEventListener('resize', resizeCallback);
     tableSectionRef.current.addEventListener('wheel', scrollCallback);
@@ -103,7 +97,7 @@ export default function TableWrapper(props) {
     });
   }, [keyboard.active]);
 
-  // Except for first render, whenever the size of the data changes (number of rows per page, rows or columns),
+  // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
   useDidUpdateEffect(() => {
     handleResetFocus({
@@ -112,6 +106,7 @@ export default function TableWrapper(props) {
       shouldRefocus,
       setFocusedCellCoord,
       hasSelections: selectionsAPI.isModal(),
+      shouldAddTabstop: keyboard.enabled && keyboard.active,
     });
   }, [rows.length, size.qcy, size.qcx, page]);
 
@@ -148,7 +143,7 @@ export default function TableWrapper(props) {
           inputProps: { 'aria-label': 'rows per page', 'data-testid': 'select' },
           native: true,
         }}
-        onPageChange={handleChangePageFromPagination}
+        onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
