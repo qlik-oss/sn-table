@@ -71,11 +71,7 @@ export default function TablePaginationActions(props) {
 
   const options = [];
   for(let i = 0; i < Math.ceil(count / rowsPerPage); i++){
-    if (i !== Math.ceil(count / rowsPerPage)-1) {
-      options.push({value: i, label: i*100 + 1 + '-' + (i+1)*100})
-    } else {
-      options.push({value: i, label: i*100 + 1 + '-' + count})
-    }
+    options.push({value: i, label: i+1})
   }
 
   const thinTable = width < 666;
