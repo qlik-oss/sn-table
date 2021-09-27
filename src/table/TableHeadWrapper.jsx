@@ -15,6 +15,10 @@ const useStyles = makeStyles({
     fontSize: ({ fontSize }) => fontSize,
     padding: ({ padding }) => padding,
   },
+  tableHeadBtn: {
+    all: 'unset',
+    width: '100%',
+  },
   visuallyHidden: {
     border: 0,
     clip: 'rect(0 0 0 0)',
@@ -60,10 +64,8 @@ function TableHeadWrapper({
               align={column.align}
               className={`${classes.head} sn-table-head-cell sn-table-cell`}
               tabIndex={tabIndex}
-              role="button"
               scope="col"
               aria-sort={isCurrentColumnActive ? `${column.sortDirection}ending` : null}
-              aria-pressed={isCurrentColumnActive}
               onKeyDown={(e) =>
                 headHandleKeyPress(
                   e,
@@ -77,14 +79,19 @@ function TableHeadWrapper({
                 )
               }
               onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setfocusedCellCoord)}
+              onClick={() =>
+                !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column.isDim, columnIndex)
+              }
             >
+              {/* <button type="button" className={classes.tableHeadBtn} tabIndex={isCurrentColumnActive ? '1' : '-1'}> */}
               <TableSortLabel active={isCurrentColumnActive} direction={column.sortDirection} tabIndex={-1}>
                 {column.label}
-                <span className={classes.visuallyHidden} data-testid={`VHL-for-col-${columnIndex}`}>
-                  {isCurrentColumnActive && `${currentSortDir}. `}
-                  Press space to sort on this column.
-                </span>
+                {/* <span className={classes.visuallyHidden} data-testid={`VHL-for-col-${columnIndex}`}>
+                    {isCurrentColumnActive && `${currentSortDir}. `}
+                    Press space to sort on this column.
+                  </span> */}
               </TableSortLabel>
+              {/* </button> */}
             </TableCell>
           );
         })}
