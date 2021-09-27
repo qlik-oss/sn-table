@@ -13,7 +13,8 @@ const useStyles = makeStyles({
     flexShrink: 0,
   },
   disabled: {
-    color: 'rgba(0, 0, 0, 0.3)'
+    color: 'rgba(0, 0, 0, 0.3)',
+    cursor: 'default'
   }
 });
 
