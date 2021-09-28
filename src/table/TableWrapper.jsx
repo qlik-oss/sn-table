@@ -35,7 +35,7 @@ const useStyles = makeStyles({
 export default function TableWrapper(props) {
   const { rootElement, tableData, setPageInfo, constraints, selectionsAPI } = props;
   const { size, rows, columns } = tableData;
-  const [tableWidth, setTableWidth] = useState();
+  const [tableWidth, setTableWidth] = useState(rootElement.clientWidth);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const [focusedCellCoord, setfocusedCellCoord] = useState([0, 0]);
