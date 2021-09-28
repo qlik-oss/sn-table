@@ -107,7 +107,7 @@ export default function TableWrapper(props) {
         })
       }
     >
-      <TableContainer ref={tableSection} className={classes[containerMode]}>
+      <TableContainer ref={tableSection} className={classes[containerMode]} tabIndex="-1" data-testid="table-wrapper">
         <Table
           stickyHeader
           aria-label={translator.get('SNTable.RowsAndColumns', [`${rows.length + 1}`, `${columns.length}`])}
