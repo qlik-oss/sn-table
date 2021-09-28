@@ -1,0 +1,26 @@
+{
+    "SNTable.RowsPerPage": {
+        "value": "rows per page",
+        "comment": "the number of rows per page"
+    },
+    "SNTable.RowsAndColumns": {
+        "value": "showing {0} rows and {1} columns",
+        "comment": "showing how many rows and how many columns"
+    },
+    "SNTable.PaginationAction.FirstPage": {
+        "value": "First page",
+        "comment": "First page"
+    },
+    "SNTable.PaginationAction.PreviousPage": {
+        "value": "Previous page",
+        "comment": "Previous page"
+    },
+    "SNTable.PaginationAction.NextPage": {
+        "value": "Next page",
+        "comment": "Next page"
+    },
+    "SNTable.PaginationAction.LastPage": {
+        "value": "Last page",
+        "comment": "Last page"
+    }
+}
