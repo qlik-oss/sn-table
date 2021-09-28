@@ -1,26 +1,66 @@
 {
-    "SNTable.RowsPerPage": {
-        "value": "rows per page",
-        "comment": "the number of rows per page"
-    },
-    "SNTable.RowsAndColumns": {
-        "value": "showing {0} rows and {1} columns",
-        "comment": "showing how many rows and how many columns"
-    },
-    "SNTable.PaginationAction.FirstPage": {
-        "value": "First page",
-        "comment": "First page"
-    },
-    "SNTable.PaginationAction.PreviousPage": {
-        "value": "Previous page",
-        "comment": "Previous page"
-    },
-    "SNTable.PaginationAction.NextPage": {
-        "value": "Next page",
-        "comment": "Next page"
-    },
-    "SNTable.PaginationAction.LastPage": {
-        "value": "Last page",
-        "comment": "Last page"
-    }
+  "SNTable.RowsPerPage": {
+    "value": "rows per page",
+    "comment": "the number of rows per page"
+  },
+  "SNTable.RowsAndColumns": {
+    "value": "showing {0} rows and {1} columns",
+    "comment": "showing how many rows and how many columns"
+  },
+  "SNTable.PaginationAction.FirstPage": {
+    "value": "First page",
+    "comment": "First page"
+  },
+  "SNTable.PaginationAction.PreviousPage": {
+    "value": "Previous page",
+    "comment": "Previous page"
+  },
+  "SNTable.PaginationAction.NextPage": {
+    "value": "Next page",
+    "comment": "Next page"
+  },
+  "SNTable.PaginationAction.LastPage": {
+    "value": "Last page",
+    "comment": "Last page"
+  },
+  "SNTable.SortLabel.SortedAscending": {
+    "value": "Sorted ascending",
+    "comment": "Sorted ascending"
+  },
+  "SNTable.SortLabel.SortedDescending": {
+    "value": "Sorted descending",
+    "comment": "Sorted descending"
+  },
+  "SNTable.SortLabel.PressSpaceToSort": {
+    "value": "Press space to sort on this column",
+    "comment": "Press space to sort on this column"
+  },
+  "SNTable.SelectionLabel.OneSelectedValue": {
+    "value": "There is one selected value currently",
+    "comment": "There is one selected value currently"
+  },
+  "SNTable.SelectionLabel.SelectedValues": {
+    "value": "There are {0} selected values currently",
+    "comment": "There more than one selected values currently"
+  },
+  "SNTable.SelectionLabel.DeselectedValue": {
+    "value": "Value is deselected",
+    "comment": "Value is deselected"
+  },
+  "SNTable.SelectionLabel.SelectedValue": {
+    "value": "Value is selected",
+    "comment": "Value is selected"
+  },
+  "SNTable.SelectionLabel.NotSelectedValue": {
+    "value": "Value is not selected",
+    "comment": "Value is not selected"
+  },
+  "SNTable.SelectionLabel.SelectionsConfirmed": {
+    "value": "Selections confirmed",
+    "comment": "Selections confirmed"
+  },
+  "SNTable.SelectionLabel.ExitedSelectionMode": {
+    "value": "value is deselected and exited selection mode",
+    "comment": "value is deselected and exited selection mode"
+  }
 }
