@@ -273,7 +273,7 @@ describe('handle-key-press', () => {
     });
   });
 
-  describe('handleNavigateTop', () => {
+  describe('handleFocusoutEvent', () => {
     let containsRelatedTarget;
     let evt;
     let shouldRefocus;
