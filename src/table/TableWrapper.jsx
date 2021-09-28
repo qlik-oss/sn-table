@@ -126,7 +126,12 @@ export default function TableWrapper(props) {
         })
       }
     >
-      <TableContainer ref={tableSectionRef} className={classes[containerMode]}>
+      <TableContainer
+        ref={tableSectionRef}
+        className={classes[containerMode]}
+        tabIndex="-1"
+        data-testid="table-wrapper"
+      >
         <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
           <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} />
           <TableBodyWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} setShouldRefocus={setShouldRefocus} />

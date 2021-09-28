@@ -51,7 +51,7 @@ describe('<TableWrapper />', () => {
   });
 
   it('should render table', () => {
-    const { queryByLabelText, queryByText } = render(
+    const { queryByLabelText, queryByText, queryByTestId } = render(
       <TableWrapper
         tableData={tableData}
         setPageInfo={setPageInfo}
@@ -62,6 +62,7 @@ describe('<TableWrapper />', () => {
       />
     );
 
+    expect(queryByTestId('table-wrapper')).to.has.attr('tabindex', '-1');
     expect(queryByLabelText('showing 2 rows and 1 columns')).to.be.visible;
     expect(queryByText(`1-${rowsPerPage} of ${tableData.size.qcy}`)).to.be.visible;
     expect(queryByText(rowsPerPage)).to.be.visible;
