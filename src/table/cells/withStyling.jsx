@@ -1,10 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+  srOnly: {
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: '1px',
+    overflow: 'hidden',
+    position: 'absolute',
+    whiteSpace: 'nowrap',
+    width: '1px',
+  },
+});
 
 export default function withStyling(CellComponent) {
   const HOC = (props) => {
-    const { styling } = props;
-    return <CellComponent {...props} className={`${styling.selectedCellClass} sn-table-cell`} style={styling} />;
+    const classes = useStyles();
+    const { styling, column, selState, value } = props;
+
+    const isInSelectionMode = selState.rows.length && Number(column.id.replace(/^\D+/g, '')) === selState.colIdx;
+    return (
+      <CellComponent
+        {...props}
+        role={isInSelectionMode ? 'option' : null}
+        aria-selected={isInSelectionMode ? !!styling.selectedCellClass : null}
+        className={`${styling.selectedCellClass} sn-table-cell`}
+        style={styling}
+      >
+        {value}
+        {!!styling.selectedCellClass && <span className={classes.srOnly}>selected</span>}
+      </CellComponent>
+    );
   };
 
   HOC.propTypes = {

@@ -60,7 +60,6 @@ function TableBodyWrapper({
     colIdx: -1,
     isEnabled: selectionsEnabled,
   });
-  const [srNotation, setSrNotation] = useState('');
 
   useEffect(() => {
     selDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
@@ -71,62 +70,52 @@ function TableBodyWrapper({
     addSelectionListeners(selectionsAPI, selDispatch, setShouldRefocus);
   }, []);
 
-  useEffect(() => {
-    setSrNotation(getCellSrNotation({ focusedCellCoord, rootElement, selState }));
-  }, [focusedCellCoord, selState]);
-
   return (
-    <>
-      <label className={classes.srOnly} aria-live="assertive">
-        {srNotation}
-      </label>
-      <TableBody className={`${classes.cellBase}`}>
-        {rows.map((row, rowIndex) => (
-          <TableRow
-            hover={hoverEffect}
-            tabIndex={-1}
-            key={row.key}
-            className={`sn-table-row ${hoverEffect && classes.hoverTableRow}`}
-          >
-            {columns.map((column, columnIndex) => {
-              const cell = row[column.id];
-              const value = cell.qText;
-              const CellRenderer = columnRenderers[columnIndex];
-              return (
-                CellRenderer && (
-                  <CellRenderer
-                    cell={cell}
-                    column={column}
-                    value={value}
-                    key={column.id}
-                    align={column.align}
-                    styling={{}}
-                    selState={selState}
-                    selDispatch={selDispatch}
-                    tabIndex={-1}
-                    onKeyDown={(evt) =>
-                      bodyHandleKeyPress(
-                        evt,
-                        rootElement,
-                        [rowIndex + 1, columnIndex],
-                        selState,
-                        cell,
-                        selDispatch,
-                        selectionsEnabled,
-                        setfocusedCellCoord
-                      )
-                    }
-                    onMouseDown={() => handleClickToFocusBody(cell, rootElement, setfocusedCellCoord)}
-                  >
-                    {value}
-                  </CellRenderer>
-                )
-              );
-            })}
-          </TableRow>
-        ))}
-      </TableBody>
-    </>
+    <TableBody className={`${classes.cellBase}`} role={selState.rows.length ? 'listbox' : null}>
+      {rows.map((row, rowIndex) => (
+        <TableRow
+          hover={hoverEffect}
+          tabIndex={-1}
+          key={row.key}
+          className={`sn-table-row ${hoverEffect && classes.hoverTableRow}`}
+        >
+          {columns.map((column, columnIndex) => {
+            const cell = row[column.id];
+            const value = cell.qText;
+            const CellRenderer = columnRenderers[columnIndex];
+
+            return (
+              CellRenderer && (
+                <CellRenderer
+                  cell={cell}
+                  column={column}
+                  value={value}
+                  key={column.id}
+                  align={column.align}
+                  styling={{}}
+                  selState={selState}
+                  selDispatch={selDispatch}
+                  tabIndex={-1}
+                  onKeyDown={(evt) =>
+                    bodyHandleKeyPress(
+                      evt,
+                      rootElement,
+                      [rowIndex + 1, columnIndex],
+                      selState,
+                      cell,
+                      selDispatch,
+                      selectionsEnabled,
+                      setfocusedCellCoord
+                    )
+                  }
+                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setfocusedCellCoord)}
+                />
+              )
+            );
+          })}
+        </TableRow>
+      ))}
+    </TableBody>
   );
 }
 
