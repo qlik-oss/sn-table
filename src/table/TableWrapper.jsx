@@ -9,7 +9,7 @@ import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import useDidUpdateEffect from './useDidUpdateEffect';
 import { handleWrapperKeyDown } from './cells/handle-key-press';
-import { updateFocus, handleResetFocus, handleNavigateTop, handleFocusout } from './cells/handle-cell-focus';
+import { updateFocus, handleResetFocus, handleNavigateTop, handleFocusoutEvent } from './cells/handle-cell-focus';
 import handleScroll from './handle-scroll';
 
 const useStyles = makeStyles({
@@ -67,7 +67,7 @@ export default function TableWrapper(props) {
   useEffect(() => {
     const resizeCallback = () => setTableWidth(rootElement.clientWidth);
     const scrollCallback = (evt) => handleScroll(evt, tableSectionRef);
-    const focusOutCallback = (evt) => handleFocusout(evt, tableWrapperRef, shouldRefocus, keyboard.blur);
+    const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard.blur);
 
     window.addEventListener('resize', resizeCallback);
     tableSectionRef.current.addEventListener('wheel', scrollCallback);

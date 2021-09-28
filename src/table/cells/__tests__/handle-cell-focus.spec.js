@@ -272,4 +272,41 @@ describe('handle-key-press', () => {
       expect(scrollTo).to.have.been.calledOnceWith({ top: targetOffsetTop, behavior: 'smooth' });
     });
   });
+
+  describe('handleNavigateTop', () => {
+    let containsRelatedTarget;
+    let evt;
+    let shouldRefocus;
+    let blur;
+
+    beforeEach(() => {
+      containsRelatedTarget = false;
+      evt = {
+        currentTarget: {
+          contains: () => containsRelatedTarget,
+        },
+      };
+      shouldRefocus = { current: false };
+      blur = sinon.spy();
+    });
+
+    it('should call blur when currentTarget doesnt contain relatedTarget and shouldRefocus is false', () => {
+      handleCellFocus.handleFocusoutEvent(evt, shouldRefocus, blur);
+      expect(blur).to.have.been.calledOnceWith(false);
+    });
+
+    it('should not call blur when currentTarget contains relatedTarget', () => {
+      containsRelatedTarget = true;
+
+      handleCellFocus.handleFocusoutEvent(evt, shouldRefocus, blur);
+      expect(blur).to.not.have.been.called;
+    });
+
+    it('should not call blur when shouldRefocus is true', () => {
+      shouldRefocus.current = true;
+
+      handleCellFocus.handleFocusoutEvent(evt, shouldRefocus, blur);
+      expect(blur).to.not.have.been.called;
+    });
+  });
 });

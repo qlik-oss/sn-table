@@ -89,9 +89,8 @@ export const handleNavigateTop = ({ tableSectionRef, focusedCellCoord, rootEleme
   }
 };
 
-export const handleFocusout = (evt, tableWrapperRef, shouldRefocus, blur) => {
-  if (!tableWrapperRef.current.contains(evt.relatedTarget) && !shouldRefocus.current) {
-    shouldRefocus.current = false;
+export const handleFocusoutEvent = (evt, shouldRefocus, blur) => {
+  if (!evt.currentTarget.contains(evt.relatedTarget) && !shouldRefocus.current) {
     blur(false);
   }
 };
