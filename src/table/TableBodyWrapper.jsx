@@ -45,7 +45,6 @@ function TableBodyWrapper({
   theme,
   setShouldRefocus,
   setfocusedCellCoord,
-  focusedCellCoord,
 }) {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
