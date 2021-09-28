@@ -22,7 +22,7 @@ describe('<TableWrapper />', () => {
   beforeEach(() => {
     sinon.stub(TableBodyWrapper, 'default').returns(<tbody />);
     sinon.stub(TableHeadWrapper, 'default').returns(<thead />);
-    sinon.stub(handleKeyPress, 'handleWrapperKeyDown').returns(sinon.spy());
+    sinon.stub(handleKeyPress, 'handleTableWrapperKeyDown').returns(sinon.spy());
 
     tableData = {
       size: { qcy: 200 },
@@ -68,7 +68,7 @@ describe('<TableWrapper />', () => {
     expect(queryByText(rowsPerPage)).to.be.visible;
   });
 
-  it('should call handleWrapperKeyDown when press control key on the table', () => {
+  it('should call handleTableWrapperKeyDown when press control key on the table', () => {
     const { queryByLabelText } = render(
       <TableWrapper
         tableData={tableData}
@@ -81,7 +81,7 @@ describe('<TableWrapper />', () => {
     );
 
     fireEvent.keyDown(queryByLabelText('showing 2 rows and 1 columns'), { key: 'Control', code: 'ControlLeft' });
-    expect(handleKeyPress.handleWrapperKeyDown).to.have.been.calledOnce;
+    expect(handleKeyPress.handleTableWrapperKeyDown).to.have.been.calledOnce;
   });
 
   it('should call setPageInfo when clicking next page button', async () => {

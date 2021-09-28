@@ -8,7 +8,7 @@ export const preventDefaultBehavior = (evt) => {
   evt.preventDefault();
 };
 
-export const handleWrapperKeyDown = ({
+export const handleTableWrapperKeyDown = ({
   evt,
   totalRowSize,
   page,
@@ -148,11 +148,11 @@ export const bodyHandleKeyPress = (
       isAnalysisMode && selState.api.confirm();
       break;
     }
-    // Esc: Cancels selections
+    // Esc: Cancels selections. If no selections, do nothing and handleTableWrapperKeyDown should catch it
     case 'Escape': {
       if (!isAnalysisMode || !selState.rows.length) break;
       preventDefaultBehavior(evt);
-      isAnalysisMode && selState.api.cancel();
+      selState.api.cancel();
       break;
     }
     default:

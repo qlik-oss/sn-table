@@ -8,7 +8,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import useDidUpdateEffect from './useDidUpdateEffect';
-import { handleWrapperKeyDown } from './cells/handle-key-press';
+import { handleTableWrapperKeyDown } from './cells/handle-key-press';
 import { updateFocus, handleResetFocus, handleNavigateTop, handleFocusoutEvent } from './cells/handle-cell-focus';
 import handleScroll from './handle-scroll';
 
@@ -106,7 +106,7 @@ export default function TableWrapper(props) {
       shouldRefocus,
       setFocusedCellCoord,
       hasSelections: selectionsAPI.isModal(),
-      shouldAddTabstop: keyboard.enabled && keyboard.active,
+      shouldAddTabstop: keyboard.active,
     });
   }, [rows.length, size.qcy, size.qcx, page]);
 
@@ -115,7 +115,7 @@ export default function TableWrapper(props) {
       className={classes.paper}
       ref={tableWrapperRef}
       onKeyDown={(evt) =>
-        handleWrapperKeyDown({
+        handleTableWrapperKeyDown({
           evt,
           totalRowSize: size.qcy,
           page,

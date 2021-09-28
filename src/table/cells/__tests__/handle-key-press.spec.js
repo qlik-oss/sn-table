@@ -3,7 +3,7 @@ import {
   arrowKeysNavigation,
   bodyHandleKeyPress,
   headHandleKeyPress,
-  handleWrapperKeyDown,
+  handleTableWrapperKeyDown,
 } from '../handle-key-press';
 
 describe('handle-key-press', () => {
@@ -485,7 +485,7 @@ describe('handle-key-press', () => {
     });
   });
 
-  describe('handleWrapperKeyDown', () => {
+  describe('handleTableWrapperKeyDown', () => {
     let evt = {};
     let totalRowSize;
     let page;
@@ -510,7 +510,7 @@ describe('handle-key-press', () => {
 
     it('when shift key is not pressed, handleChangePage should not run', () => {
       evt.shiftKey = false;
-      handleWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.have.been.called;
       expect(setShouldRefocus).not.have.been.called;
     });
@@ -518,7 +518,7 @@ describe('handle-key-press', () => {
     it('when ctrl key or meta key is not pressed, handleChangePage should not run', () => {
       evt.ctrlKey = false;
       evt.metaKey = false;
-      handleWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.have.been.called;
       expect(setShouldRefocus).not.have.been.called;
     });
@@ -527,7 +527,7 @@ describe('handle-key-press', () => {
       page = 0;
       totalRowSize = 40;
       rowsPerPage = 40;
-      handleWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.have.been.called;
       expect(setShouldRefocus).not.have.been.called;
     });
@@ -537,7 +537,7 @@ describe('handle-key-press', () => {
       page = 0;
       totalRowSize = 40;
       rowsPerPage = 10;
-      handleWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.have.been.called;
       expect(setShouldRefocus).not.have.been.called;
     });
@@ -546,7 +546,7 @@ describe('handle-key-press', () => {
       totalRowSize = 40;
       page = 0;
       rowsPerPage = 10;
-      handleWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).to.have.been.calledOnce;
       expect(setShouldRefocus).to.have.been.calledOnce;
     });
@@ -556,7 +556,7 @@ describe('handle-key-press', () => {
       totalRowSize = 40;
       page = 1;
       rowsPerPage = 40;
-      handleWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).to.have.been.calledOnce;
       expect(setShouldRefocus).to.have.been.calledOnce;
     });
@@ -568,7 +568,7 @@ describe('handle-key-press', () => {
         preventDefault: sinon.spy(),
       };
       const keyboard = { enabled: true, blur: sinon.spy() };
-      handleWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus, keyboard });
+      handleTableWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus, keyboard });
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(keyboard.blur).to.have.been.calledOnceWith(true);
