@@ -9,6 +9,7 @@ import {
   useSelections,
   useTheme,
   usePromise,
+  useKeyboard,
 } from '@nebula.js/stardust';
 import locale from '../locale/src';
 
@@ -37,6 +38,7 @@ export default function supernova(env) {
       const translator = useTranslator();
       const selectionsAPI = useSelections();
       const theme = useTheme();
+      const keyboard = useKeyboard();
 
       const [pageInfo, setPageInfo] = useState(() => ({ top: 0, height: 100 }));
       const [muiParameters] = useState(() => muiSetup());
@@ -57,9 +59,10 @@ export default function supernova(env) {
             muiParameters,
             theme,
             changeSortOrder,
+            keyboard,
           });
         }
-      }, [tableData, constraints, selectionsAPI.isModal(), theme.name(), translator.language()]);
+      }, [tableData, constraints, selectionsAPI.isModal(), theme.name(), keyboard.active, translator.language()]);
 
       useEffect(
         () => () => {
