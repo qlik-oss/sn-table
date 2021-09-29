@@ -65,7 +65,6 @@ function TableHeadWrapper({
               className={`${classes.head} sn-table-head-cell sn-table-cell`}
               tabIndex={tabIndex}
               scope="col"
-              aria-sort={isCurrentColumnActive ? `${column.sortDirection}ending` : null}
               onKeyDown={(e) =>
                 headHandleKeyPress(
                   e,
@@ -83,15 +82,13 @@ function TableHeadWrapper({
                 !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column.isDim, columnIndex)
               }
             >
-              {/* <button type="button" className={classes.tableHeadBtn} tabIndex={isCurrentColumnActive ? '1' : '-1'}> */}
               <TableSortLabel active={isCurrentColumnActive} direction={column.sortDirection} tabIndex={-1}>
                 {column.label}
-                {/* <span className={classes.visuallyHidden} data-testid={`VHL-for-col-${columnIndex}`}>
-                    {isCurrentColumnActive && `${currentSortDir}. `}
-                    Press space to sort on this column.
-                  </span> */}
+                <span className={classes.visuallyHidden} data-testid={`VHL-for-col-${columnIndex}`}>
+                  {isCurrentColumnActive && `${currentSortDir}. `}
+                  Press space or enter to sort on the column.
+                </span>
               </TableSortLabel>
-              {/* </button> */}
             </TableCell>
           );
         })}

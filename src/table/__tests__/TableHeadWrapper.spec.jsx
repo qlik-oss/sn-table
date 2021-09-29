@@ -144,7 +144,7 @@ describe('<TableHeadWrapper />', () => {
     expect(handleCellFocus.handleClickToFocusHead).to.have.been.calledOnce;
   });
 
-  it('should have proper `scope`, `role`, `aria-sort` and `aria-pressed` properties', () => {
+  it('should have proper `scope` property', () => {
     const { queryByText } = render(
       <TableHeadWrapper tableData={tableData} theme={theme} layout={layout} changeSortOrder={changeSortOrder} />
     );
@@ -155,51 +155,6 @@ describe('<TableHeadWrapper />', () => {
     // check scope
     expect(firstColQuery).to.have.attribute('scope', 'col');
     expect(secondColQuery).to.have.attribute('scope', 'col');
-
-    // check role
-    expect(firstColQuery).to.have.attribute('role', 'button');
-    expect(secondColQuery).to.have.attribute('role', 'button');
-
-    // check sort
-    expect(firstColQuery).to.have.attribute('aria-sort', 'ascending');
-    expect(secondColQuery).to.not.have.attribute('aria-sort');
-
-    // cehck pressed
-    expect(firstColQuery).to.have.attribute('aria-pressed', 'true');
-    expect(secondColQuery).to.have.attribute('aria-pressed', 'false');
-  });
-
-  it('should change `aria-pressed` and `aria-sort` when we sort by second column', () => {
-    tableData = {
-      columns: [
-        { ...tableData.columns[0], sortDirection: 'desc' },
-        { ...tableData.columns[1], sortDirection: 'asc' },
-      ],
-    };
-    layout = {
-      qHyperCube: {
-        qEffectiveInterColumnSortOrder: [1, 0],
-      },
-    };
-
-    const { queryByText } = render(
-      <TableHeadWrapper
-        tableData={tableData}
-        theme={theme}
-        layout={layout}
-        changeSortOrder={changeSortOrder}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-      />
-    );
-
-    const firstColQuery = queryByText(tableData.columns[0].label).closest('th');
-    const secondColQuery = queryByText(tableData.columns[1].label).closest('th');
-
-    expect(firstColQuery).to.not.have.attribute('aria-sort');
-    expect(firstColQuery).to.have.attribute('aria-pressed', 'false');
-    expect(secondColQuery).to.have.attribute('aria-pressed', 'true');
-    expect(secondColQuery).to.have.attribute('aria-sort', 'ascending');
   });
 
   it('should render the visually hidden text instead of `aria-label` properly', () => {
@@ -217,7 +172,7 @@ describe('<TableHeadWrapper />', () => {
     const firstColHiddenLabel = queryByTestId('VHL-for-col-0');
     const secondColHiddenLabel = queryByTestId('VHL-for-col-1');
 
-    expect(firstColHiddenLabel).to.have.text('Sorted ascending. Press space to sort on this column.');
-    expect(secondColHiddenLabel).to.have.text('Press space to sort on this column.');
+    expect(firstColHiddenLabel).to.have.text('Sorted ascending. Press space or enter to sort on the column.');
+    expect(secondColHiddenLabel).to.have.text('Press space or enter to sort on the column.');
   });
 });
