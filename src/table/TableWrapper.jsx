@@ -30,7 +30,7 @@ const useStyles = makeStyles({
 });
 
 export default function TableWrapper(props) {
-  const { rootElement, tableData, setPageInfo, constraints, selectionsAPI, keyboard } = props;
+  const { rootElement, tableData, setPageInfo, constraints, translator, selectionsAPI, keyboard } = props;
   const { size, rows, columns } = tableData;
   const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
@@ -132,7 +132,10 @@ export default function TableWrapper(props) {
         tabIndex="-1"
         data-testid="table-wrapper"
       >
-        <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
+        <Table
+          stickyHeader
+          aria-label={translator.get('SNTable.RowsAndColumns', [`${rows.length + 1}`, `${columns.length}`])}
+        >
           <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} />
           <TableBodyWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} setShouldRefocus={setShouldRefocus} />
         </Table>
@@ -143,9 +146,13 @@ export default function TableWrapper(props) {
         component="div"
         count={size.qcy}
         rowsPerPage={rowsPerPage}
+        labelRowsPerPage={`${translator.get('SNTable.RowsPerPage')}:`}
         page={page}
         SelectProps={{
-          inputProps: { 'aria-label': 'rows per page', 'data-testid': 'select' },
+          inputProps: {
+            'aria-label': translator.get('SNTable.RowsPerPage'),
+            'data-testid': 'select',
+          },
           native: true,
         }}
         onPageChange={handleChangePage}
@@ -159,6 +166,7 @@ TableWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
+  translator: PropTypes.object.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,

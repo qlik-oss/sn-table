@@ -18,6 +18,7 @@ describe('<TableWrapper />', () => {
   let modal;
   let rootElement;
   let keyboard;
+  let translator;
 
   beforeEach(() => {
     sinon.stub(TableBodyWrapper, 'default').returns(<tbody />);
@@ -43,6 +44,7 @@ describe('<TableWrapper />', () => {
       querySelector: () => {},
     };
     keyboard = { enabled: false, active: false };
+    translator = { get: (s) => s };
   });
 
   afterEach(() => {
@@ -59,11 +61,13 @@ describe('<TableWrapper />', () => {
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
         keyboard={keyboard}
+        translator={translator}
       />
     );
 
+    expect(queryByLabelText('SNTable.RowsAndColumns')).to.be.visible;
+    expect(queryByLabelText('SNTable.RowsPerPage')).to.be.visible;
     expect(queryByTestId('table-wrapper')).to.has.attr('tabindex', '-1');
-    expect(queryByLabelText('showing 2 rows and 1 columns')).to.be.visible;
     expect(queryByText(`1-${rowsPerPage} of ${tableData.size.qcy}`)).to.be.visible;
     expect(queryByText(rowsPerPage)).to.be.visible;
   });
@@ -77,10 +81,11 @@ describe('<TableWrapper />', () => {
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
         keyboard={keyboard}
+        translator={translator}
       />
     );
 
-    fireEvent.keyDown(queryByLabelText('showing 2 rows and 1 columns'), { key: 'Control', code: 'ControlLeft' });
+    fireEvent.keyDown(queryByLabelText('SNTable.RowsPerPage'), { key: 'Control', code: 'ControlLeft' });
     expect(handleKeyPress.handleTableWrapperKeyDown).to.have.been.calledOnce;
   });
 
@@ -93,6 +98,7 @@ describe('<TableWrapper />', () => {
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
         keyboard={keyboard}
+        translator={translator}
       />
     );
     fireEvent.click(await findByTitle('Next page'));
@@ -110,6 +116,7 @@ describe('<TableWrapper />', () => {
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
         keyboard={keyboard}
+        translator={translator}
       />
     );
     // This is a hack to simulate when selections are made on other page than first page and
@@ -132,6 +139,7 @@ describe('<TableWrapper />', () => {
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
         keyboard={keyboard}
+        translator={translator}
       />
     );
     fireEvent.change(getByTestId('select'), { target: { value: 25 } });
@@ -149,6 +157,7 @@ describe('<TableWrapper />', () => {
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
         keyboard={keyboard}
+        translator={translator}
       />
     );
     const rppSiblingElement = queryByText(`1-${rowsPerPage} of ${tableData.size.qcy}`);

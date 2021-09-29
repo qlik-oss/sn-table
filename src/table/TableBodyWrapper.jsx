@@ -11,7 +11,7 @@ import { handleClickToFocusBody } from './cells/handle-cell-focus';
 
 const useStyles = makeStyles({
   cellBase: {
-    '& td': {
+    '& td, th': {
       color: ({ color }) => color,
       fontSize: ({ fontSize }) => fontSize,
       padding: ({ padding }) => padding,
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
   hoverTableRow: {
     '&&:hover': {
-      '& td:not(.selected)': {
+      '& td:not(.selected), th:not(.selected)': {
         backgroundColor: ({ hoverBackgroundColor }) => hoverBackgroundColor,
         color: ({ hoverFontColor }) => hoverFontColor,
       },
