@@ -1,66 +1,70 @@
 {
-  "SNTable.RowsPerPage": {
-    "value": "rows per page",
-    "comment": "the number of rows per page"
-  },
-  "SNTable.RowsAndColumns": {
+  "SNTable.Accessibility.RowsAndColumns": {
     "value": "showing {0} rows and {1} columns",
-    "comment": "showing how many rows and how many columns"
+    "comment": "number of rows and columns announced by the screen reader"
   },
-  "SNTable.PaginationAction.FirstPage": {
+  "SNTable.Pagination.RowsPerPage": {
+    "value": "rows per page",
+    "comment": "label for the rows per page dropdown"
+  },
+  "SNTable.Pagination.FirstPage": {
     "value": "First page",
-    "comment": "First page"
+    "comment": "tooltip and aria-label for the first page button"
   },
-  "SNTable.PaginationAction.PreviousPage": {
+  "SNTable.Pagination.PreviousPage": {
     "value": "Previous page",
-    "comment": "Previous page"
+    "comment": "tooltip and aria-label for the previous page button"
   },
-  "SNTable.PaginationAction.NextPage": {
+  "SNTable.Pagination.NextPage": {
     "value": "Next page",
-    "comment": "Next page"
+    "comment": "tooltip and aria-label for the next page button"
   },
-  "SNTable.PaginationAction.LastPage": {
+  "SNTable.Pagination.LastPage": {
     "value": "Last page",
-    "comment": "Last page"
+    "comment": "tooltip and aria-label for the last page button"
   },
   "SNTable.SortLabel.SortedAscending": {
     "value": "Sorted ascending",
-    "comment": "Sorted ascending"
+    "comment": "direction of sorting for a column, announced by screen reader"
   },
   "SNTable.SortLabel.SortedDescending": {
     "value": "Sorted descending",
-    "comment": "Sorted descending"
+    "comment": "direction of sorting for a column, announced by screen reader"
   },
   "SNTable.SortLabel.PressSpaceToSort": {
     "value": "Press space to sort on this column",
-    "comment": "Press space to sort on this column"
+    "comment": "instructions for sorting, announced by screen reader"
   },
   "SNTable.SelectionLabel.OneSelectedValue": {
     "value": "There is one selected value currently",
-    "comment": "There is one selected value currently"
+    "comment": "the amount of selected values in a dimension, announced by screen reader"
   },
   "SNTable.SelectionLabel.SelectedValues": {
     "value": "There are {0} selected values currently",
-    "comment": "There more than one selected values currently"
+    "comment": "the amount of selected values in a dimension, announced by screen reader"
   },
   "SNTable.SelectionLabel.DeselectedValue": {
     "value": "Value is deselected",
-    "comment": "Value is deselected"
+    "comment": "announced by screen reader when a value is deselected"
   },
   "SNTable.SelectionLabel.SelectedValue": {
     "value": "Value is selected",
-    "comment": "Value is selected"
+    "comment": "announced by screen reader when a value is selected"
   },
   "SNTable.SelectionLabel.NotSelectedValue": {
     "value": "Value is not selected",
-    "comment": "Value is not selected"
+    "comment": "announced by screen reader when focus is on an unselected value"
   },
   "SNTable.SelectionLabel.SelectionsConfirmed": {
     "value": "Selections confirmed",
-    "comment": "Selections confirmed"
+    "comment": "announced by screen reader when selections are confirmed"
   },
   "SNTable.SelectionLabel.ExitedSelectionMode": {
     "value": "value is deselected and exited selection mode",
-    "comment": "value is deselected and exited selection mode"
+    "comment": "announced when deselecting and no values are selecting, causing the the chart to exit selection mode"
+  },
+  "SNTable.SelectionLabel.selected": {
+    "value": "selected",
+    "comment": "announced for a selected value"
   }
 }
