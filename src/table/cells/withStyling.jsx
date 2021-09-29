@@ -17,9 +17,9 @@ const useStyles = makeStyles({
 export default function withStyling(CellComponent) {
   const HOC = (props) => {
     const classes = useStyles();
-    const { styling, column, selState, value } = props;
+    const { styling, selState, value, cell } = props;
 
-    const isInSelectionMode = selState.rows.length && Number(column.id.replace(/^\D+/g, '')) === selState.colIdx;
+    const isInSelectionMode = selState?.rows.length && cell.rawColIdx === selState.colIdx;
     return (
       <CellComponent
         {...props}
