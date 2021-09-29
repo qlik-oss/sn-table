@@ -26,9 +26,9 @@
   },
   "main": "dist/sn-table.js",
   "scripts": {
-    "build": "locale:generate && node ./tools/build.js --core",
-    "build:dev": "locale:generate && node ./tools/build.js --core --mode development",
-    "build:watch": "locale:generate && node ./tools/build.js --mode development -w",
+    "build": "yarn run locale:generate && node ./tools/build.js --core",
+    "build:dev": "yarn run locale:generate && node ./tools/build.js --core --mode development",
+    "build:watch": "yarn run locale:generate && node ./tools/build.js --mode development -w",
     "lint": "eslint src",
     "start": "nebula serve --build false --type sn-table",
     "sense": "nebula sense",
