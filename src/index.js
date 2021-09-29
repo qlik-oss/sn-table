@@ -19,6 +19,7 @@ import muiSetup from './mui-setup';
 import { render, teardown } from './table/Root';
 import manageData from './table/handle-data';
 import sortingFactory from './table/sorting';
+import './index.css';
 
 export default function supernova(env) {
   return {
