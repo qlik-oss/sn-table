@@ -19,6 +19,7 @@ describe('<TableWrapper />', () => {
   let rootElement;
   let keyboard;
   let translator;
+  let rect;
 
   beforeEach(() => {
     sinon.stub(TableBodyWrapper, 'default').returns(<tbody />);
@@ -45,6 +46,9 @@ describe('<TableWrapper />', () => {
     };
     keyboard = { enabled: false, active: false };
     translator = { get: (s) => s };
+    rect = {
+      width: 400,
+    };
   });
 
   afterEach(() => {
@@ -62,6 +66,7 @@ describe('<TableWrapper />', () => {
         rootElement={rootElement}
         keyboard={keyboard}
         translator={translator}
+        rect={rect}
       />
     );
 
@@ -70,6 +75,26 @@ describe('<TableWrapper />', () => {
     expect(queryByTestId('table-wrapper')).to.has.attr('tabindex', '-1');
     expect(queryByText(`1-${rowsPerPage} of ${tableData.size.qcy}`)).to.be.visible;
     expect(queryByText(rowsPerPage)).to.be.visible;
+  });
+
+  it('should not render rows per page section in table', () => {
+    rect = {
+      width: 399,
+    };
+    const { queryByLabelText } = render(
+      <TableWrapper
+        tableData={tableData}
+        setPageInfo={setPageInfo}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+        rootElement={rootElement}
+        keyboard={keyboard}
+        translator={translator}
+        rect={rect}
+      />
+    );
+
+    expect(queryByLabelText('SNTable.RowsPerPage')).to.be.a('null');
   });
 
   it('should call handleTableWrapperKeyDown when press control key on the table', () => {
@@ -82,6 +107,7 @@ describe('<TableWrapper />', () => {
         rootElement={rootElement}
         keyboard={keyboard}
         translator={translator}
+        rect={rect}
       />
     );
 
@@ -99,6 +125,7 @@ describe('<TableWrapper />', () => {
         rootElement={rootElement}
         keyboard={keyboard}
         translator={translator}
+        rect={rect}
       />
     );
     fireEvent.click(await findByTitle('Go to next page'));
@@ -117,6 +144,7 @@ describe('<TableWrapper />', () => {
         rootElement={rootElement}
         keyboard={keyboard}
         translator={translator}
+        rect={rect}
       />
     );
     // This is a hack to simulate when selections are made on other page than first page and
@@ -140,6 +168,7 @@ describe('<TableWrapper />', () => {
         rootElement={rootElement}
         keyboard={keyboard}
         translator={translator}
+        rect={rect}
       />
     );
     fireEvent.change(getByTestId('select'), { target: { value: 25 } });
@@ -158,6 +187,7 @@ describe('<TableWrapper />', () => {
         rootElement={rootElement}
         keyboard={keyboard}
         translator={translator}
+        rect={rect}
       />
     );
     const rppSiblingElement = queryByText(`1-${rowsPerPage} of ${tableData.size.qcy}`);
