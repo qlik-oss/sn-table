@@ -11,7 +11,7 @@ import { handleClickToFocusBody } from './cells/handle-cell-focus';
 
 const useStyles = makeStyles({
   cellBase: {
-    '& td': {
+    '& td, th': {
       color: ({ color }) => color,
       fontSize: ({ fontSize }) => fontSize,
       padding: ({ padding }) => padding,
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
   hoverTableRow: {
     '&&:hover': {
-      '& td:not(.selected)': {
+      '& td:not(.selected), th:not(.selected)': {
         backgroundColor: ({ hoverBackgroundColor }) => hoverBackgroundColor,
         color: ({ hoverFontColor }) => hoverFontColor,
       },
@@ -42,8 +42,9 @@ function TableBodyWrapper({
   selectionsAPI,
   layout,
   theme,
-  focusedCellCoord,
   setShouldRefocus,
+  setFocusedCellCoord,
+  keyboard,
 }) {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
@@ -100,14 +101,14 @@ function TableBodyWrapper({
                       evt,
                       rootElement,
                       [rowIndex + 1, columnIndex],
-                      focusedCellCoord,
                       selState,
                       cell,
                       selDispatch,
-                      selectionsEnabled
+                      selectionsEnabled,
+                      setFocusedCellCoord
                     )
                   }
-                  onMouseDown={() => handleClickToFocusBody(cell, focusedCellCoord, rootElement)}
+                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
                 >
                   <div className={classes.srOnly}>{column.label}</div>
                   {value}
@@ -128,8 +129,9 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  focusedCellCoord: PropTypes.object.isRequired,
+  setFocusedCellCoord: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
+  keyboard: PropTypes.func.isRequired,
 };
 
 export default TableBodyWrapper;

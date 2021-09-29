@@ -3,9 +3,23 @@ import { updateFocus } from './handle-cell-focus';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
-export const updatePage = (evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus) => {
+export const preventDefaultBehavior = (evt) => {
+  evt.stopPropagation();
+  evt.preventDefault();
+};
+
+export const handleTableWrapperKeyDown = ({
+  evt,
+  totalRowSize,
+  page,
+  rowsPerPage,
+  handleChangePage,
+  setShouldRefocus,
+  keyboard,
+}) => {
   if (isCtrlShift(evt)) {
     const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
+
     if (evt.key === 'ArrowRight' && page < lastPage) {
       setShouldRefocus();
       handleChangePage(null, page + 1);
@@ -13,6 +27,9 @@ export const updatePage = (evt, totalRowSize, page, rowsPerPage, handleChangePag
       setShouldRefocus();
       handleChangePage(null, page - 1);
     }
+  } else if (evt.key === 'Escape' && keyboard.enabled) {
+    preventDefaultBehavior(evt);
+    keyboard.blur(true);
   }
 };
 
@@ -63,41 +80,30 @@ export const getRowAndColumnCount = (rootElement) => {
   return { rowElements, rowCount, columnCount };
 };
 
-export const removeCurrentFocus = (evt) => {
-  evt.target.blur();
-  evt.target.setAttribute('tabIndex', '-1');
-};
-
-export const preventDefaultBehavior = (evt) => {
-  evt.stopPropagation();
-  evt.preventDefault();
-};
-
-export const moveFocus = (evt, rootElement, cellCoord, focusedCellCoord, selState) => {
+export const moveFocus = (evt, rootElement, cellCoord, selState, setFocusedCellCoord) => {
   preventDefaultBehavior(evt);
-  removeCurrentFocus(evt);
+  evt.target.setAttribute('tabIndex', '-1');
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
   const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selState);
-  updateFocus(rowAndColumnCount.rowElements, nextCellCoord);
-  focusedCellCoord.current = nextCellCoord;
+  updateFocus({ focusType: 'focus', rowElements: rowAndColumnCount.rowElements, cellCoord: nextCellCoord });
+  setFocusedCellCoord(nextCellCoord);
 };
 
 export const headHandleKeyPress = (
   evt,
   rootElement,
   cellCoord,
-  focusedCellCoord,
   changeSortOrder,
   layout,
   isDim,
-  isAnalysisMode
+  isAnalysisMode,
+  setFocusedCellCoord
 ) => {
   switch (evt.key) {
-    case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, focusedCellCoord);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, false, setFocusedCellCoord);
       break;
     }
     // Space bar / Enter: update the sorting
@@ -116,18 +122,18 @@ export const bodyHandleKeyPress = (
   evt,
   rootElement,
   cellCoord,
-  focusedCellCoord,
   selState,
   cell,
   selDispatch,
-  isAnalysisMode
+  isAnalysisMode,
+  setFocusedCellCoord
 ) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, focusedCellCoord, selState);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, selState, setFocusedCellCoord);
       break;
     }
     // Space bar: Selects value.
@@ -142,10 +148,11 @@ export const bodyHandleKeyPress = (
       isAnalysisMode && selState.api.confirm();
       break;
     }
-    // Esc: Cancels selections
+    // Esc: Cancels selections. If no selections, do nothing and handleTableWrapperKeyDown should catch it
     case 'Escape': {
+      if (!isAnalysisMode || !selState.rows.length) break;
       preventDefaultBehavior(evt);
-      isAnalysisMode && selState.api.cancel();
+      selState.api.cancel();
       break;
     }
     default:

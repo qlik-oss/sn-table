@@ -8,8 +8,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import useDidUpdateEffect from './useDidUpdateEffect';
-import { updatePage } from './cells/handle-key-press';
-import { handleResetFocus } from './cells/handle-cell-focus';
+import { handleTableWrapperKeyDown } from './cells/handle-key-press';
+import { updateFocus, handleResetFocus, handleNavigateTop, handleFocusoutEvent } from './cells/handle-cell-focus';
 import handleScroll from './handle-scroll';
 
 const useStyles = makeStyles({
@@ -30,14 +30,15 @@ const useStyles = makeStyles({
 });
 
 export default function TableWrapper(props) {
-  const { rootElement, tableData, setPageInfo, constraints, selectionsAPI } = props;
+  const { rootElement, tableData, setPageInfo, constraints, translator, selectionsAPI, keyboard } = props;
   const { size, rows, columns } = tableData;
   const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
-  const focusedCellCoord = useRef([0, 0]);
+  const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
   const shouldRefocus = useRef(false);
-  const tableSection = useRef();
+  const tableSectionRef = useRef();
+  const tableWrapperRef = useRef();
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
@@ -64,30 +65,79 @@ export default function TableWrapper(props) {
   }
 
   useEffect(() => {
-    const updateSize = () => setTableWidth(rootElement.clientWidth);
-    window.addEventListener('resize', updateSize);
-    tableSection.current.addEventListener('wheel', (evt) => handleScroll(evt, tableSection));
+    const resizeCallback = () => setTableWidth(rootElement.clientWidth);
+    const scrollCallback = (evt) => handleScroll(evt, tableSectionRef);
+    const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard.blur);
+
+    window.addEventListener('resize', resizeCallback);
+    tableSectionRef.current.addEventListener('wheel', scrollCallback);
+    tableWrapperRef.current.addEventListener('focusout', focusOutCallback);
     return () => {
-      window.removeEventListener('resize', updateSize);
-      tableSection.current.removeEventListener('wheel', (evt) => handleScroll(evt, tableSection));
+      window.removeEventListener('resize', resizeCallback);
+      tableSectionRef.current.removeEventListener('wheel', scrollCallback);
+      tableWrapperRef.current.removeEventListener('focusout', focusOutCallback);
     };
   }, []);
 
-  // Except for first render, whenever the size of the data changes (number of rows per page, rows or columns),
+  useEffect(() => {
+    handleNavigateTop({
+      tableSectionRef,
+      focusedCellCoord,
+      rootElement,
+    });
+  }, [tableSectionRef, focusedCellCoord]);
+
+  useDidUpdateEffect(() => {
+    if (!keyboard.enabled) return;
+
+    updateFocus({
+      focusType: keyboard.active ? 'focus' : 'blur',
+      rowElements: rootElement.getElementsByClassName('sn-table-row'),
+      cellCoord: focusedCellCoord,
+    });
+  }, [keyboard.active]);
+
+  // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
   useDidUpdateEffect(() => {
-    handleResetFocus(focusedCellCoord, rootElement, shouldRefocus, selectionsAPI.isModal());
-  }, [rows.length, size.qcy, size.qcx]);
+    handleResetFocus({
+      focusedCellCoord,
+      rootElement,
+      shouldRefocus,
+      setFocusedCellCoord,
+      hasSelections: selectionsAPI.isModal(),
+      shouldAddTabstop: keyboard.active,
+    });
+  }, [rows.length, size.qcy, size.qcx, page]);
 
   return (
     <Paper
       className={classes.paper}
-      onKeyDown={(evt) => updatePage(evt, size.qcy, page, rowsPerPage, handleChangePage, setShouldRefocus)}
+      ref={tableWrapperRef}
+      onKeyDown={(evt) =>
+        handleTableWrapperKeyDown({
+          evt,
+          totalRowSize: size.qcy,
+          page,
+          rowsPerPage,
+          handleChangePage,
+          setShouldRefocus,
+          keyboard,
+        })
+      }
     >
-      <TableContainer ref={tableSection} className={classes[containerMode]}>
-        <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
-          <TableHeadWrapper {...props} focusedCellCoord={focusedCellCoord} />
-          <TableBodyWrapper {...props} focusedCellCoord={focusedCellCoord} setShouldRefocus={setShouldRefocus} />
+      <TableContainer
+        ref={tableSectionRef}
+        className={classes[containerMode]}
+        tabIndex="-1"
+        data-testid="table-wrapper"
+      >
+        <Table
+          stickyHeader
+          aria-label={translator.get('SNTable.RowsAndColumns', [`${rows.length + 1}`, `${columns.length}`])}
+        >
+          <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} />
+          <TableBodyWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} setShouldRefocus={setShouldRefocus} />
         </Table>
       </TableContainer>
       <TablePagination
@@ -96,13 +146,17 @@ export default function TableWrapper(props) {
         component="div"
         count={size.qcy}
         rowsPerPage={rowsPerPage}
+        labelRowsPerPage={`${translator.get('SNTable.RowsPerPage')}:`}
         page={page}
         SelectProps={{
-          inputProps: { 'aria-label': 'rows per page', 'data-testid': 'select' },
+          inputProps: {
+            'aria-label': translator.get('SNTable.RowsPerPage'),
+            'data-testid': 'select',
+          },
           native: true,
         }}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
   );
@@ -112,6 +166,8 @@ TableWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
+  translator: PropTypes.object.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
+  keyboard: PropTypes.object.isRequired,
 };
