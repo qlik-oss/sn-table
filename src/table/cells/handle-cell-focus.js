@@ -1,37 +1,45 @@
-export const updateFocus = ({ rowElements = {}, cellCoord = [], shouldFocus = true, providedCell = undefined }) => {
+export const findCellWithTabStop = (rootElement) => rootElement.querySelector("td[tabindex='0'], th[tabindex='0']");
+
+export const updateFocus = ({ focusType, rowElements = [], cellCoord = [], providedCell = undefined }) => {
   const cell = providedCell || rowElements[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[cellCoord[1]];
-  if (cell) {
-    if (shouldFocus) {
+  if (!cell) return;
+
+  switch (focusType) {
+    case 'focus':
       cell.focus();
       cell.setAttribute('tabIndex', '0');
-    } else {
+      break;
+    case 'blur':
       cell.blur();
       cell.setAttribute('tabIndex', '-1');
-    }
+      break;
+    case 'addTab':
+      cell.setAttribute('tabIndex', '0');
+      break;
+    case 'removeTab':
+      cell.setAttribute('tabIndex', '-1');
+      break;
+    default:
+      break;
   }
 };
 
-export const findCellWithTabStop = (rootElement) => rootElement.querySelector("td[tabindex='0'], th[tabindex='0']");
-
-export const handleClickToFocusBody = (cell, rootElement, setfocusedCellCoord) => {
-  const { rawRowIdx, rawColIdx } = cell;
-  const rowElements = rootElement.getElementsByClassName('sn-table-row');
+export const removeAndFocus = (newCoord, rootElement, setFocusedCellCoord, focus) => {
   updateFocus({
     providedCell: findCellWithTabStop(rootElement),
-    shouldFocus: false,
+    focusType: 'removeTab',
   });
-  setfocusedCellCoord([rawRowIdx + 1, rawColIdx]);
-  updateFocus({ rowElements, cellCoord: [rawRowIdx + 1, rawColIdx], shouldFocus: true });
+  setFocusedCellCoord(newCoord);
+  focus();
 };
 
-export const handleClickToFocusHead = (columnIndex, rootElement, setfocusedCellCoord) => {
-  const rowElements = rootElement.getElementsByClassName('sn-table-row');
-  updateFocus({
-    providedCell: findCellWithTabStop(rootElement),
-    shouldFocus: false,
-  });
-  setfocusedCellCoord([0, columnIndex]);
-  updateFocus({ rowElements, cellCoord: [0, columnIndex], shouldFocus: true });
+export const handleClickToFocusBody = (cell, rootElement, setFocusedCellCoord, keyboard) => {
+  const { rawRowIdx, rawColIdx } = cell;
+  removeAndFocus([rawRowIdx + 1, rawColIdx], rootElement, setFocusedCellCoord, keyboard.focus);
+};
+
+export const handleClickToFocusHead = (columnIndex, rootElement, setFocusedCellCoord, keyboard) => {
+  removeAndFocus([0, columnIndex], rootElement, setFocusedCellCoord, keyboard.focus);
 };
 
 export const handleResetFocus = ({
@@ -39,29 +47,29 @@ export const handleResetFocus = ({
   rootElement,
   shouldRefocus,
   hasSelections,
-  setfocusedCellCoord,
+  setFocusedCellCoord,
+  shouldAddTabstop,
 }) => {
-  const rowElements = rootElement.getElementsByClassName('sn-table-row');
-  updateFocus({ rowElements, cellCoord: focusedCellCoord, shouldFocus: false });
-
+  updateFocus({ focusType: 'removeTab', providedCell: findCellWithTabStop(rootElement) });
   // If we have selections ongoing, we want to stay on the same column
-  const nextcell = [0, hasSelections ? focusedCellCoord[1] : 0];
-  setfocusedCellCoord(nextcell);
-
-  if (shouldRefocus.current) {
-    updateFocus({ rowElements, cellCoord: nextcell });
-  } else {
-    rowElements[0]?.getElementsByClassName('sn-table-cell')[nextcell[1]].setAttribute('tabIndex', '0');
+  const nextCell = hasSelections ? [1, focusedCellCoord[1]] : [0, 0];
+  if (shouldAddTabstop) {
+    // Only run this if updates come from inside table
+    const focusType = shouldRefocus.current ? 'focus' : 'addTab';
+    shouldRefocus.current = false;
+    const rowElements = rootElement.getElementsByClassName('sn-table-row');
+    setFocusedCellCoord(nextCell);
+    updateFocus({ focusType, rowElements, cellCoord: nextCell });
   }
 };
 
-export const handleNavigateTop = ({ tableSection, focusedCellCoord, rootElement }) => {
+export const handleNavigateTop = ({ tableSectionRef, focusedCellCoord, rootElement }) => {
   const MIN_ROW_COUNT = 2;
 
-  if (!tableSection.current?.scrollTo) return;
+  if (!tableSectionRef.current?.scrollTo) return;
 
   if (focusedCellCoord[0] < MIN_ROW_COUNT) {
-    tableSection.current.scrollTo({
+    tableSectionRef.current.scrollTo({
       top: 0,
       behavior: 'smooth',
     });
@@ -71,12 +79,18 @@ export const handleNavigateTop = ({ tableSection, focusedCellCoord, rootElement 
     const rowElements = rootElement.getElementsByClassName('sn-table-row');
     const cell = rowElements[x]?.getElementsByClassName('sn-table-cell')[y];
 
-    if (cell.offsetTop - tableHead.offsetHeight - cell.offsetHeight <= tableSection.current.scrollTop) {
-      const targetOffsetTop = tableSection.current.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
-      tableSection.current.scrollTo({
+    if (cell.offsetTop - tableHead.offsetHeight - cell.offsetHeight <= tableSectionRef.current.scrollTop) {
+      const targetOffsetTop = tableSectionRef.current.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
+      tableSectionRef.current.scrollTo({
         top: Math.max(0, targetOffsetTop),
         behavior: 'smooth',
       });
     }
+  }
+};
+
+export const handleFocusoutEvent = (evt, shouldRefocus, blur) => {
+  if (!evt.currentTarget.contains(evt.relatedTarget) && !shouldRefocus.current) {
+    blur(false);
   }
 };

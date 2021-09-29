@@ -1,5 +1,4 @@
 {
-  "version": "1.0.3",
   "module": "esm/index.js",
   "peerDependencies": {
     "@nebula.js/stardust": "^1.7",
