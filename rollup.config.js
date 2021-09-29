@@ -17,6 +17,8 @@ import chaining from '@babel/plugin-proposal-optional-chaining';
 const pkg = require(path.resolve(process.cwd(), 'package.json')); // eslint-disable-line  import/no-dynamic-require
 const { name, version, license, author } = pkg;
 
+const localeStringValidator = require('./locale/tools/locale-string-validator');
+
 const auth = typeof author === 'object' ? `${author.name} <${author.email}>` : author || '';
 const moduleName = name.split('/').reverse()[0];
 
@@ -66,7 +68,7 @@ export default {
         ],
         ['@babel/react'],
       ],
-      plugins: [[jsxPlugin], [classProps], [chaining]],
+      plugins: [[jsxPlugin], [classProps], [chaining], [localeStringValidator, {}]],
     }),
     commonjs(),
     image(),

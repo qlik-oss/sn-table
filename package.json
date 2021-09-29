@@ -22,15 +22,17 @@
     "core"
   ],
   "engines": {
-    "node": ">=8"
+    "node": ">=14"
   },
   "main": "dist/sn-table.js",
   "scripts": {
-    "build": "rollup -c rollup.config.js && rollup -c rollup-core.config.js && shx cp assets/* dist",
+    "build": "yarn run locale:generate && rollup -c rollup.config.js && rollup -c rollup-core.config.js && shx cp assets/* dist",
     "build:watch": "rollup -c rollup.config.js -w",
     "lint": "eslint src",
     "start": "nebula serve --build false --type sn-table",
     "sense": "nebula sense",
+    "locale:verify": "node locale/tools/verify-translations.js",
+    "locale:generate": "node locale/scripts/generate-all.mjs",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
     "test:unit": "aw -c aw.config.js",
     "test:integration": "aw puppet --testExt '*.int.js' --glob 'test/integration/**/*.int.js'"
@@ -39,6 +41,7 @@
     "@after-work.js/aw": "6.0.14",
     "@babel/cli": "^7.15.4",
     "@babel/core": "^7.15.5",
+    "@babel/helper-plugin-utils": "^7.14.5",
     "@babel/plugin-proposal-class-properties": "^7.14.5",
     "@babel/plugin-proposal-optional-chaining": "7.14.5",
     "@babel/plugin-transform-react-jsx": "^7.14.9",
@@ -73,6 +76,7 @@
     "eslint-plugin-react": "7.25.1",
     "eslint-plugin-react-hooks": "4.2.0",
     "eslint-plugin-testing-library": "4.12.2",
+    "globby": "^12.0.2",
     "jsdom": "16.7.0",
     "mocha-junit-reporter": "2.0.0",
     "prettier": "2.4.0",

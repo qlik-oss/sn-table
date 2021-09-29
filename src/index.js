@@ -5,10 +5,13 @@ import {
   useModel,
   useState,
   useConstraints,
+  useTranslator,
   useSelections,
   useTheme,
   usePromise,
 } from '@nebula.js/stardust';
+import locale from '../locale/src';
+
 import properties from './object-properties';
 import data from './data';
 import ext from './ext';
@@ -30,6 +33,7 @@ export default function supernova(env) {
       const layout = useStaleLayout();
       const model = useModel();
       const constraints = useConstraints();
+      const translator = useTranslator();
       const selectionsAPI = useSelections();
       const theme = useTheme();
 
@@ -39,6 +43,7 @@ export default function supernova(env) {
 
       useEffect(() => {
         if (layout && tableData) {
+          locale(translator);
           const changeSortOrder = sortingFactory(model, tableData.columnOrder);
           render(rootElement, {
             rootElement,
@@ -46,13 +51,14 @@ export default function supernova(env) {
             tableData,
             setPageInfo,
             constraints,
+            translator,
             selectionsAPI,
             muiParameters,
             theme,
             changeSortOrder,
           });
         }
-      }, [tableData, constraints, selectionsAPI.isModal(), theme.name()]);
+      }, [tableData, constraints, selectionsAPI.isModal(), theme.name(), translator.language()]);
 
       useEffect(
         () => () => {

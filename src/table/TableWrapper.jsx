@@ -30,7 +30,7 @@ const useStyles = makeStyles({
 });
 
 export default function TableWrapper(props) {
-  const { rootElement, tableData, setPageInfo, constraints, selectionsAPI } = props;
+  const { rootElement, tableData, setPageInfo, constraints, translator, selectionsAPI } = props;
   const { size, rows, columns } = tableData;
   const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
@@ -107,8 +107,11 @@ export default function TableWrapper(props) {
         })
       }
     >
-      <TableContainer ref={tableSection} className={classes[containerMode]}>
-        <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
+      <TableContainer ref={tableSection} className={classes[containerMode]} tabIndex="-1" data-testid="table-wrapper">
+        <Table
+          stickyHeader
+          aria-label={translator.get('SNTable.RowsAndColumns', [`${rows.length + 1}`, `${columns.length}`])}
+        >
           <TableHeadWrapper {...props} setfocusedCellCoord={setfocusedCellCoord} />
           <TableBodyWrapper {...props} setfocusedCellCoord={setfocusedCellCoord} setShouldRefocus={setShouldRefocus} />
         </Table>
@@ -119,9 +122,13 @@ export default function TableWrapper(props) {
         component="div"
         count={size.qcy}
         rowsPerPage={rowsPerPage}
+        labelRowsPerPage={`${translator.get('SNTable.RowsPerPage')}:`}
         page={page}
         SelectProps={{
-          inputProps: { 'aria-label': 'rows per page', 'data-testid': 'select' },
+          inputProps: {
+            'aria-label': translator.get('SNTable.RowsPerPage'),
+            'data-testid': 'select',
+          },
           native: true,
         }}
         onPageChange={handleChangePage}
@@ -135,6 +142,7 @@ TableWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
+  translator: PropTypes.object.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
 };
