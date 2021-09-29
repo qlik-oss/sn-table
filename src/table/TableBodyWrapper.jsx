@@ -11,7 +11,7 @@ import { handleClickToFocusBody } from './cells/handle-cell-focus';
 
 const useStyles = makeStyles({
   cellBase: {
-    '& td': {
+    '& td, th': {
       color: ({ color }) => color,
       fontSize: ({ fontSize }) => fontSize,
       padding: ({ padding }) => padding,
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
   hoverTableRow: {
     '&&:hover': {
-      '& td:not(.selected)': {
+      '& td:not(.selected), th:not(.selected)': {
         backgroundColor: ({ hoverBackgroundColor }) => hoverBackgroundColor,
         color: ({ hoverFontColor }) => hoverFontColor,
       },
@@ -43,7 +43,8 @@ function TableBodyWrapper({
   layout,
   theme,
   setShouldRefocus,
-  setfocusedCellCoord,
+  setFocusedCellCoord,
+  keyboard,
 }) {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
@@ -104,10 +105,10 @@ function TableBodyWrapper({
                       cell,
                       selDispatch,
                       selectionsEnabled,
-                      setfocusedCellCoord
+                      setFocusedCellCoord
                     )
                   }
-                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setfocusedCellCoord)}
+                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
                 >
                   <div className={classes.srOnly}>{column.label}</div>
                   {value}
@@ -128,8 +129,9 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  setfocusedCellCoord: PropTypes.func.isRequired,
+  setFocusedCellCoord: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
+  keyboard: PropTypes.func.isRequired,
 };
 
 export default TableBodyWrapper;

@@ -28,11 +28,6 @@ const useStyles = makeStyles({
   },
 });
 
-const SORT_NOTATIONS = {
-  asc: 'Sorted ascending',
-  desc: 'Sorted descending',
-};
-
 function TableHeadWrapper({
   rootElement,
   tableData,
@@ -40,17 +35,23 @@ function TableHeadWrapper({
   layout,
   changeSortOrder,
   constraints,
+  translator,
   selectionsAPI,
-  setfocusedCellCoord,
+  setFocusedCellCoord,
+  keyboard,
 }) {
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
+  const SORT_NOTATIONS = useMemo(() => ({
+    asc: translator.get('SNTable.TableHead.SortedAscending'),
+    desc: translator.get('SNTable.TableHead.SortedDescending'),
+  }));
 
   return (
     <TableHead>
       <TableRow className="sn-table-row">
         {tableData.columns.map((column, columnIndex) => {
-          const tabIndex = columnIndex === 0 ? '0' : '-1';
+          const tabIndex = columnIndex === 0 && !keyboard.enabled ? '0' : '-1';
           const currentSortDir = SORT_NOTATIONS[column.sortDirection];
           const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex;
 
@@ -70,10 +71,10 @@ function TableHeadWrapper({
                   layout,
                   column.isDim,
                   !constraints.active,
-                  setfocusedCellCoord
+                  setFocusedCellCoord
                 )
               }
-              onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setfocusedCellCoord)}
+              onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
               onClick={() =>
                 !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column.isDim, columnIndex)
               }
@@ -82,7 +83,7 @@ function TableHeadWrapper({
                 {column.label}
                 <span className={classes.visuallyHidden} data-testid={`VHL-for-col-${columnIndex}`}>
                   {isCurrentColumnActive && `${currentSortDir}. `}
-                  Press space or enter to sort on this column.
+                  {translator.get('SNTable.TableHead.SortNotation')}
                 </span>
               </TableSortLabel>
             </TableCell>
@@ -101,7 +102,8 @@ TableHeadWrapper.propTypes = {
   changeSortOrder: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
-  setfocusedCellCoord: PropTypes.func.isRequired,
+  keyboard: PropTypes.object.isRequired,
+  setFocusedCellCoord: PropTypes.func.isRequired,
 };
 
 export default TableHeadWrapper;

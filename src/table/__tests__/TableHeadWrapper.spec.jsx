@@ -14,6 +14,8 @@ describe('<TableHeadWrapper />', () => {
   let changeSortOrder;
   let constraints;
   let selectionsAPI;
+  let keyboard;
+  let translator;
 
   beforeEach(() => {
     tableData = {
@@ -38,6 +40,10 @@ describe('<TableHeadWrapper />', () => {
     selectionsAPI = {
       isModal: () => false,
     };
+    keyboard = {
+      enabled: false,
+    };
+    translator = { get: (s) => s };
   });
 
   afterEach(() => {
@@ -47,7 +53,14 @@ describe('<TableHeadWrapper />', () => {
 
   it('should render table head', () => {
     const { queryByText } = render(
-      <TableHeadWrapper tableData={tableData} theme={theme} layout={layout} changeSortOrder={changeSortOrder} />
+      <TableHeadWrapper
+        tableData={tableData}
+        theme={theme}
+        layout={layout}
+        changeSortOrder={changeSortOrder}
+        keyboard={keyboard}
+        translator={translator}
+      />
     );
 
     expect(queryByText(tableData.columns[0].label)).to.be.visible;
@@ -63,6 +76,8 @@ describe('<TableHeadWrapper />', () => {
         changeSortOrder={changeSortOrder}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
+        keyboard={keyboard}
+        translator={translator}
       />
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
@@ -82,6 +97,8 @@ describe('<TableHeadWrapper />', () => {
         changeSortOrder={changeSortOrder}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
+        keyboard={keyboard}
+        translator={translator}
       />
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
@@ -101,6 +118,8 @@ describe('<TableHeadWrapper />', () => {
         changeSortOrder={changeSortOrder}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
+        keyboard={keyboard}
+        translator={translator}
       />
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
@@ -119,6 +138,8 @@ describe('<TableHeadWrapper />', () => {
         changeSortOrder={changeSortOrder}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
+        keyboard={keyboard}
+        translator={translator}
       />
     );
     fireEvent.keyDown(queryByText(tableData.columns[0].label));
@@ -137,6 +158,8 @@ describe('<TableHeadWrapper />', () => {
         changeSortOrder={changeSortOrder}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
+        keyboard={keyboard}
+        translator={translator}
       />
     );
     fireEvent.mouseDown(queryByText(tableData.columns[0].label));
@@ -146,7 +169,14 @@ describe('<TableHeadWrapper />', () => {
 
   it('should have proper `scope` property', () => {
     const { queryByText } = render(
-      <TableHeadWrapper tableData={tableData} theme={theme} layout={layout} changeSortOrder={changeSortOrder} />
+      <TableHeadWrapper
+        tableData={tableData}
+        theme={theme}
+        layout={layout}
+        changeSortOrder={changeSortOrder}
+        keyboard={keyboard}
+        translator={translator}
+      />
     );
 
     const firstColQuery = queryByText(tableData.columns[0].label).closest('th');
@@ -166,13 +196,15 @@ describe('<TableHeadWrapper />', () => {
         changeSortOrder={changeSortOrder}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
+        keyboard={keyboard}
+        translator={translator}
       />
     );
 
     const firstColHiddenLabel = queryByTestId('VHL-for-col-0');
     const secondColHiddenLabel = queryByTestId('VHL-for-col-1');
 
-    expect(firstColHiddenLabel).to.have.text('Sorted ascending. Press space or enter to sort on this column.');
-    expect(secondColHiddenLabel).to.have.text('Press space or enter to sort on this column.');
+    expect(firstColHiddenLabel).to.have.text('SNTable.TableHead.SortedAscending. SNTable.TableHead.SortNotation');
+    expect(secondColHiddenLabel).to.have.text('SNTable.TableHead.SortNotation');
   });
 });

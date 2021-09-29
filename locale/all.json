@@ -1,0 +1,75 @@
+{
+  "SNTable_RowsPerPage": {
+    "id": "SNTable.RowsPerPage",
+    "locale": {
+      "de-DE": "rows per page",
+      "en-US": "rows per page",
+      "es-ES": "rows per page",
+      "fr-FR": "rows per page",
+      "it-IT": "rows per page",
+      "ja-JP": "rows per page",
+      "ko-KR": "rows per page",
+      "nl-NL": "rows per page",
+      "pl-PL": "rows per page",
+      "pt-BR": "rows per page",
+      "ru-RU": "rows per page",
+      "sv-SE": "rows per page",
+      "tr-TR": "rows per page",
+      "zh-CN": "每页行数",
+      "zh-TW": "rows per page"
+    }
+  },
+  "SNTable_RowsAndColumns": {
+    "id": "SNTable.RowsAndColumns",
+    "locale": {
+      "en-US": "showing {0} rows and {1} columns",
+      "zh-CN": "展示{0}行和{1}列"
+    }
+  },
+  "SNTable_PaginationAction_FirstPage": {
+    "id": "SNTable.PaginationAction.FirstPage",
+    "locale": {
+      "en-US": "First page",
+      "zh-CN": "第一页"
+    }
+  },
+  "SNTable_PaginationAction_PreviousPage": {
+    "id": "SNTable.PaginationAction.PreviousPage",
+    "locale": {
+      "en-US": "Previous page",
+      "zh-CN": "前一页"
+    }
+  },
+  "SNTable_PaginationAction_NextPage": {
+    "id": "SNTable.PaginationAction.NextPage",
+    "locale": {
+      "en-US": "Next page",
+      "zh-CN": "后一页"
+    }
+  },
+  "SNTable_PaginationAction_LastPage": {
+    "id": "SNTable.PaginationAction.LastPage",
+    "locale": {
+      "en-US": "Last page",
+      "zh-CN": "最后一页"
+    }
+  },
+  "SNTable_TableHead_SortedAscending": {
+    "id": "SNTable.TableHead.SortedAscending",
+    "locale": {
+      "en-US": "Sorted ascending"
+    }
+  },
+  "SNTable_TableHead_SortedDescending": {
+    "id": "SNTable.TableHead.SortedDescending",
+    "locale": {
+      "en-US": "Sorted descending"
+    }
+  },
+  "SNTable_TableHead_SortNotation": {
+    "id": "SNTable.TableHead.SortNotation",
+    "locale": {
+      "en-US": "Press space or enter to sort on this column."
+    }
+  }
+}
