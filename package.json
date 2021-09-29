@@ -27,7 +27,7 @@
   "main": "dist/sn-table.js",
   "scripts": {
     "build": "yarn run locale:generate && rollup -c rollup.config.js && rollup -c rollup-core.config.js && shx cp assets/* dist",
-    "build:watch": "rollup -c rollup.config.js -w",
+    "build:watch": "yarn run locale:generate && rollup -c rollup.config.js -w",
     "lint": "eslint src",
     "start": "nebula serve --build false --type sn-table",
     "sense": "nebula sense",
