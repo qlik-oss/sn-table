@@ -15,10 +15,6 @@ const useStyles = makeStyles({
     fontSize: ({ fontSize }) => fontSize,
     padding: ({ padding }) => padding,
   },
-  tableHeadBtn: {
-    all: 'unset',
-    width: '100%',
-  },
   visuallyHidden: {
     border: 0,
     clip: 'rect(0 0 0 0)',
@@ -86,7 +82,7 @@ function TableHeadWrapper({
                 {column.label}
                 <span className={classes.visuallyHidden} data-testid={`VHL-for-col-${columnIndex}`}>
                   {isCurrentColumnActive && `${currentSortDir}. `}
-                  Press space or enter to sort on the column.
+                  Press space or enter to sort on this column.
                 </span>
               </TableSortLabel>
             </TableCell>

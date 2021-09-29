@@ -172,7 +172,7 @@ describe('<TableHeadWrapper />', () => {
     const firstColHiddenLabel = queryByTestId('VHL-for-col-0');
     const secondColHiddenLabel = queryByTestId('VHL-for-col-1');
 
-    expect(firstColHiddenLabel).to.have.text('Sorted ascending. Press space or enter to sort on the column.');
-    expect(secondColHiddenLabel).to.have.text('Press space or enter to sort on the column.');
+    expect(firstColHiddenLabel).to.have.text('Sorted ascending. Press space or enter to sort on this column.');
+    expect(secondColHiddenLabel).to.have.text('Press space or enter to sort on this column.');
   });
 });
