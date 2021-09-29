@@ -30,9 +30,8 @@ const useStyles = makeStyles({
 });
 
 export default function TableWrapper(props) {
-  const { rootElement, tableData, setPageInfo, constraints, translator, selectionsAPI, keyboard } = props;
+  const { rootElement, tableData, setPageInfo, constraints, translator, selectionsAPI, keyboard, rect } = props;
   const { size, rows, columns } = tableData;
-  const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
@@ -42,7 +41,7 @@ export default function TableWrapper(props) {
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
-  const paginationFixedRpp = selectionsAPI.isModal() || tableWidth < 400;
+  const paginationFixedRpp = selectionsAPI.isModal() || rect.width < 400;
   const setShouldRefocus = () => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   };
@@ -65,15 +64,12 @@ export default function TableWrapper(props) {
   }
 
   useEffect(() => {
-    const resizeCallback = () => setTableWidth(rootElement.clientWidth);
     const scrollCallback = (evt) => handleScroll(evt, tableSectionRef);
     const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard.blur);
 
-    window.addEventListener('resize', resizeCallback);
     tableSectionRef.current && tableSectionRef.current.addEventListener('wheel', scrollCallback);
     tableWrapperRef.current && tableWrapperRef.current.addEventListener('focusout', focusOutCallback);
     return () => {
-      window.removeEventListener('resize', resizeCallback);
       tableSectionRef.current.removeEventListener('wheel', scrollCallback);
       tableWrapperRef.current.removeEventListener('focusout', focusOutCallback);
     };
@@ -170,4 +166,5 @@ TableWrapper.propTypes = {
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
+  rect: PropTypes.object.isRequired,
 };
