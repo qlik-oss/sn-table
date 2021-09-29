@@ -71,7 +71,7 @@ export default function TableWrapper(props) {
 
     window.addEventListener('resize', resizeCallback);
     tableSectionRef.current && tableSectionRef.current.addEventListener('wheel', scrollCallback);
-    tableWrapperRef.current.addEventListener('focusout', focusOutCallback);
+    tableWrapperRef.current && tableWrapperRef.current.addEventListener('focusout', focusOutCallback);
     return () => {
       window.removeEventListener('resize', resizeCallback);
       tableSectionRef.current.removeEventListener('wheel', scrollCallback);
