@@ -131,6 +131,7 @@ export default function TableWrapper(props) {
           },
           native: true,
         }}
+        labelDisplayedRows={({ from, to, count }) => `${from}-${to} of ${count}`}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
