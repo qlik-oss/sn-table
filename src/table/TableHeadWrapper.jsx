@@ -53,7 +53,8 @@ function TableHeadWrapper({
         {tableData.columns.map((column, columnIndex) => {
           const tabIndex = columnIndex === 0 && !keyboard.enabled ? '0' : '-1';
           const currentSortDir = SORT_NOTATIONS[column.sortDirection];
-          const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex;
+          const isCurrentColumnActive =
+            layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === tableData.columnOrder[columnIndex];
 
           return (
             <TableCell
