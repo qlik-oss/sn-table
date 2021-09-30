@@ -1,4 +1,3 @@
-
 import IconButton from '@material-ui/core/IconButton';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
@@ -14,28 +13,28 @@ const useStyles = makeStyles({
   },
   disabled: {
     color: 'rgba(0, 0, 0, 0.3)',
-    cursor: 'default'
-  }
+    cursor: 'default',
+  },
 });
 
 export default function TablePaginationActions(props) {
   const classes = useStyles();
-  const { count, page, rowsPerPage, onChangePage } = props;
+  const { count, page, rowsPerPage, onPageChange } = props;
 
   const handleFirstPageButtonClick = (event) => {
-    onChangePage(event, 0);
+    onPageChange(event, 0);
   };
 
   const handleBackButtonClick = (event) => {
-    onChangePage(event, page - 1);
+    onPageChange(event, page - 1);
   };
 
   const handleNextButtonClick = (event) => {
-    onChangePage(event, page + 1);
+    onPageChange(event, page + 1);
   };
 
   const handleLastPageButtonClick = (event) => {
-    onChangePage(event, Math.ceil(count / rowsPerPage) - 1);
+    onPageChange(event, Math.ceil(count / rowsPerPage) - 1);
   };
 
   const onFirstPage = page === 0;
@@ -43,7 +42,7 @@ export default function TablePaginationActions(props) {
 
   return (
     <div className={classes.root}>
-      <IconButton 
+      <IconButton
         onClick={!onFirstPage && handleFirstPageButtonClick}
         aria-disabled={onFirstPage}
         aria-label="first page"
@@ -52,7 +51,7 @@ export default function TablePaginationActions(props) {
       >
         <FirstPageIcon />
       </IconButton>
-      <IconButton 
+      <IconButton
         onClick={!onFirstPage && handleBackButtonClick}
         aria-disabled={onFirstPage}
         aria-label="previous page"
@@ -61,7 +60,7 @@ export default function TablePaginationActions(props) {
       >
         <KeyboardArrowLeft />
       </IconButton>
-      <IconButton 
+      <IconButton
         onClick={!onLastPage && handleNextButtonClick}
         aria-disabled={onLastPage}
         aria-label="next page"
@@ -70,7 +69,7 @@ export default function TablePaginationActions(props) {
       >
         <KeyboardArrowRight />
       </IconButton>
-      <IconButton 
+      <IconButton
         onClick={!onLastPage && handleLastPageButtonClick}
         aria-disabled={onLastPage}
         aria-label="last page"

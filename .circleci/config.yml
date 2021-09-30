@@ -26,7 +26,7 @@ jobs:
   install:
     <<: *defaults
     docker:
-      - image: circleci/node:12.16.3
+      - image: circleci/node:14.15.0
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
@@ -46,7 +46,7 @@ jobs:
   build:
     <<: *defaults
     docker:
-      - image: circleci/node:10.19.0
+      - image: circleci/node:14.15.0
       - image: qlikcore/engine:12.1070.0
         command: -S AcceptEULA=yes
       - image: browserless/chrome:1.48.0-puppeteer-1.20.0
@@ -59,6 +59,9 @@ jobs:
       - run:
           name: Lint
           command: yarn run lint
+      - run:
+          name: Locale
+          command: yarn run locale:verify
       - run:
           name: Update spec
           command: yarn run spec
@@ -89,7 +92,7 @@ jobs:
   publish-dev:
     <<: *defaults
     docker:
-      - image: circleci/node:10.19.0
+      - image: circleci/node:14.15.0
     steps:
       - attach_workspace:
           at: ~/table
@@ -100,7 +103,7 @@ jobs:
   publish:
     <<: *defaults
     docker:
-      - image: circleci/node:10.19.0
+      - image: circleci/node:14.15.0
     steps:
       - attach_workspace:
           at: ~/table

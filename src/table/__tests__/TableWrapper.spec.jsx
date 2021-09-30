@@ -17,11 +17,13 @@ describe('<TableWrapper />', () => {
   let selectionsAPI;
   let modal;
   let rootElement;
+  let keyboard;
+  let translator;
 
   beforeEach(() => {
     sinon.stub(TableBodyWrapper, 'default').returns(<tbody />);
     sinon.stub(TableHeadWrapper, 'default').returns(<thead />);
-    sinon.stub(handleKeyPress, 'updatePage').returns(sinon.spy());
+    sinon.stub(handleKeyPress, 'handleTableWrapperKeyDown').returns(sinon.spy());
 
     tableData = {
       size: { qcy: 200 },
@@ -38,8 +40,11 @@ describe('<TableWrapper />', () => {
     rootElement = {
       getElementsByClassName: () => [],
       clientHeight: {},
-      getElementsByTagName: () => [{ clientHeight: {} }],
+      getElementsByTagName: () => [{ clientHeight: {}, contains: sinon.spy() }],
+      querySelector: () => {},
     };
+    keyboard = { enabled: false, active: false };
+    translator = { get: (s) => s };
   });
 
   afterEach(() => {
@@ -55,16 +60,19 @@ describe('<TableWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
+        keyboard={keyboard}
+        translator={translator}
       />
     );
 
+    expect(queryByLabelText('SNTable.RowsAndColumns')).to.be.visible;
+    expect(queryByLabelText('SNTable.RowsPerPage')).to.be.visible;
     expect(queryByTestId('table-wrapper')).to.has.attr('tabindex', '-1');
-    expect(queryByLabelText('showing 2 rows and 1 columns')).to.be.visible;
     expect(queryByText(`1-${rowsPerPage} of ${tableData.size.qcy}`)).to.be.visible;
     expect(queryByText(rowsPerPage)).to.be.visible;
   });
 
-  it('should call updatePage when press control key on the table', () => {
+  it('should call handleTableWrapperKeyDown when press control key on the table', () => {
     const { queryByLabelText } = render(
       <TableWrapper
         tableData={tableData}
@@ -72,11 +80,13 @@ describe('<TableWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
+        keyboard={keyboard}
+        translator={translator}
       />
     );
 
-    fireEvent.keyDown(queryByLabelText('showing 2 rows and 1 columns'), { key: 'Control', code: 'ControlLeft' });
-    expect(handleKeyPress.updatePage).to.have.been.calledOnce;
+    fireEvent.keyDown(queryByLabelText('SNTable.RowsPerPage'), { key: 'Control', code: 'ControlLeft' });
+    expect(handleKeyPress.handleTableWrapperKeyDown).to.have.been.calledOnce;
   });
 
   it('should call setPageInfo when clicking next page and previous page button', async () => {
@@ -87,6 +97,8 @@ describe('<TableWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
+        keyboard={keyboard}
+        translator={translator}
       />
     );
     fireEvent.click(await findByTitle('Next page'));
@@ -129,6 +141,8 @@ describe('<TableWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
+        keyboard={keyboard}
+        translator={translator}
       />
     );
     // This is a hack to simulate when selections are made on other page than first page and
@@ -150,6 +164,8 @@ describe('<TableWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
+        keyboard={keyboard}
+        translator={translator}
       />
     );
     fireEvent.change(getByTestId('select'), { target: { value: 25 } });
@@ -166,6 +182,8 @@ describe('<TableWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
+        keyboard={keyboard}
+        translator={translator}
       />
     );
     const rppSiblingElement = queryByText(`1-${rowsPerPage} of ${tableData.size.qcy}`);

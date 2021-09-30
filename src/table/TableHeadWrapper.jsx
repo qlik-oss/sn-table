@@ -36,7 +36,8 @@ function TableHeadWrapper({
   changeSortOrder,
   constraints,
   selectionsAPI,
-  setfocusedCellCoord,
+  setFocusedCellCoord,
+  keyboard,
 }) {
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
@@ -45,7 +46,7 @@ function TableHeadWrapper({
     <TableHead>
       <TableRow className="sn-table-row">
         {tableData.columns.map((column, columnIndex) => {
-          const tabIndex = columnIndex === 0 ? '0' : '-1';
+          const tabIndex = columnIndex === 0 && !keyboard.enabled ? '0' : '-1';
           return (
             <TableCell
               key={column.id}
@@ -61,10 +62,10 @@ function TableHeadWrapper({
                   layout,
                   column.isDim,
                   !constraints.active,
-                  setfocusedCellCoord
+                  setFocusedCellCoord
                 )
               }
-              onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setfocusedCellCoord)}
+              onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
             >
               <TableSortLabel
                 active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
@@ -98,7 +99,8 @@ TableHeadWrapper.propTypes = {
   changeSortOrder: PropTypes.func.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
-  setfocusedCellCoord: PropTypes.func.isRequired,
+  keyboard: PropTypes.object.isRequired,
+  setFocusedCellCoord: PropTypes.func.isRequired,
 };
 
 export default TableHeadWrapper;
