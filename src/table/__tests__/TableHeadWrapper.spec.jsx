@@ -23,6 +23,7 @@ describe('<TableHeadWrapper />', () => {
         { id: 1, align: 'left', label: 'someDim', sortDirection: 'asc', isDim: true },
         { id: 2, align: 'right', label: 'someMsr', sortDirection: 'desc', isDim: false },
       ],
+      columnOrder: [0, 1],
     };
     theme = {
       getColorPickerColor: () => {},
