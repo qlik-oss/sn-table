@@ -110,7 +110,10 @@ export default function TableWrapper(props) {
       <TableContainer ref={tableSection} className={classes[containerMode]} tabIndex="-1" data-testid="table-wrapper">
         <Table
           stickyHeader
-          aria-label={translator.get('SNTable.RowsAndColumns', [`${rows.length + 1}`, `${columns.length}`])}
+          aria-label={translator.get('SNTable.Accessibility.RowsAndColumns', [
+            `${rows.length + 1}`,
+            `${columns.length}`,
+          ])}
         >
           <TableHeadWrapper {...props} setfocusedCellCoord={setfocusedCellCoord} />
           <TableBodyWrapper {...props} setfocusedCellCoord={setfocusedCellCoord} setShouldRefocus={setShouldRefocus} />
@@ -122,11 +125,11 @@ export default function TableWrapper(props) {
         component="div"
         count={size.qcy}
         rowsPerPage={rowsPerPage}
-        labelRowsPerPage={`${translator.get('SNTable.RowsPerPage')}:`}
+        labelRowsPerPage={`${translator.get('SNTable.Pagination.RowsPerPage')}:`}
         page={page}
         SelectProps={{
           inputProps: {
-            'aria-label': translator.get('SNTable.RowsPerPage'),
+            'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
             'data-testid': 'select',
           },
           native: true,

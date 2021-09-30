@@ -61,8 +61,8 @@ describe('<TableWrapper />', () => {
       />
     );
 
-    expect(queryByLabelText('SNTable.RowsAndColumns')).to.be.visible;
-    expect(queryByLabelText('SNTable.RowsPerPage')).to.be.visible;
+    expect(queryByLabelText('SNTable.Accessibility.RowsAndColumns')).to.be.visible;
+    expect(queryByLabelText('SNTable.Pagination.RowsPerPage')).to.be.visible;
     expect(queryByTestId('table-wrapper')).to.has.attr('tabindex', '-1');
     expect(queryByText(`1-${rowsPerPage} of ${tableData.size.qcy}`)).to.be.visible;
     expect(queryByText(rowsPerPage)).to.be.visible;
@@ -80,7 +80,7 @@ describe('<TableWrapper />', () => {
       />
     );
 
-    fireEvent.keyDown(queryByLabelText('SNTable.RowsPerPage'), { key: 'Control', code: 'ControlLeft' });
+    fireEvent.keyDown(queryByLabelText('SNTable.Pagination.RowsPerPage'), { key: 'Control', code: 'ControlLeft' });
     expect(handleKeyPress.updatePage).to.have.been.calledOnce;
   });
 
