@@ -1,26 +1,70 @@
 {
-    "SNTable.RowsPerPage": {
-        "value": "rows per page",
-        "comment": "the number of rows per page"
-    },
-    "SNTable.RowsAndColumns": {
-        "value": "showing {0} rows and {1} columns",
-        "comment": "showing how many rows and how many columns"
-    },
-    "SNTable.PaginationAction.FirstPage": {
-        "value": "First page",
-        "comment": "First page"
-    },
-    "SNTable.PaginationAction.PreviousPage": {
-        "value": "Previous page",
-        "comment": "Previous page"
-    },
-    "SNTable.PaginationAction.NextPage": {
-        "value": "Next page",
-        "comment": "Next page"
-    },
-    "SNTable.PaginationAction.LastPage": {
-        "value": "Last page",
-        "comment": "Last page"
-    }
+  "SNTable.Accessibility.RowsAndColumns": {
+    "value": "Showing {0} rows and {1} columns.",
+    "comment": "number of rows and columns announced by the screen reader. (tew 210929)"
+  },
+  "SNTable.Pagination.RowsPerPage": {
+    "value": "Rows per page",
+    "comment": "label for the rows per page dropdown. (tew 210929)"
+  },
+  "SNTable.Pagination.FirstPage": {
+    "value": "First page",
+    "comment": "tooltip and aria-label for the first page button. (tew 210929)"
+  },
+  "SNTable.Pagination.PreviousPage": {
+    "value": "Previous page",
+    "comment": "tooltip and aria-label for the previous page button. (tew 210929)"
+  },
+  "SNTable.Pagination.NextPage": {
+    "value": "Next page",
+    "comment": "tooltip and aria-label for the next page button. (tew 210929)"
+  },
+  "SNTable.Pagination.LastPage": {
+    "value": "Last page",
+    "comment": "tooltip and aria-label for the last page button. (tew 210929)"
+  },
+  "SNTable.SortLabel.SortedAscending": {
+    "value": "Sorted in ascending order.",
+    "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)"
+  },
+  "SNTable.SortLabel.SortedDescending": {
+    "value": "Sorted in descending order.",
+    "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)"
+  },
+  "SNTable.SortLabel.PressSpaceToSort": {
+    "value": "Press space to sort on this column",
+    "comment": "instructions for sorting, announced by screen readers. (tew 210929)"
+  },
+  "SNTable.SelectionLabel.OneSelectedValue": {
+    "value": "Currently there is one selected value.",
+    "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)"
+  },
+  "SNTable.SelectionLabel.SelectedValues": {
+    "value": "Currently there are {0} selected values.",
+    "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)"
+  },
+  "SNTable.SelectionLabel.DeselectedValue": {
+    "value": "Value is deselected.",
+    "comment": "announced by screen readers  when a value is deselected. (tew 210929)"
+  },
+  "SNTable.SelectionLabel.SelectedValue": {
+    "value": "Value is selected.",
+    "comment": "announced by screen readers when a value is selected. (tew 210929)"
+  },
+  "SNTable.SelectionLabel.NotSelectedValue": {
+    "value": "Value is not selected.",
+    "comment": "announced by screen readers when focus is on an unselected value. (tew 210929)"
+  },
+  "SNTable.SelectionLabel.SelectionsConfirmed": {
+    "value": "Selections confirmed.",
+    "comment": "announced by screen readers when selections are confirmed. (tew 210929)"
+  },
+  "SNTable.SelectionLabel.ExitedSelectionMode": {
+    "value": "Value is deselected. Exited selection mode.",
+    "comment": "Announced by screen readers when deselecting and no values are selecting, causing the the chart to exit selection mode. (tew 210929)"
+  },
+  "SNTable.SelectionLabel.selected": {
+    "value": "Selected",
+    "comment": "announced by screen readers for a selected value. (tew 210929)"
+  }
 }
