@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState, useRef } from 'react';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
+import TablePaginationActions from './TablePaginationActions';
 import useDidUpdateEffect from './useDidUpdateEffect';
 import { handleTableWrapperKeyDown } from './cells/handle-key-press';
 import { updateFocus, handleResetFocus, handleNavigateTop, handleFocusoutEvent } from './cells/handle-cell-focus';
@@ -32,7 +33,7 @@ const useStyles = makeStyles({
 export default function TableWrapper(props) {
   const { rootElement, tableData, setPageInfo, constraints, translator, selectionsAPI, keyboard } = props;
   const { size, rows, columns } = tableData;
-  const [tableWidth, setTableWidth] = useState();
+  const [tableWidth, setTableWidth] = useState(rootElement.clientWidth);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
@@ -42,7 +43,7 @@ export default function TableWrapper(props) {
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
-  const paginationFixedRpp = selectionsAPI.isModal() || tableWidth < 400;
+  const paginationFixedRpp = selectionsAPI.isModal() || tableWidth < 475;
   const setShouldRefocus = () => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   };
@@ -157,6 +158,7 @@ export default function TableWrapper(props) {
         }}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+        ActionsComponent={TablePaginationActions}
       />
     </Paper>
   );
