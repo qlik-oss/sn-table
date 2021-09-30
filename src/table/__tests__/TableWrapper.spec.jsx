@@ -120,6 +120,8 @@ describe('<TableWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
+        keyboard={keyboard}
+        translator={translator}
       />
     );
     fireEvent.click(await findByTitle('Last page'));
