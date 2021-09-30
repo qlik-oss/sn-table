@@ -14,6 +14,7 @@ describe('<TableHeadWrapper />', () => {
   let changeSortOrder;
   let constraints;
   let selectionsAPI;
+  let keyboard;
 
   beforeEach(() => {
     tableData = {
@@ -38,6 +39,9 @@ describe('<TableHeadWrapper />', () => {
     selectionsAPI = {
       isModal: () => false,
     };
+    keyboard = {
+      enabled: false,
+    };
   });
 
   afterEach(() => {
@@ -47,7 +51,13 @@ describe('<TableHeadWrapper />', () => {
 
   it('should render table head', () => {
     const { queryByText } = render(
-      <TableHeadWrapper tableData={tableData} theme={theme} layout={layout} changeSortOrder={changeSortOrder} />
+      <TableHeadWrapper
+        tableData={tableData}
+        theme={theme}
+        layout={layout}
+        changeSortOrder={changeSortOrder}
+        keyboard={keyboard}
+      />
     );
 
     expect(queryByText(tableData.columns[0].label)).to.be.visible;
@@ -63,6 +73,7 @@ describe('<TableHeadWrapper />', () => {
         changeSortOrder={changeSortOrder}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
+        keyboard={keyboard}
       />
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
@@ -82,6 +93,7 @@ describe('<TableHeadWrapper />', () => {
         changeSortOrder={changeSortOrder}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
+        keyboard={keyboard}
       />
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
@@ -101,6 +113,7 @@ describe('<TableHeadWrapper />', () => {
         changeSortOrder={changeSortOrder}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
+        keyboard={keyboard}
       />
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
@@ -119,6 +132,7 @@ describe('<TableHeadWrapper />', () => {
         changeSortOrder={changeSortOrder}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
+        keyboard={keyboard}
       />
     );
     fireEvent.keyDown(queryByText(tableData.columns[0].label));
@@ -137,6 +151,7 @@ describe('<TableHeadWrapper />', () => {
         changeSortOrder={changeSortOrder}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
+        keyboard={keyboard}
       />
     );
     fireEvent.mouseDown(queryByText(tableData.columns[0].label));

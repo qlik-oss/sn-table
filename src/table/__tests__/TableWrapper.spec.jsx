@@ -17,12 +17,13 @@ describe('<TableWrapper />', () => {
   let selectionsAPI;
   let modal;
   let rootElement;
+  let keyboard;
   let translator;
 
   beforeEach(() => {
     sinon.stub(TableBodyWrapper, 'default').returns(<tbody />);
     sinon.stub(TableHeadWrapper, 'default').returns(<thead />);
-    sinon.stub(handleKeyPress, 'updatePage').returns(sinon.spy());
+    sinon.stub(handleKeyPress, 'handleTableWrapperKeyDown').returns(sinon.spy());
 
     tableData = {
       size: { qcy: 200 },
@@ -39,8 +40,10 @@ describe('<TableWrapper />', () => {
     rootElement = {
       getElementsByClassName: () => [],
       clientHeight: {},
-      getElementsByTagName: () => [{ clientHeight: {} }],
+      getElementsByTagName: () => [{ clientHeight: {}, contains: sinon.spy() }],
+      querySelector: () => {},
     };
+    keyboard = { enabled: false, active: false };
     translator = { get: (s) => s };
   });
 
@@ -57,6 +60,7 @@ describe('<TableWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
+        keyboard={keyboard}
         translator={translator}
       />
     );
@@ -68,7 +72,7 @@ describe('<TableWrapper />', () => {
     expect(queryByText(rowsPerPage)).to.be.visible;
   });
 
-  it('should call updatePage when press control key on the table', () => {
+  it('should call handleTableWrapperKeyDown when press control key on the table', () => {
     const { queryByLabelText } = render(
       <TableWrapper
         tableData={tableData}
@@ -76,12 +80,13 @@ describe('<TableWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
+        keyboard={keyboard}
         translator={translator}
       />
     );
 
     fireEvent.keyDown(queryByLabelText('SNTable.Pagination.RowsPerPage'), { key: 'Control', code: 'ControlLeft' });
-    expect(handleKeyPress.updatePage).to.have.been.calledOnce;
+    expect(handleKeyPress.handleTableWrapperKeyDown).to.have.been.calledOnce;
   });
 
   it('should call setPageInfo when clicking next page button', async () => {
@@ -92,6 +97,7 @@ describe('<TableWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
+        keyboard={keyboard}
         translator={translator}
       />
     );
@@ -109,6 +115,7 @@ describe('<TableWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
+        keyboard={keyboard}
         translator={translator}
       />
     );
@@ -131,6 +138,7 @@ describe('<TableWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
+        keyboard={keyboard}
         translator={translator}
       />
     );
@@ -148,6 +156,7 @@ describe('<TableWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         rootElement={rootElement}
+        keyboard={keyboard}
         translator={translator}
       />
     );
