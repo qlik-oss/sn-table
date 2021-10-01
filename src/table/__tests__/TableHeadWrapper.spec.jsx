@@ -15,13 +15,15 @@ describe('<TableHeadWrapper />', () => {
   let constraints;
   let selectionsAPI;
   let keyboard;
+  let translator;
 
   beforeEach(() => {
     tableData = {
       columns: [
         { id: 1, align: 'left', label: 'someDim', sortDirection: 'asc', isDim: true },
-        { id: 2, align: 'right', label: 'someMsr', sortDirection: 'asc', isDim: false },
+        { id: 2, align: 'right', label: 'someMsr', sortDirection: 'desc', isDim: false },
       ],
+      columnOrder: [0, 1],
     };
     theme = {
       getColorPickerColor: () => {},
@@ -42,6 +44,7 @@ describe('<TableHeadWrapper />', () => {
     keyboard = {
       enabled: false,
     };
+    translator = { get: (s) => s };
   });
 
   afterEach(() => {
@@ -57,6 +60,7 @@ describe('<TableHeadWrapper />', () => {
         layout={layout}
         changeSortOrder={changeSortOrder}
         keyboard={keyboard}
+        translator={translator}
       />
     );
 
@@ -74,6 +78,7 @@ describe('<TableHeadWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         keyboard={keyboard}
+        translator={translator}
       />
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
@@ -94,6 +99,7 @@ describe('<TableHeadWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         keyboard={keyboard}
+        translator={translator}
       />
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
@@ -114,6 +120,7 @@ describe('<TableHeadWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         keyboard={keyboard}
+        translator={translator}
       />
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
@@ -133,6 +140,7 @@ describe('<TableHeadWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         keyboard={keyboard}
+        translator={translator}
       />
     );
     fireEvent.keyDown(queryByText(tableData.columns[0].label));
@@ -152,10 +160,40 @@ describe('<TableHeadWrapper />', () => {
         constraints={constraints}
         selectionsAPI={selectionsAPI}
         keyboard={keyboard}
+        translator={translator}
       />
     );
     fireEvent.mouseDown(queryByText(tableData.columns[0].label));
 
     expect(handleCellFocus.handleClickToFocusHead).to.have.been.calledOnce;
+  });
+
+  it('should render the visually hidden text instead of `aria-label` and has correct `scope` properly', () => {
+    const { queryByText, queryByTestId } = render(
+      <TableHeadWrapper
+        tableData={tableData}
+        theme={theme}
+        layout={layout}
+        changeSortOrder={changeSortOrder}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+        keyboard={keyboard}
+        translator={translator}
+      />
+    );
+
+    const firstColQuery = queryByText(tableData.columns[0].label).closest('th');
+    const secondColQuery = queryByText(tableData.columns[1].label).closest('th');
+
+    // check scope
+    expect(firstColQuery).to.have.attribute('scope', 'col');
+    expect(secondColQuery).to.have.attribute('scope', 'col');
+
+    const firstColHiddenLabel = queryByTestId('VHL-for-col-0');
+    const secondColHiddenLabel = queryByTestId('VHL-for-col-1');
+
+    // check label
+    expect(firstColHiddenLabel).to.have.text('SNTable.SortLabel.SortedAscending. SNTable.SortLabel.PressSpaceToSort');
+    expect(secondColHiddenLabel).to.have.text('SNTable.SortLabel.PressSpaceToSort');
   });
 });

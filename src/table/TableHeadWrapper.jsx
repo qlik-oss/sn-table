@@ -35,18 +35,27 @@ function TableHeadWrapper({
   layout,
   changeSortOrder,
   constraints,
+  translator,
   selectionsAPI,
   setFocusedCellCoord,
   keyboard,
 }) {
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
+  const SORT_NOTATIONS = useMemo(() => ({
+    asc: translator.get('SNTable.SortLabel.SortedAscending'),
+    desc: translator.get('SNTable.SortLabel.SortedDescending'),
+  }));
 
   return (
     <TableHead>
       <TableRow className="sn-table-row">
         {tableData.columns.map((column, columnIndex) => {
           const tabIndex = columnIndex === 0 && !keyboard.enabled ? '0' : '-1';
+          const currentSortDir = SORT_NOTATIONS[column.sortDirection];
+          const isCurrentColumnActive =
+            layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === tableData.columnOrder[columnIndex];
+
           return (
             <TableCell
               key={column.id}
@@ -66,22 +75,16 @@ function TableHeadWrapper({
                 )
               }
               onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
+              onClick={() =>
+                !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column.isDim, columnIndex)
+              }
             >
-              <TableSortLabel
-                active={layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex}
-                direction={column.sortDirection}
-                onClick={() =>
-                  // when cells are selected or in edit mode, it should not be able to do the sorting
-                  !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column.isDim, columnIndex)
-                }
-                tabIndex={-1}
-              >
+              <TableSortLabel active={isCurrentColumnActive} direction={column.sortDirection} tabIndex={-1}>
                 {column.label}
-                {layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === columnIndex ? (
-                  <span className={classes.visuallyHidden}>
-                    {column.sortDirection === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                  </span>
-                ) : null}
+                <span className={classes.visuallyHidden} data-testid={`VHL-for-col-${columnIndex}`}>
+                  {isCurrentColumnActive && `${currentSortDir}. `}
+                  {translator.get('SNTable.SortLabel.PressSpaceToSort')}
+                </span>
               </TableSortLabel>
             </TableCell>
           );
