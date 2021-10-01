@@ -1,75 +1,104 @@
 {
-  "SNTable_RowsPerPage": {
-    "id": "SNTable.RowsPerPage",
+  "SNTable_Accessibility_RowsAndColumns": {
+    "id": "SNTable.Accessibility.RowsAndColumns",
     "locale": {
-      "de-DE": "rows per page",
-      "en-US": "rows per page",
-      "es-ES": "rows per page",
-      "fr-FR": "rows per page",
-      "it-IT": "rows per page",
-      "ja-JP": "rows per page",
-      "ko-KR": "rows per page",
-      "nl-NL": "rows per page",
-      "pl-PL": "rows per page",
-      "pt-BR": "rows per page",
-      "ru-RU": "rows per page",
-      "sv-SE": "rows per page",
-      "tr-TR": "rows per page",
-      "zh-CN": "每页行数",
-      "zh-TW": "rows per page"
+      "en-US": "Showing {0} rows and {1} columns."
     }
   },
-  "SNTable_RowsAndColumns": {
-    "id": "SNTable.RowsAndColumns",
+  "SNTable_Pagination_RowsPerPage": {
+    "id": "SNTable.Pagination.RowsPerPage",
     "locale": {
-      "en-US": "showing {0} rows and {1} columns",
-      "zh-CN": "展示{0}行和{1}列"
+      "en-US": "Rows per page"
     }
   },
-  "SNTable_PaginationAction_FirstPage": {
-    "id": "SNTable.PaginationAction.FirstPage",
+  "SNTable_Pagination_FirstPage": {
+    "id": "SNTable.Pagination.FirstPage",
     "locale": {
-      "en-US": "First page",
-      "zh-CN": "第一页"
+      "en-US": "First page"
     }
   },
-  "SNTable_PaginationAction_PreviousPage": {
-    "id": "SNTable.PaginationAction.PreviousPage",
+  "SNTable_Pagination_PreviousPage": {
+    "id": "SNTable.Pagination.PreviousPage",
     "locale": {
-      "en-US": "Previous page",
-      "zh-CN": "前一页"
+      "en-US": "Previous page"
     }
   },
-  "SNTable_PaginationAction_NextPage": {
-    "id": "SNTable.PaginationAction.NextPage",
+  "SNTable_Pagination_NextPage": {
+    "id": "SNTable.Pagination.NextPage",
     "locale": {
-      "en-US": "Next page",
-      "zh-CN": "后一页"
+      "en-US": "Next page"
     }
   },
-  "SNTable_PaginationAction_LastPage": {
-    "id": "SNTable.PaginationAction.LastPage",
+  "SNTable_Pagination_LastPage": {
+    "id": "SNTable.Pagination.LastPage",
     "locale": {
-      "en-US": "Last page",
-      "zh-CN": "最后一页"
+      "en-US": "Last page"
     }
   },
-  "SNTable_TableHead_SortedAscending": {
-    "id": "SNTable.TableHead.SortedAscending",
+  "SNTable_SortLabel_SortedAscending": {
+    "id": "SNTable.SortLabel.SortedAscending",
     "locale": {
-      "en-US": "Sorted ascending"
+      "en-US": "Sorted in ascending order."
     }
   },
-  "SNTable_TableHead_SortedDescending": {
-    "id": "SNTable.TableHead.SortedDescending",
+  "SNTable_SortLabel_SortedDescending": {
+    "id": "SNTable.SortLabel.SortedDescending",
     "locale": {
-      "en-US": "Sorted descending"
+      "en-US": "Sorted in descending order."
     }
   },
-  "SNTable_TableHead_SortNotation": {
-    "id": "SNTable.TableHead.SortNotation",
+  "SNTable_SortLabel_PressSpaceToSort": {
+    "id": "SNTable.SortLabel.PressSpaceToSort",
     "locale": {
-      "en-US": "Press space or enter to sort on this column."
+      "en-US": "Press space to sort on this column"
+    }
+  },
+  "SNTable_SelectionLabel_OneSelectedValue": {
+    "id": "SNTable.SelectionLabel.OneSelectedValue",
+    "locale": {
+      "en-US": "Currently there is one selected value."
+    }
+  },
+  "SNTable_SelectionLabel_SelectedValues": {
+    "id": "SNTable.SelectionLabel.SelectedValues",
+    "locale": {
+      "en-US": "Currently there are {0} selected values."
+    }
+  },
+  "SNTable_SelectionLabel_DeselectedValue": {
+    "id": "SNTable.SelectionLabel.DeselectedValue",
+    "locale": {
+      "en-US": "Value is deselected."
+    }
+  },
+  "SNTable_SelectionLabel_SelectedValue": {
+    "id": "SNTable.SelectionLabel.SelectedValue",
+    "locale": {
+      "en-US": "Value is selected."
+    }
+  },
+  "SNTable_SelectionLabel_NotSelectedValue": {
+    "id": "SNTable.SelectionLabel.NotSelectedValue",
+    "locale": {
+      "en-US": "Value is not selected."
+    }
+  },
+  "SNTable_SelectionLabel_SelectionsConfirmed": {
+    "id": "SNTable.SelectionLabel.SelectionsConfirmed",
+    "locale": {
+      "en-US": "Selections confirmed."
+    }
+  },
+  "SNTable_SelectionLabel_ExitedSelectionMode": {
+    "id": "SNTable.SelectionLabel.ExitedSelectionMode",
+    "locale": {
+      "en-US": "Value is deselected. Exited selection mode."
+    }
+  },
+  "SNTable_SelectionLabel_selected": {
+    "id": "SNTable.SelectionLabel.selected",
+    "locale": {
+      "en-US": "Selected"
     }
   }
 }

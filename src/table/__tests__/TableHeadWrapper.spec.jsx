@@ -168,28 +168,8 @@ describe('<TableHeadWrapper />', () => {
     expect(handleCellFocus.handleClickToFocusHead).to.have.been.calledOnce;
   });
 
-  it('should have proper `scope` property', () => {
-    const { queryByText } = render(
-      <TableHeadWrapper
-        tableData={tableData}
-        theme={theme}
-        layout={layout}
-        changeSortOrder={changeSortOrder}
-        keyboard={keyboard}
-        translator={translator}
-      />
-    );
-
-    const firstColQuery = queryByText(tableData.columns[0].label).closest('th');
-    const secondColQuery = queryByText(tableData.columns[1].label).closest('th');
-
-    // check scope
-    expect(firstColQuery).to.have.attribute('scope', 'col');
-    expect(secondColQuery).to.have.attribute('scope', 'col');
-  });
-
-  it('should render the visually hidden text instead of `aria-label` properly', () => {
-    const { queryByTestId } = render(
+  it('should render the visually hidden text instead of `aria-label` and has correct `scope` properly', () => {
+    const { queryByText, queryByTestId } = render(
       <TableHeadWrapper
         tableData={tableData}
         theme={theme}
@@ -202,10 +182,18 @@ describe('<TableHeadWrapper />', () => {
       />
     );
 
+    const firstColQuery = queryByText(tableData.columns[0].label).closest('th');
+    const secondColQuery = queryByText(tableData.columns[1].label).closest('th');
+
+    // check scope
+    expect(firstColQuery).to.have.attribute('scope', 'col');
+    expect(secondColQuery).to.have.attribute('scope', 'col');
+
     const firstColHiddenLabel = queryByTestId('VHL-for-col-0');
     const secondColHiddenLabel = queryByTestId('VHL-for-col-1');
 
-    expect(firstColHiddenLabel).to.have.text('SNTable.TableHead.SortedAscending. SNTable.TableHead.SortNotation');
-    expect(secondColHiddenLabel).to.have.text('SNTable.TableHead.SortNotation');
+    // check label
+    expect(firstColHiddenLabel).to.have.text('SNTable.SortLabel.SortedAscending. SNTable.SortLabel.PressSpaceToSort');
+    expect(secondColHiddenLabel).to.have.text('SNTable.SortLabel.PressSpaceToSort');
   });
 });

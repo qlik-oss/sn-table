@@ -65,8 +65,8 @@ describe('<TableWrapper />', () => {
       />
     );
 
-    expect(queryByLabelText('SNTable.RowsAndColumns')).to.be.visible;
-    expect(queryByLabelText('SNTable.RowsPerPage')).to.be.visible;
+    expect(queryByLabelText('SNTable.Accessibility.RowsAndColumns')).to.be.visible;
+    expect(queryByLabelText('SNTable.Pagination.RowsPerPage')).to.be.visible;
     expect(queryByTestId('table-wrapper')).to.has.attr('tabindex', '-1');
     expect(queryByText(`1-${rowsPerPage} of ${tableData.size.qcy}`)).to.be.visible;
     expect(queryByText(rowsPerPage)).to.be.visible;
@@ -85,11 +85,11 @@ describe('<TableWrapper />', () => {
       />
     );
 
-    fireEvent.keyDown(queryByLabelText('SNTable.RowsPerPage'), { key: 'Control', code: 'ControlLeft' });
+    fireEvent.keyDown(queryByLabelText('SNTable.Pagination.RowsPerPage'), { key: 'Control', code: 'ControlLeft' });
     expect(handleKeyPress.handleTableWrapperKeyDown).to.have.been.calledOnce;
   });
 
-  it('should call setPageInfo when clicking next page button', async () => {
+  it('should call setPageInfo when clicking next page and previous page button', async () => {
     const { findByTitle, findByText } = render(
       <TableWrapper
         tableData={tableData}
@@ -105,6 +105,34 @@ describe('<TableWrapper />', () => {
 
     expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
     expect(await findByText(`101-200 of ${tableData.size.qcy}`)).to.be.visible;
+
+    fireEvent.click(await findByTitle('Previous page'));
+
+    expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
+    expect(await findByText(`1-100 of ${tableData.size.qcy}`)).to.be.visible;
+  });
+
+  it('should call setPageInfo when clicking last page and first page button', async () => {
+    const { findByTitle, findByText } = render(
+      <TableWrapper
+        tableData={tableData}
+        setPageInfo={setPageInfo}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+        rootElement={rootElement}
+        keyboard={keyboard}
+        translator={translator}
+      />
+    );
+    fireEvent.click(await findByTitle('Last page'));
+
+    expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
+    expect(await findByText(`101-200 of ${tableData.size.qcy}`)).to.be.visible;
+
+    fireEvent.click(await findByTitle('First page'));
+
+    expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
+    expect(await findByText(`1-100 of ${tableData.size.qcy}`)).to.be.visible;
   });
 
   it('should change back to first page when not on first page and no rows', async () => {

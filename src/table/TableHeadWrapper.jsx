@@ -43,8 +43,8 @@ function TableHeadWrapper({
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
   const SORT_NOTATIONS = useMemo(() => ({
-    asc: translator.get('SNTable.TableHead.SortedAscending'),
-    desc: translator.get('SNTable.TableHead.SortedDescending'),
+    asc: translator.get('SNTable.SortLabel.SortedAscending'),
+    desc: translator.get('SNTable.SortLabel.SortedDescending'),
   }));
 
   return (
@@ -62,7 +62,6 @@ function TableHeadWrapper({
               align={column.align}
               className={`${classes.head} sn-table-head-cell sn-table-cell`}
               tabIndex={tabIndex}
-              scope="col"
               onKeyDown={(e) =>
                 headHandleKeyPress(
                   e,
@@ -84,7 +83,7 @@ function TableHeadWrapper({
                 {column.label}
                 <span className={classes.visuallyHidden} data-testid={`VHL-for-col-${columnIndex}`}>
                   {isCurrentColumnActive && `${currentSortDir}. `}
-                  {translator.get('SNTable.TableHead.SortNotation')}
+                  {translator.get('SNTable.SortLabel.PressSpaceToSort')}
                 </span>
               </TableSortLabel>
             </TableCell>
