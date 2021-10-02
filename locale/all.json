@@ -11,6 +11,12 @@
       "en-US": "Rows per page"
     }
   },
+  "SNTable_Pagination_DisplayedRowsLabel": {
+    "id": "SNTable.Pagination.DisplayedRowsLabel",
+    "locale": {
+      "en-US": "{0} - {1} of {2}"
+    }
+  },
   "SNTable_Pagination_FirstPage": {
     "id": "SNTable.Pagination.FirstPage",
     "locale": {
