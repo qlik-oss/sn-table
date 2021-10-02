@@ -156,13 +156,17 @@ export default function TableWrapper(props) {
           inputProps: {
             'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
             'data-testid': 'select',
+            // eslint-disable-next-line prettier/prettier
+            'tabindex': keyboard.active ? '0' : '-1',
           },
           native: true,
         }}
         labelDisplayedRows={({ from, to, count }) => `${from}-${to} of ${count}`}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-        ActionsComponent={TablePaginationActions}
+        ActionsComponent={() =>
+          TablePaginationActions({ count: size.qcy, page, rowsPerPage, onPageChange: handleChangePage, keyboard })
+        }
       />
     </Paper>
   );

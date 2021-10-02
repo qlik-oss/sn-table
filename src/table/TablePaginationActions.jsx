@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 
 export default function TablePaginationActions(props) {
   const classes = useStyles();
-  const { count, page, rowsPerPage, onPageChange } = props;
+  const { count, page, rowsPerPage, onPageChange, keyboard } = props;
 
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
@@ -47,6 +47,7 @@ export default function TablePaginationActions(props) {
         aria-disabled={onFirstPage}
         aria-label="first page"
         title="First page"
+        tabindex={keyboard.active ? '0' : '-1'}
         className={onFirstPage && classes.disabled}
       >
         <FirstPageIcon />
@@ -56,6 +57,7 @@ export default function TablePaginationActions(props) {
         aria-disabled={onFirstPage}
         aria-label="previous page"
         title="Previous page"
+        tabindex={keyboard.active ? '0' : '-1'}
         className={onFirstPage && classes.disabled}
       >
         <KeyboardArrowLeft />
@@ -65,6 +67,7 @@ export default function TablePaginationActions(props) {
         aria-disabled={onLastPage}
         aria-label="next page"
         title="Next page"
+        tabindex={keyboard.active ? '0' : '-1'}
         className={onLastPage && classes.disabled}
       >
         <KeyboardArrowRight />
@@ -74,6 +77,7 @@ export default function TablePaginationActions(props) {
         aria-disabled={onLastPage}
         aria-label="last page"
         title="Last page"
+        tabindex={keyboard.active ? '0' : '-1'}
         className={onLastPage && classes.disabled}
       >
         <LastPageIcon />
@@ -87,4 +91,5 @@ TablePaginationActions.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
+  keyboard: PropTypes.object.isRequired,
 };

@@ -35,7 +35,7 @@ export default {
     name: moduleName,
     format: 'esm',
     exports: 'default',
-    sourcemap: true,
+    sourcemap: false,
     globals: {
       '@nebula.js/stardust': 'stardust',
     },
