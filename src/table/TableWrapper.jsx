@@ -25,8 +25,15 @@ const useStyles = makeStyles({
     height: '100%',
     overflow: 'hidden',
   },
+  tablePaginationSection: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
   paginationHidden: {
     display: 'none',
+  },
+  actions: {
+    display: 'flex',
   },
 });
 
@@ -144,30 +151,36 @@ export default function TableWrapper(props) {
           <TableBodyWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} setShouldRefocus={setShouldRefocus} />
         </Table>
       </TableContainer>
-      <TablePagination
-        className={classes[paginationHidden]}
-        rowsPerPageOptions={paginationFixedRpp ? [rowsPerPage] : [10, 25, 100]}
-        component="div"
-        count={size.qcy}
-        rowsPerPage={rowsPerPage}
-        labelRowsPerPage={`${translator.get('SNTable.Pagination.RowsPerPage')}:`}
-        page={page}
-        SelectProps={{
-          inputProps: {
-            'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
-            'data-testid': 'select',
-            // eslint-disable-next-line prettier/prettier
-            'tabindex': keyboard.active ? '0' : '-1',
-          },
-          native: true,
-        }}
-        labelDisplayedRows={({ from, to, count }) => `${from}-${to} of ${count}`}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        ActionsComponent={() =>
-          TablePaginationActions({ count: size.qcy, page, rowsPerPage, onPageChange: handleChangePage, keyboard })
-        }
-      />
+      <Paper className={classes.tablePaginationSection}>
+        <TablePagination
+          className={classes[paginationHidden]}
+          rowsPerPageOptions={paginationFixedRpp ? [rowsPerPage] : [10, 25, 100]}
+          component="div"
+          count={size.qcy}
+          rowsPerPage={rowsPerPage}
+          labelRowsPerPage={`${translator.get('SNTable.Pagination.RowsPerPage')}:`}
+          page={page}
+          SelectProps={{
+            inputProps: {
+              'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
+              'data-testid': 'select',
+              tabindex: keyboard.active ? '0' : '-1',
+            },
+            native: true,
+          }}
+          labelDisplayedRows={({ from, to, count }) => `${from}-${to} of ${count}`}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          ActionsComponent={() => <div>{null}</div>}
+        />
+        <TablePaginationActions
+          count={size.qcy}
+          onPageChange={handleChangePage}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          keyboard={keyboard}
+        />
+      </Paper>
     </Paper>
   );
 }

@@ -9,7 +9,7 @@ import React from 'react';
 
 const useStyles = makeStyles({
   root: {
-    flexShrink: 0,
+    display: 'flex',
   },
 });
 
