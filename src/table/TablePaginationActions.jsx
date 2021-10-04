@@ -36,56 +36,44 @@ export default function TablePaginationActions(props) {
   const onFirstPage = page === 0;
   const onLastPage = page >= Math.ceil(count / rowsPerPage) - 1;
 
-  const tableButtonsArr = [
-    {
-      order: 0,
-      IconProps: {
-        onClick: handleFirstPageButtonClick,
-        disabled: onFirstPage,
-        'aria-label': 'first page',
-        title: 'First Page',
-      },
-      IconToRender: <FirstPageIcon />,
-    },
-    {
-      order: 1,
-      IconProps: {
-        onClick: handleBackButtonClick,
-        disabled: onFirstPage,
-        'aria-label': 'previous page',
-        title: 'Previous Page',
-      },
-      IconToRender: <KeyboardArrowLeft />,
-    },
-    {
-      order: 2,
-      IconProps: {
-        onClick: handleNextButtonClick,
-        disabled: onLastPage,
-        'aria-label': 'next page',
-        title: 'Next Page',
-      },
-      IconToRender: <KeyboardArrowRight />,
-    },
-    {
-      order: 3,
-      IconProps: {
-        onClick: handleLastPageButtonClick,
-        disabled: onLastPage,
-        'aria-label': 'last page',
-        title: 'Last Page',
-      },
-      IconToRender: <LastPageIcon />,
-    },
-  ].sort((a, b) => a.order - b.order);
-
   return (
     <div className={classes.root}>
-      {tableButtonsArr.map((btn) => (
-        <IconButton key={btn.order} {...btn.IconProps} tabIndex={keyboardActive}>
-          {btn.IconToRender}
-        </IconButton>
-      ))}
+      <IconButton
+        onClick={handleFirstPageButtonClick}
+        disabled={onFirstPage}
+        aria-label="first page"
+        title="First page"
+        tabindex={keyboardActive}
+      >
+        <FirstPageIcon />
+      </IconButton>
+      <IconButton
+        onClick={handleBackButtonClick}
+        disabled={onFirstPage}
+        aria-label="previous page"
+        title="Previous page"
+        tabindex={keyboardActive}
+      >
+        <KeyboardArrowLeft />
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={onLastPage}
+        aria-label="next page"
+        title="Next page"
+        tabindex={keyboardActive}
+      >
+        <KeyboardArrowRight />
+      </IconButton>
+      <IconButton
+        onClick={handleLastPageButtonClick}
+        disabled={onLastPage}
+        aria-label="last page"
+        title="Last page"
+        tabindex={keyboardActive}
+      >
+        <LastPageIcon />
+      </IconButton>
     </div>
   );
 }

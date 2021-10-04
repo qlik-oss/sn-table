@@ -32,9 +32,6 @@ const useStyles = makeStyles({
   paginationHidden: {
     display: 'none',
   },
-  actions: {
-    display: 'flex',
-  },
 });
 
 export default function TableWrapper(props) {
