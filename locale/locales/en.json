@@ -8,7 +8,7 @@
     "comment": "label for the rows per page dropdown. (tew 210929)"
   },
   "SNTable.Pagination.DisplayedRowsLabel": {
-    "value": "{0} - {1} of {2}",
+    "value": "{0} of {1}",
     "comment": "label for the displayed rows"
   },
   "SNTable.Pagination.FirstPage": {

@@ -160,7 +160,7 @@ export default function TableWrapper(props) {
           native: true,
         }}
         labelDisplayedRows={({ from, to, count }) =>
-          translator.get('SNTable.Pagination.DisplayedRowsLabel', [from, to, count])
+          translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
         }
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
