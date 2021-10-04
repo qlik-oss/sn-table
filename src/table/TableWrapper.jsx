@@ -178,7 +178,7 @@ export default function TableWrapper(props) {
           onPageChange={handleChangePage}
           page={page}
           rowsPerPage={rowsPerPage}
-          keyboard={keyboard}
+          keyboardActive={keyboard.active ? '0' : '-1'}
         />
       </Paper>
     </Paper>
