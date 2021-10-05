@@ -1,5 +1,5 @@
 import { selectCell } from '../selections-utils';
-import { updateFocus } from './handle-cell-focus';
+import { updateFocus, focusConfirmButton } from './handle-cell-focus';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -153,6 +153,13 @@ export const bodyHandleKeyPress = (
       if (!isAnalysisMode || !selState.rows.length) break;
       preventDefaultBehavior(evt);
       selState.api.cancel();
+      break;
+    }
+    case 'Tab': {
+      if (evt.shiftKey && selState.rows.length) {
+        preventDefaultBehavior(evt);
+        focusConfirmButton(rootElement);
+      }
       break;
     }
     default:

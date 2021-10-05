@@ -4,6 +4,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import { makeStyles } from '@material-ui/core/styles';
+import { focusConfirmButton } from './cells/handle-cell-focus';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -35,6 +36,12 @@ export default function TablePaginationActions(props) {
 
   const handleLastPageButtonClick = (event) => {
     onPageChange(event, Math.ceil(count / rowsPerPage) - 1);
+  };
+
+  const lastPageTabHandle = (event) => {
+    if (event.key === 'Tab' && !event.shiftKey) {
+      focusConfirmButton(event.target);
+    }
   };
 
   const onFirstPage = page === 0;
@@ -75,6 +82,7 @@ export default function TablePaginationActions(props) {
         aria-label="last page"
         title="Last page"
         className={onLastPage && classes.disabled}
+        onKeyDown={lastPageTabHandle}
       >
         <LastPageIcon />
       </IconButton>
