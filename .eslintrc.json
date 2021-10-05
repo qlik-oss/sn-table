@@ -1,6 +1,6 @@
 {
   "root": true,
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "env": {
     "browser": true
   },
@@ -21,27 +21,27 @@
     "import/no-extraneous-dependencies": [2, { "devDependencies": true }],
     "prefer-destructuring": ["error", { "object": true, "array": false }],
     "no-param-reassign": [2, { "props": false }]
-  },
+  }
 
-  "overrides": [
-    {
-      "files": ["**/*.spec.js", "**/*.spec.jsx"],
-      "env": {
-        "browser": false,
-        "node": true,
-        "mocha": true
-      },
-      "globals": {
-        "chai": false,
-        "expect": false,
-        "sinon": false,
-        "aw": false,
-        "page": false
-      },
-      "plugins": ["mocha", "react"],
-      "rules": {
-        "mocha/no-exclusive-tests": "error"
-      }
-    }
-  ]
+  // "overrides": [
+  //   {
+  //     "files": ["**/*.spec.js", "**/*.spec.jsx"],
+  //     "env": {
+  //       "browser": false,
+  //       "node": true,
+  //       "mocha": true
+  //     },
+  //     "globals": {
+  //       "chai": false,
+  //       "expect": false,
+  //       "sinon": false,
+  //       "aw": false,
+  //       "page": false
+  //     },
+  //     "plugins": ["mocha", "react"],
+  //     "rules": {
+  //       "mocha/no-exclusive-tests": "error"
+  //     }
+  //   }
+  // ]
 }
