@@ -206,7 +206,7 @@ describe('<TableHeadWrapper />', () => {
     expect(secondColHiddenLabel).to.have.text('SNTable.SortLabel.PressSpaceToSort');
   });
 
-  it.only('should not render visually hidden text while we are out of table header', () => {
+  it('should not render visually hidden text while we are out of table header', () => {
     focusedCellCoord = [1, 1];
     const { queryByTestId } = render(
       <TableHeadWrapper
