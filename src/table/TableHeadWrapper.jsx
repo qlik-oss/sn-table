@@ -37,6 +37,7 @@ function TableHeadWrapper({
   constraints,
   translator,
   selectionsAPI,
+  focusedCellCoord,
   setFocusedCellCoord,
   keyboard,
 }) {
@@ -55,6 +56,7 @@ function TableHeadWrapper({
           const currentSortDir = SORT_NOTATIONS[column.sortDirection];
           const isCurrentColumnActive =
             layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === tableData.columnOrder[columnIndex];
+          const isFocusInHead = focusedCellCoord[0] === 0;
 
           return (
             <TableCell
@@ -82,8 +84,8 @@ function TableHeadWrapper({
               <TableSortLabel active={isCurrentColumnActive} direction={column.sortDirection} tabIndex={-1}>
                 {column.label}
                 <span className={classes.visuallyHidden} data-testid={`VHL-for-col-${columnIndex}`}>
-                  {isCurrentColumnActive && `${currentSortDir}. `}
-                  {translator.get('SNTable.SortLabel.PressSpaceToSort')}
+                  {isCurrentColumnActive && isFocusInHead && `${currentSortDir} `}
+                  {isFocusInHead && translator.get('SNTable.SortLabel.PressSpaceToSort')}
                 </span>
               </TableSortLabel>
             </TableCell>
