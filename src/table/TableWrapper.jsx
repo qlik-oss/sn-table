@@ -140,7 +140,7 @@ export default function TableWrapper(props) {
             `${columns.length}`,
           ])}
         >
-          <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} />
+          <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
           <TableBodyWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} setShouldRefocus={setShouldRefocus} />
         </Table>
       </TableContainer>
