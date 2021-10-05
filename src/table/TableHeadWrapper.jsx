@@ -83,10 +83,12 @@ function TableHeadWrapper({
             >
               <TableSortLabel active={isCurrentColumnActive} direction={column.sortDirection} tabIndex={-1}>
                 {column.label}
-                <span className={classes.visuallyHidden} data-testid={`VHL-for-col-${columnIndex}`}>
-                  {isCurrentColumnActive && isFocusInHead && `${currentSortDir} `}
-                  {isFocusInHead && translator.get('SNTable.SortLabel.PressSpaceToSort')}
-                </span>
+                {isFocusInHead && (
+                  <span className={classes.visuallyHidden} data-testid={`VHL-for-col-${columnIndex}`}>
+                    {isCurrentColumnActive && `${currentSortDir} `}
+                    {translator.get('SNTable.SortLabel.PressSpaceToSort')}
+                  </span>
+                )}
               </TableSortLabel>
             </TableCell>
           );
@@ -105,6 +107,7 @@ TableHeadWrapper.propTypes = {
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
+  focusedCellCoord: PropTypes.arrayOf(PropTypes.number).isRequired,
   setFocusedCellCoord: PropTypes.func.isRequired,
 };
 

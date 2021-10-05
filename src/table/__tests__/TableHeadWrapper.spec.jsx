@@ -16,6 +16,7 @@ describe('<TableHeadWrapper />', () => {
   let selectionsAPI;
   let keyboard;
   let translator;
+  let focusedCellCoord;
 
   beforeEach(() => {
     tableData = {
@@ -45,6 +46,7 @@ describe('<TableHeadWrapper />', () => {
       enabled: false,
     };
     translator = { get: (s) => s };
+    focusedCellCoord = [0, 0];
   });
 
   afterEach(() => {
@@ -61,6 +63,7 @@ describe('<TableHeadWrapper />', () => {
         changeSortOrder={changeSortOrder}
         keyboard={keyboard}
         translator={translator}
+        focusedCellCoord={focusedCellCoord}
       />
     );
 
@@ -79,6 +82,7 @@ describe('<TableHeadWrapper />', () => {
         selectionsAPI={selectionsAPI}
         keyboard={keyboard}
         translator={translator}
+        focusedCellCoord={focusedCellCoord}
       />
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
@@ -100,6 +104,7 @@ describe('<TableHeadWrapper />', () => {
         selectionsAPI={selectionsAPI}
         keyboard={keyboard}
         translator={translator}
+        focusedCellCoord={focusedCellCoord}
       />
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
@@ -121,6 +126,7 @@ describe('<TableHeadWrapper />', () => {
         selectionsAPI={selectionsAPI}
         keyboard={keyboard}
         translator={translator}
+        focusedCellCoord={focusedCellCoord}
       />
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
@@ -141,6 +147,7 @@ describe('<TableHeadWrapper />', () => {
         selectionsAPI={selectionsAPI}
         keyboard={keyboard}
         translator={translator}
+        focusedCellCoord={focusedCellCoord}
       />
     );
     fireEvent.keyDown(queryByText(tableData.columns[0].label));
@@ -161,6 +168,7 @@ describe('<TableHeadWrapper />', () => {
         selectionsAPI={selectionsAPI}
         keyboard={keyboard}
         translator={translator}
+        focusedCellCoord={focusedCellCoord}
       />
     );
     fireEvent.mouseDown(queryByText(tableData.columns[0].label));
@@ -179,6 +187,7 @@ describe('<TableHeadWrapper />', () => {
         selectionsAPI={selectionsAPI}
         keyboard={keyboard}
         translator={translator}
+        focusedCellCoord={focusedCellCoord}
       />
     );
 
@@ -193,7 +202,30 @@ describe('<TableHeadWrapper />', () => {
     const secondColHiddenLabel = queryByTestId('VHL-for-col-1');
 
     // check label
-    expect(firstColHiddenLabel).to.have.text('SNTable.SortLabel.SortedAscending. SNTable.SortLabel.PressSpaceToSort');
+    expect(firstColHiddenLabel).to.have.text('SNTable.SortLabel.SortedAscending SNTable.SortLabel.PressSpaceToSort');
     expect(secondColHiddenLabel).to.have.text('SNTable.SortLabel.PressSpaceToSort');
+  });
+
+  it.only('should not render visually hidden text while we are out of table header', () => {
+    focusedCellCoord = [1, 1];
+    const { queryByTestId } = render(
+      <TableHeadWrapper
+        tableData={tableData}
+        theme={theme}
+        layout={layout}
+        changeSortOrder={changeSortOrder}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+        keyboard={keyboard}
+        translator={translator}
+        focusedCellCoord={focusedCellCoord}
+      />
+    );
+
+    const firstColHiddenLabel = queryByTestId('VHL-for-col-0');
+    const secondColHiddenLabel = queryByTestId('VHL-for-col-1');
+
+    expect(firstColHiddenLabel).to.be.null;
+    expect(secondColHiddenLabel).to.be.null;
   });
 });
