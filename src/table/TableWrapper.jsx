@@ -124,6 +124,7 @@ export default function TableWrapper(props) {
           handleChangePage,
           setShouldRefocus,
           keyboard,
+          isSelectionActive: selectionsAPI.isModal(),
         })
       }
     >
