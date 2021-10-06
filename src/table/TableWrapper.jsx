@@ -25,6 +25,10 @@ const useStyles = makeStyles({
     height: '100%',
     overflow: 'hidden',
   },
+  tablePaginationSection: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
   paginationHidden: {
     display: 'none',
   },
@@ -144,28 +148,38 @@ export default function TableWrapper(props) {
           <TableBodyWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} setShouldRefocus={setShouldRefocus} />
         </Table>
       </TableContainer>
-      <TablePagination
-        className={classes[paginationHidden]}
-        rowsPerPageOptions={paginationFixedRpp ? [rowsPerPage] : [10, 25, 100]}
-        component="div"
-        count={size.qcy}
-        rowsPerPage={rowsPerPage}
-        labelRowsPerPage={translator.get('SNTable.Pagination.RowsPerPage')}
-        page={page}
-        SelectProps={{
-          inputProps: {
-            'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
-            'data-testid': 'select',
-          },
-          native: true,
-        }}
-        labelDisplayedRows={({ from, to, count }) =>
-          translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
-        }
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        ActionsComponent={TablePaginationActions}
-      />
+      <Paper className={classes.tablePaginationSection}>
+        <TablePagination
+          className={classes[paginationHidden]}
+          rowsPerPageOptions={paginationFixedRpp ? [rowsPerPage] : [10, 25, 100]}
+          component="div"
+          count={size.qcy}
+          rowsPerPage={rowsPerPage}
+          labelRowsPerPage={translator.get('SNTable.Pagination.RowsPerPage')}
+          page={page}
+          SelectProps={{
+            inputProps: {
+              'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
+              'data-testid': 'select',
+              tabindex: keyboard.active ? '0' : '-1',
+            },
+            native: true,
+          }}
+          labelDisplayedRows={({ from, to, count }) =>
+            translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
+          }
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          ActionsComponent={() => <div>{null}</div>}
+        />
+        <TablePaginationActions
+          count={size.qcy}
+          onPageChange={handleChangePage}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          keyboardActive={keyboard.active ? '0' : '-1'}
+        />
+      </Paper>
     </Paper>
   );
 }

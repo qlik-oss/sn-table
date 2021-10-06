@@ -109,6 +109,7 @@ TableHeadWrapper.propTypes = {
   keyboard: PropTypes.object.isRequired,
   focusedCellCoord: PropTypes.arrayOf(PropTypes.number).isRequired,
   setFocusedCellCoord: PropTypes.func.isRequired,
+  translator: PropTypes.object.isRequired,
 };
 
 export default TableHeadWrapper;
