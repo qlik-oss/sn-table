@@ -1,8 +1,10 @@
 export const findCellWithTabStop = (rootElement) => rootElement.querySelector("td[tabindex='0'], th[tabindex='0']");
 
 // get the object, find the confirm buttons parent and focus that element
-export const focusConfirmButton = (rootElement) =>
+export const focusConfirmButton = (rootElement) => {
+  console.log(rootElement.closest('.qv-object-wrapper')?.querySelector('.sel-toolbar-confirm')?.parentElement);
   rootElement.closest('.qv-object-wrapper')?.querySelector('.sel-toolbar-confirm')?.parentElement?.focus();
+};
 
 export const updateFocus = ({ focusType, rowElements = [], cellCoord = [], providedCell = undefined }) => {
   const cell = providedCell || rowElements[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[cellCoord[1]];
@@ -94,7 +96,14 @@ export const handleNavigateTop = ({ tableSectionRef, focusedCellCoord, rootEleme
 };
 
 export const handleFocusoutEvent = (evt, shouldRefocus, blur) => {
+  if (evt.relatedTarget?.classList.contains('sel-toolbar-list-item')) {
+    blur('noCallback');
+    return;
+  }
+  console.log(shouldRefocus.current);
+
   if (!evt.currentTarget.contains(evt.relatedTarget) && !shouldRefocus.current) {
+    console.log('blurring');
     blur(false);
   }
 };

@@ -89,13 +89,17 @@ export default function TableWrapper(props) {
   }, [tableSectionRef, focusedCellCoord]);
 
   useDidUpdateEffect(() => {
-    if (!keyboard.enabled) return;
+    const isSelToolbar = document.activeElement.classList.contains('sel-toolbar-list-item');
+    if (!keyboard.enabled || (isSelToolbar && !keyboard.active)) {
+      return;
+    }
 
     updateFocus({
       focusType: keyboard.active ? 'focus' : 'blur',
       rowElements: rootElement.getElementsByClassName('sn-table-row'),
       cellCoord: focusedCellCoord,
     });
+    selectionsAPI.isModal() && setShouldRefocus();
   }, [keyboard.active]);
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,

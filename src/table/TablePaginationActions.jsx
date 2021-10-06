@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+import React from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
@@ -5,8 +7,6 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import { makeStyles } from '@material-ui/core/styles';
 import { focusConfirmButton } from './cells/handle-cell-focus';
-import PropTypes from 'prop-types';
-import React from 'react';
 
 const useStyles = makeStyles({
   root: {
@@ -40,6 +40,8 @@ export default function TablePaginationActions(props) {
 
   const lastPageTabHandle = (event) => {
     if (event.key === 'Tab' && !event.shiftKey) {
+      event.stopPropagation();
+      event.preventDefault();
       focusConfirmButton(event.target);
     }
   };
