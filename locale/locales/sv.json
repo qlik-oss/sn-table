@@ -1,0 +1,87 @@
+{
+  "SNTable.Accessibility.RowsAndColumns": {
+    "value": "Visar {0} rader och {1} kolumner.",
+    "comment": "number of rows and columns announced by the screen reader. (tew 210929)",
+    "version": "HKjzXNhL9hPs/kFY0XyjTQ=="
+  },
+  "SNTable.Pagination.FirstPage": {
+    "value": "Första sidan",
+    "comment": "tooltip and aria-label for the first page button. (tew 210929)",
+    "version": "vp2MW/tPZq4FsBw+3qknqA=="
+  },
+  "SNTable.Pagination.LastPage": {
+    "value": "Sista sidan",
+    "comment": "tooltip and aria-label for the last page button. (tew 210929)",
+    "version": "9lUogxKZctLBgLYSNmpyPA=="
+  },
+  "SNTable.Pagination.NextPage": {
+    "value": "Nästa sida",
+    "comment": "tooltip and aria-label for the next page button. (tew 210929)",
+    "version": "YyUO+qPBjWcn7zy0bpXeFw=="
+  },
+  "SNTable.Pagination.PreviousPage": {
+    "value": "Föregående sida",
+    "comment": "tooltip and aria-label for the previous page button. (tew 210929)",
+    "version": "3IinXJOsZ4CCBrNYsg4U5A=="
+  },
+  "SNTable.Pagination.RowsPerPage": {
+    "value": "Rader per sida",
+    "comment": "label for the rows per page dropdown. (tew 210929)",
+    "version": "zuWpMmMSoOG/QRsKoVx3OA=="
+  },
+  "SNTable.SelectionLabel.DeselectedValue": {
+    "value": "Val av värde har tagits bort.",
+    "comment": "announced by screen readers  when a value is deselected. (tew 210929)",
+    "version": "/NL1c53TDjc2dhooLWg1WA=="
+  },
+  "SNTable.SelectionLabel.ExitedSelectionMode": {
+    "value": "Val av värde har tagits bort. Lämnade urvalsläge.",
+    "comment": "Announced by screen readers when deselecting and no values are selecting, causing the the chart to exit selection mode. (tew 210929)",
+    "version": "A4NCF1GIsCVwVg0MjPHUqw=="
+  },
+  "SNTable.SelectionLabel.NotSelectedValue": {
+    "value": "Värdet är inte valt.",
+    "comment": "announced by screen readers when focus is on an unselected value. (tew 210929)",
+    "version": "oj/qLPcfANXpS2oVVUzTdQ=="
+  },
+  "SNTable.SelectionLabel.OneSelectedValue": {
+    "value": "Just nu är ett värde valt.",
+    "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)",
+    "version": "5llYYux+meuJItZE6XJhcQ=="
+  },
+  "SNTable.SelectionLabel.SelectedValue": {
+    "value": "Värdet är valt.",
+    "comment": "announced by screen readers when a value is selected. (tew 210929)",
+    "version": "ZJO4WnSdc7Wk5mDyEj4hug=="
+  },
+  "SNTable.SelectionLabel.SelectedValues": {
+    "value": "Just nu är {0} värden valda.",
+    "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)",
+    "version": "58lPVnscmLNuN+pvnPhkYA=="
+  },
+  "SNTable.SelectionLabel.SelectionsConfirmed": {
+    "value": "Valen har bekräftats.",
+    "comment": "announced by screen readers when selections are confirmed. (tew 210929)",
+    "version": "g2xbBOIYPMUM0bFIQp5hDg=="
+  },
+  "SNTable.SelectionLabel.selected": {
+    "value": "Urval",
+    "comment": "announced by screen readers for a selected value. (tew 210929)",
+    "version": "57xiDyOBQ0x8VcdHGd5tzg=="
+  },
+  "SNTable.SortLabel.PressSpaceToSort": {
+    "value": "Tryck på Blanksteg om du vill sortera efter den här kolumnen",
+    "comment": "instructions for sorting, announced by screen readers. (tew 210929)",
+    "version": "Qqrq+G7uktBDlaLsccl7ng=="
+  },
+  "SNTable.SortLabel.SortedAscending": {
+    "value": "Sorterat i stigande ordning.",
+    "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)",
+    "version": "LrRndbCXiDS4JMC+VCnW4A=="
+  },
+  "SNTable.SortLabel.SortedDescending": {
+    "value": "Sorterat i fallande ordning.",
+    "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)",
+    "version": "81l9u+cBWloC+4R4s9akDQ=="
+  }
+}

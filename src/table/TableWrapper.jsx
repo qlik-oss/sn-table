@@ -7,9 +7,10 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState, useRef } from 'react';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
+import TablePaginationActions from './TablePaginationActions';
 import useDidUpdateEffect from './useDidUpdateEffect';
-import { updatePage } from './cells/handle-key-press';
-import { handleResetFocus, handleNavigateTop } from './cells/handle-cell-focus';
+import { handleTableWrapperKeyDown } from './cells/handle-key-press';
+import { updateFocus, handleResetFocus, handleNavigateTop, handleFocusoutEvent } from './cells/handle-cell-focus';
 import handleScroll from './handle-scroll';
 
 const useStyles = makeStyles({
@@ -24,24 +25,28 @@ const useStyles = makeStyles({
     height: '100%',
     overflow: 'hidden',
   },
+  tablePaginationSection: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
   paginationHidden: {
     display: 'none',
   },
 });
 
 export default function TableWrapper(props) {
-  const { rootElement, tableData, setPageInfo, constraints, selectionsAPI } = props;
+  const { rootElement, tableData, setPageInfo, constraints, translator, selectionsAPI, keyboard, rect } = props;
   const { size, rows, columns } = tableData;
-  const [tableWidth, setTableWidth] = useState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
-  const [focusedCellCoord, setfocusedCellCoord] = useState([0, 0]);
+  const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
   const shouldRefocus = useRef(false);
-  const tableSection = useRef();
+  const tableSectionRef = useRef();
+  const tableWrapperRef = useRef();
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
-  const paginationFixedRpp = selectionsAPI.isModal() || tableWidth < 400;
+  const paginationFixedRpp = selectionsAPI.isModal() || rect.width < 475;
   const setShouldRefocus = () => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   };
@@ -64,74 +69,118 @@ export default function TableWrapper(props) {
   }
 
   useEffect(() => {
-    const updateSize = () => setTableWidth(rootElement.clientWidth);
-    window.addEventListener('resize', updateSize);
-    tableSection.current.addEventListener('wheel', (evt) => handleScroll(evt, tableSection));
+    const scrollCallback = (evt) => handleScroll(evt, tableSectionRef);
+    const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard.blur);
+
+    tableSectionRef.current.addEventListener('wheel', scrollCallback);
+    tableWrapperRef.current.addEventListener('focusout', focusOutCallback);
     return () => {
-      window.removeEventListener('resize', updateSize);
-      tableSection.current.removeEventListener('wheel', (evt) => handleScroll(evt, tableSection));
+      tableSectionRef.current.removeEventListener('wheel', scrollCallback);
+      tableWrapperRef.current.removeEventListener('focusout', focusOutCallback);
     };
   }, []);
 
   useEffect(() => {
     handleNavigateTop({
-      tableSection,
+      tableSectionRef,
       focusedCellCoord,
       rootElement,
     });
-  }, [tableSection, focusedCellCoord]);
+  }, [tableSectionRef, focusedCellCoord]);
 
-  // Except for first render, whenever the size of the data changes (number of rows per page, rows or columns),
+  useDidUpdateEffect(() => {
+    if (!keyboard.enabled) return;
+
+    updateFocus({
+      focusType: keyboard.active ? 'focus' : 'blur',
+      rowElements: rootElement.getElementsByClassName('sn-table-row'),
+      cellCoord: focusedCellCoord,
+    });
+  }, [keyboard.active]);
+
+  // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
   useDidUpdateEffect(() => {
     handleResetFocus({
       focusedCellCoord,
       rootElement,
       shouldRefocus,
-      setfocusedCellCoord,
+      setFocusedCellCoord,
       hasSelections: selectionsAPI.isModal(),
+      shouldAddTabstop: keyboard.active,
     });
   }, [rows.length, size.qcy, size.qcx, page]);
 
   return (
     <Paper
       className={classes.paper}
+      ref={tableWrapperRef}
       onKeyDown={(evt) =>
-        updatePage({
+        handleTableWrapperKeyDown({
           evt,
           totalRowSize: size.qcy,
           page,
           rowsPerPage,
           handleChangePage,
           setShouldRefocus,
+          keyboard,
         })
       }
     >
-      <TableContainer ref={tableSection} className={classes[containerMode]}>
-        <Table stickyHeader aria-label={`showing ${rows.length + 1} rows and ${columns.length} columns`}>
-          <TableHeadWrapper {...props} setfocusedCellCoord={setfocusedCellCoord} />
+      <TableContainer
+        ref={tableSectionRef}
+        className={classes[containerMode]}
+        tabIndex="-1"
+        data-testid="table-wrapper"
+      >
+        <Table
+          stickyHeader
+          aria-label={translator.get('SNTable.Accessibility.RowsAndColumns', [
+            `${rows.length + 1}`,
+            `${columns.length}`,
+          ])}
+        >
+          <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
           <TableBodyWrapper
             {...props}
-            setfocusedCellCoord={setfocusedCellCoord}
+            setFocusedCellCoord={setFocusedCellCoord}
             focusedCellCoord={focusedCellCoord}
             setShouldRefocus={setShouldRefocus}
           />
         </Table>
       </TableContainer>
-      <TablePagination
-        className={classes[paginationHidden]}
-        rowsPerPageOptions={paginationFixedRpp ? [rowsPerPage] : [10, 25, 100]}
-        component="div"
-        count={size.qcy}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        SelectProps={{
-          inputProps: { 'aria-label': 'rows per page', 'data-testid': 'select' },
-          native: true,
-        }}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
+      <Paper className={classes.tablePaginationSection}>
+        <TablePagination
+          className={classes[paginationHidden]}
+          rowsPerPageOptions={paginationFixedRpp ? [rowsPerPage] : [10, 25, 100]}
+          component="div"
+          count={size.qcy}
+          rowsPerPage={rowsPerPage}
+          labelRowsPerPage={translator.get('SNTable.Pagination.RowsPerPage')}
+          page={page}
+          SelectProps={{
+            inputProps: {
+              'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
+              'data-testid': 'select',
+              tabindex: keyboard.active ? '0' : '-1',
+            },
+            native: true,
+          }}
+          labelDisplayedRows={({ from, to, count }) =>
+            translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
+          }
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          ActionsComponent={() => <div>{null}</div>}
+        />
+        <TablePaginationActions
+          count={size.qcy}
+          onPageChange={handleChangePage}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          keyboardActive={keyboard.active ? '0' : '-1'}
+        />
+      </Paper>
     </Paper>
   );
 }
@@ -140,6 +189,9 @@ TableWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
+  translator: PropTypes.object.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
+  keyboard: PropTypes.object.isRequired,
+  rect: PropTypes.object.isRequired,
 };
