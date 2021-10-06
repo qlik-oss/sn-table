@@ -73,7 +73,7 @@ describe('<TableWrapper />', () => {
     expect(queryByLabelText('SNTable.Accessibility.RowsAndColumns')).to.be.visible;
     expect(queryByLabelText('SNTable.Pagination.RowsPerPage')).to.be.visible;
     expect(queryByTestId('table-wrapper')).to.has.attr('tabindex', '-1');
-    expect(queryByText(`1-${rowsPerPage} of ${tableData.size.qcy}`)).to.be.visible;
+    expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).to.be.visible;
     expect(queryByText(rowsPerPage)).to.be.visible;
   });
 
@@ -131,12 +131,12 @@ describe('<TableWrapper />', () => {
     fireEvent.click(await findByTitle('Next page'));
 
     expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
-    expect(await findByText(`101-200 of ${tableData.size.qcy}`)).to.be.visible;
+    expect(await findByText(`SNTable.Pagination.DisplayedRowsLabel`)).to.be.visible;
 
     fireEvent.click(await findByTitle('Previous page'));
 
     expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
-    expect(await findByText(`1-100 of ${tableData.size.qcy}`)).to.be.visible;
+    expect(await findByText(`SNTable.Pagination.DisplayedRowsLabel`)).to.be.visible;
   });
 
   it('should call setPageInfo when clicking last page and first page button', async () => {
@@ -155,12 +155,12 @@ describe('<TableWrapper />', () => {
     fireEvent.click(await findByTitle('Last page'));
 
     expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
-    expect(await findByText(`101-200 of ${tableData.size.qcy}`)).to.be.visible;
+    expect(await findByText(`SNTable.Pagination.DisplayedRowsLabel`)).to.be.visible;
 
     fireEvent.click(await findByTitle('First page'));
 
     expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
-    expect(await findByText(`1-100 of ${tableData.size.qcy}`)).to.be.visible;
+    expect(await findByText(`SNTable.Pagination.DisplayedRowsLabel`)).to.be.visible;
   });
 
   it('should change back to first page when not on first page and no rows', async () => {
@@ -219,7 +219,7 @@ describe('<TableWrapper />', () => {
         rect={rect}
       />
     );
-    const rppSiblingElement = queryByText(`1-${rowsPerPage} of ${tableData.size.qcy}`);
+    const rppSiblingElement = queryByText(`SNTable.Pagination.DisplayedRowsLabel`);
 
     // Can't check if rows per page is not visible, so check if parent has correct amount of child elements
     expect(rppSiblingElement.parentNode.childElementCount).to.equal(3);

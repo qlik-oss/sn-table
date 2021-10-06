@@ -136,7 +136,7 @@ export default function TableWrapper(props) {
             `${columns.length}`,
           ])}
         >
-          <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} />
+          <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
           <TableBodyWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} setShouldRefocus={setShouldRefocus} />
         </Table>
       </TableContainer>
@@ -146,7 +146,7 @@ export default function TableWrapper(props) {
         component="div"
         count={size.qcy}
         rowsPerPage={rowsPerPage}
-        labelRowsPerPage={`${translator.get('SNTable.Pagination.RowsPerPage')}:`}
+        labelRowsPerPage={translator.get('SNTable.Pagination.RowsPerPage')}
         page={page}
         SelectProps={{
           inputProps: {
@@ -155,7 +155,9 @@ export default function TableWrapper(props) {
           },
           native: true,
         }}
-        labelDisplayedRows={({ from, to, count }) => `${from}-${to} of ${count}`}
+        labelDisplayedRows={({ from, to, count }) =>
+          translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
+        }
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
         ActionsComponent={TablePaginationActions}
