@@ -15,7 +15,7 @@ const useStyles = makeStyles({
 
 export default function TablePaginationActions(props) {
   const classes = useStyles();
-  const { count, page, rowsPerPage, onPageChange, keyboardActive } = props;
+  const { count, page, rowsPerPage, onPageChange, keyboardActive, tableWidth } = props;
 
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
@@ -38,15 +38,17 @@ export default function TablePaginationActions(props) {
 
   return (
     <div className={classes.root}>
-      <IconButton
-        onClick={handleFirstPageButtonClick}
-        disabled={onFirstPage}
-        aria-label="first page"
-        title="First page"
-        tabindex={keyboardActive}
-      >
-        <FirstPageIcon />
-      </IconButton>
+      {tableWidth > 255 && (
+        <IconButton
+          onClick={handleFirstPageButtonClick}
+          disabled={onFirstPage}
+          aria-label="first page"
+          title="First page"
+          tabindex={keyboardActive}
+        >
+          <FirstPageIcon />
+        </IconButton>
+      )}
       <IconButton
         onClick={handleBackButtonClick}
         disabled={onFirstPage}
@@ -65,15 +67,17 @@ export default function TablePaginationActions(props) {
       >
         <KeyboardArrowRight />
       </IconButton>
-      <IconButton
-        onClick={handleLastPageButtonClick}
-        disabled={onLastPage}
-        aria-label="last page"
-        title="Last page"
-        tabindex={keyboardActive}
-      >
-        <LastPageIcon />
-      </IconButton>
+      {tableWidth > 255 && (
+        <IconButton
+          onClick={handleLastPageButtonClick}
+          disabled={onLastPage}
+          aria-label="last page"
+          title="Last page"
+          tabindex={keyboardActive}
+        >
+          <LastPageIcon />
+        </IconButton>
+      )}
     </div>
   );
 }
@@ -84,4 +88,5 @@ TablePaginationActions.propTypes = {
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
   keyboardActive: PropTypes.bool.isRequired,
+  tableWidth: PropTypes.number.isRequired,
 };
