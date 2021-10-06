@@ -98,6 +98,7 @@ export const handleNavigateTop = ({ tableSectionRef, focusedCellCoord, rootEleme
 export const handleFocusoutEvent = (evt, shouldRefocus, blur) => {
   if (evt.relatedTarget?.classList.contains('sel-toolbar-list-item')) {
     blur('noCallback');
+    shouldRefocus.current = true;
     return;
   }
   console.log(shouldRefocus.current);
@@ -105,5 +106,6 @@ export const handleFocusoutEvent = (evt, shouldRefocus, blur) => {
   if (!evt.currentTarget.contains(evt.relatedTarget) && !shouldRefocus.current) {
     console.log('blurring');
     blur(false);
+    shouldRefocus.current = false;
   }
 };
