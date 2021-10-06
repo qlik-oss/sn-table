@@ -11,6 +11,10 @@ const useStyles = makeStyles({
   root: {
     display: 'flex',
   },
+  disabled: {
+    color: 'rgba(0, 0, 0, 0.3)',
+    cursor: 'default',
+  },
 });
 
 export default function TablePaginationActions(props) {
@@ -39,38 +43,42 @@ export default function TablePaginationActions(props) {
   return (
     <div className={classes.root}>
       <IconButton
-        onClick={handleFirstPageButtonClick}
-        disabled={onFirstPage}
+        onClick={!onFirstPage ? handleFirstPageButtonClick : () => {}}
+        aria-disabled={onFirstPage}
         aria-label="first page"
         title="First page"
         tabindex={keyboardActive}
+        className={onFirstPage && classes.disabled}
       >
         <FirstPageIcon />
       </IconButton>
       <IconButton
-        onClick={handleBackButtonClick}
-        disabled={onFirstPage}
+        onClick={!onFirstPage ? handleBackButtonClick : () => {}}
+        aria-disabled={onFirstPage}
         aria-label="previous page"
         title="Previous page"
         tabindex={keyboardActive}
+        className={onFirstPage && classes.disabled}
       >
         <KeyboardArrowLeft />
       </IconButton>
       <IconButton
-        onClick={handleNextButtonClick}
-        disabled={onLastPage}
+        onClick={!onLastPage ? handleNextButtonClick : () => {}}
+        aria-disabled={onLastPage}
         aria-label="next page"
         title="Next page"
         tabindex={keyboardActive}
+        className={onLastPage && classes.disabled}
       >
         <KeyboardArrowRight />
       </IconButton>
       <IconButton
-        onClick={handleLastPageButtonClick}
-        disabled={onLastPage}
+        onClick={!onLastPage ? handleLastPageButtonClick : () => {}}
+        aria-disabled={onLastPage}
         aria-label="last page"
         title="Last page"
         tabindex={keyboardActive}
+        className={onLastPage && classes.disabled}
       >
         <LastPageIcon />
       </IconButton>
