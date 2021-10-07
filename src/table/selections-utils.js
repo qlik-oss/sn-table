@@ -2,6 +2,9 @@ export function addSelectionListeners(api, selDispatch, setShouldRefocus) {
   const resetSelections = () => {
     selDispatch({ type: 'reset' });
   };
+  const clearSelections = () => {
+    selDispatch({ type: 'clear' });
+  };
   const resetSelectionsAndSetupRefocus = () => {
     setShouldRefocus();
     resetSelections();
@@ -14,13 +17,13 @@ export function addSelectionListeners(api, selDispatch, setShouldRefocus) {
   api.on('deactivated', resetSelections);
   api.on('canceled', resetSelections);
   api.on('confirmed', resetSelectionsAndSetupRefocus);
-  api.on('cleared', resetSelections);
+  api.on('cleared', clearSelections);
   // Return function called on unmount
   return () => {
     api.removeListener('deactivated', resetSelections);
     api.removeListener('canceled', resetSelections);
     api.removeListener('confirmed', resetSelectionsAndSetupRefocus);
-    api.removeListener('cleared', resetSelections);
+    api.removeListener('cleared', clearSelections);
   };
 }
 
@@ -32,6 +35,8 @@ export function reducer(state, action) {
       return { ...state, rows, colIdx };
     case 'reset':
       return state.rows.length ? { ...state, rows: [], colIdx: -1 } : state;
+    case 'clear':
+      return state.rows.length ? { ...state, rows: [] } : state;
     case 'set-enabled':
       return { ...state, isEnabled };
     default:

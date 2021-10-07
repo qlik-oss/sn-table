@@ -74,9 +74,11 @@ export default function TableWrapper(props) {
 
     tableSectionRef.current.addEventListener('wheel', scrollCallback);
     tableWrapperRef.current.addEventListener('focusout', focusOutCallback);
+    // paginationRef.current.addEventListener('focusin', setShouldRefocus);
     return () => {
       tableSectionRef.current.removeEventListener('wheel', scrollCallback);
       tableWrapperRef.current.removeEventListener('focusout', focusOutCallback);
+      // paginationRef.current.removeEventListener('focusin', setShouldRefocus);
     };
   }, []);
 
@@ -89,17 +91,11 @@ export default function TableWrapper(props) {
   }, [tableSectionRef, focusedCellCoord]);
 
   useDidUpdateEffect(() => {
-    const isSelToolbar = document.activeElement.classList.contains('sel-toolbar-list-item');
-    if (!keyboard.enabled || (isSelToolbar && !keyboard.active)) {
-      return;
-    }
-
     updateFocus({
       focusType: keyboard.active ? 'focus' : 'blur',
       rowElements: rootElement.getElementsByClassName('sn-table-row'),
       cellCoord: focusedCellCoord,
     });
-    selectionsAPI.isModal() && setShouldRefocus();
   }, [keyboard.active]);
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
