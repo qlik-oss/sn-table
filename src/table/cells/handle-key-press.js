@@ -18,6 +18,7 @@ export const handleTableWrapperKeyDown = ({
   keyboard,
   isSelectionActive,
 }) => {
+  console.log('>>> evt on WRAPPER');
   if (isCtrlShift(evt)) {
     const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
 
@@ -100,6 +101,7 @@ export const headHandleKeyPress = (
   isAnalysisMode,
   setFocusedCellCoord
 ) => {
+  console.log('>>> evt on HEAD');
   switch (evt.key) {
     case 'ArrowDown':
     case 'ArrowRight':
@@ -129,6 +131,7 @@ export const bodyHandleKeyPress = (
   isAnalysisMode,
   setFocusedCellCoord
 ) => {
+  console.log('>>> evt on BODY');
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
