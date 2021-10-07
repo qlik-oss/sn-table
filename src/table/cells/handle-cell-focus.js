@@ -1,5 +1,3 @@
-export const findCellWithTabStop = (rootElement) => rootElement.querySelector("td[tabindex='0'], th[tabindex='0']");
-
 // get the object, find the confirm buttons parent and focus that element
 export const focusConfirmButton = (rootElement) =>
   rootElement.closest('.qv-object-wrapper')?.querySelector('.sel-toolbar-confirm')?.parentElement?.focus();

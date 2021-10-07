@@ -105,8 +105,7 @@ function TableBodyWrapper({
                       cell,
                       selDispatch,
                       selectionsEnabled,
-                      setFocusedCellCoord,
-                      keyboard
+                      setFocusedCellCoord
                     )
                   }
                   onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}

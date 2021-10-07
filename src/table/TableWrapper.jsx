@@ -91,6 +91,8 @@ export default function TableWrapper(props) {
   }, [tableSectionRef, focusedCellCoord]);
 
   useDidUpdateEffect(() => {
+    if (!keyboard.enabled) return;
+
     updateFocus({
       focusType: keyboard.active ? 'focus' : 'blur',
       rowElements: rootElement.getElementsByClassName('sn-table-row'),

@@ -1,5 +1,5 @@
 import { selectCell } from '../selections-utils';
-import { updateFocus, focusConfirmButton } from './handle-cell-focus';
+import { updateFocus } from './handle-cell-focus';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -149,19 +149,14 @@ export const bodyHandleKeyPress = (
       break;
     }
     // Esc: Cancels selections. If no selections, do nothing and handleTableWrapperKeyDown should catch it
-    case 'Escape': {
-      if (!isAnalysisMode || !selState.api.isModal()) break;
-      preventDefaultBehavior(evt);
-      selState.api.cancel();
-      break;
-    }
-    case 'Tab': {
-      if (evt.shiftKey && selState.rows.length) {
+    case 'Escape':
+      {
+        if (!isAnalysisMode || !selState.api.isModal()) break;
         preventDefaultBehavior(evt);
-        focusConfirmButton(rootElement);
+        selState.api.cancel();
+        break;
       }
-      break;
-    }
+      st;
     default:
       break;
   }
