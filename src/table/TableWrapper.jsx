@@ -174,6 +174,7 @@ export default function TableWrapper(props) {
           page={page}
           rowsPerPage={rowsPerPage}
           keyboardActive={keyboard.active ? '0' : '-1'}
+          translator={translator}
         />
       </Paper>
     </Paper>
