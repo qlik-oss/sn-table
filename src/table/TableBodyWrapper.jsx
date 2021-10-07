@@ -40,6 +40,7 @@ function TableBodyWrapper({
   rootElement,
   tableData,
   constraints,
+  translator,
   selectionsAPI,
   layout,
   theme,
@@ -73,8 +74,8 @@ function TableBodyWrapper({
   }, []);
 
   useEffect(() => {
-    setSrNotation(getCellSrNotation({ focusedCellCoord, rootElement, selState }));
-  }, [focusedCellCoord, selState]);
+    setSrNotation(getCellSrNotation({ focusedCellCoord, rootElement, selState, translator }));
+  }, [focusedCellCoord, selState, translator]);
 
   return (
     <>

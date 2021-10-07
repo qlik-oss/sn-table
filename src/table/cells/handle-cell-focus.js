@@ -89,14 +89,16 @@ export const handleNavigateTop = ({ tableSectionRef, focusedCellCoord, rootEleme
   }
 };
 
-export const getCellSelectionStatusNote = (rows) =>
-  rows.length === 1 ? 'There is 1 selected value currently' : `There are ${rows.length} selected values currently`;
+export const getCellSelectionStatusNote = (rows, translator) =>
+  rows.length === 1
+    ? translator.get('SNTable.SelectionLabel.OneSelectedValue')
+    : translator.get('SNTable.SelectionLabel.SelectedValues', [rows.length]);
 
 export const getMemoisedSrNotation = (prevCount = 0) => {
   let prevSelectedCount = prevCount || 0;
   let hasJunkChar = 0;
 
-  return ({ focusedCellCoord, rootElement, selState }) => {
+  return ({ focusedCellCoord, rootElement, selState, translator }) => {
     if (!focusedCellCoord || focusedCellCoord[0] === 0) return '';
 
     const [rowIdx, colIdx] = focusedCellCoord;
@@ -108,20 +110,20 @@ export const getMemoisedSrNotation = (prevCount = 0) => {
     let notation = '';
 
     if (selState.rows.length) {
-      const selectionNote = getCellSelectionStatusNote(selState.rows);
+      const selectionNote = getCellSelectionStatusNote(selState.rows, translator);
 
       if (prevSelectedCount < selState.rows.length) {
         // if we select cell
-        notation += `value is selected. ${selectionNote}`;
+        notation += `${translator.get('SNTable.SelectionLabel.SelectedValue')} ${selectionNote}`;
       } else if (prevSelectedCount > selState.rows.length) {
         // if we deselect cell
-        notation += `value is deselected. ${selectionNote}`;
+        notation += `${translator.get('SNTable.SelectionLabel.DeselectedValue')} ${selectionNote}`;
       } else if (isCellSelected) {
         // if we are in selection mode and move to selected cell
-        notation += 'value is selected';
+        notation += translator.get('SNTable.SelectionLabel.SelectedValue');
       } else {
         // if we are in selection mode and move to unselected cell
-        notation += 'value is not selected';
+        notation += translator.get('SNTable.SelectionLabel.NotSelectedValue');
       }
 
       // Junk char addition
@@ -129,7 +131,7 @@ export const getMemoisedSrNotation = (prevCount = 0) => {
       hasJunkChar++;
     } else if (selState.rows.length === 0 && prevSelectedCount > 0) {
       // if we deselect last (selected) cell which means we close the selection mode
-      notation += 'value deselected and exited selection mode.';
+      notation += translator.get('SNTable.SelectionLabel.ExitedSelectionMode');
     }
 
     prevSelectedCount = selState.rows.length;

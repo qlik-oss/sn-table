@@ -7,6 +7,7 @@ describe('handle-key-press', () => {
   let focusedCellCoord;
   let setFocusedCellCoord;
   let keyboard;
+  let translator;
 
   beforeEach(() => {
     cell = { focus: sinon.spy(), blur: sinon.spy(), setAttribute: sinon.spy() };
@@ -17,6 +18,7 @@ describe('handle-key-press', () => {
     focusedCellCoord = [0, 0];
     setFocusedCellCoord = sinon.spy();
     keyboard = { focus: sinon.spy() };
+    translator = { get: (s) => s };
   });
 
   afterEach(() => {
@@ -278,14 +280,14 @@ describe('handle-key-press', () => {
 
     it('should return singular notation for array with single item', () => {
       rows = [1];
-      const result = handleCellFocus.getCellSelectionStatusNote(rows);
-      expect(result).to.equal('There is 1 selected value currently');
+      const result = handleCellFocus.getCellSelectionStatusNote(rows, translator);
+      expect(result).to.equal('SNTable.SelectionLabel.OneSelectedValue');
     });
 
     it('should return plural notation for arrays with multiple items', () => {
       rows = [1, 2, 3];
-      const result = handleCellFocus.getCellSelectionStatusNote(rows);
-      expect(result).to.equal(`There are ${rows.length} selected values currently`);
+      const result = handleCellFocus.getCellSelectionStatusNote(rows, translator);
+      expect(result).to.equal(`SNTable.SelectionLabel.SelectedValues`);
     });
   });
 
@@ -300,7 +302,7 @@ describe('handle-key-press', () => {
 
     it('should return empty string while we are in first row', () => {
       focusedCellCoord = [0, 1];
-      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState });
+      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState, translator });
 
       expect(notation).to.equal('');
     });
@@ -308,7 +310,7 @@ describe('handle-key-press', () => {
     it('should return empty string while there is no selected items', () => {
       selState = { rows: [] };
       focusedCellCoord = [1, 1];
-      const notatino = getCellSrNotation({ focusedCellCoord, rootElement, selState });
+      const notatino = getCellSrNotation({ focusedCellCoord, rootElement, selState, translator });
 
       expect(notatino).to.equal('');
     });
@@ -318,9 +320,9 @@ describe('handle-key-press', () => {
       selState = { rows: ['row#01', 'row#02'] };
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation(1);
 
-      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState });
+      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState, translator });
 
-      expect(notation).to.equal('value is selected. There are 2 selected values currently');
+      expect(notation).to.equal('SNTable.SelectionLabel.SelectedValue SNTable.SelectionLabel.SelectedValues');
     });
 
     it('should be able to deselect previously selected value', () => {
@@ -328,9 +330,9 @@ describe('handle-key-press', () => {
       selState = { rows: ['row#01', 'row#02'] };
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation(3);
 
-      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState });
+      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState, translator });
 
-      expect(notation).to.equal('value is deselected. There are 2 selected values currently');
+      expect(notation).to.equal('SNTable.SelectionLabel.DeselectedValue SNTable.SelectionLabel.SelectedValues');
     });
 
     it('should be able to detect if cell has been selected while changing the focus to cell if we are in selection mode', () => {
@@ -343,9 +345,9 @@ describe('handle-key-press', () => {
         getElementsByClassName: () => [{}, { getElementsByClassName: () => [null, cell] }],
       };
 
-      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState });
+      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState, translator });
 
-      expect(notation).to.equal('value is selected');
+      expect(notation).to.equal('SNTable.SelectionLabel.SelectedValue');
     });
 
     it('should be able to detect if cell has not been selected while changing the focus to cell if we are in selection mode', () => {
@@ -353,9 +355,9 @@ describe('handle-key-press', () => {
       selState = { rows: ['row#01', 'row#02'] };
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation(2);
 
-      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState });
+      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState, translator });
 
-      expect(notation).to.equal('value is not selected');
+      expect(notation).to.equal('SNTable.SelectionLabel.NotSelectedValue');
     });
 
     it('should convey selection exited when we deselect very last selected cell in column', () => {
@@ -363,9 +365,9 @@ describe('handle-key-press', () => {
       selState = { rows: [] };
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation(1);
 
-      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState });
+      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState, translator });
 
-      expect(notation).to.equal('value deselected and exited selection mode.');
+      expect(notation).to.equal('SNTable.SelectionLabel.ExitedSelectionMode');
     });
   });
 
