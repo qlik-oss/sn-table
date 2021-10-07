@@ -82,6 +82,12 @@ describe('selections-utils', () => {
       expect(newState).to.eql({ ...state, rows: [], colIdx: -1 });
     });
 
+    it('should return state updated with rows when action.type is clear', () => {
+      action.type = 'clear';
+      const newState = reducer(state, action);
+      expect(newState).to.eql({ ...state, rows: [] });
+    });
+
     it('should return state unchanged when rows and colIdx are already reset and action.type is reset', () => {
       state.rows = [];
       state.colIdx = -1;
