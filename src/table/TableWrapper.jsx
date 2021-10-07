@@ -124,6 +124,7 @@ export default function TableWrapper(props) {
           handleChangePage,
           setShouldRefocus,
           keyboard,
+          isSelectionActive: selectionsAPI.isModal(),
         })
       }
     >
@@ -179,6 +180,7 @@ export default function TableWrapper(props) {
           page={page}
           rowsPerPage={rowsPerPage}
           keyboardActive={keyboard.active ? '0' : '-1'}
+          translator={translator}
         />
       </Paper>
     </Paper>
