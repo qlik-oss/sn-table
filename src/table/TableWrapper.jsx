@@ -141,7 +141,12 @@ export default function TableWrapper(props) {
           ])}
         >
           <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
-          <TableBodyWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} setShouldRefocus={setShouldRefocus} />
+          <TableBodyWrapper
+            {...props}
+            setFocusedCellCoord={setFocusedCellCoord}
+            setShouldRefocus={setShouldRefocus}
+            tableWrapperRef={tableWrapperRef}
+          />
         </Table>
       </TableContainer>
       <Paper className={classes.tablePaginationSection}>
