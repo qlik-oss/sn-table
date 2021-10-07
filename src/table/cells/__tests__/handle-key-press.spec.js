@@ -492,6 +492,8 @@ describe('handle-key-press', () => {
     let rowsPerPage;
     let handleChangePage;
     let setShouldRefocus;
+    let keyboard;
+    let isSelectionActive;
 
     beforeEach(() => {
       evt = {
@@ -567,11 +569,34 @@ describe('handle-key-press', () => {
         stopPropagation: sinon.spy(),
         preventDefault: sinon.spy(),
       };
-      const keyboard = { enabled: true, blur: sinon.spy() };
+      keyboard = { enabled: true, blur: sinon.spy() };
       handleTableWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus, keyboard });
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(keyboard.blur).to.have.been.calledOnceWith(true);
+    });
+
+    it('should ignore keyboard.blur while we are focusing on the pagination and pressing Esc key', () => {
+      evt = {
+        key: 'Escape',
+        stopPropagation: sinon.spy(),
+        preventDefault: sinon.spy(),
+      };
+      keyboard = { enabled: true, blur: sinon.spy() };
+      isSelectionActive = true;
+      handleTableWrapperKeyDown({
+        evt,
+        totalRowSize,
+        page,
+        rowsPerPage,
+        handleChangePage,
+        setShouldRefocus,
+        keyboard,
+        isSelectionActive,
+      });
+      expect(evt.preventDefault).to.not.have.been.calledOnce;
+      expect(evt.stopPropagation).to.not.have.been.calledOnce;
+      expect(keyboard.blur).to.not.have.been.calledOnce;
     });
   });
 });

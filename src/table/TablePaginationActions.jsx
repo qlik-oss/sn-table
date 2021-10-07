@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 
 export default function TablePaginationActions(props) {
   const classes = useStyles();
-  const { count, page, rowsPerPage, onPageChange, keyboardActive } = props;
+  const { count, page, rowsPerPage, onPageChange, keyboardActive, translator } = props;
 
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
@@ -45,8 +45,8 @@ export default function TablePaginationActions(props) {
       <IconButton
         onClick={!onFirstPage ? handleFirstPageButtonClick : () => {}}
         aria-disabled={onFirstPage}
-        aria-label="first page"
-        title="First page"
+        aria-label={translator.get('SNTable.Pagination.FirstPage')}
+        title={translator.get('SNTable.Pagination.FirstPage')}
         tabindex={keyboardActive}
         className={onFirstPage && classes.disabled}
       >
@@ -55,8 +55,8 @@ export default function TablePaginationActions(props) {
       <IconButton
         onClick={!onFirstPage ? handleBackButtonClick : () => {}}
         aria-disabled={onFirstPage}
-        aria-label="previous page"
-        title="Previous page"
+        aria-label={translator.get('SNTable.Pagination.PreviousPage')}
+        title={translator.get('SNTable.Pagination.PreviousPage')}
         tabindex={keyboardActive}
         className={onFirstPage && classes.disabled}
       >
@@ -65,8 +65,8 @@ export default function TablePaginationActions(props) {
       <IconButton
         onClick={!onLastPage ? handleNextButtonClick : () => {}}
         aria-disabled={onLastPage}
-        aria-label="next page"
-        title="Next page"
+        aria-label={translator.get('SNTable.Pagination.NextPage')}
+        title={translator.get('SNTable.Pagination.NextPage')}
         tabindex={keyboardActive}
         className={onLastPage && classes.disabled}
       >
@@ -75,8 +75,8 @@ export default function TablePaginationActions(props) {
       <IconButton
         onClick={!onLastPage ? handleLastPageButtonClick : () => {}}
         aria-disabled={onLastPage}
-        aria-label="last page"
-        title="Last page"
+        aria-label={translator.get('SNTable.Pagination.LastPage')}
+        title={translator.get('SNTable.Pagination.LastPage')}
         tabindex={keyboardActive}
         className={onLastPage && classes.disabled}
       >
@@ -92,4 +92,5 @@ TablePaginationActions.propTypes = {
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
   keyboardActive: PropTypes.bool.isRequired,
+  translator: PropTypes.object.isRequired,
 };
