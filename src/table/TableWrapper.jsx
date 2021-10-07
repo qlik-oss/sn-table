@@ -46,7 +46,7 @@ export default function TableWrapper(props) {
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
-  const paginationFixedRpp = selectionsAPI.isModal() || rect.width < 475;
+  const paginationFixedRpp = selectionsAPI.isModal() || rect.width < 550;
   const setShouldRefocus = () => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   };
@@ -162,7 +162,7 @@ export default function TableWrapper(props) {
             native: true,
           }}
           labelDisplayedRows={({ from, to, count }) =>
-            rect.width > 165 && translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
+            rect.width > 250 && translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
           }
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}

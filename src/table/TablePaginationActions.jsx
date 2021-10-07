@@ -38,7 +38,7 @@ export default function TablePaginationActions(props) {
 
   return (
     <div className={classes.root}>
-      {tableWidth > 255 && (
+      {tableWidth > 350 && (
         <IconButton
           onClick={handleFirstPageButtonClick}
           disabled={onFirstPage}
@@ -67,7 +67,7 @@ export default function TablePaginationActions(props) {
       >
         <KeyboardArrowRight />
       </IconButton>
-      {tableWidth > 255 && (
+      {tableWidth > 350 && (
         <IconButton
           onClick={handleLastPageButtonClick}
           disabled={onLastPage}
