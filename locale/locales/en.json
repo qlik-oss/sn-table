@@ -7,6 +7,10 @@
     "value": "Rows per page",
     "comment": "label for the rows per page dropdown. (tew 210929)"
   },
+  "SNTable.Pagination.DisplayedRowsLabel": {
+    "value": "{0} of {1}",
+    "comment": "label for the displayed rows, e.g. '1-100 of 234' (tew 211004)"
+  },
   "SNTable.Pagination.FirstPage": {
     "value": "First page",
     "comment": "tooltip and aria-label for the first page button. (tew 210929)"
