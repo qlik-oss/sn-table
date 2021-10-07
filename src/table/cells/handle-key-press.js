@@ -149,14 +149,12 @@ export const bodyHandleKeyPress = (
       break;
     }
     // Esc: Cancels selections. If no selections, do nothing and handleTableWrapperKeyDown should catch it
-    case 'Escape':
-      {
-        if (!isAnalysisMode || !selState.api.isModal()) break;
-        preventDefaultBehavior(evt);
-        selState.api.cancel();
-        break;
-      }
-      st;
+    case 'Escape': {
+      if (!isAnalysisMode || !selState.api.isModal()) break;
+      preventDefaultBehavior(evt);
+      selState.api.cancel();
+      break;
+    }
     default:
       break;
   }

@@ -74,11 +74,9 @@ export default function TableWrapper(props) {
 
     tableSectionRef.current.addEventListener('wheel', scrollCallback);
     tableWrapperRef.current.addEventListener('focusout', focusOutCallback);
-    // paginationRef.current.addEventListener('focusin', setShouldRefocus);
     return () => {
       tableSectionRef.current.removeEventListener('wheel', scrollCallback);
       tableWrapperRef.current.removeEventListener('focusout', focusOutCallback);
-      // paginationRef.current.removeEventListener('focusin', setShouldRefocus);
     };
   }, []);
 
