@@ -16,6 +16,7 @@ export const handleTableWrapperKeyDown = ({
   handleChangePage,
   setShouldRefocus,
   keyboard,
+  isSelectionActive,
 }) => {
   if (isCtrlShift(evt)) {
     const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
@@ -27,7 +28,7 @@ export const handleTableWrapperKeyDown = ({
       setShouldRefocus();
       handleChangePage(null, page - 1);
     }
-  } else if (evt.key === 'Escape' && keyboard.enabled) {
+  } else if (evt.key === 'Escape' && keyboard.enabled && !isSelectionActive) {
     preventDefaultBehavior(evt);
     keyboard.blur(true);
   }
@@ -156,7 +157,7 @@ export const bodyHandleKeyPress = (
       break;
     }
     case 'Tab': {
-      if (evt.shiftKey && selState.rows.length) {
+      if (evt.shiftKey && selState.api.isModal()) {
         preventDefaultBehavior(evt);
         focusConfirmButton(rootElement);
       }

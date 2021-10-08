@@ -47,7 +47,7 @@ describe('<TableWrapper />', () => {
     keyboard = { enabled: false, active: false };
     translator = { get: (s) => s };
     rect = {
-      width: 475,
+      width: 551,
     };
   });
 
@@ -128,12 +128,12 @@ describe('<TableWrapper />', () => {
         rect={rect}
       />
     );
-    fireEvent.click(await findByTitle('Next page'));
+    fireEvent.click(await findByTitle('SNTable.Pagination.NextPage'));
 
     expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
     expect(await findByText(`SNTable.Pagination.DisplayedRowsLabel`)).to.be.visible;
 
-    fireEvent.click(await findByTitle('Previous page'));
+    fireEvent.click(await findByTitle('SNTable.Pagination.PreviousPage'));
 
     expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
     expect(await findByText(`SNTable.Pagination.DisplayedRowsLabel`)).to.be.visible;
@@ -152,12 +152,12 @@ describe('<TableWrapper />', () => {
         rect={rect}
       />
     );
-    fireEvent.click(await findByTitle('Last page'));
+    fireEvent.click(await findByTitle('SNTable.Pagination.LastPage'));
 
     expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
     expect(await findByText(`SNTable.Pagination.DisplayedRowsLabel`)).to.be.visible;
 
-    fireEvent.click(await findByTitle('First page'));
+    fireEvent.click(await findByTitle('SNTable.Pagination.FirstPage'));
 
     expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
     expect(await findByText(`SNTable.Pagination.DisplayedRowsLabel`)).to.be.visible;
@@ -179,7 +179,7 @@ describe('<TableWrapper />', () => {
     // This is a hack to simulate when selections are made on other page than first page and
     // rows per page is bigger than the selected rows -> handle data returns no rows.
     tableData.rows = [];
-    fireEvent.click(await findByTitle('Next page'));
+    fireEvent.click(await findByTitle('SNTable.Pagination.NextPage'));
 
     // Called when pressing the button
     expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
