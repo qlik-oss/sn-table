@@ -1,5 +1,5 @@
 import { selectCell } from '../selections-utils';
-import { updateFocus } from './handle-cell-focus';
+import { updateFocus, focusConfirmButton } from './handle-cell-focus';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -16,6 +16,7 @@ export const handleTableWrapperKeyDown = ({
   handleChangePage,
   setShouldRefocus,
   keyboard,
+  isSelectionActive,
 }) => {
   if (isCtrlShift(evt)) {
     const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
@@ -27,7 +28,7 @@ export const handleTableWrapperKeyDown = ({
       setShouldRefocus();
       handleChangePage(null, page - 1);
     }
-  } else if (evt.key === 'Escape' && keyboard.enabled) {
+  } else if (evt.key === 'Escape' && keyboard.enabled && !isSelectionActive) {
     preventDefaultBehavior(evt);
     keyboard.blur(true);
   }
@@ -153,6 +154,13 @@ export const bodyHandleKeyPress = (
       if (!isAnalysisMode || !selState.api.isModal()) break;
       preventDefaultBehavior(evt);
       selState.api.cancel();
+      break;
+    }
+    case 'Tab': {
+      if (evt.shiftKey && selState.api.isModal()) {
+        preventDefaultBehavior(evt);
+        focusConfirmButton(rootElement);
+      }
       break;
     }
     default:
