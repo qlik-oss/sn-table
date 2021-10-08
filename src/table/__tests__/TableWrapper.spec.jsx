@@ -56,7 +56,7 @@ describe('<TableWrapper />', () => {
     sinon.resetHistory();
   });
 
-  it.only('should render table', () => {
+  it('should render table', () => {
     const { queryByLabelText, queryByText, queryByTestId } = render(
       <TableWrapper
         tableData={tableData}

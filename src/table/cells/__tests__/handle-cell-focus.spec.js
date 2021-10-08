@@ -294,15 +294,23 @@ describe('handle-key-press', () => {
   describe('getCellSrNotation', () => {
     let selState;
     let getCellSrNotation;
+    let isActiveElementInTable;
 
     beforeEach(() => {
       selState = { rows: [1, 2] };
+      isActiveElementInTable = true;
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation();
     });
 
     it('should return empty string while we are in first row', () => {
       focusedCellCoord = [0, 1];
-      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState, translator });
+      const notation = getCellSrNotation({
+        focusedCellCoord,
+        rootElement,
+        selState,
+        translator,
+        isActiveElementInTable,
+      });
 
       expect(notation).to.equal('');
     });
@@ -310,7 +318,28 @@ describe('handle-key-press', () => {
     it('should return empty string while there is no selected items', () => {
       selState = { rows: [] };
       focusedCellCoord = [1, 1];
-      const notatino = getCellSrNotation({ focusedCellCoord, rootElement, selState, translator });
+      const notatino = getCellSrNotation({
+        focusedCellCoord,
+        rootElement,
+        selState,
+        translator,
+        isActiveElementInTable,
+      });
+
+      expect(notatino).to.equal('');
+    });
+
+    it('should return empty string when focused cell is not in the table', () => {
+      selState = { rows: [] };
+      focusedCellCoord = [1, 1];
+      isActiveElementInTable = false;
+      const notatino = getCellSrNotation({
+        focusedCellCoord,
+        rootElement,
+        selState,
+        translator,
+        isActiveElementInTable,
+      });
 
       expect(notatino).to.equal('');
     });
@@ -320,7 +349,13 @@ describe('handle-key-press', () => {
       selState = { rows: ['row#01', 'row#02'] };
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation(1);
 
-      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState, translator });
+      const notation = getCellSrNotation({
+        focusedCellCoord,
+        rootElement,
+        selState,
+        translator,
+        isActiveElementInTable,
+      });
 
       expect(notation).to.equal('SNTable.SelectionLabel.SelectedValue SNTable.SelectionLabel.SelectedValues');
     });
@@ -330,7 +365,13 @@ describe('handle-key-press', () => {
       selState = { rows: ['row#01', 'row#02'] };
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation(3);
 
-      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState, translator });
+      const notation = getCellSrNotation({
+        focusedCellCoord,
+        rootElement,
+        selState,
+        translator,
+        isActiveElementInTable,
+      });
 
       expect(notation).to.equal('SNTable.SelectionLabel.DeselectedValue SNTable.SelectionLabel.SelectedValues');
     });
@@ -345,7 +386,13 @@ describe('handle-key-press', () => {
         getElementsByClassName: () => [{}, { getElementsByClassName: () => [null, cell] }],
       };
 
-      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState, translator });
+      const notation = getCellSrNotation({
+        focusedCellCoord,
+        rootElement,
+        selState,
+        translator,
+        isActiveElementInTable,
+      });
 
       expect(notation).to.equal('SNTable.SelectionLabel.SelectedValue');
     });
@@ -355,7 +402,13 @@ describe('handle-key-press', () => {
       selState = { rows: ['row#01', 'row#02'] };
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation(2);
 
-      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState, translator });
+      const notation = getCellSrNotation({
+        focusedCellCoord,
+        rootElement,
+        selState,
+        translator,
+        isActiveElementInTable,
+      });
 
       expect(notation).to.equal('SNTable.SelectionLabel.NotSelectedValue');
     });
@@ -365,7 +418,13 @@ describe('handle-key-press', () => {
       selState = { rows: [] };
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation(1);
 
-      const notation = getCellSrNotation({ focusedCellCoord, rootElement, selState, translator });
+      const notation = getCellSrNotation({
+        focusedCellCoord,
+        rootElement,
+        selState,
+        translator,
+        isActiveElementInTable,
+      });
 
       expect(notation).to.equal('SNTable.SelectionLabel.ExitedSelectionMode');
     });

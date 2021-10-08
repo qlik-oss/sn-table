@@ -48,6 +48,7 @@ function TableBodyWrapper({
   setFocusedCellCoord,
   focusedCellCoord,
   keyboard,
+  isActiveElementInTable,
 }) {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
@@ -74,8 +75,16 @@ function TableBodyWrapper({
   }, []);
 
   useEffect(() => {
-    setSrNotation(getCellSrNotation({ focusedCellCoord, rootElement, selState, translator }));
-  }, [focusedCellCoord, selState, translator]);
+    setSrNotation(
+      getCellSrNotation({
+        focusedCellCoord,
+        rootElement,
+        selState,
+        translator,
+        isActiveElementInTable,
+      })
+    );
+  }, [focusedCellCoord, selState, translator, isActiveElementInTable]);
 
   return (
     <>
@@ -144,6 +153,7 @@ TableBodyWrapper.propTypes = {
   setFocusedCellCoord: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
   keyboard: PropTypes.func.isRequired,
+  isActiveElementInTable: PropTypes.bool.isRequired,
 };
 
 export default TableBodyWrapper;

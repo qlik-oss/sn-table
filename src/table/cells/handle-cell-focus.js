@@ -98,8 +98,8 @@ export const getMemoisedSrNotation = (prevCount = 0) => {
   let prevSelectedCount = prevCount || 0;
   let hasJunkChar = 0;
 
-  return ({ focusedCellCoord, rootElement, selState, translator }) => {
-    if (!focusedCellCoord || focusedCellCoord[0] === 0) return '';
+  return ({ focusedCellCoord, rootElement, selState, translator, isActiveElementInTable }) => {
+    if (!focusedCellCoord || focusedCellCoord[0] === 0 || !isActiveElementInTable) return '';
 
     const [rowIdx, colIdx] = focusedCellCoord;
     const rowElements = rootElement.getElementsByClassName('sn-table-row');
