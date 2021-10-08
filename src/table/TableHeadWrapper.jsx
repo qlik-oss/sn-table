@@ -43,20 +43,20 @@ function TableHeadWrapper({
 }) {
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
-  const SORT_NOTATIONS = useMemo(() => ({
-    asc: translator.get('SNTable.SortLabel.SortedAscending'),
-    desc: translator.get('SNTable.SortLabel.SortedDescending'),
-  }));
+  // const SORT_NOTATIONS = useMemo(() => ({
+  //   asc: translator.get('SNTable.SortLabel.SortedAscending'),
+  //   desc: translator.get('SNTable.SortLabel.SortedDescending'),
+  // }));
 
   return (
     <TableHead>
       <TableRow className="sn-table-row">
         {tableData.columns.map((column, columnIndex) => {
           const tabIndex = columnIndex === 0 && !keyboard.enabled ? '0' : '-1';
-          const currentSortDir = SORT_NOTATIONS[column.sortDirection];
+          // const currentSortDir = SORT_NOTATIONS[column.sortDirection];
           const isCurrentColumnActive =
             layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === tableData.columnOrder[columnIndex];
-          const isFocusInHead = focusedCellCoord[0] === 0;
+          // const isFocusInHead = focusedCellCoord[0] === 0;
 
           return (
             <TableCell
@@ -64,6 +64,8 @@ function TableHeadWrapper({
               align={column.align}
               className={`${classes.head} sn-table-head-cell sn-table-cell`}
               tabIndex={tabIndex}
+              aria-sort={isCurrentColumnActive ? `${column.sortDirection}ending` : null}
+              aria-pressed={isCurrentColumnActive}
               onKeyDown={(e) =>
                 headHandleKeyPress(
                   e,
@@ -83,9 +85,8 @@ function TableHeadWrapper({
             >
               <TableSortLabel active={isCurrentColumnActive} direction={column.sortDirection} tabIndex={-1}>
                 {column.label}
-                {isFocusInHead && (
+                {isCurrentColumnActive && (
                   <span className={classes.visuallyHidden} data-testid={`VHL-for-col-${columnIndex}`}>
-                    {isCurrentColumnActive && `${currentSortDir} `}
                     {translator.get('SNTable.SortLabel.PressSpaceToSort')}
                   </span>
                 )}
