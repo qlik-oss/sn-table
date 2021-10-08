@@ -148,9 +148,10 @@ export default function TableWrapper(props) {
           <TableBodyWrapper
             {...props}
             isActiveElementInTable={tableSectionRef.current?.contains(activeElement)}
-            setFocusedCellCoord={setFocusedCellCoord}
             focusedCellCoord={focusedCellCoord}
+            setFocusedCellCoord={setFocusedCellCoord}
             setShouldRefocus={setShouldRefocus}
+            tableWrapperRef={tableWrapperRef}
           />
         </Table>
       </TableContainer>
@@ -184,6 +185,7 @@ export default function TableWrapper(props) {
           page={page}
           rowsPerPage={rowsPerPage}
           keyboardActive={keyboard.active ? '0' : '-1'}
+          isInSelectionMode={selectionsAPI.isModal()}
           tableWidth={rect.width}
           translator={translator}
         />

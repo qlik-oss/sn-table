@@ -1,9 +1,15 @@
-export function addSelectionListeners(api, selDispatch, setShouldRefocus) {
+export function addSelectionListeners(api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef) {
   const resetSelections = () => {
     selDispatch({ type: 'reset' });
   };
   const resetSelectionsAndSetupRefocus = () => {
-    setShouldRefocus();
+    // if there is focus in the chart, set shouldRefocus so that we should either focus or just set the tabstop, after data has reloaded.
+    // if there is no focus on the chart, make sure we blur and focus the entire chart
+    if (tableWrapperRef.current?.contains(document.activeElement)) {
+      setShouldRefocus();
+    } else {
+      keyboard.blur(true);
+    }
     resetSelections();
   };
 

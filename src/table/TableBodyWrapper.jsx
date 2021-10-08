@@ -49,6 +49,7 @@ function TableBodyWrapper({
   focusedCellCoord,
   keyboard,
   isActiveElementInTable,
+  tableWrapperRef,
 }) {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
@@ -71,7 +72,7 @@ function TableBodyWrapper({
   }, [selectionsEnabled, columns.length]);
 
   useEffect(() => {
-    addSelectionListeners(selectionsAPI, selDispatch, setShouldRefocus);
+    addSelectionListeners(selectionsAPI, selDispatch, setShouldRefocus, keyboard, tableWrapperRef);
   }, []);
 
   useEffect(() => {
@@ -154,6 +155,7 @@ TableBodyWrapper.propTypes = {
   setShouldRefocus: PropTypes.func.isRequired,
   keyboard: PropTypes.func.isRequired,
   isActiveElementInTable: PropTypes.bool.isRequired,
+  tableWrapperRef: PropTypes.object.isRequired,
 };
 
 export default TableBodyWrapper;
