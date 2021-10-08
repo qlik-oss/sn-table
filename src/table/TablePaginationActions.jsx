@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 
 export default function TablePaginationActions(props) {
   const classes = useStyles();
-  const { count, page, rowsPerPage, onPageChange, keyboardActive, translator } = props;
+  const { count, page, rowsPerPage, onPageChange, keyboardActive, tableWidth, translator } = props;
 
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
@@ -42,16 +42,18 @@ export default function TablePaginationActions(props) {
 
   return (
     <div className={classes.root}>
-      <IconButton
-        onClick={!onFirstPage ? handleFirstPageButtonClick : () => {}}
-        aria-disabled={onFirstPage}
-        aria-label={translator.get('SNTable.Pagination.FirstPage')}
-        title={translator.get('SNTable.Pagination.FirstPage')}
-        tabindex={keyboardActive}
-        className={onFirstPage && classes.disabled}
-      >
-        <FirstPageIcon />
-      </IconButton>
+      {tableWidth > 350 && (
+        <IconButton
+          onClick={!onFirstPage ? handleFirstPageButtonClick : () => {}}
+          aria-disabled={onFirstPage}
+          aria-label={translator.get('SNTable.Pagination.FirstPage')}
+          title={translator.get('SNTable.Pagination.FirstPage')}
+          tabindex={keyboardActive}
+          className={onFirstPage && classes.disabled}
+        >
+          <FirstPageIcon />
+        </IconButton>
+      )}
       <IconButton
         onClick={!onFirstPage ? handleBackButtonClick : () => {}}
         aria-disabled={onFirstPage}
@@ -72,16 +74,18 @@ export default function TablePaginationActions(props) {
       >
         <KeyboardArrowRight />
       </IconButton>
-      <IconButton
-        onClick={!onLastPage ? handleLastPageButtonClick : () => {}}
-        aria-disabled={onLastPage}
-        aria-label={translator.get('SNTable.Pagination.LastPage')}
-        title={translator.get('SNTable.Pagination.LastPage')}
-        tabindex={keyboardActive}
-        className={onLastPage && classes.disabled}
-      >
-        <LastPageIcon />
-      </IconButton>
+      {tableWidth > 350 && (
+        <IconButton
+          onClick={!onLastPage ? handleLastPageButtonClick : () => {}}
+          aria-disabled={onLastPage}
+          aria-label={translator.get('SNTable.Pagination.LastPage')}
+          title={translator.get('SNTable.Pagination.LastPage')}
+          tabindex={keyboardActive}
+          className={onLastPage && classes.disabled}
+        >
+          <LastPageIcon />
+        </IconButton>
+      )}
     </div>
   );
 }
@@ -92,5 +96,6 @@ TablePaginationActions.propTypes = {
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
   keyboardActive: PropTypes.bool.isRequired,
+  tableWidth: PropTypes.number.isRequired,
   translator: PropTypes.object.isRequired,
 };
