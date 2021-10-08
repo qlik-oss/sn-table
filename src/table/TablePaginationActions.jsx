@@ -1,11 +1,12 @@
+import PropTypes from 'prop-types';
+import React from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import { makeStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { focusConfirmButton } from './cells/handle-cell-focus';
 
 const useStyles = makeStyles({
   root: {
@@ -19,7 +20,7 @@ const useStyles = makeStyles({
 
 export default function TablePaginationActions(props) {
   const classes = useStyles();
-  const { count, page, rowsPerPage, onPageChange, keyboardActive, tableWidth, translator } = props;
+  const { count, page, rowsPerPage, onPageChange, keyboardActive, tableWidth, translator, isInSelectionMode } = props;
 
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
@@ -35,6 +36,14 @@ export default function TablePaginationActions(props) {
 
   const handleLastPageButtonClick = (event) => {
     onPageChange(event, Math.ceil(count / rowsPerPage) - 1);
+  };
+
+  const lastPageTabHandle = (event) => {
+    if (isInSelectionMode && event.key === 'Tab' && !event.shiftKey) {
+      event.stopPropagation();
+      event.preventDefault();
+      focusConfirmButton(event.target);
+    }
   };
 
   const onFirstPage = page === 0;
@@ -71,6 +80,7 @@ export default function TablePaginationActions(props) {
         title={translator.get('SNTable.Pagination.NextPage')}
         tabindex={keyboardActive}
         className={onLastPage && classes.disabled}
+        onKeyDown={tableWidth <= 350 && lastPageTabHandle}
       >
         <KeyboardArrowRight />
       </IconButton>
@@ -82,6 +92,7 @@ export default function TablePaginationActions(props) {
           title={translator.get('SNTable.Pagination.LastPage')}
           tabindex={keyboardActive}
           className={onLastPage && classes.disabled}
+          onKeyDown={lastPageTabHandle}
         >
           <LastPageIcon />
         </IconButton>
@@ -96,6 +107,7 @@ TablePaginationActions.propTypes = {
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
   keyboardActive: PropTypes.bool.isRequired,
+  isInSelectionMode: PropTypes.bool.isRequired,
   tableWidth: PropTypes.number.isRequired,
   translator: PropTypes.object.isRequired,
 };

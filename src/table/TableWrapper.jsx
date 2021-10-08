@@ -142,7 +142,12 @@ export default function TableWrapper(props) {
           ])}
         >
           <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
-          <TableBodyWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} setShouldRefocus={setShouldRefocus} />
+          <TableBodyWrapper
+            {...props}
+            setFocusedCellCoord={setFocusedCellCoord}
+            setShouldRefocus={setShouldRefocus}
+            tableWrapperRef={tableWrapperRef}
+          />
         </Table>
       </TableContainer>
       <Paper className={classes.tablePaginationSection}>
@@ -175,6 +180,7 @@ export default function TableWrapper(props) {
           page={page}
           rowsPerPage={rowsPerPage}
           keyboardActive={keyboard.active ? '0' : '-1'}
+          isInSelectionMode={selectionsAPI.isModal()}
           tableWidth={rect.width}
           translator={translator}
         />
