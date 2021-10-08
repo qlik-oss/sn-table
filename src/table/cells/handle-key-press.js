@@ -16,6 +16,7 @@ export const handleTableWrapperKeyDown = ({
   handleChangePage,
   setShouldRefocus,
   keyboard,
+  isSelectionActive,
 }) => {
   if (isCtrlShift(evt)) {
     const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
@@ -27,7 +28,7 @@ export const handleTableWrapperKeyDown = ({
       setShouldRefocus();
       handleChangePage(null, page - 1);
     }
-  } else if (evt.key === 'Escape' && keyboard.enabled) {
+  } else if (evt.key === 'Escape' && keyboard.enabled && !isSelectionActive) {
     preventDefaultBehavior(evt);
     keyboard.blur(true);
   }
