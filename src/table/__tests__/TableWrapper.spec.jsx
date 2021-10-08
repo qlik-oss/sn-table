@@ -40,7 +40,6 @@ describe('<TableWrapper />', () => {
     modal = false;
     rootElement = {
       getElementsByClassName: () => [],
-      clientHeight: {},
       getElementsByTagName: () => [{ clientHeight: {}, contains: sinon.spy() }],
       querySelector: () => {},
     };
@@ -77,26 +76,6 @@ describe('<TableWrapper />', () => {
     expect(queryByText(rowsPerPage)).to.be.visible;
   });
 
-  it('should not render rows per page section in table', () => {
-    rect = {
-      width: 474,
-    };
-    const { queryByLabelText } = render(
-      <TableWrapper
-        tableData={tableData}
-        setPageInfo={setPageInfo}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        rootElement={rootElement}
-        keyboard={keyboard}
-        translator={translator}
-        rect={rect}
-      />
-    );
-
-    expect(queryByLabelText('SNTable.RowsPerPage')).to.be.a('null');
-  });
-
   it('should call handleTableWrapperKeyDown when press control key on the table', () => {
     const { queryByLabelText } = render(
       <TableWrapper
@@ -115,8 +94,8 @@ describe('<TableWrapper />', () => {
     expect(handleKeyPress.handleTableWrapperKeyDown).to.have.been.calledOnce;
   });
 
-  it('should call setPageInfo when clicking next page and previous page button', async () => {
-    const { findByTitle, findByText } = render(
+  it('should call setPageInfo when changing rows per page', async () => {
+    const { getByTestId } = render(
       <TableWrapper
         tableData={tableData}
         setPageInfo={setPageInfo}
@@ -128,39 +107,8 @@ describe('<TableWrapper />', () => {
         rect={rect}
       />
     );
-    fireEvent.click(await findByTitle('SNTable.Pagination.NextPage'));
-
-    expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
-    expect(await findByText(`SNTable.Pagination.DisplayedRowsLabel`)).to.be.visible;
-
-    fireEvent.click(await findByTitle('SNTable.Pagination.PreviousPage'));
-
-    expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
-    expect(await findByText(`SNTable.Pagination.DisplayedRowsLabel`)).to.be.visible;
-  });
-
-  it('should call setPageInfo when clicking last page and first page button', async () => {
-    const { findByTitle, findByText } = render(
-      <TableWrapper
-        tableData={tableData}
-        setPageInfo={setPageInfo}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        rootElement={rootElement}
-        keyboard={keyboard}
-        translator={translator}
-        rect={rect}
-      />
-    );
-    fireEvent.click(await findByTitle('SNTable.Pagination.LastPage'));
-
-    expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
-    expect(await findByText(`SNTable.Pagination.DisplayedRowsLabel`)).to.be.visible;
-
-    fireEvent.click(await findByTitle('SNTable.Pagination.FirstPage'));
-
-    expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
-    expect(await findByText(`SNTable.Pagination.DisplayedRowsLabel`)).to.be.visible;
+    fireEvent.change(getByTestId('select'), { target: { value: 25 } });
+    expect(setPageInfo).to.have.been.calledWith({ top: 0, height: 25 });
   });
 
   it('should change back to first page when not on first page and no rows', async () => {
@@ -187,8 +135,11 @@ describe('<TableWrapper />', () => {
     expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
   });
 
-  it('should call setPageInfo when changing rows per page', async () => {
-    const { getByTestId } = render(
+  it('should not render rows per page section in table when width smaller than 550', () => {
+    rect = {
+      width: 474,
+    };
+    const { queryByLabelText } = render(
       <TableWrapper
         tableData={tableData}
         setPageInfo={setPageInfo}
@@ -200,8 +151,8 @@ describe('<TableWrapper />', () => {
         rect={rect}
       />
     );
-    fireEvent.change(getByTestId('select'), { target: { value: 25 } });
-    expect(setPageInfo).to.have.been.calledWith({ top: 0, height: 25 });
+
+    expect(queryByLabelText('SNTable.RowsPerPage')).to.be.a('null');
   });
 
   it('should not show rows per page when selectionsAPI.isModal() returns true', async () => {

@@ -1,3 +1,4 @@
+import { expect } from 'chai';
 import {
   getRowAndColumnCount,
   arrowKeysNavigation,
@@ -5,6 +6,8 @@ import {
   headHandleKeyPress,
   handleTableWrapperKeyDown,
 } from '../handle-key-press';
+
+import * as handleCellFocus from '../handle-cell-focus';
 
 describe('handle-key-press', () => {
   describe('arrowKeysNavigation', () => {
@@ -149,10 +152,12 @@ describe('handle-key-press', () => {
     let selDispatch;
     let isAnalysisMode;
     let setFocusedCellCoord;
+    let isModal;
 
     beforeEach(() => {
       rowIndex = 0;
       colIndex = 0;
+      isModal = false;
       evt = {
         key: 'ArrowDown',
         stopPropagation: sinon.spy(),
@@ -171,6 +176,7 @@ describe('handle-key-press', () => {
           cancel: sinon.spy(),
           begin: sinon.spy(),
           select: sinon.spy(),
+          isModal: () => isModal,
         },
         rows: [],
         colIdx: -1,
@@ -179,6 +185,12 @@ describe('handle-key-press', () => {
       selDispatch = sinon.spy();
       isAnalysisMode = true;
       setFocusedCellCoord = sinon.spy();
+      sinon.stub(handleCellFocus, 'focusConfirmButton').returns(sinon.spy());
+    });
+
+    afterEach(() => {
+      sinon.verifyAndRestore();
+      sinon.resetHistory();
     });
 
     it('when press arrow-down key, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
@@ -337,6 +349,37 @@ describe('handle-key-press', () => {
       expect(evt.stopPropagation).not.have.been.called;
       expect(selState.api.cancel).not.have.been.called;
       expect(setFocusedCellCoord).to.not.have.been.called;
+    });
+
+    it('when shift + tab is pressed should prevent defualt and call focusConfirmButton', () => {
+      evt.key = 'Tab';
+      evt.shiftKey = true;
+      isModal = true;
+
+      bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], selState, cell, selDispatch, setFocusedCellCoord);
+      expect(evt.preventDefault).have.been.calledOnce;
+      expect(evt.stopPropagation).have.been.calledOnce;
+      expect(handleCellFocus.focusConfirmButton).to.have.been.calledOnce;
+    });
+
+    it('when only tab is pressed should not prevent defualt nor call focusConfirmButton', () => {
+      evt.key = 'Tab';
+      isModal = true;
+
+      bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], selState, cell, selDispatch, setFocusedCellCoord);
+      expect(evt.preventDefault).to.not.have.been.calledOnce;
+      expect(evt.stopPropagation).to.not.have.been.calledOnce;
+      expect(handleCellFocus.focusConfirmButton).to.not.have.been.called;
+    });
+
+    it('when shift + tab is pressed but not in selection mode, should not prevent defualt nor call focusConfirmButton', () => {
+      evt.key = 'Tab';
+      evt.shiftKey = true;
+
+      bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], selState, cell, selDispatch, setFocusedCellCoord);
+      expect(evt.preventDefault).to.not.have.been.calledOnce;
+      expect(evt.stopPropagation).to.not.have.been.calledOnce;
+      expect(handleCellFocus.focusConfirmButton).to.not.have.been.called;
     });
 
     it('when other keys are pressed, should not do anything', () => {
