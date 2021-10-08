@@ -47,7 +47,7 @@ describe('<TableWrapper />', () => {
     keyboard = { enabled: false, active: false };
     translator = { get: (s) => s };
     rect = {
-      width: 475,
+      width: 551,
     };
   });
 
