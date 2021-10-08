@@ -16,7 +16,7 @@ const useStyles = makeStyles({
 
 export default function TablePaginationActions(props) {
   const classes = useStyles();
-  const { count, page, rowsPerPage, onPageChange, keyboardActive } = props;
+  const { count, page, rowsPerPage, onPageChange, keyboardActive, isInSelectionMode } = props;
 
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
@@ -35,7 +35,7 @@ export default function TablePaginationActions(props) {
   };
 
   const lastPageTabHandle = (event) => {
-    if (event.key === 'Tab' && !event.shiftKey) {
+    if (isInSelectionMode && event.key === 'Tab' && !event.shiftKey) {
       event.stopPropagation();
       event.preventDefault();
       focusConfirmButton(event.target);
@@ -94,4 +94,5 @@ TablePaginationActions.propTypes = {
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
   keyboardActive: PropTypes.bool.isRequired,
+  isInSelectionMode: PropTypes.bool.isRequired,
 };
