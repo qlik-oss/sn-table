@@ -132,6 +132,7 @@ export default function TableWrapper(props) {
         ref={tableSectionRef}
         className={classes[containerMode]}
         tabIndex="-1"
+        role="application"
         data-testid="table-wrapper"
       >
         <Table
