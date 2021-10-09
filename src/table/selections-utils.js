@@ -39,8 +39,9 @@ export function reducer(state, action) {
   switch (action.type) {
     case 'select':
       return { ...state, rows, colIdx };
-    case 'reset':
-      return state.rows.length ? { ...state, rows: [], colIdx: -1 } : state;
+    case 'reset': {
+      return state.api.isModal() ? state : { ...state, rows: [], colIdx: -1 };
+    }
     case 'clear':
       return state.rows.length ? { ...state, rows: [] } : state;
     case 'set-enabled':
