@@ -88,7 +88,9 @@ describe('selections-utils', () => {
       state = {
         rows: [{ qElemNumber: 1, rowIdx: 1 }],
         colIdx: 1,
-        api: {},
+        api: {
+          isModal: () => false,
+        },
         isEnabled: false,
       };
       action = {
@@ -105,7 +107,7 @@ describe('selections-utils', () => {
       expect(newState).to.eql({ ...state, rows: expectedRows });
     });
 
-    it('should return state updated with rows and colIdx reset when action.type is reset', () => {
+    it('should return state updated when the app is not in selection modal state  when action.type is reset', () => {
       action.type = 'reset';
       const newState = reducer(state, action);
       expect(newState).to.eql({ ...state, rows: [], colIdx: -1 });
@@ -117,10 +119,9 @@ describe('selections-utils', () => {
       expect(newState).to.eql({ ...state, rows: [] });
     });
 
-    it('should return state unchanged when rows and colIdx are already reset and action.type is reset', () => {
-      state.rows = [];
-      state.colIdx = -1;
+    it('should return state unchanged when the app is in selection modal state and action.type is reset', () => {
       action.type = 'reset';
+      state.api.isModal = () => true;
       const newState = reducer(state, action);
       expect(newState).to.equal(state);
     });
