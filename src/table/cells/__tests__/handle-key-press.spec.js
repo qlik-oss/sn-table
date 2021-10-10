@@ -501,6 +501,8 @@ describe('handle-key-press', () => {
         ctrlKey: true,
         metaKey: true,
         key: 'ArrowRight',
+        stopPropagation: () => {},
+        preventDefault: () => {},
       };
       handleChangePage = sinon.spy();
       setShouldRefocus = sinon.spy();
