@@ -171,6 +171,7 @@ describe('handle-key-press', () => {
           cancel: sinon.spy(),
           begin: sinon.spy(),
           select: sinon.spy(),
+          isModal: () => true,
         },
         rows: [],
         colIdx: -1,
@@ -181,7 +182,7 @@ describe('handle-key-press', () => {
       setFocusedCellCoord = sinon.spy();
     });
 
-    it('when press arrow-down key, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
+    it('when press arrow down key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
       bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], selState, null, null, false, setFocusedCellCoord);
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
@@ -382,7 +383,7 @@ describe('handle-key-press', () => {
       setFocusedCellCoord = sinon.spy();
     });
 
-    it('when press arrow down key, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
+    it('when press arrow down key on head cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
       headHandleKeyPress(evt, rootElement, [rowIndex, colIndex], null, null, null, false, setFocusedCellCoord);
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
