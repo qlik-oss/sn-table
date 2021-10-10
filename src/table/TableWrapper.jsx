@@ -49,6 +49,7 @@ export default function TableWrapper(props) {
   const paginationHidden = constraints.active && 'paginationHidden';
   const paginationFixedRpp = selectionsAPI.isModal() || rect.width < 550;
   const activeElement = useActiveElement();
+
   const setShouldRefocus = () => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   };
