@@ -181,7 +181,7 @@ describe('handle-key-press', () => {
         rows: [],
         colIdx: -1,
       };
-      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1, isDim: true };
+      cell = { qElemNumber: 1, colIddx: 1, rowIdx: 1, isDim: true };
       selDispatch = sinon.spy();
       isAnalysisMode = true;
       setFocusedCellCoord = sinon.spy();
@@ -193,7 +193,7 @@ describe('handle-key-press', () => {
       sinon.resetHistory();
     });
 
-    it('when press arrow-down key, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
+    it('when press arrow down key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
       bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], selState, null, null, false, setFocusedCellCoord);
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
@@ -303,6 +303,7 @@ describe('handle-key-press', () => {
     });
 
     it('when press cancel key, should cancel selection', () => {
+      isModal = true;
       evt.key = 'Escape';
       selState.rows = [{}];
       bodyHandleKeyPress(
@@ -322,6 +323,7 @@ describe('handle-key-press', () => {
     });
 
     it('when press cancel key not in analysis mode, should not cancel selection', () => {
+      isModal = true;
       evt.key = 'Escape';
       isAnalysisMode = false;
       bodyHandleKeyPress(
@@ -425,7 +427,7 @@ describe('handle-key-press', () => {
       setFocusedCellCoord = sinon.spy();
     });
 
-    it('when press arrow down key, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
+    it('when press arrow down key on head cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
       headHandleKeyPress(evt, rootElement, [rowIndex, colIndex], null, null, null, false, setFocusedCellCoord);
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
@@ -544,6 +546,8 @@ describe('handle-key-press', () => {
         ctrlKey: true,
         metaKey: true,
         key: 'ArrowRight',
+        stopPropagation: () => {},
+        preventDefault: () => {},
       };
       handleChangePage = sinon.spy();
       setShouldRefocus = sinon.spy();
