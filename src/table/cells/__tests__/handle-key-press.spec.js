@@ -181,7 +181,7 @@ describe('handle-key-press', () => {
         rows: [],
         colIdx: -1,
       };
-      cell = { qElemNumber: 1, colIddx: 1, rowIdx: 1, isDim: true };
+      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1, isDim: true };
       selDispatch = sinon.spy();
       isAnalysisMode = true;
       setFocusedCellCoord = sinon.spy();
