@@ -108,17 +108,6 @@ const validate = (pkg, dir) => {
     throw new Error('Missing README.md file');
   }
 
-  // make sure no mention of qlik-trial or @qlik
-  if (/@qlik/.test(cleanedPkg)) {
-    throw new Error('package.json may not contain any mention of @qlik');
-  }
-  if (/qlik-trial/.test(cleanedPkg)) {
-    throw new Error('package.json may not contain any mention of qlik-trial');
-  }
-  if (/jfrog|qliktech/.test(cleanedPkg)) {
-    throw new Error('package.json may not contain any mention of qliktech or jfrog');
-  }
-
   return cleanedPkg;
 };
 
