@@ -1,6 +1,91 @@
 {
-    "SNTable.RowsPerPage": {
-        "value": "rows per page",
-        "comment": "the number of rows per page"
-    }
+  "SNTable.Accessibility.RowsAndColumns": {
+    "value": "Показаны строки ({0}) и столбцы ({1}).",
+    "comment": "number of rows and columns announced by the screen reader. (tew 210929)",
+    "version": "HKjzXNhL9hPs/kFY0XyjTQ=="
+  },
+  "SNTable.Pagination.FirstPage": {
+    "value": "Первая страница",
+    "comment": "tooltip and aria-label for the first page button. (tew 210929)",
+    "version": "vp2MW/tPZq4FsBw+3qknqA=="
+  },
+  "SNTable.Pagination.DisplayedRowsLabel": {
+    "value": "{0} из {1}",
+    "comment": "label for the displayed rows, e.g. '1-100 of 234' (tew 211004)"
+  },
+  "SNTable.Pagination.LastPage": {
+    "value": "Последняя страница",
+    "comment": "tooltip and aria-label for the last page button. (tew 210929)",
+    "version": "9lUogxKZctLBgLYSNmpyPA=="
+  },
+  "SNTable.Pagination.NextPage": {
+    "value": "Следующая страница",
+    "comment": "tooltip and aria-label for the next page button. (tew 210929)",
+    "version": "YyUO+qPBjWcn7zy0bpXeFw=="
+  },
+  "SNTable.Pagination.PreviousPage": {
+    "value": "Предыдущая страница",
+    "comment": "tooltip and aria-label for the previous page button. (tew 210929)",
+    "version": "3IinXJOsZ4CCBrNYsg4U5A=="
+  },
+  "SNTable.Pagination.RowsPerPage": {
+    "value": "Строк на странице",
+    "comment": "label for the rows per page dropdown. (tew 210929)",
+    "version": "zuWpMmMSoOG/QRsKoVx3OA=="
+  },
+  "SNTable.SelectionLabel.DeselectedValue": {
+    "value": "Выбор значения отменен.",
+    "comment": "announced by screen readers  when a value is deselected. (tew 210929)",
+    "version": "/NL1c53TDjc2dhooLWg1WA=="
+  },
+  "SNTable.SelectionLabel.ExitedSelectionMode": {
+    "value": "Выбор значения отменен. Выполнен выход из режима выборки.",
+    "comment": "Announced by screen readers when deselecting and no values are selecting, causing the the chart to exit selection mode. (tew 210929)",
+    "version": "A4NCF1GIsCVwVg0MjPHUqw=="
+  },
+  "SNTable.SelectionLabel.NotSelectedValue": {
+    "value": "Значение не выбрано.",
+    "comment": "announced by screen readers when focus is on an unselected value. (tew 210929)",
+    "version": "oj/qLPcfANXpS2oVVUzTdQ=="
+  },
+  "SNTable.SelectionLabel.OneSelectedValue": {
+    "value": "В настоящее время выбрано одно значение.",
+    "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)",
+    "version": "5llYYux+meuJItZE6XJhcQ=="
+  },
+  "SNTable.SelectionLabel.SelectedValue": {
+    "value": "Значение выбрано.",
+    "comment": "announced by screen readers when a value is selected. (tew 210929)",
+    "version": "ZJO4WnSdc7Wk5mDyEj4hug=="
+  },
+  "SNTable.SelectionLabel.SelectedValues": {
+    "value": "В настоящее время выбраны значения: {0}.",
+    "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)",
+    "version": "58lPVnscmLNuN+pvnPhkYA=="
+  },
+  "SNTable.SelectionLabel.SelectionsConfirmed": {
+    "value": "Выборки подтверждены.",
+    "comment": "announced by screen readers when selections are confirmed. (tew 210929)",
+    "version": "g2xbBOIYPMUM0bFIQp5hDg=="
+  },
+  "SNTable.SelectionLabel.selected": {
+    "value": "Выбрано",
+    "comment": "announced by screen readers for a selected value. (tew 210929)",
+    "version": "57xiDyOBQ0x8VcdHGd5tzg=="
+  },
+  "SNTable.SortLabel.PressSpaceToSort": {
+    "value": "Нажмите пробел, чтобы отсортировать по этому столбцу",
+    "comment": "instructions for sorting, announced by screen readers. (tew 210929)",
+    "version": "Qqrq+G7uktBDlaLsccl7ng=="
+  },
+  "SNTable.SortLabel.SortedAscending": {
+    "value": "Сортировка в порядке возрастания.",
+    "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)",
+    "version": "LrRndbCXiDS4JMC+VCnW4A=="
+  },
+  "SNTable.SortLabel.SortedDescending": {
+    "value": "Сортировка в порядке убывания.",
+    "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)",
+    "version": "81l9u+cBWloC+4R4s9akDQ=="
+  }
 }
