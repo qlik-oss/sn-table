@@ -5,10 +5,15 @@ import {
   useModel,
   useState,
   useConstraints,
+  useTranslator,
   useSelections,
   useTheme,
   usePromise,
+  useKeyboard,
+  useRect,
 } from '@nebula.js/stardust';
+import locale from '../locale/src';
+
 import properties from './object-properties';
 import data from './data';
 import ext from './ext';
@@ -30,8 +35,11 @@ export default function supernova(env) {
       const layout = useStaleLayout();
       const model = useModel();
       const constraints = useConstraints();
+      const translator = useTranslator();
       const selectionsAPI = useSelections();
       const theme = useTheme();
+      const keyboard = useKeyboard();
+      const rect = useRect();
 
       const [pageInfo, setPageInfo] = useState(() => ({ top: 0, height: 100 }));
       const [muiParameters] = useState(() => muiSetup());
@@ -39,6 +47,7 @@ export default function supernova(env) {
 
       useEffect(() => {
         if (layout && tableData) {
+          locale(translator);
           const changeSortOrder = sortingFactory(model, tableData.columnOrder);
           render(rootElement, {
             rootElement,
@@ -46,13 +55,24 @@ export default function supernova(env) {
             tableData,
             setPageInfo,
             constraints,
+            translator,
             selectionsAPI,
             muiParameters,
             theme,
             changeSortOrder,
+            keyboard,
+            rect,
           });
         }
-      }, [tableData, constraints, selectionsAPI.isModal(), theme.name()]);
+      }, [
+        tableData,
+        constraints,
+        selectionsAPI.isModal(),
+        theme.name(),
+        keyboard.active,
+        translator.language(),
+        rect.width,
+      ]);
 
       useEffect(
         () => () => {

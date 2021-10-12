@@ -97,9 +97,9 @@ export function getColumnStyle(styling, qAttrExps, stylingInfo) {
 }
 
 export function getSelectionColors(background = STYLING_DEFAULTS.WHITE, cell, selState) {
-  const { colIdx, rows } = selState;
+  const { colIdx, rows, api } = selState;
 
-  if (rows.length) {
+  if (api.isModal()) {
     if (colIdx !== cell.colIdx) {
       return { background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${background}` };
     }

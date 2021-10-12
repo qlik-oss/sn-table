@@ -1,12 +1,26 @@
 import { selectCell } from '../selections-utils';
-import { updateFocus } from './handle-cell-focus';
+import { updateFocus, focusConfirmButton } from './handle-cell-focus';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
-export const updatePage = ({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus }) => {
-  if (isCtrlShift(evt)) {
-    const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
+export const preventDefaultBehavior = (evt) => {
+  evt.stopPropagation();
+  evt.preventDefault();
+};
 
+export const handleTableWrapperKeyDown = ({
+  evt,
+  totalRowSize,
+  page,
+  rowsPerPage,
+  handleChangePage,
+  setShouldRefocus,
+  keyboard,
+  isSelectionActive,
+}) => {
+  if (isCtrlShift(evt)) {
+    preventDefaultBehavior(evt);
+    const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
     if (evt.key === 'ArrowRight' && page < lastPage) {
       setShouldRefocus();
       handleChangePage(null, page + 1);
@@ -14,23 +28,26 @@ export const updatePage = ({ evt, totalRowSize, page, rowsPerPage, handleChangeP
       setShouldRefocus();
       handleChangePage(null, page - 1);
     }
+  } else if (evt.key === 'Escape' && keyboard.enabled && !isSelectionActive) {
+    preventDefaultBehavior(evt);
+    keyboard.blur(true);
   }
 };
 
 export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, selState) => {
   let [nextRow, nextCol] = cellCoord;
   // check if you have unconfirmed selections, so one or more cells are selected but not confirmed yet.
-  const hasUnconfirmedSelection = selState && selState.rows.length > 0;
+  const isInSelectionMode = selState?.api?.isModal();
 
   switch (evt.key) {
     case 'ArrowDown':
       nextRow + 1 < rowAndColumnCount.rowCount && nextRow++;
       break;
     case 'ArrowUp':
-      nextRow > 0 && (!hasUnconfirmedSelection || nextRow !== 1) && nextRow--;
+      nextRow > 0 && (!isInSelectionMode || nextRow !== 1) && nextRow--;
       break;
     case 'ArrowRight':
-      if (hasUnconfirmedSelection) break;
+      if (isInSelectionMode) break;
       if (nextCol < rowAndColumnCount.columnCount - 1) {
         nextCol++;
       } else if (nextRow < rowAndColumnCount.rowCount - 1) {
@@ -39,7 +56,7 @@ export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, selState)
       }
       break;
     case 'ArrowLeft':
-      if (hasUnconfirmedSelection) break;
+      if (isInSelectionMode) break;
       if (nextCol > 0) {
         nextCol--;
       } else if (nextRow > 0) {
@@ -64,23 +81,13 @@ export const getRowAndColumnCount = (rootElement) => {
   return { rowElements, rowCount, columnCount };
 };
 
-export const removeCurrentFocus = (evt) => {
-  evt.target.blur();
-  evt.target.setAttribute('tabIndex', '-1');
-};
-
-export const preventDefaultBehavior = (evt) => {
-  evt.stopPropagation();
-  evt.preventDefault();
-};
-
-export const moveFocus = (evt, rootElement, cellCoord, selState, setfocusedCellCoord) => {
+export const moveFocus = (evt, rootElement, cellCoord, selState, setFocusedCellCoord) => {
   preventDefaultBehavior(evt);
-  removeCurrentFocus(evt);
+  evt.target.setAttribute('tabIndex', '-1');
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
   const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selState);
-  updateFocus({ rowElements: rowAndColumnCount.rowElements, cellCoord: nextCellCoord });
-  setfocusedCellCoord(nextCellCoord);
+  updateFocus({ focusType: 'focus', rowElements: rowAndColumnCount.rowElements, cellCoord: nextCellCoord });
+  setFocusedCellCoord(nextCellCoord);
 };
 
 export const headHandleKeyPress = (
@@ -91,13 +98,13 @@ export const headHandleKeyPress = (
   layout,
   isDim,
   isAnalysisMode,
-  setfocusedCellCoord
+  setFocusedCellCoord
 ) => {
   switch (evt.key) {
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, false, setfocusedCellCoord);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, false, setFocusedCellCoord);
       break;
     }
     // Space bar / Enter: update the sorting
@@ -120,14 +127,14 @@ export const bodyHandleKeyPress = (
   cell,
   selDispatch,
   isAnalysisMode,
-  setfocusedCellCoord
+  setFocusedCellCoord
 ) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, selState, setfocusedCellCoord);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, selState, setFocusedCellCoord);
       break;
     }
     // Space bar: Selects value.
@@ -142,10 +149,18 @@ export const bodyHandleKeyPress = (
       isAnalysisMode && selState.api.confirm();
       break;
     }
-    // Esc: Cancels selections
+    // Esc: Cancels selections. If no selections, do nothing and handleTableWrapperKeyDown should catch it
     case 'Escape': {
+      if (!isAnalysisMode || !selState.api.isModal()) break;
       preventDefaultBehavior(evt);
-      isAnalysisMode && selState.api.cancel();
+      selState.api.cancel();
+      break;
+    }
+    case 'Tab': {
+      if (evt.shiftKey && selState.api.isModal()) {
+        preventDefaultBehavior(evt);
+        focusConfirmButton(rootElement);
+      }
       break;
     }
     default:

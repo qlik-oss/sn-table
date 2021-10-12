@@ -28,7 +28,9 @@ describe('<TableBodyWrapper />', async () => {
 
     tableData = await manageData(model, generateLayout(1, 1), { top: 0, height: 100 });
     constraints = {};
-    selectionsAPI = {};
+    selectionsAPI = {
+      isModal: () => true,
+    };
     theme = {
       getColorPickerColor: () => {},
       name: () => {},
@@ -66,7 +68,7 @@ describe('<TableBodyWrapper />', async () => {
     expect(queryByText(tableData.rows[1]['col-1'].qText)).to.be.visible;
   });
 
-  it('should call bodyHandleKeyPress on keyDown', () => {
+  it('should call bodyHandleKeyPress on key down', () => {
     sinon.stub(handleKeyPress, 'bodyHandleKeyPress').returns(sinon.spy());
 
     const { queryByText } = render(
