@@ -1,1 +1,91 @@
-{}
+{
+  "SNTable.Accessibility.RowsAndColumns": {
+    "value": "{0} 行 {1} 列を表示しています。",
+    "comment": "number of rows and columns announced by the screen reader. (tew 210929)",
+    "version": "HKjzXNhL9hPs/kFY0XyjTQ=="
+  },
+  "SNTable.Pagination.FirstPage": {
+    "value": "最初のページ",
+    "comment": "tooltip and aria-label for the first page button. (tew 210929)",
+    "version": "vp2MW/tPZq4FsBw+3qknqA=="
+  },
+  "SNTable.Pagination.DisplayedRowsLabel": {
+    "value": "{0} / {1}",
+    "comment": "label for the displayed rows, e.g. '1-100 of 234' (tew 211004)"
+  },
+  "SNTable.Pagination.LastPage": {
+    "value": "最後のページ",
+    "comment": "tooltip and aria-label for the last page button. (tew 210929)",
+    "version": "9lUogxKZctLBgLYSNmpyPA=="
+  },
+  "SNTable.Pagination.NextPage": {
+    "value": "次のページ",
+    "comment": "tooltip and aria-label for the next page button. (tew 210929)",
+    "version": "YyUO+qPBjWcn7zy0bpXeFw=="
+  },
+  "SNTable.Pagination.PreviousPage": {
+    "value": "前のページ",
+    "comment": "tooltip and aria-label for the previous page button. (tew 210929)",
+    "version": "3IinXJOsZ4CCBrNYsg4U5A=="
+  },
+  "SNTable.Pagination.RowsPerPage": {
+    "value": "ページあたりの行数",
+    "comment": "label for the rows per page dropdown. (tew 210929)",
+    "version": "zuWpMmMSoOG/QRsKoVx3OA=="
+  },
+  "SNTable.SelectionLabel.DeselectedValue": {
+    "value": "値が選択解除されました。",
+    "comment": "announced by screen readers  when a value is deselected. (tew 210929)",
+    "version": "/NL1c53TDjc2dhooLWg1WA=="
+  },
+  "SNTable.SelectionLabel.ExitedSelectionMode": {
+    "value": "値が選択解除されました。選択モードを終了しました。",
+    "comment": "Announced by screen readers when deselecting and no values are selecting, causing the the chart to exit selection mode. (tew 210929)",
+    "version": "A4NCF1GIsCVwVg0MjPHUqw=="
+  },
+  "SNTable.SelectionLabel.NotSelectedValue": {
+    "value": "値が選択されていません。",
+    "comment": "announced by screen readers when focus is on an unselected value. (tew 210929)",
+    "version": "oj/qLPcfANXpS2oVVUzTdQ=="
+  },
+  "SNTable.SelectionLabel.OneSelectedValue": {
+    "value": "現在、値が 1 つ選択されています。",
+    "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)",
+    "version": "5llYYux+meuJItZE6XJhcQ=="
+  },
+  "SNTable.SelectionLabel.SelectedValue": {
+    "value": "値が選択されました。",
+    "comment": "announced by screen readers when a value is selected. (tew 210929)",
+    "version": "ZJO4WnSdc7Wk5mDyEj4hug=="
+  },
+  "SNTable.SelectionLabel.SelectedValues": {
+    "value": "現在、値が {0} つ選択されています。",
+    "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)",
+    "version": "58lPVnscmLNuN+pvnPhkYA=="
+  },
+  "SNTable.SelectionLabel.SelectionsConfirmed": {
+    "value": "選択が確定されました。",
+    "comment": "announced by screen readers when selections are confirmed. (tew 210929)",
+    "version": "g2xbBOIYPMUM0bFIQp5hDg=="
+  },
+  "SNTable.SelectionLabel.selected": {
+    "value": "選択済み",
+    "comment": "announced by screen readers for a selected value. (tew 210929)",
+    "version": "57xiDyOBQ0x8VcdHGd5tzg=="
+  },
+  "SNTable.SortLabel.PressSpaceToSort": {
+    "value": "スペース キーを押して、この列をソートします",
+    "comment": "instructions for sorting, announced by screen readers. (tew 210929)",
+    "version": "Qqrq+G7uktBDlaLsccl7ng=="
+  },
+  "SNTable.SortLabel.SortedAscending": {
+    "value": "昇順で並べ替えられます。",
+    "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)",
+    "version": "LrRndbCXiDS4JMC+VCnW4A=="
+  },
+  "SNTable.SortLabel.SortedDescending": {
+    "value": "降順で並べ替えられます。",
+    "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)",
+    "version": "81l9u+cBWloC+4R4s9akDQ=="
+  }
+}

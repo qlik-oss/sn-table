@@ -1,1 +1,91 @@
-{}
+{
+  "SNTable.Accessibility.RowsAndColumns": {
+    "value": "{0} satır ve {1} sütun gösteriliyor.",
+    "comment": "number of rows and columns announced by the screen reader. (tew 210929)",
+    "version": "HKjzXNhL9hPs/kFY0XyjTQ=="
+  },
+  "SNTable.Pagination.FirstPage": {
+    "value": "İlk sayfa",
+    "comment": "tooltip and aria-label for the first page button. (tew 210929)",
+    "version": "vp2MW/tPZq4FsBw+3qknqA=="
+  },
+  "SNTable.Pagination.DisplayedRowsLabel": {
+    "value": "{0} / {1}",
+    "comment": "label for the displayed rows, e.g. '1-100 of 234' (tew 211004)"
+  },
+  "SNTable.Pagination.LastPage": {
+    "value": "Son sayfa",
+    "comment": "tooltip and aria-label for the last page button. (tew 210929)",
+    "version": "9lUogxKZctLBgLYSNmpyPA=="
+  },
+  "SNTable.Pagination.NextPage": {
+    "value": "Sonraki sayfa",
+    "comment": "tooltip and aria-label for the next page button. (tew 210929)",
+    "version": "YyUO+qPBjWcn7zy0bpXeFw=="
+  },
+  "SNTable.Pagination.PreviousPage": {
+    "value": "Önceki sayfa",
+    "comment": "tooltip and aria-label for the previous page button. (tew 210929)",
+    "version": "3IinXJOsZ4CCBrNYsg4U5A=="
+  },
+  "SNTable.Pagination.RowsPerPage": {
+    "value": "Sayfa başına satır sayısı",
+    "comment": "label for the rows per page dropdown. (tew 210929)",
+    "version": "zuWpMmMSoOG/QRsKoVx3OA=="
+  },
+  "SNTable.SelectionLabel.DeselectedValue": {
+    "value": "Değer seçimi iptal edildi.",
+    "comment": "announced by screen readers  when a value is deselected. (tew 210929)",
+    "version": "/NL1c53TDjc2dhooLWg1WA=="
+  },
+  "SNTable.SelectionLabel.ExitedSelectionMode": {
+    "value": "Değer seçimi iptal edildi. Seçim modundan çıkıldı.",
+    "comment": "Announced by screen readers when deselecting and no values are selecting, causing the the chart to exit selection mode. (tew 210929)",
+    "version": "A4NCF1GIsCVwVg0MjPHUqw=="
+  },
+  "SNTable.SelectionLabel.NotSelectedValue": {
+    "value": "Değer seçilmedi.",
+    "comment": "announced by screen readers when focus is on an unselected value. (tew 210929)",
+    "version": "oj/qLPcfANXpS2oVVUzTdQ=="
+  },
+  "SNTable.SelectionLabel.OneSelectedValue": {
+    "value": "Şu anda seçili bir değer var.",
+    "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)",
+    "version": "5llYYux+meuJItZE6XJhcQ=="
+  },
+  "SNTable.SelectionLabel.SelectedValue": {
+    "value": "Değer seçildi.",
+    "comment": "announced by screen readers when a value is selected. (tew 210929)",
+    "version": "ZJO4WnSdc7Wk5mDyEj4hug=="
+  },
+  "SNTable.SelectionLabel.SelectedValues": {
+    "value": "Şu anda seçili {0} değer var.",
+    "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)",
+    "version": "58lPVnscmLNuN+pvnPhkYA=="
+  },
+  "SNTable.SelectionLabel.SelectionsConfirmed": {
+    "value": "Seçimler onaylandı.",
+    "comment": "announced by screen readers when selections are confirmed. (tew 210929)",
+    "version": "g2xbBOIYPMUM0bFIQp5hDg=="
+  },
+  "SNTable.SelectionLabel.selected": {
+    "value": "Seçildi",
+    "comment": "announced by screen readers for a selected value. (tew 210929)",
+    "version": "57xiDyOBQ0x8VcdHGd5tzg=="
+  },
+  "SNTable.SortLabel.PressSpaceToSort": {
+    "value": "Bu sütunda sıralama yapmak için boşluk tuşuna basın.",
+    "comment": "instructions for sorting, announced by screen readers. (tew 210929)",
+    "version": "Qqrq+G7uktBDlaLsccl7ng=="
+  },
+  "SNTable.SortLabel.SortedAscending": {
+    "value": "Artan düzende sıralanmıştır.",
+    "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)",
+    "version": "LrRndbCXiDS4JMC+VCnW4A=="
+  },
+  "SNTable.SortLabel.SortedDescending": {
+    "value": "Azalan düzende sıralanmıştır.",
+    "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)",
+    "version": "81l9u+cBWloC+4R4s9akDQ=="
+  }
+}

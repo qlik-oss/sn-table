@@ -171,6 +171,7 @@ describe('handle-key-press', () => {
           cancel: sinon.spy(),
           begin: sinon.spy(),
           select: sinon.spy(),
+          isModal: () => true,
         },
         rows: [],
         colIdx: -1,
@@ -181,7 +182,7 @@ describe('handle-key-press', () => {
       setFocusedCellCoord = sinon.spy();
     });
 
-    it('when press arrow-down key, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
+    it('when press arrow down key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
       bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], selState, null, null, false, setFocusedCellCoord);
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
@@ -382,7 +383,7 @@ describe('handle-key-press', () => {
       setFocusedCellCoord = sinon.spy();
     });
 
-    it('when press arrow down key, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
+    it('when press arrow down key on head cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
       headHandleKeyPress(evt, rootElement, [rowIndex, colIndex], null, null, null, false, setFocusedCellCoord);
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
@@ -492,6 +493,8 @@ describe('handle-key-press', () => {
     let rowsPerPage;
     let handleChangePage;
     let setShouldRefocus;
+    let keyboard;
+    let isSelectionActive;
 
     beforeEach(() => {
       evt = {
@@ -499,6 +502,8 @@ describe('handle-key-press', () => {
         ctrlKey: true,
         metaKey: true,
         key: 'ArrowRight',
+        stopPropagation: () => {},
+        preventDefault: () => {},
       };
       handleChangePage = sinon.spy();
       setShouldRefocus = sinon.spy();
@@ -567,11 +572,34 @@ describe('handle-key-press', () => {
         stopPropagation: sinon.spy(),
         preventDefault: sinon.spy(),
       };
-      const keyboard = { enabled: true, blur: sinon.spy() };
+      keyboard = { enabled: true, blur: sinon.spy() };
       handleTableWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus, keyboard });
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(keyboard.blur).to.have.been.calledOnceWith(true);
+    });
+
+    it('should ignore keyboard.blur while we are focusing on the pagination and pressing Esc key', () => {
+      evt = {
+        key: 'Escape',
+        stopPropagation: sinon.spy(),
+        preventDefault: sinon.spy(),
+      };
+      keyboard = { enabled: true, blur: sinon.spy() };
+      isSelectionActive = true;
+      handleTableWrapperKeyDown({
+        evt,
+        totalRowSize,
+        page,
+        rowsPerPage,
+        handleChangePage,
+        setShouldRefocus,
+        keyboard,
+        isSelectionActive,
+      });
+      expect(evt.preventDefault).to.not.have.been.calledOnce;
+      expect(evt.stopPropagation).to.not.have.been.calledOnce;
+      expect(keyboard.blur).to.not.have.been.calledOnce;
     });
   });
 });
