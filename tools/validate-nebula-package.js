@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const validateScripts = (pkg) => {
-  if (pkg.scripts.build !== 'node ./tools/build.js --core') {
+  if (pkg.scripts.build !== 'yarn run locale:generate && node ./tools/build.js --core') {
     throw new Error('package.json does not have correct build script');
   }
   if (pkg.scripts.prepublishOnly !== 'NODE_ENV=production yarn run build') {
@@ -48,16 +48,19 @@ const validateFiles = (pkg) => {
     'publishConfig',
     'repository',
     'files',
+    'engines',
     'main',
+    'scripts',
+    'devDependencies',
     'peerDependencies',
   ];
   // files
   const mustHaveFiles = ['dist', 'core', 'api-specifications'];
   if (pkg.qext) {
-    const qextname = /^@nebula\.js\/([a-z-]+)$/.exec(pkg.name)[1];
+    const qextName = /^@nebula\.js\/([a-z-]+)$/.exec(pkg.name)[1];
     mustHaveFiles.push('qext');
-    mustHaveFiles.push(`${qextname}.qext`);
-    mustHaveFiles.push(`${qextname}.js`);
+    mustHaveFiles.push(`${qextName}.qext`);
+    mustHaveFiles.push(`${qextName}.js`);
   }
   const allowedFiles = ['assets', ...mustHaveFiles];
   const missing = mustHaveFiles.filter((f) => (pkg.files || []).indexOf(f) === -1);
