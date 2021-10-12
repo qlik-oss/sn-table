@@ -52,7 +52,7 @@
     "@nebula.js/cli-build": "2.0.0",
     "@nebula.js/cli-sense": "2.0.0",
     "@nebula.js/cli-serve": "2.0.0",
-    "@testing-library/react": "12.1.1",
+    "@testing-library/react": "12.1.2",
     "@testing-library/react-hooks": "7.0.2",
     "babel-eslint": "10.1.0",
     "babel-plugin-istanbul": "^6.0.0",
