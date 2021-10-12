@@ -73,7 +73,7 @@ export default function TablePaginationActions(props) {
   };
 
   const handleSelectPage = (event) => {
-    onChangePage(event, event.target.value);
+    onPageChange(event, event.target.value);
   };
 
   const onFirstPage = page === 0;
@@ -84,7 +84,7 @@ export default function TablePaginationActions(props) {
     options.push({value: i, label: i+1})
   }
 
-  const thinTable = width < 666;
+  const thinTable = tableWidth < 666;
 
   return (
     <div className={classes.root}>
@@ -96,6 +96,7 @@ export default function TablePaginationActions(props) {
           id="pagination-dropdown"
           value={page}
           onChange={handleSelectPage}
+          tabindex={keyboardActive}
           label="Page"
           inputProps={{
             name: 'Page',
