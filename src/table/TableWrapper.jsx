@@ -12,6 +12,7 @@ import useDidUpdateEffect from './useDidUpdateEffect';
 import { handleTableWrapperKeyDown } from './cells/handle-key-press';
 import { updateFocus, handleResetFocus, handleNavigateTop, handleFocusoutEvent } from './cells/handle-cell-focus';
 import handleScroll from './handle-scroll';
+import useActiveElement from './useActiveElement';
 
 const useStyles = makeStyles({
   paper: {
@@ -47,6 +48,8 @@ export default function TableWrapper(props) {
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
   const paginationFixedRpp = selectionsAPI.isModal() || rect.width < 550;
+  const activeElement = useActiveElement();
+
   const setShouldRefocus = () => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   };
@@ -143,7 +146,14 @@ export default function TableWrapper(props) {
           ])}
         >
           <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
-          <TableBodyWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} setShouldRefocus={setShouldRefocus} />
+          <TableBodyWrapper
+            {...props}
+            isActiveElementInTable={tableSectionRef.current?.contains(activeElement)}
+            focusedCellCoord={focusedCellCoord}
+            setFocusedCellCoord={setFocusedCellCoord}
+            setShouldRefocus={setShouldRefocus}
+            tableWrapperRef={tableWrapperRef}
+          />
         </Table>
       </TableContainer>
       <Paper className={classes.tablePaginationSection}>
@@ -176,6 +186,7 @@ export default function TableWrapper(props) {
           page={page}
           rowsPerPage={rowsPerPage}
           keyboardActive={keyboard.active ? '0' : '-1'}
+          isInSelectionMode={selectionsAPI.isModal()}
           tableWidth={rect.width}
           translator={translator}
         />

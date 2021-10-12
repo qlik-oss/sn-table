@@ -26,6 +26,7 @@ describe('withSelections', async () => {
     selState = {
       rows: [],
       colIdx: -1,
+      api: { isModal: () => true },
     };
     selDispatch = () => {};
     evt = { button: 0 };

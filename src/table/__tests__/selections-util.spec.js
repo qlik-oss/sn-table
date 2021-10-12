@@ -6,18 +6,33 @@ describe('selections-utils', () => {
     let api;
     let selDispatch;
     let setShouldRefocus;
+    let keyboard;
+    let containsActiveElement;
+    let tableWrapperRef;
 
     beforeEach(() => {
-      selDispatch = () => {};
-      setShouldRefocus = () => {};
+      selDispatch = sinon.spy();
+      setShouldRefocus = sinon.spy();
       api = {
         on: sinon.spy(),
         removeListener: sinon.spy(),
       };
+      keyboard = { active: false, blur: sinon.spy() };
+      containsActiveElement = true;
+      tableWrapperRef = {
+        current: {
+          contains: () => containsActiveElement,
+        },
+      };
+    });
+
+    afterEach(() => {
+      sinon.verifyAndRestore();
+      sinon.resetHistory();
     });
 
     it('should call api.on and api removeListener for all listeners', () => {
-      addSelectionListeners(api, selDispatch, setShouldRefocus)();
+      addSelectionListeners(api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef)();
       listenerNames.forEach((name) => {
         expect(api.on).to.have.been.calledWith(name);
         expect(api.removeListener).to.have.been.calledWith(name);
@@ -26,14 +41,12 @@ describe('selections-utils', () => {
     it('should not call call api.on nor api.removeListener when no api', () => {
       api = undefined;
 
-      const destroyFn = addSelectionListeners(api, selDispatch, setShouldRefocus);
+      const destroyFn = addSelectionListeners(api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef);
       // Not a great check, but this would crash if the this case worked incorrectly
       expect(destroyFn).to.be.a('function');
     });
     it('should call api.on with the same callback for all listener names, that calls selDispatch', () => {
       const callbacks = [];
-      selDispatch = sinon.spy();
-      setShouldRefocus = sinon.spy();
       api = {
         on: (name, cb) => {
           callbacks.push(cb);
@@ -41,13 +54,29 @@ describe('selections-utils', () => {
         removeListener: () => {},
       };
 
-      addSelectionListeners(api, selDispatch, setShouldRefocus);
+      addSelectionListeners(api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef);
       callbacks.forEach((cb) => {
         cb();
         expect(selDispatch).to.have.been.calledWith({ type: 'reset' });
       });
-      // only called for confirm events
+      // only for confirm events
       expect(setShouldRefocus).to.have.been.calledOnce;
+      expect(keyboard.blur).to.not.have.been.called;
+    });
+    it('should call keyboard blur when confirmed callback is called and tableWrapperRef does not contain activeElement', () => {
+      containsActiveElement = false;
+      let confirmCallback;
+      api = {
+        on: (name, cb) => {
+          name === 'confirmed' && (confirmCallback = cb);
+        },
+        removeListener: () => {},
+      };
+
+      addSelectionListeners(api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef);
+      confirmCallback();
+      expect(setShouldRefocus).to.not.have.been.called;
+      expect(keyboard.blur).to.have.been.calledOnce;
     });
   });
 
@@ -59,7 +88,9 @@ describe('selections-utils', () => {
       state = {
         rows: [{ qElemNumber: 1, rowIdx: 1 }],
         colIdx: 1,
-        api: {},
+        api: {
+          isModal: () => false,
+        },
         isEnabled: false,
       };
       action = {
@@ -76,16 +107,21 @@ describe('selections-utils', () => {
       expect(newState).to.eql({ ...state, rows: expectedRows });
     });
 
-    it('should return state updated with rows and colIdx reset when action.type is reset', () => {
+    it('should return state updated when the app is not in selection modal state  when action.type is reset', () => {
       action.type = 'reset';
       const newState = reducer(state, action);
       expect(newState).to.eql({ ...state, rows: [], colIdx: -1 });
     });
 
-    it('should return state unchanged when rows and colIdx are already reset and action.type is reset', () => {
-      state.rows = [];
-      state.colIdx = -1;
+    it('should return state updated with rows when action.type is clear', () => {
+      action.type = 'clear';
+      const newState = reducer(state, action);
+      expect(newState).to.eql({ ...state, rows: [] });
+    });
+
+    it('should return state unchanged when the app is in selection modal state and action.type is reset', () => {
       action.type = 'reset';
+      state.api.isModal = () => true;
       const newState = reducer(state, action);
       expect(newState).to.equal(state);
     });
