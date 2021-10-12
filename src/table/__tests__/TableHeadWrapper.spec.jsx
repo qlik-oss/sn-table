@@ -202,7 +202,7 @@ describe('<TableHeadWrapper />', () => {
     const secondColHiddenLabel = queryByTestId('VHL-for-col-1');
 
     // check label
-    expect(firstColHiddenLabel).to.have.text('SNTable.SortLabel.SortedAscending SNTable.SortLabel.PressSpaceToSort');
+    expect(firstColHiddenLabel).to.have.text('SNTable.SortLabel.PressSpaceToSort');
     expect(secondColHiddenLabel).to.have.text('SNTable.SortLabel.PressSpaceToSort');
   });
 
