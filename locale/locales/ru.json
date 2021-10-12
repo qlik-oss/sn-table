@@ -14,10 +14,6 @@
     "comment": "tooltip and aria-label for the first page button. (tew 210929)",
     "version": "vp2MW/tPZq4FsBw+3qknqA=="
   },
-  "SNTable.Pagination.DisplayedRowsLabel": {
-    "value": "{0} из {1}",
-    "comment": "label for the displayed rows, e.g. '1-100 of 234' (tew 211004)"
-  },
   "SNTable.Pagination.LastPage": {
     "value": "Последняя страница",
     "comment": "tooltip and aria-label for the last page button. (tew 210929)",
