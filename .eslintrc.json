@@ -10,13 +10,15 @@
       "presets": ["@babel/preset-react"]
     }
   },
-  "extends": ["airbnb", "prettier"],
-  "plugins": ["prettier"],
+  "extends": ["airbnb", "prettier", "eslint:recommended"],
+  "plugins": ["prettier", "react"],
   "rules": {
     "max-len": 0,
     "no-plusplus": 0,
     "no-bitwise": 0,
     "prettier/prettier": 2,
+    "arrow-body-style": 0,
+    "prefer-arrow-callback": 0,
     "no-unused-expressions": 0,
     "no-nested-ternary": 0,
     "react/forbid-prop-types": 0,
