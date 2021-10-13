@@ -176,6 +176,43 @@ describe('<TableHeadWrapper />', () => {
     expect(handleCellFocus.handleClickToFocusHead).to.have.been.calledOnce;
   });
 
+  it('should change `aria-pressed` and `aria-sort` when we sort by second column', () => {
+    tableData = {
+      columns: [
+        { ...tableData.columns[0], sortDirection: 'desc' },
+        { ...tableData.columns[1], sortDirection: 'asc' },
+      ],
+      columnOrder: tableData.columnOrder,
+    };
+    layout = {
+      qHyperCube: {
+        qEffectiveInterColumnSortOrder: [1, 0],
+      },
+    };
+
+    const { queryByText } = render(
+      <TableHeadWrapper
+        tableData={tableData}
+        theme={theme}
+        layout={layout}
+        changeSortOrder={changeSortOrder}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+        keyboard={keyboard}
+        translator={translator}
+        focusedCellCoord={focusedCellCoord}
+      />
+    );
+
+    const firstColQuery = queryByText(tableData.columns[0].label).closest('th');
+    const secondColQuery = queryByText(tableData.columns[1].label).closest('th');
+
+    expect(firstColQuery).to.not.have.attribute('aria-sort');
+    expect(firstColQuery).to.have.attribute('aria-pressed', 'false');
+    expect(secondColQuery).to.have.attribute('aria-sort', 'ascending');
+    expect(secondColQuery).to.have.attribute('aria-pressed', 'true');
+  });
+
   it('should render the visually hidden text instead of `aria-label` and has correct `scope` properly', () => {
     const { queryByText, queryByTestId } = render(
       <TableHeadWrapper
