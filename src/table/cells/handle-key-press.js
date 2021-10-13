@@ -160,11 +160,18 @@ export const bodyHandleKeyPress = (
     case 'Tab': {
       if (evt.shiftKey && keyboard.enabled && selState.api.isModal()) {
         preventDefaultBehavior(evt);
-        focusConfirmButton(rootElement);
+        focusConfirmButton(evt.target);
       }
       break;
     }
     default:
       break;
+  }
+};
+
+export const handleLastTab = (evt, isInSelectionMode) => {
+  if (isInSelectionMode && evt.key === 'Tab' && !evt.shiftKey) {
+    preventDefaultBehavior(evt);
+    focusConfirmButton(evt.target);
   }
 };

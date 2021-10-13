@@ -6,7 +6,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import { makeStyles } from '@material-ui/core/styles';
-import { focusConfirmButton } from './cells/handle-cell-focus';
+import { handleLastTab } from './cells/handle-key-press';
 
 const useStyles = makeStyles({
   root: {
@@ -26,29 +26,11 @@ export default function TablePaginationActions(props) {
   const onLastPage = page >= lastPage;
   const tabIndex = !keyboard.enabled || keyboard.active ? '0' : '-1';
 
-  const handleFirstPageButtonClick = (event) => {
-    onPageChange(event, 0);
-  };
-
-  const handleBackButtonClick = (event) => {
-    onPageChange(event, page - 1);
-  };
-
-  const handleNextButtonClick = (event) => {
-    onPageChange(event, page + 1);
-  };
-
-  const handleLastPageButtonClick = (event) => {
-    onPageChange(event, lastPage);
-  };
-
-  const lastButtonTabHandle = (event) => {
-    if (isInSelectionMode && event.key === 'Tab' && !event.shiftKey) {
-      event.stopPropagation();
-      event.preventDefault();
-      focusConfirmButton(event.target);
-    }
-  };
+  const handleLastButtonTab = (event) => handleLastTab(event, isInSelectionMode);
+  const handleFirstPageButtonClick = (event) => onPageChange(event, 0);
+  const handleBackButtonClick = (event) => onPageChange(event, page - 1);
+  const handleNextButtonClick = (event) => onPageChange(event, page + 1);
+  const handleLastPageButtonClick = (event) => onPageChange(event, lastPage);
 
   return (
     <div className={classes.root}>
@@ -81,7 +63,7 @@ export default function TablePaginationActions(props) {
         title={translator.get('SNTable.Pagination.NextPage')}
         tabindex={tabIndex}
         className={onLastPage && classes.disabled}
-        onKeyDown={keyboard.enabled && tableWidth <= 350 && lastButtonTabHandle}
+        onKeyDown={keyboard.enabled && tableWidth <= 350 && handleLastButtonTab}
       >
         <KeyboardArrowRight />
       </IconButton>
@@ -93,7 +75,7 @@ export default function TablePaginationActions(props) {
           title={translator.get('SNTable.Pagination.LastPage')}
           tabindex={tabIndex}
           className={onLastPage && classes.disabled}
-          onKeyDown={keyboard.enabled && lastButtonTabHandle}
+          onKeyDown={keyboard.enabled && handleLastButtonTab}
         >
           <LastPageIcon />
         </IconButton>
