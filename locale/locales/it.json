@@ -4,14 +4,15 @@
     "comment": "number of rows and columns announced by the screen reader. (tew 210929)",
     "version": "HKjzXNhL9hPs/kFY0XyjTQ=="
   },
+  "SNTable.Pagination.DisplayedRowsLabel": {
+    "value": "{0} di {1}",
+    "comment": "label for the displayed rows, e.g. '1-100 of 234' (tew 211004)",
+    "version": "aQJbyf9x9LTIhITOr45yXA=="
+  },
   "SNTable.Pagination.FirstPage": {
     "value": "Prima pagina",
     "comment": "tooltip and aria-label for the first page button. (tew 210929)",
     "version": "vp2MW/tPZq4FsBw+3qknqA=="
-  },
-  "SNTable.Pagination.DisplayedRowsLabel": {
-    "value": "{0} di {1}",
-    "comment": "label for the displayed rows, e.g. '1-100 of 234' (tew 211004)"
   },
   "SNTable.Pagination.LastPage": {
     "value": "Ultima pagina",

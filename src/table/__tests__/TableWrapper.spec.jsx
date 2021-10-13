@@ -73,6 +73,7 @@ describe('<TableWrapper />', () => {
     expect(queryByLabelText('SNTable.Accessibility.RowsAndColumns')).to.be.visible;
     expect(queryByLabelText('SNTable.Pagination.RowsPerPage')).to.be.visible;
     expect(queryByTestId('table-wrapper')).to.has.attr('tabindex', '-1');
+    expect(queryByTestId('table-wrapper')).to.has.attr('role', 'application');
     expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).to.be.visible;
     expect(queryByText(rowsPerPage)).to.be.visible;
   });
