@@ -28,7 +28,7 @@
   "scripts": {
     "build": "yarn run locale:generate && rollup -c rollup.config.js && rollup -c rollup-core.config.js && shx cp assets/* dist",
     "build:watch": "yarn run locale:generate && rollup -c rollup.config.js -w",
-    "lint": "eslint src/**/*.js src/**/*.jsx",
+    "lint": "eslint 'src/**'",
     "start": "nebula serve --build false --type sn-table",
     "sense": "nebula sense",
     "locale:verify": "node locale/tools/verify-translations.js",
