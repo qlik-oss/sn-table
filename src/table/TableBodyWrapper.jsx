@@ -89,10 +89,10 @@ function TableBodyWrapper({
 
   return (
     <>
-      <label className={classes.srOnly} aria-live="assertive">
+      <label htmlFor="cellSrNotation" className={classes.srOnly} aria-live="assertive">
         {srNotation}
       </label>
-      <TableBody className={`${classes.cellBase}`}>
+      <TableBody id="cellSrNotation" className={`${classes.cellBase}`}>
         {rows.map((row, rowIndex) => (
           <TableRow
             hover={hoverEffect}
