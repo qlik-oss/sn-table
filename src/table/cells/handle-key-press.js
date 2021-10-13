@@ -127,7 +127,8 @@ export const bodyHandleKeyPress = (
   cell,
   selDispatch,
   isAnalysisMode,
-  setFocusedCellCoord
+  setFocusedCellCoord,
+  keyboard
 ) => {
   switch (evt.key) {
     case 'ArrowUp':
@@ -157,7 +158,7 @@ export const bodyHandleKeyPress = (
       break;
     }
     case 'Tab': {
-      if (evt.shiftKey && selState.api.isModal()) {
+      if (evt.shiftKey && keyboard.enabled && selState.api.isModal()) {
         preventDefaultBehavior(evt);
         focusConfirmButton(rootElement);
       }

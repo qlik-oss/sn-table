@@ -45,10 +45,10 @@ export default function TableWrapper(props) {
   const tableSectionRef = useRef();
   const tableWrapperRef = useRef();
   const classes = useStyles();
+  const activeElement = useActiveElement();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
   const paginationFixedRpp = selectionsAPI.isModal() || rect.width < 550;
-  const activeElement = useActiveElement();
 
   const setShouldRefocus = () => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
@@ -73,7 +73,7 @@ export default function TableWrapper(props) {
 
   useEffect(() => {
     const scrollCallback = (evt) => handleScroll(evt, tableSectionRef);
-    const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard.blur);
+    const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard);
 
     tableSectionRef.current.addEventListener('wheel', scrollCallback);
     tableWrapperRef.current.addEventListener('focusout', focusOutCallback);
@@ -169,7 +169,7 @@ export default function TableWrapper(props) {
             inputProps: {
               'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
               'data-testid': 'select',
-              tabindex: keyboard.active ? '0' : '-1',
+              tabindex: !keyboard.enabled || keyboard.active ? '0' : '-1',
             },
             native: true,
           }}
@@ -185,7 +185,7 @@ export default function TableWrapper(props) {
           onPageChange={handleChangePage}
           page={page}
           rowsPerPage={rowsPerPage}
-          keyboardActive={keyboard.active ? '0' : '-1'}
+          keyboard={keyboard}
           isInSelectionMode={selectionsAPI.isModal()}
           tableWidth={rect.width}
           translator={translator}

@@ -10,7 +10,7 @@ export function addSelectionListeners(api, selDispatch, setShouldRefocus, keyboa
     // if there is no focus on the chart, make sure we blur and focus the entire chart
     if (tableWrapperRef.current?.contains(document.activeElement)) {
       setShouldRefocus();
-    } else {
+    } else if (keyboard.enabled) {
       keyboard.blur(true);
     }
     resetSelections();

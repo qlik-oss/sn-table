@@ -17,7 +17,7 @@ describe('selections-utils', () => {
         on: sinon.spy(),
         removeListener: sinon.spy(),
       };
-      keyboard = { active: false, blur: sinon.spy() };
+      keyboard = { enabled: true, active: false, blur: sinon.spy() };
       containsActiveElement = true;
       tableWrapperRef = {
         current: {
@@ -63,7 +63,7 @@ describe('selections-utils', () => {
       expect(setShouldRefocus).to.have.been.calledOnce;
       expect(keyboard.blur).to.not.have.been.called;
     });
-    it('should call keyboard blur when confirmed callback is called and tableWrapperRef does not contain activeElement', () => {
+    it('should call keyboard blur when confirmed callback is called, keyboard.enabled is true and tableWrapperRef does not contain activeElement', () => {
       containsActiveElement = false;
       let confirmCallback;
       api = {
@@ -77,6 +77,23 @@ describe('selections-utils', () => {
       confirmCallback();
       expect(setShouldRefocus).to.not.have.been.called;
       expect(keyboard.blur).to.have.been.calledOnce;
+    });
+
+    it('should not call keyboard blur when confirmed callback is called, keyboard.enabled is undefined and tableWrapperRef does not contain activeElement', () => {
+      containsActiveElement = false;
+      keyboard.enabled = undefined;
+      let confirmCallback;
+      api = {
+        on: (name, cb) => {
+          name === 'confirmed' && (confirmCallback = cb);
+        },
+        removeListener: () => {},
+      };
+
+      addSelectionListeners(api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef);
+      confirmCallback();
+      expect(setShouldRefocus).to.not.have.been.called;
+      expect(keyboard.blur).to.not.have.been.called;
     });
   });
 

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as handleCellFocus from '../handle-cell-focus';
 
-describe('handle-key-press', () => {
+describe('handle-cell-focus', () => {
   let cell;
   let rootElement;
   let focusedCellCoord;
@@ -17,7 +17,7 @@ describe('handle-key-press', () => {
     };
     focusedCellCoord = [0, 0];
     setFocusedCellCoord = sinon.spy();
-    keyboard = { focus: sinon.spy() };
+    keyboard = { focus: sinon.spy(), enabled: true };
     translator = { get: (s) => s };
   });
 
@@ -137,11 +137,18 @@ describe('handle-key-press', () => {
       rawColIdx: 0,
     };
 
-    it('should call setFocusedCellCoord with adjusted index, and keyboard.focus', () => {
+    it('should indirectly call setFocusedCellCoord with adjusted index, and keyboard.focus', () => {
       handleCellFocus.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard);
       expect(cell.setAttribute).have.been.calledOnceWith('tabIndex', '-1');
       expect(setFocusedCellCoord).to.have.been.calledOnceWith([1, 0]);
       expect(keyboard.focus).to.have.been.calledOnce;
+    });
+    it('should indirectly call setFocusedCellCoord with adjusted index, but not keyboard.focus when keyboard.enabled is falsey', () => {
+      keyboard.enabled = false;
+      handleCellFocus.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard);
+      expect(cell.setAttribute).have.been.calledOnceWith('tabIndex', '-1');
+      expect(setFocusedCellCoord).to.have.been.calledOnceWith([1, 0]);
+      expect(keyboard.focus).to.not.have.been.called;
     });
   });
 
@@ -444,26 +451,33 @@ describe('handle-key-press', () => {
         },
       };
       shouldRefocus = { current: false };
-      blur = sinon.spy();
+      keyboard = { enabled: true, blur: sinon.spy() };
     });
 
-    it('should call blur when currentTarget doesnt contain relatedTarget and shouldRefocus is false', () => {
-      handleCellFocus.handleFocusoutEvent(evt, shouldRefocus, blur);
-      expect(blur).to.have.been.calledOnceWith(false);
+    it('should call blur when currentTarget doesnt contain relatedTarget, shouldRefocus is false and keyboard.enabled is true', () => {
+      handleCellFocus.handleFocusoutEvent(evt, shouldRefocus, keyboard);
+      expect(keyboard.blur).to.have.been.calledOnceWith(false);
     });
 
     it('should not call blur when currentTarget contains relatedTarget', () => {
       containsRelatedTarget = true;
 
-      handleCellFocus.handleFocusoutEvent(evt, shouldRefocus, blur);
-      expect(blur).to.not.have.been.called;
+      handleCellFocus.handleFocusoutEvent(evt, shouldRefocus, keyboard);
+      expect(keyboard.blur).to.not.have.been.called;
     });
 
     it('should not call blur when shouldRefocus is true', () => {
       shouldRefocus.current = true;
 
-      handleCellFocus.handleFocusoutEvent(evt, shouldRefocus, blur);
-      expect(blur).to.not.have.been.called;
+      handleCellFocus.handleFocusoutEvent(evt, shouldRefocus, keyboard);
+      expect(keyboard.blur).to.not.have.been.called;
+    });
+
+    it('should not call blur when keyboard.enabled is falsey', () => {
+      keyboard.enabled = false;
+
+      handleCellFocus.handleFocusoutEvent(evt, shouldRefocus, keyboard);
+      expect(keyboard.blur).to.not.have.been.called;
     });
   });
 });
