@@ -110,7 +110,7 @@ export default function TableWrapper(props) {
       shouldRefocus,
       setFocusedCellCoord,
       hasSelections: selectionsAPI.isModal(),
-      shouldAddTabstop: keyboard.active,
+      shouldAddTabstop: !keyboard.enabled || keyboard.active,
     });
   }, [rows.length, size.qcy, size.qcx, page]);
 
