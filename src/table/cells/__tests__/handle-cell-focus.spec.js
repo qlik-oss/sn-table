@@ -441,7 +441,6 @@ describe('handle-cell-focus', () => {
     let containsRelatedTarget;
     let evt;
     let shouldRefocus;
-    let blur;
 
     beforeEach(() => {
       containsRelatedTarget = false;
