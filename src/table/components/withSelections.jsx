@@ -7,7 +7,10 @@ export default function withSelections(CellComponent) {
   const HOC = (props) => {
     const { selectionState, cell, selDispatch, styling } = props;
     const handleMouseUp = (evt) => cell.isDim && evt.button === 0 && selectCell(selectionState, cell, selDispatch, evt);
-    const selectionStyling = useMemo(() => getSelectionStyle(styling, cell, selectionState), [styling, cell, selectionState]);
+    const selectionStyling = useMemo(
+      () => getSelectionStyle(styling, cell, selectionState),
+      [styling, cell, selectionState]
+    );
 
     return <CellComponent {...props} styling={selectionStyling} onMouseUp={handleMouseUp} />;
   };

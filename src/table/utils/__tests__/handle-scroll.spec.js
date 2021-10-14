@@ -46,10 +46,7 @@ describe('handle-scroll', () => {
       scrollTo = sinon.spy();
       tableSectionRef = { current: { scrollTo } };
       focusedCellCoord = [0, 0];
-      rootElement = {
-        getElementsByClassName: () => [{ getElementsByClassName: () => [cell] }],
-        querySelector: () => cell,
-      };
+      rootElement = {};
     });
 
     it('should not do anything when ref is not setup yet', () => {
@@ -63,7 +60,7 @@ describe('handle-scroll', () => {
       focusedCellCoord = [1, 0];
 
       handleNavigateTop({ tableSectionRef, focusedCellCoord, rootElement });
-      expect(scrollTo).to.have.been.calledOnce;
+      expect(scrollTo).to.have.been.calledWith({ top: 0, behavior: 'smooth' });
     });
 
     it('should scroll upwards automatically if it detects the cursor gets behind <TableHead />', () => {

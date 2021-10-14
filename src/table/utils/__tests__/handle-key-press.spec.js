@@ -183,7 +183,16 @@ describe('handle-key-press', () => {
     });
 
     it('when press arrow down key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
-      bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], selectionState, null, null, false, setFocusedCellCoord);
+      bodyHandleKeyPress(
+        evt,
+        rootElement,
+        [rowIndex, colIndex],
+        selectionState,
+        null,
+        null,
+        false,
+        setFocusedCellCoord
+      );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(evt.target.setAttribute).to.have.been.calledOnce;
@@ -333,7 +342,15 @@ describe('handle-key-press', () => {
       evt.key = 'ArrowRight';
       evt.shiftKey = true;
       evt.ctrlKey = true;
-      bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], selectionState, cell, selDispatch, setFocusedCellCoord);
+      bodyHandleKeyPress(
+        evt,
+        rootElement,
+        [rowIndex, colIndex],
+        selectionState,
+        cell,
+        selDispatch,
+        setFocusedCellCoord
+      );
       expect(evt.preventDefault).not.have.been.called;
       expect(evt.stopPropagation).not.have.been.called;
       expect(selectionState.api.cancel).not.have.been.called;
@@ -342,7 +359,15 @@ describe('handle-key-press', () => {
 
     it('when other keys are pressed, should not do anything', () => {
       evt.key = 'Control';
-      bodyHandleKeyPress(evt, rootElement, [rowIndex, colIndex], selectionState, cell, selDispatch, setFocusedCellCoord);
+      bodyHandleKeyPress(
+        evt,
+        rootElement,
+        [rowIndex, colIndex],
+        selectionState,
+        cell,
+        selDispatch,
+        setFocusedCellCoord
+      );
       expect(evt.preventDefault).not.have.been.called;
       expect(evt.stopPropagation).not.have.been.called;
       expect(evt.target.blur).not.have.been.called;
