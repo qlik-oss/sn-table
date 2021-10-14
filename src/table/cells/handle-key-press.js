@@ -1,5 +1,5 @@
 import { selectCell } from '../selections-utils';
-import { updateFocus } from './handle-cell-focus';
+import { updateFocus, focusConfirmButton } from './handle-cell-focus';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -16,10 +16,11 @@ export const handleTableWrapperKeyDown = ({
   handleChangePage,
   setShouldRefocus,
   keyboard,
+  isSelectionActive,
 }) => {
   if (isCtrlShift(evt)) {
+    preventDefaultBehavior(evt);
     const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
-
     if (evt.key === 'ArrowRight' && page < lastPage) {
       setShouldRefocus();
       handleChangePage(null, page + 1);
@@ -27,7 +28,7 @@ export const handleTableWrapperKeyDown = ({
       setShouldRefocus();
       handleChangePage(null, page - 1);
     }
-  } else if (evt.key === 'Escape' && keyboard.enabled) {
+  } else if (evt.key === 'Escape' && keyboard.enabled && !isSelectionActive) {
     preventDefaultBehavior(evt);
     keyboard.blur(true);
   }
@@ -36,17 +37,17 @@ export const handleTableWrapperKeyDown = ({
 export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, selState) => {
   let [nextRow, nextCol] = cellCoord;
   // check if you have unconfirmed selections, so one or more cells are selected but not confirmed yet.
-  const hasUnconfirmedSelection = selState && selState.rows.length > 0;
+  const isInSelectionMode = selState?.api?.isModal();
 
   switch (evt.key) {
     case 'ArrowDown':
       nextRow + 1 < rowAndColumnCount.rowCount && nextRow++;
       break;
     case 'ArrowUp':
-      nextRow > 0 && (!hasUnconfirmedSelection || nextRow !== 1) && nextRow--;
+      nextRow > 0 && (!isInSelectionMode || nextRow !== 1) && nextRow--;
       break;
     case 'ArrowRight':
-      if (hasUnconfirmedSelection) break;
+      if (isInSelectionMode) break;
       if (nextCol < rowAndColumnCount.columnCount - 1) {
         nextCol++;
       } else if (nextRow < rowAndColumnCount.rowCount - 1) {
@@ -55,7 +56,7 @@ export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, selState)
       }
       break;
     case 'ArrowLeft':
-      if (hasUnconfirmedSelection) break;
+      if (isInSelectionMode) break;
       if (nextCol > 0) {
         nextCol--;
       } else if (nextRow > 0) {
@@ -150,9 +151,16 @@ export const bodyHandleKeyPress = (
     }
     // Esc: Cancels selections. If no selections, do nothing and handleTableWrapperKeyDown should catch it
     case 'Escape': {
-      if (!isAnalysisMode || !selState.rows.length) break;
+      if (!isAnalysisMode || !selState.api.isModal()) break;
       preventDefaultBehavior(evt);
       selState.api.cancel();
+      break;
+    }
+    case 'Tab': {
+      if (evt.shiftKey && selState.api.isModal()) {
+        preventDefaultBehavior(evt);
+        focusConfirmButton(rootElement);
+      }
       break;
     }
     default:

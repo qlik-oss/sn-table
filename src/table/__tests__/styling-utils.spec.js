@@ -261,7 +261,7 @@ describe('styling-utils', () => {
 
     beforeEach(() => {
       background = undefined;
-      selState = { colIdx: 1, rows: [{ qElemNumber: 1, rowIdx: 1 }] };
+      selState = { colIdx: 1, rows: [{ qElemNumber: 1, rowIdx: 1 }], api: { isModal: () => true } };
       cell = { qElemNumber: 1, colIdx: 1 };
     });
 
@@ -289,7 +289,7 @@ describe('styling-utils', () => {
       expect(selectionClass).to.equal(SELECTION_STYLING.POSSIBLE);
     });
     it('should return empty object when no active selections', () => {
-      selState = { rows: [] };
+      selState = { rows: [], api: { isModal: () => false } };
 
       const selectionClass = getSelectionColors(background, cell, selState);
       expect(selectionClass).to.eql({});

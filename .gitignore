@@ -1,3 +1,4 @@
+
 *.log
 *.log
 .cache
@@ -11,5 +12,6 @@ node_modules
 coverage
 dist/
 core/esm
+all.json
 
 sn-table-ext

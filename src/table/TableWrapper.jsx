@@ -7,10 +7,12 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState, useRef } from 'react';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
+import TablePaginationActions from './TablePaginationActions';
 import useDidUpdateEffect from './useDidUpdateEffect';
 import { handleTableWrapperKeyDown } from './cells/handle-key-press';
 import { updateFocus, handleResetFocus, handleNavigateTop, handleFocusoutEvent } from './cells/handle-cell-focus';
 import handleScroll from './handle-scroll';
+import useActiveElement from './useActiveElement';
 
 const useStyles = makeStyles({
   paper: {
@@ -23,6 +25,10 @@ const useStyles = makeStyles({
   containerOverflowHidden: {
     height: '100%',
     overflow: 'hidden',
+  },
+  tablePaginationSection: {
+    display: 'flex',
+    justifyContent: 'flex-end',
   },
   paginationHidden: {
     display: 'none',
@@ -41,7 +47,9 @@ export default function TableWrapper(props) {
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
-  const paginationFixedRpp = selectionsAPI.isModal() || rect.width < 400;
+  const paginationFixedRpp = selectionsAPI.isModal() || rect.width < 550;
+  const activeElement = useActiveElement();
+
   const setShouldRefocus = () => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   };
@@ -102,7 +110,7 @@ export default function TableWrapper(props) {
       shouldRefocus,
       setFocusedCellCoord,
       hasSelections: selectionsAPI.isModal(),
-      shouldAddTabstop: keyboard.active,
+      shouldAddTabstop: !keyboard.enabled || keyboard.active,
     });
   }, [rows.length, size.qcy, size.qcx, page]);
 
@@ -119,6 +127,7 @@ export default function TableWrapper(props) {
           handleChangePage,
           setShouldRefocus,
           keyboard,
+          isSelectionActive: selectionsAPI.isModal(),
         })
       }
     >
@@ -126,34 +135,62 @@ export default function TableWrapper(props) {
         ref={tableSectionRef}
         className={classes[containerMode]}
         tabIndex="-1"
+        role="application"
         data-testid="table-wrapper"
       >
         <Table
           stickyHeader
-          aria-label={translator.get('SNTable.RowsAndColumns', [`${rows.length + 1}`, `${columns.length}`])}
+          aria-label={translator.get('SNTable.Accessibility.RowsAndColumns', [
+            `${rows.length + 1}`,
+            `${columns.length}`,
+          ])}
         >
-          <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} />
-          <TableBodyWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} setShouldRefocus={setShouldRefocus} />
+          <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
+          <TableBodyWrapper
+            {...props}
+            isActiveElementInTable={tableSectionRef.current?.contains(activeElement)}
+            focusedCellCoord={focusedCellCoord}
+            setFocusedCellCoord={setFocusedCellCoord}
+            setShouldRefocus={setShouldRefocus}
+            tableWrapperRef={tableWrapperRef}
+          />
         </Table>
       </TableContainer>
-      <TablePagination
-        className={classes[paginationHidden]}
-        rowsPerPageOptions={paginationFixedRpp ? [rowsPerPage] : [10, 25, 100]}
-        component="div"
-        count={size.qcy}
-        rowsPerPage={rowsPerPage}
-        labelRowsPerPage={`${translator.get('SNTable.RowsPerPage')}:`}
-        page={page}
-        SelectProps={{
-          inputProps: {
-            'aria-label': translator.get('SNTable.RowsPerPage'),
-            'data-testid': 'select',
-          },
-          native: true,
-        }}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      <Paper className={classes.tablePaginationSection}>
+        <TablePagination
+          className={classes[paginationHidden]}
+          rowsPerPageOptions={paginationFixedRpp ? [rowsPerPage] : [10, 25, 100]}
+          component="div"
+          count={size.qcy}
+          rowsPerPage={rowsPerPage}
+          labelRowsPerPage={translator.get('SNTable.Pagination.RowsPerPage')}
+          page={page}
+          SelectProps={{
+            inputProps: {
+              'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
+              'data-testid': 'select',
+              tabindex: keyboard.active ? '0' : '-1',
+            },
+            native: true,
+          }}
+          labelDisplayedRows={({ from, to, count }) =>
+            rect.width > 250 && translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
+          }
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          ActionsComponent={() => <div>{null}</div>}
+        />
+        <TablePaginationActions
+          count={size.qcy}
+          onPageChange={handleChangePage}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          keyboardActive={keyboard.active ? '0' : '-1'}
+          isInSelectionMode={selectionsAPI.isModal()}
+          tableWidth={rect.width}
+          translator={translator}
+        />
+      </Paper>
     </Paper>
   );
 }
