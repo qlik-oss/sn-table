@@ -3,14 +3,13 @@ import React from 'react';
 import { StylesProvider } from '@mui/styles';
 import { ThemeProvider } from '@mui/material/styles';
 import TableWrapper from './TableWrapper';
+import muiSetup from '../mui-setup';
 
 export function render(rootElement, props) {
-  const { muiParameters } = props;
-
   ReactDOM.render(
     <React.StrictMode>
-      <StylesProvider generateClassName={muiParameters.generateClassName}>
-        <ThemeProvider theme={muiParameters.theme}>
+      <StylesProvider generateClassName={muiSetup().generateClassName}>
+        <ThemeProvider theme={muiSetup().theme}>
           <TableWrapper {...props} />
         </ThemeProvider>
       </StylesProvider>
