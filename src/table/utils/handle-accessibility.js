@@ -63,32 +63,6 @@ export const handleResetFocus = ({
   setFocusedCellCoord(nextCell);
 };
 
-export const handleNavigateTop = ({ tableSectionRef, focusedCellCoord, rootElement }) => {
-  const MIN_ROW_COUNT = 2;
-
-  if (!tableSectionRef.current?.scrollTo) return;
-
-  if (focusedCellCoord[0] < MIN_ROW_COUNT) {
-    tableSectionRef.current.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  } else {
-    const [x, y] = focusedCellCoord;
-    const tableHead = rootElement.getElementsByClassName('sn-table-head-cell')[0];
-    const rowElements = rootElement.getElementsByClassName('sn-table-row');
-    const cell = rowElements[x]?.getElementsByClassName('sn-table-cell')[y];
-
-    if (cell.offsetTop - tableHead.offsetHeight - cell.offsetHeight <= tableSectionRef.current.scrollTop) {
-      const targetOffsetTop = tableSectionRef.current.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
-      tableSectionRef.current.scrollTo({
-        top: Math.max(0, targetOffsetTop),
-        behavior: 'smooth',
-      });
-    }
-  }
-};
-
 export const getCellSelectionStatusNote = (rows, translator) =>
   rows.length === 1
     ? translator.get('SNTable.SelectionLabel.OneSelectedValue')
@@ -98,7 +72,7 @@ export const getMemoisedSrNotation = (prevCount = 0) => {
   let prevSelectedCount = prevCount || 0;
   let hasJunkChar = 0;
 
-  return ({ focusedCellCoord, rootElement, selState, translator, isActiveElementInTable }) => {
+  return ({ focusedCellCoord, rootElement, selectionState, translator, isActiveElementInTable }) => {
     if (!focusedCellCoord || focusedCellCoord[0] === 0 || !isActiveElementInTable) return '';
 
     const [rowIdx, colIdx] = focusedCellCoord;
@@ -109,13 +83,13 @@ export const getMemoisedSrNotation = (prevCount = 0) => {
 
     let notation = '';
 
-    if (selState.rows.length) {
-      const selectionNote = getCellSelectionStatusNote(selState.rows, translator);
+    if (selectionState.rows.length) {
+      const selectionNote = getCellSelectionStatusNote(selectionState.rows, translator);
 
-      if (prevSelectedCount < selState.rows.length) {
+      if (prevSelectedCount < selectionState.rows.length) {
         // if we select cell
         notation += `${translator.get('SNTable.SelectionLabel.SelectedValue')} ${selectionNote}`;
-      } else if (prevSelectedCount > selState.rows.length) {
+      } else if (prevSelectedCount > selectionState.rows.length) {
         // if we deselect cell
         notation += `${translator.get('SNTable.SelectionLabel.DeselectedValue')} ${selectionNote}`;
       } else if (isCellSelected) {
@@ -129,12 +103,12 @@ export const getMemoisedSrNotation = (prevCount = 0) => {
       // Junk char addition
       if (hasJunkChar % 2) notation += ` ­`;
       hasJunkChar++;
-    } else if (selState.rows.length === 0 && prevSelectedCount > 0) {
+    } else if (selectionState.rows.length === 0 && prevSelectedCount > 0) {
       // if we deselect last (selected) cell which means we close the selection mode
       notation += translator.get('SNTable.SelectionLabel.ExitedSelectionMode');
     }
 
-    prevSelectedCount = selState.rows.length;
+    prevSelectedCount = selectionState.rows.length;
     return notation;
   };
 };

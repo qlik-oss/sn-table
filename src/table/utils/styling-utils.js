@@ -96,8 +96,8 @@ export function getColumnStyle(styling, qAttrExps, stylingInfo) {
   };
 }
 
-export function getSelectionColors(background = STYLING_DEFAULTS.WHITE, cell, selState) {
-  const { colIdx, rows, api } = selState;
+export function getSelectionColors(background = STYLING_DEFAULTS.WHITE, cell, selectionState) {
+  const { colIdx, rows, api } = selectionState;
 
   if (api.isModal()) {
     if (colIdx !== cell.colIdx) {
@@ -116,6 +116,6 @@ export function getSelectionColors(background = STYLING_DEFAULTS.WHITE, cell, se
   return {};
 }
 
-export function getSelectionStyle(styling, cell, selState) {
-  return { ...styling, ...getSelectionColors(styling.background, cell, selState) };
+export function getSelectionStyle(styling, cell, selectionState) {
+  return { ...styling, ...getSelectionColors(styling.background, cell, selectionState) };
 }
