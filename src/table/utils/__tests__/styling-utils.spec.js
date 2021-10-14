@@ -255,43 +255,43 @@ describe('styling-utils', () => {
   });
 
   describe('getSelectionStyle', () => {
-    let selState;
+    let selectionState;
     let cell;
     let background;
 
     beforeEach(() => {
       background = undefined;
-      selState = { colIdx: 1, rows: [{ qElemNumber: 1, rowIdx: 1 }], api: { isModal: () => true } };
+      selectionState = { colIdx: 1, rows: [{ qElemNumber: 1, rowIdx: 1 }], api: { isModal: () => true } };
       cell = { qElemNumber: 1, colIdx: 1 };
     });
 
     it('should return selected when selected styling', () => {
-      const selectionClass = getSelectionColors(background, cell, selState);
+      const selectionClass = getSelectionColors(background, cell, selectionState);
       expect(selectionClass).to.equal(SELECTION_STYLING.SELECTED);
     });
     it('should return excluded styling when other column', () => {
       cell.colIdx = 2;
 
-      const selectionClass = getSelectionColors(background, cell, selState);
+      const selectionClass = getSelectionColors(background, cell, selectionState);
       expect(selectionClass).to.eql({ background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, #fff` });
     });
     it('should return excluded styling with columns background when other column and background color exists', () => {
       cell.colIdx = 2;
       background = 'someColor';
 
-      const selectionClass = getSelectionColors(background, cell, selState);
+      const selectionClass = getSelectionColors(background, cell, selectionState);
       expect(selectionClass).to.eql({ background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, someColor` });
     });
     it('should return possible styling when active and available to select', () => {
       cell.qElemNumber = 2;
 
-      const selectionClass = getSelectionColors(background, cell, selState);
+      const selectionClass = getSelectionColors(background, cell, selectionState);
       expect(selectionClass).to.equal(SELECTION_STYLING.POSSIBLE);
     });
     it('should return empty object when no active selections', () => {
-      selState = { rows: [], api: { isModal: () => false } };
+      selectionState = { rows: [], api: { isModal: () => false } };
 
-      const selectionClass = getSelectionColors(background, cell, selState);
+      const selectionClass = getSelectionColors(background, cell, selectionState);
       expect(selectionClass).to.eql({});
     });
   });

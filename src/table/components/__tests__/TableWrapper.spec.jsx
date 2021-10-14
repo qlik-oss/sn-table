@@ -7,7 +7,7 @@ import sinon from 'sinon';
 import TableWrapper from '../TableWrapper';
 import * as TableBodyWrapper from '../TableBodyWrapper';
 import * as TableHeadWrapper from '../TableHeadWrapper';
-import * as handleKeyPress from '../cells/handle-key-press';
+import * as handleKeyPress from '../../utils/handle-key-press';
 
 describe('<TableWrapper />', () => {
   let tableData;

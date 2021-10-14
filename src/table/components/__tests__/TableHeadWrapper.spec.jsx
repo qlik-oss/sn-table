@@ -4,8 +4,8 @@ import { render, fireEvent } from '@testing-library/react';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import TableHeadWrapper from '../TableHeadWrapper';
-import * as handleKeyPress from '../cells/handle-key-press';
-import * as handleCellFocus from '../cells/handle-cell-focus';
+import * as handleKeyPress from '../../utils/handle-key-press';
+import * as handleAccessibility from '../../utils/handle-accessibility';
 
 describe('<TableHeadWrapper />', () => {
   let tableData;
@@ -156,7 +156,7 @@ describe('<TableHeadWrapper />', () => {
   });
 
   it('should call handleClickToFocusHead when clicking a header cell', () => {
-    sinon.stub(handleCellFocus, 'handleClickToFocusHead').returns(sinon.spy());
+    sinon.stub(handleAccessibility, 'handleClickToFocusHead').returns(sinon.spy());
 
     const { queryByText } = render(
       <TableHeadWrapper
@@ -173,7 +173,7 @@ describe('<TableHeadWrapper />', () => {
     );
     fireEvent.mouseDown(queryByText(tableData.columns[0].label));
 
-    expect(handleCellFocus.handleClickToFocusHead).to.have.been.calledOnce;
+    expect(handleAccessibility.handleClickToFocusHead).to.have.been.calledOnce;
   });
 
   it('should change `aria-pressed` and `aria-sort` when we sort by second column', () => {
