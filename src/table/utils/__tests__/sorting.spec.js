@@ -1,5 +1,5 @@
 import sortingFactory from '../sorting';
-import { generateLayout } from './generate-test-data';
+import { generateLayout } from '../../../__test__/generate-test-data';
 
 describe('sorting', () => {
   let layout;

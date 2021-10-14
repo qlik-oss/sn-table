@@ -4,14 +4,14 @@ import { render, fireEvent } from '@testing-library/react';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
-import { generateDataPages, generateLayout } from './generate-test-data';
-import manageData from '../handle-data';
+import { generateDataPages, generateLayout } from '../../../__test__/generate-test-data';
+import manageData from '../../../handle-data';
 
 import TableBodyWrapper from '../TableBodyWrapper';
-import * as selectionsUtils from '../selections-utils';
-import * as getCellRenderer from '../cells/renderer';
-import * as handleKeyPress from '../cells/handle-key-press';
-import * as handleCellFocus from '../cells/handle-cell-focus';
+import * as selectionsUtils from '../../utils/selections-utils';
+import * as getCellRenderer from '../renderer';
+import * as handleKeyPress from '../../utils/handle-key-press';
+import * as handleCellFocus from '../../utils/handle-cell-focus';
 
 describe('<TableBodyWrapper />', async () => {
   const model = { getHyperCubeData: async () => generateDataPages(2, 2) };

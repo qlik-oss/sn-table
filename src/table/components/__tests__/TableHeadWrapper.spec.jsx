@@ -4,8 +4,8 @@ import { render, fireEvent } from '@testing-library/react';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import TableHeadWrapper from '../TableHeadWrapper';
-import * as handleKeyPress from '../cells/handle-key-press';
-import * as handleCellFocus from '../cells/handle-cell-focus';
+import * as handleKeyPress from '../../utils/handle-key-press';
+import * as handleCellFocus from '../../utils/handle-cell-focus';
 
 describe('<TableHeadWrapper />', () => {
   let tableData;

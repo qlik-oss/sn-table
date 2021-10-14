@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
-import { addSelectionListeners, reducer } from './selections-utils';
-import getCellRenderer from './cells/renderer';
-import { getBodyStyle } from './styling-utils';
-import { bodyHandleKeyPress } from './cells/handle-key-press';
-import { handleClickToFocusBody, getCellSrNotation } from './cells/handle-cell-focus';
+import { addSelectionListeners, reducer } from '../utils/selections-utils';
+import getCellRenderer from './renderer';
+import { getBodyStyle } from '../utils/styling-utils';
+import { bodyHandleKeyPress } from '../utils/handle-key-press';
+import { handleClickToFocusBody, getCellSrNotation } from '../utils/handle-cell-focus';
 
 const useStyles = makeStyles({
   cellBase: {
@@ -58,7 +58,7 @@ function TableBodyWrapper({
   const selectionsEnabled = !!selectionsAPI && !constraints.active;
   const getColumnRenderers = tableData.columns.map((c) => getCellRenderer(!!c.stylingInfo.length, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(() => getColumnRenderers);
-  const [selState, selDispatch] = useReducer(reducer, {
+  const [selectionState, selDispatch] = useReducer(reducer, {
     api: selectionsAPI,
     rows: [],
     colIdx: -1,
@@ -80,12 +80,12 @@ function TableBodyWrapper({
       getCellSrNotation({
         focusedCellCoord,
         rootElement,
-        selState,
+        selectionState,
         translator,
         isActiveElementInTable,
       })
     );
-  }, [focusedCellCoord, selState, translator, isActiveElementInTable]);
+  }, [focusedCellCoord, selectionState, translator, isActiveElementInTable]);
 
   return (
     <>
@@ -115,7 +115,7 @@ function TableBodyWrapper({
                     key={column.id}
                     align={column.align}
                     styling={{}}
-                    selState={selState}
+                    selectionState={selectionState}
                     selDispatch={selDispatch}
                     tabIndex={-1}
                     onKeyDown={(evt) =>
@@ -123,7 +123,7 @@ function TableBodyWrapper({
                         evt,
                         rootElement,
                         [rowIndex + 1, columnIndex],
-                        selState,
+                        selectionState,
                         cell,
                         selDispatch,
                         selectionsEnabled,

@@ -1,16 +1,16 @@
-import '../../__tests__/rtl-setup';
+import './rtl-setup';
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
 import * as withSelections from '../withSelections';
-import * as selectionsUtils from '../../selections-utils';
+import * as selectionsUtils from '../../utils/selections-utils';
 
 describe('withSelections', async () => {
   let HOC;
   let cell;
-  let selState;
+  let selectionState;
   let selDispatch;
   let evt;
   let styling;
@@ -23,7 +23,7 @@ describe('withSelections', async () => {
       isDim: true,
       value: '100',
     };
-    selState = {
+    selectionState = {
       rows: [],
       colIdx: -1,
       api: { isModal: () => true },
@@ -39,20 +39,20 @@ describe('withSelections', async () => {
   });
 
   it('should render a mocked component with the passed value', () => {
-    const { queryByText } = render(<HOC selState={selState} cell={cell} selDispatch={selDispatch} styling={styling} />);
+    const { queryByText } = render(<HOC selectionState={selectionState} cell={cell} selDispatch={selDispatch} styling={styling} />);
 
     expect(queryByText(cell.value)).to.be.visible;
   });
   it('should call selectCell on mouseUp', () => {
-    const { queryByText } = render(<HOC selState={selState} cell={cell} selDispatch={selDispatch} styling={styling} />);
+    const { queryByText } = render(<HOC selectionState={selectionState} cell={cell} selDispatch={selDispatch} styling={styling} />);
     fireEvent.mouseUp(queryByText(cell.value));
 
-    expect(selectionsUtils.selectCell).to.have.been.calledWith(selState, cell);
+    expect(selectionsUtils.selectCell).to.have.been.calledWith(selectionState, cell);
   });
   it('should not call selectCell on mouseUp when measure', () => {
     cell.isDim = false;
 
-    const { queryByText } = render(<HOC selState={selState} cell={cell} selDispatch={selDispatch} styling={styling} />);
+    const { queryByText } = render(<HOC selectionState={selectionState} cell={cell} selDispatch={selDispatch} styling={styling} />);
     fireEvent.mouseUp(queryByText(cell.value));
 
     expect(selectionsUtils.selectCell).to.not.have.been.called;
@@ -60,7 +60,7 @@ describe('withSelections', async () => {
   it('should not call selectCell on mouseUp when measure', () => {
     cell.isDim = false;
 
-    const { queryByText } = render(<HOC selState={selState} cell={cell} selDispatch={selDispatch} styling={styling} />);
+    const { queryByText } = render(<HOC selectionState={selectionState} cell={cell} selDispatch={selDispatch} styling={styling} />);
     fireEvent.mouseUp(queryByText(cell.value), evt);
 
     expect(selectionsUtils.selectCell).to.not.have.been.called;
@@ -68,7 +68,7 @@ describe('withSelections', async () => {
   it('should not call selectCell on mouseUp when right button', () => {
     evt.button = 2;
 
-    const { queryByText } = render(<HOC selState={selState} cell={cell} selDispatch={selDispatch} styling={styling} />);
+    const { queryByText } = render(<HOC selectionState={selectionState} cell={cell} selDispatch={selDispatch} styling={styling} />);
     fireEvent.mouseUp(queryByText(cell.value), evt);
 
     expect(selectionsUtils.selectCell).to.not.have.been.called;

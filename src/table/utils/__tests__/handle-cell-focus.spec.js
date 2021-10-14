@@ -292,12 +292,12 @@ describe('handle-key-press', () => {
   });
 
   describe('getCellSrNotation', () => {
-    let selState;
+    let selectionState;
     let getCellSrNotation;
     let isActiveElementInTable;
 
     beforeEach(() => {
-      selState = { rows: [1, 2] };
+      selectionState = { rows: [1, 2] };
       isActiveElementInTable = true;
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation();
     });
@@ -307,7 +307,7 @@ describe('handle-key-press', () => {
       const notation = getCellSrNotation({
         focusedCellCoord,
         rootElement,
-        selState,
+        selectionState,
         translator,
         isActiveElementInTable,
       });
@@ -316,12 +316,12 @@ describe('handle-key-press', () => {
     });
 
     it('should return empty string while there is no selected items', () => {
-      selState = { rows: [] };
+      selectionState = { rows: [] };
       focusedCellCoord = [1, 1];
       const notatino = getCellSrNotation({
         focusedCellCoord,
         rootElement,
-        selState,
+        selectionState,
         translator,
         isActiveElementInTable,
       });
@@ -330,13 +330,13 @@ describe('handle-key-press', () => {
     });
 
     it('should return empty string when focused cell is not in the table', () => {
-      selState = { rows: [] };
+      selectionState = { rows: [] };
       focusedCellCoord = [1, 1];
       isActiveElementInTable = false;
       const notatino = getCellSrNotation({
         focusedCellCoord,
         rootElement,
-        selState,
+        selectionState,
         translator,
         isActiveElementInTable,
       });
@@ -346,13 +346,13 @@ describe('handle-key-press', () => {
 
     it('should return `value selected` and selected rows count while we are selecting multiple rows', () => {
       focusedCellCoord = [2, 1];
-      selState = { rows: ['row#01', 'row#02'] };
+      selectionState = { rows: ['row#01', 'row#02'] };
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation(1);
 
       const notation = getCellSrNotation({
         focusedCellCoord,
         rootElement,
-        selState,
+        selectionState,
         translator,
         isActiveElementInTable,
       });
@@ -362,13 +362,13 @@ describe('handle-key-press', () => {
 
     it('should be able to deselect previously selected value', () => {
       focusedCellCoord = [2, 1];
-      selState = { rows: ['row#01', 'row#02'] };
+      selectionState = { rows: ['row#01', 'row#02'] };
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation(3);
 
       const notation = getCellSrNotation({
         focusedCellCoord,
         rootElement,
-        selState,
+        selectionState,
         translator,
         isActiveElementInTable,
       });
@@ -378,7 +378,7 @@ describe('handle-key-press', () => {
 
     it('should be able to detect if cell has been selected while changing the focus to cell if we are in selection mode', () => {
       focusedCellCoord = [1, 1];
-      selState = { rows: ['row#01', 'row#02'] };
+      selectionState = { rows: ['row#01', 'row#02'] };
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation(2);
       cell = global.document.createElement('td');
       cell.classList.add('selected');
@@ -389,7 +389,7 @@ describe('handle-key-press', () => {
       const notation = getCellSrNotation({
         focusedCellCoord,
         rootElement,
-        selState,
+        selectionState,
         translator,
         isActiveElementInTable,
       });
@@ -399,13 +399,13 @@ describe('handle-key-press', () => {
 
     it('should be able to detect if cell has not been selected while changing the focus to cell if we are in selection mode', () => {
       focusedCellCoord = [2, 1];
-      selState = { rows: ['row#01', 'row#02'] };
+      selectionState = { rows: ['row#01', 'row#02'] };
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation(2);
 
       const notation = getCellSrNotation({
         focusedCellCoord,
         rootElement,
-        selState,
+        selectionState,
         translator,
         isActiveElementInTable,
       });
@@ -415,13 +415,13 @@ describe('handle-key-press', () => {
 
     it('should convey selection exited when we deselect very last selected cell in column', () => {
       focusedCellCoord = [2, 1];
-      selState = { rows: [] };
+      selectionState = { rows: [] };
       getCellSrNotation = handleCellFocus.getMemoisedSrNotation(1);
 
       const notation = getCellSrNotation({
         focusedCellCoord,
         rootElement,
-        selState,
+        selectionState,
         translator,
         isActiveElementInTable,
       });
