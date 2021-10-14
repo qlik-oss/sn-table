@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { getColumnStyle } from '../styling-utils';
+import { getColumnStyle } from '../utils/styling-utils';
 
 export default function withColumnStyling(CellComponent) {
   const HOC = (props) => {

@@ -9,9 +9,9 @@ import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import TablePaginationActions from './TablePaginationActions';
 import useDidUpdateEffect from './useDidUpdateEffect';
-import { handleTableWrapperKeyDown } from './cells/handle-key-press';
-import { updateFocus, handleResetFocus, handleNavigateTop, handleFocusoutEvent } from './cells/handle-cell-focus';
-import handleScroll from './handle-scroll';
+import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
+import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
+import { handleScroll, handleNavigateTop } from '../utils/handle-scroll';
 import useActiveElement from './useActiveElement';
 
 const useStyles = makeStyles({
@@ -110,7 +110,7 @@ export default function TableWrapper(props) {
       shouldRefocus,
       setFocusedCellCoord,
       hasSelections: selectionsAPI.isModal(),
-      shouldAddTabstop: keyboard.active,
+      shouldAddTabstop: !keyboard.enabled || keyboard.active,
     });
   }, [rows.length, size.qcy, size.qcx, page]);
 
@@ -135,6 +135,7 @@ export default function TableWrapper(props) {
         ref={tableSectionRef}
         className={classes[containerMode]}
         tabIndex="-1"
+        role="application"
         data-testid="table-wrapper"
       >
         <Table

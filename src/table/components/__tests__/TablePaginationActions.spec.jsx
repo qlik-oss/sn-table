@@ -5,7 +5,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 
 import TablePaginationActions from '../TablePaginationActions';
-import * as handleCellFocus from '../cells/handle-cell-focus';
+import * as handleAccessibility from '../../utils/handle-accessibility';
 
 describe('<TablePaginationActions />', () => {
   let count;
@@ -26,7 +26,7 @@ describe('<TablePaginationActions />', () => {
     tableWidth = 500;
     translator = { get: (s) => s };
     isInSelectionMode = false;
-    sinon.stub(handleCellFocus, 'focusConfirmButton').returns(sinon.spy());
+    sinon.stub(handleAccessibility, 'focusConfirmButton').returns(sinon.spy());
   });
 
   afterEach(() => {
@@ -163,7 +163,7 @@ describe('<TablePaginationActions />', () => {
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab' });
-    expect(handleCellFocus.focusConfirmButton).to.not.have.been.called;
+    expect(handleAccessibility.focusConfirmButton).to.not.have.been.called;
   });
 
   it('should not call focusConfirmButton when pressing shift + tab on last page button and isInSelectionMode is true', () => {
@@ -182,7 +182,7 @@ describe('<TablePaginationActions />', () => {
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab', shiftKey: true });
-    expect(handleCellFocus.focusConfirmButton).to.not.have.been.called;
+    expect(handleAccessibility.focusConfirmButton).to.not.have.been.called;
   });
 
   it('should call focusConfirmButton when pressing tab on last page button and isInSelectionMode is true', () => {
@@ -201,7 +201,7 @@ describe('<TablePaginationActions />', () => {
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab' });
-    expect(handleCellFocus.focusConfirmButton).to.have.been.calledOnce;
+    expect(handleAccessibility.focusConfirmButton).to.have.been.calledOnce;
   });
 
   it('should call focusConfirmButton when pressing tab on next page button, isInSelectionMode is true and tableWidth < 350', () => {
@@ -221,6 +221,6 @@ describe('<TablePaginationActions />', () => {
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.NextPage'), { key: 'Tab' });
-    expect(handleCellFocus.focusConfirmButton).to.have.been.calledOnce;
+    expect(handleAccessibility.focusConfirmButton).to.have.been.calledOnce;
   });
 });
