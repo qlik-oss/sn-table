@@ -20,7 +20,7 @@ import ext from './ext';
 import muiSetup from './mui-setup';
 import { render, teardown } from './table/Root';
 import manageData from './handle-data';
-import sortingFactory from './table/utils/sorting';
+import sortingFactory from './sorting-factory';
 
 export default function supernova(env) {
   return {
