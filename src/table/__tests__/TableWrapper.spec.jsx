@@ -94,7 +94,7 @@ describe('<TableWrapper />', () => {
     expect(handleKeyPress.handleTableWrapperKeyDown).to.have.been.calledOnce;
   });
 
-  it('should call setPageInfo when changing rows per page', async () => {
+  it('should call setPageInfo when changing rows per page', () => {
     const { getByTestId } = render(
       <TableWrapper
         tableData={tableData}
@@ -111,8 +111,8 @@ describe('<TableWrapper />', () => {
     expect(setPageInfo).to.have.been.calledWith({ top: 0, height: 25 });
   });
 
-  it('should change back to first page when not on first page and no rows', async () => {
-    const { findByTitle } = render(
+  it('should change back to first page when not on first page and no rows', () => {
+    const { queryByTitle } = render(
       <TableWrapper
         tableData={tableData}
         setPageInfo={setPageInfo}
@@ -127,7 +127,7 @@ describe('<TableWrapper />', () => {
     // This is a hack to simulate when selections are made on other page than first page and
     // rows per page is bigger than the selected rows -> handle data returns no rows.
     tableData.rows = [];
-    fireEvent.click(await findByTitle('SNTable.Pagination.NextPage'));
+    fireEvent.click(queryByTitle('SNTable.Pagination.NextPage'));
 
     // Called when pressing the button
     expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
@@ -155,7 +155,7 @@ describe('<TableWrapper />', () => {
     expect(queryByLabelText('SNTable.RowsPerPage')).to.be.a('null');
   });
 
-  it('should not show rows per page when selectionsAPI.isModal() returns true', async () => {
+  it('should not show rows per page when selectionsAPI.isModal() returns true', () => {
     modal = true;
 
     const { queryByText } = render(

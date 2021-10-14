@@ -90,7 +90,7 @@ describe('<TablePaginationActions />', () => {
     );
 
     fireEvent.click(queryByTitle('SNTable.Pagination.NextPage'));
-    expect(onPageChange.firstCall.args[1]).to.equal(1);
+    expect(onPageChange).to.have.been.calledWith(sinon.match.any, 1);
   });
 
   it('should call onPageChange when clicking previous page', () => {
@@ -109,7 +109,7 @@ describe('<TablePaginationActions />', () => {
     );
 
     fireEvent.click(queryByTitle('SNTable.Pagination.PreviousPage'));
-    expect(onPageChange.firstCall.args[1]).to.equal(0);
+    expect(onPageChange).to.have.been.calledWith(sinon.match.any, 0);
   });
 
   it('should call onPageChange when clicking last page', () => {
@@ -127,7 +127,7 @@ describe('<TablePaginationActions />', () => {
     );
 
     fireEvent.click(queryByTitle('SNTable.Pagination.LastPage'));
-    expect(onPageChange.firstCall.args[1]).to.equal(2);
+    expect(onPageChange).to.have.been.calledWith(sinon.match.any, 2);
   });
 
   it('should call onPageChange when clicking first page', () => {
@@ -146,10 +146,10 @@ describe('<TablePaginationActions />', () => {
     );
 
     fireEvent.click(queryByTitle('SNTable.Pagination.FirstPage'));
-    expect(onPageChange.firstCall.args[1]).to.equal(0);
+    expect(onPageChange).to.have.been.calledWith(sinon.match.any, 0);
   });
 
-  it('should not call focusConfirmButton when pressing tab on last page button and isInSelectionMode is false', async () => {
+  it('should not call focusConfirmButton when pressing tab on last page button and isInSelectionMode is false', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
         count={count}
@@ -166,7 +166,7 @@ describe('<TablePaginationActions />', () => {
     expect(handleCellFocus.focusConfirmButton).to.not.have.been.called;
   });
 
-  it('should not call focusConfirmButton when pressing shift + tab on last page button and isInSelectionMode is true', async () => {
+  it('should not call focusConfirmButton when pressing shift + tab on last page button and isInSelectionMode is true', () => {
     isInSelectionMode = true;
 
     const { queryByTitle } = render(
@@ -185,7 +185,7 @@ describe('<TablePaginationActions />', () => {
     expect(handleCellFocus.focusConfirmButton).to.not.have.been.called;
   });
 
-  it('should call focusConfirmButton when pressing tab on last page button and isInSelectionMode is true', async () => {
+  it('should call focusConfirmButton when pressing tab on last page button and isInSelectionMode is true', () => {
     isInSelectionMode = true;
 
     const { queryByTitle } = render(
@@ -204,7 +204,7 @@ describe('<TablePaginationActions />', () => {
     expect(handleCellFocus.focusConfirmButton).to.have.been.calledOnce;
   });
 
-  it('should call focusConfirmButton when pressing tab on next page button, isInSelectionMode is true and tableWidth < 350', async () => {
+  it('should call focusConfirmButton when pressing tab on next page button, isInSelectionMode is true and tableWidth < 350', () => {
     isInSelectionMode = true;
     tableWidth = 300;
 
