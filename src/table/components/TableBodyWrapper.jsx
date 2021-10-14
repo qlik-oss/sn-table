@@ -72,7 +72,7 @@ function TableBodyWrapper({
   }, [selectionsEnabled, columns.length]);
 
   useEffect(() => {
-    addSelectionListeners(selectionsAPI, selDispatch, setShouldRefocus, keyboard, tableWrapperRef);
+    addSelectionListeners({ api: selectionsAPI, selDispatch, setShouldRefocus, keyboard, tableWrapperRef });
   }, []);
 
   useEffect(() => {

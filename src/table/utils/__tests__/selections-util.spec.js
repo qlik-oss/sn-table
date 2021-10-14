@@ -32,7 +32,7 @@ describe('selections-utils', () => {
     });
 
     it('should call api.on and api removeListener for all listeners', () => {
-      addSelectionListeners(api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef)();
+      addSelectionListeners({ api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef })();
       listenerNames.forEach((name) => {
         expect(api.on).to.have.been.calledWith(name);
         expect(api.removeListener).to.have.been.calledWith(name);
@@ -41,7 +41,7 @@ describe('selections-utils', () => {
     it('should not call call api.on nor api.removeListener when no api', () => {
       api = undefined;
 
-      const destroyFn = addSelectionListeners(api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef);
+      const destroyFn = addSelectionListeners({ api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef });
       // Not a great check, but this would crash if the this case worked incorrectly
       expect(destroyFn).to.be.a('function');
     });
@@ -54,7 +54,7 @@ describe('selections-utils', () => {
         removeListener: () => {},
       };
 
-      addSelectionListeners(api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef);
+      addSelectionListeners({ api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef });
       callbacks.forEach((cb) => {
         cb();
         expect(selDispatch).to.have.been.calledWith({ type: 'reset' });
@@ -73,7 +73,7 @@ describe('selections-utils', () => {
         removeListener: () => {},
       };
 
-      addSelectionListeners(api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef);
+      addSelectionListeners({ api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef });
       confirmCallback();
       expect(setShouldRefocus).to.not.have.been.called;
       expect(keyboard.blur).to.have.been.calledOnce;

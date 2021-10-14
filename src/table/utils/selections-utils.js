@@ -1,4 +1,4 @@
-export function addSelectionListeners(api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef) {
+export function addSelectionListeners({ api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef }) {
   const resetSelections = () => {
     selDispatch({ type: 'reset' });
   };
