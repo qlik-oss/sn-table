@@ -8,6 +8,7 @@
 .npmrc
 stats.html
 
+properties.json
 node_modules
 coverage
 dist/

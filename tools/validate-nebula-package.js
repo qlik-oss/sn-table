@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const validateScripts = (pkg) => {
-  if (pkg.scripts.build !== 'yarn run locale:generate && node ./tools/build.js --core') {
+  if (pkg.scripts.build !== 'yarn run locale:generate && node ./tools/build.js --core && shx cp assets/* dist') {
     throw new Error('package.json does not have correct build script');
   }
   if (pkg.scripts.prepublishOnly !== 'NODE_ENV=production yarn run build') {

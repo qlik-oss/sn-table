@@ -30,9 +30,9 @@ jobs:
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
-      - run: 
+      - run:
           name: Install dependencies
-          command: yarn install --frozen-lockfile 
+          command: yarn install --frozen-lockfile
       - save_cache: *save_yarn_cache
 
       - store_artifacts:
@@ -85,6 +85,7 @@ jobs:
       - persist_to_workspace:
           root: ~/table
           paths:
+            - api-specifications
             - dist
             - package.json
             - core
@@ -127,11 +128,10 @@ jobs:
             fi
   api-governance:
     machine: true
-    working_directory: ~/project
+    working_directory: ~/table
     steps:
-      - checkout
       - attach_workspace:
-          at: ~/project
+          at: ~/table
       - run:
           name: Login for Docker
           command: echo $DOCKER_TOKEN | docker login -u "$DOCKER_USER" --password-stdin
@@ -156,6 +156,8 @@ workflows:
           requires:
             - install
       - api-governance:
+          requires:
+            - build
           filters:
             branches:
               # Forked pull requests have CIRCLE_BRANCH set to pull/XXX
