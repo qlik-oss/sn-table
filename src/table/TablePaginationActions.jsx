@@ -77,7 +77,7 @@ export default function TablePaginationActions(props) {
   };
 
   const handleSelectPage = (event) => {
-    onPageChange(event, event.target.value);
+    onPageChange(event, parseInt(event.target.value));
   };
 
   const onFirstPage = page === 0;
