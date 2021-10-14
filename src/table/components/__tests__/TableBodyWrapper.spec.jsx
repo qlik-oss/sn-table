@@ -11,7 +11,7 @@ import TableBodyWrapper from '../TableBodyWrapper';
 import * as selectionsUtils from '../../utils/selections-utils';
 import * as getCellRenderer from '../renderer';
 import * as handleKeyPress from '../../utils/handle-key-press';
-import * as handleCellFocus from '../../utils/handle-cell-focus';
+import * as handleAccessibility from '../../utils/handle-accessibility';
 
 describe('<TableBodyWrapper />', async () => {
   const model = { getHyperCubeData: async () => generateDataPages(2, 2) };
@@ -86,7 +86,7 @@ describe('<TableBodyWrapper />', async () => {
   });
 
   it('should call handleClickToFocusBody on mouseDown', () => {
-    sinon.stub(handleCellFocus, 'handleClickToFocusBody').returns(sinon.spy());
+    sinon.stub(handleAccessibility, 'handleClickToFocusBody').returns(sinon.spy());
 
     const { queryByText } = render(
       <TableBodyWrapper
@@ -99,6 +99,6 @@ describe('<TableBodyWrapper />', async () => {
     );
     fireEvent.mouseDown(queryByText(tableData.rows[0]['col-0'].qText));
 
-    expect(handleCellFocus.handleClickToFocusBody).to.have.been.calledOnce;
+    expect(handleAccessibility.handleClickToFocusBody).to.have.been.calledOnce;
   });
 });

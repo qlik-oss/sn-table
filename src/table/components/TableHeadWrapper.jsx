@@ -7,7 +7,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { getHeadStyle } from '../utils/styling-utils';
 import { headHandleKeyPress } from '../utils/handle-key-press';
-import { handleClickToFocusHead } from '../utils/handle-cell-focus';
+import { handleClickToFocusHead } from '../utils/handle-accessibility';
 
 const useStyles = makeStyles({
   head: {

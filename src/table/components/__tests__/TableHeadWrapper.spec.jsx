@@ -5,7 +5,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import TableHeadWrapper from '../TableHeadWrapper';
 import * as handleKeyPress from '../../utils/handle-key-press';
-import * as handleCellFocus from '../../utils/handle-cell-focus';
+import * as handleAccessibility from '../../utils/handle-accessibility';
 
 describe('<TableHeadWrapper />', () => {
   let tableData;
@@ -156,7 +156,7 @@ describe('<TableHeadWrapper />', () => {
   });
 
   it('should call handleClickToFocusHead when clicking a header cell', () => {
-    sinon.stub(handleCellFocus, 'handleClickToFocusHead').returns(sinon.spy());
+    sinon.stub(handleAccessibility, 'handleClickToFocusHead').returns(sinon.spy());
 
     const { queryByText } = render(
       <TableHeadWrapper
@@ -173,7 +173,7 @@ describe('<TableHeadWrapper />', () => {
     );
     fireEvent.mouseDown(queryByText(tableData.columns[0].label));
 
-    expect(handleCellFocus.handleClickToFocusHead).to.have.been.calledOnce;
+    expect(handleAccessibility.handleClickToFocusHead).to.have.been.calledOnce;
   });
 
   it('should render the visually hidden text instead of `aria-label` and has correct `scope` properly', () => {

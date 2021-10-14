@@ -1,5 +1,5 @@
 import { selectCell } from './selections-utils';
-import { updateFocus, focusConfirmButton } from './handle-cell-focus';
+import { updateFocus, focusConfirmButton } from './handle-accessibility';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 

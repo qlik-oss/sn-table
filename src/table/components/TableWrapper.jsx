@@ -10,8 +10,8 @@ import TableHeadWrapper from './TableHeadWrapper';
 import TablePaginationActions from './TablePaginationActions';
 import useDidUpdateEffect from './useDidUpdateEffect';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
-import { updateFocus, handleResetFocus, handleNavigateTop, handleFocusoutEvent } from '../utils/handle-cell-focus';
-import handleScroll from '../utils/handle-scroll';
+import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
+import { handleScroll, handleNavigateTop } from '../utils/handle-scroll';
 import useActiveElement from './useActiveElement';
 
 const useStyles = makeStyles({
