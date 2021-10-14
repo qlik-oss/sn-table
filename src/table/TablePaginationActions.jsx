@@ -16,6 +16,7 @@ const useStyles = makeStyles({
   root: {
     flexShrink: 0,
     paddingLeft: '24px',
+    transform: 'translate(0px, 4px)',
   },
   disabled: {
     color: 'rgba(0, 0, 0, 0.3)',
@@ -41,6 +42,9 @@ const useStyles = makeStyles({
     minWidth: '16px',
     maxHeight: '32px',
     transform: 'translate(0px, 6px)',
+  },
+  input: {
+    padding: '6px 32px 7px 8px'
   }
 });
 
@@ -89,7 +93,7 @@ export default function TablePaginationActions(props) {
   return (
     <div className={classes.root}>
       <FormControl className={`${classes.formControl} ${thinTable && classes.hidden}`}>
-        <InputLabel className={classes.caption} htmlFor="pagination-dropdown">Select page: </InputLabel>
+        <InputLabel className={classes.caption} htmlFor="pagination-dropdown">{translator.get('SNTable.Pagination.SelectPage')}: </InputLabel>
         <Select
           native
           className={classes.dropdown}
@@ -101,6 +105,7 @@ export default function TablePaginationActions(props) {
             tabindex: keyboardActive,
             name: 'Page',
             id: 'pagination-dropdown',
+            className: classes.input,
           }}
         >
           {options.map(value => {

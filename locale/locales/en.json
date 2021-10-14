@@ -11,6 +11,10 @@
     "value": "{0} of {1}",
     "comment": "label for the displayed rows, e.g. '1-100 of 234' (tew 211004)"
   },
+  "SNTable.Pagination.SelectPage": {
+    "value": "Select page",
+    "comment": "Label for the dropdown to select a page."
+  },
   "SNTable.Pagination.FirstPage": {
     "value": "First page",
     "comment": "tooltip and aria-label for the first page button. (tew 210929)"
