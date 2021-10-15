@@ -1,11 +1,7 @@
 import { expect } from 'chai';
 import * as handleAccessibility from '../handle-accessibility';
 
-<<<<<<< HEAD:src/table/cells/__tests__/handle-cell-focus.spec.js
-describe('handle-cell-focus', () => {
-=======
 describe('handle-accessibility', () => {
->>>>>>> main:src/table/utils/__tests__/handle-accessiblity.spec.js
   let cell;
   let rootElement;
   let focusedCellCoord;
@@ -141,20 +137,15 @@ describe('handle-accessibility', () => {
       rawColIdx: 0,
     };
 
-<<<<<<< HEAD:src/table/cells/__tests__/handle-cell-focus.spec.js
     it('should indirectly call setFocusedCellCoord with adjusted index, and keyboard.focus', () => {
-      handleCellFocus.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard);
-=======
-    it('should call setFocusedCellCoord with adjusted index, and keyboard.focus', () => {
       handleAccessibility.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard);
->>>>>>> main:src/table/utils/__tests__/handle-accessiblity.spec.js
       expect(cell.setAttribute).have.been.calledOnceWith('tabIndex', '-1');
       expect(setFocusedCellCoord).to.have.been.calledOnceWith([1, 0]);
       expect(keyboard.focus).to.have.been.calledOnce;
     });
     it('should indirectly call setFocusedCellCoord with adjusted index, but not keyboard.focus when keyboard.enabled is falsey', () => {
       keyboard.enabled = false;
-      handleCellFocus.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard);
+      handleAccessibility.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard);
       expect(cell.setAttribute).have.been.calledOnceWith('tabIndex', '-1');
       expect(setFocusedCellCoord).to.have.been.calledOnceWith([1, 0]);
       expect(keyboard.focus).to.not.have.been.called;
@@ -407,46 +398,30 @@ describe('handle-accessibility', () => {
       keyboard = { enabled: true, blur: sinon.spy() };
     });
 
-<<<<<<< HEAD:src/table/cells/__tests__/handle-cell-focus.spec.js
     it('should call blur when currentTarget doesnt contain relatedTarget, shouldRefocus is false and keyboard.enabled is true', () => {
-      handleCellFocus.handleFocusoutEvent(evt, shouldRefocus, keyboard);
+      handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, keyboard);
       expect(keyboard.blur).to.have.been.calledOnceWith(false);
-=======
-    it('should call blur when currentTarget doesnt contain relatedTarget and shouldRefocus is false', () => {
-      handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, blur);
-      expect(blur).to.have.been.calledOnceWith(false);
->>>>>>> main:src/table/utils/__tests__/handle-accessiblity.spec.js
     });
 
     it('should not call blur when currentTarget contains relatedTarget', () => {
       containsRelatedTarget = true;
 
-<<<<<<< HEAD:src/table/cells/__tests__/handle-cell-focus.spec.js
-      handleCellFocus.handleFocusoutEvent(evt, shouldRefocus, keyboard);
+      handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, keyboard);
       expect(keyboard.blur).to.not.have.been.called;
-=======
-      handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, blur);
-      expect(blur).to.not.have.been.called;
->>>>>>> main:src/table/utils/__tests__/handle-accessiblity.spec.js
     });
 
     it('should not call blur when shouldRefocus is true', () => {
       shouldRefocus.current = true;
 
-<<<<<<< HEAD:src/table/cells/__tests__/handle-cell-focus.spec.js
-      handleCellFocus.handleFocusoutEvent(evt, shouldRefocus, keyboard);
+      handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, keyboard);
       expect(keyboard.blur).to.not.have.been.called;
     });
 
     it('should not call blur when keyboard.enabled is falsey', () => {
       keyboard.enabled = false;
 
-      handleCellFocus.handleFocusoutEvent(evt, shouldRefocus, keyboard);
+      handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, keyboard);
       expect(keyboard.blur).to.not.have.been.called;
-=======
-      handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, blur);
-      expect(blur).to.not.have.been.called;
->>>>>>> main:src/table/utils/__tests__/handle-accessiblity.spec.js
     });
   });
 });

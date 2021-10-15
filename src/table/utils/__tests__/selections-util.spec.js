@@ -90,7 +90,7 @@ describe('selections-utils', () => {
         removeListener: () => {},
       };
 
-      addSelectionListeners(api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef);
+      addSelectionListeners({ api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef });
       confirmCallback();
       expect(setShouldRefocus).to.not.have.been.called;
       expect(keyboard.blur).to.not.have.been.called;
