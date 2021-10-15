@@ -228,19 +228,13 @@ describe('<TableHeadWrapper />', () => {
       />
     );
 
-    const firstColQuery = queryByText(tableData.columns[0].label).closest('th');
-    const secondColQuery = queryByText(tableData.columns[1].label).closest('th');
-
     // check scope
-    expect(firstColQuery).to.have.attribute('scope', 'col');
-    expect(secondColQuery).to.have.attribute('scope', 'col');
-
-    const firstColHiddenLabel = queryByTestId('VHL-for-col-0');
-    const secondColHiddenLabel = queryByTestId('VHL-for-col-1');
+    const tableColumn = queryByText(tableData.columns[0].label).closest('th');
+    expect(tableColumn).to.have.attribute('scope', 'col');
 
     // check label
-    expect(firstColHiddenLabel).to.have.text('SNTable.SortLabel.PressSpaceToSort');
-    expect(secondColHiddenLabel).to.have.text('SNTable.SortLabel.PressSpaceToSort');
+    const tableColumnSortlabel = queryByTestId('VHL-for-col-0');
+    expect(tableColumnSortlabel).to.have.text('SNTable.SortLabel.PressSpaceToSort');
   });
 
   it('should not render visually hidden text while we are out of table header', () => {
