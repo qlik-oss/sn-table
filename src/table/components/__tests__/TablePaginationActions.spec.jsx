@@ -75,6 +75,27 @@ describe('<TablePaginationActions />', () => {
     expect(queryByTitle('SNTable.Pagination.LastPage')).to.be.null;
   });
 
+  it('should not render pagination dropdown', () => {
+    const { queryByTitle, queryByTestId } = render(
+      <TablePaginationActions
+        count={count}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        onPageChange={onPageChange}
+        keyboardActive={keyboardActive}
+        tableWidth={tableWidth}
+        translator={translator}
+        isInSelectionMode={isInSelectionMode}
+      />
+    );
+
+    expect(queryByTitle('SNTable.Pagination.FirstPage')).to.be.visible;
+    expect(queryByTitle('SNTable.Pagination.PreviousPage')).to.be.visible;
+    expect(queryByTitle('SNTable.Pagination.NextPage')).to.be.visible;
+    expect(queryByTitle('SNTable.Pagination.LastPage')).to.be.visible;
+    expect(queryByTestId('pagination-dropdown')).to.be.null;
+  });
+
   it('should call onPageChange when clicking next page', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
@@ -147,6 +168,26 @@ describe('<TablePaginationActions />', () => {
 
     fireEvent.click(queryByTitle('SNTable.Pagination.FirstPage'));
     expect(onPageChange).to.have.been.calledWith(sinon.match.any, 0);
+  });
+
+  it('should call onPageChange when selecting page from dropdown', () => {
+    tableWidth = 700;
+    page = 0;
+    const { queryByTestId } = render(
+      <TablePaginationActions
+        count={count}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        onPageChange={onPageChange}
+        keyboardActive={keyboardActive}
+        tableWidth={tableWidth}
+        translator={translator}
+        isInSelectionMode={isInSelectionMode}
+      />
+    );
+
+    fireEvent.change(queryByTestId('pagination-dropdown'), { target: { value: 1 } });
+    expect(onPageChange).to.have.been.calledWith(sinon.match.any, 1);
   });
 
   it('should not call focusConfirmButton when pressing tab on last page button and isInSelectionMode is false', () => {

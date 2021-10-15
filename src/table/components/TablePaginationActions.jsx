@@ -92,13 +92,11 @@ export default function TablePaginationActions(props) {
           <Select
             native
             className={classes.dropdown}
-            id="pagination-dropdown"
             value={page}
             onChange={handleSelectPage}
-            label="Page"
             inputProps={{
+              'data-testid': 'pagination-dropdown',
               tabindex: keyboardActive,
-              name: 'Page',
               id: 'pagination-dropdown',
               className: classes.input,
             }}
