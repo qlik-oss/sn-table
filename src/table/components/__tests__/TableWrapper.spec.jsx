@@ -7,7 +7,7 @@ import sinon from 'sinon';
 import TableWrapper from '../TableWrapper';
 import * as TableBodyWrapper from '../TableBodyWrapper';
 import * as TableHeadWrapper from '../TableHeadWrapper';
-import * as handleKeyPress from '../cells/handle-key-press';
+import * as handleKeyPress from '../../utils/handle-key-press';
 
 describe('<TableWrapper />', () => {
   let tableData;
@@ -73,6 +73,7 @@ describe('<TableWrapper />', () => {
     expect(queryByLabelText('SNTable.Accessibility.RowsAndColumns')).to.be.visible;
     expect(queryByLabelText('SNTable.Pagination.RowsPerPage')).to.be.visible;
     expect(queryByTestId('table-wrapper')).to.has.attr('tabindex', '-1');
+    expect(queryByTestId('table-wrapper')).to.has.attr('role', 'application');
     expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).to.be.visible;
     expect(queryByText(rowsPerPage)).to.be.visible;
   });
