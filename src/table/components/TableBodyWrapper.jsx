@@ -89,9 +89,9 @@ function TableBodyWrapper({
 
   return (
     <>
-      <label htmlFor="cellSrNotation" className={classes.srOnly} aria-live="assertive">
+      {/* <label htmlFor="cellSrNotation" className={classes.srOnly} aria-live="assertive">
         {srNotation}
-      </label>
+      </label> */}
       <TableBody id="cellSrNotation" className={`${classes.cellBase}`}>
         {rows.map((row, rowIndex) => (
           <TableRow

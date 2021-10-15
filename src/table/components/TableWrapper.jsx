@@ -13,6 +13,7 @@ import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleScroll, handleNavigateTop } from '../utils/handle-scroll';
 import useActiveElement from './useActiveElement';
+import Announcer from './Announcer';
 
 const useStyles = makeStyles({
   paper: {
@@ -131,6 +132,7 @@ export default function TableWrapper(props) {
         })
       }
     >
+      <Announcer />
       <TableContainer
         ref={tableSectionRef}
         className={classes[containerMode]}
