@@ -32,7 +32,7 @@ describe('selections-utils', () => {
     });
 
     it('should call api.on and api removeListener for all listeners', () => {
-      addSelectionListeners(api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef)();
+      addSelectionListeners({ api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef })();
       listenerNames.forEach((name) => {
         expect(api.on).to.have.been.calledWith(name);
         expect(api.removeListener).to.have.been.calledWith(name);
@@ -41,7 +41,7 @@ describe('selections-utils', () => {
     it('should not call call api.on nor api.removeListener when no api', () => {
       api = undefined;
 
-      const destroyFn = addSelectionListeners(api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef);
+      const destroyFn = addSelectionListeners({ api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef });
       // Not a great check, but this would crash if the this case worked incorrectly
       expect(destroyFn).to.be.a('function');
     });
@@ -54,7 +54,7 @@ describe('selections-utils', () => {
         removeListener: () => {},
       };
 
-      addSelectionListeners(api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef);
+      addSelectionListeners({ api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef });
       callbacks.forEach((cb) => {
         cb();
         expect(selDispatch).to.have.been.calledWith({ type: 'reset' });
@@ -73,7 +73,7 @@ describe('selections-utils', () => {
         removeListener: () => {},
       };
 
-      addSelectionListeners(api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef);
+      addSelectionListeners({ api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef });
       confirmCallback();
       expect(setShouldRefocus).to.not.have.been.called;
       expect(keyboard.blur).to.have.been.calledOnce;
@@ -202,12 +202,12 @@ describe('selections-utils', () => {
 
   describe('selectCell', () => {
     const event = {};
-    let selState;
+    let selectionState;
     let cell;
     let selDispatch;
 
     beforeEach(() => {
-      selState = {
+      selectionState = {
         rows: [],
         colIdx: -1,
         api: {
@@ -224,32 +224,32 @@ describe('selections-utils', () => {
       const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
       const payload = { colIdx: cell.colIdx, rows: [{ qElemNumber: cell.qElemNumber, rowIdx: cell.rowIdx }] };
 
-      selectCell(selState, cell, selDispatch, event);
-      expect(selState.api.begin).to.have.been.calledOnce;
-      expect(selState.api.select).to.have.been.calledWith({ method: 'selectHyperCubeCells', params });
+      selectCell(selectionState, cell, selDispatch, event);
+      expect(selectionState.api.begin).to.have.been.calledOnce;
+      expect(selectionState.api.select).to.have.been.calledWith({ method: 'selectHyperCubeCells', params });
       expect(selDispatch).to.have.been.calledWith({ type: 'select', payload });
-      expect(selState.api.cancel).to.not.have.been.called;
+      expect(selectionState.api.cancel).to.not.have.been.called;
     });
     it('should not call begin and call cancel when same qElemNumber (resulting in empty selectedCells)', () => {
-      selState.rows = [{ qElemNumber: 1, rowIdx: 1 }];
-      selState.colIdx = 1;
+      selectionState.rows = [{ qElemNumber: 1, rowIdx: 1 }];
+      selectionState.colIdx = 1;
 
-      selectCell(selState, cell, selDispatch, event);
-      expect(selState.api.begin).to.not.have.been.called;
-      expect(selState.api.cancel).to.have.been.calledOnce;
+      selectCell(selectionState, cell, selDispatch, event);
+      expect(selectionState.api.begin).to.not.have.been.called;
+      expect(selectionState.api.cancel).to.have.been.calledOnce;
       expect(selDispatch).to.not.have.been.called;
-      expect(selState.api.select).to.not.have.been.called;
+      expect(selectionState.api.select).to.not.have.been.called;
     });
     it('should return early when excluded columns', () => {
-      selState.rows = [{ qElemNumber: 1, rowIdx: 1 }];
-      selState.colIdx = 1;
+      selectionState.rows = [{ qElemNumber: 1, rowIdx: 1 }];
+      selectionState.colIdx = 1;
       cell.colIdx = 2;
 
-      selectCell(selState, cell, selDispatch, event);
-      expect(selState.api.begin).to.not.have.been.called;
-      expect(selState.api.cancel).to.not.have.been.called;
+      selectCell(selectionState, cell, selDispatch, event);
+      expect(selectionState.api.begin).to.not.have.been.called;
+      expect(selectionState.api.cancel).to.not.have.been.called;
       expect(selDispatch).to.not.have.been.called;
-      expect(selState.api.select).to.not.have.been.called;
+      expect(selectionState.api.select).to.not.have.been.called;
     });
   });
 });

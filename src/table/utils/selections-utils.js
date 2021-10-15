@@ -1,4 +1,4 @@
-export function addSelectionListeners(api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef) {
+export function addSelectionListeners({ api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef }) {
   const resetSelections = () => {
     selDispatch({ type: 'reset' });
   };
@@ -69,14 +69,14 @@ export const getSelectedRows = (selectedRows, qElemNumber, rowIdx, evt) => {
   return selectedRows;
 };
 
-export function selectCell(selState, cell, selDispatch, evt) {
-  const { api, rows } = selState;
+export function selectCell(selectionState, cell, selDispatch, evt) {
+  const { api, rows } = selectionState;
   const { rowIdx, colIdx, qElemNumber } = cell;
   let selectedRows = [];
 
-  if (selState.colIdx === -1) {
+  if (selectionState.colIdx === -1) {
     api.begin('/qHyperCubeDef');
-  } else if (selState.colIdx === colIdx) {
+  } else if (selectionState.colIdx === colIdx) {
     selectedRows = rows.concat();
   } else {
     return;

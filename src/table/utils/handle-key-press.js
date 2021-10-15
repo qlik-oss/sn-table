@@ -1,5 +1,5 @@
-import { selectCell } from '../selections-utils';
-import { updateFocus, focusConfirmButton } from './handle-cell-focus';
+import { selectCell } from './selections-utils';
+import { updateFocus, focusConfirmButton } from './handle-accessibility';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -34,10 +34,10 @@ export const handleTableWrapperKeyDown = ({
   }
 };
 
-export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, selState) => {
+export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, selectionState) => {
   let [nextRow, nextCol] = cellCoord;
   // check if you have unconfirmed selections, so one or more cells are selected but not confirmed yet.
-  const isInSelectionMode = selState?.api?.isModal();
+  const isInSelectionMode = selectionState?.api?.isModal();
 
   switch (evt.key) {
     case 'ArrowDown':
@@ -81,11 +81,11 @@ export const getRowAndColumnCount = (rootElement) => {
   return { rowElements, rowCount, columnCount };
 };
 
-export const moveFocus = (evt, rootElement, cellCoord, selState, setFocusedCellCoord) => {
+export const moveFocus = (evt, rootElement, cellCoord, selectionState, setFocusedCellCoord) => {
   preventDefaultBehavior(evt);
   evt.target.setAttribute('tabIndex', '-1');
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
-  const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selState);
+  const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selectionState);
   updateFocus({ focusType: 'focus', rowElements: rowAndColumnCount.rowElements, cellCoord: nextCellCoord });
   setFocusedCellCoord(nextCellCoord);
 };
@@ -123,7 +123,7 @@ export const bodyHandleKeyPress = (
   evt,
   rootElement,
   cellCoord,
-  selState,
+  selectionState,
   cell,
   selDispatch,
   isAnalysisMode,
@@ -135,30 +135,30 @@ export const bodyHandleKeyPress = (
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, selState, setFocusedCellCoord);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, selectionState, setFocusedCellCoord);
       break;
     }
     // Space bar: Selects value.
     case ' ': {
       preventDefaultBehavior(evt);
-      cell?.isDim && isAnalysisMode && selectCell(selState, cell, selDispatch, evt);
+      cell?.isDim && isAnalysisMode && selectCell(selectionState, cell, selDispatch, evt);
       break;
     }
     // Enter: Confirms selections.
     case 'Enter': {
       preventDefaultBehavior(evt);
-      isAnalysisMode && selState.api.confirm();
+      isAnalysisMode && selectionState.api.confirm();
       break;
     }
     // Esc: Cancels selections. If no selections, do nothing and handleTableWrapperKeyDown should catch it
     case 'Escape': {
-      if (!isAnalysisMode || !selState.api.isModal()) break;
+      if (!isAnalysisMode || !selectionState.api.isModal()) break;
       preventDefaultBehavior(evt);
-      selState.api.cancel();
+      selectionState.api.cancel();
       break;
     }
     case 'Tab': {
-      if (evt.shiftKey && keyboard.enabled && selState.api.isModal()) {
+      if (evt.shiftKey && keyboard.enabled && selectionState.api.isModal()) {
         preventDefaultBehavior(evt);
         focusConfirmButton(evt.target);
       }
