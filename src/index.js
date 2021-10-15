@@ -13,13 +13,12 @@ import {
   useRect,
 } from '@nebula.js/stardust';
 import locale from '../locale/src';
-
 import properties from './object-properties';
 import data from './data';
 import ext from './ext';
+import manageData from './handle-data';
+import sortingFactory from './sorting-factory';
 import { render, teardown } from './table/Root';
-import manageData from './table/handle-data';
-import sortingFactory from './table/sorting';
 import './index.css';
 
 export default function supernova(env) {

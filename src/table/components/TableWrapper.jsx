@@ -9,9 +9,9 @@ import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import TablePaginationActions from './TablePaginationActions';
 import useDidUpdateEffect from './useDidUpdateEffect';
-import { handleTableWrapperKeyDown } from './cells/handle-key-press';
-import { updateFocus, handleResetFocus, handleNavigateTop, handleFocusoutEvent } from './cells/handle-cell-focus';
-import handleScroll from './handle-scroll';
+import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
+import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
+import { handleScroll, handleNavigateTop } from '../utils/handle-scroll';
 import useActiveElement from './useActiveElement';
 
 const useStyles = makeStyles({

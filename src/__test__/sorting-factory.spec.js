@@ -1,7 +1,7 @@
-import sortingFactory from '../sorting';
+import sortingFactory from '../sorting-factory';
 import { generateLayout } from './generate-test-data';
 
-describe('sorting', () => {
+describe('sorting-factory', () => {
   let layout;
   let model;
   let columnOrder;

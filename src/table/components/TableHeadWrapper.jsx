@@ -5,9 +5,9 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import { getHeadStyle } from './styling-utils';
-import { headHandleKeyPress } from './cells/handle-key-press';
-import { handleClickToFocusHead } from './cells/handle-cell-focus';
+import { getHeadStyle } from '../utils/styling-utils';
+import { headHandleKeyPress } from '../utils/handle-key-press';
+import { handleClickToFocusHead } from '../utils/handle-accessibility';
 
 const useStyles = makeStyles({
   head: {

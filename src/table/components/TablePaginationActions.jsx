@@ -6,7 +6,7 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import { makeStyles } from '@mui/styles';
-import { focusConfirmButton } from './cells/handle-cell-focus';
+import { focusConfirmButton } from '../utils/handle-accessibility';
 
 const useStyles = makeStyles({
   root: {
