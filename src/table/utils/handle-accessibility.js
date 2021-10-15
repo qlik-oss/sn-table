@@ -25,7 +25,7 @@ export const updateFocus = ({ focusType, rowElements = [], cellCoord = [], provi
       break;
   }
 
-  emitAnnouncement();
+  emitAnnouncement({ target: cell });
 };
 
 export const removeAndFocus = (newCoord, rootElement, setFocusedCellCoord, focus) => {

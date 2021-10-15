@@ -13,8 +13,8 @@ const AnnouncerManager = () => {
     };
   }, []);
 
-  const handleAnnouncment = ({ detail }) => {
-    console.log('#01', detail);
+  const handleAnnouncment = (evt) => {
+    console.log('#01', evt);
     // TODO:
     //  - get related notation
     //  - update announcment type
@@ -22,8 +22,8 @@ const AnnouncerManager = () => {
     //  - make sure this announcement will happen inside of this table
     //    not other tables inside of the sheet! ( scope it properly )
     setNotation(`some announcment ${randomIntFromInterval(1, 100)}`);
-    setAnnounceType(detail.announceType);
-    setIsAnnouncmentAtomic(detail.shouldBeAtomic);
+    setAnnounceType(evt.detail.announceType);
+    setIsAnnouncmentAtomic(evt.detail.shouldBeAtomic);
   };
 
   function randomIntFromInterval(min, max) {

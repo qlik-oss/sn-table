@@ -5,7 +5,8 @@ export const emitAnnouncement = ({
   announceType = ASSERTIVE_PRESSURE.ASSERTIVE,
   shouldBeAtomic = false,
   shouldBubble = true,
-}) => {
+  target = document,
+} = {}) => {
   // TODO:
   //  - this function would create an announcment evt
   //  - dispatches this event
@@ -18,10 +19,11 @@ export const emitAnnouncement = ({
       //  - announcer should handle that part
       announceType,
       shouldBeAtomic,
+      EVT: SN_TABLE_EVENT_TYPES.EMIT_ANNOUNCEMENT,
     },
   });
 
-  document.dispatchEvent(announcementEvent);
+  target.dispatchEvent(announcementEvent);
 };
 
 // const getNotationBase = () => {
