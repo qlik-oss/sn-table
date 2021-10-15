@@ -82,18 +82,11 @@ export default function TablePaginationActions(props) {
   const onFirstPage = page === 0;
   const onLastPage = page >= Math.ceil(count / rowsPerPage) - 1;
 
-  const options = [];
-  for (let i = 0; i < Math.ceil(count / rowsPerPage); i++) {
-    options.push({ value: i, label: i + 1 });
-  }
-
-  const thinTable = tableWidth < 650;
-
   return (
     <div className={classes.root}>
-      <FormControl className={`${classes.formControl} ${thinTable && classes.hidden}`}>
+      {tableWidth > 650 && <FormControl className={classes.formControl}>
         <InputLabel className={classes.caption} htmlFor="pagination-dropdown">
-          {translator.get('SNTable.Pagination.SelectPage')}:{' '}
+          {`${translator.get('SNTable.Pagination.SelectPage')}: `}
         </InputLabel>
         <Select
           native
@@ -109,11 +102,9 @@ export default function TablePaginationActions(props) {
             className: classes.input,
           }}
         >
-          {options.map((value) => {
-            return <option value={value.value}>{value.label}</option>;
-          })}
+          {Array(Math.ceil(count / rowsPerPage)).fill().map((val, i) => <option value={i}>{i + 1}</option>)}
         </Select>
-      </FormControl>
+      </FormControl>}
       {tableWidth > 350 && (
         <IconButton
           onClick={!onFirstPage ? handleFirstPageButtonClick : () => {}}
