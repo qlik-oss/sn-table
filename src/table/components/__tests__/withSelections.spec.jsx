@@ -7,7 +7,7 @@ import sinon from 'sinon';
 import * as withSelections from '../withSelections';
 import * as selectionsUtils from '../../utils/selections-utils';
 
-describe('withSelections', async () => {
+describe('withSelections', () => {
   let HOC;
   let cell;
   let selectionState;
