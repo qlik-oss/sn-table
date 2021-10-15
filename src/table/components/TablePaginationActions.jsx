@@ -28,13 +28,13 @@ const useStyles = makeStyles({
     position: 'relative',
     transform: 'translate(0px, 14px)',
     paddingRight: '8px',
-    height: '30px'
+    height: '30px',
   },
   formControl: {
     flexDirection: 'row',
   },
   hidden: {
-    display: 'none'
+    display: 'none',
   },
   dropdown: {
     cursor: 'pointer',
@@ -43,8 +43,8 @@ const useStyles = makeStyles({
     transform: 'translate(0px, 6px)',
   },
   input: {
-    padding: '6px 32px 7px 8px'
-  }
+    padding: '6px 32px 7px 8px',
+  },
 });
 
 export default function TablePaginationActions(props) {
@@ -76,15 +76,15 @@ export default function TablePaginationActions(props) {
   };
 
   const handleSelectPage = (event) => {
-    onPageChange(event, parseInt(event.target.value));
+    onPageChange(event, parseInt(event.target.value, 10));
   };
 
   const onFirstPage = page === 0;
   const onLastPage = page >= Math.ceil(count / rowsPerPage) - 1;
 
   const options = [];
-  for(let i = 0; i < Math.ceil(count / rowsPerPage); i++){
-    options.push({value: i, label: i+1})
+  for (let i = 0; i < Math.ceil(count / rowsPerPage); i++) {
+    options.push({ value: i, label: i + 1 });
   }
 
   const thinTable = tableWidth < 650;
@@ -92,7 +92,9 @@ export default function TablePaginationActions(props) {
   return (
     <div className={classes.root}>
       <FormControl className={`${classes.formControl} ${thinTable && classes.hidden}`}>
-        <InputLabel className={classes.caption} htmlFor="pagination-dropdown">{translator.get('SNTable.Pagination.SelectPage')}: </InputLabel>
+        <InputLabel className={classes.caption} htmlFor="pagination-dropdown">
+          {translator.get('SNTable.Pagination.SelectPage')}:{' '}
+        </InputLabel>
         <Select
           native
           className={classes.dropdown}
@@ -107,23 +109,24 @@ export default function TablePaginationActions(props) {
             className: classes.input,
           }}
         >
-          {options.map(value => {
-            return <option value={value.value}>{value.label}</option>
+          {options.map((value) => {
+            return <option value={value.value}>{value.label}</option>;
           })}
         </Select>
       </FormControl>
       {tableWidth > 350 && (
-      <IconButton 
-        onClick={!onFirstPage ? handleFirstPageButtonClick : () => {}}
-        aria-disabled={onFirstPage}
-        aria-label={translator.get('SNTable.Pagination.FirstPage')}
-        title={translator.get('SNTable.Pagination.FirstPage')}
-        tabindex={keyboardActive}
-        className={onFirstPage && classes.disabled}
-      >
-        <FirstPageIcon />
-      </IconButton>)}
-      <IconButton 
+        <IconButton
+          onClick={!onFirstPage ? handleFirstPageButtonClick : () => {}}
+          aria-disabled={onFirstPage}
+          aria-label={translator.get('SNTable.Pagination.FirstPage')}
+          title={translator.get('SNTable.Pagination.FirstPage')}
+          tabindex={keyboardActive}
+          className={onFirstPage && classes.disabled}
+        >
+          <FirstPageIcon />
+        </IconButton>
+      )}
+      <IconButton
         onClick={!onFirstPage ? handleBackButtonClick : () => {}}
         aria-disabled={onFirstPage}
         aria-label={translator.get('SNTable.Pagination.PreviousPage')}
