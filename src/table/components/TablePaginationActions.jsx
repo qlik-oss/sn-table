@@ -84,27 +84,33 @@ export default function TablePaginationActions(props) {
 
   return (
     <div className={classes.root}>
-      {tableWidth > 650 && <FormControl className={classes.formControl}>
-        <InputLabel className={classes.caption} htmlFor="pagination-dropdown">
-          {`${translator.get('SNTable.Pagination.SelectPage')}: `}
-        </InputLabel>
-        <Select
-          native
-          className={classes.dropdown}
-          id="pagination-dropdown"
-          value={page}
-          onChange={handleSelectPage}
-          label="Page"
-          inputProps={{
-            tabindex: keyboardActive,
-            name: 'Page',
-            id: 'pagination-dropdown',
-            className: classes.input,
-          }}
-        >
-          {Array(Math.ceil(count / rowsPerPage)).fill().map((val, i) => <option value={i}>{i + 1}</option>)}
-        </Select>
-      </FormControl>}
+      {tableWidth > 650 && (
+        <FormControl className={classes.formControl}>
+          <InputLabel className={classes.caption} htmlFor="pagination-dropdown">
+            {`${translator.get('SNTable.Pagination.SelectPage')}: `}
+          </InputLabel>
+          <Select
+            native
+            className={classes.dropdown}
+            id="pagination-dropdown"
+            value={page}
+            onChange={handleSelectPage}
+            label="Page"
+            inputProps={{
+              tabindex: keyboardActive,
+              name: 'Page',
+              id: 'pagination-dropdown',
+              className: classes.input,
+            }}
+          >
+            {Array(Math.ceil(count / rowsPerPage))
+              .fill()
+              .map((val, i) => (
+                <option value={i}>{i + 1}</option>
+              ))}
+          </Select>
+        </FormControl>
+      )}
       {tableWidth > 350 && (
         <IconButton
           onClick={!onFirstPage ? handleFirstPageButtonClick : () => {}}
