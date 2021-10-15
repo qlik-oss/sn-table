@@ -114,7 +114,7 @@ export default function TablePaginationActions(props) {
       </FormControl>
       {tableWidth > 350 && (
       <IconButton 
-        onClick={!onFirstPage && handleFirstPageButtonClick}
+        onClick={!onFirstPage ? handleFirstPageButtonClick : () => {}}
         aria-disabled={onFirstPage}
         aria-label={translator.get('SNTable.Pagination.FirstPage')}
         title={translator.get('SNTable.Pagination.FirstPage')}
@@ -124,7 +124,7 @@ export default function TablePaginationActions(props) {
         <FirstPageIcon />
       </IconButton>)}
       <IconButton 
-        onClick={!onFirstPage && handleBackButtonClick}
+        onClick={!onFirstPage ? handleBackButtonClick : () => {}}
         aria-disabled={onFirstPage}
         aria-label={translator.get('SNTable.Pagination.PreviousPage')}
         title={translator.get('SNTable.Pagination.PreviousPage')}
