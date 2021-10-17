@@ -42,8 +42,12 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn lint && yarn format"
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "*.+(js|jsx)": "eslint",
+    "*.+(js|jsx|json|css|md)": "prettier --write"
   },
   "devDependencies": {
     "@after-work.js/aw": "6.0.14",
@@ -76,6 +80,7 @@
     "globby": "^12.0.2",
     "husky": "^7.0.2",
     "jsdom": "18.0.0",
+    "lint-staged": "^11.2.3",
     "mocha-junit-reporter": "2.0.2",
     "prettier": "2.4.1",
     "prop-types": "^15.7.2",
