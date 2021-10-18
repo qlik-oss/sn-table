@@ -37,6 +37,8 @@ const getMemoisedAnnouncementNotation = (prevCount) => {
 
   return ({
     announcementType,
+    tableData,
+    layout,
     rootElement,
     selectionState,
     focusedCellCoord,
@@ -50,22 +52,22 @@ const getMemoisedAnnouncementNotation = (prevCount) => {
     const cell = rowElements[rowIdx]?.getElementsByClassName('sn-table-cell')[colIdx];
 
     // const tColumnName = tableData.columns[y].label;
-    // const cellContent = cell && cell.innerText;
+    const cellContent = cell && cell.innerText;
     const isCellSelected = cell && cell.classList.contains('selected');
 
     let notation = '';
 
     switch (announcementType) {
-      case ANNOUNCEMENT_TYPES.FOCUS_TYPE:
+      case ANNOUNCEMENT_TYPES.FOCUS_TYPE: {
+        // if we deselect last (selected) cell which means we close the selection mode
         if (selectionState.rows.length === 0 && prevSelectedCount > 0) {
-          // if we deselect last (selected) cell which means we close the selection mode
           notation = translator.get('SNTable.SelectionLabel.ExitedSelectionMode');
         }
 
         prevSelectedCount = selectionState.rows.length;
         break;
-
-      case ANNOUNCEMENT_TYPES.SELECTION_TYPE:
+      }
+      case ANNOUNCEMENT_TYPES.SELECTION_TYPE: {
         if (selectionState.rows.length) {
           const selectionNote = getCellSelectionStatusNote(selectionState.rows, translator);
 
@@ -84,17 +86,36 @@ const getMemoisedAnnouncementNotation = (prevCount) => {
           }
         }
 
+        // Junk char addition
+        if (hasJunkChar % 2) notation += ` ­`;
+        hasJunkChar++;
+
         prevSelectedCount = selectionState.rows.length;
         break;
+      }
+      case ANNOUNCEMENT_TYPES.SORTING_TYPE: {
+        const SORT_NOTATIONS = {
+          asc: translator.get('SNTable.SortLabel.SortedAscending'),
+          desc: translator.get('SNTable.SortLabel.SortedDescending'),
+        };
 
-      default:
+        const targetColIdx = tableData.columns.findIndex((col) => col.label === cellContent);
+        const targetCol = tableData.columns[targetColIdx];
+        const currentSortDir = SORT_NOTATIONS[targetCol.sortDirection];
+
+        const isCurrentColumnActive =
+          layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === tableData.columnOrder[targetColIdx];
+
+        notation = `${cellContent}, ${isCurrentColumnActive ? currentSortDir : ''} ${translator.get(
+          'SNTable.SortLabel.PressSpaceToSort'
+        )}`;
+        break;
+      }
+      default: {
         notation = 'some announcment';
         break;
+      }
     }
-
-    // Junk char addition
-    if (hasJunkChar % 2) notation += ` ­`;
-    hasJunkChar++;
 
     return notation;
   };

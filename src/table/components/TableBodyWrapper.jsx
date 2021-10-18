@@ -77,17 +77,6 @@ function TableBodyWrapper({
     addSelectionListeners({ api: selectionsAPI, selDispatch, setShouldRefocus, keyboard, tableWrapperRef });
   }, []);
 
-  // useEffect(() => {
-  //   setSrNotation(
-  //     getCellSrNotation({
-  //       focusedCellCoord,
-  //       rootElement,
-  //       selectionState,
-  //       translator,
-  //       isActiveElementInTable,
-  //     })
-  //   );
-  // }, [focusedCellCoord, selectionState, translator, isActiveElementInTable]);
   useEffect(() => {
     if (focusedCellCoord[0] === 0) return;
 
