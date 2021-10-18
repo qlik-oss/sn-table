@@ -19,7 +19,6 @@ import ext from './ext';
 import manageData from './handle-data';
 import sortingFactory from './sorting-factory';
 import { render, teardown } from './table/Root';
-import './index.css';
 
 export default function supernova(env) {
   return {

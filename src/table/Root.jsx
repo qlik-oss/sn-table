@@ -5,10 +5,12 @@ import TableWrapper from './components/TableWrapper';
 import muiSetup from '../mui-setup';
 
 export function render(rootElement, props) {
+  const muiParameters = muiSetup();
+
   ReactDOM.render(
     <React.StrictMode>
-      <StyledEngineProvider injectFirst generateClassName={muiSetup().generateClassName}>
-        <ThemeProvider theme={muiSetup().theme}>
+      <StyledEngineProvider injectFirst generateClassName={muiParameters.generateClassName}>
+        <ThemeProvider theme={muiParameters.theme}>
           <TableWrapper {...props} />
         </ThemeProvider>
       </StyledEngineProvider>
