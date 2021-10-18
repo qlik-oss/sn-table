@@ -9,7 +9,6 @@ import {
 } from '../handle-key-press';
 
 import * as handleAccessibility from '../handle-accessibility';
-import { exact } from 'prop-types';
 
 describe('handle-key-press', () => {
   describe('arrowKeysNavigation', () => {
