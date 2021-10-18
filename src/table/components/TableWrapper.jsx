@@ -132,7 +132,7 @@ export default function TableWrapper(props) {
         })
       }
     >
-      <Announcer />
+      <Announcer tableRef={tableSectionRef} />
       <TableContainer
         ref={tableSectionRef}
         className={classes[containerMode]}

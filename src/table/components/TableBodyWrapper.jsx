@@ -8,6 +8,8 @@ import getCellRenderer from './renderer';
 import { getBodyStyle } from '../utils/styling-utils';
 import { bodyHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusBody, getCellSrNotation } from '../utils/handle-accessibility';
+import { emitAnnouncement } from './Announcer/announcement-utils';
+import { ANNOUNCEMENT_TYPES } from './Announcer/constants';
 
 const useStyles = makeStyles({
   cellBase: {
@@ -64,7 +66,7 @@ function TableBodyWrapper({
     colIdx: -1,
     isEnabled: selectionsEnabled,
   });
-  const [srNotation, setSrNotation] = useState('');
+  // const [srNotation, setSrNotation] = useState('');
 
   useEffect(() => {
     selDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
@@ -75,72 +77,85 @@ function TableBodyWrapper({
     addSelectionListeners({ api: selectionsAPI, selDispatch, setShouldRefocus, keyboard, tableWrapperRef });
   }, []);
 
+  // useEffect(() => {
+  //   setSrNotation(
+  //     getCellSrNotation({
+  //       focusedCellCoord,
+  //       rootElement,
+  //       selectionState,
+  //       translator,
+  //       isActiveElementInTable,
+  //     })
+  //   );
+  // }, [focusedCellCoord, selectionState, translator, isActiveElementInTable]);
   useEffect(() => {
-    setSrNotation(
-      getCellSrNotation({
-        focusedCellCoord,
+    if (focusedCellCoord[0] === 0) return;
+
+    const announcementType = selectionsAPI.isModal()
+      ? ANNOUNCEMENT_TYPES.SELECTION_TYPE
+      : ANNOUNCEMENT_TYPES.FOCUS_TYPE;
+
+    emitAnnouncement({
+      announcementType,
+      notationDependencies: {
         rootElement,
         selectionState,
-        translator,
+        focusedCellCoord,
         isActiveElementInTable,
-      })
-    );
-  }, [focusedCellCoord, selectionState, translator, isActiveElementInTable]);
+        translator,
+      },
+    });
+  }, [focusedCellCoord, selectionState, selectionsAPI, isActiveElementInTable, translator]);
 
   return (
-    <>
-      {/* <label htmlFor="cellSrNotation" className={classes.srOnly} aria-live="assertive">
-        {srNotation}
-      </label> */}
-      <TableBody id="cellSrNotation" className={`${classes.cellBase}`}>
-        {rows.map((row, rowIndex) => (
-          <TableRow
-            hover={hoverEffect}
-            tabIndex={-1}
-            key={row.key}
-            className={`sn-table-row ${hoverEffect && classes.hoverTableRow}`}
-          >
-            {columns.map((column, columnIndex) => {
-              const cell = row[column.id];
-              const value = cell.qText;
-              const CellRenderer = columnRenderers[columnIndex];
-              return (
-                CellRenderer && (
-                  <CellRenderer
-                    scope={columnIndex === 0 ? 'row' : null}
-                    component={columnIndex === 0 ? 'th' : null}
-                    cell={cell}
-                    column={column}
-                    value={value}
-                    key={column.id}
-                    align={column.align}
-                    styling={{}}
-                    selectionState={selectionState}
-                    selDispatch={selDispatch}
-                    tabIndex={-1}
-                    onKeyDown={(evt) =>
-                      bodyHandleKeyPress(
-                        evt,
-                        rootElement,
-                        [rowIndex + 1, columnIndex],
-                        selectionState,
-                        cell,
-                        selDispatch,
-                        selectionsEnabled,
-                        setFocusedCellCoord
-                      )
-                    }
-                    onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
-                  >
-                    {value}
-                  </CellRenderer>
-                )
-              );
-            })}
-          </TableRow>
-        ))}
-      </TableBody>
-    </>
+    <TableBody className={`${classes.cellBase}`}>
+      {rows.map((row, rowIndex) => (
+        <TableRow
+          hover={hoverEffect}
+          tabIndex={-1}
+          key={row.key}
+          className={`sn-table-row ${hoverEffect && classes.hoverTableRow}`}
+        >
+          {columns.map((column, columnIndex) => {
+            const cell = row[column.id];
+            const value = cell.qText;
+            const CellRenderer = columnRenderers[columnIndex];
+            return (
+              CellRenderer && (
+                <CellRenderer
+                  scope={columnIndex === 0 ? 'row' : null}
+                  component={columnIndex === 0 ? 'th' : null}
+                  cell={cell}
+                  column={column}
+                  value={value}
+                  key={column.id}
+                  align={column.align}
+                  styling={{}}
+                  selectionState={selectionState}
+                  selDispatch={selDispatch}
+                  tabIndex={-1}
+                  onKeyDown={(evt) =>
+                    bodyHandleKeyPress(
+                      evt,
+                      rootElement,
+                      [rowIndex + 1, columnIndex],
+                      selectionState,
+                      cell,
+                      selDispatch,
+                      selectionsEnabled,
+                      setFocusedCellCoord
+                    )
+                  }
+                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
+                >
+                  {value}
+                </CellRenderer>
+              )
+            );
+          })}
+        </TableRow>
+      ))}
+    </TableBody>
   );
 }
 

@@ -1,5 +1,3 @@
-import { emitAnnouncement } from '../components/Announcer/announcement-utils';
-
 export const findCellWithTabStop = (rootElement) => rootElement.querySelector("td[tabindex='0'], th[tabindex='0']");
 
 export const updateFocus = ({ focusType, rowElements = [], cellCoord = [], providedCell = undefined }) => {
@@ -24,8 +22,6 @@ export const updateFocus = ({ focusType, rowElements = [], cellCoord = [], provi
     default:
       break;
   }
-
-  emitAnnouncement({ target: cell });
 };
 
 export const removeAndFocus = (newCoord, rootElement, setFocusedCellCoord, focus) => {
@@ -118,6 +114,7 @@ export const getMemoisedSrNotation = (prevCount = 0) => {
 };
 
 export const getCellSrNotation = getMemoisedSrNotation();
+
 export const handleFocusoutEvent = (evt, shouldRefocus, blur) => {
   if (!evt.currentTarget.contains(evt.relatedTarget) && !shouldRefocus.current) {
     blur(false);
