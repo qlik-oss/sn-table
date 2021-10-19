@@ -1,4 +1,4 @@
-import { SN_TABLE_EVENT_TYPES, ASSERTIVE_PRESSURE } from './constants';
+import { SN_TABLE_EVENT_TYPES, ASSERTIVE_PRESSURE, uniqHash } from './constants';
 
 export const emitAnnouncement = ({
   politness = ASSERTIVE_PRESSURE.POLITE,
@@ -6,6 +6,7 @@ export const emitAnnouncement = ({
   shouldBubble = true,
   message = '',
 } = {}) => {
+  console.log('>>>>~~~~~~~~', document.querySelectorAll(`#sn-table-announcer--${uniqHash}`));
   const announcementEvent = new CustomEvent(SN_TABLE_EVENT_TYPES.EMIT_ANNOUNCEMENT, {
     bubbles: shouldBubble,
     detail: {

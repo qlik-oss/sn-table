@@ -7,3 +7,5 @@ export const ASSERTIVE_PRESSURE = {
   POLITE: 'polite',
   OFF: 'off',
 };
+
+export const uniqHash = '_' + Math.random().toString(36).substr(2, 12);

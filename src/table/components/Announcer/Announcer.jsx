@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SN_TABLE_EVENT_TYPES } from './constants';
+import { SN_TABLE_EVENT_TYPES, uniqHash } from './constants';
 
 import useStyles from './styles';
 
@@ -28,7 +28,7 @@ const Announcer = ({ tableRef }) => {
 
   return (
     <div
-      id="sn-table-announcer"
+      id={`sn-table-announcer--${uniqHash}`}
       aria-live={announceType}
       aria-atomic={isAnnouncmentAtomic}
       className={styles.screenReaderOnly}
