@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
@@ -8,8 +8,6 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { getHeadStyle } from '../utils/styling-utils';
 import { headHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusHead } from '../utils/handle-accessibility';
-import { emitAnnouncement } from './Announcer/announcement-utils';
-import { ANNOUNCEMENT_TYPES } from './Announcer/constants';
 
 const useStyles = makeStyles({
   head: {

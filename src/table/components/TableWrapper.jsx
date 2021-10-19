@@ -12,7 +12,6 @@ import useDidUpdateEffect from './useDidUpdateEffect';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleScroll, handleNavigateTop } from '../utils/handle-scroll';
-import useActiveElement from './useActiveElement';
 import Announcer from './Announcer';
 
 const useStyles = makeStyles({
@@ -49,7 +48,6 @@ export default function TableWrapper(props) {
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
   const paginationFixedRpp = selectionsAPI.isModal() || rect.width < 550;
-  const activeElement = useActiveElement();
 
   const setShouldRefocus = () => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
@@ -99,8 +97,11 @@ export default function TableWrapper(props) {
       focusType: keyboard.active ? 'focus' : 'blur',
       rowElements: rootElement.getElementsByClassName('sn-table-row'),
       cellCoord: focusedCellCoord,
+      isSelectionActive: selectionsAPI.isModal(),
+      translator: translator,
+      callee: 'tableWrapper',
     });
-  }, [keyboard.active]);
+  }, [keyboard.active, selectionsAPI.isModal(), translator]);
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
@@ -112,6 +113,7 @@ export default function TableWrapper(props) {
       setFocusedCellCoord,
       hasSelections: selectionsAPI.isModal(),
       shouldAddTabstop: !keyboard.enabled || keyboard.active,
+      translator,
     });
   }, [rows.length, size.qcy, size.qcx, page]);
 

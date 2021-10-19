@@ -82,12 +82,18 @@ export const getRowAndColumnCount = (rootElement) => {
   return { rowElements, rowCount, columnCount };
 };
 
-export const moveFocus = (evt, rootElement, cellCoord, selectionState, setFocusedCellCoord) => {
+export const moveFocus = (evt, rootElement, cellCoord, selectionState, setFocusedCellCoord, translator) => {
   preventDefaultBehavior(evt);
   evt.target.setAttribute('tabIndex', '-1');
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
   const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selectionState);
-  updateFocus({ focusType: 'focus', rowElements: rowAndColumnCount.rowElements, cellCoord: nextCellCoord });
+  updateFocus({
+    focusType: 'focus',
+    rowElements: rowAndColumnCount.rowElements,
+    cellCoord: nextCellCoord,
+    isSelectionActive: selectionState.rows?.length || false,
+    translator: translator,
+  });
   setFocusedCellCoord(nextCellCoord);
 };
 
@@ -136,7 +142,7 @@ export const bodyHandleKeyPress = (
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, selectionState, setFocusedCellCoord);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, selectionState, setFocusedCellCoord, translator);
       break;
     }
     // Space bar: Selects value.

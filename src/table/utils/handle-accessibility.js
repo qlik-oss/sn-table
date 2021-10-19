@@ -1,8 +1,25 @@
+import { emitAnnouncement } from '../components/Announcer/announcement-utils';
+
 export const findCellWithTabStop = (rootElement) => rootElement.querySelector("td[tabindex='0'], th[tabindex='0']");
 
-export const updateFocus = ({ focusType, rowElements = [], cellCoord = [], providedCell = undefined }) => {
+export const updateFocus = ({
+  focusType,
+  rowElements = [],
+  cellCoord = [],
+  providedCell = undefined,
+  isSelectionActive,
+  translator,
+  callee,
+}) => {
   const cell = providedCell || rowElements[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[cellCoord[1]];
   if (!cell) return;
+
+  if (isSelectionActive && callee !== 'tableWrapper') {
+    const hasActiveClassName = cell.classList.contains('selected');
+    hasActiveClassName
+      ? emitAnnouncement({ message: translator.get('SNTable.SelectionLabel.SelectedValue') })
+      : emitAnnouncement({ message: translator.get('SNTable.SelectionLabel.NotSelectedValue') });
+  }
 
   switch (focusType) {
     case 'focus':
@@ -49,8 +66,14 @@ export const handleResetFocus = ({
   hasSelections,
   setFocusedCellCoord,
   shouldAddTabstop,
+  translator,
 }) => {
-  updateFocus({ focusType: 'removeTab', providedCell: findCellWithTabStop(rootElement) });
+  updateFocus({
+    focusType: 'removeTab',
+    providedCell: findCellWithTabStop(rootElement),
+    isSelectionActive: hasSelections,
+    translator,
+  });
   // If we have selections ongoing, we want to stay on the same column
   const nextCell = hasSelections ? [1, focusedCellCoord[1]] : [0, 0];
   if (shouldAddTabstop) {
@@ -58,62 +81,10 @@ export const handleResetFocus = ({
     const focusType = shouldRefocus.current ? 'focus' : 'addTab';
     shouldRefocus.current = false;
     const rowElements = rootElement.getElementsByClassName('sn-table-row');
-    updateFocus({ focusType, rowElements, cellCoord: nextCell });
+    updateFocus({ focusType, rowElements, cellCoord: nextCell, isSelectionActive: hasSelections, translator });
   }
   setFocusedCellCoord(nextCell);
 };
-
-export const getCellSelectionStatusNote = (rows, translator) =>
-  rows.length === 1
-    ? translator.get('SNTable.SelectionLabel.OneSelectedValue')
-    : translator.get('SNTable.SelectionLabel.SelectedValues', [rows.length]);
-
-export const getMemoisedSrNotation = (prevCount = 0) => {
-  let prevSelectedCount = prevCount || 0;
-  let hasJunkChar = 0;
-
-  return ({ focusedCellCoord, rootElement, selectionState, translator, isActiveElementInTable }) => {
-    if (!focusedCellCoord || focusedCellCoord[0] === 0 || !isActiveElementInTable) return '';
-
-    const [rowIdx, colIdx] = focusedCellCoord;
-    const rowElements = rootElement.getElementsByClassName('sn-table-row');
-    const cell = rowElements[rowIdx]?.getElementsByClassName('sn-table-cell')[colIdx];
-
-    const isCellSelected = cell && cell.classList.contains('selected');
-
-    let notation = '';
-
-    if (selectionState.rows.length) {
-      const selectionNote = getCellSelectionStatusNote(selectionState.rows, translator);
-
-      if (prevSelectedCount < selectionState.rows.length) {
-        // if we select cell
-        notation += `${translator.get('SNTable.SelectionLabel.SelectedValue')} ${selectionNote}`;
-      } else if (prevSelectedCount > selectionState.rows.length) {
-        // if we deselect cell
-        notation += `${translator.get('SNTable.SelectionLabel.DeselectedValue')} ${selectionNote}`;
-      } else if (isCellSelected) {
-        // if we are in selection mode and move to selected cell
-        notation += translator.get('SNTable.SelectionLabel.SelectedValue');
-      } else {
-        // if we are in selection mode and move to unselected cell
-        notation += translator.get('SNTable.SelectionLabel.NotSelectedValue');
-      }
-
-      // Junk char addition
-      if (hasJunkChar % 2) notation += ` ­`;
-      hasJunkChar++;
-    } else if (selectionState.rows.length === 0 && prevSelectedCount > 0) {
-      // if we deselect last (selected) cell which means we close the selection mode
-      notation += translator.get('SNTable.SelectionLabel.ExitedSelectionMode');
-    }
-
-    prevSelectedCount = selectionState.rows.length;
-    return notation;
-  };
-};
-
-export const getCellSrNotation = getMemoisedSrNotation();
 
 export const handleFocusoutEvent = (evt, shouldRefocus, blur) => {
   if (!evt.currentTarget.contains(evt.relatedTarget) && !shouldRefocus.current) {

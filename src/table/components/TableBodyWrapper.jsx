@@ -7,9 +7,7 @@ import { addSelectionListeners, reducer } from '../utils/selections-utils';
 import getCellRenderer from './renderer';
 import { getBodyStyle } from '../utils/styling-utils';
 import { bodyHandleKeyPress } from '../utils/handle-key-press';
-import { handleClickToFocusBody, getCellSrNotation } from '../utils/handle-accessibility';
-import { emitAnnouncement } from './Announcer/announcement-utils';
-import { ANNOUNCEMENT_TYPES } from './Announcer/constants';
+import { handleClickToFocusBody } from '../utils/handle-accessibility';
 
 const useStyles = makeStyles({
   cellBase: {
