@@ -1,3 +1,5 @@
+import { emitAnnouncement } from '../components/Announcer/announcement-utils';
+
 export function addSelectionListeners({ api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef }) {
   const resetSelections = () => {
     selDispatch({ type: 'reset' });
@@ -50,7 +52,13 @@ export function reducer(state, action) {
   }
 }
 
-export const getSelectedRows = (selectedRows, qElemNumber, rowIdx, evt) => {
+export const getCellSelectionStatusNote = (rows, translator) => {
+  return rows.length === 1
+    ? translator.get('SNTable.SelectionLabel.OneSelectedValue')
+    : translator.get('SNTable.SelectionLabel.SelectedValues', [rows.length]);
+};
+
+export const getSelectedRows = (selectedRows, qElemNumber, rowIdx, evt, translator) => {
   if (evt.ctrlKey || evt.metaKey) {
     // if the ctrl key or the ⌘ Command key (On Macintosh keyboards) or the ⊞ Windows key is pressed
     // get the last clicked item
@@ -61,20 +69,38 @@ export const getSelectedRows = (selectedRows, qElemNumber, rowIdx, evt) => {
   if (alreadySelectedIdx > -1) {
     // if the selected item is clicked again, that item will be removed
     selectedRows.splice(alreadySelectedIdx, 1);
+    emitAnnouncement({
+      message: `${translator.get('SNTable.SelectionLabel.DeselectedValue')} ${getCellSelectionStatusNote(
+        selectedRows,
+        translator
+      )}`,
+    });
     return selectedRows;
   }
 
   // if an item was clicked, the item was selected
   selectedRows.push({ qElemNumber, rowIdx });
+  emitAnnouncement({
+    message: `${translator.get('SNTable.SelectionLabel.SelectedValue')} ${getCellSelectionStatusNote(
+      selectedRows,
+      translator
+    )}`,
+  });
   return selectedRows;
 };
 
-export function selectCell(selectionState, cell, selDispatch, evt) {
+export function selectCell(selectionState, cell, selDispatch, evt, translator) {
   const { api, rows } = selectionState;
   const { rowIdx, colIdx, qElemNumber } = cell;
   let selectedRows = [];
 
   if (selectionState.colIdx === -1) {
+    // TODO:
+    // we could have a "Entered selection mode" announcement here
+    // but not sure it it will be overrided by "Value selected. there is ..." since we have a single live element
+    // emitAnnouncement({
+    //   message: 'Entered selection Mode',
+    // });
     api.begin('/qHyperCubeDef');
   } else if (selectionState.colIdx === colIdx) {
     selectedRows = rows.concat();
@@ -82,7 +108,7 @@ export function selectCell(selectionState, cell, selDispatch, evt) {
     return;
   }
 
-  selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt);
+  selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt, translator);
 
   if (selectedRows.length) {
     selDispatch({ type: 'select', payload: { rows: selectedRows, colIdx } });

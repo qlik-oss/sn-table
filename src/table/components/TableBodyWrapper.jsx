@@ -48,9 +48,7 @@ function TableBodyWrapper({
   theme,
   setShouldRefocus,
   setFocusedCellCoord,
-  focusedCellCoord,
   keyboard,
-  isActiveElementInTable,
   tableWrapperRef,
 }) {
   const { rows, columns } = tableData;
@@ -66,7 +64,6 @@ function TableBodyWrapper({
     colIdx: -1,
     isEnabled: selectionsEnabled,
   });
-  // const [srNotation, setSrNotation] = useState('');
 
   useEffect(() => {
     selDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
@@ -76,25 +73,6 @@ function TableBodyWrapper({
   useEffect(() => {
     addSelectionListeners({ api: selectionsAPI, selDispatch, setShouldRefocus, keyboard, tableWrapperRef });
   }, []);
-
-  useEffect(() => {
-    if (focusedCellCoord[0] === 0) return;
-
-    const announcementType = selectionsAPI.isModal()
-      ? ANNOUNCEMENT_TYPES.SELECTION_TYPE
-      : ANNOUNCEMENT_TYPES.FOCUS_TYPE;
-
-    emitAnnouncement({
-      announcementType,
-      notationDependencies: {
-        rootElement,
-        selectionState,
-        focusedCellCoord,
-        isActiveElementInTable,
-        translator,
-      },
-    });
-  }, [focusedCellCoord, selectionState, selectionsAPI, isActiveElementInTable, translator]);
 
   return (
     <TableBody className={`${classes.cellBase}`}>
@@ -123,6 +101,7 @@ function TableBodyWrapper({
                   selectionState={selectionState}
                   selDispatch={selDispatch}
                   tabIndex={-1}
+                  translator={translator}
                   onKeyDown={(evt) =>
                     bodyHandleKeyPress(
                       evt,
@@ -132,7 +111,8 @@ function TableBodyWrapper({
                       cell,
                       selDispatch,
                       selectionsEnabled,
-                      setFocusedCellCoord
+                      setFocusedCellCoord,
+                      translator
                     )
                   }
                   onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}

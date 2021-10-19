@@ -4,7 +4,7 @@ import { SN_TABLE_EVENT_TYPES, ASSERTIVE_PRESSURE, ANNOUNCEMENT_TYPES } from './
 // handle sorting by calling `emitAnnouncement` in table head
 export const emitAnnouncement = ({
   announcementType = 'some-announcement-type',
-  politness = ASSERTIVE_PRESSURE.ASSERTIVE,
+  politness = ASSERTIVE_PRESSURE.POLITE,
   shouldBeAtomic = false,
   shouldBubble = true,
   message = '',
@@ -16,7 +16,6 @@ export const emitAnnouncement = ({
   const announcementEvent = new CustomEvent(SN_TABLE_EVENT_TYPES.EMIT_ANNOUNCEMENT, {
     bubbles: shouldBubble,
     detail: {
-      announcementType,
       politness,
       shouldBeAtomic,
       message: message || getAnnouncementNotation({ announcementType, ...notationDependencies }),

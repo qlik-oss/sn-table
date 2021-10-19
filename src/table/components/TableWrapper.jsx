@@ -147,15 +147,9 @@ export default function TableWrapper(props) {
             `${columns.length}`,
           ])}
         >
-          <TableHeadWrapper
-            {...props}
-            isActiveElementInTable={tableSectionRef.current?.contains(activeElement)}
-            setFocusedCellCoord={setFocusedCellCoord}
-            focusedCellCoord={focusedCellCoord}
-          />
+          <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
           <TableBodyWrapper
             {...props}
-            isActiveElementInTable={tableSectionRef.current?.contains(activeElement)}
             focusedCellCoord={focusedCellCoord}
             setFocusedCellCoord={setFocusedCellCoord}
             setShouldRefocus={setShouldRefocus}

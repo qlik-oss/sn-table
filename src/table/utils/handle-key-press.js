@@ -1,5 +1,6 @@
 import { selectCell } from './selections-utils';
 import { updateFocus, focusConfirmButton } from './handle-accessibility';
+import { emitAnnouncement } from '../components/Announcer/announcement-utils';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -127,7 +128,8 @@ export const bodyHandleKeyPress = (
   cell,
   selDispatch,
   isAnalysisMode,
-  setFocusedCellCoord
+  setFocusedCellCoord,
+  translator
 ) => {
   switch (evt.key) {
     case 'ArrowUp':
@@ -140,7 +142,7 @@ export const bodyHandleKeyPress = (
     // Space bar: Selects value.
     case ' ': {
       preventDefaultBehavior(evt);
-      cell?.isDim && isAnalysisMode && selectCell(selectionState, cell, selDispatch, evt);
+      cell?.isDim && isAnalysisMode && selectCell(selectionState, cell, selDispatch, evt, translator);
       break;
     }
     // Enter: Confirms selections.
@@ -154,6 +156,9 @@ export const bodyHandleKeyPress = (
       if (!isAnalysisMode || !selectionState.api.isModal()) break;
       preventDefaultBehavior(evt);
       selectionState.api.cancel();
+      emitAnnouncement({
+        message: translator.get('SNTable.SelectionLabel.ExitedSelectionMode'),
+      });
       break;
     }
     case 'Tab': {
