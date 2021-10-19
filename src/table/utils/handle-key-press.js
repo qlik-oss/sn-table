@@ -1,6 +1,5 @@
 import { selectCell } from './selections-utils';
 import { updateFocus, focusConfirmButton } from './handle-accessibility';
-import { emitAnnouncement } from '../components/Announcer/announcement-utils';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -82,7 +81,7 @@ export const getRowAndColumnCount = (rootElement) => {
   return { rowElements, rowCount, columnCount };
 };
 
-export const moveFocus = (evt, rootElement, cellCoord, selectionState, setFocusedCellCoord, translator) => {
+export const moveFocus = (evt, rootElement, cellCoord, selectionState, setFocusedCellCoord, announce) => {
   preventDefaultBehavior(evt);
   evt.target.setAttribute('tabIndex', '-1');
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
@@ -92,7 +91,7 @@ export const moveFocus = (evt, rootElement, cellCoord, selectionState, setFocuse
     rowElements: rowAndColumnCount.rowElements,
     cellCoord: nextCellCoord,
     isSelectionActive: selectionState.rows?.length || false,
-    translator: translator,
+    announce,
   });
   setFocusedCellCoord(nextCellCoord);
 };
@@ -105,13 +104,14 @@ export const headHandleKeyPress = (
   layout,
   isDim,
   isAnalysisMode,
-  setFocusedCellCoord
+  setFocusedCellCoord,
+  announce
 ) => {
   switch (evt.key) {
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, false, setFocusedCellCoord);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, false, setFocusedCellCoord, announce);
       break;
     }
     // Space bar / Enter: update the sorting
@@ -135,20 +135,20 @@ export const bodyHandleKeyPress = (
   selDispatch,
   isAnalysisMode,
   setFocusedCellCoord,
-  translator
+  announce
 ) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, selectionState, setFocusedCellCoord, translator);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, selectionState, setFocusedCellCoord, announce);
       break;
     }
     // Space bar: Selects value.
     case ' ': {
       preventDefaultBehavior(evt);
-      cell?.isDim && isAnalysisMode && selectCell(selectionState, cell, selDispatch, evt, translator);
+      cell?.isDim && isAnalysisMode && selectCell(selectionState, cell, selDispatch, evt, announce);
       break;
     }
     // Enter: Confirms selections.
@@ -162,9 +162,7 @@ export const bodyHandleKeyPress = (
       if (!isAnalysisMode || !selectionState.api.isModal()) break;
       preventDefaultBehavior(evt);
       selectionState.api.cancel();
-      emitAnnouncement({
-        message: translator.get('SNTable.SelectionLabel.ExitedSelectionMode'),
-      });
+      announce({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
       break;
     }
     case 'Tab': {

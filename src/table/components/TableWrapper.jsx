@@ -12,7 +12,6 @@ import useDidUpdateEffect from './useDidUpdateEffect';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleScroll, handleNavigateTop } from '../utils/handle-scroll';
-import Announcer from './Announcer';
 
 const useStyles = makeStyles({
   paper: {
@@ -33,10 +32,20 @@ const useStyles = makeStyles({
   paginationHidden: {
     display: 'none',
   },
+  screenReaderOnly: {
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: '1px',
+    overflow: 'hidden',
+    position: 'absolute',
+    whiteSpace: 'nowrap',
+    width: '1px',
+  },
 });
 
 export default function TableWrapper(props) {
-  const { rootElement, tableData, setPageInfo, constraints, translator, selectionsAPI, keyboard, rect } = props;
+  const { rootElement, tableData, setPageInfo, constraints, translator, selectionsAPI, keyboard, rect, announce } =
+    props;
   const { size, rows, columns } = tableData;
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
@@ -98,8 +107,8 @@ export default function TableWrapper(props) {
       rowElements: rootElement.getElementsByClassName('sn-table-row'),
       cellCoord: focusedCellCoord,
       isSelectionActive: selectionsAPI.isModal(),
-      translator: translator,
       callee: 'tableWrapper',
+      announce,
     });
   }, [keyboard.active, selectionsAPI.isModal(), translator]);
 
@@ -113,7 +122,7 @@ export default function TableWrapper(props) {
       setFocusedCellCoord,
       hasSelections: selectionsAPI.isModal(),
       shouldAddTabstop: !keyboard.enabled || keyboard.active,
-      translator,
+      announce,
     });
   }, [rows.length, size.qcy, size.qcx, page]);
 
@@ -134,7 +143,7 @@ export default function TableWrapper(props) {
         })
       }
     >
-      <Announcer tableRef={tableSectionRef} />
+      <div id="sn-table-announcer" aria-live="polite" aria-atomic="true" className={classes.screenReaderOnly} />
       <TableContainer
         ref={tableSectionRef}
         className={classes[containerMode]}

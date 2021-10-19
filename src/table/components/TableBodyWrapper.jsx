@@ -25,22 +25,12 @@ const useStyles = makeStyles({
       },
     },
   },
-  srOnly: {
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: '1px',
-    overflow: 'hidden',
-    position: 'absolute',
-    whiteSpace: 'nowrap',
-    width: '1px',
-  },
 });
 
 function TableBodyWrapper({
   rootElement,
   tableData,
   constraints,
-  translator,
   selectionsAPI,
   layout,
   theme,
@@ -48,6 +38,7 @@ function TableBodyWrapper({
   setFocusedCellCoord,
   keyboard,
   tableWrapperRef,
+  announce,
 }) {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
@@ -99,7 +90,7 @@ function TableBodyWrapper({
                   selectionState={selectionState}
                   selDispatch={selDispatch}
                   tabIndex={-1}
-                  translator={translator}
+                  announce={announce}
                   onKeyDown={(evt) =>
                     bodyHandleKeyPress(
                       evt,
@@ -110,10 +101,10 @@ function TableBodyWrapper({
                       selDispatch,
                       selectionsEnabled,
                       setFocusedCellCoord,
-                      translator
+                      announce
                     )
                   }
-                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
+                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, announce)}
                 >
                   {value}
                 </CellRenderer>
@@ -130,7 +121,6 @@ TableBodyWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
   constraints: PropTypes.object.isRequired,
-  translator: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,

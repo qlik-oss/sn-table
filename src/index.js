@@ -21,6 +21,7 @@ import muiSetup from './mui-setup';
 import { render, teardown } from './table/Root';
 import manageData from './handle-data';
 import sortingFactory from './sorting-factory';
+import announcementFactory from './announcement-factory';
 
 export default function supernova(env) {
   return {
@@ -49,6 +50,7 @@ export default function supernova(env) {
         if (layout && tableData) {
           locale(translator);
           const changeSortOrder = sortingFactory(model, tableData.columnOrder);
+          const announce = announcementFactory(rootElement, translator);
           render(rootElement, {
             rootElement,
             layout,
@@ -62,6 +64,7 @@ export default function supernova(env) {
             changeSortOrder,
             keyboard,
             rect,
+            announce,
           });
         }
       }, [

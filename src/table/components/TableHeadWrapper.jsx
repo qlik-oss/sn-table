@@ -40,6 +40,7 @@ function TableHeadWrapper({
   focusedCellCoord,
   setFocusedCellCoord,
   keyboard,
+  announce,
 }) {
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
@@ -73,10 +74,13 @@ function TableHeadWrapper({
                   layout,
                   column.isDim,
                   !constraints.active,
-                  setFocusedCellCoord
+                  setFocusedCellCoord,
+                  announce
                 )
               }
-              onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
+              onMouseDown={() =>
+                handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard, announce)
+              }
               onClick={() =>
                 !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column.isDim, columnIndex)
               }

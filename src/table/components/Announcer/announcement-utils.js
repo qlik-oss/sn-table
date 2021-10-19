@@ -6,7 +6,6 @@ export const emitAnnouncement = ({
   shouldBubble = true,
   message = '',
 } = {}) => {
-  console.log('>>>>~~~~~~~~', document.querySelectorAll(`#sn-table-announcer--${uniqHash}`));
   const announcementEvent = new CustomEvent(SN_TABLE_EVENT_TYPES.EMIT_ANNOUNCEMENT, {
     bubbles: shouldBubble,
     detail: {
