@@ -155,6 +155,7 @@ export const bodyHandleKeyPress = (
     case 'Enter': {
       preventDefaultBehavior(evt);
       isAnalysisMode && selectionState.api.confirm();
+      isAnalysisMode && announce({ keys: 'SNTable.SelectionLabel.SelectionsConfirmed' });
       break;
     }
     // Esc: Cancels selections. If no selections, do nothing and handleTableWrapperKeyDown should catch it
