@@ -90,10 +90,18 @@ export const moveFocus = (evt, rootElement, cellCoord, selectionState, setFocuse
     focusType: 'focus',
     rowElements: rowAndColumnCount.rowElements,
     cellCoord: nextCellCoord,
-    isSelectionActive: selectionState.rows?.length || false,
-    announce,
   });
   setFocusedCellCoord(nextCellCoord);
+
+  // handle announce
+  if (selectionState.rows?.length) {
+    const cell =
+      rowAndColumnCount.rowElements[nextCellCoord[0]]?.getElementsByClassName('sn-table-cell')[nextCellCoord[1]];
+    const hasActiveClassName = cell.classList.contains('selected');
+    hasActiveClassName
+      ? announce({ keys: 'SNTable.SelectionLabel.SelectedValue' })
+      : announce({ keys: 'SNTable.SelectionLabel.NotSelectedValue' });
+  }
 };
 
 export const headHandleKeyPress = (

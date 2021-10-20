@@ -1,23 +1,8 @@
 export const findCellWithTabStop = (rootElement) => rootElement.querySelector("td[tabindex='0'], th[tabindex='0']");
 
-export const updateFocus = ({
-  focusType,
-  rowElements = [],
-  cellCoord = [],
-  providedCell = undefined,
-  isSelectionActive,
-  callee,
-  announce,
-}) => {
+export const updateFocus = ({ focusType, rowElements = [], cellCoord = [], providedCell = undefined }) => {
   const cell = providedCell || rowElements[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[cellCoord[1]];
   if (!cell) return;
-
-  if (isSelectionActive && callee !== 'tableWrapper') {
-    const hasActiveClassName = cell.classList.contains('selected');
-    hasActiveClassName
-      ? announce({ keys: 'SNTable.SelectionLabel.SelectedValue' })
-      : announce({ keys: 'SNTable.SelectionLabel.NotSelectedValue' });
-  }
 
   switch (focusType) {
     case 'focus':
@@ -39,23 +24,22 @@ export const updateFocus = ({
   }
 };
 
-export const removeAndFocus = (newCoord, rootElement, setFocusedCellCoord, focus, announce) => {
+export const removeAndFocus = (newCoord, rootElement, setFocusedCellCoord, focus) => {
   updateFocus({
     providedCell: findCellWithTabStop(rootElement),
     focusType: 'removeTab',
-    announce,
   });
   setFocusedCellCoord(newCoord);
   focus();
 };
 
-export const handleClickToFocusBody = (cell, rootElement, setFocusedCellCoord, keyboard, announce) => {
+export const handleClickToFocusBody = (cell, rootElement, setFocusedCellCoord, keyboard) => {
   const { rawRowIdx, rawColIdx } = cell;
-  removeAndFocus([rawRowIdx + 1, rawColIdx], rootElement, setFocusedCellCoord, keyboard.focus, announce);
+  removeAndFocus([rawRowIdx + 1, rawColIdx], rootElement, setFocusedCellCoord, keyboard.focus);
 };
 
-export const handleClickToFocusHead = (columnIndex, rootElement, setFocusedCellCoord, keyboard, announce) => {
-  removeAndFocus([0, columnIndex], rootElement, setFocusedCellCoord, keyboard.focus, announce);
+export const handleClickToFocusHead = (columnIndex, rootElement, setFocusedCellCoord, keyboard) => {
+  removeAndFocus([0, columnIndex], rootElement, setFocusedCellCoord, keyboard.focus);
 };
 
 export const handleResetFocus = ({
@@ -65,13 +49,10 @@ export const handleResetFocus = ({
   hasSelections,
   setFocusedCellCoord,
   shouldAddTabstop,
-  announce,
 }) => {
   updateFocus({
     focusType: 'removeTab',
     providedCell: findCellWithTabStop(rootElement),
-    isSelectionActive: hasSelections,
-    announce,
   });
   // If we have selections ongoing, we want to stay on the same column
   const nextCell = hasSelections ? [1, focusedCellCoord[1]] : [0, 0];
@@ -80,7 +61,7 @@ export const handleResetFocus = ({
     const focusType = shouldRefocus.current ? 'focus' : 'addTab';
     shouldRefocus.current = false;
     const rowElements = rootElement.getElementsByClassName('sn-table-row');
-    updateFocus({ focusType, rowElements, cellCoord: nextCell, isSelectionActive: hasSelections, announce });
+    updateFocus({ focusType, rowElements, cellCoord: nextCell });
   }
   setFocusedCellCoord(nextCell);
 };

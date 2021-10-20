@@ -106,9 +106,6 @@ export default function TableWrapper(props) {
       focusType: keyboard.active ? 'focus' : 'blur',
       rowElements: rootElement.getElementsByClassName('sn-table-row'),
       cellCoord: focusedCellCoord,
-      isSelectionActive: selectionsAPI.isModal(),
-      callee: 'tableWrapper',
-      announce,
     });
   }, [keyboard.active, selectionsAPI.isModal(), translator]);
 
@@ -122,7 +119,6 @@ export default function TableWrapper(props) {
       setFocusedCellCoord,
       hasSelections: selectionsAPI.isModal(),
       shouldAddTabstop: !keyboard.enabled || keyboard.active,
-      announce,
     });
   }, [rows.length, size.qcy, size.qcx, page]);
 

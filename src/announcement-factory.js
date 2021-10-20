@@ -1,6 +1,11 @@
 export default function announcementFactory(rootElement, translator) {
   let hasJunkChar = 0;
 
+  /**
+   * this resulted function could recive a 2 dimentional array like:
+   * { keys: ['some string key', ['some other string key', [arg1, arg2, ...]]] }
+   * and it will get the proper translated string for you
+   */
   return ({ keys, shouldBeAtomic = true, politeness = 'polite' }) => {
     const stringKeys = Array.isArray(keys) ? keys : [keys];
     let notation = '';

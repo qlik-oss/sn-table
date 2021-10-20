@@ -104,7 +104,7 @@ function TableBodyWrapper({
                       announce
                     )
                   }
-                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, announce)}
+                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
                 >
                   {value}
                 </CellRenderer>

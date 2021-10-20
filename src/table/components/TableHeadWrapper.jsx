@@ -78,9 +78,7 @@ function TableHeadWrapper({
                   announce
                 )
               }
-              onMouseDown={() =>
-                handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard, announce)
-              }
+              onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
               onClick={() =>
                 !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column.isDim, columnIndex)
               }
