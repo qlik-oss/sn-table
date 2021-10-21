@@ -57,19 +57,27 @@ export const getSelNote = (rows) => {
 };
 
 export const handleAnnounceSelectionStatus = ({ announce, selectedRows, isAddition }) => {
-  switch (true) {
-    case isAddition:
-      announce({ keys: ['SNTable.SelectionLabel.SelectedValue', getSelNote(selectedRows)] });
-      break;
-    case !isAddition & (selectedRows.length < 1):
-      announce({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
-      break;
-    case !isAddition:
-      announce({ keys: ['SNTable.SelectionLabel.DeselectedValue', getSelNote(selectedRows)] });
-      break;
-    default:
-      break;
+  if (isAddition) {
+    announce({ keys: ['SNTable.SelectionLabel.SelectedValue', getSelNote(selectedRows)] });
+  } else if (selectedRows.length > 1) {
+    announce({ keys: ['SNTable.SelectionLabel.DeselectedValue', getSelNote(selectedRows)] });
+  } else {
+    announce({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
   }
+
+  // switch (true) {
+  //   case isAddition:
+  //     announce({ keys: ['SNTable.SelectionLabel.SelectedValue', getSelNote(selectedRows)] });
+  //     break;
+  //   case !isAddition & (selectedRows.length < 1):
+  //     announce({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
+  //     break;
+  //   case !isAddition:
+  //     announce({ keys: ['SNTable.SelectionLabel.DeselectedValue', getSelNote(selectedRows)] });
+  //     break;
+  //   default:
+  //     break;
+  // }
 };
 
 export const getSelectedRows = ({ selectedRows, qElemNumber, rowIdx, evt }) => {
