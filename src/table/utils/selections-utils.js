@@ -64,20 +64,6 @@ export const handleAnnounceSelectionStatus = ({ announce, selectedRows, isAdditi
   } else {
     announce({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
   }
-
-  // switch (true) {
-  //   case isAddition:
-  //     announce({ keys: ['SNTable.SelectionLabel.SelectedValue', getSelNote(selectedRows)] });
-  //     break;
-  //   case !isAddition & (selectedRows.length < 1):
-  //     announce({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
-  //     break;
-  //   case !isAddition:
-  //     announce({ keys: ['SNTable.SelectionLabel.DeselectedValue', getSelNote(selectedRows)] });
-  //     break;
-  //   default:
-  //     break;
-  // }
 };
 
 export const getSelectedRows = ({ selectedRows, qElemNumber, rowIdx, evt }) => {
