@@ -1,5 +1,5 @@
-export default function announcementFactory(rootElement, translator) {
-  let hasJunkChar = 0;
+export default function announcementFactory(rootElement, translator, junkCharIdx) {
+  let hasJunkChar = junkCharIdx || 0;
 
   /**
    * this resulted function could recive a 2 dimentional array like:
@@ -25,6 +25,6 @@ export default function announcementFactory(rootElement, translator) {
     const announceElement = rootElement.querySelector('#sn-table-announcer');
     announceElement.innerHTML = notation;
     announceElement.setAttribute('aria-atomic', shouldBeAtomic);
-    announceElement.setAttribute('aria-alive', politeness);
+    announceElement.setAttribute('aria-live', politeness);
   };
 }

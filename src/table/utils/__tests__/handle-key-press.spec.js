@@ -153,6 +153,7 @@ describe('handle-key-press', () => {
     let isAnalysisMode;
     let setFocusedCellCoord;
     let isModal;
+    let announce;
 
     beforeEach(() => {
       rowIndex = 0;
@@ -185,6 +186,7 @@ describe('handle-key-press', () => {
       selDispatch = sinon.spy();
       isAnalysisMode = true;
       setFocusedCellCoord = sinon.spy();
+      announce = sinon.spy();
       sinon.stub(handleAccessibility, 'focusConfirmButton').returns(sinon.spy());
     });
 
@@ -220,7 +222,8 @@ describe('handle-key-press', () => {
         cell,
         selDispatch,
         isAnalysisMode,
-        setFocusedCellCoord
+        setFocusedCellCoord,
+        announce
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
@@ -228,6 +231,9 @@ describe('handle-key-press', () => {
       expect(selectionState.api.select).to.have.been.calledOnce;
       expect(selDispatch).to.have.been.calledOnce;
       expect(setFocusedCellCoord).to.not.have.been.called;
+      expect(announce).to.have.been.calledWith({
+        keys: ['SNTable.SelectionLabel.SelectedValue', 'SNTable.SelectionLabel.OneSelectedValue'],
+      });
     });
 
     it('when press space bar key not on dimension, should not select value for measure', () => {
@@ -243,7 +249,8 @@ describe('handle-key-press', () => {
         cell,
         selDispatch,
         false,
-        setFocusedCellCoord
+        setFocusedCellCoord,
+        announce
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
@@ -251,6 +258,7 @@ describe('handle-key-press', () => {
       expect(selectionState.api.select).not.have.been.called;
       expect(selDispatch).not.have.been.called;
       expect(setFocusedCellCoord).to.not.have.been.called;
+      expect(announce).not.have.been.called;
     });
 
     it('when press space bar key not in analysis mode, should not select value for measure ', () => {
@@ -264,7 +272,8 @@ describe('handle-key-press', () => {
         cell,
         selDispatch,
         false,
-        setFocusedCellCoord
+        setFocusedCellCoord,
+        announce
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
@@ -272,10 +281,12 @@ describe('handle-key-press', () => {
       expect(selectionState.api.select).not.have.been.called;
       expect(selDispatch).not.have.been.called;
       expect(setFocusedCellCoord).to.not.have.been.called;
+      expect(announce).not.have.been.called;
     });
 
     it('when press enter key, should confirms selections', () => {
       evt.key = 'Enter';
+      isModal = true;
       bodyHandleKeyPress(
         evt,
         rootElement,
@@ -284,12 +295,14 @@ describe('handle-key-press', () => {
         cell,
         selDispatch,
         isAnalysisMode,
-        setFocusedCellCoord
+        setFocusedCellCoord,
+        announce
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(selectionState.api.confirm).to.have.been.calledOnce;
       expect(setFocusedCellCoord).to.not.have.been.called;
+      expect(announce).to.have.been.calledWith({ keys: 'SNTable.SelectionLabel.SelectionsConfirmed' });
     });
 
     it('when press enter key not in analysis mode, should not confirms selections', () => {
@@ -303,12 +316,14 @@ describe('handle-key-press', () => {
         cell,
         selDispatch,
         isAnalysisMode,
-        setFocusedCellCoord
+        setFocusedCellCoord,
+        announce
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(selectionState.api.confirm).not.have.been.called;
       expect(setFocusedCellCoord).to.not.have.been.called;
+      expect(announce).to.not.have.been.called;
     });
 
     it('when press cancel key, should cancel selection', () => {
@@ -323,12 +338,14 @@ describe('handle-key-press', () => {
         cell,
         selDispatch,
         isAnalysisMode,
-        setFocusedCellCoord
+        setFocusedCellCoord,
+        announce
       );
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(selectionState.api.cancel).to.have.been.calledOnce;
       expect(setFocusedCellCoord).to.not.have.been.called;
+      expect(announce).to.have.been.calledWith({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
     });
 
     it('when press cancel key not in analysis mode, should not cancel selection', () => {
@@ -343,12 +360,14 @@ describe('handle-key-press', () => {
         cell,
         selDispatch,
         isAnalysisMode,
-        setFocusedCellCoord
+        setFocusedCellCoord,
+        announce
       );
       expect(evt.preventDefault).to.not.have.been.called;
       expect(evt.stopPropagation).to.not.have.been.called;
       expect(selectionState.api.cancel).to.not.have.been.called;
       expect(setFocusedCellCoord).to.not.have.been.called;
+      expect(announce).to.not.have.been.called;
     });
 
     it('when press ArrowRight and shif and ctrl key, should not update the sorting', () => {
@@ -362,12 +381,14 @@ describe('handle-key-press', () => {
         selectionState,
         cell,
         selDispatch,
-        setFocusedCellCoord
+        setFocusedCellCoord,
+        announce
       );
       expect(evt.preventDefault).not.have.been.called;
       expect(evt.stopPropagation).not.have.been.called;
       expect(selectionState.api.cancel).not.have.been.called;
       expect(setFocusedCellCoord).to.not.have.been.called;
+      expect(announce).to.not.have.been.called;
     });
 
     it('when shift + tab is pressed should prevent defualt and call focusConfirmButton', () => {
@@ -382,11 +403,13 @@ describe('handle-key-press', () => {
         selectionState,
         cell,
         selDispatch,
-        setFocusedCellCoord
+        setFocusedCellCoord,
+        announce
       );
       expect(evt.preventDefault).have.been.calledOnce;
       expect(evt.stopPropagation).have.been.calledOnce;
       expect(handleAccessibility.focusConfirmButton).to.have.been.calledOnce;
+      expect(announce).to.not.have.been.called;
     });
 
     it('when only tab is pressed should not prevent defualt nor call focusConfirmButton', () => {
@@ -400,11 +423,13 @@ describe('handle-key-press', () => {
         selectionState,
         cell,
         selDispatch,
-        setFocusedCellCoord
+        setFocusedCellCoord,
+        announce
       );
       expect(evt.preventDefault).to.not.have.been.calledOnce;
       expect(evt.stopPropagation).to.not.have.been.calledOnce;
       expect(handleAccessibility.focusConfirmButton).to.not.have.been.called;
+      expect(announce).to.not.have.been.called;
     });
 
     it('when shift + tab is pressed but not in selection mode, should not prevent defualt nor call focusConfirmButton', () => {
@@ -418,11 +443,13 @@ describe('handle-key-press', () => {
         selectionState,
         cell,
         selDispatch,
-        setFocusedCellCoord
+        setFocusedCellCoord,
+        announce
       );
       expect(evt.preventDefault).to.not.have.been.calledOnce;
       expect(evt.stopPropagation).to.not.have.been.calledOnce;
       expect(handleAccessibility.focusConfirmButton).to.not.have.been.called;
+      expect(announce).to.not.have.been.called;
     });
 
     it('when other keys are pressed, should not do anything', () => {
@@ -434,7 +461,8 @@ describe('handle-key-press', () => {
         selectionState,
         cell,
         selDispatch,
-        setFocusedCellCoord
+        setFocusedCellCoord,
+        announce
       );
       expect(evt.preventDefault).not.have.been.called;
       expect(evt.stopPropagation).not.have.been.called;
@@ -442,6 +470,7 @@ describe('handle-key-press', () => {
       expect(evt.target.setAttribute).not.have.been.called;
       expect(selectionState.api.cancel).not.have.been.called;
       expect(setFocusedCellCoord).to.not.have.been.called;
+      expect(announce).to.not.have.been.called;
     });
   });
 
