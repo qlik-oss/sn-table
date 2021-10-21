@@ -156,7 +156,7 @@ export const bodyHandleKeyPress = (
     // Space bar: Selects value.
     case ' ': {
       preventDefaultBehavior(evt);
-      cell?.isDim && isAnalysisMode && selectCell(selectionState, cell, selDispatch, evt, announce);
+      cell?.isDim && isAnalysisMode && selectCell({ selectionState, cell, selDispatch, evt, announce });
       break;
     }
     // Enter: Confirms selections.

@@ -1,3 +1,4 @@
+import sinon from 'sinon';
 import { addSelectionListeners, getSelectedRows, reducer, selectCell } from '../selections-utils';
 
 describe('selections-utils', () => {
@@ -188,6 +189,7 @@ describe('selections-utils', () => {
     let selectionState;
     let cell;
     let selDispatch;
+    let announce;
 
     beforeEach(() => {
       selectionState = {
@@ -201,38 +203,46 @@ describe('selections-utils', () => {
       };
       cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1 };
       selDispatch = sinon.spy();
+      announce = sinon.spy();
     });
 
     it('should call begin, selDispatch and selectHyperCubeCells when no previous selections', () => {
       const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
       const payload = { colIdx: cell.colIdx, rows: [{ qElemNumber: cell.qElemNumber, rowIdx: cell.rowIdx }] };
 
-      selectCell(selectionState, cell, selDispatch, event);
+      selectCell({ selectionState, cell, selDispatch, evt: event, announce });
       expect(selectionState.api.begin).to.have.been.calledOnce;
       expect(selectionState.api.select).to.have.been.calledWith({ method: 'selectHyperCubeCells', params });
       expect(selDispatch).to.have.been.calledWith({ type: 'select', payload });
       expect(selectionState.api.cancel).to.not.have.been.called;
+      expect(announce).to.have.been.calledWith({
+        keys: ['SNTable.SelectionLabel.SelectedValue', 'SNTable.SelectionLabel.OneSelectedValue'],
+      });
     });
     it('should not call begin and call cancel when same qElemNumber (resulting in empty selectedCells)', () => {
       selectionState.rows = [{ qElemNumber: 1, rowIdx: 1 }];
       selectionState.colIdx = 1;
 
-      selectCell(selectionState, cell, selDispatch, event);
+      selectCell({ selectionState, cell, selDispatch, evt: event, announce });
       expect(selectionState.api.begin).to.not.have.been.called;
       expect(selectionState.api.cancel).to.have.been.calledOnce;
       expect(selDispatch).to.not.have.been.called;
       expect(selectionState.api.select).to.not.have.been.called;
+      expect(announce).to.have.been.calledWith({
+        keys: 'SNTable.SelectionLabel.ExitedSelectionMode',
+      });
     });
     it('should return early when excluded columns', () => {
       selectionState.rows = [{ qElemNumber: 1, rowIdx: 1 }];
       selectionState.colIdx = 1;
       cell.colIdx = 2;
 
-      selectCell(selectionState, cell, selDispatch, event);
+      selectCell({ selectionState, cell, selDispatch, evt: event, announce });
       expect(selectionState.api.begin).to.not.have.been.called;
       expect(selectionState.api.cancel).to.not.have.been.called;
       expect(selDispatch).to.not.have.been.called;
       expect(selectionState.api.select).to.not.have.been.called;
+      expect(announce).to.not.have.been.called;
     });
   });
 });

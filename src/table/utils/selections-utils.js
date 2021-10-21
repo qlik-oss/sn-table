@@ -79,7 +79,7 @@ export const getSelectedRows = (selectedRows, qElemNumber, rowIdx, evt, announce
   return selectedRows;
 };
 
-export function selectCell(selectionState, cell, selDispatch, evt, announce) {
+export function selectCell({ selectionState, cell, selDispatch, evt, announce }) {
   const { api, rows } = selectionState;
   const { rowIdx, colIdx, qElemNumber } = cell;
   let selectedRows = [];
