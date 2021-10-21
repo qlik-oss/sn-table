@@ -56,7 +56,23 @@ export const getSelNote = (rows) => {
     : ['SNTable.SelectionLabel.SelectedValues', rows.length];
 };
 
-export const getSelectedRows = (selectedRows, qElemNumber, rowIdx, evt, announce) => {
+export const handleAnnounceSelectionStatus = ({ announce, selectedRows, isAddition }) => {
+  switch (true) {
+    case isAddition:
+      announce({ keys: ['SNTable.SelectionLabel.SelectedValue', getSelNote(selectedRows)] });
+      break;
+    case !isAddition & (selectedRows.length < 1):
+      announce({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
+      break;
+    case !isAddition:
+      announce({ keys: ['SNTable.SelectionLabel.DeselectedValue', getSelNote(selectedRows)] });
+      break;
+    default:
+      break;
+  }
+};
+
+export const getSelectedRows = ({ selectedRows, qElemNumber, rowIdx, evt }) => {
   if (evt.ctrlKey || evt.metaKey) {
     // if the ctrl key or the ⌘ Command key (On Macintosh keyboards) or the ⊞ Windows key is pressed
     // get the last clicked item
@@ -67,15 +83,11 @@ export const getSelectedRows = (selectedRows, qElemNumber, rowIdx, evt, announce
   if (alreadySelectedIdx > -1) {
     // if the selected item is clicked again, that item will be removed
     selectedRows.splice(alreadySelectedIdx, 1);
-
-    if (selectedRows.length < 1) announce({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
-    else announce({ keys: ['SNTable.SelectionLabel.DeselectedValue', getSelNote(selectedRows)] });
     return selectedRows;
   }
 
   // if an item was clicked, the item was selected
   selectedRows.push({ qElemNumber, rowIdx });
-  announce({ keys: ['SNTable.SelectionLabel.SelectedValue', getSelNote(selectedRows)] });
   return selectedRows;
 };
 
@@ -92,7 +104,8 @@ export function selectCell({ selectionState, cell, selDispatch, evt, announce })
     return;
   }
 
-  selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt, announce);
+  selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
+  handleAnnounceSelectionStatus({ announce, selectedRows, isAddition: selectedRows.length > rows.length });
 
   if (selectedRows.length) {
     selDispatch({ type: 'select', payload: { rows: selectedRows, colIdx } });

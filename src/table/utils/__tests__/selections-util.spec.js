@@ -159,24 +159,24 @@ describe('selections-utils', () => {
     it('should return array with only the last clicked item when ctrlKey is pressed', () => {
       evt.ctrlKey = true;
 
-      selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt);
+      selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
       expect(selectedRows).to.eql([{ qElemNumber, rowIdx }]);
     });
     it('should return array with only the last clicked item metaKey cm is pressed', () => {
       evt.metaKey = true;
 
-      selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt);
+      selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
       expect(selectedRows).to.eql([{ qElemNumber, rowIdx }]);
     });
     it('should return array with selected item removed if it already was in selectedRows', () => {
       qElemNumber = 1;
       rowIdx = 1;
 
-      selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt);
+      selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
       expect(selectedRows).to.eql([]);
     });
     it('should return array with selected item added if it was not in selectedRows before', () => {
-      selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt);
+      selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
       expect(selectedRows).to.eql([
         { qElemNumber: 1, rowIdx: 1 },
         { qElemNumber, rowIdx },
