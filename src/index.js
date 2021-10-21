@@ -13,14 +13,12 @@ import {
   useRect,
 } from '@nebula.js/stardust';
 import locale from '../locale/src';
-
 import properties from './object-properties';
 import data from './data';
 import ext from './ext';
-import muiSetup from './mui-setup';
-import { render, teardown } from './table/Root';
 import manageData from './handle-data';
 import sortingFactory from './sorting-factory';
+import { render, teardown } from './table/Root';
 import announcementFactory from './announcement-factory';
 
 export default function supernova(env) {
@@ -43,7 +41,6 @@ export default function supernova(env) {
       const rect = useRect();
 
       const [pageInfo, setPageInfo] = useState(() => ({ top: 0, height: 100 }));
-      const [muiParameters] = useState(() => muiSetup());
       const [tableData] = usePromise(() => manageData(model, layout, pageInfo), [layout, pageInfo]);
 
       useEffect(() => {
@@ -59,7 +56,6 @@ export default function supernova(env) {
             constraints,
             translator,
             selectionsAPI,
-            muiParameters,
             theme,
             changeSortOrder,
             keyboard,

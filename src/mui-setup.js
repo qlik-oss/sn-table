@@ -1,11 +1,12 @@
-import { createGenerateClassName, createMuiTheme } from '@material-ui/core/styles';
+import { createTheme, adaptV4Theme } from '@mui/material/styles';
+import { createGenerateClassName } from '@mui/styles';
 import * as muiConfig from './mui-config.json';
 
 export default function muiSetup() {
   // Currently importing a reduced copy of sprout, should be replaced with the open-source version of sprout ASAP
   if (muiConfig.overrides) {
     muiConfig.overrides.MuiListItem.root['&$selected'] = {};
-    muiConfig.overrides.MuiSelect.root['& ~i'].padding = '6px';
+    muiConfig.overrides.MuiNativeSelect.select['& ~i'].padding = '6px';
     muiConfig.overrides.MuiTableSortLabel.root.color = 'inherit';
     muiConfig.overrides.MuiTableSortLabel.root['&$active'].color = 'inherit';
     muiConfig.overrides.MuiTableSortLabel.root['&:hover'].color = 'inherit';
@@ -20,7 +21,7 @@ export default function muiSetup() {
     };
   }
 
-  const theme = createMuiTheme(muiConfig);
+  const theme = createTheme(adaptV4Theme(muiConfig));
   const generateClassName = createGenerateClassName({
     productionPrefix: `${process.env.PACKAGE_VERSION}`,
     disableGlobal: true,

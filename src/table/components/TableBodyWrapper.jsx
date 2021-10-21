@@ -1,8 +1,8 @@
 import React, { useReducer, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
+import { makeStyles } from '@mui/styles';
+import TableBody from '@mui/material/TableBody';
+import TableRow from '@mui/material/TableRow';
 import { addSelectionListeners, reducer } from '../utils/selections-utils';
 import getCellRenderer from './renderer';
 import { getBodyStyle } from '../utils/styling-utils';

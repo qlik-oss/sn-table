@@ -1,8 +1,8 @@
-import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableContainer from '@material-ui/core/TableContainer';
-import TablePagination from '@material-ui/core/TablePagination';
+import Paper from '@mui/material/Paper';
+import { makeStyles } from '@mui/styles';
+import Table from '@mui/material/Table';
+import TableContainer from '@mui/material/TableContainer';
+import TablePagination from '@mui/material/TablePagination';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState, useRef } from 'react';
 import TableBodyWrapper from './TableBodyWrapper';
@@ -82,8 +82,8 @@ export default function TableWrapper(props) {
     const scrollCallback = (evt) => handleScroll(evt, tableSectionRef);
     const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard.blur);
 
-    tableSectionRef.current.addEventListener('wheel', scrollCallback);
-    tableWrapperRef.current.addEventListener('focusout', focusOutCallback);
+    tableSectionRef.current && tableSectionRef.current.addEventListener('wheel', scrollCallback);
+    tableWrapperRef.current && tableWrapperRef.current.addEventListener('focusout', focusOutCallback);
     return () => {
       tableSectionRef.current.removeEventListener('wheel', scrollCallback);
       tableWrapperRef.current.removeEventListener('focusout', focusOutCallback);
