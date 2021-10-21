@@ -106,7 +106,7 @@ export default function TableWrapper(props) {
       rowElements: rootElement.getElementsByClassName('sn-table-row'),
       cellCoord: focusedCellCoord,
     });
-  }, [keyboard.active, selectionsAPI.isModal(), translator]);
+  }, [keyboard.active]);
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
