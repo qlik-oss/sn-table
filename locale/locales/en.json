@@ -27,26 +27,6 @@
     "value": "Last page",
     "comment": "tooltip and aria-label for the last page button. (tew 210929)"
   },
-  "SNTable.Pagination.MovedToFirstPage": {
-    "value": "You are in the first page",
-    "comment": "label for when switching to very first page"
-  },
-  "SNTable.Pagination.MovedToLastPage": {
-    "value": "You are in the last page",
-    "comment": "label for when switching to last page"
-  },
-  "SNTable.Pagination.MovedToNextPage": {
-    "value": "Moved to the next page.",
-    "comment": "label for when switching to next page"
-  },
-  "SNTable.Pagination.MovedToPreviousPage": {
-    "value": "Moved to the previous page.",
-    "comment": "label for when switching to prev page"
-  },
-  "SNTable.Pagination.PageStatusReport": {
-    "value": "You are currently in page {0} out of {1} pages",
-    "comment": "label for when switching to prev page"
-  },
   "SNTable.SortLabel.SortedAscending": {
     "value": "Sorted in ascending order.",
     "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)"

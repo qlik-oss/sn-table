@@ -86,15 +86,11 @@ export const moveFocus = (evt, rootElement, cellCoord, selectionState, setFocuse
   evt.target.setAttribute('tabIndex', '-1');
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
   const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selectionState);
-  updateFocus({
-    focusType: 'focus',
-    rowElements: rowAndColumnCount.rowElements,
-    cellCoord: nextCellCoord,
-  });
+  updateFocus({ focusType: 'focus', rowElements: rowAndColumnCount.rowElements, cellCoord: nextCellCoord });
   setFocusedCellCoord(nextCellCoord);
 
   // handle announce
-  if (selectionState.rows?.length) {
+  if (selectionState.api?.isModal()) {
     const cell =
       rowAndColumnCount.rowElements[nextCellCoord[0]]?.getElementsByClassName('sn-table-cell')[nextCellCoord[1]];
     const hasActiveClassName = cell.classList.contains('selected');
@@ -112,14 +108,13 @@ export const headHandleKeyPress = (
   layout,
   isDim,
   isAnalysisMode,
-  setFocusedCellCoord,
-  announce
+  setFocusedCellCoord
 ) => {
   switch (evt.key) {
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, false, setFocusedCellCoord, announce);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, false, setFocusedCellCoord);
       break;
     }
     // Space bar / Enter: update the sorting
@@ -163,7 +158,7 @@ export const bodyHandleKeyPress = (
     case 'Enter': {
       preventDefaultBehavior(evt);
       isAnalysisMode && selectionState.api.confirm();
-      isAnalysisMode && announce({ keys: 'SNTable.SelectionLabel.SelectionsConfirmed' });
+      selectionState.api.isModal() && announce({ keys: 'SNTable.SelectionLabel.SelectionsConfirmed' });
       break;
     }
     // Esc: Cancels selections. If no selections, do nothing and handleTableWrapperKeyDown should catch it

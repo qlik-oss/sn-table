@@ -50,10 +50,7 @@ export const handleResetFocus = ({
   setFocusedCellCoord,
   shouldAddTabstop,
 }) => {
-  updateFocus({
-    focusType: 'removeTab',
-    providedCell: findCellWithTabStop(rootElement),
-  });
+  updateFocus({ focusType: 'removeTab', providedCell: findCellWithTabStop(rootElement) });
   // If we have selections ongoing, we want to stay on the same column
   const nextCell = hasSelections ? [1, focusedCellCoord[1]] : [0, 0];
   if (shouldAddTabstop) {
