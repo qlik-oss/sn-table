@@ -6,7 +6,7 @@ export default function muiSetup() {
   // Currently importing a reduced copy of sprout, should be replaced with the open-source version of sprout ASAP
   if (muiConfig.overrides) {
     muiConfig.overrides.MuiListItem.root['&$selected'] = {};
-    muiConfig.overrides.MuiSelect.root['& ~i'].padding = '6px';
+    muiConfig.overrides.MuiNativeSelect.select['& ~i'].padding = '6px';
     muiConfig.overrides.MuiTableSortLabel.root.color = 'inherit';
     muiConfig.overrides.MuiTableSortLabel.root['&$active'].color = 'inherit';
     muiConfig.overrides.MuiTableSortLabel.root['&:hover'].color = 'inherit';
