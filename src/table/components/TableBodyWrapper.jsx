@@ -124,12 +124,11 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  focusedCellCoord: PropTypes.arrayOf(PropTypes.number).isRequired,
   setFocusedCellCoord: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
   keyboard: PropTypes.func.isRequired,
-  isActiveElementInTable: PropTypes.bool.isRequired,
   tableWrapperRef: PropTypes.object.isRequired,
+  announce: PropTypes.func.isRequired,
 };
 
 export default TableBodyWrapper;

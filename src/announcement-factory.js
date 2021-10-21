@@ -8,14 +8,16 @@ export default function announcementFactory(rootElement, translator) {
    */
   return ({ keys, shouldBeAtomic = true, politeness = 'polite' }) => {
     const stringKeys = Array.isArray(keys) ? keys : [keys];
-    let notation = '';
 
-    stringKeys.forEach((key) => {
-      if (Array.isArray(key)) {
-        const [actualKey, ...rest] = key;
-        notation += ' ' + translator.get(actualKey, ...rest);
-      } else notation += ' ' + translator.get(key);
-    });
+    let notation = stringKeys
+      .map((key) => {
+        if (Array.isArray(key)) {
+          const [actualKey, ...rest] = key;
+          return translator.get(actualKey, ...rest);
+        }
+        return translator.get(key);
+      })
+      .join(' ');
 
     if (hasJunkChar % 2) notation += ` ­`;
     hasJunkChar++;

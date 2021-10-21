@@ -112,6 +112,7 @@ TableHeadWrapper.propTypes = {
   focusedCellCoord: PropTypes.arrayOf(PropTypes.number).isRequired,
   setFocusedCellCoord: PropTypes.func.isRequired,
   translator: PropTypes.object.isRequired,
+  announce: PropTypes.func.isRequired,
 };
 
 export default TableHeadWrapper;
