@@ -3,7 +3,7 @@ import sinon from 'sinon';
 import {
   addSelectionListeners,
   reducer,
-  getSelNote,
+  getSelectionStatusKey,
   handleAnnounceSelectionStatus,
   getSelectedRows,
   selectCell,
@@ -151,19 +151,19 @@ describe('selections-utils', () => {
     });
   });
 
-  describe('getSelNote', () => {
+  describe('getSelectionStatusKey', () => {
     let rows;
 
     it('key should be in singular shape', () => {
       rows = ['row#01'];
-      const key = getSelNote(rows);
+      const key = getSelectionStatusKey(rows);
 
       expect(key).to.be.equal('SNTable.SelectionLabel.OneSelectedValue');
     });
 
     it('should return and array and be in plural shape', () => {
       rows = ['row#01', 'row#02'];
-      const [key, length] = getSelNote(rows);
+      const [key, length] = getSelectionStatusKey(rows);
 
       expect(key).to.be.equal('SNTable.SelectionLabel.SelectedValues');
       expect(length).to.be.equal(rows.length);

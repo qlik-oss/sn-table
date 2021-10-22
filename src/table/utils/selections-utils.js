@@ -50,7 +50,7 @@ export function reducer(state, action) {
   }
 }
 
-export const getSelNote = (rows) => {
+export const getSelectionStatusKey = (rows) => {
   return rows.length === 1
     ? 'SNTable.SelectionLabel.OneSelectedValue'
     : ['SNTable.SelectionLabel.SelectedValues', rows.length];
@@ -58,9 +58,9 @@ export const getSelNote = (rows) => {
 
 export const handleAnnounceSelectionStatus = ({ announce, selectedRows, isAddition }) => {
   if (isAddition) {
-    announce({ keys: ['SNTable.SelectionLabel.SelectedValue', getSelNote(selectedRows)] });
+    announce({ keys: ['SNTable.SelectionLabel.SelectedValue', getSelectionStatusKey(selectedRows)] });
   } else if (selectedRows.length > 0) {
-    announce({ keys: ['SNTable.SelectionLabel.DeselectedValue', getSelNote(selectedRows)] });
+    announce({ keys: ['SNTable.SelectionLabel.DeselectedValue', getSelectionStatusKey(selectedRows)] });
   } else {
     announce({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
   }
