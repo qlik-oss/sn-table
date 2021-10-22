@@ -26,6 +26,11 @@ const useStyles = makeStyles({
     top: 20,
     width: 1,
   },
+  sortLabel: {
+    '&.Mui-active': {
+      color: 'inherit',
+    },
+  },
 });
 
 function TableHeadWrapper({
@@ -81,7 +86,12 @@ function TableHeadWrapper({
                 !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column.isDim, columnIndex)
               }
             >
-              <TableSortLabel active={isCurrentColumnActive} direction={column.sortDirection} tabIndex={-1}>
+              <TableSortLabel
+                className={classes.sortLabel}
+                active={isCurrentColumnActive}
+                direction={column.sortDirection}
+                tabIndex={-1}
+              >
                 {column.label}
                 {isFocusInHead && (
                   <span className={classes.visuallyHidden} data-testid={`VHL-for-col-${columnIndex}`}>
