@@ -29,9 +29,11 @@ export function getColumnInfo(layout, colIndex) {
 }
 
 export default async function manageData(model, layout, pageInfo) {
+  const { page, rowsPerPage } = pageInfo;
+  const top = page * rowsPerPage;
   const columnOrder = getColumnOrder(layout);
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
-    { qTop: pageInfo.top, qLeft: 0, qHeight: pageInfo.height, qWidth: columnOrder.length },
+    { qTop: top, qLeft: 0, qHeight: rowsPerPage, qWidth: columnOrder.length },
   ]);
   const matrix = dataPages[0].qMatrix;
 
@@ -42,7 +44,7 @@ export default async function manageData(model, layout, pageInfo) {
     columns.forEach((c, colIdx) => {
       row[c.id] = {
         ...r[colIdx],
-        rowIdx: rowIdx + pageInfo.top,
+        rowIdx: rowIdx + top,
         colIdx: columnOrder[colIdx],
         isDim: c.isDim,
         rawRowIdx: rowIdx,
