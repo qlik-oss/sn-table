@@ -234,6 +234,44 @@ describe('handle-key-press', () => {
       });
     });
 
+    it('when moving to a cell on a dimension column which is selected, also have some selections already, should announce the value is selected', () => {
+      isModal = true;
+      cell = global.document.createElement('td');
+      cell.classList.add('selected');
+
+      rootElement = { getElementsByClassName: () => [{ getElementsByClassName: () => [cell] }] };
+      selectionState = { ...selectionState, rows: ['key#01'] };
+      bodyHandleKeyPress({
+        evt,
+        rootElement,
+        cellCoord: [rowIndex, colIndex],
+        selectionState,
+        setFocusedCellCoord,
+        announce,
+      });
+      expect(announce).to.have.been.calledWith({
+        keys: 'SNTable.SelectionLabel.SelectedValue',
+      });
+    });
+
+    it('when moving to a cell on a dimension column which is not selected, also have some selections already, should announce the value is not selected', () => {
+      isModal = true;
+      cell = global.document.createElement('td');
+      rootElement = { getElementsByClassName: () => [{ getElementsByClassName: () => [cell] }] };
+      selectionState = { ...selectionState, rows: ['key#01'] };
+      bodyHandleKeyPress({
+        evt,
+        rootElement,
+        cellCoord: [rowIndex, colIndex],
+        selectionState,
+        setFocusedCellCoord,
+        announce,
+      });
+      expect(announce).to.have.been.calledWith({
+        keys: 'SNTable.SelectionLabel.NotSelectedValue',
+      });
+    });
+
     it('when press space bar key not on dimension, should not select value for measure', () => {
       evt.key = ' ';
       cell = {
