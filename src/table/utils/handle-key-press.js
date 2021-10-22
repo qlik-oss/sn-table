@@ -129,7 +129,7 @@ export const headHandleKeyPress = (
   }
 };
 
-export const bodyHandleKeyPress = (
+export const bodyHandleKeyPress = ({
   evt,
   rootElement,
   cellCoord,
@@ -138,8 +138,8 @@ export const bodyHandleKeyPress = (
   selDispatch,
   isAnalysisMode,
   setFocusedCellCoord,
-  announce
-) => {
+  announce,
+}) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':

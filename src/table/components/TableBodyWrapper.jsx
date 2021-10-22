@@ -92,17 +92,17 @@ function TableBodyWrapper({
                   tabIndex={-1}
                   announce={announce}
                   onKeyDown={(evt) =>
-                    bodyHandleKeyPress(
+                    bodyHandleKeyPress({
                       evt,
                       rootElement,
-                      [rowIndex + 1, columnIndex],
+                      cellCoord: [rowIndex + 1, columnIndex],
                       selectionState,
                       cell,
                       selDispatch,
-                      selectionsEnabled,
+                      isAnalysisMode: selectionsEnabled,
                       setFocusedCellCoord,
-                      announce
-                    )
+                      announce,
+                    })
                   }
                   onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
                 >
