@@ -14,8 +14,8 @@ export default function announcementFactory(rootElement, translator, junkCharIdx
    *
    * @param {Object} announcementArgs required configuration object for announcement
    * @param {string|Array<string|Array<string|number>} announcementArgs.keys required translation keys, that could be only in string shape, in arrays of strings (for concatinating multiple keys), or a 2 dimentional array with arguments for translations like: { keys: ['some string key', ['some other string key', [arg1, arg2, ...]]] }
-   * @param {boolean} announcementArgs.shouldBeAtomic defines the live element should be atomic or not
-   * @param {(polite|assertive|off)} announcementArgs.politeness the assertive level of the live element
+   * @param {boolean=} announcementArgs.shouldBeAtomic defines the live element should be atomic or not
+   * @param {(polite|assertive|off)=} announcementArgs.politeness the assertive level of the live element
    *
    * @returns {undefined} this function should not retuns anyhting, it will only make changes in the live element
    */
