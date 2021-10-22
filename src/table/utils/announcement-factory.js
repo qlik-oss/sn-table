@@ -13,7 +13,7 @@ export default function announcementFactory(rootElement, translator, junkCharIdx
    * the announce function
    *
    * @param {Object} announcementArgs required configuration object for announcement
-   * @param {string|Array<string|Array<string|number>} announcementArgs.keys required translation keys, that could be only in string shape, in arrays of strings (for concatinating multiple keys), or a 2 dimentional array with arguments for translations like: { keys: ['some string key', ['some other string key', [arg1, arg2, ...]]] }
+   * @param {string|Array<string|Array<string|number>} announcementArgs.keys required translation keys, that could be a string, an array of strings (for concatenating multiple keys), or a 2-dimensional array with arguments for translations, e.g. `{ keys: ['some string key', ['some other string key', arg1, arg2, ...]] }`
    * @param {boolean=} announcementArgs.shouldBeAtomic defines the live element should be atomic or not
    * @param {(polite|assertive|off)=} announcementArgs.politeness the assertive level of the live element
    *
