@@ -2,10 +2,9 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import TableWrapper from './components/TableWrapper';
-import muiSetup from '../mui-setup';
 
 export function render(rootElement, props) {
-  const muiParameters = muiSetup();
+  const { muiParameters } = props;
 
   ReactDOM.render(
     <React.StrictMode>
