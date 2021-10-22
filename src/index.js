@@ -19,6 +19,7 @@ import ext from './ext';
 import manageData from './handle-data';
 import sortingFactory from './sorting-factory';
 import { render, teardown } from './table/Root';
+import muiSetup from './mui-setup';
 
 export default function supernova(env) {
   return {
@@ -35,10 +36,10 @@ export default function supernova(env) {
       const constraints = useConstraints();
       const translator = useTranslator();
       const selectionsAPI = useSelections();
+      const muiParameters = muiSetup();
       const theme = useTheme();
       const keyboard = useKeyboard();
       const rect = useRect();
-
       const [pageInfo, setPageInfo] = useState(() => ({ top: 0, height: 100 }));
       const [tableData] = usePromise(() => manageData(model, layout, pageInfo), [layout, pageInfo]);
 
@@ -54,6 +55,7 @@ export default function supernova(env) {
             constraints,
             translator,
             selectionsAPI,
+            muiParameters,
             theme,
             changeSortOrder,
             keyboard,
