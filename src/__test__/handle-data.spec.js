@@ -73,7 +73,7 @@ describe('handle-data', () => {
 
   describe('manageData', () => {
     const model = { getHyperCubeData: async () => generateDataPages(2, 4) };
-    const pageInfo = { top: 100, height: 100 };
+    const pageInfo = { page: 1, rowsPerPage: 100 };
 
     it('should return size, rows and columns correctly formatted', async () => {
       const { size, rows, columns } = await manageData(model, layout, pageInfo);

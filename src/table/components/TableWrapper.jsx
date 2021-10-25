@@ -146,8 +146,8 @@ export default function TableWrapper(props) {
           component="div"
           count={size.qcy}
           rowsPerPage={rowsPerPage}
-          page={page}
           labelRowsPerPage={translator.get('SNTable.Pagination.RowsPerPage')}
+          page={page}
           SelectProps={{
             inputProps: {
               'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),

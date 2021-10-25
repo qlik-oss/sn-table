@@ -11,6 +11,7 @@ import * as handleKeyPress from '../../utils/handle-key-press';
 
 describe('<TableWrapper />', () => {
   let tableData;
+  let pageInfo;
   let setPageInfo;
   let constraints;
   let rowsPerPage;
@@ -31,6 +32,7 @@ describe('<TableWrapper />', () => {
       rows: [{ qText: '1' }],
       columns: [{}],
     };
+    pageInfo = { page: 0, rowsPerPage: 100 };
     setPageInfo = sinon.spy();
     constraints = {};
     rowsPerPage = 100;
@@ -59,6 +61,7 @@ describe('<TableWrapper />', () => {
     const { queryByLabelText, queryByText, queryByTestId } = render(
       <TableWrapper
         tableData={tableData}
+        pageInfo={pageInfo}
         setPageInfo={setPageInfo}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
@@ -81,6 +84,7 @@ describe('<TableWrapper />', () => {
     const { queryByLabelText } = render(
       <TableWrapper
         tableData={tableData}
+        pageInfo={pageInfo}
         setPageInfo={setPageInfo}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
@@ -99,6 +103,7 @@ describe('<TableWrapper />', () => {
     const { getByTestId } = render(
       <TableWrapper
         tableData={tableData}
+        pageInfo={pageInfo}
         setPageInfo={setPageInfo}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
@@ -109,13 +114,14 @@ describe('<TableWrapper />', () => {
       />
     );
     fireEvent.change(getByTestId('select'), { target: { value: 25 } });
-    expect(setPageInfo).to.have.been.calledWith({ top: 0, height: 25 });
+    expect(setPageInfo).to.have.been.calledWith({ page: 0, rowsPerPage: 25 });
   });
 
   it('should change back to first page when not on first page and no rows', () => {
     const { queryByTitle } = render(
       <TableWrapper
         tableData={tableData}
+        pageInfo={pageInfo}
         setPageInfo={setPageInfo}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
@@ -131,9 +137,9 @@ describe('<TableWrapper />', () => {
     fireEvent.click(queryByTitle('SNTable.Pagination.NextPage'));
 
     // Called when pressing the button
-    expect(setPageInfo).to.have.been.calledWith({ top: rowsPerPage, height: rowsPerPage });
+    expect(setPageInfo).to.have.been.calledWith({ page: 1, rowsPerPage });
     // Called from if statement in TableWrapper
-    expect(setPageInfo).to.have.been.calledWith({ top: 0, height: rowsPerPage });
+    expect(setPageInfo).to.have.been.calledWith({ page: 0, rowsPerPage });
   });
 
   it('should not render rows per page section in table when width smaller than 550', () => {
@@ -143,6 +149,7 @@ describe('<TableWrapper />', () => {
     const { queryByLabelText } = render(
       <TableWrapper
         tableData={tableData}
+        pageInfo={pageInfo}
         setPageInfo={setPageInfo}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
@@ -162,6 +169,7 @@ describe('<TableWrapper />', () => {
     const { queryByText } = render(
       <TableWrapper
         tableData={tableData}
+        pageInfo={pageInfo}
         setPageInfo={setPageInfo}
         constraints={constraints}
         selectionsAPI={selectionsAPI}
