@@ -117,31 +117,6 @@ describe('<TableWrapper />', () => {
     expect(setPageInfo).to.have.been.calledWith({ page: 0, rowsPerPage: 25 });
   });
 
-  it('should change back to first page when not on first page and no rows', () => {
-    const { queryByTitle } = render(
-      <TableWrapper
-        tableData={tableData}
-        pageInfo={pageInfo}
-        setPageInfo={setPageInfo}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        rootElement={rootElement}
-        keyboard={keyboard}
-        translator={translator}
-        rect={rect}
-      />
-    );
-    // This is a hack to simulate when selections are made on other page than first page and
-    // rows per page is bigger than the selected rows -> handle data returns no rows.
-    tableData.rows = [];
-    fireEvent.click(queryByTitle('SNTable.Pagination.NextPage'));
-
-    // Called when pressing the button
-    expect(setPageInfo).to.have.been.calledWith({ page: 1, rowsPerPage });
-    // Called from if statement in TableWrapper
-    expect(setPageInfo).to.have.been.calledWith({ page: 0, rowsPerPage });
-  });
-
   it('should not render rows per page section in table when width smaller than 550', () => {
     rect = {
       width: 474,
