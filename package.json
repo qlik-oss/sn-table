@@ -42,10 +42,10 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*.{js, jsx}": [
+    "*.{js,jsx}": [
       "yarn lint"
     ],
-    "*.{json, css, md}": [
+    "*.{json,css,md}": [
       "yarn format"
     ]
   },
