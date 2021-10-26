@@ -155,7 +155,7 @@ TableBodyWrapper.propTypes = {
   focusedCellCoord: PropTypes.arrayOf(PropTypes.number).isRequired,
   setFocusedCellCoord: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
-  keyboard: PropTypes.func.isRequired,
+  keyboard: PropTypes.object.isRequired,
   isActiveElementInTable: PropTypes.bool.isRequired,
   tableWrapperRef: PropTypes.object.isRequired,
 };

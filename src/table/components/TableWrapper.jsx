@@ -150,7 +150,7 @@ export default function TableWrapper(props) {
           <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
           <TableBodyWrapper
             {...props}
-            isActiveElementInTable={tableSectionRef.current?.contains(activeElement)}
+            isActiveElementInTable={!!tableSectionRef.current && tableSectionRef.current.contains(activeElement)}
             focusedCellCoord={focusedCellCoord}
             setFocusedCellCoord={setFocusedCellCoord}
             setShouldRefocus={setShouldRefocus}
@@ -171,7 +171,7 @@ export default function TableWrapper(props) {
             inputProps: {
               'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
               'data-testid': 'select',
-              tabindex: keyboard.active ? '0' : '-1',
+              tabIndex: keyboard.active ? '0' : '-1',
             },
             native: true,
           }}
@@ -187,7 +187,7 @@ export default function TableWrapper(props) {
           onPageChange={handleChangePage}
           page={page}
           rowsPerPage={rowsPerPage}
-          keyboardActive={keyboard.active ? '0' : '-1'}
+          keyboardActive={keyboard.active ? 0 : -1}
           isInSelectionMode={selectionsAPI.isModal()}
           tableWidth={rect.width}
           translator={translator}

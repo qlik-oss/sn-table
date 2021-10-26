@@ -15,7 +15,7 @@ const useStyles = makeStyles({
   root: {
     flexShrink: 0,
     paddingLeft: '24px',
-    transform: 'translate(0px, 4px)',
+    transform: 'translate(0px, 10px)',
   },
   paginationActionButton: {
     color: 'rgba(0, 0, 0, 0.54)',
@@ -89,7 +89,7 @@ export default function TablePaginationActions(props) {
     <div className={classes.root}>
       {tableWidth > 650 && (
         <FormControl className={classes.formControl}>
-          <InputLabel className={classes.caption} htmlFor="pagination-dropdown">
+          <InputLabel className={classes.caption} htmlFor="pagination-dropdown" shrink={false}>
             {`${translator.get('SNTable.Pagination.SelectPage')}: `}
           </InputLabel>
           <Select
@@ -99,7 +99,7 @@ export default function TablePaginationActions(props) {
             onChange={handleSelectPage}
             inputProps={{
               'data-testid': 'pagination-dropdown',
-              tabindex: keyboardActive,
+              tabIndex: keyboardActive,
               id: 'pagination-dropdown',
               className: classes.input,
             }}
@@ -118,7 +118,7 @@ export default function TablePaginationActions(props) {
           aria-disabled={onFirstPage}
           aria-label={translator.get('SNTable.Pagination.FirstPage')}
           title={translator.get('SNTable.Pagination.FirstPage')}
-          tabindex={keyboardActive}
+          tabIndex={keyboardActive}
           className={`${classes.paginationActionButton} ${onFirstPage && classes.disabled}`}
         >
           <FirstPageIcon />
@@ -129,7 +129,7 @@ export default function TablePaginationActions(props) {
         aria-disabled={onFirstPage}
         aria-label={translator.get('SNTable.Pagination.PreviousPage')}
         title={translator.get('SNTable.Pagination.PreviousPage')}
-        tabindex={keyboardActive}
+        tabIndex={keyboardActive}
         className={`${classes.paginationActionButton} ${onFirstPage && classes.disabled}`}
       >
         <KeyboardArrowLeft />
@@ -139,9 +139,9 @@ export default function TablePaginationActions(props) {
         aria-disabled={onLastPage}
         aria-label={translator.get('SNTable.Pagination.NextPage')}
         title={translator.get('SNTable.Pagination.NextPage')}
-        tabindex={keyboardActive}
+        tabIndex={keyboardActive}
         className={`${classes.paginationActionButton} ${onLastPage && classes.disabled}`}
-        onKeyDown={tableWidth <= 350 && lastPageTabHandle}
+        onKeyDown={tableWidth <= 350 ? lastPageTabHandle : () => {}}
       >
         <KeyboardArrowRight />
       </IconButton>
@@ -151,7 +151,7 @@ export default function TablePaginationActions(props) {
           aria-disabled={onLastPage}
           aria-label={translator.get('SNTable.Pagination.LastPage')}
           title={translator.get('SNTable.Pagination.LastPage')}
-          tabindex={keyboardActive}
+          tabIndex={keyboardActive}
           className={`${classes.paginationActionButton} ${onLastPage && classes.disabled}`}
           onKeyDown={lastPageTabHandle}
         >
@@ -167,7 +167,7 @@ TablePaginationActions.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
-  keyboardActive: PropTypes.bool.isRequired,
+  keyboardActive: PropTypes.number.isRequired,
   isInSelectionMode: PropTypes.bool.isRequired,
   tableWidth: PropTypes.number.isRequired,
   translator: PropTypes.object.isRequired,
