@@ -1,6 +1,6 @@
 {
   "palette": {
-    "type": "light",
+    "mode": "light",
     "primary": {
       "light": "#0AAF54",
       "main": "#009845",
@@ -183,8 +183,8 @@
         "padding": "10px 19px"
       }
     },
-    "MuiSelect": {
-      "root": {
+    "MuiNativeSelect": {
+      "select": {
         "height": "32px",
         "zIndex": 1,
         "borderRadius": "3px !important",
@@ -192,7 +192,7 @@
           "color": "rgba(0, 0, 0, 0.55)",
           "WebkitFontSmoothing": "antialiased",
           "&::after": {
-            "content": ""
+            "content": "''"
           }
         },
         "& ~i": {
@@ -355,10 +355,10 @@
         "opacity": 0
       },
       "iconDirectionDesc": {
-        "transform": "rotate(180deg)"
+        "transform": "rotate(0deg)"
       },
       "iconDirectionAsc": {
-        "transform": "rotate(0deg)"
+        "transform": "rotate(180deg)"
       }
     },
     "MuiTable": {
