@@ -1,5 +1,5 @@
 import { selectCell } from './selections-utils';
-import { updateFocus, focusConfirmButton } from './handle-accessibility';
+import { updateFocus, focusSelectionToolbar } from './handle-accessibility';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -160,8 +160,7 @@ export const bodyHandleKeyPress = (
     case 'Tab': {
       if (evt.shiftKey && selectionState.api.isModal()) {
         preventDefaultBehavior(evt);
-        focusConfirmButton(rootElement);
-        keyboard.focusSel(true);
+        focusSelectionToolbar(rootElement, keyboard, true);
       }
       break;
     }

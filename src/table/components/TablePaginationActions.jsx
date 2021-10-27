@@ -6,7 +6,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import { makeStyles } from '@material-ui/core/styles';
-import { focusConfirmButton } from '../utils/handle-accessibility';
+import { focusSelectionToolbar } from '../utils/handle-accessibility';
 
 const useStyles = makeStyles({
   root: {
@@ -20,7 +20,8 @@ const useStyles = makeStyles({
 
 export default function TablePaginationActions(props) {
   const classes = useStyles();
-  const { count, page, rowsPerPage, onPageChange, keyboardActive, tableWidth, translator, isInSelectionMode } = props;
+  const { count, page, rowsPerPage, onPageChange, keyboard, tableWidth, translator, isInSelectionMode } = props;
+  const tabIndex = !keyboard.enabled || keyboard.active ? '0' : '-1';
 
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
@@ -42,7 +43,7 @@ export default function TablePaginationActions(props) {
     if (isInSelectionMode && event.key === 'Tab' && !event.shiftKey) {
       event.stopPropagation();
       event.preventDefault();
-      focusConfirmButton(event.target);
+      focusSelectionToolbar(event.target, keyboard, false);
     }
   };
 
@@ -57,7 +58,7 @@ export default function TablePaginationActions(props) {
           aria-disabled={onFirstPage}
           aria-label={translator.get('SNTable.Pagination.FirstPage')}
           title={translator.get('SNTable.Pagination.FirstPage')}
-          tabindex={keyboardActive}
+          tabindex={tabIndex}
           className={onFirstPage && classes.disabled}
         >
           <FirstPageIcon />
@@ -68,7 +69,7 @@ export default function TablePaginationActions(props) {
         aria-disabled={onFirstPage}
         aria-label={translator.get('SNTable.Pagination.PreviousPage')}
         title={translator.get('SNTable.Pagination.PreviousPage')}
-        tabindex={keyboardActive}
+        tabindex={tabIndex}
         className={onFirstPage && classes.disabled}
       >
         <KeyboardArrowLeft />
@@ -78,7 +79,7 @@ export default function TablePaginationActions(props) {
         aria-disabled={onLastPage}
         aria-label={translator.get('SNTable.Pagination.NextPage')}
         title={translator.get('SNTable.Pagination.NextPage')}
-        tabindex={keyboardActive}
+        tabindex={tabIndex}
         className={onLastPage && classes.disabled}
         onKeyDown={tableWidth <= 350 && lastPageTabHandle}
       >
@@ -90,7 +91,7 @@ export default function TablePaginationActions(props) {
           aria-disabled={onLastPage}
           aria-label={translator.get('SNTable.Pagination.LastPage')}
           title={translator.get('SNTable.Pagination.LastPage')}
-          tabindex={keyboardActive}
+          tabindex={tabIndex}
           className={onLastPage && classes.disabled}
           onKeyDown={lastPageTabHandle}
         >
@@ -106,7 +107,7 @@ TablePaginationActions.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
-  keyboardActive: PropTypes.bool.isRequired,
+  keyboard: PropTypes.object.isRequired,
   isInSelectionMode: PropTypes.bool.isRequired,
   tableWidth: PropTypes.number.isRequired,
   translator: PropTypes.object.isRequired,

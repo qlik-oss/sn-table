@@ -40,8 +40,6 @@ export default function supernova(env) {
       const theme = useTheme();
       const keyboard = useKeyboard();
       const rect = useRect();
-      keyboard.enabled = true;
-      keyboard.active = true;
 
       const [pageInfo, setPageInfo] = useState(() => ({ top: 0, height: 100 }));
       const [muiParameters] = useState(() => muiSetup());

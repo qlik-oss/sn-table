@@ -185,7 +185,7 @@ export default function TableWrapper(props) {
           onPageChange={handleChangePage}
           page={page}
           rowsPerPage={rowsPerPage}
-          keyboardActive={keyboard.active ? '0' : '-1'}
+          keyboard={keyboard}
           isInSelectionMode={selectionsAPI.isModal()}
           tableWidth={rect.width}
           translator={translator}

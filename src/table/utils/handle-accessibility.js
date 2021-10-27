@@ -121,5 +121,13 @@ export const handleFocusoutEvent = (evt, shouldRefocus, blur) => {
 };
 
 // get the object, find the patent of the confirmbutton in slection toolbar parent and focus that element
-export const focusConfirmButton = (element) =>
-  element.closest('.qv-object-wrapper')?.querySelector('.sel-toolbar-confirm')?.parentElement?.focus();
+export const focusSelectionToolbar = (element, keyboard, last) => {
+  const clientConfirmButton = element
+    .closest('.qv-object-wrapper')
+    ?.querySelector('.sel-toolbar-confirm')?.parentElement;
+  if (clientConfirmButton) {
+    clientConfirmButton.focus();
+    return;
+  }
+  keyboard.focusSelection(last);
+};
