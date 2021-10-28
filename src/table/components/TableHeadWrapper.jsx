@@ -57,7 +57,7 @@ function TableHeadWrapper({
     <TableHead>
       <TableRow className="sn-table-row">
         {tableData.columns.map((column, columnIndex) => {
-          const tabIndex = columnIndex === 0 && !keyboard.enabled ? '0' : '-1';
+          const tabIndex = columnIndex === 0 && !keyboard.enabled ? 0 : -1;
           const currentSortDir = SORT_NOTATIONS[column.sortDirection];
           const isCurrentColumnActive =
             layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === tableData.columnOrder[columnIndex];
