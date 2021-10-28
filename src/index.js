@@ -20,6 +20,7 @@ import manageData from './handle-data';
 import sortingFactory from './sorting-factory';
 import { render, teardown } from './table/Root';
 import muiSetup from './mui-setup';
+import './table/components/TablePaginationActions.css';
 
 export default function supernova(env) {
   return {
