@@ -154,6 +154,9 @@ export default function TableWrapper(props) {
             inputProps: {
               'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
               'data-testid': 'select',
+              style: {
+                color: '#404040',
+              },
               tabindex: keyboard.active ? '0' : '-1',
             },
             native: true,
