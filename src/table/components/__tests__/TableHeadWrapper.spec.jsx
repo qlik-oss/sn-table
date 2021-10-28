@@ -176,8 +176,21 @@ describe('<TableHeadWrapper />', () => {
     expect(handleAccessibility.handleClickToFocusHead).to.have.been.calledOnce;
   });
 
-  it('should render the visually hidden text instead of `aria-label` and has correct `scope` properly', () => {
-    const { queryByText, queryByTestId } = render(
+  it('should change `aria-pressed` and `aria-sort` when we sort by second column', () => {
+    tableData = {
+      columns: [
+        { ...tableData.columns[0], sortDirection: 'desc' },
+        { ...tableData.columns[1], sortDirection: 'asc' },
+      ],
+      columnOrder: tableData.columnOrder,
+    };
+    layout = {
+      qHyperCube: {
+        qEffectiveInterColumnSortOrder: [1, 0],
+      },
+    };
+
+    const { queryByText } = render(
       <TableHeadWrapper
         tableData={tableData}
         theme={theme}
@@ -194,16 +207,34 @@ describe('<TableHeadWrapper />', () => {
     const firstColQuery = queryByText(tableData.columns[0].label).closest('th');
     const secondColQuery = queryByText(tableData.columns[1].label).closest('th');
 
-    // check scope
-    expect(firstColQuery).to.have.attribute('scope', 'col');
-    expect(secondColQuery).to.have.attribute('scope', 'col');
+    expect(firstColQuery).to.not.have.attribute('aria-sort');
+    expect(firstColQuery).to.have.attribute('aria-pressed', 'false');
+    expect(secondColQuery).to.have.attribute('aria-sort', 'ascending');
+    expect(secondColQuery).to.have.attribute('aria-pressed', 'true');
+  });
 
-    const firstColHiddenLabel = queryByTestId('VHL-for-col-0');
-    const secondColHiddenLabel = queryByTestId('VHL-for-col-1');
+  it('should render the visually hidden text instead of `aria-label` and has correct `scope` properly', () => {
+    const { queryByText, queryByTestId } = render(
+      <TableHeadWrapper
+        tableData={tableData}
+        theme={theme}
+        layout={layout}
+        changeSortOrder={changeSortOrder}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+        keyboard={keyboard}
+        translator={translator}
+        focusedCellCoord={focusedCellCoord}
+      />
+    );
+
+    // check scope
+    const tableColumn = queryByText(tableData.columns[0].label).closest('th');
+    expect(tableColumn).to.have.attribute('scope', 'col');
 
     // check label
-    expect(firstColHiddenLabel).to.have.text('SNTable.SortLabel.SortedAscending SNTable.SortLabel.PressSpaceToSort');
-    expect(secondColHiddenLabel).to.have.text('SNTable.SortLabel.PressSpaceToSort');
+    const tableColumnSortlabel = queryByTestId('VHL-for-col-0');
+    expect(tableColumnSortlabel).to.have.text('SNTable.SortLabel.PressSpaceToSort');
   });
 
   it('should not render visually hidden text while we are out of table header', () => {
