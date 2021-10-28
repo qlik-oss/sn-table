@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
+import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
+import { StylesProvider } from '@mui/styles';
 import TableWrapper from './components/TableWrapper';
 
 export function render(rootElement, props) {
@@ -8,11 +9,13 @@ export function render(rootElement, props) {
 
   ReactDOM.render(
     <React.StrictMode>
-      <StylesProvider generateClassName={muiParameters.generateClassName}>
-        <ThemeProvider theme={muiParameters.theme}>
-          <TableWrapper {...props} />
-        </ThemeProvider>
-      </StylesProvider>
+      <StyledEngineProvider injectFirst>
+        <StylesProvider generateClassName={muiParameters.generateClassName}>
+          <ThemeProvider theme={muiParameters.theme}>
+            <TableWrapper {...props} />
+          </ThemeProvider>
+        </StylesProvider>
+      </StyledEngineProvider>
     </React.StrictMode>,
     rootElement
   );

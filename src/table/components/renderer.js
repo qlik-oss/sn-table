@@ -1,4 +1,4 @@
-import TableCell from '@material-ui/core/TableCell';
+import TableCell from '@mui/material/TableCell';
 import withColumnStyling from './withColumnStyling';
 import withSelections from './withSelections';
 import withStyling from './withStyling';
