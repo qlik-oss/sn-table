@@ -50,13 +50,13 @@ export function reducer(state, action) {
   }
 }
 
-export const handleAnnounceSelectionStatus = ({ announce, rowslength, isAddition }) => {
-  if (rowslength) {
-    const amountStatus =
-      rowslength === 1
-        ? 'SNTable.SelectionLabel.OneSelectedValue'
-        : ['SNTable.SelectionLabel.SelectedValues', rowslength];
+export const handleAnnounceSelectionStatus = ({ announce, rowsLength, isAddition }) => {
+  if (rowsLength) {
     const changeStatus = isAddition ? 'SNTable.SelectionLabel.SelectedValue' : 'SNTable.SelectionLabel.DeselectedValue';
+    const amountStatus =
+      rowsLength === 1
+        ? 'SNTable.SelectionLabel.OneSelectedValue'
+        : ['SNTable.SelectionLabel.SelectedValues', rowsLength];
     announce({ keys: [changeStatus, amountStatus] });
   } else {
     announce({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
@@ -98,7 +98,7 @@ export function selectCell({ selectionState, cell, selDispatch, evt, announce })
   selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
   handleAnnounceSelectionStatus({
     announce,
-    rowslength: selectedRows.length,
+    rowsLength: selectedRows.length,
     isAddition: selectedRows.length > rows.length,
   });
 

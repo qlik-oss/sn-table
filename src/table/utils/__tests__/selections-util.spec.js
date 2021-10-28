@@ -150,31 +150,15 @@ describe('selections-utils', () => {
     });
   });
 
-  // describe('getSelectionStatusKey', () => {
-  //   let rows;
-
-  //   it('key should be in singular shape', () => {
-  //     rows = ['row#01'];
-  //     const key = getSelectionStatusKey(rows);
-
-  //     expect(key).to.be.equal('SNTable.SelectionLabel.OneSelectedValue');
-  //   });
-
-  //   it('should return and array and be in plural shape', () => {
-  //     rows = ['row#01', 'row#02'];
-  //     const [key, length] = getSelectionStatusKey(rows);
-
-  //     expect(key).to.be.equal('SNTable.SelectionLabel.SelectedValues');
-  //     expect(length).to.be.equal(rows.length);
-  //   });
-  // });
-
   describe('handleAnnounceSelectionStatus', () => {
     let announce;
-    let selectedRows;
+    let rowsLength;
+    let isAddition;
 
     beforeEach(() => {
       announce = sinon.spy();
+      rowsLength = 1;
+      isAddition = true;
     });
 
     afterEach(() => {
@@ -182,52 +166,48 @@ describe('selections-utils', () => {
       sinon.resetHistory();
     });
 
-    it('should announce selected value in singular shape when we have one selection', () => {
-      selectedRows = ['row#01'];
-      handleAnnounceSelectionStatus({ announce, selectedRows, isAddition: true });
+    it('should announce selected value and one selected value when rowsLength is 1 and isAddition is true', () => {
+      handleAnnounceSelectionStatus({ announce, rowsLength, isAddition });
 
       expect(announce).to.have.been.calledOnceWith({
         keys: ['SNTable.SelectionLabel.SelectedValue', 'SNTable.SelectionLabel.OneSelectedValue'],
       });
     });
 
-    it('should announce selected value in plural shape when we have more than one selection', () => {
-      selectedRows = ['row#01', 'row#02', 'row#03'];
-      handleAnnounceSelectionStatus({ announce, selectedRows, isAddition: true });
+    it('should announce selected value and two selected values when rowsLength is 2 and isAddition is true', () => {
+      rowsLength = 2;
+      handleAnnounceSelectionStatus({ announce, rowsLength, isAddition });
 
       expect(announce).to.have.been.calledOnceWith({
-        keys: ['SNTable.SelectionLabel.SelectedValue', ['SNTable.SelectionLabel.SelectedValues', selectedRows.length]],
+        keys: ['SNTable.SelectionLabel.SelectedValue', ['SNTable.SelectionLabel.SelectedValues', rowsLength]],
       });
     });
 
-    it('should announce deselected value in singular shape when we have left off with one selection', () => {
-      selectedRows = ['row#01'];
-      handleAnnounceSelectionStatus({ announce, selectedRows, isAddition: false });
+    it('should announce deselected value and one selected value when rowsLength is 1 and isAddition is false', () => {
+      isAddition = false;
+      handleAnnounceSelectionStatus({ announce, rowsLength, isAddition });
 
       expect(announce).to.have.been.calledOnceWith({
         keys: ['SNTable.SelectionLabel.DeselectedValue', 'SNTable.SelectionLabel.OneSelectedValue'],
       });
     });
 
-    it('should announce deselected value in plural shape when we have left off with more than one selection', () => {
-      selectedRows = ['row#01', 'row#02', 'row#03'];
-      handleAnnounceSelectionStatus({ announce, selectedRows, isAddition: false });
+    it('should announce deselected value and two selected values when rowsLength is 2 and isAddition is false', () => {
+      rowsLength = 2;
+      isAddition = false;
+      handleAnnounceSelectionStatus({ announce, rowsLength, isAddition: false });
 
       expect(announce).to.have.been.calledOnceWith({
-        keys: [
-          'SNTable.SelectionLabel.DeselectedValue',
-          ['SNTable.SelectionLabel.SelectedValues', selectedRows.length],
-        ],
+        keys: ['SNTable.SelectionLabel.DeselectedValue', ['SNTable.SelectionLabel.SelectedValues', rowsLength]],
       });
     });
 
     it('should announce deselected value and exited selection mode when we have deselected the last value', () => {
-      selectedRows = [];
-      handleAnnounceSelectionStatus({ announce, selectedRows, isAddition: false });
+      rowsLength = 0;
+      isAddition = false;
+      handleAnnounceSelectionStatus({ announce, rowsLength, isAddition });
 
-      expect(announce).to.have.been.calledOnceWith({
-        keys: 'SNTable.SelectionLabel.ExitedSelectionMode',
-      });
+      expect(announce).to.have.been.calledOnceWith({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
     });
   });
 
