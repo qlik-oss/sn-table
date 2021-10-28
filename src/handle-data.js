@@ -28,18 +28,26 @@ export function getColumnInfo(layout, colIndex) {
   );
 }
 
-export default async function manageData(model, layout, pageInfo) {
+export default async function manageData(model, layout, pageInfo, setPageInfo) {
   const { page, rowsPerPage } = pageInfo;
+  const size = layout.qHyperCube.qSize;
+  // When the number of rows is reduced (e.g. confirming selections),
+  // you can end up still being on a page that doesn't exist anymore, then go back to the first page and return null
+  const shouldGoToFirstPage = (size.qcy > 0 && page * rowsPerPage >= size.qcy) || (size.qcy === 0 && page > 0);
+  if (shouldGoToFirstPage) {
+    setPageInfo({ rowsPerPage, page: 0 });
+    return null;
+  }
+
   const top = page * rowsPerPage;
   const columnOrder = getColumnOrder(layout);
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
     { qTop: top, qLeft: 0, qHeight: rowsPerPage, qWidth: columnOrder.length },
   ]);
-  const matrix = dataPages[0].qMatrix;
 
   // using filter to remove hidden columns (represented with false)
   const columns = columnOrder.map((colIndex) => getColumnInfo(layout, colIndex)).filter(Boolean);
-  const rows = matrix.map((r, rowIdx) => {
+  const rows = dataPages[0].qMatrix.map((r, rowIdx) => {
     const row = { key: `row-${rowIdx}` };
     columns.forEach((c, colIdx) => {
       row[c.id] = {
@@ -54,5 +62,5 @@ export default async function manageData(model, layout, pageInfo) {
     return row;
   });
 
-  return { size: layout.qHyperCube.qSize, rows, columns, columnOrder };
+  return { size, rows, columns, columnOrder };
 }

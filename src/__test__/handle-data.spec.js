@@ -1,3 +1,4 @@
+import { expect } from 'chai';
 import manageData, { getColumnOrder, getColumnInfo } from '../handle-data';
 import { generateDataPages, generateLayout } from './generate-test-data';
 
@@ -72,11 +73,18 @@ describe('handle-data', () => {
   });
 
   describe('manageData', () => {
-    const model = { getHyperCubeData: async () => generateDataPages(2, 4) };
-    const pageInfo = { page: 1, rowsPerPage: 100 };
+    let model;
+    let pageInfo;
+    let setPageInfo;
+
+    beforeEach(() => {
+      model = { getHyperCubeData: async () => generateDataPages(2, 4) };
+      pageInfo = { page: 1, rowsPerPage: 100 };
+      setPageInfo = sinon.spy();
+    });
 
     it('should return size, rows and columns correctly formatted', async () => {
-      const { size, rows, columns } = await manageData(model, layout, pageInfo);
+      const { size, rows, columns } = await manageData(model, layout, pageInfo, setPageInfo);
 
       expect(size).to.equal(layout.qHyperCube.qSize);
       expect(rows.length).to.equal(2);
@@ -94,6 +102,22 @@ describe('handle-data', () => {
       columns.forEach((c, i) => {
         expect(c.id).to.equal(Object.keys(rows[0])[i + 1]); // skip the first key
       });
+    });
+
+    it('should return null and call setPageInfo when qcy is 0 and page is > 0', async () => {
+      layout.qHyperCube.qSize.qcy = 0;
+      const tableData = await manageData(model, layout, pageInfo, setPageInfo);
+
+      expect(tableData).to.be.null;
+      expect(setPageInfo).to.have.been.calledOnceWith({ page: 0, rowsPerPage: 100 });
+    });
+
+    it('should return null and call setPageInfo when qcy is > 0 and page * rowsPerPage >= qcy', async () => {
+      layout.qHyperCube.qSize.qcy = 100;
+      const tableData = await manageData(model, layout, pageInfo, setPageInfo);
+
+      expect(tableData).to.be.null;
+      expect(setPageInfo).to.have.been.calledOnceWith({ page: 0, rowsPerPage: 100 });
     });
   });
 });

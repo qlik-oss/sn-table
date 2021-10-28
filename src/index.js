@@ -41,32 +41,27 @@ export default function supernova(env) {
       const keyboard = useKeyboard();
       const rect = useRect();
       const [pageInfo, setPageInfo] = useState(() => ({ page: 0, rowsPerPage: 100 }));
-      const [tableData] = usePromise(() => manageData(model, layout, pageInfo), [layout, pageInfo]);
+      const [tableData] = usePromise(() => manageData(model, layout, pageInfo, setPageInfo), [layout, pageInfo]);
 
       useEffect(() => {
         if (layout && tableData) {
-          if (!tableData.rows.length && pageInfo.page > 0) {
-            // If rows is empty and we are not on the first page, go back to the first page, thus fetching new data
-            setPageInfo({ ...pageInfo, page: 0 });
-          } else {
-            locale(translator);
-            const changeSortOrder = sortingFactory(model, tableData.columnOrder);
-            render(rootElement, {
-              rootElement,
-              layout,
-              tableData,
-              pageInfo,
-              setPageInfo,
-              constraints,
-              translator,
-              selectionsAPI,
-              muiParameters,
-              theme,
-              changeSortOrder,
-              keyboard,
-              rect,
-            });
-          }
+          locale(translator);
+          const changeSortOrder = sortingFactory(model, tableData.columnOrder);
+          render(rootElement, {
+            rootElement,
+            layout,
+            tableData,
+            pageInfo,
+            setPageInfo,
+            constraints,
+            translator,
+            selectionsAPI,
+            muiParameters,
+            theme,
+            changeSortOrder,
+            keyboard,
+            rect,
+          });
         }
       }, [
         tableData,
