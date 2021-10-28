@@ -38,10 +38,10 @@ const useStyles = makeStyles({
 });
 
 export default function TableWrapper(props) {
-  const { rootElement, tableData, setPageInfo, constraints, translator, selectionsAPI, keyboard, rect } = props;
+  const { rootElement, tableData, pageInfo, setPageInfo, constraints, translator, selectionsAPI, keyboard, rect } =
+    props;
   const { size, rows, columns } = tableData;
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(100);
+  const { page, rowsPerPage } = pageInfo;
   const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
   const shouldRefocus = useRef(false);
   const tableSectionRef = useRef();
@@ -56,22 +56,8 @@ export default function TableWrapper(props) {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
-    setPage(newPage);
-  };
-
-  // should trigger reload
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPageInfo({ top: 0, height: +event.target.value });
-    setPage(0);
-  };
-
-  if (!rows.length && page > 0) {
-    handleChangePage(null, 0);
-    return null;
-  }
+  const handleChangePage = (evt, newPage) => setPageInfo({ ...pageInfo, page: newPage });
+  const handleChangeRowsPerPage = (evt) => setPageInfo({ page: 0, rowsPerPage: +evt.target.value });
 
   useEffect(() => {
     const scrollCallback = (evt) => handleScroll(evt, tableSectionRef);
@@ -85,13 +71,10 @@ export default function TableWrapper(props) {
     };
   }, []);
 
-  useEffect(() => {
-    handleNavigateTop({
-      tableSectionRef,
-      focusedCellCoord,
-      rootElement,
-    });
-  }, [tableSectionRef, focusedCellCoord]);
+  useEffect(
+    () => handleNavigateTop({ tableSectionRef, focusedCellCoord, rootElement }),
+    [tableSectionRef, focusedCellCoord]
+  );
 
   useDidUpdateEffect(() => {
     if (!keyboard.enabled) return;
@@ -200,6 +183,7 @@ export default function TableWrapper(props) {
 TableWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
+  pageInfo: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
   translator: PropTypes.object.isRequired,
   constraints: PropTypes.object.isRequired,

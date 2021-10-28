@@ -28,21 +28,31 @@ export function getColumnInfo(layout, colIndex) {
   );
 }
 
-export default async function manageData(model, layout, pageInfo) {
+export default async function manageData(model, layout, pageInfo, setPageInfo) {
+  const { page, rowsPerPage } = pageInfo;
+  const top = page * rowsPerPage;
+  const size = layout.qHyperCube.qSize;
+  const allRowsLength = size.qcy;
+  // When the number of rows is reduced (e.g. confirming selections),
+  // you can end up still being on a page that doesn't exist anymore, then go back to the first page and return null
+  if (page > 0 && top >= allRowsLength) {
+    setPageInfo({ rowsPerPage, page: 0 });
+    return null;
+  }
+
   const columnOrder = getColumnOrder(layout);
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
-    { qTop: pageInfo.top, qLeft: 0, qHeight: pageInfo.height, qWidth: columnOrder.length },
+    { qTop: top, qLeft: 0, qHeight: rowsPerPage, qWidth: columnOrder.length },
   ]);
-  const matrix = dataPages[0].qMatrix;
 
   // using filter to remove hidden columns (represented with false)
   const columns = columnOrder.map((colIndex) => getColumnInfo(layout, colIndex)).filter(Boolean);
-  const rows = matrix.map((r, rowIdx) => {
+  const rows = dataPages[0].qMatrix.map((r, rowIdx) => {
     const row = { key: `row-${rowIdx}` };
     columns.forEach((c, colIdx) => {
       row[c.id] = {
         ...r[colIdx],
-        rowIdx: rowIdx + pageInfo.top,
+        rowIdx: rowIdx + top,
         colIdx: columnOrder[colIdx],
         isDim: c.isDim,
         rawRowIdx: rowIdx,
@@ -52,5 +62,5 @@ export default async function manageData(model, layout, pageInfo) {
     return row;
   });
 
-  return { size: layout.qHyperCube.qSize, rows, columns, columnOrder };
+  return { size, rows, columns, columnOrder };
 }
