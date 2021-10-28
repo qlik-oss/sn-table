@@ -12,6 +12,9 @@ const useStyles = makeStyles({
   root: {
     display: 'flex',
   },
+  paginationActionButton: {
+    color: 'rgba(0, 0, 0, 0.54)',
+  },
   disabled: {
     color: 'rgba(0, 0, 0, 0.3)',
     cursor: 'default',
@@ -58,7 +61,7 @@ export default function TablePaginationActions(props) {
           aria-label={translator.get('SNTable.Pagination.FirstPage')}
           title={translator.get('SNTable.Pagination.FirstPage')}
           tabindex={keyboardActive}
-          className={onFirstPage && classes.disabled}
+          className={`${classes.paginationActionButton} ${onFirstPage && classes.disabled}`}
         >
           <FirstPageIcon />
         </IconButton>
@@ -69,7 +72,7 @@ export default function TablePaginationActions(props) {
         aria-label={translator.get('SNTable.Pagination.PreviousPage')}
         title={translator.get('SNTable.Pagination.PreviousPage')}
         tabindex={keyboardActive}
-        className={onFirstPage && classes.disabled}
+        className={`${classes.paginationActionButton} ${onFirstPage && classes.disabled}`}
       >
         <KeyboardArrowLeft />
       </IconButton>
@@ -79,7 +82,7 @@ export default function TablePaginationActions(props) {
         aria-label={translator.get('SNTable.Pagination.NextPage')}
         title={translator.get('SNTable.Pagination.NextPage')}
         tabindex={keyboardActive}
-        className={onLastPage && classes.disabled}
+        className={`${classes.paginationActionButton} ${onLastPage && classes.disabled}`}
         onKeyDown={tableWidth <= 350 && lastPageTabHandle}
       >
         <KeyboardArrowRight />
@@ -91,7 +94,7 @@ export default function TablePaginationActions(props) {
           aria-label={translator.get('SNTable.Pagination.LastPage')}
           title={translator.get('SNTable.Pagination.LastPage')}
           tabindex={keyboardActive}
-          className={onLastPage && classes.disabled}
+          className={`${classes.paginationActionButton} ${onLastPage && classes.disabled}`}
           onKeyDown={lastPageTabHandle}
         >
           <LastPageIcon />
