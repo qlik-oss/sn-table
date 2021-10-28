@@ -1,6 +1,6 @@
 {
   "palette": {
-    "type": "light",
+    "mode": "light",
     "primary": {
       "light": "#0AAF54",
       "main": "#009845",

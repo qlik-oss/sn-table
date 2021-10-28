@@ -17,6 +17,7 @@ import announcementFactory from '../utils/announcement-factory';
 const useStyles = makeStyles({
   paper: {
     height: '100%',
+    backgroundColor: 'rgb(255, 255, 255)',
   },
   containerOverflowAuto: {
     height: 'calc(100% - 52px)',
@@ -27,6 +28,7 @@ const useStyles = makeStyles({
     overflow: 'hidden',
   },
   tablePaginationSection: {
+    backgroundColor: 'rgb(255, 255, 255)',
     display: 'flex',
     justifyContent: 'flex-end',
   },
