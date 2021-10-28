@@ -30,16 +30,16 @@ export function getColumnInfo(layout, colIndex) {
 
 export default async function manageData(model, layout, pageInfo, setPageInfo) {
   const { page, rowsPerPage } = pageInfo;
+  const top = page * rowsPerPage;
   const size = layout.qHyperCube.qSize;
+  const allRowsLength = size.qcy;
   // When the number of rows is reduced (e.g. confirming selections),
   // you can end up still being on a page that doesn't exist anymore, then go back to the first page and return null
-  const shouldGoToFirstPage = (size.qcy > 0 && page * rowsPerPage >= size.qcy) || (size.qcy === 0 && page > 0);
-  if (shouldGoToFirstPage) {
+  if (page > 0 && top >= allRowsLength) {
     setPageInfo({ rowsPerPage, page: 0 });
     return null;
   }
 
-  const top = page * rowsPerPage;
   const columnOrder = getColumnOrder(layout);
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
     { qTop: top, qLeft: 0, qHeight: rowsPerPage, qWidth: columnOrder.length },

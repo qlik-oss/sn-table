@@ -104,15 +104,7 @@ describe('handle-data', () => {
       });
     });
 
-    it('should return null and call setPageInfo when qcy is 0 and page is > 0', async () => {
-      layout.qHyperCube.qSize.qcy = 0;
-      const tableData = await manageData(model, layout, pageInfo, setPageInfo);
-
-      expect(tableData).to.be.null;
-      expect(setPageInfo).to.have.been.calledOnceWith({ page: 0, rowsPerPage: 100 });
-    });
-
-    it('should return null and call setPageInfo when qcy is > 0 and page * rowsPerPage >= qcy', async () => {
+    it('should return null and call setPageInfo when page is > 0 and page * rowsPerPage >= qcy', async () => {
       layout.qHyperCube.qSize.qcy = 100;
       const tableData = await manageData(model, layout, pageInfo, setPageInfo);
 
