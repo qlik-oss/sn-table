@@ -81,13 +81,23 @@ export const getRowAndColumnCount = (rootElement) => {
   return { rowElements, rowCount, columnCount };
 };
 
-export const moveFocus = (evt, rootElement, cellCoord, selectionState, setFocusedCellCoord) => {
+export const moveFocus = (evt, rootElement, cellCoord, selectionState, setFocusedCellCoord, announce) => {
   preventDefaultBehavior(evt);
   evt.target.setAttribute('tabIndex', '-1');
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
   const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selectionState);
   updateFocus({ focusType: 'focus', rowElements: rowAndColumnCount.rowElements, cellCoord: nextCellCoord });
   setFocusedCellCoord(nextCellCoord);
+
+  // handle announce
+  if (selectionState.api?.isModal()) {
+    const cell =
+      rowAndColumnCount.rowElements[nextCellCoord[0]]?.getElementsByClassName('sn-table-cell')[nextCellCoord[1]];
+    const hasActiveClassName = cell.classList.contains('selected');
+    hasActiveClassName
+      ? announce({ keys: 'SNTable.SelectionLabel.SelectedValue' })
+      : announce({ keys: 'SNTable.SelectionLabel.NotSelectedValue' });
+  }
 };
 
 export const headHandleKeyPress = (
@@ -119,7 +129,7 @@ export const headHandleKeyPress = (
   }
 };
 
-export const bodyHandleKeyPress = (
+export const bodyHandleKeyPress = ({
   evt,
   rootElement,
   cellCoord,
@@ -127,26 +137,29 @@ export const bodyHandleKeyPress = (
   cell,
   selDispatch,
   isAnalysisMode,
-  setFocusedCellCoord
-) => {
+  setFocusedCellCoord,
+  announce,
+}) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, selectionState, setFocusedCellCoord);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, selectionState, setFocusedCellCoord, announce);
       break;
     }
     // Space bar: Selects value.
     case ' ': {
       preventDefaultBehavior(evt);
-      cell?.isDim && isAnalysisMode && selectCell(selectionState, cell, selDispatch, evt);
+      cell?.isDim && isAnalysisMode && selectCell({ selectionState, cell, selDispatch, evt, announce });
       break;
     }
     // Enter: Confirms selections.
     case 'Enter': {
       preventDefaultBehavior(evt);
-      isAnalysisMode && selectionState.api.confirm();
+      if (!selectionState.api.isModal()) break;
+      selectionState.api.confirm();
+      announce({ keys: 'SNTable.SelectionLabel.SelectionsConfirmed' });
       break;
     }
     // Esc: Cancels selections. If no selections, do nothing and handleTableWrapperKeyDown should catch it
@@ -154,6 +167,7 @@ export const bodyHandleKeyPress = (
       if (!isAnalysisMode || !selectionState.api.isModal()) break;
       preventDefaultBehavior(evt);
       selectionState.api.cancel();
+      announce({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
       break;
     }
     case 'Tab': {

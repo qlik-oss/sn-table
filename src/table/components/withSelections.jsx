@@ -5,8 +5,9 @@ import { getSelectionStyle } from '../utils/styling-utils';
 
 export default function withSelections(CellComponent) {
   const HOC = (props) => {
-    const { selectionState, cell, selDispatch, styling } = props;
-    const handleMouseUp = (evt) => cell.isDim && evt.button === 0 && selectCell(selectionState, cell, selDispatch, evt);
+    const { selectionState, cell, selDispatch, styling, announce } = props;
+    const handleMouseUp = (evt) =>
+      cell.isDim && evt.button === 0 && selectCell({ selectionState, cell, selDispatch, evt, announce });
     const selectionStyling = useMemo(
       () => getSelectionStyle(styling, cell, selectionState),
       [styling, cell, selectionState]
@@ -20,6 +21,7 @@ export default function withSelections(CellComponent) {
     selectionState: PropTypes.object.isRequired,
     cell: PropTypes.object.isRequired,
     selDispatch: PropTypes.func.isRequired,
+    announce: PropTypes.func.isRequired,
   };
 
   return HOC;

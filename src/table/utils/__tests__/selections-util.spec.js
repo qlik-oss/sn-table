@@ -1,4 +1,12 @@
-import { addSelectionListeners, getSelectedRows, reducer, selectCell } from '../selections-utils';
+import { expect } from 'chai';
+import sinon from 'sinon';
+import {
+  addSelectionListeners,
+  reducer,
+  handleAnnounceSelectionStatus,
+  getSelectedRows,
+  selectCell,
+} from '../selections-utils';
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {
@@ -142,6 +150,67 @@ describe('selections-utils', () => {
     });
   });
 
+  describe('handleAnnounceSelectionStatus', () => {
+    let announce;
+    let rowsLength;
+    let isAddition;
+
+    beforeEach(() => {
+      announce = sinon.spy();
+      rowsLength = 1;
+      isAddition = true;
+    });
+
+    afterEach(() => {
+      sinon.verifyAndRestore();
+      sinon.resetHistory();
+    });
+
+    it('should announce selected value and one selected value when rowsLength is 1 and isAddition is true', () => {
+      handleAnnounceSelectionStatus({ announce, rowsLength, isAddition });
+
+      expect(announce).to.have.been.calledOnceWith({
+        keys: ['SNTable.SelectionLabel.SelectedValue', 'SNTable.SelectionLabel.OneSelectedValue'],
+      });
+    });
+
+    it('should announce selected value and two selected values when rowsLength is 2 and isAddition is true', () => {
+      rowsLength = 2;
+      handleAnnounceSelectionStatus({ announce, rowsLength, isAddition });
+
+      expect(announce).to.have.been.calledOnceWith({
+        keys: ['SNTable.SelectionLabel.SelectedValue', ['SNTable.SelectionLabel.SelectedValues', rowsLength]],
+      });
+    });
+
+    it('should announce deselected value and one selected value when rowsLength is 1 and isAddition is false', () => {
+      isAddition = false;
+      handleAnnounceSelectionStatus({ announce, rowsLength, isAddition });
+
+      expect(announce).to.have.been.calledOnceWith({
+        keys: ['SNTable.SelectionLabel.DeselectedValue', 'SNTable.SelectionLabel.OneSelectedValue'],
+      });
+    });
+
+    it('should announce deselected value and two selected values when rowsLength is 2 and isAddition is false', () => {
+      rowsLength = 2;
+      isAddition = false;
+      handleAnnounceSelectionStatus({ announce, rowsLength, isAddition: false });
+
+      expect(announce).to.have.been.calledOnceWith({
+        keys: ['SNTable.SelectionLabel.DeselectedValue', ['SNTable.SelectionLabel.SelectedValues', rowsLength]],
+      });
+    });
+
+    it('should announce deselected value and exited selection mode when we have deselected the last value', () => {
+      rowsLength = 0;
+      isAddition = false;
+      handleAnnounceSelectionStatus({ announce, rowsLength, isAddition });
+
+      expect(announce).to.have.been.calledOnceWith({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
+    });
+  });
+
   describe('getSelectedRows', () => {
     let selectedRows;
     let qElemNumber;
@@ -158,24 +227,24 @@ describe('selections-utils', () => {
     it('should return array with only the last clicked item when ctrlKey is pressed', () => {
       evt.ctrlKey = true;
 
-      selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt);
+      selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
       expect(selectedRows).to.eql([{ qElemNumber, rowIdx }]);
     });
     it('should return array with only the last clicked item metaKey cm is pressed', () => {
       evt.metaKey = true;
 
-      selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt);
+      selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
       expect(selectedRows).to.eql([{ qElemNumber, rowIdx }]);
     });
     it('should return array with selected item removed if it already was in selectedRows', () => {
       qElemNumber = 1;
       rowIdx = 1;
 
-      selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt);
+      selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
       expect(selectedRows).to.eql([]);
     });
     it('should return array with selected item added if it was not in selectedRows before', () => {
-      selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt);
+      selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
       expect(selectedRows).to.eql([
         { qElemNumber: 1, rowIdx: 1 },
         { qElemNumber, rowIdx },
@@ -188,6 +257,7 @@ describe('selections-utils', () => {
     let selectionState;
     let cell;
     let selDispatch;
+    let announce;
 
     beforeEach(() => {
       selectionState = {
@@ -201,38 +271,42 @@ describe('selections-utils', () => {
       };
       cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1 };
       selDispatch = sinon.spy();
+      announce = sinon.spy();
     });
 
-    it('should call begin, selDispatch and selectHyperCubeCells when no previous selections', () => {
+    it('should call begin, selDispatch and selectHyperCubeCells when no previous selections and also announce it to the user', () => {
       const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
       const payload = { colIdx: cell.colIdx, rows: [{ qElemNumber: cell.qElemNumber, rowIdx: cell.rowIdx }] };
 
-      selectCell(selectionState, cell, selDispatch, event);
+      selectCell({ selectionState, cell, selDispatch, evt: event, announce });
       expect(selectionState.api.begin).to.have.been.calledOnce;
       expect(selectionState.api.select).to.have.been.calledWith({ method: 'selectHyperCubeCells', params });
       expect(selDispatch).to.have.been.calledWith({ type: 'select', payload });
       expect(selectionState.api.cancel).to.not.have.been.called;
+      expect(announce).to.have.been.calledOnce;
     });
     it('should not call begin and call cancel when same qElemNumber (resulting in empty selectedCells)', () => {
       selectionState.rows = [{ qElemNumber: 1, rowIdx: 1 }];
       selectionState.colIdx = 1;
 
-      selectCell(selectionState, cell, selDispatch, event);
+      selectCell({ selectionState, cell, selDispatch, evt: event, announce });
       expect(selectionState.api.begin).to.not.have.been.called;
       expect(selectionState.api.cancel).to.have.been.calledOnce;
       expect(selDispatch).to.not.have.been.called;
       expect(selectionState.api.select).to.not.have.been.called;
+      expect(announce).to.have.been.calledOnce;
     });
     it('should return early when excluded columns', () => {
       selectionState.rows = [{ qElemNumber: 1, rowIdx: 1 }];
       selectionState.colIdx = 1;
       cell.colIdx = 2;
 
-      selectCell(selectionState, cell, selDispatch, event);
+      selectCell({ selectionState, cell, selDispatch, evt: event, announce });
       expect(selectionState.api.begin).to.not.have.been.called;
       expect(selectionState.api.cancel).to.not.have.been.called;
       expect(selDispatch).to.not.have.been.called;
       expect(selectionState.api.select).to.not.have.been.called;
+      expect(announce).to.not.have.been.called;
     });
   });
 });
