@@ -24,6 +24,9 @@ const useStyles = makeStyles({
     color: 'rgba(0, 0, 0, 0.3)',
     cursor: 'default',
   },
+  focused: {
+    color: '#404040 !important',
+  },
   caption: {
     fontSize: '14px',
     color: 'inherit',
