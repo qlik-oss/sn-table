@@ -32,7 +32,7 @@ const useStyles = makeStyles({
     color: 'inherit',
     width: 'fit-content',
     position: 'relative',
-    transform: 'translate(0px, 14px)',
+    transform: 'translate(0px, 12px)',
     paddingRight: '8px',
     height: '30px',
   },
