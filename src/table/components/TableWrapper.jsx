@@ -129,7 +129,7 @@ export default function TableWrapper(props) {
       <TableContainer
         ref={tableSectionRef}
         className={classes[containerMode]}
-        tabIndex="-1"
+        tabIndex={-1}
         role="application"
         data-testid="table-wrapper"
       >
@@ -167,7 +167,7 @@ export default function TableWrapper(props) {
               style: {
                 color: '#404040',
               },
-              tabindex: keyboard.active ? '0' : '-1',
+              tabindex: keyboard.active ? 0 : -1,
             },
             native: true,
           }}
@@ -183,7 +183,7 @@ export default function TableWrapper(props) {
           onPageChange={handleChangePage}
           page={page}
           rowsPerPage={rowsPerPage}
-          keyboardActive={keyboard.active ? '0' : '-1'}
+          tabIndex={keyboard.active ? 0 : -1}
           isInSelectionMode={selectionsAPI.isModal()}
           tableWidth={rect.width}
           translator={translator}

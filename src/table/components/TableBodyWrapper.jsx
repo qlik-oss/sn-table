@@ -126,7 +126,7 @@ TableBodyWrapper.propTypes = {
   theme: PropTypes.object.isRequired,
   setFocusedCellCoord: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
-  keyboard: PropTypes.func.isRequired,
+  keyboard: PropTypes.object.isRequired,
   tableWrapperRef: PropTypes.object.isRequired,
   announce: PropTypes.func.isRequired,
 };
