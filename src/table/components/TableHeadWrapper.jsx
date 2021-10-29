@@ -53,7 +53,7 @@ function TableHeadWrapper({
     <TableHead>
       <TableRow className="sn-table-row">
         {tableData.columns.map((column, columnIndex) => {
-          const tabIndex = columnIndex === 0 && !keyboard.enabled ? '0' : '-1';
+          const tabIndex = columnIndex === 0 && !keyboard.enabled ? 0 : -1;
           const isCurrentColumnActive =
             layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === tableData.columnOrder[columnIndex];
           const isFocusInHead = focusedCellCoord[0] === 0;

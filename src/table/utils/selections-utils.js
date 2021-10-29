@@ -50,7 +50,20 @@ export function reducer(state, action) {
   }
 }
 
-export const getSelectedRows = (selectedRows, qElemNumber, rowIdx, evt) => {
+export const handleAnnounceSelectionStatus = ({ announce, rowsLength, isAddition }) => {
+  if (rowsLength) {
+    const changeStatus = isAddition ? 'SNTable.SelectionLabel.SelectedValue' : 'SNTable.SelectionLabel.DeselectedValue';
+    const amountStatus =
+      rowsLength === 1
+        ? 'SNTable.SelectionLabel.OneSelectedValue'
+        : ['SNTable.SelectionLabel.SelectedValues', rowsLength];
+    announce({ keys: [changeStatus, amountStatus] });
+  } else {
+    announce({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
+  }
+};
+
+export const getSelectedRows = ({ selectedRows, qElemNumber, rowIdx, evt }) => {
   if (evt.ctrlKey || evt.metaKey) {
     // if the ctrl key or the ⌘ Command key (On Macintosh keyboards) or the ⊞ Windows key is pressed
     // get the last clicked item
@@ -69,7 +82,7 @@ export const getSelectedRows = (selectedRows, qElemNumber, rowIdx, evt) => {
   return selectedRows;
 };
 
-export function selectCell(selectionState, cell, selDispatch, evt) {
+export function selectCell({ selectionState, cell, selDispatch, evt, announce }) {
   const { api, rows } = selectionState;
   const { rowIdx, colIdx, qElemNumber } = cell;
   let selectedRows = [];
@@ -82,7 +95,12 @@ export function selectCell(selectionState, cell, selDispatch, evt) {
     return;
   }
 
-  selectedRows = getSelectedRows(selectedRows, qElemNumber, rowIdx, evt);
+  selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
+  handleAnnounceSelectionStatus({
+    announce,
+    rowsLength: selectedRows.length,
+    isAddition: selectedRows.length > rows.length,
+  });
 
   if (selectedRows.length) {
     selDispatch({ type: 'select', payload: { rows: selectedRows, colIdx } });

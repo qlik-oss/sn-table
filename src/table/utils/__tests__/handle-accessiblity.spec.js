@@ -7,7 +7,6 @@ describe('handle-accessibility', () => {
   let focusedCellCoord;
   let setFocusedCellCoord;
   let keyboard;
-  let translator;
 
   beforeEach(() => {
     cell = { focus: sinon.spy(), blur: sinon.spy(), setAttribute: sinon.spy() };
@@ -18,7 +17,6 @@ describe('handle-accessibility', () => {
     focusedCellCoord = [0, 0];
     setFocusedCellCoord = sinon.spy();
     keyboard = { focus: sinon.spy(), enabled: true };
-    translator = { get: (s) => s };
   });
 
   afterEach(() => {
@@ -224,161 +222,6 @@ describe('handle-accessibility', () => {
       expect(cell.setAttribute).have.been.calledTwice;
       expect(setFocusedCellCoord).to.have.been.calledOnceWith([1, 1]);
       expect(cell.focus).to.not.have.been.called;
-    });
-  });
-
-  describe('getCellSelectionStatusNote', () => {
-    let rows;
-
-    it('should return singular notation for array with single item', () => {
-      rows = [1];
-      const result = handleAccessibility.getCellSelectionStatusNote(rows, translator);
-      expect(result).to.equal('SNTable.SelectionLabel.OneSelectedValue');
-    });
-
-    it('should return plural notation for arrays with multiple items', () => {
-      rows = [1, 2, 3];
-      const result = handleAccessibility.getCellSelectionStatusNote(rows, translator);
-      expect(result).to.equal(`SNTable.SelectionLabel.SelectedValues`);
-    });
-  });
-
-  describe('getCellSrNotation', () => {
-    let selectionState;
-    let getCellSrNotation;
-    let isActiveElementInTable;
-
-    beforeEach(() => {
-      selectionState = { rows: [1, 2] };
-      isActiveElementInTable = true;
-      getCellSrNotation = handleAccessibility.getMemoisedSrNotation();
-    });
-
-    it('should return empty string while we are in first row', () => {
-      focusedCellCoord = [0, 1];
-      const notation = getCellSrNotation({
-        focusedCellCoord,
-        rootElement,
-        selectionState,
-        translator,
-        isActiveElementInTable,
-      });
-
-      expect(notation).to.equal('');
-    });
-
-    it('should return empty string while there is no selected items', () => {
-      selectionState = { rows: [] };
-      focusedCellCoord = [1, 1];
-      const notatino = getCellSrNotation({
-        focusedCellCoord,
-        rootElement,
-        selectionState,
-        translator,
-        isActiveElementInTable,
-      });
-
-      expect(notatino).to.equal('');
-    });
-
-    it('should return empty string when focused cell is not in the table', () => {
-      selectionState = { rows: [] };
-      focusedCellCoord = [1, 1];
-      isActiveElementInTable = false;
-      const notatino = getCellSrNotation({
-        focusedCellCoord,
-        rootElement,
-        selectionState,
-        translator,
-        isActiveElementInTable,
-      });
-
-      expect(notatino).to.equal('');
-    });
-
-    it('should return `value selected` and selected rows count while we are selecting multiple rows', () => {
-      focusedCellCoord = [2, 1];
-      selectionState = { rows: ['row#01', 'row#02'] };
-      getCellSrNotation = handleAccessibility.getMemoisedSrNotation(1);
-
-      const notation = getCellSrNotation({
-        focusedCellCoord,
-        rootElement,
-        selectionState,
-        translator,
-        isActiveElementInTable,
-      });
-
-      expect(notation).to.equal('SNTable.SelectionLabel.SelectedValue SNTable.SelectionLabel.SelectedValues');
-    });
-
-    it('should be able to deselect previously selected value', () => {
-      focusedCellCoord = [2, 1];
-      selectionState = { rows: ['row#01', 'row#02'] };
-      getCellSrNotation = handleAccessibility.getMemoisedSrNotation(3);
-
-      const notation = getCellSrNotation({
-        focusedCellCoord,
-        rootElement,
-        selectionState,
-        translator,
-        isActiveElementInTable,
-      });
-
-      expect(notation).to.equal('SNTable.SelectionLabel.DeselectedValue SNTable.SelectionLabel.SelectedValues');
-    });
-
-    it('should be able to detect if cell has been selected while changing the focus to cell if we are in selection mode', () => {
-      focusedCellCoord = [1, 1];
-      selectionState = { rows: ['row#01', 'row#02'] };
-      getCellSrNotation = handleAccessibility.getMemoisedSrNotation(2);
-      cell = global.document.createElement('td');
-      cell.classList.add('selected');
-      rootElement = {
-        getElementsByClassName: () => [{}, { getElementsByClassName: () => [null, cell] }],
-      };
-
-      const notation = getCellSrNotation({
-        focusedCellCoord,
-        rootElement,
-        selectionState,
-        translator,
-        isActiveElementInTable,
-      });
-
-      expect(notation).to.equal('SNTable.SelectionLabel.SelectedValue');
-    });
-
-    it('should be able to detect if cell has not been selected while changing the focus to cell if we are in selection mode', () => {
-      focusedCellCoord = [2, 1];
-      selectionState = { rows: ['row#01', 'row#02'] };
-      getCellSrNotation = handleAccessibility.getMemoisedSrNotation(2);
-
-      const notation = getCellSrNotation({
-        focusedCellCoord,
-        rootElement,
-        selectionState,
-        translator,
-        isActiveElementInTable,
-      });
-
-      expect(notation).to.equal('SNTable.SelectionLabel.NotSelectedValue');
-    });
-
-    it('should convey selection exited when we deselect very last selected cell in column', () => {
-      focusedCellCoord = [2, 1];
-      selectionState = { rows: [] };
-      getCellSrNotation = handleAccessibility.getMemoisedSrNotation(1);
-
-      const notation = getCellSrNotation({
-        focusedCellCoord,
-        rootElement,
-        selectionState,
-        translator,
-        isActiveElementInTable,
-      });
-
-      expect(notation).to.equal('SNTable.SelectionLabel.ExitedSelectionMode');
     });
   });
 

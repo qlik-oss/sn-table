@@ -14,6 +14,7 @@ describe('withSelections', () => {
   let selDispatch;
   let evt;
   let styling;
+  let announce;
 
   beforeEach(() => {
     HOC = withSelections.default((props) => <div {...props}>{props.cell.value}</div>);
@@ -31,6 +32,7 @@ describe('withSelections', () => {
     selDispatch = () => {};
     evt = { button: 0 };
     styling = {};
+    announce = sinon.spy();
   });
 
   afterEach(() => {
@@ -47,11 +49,17 @@ describe('withSelections', () => {
   });
   it('should call selectCell on mouseUp', () => {
     const { queryByText } = render(
-      <HOC selectionState={selectionState} cell={cell} selDispatch={selDispatch} styling={styling} />
+      <HOC
+        selectionState={selectionState}
+        cell={cell}
+        selDispatch={selDispatch}
+        styling={styling}
+        announce={announce}
+      />
     );
     fireEvent.mouseUp(queryByText(cell.value));
 
-    expect(selectionsUtils.selectCell).to.have.been.calledWith(selectionState, cell);
+    expect(selectionsUtils.selectCell).to.have.been.calledWithMatch({ selectionState, cell, evt, announce });
   });
   it('should not call selectCell on mouseUp when measure', () => {
     cell.isDim = false;
