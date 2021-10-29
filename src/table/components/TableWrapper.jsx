@@ -1,8 +1,8 @@
-import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableContainer from '@material-ui/core/TableContainer';
-import TablePagination from '@material-ui/core/TablePagination';
+import Paper from '@mui/material/Paper';
+import { makeStyles } from '@mui/styles';
+import Table from '@mui/material/Table';
+import TableContainer from '@mui/material/TableContainer';
+import TablePagination from '@mui/material/TablePagination';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState, useRef } from 'react';
 import TableBodyWrapper from './TableBodyWrapper';
@@ -17,6 +17,7 @@ import useActiveElement from './useActiveElement';
 const useStyles = makeStyles({
   paper: {
     height: '100%',
+    backgroundColor: 'rgb(255, 255, 255)',
   },
   containerOverflowAuto: {
     height: 'calc(100% - 52px)',
@@ -27,6 +28,7 @@ const useStyles = makeStyles({
     overflow: 'hidden',
   },
   tablePaginationSection: {
+    backgroundColor: 'rgb(255, 255, 255)',
     display: 'flex',
     justifyContent: 'flex-end',
   },
@@ -36,10 +38,10 @@ const useStyles = makeStyles({
 });
 
 export default function TableWrapper(props) {
-  const { rootElement, tableData, setPageInfo, constraints, translator, selectionsAPI, keyboard, rect } = props;
+  const { rootElement, tableData, pageInfo, setPageInfo, constraints, translator, selectionsAPI, keyboard, rect } =
+    props;
   const { size, rows, columns } = tableData;
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(100);
+  const { page, rowsPerPage } = pageInfo;
   const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
   const shouldRefocus = useRef(false);
   const tableSectionRef = useRef();
@@ -54,42 +56,25 @@ export default function TableWrapper(props) {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPageInfo({ top: newPage * rowsPerPage, height: rowsPerPage });
-    setPage(newPage);
-  };
-
-  // should trigger reload
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPageInfo({ top: 0, height: +event.target.value });
-    setPage(0);
-  };
-
-  if (!rows.length && page > 0) {
-    handleChangePage(null, 0);
-    return null;
-  }
+  const handleChangePage = (evt, newPage) => setPageInfo({ ...pageInfo, page: newPage });
+  const handleChangeRowsPerPage = (evt) => setPageInfo({ page: 0, rowsPerPage: +evt.target.value });
 
   useEffect(() => {
     const scrollCallback = (evt) => handleScroll(evt, tableSectionRef);
     const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard);
 
-    tableSectionRef.current.addEventListener('wheel', scrollCallback);
-    tableWrapperRef.current.addEventListener('focusout', focusOutCallback);
+    tableSectionRef.current && tableSectionRef.current.addEventListener('wheel', scrollCallback);
+    tableWrapperRef.current && tableWrapperRef.current.addEventListener('focusout', focusOutCallback);
     return () => {
       tableSectionRef.current.removeEventListener('wheel', scrollCallback);
       tableWrapperRef.current.removeEventListener('focusout', focusOutCallback);
     };
   }, []);
 
-  useEffect(() => {
-    handleNavigateTop({
-      tableSectionRef,
-      focusedCellCoord,
-      rootElement,
-    });
-  }, [tableSectionRef, focusedCellCoord]);
+  useEffect(
+    () => handleNavigateTop({ tableSectionRef, focusedCellCoord, rootElement }),
+    [tableSectionRef, focusedCellCoord]
+  );
 
   useDidUpdateEffect(() => {
     if (!keyboard.enabled) return;
@@ -169,6 +154,9 @@ export default function TableWrapper(props) {
             inputProps: {
               'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
               'data-testid': 'select',
+              style: {
+                color: '#404040',
+              },
               tabindex: !keyboard.enabled || keyboard.active ? '0' : '-1',
             },
             native: true,
@@ -198,6 +186,7 @@ export default function TableWrapper(props) {
 TableWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
+  pageInfo: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
   translator: PropTypes.object.isRequired,
   constraints: PropTypes.object.isRequired,

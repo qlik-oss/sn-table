@@ -13,14 +13,13 @@ import {
   useRect,
 } from '@nebula.js/stardust';
 import locale from '../locale/src';
-
 import properties from './object-properties';
 import data from './data';
 import ext from './ext';
-import muiSetup from './mui-setup';
-import { render, teardown } from './table/Root';
 import manageData from './handle-data';
 import sortingFactory from './sorting-factory';
+import { render, teardown } from './table/Root';
+import muiSetup from './mui-setup';
 
 export default function supernova(env) {
   return {
@@ -37,13 +36,12 @@ export default function supernova(env) {
       const constraints = useConstraints();
       const translator = useTranslator();
       const selectionsAPI = useSelections();
+      const muiParameters = muiSetup();
       const theme = useTheme();
       const keyboard = useKeyboard();
       const rect = useRect();
-
-      const [pageInfo, setPageInfo] = useState(() => ({ top: 0, height: 100 }));
-      const [muiParameters] = useState(() => muiSetup());
-      const [tableData] = usePromise(() => manageData(model, layout, pageInfo), [layout, pageInfo]);
+      const [pageInfo, setPageInfo] = useState(() => ({ page: 0, rowsPerPage: 100 }));
+      const [tableData] = usePromise(() => manageData(model, layout, pageInfo, setPageInfo), [layout, pageInfo]);
 
       useEffect(() => {
         if (layout && tableData) {
@@ -53,6 +51,7 @@ export default function supernova(env) {
             rootElement,
             layout,
             tableData,
+            pageInfo,
             setPageInfo,
             constraints,
             translator,

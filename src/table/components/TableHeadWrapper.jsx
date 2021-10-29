@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
+import { makeStyles } from '@mui/styles';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
 import { getHeadStyle } from '../utils/styling-utils';
 import { headHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusHead } from '../utils/handle-accessibility';
@@ -26,6 +26,11 @@ const useStyles = makeStyles({
     top: 20,
     width: 1,
   },
+  sortLabel: {
+    '&.Mui-active': {
+      color: 'inherit',
+    },
+  },
 });
 
 function TableHeadWrapper({
@@ -43,17 +48,12 @@ function TableHeadWrapper({
 }) {
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
-  const SORT_NOTATIONS = useMemo(() => ({
-    asc: translator.get('SNTable.SortLabel.SortedAscending'),
-    desc: translator.get('SNTable.SortLabel.SortedDescending'),
-  }));
 
   return (
     <TableHead>
       <TableRow className="sn-table-row">
         {tableData.columns.map((column, columnIndex) => {
           const tabIndex = columnIndex === 0 && !keyboard.enabled ? '0' : '-1';
-          const currentSortDir = SORT_NOTATIONS[column.sortDirection];
           const isCurrentColumnActive =
             layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === tableData.columnOrder[columnIndex];
           const isFocusInHead = focusedCellCoord[0] === 0;
@@ -64,6 +64,8 @@ function TableHeadWrapper({
               align={column.align}
               className={`${classes.head} sn-table-head-cell sn-table-cell`}
               tabIndex={tabIndex}
+              aria-sort={isCurrentColumnActive ? `${column.sortDirection}ending` : null}
+              aria-pressed={isCurrentColumnActive}
               onKeyDown={(e) =>
                 headHandleKeyPress(
                   e,
@@ -81,11 +83,15 @@ function TableHeadWrapper({
                 !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column.isDim, columnIndex)
               }
             >
-              <TableSortLabel active={isCurrentColumnActive} direction={column.sortDirection} tabIndex={-1}>
+              <TableSortLabel
+                className={classes.sortLabel}
+                active={isCurrentColumnActive}
+                direction={column.sortDirection}
+                tabIndex={-1}
+              >
                 {column.label}
                 {isFocusInHead && (
                   <span className={classes.visuallyHidden} data-testid={`VHL-for-col-${columnIndex}`}>
-                    {isCurrentColumnActive && `${currentSortDir} `}
                     {translator.get('SNTable.SortLabel.PressSpaceToSort')}
                   </span>
                 )}

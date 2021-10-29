@@ -1,16 +1,19 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import IconButton from '@material-ui/core/IconButton';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
-import { makeStyles } from '@material-ui/core/styles';
+import IconButton from '@mui/material/IconButton';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import { makeStyles } from '@mui/styles';
 import { handleLastTab } from '../utils/handle-key-press';
 
 const useStyles = makeStyles({
   root: {
     display: 'flex',
+  },
+  paginationActionButton: {
+    color: 'rgba(0, 0, 0, 0.54)',
   },
   disabled: {
     color: 'rgba(0, 0, 0, 0.3)',
@@ -41,7 +44,7 @@ export default function TablePaginationActions(props) {
           aria-label={translator.get('SNTable.Pagination.FirstPage')}
           title={translator.get('SNTable.Pagination.FirstPage')}
           tabindex={tabIndex}
-          className={onFirstPage && classes.disabled}
+          className={`${classes.paginationActionButton} ${onFirstPage && classes.disabled}`}
         >
           <FirstPageIcon />
         </IconButton>
@@ -52,7 +55,7 @@ export default function TablePaginationActions(props) {
         aria-label={translator.get('SNTable.Pagination.PreviousPage')}
         title={translator.get('SNTable.Pagination.PreviousPage')}
         tabindex={tabIndex}
-        className={onFirstPage && classes.disabled}
+        className={`${classes.paginationActionButton} ${onFirstPage && classes.disabled}`}
       >
         <KeyboardArrowLeft />
       </IconButton>
@@ -62,7 +65,7 @@ export default function TablePaginationActions(props) {
         aria-label={translator.get('SNTable.Pagination.NextPage')}
         title={translator.get('SNTable.Pagination.NextPage')}
         tabindex={tabIndex}
-        className={onLastPage && classes.disabled}
+        className={`${classes.paginationActionButton} ${onLastPage && classes.disabled}`}
         onKeyDown={keyboard.enabled && tableWidth <= 350 && handleLastButtonTab}
       >
         <KeyboardArrowRight />
@@ -74,7 +77,7 @@ export default function TablePaginationActions(props) {
           aria-label={translator.get('SNTable.Pagination.LastPage')}
           title={translator.get('SNTable.Pagination.LastPage')}
           tabindex={tabIndex}
-          className={onLastPage && classes.disabled}
+          className={`${classes.paginationActionButton} ${onLastPage && classes.disabled}`}
           onKeyDown={keyboard.enabled && handleLastButtonTab}
         >
           <LastPageIcon />
