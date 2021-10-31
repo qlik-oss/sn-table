@@ -29,7 +29,7 @@
   },
   "overrides": [
     {
-      "files": ["**/*.spec.js", "**/*.spec.jsx"],
+      "files": ["**/*.{int,spec}.{js,jsx}"],
       "env": {
         "browser": false,
         "node": true,
@@ -45,6 +45,12 @@
       "plugins": ["mocha", "react"],
       "rules": {
         "mocha/no-exclusive-tests": "error"
+      }
+    },
+    {
+      "files": ["**/*.{int}.js"],
+      "env": {
+        "browser": true
       }
     }
   ]

@@ -1,3 +1,4 @@
+const path = require('path');
 const serve = require('@nebula.js/cli-serve'); // eslint-disable-line
 
 page.on('pageerror', (e) => {
@@ -13,10 +14,11 @@ page.on('console', (msg) => {
 if (!process.env.BASE_URL) {
   let s;
 
-  before(async function setup() {
-    this.timeout(15000);
+  before(async () => {
     s = await serve({
+      entry: path.resolve(__dirname, '../../'),
       open: false,
+      build: false,
     });
 
     process.env.BASE_URL = s.url;

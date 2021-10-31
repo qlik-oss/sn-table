@@ -36,7 +36,7 @@
     "locale:generate": "node locale/scripts/generate-all.mjs",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
     "test:unit": "aw -c aw.config.js",
-    "test:integration": "aw puppet --testExt '*.int.js' --glob 'test/integration/**/*.int.js'",
+    "test:integration": "aw puppet -c aw.int.config.js --testExt '*.int.js' --glob 'test/integration/**/*.int.js'",
     "prepublishOnly": "NODE_ENV=production yarn run build",
     "prepack": "./tools/prepare-sn-pack.js",
     "prepare": "husky install"
