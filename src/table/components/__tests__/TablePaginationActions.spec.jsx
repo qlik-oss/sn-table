@@ -12,21 +12,21 @@ describe('<TablePaginationActions />', () => {
   let page;
   let rowsPerPage;
   let onPageChange;
-  let keyboardActive;
   let tableWidth;
   let translator;
   let isInSelectionMode;
+  let keyboard;
 
   beforeEach(() => {
     count = 250;
     page = 0;
     rowsPerPage = 100;
     onPageChange = sinon.spy();
-    keyboardActive = false;
     tableWidth = 500;
     translator = { get: (s) => s };
     isInSelectionMode = false;
-    sinon.stub(handleAccessibility, 'focusConfirmButton').returns(sinon.spy());
+    keyboard = { enabled: true };
+    sinon.stub(handleAccessibility, 'focusSelectionToolbar').returns(sinon.spy());
   });
 
   afterEach(() => {
@@ -41,7 +41,7 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboardActive={keyboardActive}
+        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
@@ -62,7 +62,7 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboardActive={keyboardActive}
+        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
@@ -75,6 +75,27 @@ describe('<TablePaginationActions />', () => {
     expect(queryByTitle('SNTable.Pagination.LastPage')).to.be.null;
   });
 
+  it('should not render pagination dropdown', () => {
+    const { queryByTitle, queryByTestId } = render(
+      <TablePaginationActions
+        count={count}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        onPageChange={onPageChange}
+        keyboard={keyboard}
+        tableWidth={tableWidth}
+        translator={translator}
+        isInSelectionMode={isInSelectionMode}
+      />
+    );
+
+    expect(queryByTitle('SNTable.Pagination.FirstPage')).to.be.visible;
+    expect(queryByTitle('SNTable.Pagination.PreviousPage')).to.be.visible;
+    expect(queryByTitle('SNTable.Pagination.NextPage')).to.be.visible;
+    expect(queryByTitle('SNTable.Pagination.LastPage')).to.be.visible;
+    expect(queryByTestId('pagination-dropdown')).to.be.null;
+  });
+
   it('should call onPageChange when clicking next page', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
@@ -82,7 +103,7 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboardActive={keyboardActive}
+        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
@@ -101,7 +122,7 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboardActive={keyboardActive}
+        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
@@ -119,7 +140,7 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboardActive={keyboardActive}
+        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
@@ -138,7 +159,7 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboardActive={keyboardActive}
+        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
@@ -149,24 +170,44 @@ describe('<TablePaginationActions />', () => {
     expect(onPageChange).to.have.been.calledWith(sinon.match.any, 0);
   });
 
-  it('should not call focusConfirmButton when pressing tab on last page button and isInSelectionMode is false', () => {
+  it('should call onPageChange when selecting page from dropdown', () => {
+    tableWidth = 700;
+    page = 0;
+    const { queryByTestId } = render(
+      <TablePaginationActions
+        count={count}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        onPageChange={onPageChange}
+        keyboard={keyboard}
+        tableWidth={tableWidth}
+        translator={translator}
+        isInSelectionMode={isInSelectionMode}
+      />
+    );
+
+    fireEvent.change(queryByTestId('pagination-dropdown'), { target: { value: 1 } });
+    expect(onPageChange).to.have.been.calledWith(sinon.match.any, 1);
+  });
+
+  it('should not call focusSelectionToolbar when pressing tab on last page button and isInSelectionMode is false', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
         count={count}
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboardActive={keyboardActive}
+        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab' });
-    expect(handleAccessibility.focusConfirmButton).to.not.have.been.called;
+    expect(handleAccessibility.focusSelectionToolbar).to.not.have.been.called;
   });
 
-  it('should not call focusConfirmButton when pressing shift + tab on last page button and isInSelectionMode is true', () => {
+  it('should not call focusSelectionToolbar when pressing shift + tab on last page button and isInSelectionMode is true', () => {
     isInSelectionMode = true;
 
     const { queryByTitle } = render(
@@ -175,17 +216,17 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboardActive={keyboardActive}
+        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab', shiftKey: true });
-    expect(handleAccessibility.focusConfirmButton).to.not.have.been.called;
+    expect(handleAccessibility.focusSelectionToolbar).to.not.have.been.called;
   });
 
-  it('should call focusConfirmButton when pressing tab on last page button and isInSelectionMode is true', () => {
+  it('should call focusSelectionToolbar when pressing tab on last page button and isInSelectionMode is true', () => {
     isInSelectionMode = true;
 
     const { queryByTitle } = render(
@@ -194,17 +235,17 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboardActive={keyboardActive}
+        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab' });
-    expect(handleAccessibility.focusConfirmButton).to.have.been.calledOnce;
+    expect(handleAccessibility.focusSelectionToolbar).to.have.been.calledOnce;
   });
 
-  it('should call focusConfirmButton when pressing tab on next page button, isInSelectionMode is true and tableWidth < 350', () => {
+  it('should call focusSelectionToolbar when pressing tab on next page button, isInSelectionMode is true and tableWidth < 350', () => {
     isInSelectionMode = true;
     tableWidth = 300;
 
@@ -214,13 +255,13 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboardActive={keyboardActive}
+        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.NextPage'), { key: 'Tab' });
-    expect(handleAccessibility.focusConfirmButton).to.have.been.calledOnce;
+    expect(handleAccessibility.focusSelectionToolbar).to.have.been.calledOnce;
   });
 });
