@@ -15,3 +15,6 @@ core/esm
 all.json
 
 sn-table-ext
+
+**/test/*/__artifacts__/diff
+**/test/*/__artifacts__/regression

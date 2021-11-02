@@ -37,6 +37,7 @@
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
     "test:unit": "aw -c aw.config.js",
     "test:integration": "aw puppet --testExt '*.int.js' --glob 'test/integration/**/*.int.js'",
+    "test:rendering": "aw puppet -c aw.ren.config.js --testExt '*.spec.js' --glob 'test/rendering/**/*.spec.js'",
     "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
     "prepack": "./tools/prepare-sn-pack.js",
     "prepare": "husky install"
@@ -72,6 +73,7 @@
     "babel-plugin-istanbul": "^6.1.1",
     "chai": "4.3.4",
     "chai-dom": "1.10.0",
+    "cross-fetch": "^3.1.4",
     "eslint": "7.32.0",
     "eslint-config-airbnb": "18.2.1",
     "eslint-config-prettier": "8.3.0",

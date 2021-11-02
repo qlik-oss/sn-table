@@ -59,6 +59,7 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
     { qTop: top, qLeft: 0, qHeight: height, qWidth: width },
   ]);
+
   const rows = dataPages[0].qMatrix.map((r, rowIdx) => {
     const row = { key: `row-${rowIdx}` };
     columns.forEach((c, colIdx) => {
