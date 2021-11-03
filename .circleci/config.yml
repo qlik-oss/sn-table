@@ -133,20 +133,40 @@ jobs:
       - attach_workspace:
           at: ~/project
       - run:
-          name: Login for Docker
-          command: echo $DOCKER_TOKEN | docker login -u "$DOCKER_USER" --password-stdin
-      - run:
-          name: API Governance Compliance
+          name: Log into Github Docker Registry
           command: |
-            docker pull qlik/asmquery
+              echo $QLIK_DOCKER_DEV_PASSWORD | docker login -u $QLIK_DOCKER_DEV_USERNAME --password-stdin $QLIK_DOCKER_DEV_REGISTRY
+      - run:
+          name: Create version.txt
+          command: |
+              set -x
+              if [ -n "${CIRCLE_TAG}" ]; then
+                  version=${CIRCLE_TAG#v}
+              else
+                  version=$(git describe --tags --abbrev=7 --match "v*")
+                  version=${version#v}
+              fi
+              echo "$version" > ./version.txt
+              echo "Building $version"
+      - run:
+          name: Prepare API Compliance
+          command: |
+            docker pull ghcr.io/qlik-trial/api-compliance
             docker create -v /specs --name specs alpine:3.4 /bin/true
-            docker cp ./api-specifications/properties.json specs:/specs
-            docker run --volumes-from specs \
-            -e target=Colony \
-            -e runMode=failBuild \
-            -e apiId=b96971ec-2f58-4ba3-9213-440e689471a0 \
-            -e specPath='/specs/properties.json' \
-            -e commit="$CIRCLE_SHA1" qlik/asmquery
+            docker cp  ./api-specifications/properties.json specs:/specs
+      - run:
+          name: Run API Compliance
+          command: >
+            VER=$(cat ./version.txt)
+
+            docker run --volumes-from specs
+            -e SPEC_PATHS="b96971ec-2f58-4ba3-9213-440e689471a0@/specs/properties.json"
+            -e COMMIT_SHA="$CIRCLE_SHA1"
+            -e RELEASE_TAG="$VER"
+            -e CREDENTIALS_S3_SECRETKEY="$APICULTURIST_S3"
+            -e CREDENTIALS_GITHUB="$APICULTURIST_GITHUB"
+            -e CREDENTIALS_COLONY="$APICULTURIST_TOKEN"
+            ghcr.io/qlik-trial/api-compliance
 workflows:
   version: 2
   build-all:
@@ -156,6 +176,7 @@ workflows:
           requires:
             - install
       - api-governance:
+          context: deploy-secrets
           filters:
             branches:
               # Forked pull requests have CIRCLE_BRANCH set to pull/XXX
