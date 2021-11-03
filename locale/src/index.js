@@ -2,10 +2,11 @@ import all from '../all.json';
 
 export default function autoRegister(translator) {
   if (translator && translator.get && translator.add) {
-    const t = '';
+    const t = 'SNTable.Accessibility.RowsAndColumns';
     const g = translator.get(t);
-    // if translated string is different from its id
-    // assume translations already exists for current locale
+
+    // if the translated string is different from its id,
+    // we assume the translations already exist for current locale
     if (g !== t) {
       return;
     }
