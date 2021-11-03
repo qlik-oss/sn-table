@@ -1,6 +1,6 @@
 import all from '../all.json';
 
-export default function autoRegister(translator) {
+export default function registerLocale(translator) {
   if (translator && translator.get && translator.add) {
     const t = 'SNTable.Accessibility.RowsAndColumns';
     const g = translator.get(t);

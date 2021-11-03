@@ -12,7 +12,7 @@ import {
   useKeyboard,
   useRect,
 } from '@nebula.js/stardust';
-import locale from '../locale/src';
+import registerLocale from '../locale/src';
 import properties from './object-properties';
 import data from './data';
 import ext from './ext';
@@ -45,7 +45,7 @@ export default function supernova(env) {
 
       useEffect(() => {
         if (layout && tableData) {
-          locale(translator);
+          registerLocale(translator);
           const changeSortOrder = sortingFactory(model, tableData.columnOrder);
           render(rootElement, {
             rootElement,
