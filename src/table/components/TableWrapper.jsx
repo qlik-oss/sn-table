@@ -60,12 +60,16 @@ export default function TableWrapper(props) {
   const paginationHidden = constraints.active && 'paginationHidden';
   const paginationFixedRpp = selectionsAPI.isModal() || rect.width < 550;
   const announce = useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
+  const totalPages = Math.ceil(size.qcy / rowsPerPage);
 
   const setShouldRefocus = () => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   };
 
-  const handleChangePage = (evt, newPage) => setPageInfo({ ...pageInfo, page: newPage });
+  const handleChangePage = ({ pageIdx, actualPageIdx = null }) => {
+    setPageInfo({ ...pageInfo, page: pageIdx });
+    announce({ keys: [['SNTable.Pagination.PageStatusReport', [actualPageIdx, totalPages]]], politeness: 'assertive' });
+  };
   const handleChangeRowsPerPage = (evt) => {
     setPageInfo({ page: 0, rowsPerPage: +evt.target.value });
     announce({ keys: [['SNTable.Pagination.RowsPerPageChange', evt.target.value]], politeness: 'assertive' });
@@ -178,14 +182,13 @@ export default function TableWrapper(props) {
           labelDisplayedRows={({ from, to, count }) =>
             rect.width > 250 && translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
           }
-          onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           ActionsComponent={() => <div>{null}</div>}
         />
         <TablePaginationActions
           page={page}
+          totalPages={totalPages}
           onPageChange={handleChangePage}
-          totalPages={Math.ceil(size.qcy / rowsPerPage)}
           tabIndex={keyboard.active ? 0 : -1}
           isInSelectionMode={selectionsAPI.isModal()}
           tableWidth={rect.width}

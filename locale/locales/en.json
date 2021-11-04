@@ -36,7 +36,7 @@
     "comment": "Label for rows per page change."
   },
   "SNTable.Pagination.PageStatusReport": {
-    "value": "You are currently on page {0} out of {1} pages.",
+    "value": "Page has changed. Now Showing page {0} out of {1} pages.",
     "comment": "Label for page status while changing pages."
   },
   "SNTable.SortLabel.SortedAscending": {
