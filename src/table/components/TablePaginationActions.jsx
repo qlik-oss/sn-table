@@ -59,18 +59,15 @@ export default function TablePaginationActions(props) {
 
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
-    announce({ keys: 'SNTable.Pagination.MovedToFirstPage', politeness: 'assertive' });
+    announce({ keys: [['SNTable.Pagination.PageStatusReport', [1, totalPages]]], politeness: 'assertive' });
   };
 
   const handleBackButtonClick = (event) => {
     onPageChange(event, page - 1);
     announce({
-      keys: [
-        'SNTable.Pagination.MovedToPreviousPage',
-        // we are doing announcement before page state update
-        // we dont need to subtract1, the value is already indicating the current page number
-        ['SNTable.Pagination.PageStatusReport', [page, totalPages]],
-      ],
+      // we are doing announcement before page state update
+      // we dont need to subtract1, the value is already indicating the current page number
+      keys: [['SNTable.Pagination.PageStatusReport', [page, totalPages]]],
       politeness: 'assertive',
     });
   };
@@ -78,19 +75,16 @@ export default function TablePaginationActions(props) {
   const handleNextButtonClick = (event) => {
     onPageChange(event, page + 1);
     announce({
-      keys: [
-        'SNTable.Pagination.MovedToNextPage',
-        // we are doing announcement before the page state update
-        // so we need to add 2 instead of 1
-        ['SNTable.Pagination.PageStatusReport', [page + 2, totalPages]],
-      ],
+      // we are doing announcement before the page state update
+      // so we need to add 2 instead of 1
+      keys: [['SNTable.Pagination.PageStatusReport', [page + 2, totalPages]]],
       politeness: 'assertive',
     });
   };
 
   const handleLastPageButtonClick = (event) => {
     onPageChange(event, totalPages - 1);
-    announce({ keys: 'SNTable.Pagination.MovedToLastPage', politeness: 'assertive' });
+    announce({ keys: [['SNTable.Pagination.PageStatusReport', [totalPages, totalPages]]], politeness: 'assertive' });
   };
 
   const lastPageTabHandle = (event) => {
@@ -104,7 +98,7 @@ export default function TablePaginationActions(props) {
   const handleSelectPage = (event) => {
     onPageChange(event, parseInt(event.target.value, 10));
     announce({
-      keys: [['SNTable.Pagination.CustomePageSelection', [parseInt(event.target.value, 10) + 1, totalPages]]],
+      keys: [['SNTable.Pagination.PageStatusReport', [parseInt(event.target.value, 10) + 1, totalPages]]],
       politeness: 'assertive',
     });
   };

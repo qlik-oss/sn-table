@@ -27,24 +27,18 @@ export const handleTableWrapperKeyDown = ({
       setShouldRefocus();
       handleChangePage(null, page + 1);
       announce({
-        keys: [
-          'SNTable.Pagination.MovedToNextPage',
-          // we are doing announcement before the page state update
-          // so we need to add 2 instead of 1
-          ['SNTable.Pagination.PageStatusReport', [page + 2, totalPagesCount]],
-        ],
+        // we are doing announcement before the page state update
+        // so we need to add 2 instead of 1
+        keys: [['SNTable.Pagination.PageStatusReport', [page + 2, totalPagesCount]]],
         politeness: 'assertive',
       });
     } else if (evt.key === 'ArrowLeft' && page > 0) {
       setShouldRefocus();
       handleChangePage(null, page - 1);
       announce({
-        keys: [
-          'SNTable.Pagination.MovedToPreviousPage',
-          // we are doing announcement before page state update
-          // we dont need to subtract1, the value is already indicating the current page number
-          ['SNTable.Pagination.PageStatusReport', [page, totalPagesCount]],
-        ],
+        // we are doing announcement before page state update
+        // we dont need to subtract1, the value is already indicating the current page number
+        keys: [['SNTable.Pagination.PageStatusReport', [page, totalPagesCount]]],
         politeness: 'assertive',
       });
     }

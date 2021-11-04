@@ -31,33 +31,13 @@
     "value": "Last page",
     "comment": "tooltip and aria-label for the last page button. (tew 210929)"
   },
-  "SNTable.Pagination.MovedToFirstPage": {
-    "value": "You are in the first page.",
-    "comment": "Label for Switching to the very first page."
-  },
-  "SNTable.Pagination.MovedToLastPage": {
-    "value": "You are in the last page.",
-    "comment": "Label for Switching to the last page."
-  },
-  "SNTable.Pagination.MovedToNextPage": {
-    "value": "Moved to the next page.",
-    "comment": "Label for Switching to the next page."
-  },
-  "SNTable.Pagination.MovedToPreviousPage": {
-    "value": "Moved to the previous page.",
-    "comment": "Label for Switching to the previous page."
-  },
-  "SNTable.Pagination.PageStatusReport": {
-    "value": "You are currently in page {0} out of {1} pages.",
-    "comment": "Label for page status while changing pages."
-  },
   "SNTable.Pagination.RowsPerPageChange": {
-    "value": "Rows per page has changed. Now showing {0} items on each page of table.",
+    "value": "Rows per page has changed. Now showing {0} rows on each page.",
     "comment": "Label for rows per page change."
   },
-  "SNTable.Pagination.CustomePageSelection": {
-    "value": "You have selected page {0} out of {1} pages.",
-    "comment": "Label for changing page directly from provided page selection dropdown."
+  "SNTable.Pagination.PageStatusReport": {
+    "value": "You are currently on page {0} out of {1} pages.",
+    "comment": "Label for page status while changing pages."
   },
   "SNTable.SortLabel.SortedAscending": {
     "value": "Sorted in ascending order.",
