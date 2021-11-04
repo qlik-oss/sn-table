@@ -122,6 +122,7 @@ export default function TableWrapper(props) {
           setShouldRefocus,
           keyboard,
           isSelectionActive: selectionsAPI.isModal(),
+          announce,
         })
       }
     >
