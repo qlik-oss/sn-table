@@ -180,14 +180,14 @@ export default function TableWrapper(props) {
           ActionsComponent={() => <div>{null}</div>}
         />
         <TablePaginationActions
-          count={size.qcy}
-          onPageChange={handleChangePage}
           page={page}
-          rowsPerPage={rowsPerPage}
+          onPageChange={handleChangePage}
+          totalPages={Math.ceil(size.qcy / rowsPerPage)}
           tabIndex={keyboard.active ? 0 : -1}
           isInSelectionMode={selectionsAPI.isModal()}
           tableWidth={rect.width}
           translator={translator}
+          announce={announce}
         />
       </Paper>
     </Paper>

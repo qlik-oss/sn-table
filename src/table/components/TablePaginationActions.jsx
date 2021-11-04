@@ -55,22 +55,42 @@ const useStyles = makeStyles({
 
 export default function TablePaginationActions(props) {
   const classes = useStyles();
-  const { count, page, rowsPerPage, onPageChange, tabIndex, tableWidth, translator, isInSelectionMode } = props;
+  const { page, totalPages, onPageChange, tabIndex, tableWidth, translator, isInSelectionMode, announce } = props;
 
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
+    announce({ keys: 'SNTable.Pagination.MovedToFirstPage', politeness: 'assertive' });
   };
 
   const handleBackButtonClick = (event) => {
     onPageChange(event, page - 1);
+    announce({
+      keys: [
+        'SNTable.Pagination.MovedToPreviousPage',
+        // we are doing announcement before page state update
+        // we dont need to subtract1, the value is already indicating the current page number
+        ['SNTable.Pagination.PageStatusReport', [page, totalPages]],
+      ],
+      politeness: 'assertive',
+    });
   };
 
   const handleNextButtonClick = (event) => {
     onPageChange(event, page + 1);
+    announce({
+      keys: [
+        'SNTable.Pagination.MovedToNextPage',
+        // we are doing announcement before the page state update
+        // so we need to add 2 instead of 1
+        ['SNTable.Pagination.PageStatusReport', [page + 2, totalPages]],
+      ],
+      politeness: 'assertive',
+    });
   };
 
   const handleLastPageButtonClick = (event) => {
-    onPageChange(event, Math.ceil(count / rowsPerPage) - 1);
+    onPageChange(event, totalPages - 1);
+    announce({ keys: 'SNTable.Pagination.MovedToLastPage', politeness: 'assertive' });
   };
 
   const lastPageTabHandle = (event) => {
@@ -86,7 +106,7 @@ export default function TablePaginationActions(props) {
   };
 
   const onFirstPage = page === 0;
-  const onLastPage = page >= Math.ceil(count / rowsPerPage) - 1;
+  const onLastPage = page >= totalPages - 1;
 
   return (
     <div className={classes.root}>
@@ -112,9 +132,9 @@ export default function TablePaginationActions(props) {
               className: classes.input,
             }}
           >
-            {Array(Math.ceil(count / rowsPerPage))
+            {Array(totalPages)
               .fill()
-              .map((val, i) => (
+              .map((_, i) => (
                 <option value={i}>{i + 1}</option>
               ))}
           </Select>
@@ -171,12 +191,12 @@ export default function TablePaginationActions(props) {
 }
 
 TablePaginationActions.propTypes = {
-  count: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired,
+  totalPages: PropTypes.number.isRequired,
   tabIndex: PropTypes.number.isRequired,
   isInSelectionMode: PropTypes.bool.isRequired,
   tableWidth: PropTypes.number.isRequired,
   translator: PropTypes.object.isRequired,
+  announce: PropTypes.func.isRequired,
 };
