@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import all from '../all.json';
 
 export default function registerLocale(translator) {
