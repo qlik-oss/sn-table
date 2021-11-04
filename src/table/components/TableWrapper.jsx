@@ -66,7 +66,10 @@ export default function TableWrapper(props) {
   };
 
   const handleChangePage = (evt, newPage) => setPageInfo({ ...pageInfo, page: newPage });
-  const handleChangeRowsPerPage = (evt) => setPageInfo({ page: 0, rowsPerPage: +evt.target.value });
+  const handleChangeRowsPerPage = (evt) => {
+    setPageInfo({ page: 0, rowsPerPage: +evt.target.value });
+    announce({ keys: [['SNTable.Pagination.RowsPerPageChange', evt.target.value]], politeness: 'assertive' });
+  };
 
   useEffect(() => {
     const scrollCallback = (evt) => handleScroll(evt, tableSectionRef);

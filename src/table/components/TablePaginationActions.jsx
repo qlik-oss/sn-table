@@ -103,6 +103,10 @@ export default function TablePaginationActions(props) {
 
   const handleSelectPage = (event) => {
     onPageChange(event, parseInt(event.target.value, 10));
+    announce({
+      keys: [['SNTable.Pagination.CustomePageSelection', [parseInt(event.target.value, 10) + 1, totalPages]]],
+      politeness: 'assertive',
+    });
   };
 
   const onFirstPage = page === 0;

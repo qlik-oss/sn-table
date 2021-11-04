@@ -51,6 +51,14 @@
     "value": "You are currently in page {0} out of {1} pages.",
     "comment": "Label for page status while changing pages."
   },
+  "SNTable.Pagination.RowsPerPageChange": {
+    "value": "Rows per page has changed. Now showing {0} items on each page of table.",
+    "comment": "Label for rows per page change."
+  },
+  "SNTable.Pagination.CustomePageSelection": {
+    "value": "You have selected page {0} out of {1} pages.",
+    "comment": "Label for changing page directly from provided page selection dropdown."
+  },
   "SNTable.SortLabel.SortedAscending": {
     "value": "Sorted in ascending order.",
     "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)"
