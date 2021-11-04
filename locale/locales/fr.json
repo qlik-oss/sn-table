@@ -34,6 +34,11 @@
     "comment": "label for the rows per page dropdown. (tew 210929)",
     "version": "zuWpMmMSoOG/QRsKoVx3OA=="
   },
+  "SNTable.Pagination.SelectPage": {
+    "value": "Sélectionner une page",
+    "comment": "Label for the dropdown to select a page.",
+    "version": "306b2wiIN019EPnVvTBSjA=="
+  },
   "SNTable.SelectionLabel.DeselectedValue": {
     "value": "La valeur est désélectionnée.",
     "comment": "announced by screen readers  when a value is deselected. (tew 210929)",
