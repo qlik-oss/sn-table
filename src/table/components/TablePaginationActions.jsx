@@ -55,26 +55,26 @@ const useStyles = makeStyles({
 
 export default function TablePaginationActions(props) {
   const classes = useStyles();
-  const { page, totalPages, onPageChange, tabIndex, tableWidth, translator, isInSelectionMode, announce } = props;
+  const { page, totalPages, onPageChange, tabIndex, tableWidth, translator, isInSelectionMode } = props;
 
   const handleFirstPageButtonClick = () => {
-    onPageChange({ pageIdx: 0, actualPageIdx: 1 });
+    onPageChange(0);
   };
 
   const handleBackButtonClick = () => {
     // we are doing announcement before page state update
     // we dont need to subtract1, the value is already indicating the current page number
-    onPageChange({ pageIdx: page - 1, actualPageIdx: page });
+    onPageChange(page - 1);
   };
 
   const handleNextButtonClick = () => {
     // we are doing announcement before the page state update
     // so we need to add 2 instead of 1
-    onPageChange({ pageIdx: page + 1, actualPageIdx: page + 2 });
+    onPageChange(page + 1);
   };
 
   const handleLastPageButtonClick = () => {
-    onPageChange({ pageIdx: totalPages - 1, actualPageIdx: totalPages });
+    onPageChange(totalPages - 1);
   };
 
   const lastPageTabHandle = (event) => {
@@ -86,8 +86,7 @@ export default function TablePaginationActions(props) {
   };
 
   const handleSelectPage = (event) => {
-    const targetPageIdx = parseInt(event.target.value, 10);
-    onPageChange({ pageIdx: targetPageIdx, actualPageIdx: targetPageIdx + 1 });
+    onPageChange(parseInt(event.target.value, 10));
   };
 
   const onFirstPage = page === 0;
@@ -183,5 +182,4 @@ TablePaginationActions.propTypes = {
   isInSelectionMode: PropTypes.bool.isRequired,
   tableWidth: PropTypes.number.isRequired,
   translator: PropTypes.object.isRequired,
-  announce: PropTypes.func.isRequired,
 };

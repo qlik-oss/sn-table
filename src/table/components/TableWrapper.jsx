@@ -66,9 +66,9 @@ export default function TableWrapper(props) {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   };
 
-  const handleChangePage = ({ pageIdx, actualPageIdx = null }) => {
+  const handleChangePage = (pageIdx) => {
     setPageInfo({ ...pageInfo, page: pageIdx });
-    announce({ keys: [['SNTable.Pagination.PageStatusReport', [actualPageIdx, totalPages]]], politeness: 'assertive' });
+    announce({ keys: [['SNTable.Pagination.PageStatusReport', [pageIdx + 1, totalPages]]], politeness: 'assertive' });
   };
   const handleChangeRowsPerPage = (evt) => {
     setPageInfo({ page: 0, rowsPerPage: +evt.target.value });
@@ -129,7 +129,6 @@ export default function TableWrapper(props) {
           setShouldRefocus,
           keyboard,
           isSelectionActive: selectionsAPI.isModal(),
-          announce,
         })
       }
     >
@@ -193,7 +192,6 @@ export default function TableWrapper(props) {
           isInSelectionMode={selectionsAPI.isModal()}
           tableWidth={rect.width}
           translator={translator}
-          announce={announce}
         />
       </Paper>
     </Paper>
