@@ -23,13 +23,9 @@ export const handleTableWrapperKeyDown = ({
     const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
     if (evt.key === 'ArrowRight' && page < lastPage) {
       setShouldRefocus();
-      // we are doing announcement before the page state update
-      // so we need to add 2 instead of 1
       handleChangePage(page + 1);
     } else if (evt.key === 'ArrowLeft' && page > 0) {
       setShouldRefocus();
-      // we are doing announcement before page state update
-      // we dont need to subtract1, the value is already indicating the current page number
       handleChangePage(page - 1);
     }
   } else if (evt.key === 'Escape' && keyboard.enabled && !isSelectionActive) {
