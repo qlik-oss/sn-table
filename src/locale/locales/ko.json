@@ -34,6 +34,11 @@
     "comment": "label for the rows per page dropdown. (tew 210929)",
     "version": "zuWpMmMSoOG/QRsKoVx3OA=="
   },
+  "SNTable.Pagination.SelectPage": {
+    "value": "페이지 선택",
+    "comment": "Label for the dropdown to select a page.",
+    "version": "306b2wiIN019EPnVvTBSjA=="
+  },
   "SNTable.SelectionLabel.DeselectedValue": {
     "value": "값이 선택 취소되었습니다.",
     "comment": "announced by screen readers  when a value is deselected. (tew 210929)",
