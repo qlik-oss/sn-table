@@ -117,6 +117,27 @@ describe('<TableWrapper />', () => {
     expect(setPageInfo).to.have.been.calledWith({ page: 0, rowsPerPage: 25 });
   });
 
+  it('should call setPageInfo when changing page', () => {
+    rect = {
+      width: 651,
+    };
+    const { getByTestId } = render(
+      <TableWrapper
+        tableData={tableData}
+        pageInfo={pageInfo}
+        setPageInfo={setPageInfo}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+        rootElement={rootElement}
+        keyboard={keyboard}
+        translator={translator}
+        rect={rect}
+      />
+    );
+    fireEvent.change(getByTestId('pagination-dropdown'));
+    expect(setPageInfo).to.have.been.calledOnce;
+  });
+
   it('should not render rows per page section in table when width smaller than 550', () => {
     rect = {
       width: 474,

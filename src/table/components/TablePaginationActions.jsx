@@ -57,25 +57,11 @@ export default function TablePaginationActions(props) {
   const classes = useStyles();
   const { page, totalPages, onPageChange, tabIndex, tableWidth, translator, isInSelectionMode } = props;
 
-  const handleFirstPageButtonClick = () => {
-    onPageChange(0);
-  };
-
-  const handleBackButtonClick = () => {
-    // we are doing announcement before page state update
-    // we dont need to subtract1, the value is already indicating the current page number
-    onPageChange(page - 1);
-  };
-
-  const handleNextButtonClick = () => {
-    // we are doing announcement before the page state update
-    // so we need to add 2 instead of 1
-    onPageChange(page + 1);
-  };
-
-  const handleLastPageButtonClick = () => {
-    onPageChange(totalPages - 1);
-  };
+  const handleFirstPageButtonClick = () => onPageChange(0);
+  const handleBackButtonClick = () => onPageChange(page - 1);
+  const handleNextButtonClick = () => onPageChange(page + 1);
+  const handleLastPageButtonClick = () => onPageChange(totalPages - 1);
+  const handleSelectPage = (event) => onPageChange(parseInt(event.target.value, 10));
 
   const lastPageTabHandle = (event) => {
     if (isInSelectionMode && event.key === 'Tab' && !event.shiftKey) {
@@ -83,10 +69,6 @@ export default function TablePaginationActions(props) {
       event.preventDefault();
       focusConfirmButton(event.target);
     }
-  };
-
-  const handleSelectPage = (event) => {
-    onPageChange(parseInt(event.target.value, 10));
   };
 
   const onFirstPage = page === 0;
