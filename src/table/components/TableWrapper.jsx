@@ -208,6 +208,10 @@ export default function TableWrapper(props) {
   );
 }
 
+TableWrapper.defaultProps = {
+  announcer: null,
+};
+
 TableWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
