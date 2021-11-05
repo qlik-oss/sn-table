@@ -29,7 +29,6 @@ verify locale
 yarn locale:verify
 ```
 
-
 ## Locale specific strings
 
 The English resource (string) container [en.json](./locales/en.json) on `main` branch is monitored for changes. All modifications will automatically be picked up and propagated to the other locale files by the Globalization Services team at Qlik at regular intervals (normally at least twice a week).
@@ -38,6 +37,6 @@ The English resource (string) container [en.json](./locales/en.json) on `main` b
 
 Please request a review from a technical writer on all PRs touching English string resources, to ensure changes are consistent with style guides and translatability requirements.
 
-**Important**
+## Important
 
 Any changes to **non-English files** will be overwritten on next translation delivery. If you need to modify the non-English strings for any reason, please contact Qlik Globalization Services via [@qlik-oss/globalization](https://github.com/orgs/qlik-oss/teams/globalization).
