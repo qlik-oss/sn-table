@@ -16,7 +16,7 @@ describe('handle-accessibility', () => {
     };
     focusedCellCoord = [0, 0];
     setFocusedCellCoord = sinon.spy();
-    keyboard = { focus: sinon.spy() };
+    keyboard = { focus: sinon.spy(), focusSelection: sinon.spy() };
   });
 
   afterEach(() => {
@@ -252,6 +252,32 @@ describe('handle-accessibility', () => {
 
       handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, blur);
       expect(blur).to.not.have.been.called;
+    });
+  });
+
+  describe('focusSelectionToolbar', () => {
+    let element;
+    let parentElement;
+    let last;
+
+    beforeEach(() => {
+      parentElement = { focus: sinon.spy() };
+      element = {
+        closest: () => ({ querySelector: () => ({ parentElement }) }),
+      };
+      last = false;
+    });
+
+    it('should call parentElement.focus when clientConfirmButton exists', () => {
+      handleAccessibility.focusSelectionToolbar(element, keyboard, last);
+      expect(parentElement.focus).to.have.been.calledOnce;
+      expect(keyboard.focusSelection).to.not.have.been.called;
+    });
+
+    it("should call keyboard.focusSelection when clientConfirmButton doesn't exist", () => {
+      parentElement = null;
+      handleAccessibility.focusSelectionToolbar(element, keyboard, last);
+      expect(keyboard.focusSelection).to.have.been.calledOnceWith(false);
     });
   });
 });
