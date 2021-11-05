@@ -10,6 +10,7 @@ import * as handleAccessibility from '../../utils/handle-accessibility';
 describe('<TablePaginationActions />', () => {
   let count;
   let page;
+  let totalPages;
   let rowsPerPage;
   let onPageChange;
   let keyboardActive;
@@ -21,6 +22,7 @@ describe('<TablePaginationActions />', () => {
     count = 250;
     page = 0;
     rowsPerPage = 100;
+    totalPages = Math.ceil(count / rowsPerPage);
     onPageChange = sinon.spy();
     keyboardActive = false;
     tableWidth = 500;
@@ -111,7 +113,7 @@ describe('<TablePaginationActions />', () => {
     );
 
     fireEvent.click(queryByTitle('SNTable.Pagination.NextPage'));
-    expect(onPageChange).to.have.been.calledWith(sinon.match.any, 1);
+    expect(onPageChange).to.have.been.calledWith(1);
   });
 
   it('should call onPageChange when clicking previous page', () => {
@@ -130,7 +132,7 @@ describe('<TablePaginationActions />', () => {
     );
 
     fireEvent.click(queryByTitle('SNTable.Pagination.PreviousPage'));
-    expect(onPageChange).to.have.been.calledWith(sinon.match.any, 0);
+    expect(onPageChange).to.have.been.calledWith(0);
   });
 
   it('should call onPageChange when clicking last page', () => {
@@ -139,6 +141,7 @@ describe('<TablePaginationActions />', () => {
         count={count}
         page={page}
         rowsPerPage={rowsPerPage}
+        totalPages={totalPages}
         onPageChange={onPageChange}
         keyboardActive={keyboardActive}
         tableWidth={tableWidth}
@@ -148,7 +151,7 @@ describe('<TablePaginationActions />', () => {
     );
 
     fireEvent.click(queryByTitle('SNTable.Pagination.LastPage'));
-    expect(onPageChange).to.have.been.calledWith(sinon.match.any, 2);
+    expect(onPageChange).to.have.been.calledWith(2);
   });
 
   it('should call onPageChange when clicking first page', () => {
@@ -167,7 +170,7 @@ describe('<TablePaginationActions />', () => {
     );
 
     fireEvent.click(queryByTitle('SNTable.Pagination.FirstPage'));
-    expect(onPageChange).to.have.been.calledWith(sinon.match.any, 0);
+    expect(onPageChange).to.have.been.calledWith(0);
   });
 
   it('should call onPageChange when selecting page from dropdown', () => {
@@ -177,6 +180,7 @@ describe('<TablePaginationActions />', () => {
       <TablePaginationActions
         count={count}
         page={page}
+        totalPages={totalPages}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
         keyboardActive={keyboardActive}
@@ -187,7 +191,7 @@ describe('<TablePaginationActions />', () => {
     );
 
     fireEvent.change(queryByTestId('pagination-dropdown'), { target: { value: 1 } });
-    expect(onPageChange).to.have.been.calledWith(sinon.match.any, 1);
+    expect(onPageChange).to.have.been.calledWith(1);
   });
 
   it('should not call focusConfirmButton when pressing tab on last page button and isInSelectionMode is false', () => {
