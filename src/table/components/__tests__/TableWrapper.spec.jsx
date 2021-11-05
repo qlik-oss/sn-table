@@ -21,6 +21,7 @@ describe('<TableWrapper />', () => {
   let keyboard;
   let translator;
   let rect;
+  let announcer;
 
   beforeEach(() => {
     sinon.stub(TableBodyWrapper, 'default').returns(<tbody />);
@@ -50,6 +51,7 @@ describe('<TableWrapper />', () => {
     rect = {
       width: 551,
     };
+    announcer = sinon.spy();
   });
 
   afterEach(() => {
@@ -111,10 +113,17 @@ describe('<TableWrapper />', () => {
         keyboard={keyboard}
         translator={translator}
         rect={rect}
+        announcer={announcer}
       />
     );
+
     fireEvent.change(getByTestId('select'), { target: { value: 25 } });
+
     expect(setPageInfo).to.have.been.calledWith({ page: 0, rowsPerPage: 25 });
+    expect(announcer).to.have.been.calledOnceWith({
+      keys: [['SNTable.Pagination.RowsPerPageChange', sinon.match.any]],
+      politeness: 'assertive',
+    });
   });
 
   it('should call setPageInfo when changing page', () => {
@@ -132,10 +141,17 @@ describe('<TableWrapper />', () => {
         keyboard={keyboard}
         translator={translator}
         rect={rect}
+        announcer={announcer}
       />
     );
+
     fireEvent.change(getByTestId('pagination-dropdown'));
+
     expect(setPageInfo).to.have.been.calledOnce;
+    expect(announcer).to.have.been.calledOnceWith({
+      keys: [['SNTable.Pagination.PageStatusReport', sinon.match.any]],
+      politeness: 'assertive',
+    });
   });
 
   it('should not render rows per page section in table when width smaller than 550', () => {

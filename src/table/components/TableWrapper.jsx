@@ -47,8 +47,18 @@ const useStyles = makeStyles({
 });
 
 export default function TableWrapper(props) {
-  const { rootElement, tableData, pageInfo, setPageInfo, constraints, translator, selectionsAPI, keyboard, rect } =
-    props;
+  const {
+    rootElement,
+    tableData,
+    pageInfo,
+    setPageInfo,
+    constraints,
+    translator,
+    selectionsAPI,
+    keyboard,
+    rect,
+    announcer,
+  } = props;
   const { size, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
   const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
@@ -59,7 +69,7 @@ export default function TableWrapper(props) {
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
   const paginationFixedRpp = selectionsAPI.isModal() || rect.width < 550;
-  const announce = useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
+  const announce = announcer || useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
   const totalPages = Math.ceil(size.qcy / rowsPerPage);
 
   const setShouldRefocus = () => {
@@ -208,4 +218,5 @@ TableWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
   rect: PropTypes.object.isRequired,
+  announcer: PropTypes.func,
 };
