@@ -1,4 +1,4 @@
-import React, { useReducer, useState, useEffect, useMemo } from 'react';
+import React, { useReducer, useState, useEffect, useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@mui/styles';
 import TableBody from '@mui/material/TableBody';
@@ -8,6 +8,7 @@ import getCellRenderer from './renderer';
 import { getBodyStyle } from '../utils/styling-utils';
 import { bodyHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
+import RootContext from '../../contexts/rootContext';
 
 const useStyles = makeStyles({
   cellBase: {
@@ -27,19 +28,8 @@ const useStyles = makeStyles({
   },
 });
 
-function TableBodyWrapper({
-  rootElement,
-  tableData,
-  constraints,
-  selectionsAPI,
-  layout,
-  theme,
-  setShouldRefocus,
-  setFocusedCellCoord,
-  keyboard,
-  tableWrapperRef,
-  announce,
-}) {
+function TableBodyWrapper({ setShouldRefocus, setFocusedCellCoord, tableWrapperRef, announce }) {
+  const { rootElement, layout, tableData, constraints, selectionsAPI, keyboard, theme } = useContext(RootContext);
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
@@ -118,15 +108,8 @@ function TableBodyWrapper({
 }
 
 TableBodyWrapper.propTypes = {
-  rootElement: PropTypes.object.isRequired,
-  tableData: PropTypes.object.isRequired,
-  constraints: PropTypes.object.isRequired,
-  selectionsAPI: PropTypes.object.isRequired,
-  layout: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
   setFocusedCellCoord: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
-  keyboard: PropTypes.object.isRequired,
   tableWrapperRef: PropTypes.object.isRequired,
   announce: PropTypes.func.isRequired,
 };

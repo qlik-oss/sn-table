@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@mui/styles';
 import TableCell from '@mui/material/TableCell';
@@ -8,6 +8,7 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import { getHeadStyle } from '../utils/styling-utils';
 import { headHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusHead } from '../utils/handle-accessibility';
+import RootContext from '../../contexts/rootContext';
 
 const useStyles = makeStyles({
   head: {
@@ -33,19 +34,9 @@ const useStyles = makeStyles({
   },
 });
 
-function TableHeadWrapper({
-  rootElement,
-  tableData,
-  theme,
-  layout,
-  changeSortOrder,
-  constraints,
-  translator,
-  selectionsAPI,
-  focusedCellCoord,
-  setFocusedCellCoord,
-  keyboard,
-}) {
+function TableHeadWrapper({ focusedCellCoord, setFocusedCellCoord }) {
+  const { rootElement, layout, tableData, constraints, translator, theme, changeSortOrder, selectionsAPI, keyboard } =
+    useContext(RootContext);
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
 
@@ -105,17 +96,8 @@ function TableHeadWrapper({
 }
 
 TableHeadWrapper.propTypes = {
-  rootElement: PropTypes.object.isRequired,
-  tableData: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-  layout: PropTypes.object.isRequired,
-  changeSortOrder: PropTypes.func.isRequired,
-  constraints: PropTypes.object.isRequired,
-  selectionsAPI: PropTypes.object.isRequired,
-  keyboard: PropTypes.object.isRequired,
   focusedCellCoord: PropTypes.arrayOf(PropTypes.number).isRequired,
   setFocusedCellCoord: PropTypes.func.isRequired,
-  translator: PropTypes.object.isRequired,
 };
 
 export default TableHeadWrapper;

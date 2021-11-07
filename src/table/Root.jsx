@@ -3,6 +3,7 @@ import React from 'react';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import { StylesProvider } from '@mui/styles';
 import TableWrapper from './components/TableWrapper';
+import RootContext from '../contexts/rootContext';
 
 export function render(rootElement, props) {
   const { muiParameters } = props;
@@ -12,7 +13,9 @@ export function render(rootElement, props) {
       <StyledEngineProvider injectFirst>
         <StylesProvider generateClassName={muiParameters.generateClassName}>
           <ThemeProvider theme={muiParameters.theme}>
-            <TableWrapper {...props} />
+            <RootContext.Provider value={props}>
+              <TableWrapper />
+            </RootContext.Provider>
           </ThemeProvider>
         </StylesProvider>
       </StyledEngineProvider>

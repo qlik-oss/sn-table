@@ -3,8 +3,7 @@ import { makeStyles } from '@mui/styles';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
-import PropTypes from 'prop-types';
-import React, { useEffect, useState, useMemo, useRef } from 'react';
+import React, { useEffect, useState, useMemo, useRef, useContext } from 'react';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import TablePaginationActions from './TablePaginationActions';
@@ -13,6 +12,7 @@ import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleScroll, handleNavigateTop } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
+import RootContext from '../../contexts/rootContext';
 
 const useStyles = makeStyles({
   paper: {
@@ -46,9 +46,9 @@ const useStyles = makeStyles({
   },
 });
 
-export default function TableWrapper(props) {
+export default function TableWrapper() {
   const { rootElement, tableData, pageInfo, setPageInfo, constraints, translator, selectionsAPI, keyboard, rect } =
-    props;
+    useContext(RootContext);
   const { size, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
   const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
@@ -140,9 +140,8 @@ export default function TableWrapper(props) {
             `${columns.length}`,
           ])}
         >
-          <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
+          <TableHeadWrapper setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
           <TableBodyWrapper
-            {...props}
             announce={announce}
             focusedCellCoord={focusedCellCoord}
             setFocusedCellCoord={setFocusedCellCoord}
@@ -192,15 +191,3 @@ export default function TableWrapper(props) {
     </Paper>
   );
 }
-
-TableWrapper.propTypes = {
-  rootElement: PropTypes.object.isRequired,
-  tableData: PropTypes.object.isRequired,
-  pageInfo: PropTypes.object.isRequired,
-  setPageInfo: PropTypes.func.isRequired,
-  translator: PropTypes.object.isRequired,
-  constraints: PropTypes.object.isRequired,
-  selectionsAPI: PropTypes.object.isRequired,
-  keyboard: PropTypes.object.isRequired,
-  rect: PropTypes.object.isRequired,
-};
