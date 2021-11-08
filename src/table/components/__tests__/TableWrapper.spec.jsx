@@ -102,6 +102,7 @@ describe('<TableWrapper />', () => {
   });
 
   it('should call setPageInfo when changing rows per page', () => {
+    const targetRowsPerPage = 25;
     const { getByTestId } = render(
       <TableWrapper
         tableData={tableData}
@@ -117,9 +118,8 @@ describe('<TableWrapper />', () => {
       />
     );
 
-    fireEvent.change(getByTestId('select'), { target: { value: 25 } });
+    fireEvent.change(getByTestId('select'), { target: { value: targetRowsPerPage } });
 
-    const targetRowsPerPage = 25;
     expect(setPageInfo).to.have.been.calledWith({ page: 0, rowsPerPage: targetRowsPerPage });
     expect(announcer).to.have.been.calledOnceWith({
       keys: [['SNTable.Pagination.RowsPerPageChange', `${targetRowsPerPage}`]],
