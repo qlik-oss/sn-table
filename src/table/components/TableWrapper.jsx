@@ -57,7 +57,7 @@ export default function TableWrapper(props) {
     selectionsAPI,
     keyboard,
     rect,
-    announcer,
+    announcer, // this is only for testing purposes
   } = props;
   const { size, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;

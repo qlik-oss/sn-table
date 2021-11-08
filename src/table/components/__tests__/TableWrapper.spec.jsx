@@ -119,9 +119,10 @@ describe('<TableWrapper />', () => {
 
     fireEvent.change(getByTestId('select'), { target: { value: 25 } });
 
-    expect(setPageInfo).to.have.been.calledWith({ page: 0, rowsPerPage: 25 });
+    const targetRowsPerPage = 25;
+    expect(setPageInfo).to.have.been.calledWith({ page: 0, rowsPerPage: targetRowsPerPage });
     expect(announcer).to.have.been.calledOnceWith({
-      keys: [['SNTable.Pagination.RowsPerPageChange', sinon.match.any]],
+      keys: [['SNTable.Pagination.RowsPerPageChange', `${targetRowsPerPage}`]],
       politeness: 'assertive',
     });
   });
@@ -149,7 +150,7 @@ describe('<TableWrapper />', () => {
 
     expect(setPageInfo).to.have.been.calledOnce;
     expect(announcer).to.have.been.calledOnceWith({
-      keys: [['SNTable.Pagination.PageStatusReport', sinon.match.any]],
+      keys: [['SNTable.Pagination.PageStatusReport', [1, 2]]], // 200 rows, 100 rows per page => [1, 2]
       politeness: 'assertive',
     });
   });
