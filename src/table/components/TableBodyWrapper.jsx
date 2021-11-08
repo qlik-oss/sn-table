@@ -30,6 +30,7 @@ const useStyles = makeStyles({
 
 function TableBodyWrapper({ setShouldRefocus, setFocusedCellCoord, tableWrapperRef, announce }) {
   const { rootElement, layout, tableData, constraints, selectionsAPI, keyboard, theme } = useContext(RootContext);
+  console.log({ rootElement });
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);

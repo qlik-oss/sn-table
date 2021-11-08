@@ -12,30 +12,28 @@ import * as selectionsUtils from '../../utils/selections-utils';
 import * as getCellRenderer from '../renderer';
 import * as handleKeyPress from '../../utils/handle-key-press';
 import * as handleAccessibility from '../../utils/handle-accessibility';
+import RootContext from '../../../contexts/rootContext';
 
 describe('<TableBodyWrapper />', async () => {
   const model = { getHyperCubeData: async () => generateDataPages(2, 2) };
-
-  let tableData;
-  let constraints;
-  let selectionsAPI;
-  let layout;
-  let theme;
+  let providerProps;
   let cellRendererSpy;
 
   beforeEach(async () => {
     sinon.stub(selectionsUtils, 'addSelectionListeners').returns(sinon.spy());
-
-    tableData = await manageData(model, generateLayout(1, 1), { top: 0, height: 100 });
-    constraints = {};
-    selectionsAPI = {
-      isModal: () => true,
+    providerProps = {
+      rootElement: {},
+      tableData: await manageData(model, generateLayout(1, 1), { top: 0, height: 100 }),
+      constraints: {},
+      selectionsAPI: {
+        isModal: () => true,
+      },
+      layout: {},
+      theme: {
+        getColorPickerColor: () => {},
+        name: () => {},
+      },
     };
-    theme = {
-      getColorPickerColor: () => {},
-      name: () => {},
-    };
-    layout = {};
     cellRendererSpy = sinon.spy();
   });
 
@@ -52,35 +50,27 @@ describe('<TableBodyWrapper />', async () => {
     });
 
     const { queryByText } = render(
-      <TableBodyWrapper
-        tableData={tableData}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        layout={layout}
-        theme={theme}
-      />
+      <RootContext.Provider value={providerProps}>
+        <TableBodyWrapper />
+      </RootContext.Provider>
     );
 
     expect(cellRendererSpy).to.have.callCount(8);
-    expect(queryByText(tableData.rows[0]['col-0'].qText)).to.be.visible;
-    expect(queryByText(tableData.rows[0]['col-1'].qText)).to.be.visible;
-    expect(queryByText(tableData.rows[1]['col-0'].qText)).to.be.visible;
-    expect(queryByText(tableData.rows[1]['col-1'].qText)).to.be.visible;
+    expect(queryByText(providerProps.tableData.rows[0]['col-0'].qText)).to.be.visible;
+    expect(queryByText(providerProps.tableData.rows[0]['col-1'].qText)).to.be.visible;
+    expect(queryByText(providerProps.tableData.rows[1]['col-0'].qText)).to.be.visible;
+    expect(queryByText(providerProps.tableData.rows[1]['col-1'].qText)).to.be.visible;
   });
 
   it('should call bodyHandleKeyPress on key down', () => {
     sinon.stub(handleKeyPress, 'bodyHandleKeyPress').returns(sinon.spy());
 
     const { queryByText } = render(
-      <TableBodyWrapper
-        tableData={tableData}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        theme={theme}
-        layout={layout}
-      />
+      <RootContext.Provider value={providerProps}>
+        <TableBodyWrapper />
+      </RootContext.Provider>
     );
-    fireEvent.keyDown(queryByText(tableData.rows[0]['col-0'].qText));
+    fireEvent.keyDown(queryByText(providerProps.tableData.rows[0]['col-0'].qText));
 
     expect(handleKeyPress.bodyHandleKeyPress).to.have.been.calledOnce;
   });
@@ -89,15 +79,11 @@ describe('<TableBodyWrapper />', async () => {
     sinon.stub(handleAccessibility, 'handleClickToFocusBody').returns(sinon.spy());
 
     const { queryByText } = render(
-      <TableBodyWrapper
-        tableData={tableData}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        theme={theme}
-        layout={layout}
-      />
+      <RootContext.Provider value={providerProps}>
+        <TableBodyWrapper />
+      </RootContext.Provider>
     );
-    fireEvent.mouseDown(queryByText(tableData.rows[0]['col-0'].qText));
+    fireEvent.mouseDown(queryByText(providerProps.tableData.rows[0]['col-0'].qText));
 
     expect(handleAccessibility.handleClickToFocusBody).to.have.been.calledOnce;
   });
