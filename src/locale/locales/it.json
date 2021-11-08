@@ -1,91 +1,96 @@
 {
   "SNTable.Accessibility.RowsAndColumns": {
-    "value": "{0}개의 행과 {1}개의 열을 표시합니다.",
+    "value": "Visualizzazione di {0} righe e {1} colonne.",
     "comment": "number of rows and columns announced by the screen reader. (tew 210929)",
     "version": "HKjzXNhL9hPs/kFY0XyjTQ=="
   },
   "SNTable.Pagination.DisplayedRowsLabel": {
-    "value": "{1}의 {0}",
+    "value": "{0} di {1}",
     "comment": "label for the displayed rows, e.g. '1-100 of 234' (tew 211004)",
     "version": "aQJbyf9x9LTIhITOr45yXA=="
   },
   "SNTable.Pagination.FirstPage": {
-    "value": "첫 페이지",
+    "value": "Prima pagina",
     "comment": "tooltip and aria-label for the first page button. (tew 210929)",
     "version": "vp2MW/tPZq4FsBw+3qknqA=="
   },
   "SNTable.Pagination.LastPage": {
-    "value": "마지막 페이지",
+    "value": "Ultima pagina",
     "comment": "tooltip and aria-label for the last page button. (tew 210929)",
     "version": "9lUogxKZctLBgLYSNmpyPA=="
   },
   "SNTable.Pagination.NextPage": {
-    "value": "다음 페이지",
+    "value": "Pagina successiva",
     "comment": "tooltip and aria-label for the next page button. (tew 210929)",
     "version": "YyUO+qPBjWcn7zy0bpXeFw=="
   },
   "SNTable.Pagination.PreviousPage": {
-    "value": "이전 페이지",
+    "value": "Pagina precedente",
     "comment": "tooltip and aria-label for the previous page button. (tew 210929)",
     "version": "3IinXJOsZ4CCBrNYsg4U5A=="
   },
   "SNTable.Pagination.RowsPerPage": {
-    "value": "페이지별 행 수",
+    "value": "Righe per pagina",
     "comment": "label for the rows per page dropdown. (tew 210929)",
     "version": "zuWpMmMSoOG/QRsKoVx3OA=="
   },
+  "SNTable.Pagination.SelectPage": {
+    "value": "Seleziona pagina",
+    "comment": "Label for the dropdown to select a page.",
+    "version": "306b2wiIN019EPnVvTBSjA=="
+  },
   "SNTable.SelectionLabel.DeselectedValue": {
-    "value": "값이 선택 취소되었습니다.",
+    "value": "Il valore è deselezionato.",
     "comment": "announced by screen readers  when a value is deselected. (tew 210929)",
     "version": "/NL1c53TDjc2dhooLWg1WA=="
   },
   "SNTable.SelectionLabel.ExitedSelectionMode": {
-    "value": "값이 선택 취소되었습니다. 선택 모드를 종료했습니다.",
+    "value": "Il valore è deselezionato. Uscita dalla modalità selezione.",
     "comment": "Announced by screen readers when deselecting and no values are selecting, causing the the chart to exit selection mode. (tew 210929)",
     "version": "A4NCF1GIsCVwVg0MjPHUqw=="
   },
   "SNTable.SelectionLabel.NotSelectedValue": {
-    "value": "값이 선택되지 않았습니다.",
+    "value": "Il valore non è selezionato.",
     "comment": "announced by screen readers when focus is on an unselected value. (tew 210929)",
     "version": "oj/qLPcfANXpS2oVVUzTdQ=="
   },
   "SNTable.SelectionLabel.OneSelectedValue": {
-    "value": "현재 하나의 값이 선택되었습니다.",
+    "value": "Attualmente è presente un solo valore selezionato.",
     "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)",
     "version": "5llYYux+meuJItZE6XJhcQ=="
   },
   "SNTable.SelectionLabel.SelectedValue": {
-    "value": "값이 선택되었습니다.",
+    "value": "Il valore è selezionato.",
     "comment": "announced by screen readers when a value is selected. (tew 210929)",
     "version": "ZJO4WnSdc7Wk5mDyEj4hug=="
   },
   "SNTable.SelectionLabel.SelectedValues": {
-    "value": "현재 {0}개의 값이 선택되었습니다.",
+    "value": "Attualmente sono presenti {0} valori selezionati.",
     "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)",
     "version": "58lPVnscmLNuN+pvnPhkYA=="
   },
   "SNTable.SelectionLabel.SelectionsConfirmed": {
-    "value": "선택 내용이 확인되었습니다.",
+    "value": "Selezioni confermate.",
     "comment": "announced by screen readers when selections are confirmed. (tew 210929)",
     "version": "g2xbBOIYPMUM0bFIQp5hDg=="
   },
   "SNTable.SelectionLabel.selected": {
-    "value": "선택됨",
+    "value": "Selezionato",
     "comment": "announced by screen readers for a selected value. (tew 210929)",
     "version": "57xiDyOBQ0x8VcdHGd5tzg=="
   },
   "SNTable.SortLabel.PressSpaceToSort": {
-    "value": "이 열을 정렬하려면 스페이스바를 누르십시오.",
+    "value": "Premere la barra spaziatrice per ordinare questa colonna",
     "comment": "instructions for sorting, announced by screen readers. (tew 210929)",
     "version": "Qqrq+G7uktBDlaLsccl7ng=="
   },
   "SNTable.SortLabel.SortedAscending": {
-    "value": "오름차순으로 정렬되었습니다.",
+    "value": "Ordinato in ordine crescente.",
     "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)",
     "version": "LrRndbCXiDS4JMC+VCnW4A=="
   },
   "SNTable.SortLabel.SortedDescending": {
-    "value": "내림차순으로 정렬되었습니다.",
+    "value": "Ordinato in ordine decrescente.",
     "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)",
     "version": "81l9u+cBWloC+4R4s9akDQ=="
   }

@@ -3,3 +3,6 @@ dist
 coverage
 node_modules
 src/mui-config.json
+src/locale/locales/*.json
+src/locale/*.json
+src/locale/*.md
