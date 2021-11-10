@@ -8,6 +8,7 @@
 
 export default function announcementFactory(rootElement, translator, junkCharIdx) {
   let hasJunkChar = junkCharIdx || 0;
+  let lastAnnounceElement = null;
 
   /**
    * the announce function
@@ -35,11 +36,28 @@ export default function announcementFactory(rootElement, translator, junkCharIdx
     if (hasJunkChar % 2) notation += ` ­`;
     hasJunkChar++;
 
-    console.log('>>> notation:', notation);
+    const announceElement_01 = rootElement.querySelector('#sn-table-announcer--01');
+    const announceElement_02 = rootElement.querySelector('#sn-table-announcer--02');
 
-    const announceElement = rootElement.querySelector('#sn-table-announcer');
+    let announceElement = null;
+    if (lastAnnounceElement === null) {
+      announceElement = announceElement_01;
+      lastAnnounceElement = announcerElements.first;
+    } else if (lastAnnounceElement && lastAnnounceElement === announcerElements.first) {
+      announceElement = announceElement_02;
+      lastAnnounceElement = announcerElements.second;
+    } else {
+      announceElement = announceElement_01;
+      lastAnnounceElement = announcerElements.first;
+    }
+
     announceElement.innerHTML = notation;
     announceElement.setAttribute('aria-atomic', shouldBeAtomic);
     announceElement.setAttribute('aria-live', politeness);
   };
 }
+
+const announcerElements = {
+  first: 'first-announcer-element',
+  second: 'second-announcer-element',
+};

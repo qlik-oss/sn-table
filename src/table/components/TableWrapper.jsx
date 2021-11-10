@@ -126,7 +126,8 @@ export default function TableWrapper(props) {
         })
       }
     >
-      <div id="sn-table-announcer" aria-live="polite" aria-atomic="true" className={classes.screenReaderOnly} />
+      <div id="sn-table-announcer--01" aria-live="polite" aria-atomic="true" className={classes.screenReaderOnly} />
+      <div id="sn-table-announcer--02" aria-live="polite" aria-atomic="true" className={classes.screenReaderOnly} />
       <TableContainer
         ref={tableSectionRef}
         className={classes[containerMode]}
