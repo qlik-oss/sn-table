@@ -64,7 +64,7 @@ export const handleResetFocus = ({
     const providedCell = rowElements[nextCell[0]]?.getElementsByClassName('sn-table-cell')[nextCell[1]];
     updateFocus({ focusType, providedCell });
 
-    const hasActiveClassName = providedCell.classList.contains('selected');
+    const hasActiveClassName = providedCell?.classList?.contains('selected');
 
     if (hasSelections)
       announce({

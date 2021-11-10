@@ -158,12 +158,14 @@ describe('handle-accessibility', () => {
     let shouldRefocus;
     let hasSelections;
     let shouldAddTabstop;
+    let announce;
 
     beforeEach(() => {
       focusedCellCoord = [2, 1];
       shouldRefocus = { current: false };
       hasSelections = false;
       shouldAddTabstop = true;
+      announce = sinon.spy();
     });
 
     it('should set tabindex on the first cell and not focus', () => {
@@ -211,6 +213,7 @@ describe('handle-accessibility', () => {
         hasSelections,
         setFocusedCellCoord,
         shouldAddTabstop,
+        announce,
       });
       expect(cell.setAttribute).have.been.calledTwice;
       expect(setFocusedCellCoord).to.have.been.calledOnceWith([1, 1]);

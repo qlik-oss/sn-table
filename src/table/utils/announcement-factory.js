@@ -1,4 +1,14 @@
 /**
+ * Enum for announcement elements
+ * @readonly
+ * @enum {string}
+ */
+const announcerElements = {
+  first: 'first-announcer-element',
+  second: 'second-announcer-element',
+};
+
+/**
  * creates the function for announcement
  *
  * @param {Object} rootElement root element for getting the live aria from it
@@ -36,18 +46,18 @@ export default function announcementFactory(rootElement, translator, junkCharIdx
     if (hasJunkChar % 2) notation += ` ­`;
     hasJunkChar++;
 
-    const announceElement_01 = rootElement.querySelector('#sn-table-announcer--01');
-    const announceElement_02 = rootElement.querySelector('#sn-table-announcer--02');
+    const announceElement01 = rootElement.querySelector('#sn-table-announcer--01');
+    const announceElement02 = rootElement.querySelector('#sn-table-announcer--02');
 
     let announceElement = null;
     if (lastAnnounceElement === null) {
-      announceElement = announceElement_01;
+      announceElement = announceElement01;
       lastAnnounceElement = announcerElements.first;
     } else if (lastAnnounceElement && lastAnnounceElement === announcerElements.first) {
-      announceElement = announceElement_02;
+      announceElement = announceElement02;
       lastAnnounceElement = announcerElements.second;
     } else {
-      announceElement = announceElement_01;
+      announceElement = announceElement01;
       lastAnnounceElement = announcerElements.first;
     }
 
@@ -56,8 +66,3 @@ export default function announcementFactory(rootElement, translator, junkCharIdx
     announceElement.setAttribute('aria-live', politeness);
   };
 }
-
-const announcerElements = {
-  first: 'first-announcer-element',
-  second: 'second-announcer-element',
-};
