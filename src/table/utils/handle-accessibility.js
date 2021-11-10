@@ -49,6 +49,7 @@ export const handleResetFocus = ({
   hasSelections,
   setFocusedCellCoord,
   shouldAddTabstop,
+  announce,
 }) => {
   updateFocus({ focusType: 'removeTab', providedCell: findCellWithTabStop(rootElement) });
   // If we have selections ongoing, we want to stay on the same column
@@ -58,7 +59,20 @@ export const handleResetFocus = ({
     const focusType = shouldRefocus.current ? 'focus' : 'addTab';
     shouldRefocus.current = false;
     const rowElements = rootElement.getElementsByClassName('sn-table-row');
-    updateFocus({ focusType, rowElements, cellCoord: nextCell });
+    // updateFocus({ focusType, rowElements, cellCoord: nextCell });
+
+    const providedCell = rowElements[nextCell[0]]?.getElementsByClassName('sn-table-cell')[nextCell[1]];
+    updateFocus({ focusType, providedCell });
+
+    const hasActiveClassName = providedCell.classList.contains('selected');
+
+    if (hasSelections)
+      announce({
+        keys: [
+          `${providedCell.textContent},`,
+          hasActiveClassName ? 'SNTable.SelectionLabel.SelectedValue' : 'SNTable.SelectionLabel.NotSelectedValue',
+        ],
+      });
   }
   setFocusedCellCoord(nextCell);
 };

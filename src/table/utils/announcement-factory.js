@@ -35,6 +35,8 @@ export default function announcementFactory(rootElement, translator, junkCharIdx
     if (hasJunkChar % 2) notation += ` ­`;
     hasJunkChar++;
 
+    console.log('>>> notation:', notation);
+
     const announceElement = rootElement.querySelector('#sn-table-announcer');
     announceElement.innerHTML = notation;
     announceElement.setAttribute('aria-atomic', shouldBeAtomic);

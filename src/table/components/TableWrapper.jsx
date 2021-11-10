@@ -105,6 +105,7 @@ export default function TableWrapper(props) {
       setFocusedCellCoord,
       hasSelections: selectionsAPI.isModal(),
       shouldAddTabstop: !keyboard.enabled || keyboard.active,
+      announce,
     });
   }, [rows.length, size.qcy, size.qcx, page]);
 
