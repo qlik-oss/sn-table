@@ -9,7 +9,7 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import { makeStyles } from '@mui/styles';
-import { focusConfirmButton } from '../utils/handle-accessibility';
+import { handleLastTab } from '../utils/handle-key-press';
 
 const useStyles = makeStyles({
   root: {
@@ -55,38 +55,18 @@ const useStyles = makeStyles({
 
 export default function TablePaginationActions(props) {
   const classes = useStyles();
-  const { count, page, rowsPerPage, onPageChange, tabIndex, tableWidth, translator, isInSelectionMode } = props;
-
-  const handleFirstPageButtonClick = (event) => {
-    onPageChange(event, 0);
-  };
-
-  const handleBackButtonClick = (event) => {
-    onPageChange(event, page - 1);
-  };
-
-  const handleNextButtonClick = (event) => {
-    onPageChange(event, page + 1);
-  };
-
-  const handleLastPageButtonClick = (event) => {
-    onPageChange(event, Math.ceil(count / rowsPerPage) - 1);
-  };
-
-  const lastPageTabHandle = (event) => {
-    if (isInSelectionMode && event.key === 'Tab' && !event.shiftKey) {
-      event.stopPropagation();
-      event.preventDefault();
-      focusConfirmButton(event.target);
-    }
-  };
-
-  const handleSelectPage = (event) => {
-    onPageChange(event, parseInt(event.target.value, 10));
-  };
-
+  const { count, page, rowsPerPage, onPageChange, keyboard, tableWidth, translator, isInSelectionMode } = props;
   const onFirstPage = page === 0;
-  const onLastPage = page >= Math.ceil(count / rowsPerPage) - 1;
+  const lastPage = Math.ceil(count / rowsPerPage) - 1;
+  const onLastPage = page >= lastPage;
+  const tabIndex = !keyboard.enabled || keyboard.active ? '0' : '-1';
+
+  const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, isInSelectionMode) : null;
+  const handleSelectPage = (event) => onPageChange(event, parseInt(event.target.value, 10));
+  const handleFirstPageButtonClick = (event) => onPageChange(event, 0);
+  const handleBackButtonClick = (event) => onPageChange(event, page - 1);
+  const handleNextButtonClick = (event) => onPageChange(event, page + 1);
+  const handleLastPageButtonClick = (event) => onPageChange(event, lastPage);
 
   return (
     <div className={classes.root}>
@@ -149,7 +129,7 @@ export default function TablePaginationActions(props) {
         title={translator.get('SNTable.Pagination.NextPage')}
         tabIndex={tabIndex}
         className={`${classes.paginationActionButton} ${onLastPage && classes.disabled}`}
-        onKeyDown={tableWidth <= 350 ? lastPageTabHandle : null}
+        onKeyDown={tableWidth <= 350 && handleLastButtonTab}
       >
         <KeyboardArrowRight />
       </IconButton>
@@ -161,7 +141,7 @@ export default function TablePaginationActions(props) {
           title={translator.get('SNTable.Pagination.LastPage')}
           tabIndex={tabIndex}
           className={`${classes.paginationActionButton} ${onLastPage && classes.disabled}`}
-          onKeyDown={lastPageTabHandle}
+          onKeyDown={handleLastButtonTab}
         >
           <LastPageIcon />
         </IconButton>
@@ -175,7 +155,7 @@ TablePaginationActions.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
-  tabIndex: PropTypes.number.isRequired,
+  keyboard: PropTypes.object.isRequired,
   isInSelectionMode: PropTypes.bool.isRequired,
   tableWidth: PropTypes.number.isRequired,
   translator: PropTypes.object.isRequired,
