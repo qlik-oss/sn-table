@@ -18,7 +18,7 @@ const announcerElements = {
 
 export default function announcementFactory(rootElement, translator, junkCharIdx) {
   let hasJunkChar = junkCharIdx || 0;
-  let lastAnnounceElement = null;
+  let previousAnnouncementElement = null;
 
   /**
    * the announce function
@@ -50,15 +50,13 @@ export default function announcementFactory(rootElement, translator, junkCharIdx
     const announceElement02 = rootElement.querySelector('#sn-table-announcer--02');
 
     let announceElement = null;
-    if (lastAnnounceElement === null) {
-      announceElement = announceElement01;
-      lastAnnounceElement = announcerElements.first;
-    } else if (lastAnnounceElement && lastAnnounceElement === announcerElements.first) {
+
+    if (previousAnnouncementElement === announcerElements.first) {
       announceElement = announceElement02;
-      lastAnnounceElement = announcerElements.second;
+      previousAnnouncementElement = announcerElements.second;
     } else {
       announceElement = announceElement01;
-      lastAnnounceElement = announcerElements.first;
+      previousAnnouncementElement = announcerElements.first;
     }
 
     announceElement.innerHTML = notation;

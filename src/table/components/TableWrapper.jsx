@@ -5,6 +5,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState, useMemo, useRef } from 'react';
+import Announcer from './Announcer';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import TablePaginationActions from './TablePaginationActions';
@@ -34,15 +35,6 @@ const useStyles = makeStyles({
   },
   paginationHidden: {
     display: 'none',
-  },
-  screenReaderOnly: {
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: '1px',
-    overflow: 'hidden',
-    position: 'absolute',
-    whiteSpace: 'nowrap',
-    width: '1px',
   },
 });
 
@@ -126,8 +118,7 @@ export default function TableWrapper(props) {
         })
       }
     >
-      <div id="sn-table-announcer--01" aria-live="polite" aria-atomic="true" className={classes.screenReaderOnly} />
-      <div id="sn-table-announcer--02" aria-live="polite" aria-atomic="true" className={classes.screenReaderOnly} />
+      <Announcer />
       <TableContainer
         ref={tableSectionRef}
         className={classes[containerMode]}
