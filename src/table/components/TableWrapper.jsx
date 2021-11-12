@@ -167,7 +167,7 @@ export default function TableWrapper(props) {
               style: {
                 color: '#404040',
               },
-              tabindex: !keyboard.enabled || keyboard.active ? 0 : -1,
+              tabIndex: !keyboard.enabled || keyboard.active ? 0 : -1,
             },
             native: true,
           }}
