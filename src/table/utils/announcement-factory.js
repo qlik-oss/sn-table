@@ -16,9 +16,9 @@ const announcerElements = {
  * @param {number=} junkCharIdx for test reasons
  */
 
-export default function announcementFactory(rootElement, translator, junkCharIdx) {
+export default function announcementFactory(rootElement, translator, junkCharIdx, prevAnnounceEl) {
   let hasJunkChar = junkCharIdx || 0;
-  let previousAnnouncementElement = null;
+  let previousAnnouncementElement = prevAnnounceEl || null;
 
   /**
    * the announce function

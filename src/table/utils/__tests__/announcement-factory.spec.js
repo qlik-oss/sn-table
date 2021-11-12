@@ -9,7 +9,7 @@ describe('announcement-factory', () => {
   let announcerElement;
 
   beforeEach(() => {
-    announcerElement = global.document.createElement('td');
+    announcerElement = global.document.createElement('div');
     announcerElement.setAttribute('id', '#sn-table-announcer');
 
     rootElement = { querySelector: () => announcerElement };

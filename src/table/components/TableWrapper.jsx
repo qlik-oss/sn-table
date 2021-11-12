@@ -5,7 +5,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState, useMemo, useRef } from 'react';
-import Announcer from './Announcer';
+import Announce from './Announce';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import TablePaginationActions from './TablePaginationActions';
@@ -118,7 +118,7 @@ export default function TableWrapper(props) {
         })
       }
     >
-      <Announcer />
+      <Announce />
       <TableContainer
         ref={tableSectionRef}
         className={classes[containerMode]}

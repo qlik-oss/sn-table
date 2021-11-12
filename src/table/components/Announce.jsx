@@ -13,7 +13,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Announcer = () => {
+const Announce = () => {
   const classes = useStyles();
 
   return (
@@ -24,4 +24,4 @@ const Announcer = () => {
   );
 };
 
-export default Announcer;
+export default Announce;

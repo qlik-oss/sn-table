@@ -176,10 +176,12 @@ describe('handle-accessibility', () => {
         hasSelections,
         setFocusedCellCoord,
         shouldAddTabstop,
+        announce,
       });
       expect(cell.setAttribute).have.been.calledTwice;
       expect(setFocusedCellCoord).to.have.been.calledOnceWith([0, 0]);
       expect(cell.focus).to.not.have.been.called;
+      expect(announce).to.not.have.been.called;
     });
 
     it('should set tabindex on the first cell and focus when shouldRefocus is true', () => {
@@ -192,10 +194,12 @@ describe('handle-accessibility', () => {
         hasSelections,
         setFocusedCellCoord,
         shouldAddTabstop,
+        announce,
       });
       expect(cell.setAttribute).have.been.calledTwice;
       expect(setFocusedCellCoord).to.have.been.calledOnceWith([0, 0]);
       expect(cell.focus).to.have.been.called;
+      expect(announce).to.not.have.been.called;
     });
 
     it('should set tabindex on the second cell in currently focused column when hasSelections is true', () => {
@@ -218,6 +222,57 @@ describe('handle-accessibility', () => {
       expect(cell.setAttribute).have.been.calledTwice;
       expect(setFocusedCellCoord).to.have.been.calledOnceWith([1, 1]);
       expect(cell.focus).to.not.have.been.called;
+    });
+
+    it('should announce cell content and selection status for non selected first cell after focusing on it', () => {
+      cell = { ...cell, textContent: '#something' };
+      const row = { getElementsByClassName: () => [cell, cell] };
+      rootElement = {
+        getElementsByClassName: () => [row, row],
+        querySelector: () => cell,
+      };
+      hasSelections = true;
+
+      handleAccessibility.handleResetFocus({
+        focusedCellCoord,
+        rootElement,
+        shouldRefocus,
+        hasSelections,
+        setFocusedCellCoord,
+        shouldAddTabstop,
+        announce,
+      });
+
+      expect(announce).to.have.been.calledOnceWith({
+        keys: ['#something,', 'SNTable.SelectionLabel.NotSelectedValue'],
+      });
+    });
+
+    it('should announce cell content and selection status for selected first cell after focusing on it', () => {
+      const tmpCell = global.document.createElement('td');
+      tmpCell.classList.add('selected');
+
+      cell = { ...cell, classList: tmpCell.classList, textContent: '#something' };
+      const row = { getElementsByClassName: () => [cell, cell] };
+      rootElement = {
+        getElementsByClassName: () => [row, row],
+        querySelector: () => cell,
+      };
+      hasSelections = true;
+
+      handleAccessibility.handleResetFocus({
+        focusedCellCoord,
+        rootElement,
+        shouldRefocus,
+        hasSelections,
+        setFocusedCellCoord,
+        shouldAddTabstop,
+        announce,
+      });
+
+      expect(announce).to.have.been.calledOnceWith({
+        keys: ['#something,', 'SNTable.SelectionLabel.SelectedValue'],
+      });
     });
   });
 
