@@ -70,7 +70,7 @@ export default function TableWrapper(props) {
 
   useEffect(() => {
     const scrollCallback = (evt) => handleScroll(evt, tableSectionRef);
-    const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard.blur);
+    const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard);
 
     tableSectionRef.current && tableSectionRef.current.addEventListener('wheel', scrollCallback);
     tableWrapperRef.current && tableWrapperRef.current.addEventListener('focusout', focusOutCallback);
@@ -167,7 +167,7 @@ export default function TableWrapper(props) {
               style: {
                 color: '#404040',
               },
-              tabindex: keyboard.active ? 0 : -1,
+              tabIndex: !keyboard.enabled || keyboard.active ? 0 : -1,
             },
             native: true,
           }}

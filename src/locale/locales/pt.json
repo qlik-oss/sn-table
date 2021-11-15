@@ -1,91 +1,96 @@
 {
   "SNTable.Accessibility.RowsAndColumns": {
-    "value": "Affichage de {0} lignes et de {1} colonnes.",
+    "value": "Mostrando {0} linhas e {1} colunas.",
     "comment": "number of rows and columns announced by the screen reader. (tew 210929)",
     "version": "HKjzXNhL9hPs/kFY0XyjTQ=="
   },
   "SNTable.Pagination.DisplayedRowsLabel": {
-    "value": "{0} sur {1}",
+    "value": "{0} de {1}",
     "comment": "label for the displayed rows, e.g. '1-100 of 234' (tew 211004)",
     "version": "aQJbyf9x9LTIhITOr45yXA=="
   },
   "SNTable.Pagination.FirstPage": {
-    "value": "Première page",
+    "value": "Primeira página",
     "comment": "tooltip and aria-label for the first page button. (tew 210929)",
     "version": "vp2MW/tPZq4FsBw+3qknqA=="
   },
   "SNTable.Pagination.LastPage": {
-    "value": "Dernière page",
+    "value": "Última página",
     "comment": "tooltip and aria-label for the last page button. (tew 210929)",
     "version": "9lUogxKZctLBgLYSNmpyPA=="
   },
   "SNTable.Pagination.NextPage": {
-    "value": "Page suivante",
+    "value": "Próxima página",
     "comment": "tooltip and aria-label for the next page button. (tew 210929)",
     "version": "YyUO+qPBjWcn7zy0bpXeFw=="
   },
   "SNTable.Pagination.PreviousPage": {
-    "value": "Page précédente",
+    "value": "Página anterior",
     "comment": "tooltip and aria-label for the previous page button. (tew 210929)",
     "version": "3IinXJOsZ4CCBrNYsg4U5A=="
   },
   "SNTable.Pagination.RowsPerPage": {
-    "value": "Lignes par page",
+    "value": "Linhas por página",
     "comment": "label for the rows per page dropdown. (tew 210929)",
     "version": "zuWpMmMSoOG/QRsKoVx3OA=="
   },
+  "SNTable.Pagination.SelectPage": {
+    "value": "Selecionar página",
+    "comment": "Label for the dropdown to select a page.",
+    "version": "306b2wiIN019EPnVvTBSjA=="
+  },
   "SNTable.SelectionLabel.DeselectedValue": {
-    "value": "La valeur est désélectionnée.",
+    "value": "O valor está desmarcado.",
     "comment": "announced by screen readers  when a value is deselected. (tew 210929)",
     "version": "/NL1c53TDjc2dhooLWg1WA=="
   },
   "SNTable.SelectionLabel.ExitedSelectionMode": {
-    "value": "La valeur est désélectionnée. Mode de sélection désactivé.",
+    "value": "O valor está desmarcado. Modo de seleção encerrado.",
     "comment": "Announced by screen readers when deselecting and no values are selecting, causing the the chart to exit selection mode. (tew 210929)",
     "version": "A4NCF1GIsCVwVg0MjPHUqw=="
   },
   "SNTable.SelectionLabel.NotSelectedValue": {
-    "value": "La valeur n'est pas sélectionnée.",
+    "value": "O valor não está selecionado.",
     "comment": "announced by screen readers when focus is on an unselected value. (tew 210929)",
     "version": "oj/qLPcfANXpS2oVVUzTdQ=="
   },
   "SNTable.SelectionLabel.OneSelectedValue": {
-    "value": "Actuellement, une valeur est sélectionnée.",
+    "value": "Atualmente, há um valor selecionado.",
     "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)",
     "version": "5llYYux+meuJItZE6XJhcQ=="
   },
   "SNTable.SelectionLabel.SelectedValue": {
-    "value": "La valeur est sélectionnée.",
+    "value": "O valor está selecionado.",
     "comment": "announced by screen readers when a value is selected. (tew 210929)",
     "version": "ZJO4WnSdc7Wk5mDyEj4hug=="
   },
   "SNTable.SelectionLabel.SelectedValues": {
-    "value": "Actuellement, {0} valeurs sont sélectionnées.",
+    "value": "Atualmente, há {0} valores selecionados.",
     "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)",
     "version": "58lPVnscmLNuN+pvnPhkYA=="
   },
   "SNTable.SelectionLabel.SelectionsConfirmed": {
-    "value": "Sélections confirmées.",
+    "value": "Seleções confirmadas.",
     "comment": "announced by screen readers when selections are confirmed. (tew 210929)",
     "version": "g2xbBOIYPMUM0bFIQp5hDg=="
   },
   "SNTable.SelectionLabel.selected": {
-    "value": "Sélectionné",
+    "value": "Selecionado",
     "comment": "announced by screen readers for a selected value. (tew 210929)",
     "version": "57xiDyOBQ0x8VcdHGd5tzg=="
   },
   "SNTable.SortLabel.PressSpaceToSort": {
-    "value": "Appuyez sur Espace pour trier en fonction de cette colonne.",
+    "value": "Pressione espaço para classificar por esta coluna",
     "comment": "instructions for sorting, announced by screen readers. (tew 210929)",
     "version": "Qqrq+G7uktBDlaLsccl7ng=="
   },
   "SNTable.SortLabel.SortedAscending": {
-    "value": "Tri dans l'ordre croissant.",
+    "value": "Classificado em ordem crescente.",
     "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)",
     "version": "LrRndbCXiDS4JMC+VCnW4A=="
   },
   "SNTable.SortLabel.SortedDescending": {
-    "value": "Tri dans l'ordre décroissant.",
+    "value": "Classificado em ordem decrescente.",
     "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)",
     "version": "81l9u+cBWloC+4R4s9akDQ=="
   }

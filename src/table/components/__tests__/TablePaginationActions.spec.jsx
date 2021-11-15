@@ -41,10 +41,10 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
+        keyboard={keyboard}
       />
     );
 
@@ -62,10 +62,10 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
+        keyboard={keyboard}
       />
     );
 
@@ -82,10 +82,10 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
+        keyboard={keyboard}
       />
     );
 
@@ -103,10 +103,10 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
+        keyboard={keyboard}
       />
     );
 
@@ -122,10 +122,10 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
+        keyboard={keyboard}
       />
     );
 
@@ -140,10 +140,10 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
+        keyboard={keyboard}
       />
     );
 
@@ -159,10 +159,10 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
+        keyboard={keyboard}
       />
     );
 
@@ -179,10 +179,10 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
+        keyboard={keyboard}
       />
     );
 
@@ -197,10 +197,10 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
+        keyboard={keyboard}
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab' });
@@ -216,10 +216,10 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
+        keyboard={keyboard}
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab', shiftKey: true });
@@ -235,10 +235,10 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
+        keyboard={keyboard}
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab' });
@@ -255,10 +255,10 @@ describe('<TablePaginationActions />', () => {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onPageChange}
-        keyboard={keyboard}
         tableWidth={tableWidth}
         translator={translator}
         isInSelectionMode={isInSelectionMode}
+        keyboard={keyboard}
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.NextPage'), { key: 'Tab' });
