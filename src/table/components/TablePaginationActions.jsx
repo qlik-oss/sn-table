@@ -86,21 +86,6 @@ export default function TablePaginationActions(props) {
     );
   };
 
-  const buttons =
-    tableWidth > 350 ? (
-      <>
-        {getButton(onFirstPage, 0, 'FirstPage')}
-        {getButton(onFirstPage, page - 1, 'PreviousPage')}
-        {getButton(onLastPage, page + 1, 'NextPage')}
-        {getButton(onLastPage, lastPage, 'LastPage', handleLastButtonTab)}
-      </>
-    ) : (
-      <>
-        {getButton(onFirstPage, page - 1, 'PreviousPage')}
-        {getButton(onLastPage, page + 1, 'NextPage', handleLastButtonTab)}
-      </>
-    );
-
   return (
     <div className={classes.root}>
       {tableWidth > 650 && (
@@ -133,7 +118,10 @@ export default function TablePaginationActions(props) {
           </Select>
         </FormControl>
       )}
-      {buttons}
+      {tableWidth > 350 && getButton(onFirstPage, 0, 'FirstPage')}
+      {getButton(onFirstPage, page - 1, 'PreviousPage')}
+      {getButton(onLastPage, page + 1, 'NextPage', tableWidth > 350 ? null : handleLastButtonTab)}
+      {tableWidth > 350 && getButton(onLastPage, lastPage, 'LastPage', handleLastButtonTab)}
     </div>
   );
 }
