@@ -59,7 +59,7 @@ export default function TablePaginationActions(props) {
   const onFirstPage = page === 0;
   const lastPage = Math.ceil(count / rowsPerPage) - 1;
   const onLastPage = page >= lastPage;
-  const tabIndex = !keyboard.enabled || keyboard.active ? '0' : '-1';
+  const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
 
   const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, isInSelectionMode) : null;
   const handleSelectPage = (event) => onPageChange(event, parseInt(event.target.value, 10));
