@@ -19,8 +19,8 @@ describe('announcement-factory', () => {
     rootElement = {
       querySelector: (query) => {
         if (query === '#sn-table-announcer--01') return announcerElement01;
-        else if (query === '#sn-table-announcer--02') return announcerElement02;
-        else return announcerElement01;
+        if (query === '#sn-table-announcer--02') return announcerElement02;
+        return announcerElement01;
       },
     };
     translator = { get: (key) => key };
