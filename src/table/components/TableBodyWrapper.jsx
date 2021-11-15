@@ -102,6 +102,7 @@ function TableBodyWrapper({
                       isAnalysisMode: selectionsEnabled,
                       setFocusedCellCoord,
                       announce,
+                      keyboard,
                     })
                   }
                   onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}

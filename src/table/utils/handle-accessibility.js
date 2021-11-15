@@ -24,22 +24,22 @@ export const updateFocus = ({ focusType, rowElements = [], cellCoord = [], provi
   }
 };
 
-export const removeAndFocus = (newCoord, rootElement, setFocusedCellCoord, focus) => {
+export const removeAndFocus = (newCoord, rootElement, setFocusedCellCoord, keyboard) => {
   updateFocus({
     providedCell: findCellWithTabStop(rootElement),
     focusType: 'removeTab',
   });
   setFocusedCellCoord(newCoord);
-  focus();
+  keyboard.enabled && keyboard.focus();
 };
 
 export const handleClickToFocusBody = (cell, rootElement, setFocusedCellCoord, keyboard) => {
   const { rawRowIdx, rawColIdx } = cell;
-  removeAndFocus([rawRowIdx + 1, rawColIdx], rootElement, setFocusedCellCoord, keyboard.focus);
+  removeAndFocus([rawRowIdx + 1, rawColIdx], rootElement, setFocusedCellCoord, keyboard);
 };
 
 export const handleClickToFocusHead = (columnIndex, rootElement, setFocusedCellCoord, keyboard) => {
-  removeAndFocus([0, columnIndex], rootElement, setFocusedCellCoord, keyboard.focus);
+  removeAndFocus([0, columnIndex], rootElement, setFocusedCellCoord, keyboard);
 };
 
 export const handleResetFocus = ({
@@ -75,9 +75,9 @@ export const handleResetFocus = ({
   setFocusedCellCoord(nextCell);
 };
 
-export const handleFocusoutEvent = (evt, shouldRefocus, blur) => {
-  if (!evt.currentTarget.contains(evt.relatedTarget) && !shouldRefocus.current) {
-    blur(false);
+export const handleFocusoutEvent = (evt, shouldRefocus, keyboard) => {
+  if (keyboard.enabled && !evt.currentTarget.contains(evt.relatedTarget) && !shouldRefocus.current) {
+    keyboard.blur(false);
   }
 };
 

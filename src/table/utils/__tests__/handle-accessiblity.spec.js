@@ -16,7 +16,7 @@ describe('handle-accessibility', () => {
     };
     focusedCellCoord = [0, 0];
     setFocusedCellCoord = sinon.spy();
-    keyboard = { focus: sinon.spy() };
+    keyboard = { focus: sinon.spy(), enabled: true };
   });
 
   afterEach(() => {
@@ -135,11 +135,18 @@ describe('handle-accessibility', () => {
       rawColIdx: 0,
     };
 
-    it('should call setFocusedCellCoord with adjusted index, and keyboard.focus', () => {
+    it('should indirectly call setFocusedCellCoord with adjusted index, and keyboard.focus', () => {
       handleAccessibility.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard);
       expect(cell.setAttribute).have.been.calledOnceWith('tabIndex', '-1');
       expect(setFocusedCellCoord).to.have.been.calledOnceWith([1, 0]);
       expect(keyboard.focus).to.have.been.calledOnce;
+    });
+    it('should indirectly call setFocusedCellCoord with adjusted index, but not keyboard.focus when keyboard.enabled is falsey', () => {
+      keyboard.enabled = false;
+      handleAccessibility.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard);
+      expect(cell.setAttribute).have.been.calledOnceWith('tabIndex', '-1');
+      expect(setFocusedCellCoord).to.have.been.calledOnceWith([1, 0]);
+      expect(keyboard.focus).to.not.have.been.called;
     });
   });
 
@@ -280,7 +287,6 @@ describe('handle-accessibility', () => {
     let containsRelatedTarget;
     let evt;
     let shouldRefocus;
-    let blur;
 
     beforeEach(() => {
       containsRelatedTarget = false;
@@ -290,26 +296,33 @@ describe('handle-accessibility', () => {
         },
       };
       shouldRefocus = { current: false };
-      blur = sinon.spy();
+      keyboard = { enabled: true, blur: sinon.spy() };
     });
 
-    it('should call blur when currentTarget doesnt contain relatedTarget and shouldRefocus is false', () => {
-      handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, blur);
-      expect(blur).to.have.been.calledOnceWith(false);
+    it('should call blur when currentTarget doesnt contain relatedTarget, shouldRefocus is false and keyboard.enabled is true', () => {
+      handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, keyboard);
+      expect(keyboard.blur).to.have.been.calledOnceWith(false);
     });
 
     it('should not call blur when currentTarget contains relatedTarget', () => {
       containsRelatedTarget = true;
 
-      handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, blur);
-      expect(blur).to.not.have.been.called;
+      handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, keyboard);
+      expect(keyboard.blur).to.not.have.been.called;
     });
 
     it('should not call blur when shouldRefocus is true', () => {
       shouldRefocus.current = true;
 
-      handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, blur);
-      expect(blur).to.not.have.been.called;
+      handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, keyboard);
+      expect(keyboard.blur).to.not.have.been.called;
+    });
+
+    it('should not call blur when keyboard.enabled is falsey', () => {
+      keyboard.enabled = false;
+
+      handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, keyboard);
+      expect(keyboard.blur).to.not.have.been.called;
     });
   });
 });

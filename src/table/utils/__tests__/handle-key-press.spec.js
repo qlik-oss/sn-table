@@ -5,6 +5,7 @@ import {
   bodyHandleKeyPress,
   headHandleKeyPress,
   handleTableWrapperKeyDown,
+  handleLastTab,
 } from '../handle-key-press';
 
 import * as handleAccessibility from '../handle-accessibility';
@@ -153,6 +154,7 @@ describe('handle-key-press', () => {
     let isAnalysisMode;
     let setFocusedCellCoord;
     let isModal;
+    let keyboard;
     let announce;
 
     beforeEach(() => {
@@ -183,6 +185,7 @@ describe('handle-key-press', () => {
         colIdx: -1,
       };
       cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1, isDim: true };
+      keyboard = { enabled: true };
       selDispatch = sinon.spy();
       isAnalysisMode = true;
       setFocusedCellCoord = sinon.spy();
@@ -203,6 +206,8 @@ describe('handle-key-press', () => {
         selectionState,
         isAnalysisMode: false,
         setFocusedCellCoord,
+        announce,
+        keyboard,
       });
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
@@ -222,6 +227,7 @@ describe('handle-key-press', () => {
         isAnalysisMode,
         setFocusedCellCoord,
         announce,
+        keyboard,
       });
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
@@ -287,6 +293,7 @@ describe('handle-key-press', () => {
         isAnalysisMode: false,
         setFocusedCellCoord,
         announce,
+        keyboard,
       });
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
@@ -310,6 +317,7 @@ describe('handle-key-press', () => {
         isAnalysisMode: false,
         setFocusedCellCoord,
         announce,
+        keyboard,
       });
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
@@ -333,6 +341,7 @@ describe('handle-key-press', () => {
         isAnalysisMode,
         setFocusedCellCoord,
         announce,
+        keyboard,
       });
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
@@ -354,6 +363,7 @@ describe('handle-key-press', () => {
         isAnalysisMode,
         setFocusedCellCoord,
         announce,
+        keyboard,
       });
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
@@ -376,6 +386,7 @@ describe('handle-key-press', () => {
         isAnalysisMode,
         setFocusedCellCoord,
         announce,
+        keyboard,
       });
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
@@ -398,6 +409,7 @@ describe('handle-key-press', () => {
         isAnalysisMode,
         setFocusedCellCoord,
         announce,
+        keyboard,
       });
       expect(evt.preventDefault).to.not.have.been.called;
       expect(evt.stopPropagation).to.not.have.been.called;
@@ -417,8 +429,10 @@ describe('handle-key-press', () => {
         selectionState,
         cell,
         selDispatch,
+        isAnalysisMode,
         setFocusedCellCoord,
         announce,
+        keyboard,
       });
       expect(evt.preventDefault).not.have.been.called;
       expect(evt.stopPropagation).not.have.been.called;
@@ -439,8 +453,10 @@ describe('handle-key-press', () => {
         selectionState,
         cell,
         selDispatch,
+        isAnalysisMode,
         setFocusedCellCoord,
         announce,
+        keyboard,
       });
       expect(evt.preventDefault).have.been.calledOnce;
       expect(evt.stopPropagation).have.been.calledOnce;
@@ -459,8 +475,10 @@ describe('handle-key-press', () => {
         selectionState,
         cell,
         selDispatch,
+        isAnalysisMode,
         setFocusedCellCoord,
         announce,
+        keyboard,
       });
       expect(evt.preventDefault).to.not.have.been.calledOnce;
       expect(evt.stopPropagation).to.not.have.been.calledOnce;
@@ -479,8 +497,32 @@ describe('handle-key-press', () => {
         selectionState,
         cell,
         selDispatch,
+        isAnalysisMode,
         setFocusedCellCoord,
         announce,
+        keyboard,
+      });
+      expect(evt.preventDefault).to.not.have.been.calledOnce;
+      expect(evt.stopPropagation).to.not.have.been.calledOnce;
+      expect(handleAccessibility.focusConfirmButton).to.not.have.been.called;
+    });
+
+    it('when shift + tab is pressed but keyboard.enabled is falsey, should not prevent defualt nor call focusConfirmButton', () => {
+      evt.key = 'Tab';
+      evt.shiftKey = true;
+      keyboard.enabled = false;
+
+      bodyHandleKeyPress({
+        evt,
+        rootElement,
+        cellCoord: [rowIndex, colIndex],
+        selectionState,
+        cell,
+        selDispatch,
+        isAnalysisMode,
+        setFocusedCellCoord,
+        announce,
+        keyboard,
       });
       expect(evt.preventDefault).to.not.have.been.calledOnce;
       expect(evt.stopPropagation).to.not.have.been.calledOnce;
@@ -499,6 +541,7 @@ describe('handle-key-press', () => {
         selDispatch,
         setFocusedCellCoord,
         announce,
+        keyboard,
       });
       expect(evt.preventDefault).not.have.been.called;
       expect(evt.stopPropagation).not.have.been.called;
@@ -758,6 +801,63 @@ describe('handle-key-press', () => {
       expect(evt.preventDefault).to.not.have.been.calledOnce;
       expect(evt.stopPropagation).to.not.have.been.calledOnce;
       expect(keyboard.blur).to.not.have.been.calledOnce;
+    });
+  });
+
+  describe('handleLastTab', () => {
+    let evt;
+    let isInSelectionMode;
+
+    beforeEach(() => {
+      evt = {
+        key: 'Tab',
+        shiftKey: false,
+        target: {},
+        stopPropagation: sinon.spy(),
+        preventDefault: sinon.spy(),
+      };
+      isInSelectionMode = true;
+      sinon.stub(handleAccessibility, 'focusConfirmButton').returns(sinon.spy());
+    });
+
+    afterEach(() => {
+      sinon.verifyAndRestore();
+      sinon.resetHistory();
+    });
+
+    it('should call focusConfirmButton when isInSelectionMode is true and tab is pressed', () => {
+      handleLastTab(evt, isInSelectionMode);
+
+      expect(evt.stopPropagation).to.have.been.calledOnce;
+      expect(evt.preventDefault).to.have.been.calledOnce;
+      expect(handleAccessibility.focusConfirmButton).to.have.been.calledOnce;
+    });
+
+    it('should not call focusConfirmButton when isInSelectionMode is false', () => {
+      isInSelectionMode = false;
+      handleLastTab(evt, isInSelectionMode);
+
+      expect(evt.stopPropagation).to.not.have.been.called;
+      expect(evt.preventDefault).to.not.have.been.called;
+      expect(handleAccessibility.focusConfirmButton).to.not.have.been.called;
+    });
+
+    it('should not call focusConfirmButton when key is not tab', () => {
+      evt.key = 'someKey';
+      handleLastTab(evt, isInSelectionMode);
+
+      expect(evt.stopPropagation).to.not.have.been.called;
+      expect(evt.preventDefault).to.not.have.been.called;
+      expect(handleAccessibility.focusConfirmButton).to.not.have.been.called;
+    });
+
+    it('should not call focusConfirmButton when shift+tab is pressed', () => {
+      evt.shiftKey = true;
+      handleLastTab(evt, isInSelectionMode);
+
+      expect(evt.stopPropagation).to.not.have.been.called;
+      expect(evt.preventDefault).to.not.have.been.called;
+      expect(handleAccessibility.focusConfirmButton).to.not.have.been.called;
     });
   });
 });

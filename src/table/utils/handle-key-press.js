@@ -139,6 +139,7 @@ export const bodyHandleKeyPress = ({
   isAnalysisMode,
   setFocusedCellCoord,
   announce,
+  keyboard,
 }) => {
   switch (evt.key) {
     case 'ArrowUp':
@@ -171,13 +172,20 @@ export const bodyHandleKeyPress = ({
       break;
     }
     case 'Tab': {
-      if (evt.shiftKey && selectionState.api.isModal()) {
+      if (evt.shiftKey && keyboard.enabled && selectionState.api.isModal()) {
         preventDefaultBehavior(evt);
-        focusConfirmButton(rootElement);
+        focusConfirmButton(evt.target);
       }
       break;
     }
     default:
       break;
+  }
+};
+
+export const handleLastTab = (evt, isInSelectionMode) => {
+  if (isInSelectionMode && evt.key === 'Tab' && !evt.shiftKey) {
+    preventDefaultBehavior(evt);
+    focusConfirmButton(evt.target);
   }
 };
