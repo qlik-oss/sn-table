@@ -1,11 +1,11 @@
 import React from 'react';
 import { expect } from 'chai';
 import { render } from '@testing-library/react';
-import Announce from '../Announce';
+import AnnounceElements from '../AnnounceElements';
 
-describe('<Announce />', () => {
+describe('<AnnounceElements />', () => {
   it('should render the Announce component properly', () => {
-    const result = render(<Announce />);
+    const result = render(<AnnounceElements />);
     const firstAnnounceElement = result.container.querySelector('#sn-table-announcer--01');
     const secondAnnounceElement = result.container.querySelector('#sn-table-announcer--02');
 
