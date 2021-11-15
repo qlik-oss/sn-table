@@ -3,7 +3,7 @@ import React from 'react';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import { StylesProvider } from '@mui/styles';
 import TableWrapper from './components/TableWrapper';
-import RootContext from '../contexts/rootContext';
+import { RootContext } from '../contexts/rootContext';
 
 export function render(rootElement, props) {
   const { muiParameters } = props;

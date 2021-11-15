@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
-import React, { useEffect, useState, useMemo, useRef, useContext } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import TablePaginationActions from './TablePaginationActions';
@@ -11,8 +11,7 @@ import useDidUpdateEffect from './useDidUpdateEffect';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleScroll, handleNavigateTop } from '../utils/handle-scroll';
-import announcementFactory from '../utils/announcement-factory';
-import RootContext from '../../contexts/rootContext';
+import { useRootContext } from '../../contexts/rootContext';
 
 const useStyles = makeStyles({
   paper: {
@@ -48,7 +47,7 @@ const useStyles = makeStyles({
 
 export default function TableWrapper() {
   const { rootElement, tableData, pageInfo, setPageInfo, constraints, translator, selectionsAPI, keyboard, rect } =
-    useContext(RootContext);
+    useRootContext();
   const { size, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
   const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
@@ -59,7 +58,6 @@ export default function TableWrapper() {
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
   const paginationFixedRpp = selectionsAPI.isModal() || rect.width < 550;
-  const announce = useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
 
   const setShouldRefocus = () => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
@@ -142,7 +140,6 @@ export default function TableWrapper() {
         >
           <TableHeadWrapper setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
           <TableBodyWrapper
-            announce={announce}
             focusedCellCoord={focusedCellCoord}
             setFocusedCellCoord={setFocusedCellCoord}
             setShouldRefocus={setShouldRefocus}

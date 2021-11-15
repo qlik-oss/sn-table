@@ -1,4 +1,4 @@
-import React, { useMemo, useContext } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@mui/styles';
 import TableCell from '@mui/material/TableCell';
@@ -8,7 +8,7 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import { getHeadStyle } from '../utils/styling-utils';
 import { headHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusHead } from '../utils/handle-accessibility';
-import RootContext from '../../contexts/rootContext';
+import { useRootContext } from '../../contexts/rootContext';
 
 const useStyles = makeStyles({
   head: {
@@ -36,7 +36,7 @@ const useStyles = makeStyles({
 
 function TableHeadWrapper({ focusedCellCoord, setFocusedCellCoord }) {
   const { rootElement, layout, tableData, constraints, translator, theme, changeSortOrder, selectionsAPI, keyboard } =
-    useContext(RootContext);
+    useRootContext();
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
 

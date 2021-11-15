@@ -1,4 +1,4 @@
-import React, { useReducer, useState, useEffect, useMemo, useContext } from 'react';
+import React, { useReducer, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@mui/styles';
 import TableBody from '@mui/material/TableBody';
@@ -8,7 +8,8 @@ import getCellRenderer from './renderer';
 import { getBodyStyle } from '../utils/styling-utils';
 import { bodyHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
-import RootContext from '../../contexts/rootContext';
+import { useRootContext } from '../../contexts/rootContext';
+import useAnnounce from '../../hooks/useAnnounce';
 
 const useStyles = makeStyles({
   cellBase: {
@@ -28,13 +29,13 @@ const useStyles = makeStyles({
   },
 });
 
-function TableBodyWrapper({ setShouldRefocus, setFocusedCellCoord, tableWrapperRef, announce }) {
-  const { rootElement, layout, tableData, constraints, selectionsAPI, keyboard, theme } = useContext(RootContext);
-  console.log({ rootElement });
+function TableBodyWrapper({ setShouldRefocus, setFocusedCellCoord, tableWrapperRef }) {
+  const { rootElement, layout, tableData, constraints, selectionsAPI, keyboard, theme } = useRootContext();
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(bodyStyle);
+  const announce = useAnnounce();
   const selectionsEnabled = !!selectionsAPI && !constraints.active;
   const getColumnRenderers = tableData.columns.map((c) => getCellRenderer(!!c.stylingInfo.length, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(() => getColumnRenderers);
@@ -81,7 +82,6 @@ function TableBodyWrapper({ setShouldRefocus, setFocusedCellCoord, tableWrapperR
                   selectionState={selectionState}
                   selDispatch={selDispatch}
                   tabIndex={-1}
-                  announce={announce}
                   onKeyDown={(evt) =>
                     bodyHandleKeyPress({
                       evt,
@@ -113,7 +113,6 @@ TableBodyWrapper.propTypes = {
   setFocusedCellCoord: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
   tableWrapperRef: PropTypes.object.isRequired,
-  announce: PropTypes.func.isRequired,
 };
 
 export default TableBodyWrapper;

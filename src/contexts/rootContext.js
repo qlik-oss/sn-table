@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
 
-const RootContext = createContext();
-export default RootContext;
+export const RootContext = createContext();
+export const useRootContext = () => useContext(RootContext);
