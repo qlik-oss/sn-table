@@ -66,6 +66,7 @@ export default function TablePaginationActions(props) {
   const onFirstPage = page === 0;
   const onLastPage = page >= lastPage;
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
+  const showFirstLast = tableWidth > 350;
   const handleSelectPage = (event) => onPageChange(event, parseInt(event.target.value, 10));
   const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, isInSelectionMode) : null;
 
@@ -118,10 +119,10 @@ export default function TablePaginationActions(props) {
           </Select>
         </FormControl>
       )}
-      {tableWidth > 350 && getButton(onFirstPage, 0, 'FirstPage')}
+      {showFirstLast && getButton(onFirstPage, 0, 'FirstPage')}
       {getButton(onFirstPage, page - 1, 'PreviousPage')}
-      {getButton(onLastPage, page + 1, 'NextPage', tableWidth > 350 ? null : handleLastButtonTab)}
-      {tableWidth > 350 && getButton(onLastPage, lastPage, 'LastPage', handleLastButtonTab)}
+      {getButton(onLastPage, page + 1, 'NextPage', !showFirstLast ? handleLastButtonTab : null)}
+      {showFirstLast && getButton(onLastPage, lastPage, 'LastPage', handleLastButtonTab)}
     </div>
   );
 }
