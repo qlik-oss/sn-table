@@ -272,6 +272,7 @@ describe('handle-accessibility', () => {
     let element;
     let parentElement;
     let last;
+    let announce;
 
     beforeEach(() => {
       parentElement = { focus: sinon.spy() };
@@ -279,18 +280,21 @@ describe('handle-accessibility', () => {
         closest: () => ({ querySelector: () => ({ parentElement }) }),
       };
       last = false;
+      announce = sinon.spy();
     });
 
     it('should call parentElement.focus when clientConfirmButton exists', () => {
-      handleAccessibility.focusSelectionToolbar(element, keyboard, last);
+      handleAccessibility.focusSelectionToolbar(element, keyboard, last, announce);
       expect(parentElement.focus).to.have.been.calledOnce;
       expect(keyboard.focusSelection).to.not.have.been.called;
+      expect(announce).to.have.been.calledOnceWith({ keys: 'SNTable.Accessibility.SelectionToolbar' });
     });
 
     it("should call keyboard.focusSelection when clientConfirmButton doesn't exist", () => {
       parentElement = null;
-      handleAccessibility.focusSelectionToolbar(element, keyboard, last);
+      handleAccessibility.focusSelectionToolbar(element, keyboard, last, announce);
       expect(keyboard.focusSelection).to.have.been.calledOnceWith(false);
+      expect(announce).to.not.have.been.called;
     });
   });
 });

@@ -187,6 +187,7 @@ export default function TableWrapper(props) {
           isInSelectionMode={selectionsAPI.isModal()}
           tableWidth={rect.width}
           translator={translator}
+          announce={announce}
         />
       </Paper>
     </Paper>

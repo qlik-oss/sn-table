@@ -174,7 +174,7 @@ export const bodyHandleKeyPress = ({
     case 'Tab': {
       if (evt.shiftKey && keyboard.enabled && selectionState.api.isModal()) {
         preventDefaultBehavior(evt);
-        focusSelectionToolbar(evt.target, keyboard, true);
+        focusSelectionToolbar(evt.target, keyboard, true, announce);
       }
       break;
     }
@@ -183,9 +183,9 @@ export const bodyHandleKeyPress = ({
   }
 };
 
-export const handleLastTab = (evt, isInSelectionMode, keyboard) => {
+export const handleLastTab = (evt, isInSelectionMode, keyboard, announce) => {
   if (isInSelectionMode && evt.key === 'Tab' && !evt.shiftKey) {
     preventDefaultBehavior(evt);
-    focusSelectionToolbar(evt.target, keyboard, false);
+    focusSelectionToolbar(evt.target, keyboard, false, announce);
   }
 };

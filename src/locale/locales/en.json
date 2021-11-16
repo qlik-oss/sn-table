@@ -3,6 +3,10 @@
     "value": "Showing {0} rows and {1} columns.",
     "comment": "number of rows and columns announced by the screen reader. (tew 210929)"
   },
+  "SNTable.Accessibility.SelectionToolbar": {
+    "value": "Selection Toolbar",
+    "comment": "label for the time user tabs into the selection toolbar section"
+  },
   "SNTable.Pagination.RowsPerPage": {
     "value": "Rows per page",
     "comment": "label for the rows per page dropdown. (tew 210929)"

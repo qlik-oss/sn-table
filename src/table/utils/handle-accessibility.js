@@ -69,12 +69,13 @@ export const handleFocusoutEvent = (evt, shouldRefocus, keyboard) => {
   }
 };
 
-export const focusSelectionToolbar = (element, keyboard, last) => {
+export const focusSelectionToolbar = (element, keyboard, last, announce) => {
   const clientConfirmButton = element
     .closest('.qv-object-wrapper')
     ?.querySelector('.sel-toolbar-confirm')?.parentElement;
   if (clientConfirmButton) {
     clientConfirmButton.focus();
+    announce({ keys: 'SNTable.Accessibility.SelectionToolbar' });
     return;
   }
   keyboard.focusSelection(last);
