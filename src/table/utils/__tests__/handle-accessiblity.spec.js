@@ -294,7 +294,7 @@ describe('handle-accessibility', () => {
       parentElement = null;
       handleAccessibility.focusSelectionToolbar(element, keyboard, last, announce);
       expect(keyboard.focusSelection).to.have.been.calledOnceWith(false);
-      expect(announce).to.not.have.been.called;
+      expect(announce).to.have.been.calledOnceWith({ keys: 'SNTable.Accessibility.SelectionToolbar' });
     });
   });
 });
