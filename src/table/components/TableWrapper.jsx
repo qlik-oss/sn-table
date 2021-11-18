@@ -69,6 +69,7 @@ export default function TableWrapper(props) {
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
   const paginationFixedRpp = selectionsAPI.isModal() || rect.width < 550;
+  /* eslint-disable react-hooks/rules-of-hooks */
   const announce = announcer || useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
   const totalPages = Math.ceil(size.qcy / rowsPerPage);
 
@@ -196,6 +197,7 @@ export default function TableWrapper(props) {
         />
         <TablePaginationActions
           page={page}
+          count={size.qcy}
           totalPages={totalPages}
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}
