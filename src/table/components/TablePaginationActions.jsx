@@ -55,14 +55,26 @@ const useStyles = makeStyles({
 
 export default function TablePaginationActions(props) {
   const classes = useStyles();
-  const { count, totalPages, page, rowsPerPage, onPageChange, keyboard, tableWidth, translator, isInSelectionMode } =
-    props;
+  const {
+    count,
+    totalPages,
+    page,
+    rowsPerPage,
+    onPageChange,
+    keyboard,
+    tableWidth,
+    translator,
+    isInSelectionMode,
+    announce,
+  } = props;
   const onFirstPage = page === 0;
   const lastPage = Math.ceil(count / rowsPerPage) - 1;
   const onLastPage = page >= lastPage;
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
 
-  const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, isInSelectionMode, keyboard) : null;
+  const handleLastButtonTab = keyboard.enabled
+    ? (event) => handleLastTab(event, isInSelectionMode, keyboard, announce)
+    : null;
   const handleSelectPage = (event) => onPageChange(parseInt(event.target.value, 10));
   const handleFirstPageButtonClick = () => onPageChange(0);
   const handleBackButtonClick = () => onPageChange(page - 1);
@@ -161,4 +173,5 @@ TablePaginationActions.propTypes = {
   isInSelectionMode: PropTypes.bool.isRequired,
   tableWidth: PropTypes.number.isRequired,
   translator: PropTypes.object.isRequired,
+  announce: PropTypes.func.isRequired,
 };
