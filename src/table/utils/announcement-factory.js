@@ -1,4 +1,14 @@
 /**
+ * Enum for announcement elements
+ * @readonly
+ * @enum {string}
+ */
+const announcerElements = {
+  first: 'first-announcer-element',
+  second: 'second-announcer-element',
+};
+
+/**
  * creates the function for announcement
  *
  * @param {Object} rootElement root element for getting the live aria from it
@@ -6,8 +16,9 @@
  * @param {number=} junkCharIdx for test reasons
  */
 
-export default function announcementFactory(rootElement, translator, junkCharIdx) {
+export default function announcementFactory(rootElement, translator, junkCharIdx, prevAnnounceEl) {
   let hasJunkChar = junkCharIdx || 0;
+  let previousAnnouncementElement = prevAnnounceEl || null;
 
   /**
    * the announce function
@@ -35,7 +46,19 @@ export default function announcementFactory(rootElement, translator, junkCharIdx
     if (hasJunkChar % 2) notation += ` ­`;
     hasJunkChar++;
 
-    const announceElement = rootElement.querySelector('#sn-table-announcer');
+    const announceElement01 = rootElement.querySelector('#sn-table-announcer--01');
+    const announceElement02 = rootElement.querySelector('#sn-table-announcer--02');
+
+    let announceElement = null;
+
+    if (previousAnnouncementElement === announcerElements.first) {
+      announceElement = announceElement02;
+      previousAnnouncementElement = announcerElements.second;
+    } else {
+      announceElement = announceElement01;
+      previousAnnouncementElement = announcerElements.first;
+    }
+
     announceElement.innerHTML = notation;
     announceElement.setAttribute('aria-atomic', shouldBeAtomic);
     announceElement.setAttribute('aria-live', politeness);
