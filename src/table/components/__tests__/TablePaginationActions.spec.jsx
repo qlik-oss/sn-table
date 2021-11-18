@@ -26,7 +26,7 @@ describe('<TablePaginationActions />', () => {
     translator = { get: (s) => s };
     isInSelectionMode = false;
     keyboard = { enabled: true };
-    sinon.stub(handleAccessibility, 'focusConfirmButton').returns(sinon.spy());
+    sinon.stub(handleAccessibility, 'focusSelectionToolbar').returns(sinon.spy());
   });
 
   afterEach(() => {
@@ -190,7 +190,7 @@ describe('<TablePaginationActions />', () => {
     expect(onPageChange).to.have.been.calledWith(sinon.match.any, 1);
   });
 
-  it('should not call focusConfirmButton when pressing tab on last page button and isInSelectionMode is false', () => {
+  it('should not call focusSelectionToolbar when pressing tab on last page button and isInSelectionMode is false', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
         count={count}
@@ -204,10 +204,10 @@ describe('<TablePaginationActions />', () => {
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab' });
-    expect(handleAccessibility.focusConfirmButton).to.not.have.been.called;
+    expect(handleAccessibility.focusSelectionToolbar).to.not.have.been.called;
   });
 
-  it('should not call focusConfirmButton when pressing shift + tab on last page button and isInSelectionMode is true', () => {
+  it('should not call focusSelectionToolbar when pressing shift + tab on last page button and isInSelectionMode is true', () => {
     isInSelectionMode = true;
 
     const { queryByTitle } = render(
@@ -223,10 +223,10 @@ describe('<TablePaginationActions />', () => {
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab', shiftKey: true });
-    expect(handleAccessibility.focusConfirmButton).to.not.have.been.called;
+    expect(handleAccessibility.focusSelectionToolbar).to.not.have.been.called;
   });
 
-  it('should call focusConfirmButton when pressing tab on last page button and isInSelectionMode is true', () => {
+  it('should call focusSelectionToolbar when pressing tab on last page button and isInSelectionMode is true', () => {
     isInSelectionMode = true;
 
     const { queryByTitle } = render(
@@ -242,10 +242,10 @@ describe('<TablePaginationActions />', () => {
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab' });
-    expect(handleAccessibility.focusConfirmButton).to.have.been.calledOnce;
+    expect(handleAccessibility.focusSelectionToolbar).to.have.been.calledOnce;
   });
 
-  it('should call focusConfirmButton when pressing tab on next page button, isInSelectionMode is true and tableWidth < 350', () => {
+  it('should call focusSelectionToolbar when pressing tab on next page button, isInSelectionMode is true and tableWidth < 350', () => {
     isInSelectionMode = true;
     tableWidth = 300;
 
@@ -262,6 +262,6 @@ describe('<TablePaginationActions />', () => {
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.NextPage'), { key: 'Tab' });
-    expect(handleAccessibility.focusConfirmButton).to.have.been.calledOnce;
+    expect(handleAccessibility.focusSelectionToolbar).to.have.been.calledOnce;
   });
 });
