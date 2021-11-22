@@ -5,7 +5,7 @@
   },
   "SNTable.Accessibility.NavigationInstructions": {
     "value": "Use arrow keys to navigate the cells and tab to move to pagination controls. See documentation for full instructions.",
-    "comment": "Instructions read by screen reader when first focusing inside the table."
+    "comment": "Instructions read by screen reader when first focusing inside the table. "
   },
   "SNTable.Pagination.RowsPerPage": {
     "value": "Rows per page",
