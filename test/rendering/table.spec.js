@@ -3,19 +3,17 @@ import path from 'path';
 import serve from '@nebula.js/cli-serve';
 import createPuppet from './utils/puppet';
 import events from './utils/events';
-import createRoutes from './utils/routes';
-import createFixtureService from './utils/fixtures';
+import createNebulaRoutes from './utils/routes';
 
 const paths = {
   artifacts: path.join(__dirname, '__artifacts__'),
-  data: path.join(__dirname, '__data__'),
+  fixtures: path.join(__dirname, '__fixtures__'),
 };
 
 describe('sn table: Rendering tests', () => {
   let s;
   let puppet;
-  let routes;
-  let fixtures;
+  let route;
 
   before(async () => {
     s = await serve({
@@ -27,8 +25,7 @@ describe('sn table: Rendering tests', () => {
     });
 
     puppet = createPuppet(page);
-    routes = createRoutes(s.url);
-    fixtures = createFixtureService(routes);
+    route = createNebulaRoutes(s.url);
   });
 
   after(async () => {
@@ -43,16 +40,16 @@ describe('sn table: Rendering tests', () => {
     events.removeListeners(page);
   });
 
-  fs.readdirSync(paths.data).forEach((file) => {
-    const name = file.replace('.json', '');
-    const fixturePath = path.join(paths.data, file);
+  fs.readdirSync(paths.fixtures).forEach((file) => {
+    const name = file.replace('.js', '');
+    const fixturePath = path.join(paths.fixtures, file);
+    console.log({ fixturePath });
 
     it(name, async () => {
-      // Upload fixture to Nebula serve
-      const { fixture } = await fixtures.upload(fixturePath);
+      const renderUrl = await route.renderFixture(fixturePath);
+      console.log({ renderUrl });
       // Open page in Nebula which renders fixture
-      await puppet.open(routes.render(fixture.key));
-      console.log(routes.render(fixture.key));
+      await puppet.open(renderUrl);
       // Capture screenshot
       const img = await puppet.screenshot();
 

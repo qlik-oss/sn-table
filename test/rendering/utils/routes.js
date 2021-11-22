@@ -1,4 +1,3 @@
 export default (baseUrl) => ({
-  fixture: () => `${baseUrl}/fixture`,
-  render: (key) => `${baseUrl}/render?fixture=${key}`,
+  renderFixture: (fixturePath) => `${baseUrl}/render?fixture=${fixturePath}`,
 });
