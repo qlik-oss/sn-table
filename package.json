@@ -34,10 +34,11 @@
     "start": "nebula serve --build false --type sn-table",
     "locale:verify": "node src/locale/tools/verify-translations.js",
     "locale:generate": "node src/locale/scripts/generate-all.mjs",
+    "spec:sync": "node ./tools/sync-api-spec-version.js",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
     "test:unit": "aw -c aw.config.js",
     "test:integration": "aw puppet --testExt '*.int.js' --glob 'test/integration/**/*.int.js'",
-    "prepublishOnly": "NODE_ENV=production yarn run build",
+    "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec:sync",
     "prepack": "./tools/prepare-sn-pack.js",
     "prepare": "husky install"
   },
@@ -82,6 +83,7 @@
     "eslint-plugin-react": "7.27.0",
     "eslint-plugin-react-hooks": "4.3.0",
     "eslint-plugin-testing-library": "4.12.4",
+    "fs-extra": "^10.0.0",
     "globby": "^12.0.2",
     "husky": "^7.0.4",
     "jsdom": "18.1.0",
@@ -94,7 +96,8 @@
     "scriptappy-from-jsdoc": "0.7.0",
     "shx": "^0.3.3",
     "sinon": "12.0.1",
-    "sinon-chai": "3.7.0"
+    "sinon-chai": "3.7.0",
+    "yargs": "^17.2.1"
   },
   "peerDependencies": {
     "@nebula.js/stardust": "^2.1.0"
