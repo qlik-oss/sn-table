@@ -32,12 +32,12 @@
     "comment": "tooltip and aria-label for the last page button. (tew 210929)"
   },
   "SNTable.Pagination.RowsPerPageChange": {
-    "value": "Rows per page has changed. Now showing {0} rows on each page and moved to the first page.",
-    "comment": "Label for rows per page change."
+    "value": "Rows per page has changed (Rows: {0}). Now showing the first page.",
+    "comment": "Label for rows per page change. (tew 211122)"
   },
   "SNTable.Pagination.PageStatusReport": {
     "value": "Page has changed. Showing page {0} of {1}.",
-    "comment": "Label for page status while changing pages."
+    "comment": "Label for page status while changing pages. (tew 211122)"
   },
   "SNTable.SortLabel.SortedAscending": {
     "value": "Sorted in ascending order.",
