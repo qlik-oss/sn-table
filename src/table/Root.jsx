@@ -14,7 +14,7 @@ export function render(rootElement, props) {
         <StylesProvider generateClassName={muiParameters.generateClassName}>
           <ThemeProvider theme={muiParameters.theme}>
             <RootContext.Provider value={props}>
-              <TableWrapper />
+              <TableWrapper {...props} />
             </RootContext.Provider>
           </ThemeProvider>
         </StylesProvider>

@@ -12,6 +12,7 @@ import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleScroll, handleNavigateTop } from '../utils/handle-scroll';
 import { useRootContext } from '../../contexts/rootContext';
+import { RootContextProvider } from '../../contexts';
 
 const useStyles = makeStyles({
   paper: {
@@ -45,7 +46,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function TableWrapper() {
+export default function TableWrapper(props) {
   const { rootElement, tableData, pageInfo, setPageInfo, constraints, translator, selectionsAPI, keyboard, rect } =
     useRootContext();
   const { size, rows, columns } = tableData;
@@ -107,84 +108,86 @@ export default function TableWrapper() {
   }, [rows.length, size.qcy, size.qcx, page]);
 
   return (
-    <Paper
-      className={classes.paper}
-      ref={tableWrapperRef}
-      onKeyDown={(evt) =>
-        handleTableWrapperKeyDown({
-          evt,
-          totalRowSize: size.qcy,
-          page,
-          rowsPerPage,
-          handleChangePage,
-          setShouldRefocus,
-          keyboard,
-          isSelectionActive: selectionsAPI.isModal(),
-        })
-      }
-    >
-      <div id="sn-table-announcer" aria-live="polite" aria-atomic="true" className={classes.screenReaderOnly} />
-      <TableContainer
-        ref={tableSectionRef}
-        className={classes[containerMode]}
-        tabIndex={-1}
-        role="application"
-        data-testid="table-wrapper"
+    <RootContextProvider {...props}>
+      <Paper
+        className={classes.paper}
+        ref={tableWrapperRef}
+        onKeyDown={(evt) =>
+          handleTableWrapperKeyDown({
+            evt,
+            totalRowSize: size.qcy,
+            page,
+            rowsPerPage,
+            handleChangePage,
+            setShouldRefocus,
+            keyboard,
+            isSelectionActive: selectionsAPI.isModal(),
+          })
+        }
       >
-        <Table
-          stickyHeader
-          aria-label={translator.get('SNTable.Accessibility.RowsAndColumns', [
-            `${rows.length + 1}`,
-            `${columns.length}`,
-          ])}
+        <div id="sn-table-announcer" aria-live="polite" aria-atomic="true" className={classes.screenReaderOnly} />
+        <TableContainer
+          ref={tableSectionRef}
+          className={classes[containerMode]}
+          tabIndex={-1}
+          role="application"
+          data-testid="table-wrapper"
         >
-          <TableHeadWrapper setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
-          <TableBodyWrapper
-            focusedCellCoord={focusedCellCoord}
-            setFocusedCellCoord={setFocusedCellCoord}
-            setShouldRefocus={setShouldRefocus}
-            tableWrapperRef={tableWrapperRef}
-          />
-        </Table>
-      </TableContainer>
-      <Paper className={classes.tablePaginationSection}>
-        <TablePagination
-          className={classes[paginationHidden]}
-          rowsPerPageOptions={paginationFixedRpp ? [rowsPerPage] : [10, 25, 100]}
-          component="div"
-          count={size.qcy}
-          rowsPerPage={rowsPerPage}
-          labelRowsPerPage={translator.get('SNTable.Pagination.RowsPerPage')}
-          page={page}
-          SelectProps={{
-            inputProps: {
-              'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
-              'data-testid': 'select',
-              style: {
-                color: '#404040',
+          <Table
+            stickyHeader
+            aria-label={translator.get('SNTable.Accessibility.RowsAndColumns', [
+              `${rows.length + 1}`,
+              `${columns.length}`,
+            ])}
+          >
+            <TableHeadWrapper setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
+            <TableBodyWrapper
+              focusedCellCoord={focusedCellCoord}
+              setFocusedCellCoord={setFocusedCellCoord}
+              setShouldRefocus={setShouldRefocus}
+              tableWrapperRef={tableWrapperRef}
+            />
+          </Table>
+        </TableContainer>
+        <Paper className={classes.tablePaginationSection}>
+          <TablePagination
+            className={classes[paginationHidden]}
+            rowsPerPageOptions={paginationFixedRpp ? [rowsPerPage] : [10, 25, 100]}
+            component="div"
+            count={size.qcy}
+            rowsPerPage={rowsPerPage}
+            labelRowsPerPage={translator.get('SNTable.Pagination.RowsPerPage')}
+            page={page}
+            SelectProps={{
+              inputProps: {
+                'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
+                'data-testid': 'select',
+                style: {
+                  color: '#404040',
+                },
+                tabIndex: !keyboard.enabled || keyboard.active ? 0 : -1,
               },
-              tabIndex: !keyboard.enabled || keyboard.active ? 0 : -1,
-            },
-            native: true,
-          }}
-          labelDisplayedRows={({ from, to, count }) =>
-            rect.width > 250 && translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
-          }
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          ActionsComponent={() => <div>{null}</div>}
-        />
-        <TablePaginationActions
-          count={size.qcy}
-          onPageChange={handleChangePage}
-          page={page}
-          rowsPerPage={rowsPerPage}
-          keyboard={keyboard}
-          isInSelectionMode={selectionsAPI.isModal()}
-          tableWidth={rect.width}
-          translator={translator}
-        />
+              native: true,
+            }}
+            labelDisplayedRows={({ from, to, count }) =>
+              rect.width > 250 && translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
+            }
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            ActionsComponent={() => <div>{null}</div>}
+          />
+          <TablePaginationActions
+            count={size.qcy}
+            onPageChange={handleChangePage}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            keyboard={keyboard}
+            isInSelectionMode={selectionsAPI.isModal()}
+            tableWidth={rect.width}
+            translator={translator}
+          />
+        </Paper>
       </Paper>
-    </Paper>
+    </RootContextProvider>
   );
 }
