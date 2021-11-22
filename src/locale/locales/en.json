@@ -3,6 +3,10 @@
     "value": "Showing {0} rows and {1} columns.",
     "comment": "number of rows and columns announced by the screen reader. (tew 210929)"
   },
+  "SNTable.Accessibility.NavigationInstructions": {
+    "value": "Use arrow keys to navigate the cells and tab to move to pagination controls. See documentation for full instructions.",
+    "comment": "Instructions read by screen reader when first focusing inside the table."
+  },
   "SNTable.Pagination.RowsPerPage": {
     "value": "Rows per page",
     "comment": "label for the rows per page dropdown. (tew 210929)"
