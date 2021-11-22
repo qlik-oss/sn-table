@@ -63,11 +63,13 @@ export const handleResetFocus = ({
   setFocusedCellCoord(nextCell);
 };
 
-export const handleFocusoutEvent = (evt, shouldRefocus, keyboard) => {
-  if (keyboard.enabled && !evt.currentTarget.contains(evt.relatedTarget) && !shouldRefocus.current) {
-    keyboard.blur(false);
-  }
-};
+const isPreviousElementInside = (evt) => evt.currentTarget.contains(evt.relatedTarget);
+
+export const handleFocusinEvent = (evt, announce) =>
+  !isPreviousElementInside(evt) && announce({ keys: 'SNTable.Accessibility.NavigationInstructions' });
+
+export const handleFocusoutEvent = (evt, shouldRefocus, keyboard) =>
+  keyboard.enabled && !isPreviousElementInside(evt) && !shouldRefocus.current && keyboard.blur(false);
 
 export const focusSelectionToolbar = (element, keyboard, last) => {
   const clientConfirmButton = element
