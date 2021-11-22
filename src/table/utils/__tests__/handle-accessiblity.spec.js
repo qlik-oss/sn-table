@@ -225,6 +225,33 @@ describe('handle-accessibility', () => {
     });
   });
 
+  describe('handleFocusinEvent', () => {
+    let containsRelatedTarget;
+    let evt;
+    let announce;
+
+    beforeEach(() => {
+      containsRelatedTarget = false;
+      evt = {
+        currentTarget: {
+          contains: () => containsRelatedTarget,
+        },
+      };
+      announce = sinon.spy();
+    });
+
+    it('should call announce when currentTarget does not contain relatedTarget', () => {
+      handleAccessibility.handleFocusinEvent(evt, announce);
+      expect(announce).to.have.been.calledOnce;
+    });
+
+    it('should not call announce when currentTarget contains relatedTarget', () => {
+      containsRelatedTarget = true;
+      handleAccessibility.handleFocusinEvent(evt, announce);
+      expect(announce).to.not.have.been.called;
+    });
+  });
+
   describe('handleFocusoutEvent', () => {
     let containsRelatedTarget;
     let evt;
@@ -241,7 +268,7 @@ describe('handle-accessibility', () => {
       keyboard = { enabled: true, blur: sinon.spy() };
     });
 
-    it('should call blur when currentTarget doesnt contain relatedTarget, shouldRefocus is false and keyboard.enabled is true', () => {
+    it('should call blur when currentTarget does not contain relatedTarget, shouldRefocus is false and keyboard.enabled is true', () => {
       handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, keyboard);
       expect(keyboard.blur).to.have.been.calledOnceWith(false);
     });
