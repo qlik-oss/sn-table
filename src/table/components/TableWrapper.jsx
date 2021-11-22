@@ -10,7 +10,7 @@ import TableHeadWrapper from './TableHeadWrapper';
 import TablePaginationActions from './TablePaginationActions';
 import useDidUpdateEffect from './useDidUpdateEffect';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
-import { updateFocus, handleResetFocus, handleFocusinEvent, handleFocusoutEvent } from '../utils/handle-accessibility';
+import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleScroll, handleNavigateTop } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
 
@@ -53,7 +53,7 @@ export default function TableWrapper(props) {
   const { page, rowsPerPage } = pageInfo;
   const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
   const shouldRefocus = useRef(false);
-  const tableContainerRef = useRef();
+  const tableSectionRef = useRef();
   const tableWrapperRef = useRef();
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
@@ -69,27 +69,20 @@ export default function TableWrapper(props) {
   const handleChangeRowsPerPage = (evt) => setPageInfo({ page: 0, rowsPerPage: +evt.target.value });
 
   useEffect(() => {
-    const memoedContainer = tableContainerRef.current;
-    const memoedWrapper = tableWrapperRef.current;
-    if (!memoedContainer || !memoedWrapper) return () => {};
-
-    const scrollCallback = (evt) => handleScroll(evt, tableContainerRef);
+    const scrollCallback = (evt) => handleScroll(evt, tableSectionRef);
     const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard);
-    const focusInCallback = (evt) => handleFocusinEvent(evt, announce);
-    memoedContainer.addEventListener('wheel', scrollCallback);
-    memoedContainer.addEventListener('focusin', focusInCallback);
-    memoedWrapper.addEventListener('focusout', focusOutCallback);
 
+    tableSectionRef.current && tableSectionRef.current.addEventListener('wheel', scrollCallback);
+    tableWrapperRef.current && tableWrapperRef.current.addEventListener('focusout', focusOutCallback);
     return () => {
-      memoedContainer.removeEventListener('wheel', scrollCallback);
-      memoedContainer.removeEventListener('focusin', focusInCallback);
-      memoedWrapper.removeEventListener('focusout', focusOutCallback);
+      tableSectionRef.current.removeEventListener('wheel', scrollCallback);
+      tableWrapperRef.current.removeEventListener('focusout', focusOutCallback);
     };
   }, []);
 
   useEffect(
-    () => handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement }),
-    [tableContainerRef, focusedCellCoord]
+    () => handleNavigateTop({ tableSectionRef, focusedCellCoord, rootElement }),
+    [tableSectionRef, focusedCellCoord]
   );
 
   useDidUpdateEffect(() => {
@@ -134,7 +127,7 @@ export default function TableWrapper(props) {
     >
       <div id="sn-table-announcer" aria-live="polite" aria-atomic="true" className={classes.screenReaderOnly} />
       <TableContainer
-        ref={tableContainerRef}
+        ref={tableSectionRef}
         className={classes[containerMode]}
         tabIndex={-1}
         role="application"
