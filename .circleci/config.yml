@@ -30,9 +30,9 @@ jobs:
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
-      - run: 
+      - run:
           name: Install dependencies
-          command: yarn install --frozen-lockfile 
+          command: yarn install --frozen-lockfile
       - save_cache: *save_yarn_cache
 
       - store_artifacts:
@@ -47,8 +47,6 @@ jobs:
     <<: *defaults
     docker:
       - image: circleci/node:14.15.0
-      - image: qlikcore/engine:12.1126.0
-        command: -S AcceptEULA=yes
       - image: browserless/chrome:1.49.1-puppeteer-1.20.0
     steps:
       - attach_workspace:
