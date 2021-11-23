@@ -35,8 +35,20 @@ const useStyles = makeStyles({
 });
 
 function TableHeadWrapper({ focusedCellCoord, setFocusedCellCoord }) {
-  const { rootElement, layout, tableData, constraints, translator, theme, changeSortOrder, selectionsAPI, keyboard } =
-    useRootContext();
+  const {
+    nebulaProps: {
+      rootElement,
+      layout,
+      tableData,
+      constraints,
+      translator,
+      theme,
+      changeSortOrder,
+      selectionsAPI,
+      keyboard,
+    },
+  } = useRootContext();
+
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(headStyle);
 
