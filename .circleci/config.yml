@@ -30,9 +30,9 @@ jobs:
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
-      - run: 
+      - run:
           name: Install dependencies
-          command: yarn install --frozen-lockfile 
+          command: yarn install --frozen-lockfile
       - save_cache: *save_yarn_cache
 
       - store_artifacts:
@@ -125,6 +125,7 @@ jobs:
               echo "Running >> npm publish"
               npm publish
             fi
+
   api-governance:
     machine: true
     working_directory: ~/project
@@ -147,6 +148,7 @@ jobs:
             -e apiId=b96971ec-2f58-4ba3-9213-440e689471a0 \
             -e specPath='/specs/properties.json' \
             -e commit="$CIRCLE_SHA1" qlik/asmquery
+
 workflows:
   version: 2
   build-all:
