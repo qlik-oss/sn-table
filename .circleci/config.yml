@@ -47,8 +47,6 @@ jobs:
     <<: *defaults
     docker:
       - image: circleci/node:14.15.0
-      - image: qlikcore/engine:12.1126.0
-        command: -S AcceptEULA=yes
       - image: browserless/chrome:1.49.1-puppeteer-1.20.0
     steps:
       - attach_workspace:
