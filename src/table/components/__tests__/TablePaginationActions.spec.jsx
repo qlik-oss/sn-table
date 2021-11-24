@@ -9,7 +9,7 @@ import * as handleAccessibility from '../../utils/handle-accessibility';
 
 describe('<TablePaginationActions />', () => {
   let page;
-  let lastPage;
+  let lastPageIdx;
   let onPageChange;
   let tableWidth;
   let translator;
@@ -18,7 +18,7 @@ describe('<TablePaginationActions />', () => {
 
   beforeEach(() => {
     page = 0;
-    lastPage = 2;
+    lastPageIdx = 2;
     onPageChange = sinon.spy();
     tableWidth = 500;
     translator = { get: (s) => s };
@@ -36,7 +36,7 @@ describe('<TablePaginationActions />', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
         page={page}
-        lastPage={lastPage}
+        lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -56,7 +56,7 @@ describe('<TablePaginationActions />', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
         page={page}
-        lastPage={lastPage}
+        lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -75,7 +75,7 @@ describe('<TablePaginationActions />', () => {
     const { queryByTitle, queryByTestId } = render(
       <TablePaginationActions
         page={page}
-        lastPage={lastPage}
+        lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -95,7 +95,7 @@ describe('<TablePaginationActions />', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
         page={page}
-        lastPage={lastPage}
+        lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -113,7 +113,7 @@ describe('<TablePaginationActions />', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
         page={page}
-        lastPage={lastPage}
+        lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -130,7 +130,7 @@ describe('<TablePaginationActions />', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
         page={page}
-        lastPage={lastPage}
+        lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -148,7 +148,7 @@ describe('<TablePaginationActions />', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
         page={page}
-        lastPage={lastPage}
+        lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -167,7 +167,7 @@ describe('<TablePaginationActions />', () => {
     const { queryByTestId } = render(
       <TablePaginationActions
         page={page}
-        lastPage={lastPage}
+        lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -184,7 +184,7 @@ describe('<TablePaginationActions />', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
         page={page}
-        lastPage={lastPage}
+        lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -202,7 +202,7 @@ describe('<TablePaginationActions />', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
         page={page}
-        lastPage={lastPage}
+        lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -220,7 +220,7 @@ describe('<TablePaginationActions />', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
         page={page}
-        lastPage={lastPage}
+        lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -239,7 +239,7 @@ describe('<TablePaginationActions />', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
         page={page}
-        lastPage={lastPage}
+        lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}

@@ -62,11 +62,12 @@ const icons = {
 
 export default function TablePaginationActions(props) {
   const classes = useStyles();
-  const { page, lastPage, onPageChange, keyboard, tableWidth, translator, isInSelectionMode } = props;
+  const { page, lastPageIdx, onPageChange, keyboard, tableWidth, translator, isInSelectionMode } = props;
   const onFirstPage = page === 0;
-  const onLastPage = page >= lastPage;
+  const onLastPage = page >= lastPageIdx;
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
   const showFirstLast = tableWidth > 350;
+
   const handleSelectPage = (event) => onPageChange(+event.target.value);
   const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, isInSelectionMode) : null;
 
@@ -111,7 +112,7 @@ export default function TablePaginationActions(props) {
               className: classes.input,
             }}
           >
-            {Array(lastPage + 1)
+            {Array(lastPageIdx + 1)
               .fill()
               .map((_, i) => (
                 <option value={i}>{i + 1}</option>
@@ -122,7 +123,7 @@ export default function TablePaginationActions(props) {
       {showFirstLast && getButton(onFirstPage, 0, 'FirstPage')}
       {getButton(onFirstPage, page - 1, 'PreviousPage')}
       {getButton(onLastPage, page + 1, 'NextPage', !showFirstLast ? handleLastButtonTab : null)}
-      {showFirstLast && getButton(onLastPage, lastPage, 'LastPage', handleLastButtonTab)}
+      {showFirstLast && getButton(onLastPage, lastPageIdx, 'LastPage', handleLastButtonTab)}
     </div>
   );
 }
@@ -130,7 +131,7 @@ export default function TablePaginationActions(props) {
 TablePaginationActions.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
-  lastPage: PropTypes.number.isRequired,
+  lastPageIdx: PropTypes.number.isRequired,
   keyboard: PropTypes.object.isRequired,
   isInSelectionMode: PropTypes.bool.isRequired,
   tableWidth: PropTypes.number.isRequired,
