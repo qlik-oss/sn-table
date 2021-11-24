@@ -5,6 +5,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState, useMemo, useRef } from 'react';
+import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import TablePaginationActions from './TablePaginationActions';
@@ -35,20 +36,21 @@ const useStyles = makeStyles({
   paginationHidden: {
     display: 'none',
   },
-  screenReaderOnly: {
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: '1px',
-    overflow: 'hidden',
-    position: 'absolute',
-    whiteSpace: 'nowrap',
-    width: '1px',
-  },
 });
 
 export default function TableWrapper(props) {
-  const { rootElement, tableData, pageInfo, setPageInfo, constraints, translator, selectionsAPI, keyboard, rect } =
-    props;
+  const {
+    rootElement,
+    tableData,
+    pageInfo,
+    setPageInfo,
+    constraints,
+    translator,
+    selectionsAPI,
+    keyboard,
+    rect,
+    announcer, // this is only for testing purposes
+  } = props;
   const { size, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
   const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
@@ -59,14 +61,22 @@ export default function TableWrapper(props) {
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
   const paginationFixedRpp = selectionsAPI.isModal() || rect.width < 550;
-  const announce = useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
+  /* eslint-disable react-hooks/rules-of-hooks */
+  const announce = announcer || useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
+  const totalPages = Math.ceil(size.qcy / rowsPerPage);
 
   const setShouldRefocus = () => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   };
 
-  const handleChangePage = (evt, newPage) => setPageInfo({ ...pageInfo, page: newPage });
-  const handleChangeRowsPerPage = (evt) => setPageInfo({ page: 0, rowsPerPage: +evt.target.value });
+  const handleChangePage = (pageIdx) => {
+    setPageInfo({ ...pageInfo, page: pageIdx });
+    announce({ keys: [['SNTable.Pagination.PageStatusReport', [pageIdx + 1, totalPages]]], politeness: 'assertive' });
+  };
+  const handleChangeRowsPerPage = (evt) => {
+    setPageInfo({ page: 0, rowsPerPage: +evt.target.value });
+    announce({ keys: [['SNTable.Pagination.RowsPerPageChange', evt.target.value]], politeness: 'assertive' });
+  };
 
   useEffect(() => {
     const memoedContainer = tableContainerRef.current;
@@ -112,6 +122,7 @@ export default function TableWrapper(props) {
       setFocusedCellCoord,
       hasSelections: selectionsAPI.isModal(),
       shouldAddTabstop: !keyboard.enabled || keyboard.active,
+      announce,
     });
   }, [rows.length, size.qcy, size.qcx, page]);
 
@@ -132,7 +143,7 @@ export default function TableWrapper(props) {
         })
       }
     >
-      <div id="sn-table-announcer" aria-live="polite" aria-atomic="true" className={classes.screenReaderOnly} />
+      <AnnounceElements />
       <TableContainer
         ref={tableContainerRef}
         className={classes[containerMode]}
@@ -181,14 +192,14 @@ export default function TableWrapper(props) {
           labelDisplayedRows={({ from, to, count }) =>
             rect.width > 250 && translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
           }
-          onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           ActionsComponent={() => <div>{null}</div>}
         />
         <TablePaginationActions
-          count={size.qcy}
-          onPageChange={handleChangePage}
           page={page}
+          count={size.qcy}
+          totalPages={totalPages}
+          onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}
           keyboard={keyboard}
           isInSelectionMode={selectionsAPI.isModal()}
@@ -200,6 +211,10 @@ export default function TableWrapper(props) {
   );
 }
 
+TableWrapper.defaultProps = {
+  announcer: null,
+};
+
 TableWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
@@ -210,4 +225,5 @@ TableWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
   rect: PropTypes.object.isRequired,
+  announcer: PropTypes.func,
 };

@@ -55,18 +55,19 @@ const useStyles = makeStyles({
 
 export default function TablePaginationActions(props) {
   const classes = useStyles();
-  const { count, page, rowsPerPage, onPageChange, keyboard, tableWidth, translator, isInSelectionMode } = props;
+  const { count, totalPages, page, rowsPerPage, onPageChange, keyboard, tableWidth, translator, isInSelectionMode } =
+    props;
   const onFirstPage = page === 0;
   const lastPage = Math.ceil(count / rowsPerPage) - 1;
   const onLastPage = page >= lastPage;
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
 
   const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, isInSelectionMode, keyboard) : null;
-  const handleSelectPage = (event) => onPageChange(event, parseInt(event.target.value, 10));
-  const handleFirstPageButtonClick = (event) => onPageChange(event, 0);
-  const handleBackButtonClick = (event) => onPageChange(event, page - 1);
-  const handleNextButtonClick = (event) => onPageChange(event, page + 1);
-  const handleLastPageButtonClick = (event) => onPageChange(event, lastPage);
+  const handleSelectPage = (event) => onPageChange(parseInt(event.target.value, 10));
+  const handleFirstPageButtonClick = () => onPageChange(0);
+  const handleBackButtonClick = () => onPageChange(page - 1);
+  const handleNextButtonClick = () => onPageChange(page + 1);
+  const handleLastPageButtonClick = () => onPageChange(lastPage);
 
   return (
     <div className={classes.root}>
@@ -92,9 +93,9 @@ export default function TablePaginationActions(props) {
               className: classes.input,
             }}
           >
-            {Array(Math.ceil(count / rowsPerPage))
+            {Array(totalPages)
               .fill()
-              .map((val, i) => (
+              .map((_, i) => (
                 <option value={i}>{i + 1}</option>
               ))}
           </Select>
@@ -151,9 +152,10 @@ export default function TablePaginationActions(props) {
 }
 
 TablePaginationActions.propTypes = {
-  count: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
+  count: PropTypes.number.isRequired,
+  totalPages: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
   keyboard: PropTypes.object.isRequired,
   isInSelectionMode: PropTypes.bool.isRequired,
