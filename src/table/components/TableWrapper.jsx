@@ -190,10 +190,8 @@ export default function TableWrapper(props) {
         />
         <TablePaginationActions
           page={page}
-          count={size.qcy}
-          totalPages={totalPages}
           onPageChange={handleChangePage}
-          rowsPerPage={rowsPerPage}
+          lastPageIdx={Math.ceil(size.qcy / rowsPerPage) - 1}
           keyboard={keyboard}
           isInSelectionMode={selectionsAPI.isModal()}
           tableWidth={rect.width}
