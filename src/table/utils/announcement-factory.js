@@ -55,8 +55,7 @@ export default function announcementFactory(rootElement, translator, prevAnnounc
       previousAnnouncementElement = announcerElements.first;
     }
 
-    if (announceElement.innerHTML.endsWith(` ­`)) announceElement.innerHTML = notation;
-    else announceElement.innerHTML = `${notation} ­`;
+    announceElement.innerHTML = announceElement.innerHTML.endsWith(` ­`) ? notation : `${notation} ­`;
 
     announceElement.setAttribute('aria-atomic', shouldBeAtomic);
     announceElement.setAttribute('aria-live', politeness);
