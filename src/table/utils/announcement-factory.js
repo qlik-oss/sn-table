@@ -13,11 +13,10 @@ const announcerElements = {
  *
  * @param {Object} rootElement root element for getting the live aria from it
  * @param {Object} translator translator object
- * @param {number=} junkCharIdx for test reasons
+ * @param {Element} prevAnnounceEl for test reasons
  */
 
-export default function announcementFactory(rootElement, translator, junkCharIdx, prevAnnounceEl) {
-  let hasJunkChar = junkCharIdx || 0;
+export default function announcementFactory(rootElement, translator, prevAnnounceEl) {
   let previousAnnouncementElement = prevAnnounceEl || null;
 
   /**
@@ -33,7 +32,7 @@ export default function announcementFactory(rootElement, translator, junkCharIdx
   return ({ keys, shouldBeAtomic = true, politeness = 'polite' }) => {
     const stringKeys = Array.isArray(keys) ? keys : [keys];
 
-    let notation = stringKeys
+    const notation = stringKeys
       .map((key) => {
         if (Array.isArray(key)) {
           const [actualKey, ...rest] = key;
@@ -42,9 +41,6 @@ export default function announcementFactory(rootElement, translator, junkCharIdx
         return translator.get(key);
       })
       .join(' ');
-
-    if (hasJunkChar % 2) notation += ` ­`;
-    hasJunkChar++;
 
     const announceElement01 = rootElement.querySelector('#sn-table-announcer--01');
     const announceElement02 = rootElement.querySelector('#sn-table-announcer--02');
@@ -59,7 +55,9 @@ export default function announcementFactory(rootElement, translator, junkCharIdx
       previousAnnouncementElement = announcerElements.first;
     }
 
-    announceElement.innerHTML = notation;
+    if (announceElement.innerHTML.endsWith(` ­`)) announceElement.innerHTML = notation;
+    else announceElement.innerHTML = `${notation} ­`;
+
     announceElement.setAttribute('aria-atomic', shouldBeAtomic);
     announceElement.setAttribute('aria-live', politeness);
   };
