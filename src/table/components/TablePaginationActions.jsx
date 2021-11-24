@@ -67,14 +67,14 @@ export default function TablePaginationActions(props) {
   const onLastPage = page >= lastPage;
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
   const showFirstLast = tableWidth > 350;
-  const handleSelectPage = (event) => onPageChange(event, parseInt(event.target.value, 10));
+  const handleSelectPage = (event) => onPageChange(+event.target.value);
   const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, isInSelectionMode) : null;
 
   const getButton = (disabledCondition, pageNumber, type, onKeyDown = null) => {
     const IconComponent = icons[type];
     return (
       <IconButton
-        onClick={!disabledCondition ? () => onPageChange(null, pageNumber) : null}
+        onClick={!disabledCondition ? () => onPageChange(pageNumber) : null}
         aria-disabled={disabledCondition}
         aria-label={translator.get(`SNTable.Pagination.${type}`)}
         title={translator.get(`SNTable.Pagination.${type}`)}

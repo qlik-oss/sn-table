@@ -8,10 +8,8 @@ import TablePaginationActions from '../TablePaginationActions';
 import * as handleAccessibility from '../../utils/handle-accessibility';
 
 describe('<TablePaginationActions />', () => {
-  let count;
   let page;
-  let totalPages;
-  let rowsPerPage;
+  let lastPage;
   let onPageChange;
   let tableWidth;
   let translator;
@@ -19,10 +17,8 @@ describe('<TablePaginationActions />', () => {
   let keyboard;
 
   beforeEach(() => {
-    count = 250;
     page = 0;
-    rowsPerPage = 100;
-    totalPages = Math.ceil(count / rowsPerPage);
+    lastPage = 2;
     onPageChange = sinon.spy();
     tableWidth = 500;
     translator = { get: (s) => s };
@@ -39,9 +35,8 @@ describe('<TablePaginationActions />', () => {
   it('should render all buttons', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
-        count={count}
         page={page}
-        rowsPerPage={rowsPerPage}
+        lastPage={lastPage}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -60,9 +55,8 @@ describe('<TablePaginationActions />', () => {
     tableWidth = 300;
     const { queryByTitle } = render(
       <TablePaginationActions
-        count={count}
         page={page}
-        rowsPerPage={rowsPerPage}
+        lastPage={lastPage}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -80,9 +74,8 @@ describe('<TablePaginationActions />', () => {
   it('should not render pagination dropdown', () => {
     const { queryByTitle, queryByTestId } = render(
       <TablePaginationActions
-        count={count}
         page={page}
-        rowsPerPage={rowsPerPage}
+        lastPage={lastPage}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -101,9 +94,8 @@ describe('<TablePaginationActions />', () => {
   it('should call onPageChange when clicking next page', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
-        count={count}
         page={page}
-        rowsPerPage={rowsPerPage}
+        lastPage={lastPage}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -120,9 +112,8 @@ describe('<TablePaginationActions />', () => {
     page = 1;
     const { queryByTitle } = render(
       <TablePaginationActions
-        count={count}
         page={page}
-        rowsPerPage={rowsPerPage}
+        lastPage={lastPage}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -138,10 +129,8 @@ describe('<TablePaginationActions />', () => {
   it('should call onPageChange when clicking last page', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
-        count={count}
         page={page}
-        rowsPerPage={rowsPerPage}
-        totalPages={totalPages}
+        lastPage={lastPage}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -158,9 +147,8 @@ describe('<TablePaginationActions />', () => {
     page = 2;
     const { queryByTitle } = render(
       <TablePaginationActions
-        count={count}
         page={page}
-        rowsPerPage={rowsPerPage}
+        lastPage={lastPage}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -178,10 +166,8 @@ describe('<TablePaginationActions />', () => {
     page = 0;
     const { queryByTestId } = render(
       <TablePaginationActions
-        count={count}
         page={page}
-        totalPages={totalPages}
-        rowsPerPage={rowsPerPage}
+        lastPage={lastPage}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -197,9 +183,8 @@ describe('<TablePaginationActions />', () => {
   it('should not call focusSelectionToolbar when pressing tab on last page button and isInSelectionMode is false', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
-        count={count}
         page={page}
-        rowsPerPage={rowsPerPage}
+        lastPage={lastPage}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -216,9 +201,8 @@ describe('<TablePaginationActions />', () => {
 
     const { queryByTitle } = render(
       <TablePaginationActions
-        count={count}
         page={page}
-        rowsPerPage={rowsPerPage}
+        lastPage={lastPage}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -235,9 +219,8 @@ describe('<TablePaginationActions />', () => {
 
     const { queryByTitle } = render(
       <TablePaginationActions
-        count={count}
         page={page}
-        rowsPerPage={rowsPerPage}
+        lastPage={lastPage}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
@@ -255,9 +238,8 @@ describe('<TablePaginationActions />', () => {
 
     const { queryByTitle } = render(
       <TablePaginationActions
-        count={count}
         page={page}
-        rowsPerPage={rowsPerPage}
+        lastPage={lastPage}
         onPageChange={onPageChange}
         tableWidth={tableWidth}
         translator={translator}
