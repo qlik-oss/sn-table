@@ -23,10 +23,10 @@ export const handleTableWrapperKeyDown = ({
     const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
     if (evt.key === 'ArrowRight' && page < lastPage) {
       setShouldRefocus();
-      handleChangePage(null, page + 1);
+      handleChangePage(page + 1);
     } else if (evt.key === 'ArrowLeft' && page > 0) {
       setShouldRefocus();
-      handleChangePage(null, page - 1);
+      handleChangePage(page - 1);
     }
   } else if (evt.key === 'Escape' && keyboard.enabled && !isSelectionActive) {
     preventDefaultBehavior(evt);

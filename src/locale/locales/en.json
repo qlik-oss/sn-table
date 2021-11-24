@@ -31,6 +31,14 @@
     "value": "Last page",
     "comment": "tooltip and aria-label for the last page button. (tew 210929)"
   },
+  "SNTable.Pagination.RowsPerPageChange": {
+    "value": "Rows per page has changed to {0}. Now showing the first page.",
+    "comment": "Read via screenreader when the number rows per page changes. {0} is replaced with the number of rows per page. (tew 211122)"
+  },
+  "SNTable.Pagination.PageStatusReport": {
+    "value": "Page has changed. Showing page {0} of {1}.",
+    "comment": "Read via screenreader when the page has changed. {0} is replaced with the current page number. {1} is replaced with the total page number. (tew 211122)"
+  },
   "SNTable.SortLabel.SortedAscending": {
     "value": "Sorted in ascending order.",
     "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)"

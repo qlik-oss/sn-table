@@ -47,8 +47,18 @@ const useStyles = makeStyles({
 });
 
 export default function TableWrapper(props) {
-  const { rootElement, tableData, pageInfo, setPageInfo, constraints, translator, selectionsAPI, keyboard, rect } =
-    props;
+  const {
+    rootElement,
+    tableData,
+    pageInfo,
+    setPageInfo,
+    constraints,
+    translator,
+    selectionsAPI,
+    keyboard,
+    rect,
+    announcer, // this is only for testing purposes
+  } = props;
   const { size, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
   const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
@@ -59,14 +69,22 @@ export default function TableWrapper(props) {
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
   const paginationFixedRpp = selectionsAPI.isModal() || rect.width < 550;
-  const announce = useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
+  /* eslint-disable react-hooks/rules-of-hooks */
+  const announce = announcer || useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
+  const totalPages = Math.ceil(size.qcy / rowsPerPage);
 
   const setShouldRefocus = () => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   };
 
-  const handleChangePage = (evt, newPage) => setPageInfo({ ...pageInfo, page: newPage });
-  const handleChangeRowsPerPage = (evt) => setPageInfo({ page: 0, rowsPerPage: +evt.target.value });
+  const handleChangePage = (pageIdx) => {
+    setPageInfo({ ...pageInfo, page: pageIdx });
+    announce({ keys: [['SNTable.Pagination.PageStatusReport', [pageIdx + 1, totalPages]]], politeness: 'assertive' });
+  };
+  const handleChangeRowsPerPage = (evt) => {
+    setPageInfo({ page: 0, rowsPerPage: +evt.target.value });
+    announce({ keys: [['SNTable.Pagination.RowsPerPageChange', evt.target.value]], politeness: 'assertive' });
+  };
 
   useEffect(() => {
     const scrollCallback = (evt) => handleScroll(evt, tableSectionRef);
@@ -174,14 +192,14 @@ export default function TableWrapper(props) {
           labelDisplayedRows={({ from, to, count }) =>
             rect.width > 250 && translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
           }
-          onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           ActionsComponent={() => <div>{null}</div>}
         />
         <TablePaginationActions
-          count={size.qcy}
-          onPageChange={handleChangePage}
           page={page}
+          count={size.qcy}
+          totalPages={totalPages}
+          onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}
           keyboard={keyboard}
           isInSelectionMode={selectionsAPI.isModal()}
@@ -193,6 +211,10 @@ export default function TableWrapper(props) {
   );
 }
 
+TableWrapper.defaultProps = {
+  announcer: null,
+};
+
 TableWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
@@ -203,4 +225,5 @@ TableWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
   rect: PropTypes.object.isRequired,
+  announcer: PropTypes.func,
 };
