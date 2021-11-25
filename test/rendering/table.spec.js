@@ -17,11 +17,14 @@ describe('sn table: Rendering tests', () => {
 
   before(async () => {
     s = await serve({
+      // the entry is equal to path.resolve(__dirname, '../../dist/sn-table.js'),
+      // so before run the testing, yarn build should run first to generate /dist
       entry: path.resolve(__dirname, '../../'),
       type: 'sn-table',
       open: false,
       build: false,
       themes: [],
+      fixturePath: 'test/rendering/__fixtures__',
     });
 
     puppet = createPuppet(page);
@@ -29,7 +32,7 @@ describe('sn table: Rendering tests', () => {
   });
 
   after(async () => {
-    // s.close();
+    s.close();
   });
 
   beforeEach(() => {
@@ -41,9 +44,8 @@ describe('sn table: Rendering tests', () => {
   });
 
   fs.readdirSync(paths.fixtures).forEach((file) => {
-    const name = file.replace('.js', '');
-    const fixturePath = path.join(paths.fixtures, file);
-    console.log({ fixturePath });
+    const name = file.replace('.fix.js', '');
+    const fixturePath = `./${file}`;
 
     it(name, async () => {
       const renderUrl = await route.renderFixture(fixturePath);
