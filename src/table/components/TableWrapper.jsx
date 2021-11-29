@@ -14,6 +14,7 @@ import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleScroll, handleNavigateTop } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
+import { ROWS_PER_PAGE_OPTIONS } from '../../handle-data';
 
 const useStyles = makeStyles({
   paper: {
@@ -60,7 +61,7 @@ export default function TableWrapper(props) {
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
-  const paginationFixedRpp = selectionsAPI.isModal() || rect.width < 550;
+  const paginationFixedRpp = selectionsAPI.isModal() || rect.width < 550 || size.qcx >= 100;
   /* eslint-disable react-hooks/rules-of-hooks */
   const announce = announcer || useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
   const totalPages = Math.ceil(size.qcy / rowsPerPage);
@@ -165,7 +166,7 @@ export default function TableWrapper(props) {
       <Paper className={classes.tablePaginationSection}>
         <TablePagination
           className={classes[paginationHidden]}
-          rowsPerPageOptions={paginationFixedRpp ? [rowsPerPage] : [10, 25, 100]}
+          rowsPerPageOptions={paginationFixedRpp ? [rowsPerPage] : ROWS_PER_PAGE_OPTIONS}
           component="div"
           count={size.qcy}
           rowsPerPage={rowsPerPage}
