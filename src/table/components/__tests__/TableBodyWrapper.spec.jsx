@@ -14,7 +14,7 @@ import * as handleKeyPress from '../../utils/handle-key-press';
 import * as handleAccessibility from '../../utils/handle-accessibility';
 
 describe('<TableBodyWrapper />', async () => {
-  const model = { getHyperCubeData: async () => generateDataPages(2, 2) };
+  const model = { getHyperCubeData: async () => generateDataPages(2, 2, 2) };
 
   let tableData;
   let constraints;
@@ -26,7 +26,7 @@ describe('<TableBodyWrapper />', async () => {
   beforeEach(async () => {
     sinon.stub(selectionsUtils, 'addSelectionListeners').returns(sinon.spy());
 
-    tableData = await manageData(model, generateLayout(1, 1), { top: 0, height: 100 });
+    tableData = await manageData(model, generateLayout(1, 1, 2), { top: 0, height: 100 });
     constraints = {};
     selectionsAPI = {
       isModal: () => true,

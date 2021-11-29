@@ -41,7 +41,7 @@ export default function supernova(env) {
       const theme = useTheme();
       const keyboard = useKeyboard();
       const rect = useRect();
-      const [pageInfo, setPageInfo] = useState(() => ({ page: 0, rowsPerPage: 25 }));
+      const [pageInfo, setPageInfo] = useState(() => ({ page: 0, rowsPerPage: 100 }));
       const [tableData] = usePromise(() => manageData(model, layout, pageInfo, setPageInfo), [layout, pageInfo]);
 
       useEffect(() => {

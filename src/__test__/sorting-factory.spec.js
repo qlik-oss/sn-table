@@ -9,7 +9,7 @@ describe('sorting-factory', () => {
   let expectedPatches;
 
   beforeEach(() => {
-    layout = generateLayout(2, 2, [0, 1, 2, 3]);
+    layout = generateLayout(2, 2, 2, [0, 1, 2, 3]);
     model = {
       applyPatches: sinon.spy(),
     };
