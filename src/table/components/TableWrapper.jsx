@@ -75,7 +75,7 @@ export default function TableWrapper(props) {
     announce({ keys: [['SNTable.Pagination.PageStatusReport', [pageIdx + 1, totalPages]]], politeness: 'assertive' });
   };
   const handleChangeRowsPerPage = (evt) => {
-    setPageInfo({ page: 0, rowsPerPage: +evt.target.value });
+    setPageInfo({ ...pageInfo, page: 0, rowsPerPage: +evt.target.value });
     announce({ keys: [['SNTable.Pagination.RowsPerPageChange', evt.target.value]], politeness: 'assertive' });
   };
 

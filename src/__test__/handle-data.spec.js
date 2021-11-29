@@ -109,7 +109,7 @@ describe('handle-data', () => {
       const tableData = await manageData(model, layout, pageInfo, setPageInfo);
 
       expect(tableData).to.be.null;
-      expect(setPageInfo).to.have.been.calledOnceWith({ page: 0, rowsPerPage: 100 });
+      expect(setPageInfo).to.have.been.calledOnceWith({ ...pageInfo, page: 0 });
     });
 
     it('should return null and call setPageInfo with rowsPerPage 25 when height * width > 10000 and width is 120', async () => {
@@ -118,7 +118,7 @@ describe('handle-data', () => {
       const tableData = await manageData(model, layout, pageInfo, setPageInfo);
 
       expect(tableData).to.be.null;
-      expect(setPageInfo).to.have.been.calledOnceWith({ page: 0, rowsPerPage: 25 });
+      expect(setPageInfo).to.have.been.calledOnceWith({ ...pageInfo, rowsPerPage: 25 });
     });
 
     it('should return null and call setPageInfo with rowsPerPage 4 when height * width > 10000 and width is 2200', async () => {
@@ -127,7 +127,7 @@ describe('handle-data', () => {
       const tableData = await manageData(model, layout, pageInfo, setPageInfo);
 
       expect(tableData).to.be.null;
-      expect(setPageInfo).to.have.been.calledOnceWith({ page: 0, rowsPerPage: 4 });
+      expect(setPageInfo).to.have.been.calledOnceWith({ ...pageInfo, rowsPerPage: 4 });
     });
   });
 });

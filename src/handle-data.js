@@ -44,12 +44,12 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
   // When the number of rows is reduced (e.g. confirming selections),
   // you can end up still being on a page that doesn't exist anymore, then go back to the first page and return null
   if (page > 0 && top >= totalHeight) {
-    setPageInfo({ rowsPerPage, page: 0 });
+    setPageInfo({ ...pageInfo, page: 0 });
     return null;
   }
   // If the number of cells exceeds 10k then we need to lower the rows per page to the maximum possible value
   if (height * width > MAX_CELLS) {
-    setPageInfo({ rowsPerPage: getHighestPossibleRpp(width, rowsPerPageOptions), page: 0 });
+    setPageInfo({ ...pageInfo, rowsPerPage: getHighestPossibleRpp(width, rowsPerPageOptions), page: 0 });
     return null;
   }
 
