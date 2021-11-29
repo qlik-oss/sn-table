@@ -78,7 +78,7 @@ describe('handle-data', () => {
     let setPageInfo;
 
     beforeEach(() => {
-      pageInfo = { page: 1, rowsPerPage: 100 };
+      pageInfo = { page: 1, rowsPerPage: 100, rowsPerPageOptions: [10, 25, 100] };
       model = { getHyperCubeData: async () => generateDataPages(100, 4) };
       setPageInfo = sinon.spy();
     });
@@ -113,7 +113,7 @@ describe('handle-data', () => {
     });
 
     it('should return null and call setPageInfo with rowsPerPage 25 when height * width > 10000 and width is 120', async () => {
-      pageInfo = { page: 0, rowsPerPage: 100 };
+      pageInfo = { ...pageInfo, page: 0 };
       layout = generateLayout(60, 60, 1100);
       const tableData = await manageData(model, layout, pageInfo, setPageInfo);
 
@@ -122,7 +122,7 @@ describe('handle-data', () => {
     });
 
     it('should return null and call setPageInfo with rowsPerPage 4 when height * width > 10000 and width is 2200', async () => {
-      pageInfo = { page: 0, rowsPerPage: 100 };
+      pageInfo = { ...pageInfo, page: 0 };
       layout = generateLayout(1100, 1100, 100);
       const tableData = await manageData(model, layout, pageInfo, setPageInfo);
 
