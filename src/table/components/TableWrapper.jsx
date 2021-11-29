@@ -61,7 +61,7 @@ export default function TableWrapper(props) {
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
-  const fixedRowsPerPage = selectionsAPI.isModal() || rect.width < 550 || size.qcx >= 100;
+  const fixedRowsPerPage = selectionsAPI.isModal() || rect.width < 550 || size.qcx > 100;
   /* eslint-disable react-hooks/rules-of-hooks */
   const announce = announcer || useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
   const totalPages = Math.ceil(size.qcy / rowsPerPage);
