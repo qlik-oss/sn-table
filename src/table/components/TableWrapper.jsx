@@ -14,7 +14,6 @@ import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleScroll, handleNavigateTop } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
-// import { ROWS_PER_PAGE_OPTIONS } from '../../handle-data';
 
 const useStyles = makeStyles({
   paper: {
