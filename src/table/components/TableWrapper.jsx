@@ -52,7 +52,7 @@ export default function TableWrapper(props) {
     announcer, // this is only for testing purposes
   } = props;
   const { size, rows, columns } = tableData;
-  const { page, rowsPerPage } = pageInfo;
+  const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
   const shouldRefocus = useRef(false);
   const tableSectionRef = useRef();
@@ -60,7 +60,7 @@ export default function TableWrapper(props) {
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
-  const paginationFixedRpp = selectionsAPI.isModal() || rect.width < 550;
+  const fixedRowsPerPage = selectionsAPI.isModal() || rect.width < 550 || size.qcx > 100;
   /* eslint-disable react-hooks/rules-of-hooks */
   const announce = announcer || useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
   const totalPages = Math.ceil(size.qcy / rowsPerPage);
@@ -74,7 +74,7 @@ export default function TableWrapper(props) {
     announce({ keys: [['SNTable.Pagination.PageStatusReport', [pageIdx + 1, totalPages]]], politeness: 'assertive' });
   };
   const handleChangeRowsPerPage = (evt) => {
-    setPageInfo({ page: 0, rowsPerPage: +evt.target.value });
+    setPageInfo({ ...pageInfo, page: 0, rowsPerPage: +evt.target.value });
     announce({ keys: [['SNTable.Pagination.RowsPerPageChange', evt.target.value]], politeness: 'assertive' });
   };
 
@@ -165,7 +165,7 @@ export default function TableWrapper(props) {
       <Paper className={classes.tablePaginationSection}>
         <TablePagination
           className={classes[paginationHidden]}
-          rowsPerPageOptions={paginationFixedRpp ? [rowsPerPage] : [10, 25, 100]}
+          rowsPerPageOptions={fixedRowsPerPage ? [rowsPerPage] : rowsPerPageOptions}
           component="div"
           count={size.qcy}
           rowsPerPage={rowsPerPage}

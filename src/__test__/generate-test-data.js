@@ -14,7 +14,7 @@ export function generateDataPages(height, width) {
   return [{ qMatrix }];
 }
 
-export function generateLayout(nDims, nMeas, qColumnOrder = []) {
+export function generateLayout(nDims, nMeas, nRows, qColumnOrder = []) {
   const createField = (idx) => ({
     qFallbackTitle: `title-${idx}`,
     qAttrExprInfo: [],
@@ -37,7 +37,7 @@ export function generateLayout(nDims, nMeas, qColumnOrder = []) {
       qMeasureInfo,
       qColumnOrder,
       qEffectiveInterColumnSortOrder: qColumnOrder, // little hack, assuming the column order is the same as the sort order
-      qSize: { qcx: nDims + nMeas },
+      qSize: { qcx: nDims + nMeas, qcy: nRows },
     },
   };
 }
