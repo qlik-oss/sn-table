@@ -80,8 +80,13 @@ const isPreviousElementInside = (evt) => evt.currentTarget.contains(evt.relatedT
 export const handleFocusinEvent = (evt, announce) =>
   !isPreviousElementInside(evt) && announce({ keys: 'SNTable.Accessibility.NavigationInstructions' });
 
-export const handleFocusoutEvent = (evt, shouldRefocus, keyboard) =>
-  keyboard.enabled && !isPreviousElementInside(evt) && !shouldRefocus.current && keyboard.blur(false);
+export const handleFocusoutEvent = (evt, shouldRefocus, keyboard) => {
+  if (keyboard.enabled && !isPreviousElementInside(evt) && !shouldRefocus.current) {
+    evt.currentTarget.querySelector('#sn-table-announcer--01').innerHTML = '';
+    evt.currentTarget.querySelector('#sn-table-announcer--02').innerHTML = '';
+    keyboard.blur(false);
+  }
+};
 
 export const focusSelectionToolbar = (element, keyboard, last) => {
   const clientConfirmButton = element
