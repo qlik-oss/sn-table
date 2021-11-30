@@ -129,5 +129,14 @@ describe('handle-data', () => {
       expect(tableData).to.be.null;
       expect(setPageInfo).to.have.been.calledOnceWith({ ...pageInfo, rowsPerPage: 4 });
     });
+
+    it('should return null and call setPageInfo with rowsPerPage 4 when width > 10000', async () => {
+      pageInfo = { ...pageInfo, page: 0 };
+      layout = generateLayout(6000, 6000, 100);
+      const tableData = await manageData(model, layout, pageInfo, setPageInfo);
+
+      expect(tableData).to.be.null;
+      expect(setPageInfo).to.have.been.calledOnceWith({ ...pageInfo, rowsPerPage: 0 });
+    });
   });
 });
