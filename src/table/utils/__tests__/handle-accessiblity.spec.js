@@ -283,33 +283,6 @@ describe('handle-accessibility', () => {
     });
   });
 
-  describe('handleFocusinEvent', () => {
-    let containsRelatedTarget;
-    let evt;
-    let announce;
-
-    beforeEach(() => {
-      containsRelatedTarget = false;
-      evt = {
-        currentTarget: {
-          contains: () => containsRelatedTarget,
-        },
-      };
-      announce = sinon.spy();
-    });
-
-    it('should call announce when currentTarget does not contain relatedTarget', () => {
-      handleAccessibility.handleFocusinEvent(evt, announce);
-      expect(announce).to.have.been.calledOnce;
-    });
-
-    it('should not call announce when currentTarget contains relatedTarget', () => {
-      containsRelatedTarget = true;
-      handleAccessibility.handleFocusinEvent(evt, announce);
-      expect(announce).to.not.have.been.called;
-    });
-  });
-
   describe('handleFocusoutEvent', () => {
     let containsRelatedTarget;
     let evt;

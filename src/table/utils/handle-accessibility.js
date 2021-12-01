@@ -75,14 +75,8 @@ export const handleResetFocus = ({
   setFocusedCellCoord(nextCell);
 };
 
-const isPreviousElementInside = (evt) => evt.currentTarget.contains(evt.relatedTarget);
-
-// export const handleFocusinEvent = (evt, announce) =>
-//   !isPreviousElementInside(evt) &&
-//   announce({ keys: 'SNTable.Accessibility.NavigationInstructions', politeness: 'off' });
-
 export const handleFocusoutEvent = (evt, shouldRefocus, keyboard) => {
-  if (keyboard.enabled && !isPreviousElementInside(evt) && !shouldRefocus.current) {
+  if (keyboard.enabled && !evt.currentTarget.contains(evt.relatedTarget) && !shouldRefocus.current) {
     evt.currentTarget.querySelector('#sn-table-announcer--01').innerHTML = '';
     evt.currentTarget.querySelector('#sn-table-announcer--02').innerHTML = '';
     keyboard.blur(false);
