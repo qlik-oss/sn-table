@@ -55,7 +55,7 @@ export default function TableWrapper(props) {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
   const shouldRefocus = useRef(false);
-  const tableSectionRef = useRef();
+  const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
   const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
@@ -64,6 +64,10 @@ export default function TableWrapper(props) {
   /* eslint-disable react-hooks/rules-of-hooks */
   const announce = announcer || useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
   const totalPages = Math.ceil(size.qcy / rowsPerPage);
+  const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
+    rows.length + 1,
+    columns.length,
+  ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
   const setShouldRefocus = () => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
@@ -79,20 +83,24 @@ export default function TableWrapper(props) {
   };
 
   useEffect(() => {
-    const scrollCallback = (evt) => handleScroll(evt, tableSectionRef);
-    const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard);
+    const memoedContainer = tableContainerRef.current;
+    const memoedWrapper = tableWrapperRef.current;
+    if (!memoedContainer || !memoedWrapper) return () => {};
 
-    tableSectionRef.current && tableSectionRef.current.addEventListener('wheel', scrollCallback);
-    tableWrapperRef.current && tableWrapperRef.current.addEventListener('focusout', focusOutCallback);
+    const scrollCallback = (evt) => handleScroll(evt, tableContainerRef);
+    const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard);
+    memoedContainer.addEventListener('wheel', scrollCallback);
+    memoedWrapper.addEventListener('focusout', focusOutCallback);
+
     return () => {
-      tableSectionRef.current.removeEventListener('wheel', scrollCallback);
-      tableWrapperRef.current.removeEventListener('focusout', focusOutCallback);
+      memoedContainer.removeEventListener('wheel', scrollCallback);
+      memoedWrapper.removeEventListener('focusout', focusOutCallback);
     };
   }, []);
 
   useEffect(
-    () => handleNavigateTop({ tableSectionRef, focusedCellCoord, rootElement }),
-    [tableSectionRef, focusedCellCoord]
+    () => handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement }),
+    [tableContainerRef, focusedCellCoord]
   );
 
   useDidUpdateEffect(() => {
@@ -138,19 +146,13 @@ export default function TableWrapper(props) {
     >
       <AnnounceElements />
       <TableContainer
-        ref={tableSectionRef}
+        ref={tableContainerRef}
         className={classes[containerMode]}
         tabIndex={-1}
         role="application"
         data-testid="table-wrapper"
       >
-        <Table
-          stickyHeader
-          aria-label={translator.get('SNTable.Accessibility.RowsAndColumns', [
-            `${rows.length + 1}`,
-            `${columns.length}`,
-          ])}
-        >
+        <Table stickyHeader aria-label={tableAriaLabel}>
           <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
           <TableBodyWrapper
             {...props}

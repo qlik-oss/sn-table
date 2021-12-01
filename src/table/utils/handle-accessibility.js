@@ -77,6 +77,8 @@ export const handleResetFocus = ({
 
 export const handleFocusoutEvent = (evt, shouldRefocus, keyboard) => {
   if (keyboard.enabled && !evt.currentTarget.contains(evt.relatedTarget) && !shouldRefocus.current) {
+    evt.currentTarget.querySelector('#sn-table-announcer--01').innerHTML = '';
+    evt.currentTarget.querySelector('#sn-table-announcer--02').innerHTML = '';
     keyboard.blur(false);
   }
 };

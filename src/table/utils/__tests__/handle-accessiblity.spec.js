@@ -287,21 +287,28 @@ describe('handle-accessibility', () => {
     let containsRelatedTarget;
     let evt;
     let shouldRefocus;
+    let announcement1;
+    let announcement2;
 
     beforeEach(() => {
       containsRelatedTarget = false;
+      announcement1 = { innerHTML: 'firstAnnouncement' };
+      announcement2 = { innerHTML: 'secondAnnouncement' };
       evt = {
         currentTarget: {
           contains: () => containsRelatedTarget,
+          querySelector: (identifier) => (identifier.slice(-1) === '1' ? announcement1 : announcement2),
         },
       };
       shouldRefocus = { current: false };
       keyboard = { enabled: true, blur: sinon.spy() };
     });
 
-    it('should call blur when currentTarget doesnt contain relatedTarget, shouldRefocus is false and keyboard.enabled is true', () => {
+    it('should call blur and remove announcements when currentTarget does not contain relatedTarget, shouldRefocus is false and keyboard.enabled is true', () => {
       handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, keyboard);
       expect(keyboard.blur).to.have.been.calledOnceWith(false);
+      expect(announcement1.innerHTML).to.equal('');
+      expect(announcement2.innerHTML).to.equal('');
     });
 
     it('should not call blur when currentTarget contains relatedTarget', () => {
