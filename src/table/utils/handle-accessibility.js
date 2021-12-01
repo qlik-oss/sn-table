@@ -77,8 +77,9 @@ export const handleResetFocus = ({
 
 const isPreviousElementInside = (evt) => evt.currentTarget.contains(evt.relatedTarget);
 
-export const handleFocusinEvent = (evt, announce) =>
-  !isPreviousElementInside(evt) && announce({ keys: 'SNTable.Accessibility.NavigationInstructions' });
+// export const handleFocusinEvent = (evt, announce) =>
+//   !isPreviousElementInside(evt) &&
+//   announce({ keys: 'SNTable.Accessibility.NavigationInstructions', politeness: 'off' });
 
 export const handleFocusoutEvent = (evt, shouldRefocus, keyboard) => {
   if (keyboard.enabled && !isPreviousElementInside(evt) && !shouldRefocus.current) {

@@ -11,7 +11,7 @@ import TableHeadWrapper from './TableHeadWrapper';
 import TablePaginationActions from './TablePaginationActions';
 import useDidUpdateEffect from './useDidUpdateEffect';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
-import { updateFocus, handleResetFocus, handleFocusinEvent, handleFocusoutEvent } from '../utils/handle-accessibility';
+import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleScroll, handleNavigateTop } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
 
@@ -64,6 +64,10 @@ export default function TableWrapper(props) {
   /* eslint-disable react-hooks/rules-of-hooks */
   const announce = announcer || useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
   const totalPages = Math.ceil(size.qcy / rowsPerPage);
+  const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
+    rows.length + 1,
+    columns.length,
+  ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
   const setShouldRefocus = () => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
@@ -85,14 +89,11 @@ export default function TableWrapper(props) {
 
     const scrollCallback = (evt) => handleScroll(evt, tableContainerRef);
     const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard);
-    const focusInCallback = (evt) => handleFocusinEvent(evt, announce);
     memoedContainer.addEventListener('wheel', scrollCallback);
-    memoedContainer.addEventListener('focusin', focusInCallback);
     memoedWrapper.addEventListener('focusout', focusOutCallback);
 
     return () => {
       memoedContainer.removeEventListener('wheel', scrollCallback);
-      memoedContainer.removeEventListener('focusin', focusInCallback);
       memoedWrapper.removeEventListener('focusout', focusOutCallback);
     };
   }, []);
@@ -151,13 +152,7 @@ export default function TableWrapper(props) {
         role="application"
         data-testid="table-wrapper"
       >
-        <Table
-          stickyHeader
-          aria-label={translator.get('SNTable.Accessibility.RowsAndColumns', [
-            `${rows.length + 1}`,
-            `${columns.length}`,
-          ])}
-        >
+        <Table stickyHeader aria-label={tableAriaLabel}>
           <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
           <TableBodyWrapper
             {...props}
