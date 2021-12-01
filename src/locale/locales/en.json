@@ -4,8 +4,8 @@
     "comment": "number of rows and columns announced by the screen reader. (tew 210929)"
   },
   "SNTable.Accessibility.NavigationInstructions": {
-    "value": "Use arrow keys to navigate the cells and tab to move to pagination controls. See documentation for full instructions.",
-    "comment": "Instructions read by screen reader when first focusing inside the table."
+    "value": "Use arrow keys to navigate in table cells and tab to move to pagination controls. For the full range of keyboard navigation, see the documentation.",
+    "comment": "Instructions read by screen reader when first focusing inside the table. (tew 211130)"
   },
   "SNTable.Pagination.RowsPerPage": {
     "value": "Rows per page",
