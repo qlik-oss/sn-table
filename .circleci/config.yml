@@ -46,7 +46,7 @@ jobs:
   build:
     <<: *defaults
     docker:
-      - image: circleci/node:14.15.0
+      - image: circleci/node:16.7-browsers
       - image: browserless/chrome:1.49.1-puppeteer-1.20.0
     steps:
       - attach_workspace:
@@ -73,13 +73,13 @@ jobs:
             ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
       - store_artifacts:
           path: coverage
-      #  - run:
-      #      name: Integration tests
-      #      command: |
-      #       DocId=$(curl -s --data-binary @data/apps/org-chart-test.qvf http://localhost:9076/v1/apps/import | jq -r '.attributes.id')
-      #        APP_ID=$DocId yarn run test:integration --chrome.browserWSEndpoint "ws://localhost:3000" --no-launch
-      # - store_artifacts:
-      #     path: ./test/integration/__artifacts__
+      - run:
+          name: Integration tests
+          command: yarn run test:rendering
+      - store_artifacts:
+          path: ./test/integration/__artifacts__
+      - store_test_results:
+          path: coverage/junit
       - persist_to_workspace:
           root: ~/table
           paths:

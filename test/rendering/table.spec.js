@@ -43,18 +43,22 @@ describe('sn table: Rendering tests', () => {
     events.removeListeners(page);
   });
 
+  // Iterate testing fixture files
   fs.readdirSync(paths.fixtures).forEach((file) => {
     const name = file.replace('.fix.js', '');
     const fixturePath = `./${file}`;
 
+    // Create test case per testing fixture file
     it(name, async () => {
+      // Render chart based on testing fixture file
+      // in Nebula serve using Enigma mocker
       const renderUrl = await route.renderFixture(fixturePath);
       console.log({ renderUrl });
       // Open page in Nebula which renders fixture
       await puppet.open(renderUrl);
-      // Capture screenshot
+      // Puppeteer Capture screenshot
       const img = await puppet.screenshot();
-
+      // Compare screenshot with baseline image
       expect(img).to.matchImageOf(name, { artifactsPath: paths.artifacts }, 0.01);
     });
   });
