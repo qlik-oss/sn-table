@@ -74,10 +74,10 @@ jobs:
       - store_artifacts:
           path: coverage
       - run:
-          name: Integration tests
+          name: Rendering tests
           command: yarn run test:rendering
       - store_artifacts:
-          path: ./test/integration/__artifacts__
+          path: ./test/rendering/__artifacts__
       - store_test_results:
           path: coverage/junit
       - persist_to_workspace:
