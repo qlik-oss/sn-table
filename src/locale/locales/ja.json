@@ -1,4 +1,9 @@
 {
+  "SNTable.Accessibility.NavigationInstructions": {
+    "value": "矢印キーで表のセル内を移動し、タブ キーでページネーション コントロールに移動します。キーボード ナビゲーションの全範囲については、ドキュメントをご覧ください。",
+    "comment": "Instructions read by screen reader when first focusing inside the table. (tew 211130)",
+    "version": "rON9K1cUvIGtROZHqXNfbg=="
+  },
   "SNTable.Accessibility.RowsAndColumns": {
     "value": "{0} 行 {1} 列を表示しています。",
     "comment": "number of rows and columns announced by the screen reader. (tew 210929)",
@@ -24,6 +29,11 @@
     "comment": "tooltip and aria-label for the next page button. (tew 210929)",
     "version": "YyUO+qPBjWcn7zy0bpXeFw=="
   },
+  "SNTable.Pagination.PageStatusReport": {
+    "value": "ページが変更されました。{1} ページ中の {0} ページ目を表示しています。",
+    "comment": "Read via screenreader when the page has changed. {0} is replaced with the current page number. {1} is replaced with the total page number. (tew 211122)",
+    "version": "AOFznLoJupPIAwS7SchRcA=="
+  },
   "SNTable.Pagination.PreviousPage": {
     "value": "前のページ",
     "comment": "tooltip and aria-label for the previous page button. (tew 210929)",
@@ -33,6 +43,11 @@
     "value": "ページあたりの行数",
     "comment": "label for the rows per page dropdown. (tew 210929)",
     "version": "zuWpMmMSoOG/QRsKoVx3OA=="
+  },
+  "SNTable.Pagination.RowsPerPageChange": {
+    "value": "ページあたりの行数が {0} に変更されました。現在、最初のページを表示しています。",
+    "comment": "Read via screenreader when the number rows per page changes. {0} is replaced with the number of rows per page. (tew 211122)",
+    "version": "pMOIMgdSzJmSIj7NLXkS6g=="
   },
   "SNTable.Pagination.SelectPage": {
     "value": "ページを選択",

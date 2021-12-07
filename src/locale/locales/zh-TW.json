@@ -1,4 +1,9 @@
 {
+  "SNTable.Accessibility.NavigationInstructions": {
+    "value": "使用方向鍵以在表格儲存格中導覽，並使用 Tab 以前往分頁控制。如需完整的鍵盤導覽，請參閱文件。",
+    "comment": "Instructions read by screen reader when first focusing inside the table. (tew 211130)",
+    "version": "rON9K1cUvIGtROZHqXNfbg=="
+  },
   "SNTable.Accessibility.RowsAndColumns": {
     "value": "顯示 {0} 列和 {1} 欄。",
     "comment": "number of rows and columns announced by the screen reader. (tew 210929)",
@@ -24,6 +29,11 @@
     "comment": "tooltip and aria-label for the next page button. (tew 210929)",
     "version": "YyUO+qPBjWcn7zy0bpXeFw=="
   },
+  "SNTable.Pagination.PageStatusReport": {
+    "value": "頁面已變更。顯示第 {0} 頁，共 {1} 頁。",
+    "comment": "Read via screenreader when the page has changed. {0} is replaced with the current page number. {1} is replaced with the total page number. (tew 211122)",
+    "version": "AOFznLoJupPIAwS7SchRcA=="
+  },
   "SNTable.Pagination.PreviousPage": {
     "value": "上一頁",
     "comment": "tooltip and aria-label for the previous page button. (tew 210929)",
@@ -33,6 +43,11 @@
     "value": "每頁列數",
     "comment": "label for the rows per page dropdown. (tew 210929)",
     "version": "zuWpMmMSoOG/QRsKoVx3OA=="
+  },
+  "SNTable.Pagination.RowsPerPageChange": {
+    "value": "每頁列數已變更為 {0}。現在顯示第一頁。",
+    "comment": "Read via screenreader when the number rows per page changes. {0} is replaced with the number of rows per page. (tew 211122)",
+    "version": "pMOIMgdSzJmSIj7NLXkS6g=="
   },
   "SNTable.Pagination.SelectPage": {
     "value": "選取頁面",
