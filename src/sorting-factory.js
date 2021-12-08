@@ -1,7 +1,7 @@
 export default function sortingFactory(model, columnOrder) {
   return (layout, isDim, columnIndex) => {
     const sortIdx = columnOrder[columnIndex];
-    const sortOrder = [].concat(layout.qHyperCube.qEffectiveInterColumnSortOrder);
+    const sortOrder = [...layout.qHyperCube.qEffectiveInterColumnSortOrder];
     const topSortIdx = sortOrder[0];
 
     if (sortIdx !== topSortIdx) {
