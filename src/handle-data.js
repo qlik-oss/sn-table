@@ -34,23 +34,9 @@ export function getColumnInfo(qHyperCube, colIndex) {
   );
 }
 
-export function getColumns(qHyperCube) {
-  const columns = [];
-  const columnOrder = getColumnOrder(qHyperCube);
-  columnOrder.forEach((colIndex, idx, self) => {
-    const column = getColumnInfo(qHyperCube, colIndex);
-    if (column) {
-      columns.push(column);
-      self.splice(idx, 1);
-    }
-  });
-  return { columnOrder, columns };
-}
-
 export default async function manageData(model, layout, pageInfo, setPageInfo) {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
-  const { qHyperCube } = layout;
-  const size = qHyperCube.qSize;
+  const size = layout.qHyperCube.qSize;
   const top = page * rowsPerPage;
   const width = size.qcx;
   const totalHeight = size.qcy;
@@ -67,8 +53,9 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
     return null;
   }
 
-  const { columns, columnOrder } = getColumns(qHyperCube);
-
+  const columnOrder = getColumnOrder(layout.qHyperCube);
+  // using filter to remove hidden columns (represented with false)
+  const columns = columnOrder.map((colIndex) => getColumnInfo(layout.qHyperCube, colIndex)).filter(Boolean);
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
     { qTop: top, qLeft: 0, qHeight: height, qWidth: width },
   ]);
