@@ -11,8 +11,8 @@ export function getHighestPossibleRpp(width, rowsPerPageOptions) {
 }
 
 export function getColumnOrder({ qColumnOrder, qDimensionInfo, qMeasureInfo }) {
-  if (qColumnOrder?.length === qDimensionInfo.length + qMeasureInfo.length) return qColumnOrder;
-  return [...Array(qDimensionInfo.length + qMeasureInfo.length).keys()];
+  const columnsLength = qDimensionInfo.length + qMeasureInfo.length;
+  return qColumnOrder?.length === columnsLength ? qColumnOrder : [...Array(columnsLength).keys()];
 }
 
 export function getColumnInfo(qHyperCube, colIndex) {
@@ -36,12 +36,13 @@ export function getColumnInfo(qHyperCube, colIndex) {
 
 export function getColumns(qHyperCube) {
   const columns = [];
-  const columnOrder = getColumnOrder(qHyperCube);
-  columnOrder.forEach((colIndex, idx, self) => {
+  const columnOrder = [];
+  const columnOrderUnfiltered = getColumnOrder(qHyperCube);
+  columnOrderUnfiltered.forEach((colIndex) => {
     const column = getColumnInfo(qHyperCube, colIndex);
     if (column) {
       columns.push(column);
-      self.splice(idx, 1);
+      columnOrder.push(colIndex);
     }
   });
   return { columnOrder, columns };
