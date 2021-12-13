@@ -33,7 +33,6 @@ export default function sortingFactory(model) {
       });
     }
 
-    console.log(patches);
     model.applyPatches(patches, true);
   };
 }
