@@ -18,3 +18,4 @@ exclude_patterns:
   - 'src/**/*.spec.js'
   - 'src/**/*.spec.jsx'
   - '*config*'
+  - 'test/**/__fixtures__'
