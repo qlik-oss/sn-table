@@ -21,10 +21,9 @@ describe('<TableHeadWrapper />', () => {
   beforeEach(() => {
     tableData = {
       columns: [
-        { id: 1, align: 'left', label: 'someDim', sortDirection: 'asc', isDim: true },
-        { id: 2, align: 'right', label: 'someMsr', sortDirection: 'desc', isDim: false },
+        { id: 1, align: 'left', label: 'someDim', sortDirection: 'asc', isDim: true, dataColIdx: 0 },
+        { id: 2, align: 'right', label: 'someMsr', sortDirection: 'desc', isDim: false, dataColIdx: 1 },
       ],
-      columnOrder: [0, 1],
     };
     theme = {
       getColorPickerColor: () => {},
@@ -87,7 +86,7 @@ describe('<TableHeadWrapper />', () => {
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
 
-    expect(changeSortOrder).to.have.been.calledWith(layout, true, 0);
+    expect(changeSortOrder).to.have.been.calledWith(layout, tableData.columns[0]);
   });
 
   it('should not call changeSortOrder when clicking a header cell in edit mode', () => {

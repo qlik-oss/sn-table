@@ -30,22 +30,9 @@ export function getColumnInfo(qHyperCube, colIndex) {
       align: !info.textAlign || info.textAlign.auto ? (isDim ? 'left' : 'right') : info.textAlign.align,
       stylingInfo: info.qAttrExprInfo.map((expr) => expr.id),
       sortDirection: directionMap[info.qSortIndicator],
+      dataColIdx: colIndex,
     }
   );
-}
-
-export function getColumns(qHyperCube) {
-  const columns = [];
-  const columnOrder = [];
-  const columnOrderUnfiltered = getColumnOrder(qHyperCube);
-  columnOrderUnfiltered.forEach((colIndex) => {
-    const column = getColumnInfo(qHyperCube, colIndex);
-    if (column) {
-      columns.push(column);
-      columnOrder.push(colIndex);
-    }
-  });
-  return { columnOrder, columns };
 }
 
 export default async function manageData(model, layout, pageInfo, setPageInfo) {
@@ -68,8 +55,9 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
     return null;
   }
 
-  const { columns, columnOrder } = getColumns(qHyperCube);
-
+  const columnOrder = getColumnOrder(qHyperCube);
+  // using filter to remove hidden columns (represented with false)
+  const columns = columnOrder.map((colIndex) => getColumnInfo(qHyperCube, colIndex)).filter(Boolean);
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
     { qTop: top, qLeft: 0, qHeight: height, qWidth: width },
   ]);
@@ -88,5 +76,5 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
     return row;
   });
 
-  return { size, rows, columns, columnOrder };
+  return { size, rows, columns };
 }

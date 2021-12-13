@@ -54,8 +54,7 @@ function TableHeadWrapper({
       <TableRow className="sn-table-row">
         {tableData.columns.map((column, columnIndex) => {
           const tabIndex = columnIndex === 0 && !keyboard.enabled ? 0 : -1;
-          const isCurrentColumnActive =
-            layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === tableData.columnOrder[columnIndex];
+          const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.dataColIdx;
           const isFocusInHead = focusedCellCoord[0] === 0;
 
           return (
@@ -71,17 +70,15 @@ function TableHeadWrapper({
                   e,
                   rootElement,
                   [0, columnIndex],
+                  column,
                   changeSortOrder,
                   layout,
-                  column.isDim,
                   !constraints.active,
                   setFocusedCellCoord
                 )
               }
               onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
-              onClick={() =>
-                !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column.isDim, columnIndex)
-              }
+              onClick={() => !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column)}
             >
               <TableSortLabel
                 className={classes.sortLabel}
