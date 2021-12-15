@@ -36,7 +36,6 @@ export function generateLayout(nDims, nMeas, nRows, qColumnOrder = []) {
       qDimensionInfo,
       qMeasureInfo,
       qColumnOrder,
-      qEffectiveInterColumnSortOrder: qColumnOrder, // little hack, assuming the column order is the same as the sort order
       qSize: { qcx: nDims + nMeas, qcy: nRows },
     },
   };

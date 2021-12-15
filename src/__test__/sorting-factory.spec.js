@@ -2,19 +2,27 @@ import sortingFactory from '../sorting-factory';
 import { generateLayout } from './generate-test-data';
 
 describe('sorting-factory', () => {
+  let originalOrder;
+  let column;
   let layout;
   let model;
-  let columnOrder;
   let changeSortOrder;
   let expectedPatches;
 
   beforeEach(() => {
-    layout = generateLayout(2, 2, 2, [0, 1, 2, 3]);
+    originalOrder = [0, 1, 2, 3];
+    layout = generateLayout(2, 2, 2);
+    column = { isDim: true, dataColIdx: 1 };
     model = {
       applyPatches: sinon.spy(),
+      getEffectiveProperties: async () =>
+        Promise.resolve({
+          qHyperCubeDef: {
+            qInterColumnSortOrder: originalOrder,
+          },
+        }),
     };
-    columnOrder = [0, 1, 2, 3];
-    changeSortOrder = sortingFactory(model, columnOrder);
+    changeSortOrder = sortingFactory(model);
     expectedPatches = [
       {
         qPath: '/qHyperCubeDef/qInterColumnSortOrder',
@@ -24,26 +32,28 @@ describe('sorting-factory', () => {
     ];
   });
 
-  it('should call apply patches with second dimension first in sort order', () => {
+  it('should call apply patches with second dimension first in sort order', async () => {
     expectedPatches[0].qValue = '[1,0,2,3]';
 
-    changeSortOrder(layout, true, 1);
+    await changeSortOrder(layout, column);
     expect(model.applyPatches).to.have.been.calledWith(expectedPatches, true);
   });
 
-  it('should call apply patches with another patch for qReverseSort for dimension', () => {
+  it('should call apply patches with another patch for qReverseSort for dimension', async () => {
+    column.dataColIdx = 0;
     expectedPatches.push({
       qPath: '/qHyperCubeDef/qDimensions/0/qDef/qReverseSort',
       qOp: 'replace',
       qValue: 'true',
     });
 
-    changeSortOrder(layout, true, 0);
+    await changeSortOrder(layout, column);
     expect(model.applyPatches).to.have.been.calledWith(expectedPatches, true);
   });
 
-  it('should call apply patches with another patch for qReverseSort for measure', () => {
-    layout.qHyperCube.qEffectiveInterColumnSortOrder = [2, 0, 1, 3];
+  it('should call apply patches with another patch for qReverseSort for measure', async () => {
+    column = { isDim: false, dataColIdx: 2 };
+    originalOrder = [2, 0, 1, 3];
     expectedPatches[0].qValue = '[2,0,1,3]';
     expectedPatches.push({
       qPath: '/qHyperCubeDef/qMeasures/0/qDef/qReverseSort',
@@ -51,7 +61,7 @@ describe('sorting-factory', () => {
       qValue: 'true',
     });
 
-    changeSortOrder(layout, false, 2);
+    await changeSortOrder(layout, column);
     expect(model.applyPatches).to.have.been.calledWith(expectedPatches, true);
   });
 });

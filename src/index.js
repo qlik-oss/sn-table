@@ -51,7 +51,7 @@ export default function supernova(env) {
       useEffect(() => {
         if (layout && tableData) {
           registerLocale(translator);
-          const changeSortOrder = sortingFactory(model, tableData.columnOrder);
+          const changeSortOrder = sortingFactory(model);
           render(rootElement, {
             rootElement,
             layout,

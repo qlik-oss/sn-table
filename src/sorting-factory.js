@@ -1,12 +1,14 @@
-export default function sortingFactory(model, columnOrder) {
-  return (layout, isDim, columnIndex) => {
-    const sortIdx = columnOrder[columnIndex];
-    const sortOrder = [].concat(layout.qHyperCube.qEffectiveInterColumnSortOrder);
+export default function sortingFactory(model) {
+  return async (layout, column) => {
+    const { isDim, dataColIdx } = column;
+    // The sort order from the properties is needed since it contains hidden columns
+    const properties = await model.getEffectiveProperties();
+    const sortOrder = properties.qHyperCubeDef.qInterColumnSortOrder;
     const topSortIdx = sortOrder[0];
 
-    if (sortIdx !== topSortIdx) {
-      sortOrder.splice(sortOrder.indexOf(sortIdx), 1);
-      sortOrder.unshift(sortIdx);
+    if (dataColIdx !== topSortIdx) {
+      sortOrder.splice(sortOrder.indexOf(dataColIdx), 1);
+      sortOrder.unshift(dataColIdx);
     }
 
     const patches = [
@@ -18,9 +20,9 @@ export default function sortingFactory(model, columnOrder) {
     ];
 
     // reverse
-    if (sortIdx === topSortIdx) {
+    if (dataColIdx === topSortIdx) {
       const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
-      const idx = isDim ? sortIdx : sortIdx - qDimensionInfo.length;
+      const idx = isDim ? dataColIdx : dataColIdx - qDimensionInfo.length;
       const { qReverseSort } = isDim ? qDimensionInfo[idx] : qMeasureInfo[idx];
       const qPath = `/qHyperCubeDef/${isDim ? 'qDimensions' : 'qMeasures'}/${idx}/qDef/qReverseSort`;
 

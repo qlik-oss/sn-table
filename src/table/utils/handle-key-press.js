@@ -104,9 +104,9 @@ export const headHandleKeyPress = (
   evt,
   rootElement,
   cellCoord,
+  column,
   changeSortOrder,
   layout,
-  isDim,
   isAnalysisMode,
   setFocusedCellCoord
 ) => {
@@ -121,7 +121,7 @@ export const headHandleKeyPress = (
     case ' ':
     case 'Enter': {
       preventDefaultBehavior(evt);
-      isAnalysisMode && changeSortOrder(layout, isDim, cellCoord[1]);
+      isAnalysisMode && changeSortOrder(layout, column);
       break;
     }
     default:

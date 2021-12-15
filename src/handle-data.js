@@ -11,8 +11,8 @@ export function getHighestPossibleRpp(width, rowsPerPageOptions) {
 }
 
 export function getColumnOrder({ qColumnOrder, qDimensionInfo, qMeasureInfo }) {
-  if (qColumnOrder?.length === qDimensionInfo.length + qMeasureInfo.length) return qColumnOrder;
-  return [...Array(qDimensionInfo.length + qMeasureInfo.length).keys()];
+  const columnsLength = qDimensionInfo.length + qMeasureInfo.length;
+  return qColumnOrder?.length === columnsLength ? qColumnOrder : [...Array(columnsLength).keys()];
 }
 
 export function getColumnInfo(qHyperCube, colIndex) {
@@ -30,13 +30,15 @@ export function getColumnInfo(qHyperCube, colIndex) {
       align: !info.textAlign || info.textAlign.auto ? (isDim ? 'left' : 'right') : info.textAlign.align,
       stylingInfo: info.qAttrExprInfo.map((expr) => expr.id),
       sortDirection: directionMap[info.qSortIndicator],
+      dataColIdx: colIndex,
     }
   );
 }
 
 export default async function manageData(model, layout, pageInfo, setPageInfo) {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
-  const size = layout.qHyperCube.qSize;
+  const { qHyperCube } = layout;
+  const size = qHyperCube.qSize;
   const top = page * rowsPerPage;
   const width = size.qcx;
   const totalHeight = size.qcy;
@@ -53,9 +55,9 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
     return null;
   }
 
-  const columnOrder = getColumnOrder(layout.qHyperCube);
+  const columnOrder = getColumnOrder(qHyperCube);
   // using filter to remove hidden columns (represented with false)
-  const columns = columnOrder.map((colIndex) => getColumnInfo(layout.qHyperCube, colIndex)).filter(Boolean);
+  const columns = columnOrder.map((colIndex) => getColumnInfo(qHyperCube, colIndex)).filter(Boolean);
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
     { qTop: top, qLeft: 0, qHeight: height, qWidth: width },
   ]);
@@ -75,5 +77,5 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
     return row;
   });
 
-  return { size, rows, columns, columnOrder };
+  return { size, rows, columns };
 }

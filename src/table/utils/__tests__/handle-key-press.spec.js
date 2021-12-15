@@ -556,17 +556,18 @@ describe('handle-key-press', () => {
   describe('headHandleKeyPress', () => {
     let rowIndex;
     let colIndex;
+    let column;
     let evt = {};
     let rootElement = {};
     let changeSortOrder;
     let layout;
-    let isDim;
     let isAnalysisMode;
     let setFocusedCellCoord;
 
     beforeEach(() => {
       rowIndex = 0;
       colIndex = 0;
+      column = {};
       evt = {
         key: 'ArrowDown',
         stopPropagation: sinon.spy(),
@@ -585,7 +586,7 @@ describe('handle-key-press', () => {
     });
 
     it('when press arrow down key on head cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
-      headHandleKeyPress(evt, rootElement, [rowIndex, colIndex], null, null, null, false, setFocusedCellCoord);
+      headHandleKeyPress(evt, rootElement, [rowIndex, colIndex], column, null, null, null, setFocusedCellCoord);
       expect(evt.preventDefault).to.have.been.calledOnce;
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(evt.target.setAttribute).to.have.been.calledOnce;
@@ -598,9 +599,9 @@ describe('handle-key-press', () => {
         evt,
         rootElement,
         [rowIndex, colIndex],
+        column,
         changeSortOrder,
         layout,
-        isDim,
         isAnalysisMode,
         setFocusedCellCoord
       );
@@ -617,9 +618,9 @@ describe('handle-key-press', () => {
         evt,
         rootElement,
         [rowIndex, colIndex],
+        column,
         changeSortOrder,
         layout,
-        isDim,
         isAnalysisMode,
         setFocusedCellCoord
       );
@@ -635,9 +636,9 @@ describe('handle-key-press', () => {
         evt,
         rootElement,
         [rowIndex, colIndex],
+        column,
         changeSortOrder,
         layout,
-        isDim,
         isAnalysisMode,
         setFocusedCellCoord
       );
@@ -654,9 +655,9 @@ describe('handle-key-press', () => {
         evt,
         rootElement,
         [rowIndex, colIndex],
+        column,
         changeSortOrder,
         layout,
-        isDim,
         isAnalysisMode,
         setFocusedCellCoord
       );
@@ -674,9 +675,9 @@ describe('handle-key-press', () => {
         evt,
         rootElement,
         [rowIndex, colIndex],
+        column,
         changeSortOrder,
         layout,
-        isDim,
         isAnalysisMode,
         setFocusedCellCoord
       );
