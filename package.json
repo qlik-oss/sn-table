@@ -73,7 +73,7 @@
     "babel-plugin-istanbul": "^6.1.1",
     "chai": "4.3.4",
     "chai-dom": "1.10.0",
-    "eslint": "7.32.0",
+    "eslint": "8.4.1",
     "eslint-config-airbnb": "18.2.1",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-import": "2.25.3",
