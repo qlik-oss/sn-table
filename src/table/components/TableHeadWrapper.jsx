@@ -51,7 +51,6 @@ function TableHeadWrapper({
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   // transparent is not allowed
   headStyle.backgroundColor = backgroundColor === 'transparent' ? 'inherent' : backgroundColor;
-  window.console.log({ headStyle });
   const classes = useStyles(headStyle);
 
   return (

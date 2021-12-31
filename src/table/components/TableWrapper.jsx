@@ -58,10 +58,10 @@ export default function TableWrapper(props) {
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
-  const backgroundColorFromTheme = theme.getStyle('object', 'straightTable', 'backgroundColor');
-  const backgroundColor = !backgroundColorFromTheme ? 'inherit' : backgroundColorFromTheme;
-  window.console.log({ backgroundColor });
+
+  const backgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor') || 'inherit';
   const classes = useStyles({ backgroundColor });
+
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
   const fixedRowsPerPage = selectionsAPI.isModal() || rect.width < 550 || size.qcx > 100;
