@@ -14,6 +14,7 @@ const useStyles = makeStyles({
     color: ({ color }) => color,
     fontSize: ({ fontSize }) => fontSize,
     padding: ({ padding }) => padding,
+    backgroundColor: ({ backgroundColor }) => backgroundColor,
   },
   visuallyHidden: {
     border: 0,
@@ -45,8 +46,12 @@ function TableHeadWrapper({
   focusedCellCoord,
   setFocusedCellCoord,
   keyboard,
+  backgroundColor,
 }) {
   const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
+  // transparent is not allowed
+  headStyle.backgroundColor = backgroundColor === 'transparent' ? 'inherent' : backgroundColor;
+  window.console.log({ headStyle });
   const classes = useStyles(headStyle);
 
   return (
@@ -113,6 +118,7 @@ TableHeadWrapper.propTypes = {
   focusedCellCoord: PropTypes.arrayOf(PropTypes.number).isRequired,
   setFocusedCellCoord: PropTypes.func.isRequired,
   translator: PropTypes.object.isRequired,
+  backgroundColor: PropTypes.string.isRequired,
 };
 
 export default TableHeadWrapper;

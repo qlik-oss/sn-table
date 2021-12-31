@@ -18,7 +18,7 @@ import announcementFactory from '../utils/announcement-factory';
 const useStyles = makeStyles({
   paper: {
     height: '100%',
-    backgroundColor: 'rgb(255, 255, 255)',
+    backgroundColor: ({ backgroundColor }) => backgroundColor,
   },
   containerOverflowAuto: {
     height: 'calc(100% - 52px)',
@@ -29,9 +29,9 @@ const useStyles = makeStyles({
     overflow: 'hidden',
   },
   tablePaginationSection: {
-    backgroundColor: 'rgb(255, 255, 255)',
     display: 'flex',
     justifyContent: 'flex-end',
+    backgroundColor: ({ backgroundColor }) => backgroundColor,
   },
   paginationHidden: {
     display: 'none',
@@ -50,6 +50,7 @@ export default function TableWrapper(props) {
     keyboard,
     rect,
     announcer, // this is only for testing purposes
+    theme,
   } = props;
   const { size, rows, columns } = tableData;
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
@@ -57,7 +58,10 @@ export default function TableWrapper(props) {
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
-  const classes = useStyles();
+  const backgroundColorFromTheme = theme.getStyle('object', 'straightTable', 'backgroundColor');
+  const backgroundColor = !backgroundColorFromTheme ? 'inherit' : backgroundColorFromTheme;
+  window.console.log({ backgroundColor });
+  const classes = useStyles({ backgroundColor });
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
   const fixedRowsPerPage = selectionsAPI.isModal() || rect.width < 550 || size.qcx > 100;
@@ -153,7 +157,12 @@ export default function TableWrapper(props) {
         data-testid="table-wrapper"
       >
         <Table stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
+          <TableHeadWrapper
+            {...props}
+            backgroundColor={backgroundColor}
+            setFocusedCellCoord={setFocusedCellCoord}
+            focusedCellCoord={focusedCellCoord}
+          />
           <TableBodyWrapper
             {...props}
             announce={announce}
@@ -219,4 +228,5 @@ TableWrapper.propTypes = {
   keyboard: PropTypes.object.isRequired,
   rect: PropTypes.object.isRequired,
   announcer: PropTypes.func,
+  theme: PropTypes.object.isRequired,
 };
