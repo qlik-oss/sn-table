@@ -2,7 +2,7 @@ import {
   STYLING_DEFAULTS,
   SELECTION_STYLING,
   getColor,
-  getBaseStyling,
+  // getBaseStyling,
   getHeadStyle,
   getBodyStyle,
   getColumnStyle,
@@ -68,39 +68,39 @@ describe('styling-utils', () => {
     });
   });
 
-  describe('getBaseStyling', () => {
-    let styleObj;
+  // describe('getBaseStyling', () => {
+  //   let styleObj;
 
-    beforeEach(() => {
-      resolvedColor = '#fff';
-      styleObj = {
-        fontColor: {
-          index: 1,
-          color: null,
-        },
-        fontSize: 12,
-      };
-    });
+  //   beforeEach(() => {
+  //     resolvedColor = '#fff';
+  //     styleObj = {
+  //       fontColor: {
+  //         index: 1,
+  //         color: null,
+  //       },
+  //       fontSize: 12,
+  //     };
+  //   });
 
-    it('should return styling with fontColor and fontSize', () => {
-      const resultStyling = getBaseStyling(styleObj, theme);
-      expect(resultStyling).to.eql({
-        color: '#fff',
-        fontSize: 12,
-        padding: '6px 12px',
-      });
-    });
-    it('should return styling with fontColor and default fontSize and padding', () => {
-      styleObj.fontSize = null;
+  //   it('should return styling with fontColor and fontSize', () => {
+  //     const resultStyling = getBaseStyling(styleObj, theme);
+  //     expect(resultStyling).to.eql({
+  //       color: '#fff',
+  //       fontSize: 12,
+  //       padding: '6px 12px',
+  //     });
+  //   });
+  //   it('should return styling with fontColor and default fontSize and padding', () => {
+  //     styleObj.fontSize = null;
 
-      const resultStyling = getBaseStyling(styleObj, theme);
-      expect(resultStyling).to.eql({
-        color: '#fff',
-        fontSize: '14px',
-        padding: '7px 14px',
-      });
-    });
-  });
+  //     const resultStyling = getBaseStyling(styleObj, theme);
+  //     expect(resultStyling).to.eql({
+  //       color: '#fff',
+  //       fontSize: '14px',
+  //       padding: '7px 14px',
+  //     });
+  //   });
+  // });
 
   describe('getHeadStyle', () => {
     let layout;

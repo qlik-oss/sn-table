@@ -12,6 +12,7 @@ import { handleClickToFocusBody } from '../utils/handle-accessibility';
 const useStyles = makeStyles({
   cellBase: {
     '& td, th': {
+      fontFamily: ({ fontFamily }) => fontFamily,
       color: ({ color }) => color,
       fontSize: ({ fontSize }) => fontSize,
       padding: ({ padding }) => padding,
@@ -34,6 +35,7 @@ function TableBodyWrapper({
   selectionsAPI,
   layout,
   theme,
+  backgroundColor,
   setShouldRefocus,
   setFocusedCellCoord,
   keyboard,
@@ -90,6 +92,7 @@ function TableBodyWrapper({
                   selectionState={selectionState}
                   selDispatch={selDispatch}
                   tabIndex={-1}
+                  backgroundColor={backgroundColor}
                   announce={announce}
                   onKeyDown={(evt) =>
                     bodyHandleKeyPress({
@@ -129,6 +132,7 @@ TableBodyWrapper.propTypes = {
   setShouldRefocus: PropTypes.func.isRequired,
   keyboard: PropTypes.object.isRequired,
   tableWrapperRef: PropTypes.object.isRequired,
+  backgroundColor: PropTypes.string.isRequired,
   announce: PropTypes.func.isRequired,
 };
 

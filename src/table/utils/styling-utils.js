@@ -1,5 +1,7 @@
 import { resolveExpression, isDarkColor } from './color-utils';
 
+// the order of style
+// default < theme < column < selection (except the selected green) < hover < selected green
 export const STYLING_DEFAULTS = {
   FONT_SIZE: '14px',
   FONT_COLOR: '#404040',
@@ -33,51 +35,66 @@ export function getColor(color = {}, defaultColor, theme) {
 export const getAutoFontColor = (backgroundColor) =>
   isDarkColor(backgroundColor) ? STYLING_DEFAULTS.WHITE : STYLING_DEFAULTS.FONT_COLOR;
 
-export const getBaseStyling = (styleObj, theme) => ({
-  color: getColor(styleObj.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme),
-  fontSize: styleObj.fontSize || STYLING_DEFAULTS.FONT_SIZE,
-  padding: styleObj.fontSize ? `${styleObj.fontSize / 2}px ${styleObj.fontSize}px` : STYLING_DEFAULTS.PADDING,
-});
-
 // Both index === -1 and color === null must be true for the property to be unset
 export const isUnset = (prop) => !prop || JSON.stringify(prop) === JSON.stringify({ index: -1, color: null });
 
 export function getHeadStyle(layout, theme) {
   const header = layout.components?.[0]?.header;
-  return header ? getBaseStyling(header, theme) : { padding: STYLING_DEFAULTS.PADDING };
+  const headerStyle = {
+    fontFamily: theme.getStyle('object.straightTable', 'header', 'fontFamily') || 'inherit',
+    color: header
+      ? getColor(header.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme)
+      : theme.getStyle('object.straightTable', 'header', 'color'),
+    fontSize:
+      header?.fontSize || theme.getStyle('object.straightTable', 'header', 'fontSize') || STYLING_DEFAULTS.FONT_SIZE,
+    padding: header?.fontSize ? `${header.fontSize / 2}px ${header.fontSize}px` : STYLING_DEFAULTS.PADDING,
+  };
+  return headerStyle;
 }
 
 export function getBodyStyle(layout, theme) {
   const content = layout.components?.[0]?.content;
-  if (!content) return { padding: STYLING_DEFAULTS.PADDING };
+  window.console.log({ content });
 
   // Cases when hoverEffect is true:
   // 1. There is no hover font color but a hover background color,
   // when hovering, the hover font color becomes white when the hover background color is a dark color
-  // or the hover font color stays the same as whetever the font color is when the hover background color is a light color.
+  // or the hover font color stays the same as whatever the font color is when the hover background color is a light color.
   // 2. There is a hover font color but no hover background color,
   // when hovering, only a hover font color is applied and the hover background color disappears.
-  // 3. There is no hover font color and no hover background color, when hovering, the defalut hover effect (light gray backgournd)
+  // 3. There is no hover font color and no hover background color, when hovering, the default hover effect (light gray background)
   // 4. There are both hover font and background colors, when hovering, the hover font and background colors take effect.
 
-  const unsetHoverBackgroundColor = isUnset(content.hoverColor);
-  const unsetHoverFontandBackgroundColor = isUnset(content.hoverFontColor) && unsetHoverBackgroundColor;
+  const unsetHoverBackgroundColor = isUnset(content?.hoverColor);
+  const unsetHoverFontandBackgroundColor = isUnset(content?.hoverFontColor) && unsetHoverBackgroundColor;
+  const hoverBackgroundColorFromTheme = theme.getStyle('object.straightTable', 'content.hover', 'backgroundColor');
+
+  const setHoverBackgroundColor = unsetHoverBackgroundColor
+    ? hoverBackgroundColorFromTheme || ''
+    : getColor(content.hoverColor, STYLING_DEFAULTS.HOVER_BACKGROUND, theme);
 
   const hoverBackgroundColor = unsetHoverFontandBackgroundColor
-    ? STYLING_DEFAULTS.HOVER_BACKGROUND
-    : unsetHoverBackgroundColor
-    ? ''
-    : getColor(content.hoverColor, STYLING_DEFAULTS.HOVER_BACKGROUND, theme);
+    ? hoverBackgroundColorFromTheme || STYLING_DEFAULTS.HOVER_BACKGROUND
+    : setHoverBackgroundColor;
+
   const hoverFontColor = unsetHoverFontandBackgroundColor
-    ? ''
+    ? theme.getStyle('object.straightTable', 'content.hover', 'color') || ''
     : getColor(content.hoverFontColor, getAutoFontColor(hoverBackgroundColor), theme);
 
-  return {
-    ...getBaseStyling(content, theme),
+  const contentStyle = {
+    fontFamily: theme.getStyle('object.straightTable', 'content', 'fontFamily') || 'inherit',
+    color: content
+      ? getColor(content.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme)
+      : theme.getStyle('object.straightTable', 'content', 'color'),
+    fontSize:
+      content?.fontSize || theme.getStyle('object.straightTable', 'content', 'fontSize') || STYLING_DEFAULTS.FONT_SIZE,
+    padding: content?.fontSize ? `${content.fontSize / 2}px ${content.fontSize}px` : STYLING_DEFAULTS.PADDING,
     hoverBackgroundColor: [hoverBackgroundColor, '!important'],
     hoverFontColor: [hoverFontColor, '!important'],
     selectedCellClass: '',
   };
+  window.console.log({ contentStyle });
+  return contentStyle;
 }
 
 export function getColumnStyle(styling, qAttrExps, stylingInfo) {
@@ -96,12 +113,12 @@ export function getColumnStyle(styling, qAttrExps, stylingInfo) {
   };
 }
 
-export function getSelectionColors(background = STYLING_DEFAULTS.WHITE, cell, selectionState) {
+export function getSelectionColors(background = STYLING_DEFAULTS.WHITE, cell, selectionState, backgroundColor) {
   const { colIdx, rows, api } = selectionState;
 
   if (api.isModal()) {
     if (colIdx !== cell.colIdx) {
-      return { background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${background}` };
+      return { background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${backgroundColor || background}` };
     }
 
     for (let i = 0; i < rows.length; i++) {
@@ -110,12 +127,16 @@ export function getSelectionColors(background = STYLING_DEFAULTS.WHITE, cell, se
       }
     }
 
-    return SELECTION_STYLING.POSSIBLE;
+    return { ...SELECTION_STYLING.POSSIBLE, background: backgroundColor || SELECTION_STYLING.POSSIBLE.background };
   }
 
   return {};
 }
 
-export function getSelectionStyle(styling, cell, selectionState) {
-  return { ...styling, ...getSelectionColors(styling.background, cell, selectionState) };
+export function getSelectionStyle(styling, cell, selectionState, backgroundColor) {
+  const selectionStyle = {
+    ...styling,
+    ...getSelectionColors(styling.background, cell, selectionState, backgroundColor),
+  };
+  return selectionStyle;
 }

@@ -11,6 +11,7 @@ import { handleClickToFocusHead } from '../utils/handle-accessibility';
 
 const useStyles = makeStyles({
   head: {
+    fontFamily: ({ fontFamily }) => fontFamily,
     color: ({ color }) => color,
     fontSize: ({ fontSize }) => fontSize,
     padding: ({ padding }) => padding,

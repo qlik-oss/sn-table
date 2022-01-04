@@ -12,5 +12,23 @@ module.exports = {
   },
   serve: {
     keyboardNavigation: false,
+    themes: [
+      {
+        id: 'Test',
+        theme: {
+          straightTable: {
+            header: {
+              fontSize: '40px',
+              color: 'cyan',
+            },
+            content: {
+              fontSize: '16px',
+              color: 'magenta',
+            },
+          },
+          backgroundColor: '#000000',
+        },
+      },
+    ],
   },
 };

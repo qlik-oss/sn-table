@@ -165,6 +165,7 @@ export default function TableWrapper(props) {
           />
           <TableBodyWrapper
             {...props}
+            backgroundColor={backgroundColor}
             announce={announce}
             focusedCellCoord={focusedCellCoord}
             setFocusedCellCoord={setFocusedCellCoord}
