@@ -61,17 +61,6 @@ export default function TableWrapper(props) {
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
   const tablePaginationSectionRef = useRef();
-  const handleResize = () => {
-    setPaginationHeight(tablePaginationSectionRef.current.clientHeight);
-  };
-  useEffect(() => {
-    handleResize();
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
 
   const classes = useStyles({ paginationHeight });
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
@@ -93,6 +82,7 @@ export default function TableWrapper(props) {
     setPageInfo({ ...pageInfo, page: pageIdx });
     announce({ keys: [['SNTable.Pagination.PageStatusReport', [pageIdx + 1, totalPages]]], politeness: 'assertive' });
   };
+
   const handleChangeRowsPerPage = (evt) => {
     setPageInfo({ ...pageInfo, page: 0, rowsPerPage: +evt.target.value });
     announce({ keys: [['SNTable.Pagination.RowsPerPageChange', evt.target.value]], politeness: 'assertive' });
@@ -101,16 +91,21 @@ export default function TableWrapper(props) {
   useEffect(() => {
     const memoedContainer = tableContainerRef.current;
     const memoedWrapper = tableWrapperRef.current;
-    if (!memoedContainer || !memoedWrapper) return () => {};
-
+    const tablePaginationSection = tablePaginationSectionRef.current;
+    if (!memoedContainer || !memoedWrapper || !tablePaginationSection) return () => {};
+    const handleResize = () => setPaginationHeight(tablePaginationSection.clientHeight);
+    handleResize();
     const scrollCallback = (evt) => handleScroll(evt, tableContainerRef);
     const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard);
+
     memoedContainer.addEventListener('wheel', scrollCallback);
     memoedWrapper.addEventListener('focusout', focusOutCallback);
+    window.addEventListener('resize', handleResize);
 
     return () => {
       memoedContainer.removeEventListener('wheel', scrollCallback);
       memoedWrapper.removeEventListener('focusout', focusOutCallback);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
