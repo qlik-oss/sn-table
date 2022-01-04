@@ -21,8 +21,7 @@ const useStyles = makeStyles({
     backgroundColor: 'rgb(255, 255, 255)',
   },
   containerOverflowAuto: {
-    height: 'calc(100% - 65px)',
-    overflow: 'auto',
+    height: ({ paginationHeight }) => `calc(100% - ${paginationHeight}px)`,
   },
   containerOverflowHidden: {
     height: '100%',
@@ -57,10 +56,24 @@ export default function TableWrapper(props) {
   const { size, rows, columns } = tableData;
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
+  const [paginationHeight, setPaginationHeight] = useState();
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
-  const classes = useStyles();
+  const tablePaginationSectionRef = useRef();
+  const handleResize = () => {
+    setPaginationHeight(tablePaginationSectionRef.current.clientHeight);
+  };
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const classes = useStyles({ paginationHeight });
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
   const fixedRowsPerPage = selectionsAPI.isModal() || rect.width < 550 || size.qcx > 100;
@@ -167,7 +180,7 @@ export default function TableWrapper(props) {
           />
         </Table>
       </TableContainer>
-      <Paper className={classes.tablePaginationSection}>
+      <Paper ref={tablePaginationSectionRef} className={classes.tablePaginationSection}>
         <TablePagination
           className={classes[paginationHidden]}
           rowsPerPageOptions={fixedRowsPerPage ? [rowsPerPage] : rowsPerPageOptions}
