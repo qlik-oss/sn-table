@@ -21,7 +21,7 @@ const useStyles = makeStyles({
     backgroundColor: 'rgb(255, 255, 255)',
   },
   containerOverflowAuto: {
-    height: 'calc(100% - 52px)',
+    height: 'calc(100% - 65px)',
     overflow: 'auto',
   },
   containerOverflowHidden: {
@@ -32,6 +32,9 @@ const useStyles = makeStyles({
     backgroundColor: 'rgb(255, 255, 255)',
     display: 'flex',
     justifyContent: 'flex-end',
+    border: '1px solid rgb(217, 217, 217)',
+    borderTop: '0px',
+    boxShadow: 'none',
   },
   paginationHidden: {
     display: 'none',

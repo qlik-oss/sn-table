@@ -13,9 +13,21 @@ import { handleLastTab } from '../utils/handle-key-press';
 
 const useStyles = makeStyles({
   root: {
+    paddingLeft: '12px',
     flexShrink: 0,
-    paddingLeft: '24px',
-    transform: 'translate(0px, 4px)',
+    display: 'flex',
+  },
+  formControl: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  caption: {
+    fontSize: '14px',
+    color: 'inherit',
+    width: 'fit-content',
+    position: 'relative',
+    padding: '8px',
+    transform: 'none',
   },
   paginationActionButton: {
     color: 'rgba(0, 0, 0, 0.54)',
@@ -27,18 +39,6 @@ const useStyles = makeStyles({
   focused: {
     color: '#404040 !important',
   },
-  caption: {
-    fontSize: '14px',
-    color: 'inherit',
-    width: 'fit-content',
-    position: 'relative',
-    transform: 'translate(0px, 12px)',
-    paddingRight: '8px',
-    height: '30px',
-  },
-  formControl: {
-    flexDirection: 'row',
-  },
   hidden: {
     display: 'none',
   },
@@ -46,7 +46,6 @@ const useStyles = makeStyles({
     cursor: 'pointer',
     minWidth: '16px',
     maxHeight: '32px',
-    transform: 'translate(0px, 6px)',
   },
   input: {
     padding: '6px 32px 7px 8px',
