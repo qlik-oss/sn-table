@@ -34,6 +34,7 @@ describe('<TableBodyWrapper />', async () => {
     theme = {
       getColorPickerColor: () => {},
       name: () => {},
+      getStyle: () => {},
     };
     layout = {};
     cellRendererSpy = sinon.spy();

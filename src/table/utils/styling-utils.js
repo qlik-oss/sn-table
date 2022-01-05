@@ -1,7 +1,7 @@
 import { resolveExpression, isDarkColor } from './color-utils';
 
 // the order of style
-// default < theme < column < selection (except the selected green) < hover < selected green
+// default < theme < styling settings < column < selection (except the selected green) < hover < selected green
 export const STYLING_DEFAULTS = {
   FONT_SIZE: '14px',
   FONT_COLOR: '#404040',
@@ -54,7 +54,6 @@ export function getHeadStyle(layout, theme) {
 
 export function getBodyStyle(layout, theme) {
   const content = layout.components?.[0]?.content;
-  window.console.log({ content });
 
   // Cases when hoverEffect is true:
   // 1. There is no hover font color but a hover background color,
@@ -93,7 +92,7 @@ export function getBodyStyle(layout, theme) {
     hoverFontColor: [hoverFontColor, '!important'],
     selectedCellClass: '',
   };
-  window.console.log({ contentStyle });
+
   return contentStyle;
 }
 
