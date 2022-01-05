@@ -18,7 +18,7 @@ import announcementFactory from '../utils/announcement-factory';
 const useStyles = makeStyles({
   paper: {
     height: '100%',
-    backgroundColor: ({ backgroundColor }) => backgroundColor,
+    backgroundColor: ({ tableBackgroundColor }) => tableBackgroundColor,
   },
   containerOverflowAuto: {
     height: 'calc(100% - 52px)',
@@ -31,7 +31,7 @@ const useStyles = makeStyles({
   tablePaginationSection: {
     display: 'flex',
     justifyContent: 'flex-end',
-    backgroundColor: ({ backgroundColor }) => backgroundColor,
+    backgroundColor: ({ tableBackgroundColor }) => tableBackgroundColor,
   },
   paginationHidden: {
     display: 'none',
@@ -59,8 +59,8 @@ export default function TableWrapper(props) {
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
 
-  const backgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor') || 'inherit';
-  const classes = useStyles({ backgroundColor });
+  const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor') || 'inherit';
+  const classes = useStyles({ tableBackgroundColor });
 
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
@@ -157,15 +157,10 @@ export default function TableWrapper(props) {
         data-testid="table-wrapper"
       >
         <Table stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper
-            {...props}
-            backgroundColor={backgroundColor}
-            setFocusedCellCoord={setFocusedCellCoord}
-            focusedCellCoord={focusedCellCoord}
-          />
+          <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
           <TableBodyWrapper
             {...props}
-            backgroundColor={backgroundColor}
+            tableBackgroundColor={tableBackgroundColor}
             announce={announce}
             focusedCellCoord={focusedCellCoord}
             setFocusedCellCoord={setFocusedCellCoord}

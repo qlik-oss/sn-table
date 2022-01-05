@@ -35,7 +35,7 @@ function TableBodyWrapper({
   selectionsAPI,
   layout,
   theme,
-  backgroundColor,
+  tableBackgroundColor,
   setShouldRefocus,
   setFocusedCellCoord,
   keyboard,
@@ -92,7 +92,7 @@ function TableBodyWrapper({
                   selectionState={selectionState}
                   selDispatch={selDispatch}
                   tabIndex={-1}
-                  backgroundColor={backgroundColor}
+                  tableBackgroundColor={tableBackgroundColor}
                   announce={announce}
                   onKeyDown={(evt) =>
                     bodyHandleKeyPress({
@@ -132,7 +132,7 @@ TableBodyWrapper.propTypes = {
   setShouldRefocus: PropTypes.func.isRequired,
   keyboard: PropTypes.object.isRequired,
   tableWrapperRef: PropTypes.object.isRequired,
-  backgroundColor: PropTypes.string.isRequired,
+  tableBackgroundColor: PropTypes.string.isRequired,
   announce: PropTypes.func.isRequired,
 };
 

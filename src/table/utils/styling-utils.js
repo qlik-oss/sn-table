@@ -40,15 +40,21 @@ export const isUnset = (prop) => !prop || JSON.stringify(prop) === JSON.stringif
 
 export function getHeadStyle(layout, theme) {
   const header = layout.components?.[0]?.header;
+  const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
+
   const headerStyle = {
-    fontFamily: theme.getStyle('object.straightTable', 'header', 'fontFamily') || 'inherit',
+    fontFamily: theme.getStyle('object.straightTable', 'header', 'fontFamily'),
     color: header
       ? getColor(header.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme)
       : theme.getStyle('object.straightTable', 'header', 'color'),
     fontSize:
       header?.fontSize || theme.getStyle('object.straightTable', 'header', 'fontSize') || STYLING_DEFAULTS.FONT_SIZE,
     padding: header?.fontSize ? `${header.fontSize / 2}px ${header.fontSize}px` : STYLING_DEFAULTS.PADDING,
+    // transparent is not allowed
+    backgroundColor: tableBackgroundColor === 'transparent' ? 'inherent' : tableBackgroundColor,
   };
+  // Remove all Undefined Values from an Object
+  Object.keys(headerStyle).forEach((key) => headerStyle[key] === undefined && delete headerStyle[key]);
   return headerStyle;
 }
 
@@ -81,7 +87,7 @@ export function getBodyStyle(layout, theme) {
     : getColor(content.hoverFontColor, getAutoFontColor(hoverBackgroundColor), theme);
 
   const contentStyle = {
-    fontFamily: theme.getStyle('object.straightTable', 'content', 'fontFamily') || 'inherit',
+    fontFamily: theme.getStyle('object.straightTable', 'content', 'fontFamily'),
     color: content
       ? getColor(content.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme)
       : theme.getStyle('object.straightTable', 'content', 'color'),
@@ -92,7 +98,7 @@ export function getBodyStyle(layout, theme) {
     hoverFontColor: [hoverFontColor, '!important'],
     selectedCellClass: '',
   };
-
+  Object.keys(contentStyle).forEach((key) => contentStyle[key] === undefined && delete contentStyle[key]);
   return contentStyle;
 }
 
@@ -112,12 +118,12 @@ export function getColumnStyle(styling, qAttrExps, stylingInfo) {
   };
 }
 
-export function getSelectionColors(background = STYLING_DEFAULTS.WHITE, cell, selectionState, backgroundColor) {
+export function getSelectionColors(background = STYLING_DEFAULTS.WHITE, cell, selectionState, tableBackgroundColor) {
   const { colIdx, rows, api } = selectionState;
 
   if (api.isModal()) {
     if (colIdx !== cell.colIdx) {
-      return { background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${backgroundColor || background}` };
+      return { background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${tableBackgroundColor || background}` };
     }
 
     for (let i = 0; i < rows.length; i++) {
@@ -126,16 +132,16 @@ export function getSelectionColors(background = STYLING_DEFAULTS.WHITE, cell, se
       }
     }
 
-    return { ...SELECTION_STYLING.POSSIBLE, background: backgroundColor || SELECTION_STYLING.POSSIBLE.background };
+    return { ...SELECTION_STYLING.POSSIBLE, background: tableBackgroundColor || SELECTION_STYLING.POSSIBLE.background };
   }
 
   return {};
 }
 
-export function getSelectionStyle(styling, cell, selectionState, backgroundColor) {
+export function getSelectionStyle(styling, cell, selectionState, tableBackgroundColor) {
   const selectionStyle = {
     ...styling,
-    ...getSelectionColors(styling.background, cell, selectionState, backgroundColor),
+    ...getSelectionColors(styling.background, cell, selectionState, tableBackgroundColor),
   };
   return selectionStyle;
 }

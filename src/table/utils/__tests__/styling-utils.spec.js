@@ -81,16 +81,14 @@ describe('styling-utils', () => {
       };
     });
 
-    it('should return object with only padding when no header property', () => {
+    it('should return object with only default padding and font size when no header property', () => {
       layout = {};
 
       const resultStyling = getHeadStyle(layout, theme);
-      console.log({ resultStyling });
-      expect(resultStyling).to.eql({ padding: '7px 14px' });
+      expect(resultStyling).to.eql({ padding: '7px 14px', fontSize: '14px' });
     });
     it('should call default styling', () => {
       const resultStyling = getHeadStyle(layout, theme);
-      console.log({ resultStyling });
       expect(resultStyling).to.eql({
         color: '#404040',
         fontSize: '14px',
@@ -129,11 +127,17 @@ describe('styling-utils', () => {
       };
     });
 
-    it('should return object with only padding when no header property', () => {
+    it('should return object with only default padding, font size, HOVER_BACKGROUND  when no header property', () => {
       layout = {};
 
       const resultStyling = getBodyStyle(layout, theme);
-      expect(resultStyling).to.eql({ padding: '7px 14px' });
+      expect(resultStyling).to.eql({
+        padding: '7px 14px',
+        fontSize: '14px',
+        hoverBackgroundColor: ['#f4f4f4', '!important'],
+        hoverFontColor: ['', '!important'],
+        selectedCellClass: '',
+      });
     });
     it('should return styling with fontColor, fontSize, padding plus defualt hoverBackgroundColor and hoverFontColor', () => {
       const resultStyling = getBodyStyle(layout, theme);
@@ -254,7 +258,9 @@ describe('styling-utils', () => {
       cell.qElemNumber = 2;
 
       const selectionClass = getSelectionColors(background, cell, selectionState);
-      expect(selectionClass).to.equal(SELECTION_STYLING.POSSIBLE);
+      console.log(selectionClass);
+      console.log(SELECTION_STYLING.POSSIBLE);
+      expect(selectionClass).to.eql(SELECTION_STYLING.POSSIBLE);
     });
     it('should return empty object when no active selections', () => {
       selectionState = { rows: [], api: { isModal: () => false } };
