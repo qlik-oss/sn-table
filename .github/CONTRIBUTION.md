@@ -39,5 +39,7 @@ Currently only admins are able to create a release. A release consists of the fo
 
 ### On version command failure
 
-1. Run `git tag` to make sure a tag not was created.
+If you would run `npm version` and it for some reason fails, or you would like to revert the tag you just created:
+
+1. Run `git tag` to check if a new tag was created (or already existed).
 1. If a tag was created, delete it with `git tag -d <tag>`.
