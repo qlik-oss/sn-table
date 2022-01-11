@@ -40,7 +40,9 @@
     "test:rendering": "aw puppet --testExt '*.spec.js' --glob 'test/rendering/**/*.spec.js' --mocha.bail false --mocha.timeout 30000",
     "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
     "prepack": "./tools/prepare-sn-pack.js",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "preversion": "yarn build",
+    "version": "yarn spec && git add api-specifications"
   },
   "lint-staged": {
     "*.{js,jsx}": [
