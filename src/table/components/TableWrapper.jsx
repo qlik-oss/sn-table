@@ -19,6 +19,7 @@ const useStyles = makeStyles({
   paper: {
     height: '100%',
     backgroundColor: 'rgb(255, 255, 255)',
+    direction: ({ rtl }) => (rtl ? 'rtl' : 'ltr'),
   },
   containerOverflowAuto: {
     height: 'calc(100% - 52px)',
@@ -49,6 +50,7 @@ export default function TableWrapper(props) {
     selectionsAPI,
     keyboard,
     rect,
+    rtl,
     announcer, // this is only for testing purposes
   } = props;
   const { size, rows, columns } = tableData;
@@ -57,7 +59,7 @@ export default function TableWrapper(props) {
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
-  const classes = useStyles();
+  const classes = useStyles({ rtl });
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
   const fixedRowsPerPage = selectionsAPI.isModal() || rect.width < 550 || size.qcx > 100;
@@ -218,5 +220,6 @@ TableWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
   rect: PropTypes.object.isRequired,
+  rtl: PropTypes.bool.isRequired,
   announcer: PropTypes.func,
 };
