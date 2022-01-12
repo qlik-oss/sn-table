@@ -115,7 +115,9 @@ export default function TablePaginationActions(props) {
             {Array(lastPageIdx + 1)
               .fill()
               .map((_, i) => (
-                <option value={i}>{i + 1}</option>
+                <option key={_} value={i}>
+                  {i + 1}
+                </option>
               ))}
           </Select>
         </FormControl>

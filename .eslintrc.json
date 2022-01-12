@@ -10,7 +10,7 @@
       "presets": ["@babel/preset-react"]
     }
   },
-  "extends": ["airbnb", "prettier", "eslint:recommended"],
+  "extends": ["airbnb", "prettier", "plugin:react/recommended"],
   "plugins": ["prettier", "react", "react-hooks"],
   "rules": {
     "max-len": 0,

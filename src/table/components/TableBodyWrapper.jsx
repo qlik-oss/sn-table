@@ -64,7 +64,7 @@ function TableBodyWrapper({
   }, []);
 
   return (
-    <TableBody className={`${classes.cellBase}`}>
+    <TableBody className={classes.cellBase}>
       {rows.map((row, rowIndex) => (
         <TableRow
           hover={hoverEffect}
