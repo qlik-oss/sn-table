@@ -3,6 +3,7 @@ import {
   useElement,
   useStaleLayout,
   useEffect,
+  useOptions,
   useModel,
   useState,
   useConstraints,
@@ -33,6 +34,7 @@ export default function supernova(env) {
     component() {
       const rootElement = useElement();
       const layout = useStaleLayout();
+      const options = useOptions();
       const model = useModel();
       const constraints = useConstraints();
       const translator = useTranslator();
@@ -52,6 +54,7 @@ export default function supernova(env) {
         if (layout && tableData) {
           registerLocale(translator);
           const changeSortOrder = sortingFactory(model);
+          const rtl = options.direction === 'rtl';
           render(rootElement, {
             rootElement,
             layout,
@@ -64,6 +67,7 @@ export default function supernova(env) {
             muiParameters,
             theme,
             changeSortOrder,
+            rtl,
             keyboard,
             rect,
           });
@@ -71,6 +75,7 @@ export default function supernova(env) {
       }, [
         tableData,
         constraints,
+        options.direction,
         selectionsAPI.isModal(),
         theme.name(),
         keyboard.active,
