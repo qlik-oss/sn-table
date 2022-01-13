@@ -19,6 +19,7 @@ const useStyles = makeStyles({
   paper: {
     height: '100%',
     backgroundColor: ({ tableBackgroundColor }) => tableBackgroundColor,
+    direction: ({ rtl }) => (rtl ? 'rtl' : 'ltr'),
   },
   containerOverflowAuto: {
     height: 'calc(100% - 52px)',
@@ -49,6 +50,7 @@ export default function TableWrapper(props) {
     selectionsAPI,
     keyboard,
     rect,
+    rtl,
     announcer, // this is only for testing purposes
     theme,
   } = props;
@@ -58,9 +60,8 @@ export default function TableWrapper(props) {
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
-
   const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor') || 'inherit';
-  const classes = useStyles({ tableBackgroundColor });
+  const classes = useStyles({ tableBackgroundColor, rtl });
 
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
@@ -223,6 +224,7 @@ TableWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
   rect: PropTypes.object.isRequired,
+  rtl: PropTypes.bool.isRequired,
   announcer: PropTypes.func,
   theme: PropTypes.object.isRequired,
 };
