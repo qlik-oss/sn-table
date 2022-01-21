@@ -150,7 +150,7 @@ jobs:
       - run:
           name: Prepare API Compliance
           command: |
-            docker pull http://ghcr.io/qlik-download/api-compliance
+            docker pull ghcr.io/qlik-download/api-compliance
             docker create -v /specs --name specs alpine:3.4 /bin/true
             docker cp  ./api-specifications/properties.json specs:/specs
       - run:
