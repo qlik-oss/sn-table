@@ -134,7 +134,6 @@ jobs:
           at: ~/project
       - run:
           name: Log into Github Docker Registry
-          command: |
           command: echo $DOCKER_TOKEN | docker login -u "$DOCKER_USER" --password-stdin
       - run:
           name: Create version.txt
