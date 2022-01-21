@@ -163,7 +163,7 @@ jobs:
             -e CREDENTIALS_GITHUB="$APICULTURIST_GITHUB"
             -e CREDENTIALS_COLONY="$APICULTURIST_TOKEN"
             ghcr.io/qlik-download/api-compliance
- workflows:
+workflows:
   version: 2
   build-all:
     jobs:
