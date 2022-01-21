@@ -172,6 +172,7 @@ workflows:
           requires:
             - install
       - api-governance:
+          context: api-compliance
           filters:
             branches:
               # Forked pull requests have CIRCLE_BRANCH set to pull/XXX
