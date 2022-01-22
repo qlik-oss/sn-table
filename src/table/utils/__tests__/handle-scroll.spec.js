@@ -1,9 +1,10 @@
-import { handleScroll, handleNavigateTop } from '../handle-scroll';
+import { handleHorizontalScroll, handleNavigateTop } from '../handle-scroll';
 
 describe('handle-scroll', () => {
-  describe('handleNavigateTop', () => {
+  describe('handleHorizontalScroll', () => {
     let evt;
-    let tableContainer;
+    let memoedContainer;
+    let rtl;
 
     beforeEach(() => {
       evt = {
@@ -11,24 +12,43 @@ describe('handle-scroll', () => {
         preventDefault: sinon.spy(),
         deltaX: -1,
       };
-      tableContainer = {
-        current: {
-          scrollWidth: 2327,
-          offsetWidth: 958,
-          scrollLeft: 0,
-        },
+      memoedContainer = {
+        scrollWidth: 2327,
+        offsetWidth: 958,
+        scrollLeft: 0,
       };
+      rtl = true;
     });
 
-    it('should run preventDefault when scroll to leftmost place', () => {
-      handleScroll(evt, tableContainer);
+    it('should run preventDefault when scroll to leftmost place in ltr direction', () => {
+      rtl = false;
+      handleHorizontalScroll(evt, rtl, memoedContainer);
       expect(evt.stopPropagation).have.been.calledOnce;
       expect(evt.preventDefault).have.been.calledOnce;
     });
 
-    it('should not run preventDefault when not scroll to leftmost place', () => {
-      tableContainer.current.scrollLeft = 1369;
-      handleScroll(evt, tableContainer);
+    it('should not run preventDefault when not scroll to leftmost place in ltr direction', () => {
+      rtl = false;
+      memoedContainer.scrollLeft = 1369;
+      handleHorizontalScroll(evt, rtl, memoedContainer);
+      expect(evt.stopPropagation).have.been.calledOnce;
+      expect(evt.preventDefault).not.have.been.called;
+    });
+
+    it('should run preventDefault when scroll to leftmost place in rtl direction', () => {
+      memoedContainer = {
+        scrollWidth: 968,
+        offsetWidth: 295,
+        clientWidth: 295,
+        scrollLeft: -672,
+      };
+      handleHorizontalScroll(evt, rtl, memoedContainer);
+      expect(evt.stopPropagation).have.been.calledOnce;
+      expect(evt.preventDefault).have.been.calledOnce;
+    });
+
+    it('should not run preventDefault when not scroll to leftmost place in rtl direction', () => {
+      handleHorizontalScroll(evt, rtl, memoedContainer);
       expect(evt.stopPropagation).have.been.calledOnce;
       expect(evt.preventDefault).not.have.been.called;
     });
