@@ -98,7 +98,7 @@ export default function TablePaginationActions(props) {
             shrink={false}
             classes={{ focused: classes.focused }}
           >
-            {`${translator.get('SNTable.Pagination.SelectPage')}: `}
+            {`${translator.get('SNTable.Pagination.SelectPage')}:`}
           </InputLabel>
           <Select
             native

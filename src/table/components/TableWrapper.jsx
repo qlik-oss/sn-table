@@ -19,7 +19,6 @@ const useStyles = makeStyles({
   paper: {
     height: '100%',
     backgroundColor: 'rgb(255, 255, 255)',
-    direction: ({ rtl }) => (rtl ? 'rtl' : 'ltr'),
   },
   containerOverflowAuto: {
     height: 'calc(100% - 52px)',
@@ -42,6 +41,7 @@ const useStyles = makeStyles({
 export default function TableWrapper(props) {
   const {
     rootElement,
+    direction,
     tableData,
     pageInfo,
     setPageInfo,
@@ -50,7 +50,6 @@ export default function TableWrapper(props) {
     selectionsAPI,
     keyboard,
     rect,
-    rtl,
     announcer, // this is only for testing purposes
   } = props;
   const { size, rows, columns } = tableData;
@@ -59,7 +58,7 @@ export default function TableWrapper(props) {
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
-  const classes = useStyles({ rtl });
+  const classes = useStyles();
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
   const fixedRowsPerPage = selectionsAPI.isModal() || rect.width < 550 || size.qcx > 100;
@@ -131,6 +130,7 @@ export default function TableWrapper(props) {
 
   return (
     <Paper
+      dir={direction}
       className={classes.paper}
       ref={tableWrapperRef}
       onKeyDown={(evt) =>
@@ -212,6 +212,7 @@ TableWrapper.defaultProps = {
 
 TableWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
+  direction: PropTypes.string.isRequired,
   tableData: PropTypes.object.isRequired,
   pageInfo: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,
@@ -220,6 +221,5 @@ TableWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
   rect: PropTypes.object.isRequired,
-  rtl: PropTypes.bool.isRequired,
   announcer: PropTypes.func,
 };
