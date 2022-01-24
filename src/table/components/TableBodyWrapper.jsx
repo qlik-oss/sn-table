@@ -1,6 +1,6 @@
+import { styled } from '@mui/system';
 import React, { useReducer, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@mui/styles';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import { addSelectionListeners, reducer } from '../utils/selections-utils';
@@ -9,24 +9,22 @@ import { getBodyStyle } from '../utils/styling-utils';
 import { bodyHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
 
-const useStyles = makeStyles({
-  cellBase: {
-    '& td, th': {
-      color: ({ color }) => color,
-      fontSize: ({ fontSize }) => fontSize,
-      padding: ({ padding }) => padding,
-    },
+const CustomTableBody = styled(TableBody)(({ bodyStyle }) => ({
+  '& td, th': {
+    color: bodyStyle.color,
+    fontSize: bodyStyle.fontSize,
+    padding: bodyStyle.padding,
   },
-  hoverTableRow: {
-    '&&:hover': {
-      '& td:not(.selected), th:not(.selected)': {
-        backgroundColor: ({ hoverBackgroundColor }) => hoverBackgroundColor,
-        color: ({ hoverFontColor }) => hoverFontColor,
-      },
-    },
-  },
-});
+}));
 
+const CustomTableRow = styled(TableRow)(({ hover, bodyStyle }) => ({
+  '&&:hover': {
+    '& td:not(.selected), th:not(.selected)': {
+      backgroundColor: hover && bodyStyle.hoverBackgroundColor,
+      color: hover && bodyStyle.hoverFontColor,
+    },
+  },
+}));
 function TableBodyWrapper({
   rootElement,
   tableData,
@@ -43,7 +41,6 @@ function TableBodyWrapper({
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
-  const classes = useStyles(bodyStyle);
   const selectionsEnabled = !!selectionsAPI && !constraints.active;
   const getColumnRenderers = tableData.columns.map((c) => getCellRenderer(!!c.stylingInfo.length, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(() => getColumnRenderers);
@@ -64,14 +61,9 @@ function TableBodyWrapper({
   }, []);
 
   return (
-    <TableBody className={classes.cellBase}>
+    <CustomTableBody bodyStyle={bodyStyle}>
       {rows.map((row, rowIndex) => (
-        <TableRow
-          hover={hoverEffect}
-          tabIndex={-1}
-          key={row.key}
-          className={`sn-table-row ${hoverEffect && classes.hoverTableRow}`}
-        >
+        <CustomTableRow hover={hoverEffect} bodyStyle={bodyStyle} tabIndex={-1} key={row.key} className="sn-table-row">
           {columns.map((column, columnIndex) => {
             const cell = row[column.id];
             const value = cell.qText;
@@ -112,9 +104,9 @@ function TableBodyWrapper({
               )
             );
           })}
-        </TableRow>
+        </CustomTableRow>
       ))}
-    </TableBody>
+    </CustomTableBody>
   );
 }
 

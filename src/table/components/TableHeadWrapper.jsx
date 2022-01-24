@@ -1,6 +1,6 @@
+import { styled } from '@mui/system';
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@mui/styles';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -9,27 +9,27 @@ import { getHeadStyle } from '../utils/styling-utils';
 import { headHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusHead } from '../utils/handle-accessibility';
 
-const useStyles = makeStyles({
-  head: {
-    color: ({ color }) => color,
-    fontSize: ({ fontSize }) => fontSize,
-    padding: ({ padding }) => padding,
-  },
-  visuallyHidden: {
-    border: 0,
-    clip: 'rect(0 0 0 0)',
-    height: 1,
-    margin: -1,
-    overflow: 'hidden',
-    padding: 0,
-    position: 'absolute',
-    top: 20,
-    width: 1,
-  },
-  sortLabel: {
-    '&.Mui-active': {
-      color: 'inherit',
-    },
+const CustomTableCell = styled(TableCell)(({ headCellStyle }) => ({
+  color: headCellStyle.color,
+  fontSize: headCellStyle.fontSize,
+  padding: headCellStyle.padding,
+}));
+
+const VisuallyHidden = styled('span')({
+  border: 0,
+  clip: 'rect(0 0 0 0)',
+  height: 1,
+  margin: -1,
+  overflow: 'hidden',
+  padding: 0,
+  position: 'absolute',
+  top: 20,
+  width: 1,
+});
+
+const TableSortLabelSection = styled(TableSortLabel)({
+  '&.Mui-active': {
+    color: 'inherit',
   },
 });
 
@@ -46,8 +46,7 @@ function TableHeadWrapper({
   setFocusedCellCoord,
   keyboard,
 }) {
-  const headStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
-  const classes = useStyles(headStyle);
+  const headCellStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
 
   return (
     <TableHead>
@@ -58,10 +57,11 @@ function TableHeadWrapper({
           const isFocusInHead = focusedCellCoord[0] === 0;
 
           return (
-            <TableCell
+            <CustomTableCell
+              headCellStyle={headCellStyle}
               key={column.id}
               align={column.align}
-              className={`${classes.head} sn-table-head-cell sn-table-cell`}
+              className="sn-table-head-cell sn-table-cell"
               tabIndex={tabIndex}
               aria-sort={isCurrentColumnActive ? `${column.sortDirection}ending` : null}
               aria-pressed={isCurrentColumnActive}
@@ -80,20 +80,15 @@ function TableHeadWrapper({
               onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
               onClick={() => !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column)}
             >
-              <TableSortLabel
-                className={classes.sortLabel}
-                active={isCurrentColumnActive}
-                direction={column.sortDirection}
-                tabIndex={-1}
-              >
+              <TableSortLabelSection active={isCurrentColumnActive} direction={column.sortDirection} tabIndex={-1}>
                 {column.label}
                 {isFocusInHead && (
-                  <span className={classes.visuallyHidden} data-testid={`VHL-for-col-${columnIndex}`}>
+                  <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>
                     {translator.get('SNTable.SortLabel.PressSpaceToSort')}
-                  </span>
+                  </VisuallyHidden>
                 )}
-              </TableSortLabel>
-            </TableCell>
+              </TableSortLabelSection>
+            </CustomTableCell>
           );
         })}
       </TableRow>

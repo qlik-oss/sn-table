@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { styled } from '@mui/system';
 import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
@@ -8,50 +9,7 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
-import { makeStyles } from '@mui/styles';
 import { handleLastTab } from '../utils/handle-key-press';
-
-const useStyles = makeStyles({
-  root: {
-    flexShrink: 0,
-    paddingLeft: '24px',
-    transform: 'translate(0px, 4px)',
-  },
-  paginationActionButton: {
-    color: 'rgba(0, 0, 0, 0.54)',
-  },
-  disabled: {
-    color: 'rgba(0, 0, 0, 0.3)',
-    cursor: 'default',
-  },
-  focused: {
-    color: '#404040 !important',
-  },
-  caption: {
-    fontSize: '14px',
-    color: 'inherit',
-    width: 'fit-content',
-    position: 'relative',
-    transform: 'translate(0px, 12px)',
-    paddingRight: '8px',
-    height: '30px',
-  },
-  formControl: {
-    flexDirection: 'row',
-  },
-  hidden: {
-    display: 'none',
-  },
-  dropdown: {
-    cursor: 'pointer',
-    minWidth: '16px',
-    maxHeight: '32px',
-    transform: 'translate(0px, 6px)',
-  },
-  input: {
-    padding: '6px 32px 7px 8px',
-  },
-});
 
 const icons = {
   FirstPage: FirstPageIcon,
@@ -60,8 +18,39 @@ const icons = {
   LastPage: LastPageIcon,
 };
 
+const PaginationActionIconButton = styled(IconButton)(({ disabledCondition }) => ({
+  color: disabledCondition ? 'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.54)',
+  cursor: disabledCondition && 'default',
+}));
+
+const TablePaginationActionsSection = styled('div')({
+  flexShrink: 0,
+  paddingLeft: '24px',
+  transform: 'translate(0px, 4px)',
+});
+
+const Caption = styled(InputLabel)({
+  fontSize: '14px',
+  color: '#404040',
+  width: 'fit-content',
+  position: 'relative',
+  transform: 'translate(0px, 12px)',
+  paddingRight: '8px',
+  height: '30px',
+});
+
+const PaginationSelect = styled(Select)({
+  cursor: 'pointer',
+  minWidth: '16px',
+  maxHeight: '32px',
+  transform: 'translate(0px, 6px)',
+});
+
+const CustomFormControl = styled(FormControl)({
+  flexDirection: 'row',
+});
+
 export default function TablePaginationActions(props) {
-  const classes = useStyles();
   const { page, lastPageIdx, onPageChange, keyboard, tableWidth, translator, isInSelectionMode } = props;
   const onFirstPage = page === 0;
   const onLastPage = page >= lastPageIdx;
@@ -74,42 +63,38 @@ export default function TablePaginationActions(props) {
   const getButton = (disabledCondition, pageNumber, type, onKeyDown = null) => {
     const IconComponent = icons[type];
     return (
-      <IconButton
+      <PaginationActionIconButton
         onClick={!disabledCondition ? () => onPageChange(pageNumber) : null}
         aria-disabled={disabledCondition}
         aria-label={translator.get(`SNTable.Pagination.${type}`)}
         title={translator.get(`SNTable.Pagination.${type}`)}
         tabIndex={tabIndex}
-        className={`${classes.paginationActionButton} ${disabledCondition && classes.disabled}`}
+        disabledCondition={disabledCondition}
         onKeyDown={onKeyDown}
       >
         <IconComponent />
-      </IconButton>
+      </PaginationActionIconButton>
     );
   };
 
   return (
-    <div className={classes.root}>
+    <TablePaginationActionsSection>
       {tableWidth > 650 && (
-        <FormControl className={classes.formControl}>
-          <InputLabel
-            className={classes.caption}
-            htmlFor="pagination-dropdown"
-            shrink={false}
-            classes={{ focused: classes.focused }}
-          >
+        <CustomFormControl>
+          <Caption htmlFor="pagination-dropdown" shrink={false}>
             {`${translator.get('SNTable.Pagination.SelectPage')}:`}
-          </InputLabel>
-          <Select
+          </Caption>
+          <PaginationSelect
             native
-            className={classes.dropdown}
             value={page}
             onChange={handleSelectPage}
             inputProps={{
               'data-testid': 'pagination-dropdown',
               tabIndex,
               id: 'pagination-dropdown',
-              className: classes.input,
+              style: {
+                padding: '6px 32px 7px 8px',
+              },
             }}
           >
             {Array(lastPageIdx + 1)
@@ -119,14 +104,14 @@ export default function TablePaginationActions(props) {
                   {i + 1}
                 </option>
               ))}
-          </Select>
-        </FormControl>
+          </PaginationSelect>
+        </CustomFormControl>
       )}
       {showFirstLast && getButton(onFirstPage, 0, 'FirstPage')}
       {getButton(onFirstPage, page - 1, 'PreviousPage')}
       {getButton(onLastPage, page + 1, 'NextPage', !showFirstLast ? handleLastButtonTab : null)}
       {showFirstLast && getButton(onLastPage, lastPageIdx, 'LastPage', handleLastButtonTab)}
-    </div>
+    </TablePaginationActionsSection>
   );
 }
 
