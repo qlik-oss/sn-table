@@ -1,22 +1,29 @@
 export const handleHorizontalScroll = (evt, rtl, memoedContainer) => {
   evt.stopPropagation();
+  // scrollWidth is a measurement of the width of an element's content, including content not visible on the screen due to overflow.
+  // offsetWidth is a measurement in pixels of the element's CSS width, including any borders, padding, and vertical scrollbars
+  // scrollLeft is the number of pixels scrolled from its left edge
   if (rtl) {
-    // in RTL, scrollLeft is actually scrollRight, scrollRight is scrollLeft
+    // scrollLeft is 0 when the scrollbar is at its rightmost position
+    // (at the start of the scrolled content),
+    // and then increasingly negative as you scroll towards (left) the end of the content .
+    // evt.deltaX increasingly negative as you scroll towards left,
+    // increasingly positive as you scroll towards right
     let { scrollLeft } = memoedContainer;
-    const newScrollLeft = scrollLeft + evt.deltaX;
-    const scrollRight = memoedContainer.scrollWidth + newScrollLeft - memoedContainer.clientWidth;
-    const max = memoedContainer.scrollWidth - memoedContainer.offsetWidth;
-    if (max > 0 && (scrollRight < 0 || scrollRight > max)) {
+    const ScrollLeftWidth = scrollLeft + evt.deltaX;
+    const maxScrollableWidth = memoedContainer.scrollWidth - memoedContainer.offsetWidth;
+    const scrollRight = maxScrollableWidth + ScrollLeftWidth;
+    if (maxScrollableWidth > 0 && (scrollRight <= 0 || scrollRight > maxScrollableWidth)) {
       evt.preventDefault();
-      scrollLeft = Math.min(0, Math.min(max, scrollRight));
+      scrollLeft = Math.min(0, Math.min(maxScrollableWidth, scrollRight));
     }
   } else {
     let { scrollLeft } = memoedContainer;
-    const newScrollLeft = scrollLeft + evt.deltaX;
-    const max = memoedContainer.scrollWidth - memoedContainer.offsetWidth;
-    if (max > 0 && (newScrollLeft < 0 || newScrollLeft > max)) {
+    const ScrollLeftWidth = scrollLeft + evt.deltaX;
+    const maxScrollableWidth = memoedContainer.scrollWidth - memoedContainer.offsetWidth;
+    if (maxScrollableWidth > 0 && (ScrollLeftWidth < 0 || ScrollLeftWidth > maxScrollableWidth)) {
       evt.preventDefault();
-      scrollLeft = Math.max(0, Math.min(max, newScrollLeft));
+      scrollLeft = Math.max(0, Math.min(maxScrollableWidth, ScrollLeftWidth));
     }
   }
 };

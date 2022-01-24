@@ -27,20 +27,69 @@ describe('handle-scroll', () => {
       expect(evt.preventDefault).have.been.calledOnce;
     });
 
+    it('should run preventDefault when scroll to rightmost place in ltr direction', () => {
+      evt = {
+        ...evt,
+        deltaX: 10,
+      };
+      memoedContainer = {
+        ...memoedContainer,
+        scrollLeft: 1369,
+      };
+      rtl = false;
+      handleHorizontalScroll(evt, rtl, memoedContainer);
+      expect(evt.stopPropagation).have.been.calledOnce;
+      expect(evt.preventDefault).have.been.calledOnce;
+    });
+
     it('should not run preventDefault when not scroll to leftmost place in ltr direction', () => {
       rtl = false;
-      memoedContainer.scrollLeft = 1369;
+      memoedContainer = {
+        ...memoedContainer,
+        scrollLeft: 400,
+      };
+      handleHorizontalScroll(evt, rtl, memoedContainer);
+      expect(evt.stopPropagation).have.been.calledOnce;
+      expect(evt.preventDefault).not.have.been.called;
+    });
+
+    it('should not run preventDefault when not scroll to rightmost place in ltr direction', () => {
+      evt = {
+        ...evt,
+        deltaX: 10,
+      };
+      memoedContainer = {
+        ...memoedContainer,
+        scrollLeft: 400,
+      };
+      rtl = false;
       handleHorizontalScroll(evt, rtl, memoedContainer);
       expect(evt.stopPropagation).have.been.calledOnce;
       expect(evt.preventDefault).not.have.been.called;
     });
 
     it('should run preventDefault when scroll to leftmost place in rtl direction', () => {
+      evt = {
+        ...evt,
+        deltaX: -1,
+      };
       memoedContainer = {
-        scrollWidth: 968,
-        offsetWidth: 295,
-        clientWidth: 295,
-        scrollLeft: -672,
+        ...memoedContainer,
+        scrollLeft: -1369,
+      };
+      handleHorizontalScroll(evt, rtl, memoedContainer);
+      expect(evt.stopPropagation).have.been.calledOnce;
+      expect(evt.preventDefault).have.been.calledOnce;
+    });
+
+    it('should run preventDefault when scroll to rightmost place in rtl direction', () => {
+      evt = {
+        ...evt,
+        deltaX: 1,
+      };
+      memoedContainer = {
+        ...memoedContainer,
+        scrollLeft: 1,
       };
       handleHorizontalScroll(evt, rtl, memoedContainer);
       expect(evt.stopPropagation).have.been.calledOnce;
@@ -48,6 +97,28 @@ describe('handle-scroll', () => {
     });
 
     it('should not run preventDefault when not scroll to leftmost place in rtl direction', () => {
+      evt = {
+        ...evt,
+        deltaX: -10,
+      };
+      memoedContainer = {
+        ...memoedContainer,
+        scrollLeft: -855,
+      };
+      handleHorizontalScroll(evt, rtl, memoedContainer);
+      expect(evt.stopPropagation).have.been.calledOnce;
+      expect(evt.preventDefault).not.have.been.called;
+    });
+
+    it('should not run preventDefault when not scroll to rightmost place in rtl direction', () => {
+      evt = {
+        ...evt,
+        deltaX: 10,
+      };
+      memoedContainer = {
+        ...memoedContainer,
+        scrollLeft: -50,
+      };
       handleHorizontalScroll(evt, rtl, memoedContainer);
       expect(evt.stopPropagation).have.been.calledOnce;
       expect(evt.preventDefault).not.have.been.called;
