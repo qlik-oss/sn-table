@@ -64,7 +64,7 @@ function TableBodyWrapper({
   }, []);
 
   return (
-    <TableBody className={`${classes.cellBase}`}>
+    <TableBody className={classes.cellBase}>
       {rows.map((row, rowIndex) => (
         <TableRow
           hover={hoverEffect}
@@ -102,6 +102,7 @@ function TableBodyWrapper({
                       isAnalysisMode: selectionsEnabled,
                       setFocusedCellCoord,
                       announce,
+                      keyboard,
                     })
                   }
                   onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}

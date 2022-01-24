@@ -26,13 +26,13 @@ jobs:
   install:
     <<: *defaults
     docker:
-      - image: circleci/node:14.15.0
+      - image: circleci/node:16.7.0
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
-      - run: 
+      - run:
           name: Install dependencies
-          command: yarn install --frozen-lockfile 
+          command: yarn install --frozen-lockfile
       - save_cache: *save_yarn_cache
 
       - store_artifacts:
@@ -46,10 +46,8 @@ jobs:
   build:
     <<: *defaults
     docker:
-      - image: circleci/node:14.15.0
-      - image: qlikcore/engine:12.1126.0
-        command: -S AcceptEULA=yes
-      - image: browserless/chrome:1.49.1-puppeteer-1.20.0
+      - image: circleci/node:16.7.0-browsers
+      - image: browserless/chrome:1.50.0-puppeteer-1.20.0
     steps:
       - attach_workspace:
           at: ~/table
@@ -75,13 +73,13 @@ jobs:
             ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
       - store_artifacts:
           path: coverage
-      #  - run:
-      #      name: Integration tests
-      #      command: |
-      #       DocId=$(curl -s --data-binary @data/apps/org-chart-test.qvf http://localhost:9076/v1/apps/import | jq -r '.attributes.id')
-      #        APP_ID=$DocId yarn run test:integration --chrome.browserWSEndpoint "ws://localhost:3000" --no-launch
-      # - store_artifacts:
-      #     path: ./test/integration/__artifacts__
+      - run:
+          name: Rendering tests
+          command: yarn run test:rendering
+      - store_artifacts:
+          path: ./test/rendering/__artifacts__
+      - store_test_results:
+          path: coverage/junit
       - persist_to_workspace:
           root: ~/table
           paths:
@@ -92,7 +90,7 @@ jobs:
   publish-dev:
     <<: *defaults
     docker:
-      - image: circleci/node:14.15.0
+      - image: circleci/node:16.7.0
     steps:
       - attach_workspace:
           at: ~/table
@@ -103,7 +101,7 @@ jobs:
   publish:
     <<: *defaults
     docker:
-      - image: circleci/node:14.15.0
+      - image: circleci/node:16.7.0
     steps:
       - attach_workspace:
           at: ~/table
@@ -125,6 +123,7 @@ jobs:
               echo "Running >> npm publish"
               npm publish
             fi
+
   api-governance:
     machine: true
     working_directory: ~/project
@@ -163,6 +162,7 @@ jobs:
             -e CREDENTIALS_GITHUB="$APICULTURIST_GITHUB"
             -e CREDENTIALS_COLONY="$APICULTURIST_TOKEN"
             ghcr.io/qlik-download/api-compliance
+
 workflows:
   version: 2
   build-all:

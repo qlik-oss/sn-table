@@ -16,13 +16,15 @@ fs.removeSync(path.resolve(process.cwd(), 'dist'));
 fs.removeSync(path.resolve(process.cwd(), 'core/esm'));
 
 const buildArgs = {};
+
 if (buildCore) {
   buildArgs.core = 'core';
 }
 
 if (mode === 'production') {
-  buildArgs.mode = 'production';
   buildArgs.sourcemap = false;
+} else {
+  buildArgs.mode = mode;
 }
 
 if (watch) {

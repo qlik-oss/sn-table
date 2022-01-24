@@ -1,5 +1,5 @@
 import { selectCell } from './selections-utils';
-import { updateFocus, focusConfirmButton } from './handle-accessibility';
+import { updateFocus, focusSelectionToolbar } from './handle-accessibility';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -23,10 +23,10 @@ export const handleTableWrapperKeyDown = ({
     const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
     if (evt.key === 'ArrowRight' && page < lastPage) {
       setShouldRefocus();
-      handleChangePage(null, page + 1);
+      handleChangePage(page + 1);
     } else if (evt.key === 'ArrowLeft' && page > 0) {
       setShouldRefocus();
-      handleChangePage(null, page - 1);
+      handleChangePage(page - 1);
     }
   } else if (evt.key === 'Escape' && keyboard.enabled && !isSelectionActive) {
     preventDefaultBehavior(evt);
@@ -104,9 +104,9 @@ export const headHandleKeyPress = (
   evt,
   rootElement,
   cellCoord,
+  column,
   changeSortOrder,
   layout,
-  isDim,
   isAnalysisMode,
   setFocusedCellCoord
 ) => {
@@ -121,7 +121,7 @@ export const headHandleKeyPress = (
     case ' ':
     case 'Enter': {
       preventDefaultBehavior(evt);
-      isAnalysisMode && changeSortOrder(layout, isDim, cellCoord[1]);
+      isAnalysisMode && changeSortOrder(layout, column);
       break;
     }
     default:
@@ -139,6 +139,7 @@ export const bodyHandleKeyPress = ({
   isAnalysisMode,
   setFocusedCellCoord,
   announce,
+  keyboard,
 }) => {
   switch (evt.key) {
     case 'ArrowUp':
@@ -171,13 +172,20 @@ export const bodyHandleKeyPress = ({
       break;
     }
     case 'Tab': {
-      if (evt.shiftKey && selectionState.api.isModal()) {
+      if (evt.shiftKey && keyboard.enabled && selectionState.api.isModal()) {
         preventDefaultBehavior(evt);
-        focusConfirmButton(rootElement);
+        focusSelectionToolbar(evt.target, keyboard, true);
       }
       break;
     }
     default:
       break;
+  }
+};
+
+export const handleLastTab = (evt, isInSelectionMode, keyboard) => {
+  if (isInSelectionMode && evt.key === 'Tab' && !evt.shiftKey) {
+    preventDefaultBehavior(evt);
+    focusSelectionToolbar(evt.target, keyboard, false);
   }
 };

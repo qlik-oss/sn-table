@@ -1,4 +1,9 @@
 {
+  "SNTable.Accessibility.NavigationInstructions": {
+    "value": "Utilisez les touches fléchées pour parcourir les cellules du tableau et la tabulation pour accéder aux commandes de pagination. Pour connaître la gamme complète des commandes de navigation au clavier, voir la documentation.",
+    "comment": "Instructions read by screen reader when first focusing inside the table. (tew 211130)",
+    "version": "rON9K1cUvIGtROZHqXNfbg=="
+  },
   "SNTable.Accessibility.RowsAndColumns": {
     "value": "Affichage de {0} lignes et de {1} colonnes.",
     "comment": "number of rows and columns announced by the screen reader. (tew 210929)",
@@ -24,6 +29,11 @@
     "comment": "tooltip and aria-label for the next page button. (tew 210929)",
     "version": "YyUO+qPBjWcn7zy0bpXeFw=="
   },
+  "SNTable.Pagination.PageStatusReport": {
+    "value": "La page a changé. Affichage de la page {0} sur {1}.",
+    "comment": "Read via screenreader when the page has changed. {0} is replaced with the current page number. {1} is replaced with the total page number. (tew 211122)",
+    "version": "AOFznLoJupPIAwS7SchRcA=="
+  },
   "SNTable.Pagination.PreviousPage": {
     "value": "Page précédente",
     "comment": "tooltip and aria-label for the previous page button. (tew 210929)",
@@ -33,6 +43,11 @@
     "value": "Lignes par page",
     "comment": "label for the rows per page dropdown. (tew 210929)",
     "version": "zuWpMmMSoOG/QRsKoVx3OA=="
+  },
+  "SNTable.Pagination.RowsPerPageChange": {
+    "value": "Le nombre de lignes par page a été remplacé par {0}. Affichage en cours de la première page.",
+    "comment": "Read via screenreader when the number rows per page changes. {0} is replaced with the number of rows per page. (tew 211122)",
+    "version": "pMOIMgdSzJmSIj7NLXkS6g=="
   },
   "SNTable.Pagination.SelectPage": {
     "value": "Sélectionner une page",

@@ -4,17 +4,28 @@ import announcementFactory from '../announcement-factory';
 describe('announcement-factory', () => {
   let rootElement;
   let translator;
-  let junkCharIdx;
   let announcer;
-  let announcerElement;
+  let announcerElement01;
+  let announcerElement02;
+  let previousAnnouncementElement;
+  let junkChar;
 
   beforeEach(() => {
-    announcerElement = global.document.createElement('td');
-    announcerElement.setAttribute('id', '#sn-table-announcer');
+    announcerElement01 = global.document.createElement('div');
+    announcerElement01.setAttribute('id', '#sn-table-announcer--01');
+    announcerElement02 = global.document.createElement('div');
+    announcerElement02.setAttribute('id', '#sn-table-announcer--02');
 
-    rootElement = { querySelector: () => announcerElement };
+    rootElement = {
+      querySelector: (query) => {
+        if (query === '#sn-table-announcer--01') return announcerElement01;
+        if (query === '#sn-table-announcer--02') return announcerElement02;
+        return announcerElement01;
+      },
+    };
     translator = { get: (key) => key };
-    junkCharIdx = 0;
+    previousAnnouncementElement = null;
+    junkChar = ' ­';
   });
 
   it('should render a simple key', () => {
@@ -22,7 +33,8 @@ describe('announcement-factory', () => {
     const key = 'SOME_SIMPLE_KEY';
     announcer({ keys: key });
 
-    expect(announcerElement.innerHTML).to.be.equal(key);
+    expect(announcerElement01.innerHTML).to.be.equal(`${key}${junkChar}`);
+    expect(announcerElement02.innerHTML).to.be.empty;
   });
 
   it('should render live element with proper attributes', () => {
@@ -30,9 +42,10 @@ describe('announcement-factory', () => {
     const keys = 'SOME_SIMPLE_KEY';
     announcer({ keys, shouldBeAtomic: true, politeness: 'assertive' });
 
-    expect(announcerElement.innerHTML).to.be.equal('SOME_SIMPLE_KEY');
-    expect(announcerElement).to.have.attr('aria-atomic', 'true');
-    expect(announcerElement).to.have.attr('aria-live', 'assertive');
+    expect(announcerElement01.innerHTML).to.be.equal(`${keys}${junkChar}`);
+    expect(announcerElement01).to.have.attr('aria-atomic', 'true');
+    expect(announcerElement01).to.have.attr('aria-live', 'assertive');
+    expect(announcerElement02.innerHTML).to.be.empty;
   });
 
   it('should render multiple keys', () => {
@@ -40,7 +53,8 @@ describe('announcement-factory', () => {
     const keys = ['key#01', 'key#02'];
     announcer({ keys });
 
-    expect(announcerElement.innerHTML).to.be.equal(keys.join(' '));
+    expect(announcerElement01.innerHTML).to.be.equal(`${keys.join(' ')}${junkChar}`);
+    expect(announcerElement02.innerHTML).to.be.empty;
   });
 
   it('should render multiple keys with arguments', () => {
@@ -48,15 +62,34 @@ describe('announcement-factory', () => {
     const keys = ['key#01', ['key#02', 1, 2]];
     announcer({ keys });
 
-    expect(announcerElement.innerHTML).to.be.equal('key#01 key#02');
+    expect(announcerElement01.innerHTML).to.be.equal(`key#01 key#02${junkChar}`);
+    expect(announcerElement02.innerHTML).to.be.empty;
   });
 
   it('should render the junk char in odd function run iterations', () => {
-    junkCharIdx = 1;
-    announcer = announcementFactory(rootElement, translator, junkCharIdx);
+    announcer = announcementFactory(rootElement, translator);
     const keys = 'key#01';
     announcer({ keys });
 
-    expect(announcerElement.innerHTML).to.be.equal('key#01 ­');
+    expect(announcerElement01.innerHTML).to.be.equal(`${keys}${junkChar}`); // extra space for the junk char
+    expect(announcerElement02.innerHTML).to.be.empty;
+  });
+
+  it('should be able to handle the cuncurrent announcement', () => {
+    previousAnnouncementElement = 'first-announcer-element';
+    announcer = announcementFactory(rootElement, translator, previousAnnouncementElement);
+    announcer({ keys: ['key#01'] });
+
+    expect(announcerElement02.innerHTML).to.be.equal(`key#01${junkChar}`);
+  });
+
+  it('should remove junkChar if the current announce element has it', () => {
+    const keys = 'key#01';
+    announcerElement01.innerHTML = `${keys}${junkChar}`;
+    announcer = announcementFactory(rootElement, translator);
+    announcer({ keys });
+
+    expect(announcerElement01.innerHTML).to.be.equal(keys);
+    expect(announcerElement02.innerHTML).to.be.empty;
   });
 });

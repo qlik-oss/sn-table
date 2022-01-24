@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {
   useElement,
   useStaleLayout,
   useEffect,
+  useOptions,
   useModel,
   useState,
   useConstraints,
@@ -32,6 +34,7 @@ export default function supernova(env) {
     component() {
       const rootElement = useElement();
       const layout = useStaleLayout();
+      const options = useOptions();
       const model = useModel();
       const constraints = useConstraints();
       const translator = useTranslator();
@@ -40,13 +43,18 @@ export default function supernova(env) {
       const theme = useTheme();
       const keyboard = useKeyboard();
       const rect = useRect();
-      const [pageInfo, setPageInfo] = useState(() => ({ page: 0, rowsPerPage: 100 }));
+      const [pageInfo, setPageInfo] = useState(() => ({
+        page: 0,
+        rowsPerPage: 100,
+        rowsPerPageOptions: [10, 25, 100],
+      }));
       const [tableData] = usePromise(() => manageData(model, layout, pageInfo, setPageInfo), [layout, pageInfo]);
 
       useEffect(() => {
         if (layout && tableData) {
           registerLocale(translator);
-          const changeSortOrder = sortingFactory(model, tableData.columnOrder);
+          const changeSortOrder = sortingFactory(model);
+          const rtl = options.direction === 'rtl';
           render(rootElement, {
             rootElement,
             layout,
@@ -59,6 +67,7 @@ export default function supernova(env) {
             muiParameters,
             theme,
             changeSortOrder,
+            rtl,
             keyboard,
             rect,
           });
@@ -66,6 +75,7 @@ export default function supernova(env) {
       }, [
         tableData,
         constraints,
+        options.direction,
         selectionsAPI.isModal(),
         theme.name(),
         keyboard.active,

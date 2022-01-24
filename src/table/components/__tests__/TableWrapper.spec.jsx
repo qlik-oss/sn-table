@@ -21,6 +21,7 @@ describe('<TableWrapper />', () => {
   let keyboard;
   let translator;
   let rect;
+  let announcer;
 
   beforeEach(() => {
     sinon.stub(TableBodyWrapper, 'default').returns(<tbody />);
@@ -50,6 +51,7 @@ describe('<TableWrapper />', () => {
     rect = {
       width: 551,
     };
+    announcer = sinon.spy();
   });
 
   afterEach(() => {
@@ -72,7 +74,9 @@ describe('<TableWrapper />', () => {
       />
     );
 
-    expect(queryByLabelText('SNTable.Accessibility.RowsAndColumns')).to.be.visible;
+    expect(
+      queryByLabelText(`${'SNTable.Accessibility.RowsAndColumns'} ${'SNTable.Accessibility.NavigationInstructions'}`)
+    ).to.be.visible;
     expect(queryByLabelText('SNTable.Pagination.RowsPerPage')).to.be.visible;
     expect(queryByTestId('table-wrapper')).to.has.attr('tabindex', '-1');
     expect(queryByTestId('table-wrapper')).to.has.attr('role', 'application');
@@ -100,6 +104,7 @@ describe('<TableWrapper />', () => {
   });
 
   it('should call setPageInfo when changing rows per page', () => {
+    const targetRowsPerPage = 25;
     const { getByTestId } = render(
       <TableWrapper
         tableData={tableData}
@@ -111,10 +116,45 @@ describe('<TableWrapper />', () => {
         keyboard={keyboard}
         translator={translator}
         rect={rect}
+        announcer={announcer}
       />
     );
-    fireEvent.change(getByTestId('select'), { target: { value: 25 } });
-    expect(setPageInfo).to.have.been.calledWith({ page: 0, rowsPerPage: 25 });
+
+    fireEvent.change(getByTestId('select'), { target: { value: targetRowsPerPage } });
+
+    expect(setPageInfo).to.have.been.calledWith({ page: 0, rowsPerPage: targetRowsPerPage });
+    expect(announcer).to.have.been.calledOnceWith({
+      keys: [['SNTable.Pagination.RowsPerPageChange', `${targetRowsPerPage}`]],
+      politeness: 'assertive',
+    });
+  });
+
+  it('should call setPageInfo when changing page', () => {
+    rect = {
+      width: 651,
+    };
+    const { getByTestId } = render(
+      <TableWrapper
+        tableData={tableData}
+        pageInfo={pageInfo}
+        setPageInfo={setPageInfo}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+        rootElement={rootElement}
+        keyboard={keyboard}
+        translator={translator}
+        rect={rect}
+        announcer={announcer}
+      />
+    );
+
+    fireEvent.change(getByTestId('pagination-dropdown'));
+
+    expect(setPageInfo).to.have.been.calledOnce;
+    expect(announcer).to.have.been.calledOnceWith({
+      keys: [['SNTable.Pagination.PageStatusReport', [1, 2]]], // 200 rows, 100 rows per page => [1, 2]
+      politeness: 'assertive',
+    });
   });
 
   it('should not render rows per page section in table when width smaller than 550', () => {
