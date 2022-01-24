@@ -51,7 +51,8 @@ const CustomFormControl = styled(FormControl)({
 });
 
 export default function TablePaginationActions(props) {
-  const { page, lastPageIdx, onPageChange, keyboard, tableWidth, translator, isInSelectionMode } = props;
+  const { direction, page, lastPageIdx, onPageChange, keyboard, tableWidth, translator, isInSelectionMode } = props;
+  const isRTL = direction === 'rtl';
   const onFirstPage = page === 0;
   const onLastPage = page >= lastPageIdx;
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
@@ -61,7 +62,19 @@ export default function TablePaginationActions(props) {
   const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, isInSelectionMode) : null;
 
   const getButton = (disabledCondition, pageNumber, type, onKeyDown = null) => {
-    const IconComponent = icons[type];
+    let iconType = type;
+    if (isRTL) {
+      if (type === 'FirstPage') {
+        iconType = 'LastPage';
+      } else if (type === 'PreviousPage') {
+        iconType = 'NextPage';
+      } else if (type === 'NextPage') {
+        iconType = 'PreviousPage';
+      } else if (type === 'LastPage') {
+        iconType = 'FirstPage';
+      }
+    }
+    const IconComponent = icons[iconType];
     return (
       <PaginationActionIconButton
         onClick={!disabledCondition ? () => onPageChange(pageNumber) : null}
@@ -117,6 +130,7 @@ export default function TablePaginationActions(props) {
 }
 
 TablePaginationActions.propTypes = {
+  direction: PropTypes.string.isRequired,
   onPageChange: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   lastPageIdx: PropTypes.number.isRequired,

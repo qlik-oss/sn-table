@@ -187,6 +187,7 @@ export default function TableWrapper(props) {
           ActionsComponent={() => <div>{null}</div>}
         />
         <TablePaginationActions
+          direction={direction}
           page={page}
           onPageChange={handleChangePage}
           lastPageIdx={Math.ceil(size.qcy / rowsPerPage) - 1}
