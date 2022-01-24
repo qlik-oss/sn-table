@@ -31,7 +31,7 @@ const TablePaginationActionsSection = styled('div')({
 
 const Caption = styled(InputLabel)({
   fontSize: '14px',
-  color: '#404040',
+  color: 'inherit',
   width: 'fit-content',
   position: 'relative',
   transform: 'translate(0px, 12px)',
@@ -93,7 +93,8 @@ export default function TablePaginationActions(props) {
               tabIndex,
               id: 'pagination-dropdown',
               style: {
-                padding: '6px 32px 7px 8px',
+                paddingTop: '3px',
+                paddingBottom: '3px',
               },
             }}
           >
