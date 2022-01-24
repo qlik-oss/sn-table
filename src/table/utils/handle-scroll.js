@@ -1,12 +1,14 @@
 export const handleHorizontalScroll = (evt, rtl, memoedContainer) => {
   evt.stopPropagation();
   if (rtl) {
-    const scrollLeft = memoedContainer.scrollLeft + evt.deltaX;
-    let scrollRight = memoedContainer.scrollWidth - (scrollLeft + memoedContainer.clientWidth);
-    const max = memoedContainer.scrollWidth + memoedContainer.offsetWidth;
+    // in RTL, scrollLeft is actually scrollRight, scrollRight is scrollLeft
+    let { scrollLeft } = memoedContainer;
+    const newScrollLeft = scrollLeft + evt.deltaX;
+    const scrollRight = memoedContainer.scrollWidth + newScrollLeft - memoedContainer.clientWidth;
+    const max = memoedContainer.scrollWidth - memoedContainer.offsetWidth;
     if (max > 0 && (scrollRight < 0 || scrollRight > max)) {
       evt.preventDefault();
-      scrollRight = Math.max(0, Math.min(max, scrollRight));
+      scrollLeft = Math.min(0, Math.min(max, scrollRight));
     }
   } else {
     let { scrollLeft } = memoedContainer;
