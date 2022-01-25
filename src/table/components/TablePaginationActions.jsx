@@ -77,6 +77,7 @@ export default function TablePaginationActions(props) {
     const IconComponent = icons[iconType];
     return (
       <PaginationActionIconButton
+        data-testid="pagination-action-icon-button"
         onClick={!disabledCondition ? () => onPageChange(pageNumber) : null}
         aria-disabled={disabledCondition}
         aria-label={translator.get(`SNTable.Pagination.${type}`)}
