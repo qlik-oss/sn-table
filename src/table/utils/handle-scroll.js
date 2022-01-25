@@ -1,7 +1,7 @@
 export const handleHorizontalScroll = (evt, rtl, memoedContainer) => {
   evt.stopPropagation();
-  // scrollWidth is a measurement of the width of an element's content, including content not visible on the screen due to overflow.
-  // offsetWidth is a measurement in pixels of the element's CSS width, including any borders, padding, and vertical scrollbars
+  // scrollWidth is the width of an element's content, including content not visible on the screen due to overflow.
+  // offsetWidth is the element's CSS width, including any borders, padding, and vertical scrollbars
   // scrollLeft is the number of pixels scrolled from its left edge
   if (rtl) {
     // scrollLeft is 0 when the scrollbar is at its rightmost position
