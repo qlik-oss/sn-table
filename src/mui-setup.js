@@ -22,7 +22,7 @@ export default function muiSetup(direction) {
   }
   const themeConfig = {
     ...adaptV4Theme(muiConfig),
-    ...{ direction },
+    direction,
   };
 
   const theme = createTheme(themeConfig);
