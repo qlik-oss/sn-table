@@ -12,7 +12,7 @@ import TablePaginationActions from './TablePaginationActions';
 import useDidUpdateEffect from './useDidUpdateEffect';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
-import { handleScroll, handleNavigateTop } from '../utils/handle-scroll';
+import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
 
 const TablePaper = styled(Paper)({
@@ -79,20 +79,28 @@ export default function TableWrapper(props) {
   };
 
   useEffect(() => {
-    const memoedContainer = tableContainerRef.current;
     const memoedWrapper = tableWrapperRef.current;
-    if (!memoedContainer || !memoedWrapper) return () => {};
+    if (!memoedWrapper) return () => {};
 
-    const scrollCallback = (evt) => handleScroll(evt, tableContainerRef);
     const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard);
-    memoedContainer.addEventListener('wheel', scrollCallback);
     memoedWrapper.addEventListener('focusout', focusOutCallback);
 
     return () => {
-      memoedContainer.removeEventListener('wheel', scrollCallback);
       memoedWrapper.removeEventListener('focusout', focusOutCallback);
     };
   }, []);
+
+  useEffect(() => {
+    const memoedContainer = tableContainerRef.current;
+    if (!memoedContainer) return () => {};
+
+    const horizontalScrollCallback = (evt) => handleHorizontalScroll(evt, rtl, memoedContainer);
+    memoedContainer.addEventListener('wheel', horizontalScrollCallback);
+
+    return () => {
+      memoedContainer.removeEventListener('wheel', horizontalScrollCallback);
+    };
+  }, [rtl]);
 
   useEffect(
     () => handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement }),
