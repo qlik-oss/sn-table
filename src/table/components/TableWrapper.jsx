@@ -49,6 +49,7 @@ export default function TableWrapper(props) {
     rect,
     announcer, // this is only for testing purposes
   } = props;
+  const isRTL = direction === 'rtl';
   const { size, rows, columns } = tableData;
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
@@ -94,13 +95,13 @@ export default function TableWrapper(props) {
     const memoedContainer = tableContainerRef.current;
     if (!memoedContainer) return () => {};
 
-    const horizontalScrollCallback = (evt) => handleHorizontalScroll(evt, rtl, memoedContainer);
+    const horizontalScrollCallback = (evt) => handleHorizontalScroll(evt, isRTL, memoedContainer);
     memoedContainer.addEventListener('wheel', horizontalScrollCallback);
 
     return () => {
       memoedContainer.removeEventListener('wheel', horizontalScrollCallback);
     };
-  }, [rtl]);
+  }, [isRTL]);
 
   useEffect(
     () => handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement }),
