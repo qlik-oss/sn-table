@@ -16,6 +16,10 @@ const icons = {
   PreviousPage: KeyboardArrowLeft,
   NextPage: KeyboardArrowRight,
   LastPage: LastPageIcon,
+  FirstPageRTL: LastPageIcon,
+  PreviousPageRTL: KeyboardArrowRight,
+  NextPageRTL: KeyboardArrowLeft,
+  LastPageRTL: FirstPageIcon,
 };
 
 const PaginationActionIconButton = styled(IconButton)(({ disabledCondition }) => ({
@@ -50,9 +54,16 @@ const CustomFormControl = styled(FormControl)({
   flexDirection: 'row',
 });
 
-export default function TablePaginationActions(props) {
-  const { direction, page, lastPageIdx, onPageChange, keyboard, tableWidth, translator, isInSelectionMode } = props;
-  const isRTL = direction === 'rtl';
+export default function TablePaginationActions({
+  direction,
+  page,
+  lastPageIdx,
+  onPageChange,
+  keyboard,
+  tableWidth,
+  translator,
+  isInSelectionMode,
+}) {
   const onFirstPage = page === 0;
   const onLastPage = page >= lastPageIdx;
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
@@ -62,18 +73,7 @@ export default function TablePaginationActions(props) {
   const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, isInSelectionMode) : null;
 
   const getButton = (disabledCondition, pageNumber, type, onKeyDown = null) => {
-    let iconType = type;
-    if (isRTL) {
-      if (type === 'FirstPage') {
-        iconType = 'LastPage';
-      } else if (type === 'PreviousPage') {
-        iconType = 'NextPage';
-      } else if (type === 'NextPage') {
-        iconType = 'PreviousPage';
-      } else if (type === 'LastPage') {
-        iconType = 'FirstPage';
-      }
-    }
+    const iconType = `${type}${direction === 'rtl' ? 'RTL' : ''}`;
     const IconComponent = icons[iconType];
     return (
       <PaginationActionIconButton
@@ -124,7 +124,13 @@ export default function TablePaginationActions(props) {
       )}
       {showFirstLast && getButton(onFirstPage, 0, 'FirstPage')}
       {getButton(onFirstPage, page - 1, 'PreviousPage')}
-      {getButton(onLastPage, page + 1, 'NextPage', !showFirstLast ? handleLastButtonTab : null)}
+      {getButton(
+        onLastPage,
+        page + 1,
+        'NextPage',
+
+        !showFirstLast ? handleLastButtonTab : null
+      )}
       {showFirstLast && getButton(onLastPage, lastPageIdx, 'LastPage', handleLastButtonTab)}
     </TablePaginationActionsSection>
   );
