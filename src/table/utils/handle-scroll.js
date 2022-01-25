@@ -3,28 +3,23 @@ export const handleHorizontalScroll = (evt, rtl, memoedContainer) => {
   // scrollWidth is the width of an element's content, including content not visible on the screen due to overflow.
   // offsetWidth is the element's CSS width, including any borders, padding, and vertical scrollbars
   // scrollLeft is the number of pixels scrolled from its left edge
+  let { scrollLeft } = memoedContainer;
+  const ScrollLeftWidth = scrollLeft + evt.deltaX;
+  const maxScrollableWidth = memoedContainer.scrollWidth - memoedContainer.offsetWidth;
   if (rtl) {
     // scrollLeft is 0 when the scrollbar is at its rightmost position
     // (at the start of the scrolled content),
     // and then increasingly negative as you scroll towards (left) the end of the content .
     // evt.deltaX increasingly negative as you scroll towards left,
     // increasingly positive as you scroll towards right
-    let { scrollLeft } = memoedContainer;
-    const ScrollLeftWidth = scrollLeft + evt.deltaX;
-    const maxScrollableWidth = memoedContainer.scrollWidth - memoedContainer.offsetWidth;
     const scrollRight = maxScrollableWidth + ScrollLeftWidth;
     if (maxScrollableWidth > 0 && (scrollRight <= 0 || scrollRight > maxScrollableWidth)) {
       evt.preventDefault();
       scrollLeft = Math.min(0, Math.min(maxScrollableWidth, scrollRight));
     }
-  } else {
-    let { scrollLeft } = memoedContainer;
-    const ScrollLeftWidth = scrollLeft + evt.deltaX;
-    const maxScrollableWidth = memoedContainer.scrollWidth - memoedContainer.offsetWidth;
-    if (maxScrollableWidth > 0 && (ScrollLeftWidth < 0 || ScrollLeftWidth > maxScrollableWidth)) {
-      evt.preventDefault();
-      scrollLeft = Math.max(0, Math.min(maxScrollableWidth, ScrollLeftWidth));
-    }
+  } else if (maxScrollableWidth > 0 && (ScrollLeftWidth < 0 || ScrollLeftWidth > maxScrollableWidth)) {
+    evt.preventDefault();
+    scrollLeft = Math.max(0, Math.min(maxScrollableWidth, ScrollLeftWidth));
   }
 };
 
