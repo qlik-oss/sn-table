@@ -45,7 +45,7 @@ function TableBodyWrapper({
   const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(bodyStyle);
   const selectionsEnabled = !!selectionsAPI && !constraints.active;
-  const getColumnRenderers = tableData.columns.map((c) => getCellRenderer(!!c.stylingInfo.length, selectionsEnabled));
+  const getColumnRenderers = columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(() => getColumnRenderers);
   const [selectionState, selDispatch] = useReducer(reducer, {
     api: selectionsAPI,
