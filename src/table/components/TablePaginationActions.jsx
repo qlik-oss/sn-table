@@ -124,13 +124,7 @@ export default function TablePaginationActions({
       )}
       {showFirstLast && getButton(onFirstPage, 0, 'FirstPage')}
       {getButton(onFirstPage, page - 1, 'PreviousPage')}
-      {getButton(
-        onLastPage,
-        page + 1,
-        'NextPage',
-
-        !showFirstLast ? handleLastButtonTab : null
-      )}
+      {getButton(onLastPage, page + 1, 'NextPage', !showFirstLast ? handleLastButtonTab : null)}
       {showFirstLast && getButton(onLastPage, lastPageIdx, 'LastPage', handleLastButtonTab)}
     </TablePaginationActionsSection>
   );
