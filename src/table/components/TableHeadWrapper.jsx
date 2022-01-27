@@ -9,7 +9,7 @@ import { getHeadStyle } from '../utils/styling-utils';
 import { headHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusHead } from '../utils/handle-accessibility';
 
-const CustomTableCell = styled(TableCell)(({ headCellStyle }) => ({
+const CustomTableCell = styled(TableCell)(({ headcellstyle: headCellStyle }) => ({
   color: headCellStyle.color,
   fontSize: headCellStyle.fontSize,
   padding: headCellStyle.padding,
@@ -58,7 +58,7 @@ function TableHeadWrapper({
 
           return (
             <CustomTableCell
-              headCellStyle={headCellStyle}
+              headcellstyle={headCellStyle}
               key={column.id}
               align={column.align}
               className="sn-table-head-cell sn-table-cell"

@@ -11,7 +11,7 @@ describe('withSelections', () => {
   let HOC;
   let cell;
   let selectionState;
-  let selDispatch;
+  let selectionDispatch;
   let evt;
   let styling;
   let announce;
@@ -29,7 +29,7 @@ describe('withSelections', () => {
       colIdx: -1,
       api: { isModal: () => true },
     };
-    selDispatch = () => {};
+    selectionDispatch = () => {};
     evt = { button: 0 };
     styling = {};
     announce = sinon.spy();
@@ -42,7 +42,7 @@ describe('withSelections', () => {
 
   it('should render a mocked component with the passed value', () => {
     const { queryByText } = render(
-      <HOC selectionState={selectionState} cell={cell} selDispatch={selDispatch} styling={styling} />
+      <HOC selectionstate={selectionState} cell={cell} selectiondispatch={selectionDispatch} styling={styling} />
     );
 
     expect(queryByText(cell.value)).to.be.visible;
@@ -50,9 +50,9 @@ describe('withSelections', () => {
   it('should call selectCell on mouseUp', () => {
     const { queryByText } = render(
       <HOC
-        selectionState={selectionState}
+        selectionstate={selectionState}
         cell={cell}
-        selDispatch={selDispatch}
+        selectiondispatch={selectionDispatch}
         styling={styling}
         announce={announce}
       />
@@ -65,7 +65,7 @@ describe('withSelections', () => {
     cell.isDim = false;
 
     const { queryByText } = render(
-      <HOC selectionState={selectionState} cell={cell} selDispatch={selDispatch} styling={styling} />
+      <HOC selectionstate={selectionState} cell={cell} selectiondispatch={selectionDispatch} styling={styling} />
     );
     fireEvent.mouseUp(queryByText(cell.value));
 
@@ -75,7 +75,7 @@ describe('withSelections', () => {
     cell.isDim = false;
 
     const { queryByText } = render(
-      <HOC selectionState={selectionState} cell={cell} selDispatch={selDispatch} styling={styling} />
+      <HOC selectionstate={selectionState} cell={cell} selectiondispatch={selectionDispatch} styling={styling} />
     );
     fireEvent.mouseUp(queryByText(cell.value), evt);
 
@@ -85,7 +85,7 @@ describe('withSelections', () => {
     evt.button = 2;
 
     const { queryByText } = render(
-      <HOC selectionState={selectionState} cell={cell} selDispatch={selDispatch} styling={styling} />
+      <HOC selectionstate={selectionState} cell={cell} selectiondispatch={selectionDispatch} styling={styling} />
     );
     fireEvent.mouseUp(queryByText(cell.value), evt);
 

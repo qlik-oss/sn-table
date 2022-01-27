@@ -9,7 +9,7 @@ import { getBodyStyle } from '../utils/styling-utils';
 import { bodyHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
 
-const CustomTableBody = styled(TableBody)(({ bodyStyle }) => ({
+const CustomTableBody = styled(TableBody)(({ bodystyle: bodyStyle }) => ({
   '& td, th': {
     color: bodyStyle.color,
     fontSize: bodyStyle.fontSize,
@@ -17,7 +17,7 @@ const CustomTableBody = styled(TableBody)(({ bodyStyle }) => ({
   },
 }));
 
-const CustomTableRow = styled(TableRow)(({ hover, bodyStyle }) => ({
+const CustomTableRow = styled(TableRow)(({ hover, bodystyle: bodyStyle }) => ({
   '&&:hover': {
     '& td:not(.selected), th:not(.selected)': {
       backgroundColor: hover && bodyStyle.hoverBackgroundColor,
@@ -42,9 +42,9 @@ function TableBodyWrapper({
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
   const selectionsEnabled = !!selectionsAPI && !constraints.active;
-  const getColumnRenderers = tableData.columns.map((c) => getCellRenderer(!!c.stylingInfo.length, selectionsEnabled));
+  const getColumnRenderers = columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(() => getColumnRenderers);
-  const [selectionState, selDispatch] = useReducer(reducer, {
+  const [selectionState, selectionDispatch] = useReducer(reducer, {
     api: selectionsAPI,
     rows: [],
     colIdx: -1,
@@ -52,18 +52,18 @@ function TableBodyWrapper({
   });
 
   useEffect(() => {
-    selDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
+    selectionDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
     setColumnRenderers(getColumnRenderers);
   }, [selectionsEnabled, columns.length]);
 
   useEffect(() => {
-    addSelectionListeners({ api: selectionsAPI, selDispatch, setShouldRefocus, keyboard, tableWrapperRef });
+    addSelectionListeners({ api: selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
   }, []);
 
   return (
-    <CustomTableBody bodyStyle={bodyStyle}>
+    <CustomTableBody bodystyle={bodyStyle}>
       {rows.map((row, rowIndex) => (
-        <CustomTableRow hover={hoverEffect} bodyStyle={bodyStyle} tabIndex={-1} key={row.key} className="sn-table-row">
+        <CustomTableRow hover={hoverEffect} bodystyle={bodyStyle} tabIndex={-1} key={row.key} className="sn-table-row">
           {columns.map((column, columnIndex) => {
             const cell = row[column.id];
             const value = cell.qText;
@@ -79,8 +79,8 @@ function TableBodyWrapper({
                   key={column.id}
                   align={column.align}
                   styling={{}}
-                  selectionState={selectionState}
-                  selDispatch={selDispatch}
+                  selectionstate={selectionState}
+                  selectiondispatch={selectionDispatch}
                   tabIndex={-1}
                   announce={announce}
                   onKeyDown={(evt) =>
@@ -90,7 +90,7 @@ function TableBodyWrapper({
                       cellCoord: [rowIndex + 1, columnIndex],
                       selectionState,
                       cell,
-                      selDispatch,
+                      selectionDispatch,
                       isAnalysisMode: selectionsEnabled,
                       setFocusedCellCoord,
                       announce,

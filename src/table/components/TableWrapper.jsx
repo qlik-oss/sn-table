@@ -26,12 +26,12 @@ const TablePaginationSection = styled(Paper)({
   justifyContent: 'flex-end',
 });
 
-const TableContainerSection = styled(TableContainer)(({ containerMode }) => ({
+const TableContainerSection = styled(TableContainer)(({ containermode: containerMode }) => ({
   height: containerMode ? '100%' : 'calc(100% - 52px)',
   overflow: containerMode ? 'hidden' : 'auto',
 }));
 
-const CustomTablePagination = styled(TablePagination)(({ paginationHidden }) => ({
+const CustomTablePagination = styled(TablePagination)(({ paginationhidden: paginationHidden }) => ({
   display: paginationHidden && 'none',
 }));
 
@@ -152,7 +152,7 @@ export default function TableWrapper(props) {
       <AnnounceElements />
       <TableContainerSection
         ref={tableContainerRef}
-        containerMode={constraints.active}
+        containermode={constraints.active}
         tabIndex={-1}
         role="application"
         data-testid="table-wrapper"
@@ -171,7 +171,7 @@ export default function TableWrapper(props) {
       </TableContainerSection>
       <TablePaginationSection>
         <CustomTablePagination
-          paginationHidden={constraints.active}
+          paginationhidden={constraints.active}
           rowsPerPageOptions={fixedRowsPerPage ? [rowsPerPage] : rowsPerPageOptions}
           component="div"
           count={size.qcy}
@@ -194,6 +194,7 @@ export default function TableWrapper(props) {
           }
           onRowsPerPageChange={handleChangeRowsPerPage}
           ActionsComponent={() => <div>{null}</div>}
+          onPageChange={() => {}}
         />
         <TablePaginationActions
           direction={direction}
@@ -211,12 +212,13 @@ export default function TableWrapper(props) {
 }
 
 TableWrapper.defaultProps = {
+  direction: null,
   announcer: null,
 };
 
 TableWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
-  direction: PropTypes.string.isRequired,
+  direction: PropTypes.string,
   tableData: PropTypes.object.isRequired,
   pageInfo: PropTypes.object.isRequired,
   setPageInfo: PropTypes.func.isRequired,

@@ -22,7 +22,7 @@ const icons = {
   LastPageRTL: FirstPageIcon,
 };
 
-const PaginationActionIconButton = styled(IconButton)(({ disabledCondition }) => ({
+const PaginationActionIconButton = styled(IconButton)(({ disabledcondition: disabledCondition }) => ({
   color: disabledCondition ? 'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.54)',
   cursor: disabledCondition && 'default',
 }));
@@ -83,7 +83,7 @@ export default function TablePaginationActions({
         aria-label={translator.get(`SNTable.Pagination.${type}`)}
         title={translator.get(`SNTable.Pagination.${type}`)}
         tabIndex={tabIndex}
-        disabledCondition={disabledCondition}
+        disabledcondition={+disabledCondition}
         onKeyDown={onKeyDown}
       >
         <IconComponent />
@@ -130,8 +130,12 @@ export default function TablePaginationActions({
   );
 }
 
+TablePaginationActions.defaultProps = {
+  direction: null,
+};
+
 TablePaginationActions.propTypes = {
-  direction: PropTypes.string.isRequired,
+  direction: PropTypes.string,
   onPageChange: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   lastPageIdx: PropTypes.number.isRequired,
