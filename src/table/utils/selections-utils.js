@@ -1,9 +1,9 @@
-export function addSelectionListeners({ api, selDispatch, setShouldRefocus, keyboard, tableWrapperRef }) {
+export function addSelectionListeners({ api, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef }) {
   const resetSelections = () => {
-    selDispatch({ type: 'reset' });
+    selectionDispatch({ type: 'reset' });
   };
   const clearSelections = () => {
-    selDispatch({ type: 'clear' });
+    selectionDispatch({ type: 'clear' });
   };
   const resetSelectionsAndSetupRefocus = () => {
     // if there is focus in the chart, set shouldRefocus so that we should either focus or just set the tabstop, after data has reloaded.
@@ -82,7 +82,7 @@ export const getSelectedRows = ({ selectedRows, qElemNumber, rowIdx, evt }) => {
   return selectedRows;
 };
 
-export function selectCell({ selectionState, cell, selDispatch, evt, announce }) {
+export function selectCell({ selectionState, cell, selectionDispatch, evt, announce }) {
   const { api, rows } = selectionState;
   const { rowIdx, colIdx, qElemNumber } = cell;
   let selectedRows = [];
@@ -103,7 +103,7 @@ export function selectCell({ selectionState, cell, selDispatch, evt, announce })
   });
 
   if (selectedRows.length) {
-    selDispatch({ type: 'select', payload: { rows: selectedRows, colIdx } });
+    selectionDispatch({ type: 'select', payload: { rows: selectedRows, colIdx } });
     api.select({
       method: 'selectHyperCubeCells',
       params: ['/qHyperCubeDef', selectedRows.map((r) => r.rowIdx), [colIdx]],

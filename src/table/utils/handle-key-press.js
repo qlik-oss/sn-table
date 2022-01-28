@@ -135,7 +135,7 @@ export const bodyHandleKeyPress = ({
   cellCoord,
   selectionState,
   cell,
-  selDispatch,
+  selectionDispatch,
   isAnalysisMode,
   setFocusedCellCoord,
   announce,
@@ -152,7 +152,7 @@ export const bodyHandleKeyPress = ({
     // Space bar: Selects value.
     case ' ': {
       preventDefaultBehavior(evt);
-      cell?.isDim && isAnalysisMode && selectCell({ selectionState, cell, selDispatch, evt, announce });
+      cell?.isDim && isAnalysisMode && selectCell({ selectionState, cell, selectionDispatch, evt, announce });
       break;
     }
     // Enter: Confirms selections.

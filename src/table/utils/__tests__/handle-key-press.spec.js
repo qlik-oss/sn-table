@@ -150,7 +150,7 @@ describe('handle-key-press', () => {
     let rootElement = {};
     let selectionState = {};
     let cell = [];
-    let selDispatch;
+    let selectionDispatch;
     let isAnalysisMode;
     let setFocusedCellCoord;
     let isModal;
@@ -186,7 +186,7 @@ describe('handle-key-press', () => {
       };
       cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1, isDim: true };
       keyboard = { enabled: true };
-      selDispatch = sinon.spy();
+      selectionDispatch = sinon.spy();
       isAnalysisMode = true;
       setFocusedCellCoord = sinon.spy();
       announce = sinon.spy();
@@ -223,7 +223,7 @@ describe('handle-key-press', () => {
         cellCoord: [rowIndex, colIndex],
         selectionState,
         cell,
-        selDispatch,
+        selectionDispatch,
         isAnalysisMode,
         setFocusedCellCoord,
         announce,
@@ -233,7 +233,7 @@ describe('handle-key-press', () => {
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(selectionState.api.begin).to.have.been.calledOnce;
       expect(selectionState.api.select).to.have.been.calledOnce;
-      expect(selDispatch).to.have.been.calledOnce;
+      expect(selectionDispatch).to.have.been.calledOnce;
       expect(setFocusedCellCoord).to.not.have.been.called;
       expect(announce).to.have.been.calledWith({
         keys: ['SNTable.SelectionLabel.SelectedValue', 'SNTable.SelectionLabel.OneSelectedValue'],
@@ -289,7 +289,7 @@ describe('handle-key-press', () => {
         cellCoord: [rowIndex, colIndex],
         selectionState,
         cell,
-        selDispatch,
+        selectionDispatch,
         isAnalysisMode: false,
         setFocusedCellCoord,
         announce,
@@ -299,7 +299,7 @@ describe('handle-key-press', () => {
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(selectionState.api.begin).not.have.been.called;
       expect(selectionState.api.select).not.have.been.called;
-      expect(selDispatch).not.have.been.called;
+      expect(selectionDispatch).not.have.been.called;
       expect(setFocusedCellCoord).to.not.have.been.called;
       expect(announce).not.have.been.called;
     });
@@ -313,7 +313,7 @@ describe('handle-key-press', () => {
         cellCoord: [rowIndex, colIndex],
         selectionState,
         cell,
-        selDispatch,
+        selectionDispatch,
         isAnalysisMode: false,
         setFocusedCellCoord,
         announce,
@@ -323,7 +323,7 @@ describe('handle-key-press', () => {
       expect(evt.stopPropagation).to.have.been.calledOnce;
       expect(selectionState.api.begin).not.have.been.called;
       expect(selectionState.api.select).not.have.been.called;
-      expect(selDispatch).not.have.been.called;
+      expect(selectionDispatch).not.have.been.called;
       expect(setFocusedCellCoord).to.not.have.been.called;
       expect(announce).not.have.been.called;
     });
@@ -337,7 +337,7 @@ describe('handle-key-press', () => {
         cellCoord: [rowIndex, colIndex],
         selectionState,
         cell,
-        selDispatch,
+        selectionDispatch,
         isAnalysisMode,
         setFocusedCellCoord,
         announce,
@@ -359,7 +359,7 @@ describe('handle-key-press', () => {
         cellCoord: [rowIndex, colIndex],
         selectionState,
         cell,
-        selDispatch,
+        selectionDispatch,
         isAnalysisMode,
         setFocusedCellCoord,
         announce,
@@ -382,7 +382,7 @@ describe('handle-key-press', () => {
         cellCoord: [rowIndex, colIndex],
         selectionState,
         cell,
-        selDispatch,
+        selectionDispatch,
         isAnalysisMode,
         setFocusedCellCoord,
         announce,
@@ -405,7 +405,7 @@ describe('handle-key-press', () => {
         cellCoord: [rowIndex, colIndex],
         selectionState,
         cell,
-        selDispatch,
+        selectionDispatch,
         isAnalysisMode,
         setFocusedCellCoord,
         announce,
@@ -428,7 +428,7 @@ describe('handle-key-press', () => {
         cellCoord: [rowIndex, colIndex],
         selectionState,
         cell,
-        selDispatch,
+        selectionDispatch,
         isAnalysisMode,
         setFocusedCellCoord,
         announce,
@@ -452,7 +452,7 @@ describe('handle-key-press', () => {
         cellCoord: [rowIndex, colIndex],
         selectionState,
         cell,
-        selDispatch,
+        selectionDispatch,
         isAnalysisMode,
         setFocusedCellCoord,
         announce,
@@ -474,7 +474,7 @@ describe('handle-key-press', () => {
         cellCoord: [rowIndex, colIndex],
         selectionState,
         cell,
-        selDispatch,
+        selectionDispatch,
         isAnalysisMode,
         setFocusedCellCoord,
         announce,
@@ -496,7 +496,7 @@ describe('handle-key-press', () => {
         cellCoord: [rowIndex, colIndex],
         selectionState,
         cell,
-        selDispatch,
+        selectionDispatch,
         isAnalysisMode,
         setFocusedCellCoord,
         announce,
@@ -518,7 +518,7 @@ describe('handle-key-press', () => {
         cellCoord: [rowIndex, colIndex],
         selectionState,
         cell,
-        selDispatch,
+        selectionDispatch,
         isAnalysisMode,
         setFocusedCellCoord,
         announce,
@@ -538,7 +538,7 @@ describe('handle-key-press', () => {
         cellCoord: [rowIndex, colIndex],
         selectionState,
         cell,
-        selDispatch,
+        selectionDispatch,
         setFocusedCellCoord,
         announce,
         keyboard,
