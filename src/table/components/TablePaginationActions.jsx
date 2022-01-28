@@ -39,9 +39,6 @@ const useStyles = makeStyles({
   formControl: {
     flexDirection: 'row',
   },
-  hidden: {
-    display: 'none',
-  },
   dropdown: {
     cursor: 'pointer',
     minWidth: '16px',
@@ -58,11 +55,24 @@ const icons = {
   PreviousPage: KeyboardArrowLeft,
   NextPage: KeyboardArrowRight,
   LastPage: LastPageIcon,
+  FirstPageRTL: LastPageIcon,
+  PreviousPageRTL: KeyboardArrowRight,
+  NextPageRTL: KeyboardArrowLeft,
+  LastPageRTL: FirstPageIcon,
 };
 
-export default function TablePaginationActions(props) {
+export default function TablePaginationActions({
+  direction,
+  page,
+  lastPageIdx,
+  onPageChange,
+  keyboard,
+  tableWidth,
+  translator,
+  isInSelectionMode,
+}) {
   const classes = useStyles();
-  const { page, lastPageIdx, onPageChange, keyboard, tableWidth, translator, isInSelectionMode } = props;
+
   const onFirstPage = page === 0;
   const onLastPage = page >= lastPageIdx;
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
@@ -72,9 +82,11 @@ export default function TablePaginationActions(props) {
   const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, isInSelectionMode) : null;
 
   const getButton = (disabledCondition, pageNumber, type, onKeyDown = null) => {
-    const IconComponent = icons[type];
+    const iconType = `${type}${direction === 'rtl' ? 'RTL' : ''}`;
+    const IconComponent = icons[iconType];
     return (
       <IconButton
+        data-testid="pagination-action-icon-button"
         onClick={!disabledCondition ? () => onPageChange(pageNumber) : null}
         aria-disabled={disabledCondition}
         aria-label={translator.get(`SNTable.Pagination.${type}`)}
@@ -131,6 +143,7 @@ export default function TablePaginationActions(props) {
 }
 
 TablePaginationActions.propTypes = {
+  direction: PropTypes.string.isRequired,
   onPageChange: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   lastPageIdx: PropTypes.number.isRequired,

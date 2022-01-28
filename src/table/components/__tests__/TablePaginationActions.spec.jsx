@@ -8,6 +8,8 @@ import TablePaginationActions from '../TablePaginationActions';
 import * as handleAccessibility from '../../utils/handle-accessibility';
 
 describe('<TablePaginationActions />', () => {
+  let direction;
+  let titles;
   let page;
   let lastPageIdx;
   let onPageChange;
@@ -17,6 +19,13 @@ describe('<TablePaginationActions />', () => {
   let keyboard;
 
   beforeEach(() => {
+    direction = 'ltr';
+    titles = [
+      'SNTable.Pagination.FirstPage',
+      'SNTable.Pagination.PreviousPage',
+      'SNTable.Pagination.NextPage',
+      'SNTable.Pagination.LastPage',
+    ];
     page = 0;
     lastPageIdx = 2;
     onPageChange = sinon.spy();
@@ -32,9 +41,10 @@ describe('<TablePaginationActions />', () => {
     sinon.resetHistory();
   });
 
-  it('should render all buttons', () => {
-    const { queryByTitle } = render(
+  it('should render all buttons in right order when left-to-right direction', () => {
+    const { getAllByTestId } = render(
       <TablePaginationActions
+        direction={direction}
         page={page}
         lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
@@ -45,15 +55,37 @@ describe('<TablePaginationActions />', () => {
       />
     );
 
-    expect(queryByTitle('SNTable.Pagination.FirstPage')).to.be.visible;
-    expect(queryByTitle('SNTable.Pagination.PreviousPage')).to.be.visible;
-    expect(queryByTitle('SNTable.Pagination.NextPage')).to.be.visible;
-    expect(queryByTitle('SNTable.Pagination.LastPage')).to.be.visible;
+    const renderedNames = getAllByTestId('pagination-action-icon-button');
+    renderedNames.forEach((nameNode, index) => {
+      expect(Object.values(nameNode)[1].title).to.be.equal(titles[index]);
+    });
   });
 
-  it('should render only previous and next button', () => {
-    tableWidth = 300;
-    const { queryByTitle } = render(
+  it('should render all buttons in right order when right-to-left direction', () => {
+    direction = 'rtl';
+    const { getAllByTestId } = render(
+      <TablePaginationActions
+        direction={direction}
+        page={page}
+        lastPageIdx={lastPageIdx}
+        onPageChange={onPageChange}
+        tableWidth={tableWidth}
+        translator={translator}
+        isInSelectionMode={isInSelectionMode}
+        keyboard={keyboard}
+      />
+    );
+
+    const renderedNames = getAllByTestId('pagination-action-icon-button');
+    renderedNames.forEach((nameNode, index) => {
+      expect(Object.values(nameNode)[1].title).to.be.equal(titles[index]);
+    });
+  });
+
+  it('should render only previous and next button when the size of table is smaller than or equal to 350', () => {
+    tableWidth = 350;
+    titles = ['SNTable.Pagination.PreviousPage', 'SNTable.Pagination.NextPage'];
+    const { getAllByTestId, queryByTitle } = render(
       <TablePaginationActions
         page={page}
         lastPageIdx={lastPageIdx}
@@ -65,14 +97,41 @@ describe('<TablePaginationActions />', () => {
       />
     );
 
+    const renderedNames = getAllByTestId('pagination-action-icon-button');
+    renderedNames.forEach((nameNode, index) => {
+      expect(Object.values(nameNode)[1].title).to.be.equal(titles[index]);
+    });
     expect(queryByTitle('SNTable.Pagination.FirstPage')).to.be.null;
-    expect(queryByTitle('SNTable.Pagination.PreviousPage')).to.be.visible;
-    expect(queryByTitle('SNTable.Pagination.NextPage')).to.be.visible;
+    expect(queryByTitle('SNTable.Pagination.LastPage')).to.be.null;
+  });
+
+  it('should render only previous and next button when the size of table is smaller than or equal to 350 and in right-to-left direction', () => {
+    tableWidth = 349;
+    direction = 'rtl';
+    titles = ['SNTable.Pagination.PreviousPage', 'SNTable.Pagination.NextPage'];
+    const { queryByTitle, getAllByTestId } = render(
+      <TablePaginationActions
+        direction={direction}
+        page={page}
+        lastPageIdx={lastPageIdx}
+        onPageChange={onPageChange}
+        tableWidth={tableWidth}
+        translator={translator}
+        isInSelectionMode={isInSelectionMode}
+        keyboard={keyboard}
+      />
+    );
+
+    const renderedNames = getAllByTestId('pagination-action-icon-button');
+    renderedNames.forEach((nameNode, index) => {
+      expect(Object.values(nameNode)[1].title).to.be.equal(titles[index]);
+    });
+    expect(queryByTitle('SNTable.Pagination.FirstPage')).to.be.null;
     expect(queryByTitle('SNTable.Pagination.LastPage')).to.be.null;
   });
 
   it('should not render pagination dropdown', () => {
-    const { queryByTitle, queryByTestId } = render(
+    const { queryByTestId } = render(
       <TablePaginationActions
         page={page}
         lastPageIdx={lastPageIdx}
@@ -84,10 +143,6 @@ describe('<TablePaginationActions />', () => {
       />
     );
 
-    expect(queryByTitle('SNTable.Pagination.FirstPage')).to.be.visible;
-    expect(queryByTitle('SNTable.Pagination.PreviousPage')).to.be.visible;
-    expect(queryByTitle('SNTable.Pagination.NextPage')).to.be.visible;
-    expect(queryByTitle('SNTable.Pagination.LastPage')).to.be.visible;
     expect(queryByTestId('pagination-dropdown')).to.be.null;
   });
 
