@@ -9,6 +9,7 @@ export default function withSelections(CellComponent) {
 
     const handleMouseUp = (evt) =>
       cell.isDim && evt.button === 0 && selectCell({ selectionState, cell, selectionDispatch, evt, announce });
+
     const selectionStyling = useMemo(
       () => getSelectionStyle(styling, cell, selectionState),
       [styling, cell, selectionState]

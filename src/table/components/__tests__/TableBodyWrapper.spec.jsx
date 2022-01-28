@@ -45,10 +45,9 @@ describe('<TableBodyWrapper />', async () => {
   });
 
   it('should render 2x2 table body and call CellRenderer', () => {
-    // eslint-disable-next-line react/prop-types
-    sinon.stub(getCellRenderer, 'default').returns(({ value }) => {
+    sinon.stub(getCellRenderer, 'default').returns(({ cell }) => {
       cellRendererSpy();
-      return <td>{value}</td>;
+      return <td>{cell.qText}</td>;
     });
 
     const { queryByText } = render(
