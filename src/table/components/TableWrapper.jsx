@@ -19,10 +19,12 @@ const useStyles = makeStyles({
   paper: {
     height: '100%',
     backgroundColor: 'rgb(255, 255, 255)',
+    boxShadow: 'none',
     direction: ({ rtl }) => (rtl ? 'rtl' : 'ltr'),
   },
   containerOverflowAuto: {
-    height: ({ paginationHeight }) => `calc(100% - ${paginationHeight}px)`,
+    height: 'calc(100% - 52px)',
+    overflow: 'auto',
   },
   containerOverflowHidden: {
     height: '100%',
@@ -58,12 +60,10 @@ export default function TableWrapper(props) {
   const { size, rows, columns } = tableData;
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
-  const [paginationHeight, setPaginationHeight] = useState();
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
-  const tablePaginationSectionRef = useRef();
-  const classes = useStyles({ rtl, paginationHeight });
+  const classes = useStyles({ rtl });
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
   const fixedRowsPerPage = selectionsAPI.isModal() || rect.width < 550 || size.qcx > 100;
@@ -92,21 +92,18 @@ export default function TableWrapper(props) {
   useEffect(() => {
     const memoedContainer = tableContainerRef.current;
     const memoedWrapper = tableWrapperRef.current;
-    const tablePaginationSection = tablePaginationSectionRef.current;
-    if (!memoedContainer || !memoedWrapper || !tablePaginationSection) return () => {};
-    const handleResize = () => setPaginationHeight(tablePaginationSection.clientHeight);
-    handleResize();
+
+    if (!memoedContainer || !memoedWrapper) return () => {};
+
     const scrollCallback = (evt) => handleScroll(evt, tableContainerRef);
     const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard);
 
     memoedContainer.addEventListener('wheel', scrollCallback);
     memoedWrapper.addEventListener('focusout', focusOutCallback);
-    window.addEventListener('resize', handleResize);
 
     return () => {
       memoedContainer.removeEventListener('wheel', scrollCallback);
       memoedWrapper.removeEventListener('focusout', focusOutCallback);
-      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -176,7 +173,7 @@ export default function TableWrapper(props) {
           />
         </Table>
       </TableContainer>
-      <Paper ref={tablePaginationSectionRef} className={classes.tablePaginationSection}>
+      <Paper className={classes.tablePaginationSection}>
         <TablePagination
           className={classes[paginationHidden]}
           rowsPerPageOptions={fixedRowsPerPage ? [rowsPerPage] : rowsPerPageOptions}

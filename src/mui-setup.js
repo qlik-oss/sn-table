@@ -19,6 +19,12 @@ export default function muiSetup() {
       boxShadow: '0 0 0 2px #3f8ab3 inset',
       outline: 'none',
     };
+    muiConfig.overrides.MuiToolbar = {
+      regular: {
+        minHeight: '49px !important',
+      },
+    };
+    muiConfig.overrides.MuiTableContainer.root.borderBottom = '0';
   }
 
   const theme = createTheme(adaptV4Theme(muiConfig));
