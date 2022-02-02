@@ -45,9 +45,9 @@ function TableBodyWrapper({
   const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
   const classes = useStyles(bodyStyle);
   const selectionsEnabled = !!selectionsAPI && !constraints.active;
-  const getColumnRenderers = tableData.columns.map((c) => getCellRenderer(!!c.stylingInfo.length, selectionsEnabled));
+  const getColumnRenderers = columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(() => getColumnRenderers);
-  const [selectionState, selDispatch] = useReducer(reducer, {
+  const [selectionState, selectionDispatch] = useReducer(reducer, {
     api: selectionsAPI,
     rows: [],
     colIdx: -1,
@@ -55,12 +55,12 @@ function TableBodyWrapper({
   });
 
   useEffect(() => {
-    selDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
+    selectionDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
     setColumnRenderers(getColumnRenderers);
   }, [selectionsEnabled, columns.length]);
 
   useEffect(() => {
-    addSelectionListeners({ api: selectionsAPI, selDispatch, setShouldRefocus, keyboard, tableWrapperRef });
+    addSelectionListeners({ api: selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
   }, []);
 
   return (
@@ -83,12 +83,11 @@ function TableBodyWrapper({
                   component={columnIndex === 0 ? 'th' : null}
                   cell={cell}
                   column={column}
-                  value={value}
                   key={column.id}
                   align={column.align}
                   styling={{}}
                   selectionState={selectionState}
-                  selDispatch={selDispatch}
+                  selectionDispatch={selectionDispatch}
                   tabIndex={-1}
                   announce={announce}
                   onKeyDown={(evt) =>
@@ -98,7 +97,7 @@ function TableBodyWrapper({
                       cellCoord: [rowIndex + 1, columnIndex],
                       selectionState,
                       cell,
-                      selDispatch,
+                      selectionDispatch,
                       isAnalysisMode: selectionsEnabled,
                       setFocusedCellCoord,
                       announce,
