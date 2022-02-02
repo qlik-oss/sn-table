@@ -74,8 +74,8 @@ export function getBodyStyle(layout, theme) {
 
   return {
     ...getBaseStyling(content, theme),
-    hoverBackgroundColor: [hoverBackgroundColor, '!important'],
-    hoverFontColor: [hoverFontColor, '!important'],
+    hoverBackgroundColor: `${hoverBackgroundColor} !important`,
+    hoverFontColor: `${hoverFontColor} !important`,
     selectedCellClass: '',
   };
 }

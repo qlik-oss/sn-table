@@ -8,39 +8,7 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
-import { makeStyles } from '@mui/styles';
 import { handleLastTab } from '../utils/handle-key-press';
-
-const useStyles = makeStyles({
-  root: {
-    paddingLeft: '12px',
-    flexShrink: 0,
-    display: 'flex',
-  },
-  formControl: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  caption: {
-    fontSize: '14px',
-    color: '#404040 !important',
-    width: 'fit-content',
-    position: 'relative',
-    padding: '8px',
-    transform: 'none',
-  },
-  paginationActionButton: {
-    color: 'rgba(0, 0, 0, 0.54)',
-  },
-  disabled: {
-    color: 'rgba(0, 0, 0, 0.3)',
-    cursor: 'default',
-  },
-  input: {
-    padding: '4px 32px 5px 8px',
-    border: '0',
-  },
-});
 
 const icons = {
   FirstPage: FirstPageIcon,
@@ -63,8 +31,6 @@ export default function TablePaginationActions({
   translator,
   isInSelectionMode,
 }) {
-  const classes = useStyles();
-
   const onFirstPage = page === 0;
   const onLastPage = page >= lastPageIdx;
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
@@ -84,7 +50,7 @@ export default function TablePaginationActions({
         aria-label={translator.get(`SNTable.Pagination.${type}`)}
         title={translator.get(`SNTable.Pagination.${type}`)}
         tabIndex={tabIndex}
-        className={`${classes.paginationActionButton} ${disabledCondition && classes.disabled}`}
+        sx={disabledCondition ? { color: 'rgba(0, 0, 0, 0.3)', cursor: 'default' } : { color: 'rgba(0, 0, 0, 0.54)' }}
         onKeyDown={onKeyDown}
       >
         <IconComponent />
@@ -93,10 +59,28 @@ export default function TablePaginationActions({
   };
 
   return (
-    <div className={classes.root}>
+    <>
       {tableWidth > 650 && (
-        <FormControl className={classes.formControl}>
-          <InputLabel className={classes.caption} htmlFor="pagination-dropdown" shrink={false}>
+        <FormControl
+          sx={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingLeft: '8px',
+            paddingRight: '18px',
+          }}
+        >
+          <InputLabel
+            sx={{
+              fontSize: '14px',
+              color: '#404040 !important',
+              width: 'fit-content',
+              position: 'relative',
+              padding: '8px',
+              transform: 'none',
+            }}
+            htmlFor="pagination-dropdown"
+            shrink={false}
+          >
             {`${translator.get('SNTable.Pagination.SelectPage')}:`}
           </InputLabel>
           <Select
@@ -107,7 +91,11 @@ export default function TablePaginationActions({
               'data-testid': 'pagination-dropdown',
               tabIndex,
               id: 'pagination-dropdown',
-              className: classes.input,
+              style: {
+                paddingTop: '3px',
+                paddingBottom: '3px',
+                border: 0,
+              },
             }}
           >
             {Array(lastPageIdx + 1)
@@ -124,7 +112,7 @@ export default function TablePaginationActions({
       {getButton(onFirstPage, page - 1, 'PreviousPage')}
       {getButton(onLastPage, page + 1, 'NextPage', !showFirstLast ? handleLastButtonTab : null)}
       {showFirstLast && getButton(onLastPage, lastPageIdx, 'LastPage', handleLastButtonTab)}
-    </div>
+    </>
   );
 }
 

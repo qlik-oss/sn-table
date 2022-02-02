@@ -39,7 +39,7 @@ export default function supernova(env) {
       const constraints = useConstraints();
       const translator = useTranslator();
       const selectionsAPI = useSelections();
-      const muiParameters = muiSetup(direction);
+      const tableTheme = muiSetup(direction);
       const theme = useTheme();
       const keyboard = useKeyboard();
       const rect = useRect();
@@ -64,7 +64,7 @@ export default function supernova(env) {
             constraints,
             translator,
             selectionsAPI,
-            muiParameters,
+            tableTheme,
             theme,
             changeSortOrder,
             keyboard,

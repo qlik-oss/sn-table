@@ -1,10 +1,10 @@
+import PropTypes from 'prop-types';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import Paper from '@mui/material/Paper';
-import { makeStyles } from '@mui/styles';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
-import PropTypes from 'prop-types';
-import React, { useEffect, useState, useMemo, useRef } from 'react';
+
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
@@ -14,33 +14,6 @@ import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
-
-const useStyles = makeStyles({
-  paper: {
-    height: '100%',
-    backgroundColor: 'rgb(255, 255, 255)',
-    boxShadow: 'none',
-  },
-  containerOverflowAuto: {
-    height: 'calc(100% - 52px)',
-    overflow: 'auto',
-  },
-  containerOverflowHidden: {
-    height: '100%',
-    overflow: 'hidden',
-  },
-  tablePaginationSection: {
-    backgroundColor: 'rgb(255, 255, 255)',
-    display: 'flex',
-    justifyContent: 'flex-end',
-    border: '1px solid rgb(217, 217, 217)',
-    borderTop: '0px',
-    boxShadow: 'none',
-  },
-  paginationHidden: {
-    display: 'none',
-  },
-});
 
 export default function TableWrapper(props) {
   const {
@@ -63,10 +36,6 @@ export default function TableWrapper(props) {
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
 
-  const classes = useStyles();
-
-  const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
-  const paginationHidden = constraints.active && 'paginationHidden';
   const fixedRowsPerPage = selectionsAPI.isModal() || rect.width < 550 || size.qcx > 100;
   /* eslint-disable react-hooks/rules-of-hooks */
   const announce = announcer || useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
@@ -92,18 +61,25 @@ export default function TableWrapper(props) {
 
   useEffect(() => {
     const memoedWrapper = tableWrapperRef.current;
-    const memoedContainer = tableContainerRef.current;
-    if (!memoedContainer || !memoedWrapper) return () => {};
+    if (!memoedWrapper) return () => {};
 
     const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard);
-    const horizontalScrollCallback = (evt) => handleHorizontalScroll(evt, direction === 'rtl', memoedContainer);
-
-    memoedContainer.addEventListener('wheel', horizontalScrollCallback);
     memoedWrapper.addEventListener('focusout', focusOutCallback);
 
     return () => {
-      memoedContainer.removeEventListener('wheel', horizontalScrollCallback);
       memoedWrapper.removeEventListener('focusout', focusOutCallback);
+    };
+  }, []);
+
+  useEffect(() => {
+    const memoedContainer = tableContainerRef.current;
+    if (!memoedContainer) return () => {};
+
+    const horizontalScrollCallback = (evt) => handleHorizontalScroll(evt, direction === 'rtl', memoedContainer);
+    memoedContainer.addEventListener('wheel', horizontalScrollCallback);
+
+    return () => {
+      memoedContainer.removeEventListener('wheel', horizontalScrollCallback);
     };
   }, [direction]);
 
@@ -139,7 +115,11 @@ export default function TableWrapper(props) {
   return (
     <Paper
       dir={direction}
-      className={classes.paper}
+      sx={{
+        height: '100%',
+        backgroundColor: 'rgb(255, 255, 255)',
+        boxShadow: 'none',
+      }}
       ref={tableWrapperRef}
       onKeyDown={(evt) =>
         handleTableWrapperKeyDown({
@@ -157,7 +137,17 @@ export default function TableWrapper(props) {
       <AnnounceElements />
       <TableContainer
         ref={tableContainerRef}
-        className={classes[containerMode]}
+        sx={
+          constraints.active
+            ? {
+                height: '100%',
+                overflow: 'hidden',
+              }
+            : {
+                height: 'calc(100% - 52px)',
+                overflow: 'auto',
+              }
+        }
         tabIndex={-1}
         role="application"
         data-testid="table-wrapper"
@@ -174,9 +164,18 @@ export default function TableWrapper(props) {
           />
         </Table>
       </TableContainer>
-      <Paper className={classes.tablePaginationSection}>
+      <Paper
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          backgroundColor: 'rgb(255, 255, 255)',
+          border: '1px solid rgb(217, 217, 217)',
+          borderTop: '0px',
+          boxShadow: 'none',
+        }}
+      >
         <TablePagination
-          className={classes[paginationHidden]}
+          sx={constraints.active && { display: 'none' }}
           rowsPerPageOptions={fixedRowsPerPage ? [rowsPerPage] : rowsPerPageOptions}
           component="div"
           count={size.qcy}

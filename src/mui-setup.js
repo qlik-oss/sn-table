@@ -1,5 +1,4 @@
 import { createTheme, adaptV4Theme } from '@mui/material/styles';
-import { createGenerateClassName } from '@mui/styles';
 import * as muiConfig from './mui-config.json';
 
 export default function muiSetup(direction) {
@@ -22,17 +21,12 @@ export default function muiSetup(direction) {
     muiConfig.overrides.MuiToolbar = {
       regular: {
         minHeight: '49px !important',
+        paddingRight: '24px !important;',
       },
     };
     muiConfig.overrides.MuiTableContainer.root.borderBottom = '0';
   }
 
-  const theme = createTheme(adaptV4Theme({ ...muiConfig, direction }));
-  const generateClassName = createGenerateClassName({
-    productionPrefix: `${process.env.PACKAGE_VERSION}`,
-    disableGlobal: true,
-    seed: `sn-t-${Date.now()}`,
-  });
-
-  return { theme, generateClassName };
+  const tableTheme = createTheme(adaptV4Theme({ ...muiConfig, direction }));
+  return tableTheme;
 }
