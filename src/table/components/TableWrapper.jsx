@@ -181,7 +181,7 @@ export default function TableWrapper(props) {
           component="div"
           count={size.qcy}
           rowsPerPage={rowsPerPage}
-          labelRowsPerPage={translator.get('SNTable.Pagination.RowsPerPage')}
+          labelRowsPerPage={`${translator.get('SNTable.Pagination.RowsPerPage')}:`}
           page={page}
           SelectProps={{
             inputProps: {

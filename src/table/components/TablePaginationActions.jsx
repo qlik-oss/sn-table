@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   },
   caption: {
     fontSize: '14px',
-    color: 'inherit',
+    color: '#404040 !important',
     width: 'fit-content',
     position: 'relative',
     padding: '8px',
@@ -36,16 +36,9 @@ const useStyles = makeStyles({
     color: 'rgba(0, 0, 0, 0.3)',
     cursor: 'default',
   },
-  focused: {
-    color: '#404040 !important',
-  },
-  dropdown: {
-    cursor: 'pointer',
-    minWidth: '16px',
-    maxHeight: '32px',
-  },
   input: {
-    padding: '6px 32px 7px 8px',
+    padding: '4px 32px 5px 8px',
+    border: '0',
   },
 });
 
@@ -103,17 +96,11 @@ export default function TablePaginationActions({
     <div className={classes.root}>
       {tableWidth > 650 && (
         <FormControl className={classes.formControl}>
-          <InputLabel
-            className={classes.caption}
-            htmlFor="pagination-dropdown"
-            shrink={false}
-            classes={{ focused: classes.focused }}
-          >
-            {`${translator.get('SNTable.Pagination.SelectPage')}: `}
+          <InputLabel className={classes.caption} htmlFor="pagination-dropdown" shrink={false}>
+            {`${translator.get('SNTable.Pagination.SelectPage')}:`}
           </InputLabel>
           <Select
             native
-            className={classes.dropdown}
             value={page}
             onChange={handleSelectPage}
             inputProps={{
