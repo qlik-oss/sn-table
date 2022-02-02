@@ -19,7 +19,6 @@ const useStyles = makeStyles({
   paper: {
     height: '100%',
     backgroundColor: 'rgb(255, 255, 255)',
-    direction: ({ rtl }) => (rtl ? 'rtl' : 'ltr'),
   },
   containerOverflowAuto: {
     height: 'calc(100% - 52px)',
@@ -50,7 +49,7 @@ export default function TableWrapper(props) {
     selectionsAPI,
     keyboard,
     rect,
-    rtl,
+    direction,
     announcer, // this is only for testing purposes
   } = props;
   const { size, rows, columns } = tableData;
@@ -59,7 +58,9 @@ export default function TableWrapper(props) {
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
-  const classes = useStyles({ rtl });
+
+  const classes = useStyles();
+
   const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
   const paginationHidden = constraints.active && 'paginationHidden';
   const fixedRowsPerPage = selectionsAPI.isModal() || rect.width < 550 || size.qcx > 100;
@@ -100,13 +101,13 @@ export default function TableWrapper(props) {
     const memoedContainer = tableContainerRef.current;
     if (!memoedContainer) return () => {};
 
-    const horizontalScrollCallback = (evt) => handleHorizontalScroll(evt, rtl, memoedContainer);
+    const horizontalScrollCallback = (evt) => handleHorizontalScroll(evt, direction === 'rtl', memoedContainer);
     memoedContainer.addEventListener('wheel', horizontalScrollCallback);
 
     return () => {
       memoedContainer.removeEventListener('wheel', horizontalScrollCallback);
     };
-  }, [rtl]);
+  }, [direction]);
 
   useEffect(
     () => handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement }),
@@ -139,6 +140,7 @@ export default function TableWrapper(props) {
 
   return (
     <Paper
+      dir={direction}
       className={classes.paper}
       ref={tableWrapperRef}
       onKeyDown={(evt) =>
@@ -202,6 +204,7 @@ export default function TableWrapper(props) {
           onPageChange={() => {}}
         />
         <TablePaginationActions
+          direction={direction}
           page={page}
           onPageChange={handleChangePage}
           lastPageIdx={Math.ceil(size.qcy / rowsPerPage) - 1}
@@ -229,6 +232,6 @@ TableWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
   rect: PropTypes.object.isRequired,
-  rtl: PropTypes.bool.isRequired,
+  direction: PropTypes.string.isRequired,
   announcer: PropTypes.func,
 };

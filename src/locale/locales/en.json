@@ -20,20 +20,20 @@
     "comment": "Label for the dropdown to select a page."
   },
   "SNTable.Pagination.FirstPage": {
-    "value": "First page",
-    "comment": "tooltip and aria-label for the first page button. (tew 210929)"
+    "value": "Go to the first page",
+    "comment": "tooltip and aria-label for the first page button. (tew 220125)"
   },
   "SNTable.Pagination.PreviousPage": {
-    "value": "Previous page",
-    "comment": "tooltip and aria-label for the previous page button. (tew 210929)"
+    "value": "Go to the previous page",
+    "comment": "tooltip and aria-label for the previous page button. (tew 220125)"
   },
   "SNTable.Pagination.NextPage": {
-    "value": "Next page",
-    "comment": "tooltip and aria-label for the next page button. (tew 210929)"
+    "value": "Go to the next page",
+    "comment": "tooltip and aria-label for the next page button. (tew 220125)"
   },
   "SNTable.Pagination.LastPage": {
-    "value": "Last page",
-    "comment": "tooltip and aria-label for the last page button. (tew 210929)"
+    "value": "Go to the last page",
+    "comment": "tooltip and aria-label for the last page button. (tew 220125)"
   },
   "SNTable.Pagination.RowsPerPageChange": {
     "value": "Rows per page has changed to {0}. Now showing the first page.",
