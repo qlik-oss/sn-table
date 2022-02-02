@@ -83,12 +83,11 @@ function TableBodyWrapper({
                   component={columnIndex === 0 ? 'th' : null}
                   cell={cell}
                   column={column}
-                  value={value}
                   key={column.id}
                   align={column.align}
                   styling={{}}
-                  selectionstate={selectionState}
-                  selectiondispatch={selectionDispatch}
+                  selectionState={selectionState}
+                  selectionDispatch={selectionDispatch}
                   tabIndex={-1}
                   announce={announce}
                   onKeyDown={(evt) =>
