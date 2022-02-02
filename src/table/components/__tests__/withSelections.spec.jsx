@@ -9,27 +9,28 @@ import * as selectionsUtils from '../../utils/selections-utils';
 
 describe('withSelections', () => {
   let HOC;
+  let value;
   let cell;
   let selectionState;
-  let selDispatch;
+  let selectionDispatch;
   let evt;
   let styling;
   let announce;
 
   beforeEach(() => {
-    HOC = withSelections.default((props) => <div {...props}>{props.cell.value}</div>);
+    HOC = withSelections.default((props) => <div {...props}>{props.value}</div>);
     sinon.stub(selectionsUtils, 'selectCell').returns(sinon.spy());
 
+    value = '100';
     cell = {
       isDim: true,
-      value: '100',
     };
     selectionState = {
       rows: [],
       colIdx: -1,
       api: { isModal: () => true },
     };
-    selDispatch = () => {};
+    selectionDispatch = () => {};
     evt = { button: 0 };
     styling = {};
     announce = sinon.spy();
@@ -42,22 +43,29 @@ describe('withSelections', () => {
 
   it('should render a mocked component with the passed value', () => {
     const { queryByText } = render(
-      <HOC selectionState={selectionState} cell={cell} selDispatch={selDispatch} styling={styling} />
+      <HOC
+        value={value}
+        selectionState={selectionState}
+        cell={cell}
+        selectionDispatch={selectionDispatch}
+        styling={styling}
+      />
     );
 
-    expect(queryByText(cell.value)).to.be.visible;
+    expect(queryByText(value)).to.be.visible;
   });
   it('should call selectCell on mouseUp', () => {
     const { queryByText } = render(
       <HOC
+        value={value}
         selectionState={selectionState}
         cell={cell}
-        selDispatch={selDispatch}
+        selectionDispatch={selectionDispatch}
         styling={styling}
         announce={announce}
       />
     );
-    fireEvent.mouseUp(queryByText(cell.value));
+    fireEvent.mouseUp(queryByText(value));
 
     expect(selectionsUtils.selectCell).to.have.been.calledWithMatch({ selectionState, cell, evt, announce });
   });
@@ -65,9 +73,15 @@ describe('withSelections', () => {
     cell.isDim = false;
 
     const { queryByText } = render(
-      <HOC selectionState={selectionState} cell={cell} selDispatch={selDispatch} styling={styling} />
+      <HOC
+        value={value}
+        selectionState={selectionState}
+        cell={cell}
+        selectionDispatch={selectionDispatch}
+        styling={styling}
+      />
     );
-    fireEvent.mouseUp(queryByText(cell.value));
+    fireEvent.mouseUp(queryByText(value));
 
     expect(selectionsUtils.selectCell).to.not.have.been.called;
   });
@@ -75,9 +89,15 @@ describe('withSelections', () => {
     cell.isDim = false;
 
     const { queryByText } = render(
-      <HOC selectionState={selectionState} cell={cell} selDispatch={selDispatch} styling={styling} />
+      <HOC
+        value={value}
+        selectionState={selectionState}
+        cell={cell}
+        selectionDispatch={selectionDispatch}
+        styling={styling}
+      />
     );
-    fireEvent.mouseUp(queryByText(cell.value), evt);
+    fireEvent.mouseUp(queryByText(value), evt);
 
     expect(selectionsUtils.selectCell).to.not.have.been.called;
   });
@@ -85,9 +105,15 @@ describe('withSelections', () => {
     evt.button = 2;
 
     const { queryByText } = render(
-      <HOC selectionState={selectionState} cell={cell} selDispatch={selDispatch} styling={styling} />
+      <HOC
+        value={value}
+        selectionState={selectionState}
+        cell={cell}
+        selectionDispatch={selectionDispatch}
+        styling={styling}
+      />
     );
-    fireEvent.mouseUp(queryByText(cell.value), evt);
+    fireEvent.mouseUp(queryByText(value), evt);
 
     expect(selectionsUtils.selectCell).to.not.have.been.called;
   });

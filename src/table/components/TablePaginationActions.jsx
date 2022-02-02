@@ -114,9 +114,9 @@ export default function TablePaginationActions(props) {
           >
             {Array(lastPageIdx + 1)
               .fill()
-              .map((_, i) => (
-                <option key={_} value={i}>
-                  {i + 1}
+              .map((_, index) => (
+                <option key={String(index)} value={index}>
+                  {index + 1}
                 </option>
               ))}
           </Select>
