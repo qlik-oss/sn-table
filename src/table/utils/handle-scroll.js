@@ -1,4 +1,4 @@
-export const handleHorizontalScroll = (evt, rtl, memoedContainer) => {
+export const handleHorizontalScroll = (evt, isRTL, memoedContainer) => {
   evt.stopPropagation();
   // scrollWidth is the width of an element's content, including content not visible on the screen due to overflow.
   // offsetWidth is the element's CSS width, including any borders, padding, and vertical scrollbars
@@ -6,7 +6,7 @@ export const handleHorizontalScroll = (evt, rtl, memoedContainer) => {
   let { scrollLeft } = memoedContainer;
   const ScrollLeftWidth = scrollLeft + evt.deltaX;
   const maxScrollableWidth = memoedContainer.scrollWidth - memoedContainer.offsetWidth;
-  if (rtl) {
+  if (isRTL) {
     // scrollLeft is 0 when the scrollbar is at its rightmost position
     // (at the start of the scrolled content),
     // and then increasingly negative as you scroll towards (left) the end of the content .
