@@ -197,6 +197,7 @@ export default function TableWrapper(props) {
           }
           onRowsPerPageChange={handleChangeRowsPerPage}
           ActionsComponent={() => <div>{null}</div>}
+          onPageChange={() => {}}
         />
         <TablePaginationActions
           page={page}
