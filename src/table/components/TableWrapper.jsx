@@ -168,10 +168,12 @@ export default function TableWrapper(props) {
         sx={{
           display: 'flex',
           justifyContent: 'flex-end',
+          paddingRight: 1,
           backgroundColor: 'rgb(255, 255, 255)',
           border: '1px solid rgb(217, 217, 217)',
-          borderTop: '0px',
+          borderTop: 0,
           boxShadow: 'none',
+          alignItems: 'center',
         }}
       >
         <TablePagination

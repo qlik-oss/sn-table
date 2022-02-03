@@ -61,26 +61,8 @@ export default function TablePaginationActions({
   return (
     <>
       {tableWidth > 650 && (
-        <FormControl
-          sx={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingLeft: '8px',
-            paddingRight: '18px',
-          }}
-        >
-          <InputLabel
-            sx={{
-              fontSize: '14px',
-              color: '#404040 !important',
-              width: 'fit-content',
-              position: 'relative',
-              padding: '8px',
-              transform: 'none',
-            }}
-            htmlFor="pagination-dropdown"
-            shrink={false}
-          >
+        <FormControl>
+          <InputLabel htmlFor="pagination-dropdown" shrink={false}>
             {`${translator.get('SNTable.Pagination.SelectPage')}:`}
           </InputLabel>
           <Select
@@ -91,11 +73,6 @@ export default function TablePaginationActions({
               'data-testid': 'pagination-dropdown',
               tabIndex,
               id: 'pagination-dropdown',
-              style: {
-                paddingTop: '3px',
-                paddingBottom: '3px',
-                border: 0,
-              },
             }}
           >
             {Array(lastPageIdx + 1)
@@ -108,10 +85,12 @@ export default function TablePaginationActions({
           </Select>
         </FormControl>
       )}
-      {showFirstLast && getButton(onFirstPage, 0, 'FirstPage')}
-      {getButton(onFirstPage, page - 1, 'PreviousPage')}
-      {getButton(onLastPage, page + 1, 'NextPage', !showFirstLast ? handleLastButtonTab : null)}
-      {showFirstLast && getButton(onLastPage, lastPageIdx, 'LastPage', handleLastButtonTab)}
+      <>
+        {showFirstLast && getButton(onFirstPage, 0, 'FirstPage')}
+        {getButton(onFirstPage, page - 1, 'PreviousPage')}
+        {getButton(onLastPage, page + 1, 'NextPage', !showFirstLast ? handleLastButtonTab : null)}
+        {showFirstLast && getButton(onLastPage, lastPageIdx, 'LastPage', handleLastButtonTab)}
+      </>
     </>
   );
 }

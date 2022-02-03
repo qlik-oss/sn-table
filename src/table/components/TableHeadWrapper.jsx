@@ -72,16 +72,7 @@ function TableHeadWrapper({
               onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
               onClick={() => !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column)}
             >
-              <TableSortLabel
-                sx={{
-                  '&.Mui-active': {
-                    color: 'inherit',
-                  },
-                }}
-                active={isCurrentColumnActive}
-                direction={column.sortDirection}
-                tabIndex={-1}
-              >
+              <TableSortLabel active={isCurrentColumnActive} direction={column.sortDirection} tabIndex={-1}>
                 {column.label}
                 {isFocusInHead && (
                   <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>
