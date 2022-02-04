@@ -14,13 +14,13 @@ export const STYLING_DEFAULTS = {
 
 export const SELECTION_STYLING = {
   SELECTED: {
-    color: STYLING_DEFAULTS.WHITE,
+    color: `${STYLING_DEFAULTS.WHITE} !important`,
     background: STYLING_DEFAULTS.SELECTED_BACKGROUND,
     // Setting a specific class for selected cells styling to override hover effect
     selectedCellClass: STYLING_DEFAULTS.SELECTED_CLASS,
   },
   POSSIBLE: {
-    color: STYLING_DEFAULTS.FONT_COLOR,
+    color: `${STYLING_DEFAULTS.FONT_COLOR} !important`,
     background: STYLING_DEFAULTS.WHITE,
   },
 };
