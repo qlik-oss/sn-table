@@ -112,14 +112,27 @@ export default function TableWrapper(props) {
     });
   }, [rows.length, size.qcy, size.qcx, page]);
 
+  const paperStyle = {
+    height: '100%',
+    backgroundColor: 'rgb(255, 255, 255)',
+    boxShadow: 'none',
+  };
+
+  const paperTablePaginationStyle = {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingRight: 1,
+    backgroundColor: 'rgb(255, 255, 255)',
+    border: '1px solid rgb(217, 217, 217)',
+    borderTop: 0,
+    boxShadow: 'none',
+    alignItems: 'center',
+  };
+
   return (
     <Paper
       dir={direction}
-      sx={{
-        height: '100%',
-        backgroundColor: 'rgb(255, 255, 255)',
-        boxShadow: 'none',
-      }}
+      sx={paperStyle}
       ref={tableWrapperRef}
       onKeyDown={(evt) =>
         handleTableWrapperKeyDown({
@@ -164,18 +177,7 @@ export default function TableWrapper(props) {
           />
         </Table>
       </TableContainer>
-      <Paper
-        sx={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          paddingRight: 1,
-          backgroundColor: 'rgb(255, 255, 255)',
-          border: '1px solid rgb(217, 217, 217)',
-          borderTop: 0,
-          boxShadow: 'none',
-          alignItems: 'center',
-        }}
-      >
+      <Paper sx={paperTablePaginationStyle}>
         <TablePagination
           sx={constraints.active && { display: 'none' }}
           rowsPerPageOptions={fixedRowsPerPage ? [rowsPerPage] : rowsPerPageOptions}

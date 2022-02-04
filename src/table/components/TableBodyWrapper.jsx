@@ -44,31 +44,31 @@ function TableBodyWrapper({
     addSelectionListeners({ api: selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
   }, []);
 
+  const tableBodyStyle = {
+    '& td, th': {
+      color: bodyStyle.color,
+      fontSize: bodyStyle.fontSize,
+      padding: bodyStyle.padding,
+    },
+  };
+
+  const tableRowStyle = {
+    '&&:hover': {
+      '& td:not(.selected), th:not(.selected)': {
+        backgroundColor: bodyStyle.hoverBackgroundColor,
+        color: bodyStyle.hoverFontColor,
+      },
+    },
+  };
+
   return (
-    <TableBody
-      sx={{
-        '& td, th': {
-          color: bodyStyle.color,
-          fontSize: bodyStyle.fontSize,
-          padding: bodyStyle.padding,
-        },
-      }}
-    >
+    <TableBody sx={tableBodyStyle}>
       {rows.map((row, rowIndex) => (
         <TableRow
           hover={hoverEffect}
           tabIndex={-1}
           key={row.key}
-          sx={
-            hoverEffect && {
-              '&&:hover': {
-                '& td:not(.selected), th:not(.selected)': {
-                  backgroundColor: bodyStyle.hoverBackgroundColor,
-                  color: bodyStyle.hoverFontColor,
-                },
-              },
-            }
-          }
+          sx={hoverEffect && tableRowStyle}
           className="sn-table-row"
         >
           {columns.map((column, columnIndex) => {

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 export default function withStyling(CellComponent) {
   const HOC = (props) => {
     const { styling, ...passThroughProps } = props;
+    window.console.log({ styling });
 
     return (
       <CellComponent {...passThroughProps} className={`${styling.selectedCellClass} sn-table-cell`} style={styling} />

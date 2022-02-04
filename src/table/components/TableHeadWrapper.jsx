@@ -35,6 +35,11 @@ function TableHeadWrapper({
   keyboard,
 }) {
   const headCellStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
+  const tableCellStyle = {
+    color: headCellStyle.color,
+    fontSize: headCellStyle.fontSize,
+    padding: headCellStyle.padding,
+  };
 
   return (
     <TableHead>
@@ -46,11 +51,7 @@ function TableHeadWrapper({
 
           return (
             <TableCell
-              sx={{
-                color: headCellStyle.color,
-                fontSize: headCellStyle.fontSize,
-                padding: headCellStyle.padding,
-              }}
+              sx={tableCellStyle}
               key={column.id}
               align={column.align}
               className="sn-table-head-cell sn-table-cell"
