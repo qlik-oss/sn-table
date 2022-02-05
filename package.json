@@ -99,7 +99,7 @@
     "sinon": "12.0.1",
     "sinon-chai": "3.7.0",
     "styled-components": "5.3.3",
-    "stylis": "3.5.4",
+    "stylis": "4.0.13",
     "stylis-plugin-rtl-sc": "npm:stylis-plugin-rtl@1.1.0",
     "yargs": "^17.3.1"
   },
