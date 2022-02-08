@@ -15,19 +15,19 @@
     "version": "aQJbyf9x9LTIhITOr45yXA=="
   },
   "SNTable.Pagination.FirstPage": {
-    "value": "Första sidan",
-    "comment": "tooltip and aria-label for the first page button. (tew 210929)",
-    "version": "vp2MW/tPZq4FsBw+3qknqA=="
+    "value": "Gå till första sidan",
+    "comment": "tooltip and aria-label for the first page button. (tew 220125)",
+    "version": "02xtL9RTBrrFoJ6sKxknMg=="
   },
   "SNTable.Pagination.LastPage": {
-    "value": "Sista sidan",
-    "comment": "tooltip and aria-label for the last page button. (tew 210929)",
-    "version": "9lUogxKZctLBgLYSNmpyPA=="
+    "value": "Gå till sista sidan",
+    "comment": "tooltip and aria-label for the last page button. (tew 220125)",
+    "version": "r2oxhoCXSRbLzLA5mLygUg=="
   },
   "SNTable.Pagination.NextPage": {
-    "value": "Nästa sida",
-    "comment": "tooltip and aria-label for the next page button. (tew 210929)",
-    "version": "YyUO+qPBjWcn7zy0bpXeFw=="
+    "value": "Gå till nästa sida",
+    "comment": "tooltip and aria-label for the next page button. (tew 220125)",
+    "version": "zcTT0KquBNduHyvU9hnhoA=="
   },
   "SNTable.Pagination.PageStatusReport": {
     "value": "Sidan har ändrats. Visar sida {0} av {1}.",
@@ -35,9 +35,9 @@
     "version": "AOFznLoJupPIAwS7SchRcA=="
   },
   "SNTable.Pagination.PreviousPage": {
-    "value": "Föregående sida",
-    "comment": "tooltip and aria-label for the previous page button. (tew 210929)",
-    "version": "3IinXJOsZ4CCBrNYsg4U5A=="
+    "value": "Gå till föregående sida",
+    "comment": "tooltip and aria-label for the previous page button. (tew 220125)",
+    "version": "0HFoHIB1i+ZETBO3YI76/g=="
   },
   "SNTable.Pagination.RowsPerPage": {
     "value": "Rader per sida",

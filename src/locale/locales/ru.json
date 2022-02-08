@@ -15,19 +15,19 @@
     "version": "aQJbyf9x9LTIhITOr45yXA=="
   },
   "SNTable.Pagination.FirstPage": {
-    "value": "Первая страница",
-    "comment": "tooltip and aria-label for the first page button. (tew 210929)",
-    "version": "vp2MW/tPZq4FsBw+3qknqA=="
+    "value": "Перейти к первой странице",
+    "comment": "tooltip and aria-label for the first page button. (tew 220125)",
+    "version": "02xtL9RTBrrFoJ6sKxknMg=="
   },
   "SNTable.Pagination.LastPage": {
-    "value": "Последняя страница",
-    "comment": "tooltip and aria-label for the last page button. (tew 210929)",
-    "version": "9lUogxKZctLBgLYSNmpyPA=="
+    "value": "Перейти к последней странице",
+    "comment": "tooltip and aria-label for the last page button. (tew 220125)",
+    "version": "r2oxhoCXSRbLzLA5mLygUg=="
   },
   "SNTable.Pagination.NextPage": {
-    "value": "Следующая страница",
-    "comment": "tooltip and aria-label for the next page button. (tew 210929)",
-    "version": "YyUO+qPBjWcn7zy0bpXeFw=="
+    "value": "Перейти к следующей странице",
+    "comment": "tooltip and aria-label for the next page button. (tew 220125)",
+    "version": "zcTT0KquBNduHyvU9hnhoA=="
   },
   "SNTable.Pagination.PageStatusReport": {
     "value": "Страница изменилась. Показана страница {0} из {1}.",
@@ -35,9 +35,9 @@
     "version": "AOFznLoJupPIAwS7SchRcA=="
   },
   "SNTable.Pagination.PreviousPage": {
-    "value": "Предыдущая страница",
-    "comment": "tooltip and aria-label for the previous page button. (tew 210929)",
-    "version": "3IinXJOsZ4CCBrNYsg4U5A=="
+    "value": "Перейти к предыдущей странице",
+    "comment": "tooltip and aria-label for the previous page button. (tew 220125)",
+    "version": "0HFoHIB1i+ZETBO3YI76/g=="
   },
   "SNTable.Pagination.RowsPerPage": {
     "value": "Строк на странице",
