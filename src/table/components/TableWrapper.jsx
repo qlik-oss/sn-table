@@ -118,6 +118,16 @@ export default function TableWrapper(props) {
     boxShadow: 'none',
   };
 
+  const tableContainerStyle = constraints.active
+    ? {
+        height: '100%',
+        overflow: 'hidden',
+      }
+    : {
+        height: 'calc(100% - 52px)',
+        overflow: 'auto',
+      };
+
   const paperTablePaginationStyle = {
     display: 'flex',
     justifyContent: 'flex-end',
@@ -150,17 +160,7 @@ export default function TableWrapper(props) {
       <AnnounceElements />
       <TableContainer
         ref={tableContainerRef}
-        sx={
-          constraints.active
-            ? {
-                height: '100%',
-                overflow: 'hidden',
-              }
-            : {
-                height: 'calc(100% - 52px)',
-                overflow: 'auto',
-              }
-        }
+        sx={tableContainerStyle}
         tabIndex={-1}
         role="application"
         data-testid="table-wrapper"
