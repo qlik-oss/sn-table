@@ -15,19 +15,19 @@
     "version": "aQJbyf9x9LTIhITOr45yXA=="
   },
   "SNTable.Pagination.FirstPage": {
-    "value": "Pierwsza strona",
-    "comment": "tooltip and aria-label for the first page button. (tew 210929)",
-    "version": "vp2MW/tPZq4FsBw+3qknqA=="
+    "value": "Przejdź do pierwszej strony",
+    "comment": "tooltip and aria-label for the first page button. (tew 220125)",
+    "version": "02xtL9RTBrrFoJ6sKxknMg=="
   },
   "SNTable.Pagination.LastPage": {
-    "value": "Ostatnia strona",
-    "comment": "tooltip and aria-label for the last page button. (tew 210929)",
-    "version": "9lUogxKZctLBgLYSNmpyPA=="
+    "value": "Przejdź do ostatniej strony",
+    "comment": "tooltip and aria-label for the last page button. (tew 220125)",
+    "version": "r2oxhoCXSRbLzLA5mLygUg=="
   },
   "SNTable.Pagination.NextPage": {
-    "value": "Następna strona",
-    "comment": "tooltip and aria-label for the next page button. (tew 210929)",
-    "version": "YyUO+qPBjWcn7zy0bpXeFw=="
+    "value": "Przejdź do następnej strony",
+    "comment": "tooltip and aria-label for the next page button. (tew 220125)",
+    "version": "zcTT0KquBNduHyvU9hnhoA=="
   },
   "SNTable.Pagination.PageStatusReport": {
     "value": "Strona się zmieniła Wyświetlanie strony {0} z {1}.",
@@ -35,9 +35,9 @@
     "version": "AOFznLoJupPIAwS7SchRcA=="
   },
   "SNTable.Pagination.PreviousPage": {
-    "value": "Poprzednia strona",
-    "comment": "tooltip and aria-label for the previous page button. (tew 210929)",
-    "version": "3IinXJOsZ4CCBrNYsg4U5A=="
+    "value": "Przejdź do poprzedniej strony",
+    "comment": "tooltip and aria-label for the previous page button. (tew 220125)",
+    "version": "0HFoHIB1i+ZETBO3YI76/g=="
   },
   "SNTable.Pagination.RowsPerPage": {
     "value": "Wierszy na stronę",

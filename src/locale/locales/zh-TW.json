@@ -15,19 +15,19 @@
     "version": "aQJbyf9x9LTIhITOr45yXA=="
   },
   "SNTable.Pagination.FirstPage": {
-    "value": "第一頁",
-    "comment": "tooltip and aria-label for the first page button. (tew 210929)",
-    "version": "vp2MW/tPZq4FsBw+3qknqA=="
+    "value": "移至第一頁",
+    "comment": "tooltip and aria-label for the first page button. (tew 220125)",
+    "version": "02xtL9RTBrrFoJ6sKxknMg=="
   },
   "SNTable.Pagination.LastPage": {
-    "value": "最後一頁",
-    "comment": "tooltip and aria-label for the last page button. (tew 210929)",
-    "version": "9lUogxKZctLBgLYSNmpyPA=="
+    "value": "移至最後一頁",
+    "comment": "tooltip and aria-label for the last page button. (tew 220125)",
+    "version": "r2oxhoCXSRbLzLA5mLygUg=="
   },
   "SNTable.Pagination.NextPage": {
-    "value": "下一頁",
-    "comment": "tooltip and aria-label for the next page button. (tew 210929)",
-    "version": "YyUO+qPBjWcn7zy0bpXeFw=="
+    "value": "移至下一頁",
+    "comment": "tooltip and aria-label for the next page button. (tew 220125)",
+    "version": "zcTT0KquBNduHyvU9hnhoA=="
   },
   "SNTable.Pagination.PageStatusReport": {
     "value": "頁面已變更。顯示第 {0} 頁，共 {1} 頁。",
@@ -35,9 +35,9 @@
     "version": "AOFznLoJupPIAwS7SchRcA=="
   },
   "SNTable.Pagination.PreviousPage": {
-    "value": "上一頁",
-    "comment": "tooltip and aria-label for the previous page button. (tew 210929)",
-    "version": "3IinXJOsZ4CCBrNYsg4U5A=="
+    "value": "移至上一頁",
+    "comment": "tooltip and aria-label for the previous page button. (tew 220125)",
+    "version": "0HFoHIB1i+ZETBO3YI76/g=="
   },
   "SNTable.Pagination.RowsPerPage": {
     "value": "每頁列數",
