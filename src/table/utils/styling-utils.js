@@ -14,13 +14,13 @@ export const STYLING_DEFAULTS = {
 
 export const SELECTION_STYLING = {
   SELECTED: {
-    color: `${STYLING_DEFAULTS.WHITE} !important`,
+    color: STYLING_DEFAULTS.WHITE,
     background: STYLING_DEFAULTS.SELECTED_BACKGROUND,
     // Setting a specific class for selected cells styling to override hover effect
     selectedCellClass: STYLING_DEFAULTS.SELECTED_CLASS,
   },
   POSSIBLE: {
-    color: `${STYLING_DEFAULTS.FONT_COLOR} !important`,
+    color: STYLING_DEFAULTS.FONT_COLOR,
     background: STYLING_DEFAULTS.WHITE,
   },
 };
@@ -74,9 +74,9 @@ export function getBodyStyle(layout, theme) {
 
   return {
     ...getBaseStyling(content, theme),
-    hoverBackgroundColor: `${hoverBackgroundColor} !important`,
-    hoverFontColor: `${hoverFontColor} !important`,
-    selectedCellClass: '',
+    hoverBackgroundColor,
+    hoverFontColor,
+    selectedCellClass: 'unselected',
   };
 }
 

@@ -46,7 +46,6 @@ function TableBodyWrapper({
 
   const tableBodyStyle = {
     '& td, th': {
-      color: bodyStyle.color,
       fontSize: bodyStyle.fontSize,
       padding: bodyStyle.padding,
     },
@@ -84,7 +83,7 @@ function TableBodyWrapper({
                   column={column}
                   key={column.id}
                   align={column.align}
-                  styling={{}}
+                  styling={{ color: bodyStyle.color }}
                   selectionState={selectionState}
                   selectionDispatch={selectionDispatch}
                   tabIndex={-1}
