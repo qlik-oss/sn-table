@@ -29,3 +29,9 @@ nuked.render({
   type: 'table',
 });
 ```
+
+[See full example](./mashup-example) of the mashup usage
+
+## API
+
+The API can be found in [the Qlik developer portal](https://qlik.dev/apis/javascript/nebula-table)
