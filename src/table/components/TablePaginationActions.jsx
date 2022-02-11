@@ -8,47 +8,7 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
-import { makeStyles } from '@mui/styles';
 import { handleLastTab } from '../utils/handle-key-press';
-
-const useStyles = makeStyles({
-  root: {
-    flexShrink: 0,
-    paddingLeft: '24px',
-    transform: 'translate(0px, 4px)',
-  },
-  paginationActionButton: {
-    color: 'rgba(0, 0, 0, 0.54)',
-  },
-  disabled: {
-    color: 'rgba(0, 0, 0, 0.3)',
-    cursor: 'default',
-  },
-  focused: {
-    color: '#404040 !important',
-  },
-  caption: {
-    fontSize: '14px',
-    color: 'inherit',
-    width: 'fit-content',
-    position: 'relative',
-    transform: 'translate(0px, 12px)',
-    paddingRight: '8px',
-    height: '30px',
-  },
-  formControl: {
-    flexDirection: 'row',
-  },
-  dropdown: {
-    cursor: 'pointer',
-    minWidth: '16px',
-    maxHeight: '32px',
-    transform: 'translate(0px, 6px)',
-  },
-  input: {
-    padding: '6px 32px 7px 8px',
-  },
-});
 
 const icons = {
   FirstPage: FirstPageIcon,
@@ -71,8 +31,6 @@ export default function TablePaginationActions({
   translator,
   isInSelectionMode,
 }) {
-  const classes = useStyles();
-
   const onFirstPage = page === 0;
   const onLastPage = page >= lastPageIdx;
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
@@ -92,7 +50,7 @@ export default function TablePaginationActions({
         aria-label={translator.get(`SNTable.Pagination.${type}`)}
         title={translator.get(`SNTable.Pagination.${type}`)}
         tabIndex={tabIndex}
-        className={`${classes.paginationActionButton} ${disabledCondition && classes.disabled}`}
+        sx={disabledCondition ? { color: 'rgba(0, 0, 0, 0.3)', cursor: 'default' } : { color: 'rgba(0, 0, 0, 0.54)' }}
         onKeyDown={onKeyDown}
       >
         <IconComponent />
@@ -101,27 +59,20 @@ export default function TablePaginationActions({
   };
 
   return (
-    <div className={classes.root}>
+    <>
       {tableWidth > 650 && (
-        <FormControl className={classes.formControl}>
-          <InputLabel
-            className={classes.caption}
-            htmlFor="pagination-dropdown"
-            shrink={false}
-            classes={{ focused: classes.focused }}
-          >
-            {`${translator.get('SNTable.Pagination.SelectPage')}: `}
+        <FormControl>
+          <InputLabel htmlFor="pagination-dropdown" shrink={false}>
+            {`${translator.get('SNTable.Pagination.SelectPage')}:`}
           </InputLabel>
           <Select
             native
-            className={classes.dropdown}
             value={page}
             onChange={handleSelectPage}
             inputProps={{
               'data-testid': 'pagination-dropdown',
               tabIndex,
               id: 'pagination-dropdown',
-              className: classes.input,
             }}
           >
             {Array(lastPageIdx + 1)
@@ -134,16 +85,22 @@ export default function TablePaginationActions({
           </Select>
         </FormControl>
       )}
-      {showFirstLast && getButton(onFirstPage, 0, 'FirstPage')}
-      {getButton(onFirstPage, page - 1, 'PreviousPage')}
-      {getButton(onLastPage, page + 1, 'NextPage', !showFirstLast ? handleLastButtonTab : null)}
-      {showFirstLast && getButton(onLastPage, lastPageIdx, 'LastPage', handleLastButtonTab)}
-    </div>
+      <>
+        {showFirstLast && getButton(onFirstPage, 0, 'FirstPage')}
+        {getButton(onFirstPage, page - 1, 'PreviousPage')}
+        {getButton(onLastPage, page + 1, 'NextPage', !showFirstLast ? handleLastButtonTab : null)}
+        {showFirstLast && getButton(onLastPage, lastPageIdx, 'LastPage', handleLastButtonTab)}
+      </>
+    </>
   );
 }
 
+TablePaginationActions.defaultProps = {
+  direction: null,
+};
+
 TablePaginationActions.propTypes = {
-  direction: PropTypes.string.isRequired,
+  direction: PropTypes.string,
   onPageChange: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   lastPageIdx: PropTypes.number.isRequired,

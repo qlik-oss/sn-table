@@ -1,10 +1,10 @@
+import PropTypes from 'prop-types';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import Paper from '@mui/material/Paper';
-import { makeStyles } from '@mui/styles';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
-import PropTypes from 'prop-types';
-import React, { useEffect, useState, useMemo, useRef } from 'react';
+
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
@@ -14,29 +14,6 @@ import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
-
-const useStyles = makeStyles({
-  paper: {
-    height: '100%',
-    backgroundColor: 'rgb(255, 255, 255)',
-  },
-  containerOverflowAuto: {
-    height: 'calc(100% - 52px)',
-    overflow: 'auto',
-  },
-  containerOverflowHidden: {
-    height: '100%',
-    overflow: 'hidden',
-  },
-  tablePaginationSection: {
-    backgroundColor: 'rgb(255, 255, 255)',
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
-  paginationHidden: {
-    display: 'none',
-  },
-});
 
 export default function TableWrapper(props) {
   const {
@@ -59,10 +36,6 @@ export default function TableWrapper(props) {
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
 
-  const classes = useStyles();
-
-  const containerMode = constraints.active ? 'containerOverflowHidden' : 'containerOverflowAuto';
-  const paginationHidden = constraints.active && 'paginationHidden';
   const fixedRowsPerPage = selectionsAPI.isModal() || rect.width < 550 || size.qcx > 100;
   /* eslint-disable react-hooks/rules-of-hooks */
   const announce = announcer || useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
@@ -80,6 +53,7 @@ export default function TableWrapper(props) {
     setPageInfo({ ...pageInfo, page: pageIdx });
     announce({ keys: [['SNTable.Pagination.PageStatusReport', [pageIdx + 1, totalPages]]], politeness: 'assertive' });
   };
+
   const handleChangeRowsPerPage = (evt) => {
     setPageInfo({ ...pageInfo, page: 0, rowsPerPage: +evt.target.value });
     announce({ keys: [['SNTable.Pagination.RowsPerPageChange', evt.target.value]], politeness: 'assertive' });
@@ -138,10 +112,37 @@ export default function TableWrapper(props) {
     });
   }, [rows.length, size.qcy, size.qcx, page]);
 
+  const paperStyle = {
+    height: '100%',
+    backgroundColor: 'rgb(255, 255, 255)',
+    boxShadow: 'none',
+  };
+
+  const tableContainerStyle = constraints.active
+    ? {
+        height: '100%',
+        overflow: 'hidden',
+      }
+    : {
+        height: 'calc(100% - 52px)',
+        overflow: 'auto',
+      };
+
+  const paperTablePaginationStyle = {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingRight: 1,
+    backgroundColor: 'rgb(255, 255, 255)',
+    border: '1px solid rgb(217, 217, 217)',
+    borderTop: 0,
+    boxShadow: 'none',
+    alignItems: 'center',
+  };
+
   return (
     <Paper
       dir={direction}
-      className={classes.paper}
+      sx={paperStyle}
       ref={tableWrapperRef}
       onKeyDown={(evt) =>
         handleTableWrapperKeyDown({
@@ -159,7 +160,7 @@ export default function TableWrapper(props) {
       <AnnounceElements />
       <TableContainer
         ref={tableContainerRef}
-        className={classes[containerMode]}
+        sx={tableContainerStyle}
         tabIndex={-1}
         role="application"
         data-testid="table-wrapper"
@@ -176,14 +177,14 @@ export default function TableWrapper(props) {
           />
         </Table>
       </TableContainer>
-      <Paper className={classes.tablePaginationSection}>
+      <Paper sx={paperTablePaginationStyle}>
         <TablePagination
-          className={classes[paginationHidden]}
+          sx={constraints.active && { display: 'none' }}
           rowsPerPageOptions={fixedRowsPerPage ? [rowsPerPage] : rowsPerPageOptions}
           component="div"
           count={size.qcy}
           rowsPerPage={rowsPerPage}
-          labelRowsPerPage={translator.get('SNTable.Pagination.RowsPerPage')}
+          labelRowsPerPage={`${translator.get('SNTable.Pagination.RowsPerPage')}:`}
           page={page}
           SelectProps={{
             inputProps: {
@@ -220,6 +221,7 @@ export default function TableWrapper(props) {
 
 TableWrapper.defaultProps = {
   announcer: null,
+  direction: null,
 };
 
 TableWrapper.propTypes = {
@@ -232,6 +234,6 @@ TableWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
   rect: PropTypes.object.isRequired,
-  direction: PropTypes.string.isRequired,
+  direction: PropTypes.string,
   announcer: PropTypes.func,
 };
