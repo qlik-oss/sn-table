@@ -1,3 +1,4 @@
+import { expect } from 'chai';
 import {
   STYLING_DEFAULTS,
   SELECTION_STYLING,
@@ -99,6 +100,12 @@ describe('styling-utils', () => {
         fontSize: '14px',
         padding: '7px 14px',
       });
+    });
+    it('should return styling with custom padding', () => {
+      styleObj.padding = '4px';
+
+      const resultStyling = getBaseStyling(styleObj, theme);
+      expect(resultStyling.padding).to.eql('4px');
     });
   });
 
