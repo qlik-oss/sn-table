@@ -33,11 +33,20 @@ export function getColor(color = {}, defaultColor, theme) {
 export const getAutoFontColor = (backgroundColor) =>
   isDarkColor(backgroundColor) ? STYLING_DEFAULTS.WHITE : STYLING_DEFAULTS.FONT_COLOR;
 
-export const getBaseStyling = (styleObj, theme) => ({
-  color: getColor(styleObj.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme),
-  fontSize: styleObj.fontSize || STYLING_DEFAULTS.FONT_SIZE,
-  padding: styleObj.fontSize ? `${styleObj.fontSize / 2}px ${styleObj.fontSize}px` : STYLING_DEFAULTS.PADDING,
-});
+export const getBaseStyling = (styleObj, theme) => {
+  let padding = STYLING_DEFAULTS.PADDING;
+  if (styleObj.padding) {
+    padding = styleObj.padding;
+  } else if (styleObj.fontSize) {
+    padding = `${styleObj.fontSize / 2}px ${styleObj.fontSize}px`;
+  }
+
+  return {
+    color: getColor(styleObj.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme),
+    fontSize: styleObj.fontSize || STYLING_DEFAULTS.FONT_SIZE,
+    padding,
+  };
+};
 
 // Both index === -1 and color === null must be true for the property to be unset
 export const isUnset = (prop) => !prop || JSON.stringify(prop) === JSON.stringify({ index: -1, color: null });
