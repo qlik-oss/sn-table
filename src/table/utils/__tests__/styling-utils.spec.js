@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import {
   STYLING_DEFAULTS,
   SELECTION_STYLING,
