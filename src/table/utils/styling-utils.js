@@ -36,7 +36,7 @@ export const getAutoFontColor = (backgroundColor) =>
 export const getBaseStyling = (styleObj, theme) => {
   let padding = STYLING_DEFAULTS.PADDING;
   if (styleObj.padding) {
-    padding = styleObj.padding;
+    ({ padding } = styleObj);
   } else if (styleObj.fontSize) {
     padding = `${styleObj.fontSize / 2}px ${styleObj.fontSize}px`;
   }
