@@ -24,6 +24,7 @@ export default function TableWrapper(props) {
     constraints,
     translator,
     selectionsAPI,
+    theme,
     keyboard,
     rect,
     direction,
@@ -112,12 +113,12 @@ export default function TableWrapper(props) {
     });
   }, [rows.length, size.qcy, size.qcx, page]);
 
+  const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
   const paperStyle = {
     height: '100%',
-    backgroundColor: 'rgb(255, 255, 255)',
+    backgroundColor: tableBackgroundColor,
     boxShadow: 'none',
   };
-
   const tableContainerStyle = constraints.active
     ? {
         height: '100%',
@@ -127,16 +128,16 @@ export default function TableWrapper(props) {
         height: 'calc(100% - 52px)',
         overflow: 'auto',
       };
-
   const paperTablePaginationStyle = {
     display: 'flex',
     justifyContent: 'flex-end',
+    alignItems: 'center',
     paddingRight: 1,
-    backgroundColor: 'rgb(255, 255, 255)',
+    backgroundColor: tableBackgroundColor,
     border: '1px solid rgb(217, 217, 217)',
     borderTop: 0,
     boxShadow: 'none',
-    alignItems: 'center',
+    borderRadius: 0,
   };
 
   return (
@@ -232,6 +233,7 @@ TableWrapper.propTypes = {
   translator: PropTypes.object.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
   rect: PropTypes.object.isRequired,
   direction: PropTypes.string,

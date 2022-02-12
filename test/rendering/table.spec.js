@@ -59,7 +59,7 @@ describe('sn table: Rendering tests', () => {
       // Puppeteer Capture screenshot
       const img = await puppet.screenshot();
       // Compare screenshot with baseline image
-      expect(img).to.matchImageOf(name, { artifactsPath: paths.artifacts }, 0.035);
+      expect(img).to.matchImageOf(name, { artifactsPath: paths.artifacts }, 0.02);
     });
   });
 });

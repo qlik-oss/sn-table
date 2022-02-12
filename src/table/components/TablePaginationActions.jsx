@@ -66,6 +66,7 @@ export default function TablePaginationActions({
             {`${translator.get('SNTable.Pagination.SelectPage')}:`}
           </InputLabel>
           <Select
+            sx={{ backgroundColor: 'inherit' }}
             native
             value={page}
             onChange={handleSelectPage}

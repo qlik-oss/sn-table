@@ -35,14 +35,9 @@ function TableHeadWrapper({
   keyboard,
 }) {
   const headCellStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
-  const tableCellStyle = {
-    color: headCellStyle.color,
-    fontSize: headCellStyle.fontSize,
-    padding: headCellStyle.padding,
-  };
-
+  const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
   return (
-    <TableHead>
+    <TableHead sx={{ backgroundColor: tableBackgroundColor }}>
       <TableRow className="sn-table-row">
         {tableData.columns.map((column, columnIndex) => {
           const tabIndex = columnIndex === 0 && !keyboard.enabled ? 0 : -1;
@@ -51,7 +46,7 @@ function TableHeadWrapper({
 
           return (
             <TableCell
-              sx={tableCellStyle}
+              sx={headCellStyle}
               key={column.id}
               align={column.align}
               className="sn-table-head-cell sn-table-cell"

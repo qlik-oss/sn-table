@@ -2157,6 +2157,11 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.2.tgz#830beaec4b4091a9e9398ac50f865ddea52186b9"
   integrity sha512-92FRmppjjqz29VMJ2dn+xdyXZBrMlE42AV6Kq6BwjWV7CNUW1hs2FtxSNLQE+gJhaZ6AAmYuO9y8dshhcBl7vA==
 
+"@qlik-trial/sense-themes-default@^1.9.2":
+  version "1.9.2"
+  resolved "https://npm.pkg.github.com/download/@qlik-trial/sense-themes-default/1.9.2/1bc7dea4c70693d18e060d6776194989672461fdfe1e6da0054a05b03a00176d#7223f00683250ffb378ad6be91dadfb0440a1742"
+  integrity sha512-UF5X+t4j3LfhYpByBi6N+fKYPF/s8z4WeVZTPNT9t71fltmZV6UF6Jnj7DjrYa3/0Dt4kiDeV8XqysAvPBi/EA==
+
 "@rollup/plugin-commonjs@21.0.1":
   version "21.0.1"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-commonjs/-/plugin-commonjs-21.0.1.tgz#1e57c81ae1518e4df0954d681c642e7d94588fee"

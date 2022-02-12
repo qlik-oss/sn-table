@@ -40,6 +40,7 @@ export default function supernova(env) {
       const translator = useTranslator();
       const selectionsAPI = useSelections();
       const tableTheme = muiSetup(direction);
+      // the style which is from them can be found in nebula.config.js -> serve -> themes
       const theme = useTheme();
       const keyboard = useKeyboard();
       const rect = useRect();
