@@ -88,6 +88,7 @@ function TableBodyWrapper({
                   selectionDispatch={selectionDispatch}
                   tabIndex={-1}
                   announce={announce}
+                  theme={theme}
                   onKeyDown={(evt) =>
                     bodyHandleKeyPress({
                       evt,

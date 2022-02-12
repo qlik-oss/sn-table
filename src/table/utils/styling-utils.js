@@ -29,7 +29,7 @@ export const SELECTION_STYLING = {
   },
 };
 
-export function getColor(color = {}, defaultColor, theme) {
+export function getColor(defaultColor, theme, color = {}) {
   const resolvedColor = theme.getColorPickerColor(color);
   return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
 }
@@ -45,7 +45,7 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
 
   return {
     fontFamily: theme.getStyle('object.straightTable', objetName, 'fontFamily'),
-    color: styleObj?.fontColor ? getColor(styleObj?.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme) : color,
+    color: styleObj?.fontColor ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj?.fontColor) : color,
     fontSize: styleObj?.fontSize || font || STYLING_DEFAULTS.FONT_SIZE,
     padding:
       padding || (styleObj?.fontSize ? `${styleObj.fontSize / 2}px ${styleObj.fontSize}px` : STYLING_DEFAULTS.PADDING),
@@ -89,7 +89,7 @@ export function getBodyStyle(layout, theme) {
 
   const setHoverBackgroundColor = unsetHoverBackgroundColor
     ? hoverBackgroundColorFromTheme || ''
-    : getColor(content.hoverColor, STYLING_DEFAULTS.HOVER_BACKGROUND, theme);
+    : getColor(STYLING_DEFAULTS.HOVER_BACKGROUND, theme, content?.hoverColor);
 
   const hoverBackgroundColor = unsetHoverFontBackgroundColor
     ? hoverBackgroundColorFromTheme || STYLING_DEFAULTS.HOVER_BACKGROUND
@@ -97,7 +97,7 @@ export function getBodyStyle(layout, theme) {
 
   const hoverFontColor = unsetHoverFontBackgroundColor
     ? hoverBackgroundColorFromTheme
-    : getColor(content.hoverFontColor, getAutoFontColor(hoverBackgroundColor), theme);
+    : getColor(getAutoFontColor(hoverBackgroundColor), theme, content?.hoverFontColor);
 
   const contentStyle = getBaseStyling(content, 'content', theme);
   // Remove all Undefined Values from an Object
@@ -127,19 +127,20 @@ export function getColumnStyle(styling, qAttrExps, stylingInfo) {
   };
 }
 
-export function getSelectionColors(background = STYLING_DEFAULTS.WHITE, cell, selectionState) {
+export function getSelectionColors(cell, selectionState, background, theme) {
   const { colIdx, rows, api } = selectionState;
+  const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
 
   if (api.isModal()) {
-    if (colIdx !== cell.colIdx) {
-      return { background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${background}` };
-    }
+    if (colIdx !== cell.colIdx)
+      return {
+        background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${
+          background || tableBackgroundColor || STYLING_DEFAULTS.WHITE
+        }`,
+      };
 
-    for (let i = 0; i < rows.length; i++) {
-      if (rows[i].qElemNumber === cell.qElemNumber) {
-        return SELECTION_STYLING.SELECTED;
-      }
-    }
+    const match = (row) => row.qElemNumber === cell.qElemNumber;
+    if (rows.some(match)) return SELECTION_STYLING.SELECTED;
 
     return SELECTION_STYLING.POSSIBLE;
   }
@@ -147,6 +148,6 @@ export function getSelectionColors(background = STYLING_DEFAULTS.WHITE, cell, se
   return {};
 }
 
-export function getSelectionStyle(styling, cell, selectionState) {
-  return { ...styling, ...getSelectionColors(styling.background, cell, selectionState) };
+export function getSelectionStyle(styling, cell, selectionState, theme) {
+  return { ...styling, ...getSelectionColors(cell, selectionState, styling.background, theme) };
 }
