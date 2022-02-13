@@ -5,7 +5,6 @@ import { resolveExpression, isDarkColor } from './color-utils';
 // < column < selection (except the selected green) < hover < selected green
 
 export const STYLING_DEFAULTS = {
-  FONT_SIZE: '14px',
   FONT_COLOR: '#404040',
   HOVER_BACKGROUND: '#f4f4f4',
   SELECTED_CLASS: 'selected',
@@ -13,7 +12,6 @@ export const STYLING_DEFAULTS = {
   EXCLUDED_BACKGROUND:
     'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px)',
   WHITE: '#fff',
-  PADDING: '7px 14px',
 };
 
 export const SELECTION_STYLING = {
@@ -40,15 +38,14 @@ export const getAutoFontColor = (backgroundColor) =>
 export const getBaseStyling = (styleObj, objetName, theme) => {
   const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
   const color = theme.getStyle('object.straightTable', objetName, 'color');
-  const font = theme.getStyle('object.straightTable', objetName, 'fontSize');
+  const fontSize = theme.getStyle('object.straightTable', objetName, 'fontSize');
   const padding = theme.getStyle('object.straightTable', objetName, 'padding');
 
   const baseStyle = {
     fontFamily: theme.getStyle('object.straightTable', objetName, 'fontFamily'),
     color: styleObj?.fontColor ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj?.fontColor) : color,
-    fontSize: styleObj?.fontSize || font || STYLING_DEFAULTS.FONT_SIZE,
-    padding:
-      padding || (styleObj?.fontSize ? `${styleObj.fontSize / 2}px ${styleObj.fontSize}px` : STYLING_DEFAULTS.PADDING),
+    fontSize: styleObj?.fontSize || fontSize,
+    padding,
     backgroundColor: tableBackgroundColor,
   };
   // Remove all Undefined Values from an Object

@@ -35,10 +35,15 @@ function TableHeadWrapper({
   keyboard,
 }) {
   const headCellStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
-
   const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
+  const headStyle = {
+    '& th:last-of-type': {
+      borderRight: 0,
+    },
+    backgroundColor: tableBackgroundColor,
+  };
   return (
-    <TableHead sx={{ backgroundColor: tableBackgroundColor }}>
+    <TableHead sx={headStyle}>
       <TableRow className="sn-table-row">
         {tableData.columns.map((column, columnIndex) => {
           const tabIndex = columnIndex === 0 && !keyboard.enabled ? 0 : -1;

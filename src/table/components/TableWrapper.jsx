@@ -114,7 +114,10 @@ export default function TableWrapper(props) {
   }, [rows.length, size.qcy, size.qcx, page]);
 
   const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
+
   const paperStyle = {
+    border: '1px solid #D9D9D9',
+    borderBottom: 0,
     height: '100%',
     backgroundColor: tableBackgroundColor,
     boxShadow: 'none',
@@ -125,7 +128,7 @@ export default function TableWrapper(props) {
         overflow: 'hidden',
       }
     : {
-        height: 'calc(100% - 52px)',
+        height: 'calc(100% - 54px)',
         overflow: 'auto',
       };
   const paperTablePaginationStyle = {
@@ -134,10 +137,9 @@ export default function TableWrapper(props) {
     alignItems: 'center',
     paddingRight: 1,
     backgroundColor: tableBackgroundColor,
-    border: '1px solid rgb(217, 217, 217)',
-    borderTop: 0,
     boxShadow: 'none',
     borderRadius: 0,
+    borderBottom: '1px solid #D9D9D9',
   };
 
   return (

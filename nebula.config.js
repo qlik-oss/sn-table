@@ -18,14 +18,14 @@ module.exports = {
         theme: {
           straightTable: {
             header: {
-              fontSize: '40px',
+              // fontSize: '40px',
               color: 'cyan',
-              padding: '10px',
+              // padding: '10px',
             },
             content: {
-              fontSize: '16px',
+              // fontSize: '16px',
               color: 'magenta',
-              padding: '10px',
+              // padding: '10px',
             },
           },
           backgroundColor: '#32a852',

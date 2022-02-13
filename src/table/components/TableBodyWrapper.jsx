@@ -44,14 +44,17 @@ function TableBodyWrapper({
     addSelectionListeners({ api: selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
   }, []);
 
-  const tableBodyStyle = {
+  const bodyCellStyle = {
     '& td, th': {
       fontSize: bodyStyle.fontSize,
       padding: bodyStyle.padding,
     },
+    '& td:last-of-type': {
+      borderRight: 0,
+    },
   };
 
-  const tableRowStyle = {
+  const rowCellStyle = {
     '&&:hover': {
       '& td:not(.selected), th:not(.selected)': {
         backgroundColor: bodyStyle.hoverBackgroundColor,
@@ -61,13 +64,13 @@ function TableBodyWrapper({
   };
 
   return (
-    <TableBody sx={tableBodyStyle}>
+    <TableBody sx={bodyCellStyle}>
       {rows.map((row, rowIndex) => (
         <TableRow
           hover={hoverEffect}
           tabIndex={-1}
           key={row.key}
-          sx={hoverEffect && tableRowStyle}
+          sx={hoverEffect && rowCellStyle}
           className="sn-table-row"
         >
           {columns.map((column, columnIndex) => {
