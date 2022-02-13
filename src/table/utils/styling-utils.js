@@ -83,27 +83,23 @@ export function getBodyStyle(layout, theme) {
   const unsetHoverBackgroundColor = isUnset(content?.hoverColor);
   const unsetHoverFontBackgroundColor = isUnset(content?.hoverFontColor) && unsetHoverBackgroundColor;
 
-  const hoverBackgroundColorFromTheme = theme.getStyle('object.straightTable', 'content.hover', 'backgroundColor');
-
   const setHoverBackgroundColor = unsetHoverBackgroundColor
-    ? hoverBackgroundColorFromTheme || ''
+    ? ''
     : getColor(STYLING_DEFAULTS.HOVER_BACKGROUND, theme, content?.hoverColor);
 
   const hoverBackgroundColor = unsetHoverFontBackgroundColor
-    ? hoverBackgroundColorFromTheme || STYLING_DEFAULTS.HOVER_BACKGROUND
+    ? STYLING_DEFAULTS.HOVER_BACKGROUND
     : setHoverBackgroundColor;
 
   const hoverFontColor = unsetHoverFontBackgroundColor
-    ? hoverBackgroundColorFromTheme
+    ? ''
     : getColor(getAutoFontColor(hoverBackgroundColor), theme, content?.hoverFontColor);
 
   const contentStyle = getBaseStyling(content, 'content', theme);
-
   return {
     ...contentStyle,
     hoverBackgroundColor,
     hoverFontColor,
-    selectedCellClass: 'unselected',
   };
 }
 

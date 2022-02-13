@@ -6,7 +6,13 @@ export default function withStyling(CellComponent) {
     const { styling, ...passThroughProps } = props;
     const { selectedCellClass, ...style } = styling;
 
-    return <CellComponent {...passThroughProps} className={`${selectedCellClass} sn-table-cell`} sx={style} />;
+    return (
+      <CellComponent
+        {...passThroughProps}
+        className={selectedCellClass ? `${selectedCellClass} sn-table-cell` : `sn-table-cell`}
+        sx={style}
+      />
+    );
   };
 
   HOC.propTypes = {

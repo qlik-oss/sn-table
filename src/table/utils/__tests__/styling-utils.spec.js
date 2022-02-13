@@ -90,17 +90,21 @@ describe('styling-utils', () => {
       expect(resultStyling).to.eql({
         color: '#fff',
         fontSize: 12,
-        padding: '6px 12px',
       });
     });
-    it('should return styling with fontColor and default fontSize and padding', () => {
+    it('should return styling with fontSize', () => {
+      styleObj.fontColor = null;
+      const resultStyling = getBaseStyling(styleObj, objetName, theme);
+      expect(resultStyling).to.eql({
+        fontSize: 12,
+      });
+    });
+    it('should return styling with fontColor as the font size and padding are from sprout theme', () => {
       styleObj.fontSize = null;
 
       const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).to.eql({
         color: '#fff',
-        fontSize: '14px',
-        padding: '7px 14px',
       });
     });
   });
@@ -112,24 +116,42 @@ describe('styling-utils', () => {
       layout = {
         components: [
           {
-            header: {},
+            header: {
+              fontColor: '#444444',
+              fontSize: '44px',
+            },
           },
         ],
       };
     });
 
-    it('should return object with default padding and font size when no header property', () => {
+    it('should return empty object as the padding and font size are from sprout theme', () => {
       layout = {};
 
       const resultStyling = getHeadStyle(layout, theme);
-      expect(resultStyling).to.eql({ fontSize: '14px', padding: '7px 14px' });
+      expect(resultStyling).to.eql({});
     });
-    it('should call default styling', () => {
+    it('should return header style with only fontColor', () => {
+      layout = {
+        components: [
+          {
+            header: {
+              fontColor: '#444444',
+            },
+          },
+        ],
+      };
+
       const resultStyling = getHeadStyle(layout, theme);
       expect(resultStyling).to.eql({
         color: '#404040',
-        fontSize: '14px',
-        padding: '7px 14px',
+      });
+    });
+    it('should return header style from layout', () => {
+      const resultStyling = getHeadStyle(layout, theme);
+      expect(resultStyling).to.eql({
+        color: '#404040',
+        fontSize: '44px',
       });
     });
   });
@@ -164,21 +186,19 @@ describe('styling-utils', () => {
       };
     });
 
-    it('should return object with only padding when no body content property', () => {
+    it('should return styling with  default hoverBackgroundColor and hoverFontColor', () => {
       layout = {};
 
       const resultStyling = getBodyStyle(layout, theme);
-      expect(resultStyling).to.eql({ padding: '7px 14px' });
+      expect(resultStyling).to.eql({ hoverBackgroundColor: '#f4f4f4', hoverFontColor: '' });
     });
     it('should return styling with fontColor, fontSize, padding plus default hoverBackgroundColor and hoverFontColor', () => {
       const resultStyling = getBodyStyle(layout, theme);
       expect(resultStyling).to.eql({
         fontSize: 22,
         color: resolvedColor,
-        padding: '11px 22px',
         hoverBackgroundColor: '#f4f4f4',
         hoverFontColor: '',
-        selectedCellClass: 'unselected',
       });
     });
     // Only checking hover properties from here on
@@ -261,40 +281,42 @@ describe('styling-utils', () => {
     let selectionState;
     let cell;
     let background;
+    let tableBackgroundColor;
 
     beforeEach(() => {
       background = undefined;
       selectionState = { colIdx: 1, rows: [{ qElemNumber: 1, rowIdx: 1 }], api: { isModal: () => true } };
       cell = { qElemNumber: 1, colIdx: 1 };
+      tableBackgroundColor = '#123456';
     });
 
     it('should return selected when selected styling', () => {
-      const selectionClass = getSelectionColors(cell, selectionState, background, theme);
+      const selectionClass = getSelectionColors(cell, selectionState, background, tableBackgroundColor);
       expect(selectionClass).to.equal(SELECTION_STYLING.SELECTED);
     });
     it('should return excluded styling when other column', () => {
       cell.colIdx = 2;
 
-      const selectionClass = getSelectionColors(cell, selectionState, background, theme);
-      expect(selectionClass).to.eql({ background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, #fff` });
+      const selectionClass = getSelectionColors(cell, selectionState, background, tableBackgroundColor);
+      expect(selectionClass).to.eql({ background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, #123456` });
     });
     it('should return excluded styling with columns background when other column and background color exists', () => {
       cell.colIdx = 2;
       background = 'someColor';
 
-      const selectionClass = getSelectionColors(cell, selectionState, background, theme);
+      const selectionClass = getSelectionColors(cell, selectionState, background, tableBackgroundColor);
       expect(selectionClass).to.eql({ background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, someColor` });
     });
     it('should return possible styling when active and available to select', () => {
       cell.qElemNumber = 2;
 
-      const selectionClass = getSelectionColors(cell, selectionState, background, theme);
+      const selectionClass = getSelectionColors(cell, selectionState, background, tableBackgroundColor);
       expect(selectionClass).to.equal(SELECTION_STYLING.POSSIBLE);
     });
     it('should return empty object when no active selections', () => {
       selectionState = { rows: [], api: { isModal: () => false } };
 
-      const selectionClass = getSelectionColors(cell, selectionState, background, theme);
+      const selectionClass = getSelectionColors(cell, selectionState, background, tableBackgroundColor);
       expect(selectionClass).to.eql({});
     });
   });
