@@ -35,6 +35,7 @@ function TableHeadWrapper({
   keyboard,
 }) {
   const headCellStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
+
   const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
   return (
     <TableHead sx={{ backgroundColor: tableBackgroundColor }}>

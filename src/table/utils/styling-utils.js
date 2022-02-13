@@ -43,7 +43,7 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
   const font = theme.getStyle('object.straightTable', objetName, 'fontSize');
   const padding = theme.getStyle('object.straightTable', objetName, 'padding');
 
-  return {
+  const baseStyle = {
     fontFamily: theme.getStyle('object.straightTable', objetName, 'fontFamily'),
     color: styleObj?.fontColor ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj?.fontColor) : color,
     fontSize: styleObj?.fontSize || font || STYLING_DEFAULTS.FONT_SIZE,
@@ -51,6 +51,10 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
       padding || (styleObj?.fontSize ? `${styleObj.fontSize / 2}px ${styleObj.fontSize}px` : STYLING_DEFAULTS.PADDING),
     backgroundColor: tableBackgroundColor,
   };
+  // Remove all Undefined Values from an Object
+  Object.keys(baseStyle).forEach((key) => baseStyle[key] === undefined && delete baseStyle[key]);
+
+  return baseStyle;
 };
 
 // Both index === -1 and color === null must be true for the property to be unset
@@ -58,11 +62,8 @@ export const isUnset = (prop) => !prop || JSON.stringify(prop) === JSON.stringif
 
 export function getHeadStyle(layout, theme) {
   const header = layout.components?.[0]?.header;
-  const headerStyle = getBaseStyling(header, 'header', theme);
-  // Remove all Undefined Values from an Object
-  Object.keys(headerStyle).forEach((key) => headerStyle[key] === undefined && delete headerStyle[key]);
 
-  return headerStyle;
+  return getBaseStyling(header, 'header', theme);
 }
 
 export function getBodyStyle(layout, theme) {
@@ -100,8 +101,6 @@ export function getBodyStyle(layout, theme) {
     : getColor(getAutoFontColor(hoverBackgroundColor), theme, content?.hoverFontColor);
 
   const contentStyle = getBaseStyling(content, 'content', theme);
-  // Remove all Undefined Values from an Object
-  Object.keys(contentStyle).forEach((key) => contentStyle[key] === undefined && delete contentStyle[key]);
 
   return {
     ...contentStyle,

@@ -28,6 +28,7 @@ describe('styling-utils', () => {
           return null;
       }
     },
+    getStyle: () => {},
   };
 
   describe('getColor', () => {
@@ -46,30 +47,31 @@ describe('styling-utils', () => {
     it('should return a hex color when color obj has index', () => {
       color.index = 1;
 
-      const resultColor = getColor(color, defaultColor, theme);
+      const resultColor = getColor(defaultColor, theme, color);
       expect(resultColor).to.equal(resolvedColor);
     });
-    it('should return a default color when getColorPickerColor returns falsey', () => {
-      const resultColor = getColor(color, defaultColor, theme);
+    it('should return a default color when getColorPickerColor returns false', () => {
+      const resultColor = getColor(defaultColor, theme, color);
       expect(resultColor).to.equal(defaultColor);
     });
     it('should return a default color when getColorPickerColor returns none', () => {
       // Some palettes have none as the first value in the array of colors
       color.index = 0;
 
-      const resultColor = getColor(color, defaultColor, theme);
+      const resultColor = getColor(defaultColor, theme, color);
       expect(resultColor).to.equal(defaultColor);
     });
     it('should return a default color when color is undefined', () => {
       color = undefined;
 
-      const resultColor = getColor(color, defaultColor, theme);
+      const resultColor = getColor(defaultColor, theme, color);
       expect(resultColor).to.equal(defaultColor);
     });
   });
 
   describe('getBaseStyling', () => {
     let styleObj;
+    let objetName;
 
     beforeEach(() => {
       resolvedColor = '#fff';
@@ -80,10 +82,11 @@ describe('styling-utils', () => {
         },
         fontSize: 12,
       };
+      objetName = '';
     });
 
     it('should return styling with fontColor and fontSize', () => {
-      const resultStyling = getBaseStyling(styleObj, theme);
+      const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).to.eql({
         color: '#fff',
         fontSize: 12,
@@ -93,7 +96,7 @@ describe('styling-utils', () => {
     it('should return styling with fontColor and default fontSize and padding', () => {
       styleObj.fontSize = null;
 
-      const resultStyling = getBaseStyling(styleObj, theme);
+      const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).to.eql({
         color: '#fff',
         fontSize: '14px',
@@ -115,11 +118,11 @@ describe('styling-utils', () => {
       };
     });
 
-    it('should return object with only padding when no header property', () => {
+    it('should return object with default padding and font size when no header property', () => {
       layout = {};
 
       const resultStyling = getHeadStyle(layout, theme);
-      expect(resultStyling).to.eql({ padding: '7px 14px' });
+      expect(resultStyling).to.eql({ fontSize: '14px', padding: '7px 14px' });
     });
     it('should call default styling', () => {
       const resultStyling = getHeadStyle(layout, theme);
@@ -161,13 +164,13 @@ describe('styling-utils', () => {
       };
     });
 
-    it('should return object with only padding when no header property', () => {
+    it('should return object with only padding when no body content property', () => {
       layout = {};
 
       const resultStyling = getBodyStyle(layout, theme);
       expect(resultStyling).to.eql({ padding: '7px 14px' });
     });
-    it('should return styling with fontColor, fontSize, padding plus defualt hoverBackgroundColor and hoverFontColor', () => {
+    it('should return styling with fontColor, fontSize, padding plus default hoverBackgroundColor and hoverFontColor', () => {
       const resultStyling = getBodyStyle(layout, theme);
       expect(resultStyling).to.eql({
         fontSize: 22,
@@ -266,32 +269,32 @@ describe('styling-utils', () => {
     });
 
     it('should return selected when selected styling', () => {
-      const selectionClass = getSelectionColors(background, cell, selectionState);
+      const selectionClass = getSelectionColors(cell, selectionState, background, theme);
       expect(selectionClass).to.equal(SELECTION_STYLING.SELECTED);
     });
     it('should return excluded styling when other column', () => {
       cell.colIdx = 2;
 
-      const selectionClass = getSelectionColors(background, cell, selectionState);
+      const selectionClass = getSelectionColors(cell, selectionState, background, theme);
       expect(selectionClass).to.eql({ background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, #fff` });
     });
     it('should return excluded styling with columns background when other column and background color exists', () => {
       cell.colIdx = 2;
       background = 'someColor';
 
-      const selectionClass = getSelectionColors(background, cell, selectionState);
+      const selectionClass = getSelectionColors(cell, selectionState, background, theme);
       expect(selectionClass).to.eql({ background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, someColor` });
     });
     it('should return possible styling when active and available to select', () => {
       cell.qElemNumber = 2;
 
-      const selectionClass = getSelectionColors(background, cell, selectionState);
+      const selectionClass = getSelectionColors(cell, selectionState, background, theme);
       expect(selectionClass).to.equal(SELECTION_STYLING.POSSIBLE);
     });
     it('should return empty object when no active selections', () => {
       selectionState = { rows: [], api: { isModal: () => false } };
 
-      const selectionClass = getSelectionColors(background, cell, selectionState);
+      const selectionClass = getSelectionColors(cell, selectionState, background, theme);
       expect(selectionClass).to.eql({});
     });
   });

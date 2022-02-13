@@ -1,5 +1,4 @@
 const path = require('path');
-const theme = require('@qlik-trial/sense-themes-default/dist/sense/theme.json');
 
 const { version } = require(path.resolve(__dirname, './package.json')); // eslint-disable-line
 
@@ -14,7 +13,6 @@ module.exports = {
   serve: {
     keyboardNavigation: false,
     themes: [
-      { id: 'sense', theme },
       {
         id: 'Test',
         theme: {

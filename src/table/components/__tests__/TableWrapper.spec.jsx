@@ -22,6 +22,7 @@ describe('<TableWrapper />', () => {
   let translator;
   let rect;
   let announcer;
+  let theme;
 
   beforeEach(() => {
     sinon.stub(TableBodyWrapper, 'default').returns(<tbody />);
@@ -52,6 +53,9 @@ describe('<TableWrapper />', () => {
       width: 551,
     };
     announcer = sinon.spy();
+    theme = {
+      getStyle: () => {},
+    };
   });
 
   afterEach(() => {
@@ -71,6 +75,7 @@ describe('<TableWrapper />', () => {
         keyboard={keyboard}
         translator={translator}
         rect={rect}
+        theme={theme}
       />
     );
 
@@ -96,6 +101,7 @@ describe('<TableWrapper />', () => {
         keyboard={keyboard}
         translator={translator}
         rect={rect}
+        theme={theme}
       />
     );
 
@@ -117,6 +123,7 @@ describe('<TableWrapper />', () => {
         translator={translator}
         rect={rect}
         announcer={announcer}
+        theme={theme}
       />
     );
 
@@ -145,6 +152,7 @@ describe('<TableWrapper />', () => {
         translator={translator}
         rect={rect}
         announcer={announcer}
+        theme={theme}
       />
     );
 
@@ -172,6 +180,7 @@ describe('<TableWrapper />', () => {
         keyboard={keyboard}
         translator={translator}
         rect={rect}
+        theme={theme}
       />
     );
 
@@ -192,6 +201,7 @@ describe('<TableWrapper />', () => {
         keyboard={keyboard}
         translator={translator}
         rect={rect}
+        theme={theme}
       />
     );
     const rppSiblingElement = queryByText(`SNTable.Pagination.DisplayedRowsLabel`);
