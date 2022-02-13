@@ -15,6 +15,7 @@ function TableBodyWrapper({
   selectionsAPI,
   layout,
   theme,
+  tableBackgroundColor,
   setShouldRefocus,
   setFocusedCellCoord,
   keyboard,
@@ -87,11 +88,11 @@ function TableBodyWrapper({
                   key={column.id}
                   align={column.align}
                   styling={{ color: bodyStyle.color }}
+                  tableBackgroundColor={tableBackgroundColor}
                   selectionState={selectionState}
                   selectionDispatch={selectionDispatch}
                   tabIndex={-1}
                   announce={announce}
-                  theme={theme}
                   onKeyDown={(evt) =>
                     bodyHandleKeyPress({
                       evt,
@@ -119,6 +120,10 @@ function TableBodyWrapper({
   );
 }
 
+TableBodyWrapper.defaultProps = {
+  tableBackgroundColor: null,
+};
+
 TableBodyWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
@@ -126,6 +131,7 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  tableBackgroundColor: PropTypes.string,
   setFocusedCellCoord: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
   keyboard: PropTypes.object.isRequired,

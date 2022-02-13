@@ -114,7 +114,6 @@ export default function TableWrapper(props) {
   }, [rows.length, size.qcy, size.qcx, page]);
 
   const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
-
   const paperStyle = {
     border: '1px solid #D9D9D9',
     borderBottom: 0,
@@ -172,6 +171,7 @@ export default function TableWrapper(props) {
           <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
           <TableBodyWrapper
             {...props}
+            tableBackgroundColor={tableBackgroundColor}
             announce={announce}
             focusedCellCoord={focusedCellCoord}
             setFocusedCellCoord={setFocusedCellCoord}

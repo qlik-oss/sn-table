@@ -123,9 +123,8 @@ export function getColumnStyle(styling, qAttrExps, stylingInfo) {
   };
 }
 
-export function getSelectionColors(cell, selectionState, background, theme) {
+export function getSelectionColors(cell, selectionState, background, tableBackgroundColor) {
   const { colIdx, rows, api } = selectionState;
-  const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
 
   if (api.isModal()) {
     if (colIdx !== cell.colIdx)
@@ -144,6 +143,6 @@ export function getSelectionColors(cell, selectionState, background, theme) {
   return {};
 }
 
-export function getSelectionStyle(styling, cell, selectionState, theme) {
-  return { ...styling, ...getSelectionColors(cell, selectionState, styling.background, theme) };
+export function getSelectionStyle(styling, cell, selectionState, tableBackgroundColor) {
+  return { ...styling, ...getSelectionColors(cell, selectionState, styling.background, tableBackgroundColor) };
 }
