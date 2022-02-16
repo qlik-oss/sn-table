@@ -34,14 +34,19 @@ function TableHeadWrapper({
   setFocusedCellCoord,
   keyboard,
 }) {
-  const headCellStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
+  // When the table background color from sense theme is transparent, there is a default background color for the header
+  // to avoid seeing the table body through the header
+  const backgroundColor = tableBackgroundColor === 'transparent' ? '#FAFAFA' : tableBackgroundColor;
   const headStyle = {
     '& th:last-of-type': {
       borderRight: 0,
     },
-    backgroundColor: tableBackgroundColor,
+    backgroundColor,
   };
+  const headCellStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
+  headCellStyle.backgroundColor = backgroundColor;
+
   return (
     <TableHead sx={headStyle}>
       <TableRow className="sn-table-row">
