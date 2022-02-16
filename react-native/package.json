@@ -1,0 +1,33 @@
+{
+  "name": "@nebula.js/react-native-sn-table",
+  "version": "1.4.13",
+  "description": "table supernova",
+  "license": "MIT",
+  "author": "QlikTech International AB",
+  "keywords": [
+    "qlik",
+    "nebula",
+    "stardust"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qlik-oss/sn-table.git"
+  },
+  "files": [
+    "dist",
+    "api-specifications",
+    "core"
+  ],
+  "main": "dist/sn-table.js",
+  "peerDependencies": {
+    "@nebula.js/stardust": "^2.3.1",
+    "react": "^17.0.2",
+    "react-native": "0.66.4"
+  },
+  "resolutions": {
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
+  }
+}

@@ -34,6 +34,8 @@
     "build": "yarn run locale:generate && node ./tools/build.js --core --ext && shx cp assets/* dist",
     "build:dev": "yarn run locale:generate && node ./tools/build.js --core --mode development && shx cp assets/* dist",
     "build:watch": "yarn run locale:generate && node ./tools/build.js --mode development -w",
+    "build:rn": "yarn run locale:generate && node ./tools/build.js --carbon",
+    "build:rn:dev": "yarn run locale:generate && ditto src ./react-native/dist && rm -rf ./react-native/dist/__test__ && mv ./react-native/dist/index.js ./react-native/dist/sn-table.js",
     "lint": "eslint 'src/**'",
     "format": "prettier --write 'src/**'",
     "start": "nebula serve --build false --type sn-table",

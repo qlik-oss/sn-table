@@ -13,6 +13,7 @@ const buildCore = args.core;
 const mode = args.mode || 'production';
 const watch = args.w;
 const sourcemap = mode !== 'production';
+const { carbon } = args;
 
 // cleanup old build
 fs.removeSync(path.resolve(process.cwd(), 'dist'));
@@ -37,6 +38,10 @@ if (mode === 'production') {
 
 if (watch) {
   buildArgs.watch = true;
+}
+
+if (carbon) {
+  buildArgs.reactNative = true;
 }
 
 const main = async () => {
