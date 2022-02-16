@@ -1,6 +1,6 @@
 # Table
 
-> This example requires access to Qlik Sense SaaS.
+> This example requires access to Qlik Sense SaaS using build tool.
 
 ## With Qlik Sense SaaS
 

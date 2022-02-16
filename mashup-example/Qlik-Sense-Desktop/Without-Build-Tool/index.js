@@ -19,6 +19,10 @@
   connect()('/apps/Executive_Dashboard.qvf').then((app) => {
     // configure stardust
     const nuked = window.stardust.embed(app, {
+      theme: 'dark',
+      constraints: {
+        active: true, // do not allow interactions
+      },
       types: [
         {
           name: 'table',
@@ -41,6 +45,9 @@
       element: document.querySelectorAll('.object')[1],
       type: 'table',
       fields: ['Sales Price', '=Sum([Sales Quantity]*[Sales Price])'],
+      options: {
+        direction: 'rtl',
+      },
     });
   });
 })();

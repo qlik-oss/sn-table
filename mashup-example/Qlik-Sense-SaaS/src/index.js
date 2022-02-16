@@ -25,6 +25,9 @@ async function run() {
     element: document.querySelectorAll('.object')[1],
     type: 'table',
     fields: ['Sales Price', '=Sum([Sales Quantity]*[Sales Price])'],
+    options: {
+      direction: 'rtl',
+    },
   });
 }
 
