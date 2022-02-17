@@ -36,21 +36,21 @@ export const getAutoFontColor = (backgroundColor) =>
   isDarkColor(backgroundColor) ? STYLING_DEFAULTS.WHITE : STYLING_DEFAULTS.FONT_COLOR;
 
 export const getBaseStyling = (styleObj, objetName, theme) => {
-  const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
-  const color = theme.getStyle('object.straightTable', objetName, 'color');
-  const fontSize = theme.getStyle('object.straightTable', objetName, 'fontSize');
-  const padding = theme.getStyle('object.straightTable', objetName, 'padding');
+  const backgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
+  const fontFamily = theme.getStyle('object', `straightTable.${objetName}`, 'fontFamily');
+  const color = theme.getStyle('object', `straightTable.${objetName}`, 'color');
+  const fontSize = theme.getStyle('object', `straightTable.${objetName}`, 'fontSize');
+  const padding = theme.getStyle('object', `straightTable.${objetName}`, 'padding');
 
   const baseStyle = {
-    fontFamily: theme.getStyle('object.straightTable', objetName, 'fontFamily'),
+    backgroundColor,
+    fontFamily,
     color: styleObj?.fontColor ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj?.fontColor) : color,
     fontSize: styleObj?.fontSize || fontSize,
     padding,
-    backgroundColor: tableBackgroundColor,
   };
   // Remove all Undefined Values from an Object
   Object.keys(baseStyle).forEach((key) => baseStyle[key] === undefined && delete baseStyle[key]);
-
   return baseStyle;
 };
 

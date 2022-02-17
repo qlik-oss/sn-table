@@ -19,7 +19,7 @@ module.exports = {
           straightTable: {
             header: {
               fontSize: '40px',
-              color: 'cyan',
+              color: 'chocolate',
               padding: '10px',
             },
             content: {
@@ -29,6 +29,24 @@ module.exports = {
             },
           },
           backgroundColor: '#32a852',
+        },
+      },
+      {
+        id: 'Test2',
+        theme: {
+          straightTable: {
+            header: {
+              fontSize: '20px',
+              color: 'blue',
+              padding: '40px',
+            },
+            content: {
+              fontSize: '16px',
+              color: '232323',
+              padding: '40px',
+            },
+          },
+          backgroundColor: 'cyan',
         },
       },
     ],
