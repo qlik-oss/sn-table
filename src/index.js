@@ -89,6 +89,7 @@ export default function supernova(env) {
         []
       );
     },
+    // Extension definition
     ext: ext(env),
   };
 }

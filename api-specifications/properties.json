@@ -28,9 +28,19 @@
           "description": "Visualization footnote",
           "optional": true,
           "defaultValue": "",
-          "type": "string"
+          "kind": "union",
+          "items": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "StringExpression"
+            }
+          ],
+          "type": "any"
         },
         "qHyperCubeDef": {
+          "description": "Extends HyperCubeDef, see Engine API: HyperCubeDef",
           "extends": [
             {
               "type": "qae.HyperCubeDef"
@@ -73,16 +83,34 @@
           "description": "Visualization subtitle",
           "optional": true,
           "defaultValue": "",
-          "type": "string"
+          "kind": "union",
+          "items": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "StringExpression"
+            }
+          ],
+          "type": "any"
         },
         "title": {
           "description": "Visualization title",
           "optional": true,
           "defaultValue": "",
-          "type": "string"
+          "kind": "union",
+          "items": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "StringExpression"
+            }
+          ],
+          "type": "any"
         },
         "version": {
-          "description": "Current version of this generic object definition.",
+          "description": "Current version of this generic object definition",
           "type": "string"
         }
       }
@@ -90,7 +118,7 @@
   },
   "definitions": {
     "AttributeExpressionProperties": {
-      "description": "Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`. Column specific styling overrides general styling, that is defined in `components`",
+      "description": "Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`.\nColumn specific styling overrides general styling, that is defined in `components`.",
       "extends": [
         {
           "type": "NxAttrExprDef"
@@ -99,7 +127,7 @@
       "kind": "object",
       "entries": {
         "id": {
-          "description": "spefifying what the color applies to",
+          "description": "specifying what the color applies to",
           "kind": "union",
           "items": [
             {
@@ -116,11 +144,11 @@
       }
     },
     "ContentStyling": {
-      "description": "Holds properties for font size, font color and hover styling",
+      "description": "Holds properties for font size, font color and hover styling.",
       "kind": "object",
       "entries": {
         "fontSize": {
-          "description": "Defualts to `14`",
+          "description": "Defaults to `14`",
           "optional": true,
           "type": "number"
         },
@@ -147,7 +175,7 @@
       }
     },
     "DimensionProperties": {
-      "description": "Extends `NxDimension`, see Engine API: `NxDimension`.",
+      "description": "Extends `NxDimension`, see Engine API: `NxDimension`",
       "extends": [
         {
           "type": "NxDimension"
@@ -167,16 +195,16 @@
       }
     },
     "HeaderStyling": {
-      "description": "Holds properties for font size and color",
+      "description": "Holds properties for font size and color.",
       "kind": "object",
       "entries": {
         "fontSize": {
-          "description": "Defualts to `14`",
+          "description": "Defaults to `14`",
           "optional": true,
           "type": "number"
         },
         "fontColor": {
-          "description": "Defualts to `#404040`",
+          "description": "Defaults to `#404040`",
           "optional": true,
           "type": "#/definitions/PaletteColor"
         }
@@ -213,7 +241,7 @@
       }
     },
     "MeasureProperties": {
-      "description": "Extends `NxMeasure`, see Engine API: `NxMeasure`.",
+      "description": "Extends `NxMeasure`, see Engine API: `NxMeasure`",
       "extends": [
         {
           "type": "NxMeasure"
@@ -233,7 +261,7 @@
       }
     },
     "PaletteColor": {
-      "description": "Color information structure. Holds the actual color and index in palette.",
+      "description": "Color information structure. Holds the actual color and index in palette",
       "kind": "object",
       "entries": {
         "color": {
@@ -247,7 +275,7 @@
       }
     },
     "Styling": {
-      "description": "General styling for all columns. Split up into header and content (body) styling. If any property is not set, default values specific for each property is used",
+      "description": "General styling for all columns.\nSplit up into header and content (body) styling.\nIf any property is not set, default values specific for each property is used.",
       "kind": "object",
       "entries": {
         "key": {
@@ -265,7 +293,7 @@
       }
     },
     "TextAlign": {
-      "description": "Holds text aligmnet for a specific column",
+      "description": "Holds text alignment for a specific column.",
       "extends": [
         {
           "type": "NxInlineDimensionDef"
@@ -278,7 +306,7 @@
           "type": "boolean"
         },
         "align": {
-          "description": "Is used (and mandatoty) if `auto` is false",
+          "description": "Is used (and mandatory) if `auto` is false",
           "kind": "union",
           "items": [
             {
