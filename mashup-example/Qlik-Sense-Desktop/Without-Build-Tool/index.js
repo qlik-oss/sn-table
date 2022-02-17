@@ -2,8 +2,8 @@
   function connect() {
     const schemaPromise = fetch('https://unpkg.com/enigma.js/schemas/3.2.json').then((response) => response.json());
 
-    const openDoc = (appId) =>
-      schemaPromise.then((schema) =>
+    function openDoc(appId) {
+      return schemaPromise.then((schema) =>
         window.enigma
           .create({
             schema,
@@ -12,6 +12,7 @@
           .open()
           .then((qix) => qix.openDoc(appId))
       );
+    }
 
     return openDoc;
   }
@@ -19,6 +20,10 @@
   connect()('/apps/Executive_Dashboard.qvf').then((app) => {
     // configure stardust
     const nuked = window.stardust.embed(app, {
+      theme: 'dark',
+      constraints: {
+        active: true, // do not allow interactions
+      },
       types: [
         {
           name: 'table',
@@ -41,6 +46,9 @@
       element: document.querySelectorAll('.object')[1],
       type: 'table',
       fields: ['Sales Price', '=Sum([Sales Quantity]*[Sales Price])'],
+      options: {
+        direction: 'rtl',
+      },
     });
   });
 })();
