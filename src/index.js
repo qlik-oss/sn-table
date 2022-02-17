@@ -22,6 +22,7 @@ import manageData from './handle-data';
 import sortingFactory from './sorting-factory';
 import { render, teardown } from './table/Root';
 import muiSetup from './mui-setup';
+import { isDarkColor } from './table/utils/color-utils';
 
 export default function supernova(env) {
   return {
@@ -39,9 +40,13 @@ export default function supernova(env) {
       const constraints = useConstraints();
       const translator = useTranslator();
       const selectionsAPI = useSelections();
-      const tableTheme = muiSetup(direction);
       // the style which is from them can be found in nebula.config.js -> serve -> themes
-      const theme = useTheme();
+      const theme = {
+        ...useTheme(),
+        backgroundColor: useTheme().getStyle('object', 'straightTable', 'backgroundColor'),
+        isBackgroundDarkColor: isDarkColor(useTheme().getStyle('object', 'straightTable', 'backgroundColor')),
+      };
+      const tableTheme = muiSetup(direction, theme);
       const keyboard = useKeyboard();
       const rect = useRect();
       const [pageInfo, setPageInfo] = useState(() => ({

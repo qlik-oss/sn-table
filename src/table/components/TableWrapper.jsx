@@ -113,12 +113,11 @@ export default function TableWrapper(props) {
     });
   }, [rows.length, size.qcy, size.qcx, page]);
 
-  const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
   const paperStyle = {
     border: '1px solid #D9D9D9',
     borderBottom: 0,
     height: '100%',
-    backgroundColor: tableBackgroundColor,
+    backgroundColor: theme.backgroundColor,
     boxShadow: 'none',
   };
   const tableContainerStyle = constraints.active
@@ -135,7 +134,7 @@ export default function TableWrapper(props) {
     justifyContent: 'flex-end',
     alignItems: 'center',
     paddingRight: 1,
-    backgroundColor: tableBackgroundColor,
+    backgroundColor: theme.backgroundColor,
     boxShadow: 'none',
     borderRadius: 0,
     borderBottom: '1px solid #D9D9D9',
@@ -171,7 +170,6 @@ export default function TableWrapper(props) {
           <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
           <TableBodyWrapper
             {...props}
-            tableBackgroundColor={tableBackgroundColor}
             announce={announce}
             focusedCellCoord={focusedCellCoord}
             setFocusedCellCoord={setFocusedCellCoord}
@@ -194,7 +192,7 @@ export default function TableWrapper(props) {
               'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
               'data-testid': 'select',
               style: {
-                color: '#404040',
+                color: theme.isBackgroundDarkColor ? '#ffffff' : '#404040',
               },
               tabIndex: !keyboard.enabled || keyboard.active ? 0 : -1,
             },
@@ -208,6 +206,7 @@ export default function TableWrapper(props) {
           onPageChange={() => {}}
         />
         <TablePaginationActions
+          theme={theme}
           direction={direction}
           page={page}
           onPageChange={handleChangePage}

@@ -1,7 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 import * as muiConfig from './mui-config.json';
 
-export default function muiSetup(direction) {
+export default function muiSetup(direction, theme) {
   // Currently importing a reduced copy of sprout, should be replaced with the open-source version of sprout ASAP
   if (muiConfig.components) {
     muiConfig.components.MuiIconButton.styleOverrides.root.padding = '0px 7px';
@@ -20,10 +20,18 @@ export default function muiSetup(direction) {
       outline: 'none',
     };
     muiConfig.components.MuiTableContainer.styleOverrides.root = {};
+    muiConfig.components.MuiToolbar.styleOverrides.root.color = theme.isBackgroundDarkColor ? '#ffffff' : '#404040';
+    muiConfig.components.MuiFormLabel.styleOverrides.root.color = theme.isBackgroundDarkColor ? '#ffffff' : '#404040';
+    muiConfig.components.MuiInputBase.styleOverrides.root = {
+      backgroundColor: 'inherit',
+    };
     muiConfig.components.MuiInputBase.styleOverrides.input.padding = '0px 12px';
     muiConfig.components.MuiInputBase.styleOverrides.input.border = '1px solid transparent';
     muiConfig.components.MuiOutlinedInput.styleOverrides.input.padding = '0px 12px';
     muiConfig.components.MuiNativeSelect.styleOverrides.outlined.border = '1px solid transparent';
+    muiConfig.components.MuiNativeSelect.styleOverrides.icon = {
+      color: theme.isBackgroundDarkColor ? '#ffffff' : '#404040',
+    };
     muiConfig.components.MuiInputLabel.styleOverrides.outlined = {
       fontSize: 14,
       width: 'fit-content',
@@ -36,6 +44,5 @@ export default function muiSetup(direction) {
     muiConfig.components.MuiFormControl.styleOverrides.root.paddingRight = 14;
   }
 
-  const tableTheme = createTheme({ ...muiConfig, direction });
-  return tableTheme;
+  return createTheme({ ...muiConfig, direction });
 }

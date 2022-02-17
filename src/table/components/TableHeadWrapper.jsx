@@ -34,10 +34,9 @@ function TableHeadWrapper({
   setFocusedCellCoord,
   keyboard,
 }) {
-  const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
   // When the table background color from sense theme is transparent, there is a default background color for the header
   // to avoid seeing the table body through the header
-  const backgroundColor = tableBackgroundColor === 'transparent' ? '#FAFAFA' : tableBackgroundColor;
+  const backgroundColor = theme.backgroundColor === 'transparent' ? '#FAFAFA' : theme.backgroundColor;
   const headStyle = {
     '& th:last-of-type': {
       borderRight: 0,

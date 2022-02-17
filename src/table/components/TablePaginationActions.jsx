@@ -22,6 +22,7 @@ const icons = {
 };
 
 export default function TablePaginationActions({
+  theme,
   direction,
   page,
   lastPageIdx,
@@ -39,6 +40,9 @@ export default function TablePaginationActions({
   const handleSelectPage = (event) => onPageChange(+event.target.value);
   const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, isInSelectionMode) : null;
 
+  const disabledIconButtonColor = theme.isBackgroundDarkColor ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)';
+  const iconButtonColor = theme.isBackgroundDarkColor ? 'rgba(255, 255, 255)' : 'rgba(0, 0, 0, 0.54)';
+
   const getButton = (disabledCondition, pageNumber, type, onKeyDown = null) => {
     const iconType = `${type}${direction === 'rtl' ? 'RTL' : ''}`;
     const IconComponent = icons[iconType];
@@ -50,7 +54,7 @@ export default function TablePaginationActions({
         aria-label={translator.get(`SNTable.Pagination.${type}`)}
         title={translator.get(`SNTable.Pagination.${type}`)}
         tabIndex={tabIndex}
-        sx={disabledCondition ? { color: 'rgba(0, 0, 0, 0.3)', cursor: 'default' } : { color: 'rgba(0, 0, 0, 0.54)' }}
+        sx={disabledCondition ? { color: disabledIconButtonColor, cursor: 'default' } : { color: iconButtonColor }}
         onKeyDown={onKeyDown}
       >
         <IconComponent />
@@ -74,6 +78,9 @@ export default function TablePaginationActions({
               'data-testid': 'pagination-dropdown',
               tabIndex,
               id: 'pagination-dropdown',
+              style: {
+                color: theme.isBackgroundDarkColor ? '#ffffff' : '#404040',
+              },
             }}
           >
             {Array(lastPageIdx + 1)
@@ -101,6 +108,7 @@ TablePaginationActions.defaultProps = {
 };
 
 TablePaginationActions.propTypes = {
+  theme: PropTypes.object.isRequired,
   direction: PropTypes.string,
   onPageChange: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
