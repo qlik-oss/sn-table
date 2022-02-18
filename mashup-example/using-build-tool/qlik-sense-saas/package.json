@@ -1,0 +1,22 @@
+{
+  "name": "table-mashup",
+  "version": "0.0.1",
+  "author": {
+    "name": "",
+    "email": ""
+  },
+  "keywords": [
+    "qlik",
+    "nebula"
+  ],
+  "scripts": {
+    "start": "parcel src/index.html --open",
+    "build": "parcel build src/index.html --dist-dir ./dist"
+  },
+  "dependencies": {
+    "@nebula.js/stardust": "2.2.0",
+    "@nebula.js/sn-table": "1.4.2",
+    "enigma.js": "^2.6.3",
+    "parcel": "^2.0.1"
+  }
+}

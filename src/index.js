@@ -1,24 +1,27 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {
   useElement,
   useStaleLayout,
   useEffect,
+  useOptions,
   useModel,
   useState,
   useConstraints,
+  useTranslator,
   useSelections,
   useTheme,
   usePromise,
+  useKeyboard,
+  useRect,
 } from '@nebula.js/stardust';
+import registerLocale from './locale/src';
 import properties from './object-properties';
 import data from './data';
 import ext from './ext';
-import muiSetup from './mui-setup';
+import manageData from './handle-data';
+import sortingFactory from './sorting-factory';
 import { render, teardown } from './table/Root';
-import manageData from './table/handle-data';
-import sortingFactory from './table/sorting';
-
-// This line is replaced by rollup with an import for internal builds
-const __OPIONAL_THEME_DEPS__ = {}; // eslint-disable-line no-underscore-dangle
+import muiSetup from './mui-setup';
 
 export default function supernova(env) {
   return {
@@ -31,31 +34,53 @@ export default function supernova(env) {
     component() {
       const rootElement = useElement();
       const layout = useStaleLayout();
+      const { direction } = useOptions();
       const model = useModel();
       const constraints = useConstraints();
+      const translator = useTranslator();
       const selectionsAPI = useSelections();
+      const tableTheme = muiSetup(direction);
       const theme = useTheme();
-
-      const [pageInfo, setPageInfo] = useState(() => ({ top: 0, height: 100 }));
-      const [muiParameters] = useState(() => muiSetup(__OPIONAL_THEME_DEPS__));
-      const [tableData] = usePromise(() => manageData(model, layout, pageInfo), [layout, pageInfo]);
+      const keyboard = useKeyboard();
+      const rect = useRect();
+      const [pageInfo, setPageInfo] = useState(() => ({
+        page: 0,
+        rowsPerPage: 100,
+        rowsPerPageOptions: [10, 25, 100],
+      }));
+      const [tableData] = usePromise(() => manageData(model, layout, pageInfo, setPageInfo), [layout, pageInfo]);
 
       useEffect(() => {
         if (layout && tableData) {
-          const changeSortOrder = sortingFactory(model, tableData.columnOrder);
+          registerLocale(translator);
+          const changeSortOrder = sortingFactory(model);
           render(rootElement, {
             rootElement,
             layout,
             tableData,
+            direction,
+            pageInfo,
             setPageInfo,
             constraints,
+            translator,
             selectionsAPI,
-            muiParameters,
+            tableTheme,
             theme,
             changeSortOrder,
+            keyboard,
+            rect,
           });
         }
-      }, [tableData, constraints, selectionsAPI.isModal(), theme.name()]);
+      }, [
+        tableData,
+        constraints,
+        direction,
+        selectionsAPI.isModal(),
+        theme.name(),
+        keyboard.active,
+        translator.language(),
+        rect.width,
+      ]);
 
       useEffect(
         () => () => {

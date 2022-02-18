@@ -1,28 +1,34 @@
 {
   "root": true,
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "env": {
     "browser": true
   },
   "parserOptions": {
-    "sourceType": "module"
+    "sourceType": "module",
+    "babelOptions": {
+      "presets": ["@babel/preset-react"]
+    }
   },
-  "extends": ["airbnb", "prettier"],
-  "plugins": ["prettier"],
+  "extends": ["airbnb", "prettier", "plugin:react/recommended"],
+  "plugins": ["prettier", "react", "react-hooks"],
   "rules": {
     "max-len": 0,
     "no-plusplus": 0,
     "no-bitwise": 0,
     "prettier/prettier": 2,
+    "arrow-body-style": 0,
+    "prefer-arrow-callback": 0,
     "no-unused-expressions": 0,
     "no-nested-ternary": 0,
     "react/forbid-prop-types": 0,
     "react/jsx-props-no-spreading": 0,
+    "react-hooks/rules-of-hooks": 2,
+    "react-hooks/exhaustive-deps": 1,
     "import/no-extraneous-dependencies": [2, { "devDependencies": true }],
     "prefer-destructuring": ["error", { "object": true, "array": false }],
     "no-param-reassign": [2, { "props": false }]
   },
-
   "overrides": [
     {
       "files": ["**/*.spec.js", "**/*.spec.jsx"],

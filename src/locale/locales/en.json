@@ -1,0 +1,90 @@
+{
+  "SNTable.Accessibility.RowsAndColumns": {
+    "value": "Showing {0} rows and {1} columns.",
+    "comment": "number of rows and columns announced by the screen reader. (tew 210929)"
+  },
+  "SNTable.Accessibility.NavigationInstructions": {
+    "value": "Use arrow keys to navigate in table cells and tab to move to pagination controls. For the full range of keyboard navigation, see the documentation.",
+    "comment": "Instructions read by screen reader when first focusing inside the table. (tew 211130)"
+  },
+  "SNTable.Pagination.RowsPerPage": {
+    "value": "Rows per page",
+    "comment": "label for the rows per page dropdown. (tew 210929)"
+  },
+  "SNTable.Pagination.DisplayedRowsLabel": {
+    "value": "{0} of {1}",
+    "comment": "label for the displayed rows, e.g. '1-100 of 234' (tew 211004)"
+  },
+  "SNTable.Pagination.SelectPage": {
+    "value": "Select page",
+    "comment": "Label for the dropdown to select a page."
+  },
+  "SNTable.Pagination.FirstPage": {
+    "value": "Go to the first page",
+    "comment": "tooltip and aria-label for the first page button. (tew 220125)"
+  },
+  "SNTable.Pagination.PreviousPage": {
+    "value": "Go to the previous page",
+    "comment": "tooltip and aria-label for the previous page button. (tew 220125)"
+  },
+  "SNTable.Pagination.NextPage": {
+    "value": "Go to the next page",
+    "comment": "tooltip and aria-label for the next page button. (tew 220125)"
+  },
+  "SNTable.Pagination.LastPage": {
+    "value": "Go to the last page",
+    "comment": "tooltip and aria-label for the last page button. (tew 220125)"
+  },
+  "SNTable.Pagination.RowsPerPageChange": {
+    "value": "Rows per page has changed to {0}. Now showing the first page.",
+    "comment": "Read via screenreader when the number rows per page changes. {0} is replaced with the number of rows per page. (tew 211122)"
+  },
+  "SNTable.Pagination.PageStatusReport": {
+    "value": "Page has changed. Showing page {0} of {1}.",
+    "comment": "Read via screenreader when the page has changed. {0} is replaced with the current page number. {1} is replaced with the total page number. (tew 211122)"
+  },
+  "SNTable.SortLabel.SortedAscending": {
+    "value": "Sorted in ascending order.",
+    "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)"
+  },
+  "SNTable.SortLabel.SortedDescending": {
+    "value": "Sorted in descending order.",
+    "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)"
+  },
+  "SNTable.SortLabel.PressSpaceToSort": {
+    "value": "Press space to sort on this column",
+    "comment": "instructions for sorting, announced by screen readers. (tew 210929)"
+  },
+  "SNTable.SelectionLabel.OneSelectedValue": {
+    "value": "Currently there is one selected value.",
+    "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)"
+  },
+  "SNTable.SelectionLabel.SelectedValues": {
+    "value": "Currently there are {0} selected values.",
+    "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)"
+  },
+  "SNTable.SelectionLabel.DeselectedValue": {
+    "value": "Value is deselected.",
+    "comment": "announced by screen readers  when a value is deselected. (tew 210929)"
+  },
+  "SNTable.SelectionLabel.SelectedValue": {
+    "value": "Value is selected.",
+    "comment": "announced by screen readers when a value is selected. (tew 210929)"
+  },
+  "SNTable.SelectionLabel.NotSelectedValue": {
+    "value": "Value is not selected.",
+    "comment": "announced by screen readers when focus is on an unselected value. (tew 210929)"
+  },
+  "SNTable.SelectionLabel.SelectionsConfirmed": {
+    "value": "Selections confirmed.",
+    "comment": "announced by screen readers when selections are confirmed. (tew 210929)"
+  },
+  "SNTable.SelectionLabel.ExitedSelectionMode": {
+    "value": "Value is deselected. Exited selection mode.",
+    "comment": "Announced by screen readers when deselecting and no values are selecting, causing the the chart to exit selection mode. (tew 210929)"
+  },
+  "SNTable.SelectionLabel.selected": {
+    "value": "Selected",
+    "comment": "announced by screen readers for a selected value. (tew 210929)"
+  }
+}

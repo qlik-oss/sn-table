@@ -1,0 +1,112 @@
+{
+  "SNTable.Accessibility.NavigationInstructions": {
+    "value": "使用方向鍵以在表格儲存格中導覽，並使用 Tab 以前往分頁控制。如需完整的鍵盤導覽，請參閱文件。",
+    "comment": "Instructions read by screen reader when first focusing inside the table. (tew 211130)",
+    "version": "rON9K1cUvIGtROZHqXNfbg=="
+  },
+  "SNTable.Accessibility.RowsAndColumns": {
+    "value": "顯示 {0} 列和 {1} 欄。",
+    "comment": "number of rows and columns announced by the screen reader. (tew 210929)",
+    "version": "HKjzXNhL9hPs/kFY0XyjTQ=="
+  },
+  "SNTable.Pagination.DisplayedRowsLabel": {
+    "value": "{0} / {1}",
+    "comment": "label for the displayed rows, e.g. '1-100 of 234' (tew 211004)",
+    "version": "aQJbyf9x9LTIhITOr45yXA=="
+  },
+  "SNTable.Pagination.FirstPage": {
+    "value": "移至第一頁",
+    "comment": "tooltip and aria-label for the first page button. (tew 220125)",
+    "version": "02xtL9RTBrrFoJ6sKxknMg=="
+  },
+  "SNTable.Pagination.LastPage": {
+    "value": "移至最後一頁",
+    "comment": "tooltip and aria-label for the last page button. (tew 220125)",
+    "version": "r2oxhoCXSRbLzLA5mLygUg=="
+  },
+  "SNTable.Pagination.NextPage": {
+    "value": "移至下一頁",
+    "comment": "tooltip and aria-label for the next page button. (tew 220125)",
+    "version": "zcTT0KquBNduHyvU9hnhoA=="
+  },
+  "SNTable.Pagination.PageStatusReport": {
+    "value": "頁面已變更。顯示第 {0} 頁，共 {1} 頁。",
+    "comment": "Read via screenreader when the page has changed. {0} is replaced with the current page number. {1} is replaced with the total page number. (tew 211122)",
+    "version": "AOFznLoJupPIAwS7SchRcA=="
+  },
+  "SNTable.Pagination.PreviousPage": {
+    "value": "移至上一頁",
+    "comment": "tooltip and aria-label for the previous page button. (tew 220125)",
+    "version": "0HFoHIB1i+ZETBO3YI76/g=="
+  },
+  "SNTable.Pagination.RowsPerPage": {
+    "value": "每頁列數",
+    "comment": "label for the rows per page dropdown. (tew 210929)",
+    "version": "zuWpMmMSoOG/QRsKoVx3OA=="
+  },
+  "SNTable.Pagination.RowsPerPageChange": {
+    "value": "每頁列數已變更為 {0}。現在顯示第一頁。",
+    "comment": "Read via screenreader when the number rows per page changes. {0} is replaced with the number of rows per page. (tew 211122)",
+    "version": "pMOIMgdSzJmSIj7NLXkS6g=="
+  },
+  "SNTable.Pagination.SelectPage": {
+    "value": "選取頁面",
+    "comment": "Label for the dropdown to select a page.",
+    "version": "306b2wiIN019EPnVvTBSjA=="
+  },
+  "SNTable.SelectionLabel.DeselectedValue": {
+    "value": "值已取消選取。",
+    "comment": "announced by screen readers  when a value is deselected. (tew 210929)",
+    "version": "/NL1c53TDjc2dhooLWg1WA=="
+  },
+  "SNTable.SelectionLabel.ExitedSelectionMode": {
+    "value": "值已取消選取。輸入的選取模式。",
+    "comment": "Announced by screen readers when deselecting and no values are selecting, causing the the chart to exit selection mode. (tew 210929)",
+    "version": "A4NCF1GIsCVwVg0MjPHUqw=="
+  },
+  "SNTable.SelectionLabel.NotSelectedValue": {
+    "value": "未選取值。",
+    "comment": "announced by screen readers when focus is on an unselected value. (tew 210929)",
+    "version": "oj/qLPcfANXpS2oVVUzTdQ=="
+  },
+  "SNTable.SelectionLabel.OneSelectedValue": {
+    "value": "目前有一個選取的值。",
+    "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)",
+    "version": "5llYYux+meuJItZE6XJhcQ=="
+  },
+  "SNTable.SelectionLabel.SelectedValue": {
+    "value": "已選取值。",
+    "comment": "announced by screen readers when a value is selected. (tew 210929)",
+    "version": "ZJO4WnSdc7Wk5mDyEj4hug=="
+  },
+  "SNTable.SelectionLabel.SelectedValues": {
+    "value": "目前有 {0} 個選取的值。",
+    "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)",
+    "version": "58lPVnscmLNuN+pvnPhkYA=="
+  },
+  "SNTable.SelectionLabel.SelectionsConfirmed": {
+    "value": "選項已確認。",
+    "comment": "announced by screen readers when selections are confirmed. (tew 210929)",
+    "version": "g2xbBOIYPMUM0bFIQp5hDg=="
+  },
+  "SNTable.SelectionLabel.selected": {
+    "value": "已選取",
+    "comment": "announced by screen readers for a selected value. (tew 210929)",
+    "version": "57xiDyOBQ0x8VcdHGd5tzg=="
+  },
+  "SNTable.SortLabel.PressSpaceToSort": {
+    "value": "在此欄按下空格鍵以進行排序",
+    "comment": "instructions for sorting, announced by screen readers. (tew 210929)",
+    "version": "Qqrq+G7uktBDlaLsccl7ng=="
+  },
+  "SNTable.SortLabel.SortedAscending": {
+    "value": "已依遞增順序排序。",
+    "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)",
+    "version": "LrRndbCXiDS4JMC+VCnW4A=="
+  },
+  "SNTable.SortLabel.SortedDescending": {
+    "value": "已依遞減順序排序。",
+    "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)",
+    "version": "81l9u+cBWloC+4R4s9akDQ=="
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "SNTable.Accessibility.NavigationInstructions": {
+    "value": "Verwenden Sie die Pfeiltasten, um in den Tabellenzellen zu navigieren, und die Tabulatortaste, um zu den Paginierungssteuerungen zu wechseln. Alle Angaben zur Tastaturnavigation finden Sie in der Dokumentation.",
+    "comment": "Instructions read by screen reader when first focusing inside the table. (tew 211130)",
+    "version": "rON9K1cUvIGtROZHqXNfbg=="
+  },
+  "SNTable.Accessibility.RowsAndColumns": {
+    "value": "Es werden {0} Zeilen und {1} Spalten angezeigt.",
+    "comment": "number of rows and columns announced by the screen reader. (tew 210929)",
+    "version": "HKjzXNhL9hPs/kFY0XyjTQ=="
+  },
+  "SNTable.Pagination.DisplayedRowsLabel": {
+    "value": "{0} von {1}",
+    "comment": "label for the displayed rows, e.g. '1-100 of 234' (tew 211004)",
+    "version": "aQJbyf9x9LTIhITOr45yXA=="
+  },
+  "SNTable.Pagination.FirstPage": {
+    "value": "Zur ersten Seite",
+    "comment": "tooltip and aria-label for the first page button. (tew 220125)",
+    "version": "02xtL9RTBrrFoJ6sKxknMg=="
+  },
+  "SNTable.Pagination.LastPage": {
+    "value": "Zur letzten Seite",
+    "comment": "tooltip and aria-label for the last page button. (tew 220125)",
+    "version": "r2oxhoCXSRbLzLA5mLygUg=="
+  },
+  "SNTable.Pagination.NextPage": {
+    "value": "Zur nächsten Seite",
+    "comment": "tooltip and aria-label for the next page button. (tew 220125)",
+    "version": "zcTT0KquBNduHyvU9hnhoA=="
+  },
+  "SNTable.Pagination.PageStatusReport": {
+    "value": "Die Seite wurde geändert. Seite {0} von {1} wird angezeigt.",
+    "comment": "Read via screenreader when the page has changed. {0} is replaced with the current page number. {1} is replaced with the total page number. (tew 211122)",
+    "version": "AOFznLoJupPIAwS7SchRcA=="
+  },
+  "SNTable.Pagination.PreviousPage": {
+    "value": "Zur vorherigen Seite",
+    "comment": "tooltip and aria-label for the previous page button. (tew 220125)",
+    "version": "0HFoHIB1i+ZETBO3YI76/g=="
+  },
+  "SNTable.Pagination.RowsPerPage": {
+    "value": "Zeilen pro Seite",
+    "comment": "label for the rows per page dropdown. (tew 210929)",
+    "version": "zuWpMmMSoOG/QRsKoVx3OA=="
+  },
+  "SNTable.Pagination.RowsPerPageChange": {
+    "value": "Zeilen pro Seite wurden in {0} geändert. Jetzt wird die erste Seite angezeigt.",
+    "comment": "Read via screenreader when the number rows per page changes. {0} is replaced with the number of rows per page. (tew 211122)",
+    "version": "pMOIMgdSzJmSIj7NLXkS6g=="
+  },
+  "SNTable.Pagination.SelectPage": {
+    "value": "Seite auswählen",
+    "comment": "Label for the dropdown to select a page.",
+    "version": "306b2wiIN019EPnVvTBSjA=="
+  },
+  "SNTable.SelectionLabel.DeselectedValue": {
+    "value": "Die Werteauswahl ist aufgehoben.",
+    "comment": "announced by screen readers  when a value is deselected. (tew 210929)",
+    "version": "/NL1c53TDjc2dhooLWg1WA=="
+  },
+  "SNTable.SelectionLabel.ExitedSelectionMode": {
+    "value": "Die Werteauswahl ist aufgehoben. Auswahlmodus beendet.",
+    "comment": "Announced by screen readers when deselecting and no values are selecting, causing the the chart to exit selection mode. (tew 210929)",
+    "version": "A4NCF1GIsCVwVg0MjPHUqw=="
+  },
+  "SNTable.SelectionLabel.NotSelectedValue": {
+    "value": "Wert ist nicht ausgewählt.",
+    "comment": "announced by screen readers when focus is on an unselected value. (tew 210929)",
+    "version": "oj/qLPcfANXpS2oVVUzTdQ=="
+  },
+  "SNTable.SelectionLabel.OneSelectedValue": {
+    "value": "Aktuell ist ein Wert ausgewählt.",
+    "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)",
+    "version": "5llYYux+meuJItZE6XJhcQ=="
+  },
+  "SNTable.SelectionLabel.SelectedValue": {
+    "value": "Wert ist ausgewählt.",
+    "comment": "announced by screen readers when a value is selected. (tew 210929)",
+    "version": "ZJO4WnSdc7Wk5mDyEj4hug=="
+  },
+  "SNTable.SelectionLabel.SelectedValues": {
+    "value": "Aktuell sind {0} Werte ausgewählt.",
+    "comment": "the amount of selected values in a dimension, announced by screen readers. (tew 210929)",
+    "version": "58lPVnscmLNuN+pvnPhkYA=="
+  },
+  "SNTable.SelectionLabel.SelectionsConfirmed": {
+    "value": "Auswahl bestätigt.",
+    "comment": "announced by screen readers when selections are confirmed. (tew 210929)",
+    "version": "g2xbBOIYPMUM0bFIQp5hDg=="
+  },
+  "SNTable.SelectionLabel.selected": {
+    "value": "Ausgewählt",
+    "comment": "announced by screen readers for a selected value. (tew 210929)",
+    "version": "57xiDyOBQ0x8VcdHGd5tzg=="
+  },
+  "SNTable.SortLabel.PressSpaceToSort": {
+    "value": "Drücken Sie die Leertaste, um nach dieser Spalte zu sortieren",
+    "comment": "instructions for sorting, announced by screen readers. (tew 210929)",
+    "version": "Qqrq+G7uktBDlaLsccl7ng=="
+  },
+  "SNTable.SortLabel.SortedAscending": {
+    "value": "In aufsteigender Reihenfolge sortiert.",
+    "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)",
+    "version": "LrRndbCXiDS4JMC+VCnW4A=="
+  },
+  "SNTable.SortLabel.SortedDescending": {
+    "value": "In absteigender Reihenfolge sortiert.",
+    "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)",
+    "version": "81l9u+cBWloC+4R4s9akDQ=="
+  }
+}

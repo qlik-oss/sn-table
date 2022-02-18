@@ -30,9 +30,13 @@ nuked.render({
 });
 ```
 
-Look into [Build a simple mashup using nebula.js](https://qlik.dev/tutorials/build-a-simple-mashup-using-nebulajs) to learn more
+Look into [Build a simple mashup using nebula.js](https://qlik.dev/tutorials/build-a-simple-mashup-using-nebulajs) to learn more.
 
-## Visualization Extensions Usage
+[See full example](./mashup-example) of the mashup usage.
+
+More specifics and information about the sn-table can be found in [the Qlik developer portal](https://qlik.dev/libraries-and-tools/visualizations/table).
+
+## Visualization Extension Usage
 
 ### Steps to create a sn-table extension as as a Qlik Sense extension
 
@@ -42,13 +46,13 @@ Install all dependencies:
 yarn
 ```
 
-Build nebula.js visualization
+Build nebula.js visualization:
 
 ```sh
 yarn build
 ```
 
-Build a nebula visualization as a Qlik Sense extension
+Build a nebula visualization as a Qlik Sense extension:
 
 ```sh
 yarn sense
@@ -57,3 +61,25 @@ yarn sense
 | [Saas Edition of Qlik Sense](https://help.qlik.com/en-US/cloud-services/Subsystems/Hub/Content/Sense_Hub/Admin/mc-extensions.htm) | [Qlik Sense Enterprise](https://help.qlik.com/en-US/sense-developer/May2021/Subsystems/Extensions/Content/Sense_Extensions/Howtos/deploy-extensions.htm) | [Qlik Sense Desktop](https://help.qlik.com/en-US/sense-developer/May2021/Subsystems/Extensions/Content/Sense_Extensions/Howtos/deploy-extensions.htm) |
 | --------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------: | ----------------------------------------------------------------------------------------------------------------------------------------------------: |
 | copy sn-table-ext into https://your-tenant.us.qlikcloud.com/console/extensions/                                                   |                                             copy sn-table-ext into Qlik Management Console (QMC)->Extensions                                             |                                                                            copy sn-table-ext into ..\Users\<UserName>\Documents\Qlik\Sense\Extensions |
+
+## API
+
+The API can also be found in [the Qlik developer portal](https://qlik.dev/apis/javascript/nebula-table)
+
+## Contributing
+
+Follow the instructions in our [contributing guide](./.github/CONTRIBUTING.md).
+
+## Package
+
+| name       | status                             | description                   |
+| ---------- | ---------------------------------- | ----------------------------- |
+| [sn-table] | [![sn-table-status]][sn-table-npm] | table supernova for nebula.js |
+
+## License
+
+`@nebula.js/sn-table` is [MIT licensed](./LICENSE).
+
+[sn-table]: https://github.com/qlik-oss/sn-table
+[sn-table-status]: https://img.shields.io/npm/v/@nebula.js/sn-table.svg
+[sn-table-npm]: https://www.npmjs.com/package/@nebula.js/sn-table

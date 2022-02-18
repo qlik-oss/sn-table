@@ -1,18 +1,20 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
-import TableWrapper from './TableWrapper';
+import { StyleSheetManager } from 'styled-components';
+import { ThemeProvider } from '@mui/material/styles';
+import rtlPluginSc from 'stylis-plugin-rtl-sc';
+import TableWrapper from './components/TableWrapper';
 
 export function render(rootElement, props) {
-  const { muiParameters } = props;
+  const { tableTheme, direction } = props;
 
   ReactDOM.render(
     <React.StrictMode>
-      <StylesProvider generateClassName={muiParameters.generateClassName}>
-        <ThemeProvider theme={muiParameters.theme}>
+      <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : []}>
+        <ThemeProvider theme={tableTheme}>
           <TableWrapper {...props} />
         </ThemeProvider>
-      </StylesProvider>
+      </StyleSheetManager>
     </React.StrictMode>,
     rootElement
   );
