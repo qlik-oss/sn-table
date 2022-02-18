@@ -1,10 +1,10 @@
 import { embed } from '@nebula.js/stardust';
-import table from '@nebula.js/sn-table/core/esm/index';
+import table from '@nebula.js/sn-table';
 
 const nuked = embed.createConfiguration({
   context: {
     theme: 'dark',
-    language: 'zh-CN',
+    language: 'en-US',
     keyboardNavigation: true,
     constraints: {
       active: true, // do not allow interactions

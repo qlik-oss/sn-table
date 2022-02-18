@@ -1,29 +1,10 @@
-import { embed } from '@nebula.js/stardust';
-import table from '@nebula.js/sn-table/core/esm/index';
-
 import connect from './connect';
-// import embed from './configure';
+import embed from './configure';
 import './style.css';
 
 (async () => {
   const app = await connect();
-  // const nuked = embed(app);
-  const nuked = embed(app, {
-    context: {
-      theme: 'dark',
-      language: 'zh-CN',
-      keyboardNavigation: true,
-      constraints: {
-        active: true, // do not allow interactions
-      },
-    },
-    types: [
-      {
-        name: 'table',
-        load: () => Promise.resolve(table),
-      },
-    ],
-  });
+  const nuked = embed(app);
 
   nuked.selections().then((selections) => selections.mount(document.getElementById('selections')));
 
@@ -58,10 +39,4 @@ import './style.css';
       },
     },
   });
-
-  // .then((viz) => {
-  //   setTimeout(function () {
-  //     viz.convertTo("line");
-  //   }, 3000);
-  // });
 })();
