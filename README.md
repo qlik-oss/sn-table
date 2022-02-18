@@ -29,3 +29,11 @@ nuked.render({
   type: 'table',
 });
 ```
+
+[See full example](./mashup-example) of the mashup usage
+
+More specifics and information about the sn-table can be found in [the Qlik developer portal](https://qlik.dev/libraries-and-tools/visualizations/table)
+
+## API
+
+The API can also be found in [the Qlik developer portal](https://qlik.dev/apis/javascript/nebula-table)
