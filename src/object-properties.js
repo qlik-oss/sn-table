@@ -1,5 +1,5 @@
 /**
- * @extends {qae.GenericObjectProperties}
+ * @extends {GenericObjectProperties}
  * @entry
  */
 const properties = {
@@ -11,20 +11,22 @@ const properties = {
   version: process.env.PACKAGE_VERSION,
   /**
    * Extends HyperCubeDef, see Engine API: HyperCubeDef
-   * @extends {qae.HyperCubeDef}
+   * @extends {HyperCubeDef}
    */
   qHyperCubeDef: {
     /** @type {DimensionProperties[]} */
     qDimensions: [],
     /** @type {MeasureProperties[]} */
     qMeasures: [],
+    /** @type {schemasNxHypercubeMode} */
     qMode: 'S',
     /** @type {boolean} */
     qSuppressZero: false,
     /** @type {boolean} */
     qSuppressMissing: true,
-    /** @type {Array} */
+    /** @type {Array<integer<int32>>} */
     qColumnOrder: [],
+    /** @type {Array<integer<int32>>} */
     columnWidths: [],
   },
   /**

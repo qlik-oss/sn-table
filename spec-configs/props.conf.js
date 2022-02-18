@@ -20,17 +20,35 @@ module.exports = {
   },
   parse: {
     types: {
-      'qae.GenericObjectProperties': {
-        url: 'https://core.qlik.com/services/qix-engine/apis/qix/definitions/#genericobjectproperties',
+      GenericObjectProperties: {
+        url: 'https://qlik.dev/apis/json-rpc/qix/schemas#%23%2Fdefinitions%2Fschemas%2Fentries%2FGenericObjectProperties',
       },
-      'qae.NxDimension': {
-        url: 'https://core.qlik.com/services/qix-engine/apis/qix/definitions/#nxdimension',
+      NxDimension: {
+        url: 'https://qlik.dev/apis/json-rpc/qix/schemas#%23%2Fdefinitions%2Fschemas%2Fentries%2FNxDimension',
       },
-      'qae.NxMeasure': {
-        url: 'https://core.qlik.com/services/qix-engine/apis/qix/definitions/#nxmeasure',
+      NxMeasure: {
+        url: 'https://qlik.dev/apis/json-rpc/qix/schemas#%23%2Fdefinitions%2Fschemas%2Fentries%2FNxMeasure',
       },
-      'qae.HyperCubeDef': {
-        url: 'https://core.qlik.com/services/qix-engine/apis/qix/definitions/#hypercubedef',
+      HyperCubeDef: {
+        url: 'https://qlik.dev/apis/json-rpc/qix/schemas#%23%2Fdefinitions%2Fschemas%2Fentries%2FHyperCubeDef',
+      },
+      NxHypercubeMode: {
+        url: 'https://qlik.dev/apis/json-rpc/qix/schemas#%23%2Fdefinitions%2Fschemas%2Fentries%2FNxHypercubeMode',
+      },
+      StringExpression: {
+        url: 'https://qlik.dev/apis/json-rpc/qix/schemas/#%23%2Fdefinitions%2Fschemas%2Fentries%2FStringExpression',
+      },
+      schemasNxHypercubeMode: {
+        url: 'https://qlik.dev/apis/json-rpc/qix/schemas/#%23%2Fdefinitions%2Fschemas%2Fentries%2FNxHypercubeMode',
+      },
+      NxAttrExprDef: {
+        url: 'https://qlik.dev/apis/json-rpc/qix/schemas#%23%2Fdefinitions%2Fschemas%2Fentries%2FNxAttrExprDef',
+      },
+      NxInlineDimensionDef: {
+        url: 'https://qlik.dev/apis/json-rpc/qix/schemas#%23%2Fdefinitions%2Fschemas%2Fentries%2FNxInlineDimensionDef',
+      },
+      NxInlineMeasureDef: {
+        url: 'https://qlik.dev/apis/json-rpc/qix/schemas#%23%2Fdefinitions%2Fschemas%2Fentries%2FNxInlineMeasureDef',
       },
     },
   },
