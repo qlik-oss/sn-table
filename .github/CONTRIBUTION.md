@@ -1,3 +1,5 @@
+# Contribution
+
 ## Developing
 
 1. Install with `yarn`
