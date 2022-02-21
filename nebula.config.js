@@ -19,16 +19,34 @@ module.exports = {
           straightTable: {
             header: {
               fontSize: '40px',
-              color: 'cyan',
-              padding: '10px',
+              color: 'chocolate',
+              fontFamily: 'sans-serif',
             },
             content: {
               fontSize: '16px',
               color: 'magenta',
-              padding: '10px',
+              fontFamily: 'sans-serif',
             },
           },
           backgroundColor: '#32a852',
+        },
+      },
+      {
+        id: 'Test2',
+        theme: {
+          straightTable: {
+            header: {
+              fontSize: '20px',
+              color: 'blue',
+              fontFamily: 'sans-serif',
+            },
+            content: {
+              fontSize: '16px',
+              color: '232323',
+              fontFamily: 'sans-serif',
+            },
+          },
+          backgroundColor: 'cyan',
         },
       },
     ],
