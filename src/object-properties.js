@@ -13,9 +13,15 @@ const properties = {
    * @extends {qae.HyperCubeDef}
    */
   qHyperCubeDef: {
-    /** @type {DimensionProperties[]} */
+    /**
+     * The maximum amount of dimensions is 15
+     * @type {DimensionProperties[]}
+     */
     qDimensions: [],
-    /** @type {MeasureProperties[]} */
+    /**
+     * The maximum amount of measures is 15
+     * @type {MeasureProperties[]}
+     */
     qMeasures: [],
     qMode: 'S',
     /** @type {boolean} */
