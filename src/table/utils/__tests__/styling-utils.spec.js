@@ -91,6 +91,8 @@ describe('styling-utils', () => {
         color: '#fff',
         fontSize: 12,
         padding: '6px 12px',
+        borderBottom: '1px solid #D9D9D9',
+        borderRight: '1px solid #D9D9D9',
       });
     });
     it('should return styling with fontSize and padding', () => {
@@ -99,6 +101,8 @@ describe('styling-utils', () => {
       expect(resultStyling).to.eql({
         fontSize: 12,
         padding: '6px 12px',
+        borderBottom: '1px solid #D9D9D9',
+        borderRight: '1px solid #D9D9D9',
       });
     });
     it('should return styling with fontColor as the font size and padding are from sprout theme', () => {
@@ -107,6 +111,8 @@ describe('styling-utils', () => {
       const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).to.eql({
         color: '#fff',
+        borderBottom: '1px solid #D9D9D9',
+        borderRight: '1px solid #D9D9D9',
       });
     });
   });
@@ -131,7 +137,10 @@ describe('styling-utils', () => {
       layout = {};
 
       const resultStyling = getHeadStyle(layout, theme);
-      expect(resultStyling).to.eql({});
+      expect(resultStyling).to.eql({
+        borderBottom: '1px solid #D9D9D9',
+        borderRight: '1px solid #D9D9D9',
+      });
     });
     it('should return header style with only fontColor', () => {
       layout = {
@@ -147,6 +156,8 @@ describe('styling-utils', () => {
       const resultStyling = getHeadStyle(layout, theme);
       expect(resultStyling).to.eql({
         color: '#404040',
+        borderBottom: '1px solid #D9D9D9',
+        borderRight: '1px solid #D9D9D9',
       });
     });
     it('should return header style from layout', () => {
@@ -155,6 +166,8 @@ describe('styling-utils', () => {
         color: '#404040',
         fontSize: 44,
         padding: '22px 44px',
+        borderBottom: '1px solid #D9D9D9',
+        borderRight: '1px solid #D9D9D9',
       });
     });
   });
@@ -193,7 +206,12 @@ describe('styling-utils', () => {
       layout = {};
 
       const resultStyling = getBodyStyle(layout, theme);
-      expect(resultStyling).to.eql({ hoverBackgroundColor: '#f4f4f4', hoverFontColor: '' });
+      expect(resultStyling).to.eql({
+        hoverBackgroundColor: '#f4f4f4',
+        hoverFontColor: '',
+        borderBottom: '1px solid #D9D9D9',
+        borderRight: '1px solid #D9D9D9',
+      });
     });
     it('should return styling with fontColor, fontSize, padding plus default hoverBackgroundColor and hoverFontColor', () => {
       const resultStyling = getBodyStyle(layout, theme);
@@ -203,6 +221,8 @@ describe('styling-utils', () => {
         padding: '11px 22px',
         hoverBackgroundColor: '#f4f4f4',
         hoverFontColor: '',
+        borderBottom: '1px solid #D9D9D9',
+        borderRight: '1px solid #D9D9D9',
       });
     });
     // Only checking hover properties from here on
