@@ -135,7 +135,7 @@ export default function TableWrapper(props) {
         overflow: 'hidden',
       }
     : {
-        height: 'calc(100% - 54px)',
+        height: 'calc(100% - 53px)',
         overflow: 'auto',
       };
   const paperTablePaginationStyle = {
