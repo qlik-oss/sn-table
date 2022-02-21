@@ -12,6 +12,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "bugs": {
+    "url": "https://github.com/qlik-oss/sn-table/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/qlik-oss/sn-table.git"
