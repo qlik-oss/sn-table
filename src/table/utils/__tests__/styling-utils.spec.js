@@ -85,18 +85,20 @@ describe('styling-utils', () => {
       objetName = '';
     });
 
-    it('should return styling with fontColor and fontSize', () => {
+    it('should return styling with fontColor, fontSize, and padding', () => {
       const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).to.eql({
         color: '#fff',
         fontSize: 12,
+        padding: '6px 12px',
       });
     });
-    it('should return styling with fontSize', () => {
+    it('should return styling with fontSize and padding', () => {
       styleObj.fontColor = null;
       const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).to.eql({
         fontSize: 12,
+        padding: '6px 12px',
       });
     });
     it('should return styling with fontColor as the font size and padding are from sprout theme', () => {
@@ -118,7 +120,7 @@ describe('styling-utils', () => {
           {
             header: {
               fontColor: '#444444',
-              fontSize: '44px',
+              fontSize: 44,
             },
           },
         ],
@@ -151,7 +153,8 @@ describe('styling-utils', () => {
       const resultStyling = getHeadStyle(layout, theme);
       expect(resultStyling).to.eql({
         color: '#404040',
-        fontSize: '44px',
+        fontSize: 44,
+        padding: '22px 44px',
       });
     });
   });
@@ -197,6 +200,7 @@ describe('styling-utils', () => {
       expect(resultStyling).to.eql({
         fontSize: 22,
         color: resolvedColor,
+        padding: '11px 22px',
         hoverBackgroundColor: '#f4f4f4',
         hoverFontColor: '',
       });

@@ -46,10 +46,10 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
     fontFamily,
     color: styleObj?.fontColor ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj?.fontColor) : color,
     fontSize: styleObj?.fontSize || fontSize,
-    padding: styleObj.fontSize && `${styleObj.fontSize / 2}px ${styleObj.fontSize}px`,
+    padding: styleObj?.fontSize && `${styleObj?.fontSize / 2}px ${styleObj?.fontSize}px`,
   };
   // Remove all Undefined Values from an Object
-  Object.keys(baseStyle).forEach((key) => baseStyle[key] === undefined && delete baseStyle[key]);
+  Object.keys(baseStyle).forEach((key) => baseStyle[key] == null && delete baseStyle[key]);
   return baseStyle;
 };
 
