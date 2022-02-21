@@ -20,12 +20,12 @@ module.exports = {
             header: {
               fontSize: '40px',
               color: 'chocolate',
-              padding: '10px',
+              fontFamily: 'sans-serif',
             },
             content: {
               fontSize: '16px',
               color: 'magenta',
-              padding: '10px',
+              fontFamily: 'sans-serif',
             },
           },
           backgroundColor: '#32a852',
@@ -38,12 +38,12 @@ module.exports = {
             header: {
               fontSize: '20px',
               color: 'blue',
-              padding: '40px',
+              fontFamily: 'sans-serif',
             },
             content: {
               fontSize: '16px',
               color: '232323',
-              padding: '40px',
+              fontFamily: 'sans-serif',
             },
           },
           backgroundColor: 'cyan',

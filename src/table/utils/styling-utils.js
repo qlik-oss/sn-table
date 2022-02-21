@@ -40,14 +40,13 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
   const fontFamily = theme.getStyle('object', `straightTable.${objetName}`, 'fontFamily');
   const color = theme.getStyle('object', `straightTable.${objetName}`, 'color');
   const fontSize = theme.getStyle('object', `straightTable.${objetName}`, 'fontSize');
-  const padding = theme.getStyle('object', `straightTable.${objetName}`, 'padding');
 
   const baseStyle = {
     backgroundColor,
     fontFamily,
     color: styleObj?.fontColor ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj?.fontColor) : color,
     fontSize: styleObj?.fontSize || fontSize,
-    padding,
+    padding: styleObj.fontSize && `${styleObj.fontSize / 2}px ${styleObj.fontSize}px`,
   };
   // Remove all Undefined Values from an Object
   Object.keys(baseStyle).forEach((key) => baseStyle[key] === undefined && delete baseStyle[key]);
