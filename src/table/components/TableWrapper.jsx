@@ -113,6 +113,15 @@ export default function TableWrapper(props) {
     });
   }, [rows.length, size.qcy, size.qcx, page]);
 
+  const SelectProps = {
+    inputProps: {
+      'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
+      'data-testid': 'select',
+      tabIndex: !keyboard.enabled || keyboard.active ? 0 : -1,
+    },
+    native: true,
+  };
+
   const paperStyle = {
     border: '1px solid #D9D9D9',
     borderBottom: 0,
@@ -139,6 +148,15 @@ export default function TableWrapper(props) {
     borderRadius: 0,
     borderBottom: '1px solid #D9D9D9',
   };
+  const tablePaginationStyle = [
+    constraints.active && { display: 'none' },
+    {
+      color: theme.isBackgroundDarkColor ? 'rgba(255, 255, 255, 0.9)' : '#404040',
+      '& .MuiNativeSelect-icon': {
+        color: theme.isBackgroundDarkColor ? 'rgba(255, 255, 255, 0.9)' : '#404040',
+      },
+    },
+  ];
 
   return (
     <Paper
@@ -180,24 +198,14 @@ export default function TableWrapper(props) {
       </TableContainer>
       <Paper sx={paperTablePaginationStyle}>
         <TablePagination
-          sx={constraints.active && { display: 'none' }}
+          sx={tablePaginationStyle}
           rowsPerPageOptions={fixedRowsPerPage ? [rowsPerPage] : rowsPerPageOptions}
           component="div"
           count={size.qcy}
           rowsPerPage={rowsPerPage}
           labelRowsPerPage={`${translator.get('SNTable.Pagination.RowsPerPage')}:`}
           page={page}
-          SelectProps={{
-            inputProps: {
-              'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
-              'data-testid': 'select',
-              style: {
-                color: theme.isBackgroundDarkColor ? '#ffffff' : '#404040',
-              },
-              tabIndex: !keyboard.enabled || keyboard.active ? 0 : -1,
-            },
-            native: true,
-          }}
+          SelectProps={SelectProps}
           labelDisplayedRows={({ from, to, count }) =>
             rect.width > 250 && translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
           }

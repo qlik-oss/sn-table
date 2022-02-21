@@ -40,13 +40,12 @@ export default function supernova(env) {
       const constraints = useConstraints();
       const translator = useTranslator();
       const selectionsAPI = useSelections();
-      // the style which is from them can be found in nebula.config.js -> serve -> themes
       const theme = {
         ...useTheme(),
         backgroundColor: useTheme().getStyle('object', 'straightTable', 'backgroundColor'),
         isBackgroundDarkColor: isDarkColor(useTheme().getStyle('object', 'straightTable', 'backgroundColor')),
       };
-      const tableTheme = muiSetup(direction, theme);
+      const muiTheme = muiSetup(direction);
       const keyboard = useKeyboard();
       const rect = useRect();
       const [pageInfo, setPageInfo] = useState(() => ({
@@ -70,7 +69,7 @@ export default function supernova(env) {
             constraints,
             translator,
             selectionsAPI,
-            tableTheme,
+            muiTheme,
             theme,
             changeSortOrder,
             keyboard,
