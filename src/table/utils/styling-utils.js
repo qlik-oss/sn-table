@@ -47,6 +47,8 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
     fontSize: styleObj?.fontSize || fontSize,
     padding,
     backgroundColor: tableBackgroundColor,
+    borderBottom: theme.isBackgroundDarkColor ? '1px solid #F2F2F3' : '1px solid #D9D9D9',
+    borderRight: theme.isBackgroundDarkColor ? '1px solid #F2F2F3' : '1px solid #D9D9D9',
   };
   // Remove all Undefined Values from an Object
   Object.keys(baseStyle).forEach((key) => baseStyle[key] === undefined && delete baseStyle[key]);

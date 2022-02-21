@@ -123,11 +123,12 @@ export default function TableWrapper(props) {
   };
 
   const paperStyle = {
-    border: '1px solid #D9D9D9',
+    border: theme.isBackgroundDarkColor ? '1px solid #F2F2F3' : '1px solid #D9D9D9',
     borderBottom: 0,
     height: '100%',
     backgroundColor: theme.backgroundColor,
     boxShadow: 'none',
+    borderRadius: 'unset',
   };
   const tableContainerStyle = constraints.active
     ? {
@@ -146,7 +147,7 @@ export default function TableWrapper(props) {
     backgroundColor: theme.backgroundColor,
     boxShadow: 'none',
     borderRadius: 0,
-    borderBottom: '1px solid #D9D9D9',
+    borderBottom: theme.isBackgroundDarkColor ? '1px solid #F2F2F3' : '1px solid #D9D9D9',
   };
   const tablePaginationStyle = [
     constraints.active && { display: 'none' },

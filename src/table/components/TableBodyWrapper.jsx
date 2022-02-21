@@ -52,6 +52,9 @@ function TableBodyWrapper({
     '& td:last-of-type': {
       borderRight: 0,
     },
+    '& th:last-of-type': {
+      borderRight: 0,
+    },
   };
 
   const rowCellStyle = {
