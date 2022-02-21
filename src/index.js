@@ -40,11 +40,9 @@ export default function supernova(env) {
       const constraints = useConstraints();
       const translator = useTranslator();
       const selectionsAPI = useSelections();
-      const theme = {
-        ...useTheme(),
-        backgroundColor: useTheme().getStyle('object', 'straightTable', 'backgroundColor'),
-        isBackgroundDarkColor: isDarkColor(useTheme().getStyle('object', 'straightTable', 'backgroundColor')),
-      };
+      const theme = useTheme();
+      theme.backgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
+      theme.isBackgroundDarkColor = isDarkColor(theme.backgroundColor);
       const muiTheme = muiSetup(direction);
       const keyboard = useKeyboard();
       const rect = useRect();
