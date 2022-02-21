@@ -24,9 +24,9 @@ const properties = {
     qSuppressZero: false,
     /** @type {boolean} */
     qSuppressMissing: true,
-    /** @type {Array<integer<int32>>} */
+    /** @type {number[]} */
     qColumnOrder: [],
-    /** @type {Array<integer<int32>>} */
+    /** @type {number[]} */
     columnWidths: [],
   },
   /**
