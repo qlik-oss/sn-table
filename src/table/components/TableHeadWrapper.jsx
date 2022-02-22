@@ -38,7 +38,7 @@ function TableHeadWrapper({
   // to avoid seeing the table body through the header
   const backgroundColor = theme.backgroundColor === 'transparent' ? '#FAFAFA' : theme.backgroundColor;
   const headStyle = {
-    '& th:last-of-type': {
+    'tr :last-child': {
       borderRight: 0,
     },
     backgroundColor,

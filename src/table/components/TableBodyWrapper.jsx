@@ -49,10 +49,7 @@ function TableBodyWrapper({
       fontSize: bodyStyle.fontSize,
       padding: bodyStyle.padding,
     },
-    '& td:last-of-type': {
-      borderRight: 0,
-    },
-    '& th:last-of-type': {
+    'tr :last-child': {
       borderRight: 0,
     },
   };
