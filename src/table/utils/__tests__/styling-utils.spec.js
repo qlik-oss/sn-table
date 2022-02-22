@@ -244,6 +244,7 @@ describe('styling-utils', () => {
       layout.components[0].content.hoverColor.index = 2;
 
       const resultStyling = getBodyStyle(layout, theme);
+
       expect(resultStyling.hoverBackgroundColor).to.eql(altResolvedColor);
       expect(resultStyling.hoverFontColor).to.eql(STYLING_DEFAULTS.FONT_COLOR);
     });

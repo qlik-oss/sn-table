@@ -65,6 +65,23 @@ export function getHeadStyle(layout, theme) {
 }
 
 export function getBodyStyle(layout, theme) {
+  const contentHoverBackgroundColor = theme.getStyle('object', 'straightTable.content.hover', 'backgroundColor');
+  const contentBackgroundColor = theme.getStyle('object', 'straightTable.content', 'backgroundColor');
+  const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
+  const objectBackgroundColor = theme.getStyle('object', '', 'backgroundColor');
+  const isHoverBackgroundColorFromTheme = !(
+    contentHoverBackgroundColor === contentBackgroundColor ||
+    contentHoverBackgroundColor === tableBackgroundColor ||
+    contentHoverBackgroundColor === objectBackgroundColor
+  );
+
+  const contentHoverFontColor = theme.getStyle('object', 'straightTable.content.hover', 'color');
+  const contentFontColor = theme.getStyle('object', 'straightTable.content', 'color');
+  const tableFontColor = theme.getStyle('object', 'straightTable', 'color');
+  const isHoverFontColorFromTheme = !(
+    contentHoverFontColor === contentFontColor || contentHoverFontColor === tableFontColor
+  );
+
   const content = layout.components?.[0]?.content;
 
   // Cases when hoverEffect is true:
@@ -80,21 +97,23 @@ export function getBodyStyle(layout, theme) {
   // when hovering, the default hover effect (light gray background)
   // 4. There are both hover font and background colors, when hovering,
   // the hover font and background colors take effect.
+  // 5. Hover font color and background color from properties override those from theme.
+  const unsetHoverBackgroundColor = isUnset(content?.hoverColor) && !isHoverBackgroundColorFromTheme;
+  const unsetHoverFontColor = isUnset(content?.hoverFontColor) && !isHoverFontColorFromTheme;
+  const unsetHoverFontBackgroundColor = unsetHoverBackgroundColor && unsetHoverFontColor;
 
-  const unsetHoverBackgroundColor = isUnset(content?.hoverColor);
-  const unsetHoverFontBackgroundColor = isUnset(content?.hoverFontColor) && unsetHoverBackgroundColor;
-
-  const setHoverBackgroundColor = unsetHoverBackgroundColor
-    ? ''
-    : getColor(STYLING_DEFAULTS.HOVER_BACKGROUND, theme, content?.hoverColor);
-
+  const getHoverBackgroundColor = !isUnset(content?.hoverColor)
+    ? getColor(STYLING_DEFAULTS.HOVER_BACKGROUND, theme, content?.hoverColor)
+    : contentHoverBackgroundColor;
+  const setHoverBackgroundColor = unsetHoverBackgroundColor ? '' : getHoverBackgroundColor;
   const hoverBackgroundColor = unsetHoverFontBackgroundColor
     ? STYLING_DEFAULTS.HOVER_BACKGROUND
     : setHoverBackgroundColor;
 
-  const hoverFontColor = unsetHoverFontBackgroundColor
-    ? ''
-    : getColor(getAutoFontColor(hoverBackgroundColor), theme, content?.hoverFontColor);
+  const autoFonColor = getColor(getAutoFontColor(hoverBackgroundColor), theme, content?.hoverFontColor);
+  const getContentHoverFontColor = isHoverFontColorFromTheme ? contentHoverFontColor : autoFonColor;
+  const setContentHoverFontColor = !isUnset(content?.hoverFontColor) ? autoFonColor : getContentHoverFontColor;
+  const hoverFontColor = unsetHoverFontBackgroundColor ? '' : setContentHoverFontColor;
 
   const contentStyle = getBaseStyling(content, 'content', theme);
   return {
