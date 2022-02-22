@@ -45,6 +45,7 @@ function TableHeadWrapper({
   };
   const headCellStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   headCellStyle.backgroundColor = backgroundColor;
+  headCellStyle.borderTop = theme.isBackgroundDarkColor ? '1px solid #F2F2F3' : '1px solid #D9D9D9';
 
   return (
     <TableHead sx={headStyle}>
