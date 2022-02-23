@@ -37,15 +37,24 @@ function TableHeadWrapper({
   // When the table background color from sense theme is transparent, there is a default background color for the header
   // to avoid seeing the table body through the header
   const backgroundColor = theme.backgroundColor === 'transparent' ? '#FAFAFA' : theme.backgroundColor;
+  const sortLabelColor = theme.isBackgroundDarkColor ? 'rgba(255,255,255,0.9)' : 'rgba(0, 0, 0, 0.54)';
+
   const headStyle = {
     'tr :last-child': {
       borderRight: 0,
     },
     backgroundColor,
   };
+
   const headCellStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
   headCellStyle.backgroundColor = backgroundColor;
   headCellStyle.borderTop = theme.isBackgroundDarkColor ? '1px solid #F2F2F3' : '1px solid #D9D9D9';
+
+  const tableSortLabelStyle = {
+    '&.Mui-active .MuiTableSortLabel-icon': {
+      color: headCellStyle.color ? headCellStyle.color : sortLabelColor,
+    },
+  };
 
   return (
     <TableHead sx={headStyle}>
@@ -79,7 +88,12 @@ function TableHeadWrapper({
               onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
               onClick={() => !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column)}
             >
-              <TableSortLabel active={isCurrentColumnActive} direction={column.sortDirection} tabIndex={-1}>
+              <TableSortLabel
+                sx={tableSortLabelStyle}
+                active={isCurrentColumnActive}
+                direction={column.sortDirection}
+                tabIndex={-1}
+              >
                 {column.label}
                 {isFocusInHead && (
                   <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>
