@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState, useMemo, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
@@ -15,6 +16,9 @@ import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/han
 import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
 
+function Portal({ children, target }) {
+  return ReactDOM.createPortal(children, target);
+}
 export default function TableWrapper(props) {
   const {
     rootElement,
@@ -27,6 +31,7 @@ export default function TableWrapper(props) {
     keyboard,
     rect,
     direction,
+    paginationContainer,
     announcer, // this is only for testing purposes
   } = props;
   const { size, rows, columns } = tableData;
@@ -36,7 +41,6 @@ export default function TableWrapper(props) {
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
 
-  const fixedRowsPerPage = selectionsAPI.isModal() || rect.width < 550 || size.qcx > 100;
   /* eslint-disable react-hooks/rules-of-hooks */
   const announce = announcer || useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
   const totalPages = Math.ceil(size.qcy / rowsPerPage);
@@ -118,15 +122,10 @@ export default function TableWrapper(props) {
     boxShadow: 'none',
   };
 
-  const tableContainerStyle = constraints.active
-    ? {
-        height: '100%',
-        overflow: 'hidden',
-      }
-    : {
-        height: 'calc(100% - 52px)',
-        overflow: 'auto',
-      };
+  const tableContainerStyle = {
+    height: constraints.active || paginationContainer ? '100%' : 'calc(100% - 52px)',
+    overflow: constraints.active ? 'hidden' : 'auto',
+  };
 
   const paperTablePaginationStyle = {
     display: 'flex',
@@ -138,6 +137,61 @@ export default function TableWrapper(props) {
     boxShadow: 'none',
     alignItems: 'center',
   };
+
+  const paginationContent = (width) => {
+    const fixedRowsPerPage = selectionsAPI.isModal() || width < 550 || size.qcx > 100;
+    return (
+      <>
+        <TablePagination
+          sx={constraints.active && { display: 'none' }}
+          rowsPerPageOptions={fixedRowsPerPage ? [rowsPerPage] : rowsPerPageOptions}
+          component="div"
+          count={size.qcy}
+          rowsPerPage={rowsPerPage}
+          labelRowsPerPage={`${translator.get('SNTable.Pagination.RowsPerPage')}:`}
+          page={page}
+          SelectProps={{
+            inputProps: {
+              'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
+              'data-testid': 'select',
+              style: {
+                color: '#404040',
+              },
+              tabIndex: !keyboard.enabled || keyboard.active ? 0 : -1,
+            },
+            native: true,
+          }}
+          labelDisplayedRows={({ from, to, count }) =>
+            width > 250 && translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
+          }
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          ActionsComponent={() => <div>{null}</div>}
+          onPageChange={() => {}}
+        />
+        <TablePaginationActions
+          direction={direction}
+          page={page}
+          onPageChange={handleChangePage}
+          lastPageIdx={Math.ceil(size.qcy / rowsPerPage) - 1}
+          keyboard={keyboard}
+          isInSelectionMode={selectionsAPI.isModal()}
+          tableWidth={width}
+          translator={translator}
+        />
+      </>
+    );
+  };
+
+  let paginationBar;
+  if (paginationContainer) {
+    paginationBar = (
+      <Portal target={paginationContainer}>
+        {paginationContent(paginationContainer.getBoundingClientRect().width)}
+      </Portal>
+    );
+  } else {
+    paginationBar = <Paper sx={paperTablePaginationStyle}>{paginationContent(rect.width)}</Paper>;
+  }
 
   return (
     <Paper
@@ -177,44 +231,7 @@ export default function TableWrapper(props) {
           />
         </Table>
       </TableContainer>
-      <Paper sx={paperTablePaginationStyle}>
-        <TablePagination
-          sx={constraints.active && { display: 'none' }}
-          rowsPerPageOptions={fixedRowsPerPage ? [rowsPerPage] : rowsPerPageOptions}
-          component="div"
-          count={size.qcy}
-          rowsPerPage={rowsPerPage}
-          labelRowsPerPage={`${translator.get('SNTable.Pagination.RowsPerPage')}:`}
-          page={page}
-          SelectProps={{
-            inputProps: {
-              'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
-              'data-testid': 'select',
-              style: {
-                color: '#404040',
-              },
-              tabIndex: !keyboard.enabled || keyboard.active ? 0 : -1,
-            },
-            native: true,
-          }}
-          labelDisplayedRows={({ from, to, count }) =>
-            rect.width > 250 && translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
-          }
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          ActionsComponent={() => <div>{null}</div>}
-          onPageChange={() => {}}
-        />
-        <TablePaginationActions
-          direction={direction}
-          page={page}
-          onPageChange={handleChangePage}
-          lastPageIdx={Math.ceil(size.qcy / rowsPerPage) - 1}
-          keyboard={keyboard}
-          isInSelectionMode={selectionsAPI.isModal()}
-          tableWidth={rect.width}
-          translator={translator}
-        />
-      </Paper>
+      {paginationBar}
     </Paper>
   );
 }
@@ -234,6 +251,7 @@ TableWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
   rect: PropTypes.object.isRequired,
+  paginationContainer: PropTypes.object.isRequired,
   direction: PropTypes.string,
   announcer: PropTypes.func,
 };
