@@ -8,7 +8,6 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import { getHeadStyle } from '../utils/styling-utils';
 import { headHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusHead } from '../utils/handle-accessibility';
-import { isDarkColor } from '../utils/color-utils';
 
 const VisuallyHidden = styled('span')({
   border: 0,
@@ -40,14 +39,7 @@ function TableHeadWrapper({
       borderRight: 0,
     },
   };
-
   const headCellStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
-  const setBackgroundColor = isDarkColor(headCellStyle.color) ? '#FAFAFA' : '#323232';
-  // When the table background color from sense theme is transparent, there is a default background color for the header
-  // to avoid seeing the table body through the header
-  const backgroundColor = theme.backgroundColor === 'transparent' ? setBackgroundColor : theme.backgroundColor;
-  headCellStyle.backgroundColor = backgroundColor;
-  headCellStyle.borderTop = theme.isBackgroundDarkColor ? '1px solid #F2F2F3' : '1px solid #D9D9D9';
 
   return (
     <TableHead sx={headStyle}>

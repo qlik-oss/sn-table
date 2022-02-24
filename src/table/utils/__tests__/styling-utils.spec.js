@@ -29,6 +29,7 @@ describe('styling-utils', () => {
       }
     },
     getStyle: () => {},
+    backgroundColor: '#323232',
   };
 
   describe('getColor', () => {
@@ -133,16 +134,18 @@ describe('styling-utils', () => {
       };
     });
 
-    it('should return empty object as the padding and font size are from sprout theme', () => {
+    it('should return empty object except backgroundColor and border as the padding and font size are from sprout theme', () => {
       layout = {};
 
       const resultStyling = getHeadStyle(layout, theme);
       expect(resultStyling).to.eql({
+        backgroundColor: '#323232',
         borderBottom: '1px solid #D9D9D9',
         borderRight: '1px solid #D9D9D9',
+        borderTop: '1px solid #D9D9D9',
       });
     });
-    it('should return header style with only fontColor', () => {
+    it('should return header style with only fontColor except backgroundColor and border', () => {
       layout = {
         components: [
           {
@@ -156,18 +159,22 @@ describe('styling-utils', () => {
       const resultStyling = getHeadStyle(layout, theme);
       expect(resultStyling).to.eql({
         color: '#404040',
+        backgroundColor: '#323232',
         borderBottom: '1px solid #D9D9D9',
         borderRight: '1px solid #D9D9D9',
+        borderTop: '1px solid #D9D9D9',
       });
     });
-    it('should return header style from layout', () => {
+    it('should return all header style from layout', () => {
       const resultStyling = getHeadStyle(layout, theme);
       expect(resultStyling).to.eql({
         color: '#404040',
         fontSize: 44,
         padding: '22px 44px',
+        backgroundColor: '#323232',
         borderBottom: '1px solid #D9D9D9',
         borderRight: '1px solid #D9D9D9',
+        borderTop: '1px solid #D9D9D9',
       });
     });
   });

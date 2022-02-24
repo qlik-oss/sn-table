@@ -60,8 +60,14 @@ export const isUnset = (prop) => !prop || JSON.stringify(prop) === JSON.stringif
 
 export function getHeadStyle(layout, theme) {
   const header = layout.components?.[0]?.header;
-
-  return getBaseStyling(header, 'header', theme);
+  const headStyle = getBaseStyling(header, 'header', theme);
+  const setBackgroundColor = isDarkColor(headStyle.color) ? '#FAFAFA' : '#323232';
+  // When the table background color from sense theme is transparent,
+  // there is a default background color for the header
+  // to avoid seeing the table body through the header
+  headStyle.backgroundColor = theme.backgroundColor === 'transparent' ? setBackgroundColor : theme.backgroundColor;
+  headStyle.borderTop = theme.isBackgroundDarkColor ? '1px solid #F2F2F3' : '1px solid #D9D9D9';
+  return headStyle;
 }
 
 export function getBodyStyle(layout, theme) {
