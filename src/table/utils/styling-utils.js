@@ -110,6 +110,33 @@ export function getBodyStyle(layout, theme) {
   };
 }
 
+/**
+ * We can set the background color expression or text color expression\
+ * for measure data or dimension data.
+ * Ex:
+ * {"qHyperCubeDef": {
+ *     "qDimensions": [{
+ *        "qAttributeExpressions": [
+          {
+            "qExpression": "rgb(4,4,4)",
+            "qAttribute": true,
+            "id": "cellBackgroundColor"
+          },
+          {
+            "qExpression": "rgb(219, 42, 42)",
+            "qAttribute": true,
+            "id": "cellForegroundColor"
+          }
+        ],
+ *     }]
+ * }}
+ *
+ * get style from qAttributeExpressions in qDimensions or qMeasures
+ * @param {Object} styling - style from styling in CellRenderer in TableBodyWrapper
+ * @param {?Object} qAttrExps - qAttributeExpressions from each cell
+ * @param {Array} stylingInfo - stylingInfo from each column
+ * @returns {Object} cell font color and background color used for cells in specific columns
+ */
 export function getColumnStyle(styling, qAttrExps, stylingInfo) {
   const columnColors = {};
   qAttrExps?.qValues.forEach((val, i) => {
@@ -122,19 +149,31 @@ export function getColumnStyle(styling, qAttrExps, stylingInfo) {
   return {
     ...styling,
     color: columnColors.cellForegroundColor || styling.color,
-    background: columnColors.cellBackgroundColor,
+    backgroundColor: columnColors.cellBackgroundColor,
   };
 }
 
-export function getSelectionColors(cell, selectionState, background, tableBackgroundColor) {
+/**
+ * Get different styles for cells based on wether they are
+ * selected or possible to be selected or not possible to be selected
+ * @param {Object} cell - each cell in the table body
+ * @param {Object} selectionState - the selected cell
+ * @param {?String} columnBackgroundColor - the background color from qAttributeExpressions in qDimensions or qMeasures
+ * @param {?String} themeBackgroundColor - the background color from nebula theme or sense theme
+ * @returns {Object} different set of styles for different state of cells
+ */
+export function getSelectionColors(
+  cell,
+  selectionState,
+  columnBackgroundColor,
+  themeBackgroundColor = STYLING_DEFAULTS.WHITE
+) {
   const { colIdx, rows, api } = selectionState;
 
   if (api.isModal()) {
     if (colIdx !== cell.colIdx)
       return {
-        background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${
-          background || tableBackgroundColor || STYLING_DEFAULTS.WHITE
-        }`,
+        background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${columnBackgroundColor || themeBackgroundColor}`,
       };
 
     const match = (row) => row.qElemNumber === cell.qElemNumber;
@@ -146,6 +185,9 @@ export function getSelectionColors(cell, selectionState, background, tableBackgr
   return {};
 }
 
-export function getSelectionStyle(styling, cell, selectionState, tableBackgroundColor) {
-  return { ...styling, ...getSelectionColors(cell, selectionState, styling.background, tableBackgroundColor) };
+export function getSelectionStyle(styling, cell, selectionState, themeBackgroundColor) {
+  return {
+    ...styling,
+    ...getSelectionColors(cell, selectionState, styling.backgroundColor, themeBackgroundColor),
+  };
 }

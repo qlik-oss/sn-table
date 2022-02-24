@@ -279,7 +279,7 @@ describe('styling-utils', () => {
 
     it('should return styling with both new fontColor and backgroundColor when selected', () => {
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
-      expect(columnStyle.background).to.equal('#dddddd');
+      expect(columnStyle.backgroundColor).to.equal('#dddddd');
       expect(columnStyle.color).to.equal('#111111');
     });
     it('should return styling with new fontColor', () => {
@@ -287,7 +287,7 @@ describe('styling-utils', () => {
       stylingInfo = [stylingInfo[1]];
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
-      expect(columnStyle.background).to.equal(undefined);
+      expect(columnStyle.backgroundColor).to.equal(undefined);
       expect(columnStyle.color).to.equal('#111111');
     });
     it('should return styling with backgroundColor', () => {
@@ -295,7 +295,7 @@ describe('styling-utils', () => {
       stylingInfo = [stylingInfo[0]];
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
-      expect(columnStyle.background).to.equal('#dddddd');
+      expect(columnStyle.backgroundColor).to.equal('#dddddd');
       expect(columnStyle.color).to.equal(STYLING_DEFAULTS.FONT_COLOR);
     });
     it('should return styling unchanged', () => {
@@ -303,7 +303,7 @@ describe('styling-utils', () => {
       stylingInfo = [];
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
-      expect(columnStyle.background).to.equal(undefined);
+      expect(columnStyle.backgroundColor).to.equal(undefined);
       expect(columnStyle.color).to.equal('someFontColor');
     });
   });
@@ -312,42 +312,42 @@ describe('styling-utils', () => {
     let selectionState;
     let cell;
     let background;
-    let tableBackgroundColor;
+    let themeBackgroundColor;
 
     beforeEach(() => {
       background = undefined;
       selectionState = { colIdx: 1, rows: [{ qElemNumber: 1, rowIdx: 1 }], api: { isModal: () => true } };
       cell = { qElemNumber: 1, colIdx: 1 };
-      tableBackgroundColor = '#123456';
+      themeBackgroundColor = '#123456';
     });
 
     it('should return selected when selected styling', () => {
-      const selectionClass = getSelectionColors(cell, selectionState, background, tableBackgroundColor);
+      const selectionClass = getSelectionColors(cell, selectionState, background, themeBackgroundColor);
       expect(selectionClass).to.equal(SELECTION_STYLING.SELECTED);
     });
     it('should return excluded styling when other column', () => {
       cell.colIdx = 2;
 
-      const selectionClass = getSelectionColors(cell, selectionState, background, tableBackgroundColor);
+      const selectionClass = getSelectionColors(cell, selectionState, background, themeBackgroundColor);
       expect(selectionClass).to.eql({ background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, #123456` });
     });
     it('should return excluded styling with columns background when other column and background color exists', () => {
       cell.colIdx = 2;
       background = 'someColor';
 
-      const selectionClass = getSelectionColors(cell, selectionState, background, tableBackgroundColor);
+      const selectionClass = getSelectionColors(cell, selectionState, background, themeBackgroundColor);
       expect(selectionClass).to.eql({ background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, someColor` });
     });
     it('should return possible styling when active and available to select', () => {
       cell.qElemNumber = 2;
 
-      const selectionClass = getSelectionColors(cell, selectionState, background, tableBackgroundColor);
+      const selectionClass = getSelectionColors(cell, selectionState, background, themeBackgroundColor);
       expect(selectionClass).to.equal(SELECTION_STYLING.POSSIBLE);
     });
     it('should return empty object when no active selections', () => {
       selectionState = { rows: [], api: { isModal: () => false } };
 
-      const selectionClass = getSelectionColors(cell, selectionState, background, tableBackgroundColor);
+      const selectionClass = getSelectionColors(cell, selectionState, background, themeBackgroundColor);
       expect(selectionClass).to.eql({});
     });
   });
