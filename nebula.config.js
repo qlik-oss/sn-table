@@ -42,7 +42,7 @@ module.exports = {
             },
             content: {
               fontSize: '16px',
-              color: '232323',
+              color: '#232323',
               fontFamily: 'sans-serif',
             },
           },
