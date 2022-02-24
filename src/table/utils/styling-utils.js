@@ -91,13 +91,14 @@ export function getBodyStyle(layout, theme) {
   // the same as whatever the font color is when the hover background
   // color is a light color.
   // 2. There is a hover font color but no hover background color,
-  // when hovering, only a hover font color is applied and the hover
-  // background color disappears.
+  // when hovering, only the font color is applied and no hover
+  // background color is shown.
   // 3. There is no hover font color and no hover background color,
-  // when hovering, the default hover effect (light gray background)
+  // when hovering, the default hover effect (light gray background).
   // 4. There are both hover font and background colors, when hovering,
   // the hover font and background colors take effect.
-  // 5. Hover font color and background color from properties override those from theme.
+  // 5. The Hover font color and background color from properties override
+  // those from theme.
   const unsetHoverBackgroundColor = isUnset(content?.hoverColor) && !isHoverBackgroundColorFromTheme;
   const unsetHoverFontColor = isUnset(content?.hoverFontColor) && !isHoverFontColorFromTheme;
   const unsetHoverFontBackgroundColor = unsetHoverBackgroundColor && unsetHoverFontColor;
