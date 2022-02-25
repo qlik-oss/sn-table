@@ -58,19 +58,20 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
 // Both index === -1 and color === null must be true for the property to be unset
 export const isUnset = (prop) => !prop || JSON.stringify(prop) === JSON.stringify({ index: -1, color: null });
 
-export function getHeadStyle(layout, theme) {
+export function getHeaderStyle(layout, theme) {
   const header = layout.components?.[0]?.header;
-  const headStyle = getBaseStyling(header, 'header', theme);
-  const setBackgroundColor = isDarkColor(headStyle.color) ? '#FAFAFA' : '#323232';
-  // When the table background color from sense theme is transparent,
-  // there is a default background color for the header
-  // to avoid seeing the table body through the header
-  headStyle.backgroundColor = theme.backgroundColor === 'transparent' ? setBackgroundColor : theme.backgroundColor;
-  headStyle.borderTop = theme.isBackgroundDarkColor ? '1px solid #F2F2F3' : '1px solid #D9D9D9';
-  return headStyle;
+  const headerStyle = getBaseStyling(header, 'header', theme);
+
+  // When the table background color from the sense theme is transparent,
+  // there is a header background color depending on the header font color
+  // to avoid seeing the table body through the table head.
+  const headerBackgroundColor = isDarkColor(headerStyle.color) ? '#FAFAFA' : '#323232';
+  headerStyle.backgroundColor = theme.backgroundColor === 'transparent' ? headerBackgroundColor : theme.backgroundColor;
+  headerStyle.borderTop = theme.isBackgroundDarkColor ? '1px solid #F2F2F3' : '1px solid #D9D9D9';
+  return headerStyle;
 }
 
-export function getBodyStyle(layout, theme) {
+export function getBodyCellStyle(layout, theme) {
   const content = layout.components?.[0]?.content;
 
   // Cases when hoverEffect is true:
