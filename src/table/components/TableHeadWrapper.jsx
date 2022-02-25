@@ -5,7 +5,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import { getHeadStyle } from '../utils/styling-utils';
+import { getHeaderStyle } from '../utils/styling-utils';
 import { headHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusHead } from '../utils/handle-accessibility';
 
@@ -34,16 +34,16 @@ function TableHeadWrapper({
   setFocusedCellCoord,
   keyboard,
 }) {
-  const headStyle = {
-    'tr :last-child': {
+  const headRowStyle = {
+    '& :last-child': {
       borderRight: 0,
     },
   };
-  const headCellStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
+  const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name()]);
 
   return (
-    <TableHead sx={headStyle}>
-      <TableRow className="sn-table-row">
+    <TableHead>
+      <TableRow sx={headRowStyle} className="sn-table-row">
         {tableData.columns.map((column, columnIndex) => {
           const tabIndex = columnIndex === 0 && !keyboard.enabled ? 0 : -1;
           const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.dataColIdx;
@@ -51,7 +51,7 @@ function TableHeadWrapper({
 
           return (
             <TableCell
-              sx={headCellStyle}
+              sx={headerStyle}
               key={column.id}
               align={column.align}
               className="sn-table-head-cell sn-table-cell"
