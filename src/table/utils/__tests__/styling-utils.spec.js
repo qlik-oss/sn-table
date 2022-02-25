@@ -3,8 +3,8 @@ import {
   SELECTION_STYLING,
   getColor,
   getBaseStyling,
-  getHeadStyle,
-  getBodyStyle,
+  getHeaderStyle,
+  getBodyCellStyle,
   getColumnStyle,
   getSelectionColors,
 } from '../styling-utils';
@@ -118,7 +118,7 @@ describe('styling-utils', () => {
     });
   });
 
-  describe('getHeadStyle', () => {
+  describe('getHeaderStyle', () => {
     let layout;
 
     beforeEach(() => {
@@ -137,7 +137,7 @@ describe('styling-utils', () => {
     it('should return empty object except backgroundColor and border as the padding and font size are from sprout theme', () => {
       layout = {};
 
-      const resultStyling = getHeadStyle(layout, theme);
+      const resultStyling = getHeaderStyle(layout, theme);
       expect(resultStyling).to.eql({
         backgroundColor: '#323232',
         borderBottom: '1px solid #D9D9D9',
@@ -156,7 +156,7 @@ describe('styling-utils', () => {
         ],
       };
 
-      const resultStyling = getHeadStyle(layout, theme);
+      const resultStyling = getHeaderStyle(layout, theme);
       expect(resultStyling).to.eql({
         color: '#404040',
         backgroundColor: '#323232',
@@ -166,7 +166,7 @@ describe('styling-utils', () => {
       });
     });
     it('should return all header style from layout', () => {
-      const resultStyling = getHeadStyle(layout, theme);
+      const resultStyling = getHeaderStyle(layout, theme);
       expect(resultStyling).to.eql({
         color: '#404040',
         fontSize: 44,
@@ -179,7 +179,7 @@ describe('styling-utils', () => {
     });
   });
 
-  describe('getBodyStyle', () => {
+  describe('getBodyCellStyle', () => {
     let layout;
 
     beforeEach(() => {
@@ -212,7 +212,7 @@ describe('styling-utils', () => {
     it('should return styling with  default hoverBackgroundColor and hoverFontColor', () => {
       layout = {};
 
-      const resultStyling = getBodyStyle(layout, theme);
+      const resultStyling = getBodyCellStyle(layout, theme);
       expect(resultStyling).to.eql({
         hoverBackgroundColor: '#f4f4f4',
         hoverFontColor: '',
@@ -221,7 +221,7 @@ describe('styling-utils', () => {
       });
     });
     it('should return styling with fontColor, fontSize, padding plus default hoverBackgroundColor and hoverFontColor', () => {
-      const resultStyling = getBodyStyle(layout, theme);
+      const resultStyling = getBodyCellStyle(layout, theme);
       expect(resultStyling).to.eql({
         fontSize: 22,
         color: resolvedColor,
@@ -236,21 +236,21 @@ describe('styling-utils', () => {
     it('should return styling with no hoverBackgroundColor and the specified hoverFontColor', () => {
       layout.components[0].content.hoverFontColor.index = 1;
 
-      const resultStyling = getBodyStyle(layout, theme);
+      const resultStyling = getBodyCellStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).to.eql('');
       expect(resultStyling.hoverFontColor).to.eql(resolvedColor);
     });
     it('should return styling with dark hoverBackgroundColor and white hoverFontColor', () => {
       layout.components[0].content.hoverColor.index = 1;
 
-      const resultStyling = getBodyStyle(layout, theme);
+      const resultStyling = getBodyCellStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).to.eql(resolvedColor);
       expect(resultStyling.hoverFontColor).to.eql(STYLING_DEFAULTS.WHITE);
     });
     it('should return styling with light hoverBackgroundColor and no hoverFontColor', () => {
       layout.components[0].content.hoverColor.index = 2;
 
-      const resultStyling = getBodyStyle(layout, theme);
+      const resultStyling = getBodyCellStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).to.eql(altResolvedColor);
       expect(resultStyling.hoverFontColor).to.eql(STYLING_DEFAULTS.FONT_COLOR);
     });
@@ -258,7 +258,7 @@ describe('styling-utils', () => {
       layout.components[0].content.hoverColor.index = 1;
       layout.components[0].content.hoverFontColor.index = 2;
 
-      const resultStyling = getBodyStyle(layout, theme);
+      const resultStyling = getBodyCellStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).to.eql(resolvedColor);
       expect(resultStyling.hoverFontColor).to.eql(altResolvedColor);
     });
