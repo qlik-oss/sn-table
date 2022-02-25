@@ -40,7 +40,15 @@ function TableHeadWrapper({
     },
   };
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name()]);
-
+  // When you set the header font color,
+  // the sort label color should be same.
+  // When there is no header content color setting,
+  // the sort label color is depending on the header background color.
+  const tableSortLabelStyle = {
+    '&.Mui-active .MuiTableSortLabel-icon': {
+      color: headerStyle.color ? headerStyle.color : headerStyle.sortLabelColor,
+    },
+  };
   return (
     <TableHead>
       <TableRow sx={headRowStyle} className="sn-table-row">
@@ -73,7 +81,12 @@ function TableHeadWrapper({
               onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
               onClick={() => !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column)}
             >
-              <TableSortLabel active={isCurrentColumnActive} direction={column.sortDirection} tabIndex={-1}>
+              <TableSortLabel
+                sx={tableSortLabelStyle}
+                active={isCurrentColumnActive}
+                direction={column.sortDirection}
+                tabIndex={-1}
+              >
                 {column.label}
                 {isFocusInHead && (
                   <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>

@@ -68,6 +68,9 @@ export function getHeaderStyle(layout, theme) {
   const headerBackgroundColor = isDarkColor(headerStyle.color) ? '#FAFAFA' : '#323232';
   headerStyle.backgroundColor = theme.backgroundColor === 'transparent' ? headerBackgroundColor : theme.backgroundColor;
   headerStyle.borderTop = theme.isBackgroundDarkColor ? '1px solid #F2F2F3' : '1px solid #D9D9D9';
+  headerStyle.sortLabelColor = isDarkColor(headerStyle.backgroundColor)
+    ? 'rgba(255,255,255,0.9)'
+    : 'rgba(0, 0, 0, 0.54)';
   return headerStyle;
 }
 
