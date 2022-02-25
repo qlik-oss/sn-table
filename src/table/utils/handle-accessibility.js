@@ -52,7 +52,7 @@ export const handleResetFocus = ({
   announce,
 }) => {
   updateFocus({ focusType: 'removeTab', providedCell: findCellWithTabStop(rootElement) });
-  // If we have selections ongoing, we want to stay on the same column
+  // If you have selections ongoing, you want to stay on the same column
   const nextCell = hasSelections ? [1, focusedCellCoord[1]] : [0, 0];
   if (shouldAddTabstop) {
     // Only run this if updates come from inside table

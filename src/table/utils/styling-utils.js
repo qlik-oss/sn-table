@@ -111,8 +111,8 @@ export function getBodyStyle(layout, theme) {
 }
 
 /**
- * We can set the background color expression or text color expression\
- * for measure data or dimension data.
+ * You can set the background color expression and/or text color expression
+ * for measure data and/or dimension data.
  * Ex:
  * {"qHyperCubeDef": {
  *     "qDimensions": [{
@@ -154,13 +154,13 @@ export function getColumnStyle(styling, qAttrExps, stylingInfo) {
 }
 
 /**
- * Get different styles for cells based on wether they are
+ * Get the style for one cell based on wether it is
  * selected or possible to be selected or not possible to be selected
- * @param {Object} cell - each cell in the table body
- * @param {Object} selectionState - the selected cell
- * @param {?String} columnBackgroundColor - the background color from qAttributeExpressions in qDimensions or qMeasures
- * @param {?String} themeBackgroundColor - the background color from nebula theme or sense theme
- * @returns {Object} different set of styles for different state of cells
+ * @param {Object} cell - The info of one cell in the table body
+ * @param {Object} selectionState - The info of which cells are selected
+ * @param {?String} columnBackgroundColor - The background color from qAttributeExpressions in qDimensions or qMeasures
+ * @param {?String} [themeBackgroundColor='#fff'] - The background color from nebula theme or sense theme
+ * @returns {Object} The style for the provided cell
  */
 export function getSelectionColors(
   cell,
@@ -169,7 +169,7 @@ export function getSelectionColors(
   themeBackgroundColor = STYLING_DEFAULTS.WHITE
 ) {
   const { colIdx, rows, api } = selectionState;
-
+  window.console.log({ selectionState });
   if (api.isModal()) {
     if (colIdx !== cell.colIdx)
       return {
