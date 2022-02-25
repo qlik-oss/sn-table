@@ -61,10 +61,11 @@ export const isUnset = (prop) => !prop || JSON.stringify(prop) === JSON.stringif
 export function getHeaderStyle(layout, theme) {
   const header = layout.components?.[0]?.header;
   const headerStyle = getBaseStyling(header, 'header', theme);
-  const headerBackgroundColor = isDarkColor(headerStyle.color) ? '#FAFAFA' : '#323232';
+
   // When the table background color from sense theme is transparent,
-  // there is a default background color for the header
-  // to avoid seeing the table body through the table head
+  // there is a header background color depended on the header font color
+  // to avoid seeing the table body through the table head.
+  const headerBackgroundColor = isDarkColor(headerStyle.color) ? '#FAFAFA' : '#323232';
   headerStyle.backgroundColor = theme.backgroundColor === 'transparent' ? headerBackgroundColor : theme.backgroundColor;
   headerStyle.borderTop = theme.isBackgroundDarkColor ? '1px solid #F2F2F3' : '1px solid #D9D9D9';
   return headerStyle;
