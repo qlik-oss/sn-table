@@ -65,7 +65,7 @@ export function getHeadStyle(layout, theme) {
   return getBaseStyling(header, 'header', theme);
 }
 
-export function getBodyStyle(layout, theme) {
+export function getContentHoverBackgroundColor(theme) {
   const contentHoverBackgroundColor = theme.getStyle('object', 'straightTable.content.hover', 'backgroundColor');
   const contentBackgroundColor = theme.getStyle('object', 'straightTable.content', 'backgroundColor');
   const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
@@ -76,6 +76,10 @@ export function getBodyStyle(layout, theme) {
     contentHoverBackgroundColor === objectBackgroundColor
   );
 
+  return isHoverBackgroundColorFromTheme ? contentHoverBackgroundColor : undefined;
+}
+
+export function getContentHoverFontColor(theme) {
   const contentHoverFontColor = theme.getStyle('object', 'straightTable.content.hover', 'color');
   const contentFontColor = theme.getStyle('object', 'straightTable.content', 'color');
   const tableFontColor = theme.getStyle('object', 'straightTable', 'color');
@@ -83,7 +87,16 @@ export function getBodyStyle(layout, theme) {
     contentHoverFontColor === contentFontColor || contentHoverFontColor === tableFontColor
   );
 
+  return isHoverFontColorFromTheme ? contentHoverFontColor : undefined;
+}
+
+export function getBodyStyle(layout, theme) {
+  const contentHoverBackgroundColorFromTheme = getContentHoverBackgroundColor(theme);
+  const contentHoverFontColorFromTheme = getContentHoverFontColor(theme);
+
   const content = layout.components?.[0]?.content;
+  const contentHoverBackgroundColor = content?.hoverColor;
+  const contentHoverFontColor = content?.hoverFontColor;
 
   // Cases when hoverEffect is true:
   // 1. There is no hover font color but a hover background color,
@@ -101,13 +114,13 @@ export function getBodyStyle(layout, theme) {
   // when hovering, the hover font and the hover background color take effect.
   // 5. The hover font color and hover background color from properties have a
   // higher priorities than those from theme.
-  const unsetHoverBackgroundColor = isUnset(content?.hoverColor) && !isHoverBackgroundColorFromTheme;
-  const unsetHoverFontColor = isUnset(content?.hoverFontColor) && !isHoverFontColorFromTheme;
+  const unsetHoverBackgroundColor = isUnset(contentHoverBackgroundColor) && !contentHoverBackgroundColorFromTheme;
+  const unsetHoverFontColor = isUnset(contentHoverFontColor) && !contentHoverFontColorFromTheme;
   const unsetHoverFontBackgroundColor = unsetHoverBackgroundColor && unsetHoverFontColor;
 
-  let hoverBackgroundColor = isUnset(content?.hoverColor)
-    ? contentHoverBackgroundColor
-    : getColor(STYLING_DEFAULTS.HOVER_BACKGROUND, theme, content.hoverColor);
+  let hoverBackgroundColor = isUnset(contentHoverBackgroundColor)
+    ? contentHoverBackgroundColorFromTheme
+    : getColor(STYLING_DEFAULTS.HOVER_BACKGROUND, theme, contentHoverBackgroundColor);
   hoverBackgroundColor = unsetHoverBackgroundColor ? '' : hoverBackgroundColor;
   hoverBackgroundColor = unsetHoverFontBackgroundColor ? STYLING_DEFAULTS.HOVER_BACKGROUND : hoverBackgroundColor;
 
@@ -116,7 +129,7 @@ export function getBodyStyle(layout, theme) {
     : getColor(
         getAutoFontColor(hoverBackgroundColor),
         theme,
-        isUnset(content?.hoverFontColor) ? contentHoverFontColor : content.hoverFontColor
+        isUnset(contentHoverFontColor) ? contentHoverFontColorFromTheme : contentHoverFontColor
       );
 
   const contentStyle = getBaseStyling(content, 'content', theme);
