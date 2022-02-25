@@ -62,8 +62,8 @@ export function getHeaderStyle(layout, theme) {
   const header = layout.components?.[0]?.header;
   const headerStyle = getBaseStyling(header, 'header', theme);
 
-  // When the table background color from sense theme is transparent,
-  // there is a header background color depended on the header font color
+  // When the table background color from the sense theme is transparent,
+  // there is a header background color depending on the header font color
   // to avoid seeing the table body through the table head.
   const headerBackgroundColor = isDarkColor(headerStyle.color) ? '#FAFAFA' : '#323232';
   headerStyle.backgroundColor = theme.backgroundColor === 'transparent' ? headerBackgroundColor : theme.backgroundColor;
