@@ -24,7 +24,6 @@ function TableBodyWrapper({
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
-  window.console.log({ bodyStyle });
   const selectionsEnabled = !!selectionsAPI && !constraints.active;
   const getColumnRenderers = columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(() => getColumnRenderers);
