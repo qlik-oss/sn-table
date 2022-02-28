@@ -112,8 +112,8 @@ export function getBodyStyle(layout, theme) {
   // color and no hover font color).
   // 4. There are both a hover font and a hover background color,
   // when hovering, the hover font and the hover background color take effect.
-  // 5. The hover font color and hover background color from properties have a
-  // higher priorities than those from theme.
+  // Note that hover colors from properties have a
+  // higher priority than those from theme.
   const unsetHoverBackgroundColor = isUnset(contentHoverBackgroundColor) && !contentHoverBackgroundColorFromTheme;
   const unsetHoverFontColor = isUnset(contentHoverFontColor) && !contentHoverFontColorFromTheme;
   const unsetHoverFontBackgroundColor = unsetHoverBackgroundColor && unsetHoverFontColor;
