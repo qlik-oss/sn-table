@@ -80,14 +80,14 @@ export function getHeaderStyle(layout, theme) {
 
 export function getHoverBackgroundColor(theme) {
   const hoverBackgroundColor = theme.getStyle('object', 'straightTable.content.hover', 'backgroundColor');
-  const contentBackgroundColor = theme.getStyle('object', 'straightTable.content', 'backgroundColor');
   const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
   const objectBackgroundColor = theme.getStyle('object', '', 'backgroundColor');
-  const isHoverBackgroundColorFromTheme = !(
-    hoverBackgroundColor === contentBackgroundColor ||
-    hoverBackgroundColor === tableBackgroundColor ||
-    hoverBackgroundColor === objectBackgroundColor
-  );
+  const isHoverBackgroundColorFromTheme =
+    !(hoverBackgroundColor === tableBackgroundColor || hoverBackgroundColor === objectBackgroundColor) ||
+    // hoverBackgroundColor is green
+    // tableBackgroundColor is red
+    // objectBackgroundColor is green
+    (hoverBackgroundColor !== tableBackgroundColor && hoverBackgroundColor === objectBackgroundColor);
 
   return isHoverBackgroundColorFromTheme ? hoverBackgroundColor : undefined;
 }
