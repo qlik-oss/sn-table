@@ -9,7 +9,7 @@
   "dependencies": {
     "@nebula.js/sn-table": "latest",
     "@nebula.js/stardust": "latest",
-    "enigma.js": "^2.7.3",
-    "parcel": "^2.0.0"
+    "enigma.js": "^2.8.0",
+    "parcel": "^2.3.2"
   }
 }
