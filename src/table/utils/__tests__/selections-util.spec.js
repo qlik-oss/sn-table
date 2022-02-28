@@ -219,7 +219,7 @@ describe('selections-utils', () => {
       });
     });
 
-    it('should announce deselected value and exited selection mode when we have deselected the last value', () => {
+    it('should announce deselected value and exited selection mode when you have deselected the last value', () => {
       rowsLength = 0;
       isAddition = false;
       handleAnnounceSelectionStatus({ announce, rowsLength, isAddition });

@@ -123,8 +123,9 @@ export default function TableWrapper(props) {
   };
 
   const paperStyle = {
-    border: theme.isBackgroundDarkColor ? '1px solid #F2F2F3' : '1px solid #D9D9D9',
-    borderBottom: 0,
+    borderWidth: '0px 1px 0px',
+    borderStyle: 'solid',
+    borderColor: theme.isBackgroundDarkColor ? ' #F2F2F3' : '#D9D9D9',
     height: '100%',
     backgroundColor: theme.backgroundColor,
     boxShadow: 'none',
