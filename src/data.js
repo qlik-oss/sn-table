@@ -3,7 +3,7 @@ export default () => ({
     {
       path: '/qHyperCubeDef',
       dimensions: {
-        min: 1,
+        min: 0,
         max: 15,
       },
       measures: {

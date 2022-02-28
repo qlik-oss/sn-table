@@ -1,17 +1,21 @@
+# Contribution Guiding
+
 ## Developing
 
 1. Install with `yarn`
 1. Transpile code: `yarn build` (or `yarn build:watch`)
-1. Link to Sense Desktop (locally on your computer):
-   1. In this repo: `yarn link`
-   1. In sense-client repo: `yarn link "@nebula.js/sn-kpi"`
-1. Or, run it using nebula with `yarn start`
+1. Run it using nebula dev environment with `yarn start`
+1. Or, Upload the /dist folder as an extension on [Qlik Sense Enterprise for Windows](https://help.qlik.com/en-US/sense-developer/November2021/Subsystems/Extensions/Content/Sense_Extensions/Howtos/deploy-extensions.htm) or [Qlik Sense SaaS](https://help.qlik.com/en-US/cloud-services/Subsystems/Hub/Content/Sense_Hub/Admin/mc-extensions.htm)
 
 ## Testing
 
 Run unit tests with:
 
 `yarn test:unit`
+
+Run rendering tests with:
+
+`yarn test:rendering`
 
 ## Linting
 
