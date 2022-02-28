@@ -78,7 +78,7 @@ export default function TablePaginationActions({
             {Array(lastPageIdx + 1)
               .fill()
               .map((_, index) => (
-                <option key={String(index)} value={index}>
+                <option key={String(_)} value={index}>
                   {index + 1}
                 </option>
               ))}
