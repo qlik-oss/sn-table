@@ -46,7 +46,7 @@ function TableHeadWrapper({
   // the sort label color is depending on the header background color.
   const tableSortLabelStyle = {
     '&.Mui-active .MuiTableSortLabel-icon': {
-      color: headerStyle.color ? headerStyle.color : headerStyle.sortLabelColor,
+      color: headerStyle.color ?? headerStyle.sortLabelColor,
     },
   };
   return (
