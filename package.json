@@ -79,7 +79,7 @@
     "chai": "4.3.4",
     "chai-dom": "1.11.0",
     "eslint": "8.6.0",
-    "eslint-config-airbnb": "18.2.1",
+    "eslint-config-airbnb": "19.0.4",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-import": "2.25.4",
     "eslint-plugin-jsx-a11y": "6.5.1",
