@@ -40,15 +40,12 @@ function TableHeadWrapper({
     },
   };
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name()]);
-  // When you set the header font color,
-  // the sort label color should be same.
-  // When there is no header content color setting,
-  // the sort label color is depending on the header background color.
   const tableSortLabelStyle = {
     '&.Mui-active .MuiTableSortLabel-icon': {
-      color: headerStyle.color ?? headerStyle.sortLabelColor,
+      color: headerStyle.sortLabelColor,
     },
   };
+
   return (
     <TableHead>
       <TableRow sx={headRowStyle} className="sn-table-row">
