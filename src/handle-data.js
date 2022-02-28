@@ -49,7 +49,7 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
     setPageInfo({ ...pageInfo, page: 0 });
     return null;
   }
-  // If the number of cells exceeds 10k then we need to lower the rows per page to the maximum possible value
+  // If the number of cells exceeds 10k then you need to lower the rows per page to the maximum possible value
   if (height * width > MAX_CELLS) {
     setPageInfo({ ...pageInfo, rowsPerPage: getHighestPossibleRpp(width, rowsPerPageOptions), page: 0 });
     return null;

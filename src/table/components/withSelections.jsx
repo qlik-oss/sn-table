@@ -10,18 +10,17 @@ export default function withSelections(CellComponent) {
       cell,
       selectionDispatch,
       styling,
-      tableBackgroundColor,
+      themeBackgroundColor,
       announce,
       column,
       ...passThroughProps
     } = props;
-
     const handleMouseUp = (evt) =>
       cell.isDim && evt.button === 0 && selectCell({ selectionState, cell, selectionDispatch, evt, announce });
 
     const selectionStyling = useMemo(
-      () => getSelectionStyle(styling, cell, selectionState, tableBackgroundColor),
-      [styling, cell, selectionState, tableBackgroundColor]
+      () => getSelectionStyle(styling, cell, selectionState, themeBackgroundColor),
+      [styling, cell, selectionState, themeBackgroundColor]
     );
 
     return <CellComponent {...passThroughProps} styling={selectionStyling} onMouseUp={handleMouseUp} />;
@@ -29,12 +28,12 @@ export default function withSelections(CellComponent) {
 
   HOC.defaultProps = {
     column: null,
-    tableBackgroundColor: null,
+    themeBackgroundColor: null,
   };
 
   HOC.propTypes = {
     styling: PropTypes.object.isRequired,
-    tableBackgroundColor: PropTypes.string,
+    themeBackgroundColor: PropTypes.string,
     selectionState: PropTypes.object.isRequired,
     cell: PropTypes.object.isRequired,
     selectionDispatch: PropTypes.func.isRequired,
