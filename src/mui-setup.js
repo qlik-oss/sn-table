@@ -20,6 +20,10 @@ export default function muiSetup(direction) {
       outline: 'none',
     };
     muiConfig.components.MuiTableContainer.styleOverrides.root = {};
+    muiConfig.components.MuiFormLabel.styleOverrides.root['&.Mui-focused'] = { color: 'inherit' };
+    muiConfig.components.MuiInputBase.styleOverrides.root = {
+      backgroundColor: 'inherit',
+    };
     muiConfig.components.MuiInputBase.styleOverrides.input.padding = '0px 12px';
     muiConfig.components.MuiInputBase.styleOverrides.input.border = '1px solid transparent';
     muiConfig.components.MuiOutlinedInput.styleOverrides.input.padding = '0px 12px';
@@ -36,6 +40,5 @@ export default function muiSetup(direction) {
     muiConfig.components.MuiFormControl.styleOverrides.root.paddingRight = 14;
   }
 
-  const tableTheme = createTheme({ ...muiConfig, direction });
-  return tableTheme;
+  return createTheme({ ...muiConfig, direction });
 }

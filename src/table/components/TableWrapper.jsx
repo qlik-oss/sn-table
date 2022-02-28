@@ -113,13 +113,23 @@ export default function TableWrapper(props) {
     });
   }, [rows.length, size.qcy, size.qcx, page]);
 
-  const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
+  const SelectProps = {
+    inputProps: {
+      'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
+      'data-testid': 'select',
+      tabIndex: !keyboard.enabled || keyboard.active ? 0 : -1,
+    },
+    native: true,
+  };
+
   const paperStyle = {
-    border: '1px solid #D9D9D9',
-    borderBottom: 0,
+    borderWidth: '0px 1px 0px',
+    borderStyle: 'solid',
+    borderColor: theme.isBackgroundDarkColor ? ' #F2F2F2' : '#D9D9D9',
     height: '100%',
-    backgroundColor: tableBackgroundColor,
+    backgroundColor: theme.backgroundColor,
     boxShadow: 'none',
+    borderRadius: 'unset',
   };
   const tableContainerStyle = constraints.active
     ? {
@@ -127,7 +137,7 @@ export default function TableWrapper(props) {
         overflow: 'hidden',
       }
     : {
-        height: 'calc(100% - 54px)',
+        height: 'calc(100% - 53px)',
         overflow: 'auto',
       };
   const paperTablePaginationStyle = {
@@ -135,11 +145,20 @@ export default function TableWrapper(props) {
     justifyContent: 'flex-end',
     alignItems: 'center',
     paddingRight: 1,
-    backgroundColor: tableBackgroundColor,
+    backgroundColor: theme.backgroundColor,
     boxShadow: 'none',
     borderRadius: 0,
-    borderBottom: '1px solid #D9D9D9',
+    borderBottom: theme.isBackgroundDarkColor ? '1px solid #F2F2F2' : '1px solid #D9D9D9',
   };
+  const tablePaginationStyle = [
+    constraints.active && { display: 'none' },
+    {
+      color: theme.isBackgroundDarkColor ? 'rgba(255, 255, 255, 0.9)' : '#404040',
+      '& .MuiNativeSelect-icon': {
+        color: theme.isBackgroundDarkColor ? 'rgba(255, 255, 255, 0.9)' : '#404040',
+      },
+    },
+  ];
 
   return (
     <Paper
@@ -171,7 +190,6 @@ export default function TableWrapper(props) {
           <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
           <TableBodyWrapper
             {...props}
-            tableBackgroundColor={tableBackgroundColor}
             announce={announce}
             focusedCellCoord={focusedCellCoord}
             setFocusedCellCoord={setFocusedCellCoord}
@@ -182,24 +200,14 @@ export default function TableWrapper(props) {
       </TableContainer>
       <Paper sx={paperTablePaginationStyle}>
         <TablePagination
-          sx={constraints.active && { display: 'none' }}
+          sx={tablePaginationStyle}
           rowsPerPageOptions={fixedRowsPerPage ? [rowsPerPage] : rowsPerPageOptions}
           component="div"
           count={size.qcy}
           rowsPerPage={rowsPerPage}
           labelRowsPerPage={`${translator.get('SNTable.Pagination.RowsPerPage')}:`}
           page={page}
-          SelectProps={{
-            inputProps: {
-              'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
-              'data-testid': 'select',
-              style: {
-                color: '#404040',
-              },
-              tabIndex: !keyboard.enabled || keyboard.active ? 0 : -1,
-            },
-            native: true,
-          }}
+          SelectProps={SelectProps}
           labelDisplayedRows={({ from, to, count }) =>
             rect.width > 250 && translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
           }
@@ -208,6 +216,7 @@ export default function TableWrapper(props) {
           onPageChange={() => {}}
         />
         <TablePaginationActions
+          theme={theme}
           direction={direction}
           page={page}
           onPageChange={handleChangePage}

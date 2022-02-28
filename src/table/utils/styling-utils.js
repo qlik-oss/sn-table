@@ -47,6 +47,8 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
     color: styleObj?.fontColor ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj?.fontColor) : color,
     fontSize: styleObj?.fontSize || fontSize,
     padding: styleObj?.fontSize && `${styleObj?.fontSize / 2}px ${styleObj?.fontSize}px`,
+    borderBottom: theme.isBackgroundDarkColor ? '1px solid #F2F2F2' : '1px solid #D9D9D9',
+    borderRight: theme.isBackgroundDarkColor ? '1px solid #F2F2F2' : '1px solid #D9D9D9',
   };
   // Remove all Undefined Values from an Object
   Object.keys(baseStyle).forEach((key) => baseStyle[key] == null && delete baseStyle[key]);
@@ -56,13 +58,26 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
 // Both index === -1 and color === null must be true for the property to be unset
 export const isUnset = (prop) => !prop || JSON.stringify(prop) === JSON.stringify({ index: -1, color: null });
 
-export function getHeadStyle(layout, theme) {
+export function getHeaderStyle(layout, theme) {
   const header = layout.components?.[0]?.header;
+  const headerStyle = getBaseStyling(header, 'header', theme);
 
-  return getBaseStyling(header, 'header', theme);
+  // When the table background color from the sense theme is transparent,
+  // there is a header background color depending on the header font color
+  // to avoid seeing the table body through the table head.
+  const headerBackgroundColor = isDarkColor(headerStyle.color) ? '#FAFAFA' : '#323232';
+  headerStyle.backgroundColor = theme.backgroundColor === 'transparent' ? headerBackgroundColor : theme.backgroundColor;
+  headerStyle.borderTop = theme.isBackgroundDarkColor ? '1px solid #F2F2F2' : '1px solid #D9D9D9';
+  // When you set the header font color,
+  // the sort label color should be same.
+  // When there is no header content color setting,
+  // the sort label color is depending on the header background color.
+  headerStyle.sortLabelColor =
+    headerStyle.color ?? isDarkColor(headerStyle.backgroundColor) ? 'rgba(255,255,255,0.9)' : 'rgba(0, 0, 0, 0.54)';
+  return headerStyle;
 }
 
-export function getBodyStyle(layout, theme) {
+export function getBodyCellStyle(layout, theme) {
   const content = layout.components?.[0]?.content;
 
   // Cases when hoverEffect is true:
@@ -102,6 +117,33 @@ export function getBodyStyle(layout, theme) {
   };
 }
 
+/**
+ * You can set the background color expression and/or text color expression
+ * for measure data and/or dimension data.
+ * Ex:
+ * {"qHyperCubeDef": {
+ *     "qDimensions": [{
+ *        "qAttributeExpressions": [
+          {
+            "qExpression": "rgb(4,4,4)",
+            "qAttribute": true,
+            "id": "cellBackgroundColor"
+          },
+          {
+            "qExpression": "rgb(219, 42, 42)",
+            "qAttribute": true,
+            "id": "cellForegroundColor"
+          }
+        ],
+ *     }]
+ * }}
+ *
+ * get style from qAttributeExpressions in qDimensions or qMeasures
+ * @param {Object} styling - style from styling in CellRenderer in TableBodyWrapper
+ * @param {?Object} qAttrExps - qAttributeExpressions from each cell
+ * @param {Array} stylingInfo - stylingInfo from each column
+ * @returns {Object} cell font color and background color used for cells in specific columns
+ */
 export function getColumnStyle(styling, qAttrExps, stylingInfo) {
   const columnColors = {};
   qAttrExps?.qValues.forEach((val, i) => {
@@ -114,19 +156,31 @@ export function getColumnStyle(styling, qAttrExps, stylingInfo) {
   return {
     ...styling,
     color: columnColors.cellForegroundColor || styling.color,
-    background: columnColors.cellBackgroundColor,
+    backgroundColor: columnColors.cellBackgroundColor,
   };
 }
 
-export function getSelectionColors(cell, selectionState, background, tableBackgroundColor) {
+/**
+ * Get the style for one cell based on wether it is
+ * selected or possible to be selected or not possible to be selected
+ * @param {Object} cell - The info of one cell in the table body
+ * @param {Object} selectionState - The info of which cells are selected
+ * @param {?String} columnBackgroundColor - The background color from qAttributeExpressions in qDimensions or qMeasures
+ * @param {?String} [themeBackgroundColor='#fff'] - The background color from nebula theme or sense theme
+ * @returns {Object} The style for the provided cell
+ */
+export function getSelectionColors(
+  cell,
+  selectionState,
+  columnBackgroundColor,
+  themeBackgroundColor = STYLING_DEFAULTS.WHITE
+) {
   const { colIdx, rows, api } = selectionState;
 
   if (api.isModal()) {
     if (colIdx !== cell.colIdx)
       return {
-        background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${
-          background || tableBackgroundColor || STYLING_DEFAULTS.WHITE
-        }`,
+        background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${columnBackgroundColor || themeBackgroundColor}`,
       };
 
     const match = (row) => row.qElemNumber === cell.qElemNumber;
@@ -138,6 +192,9 @@ export function getSelectionColors(cell, selectionState, background, tableBackgr
   return {};
 }
 
-export function getSelectionStyle(styling, cell, selectionState, tableBackgroundColor) {
-  return { ...styling, ...getSelectionColors(cell, selectionState, styling.background, tableBackgroundColor) };
+export function getSelectionStyle(styling, cell, selectionState, themeBackgroundColor) {
+  return {
+    ...styling,
+    ...getSelectionColors(cell, selectionState, styling.backgroundColor, themeBackgroundColor),
+  };
 }
