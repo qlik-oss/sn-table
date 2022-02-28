@@ -14,9 +14,9 @@
     "build": "parcel build src/index.html --dist-dir ./dist"
   },
   "dependencies": {
-    "@nebula.js/stardust": "2.2.0",
+    "@nebula.js/stardust": "2.6.1",
     "@nebula.js/sn-table": "1.4.2",
-    "enigma.js": "^2.6.3",
-    "parcel": "^2.0.1"
+    "enigma.js": "^2.8.0",
+    "parcel": "^2.3.2"
   }
 }
