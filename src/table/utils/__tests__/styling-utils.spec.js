@@ -143,6 +143,7 @@ describe('styling-utils', () => {
         borderBottom: '1px solid #D9D9D9',
         borderRight: '1px solid #D9D9D9',
         borderTop: '1px solid #D9D9D9',
+        sortLabelColor: 'rgba(255,255,255,0.9)',
       });
     });
     it('should return header style with only fontColor except backgroundColor and border', () => {
@@ -163,6 +164,7 @@ describe('styling-utils', () => {
         borderBottom: '1px solid #D9D9D9',
         borderRight: '1px solid #D9D9D9',
         borderTop: '1px solid #D9D9D9',
+        sortLabelColor: 'rgba(255,255,255,0.9)',
       });
     });
     it('should return all header style from layout', () => {
@@ -175,6 +177,7 @@ describe('styling-utils', () => {
         borderBottom: '1px solid #D9D9D9',
         borderRight: '1px solid #D9D9D9',
         borderTop: '1px solid #D9D9D9',
+        sortLabelColor: 'rgba(255,255,255,0.9)',
       });
     });
   });
