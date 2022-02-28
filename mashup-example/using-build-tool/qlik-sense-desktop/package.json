@@ -1,0 +1,15 @@
+{
+  "name": "table-mashup",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "parcel index.html --open",
+    "build": "parcel build index.html --dist-dir ./dist"
+  },
+  "dependencies": {
+    "@nebula.js/sn-table": "latest",
+    "@nebula.js/stardust": "latest",
+    "enigma.js": "^2.8.0",
+    "parcel": "^2.3.2"
+  }
+}
