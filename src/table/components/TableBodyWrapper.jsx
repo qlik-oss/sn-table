@@ -4,7 +4,7 @@ import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import { addSelectionListeners, reducer } from '../utils/selections-utils';
 import getCellRenderer from './renderer';
-import { getBodyStyle } from '../utils/styling-utils';
+import { getBodyCellStyle } from '../utils/styling-utils';
 import { bodyHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
 
@@ -23,8 +23,7 @@ function TableBodyWrapper({
 }) {
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
-  const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
-
+  const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme.name()]);
   const selectionsEnabled = !!selectionsAPI && !constraints.active;
   const getColumnRenderers = columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(() => getColumnRenderers);
@@ -44,30 +43,27 @@ function TableBodyWrapper({
     addSelectionListeners({ api: selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
   }, []);
 
-  const bodyCellStyle = {
+  const bodyRowAndCellStyle = {
+    'tr :last-child': {
+      borderRight: 0,
+    },
     '& td, th': {
-      fontSize: bodyStyle.fontSize,
-      padding: bodyStyle.padding,
-    },
-    '& td:last-of-type': {
-      borderRight: 0,
-    },
-    '& th:last-of-type': {
-      borderRight: 0,
+      fontSize: bodyCellStyle.fontSize,
+      padding: bodyCellStyle.padding,
     },
   };
 
   const rowCellStyle = {
     '&&:hover': {
       '& td:not(.selected), th:not(.selected)': {
-        backgroundColor: bodyStyle.hoverBackgroundColor,
-        color: bodyStyle.hoverFontColor,
+        backgroundColor: bodyCellStyle.hoverBackgroundColor,
+        color: bodyCellStyle.hoverFontColor,
       },
     },
   };
 
   return (
-    <TableBody sx={bodyCellStyle}>
+    <TableBody sx={bodyRowAndCellStyle}>
       {rows.map((row, rowIndex) => (
         <TableRow
           hover={hoverEffect}
@@ -89,8 +85,8 @@ function TableBodyWrapper({
                   column={column}
                   key={column.id}
                   align={column.align}
-                  styling={{ color: bodyStyle.color }}
-                  tableBackgroundColor={theme.backgroundColor}
+                  styling={{ color: bodyCellStyle.color }}
+                  themeBackgroundColor={theme.backgroundColor}
                   selectionState={selectionState}
                   selectionDispatch={selectionDispatch}
                   tabIndex={-1}

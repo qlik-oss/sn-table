@@ -6,8 +6,8 @@ export function addSelectionListeners({ api, selectionDispatch, setShouldRefocus
     selectionDispatch({ type: 'clear' });
   };
   const resetSelectionsAndSetupRefocus = () => {
-    // if there is focus in the chart, set shouldRefocus so that we should either focus or just set the tabstop, after data has reloaded.
-    // if there is no focus on the chart, make sure we blur and focus the entire chart
+    // if there is focus in the chart, set shouldRefocus so that you should either focus or just set the tabstop, after data has reloaded.
+    // if there is no focus on the chart, make sure you blur and focus the entire chart
     if (tableWrapperRef.current?.contains(document.activeElement)) {
       setShouldRefocus();
     } else if (keyboard.enabled) {
