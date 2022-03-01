@@ -4,7 +4,9 @@
 
 # sn-table
 
-table supernova for [nebula.js]
+Table supernova for [nebula.js]
+
+More specifics and information about the sn-table can be found in [the Qlik developer portal](https://qlik.dev/libraries-and-tools/visualizations/table).
 
 ## Mashup Usage
 
@@ -32,11 +34,9 @@ nuked.render({
 });
 ```
 
-Look into [Build a simple mashup using nebula.js](https://qlik.dev/tutorials/build-a-simple-mashup-using-nebulajs) to learn more.
+Look into [Build a simple mashup using nebula.js](https://qlik.dev/tutorials/build-a-simple-mashup-using-nebulajs) and [Embed a visualization](https://qlik.dev/libraries-and-tools/nebulajs/rendering) to learn more.
 
-[See full example](./mashup-example) of the mashup usage.
-
-More specifics and information about the sn-table can be found in [the Qlik developer portal](https://qlik.dev/libraries-and-tools/visualizations/table).
+[Check full examples](./mashup-example) of the mashup usage.
 
 ## Visualization Extension Usage
 
@@ -48,21 +48,19 @@ Install all dependencies:
 yarn
 ```
 
-Build nebula.js visualization:
+Build a nebula.js visualization as a Qlik Sense extension:
 
 ```sh
 yarn build
 ```
 
-Build a nebula visualization as a Qlik Sense extension:
-
-```sh
-yarn sense
-```
-
 |                          [Saas Edition of Qlik Sense]                           |                     [Qlik Sense Enterprise]                      |                            [Qlik Sense Desktop]                            |
 | :-----------------------------------------------------------------------------: | :--------------------------------------------------------------: | :------------------------------------------------------------------------: |
 | Copy sn-table-ext into https://your-tenant.us.qlikcloud.com/console/extensions/ | Copy sn-table-ext into Qlik Management Console (QMC)->Extensions | Copy sn-table-ext into ..\Users\<UserName>\Documents\Qlik\Sense\Extensions |
+
+### Run a sn-table extension against the Saas Edition of Qlik Sense
+
+After building a nebula.js visualization, you can also run the sn-table extension against the Saas Edition of Qlik Sense in the local nebula web development server by adding your webIntegrationId and pointing the engine URL to your tenant following [the bottom of the page](https://qlik.dev/libraries-and-tools/nebulajs/nebula-serve).
 
 ## API
 
