@@ -183,8 +183,11 @@ export function getSelectionColors(
         background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${columnBackgroundColor || themeBackgroundColor}`,
       };
 
-    const match = (row) => row.qElemNumber === cell.qElemNumber;
-    if (rows.some(match)) return SELECTION_STYLING.SELECTED;
+    for (let i = 0; i < rows.length; i++) {
+      if (rows[i].qElemNumber === cell.qElemNumber) {
+        return SELECTION_STYLING.SELECTED;
+      }
+    }
 
     return SELECTION_STYLING.POSSIBLE;
   }

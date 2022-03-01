@@ -7,7 +7,7 @@ export default function registerLocale(translator) {
     const g = translator.get(t);
 
     // if the translated string is different from its id,
-    // you assume the translations already exist for current locale
+    // the translations are assumed to already exist for the current locale
     if (g !== t) {
       return;
     }
