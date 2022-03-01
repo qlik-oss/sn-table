@@ -64,6 +64,25 @@ yarn sense
 | :-----------------------------------------------------------------------------: | :--------------------------------------------------------------: | :------------------------------------------------------------------------: |
 | Copy sn-table-ext into https://your-tenant.us.qlikcloud.com/console/extensions/ | Copy sn-table-ext into Qlik Management Console (QMC)->Extensions | Copy sn-table-ext into ..\Users\<UserName>\Documents\Qlik\Sense\Extensions |
 
+### Test extension against the Saas Edition of Qlik Sense
+
+1. Adding your webIntegrationId in nebula.config.js as shown below:
+
+```
+module.exports = {
+  serve: {
+    webIntegrationId: 'your_web_intergration_id'
+  },
+};
+```
+
+You can learn how to get webIntegrationId (qlik-web-integration-id) from [here](https://qlik.dev/tutorials/build-a-simple-mashup-using-nebulajs#set-up-a-qlik-sense-saas-account).
+
+2. Install with `yarn`
+3. Transpile code with `yarn build` (or `yarn build:watch`)
+4. Run it using nebula dev environment with `yarn start`
+5. Pointing the engine url to your tenant: wss://tenant.us.qlik-stage.com (Note: http://localhost:8000 should be added to the whitelist of origins).
+
 ## API
 
 The API can also be found in [the Qlik developer portal](https://qlik.dev/apis/javascript/nebula-table)
