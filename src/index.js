@@ -34,7 +34,7 @@ export default function supernova(env) {
     component() {
       const rootElement = useElement();
       const layout = useStaleLayout();
-      const { direction, paginationContainer } = useOptions();
+      const { direction, footerContainer } = useOptions();
       const model = useModel();
       const constraints = useConstraints();
       const translator = useTranslator();
@@ -69,7 +69,7 @@ export default function supernova(env) {
             changeSortOrder,
             keyboard,
             rect,
-            paginationContainer,
+            footerContainer,
           });
         }
       }, [

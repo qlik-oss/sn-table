@@ -31,7 +31,7 @@ export default function TableWrapper(props) {
     keyboard,
     rect,
     direction,
-    paginationContainer,
+    footerContainer,
     announcer, // this is only for testing purposes
   } = props;
   const { size, rows, columns } = tableData;
@@ -123,7 +123,7 @@ export default function TableWrapper(props) {
   };
 
   const tableContainerStyle = {
-    height: constraints.active || paginationContainer ? '100%' : 'calc(100% - 52px)',
+    height: constraints.active || footerContainer ? '100%' : 'calc(100% - 52px)',
     overflow: constraints.active ? 'hidden' : 'auto',
   };
 
@@ -183,11 +183,9 @@ export default function TableWrapper(props) {
   };
 
   let paginationBar;
-  if (paginationContainer) {
+  if (footerContainer) {
     paginationBar = (
-      <Portal target={paginationContainer}>
-        {paginationContent(paginationContainer.getBoundingClientRect().width)}
-      </Portal>
+      <Portal target={footerContainer}>{paginationContent(footerContainer.getBoundingClientRect().width)}</Portal>
     );
   } else {
     paginationBar = <Paper sx={paperTablePaginationStyle}>{paginationContent(rect.width)}</Paper>;
@@ -239,6 +237,7 @@ export default function TableWrapper(props) {
 TableWrapper.defaultProps = {
   announcer: null,
   direction: null,
+  footerContainer: null,
 };
 
 TableWrapper.propTypes = {
@@ -251,7 +250,7 @@ TableWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
   rect: PropTypes.object.isRequired,
-  paginationContainer: PropTypes.object.isRequired,
+  footerContainer: PropTypes.object,
   direction: PropTypes.string,
   announcer: PropTypes.func,
 };
