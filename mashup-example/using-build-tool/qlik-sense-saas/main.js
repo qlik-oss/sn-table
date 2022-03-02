@@ -1,12 +1,13 @@
 /* eslint-disable */
 import embed from './configure';
 import connect from './connect';
+import './style.css';
 
 async function run() {
   const app = await connect({
-    url: '<URL>',
-    webIntegrationId: '<Qlik web integration id>',
-    appId: '<App id>',
+    url: '<Qlik tenant url>', // 'https://xxxx.us.qlik.com',
+    webIntegrationId: '<Qlik web integration id>', // 'xxx-xxxxxxx-xxxxxxxx',
+    appId: '<App id>', // 'xxxx-xxx-xxx-xxx-xxxxxxx',
   });
 
   const nuked = embed(app);

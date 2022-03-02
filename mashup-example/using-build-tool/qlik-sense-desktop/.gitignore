@@ -1,1 +1,14 @@
-.parcel-cache
+# Logs
+logs
+*.log
+yarn-debug.log*
+yarn-error.log*
+
+node_modules
+dist
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
