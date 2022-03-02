@@ -7,6 +7,6 @@
 1. Copy the `Example_Dashboard.qvf` app from `data/apps` into Qlik Sense Saas.
 
 2. Following https://qlik.dev/tutorials/build-a-simple-mashup-using-nebulajs to
-   configure the connection.
+   configure the connection. (Note: http://localhost:3000 should be added to the whitelist of origins)
 
-3. run `yarn build` and `yarn start`.
+3. run `yarn install` and `yarn dev`.

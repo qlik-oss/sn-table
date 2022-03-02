@@ -27,6 +27,16 @@ export const SELECTION_STYLING = {
   },
 };
 
+export function getPadding(styleObj, defaultPadding) {
+  let padding = defaultPadding;
+  if (styleObj?.padding) {
+    ({ padding } = styleObj);
+  } else if (styleObj?.fontSize) {
+    padding = `${styleObj.fontSize / 2}px ${styleObj.fontSize}px`;
+  }
+  return padding;
+}
+
 export function getColor(defaultColor, theme, color = {}) {
   const resolvedColor = theme.getColorPickerColor(color);
   return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
@@ -46,7 +56,7 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
     fontFamily,
     color: styleObj?.fontColor ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj?.fontColor) : color,
     fontSize: styleObj?.fontSize || fontSize,
-    padding: styleObj?.fontSize && `${styleObj?.fontSize / 2}px ${styleObj?.fontSize}px`,
+    padding: getPadding(styleObj, STYLING_DEFAULTS.PADDING),
     borderBottom: theme.isBackgroundDarkColor ? '1px solid #F2F2F2' : '1px solid #D9D9D9',
     borderRight: theme.isBackgroundDarkColor ? '1px solid #F2F2F2' : '1px solid #D9D9D9',
   };
