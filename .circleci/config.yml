@@ -70,7 +70,9 @@ jobs:
             chmod +x ./cc-test-reporter
             ./cc-test-reporter before-build
             yarn test:unit -- --mocha.bail false
-            ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
+            if [ ! -z "$CC_TEST_REPORTER_ID" ]; then
+              ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
+            fi
       - store_artifacts:
           path: coverage
       - run:
@@ -134,15 +136,15 @@ jobs:
       - run:
           name: Create version.txt
           command: |
-              set -x
-              if [ -n "${CIRCLE_TAG}" ]; then
-                  version=${CIRCLE_TAG#v}
-              else
-                  version=$(git describe --tags --abbrev=7 --match "v*")
-                  version=${version#v}
-              fi
-              echo "$version" > ./version.txt
-              echo "Building $version"
+            set -x
+            if [ -n "${CIRCLE_TAG}" ]; then
+                version=${CIRCLE_TAG#v}
+            else
+                version=$(git describe --tags --abbrev=7 --match "v*")
+                version=${version#v}
+            fi
+            echo "$version" > ./version.txt
+            echo "Building $version"
       - run:
           name: Prepare API Compliance
           command: |
