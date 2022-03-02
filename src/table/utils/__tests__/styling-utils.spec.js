@@ -116,6 +116,12 @@ describe('styling-utils', () => {
         borderRight: '1px solid #D9D9D9',
       });
     });
+    it('should return styling with custom padding', () => {
+      styleObj.padding = '4px';
+
+      const resultStyling = getBaseStyling(styleObj, objetName, theme);
+      expect(resultStyling.padding).to.eql('4px');
+    });
   });
 
   describe('getHeaderStyle', () => {
