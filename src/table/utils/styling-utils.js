@@ -25,6 +25,16 @@ export const SELECTION_STYLING = {
   },
 };
 
+export function getPadding(styleObj, defaultPadding) {
+  let padding = defaultPadding;
+  if (styleObj.padding) {
+    ({ padding } = styleObj);
+  } else if (styleObj.fontSize) {
+    padding = `${styleObj.fontSize / 2}px ${styleObj.fontSize}px`;
+  }
+  return padding;
+}
+
 export function getColor(color = {}, defaultColor, theme) {
   const resolvedColor = theme.getColorPickerColor(color);
   return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
@@ -36,7 +46,7 @@ export const getAutoFontColor = (backgroundColor) =>
 export const getBaseStyling = (styleObj, theme) => ({
   color: getColor(styleObj.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme),
   fontSize: styleObj.fontSize || STYLING_DEFAULTS.FONT_SIZE,
-  padding: styleObj.fontSize ? `${styleObj.fontSize / 2}px ${styleObj.fontSize}px` : STYLING_DEFAULTS.PADDING,
+  padding: getPadding(styleObj, STYLING_DEFAULTS.PADDING),
 });
 
 // Both index === -1 and color === null must be true for the property to be unset

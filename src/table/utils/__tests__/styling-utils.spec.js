@@ -100,6 +100,12 @@ describe('styling-utils', () => {
         padding: '7px 14px',
       });
     });
+    it('should return styling with custom padding', () => {
+      styleObj.padding = '4px';
+
+      const resultStyling = getBaseStyling(styleObj, theme);
+      expect(resultStyling.padding).to.eql('4px');
+    });
   });
 
   describe('getHeadStyle', () => {
