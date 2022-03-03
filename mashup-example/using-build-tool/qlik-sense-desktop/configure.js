@@ -1,21 +1,32 @@
 import { embed } from '@nebula.js/stardust';
 import table from '@nebula.js/sn-table';
+import customTheme from './sense-dark-horizon';
+
+const types = [
+  {
+    name: 'table',
+    load: () => Promise.resolve(table),
+  },
+];
+
+const themes = [
+  {
+    id: 'myTheme',
+    load: () => Promise.resolve(customTheme),
+  },
+];
 
 const nuked = embed.createConfiguration({
+  types,
+  themes,
   context: {
-    theme: 'dark',
+    theme: 'myTheme',
     language: 'en-US',
     keyboardNavigation: true,
     constraints: {
       active: true, // do not allow interactions
     },
   },
-  types: [
-    {
-      name: 'table',
-      load: () => Promise.resolve(table),
-    },
-  ],
 });
 
 export default nuked;
