@@ -46,11 +46,13 @@ if (reactNative) {
   buildArgs.reactNative = true;
 }
 
+// this function will sync packages.
 const configureReactNative = () => {
   // cleanup old build
   const reactNativeFolder = './react-native';
   fs.removeSync(path.resolve(process.cwd(), `${reactNativeFolder}/dist`));
   rnSnTablePackage.version = snTablePackage.version;
+  rnSnTablePackage.peerDependencies = { ...rnSnTablePackage.peerDependencies, ...snTablePackage.peerDependencies };
   fs.writeFileSync(`${reactNativeFolder}/package.json`, JSON.stringify(rnSnTablePackage, null, 2));
 };
 
