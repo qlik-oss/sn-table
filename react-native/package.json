@@ -1,7 +1,7 @@
 {
   "name": "@nebula.js/react-native-sn-table",
-  "version": "1.4.13",
-  "description": "table supernova",
+  "version": "1.4.2",
+  "description": "react native table supernova",
   "license": "MIT",
   "author": "QlikTech International AB",
   "keywords": [
