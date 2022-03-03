@@ -88,32 +88,14 @@ export function getHeaderStyle(layout, theme) {
   return headerStyle;
 }
 
-export function getHoverBackgroundColor(theme) {
-  const hoverBackgroundColor = theme.getStyle('object', 'straightTable.content.hover', 'backgroundColor');
-  const tableBackgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
-  const objectBackgroundColor = theme.getStyle('object', '', 'backgroundColor');
-  const isHoverBackgroundColorFromTheme =
-    !(hoverBackgroundColor === tableBackgroundColor || hoverBackgroundColor === objectBackgroundColor) ||
-    // hoverBackgroundColor is green
-    // tableBackgroundColor is red
-    // objectBackgroundColor is green
-    (hoverBackgroundColor !== tableBackgroundColor && hoverBackgroundColor === objectBackgroundColor);
-
-  return isHoverBackgroundColorFromTheme ? hoverBackgroundColor : undefined;
-}
-
-export function getHoverFontColor(theme) {
-  const hoverFontColor = theme.getStyle('object', 'straightTable.content.hover', 'color');
-  const contentFontColor = theme.getStyle('object', 'straightTable.content', 'color');
-  const tableFontColor = theme.getStyle('object', 'straightTable', 'color');
-  const isHoverFontColorFromTheme = !(hoverFontColor === contentFontColor || hoverFontColor === tableFontColor);
-
-  return isHoverFontColorFromTheme ? hoverFontColor : undefined;
-}
-
 export function getBodyCellStyle(layout, theme) {
-  const hoverBackgroundColorFromTheme = getHoverBackgroundColor(theme);
-  const hoverFontColorFromTheme = getHoverFontColor(theme);
+  const hoverBackgroundColorFromTheme = theme.getStyle(
+    'object',
+    'straightTable.content.hover',
+    'backgroundColor',
+    null
+  );
+  const hoverFontColorFromTheme = theme.getStyle('object', 'straightTable.content.hover', 'color', null);
 
   const content = layout.components?.[0]?.content;
   const contentHoverBackgroundColor = content?.hoverColor;
