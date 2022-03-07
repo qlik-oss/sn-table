@@ -26,6 +26,14 @@ import muiSetup from './mui-setup';
 
 const nothing = async () => {};
 
+const renderWithCarbon = ({ env, translator, rootElement, model, theme, selectionsAPI, app, rect, layout }) => {
+  if (env.carbon) {
+    registerLocale(translator);
+    const changeSortOrder = sortingFactory(model);
+    render(rootElement, { layout, model, manageData, theme, selectionsAPI, changeSortOrder, app, rect });
+  }
+};
+
 export default function supernova(env) {
   return {
     qae: {
@@ -97,11 +105,7 @@ export default function supernova(env) {
 
       // this is the one we want to use for carbon
       useEffect(() => {
-        if (env.carbon) {
-          registerLocale(translator);
-          const changeSortOrder = sortingFactory(model);
-          render(rootElement, { layout, model, manageData, theme, selectionsAPI, changeSortOrder, app, rect });
-        }
+        renderWithCarbon({ env, translator, rootElement, model, theme, selectionsAPI, app, rect, layout });
       }, [layout, model, selectionsAPI.isModal(), theme.name(), manageData, translator.language(), app]);
 
       useEffect(
