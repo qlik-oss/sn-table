@@ -1,11 +1,11 @@
-version: '2'
+version: "2"
 plugins:
   duplication:
     config:
       languages:
         javascript:
           filters:
-            - '(property (Identifier propTypes))'
+            - "(property (Identifier propTypes))"
           mass_threshold: 65
 checks:
   method-lines:
@@ -15,7 +15,8 @@ checks:
     config:
       threshold: 10
 exclude_patterns:
-  - 'src/**/*.spec.js'
-  - 'src/**/*.spec.jsx'
-  - '*config*'
-  - 'test/**/__fixtures__'
+  - "src/**/*.spec.js"
+  - "src/**/*.spec.jsx"
+  - "*config*"
+  - "test/**/__fixtures__"
+  - "theme"
