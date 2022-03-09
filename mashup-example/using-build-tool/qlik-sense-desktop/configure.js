@@ -1,6 +1,8 @@
 import { embed } from '@nebula.js/stardust';
-import table from '@nebula.js/sn-table';
-import customTheme from './sense-dark-horizon';
+// import table from '@nebula.js/sn-table';
+// To load local sn-table extension
+import table from '../../../core/esm/index';
+import customTheme from '../../../theme/sense-dark-horizon';
 
 const types = [
   {
