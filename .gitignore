@@ -1,4 +1,4 @@
-
+# misc
 *.log
 *.log
 .cache
@@ -8,13 +8,24 @@
 .npmrc
 stats.html
 
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npmrc
+.eslintcache
+package-lock.json
+
+# dependencies
 node_modules
-coverage
+
+# production
 dist/
 core/esm
 all.json
-
 sn-table-ext
 
-**/test/*/__artifacts__/diff
-**/test/*/__artifacts__/regression
+# testing
+coverage
+test/rendering/artifacts
+test/rendering/test-report
+test/rendering/state.json

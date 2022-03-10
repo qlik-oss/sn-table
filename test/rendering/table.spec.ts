@@ -1,22 +1,22 @@
 import fs from 'fs';
 import path from 'path';
 import serve from '@nebula.js/cli-serve';
-import createPuppet from './utils/puppet';
-import events from './utils/events';
 import createNebulaRoutes from './utils/routes';
+import createPlaywright from './utils/playwright';
+import { test, expect } from '@playwright/test';
 
 const paths = {
   artifacts: path.join(__dirname, '__artifacts__'),
   fixtures: path.join(__dirname, '__fixtures__'),
 };
 
-describe('sn table: Rendering tests', () => {
-  let s;
-  let puppet;
+test.describe('sn table: Rendering tests', () => {
+  let nebulaServer;
+  let playwright;
   let route;
 
-  before(async () => {
-    s = await serve({
+  test.beforeAll(async () => {
+    nebulaServer = await serve({
       // the entry is equal to path.resolve(__dirname, '../../dist/sn-table.js'),
       // so before run the testing, yarn build should run first to generate /dist
       entry: path.resolve(__dirname, '../../'),
@@ -26,21 +26,11 @@ describe('sn table: Rendering tests', () => {
       themes: [],
       fixturePath: 'test/rendering/__fixtures__',
     });
-
-    puppet = createPuppet(page);
-    route = createNebulaRoutes(s.url);
+    route = createNebulaRoutes(nebulaServer.url);
   });
 
-  after(async () => {
-    s.close();
-  });
-
-  beforeEach(() => {
-    events.addListeners(page);
-  });
-
-  afterEach(() => {
-    events.removeListeners(page);
+  test.afterAll(async () => {
+    nebulaServer.close();
   });
 
   // Iterate testing fixture files
@@ -49,17 +39,18 @@ describe('sn table: Rendering tests', () => {
     const fixturePath = `./${file}`;
 
     // Create test case per testing fixture file
-    it(name, async () => {
+    test(name, async ({ page }) => {
+      playwright = createPlaywright(page);
       // Render chart based on testing fixture file
       // in Nebula serve using Enigma mocker
       const renderUrl = await route.renderFixture(fixturePath);
       console.log({ renderUrl });
       // Open page in Nebula which renders fixture
-      await puppet.open(renderUrl);
+      await playwright.open(renderUrl);
       // Puppeteer Capture screenshot
-      const img = await puppet.screenshot();
+      const img = await playwright.screenshot();
       // Compare screenshot with baseline image
-      expect(img).to.matchImageOf(name, { artifactsPath: paths.artifacts }, 0.035);
+      expect(img).toMatchSnapshot('scenario_1.png');
     });
   });
 });

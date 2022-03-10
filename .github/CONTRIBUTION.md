@@ -15,7 +15,9 @@ Run unit tests with:
 
 Run rendering tests with:
 
-`yarn test:rendering`
+`sudo ./test/rendering/run-rendering-test.sh`
+
+Look into [overview and guide](../test/rendering/README.md) to learn more about the rendering test
 
 ## Linting
 

@@ -47,7 +47,9 @@ jobs:
     <<: *defaults
     docker:
       - image: circleci/node:16.7.0-browsers
-      - image: browserless/chrome:1.51.1-puppeteer-1.20.0
+      - image: mcr.microsoft.com/playwright:focal
+    environment:
+      NODE_ENV: development # Needed if playwright is in `devDependencies`
     steps:
       - attach_workspace:
           at: ~/table
@@ -74,12 +76,17 @@ jobs:
       - store_artifacts:
           path: coverage
       - run:
-          name: Rendering tests
-          command: yarn run test:rendering
+          name: Install playwright
+          command: npx playwright install
+      - run:
+          name: Run rendering tests
+          command: yarn test:rendering
       - store_artifacts:
-          path: ./test/rendering/__artifacts__
-      - store_test_results:
-          path: coverage/junit
+          path: test/rendering/table.spec.ts-snapshots
+      - store_artifacts:
+          path: test/rendering/artifacts
+      - store_artifacts:
+          path: test/rendering/test-report
       - persist_to_workspace:
           root: ~/table
           paths:
@@ -134,15 +141,15 @@ jobs:
       - run:
           name: Create version.txt
           command: |
-              set -x
-              if [ -n "${CIRCLE_TAG}" ]; then
-                  version=${CIRCLE_TAG#v}
-              else
-                  version=$(git describe --tags --abbrev=7 --match "v*")
-                  version=${version#v}
-              fi
-              echo "$version" > ./version.txt
-              echo "Building $version"
+            set -x
+            if [ -n "${CIRCLE_TAG}" ]; then
+                version=${CIRCLE_TAG#v}
+            else
+                version=$(git describe --tags --abbrev=7 --match "v*")
+                version=${version#v}
+            fi
+            echo "$version" > ./version.txt
+            echo "Building $version"
       - run:
           name: Prepare API Compliance
           command: |
