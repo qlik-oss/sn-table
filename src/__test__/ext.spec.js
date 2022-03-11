@@ -1,10 +1,9 @@
-import { expect } from 'chai';
 import ext, { indexAdded, indexRemoved, min, getDescription } from '../ext';
 
 describe('ext', () => {
   const env = {
     translator: {
-      get: sinon.spy(),
+      get: jest.fn(),
     },
   };
   let array;
@@ -25,21 +24,21 @@ describe('ext', () => {
 
         it('should return true for valid expression', () => {
           const isExpression = dimensionItems.visibilityCondition.isExpression(val);
-          expect(isExpression).to.be.true;
+          expect(isExpression).toBeTruthy();
         });
 
         it('should return false for non string', () => {
           val = 1;
 
           const isExpression = dimensionItems.visibilityCondition.isExpression(val);
-          expect(isExpression).to.be.false;
+          expect(isExpression).toBeFalsy();
         });
 
         it('should return false for string only containing white space', () => {
           val = ' ';
 
           const isExpression = dimensionItems.visibilityCondition.isExpression(val);
-          expect(isExpression).to.be.false;
+          expect(isExpression).toBeFalsy();
         });
       });
 
@@ -58,20 +57,20 @@ describe('ext', () => {
 
         it('should return true when auto is false', () => {
           const show = dimensionItems.textAlign.show(data);
-          expect(show).to.be.true;
+          expect(show).toBeTruthy();
         });
 
         it('should return false when auto is true', () => {
           data.qDef.textAlign.auto = true;
 
           const show = dimensionItems.textAlign.show(data);
-          expect(show).to.be.false;
+          expect(show).toBeFalsy();
         });
 
         it('should return false when textAlign is undefined', () => {
           data.qDef.textAlign = undefined;
           const show = dimensionItems.textAlign.show(data);
-          expect(show).to.be.false;
+          expect(show).toBeFalsy();
         });
       });
     });
@@ -96,8 +95,8 @@ describe('ext', () => {
         it('should not change size when in allowed value', () => {
           stylingItems.headerFontSize.change(data);
           stylingItems.fontSize.change(data);
-          expect(data.header.fontSize).to.equal(14);
-          expect(data.content.fontSize).to.equal(14);
+          expect(data.header.fontSize).toEqual(14);
+          expect(data.content.fontSize).toEqual(14);
         });
 
         it('should change size to 5 when less than 5', () => {
@@ -106,8 +105,8 @@ describe('ext', () => {
 
           stylingItems.headerFontSize.change(data);
           stylingItems.fontSize.change(data);
-          expect(data.header.fontSize).to.equal(5);
-          expect(data.content.fontSize).to.equal(5);
+          expect(data.header.fontSize).toEqual(5);
+          expect(data.content.fontSize).toEqual(5);
         });
 
         it('should change size to 300 when more than 300', () => {
@@ -116,8 +115,8 @@ describe('ext', () => {
 
           stylingItems.headerFontSize.change(data);
           stylingItems.fontSize.change(data);
-          expect(data.header.fontSize).to.equal(300);
-          expect(data.content.fontSize).to.equal(300);
+          expect(data.header.fontSize).toEqual(300);
+          expect(data.content.fontSize).toEqual(300);
         });
       });
 
@@ -133,15 +132,15 @@ describe('ext', () => {
         });
 
         it('should return true when hoverEffect is true', () => {
-          expect(stylingItems.hoverColor.show(data)).to.be.true;
-          expect(stylingItems.hoverFontColor.show(data)).to.be.true;
+          expect(stylingItems.hoverColor.show(data)).toBeTruthy();
+          expect(stylingItems.hoverFontColor.show(data)).toBeTruthy();
         });
 
-        it('should return true when hoverEffect is true', () => {
+        it('should return false when hoverEffect is false', () => {
           data.content.hoverEffect = false;
 
-          expect(stylingItems.hoverColor.show(data)).to.be.false;
-          expect(stylingItems.hoverFontColor.show(data)).to.be.false;
+          expect(stylingItems.hoverColor.show(data)).toBeFalsy();
+          expect(stylingItems.hoverFontColor.show(data)).toBeFalsy();
         });
       });
     });
@@ -153,7 +152,7 @@ describe('ext', () => {
       index = 2;
 
       indexAdded(array, index);
-      expect(array).to.eql([0, 1, 2]);
+      expect(array).toEqual([0, 1, 2]);
     });
 
     it('should add index in the end of array and increment elements that are >= index', () => {
@@ -161,7 +160,7 @@ describe('ext', () => {
       index = 1;
 
       indexAdded(array, index);
-      expect(array).to.eql([2, 0, 3, 1]);
+      expect(array).toEqual([2, 0, 3, 1]);
     });
   });
 
@@ -171,7 +170,7 @@ describe('ext', () => {
       index = 2;
 
       indexRemoved(array, index);
-      expect(array).to.eql([0, 1]);
+      expect(array).toEqual([0, 1]);
     });
 
     it('should remove index the array and decrement', () => {
@@ -179,24 +178,24 @@ describe('ext', () => {
       index = 2;
 
       indexRemoved(array, index);
-      expect(array).to.eql([1, 0, 2]);
+      expect(array).toEqual([1, 0, 2]);
     });
   });
 
   describe('min', () => {
     it('should return 0 when > 0', () => {
-      expect(min(3)).to.equal(0);
+      expect(min(3)).toEqual(0);
     });
 
     it('should return 1 when not > 0', () => {
-      expect(min(0)).to.equal(1);
+      expect(min(0)).toEqual(1);
     });
   });
 
   describe('description', () => {
     it('should call translator', () => {
       getDescription(env);
-      expect(env.translator.get).to.have.been.calledWith('Visualizations.Descriptions.Column');
+      expect(env.translator.get).toHaveBeenCalledWith('Visualizations.Descriptions.Column');
     });
   });
 
@@ -221,14 +220,14 @@ describe('ext', () => {
       describe('add', () => {
         it('should update columnWidths', () => {
           measures.add(null, null, hcHandler);
-          expect(hcHandler.hcProperties.columnWidths).to.eql([1, 1, -1]);
+          expect(hcHandler.hcProperties.columnWidths).toEqual([1, 1, -1]);
         });
       });
 
       describe('remove', () => {
         it('should update columnWidths', () => {
           measures.remove(null, null, hcHandler, 1);
-          expect(hcHandler.hcProperties.columnWidths).to.eql([1]);
+          expect(hcHandler.hcProperties.columnWidths).toEqual([1]);
         });
       });
 
@@ -238,14 +237,14 @@ describe('ext', () => {
         describe('add', () => {
           it('should update columnWidths', () => {
             dimensions.add(null, null, hcHandler);
-            expect(hcHandler.hcProperties.columnWidths).to.eql([-1, 1, 1]);
+            expect(hcHandler.hcProperties.columnWidths).toEqual([-1, 1, 1]);
           });
         });
 
         describe('remove', () => {
           it('should update columnWidths', () => {
             dimensions.remove(null, null, hcHandler, 1);
-            expect(hcHandler.hcProperties.columnWidths).to.eql([1]);
+            expect(hcHandler.hcProperties.columnWidths).toEqual([1]);
           });
         });
       });

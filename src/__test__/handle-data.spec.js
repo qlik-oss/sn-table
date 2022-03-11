@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import manageData, { getColumnOrder, getColumnInfo } from '../handle-data';
 import { generateDataPages, generateLayout } from './generate-test-data';
 
@@ -26,7 +25,7 @@ describe('handle-data', () => {
 
     it('should return column info for dimension', () => {
       const columnInfo = getColumnInfo(layout.qHyperCube, colIdx);
-      expect(columnInfo).to.eql(getExpectedInfo(colIdx, true));
+      expect(columnInfo).toEqual(getExpectedInfo(colIdx, true));
     });
 
     it('should return column info for dimension with align center', () => {
@@ -41,35 +40,35 @@ describe('handle-data', () => {
       expected.stylingInfo = ['someId'];
 
       const columnInfo = getColumnInfo(layout.qHyperCube, colIdx);
-      expect(columnInfo).to.eql(expected);
+      expect(columnInfo).toEqual(expected);
     });
 
     it('should return false for hidden column', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qError = { qErrorCode: 7005 };
 
       const columnInfo = getColumnInfo(layout.qHyperCube, colIdx);
-      expect(columnInfo).to.be.false;
+      expect(columnInfo).toBeFalsy();
     });
 
     it('should return column info for measure', () => {
       colIdx = 3;
 
       const columnInfo = getColumnInfo(layout.qHyperCube, colIdx);
-      expect(columnInfo).to.eql(getExpectedInfo(colIdx, false));
+      expect(columnInfo).toEqual(getExpectedInfo(colIdx, false));
     });
   });
 
   describe('getColumnOrder', () => {
     it('should return qColumnOrder when length of qColumnOrder equals the number of columns', () => {
       const columnLayout = getColumnOrder(layout.qHyperCube);
-      expect(columnLayout).to.equal(layout.qHyperCube.qColumnOrder);
+      expect(columnLayout).toEqual(layout.qHyperCube.qColumnOrder);
     });
 
     it('should return [0, 1, ... , number of columns] when length of qColumnOrder does not equal number of columns', () => {
       layout.qHyperCube.qColumnOrder = [];
 
       const columnLayout = getColumnOrder(layout.qHyperCube);
-      expect(columnLayout).to.eql([0, 1, 2, 3]);
+      expect(columnLayout).toEqual([0, 1, 2, 3]);
     });
   });
 
@@ -81,27 +80,27 @@ describe('handle-data', () => {
     beforeEach(() => {
       pageInfo = { page: 1, rowsPerPage: 100, rowsPerPageOptions: [10, 25, 100] };
       model = { getHyperCubeData: async () => generateDataPages(100, 4) };
-      setPageInfo = sinon.spy();
+      setPageInfo = jest.fn();
     });
 
     it('should return size, rows and columns correctly formatted', async () => {
       const { size, rows, columns } = await manageData(model, layout, pageInfo, setPageInfo);
 
-      expect(size).to.equal(layout.qHyperCube.qSize);
-      expect(rows.length).to.equal(100);
-      expect(rows[0]['col-0'].qText).to.equal('2');
-      expect(rows[0]['col-0'].rowIdx).to.equal(100);
-      expect(rows[0]['col-0'].colIdx).to.equal(0);
-      expect(rows[0]['col-0'].rawRowIdx).to.equal(0);
-      expect(rows[0]['col-0'].rawColIdx).to.equal(2);
-      expect(rows[0]['col-1'].qText).to.equal('0');
-      expect(rows[0]['col-1'].rowIdx).to.equal(100);
-      expect(rows[0]['col-1'].colIdx).to.equal(1);
-      expect(rows[0]['col-1'].rawRowIdx).to.equal(0);
-      expect(rows[0]['col-1'].rawColIdx).to.equal(0);
-      expect(columns.length).to.equal(4);
+      expect(size).toEqual(layout.qHyperCube.qSize);
+      expect(rows).toHaveLength(100);
+      expect(rows[0]['col-0'].qText).toEqual('2');
+      expect(rows[0]['col-0'].rowIdx).toEqual(100);
+      expect(rows[0]['col-0'].colIdx).toEqual(0);
+      expect(rows[0]['col-0'].rawRowIdx).toEqual(0);
+      expect(rows[0]['col-0'].rawColIdx).toEqual(2);
+      expect(rows[0]['col-1'].qText).toEqual('0');
+      expect(rows[0]['col-1'].rowIdx).toEqual(100);
+      expect(rows[0]['col-1'].colIdx).toEqual(1);
+      expect(rows[0]['col-1'].rawRowIdx).toEqual(0);
+      expect(rows[0]['col-1'].rawColIdx).toEqual(0);
+      expect(columns).toHaveLength(4);
       columns.forEach((c, i) => {
-        expect(c.id).to.equal(Object.keys(rows[0])[i + 1]); // skip the first key
+        expect(c.id).toEqual(Object.keys(rows[0])[i + 1]); // skip the first key
       });
     });
 
@@ -109,8 +108,8 @@ describe('handle-data', () => {
       layout.qHyperCube.qSize.qcy = 100;
       const tableData = await manageData(model, layout, pageInfo, setPageInfo);
 
-      expect(tableData).to.be.null;
-      expect(setPageInfo).to.have.been.calledOnceWith({ ...pageInfo, page: 0 });
+      expect(tableData).toBeNull();
+      expect(setPageInfo).toHaveBeenCalledWith({ ...pageInfo, page: 0 });
     });
 
     it('should return null and call setPageInfo with rowsPerPage 25 when height * width > 10000 and width is 120', async () => {
@@ -118,8 +117,8 @@ describe('handle-data', () => {
       layout = generateLayout(60, 60, 1100);
       const tableData = await manageData(model, layout, pageInfo, setPageInfo);
 
-      expect(tableData).to.be.null;
-      expect(setPageInfo).to.have.been.calledOnceWith({ ...pageInfo, rowsPerPage: 25 });
+      expect(tableData).toBeNull();
+      expect(setPageInfo).toHaveBeenCalledWith({ ...pageInfo, rowsPerPage: 25 });
     });
 
     it('should return null and call setPageInfo with rowsPerPage 4 when height * width > 10000 and width is 2200', async () => {
@@ -127,8 +126,8 @@ describe('handle-data', () => {
       layout = generateLayout(1100, 1100, 100);
       const tableData = await manageData(model, layout, pageInfo, setPageInfo);
 
-      expect(tableData).to.be.null;
-      expect(setPageInfo).to.have.been.calledOnceWith({ ...pageInfo, rowsPerPage: 4 });
+      expect(tableData).toBeNull();
+      expect(setPageInfo).toHaveBeenCalledWith({ ...pageInfo, rowsPerPage: 4 });
     });
 
     it('should return null and call setPageInfo with rowsPerPage 4 when width > 10000', async () => {
@@ -136,8 +135,8 @@ describe('handle-data', () => {
       layout = generateLayout(6000, 6000, 100);
       const tableData = await manageData(model, layout, pageInfo, setPageInfo);
 
-      expect(tableData).to.be.null;
-      expect(setPageInfo).to.have.been.calledOnceWith({ ...pageInfo, rowsPerPage: 0 });
+      expect(tableData).toBeNull();
+      expect(setPageInfo).toHaveBeenCalledWith({ ...pageInfo, rowsPerPage: 0 });
     });
   });
 });

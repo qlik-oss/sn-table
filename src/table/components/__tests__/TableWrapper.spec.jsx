@@ -1,8 +1,5 @@
-import './rtl-setup';
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import { expect } from 'chai';
-import sinon from 'sinon';
 
 import TableWrapper from '../TableWrapper';
 import * as TableBodyWrapper from '../TableBodyWrapper';
@@ -24,9 +21,9 @@ describe('<TableWrapper />', () => {
   let announcer;
 
   beforeEach(() => {
-    sinon.stub(TableBodyWrapper, 'default').returns(<tbody />);
-    sinon.stub(TableHeadWrapper, 'default').returns(<thead />);
-    sinon.stub(handleKeyPress, 'handleTableWrapperKeyDown').returns(sinon.spy());
+    jest.spyOn(TableBodyWrapper, 'default').mockImplementation(() => <tbody />);
+    jest.spyOn(TableHeadWrapper, 'default').mockImplementation(() => <thead />);
+    jest.spyOn(handleKeyPress, 'handleTableWrapperKeyDown').mockImplementation(() => jest.fn());
 
     tableData = {
       size: { qcy: 200 },
@@ -34,7 +31,7 @@ describe('<TableWrapper />', () => {
       columns: [{}],
     };
     pageInfo = { page: 0, rowsPerPage: 100 };
-    setPageInfo = sinon.spy();
+    setPageInfo = jest.fn();
     constraints = {};
     rowsPerPage = 100;
     selectionsAPI = {
@@ -43,7 +40,7 @@ describe('<TableWrapper />', () => {
     modal = false;
     rootElement = {
       getElementsByClassName: () => [],
-      getElementsByTagName: () => [{ clientHeight: {}, contains: sinon.spy() }],
+      getElementsByTagName: () => [{ clientHeight: {}, contains: jest.fn() }],
       querySelector: () => {},
     };
     keyboard = { enabled: false, active: false };
@@ -51,13 +48,10 @@ describe('<TableWrapper />', () => {
     rect = {
       width: 551,
     };
-    announcer = sinon.spy();
+    announcer = jest.fn();
   });
 
-  afterEach(() => {
-    sinon.verifyAndRestore();
-    sinon.resetHistory();
-  });
+  afterEach(() => jest.clearAllMocks());
 
   it('should render table', () => {
     const { queryByLabelText, queryByText, queryByTestId } = render(
@@ -76,12 +70,12 @@ describe('<TableWrapper />', () => {
 
     expect(
       queryByLabelText(`${'SNTable.Accessibility.RowsAndColumns'} ${'SNTable.Accessibility.NavigationInstructions'}`)
-    ).to.be.visible;
-    expect(queryByLabelText('SNTable.Pagination.RowsPerPage')).to.be.visible;
-    expect(queryByTestId('table-wrapper')).to.has.attr('tabindex', '-1');
-    expect(queryByTestId('table-wrapper')).to.has.attr('role', 'application');
-    expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).to.be.visible;
-    expect(queryByText(rowsPerPage)).to.be.visible;
+    ).toBeVisible();
+    expect(queryByLabelText('SNTable.Pagination.RowsPerPage')).toBeVisible();
+    expect(queryByTestId('table-wrapper').getAttribute('tabindex')).toEqual('-1');
+    expect(queryByTestId('table-wrapper').getAttribute('role')).toEqual('application');
+    expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeVisible();
+    expect(queryByText(rowsPerPage)).toBeVisible();
   });
 
   it('should call handleTableWrapperKeyDown when press control key on the table', () => {
@@ -100,7 +94,7 @@ describe('<TableWrapper />', () => {
     );
 
     fireEvent.keyDown(queryByLabelText('SNTable.Pagination.RowsPerPage'), { key: 'Control', code: 'ControlLeft' });
-    expect(handleKeyPress.handleTableWrapperKeyDown).to.have.been.calledOnce;
+    expect(handleKeyPress.handleTableWrapperKeyDown).toHaveBeenCalledTimes(1);
   });
 
   it('should call setPageInfo when changing rows per page', () => {
@@ -122,8 +116,8 @@ describe('<TableWrapper />', () => {
 
     fireEvent.change(getByTestId('select'), { target: { value: targetRowsPerPage } });
 
-    expect(setPageInfo).to.have.been.calledWith({ page: 0, rowsPerPage: targetRowsPerPage });
-    expect(announcer).to.have.been.calledOnceWith({
+    expect(setPageInfo).toHaveBeenCalledWith({ page: 0, rowsPerPage: targetRowsPerPage });
+    expect(announcer).toHaveBeenCalledWith({
       keys: [['SNTable.Pagination.RowsPerPageChange', `${targetRowsPerPage}`]],
       politeness: 'assertive',
     });
@@ -150,8 +144,8 @@ describe('<TableWrapper />', () => {
 
     fireEvent.change(getByTestId('pagination-dropdown'));
 
-    expect(setPageInfo).to.have.been.calledOnce;
-    expect(announcer).to.have.been.calledOnceWith({
+    expect(setPageInfo).toHaveBeenCalledTimes(1);
+    expect(announcer).toHaveBeenCalledWith({
       keys: [['SNTable.Pagination.PageStatusReport', [1, 2]]], // 200 rows, 100 rows per page => [1, 2]
       politeness: 'assertive',
     });
@@ -175,7 +169,7 @@ describe('<TableWrapper />', () => {
       />
     );
 
-    expect(queryByLabelText('SNTable.RowsPerPage')).to.be.a('null');
+    expect(queryByLabelText('SNTable.RowsPerPage')).toBeNull();
   });
 
   it('should not show rows per page when selectionsAPI.isModal() returns true', () => {
@@ -197,6 +191,6 @@ describe('<TableWrapper />', () => {
     const rppSiblingElement = queryByText(`SNTable.Pagination.DisplayedRowsLabel`);
 
     // Can't check if rows per page is not visible, so check if parent has correct amount of child elements
-    expect(rppSiblingElement.parentNode.childElementCount).to.equal(3);
+    expect(rppSiblingElement.parentNode.childElementCount).toEqual(3);
   });
 });

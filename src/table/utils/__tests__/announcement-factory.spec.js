@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import announcementFactory from '../announcement-factory';
 
 describe('announcement-factory', () => {
@@ -33,8 +32,8 @@ describe('announcement-factory', () => {
     const key = 'SOME_SIMPLE_KEY';
     announcer({ keys: key });
 
-    expect(announcerElement01.innerHTML).to.be.equal(`${key}${junkChar}`);
-    expect(announcerElement02.innerHTML).to.be.empty;
+    expect(announcerElement01.innerHTML).toEqual(`${key}${junkChar}`);
+    expect(announcerElement02.innerHTML).toHaveLength(0);
   });
 
   it('should render live element with proper attributes', () => {
@@ -42,10 +41,10 @@ describe('announcement-factory', () => {
     const keys = 'SOME_SIMPLE_KEY';
     announcer({ keys, shouldBeAtomic: true, politeness: 'assertive' });
 
-    expect(announcerElement01.innerHTML).to.be.equal(`${keys}${junkChar}`);
-    expect(announcerElement01).to.have.attr('aria-atomic', 'true');
-    expect(announcerElement01).to.have.attr('aria-live', 'assertive');
-    expect(announcerElement02.innerHTML).to.be.empty;
+    expect(announcerElement01.innerHTML).toEqual(`${keys}${junkChar}`);
+    expect(announcerElement01.getAttribute('aria-atomic')).toEqual('true');
+    expect(announcerElement01.getAttribute('aria-live')).toEqual('assertive');
+    expect(announcerElement02.innerHTML).toHaveLength(0);
   });
 
   it('should render multiple keys', () => {
@@ -53,8 +52,8 @@ describe('announcement-factory', () => {
     const keys = ['key#01', 'key#02'];
     announcer({ keys });
 
-    expect(announcerElement01.innerHTML).to.be.equal(`${keys.join(' ')}${junkChar}`);
-    expect(announcerElement02.innerHTML).to.be.empty;
+    expect(announcerElement01.innerHTML).toEqual(`${keys.join(' ')}${junkChar}`);
+    expect(announcerElement02.innerHTML).toHaveLength(0);
   });
 
   it('should render multiple keys with arguments', () => {
@@ -62,8 +61,8 @@ describe('announcement-factory', () => {
     const keys = ['key#01', ['key#02', 1, 2]];
     announcer({ keys });
 
-    expect(announcerElement01.innerHTML).to.be.equal(`key#01 key#02${junkChar}`);
-    expect(announcerElement02.innerHTML).to.be.empty;
+    expect(announcerElement01.innerHTML).toEqual(`key#01 key#02${junkChar}`);
+    expect(announcerElement02.innerHTML).toHaveLength(0);
   });
 
   it('should render the junk char in odd function run iterations', () => {
@@ -71,8 +70,8 @@ describe('announcement-factory', () => {
     const keys = 'key#01';
     announcer({ keys });
 
-    expect(announcerElement01.innerHTML).to.be.equal(`${keys}${junkChar}`); // extra space for the junk char
-    expect(announcerElement02.innerHTML).to.be.empty;
+    expect(announcerElement01.innerHTML).toEqual(`${keys}${junkChar}`); // extra space for the junk char
+    expect(announcerElement02.innerHTML).toHaveLength(0);
   });
 
   it('should be able to handle the cuncurrent announcement', () => {
@@ -80,7 +79,7 @@ describe('announcement-factory', () => {
     announcer = announcementFactory(rootElement, translator, previousAnnouncementElement);
     announcer({ keys: ['key#01'] });
 
-    expect(announcerElement02.innerHTML).to.be.equal(`key#01${junkChar}`);
+    expect(announcerElement02.innerHTML).toEqual(`key#01${junkChar}`);
   });
 
   it('should remove junkChar if the current announce element has it', () => {
@@ -89,7 +88,7 @@ describe('announcement-factory', () => {
     announcer = announcementFactory(rootElement, translator);
     announcer({ keys });
 
-    expect(announcerElement01.innerHTML).to.be.equal(keys);
-    expect(announcerElement02.innerHTML).to.be.empty;
+    expect(announcerElement01.innerHTML).toEqual(keys);
+    expect(announcerElement02.innerHTML).toHaveLength(0);
   });
 });

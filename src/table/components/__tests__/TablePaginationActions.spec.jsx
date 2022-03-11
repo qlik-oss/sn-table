@@ -1,8 +1,5 @@
-import './rtl-setup';
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import { expect } from 'chai';
-import sinon from 'sinon';
 
 import TablePaginationActions from '../TablePaginationActions';
 import * as handleAccessibility from '../../utils/handle-accessibility';
@@ -28,18 +25,15 @@ describe('<TablePaginationActions />', () => {
     ];
     page = 0;
     lastPageIdx = 2;
-    onPageChange = sinon.spy();
+    onPageChange = jest.fn();
     tableWidth = 500;
     translator = { get: (s) => s };
     isInSelectionMode = false;
     keyboard = { enabled: true };
-    sinon.stub(handleAccessibility, 'focusSelectionToolbar').returns(sinon.spy());
+    jest.spyOn(handleAccessibility, 'focusSelectionToolbar').mockImplementation(() => jest.fn());
   });
 
-  afterEach(() => {
-    sinon.verifyAndRestore();
-    sinon.resetHistory();
-  });
+  afterEach(() => jest.clearAllMocks());
 
   it('should render all buttons in right order when left-to-right direction', () => {
     const { getAllByTestId } = render(
@@ -57,7 +51,7 @@ describe('<TablePaginationActions />', () => {
 
     const renderedNames = getAllByTestId('pagination-action-icon-button');
     renderedNames.forEach((nameNode, index) => {
-      expect(Object.values(nameNode)[1].title).to.be.equal(titles[index]);
+      expect(Object.values(nameNode)[1].title).toEqual(titles[index]);
     });
   });
 
@@ -78,7 +72,7 @@ describe('<TablePaginationActions />', () => {
 
     const renderedNames = getAllByTestId('pagination-action-icon-button');
     renderedNames.forEach((nameNode, index) => {
-      expect(Object.values(nameNode)[1].title).to.be.equal(titles[index]);
+      expect(Object.values(nameNode)[1].title).toEqual(titles[index]);
     });
   });
 
@@ -99,10 +93,10 @@ describe('<TablePaginationActions />', () => {
 
     const renderedNames = getAllByTestId('pagination-action-icon-button');
     renderedNames.forEach((nameNode, index) => {
-      expect(Object.values(nameNode)[1].title).to.be.equal(titles[index]);
+      expect(Object.values(nameNode)[1].title).toEqual(titles[index]);
     });
-    expect(queryByTitle('SNTable.Pagination.FirstPage')).to.be.null;
-    expect(queryByTitle('SNTable.Pagination.LastPage')).to.be.null;
+    expect(queryByTitle('SNTable.Pagination.FirstPage')).toBeNull();
+    expect(queryByTitle('SNTable.Pagination.LastPage')).toBeNull();
   });
 
   it('should render only previous and next button when the size of table is smaller than or equal to 350 and in right-to-left direction', () => {
@@ -124,10 +118,10 @@ describe('<TablePaginationActions />', () => {
 
     const renderedNames = getAllByTestId('pagination-action-icon-button');
     renderedNames.forEach((nameNode, index) => {
-      expect(Object.values(nameNode)[1].title).to.be.equal(titles[index]);
+      expect(Object.values(nameNode)[1].title).toEqual(titles[index]);
     });
-    expect(queryByTitle('SNTable.Pagination.FirstPage')).to.be.null;
-    expect(queryByTitle('SNTable.Pagination.LastPage')).to.be.null;
+    expect(queryByTitle('SNTable.Pagination.FirstPage')).toBeNull();
+    expect(queryByTitle('SNTable.Pagination.LastPage')).toBeNull();
   });
 
   it('should not render pagination dropdown', () => {
@@ -143,7 +137,7 @@ describe('<TablePaginationActions />', () => {
       />
     );
 
-    expect(queryByTestId('pagination-dropdown')).to.be.null;
+    expect(queryByTestId('pagination-dropdown')).toBeNull();
   });
 
   it('should call onPageChange when clicking next page', () => {
@@ -160,7 +154,7 @@ describe('<TablePaginationActions />', () => {
     );
 
     fireEvent.click(queryByTitle('SNTable.Pagination.NextPage'));
-    expect(onPageChange).to.have.been.calledWith(1);
+    expect(onPageChange).toHaveBeenCalledWith(1);
   });
 
   it('should call onPageChange when clicking previous page', () => {
@@ -178,7 +172,7 @@ describe('<TablePaginationActions />', () => {
     );
 
     fireEvent.click(queryByTitle('SNTable.Pagination.PreviousPage'));
-    expect(onPageChange).to.have.been.calledWith(0);
+    expect(onPageChange).toHaveBeenCalledWith(0);
   });
 
   it('should call onPageChange when clicking last page', () => {
@@ -195,7 +189,7 @@ describe('<TablePaginationActions />', () => {
     );
 
     fireEvent.click(queryByTitle('SNTable.Pagination.LastPage'));
-    expect(onPageChange).to.have.been.calledWith(2);
+    expect(onPageChange).toHaveBeenCalledWith(2);
   });
 
   it('should call onPageChange when clicking first page', () => {
@@ -213,7 +207,7 @@ describe('<TablePaginationActions />', () => {
     );
 
     fireEvent.click(queryByTitle('SNTable.Pagination.FirstPage'));
-    expect(onPageChange).to.have.been.calledWith(0);
+    expect(onPageChange).toHaveBeenCalledWith(0);
   });
 
   it('should call onPageChange when selecting page from dropdown', () => {
@@ -232,7 +226,7 @@ describe('<TablePaginationActions />', () => {
     );
 
     fireEvent.change(queryByTestId('pagination-dropdown'), { target: { value: 1 } });
-    expect(onPageChange).to.have.been.calledWith(1);
+    expect(onPageChange).toHaveBeenCalledWith(1);
   });
 
   it('should not call focusSelectionToolbar when pressing tab on last page button and isInSelectionMode is false', () => {
@@ -248,7 +242,7 @@ describe('<TablePaginationActions />', () => {
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab' });
-    expect(handleAccessibility.focusSelectionToolbar).to.not.have.been.called;
+    expect(handleAccessibility.focusSelectionToolbar).not.toHaveBeenCalled();
   });
 
   it('should not call focusSelectionToolbar when pressing shift + tab on last page button and isInSelectionMode is true', () => {
@@ -266,7 +260,7 @@ describe('<TablePaginationActions />', () => {
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab', shiftKey: true });
-    expect(handleAccessibility.focusSelectionToolbar).to.not.have.been.called;
+    expect(handleAccessibility.focusSelectionToolbar).not.toHaveBeenCalled();
   });
 
   it('should call focusSelectionToolbar when pressing tab on last page button and isInSelectionMode is true', () => {
@@ -284,7 +278,7 @@ describe('<TablePaginationActions />', () => {
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab' });
-    expect(handleAccessibility.focusSelectionToolbar).to.have.been.calledOnce;
+    expect(handleAccessibility.focusSelectionToolbar).toHaveBeenCalledTimes(1);
   });
 
   it('should call focusSelectionToolbar when pressing tab on next page button, isInSelectionMode is true and tableWidth < 350', () => {
@@ -303,6 +297,6 @@ describe('<TablePaginationActions />', () => {
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.NextPage'), { key: 'Tab' });
-    expect(handleAccessibility.focusSelectionToolbar).to.have.been.calledOnce;
+    expect(handleAccessibility.focusSelectionToolbar).toHaveBeenCalledTimes(1);
   });
 });

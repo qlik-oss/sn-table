@@ -8,30 +8,30 @@ describe('translations', () => {
     beforeEach(() => {
       translator = {
         get: (t) => t === 'SNTable.Accessibility.RowsAndColumns' && 'SNTable.Accessibility.RowsAndColumns',
-        add: sinon.spy(),
+        add: jest.fn(),
       };
     });
 
     it('Should not add anything when translator is not passed', () => {
       registerLocale();
-      expect(translator.add).to.not.have.been.called;
+      expect(translator.add).not.toHaveBeenCalled();
     });
 
     it('Should not add anything when get is undefined', () => {
       translator.get = undefined;
       registerLocale(translator);
-      expect(translator.add).to.not.have.been.called;
+      expect(translator.add).not.toHaveBeenCalled();
     });
 
     it('Should early return when translation is different from id', () => {
-      translator.get = () => 'somexTranslation';
+      translator.get = () => 'someTranslation';
       registerLocale(translator);
-      expect(translator.add).to.not.have.been.called;
+      expect(translator.add).not.toHaveBeenCalled();
     });
 
     it('Should call add for every key', () => {
       registerLocale(translator);
-      expect(translator.add).to.have.callCount(Object.keys(all).length);
+      expect(translator.add).toHaveBeenCalledTimes(Object.keys(all).length);
     });
   });
 });

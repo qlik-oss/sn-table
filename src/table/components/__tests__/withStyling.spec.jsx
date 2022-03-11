@@ -1,7 +1,5 @@
-import './rtl-setup';
 import React from 'react';
 import { render } from '@testing-library/react';
-import { expect } from 'chai';
 
 import * as withStyling from '../withStyling';
 
@@ -20,6 +18,6 @@ describe('withStyling', () => {
   it('should render table head', () => {
     const { queryByText } = render(<HOC value="someValue" styling={styling} />);
 
-    expect(queryByText('someValue')).to.be.visible;
+    expect(queryByText('someValue')).toBeVisible();
   });
 });

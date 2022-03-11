@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import * as handleAccessibility from '../handle-accessibility';
 
 describe('handle-accessibility', () => {
@@ -9,19 +8,14 @@ describe('handle-accessibility', () => {
   let keyboard;
 
   beforeEach(() => {
-    cell = { focus: sinon.spy(), blur: sinon.spy(), setAttribute: sinon.spy() };
+    cell = { focus: jest.fn(), blur: jest.fn(), setAttribute: jest.fn() };
     rootElement = {
       getElementsByClassName: () => [{ getElementsByClassName: () => [cell] }],
       querySelector: () => cell,
     };
     focusedCellCoord = [0, 0];
-    setFocusedCellCoord = sinon.spy();
-    keyboard = { focus: sinon.spy(), focusSelection: sinon.spy(), enabled: true };
-  });
-
-  afterEach(() => {
-    sinon.verifyAndRestore();
-    sinon.resetHistory();
+    setFocusedCellCoord = jest.fn();
+    keyboard = { focus: jest.fn(), focusSelection: jest.fn(), enabled: true };
   });
 
   describe('updateFocus', () => {
@@ -38,49 +32,49 @@ describe('handle-accessibility', () => {
 
     it('should focus cell and call setAttribute when focusType is focus', () => {
       handleAccessibility.updateFocus({ focusType, rowElements, cellCoord });
-      expect(cell.focus).to.have.been.calledOnce;
-      expect(cell.setAttribute).to.have.been.calledOnceWith('tabIndex', '0');
+      expect(cell.focus).toHaveBeenCalledTimes(1);
+      expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '0');
     });
 
     it('should blur cell and call setAttribute when focusType is blur', () => {
       focusType = 'blur';
 
       handleAccessibility.updateFocus({ focusType, rowElements, cellCoord });
-      expect(cell.blur).to.have.been.calledOnce;
-      expect(cell.setAttribute).to.have.been.calledOnceWith('tabIndex', '-1');
+      expect(cell.blur).toHaveBeenCalledTimes(1);
+      expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
     });
 
     it('should call setAttribute when focusType is addTab', () => {
       focusType = 'addTab';
 
       handleAccessibility.updateFocus({ focusType, rowElements, cellCoord });
-      expect(cell.focus).to.not.have.been.called;
-      expect(cell.setAttribute).to.have.been.calledOnceWith('tabIndex', '0');
+      expect(cell.focus).not.toHaveBeenCalled();
+      expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '0');
     });
 
     it('should call setAttribute when focusType is removeTab', () => {
       focusType = 'removeTab';
 
       handleAccessibility.updateFocus({ focusType, rowElements, cellCoord });
-      expect(cell.blur).to.not.have.been.called;
-      expect(cell.setAttribute).to.have.been.calledOnceWith('tabIndex', '-1');
+      expect(cell.blur).not.toHaveBeenCalled();
+      expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
     });
 
     it('should not focus cell nor cell setAttribute when cell is not found', () => {
       cellCoord = [1, 0];
 
       handleAccessibility.updateFocus({ focusType, rowElements, cellCoord });
-      expect(cell.focus).to.not.have.been.called;
-      expect(cell.blur).to.not.have.been.called;
-      expect(cell.setAttribute).to.not.have.been.called;
+      expect(cell.focus).not.toHaveBeenCalled();
+      expect(cell.blur).not.toHaveBeenCalled();
+      expect(cell.setAttribute).not.toHaveBeenCalled();
     });
 
     it('should pick up providedCell element if there was no rowElements provided', () => {
       providedCell = cell;
 
       handleAccessibility.updateFocus({ focusType, providedCell });
-      expect(cell.focus).to.have.been.calledOnce;
-      expect(cell.setAttribute).to.have.been.calledOnceWith('tabIndex', '0');
+      expect(cell.focus).toHaveBeenCalledTimes(1);
+      expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '0');
     });
   });
 
@@ -105,19 +99,18 @@ describe('handle-accessibility', () => {
 
       const cellElement = handleAccessibility.findCellWithTabStop(rootElement);
 
-      expect(cellElement).to.not.be.null;
-      expect(cellElement.tagName).to.equal('TD');
-      expect(cellElement).to.have.attr('tabIndex').match(/0/);
+      expect(cellElement).not.toBeNull();
+      expect(cellElement.tagName).toEqual('TD');
+      expect(cellElement.getAttribute('tabIndex')).toEqual('0');
     });
 
     it('should return active th element', () => {
       cell = elementCreator('th', '0');
-
       const cellElement = handleAccessibility.findCellWithTabStop(rootElement);
 
-      expect(cellElement).to.not.be.null;
-      expect(cellElement.tagName).to.equal('TH');
-      expect(cellElement).to.have.attr('tabIndex').match(/0/);
+      expect(cellElement).not.toBeNull();
+      expect(cellElement.tagName).toEqual('TH');
+      expect(cellElement.getAttribute('tabIndex')).toEqual('0');
     });
 
     it('should return null', () => {
@@ -125,7 +118,7 @@ describe('handle-accessibility', () => {
 
       const cellElement = handleAccessibility.findCellWithTabStop(rootElement);
 
-      expect(cellElement).to.be.null;
+      expect(cellElement).toBeNull();
     });
   });
 
@@ -137,16 +130,18 @@ describe('handle-accessibility', () => {
 
     it('should indirectly call setFocusedCellCoord with adjusted index, and keyboard.focus', () => {
       handleAccessibility.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard);
-      expect(cell.setAttribute).have.been.calledOnceWith('tabIndex', '-1');
-      expect(setFocusedCellCoord).to.have.been.calledOnceWith([1, 0]);
-      expect(keyboard.focus).to.have.been.calledOnce;
+      expect(cell.setAttribute).toHaveBeenCalledTimes(1);
+      expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
+      expect(setFocusedCellCoord).toHaveBeenCalledWith([1, 0]);
+      expect(keyboard.focus).toHaveBeenCalledTimes(1);
     });
     it('should indirectly call setFocusedCellCoord with adjusted index, but not keyboard.focus when keyboard.enabled is falsey', () => {
       keyboard.enabled = false;
       handleAccessibility.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard);
-      expect(cell.setAttribute).have.been.calledOnceWith('tabIndex', '-1');
-      expect(setFocusedCellCoord).to.have.been.calledOnceWith([1, 0]);
-      expect(keyboard.focus).to.not.have.been.called;
+      expect(cell.setAttribute).toHaveBeenCalledTimes(1);
+      expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
+      expect(setFocusedCellCoord).toHaveBeenCalledWith([1, 0]);
+      expect(keyboard.focus).not.toHaveBeenCalled();
     });
   });
 
@@ -155,9 +150,10 @@ describe('handle-accessibility', () => {
 
     it('should indirectly call updateFocus, setFocusedCellCoord and keyboard.focus', () => {
       handleAccessibility.handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard);
-      expect(cell.setAttribute).have.been.calledOnceWith('tabIndex', '-1');
-      expect(setFocusedCellCoord).to.have.been.calledOnceWith([0, 2]);
-      expect(keyboard.focus).to.have.been.calledOnce;
+      expect(cell.setAttribute).toHaveBeenCalledTimes(1);
+      expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
+      expect(setFocusedCellCoord).toHaveBeenCalledWith([0, 2]);
+      expect(keyboard.focus).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -172,7 +168,7 @@ describe('handle-accessibility', () => {
       shouldRefocus = { current: false };
       hasSelections = false;
       shouldAddTabstop = true;
-      announce = sinon.spy();
+      announce = jest.fn();
     });
 
     it('should set tabindex on the first cell and not focus', () => {
@@ -185,10 +181,10 @@ describe('handle-accessibility', () => {
         shouldAddTabstop,
         announce,
       });
-      expect(cell.setAttribute).have.been.calledTwice;
-      expect(setFocusedCellCoord).to.have.been.calledOnceWith([0, 0]);
-      expect(cell.focus).to.not.have.been.called;
-      expect(announce).to.not.have.been.called;
+      expect(cell.setAttribute).toHaveBeenCalledTimes(2);
+      expect(setFocusedCellCoord).toHaveBeenCalledWith([0, 0]);
+      expect(cell.focus).not.toHaveBeenCalled();
+      expect(announce).not.toHaveBeenCalled();
     });
 
     it('should set tabindex on the first cell and focus when shouldRefocus is true', () => {
@@ -203,10 +199,10 @@ describe('handle-accessibility', () => {
         shouldAddTabstop,
         announce,
       });
-      expect(cell.setAttribute).have.been.calledTwice;
-      expect(setFocusedCellCoord).to.have.been.calledOnceWith([0, 0]);
-      expect(cell.focus).to.have.been.called;
-      expect(announce).to.not.have.been.called;
+      expect(cell.setAttribute).toHaveBeenCalledTimes(2);
+      expect(setFocusedCellCoord).toHaveBeenCalledWith([0, 0]);
+      expect(cell.focus).toHaveBeenCalled();
+      expect(announce).not.toHaveBeenCalled();
     });
 
     it('should set tabindex on the second cell in currently focused column when hasSelections is true', () => {
@@ -226,9 +222,9 @@ describe('handle-accessibility', () => {
         shouldAddTabstop,
         announce,
       });
-      expect(cell.setAttribute).have.been.calledTwice;
-      expect(setFocusedCellCoord).to.have.been.calledOnceWith([1, 1]);
-      expect(cell.focus).to.not.have.been.called;
+      expect(cell.setAttribute).toHaveBeenCalledTimes(2);
+      expect(setFocusedCellCoord).toHaveBeenCalledWith([1, 1]);
+      expect(cell.focus).not.toHaveBeenCalled();
     });
 
     it('should announce cell content and selection status for non selected first cell after focusing on it', () => {
@@ -250,7 +246,7 @@ describe('handle-accessibility', () => {
         announce,
       });
 
-      expect(announce).to.have.been.calledOnceWith({
+      expect(announce).toHaveBeenCalledWith({
         keys: ['#something,', 'SNTable.SelectionLabel.NotSelectedValue'],
       });
     });
@@ -277,7 +273,7 @@ describe('handle-accessibility', () => {
         announce,
       });
 
-      expect(announce).to.have.been.calledOnceWith({
+      expect(announce).toHaveBeenCalledWith({
         keys: ['#something,', 'SNTable.SelectionLabel.SelectedValue'],
       });
     });
@@ -301,35 +297,35 @@ describe('handle-accessibility', () => {
         },
       };
       shouldRefocus = { current: false };
-      keyboard = { enabled: true, blur: sinon.spy() };
+      keyboard = { enabled: true, blur: jest.fn() };
     });
 
     it('should call blur and remove announcements when currentTarget does not contain relatedTarget, shouldRefocus is false and keyboard.enabled is true', () => {
       handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, keyboard);
-      expect(keyboard.blur).to.have.been.calledOnceWith(false);
-      expect(announcement1.innerHTML).to.equal('');
-      expect(announcement2.innerHTML).to.equal('');
+      expect(keyboard.blur).toHaveBeenCalledWith(false);
+      expect(announcement1.innerHTML).toEqual('');
+      expect(announcement2.innerHTML).toEqual('');
     });
 
     it('should not call blur when currentTarget contains relatedTarget', () => {
       containsRelatedTarget = true;
 
       handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, keyboard);
-      expect(keyboard.blur).to.not.have.been.called;
+      expect(keyboard.blur).not.toHaveBeenCalled();
     });
 
     it('should not call blur when shouldRefocus is true', () => {
       shouldRefocus.current = true;
 
       handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, keyboard);
-      expect(keyboard.blur).to.not.have.been.called;
+      expect(keyboard.blur).not.toHaveBeenCalled();
     });
 
     it('should not call blur when keyboard.enabled is falsey', () => {
       keyboard.enabled = false;
 
       handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, keyboard);
-      expect(keyboard.blur).to.not.have.been.called;
+      expect(keyboard.blur).not.toHaveBeenCalled();
     });
   });
 
@@ -339,7 +335,7 @@ describe('handle-accessibility', () => {
     let last;
 
     beforeEach(() => {
-      parentElement = { focus: sinon.spy() };
+      parentElement = { focus: jest.fn() };
       element = {
         closest: () => ({ querySelector: () => ({ parentElement }) }),
       };
@@ -348,14 +344,14 @@ describe('handle-accessibility', () => {
 
     it('should call parentElement.focus when clientConfirmButton exists', () => {
       handleAccessibility.focusSelectionToolbar(element, keyboard, last);
-      expect(parentElement.focus).to.have.been.calledOnce;
-      expect(keyboard.focusSelection).to.not.have.been.called;
+      expect(parentElement.focus).toHaveBeenCalledTimes(1);
+      expect(keyboard.focusSelection).not.toHaveBeenCalled();
     });
 
     it("should call keyboard.focusSelection when clientConfirmButton doesn't exist", () => {
       parentElement = null;
       handleAccessibility.focusSelectionToolbar(element, keyboard, last);
-      expect(keyboard.focusSelection).to.have.been.calledOnceWith(false);
+      expect(keyboard.focusSelection).toHaveBeenCalledWith(false);
     });
   });
 });
