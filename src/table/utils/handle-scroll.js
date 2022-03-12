@@ -13,11 +13,11 @@ export const handleHorizontalScroll = (evt, isRTL, memoedContainer) => {
     // evt.deltaX increasingly negative as you scroll towards left,
     // increasingly positive as you scroll towards right
     const scrollRight = maxScrollableWidth + ScrollLeftWidth;
-    if (maxScrollableWidth > 0 && (scrollRight <= 0 || scrollRight > maxScrollableWidth)) {
+    if (maxScrollableWidth > 0 && (scrollRight < 0 || scrollRight > maxScrollableWidth + 1)) {
       evt.preventDefault();
       scrollLeft = Math.min(0, Math.min(maxScrollableWidth, scrollRight));
     }
-  } else if (maxScrollableWidth > 0 && (ScrollLeftWidth < 0 || ScrollLeftWidth > maxScrollableWidth)) {
+  } else if (maxScrollableWidth > 0 && (ScrollLeftWidth < 0 || ScrollLeftWidth > maxScrollableWidth + 1)) {
     evt.preventDefault();
     scrollLeft = Math.max(0, Math.min(maxScrollableWidth, ScrollLeftWidth));
   }
