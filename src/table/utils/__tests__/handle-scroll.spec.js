@@ -20,14 +20,14 @@ describe('handle-scroll', () => {
       isRTL = true;
     });
 
-    it('should run preventDefault when scroll to leftmost place in ltr direction', () => {
+    it('should run preventDefault when scroll to the leftmost place and keep scrolling left in LTR direction', () => {
       isRTL = false;
       handleHorizontalScroll(evt, isRTL, memoedContainer);
       expect(evt.stopPropagation).have.been.calledOnce;
       expect(evt.preventDefault).have.been.calledOnce;
     });
 
-    it('should run preventDefault when scroll to rightmost place in ltr direction', () => {
+    it('should run preventDefault when scroll to the rightmost place and keep scrolling right in LTR direction', () => {
       evt = {
         ...evt,
         deltaX: 10,
@@ -42,7 +42,7 @@ describe('handle-scroll', () => {
       expect(evt.preventDefault).have.been.calledOnce;
     });
 
-    it('should not run preventDefault when not scroll to leftmost place in ltr direction', () => {
+    it('should not run preventDefault when not scroll to the leftmost place or the rightmost place in LTR direction', () => {
       isRTL = false;
       memoedContainer = {
         ...memoedContainer,
@@ -53,14 +53,25 @@ describe('handle-scroll', () => {
       expect(evt.preventDefault).not.have.been.called;
     });
 
-    it('should not run preventDefault when not scroll to rightmost place in ltr direction', () => {
+    it('should not run preventDefault when scroll to the leftmost place but not keep scrolling left in LTR direction', () => {
+      isRTL = false;
       evt = {
         ...evt,
-        deltaX: 10,
+        deltaX: 0,
+      };
+      handleHorizontalScroll(evt, isRTL, memoedContainer);
+      expect(evt.stopPropagation).have.been.calledOnce;
+      expect(evt.preventDefault).not.have.been.called;
+    });
+
+    it('should not run preventDefault when scroll to the rightmost place but not keep scrolling right in LTR direction', () => {
+      evt = {
+        ...evt,
+        deltaX: 0,
       };
       memoedContainer = {
         ...memoedContainer,
-        scrollLeft: 400,
+        scrollLeft: 1369,
       };
       isRTL = false;
       handleHorizontalScroll(evt, isRTL, memoedContainer);
@@ -68,7 +79,7 @@ describe('handle-scroll', () => {
       expect(evt.preventDefault).not.have.been.called;
     });
 
-    it('should run preventDefault when scroll to leftmost place in isRTL direction', () => {
+    it('should run preventDefault when scroll to the leftmost place and keep scrolling left in RTL direction', () => {
       evt = {
         ...evt,
         deltaX: -1,
@@ -82,7 +93,7 @@ describe('handle-scroll', () => {
       expect(evt.preventDefault).have.been.calledOnce;
     });
 
-    it('should run preventDefault when scroll to rightmost place in isRTL direction', () => {
+    it('should run preventDefault when scroll to the rightmost place and and keep scrolling right in RTL direction', () => {
       evt = {
         ...evt,
         deltaX: 1,
@@ -96,7 +107,7 @@ describe('handle-scroll', () => {
       expect(evt.preventDefault).have.been.calledOnce;
     });
 
-    it('should not run preventDefault when not scroll to leftmost place in isRTL direction', () => {
+    it('should not run preventDefault when not scroll to the leftmost place or the rightmost place in RTL direction', () => {
       evt = {
         ...evt,
         deltaX: -10,
@@ -110,14 +121,28 @@ describe('handle-scroll', () => {
       expect(evt.preventDefault).not.have.been.called;
     });
 
-    it('should not run preventDefault when not scroll to rightmost place in isRTL direction', () => {
+    it('should not run preventDefault when scroll to the leftmost place but not keep scrolling left in RTL direction', () => {
       evt = {
         ...evt,
-        deltaX: 10,
+        deltaX: 0,
       };
       memoedContainer = {
         ...memoedContainer,
-        scrollLeft: -50,
+        scrollLeft: -1369,
+      };
+      handleHorizontalScroll(evt, isRTL, memoedContainer);
+      expect(evt.stopPropagation).have.been.calledOnce;
+      expect(evt.preventDefault).not.have.been.called;
+    });
+
+    it('should not run preventDefault when scroll to the rightmost place but not keep scrolling right in RTL direction', () => {
+      evt = {
+        ...evt,
+        deltaX: 0,
+      };
+      memoedContainer = {
+        ...memoedContainer,
+        scrollLeft: 1,
       };
       handleHorizontalScroll(evt, isRTL, memoedContainer);
       expect(evt.stopPropagation).have.been.calledOnce;
