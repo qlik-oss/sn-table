@@ -11,45 +11,43 @@ describe('render', () => {
     beforeEach(() => {
       selectionsEnabled = false;
       hasColumnStyling = false;
-      sinon.stub(withSelections, 'default').returns(sinon.spy());
-      sinon.stub(withColumnStyling, 'default').returns(sinon.spy());
-      sinon.stub(withStyling, 'default').returns(sinon.spy());
+      jest.spyOn(withSelections, 'default').mockImplementation(() => jest.fn());
+      jest.spyOn(withColumnStyling, 'default').mockImplementation(() => jest.fn());
+      jest.spyOn(withStyling, 'default').mockImplementation(() => jest.fn());
     });
 
-    afterEach(() => {
-      sinon.verifyAndRestore();
-    });
+    afterEach(() => jest.clearAllMocks());
 
     it('should call withStyling when selectionsEnabled and hasColumnStyling is false', () => {
       getCellRenderer(hasColumnStyling, selectionsEnabled);
-      expect(withStyling.default).to.have.been.calledOnce;
-      expect(withSelections.default).to.not.have.been.called;
-      expect(withColumnStyling.default).to.not.have.been.called;
+      expect(withStyling.default).toHaveBeenCalledTimes(1);
+      expect(withSelections.default).not.toHaveBeenCalled();
+      expect(withColumnStyling.default).not.toHaveBeenCalled();
     });
     it('should call withStyling and withSelections when selectionsEnabled is true and hasColumnStyling is false', () => {
       selectionsEnabled = true;
 
       getCellRenderer(hasColumnStyling, selectionsEnabled);
-      expect(withStyling.default).to.have.been.calledOnce;
-      expect(withSelections.default).to.have.been.calledOnce;
-      expect(withColumnStyling.default).to.not.have.been.called;
+      expect(withStyling.default).toHaveBeenCalledTimes(1);
+      expect(withSelections.default).toHaveBeenCalledTimes(1);
+      expect(withColumnStyling.default).not.toHaveBeenCalled();
     });
     it('should call withStyling and withColumnStyling when selectionsEnabled is false and hasColumnStyling is true', () => {
       hasColumnStyling = true;
 
       getCellRenderer(hasColumnStyling, selectionsEnabled);
-      expect(withStyling.default).to.have.been.calledOnce;
-      expect(withColumnStyling.default).to.have.been.calledOnce;
-      expect(withSelections.default).to.not.have.been.called;
+      expect(withStyling.default).toHaveBeenCalledTimes(1);
+      expect(withColumnStyling.default).toHaveBeenCalledTimes(1);
+      expect(withSelections.default).not.toHaveBeenCalled();
     });
     it('should call all with-functions when both selectionsEnabled and hasColumnStyling are true', () => {
       selectionsEnabled = true;
       hasColumnStyling = true;
 
       getCellRenderer(hasColumnStyling, selectionsEnabled);
-      expect(withStyling.default).to.have.been.calledOnce;
-      expect(withColumnStyling.default).to.have.been.calledOnce;
-      expect(withSelections.default).to.have.been.calledOnce;
+      expect(withStyling.default).toHaveBeenCalledTimes(1);
+      expect(withColumnStyling.default).toHaveBeenCalledTimes(1);
+      expect(withSelections.default).toHaveBeenCalledTimes(1);
     });
   });
 });

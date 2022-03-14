@@ -15,6 +15,7 @@ describe('sn table: Rendering tests', () => {
   let puppet;
   let route;
 
+  // eslint-disable-next-line no-undef
   before(async () => {
     s = await serve({
       // the entry is equal to path.resolve(__dirname, '../../dist/sn-table.js'),
@@ -31,6 +32,7 @@ describe('sn table: Rendering tests', () => {
     route = createNebulaRoutes(s.url);
   });
 
+  // eslint-disable-next-line no-undef
   after(async () => {
     s.close();
   });
@@ -39,9 +41,7 @@ describe('sn table: Rendering tests', () => {
     events.addListeners(page);
   });
 
-  afterEach(() => {
-    events.removeListeners(page);
-  });
+  afterEach(() => events.removeListeners(page));
 
   // Iterate testing fixture files
   fs.readdirSync(paths.fixtures).forEach((file) => {
@@ -59,6 +59,7 @@ describe('sn table: Rendering tests', () => {
       // Puppeteer Capture screenshot
       const img = await puppet.screenshot();
       // Compare screenshot with baseline image
+      // eslint-disable-next-line jest/valid-expect
       expect(img).to.matchImageOf(name, { artifactsPath: paths.artifacts }, 0.035);
     });
   });
