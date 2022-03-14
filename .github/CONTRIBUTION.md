@@ -11,11 +11,20 @@
 
 Run unit tests with:
 
-`yarn test:unit`
+    yarn test:unit
 
 Run rendering tests with:
 
-`yarn test:rendering`
+    # Install dependencies
+    yarn --frozen-lockfile
+
+    # Build nebula.js visualization
+    yarn build
+
+    chmod 777 ./test/rendering/commands/run-rendering-test.sh
+    sudo ./test/rendering/commands/run-rendering-test.sh
+
+Look into [overview and guide](../test/rendering/README.md) to learn more about the rendering test
 
 ## Linting
 
