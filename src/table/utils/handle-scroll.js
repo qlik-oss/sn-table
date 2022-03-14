@@ -1,25 +1,27 @@
 export const handleHorizontalScroll = (evt, isRTL, memoedContainer) => {
   evt.stopPropagation();
+
   // scrollWidth is the width of an element's content, including content not visible on the screen due to overflow.
   // offsetWidth is the element's CSS width, including any borders, padding, and vertical scrollbars
-  // scrollLeft is the number of pixels scrolled from its left edge
-  let { scrollLeft } = memoedContainer;
-  const ScrollLeftWidth = scrollLeft + evt.deltaX;
   const maxScrollableWidth = memoedContainer.scrollWidth - memoedContainer.offsetWidth;
-  if (isRTL) {
-    // scrollLeft is 0 when the scrollbar is at its rightmost position
-    // (at the start of the scrolled content),
-    // and then increasingly negative as you scroll towards (left) the end of the content .
-    // evt.deltaX increasingly negative as you scroll towards left,
-    // increasingly positive as you scroll towards right
-    const scrollRight = maxScrollableWidth + ScrollLeftWidth;
-    if (maxScrollableWidth > 0 && (scrollRight < 0 || scrollRight > maxScrollableWidth + 1)) {
-      evt.preventDefault();
-      scrollLeft = Math.min(0, Math.min(maxScrollableWidth, scrollRight));
-    }
-  } else if (maxScrollableWidth > 0 && (ScrollLeftWidth < 0 || ScrollLeftWidth > maxScrollableWidth + 1)) {
+
+  // scrollLeft is the number of pixels scrolled from its left edge
+  // scrollLeft is 0 when the scrollbar is at its leftmost position
+  // (at the start of the scrolled content),
+  // and then increasingly negative as it is scrolled towards left.
+  let { scrollLeft } = memoedContainer;
+
+  // evt.deltaX is the horizontal scroll amount
+  // evt.deltaX increasingly negative as you scroll towards left,
+  // increasingly positive as you scroll towards right
+  let scrolledDistance = scrollLeft + evt.deltaX;
+
+  if (isRTL) scrolledDistance = maxScrollableWidth + scrolledDistance;
+  if (maxScrollableWidth > 0 && (scrolledDistance < 0 || scrolledDistance > maxScrollableWidth + 1)) {
     evt.preventDefault();
-    scrollLeft = Math.max(0, Math.min(maxScrollableWidth, ScrollLeftWidth));
+    scrollLeft = isRTL
+      ? Math.min(0, Math.min(maxScrollableWidth, scrolledDistance))
+      : Math.max(0, Math.min(maxScrollableWidth, scrolledDistance));
   }
 };
 
