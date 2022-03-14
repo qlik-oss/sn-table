@@ -1,19 +1,20 @@
-import './rtl-setup';
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import { expect } from 'chai';
-import sinon from 'sinon';
-
 import { generateDataPages, generateLayout } from '../../../__test__/generate-test-data';
 import manageData from '../../../handle-data';
-
 import TableBodyWrapper from '../TableBodyWrapper';
 import * as selectionsUtils from '../../utils/selections-utils';
 import * as getCellRenderer from '../renderer';
 import * as handleKeyPress from '../../utils/handle-key-press';
 import * as handleAccessibility from '../../utils/handle-accessibility';
 
-describe('<TableBodyWrapper />', async () => {
+describe('<TableBodyWrapper />', () => {
+  const rootElement = {};
+  const setFocusedCellCoord = () => {};
+  const setShouldRefocus = () => {};
+  const keyboard = {};
+  const tableWrapperRef = {};
+  const announce = () => {};
   const model = { getHyperCubeData: async () => generateDataPages(2, 2, 2) };
 
   let tableData;
@@ -24,7 +25,7 @@ describe('<TableBodyWrapper />', async () => {
   let cellRendererSpy;
 
   beforeEach(async () => {
-    sinon.stub(selectionsUtils, 'addSelectionListeners').returns(sinon.spy());
+    jest.spyOn(selectionsUtils, 'addSelectionListeners').mockImplementation(() => jest.fn());
 
     tableData = await manageData(model, generateLayout(1, 1, 2), { top: 0, height: 100 });
     constraints = {};
@@ -36,18 +37,15 @@ describe('<TableBodyWrapper />', async () => {
       name: () => {},
     };
     layout = {};
-    cellRendererSpy = sinon.spy();
+    cellRendererSpy = jest.fn();
   });
 
-  afterEach(() => {
-    sinon.verifyAndRestore();
-    sinon.resetHistory();
-  });
+  afterEach(() => jest.clearAllMocks());
 
   it('should render 2x2 table body and call CellRenderer', () => {
-    sinon.stub(getCellRenderer, 'default').returns(({ cell }) => {
+    jest.spyOn(getCellRenderer, 'default').mockImplementation(() => {
       cellRendererSpy();
-      return <td>{cell.qText}</td>;
+      return 'test';
     });
 
     const { queryByText } = render(
@@ -57,18 +55,24 @@ describe('<TableBodyWrapper />', async () => {
         selectionsAPI={selectionsAPI}
         layout={layout}
         theme={theme}
+        rootElement={rootElement}
+        setFocusedCellCoord={setFocusedCellCoord}
+        setShouldRefocus={setShouldRefocus}
+        keyboard={keyboard}
+        tableWrapperRef={tableWrapperRef}
+        announce={announce}
       />
     );
 
-    expect(cellRendererSpy).to.have.callCount(8);
-    expect(queryByText(tableData.rows[0]['col-0'].qText)).to.be.visible;
-    expect(queryByText(tableData.rows[0]['col-1'].qText)).to.be.visible;
-    expect(queryByText(tableData.rows[1]['col-0'].qText)).to.be.visible;
-    expect(queryByText(tableData.rows[1]['col-1'].qText)).to.be.visible;
+    expect(cellRendererSpy).toHaveBeenCalledTimes(4);
+    expect(queryByText(tableData.rows[0]['col-0'].qText)).toBeVisible();
+    expect(queryByText(tableData.rows[0]['col-1'].qText)).toBeVisible();
+    expect(queryByText(tableData.rows[1]['col-0'].qText)).toBeVisible();
+    expect(queryByText(tableData.rows[1]['col-1'].qText)).toBeVisible();
   });
 
   it('should call bodyHandleKeyPress on key down', () => {
-    sinon.stub(handleKeyPress, 'bodyHandleKeyPress').returns(sinon.spy());
+    jest.spyOn(handleKeyPress, 'bodyHandleKeyPress').mockImplementation(() => jest.fn());
 
     const { queryByText } = render(
       <TableBodyWrapper
@@ -77,15 +81,21 @@ describe('<TableBodyWrapper />', async () => {
         selectionsAPI={selectionsAPI}
         theme={theme}
         layout={layout}
+        rootElement={rootElement}
+        setFocusedCellCoord={setFocusedCellCoord}
+        setShouldRefocus={setShouldRefocus}
+        keyboard={keyboard}
+        tableWrapperRef={tableWrapperRef}
+        announce={announce}
       />
     );
     fireEvent.keyDown(queryByText(tableData.rows[0]['col-0'].qText));
 
-    expect(handleKeyPress.bodyHandleKeyPress).to.have.been.calledOnce;
+    expect(handleKeyPress.bodyHandleKeyPress).toHaveBeenCalledTimes(1);
   });
 
   it('should call handleClickToFocusBody on mouseDown', () => {
-    sinon.stub(handleAccessibility, 'handleClickToFocusBody').returns(sinon.spy());
+    jest.spyOn(handleAccessibility, 'handleClickToFocusBody').mockImplementation(() => jest.fn());
 
     const { queryByText } = render(
       <TableBodyWrapper
@@ -94,10 +104,16 @@ describe('<TableBodyWrapper />', async () => {
         selectionsAPI={selectionsAPI}
         theme={theme}
         layout={layout}
+        rootElement={rootElement}
+        setFocusedCellCoord={setFocusedCellCoord}
+        setShouldRefocus={setShouldRefocus}
+        keyboard={keyboard}
+        tableWrapperRef={tableWrapperRef}
+        announce={announce}
       />
     );
     fireEvent.mouseDown(queryByText(tableData.rows[0]['col-0'].qText));
 
-    expect(handleAccessibility.handleClickToFocusBody).to.have.been.calledOnce;
+    expect(handleAccessibility.handleClickToFocusBody).toHaveBeenCalledTimes(1);
   });
 });
