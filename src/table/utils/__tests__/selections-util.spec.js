@@ -173,6 +173,8 @@ describe('selections-utils', () => {
       isAddition = true;
     });
 
+    afterEach(() => jest.clearAllMocks());
+
     it('should announce selected value and one selected value when rowsLength is 1 and isAddition is true', () => {
       handleAnnounceSelectionStatus({ announce, rowsLength, isAddition });
 

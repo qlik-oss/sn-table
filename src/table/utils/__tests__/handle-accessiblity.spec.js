@@ -143,6 +143,7 @@ describe('handle-accessibility', () => {
       handleAccessibility.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard);
       expect(cell.setAttribute).toHaveBeenCalledTimes(1);
       expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
+      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledWith([1, 0]);
       expect(keyboard.focus).not.toHaveBeenCalled();
     });
@@ -155,6 +156,7 @@ describe('handle-accessibility', () => {
       handleAccessibility.handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard);
       expect(cell.setAttribute).toHaveBeenCalledTimes(1);
       expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
+      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledWith([0, 2]);
       expect(keyboard.focus).toHaveBeenCalledTimes(1);
     });

@@ -63,6 +63,14 @@ describe('withSelections', () => {
     fireEvent.mouseUp(queryByText(value));
 
     expect(selectionsUtils.selectCell).toHaveBeenCalledTimes(1);
+    expect(selectionsUtils.selectCell).toHaveBeenCalledWith(
+      expect.objectContaining({
+        selectionState: expect.anything(),
+        cell: expect.anything(),
+        evt: expect.anything(),
+        announce: expect.anything(),
+      })
+    );
   });
   it('should not call selectCell on mouseUp when measure', () => {
     cell.isDim = false;
