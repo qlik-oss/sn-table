@@ -49,8 +49,8 @@ describe('handle-scroll', () => {
         scrollLeft: 50,
       };
       handleHorizontalScroll(evt, isRTL, memoedContainer);
-      expect(evt.stopPropagation).have.been.calledOnce;
-      expect(evt.preventDefault).not.have.been.called;
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
     });
 
     it('should not run preventDefault when the scrollbar is at its leftmost place but is not scrolled left in LTR direction', () => {
@@ -131,8 +131,8 @@ describe('handle-scroll', () => {
         scrollLeft: -100,
       };
       handleHorizontalScroll(evt, isRTL, memoedContainer);
-      expect(evt.stopPropagation).have.been.calledOnce;
-      expect(evt.preventDefault).not.have.been.called;
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
     });
 
     it('should not run preventDefault when the scrollbar is at its rightmost place but is not scrolled right in RTL direction', () => {
