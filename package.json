@@ -39,7 +39,6 @@
     "locale:generate": "node src/locale/scripts/generate-all.mjs",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
     "test:unit": "jest",
-    "test:integration": "aw puppet --testExt '*.int.js' --glob 'test/integration/**/*.int.js'",
     "test:rendering": "playwright test",
     "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
     "prepack": "./tools/prepare-sn-pack.js",

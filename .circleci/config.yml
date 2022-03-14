@@ -48,8 +48,6 @@ jobs:
     docker:
       - image: circleci/node:16.7.0-browsers
       - image: mcr.microsoft.com/playwright:focal
-    environment:
-      NODE_ENV: development # Needed if playwright is in `devDependencies`
     steps:
       - attach_workspace:
           at: ~/table
