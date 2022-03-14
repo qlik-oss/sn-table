@@ -8,8 +8,8 @@ describe('handle-scroll', () => {
 
     beforeEach(() => {
       evt = {
-        stopPropagation: sinon.spy(),
-        preventDefault: sinon.spy(),
+        stopPropagation: jest.fn(),
+        preventDefault: jest.fn(),
         deltaX: -1,
       };
       memoedContainer = {
@@ -23,8 +23,8 @@ describe('handle-scroll', () => {
     it('should run preventDefault when scroll to leftmost place in ltr direction', () => {
       isRTL = false;
       handleHorizontalScroll(evt, isRTL, memoedContainer);
-      expect(evt.stopPropagation).have.been.calledOnce;
-      expect(evt.preventDefault).have.been.calledOnce;
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
     });
 
     it('should run preventDefault when scroll to rightmost place in ltr direction', () => {
@@ -38,8 +38,8 @@ describe('handle-scroll', () => {
       };
       isRTL = false;
       handleHorizontalScroll(evt, isRTL, memoedContainer);
-      expect(evt.stopPropagation).have.been.calledOnce;
-      expect(evt.preventDefault).have.been.calledOnce;
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
     });
 
     it('should not run preventDefault when not scroll to leftmost place in ltr direction', () => {
@@ -49,8 +49,8 @@ describe('handle-scroll', () => {
         scrollLeft: 400,
       };
       handleHorizontalScroll(evt, isRTL, memoedContainer);
-      expect(evt.stopPropagation).have.been.calledOnce;
-      expect(evt.preventDefault).not.have.been.called;
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
     });
 
     it('should not run preventDefault when not scroll to rightmost place in ltr direction', () => {
@@ -64,8 +64,8 @@ describe('handle-scroll', () => {
       };
       isRTL = false;
       handleHorizontalScroll(evt, isRTL, memoedContainer);
-      expect(evt.stopPropagation).have.been.calledOnce;
-      expect(evt.preventDefault).not.have.been.called;
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
     });
 
     it('should run preventDefault when scroll to leftmost place in isRTL direction', () => {
@@ -78,8 +78,8 @@ describe('handle-scroll', () => {
         scrollLeft: -1369,
       };
       handleHorizontalScroll(evt, isRTL, memoedContainer);
-      expect(evt.stopPropagation).have.been.calledOnce;
-      expect(evt.preventDefault).have.been.calledOnce;
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
     });
 
     it('should run preventDefault when scroll to rightmost place in isRTL direction', () => {
@@ -92,8 +92,8 @@ describe('handle-scroll', () => {
         scrollLeft: 1,
       };
       handleHorizontalScroll(evt, isRTL, memoedContainer);
-      expect(evt.stopPropagation).have.been.calledOnce;
-      expect(evt.preventDefault).have.been.calledOnce;
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
     });
 
     it('should not run preventDefault when not scroll to leftmost place in isRTL direction', () => {
@@ -106,8 +106,8 @@ describe('handle-scroll', () => {
         scrollLeft: -855,
       };
       handleHorizontalScroll(evt, isRTL, memoedContainer);
-      expect(evt.stopPropagation).have.been.calledOnce;
-      expect(evt.preventDefault).not.have.been.called;
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
     });
 
     it('should not run preventDefault when not scroll to rightmost place in isRTL direction', () => {
@@ -120,8 +120,8 @@ describe('handle-scroll', () => {
         scrollLeft: -50,
       };
       handleHorizontalScroll(evt, isRTL, memoedContainer);
-      expect(evt.stopPropagation).have.been.calledOnce;
-      expect(evt.preventDefault).not.have.been.called;
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
     });
   });
 
@@ -134,7 +134,7 @@ describe('handle-scroll', () => {
 
     beforeEach(() => {
       rowHeight = 100;
-      scrollTo = sinon.spy();
+      scrollTo = jest.fn();
       tableContainerRef = { current: { scrollTo } };
       focusedCellCoord = [0, 0];
       rootElement = {};
@@ -144,14 +144,14 @@ describe('handle-scroll', () => {
       tableContainerRef.current = {};
 
       handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement });
-      expect(scrollTo).to.not.have.been.called;
+      expect(scrollTo).not.toHaveBeenCalled();
     });
 
     it('should scroll to the top when you reach the top two rows', () => {
       focusedCellCoord = [1, 0];
 
       handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement });
-      expect(scrollTo).to.have.been.calledWith({ top: 0, behavior: 'smooth' });
+      expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' });
     });
 
     it('should scroll upwards automatically if it detects the cursor gets behind <TableHead />', () => {
@@ -179,8 +179,8 @@ describe('handle-scroll', () => {
       const targetOffsetTop = 472;
 
       handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement });
-      expect(scrollTo).to.have.been.calledOnce;
-      expect(scrollTo).to.have.been.calledOnceWith({ top: targetOffsetTop, behavior: 'smooth' });
+      expect(scrollTo).toHaveBeenCalledTimes(1);
+      expect(scrollTo).toHaveBeenCalledWith({ top: targetOffsetTop, behavior: 'smooth' });
     });
   });
 });

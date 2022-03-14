@@ -14,7 +14,7 @@ describe('sorting-factory', () => {
     layout = generateLayout(2, 2, 2);
     column = { isDim: true, dataColIdx: 1 };
     model = {
-      applyPatches: sinon.spy(),
+      applyPatches: jest.fn(),
       getEffectiveProperties: async () =>
         Promise.resolve({
           qHyperCubeDef: {
@@ -36,7 +36,7 @@ describe('sorting-factory', () => {
     expectedPatches[0].qValue = '[1,0,2,3]';
 
     await changeSortOrder(layout, column);
-    expect(model.applyPatches).to.have.been.calledWith(expectedPatches, true);
+    expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
   });
 
   it('should call apply patches with another patch for qReverseSort for dimension', async () => {
@@ -48,7 +48,7 @@ describe('sorting-factory', () => {
     });
 
     await changeSortOrder(layout, column);
-    expect(model.applyPatches).to.have.been.calledWith(expectedPatches, true);
+    expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
   });
 
   it('should call apply patches with another patch for qReverseSort for measure', async () => {
@@ -62,6 +62,6 @@ describe('sorting-factory', () => {
     });
 
     await changeSortOrder(layout, column);
-    expect(model.applyPatches).to.have.been.calledWith(expectedPatches, true);
+    expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
   });
 });
