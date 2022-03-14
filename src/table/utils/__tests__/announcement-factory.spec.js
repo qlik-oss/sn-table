@@ -32,7 +32,7 @@ describe('announcement-factory', () => {
     const key = 'SOME_SIMPLE_KEY';
     announcer({ keys: key });
 
-    expect(announcerElement01.innerHTML).toEqual(`${key}${junkChar}`);
+    expect(announcerElement01.innerHTML).toBe(`${key}${junkChar}`);
     expect(announcerElement02.innerHTML).toHaveLength(0);
   });
 
@@ -41,9 +41,9 @@ describe('announcement-factory', () => {
     const keys = 'SOME_SIMPLE_KEY';
     announcer({ keys, shouldBeAtomic: true, politeness: 'assertive' });
 
-    expect(announcerElement01.innerHTML).toEqual(`${keys}${junkChar}`);
-    expect(announcerElement01.getAttribute('aria-atomic')).toEqual('true');
-    expect(announcerElement01.getAttribute('aria-live')).toEqual('assertive');
+    expect(announcerElement01.innerHTML).toBe(`${keys}${junkChar}`);
+    expect(announcerElement01.getAttribute('aria-atomic')).toBe('true');
+    expect(announcerElement01.getAttribute('aria-live')).toBe('assertive');
     expect(announcerElement02.innerHTML).toHaveLength(0);
   });
 
@@ -52,7 +52,7 @@ describe('announcement-factory', () => {
     const keys = ['key#01', 'key#02'];
     announcer({ keys });
 
-    expect(announcerElement01.innerHTML).toEqual(`${keys.join(' ')}${junkChar}`);
+    expect(announcerElement01.innerHTML).toBe(`${keys.join(' ')}${junkChar}`);
     expect(announcerElement02.innerHTML).toHaveLength(0);
   });
 
@@ -61,7 +61,7 @@ describe('announcement-factory', () => {
     const keys = ['key#01', ['key#02', 1, 2]];
     announcer({ keys });
 
-    expect(announcerElement01.innerHTML).toEqual(`key#01 key#02${junkChar}`);
+    expect(announcerElement01.innerHTML).toBe(`key#01 key#02${junkChar}`);
     expect(announcerElement02.innerHTML).toHaveLength(0);
   });
 
@@ -70,7 +70,7 @@ describe('announcement-factory', () => {
     const keys = 'key#01';
     announcer({ keys });
 
-    expect(announcerElement01.innerHTML).toEqual(`${keys}${junkChar}`); // extra space for the junk char
+    expect(announcerElement01.innerHTML).toBe(`${keys}${junkChar}`); // extra space for the junk char
     expect(announcerElement02.innerHTML).toHaveLength(0);
   });
 
@@ -79,7 +79,7 @@ describe('announcement-factory', () => {
     announcer = announcementFactory(rootElement, translator, previousAnnouncementElement);
     announcer({ keys: ['key#01'] });
 
-    expect(announcerElement02.innerHTML).toEqual(`key#01${junkChar}`);
+    expect(announcerElement02.innerHTML).toBe(`key#01${junkChar}`);
   });
 
   it('should remove junkChar if the current announce element has it', () => {
@@ -88,7 +88,7 @@ describe('announcement-factory', () => {
     announcer = announcementFactory(rootElement, translator);
     announcer({ keys });
 
-    expect(announcerElement01.innerHTML).toEqual(keys);
+    expect(announcerElement01.innerHTML).toBe(keys);
     expect(announcerElement02.innerHTML).toHaveLength(0);
   });
 });

@@ -217,9 +217,9 @@ describe('<TableHeadWrapper />', () => {
     const secondColQuery = queryByText(tableData.columns[1].label).closest('th');
 
     expect(firstColQuery.getAttribute('aria-sort')).toBeNull();
-    expect(firstColQuery.getAttribute('aria-pressed')).toEqual('false');
-    expect(secondColQuery.getAttribute('aria-sort')).toEqual('ascending');
-    expect(secondColQuery.getAttribute('aria-pressed')).toEqual('true');
+    expect(firstColQuery.getAttribute('aria-pressed')).toBe('false');
+    expect(secondColQuery.getAttribute('aria-sort')).toBe('ascending');
+    expect(secondColQuery.getAttribute('aria-pressed')).toBe('true');
   });
 
   it('should render the visually hidden text instead of `aria-label` and has correct `scope` properly', () => {
@@ -241,7 +241,7 @@ describe('<TableHeadWrapper />', () => {
 
     // check scope
     const tableColumn = queryByText(tableData.columns[0].label).closest('th');
-    expect(tableColumn.getAttribute('scope')).toEqual('col');
+    expect(tableColumn.getAttribute('scope')).toBe('col');
 
     // check label
     const tableColumnSortlabel = queryByTestId('VHL-for-col-0');

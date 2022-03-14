@@ -72,8 +72,8 @@ describe('<TableWrapper />', () => {
       queryByLabelText(`${'SNTable.Accessibility.RowsAndColumns'} ${'SNTable.Accessibility.NavigationInstructions'}`)
     ).toBeVisible();
     expect(queryByLabelText('SNTable.Pagination.RowsPerPage')).toBeVisible();
-    expect(queryByTestId('table-wrapper').getAttribute('tabindex')).toEqual('-1');
-    expect(queryByTestId('table-wrapper').getAttribute('role')).toEqual('application');
+    expect(queryByTestId('table-wrapper').getAttribute('tabindex')).toBe('-1');
+    expect(queryByTestId('table-wrapper').getAttribute('role')).toBe('application');
     expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeVisible();
     expect(queryByText(rowsPerPage)).toBeVisible();
   });
@@ -191,6 +191,6 @@ describe('<TableWrapper />', () => {
     const rppSiblingElement = queryByText(`SNTable.Pagination.DisplayedRowsLabel`);
 
     // Can't check if rows per page is not visible, so check if parent has correct amount of child elements
-    expect(rppSiblingElement.parentNode.childElementCount).toEqual(3);
+    expect(rppSiblingElement.parentNode.childElementCount).toBe(3);
   });
 });

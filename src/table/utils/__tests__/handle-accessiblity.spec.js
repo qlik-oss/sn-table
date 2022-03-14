@@ -18,6 +18,8 @@ describe('handle-accessibility', () => {
     keyboard = { focus: jest.fn(), focusSelection: jest.fn(), enabled: true };
   });
 
+  afterEach(() => jest.clearAllMocks());
+
   describe('updateFocus', () => {
     let focusType;
     let rowElements;
@@ -100,8 +102,8 @@ describe('handle-accessibility', () => {
       const cellElement = handleAccessibility.findCellWithTabStop(rootElement);
 
       expect(cellElement).not.toBeNull();
-      expect(cellElement.tagName).toEqual('TD');
-      expect(cellElement.getAttribute('tabIndex')).toEqual('0');
+      expect(cellElement.tagName).toBe('TD');
+      expect(cellElement.getAttribute('tabIndex')).toBe('0');
     });
 
     it('should return active th element', () => {
@@ -109,8 +111,8 @@ describe('handle-accessibility', () => {
       const cellElement = handleAccessibility.findCellWithTabStop(rootElement);
 
       expect(cellElement).not.toBeNull();
-      expect(cellElement.tagName).toEqual('TH');
-      expect(cellElement.getAttribute('tabIndex')).toEqual('0');
+      expect(cellElement.tagName).toBe('TH');
+      expect(cellElement.getAttribute('tabIndex')).toBe('0');
     });
 
     it('should return null', () => {
@@ -132,6 +134,7 @@ describe('handle-accessibility', () => {
       handleAccessibility.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard);
       expect(cell.setAttribute).toHaveBeenCalledTimes(1);
       expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
+      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledWith([1, 0]);
       expect(keyboard.focus).toHaveBeenCalledTimes(1);
     });
@@ -303,8 +306,8 @@ describe('handle-accessibility', () => {
     it('should call blur and remove announcements when currentTarget does not contain relatedTarget, shouldRefocus is false and keyboard.enabled is true', () => {
       handleAccessibility.handleFocusoutEvent(evt, shouldRefocus, keyboard);
       expect(keyboard.blur).toHaveBeenCalledWith(false);
-      expect(announcement1.innerHTML).toEqual('');
-      expect(announcement2.innerHTML).toEqual('');
+      expect(announcement1.innerHTML).toBe('');
+      expect(announcement2.innerHTML).toBe('');
     });
 
     it('should not call blur when currentTarget contains relatedTarget', () => {

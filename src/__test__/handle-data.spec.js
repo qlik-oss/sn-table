@@ -47,7 +47,7 @@ describe('handle-data', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qError = { qErrorCode: 7005 };
 
       const columnInfo = getColumnInfo(layout.qHyperCube, colIdx);
-      expect(columnInfo).toBeFalsy();
+      expect(columnInfo).toBe(false);
     });
 
     it('should return column info for measure', () => {
@@ -61,7 +61,7 @@ describe('handle-data', () => {
   describe('getColumnOrder', () => {
     it('should return qColumnOrder when length of qColumnOrder equals the number of columns', () => {
       const columnLayout = getColumnOrder(layout.qHyperCube);
-      expect(columnLayout).toEqual(layout.qHyperCube.qColumnOrder);
+      expect(columnLayout).toBe(layout.qHyperCube.qColumnOrder);
     });
 
     it('should return [0, 1, ... , number of columns] when length of qColumnOrder does not equal number of columns', () => {
@@ -86,21 +86,21 @@ describe('handle-data', () => {
     it('should return size, rows and columns correctly formatted', async () => {
       const { size, rows, columns } = await manageData(model, layout, pageInfo, setPageInfo);
 
-      expect(size).toEqual(layout.qHyperCube.qSize);
+      expect(size).toBe(layout.qHyperCube.qSize);
       expect(rows).toHaveLength(100);
-      expect(rows[0]['col-0'].qText).toEqual('2');
-      expect(rows[0]['col-0'].rowIdx).toEqual(100);
-      expect(rows[0]['col-0'].colIdx).toEqual(0);
-      expect(rows[0]['col-0'].rawRowIdx).toEqual(0);
-      expect(rows[0]['col-0'].rawColIdx).toEqual(2);
-      expect(rows[0]['col-1'].qText).toEqual('0');
-      expect(rows[0]['col-1'].rowIdx).toEqual(100);
-      expect(rows[0]['col-1'].colIdx).toEqual(1);
-      expect(rows[0]['col-1'].rawRowIdx).toEqual(0);
-      expect(rows[0]['col-1'].rawColIdx).toEqual(0);
+      expect(rows[0]['col-0'].qText).toBe('2');
+      expect(rows[0]['col-0'].rowIdx).toBe(100);
+      expect(rows[0]['col-0'].colIdx).toBe(0);
+      expect(rows[0]['col-0'].rawRowIdx).toBe(0);
+      expect(rows[0]['col-0'].rawColIdx).toBe(2);
+      expect(rows[0]['col-1'].qText).toBe('0');
+      expect(rows[0]['col-1'].rowIdx).toBe(100);
+      expect(rows[0]['col-1'].colIdx).toBe(1);
+      expect(rows[0]['col-1'].rawRowIdx).toBe(0);
+      expect(rows[0]['col-1'].rawColIdx).toBe(0);
       expect(columns).toHaveLength(4);
       columns.forEach((c, i) => {
-        expect(c.id).toEqual(Object.keys(rows[0])[i + 1]); // skip the first key
+        expect(c.id).toBe(Object.keys(rows[0])[i + 1]); // skip the first key
       });
     });
 

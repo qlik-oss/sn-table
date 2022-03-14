@@ -27,23 +27,23 @@ describe('handle-key-press', () => {
     it('should stay the current cell when move down', () => {
       evt.key = 'ArrowDown';
       const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
-      expect(nextRow).toEqual(0);
-      expect(nextCol).toEqual(0);
+      expect(nextRow).toBe(0);
+      expect(nextCol).toBe(0);
     });
 
     it('should stay the current cell when move up', () => {
       evt.key = 'ArrowUp';
       const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
-      expect(nextRow).toEqual(0);
-      expect(nextCol).toEqual(0);
+      expect(nextRow).toBe(0);
+      expect(nextCol).toBe(0);
     });
 
     it('should go to one row down cell', () => {
       evt.key = 'ArrowDown';
       rowAndColumnCount.rowCount = 2;
       const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
-      expect(nextRow).toEqual(1);
-      expect(nextCol).toEqual(0);
+      expect(nextRow).toBe(1);
+      expect(nextCol).toBe(0);
     });
 
     it('should go to one row up cell', () => {
@@ -51,8 +51,8 @@ describe('handle-key-press', () => {
       rowAndColumnCount.rowCount = 2;
       rowIndex = 1;
       const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
-      expect(nextRow).toEqual(0);
-      expect(nextCol).toEqual(0);
+      expect(nextRow).toBe(0);
+      expect(nextCol).toBe(0);
     });
 
     it('should go to one column left cell', () => {
@@ -60,23 +60,23 @@ describe('handle-key-press', () => {
       rowAndColumnCount.columnCount = 2;
       colIndex = 1;
       const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
-      expect(nextRow).toEqual(0);
-      expect(nextCol).toEqual(0);
+      expect(nextRow).toBe(0);
+      expect(nextCol).toBe(0);
     });
 
     it('should go to one column right cell', () => {
       evt.key = 'ArrowRight';
       rowAndColumnCount.columnCount = 2;
       const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
-      expect(nextRow).toEqual(0);
-      expect(nextCol).toEqual(1);
+      expect(nextRow).toBe(0);
+      expect(nextCol).toBe(1);
     });
 
     it('should stay the current cell when other keys are pressed', () => {
       evt.key = 'Control';
       const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
-      expect(nextRow).toEqual(0);
-      expect(nextCol).toEqual(0);
+      expect(nextRow).toBe(0);
+      expect(nextCol).toBe(0);
     });
 
     it('should move to the next row when we reach to the end of the current row', () => {
@@ -86,8 +86,8 @@ describe('handle-key-press', () => {
       rowIndex = 1;
       colIndex = 3;
       const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
-      expect(nextRow).toEqual(2);
-      expect(nextCol).toEqual(0);
+      expect(nextRow).toBe(2);
+      expect(nextCol).toBe(0);
     });
 
     it('should move to the prev row when we reach to the beganing of the current row', () => {
@@ -97,8 +97,8 @@ describe('handle-key-press', () => {
       rowIndex = 2;
       colIndex = 0;
       const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
-      expect(nextRow).toEqual(1);
-      expect(nextCol).toEqual(2);
+      expect(nextRow).toBe(1);
+      expect(nextCol).toBe(2);
     });
 
     it('should stay at the first row and first col of table when we reached to the beganing of the table', () => {
@@ -108,8 +108,8 @@ describe('handle-key-press', () => {
       rowIndex = 0;
       colIndex = 0;
       const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
-      expect(nextRow).toEqual(0);
-      expect(nextCol).toEqual(0);
+      expect(nextRow).toBe(0);
+      expect(nextCol).toBe(0);
     });
 
     it('should stay at the end row and end col of table when we reached to the end of the table', () => {
@@ -119,8 +119,8 @@ describe('handle-key-press', () => {
       rowIndex = 1;
       colIndex = 1;
       const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
-      expect(nextRow).toEqual(1);
-      expect(nextCol).toEqual(1);
+      expect(nextRow).toBe(1);
+      expect(nextCol).toBe(1);
     });
   });
 
@@ -136,9 +136,9 @@ describe('handle-key-press', () => {
       resolvedRowElements = [{}];
       rootElement.getElementsByClassName = () => resolvedRowElements;
       const { rowElements, rowCount, columnCount } = getRowAndColumnCount(rootElement);
-      expect(rowCount).toEqual(resolvedRowCount);
-      expect(columnCount).toEqual(resolvedColumnCount);
-      expect(rowElements).toEqual(resolvedRowElements);
+      expect(rowCount).toBe(resolvedRowCount);
+      expect(columnCount).toBe(resolvedColumnCount);
+      expect(rowElements).toBe(resolvedRowElements);
     });
   });
 

@@ -8,6 +8,7 @@ import {
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {
+    const listenerNames = ['deactivated', 'canceled', 'confirmed', 'cleared'];
     let api;
     let selectionDispatch;
     let setShouldRefocus;
@@ -36,8 +37,9 @@ describe('selections-utils', () => {
     it('should call api.on and api removeListener for all listeners', () => {
       addSelectionListeners({ api, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef })();
 
-      expect(api.on).toHaveBeenCalledTimes(4);
-      expect(api.removeListener).toHaveBeenCalledTimes(4);
+      listenerNames.forEach((name, index) => {
+        expect(api.on).toHaveBeenNthCalledWith(index + 1, name, expect.anything());
+      });
     });
     it('should not call call api.on nor api.removeListener when no api', () => {
       api = undefined;

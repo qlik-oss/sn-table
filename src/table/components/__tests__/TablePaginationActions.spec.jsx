@@ -51,7 +51,7 @@ describe('<TablePaginationActions />', () => {
 
     const renderedNames = getAllByTestId('pagination-action-icon-button');
     renderedNames.forEach((nameNode, index) => {
-      expect(Object.values(nameNode)[1].title).toEqual(titles[index]);
+      expect(Object.values(nameNode)[1].title).toBe(titles[index]);
     });
   });
 
@@ -72,7 +72,7 @@ describe('<TablePaginationActions />', () => {
 
     const renderedNames = getAllByTestId('pagination-action-icon-button');
     renderedNames.forEach((nameNode, index) => {
-      expect(Object.values(nameNode)[1].title).toEqual(titles[index]);
+      expect(Object.values(nameNode)[1].title).toBe(titles[index]);
     });
   });
 
@@ -93,7 +93,7 @@ describe('<TablePaginationActions />', () => {
 
     const renderedNames = getAllByTestId('pagination-action-icon-button');
     renderedNames.forEach((nameNode, index) => {
-      expect(Object.values(nameNode)[1].title).toEqual(titles[index]);
+      expect(Object.values(nameNode)[1].title).toBe(titles[index]);
     });
     expect(queryByTitle('SNTable.Pagination.FirstPage')).toBeNull();
     expect(queryByTitle('SNTable.Pagination.LastPage')).toBeNull();
@@ -118,7 +118,7 @@ describe('<TablePaginationActions />', () => {
 
     const renderedNames = getAllByTestId('pagination-action-icon-button');
     renderedNames.forEach((nameNode, index) => {
-      expect(Object.values(nameNode)[1].title).toEqual(titles[index]);
+      expect(Object.values(nameNode)[1].title).toBe(titles[index]);
     });
     expect(queryByTitle('SNTable.Pagination.FirstPage')).toBeNull();
     expect(queryByTitle('SNTable.Pagination.LastPage')).toBeNull();

@@ -47,24 +47,24 @@ describe('styling-utils', () => {
       color.index = 1;
 
       const resultColor = getColor(color, defaultColor, theme);
-      expect(resultColor).toEqual(resolvedColor);
+      expect(resultColor).toBe(resolvedColor);
     });
     it('should return a default color when getColorPickerColor returns falsey', () => {
       const resultColor = getColor(color, defaultColor, theme);
-      expect(resultColor).toEqual(defaultColor);
+      expect(resultColor).toBe(defaultColor);
     });
     it('should return a default color when getColorPickerColor returns none', () => {
       // Some palettes have none as the first value in the array of colors
       color.index = 0;
 
       const resultColor = getColor(color, defaultColor, theme);
-      expect(resultColor).toEqual(defaultColor);
+      expect(resultColor).toBe(defaultColor);
     });
     it('should return a default color when color is undefined', () => {
       color = undefined;
 
       const resultColor = getColor(color, defaultColor, theme);
-      expect(resultColor).toEqual(defaultColor);
+      expect(resultColor).toBe(defaultColor);
     });
   });
 
@@ -104,7 +104,7 @@ describe('styling-utils', () => {
       styleObj.padding = '4px';
 
       const resultStyling = getBaseStyling(styleObj, theme);
-      expect(resultStyling.padding).toEqual('4px');
+      expect(resultStyling.padding).toBe('4px');
     });
   });
 
@@ -189,30 +189,30 @@ describe('styling-utils', () => {
       layout.components[0].content.hoverFontColor.index = 1;
 
       const resultStyling = getBodyStyle(layout, theme);
-      expect(resultStyling.hoverBackgroundColor).toEqual('');
-      expect(resultStyling.hoverFontColor).toEqual(resolvedColor);
+      expect(resultStyling.hoverBackgroundColor).toBe('');
+      expect(resultStyling.hoverFontColor).toBe(resolvedColor);
     });
     it('should return styling with dark hoverBackgroundColor and white hoverFontColor', () => {
       layout.components[0].content.hoverColor.index = 1;
 
       const resultStyling = getBodyStyle(layout, theme);
-      expect(resultStyling.hoverBackgroundColor).toEqual(resolvedColor);
-      expect(resultStyling.hoverFontColor).toEqual(STYLING_DEFAULTS.WHITE);
+      expect(resultStyling.hoverBackgroundColor).toBe(resolvedColor);
+      expect(resultStyling.hoverFontColor).toBe(STYLING_DEFAULTS.WHITE);
     });
     it('should return styling with light hoverBackgroundColor and no hoverFontColor', () => {
       layout.components[0].content.hoverColor.index = 2;
 
       const resultStyling = getBodyStyle(layout, theme);
-      expect(resultStyling.hoverBackgroundColor).toEqual(altResolvedColor);
-      expect(resultStyling.hoverFontColor).toEqual(STYLING_DEFAULTS.FONT_COLOR);
+      expect(resultStyling.hoverBackgroundColor).toBe(altResolvedColor);
+      expect(resultStyling.hoverFontColor).toBe(STYLING_DEFAULTS.FONT_COLOR);
     });
     it('should return styling with set hoverBackgroundColor and hoverFontColor', () => {
       layout.components[0].content.hoverColor.index = 1;
       layout.components[0].content.hoverFontColor.index = 2;
 
       const resultStyling = getBodyStyle(layout, theme);
-      expect(resultStyling.hoverBackgroundColor).toEqual(resolvedColor);
-      expect(resultStyling.hoverFontColor).toEqual(altResolvedColor);
+      expect(resultStyling.hoverBackgroundColor).toBe(resolvedColor);
+      expect(resultStyling.hoverFontColor).toBe(altResolvedColor);
     });
   });
 
@@ -231,32 +231,32 @@ describe('styling-utils', () => {
 
     it('should return styling with both new fontColor and backgroundColor when selected', () => {
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
-      expect(columnStyle.background).toEqual('#dddddd');
-      expect(columnStyle.color).toEqual('#111111');
+      expect(columnStyle.background).toBe('#dddddd');
+      expect(columnStyle.color).toBe('#111111');
     });
     it('should return styling with new fontColor', () => {
       qAttrExps.qValues = [qAttrExps.qValues[1]];
       stylingInfo = [stylingInfo[1]];
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
-      expect(columnStyle.background).toEqual(undefined);
-      expect(columnStyle.color).toEqual('#111111');
+      expect(columnStyle.background).toBe(undefined);
+      expect(columnStyle.color).toBe('#111111');
     });
     it('should return styling with backgroundColor', () => {
       qAttrExps.qValues = [qAttrExps.qValues[0]];
       stylingInfo = [stylingInfo[0]];
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
-      expect(columnStyle.background).toEqual('#dddddd');
-      expect(columnStyle.color).toEqual(STYLING_DEFAULTS.FONT_COLOR);
+      expect(columnStyle.background).toBe('#dddddd');
+      expect(columnStyle.color).toBe(STYLING_DEFAULTS.FONT_COLOR);
     });
     it('should return styling unchanged', () => {
       qAttrExps = undefined;
       stylingInfo = [];
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
-      expect(columnStyle.background).toEqual(undefined);
-      expect(columnStyle.color).toEqual('someFontColor');
+      expect(columnStyle.background).toBe(undefined);
+      expect(columnStyle.color).toBe('someFontColor');
     });
   });
 
@@ -273,7 +273,7 @@ describe('styling-utils', () => {
 
     it('should return selected when selected styling', () => {
       const selectionClass = getSelectionColors(background, cell, selectionState);
-      expect(selectionClass).toEqual(SELECTION_STYLING.SELECTED);
+      expect(selectionClass).toBe(SELECTION_STYLING.SELECTED);
     });
     it('should return excluded styling when other column', () => {
       cell.colIdx = 2;
@@ -292,7 +292,7 @@ describe('styling-utils', () => {
       cell.qElemNumber = 2;
 
       const selectionClass = getSelectionColors(background, cell, selectionState);
-      expect(selectionClass).toEqual(SELECTION_STYLING.POSSIBLE);
+      expect(selectionClass).toBe(SELECTION_STYLING.POSSIBLE);
     });
     it('should return empty object when no active selections', () => {
       selectionState = { rows: [], api: { isModal: () => false } };

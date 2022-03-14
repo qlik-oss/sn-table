@@ -24,21 +24,21 @@ describe('ext', () => {
 
         it('should return true for valid expression', () => {
           const isExpression = dimensionItems.visibilityCondition.isExpression(val);
-          expect(isExpression).toBeTruthy();
+          expect(isExpression).toBe(true);
         });
 
         it('should return false for non string', () => {
           val = 1;
 
           const isExpression = dimensionItems.visibilityCondition.isExpression(val);
-          expect(isExpression).toBeFalsy();
+          expect(isExpression).toBe(false);
         });
 
         it('should return false for string only containing white space', () => {
           val = ' ';
 
           const isExpression = dimensionItems.visibilityCondition.isExpression(val);
-          expect(isExpression).toBeFalsy();
+          expect(isExpression).toBe(false);
         });
       });
 
@@ -57,20 +57,20 @@ describe('ext', () => {
 
         it('should return true when auto is false', () => {
           const show = dimensionItems.textAlign.show(data);
-          expect(show).toBeTruthy();
+          expect(show).toBe(true);
         });
 
         it('should return false when auto is true', () => {
           data.qDef.textAlign.auto = true;
 
           const show = dimensionItems.textAlign.show(data);
-          expect(show).toBeFalsy();
+          expect(show).toBe(false);
         });
 
         it('should return false when textAlign is undefined', () => {
           data.qDef.textAlign = undefined;
           const show = dimensionItems.textAlign.show(data);
-          expect(show).toBeFalsy();
+          expect(show).toBe(false);
         });
       });
     });
@@ -95,8 +95,8 @@ describe('ext', () => {
         it('should not change size when in allowed value', () => {
           stylingItems.headerFontSize.change(data);
           stylingItems.fontSize.change(data);
-          expect(data.header.fontSize).toEqual(14);
-          expect(data.content.fontSize).toEqual(14);
+          expect(data.header.fontSize).toBe(14);
+          expect(data.content.fontSize).toBe(14);
         });
 
         it('should change size to 5 when less than 5', () => {
@@ -105,8 +105,8 @@ describe('ext', () => {
 
           stylingItems.headerFontSize.change(data);
           stylingItems.fontSize.change(data);
-          expect(data.header.fontSize).toEqual(5);
-          expect(data.content.fontSize).toEqual(5);
+          expect(data.header.fontSize).toBe(5);
+          expect(data.content.fontSize).toBe(5);
         });
 
         it('should change size to 300 when more than 300', () => {
@@ -115,8 +115,8 @@ describe('ext', () => {
 
           stylingItems.headerFontSize.change(data);
           stylingItems.fontSize.change(data);
-          expect(data.header.fontSize).toEqual(300);
-          expect(data.content.fontSize).toEqual(300);
+          expect(data.header.fontSize).toBe(300);
+          expect(data.content.fontSize).toBe(300);
         });
       });
 
@@ -132,15 +132,15 @@ describe('ext', () => {
         });
 
         it('should return true when hoverEffect is true', () => {
-          expect(stylingItems.hoverColor.show(data)).toBeTruthy();
-          expect(stylingItems.hoverFontColor.show(data)).toBeTruthy();
+          expect(stylingItems.hoverColor.show(data)).toBe(true);
+          expect(stylingItems.hoverFontColor.show(data)).toBe(true);
         });
 
         it('should return false when hoverEffect is false', () => {
           data.content.hoverEffect = false;
 
-          expect(stylingItems.hoverColor.show(data)).toBeFalsy();
-          expect(stylingItems.hoverFontColor.show(data)).toBeFalsy();
+          expect(stylingItems.hoverColor.show(data)).toBe(false);
+          expect(stylingItems.hoverFontColor.show(data)).toBe(false);
         });
       });
     });
@@ -184,11 +184,11 @@ describe('ext', () => {
 
   describe('min', () => {
     it('should return 0 when > 0', () => {
-      expect(min(3)).toEqual(0);
+      expect(min(3)).toBe(0);
     });
 
     it('should return 1 when not > 0', () => {
-      expect(min(0)).toEqual(1);
+      expect(min(0)).toBe(1);
     });
   });
 
