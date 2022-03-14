@@ -89,13 +89,8 @@ export function getHeaderStyle(layout, theme) {
 }
 
 export function getBodyCellStyle(layout, theme) {
-  const hoverBackgroundColorFromTheme = theme.getStyle(
-    'object',
-    'straightTable.content.hover',
-    'backgroundColor',
-    null
-  );
-  const hoverFontColorFromTheme = theme.getStyle('object', 'straightTable.content.hover', 'color', null);
+  const hoverBackgroundColorFromTheme = theme.getStyle('object', '', 'straightTable.content.hover.backgroundColor');
+  const hoverFontColorFromTheme = theme.getStyle('object', '', 'straightTable.content.hover.color');
 
   const content = layout.components?.[0]?.content;
   const contentHoverBackgroundColor = content?.hoverColor;
