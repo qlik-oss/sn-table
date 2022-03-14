@@ -82,7 +82,7 @@ jobs:
           name: Run rendering tests
           command: yarn test:rendering
       - store_artifacts:
-          path: test/rendering/table.spec.ts-snapshots
+          path: test/rendering/table.render.ts-snapshots
       - store_artifacts:
           path: test/rendering/artifacts
       - store_artifacts:
