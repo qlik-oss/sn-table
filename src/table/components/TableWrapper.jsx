@@ -177,6 +177,7 @@ export default function TableWrapper(props) {
           isInSelectionMode={selectionsAPI.isModal()}
           tableWidth={width}
           translator={translator}
+          constraints={constraints}
         />
       </>
     );

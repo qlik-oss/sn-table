@@ -30,6 +30,7 @@ export default function TablePaginationActions({
   tableWidth,
   translator,
   isInSelectionMode,
+  constraints,
 }) {
   const onFirstPage = page === 0;
   const onLastPage = page >= lastPageIdx;
@@ -48,7 +49,7 @@ export default function TablePaginationActions({
         onClick={!disabledCondition ? () => onPageChange(pageNumber) : null}
         aria-disabled={disabledCondition}
         aria-label={translator.get(`SNTable.Pagination.${type}`)}
-        title={translator.get(`SNTable.Pagination.${type}`)}
+        title={!constraints.passive && translator.get(`SNTable.Pagination.${type}`)}
         tabIndex={tabIndex}
         sx={disabledCondition ? { color: 'rgba(0, 0, 0, 0.3)', cursor: 'default' } : { color: 'rgba(0, 0, 0, 0.54)' }}
         onKeyDown={onKeyDown}
@@ -108,4 +109,5 @@ TablePaginationActions.propTypes = {
   isInSelectionMode: PropTypes.bool.isRequired,
   tableWidth: PropTypes.number.isRequired,
   translator: PropTypes.object.isRequired,
+  constraints: PropTypes.object.isRequired,
 };
