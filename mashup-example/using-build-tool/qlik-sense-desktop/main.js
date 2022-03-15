@@ -24,6 +24,13 @@ import './style.css';
       direction: 'rtl',
     },
     properties: {
+      components: [
+        {
+          content: {
+            fontSize: 40,
+          },
+        },
+      ],
       qHyperCubeDef: {
         qMeasures: [
           {
@@ -37,6 +44,7 @@ import './style.css';
           },
         ],
       },
+      footnote: 'it is footnote',
     },
   });
 })();
