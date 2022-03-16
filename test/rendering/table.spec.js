@@ -41,7 +41,9 @@ describe('sn table: Rendering tests', () => {
     events.addListeners(page);
   });
 
-  afterEach(() => events.removeListeners(page));
+  afterEach(() => {
+    events.removeListeners(page);
+  });
 
   // Iterate testing fixture files
   fs.readdirSync(paths.fixtures).forEach((file) => {
