@@ -3,7 +3,7 @@ import { PlaywrightTestConfig, devices } from '@playwright/test';
 const config: PlaywrightTestConfig = {
   use: {
     // Run the browser in headless mode
-    // headless: true,
+    // headless: false,
     // Record trace for each test, but remove it from successful test runs.
     trace: 'retain-on-failure',
   },

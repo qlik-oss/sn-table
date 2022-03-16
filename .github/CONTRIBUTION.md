@@ -22,7 +22,7 @@ Run rendering tests with:
     yarn build
 
     chmod 777 ./test/rendering/commands/run-rendering-test.sh
-    sudo ./test/rendering/commands/run-rendering-test.sh
+    ./test/rendering/commands/run-rendering-test.sh
 
 Look into [overview and guide](../test/rendering/README.md) to learn more about the rendering test
 

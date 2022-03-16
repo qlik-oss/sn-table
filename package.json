@@ -71,7 +71,7 @@
     "@nebula.js/cli-build": "2.6.1",
     "@nebula.js/cli-sense": "2.6.1",
     "@nebula.js/cli-serve": "2.6.1",
-    "@playwright/test": "^1.19.2",
+    "@playwright/test": "1.19.2",
     "@testing-library/jest-dom": "5.16.2",
     "@testing-library/react": "12.1.4",
     "@testing-library/react-hooks": "7.0.2",

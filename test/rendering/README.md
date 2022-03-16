@@ -28,13 +28,13 @@ If you've updated the UI, you need to run the update-screenshots.sh script:
     yarn build
 
     chmod 777 ./test/rendering/commands/update-screenshots.sh
-    sudo ./test/rendering/commands/update-screenshots.sh
+    ./test/rendering/commands/update-screenshots.sh
 
 It will spin up a docker container with playwright and enable us to emulate our CI server for updating the reference screenshots. The `--update-snapshots` will generate new screenshots for you.
 
 Make sure to commit these after you've **confirmed the screenshot changes**.
 
-Sometimes they might break, if you are certain no UI changes have been made just re-run the failed workflow.
+Sometimes tests might break, if you are certain no UI changes have been made just re-run the failed workflow.
 
 <!-- ## Test cases description -->
 
