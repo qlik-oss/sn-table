@@ -127,7 +127,8 @@ jobs:
             fi
 
   api-governance:
-    machine: true
+    machine:
+      image: ubuntu-2004:current
     working_directory: ~/project
     steps:
       - checkout
