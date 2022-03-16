@@ -25,9 +25,9 @@ function TableBodyWrapper({
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
 
-  // active: turn off interactions that affect the state of the visual representation like zoom, scroll, etc.
+  // active: turn off interactions that affect the state of the visual representation including selection, zoom, scroll, etc.
   // select: turn off selections.
-  const selectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
+  const selectionsEnabled = !!selectionsAPI && !constraints.active;
   const getColumnRenderers = columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(() => getColumnRenderers);
   const [selectionState, selectionDispatch] = useReducer(reducer, {
