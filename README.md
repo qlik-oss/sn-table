@@ -66,7 +66,7 @@ The API can also be found in [the Qlik developer portal](https://qlik.dev/apis/j
 
 ## Contribution
 
-To learn how to run a sn-table extension using nebula development server and make a development following the instructions in our [contributing guide](./.github/CONTRIBUTION.md).
+To learn how to run a sn-table extension using nebula development server and develop, see our [contributing guide](./.github/CONTRIBUTION.md).
 
 ## Package
 
