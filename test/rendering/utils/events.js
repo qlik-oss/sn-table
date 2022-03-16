@@ -17,7 +17,7 @@ function pageerrorEvent(msg) {
   console.error(msg);
 }
 
-export default {
+module.exports = {
   addListeners(page) {
     page.on('console', consoleEvent);
     page.on('pageerror', pageerrorEvent);

@@ -39,7 +39,6 @@
       },
       "globals": {
         "expect": false,
-        "aw": false,
         "page": false,
         "window": true
       },
