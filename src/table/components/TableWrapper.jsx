@@ -16,9 +16,8 @@ import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/han
 import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
 
-function Portal({ children, target }) {
-  return ReactDOM.createPortal(children, target);
-}
+const Portal = ({ children, target }) => ReactDOM.createPortal(children, target);
+
 export default function TableWrapper(props) {
   const {
     rootElement,
@@ -123,7 +122,7 @@ export default function TableWrapper(props) {
   };
 
   const tableContainerStyle = {
-    height: constraints.active || footerContainer ? '100%' : 'calc(100% - 52px)',
+    height: constraints.active || footerContainer || size.qcy <= 10 ? '100%' : 'calc(100% - 52px)',
     overflow: constraints.active ? 'hidden' : 'auto',
   };
 
