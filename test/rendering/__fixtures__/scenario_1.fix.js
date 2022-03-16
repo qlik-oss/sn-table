@@ -13,8 +13,8 @@ export default () => ({
         qSelectionInfo: {},
         qHyperCube: {
           qSize: {
-            qcx: 1,
-            qcy: 6,
+            qcx: 2,
+            qcy: 78,
           },
           qDimensionInfo: [
             {
