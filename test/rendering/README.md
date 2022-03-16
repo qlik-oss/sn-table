@@ -17,7 +17,7 @@ Visual regression testing flow:
 
 To capture same screenshot on the same operating system both locally and on a CI server, we use a docker instance to take the contents of `dist` and start a http-server. The rendering tests then run on your local machine or on the CI server.
 
-## Guide
+## Updating snapshots
 
 If you've updated the UI, you need to run the update-screenshots.sh script:
 
