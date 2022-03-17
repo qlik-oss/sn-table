@@ -35,18 +35,20 @@
       "env": {
         "browser": false,
         "node": true,
-        "mocha": true
+        "jest/globals": true
       },
       "globals": {
-        "chai": false,
         "expect": false,
-        "sinon": false,
-        "aw": false,
-        "page": false
+        "page": false,
+        "window": true
       },
-      "plugins": ["mocha", "react"],
+      "plugins": ["jest", "react"],
       "rules": {
-        "mocha/no-exclusive-tests": "error"
+        "jest/no-disabled-tests": "warn",
+        "jest/no-focused-tests": "error",
+        "jest/no-identical-title": "error",
+        "jest/prefer-to-have-length": "warn",
+        "jest/valid-expect": "error"
       }
     }
   ]

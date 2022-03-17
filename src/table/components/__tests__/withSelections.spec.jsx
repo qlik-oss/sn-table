@@ -1,8 +1,5 @@
-import './rtl-setup';
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import { expect } from 'chai';
-import sinon from 'sinon';
 
 import * as withSelections from '../withSelections';
 import * as selectionsUtils from '../../utils/selections-utils';
@@ -20,7 +17,7 @@ describe('withSelections', () => {
 
   beforeEach(() => {
     HOC = withSelections.default((props) => <div {...props}>{props.value}</div>);
-    sinon.stub(selectionsUtils, 'selectCell').returns(sinon.spy());
+    jest.spyOn(selectionsUtils, 'selectCell').mockImplementation(() => jest.fn());
 
     value = '100';
     cell = {
@@ -34,16 +31,13 @@ describe('withSelections', () => {
     selectionDispatch = () => {};
     evt = { button: 0 };
     styling = {};
-    announce = sinon.spy();
+    announce = jest.fn();
     theme = {
       getStyle: () => {},
     };
   });
 
-  afterEach(() => {
-    sinon.verifyAndRestore();
-    sinon.resetHistory();
-  });
+  afterEach(() => jest.clearAllMocks());
 
   it('should render a mocked component with the passed value', () => {
     const { queryByText } = render(
@@ -54,10 +48,11 @@ describe('withSelections', () => {
         selectionDispatch={selectionDispatch}
         styling={styling}
         theme={theme}
+        announce={announce}
       />
     );
 
-    expect(queryByText(value)).to.be.visible;
+    expect(queryByText(value)).toBeVisible();
   });
   it('should call selectCell on mouseUp', () => {
     const { queryByText } = render(
@@ -73,7 +68,15 @@ describe('withSelections', () => {
     );
     fireEvent.mouseUp(queryByText(value));
 
-    expect(selectionsUtils.selectCell).to.have.been.calledWithMatch({ selectionState, cell, evt, announce });
+    expect(selectionsUtils.selectCell).toHaveBeenCalledTimes(1);
+    expect(selectionsUtils.selectCell).toHaveBeenCalledWith(
+      expect.objectContaining({
+        selectionState: expect.anything(),
+        cell: expect.anything(),
+        evt: expect.anything(),
+        announce: expect.anything(),
+      })
+    );
   });
   it('should not call selectCell on mouseUp when measure', () => {
     cell.isDim = false;
@@ -86,28 +89,12 @@ describe('withSelections', () => {
         selectionDispatch={selectionDispatch}
         styling={styling}
         theme={theme}
+        announce={announce}
       />
     );
     fireEvent.mouseUp(queryByText(value));
 
-    expect(selectionsUtils.selectCell).to.not.have.been.called;
-  });
-  it('should not call selectCell on mouseUp when measure', () => {
-    cell.isDim = false;
-
-    const { queryByText } = render(
-      <HOC
-        value={value}
-        selectionState={selectionState}
-        cell={cell}
-        selectionDispatch={selectionDispatch}
-        styling={styling}
-        theme={theme}
-      />
-    );
-    fireEvent.mouseUp(queryByText(value), evt);
-
-    expect(selectionsUtils.selectCell).to.not.have.been.called;
+    expect(selectionsUtils.selectCell).not.toHaveBeenCalled();
   });
   it('should not call selectCell on mouseUp when right button', () => {
     evt.button = 2;
@@ -120,10 +107,11 @@ describe('withSelections', () => {
         selectionDispatch={selectionDispatch}
         styling={styling}
         theme={theme}
+        announce={announce}
       />
     );
     fireEvent.mouseUp(queryByText(value), evt);
 
-    expect(selectionsUtils.selectCell).to.not.have.been.called;
+    expect(selectionsUtils.selectCell).not.toHaveBeenCalled();
   });
 });
