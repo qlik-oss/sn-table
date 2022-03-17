@@ -1,13 +1,12 @@
-import './rtl-setup';
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import { expect } from 'chai';
-import sinon from 'sinon';
 import TableHeadWrapper from '../TableHeadWrapper';
 import * as handleKeyPress from '../../utils/handle-key-press';
 import * as handleAccessibility from '../../utils/handle-accessibility';
 
 describe('<TableHeadWrapper />', () => {
+  const rootElement = {};
+  const setFocusedCellCoord = () => {};
   let tableData;
   let theme;
   let layout;
@@ -35,7 +34,7 @@ describe('<TableHeadWrapper />', () => {
         qEffectiveInterColumnSortOrder: [0, 1],
       },
     };
-    changeSortOrder = sinon.spy();
+    changeSortOrder = jest.fn();
     constraints = {
       active: false,
     };
@@ -49,14 +48,13 @@ describe('<TableHeadWrapper />', () => {
     focusedCellCoord = [0, 0];
   });
 
-  afterEach(() => {
-    sinon.verifyAndRestore();
-    sinon.resetHistory();
-  });
-
   it('should render table head', () => {
     const { queryByText } = render(
       <TableHeadWrapper
+        rootElement={rootElement}
+        setFocusedCellCoord={setFocusedCellCoord}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
         tableData={tableData}
         theme={theme}
         layout={layout}
@@ -67,13 +65,15 @@ describe('<TableHeadWrapper />', () => {
       />
     );
 
-    expect(queryByText(tableData.columns[0].label)).to.be.visible;
-    expect(queryByText(tableData.columns[1].label)).to.be.visible;
+    expect(queryByText(tableData.columns[0].label)).toBeVisible();
+    expect(queryByText(tableData.columns[1].label)).toBeVisible();
   });
 
   it('should call changeSortOrder when clicking a header cell', () => {
     const { queryByText } = render(
       <TableHeadWrapper
+        rootElement={rootElement}
+        setFocusedCellCoord={setFocusedCellCoord}
         tableData={tableData}
         theme={theme}
         layout={layout}
@@ -87,7 +87,7 @@ describe('<TableHeadWrapper />', () => {
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
 
-    expect(changeSortOrder).to.have.been.calledWith(layout, tableData.columns[0]);
+    expect(changeSortOrder).toHaveBeenCalledWith(layout, tableData.columns[0]);
   });
 
   it('should not call changeSortOrder when clicking a header cell in edit mode', () => {
@@ -96,6 +96,8 @@ describe('<TableHeadWrapper />', () => {
     };
     const { queryByText } = render(
       <TableHeadWrapper
+        rootElement={rootElement}
+        setFocusedCellCoord={setFocusedCellCoord}
         tableData={tableData}
         theme={theme}
         layout={layout}
@@ -109,7 +111,7 @@ describe('<TableHeadWrapper />', () => {
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
 
-    expect(changeSortOrder).not.have.been.called;
+    expect(changeSortOrder).not.toHaveBeenCalled();
   });
 
   it('should not call changeSortOrder when clicking a header cell and cells are selected', () => {
@@ -118,6 +120,8 @@ describe('<TableHeadWrapper />', () => {
     };
     const { queryByText } = render(
       <TableHeadWrapper
+        rootElement={rootElement}
+        setFocusedCellCoord={setFocusedCellCoord}
         tableData={tableData}
         theme={theme}
         layout={layout}
@@ -131,14 +135,16 @@ describe('<TableHeadWrapper />', () => {
     );
     fireEvent.click(queryByText(tableData.columns[0].label));
 
-    expect(changeSortOrder).not.have.been.called;
+    expect(changeSortOrder).not.toHaveBeenCalled();
   });
 
   it('should call headHandleKeyPress when keyDown on a header cell', () => {
-    sinon.stub(handleKeyPress, 'headHandleKeyPress').returns(sinon.spy());
+    jest.spyOn(handleKeyPress, 'headHandleKeyPress').mockImplementation(() => jest.fn());
 
     const { queryByText } = render(
       <TableHeadWrapper
+        rootElement={rootElement}
+        setFocusedCellCoord={setFocusedCellCoord}
         tableData={tableData}
         theme={theme}
         layout={layout}
@@ -152,14 +158,16 @@ describe('<TableHeadWrapper />', () => {
     );
     fireEvent.keyDown(queryByText(tableData.columns[0].label));
 
-    expect(handleKeyPress.headHandleKeyPress).to.have.been.calledOnce;
+    expect(handleKeyPress.headHandleKeyPress).toHaveBeenCalledTimes(1);
   });
 
   it('should call handleClickToFocusHead when clicking a header cell', () => {
-    sinon.stub(handleAccessibility, 'handleClickToFocusHead').returns(sinon.spy());
+    jest.spyOn(handleAccessibility, 'handleClickToFocusHead').mockImplementation(() => jest.fn());
 
     const { queryByText } = render(
       <TableHeadWrapper
+        rootElement={rootElement}
+        setFocusedCellCoord={setFocusedCellCoord}
         tableData={tableData}
         theme={theme}
         layout={layout}
@@ -173,7 +181,7 @@ describe('<TableHeadWrapper />', () => {
     );
     fireEvent.mouseDown(queryByText(tableData.columns[0].label));
 
-    expect(handleAccessibility.handleClickToFocusHead).to.have.been.calledOnce;
+    expect(handleAccessibility.handleClickToFocusHead).toHaveBeenCalledTimes(1);
   });
 
   it('should change `aria-pressed` and `aria-sort` when you sort by second column', () => {
@@ -192,6 +200,8 @@ describe('<TableHeadWrapper />', () => {
 
     const { queryByText } = render(
       <TableHeadWrapper
+        rootElement={rootElement}
+        setFocusedCellCoord={setFocusedCellCoord}
         tableData={tableData}
         theme={theme}
         layout={layout}
@@ -207,15 +217,17 @@ describe('<TableHeadWrapper />', () => {
     const firstColQuery = queryByText(tableData.columns[0].label).closest('th');
     const secondColQuery = queryByText(tableData.columns[1].label).closest('th');
 
-    expect(firstColQuery).to.not.have.attribute('aria-sort');
-    expect(firstColQuery).to.have.attribute('aria-pressed', 'false');
-    expect(secondColQuery).to.have.attribute('aria-sort', 'ascending');
-    expect(secondColQuery).to.have.attribute('aria-pressed', 'true');
+    expect(firstColQuery.getAttribute('aria-sort')).toBeNull();
+    expect(firstColQuery.getAttribute('aria-pressed')).toBe('false');
+    expect(secondColQuery.getAttribute('aria-sort')).toBe('ascending');
+    expect(secondColQuery.getAttribute('aria-pressed')).toBe('true');
   });
 
   it('should render the visually hidden text instead of `aria-label` and has correct `scope` properly', () => {
     const { queryByText, queryByTestId } = render(
       <TableHeadWrapper
+        rootElement={rootElement}
+        setFocusedCellCoord={setFocusedCellCoord}
         tableData={tableData}
         theme={theme}
         layout={layout}
@@ -230,17 +242,19 @@ describe('<TableHeadWrapper />', () => {
 
     // check scope
     const tableColumn = queryByText(tableData.columns[0].label).closest('th');
-    expect(tableColumn).to.have.attribute('scope', 'col');
+    expect(tableColumn.getAttribute('scope')).toBe('col');
 
     // check label
     const tableColumnSortlabel = queryByTestId('VHL-for-col-0');
-    expect(tableColumnSortlabel).to.have.text('SNTable.SortLabel.PressSpaceToSort');
+    expect(tableColumnSortlabel).toHaveTextContent('SNTable.SortLabel.PressSpaceToSort');
   });
 
   it('should not render visually hidden text while you are out of table header', () => {
     focusedCellCoord = [1, 1];
     const { queryByTestId } = render(
       <TableHeadWrapper
+        rootElement={rootElement}
+        setFocusedCellCoord={setFocusedCellCoord}
         tableData={tableData}
         theme={theme}
         layout={layout}
@@ -256,7 +270,7 @@ describe('<TableHeadWrapper />', () => {
     const firstColHiddenLabel = queryByTestId('VHL-for-col-0');
     const secondColHiddenLabel = queryByTestId('VHL-for-col-1');
 
-    expect(firstColHiddenLabel).to.be.null;
-    expect(secondColHiddenLabel).to.be.null;
+    expect(firstColHiddenLabel).toBeNull();
+    expect(secondColHiddenLabel).toBeNull();
   });
 });

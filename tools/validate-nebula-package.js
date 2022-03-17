@@ -46,6 +46,7 @@ const validateFiles = (pkg) => {
     'license',
     'keywords',
     'publishConfig',
+    'bug',
     'repository',
     'files',
     'engines',
