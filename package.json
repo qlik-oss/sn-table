@@ -22,7 +22,8 @@
   "files": [
     "dist",
     "api-specifications",
-    "core"
+    "core",
+    "sn-table-ext"
   ],
   "engines": {
     "node": ">=16"
@@ -35,6 +36,7 @@
     "lint": "eslint 'src/**'",
     "format": "prettier --write 'src/**'",
     "start": "nebula serve --build false --type sn-table",
+    "sense": "nebula sense",
     "locale:verify": "node src/locale/tools/verify-translations.js",
     "locale:generate": "node src/locale/scripts/generate-all.mjs",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
