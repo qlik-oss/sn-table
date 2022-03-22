@@ -29,6 +29,7 @@
     "node": ">=16"
   },
   "main": "dist/sn-table.js",
+  "module": "core/esm/index.js",
   "scripts": {
     "build": "yarn run locale:generate && node ./tools/build.js --core && shx cp assets/* dist",
     "build:dev": "yarn run locale:generate && node ./tools/build.js --core --mode development && shx cp assets/* dist",
