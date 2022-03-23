@@ -123,7 +123,7 @@ export default function TableWrapper(props) {
   };
 
   const tableContainerStyle = {
-    height: constraints.active || footerContainer || size.qcy <= 10 ? '100%' : 'calc(100% - 52px)',
+    height: constraints.active || footerContainer || totalVerticalCount <= 10 ? '100%' : 'calc(100% - 52px)',
     overflow: constraints.active ? 'hidden' : 'auto',
   };
 
@@ -185,10 +185,13 @@ export default function TableWrapper(props) {
   let paginationBar;
   if (footerContainer) {
     paginationBar = (
-      <Portal target={footerContainer}>{paginationContent(footerContainer.getBoundingClientRect().width)}</Portal>
+      <Portal target={footerContainer}>
+        {totalVerticalCount <= 10 ? '' : paginationContent(footerContainer.getBoundingClientRect().width)}
+      </Portal>
     );
   } else {
-    paginationBar = <Paper sx={paperTablePaginationStyle}>{paginationContent(rect.width)}</Paper>;
+    paginationBar =
+      totalVerticalCount <= 10 ? '' : <Paper sx={paperTablePaginationStyle}>{paginationContent(rect.width)}</Paper>;
   }
 
   return (
