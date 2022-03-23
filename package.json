@@ -31,7 +31,7 @@
   "main": "dist/sn-table.js",
   "module": "core/esm/index.js",
   "scripts": {
-    "build": "yarn run locale:generate && node ./tools/build.js --core && shx cp assets/* dist",
+    "build": "yarn run locale:generate && node ./tools/build.js --core --ext && shx cp assets/* dist",
     "build:dev": "yarn run locale:generate && node ./tools/build.js --core --mode development && shx cp assets/* dist",
     "build:watch": "yarn run locale:generate && node ./tools/build.js --mode development -w",
     "lint": "eslint 'src/**'",
