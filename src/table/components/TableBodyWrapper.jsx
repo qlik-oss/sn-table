@@ -27,7 +27,7 @@ function TableBodyWrapper({
 
   // active: turn off interactions that affect the state of the visual representation including selection, zoom, scroll, etc.
   // select: turn off selections.
-  const selectionsEnabled = !!selectionsAPI && !constraints.active;
+  const selectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
   const getColumnRenderers = columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(() => getColumnRenderers);
   const [selectionState, selectionDispatch] = useReducer(reducer, {
