@@ -34,6 +34,7 @@ export default function TableWrapper(props) {
     announcer, // this is only for testing purposes
   } = props;
   const { size, rows, columns } = tableData;
+  const totalVerticalCount = size.qcy;
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
   const shouldRefocus = useRef(false);
@@ -42,7 +43,7 @@ export default function TableWrapper(props) {
 
   /* eslint-disable react-hooks/rules-of-hooks */
   const announce = announcer || useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
-  const totalPages = Math.ceil(size.qcy / rowsPerPage);
+  const totalPages = Math.ceil(totalVerticalCount / rowsPerPage);
   const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
     rows.length + 1,
     columns.length,
@@ -113,7 +114,7 @@ export default function TableWrapper(props) {
       shouldAddTabstop: !keyboard.enabled || keyboard.active,
       announce,
     });
-  }, [rows.length, size.qcy, size.qcx, page]);
+  }, [rows.length, totalVerticalCount, size.qcx, page]);
 
   const paperStyle = {
     height: '100%',
@@ -145,7 +146,7 @@ export default function TableWrapper(props) {
           sx={constraints.active && { display: 'none' }}
           rowsPerPageOptions={fixedRowsPerPage ? [rowsPerPage] : rowsPerPageOptions}
           component="div"
-          count={size.qcy}
+          count={totalVerticalCount}
           rowsPerPage={rowsPerPage}
           labelRowsPerPage={`${translator.get('SNTable.Pagination.RowsPerPage')}:`}
           page={page}
@@ -171,7 +172,7 @@ export default function TableWrapper(props) {
           direction={direction}
           page={page}
           onPageChange={handleChangePage}
-          lastPageIdx={Math.ceil(size.qcy / rowsPerPage) - 1}
+          lastPageIdx={Math.ceil(totalVerticalCount / rowsPerPage) - 1}
           keyboard={keyboard}
           isInSelectionMode={selectionsAPI.isModal()}
           tableWidth={width}
@@ -198,7 +199,7 @@ export default function TableWrapper(props) {
       onKeyDown={(evt) =>
         handleTableWrapperKeyDown({
           evt,
-          totalRowSize: size.qcy,
+          totalVerticalCount,
           page,
           rowsPerPage,
           handleChangePage,

@@ -10,7 +10,7 @@ export const preventDefaultBehavior = (evt) => {
 
 export const handleTableWrapperKeyDown = ({
   evt,
-  totalRowSize,
+  totalVerticalCount,
   page,
   rowsPerPage,
   handleChangePage,
@@ -20,7 +20,7 @@ export const handleTableWrapperKeyDown = ({
 }) => {
   if (isCtrlShift(evt)) {
     preventDefaultBehavior(evt);
-    const lastPage = Math.ceil(totalRowSize / rowsPerPage) - 1;
+    const lastPage = Math.ceil(totalVerticalCount / rowsPerPage) - 1;
     if (evt.key === 'ArrowRight' && page < lastPage) {
       setShouldRefocus();
       handleChangePage(page + 1);
