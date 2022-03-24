@@ -54,7 +54,7 @@ Build a nebula.js visualization as a Qlik Sense extension:
 yarn build
 ```
 
-Compress the generated 'dist' folder into the 'application/zip' file format and rename it to 'sn-table-ext'.
+Compress the generated 'sn-table-ext' folder into the 'application/zip' file format
 
 |                          [Saas Edition of Qlik Sense]                           |                     [Qlik Sense Enterprise]                      |                            [Qlik Sense Desktop]                            |
 | :-----------------------------------------------------------------------------: | :--------------------------------------------------------------: | :------------------------------------------------------------------------: |
