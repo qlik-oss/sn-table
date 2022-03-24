@@ -35,6 +35,7 @@ export default function TableWrapper(props) {
   } = props;
   const { size, rows, columns } = tableData;
   const totalVerticalCount = size.qcy;
+  const paginationNeeded = totalVerticalCount > 10;
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
   const shouldRefocus = useRef(false);
@@ -123,7 +124,7 @@ export default function TableWrapper(props) {
   };
 
   const tableContainerStyle = {
-    height: constraints.active || footerContainer || totalVerticalCount <= 10 ? '100%' : 'calc(100% - 52px)',
+    height: constraints.active || footerContainer || paginationNeeded ? 'calc(100% - 52px)' : '100%',
     overflow: constraints.active ? 'hidden' : 'auto',
   };
 
@@ -186,12 +187,11 @@ export default function TableWrapper(props) {
   if (footerContainer) {
     paginationBar = (
       <Portal target={footerContainer}>
-        {totalVerticalCount <= 10 ? '' : paginationContent(footerContainer.getBoundingClientRect().width)}
+        {paginationNeeded && paginationContent(footerContainer.getBoundingClientRect().width)}
       </Portal>
     );
   } else {
-    paginationBar =
-      totalVerticalCount <= 10 ? '' : <Paper sx={paperTablePaginationStyle}>{paginationContent(rect.width)}</Paper>;
+    paginationBar = paginationNeeded && <Paper sx={paperTablePaginationStyle}>{paginationContent(rect.width)}</Paper>;
   }
 
   return (
