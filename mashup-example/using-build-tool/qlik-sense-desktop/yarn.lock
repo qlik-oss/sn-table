@@ -2,22 +2,22 @@
 # yarn lockfile v1
 
 
-"@nebula.js/sn-table@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/sn-table/-/sn-table-1.7.0.tgz#03a99e866fcb6107d2ffcdffe6508b038a29adce"
-  integrity sha512-ZWZtKKq/Rh4qxBMfPOW7bcW4OX5WYgPubVWtDcRrH8PBpBnZ7RZhsMEGhcECEMaadZPVmRq1oBV/cWEwZpI9EQ==
+"@nebula.js/sn-table@1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/sn-table/-/sn-table-1.8.0.tgz#fff322cc96009f1d55b68ce939f81a182095d501"
+  integrity sha512-MzjFlKUIX7MW7GHbnwfD5Vy50u3wtizJqUx0dbPwAxChkXkEB/YRlsPQgCxJU0rTYZVjA6H/FxbJwmiaRqX+Ow==
 
-"@nebula.js/stardust@2.6.1":
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-2.6.1.tgz#ef60ff04b1e3e91dd1df3f880a250936b4427d6b"
-  integrity sha512-HdLJSif7rB97Bl1gZAxEA7zuFLIicOgya6NY9UwPOBBSnlcWWhyt648CACPZS6tjC7ToCXQHQMO3rIMR9BkRyw==
+"@nebula.js/stardust@2.7.0":
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-2.7.0.tgz#18c73110429a00179cb820fe24a300df1c6d6bb7"
+  integrity sha512-H5X4mvnY/GwZh0JnQQICYkcEIWqDq3lGVn39vZv7Wgd87YHc13fHNsajnPJtchbRaeMfvAM6mzWobYxOehL4eg==
   dependencies:
-    "@types/qlik-engineapi" "12.67.11"
+    "@types/qlik-engineapi" "12.67.12"
 
-"@types/qlik-engineapi@12.67.11":
-  version "12.67.11"
-  resolved "https://registry.yarnpkg.com/@types/qlik-engineapi/-/qlik-engineapi-12.67.11.tgz#279da931e9cbd2a2d4d9d17220f3f12a482027eb"
-  integrity sha512-zMzI2+TibE4XHImPvBA2iQi2RE0XYhe5MdXaT1ViPfjbT7qgIfWoy58idOsOPbPtGupvE+gCw4TtFx069ClAdQ==
+"@types/qlik-engineapi@12.67.12":
+  version "12.67.12"
+  resolved "https://registry.yarnpkg.com/@types/qlik-engineapi/-/qlik-engineapi-12.67.12.tgz#454966501cc48f5cd5092b3f4022c8a82ab681fa"
+  integrity sha512-b5F9+pikUXCahd8phenSZfTddQXlmnw+VMPPtuOB6J3GNNEZG/o0dYFOMeAo1VuFgLaD3R/Ew/+dn4QG7cpPNw==
 
 enigma.js@2.8.0:
   version "2.8.0"
