@@ -40,18 +40,18 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
   const { qHyperCube } = layout;
   const size = qHyperCube.qSize;
   const top = page * rowsPerPage;
-  const width = size.qcx;
-  const totalHeight = size.qcy;
-  const height = Math.min(rowsPerPage, totalHeight - top);
+  const totalHorizontalCount = size.qcx;
+  const totalVerticalCount = size.qcy;
+  const height = Math.min(rowsPerPage, totalVerticalCount - top);
   // When the number of rows is reduced (e.g. confirming selections),
   // you can end up still being on a page that doesn't exist anymore, then go back to the first page and return null
-  if (page > 0 && top >= totalHeight) {
+  if (page > 0 && top >= totalVerticalCount) {
     setPageInfo({ ...pageInfo, page: 0 });
     return null;
   }
   // If the number of cells exceeds 10k then we need to lower the rows per page to the maximum possible value
-  if (height * width > MAX_CELLS) {
-    setPageInfo({ ...pageInfo, rowsPerPage: getHighestPossibleRpp(width, rowsPerPageOptions), page: 0 });
+  if (height * totalHorizontalCount > MAX_CELLS) {
+    setPageInfo({ ...pageInfo, rowsPerPage: getHighestPossibleRpp(totalHorizontalCount, rowsPerPageOptions), page: 0 });
     return null;
   }
 
@@ -59,7 +59,7 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
   // using filter to remove hidden columns (represented with false)
   const columns = columnOrder.map((colIndex) => getColumnInfo(qHyperCube, colIndex)).filter(Boolean);
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
-    { qTop: top, qLeft: 0, qHeight: height, qWidth: width },
+    { qTop: top, qLeft: 0, qHeight: height, qWidth: totalHorizontalCount },
   ]);
 
   const rows = dataPages[0].qMatrix.map((r, rowIdx) => {

@@ -90,7 +90,7 @@ describe('handle-key-press', () => {
       expect(nextCol).toBe(0);
     });
 
-    it('should move to the prev row when we reach to the beganing of the current row', () => {
+    it('should move to the prev row when we reach to the beginning of the current row', () => {
       evt.key = 'ArrowLeft';
       rowAndColumnCount.rowCount = 3;
       rowAndColumnCount.columnCount = 3;
@@ -101,7 +101,7 @@ describe('handle-key-press', () => {
       expect(nextCol).toBe(2);
     });
 
-    it('should stay at the first row and first col of table when we reached to the beganing of the table', () => {
+    it('should stay at the first row and first col of table when we reached to the beginning of the table', () => {
       evt.key = 'ArrowLeft';
       rowAndColumnCount.rowCount = 2;
       rowAndColumnCount.columnCount = 2;
@@ -414,7 +414,7 @@ describe('handle-key-press', () => {
       expect(announce).not.toHaveBeenCalled();
     });
 
-    it('when press ArrowRight and shif and ctrl key, should not update the sorting', () => {
+    it('when press ArrowRight and shift and ctrl key, should not update the sorting', () => {
       evt.key = 'ArrowRight';
       evt.shiftKey = true;
       evt.ctrlKey = true;
@@ -437,7 +437,7 @@ describe('handle-key-press', () => {
       expect(announce).not.toHaveBeenCalled();
     });
 
-    it('when shift + tab is pressed should prevent defualt and call focusSelectionToolbar', () => {
+    it('when shift + tab is pressed should prevent default and call focusSelectionToolbar', () => {
       evt.key = 'Tab';
       evt.shiftKey = true;
       isModal = true;
@@ -460,7 +460,7 @@ describe('handle-key-press', () => {
       expect(announce).not.toHaveBeenCalled();
     });
 
-    it('when only tab is pressed should not prevent defualt nor call focusSelectionToolbar', () => {
+    it('when only tab is pressed should not prevent default nor call focusSelectionToolbar', () => {
       evt.key = 'Tab';
       isModal = true;
 
@@ -482,7 +482,7 @@ describe('handle-key-press', () => {
       expect(announce).not.toHaveBeenCalled();
     });
 
-    it('when shift + tab is pressed but not in selection mode, should not prevent defualt nor call focusSelectionToolbar', () => {
+    it('when shift + tab is pressed but not in selection mode, should not prevent default nor call focusSelectionToolbar', () => {
       evt.key = 'Tab';
       evt.shiftKey = true;
 
@@ -503,7 +503,7 @@ describe('handle-key-press', () => {
       expect(handleAccessibility.focusSelectionToolbar).not.toHaveBeenCalled();
     });
 
-    it('when shift + tab is pressed but keyboard.enabled is falsey, should not prevent defualt nor call focusSelectionToolbar', () => {
+    it('when shift + tab is pressed but keyboard.enabled is false, should not prevent default nor call focusSelectionToolbar', () => {
       evt.key = 'Tab';
       evt.shiftKey = true;
       keyboard.enabled = false;
@@ -607,7 +607,7 @@ describe('handle-key-press', () => {
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
     });
 
-    it('when press space bar key not in analysis mdoe, should not update the sorting', () => {
+    it('when press space bar key not in analysis mode, should not update the sorting', () => {
       evt.key = ' ';
       isAnalysisMode = false;
       headHandleKeyPress(
@@ -644,7 +644,7 @@ describe('handle-key-press', () => {
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
     });
 
-    it('when press enter key not in analysis mdoe, should not update the sorting', () => {
+    it('when press enter key not in analysis mode, should not update the sorting', () => {
       evt.key = 'Enter';
       isAnalysisMode = false;
       headHandleKeyPress(
@@ -663,7 +663,7 @@ describe('handle-key-press', () => {
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
     });
 
-    it('when press ArrowRight and shif and ctrl key, should not update the sorting', () => {
+    it('when press ArrowRight and shift and ctrl key, should not update the sorting', () => {
       evt.key = 'ArrowRight';
       evt.shiftKey = true;
       evt.ctrlKey = true;
@@ -686,7 +686,7 @@ describe('handle-key-press', () => {
 
   describe('handleTableWrapperKeyDown', () => {
     let evt = {};
-    let totalRowSize;
+    let totalVerticalCount;
     let page;
     let rowsPerPage;
     let handleChangePage;
@@ -709,7 +709,7 @@ describe('handle-key-press', () => {
 
     it('when shift key is not pressed, handleChangePage should not run', () => {
       evt.shiftKey = false;
-      handleTableWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.toHaveBeenCalled();
       expect(setShouldRefocus).not.toHaveBeenCalled();
     });
@@ -717,57 +717,65 @@ describe('handle-key-press', () => {
     it('when ctrl key or meta key is not pressed, handleChangePage should not run', () => {
       evt.ctrlKey = false;
       evt.metaKey = false;
-      handleTableWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.toHaveBeenCalled();
       expect(setShouldRefocus).not.toHaveBeenCalled();
     });
 
-    it('when presss arrow right key on the first page which contains all rows, handleChangePage should not run', () => {
+    it('when press arrow right key on the first page which contains all rows, handleChangePage should not run', () => {
       page = 0;
-      totalRowSize = 40;
+      totalVerticalCount = 40;
       rowsPerPage = 40;
-      handleTableWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.toHaveBeenCalled();
       expect(setShouldRefocus).not.toHaveBeenCalled();
     });
 
-    it('when presss arrow left key on the first page, handleChangePage should not run', () => {
+    it('when press arrow left key on the first page, handleChangePage should not run', () => {
       evt.key = 'ArrowLeft';
       page = 0;
-      totalRowSize = 40;
+      totalVerticalCount = 40;
       rowsPerPage = 10;
-      handleTableWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.toHaveBeenCalled();
       expect(setShouldRefocus).not.toHaveBeenCalled();
     });
 
-    it('when presss arrow right key on the page whose next page contains rows, should change page', () => {
-      totalRowSize = 40;
+    it('when press arrow right key on the page whose next page contains rows, should change page', () => {
+      totalVerticalCount = 40;
       page = 0;
       rowsPerPage = 10;
-      handleTableWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).toHaveBeenCalledTimes(1);
       expect(setShouldRefocus).toHaveBeenCalledTimes(1);
     });
 
-    it('when presss arrow left key not on the first page, should change page', () => {
+    it('when press arrow left key not on the first page, should change page', () => {
       evt.key = 'ArrowLeft';
-      totalRowSize = 40;
+      totalVerticalCount = 40;
       page = 1;
       rowsPerPage = 40;
-      handleTableWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).toHaveBeenCalledTimes(1);
       expect(setShouldRefocus).toHaveBeenCalledTimes(1);
     });
 
-    it('when presss escape is pressed and keyboard.enabled is true, should call keyboard.blur', () => {
+    it('when press escape is pressed and keyboard.enabled is true, should call keyboard.blur', () => {
       evt = {
         key: 'Escape',
         stopPropagation: jest.fn(),
         preventDefault: jest.fn(),
       };
       keyboard = { enabled: true, blur: jest.fn() };
-      handleTableWrapperKeyDown({ evt, totalRowSize, page, rowsPerPage, handleChangePage, setShouldRefocus, keyboard });
+      handleTableWrapperKeyDown({
+        evt,
+        totalVerticalCount,
+        page,
+        rowsPerPage,
+        handleChangePage,
+        setShouldRefocus,
+        keyboard,
+      });
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(keyboard.blur).toHaveBeenCalledWith(true);
@@ -783,7 +791,7 @@ describe('handle-key-press', () => {
       isSelectionActive = true;
       handleTableWrapperKeyDown({
         evt,
-        totalRowSize,
+        totalVerticalCount,
         page,
         rowsPerPage,
         handleChangePage,
