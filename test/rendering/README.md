@@ -27,8 +27,8 @@ If you've updated the UI, you need to run the update-screenshots.sh script:
     # Build nebula.js visualization
     yarn build
 
-    chmod 777 ./test/rendering/commands/update-screenshots.sh
-    ./test/rendering/commands/update-screenshots.sh
+    chmod 777 ./test/rendering/scripts/update-screenshots.sh
+    ./test/rendering/scripts/update-screenshots.sh
 
 It will spin up a docker container with playwright and enable us to emulate our CI server for updating the reference screenshots. The `--update-snapshots` will generate new screenshots for you.
 

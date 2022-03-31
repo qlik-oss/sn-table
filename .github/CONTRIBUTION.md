@@ -23,8 +23,8 @@ Run rendering tests with:
     # Build nebula.js visualization
     yarn build
 
-    chmod 777 ./test/rendering/commands/run-rendering-test.sh
-    ./test/rendering/commands/run-rendering-test.sh
+    chmod 777 ./test/rendering/scripts/run-rendering-test.sh
+    ./test/rendering/scripts/run-rendering-test.sh
 
 Look into [overview and guide](../test/rendering/README.md) to learn more about the rendering test
 
