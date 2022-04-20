@@ -13,7 +13,10 @@
   "scripts": {
     "dev": "vite --force",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:rendering": "playwright test",
+    "test:local:rendering": "./test/rendering/scripts/run-rendering-test.sh",
+    "test:local:update:screenshots": "./test/rendering/scripts/update-screenshots.sh"
   },
   "dependencies": {
     "@nebula.js/sn-table": "1.8.0",
@@ -21,6 +24,7 @@
     "enigma.js": "2.8.0"
   },
   "devDependencies": {
+    "@playwright/test": "1.21.1",
     "vite": "2.8.6"
   }
 }

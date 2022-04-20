@@ -12,3 +12,6 @@ dist
 !.vscode/extensions.json
 .idea
 .DS_Store
+
+# testing
+test-report
