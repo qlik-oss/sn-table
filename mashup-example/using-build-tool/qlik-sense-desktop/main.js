@@ -41,6 +41,18 @@ import './style.css';
                 align: 'left',
               },
             },
+            qAttributeExpressions: [
+              {
+                qExpression: `=if(Sum([Sales Quantity]) < 100000, '#ff0000', '#00ff00')`,
+                qAttribute: true,
+                id: 'cellBackgroundColor',
+              },
+              {
+                qExpression: `=if(Sum([Sales Quantity]) < 100000, '#3bbc4a', '#8b3bbc')`,
+                qAttribute: true,
+                id: 'cellForegroundColor',
+              },
+            ],
           },
         ],
       },
