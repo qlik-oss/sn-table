@@ -39,23 +39,26 @@ test.describe('sn table: Rendering tests', () => {
   });
 
   // Iterate testing fixture files
-  fs.readdirSync(paths.fixtures).forEach((file) => {
-    const name = file.replace('.fix.js', '');
-    const fixturePath = `./${file}`;
-
-    // Create test case per testing fixture file
-    test(name, async ({ page }) => {
-      playwright = createPlaywright(page);
-      // Render chart based on testing fixture file
-      // in Nebula serve using Enigma mocker
-      const renderUrl = await route.renderFixture(fixturePath);
-      console.log({ renderUrl });
-      // Open page in Nebula which renders fixture
-      await playwright.open(renderUrl);
-      // Puppeteer Capture screenshot
-      const img = await playwright.screenshot();
-      // Compare screenshot with baseline image
-      expect(img).toMatchSnapshot(`${name}.png`);
-    });
+  // fs.readdirSync(paths.fixtures).forEach((file) => {
+  //   const name = file.replace('.fix.js', '');
+  // const fixturePath = `./${file}`;
+  const name = 'scenario_9'
+  const fixturePath = `./scenario_9.fix.js`;
+  // Create test case per testing fixture file
+  test(name, async ({ page }) => {
+    playwright = createPlaywright(page);
+    // Render chart based on testing fixture file
+    // in Nebula serve using Enigma mocker
+    const renderUrl = await route.renderFixture(fixturePath);
+    console.log({ renderUrl });
+    // Open page in Nebula which renders fixture
+    await playwright.open(renderUrl);
+    if (name === 'scenario_9')
+      await page.hover('text=Tampere')
+    // Puppeteer Capture screenshot
+    const img = await playwright.screenshot();
+    // Compare screenshot with baseline image
+    expect(img).toMatchSnapshot(`${name}.png`);
   });
+  // });
 });

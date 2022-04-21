@@ -36,6 +36,43 @@ Make sure to commit these after you've **confirmed the screenshot changes**.
 
 Sometimes tests might break, if you are certain no UI changes have been made just re-run the failed workflow.
 
-<!-- ## Test cases description -->
+## Test cases description
 
-<!-- scenario_1.fix.js:  -->
+scenario_1.fix.js:
+one dimension
+
+scenario_2.fix.js:
+one dimension,
+the total amount of rows is less then or equal to 10
+
+scenario_3.fix.js:
+one dimension,
+one measure
+
+scenario_4.fix.js:
+one dimension,
+one measure,
+font size and color for header and body
+
+scenario_5.fix.js:
+one dimension,
+one desc sorted measure,
+Background and font coloring for a column
+
+scenario_6.fix.js:
+one center-aligned dimension,
+one right-aligned measure,
+
+scenario_7.fix.js:
+one desc sorted dimension,
+one measure
+
+scenario_8.fix.js:
+one desc sorted dimension,
+one measure,
+the displayed amount of rows is 10
+
+scenario_9.fix.js:
+one dimension,
+one measure,
+the hover font color and background color
