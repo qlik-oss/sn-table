@@ -24,7 +24,7 @@ Run rendering tests with:
     yarn build
 
     chmod 777 ./test/rendering/scripts/run-rendering-test.sh
-    ./test/rendering/scripts/run-rendering-test.sh
+    yarn test:local:rendering
 
 Look into [overview and guide](../test/rendering/README.md) to learn more about the rendering test
 
