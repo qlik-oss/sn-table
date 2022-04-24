@@ -76,3 +76,16 @@ scenario_9.fix.js:
 one dimension,
 one measure,
 the hover font color and background color
+
+scenario_10.fix.js:
+one dimension,
+one measure,
+the hover font color and background color
+font size and color for header and body
+
+scenario_11.fix.js:
+one dimension,
+one measure,
+the hover font color and background color
+font size and color for header and body
+Background and font coloring for a column
