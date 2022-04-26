@@ -2,6 +2,7 @@
 *.log
 *.log
 .cache
+.DS_Store
 
 .npmrc
 npm-debug.log*
