@@ -183,7 +183,7 @@ describe('handle-key-press', () => {
         rows: [],
         colIdx: -1,
       };
-      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1, isDim: true };
+      cell = { qElemNumber: 1, colIdx: 0, rowIdx: 0, isDim: true };
       keyboard = { enabled: true };
       selectionDispatch = jest.fn();
       isAnalysisMode = true;
@@ -209,9 +209,90 @@ describe('handle-key-press', () => {
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
+      expect(announce).not.toHaveBeenCalled();
     });
 
-    it('when press space bar key and dimension, should select value for dimension', () => {
+    it('when press shift + arrow down key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell and select multiple values for dimension', () => {
+      evt.shiftKey = true;
+      const rows = [
+        {},
+        {
+          'col-0': {
+            qText: '3',
+            qNum: 3,
+            qElemNumber: 4,
+            rowIdx: 0,
+            colIdx: 0,
+          },
+        },
+      ];
+      const column = { id: 'col-0' };
+      bodyHandleKeyPress({
+        evt,
+        rootElement,
+        cellCoord: [rowIndex, colIndex],
+        selectionState,
+        cell,
+        selectionDispatch,
+        tableRows: rows,
+        columnId: column.id,
+        isAnalysisMode,
+        setFocusedCellCoord,
+        announce,
+        keyboard,
+      });
+
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(selectionState.api.begin).toHaveBeenCalledTimes(1);
+      expect(selectionState.api.select).toHaveBeenCalledTimes(1);
+      expect(selectionDispatch).toHaveBeenCalledTimes(1);
+      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
+      expect(announce).toHaveBeenCalledTimes(1);
+    });
+
+    it('when press shift + arrow up key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell and select multiple values for dimension', () => {
+      evt.shiftKey = true;
+      evt.key = 'ArrowUp';
+      cell = { qElemNumber: 1, colIdx: 0, rowIdx: 1, isDim: true };
+      const rows = [
+        {
+          'col-0': {
+            qText: '3',
+            qNum: 3,
+            qElemNumber: 4,
+            rowIdx: 0,
+            colIdx: 0,
+          },
+        },
+        {},
+      ];
+      const column = { id: 'col-0' };
+      bodyHandleKeyPress({
+        evt,
+        rootElement,
+        cellCoord: [rowIndex, colIndex],
+        selectionState,
+        cell,
+        selectionDispatch,
+        tableRows: rows,
+        columnId: column.id,
+        isAnalysisMode,
+        setFocusedCellCoord,
+        announce,
+        keyboard,
+      });
+
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(selectionState.api.begin).toHaveBeenCalledTimes(1);
+      expect(selectionState.api.select).toHaveBeenCalledTimes(1);
+      expect(selectionDispatch).toHaveBeenCalledTimes(1);
+      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
+      expect(announce).toHaveBeenCalledTimes(1);
+    });
+
+    it('when press space bar key and dimension, should select a value for dimension', () => {
       evt.key = ' ';
       bodyHandleKeyPress({
         evt,
@@ -231,6 +312,7 @@ describe('handle-key-press', () => {
       expect(selectionState.api.select).toHaveBeenCalledTimes(1);
       expect(selectionDispatch).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
+      expect(announce).toHaveBeenCalledTimes(1);
       expect(announce).toHaveBeenCalledWith({
         keys: ['SNTable.SelectionLabel.SelectedValue', 'SNTable.SelectionLabel.OneSelectedValue'],
       });
@@ -430,8 +512,8 @@ describe('handle-key-press', () => {
         announce,
         keyboard,
       });
-      expect(evt.preventDefault).not.toHaveBeenCalled();
-      expect(evt.stopPropagation).not.toHaveBeenCalled();
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(selectionState.api.cancel).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
       expect(announce).not.toHaveBeenCalled();
@@ -677,8 +759,8 @@ describe('handle-key-press', () => {
         isAnalysisMode,
         setFocusedCellCoord
       );
-      expect(evt.preventDefault).not.toHaveBeenCalled();
-      expect(evt.stopPropagation).not.toHaveBeenCalled();
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(changeSortOrder).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
     });

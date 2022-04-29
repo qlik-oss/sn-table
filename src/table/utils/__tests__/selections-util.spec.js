@@ -239,20 +239,32 @@ describe('selections-utils', () => {
       selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
       expect(selectedRows).toEqual([{ qElemNumber, rowIdx }]);
     });
-    it('should return array with only the last clicked item metaKey cm is pressed', () => {
+    it('should return array with only the last clicked item when metaKey is pressed', () => {
       evt.metaKey = true;
 
       selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
       expect(selectedRows).toEqual([{ qElemNumber, rowIdx }]);
     });
-    it('should return array with selected item removed if it already was in selectedRows', () => {
+    it('should return array with a selected item removed if it already was in the selectedRows', () => {
       qElemNumber = 1;
       rowIdx = 1;
 
       selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
       expect(selectedRows).toEqual([]);
     });
-    it('should return array with selected item added if it was not in selectedRows before', () => {
+    it('should return array with selected items removed if they already were in the selectedRows', () => {
+      selectedRows = [
+        { qElemNumber: 2, rowIdx: 1 },
+        { qElemNumber: 1, rowIdx: 1 },
+        { qElemNumber: 2, rowIdx: 1 },
+      ];
+      qElemNumber = 2;
+      rowIdx = 1;
+
+      selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
+      expect(selectedRows).toEqual([{ qElemNumber: 1, rowIdx: 1 }]);
+    });
+    it('should return array with selected items added if they were not in the selectedRows before', () => {
       selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
       expect(selectedRows).toEqual([
         { qElemNumber: 1, rowIdx: 1 },
@@ -288,6 +300,39 @@ describe('selections-utils', () => {
       const payload = { colIdx: cell.colIdx, rows: [{ qElemNumber: cell.qElemNumber, rowIdx: cell.rowIdx }] };
 
       selectCell({ selectionState, cell, selectionDispatch, evt: event, announce });
+      expect(selectionState.api.begin).toHaveBeenCalledTimes(1);
+      expect(selectionState.api.select).toHaveBeenCalledWith({ method: 'selectHyperCubeCells', params });
+      expect(selectionDispatch).toHaveBeenCalledWith({ type: 'select', payload });
+      expect(selectionState.api.cancel).not.toHaveBeenCalled();
+      expect(announce).toHaveBeenCalledTimes(1);
+    });
+    it('should call begin, selectionDispatch and selectHyperCubeCells when no previous selections and also announce it to the user when select multiple cells', () => {
+      const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
+      const payload = { colIdx: cell.colIdx, rows: [{ qElemNumber: cell.qElemNumber, rowIdx: cell.rowIdx }] };
+      const tableRows = [
+        {},
+        {
+          'col-0': {
+            qText: '3',
+            qNum: 3,
+            qElemNumber: 4,
+            rowIdx: 0,
+            colIdx: 0,
+          },
+        },
+      ];
+      const columnId = { id: 'col-0' };
+
+      selectCell({
+        selectionState,
+        cell,
+        selectionDispatch,
+        tableRows,
+        columnId,
+        evt: event,
+        announce,
+        isMultiple: true,
+      });
       expect(selectionState.api.begin).toHaveBeenCalledTimes(1);
       expect(selectionState.api.select).toHaveBeenCalledWith({ method: 'selectHyperCubeCells', params });
       expect(selectionDispatch).toHaveBeenCalledWith({ type: 'select', payload });
