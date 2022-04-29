@@ -113,17 +113,15 @@ export const headHandleKeyPress = (
   switch (evt.key) {
     case 'ArrowDown':
     case 'ArrowRight':
-    case 'ArrowLeft': {
+    case 'ArrowLeft':
       !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, false, setFocusedCellCoord);
       break;
-    }
     // Space bar / Enter: update the sorting
     case ' ':
-    case 'Enter': {
+    case 'Enter':
       preventDefaultBehavior(evt);
       isAnalysisMode && changeSortOrder(layout, column);
       break;
-    }
     default:
       break;
   }
@@ -136,6 +134,8 @@ export const bodyHandleKeyPress = ({
   selectionState,
   cell,
   selectionDispatch,
+  tableRows,
+  columnId,
   isAnalysisMode,
   setFocusedCellCoord,
   announce,
@@ -144,40 +144,60 @@ export const bodyHandleKeyPress = ({
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
+      moveFocus(evt, rootElement, cellCoord, selectionState, setFocusedCellCoord, announce);
+      // Shift + up/down arrows: Selects multiple values.
+      evt.shiftKey &&
+        selectCell({
+          selectionState,
+          cell,
+          selectionDispatch,
+          tableRows,
+          columnId,
+          evt,
+          announce,
+          isSelectMultiCells: true,
+        });
+      break;
     case 'ArrowRight':
-    case 'ArrowLeft': {
+    case 'ArrowLeft':
       !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, selectionState, setFocusedCellCoord, announce);
       break;
-    }
     // Space bar: Selects value.
-    case ' ': {
+    case ' ':
       preventDefaultBehavior(evt);
-      cell?.isDim && isAnalysisMode && selectCell({ selectionState, cell, selectionDispatch, evt, announce });
+      cell?.isDim &&
+        isAnalysisMode &&
+        selectCell({
+          selectionState,
+          cell,
+          selectionDispatch,
+          tableRows,
+          columnId,
+          evt,
+          announce,
+          isSelectMultiCells: false,
+        });
       break;
-    }
     // Enter: Confirms selections.
-    case 'Enter': {
+    case 'Enter':
       preventDefaultBehavior(evt);
       if (!selectionState.api.isModal()) break;
       selectionState.api.confirm();
       announce({ keys: 'SNTable.SelectionLabel.SelectionsConfirmed' });
       break;
-    }
     // Esc: Cancels selections. If no selections, do nothing and handleTableWrapperKeyDown should catch it
-    case 'Escape': {
+    case 'Escape':
       if (!isAnalysisMode || !selectionState.api.isModal()) break;
       preventDefaultBehavior(evt);
       selectionState.api.cancel();
       announce({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
       break;
-    }
-    case 'Tab': {
+    case 'Tab':
       if (evt.shiftKey && keyboard.enabled && selectionState.api.isModal()) {
         preventDefaultBehavior(evt);
         focusSelectionToolbar(evt.target, keyboard, true);
       }
       break;
-    }
     default:
       break;
   }

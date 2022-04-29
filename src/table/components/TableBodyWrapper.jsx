@@ -98,6 +98,8 @@ function TableBodyWrapper({
                       selectionState,
                       cell,
                       selectionDispatch,
+                      tableRows: rows,
+                      columnId: column.id,
                       isAnalysisMode: selectionsEnabled,
                       setFocusedCellCoord,
                       announce,

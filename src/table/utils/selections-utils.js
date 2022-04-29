@@ -73,8 +73,7 @@ export const getSelectedRows = ({ selectedRows, qElemNumber, rowIdx, evt }) => {
   const alreadySelectedIdx = selectedRows.findIndex((r) => r.qElemNumber === qElemNumber);
   if (alreadySelectedIdx > -1) {
     // if the selected item is clicked again, that item will be removed
-    selectedRows.splice(alreadySelectedIdx, 1);
-    return selectedRows;
+    return selectedRows.filter((r) => r.qElemNumber !== qElemNumber);
   }
 
   // if an item was clicked, the item was selected
@@ -82,9 +81,19 @@ export const getSelectedRows = ({ selectedRows, qElemNumber, rowIdx, evt }) => {
   return selectedRows;
 };
 
-export function selectCell({ selectionState, cell, selectionDispatch, evt, announce }) {
+export function selectCell({
+  selectionState,
+  cell,
+  selectionDispatch,
+  tableRows,
+  columnId,
+  evt,
+  announce,
+  isSelectMultiCells,
+}) {
   const { api, rows } = selectionState;
-  const { rowIdx, colIdx, qElemNumber } = cell;
+  const { colIdx, qElemNumber } = cell;
+  let { rowIdx } = cell;
   let selectedRows = [];
 
   if (selectionState.colIdx === -1) {
@@ -95,7 +104,17 @@ export function selectCell({ selectionState, cell, selectionDispatch, evt, annou
     return;
   }
 
-  selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
+  if (isSelectMultiCells) {
+    selectedRows.push({ qElemNumber, rowIdx });
+
+    if (evt.key === 'ArrowDown') rowIdx += 1;
+    else if (evt.key === 'ArrowUp') rowIdx -= 1;
+
+    selectedRows.push({ qElemNumber: tableRows[rowIdx][columnId].qElemNumber, rowIdx });
+  } else {
+    selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
+  }
+
   handleAnnounceSelectionStatus({
     announce,
     rowsLength: selectedRows.length,
