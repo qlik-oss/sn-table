@@ -82,7 +82,6 @@ export const getRowAndColumnCount = (rootElement) => {
 };
 
 export const moveFocus = (evt, rootElement, cellCoord, selectionState, setFocusedCellCoord, announce) => {
-  preventDefaultBehavior(evt);
   evt.target.setAttribute('tabIndex', '-1');
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
   const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selectionState);
@@ -114,6 +113,7 @@ export const headHandleKeyPress = (
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft':
+      preventDefaultBehavior(evt);
       !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, false, setFocusedCellCoord);
       break;
     // Space bar / Enter: update the sorting
@@ -144,6 +144,7 @@ export const bodyHandleKeyPress = ({
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
+      preventDefaultBehavior(evt);
       moveFocus(evt, rootElement, cellCoord, selectionState, setFocusedCellCoord, announce);
       // Shift + up/down arrows: Selects multiple values.
       evt.shiftKey &&
@@ -160,6 +161,7 @@ export const bodyHandleKeyPress = ({
       break;
     case 'ArrowRight':
     case 'ArrowLeft':
+      preventDefaultBehavior(evt);
       !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, selectionState, setFocusedCellCoord, announce);
       break;
     // Space bar: Selects value.
