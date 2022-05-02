@@ -11,6 +11,7 @@ import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import TablePaginationActions from './TablePaginationActions';
 import useDidUpdateEffect from './useDidUpdateEffect';
+import tableThemeColors from '../utils/table-theme-colors';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
@@ -34,6 +35,7 @@ export default function TableWrapper(props) {
     footerContainer,
     announcer, // this is only for testing purposes
   } = props;
+  theme.table = tableThemeColors(theme);
   const { size, rows, columns } = tableData;
   const totalVerticalCount = size.qcy;
   const paginationNeeded = totalVerticalCount > 10;
@@ -130,9 +132,9 @@ export default function TableWrapper(props) {
   const paperStyle = {
     borderWidth: '0px 1px 0px',
     borderStyle: 'solid',
-    borderColor: theme.isBackgroundDarkColor ? ' #F2F2F2' : '#D9D9D9',
+    borderColor: theme.table.borderColor,
     height: '100%',
-    backgroundColor: theme.backgroundColor,
+    backgroundColor: theme.table.backgroundColor,
     boxShadow: 'none',
     borderRadius: 'unset',
   };
@@ -147,17 +149,17 @@ export default function TableWrapper(props) {
     justifyContent: 'flex-end',
     alignItems: 'center',
     paddingRight: 1,
-    backgroundColor: theme.backgroundColor,
+    backgroundColor: theme.table.backgroundColor,
     boxShadow: 'none',
     borderRadius: 0,
-    borderBottom: theme.isBackgroundDarkColor ? '1px solid #F2F2F2' : '1px solid #D9D9D9',
+    borderBottom: theme.table.pagination.borderColor,
   };
   const tablePaginationStyle = [
     constraints.active && { display: 'none' },
     {
-      color: theme.isBackgroundDarkColor ? 'rgba(255, 255, 255, 0.9)' : '#404040',
+      color: theme.table.pagination.color,
       '& .MuiNativeSelect-icon': {
-        color: theme.isBackgroundDarkColor ? 'rgba(255, 255, 255, 0.9)' : '#404040',
+        color: theme.table.pagination.iconColor,
       },
     },
   ];

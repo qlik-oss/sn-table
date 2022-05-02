@@ -57,8 +57,8 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
     color: styleObj?.fontColor ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj?.fontColor) : color,
     fontSize: styleObj?.fontSize || fontSize,
     padding: getPadding(styleObj, STYLING_DEFAULTS.PADDING),
-    borderBottom: theme.isBackgroundDarkColor ? '1px solid #F2F2F2' : '1px solid #D9D9D9',
-    borderRight: theme.isBackgroundDarkColor ? '1px solid #F2F2F2' : '1px solid #D9D9D9',
+    borderBottom: theme.table.body.borderColor,
+    borderRight: theme.table.body.borderColor,
   };
   // Remove all Undefined Values from an Object
   Object.keys(baseStyle).forEach((key) => baseStyle[key] == null && delete baseStyle[key]);
@@ -76,8 +76,9 @@ export function getHeaderStyle(layout, theme) {
   // there is a header background color depending on the header font color
   // to avoid seeing the table body through the table head.
   const headerBackgroundColor = isDarkColor(headerStyle.color) ? '#FAFAFA' : '#323232';
-  headerStyle.backgroundColor = theme.backgroundColor === 'transparent' ? headerBackgroundColor : theme.backgroundColor;
-  headerStyle.borderTop = theme.isBackgroundDarkColor ? '1px solid #F2F2F2' : '1px solid #D9D9D9';
+  headerStyle.backgroundColor =
+    theme.table.backgroundColor === 'transparent' ? headerBackgroundColor : theme.table.backgroundColor;
+  headerStyle.borderTop = theme.table.isBackgroundDarkColor ? '1px solid #F2F2F2' : '1px solid #D9D9D9';
   // When you set the header font color,
   // the sort label color should be same.
   // When there is no header content color setting,
