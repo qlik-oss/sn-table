@@ -89,12 +89,14 @@ export function getHeaderStyle(layout, theme) {
 }
 
 export function getBodyCellStyle(layout, theme) {
+  const content = layout.components?.[0]?.content;
+  const contentStyle = getBaseStyling(content, 'content', theme);
+
+  const hoverBackgroundColorFromLayout = content?.hoverColor;
+  const hoverFontColorFromLayout = content?.hoverFontColor;
+
   const hoverBackgroundColorFromTheme = theme.getStyle('object', '', 'straightTable.content.hover.backgroundColor');
   const hoverFontColorFromTheme = theme.getStyle('object', '', 'straightTable.content.hover.color');
-
-  const content = layout.components?.[0]?.content;
-  const contentHoverBackgroundColor = content?.hoverColor;
-  const contentHoverFontColor = content?.hoverFontColor;
 
   // Cases when hoverEffect is true:
   // 1. There is no hover font color but a hover background color,
@@ -102,40 +104,42 @@ export function getBodyCellStyle(layout, theme) {
   // background color is a dark color or the hover font color stays
   // the same as whatever the font color is when the hover background
   // color is a light color.
-  // 2. There is a hover font color but no hover background color,
+  // 2. There is no hover font color and no hover background color,
+  // when hovering, the default hover effect (a light gray hover background
+  // color and no hover font color) is in use.
+  // 3. There is a hover font color but no hover background color,
   // when hovering, only the font color is applied and no hover
   // background color is shown.
-  // 3. There is no hover font color and no hover background color,
-  // when hovering, the default hover effect (a light gray hover background
-  // color and no hover font color).
   // 4. There are both a hover font and a hover background color,
   // when hovering, the hover font and the hover background color take effect.
-  // Note that hover colors from properties have a
-  // higher priority than those from theme.
-  const unsetHoverBackgroundColor = isUnset(contentHoverBackgroundColor) && !hoverBackgroundColorFromTheme;
-  const unsetHoverFontColor = isUnset(contentHoverFontColor) && !hoverFontColorFromTheme;
-  const unsetHoverFontBackgroundColor = unsetHoverBackgroundColor && unsetHoverFontColor;
+
+  // Note: Hover colors from Layout have a higher priority than those from theme.
+
+  const isHoverBackgroundColorUnset = isUnset(hoverBackgroundColorFromLayout) && !hoverBackgroundColorFromTheme;
+  const isHoverFontColorUnset = isUnset(hoverFontColorFromLayout) && !hoverFontColorFromTheme;
+  const isHoverFontBackgroundColorUnset = isHoverBackgroundColorUnset && isHoverFontColorUnset;
 
   // case 1 or 4
-  let hoverBackgroundColor = isUnset(contentHoverBackgroundColor)
+  let hoverBackgroundColor = isUnset(hoverBackgroundColorFromLayout)
     ? hoverBackgroundColorFromTheme
-    : getColor(STYLING_DEFAULTS.HOVER_BACKGROUND, theme, contentHoverBackgroundColor);
-  hoverBackgroundColor = unsetHoverBackgroundColor
-    ? '' // case 2
-    : hoverBackgroundColor;
-  hoverBackgroundColor = unsetHoverFontBackgroundColor
-    ? STYLING_DEFAULTS.HOVER_BACKGROUND // case 3
+    : getColor(STYLING_DEFAULTS.HOVER_BACKGROUND, theme, hoverBackgroundColorFromLayout);
+
+  hoverBackgroundColor = isHoverBackgroundColorUnset
+    ? '' // case 3
     : hoverBackgroundColor;
 
-  const hoverFontColor = unsetHoverFontBackgroundColor
-    ? '' // case 3
+  hoverBackgroundColor = isHoverFontBackgroundColorUnset
+    ? STYLING_DEFAULTS.HOVER_BACKGROUND // case 2
+    : hoverBackgroundColor;
+
+  const hoverFontColor = isHoverFontBackgroundColorUnset
+    ? '' // case 2
     : getColor(
         getAutoFontColor(hoverBackgroundColor),
         theme,
-        isUnset(contentHoverFontColor) ? hoverFontColorFromTheme : contentHoverFontColor
-      ); // case 1 or 2 or 4
+        isUnset(hoverFontColorFromLayout) ? hoverFontColorFromTheme : hoverFontColorFromLayout
+      ); // case 1 or 3 or 4
 
-  const contentStyle = getBaseStyling(content, 'content', theme);
   return {
     ...contentStyle,
     hoverBackgroundColor,
