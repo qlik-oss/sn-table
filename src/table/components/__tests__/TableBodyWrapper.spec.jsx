@@ -36,6 +36,9 @@ describe('<TableBodyWrapper />', () => {
       getColorPickerColor: () => {},
       name: () => {},
       getStyle: () => {},
+      table: {
+        body: { borderColor: '' },
+      },
     };
     layout = {};
     cellRendererSpy = jest.fn();

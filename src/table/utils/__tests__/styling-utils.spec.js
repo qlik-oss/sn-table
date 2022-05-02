@@ -29,7 +29,10 @@ describe('styling-utils', () => {
       }
     },
     getStyle: () => {},
-    backgroundColor: '#323232',
+    table: {
+      body: { borderColor: '1px solid #D9D9D9' },
+      backgroundColor: '#323232',
+    },
   };
 
   describe('getColor', () => {

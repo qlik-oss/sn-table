@@ -69,7 +69,7 @@ export default function TablePaginationActions({
     tabIndex,
     id: 'pagination-dropdown',
     style: {
-      color: theme.table.pagination,
+      color: theme.table.pagination.color,
     },
   };
 
