@@ -8,7 +8,6 @@ import createNebulaRoutes from './utils/routes';
 import createPlaywright from './utils/playwright';
 
 const paths = {
-  artifacts: path.join(__dirname, '__artifacts__'),
   fixtures: path.join(__dirname, '__fixtures__'),
 };
 
@@ -56,7 +55,7 @@ test.describe('sn table: Rendering tests', () => {
       // Puppeteer Capture screenshot
       const img = await playwright.screenshot();
       // Compare screenshot with baseline image
-      expect(img).toMatchSnapshot('scenario_1.png');
+      expect(img).toMatchSnapshot(`${name}.png`);
     });
   });
 });
