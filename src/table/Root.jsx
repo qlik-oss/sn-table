@@ -23,3 +23,7 @@ export function render(rootElement, props) {
 export function teardown(rootElement) {
   ReactDOM.unmountComponentAtNode(rootElement);
 }
+
+export function mount() {
+  /* noop in web */
+}

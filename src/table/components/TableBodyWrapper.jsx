@@ -24,7 +24,11 @@ function TableBodyWrapper({
   const { rows, columns } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme.name()]);
-  const selectionsEnabled = !!selectionsAPI && !constraints.active;
+
+  // active: turn off interactions that affect the state of the visual representation including selection, zoom, scroll, etc.
+  // select: turn off selections.
+  const selectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
+
   const getColumnRenderers = columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(() => getColumnRenderers);
   const [selectionState, selectionDispatch] = useReducer(reducer, {

@@ -15,6 +15,7 @@ describe('<TablePaginationActions />', () => {
   let translator;
   let isInSelectionMode;
   let keyboard;
+  let constraints;
 
   beforeEach(() => {
     theme = {
@@ -34,6 +35,9 @@ describe('<TablePaginationActions />', () => {
     translator = { get: (s) => s };
     isInSelectionMode = false;
     keyboard = { enabled: true };
+    constraints = {
+      passive: false,
+    };
     jest.spyOn(handleAccessibility, 'focusSelectionToolbar').mockImplementation(() => jest.fn());
   });
 
@@ -51,6 +55,7 @@ describe('<TablePaginationActions />', () => {
         translator={translator}
         isInSelectionMode={isInSelectionMode}
         keyboard={keyboard}
+        constraints={constraints}
       />
     );
 
@@ -73,6 +78,7 @@ describe('<TablePaginationActions />', () => {
         translator={translator}
         isInSelectionMode={isInSelectionMode}
         keyboard={keyboard}
+        constraints={constraints}
       />
     );
 
@@ -95,6 +101,7 @@ describe('<TablePaginationActions />', () => {
         translator={translator}
         isInSelectionMode={isInSelectionMode}
         keyboard={keyboard}
+        constraints={constraints}
       />
     );
 
@@ -121,6 +128,7 @@ describe('<TablePaginationActions />', () => {
         translator={translator}
         isInSelectionMode={isInSelectionMode}
         keyboard={keyboard}
+        constraints={constraints}
       />
     );
 
@@ -143,6 +151,7 @@ describe('<TablePaginationActions />', () => {
         translator={translator}
         isInSelectionMode={isInSelectionMode}
         keyboard={keyboard}
+        constraints={constraints}
       />
     );
 
@@ -160,6 +169,7 @@ describe('<TablePaginationActions />', () => {
         translator={translator}
         isInSelectionMode={isInSelectionMode}
         keyboard={keyboard}
+        constraints={constraints}
       />
     );
 
@@ -179,6 +189,7 @@ describe('<TablePaginationActions />', () => {
         translator={translator}
         isInSelectionMode={isInSelectionMode}
         keyboard={keyboard}
+        constraints={constraints}
       />
     );
 
@@ -197,6 +208,7 @@ describe('<TablePaginationActions />', () => {
         translator={translator}
         isInSelectionMode={isInSelectionMode}
         keyboard={keyboard}
+        constraints={constraints}
       />
     );
 
@@ -216,6 +228,7 @@ describe('<TablePaginationActions />', () => {
         translator={translator}
         isInSelectionMode={isInSelectionMode}
         keyboard={keyboard}
+        constraints={constraints}
       />
     );
 
@@ -236,6 +249,7 @@ describe('<TablePaginationActions />', () => {
         translator={translator}
         isInSelectionMode={isInSelectionMode}
         keyboard={keyboard}
+        constraints={constraints}
       />
     );
 
@@ -254,6 +268,7 @@ describe('<TablePaginationActions />', () => {
         translator={translator}
         isInSelectionMode={isInSelectionMode}
         keyboard={keyboard}
+        constraints={constraints}
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab' });
@@ -273,6 +288,7 @@ describe('<TablePaginationActions />', () => {
         translator={translator}
         isInSelectionMode={isInSelectionMode}
         keyboard={keyboard}
+        constraints={constraints}
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab', shiftKey: true });
@@ -292,6 +308,7 @@ describe('<TablePaginationActions />', () => {
         translator={translator}
         isInSelectionMode={isInSelectionMode}
         keyboard={keyboard}
+        constraints={constraints}
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab' });
@@ -312,6 +329,7 @@ describe('<TablePaginationActions />', () => {
         translator={translator}
         isInSelectionMode={isInSelectionMode}
         keyboard={keyboard}
+        constraints={constraints}
       />
     );
     fireEvent.keyDown(queryByTitle('SNTable.Pagination.NextPage'), { key: 'Tab' });

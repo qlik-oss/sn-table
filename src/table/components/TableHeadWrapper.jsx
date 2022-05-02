@@ -81,6 +81,7 @@ function TableHeadWrapper({
               <TableSortLabel
                 sx={tableSortLabelStyle}
                 active={isCurrentColumnActive}
+                title={!constraints.passive && column.sortDirection} // passive: turn off tooltips.
                 direction={column.sortDirection}
                 tabIndex={-1}
               >
