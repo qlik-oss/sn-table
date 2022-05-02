@@ -40,6 +40,7 @@
     "format": "prettier --write 'src/**'",
     "start": "nebula serve --build false --type sn-table",
     "sense": "nebula sense",
+    "copy:ext": "node ./tools/copy-ext.js",
     "locale:verify": "node src/locale/tools/verify-translations.js",
     "locale:generate": "node src/locale/scripts/generate-all.mjs",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
