@@ -74,11 +74,6 @@ export function getHeaderStyle(layout, theme) {
   // there is a header background color depending on the header font color
   // to avoid seeing the table body through the table head.
   const headerBackgroundColor = isDarkColor(headerStyle.color) ? '#FAFAFA' : '#323232';
-  console.log('🚀 ~ file: styling-utils.js ~ line 77 ~ getHeaderStyle ~ headerBackgroundColor', headerBackgroundColor);
-  console.log(
-    '🚀 ~ file: styling-utils.js ~ line 77 ~ getHeaderStyle ~ isDarkColor(headerStyle.color)',
-    isDarkColor(headerStyle.color)
-  );
   headerStyle.backgroundColor =
     theme.table.backgroundColor === 'transparent' ? headerBackgroundColor : theme.table.backgroundColor;
 
@@ -88,7 +83,6 @@ export function getHeaderStyle(layout, theme) {
   // the sort label color is depending on the header background color.
   headerStyle.sortLabelColor =
     headerStyle.color ?? (isDarkColor(headerStyle.backgroundColor) ? 'rgba(255,255,255,0.9)' : 'rgba(0, 0, 0, 0.54)');
-  console.log('🚀 ~ file: styling-utils.js ~ line 91 ~ getHeaderStyle ~ headerStyle', headerStyle);
 
   return headerStyle;
 }
