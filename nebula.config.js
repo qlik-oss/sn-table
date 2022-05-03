@@ -26,6 +26,10 @@ module.exports = {
               fontSize: '16px',
               color: 'magenta',
               fontFamily: 'sans-serif',
+              hover: {
+                backgroundColor: 'black',
+                color: 'red',
+              },
             },
           },
           backgroundColor: '#32a852',

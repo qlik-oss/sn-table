@@ -251,6 +251,13 @@ describe('styling-utils', () => {
       expect(resultStyling.hoverBackgroundColor).toBe('');
       expect(resultStyling.hoverFontColor).toBe(resolvedColor);
     });
+    it('should return styling with light hoverBackgroundColor from theme and the default hoverFontColor', () => {
+      theme.getStyle = () => '#111';
+
+      const resultStyling = getBodyCellStyle(layout, theme);
+      expect(resultStyling.hoverBackgroundColor).toBe('#111');
+      expect(resultStyling.hoverFontColor).toBe(STYLING_DEFAULTS.FONT_COLOR);
+    });
     it('should return styling with dark hoverBackgroundColor and white hoverFontColor', () => {
       layout.components[0].content.hoverColor.index = 1;
 
@@ -258,7 +265,7 @@ describe('styling-utils', () => {
       expect(resultStyling.hoverBackgroundColor).toBe(resolvedColor);
       expect(resultStyling.hoverFontColor).toBe(STYLING_DEFAULTS.WHITE);
     });
-    it('should return styling with light hoverBackgroundColor and no hoverFontColor', () => {
+    it('should return styling with light hoverBackgroundColor and the default hoverFontColor', () => {
       layout.components[0].content.hoverColor.index = 2;
 
       const resultStyling = getBodyCellStyle(layout, theme);

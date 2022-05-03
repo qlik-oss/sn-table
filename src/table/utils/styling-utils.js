@@ -39,6 +39,7 @@ export function getPadding(styleObj, defaultPadding) {
 
 export function getColor(defaultColor, theme, color = {}) {
   const resolvedColor = theme.getColorPickerColor(color);
+
   return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
 }
 
@@ -54,7 +55,7 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
   const baseStyle = {
     backgroundColor,
     fontFamily,
-    color: styleObj?.fontColor ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj?.fontColor) : color,
+    color: styleObj?.fontColor ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj.fontColor) : color,
     fontSize: styleObj?.fontSize || fontSize,
     padding: getPadding(styleObj, STYLING_DEFAULTS.PADDING),
     borderBottom: theme.isBackgroundDarkColor ? '1px solid #F2F2F2' : '1px solid #D9D9D9',
@@ -64,9 +65,6 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
   Object.keys(baseStyle).forEach((key) => baseStyle[key] == null && delete baseStyle[key]);
   return baseStyle;
 };
-
-// Both index === -1 and color === null must be true for the property to be unset
-export const isUnset = (prop) => !prop || JSON.stringify(prop) === JSON.stringify({ index: -1, color: null });
 
 export function getHeaderStyle(layout, theme) {
   const header = layout.components?.[0]?.header;
@@ -87,8 +85,18 @@ export function getHeaderStyle(layout, theme) {
   return headerStyle;
 }
 
+// Both index === -1 and color === null must be true for the property to be unset
+export const isSet = (prop) => prop && JSON.stringify(prop) !== JSON.stringify({ index: -1, color: null });
+
 export function getBodyCellStyle(layout, theme) {
   const content = layout.components?.[0]?.content;
+  const contentStyle = getBaseStyling(content, 'content', theme);
+
+  const hoverBackgroundColorFromLayout = content?.hoverColor;
+  const hoverFontColorFromLayout = content?.hoverFontColor;
+
+  const hoverBackgroundColorFromTheme = theme.getStyle('object', '', 'straightTable.content.hover.backgroundColor');
+  const hoverFontColorFromTheme = theme.getStyle('object', '', 'straightTable.content.hover.color');
 
   // Cases when hoverEffect is true:
   // 1. There is no hover font color but a hover background color,
@@ -96,30 +104,42 @@ export function getBodyCellStyle(layout, theme) {
   // background color is a dark color or the hover font color stays
   // the same as whatever the font color is when the hover background
   // color is a light color.
-  // 2. There is a hover font color but no hover background color,
-  // when hovering, only a hover font color is applied and the hover
-  // background color disappears.
-  // 3. There is no hover font color and no hover background color,
-  // when hovering, the default hover effect (light gray background)
-  // 4. There are both hover font and background colors, when hovering,
-  // the hover font and background colors take effect.
+  // 2. There is no hover font color and no hover background color,
+  // when hovering, the default hover effect (a light gray hover background
+  // color and no hover font color) is in use.
+  // 3. There is a hover font color but no hover background color,
+  // when hovering, only the font color is applied and no hover
+  // background color is shown.
+  // 4. There are both a hover font and a hover background color,
+  // when hovering, the hover font and the hover background color take effect.
 
-  const unsetHoverBackgroundColor = isUnset(content?.hoverColor);
-  const unsetHoverFontBackgroundColor = isUnset(content?.hoverFontColor) && unsetHoverBackgroundColor;
+  // Note: Hover colors from Layout have a higher priority than those from theme.
 
-  const setHoverBackgroundColor = unsetHoverBackgroundColor
-    ? ''
-    : getColor(STYLING_DEFAULTS.HOVER_BACKGROUND, theme, content?.hoverColor);
+  const isHoverFontColorSet = isSet(hoverFontColorFromLayout) || !!hoverFontColorFromTheme;
+  const isHoverBackgroundColorSet = isSet(hoverBackgroundColorFromLayout) || !!hoverBackgroundColorFromTheme;
+  const isHoverFontOrBackgroundColorSet = isHoverFontColorSet || isHoverBackgroundColorSet;
 
-  const hoverBackgroundColor = unsetHoverFontBackgroundColor
-    ? STYLING_DEFAULTS.HOVER_BACKGROUND
-    : setHoverBackgroundColor;
+  let hoverBackgroundColor;
+  if (isSet(hoverBackgroundColorFromLayout)) {
+    // case 1 or 4
+    hoverBackgroundColor = getColor(STYLING_DEFAULTS.HOVER_BACKGROUND, theme, hoverBackgroundColorFromLayout);
+  } else if (hoverBackgroundColorFromTheme) {
+    // case 1 or 4
+    hoverBackgroundColor = hoverBackgroundColorFromTheme;
+  } else if (isHoverFontColorSet) {
+    hoverBackgroundColor = ''; // case 3
+  } else {
+    hoverBackgroundColor = STYLING_DEFAULTS.HOVER_BACKGROUND; // case 2
+  }
 
-  const hoverFontColor = unsetHoverFontBackgroundColor
-    ? ''
-    : getColor(getAutoFontColor(hoverBackgroundColor), theme, content?.hoverFontColor);
+  const hoverFontColor = isHoverFontOrBackgroundColorSet
+    ? getColor(
+        getAutoFontColor(hoverBackgroundColor),
+        theme,
+        isSet(hoverFontColorFromLayout) ? hoverFontColorFromLayout : hoverFontColorFromTheme
+      ) // case 1 or 3 or 4
+    : ''; // case 2;
 
-  const contentStyle = getBaseStyling(content, 'content', theme);
   return {
     ...contentStyle,
     hoverBackgroundColor,
