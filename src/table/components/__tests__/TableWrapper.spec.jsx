@@ -52,6 +52,14 @@ describe('<TableWrapper />', () => {
     announcer = jest.fn();
     theme = {
       getStyle: () => {},
+      table: {
+        body: {
+          borderColor: '',
+        },
+        pagination: {
+          borderColor: '',
+        },
+      },
     };
   });
 

@@ -23,7 +23,7 @@ import manageData from './handle-data';
 import sortingFactory from './sorting-factory';
 import { mount, render, teardown } from './table/Root';
 import muiSetup from './mui-setup';
-import { isDarkColor } from './table/utils/color-utils';
+import tableThemeColors from './table-theme-colors';
 
 const nothing = async () => {};
 
@@ -53,18 +53,7 @@ export default function supernova(env) {
       const translator = useTranslator();
       const selectionsAPI = useSelections();
       const theme = useTheme();
-      // Running in nebula dev environment (locally),
-      // the style from theme can be found in
-      // nebula.config.js -> serve -> themes.
-      // Get the value of a style attribute, starting in the given base path + path
-      // Ex: Base path: "object", Path: "straightTable", Attribute: "backgroundColor"
-      // Will search in, and fall back to:
-      // object - straightTable - backgroundColor
-      // straightTable - backgroundColor
-      // object - backgroundColor
-      // backgroundColor
-      theme.backgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
-      theme.isBackgroundDarkColor = isDarkColor(theme.backgroundColor);
+      theme.table = tableThemeColors(theme);
       const muiTheme = muiSetup(direction);
       const keyboard = useKeyboard();
       const rect = useRect();

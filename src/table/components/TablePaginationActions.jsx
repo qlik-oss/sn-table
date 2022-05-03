@@ -41,9 +41,6 @@ export default function TablePaginationActions({
   const handleSelectPage = (event) => onPageChange(+event.target.value);
   const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, isInSelectionMode) : null;
 
-  const disabledIconButtonColor = theme.isBackgroundDarkColor ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)';
-  const iconButtonColor = theme.isBackgroundDarkColor ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.54)';
-
   const getButton = (disabledCondition, pageNumber, type, onKeyDown = null) => {
     const iconType = `${type}${direction === 'rtl' ? 'RTL' : ''}`;
     const IconComponent = icons[iconType];
@@ -55,7 +52,14 @@ export default function TablePaginationActions({
         aria-label={translator.get(`SNTable.Pagination.${type}`)}
         title={!constraints.passive && translator.get(`SNTable.Pagination.${type}`)}
         tabIndex={tabIndex}
-        sx={disabledCondition ? { color: disabledIconButtonColor, cursor: 'default' } : { color: iconButtonColor }}
+        sx={
+          disabledCondition
+            ? {
+                color: theme.table.pagination.disabledIconColor,
+                cursor: 'default',
+              }
+            : { color: theme.table.pagination.iconColor }
+        }
         onKeyDown={onKeyDown}
       >
         <IconComponent />
@@ -67,27 +71,19 @@ export default function TablePaginationActions({
     'data-testid': 'pagination-dropdown',
     tabIndex,
     id: 'pagination-dropdown',
-    style: {
-      color: theme.isBackgroundDarkColor ? 'rgba(255, 255, 255, 0.9)' : '#404040',
-    },
+    style: { color: theme.table.pagination.color },
   };
 
   const selectStyle = {
     backgroundColor: 'inherit',
-    '& .MuiNativeSelect-icon': {
-      color: theme.isBackgroundDarkColor ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.54)',
-    },
+    '& .MuiNativeSelect-icon': { color: theme.table.pagination.iconColor },
   };
 
   return (
     <>
       {tableWidth > 650 && (
-        <FormControl sx={{ color: theme.isBackgroundDarkColor ? 'rgba(255, 255, 255, 0.9)' : '#404040' }}>
-          <InputLabel
-            sx={{ color: theme.isBackgroundDarkColor ? 'rgba(255, 255, 255, 0.9)' : '#404040' }}
-            htmlFor="pagination-dropdown"
-            shrink={false}
-          >
+        <FormControl sx={{ color: theme.table.pagination.color }}>
+          <InputLabel sx={{ color: theme.table.pagination.color }} htmlFor="pagination-dropdown" shrink={false}>
             {`${translator.get('SNTable.Pagination.SelectPage')}:`}
           </InputLabel>
           <Select sx={selectStyle} native value={page} onChange={handleSelectPage} inputProps={inputProps}>
