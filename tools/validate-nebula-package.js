@@ -74,8 +74,8 @@ const validate = (pkg, dir) => {
 
   const cleanedPkg = JSON.stringify(pkg, null, 2);
   // package version must be 1.x.x at the moment
-  if (!/1\.\d+\.\d+/.test(pkg.version)) {
-    throw new Error('Bad package version. Package version should match 0.x.x');
+  if (!/1\.\d\.\d+/.test(pkg.version)) {
+    throw new Error('Bad package version. Package version should match 1.x.x');
   }
 
   // author

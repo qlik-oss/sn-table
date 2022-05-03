@@ -27,6 +27,7 @@ export default function TableWrapper(props) {
     constraints,
     translator,
     selectionsAPI,
+    theme,
     keyboard,
     rect,
     direction,
@@ -117,10 +118,23 @@ export default function TableWrapper(props) {
     });
   }, [rows.length, totalVerticalCount, size.qcx, page]);
 
+  const selectProps = {
+    inputProps: {
+      'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
+      'data-testid': 'select',
+      tabIndex: !keyboard.enabled || keyboard.active ? 0 : -1,
+    },
+    native: true,
+  };
+
   const paperStyle = {
+    borderWidth: '0px 1px 0px',
+    borderStyle: 'solid',
+    borderColor: theme.isBackgroundDarkColor ? ' #F2F2F2' : '#D9D9D9',
     height: '100%',
-    backgroundColor: 'rgb(255, 255, 255)',
+    backgroundColor: theme.backgroundColor,
     boxShadow: 'none',
+    borderRadius: 'unset',
   };
 
   const tableContainerStyle = {
@@ -131,37 +145,36 @@ export default function TableWrapper(props) {
   const paperTablePaginationStyle = {
     display: 'flex',
     justifyContent: 'flex-end',
-    paddingRight: 1,
-    backgroundColor: 'rgb(255, 255, 255)',
-    border: '1px solid rgb(217, 217, 217)',
-    borderTop: 0,
-    boxShadow: 'none',
     alignItems: 'center',
+    paddingRight: 1,
+    backgroundColor: theme.backgroundColor,
+    boxShadow: 'none',
+    borderRadius: 0,
+    borderBottom: theme.isBackgroundDarkColor ? '1px solid #F2F2F2' : '1px solid #D9D9D9',
   };
+  const tablePaginationStyle = [
+    constraints.active && { display: 'none' },
+    {
+      color: theme.isBackgroundDarkColor ? 'rgba(255, 255, 255, 0.9)' : '#404040',
+      '& .MuiNativeSelect-icon': {
+        color: theme.isBackgroundDarkColor ? 'rgba(255, 255, 255, 0.9)' : '#404040',
+      },
+    },
+  ];
 
   const paginationContent = (width) => {
     const fixedRowsPerPage = selectionsAPI.isModal() || width < 550 || size.qcx > 100;
     return (
       <>
         <TablePagination
-          sx={constraints.active && { display: 'none' }}
+          sx={tablePaginationStyle}
           rowsPerPageOptions={fixedRowsPerPage ? [rowsPerPage] : rowsPerPageOptions}
           component="div"
           count={totalVerticalCount}
           rowsPerPage={rowsPerPage}
           labelRowsPerPage={`${translator.get('SNTable.Pagination.RowsPerPage')}:`}
           page={page}
-          SelectProps={{
-            inputProps: {
-              'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
-              'data-testid': 'select',
-              style: {
-                color: '#404040',
-              },
-              tabIndex: !keyboard.enabled || keyboard.active ? 0 : -1,
-            },
-            native: true,
-          }}
+          SelectProps={selectProps}
           labelDisplayedRows={({ from, to, count }) =>
             width > 250 && translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
           }
@@ -170,6 +183,7 @@ export default function TableWrapper(props) {
           onPageChange={() => {}}
         />
         <TablePaginationActions
+          theme={theme}
           direction={direction}
           page={page}
           onPageChange={handleChangePage}
@@ -252,6 +266,7 @@ TableWrapper.propTypes = {
   translator: PropTypes.object.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
   rect: PropTypes.object.isRequired,
   footerContainer: PropTypes.object,

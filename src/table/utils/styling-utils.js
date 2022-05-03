@@ -1,7 +1,10 @@
 import { resolveExpression, isDarkColor } from './color-utils';
 
+// the order of style
+// default (inl. sprout theme) < Sense theme < styling settings
+// < column < selection (except the selected green) < hover < selected green
+
 export const STYLING_DEFAULTS = {
-  FONT_SIZE: '14px',
   FONT_COLOR: '#404040',
   HOVER_BACKGROUND: '#f4f4f4',
   SELECTED_CLASS: 'selected',
@@ -9,7 +12,6 @@ export const STYLING_DEFAULTS = {
   EXCLUDED_BACKGROUND:
     'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px)',
   WHITE: '#fff',
-  PADDING: '7px 14px',
 };
 
 export const SELECTION_STYLING = {
@@ -27,69 +29,151 @@ export const SELECTION_STYLING = {
 
 export function getPadding(styleObj, defaultPadding) {
   let padding = defaultPadding;
-  if (styleObj.padding) {
+  if (styleObj?.padding) {
     ({ padding } = styleObj);
-  } else if (styleObj.fontSize) {
+  } else if (styleObj?.fontSize) {
     padding = `${styleObj.fontSize / 2}px ${styleObj.fontSize}px`;
   }
   return padding;
 }
 
-export function getColor(color = {}, defaultColor, theme) {
+export function getColor(defaultColor, theme, color = {}) {
   const resolvedColor = theme.getColorPickerColor(color);
+
   return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
 }
 
 export const getAutoFontColor = (backgroundColor) =>
   isDarkColor(backgroundColor) ? STYLING_DEFAULTS.WHITE : STYLING_DEFAULTS.FONT_COLOR;
 
-export const getBaseStyling = (styleObj, theme) => ({
-  color: getColor(styleObj.fontColor, STYLING_DEFAULTS.FONT_COLOR, theme),
-  fontSize: styleObj.fontSize || STYLING_DEFAULTS.FONT_SIZE,
-  padding: getPadding(styleObj, STYLING_DEFAULTS.PADDING),
-});
+export const getBaseStyling = (styleObj, objetName, theme) => {
+  const backgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
+  const fontFamily = theme.getStyle('object', `straightTable.${objetName}`, 'fontFamily');
+  const color = theme.getStyle('object', `straightTable.${objetName}`, 'color');
+  const fontSize = theme.getStyle('object', `straightTable.${objetName}`, 'fontSize');
 
-// Both index === -1 and color === null must be true for the property to be unset
-export const isUnset = (prop) => !prop || JSON.stringify(prop) === JSON.stringify({ index: -1, color: null });
+  const baseStyle = {
+    backgroundColor,
+    fontFamily,
+    color: styleObj?.fontColor ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj.fontColor) : color,
+    fontSize: styleObj?.fontSize || fontSize,
+    padding: getPadding(styleObj, STYLING_DEFAULTS.PADDING),
+    borderBottom: theme.isBackgroundDarkColor ? '1px solid #F2F2F2' : '1px solid #D9D9D9',
+    borderRight: theme.isBackgroundDarkColor ? '1px solid #F2F2F2' : '1px solid #D9D9D9',
+  };
+  // Remove all Undefined Values from an Object
+  Object.keys(baseStyle).forEach((key) => baseStyle[key] == null && delete baseStyle[key]);
+  return baseStyle;
+};
 
-export function getHeadStyle(layout, theme) {
+export function getHeaderStyle(layout, theme) {
   const header = layout.components?.[0]?.header;
-  return header ? getBaseStyling(header, theme) : { padding: STYLING_DEFAULTS.PADDING };
+  const headerStyle = getBaseStyling(header, 'header', theme);
+
+  // When the table background color from the sense theme is transparent,
+  // there is a header background color depending on the header font color
+  // to avoid seeing the table body through the table head.
+  const headerBackgroundColor = isDarkColor(headerStyle.color) ? '#FAFAFA' : '#323232';
+  headerStyle.backgroundColor = theme.backgroundColor === 'transparent' ? headerBackgroundColor : theme.backgroundColor;
+  headerStyle.borderTop = theme.isBackgroundDarkColor ? '1px solid #F2F2F2' : '1px solid #D9D9D9';
+  // When you set the header font color,
+  // the sort label color should be same.
+  // When there is no header content color setting,
+  // the sort label color is depending on the header background color.
+  headerStyle.sortLabelColor =
+    headerStyle.color ?? isDarkColor(headerStyle.backgroundColor) ? 'rgba(255,255,255,0.9)' : 'rgba(0, 0, 0, 0.54)';
+  return headerStyle;
 }
 
-export function getBodyStyle(layout, theme) {
+// Both index !== -1 and color !== null must be true for the property to be set
+export const isSet = (prop) => prop && JSON.stringify(prop) !== JSON.stringify({ index: -1, color: null });
+
+export function getBodyCellStyle(layout, theme) {
   const content = layout.components?.[0]?.content;
-  if (!content) return { padding: STYLING_DEFAULTS.PADDING };
+  const contentStyle = getBaseStyling(content, 'content', theme);
+
+  const hoverBackgroundColorFromLayout = content?.hoverColor;
+  const hoverFontColorFromLayout = content?.hoverFontColor;
+
+  const hoverBackgroundColorFromTheme = theme.getStyle('object', '', 'straightTable.content.hover.backgroundColor');
+  const hoverFontColorFromTheme = theme.getStyle('object', '', 'straightTable.content.hover.color');
 
   // Cases when hoverEffect is true:
   // 1. There is no hover font color but a hover background color,
-  // when hovering, the hover font color becomes white when the hover background color is a dark color
-  // or the hover font color stays the same as whetever the font color is when the hover background color is a light color.
-  // 2. There is a hover font color but no hover background color,
-  // when hovering, only a hover font color is applied and the hover background color disappears.
-  // 3. There is no hover font color and no hover background color, when hovering, the defalut hover effect (light gray backgournd)
-  // 4. There are both hover font and background colors, when hovering, the hover font and background colors take effect.
+  // when hovering, the hover font color becomes white when the hover
+  // background color is a dark color or the hover font color stays
+  // the same as whatever the font color is when the hover background
+  // color is a light color.
+  // 2. There is no hover font color and no hover background color,
+  // when hovering, the default hover effect (a light gray hover background
+  // color and no hover font color) is in use.
+  // 3. There is a hover font color but no hover background color,
+  // when hovering, only the font color is applied and no hover
+  // background color is shown.
+  // 4. There are both a hover font and a hover background color,
+  // when hovering, the hover font and the hover background color take effect.
 
-  const unsetHoverBackgroundColor = isUnset(content.hoverColor);
-  const unsetHoverFontandBackgroundColor = isUnset(content.hoverFontColor) && unsetHoverBackgroundColor;
+  // Note: Hover colors from Layout have a higher priority than those from theme.
 
-  const hoverBackgroundColor = unsetHoverFontandBackgroundColor
-    ? STYLING_DEFAULTS.HOVER_BACKGROUND
-    : unsetHoverBackgroundColor
-    ? ''
-    : getColor(content.hoverColor, STYLING_DEFAULTS.HOVER_BACKGROUND, theme);
-  const hoverFontColor = unsetHoverFontandBackgroundColor
-    ? ''
-    : getColor(content.hoverFontColor, getAutoFontColor(hoverBackgroundColor), theme);
+  const isHoverFontColorSet = isSet(hoverFontColorFromLayout) || !!hoverFontColorFromTheme;
+  const isHoverBackgroundColorSet = isSet(hoverBackgroundColorFromLayout) || !!hoverBackgroundColorFromTheme;
+  const isHoverFontOrBackgroundColorSet = isHoverFontColorSet || isHoverBackgroundColorSet;
+
+  let hoverBackgroundColor;
+  if (isSet(hoverBackgroundColorFromLayout)) {
+    // case 1 or 4
+    hoverBackgroundColor = getColor(STYLING_DEFAULTS.HOVER_BACKGROUND, theme, hoverBackgroundColorFromLayout);
+  } else if (hoverBackgroundColorFromTheme) {
+    // case 1 or 4
+    hoverBackgroundColor = hoverBackgroundColorFromTheme;
+  } else if (isHoverFontColorSet) {
+    hoverBackgroundColor = ''; // case 3
+  } else {
+    hoverBackgroundColor = STYLING_DEFAULTS.HOVER_BACKGROUND; // case 2
+  }
+
+  const hoverFontColor = isHoverFontOrBackgroundColorSet
+    ? getColor(
+        getAutoFontColor(hoverBackgroundColor),
+        theme,
+        isSet(hoverFontColorFromLayout) ? hoverFontColorFromLayout : hoverFontColorFromTheme
+      ) // case 1 or 3 or 4
+    : ''; // case 2;
 
   return {
-    ...getBaseStyling(content, theme),
+    ...contentStyle,
     hoverBackgroundColor,
     hoverFontColor,
-    selectedCellClass: 'unselected',
   };
 }
 
+/**
+ * You can set the background color expression and/or text color expression
+ * for measure data and/or dimension data.
+ * Ex:
+ * {"qHyperCubeDef": {
+ *     "qDimensions": [{
+ *        "qAttributeExpressions": [
+          {
+            "qExpression": "rgb(4,4,4)",
+            "qAttribute": true,
+            "id": "cellBackgroundColor"
+          },
+          {
+            "qExpression": "rgb(219, 42, 42)",
+            "qAttribute": true,
+            "id": "cellForegroundColor"
+          }
+        ],
+ *     }]
+ * }}
+ *
+ * get style from qAttributeExpressions in qDimensions or qMeasures
+ * @param {Object} styling - style from styling in CellRenderer in TableBodyWrapper
+ * @param {?Object} qAttrExps - qAttributeExpressions from each cell
+ * @param {Array} stylingInfo - stylingInfo from each column
+ * @returns {Object} cell font color and background color used for cells in specific columns
+ */
 export function getColumnStyle(styling, qAttrExps, stylingInfo) {
   const columnColors = {};
   qAttrExps?.qValues.forEach((val, i) => {
@@ -102,17 +186,32 @@ export function getColumnStyle(styling, qAttrExps, stylingInfo) {
   return {
     ...styling,
     color: columnColors.cellForegroundColor || styling.color,
-    background: columnColors.cellBackgroundColor,
+    backgroundColor: columnColors.cellBackgroundColor,
   };
 }
 
-export function getSelectionColors(background = STYLING_DEFAULTS.WHITE, cell, selectionState) {
+/**
+ * Get the style for one cell based on wether it is
+ * selected or possible to be selected or not possible to be selected
+ * @param {Object} cell - The info of one cell in the table body
+ * @param {Object} selectionState - The info of which cells are selected
+ * @param {?String} columnBackgroundColor - The background color from qAttributeExpressions in qDimensions or qMeasures
+ * @param {?String} [themeBackgroundColor='#fff'] - The background color from nebula theme or sense theme
+ * @returns {Object} The style for the provided cell
+ */
+export function getSelectionColors(
+  cell,
+  selectionState,
+  columnBackgroundColor,
+  themeBackgroundColor = STYLING_DEFAULTS.WHITE
+) {
   const { colIdx, rows, api } = selectionState;
 
   if (api.isModal()) {
-    if (colIdx !== cell.colIdx) {
-      return { background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${background}` };
-    }
+    if (colIdx !== cell.colIdx)
+      return {
+        background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${columnBackgroundColor || themeBackgroundColor}`,
+      };
 
     for (let i = 0; i < rows.length; i++) {
       if (rows[i].qElemNumber === cell.qElemNumber) {
@@ -126,6 +225,9 @@ export function getSelectionColors(background = STYLING_DEFAULTS.WHITE, cell, se
   return {};
 }
 
-export function getSelectionStyle(styling, cell, selectionState) {
-  return { ...styling, ...getSelectionColors(styling.background, cell, selectionState) };
+export function getSelectionStyle(styling, cell, selectionState, themeBackgroundColor) {
+  return {
+    ...styling,
+    ...getSelectionColors(cell, selectionState, styling.backgroundColor, themeBackgroundColor),
+  };
 }

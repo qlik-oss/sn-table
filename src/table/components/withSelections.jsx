@@ -5,14 +5,22 @@ import { getSelectionStyle } from '../utils/styling-utils';
 
 export default function withSelections(CellComponent) {
   const HOC = (props) => {
-    const { selectionState, cell, selectionDispatch, styling, announce, column, ...passThroughProps } = props;
-
+    const {
+      selectionState,
+      cell,
+      selectionDispatch,
+      styling,
+      themeBackgroundColor,
+      announce,
+      column,
+      ...passThroughProps
+    } = props;
     const handleMouseUp = (evt) =>
       cell.isDim && evt.button === 0 && selectCell({ selectionState, cell, selectionDispatch, evt, announce });
 
     const selectionStyling = useMemo(
-      () => getSelectionStyle(styling, cell, selectionState),
-      [styling, cell, selectionState]
+      () => getSelectionStyle(styling, cell, selectionState, themeBackgroundColor),
+      [styling, cell, selectionState, themeBackgroundColor]
     );
 
     return <CellComponent {...passThroughProps} styling={selectionStyling} onMouseUp={handleMouseUp} />;
@@ -20,10 +28,12 @@ export default function withSelections(CellComponent) {
 
   HOC.defaultProps = {
     column: null,
+    themeBackgroundColor: null,
   };
 
   HOC.propTypes = {
     styling: PropTypes.object.isRequired,
+    themeBackgroundColor: PropTypes.string,
     selectionState: PropTypes.object.isRequired,
     cell: PropTypes.object.isRequired,
     selectionDispatch: PropTypes.func.isRequired,

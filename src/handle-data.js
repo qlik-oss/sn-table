@@ -45,12 +45,12 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
   const height = Math.min(rowsPerPage, totalVerticalCount - top);
   // When the number of rows is reduced (e.g. confirming selections),
   // you can end up still being on a page that doesn't exist anymore, then go back to the first page and return null
-  if (page > 0 && top >= totalVerticalCount) {
+  if (page > 0 && top >= totalVerticalCount && pageInfo) {
     setPageInfo({ ...pageInfo, page: 0 });
     return null;
   }
   // If the number of cells exceeds 10k then we need to lower the rows per page to the maximum possible value
-  if (height * totalHorizontalCount > MAX_CELLS) {
+  if (height * totalHorizontalCount > MAX_CELLS && pageInfo) {
     setPageInfo({ ...pageInfo, rowsPerPage: getHighestPossibleRpp(totalHorizontalCount, rowsPerPageOptions), page: 0 });
     return null;
   }

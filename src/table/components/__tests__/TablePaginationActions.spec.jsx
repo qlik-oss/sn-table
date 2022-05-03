@@ -5,6 +5,7 @@ import TablePaginationActions from '../TablePaginationActions';
 import * as handleAccessibility from '../../utils/handle-accessibility';
 
 describe('<TablePaginationActions />', () => {
+  let theme;
   let direction;
   let titles;
   let page;
@@ -17,6 +18,9 @@ describe('<TablePaginationActions />', () => {
   let constraints;
 
   beforeEach(() => {
+    theme = {
+      isBackgroundDarkColor: false,
+    };
     direction = 'ltr';
     titles = [
       'SNTable.Pagination.FirstPage',
@@ -42,6 +46,7 @@ describe('<TablePaginationActions />', () => {
   it('should render all buttons in right order when left-to-right direction', () => {
     const { getAllByTestId } = render(
       <TablePaginationActions
+        theme={theme}
         direction={direction}
         page={page}
         lastPageIdx={lastPageIdx}
@@ -64,6 +69,7 @@ describe('<TablePaginationActions />', () => {
     direction = 'rtl';
     const { getAllByTestId } = render(
       <TablePaginationActions
+        theme={theme}
         direction={direction}
         page={page}
         lastPageIdx={lastPageIdx}
@@ -87,6 +93,7 @@ describe('<TablePaginationActions />', () => {
     titles = ['SNTable.Pagination.PreviousPage', 'SNTable.Pagination.NextPage'];
     const { getAllByTestId, queryByTitle } = render(
       <TablePaginationActions
+        theme={theme}
         page={page}
         lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
@@ -112,6 +119,7 @@ describe('<TablePaginationActions />', () => {
     titles = ['SNTable.Pagination.PreviousPage', 'SNTable.Pagination.NextPage'];
     const { queryByTitle, getAllByTestId } = render(
       <TablePaginationActions
+        theme={theme}
         direction={direction}
         page={page}
         lastPageIdx={lastPageIdx}
@@ -135,6 +143,7 @@ describe('<TablePaginationActions />', () => {
   it('should not render pagination dropdown', () => {
     const { queryByTestId } = render(
       <TablePaginationActions
+        theme={theme}
         page={page}
         lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
@@ -152,6 +161,7 @@ describe('<TablePaginationActions />', () => {
   it('should call onPageChange when clicking next page', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
+        theme={theme}
         page={page}
         lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
@@ -171,6 +181,7 @@ describe('<TablePaginationActions />', () => {
     page = 1;
     const { queryByTitle } = render(
       <TablePaginationActions
+        theme={theme}
         page={page}
         lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
@@ -189,6 +200,7 @@ describe('<TablePaginationActions />', () => {
   it('should call onPageChange when clicking last page', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
+        theme={theme}
         page={page}
         lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
@@ -208,6 +220,7 @@ describe('<TablePaginationActions />', () => {
     page = 2;
     const { queryByTitle } = render(
       <TablePaginationActions
+        theme={theme}
         page={page}
         lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
@@ -228,6 +241,7 @@ describe('<TablePaginationActions />', () => {
     page = 0;
     const { queryByTestId } = render(
       <TablePaginationActions
+        theme={theme}
         page={page}
         lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
@@ -246,6 +260,7 @@ describe('<TablePaginationActions />', () => {
   it('should not call focusSelectionToolbar when pressing tab on last page button and isInSelectionMode is false', () => {
     const { queryByTitle } = render(
       <TablePaginationActions
+        theme={theme}
         page={page}
         lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
@@ -265,6 +280,7 @@ describe('<TablePaginationActions />', () => {
 
     const { queryByTitle } = render(
       <TablePaginationActions
+        theme={theme}
         page={page}
         lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
@@ -284,6 +300,7 @@ describe('<TablePaginationActions />', () => {
 
     const { queryByTitle } = render(
       <TablePaginationActions
+        theme={theme}
         page={page}
         lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
@@ -304,6 +321,7 @@ describe('<TablePaginationActions />', () => {
 
     const { queryByTitle } = render(
       <TablePaginationActions
+        theme={theme}
         page={page}
         lastPageIdx={lastPageIdx}
         onPageChange={onPageChange}
