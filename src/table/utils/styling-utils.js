@@ -66,9 +66,6 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
   return baseStyle;
 };
 
-// Both index === -1 and color === null must be true for the property to be unset
-export const isUnset = (prop) => !prop || JSON.stringify(prop) === JSON.stringify({ index: -1, color: null });
-
 export function getHeaderStyle(layout, theme) {
   const header = layout.components?.[0]?.header;
   const headerStyle = getBaseStyling(header, 'header', theme);
@@ -87,6 +84,9 @@ export function getHeaderStyle(layout, theme) {
     headerStyle.color ?? isDarkColor(headerStyle.backgroundColor) ? 'rgba(255,255,255,0.9)' : 'rgba(0, 0, 0, 0.54)';
   return headerStyle;
 }
+
+// Both index === -1 and color === null must be true for the property to be unset
+export const isSet = (prop) => prop && JSON.stringify(prop) !== JSON.stringify({ index: -1, color: null });
 
 export function getBodyCellStyle(layout, theme) {
   const content = layout.components?.[0]?.content;
@@ -115,30 +115,30 @@ export function getBodyCellStyle(layout, theme) {
 
   // Note: Hover colors from Layout have a higher priority than those from theme.
 
-  const isHoverBackgroundColorUnset = isUnset(hoverBackgroundColorFromLayout) && !hoverBackgroundColorFromTheme;
-  const isHoverFontColorUnset = isUnset(hoverFontColorFromLayout) && !hoverFontColorFromTheme;
-  const isHoverFontBackgroundColorUnset = isHoverBackgroundColorUnset && isHoverFontColorUnset;
+  const isHoverFontColorSet = isSet(hoverFontColorFromLayout) || !!hoverFontColorFromTheme;
+  const isHoverBackgroundColorSet = isSet(hoverBackgroundColorFromLayout) || !!hoverBackgroundColorFromTheme;
+  const isHoverFontOrBackgroundColorSet = isHoverFontColorSet || isHoverBackgroundColorSet;
 
-  // case 1 or 4
-  let hoverBackgroundColor = isUnset(hoverBackgroundColorFromLayout)
-    ? hoverBackgroundColorFromTheme
-    : getColor(STYLING_DEFAULTS.HOVER_BACKGROUND, theme, hoverBackgroundColorFromLayout);
+  let hoverBackgroundColor;
+  if (isSet(hoverBackgroundColorFromLayout)) {
+    // case 1 or 4
+    hoverBackgroundColor = getColor(STYLING_DEFAULTS.HOVER_BACKGROUND, theme, hoverBackgroundColorFromLayout);
+  } else if (hoverBackgroundColorFromTheme) {
+    // case 1 or 4
+    hoverBackgroundColor = hoverBackgroundColorFromTheme;
+  } else if (isHoverFontColorSet) {
+    hoverBackgroundColor = ''; // case 3
+  } else {
+    hoverBackgroundColor = STYLING_DEFAULTS.HOVER_BACKGROUND; // case 2
+  }
 
-  hoverBackgroundColor = isHoverBackgroundColorUnset
-    ? '' // case 3
-    : hoverBackgroundColor;
-
-  hoverBackgroundColor = isHoverFontBackgroundColorUnset
-    ? STYLING_DEFAULTS.HOVER_BACKGROUND // case 2
-    : hoverBackgroundColor;
-
-  const hoverFontColor = isHoverFontBackgroundColorUnset
-    ? '' // case 2
-    : getColor(
+  const hoverFontColor = isHoverFontOrBackgroundColorSet
+    ? getColor(
         getAutoFontColor(hoverBackgroundColor),
         theme,
-        isUnset(hoverFontColorFromLayout) ? hoverFontColorFromTheme : hoverFontColorFromLayout
-      ); // case 1 or 3 or 4
+        isSet(hoverFontColorFromLayout) ? hoverFontColorFromLayout : hoverFontColorFromTheme
+      ) // case 1 or 3 or 4
+    : ''; // case 2;
 
   return {
     ...contentStyle,
