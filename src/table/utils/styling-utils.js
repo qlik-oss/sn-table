@@ -85,7 +85,7 @@ export function getHeaderStyle(layout, theme) {
   return headerStyle;
 }
 
-// Both index === -1 and color === null must be true for the property to be unset
+// Both index !== -1 and color !== null must be true for the property to be set
 export const isSet = (prop) => prop && JSON.stringify(prop) !== JSON.stringify({ index: -1, color: null });
 
 export function getBodyCellStyle(layout, theme) {
