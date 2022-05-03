@@ -79,7 +79,7 @@ describe('handle-key-press', () => {
       expect(nextCol).toBe(0);
     });
 
-    it('should move to the next row when we reach to the end of the current row', () => {
+    it('should move to the next row when you reach to the end of the current row', () => {
       evt.key = 'ArrowRight';
       rowAndColumnCount.rowCount = 3;
       rowAndColumnCount.columnCount = 3;
@@ -112,7 +112,7 @@ describe('handle-key-press', () => {
       expect(nextCol).toBe(0);
     });
 
-    it('should stay at the end row and end col of table when we reached to the end of the table', () => {
+    it('should stay at the end row and end col of table when you reached to the end of the table', () => {
       evt.key = 'ArrowRight';
       rowAndColumnCount.rowCount = 2;
       rowAndColumnCount.columnCount = 2;
@@ -781,7 +781,7 @@ describe('handle-key-press', () => {
       expect(keyboard.blur).toHaveBeenCalledWith(true);
     });
 
-    it('should ignore keyboard.blur while we are focusing on the pagination and pressing Esc key', () => {
+    it('should ignore keyboard.blur while you are focusing on the pagination and pressing Esc key', () => {
       evt = {
         key: 'Escape',
         stopPropagation: jest.fn(),

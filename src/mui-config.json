@@ -80,8 +80,8 @@
       },
       "styleOverrides": {
         "root": {
-          "fontSize": "14px",
-          "lineHeight": "16px",
+          "fontSize": 14,
+          "lineHeight": 16,
           "backgroundColor": "#FFFFFF",
           "borderRadius": 3,
           "&:not(.Mui-focused):not(.Mui-error):not(.Mui-disabled):hover .MuiOutlinedInput-notchedOutline": {

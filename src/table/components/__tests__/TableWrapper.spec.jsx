@@ -19,6 +19,7 @@ describe('<TableWrapper />', () => {
   let translator;
   let rect;
   let announcer;
+  let theme;
 
   beforeEach(() => {
     jest.spyOn(TableBodyWrapper, 'default').mockImplementation(() => <tbody />);
@@ -49,6 +50,9 @@ describe('<TableWrapper />', () => {
       width: 551,
     };
     announcer = jest.fn();
+    theme = {
+      getStyle: () => {},
+    };
   });
 
   afterEach(() => jest.clearAllMocks());
@@ -65,6 +69,7 @@ describe('<TableWrapper />', () => {
         keyboard={keyboard}
         translator={translator}
         rect={rect}
+        theme={theme}
       />
     );
 
@@ -90,6 +95,7 @@ describe('<TableWrapper />', () => {
         keyboard={keyboard}
         translator={translator}
         rect={rect}
+        theme={theme}
       />
     );
 
@@ -111,6 +117,7 @@ describe('<TableWrapper />', () => {
         translator={translator}
         rect={rect}
         announcer={announcer}
+        theme={theme}
       />
     );
 
@@ -139,6 +146,7 @@ describe('<TableWrapper />', () => {
         translator={translator}
         rect={rect}
         announcer={announcer}
+        theme={theme}
       />
     );
 
@@ -166,6 +174,7 @@ describe('<TableWrapper />', () => {
         keyboard={keyboard}
         translator={translator}
         rect={rect}
+        theme={theme}
       />
     );
 
@@ -186,6 +195,7 @@ describe('<TableWrapper />', () => {
         keyboard={keyboard}
         translator={translator}
         rect={rect}
+        theme={theme}
       />
     );
     const rppSiblingElement = queryByText(`SNTable.Pagination.DisplayedRowsLabel`);
