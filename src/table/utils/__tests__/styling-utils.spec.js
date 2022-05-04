@@ -29,7 +29,10 @@ describe('styling-utils', () => {
       }
     },
     getStyle: () => {},
-    backgroundColor: '#323232',
+    table: {
+      body: { borderColor: '#D9D9D9' },
+      backgroundColor: '#323232',
+    },
   };
 
   describe('getColor', () => {
@@ -91,21 +94,23 @@ describe('styling-utils', () => {
     it('should return styling with fontColor and fontSize', () => {
       const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).toEqual({
+        backgroundColor: '#323232',
+        borderColor: '#D9D9D9',
+        borderStyle: 'solid',
         color: '#fff',
         fontSize: 12,
         padding: '6px 12px',
-        borderBottom: '1px solid #D9D9D9',
-        borderRight: '1px solid #D9D9D9',
       });
     });
     it('should return styling with fontSize and padding', () => {
       styleObj.fontColor = null;
       const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).toEqual({
+        backgroundColor: '#323232',
+        borderColor: '#D9D9D9',
+        borderStyle: 'solid',
         fontSize: 12,
         padding: '6px 12px',
-        borderBottom: '1px solid #D9D9D9',
-        borderRight: '1px solid #D9D9D9',
       });
     });
     it('should return styling with fontColor as the font size and padding are from sprout theme', () => {
@@ -114,8 +119,9 @@ describe('styling-utils', () => {
       const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).toEqual({
         color: '#fff',
-        borderBottom: '1px solid #D9D9D9',
-        borderRight: '1px solid #D9D9D9',
+        backgroundColor: '#323232',
+        borderColor: '#D9D9D9',
+        borderStyle: 'solid',
       });
     });
     it('should return styling with custom padding', () => {
@@ -148,9 +154,9 @@ describe('styling-utils', () => {
       const resultStyling = getHeaderStyle(layout, theme);
       expect(resultStyling).toEqual({
         backgroundColor: '#323232',
-        borderBottom: '1px solid #D9D9D9',
-        borderRight: '1px solid #D9D9D9',
-        borderTop: '1px solid #D9D9D9',
+        borderColor: '#D9D9D9',
+        borderStyle: 'solid',
+        borderWidth: '1px 1px 1px 0px',
         sortLabelColor: 'rgba(255,255,255,0.9)',
       });
     });
@@ -169,10 +175,10 @@ describe('styling-utils', () => {
       expect(resultStyling).toEqual({
         color: '#404040',
         backgroundColor: '#323232',
-        borderBottom: '1px solid #D9D9D9',
-        borderRight: '1px solid #D9D9D9',
-        borderTop: '1px solid #D9D9D9',
-        sortLabelColor: 'rgba(255,255,255,0.9)',
+        borderColor: '#D9D9D9',
+        borderStyle: 'solid',
+        borderWidth: '1px 1px 1px 0px',
+        sortLabelColor: '#404040',
       });
     });
     it('should return all header style from layout', () => {
@@ -182,10 +188,10 @@ describe('styling-utils', () => {
         fontSize: 44,
         padding: '22px 44px',
         backgroundColor: '#323232',
-        borderBottom: '1px solid #D9D9D9',
-        borderRight: '1px solid #D9D9D9',
-        borderTop: '1px solid #D9D9D9',
-        sortLabelColor: 'rgba(255,255,255,0.9)',
+        borderColor: '#D9D9D9',
+        borderStyle: 'solid',
+        borderWidth: '1px 1px 1px 0px',
+        sortLabelColor: '#404040',
       });
     });
   });
@@ -227,8 +233,10 @@ describe('styling-utils', () => {
       expect(resultStyling).toEqual({
         hoverBackgroundColor: '#f4f4f4',
         hoverFontColor: '',
-        borderBottom: '1px solid #D9D9D9',
-        borderRight: '1px solid #D9D9D9',
+        backgroundColor: '#323232',
+        borderColor: '#D9D9D9',
+        borderStyle: 'solid',
+        borderWidth: '0px 1px 1px 0px',
       });
     });
     it('should return styling with fontColor, fontSize, padding plus default hoverBackgroundColor and hoverFontColor', () => {
@@ -239,8 +247,10 @@ describe('styling-utils', () => {
         padding: '11px 22px',
         hoverBackgroundColor: '#f4f4f4',
         hoverFontColor: '',
-        borderBottom: '1px solid #D9D9D9',
-        borderRight: '1px solid #D9D9D9',
+        backgroundColor: '#323232',
+        borderColor: '#D9D9D9',
+        borderStyle: 'solid',
+        borderWidth: '0px 1px 1px 0px',
       });
     });
     // Only checking hover properties from here on

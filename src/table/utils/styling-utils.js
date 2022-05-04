@@ -47,19 +47,18 @@ export const getAutoFontColor = (backgroundColor) =>
   isDarkColor(backgroundColor) ? STYLING_DEFAULTS.WHITE : STYLING_DEFAULTS.FONT_COLOR;
 
 export const getBaseStyling = (styleObj, objetName, theme) => {
-  const backgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
   const fontFamily = theme.getStyle('object', `straightTable.${objetName}`, 'fontFamily');
   const color = theme.getStyle('object', `straightTable.${objetName}`, 'color');
   const fontSize = theme.getStyle('object', `straightTable.${objetName}`, 'fontSize');
 
   const baseStyle = {
-    backgroundColor,
+    backgroundColor: theme.table.backgroundColor,
     fontFamily,
     color: styleObj?.fontColor ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj.fontColor) : color,
     fontSize: styleObj?.fontSize || fontSize,
     padding: getPadding(styleObj, STYLING_DEFAULTS.PADDING),
-    borderBottom: theme.isBackgroundDarkColor ? '1px solid #F2F2F2' : '1px solid #D9D9D9',
-    borderRight: theme.isBackgroundDarkColor ? '1px solid #F2F2F2' : '1px solid #D9D9D9',
+    borderStyle: 'solid',
+    borderColor: theme.table.body.borderColor,
   };
   // Remove all Undefined Values from an Object
   Object.keys(baseStyle).forEach((key) => baseStyle[key] == null && delete baseStyle[key]);
@@ -69,19 +68,22 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
 export function getHeaderStyle(layout, theme) {
   const header = layout.components?.[0]?.header;
   const headerStyle = getBaseStyling(header, 'header', theme);
+  headerStyle.borderWidth = '1px 1px 1px 0px';
 
   // When the table background color from the sense theme is transparent,
   // there is a header background color depending on the header font color
   // to avoid seeing the table body through the table head.
   const headerBackgroundColor = isDarkColor(headerStyle.color) ? '#FAFAFA' : '#323232';
-  headerStyle.backgroundColor = theme.backgroundColor === 'transparent' ? headerBackgroundColor : theme.backgroundColor;
-  headerStyle.borderTop = theme.isBackgroundDarkColor ? '1px solid #F2F2F2' : '1px solid #D9D9D9';
+  headerStyle.backgroundColor =
+    theme.table.backgroundColor === 'transparent' ? headerBackgroundColor : theme.table.backgroundColor;
+
   // When you set the header font color,
   // the sort label color should be same.
   // When there is no header content color setting,
   // the sort label color is depending on the header background color.
   headerStyle.sortLabelColor =
-    headerStyle.color ?? isDarkColor(headerStyle.backgroundColor) ? 'rgba(255,255,255,0.9)' : 'rgba(0, 0, 0, 0.54)';
+    headerStyle.color ?? (isDarkColor(headerStyle.backgroundColor) ? 'rgba(255,255,255,0.9)' : 'rgba(0, 0, 0, 0.54)');
+
   return headerStyle;
 }
 
@@ -91,6 +93,7 @@ export const isSet = (prop) => prop && JSON.stringify(prop) !== JSON.stringify({
 export function getBodyCellStyle(layout, theme) {
   const content = layout.components?.[0]?.content;
   const contentStyle = getBaseStyling(content, 'content', theme);
+  contentStyle.borderWidth = '0px 1px 1px 0px';
 
   const hoverBackgroundColorFromLayout = content?.hoverColor;
   const hoverFontColorFromLayout = content?.hoverFontColor;
