@@ -138,7 +138,7 @@ export default function TableWrapper(props) {
   };
 
   const tableContainerStyle = {
-    height: constraints.active || footerContainer || paginationNeeded ? 'calc(100% - 52px)' : '100%',
+    height: constraints.active || footerContainer || paginationNeeded ? 'calc(100% - 53px)' : '100%',
     overflow: constraints.active ? 'hidden' : 'auto',
   };
 
