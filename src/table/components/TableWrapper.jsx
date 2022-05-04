@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState, useMemo, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -14,7 +14,8 @@ import useDidUpdateEffect from './useDidUpdateEffect';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
-import announcementFactory from '../utils/announcement-factory';
+// import announcementFactory from '../utils/announcement-factory';
+import { useRootContext } from '../../contexts/RootContext';
 
 const Portal = ({ children, target }) => ReactDOM.createPortal(children, target);
 
@@ -32,7 +33,6 @@ export default function TableWrapper(props) {
     rect,
     direction,
     footerContainer,
-    announcer, // this is only for testing purposes
   } = props;
   const { size, rows, columns } = tableData;
   const totalVerticalCount = size.qcy;
@@ -44,7 +44,8 @@ export default function TableWrapper(props) {
   const tableWrapperRef = useRef();
 
   /* eslint-disable react-hooks/rules-of-hooks */
-  const announce = announcer || useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
+  // const announce = announcer || useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
+  const { announce } = useRootContext();
   const totalPages = Math.ceil(totalVerticalCount / rowsPerPage);
   const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
     rows.length + 1,
@@ -253,7 +254,6 @@ export default function TableWrapper(props) {
 }
 
 TableWrapper.defaultProps = {
-  announcer: null,
   direction: null,
   footerContainer: null,
 };
@@ -271,5 +271,4 @@ TableWrapper.propTypes = {
   rect: PropTypes.object.isRequired,
   footerContainer: PropTypes.object,
   direction: PropTypes.string,
-  announcer: PropTypes.func,
 };
