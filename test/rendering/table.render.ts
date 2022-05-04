@@ -52,6 +52,10 @@ test.describe('sn table: Rendering tests', () => {
       console.log({ renderUrl });
       // Open page in Nebula which renders fixture
       await playwright.open(renderUrl);
+      if (name === 'scenario_9' || name === 'scenario_10')
+        await page.hover('text=Tampere');
+      if (name === 'scenario_11')
+        await page.hover('text=Valley Solutions');
       // Puppeteer Capture screenshot
       const img = await playwright.screenshot();
       // Compare screenshot with baseline image
