@@ -19,7 +19,7 @@ describe('<TablePaginationActions />', () => {
 
   beforeEach(() => {
     theme = {
-      isBackgroundDarkColor: false,
+      table: { pagination: { color: '', iconColor: '' } },
     };
     direction = 'ltr';
     titles = [

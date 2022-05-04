@@ -28,6 +28,7 @@ describe('<TableHeadWrapper />', () => {
       getColorPickerColor: () => {},
       name: () => {},
       getStyle: () => {},
+      table: { body: { borderColor: '' } },
     };
     layout = {
       qHyperCube: {

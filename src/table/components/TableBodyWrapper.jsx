@@ -90,7 +90,7 @@ function TableBodyWrapper({
                   key={column.id}
                   align={column.align}
                   styling={{ color: bodyCellStyle.color }}
-                  themeBackgroundColor={theme.backgroundColor}
+                  themeBackgroundColor={theme.table.backgroundColor}
                   selectionState={selectionState}
                   selectionDispatch={selectionDispatch}
                   tabIndex={-1}
