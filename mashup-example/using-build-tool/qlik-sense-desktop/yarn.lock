@@ -2,15 +2,15 @@
 # yarn lockfile v1
 
 
-"@nebula.js/sn-table@1.10.0":
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/sn-table/-/sn-table-1.10.0.tgz#2a57a325b85e11f5feab4ce07bb1f4dc11deb7e8"
-  integrity sha512-57MquVrnGcsObqgGiUxqxuXBUmI6Fb30HpBM5MdSNvZ9qNRkx7feY6io7EDzCdQxzslgkNDPmAMwCswNyYUYlw==
+"@nebula.js/sn-table@1.11.0":
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/sn-table/-/sn-table-1.11.0.tgz#b8522e45fed4baff92cb510ab69f74e4723db37c"
+  integrity sha512-KakUl92qMfJmLGGgjVCvXMkiR3QrUMcnrIpZ87kSai3cNv6JEM1mvte5jRvq6+PavQOtyXmrwRw+ngN9cFCW8g==
 
-"@nebula.js/stardust@2.9.0":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-2.9.0.tgz#e424eb0948d5ebca7e9ffb369290a0102753e0e8"
-  integrity sha512-uJ/GhNUXbCq1c6cdgWBjwIy6e6T9/QlGb5BU7BKPFXChdAwzakE8Xc6DgafCkFx8L5saDYTTX9lsTGBOwemD3w==
+"@nebula.js/stardust@2.10.0":
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-2.10.0.tgz#eafaa13949a5684b519e0070dbf26386c632818f"
+  integrity sha512-s7QkuvkUdjBAW4IGdkHb/8K17Iqv9COL9BbZVcgsJYcNh857P1jtb1XCFXi4goz+2a3npA1c9uMjVgO4GOeKPg==
   dependencies:
     "@types/qlik-engineapi" "12.67.12"
 
@@ -174,10 +174,10 @@ is-core-module@^2.8.1:
   dependencies:
     has "^1.0.3"
 
-nanoid@^3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.1.tgz#6347a18cac88af88f58af0b3594b723d5e99bb35"
-  integrity sha512-n6Vs/3KGyxPQd6uO0eH4Bv0ojGSUvuLlIHtC3Y0kEO23YRge8H9x1GCzLn28YX0H66pMkxuaeESFq4tKISKwdw==
+nanoid@^3.3.3:
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.4.tgz#730b67e3cd09e2deacf03c027c81c9d9dbc5e8ab"
+  integrity sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==
 
 path-parse@^1.0.7:
   version "1.0.7"
@@ -189,12 +189,12 @@ picocolors@^1.0.0:
   resolved "https://registry.yarnpkg.com/picocolors/-/picocolors-1.0.0.tgz#cb5bdc74ff3f51892236eaf79d68bc44564ab81c"
   integrity sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==
 
-postcss@^8.4.12:
-  version "8.4.12"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.12.tgz#1e7de78733b28970fa4743f7da6f3763648b1905"
-  integrity sha512-lg6eITwYe9v6Hr5CncVbK70SoioNQIq81nsaG86ev5hAidQvmOeETBqs7jm43K2F5/Ley3ytDtriImV6TpNiSg==
+postcss@^8.4.13:
+  version "8.4.13"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.13.tgz#7c87bc268e79f7f86524235821dfdf9f73e5d575"
+  integrity sha512-jtL6eTBrza5MPzy8oJLFuUscHDXTV5KcLlqAWHl5q5WYRfnNRGSmOZmOZ1T6Gy7A99mOZfqungmZMpMmCVJ8ZA==
   dependencies:
-    nanoid "^3.3.1"
+    nanoid "^3.3.3"
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
@@ -224,13 +224,13 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-vite@2.9.5:
-  version "2.9.5"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-2.9.5.tgz#08ef37ac7a6d879c96f328b791732c9a00ea25ea"
-  integrity sha512-dvMN64X2YEQgSXF1lYabKXw3BbN6e+BL67+P3Vy4MacnY+UzT1AfkHiioFSi9+uiDUiaDy7Ax/LQqivk6orilg==
+vite@2.9.7:
+  version "2.9.7"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-2.9.7.tgz#210c328e08ed206ab0953eb1ca00860042cd0a77"
+  integrity sha512-5hH7aNQe8rJiTTqCtPNX/6mIKlGw+1wg8UXwAxDIIN8XaSR+Zx3GT2zSu7QKa1vIaBqfUODGh3vpwY8r0AW/jw==
   dependencies:
     esbuild "^0.14.27"
-    postcss "^8.4.12"
+    postcss "^8.4.13"
     resolve "^1.22.0"
     rollup "^2.59.0"
   optionalDependencies:
