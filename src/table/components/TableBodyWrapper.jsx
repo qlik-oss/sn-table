@@ -21,7 +21,7 @@ function TableBodyWrapper({
   tableWrapperRef,
   announce,
 }) {
-  const { rows, columns } = tableData;
+  const { rows, columns, paginationNeeded } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme.name()]);
 
@@ -49,7 +49,10 @@ function TableBodyWrapper({
 
   const bodyRowAndCellStyle = {
     'tr :last-child': {
-      borderRight: 0,
+      borderRight: paginationNeeded && 0,
+    },
+    'tr :first-child': {
+      borderLeft: !paginationNeeded && '1px solid rgb(217, 217, 217)',
     },
     '& td, th': {
       fontSize: bodyCellStyle.fontSize,

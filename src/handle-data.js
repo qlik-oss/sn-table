@@ -40,7 +40,7 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
   const { qHyperCube } = layout;
   const totalColumnCount = qHyperCube.qSize.qcx;
   const totalRowCount = qHyperCube.qSize.qcy;
-  const paginationNeeded = totalRowCount > 10; // TODO: This might not be true if you have > columns
+  const paginationNeeded = totalRowCount > 10; // TODO: This might not be true if you have > 1000 columns
   const top = page * rowsPerPage;
   const height = Math.min(rowsPerPage, totalRowCount - top);
   // When the number of rows is reduced (e.g. confirming selections),

@@ -126,7 +126,7 @@ export default function TableWrapper(props) {
   };
 
   const paperStyle = {
-    borderWidth: '0px 1px 0px',
+    borderWidth: paginationNeeded ? '0px 1px 0px' : '0px',
     borderStyle: 'solid',
     borderColor: theme.table.borderColor,
     height: '100%',

@@ -34,9 +34,13 @@ function TableHeadWrapper({
   setFocusedCellCoord,
   keyboard,
 }) {
+  const { columns, paginationNeeded } = tableData;
   const headRowStyle = {
     '& :last-child': {
-      borderRight: 0,
+      borderRight: paginationNeeded && 0,
+    },
+    'th:first-of-type': {
+      borderLeft: !paginationNeeded && '1px solid rgb(217, 217, 217)',
     },
   };
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name()]);
@@ -49,7 +53,7 @@ function TableHeadWrapper({
   return (
     <TableHead>
       <TableRow sx={headRowStyle} className="sn-table-row">
-        {tableData.columns.map((column, columnIndex) => {
+        {columns.map((column, columnIndex) => {
           const tabIndex = columnIndex === 0 && !keyboard.enabled ? 0 : -1;
           const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.dataColIdx;
           const isFocusInHead = focusedCellCoord[0] === 0;
