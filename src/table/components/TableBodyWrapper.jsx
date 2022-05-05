@@ -16,13 +16,12 @@ function TableBodyWrapper({
   layout,
   theme,
   setShouldRefocus,
-  paginationNeeded,
   setFocusedCellCoord,
   keyboard,
   tableWrapperRef,
   announce,
 }) {
-  const { rows, columns } = tableData;
+  const { rows, columns, paginationNeeded } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme.name()]);
 
@@ -134,7 +133,6 @@ TableBodyWrapper.propTypes = {
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
   setFocusedCellCoord: PropTypes.func.isRequired,
-  paginationNeeded: PropTypes.bool.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
   keyboard: PropTypes.object.isRequired,
   tableWrapperRef: PropTypes.object.isRequired,

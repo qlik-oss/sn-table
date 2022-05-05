@@ -236,15 +236,9 @@ export default function TableWrapper(props) {
         data-testid="table-wrapper"
       >
         <Table stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper
-            {...props}
-            paginationNeeded={paginationNeeded}
-            setFocusedCellCoord={setFocusedCellCoord}
-            focusedCellCoord={focusedCellCoord}
-          />
+          <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
           <TableBodyWrapper
             {...props}
-            paginationNeeded={paginationNeeded}
             announce={announce}
             focusedCellCoord={focusedCellCoord}
             setFocusedCellCoord={setFocusedCellCoord}

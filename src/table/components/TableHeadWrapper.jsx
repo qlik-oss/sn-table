@@ -31,10 +31,10 @@ function TableHeadWrapper({
   translator,
   selectionsAPI,
   focusedCellCoord,
-  paginationNeeded,
   setFocusedCellCoord,
   keyboard,
 }) {
+  const { columns, paginationNeeded } = tableData;
   const headRowStyle = {
     '& :last-child': {
       borderRight: paginationNeeded && 0,
@@ -53,7 +53,7 @@ function TableHeadWrapper({
   return (
     <TableHead>
       <TableRow sx={headRowStyle} className="sn-table-row">
-        {tableData.columns.map((column, columnIndex) => {
+        {columns.map((column, columnIndex) => {
           const tabIndex = columnIndex === 0 && !keyboard.enabled ? 0 : -1;
           const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.dataColIdx;
           const isFocusInHead = focusedCellCoord[0] === 0;
@@ -114,7 +114,6 @@ TableHeadWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
   focusedCellCoord: PropTypes.arrayOf(PropTypes.number).isRequired,
-  paginationNeeded: PropTypes.bool.isRequired,
   setFocusedCellCoord: PropTypes.func.isRequired,
   translator: PropTypes.object.isRequired,
 };
