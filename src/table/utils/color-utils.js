@@ -56,3 +56,12 @@ export function isDarkColor(color) {
   // HSP < 125, the color is dark, otherwise, the color is light
   return 0.299 * r + 0.587 * g + 0.114 * b < 125;
 }
+
+export function removeOpacity(color) {
+  const matches = resolveExpression(color)
+    .substring(5, color?.length - 1)
+    .replace(/ /g, '')
+    .split(',');
+
+  return matches?.length === 4 ? `rgb(${matches[0]},${matches[1]},${matches[2]})` : color;
+}

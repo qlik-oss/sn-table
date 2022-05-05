@@ -94,7 +94,6 @@ describe('styling-utils', () => {
     it('should return styling with fontColor, fontSize and padding', () => {
       const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).toEqual({
-        backgroundColor: '#323232',
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
         color: '#fff',
@@ -106,7 +105,6 @@ describe('styling-utils', () => {
       styleObj.fontColor = null;
       const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).toEqual({
-        backgroundColor: '#323232',
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
         fontSize: 12,
@@ -117,7 +115,6 @@ describe('styling-utils', () => {
       styleObj.fontColor = { index: -1, color: null };
       const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).toEqual({
-        backgroundColor: '#323232',
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
         fontSize: 12,
@@ -132,7 +129,6 @@ describe('styling-utils', () => {
       };
       const resultStyling = getBaseStyling(styleObj, objetName, customTheme);
       expect(resultStyling).toEqual({
-        backgroundColor: '#323232',
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
         color: '#111',
@@ -145,7 +141,6 @@ describe('styling-utils', () => {
       styleObj.fontColor = { index: -1, color: 'fff' };
       const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).toEqual({
-        backgroundColor: '#323232',
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
         color: 'fff',
@@ -159,7 +154,6 @@ describe('styling-utils', () => {
       const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).toEqual({
         color: '#fff',
-        backgroundColor: '#323232',
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
       });
@@ -271,10 +265,9 @@ describe('styling-utils', () => {
 
       const resultStyling = getBodyCellStyle(layout, theme);
       expect(resultStyling).toEqual({
-        hoverBackgroundColor: '#f4f4f4',
         hoverFontColor: '',
-        backgroundColor: '#323232',
         borderColor: '#D9D9D9',
+        hoverBackgroundColor: '#f4f4f4',
         borderStyle: 'solid',
         borderWidth: '0px 1px 1px 0px',
       });
@@ -287,7 +280,6 @@ describe('styling-utils', () => {
         padding: '11px 22px',
         hoverBackgroundColor: '#f4f4f4',
         hoverFontColor: '',
-        backgroundColor: '#323232',
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
         borderWidth: '0px 1px 1px 0px',

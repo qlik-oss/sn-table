@@ -1,4 +1,4 @@
-import { resolveExpression, isDarkColor } from './color-utils';
+import { resolveExpression, isDarkColor, removeOpacity } from './color-utils';
 
 // the order of style
 // default (inl. sprout theme) < Sense theme < styling settings
@@ -55,7 +55,6 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
   const fontSize = theme.getStyle('object', `straightTable.${objetName}`, 'fontSize');
 
   const baseStyle = {
-    backgroundColor: theme.table.backgroundColor,
     fontFamily,
     color: isSet(styleObj?.fontColor) ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj.fontColor) : color,
     fontSize: styleObj?.fontSize || fontSize,
@@ -77,8 +76,8 @@ export function getHeaderStyle(layout, theme) {
   // there is a header background color depending on the header font color
   // to avoid seeing the table body through the table head.
   const headerBackgroundColor = isDarkColor(headerStyle.color) ? '#FAFAFA' : '#323232';
-  headerStyle.backgroundColor =
-    theme.table.backgroundColor === 'transparent' ? headerBackgroundColor : theme.table.backgroundColor;
+  const RGB = removeOpacity(theme.table.backgroundColor);
+  headerStyle.backgroundColor = theme.table.backgroundColor === 'transparent' ? headerBackgroundColor : RGB;
 
   // When you set the header font color,
   // the sort label color should be same.
