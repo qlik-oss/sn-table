@@ -14,10 +14,10 @@ describe('styling-utils', () => {
   let altResolvedColor;
   const theme = {
     // very simple mock of getColorPickerColor. Normally color.color has to be null for the fn to return null
-    getColorPickerColor: ({ index }) => {
+    getColorPickerColor: ({ index, color }) => {
       switch (index) {
         case -1:
-          return null;
+          return color;
         case 0:
           return 'none';
         case 1:
@@ -91,7 +91,7 @@ describe('styling-utils', () => {
       objetName = '';
     });
 
-    it('should return styling with fontColor and fontSize', () => {
+    it('should return styling with fontColor, fontSize and padding', () => {
       const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).toEqual({
         backgroundColor: '#323232',
@@ -109,6 +109,46 @@ describe('styling-utils', () => {
         backgroundColor: '#323232',
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
+        fontSize: 12,
+        padding: '6px 12px',
+      });
+    });
+    it('should return styling with fontSize and padding when the index for font color is -1 and color is null', () => {
+      styleObj.fontColor = { index: -1, color: null };
+      const resultStyling = getBaseStyling(styleObj, objetName, theme);
+      expect(resultStyling).toEqual({
+        backgroundColor: '#323232',
+        borderColor: '#D9D9D9',
+        borderStyle: 'solid',
+        fontSize: 12,
+        padding: '6px 12px',
+      });
+    });
+    it('should return styling with fontSize, padding and font color when the index for font color is -1 and color is null and there is a color from theme', () => {
+      styleObj.fontColor = { index: -1, color: null };
+      const customTheme = {
+        ...theme,
+        getStyle: () => '#111',
+      };
+      const resultStyling = getBaseStyling(styleObj, objetName, customTheme);
+      expect(resultStyling).toEqual({
+        backgroundColor: '#323232',
+        borderColor: '#D9D9D9',
+        borderStyle: 'solid',
+        color: '#111',
+        fontSize: 12,
+        padding: '6px 12px',
+        fontFamily: '#111',
+      });
+    });
+    it('should return styling with fontSize, padding and font color when the index for font color is -1 and the color is not null', () => {
+      styleObj.fontColor = { index: -1, color: 'fff' };
+      const resultStyling = getBaseStyling(styleObj, objetName, theme);
+      expect(resultStyling).toEqual({
+        backgroundColor: '#323232',
+        borderColor: '#D9D9D9',
+        borderStyle: 'solid',
+        color: 'fff',
         fontSize: 12,
         padding: '6px 12px',
       });
