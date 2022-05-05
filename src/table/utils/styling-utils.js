@@ -27,6 +27,9 @@ export const SELECTION_STYLING = {
   },
 };
 
+// Both index !== -1 and color !== null must be true for the property to be set
+export const isSet = (prop) => prop && JSON.stringify(prop) !== JSON.stringify({ index: -1, color: null });
+
 export function getPadding(styleObj, defaultPadding) {
   let padding = defaultPadding;
   if (styleObj?.padding) {
@@ -54,7 +57,7 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
   const baseStyle = {
     backgroundColor: theme.table.backgroundColor,
     fontFamily,
-    color: styleObj?.fontColor ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj.fontColor) : color,
+    color: isSet(styleObj?.fontColor) ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj.fontColor) : color,
     fontSize: styleObj?.fontSize || fontSize,
     padding: getPadding(styleObj, STYLING_DEFAULTS.PADDING),
     borderStyle: 'solid',
@@ -86,9 +89,6 @@ export function getHeaderStyle(layout, theme) {
 
   return headerStyle;
 }
-
-// Both index !== -1 and color !== null must be true for the property to be set
-export const isSet = (prop) => prop && JSON.stringify(prop) !== JSON.stringify({ index: -1, color: null });
 
 export function getBodyCellStyle(layout, theme) {
   const content = layout.components?.[0]?.content;
