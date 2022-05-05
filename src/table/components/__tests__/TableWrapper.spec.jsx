@@ -27,7 +27,8 @@ describe('<TableWrapper />', () => {
     jest.spyOn(handleKeyPress, 'handleTableWrapperKeyDown').mockImplementation(() => jest.fn());
 
     tableData = {
-      size: { qcy: 200 },
+      totalRowCount: 200,
+      paginationNeeded: true,
       rows: [{ qText: '1' }],
       columns: [{}],
     };

@@ -84,9 +84,16 @@ describe('handle-data', () => {
     });
 
     it('should return size, rows and columns correctly formatted', async () => {
-      const { size, rows, columns } = await manageData(model, layout, pageInfo, setPageInfo);
+      const { totalColumnCount, totalRowCount, paginationNeeded, rows, columns } = await manageData(
+        model,
+        layout,
+        pageInfo,
+        setPageInfo
+      );
 
-      expect(size).toBe(layout.qHyperCube.qSize);
+      expect(totalColumnCount).toBe(layout.qHyperCube.qSize.qcx);
+      expect(totalRowCount).toBe(layout.qHyperCube.qSize.qcy);
+      expect(paginationNeeded).toBe(true);
       expect(rows).toHaveLength(100);
       expect(rows[0]['col-0'].qText).toBe('2');
       expect(rows[0]['col-0'].rowIdx).toBe(100);
