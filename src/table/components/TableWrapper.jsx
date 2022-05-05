@@ -34,9 +34,7 @@ export default function TableWrapper(props) {
     footerContainer,
     announcer, // this is only for testing purposes
   } = props;
-  const { size, rows, columns } = tableData;
-  const totalVerticalCount = size.qcy;
-  const paginationNeeded = totalVerticalCount > 10;
+  const { totalColumnCount, totalRowCount, paginationNeeded, rows, columns } = tableData;
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
   const shouldRefocus = useRef(false);
@@ -45,7 +43,7 @@ export default function TableWrapper(props) {
 
   /* eslint-disable react-hooks/rules-of-hooks */
   const announce = announcer || useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
-  const totalPages = Math.ceil(totalVerticalCount / rowsPerPage);
+  const totalPages = Math.ceil(totalRowCount / rowsPerPage);
   const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
     rows.length + 1,
     columns.length,
@@ -116,7 +114,7 @@ export default function TableWrapper(props) {
       shouldAddTabstop: !keyboard.enabled || keyboard.active,
       announce,
     });
-  }, [rows.length, totalVerticalCount, size.qcx, page]);
+  }, [rows.length, totalRowCount, totalColumnCount, page]);
 
   const selectProps = {
     inputProps: {
@@ -138,7 +136,7 @@ export default function TableWrapper(props) {
   };
 
   const tableContainerStyle = {
-    height: constraints.active || footerContainer || paginationNeeded ? 'calc(100% - 52px)' : '100%',
+    height: constraints.active || footerContainer || paginationNeeded ? 'calc(100% - 53px)' : '100%',
     overflow: constraints.active ? 'hidden' : 'auto',
   };
 
@@ -165,14 +163,14 @@ export default function TableWrapper(props) {
   ];
 
   const paginationContent = (width) => {
-    const fixedRowsPerPage = selectionsAPI.isModal() || width < 550 || size.qcx > 100;
+    const fixedRowsPerPage = selectionsAPI.isModal() || width < 550 || totalColumnCount > 100;
     return (
       <>
         <TablePagination
           sx={tablePaginationStyle}
           rowsPerPageOptions={fixedRowsPerPage ? [rowsPerPage] : rowsPerPageOptions}
           component="div"
-          count={totalVerticalCount}
+          count={totalRowCount}
           rowsPerPage={rowsPerPage}
           labelRowsPerPage={`${translator.get('SNTable.Pagination.RowsPerPage')}:`}
           page={page}
@@ -189,7 +187,7 @@ export default function TableWrapper(props) {
           direction={direction}
           page={page}
           onPageChange={handleChangePage}
-          lastPageIdx={Math.ceil(totalVerticalCount / rowsPerPage) - 1}
+          lastPageIdx={totalPages - 1}
           keyboard={keyboard}
           isInSelectionMode={selectionsAPI.isModal()}
           tableWidth={width}
@@ -219,7 +217,7 @@ export default function TableWrapper(props) {
       onKeyDown={(evt) =>
         handleTableWrapperKeyDown({
           evt,
-          totalVerticalCount,
+          totalRowCount,
           page,
           rowsPerPage,
           handleChangePage,
