@@ -128,7 +128,7 @@ export default function TableWrapper(props) {
   };
 
   const paperStyle = {
-    borderWidth: '0px 1px 0px',
+    borderWidth: paginationNeeded ? '0px 1px 0px' : '0px',
     borderStyle: 'solid',
     borderColor: theme.table.borderColor,
     height: '100%',
@@ -238,9 +238,15 @@ export default function TableWrapper(props) {
         data-testid="table-wrapper"
       >
         <Table stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
+          <TableHeadWrapper
+            {...props}
+            paginationNeeded={paginationNeeded}
+            setFocusedCellCoord={setFocusedCellCoord}
+            focusedCellCoord={focusedCellCoord}
+          />
           <TableBodyWrapper
             {...props}
+            paginationNeeded={paginationNeeded}
             announce={announce}
             focusedCellCoord={focusedCellCoord}
             setFocusedCellCoord={setFocusedCellCoord}

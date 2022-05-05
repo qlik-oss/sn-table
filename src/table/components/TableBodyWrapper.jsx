@@ -16,6 +16,7 @@ function TableBodyWrapper({
   layout,
   theme,
   setShouldRefocus,
+  paginationNeeded,
   setFocusedCellCoord,
   keyboard,
   tableWrapperRef,
@@ -49,7 +50,10 @@ function TableBodyWrapper({
 
   const bodyRowAndCellStyle = {
     'tr :last-child': {
-      borderRight: 0,
+      borderRight: paginationNeeded && 0,
+    },
+    'tr :first-child': {
+      borderLeft: !paginationNeeded && '1px solid rgb(217, 217, 217)',
     },
     '& td, th': {
       fontSize: bodyCellStyle.fontSize,
@@ -130,6 +134,7 @@ TableBodyWrapper.propTypes = {
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
   setFocusedCellCoord: PropTypes.func.isRequired,
+  paginationNeeded: PropTypes.bool.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
   keyboard: PropTypes.object.isRequired,
   tableWrapperRef: PropTypes.object.isRequired,

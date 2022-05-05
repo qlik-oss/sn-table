@@ -31,12 +31,16 @@ function TableHeadWrapper({
   translator,
   selectionsAPI,
   focusedCellCoord,
+  paginationNeeded,
   setFocusedCellCoord,
   keyboard,
 }) {
   const headRowStyle = {
     '& :last-child': {
-      borderRight: 0,
+      borderRight: paginationNeeded && 0,
+    },
+    'th:first-of-type': {
+      borderLeft: !paginationNeeded && '1px solid rgb(217, 217, 217)',
     },
   };
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name()]);
@@ -110,6 +114,7 @@ TableHeadWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
   focusedCellCoord: PropTypes.arrayOf(PropTypes.number).isRequired,
+  paginationNeeded: PropTypes.bool.isRequired,
   setFocusedCellCoord: PropTypes.func.isRequired,
   translator: PropTypes.object.isRequired,
 };
