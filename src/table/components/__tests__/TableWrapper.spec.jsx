@@ -86,8 +86,8 @@ describe('<TableWrapper />', () => {
       queryByLabelText(`${'SNTable.Accessibility.RowsAndColumns'} ${'SNTable.Accessibility.NavigationInstructions'}`)
     ).toBeVisible();
     expect(queryByLabelText('SNTable.Pagination.RowsPerPage')).toBeVisible();
-    expect(queryByTestId('table-wrapper').getAttribute('tabindex')).toBe('-1');
-    expect(queryByTestId('table-wrapper').getAttribute('role')).toBe('application');
+    expect(queryByTestId('table-container').getAttribute('tabindex')).toBe('-1');
+    expect(queryByTestId('table-container').getAttribute('role')).toBe('application');
     expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeVisible();
     expect(queryByText(rowsPerPage)).toBeVisible();
   });
