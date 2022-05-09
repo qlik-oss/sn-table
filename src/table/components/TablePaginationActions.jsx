@@ -87,13 +87,11 @@ export default function TablePaginationActions({
             {`${translator.get('SNTable.Pagination.SelectPage')}:`}
           </InputLabel>
           <Select sx={selectStyle} native value={page} onChange={handleSelectPage} inputProps={inputProps}>
-            {Array(lastPageIdx + 1)
-              .fill()
-              .map((_, index) => (
-                <option key={String(_)} value={index}>
-                  {index + 1}
-                </option>
-              ))}
+            {[...Array(lastPageIdx + 1).keys()].map((pageIdx, index) => (
+              <option key={pageIdx} value={index}>
+                {pageIdx + 1}
+              </option>
+            ))}
           </Select>
         </FormControl>
       )}
