@@ -1,13 +1,15 @@
-import { isDarkColor } from './table/utils/color-utils';
+import { resolveExpression, isDarkColor } from './table/utils/color-utils';
 
 export default function tableThemeColors(theme) {
   const qvInnerObject = document.querySelector('.qv-object .qv-inner-object');
   const backgroundColorFromCSS = qvInnerObject && window.getComputedStyle?.(qvInnerObject).backgroundColor;
 
-  const tableBackgroundColor = theme.getStyle('', '', 'object.straightTable.backgroundColor');
+  const tableBackgroundColorFromTheme = theme.getStyle('', '', 'object.straightTable.backgroundColor');
   const backgroundColorFromTheme = theme.getStyle('object', 'straightTable', 'backgroundColor');
 
-  const backgroundColor = tableBackgroundColor || backgroundColorFromCSS || backgroundColorFromTheme;
+  const backgroundColor = resolveExpression(
+    tableBackgroundColorFromTheme || backgroundColorFromCSS || backgroundColorFromTheme
+  );
   const isBackgroundDarkColor = isDarkColor(backgroundColor);
 
   const BORDER_COLOR = isBackgroundDarkColor ? ' #F2F2F2' : '#D9D9D9';
@@ -22,7 +24,7 @@ export default function tableThemeColors(theme) {
   };
 
   return {
-    tableBackgroundColor,
+    tableBackgroundColor: tableBackgroundColorFromTheme,
     backgroundColor,
     isBackgroundDarkColor,
     borderColor,

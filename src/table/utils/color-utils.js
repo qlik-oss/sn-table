@@ -37,7 +37,6 @@ export function isDarkColor(color) {
   let r;
   let g;
   let b;
-  let a;
   let matches;
   if (
     (matches =
@@ -47,18 +46,17 @@ export function isDarkColor(color) {
     r = parseInt(matches[1], 10);
     g = parseInt(matches[2], 10);
     b = parseInt(matches[3], 10);
-    a = parseFloat(matches[4]);
   } else if ((matches = /^#([A-f0-9]{2})([A-f0-9]{2})([A-f0-9]{2})$/i.exec(color))) {
     // #aBc123
     r = parseInt(matches[1], 16);
     g = parseInt(matches[2], 16);
     b = parseInt(matches[3], 16);
   }
-  let HSP = 0.299 * r + 0.587 * g + 0.114 * b;
-  HSP = a ? HSP / a : HSP;
   // Using the HSP (Highly Sensitive Poo) value, determine whether the color is light or dark
+  // the equation is from http://alienryderflex.com/hsp.html
+  const HSP = Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b));
   // HSP < 125, the color is dark, otherwise, the color is light
-  return a !== 0 && HSP < 125;
+  return HSP < 125;
 }
 
 export function removeOpacity(color) {
