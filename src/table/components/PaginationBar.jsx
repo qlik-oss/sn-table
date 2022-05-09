@@ -66,6 +66,13 @@ export default function PaginationBar({
   const getButton = (disabledCondition, pageNumber, type, onKeyDown = null) => {
     const iconType = `${type}${direction === 'rtl' ? 'RTL' : ''}`;
     const IconComponent = icons[iconType];
+    const buttonStyle = disabledCondition
+      ? {
+          color: theme.table.pagination.disabledIconColor,
+          cursor: 'default',
+        }
+      : { color: theme.table.pagination.iconColor };
+
     return (
       <IconButton
         data-testid="pagination-action-icon-button"
@@ -74,14 +81,7 @@ export default function PaginationBar({
         aria-label={translator.get(`SNTable.Pagination.${type}`)}
         title={!constraints.passive && translator.get(`SNTable.Pagination.${type}`)}
         tabIndex={tabIndex}
-        sx={
-          disabledCondition
-            ? {
-                color: theme.table.pagination.disabledIconColor,
-                cursor: 'default',
-              }
-            : { color: theme.table.pagination.iconColor }
-        }
+        sx={buttonStyle}
         onKeyDown={onKeyDown}
       >
         <IconComponent />
