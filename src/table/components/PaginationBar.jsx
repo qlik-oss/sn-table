@@ -6,7 +6,6 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
-import TablePagination from '@mui/material/TablePagination';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
@@ -25,8 +24,22 @@ const icons = {
   LastPageRTL: FirstPageIcon,
 };
 
-const Portal = ({ children, target }) => ReactDOM.createPortal(children, target);
+const shouldShow = (component, width) => {
+  switch (component) {
+    case 'selectPage':
+      return width > 650;
+    case 'rppOptions':
+      return width > 550;
+    case 'firstLast':
+      return width > 350;
+    case 'currentRows':
+      return width > 250;
+    default:
+      return false;
+  }
+};
 
+const Portal = ({ children, target }) => ReactDOM.createPortal(children, target);
 export default function PaginationBar({
   theme,
   direction,
@@ -46,15 +59,14 @@ export default function PaginationBar({
   const { totalRowCount, totalColumnCount, paginationNeeded } = tableData;
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
 
-  if (!paginationNeeded) return null;
+  if (!paginationNeeded || constraints.active) return null;
 
   const onFirstPage = page === 0;
   const onLastPage = page >= lastPageIdx;
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
-  const tableWidth = footerContainer ? footerContainer.getBoundingClientRect().width : rect.width;
-  const showFirstAndLast = tableWidth > 350;
-  const rppOptions =
-    selectionsAPI.isModal() || tableWidth < 550 || totalColumnCount > 100 ? [rowsPerPage] : rowsPerPageOptions;
+  const width = footerContainer ? footerContainer.getBoundingClientRect().width : rect.width;
+  const showFirstAndLast = shouldShow('firstLast', width);
+  const showRppOptions = !selectionsAPI.isModal() && shouldShow('rppOptions', width) && totalColumnCount <= 100;
 
   const handleChangeRowsPerPage = (evt) => {
     setPageInfo({ ...pageInfo, page: 0, rowsPerPage: +evt.target.value });
@@ -64,6 +76,25 @@ export default function PaginationBar({
   const handleSelectPage = (event) => handleChangePage(+event.target.value);
 
   const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, selectionsAPI.isModal()) : null;
+
+  const paperTablePaginationStyle = {
+    height: '40px',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingRight: 1,
+    backgroundColor: theme.table.backgroundColor,
+    boxShadow: 'none',
+    borderStyle: 'solid',
+    borderWidth: '0px 0px 1px 0px',
+    borderRadius: 0,
+    borderColor: theme.table.pagination.borderColor,
+  };
+
+  const selectStyle = {
+    backgroundColor: 'inherit',
+    '& .MuiNativeSelect-icon': { color: theme.table.pagination.iconColor },
+  };
 
   const getButton = (disabledCondition, pageNumber, type, onKeyDown = null) => {
     const iconType = `${type}${direction === 'rtl' ? 'RTL' : ''}`;
@@ -91,90 +122,67 @@ export default function PaginationBar({
     );
   };
 
-  const paperTablePaginationStyle = {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    paddingRight: 1,
-    backgroundColor: theme.table.backgroundColor,
-    boxShadow: 'none',
-    borderStyle: 'solid',
-    borderWidth: '0px 0px 1px 0px',
-    borderRadius: 0,
-    borderColor: theme.table.pagination.borderColor,
-  };
-
-  const tablePaginationStyle = [
-    constraints.active && { display: 'none' },
-    {
-      color: theme.table.pagination.color,
-      '& .MuiNativeSelect-icon': {
-        color: theme.table.pagination.iconColor,
-      },
-    },
-  ];
-
-  const selectProps = {
-    inputProps: {
-      'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
-      'data-testid': 'select',
+  const getDropdown = (name, value, options, handleChange) => {
+    const translationName = `SNTable.Pagination.${name}`;
+    const id = `${name}-dropdown`;
+    const inputProps = {
       tabIndex,
-    },
-    native: true,
+      id,
+      'data-testid': id,
+      style: { color: theme.table.pagination.color },
+    };
+
+    return (
+      <FormControl sx={{ color: theme.table.pagination.color }}>
+        <InputLabel sx={{ color: theme.table.pagination.color }} htmlFor="rpp-dropdown" shrink={false}>
+          {`${translator.get(translationName)}:`}
+        </InputLabel>
+        <Select sx={selectStyle} native value={value} onChange={handleChange} inputProps={inputProps}>
+          {options}
+        </Select>
+      </FormControl>
+    );
   };
 
-  const inputProps = {
-    'data-testid': 'pagination-dropdown',
-    tabIndex,
-    id: 'pagination-dropdown',
-    style: { color: theme.table.pagination.color },
-  };
+  const rppOptions = (
+    <>
+      {rowsPerPageOptions.map((opt) => (
+        <option key={opt} value={opt}>
+          {opt}
+        </option>
+      ))}
+    </>
+  );
 
-  const selectStyle = {
-    backgroundColor: 'inherit',
-    '& .MuiNativeSelect-icon': { color: theme.table.pagination.iconColor },
-  };
+  const pageOptions = (
+    <>
+      {[...Array(lastPageIdx + 1).keys()].map((pageIdx, index) => (
+        <option key={pageIdx} value={index}>
+          {pageIdx + 1}
+        </option>
+      ))}
+    </>
+  );
+
+  // TODO: proper mui component
+  const currentRows = shouldShow('currentRows', width) && (
+    <div>
+      {translator.get('SNTable.Pagination.DisplayedRowsLabel', [
+        `${page * rowsPerPage + 1} - ${Math.min((page + 1) * rowsPerPage, totalRowCount)}`,
+        totalRowCount,
+      ])}
+    </div>
+  );
 
   const paginationContent = (
     <>
-      <TablePagination
-        sx={tablePaginationStyle}
-        rowsPerPageOptions={rppOptions}
-        component="div"
-        count={totalRowCount}
-        rowsPerPage={rowsPerPage}
-        labelRowsPerPage={`${translator.get('SNTable.Pagination.RowsPerPage')}:`}
-        page={page}
-        SelectProps={selectProps}
-        labelDisplayedRows={({ from, to, count }) =>
-          tableWidth > 250 && translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
-        }
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        ActionsComponent={() => <div>{null}</div>}
-        onPageChange={() => {}}
-      />
-      {tableWidth > 650 && (
-        <FormControl sx={{ color: theme.table.pagination.color }}>
-          <InputLabel sx={{ color: theme.table.pagination.color }} htmlFor="pagination-dropdown" shrink={false}>
-            {`${translator.get('SNTable.Pagination.SelectPage')}:`}
-          </InputLabel>
-          <Select sx={selectStyle} native value={page} onChange={handleSelectPage} inputProps={inputProps}>
-            {Array(lastPageIdx + 1)
-              .fill()
-              .map((_, index) => (
-                <option key={String(_)} value={index}>
-                  {index + 1}
-                </option>
-              ))}
-          </Select>
-        </FormControl>
-      )}
-      <>
-        {showFirstAndLast && getButton(onFirstPage, 0, 'FirstPage')}
-        {getButton(onFirstPage, page - 1, 'PreviousPage')}
-        {getButton(onLastPage, page + 1, 'NextPage', !showFirstAndLast ? handleLastButtonTab : null)}
-        {showFirstAndLast && getButton(onLastPage, lastPageIdx, 'LastPage', handleLastButtonTab)}
-      </>
+      {showRppOptions && getDropdown('RowsPerPage', rowsPerPage, rppOptions, handleChangeRowsPerPage)}
+      {currentRows}
+      {shouldShow('selectPage', width) && getDropdown('SelectPage', page, pageOptions, handleSelectPage)}
+      {showFirstAndLast && getButton(onFirstPage, 0, 'FirstPage')}
+      {getButton(onFirstPage, page - 1, 'PreviousPage')}
+      {getButton(onLastPage, page + 1, 'NextPage', !showFirstAndLast ? handleLastButtonTab : null)}
+      {showFirstAndLast && getButton(onLastPage, lastPageIdx, 'LastPage', handleLastButtonTab)}
     </>
   );
 
