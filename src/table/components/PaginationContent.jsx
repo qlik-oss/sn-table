@@ -1,5 +1,4 @@
 import React from 'react';
-// import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
@@ -39,7 +38,6 @@ export const shouldShow = (component, width) => {
   }
 };
 
-// const Portal = ({ children, target }) => ReactDOM.createPortal(children, target);
 export default function PaginationContent({
   theme,
   direction,
@@ -150,20 +148,17 @@ export default function PaginationContent({
     </>
   );
 
-  // Doing this here to opt out when it shouldn't show
-  const currentRows = (
-    <Box>
-      {translator.get('SNTable.Pagination.DisplayedRowsLabel', [
-        `${page * rowsPerPage + 1} - ${Math.min((page + 1) * rowsPerPage, totalRowCount)}`,
-        totalRowCount,
-      ])}
-    </Box>
-  );
-
   return (
     <>
       {showRppOptions && getDropdown('RowsPerPage', rowsPerPage, rppOptions, handleChangeRowsPerPage)}
-      {shouldShow('currentRows', width) && currentRows}
+      {shouldShow('currentRows', width) && (
+        <Box>
+          {translator.get('SNTable.Pagination.DisplayedRowsLabel', [
+            `${page * rowsPerPage + 1} - ${Math.min((page + 1) * rowsPerPage, totalRowCount)}`,
+            totalRowCount,
+          ])}
+        </Box>
+      )}
       {shouldShow('selectPage', width) && getDropdown('SelectPage', page, pageOptions, handleSelectPage)}
       {showFirstAndLast && getButton(onFirstPage, 0, 'FirstPage')}
       {getButton(onFirstPage, page - 1, 'PreviousPage')}

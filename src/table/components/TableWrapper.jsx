@@ -28,7 +28,6 @@ export default function TableWrapper(props) {
     keyboard,
     direction,
     footerContainer,
-    announcer, // this is only for testing purposes
   } = props;
   const { totalColumnCount, totalRowCount, paginationNeeded, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
@@ -37,8 +36,7 @@ export default function TableWrapper(props) {
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
 
-  /* eslint-disable react-hooks/rules-of-hooks */
-  const announce = announcer || useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
+  const announce = useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
   const totalPages = Math.ceil(totalRowCount / rowsPerPage);
   const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
     rows.length + 1,
