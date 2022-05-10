@@ -1,10 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
 import Select from '@mui/material/Select';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
@@ -24,7 +24,7 @@ const icons = {
   LastPageRTL: FirstPageIcon,
 };
 
-const shouldShow = (component, width) => {
+export const shouldShow = (component, width) => {
   switch (component) {
     case 'selectPage':
       return width > 650;
@@ -39,8 +39,8 @@ const shouldShow = (component, width) => {
   }
 };
 
-const Portal = ({ children, target }) => ReactDOM.createPortal(children, target);
-export default function PaginationBar({
+// const Portal = ({ children, target }) => ReactDOM.createPortal(children, target);
+export default function PaginationContent({
   theme,
   direction,
   tableData,
@@ -76,20 +76,6 @@ export default function PaginationBar({
   const handleSelectPage = (event) => handleChangePage(+event.target.value);
 
   const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, selectionsAPI.isModal()) : null;
-
-  const paperTablePaginationStyle = {
-    height: '40px',
-    display: 'flex',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    paddingRight: 1,
-    backgroundColor: theme.table.backgroundColor,
-    boxShadow: 'none',
-    borderStyle: 'solid',
-    borderWidth: '0px 0px 1px 0px',
-    borderRadius: 0,
-    borderColor: theme.table.pagination.borderColor,
-  };
 
   const selectStyle = {
     backgroundColor: 'inherit',
@@ -134,7 +120,7 @@ export default function PaginationBar({
 
     return (
       <FormControl sx={{ color: theme.table.pagination.color }}>
-        <InputLabel sx={{ color: theme.table.pagination.color }} htmlFor="rpp-dropdown" shrink={false}>
+        <InputLabel sx={{ color: theme.table.pagination.color }} htmlFor={id} shrink={false}>
           {`${translator.get(translationName)}:`}
         </InputLabel>
         <Select sx={selectStyle} native value={value} onChange={handleChange} inputProps={inputProps}>
@@ -164,20 +150,20 @@ export default function PaginationBar({
     </>
   );
 
-  // TODO: proper mui component
-  const currentRows = shouldShow('currentRows', width) && (
-    <div>
+  // Doing this here to opt out when it shouldn't show
+  const currentRows = (
+    <Box>
       {translator.get('SNTable.Pagination.DisplayedRowsLabel', [
         `${page * rowsPerPage + 1} - ${Math.min((page + 1) * rowsPerPage, totalRowCount)}`,
         totalRowCount,
       ])}
-    </div>
+    </Box>
   );
 
-  const paginationContent = (
+  return (
     <>
       {showRppOptions && getDropdown('RowsPerPage', rowsPerPage, rppOptions, handleChangeRowsPerPage)}
-      {currentRows}
+      {shouldShow('currentRows', width) && currentRows}
       {shouldShow('selectPage', width) && getDropdown('SelectPage', page, pageOptions, handleSelectPage)}
       {showFirstAndLast && getButton(onFirstPage, 0, 'FirstPage')}
       {getButton(onFirstPage, page - 1, 'PreviousPage')}
@@ -185,20 +171,14 @@ export default function PaginationBar({
       {showFirstAndLast && getButton(onLastPage, lastPageIdx, 'LastPage', handleLastButtonTab)}
     </>
   );
-
-  return footerContainer ? (
-    <Portal target={footerContainer}>{paginationContent}</Portal>
-  ) : (
-    <Paper sx={paperTablePaginationStyle}>{paginationContent}</Paper>
-  );
 }
 
-PaginationBar.defaultProps = {
+PaginationContent.defaultProps = {
   direction: null,
   footerContainer: null,
 };
 
-PaginationBar.propTypes = {
+PaginationContent.propTypes = {
   theme: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
   pageInfo: PropTypes.object.isRequired,

@@ -7,7 +7,8 @@ import TableContainer from '@mui/material/TableContainer';
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
-import PaginationBar from './PaginationBar';
+import PaginationWrapper from './PaginationWrapper';
+import PaginationContent from './PaginationContent';
 import useDidUpdateEffect from './useDidUpdateEffect';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
@@ -159,7 +160,14 @@ export default function TableWrapper(props) {
           />
         </Table>
       </TableContainer>
-      <PaginationBar {...props} handleChangePage={handleChangePage} lastPageIdx={totalPages - 1} announce={announce} />
+      <PaginationWrapper theme={theme} footerContainer={footerContainer}>
+        <PaginationContent
+          {...props}
+          handleChangePage={handleChangePage}
+          lastPageIdx={totalPages - 1}
+          announce={announce}
+        />
+      </PaginationWrapper>
     </Paper>
   );
 }
