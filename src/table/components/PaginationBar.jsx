@@ -53,6 +53,8 @@ export default function PaginationBar({
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
   const tableWidth = footerContainer ? footerContainer.getBoundingClientRect().width : rect.width;
   const showFirstAndLast = tableWidth > 350;
+  const rppOptions =
+    selectionsAPI.isModal() || tableWidth < 550 || totalColumnCount > 100 ? [rowsPerPage] : rowsPerPageOptions;
 
   const handleChangeRowsPerPage = (evt) => {
     setPageInfo({ ...pageInfo, page: 0, rowsPerPage: +evt.target.value });
@@ -116,7 +118,7 @@ export default function PaginationBar({
     inputProps: {
       'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
       'data-testid': 'select',
-      tabIndex: !keyboard.enabled || keyboard.active ? 0 : -1,
+      tabIndex,
     },
     native: true,
   };
@@ -133,13 +135,11 @@ export default function PaginationBar({
     '& .MuiNativeSelect-icon': { color: theme.table.pagination.iconColor },
   };
 
-  const fixedRowsPerPage = selectionsAPI.isModal() || tableWidth < 550 || totalColumnCount > 100;
-
   const paginationContent = (
     <>
       <TablePagination
         sx={tablePaginationStyle}
-        rowsPerPageOptions={fixedRowsPerPage ? [rowsPerPage] : rowsPerPageOptions}
+        rowsPerPageOptions={rppOptions}
         component="div"
         count={totalRowCount}
         rowsPerPage={rowsPerPage}
