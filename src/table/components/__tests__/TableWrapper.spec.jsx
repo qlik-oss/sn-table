@@ -19,10 +19,25 @@ describe('<TableWrapper />', () => {
   let rect;
   let theme;
 
+  const renderTableWrapper = () =>
+    render(
+      <TableWrapper
+        tableData={tableData}
+        pageInfo={pageInfo}
+        setPageInfo={setPageInfo}
+        constraints={constraints}
+        selectionsAPI={selectionsAPI}
+        rootElement={rootElement}
+        keyboard={keyboard}
+        translator={translator}
+        rect={rect}
+        theme={theme}
+      />
+    );
+
   beforeEach(() => {
     jest.spyOn(TableBodyWrapper, 'default').mockImplementation(() => <tbody />);
     jest.spyOn(TableHeadWrapper, 'default').mockImplementation(() => <thead />);
-    // jest.spyOn(PaginationWrapper, 'default').mockImplementation(() => <div />);
     jest.spyOn(handleKeyPress, 'handleTableWrapperKeyDown').mockImplementation(() => jest.fn());
 
     tableData = {
@@ -65,20 +80,7 @@ describe('<TableWrapper />', () => {
   afterEach(() => jest.clearAllMocks());
 
   it('should render table with pagination', () => {
-    const { queryByLabelText, queryByText, queryByTestId } = render(
-      <TableWrapper
-        tableData={tableData}
-        pageInfo={pageInfo}
-        setPageInfo={setPageInfo}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        rootElement={rootElement}
-        keyboard={keyboard}
-        translator={translator}
-        rect={rect}
-        theme={theme}
-      />
-    );
+    const { queryByLabelText, queryByText, queryByTestId } = renderTableWrapper();
 
     expect(
       queryByLabelText(`${'SNTable.Accessibility.RowsAndColumns'} ${'SNTable.Accessibility.NavigationInstructions'}`)
@@ -91,20 +93,7 @@ describe('<TableWrapper />', () => {
 
   it('should not render pagination when constraints.active is true', () => {
     constraints.active = true;
-    const { queryByLabelText, queryByText, queryByTestId } = render(
-      <TableWrapper
-        tableData={tableData}
-        pageInfo={pageInfo}
-        setPageInfo={setPageInfo}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        rootElement={rootElement}
-        keyboard={keyboard}
-        translator={translator}
-        rect={rect}
-        theme={theme}
-      />
-    );
+    const { queryByLabelText, queryByText, queryByTestId } = renderTableWrapper();
 
     expect(
       queryByLabelText(`${'SNTable.Accessibility.RowsAndColumns'} ${'SNTable.Accessibility.NavigationInstructions'}`)
@@ -115,20 +104,7 @@ describe('<TableWrapper />', () => {
   });
 
   it('should call handleTableWrapperKeyDown when press control key on the table', () => {
-    const { queryByLabelText } = render(
-      <TableWrapper
-        tableData={tableData}
-        pageInfo={pageInfo}
-        setPageInfo={setPageInfo}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        rootElement={rootElement}
-        keyboard={keyboard}
-        translator={translator}
-        rect={rect}
-        theme={theme}
-      />
-    );
+    const { queryByLabelText } = renderTableWrapper();
 
     fireEvent.keyDown(queryByLabelText('SNTable.Pagination.RowsPerPage:'), { key: 'Control', code: 'ControlLeft' });
     expect(handleKeyPress.handleTableWrapperKeyDown).toHaveBeenCalledTimes(1);
