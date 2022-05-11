@@ -60,25 +60,21 @@ function TableBodyWrapper({
     },
   };
 
-  const rowCellStyle = {
-    '&&:hover': {
-      '& td:not(.selected), th:not(.selected)': {
-        backgroundColor: bodyCellStyle.hoverBackgroundColor,
-        color: bodyCellStyle.hoverFontColor,
-      },
-    },
-  };
+  const rowCellStyle = hoverEffect
+    ? {
+        '&&:hover': {
+          '& td:not(.selected), th:not(.selected)': {
+            backgroundColor: bodyCellStyle.hoverBackgroundColor,
+            color: bodyCellStyle.hoverFontColor,
+          },
+        },
+      }
+    : {};
 
   return (
     <TableBody sx={bodyRowAndCellStyle}>
       {rows.map((row, rowIndex) => (
-        <TableRow
-          hover={hoverEffect}
-          tabIndex={-1}
-          key={row.key}
-          sx={hoverEffect && rowCellStyle}
-          className="sn-table-row"
-        >
+        <TableRow hover={hoverEffect} tabIndex={-1} key={row.key} sx={rowCellStyle} className="sn-table-row">
           {columns.map((column, columnIndex) => {
             const cell = row[column.id];
             const value = cell.qText;
