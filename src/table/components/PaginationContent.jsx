@@ -31,7 +31,7 @@ export const shouldShow = (component, width) => {
       return width > 550;
     case 'firstLast':
       return width > 350;
-    case 'currentRows':
+    case 'displayedRows':
       return width > 250;
     default:
       return false;
@@ -64,7 +64,11 @@ export default function PaginationContent({
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
   const width = footerContainer ? footerContainer.getBoundingClientRect().width : rect.width;
   const showFirstAndLast = shouldShow('firstLast', width);
-  const showRppOptions = !selectionsAPI.isModal() && shouldShow('rppOptions', width) && totalColumnCount <= 100;
+  const showRowsPerPage = !selectionsAPI.isModal() && shouldShow('rppOptions', width) && totalColumnCount <= 100;
+  const displayedRowsText = translator.get('SNTable.Pagination.DisplayedRowsLabel', [
+    `${page * rowsPerPage + 1} - ${Math.min((page + 1) * rowsPerPage, totalRowCount)}`,
+    totalRowCount,
+  ]);
 
   const handleChangeRowsPerPage = (evt) => {
     setPageInfo({ ...pageInfo, page: 0, rowsPerPage: +evt.target.value });
@@ -150,15 +154,8 @@ export default function PaginationContent({
 
   return (
     <>
-      {showRppOptions && getDropdown('RowsPerPage', rowsPerPage, rppOptions, handleChangeRowsPerPage)}
-      {shouldShow('currentRows', width) && (
-        <Box>
-          {translator.get('SNTable.Pagination.DisplayedRowsLabel', [
-            `${page * rowsPerPage + 1} - ${Math.min((page + 1) * rowsPerPage, totalRowCount)}`,
-            totalRowCount,
-          ])}
-        </Box>
-      )}
+      {showRowsPerPage && getDropdown('RowsPerPage', rowsPerPage, rppOptions, handleChangeRowsPerPage)}
+      {shouldShow('displayedRows', width) && <Box>{displayedRowsText}</Box>}
       {shouldShow('selectPage', width) && getDropdown('SelectPage', page, pageOptions, handleSelectPage)}
       {showFirstAndLast && getButton(onFirstPage, 0, 'FirstPage')}
       {getButton(onFirstPage, page - 1, 'PreviousPage')}
