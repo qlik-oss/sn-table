@@ -26,7 +26,7 @@ const icons = {
 export const shouldShow = (component, width) => {
   switch (component) {
     case 'selectPage':
-      return width > 650;
+      return width > 700;
     case 'rppOptions':
       return width > 550;
     case 'firstLast':

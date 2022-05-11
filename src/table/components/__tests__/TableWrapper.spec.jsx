@@ -62,7 +62,7 @@ describe('<TableWrapper />', () => {
     keyboard = { enabled: false, active: false };
     translator = { get: (s) => s };
     rect = {
-      width: 700,
+      width: 750,
     };
     theme = {
       getStyle: () => {},
