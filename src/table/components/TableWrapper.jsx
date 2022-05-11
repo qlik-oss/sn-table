@@ -117,7 +117,7 @@ export default function TableWrapper(props) {
 
   const tableContainerStyle = {
     // the footerContainer always wants height: 100%
-    height: footerContainer || constraints.active || !paginationNeeded ? '100%' : 'calc(100% - 40px)',
+    height: footerContainer || constraints.active || !paginationNeeded ? '100%' : 'calc(100% - 49px)',
     overflow: constraints.active ? 'hidden' : 'auto',
   };
 

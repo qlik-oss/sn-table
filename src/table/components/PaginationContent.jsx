@@ -103,7 +103,7 @@ export default function PaginationContent({
         aria-label={translator.get(`SNTable.Pagination.${type}`)}
         title={!constraints.passive && translator.get(`SNTable.Pagination.${type}`)}
         tabIndex={tabIndex}
-        sx={buttonStyle}
+        sx={{ ...buttonStyle, height: 32 }}
         onKeyDown={onKeyDown}
       >
         <IconComponent />
@@ -118,11 +118,11 @@ export default function PaginationContent({
       tabIndex,
       id,
       'data-testid': id,
-      style: { color: theme.table.pagination.color },
+      style: { color: theme.table.pagination.color, height: 30 },
     };
 
     return (
-      <FormControl sx={{ color: theme.table.pagination.color }}>
+      <FormControl sx={{ color: theme.table.pagination.color, px: 2.5 }}>
         <InputLabel sx={{ color: theme.table.pagination.color }} htmlFor={id} shrink={false}>
           {`${translator.get(translationName)}:`}
         </InputLabel>

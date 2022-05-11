@@ -7,7 +7,7 @@ const Portal = ({ children, target }) => ReactDOM.createPortal(children, target)
 
 export default function FooterWrapper({ children, theme, footerContainer }) {
   const paperTablePaginationStyle = {
-    height: '40px',
+    height: 48,
     display: 'flex',
     justifyContent: 'flex-end',
     alignItems: 'center',
