@@ -85,12 +85,6 @@ describe('<PaginationContent />', () => {
       expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeNull();
     });
 
-    it('should return null when constraints.active is true', () => {
-      constraints.active = true;
-      const { queryByText } = renderPagination();
-      expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeNull();
-    });
-
     it('should render all sub-components', () => {
       const { getAllByTestId, queryByTestId, queryByText } = renderPagination();
       const buttons = getAllByTestId('pagination-action-icon-button');
