@@ -122,7 +122,7 @@ export default function PaginationContent({
     };
 
     return (
-      <FormControl sx={{ color: theme.table.pagination.color, px: 2.5 }}>
+      <FormControl sx={{ px: 2.5 }}>
         <InputLabel sx={{ color: theme.table.pagination.color }} htmlFor={id} shrink={false}>
           {`${translator.get(translationName)}:`}
         </InputLabel>

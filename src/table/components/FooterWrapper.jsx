@@ -12,12 +12,13 @@ export default function FooterWrapper({ children, theme, footerContainer }) {
     justifyContent: 'flex-end',
     alignItems: 'center',
     paddingRight: 1,
-    backgroundColor: theme.table.backgroundColor,
     boxShadow: 'none',
     borderStyle: 'solid',
     borderWidth: '0px 0px 1px 0px',
     borderRadius: 0,
     borderColor: theme.table.pagination.borderColor,
+    color: theme.table.pagination.color,
+    backgroundColor: theme.table.backgroundColor,
   };
 
   return footerContainer ? (

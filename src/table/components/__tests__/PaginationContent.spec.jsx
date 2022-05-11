@@ -66,7 +66,7 @@ describe('<PaginationContent />', () => {
     setPageInfo = jest.fn();
     lastPageIdx = 2;
     handleChangePage = jest.fn();
-    rect = { width: 700 };
+    rect = { width: 750 };
     translator = { get: (s) => s };
     isModal = false;
     selectionsAPI = { isModal: () => isModal };
