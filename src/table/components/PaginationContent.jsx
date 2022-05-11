@@ -57,7 +57,7 @@ export default function PaginationContent({
   const { totalRowCount, totalColumnCount, paginationNeeded } = tableData;
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
 
-  if (!paginationNeeded || constraints.active) return null;
+  if (!paginationNeeded) return null;
 
   const onFirstPage = page === 0;
   const onLastPage = page >= lastPageIdx;
@@ -99,6 +99,7 @@ export default function PaginationContent({
         data-testid="pagination-action-icon-button"
         onClick={!disabledCondition ? () => handleChangePage(pageNumber) : null}
         aria-disabled={disabledCondition}
+        ok
         aria-label={translator.get(`SNTable.Pagination.${type}`)}
         title={!constraints.passive && translator.get(`SNTable.Pagination.${type}`)}
         tabIndex={tabIndex}

@@ -5,7 +5,7 @@ import Paper from '@mui/material/Paper';
 
 const Portal = ({ children, target }) => ReactDOM.createPortal(children, target);
 
-export default function PaginationWrapper({ children, theme, footerContainer }) {
+export default function FooterWrapper({ children, theme, footerContainer }) {
   const paperTablePaginationStyle = {
     height: '40px',
     display: 'flex',
@@ -27,11 +27,11 @@ export default function PaginationWrapper({ children, theme, footerContainer }) 
   );
 }
 
-PaginationWrapper.defaultProps = {
+FooterWrapper.defaultProps = {
   footerContainer: null,
 };
 
-PaginationWrapper.propTypes = {
+FooterWrapper.propTypes = {
   theme: PropTypes.object.isRequired,
   children: PropTypes.any.isRequired,
   footerContainer: PropTypes.object,

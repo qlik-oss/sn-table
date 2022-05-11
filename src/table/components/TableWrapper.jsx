@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
-import PaginationWrapper from './PaginationWrapper';
+import FooterWrapper from './FooterWrapper';
 import PaginationContent from './PaginationContent';
 import useDidUpdateEffect from './useDidUpdateEffect';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
@@ -116,7 +116,8 @@ export default function TableWrapper(props) {
   };
 
   const tableContainerStyle = {
-    height: constraints.active || footerContainer || paginationNeeded ? 'calc(100% - 40px)' : '100%',
+    // the footerContainer always wants height: 100%
+    height: footerContainer || constraints.active || !paginationNeeded ? '100%' : 'calc(100% - 40px)',
     overflow: constraints.active ? 'hidden' : 'auto',
   };
 
@@ -158,14 +159,16 @@ export default function TableWrapper(props) {
           />
         </Table>
       </TableContainer>
-      <PaginationWrapper theme={theme} footerContainer={footerContainer}>
-        <PaginationContent
-          {...props}
-          handleChangePage={handleChangePage}
-          lastPageIdx={totalPages - 1}
-          announce={announce}
-        />
-      </PaginationWrapper>
+      {!constraints.active && (
+        <FooterWrapper theme={theme} footerContainer={footerContainer}>
+          <PaginationContent
+            {...props}
+            handleChangePage={handleChangePage}
+            lastPageIdx={totalPages - 1}
+            announce={announce}
+          />
+        </FooterWrapper>
+      )}
     </Paper>
   );
 }
