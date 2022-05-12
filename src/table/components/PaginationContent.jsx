@@ -99,7 +99,6 @@ export default function PaginationContent({
         data-testid="pagination-action-icon-button"
         onClick={!disabledCondition ? () => handleChangePage(pageNumber) : null}
         aria-disabled={disabledCondition}
-        ok
         aria-label={translator.get(`SNTable.Pagination.${type}`)}
         title={!constraints.passive && translator.get(`SNTable.Pagination.${type}`)}
         tabIndex={tabIndex}
