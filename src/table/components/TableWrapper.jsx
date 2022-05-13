@@ -54,16 +54,24 @@ export default function TableWrapper(props) {
 
   useEffect(() => {
     const memoedWrapper = tableWrapperRef.current;
-    const memoedContainer = tableContainerRef.current;
-    if (!memoedWrapper || !memoedContainer) return () => {};
+    if (!memoedWrapper) return () => {};
 
     const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard);
-    const horizontalScrollCallback = (evt) => handleHorizontalScroll(evt, direction === 'rtl', memoedContainer);
     memoedWrapper.addEventListener('focusout', focusOutCallback);
-    memoedContainer.addEventListener('wheel', horizontalScrollCallback);
 
     return () => {
       memoedWrapper.removeEventListener('focusout', focusOutCallback);
+    };
+  }, []);
+
+  useEffect(() => {
+    const memoedContainer = tableContainerRef.current;
+    if (!memoedContainer) return () => {};
+
+    const horizontalScrollCallback = (evt) => handleHorizontalScroll(evt, direction === 'rtl', memoedContainer);
+    memoedContainer.addEventListener('wheel', horizontalScrollCallback);
+
+    return () => {
       memoedContainer.removeEventListener('wheel', horizontalScrollCallback);
     };
   }, [direction]);
