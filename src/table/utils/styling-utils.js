@@ -1,4 +1,4 @@
-import { resolveExpression, isDarkColor, removeOpacity } from './color-utils';
+import { resolveToRGBAorRGB, isDarkColor, removeOpacity } from './color-utils';
 
 // the order of style
 // default (inl. sprout theme) < Sense theme < styling settings
@@ -182,7 +182,7 @@ export function getBodyCellStyle(layout, theme) {
 export function getColumnStyle(styling, qAttrExps, stylingInfo) {
   const columnColors = {};
   qAttrExps?.qValues.forEach((val, i) => {
-    columnColors[stylingInfo[i]] = resolveExpression(val.qText);
+    columnColors[stylingInfo[i]] = resolveToRGBAorRGB(val.qText);
   });
 
   if (columnColors.cellBackgroundColor && !columnColors.cellForegroundColor)

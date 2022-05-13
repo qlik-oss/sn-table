@@ -1,22 +1,34 @@
-import { resolveExpression, isDarkColor, isTransparentColor, removeOpacity } from '../color-utils';
+import { resolveToRGBAorRGB, isDarkColor, isTransparentColor, removeOpacity } from '../color-utils';
 
 describe('color-utils', () => {
-  describe('resolveExpression', () => {
+  describe('resolveToRGBAorRGB', () => {
     let color = '#fff';
 
-    it('should resolve a color expression', () => {
-      const result = resolveExpression(color);
+    it('should resolve a hex color to rgb', () => {
+      const result = resolveToRGBAorRGB(color);
       expect(result).toBe('rgb(255,255,255)');
     });
-    it('should return when nothing is provided', () => {
-      const result = resolveExpression();
-      expect(result).toBe('none');
+    it('should resolve a hex color term to rgba', () => {
+      color = '#00000000';
+
+      const result = resolveToRGBAorRGB(color);
+      expect(result).toBe('rgba(0,0,0,0)');
     });
-    it('should return when color is the transparent term', () => {
+    it('should resolve a color term to rgb', () => {
+      color = 'red';
+
+      const result = resolveToRGBAorRGB(color);
+      expect(result).toBe('rgb(255,0,0)');
+    });
+    it('should return to rgba when color is the transparent term', () => {
       color = 'transparent';
 
-      const result = resolveExpression(color);
+      const result = resolveToRGBAorRGB(color);
       expect(result).toBe('rgba(255,255,255,0)');
+    });
+    it('should return when nothing is provided', () => {
+      const result = resolveToRGBAorRGB();
+      expect(result).toBe('none');
     });
   });
 

@@ -10,7 +10,7 @@ const hexToRGBAorRGB = (hex) => {
   return typeof a !== 'undefined' ? `rgba(${r},${g},${b},${a / 255})` : `rgb(${r},${g},${b})`;
 };
 
-export function resolveExpression(input) {
+export function resolveToRGBAorRGB(input) {
   // rgb
   let matches = /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i.exec(input);
   if (matches) {
@@ -35,15 +35,16 @@ export function resolveExpression(input) {
   // css color
   const color = input && cssColors[input.toLowerCase()];
   if (color) {
-    const a = color.a !== undefined ? color.a : 1;
-    return `rgba(${color.r},${color.g},${color.b},${a})`;
+    return typeof color.a !== 'undefined'
+      ? `rgba(${color.r},${color.g},${color.b},${color.a})`
+      : `rgb(${color.r},${color.g},${color.b})`;
   }
   // invalid
   return 'none';
 }
 
 export function isDarkColor(color) {
-  const rgba = resolveExpression(color);
+  const rgba = resolveToRGBAorRGB(color);
   const matches =
     /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i.exec(rgba) ||
     /^rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d(\.\d+)?)\s*\)$/i.exec(rgba);
@@ -60,13 +61,13 @@ export function isTransparentColor(color, opacity) {
   if (+opacity === 0) {
     return true;
   }
-  const rgba = resolveExpression(color);
+  const rgba = resolveToRGBAorRGB(color);
   const matches = /^rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d(\.\d+)?)\s*\)$/i.exec(rgba);
   return +matches?.[4] === 0;
 }
 
 export function removeOpacity(color) {
-  const rgba = resolveExpression(color);
+  const rgba = resolveToRGBAorRGB(color);
   const matches = /^rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d(\.\d+)?)\s*\)$/i.exec(rgba);
   if (matches) return `rgb(${matches[1]},${matches[2]},${matches[3]})`;
   return color;
