@@ -6,7 +6,6 @@ import {
   handleTableWrapperKeyDown,
   handleLastTab,
 } from '../handle-key-press';
-
 import * as handleAccessibility from '../handle-accessibility';
 
 describe('handle-key-press', () => {

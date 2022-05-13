@@ -2,6 +2,7 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import { StyleSheetManager } from 'styled-components';
 import { ThemeProvider } from '@mui/material/styles';
+
 import rtlPluginSc from 'stylis-plugin-rtl-sc';
 import TableWrapper from './components/TableWrapper';
 

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { View, StyleSheet, useWindowDimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import ReactNativeStraightTableViewManager from '@qlik/react-native-simple-grid';
+
 import { RowProps } from './Props';
 import SelectionCaches from './SelectionCaches';
 import DataCacheStream from './DataCachesStream';

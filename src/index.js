@@ -15,6 +15,7 @@ import {
   useRect,
   useApp,
 } from '@nebula.js/stardust';
+
 import registerLocale from './locale/src';
 import properties from './object-properties';
 import data from './data';

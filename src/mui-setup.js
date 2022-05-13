@@ -1,4 +1,5 @@
 import { createTheme } from '@mui/material/styles';
+
 import * as muiConfig from './mui-config.json';
 
 export default function muiSetup(direction) {

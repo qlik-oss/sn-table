@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
+
 import { generateDataPages, generateLayout } from '../../../__test__/generate-test-data';
 import manageData from '../../../handle-data';
 import TableBodyWrapper from '../TableBodyWrapper';

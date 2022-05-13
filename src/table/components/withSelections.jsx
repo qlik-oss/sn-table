@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+
 import PropTypes from 'prop-types';
 import { selectCell } from '../utils/selections-utils';
 import { getSelectionStyle } from '../utils/styling-utils';

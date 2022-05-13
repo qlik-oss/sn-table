@@ -1,4 +1,5 @@
 import React from 'react';
+
 import Table from './native/Table';
 
 export function mount(rootElement) {

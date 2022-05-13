@@ -2,6 +2,7 @@ import React, { useReducer, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
+
 import { addSelectionListeners, reducer } from '../utils/selections-utils';
 import getCellRenderer from './renderer';
 import { getBodyCellStyle } from '../utils/styling-utils';
