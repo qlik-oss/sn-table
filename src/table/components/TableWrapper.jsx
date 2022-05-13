@@ -130,7 +130,7 @@ export default function TableWrapper(props) {
     borderStyle: 'solid',
     borderColor: theme.table.borderColor,
     height: '100%',
-    backgroundColor: theme.table.tableBackgroundColor || 'inherit',
+    backgroundColor: theme.table.tableBackgroundColorFromTheme,
     boxShadow: 'none',
     borderRadius: 'unset',
   };
@@ -145,7 +145,7 @@ export default function TableWrapper(props) {
     justifyContent: 'flex-end',
     alignItems: 'center',
     paddingRight: 1,
-    backgroundColor: theme.table.tableBackgroundColor || 'inherit',
+    backgroundColor: theme.table.tableBackgroundColorFromTheme,
     boxShadow: 'none',
     borderStyle: 'solid',
     borderWidth: '0px 0px 1px 0px',

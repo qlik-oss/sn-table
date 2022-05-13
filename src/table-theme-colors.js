@@ -31,7 +31,7 @@ export default function tableThemeColors(theme) {
   };
 
   return {
-    tableBackgroundColor: tableBackgroundColorFromTheme,
+    tableBackgroundColorFromTheme: tableBackgroundColorFromTheme || 'inherit',
     backgroundColor,
     isBackgroundTransparentColor,
     isBackgroundDarkColor,
