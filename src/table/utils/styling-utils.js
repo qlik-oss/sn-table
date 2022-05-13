@@ -78,8 +78,9 @@ export function getHeaderStyle(layout, theme) {
   // - When the table background color from the sense theme has opacity,
   // removing that.
   const headerBackgroundColor = isDarkColor(headerStyle.color) ? '#FAFAFA' : '#323232';
-  const RGB = removeOpacity(theme.table.backgroundColor);
-  headerStyle.backgroundColor = theme.table.isBackgroundTransparentColor ? headerBackgroundColor : RGB;
+  headerStyle.backgroundColor = theme.table.isBackgroundTransparentColor
+    ? headerBackgroundColor
+    : removeOpacity(theme.table.backgroundColor);
 
   // When you set the header font color,
   // the sort label color should be same.

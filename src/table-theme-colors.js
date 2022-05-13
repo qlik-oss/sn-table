@@ -2,10 +2,10 @@ import { isDarkColor, isTransparentColor } from './table/utils/color-utils';
 
 export default function tableThemeColors(theme) {
   const qvInnerObject = document.querySelector('.qv-object .qv-inner-object');
-  const objectBackgroundColorFromCSS = qvInnerObject && window.getComputedStyle?.(qvInnerObject).backgroundColor;
+  const objectBackgroundColorFromCSS = qvInnerObject && window.getComputedStyle(qvInnerObject).backgroundColor;
+  const opacityFromCSS = qvInnerObject && window.getComputedStyle(qvInnerObject).opacity;
   const qvPanelSheet = document.querySelector('.qv-panel-sheet');
-  const sheetBackgroundColorFromCSS = qvPanelSheet && window.getComputedStyle?.(qvPanelSheet).backgroundColor;
-  const opacityFromCSS = qvInnerObject && window.getComputedStyle?.(qvInnerObject).opacity;
+  const sheetBackgroundColorFromCSS = qvPanelSheet && window.getComputedStyle(qvPanelSheet).backgroundColor;
 
   const tableBackgroundColorFromTheme = theme.getStyle('', '', 'object.straightTable.backgroundColor');
   const backgroundColorFromTheme = theme.getStyle('object', 'straightTable', 'backgroundColor');
@@ -13,7 +13,7 @@ export default function tableThemeColors(theme) {
   const backgroundColor = tableBackgroundColorFromTheme || objectBackgroundColorFromCSS || backgroundColorFromTheme;
   const isBackgroundTransparentColor = isTransparentColor(
     backgroundColor,
-    tableBackgroundColorFromTheme ?? opacityFromCSS
+    !tableBackgroundColorFromTheme && opacityFromCSS
   );
   const isBackgroundDarkColor = isDarkColor(
     isBackgroundTransparentColor ? sheetBackgroundColorFromCSS : backgroundColor
