@@ -112,7 +112,7 @@ export default function supernova(env) {
 
       useEffect(
         () => () => {
-          teardown(rootElement);
+          teardown();
         },
         []
       );
