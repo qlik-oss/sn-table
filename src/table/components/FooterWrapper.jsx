@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Paper from '@mui/material/Paper';
 
-const Portal = ({ children, target }) => ReactDOM.createPortal(children, target);
-
 export default function FooterWrapper({ children, theme, footerContainer }) {
   const paperTablePaginationStyle = {
     height: 48,
@@ -22,7 +20,7 @@ export default function FooterWrapper({ children, theme, footerContainer }) {
   };
 
   return footerContainer ? (
-    <Portal target={footerContainer}>{children}</Portal>
+    ReactDOM.createPortal(children, footerContainer)
   ) : (
     <Paper sx={paperTablePaginationStyle}>{children}</Paper>
   );
