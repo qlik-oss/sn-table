@@ -25,7 +25,7 @@ export function render(rootElement, props) {
 }
 
 export function teardown() {
-  reactRoot.unmountComponentAtNode();
+  reactRoot.unmount();
 }
 
 export function mount() {
