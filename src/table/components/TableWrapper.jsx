@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
@@ -9,10 +9,10 @@ import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import FooterWrapper from './FooterWrapper';
 import PaginationContent from './PaginationContent';
-import useDidUpdateEffect from './useDidUpdateEffect';
+// import useDidUpdateEffect from './useDidUpdateEffect';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
-import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
-import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
+import { handleFocusoutEvent } from '../utils/handle-accessibility';
+import { handleHorizontalScroll } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
 
 export default function TableWrapper(props) {
@@ -29,9 +29,9 @@ export default function TableWrapper(props) {
     direction,
     footerContainer,
   } = props;
-  const { totalColumnCount, totalRowCount, paginationNeeded, rows, columns } = tableData;
+  const { totalRowCount, paginationNeeded, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
-  const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
+  // const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
@@ -76,34 +76,34 @@ export default function TableWrapper(props) {
     };
   }, [direction]);
 
-  useEffect(
-    () => handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement }),
-    [tableContainerRef, focusedCellCoord]
-  );
+  // useEffect(
+  //   () => handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement }),
+  //   [tableContainerRef, focusedCellCoord]
+  // );
 
-  useDidUpdateEffect(() => {
-    if (!keyboard.enabled) return;
+  // useDidUpdateEffect(() => {
+  //   if (!keyboard.enabled) return;
 
-    updateFocus({
-      focusType: keyboard.active ? 'focus' : 'blur',
-      rowElements: rootElement.getElementsByClassName('sn-table-row'),
-      cellCoord: focusedCellCoord,
-    });
-  }, [keyboard.active]);
+  //   updateFocus({
+  //     focusType: keyboard.active ? 'focus' : 'blur',
+  //     rowElements: rootElement.getElementsByClassName('sn-table-row'),
+  //     cellCoord: focusedCellCoord,
+  //   });
+  // }, [keyboard.active]);
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
-  useDidUpdateEffect(() => {
-    handleResetFocus({
-      focusedCellCoord,
-      rootElement,
-      shouldRefocus,
-      setFocusedCellCoord,
-      hasSelections: selectionsAPI.isModal(),
-      shouldAddTabstop: !keyboard.enabled || keyboard.active,
-      announce,
-    });
-  }, [rows.length, totalRowCount, totalColumnCount, page]);
+  // useDidUpdateEffect(() => {
+  //   handleResetFocus({
+  //     focusedCellCoord,
+  //     rootElement,
+  //     shouldRefocus,
+  //     setFocusedCellCoord,
+  //     hasSelections: selectionsAPI.isModal(),
+  //     shouldAddTabstop: !keyboard.enabled || keyboard.active,
+  //     announce,
+  //   });
+  // }, [rows.length, totalRowCount, totalColumnCount, page]);
 
   const paperStyle = {
     borderWidth: paginationNeeded ? '0px 1px 0px' : '0px',
@@ -148,12 +148,10 @@ export default function TableWrapper(props) {
         data-testid="table-container"
       >
         <Table stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
+          <TableHeadWrapper {...props} />
           <TableBodyWrapper
             {...props}
             announce={announce}
-            focusedCellCoord={focusedCellCoord}
-            setFocusedCellCoord={setFocusedCellCoord}
             setShouldRefocus={setShouldRefocus}
             tableWrapperRef={tableWrapperRef}
           />
