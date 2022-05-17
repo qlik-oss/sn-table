@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { selectCell } from '../utils/selections-utils';
 import { getSelectionStyle } from '../utils/styling-utils';
 
 export default function withSelections(CellComponent) {
@@ -16,7 +15,7 @@ export default function withSelections(CellComponent) {
       ...passThroughProps
     } = props;
     const handleMouseUp = (evt) =>
-      cell.isDim && evt.button === 0 && selectCell({ selectionState, cell, selectionDispatch, evt, announce });
+      cell.isDim && evt.button === 0 && selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
 
     const selectionStyling = useMemo(
       () => getSelectionStyle(styling, cell, selectionState, themeBackgroundColor),

@@ -1,10 +1,4 @@
-import {
-  addSelectionListeners,
-  reducer,
-  handleAnnounceSelectionStatus,
-  getSelectedRows,
-  selectCell,
-} from '../selections-utils';
+import { addSelectionListeners, reducer, handleAnnounceSelectionStatus, getSelectedRows } from '../selections-utils';
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {
@@ -103,6 +97,9 @@ describe('selections-utils', () => {
   describe('reducer', () => {
     let state;
     let action;
+    let cell;
+    let evt;
+    let announce;
 
     beforeEach(() => {
       state = {
@@ -110,21 +107,56 @@ describe('selections-utils', () => {
         colIdx: 1,
         api: {
           isModal: () => false,
+          begin: jest.fn(),
+          select: jest.fn(),
+          cancel: jest.fn(),
         },
         isEnabled: false,
       };
       action = {
-        type: '',
+        type: 'select',
+        payload: {},
       };
+      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1 };
+      evt = { ctrlKey: false, metaKey: false };
+      announce = jest.fn();
     });
 
-    it('should return state updated with rows and colIdx when action.type is select', () => {
-      const newRow = { qElemNumber: 2, rowIdx: 2 };
-      action = { type: 'select', payload: { colIdx: 1, rows: [...state.rows, newRow] } };
-      const expectedRows = [...state.rows, newRow];
+    it('should call begin, selectionDispatch and selectHyperCubeCells when no previous selections and also announce it to the user', () => {
+      const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
+      state.colIdx = -1;
+      state.rows = [];
+      action.payload = { cell, announce, evt };
 
       const newState = reducer(state, action);
-      expect(newState).toEqual({ ...state, rows: expectedRows });
+      expect(newState).toEqual({ ...state, rows: [{ qElemNumber: 1, rowIdx: 1 }], colIdx: 1 });
+      expect(state.api.begin).toHaveBeenCalledTimes(1);
+      expect(state.api.select).toHaveBeenCalledWith({ method: 'selectHyperCubeCells', params });
+      expect(state.api.cancel).not.toHaveBeenCalled();
+      expect(announce).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not call begin and call cancel when same qElemNumber (resulting in empty selectedCells)', () => {
+      action.payload = { cell, announce, evt };
+
+      const newState = reducer(state, action);
+      expect(newState).toEqual(state);
+      expect(state.api.begin).not.toHaveBeenCalled();
+      expect(state.api.select).not.toHaveBeenCalled();
+      expect(state.api.cancel).toHaveBeenCalledTimes(1);
+      expect(announce).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return early when excluded columns', () => {
+      cell.colIdx = 2;
+      action.payload = { cell, announce, evt };
+
+      const newState = reducer(state, action);
+      expect(newState).toEqual(state);
+      expect(state.api.begin).not.toHaveBeenCalled();
+      expect(state.api.select).not.toHaveBeenCalled();
+      expect(state.api.cancel).not.toHaveBeenCalled();
+      expect(announce).not.toHaveBeenCalled();
     });
 
     it('should return state updated when the app is not in selection modal state  when action.type is reset', () => {
@@ -239,12 +271,14 @@ describe('selections-utils', () => {
       selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
       expect(selectedRows).toEqual([{ qElemNumber, rowIdx }]);
     });
+
     it('should return array with only the last clicked item metaKey cm is pressed', () => {
       evt.metaKey = true;
 
       selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
       expect(selectedRows).toEqual([{ qElemNumber, rowIdx }]);
     });
+
     it('should return array with selected item removed if it already was in selectedRows', () => {
       qElemNumber = 1;
       rowIdx = 1;
@@ -252,70 +286,13 @@ describe('selections-utils', () => {
       selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
       expect(selectedRows).toEqual([]);
     });
+
     it('should return array with selected item added if it was not in selectedRows before', () => {
       selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
       expect(selectedRows).toEqual([
         { qElemNumber: 1, rowIdx: 1 },
         { qElemNumber, rowIdx },
       ]);
-    });
-  });
-
-  describe('selectCell', () => {
-    const event = {};
-    let selectionState;
-    let cell;
-    let selectionDispatch;
-    let announce;
-
-    beforeEach(() => {
-      selectionState = {
-        rows: [],
-        colIdx: -1,
-        api: {
-          begin: jest.fn(),
-          select: jest.fn(),
-          cancel: jest.fn(),
-        },
-      };
-      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1 };
-      selectionDispatch = jest.fn();
-      announce = jest.fn();
-    });
-
-    it('should call begin, selectionDispatch and selectHyperCubeCells when no previous selections and also announce it to the user', () => {
-      const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
-      const payload = { colIdx: cell.colIdx, rows: [{ qElemNumber: cell.qElemNumber, rowIdx: cell.rowIdx }] };
-
-      selectCell({ selectionState, cell, selectionDispatch, evt: event, announce });
-      expect(selectionState.api.begin).toHaveBeenCalledTimes(1);
-      expect(selectionState.api.select).toHaveBeenCalledWith({ method: 'selectHyperCubeCells', params });
-      expect(selectionDispatch).toHaveBeenCalledWith({ type: 'select', payload });
-      expect(selectionState.api.cancel).not.toHaveBeenCalled();
-      expect(announce).toHaveBeenCalledTimes(1);
-    });
-    it('should not call begin and call cancel when same qElemNumber (resulting in empty selectedCells)', () => {
-      selectionState.rows = [{ qElemNumber: 1, rowIdx: 1 }];
-      selectionState.colIdx = 1;
-
-      selectCell({ selectionState, cell, selectionDispatch, evt: event, announce });
-      expect(selectionState.api.begin).not.toHaveBeenCalled();
-      expect(selectionState.api.cancel).toHaveBeenCalledTimes(1);
-      expect(selectionDispatch).not.toHaveBeenCalled();
-      expect(selectionState.api.select).not.toHaveBeenCalled();
-      expect(announce).toHaveBeenCalledTimes(1);
-    });
-    it('should return early when excluded columns', () => {
-      selectionState.rows = [{ qElemNumber: 1, rowIdx: 1 }];
-      selectionState.colIdx = 1;
-      cell.colIdx = 2;
-
-      selectCell({ selectionState, cell, selectionDispatch, evt: event, announce });
-      expect(selectionState.api.begin).not.toHaveBeenCalled();
-      expect(selectionState.api.cancel).not.toHaveBeenCalled();
-      expect(selectionDispatch).not.toHaveBeenCalled();
-      expect(selectionState.api.select).not.toHaveBeenCalled();
-      expect(announce).not.toHaveBeenCalled();
     });
   });
 });

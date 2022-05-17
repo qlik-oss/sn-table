@@ -2,7 +2,6 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 
 import * as withSelections from '../withSelections';
-import * as selectionsUtils from '../../utils/selections-utils';
 
 describe('withSelections', () => {
   let HOC;
@@ -17,7 +16,6 @@ describe('withSelections', () => {
 
   beforeEach(() => {
     HOC = withSelections.default((props) => <div {...props}>{props.value}</div>);
-    jest.spyOn(selectionsUtils, 'selectCell').mockImplementation(() => jest.fn());
 
     value = '100';
     cell = {
@@ -28,7 +26,7 @@ describe('withSelections', () => {
       colIdx: -1,
       api: { isModal: () => true },
     };
-    selectionDispatch = () => {};
+    selectionDispatch = jest.fn();
     evt = { button: 0 };
     styling = {};
     announce = jest.fn();
@@ -54,6 +52,7 @@ describe('withSelections', () => {
 
     expect(queryByText(value)).toBeVisible();
   });
+
   it('should call selectCell on mouseUp', () => {
     const { queryByText } = render(
       <HOC
@@ -68,16 +67,9 @@ describe('withSelections', () => {
     );
     fireEvent.mouseUp(queryByText(value));
 
-    expect(selectionsUtils.selectCell).toHaveBeenCalledTimes(1);
-    expect(selectionsUtils.selectCell).toHaveBeenCalledWith(
-      expect.objectContaining({
-        selectionState: expect.anything(),
-        cell: expect.anything(),
-        evt: expect.anything(),
-        announce: expect.anything(),
-      })
-    );
+    expect(selectionDispatch).toHaveBeenCalledTimes(1);
   });
+
   it('should not call selectCell on mouseUp when measure', () => {
     cell.isDim = false;
 
@@ -94,8 +86,9 @@ describe('withSelections', () => {
     );
     fireEvent.mouseUp(queryByText(value));
 
-    expect(selectionsUtils.selectCell).not.toHaveBeenCalled();
+    expect(selectionDispatch).not.toHaveBeenCalled();
   });
+
   it('should not call selectCell on mouseUp when right button', () => {
     evt.button = 2;
 
@@ -112,6 +105,6 @@ describe('withSelections', () => {
     );
     fireEvent.mouseUp(queryByText(value), evt);
 
-    expect(selectionsUtils.selectCell).not.toHaveBeenCalled();
+    expect(selectionDispatch).not.toHaveBeenCalled();
   });
 });

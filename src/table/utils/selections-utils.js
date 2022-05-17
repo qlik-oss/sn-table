@@ -33,23 +33,6 @@ export function addSelectionListeners({ api, selectionDispatch, setShouldRefocus
   };
 }
 
-export function reducer(state, action) {
-  const { rows, colIdx, isEnabled } = action.payload || {};
-
-  switch (action.type) {
-    case 'select':
-      return { ...state, rows, colIdx };
-    case 'reset':
-      return state.api.isModal() ? state : { ...state, rows: [], colIdx: -1 };
-    case 'clear':
-      return state.rows.length ? { ...state, rows: [] } : state;
-    case 'set-enabled':
-      return { ...state, isEnabled };
-    default:
-      throw new Error('reducer called with invalid action type');
-  }
-}
-
 export const handleAnnounceSelectionStatus = ({ announce, rowsLength, isAddition }) => {
   if (rowsLength) {
     const changeStatus = isAddition ? 'SNTable.SelectionLabel.SelectedValue' : 'SNTable.SelectionLabel.DeselectedValue';
@@ -82,33 +65,48 @@ export const getSelectedRows = ({ selectedRows, qElemNumber, rowIdx, evt }) => {
   return selectedRows;
 };
 
-export function selectCell({ selectionState, cell, selectionDispatch, evt, announce }) {
-  const { api, rows } = selectionState;
-  const { rowIdx, colIdx, qElemNumber } = cell;
-  let selectedRows = [];
+export function reducer(state, action) {
+  const { isEnabled, cell, announce, evt } = action.payload || {};
+  const { api, rows, colIdx } = state;
 
-  if (selectionState.colIdx === -1) {
-    api.begin('/qHyperCubeDef');
-  } else if (selectionState.colIdx === colIdx) {
-    selectedRows = rows.concat();
-  } else {
-    return;
-  }
+  switch (action.type) {
+    case 'select': {
+      const { rowIdx, qElemNumber } = cell;
+      let selectedRows = [];
 
-  selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
-  handleAnnounceSelectionStatus({
-    announce,
-    rowsLength: selectedRows.length,
-    isAddition: selectedRows.length > rows.length,
-  });
+      if (colIdx === -1) {
+        api.begin('/qHyperCubeDef');
+      } else if (colIdx === cell.colIdx) {
+        selectedRows = [...rows];
+      } else {
+        return state;
+      }
 
-  if (selectedRows.length) {
-    selectionDispatch({ type: 'select', payload: { rows: selectedRows, colIdx } });
-    api.select({
-      method: 'selectHyperCubeCells',
-      params: ['/qHyperCubeDef', selectedRows.map((r) => r.rowIdx), [colIdx]],
-    });
-  } else {
-    api.cancel();
+      selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
+      handleAnnounceSelectionStatus({
+        announce,
+        rowsLength: selectedRows.length,
+        isAddition: selectedRows.length > rows.length,
+      });
+
+      if (selectedRows.length) {
+        api.select({
+          method: 'selectHyperCubeCells',
+          params: ['/qHyperCubeDef', selectedRows.map((r) => r.rowIdx), [cell.colIdx]],
+        });
+        return { ...state, rows: selectedRows, colIdx: cell.colIdx };
+      }
+
+      api.cancel();
+      return state;
+    }
+    case 'reset':
+      return api.isModal() ? state : { ...state, rows: [], colIdx: -1 };
+    case 'clear':
+      return rows.length ? { ...state, rows: [] } : state;
+    case 'set-enabled':
+      return { ...state, isEnabled };
+    default:
+      return state;
   }
 }

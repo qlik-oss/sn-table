@@ -1,4 +1,3 @@
-import { selectCell } from './selections-utils';
 import { updateFocus, focusSelectionToolbar } from './handle-accessibility';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
@@ -152,7 +151,7 @@ export const bodyHandleKeyPress = ({
     // Space bar: Selects value.
     case ' ': {
       preventDefaultBehavior(evt);
-      cell?.isDim && isAnalysisMode && selectCell({ selectionState, cell, selectionDispatch, evt, announce });
+      cell?.isDim && isAnalysisMode && selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
       break;
     }
     // Enter: Confirms selections.

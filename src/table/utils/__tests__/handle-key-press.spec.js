@@ -176,8 +176,6 @@ describe('handle-key-press', () => {
         api: {
           confirm: jest.fn(),
           cancel: jest.fn(),
-          begin: jest.fn(),
-          select: jest.fn(),
           isModal: () => isModal,
         },
         rows: [],
@@ -227,13 +225,8 @@ describe('handle-key-press', () => {
       });
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(selectionState.api.begin).toHaveBeenCalledTimes(1);
-      expect(selectionState.api.select).toHaveBeenCalledTimes(1);
-      expect(selectionDispatch).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
-      expect(announce).toHaveBeenCalledWith({
-        keys: ['SNTable.SelectionLabel.SelectedValue', 'SNTable.SelectionLabel.OneSelectedValue'],
-      });
+      expect(selectionDispatch).toHaveBeenCalledTimes(1);
     });
 
     it('when moving to a cell on a dimension column which is selected, also have some selections already, should announce the value is selected', () => {
@@ -293,11 +286,8 @@ describe('handle-key-press', () => {
       });
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(selectionState.api.begin).not.toHaveBeenCalled();
-      expect(selectionState.api.select).not.toHaveBeenCalled();
       expect(selectionDispatch).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
-      expect(announce).not.toHaveBeenCalled();
     });
 
     it('when press space bar key not in analysis mode, should not select value for measure ', () => {
@@ -317,11 +307,8 @@ describe('handle-key-press', () => {
       });
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(selectionState.api.begin).not.toHaveBeenCalled();
-      expect(selectionState.api.select).not.toHaveBeenCalled();
       expect(selectionDispatch).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
-      expect(announce).not.toHaveBeenCalled();
     });
 
     it('when press enter key, should confirms selections', () => {
@@ -368,7 +355,7 @@ describe('handle-key-press', () => {
       expect(announce).not.toHaveBeenCalled();
     });
 
-    it('when press cancel key, should cancel selection', () => {
+    it('when press esc key, should cancel selection', () => {
       isModal = true;
       evt.key = 'Escape';
       selectionState.rows = [{}];
@@ -391,7 +378,7 @@ describe('handle-key-press', () => {
       expect(announce).toHaveBeenCalledWith({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
     });
 
-    it('when press cancel key not in analysis mode, should not cancel selection', () => {
+    it('when press esc key not in analysis mode, should not cancel selection', () => {
       isModal = true;
       evt.key = 'Escape';
       isAnalysisMode = false;
@@ -414,7 +401,7 @@ describe('handle-key-press', () => {
       expect(announce).not.toHaveBeenCalled();
     });
 
-    it('when press ArrowRight and shift and ctrl key, should not update the sorting', () => {
+    it('when press ArrowRight and shift and ctrl key, should not update the focus', () => {
       evt.key = 'ArrowRight';
       evt.shiftKey = true;
       evt.ctrlKey = true;
