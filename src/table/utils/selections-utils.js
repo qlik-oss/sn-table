@@ -107,6 +107,6 @@ export function reducer(state, action) {
     case 'set-enabled':
       return { ...state, isEnabled };
     default:
-      return state;
+      throw new Error('reducer called with invalid action type');
   }
 }
