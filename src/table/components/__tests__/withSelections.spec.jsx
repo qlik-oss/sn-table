@@ -68,6 +68,14 @@ describe('withSelections', () => {
     fireEvent.mouseUp(queryByText(value));
 
     expect(selectionDispatch).toHaveBeenCalledTimes(1);
+    expect(selectionDispatch).toHaveBeenCalledWith({
+      type: 'select',
+      payload: {
+        cell,
+        announce,
+        evt: expect.anything(),
+      },
+    });
   });
 
   it('should not call selectCell on mouseUp when measure', () => {
