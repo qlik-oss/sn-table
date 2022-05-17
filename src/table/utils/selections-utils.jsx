@@ -46,9 +46,9 @@ export const getCellSelectionState = (cell, value) => {
     if (colIdx !== cell.colIdx) {
       state = 'excluded';
     } else if (rows[cell.qElemNumber]) {
-      state = 'possible';
-    } else {
       state = 'selected';
+    } else {
+      state = 'possible';
     }
   }
 
