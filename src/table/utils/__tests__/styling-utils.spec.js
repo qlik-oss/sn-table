@@ -1,12 +1,12 @@
 import {
   STYLING_DEFAULTS,
-  SELECTION_STYLING,
+  // SELECTION_STYLING,
   getColor,
   getBaseStyling,
   getHeaderStyle,
   getBodyCellStyle,
   getColumnStyle,
-  getSelectionColors,
+  // getSelectionColors,
 } from '../styling-utils';
 
 describe('styling-utils', () => {
@@ -376,47 +376,47 @@ describe('styling-utils', () => {
     });
   });
 
-  describe('getSelectionStyle', () => {
-    let selectionState;
-    let cell;
-    let background;
-    let themeBackgroundColor;
+  // describe('getSelectionStyle', () => {
+  //   let selectionState;
+  //   let cell;
+  //   let background;
+  //   let themeBackgroundColor;
 
-    beforeEach(() => {
-      background = undefined;
-      selectionState = { colIdx: 1, rows: [{ qElemNumber: 1, rowIdx: 1 }], api: { isModal: () => true } };
-      cell = { qElemNumber: 1, colIdx: 1 };
-      themeBackgroundColor = '#123456';
-    });
+  //   beforeEach(() => {
+  //     background = undefined;
+  //     selectionState = { colIdx: 1, rows: [{ qElemNumber: 1, rowIdx: 1 }], api: { isModal: () => true } };
+  //     cell = { qElemNumber: 1, colIdx: 1 };
+  //     themeBackgroundColor = '#123456';
+  //   });
 
-    it('should return selected when selected styling', () => {
-      const selectionClass = getSelectionColors(cell, selectionState, background, themeBackgroundColor);
-      expect(selectionClass).toBe(SELECTION_STYLING.SELECTED);
-    });
-    it('should return excluded styling when other column', () => {
-      cell.colIdx = 2;
+  //   it('should return selected when selected styling', () => {
+  //     const selectionClass = getSelectionColors(cell, selectionState, background, themeBackgroundColor);
+  //     expect(selectionClass).toBe(SELECTION_STYLING.SELECTED);
+  //   });
+  //   it('should return excluded styling when other column', () => {
+  //     cell.colIdx = 2;
 
-      const selectionClass = getSelectionColors(cell, selectionState, background, themeBackgroundColor);
-      expect(selectionClass).toEqual({ background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, #123456` });
-    });
-    it('should return excluded styling with columns background when other column and background color exists', () => {
-      cell.colIdx = 2;
-      background = 'someColor';
+  //     const selectionClass = getSelectionColors(cell, selectionState, background, themeBackgroundColor);
+  //     expect(selectionClass).toEqual({ background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, #123456` });
+  //   });
+  //   it('should return excluded styling with columns background when other column and background color exists', () => {
+  //     cell.colIdx = 2;
+  //     background = 'someColor';
 
-      const selectionClass = getSelectionColors(cell, selectionState, background, themeBackgroundColor);
-      expect(selectionClass).toEqual({ background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, someColor` });
-    });
-    it('should return possible styling when active and available to select', () => {
-      cell.qElemNumber = 2;
+  //     const selectionClass = getSelectionColors(cell, selectionState, background, themeBackgroundColor);
+  //     expect(selectionClass).toEqual({ background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, someColor` });
+  //   });
+  //   it('should return possible styling when active and available to select', () => {
+  //     cell.qElemNumber = 2;
 
-      const selectionClass = getSelectionColors(cell, selectionState, background, themeBackgroundColor);
-      expect(selectionClass).toBe(SELECTION_STYLING.POSSIBLE);
-    });
-    it('should return empty object when no active selections', () => {
-      selectionState = { rows: [], api: { isModal: () => false } };
+  //     const selectionClass = getSelectionColors(cell, selectionState, background, themeBackgroundColor);
+  //     expect(selectionClass).toBe(SELECTION_STYLING.POSSIBLE);
+  //   });
+  //   it('should return empty object when no active selections', () => {
+  //     selectionState = { rows: [], api: { isModal: () => false } };
 
-      const selectionClass = getSelectionColors(cell, selectionState, background, themeBackgroundColor);
-      expect(selectionClass).toEqual({});
-    });
-  });
+  //     const selectionClass = getSelectionColors(cell, selectionState, background, themeBackgroundColor);
+  //     expect(selectionClass).toEqual({});
+  //   });
+  // });
 });

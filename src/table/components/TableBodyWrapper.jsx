@@ -1,12 +1,13 @@
-import React, { useReducer, useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
-import { addSelectionListeners, reducer } from '../utils/selections-utils';
+import { addSelectionListeners, SelectionContext } from '../utils/selections-utils';
 import getCellRenderer from './renderer';
 import { getBodyCellStyle } from '../utils/styling-utils';
 // import { bodyHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
+import useContextSelector from '../utils/useContextSelector';
 
 function TableBodyWrapper({
   rootElement,
@@ -29,14 +30,10 @@ function TableBodyWrapper({
   // select: turn off selections.
   const selectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
 
-  const getColumnRenderers = columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled));
-  const [columnRenderers, setColumnRenderers] = useState(() => getColumnRenderers);
-  const [selectionState, selectionDispatch] = useReducer(reducer, {
-    api: selectionsAPI,
-    rows: [],
-    colIdx: -1,
-    isEnabled: selectionsEnabled,
-  });
+  const getColumnRenderers = () =>
+    columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled));
+  const [columnRenderers, setColumnRenderers] = useState(getColumnRenderers());
+  const selectionDispatch = useContextSelector(SelectionContext, (value) => value.selectionDispatch);
 
   useEffect(() => {
     selectionDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
@@ -90,8 +87,6 @@ function TableBodyWrapper({
                   align={column.align}
                   styling={{ color: bodyCellStyle.color }}
                   themeBackgroundColor={theme.table.backgroundColor}
-                  selectionState={selectionState}
-                  selectionDispatch={selectionDispatch}
                   tabIndex={-1}
                   announce={announce}
                   // onKeyDown={(evt) =>

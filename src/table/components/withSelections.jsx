@@ -1,27 +1,18 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { selectCell } from '../utils/selections-utils';
 import { getSelectionStyle } from '../utils/styling-utils';
+import { SelectionContext, getCellSelectionState } from '../utils/selections-utils';
+import useContextSelector from '../utils/useContextSelector';
 
 export default function withSelections(CellComponent) {
   const HOC = (props) => {
-    const {
-      selectionState,
-      cell,
-      selectionDispatch,
-      styling,
-      themeBackgroundColor,
-      announce,
-      column,
-      ...passThroughProps
-    } = props;
-    const handleMouseUp = (evt) =>
-      cell.isDim && evt.button === 0 && selectCell({ selectionState, cell, selectionDispatch, evt, announce });
+    const { cell, styling, themeBackgroundColor, announce, column, ...passThroughProps } = props;
+    const cellSelectionState = useContextSelector(SelectionContext, (value) => getCellSelectionState(cell, value));
+    const selectionDispatch = useContextSelector(SelectionContext, (value) => value.selectionDispatch);
 
-    const selectionStyling = useMemo(
-      () => getSelectionStyle(styling, cell, selectionState, themeBackgroundColor),
-      [styling, cell, selectionState, themeBackgroundColor]
-    );
+    const handleMouseUp = (evt) =>
+      cell.isDim && evt.button === 0 && selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
+    const selectionStyling = getSelectionStyle(styling, cellSelectionState, themeBackgroundColor);
 
     return <CellComponent {...passThroughProps} styling={selectionStyling} onMouseUp={handleMouseUp} />;
   };
@@ -34,9 +25,9 @@ export default function withSelections(CellComponent) {
   HOC.propTypes = {
     styling: PropTypes.object.isRequired,
     themeBackgroundColor: PropTypes.string,
-    selectionState: PropTypes.object.isRequired,
+    // selectionState: PropTypes.object.isRequired,
     cell: PropTypes.object.isRequired,
-    selectionDispatch: PropTypes.func.isRequired,
+    // selectionDispatch: PropTypes.func.isRequired,
     announce: PropTypes.func.isRequired,
     column: PropTypes.object,
   };

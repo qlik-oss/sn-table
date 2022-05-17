@@ -195,42 +195,33 @@ export function getColumnStyle(styling, qAttrExps, stylingInfo) {
 
 /**
  * Get the style for one cell based on wether it is
- * selected or possible to be selected or not possible to be selected
- * @param {Object} cell - The info of one cell in the table body
- * @param {Object} selectionState - The info of which cells are selected
- * @param {?String} columnBackgroundColor - The background color from qAttributeExpressions in qDimensions or qMeasures
+ * selected, possible, excluded or no extra styling at all (not in selection mode)
+ * @param {Object} styling - Styling already calculated for the cell
+ * @param {?String} cellSelectionState - The selection state the cell is in
  * @param {?String} [themeBackgroundColor='#fff'] - The background color from nebula theme or sense theme
- * @returns {Object} The style for the provided cell
+ * @returns {Object} The style for the cell
  */
-export function getSelectionColors(
-  cell,
-  selectionState,
-  columnBackgroundColor,
-  themeBackgroundColor = STYLING_DEFAULTS.WHITE
-) {
-  const { colIdx, rows, api } = selectionState;
 
-  if (api.isModal()) {
-    if (colIdx !== cell.colIdx)
-      return {
-        background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${columnBackgroundColor || themeBackgroundColor}`,
+export function getSelectionStyle(styling, selectionType, themeBackgroundColor) {
+  let selectionStyling = {};
+  switch (selectionType) {
+    case 'selected':
+      selectionStyling = SELECTION_STYLING.SELECTED;
+      break;
+    case 'possible':
+      selectionStyling = SELECTION_STYLING.POSSIBLE;
+      break;
+    case 'excluded':
+      selectionStyling = {
+        background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${styling.columnBackgroundColor || themeBackgroundColor}`,
       };
-
-    for (let i = 0; i < rows.length; i++) {
-      if (rows[i].qElemNumber === cell.qElemNumber) {
-        return SELECTION_STYLING.SELECTED;
-      }
-    }
-
-    return SELECTION_STYLING.POSSIBLE;
+      break;
+    default:
+      break;
   }
 
-  return {};
-}
-
-export function getSelectionStyle(styling, cell, selectionState, themeBackgroundColor) {
   return {
     ...styling,
-    ...getSelectionColors(cell, selectionState, styling.backgroundColor, themeBackgroundColor),
+    ...selectionStyling,
   };
 }

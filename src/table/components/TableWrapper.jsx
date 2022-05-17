@@ -14,6 +14,7 @@ import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleHorizontalScroll } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
+import { SelectionContextProvider } from '../utils/selections-utils';
 
 export default function TableWrapper(props) {
   const {
@@ -121,53 +122,56 @@ export default function TableWrapper(props) {
     overflow: constraints.active ? 'hidden' : 'auto',
   };
 
+  console.log('table wrapper render :(');
   return (
-    <Paper
-      dir={direction}
-      sx={paperStyle}
-      ref={tableWrapperRef}
-      onKeyDown={(evt) =>
-        handleTableWrapperKeyDown({
-          evt,
-          totalRowCount,
-          page,
-          rowsPerPage,
-          handleChangePage,
-          setShouldRefocus,
-          keyboard,
-          isSelectionActive: selectionsAPI.isModal(),
-        })
-      }
-    >
-      <AnnounceElements />
-      <TableContainer
-        ref={tableContainerRef}
-        sx={tableContainerStyle}
-        tabIndex={-1}
-        role="application"
-        data-testid="table-container"
+    <SelectionContextProvider selectionsAPI={selectionsAPI}>
+      <Paper
+        dir={direction}
+        sx={paperStyle}
+        ref={tableWrapperRef}
+        onKeyDown={(evt) =>
+          handleTableWrapperKeyDown({
+            evt,
+            totalRowCount,
+            page,
+            rowsPerPage,
+            handleChangePage,
+            setShouldRefocus,
+            keyboard,
+            isSelectionActive: selectionsAPI.isModal(),
+          })
+        }
       >
-        <Table stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper {...props} />
-          <TableBodyWrapper
-            {...props}
-            announce={announce}
-            setShouldRefocus={setShouldRefocus}
-            tableWrapperRef={tableWrapperRef}
-          />
-        </Table>
-      </TableContainer>
-      {!constraints.active && (
-        <FooterWrapper theme={theme} footerContainer={footerContainer}>
-          <PaginationContent
-            {...props}
-            handleChangePage={handleChangePage}
-            lastPageIdx={totalPages - 1}
-            announce={announce}
-          />
-        </FooterWrapper>
-      )}
-    </Paper>
+        <AnnounceElements />
+        <TableContainer
+          ref={tableContainerRef}
+          sx={tableContainerStyle}
+          tabIndex={-1}
+          role="application"
+          data-testid="table-container"
+        >
+          <Table stickyHeader aria-label={tableAriaLabel}>
+            <TableHeadWrapper {...props} />
+            <TableBodyWrapper
+              {...props}
+              announce={announce}
+              setShouldRefocus={setShouldRefocus}
+              tableWrapperRef={tableWrapperRef}
+            />
+          </Table>
+        </TableContainer>
+        {!constraints.active && (
+          <FooterWrapper theme={theme} footerContainer={footerContainer}>
+            <PaginationContent
+              {...props}
+              handleChangePage={handleChangePage}
+              lastPageIdx={totalPages - 1}
+              announce={announce}
+            />
+          </FooterWrapper>
+        )}
+      </Paper>
+    </SelectionContextProvider>
   );
 }
 
