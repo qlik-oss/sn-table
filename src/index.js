@@ -27,8 +27,12 @@ import { mount, render, teardown } from './table/Root';
 import muiSetup from './mui-setup';
 import tableThemeColors from './table-theme-colors';
 
+const initialPageInfo = () => ({
+  page: 0,
+  rowsPerPage: 100,
+  rowsPerPageOptions: [10, 25, 100],
+});
 const nothing = async () => {};
-
 const renderWithCarbon = ({ env, translator, rootElement, model, theme, selectionsAPI, app, rect, layout }) => {
   if (env.carbon) {
     registerLocale(translator);
@@ -60,11 +64,7 @@ export default function supernova(env) {
       const muiTheme = muiSetup(direction);
       const keyboard = useKeyboard();
       const rect = useRect();
-      const [pageInfo, setPageInfo] = useState(() => ({
-        page: 0,
-        rowsPerPage: 100,
-        rowsPerPageOptions: [10, 25, 100],
-      }));
+      const [pageInfo, setPageInfo] = useState(initialPageInfo);
 
       const [tableData] = usePromise(() => {
         return env.carbon ? nothing() : manageData(model, layout, pageInfo, setPageInfo);
@@ -73,11 +73,6 @@ export default function supernova(env) {
       useEffect(() => {
         if (rootElement) {
           setReactRoot(createRoot(rootElement));
-        }
-      }, [rootElement]);
-
-      useEffect(() => {
-        if (rootElement) {
           mount(rootElement);
         }
       }, [rootElement]);
