@@ -9,19 +9,26 @@ import './style.css';
   nuked.selections().then((selections) => selections.mount(document.getElementById('selections')));
 
   // create a session object
-  nuked.render({
-    element: document.querySelector('.object'),
-    type: 'table',
-    fields: ['Sales Quantity', '=Sum([Sales Quantity])'],
-  });
+  // nuked.render({
+  //   element: document.querySelector('.object'),
+  //   type: 'table',
+  //   fields: ['Sales Quantity', '=Sum([Sales Quantity])'],
+  // });
+
+  const fields = ['Sales Quantity', '=Sum([Sales Quantity])'];
+
+  for (let index = 0; index < 1000; index++) {
+    fields.push('Sales Quantity');
+  }
+  console.log('🚀 ~ file: main.js ~ line 19 ~ fields', fields);
 
   // create another session object
   nuked.render({
     element: document.querySelectorAll('.object')[1],
     type: 'table',
-    fields: ['Sales Price', '=Sum([Sales Quantity]*[Sales Price])'],
+    fields,
     options: {
-      direction: 'rtl',
+      // direction: 'rtl',
     },
     properties: {
       qHyperCubeDef: {
