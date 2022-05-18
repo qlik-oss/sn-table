@@ -125,7 +125,7 @@ export function reducer(state, action) {
     case 'reset':
       return api.isModal() ? state : { ...state, rows: {}, colIdx: -1 };
     case 'clear':
-      return rows.length ? { ...state, rows: {} } : state;
+      return Object.keys(rows).length ? { ...state, rows: {} } : state;
     case 'set-enabled':
       return { ...state, isEnabled };
     default:
