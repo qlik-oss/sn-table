@@ -71,29 +71,24 @@ export const handleAnnounceSelectionStatus = ({ announce, rowsLength, isAddition
   }
 };
 
-export const getSelectedRows = ({ selectedRows, cell, evt }) => {
+export const setSelectedRows = ({ selectedRows, cell, evt }) => {
   const { qElemNumber, rowIdx } = cell;
   if (evt.ctrlKey || evt.metaKey) {
     // if the ctrl key or the ⌘ Command key (On Macintosh keyboards) or the ⊞ Windows key is pressed
     // get the last clicked item (single select)
-    return { qElemNumber: rowIdx };
-  }
-
-  if (selectedRows[qElemNumber]) {
+    selectedRows = { qElemNumber: rowIdx }; // eslint-disable-line no-param-reassign
+  } else if (selectedRows[qElemNumber]) {
     // if the selected item is clicked again, that item will be removed
     delete selectedRows[qElemNumber];
   } else {
     // if an unselected item was clicked, add it to the object
     selectedRows[qElemNumber] = rowIdx;
   }
-
-  return selectedRows;
 };
 
 const selectCell = (state, payload) => {
-  const { cell, announce, evt } = payload;
   const { api, rows, colIdx } = state;
-
+  const { cell, announce, evt } = payload;
   let selectedRows = {};
 
   if (colIdx === -1) {
@@ -104,7 +99,7 @@ const selectCell = (state, payload) => {
     return state;
   }
 
-  selectedRows = getSelectedRows({ selectedRows, cell, evt });
+  selectedRows = setSelectedRows({ selectedRows, cell, evt });
   const selectedRowsLength = Object.keys(selectedRows).length;
   handleAnnounceSelectionStatus({
     announce,

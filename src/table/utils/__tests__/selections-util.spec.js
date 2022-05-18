@@ -2,7 +2,7 @@ import {
   addSelectionListeners,
   reducer,
   handleAnnounceSelectionStatus,
-  getSelectedRows,
+  // getSelectedRows,
   // selectCell,
 } from '../selections-utils';
 
@@ -220,46 +220,46 @@ describe('selections-utils', () => {
     });
   });
 
-  describe('getSelectedRows', () => {
-    let selectedRows;
-    let qElemNumber;
-    let rowIdx;
-    let evt;
+  // describe('getSelectedRows', () => {
+  //   let selectedRows;
+  //   let qElemNumber;
+  //   let rowIdx;
+  //   let evt;
 
-    beforeEach(() => {
-      selectedRows = [{ qElemNumber: 1, rowIdx: 1 }];
-      qElemNumber = 0;
-      rowIdx = 0;
-      evt = {};
-    });
+  //   beforeEach(() => {
+  //     selectedRows = [{ qElemNumber: 1, rowIdx: 1 }];
+  //     qElemNumber = 0;
+  //     rowIdx = 0;
+  //     evt = {};
+  //   });
 
-    it('should return array with only the last clicked item when ctrlKey is pressed', () => {
-      evt.ctrlKey = true;
+  //   it('should return array with only the last clicked item when ctrlKey is pressed', () => {
+  //     evt.ctrlKey = true;
 
-      selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
-      expect(selectedRows).toEqual([{ qElemNumber, rowIdx }]);
-    });
-    it('should return array with only the last clicked item metaKey cm is pressed', () => {
-      evt.metaKey = true;
+  //     selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
+  //     expect(selectedRows).toEqual([{ qElemNumber, rowIdx }]);
+  //   });
+  //   it('should return array with only the last clicked item metaKey cm is pressed', () => {
+  //     evt.metaKey = true;
 
-      selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
-      expect(selectedRows).toEqual([{ qElemNumber, rowIdx }]);
-    });
-    it('should return array with selected item removed if it already was in selectedRows', () => {
-      qElemNumber = 1;
-      rowIdx = 1;
+  //     selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
+  //     expect(selectedRows).toEqual([{ qElemNumber, rowIdx }]);
+  //   });
+  //   it('should return array with selected item removed if it already was in selectedRows', () => {
+  //     qElemNumber = 1;
+  //     rowIdx = 1;
 
-      selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
-      expect(selectedRows).toEqual([]);
-    });
-    it('should return array with selected item added if it was not in selectedRows before', () => {
-      selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
-      expect(selectedRows).toEqual([
-        { qElemNumber: 1, rowIdx: 1 },
-        { qElemNumber, rowIdx },
-      ]);
-    });
-  });
+  //     selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
+  //     expect(selectedRows).toEqual([]);
+  //   });
+  //   it('should return array with selected item added if it was not in selectedRows before', () => {
+  //     selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
+  //     expect(selectedRows).toEqual([
+  //       { qElemNumber: 1, rowIdx: 1 },
+  //       { qElemNumber, rowIdx },
+  //     ]);
+  //   });
+  // });
 
   // describe('selectCell', () => {
   // const event = {};
