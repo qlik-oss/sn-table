@@ -5,11 +5,10 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
+import { useContextSelector, TableContext } from '../context';
 import { getHeaderStyle } from '../utils/styling-utils';
 import { headHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusHead } from '../utils/handle-accessibility';
-import { SelectionContext } from '../utils/selections-utils';
-import useContextSelector from '../utils/useContextSelector';
 
 const VisuallyHidden = styled('span')({
   border: 0,
@@ -35,8 +34,8 @@ function TableHeadWrapper({
   keyboard,
 }) {
   const { columns, paginationNeeded } = tableData;
-  const isFocusInHead = useContextSelector(SelectionContext, (value) => value.focusedCellCoord[0] === 0);
-  const setFocusedCellCoord = useContextSelector(SelectionContext, (value) => value.setFocusedCellCoord);
+  const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
+  const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
 
   const headRowStyle = {
     '& :last-child': {

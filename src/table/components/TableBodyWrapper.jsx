@@ -2,12 +2,12 @@ import React, { useState, useEffect, useMemo, memo } from 'react';
 import PropTypes from 'prop-types';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
-import { addSelectionListeners, SelectionContext } from '../utils/selections-utils';
 import getCellRenderer from './renderer';
+import { useContextSelector, TableContext } from '../context';
+import { addSelectionListeners } from '../utils/selections-utils';
 import { getBodyCellStyle } from '../utils/styling-utils';
 import { bodyHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
-import useContextSelector from '../utils/useContextSelector';
 
 function TableBodyWrapper({
   rootElement,
@@ -22,8 +22,8 @@ function TableBodyWrapper({
   announce,
 }) {
   const { rows, columns, paginationNeeded } = tableData;
-  const setFocusedCellCoord = useContextSelector(SelectionContext, (value) => value.setFocusedCellCoord);
-  const selectionDispatch = useContextSelector(SelectionContext, (value) => value.selectionDispatch);
+  const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
+  const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme.name()]);
 

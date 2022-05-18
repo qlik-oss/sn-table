@@ -1,7 +1,3 @@
-import React, { useState, useReducer, createContext } from 'react';
-import PropTypes from 'prop-types';
-import { createSelectorProvider } from './createSelectorProvider';
-
 export function addSelectionListeners({ api, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef }) {
   const resetSelections = () => {
     selectionDispatch({ type: 'reset' });
@@ -87,76 +83,51 @@ export const getSelectedRows = ({ selectedRows, cell, evt }) => {
   return selectedRows;
 };
 
-export function reducer(state, action) {
-  const { isEnabled, cell, announce, evt } = action.payload || {};
+const selectCell = (state, payload) => {
+  const { cell, announce, evt } = payload;
   const { api, rows, colIdx } = state;
 
+  let selectedRows = {};
+
+  if (colIdx === -1) {
+    api.begin('/qHyperCubeDef');
+  } else if (colIdx === cell.colIdx) {
+    selectedRows = { ...rows };
+  } else {
+    return state;
+  }
+
+  selectedRows = getSelectedRows({ selectedRows, cell, evt });
+  const selectedRowsLength = Object.keys(selectedRows).length;
+  handleAnnounceSelectionStatus({
+    announce,
+    rowsLength: selectedRowsLength,
+    isAddition: selectedRowsLength > rows.length,
+  });
+
+  if (selectedRowsLength) {
+    api.select({
+      method: 'selectHyperCubeCells',
+      params: ['/qHyperCubeDef', Object.values(selectedRows), [cell.colIdx]],
+    });
+  } else {
+    api.cancel();
+  }
+
+  return { ...state, rows: selectedRows, colIdx: cell.colIdx };
+};
+
+export const reducer = (state, action) => {
   switch (action.type) {
-    case 'select': {
-      let selectedRows = {};
-
-      if (colIdx === -1) {
-        api.begin('/qHyperCubeDef');
-      } else if (colIdx === cell.colIdx) {
-        selectedRows = { ...rows };
-      } else {
-        return state;
-      }
-
-      selectedRows = getSelectedRows({ selectedRows, cell, evt });
-      const selectedRowsLength = Object.keys(selectedRows).length;
-      handleAnnounceSelectionStatus({
-        announce,
-        rowsLength: selectedRowsLength,
-        isAddition: selectedRowsLength > rows.length,
-      });
-
-      if (selectedRowsLength) {
-        api.select({
-          method: 'selectHyperCubeCells',
-          params: ['/qHyperCubeDef', Object.values(selectedRows), [cell.colIdx]],
-        });
-      } else {
-        api.cancel();
-      }
-
-      return { ...state, rows: selectedRows, colIdx: cell.colIdx };
-    }
+    case 'select':
+      return selectCell(state, action.payload);
     case 'reset':
-      return api.isModal() ? state : { ...state, rows: {}, colIdx: -1 };
+      return state.api.isModal() ? state : { ...state, rows: {}, colIdx: -1 };
     case 'clear':
-      return Object.keys(rows).length ? { ...state, rows: {} } : state;
+      return Object.keys(state.rows).length ? { ...state, rows: {} } : state;
     case 'set-enabled':
-      return { ...state, isEnabled };
+      return { ...state, isEnabled: action.payload.enabled };
     default:
       return state;
   }
-}
-
-const initialState = {
-  rows: [],
-  colIdx: -1,
-  isEnabled: true,
-};
-
-export const SelectionContext = createContext();
-const ProviderWithSelector = createSelectorProvider(SelectionContext);
-
-export const SelectionContextProvider = ({ selectionsAPI, children }) => {
-  const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
-  const [selectionState, selectionDispatch] = useReducer(reducer, {
-    ...initialState,
-    api: selectionsAPI,
-  });
-
-  return (
-    <ProviderWithSelector value={{ focusedCellCoord, setFocusedCellCoord, selectionState, selectionDispatch }}>
-      {children}
-    </ProviderWithSelector>
-  );
-};
-
-SelectionContextProvider.propTypes = {
-  children: PropTypes.any.isRequired,
-  selectionsAPI: PropTypes.object.isRequired,
 };

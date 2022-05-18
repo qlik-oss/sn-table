@@ -47,7 +47,7 @@ export const handleResetFocus = ({
   rootElement,
   shouldRefocus,
   hasSelections,
-  // setFocusedCellCoord,
+  setFocusedCellCoord,
   shouldAddTabstop,
   announce,
 }) => {
@@ -72,7 +72,7 @@ export const handleResetFocus = ({
       });
     }
   }
-  // setFocusedCellCoord(nextCell);
+  setFocusedCellCoord(nextCell);
 };
 
 export const handleFocusoutEvent = (evt, shouldRefocus, keyboard) => {

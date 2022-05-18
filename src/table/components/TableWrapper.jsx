@@ -10,12 +10,11 @@ import TableHeadWrapper from './TableHeadWrapper';
 import FooterWrapper from './FooterWrapper';
 import PaginationContent from './PaginationContent';
 import useDidUpdateEffect from './useDidUpdateEffect';
+import { useContextSelector, TableContext } from '../context';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
-import { SelectionContext } from '../utils/selections-utils';
-import useContextSelector from '../utils/useContextSelector';
 
 export default function TableWrapper(props) {
   const {
@@ -33,8 +32,8 @@ export default function TableWrapper(props) {
   } = props;
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
-  const focusedCellCoord = useContextSelector(SelectionContext, (value) => value.focusedCellCoord);
-  const setFocusedCellCoord = useContextSelector(SelectionContext, (value) => value.setFocusedCellCoord);
+  const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
+  const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
