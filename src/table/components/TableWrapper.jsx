@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import React, { useEffect, useMemo, useRef, useCallback } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
@@ -14,7 +14,8 @@ import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { handleFocusoutEvent, updateFocus, handleResetFocus } from '../utils/handle-accessibility';
 import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
-import { SelectionContextProvider } from '../utils/selections-utils';
+import { SelectionContext } from '../utils/selections-utils';
+import useContextSelector from '../utils/useContextSelector';
 
 export default function TableWrapper(props) {
   const {
@@ -32,25 +33,24 @@ export default function TableWrapper(props) {
   } = props;
   const { totalRowCount, totalColumnCount, totalPages, paginationNeeded, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
-  const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
+  const focusedCellCoord = useContextSelector(SelectionContext, (value) => value.focusedCellCoord);
+  const setFocusedCellCoord = useContextSelector(SelectionContext, (value) => value.setFocusedCellCoord);
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
-
   const announce = useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
-  const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
-    rows.length + 1,
-    columns.length,
-  ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   }, [rootElement]);
 
-  const handleChangePage = (pageIdx) => {
-    setPageInfo({ ...pageInfo, page: pageIdx });
-    announce({ keys: [['SNTable.Pagination.PageStatusReport', [pageIdx + 1, totalPages]]], politeness: 'assertive' });
-  };
+  const handleChangePage = useCallback(
+    (pageIdx) => {
+      setPageInfo({ ...pageInfo, page: pageIdx });
+      announce({ keys: [['SNTable.Pagination.PageStatusReport', [pageIdx + 1, totalPages]]], politeness: 'assertive' });
+    },
+    [pageInfo, setPageInfo, totalPages, announce]
+  );
 
   useEffect(() => {
     const memoedWrapper = tableWrapperRef.current;
@@ -105,6 +105,11 @@ export default function TableWrapper(props) {
     });
   }, [rows.length, totalRowCount, totalColumnCount, page]);
 
+  const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
+    rows.length + 1,
+    columns.length,
+  ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
+
   const paperStyle = {
     borderWidth: paginationNeeded ? '0px 1px 0px' : '0px',
     borderStyle: 'solid',
@@ -123,54 +128,47 @@ export default function TableWrapper(props) {
 
   console.log('table wrapper render :(');
   return (
-    <SelectionContextProvider selectionsAPI={selectionsAPI}>
-      <Paper
-        dir={direction}
-        sx={paperStyle}
-        ref={tableWrapperRef}
-        onKeyDown={(evt) =>
-          handleTableWrapperKeyDown({
-            evt,
-            totalRowCount,
-            page,
-            rowsPerPage,
-            handleChangePage,
-            setShouldRefocus,
-            keyboard,
-            isSelectionActive: selectionsAPI.isModal(),
-          })
-        }
+    <Paper
+      dir={direction}
+      sx={paperStyle}
+      ref={tableWrapperRef}
+      onKeyDown={(evt) =>
+        handleTableWrapperKeyDown({
+          evt,
+          totalRowCount,
+          page,
+          rowsPerPage,
+          handleChangePage,
+          setShouldRefocus,
+          keyboard,
+          isSelectionActive: selectionsAPI.isModal(),
+        })
+      }
+    >
+      <AnnounceElements />
+      <TableContainer
+        ref={tableContainerRef}
+        sx={tableContainerStyle}
+        tabIndex={-1}
+        role="application"
+        data-testid="table-container"
       >
-        <AnnounceElements />
-        <TableContainer
-          ref={tableContainerRef}
-          sx={tableContainerStyle}
-          tabIndex={-1}
-          role="application"
-          data-testid="table-container"
-        >
-          <Table stickyHeader aria-label={tableAriaLabel}>
-            <TableHeadWrapper
-              {...props}
-              focusedCellCoord={focusedCellCoord}
-              setFocusedCellCoord={setFocusedCellCoord}
-            />
-            <TableBodyWrapper
-              {...props}
-              announce={announce}
-              setShouldRefocus={setShouldRefocus}
-              tableWrapperRef={tableWrapperRef}
-              setFocusedCellCoord={setFocusedCellCoord}
-            />
-          </Table>
-        </TableContainer>
-        {!constraints.active && (
-          <FooterWrapper theme={theme} footerContainer={footerContainer}>
-            <PaginationContent {...props} handleChangePage={handleChangePage} announce={announce} />
-          </FooterWrapper>
-        )}
-      </Paper>
-    </SelectionContextProvider>
+        <Table stickyHeader aria-label={tableAriaLabel}>
+          <TableHeadWrapper {...props} />
+          <TableBodyWrapper
+            {...props}
+            announce={announce}
+            setShouldRefocus={setShouldRefocus}
+            tableWrapperRef={tableWrapperRef}
+          />
+        </Table>
+      </TableContainer>
+      {!constraints.active && (
+        <FooterWrapper theme={theme} footerContainer={footerContainer}>
+          <PaginationContent {...props} handleChangePage={handleChangePage} announce={announce} />
+        </FooterWrapper>
+      )}
+    </Paper>
   );
 }
 

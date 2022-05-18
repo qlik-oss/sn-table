@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from 'react';
+import React, { useState, useReducer, createContext } from 'react';
 import PropTypes from 'prop-types';
 import { createSelectorProvider } from './createSelectorProvider';
 
@@ -143,12 +143,17 @@ export const SelectionContext = createContext();
 const ProviderWithSelector = createSelectorProvider(SelectionContext);
 
 export const SelectionContextProvider = ({ selectionsAPI, children }) => {
+  const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
   const [selectionState, selectionDispatch] = useReducer(reducer, {
     ...initialState,
     api: selectionsAPI,
   });
 
-  return <ProviderWithSelector value={{ selectionState, selectionDispatch }}>{children}</ProviderWithSelector>;
+  return (
+    <ProviderWithSelector value={{ focusedCellCoord, setFocusedCellCoord, selectionState, selectionDispatch }}>
+      {children}
+    </ProviderWithSelector>
+  );
 };
 
 SelectionContextProvider.propTypes = {

@@ -17,12 +17,12 @@ function TableBodyWrapper({
   layout,
   theme,
   setShouldRefocus,
-  setFocusedCellCoord,
   keyboard,
   tableWrapperRef,
   announce,
 }) {
   const { rows, columns, paginationNeeded } = tableData;
+  const setFocusedCellCoord = useContextSelector(SelectionContext, (value) => value.setFocusedCellCoord);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme.name()]);
 
@@ -123,7 +123,6 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  setFocusedCellCoord: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
   keyboard: PropTypes.object.isRequired,
   tableWrapperRef: PropTypes.object.isRequired,

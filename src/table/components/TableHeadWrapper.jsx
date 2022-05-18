@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/system';
 import TableCell from '@mui/material/TableCell';
@@ -8,6 +8,8 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import { getHeaderStyle } from '../utils/styling-utils';
 import { headHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusHead } from '../utils/handle-accessibility';
+import { SelectionContext } from '../utils/selections-utils';
+import useContextSelector from '../utils/useContextSelector';
 
 const VisuallyHidden = styled('span')({
   border: 0,
@@ -30,11 +32,12 @@ function TableHeadWrapper({
   constraints,
   translator,
   selectionsAPI,
-  focusedCellCoord,
-  setFocusedCellCoord,
   keyboard,
 }) {
   const { columns, paginationNeeded } = tableData;
+  const isFocusInHead = useContextSelector(SelectionContext, (value) => value.focusedCellCoord[0] === 0);
+  const setFocusedCellCoord = useContextSelector(SelectionContext, (value) => value.setFocusedCellCoord);
+
   const headRowStyle = {
     '& :last-child': {
       borderRight: paginationNeeded && 0,
@@ -56,7 +59,6 @@ function TableHeadWrapper({
         {columns.map((column, columnIndex) => {
           const tabIndex = columnIndex === 0 && !keyboard.enabled ? 0 : -1;
           const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.dataColIdx;
-          const isFocusInHead = focusedCellCoord[0] === 0;
 
           return (
             <TableCell
@@ -75,10 +77,11 @@ function TableHeadWrapper({
                   column,
                   changeSortOrder,
                   layout,
-                  !constraints.active
+                  !constraints.active,
+                  setFocusedCellCoord
                 )
               }
-              onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, keyboard, setFocusedCellCoord)}
+              onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
               onClick={() => !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column)}
             >
               <TableSortLabel
@@ -112,9 +115,7 @@ TableHeadWrapper.propTypes = {
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
-  focusedCellCoord: PropTypes.arrayOf(PropTypes.number).isRequired,
-  setFocusedCellCoord: PropTypes.func.isRequired,
   translator: PropTypes.object.isRequired,
 };
 
-export default TableHeadWrapper;
+export default memo(TableHeadWrapper);
