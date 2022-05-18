@@ -24,22 +24,22 @@ export const updateFocus = ({ focusType, rowElements = [], cellCoord = [], provi
   }
 };
 
-export const removeAndFocus = (newCoord, rootElement, keyboard) => {
+export const removeAndFocus = (newCoord, rootElement, keyboard, setFocusedCellCoord) => {
   updateFocus({
     providedCell: findCellWithTabStop(rootElement),
     focusType: 'removeTab',
   });
-  // setFocusedCellCoord(newCoord);
+  setFocusedCellCoord(newCoord);
   keyboard.enabled && keyboard.focus();
 };
 
-export const handleClickToFocusBody = (cell, rootElement, keyboard) => {
+export const handleClickToFocusBody = (cell, rootElement, keyboard, setFocusedCellCoord) => {
   const { rawRowIdx, rawColIdx } = cell;
-  removeAndFocus([rawRowIdx + 1, rawColIdx], rootElement, keyboard);
+  removeAndFocus([rawRowIdx + 1, rawColIdx], rootElement, keyboard, setFocusedCellCoord);
 };
 
-export const handleClickToFocusHead = (columnIndex, rootElement, keyboard) => {
-  removeAndFocus([0, columnIndex], rootElement, keyboard);
+export const handleClickToFocusHead = (columnIndex, rootElement, keyboard, setFocusedCellCoord) => {
+  removeAndFocus([0, columnIndex], rootElement, keyboard, setFocusedCellCoord);
 };
 
 export const handleResetFocus = ({

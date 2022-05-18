@@ -81,16 +81,16 @@ export const getRowAndColumnCount = (rootElement) => {
   return { rowElements, rowCount, columnCount };
 };
 
-export const moveFocus = (evt, rootElement, cellCoord, selectionState, setFocusedCellCoord, announce) => {
+export const moveFocus = (evt, rootElement, cellCoord, setFocusedCellCoord, announce, isInSelectionMode) => {
   preventDefaultBehavior(evt);
   evt.target.setAttribute('tabIndex', '-1');
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
-  const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, selectionState);
+  const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, isInSelectionMode);
   updateFocus({ focusType: 'focus', rowElements: rowAndColumnCount.rowElements, cellCoord: nextCellCoord });
   setFocusedCellCoord(nextCellCoord);
 
   // handle announce
-  if (selectionState.api?.isModal()) {
+  if (isInSelectionMode) {
     const cell =
       rowAndColumnCount.rowElements[nextCellCoord[0]]?.getElementsByClassName('sn-table-cell')[nextCellCoord[1]];
     const hasActiveClassName = cell.classList.contains('selected');
@@ -114,7 +114,7 @@ export const headHandleKeyPress = (
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, false, setFocusedCellCoord);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
       break;
     }
     // Space bar / Enter: update the sorting
@@ -133,20 +133,21 @@ export const bodyHandleKeyPress = ({
   evt,
   rootElement,
   cellCoord,
-  selectionState,
   cell,
   selectionDispatch,
   isAnalysisMode,
   setFocusedCellCoord,
   announce,
   keyboard,
+  selectionsAPI = null,
 }) => {
+  const isInSelectionMode = selectionsAPI?.isModal();
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, selectionState, setFocusedCellCoord, announce);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isInSelectionMode);
       break;
     }
     // Space bar: Selects value.
@@ -158,21 +159,22 @@ export const bodyHandleKeyPress = ({
     // Enter: Confirms selections.
     case 'Enter': {
       preventDefaultBehavior(evt);
-      if (!selectionState.api.isModal()) break;
-      selectionState.api.confirm();
+      if (!isInSelectionMode) break;
+      selectionsAPI.confirm();
       announce({ keys: 'SNTable.SelectionLabel.SelectionsConfirmed' });
       break;
     }
     // Esc: Cancels selections. If no selections, do nothing and handleTableWrapperKeyDown should catch it
     case 'Escape': {
-      if (!isAnalysisMode || !selectionState.api.isModal()) break;
+      if (!isAnalysisMode || !isInSelectionMode) break;
       preventDefaultBehavior(evt);
-      selectionState.api.cancel();
+      selectionsAPI.cancel();
       announce({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
       break;
     }
+    // Tab: shift + tab, in selection mode and keyboard enabled, focus on selection toolbar
     case 'Tab': {
-      if (evt.shiftKey && keyboard.enabled && selectionState.api.isModal()) {
+      if (evt.shiftKey && keyboard.enabled && isInSelectionMode) {
         preventDefaultBehavior(evt);
         focusSelectionToolbar(evt.target, keyboard, true);
       }
