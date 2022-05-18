@@ -71,7 +71,7 @@ export const handleAnnounceSelectionStatus = ({ announce, rowsLength, isAddition
   }
 };
 
-export const setSelectedRows = ({ selectedRows, cell, evt }) => {
+export const updateSelectedRows = ({ selectedRows, cell, evt }) => {
   const { qElemNumber, rowIdx } = cell;
   if (evt.ctrlKey || evt.metaKey) {
     // if the ctrl key or the ⌘ Command key (On Macintosh keyboards) or the ⊞ Windows key is pressed
@@ -99,7 +99,7 @@ const selectCell = (state, payload) => {
     return state;
   }
 
-  selectedRows = setSelectedRows({ selectedRows, cell, evt });
+  updateSelectedRows({ selectedRows, cell, evt });
   const selectedRowsLength = Object.keys(selectedRows).length;
   handleAnnounceSelectionStatus({
     announce,
