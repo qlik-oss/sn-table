@@ -24,7 +24,7 @@ export const updateFocus = ({ focusType, rowElements = [], cellCoord = [], provi
   }
 };
 
-export const removeAndFocus = (newCoord, rootElement, keyboard, setFocusedCellCoord) => {
+export const removeAndFocus = (newCoord, rootElement, setFocusedCellCoord, keyboard) => {
   updateFocus({
     providedCell: findCellWithTabStop(rootElement),
     focusType: 'removeTab',
@@ -33,13 +33,13 @@ export const removeAndFocus = (newCoord, rootElement, keyboard, setFocusedCellCo
   keyboard.enabled && keyboard.focus();
 };
 
-export const handleClickToFocusBody = (cell, rootElement, keyboard, setFocusedCellCoord) => {
+export const handleClickToFocusBody = (cell, rootElement, setFocusedCellCoord, keyboard) => {
   const { rawRowIdx, rawColIdx } = cell;
-  removeAndFocus([rawRowIdx + 1, rawColIdx], rootElement, keyboard, setFocusedCellCoord);
+  removeAndFocus([rawRowIdx + 1, rawColIdx], rootElement, setFocusedCellCoord, keyboard);
 };
 
-export const handleClickToFocusHead = (columnIndex, rootElement, keyboard, setFocusedCellCoord) => {
-  removeAndFocus([0, columnIndex], rootElement, keyboard, setFocusedCellCoord);
+export const handleClickToFocusHead = (columnIndex, rootElement, setFocusedCellCoord, keyboard) => {
+  removeAndFocus([0, columnIndex], rootElement, setFocusedCellCoord, keyboard);
 };
 
 export const handleResetFocus = ({
