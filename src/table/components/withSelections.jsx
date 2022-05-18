@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getSelectionStyle } from '../utils/styling-utils';
 import { useContextSelector, TableContext } from '../context';
+import { getSelectionStyle } from '../utils/styling-utils';
 import { getCellSelectionState } from '../utils/selections-utils';
 
 export default function withSelections(CellComponent) {

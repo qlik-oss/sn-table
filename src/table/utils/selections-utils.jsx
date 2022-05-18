@@ -1,3 +1,10 @@
+export const SelectionStates = {
+  SELECTED: 'selected',
+  POSSIBLE: 'possible',
+  EXCLUDED: 'excluded',
+  INACTIVE: 'inactive',
+};
+
 export function addSelectionListeners({ api, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef }) {
   const resetSelections = () => {
     selectionDispatch({ type: 'reset' });
@@ -37,14 +44,14 @@ export const getCellSelectionState = (cell, value) => {
   const {
     selectionState: { colIdx, rows, api },
   } = value;
-  let state = 'inactive';
+  let state = SelectionStates.INACTIVE;
   if (api.isModal()) {
     if (colIdx !== cell.colIdx) {
-      state = 'excluded';
+      state = SelectionStates.EXCLUDED;
     } else if (rows[cell.qElemNumber]) {
-      state = 'selected';
+      state = SelectionStates.SELECTED;
     } else {
-      state = 'possible';
+      state = SelectionStates.POSSIBLE;
     }
   }
 

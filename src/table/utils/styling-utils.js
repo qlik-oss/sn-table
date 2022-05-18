@@ -1,4 +1,5 @@
 import { resolveExpression, isDarkColor } from './color-utils';
+import { SelectionStates } from './selections-utils';
 
 // the order of style
 // default (inl. sprout theme) < Sense theme < styling settings
@@ -197,21 +198,21 @@ export function getColumnStyle(styling, qAttrExps, stylingInfo) {
  * Get the style for one cell based on wether it is
  * selected, possible, excluded or no extra styling at all (not in selection mode)
  * @param {Object} styling - Styling already calculated for the cell
- * @param {?String} cellSelectionState - The selection state the cell is in
+ * @param {String} cellSelectionState - The selection state the cell is in
  * @param {?String} [themeBackgroundColor='#fff'] - The background color from nebula theme or sense theme
  * @returns {Object} The style for the cell
  */
 
-export function getSelectionStyle(styling, selectionType, themeBackgroundColor) {
+export function getSelectionStyle(styling, cellSelectionState, themeBackgroundColor) {
   let selectionStyling = {};
-  switch (selectionType) {
-    case 'selected':
+  switch (cellSelectionState) {
+    case SelectionStates.SELECTED:
       selectionStyling = SELECTION_STYLING.SELECTED;
       break;
-    case 'possible':
+    case SelectionStates.POSSIBLE:
       selectionStyling = SELECTION_STYLING.POSSIBLE;
       break;
-    case 'excluded':
+    case SelectionStates.EXCLUDED:
       selectionStyling = {
         background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${styling.columnBackgroundColor || themeBackgroundColor}`,
       };
