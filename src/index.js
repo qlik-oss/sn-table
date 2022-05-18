@@ -15,6 +15,8 @@ import {
   useRect,
   useApp,
 } from '@nebula.js/stardust';
+import { createRoot } from 'react-dom/client';
+
 import registerLocale from './locale/src';
 import properties from './object-properties';
 import data from './data';
@@ -45,6 +47,7 @@ export default function supernova(env) {
     },
     component() {
       const rootElement = useElement();
+      const [reactRoot, setReactRoot] = useState();
       const layout = useStaleLayout();
       const { direction, footerContainer } = useOptions();
       const app = useApp();
@@ -62,9 +65,16 @@ export default function supernova(env) {
         rowsPerPage: 100,
         rowsPerPageOptions: [10, 25, 100],
       }));
+
       const [tableData] = usePromise(() => {
         return env.carbon ? nothing() : manageData(model, layout, pageInfo, setPageInfo);
       }, [layout, pageInfo]);
+
+      useEffect(() => {
+        if (rootElement) {
+          setReactRoot(createRoot(rootElement));
+        }
+      }, [rootElement]);
 
       useEffect(() => {
         if (rootElement) {
@@ -76,8 +86,9 @@ export default function supernova(env) {
         if (layout && tableData && !env.carbon) {
           registerLocale(translator);
           const changeSortOrder = sortingFactory(model);
-          render(rootElement, {
+          render({
             rootElement,
+            reactRoot,
             layout,
             tableData,
             direction,
@@ -95,6 +106,8 @@ export default function supernova(env) {
           });
         }
       }, [
+        reactRoot,
+        rootElement,
         tableData,
         constraints,
         direction,
