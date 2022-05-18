@@ -11,7 +11,7 @@ import FooterWrapper from './FooterWrapper';
 import PaginationContent from './PaginationContent';
 import useDidUpdateEffect from './useDidUpdateEffect';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
-import { handleFocusoutEvent, updateFocus, handleResetFocus } from '../utils/handle-accessibility';
+import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
 import { SelectionContext } from '../utils/selections-utils';
@@ -31,7 +31,7 @@ export default function TableWrapper(props) {
     direction,
     footerContainer,
   } = props;
-  const { totalRowCount, totalColumnCount, totalPages, paginationNeeded, rows, columns } = tableData;
+  const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
   const focusedCellCoord = useContextSelector(SelectionContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(SelectionContext, (value) => value.setFocusedCellCoord);

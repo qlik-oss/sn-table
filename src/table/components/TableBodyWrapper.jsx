@@ -23,6 +23,7 @@ function TableBodyWrapper({
 }) {
   const { rows, columns, paginationNeeded } = tableData;
   const setFocusedCellCoord = useContextSelector(SelectionContext, (value) => value.setFocusedCellCoord);
+  const selectionDispatch = useContextSelector(SelectionContext, (value) => value.selectionDispatch);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme.name()]);
 
@@ -33,7 +34,6 @@ function TableBodyWrapper({
   const getColumnRenderers = () =>
     columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(getColumnRenderers());
-  const selectionDispatch = useContextSelector(SelectionContext, (value) => value.selectionDispatch);
 
   useEffect(() => {
     selectionDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });

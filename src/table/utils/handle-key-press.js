@@ -1,4 +1,3 @@
-// import { selectCell } from './selections-utils';
 import { updateFocus, focusSelectionToolbar } from './handle-accessibility';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
@@ -142,6 +141,7 @@ export const bodyHandleKeyPress = ({
   selectionsAPI = null,
 }) => {
   const isInSelectionMode = selectionsAPI?.isModal();
+
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
