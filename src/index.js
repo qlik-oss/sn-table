@@ -14,6 +14,7 @@ import {
   useKeyboard,
   useRect,
   useApp,
+  useId,
 } from '@nebula.js/stardust';
 import registerLocale from './locale/src';
 import properties from './object-properties';
@@ -44,6 +45,7 @@ export default function supernova(env) {
       data: data(env),
     },
     component() {
+      const id = useId();
       const rootElement = useElement();
       const layout = useStaleLayout();
       const { direction, footerContainer } = useOptions();
@@ -76,7 +78,8 @@ export default function supernova(env) {
         if (layout && tableData && !env.carbon) {
           registerLocale(translator);
           const changeSortOrder = sortingFactory(model);
-          render(rootElement, {
+          render({
+            id,
             rootElement,
             layout,
             tableData,

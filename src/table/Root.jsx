@@ -7,10 +7,12 @@ import TableWrapper from './components/TableWrapper';
 
 let reactRoot;
 
-export function render(rootElement, props) {
-  const { muiTheme, direction } = props;
-  if (!reactRoot) {
-    reactRoot = createRoot(rootElement);
+export function render(props) {
+  const { muiTheme, direction, rootElement, id } = props;
+
+  // eslint-disable-next-line no-underscore-dangle
+  if (reactRoot?._internalRoot?.identifierPrefix !== id) {
+    reactRoot = createRoot(rootElement, { identifierPrefix: id });
   }
 
   reactRoot.render(
