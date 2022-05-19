@@ -1,12 +1,12 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import TableHeadWrapper from '../TableHeadWrapper';
+import { TableContextProvider } from '../../context';
 import * as handleKeyPress from '../../utils/handle-key-press';
 import * as handleAccessibility from '../../utils/handle-accessibility';
 
 describe('<TableHeadWrapper />', () => {
   const rootElement = {};
-  const setFocusedCellCoord = () => {};
   let tableData;
   let theme;
   let layout;
@@ -15,7 +15,23 @@ describe('<TableHeadWrapper />', () => {
   let selectionsAPI;
   let keyboard;
   let translator;
-  let focusedCellCoord;
+
+  const renderTableHead = (cellCoordMock) =>
+    render(
+      <TableContextProvider selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
+        <TableHeadWrapper
+          rootElement={rootElement}
+          constraints={constraints}
+          selectionsAPI={selectionsAPI}
+          tableData={tableData}
+          theme={theme}
+          layout={layout}
+          changeSortOrder={changeSortOrder}
+          keyboard={keyboard}
+          translator={translator}
+        />
+      </TableContextProvider>
+    );
 
   beforeEach(() => {
     tableData = {
@@ -46,46 +62,17 @@ describe('<TableHeadWrapper />', () => {
       enabled: false,
     };
     translator = { get: (s) => s };
-    focusedCellCoord = [0, 0];
   });
 
   it('should render table head', () => {
-    const { queryByText } = render(
-      <TableHeadWrapper
-        rootElement={rootElement}
-        setFocusedCellCoord={setFocusedCellCoord}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        tableData={tableData}
-        theme={theme}
-        layout={layout}
-        changeSortOrder={changeSortOrder}
-        keyboard={keyboard}
-        translator={translator}
-        focusedCellCoord={focusedCellCoord}
-      />
-    );
+    const { queryByText } = renderTableHead();
 
     expect(queryByText(tableData.columns[0].label)).toBeVisible();
     expect(queryByText(tableData.columns[1].label)).toBeVisible();
   });
 
   it('should call changeSortOrder when clicking a header cell', () => {
-    const { queryByText } = render(
-      <TableHeadWrapper
-        rootElement={rootElement}
-        setFocusedCellCoord={setFocusedCellCoord}
-        tableData={tableData}
-        theme={theme}
-        layout={layout}
-        changeSortOrder={changeSortOrder}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        keyboard={keyboard}
-        translator={translator}
-        focusedCellCoord={focusedCellCoord}
-      />
-    );
+    const { queryByText } = renderTableHead();
     fireEvent.click(queryByText(tableData.columns[0].label));
 
     expect(changeSortOrder).toHaveBeenCalledWith(layout, tableData.columns[0]);
@@ -95,21 +82,7 @@ describe('<TableHeadWrapper />', () => {
     constraints = {
       active: true,
     };
-    const { queryByText } = render(
-      <TableHeadWrapper
-        rootElement={rootElement}
-        setFocusedCellCoord={setFocusedCellCoord}
-        tableData={tableData}
-        theme={theme}
-        layout={layout}
-        changeSortOrder={changeSortOrder}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        keyboard={keyboard}
-        translator={translator}
-        focusedCellCoord={focusedCellCoord}
-      />
-    );
+    const { queryByText } = renderTableHead();
     fireEvent.click(queryByText(tableData.columns[0].label));
 
     expect(changeSortOrder).not.toHaveBeenCalled();
@@ -119,21 +92,7 @@ describe('<TableHeadWrapper />', () => {
     selectionsAPI = {
       isModal: () => true,
     };
-    const { queryByText } = render(
-      <TableHeadWrapper
-        rootElement={rootElement}
-        setFocusedCellCoord={setFocusedCellCoord}
-        tableData={tableData}
-        theme={theme}
-        layout={layout}
-        changeSortOrder={changeSortOrder}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        keyboard={keyboard}
-        translator={translator}
-        focusedCellCoord={focusedCellCoord}
-      />
-    );
+    const { queryByText } = renderTableHead();
     fireEvent.click(queryByText(tableData.columns[0].label));
 
     expect(changeSortOrder).not.toHaveBeenCalled();
@@ -142,21 +101,7 @@ describe('<TableHeadWrapper />', () => {
   it('should call headHandleKeyPress when keyDown on a header cell', () => {
     jest.spyOn(handleKeyPress, 'headHandleKeyPress').mockImplementation(() => jest.fn());
 
-    const { queryByText } = render(
-      <TableHeadWrapper
-        rootElement={rootElement}
-        setFocusedCellCoord={setFocusedCellCoord}
-        tableData={tableData}
-        theme={theme}
-        layout={layout}
-        changeSortOrder={changeSortOrder}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        keyboard={keyboard}
-        translator={translator}
-        focusedCellCoord={focusedCellCoord}
-      />
-    );
+    const { queryByText } = renderTableHead();
     fireEvent.keyDown(queryByText(tableData.columns[0].label));
 
     expect(handleKeyPress.headHandleKeyPress).toHaveBeenCalledTimes(1);
@@ -165,21 +110,7 @@ describe('<TableHeadWrapper />', () => {
   it('should call handleClickToFocusHead when clicking a header cell', () => {
     jest.spyOn(handleAccessibility, 'handleClickToFocusHead').mockImplementation(() => jest.fn());
 
-    const { queryByText } = render(
-      <TableHeadWrapper
-        rootElement={rootElement}
-        setFocusedCellCoord={setFocusedCellCoord}
-        tableData={tableData}
-        theme={theme}
-        layout={layout}
-        changeSortOrder={changeSortOrder}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        keyboard={keyboard}
-        translator={translator}
-        focusedCellCoord={focusedCellCoord}
-      />
-    );
+    const { queryByText } = renderTableHead();
     fireEvent.mouseDown(queryByText(tableData.columns[0].label));
 
     expect(handleAccessibility.handleClickToFocusHead).toHaveBeenCalledTimes(1);
@@ -199,22 +130,7 @@ describe('<TableHeadWrapper />', () => {
       },
     };
 
-    const { queryByText } = render(
-      <TableHeadWrapper
-        rootElement={rootElement}
-        setFocusedCellCoord={setFocusedCellCoord}
-        tableData={tableData}
-        theme={theme}
-        layout={layout}
-        changeSortOrder={changeSortOrder}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        keyboard={keyboard}
-        translator={translator}
-        focusedCellCoord={focusedCellCoord}
-      />
-    );
-
+    const { queryByText } = renderTableHead();
     const firstColQuery = queryByText(tableData.columns[0].label).closest('th');
     const secondColQuery = queryByText(tableData.columns[1].label).closest('th');
 
@@ -225,21 +141,7 @@ describe('<TableHeadWrapper />', () => {
   });
 
   it('should render the visually hidden text instead of `aria-label` and has correct `scope` properly', () => {
-    const { queryByText, queryByTestId } = render(
-      <TableHeadWrapper
-        rootElement={rootElement}
-        setFocusedCellCoord={setFocusedCellCoord}
-        tableData={tableData}
-        theme={theme}
-        layout={layout}
-        changeSortOrder={changeSortOrder}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        keyboard={keyboard}
-        translator={translator}
-        focusedCellCoord={focusedCellCoord}
-      />
-    );
+    const { queryByText, queryByTestId } = renderTableHead();
 
     // check scope
     const tableColumn = queryByText(tableData.columns[0].label).closest('th');
@@ -251,22 +153,7 @@ describe('<TableHeadWrapper />', () => {
   });
 
   it('should not render visually hidden text while you are out of table header', () => {
-    focusedCellCoord = [1, 1];
-    const { queryByTestId } = render(
-      <TableHeadWrapper
-        rootElement={rootElement}
-        setFocusedCellCoord={setFocusedCellCoord}
-        tableData={tableData}
-        theme={theme}
-        layout={layout}
-        changeSortOrder={changeSortOrder}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        keyboard={keyboard}
-        translator={translator}
-        focusedCellCoord={focusedCellCoord}
-      />
-    );
+    const { queryByTestId } = renderTableHead([1, 1]);
 
     const firstColHiddenLabel = queryByTestId('VHL-for-col-0');
     const secondColHiddenLabel = queryByTestId('VHL-for-col-1');

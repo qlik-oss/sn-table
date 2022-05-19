@@ -2,6 +2,7 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 
 import PaginationContent from '../PaginationContent';
+import { TableContextProvider } from '../../context';
 import * as handleAccessibility from '../../utils/handle-accessibility';
 
 describe('<PaginationContent />', () => {
@@ -11,7 +12,6 @@ describe('<PaginationContent />', () => {
   let pageInfo;
   let setPageInfo;
   let titles;
-  let lastPageIdx;
   let handleChangePage;
   let rect;
   let translator;
@@ -24,22 +24,23 @@ describe('<PaginationContent />', () => {
 
   const renderPagination = () =>
     render(
-      <PaginationContent
-        theme={theme}
-        direction={direction}
-        tableData={tableData}
-        pageInfo={pageInfo}
-        setPageInfo={setPageInfo}
-        keyboard={keyboard}
-        translator={translator}
-        constraints={constraints}
-        footerContainer={footerContainer}
-        selectionsAPI={selectionsAPI}
-        rect={rect}
-        handleChangePage={handleChangePage}
-        lastPageIdx={lastPageIdx}
-        announce={announce}
-      />
+      <TableContextProvider selectionsAPI={selectionsAPI}>
+        <PaginationContent
+          theme={theme}
+          direction={direction}
+          tableData={tableData}
+          pageInfo={pageInfo}
+          setPageInfo={setPageInfo}
+          keyboard={keyboard}
+          translator={translator}
+          constraints={constraints}
+          footerContainer={footerContainer}
+          selectionsAPI={selectionsAPI}
+          rect={rect}
+          handleChangePage={handleChangePage}
+          announce={announce}
+        />
+      </TableContextProvider>
     );
 
   beforeEach(() => {
@@ -57,6 +58,7 @@ describe('<PaginationContent />', () => {
       totalRowCount: 200,
       totalColumnCount: 5,
       paginationNeeded: true,
+      totalPages: 3,
     };
     pageInfo = {
       page: 0,
@@ -64,7 +66,6 @@ describe('<PaginationContent />', () => {
       rowsPerPageOptions: [10, 25, 100],
     };
     setPageInfo = jest.fn();
-    lastPageIdx = 2;
     handleChangePage = jest.fn();
     rect = { width: 750 };
     translator = { get: (s) => s };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, memo } from 'react';
+import React, { useEffect, useMemo, memo } from 'react';
 import PropTypes from 'prop-types';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
@@ -30,14 +30,7 @@ function TableBodyWrapper({
   // active: turn off interactions that affect the state of the visual representation including selection, zoom, scroll, etc.
   // select: turn off selections.
   const selectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
-
-  const getColumnRenderers = () =>
-    columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled));
-  const [columnRenderers, setColumnRenderers] = useState(getColumnRenderers());
-
-  useEffect(() => {
-    setColumnRenderers(getColumnRenderers);
-  }, [selectionsEnabled, columns.length]);
+  const columnRenderers = columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled));
 
   useEffect(() => {
     addSelectionListeners({ api: selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });

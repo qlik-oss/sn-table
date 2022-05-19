@@ -214,7 +214,7 @@ export function getSelectionStyle(styling, cellSelectionState, themeBackgroundCo
       break;
     case SelectionStates.EXCLUDED:
       selectionStyling = {
-        background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${styling.columnBackgroundColor || themeBackgroundColor}`,
+        background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${styling.backgroundColor || themeBackgroundColor}`,
       };
       break;
     default:

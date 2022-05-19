@@ -2,6 +2,7 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { generateDataPages, generateLayout } from '../../../__test__/generate-test-data';
 import manageData from '../../../handle-data';
+import { TableContextProvider } from '../../context';
 import TableBodyWrapper from '../TableBodyWrapper';
 import * as selectionsUtils from '../../utils/selections-utils';
 import * as getCellRenderer from '../renderer';
@@ -10,7 +11,6 @@ import * as handleAccessibility from '../../utils/handle-accessibility';
 
 describe('<TableBodyWrapper />', () => {
   const rootElement = {};
-  const setFocusedCellCoord = () => {};
   const setShouldRefocus = () => {};
   const keyboard = {};
   const tableWrapperRef = {};
@@ -23,6 +23,24 @@ describe('<TableBodyWrapper />', () => {
   let layout;
   let theme;
   let cellRendererSpy;
+
+  const renderTableBody = () =>
+    render(
+      <TableContextProvider selectionsAPI={selectionsAPI}>
+        <TableBodyWrapper
+          tableData={tableData}
+          constraints={constraints}
+          selectionsAPI={selectionsAPI}
+          layout={layout}
+          theme={theme}
+          rootElement={rootElement}
+          setShouldRefocus={setShouldRefocus}
+          keyboard={keyboard}
+          tableWrapperRef={tableWrapperRef}
+          announce={announce}
+        />
+      </TableContextProvider>
+    );
 
   beforeEach(async () => {
     jest.spyOn(selectionsUtils, 'addSelectionListeners').mockImplementation(() => jest.fn());
@@ -47,26 +65,12 @@ describe('<TableBodyWrapper />', () => {
   it('should render 2x2 table body and call CellRenderer', () => {
     jest.spyOn(getCellRenderer, 'default').mockImplementation(() => {
       cellRendererSpy();
-      return 'test';
+      return 'td';
     });
 
-    const { queryByText } = render(
-      <TableBodyWrapper
-        tableData={tableData}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        layout={layout}
-        theme={theme}
-        rootElement={rootElement}
-        setFocusedCellCoord={setFocusedCellCoord}
-        setShouldRefocus={setShouldRefocus}
-        keyboard={keyboard}
-        tableWrapperRef={tableWrapperRef}
-        announce={announce}
-      />
-    );
+    const { queryByText } = renderTableBody();
 
-    expect(cellRendererSpy).toHaveBeenCalledTimes(4);
+    expect(cellRendererSpy).toHaveBeenCalledTimes(2);
     expect(queryByText(tableData.rows[0]['col-0'].qText)).toBeVisible();
     expect(queryByText(tableData.rows[0]['col-1'].qText)).toBeVisible();
     expect(queryByText(tableData.rows[1]['col-0'].qText)).toBeVisible();
@@ -76,21 +80,7 @@ describe('<TableBodyWrapper />', () => {
   it('should call bodyHandleKeyPress on key down', () => {
     jest.spyOn(handleKeyPress, 'bodyHandleKeyPress').mockImplementation(() => jest.fn());
 
-    const { queryByText } = render(
-      <TableBodyWrapper
-        tableData={tableData}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        theme={theme}
-        layout={layout}
-        rootElement={rootElement}
-        setFocusedCellCoord={setFocusedCellCoord}
-        setShouldRefocus={setShouldRefocus}
-        keyboard={keyboard}
-        tableWrapperRef={tableWrapperRef}
-        announce={announce}
-      />
-    );
+    const { queryByText } = renderTableBody();
     fireEvent.keyDown(queryByText(tableData.rows[0]['col-0'].qText));
 
     expect(handleKeyPress.bodyHandleKeyPress).toHaveBeenCalledTimes(1);
@@ -99,21 +89,7 @@ describe('<TableBodyWrapper />', () => {
   it('should call handleClickToFocusBody on mouseDown', () => {
     jest.spyOn(handleAccessibility, 'handleClickToFocusBody').mockImplementation(() => jest.fn());
 
-    const { queryByText } = render(
-      <TableBodyWrapper
-        tableData={tableData}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        theme={theme}
-        layout={layout}
-        rootElement={rootElement}
-        setFocusedCellCoord={setFocusedCellCoord}
-        setShouldRefocus={setShouldRefocus}
-        keyboard={keyboard}
-        tableWrapperRef={tableWrapperRef}
-        announce={announce}
-      />
-    );
+    const { queryByText } = renderTableBody();
     fireEvent.mouseDown(queryByText(tableData.rows[0]['col-0'].qText));
 
     expect(handleAccessibility.handleClickToFocusBody).toHaveBeenCalledTimes(1);

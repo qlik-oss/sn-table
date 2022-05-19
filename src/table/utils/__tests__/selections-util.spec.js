@@ -1,4 +1,11 @@
-import { addSelectionListeners, reducer, handleAnnounceSelectionStatus, getSelectedRows } from '../selections-utils';
+import {
+  addSelectionListeners,
+  reducer,
+  handleAnnounceSelectionStatus,
+  getSelectedRows,
+  getCellSelectionState,
+  SelectionStates,
+} from '../selections-utils';
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {
@@ -278,6 +285,57 @@ describe('selections-utils', () => {
     it('should return array with selected item added if it was not in selectedRows before', () => {
       const updatedSelectedRows = getSelectedRows({ selectedRows, cell, evt });
       expect(updatedSelectedRows).toEqual({ 1: 1, [cell.qElemNumber]: cell.rowIdx });
+    });
+  });
+
+  describe('getCellSelectionState', () => {
+    let isModal;
+    let cell;
+    let value;
+
+    beforeEach(() => {
+      isModal = true;
+      cell = {
+        qElemNumber: 1,
+        colIdx: 1,
+      };
+      value = {
+        selectionState: {
+          colIdx: 1,
+          rows: { 1: 1 },
+          api: {
+            isModal: () => isModal,
+          },
+        },
+      };
+    });
+
+    it('should return selected when selected', () => {
+      const cellState = getCellSelectionState(cell, value);
+      expect(cellState).toEqual(SelectionStates.SELECTED);
+    });
+
+    it('should return possible when row is not selected', () => {
+      cell.qElemNumber = 2;
+
+      const cellState = getCellSelectionState(cell, value);
+      expect(cellState).toEqual(SelectionStates.POSSIBLE);
+    });
+
+    it('should return excluded when colIdx is not in selectionState', () => {
+      cell.colIdx = 2;
+
+      const cellState = getCellSelectionState(cell, value);
+      expect(cellState).toEqual(SelectionStates.EXCLUDED);
+    });
+
+    it('should return inactive when when isModal is false', () => {
+      value.selectionState.colIdx = -1;
+      value.selectionState.colIdx = {};
+      isModal = false;
+
+      const cellState = getCellSelectionState(cell, value);
+      expect(cellState).toEqual(SelectionStates.INACTIVE);
     });
   });
 });
