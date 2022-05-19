@@ -2,7 +2,11 @@ import { isDarkColor, isTransparentColor } from './table/utils/color-utils';
 
 export default function tableThemeColors(theme) {
   const qvInnerObject = document.querySelector('.qv-object .qv-inner-object');
+  console.log('🚀 ~ file: table-theme-colors.js ~ line 5 ~ tableThemeColors ~ qvInnerObject', qvInnerObject);
+
   const objectBackgroundColorFromCSS = qvInnerObject && window.getComputedStyle(qvInnerObject).backgroundColor;
+  console.log("🚀 ~ file: table-theme-colors.js ~ line 8 ~ tableThemeColors ~ objectBackgroundColorFromCSS", objectBackgroundColorFromCSS)
+
   const opacityFromCSS = qvInnerObject && window.getComputedStyle(qvInnerObject).opacity;
   const qvPanelSheet = document.querySelector('.qv-panel-sheet');
   const sheetBackgroundColorFromCSS = qvPanelSheet && window.getComputedStyle(qvPanelSheet).backgroundColor;
