@@ -180,6 +180,7 @@ describe('selections-utils', () => {
     });
 
     it('should return error when incorrect action type', () => {
+      action.type = 'invalidAction';
       try {
         reducer(state, action);
       } catch (error) {

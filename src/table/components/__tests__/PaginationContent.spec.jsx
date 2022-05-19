@@ -2,7 +2,6 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 
 import PaginationContent from '../PaginationContent';
-import { TableContextProvider } from '../../context';
 import * as handleAccessibility from '../../utils/handle-accessibility';
 
 describe('<PaginationContent />', () => {
@@ -24,23 +23,21 @@ describe('<PaginationContent />', () => {
 
   const renderPagination = () =>
     render(
-      <TableContextProvider selectionsAPI={selectionsAPI}>
-        <PaginationContent
-          theme={theme}
-          direction={direction}
-          tableData={tableData}
-          pageInfo={pageInfo}
-          setPageInfo={setPageInfo}
-          keyboard={keyboard}
-          translator={translator}
-          constraints={constraints}
-          footerContainer={footerContainer}
-          selectionsAPI={selectionsAPI}
-          rect={rect}
-          handleChangePage={handleChangePage}
-          announce={announce}
-        />
-      </TableContextProvider>
+      <PaginationContent
+        theme={theme}
+        direction={direction}
+        tableData={tableData}
+        pageInfo={pageInfo}
+        setPageInfo={setPageInfo}
+        keyboard={keyboard}
+        translator={translator}
+        constraints={constraints}
+        footerContainer={footerContainer}
+        selectionsAPI={selectionsAPI}
+        rect={rect}
+        handleChangePage={handleChangePage}
+        announce={announce}
+      />
     );
 
   beforeEach(() => {

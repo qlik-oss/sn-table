@@ -229,9 +229,7 @@ describe('handle-key-press', () => {
       isModal = true;
       cell = global.document.createElement('td');
       cell.classList.add('selected');
-
       rootElement = { getElementsByClassName: () => [{ getElementsByClassName: () => [cell] }] };
-      // selectionsAPI = { ...selectionsAPI, rows: ['key#01'] };
       bodyHandleKeyPress({
         evt,
         rootElement,
@@ -249,7 +247,6 @@ describe('handle-key-press', () => {
       isModal = true;
       cell = global.document.createElement('td');
       rootElement = { getElementsByClassName: () => [{ getElementsByClassName: () => [cell] }] };
-      // selectionsAPI = { ...selectionsAPI, rows: ['key#01'] };
       bodyHandleKeyPress({
         evt,
         rootElement,
