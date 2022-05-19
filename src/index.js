@@ -99,7 +99,6 @@ export default function supernova(env) {
           });
         }
       }, [
-        rootElement,
         reactRoot,
         tableData,
         constraints,
