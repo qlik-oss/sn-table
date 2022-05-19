@@ -132,6 +132,6 @@ export const reducer = (state, action) => {
     case 'clear':
       return Object.keys(state.rows).length ? { ...state, rows: {} } : state;
     default:
-      return state;
+      throw new Error('reducer called with invalid action type');
   }
 };

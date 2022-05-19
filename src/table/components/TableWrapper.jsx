@@ -125,7 +125,6 @@ export default function TableWrapper(props) {
     overflow: constraints.active ? 'hidden' : 'auto',
   };
 
-  console.log('table wrapper render :(');
   return (
     <Paper
       dir={direction}
