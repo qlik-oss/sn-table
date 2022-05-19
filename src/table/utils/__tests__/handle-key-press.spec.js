@@ -147,7 +147,7 @@ describe('handle-key-press', () => {
     let colIndex;
     let evt = {};
     let rootElement = {};
-    let selectionState = {};
+    let selectionsAPI;
     let cell = [];
     let selectionDispatch;
     let isAnalysisMode;
@@ -172,16 +172,10 @@ describe('handle-key-press', () => {
       rootElement = {
         getElementsByClassName: () => [{ getElementsByClassName: () => [{ focus: () => {}, setAttribute: () => {} }] }],
       };
-      selectionState = {
-        api: {
-          confirm: jest.fn(),
-          cancel: jest.fn(),
-          begin: jest.fn(),
-          select: jest.fn(),
-          isModal: () => isModal,
-        },
-        rows: [],
-        colIdx: -1,
+      selectionsAPI = {
+        confirm: jest.fn(),
+        cancel: jest.fn(),
+        isModal: () => isModal,
       };
       cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1, isDim: true };
       keyboard = { enabled: true };
@@ -199,7 +193,7 @@ describe('handle-key-press', () => {
         evt,
         rootElement,
         cellCoord: [rowIndex, colIndex],
-        selectionState,
+        selectionsAPI,
         isAnalysisMode: false,
         setFocusedCellCoord,
         announce,
@@ -217,7 +211,7 @@ describe('handle-key-press', () => {
         evt,
         rootElement,
         cellCoord: [rowIndex, colIndex],
-        selectionState,
+        selectionsAPI,
         cell,
         selectionDispatch,
         isAnalysisMode,
@@ -227,13 +221,8 @@ describe('handle-key-press', () => {
       });
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(selectionState.api.begin).toHaveBeenCalledTimes(1);
-      expect(selectionState.api.select).toHaveBeenCalledTimes(1);
       expect(selectionDispatch).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
-      expect(announce).toHaveBeenCalledWith({
-        keys: ['SNTable.SelectionLabel.SelectedValue', 'SNTable.SelectionLabel.OneSelectedValue'],
-      });
     });
 
     it('when moving to a cell on a dimension column which is selected, also have some selections already, should announce the value is selected', () => {
@@ -242,12 +231,12 @@ describe('handle-key-press', () => {
       cell.classList.add('selected');
 
       rootElement = { getElementsByClassName: () => [{ getElementsByClassName: () => [cell] }] };
-      selectionState = { ...selectionState, rows: ['key#01'] };
+      // selectionsAPI = { ...selectionsAPI, rows: ['key#01'] };
       bodyHandleKeyPress({
         evt,
         rootElement,
         cellCoord: [rowIndex, colIndex],
-        selectionState,
+        selectionsAPI,
         setFocusedCellCoord,
         announce,
       });
@@ -260,12 +249,12 @@ describe('handle-key-press', () => {
       isModal = true;
       cell = global.document.createElement('td');
       rootElement = { getElementsByClassName: () => [{ getElementsByClassName: () => [cell] }] };
-      selectionState = { ...selectionState, rows: ['key#01'] };
+      // selectionsAPI = { ...selectionsAPI, rows: ['key#01'] };
       bodyHandleKeyPress({
         evt,
         rootElement,
         cellCoord: [rowIndex, colIndex],
-        selectionState,
+        selectionsAPI,
         setFocusedCellCoord,
         announce,
       });
@@ -283,7 +272,7 @@ describe('handle-key-press', () => {
         evt,
         rootElement,
         cellCoord: [rowIndex, colIndex],
-        selectionState,
+        selectionsAPI,
         cell,
         selectionDispatch,
         isAnalysisMode: false,
@@ -293,8 +282,6 @@ describe('handle-key-press', () => {
       });
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(selectionState.api.begin).not.toHaveBeenCalled();
-      expect(selectionState.api.select).not.toHaveBeenCalled();
       expect(selectionDispatch).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
       expect(announce).not.toHaveBeenCalled();
@@ -307,7 +294,7 @@ describe('handle-key-press', () => {
         evt,
         rootElement,
         cellCoord: [rowIndex, colIndex],
-        selectionState,
+        selectionsAPI,
         cell,
         selectionDispatch,
         isAnalysisMode: false,
@@ -317,8 +304,6 @@ describe('handle-key-press', () => {
       });
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(selectionState.api.begin).not.toHaveBeenCalled();
-      expect(selectionState.api.select).not.toHaveBeenCalled();
       expect(selectionDispatch).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
       expect(announce).not.toHaveBeenCalled();
@@ -331,7 +316,7 @@ describe('handle-key-press', () => {
         evt,
         rootElement,
         cellCoord: [rowIndex, colIndex],
-        selectionState,
+        selectionsAPI,
         cell,
         selectionDispatch,
         isAnalysisMode,
@@ -341,7 +326,7 @@ describe('handle-key-press', () => {
       });
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(selectionState.api.confirm).toHaveBeenCalledTimes(1);
+      expect(selectionsAPI.confirm).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
       expect(announce).toHaveBeenCalledWith({ keys: 'SNTable.SelectionLabel.SelectionsConfirmed' });
     });
@@ -353,7 +338,7 @@ describe('handle-key-press', () => {
         evt,
         rootElement,
         cellCoord: [rowIndex, colIndex],
-        selectionState,
+        selectionsAPI,
         cell,
         selectionDispatch,
         isAnalysisMode,
@@ -363,20 +348,19 @@ describe('handle-key-press', () => {
       });
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(selectionState.api.confirm).not.toHaveBeenCalled();
+      expect(selectionsAPI.confirm).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
       expect(announce).not.toHaveBeenCalled();
     });
 
-    it('when press cancel key, should cancel selection', () => {
+    it('when press esc key, should cancel selection', () => {
       isModal = true;
       evt.key = 'Escape';
-      selectionState.rows = [{}];
       bodyHandleKeyPress({
         evt,
         rootElement,
         cellCoord: [rowIndex, colIndex],
-        selectionState,
+        selectionsAPI,
         cell,
         selectionDispatch,
         isAnalysisMode,
@@ -386,7 +370,7 @@ describe('handle-key-press', () => {
       });
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(selectionState.api.cancel).toHaveBeenCalledTimes(1);
+      expect(selectionsAPI.cancel).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
       expect(announce).toHaveBeenCalledWith({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
     });
@@ -399,7 +383,7 @@ describe('handle-key-press', () => {
         evt,
         rootElement,
         cellCoord: [rowIndex, colIndex],
-        selectionState,
+        selectionsAPI,
         cell,
         selectionDispatch,
         isAnalysisMode,
@@ -409,7 +393,7 @@ describe('handle-key-press', () => {
       });
       expect(evt.preventDefault).not.toHaveBeenCalled();
       expect(evt.stopPropagation).not.toHaveBeenCalled();
-      expect(selectionState.api.cancel).not.toHaveBeenCalled();
+      expect(selectionsAPI.cancel).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
       expect(announce).not.toHaveBeenCalled();
     });
@@ -422,7 +406,7 @@ describe('handle-key-press', () => {
         evt,
         rootElement,
         cellCoord: [rowIndex, colIndex],
-        selectionState,
+        selectionsAPI,
         cell,
         selectionDispatch,
         isAnalysisMode,
@@ -432,7 +416,7 @@ describe('handle-key-press', () => {
       });
       expect(evt.preventDefault).not.toHaveBeenCalled();
       expect(evt.stopPropagation).not.toHaveBeenCalled();
-      expect(selectionState.api.cancel).not.toHaveBeenCalled();
+      expect(selectionsAPI.cancel).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
       expect(announce).not.toHaveBeenCalled();
     });
@@ -446,7 +430,7 @@ describe('handle-key-press', () => {
         evt,
         rootElement,
         cellCoord: [rowIndex, colIndex],
-        selectionState,
+        selectionsAPI,
         cell,
         selectionDispatch,
         isAnalysisMode,
@@ -468,7 +452,7 @@ describe('handle-key-press', () => {
         evt,
         rootElement,
         cellCoord: [rowIndex, colIndex],
-        selectionState,
+        selectionsAPI,
         cell,
         selectionDispatch,
         isAnalysisMode,
@@ -490,7 +474,7 @@ describe('handle-key-press', () => {
         evt,
         rootElement,
         cellCoord: [rowIndex, colIndex],
-        selectionState,
+        selectionsAPI,
         cell,
         selectionDispatch,
         isAnalysisMode,
@@ -512,7 +496,7 @@ describe('handle-key-press', () => {
         evt,
         rootElement,
         cellCoord: [rowIndex, colIndex],
-        selectionState,
+        selectionsAPI,
         cell,
         selectionDispatch,
         isAnalysisMode,
@@ -532,7 +516,7 @@ describe('handle-key-press', () => {
         evt,
         rootElement,
         cellCoord: [rowIndex, colIndex],
-        selectionState,
+        selectionsAPI,
         cell,
         selectionDispatch,
         setFocusedCellCoord,
@@ -543,7 +527,7 @@ describe('handle-key-press', () => {
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(evt.target.blur).not.toHaveBeenCalled();
       expect(evt.target.setAttribute).not.toHaveBeenCalled();
-      expect(selectionState.api.cancel).not.toHaveBeenCalled();
+      expect(selectionsAPI.cancel).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
       expect(announce).not.toHaveBeenCalled();
     });

@@ -36,7 +36,6 @@ function TableBodyWrapper({
   const [columnRenderers, setColumnRenderers] = useState(getColumnRenderers());
 
   useEffect(() => {
-    selectionDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
     setColumnRenderers(getColumnRenderers);
   }, [selectionsEnabled, columns.length]);
 

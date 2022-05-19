@@ -12,7 +12,6 @@ export const TableContextProvider = ({ selectionsAPI, children }) => {
   const [selectionState, selectionDispatch] = useReducer(reducer, {
     rows: [],
     colIdx: -1,
-    isEnabled: true,
     api: selectionsAPI,
   });
 

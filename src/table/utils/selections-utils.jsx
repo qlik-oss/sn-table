@@ -44,18 +44,18 @@ export const getCellSelectionState = (cell, value) => {
   const {
     selectionState: { colIdx, rows, api },
   } = value;
-  let state = SelectionStates.INACTIVE;
+  let cellState = SelectionStates.INACTIVE;
   if (api.isModal()) {
     if (colIdx !== cell.colIdx) {
-      state = SelectionStates.EXCLUDED;
+      cellState = SelectionStates.EXCLUDED;
     } else if (rows[cell.qElemNumber]) {
-      state = SelectionStates.SELECTED;
+      cellState = SelectionStates.SELECTED;
     } else {
-      state = SelectionStates.POSSIBLE;
+      cellState = SelectionStates.POSSIBLE;
     }
   }
 
-  return state;
+  return cellState;
 };
 
 export const handleAnnounceSelectionStatus = ({ announce, rowsLength, isAddition }) => {
@@ -71,19 +71,23 @@ export const handleAnnounceSelectionStatus = ({ announce, rowsLength, isAddition
   }
 };
 
-export const updateSelectedRows = ({ selectedRows, cell, evt }) => {
+export const getSelectedRows = ({ selectedRows, cell, evt }) => {
   const { qElemNumber, rowIdx } = cell;
   if (evt.ctrlKey || evt.metaKey) {
     // if the ctrl key or the ⌘ Command key (On Macintosh keyboards) or the ⊞ Windows key is pressed
     // get the last clicked item (single select)
-    selectedRows = { qElemNumber: rowIdx }; // eslint-disable-line no-param-reassign
-  } else if (selectedRows[qElemNumber]) {
+    return { [qElemNumber]: rowIdx };
+  }
+
+  if (selectedRows[qElemNumber]) {
     // if the selected item is clicked again, that item will be removed
     delete selectedRows[qElemNumber];
   } else {
     // if an unselected item was clicked, add it to the object
     selectedRows[qElemNumber] = rowIdx;
   }
+
+  return { ...selectedRows };
 };
 
 const selectCell = (state, payload) => {
@@ -99,7 +103,7 @@ const selectCell = (state, payload) => {
     return state;
   }
 
-  updateSelectedRows({ selectedRows, cell, evt });
+  selectedRows = getSelectedRows({ selectedRows, cell, evt });
   const selectedRowsLength = Object.keys(selectedRows).length;
   handleAnnounceSelectionStatus({
     announce,
@@ -112,11 +116,11 @@ const selectCell = (state, payload) => {
       method: 'selectHyperCubeCells',
       params: ['/qHyperCubeDef', Object.values(selectedRows), [cell.colIdx]],
     });
-  } else {
-    api.cancel();
+    return { ...state, rows: selectedRows, colIdx: cell.colIdx };
   }
 
-  return { ...state, rows: selectedRows, colIdx: cell.colIdx };
+  api.cancel();
+  return { ...state, rows: selectedRows, colIdx: -1 };
 };
 
 export const reducer = (state, action) => {
@@ -127,8 +131,6 @@ export const reducer = (state, action) => {
       return state.api.isModal() ? state : { ...state, rows: {}, colIdx: -1 };
     case 'clear':
       return Object.keys(state.rows).length ? { ...state, rows: {} } : state;
-    case 'set-enabled':
-      return { ...state, isEnabled: action.payload.enabled };
     default:
       return state;
   }
