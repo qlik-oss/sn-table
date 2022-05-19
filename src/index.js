@@ -27,11 +27,11 @@ import { mount, render, teardown } from './table/Root';
 import muiSetup from './mui-setup';
 import tableThemeColors from './table-theme-colors';
 
-const initialPageInfo = () => ({
+const initialPageInfo = {
   page: 0,
   rowsPerPage: 100,
   rowsPerPageOptions: [10, 25, 100],
-});
+};
 const nothing = async () => {};
 const renderWithCarbon = ({ env, translator, rootElement, model, theme, selectionsAPI, app, rect, layout }) => {
   if (env.carbon) {
@@ -64,8 +64,7 @@ export default function supernova(env) {
       const muiTheme = muiSetup(direction);
       const keyboard = useKeyboard();
       const rect = useRect();
-      const [pageInfo, setPageInfo] = useState(initialPageInfo);
-
+      const [pageInfo, setPageInfo] = useState(() => initialPageInfo);
       const [tableData] = usePromise(() => {
         return env.carbon ? nothing() : manageData(model, layout, pageInfo, setPageInfo);
       }, [layout, pageInfo]);
@@ -81,9 +80,8 @@ export default function supernova(env) {
         if (layout && tableData && !env.carbon) {
           registerLocale(translator);
           const changeSortOrder = sortingFactory(model);
-          render({
+          render(reactRoot, {
             rootElement,
-            reactRoot,
             layout,
             tableData,
             direction,
@@ -101,8 +99,8 @@ export default function supernova(env) {
           });
         }
       }, [
-        reactRoot,
         rootElement,
+        reactRoot,
         tableData,
         constraints,
         direction,
@@ -120,7 +118,7 @@ export default function supernova(env) {
 
       useEffect(
         () => () => {
-          teardown();
+          teardown(reactRoot);
         },
         []
       );
