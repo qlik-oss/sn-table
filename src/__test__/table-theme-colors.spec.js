@@ -4,13 +4,37 @@ describe('table-theme-colors', () => {
   const spyQuerySelector = jest.fn();
   const spyGetComputedStyle = jest.fn();
   const spyGetStyle = jest.fn();
-  const defaultValue = {
+  const setObjectAndTableBackgroundColorInTheme = (objectBackgroundColor, tableBackgroundColor) =>
+    jest.fn((base, path, attribute) => {
+      let backgroundColor;
+      if (attribute === 'backgroundColor') {
+        backgroundColor = objectBackgroundColor;
+      } else if (attribute === 'object.straightTable.backgroundColor') {
+        backgroundColor = tableBackgroundColor;
+      }
+      return backgroundColor;
+    });
+  const setqvPanelSheetAndqvInnerObject = jest.fn((selector) => selector);
+  const setqvPanelSheetAndqvInnerObjectBackgroundColor = (
+    qvPanelSheetBackgroundColor = '#fff',
+    qvInnerObjectBackgroundColor = 'rgba(0, 0, 0, 0)'
+  ) =>
+    jest.fn((selector) => {
+      let backgroundColor;
+      if (selector === '.qv-panel-sheet') {
+        backgroundColor = { backgroundColor: qvPanelSheetBackgroundColor };
+      } else if (selector === '.qv-object .qv-inner-object') {
+        backgroundColor = { backgroundColor: qvInnerObjectBackgroundColor };
+      }
+      return backgroundColor;
+    });
+  let valueWithLightBackgroundColor = {
     tableBackgroundColorFromTheme: 'inherit',
     backgroundColor: undefined,
-    isBackgroundTransparentColor: false,
     isBackgroundDarkColor: false,
-    borderColor: '#D9D9D9',
+    isBackgroundTransparentColor: false,
     body: { borderColor: '#D9D9D9' },
+    borderColor: '#D9D9D9',
     pagination: {
       borderColor: '#D9D9D9',
       color: '#404040',
@@ -18,15 +42,11 @@ describe('table-theme-colors', () => {
       disabledIconColor: 'rgba(0, 0, 0, 0.3)',
     },
   };
-  const darkBackgroundColorValue = {
-    tableBackgroundColorFromTheme: 'inherit',
-    backgroundColor: undefined,
-    body: {
-      borderColor: ' #F2F2F2',
-    },
-    borderColor: ' #F2F2F2',
+  let valueWithDarkBackgroundColor = {
+    ...valueWithLightBackgroundColor,
     isBackgroundDarkColor: true,
-    isBackgroundTransparentColor: false,
+    body: { borderColor: ' #F2F2F2' },
+    borderColor: ' #F2F2F2',
     pagination: {
       borderColor: ' #F2F2F2',
       color: 'rgba(255, 255, 255, 0.9)',
@@ -37,443 +57,240 @@ describe('table-theme-colors', () => {
   let theme;
 
   beforeEach(() => {
-    global.document.querySelector = spyQuerySelector;
-    global.window.getComputedStyle = spyGetComputedStyle;
     theme = {
       getStyle: spyGetStyle,
     };
     spyQuerySelector.mockReturnValue(undefined);
-    spyGetComputedStyle.mockReturnValue(undefined);
-    spyGetStyle.mockReturnValue(undefined);
   });
 
-  describe('when there is no background color from theme or css file', () => {
-    it('should return the default value', () => {
-      const result = tableThemeColors(theme);
-      expect(result).toEqual(defaultValue);
+  describe('mashup', () => {
+    beforeEach(() => {
+      global.document.querySelector = spyQuerySelector;
+      global.window.getComputedStyle = spyGetComputedStyle;
+      spyQuerySelector.mockReturnValue(undefined);
+      spyGetComputedStyle.mockReturnValue(undefined);
     });
-  });
 
-  describe('when there is only background color on sheet', () => {
-    it('should return the default value ', () => {
-      global.document.querySelector = jest.fn((selector) => {
-        if (selector === '.qv-panel-sheet') return selector;
-        return undefined;
-      });
-      global.window.getComputedStyle = jest.fn((selector) => {
-        if (selector === '.qv-panel-sheet') {
-          return { backgroundColor: '#fff' };
-        }
-        return undefined;
-      });
-      let result = tableThemeColors(theme);
-      expect(result).toEqual(defaultValue);
-
-      global.window.getComputedStyle = jest.fn((selector) => {
-        if (selector === '.qv-panel-sheet') {
-          return { backgroundColor: '#000' };
-        }
-        return undefined;
-      });
-      result = tableThemeColors(theme);
-      expect(result).toEqual(defaultValue);
-    });
-  });
-
-  describe('when there is background color on object', () => {
-    describe('when there is only background color on object', () => {
-      it('should return the default value and backgroundColor when the background color is light', () => {
-        global.document.querySelector = jest.fn((selector) => {
-          if (selector === '.qv-object .qv-inner-object') return selector;
-          return undefined;
-        });
-        global.window.getComputedStyle = jest.fn((selector) => {
-          let style;
-          if (selector === '.qv-object .qv-inner-object') {
-            style = { backgroundColor: '#fff' };
-          }
-          return style;
-        });
+    describe('when there is no background color in the theme file', () => {
+      it('should return the valueWithLightBackgroundColor', () => {
         const result = tableThemeColors(theme);
-        expect(result).toEqual({ ...defaultValue, backgroundColor: '#fff' });
-      });
-
-      it('should return the darkBackgroundColorValue and backgroundColor when the background color is dark', () => {
-        global.document.querySelector = jest.fn((selector) => {
-          if (selector === '.qv-object .qv-inner-object') return selector;
-          return undefined;
-        });
-        global.window.getComputedStyle = jest.fn((selector) => {
-          let style;
-          if (selector === '.qv-object .qv-inner-object') {
-            style = { backgroundColor: '#000' };
-          }
-          return style;
-        });
-        const result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...darkBackgroundColorValue,
-          backgroundColor: '#000',
-        });
-      });
-
-      it('should return the defaultValue and backgroundColor and isBackgroundTransparentColor to be true when the background color is transparent', () => {
-        global.document.querySelector = jest.fn((selector) => {
-          if (selector === '.qv-object .qv-inner-object') return selector;
-          return undefined;
-        });
-        global.window.getComputedStyle = jest.fn((selector) => {
-          let style;
-          if (selector === '.qv-object .qv-inner-object') {
-            style = { backgroundColor: 'transparent' };
-          }
-          return style;
-        });
-        let result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...defaultValue,
-          backgroundColor: 'transparent',
-          isBackgroundTransparentColor: true,
-        });
-
-        global.document.querySelector = jest.fn((selector) => {
-          if (selector === '.qv-object .qv-inner-object') return selector;
-          return undefined;
-        });
-        global.window.getComputedStyle = jest.fn((selector) => {
-          let style;
-          if (selector === '.qv-object .qv-inner-object') {
-            style = { backgroundColor: 'rgba(0,0,0,0)' };
-          }
-          return style;
-        });
-        result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...defaultValue,
-          backgroundColor: 'rgba(0,0,0,0)',
-          isBackgroundTransparentColor: true,
-        });
-
-        global.window.getComputedStyle = jest.fn((selector) => {
-          let style;
-          if (selector === '.qv-object .qv-inner-object') {
-            style = { backgroundColor: 'rgba(255,255,255,0)' };
-          }
-          return style;
-        });
-        result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...defaultValue,
-          backgroundColor: 'rgba(255,255,255,0)',
-          isBackgroundTransparentColor: true,
-        });
-
-        global.window.getComputedStyle = jest.fn((selector) => {
-          let style;
-          if (selector === '.qv-object .qv-inner-object') {
-            style = { backgroundColor: '#11111100' };
-          }
-          return style;
-        });
-        result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...defaultValue,
-          backgroundColor: '#11111100',
-          isBackgroundTransparentColor: true,
-        });
+        expect(result).toEqual(valueWithLightBackgroundColor);
       });
     });
 
-    describe('when there is background color on object and background color on sheet', () => {
-      it('should return the when the background color on object is dark and opaque', () => {
-        global.document.querySelector = jest.fn((selector) => selector);
-        global.window.getComputedStyle = jest.fn((selector) => {
-          let style;
-          if (selector === '.qv-object .qv-inner-object') {
-            style = { backgroundColor: '#000' };
-          } else if (selector === '.qv-panel-sheet') {
-            style = { backgroundColor: '#fff' };
-          }
-          return style;
-        });
-        const result = tableThemeColors(theme);
-        expect(result).toEqual({ ...darkBackgroundColorValue, backgroundColor: '#000' });
-      });
+    describe('when there is a background color in the theme file', () => {
+      describe('when this is only a object background color', () => {
+        describe('when the background color is opaque', () => {
+          it('should return the valueWithLightBackgroundColor when the background color is light', () => {
+            theme.getStyle = setObjectAndTableBackgroundColorInTheme('#fff');
 
-      it('should return the when the background color on object is light and opaque', () => {
-        global.document.querySelector = jest.fn((selector) => selector);
-        global.window.getComputedStyle = jest.fn((selector) => {
-          let style;
-          if (selector === '.qv-object .qv-inner-object') {
-            style = { backgroundColor: '#fff' };
-          } else if (selector === '.qv-panel-sheet') {
-            style = { backgroundColor: '#000' };
-          }
-          return style;
-        });
-        const result = tableThemeColors(theme);
-        expect(result).toEqual({ ...defaultValue, backgroundColor: '#fff' });
-      });
+            const result = tableThemeColors(theme);
+            expect(result).toEqual({ ...valueWithLightBackgroundColor, backgroundColor: '#fff' });
+          });
 
-      it('should return the when the background color on object is transparent and background color on sheet is light', () => {
-        global.document.querySelector = jest.fn((selector) => selector);
-        global.window.getComputedStyle = jest.fn((selector) => {
-          let style;
-          if (selector === '.qv-object .qv-inner-object') {
-            style = { backgroundColor: 'rgba(0,0,0,0)' };
-          } else if (selector === '.qv-panel-sheet') {
-            style = { backgroundColor: '#fff' };
-          }
-          return style;
+          it('should return the valueWithDarkBackgroundColor when the background color is dark', () => {
+            theme.getStyle = setObjectAndTableBackgroundColorInTheme('#000');
+
+            const result = tableThemeColors(theme);
+            expect(result).toEqual({ ...valueWithDarkBackgroundColor, backgroundColor: '#000' });
+          });
         });
-        const result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...defaultValue,
-          backgroundColor: 'rgba(0,0,0,0)',
-          isBackgroundTransparentColor: true,
+
+        describe('when the background color is transparent', () => {
+          it('should return the valueWithLightBackgroundColor and isBackgroundTransparentColor to be true when the background color is light', () => {
+            theme.getStyle = setObjectAndTableBackgroundColorInTheme('rgba(255, 255, 255, 0)');
+
+            const result = tableThemeColors(theme);
+            expect(result).toEqual({
+              ...valueWithLightBackgroundColor,
+              backgroundColor: 'rgba(255, 255, 255, 0)',
+              isBackgroundTransparentColor: true,
+            });
+          });
+
+          it('should return the valueWithLightBackgroundColor when the background color is dark', () => {
+            theme.getStyle = setObjectAndTableBackgroundColorInTheme('rgba(0, 0, 0, 0)');
+
+            const result = tableThemeColors(theme);
+            expect(result).toEqual({
+              ...valueWithLightBackgroundColor,
+              backgroundColor: 'rgba(0, 0, 0, 0)',
+              isBackgroundTransparentColor: true,
+            });
+          });
         });
       });
 
-      it('should return the when the background color on object is transparent and background color on sheet is dark', () => {
-        global.document.querySelector = jest.fn((selector) => selector);
-        global.window.getComputedStyle = jest.fn((selector) => {
-          let style;
-          if (selector === '.qv-object .qv-inner-object') {
-            style = { backgroundColor: 'rgba(0,0,0,0)' };
-          } else if (selector === '.qv-panel-sheet') {
-            style = { backgroundColor: '#000' };
-          }
-          return style;
+      describe('when this is only a table background color', () => {
+        it('should return the valueWithLightBackgroundColor, backgroundColor, and tableBackgroundColorFromTheme when the background color is light', () => {
+          theme.getStyle = setObjectAndTableBackgroundColorInTheme(undefined, '#fff');
+
+          const result = tableThemeColors(theme);
+          expect(result).toEqual({
+            ...valueWithLightBackgroundColor,
+            backgroundColor: '#fff',
+            tableBackgroundColorFromTheme: '#fff',
+          });
         });
-        const result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...darkBackgroundColorValue,
-          backgroundColor: 'rgba(0,0,0,0)',
-          isBackgroundTransparentColor: true,
+
+        it('should return the valueWithDarkBackgroundColor, backgroundColor, and tableBackgroundColorFromTheme when the background color is dark', () => {
+          theme.getStyle = setObjectAndTableBackgroundColorInTheme(undefined, '#000');
+
+          const result = tableThemeColors(theme);
+          expect(result).toEqual({
+            ...valueWithDarkBackgroundColor,
+            backgroundColor: '#000',
+            tableBackgroundColorFromTheme: '#000',
+          });
+        });
+      });
+
+      describe('when this are both object and table background color', () => {
+        it('should return the default value when the table background color is light', () => {
+          theme.getStyle = setObjectAndTableBackgroundColorInTheme('#000', '#fff');
+
+          const result = tableThemeColors(theme);
+          expect(result).toEqual({
+            ...valueWithLightBackgroundColor,
+            backgroundColor: '#fff',
+            tableBackgroundColorFromTheme: '#fff',
+          });
+        });
+
+        it('should return the valueWithDarkBackgroundColor when the table background color is dark', () => {
+          theme.getStyle = setObjectAndTableBackgroundColorInTheme('#fff', '#000');
+
+          const result = tableThemeColors(theme);
+          expect(result).toEqual({
+            ...valueWithDarkBackgroundColor,
+            backgroundColor: '#000',
+            tableBackgroundColorFromTheme: '#000',
+          });
         });
       });
     });
   });
 
-  describe('when there is background color on table', () => {
-    describe('when there is only background color on table', () => {
-      it('should return defaultValue, backgroundColor, and tableBackgroundColorFromTheme when the background color on table is light and opaque', () => {
-        spyGetStyle.mockReturnValue('#fff');
-        let result = tableThemeColors(theme);
-        expect(result).toEqual({ ...defaultValue, backgroundColor: '#fff', tableBackgroundColorFromTheme: '#fff' });
+  describe('client', () => {
+    beforeEach(() => {
+      valueWithLightBackgroundColor = {
+        ...valueWithLightBackgroundColor,
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+        isBackgroundTransparentColor: true,
+      };
+      valueWithDarkBackgroundColor = {
+        ...valueWithDarkBackgroundColor,
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+        isBackgroundTransparentColor: true,
+      };
+      global.document.querySelector = setqvPanelSheetAndqvInnerObject;
+      global.window.getComputedStyle = setqvPanelSheetAndqvInnerObjectBackgroundColor();
+    });
 
-        spyGetStyle.mockReturnValue('rgba(255, 255, 255, 0.2)');
-        result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...defaultValue,
-          backgroundColor: 'rgba(255, 255, 255, 0.2)',
-          tableBackgroundColorFromTheme: 'rgba(255, 255, 255, 0.2)',
-        });
+    describe('when there is no background color from theme or css file', () => {
+      it('should return the valueWithLightBackgroundColor', () => {
+        const result = tableThemeColors(theme);
+        expect(result).toEqual(valueWithLightBackgroundColor);
       });
+    });
 
-      it('should return the darkBackgroundColorValue, backgroundColor, and tableBackgroundColorFromTheme when the background color on table is dark and opaque', () => {
-        spyGetStyle.mockReturnValue('#000');
-        let result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...darkBackgroundColorValue,
-          backgroundColor: '#000',
-          tableBackgroundColorFromTheme: '#000',
-        });
+    describe('when there is a background color from css file on sheet', () => {
+      describe('when the background color is dark', () => {
+        it('should return the valueWithDarkBackgroundColor', () => {
+          global.window.getComputedStyle = setqvPanelSheetAndqvInnerObjectBackgroundColor('#000');
 
-        spyGetStyle.mockReturnValue('rgba(0, 0, 0, 0.2)');
-        result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...darkBackgroundColorValue,
-          backgroundColor: 'rgba(0, 0, 0, 0.2)',
-          tableBackgroundColorFromTheme: 'rgba(0, 0, 0, 0.2)',
-        });
-      });
-
-      it('should return the defaultValue, backgroundColor, and tableBackgroundColorFromTheme, isBackgroundTransparentColor to be true when the background color on table is transparent', () => {
-        spyGetStyle.mockReturnValue('rgba(0, 0, 0, 0)');
-        let result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...defaultValue,
-          backgroundColor: 'rgba(0, 0, 0, 0)',
-          tableBackgroundColorFromTheme: 'rgba(0, 0, 0, 0)',
-          isBackgroundTransparentColor: true,
-        });
-
-        spyGetStyle.mockReturnValue('rgba(255, 255, 255, 0)');
-        result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...defaultValue,
-          backgroundColor: 'rgba(255, 255, 255, 0)',
-          tableBackgroundColorFromTheme: 'rgba(255, 255, 255, 0)',
-          isBackgroundTransparentColor: true,
-        });
-
-        spyGetStyle.mockReturnValue('#11111100');
-        result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...defaultValue,
-          backgroundColor: '#11111100',
-          tableBackgroundColorFromTheme: '#11111100',
-          isBackgroundTransparentColor: true,
+          const result = tableThemeColors(theme);
+          expect(result).toEqual(valueWithDarkBackgroundColor);
         });
       });
     });
 
-    describe('when there is background color on table and background color on object', () => {
-      it('when the background color on table is light and opaque', () => {
-        spyGetStyle.mockReturnValue('#fff');
-        global.document.querySelector = jest.fn((selector) => {
-          if (selector === '.qv-object .qv-inner-object') return selector;
-          return undefined;
+    describe('when there is a background color from theme file on object', () => {
+      describe('when the background color is opaque', () => {
+        describe('when the background color is light', () => {
+          it('should return the valueWithLightBackgroundColor, backgroundColor, and isBackgroundTransparentColor to be false', () => {
+            global.window.getComputedStyle = setqvPanelSheetAndqvInnerObjectBackgroundColor('#000', '#fff');
+
+            const result = tableThemeColors(theme);
+            expect(result).toEqual({
+              ...valueWithLightBackgroundColor,
+              backgroundColor: '#fff',
+              isBackgroundTransparentColor: false,
+            });
+          });
         });
-        global.window.getComputedStyle = jest.fn((selector) => {
-          let style;
-          if (selector === '.qv-object .qv-inner-object') {
-            style = { backgroundColor: '#000' };
-          }
-          return style;
-        });
-        const result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...defaultValue,
-          backgroundColor: '#fff',
-          tableBackgroundColorFromTheme: '#fff',
+
+        describe('when the background color is dark', () => {
+          it('should return the valueWithDarkBackgroundColor, backgroundColor, and isBackgroundTransparentColor to be false', () => {
+            global.window.getComputedStyle = setqvPanelSheetAndqvInnerObjectBackgroundColor('#fff', '#000');
+
+            const result = tableThemeColors(theme);
+            expect(result).toEqual({
+              ...valueWithDarkBackgroundColor,
+              backgroundColor: '#000',
+              isBackgroundTransparentColor: false,
+            });
+          });
         });
       });
 
-      it('should return when the background color on table is dark and opaque', () => {
-        spyGetStyle.mockReturnValue('#000');
-        global.document.querySelector = jest.fn((selector) => {
-          if (selector === '.qv-object .qv-inner-object') return selector;
-          return undefined;
-        });
-        global.window.getComputedStyle = jest.fn((selector) => {
-          let style;
-          if (selector === '.qv-object .qv-inner-object') {
-            style = { backgroundColor: '#fff' };
-          }
-          return style;
-        });
-        const result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...darkBackgroundColorValue,
-          backgroundColor: '#000',
-          tableBackgroundColorFromTheme: '#000',
-        });
-      });
+      describe('when the background color is transparent', () => {
+        it('should return the valueWithLightBackgroundColor and backgroundColor', () => {
+          global.window.getComputedStyle = setqvPanelSheetAndqvInnerObjectBackgroundColor(
+            '#fff',
+            'rgba(255, 255, 255, 0)'
+          );
 
-      it('when the background color on table is transparent', () => {
-        spyGetStyle.mockReturnValue('rgba(0,0,0,0)');
-        global.document.querySelector = jest.fn((selector) => {
-          if (selector === '.qv-object .qv-inner-object') return selector;
-          return undefined;
-        });
-        global.window.getComputedStyle = jest.fn((selector) => {
-          let style;
-          if (selector === '.qv-object .qv-inner-object') {
-            style = { backgroundColor: '#000' };
-          }
-          return style;
-        });
-        let result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...defaultValue,
-          isBackgroundTransparentColor: true,
-          backgroundColor: 'rgba(0,0,0,0)',
-          tableBackgroundColorFromTheme: 'rgba(0,0,0,0)',
-        });
-
-        spyGetStyle.mockReturnValue('#11111100');
-        result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...defaultValue,
-          isBackgroundTransparentColor: true,
-          backgroundColor: '#11111100',
-          tableBackgroundColorFromTheme: '#11111100',
+          const result = tableThemeColors(theme);
+          expect(result).toEqual({
+            ...valueWithLightBackgroundColor,
+            backgroundColor: 'rgba(255, 255, 255, 0)',
+          });
         });
       });
     });
 
-    describe('when there is background color on table and background color on object and background color on sheet', () => {
-      it('when the background color on table is light and opaque', () => {
-        spyGetStyle.mockReturnValue('#fff');
-        global.document.querySelector = jest.fn((selector) => selector);
-        global.window.getComputedStyle = jest.fn((selector) => {
-          let style;
-          if (selector === '.qv-object .qv-inner-object') {
-            style = { backgroundColor: '#000' };
-          } else if (selector === '.qv-panel-sheet') {
-            style = { backgroundColor: '#111' };
-          }
-          return style;
+    describe('when there is a background color from theme file on table', () => {
+      describe('when the background color is opaque', () => {
+        describe('when the background color is light', () => {
+          it('should return the valueWithLightBackgroundColor and backgroundColor', () => {
+            theme.getStyle = setObjectAndTableBackgroundColorInTheme(undefined, '#fff');
+
+            const result = tableThemeColors(theme);
+            expect(result).toEqual({
+              ...valueWithLightBackgroundColor,
+              backgroundColor: '#fff',
+              tableBackgroundColorFromTheme: '#fff',
+              isBackgroundTransparentColor: false,
+            });
+          });
         });
-        const result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...defaultValue,
-          backgroundColor: '#fff',
-          tableBackgroundColorFromTheme: '#fff',
+
+        describe('when the background color is dark', () => {
+          it('should return the valueWithLightBackgroundColor, backgroundColor, tableBackgroundColorFromTheme and isBackgroundTransparentColor to false', () => {
+            theme.getStyle = setObjectAndTableBackgroundColorInTheme(undefined, '#000');
+
+            const result = tableThemeColors(theme);
+            expect(result).toEqual({
+              ...valueWithDarkBackgroundColor,
+              backgroundColor: '#000',
+              tableBackgroundColorFromTheme: '#000',
+              isBackgroundTransparentColor: false,
+            });
+          });
         });
       });
 
-      it('when the background color on table is dark and opaque', () => {
-        spyGetStyle.mockReturnValue('#000');
-        global.document.querySelector = jest.fn((selector) => selector);
-        global.window.getComputedStyle = jest.fn((selector) => {
-          let style;
-          if (selector === '.qv-object .qv-inner-object') {
-            style = { backgroundColor: '#fff' };
-          } else if (selector === '.qv-panel-sheet') {
-            style = { backgroundColor: '#111' };
-          }
-          return style;
-        });
-        const result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...darkBackgroundColorValue,
-          backgroundColor: '#000',
-          tableBackgroundColorFromTheme: '#000',
-        });
-      });
+      describe('when the background color is transparent', () => {
+        it('should return the valueWithLightBackgroundColor, backgroundColor, tableBackgroundColorFromTheme', () => {
+          theme.getStyle = setObjectAndTableBackgroundColorInTheme(undefined, 'rgba(255, 255, 255, 0)');
 
-      it('when the background color on table is transparent and background color on sheet is dark', () => {
-        spyGetStyle.mockReturnValue('rgba(0,0,0,0)');
-        global.document.querySelector = jest.fn((selector) => selector);
-        global.window.getComputedStyle = jest.fn((selector) => {
-          let style;
-          if (selector === '.qv-object .qv-inner-object') {
-            style = { backgroundColor: '#fff' };
-          } else if (selector === '.qv-panel-sheet') {
-            style = { backgroundColor: '#111' };
-          }
-          return style;
-        });
-        const result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...darkBackgroundColorValue,
-          isBackgroundTransparentColor: true,
-          backgroundColor: 'rgba(0,0,0,0)',
-          tableBackgroundColorFromTheme: 'rgba(0,0,0,0)',
-        });
-      });
-
-      it('when the background color on table is transparent and background color on sheet is light', () => {
-        spyGetStyle.mockReturnValue('rgba(0,0,0,0)');
-        global.document.querySelector = jest.fn((selector) => selector);
-        global.window.getComputedStyle = jest.fn((selector) => {
-          let style;
-          if (selector === '.qv-object .qv-inner-object') {
-            style = { backgroundColor: '#000' };
-          } else if (selector === '.qv-panel-sheet') {
-            style = { backgroundColor: '#fff' };
-          }
-          return style;
-        });
-        const result = tableThemeColors(theme);
-        expect(result).toEqual({
-          ...defaultValue,
-          isBackgroundTransparentColor: true,
-          backgroundColor: 'rgba(0,0,0,0)',
-          tableBackgroundColorFromTheme: 'rgba(0,0,0,0)',
+          const result = tableThemeColors(theme);
+          expect(result).toEqual({
+            ...valueWithLightBackgroundColor,
+            backgroundColor: 'rgba(255, 255, 255, 0)',
+            tableBackgroundColorFromTheme: 'rgba(255, 255, 255, 0)',
+          });
         });
       });
     });

@@ -9,7 +9,8 @@ export default function tableThemeColors(theme) {
 
   const tableBackgroundColorFromTheme = theme.getStyle('', '', 'object.straightTable.backgroundColor');
 
-  const backgroundColor = tableBackgroundColorFromTheme || objectBackgroundColorFromCSS;
+  const backgroundColorFromTheme = theme.getStyle('object', 'straightTable', 'backgroundColor');
+  const backgroundColor = tableBackgroundColorFromTheme || objectBackgroundColorFromCSS || backgroundColorFromTheme;
   const isBackgroundTransparentColor = isTransparentColor(backgroundColor);
   const isBackgroundDarkColor = isDarkColor(
     isBackgroundTransparentColor ? sheetBackgroundColorFromCSS : backgroundColor
