@@ -185,7 +185,7 @@ describe('table-theme-colors', () => {
     });
 
     describe('when there is background color on object and background color on sheet', () => {
-      it('should return the when the background color on object is dark and not transparent', () => {
+      it('should return the when the background color on object is dark and opaque', () => {
         global.document.querySelector = jest.fn((selector) => selector);
         global.window.getComputedStyle = jest.fn((selector) => {
           let style;
@@ -200,7 +200,7 @@ describe('table-theme-colors', () => {
         expect(result).toEqual({ ...darkBackgroundColorValue, backgroundColor: '#000' });
       });
 
-      it('should return the when the background color on object is light and not transparent', () => {
+      it('should return the when the background color on object is light and opaque', () => {
         global.document.querySelector = jest.fn((selector) => selector);
         global.window.getComputedStyle = jest.fn((selector) => {
           let style;
@@ -257,7 +257,7 @@ describe('table-theme-colors', () => {
 
   describe('when there is background color on table', () => {
     describe('when there is only background color on table', () => {
-      it('should return defaultValue, backgroundColor, and tableBackgroundColorFromTheme when the background color on table is light and not transparent', () => {
+      it('should return defaultValue, backgroundColor, and tableBackgroundColorFromTheme when the background color on table is light and opaque', () => {
         spyGetStyle.mockReturnValue('#fff');
         let result = tableThemeColors(theme);
         expect(result).toEqual({ ...defaultValue, backgroundColor: '#fff', tableBackgroundColorFromTheme: '#fff' });
@@ -271,7 +271,7 @@ describe('table-theme-colors', () => {
         });
       });
 
-      it('should return the darkBackgroundColorValue, backgroundColor, and tableBackgroundColorFromTheme when the background color on table is dark and not transparent', () => {
+      it('should return the darkBackgroundColorValue, backgroundColor, and tableBackgroundColorFromTheme when the background color on table is dark and opaque', () => {
         spyGetStyle.mockReturnValue('#000');
         let result = tableThemeColors(theme);
         expect(result).toEqual({
@@ -320,7 +320,7 @@ describe('table-theme-colors', () => {
     });
 
     describe('when there is background color on table and background color on object', () => {
-      it('when the background color on table is light and not transparent', () => {
+      it('when the background color on table is light and opaque', () => {
         spyGetStyle.mockReturnValue('#fff');
         global.document.querySelector = jest.fn((selector) => {
           if (selector === '.qv-object .qv-inner-object') return selector;
@@ -341,7 +341,7 @@ describe('table-theme-colors', () => {
         });
       });
 
-      it('should return when the background color on table is dark and not transparent', () => {
+      it('should return when the background color on table is dark and opaque', () => {
         spyGetStyle.mockReturnValue('#000');
         global.document.querySelector = jest.fn((selector) => {
           if (selector === '.qv-object .qv-inner-object') return selector;
@@ -395,7 +395,7 @@ describe('table-theme-colors', () => {
     });
 
     describe('when there is background color on table and background color on object and background color on sheet', () => {
-      it('when the background color on table is light and not transparent', () => {
+      it('when the background color on table is light and opaque', () => {
         spyGetStyle.mockReturnValue('#fff');
         global.document.querySelector = jest.fn((selector) => selector);
         global.window.getComputedStyle = jest.fn((selector) => {
@@ -415,7 +415,7 @@ describe('table-theme-colors', () => {
         });
       });
 
-      it('when the background color on table is dark and not transparent', () => {
+      it('when the background color on table is dark and opaque', () => {
         spyGetStyle.mockReturnValue('#000');
         global.document.querySelector = jest.fn((selector) => selector);
         global.window.getComputedStyle = jest.fn((selector) => {

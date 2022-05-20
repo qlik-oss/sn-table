@@ -135,40 +135,28 @@ describe('color-utils', () => {
       const result = isTransparentColor(color);
       expect(result).toBe(false);
     });
-    it('should be false when the the color is not transparent in rgba', () => {
+    it('should be false when the the color is opaque in rgba', () => {
       color = 'rgba(0, 0, 0, 0.9)';
 
       const result = isTransparentColor(color);
       expect(result).toBe(false);
     });
-    it('should be false when the the color is not transparent in rgb', () => {
+    it('should be false when the the color is opaque in rgb', () => {
       color = 'rgb(0, 0, 0)';
 
       const result = isTransparentColor(color);
       expect(result).toBe(false);
     });
-    it('should be false when the the color is not transparent in hex', () => {
+    it('should be false when the the color is opaque in hex', () => {
       color = '#000000';
 
       const result = isTransparentColor(color);
       expect(result).toBe(false);
     });
-    it('should be false when the the color is not transparent in hex and opacity', () => {
-      color = '#000000';
-      const opacity = 0.9;
 
-      const result = isTransparentColor(color, opacity);
-      expect(result).toBe(false);
-    });
     it('should be false when nothing is provided', () => {
       const result = isTransparentColor();
       expect(result).toBe(false);
-    });
-    it('should be true when the opacity is zero', () => {
-      const opacity = 0;
-
-      const result = isTransparentColor(color, opacity);
-      expect(result).toBe(true);
     });
     it('should be true when the color is transparent in rgba', () => {
       color = 'rgba(0, 0, 0, 0)';
