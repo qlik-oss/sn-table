@@ -27,9 +27,10 @@ export function resolveToRGBAorRGB(input) {
     const a = Math.round(matches[1] / 2.55) / 100;
     return `rgba(${matches[2]},${matches[3]},${matches[4]},${a})`;
   }
-  // hex
-  matches = /^#([A-Fa-f0-9]{3,4}){1,2}$/i.exec(input);
+  // hex (#rgb, #rgba, #rrggbb, and #rrggbbaa)
+  matches = /^#(?:(?:[\da-f]{3}){1,2}|(?:[\da-f]{4}){1,2})$/i.exec(input);
   if (matches) {
+    console.log('🚀 ~ file: color-utils.js ~ line 33 ~ resolveToRGBAorRGB ~ matches', matches);
     return hexToRGBAorRGB(input);
   }
   // css color
@@ -57,10 +58,7 @@ export function isDarkColor(color) {
   return 0.299 * r + 0.587 * g + 0.114 * b < 125;
 }
 
-export function isTransparentColor(color, opacity) {
-  if (+opacity === 0) {
-    return true;
-  }
+export function isTransparentColor(color) {
   const rgba = resolveToRGBAorRGB(color);
   const matches = /^rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d(\.\d+)?)\s*\)$/i.exec(rgba);
   return +matches?.[4] === 0;

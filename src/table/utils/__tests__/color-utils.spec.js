@@ -5,14 +5,34 @@ describe('color-utils', () => {
     let color = '#fff';
 
     it('should resolve a hex color to rgb', () => {
-      const result = resolveToRGBAorRGB(color);
+      let result = resolveToRGBAorRGB(color);
       expect(result).toBe('rgb(255,255,255)');
+
+      color = '#4f4f4f';
+
+      result = resolveToRGBAorRGB(color);
+      expect(result).toBe('rgb(79,79,79)');
+
+      color = '#3f4g5p';
+
+      result = resolveToRGBAorRGB(color);
+      expect(result).toBe('none');
     });
     it('should resolve a hex color term to rgba', () => {
       color = '#00000000';
 
-      const result = resolveToRGBAorRGB(color);
+      let result = resolveToRGBAorRGB(color);
       expect(result).toBe('rgba(0,0,0,0)');
+
+      color = '#3240';
+
+      result = resolveToRGBAorRGB(color);
+      expect(result).toBe('rgba(51,34,68,0)');
+
+      color = '#11111100';
+
+      result = resolveToRGBAorRGB(color);
+      expect(result).toBe('rgba(17,17,17,0)');
     });
     it('should resolve a color term to rgb', () => {
       color = 'red';
