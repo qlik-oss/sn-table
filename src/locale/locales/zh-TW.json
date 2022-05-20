@@ -56,7 +56,7 @@
   },
   "SNTable.SelectionLabel.DeselectedValue": {
     "value": "值已取消選取。",
-    "comment": "announced by screen readers  when a value is deselected. (tew 210929)",
+    "comment": "announced by screen readers when a value is deselected. (tew 210929)",
     "version": "/NL1c53TDjc2dhooLWg1WA=="
   },
   "SNTable.SelectionLabel.ExitedSelectionMode": {
