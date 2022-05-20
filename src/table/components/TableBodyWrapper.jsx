@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, memo } from 'react';
 import PropTypes from 'prop-types';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
-import { addSelectionListeners, SelectionContext } from '../utils/selections-utils';
 import getCellRenderer from './renderer';
+import { useContextSelector, TableContext } from '../context';
+import { addSelectionListeners } from '../utils/selections-utils';
 import { getBodyCellStyle } from '../utils/styling-utils';
-// import { bodyHandleKeyPress } from '../utils/handle-key-press';
+import { bodyHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
-import useContextSelector from '../utils/useContextSelector';
 
 function TableBodyWrapper({
   rootElement,
@@ -17,28 +17,20 @@ function TableBodyWrapper({
   layout,
   theme,
   setShouldRefocus,
-  // setFocusedCellCoord,
   keyboard,
   tableWrapperRef,
   announce,
 }) {
   const { rows, columns, paginationNeeded } = tableData;
+  const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
+  const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme.name()]);
 
   // active: turn off interactions that affect the state of the visual representation including selection, zoom, scroll, etc.
   // select: turn off selections.
   const selectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
-
-  const getColumnRenderers = () =>
-    columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled));
-  const [columnRenderers, setColumnRenderers] = useState(getColumnRenderers());
-  const selectionDispatch = useContextSelector(SelectionContext, (value) => value.selectionDispatch);
-
-  useEffect(() => {
-    selectionDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
-    setColumnRenderers(getColumnRenderers);
-  }, [selectionsEnabled, columns.length]);
+  const columnRenderers = columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled));
 
   useEffect(() => {
     addSelectionListeners({ api: selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
@@ -70,7 +62,7 @@ function TableBodyWrapper({
 
   return (
     <TableBody sx={bodyRowAndCellStyle}>
-      {rows.map((row) => (
+      {rows.map((row, rowIndex) => (
         <TableRow hover={hoverEffect} tabIndex={-1} key={row.key} sx={rowCellStyle} className="sn-table-row">
           {columns.map((column, columnIndex) => {
             const cell = row[column.id];
@@ -89,21 +81,21 @@ function TableBodyWrapper({
                   themeBackgroundColor={theme.table.backgroundColor}
                   tabIndex={-1}
                   announce={announce}
-                  // onKeyDown={(evt) =>
-                  //   bodyHandleKeyPress({
-                  //     evt,
-                  //     rootElement,
-                  //     cellCoord: [rowIndex + 1, columnIndex],
-                  //     selectionState,
-                  //     cell,
-                  //     selectionDispatch,
-                  //     isAnalysisMode: selectionsEnabled,
-                  //     setFocusedCellCoord,
-                  //     announce,
-                  //     keyboard,
-                  //   })
-                  // }
-                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, keyboard)}
+                  onKeyDown={(evt) =>
+                    bodyHandleKeyPress({
+                      evt,
+                      rootElement,
+                      cellCoord: [rowIndex + 1, columnIndex],
+                      selectionsAPI,
+                      cell,
+                      selectionDispatch,
+                      isAnalysisMode: selectionsEnabled,
+                      setFocusedCellCoord,
+                      announce,
+                      keyboard,
+                    })
+                  }
+                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
                 >
                   {value}
                 </CellRenderer>
@@ -123,11 +115,10 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  // setFocusedCellCoord: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
   keyboard: PropTypes.object.isRequired,
   tableWrapperRef: PropTypes.object.isRequired,
   announce: PropTypes.func.isRequired,
 };
 
-export default TableBodyWrapper;
+export default memo(TableBodyWrapper);

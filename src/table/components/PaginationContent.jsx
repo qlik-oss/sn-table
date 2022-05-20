@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
@@ -38,7 +38,7 @@ export const shouldShow = (component, width) => {
   }
 };
 
-export default function PaginationContent({
+function PaginationContent({
   theme,
   direction,
   tableData,
@@ -51,16 +51,15 @@ export default function PaginationContent({
   selectionsAPI,
   rect,
   handleChangePage,
-  lastPageIdx,
   announce,
 }) {
-  const { totalRowCount, totalColumnCount, paginationNeeded } = tableData;
+  const { totalRowCount, totalColumnCount, totalPages, paginationNeeded } = tableData;
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
 
   if (!paginationNeeded) return null;
 
   const onFirstPage = page === 0;
-  const onLastPage = page >= lastPageIdx;
+  const onLastPage = page >= totalPages - 1;
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
   const width = footerContainer ? footerContainer.getBoundingClientRect().width : rect.width;
   const showFirstAndLast = shouldShow('firstLast', width);
@@ -144,7 +143,7 @@ export default function PaginationContent({
 
   const pageOptions = (
     <>
-      {[...Array(lastPageIdx + 1).keys()].map((pageIdx, index) => (
+      {[...Array(totalPages).keys()].map((pageIdx, index) => (
         <option key={pageIdx} value={index}>
           {pageIdx + 1}
         </option>
@@ -160,10 +159,12 @@ export default function PaginationContent({
       {showFirstAndLast && getButton(onFirstPage, 0, 'FirstPage')}
       {getButton(onFirstPage, page - 1, 'PreviousPage')}
       {getButton(onLastPage, page + 1, 'NextPage', !showFirstAndLast ? handleLastButtonTab : null)}
-      {showFirstAndLast && getButton(onLastPage, lastPageIdx, 'LastPage', handleLastButtonTab)}
+      {showFirstAndLast && getButton(onLastPage, totalPages - 1, 'LastPage', handleLastButtonTab)}
     </>
   );
 }
+
+export default memo(PaginationContent);
 
 PaginationContent.defaultProps = {
   direction: null,
@@ -183,6 +184,5 @@ PaginationContent.propTypes = {
   footerContainer: PropTypes.object,
   rect: PropTypes.object.isRequired,
   handleChangePage: PropTypes.func.isRequired,
-  lastPageIdx: PropTypes.number.isRequired,
   announce: PropTypes.func.isRequired,
 };

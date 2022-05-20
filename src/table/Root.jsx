@@ -4,11 +4,12 @@ import { StyleSheetManager } from 'styled-components';
 import { ThemeProvider } from '@mui/material/styles';
 import rtlPluginSc from 'stylis-plugin-rtl-sc';
 import TableWrapper from './components/TableWrapper';
+import { TableContextProvider } from './context';
 
 let reactRoot;
 
 export function render(rootElement, props) {
-  const { muiTheme, direction } = props;
+  const { muiTheme, direction, selectionsAPI } = props;
   if (!reactRoot) {
     reactRoot = createRoot(rootElement);
   }
@@ -17,7 +18,9 @@ export function render(rootElement, props) {
     <React.StrictMode>
       <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : []}>
         <ThemeProvider theme={muiTheme}>
-          <TableWrapper {...props} />
+          <TableContextProvider selectionsAPI={selectionsAPI}>
+            <TableWrapper {...props} />
+          </TableContextProvider>
         </ThemeProvider>
       </StyleSheetManager>
     </React.StrictMode>

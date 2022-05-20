@@ -1,7 +1,8 @@
 import { useContext, useEffect, useMemo, useReducer, useRef } from 'react';
 import { getSelectorContext } from './createSelectorProvider';
 
-function useContextSelector(context, selector) {
+// eslint-disable-next-line import/prefer-default-export
+export function useContextSelector(context, selector) {
   const accessorContext = getSelectorContext(context);
   const [accessor, listeners] = useContext(accessorContext);
   const [, forceUpdate] = useReducer((dummy) => dummy + 1, 0);
@@ -42,5 +43,3 @@ function useContextSelector(context, selector) {
 
   return selectedState;
 }
-
-export default useContextSelector;
