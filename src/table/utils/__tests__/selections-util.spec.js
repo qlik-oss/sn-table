@@ -127,7 +127,7 @@ describe('selections-utils', () => {
       expect(newState).toEqual({ ...state, rows: expectedRows });
     });
 
-    it('should return state updated when the app is not in selection modal state when action.type is reset', () => {
+    it('should return state updated when the app is not in selection modal state  when action.type is reset', () => {
       action.type = 'reset';
       const newState = reducer(state, action);
       expect(newState).toEqual({ ...state, rows: [], colIdx: -1 });

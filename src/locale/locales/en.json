@@ -65,7 +65,7 @@
   },
   "SNTable.SelectionLabel.DeselectedValue": {
     "value": "Value is deselected.",
-    "comment": "announced by screen readers when a value is deselected. (tew 210929)"
+    "comment": "announced by screen readers  when a value is deselected. (tew 210929)"
   },
   "SNTable.SelectionLabel.SelectedValue": {
     "value": "Value is selected.",
