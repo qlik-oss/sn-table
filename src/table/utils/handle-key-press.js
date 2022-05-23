@@ -121,6 +121,28 @@ export const headHandleKeyPress = ({
   }
 };
 
+/**
+ * Handle totals row key press
+ *
+ * @param {event} evt
+ * @param {Object} rootElement
+ * @param {Array} cellCoord
+ * @param {Function} setFocusedCellCoord
+ */
+export const totalHandleKeyPress = (evt, rootElement, cellCoord, setFocusedCellCoord) => {
+  switch (evt.key) {
+    case 'ArrowUp':
+    case 'ArrowDown':
+    case 'ArrowRight':
+    case 'ArrowLeft': {
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
+      break;
+    }
+    default:
+      break;
+  }
+};
+
 export const bodyHandleKeyPress = ({
   evt,
   rootElement,

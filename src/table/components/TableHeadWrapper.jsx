@@ -6,7 +6,7 @@ import { useContextSelector, TableContext } from '../context';
 import { VisuallyHidden, StyledHeadRow, StyledSortLabel } from '../styles';
 import { getHeaderStyle } from '../utils/styling-utils';
 import { headHandleKeyPress } from '../utils/handle-key-press';
-import { handleClickToFocusHead } from '../utils/handle-accessibility';
+import { handleClickToFocusCell } from '../utils/handle-accessibility';
 
 function TableHeadWrapper({
   rootElement,
@@ -19,7 +19,7 @@ function TableHeadWrapper({
   selectionsAPI,
   keyboard,
 }) {
-  const { columns, paginationNeeded } = tableData;
+  const { columns, paginationNeeded, totalsPosition } = tableData;
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name(), theme.table.backgroundColor]);
@@ -53,7 +53,9 @@ function TableHeadWrapper({
               aria-sort={isCurrentColumnActive ? `${column.sortDirection}ending` : null}
               aria-pressed={isCurrentColumnActive}
               onKeyDown={handleKeyDown}
-              onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
+            onMouseDown={() =>
+              handleClickToFocusCell(columnIndex, rootElement, setFocusedCellCoord, keyboard, [0, columnIndex])
+            }
               onClick={() => !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column)}
             >
               <StyledSortLabel
@@ -74,6 +76,7 @@ function TableHeadWrapper({
           );
         })}
       </StyledHeadRow>
+      {totalsPosition === 'top' && <TableTotals {...props} />}
     </TableHead>
   );
 }

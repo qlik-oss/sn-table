@@ -2,9 +2,11 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useRef, useCallback } from 'react';
 import Table from '@mui/material/Table';
 
+import { TableHead, TableFooter } from '@mui/material';
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
+import TableTotals from './TableTotals';
 import FooterWrapper from './FooterWrapper';
 import PaginationContent from './PaginationContent';
 import useDidUpdateEffect from './useDidUpdateEffect';
@@ -29,7 +31,7 @@ export default function TableWrapper(props) {
     direction,
     footerContainer,
   } = props;
-  const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns } = tableData;
+  const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } = tableData;
   const { page, rowsPerPage } = pageInfo;
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
@@ -135,13 +137,21 @@ export default function TableWrapper(props) {
         data-testid="table-container"
       >
         <Table stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper {...props} />
+          <TableHead>
+            <TableHeadWrapper {...props} />
+            {totalsPosition === 'top' && <TableTotals {...props} />}
+          </TableHead>
           <TableBodyWrapper
             {...props}
             announce={announce}
             setShouldRefocus={setShouldRefocus}
             tableWrapperRef={tableWrapperRef}
           />
+          {totalsPosition === 'bottom' && (
+            <TableFooter>
+              <TableTotals {...props} />
+            </TableFooter>
+          )}
         </Table>
       </StyledTableContainer>
       {!constraints.active && (

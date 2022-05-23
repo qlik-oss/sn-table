@@ -20,7 +20,7 @@ function TableBodyWrapper({
   tableWrapperRef,
   announce,
 }) {
-  const { rows, columns, paginationNeeded } = tableData;
+  const { rows, columns, paginationNeeded, totalsPosition } = tableData;
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
   // active: turn off interactions that affect the state of the visual representation including selection, zoom, scroll, etc.

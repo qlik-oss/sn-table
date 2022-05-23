@@ -25,7 +25,7 @@ describe('handle-data', () => {
     });
 
     it('should return column info for dimension', () => {
-      const columnInfo = getColumnInfo(layout.qHyperCube, colIdx);
+      const columnInfo = getColumnInfo(layout, colIdx);
       expect(columnInfo).toEqual(getExpectedInfo(colIdx, true));
     });
 
@@ -40,14 +40,14 @@ describe('handle-data', () => {
       const expected = getExpectedInfo(colIdx, true);
       expected.stylingInfo = ['someId'];
 
-      const columnInfo = getColumnInfo(layout.qHyperCube, colIdx);
+      const columnInfo = getColumnInfo(layout, colIdx);
       expect(columnInfo).toEqual(expected);
     });
 
     it('should return false for hidden column', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qError = { qErrorCode: 7005 };
 
-      const columnInfo = getColumnInfo(layout.qHyperCube, colIdx);
+      const columnInfo = getColumnInfo(layout, colIdx);
       expect(columnInfo).toBe(false);
     });
 
@@ -61,7 +61,7 @@ describe('handle-data', () => {
     it('should return column info for measure', () => {
       colIdx = 3;
 
-      const columnInfo = getColumnInfo(layout.qHyperCube, colIdx);
+      const columnInfo = getColumnInfo(layout, colIdx);
       expect(columnInfo).toEqual(getExpectedInfo(colIdx, false));
     });
   });

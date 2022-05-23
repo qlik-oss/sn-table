@@ -1,3 +1,5 @@
+import Modifiers from 'qlik-modifiers';
+
 const columnCommonHidden = {
   autoSort: {
     ref: 'qDef.autoSort',
@@ -97,228 +99,348 @@ const textAlignItems = {
   },
 };
 
-const stylingSettings = {
-  type: 'items',
-  items: [
+const getStyleSettings = (env) => {
+  return [
     {
-      component: 'style-editor',
-      translation: 'LayerStyleEditor.component.styling',
-      subtitle: 'LayerStyleEditor.component.styling',
-      resetBtnTranslation: 'LayerStyleEditor.component.resetAll',
-      key: 'theme',
-      ref: 'components',
-      defaultValue: [], // used by chart conversion
-      defaultValues: {
-        // used by style editor
-        key: 'theme',
-        content: {
-          fontSize: null,
-          fontColor: {
-            index: -1,
-            color: null,
+      type: 'items',
+      items: [
+        {
+          component: 'style-editor',
+          translation: 'LayerStyleEditor.component.styling',
+          subtitle: 'LayerStyleEditor.component.styling',
+          resetBtnTranslation: 'LayerStyleEditor.component.resetAll',
+          key: 'theme',
+          ref: 'components',
+          defaultValue: [], // used by chart conversion
+          defaultValues: {
+            // used by style editor
+            key: 'theme',
+            content: {
+              fontSize: null,
+              fontColor: {
+                index: -1,
+                color: null,
+              },
+              hoverEffect: false,
+              hoverColor: {
+                index: -1,
+                color: null,
+              },
+              hoverFontColor: {
+                index: -1,
+                color: null,
+              },
+            },
+            header: {
+              fontSize: null,
+              fontColor: {
+                index: -1,
+                color: null,
+              },
+            },
           },
-          hoverEffect: false,
-          hoverColor: {
-            index: -1,
-            color: null,
-          },
-          hoverFontColor: {
-            index: -1,
-            color: null,
-          },
-        },
-        header: {
-          fontSize: null,
-          fontColor: {
-            index: -1,
-            color: null,
-          },
-        },
-      },
-      items: {
-        chart: {
-          type: 'items',
           items: {
-            headerFontSize: {
-              show: true,
-              ref: 'header.fontSize',
-              translation: 'ThemeStyleEditor.style.headerFontSize',
-              component: 'integer',
-              // placeholder: () => parseInt(styleService.getStyle('header', 'fontSize'), 10),
-              maxlength: 3,
-              change(data) {
-                data.header.fontSize = Math.max(5, Math.min(300, Math.floor(data.header.fontSize)));
-              },
-            },
-            headerFontColor: {
-              show: true,
-              ref: 'header.fontColor',
-              translation: 'ThemeStyleEditor.style.headerFontColor',
-              type: 'object',
-              component: 'color-picker',
-              dualOutput: true,
-            },
-            fontSize: {
-              show: true,
-              translation: 'ThemeStyleEditor.style.cellFontSize',
-              ref: 'content.fontSize',
-              component: 'integer',
-              // placeholder: () => parseInt(styleService.getStyle('content', 'fontSize'), 10),
-              maxlength: 3,
-              change(data) {
-                data.content.fontSize = Math.max(5, Math.min(300, Math.floor(data.content.fontSize)));
-              },
-            },
-            fontColor: {
-              show: true,
-              ref: 'content.fontColor',
-              translation: 'ThemeStyleEditor.style.cellFontColor',
-              type: 'object',
-              component: 'color-picker',
-              dualOutput: true,
-            },
-            hoverEffect: {
-              show: true,
-              ref: 'content.hoverEffect',
-              translation: 'ThemeStyleEditor.style.hoverEffect',
-              type: 'boolean',
-              component: 'switch',
-              options: [
-                {
-                  value: true,
-                  translation: 'properties.on',
+            chart: {
+              type: 'items',
+              items: {
+                headerFontSize: {
+                  show: true,
+                  ref: 'header.fontSize',
+                  translation: 'ThemeStyleEditor.style.headerFontSize',
+                  component: 'integer',
+                  // placeholder: () => parseInt(styleService.getStyle('header', 'fontSize'), 10),
+                  maxlength: 3,
+                  change(data) {
+                    data.header.fontSize = Math.max(5, Math.min(300, Math.floor(data.header.fontSize)));
+                  },
                 },
-                {
-                  value: false,
-                  translation: 'properties.off',
+                headerFontColor: {
+                  show: true,
+                  ref: 'header.fontColor',
+                  translation: 'ThemeStyleEditor.style.headerFontColor',
+                  type: 'object',
+                  component: 'color-picker',
+                  dualOutput: true,
                 },
-              ],
-            },
-            hoverColor: {
-              show: (data) => !!data.content.hoverEffect,
-              ref: 'content.hoverColor',
-              translation: 'ThemeStyleEditor.style.hoverStyle',
-              type: 'object',
-              component: 'color-picker',
-              dualOutput: true,
-            },
-            hoverFontColor: {
-              show: (data) => !!data.content.hoverEffect,
-              ref: 'content.hoverFontColor',
-              translation: 'ThemeStyleEditor.style.hoverFontStyle',
-              type: 'object',
-              component: 'color-picker',
-              dualOutput: true,
+                fontSize: {
+                  show: true,
+                  translation: 'ThemeStyleEditor.style.cellFontSize',
+                  ref: 'content.fontSize',
+                  component: 'integer',
+                  // placeholder: () => parseInt(styleService.getStyle('content', 'fontSize'), 10),
+                  maxlength: 3,
+                  change(data) {
+                    data.content.fontSize = Math.max(5, Math.min(300, Math.floor(data.content.fontSize)));
+                  },
+                },
+                fontColor: {
+                  show: true,
+                  ref: 'content.fontColor',
+                  translation: 'ThemeStyleEditor.style.cellFontColor',
+                  type: 'object',
+                  component: 'color-picker',
+                  dualOutput: true,
+                },
+                hoverEffect: {
+                  show: true,
+                  ref: 'content.hoverEffect',
+                  translation: 'ThemeStyleEditor.style.hoverEffect',
+                  type: 'boolean',
+                  component: 'switch',
+                  options: [
+                    {
+                      value: true,
+                      translation: 'properties.on',
+                    },
+                    {
+                      value: false,
+                      translation: 'properties.off',
+                    },
+                  ],
+                },
+                hoverColor: {
+                  show: (data) => !!data.content.hoverEffect,
+                  ref: 'content.hoverColor',
+                  translation: 'ThemeStyleEditor.style.hoverStyle',
+                  type: 'object',
+                  component: 'color-picker',
+                  dualOutput: true,
+                },
+                hoverFontColor: {
+                  show: (data) => !!data.content.hoverEffect,
+                  ref: 'content.hoverFontColor',
+                  translation: 'ThemeStyleEditor.style.hoverFontStyle',
+                  type: 'object',
+                  component: 'color-picker',
+                  dualOutput: true,
+                },
+              },
             },
           },
         },
-      },
+      ],
     },
-  ],
+    {
+      type: 'items',
+      items: [
+        {
+          ref: 'totals.show',
+          type: 'boolean',
+          translation: 'properties.totals',
+          component: 'switch',
+          options: [
+            {
+              value: true,
+              translation: 'Common.Auto',
+            },
+            {
+              value: false,
+              translation: 'Common.Custom',
+            },
+          ],
+          defaultValue: true,
+        },
+        {
+          ref: 'totals.position',
+          translation: 'Common.Position',
+          type: 'string',
+          component: 'dropdown',
+          options: [
+            {
+              value: 'noTotals',
+              translation: 'Common.None',
+            },
+            {
+              value: 'top',
+              translation: 'Common.Top',
+            },
+            {
+              value: 'bottom',
+              translation: 'Common.Bottom',
+            },
+          ],
+          defaultValue: 'noTotals',
+          show(data) {
+            return !data.totals.show;
+          },
+        },
+        {
+          ref: 'totals.label',
+          translation: 'properties.totals.label',
+          type: 'string',
+          expression: 'optional',
+          defaultValue: 'Totals',
+        },
+      ],
+      show: !env?.anything?.sense?.isUnsupportedFeature?.('totals'),
+    },
+  ];
 };
 
-const definition = {
-  type: 'items',
-  component: 'accordion',
-  items: {
-    data: {
-      type: 'items',
-      component: 'columns',
-      translation: 'Common.Data',
-      sortIndexRef: 'qHyperCubeDef.qColumnOrder',
-      allowMove: true,
-      allowAdd: true,
-      addTranslation: 'Common.Columns',
-      items: {
-        dimensions: {
-          type: 'array',
-          component: 'expandable-items',
-          ref: 'qHyperCubeDef.qDimensions',
-          grouped: true,
-          items: {
-            libraryId: {
-              type: 'string',
-              component: 'library-item',
-              libraryItemType: 'dimension',
-              ref: 'qLibraryId',
-              translation: 'Common.Dimension',
-              show(itemData) {
-                return itemData.qLibraryId;
+const getDefinition = (env) => {
+  return {
+    type: 'items',
+    component: 'accordion',
+    items: {
+      data: {
+        type: 'items',
+        component: 'columns',
+        translation: 'Common.Data',
+        sortIndexRef: 'qHyperCubeDef.qColumnOrder',
+        allowMove: true,
+        allowAdd: true,
+        addTranslation: 'Common.Columns',
+        items: {
+          dimensions: {
+            type: 'array',
+            component: 'expandable-items',
+            ref: 'qHyperCubeDef.qDimensions',
+            grouped: true,
+            items: {
+              libraryId: {
+                type: 'string',
+                component: 'library-item',
+                libraryItemType: 'dimension',
+                ref: 'qLibraryId',
+                translation: 'Common.Dimension',
+                show(itemData) {
+                  return itemData.qLibraryId;
+                },
+              },
+              inlineDimension: {
+                component: 'inline-dimension',
+                show(itemData) {
+                  return !itemData.qLibraryId;
+                },
+              },
+              nullSuppression: {
+                type: 'boolean',
+                ref: 'qNullSuppression',
+                defaultValue: false,
+                translation: 'properties.dimensions.showNull',
+                inverted: true,
+              },
+              ...columnCommonHidden,
+              ...columnExpressionItems,
+              ...textAlignItems,
+            },
+          },
+          measures: {
+            type: 'array',
+            component: 'expandable-items',
+            ref: 'qHyperCubeDef.qMeasures',
+            grouped: true,
+            items: {
+              libraryId: {
+                type: 'string',
+                component: 'library-item',
+                libraryItemType: 'measure',
+                ref: 'qLibraryId',
+                translation: 'Common.Measure',
+                show: (itemData) => itemData.qLibraryId,
+              },
+              inlineMeasure: {
+                component: 'inline-measure',
+                show: (itemData) => !itemData.qLibraryId,
+              },
+              ...columnCommonHidden,
+              ...columnExpressionItems,
+              ...textAlignItems,
+              totalsAggr: {
+                type: 'items',
+                grouped: true,
+                items: {
+                  totalsAggrGroup: {
+                    type: 'items',
+                    items: {
+                      totalsAggrFunc: {
+                        type: 'string',
+                        component: 'dropdown',
+                        ref: 'qDef.qAggrFunc',
+                        translation: 'Object.Table.AggrFunc',
+                        options(data, handler) {
+                          const hasActiveModifiers = Modifiers.hasActiveModifiers({
+                            measures: [data],
+                            properties: handler.properties,
+                          });
+                          const enableTotal = !hasActiveModifiers || Modifiers.ifEnableTotalsFunction(data);
+                          const autoOption = enableTotal
+                            ? [
+                                {
+                                  value: 'Expr',
+                                  translation: 'Common.Auto',
+                                },
+                              ]
+                            : [];
+                          return autoOption.concat([
+                            {
+                              value: 'Avg',
+                              translation: 'Object.Table.AggrFunc.Avg',
+                            },
+                            {
+                              value: 'Count',
+                              translation: 'Object.Table.AggrFunc.Count',
+                            },
+                            {
+                              value: 'Max',
+                              translation: 'Object.Table.AggrFunc.Max',
+                            },
+                            {
+                              value: 'Min',
+                              translation: 'Object.Table.AggrFunc.Min',
+                            },
+                            {
+                              value: 'Sum',
+                              translation: 'Object.Table.AggrFunc.Sum',
+                            },
+                            {
+                              value: 'None',
+                              translation: 'Object.Table.AggrFunc.None',
+                            },
+                          ]);
+                        },
+                        defaultValue: env?.anything?.sense?.isUnsupportedFeature?.('totals') ? 'None' : 'Expr',
+                      },
+                    },
+                  },
+                },
+                show: !env?.anything?.sense?.isUnsupportedFeature?.('totals'),
               },
             },
-            inlineDimension: {
-              component: 'inline-dimension',
-              show(itemData) {
-                return !itemData.qLibraryId;
+          },
+        },
+      },
+      sorting: {
+        uses: 'sorting',
+      },
+      addOns: {
+        type: 'items',
+        component: 'expandable-items',
+        translation: 'properties.addons',
+        items: {
+          dataHandling: {
+            uses: 'dataHandling',
+            items: {
+              calcCond: {
+                uses: 'calcCond',
               },
             },
-            nullSuppression: {
-              type: 'boolean',
-              ref: 'qNullSuppression',
-              defaultValue: false,
-              translation: 'properties.dimensions.showNull',
-              inverted: true,
-            },
-            ...columnCommonHidden,
-            ...columnExpressionItems,
-            ...textAlignItems,
           },
         },
-        measures: {
-          type: 'array',
-          component: 'expandable-items',
-          ref: 'qHyperCubeDef.qMeasures',
-          grouped: true,
-          items: {
-            libraryId: {
-              type: 'string',
-              component: 'library-item',
-              libraryItemType: 'measure',
-              ref: 'qLibraryId',
-              translation: 'Common.Measure',
-              show: (itemData) => itemData.qLibraryId,
-            },
-            inlineMeasure: {
-              component: 'inline-measure',
-              show: (itemData) => !itemData.qLibraryId,
-            },
-            ...columnCommonHidden,
-            ...columnExpressionItems,
-            ...textAlignItems,
+      },
+      settings: {
+        uses: 'settings',
+        items: {
+          presentation: {
+            grouped: true,
+            type: 'items',
+            translation: 'properties.presentation',
+            items: getStyleSettings(env),
           },
         },
       },
     },
-    sorting: {
-      uses: 'sorting',
-    },
-    addOns: {
-      type: 'items',
-      component: 'expandable-items',
-      translation: 'properties.addons',
-      items: {
-        dataHandling: {
-          uses: 'dataHandling',
-          items: {
-            calcCond: {
-              uses: 'calcCond',
-            },
-          },
-        },
-      },
-    },
-    settings: {
-      uses: 'settings',
-      items: {
-        presentation: {
-          grouped: true,
-          type: 'items',
-          translation: 'properties.presentation',
-          items: [stylingSettings],
-        },
-      },
-    },
-  },
+  };
 };
 
 export function indexAdded(array, index) {
@@ -355,7 +477,7 @@ export function getDescription(env) {
 
 export default function ext(env) {
   return {
-    definition,
+    definition: getDefinition(env),
     data: {
       measures: {
         min,

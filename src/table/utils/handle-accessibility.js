@@ -39,8 +39,9 @@ export const handleClickToFocusBody = (cell, rootElement, setFocusedCellCoord, k
   removeAndFocus([rawRowIdx + 1, rawColIdx], rootElement, setFocusedCellCoord, keyboard);
 };
 
-export const handleClickToFocusHead = (columnIndex, rootElement, setFocusedCellCoord, keyboard) => {
-  removeAndFocus([0, columnIndex], rootElement, setFocusedCellCoord, keyboard);
+export const handleClickToFocusCell = (columnIndex, rootElement, setFocusedCellCoord, keyboard, cellCoord) => {
+  const isTotalCell = rootElement.getElementsByClassName('sn-table-total-cell').length > 0;
+  removeAndFocus((isTotalCell && cellCoord) || [0, columnIndex], rootElement, setFocusedCellCoord, keyboard);
 };
 
 export const handleResetFocus = ({

@@ -107,13 +107,13 @@ describe('<TableHeadWrapper />', () => {
     expect(handleKeyPress.headHandleKeyPress).toHaveBeenCalledTimes(1);
   });
 
-  it('should call handleClickToFocusHead when clicking a header cell', () => {
-    jest.spyOn(handleAccessibility, 'handleClickToFocusHead').mockImplementation(() => jest.fn());
+  it('should call handleClickToFocusCell when clicking a header cell', () => {
+    jest.spyOn(handleAccessibility, 'handleClickToFocusCell').mockImplementation(() => jest.fn());
 
     const { queryByText } = renderTableHead();
     fireEvent.mouseDown(queryByText(tableData.columns[0].label));
 
-    expect(handleAccessibility.handleClickToFocusHead).toHaveBeenCalledTimes(1);
+    expect(handleAccessibility.handleClickToFocusCell).toHaveBeenCalledTimes(1);
   });
 
   it('should change `aria-pressed` and `aria-sort` when you sort by second column', () => {

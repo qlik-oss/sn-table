@@ -1,6 +1,5 @@
 import { resolveToRGBAorRGB, isDarkColor, removeOpacity } from './color-utils';
 import { SelectionStates } from './selections-utils';
-
 // the order of style
 // default (inl. sprout theme) < Sense theme < styling settings
 // < column < selection (except the selected green) < hover < selected green
@@ -151,6 +150,27 @@ export function getBodyCellStyle(layout, theme) {
     hoverBackgroundColor,
     hoverFontColor,
   };
+}
+
+/**
+ * Get style for total cell
+ *
+ * @param {Object} totalHeaderStyle
+ * @param {String} totalsPosition
+ * @returns total cell style regarding the total head position
+ */
+export function getTotalsCellStyle(totalHeaderStyle, totalsPosition) {
+  if (totalsPosition === 'noTotals') return false;
+  totalHeaderStyle.fontWeight = 'bold';
+  if (totalsPosition === 'top') {
+    totalHeaderStyle.borderWidth = '0px 1px 2px 0px';
+    totalHeaderStyle.top = 35;
+  } else {
+    totalHeaderStyle.borderWidth = '2px 1px 1px 0px';
+    totalHeaderStyle.position = 'sticky';
+    totalHeaderStyle.bottom = 0;
+  }
+  return totalHeaderStyle;
 }
 
 /**
