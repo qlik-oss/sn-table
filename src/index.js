@@ -105,6 +105,7 @@ export default function supernova(env) {
         direction,
         selectionsAPI.isModal(),
         theme.name(),
+        theme.table.backgroundColor,
         keyboard.active,
         translator.language(),
         rect.width,

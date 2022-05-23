@@ -43,7 +43,7 @@ function TableHeadWrapper({
       borderLeft: !paginationNeeded && '1px solid rgb(217, 217, 217)',
     },
   };
-  const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name()]);
+  const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name(), theme.table.backgroundColor]);
   const tableSortLabelStyle = {
     '&.Mui-active .MuiTableSortLabel-icon': {
       color: headerStyle.sortLabelColor,

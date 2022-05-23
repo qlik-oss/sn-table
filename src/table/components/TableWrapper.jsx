@@ -110,7 +110,7 @@ export default function TableWrapper(props) {
     borderStyle: 'solid',
     borderColor: theme.table.borderColor,
     height: '100%',
-    backgroundColor: theme.table.backgroundColor,
+    backgroundColor: theme.table.tableBackgroundColorFromTheme,
     boxShadow: 'none',
     borderRadius: 'unset',
   };
