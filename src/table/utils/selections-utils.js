@@ -48,7 +48,7 @@ export const getCellSelectionState = (cell, value) => {
   if (api.isModal()) {
     if (colIdx !== cell.colIdx) {
       cellState = SelectionStates.EXCLUDED;
-    } else if (rows[cell.qElemNumber]) {
+    } else if (rows[cell.qElemNumber] !== undefined) {
       cellState = SelectionStates.SELECTED;
     } else {
       cellState = SelectionStates.POSSIBLE;
@@ -79,7 +79,7 @@ export const getSelectedRows = ({ selectedRows, cell, evt }) => {
     return { [qElemNumber]: rowIdx };
   }
 
-  if (selectedRows[qElemNumber]) {
+  if (selectedRows[qElemNumber] !== undefined) {
     // if the selected item is clicked again, that item will be removed
     delete selectedRows[qElemNumber];
   } else {
