@@ -4,8 +4,8 @@ describe('table-theme-colors', () => {
   const spyQuerySelector = jest.fn();
   const spyGetComputedStyle = jest.fn();
   const spyGetStyle = jest.fn();
-  const setObjectAndTableBackgroundColorInTheme = (objectBackgroundColor, tableBackgroundColor) =>
-    jest.fn((base, path, attribute) => {
+  const setObjectAndTableBackgroundColorInTheme =
+    (objectBackgroundColor, tableBackgroundColor) => (base, path, attribute) => {
       let backgroundColor;
       if (attribute === 'backgroundColor') {
         backgroundColor = objectBackgroundColor;
@@ -13,13 +13,11 @@ describe('table-theme-colors', () => {
         backgroundColor = tableBackgroundColor;
       }
       return backgroundColor;
-    });
-  const setqvPanelSheetAndqvInnerObject = jest.fn((selector) => selector);
-  const setqvPanelSheetAndqvInnerObjectBackgroundColor = (
-    qvPanelSheetBackgroundColor = '#fff',
-    qvInnerObjectBackgroundColor = 'rgba(0, 0, 0, 0)'
-  ) =>
-    jest.fn((selector) => {
+    };
+  const setqvPanelSheetAndqvInnerObject = (selector) => selector;
+  const setqvPanelSheetAndqvInnerObjectBackgroundColor =
+    (qvPanelSheetBackgroundColor = '#fff', qvInnerObjectBackgroundColor = 'rgba(0, 0, 0, 0)') =>
+    (selector) => {
       let backgroundColor;
       if (selector === '.qv-panel-sheet') {
         backgroundColor = { backgroundColor: qvPanelSheetBackgroundColor };
@@ -27,7 +25,7 @@ describe('table-theme-colors', () => {
         backgroundColor = { backgroundColor: qvInnerObjectBackgroundColor };
       }
       return backgroundColor;
-    });
+    };
   let valueWithLightBackgroundColor = {
     tableBackgroundColorFromTheme: 'inherit',
     backgroundColor: undefined,
