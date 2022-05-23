@@ -4,11 +4,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import rtlPluginSc from 'stylis-plugin-rtl-sc';
 import TableWrapper from './components/TableWrapper';
 
-let root;
-
 export function render(reactRoot, props) {
   const { muiTheme, direction } = props;
-  root = reactRoot;
 
   reactRoot.render(
     <React.StrictMode>
@@ -21,8 +18,8 @@ export function render(reactRoot, props) {
   );
 }
 
-export function teardown() {
-  root.unmount();
+export function teardown(reactRoot) {
+  reactRoot.unmount();
 }
 
 export function mount() {

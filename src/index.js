@@ -117,9 +117,9 @@ export default function supernova(env) {
 
       useEffect(
         () => () => {
-          teardown();
+          reactRoot && teardown(reactRoot);
         },
-        []
+        [reactRoot]
       );
     },
     // Extension definition
