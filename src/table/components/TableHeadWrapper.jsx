@@ -5,9 +5,10 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import { getHeaderStyle } from '../utils/styling-utils';
+import { getHeaderStyle, showTotals, showTotalsAtTop } from '../utils/styling-utils';
 import { headHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusHead } from '../utils/handle-accessibility';
+import TableTotals from './TableTotals';
 
 const VisuallyHidden = styled('span')({
   border: 0,
@@ -21,19 +22,20 @@ const VisuallyHidden = styled('span')({
   width: 1,
 });
 
-function TableHeadWrapper({
-  rootElement,
-  tableData,
-  theme,
-  layout,
-  changeSortOrder,
-  constraints,
-  translator,
-  selectionsAPI,
-  focusedCellCoord,
-  setFocusedCellCoord,
-  keyboard,
-}) {
+function TableHeadWrapper(props) {
+  const {
+    rootElement,
+    tableData,
+    theme,
+    layout,
+    changeSortOrder,
+    constraints,
+    translator,
+    selectionsAPI,
+    focusedCellCoord,
+    setFocusedCellCoord,
+    keyboard,
+  } = props;
   const { columns, paginationNeeded } = tableData;
   const headRowStyle = {
     '& :last-child': {
@@ -44,6 +46,7 @@ function TableHeadWrapper({
     },
   };
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name()]);
+
   const tableSortLabelStyle = {
     '&.Mui-active .MuiTableSortLabel-icon': {
       color: headerStyle.sortLabelColor,
@@ -100,6 +103,7 @@ function TableHeadWrapper({
           );
         })}
       </TableRow>
+      {showTotals(layout) && showTotalsAtTop(layout) && <TableTotals {...props} />}
     </TableHead>
   );
 }

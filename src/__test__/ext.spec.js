@@ -1,4 +1,4 @@
-import ext, { indexAdded, indexRemoved, min, getDescription } from '../ext';
+import ext, { min, indexAdded, indexRemoved, getDescription } from '../ext';
 
 describe('ext', () => {
   const env = {

@@ -4,9 +4,11 @@ import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 
+import { TableFooter } from '@mui/material';
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
+import TableTotals from './TableTotals';
 import FooterWrapper from './FooterWrapper';
 import PaginationContent from './PaginationContent';
 import useDidUpdateEffect from './useDidUpdateEffect';
@@ -14,6 +16,7 @@ import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
+import { showTotals, showTotalsAtTop } from '../utils/styling-utils';
 
 export default function TableWrapper(props) {
   const {
@@ -25,6 +28,7 @@ export default function TableWrapper(props) {
     translator,
     selectionsAPI,
     theme,
+    layout,
     keyboard,
     direction,
     footerContainer,
@@ -157,6 +161,7 @@ export default function TableWrapper(props) {
             setShouldRefocus={setShouldRefocus}
             tableWrapperRef={tableWrapperRef}
           />
+          <TableFooter>{showTotals(layout) && !showTotalsAtTop(layout) && <TableTotals {...props} />}</TableFooter>
         </Table>
       </TableContainer>
       {!constraints.active && (
@@ -188,6 +193,7 @@ TableWrapper.propTypes = {
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  layout: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
   footerContainer: PropTypes.object,
   direction: PropTypes.string,
