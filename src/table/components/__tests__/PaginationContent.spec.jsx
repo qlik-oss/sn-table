@@ -85,7 +85,7 @@ describe('<PaginationContent />', () => {
       const { getAllByTestId, queryByTestId, queryByText } = renderPagination();
       const buttons = getAllByTestId('pagination-action-icon-button');
 
-      expect(buttons.length).toBe(4);
+      expect(buttons).toHaveLength(4);
       expect(queryByTestId('SelectPage-dropdown')).toBeVisible();
       expect(queryByTestId('RowsPerPage-dropdown')).toBeVisible();
       expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeVisible();
@@ -97,7 +97,7 @@ describe('<PaginationContent />', () => {
       const { getAllByTestId, queryByTestId, queryByText } = renderPagination();
       const buttons = getAllByTestId('pagination-action-icon-button');
 
-      expect(buttons.length).toBe(4);
+      expect(buttons).toHaveLength(4);
       expect(queryByTestId('SelectPage-dropdown')).toBeNull();
       expect(queryByTestId('RowsPerPage-dropdown')).toBeVisible();
       expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeVisible();
@@ -109,7 +109,7 @@ describe('<PaginationContent />', () => {
       const { getAllByTestId, queryByTestId, queryByText } = renderPagination();
       const buttons = getAllByTestId('pagination-action-icon-button');
 
-      expect(buttons.length).toBe(4);
+      expect(buttons).toHaveLength(4);
       expect(queryByTestId('SelectPage-dropdown')).toBeNull();
       expect(queryByTestId('RowsPerPage-dropdown')).toBeNull();
       expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeVisible();
@@ -120,7 +120,7 @@ describe('<PaginationContent />', () => {
       const { getAllByTestId, queryByTestId, queryByText } = renderPagination();
       const buttons = getAllByTestId('pagination-action-icon-button');
 
-      expect(buttons.length).toBe(2);
+      expect(buttons).toHaveLength(2);
       expect(queryByTestId('SelectPage-dropdown')).toBeNull();
       expect(queryByTestId('RowsPerPage-dropdown')).toBeNull();
       expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeVisible();
@@ -131,7 +131,7 @@ describe('<PaginationContent />', () => {
       const { getAllByTestId, queryByTestId, queryByText } = renderPagination();
       const buttons = getAllByTestId('pagination-action-icon-button');
 
-      expect(buttons.length).toBe(2);
+      expect(buttons).toHaveLength(2);
       expect(queryByTestId('SelectPage-dropdown')).toBeNull();
       expect(queryByTestId('RowsPerPage-dropdown')).toBeNull();
       expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeNull();
