@@ -4,18 +4,29 @@
 
 1. Install with `yarn`
 1. Transpile code: `yarn build` (or `yarn build:watch`)
-1. Run it using nebula dev environment with `yarn start`
+1. Run it using nebula development server with `yarn start`
+   - The development server needs to connect to and communicate with the Qlik Associative Engine running within any of Qlik's product offerings.
+   - For the Saas Edition of Qlik Sense, you can add your webIntegrationId and pointing the engine URL to your tenant following [Nebula serve configuration file](https://qlik.dev/libraries-and-tools/nebulajs/nebula-serve#configuration-file) or the introduction page of `http://localhost:8000` when you run the development server.
 1. Or, Upload the /dist folder as an extension on [Qlik Sense Enterprise for Windows](https://help.qlik.com/en-US/sense-developer/November2021/Subsystems/Extensions/Content/Sense_Extensions/Howtos/deploy-extensions.htm) or [Qlik Sense SaaS](https://help.qlik.com/en-US/cloud-services/Subsystems/Hub/Content/Sense_Hub/Admin/mc-extensions.htm)
 
 ## Testing
 
 Run unit tests with:
 
-`yarn test:unit`
+    yarn test:unit
 
 Run rendering tests with:
 
-`yarn test:rendering`
+    # Install dependencies
+    yarn --frozen-lockfile
+
+    # Build nebula.js visualization
+    yarn build
+
+    chmod 777 ./test/rendering/scripts/run-rendering-test.sh
+    yarn test:local:rendering
+
+Look into [overview and guide](../test/rendering/README.md) to learn more about the rendering test
 
 ## Linting
 

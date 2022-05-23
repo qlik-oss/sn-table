@@ -4,7 +4,7 @@ import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import { addSelectionListeners, reducer } from '../utils/selections-utils';
 import getCellRenderer from './renderer';
-import { getBodyStyle } from '../utils/styling-utils';
+import { getBodyCellStyle } from '../utils/styling-utils';
 import { bodyHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
 
@@ -21,11 +21,14 @@ function TableBodyWrapper({
   tableWrapperRef,
   announce,
 }) {
-  const { rows, columns } = tableData;
+  const { rows, columns, paginationNeeded } = tableData;
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
-  const bodyStyle = useMemo(() => getBodyStyle(layout, theme), [layout, theme.name()]);
+  const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme.name()]);
 
-  const selectionsEnabled = !!selectionsAPI && !constraints.active;
+  // active: turn off interactions that affect the state of the visual representation including selection, zoom, scroll, etc.
+  // select: turn off selections.
+  const selectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
+
   const getColumnRenderers = columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled));
   const [columnRenderers, setColumnRenderers] = useState(() => getColumnRenderers);
   const [selectionState, selectionDispatch] = useReducer(reducer, {
@@ -44,32 +47,34 @@ function TableBodyWrapper({
     addSelectionListeners({ api: selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
   }, []);
 
-  const tableBodyStyle = {
+  const bodyRowAndCellStyle = {
+    'tr :last-child': {
+      borderRight: paginationNeeded && 0,
+    },
+    'tr :first-child': {
+      borderLeft: !paginationNeeded && '1px solid rgb(217, 217, 217)',
+    },
     '& td, th': {
-      fontSize: bodyStyle.fontSize,
-      padding: bodyStyle.padding,
+      fontSize: bodyCellStyle.fontSize,
+      padding: bodyCellStyle.padding,
     },
   };
 
-  const tableRowStyle = {
-    '&&:hover': {
-      '& td:not(.selected), th:not(.selected)': {
-        backgroundColor: bodyStyle.hoverBackgroundColor,
-        color: bodyStyle.hoverFontColor,
-      },
-    },
-  };
+  const rowCellStyle = hoverEffect
+    ? {
+        '&&:hover': {
+          '& td:not(.selected), th:not(.selected)': {
+            backgroundColor: bodyCellStyle.hoverBackgroundColor,
+            color: bodyCellStyle.hoverFontColor,
+          },
+        },
+      }
+    : {};
 
   return (
-    <TableBody sx={tableBodyStyle}>
+    <TableBody sx={bodyRowAndCellStyle}>
       {rows.map((row, rowIndex) => (
-        <TableRow
-          hover={hoverEffect}
-          tabIndex={-1}
-          key={row.key}
-          sx={hoverEffect && tableRowStyle}
-          className="sn-table-row"
-        >
+        <TableRow hover={hoverEffect} tabIndex={-1} key={row.key} sx={rowCellStyle} className="sn-table-row">
           {columns.map((column, columnIndex) => {
             const cell = row[column.id];
             const value = cell.qText;
@@ -83,7 +88,8 @@ function TableBodyWrapper({
                   column={column}
                   key={column.id}
                   align={column.align}
-                  styling={{ color: bodyStyle.color }}
+                  styling={{ color: bodyCellStyle.color }}
+                  themeBackgroundColor={theme.table.backgroundColor}
                   selectionState={selectionState}
                   selectionDispatch={selectionDispatch}
                   tabIndex={-1}

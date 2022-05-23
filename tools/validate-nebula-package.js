@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const validateScripts = (pkg) => {
-  if (pkg.scripts.build !== 'yarn run locale:generate && node ./tools/build.js --core && shx cp assets/* dist') {
+  if (pkg.scripts.build !== 'yarn run locale:generate && node ./tools/build.js --core --ext && shx cp assets/* dist') {
     throw new Error('package.json does not have correct build script');
   }
   if (pkg.scripts.prepublishOnly !== 'NODE_ENV=production yarn run build && yarn spec') {
@@ -24,10 +24,6 @@ const validatePackageJsonContent = (pkg) => {
     throw new Error('package.json does not have any build script');
   }
 
-  if ((/--ext/.test(pkg.scripts.build) && !pkg.qext) || (!/--ext/.test(pkg.scripts.build) && pkg.qext)) {
-    throw new Error('package.json has a mismatch of qext and --ext');
-  }
-
   if (/--native/.test(pkg.scripts.build)) {
     throw new Error(
       "package.json build script is not allowed to use '--native' for a chart that is not a known native chart in Qlik Sense"
@@ -46,23 +42,14 @@ const validateFiles = (pkg) => {
     'license',
     'keywords',
     'publishConfig',
-    'bug',
+    'bugs',
     'repository',
     'files',
-    'engines',
     'main',
-    'scripts',
-    'devDependencies',
     'peerDependencies',
   ];
   // files
-  const mustHaveFiles = ['dist', 'core', 'api-specifications'];
-  if (pkg.qext) {
-    const qextName = /^@nebula\.js\/([a-z-]+)$/.exec(pkg.name)[1];
-    mustHaveFiles.push('qext');
-    mustHaveFiles.push(`${qextName}.qext`);
-    mustHaveFiles.push(`${qextName}.js`);
-  }
+  const mustHaveFiles = ['dist', 'core', 'api-specifications', 'sn-table-ext'];
   const allowedFiles = ['assets', ...mustHaveFiles];
   const missing = mustHaveFiles.filter((f) => (pkg.files || []).indexOf(f) === -1);
   if (missing.length) {
@@ -86,9 +73,9 @@ const validate = (pkg, dir) => {
   validateFiles(pkg);
 
   const cleanedPkg = JSON.stringify(pkg, null, 2);
-  // package version must be 0.x.x at the moment
-  if (!/1\.\d\.\d+/.test(pkg.version)) {
-    throw new Error('Bad package version. Package version should match 0.x.x');
+  // package version must be 1.x.x at the moment
+  if (!/1\.\d+\.\d+/.test(pkg.version)) {
+    throw new Error('Bad package version. Package version should match 1.x.x');
   }
 
   // author

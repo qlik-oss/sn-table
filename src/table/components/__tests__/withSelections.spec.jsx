@@ -13,6 +13,7 @@ describe('withSelections', () => {
   let evt;
   let styling;
   let announce;
+  let theme;
 
   beforeEach(() => {
     HOC = withSelections.default((props) => <div {...props}>{props.value}</div>);
@@ -31,6 +32,9 @@ describe('withSelections', () => {
     evt = { button: 0 };
     styling = {};
     announce = jest.fn();
+    theme = {
+      getStyle: () => {},
+    };
   });
 
   afterEach(() => jest.clearAllMocks());
@@ -43,6 +47,7 @@ describe('withSelections', () => {
         cell={cell}
         selectionDispatch={selectionDispatch}
         styling={styling}
+        theme={theme}
         announce={announce}
       />
     );
@@ -58,6 +63,7 @@ describe('withSelections', () => {
         selectionDispatch={selectionDispatch}
         styling={styling}
         announce={announce}
+        theme={theme}
       />
     );
     fireEvent.mouseUp(queryByText(value));
@@ -82,6 +88,7 @@ describe('withSelections', () => {
         cell={cell}
         selectionDispatch={selectionDispatch}
         styling={styling}
+        theme={theme}
         announce={announce}
       />
     );
@@ -99,6 +106,7 @@ describe('withSelections', () => {
         cell={cell}
         selectionDispatch={selectionDispatch}
         styling={styling}
+        theme={theme}
         announce={announce}
       />
     );

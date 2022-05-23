@@ -27,6 +27,8 @@ describe('<TableHeadWrapper />', () => {
     theme = {
       getColorPickerColor: () => {},
       name: () => {},
+      getStyle: () => {},
+      table: { body: { borderColor: '' } },
     };
     layout = {
       qHyperCube: {
@@ -183,7 +185,7 @@ describe('<TableHeadWrapper />', () => {
     expect(handleAccessibility.handleClickToFocusHead).toHaveBeenCalledTimes(1);
   });
 
-  it('should change `aria-pressed` and `aria-sort` when we sort by second column', () => {
+  it('should change `aria-pressed` and `aria-sort` when you sort by second column', () => {
     tableData = {
       columns: [
         { ...tableData.columns[0], sortDirection: 'desc' },
@@ -248,7 +250,7 @@ describe('<TableHeadWrapper />', () => {
     expect(tableColumnSortlabel).toHaveTextContent('SNTable.SortLabel.PressSpaceToSort');
   });
 
-  it('should not render visually hidden text while we are out of table header', () => {
+  it('should not render visually hidden text while you are out of table header', () => {
     focusedCellCoord = [1, 1];
     const { queryByTestId } = render(
       <TableHeadWrapper

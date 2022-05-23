@@ -4,7 +4,9 @@
 
 # sn-table
 
-table supernova for [nebula.js]
+Table supernova for [nebula.js]
+
+More specifics and information about the sn-table can be found in [the Qlik developer portal](https://qlik.dev/libraries-and-tools/visualizations/table).
 
 ## Mashup Usage
 
@@ -13,6 +15,14 @@ table supernova for [nebula.js]
 If you use npm:
 
 `npm install @nebula.js/sn-table`
+
+Or without build tool, You can also load the sn-table through the script tag from [unpkg](https://unpkg.com/@nebula.js/sn-table).
+
+```html
+<script src="https://unpkg.com/@nebula.js/sn-table"></script>
+```
+
+### Usage
 
 ```js
 import { embed } from '@nebula.js/stardust';
@@ -32,15 +42,15 @@ nuked.render({
 });
 ```
 
-Look into [Build a simple mashup using nebula.js](https://qlik.dev/tutorials/build-a-simple-mashup-using-nebulajs) to learn more.
+### Tutorial & Examples
 
-[See full example](./mashup-example) of the mashup usage.
+Look into [Build a simple mashup using nebula.js](https://qlik.dev/tutorials/build-a-simple-mashup-using-nebulajs) and [Embed a visualization](https://qlik.dev/libraries-and-tools/nebulajs/rendering) to learn more.
 
-More specifics and information about the sn-table can be found in [the Qlik developer portal](https://qlik.dev/libraries-and-tools/visualizations/table).
+[Check full examples](./mashup-example) of the mashup usage.
 
 ## Visualization Extension Usage
 
-### Steps to create a sn-table extension as as a Qlik Sense extension
+### Building and adding the sn-table extension to Qlik Sense
 
 Install all dependencies:
 
@@ -48,17 +58,13 @@ Install all dependencies:
 yarn
 ```
 
-Build nebula.js visualization:
+Build a nebula.js visualization as a Qlik Sense extension:
 
 ```sh
 yarn build
 ```
 
-Build a nebula visualization as a Qlik Sense extension:
-
-```sh
-yarn sense
-```
+Compress the generated 'sn-table-ext' folder into the 'application/zip' file format
 
 |                          [Saas Edition of Qlik Sense]                           |                     [Qlik Sense Enterprise]                      |                            [Qlik Sense Desktop]                            |
 | :-----------------------------------------------------------------------------: | :--------------------------------------------------------------: | :------------------------------------------------------------------------: |
@@ -70,7 +76,7 @@ The API can also be found in [the Qlik developer portal](https://qlik.dev/apis/j
 
 ## Contribution
 
-Follow the instructions in our [contributing guide](./.github/CONTRIBUTION.md).
+To learn how to run a sn-table extension using nebula development server and develop, see our [contributing guide](./.github/CONTRIBUTION.md).
 
 ## Package
 

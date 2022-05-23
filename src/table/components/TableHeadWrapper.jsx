@@ -5,7 +5,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import { getHeadStyle } from '../utils/styling-utils';
+import { getHeaderStyle } from '../utils/styling-utils';
 import { headHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusHead } from '../utils/handle-accessibility';
 
@@ -34,24 +34,33 @@ function TableHeadWrapper({
   setFocusedCellCoord,
   keyboard,
 }) {
-  const headCellStyle = useMemo(() => getHeadStyle(layout, theme), [layout, theme.name()]);
-  const tableCellStyle = {
-    color: headCellStyle.color,
-    fontSize: headCellStyle.fontSize,
-    padding: headCellStyle.padding,
+  const { columns, paginationNeeded } = tableData;
+  const headRowStyle = {
+    '& :last-child': {
+      borderRight: paginationNeeded && 0,
+    },
+    'th:first-of-type': {
+      borderLeft: !paginationNeeded && '1px solid rgb(217, 217, 217)',
+    },
+  };
+  const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name(), theme.table.backgroundColor]);
+  const tableSortLabelStyle = {
+    '&.Mui-active .MuiTableSortLabel-icon': {
+      color: headerStyle.sortLabelColor,
+    },
   };
 
   return (
     <TableHead>
-      <TableRow className="sn-table-row">
-        {tableData.columns.map((column, columnIndex) => {
+      <TableRow sx={headRowStyle} className="sn-table-row">
+        {columns.map((column, columnIndex) => {
           const tabIndex = columnIndex === 0 && !keyboard.enabled ? 0 : -1;
           const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.dataColIdx;
           const isFocusInHead = focusedCellCoord[0] === 0;
 
           return (
             <TableCell
-              sx={tableCellStyle}
+              sx={headerStyle}
               key={column.id}
               align={column.align}
               className="sn-table-head-cell sn-table-cell"
@@ -73,7 +82,13 @@ function TableHeadWrapper({
               onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
               onClick={() => !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column)}
             >
-              <TableSortLabel active={isCurrentColumnActive} direction={column.sortDirection} tabIndex={-1}>
+              <TableSortLabel
+                sx={tableSortLabelStyle}
+                active={isCurrentColumnActive}
+                title={!constraints.passive && column.sortDirection} // passive: turn off tooltips.
+                direction={column.sortDirection}
+                tabIndex={-1}
+              >
                 {column.label}
                 {isFocusInHead && (
                   <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>

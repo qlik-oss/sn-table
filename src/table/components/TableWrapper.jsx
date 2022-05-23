@@ -1,24 +1,20 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState, useMemo, useRef } from 'react';
-import ReactDOM from 'react-dom';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
-import TablePagination from '@mui/material/TablePagination';
 
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
-import TablePaginationActions from './TablePaginationActions';
+import FooterWrapper from './FooterWrapper';
+import PaginationContent from './PaginationContent';
 import useDidUpdateEffect from './useDidUpdateEffect';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
 
-function Portal({ children, target }) {
-  return ReactDOM.createPortal(children, target);
-}
 export default function TableWrapper(props) {
   const {
     rootElement,
@@ -28,22 +24,20 @@ export default function TableWrapper(props) {
     constraints,
     translator,
     selectionsAPI,
+    theme,
     keyboard,
-    rect,
     direction,
     footerContainer,
-    announcer, // this is only for testing purposes
   } = props;
-  const { size, rows, columns } = tableData;
-  const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
+  const { totalColumnCount, totalRowCount, paginationNeeded, rows, columns } = tableData;
+  const { page, rowsPerPage } = pageInfo;
   const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
 
-  /* eslint-disable react-hooks/rules-of-hooks */
-  const announce = announcer || useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
-  const totalPages = Math.ceil(size.qcy / rowsPerPage);
+  const announce = useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
+  const totalPages = Math.ceil(totalRowCount / rowsPerPage);
   const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
     rows.length + 1,
     columns.length,
@@ -56,11 +50,6 @@ export default function TableWrapper(props) {
   const handleChangePage = (pageIdx) => {
     setPageInfo({ ...pageInfo, page: pageIdx });
     announce({ keys: [['SNTable.Pagination.PageStatusReport', [pageIdx + 1, totalPages]]], politeness: 'assertive' });
-  };
-
-  const handleChangeRowsPerPage = (evt) => {
-    setPageInfo({ ...pageInfo, page: 0, rowsPerPage: +evt.target.value });
-    announce({ keys: [['SNTable.Pagination.RowsPerPageChange', evt.target.value]], politeness: 'assertive' });
   };
 
   useEffect(() => {
@@ -114,82 +103,23 @@ export default function TableWrapper(props) {
       shouldAddTabstop: !keyboard.enabled || keyboard.active,
       announce,
     });
-  }, [rows.length, size.qcy, size.qcx, page]);
+  }, [rows.length, totalRowCount, totalColumnCount, page]);
 
   const paperStyle = {
+    borderWidth: paginationNeeded ? '0px 1px 0px' : '0px',
+    borderStyle: 'solid',
+    borderColor: theme.table.borderColor,
     height: '100%',
-    backgroundColor: 'rgb(255, 255, 255)',
+    backgroundColor: theme.table.tableBackgroundColorFromTheme,
     boxShadow: 'none',
+    borderRadius: 'unset',
   };
 
   const tableContainerStyle = {
-    height: constraints.active || footerContainer ? '100%' : 'calc(100% - 52px)',
+    // the footerContainer always wants height: 100%
+    height: footerContainer || constraints.active || !paginationNeeded ? '100%' : 'calc(100% - 49px)',
     overflow: constraints.active ? 'hidden' : 'auto',
   };
-
-  const paperTablePaginationStyle = {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    paddingRight: 1,
-    backgroundColor: 'rgb(255, 255, 255)',
-    border: '1px solid rgb(217, 217, 217)',
-    borderTop: 0,
-    boxShadow: 'none',
-    alignItems: 'center',
-  };
-
-  const paginationContent = (width) => {
-    const fixedRowsPerPage = selectionsAPI.isModal() || width < 550 || size.qcx > 100;
-    return (
-      <>
-        <TablePagination
-          sx={constraints.active && { display: 'none' }}
-          rowsPerPageOptions={fixedRowsPerPage ? [rowsPerPage] : rowsPerPageOptions}
-          component="div"
-          count={size.qcy}
-          rowsPerPage={rowsPerPage}
-          labelRowsPerPage={`${translator.get('SNTable.Pagination.RowsPerPage')}:`}
-          page={page}
-          SelectProps={{
-            inputProps: {
-              'aria-label': translator.get('SNTable.Pagination.RowsPerPage'),
-              'data-testid': 'select',
-              style: {
-                color: '#404040',
-              },
-              tabIndex: !keyboard.enabled || keyboard.active ? 0 : -1,
-            },
-            native: true,
-          }}
-          labelDisplayedRows={({ from, to, count }) =>
-            width > 250 && translator.get('SNTable.Pagination.DisplayedRowsLabel', [`${from} - ${to}`, count])
-          }
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          ActionsComponent={() => <div>{null}</div>}
-          onPageChange={() => {}}
-        />
-        <TablePaginationActions
-          direction={direction}
-          page={page}
-          onPageChange={handleChangePage}
-          lastPageIdx={Math.ceil(size.qcy / rowsPerPage) - 1}
-          keyboard={keyboard}
-          isInSelectionMode={selectionsAPI.isModal()}
-          tableWidth={width}
-          translator={translator}
-        />
-      </>
-    );
-  };
-
-  let paginationBar;
-  if (footerContainer) {
-    paginationBar = (
-      <Portal target={footerContainer}>{paginationContent(footerContainer.getBoundingClientRect().width)}</Portal>
-    );
-  } else {
-    paginationBar = <Paper sx={paperTablePaginationStyle}>{paginationContent(rect.width)}</Paper>;
-  }
 
   return (
     <Paper
@@ -199,7 +129,7 @@ export default function TableWrapper(props) {
       onKeyDown={(evt) =>
         handleTableWrapperKeyDown({
           evt,
-          totalRowSize: size.qcy,
+          totalRowCount,
           page,
           rowsPerPage,
           handleChangePage,
@@ -215,7 +145,7 @@ export default function TableWrapper(props) {
         sx={tableContainerStyle}
         tabIndex={-1}
         role="application"
-        data-testid="table-wrapper"
+        data-testid="table-container"
       >
         <Table stickyHeader aria-label={tableAriaLabel}>
           <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
@@ -229,7 +159,16 @@ export default function TableWrapper(props) {
           />
         </Table>
       </TableContainer>
-      {paginationBar}
+      {!constraints.active && (
+        <FooterWrapper theme={theme} footerContainer={footerContainer}>
+          <PaginationContent
+            {...props}
+            handleChangePage={handleChangePage}
+            lastPageIdx={totalPages - 1}
+            announce={announce}
+          />
+        </FooterWrapper>
+      )}
     </Paper>
   );
 }
@@ -248,8 +187,8 @@ TableWrapper.propTypes = {
   translator: PropTypes.object.isRequired,
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
-  rect: PropTypes.object.isRequired,
   footerContainer: PropTypes.object,
   direction: PropTypes.string,
   announcer: PropTypes.func,
