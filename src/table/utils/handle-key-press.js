@@ -111,6 +111,7 @@ export const headHandleKeyPress = (
   setFocusedCellCoord
 ) => {
   switch (evt.key) {
+    // case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
@@ -128,6 +129,27 @@ export const headHandleKeyPress = (
       break;
   }
 };
+
+// export const footerHandleKeyPress = (
+//   evt,
+//   rootElement,
+//   cellCoord,
+//   column,
+//   changeSortOrder,
+//   layout,
+//   isAnalysisMode,
+//   setFocusedCellCoord
+// ) => {
+//   switch (evt.key) {
+//     case 'ArrowRight':
+//     case 'ArrowLeft': {
+//       !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, false, setFocusedCellCoord);
+//       break;
+//     }
+//     default:
+//       break;
+//   }
+// };
 
 export const bodyHandleKeyPress = ({
   evt,

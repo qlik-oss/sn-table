@@ -5,7 +5,8 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import { getHeaderStyle, showTotals, showTotalsAtTop } from '../utils/styling-utils';
+import { getHeaderStyle } from '../utils/styling-utils';
+import { getColTotalStatus } from '../../handle-data';
 import { headHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusHead } from '../utils/handle-accessibility';
 import TableTotals from './TableTotals';
@@ -103,7 +104,7 @@ function TableHeadWrapper(props) {
           );
         })}
       </TableRow>
-      {showTotals(layout) && showTotalsAtTop(layout) && <TableTotals {...props} />}
+      {getColTotalStatus(layout) === 'top' && <TableTotals {...props} />}
     </TableHead>
   );
 }

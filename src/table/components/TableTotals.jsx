@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { getHeaderStyle, showTotalsAtTop } from '../utils/styling-utils';
+import { getHeaderStyle, getTotalsCellStyle } from '../utils/styling-utils';
 import { headHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusHead } from '../utils/handle-accessibility';
 
@@ -18,15 +18,7 @@ function TableTotals({
   keyboard,
 }) {
   const { columns, paginationNeeded } = tableData;
-
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name()]);
-  const totalCellStyle = () => {
-    headerStyle.borderColor = '#a6a6a6';
-    showTotalsAtTop(layout)
-      ? (headerStyle.borderWidth = '0px 1px 2px 0px')
-      : (headerStyle.borderWidth = '2px 1px 1px 0px');
-    return [headerStyle, { fontWeight: 'bold' }];
-  };
   const headRowStyle = {
     '& :last-child': {
       borderRight: paginationNeeded && 0,
@@ -36,40 +28,15 @@ function TableTotals({
     },
   };
 
-  const totalRowStyle = () => {
-    if (showTotalsAtTop(layout)) return [headRowStyle, { position: 'sticky', top: 35 }];
-    return [headRowStyle, { position: 'sticky', bottom: 0 }];
-  };
-
-  let measureIndex = 0;
-  const setTotals = (column, columnIndex) => {
-    let totalsHeader;
-    if (column.isDim) {
-      totalsHeader =
-        columnIndex === 0
-          ? layout.totals.label !== undefined
-            ? layout.totals.label
-            : translator.get('Object.Table.Totals')
-          : '\u00A0';
-    }
-    if (!column.isDim) {
-      totalsHeader = layout.qHyperCube.qGrandTotalRow[measureIndex].qText;
-      measureIndex += 1;
-    }
-    return totalsHeader;
-  };
-
   return (
-    <TableRow sx={totalRowStyle()} className="sn-table-row">
+    <TableRow sx={headRowStyle} className="sn-table-row">
       {columns.map((column, columnIndex) => {
-        const tabIndex = columnIndex === 0 && !keyboard.enabled ? 0 : -1;
-
         return (
           <TableCell
-            sx={totalCellStyle()}
+            sx={getTotalsCellStyle(headerStyle, layout)}
             key={column.id}
             align={column.align}
-            tabIndex={tabIndex}
+            tabIndex={-1}
             onKeyDown={(e) =>
               headHandleKeyPress(
                 e,
@@ -84,7 +51,7 @@ function TableTotals({
             }
             onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
           >
-            {setTotals(column, columnIndex)}
+            {translator.get(column.totalInfo)}
           </TableCell>
         );
       })}

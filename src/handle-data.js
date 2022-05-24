@@ -15,12 +15,20 @@ export function getColumnOrder({ qColumnOrder, qDimensionInfo, qMeasureInfo }) {
   return qColumnOrder?.length === columnsLength ? qColumnOrder : [...Array(columnsLength).keys()];
 }
 
-export function getColumnInfo(qHyperCube, colIndex) {
+export function getColumnInfo(qHyperCube, colIndex, layout, translator) {
   const { qDimensionInfo, qMeasureInfo } = qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIndex < numDims;
   const info = isDim ? qDimensionInfo[colIndex] : qMeasureInfo[colIndex - numDims];
   const isHidden = info.qError?.qErrorCode === 7005;
+  const totalInfo = isDim
+    ? colIndex === 0
+      ? layout.totals.label !== undefined
+        ? layout.totals.label
+        : translator.get('Object.Table.Totals')
+      : '\u00A0'
+    : layout.qHyperCube.qGrandTotalRow[colIndex - numDims].qText;
+
   return (
     !isHidden && {
       isDim,
@@ -31,11 +39,34 @@ export function getColumnInfo(qHyperCube, colIndex) {
       stylingInfo: info.qAttrExprInfo.map((expr) => expr.id),
       sortDirection: directionMap[info.qSortIndicator],
       dataColIdx: colIndex,
+      totalInfo,
     }
   );
 }
 
-export default async function manageData(model, layout, pageInfo, setPageInfo) {
+export function isTotalModeAuto(layout) {
+  return layout.totals?.show === true;
+}
+
+export function getColTotalStatus(layout) {
+  const hasOnlyMeasure = () => layout.qHyperCube.qDimensionInfo.length === 0;
+  const hasOnlyDimension = () => layout.qHyperCube.qMeasureInfo.length === 0;
+  const hasTotalsMeasures = () =>
+    layout.qHyperCube.qMeasureInfo.length > 0 && layout.qHyperCube.qGrandTotalRow.length > 0;
+
+  if (
+    hasOnlyMeasure() ||
+    hasOnlyDimension() ||
+    !hasTotalsMeasures() ||
+    (!isTotalModeAuto() && layout.totals.position === 'noTotals')
+  )
+    return 'none';
+  if (isTotalModeAuto() || (!isTotalModeAuto() && layout.totals.position === 'top')) return 'top';
+  if (!isTotalModeAuto() && layout.totals.position === 'bottom') return 'bottom';
+  return 'none';
+}
+
+export default async function manageData(model, layout, pageInfo, setPageInfo, translator) {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const { qHyperCube } = layout;
   const totalColumnCount = qHyperCube.qSize.qcx;
@@ -57,7 +88,9 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
 
   const columnOrder = getColumnOrder(qHyperCube);
   // using filter to remove hidden columns (represented with false)
-  const columns = columnOrder.map((colIndex) => getColumnInfo(qHyperCube, colIndex)).filter(Boolean);
+  const columns = columnOrder
+    .map((colIndex) => getColumnInfo(qHyperCube, colIndex, layout, translator))
+    .filter(Boolean);
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
     { qTop: top, qLeft: 0, qHeight: height, qWidth: totalColumnCount },
   ]);
@@ -77,5 +110,5 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
     return row;
   });
 
-  return { totalColumnCount, totalRowCount, paginationNeeded, rows, columns };
+  return { totalColumnCount, totalRowCount, paginationNeeded, rows, columns, translator };
 }

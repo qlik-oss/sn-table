@@ -1,5 +1,5 @@
 import { resolveExpression, isDarkColor } from './color-utils';
-
+import { getColTotalStatus } from '../../handle-data';
 // the order of style
 // default (inl. sprout theme) < Sense theme < styling settings
 // < column < selection (except the selected green) < hover < selected green
@@ -150,20 +150,21 @@ export function getBodyCellStyle(layout, theme) {
   };
 }
 
-const isTotalModeAuto = (layout) => layout.totals?.show === true;
-const hasOnlyMeasure = (layout) => layout.qHyperCube.qDimensionInfo.length === 0;
-const hasTotalsMeasures = (layout) => {
-  return layout.qHyperCube.qMeasureInfo.length > 0 && layout.qHyperCube.qGrandTotalRow.length > 0;
-};
-
-export function showTotals(layout) {
-  if (isTotalModeAuto(layout) && hasOnlyMeasure(layout)) return false;
-  return hasTotalsMeasures(layout) && layout.totals && (layout.totals.show || layout.totals.position !== 'noTotals');
+export function getTotalsCellStyle(headerStyle, layout) {
+  if (getColTotalStatus(layout) === 'none') return false;
+  headerStyle.borderColor = 'rgb(166, 166, 166)';
+  headerStyle.fontWeight = 'bold';
+  if (getColTotalStatus(layout) === 'top') {
+    headerStyle.borderWidth = '0px 1px 2px 0px';
+    headerStyle.top = 35;
+  } else {
+    headerStyle.borderWidth = '2px 1px 1px 0px';
+    headerStyle.position = 'sticky';
+    headerStyle.bottom = 0;
+  }
+  return headerStyle;
 }
 
-export function showTotalsAtTop(layout) {
-  return !(showTotals(layout) && layout.totals && !layout.totals.show && layout.totals.position === 'bottom');
-}
 /**
  * You can set the background color expression and/or text color expression
  * for measure data and/or dimension data.

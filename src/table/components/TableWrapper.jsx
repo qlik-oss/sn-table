@@ -16,7 +16,7 @@ import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
-import { showTotals, showTotalsAtTop } from '../utils/styling-utils';
+import { getColTotalStatus } from '../../handle-data';
 
 export default function TableWrapper(props) {
   const {
@@ -161,7 +161,7 @@ export default function TableWrapper(props) {
             setShouldRefocus={setShouldRefocus}
             tableWrapperRef={tableWrapperRef}
           />
-          <TableFooter>{showTotals(layout) && !showTotalsAtTop(layout) && <TableTotals {...props} />}</TableFooter>
+          <TableFooter>{getColTotalStatus(layout) === 'bottom' && <TableTotals {...props} />}</TableFooter>
         </Table>
       </TableContainer>
       {!constraints.active && (

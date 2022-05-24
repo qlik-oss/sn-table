@@ -66,7 +66,7 @@ export default function supernova(env) {
       const rect = useRect();
       const [pageInfo, setPageInfo] = useState(() => initialPageInfo);
       const [tableData] = usePromise(() => {
-        return env.carbon ? nothing() : manageData(model, layout, pageInfo, setPageInfo);
+        return env.carbon ? nothing() : manageData(model, layout, pageInfo, setPageInfo, translator);
       }, [layout, pageInfo]);
 
       useEffect(() => {
