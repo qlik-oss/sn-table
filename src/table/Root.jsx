@@ -8,17 +8,18 @@ import { TableContextProvider } from './context';
 export function render(reactRoot, props) {
   const { muiTheme, direction, selectionsAPI } = props;
 
-  reactRoot.render(
-    <React.StrictMode>
-      <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : []}>
-        <ThemeProvider theme={muiTheme}>
-          <TableContextProvider selectionsAPI={selectionsAPI}>
-            <TableWrapper {...props} />
-          </TableContextProvider>
-        </ThemeProvider>
-      </StyleSheetManager>
-    </React.StrictMode>
-  );
+  reactRoot &&
+    reactRoot.render(
+      <React.StrictMode>
+        <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : []}>
+          <ThemeProvider theme={muiTheme}>
+            <TableContextProvider selectionsAPI={selectionsAPI}>
+              <TableWrapper {...props} />
+            </TableContextProvider>
+          </ThemeProvider>
+        </StyleSheetManager>
+      </React.StrictMode>
+    );
 }
 
 export function teardown(reactRoot) {
