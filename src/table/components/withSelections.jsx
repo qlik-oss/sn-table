@@ -16,7 +16,7 @@ export default function withSelections(CellComponent) {
 
     const selectionStyling = getSelectionStyle(styling, cellSelectionState);
 
-    return <CellComponent {...passThroughProps} styling={selectionStyling} handleMouseUp={handleMouseUp} />;
+    return <CellComponent {...passThroughProps} styling={selectionStyling} onMouseUp={handleMouseUp} />;
   };
 
   HOC.propTypes = {

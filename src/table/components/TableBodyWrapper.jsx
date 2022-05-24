@@ -81,7 +81,7 @@ function TableBodyWrapper({
                   styling={{ color: bodyCellStyle.color, backgroundColor: theme.table.backgroundColor }}
                   tabIndex={-1}
                   announce={announce}
-                  handleKeyDown={(evt) =>
+                  onKeyDown={(evt) =>
                     bodyHandleKeyPress({
                       evt,
                       rootElement,
@@ -95,7 +95,7 @@ function TableBodyWrapper({
                       keyboard,
                     })
                   }
-                  handleMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
+                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
                 >
                   {cell.qText}
                 </CellRenderer>

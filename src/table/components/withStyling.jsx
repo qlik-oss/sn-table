@@ -10,9 +10,9 @@ export default function withStyling(CellComponent) {
       children,
       scope,
       tabIndex,
-      handleKeyDown,
-      handleMouseDown,
-      handleMouseUp,
+      onKeyDown,
+      onMouseDown,
+      onMouseUp,
     } = props;
 
     return (
@@ -21,11 +21,11 @@ export default function withStyling(CellComponent) {
         scope={scope}
         align={align}
         tabIndex={tabIndex}
-        className={selectedCellClass ? `${selectedCellClass} sn-table-cell` : `sn-table-cell`}
+        className={`sn-table-cell ${selectedCellClass || ''}`}
         sx={style}
-        onKeyDown={handleKeyDown}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
+        onKeyDown={onKeyDown}
+        onMouseDown={onMouseDown}
+        onMouseUp={onMouseUp}
       >
         {children}
       </CellComponent>
@@ -35,7 +35,7 @@ export default function withStyling(CellComponent) {
   HOC.defaultProps = {
     component: null,
     scope: null,
-    handleMouseUp: null,
+    onMouseUp: null,
   };
 
   HOC.propTypes = {
@@ -45,9 +45,9 @@ export default function withStyling(CellComponent) {
     children: PropTypes.node.isRequired,
     scope: PropTypes.string,
     tabIndex: PropTypes.number.isRequired,
-    handleKeyDown: PropTypes.func.isRequired,
-    handleMouseDown: PropTypes.func.isRequired,
-    handleMouseUp: PropTypes.func,
+    onKeyDown: PropTypes.func.isRequired,
+    onMouseDown: PropTypes.func.isRequired,
+    onMouseUp: PropTypes.func,
   };
 
   return HOC;
