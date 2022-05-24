@@ -24,13 +24,15 @@ function TableBodyWrapper({
   const { rows, columns, paginationNeeded } = tableData;
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
-  const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
-  const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme.name()]);
-
   // active: turn off interactions that affect the state of the visual representation including selection, zoom, scroll, etc.
   // select: turn off selections.
   const selectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
-  const columnRenderers = columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled));
+  const columnRenderers = useMemo(
+    () => columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled)),
+    [columns.length, selectionsEnabled]
+  );
+  const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme.name()]);
+  const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
 
   useEffect(() => {
     addSelectionListeners({ api: selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
@@ -66,7 +68,6 @@ function TableBodyWrapper({
         <TableRow hover={hoverEffect} tabIndex={-1} key={row.key} sx={rowCellStyle} className="sn-table-row">
           {columns.map((column, columnIndex) => {
             const cell = row[column.id];
-            const value = cell.qText;
             const CellRenderer = columnRenderers[columnIndex];
             return (
               CellRenderer && (
@@ -97,7 +98,7 @@ function TableBodyWrapper({
                   }
                   onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
                 >
-                  {value}
+                  {cell.qText}
                 </CellRenderer>
               )
             );
