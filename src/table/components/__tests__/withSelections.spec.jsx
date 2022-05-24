@@ -1,117 +1,86 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 
+import { TableContextProvider } from '../../context';
 import * as withSelections from '../withSelections';
-import * as selectionsUtils from '../../utils/selections-utils';
 
 describe('withSelections', () => {
+  const selectionsAPI = { isModal: () => false };
   let HOC;
   let value;
   let cell;
-  let selectionState;
-  let selectionDispatch;
   let evt;
   let styling;
   let announce;
   let theme;
+  let themeBackgroundColor;
+  let selectionDispatchMock;
+
+  const renderWithSelections = () =>
+    render(
+      <TableContextProvider selectionsAPI={selectionsAPI} selectionDispatchMock={selectionDispatchMock}>
+        <HOC
+          value={value}
+          cell={cell}
+          styling={styling}
+          theme={theme}
+          announce={announce}
+          themeBackgroundColor={themeBackgroundColor}
+        />
+      </TableContextProvider>
+    );
 
   beforeEach(() => {
     HOC = withSelections.default((props) => <div {...props}>{props.value}</div>);
-    jest.spyOn(selectionsUtils, 'selectCell').mockImplementation(() => jest.fn());
 
     value = '100';
     cell = {
       isDim: true,
     };
-    selectionState = {
-      rows: [],
-      colIdx: -1,
-      api: { isModal: () => true },
-    };
-    selectionDispatch = () => {};
     evt = { button: 0 };
     styling = {};
     announce = jest.fn();
     theme = {
       getStyle: () => {},
     };
+    themeBackgroundColor = '#123456';
+    selectionDispatchMock = jest.fn();
   });
 
   afterEach(() => jest.clearAllMocks());
 
   it('should render a mocked component with the passed value', () => {
-    const { queryByText } = render(
-      <HOC
-        value={value}
-        selectionState={selectionState}
-        cell={cell}
-        selectionDispatch={selectionDispatch}
-        styling={styling}
-        theme={theme}
-        announce={announce}
-      />
-    );
+    const { queryByText } = renderWithSelections();
 
     expect(queryByText(value)).toBeVisible();
   });
+
   it('should call selectCell on mouseUp', () => {
-    const { queryByText } = render(
-      <HOC
-        value={value}
-        selectionState={selectionState}
-        cell={cell}
-        selectionDispatch={selectionDispatch}
-        styling={styling}
-        announce={announce}
-        theme={theme}
-      />
-    );
+    const { queryByText } = renderWithSelections();
     fireEvent.mouseUp(queryByText(value));
 
-    expect(selectionsUtils.selectCell).toHaveBeenCalledTimes(1);
-    expect(selectionsUtils.selectCell).toHaveBeenCalledWith(
-      expect.objectContaining({
-        selectionState: expect.anything(),
-        cell: expect.anything(),
-        evt: expect.anything(),
-        announce: expect.anything(),
-      })
-    );
+    expect(selectionDispatchMock).toHaveBeenCalledTimes(1);
+    expect(selectionDispatchMock).toHaveBeenCalledWith({
+      type: 'select',
+      payload: { cell, evt: expect.anything(), announce },
+    });
   });
+
   it('should not call selectCell on mouseUp when measure', () => {
     cell.isDim = false;
 
-    const { queryByText } = render(
-      <HOC
-        value={value}
-        selectionState={selectionState}
-        cell={cell}
-        selectionDispatch={selectionDispatch}
-        styling={styling}
-        theme={theme}
-        announce={announce}
-      />
-    );
+    const { queryByText } = renderWithSelections();
     fireEvent.mouseUp(queryByText(value));
 
-    expect(selectionsUtils.selectCell).not.toHaveBeenCalled();
+    expect(selectionDispatchMock).not.toHaveBeenCalled();
   });
+
   it('should not call selectCell on mouseUp when right button', () => {
     evt.button = 2;
 
-    const { queryByText } = render(
-      <HOC
-        value={value}
-        selectionState={selectionState}
-        cell={cell}
-        selectionDispatch={selectionDispatch}
-        styling={styling}
-        theme={theme}
-        announce={announce}
-      />
-    );
+    const { queryByText } = renderWithSelections();
     fireEvent.mouseUp(queryByText(value), evt);
 
-    expect(selectionsUtils.selectCell).not.toHaveBeenCalled();
+    expect(selectionDispatchMock).not.toHaveBeenCalled();
   });
 });

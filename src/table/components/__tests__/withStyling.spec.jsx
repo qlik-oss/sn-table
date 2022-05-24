@@ -15,7 +15,7 @@ describe('withStyling', () => {
     styling = {};
   });
 
-  it('should render table head', () => {
+  it('should render table cell', () => {
     const { queryByText } = render(<HOC value="someValue" styling={styling} />);
 
     expect(queryByText('someValue')).toBeVisible();

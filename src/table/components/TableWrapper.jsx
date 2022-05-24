@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useCallback } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
@@ -10,6 +10,7 @@ import TableHeadWrapper from './TableHeadWrapper';
 import FooterWrapper from './FooterWrapper';
 import PaginationContent from './PaginationContent';
 import useDidUpdateEffect from './useDidUpdateEffect';
+import { useContextSelector, TableContext } from '../context';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
@@ -29,28 +30,26 @@ export default function TableWrapper(props) {
     direction,
     footerContainer,
   } = props;
-  const { totalColumnCount, totalRowCount, paginationNeeded, rows, columns } = tableData;
+  const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
-  const [focusedCellCoord, setFocusedCellCoord] = useState([0, 0]);
+  const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
+  const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
-
   const announce = useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
-  const totalPages = Math.ceil(totalRowCount / rowsPerPage);
-  const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
-    rows.length + 1,
-    columns.length,
-  ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
-  const setShouldRefocus = () => {
+  const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
-  };
+  }, [rootElement]);
 
-  const handleChangePage = (pageIdx) => {
-    setPageInfo({ ...pageInfo, page: pageIdx });
-    announce({ keys: [['SNTable.Pagination.PageStatusReport', [pageIdx + 1, totalPages]]], politeness: 'assertive' });
-  };
+  const handleChangePage = useCallback(
+    (pageIdx) => {
+      setPageInfo({ ...pageInfo, page: pageIdx });
+      announce({ keys: [['SNTable.Pagination.PageStatusReport', [pageIdx + 1, totalPages]]], politeness: 'assertive' });
+    },
+    [pageInfo, setPageInfo, totalPages, announce]
+  );
 
   useEffect(() => {
     const memoedWrapper = tableWrapperRef.current;
@@ -105,6 +104,11 @@ export default function TableWrapper(props) {
     });
   }, [rows.length, totalRowCount, totalColumnCount, page]);
 
+  const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
+    rows.length + 1,
+    columns.length,
+  ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
+
   const paperStyle = {
     borderWidth: paginationNeeded ? '0px 1px 0px' : '0px',
     borderStyle: 'solid',
@@ -148,12 +152,10 @@ export default function TableWrapper(props) {
         data-testid="table-container"
       >
         <Table stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper {...props} setFocusedCellCoord={setFocusedCellCoord} focusedCellCoord={focusedCellCoord} />
+          <TableHeadWrapper {...props} />
           <TableBodyWrapper
             {...props}
             announce={announce}
-            focusedCellCoord={focusedCellCoord}
-            setFocusedCellCoord={setFocusedCellCoord}
             setShouldRefocus={setShouldRefocus}
             tableWrapperRef={tableWrapperRef}
           />
@@ -161,12 +163,7 @@ export default function TableWrapper(props) {
       </TableContainer>
       {!constraints.active && (
         <FooterWrapper theme={theme} footerContainer={footerContainer}>
-          <PaginationContent
-            {...props}
-            handleChangePage={handleChangePage}
-            lastPageIdx={totalPages - 1}
-            announce={announce}
-          />
+          <PaginationContent {...props} handleChangePage={handleChangePage} announce={announce} />
         </FooterWrapper>
       )}
     </Paper>

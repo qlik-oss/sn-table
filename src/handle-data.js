@@ -40,6 +40,8 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
   const { qHyperCube } = layout;
   const totalColumnCount = qHyperCube.qSize.qcx;
   const totalRowCount = qHyperCube.qSize.qcy;
+  const totalPages = Math.ceil(totalRowCount / rowsPerPage);
+
   const paginationNeeded = totalRowCount > 10; // TODO: This might not be true if you have > 1000 columns
   const top = page * rowsPerPage;
   const height = Math.min(rowsPerPage, totalRowCount - top);
@@ -77,5 +79,5 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
     return row;
   });
 
-  return { totalColumnCount, totalRowCount, paginationNeeded, rows, columns };
+  return { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns };
 }

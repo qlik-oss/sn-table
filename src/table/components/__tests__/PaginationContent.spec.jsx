@@ -11,7 +11,6 @@ describe('<PaginationContent />', () => {
   let pageInfo;
   let setPageInfo;
   let titles;
-  let lastPageIdx;
   let handleChangePage;
   let rect;
   let translator;
@@ -37,7 +36,6 @@ describe('<PaginationContent />', () => {
         selectionsAPI={selectionsAPI}
         rect={rect}
         handleChangePage={handleChangePage}
-        lastPageIdx={lastPageIdx}
         announce={announce}
       />
     );
@@ -57,6 +55,7 @@ describe('<PaginationContent />', () => {
       totalRowCount: 200,
       totalColumnCount: 5,
       paginationNeeded: true,
+      totalPages: 3,
     };
     pageInfo = {
       page: 0,
@@ -64,7 +63,6 @@ describe('<PaginationContent />', () => {
       rowsPerPageOptions: [10, 25, 100],
     };
     setPageInfo = jest.fn();
-    lastPageIdx = 2;
     handleChangePage = jest.fn();
     rect = { width: 750 };
     translator = { get: (s) => s };

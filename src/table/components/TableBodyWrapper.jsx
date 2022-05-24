@@ -1,9 +1,10 @@
-import React, { useReducer, useState, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, memo } from 'react';
 import PropTypes from 'prop-types';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
-import { addSelectionListeners, reducer } from '../utils/selections-utils';
 import getCellRenderer from './renderer';
+import { useContextSelector, TableContext } from '../context';
+import { addSelectionListeners } from '../utils/selections-utils';
 import { getBodyCellStyle } from '../utils/styling-utils';
 import { bodyHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
@@ -16,32 +17,22 @@ function TableBodyWrapper({
   layout,
   theme,
   setShouldRefocus,
-  setFocusedCellCoord,
   keyboard,
   tableWrapperRef,
   announce,
 }) {
   const { rows, columns, paginationNeeded } = tableData;
-  const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
-  const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme.name()]);
-
+  const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
+  const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
   // active: turn off interactions that affect the state of the visual representation including selection, zoom, scroll, etc.
   // select: turn off selections.
   const selectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
-
-  const getColumnRenderers = columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled));
-  const [columnRenderers, setColumnRenderers] = useState(() => getColumnRenderers);
-  const [selectionState, selectionDispatch] = useReducer(reducer, {
-    api: selectionsAPI,
-    rows: [],
-    colIdx: -1,
-    isEnabled: selectionsEnabled,
-  });
-
-  useEffect(() => {
-    selectionDispatch({ type: 'set-enabled', payload: { isEnabled: selectionsEnabled } });
-    setColumnRenderers(getColumnRenderers);
-  }, [selectionsEnabled, columns.length]);
+  const columnRenderers = useMemo(
+    () => columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled)),
+    [columns.length, selectionsEnabled]
+  );
+  const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme.name()]);
+  const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
 
   useEffect(() => {
     addSelectionListeners({ api: selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
@@ -77,7 +68,6 @@ function TableBodyWrapper({
         <TableRow hover={hoverEffect} tabIndex={-1} key={row.key} sx={rowCellStyle} className="sn-table-row">
           {columns.map((column, columnIndex) => {
             const cell = row[column.id];
-            const value = cell.qText;
             const CellRenderer = columnRenderers[columnIndex];
             return (
               CellRenderer && (
@@ -90,8 +80,6 @@ function TableBodyWrapper({
                   align={column.align}
                   styling={{ color: bodyCellStyle.color }}
                   themeBackgroundColor={theme.table.backgroundColor}
-                  selectionState={selectionState}
-                  selectionDispatch={selectionDispatch}
                   tabIndex={-1}
                   announce={announce}
                   onKeyDown={(evt) =>
@@ -99,7 +87,7 @@ function TableBodyWrapper({
                       evt,
                       rootElement,
                       cellCoord: [rowIndex + 1, columnIndex],
-                      selectionState,
+                      selectionsAPI,
                       cell,
                       selectionDispatch,
                       isAnalysisMode: selectionsEnabled,
@@ -110,7 +98,7 @@ function TableBodyWrapper({
                   }
                   onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
                 >
-                  {value}
+                  {cell.qText}
                 </CellRenderer>
               )
             );
@@ -128,11 +116,10 @@ TableBodyWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  setFocusedCellCoord: PropTypes.func.isRequired,
   setShouldRefocus: PropTypes.func.isRequired,
   keyboard: PropTypes.object.isRequired,
   tableWrapperRef: PropTypes.object.isRequired,
   announce: PropTypes.func.isRequired,
 };
 
-export default TableBodyWrapper;
+export default memo(TableBodyWrapper);
