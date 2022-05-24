@@ -1,9 +1,10 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 
+import { TableContextProvider } from '../../context';
 import TableWrapper from '../TableWrapper';
-import * as TableBodyWrapper from '../TableBodyWrapper';
-import * as TableHeadWrapper from '../TableHeadWrapper';
+import TableBodyWrapper from '../TableBodyWrapper';
+import TableHeadWrapper from '../TableHeadWrapper';
 import * as handleKeyPress from '../../utils/handle-key-press';
 
 describe('<TableWrapper />', () => {
@@ -21,23 +22,26 @@ describe('<TableWrapper />', () => {
 
   const renderTableWrapper = () =>
     render(
-      <TableWrapper
-        tableData={tableData}
-        pageInfo={pageInfo}
-        setPageInfo={setPageInfo}
-        constraints={constraints}
-        selectionsAPI={selectionsAPI}
-        rootElement={rootElement}
-        keyboard={keyboard}
-        translator={translator}
-        rect={rect}
-        theme={theme}
-      />
+      <TableContextProvider selectionsAPI={selectionsAPI}>
+        <TableWrapper
+          tableData={tableData}
+          pageInfo={pageInfo}
+          setPageInfo={setPageInfo}
+          constraints={constraints}
+          selectionsAPI={selectionsAPI}
+          rootElement={rootElement}
+          keyboard={keyboard}
+          translator={translator}
+          rect={rect}
+          theme={theme}
+        />
+      </TableContextProvider>
     );
 
   beforeEach(() => {
-    jest.spyOn(TableBodyWrapper, 'default').mockImplementation(() => <tbody />);
-    jest.spyOn(TableHeadWrapper, 'default').mockImplementation(() => <thead />);
+    // When wrapping a component in memo, the actual functional component is stored on type
+    jest.spyOn(TableHeadWrapper, 'type').mockImplementation(() => <thead />);
+    jest.spyOn(TableBodyWrapper, 'type').mockImplementation(() => <thead />);
     jest.spyOn(handleKeyPress, 'handleTableWrapperKeyDown').mockImplementation(() => jest.fn());
 
     tableData = {

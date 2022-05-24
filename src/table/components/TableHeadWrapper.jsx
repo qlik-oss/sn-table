@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/system';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
+import { useContextSelector, TableContext } from '../context';
 import { getHeaderStyle } from '../utils/styling-utils';
 import { headHandleKeyPress } from '../utils/handle-key-press';
 import { handleClickToFocusHead } from '../utils/handle-accessibility';
@@ -30,11 +31,12 @@ function TableHeadWrapper({
   constraints,
   translator,
   selectionsAPI,
-  focusedCellCoord,
-  setFocusedCellCoord,
   keyboard,
 }) {
   const { columns, paginationNeeded } = tableData;
+  const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
+  const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
+
   const headRowStyle = {
     '& :last-child': {
       borderRight: paginationNeeded && 0,
@@ -56,7 +58,6 @@ function TableHeadWrapper({
         {columns.map((column, columnIndex) => {
           const tabIndex = columnIndex === 0 && !keyboard.enabled ? 0 : -1;
           const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.dataColIdx;
-          const isFocusInHead = focusedCellCoord[0] === 0;
 
           return (
             <TableCell
@@ -113,9 +114,7 @@ TableHeadWrapper.propTypes = {
   constraints: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
-  focusedCellCoord: PropTypes.arrayOf(PropTypes.number).isRequired,
-  setFocusedCellCoord: PropTypes.func.isRequired,
   translator: PropTypes.object.isRequired,
 };
 
-export default TableHeadWrapper;
+export default memo(TableHeadWrapper);

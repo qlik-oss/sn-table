@@ -1,3 +1,10 @@
+export const SelectionStates = {
+  SELECTED: 'selected',
+  POSSIBLE: 'possible',
+  EXCLUDED: 'excluded',
+  INACTIVE: 'inactive',
+};
+
 export function addSelectionListeners({ api, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef }) {
   const resetSelections = () => {
     selectionDispatch({ type: 'reset' });
@@ -33,22 +40,23 @@ export function addSelectionListeners({ api, selectionDispatch, setShouldRefocus
   };
 }
 
-export function reducer(state, action) {
-  const { rows, colIdx, isEnabled } = action.payload || {};
-
-  switch (action.type) {
-    case 'select':
-      return { ...state, rows, colIdx };
-    case 'reset':
-      return state.api.isModal() ? state : { ...state, rows: [], colIdx: -1 };
-    case 'clear':
-      return state.rows.length ? { ...state, rows: [] } : state;
-    case 'set-enabled':
-      return { ...state, isEnabled };
-    default:
-      throw new Error('reducer called with invalid action type');
+export const getCellSelectionState = (cell, value) => {
+  const {
+    selectionState: { colIdx, rows, api },
+  } = value;
+  let cellState = SelectionStates.INACTIVE;
+  if (api.isModal()) {
+    if (colIdx !== cell.colIdx) {
+      cellState = SelectionStates.EXCLUDED;
+    } else if (rows[cell.qElemNumber] !== undefined) {
+      cellState = SelectionStates.SELECTED;
+    } else {
+      cellState = SelectionStates.POSSIBLE;
+    }
   }
-}
+
+  return cellState;
+};
 
 export const handleAnnounceSelectionStatus = ({ announce, rowsLength, isAddition }) => {
   if (rowsLength) {
@@ -63,52 +71,67 @@ export const handleAnnounceSelectionStatus = ({ announce, rowsLength, isAddition
   }
 };
 
-export const getSelectedRows = ({ selectedRows, qElemNumber, rowIdx, evt }) => {
+export const getSelectedRows = ({ selectedRows, cell, evt }) => {
+  const { qElemNumber, rowIdx } = cell;
   if (evt.ctrlKey || evt.metaKey) {
     // if the ctrl key or the ⌘ Command key (On Macintosh keyboards) or the ⊞ Windows key is pressed
-    // get the last clicked item
-    return [{ qElemNumber, rowIdx }];
+    // get the last clicked item (single select)
+    return { [qElemNumber]: rowIdx };
   }
 
-  const alreadySelectedIdx = selectedRows.findIndex((r) => r.qElemNumber === qElemNumber);
-  if (alreadySelectedIdx > -1) {
+  if (selectedRows[qElemNumber] !== undefined) {
     // if the selected item is clicked again, that item will be removed
-    selectedRows.splice(alreadySelectedIdx, 1);
-    return selectedRows;
+    delete selectedRows[qElemNumber];
+  } else {
+    // if an unselected item was clicked, add it to the object
+    selectedRows[qElemNumber] = rowIdx;
   }
 
-  // if an item was clicked, the item was selected
-  selectedRows.push({ qElemNumber, rowIdx });
-  return selectedRows;
+  return { ...selectedRows };
 };
 
-export function selectCell({ selectionState, cell, selectionDispatch, evt, announce }) {
-  const { api, rows } = selectionState;
-  const { rowIdx, colIdx, qElemNumber } = cell;
-  let selectedRows = [];
+const selectCell = (state, payload) => {
+  const { api, rows, colIdx } = state;
+  const { cell, announce, evt } = payload;
+  let selectedRows = {};
 
-  if (selectionState.colIdx === -1) {
+  if (colIdx === -1) {
     api.begin('/qHyperCubeDef');
-  } else if (selectionState.colIdx === colIdx) {
-    selectedRows = rows.concat();
+  } else if (colIdx === cell.colIdx) {
+    selectedRows = { ...rows };
   } else {
-    return;
+    return state;
   }
 
-  selectedRows = getSelectedRows({ selectedRows, qElemNumber, rowIdx, evt });
+  selectedRows = getSelectedRows({ selectedRows, cell, evt });
+  const selectedRowsLength = Object.keys(selectedRows).length;
   handleAnnounceSelectionStatus({
     announce,
-    rowsLength: selectedRows.length,
-    isAddition: selectedRows.length > rows.length,
+    rowsLength: selectedRowsLength,
+    isAddition: selectedRowsLength > rows.length,
   });
 
-  if (selectedRows.length) {
-    selectionDispatch({ type: 'select', payload: { rows: selectedRows, colIdx } });
+  if (selectedRowsLength) {
     api.select({
       method: 'selectHyperCubeCells',
-      params: ['/qHyperCubeDef', selectedRows.map((r) => r.rowIdx), [colIdx]],
+      params: ['/qHyperCubeDef', Object.values(selectedRows), [cell.colIdx]],
     });
-  } else {
-    api.cancel();
+    return { ...state, rows: selectedRows, colIdx: cell.colIdx };
   }
-}
+
+  api.cancel();
+  return { ...state, rows: selectedRows, colIdx: -1 };
+};
+
+export const reducer = (state, action) => {
+  switch (action.type) {
+    case 'select':
+      return selectCell(state, action.payload);
+    case 'reset':
+      return state.api.isModal() ? state : { ...state, rows: {}, colIdx: -1 };
+    case 'clear':
+      return Object.keys(state.rows).length ? { ...state, rows: {} } : state;
+    default:
+      throw new Error('reducer called with invalid action type');
+  }
+};
