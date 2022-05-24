@@ -300,7 +300,7 @@ describe('handle-key-press', () => {
       expect(announce).not.toHaveBeenCalled();
     });
 
-    it('when press space bar key not in analysis mode, should not select value for measure ', () => {
+    it('when press space bar key not in analysis mode, should not select value for measure', () => {
       evt.key = ' ';
       isAnalysisMode = false;
       bodyHandleKeyPress({

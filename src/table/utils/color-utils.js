@@ -30,7 +30,6 @@ export function resolveToRGBAorRGB(input) {
   // hex (#rgb, #rgba, #rrggbb, and #rrggbbaa)
   matches = /^#(?:(?:[\da-f]{3}){1,2}|(?:[\da-f]{4}){1,2})$/i.exec(input);
   if (matches) {
-    console.log('🚀 ~ file: color-utils.js ~ line 33 ~ resolveToRGBAorRGB ~ matches', matches);
     return hexToRGBAorRGB(input);
   }
   // css color
