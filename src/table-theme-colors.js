@@ -1,8 +1,20 @@
-import { isDarkColor } from './table/utils/color-utils';
+import { isDarkColor, isTransparentColor } from './table/utils/color-utils';
 
 export default function tableThemeColors(theme) {
-  const backgroundColor = theme.getStyle('object', 'straightTable', 'backgroundColor');
-  const isBackgroundDarkColor = isDarkColor(backgroundColor);
+  const qvInnerObject = document.querySelector('.qv-object .qv-inner-object');
+  const objectBackgroundColorFromCSS = qvInnerObject && window.getComputedStyle(qvInnerObject).backgroundColor;
+
+  const qvPanelSheet = document.querySelector('.qv-panel-sheet');
+  const sheetBackgroundColorFromCSS = qvPanelSheet && window.getComputedStyle(qvPanelSheet).backgroundColor;
+
+  const tableBackgroundColorFromTheme = theme.getStyle('', '', 'object.straightTable.backgroundColor');
+
+  const backgroundColorFromTheme = theme.getStyle('object', 'straightTable', 'backgroundColor');
+  const backgroundColor = tableBackgroundColorFromTheme || objectBackgroundColorFromCSS || backgroundColorFromTheme;
+  const isBackgroundTransparentColor = isTransparentColor(backgroundColor);
+  const isBackgroundDarkColor = isDarkColor(
+    isBackgroundTransparentColor ? sheetBackgroundColorFromCSS : backgroundColor
+  );
 
   const BORDER_COLOR = isBackgroundDarkColor ? ' #F2F2F2' : '#D9D9D9';
 
@@ -16,7 +28,9 @@ export default function tableThemeColors(theme) {
   };
 
   return {
+    tableBackgroundColorFromTheme: tableBackgroundColorFromTheme || 'inherit',
     backgroundColor,
+    isBackgroundTransparentColor,
     isBackgroundDarkColor,
     borderColor,
     body,

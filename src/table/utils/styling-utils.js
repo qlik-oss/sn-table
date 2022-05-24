@@ -1,4 +1,4 @@
-import { resolveExpression, isDarkColor } from './color-utils';
+import { resolveToRGBAorRGB, isDarkColor, removeOpacity } from './color-utils';
 import { SelectionStates } from './selections-utils';
 
 // the order of style
@@ -56,7 +56,6 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
   const fontSize = theme.getStyle('object', `straightTable.${objetName}`, 'fontSize');
 
   const baseStyle = {
-    backgroundColor: theme.table.backgroundColor,
     fontFamily,
     color: isSet(styleObj?.fontColor) ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj.fontColor) : color,
     fontSize: styleObj?.fontSize || fontSize,
@@ -74,12 +73,15 @@ export function getHeaderStyle(layout, theme) {
   const headerStyle = getBaseStyling(header, 'header', theme);
   headerStyle.borderWidth = '1px 1px 1px 0px';
 
-  // When the table background color from the sense theme is transparent,
+  // To avoid seeing the table body through the table head:
+  // - When the table background color from the sense theme is transparent,
   // there is a header background color depending on the header font color
-  // to avoid seeing the table body through the table head.
+  // - When the table background color from the sense theme has opacity,
+  // removing that.
   const headerBackgroundColor = isDarkColor(headerStyle.color) ? '#FAFAFA' : '#323232';
-  headerStyle.backgroundColor =
-    theme.table.backgroundColor === 'transparent' ? headerBackgroundColor : theme.table.backgroundColor;
+  headerStyle.backgroundColor = theme.table.isBackgroundTransparentColor
+    ? headerBackgroundColor
+    : removeOpacity(theme.table.backgroundColor);
 
   // When you set the header font color,
   // the sort label color should be same.
@@ -181,7 +183,7 @@ export function getBodyCellStyle(layout, theme) {
 export function getColumnStyle(styling, qAttrExps, stylingInfo) {
   const columnColors = {};
   qAttrExps?.qValues.forEach((val, i) => {
-    columnColors[stylingInfo[i]] = resolveExpression(val.qText);
+    columnColors[stylingInfo[i]] = resolveToRGBAorRGB(val.qText);
   });
 
   if (columnColors.cellBackgroundColor && !columnColors.cellForegroundColor)
