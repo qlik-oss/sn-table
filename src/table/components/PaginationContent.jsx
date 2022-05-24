@@ -164,8 +164,6 @@ function PaginationContent({
   );
 }
 
-export default memo(PaginationContent);
-
 PaginationContent.defaultProps = {
   direction: null,
   footerContainer: null,
@@ -186,3 +184,5 @@ PaginationContent.propTypes = {
   handleChangePage: PropTypes.func.isRequired,
   announce: PropTypes.func.isRequired,
 };
+
+export default memo(PaginationContent);
