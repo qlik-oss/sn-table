@@ -43,7 +43,7 @@ test.describe('sn table: Rendering tests with a light theme', () => {
   // Iterate testing fixture files
   fs.readdirSync(paths.fixtures).forEach((file) => {
     const name = file.replace('.fix.js', '');
-    const fixturePath = `./${file}&theme=light&language=zh-CN`;
+    const fixturePath = `./${file}&theme=light&language=it-IT`;
 
     // Create test case per testing fixture file
     test(name, async ({ page }) => {

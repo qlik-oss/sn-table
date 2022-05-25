@@ -15,7 +15,6 @@ module.exports = (type) => ({
   },
   fontFamily: 'Source Sans Pro, sans-serif',
   fontSize: '12px',
-  _cards: true,
   color: '@myColorDark',
   backgroundColor: 'rgba(200,200,200,0.3)',
   object: {
@@ -52,43 +51,6 @@ module.exports = (type) => ({
       },
     },
   },
-  dataColors: {
-    primaryColor: '#006580',
-    othersColor: '#a5a5a5',
-    errorColor: '#ff4444',
-    nullColor: '#d2d2d2',
-    selectionColor: '#52cc52',
-  },
-  scales: [
-    {
-      name: 'Sequential Gradient',
-      translation: 'properties.colorScheme.sequential',
-      type: 'gradient',
-      propertyValue: 'sg',
-      scale: ['#006580', '#C4CFDA'],
-    },
-    {
-      name: 'Sequential Classes',
-      translation: 'properties.colorScheme.sequentialC',
-      propertyValue: 'sc',
-      type: 'class',
-      scale: ['#006580', '#C4CFDA'],
-    },
-    {
-      name: 'Diverging gradient',
-      translation: 'properties.colorScheme.diverging',
-      propertyValue: 'dg',
-      type: 'gradient',
-      scale: ['#006580', '#C4CFDA', '#87205D'],
-    },
-    {
-      name: 'Diverging Classes',
-      translation: 'properties.colorScheme.divergingC',
-      propertyValue: 'dc',
-      type: 'class',
-      scale: ['#006580', '#C4CFDA', '#87205D'],
-    },
-  ],
   palettes: {
     data: [
       {
