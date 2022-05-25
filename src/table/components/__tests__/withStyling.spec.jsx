@@ -8,8 +8,6 @@ describe('withStyling', () => {
   let styling;
 
   beforeEach(() => {
-    // This is a bit of dummy mock. value will be on props, but this is not how the value is set. That is done in tableBodyWrapper
-    // But this enables testing that withStyling uses the CellComponent correctly
     HOC = withStyling.default((props) => <div {...props}>{props.children}</div>);
 
     styling = {};
