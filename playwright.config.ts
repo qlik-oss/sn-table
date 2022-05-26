@@ -26,7 +26,7 @@ const config: PlaywrightTestConfig = {
   // The maximum number of retry attempts per test, two retries on CI
   retries: process.env.CI ? 2 : 0,
   // Limit the number of workers
-  workers: 2,
+  workers: 1,
   // Multiple "projects" can run your tests in multiple browsers and configurations
   projects: [
     {
