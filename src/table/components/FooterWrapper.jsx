@@ -16,7 +16,7 @@ export default function FooterWrapper({ children, theme, footerContainer }) {
     borderRadius: 0,
     borderColor: theme.table.pagination.borderColor,
     color: theme.table.pagination.color,
-    backgroundColor: theme.table.tableBackgroundColorFromTheme,
+    backgroundColor: theme.table.backgroundColor,
   };
 
   return footerContainer ? (

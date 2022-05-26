@@ -205,7 +205,7 @@ export function getColumnStyle(styling, qAttrExps, stylingInfo) {
  * @returns {Object} The style for the cell
  */
 
-export function getSelectionStyle(styling, cellSelectionState, themeBackgroundColor) {
+export function getSelectionStyle(styling, cellSelectionState) {
   let selectionStyling = {};
   switch (cellSelectionState) {
     case SelectionStates.SELECTED:
@@ -216,7 +216,7 @@ export function getSelectionStyle(styling, cellSelectionState, themeBackgroundCo
       break;
     case SelectionStates.EXCLUDED:
       selectionStyling = {
-        background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${styling.backgroundColor || themeBackgroundColor}`,
+        background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${styling.backgroundColor}`,
       };
       break;
     default:

@@ -11,9 +11,7 @@ describe('withColumnStyling', () => {
   let styling;
 
   beforeEach(() => {
-    // This is a bit of dummy mock. value will be on props, but this is not how the value is set. That is done in tableBodyWrapper
-    // But this enables testing that withStyling uses the CellComponent correctly
-    HOC = withColumnStyling.default((props) => <div {...props}>{props.value}</div>);
+    HOC = withColumnStyling.default((props) => <div {...props}>{props.children}</div>);
     jest.spyOn(stylingUtils, 'getColumnStyle').mockImplementation(() => jest.fn());
 
     styling = {};
@@ -28,7 +26,11 @@ describe('withColumnStyling', () => {
   afterEach(() => jest.clearAllMocks());
 
   it('should render table head', () => {
-    const { queryByText } = render(<HOC value="someValue" cell={cell} column={column} styling={styling} />);
+    const { queryByText } = render(
+      <HOC value="" cell={cell} column={column} styling={styling}>
+        someValue
+      </HOC>
+    );
 
     expect(queryByText('someValue')).toBeVisible();
     expect(stylingUtils.getColumnStyle).toHaveBeenCalledWith(styling, cell.qAttrExps, column.stylingInfo);
