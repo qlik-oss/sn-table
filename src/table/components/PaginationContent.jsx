@@ -99,7 +99,7 @@ function PaginationContent({
         onClick={!disabledCondition ? () => handleChangePage(pageNumber) : null}
         aria-disabled={disabledCondition}
         aria-label={translator.get(`SNTable.Pagination.${type}`)}
-        title={!constraints.passive && translator.get(`SNTable.Pagination.${type}`)}
+        title={!constraints.passive ? translator.get(`SNTable.Pagination.${type}`) : undefined}
         tabIndex={tabIndex}
         sx={{ ...buttonStyle, height: 32 }}
         onKeyDown={onKeyDown}
