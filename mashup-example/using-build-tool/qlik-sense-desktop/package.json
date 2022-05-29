@@ -16,7 +16,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@nebula.js/sn-table": "1.12.1",
+    "@nebula.js/sn-table": "1.12.4",
     "@nebula.js/stardust": "2.10.0",
     "enigma.js": "2.9.0"
   },
