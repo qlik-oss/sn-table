@@ -20,9 +20,14 @@
   connect()('/apps/Executive_Dashboard.qvf').then((app) => {
     // configure stardust
     const nuked = window.stardust.embed(app, {
-      theme: 'dark',
-      constraints: {
-        active: true, // do not allow interactions
+      context: {
+        theme: 'dark',
+        keyboardNavigation: true,
+        constraints: {
+          active: false, // turn off interactions that affect the state of the visual representation including selection, zoom, scroll, etc.
+          select: false, // turn off selections.
+          passive: false, // turn off interactions like tooltips.
+        },
       },
       types: [
         {
@@ -47,7 +52,66 @@
       type: 'table',
       fields: ['Sales Price', '=Sum([Sales Quantity]*[Sales Price])'],
       options: {
-        direction: 'rtl',
+        // direction: 'rtl',
+      },
+      properties: {
+        components: [
+          {
+            key: 'theme',
+            content: {
+              fontSize: 10,
+              fontColor: {
+                index: -1,
+                color: '#276e27',
+              },
+              hoverEffect: true,
+              hoverColor: {
+                index: -1,
+                color: '#7db8da',
+              },
+              hoverFontColor: {
+                index: -1,
+                color: '#4477aa',
+              },
+            },
+            header: {
+              fontSize: 20,
+              fontColor: {
+                index: -1,
+                color: '#f8981d',
+              },
+            },
+          },
+        ],
+        qHyperCubeDef: {
+          qMeasures: [
+            {
+              qDef: {
+                qDef: '=Sum([Sales Quantity])',
+                textAlign: {
+                  auto: false,
+                  align: 'left',
+                },
+              },
+              qAttributeExpressions: [
+                {
+                  qExpression: `=if(Sum([Sales Quantity]) < 100000, '#ff0000', '#00ff00')`,
+                  qAttribute: true,
+                  id: 'cellBackgroundColor',
+                },
+                {
+                  qExpression: `=if(Sum([Sales Quantity]) < 100000, '#3bbc4a', '#8b3bbc')`,
+                  qAttribute: true,
+                  id: 'cellForegroundColor',
+                },
+              ],
+            },
+          ],
+        },
+        title: 'it is title',
+        showTitles: true,
+        subtitle: 'it is subtitle',
+        footnote: 'it is footnote',
       },
     });
   });

@@ -27,7 +27,7 @@ const nuked = embed.createConfiguration({
     keyboardNavigation: true,
     constraints: {
       active: false, // turn off interactions that affect the state of the visual representation including selection, zoom, scroll, etc.
-      select: true, // turn off selections.
+      select: false, // turn off selections.
       passive: false, // turn off interactions like tooltips.
     },
   },

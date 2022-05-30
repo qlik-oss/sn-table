@@ -24,6 +24,13 @@ import './style.css';
       direction: 'rtl',
     },
     properties: {
+      components: [
+        {
+          content: {
+            fontSize: 40,
+          },
+        },
+      ],
       qHyperCubeDef: {
         qMeasures: [
           {
@@ -34,9 +41,22 @@ import './style.css';
                 align: 'left',
               },
             },
+            qAttributeExpressions: [
+              {
+                qExpression: `=if(Sum([Sales Quantity]) < 100000, '#ff0000', '#00ff00')`,
+                qAttribute: true,
+                id: 'cellBackgroundColor',
+              },
+              {
+                qExpression: `=if(Sum([Sales Quantity]) < 100000, '#3bbc4a', '#8b3bbc')`,
+                qAttribute: true,
+                id: 'cellForegroundColor',
+              },
+            ],
           },
         ],
       },
+      footnote: 'it is footnote',
     },
   });
 })();

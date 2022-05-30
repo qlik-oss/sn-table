@@ -20,3 +20,4 @@ exclude_patterns:
   - "*config*"
   - "test/**/__fixtures__"
   - "theme"
+  - "mashup-example"
