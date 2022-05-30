@@ -386,11 +386,10 @@ describe('styling-utils', () => {
 
     beforeEach(() => {
       styling = {
-        backgroundColor: undefined,
         otherStyling: 'otherStyling',
+        backgroundColor: '#123456',
       };
       cellSelectionState = SelectionStates.SELECTED;
-      themeBackgroundColor = '#123456';
     });
 
     it('should return selected when selected styling', () => {
@@ -401,10 +400,10 @@ describe('styling-utils', () => {
     it('should return excluded styling when other column', () => {
       cellSelectionState = SelectionStates.EXCLUDED;
 
-      const selectionStyling = getSelectionStyle(styling, cellSelectionState, themeBackgroundColor);
+      const selectionStyling = getSelectionStyle(styling, cellSelectionState);
       expect(selectionStyling).toEqual({
         ...styling,
-        background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${themeBackgroundColor}`,
+        background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${styling.backgroundColor}`,
       });
     });
 

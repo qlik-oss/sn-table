@@ -8,7 +8,7 @@ import { TableContextProvider } from './context';
 export function render(reactRoot, props) {
   const { muiTheme, direction, selectionsAPI } = props;
 
-  reactRoot.render(
+  reactRoot?.render(
     <React.StrictMode>
       <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : []}>
         <ThemeProvider theme={muiTheme}>
