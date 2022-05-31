@@ -40,7 +40,7 @@
     "version": "0HFoHIB1i+ZETBO3YI76/g=="
   },
   "SNTable.Pagination.RowsPerPage": {
-    "value": "每页行数",
+    "value": "每页行数：",
     "comment": "label for the rows per page dropdown. (tew 210929)",
     "version": "zuWpMmMSoOG/QRsKoVx3OA=="
   },
@@ -57,7 +57,7 @@
   "SNTable.SelectionLabel.DeselectedValue": {
     "value": "值已取消选择。",
     "comment": "announced by screen readers when a value is deselected. (tew 210929)",
-    "version": "/NL1c53TDjc2dhooLWg1WA=="
+    "version": "76E/5nke7HRRMEcF1fQbrA=="
   },
   "SNTable.SelectionLabel.ExitedSelectionMode": {
     "value": "值已取消选择。已退出选择模式。",

@@ -57,7 +57,7 @@
   "SNTable.SelectionLabel.DeselectedValue": {
     "value": "값이 선택 취소되었습니다.",
     "comment": "announced by screen readers when a value is deselected. (tew 210929)",
-    "version": "/NL1c53TDjc2dhooLWg1WA=="
+    "version": "76E/5nke7HRRMEcF1fQbrA=="
   },
   "SNTable.SelectionLabel.ExitedSelectionMode": {
     "value": "값이 선택 취소되었습니다. 선택 모드를 종료했습니다.",

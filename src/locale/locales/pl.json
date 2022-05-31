@@ -57,7 +57,7 @@
   "SNTable.SelectionLabel.DeselectedValue": {
     "value": "Wartość nie jest zaznaczona.",
     "comment": "announced by screen readers when a value is deselected. (tew 210929)",
-    "version": "/NL1c53TDjc2dhooLWg1WA=="
+    "version": "76E/5nke7HRRMEcF1fQbrA=="
   },
   "SNTable.SelectionLabel.ExitedSelectionMode": {
     "value": "Wartość nie jest zaznaczona. Zakończono tryb wyboru.",
