@@ -40,7 +40,7 @@
     "version": "0HFoHIB1i+ZETBO3YI76/g=="
   },
   "SNTable.Pagination.RowsPerPage": {
-    "value": "每页行数：",
+    "value": "每页行数",
     "comment": "label for the rows per page dropdown. (tew 210929)",
     "version": "zuWpMmMSoOG/QRsKoVx3OA=="
   },
