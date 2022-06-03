@@ -5,15 +5,8 @@ describe('table-theme-colors', () => {
   let themeTableBackgroundColor;
   let rootElement;
   const theme = {
-    getStyle: (base, path, attribute) => {
-      let backgroundColor;
-      if (attribute === 'backgroundColor') {
-        backgroundColor = themeObjectBackgroundColor;
-      } else if (attribute === 'object.straightTable.backgroundColor') {
-        backgroundColor = themeTableBackgroundColor;
-      }
-      return backgroundColor;
-    },
+    getStyle: (base, path, attribute) =>
+      attribute === 'backgroundColor' ? themeObjectBackgroundColor : themeTableBackgroundColor,
   };
   let valueWithLightBackgroundColor = {
     tableBackgroundColorFromTheme: 'inherit',
@@ -42,14 +35,15 @@ describe('table-theme-colors', () => {
     },
   };
 
+  beforeEach(() => {
+    themeTableBackgroundColor = undefined;
+    themeObjectBackgroundColor = undefined;
+  });
+
   describe('mashup', () => {
-    beforeEach(() => {
-      themeTableBackgroundColor = undefined;
-      themeObjectBackgroundColor = undefined;
-      rootElement = {
-        closest: () => null,
-      };
-    });
+    rootElement = {
+      closest: () => null,
+    };
 
     describe('when there is no background color in the theme file', () => {
       it('should return the valueWithLightBackgroundColor', () => {
@@ -156,20 +150,14 @@ describe('table-theme-colors', () => {
   });
 
   describe('client', () => {
-    let qvPanelSheetBackgroundColor;
-    let qvInnerObjectBackgroundColor;
     rootElement = {
       closest: (selector) => selector,
     };
-    global.window.getComputedStyle = (selector) => {
-      let backgroundColor;
-      if (selector === '.qv-panel-sheet') {
-        backgroundColor = { backgroundColor: qvPanelSheetBackgroundColor };
-      } else if (selector === '.qv-object .qv-inner-object') {
-        backgroundColor = { backgroundColor: qvInnerObjectBackgroundColor };
-      }
-      return backgroundColor;
-    };
+    let qvPanelSheetBackgroundColor;
+    let qvInnerObjectBackgroundColor;
+    global.window.getComputedStyle = (selector) => ({
+      backgroundColor: selector === '.qv-panel-sheet' ? qvPanelSheetBackgroundColor : qvInnerObjectBackgroundColor,
+    });
 
     beforeEach(() => {
       valueWithLightBackgroundColor = {
@@ -182,8 +170,6 @@ describe('table-theme-colors', () => {
         backgroundColor: 'rgba(0, 0, 0, 0)',
         isBackgroundTransparentColor: true,
       };
-      themeTableBackgroundColor = undefined;
-      themeObjectBackgroundColor = undefined;
       qvPanelSheetBackgroundColor = '#fff';
       qvInnerObjectBackgroundColor = 'rgba(0, 0, 0, 0)';
     });
