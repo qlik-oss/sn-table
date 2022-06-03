@@ -60,7 +60,7 @@ export default function supernova(env) {
       const translator = useTranslator();
       const selectionsAPI = useSelections();
       const theme = useTheme();
-      theme.table = tableThemeColors(theme);
+      theme.table = tableThemeColors(theme, rootElement);
       const muiTheme = muiSetup(direction);
       const keyboard = useKeyboard();
       const rect = useRect();
