@@ -35,7 +35,7 @@ describe('withSelections', () => {
 
     value = '100';
     cell = {
-      isDim: true,
+      isSelectable: true,
     };
     evt = { button: 0 };
     styling = {};
@@ -67,7 +67,7 @@ describe('withSelections', () => {
   });
 
   it('should not call selectCell on mouseUp when measure', () => {
-    cell.isDim = false;
+    cell.isSelectable = false;
 
     const { queryByText } = renderWithSelections();
     fireEvent.mouseUp(queryByText(value));

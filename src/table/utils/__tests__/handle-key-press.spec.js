@@ -177,7 +177,7 @@ describe('handle-key-press', () => {
         cancel: jest.fn(),
         isModal: () => isModal,
       };
-      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1, isDim: true };
+      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1, isSelectable: true };
       keyboard = { enabled: true };
       selectionDispatch = jest.fn();
       isAnalysisMode = true;
@@ -260,10 +260,10 @@ describe('handle-key-press', () => {
       });
     });
 
-    it('when press space bar key not on dimension, should not select value for measure', () => {
+    it('when press space bar key not on a dimension which is selectable, should not select value for measure', () => {
       evt.key = ' ';
       cell = {
-        isDim: false,
+        isSelectable: false,
       };
       bodyHandleKeyPress({
         evt,
@@ -526,30 +526,6 @@ describe('handle-key-press', () => {
       expect(evt.target.blur).not.toHaveBeenCalled();
       expect(evt.target.setAttribute).not.toHaveBeenCalled();
       expect(selectionsAPI.cancel).not.toHaveBeenCalled();
-      expect(setFocusedCellCoord).not.toHaveBeenCalled();
-      expect(announce).not.toHaveBeenCalled();
-    });
-
-    it('when a dimension is locked, should not do selections on the dimension', () => {
-      const isLocked = true;
-      evt.key = ' ';
-
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        selectionDispatch,
-        isAnalysisMode,
-        setFocusedCellCoord,
-        announce,
-        keyboard,
-        selectionsAPI,
-        isLocked,
-      });
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(selectionDispatch).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
       expect(announce).not.toHaveBeenCalled();
     });

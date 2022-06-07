@@ -67,7 +67,7 @@ function TableBodyWrapper({
       {rows.map((row, rowIndex) => (
         <TableRow hover={hoverEffect} tabIndex={-1} key={row.key} sx={rowCellStyle} className="sn-table-row">
           {columns.map((column, columnIndex) => {
-            const { id, isLocked, align } = column;
+            const { id, align } = column;
             const cell = row[id];
             const CellRenderer = columnRenderers[columnIndex];
 
@@ -83,7 +83,6 @@ function TableBodyWrapper({
                   styling={{ color: bodyCellStyle.color, backgroundColor: theme.table.backgroundColor }}
                   tabIndex={-1}
                   announce={announce}
-                  isLocked={isLocked}
                   onKeyDown={(evt) =>
                     bodyHandleKeyPress({
                       evt,
@@ -96,7 +95,6 @@ function TableBodyWrapper({
                       setFocusedCellCoord,
                       announce,
                       keyboard,
-                      isLocked,
                     })
                   }
                   onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}

@@ -26,6 +26,7 @@ export function getColumnInfo(qHyperCube, colIndex) {
   return (
     !isHidden && {
       isDim,
+      isLocked,
       width: 200,
       label: info.qFallbackTitle,
       id: `col-${colIndex}`,
@@ -33,7 +34,6 @@ export function getColumnInfo(qHyperCube, colIndex) {
       stylingInfo: info.qAttrExprInfo.map((expr) => expr.id),
       sortDirection: directionMap[info.qSortIndicator],
       dataColIdx: colIndex,
-      isLocked,
     }
   );
 }
@@ -74,7 +74,7 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
         ...r[colIdx],
         rowIdx: rowIdx + top,
         colIdx: columnOrder[colIdx],
-        isDim: c.isDim,
+        isSelectable: c.isDim && !c.isLocked,
         rawRowIdx: rowIdx,
         rawColIdx: colIdx,
       };
