@@ -1,6 +1,6 @@
 import { announcementFactory } from '../use-announce-and-translations';
 
-describe('announcement-factory', () => {
+describe('announcementFactory', () => {
   let rootElement;
   let translator;
   let announcer;
