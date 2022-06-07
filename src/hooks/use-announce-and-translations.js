@@ -72,7 +72,7 @@ const useAnnounceAndTranslations = (rootElement, translator) => {
       registerLocale(translator);
       setAnnounce(() => announcementFactory(rootElement, translator));
     }
-  }, [rootElement, translator]);
+  }, [rootElement, translator.language()]);
 
   return announce;
 };

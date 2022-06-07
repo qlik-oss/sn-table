@@ -1,6 +1,6 @@
 import { useState, useEffect } from '@nebula.js/stardust';
 
-const sortingFactory = (model) => {
+export const sortingFactory = (model) => {
   return async (layout, column) => {
     const { isDim, dataColIdx } = column;
     // The sort order from the properties is needed since it contains hidden columns

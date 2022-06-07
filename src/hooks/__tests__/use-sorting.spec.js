@@ -1,4 +1,4 @@
-import sortingFactory from '../use-sorting';
+import { sortingFactory } from '../use-sorting';
 import { generateLayout } from '../../__test__/generate-test-data';
 
 describe('sortingFactory', () => {

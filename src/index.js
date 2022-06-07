@@ -9,7 +9,6 @@ import {
   useConstraints,
   useTranslator,
   useSelections,
-  useTheme,
   usePromise,
   useKeyboard,
   useRect,
@@ -23,9 +22,9 @@ import ext from './ext';
 import manageData from './handle-data';
 import { mount, render, teardown } from './table/Root';
 import muiSetup from './mui-setup';
-import tableThemeColors from './table-theme-colors';
 import useAnnounceAndTranslations from './hooks/use-announce-and-translations';
 import useSorting from './hooks/use-sorting';
+import useExtendedTheme from './hooks/use-extended-theme';
 
 const initialPageInfo = {
   page: 0,
@@ -34,7 +33,7 @@ const initialPageInfo = {
 };
 const nothing = async () => {};
 const renderWithCarbon = ({ env, rootElement, model, theme, selectionsAPI, app, rect, layout, changeSortOrder }) => {
-  if (env.carbon) {
+  if (env.carbon && changeSortOrder && theme) {
     render(rootElement, { layout, model, manageData, theme, selectionsAPI, changeSortOrder, app, rect });
   }
 };
@@ -49,7 +48,6 @@ export default function supernova(env) {
     },
     component() {
       const rootElement = useElement();
-      const [reactRoot, setReactRoot] = useState();
       const layout = useStaleLayout();
       const { direction, footerContainer } = useOptions();
       const app = useApp();
@@ -57,18 +55,18 @@ export default function supernova(env) {
       const constraints = useConstraints();
       const translator = useTranslator();
       const selectionsAPI = useSelections();
-      const theme = useTheme();
-      theme.table = tableThemeColors(theme, rootElement);
       const muiTheme = muiSetup(direction);
       const keyboard = useKeyboard();
       const rect = useRect();
-      const [pageInfo, setPageInfo] = useState(() => initialPageInfo);
+      const theme = useExtendedTheme(rootElement);
+      const announce = useAnnounceAndTranslations(rootElement, translator);
+      const changeSortOrder = useSorting(model);
+
+      const [reactRoot, setReactRoot] = useState();
+      const [pageInfo, setPageInfo] = useState(initialPageInfo);
       const [tableData] = usePromise(() => {
         return env.carbon ? nothing() : manageData(model, layout, pageInfo, setPageInfo);
       }, [layout, pageInfo]);
-
-      const announce = useAnnounceAndTranslations(rootElement, translator);
-      const changeSortOrder = useSorting(model);
 
       useEffect(() => {
         if (rootElement) {
@@ -78,7 +76,7 @@ export default function supernova(env) {
       }, [rootElement]);
 
       useEffect(() => {
-        if (layout && tableData && announce && changeSortOrder && !env.carbon) {
+        if (!env.carbon && layout && tableData && announce && changeSortOrder && theme) {
           render(reactRoot, {
             rootElement,
             layout,
@@ -104,8 +102,7 @@ export default function supernova(env) {
         constraints,
         direction,
         selectionsAPI.isModal(),
-        theme.name(),
-        theme.table.backgroundColor,
+        theme,
         keyboard.active,
         rect.width,
         announce,
@@ -115,16 +112,7 @@ export default function supernova(env) {
       // this is the one we want to use for carbon
       useEffect(() => {
         renderWithCarbon({ env, rootElement, model, theme, selectionsAPI, app, rect, layout });
-      }, [
-        layout,
-        model,
-        selectionsAPI.isModal(),
-        theme.name(),
-        manageData,
-        translator.language(),
-        app,
-        changeSortOrder,
-      ]);
+      }, [layout, model, selectionsAPI.isModal(), theme, translator.language(), app, changeSortOrder]);
 
       useEffect(
         () => () => {
