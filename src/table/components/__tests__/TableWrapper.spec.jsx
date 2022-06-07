@@ -34,6 +34,7 @@ describe('<TableWrapper />', () => {
           translator={translator}
           rect={rect}
           theme={theme}
+          // TODO: add announce??
         />
       </TableContextProvider>
     );

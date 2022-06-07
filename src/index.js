@@ -17,15 +17,15 @@ import {
 } from '@nebula.js/stardust';
 import { createRoot } from 'react-dom/client';
 
-import registerLocale from './locale/src';
 import properties from './object-properties';
 import data from './data';
 import ext from './ext';
 import manageData from './handle-data';
-import sortingFactory from './sorting-factory';
 import { mount, render, teardown } from './table/Root';
 import muiSetup from './mui-setup';
 import tableThemeColors from './table-theme-colors';
+import useAnnounceAndTranslations from './hooks/use-announce-and-translations';
+import useSorting from './hooks/use-sorting';
 
 const initialPageInfo = {
   page: 0,
@@ -33,10 +33,8 @@ const initialPageInfo = {
   rowsPerPageOptions: [10, 25, 100],
 };
 const nothing = async () => {};
-const renderWithCarbon = ({ env, translator, rootElement, model, theme, selectionsAPI, app, rect, layout }) => {
+const renderWithCarbon = ({ env, rootElement, model, theme, selectionsAPI, app, rect, layout, changeSortOrder }) => {
   if (env.carbon) {
-    registerLocale(translator);
-    const changeSortOrder = sortingFactory(model);
     render(rootElement, { layout, model, manageData, theme, selectionsAPI, changeSortOrder, app, rect });
   }
 };
@@ -69,6 +67,9 @@ export default function supernova(env) {
         return env.carbon ? nothing() : manageData(model, layout, pageInfo, setPageInfo);
       }, [layout, pageInfo]);
 
+      const announce = useAnnounceAndTranslations(rootElement, translator);
+      const changeSortOrder = useSorting(model);
+
       useEffect(() => {
         if (rootElement) {
           setReactRoot(createRoot(rootElement));
@@ -77,9 +78,7 @@ export default function supernova(env) {
       }, [rootElement]);
 
       useEffect(() => {
-        if (layout && tableData && !env.carbon) {
-          registerLocale(translator);
-          const changeSortOrder = sortingFactory(model);
+        if (layout && tableData && announce && changeSortOrder && !env.carbon) {
           render(reactRoot, {
             rootElement,
             layout,
@@ -96,6 +95,7 @@ export default function supernova(env) {
             keyboard,
             rect,
             footerContainer,
+            announce,
           });
         }
       }, [
@@ -107,14 +107,24 @@ export default function supernova(env) {
         theme.name(),
         theme.table.backgroundColor,
         keyboard.active,
-        translator.language(),
         rect.width,
+        announce,
+        changeSortOrder,
       ]);
 
       // this is the one we want to use for carbon
       useEffect(() => {
-        renderWithCarbon({ env, translator, rootElement, model, theme, selectionsAPI, app, rect, layout });
-      }, [layout, model, selectionsAPI.isModal(), theme.name(), manageData, translator.language(), app]);
+        renderWithCarbon({ env, rootElement, model, theme, selectionsAPI, app, rect, layout });
+      }, [
+        layout,
+        model,
+        selectionsAPI.isModal(),
+        theme.name(),
+        manageData,
+        translator.language(),
+        app,
+        changeSortOrder,
+      ]);
 
       useEffect(
         () => () => {

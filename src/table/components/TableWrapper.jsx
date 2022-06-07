@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useMemo, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
@@ -9,12 +9,11 @@ import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import FooterWrapper from './FooterWrapper';
 import PaginationContent from './PaginationContent';
-import useDidUpdateEffect from './useDidUpdateEffect';
+import useDidUpdateEffect from '../../hooks/use-did-update-effect';
 import { useContextSelector, TableContext } from '../context';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
-import announcementFactory from '../utils/announcement-factory';
 
 export default function TableWrapper(props) {
   const {
@@ -29,6 +28,7 @@ export default function TableWrapper(props) {
     keyboard,
     direction,
     footerContainer,
+    announce,
   } = props;
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
@@ -37,7 +37,6 @@ export default function TableWrapper(props) {
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
-  const announce = useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
@@ -153,17 +152,12 @@ export default function TableWrapper(props) {
       >
         <Table stickyHeader aria-label={tableAriaLabel}>
           <TableHeadWrapper {...props} />
-          <TableBodyWrapper
-            {...props}
-            announce={announce}
-            setShouldRefocus={setShouldRefocus}
-            tableWrapperRef={tableWrapperRef}
-          />
+          <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </Table>
       </TableContainer>
       {!constraints.active && (
         <FooterWrapper theme={theme} footerContainer={footerContainer}>
-          <PaginationContent {...props} handleChangePage={handleChangePage} announce={announce} />
+          <PaginationContent {...props} handleChangePage={handleChangePage} />
         </FooterWrapper>
       )}
     </Paper>
@@ -171,7 +165,6 @@ export default function TableWrapper(props) {
 }
 
 TableWrapper.defaultProps = {
-  announcer: null,
   direction: null,
   footerContainer: null,
 };
@@ -186,7 +179,7 @@ TableWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
+  announce: PropTypes.func.isRequired,
   footerContainer: PropTypes.object,
   direction: PropTypes.string,
-  announcer: PropTypes.func,
 };

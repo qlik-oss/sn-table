@@ -1,4 +1,6 @@
-export default function sortingFactory(model) {
+import { useState, useEffect } from '@nebula.js/stardust';
+
+const sortingFactory = (model) => {
   return async (layout, column) => {
     const { isDim, dataColIdx } = column;
     // The sort order from the properties is needed since it contains hidden columns
@@ -35,4 +37,18 @@ export default function sortingFactory(model) {
 
     model.applyPatches(patches, true);
   };
-}
+};
+
+const useSorting = (model) => {
+  const [changeSortOrder, setChangeSortOrder] = useState();
+
+  useEffect(() => {
+    if (model) {
+      setChangeSortOrder(() => sortingFactory(model));
+    }
+  }, [model]);
+
+  return changeSortOrder;
+};
+
+export default useSorting;
