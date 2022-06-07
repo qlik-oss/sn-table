@@ -1,31 +1,13 @@
 import tableThemeColors from '../table-theme-colors';
 
 describe('table-theme-colors', () => {
-  const spyQuerySelector = jest.fn();
-  const spyGetComputedStyle = jest.fn();
-  const spyGetStyle = jest.fn();
-  const setObjectAndTableBackgroundColorInTheme =
-    (objectBackgroundColor, tableBackgroundColor) => (base, path, attribute) => {
-      let backgroundColor;
-      if (attribute === 'backgroundColor') {
-        backgroundColor = objectBackgroundColor;
-      } else if (attribute === 'object.straightTable.backgroundColor') {
-        backgroundColor = tableBackgroundColor;
-      }
-      return backgroundColor;
-    };
-  const setqvPanelSheetAndqvInnerObject = (selector) => selector;
-  const setqvPanelSheetAndqvInnerObjectBackgroundColor =
-    (qvPanelSheetBackgroundColor = '#fff', qvInnerObjectBackgroundColor = 'rgba(0, 0, 0, 0)') =>
-    (selector) => {
-      let backgroundColor;
-      if (selector === '.qv-panel-sheet') {
-        backgroundColor = { backgroundColor: qvPanelSheetBackgroundColor };
-      } else if (selector === '.qv-object .qv-inner-object') {
-        backgroundColor = { backgroundColor: qvInnerObjectBackgroundColor };
-      }
-      return backgroundColor;
-    };
+  let themeObjectBackgroundColor;
+  let themeTableBackgroundColor;
+  let rootElement;
+  const theme = {
+    getStyle: (base, path, attribute) =>
+      attribute === 'backgroundColor' ? themeObjectBackgroundColor : themeTableBackgroundColor,
+  };
   let valueWithLightBackgroundColor = {
     tableBackgroundColorFromTheme: 'inherit',
     backgroundColor: undefined,
@@ -52,22 +34,16 @@ describe('table-theme-colors', () => {
       iconColor: 'rgba(255, 255, 255, 0.9)',
     },
   };
-  let theme;
 
   beforeEach(() => {
-    theme = {
-      getStyle: spyGetStyle,
-    };
-    spyQuerySelector.mockReturnValue(undefined);
+    themeTableBackgroundColor = undefined;
+    themeObjectBackgroundColor = undefined;
   });
 
   describe('mashup', () => {
-    beforeEach(() => {
-      global.document.querySelector = spyQuerySelector;
-      global.window.getComputedStyle = spyGetComputedStyle;
-      spyQuerySelector.mockReturnValue(undefined);
-      spyGetComputedStyle.mockReturnValue(undefined);
-    });
+    rootElement = {
+      closest: () => null,
+    };
 
     describe('when there is no background color in the theme file', () => {
       it('should return the valueWithLightBackgroundColor', () => {
@@ -80,39 +56,39 @@ describe('table-theme-colors', () => {
       describe('when this is only a object background color', () => {
         describe('when the background color is opaque', () => {
           it('should return the valueWithLightBackgroundColor when the background color is light', () => {
-            theme.getStyle = setObjectAndTableBackgroundColorInTheme('#fff');
+            themeObjectBackgroundColor = '#fff';
 
-            const result = tableThemeColors(theme);
-            expect(result).toEqual({ ...valueWithLightBackgroundColor, backgroundColor: '#fff' });
+            const result = tableThemeColors(theme, rootElement);
+            expect(result).toEqual({ ...valueWithLightBackgroundColor, backgroundColor: themeObjectBackgroundColor });
           });
 
           it('should return the valueWithDarkBackgroundColor when the background color is dark', () => {
-            theme.getStyle = setObjectAndTableBackgroundColorInTheme('#000');
+            themeObjectBackgroundColor = '#000';
 
-            const result = tableThemeColors(theme);
-            expect(result).toEqual({ ...valueWithDarkBackgroundColor, backgroundColor: '#000' });
+            const result = tableThemeColors(theme, rootElement);
+            expect(result).toEqual({ ...valueWithDarkBackgroundColor, backgroundColor: themeObjectBackgroundColor });
           });
         });
 
         describe('when the background color is transparent', () => {
           it('should return the valueWithLightBackgroundColor and isBackgroundTransparentColor to be true when the background color is light', () => {
-            theme.getStyle = setObjectAndTableBackgroundColorInTheme('rgba(255, 255, 255, 0)');
+            themeObjectBackgroundColor = 'rgba(255, 255, 255, 0)';
 
-            const result = tableThemeColors(theme);
+            const result = tableThemeColors(theme, rootElement);
             expect(result).toEqual({
               ...valueWithLightBackgroundColor,
-              backgroundColor: 'rgba(255, 255, 255, 0)',
+              backgroundColor: themeObjectBackgroundColor,
               isBackgroundTransparentColor: true,
             });
           });
 
           it('should return the valueWithLightBackgroundColor when the background color is dark', () => {
-            theme.getStyle = setObjectAndTableBackgroundColorInTheme('rgba(0, 0, 0, 0)');
+            themeObjectBackgroundColor = 'rgba(0, 0, 0, 0)';
 
-            const result = tableThemeColors(theme);
+            const result = tableThemeColors(theme, rootElement);
             expect(result).toEqual({
               ...valueWithLightBackgroundColor,
-              backgroundColor: 'rgba(0, 0, 0, 0)',
+              backgroundColor: themeObjectBackgroundColor,
               isBackgroundTransparentColor: true,
             });
           });
@@ -121,48 +97,52 @@ describe('table-theme-colors', () => {
 
       describe('when this is only a table background color', () => {
         it('should return the valueWithLightBackgroundColor, backgroundColor, and tableBackgroundColorFromTheme when the background color is light', () => {
-          theme.getStyle = setObjectAndTableBackgroundColorInTheme(undefined, '#fff');
+          themeObjectBackgroundColor = undefined;
+          themeTableBackgroundColor = '#fff';
 
-          const result = tableThemeColors(theme);
+          const result = tableThemeColors(theme, rootElement);
           expect(result).toEqual({
             ...valueWithLightBackgroundColor,
-            backgroundColor: '#fff',
-            tableBackgroundColorFromTheme: '#fff',
+            backgroundColor: themeTableBackgroundColor,
+            tableBackgroundColorFromTheme: themeTableBackgroundColor,
           });
         });
 
         it('should return the valueWithDarkBackgroundColor, backgroundColor, and tableBackgroundColorFromTheme when the background color is dark', () => {
-          theme.getStyle = setObjectAndTableBackgroundColorInTheme(undefined, '#000');
+          themeObjectBackgroundColor = undefined;
+          themeTableBackgroundColor = '#000';
 
-          const result = tableThemeColors(theme);
+          const result = tableThemeColors(theme, rootElement);
           expect(result).toEqual({
             ...valueWithDarkBackgroundColor,
-            backgroundColor: '#000',
-            tableBackgroundColorFromTheme: '#000',
+            backgroundColor: themeTableBackgroundColor,
+            tableBackgroundColorFromTheme: themeTableBackgroundColor,
           });
         });
       });
 
       describe('when this are both object and table background color', () => {
         it('should return the default value when the table background color is light', () => {
-          theme.getStyle = setObjectAndTableBackgroundColorInTheme('#000', '#fff');
+          themeObjectBackgroundColor = '#000';
+          themeTableBackgroundColor = '#fff';
 
-          const result = tableThemeColors(theme);
+          const result = tableThemeColors(theme, rootElement);
           expect(result).toEqual({
             ...valueWithLightBackgroundColor,
-            backgroundColor: '#fff',
-            tableBackgroundColorFromTheme: '#fff',
+            backgroundColor: themeTableBackgroundColor,
+            tableBackgroundColorFromTheme: themeTableBackgroundColor,
           });
         });
 
         it('should return the valueWithDarkBackgroundColor when the table background color is dark', () => {
-          theme.getStyle = setObjectAndTableBackgroundColorInTheme('#fff', '#000');
+          themeObjectBackgroundColor = '#fff';
+          themeTableBackgroundColor = '#000';
 
-          const result = tableThemeColors(theme);
+          const result = tableThemeColors(theme, rootElement);
           expect(result).toEqual({
             ...valueWithDarkBackgroundColor,
-            backgroundColor: '#000',
-            tableBackgroundColorFromTheme: '#000',
+            backgroundColor: themeTableBackgroundColor,
+            tableBackgroundColorFromTheme: themeTableBackgroundColor,
           });
         });
       });
@@ -170,6 +150,15 @@ describe('table-theme-colors', () => {
   });
 
   describe('client', () => {
+    rootElement = {
+      closest: (selector) => selector,
+    };
+    let qvPanelSheetBackgroundColor;
+    let qvInnerObjectBackgroundColor;
+    global.window.getComputedStyle = (selector) => ({
+      backgroundColor: selector === '.qv-panel-sheet' ? qvPanelSheetBackgroundColor : qvInnerObjectBackgroundColor,
+    });
+
     beforeEach(() => {
       valueWithLightBackgroundColor = {
         ...valueWithLightBackgroundColor,
@@ -181,13 +170,13 @@ describe('table-theme-colors', () => {
         backgroundColor: 'rgba(0, 0, 0, 0)',
         isBackgroundTransparentColor: true,
       };
-      global.document.querySelector = setqvPanelSheetAndqvInnerObject;
-      global.window.getComputedStyle = setqvPanelSheetAndqvInnerObjectBackgroundColor();
+      qvPanelSheetBackgroundColor = '#fff';
+      qvInnerObjectBackgroundColor = 'rgba(0, 0, 0, 0)';
     });
 
     describe('when there is no background color from theme or css file', () => {
       it('should return the valueWithLightBackgroundColor', () => {
-        const result = tableThemeColors(theme);
+        const result = tableThemeColors(theme, rootElement);
         expect(result).toEqual(valueWithLightBackgroundColor);
       });
     });
@@ -195,9 +184,9 @@ describe('table-theme-colors', () => {
     describe('when there is a background color from css file on sheet', () => {
       describe('when the background color is dark', () => {
         it('should return the valueWithDarkBackgroundColor', () => {
-          global.window.getComputedStyle = setqvPanelSheetAndqvInnerObjectBackgroundColor('#000');
+          qvPanelSheetBackgroundColor = '#000';
 
-          const result = tableThemeColors(theme);
+          const result = tableThemeColors(theme, rootElement);
           expect(result).toEqual(valueWithDarkBackgroundColor);
         });
       });
@@ -207,12 +196,13 @@ describe('table-theme-colors', () => {
       describe('when the background color is opaque', () => {
         describe('when the background color is light', () => {
           it('should return the valueWithLightBackgroundColor, backgroundColor, and isBackgroundTransparentColor to be false', () => {
-            global.window.getComputedStyle = setqvPanelSheetAndqvInnerObjectBackgroundColor('#000', '#fff');
+            qvPanelSheetBackgroundColor = '#000';
+            qvInnerObjectBackgroundColor = '#fff';
 
-            const result = tableThemeColors(theme);
+            const result = tableThemeColors(theme, rootElement);
             expect(result).toEqual({
               ...valueWithLightBackgroundColor,
-              backgroundColor: '#fff',
+              backgroundColor: qvInnerObjectBackgroundColor,
               isBackgroundTransparentColor: false,
             });
           });
@@ -220,12 +210,12 @@ describe('table-theme-colors', () => {
 
         describe('when the background color is dark', () => {
           it('should return the valueWithDarkBackgroundColor, backgroundColor, and isBackgroundTransparentColor to be false', () => {
-            global.window.getComputedStyle = setqvPanelSheetAndqvInnerObjectBackgroundColor('#fff', '#000');
+            qvInnerObjectBackgroundColor = '#000';
 
-            const result = tableThemeColors(theme);
+            const result = tableThemeColors(theme, rootElement);
             expect(result).toEqual({
               ...valueWithDarkBackgroundColor,
-              backgroundColor: '#000',
+              backgroundColor: qvInnerObjectBackgroundColor,
               isBackgroundTransparentColor: false,
             });
           });
@@ -234,15 +224,13 @@ describe('table-theme-colors', () => {
 
       describe('when the background color is transparent', () => {
         it('should return the valueWithLightBackgroundColor and backgroundColor', () => {
-          global.window.getComputedStyle = setqvPanelSheetAndqvInnerObjectBackgroundColor(
-            '#fff',
-            'rgba(255, 255, 255, 0)'
-          );
+          qvPanelSheetBackgroundColor = '#fff';
+          qvInnerObjectBackgroundColor = 'rgba(255, 255, 255, 0)';
 
-          const result = tableThemeColors(theme);
+          const result = tableThemeColors(theme, rootElement);
           expect(result).toEqual({
             ...valueWithLightBackgroundColor,
-            backgroundColor: 'rgba(255, 255, 255, 0)',
+            backgroundColor: qvInnerObjectBackgroundColor,
           });
         });
       });
@@ -252,13 +240,13 @@ describe('table-theme-colors', () => {
       describe('when the background color is opaque', () => {
         describe('when the background color is light', () => {
           it('should return the valueWithLightBackgroundColor and backgroundColor', () => {
-            theme.getStyle = setObjectAndTableBackgroundColorInTheme(undefined, '#fff');
+            themeTableBackgroundColor = '#fff';
 
-            const result = tableThemeColors(theme);
+            const result = tableThemeColors(theme, rootElement);
             expect(result).toEqual({
               ...valueWithLightBackgroundColor,
-              backgroundColor: '#fff',
-              tableBackgroundColorFromTheme: '#fff',
+              backgroundColor: themeTableBackgroundColor,
+              tableBackgroundColorFromTheme: themeTableBackgroundColor,
               isBackgroundTransparentColor: false,
             });
           });
@@ -266,13 +254,13 @@ describe('table-theme-colors', () => {
 
         describe('when the background color is dark', () => {
           it('should return the valueWithLightBackgroundColor, backgroundColor, tableBackgroundColorFromTheme and isBackgroundTransparentColor to false', () => {
-            theme.getStyle = setObjectAndTableBackgroundColorInTheme(undefined, '#000');
+            themeTableBackgroundColor = '#000';
 
-            const result = tableThemeColors(theme);
+            const result = tableThemeColors(theme, rootElement);
             expect(result).toEqual({
               ...valueWithDarkBackgroundColor,
-              backgroundColor: '#000',
-              tableBackgroundColorFromTheme: '#000',
+              backgroundColor: themeTableBackgroundColor,
+              tableBackgroundColorFromTheme: themeTableBackgroundColor,
               isBackgroundTransparentColor: false,
             });
           });
@@ -281,13 +269,13 @@ describe('table-theme-colors', () => {
 
       describe('when the background color is transparent', () => {
         it('should return the valueWithLightBackgroundColor, backgroundColor, tableBackgroundColorFromTheme', () => {
-          theme.getStyle = setObjectAndTableBackgroundColorInTheme(undefined, 'rgba(255, 255, 255, 0)');
+          themeTableBackgroundColor = 'rgba(255, 255, 255, 0)';
 
-          const result = tableThemeColors(theme);
+          const result = tableThemeColors(theme, rootElement);
           expect(result).toEqual({
             ...valueWithLightBackgroundColor,
-            backgroundColor: 'rgba(255, 255, 255, 0)',
-            tableBackgroundColorFromTheme: 'rgba(255, 255, 255, 0)',
+            backgroundColor: themeTableBackgroundColor,
+            tableBackgroundColorFromTheme: themeTableBackgroundColor,
           });
         });
       });
