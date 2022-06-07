@@ -12,7 +12,7 @@ describe('handle-data', () => {
   describe('getColumnInfo', () => {
     colIdx = 1;
 
-    const getExpectedInfo = (colIx, isDim) => ({
+    const getExpectedInfo = (colIx, isDim, isLocked) => ({
       isDim,
       width: 200,
       label: `title-${colIx}`,
@@ -21,6 +21,7 @@ describe('handle-data', () => {
       stylingInfo: [],
       sortDirection: 'asc',
       dataColIdx: colIx,
+      isLocked,
     });
 
     it('should return column info for dimension', () => {
@@ -48,6 +49,13 @@ describe('handle-data', () => {
 
       const columnInfo = getColumnInfo(layout.qHyperCube, colIdx);
       expect(columnInfo).toBe(false);
+    });
+
+    it('should return column info for dimension with isLocked', () => {
+      layout.qHyperCube.qDimensionInfo[colIdx].qLocked = true;
+
+      const columnInfo = getColumnInfo(layout.qHyperCube, colIdx);
+      expect(columnInfo).toEqual(getExpectedInfo(colIdx, true, true));
     });
 
     it('should return column info for measure', () => {

@@ -139,6 +139,7 @@ export const bodyHandleKeyPress = ({
   announce,
   keyboard,
   selectionsAPI = null,
+  isLocked,
 }) => {
   const isInSelectionMode = selectionsAPI?.isModal();
 
@@ -153,7 +154,10 @@ export const bodyHandleKeyPress = ({
     // Space bar: Selects value.
     case ' ': {
       preventDefaultBehavior(evt);
-      cell?.isDim && isAnalysisMode && selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
+      cell?.isDim &&
+        isAnalysisMode &&
+        !isLocked &&
+        selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
       break;
     }
     // Enter: Confirms selections.

@@ -457,8 +457,8 @@ describe('handle-key-press', () => {
         announce,
         keyboard,
       });
-      expect(evt.preventDefault).not.toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).not.toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
+      expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(handleAccessibility.focusSelectionToolbar).not.toHaveBeenCalled();
       expect(announce).not.toHaveBeenCalled();
     });
@@ -479,8 +479,8 @@ describe('handle-key-press', () => {
         announce,
         keyboard,
       });
-      expect(evt.preventDefault).not.toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).not.toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
+      expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(handleAccessibility.focusSelectionToolbar).not.toHaveBeenCalled();
     });
 
@@ -501,8 +501,8 @@ describe('handle-key-press', () => {
         announce,
         keyboard,
       });
-      expect(evt.preventDefault).not.toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).not.toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
+      expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(handleAccessibility.focusSelectionToolbar).not.toHaveBeenCalled();
       expect(announce).not.toHaveBeenCalled();
     });
@@ -516,6 +516,7 @@ describe('handle-key-press', () => {
         selectionsAPI,
         cell,
         selectionDispatch,
+        isAnalysisMode,
         setFocusedCellCoord,
         announce,
         keyboard,
@@ -525,6 +526,30 @@ describe('handle-key-press', () => {
       expect(evt.target.blur).not.toHaveBeenCalled();
       expect(evt.target.setAttribute).not.toHaveBeenCalled();
       expect(selectionsAPI.cancel).not.toHaveBeenCalled();
+      expect(setFocusedCellCoord).not.toHaveBeenCalled();
+      expect(announce).not.toHaveBeenCalled();
+    });
+
+    it('when a dimension is locked, should not do selections on the dimension', () => {
+      const isLocked = true;
+      evt.key = ' ';
+
+      bodyHandleKeyPress({
+        evt,
+        rootElement,
+        cellCoord: [rowIndex, colIndex],
+        cell,
+        selectionDispatch,
+        isAnalysisMode,
+        setFocusedCellCoord,
+        announce,
+        keyboard,
+        selectionsAPI,
+        isLocked,
+      });
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(selectionDispatch).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
       expect(announce).not.toHaveBeenCalled();
     });

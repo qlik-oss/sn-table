@@ -21,6 +21,8 @@ export function getColumnInfo(qHyperCube, colIndex) {
   const isDim = colIndex < numDims;
   const info = isDim ? qDimensionInfo[colIndex] : qMeasureInfo[colIndex - numDims];
   const isHidden = info.qError?.qErrorCode === 7005;
+  const isLocked = info.qLocked;
+
   return (
     !isHidden && {
       isDim,
@@ -31,6 +33,7 @@ export function getColumnInfo(qHyperCube, colIndex) {
       stylingInfo: info.qAttrExprInfo.map((expr) => expr.id),
       sortDirection: directionMap[info.qSortIndicator],
       dataColIdx: colIndex,
+      isLocked,
     }
   );
 }
