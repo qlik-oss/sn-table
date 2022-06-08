@@ -52,31 +52,23 @@ export default function TableWrapper(props) {
 
   useEffect(() => {
     const memoedWrapper = tableWrapperRef.current;
-    if (!memoedWrapper) return () => {};
+    const memoedContainer = tableContainerRef.current;
+    if (!memoedWrapper || !memoedContainer) return () => {};
 
     const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard);
-    memoedWrapper.addEventListener('focusout', focusOutCallback);
-
-    return () => {
-      memoedWrapper.removeEventListener('focusout', focusOutCallback);
-    };
-  }, []);
-
-  useEffect(() => {
-    const memoedContainer = tableContainerRef.current;
-    if (!memoedContainer) return () => {};
-
     const horizontalScrollCallback = (evt) => handleHorizontalScroll(evt, direction === 'rtl', memoedContainer);
+    memoedWrapper.addEventListener('focusout', focusOutCallback);
     memoedContainer.addEventListener('wheel', horizontalScrollCallback);
 
     return () => {
+      memoedWrapper.removeEventListener('focusout', focusOutCallback);
       memoedContainer.removeEventListener('wheel', horizontalScrollCallback);
     };
-  }, [direction]);
+  }, [direction, keyboard]);
 
   useEffect(
     () => handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement }),
-    [tableContainerRef, focusedCellCoord]
+    [tableContainerRef, focusedCellCoord, rootElement]
   );
 
   useDidUpdateEffect(() => {
