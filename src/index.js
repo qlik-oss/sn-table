@@ -21,7 +21,6 @@ import data from './data';
 import ext from './ext';
 import manageData from './handle-data';
 import { mount, render, teardown } from './table/Root';
-import muiSetup from './mui-setup';
 import useAnnounceAndTranslations from './hooks/use-announce-and-translations';
 import useSorting from './hooks/use-sorting';
 import useExtendedTheme from './hooks/use-extended-theme';
@@ -55,7 +54,6 @@ export default function supernova(env) {
       const constraints = useConstraints();
       const translator = useTranslator();
       const selectionsAPI = useSelections();
-      const muiTheme = muiSetup(direction);
       const keyboard = useKeyboard();
       const rect = useRect();
       const theme = useExtendedTheme(rootElement);
@@ -87,7 +85,6 @@ export default function supernova(env) {
             constraints,
             translator,
             selectionsAPI,
-            muiTheme,
             theme,
             changeSortOrder,
             keyboard,

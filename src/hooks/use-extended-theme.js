@@ -1,4 +1,4 @@
-import { useEffect, useState, useTheme } from '@nebula.js/stardust';
+import { useMemo, useTheme } from '@nebula.js/stardust';
 import { isDarkColor, isTransparentColor } from '../table/utils/color-utils';
 
 export const tableThemeColors = (theme, rootElement) => {
@@ -41,14 +41,10 @@ export const tableThemeColors = (theme, rootElement) => {
 
 const useExtendedTheme = (rootElement) => {
   const nebulaTheme = useTheme();
-  const [theme, setTheme] = useState();
-
-  useEffect(() => {
-    if (nebulaTheme) {
-      const table = tableThemeColors(nebulaTheme, rootElement);
-      setTheme({ ...nebulaTheme, table });
-    }
-  }, [nebulaTheme.name(), rootElement]);
+  const theme = useMemo(
+    () => ({ ...nebulaTheme, table: tableThemeColors(nebulaTheme, rootElement) }),
+    [nebulaTheme.name(), rootElement]
+  );
 
   return theme;
 };

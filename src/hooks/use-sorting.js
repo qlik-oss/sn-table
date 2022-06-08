@@ -1,4 +1,4 @@
-import { useState, useEffect } from '@nebula.js/stardust';
+import { useMemo } from '@nebula.js/stardust';
 
 export const sortingFactory = (model) => {
   return async (layout, column) => {
@@ -40,13 +40,7 @@ export const sortingFactory = (model) => {
 };
 
 const useSorting = (model) => {
-  const [changeSortOrder, setChangeSortOrder] = useState();
-
-  useEffect(() => {
-    if (model) {
-      setChangeSortOrder(() => sortingFactory(model));
-    }
-  }, [model]);
+  const changeSortOrder = useMemo(() => sortingFactory(model), [model]);
 
   return changeSortOrder;
 };
