@@ -67,8 +67,10 @@ function TableBodyWrapper({
       {rows.map((row, rowIndex) => (
         <TableRow hover={hoverEffect} tabIndex={-1} key={row.key} sx={rowCellStyle} className="sn-table-row">
           {columns.map((column, columnIndex) => {
-            const cell = row[column.id];
+            const { id, align } = column;
+            const cell = row[id];
             const CellRenderer = columnRenderers[columnIndex];
+
             return (
               CellRenderer && (
                 <CellRenderer
@@ -76,8 +78,8 @@ function TableBodyWrapper({
                   component={columnIndex === 0 ? 'th' : null}
                   cell={cell}
                   column={column}
-                  key={column.id}
-                  align={column.align}
+                  key={id}
+                  align={align}
                   styling={{ color: bodyCellStyle.color, backgroundColor: theme.table.backgroundColor }}
                   tabIndex={-1}
                   announce={announce}

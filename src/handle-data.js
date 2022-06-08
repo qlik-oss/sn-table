@@ -21,9 +21,12 @@ export function getColumnInfo(qHyperCube, colIndex) {
   const isDim = colIndex < numDims;
   const info = isDim ? qDimensionInfo[colIndex] : qMeasureInfo[colIndex - numDims];
   const isHidden = info.qError?.qErrorCode === 7005;
+  const isLocked = info.qLocked;
+
   return (
     !isHidden && {
       isDim,
+      isLocked,
       width: 200,
       label: info.qFallbackTitle,
       id: `col-${colIndex}`,
@@ -71,7 +74,7 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
         ...r[colIdx],
         rowIdx: rowIdx + top,
         colIdx: columnOrder[colIdx],
-        isDim: c.isDim,
+        isSelectable: c.isDim && !c.isLocked,
         rawRowIdx: rowIdx,
         rawColIdx: colIdx,
       };
