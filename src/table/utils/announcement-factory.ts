@@ -1,3 +1,5 @@
+import { Translator } from '../../types';
+
 /**
  * Enum for announcement elements
  * @readonly
@@ -11,13 +13,13 @@ const announcerElements = {
 /**
  * creates the function for announcement
  *
- * @param {Object} rootElement root element for getting the live aria from it
- * @param {Object} translator translator object
- * @param {Element} prevAnnounceEl for test reasons
+ * @param {Element} rootElement root element for getting the live aria from it
+ * @param {Translator} translator translator object
+ * @param {?string} prevAnnounceEl for test reasons
  *
  * @returns {function} announce function
  */
-export default function announcementFactory(rootElement, translator, prevAnnounceEl) {
+export default function announcementFactory(rootElement: Element, translator: Translator, prevAnnounceEl?: string) {
   let previousAnnouncementElement = prevAnnounceEl || null;
 
   /**

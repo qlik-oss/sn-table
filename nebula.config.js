@@ -8,6 +8,7 @@ const replacementStrings = {
 
 module.exports = {
   build: {
+    typescript: true,
     replacementStrings,
   },
   serve: {
