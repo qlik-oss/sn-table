@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useRef, useCallback } from 'react';
-import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
-import TableContainer from '@mui/material/TableContainer';
 
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './TableBodyWrapper';
@@ -11,6 +9,7 @@ import FooterWrapper from './FooterWrapper';
 import PaginationContent from './PaginationContent';
 import useDidUpdateEffect from './useDidUpdateEffect';
 import { useContextSelector, TableContext } from '../context';
+import { StyledTableContainer, StyledTableWrapper } from '../styles';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
 import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
@@ -109,27 +108,12 @@ export default function TableWrapper(props) {
     columns.length,
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
-  const paperStyle = {
-    borderWidth: paginationNeeded ? '0px 1px 0px' : '0px',
-    borderStyle: 'solid',
-    borderColor: theme.table.borderColor,
-    height: '100%',
-    backgroundColor: theme.table.tableBackgroundColorFromTheme,
-    boxShadow: 'none',
-    borderRadius: 'unset',
-  };
-
-  const tableContainerStyle = {
-    // the footerContainer always wants height: 100%
-    height: footerContainer || constraints.active || !paginationNeeded ? '100%' : 'calc(100% - 49px)',
-    overflow: constraints.active ? 'hidden' : 'auto',
-  };
-
   return (
-    <Paper
-      dir={direction}
-      sx={paperStyle}
+    <StyledTableWrapper
       ref={tableWrapperRef}
+      tableTheme={theme.table}
+      paginationNeeded={paginationNeeded}
+      dir={direction}
       onKeyDown={(evt) =>
         handleTableWrapperKeyDown({
           evt,
@@ -144,9 +128,10 @@ export default function TableWrapper(props) {
       }
     >
       <AnnounceElements />
-      <TableContainer
+      <StyledTableContainer
         ref={tableContainerRef}
-        sx={tableContainerStyle}
+        fullHeight={footerContainer || constraints.active || !paginationNeeded} // the footerContainer always wants height: 100%
+        constraints={constraints}
         tabIndex={-1}
         role="application"
         data-testid="table-container"
@@ -160,13 +145,13 @@ export default function TableWrapper(props) {
             tableWrapperRef={tableWrapperRef}
           />
         </Table>
-      </TableContainer>
+      </StyledTableContainer>
       {!constraints.active && (
         <FooterWrapper theme={theme} footerContainer={footerContainer}>
           <PaginationContent {...props} handleChangePage={handleChangePage} announce={announce} />
         </FooterWrapper>
       )}
-    </Paper>
+    </StyledTableWrapper>
   );
 }
 

@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo, memo } from 'react';
 import PropTypes from 'prop-types';
-import TableBody from '@mui/material/TableBody';
-import TableRow from '@mui/material/TableRow';
 import getCellRenderer from './renderer';
 import { useContextSelector, TableContext } from '../context';
+import { StyledTableBody, StyledBodyRow } from '../styles';
 import { addSelectionListeners } from '../utils/selections-utils';
 import { getBodyCellStyle } from '../utils/styling-utils';
 import { bodyHandleKeyPress } from '../utils/handle-key-press';
@@ -38,34 +37,16 @@ function TableBodyWrapper({
     addSelectionListeners({ api: selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
   }, []);
 
-  const bodyRowAndCellStyle = {
-    'tr :last-child': {
-      borderRight: paginationNeeded && 0,
-    },
-    'tr :first-child': {
-      borderLeft: !paginationNeeded && '1px solid rgb(217, 217, 217)',
-    },
-    '& td, th': {
-      fontSize: bodyCellStyle.fontSize,
-      padding: bodyCellStyle.padding,
-    },
-  };
-
-  const rowCellStyle = hoverEffect
-    ? {
-        '&&:hover': {
-          '& td:not(.selected), th:not(.selected)': {
-            backgroundColor: bodyCellStyle.hoverBackgroundColor,
-            color: bodyCellStyle.hoverFontColor,
-          },
-        },
-      }
-    : {};
-
   return (
-    <TableBody sx={bodyRowAndCellStyle}>
+    <StyledTableBody paginationNeeded={paginationNeeded} bodyCellStyle={bodyCellStyle}>
       {rows.map((row, rowIndex) => (
-        <TableRow hover={hoverEffect} tabIndex={-1} key={row.key} sx={rowCellStyle} className="sn-table-row">
+        <StyledBodyRow
+          bodyCellStyle={bodyCellStyle}
+          hover={hoverEffect}
+          tabIndex={-1}
+          key={row.key}
+          className="sn-table-row"
+        >
           {columns.map((column, columnIndex) => {
             const { id, align } = column;
             const cell = row[id];
@@ -104,9 +85,9 @@ function TableBodyWrapper({
               )
             );
           })}
-        </TableRow>
+        </StyledBodyRow>
       ))}
-    </TableBody>
+    </StyledTableBody>
   );
 }
 
