@@ -56,6 +56,12 @@ describe('handle-accessibility', () => {
       expect(cell.blur).not.toHaveBeenCalled();
       expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
     });
+
+    it('should early return and not throw error when cell is undefined', () => {
+      cell = undefined;
+
+      expect(() => handleAccessibility.updateFocus({ focusType, cell })).not.toThrow();
+    });
   });
 
   describe('findCellWithTabStop', () => {
