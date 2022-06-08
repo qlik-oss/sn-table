@@ -31,7 +31,7 @@ function TableBodyWrapper({
     () => columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled)),
     [columns.length, selectionsEnabled]
   );
-  const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme.name()]);
+  const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
 
   useEffect(() => {
