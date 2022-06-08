@@ -10,9 +10,8 @@ export default function withSelections(CellComponent) {
     const cellSelectionState = useContextSelector(TableContext, (value) => getCellSelectionState(cell, value));
     const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
 
-    const handleMouseUp = (evt) => {
-      cell.isDim && evt.button === 0 && selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
-    };
+    const handleMouseUp = (evt) =>
+      cell.isSelectable && evt.button === 0 && selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
 
     const selectionStyling = getSelectionStyle(styling, cellSelectionState);
 

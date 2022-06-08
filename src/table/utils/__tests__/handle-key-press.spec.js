@@ -177,7 +177,7 @@ describe('handle-key-press', () => {
         cancel: jest.fn(),
         isModal: () => isModal,
       };
-      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1, isDim: true };
+      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1, isSelectable: true };
       keyboard = { enabled: true };
       selectionDispatch = jest.fn();
       isAnalysisMode = true;
@@ -260,10 +260,10 @@ describe('handle-key-press', () => {
       });
     });
 
-    it('when press space bar key not on dimension, should not select value for measure', () => {
+    it('when press space bar key not on a dimension which is selectable, should not select value for measure', () => {
       evt.key = ' ';
       cell = {
-        isDim: false,
+        isSelectable: false,
       };
       bodyHandleKeyPress({
         evt,
@@ -457,8 +457,8 @@ describe('handle-key-press', () => {
         announce,
         keyboard,
       });
-      expect(evt.preventDefault).not.toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).not.toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
+      expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(handleAccessibility.focusSelectionToolbar).not.toHaveBeenCalled();
       expect(announce).not.toHaveBeenCalled();
     });
@@ -479,8 +479,8 @@ describe('handle-key-press', () => {
         announce,
         keyboard,
       });
-      expect(evt.preventDefault).not.toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).not.toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
+      expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(handleAccessibility.focusSelectionToolbar).not.toHaveBeenCalled();
     });
 
@@ -501,8 +501,8 @@ describe('handle-key-press', () => {
         announce,
         keyboard,
       });
-      expect(evt.preventDefault).not.toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).not.toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
+      expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(handleAccessibility.focusSelectionToolbar).not.toHaveBeenCalled();
       expect(announce).not.toHaveBeenCalled();
     });
@@ -516,6 +516,7 @@ describe('handle-key-press', () => {
         selectionsAPI,
         cell,
         selectionDispatch,
+        isAnalysisMode,
         setFocusedCellCoord,
         announce,
         keyboard,
