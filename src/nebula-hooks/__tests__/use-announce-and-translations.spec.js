@@ -1,6 +1,6 @@
-import announcementFactory from '../announcement-factory';
+import { announcementFactory } from '../use-announce-and-translations';
 
-describe('announcement-factory', () => {
+describe('announcementFactory', () => {
   let rootElement;
   let translator;
   let announcer;
@@ -74,7 +74,7 @@ describe('announcement-factory', () => {
     expect(announcerElement02.innerHTML).toHaveLength(0);
   });
 
-  it('should be able to handle the cuncurrent announcement', () => {
+  it('should be able to handle the concurrent announcement', () => {
     previousAnnouncementElement = 'first-announcer-element';
     announcer = announcementFactory(rootElement, translator, previousAnnouncementElement);
     announcer({ keys: ['key#01'] });

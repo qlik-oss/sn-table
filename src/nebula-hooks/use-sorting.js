@@ -1,4 +1,6 @@
-export default function sortingFactory(model) {
+import { useMemo } from '@nebula.js/stardust';
+
+export const sortingFactory = (model) => {
   return async (layout, column) => {
     const { isDim, dataColIdx } = column;
     // The sort order from the properties is needed since it contains hidden columns
@@ -35,4 +37,12 @@ export default function sortingFactory(model) {
 
     model.applyPatches(patches, true);
   };
-}
+};
+
+const useSorting = (model) => {
+  const changeSortOrder = useMemo(() => sortingFactory(model), [model]);
+
+  return changeSortOrder;
+};
+
+export default useSorting;

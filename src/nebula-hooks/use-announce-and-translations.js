@@ -1,3 +1,6 @@
+import { useState, useEffect } from '@nebula.js/stardust';
+import registerLocale from '../locale/src';
+
 /**
  * Enum for announcement elements
  * @readonly
@@ -17,7 +20,7 @@ const announcerElements = {
  *
  * @returns {function} announce function
  */
-export default function announcementFactory(rootElement, translator, prevAnnounceEl) {
+export const announcementFactory = (rootElement, translator, prevAnnounceEl) => {
   let previousAnnouncementElement = prevAnnounceEl || null;
 
   /**
@@ -59,4 +62,19 @@ export default function announcementFactory(rootElement, translator, prevAnnounc
     announceElement.setAttribute('aria-atomic', shouldBeAtomic);
     announceElement.setAttribute('aria-live', politeness);
   };
-}
+};
+
+const useAnnounceAndTranslations = (rootElement, translator) => {
+  const [announce, setAnnounce] = useState();
+
+  useEffect(() => {
+    if (rootElement && translator) {
+      registerLocale(translator);
+      setAnnounce(() => announcementFactory(rootElement, translator));
+    }
+  }, [rootElement, translator.language()]);
+
+  return announce;
+};
+
+export default useAnnounceAndTranslations;
