@@ -50,7 +50,6 @@ function TableBodyWrapper({
       padding: bodyCellStyle.padding,
     },
   };
-
   const rowCellStyle = hoverEffect
     ? {
         '&&:hover': {
@@ -61,6 +60,7 @@ function TableBodyWrapper({
         },
       }
     : {};
+  const cellStyle = { color: bodyCellStyle.color, backgroundColor: theme.table.backgroundColor };
 
   return (
     <TableBody sx={bodyRowAndCellStyle}>
@@ -70,6 +70,20 @@ function TableBodyWrapper({
             const { id, align } = column;
             const cell = row[id];
             const CellRenderer = columnRenderers[columnIndex];
+            const handleKeyDown = (evt) => {
+              bodyHandleKeyPress({
+                evt,
+                rootElement,
+                cellCoord: [rowIndex + 1, columnIndex],
+                selectionsAPI,
+                cell,
+                selectionDispatch,
+                isAnalysisMode: selectionsEnabled,
+                setFocusedCellCoord,
+                announce,
+                keyboard,
+              });
+            };
 
             return (
               CellRenderer && (
@@ -80,23 +94,10 @@ function TableBodyWrapper({
                   column={column}
                   key={id}
                   align={align}
-                  styling={{ color: bodyCellStyle.color, backgroundColor: theme.table.backgroundColor }}
+                  styling={cellStyle}
                   tabIndex={-1}
                   announce={announce}
-                  onKeyDown={(evt) =>
-                    bodyHandleKeyPress({
-                      evt,
-                      rootElement,
-                      cellCoord: [rowIndex + 1, columnIndex],
-                      selectionsAPI,
-                      cell,
-                      selectionDispatch,
-                      isAnalysisMode: selectionsEnabled,
-                      setFocusedCellCoord,
-                      announce,
-                      keyboard,
-                    })
-                  }
+                  onKeyDown={handleKeyDown}
                   onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
                 >
                   {cell.qText}

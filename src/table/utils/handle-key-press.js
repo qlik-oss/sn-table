@@ -19,6 +19,7 @@ export const handleTableWrapperKeyDown = ({
 }) => {
   if (isCtrlShift(evt)) {
     preventDefaultBehavior(evt);
+    // ctrl + shift + left/right arrow keys: go to previous/next page
     const lastPage = Math.ceil(totalVerticalCount / rowsPerPage) - 1;
     if (evt.key === 'ArrowRight' && page < lastPage) {
       setShouldRefocus();
@@ -99,7 +100,7 @@ export const moveFocus = (evt, rootElement, cellCoord, setFocusedCellCoord, anno
   }
 };
 
-export const headHandleKeyPress = (
+export const headHandleKeyPress = ({
   evt,
   rootElement,
   cellCoord,
@@ -107,22 +108,20 @@ export const headHandleKeyPress = (
   changeSortOrder,
   layout,
   isAnalysisMode,
-  setFocusedCellCoord
-) => {
+  setFocusedCellCoord,
+}) => {
   switch (evt.key) {
     case 'ArrowDown':
     case 'ArrowRight':
-    case 'ArrowLeft': {
+    case 'ArrowLeft':
       !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
       break;
-    }
     // Space bar / Enter: update the sorting
     case ' ':
-    case 'Enter': {
+    case 'Enter':
       preventDefaultBehavior(evt);
       isAnalysisMode && changeSortOrder(layout, column);
       break;
-    }
     default:
       break;
   }
@@ -146,40 +145,35 @@ export const bodyHandleKeyPress = ({
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
-    case 'ArrowLeft': {
+    case 'ArrowLeft':
       !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isInSelectionMode);
       break;
-    }
     // Space bar: Selects value.
-    case ' ': {
+    case ' ':
       preventDefaultBehavior(evt);
       cell.isSelectable && isAnalysisMode && selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
       break;
-    }
     // Enter: Confirms selections.
-    case 'Enter': {
+    case 'Enter':
       preventDefaultBehavior(evt);
       if (!isInSelectionMode) break;
       selectionsAPI.confirm();
       announce({ keys: 'SNTable.SelectionLabel.SelectionsConfirmed' });
       break;
-    }
     // Esc: Cancels selections. If no selections, do nothing and handleTableWrapperKeyDown should catch it
-    case 'Escape': {
+    case 'Escape':
       if (!isAnalysisMode || !isInSelectionMode) break;
       preventDefaultBehavior(evt);
       selectionsAPI.cancel();
       announce({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
       break;
-    }
     // Tab: shift + tab, in selection mode and keyboard enabled, focus on selection toolbar
-    case 'Tab': {
+    case 'Tab':
       if (evt.shiftKey && keyboard.enabled && isInSelectionMode) {
         preventDefaultBehavior(evt);
         focusSelectionToolbar(evt.target, keyboard, true);
       }
       break;
-    }
     default:
       break;
   }
