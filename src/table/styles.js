@@ -16,12 +16,12 @@ export const TableAnnouncer = styled('div')({
 
 export const StyledFooterWrapper = styled(Paper, {
   shouldForwardProp: (prop) => prop !== 'tableTheme',
-})(({ tableTheme }) => ({
+})(({ tableTheme, theme }) => ({
   height: 48,
   display: 'flex',
   justifyContent: 'flex-end',
   alignItems: 'center',
-  paddingRight: 1,
+  paddingRight: theme.spacing(1),
   boxShadow: 'none',
   borderStyle: 'solid',
   borderWidth: '0px 0px 1px 0px',
@@ -34,16 +34,16 @@ export const StyledFooterWrapper = styled(Paper, {
 // ---------- PaginationContent ----------
 
 export const StyledSelect = styled(Select, {
-  shouldForwardProp: (prop) => prop !== 'tableTheme',
-})(({ tableTheme }) => ({
+  shouldForwardProp: (prop) => prop !== 'paginationTheme',
+})(({ paginationTheme }) => ({
   backgroundColor: 'inherit',
-  '& .MuiNativeSelect-icon': { color: tableTheme.pagination.iconColor },
+  '& .MuiNativeSelect-icon': { color: paginationTheme.iconColor },
 }));
 
 export const StyledIconButton = styled(IconButton, {
-  shouldForwardProp: (prop) => prop !== 'disabledCondition' && prop !== 'tableTheme',
-})(({ disabledCondition, tableTheme }) => ({
-  color: disabledCondition ? tableTheme.pagination.disabledIconColor : tableTheme.pagination.iconColor,
+  shouldForwardProp: (prop) => prop !== 'disabledCondition' && prop !== 'paginationTheme',
+})(({ disabledCondition, paginationTheme }) => ({
+  color: disabledCondition ? paginationTheme.disabledIconColor : paginationTheme.iconColor,
   cursor: disabledCondition ? 'default' : 'pointer',
   height: '32px',
 }));

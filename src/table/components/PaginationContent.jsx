@@ -57,6 +57,7 @@ function PaginationContent({
 
   if (!paginationNeeded) return null;
 
+  const paginationTheme = theme.table.pagination;
   const onFirstPage = page === 0;
   const onLastPage = page >= totalPages - 1;
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
@@ -84,7 +85,7 @@ function PaginationContent({
     return (
       <StyledIconButton
         disabledCondition={disabledCondition}
-        tableTheme={theme.table}
+        paginationTheme={paginationTheme}
         data-testid="pagination-action-icon-button"
         onClick={!disabledCondition ? () => handleChangePage(pageNumber) : null}
         aria-disabled={disabledCondition}
@@ -105,15 +106,21 @@ function PaginationContent({
       tabIndex,
       id,
       'data-testid': id,
-      style: { color: theme.table.pagination.color, height: 30 },
+      style: { color: paginationTheme.color, height: 30 },
     };
 
     return (
       <FormControl sx={{ px: 2.5 }}>
-        <InputLabel sx={{ color: theme.table.pagination.color }} htmlFor={id} shrink={false}>
+        <InputLabel sx={{ color: paginationTheme.color }} htmlFor={id} shrink={false}>
           {`${translator.get(translationName)}:`}
         </InputLabel>
-        <StyledSelect tableTheme={theme.table} native value={value} onChange={handleChange} inputProps={inputProps}>
+        <StyledSelect
+          paginationTheme={paginationTheme}
+          native
+          value={value}
+          onChange={handleChange}
+          inputProps={inputProps}
+        >
           {options}
         </StyledSelect>
       </FormControl>
