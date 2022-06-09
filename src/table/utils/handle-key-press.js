@@ -19,7 +19,7 @@ export const handleTableWrapperKeyDown = ({
 }) => {
   if (isCtrlShift(evt)) {
     preventDefaultBehavior(evt);
-    // ctrl + shift + left/right arrow keys are used to go to previous/next page
+    // ctrl + shift + left/right arrow keys: go to previous/next page
     const lastPage = Math.ceil(totalVerticalCount / rowsPerPage) - 1;
     if (evt.key === 'ArrowRight' && page < lastPage) {
       setShouldRefocus();
