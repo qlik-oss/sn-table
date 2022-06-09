@@ -71,7 +71,7 @@ export const handleAnnounceSelectionStatus = ({ announce, rowsLength, isAddition
   }
 };
 
-export const getSelectedRows = ({ selectedRows, cell, evt }) => {
+export const getSelectedRows = ({ selectedRows, cell, evt, moveToCell }) => {
   const { qElemNumber, rowIdx } = cell;
 
   if (evt.ctrlKey || evt.metaKey) {
@@ -81,7 +81,11 @@ export const getSelectedRows = ({ selectedRows, cell, evt }) => {
     return { [qElemNumber]: rowIdx };
   }
 
-  if (selectedRows[qElemNumber] !== undefined) {
+  if (moveToCell) {
+    selectedRows[qElemNumber] = rowIdx;
+    // move to a cell, and add it to the object
+    selectedRows[moveToCell.qElemNumber] = moveToCell.rowIdx;
+  } else if (selectedRows[qElemNumber] !== undefined) {
     // if the selected item is clicked again, that item will be removed
     delete selectedRows[qElemNumber];
   } else {
@@ -94,7 +98,7 @@ export const getSelectedRows = ({ selectedRows, cell, evt }) => {
 
 const selectCell = (state, payload) => {
   const { api, rows, colIdx } = state;
-  const { cell, announce, evt } = payload;
+  const { cell, announce, evt, moveToCell } = payload;
   let selectedRows = {};
 
   if (colIdx === -1) {
@@ -105,7 +109,7 @@ const selectCell = (state, payload) => {
     return state;
   }
 
-  selectedRows = getSelectedRows({ selectedRows, cell, evt });
+  selectedRows = getSelectedRows({ selectedRows, cell, evt, moveToCell });
   const selectedRowsLength = Object.keys(selectedRows).length;
   handleAnnounceSelectionStatus({
     announce,

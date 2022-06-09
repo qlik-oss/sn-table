@@ -138,12 +138,17 @@ export const bodyHandleKeyPress = ({
   announce,
   keyboard,
   selectionsAPI = null,
+  moveToCell,
 }) => {
   const isInSelectionMode = selectionsAPI?.isModal();
 
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
+      // Shift + up/down arrow keys: select multiple values
+      moveToCell && selectionDispatch({ type: 'select', payload: { cell, evt, announce, moveToCell } });
+      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isInSelectionMode);
+      break;
     case 'ArrowRight':
     case 'ArrowLeft':
       !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isInSelectionMode);
