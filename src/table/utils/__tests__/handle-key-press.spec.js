@@ -1,14 +1,135 @@
 import {
-  arrowKeysNavigation,
-  bodyHandleKeyPress,
-  headHandleKeyPress,
   handleTableWrapperKeyDown,
+  arrowKeysNavigation,
+  headHandleKeyPress,
+  bodyHandleKeyPress,
   handleLastTab,
 } from '../handle-key-press';
 
 import * as handleAccessibility from '../handle-accessibility';
 
 describe('handle-key-press', () => {
+  describe('handleTableWrapperKeyDown', () => {
+    let evt = {};
+    let totalVerticalCount;
+    let page;
+    let rowsPerPage;
+    let handleChangePage;
+    let setShouldRefocus;
+    let keyboard;
+    let isSelectionActive;
+
+    beforeEach(() => {
+      evt = {
+        shiftKey: true,
+        ctrlKey: true,
+        metaKey: true,
+        key: 'ArrowRight',
+        stopPropagation: () => {},
+        preventDefault: () => {},
+      };
+      handleChangePage = jest.fn();
+      setShouldRefocus = jest.fn();
+    });
+
+    it('when shift key is not pressed, handleChangePage should not run', () => {
+      evt.shiftKey = false;
+      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      expect(handleChangePage).not.toHaveBeenCalled();
+      expect(setShouldRefocus).not.toHaveBeenCalled();
+    });
+
+    it('when ctrl key or meta key is not pressed, handleChangePage should not run', () => {
+      evt.ctrlKey = false;
+      evt.metaKey = false;
+      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      expect(handleChangePage).not.toHaveBeenCalled();
+      expect(setShouldRefocus).not.toHaveBeenCalled();
+    });
+
+    it('when press arrow right key on the first page which contains all rows, handleChangePage should not run', () => {
+      page = 0;
+      totalVerticalCount = 40;
+      rowsPerPage = 40;
+      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      expect(handleChangePage).not.toHaveBeenCalled();
+      expect(setShouldRefocus).not.toHaveBeenCalled();
+    });
+
+    it('when press arrow left key on the first page, handleChangePage should not run', () => {
+      evt.key = 'ArrowLeft';
+      page = 0;
+      totalVerticalCount = 40;
+      rowsPerPage = 10;
+      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      expect(handleChangePage).not.toHaveBeenCalled();
+      expect(setShouldRefocus).not.toHaveBeenCalled();
+    });
+
+    it('when press arrow right key on the page whose next page contains rows, should change page', () => {
+      totalVerticalCount = 40;
+      page = 0;
+      rowsPerPage = 10;
+      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      expect(handleChangePage).toHaveBeenCalledTimes(1);
+      expect(setShouldRefocus).toHaveBeenCalledTimes(1);
+    });
+
+    it('when press arrow left key not on the first page, should change page', () => {
+      evt.key = 'ArrowLeft';
+      totalVerticalCount = 40;
+      page = 1;
+      rowsPerPage = 40;
+      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      expect(handleChangePage).toHaveBeenCalledTimes(1);
+      expect(setShouldRefocus).toHaveBeenCalledTimes(1);
+    });
+
+    it('when press escape is pressed and keyboard.enabled is true, should call keyboard.blur', () => {
+      evt = {
+        key: 'Escape',
+        stopPropagation: jest.fn(),
+        preventDefault: jest.fn(),
+      };
+      keyboard = { enabled: true, blur: jest.fn() };
+      handleTableWrapperKeyDown({
+        evt,
+        totalVerticalCount,
+        page,
+        rowsPerPage,
+        handleChangePage,
+        setShouldRefocus,
+        keyboard,
+      });
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(keyboard.blur).toHaveBeenCalledWith(true);
+    });
+
+    it('should ignore keyboard.blur while you are focusing on the pagination and pressing Esc key', () => {
+      evt = {
+        key: 'Escape',
+        stopPropagation: jest.fn(),
+        preventDefault: jest.fn(),
+      };
+      keyboard = { enabled: true, blur: jest.fn() };
+      isSelectionActive = true;
+      handleTableWrapperKeyDown({
+        evt,
+        totalVerticalCount,
+        page,
+        rowsPerPage,
+        handleChangePage,
+        setShouldRefocus,
+        keyboard,
+        isSelectionActive,
+      });
+      expect(evt.preventDefault).not.toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).not.toHaveBeenCalledTimes(1);
+      expect(keyboard.blur).not.toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('arrowKeysNavigation', () => {
     let evt;
     const rowAndColumnCount = {};
@@ -120,6 +241,150 @@ describe('handle-key-press', () => {
       const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
       expect(nextRow).toBe(1);
       expect(nextCol).toBe(1);
+    });
+  });
+
+  describe('headHandleKeyPress', () => {
+    let rowIndex;
+    let colIndex;
+    let column;
+    let evt = {};
+    let rootElement = {};
+    let changeSortOrder;
+    let layout;
+    let isAnalysisMode;
+    let setFocusedCellCoord;
+
+    beforeEach(() => {
+      rowIndex = 0;
+      colIndex = 0;
+      column = {};
+      evt = {
+        key: 'ArrowDown',
+        stopPropagation: jest.fn(),
+        preventDefault: jest.fn(),
+        target: {
+          blur: jest.fn(),
+          setAttribute: jest.fn(),
+        },
+      };
+      rootElement = {
+        getElementsByClassName: () => [{ getElementsByClassName: () => [{ focus: () => {}, setAttribute: () => {} }] }],
+      };
+      changeSortOrder = jest.fn();
+      isAnalysisMode = true;
+      setFocusedCellCoord = jest.fn();
+    });
+
+    it('when press arrow down key on head cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
+      headHandleKeyPress({
+        evt,
+        rootElement,
+        cellCoord: [rowIndex, colIndex],
+        column,
+        changeSortOrder: null,
+        layout: null,
+        isAnalysisMode: null,
+        setFocusedCellCoord,
+      });
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
+      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
+    });
+
+    it('when press space bar key, should update the sorting', () => {
+      evt.key = ' ';
+      headHandleKeyPress({
+        evt,
+        rootElement,
+        cellCoord: [rowIndex, colIndex],
+        column,
+        changeSortOrder,
+        layout,
+        isAnalysisMode,
+        setFocusedCellCoord,
+      });
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(changeSortOrder).toHaveBeenCalledTimes(1);
+      expect(setFocusedCellCoord).not.toHaveBeenCalled();
+    });
+
+    it('when press space bar key not in analysis mode, should not update the sorting', () => {
+      evt.key = ' ';
+      isAnalysisMode = false;
+      headHandleKeyPress({
+        evt,
+        rootElement,
+        cellCoord: [rowIndex, colIndex],
+        column,
+        changeSortOrder,
+        layout,
+        isAnalysisMode,
+        setFocusedCellCoord,
+      });
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(changeSortOrder).not.toHaveBeenCalled();
+      expect(setFocusedCellCoord).not.toHaveBeenCalled();
+    });
+
+    it('when press enter key, should update the sorting', () => {
+      evt.key = 'Enter';
+      headHandleKeyPress({
+        evt,
+        rootElement,
+        cellCoord: [rowIndex, colIndex],
+        column,
+        changeSortOrder,
+        layout,
+        isAnalysisMode,
+        setFocusedCellCoord,
+      });
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(changeSortOrder).toHaveBeenCalledTimes(1);
+      expect(setFocusedCellCoord).not.toHaveBeenCalled();
+    });
+
+    it('when press enter key not in analysis mode, should not update the sorting', () => {
+      evt.key = 'Enter';
+      isAnalysisMode = false;
+      headHandleKeyPress({
+        evt,
+        rootElement,
+        cellCoord: [rowIndex, colIndex],
+        column,
+        changeSortOrder,
+        layout,
+        isAnalysisMode,
+        setFocusedCellCoord,
+      });
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(changeSortOrder).not.toHaveBeenCalled();
+      expect(setFocusedCellCoord).not.toHaveBeenCalled();
+    });
+
+    it('when press ArrowRight and shift and ctrl key, should not update the sorting', () => {
+      evt.key = 'ArrowRight';
+      evt.shiftKey = true;
+      evt.ctrlKey = true;
+      headHandleKeyPress({
+        evt,
+        rootElement,
+        cellCoord: [rowIndex, colIndex],
+        column,
+        changeSortOrder,
+        layout,
+        isAnalysisMode,
+        setFocusedCellCoord,
+      });
+      expect(evt.preventDefault).not.toHaveBeenCalled();
+      expect(evt.stopPropagation).not.toHaveBeenCalled();
+      expect(changeSortOrder).not.toHaveBeenCalled();
+      expect(setFocusedCellCoord).not.toHaveBeenCalled();
     });
   });
 
@@ -509,262 +774,6 @@ describe('handle-key-press', () => {
       expect(selectionsAPI.cancel).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
       expect(announce).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('headHandleKeyPress', () => {
-    let rowIndex;
-    let colIndex;
-    let column;
-    let evt = {};
-    let rootElement = {};
-    let changeSortOrder;
-    let layout;
-    let isAnalysisMode;
-    let setFocusedCellCoord;
-
-    beforeEach(() => {
-      rowIndex = 0;
-      colIndex = 0;
-      column = {};
-      evt = {
-        key: 'ArrowDown',
-        stopPropagation: jest.fn(),
-        preventDefault: jest.fn(),
-        target: {
-          blur: jest.fn(),
-          setAttribute: jest.fn(),
-        },
-      };
-      rootElement = {
-        getElementsByClassName: () => [{ getElementsByClassName: () => [{ focus: () => {}, setAttribute: () => {} }] }],
-      };
-      changeSortOrder = jest.fn();
-      isAnalysisMode = true;
-      setFocusedCellCoord = jest.fn();
-    });
-
-    it('when press arrow down key on head cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
-      headHandleKeyPress(evt, rootElement, [rowIndex, colIndex], column, null, null, null, setFocusedCellCoord);
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
-    });
-
-    it('when press space bar key, should update the sorting', () => {
-      evt.key = ' ';
-      headHandleKeyPress(
-        evt,
-        rootElement,
-        [rowIndex, colIndex],
-        column,
-        changeSortOrder,
-        layout,
-        isAnalysisMode,
-        setFocusedCellCoord
-      );
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(changeSortOrder).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).not.toHaveBeenCalled();
-    });
-
-    it('when press space bar key not in analysis mode, should not update the sorting', () => {
-      evt.key = ' ';
-      isAnalysisMode = false;
-      headHandleKeyPress(
-        evt,
-        rootElement,
-        [rowIndex, colIndex],
-        column,
-        changeSortOrder,
-        layout,
-        isAnalysisMode,
-        setFocusedCellCoord
-      );
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(changeSortOrder).not.toHaveBeenCalled();
-      expect(setFocusedCellCoord).not.toHaveBeenCalled();
-    });
-
-    it('when press enter key, should update the sorting', () => {
-      evt.key = 'Enter';
-      headHandleKeyPress(
-        evt,
-        rootElement,
-        [rowIndex, colIndex],
-        column,
-        changeSortOrder,
-        layout,
-        isAnalysisMode,
-        setFocusedCellCoord
-      );
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(changeSortOrder).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).not.toHaveBeenCalled();
-    });
-
-    it('when press enter key not in analysis mode, should not update the sorting', () => {
-      evt.key = 'Enter';
-      isAnalysisMode = false;
-      headHandleKeyPress(
-        evt,
-        rootElement,
-        [rowIndex, colIndex],
-        column,
-        changeSortOrder,
-        layout,
-        isAnalysisMode,
-        setFocusedCellCoord
-      );
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(changeSortOrder).not.toHaveBeenCalled();
-      expect(setFocusedCellCoord).not.toHaveBeenCalled();
-    });
-
-    it('when press ArrowRight and shift and ctrl key, should not update the sorting', () => {
-      evt.key = 'ArrowRight';
-      evt.shiftKey = true;
-      evt.ctrlKey = true;
-      headHandleKeyPress(
-        evt,
-        rootElement,
-        [rowIndex, colIndex],
-        column,
-        changeSortOrder,
-        layout,
-        isAnalysisMode,
-        setFocusedCellCoord
-      );
-      expect(evt.preventDefault).not.toHaveBeenCalled();
-      expect(evt.stopPropagation).not.toHaveBeenCalled();
-      expect(changeSortOrder).not.toHaveBeenCalled();
-      expect(setFocusedCellCoord).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('handleTableWrapperKeyDown', () => {
-    let evt = {};
-    let totalVerticalCount;
-    let page;
-    let rowsPerPage;
-    let handleChangePage;
-    let setShouldRefocus;
-    let keyboard;
-    let isSelectionActive;
-
-    beforeEach(() => {
-      evt = {
-        shiftKey: true,
-        ctrlKey: true,
-        metaKey: true,
-        key: 'ArrowRight',
-        stopPropagation: () => {},
-        preventDefault: () => {},
-      };
-      handleChangePage = jest.fn();
-      setShouldRefocus = jest.fn();
-    });
-
-    it('when shift key is not pressed, handleChangePage should not run', () => {
-      evt.shiftKey = false;
-      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
-      expect(handleChangePage).not.toHaveBeenCalled();
-      expect(setShouldRefocus).not.toHaveBeenCalled();
-    });
-
-    it('when ctrl key or meta key is not pressed, handleChangePage should not run', () => {
-      evt.ctrlKey = false;
-      evt.metaKey = false;
-      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
-      expect(handleChangePage).not.toHaveBeenCalled();
-      expect(setShouldRefocus).not.toHaveBeenCalled();
-    });
-
-    it('when press arrow right key on the first page which contains all rows, handleChangePage should not run', () => {
-      page = 0;
-      totalVerticalCount = 40;
-      rowsPerPage = 40;
-      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
-      expect(handleChangePage).not.toHaveBeenCalled();
-      expect(setShouldRefocus).not.toHaveBeenCalled();
-    });
-
-    it('when press arrow left key on the first page, handleChangePage should not run', () => {
-      evt.key = 'ArrowLeft';
-      page = 0;
-      totalVerticalCount = 40;
-      rowsPerPage = 10;
-      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
-      expect(handleChangePage).not.toHaveBeenCalled();
-      expect(setShouldRefocus).not.toHaveBeenCalled();
-    });
-
-    it('when press arrow right key on the page whose next page contains rows, should change page', () => {
-      totalVerticalCount = 40;
-      page = 0;
-      rowsPerPage = 10;
-      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
-      expect(handleChangePage).toHaveBeenCalledTimes(1);
-      expect(setShouldRefocus).toHaveBeenCalledTimes(1);
-    });
-
-    it('when press arrow left key not on the first page, should change page', () => {
-      evt.key = 'ArrowLeft';
-      totalVerticalCount = 40;
-      page = 1;
-      rowsPerPage = 40;
-      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
-      expect(handleChangePage).toHaveBeenCalledTimes(1);
-      expect(setShouldRefocus).toHaveBeenCalledTimes(1);
-    });
-
-    it('when press escape is pressed and keyboard.enabled is true, should call keyboard.blur', () => {
-      evt = {
-        key: 'Escape',
-        stopPropagation: jest.fn(),
-        preventDefault: jest.fn(),
-      };
-      keyboard = { enabled: true, blur: jest.fn() };
-      handleTableWrapperKeyDown({
-        evt,
-        totalVerticalCount,
-        page,
-        rowsPerPage,
-        handleChangePage,
-        setShouldRefocus,
-        keyboard,
-      });
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(keyboard.blur).toHaveBeenCalledWith(true);
-    });
-
-    it('should ignore keyboard.blur while you are focusing on the pagination and pressing Esc key', () => {
-      evt = {
-        key: 'Escape',
-        stopPropagation: jest.fn(),
-        preventDefault: jest.fn(),
-      };
-      keyboard = { enabled: true, blur: jest.fn() };
-      isSelectionActive = true;
-      handleTableWrapperKeyDown({
-        evt,
-        totalVerticalCount,
-        page,
-        rowsPerPage,
-        handleChangePage,
-        setShouldRefocus,
-        keyboard,
-        isSelectionActive,
-      });
-      expect(evt.preventDefault).not.toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).not.toHaveBeenCalledTimes(1);
-      expect(keyboard.blur).not.toHaveBeenCalledTimes(1);
     });
   });
 
