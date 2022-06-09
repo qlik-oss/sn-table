@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { handleFocusoutEvent } from '../table/utils/handle-accessibility';
+import { handleFocusoutEvent } from '../utils/handle-accessibility';
 
 const useFocusListener = (tableWrapperRef, shouldRefocus, keyboard) => {
   useEffect(() => {

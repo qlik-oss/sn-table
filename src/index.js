@@ -21,9 +21,9 @@ import data from './data';
 import ext from './ext';
 import manageData from './handle-data';
 import { mount, render, teardown } from './table/Root';
-import useAnnounceAndTranslations from './hooks/use-announce-and-translations';
-import useSorting from './hooks/use-sorting';
-import useExtendedTheme from './hooks/use-extended-theme';
+import useAnnounceAndTranslations from './nebula-hooks/use-announce-and-translations';
+import useSorting from './nebula-hooks/use-sorting';
+import useExtendedTheme from './nebula-hooks/use-extended-theme';
 
 const initialPageInfo = {
   page: 0,

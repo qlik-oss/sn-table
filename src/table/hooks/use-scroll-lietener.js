@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { handleHorizontalScroll } from '../table/utils/handle-scroll';
+import { handleHorizontalScroll } from '../utils/handle-scroll';
 
 const useScrollListener = (tableContainerRef, direction) => {
   useEffect(() => {
