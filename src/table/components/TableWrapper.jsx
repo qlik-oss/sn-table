@@ -13,7 +13,7 @@ import useDidUpdateEffect from '../hooks/use-did-update-effect';
 import useFocusListener from '../hooks/use-focus-listener';
 import useScrollListener from '../hooks/use-scroll-lietener';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
-import { updateFocus, handleResetFocus } from '../utils/handle-accessibility';
+import { updateFocus, handleResetFocus, getCellElement } from '../utils/handle-accessibility';
 import { handleNavigateTop } from '../utils/handle-scroll';
 
 export default function TableWrapper(props) {
@@ -75,11 +75,7 @@ export default function TableWrapper(props) {
   useDidUpdateEffect(() => {
     if (!keyboard.enabled) return;
 
-    updateFocus({
-      focusType: keyboard.active ? 'focus' : 'blur',
-      rowElements: rootElement.getElementsByClassName('sn-table-row'),
-      cellCoord: focusedCellCoord,
-    });
+    updateFocus({ focusType: keyboard.active ? 'focus' : 'blur', cell: getCellElement(rootElement, focusedCellCoord) });
   }, [keyboard.active]);
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
@@ -91,7 +87,7 @@ export default function TableWrapper(props) {
       shouldRefocus,
       setFocusedCellCoord,
       hasSelections: selectionsAPI.isModal(),
-      shouldAddTabstop: !keyboard.enabled || keyboard.active,
+      keyboard,
       announce,
     });
   }, [rows.length, totalRowCount, totalColumnCount, page]);

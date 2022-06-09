@@ -1,7 +1,11 @@
+export const getCellElement = (rootElement, cellCoord) =>
+  rootElement.getElementsByClassName('sn-table-row')[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[
+    cellCoord[1]
+  ];
+
 export const findCellWithTabStop = (rootElement) => rootElement.querySelector("td[tabindex='0'], th[tabindex='0']");
 
-export const updateFocus = ({ focusType, rowElements = [], cellCoord = [], providedCell = undefined }) => {
-  const cell = providedCell || rowElements[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[cellCoord[1]];
+export const updateFocus = ({ focusType, cell }) => {
   if (!cell) return;
 
   switch (focusType) {
@@ -25,10 +29,7 @@ export const updateFocus = ({ focusType, rowElements = [], cellCoord = [], provi
 };
 
 export const removeAndFocus = (newCoord, rootElement, setFocusedCellCoord, keyboard) => {
-  updateFocus({
-    providedCell: findCellWithTabStop(rootElement),
-    focusType: 'removeTab',
-  });
+  updateFocus({ focusType: 'removeTab', cell: findCellWithTabStop(rootElement) });
   setFocusedCellCoord(newCoord);
   keyboard.enabled && keyboard.focus();
 };
@@ -48,31 +49,30 @@ export const handleResetFocus = ({
   shouldRefocus,
   hasSelections,
   setFocusedCellCoord,
-  shouldAddTabstop,
+  keyboard,
   announce,
 }) => {
-  updateFocus({ focusType: 'removeTab', providedCell: findCellWithTabStop(rootElement) });
+  updateFocus({ focusType: 'removeTab', cell: findCellWithTabStop(rootElement) });
   // If you have selections ongoing, you want to stay on the same column
-  const nextCell = hasSelections ? [1, focusedCellCoord[1]] : [0, 0];
-  if (shouldAddTabstop) {
+  const cellCoord = hasSelections ? [1, focusedCellCoord[1]] : [0, 0];
+  if (!keyboard.enabled || keyboard.active) {
     // Only run this if updates come from inside table
     const focusType = shouldRefocus.current ? 'focus' : 'addTab';
     shouldRefocus.current = false;
-    const rowElements = rootElement.getElementsByClassName('sn-table-row');
-    const providedCell = rowElements[nextCell[0]]?.getElementsByClassName('sn-table-cell')[nextCell[1]];
-    updateFocus({ focusType, providedCell });
+    const cell = getCellElement(rootElement, cellCoord);
+    updateFocus({ focusType, cell });
 
     if (hasSelections) {
-      const hasSelectedClassname = providedCell?.classList?.contains('selected');
+      const hasSelectedClassName = cell?.classList?.contains('selected');
       announce({
         keys: [
-          `${providedCell.textContent},`,
-          hasSelectedClassname ? 'SNTable.SelectionLabel.SelectedValue' : 'SNTable.SelectionLabel.NotSelectedValue',
+          `${cell.textContent},`,
+          hasSelectedClassName ? 'SNTable.SelectionLabel.SelectedValue' : 'SNTable.SelectionLabel.NotSelectedValue',
         ],
       });
     }
   }
-  setFocusedCellCoord(nextCell);
+  setFocusedCellCoord(cellCoord);
 };
 
 export const handleFocusoutEvent = (evt, shouldRefocus, keyboard) => {
