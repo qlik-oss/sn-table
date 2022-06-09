@@ -50,6 +50,19 @@ export default function TableWrapper(props) {
     [pageInfo, setPageInfo, totalPages, announce]
   );
 
+  const handleKeyDown = (evt) => {
+    handleTableWrapperKeyDown({
+      evt,
+      totalRowCount,
+      page,
+      rowsPerPage,
+      handleChangePage,
+      setShouldRefocus,
+      keyboard,
+      isSelectionActive: selectionsAPI.isModal(),
+    });
+  };
+
   useEffect(() => {
     const memoedWrapper = tableWrapperRef.current;
     if (!memoedWrapper) return () => {};
@@ -110,22 +123,11 @@ export default function TableWrapper(props) {
 
   return (
     <StyledTableWrapper
-      ref={tableWrapperRef}
       tableTheme={theme.table}
       paginationNeeded={paginationNeeded}
       dir={direction}
-      onKeyDown={(evt) =>
-        handleTableWrapperKeyDown({
-          evt,
-          totalRowCount,
-          page,
-          rowsPerPage,
-          handleChangePage,
-          setShouldRefocus,
-          keyboard,
-          isSelectionActive: selectionsAPI.isModal(),
-        })
-      }
+      ref={tableWrapperRef}
+      onKeyDown={handleKeyDown}
     >
       <AnnounceElements />
       <StyledTableContainer

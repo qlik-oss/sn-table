@@ -73,9 +73,11 @@ export const handleAnnounceSelectionStatus = ({ announce, rowsLength, isAddition
 
 export const getSelectedRows = ({ selectedRows, cell, evt }) => {
   const { qElemNumber, rowIdx } = cell;
+
   if (evt.ctrlKey || evt.metaKey) {
-    // if the ctrl key or the ⌘ Command key (On Macintosh keyboards) or the ⊞ Windows key is pressed
-    // get the last clicked item (single select)
+    // if the ctrl key or the ⌘ Command key (On Macintosh keyboards)
+    // or the ⊞ Windows key is pressed, get the last clicked
+    // item (single select)
     return { [qElemNumber]: rowIdx };
   }
 
