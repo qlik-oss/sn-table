@@ -83,7 +83,7 @@ export const getSelectedRows = ({ selectedRows, cell, evt }) => {
 
   if (evt.shiftKey && evt.key.includes('Arrow')) {
     selectedRows[qElemNumber] = rowIdx;
-    // move to a cell, and add it to the object
+    // add the next or previous cell to selectedRows, based on which arrow is pressed
     selectedRows[evt.key === 'ArrowDown' ? cell.nextQElemNumber : cell.prevQElemNumber] =
       evt.key === 'ArrowDown' ? rowIdx + 1 : rowIdx - 1;
   } else if (selectedRows[qElemNumber] !== undefined) {

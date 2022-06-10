@@ -287,6 +287,15 @@ describe('selections-utils', () => {
       const updatedSelectedRows = getSelectedRows({ selectedRows, cell, evt });
       expect(updatedSelectedRows).toEqual({ 1: 1, [cell.qElemNumber]: cell.rowIdx });
     });
+
+    it('should add the current cell and the next cell to selectedRows when press shift and arrow down key', () => {
+      evt.shiftKey = true;
+      evt.key = 'ArrowDown';
+      cell.nextQElemNumber = 2;
+
+      const updatedSelectedRows = getSelectedRows({ selectedRows, cell, evt });
+      expect(updatedSelectedRows).toEqual({ 1: 1, [cell.qElemNumber]: cell.rowIdx, [cell.nextQElemNumber]: 1 });
+    });
   });
 
   describe('getCellSelectionState', () => {

@@ -144,12 +144,11 @@ export const bodyHandleKeyPress = ({
     case 'ArrowDown':
       // Shift + up/down arrow keys: select multiple values
       // When at the first/last row of the cell, shift + arrow up/down key, no value is selected
-      if ((evt.key === 'ArrowUp' && cell.prevQElemNumber) || (evt.key === 'ArrowDown' && cell.nextQElemNumber)) {
+      (cell.prevQElemNumber || cell.nextQElemNumber) &&
         evt.shiftKey &&
-          cell.isSelectable &&
-          isAnalysisMode &&
-          selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
-      }
+        cell.isSelectable &&
+        isAnalysisMode &&
+        selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
       moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isInSelectionMode);
       break;
     case 'ArrowRight':
