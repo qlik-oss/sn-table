@@ -77,6 +77,8 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
         isSelectable: c.isDim && !c.isLocked,
         rawRowIdx: rowIdx,
         rawColIdx: colIdx,
+        prevQElemNumber: dataPages[0].qMatrix[rowIdx - 1]?.[colIdx]?.qElemNumber,
+        nextQElemNumber: dataPages[0].qMatrix[rowIdx + 1]?.[colIdx]?.qElemNumber,
       };
     });
     return row;

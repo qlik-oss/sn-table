@@ -71,10 +71,6 @@ function TableBodyWrapper({
             const cell = row[id];
             const CellRenderer = columnRenderers[columnIndex];
             const handleKeyDown = (evt) => {
-              let moveToCell;
-              if (evt.shiftKey && ((evt.key === 'ArrowUp' && rowIndex !== 0) || evt.key === 'ArrowDown'))
-                moveToCell = rows[rowIndex + (evt.key === 'ArrowDown' ? 1 : -1)][id];
-
               bodyHandleKeyPress({
                 evt,
                 rootElement,
@@ -86,7 +82,6 @@ function TableBodyWrapper({
                 setFocusedCellCoord,
                 announce,
                 keyboard,
-                moveToCell,
               });
             };
 

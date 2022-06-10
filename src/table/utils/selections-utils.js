@@ -71,7 +71,7 @@ export const handleAnnounceSelectionStatus = ({ announce, rowsLength, isAddition
   }
 };
 
-export const getSelectedRows = ({ selectedRows, cell, evt, moveToCell }) => {
+export const getSelectedRows = ({ selectedRows, cell, evt }) => {
   const { qElemNumber, rowIdx } = cell;
 
   if (evt.ctrlKey || evt.metaKey) {
@@ -81,10 +81,11 @@ export const getSelectedRows = ({ selectedRows, cell, evt, moveToCell }) => {
     return { [qElemNumber]: rowIdx };
   }
 
-  if (moveToCell) {
+  if (evt.shiftKey) {
     selectedRows[qElemNumber] = rowIdx;
     // move to a cell, and add it to the object
-    selectedRows[moveToCell.qElemNumber] = moveToCell.rowIdx;
+    selectedRows[evt.key === 'ArrowDown' ? cell.nextQElemNumber : cell.prevQElemNumber] =
+      evt.key === 'ArrowDown' ? rowIdx + 1 : rowIdx - 1;
   } else if (selectedRows[qElemNumber] !== undefined) {
     // if the selected item is clicked again, that item will be removed
     delete selectedRows[qElemNumber];
@@ -98,7 +99,7 @@ export const getSelectedRows = ({ selectedRows, cell, evt, moveToCell }) => {
 
 const selectCell = (state, payload) => {
   const { api, rows, colIdx } = state;
-  const { cell, announce, evt, moveToCell } = payload;
+  const { cell, announce, evt } = payload;
   let selectedRows = {};
 
   if (colIdx === -1) {
@@ -109,7 +110,7 @@ const selectCell = (state, payload) => {
     return state;
   }
 
-  selectedRows = getSelectedRows({ selectedRows, cell, evt, moveToCell });
+  selectedRows = getSelectedRows({ selectedRows, cell, evt });
   const selectedRowsLength = Object.keys(selectedRows).length;
   handleAnnounceSelectionStatus({
     announce,

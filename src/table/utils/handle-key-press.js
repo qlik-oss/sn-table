@@ -136,7 +136,6 @@ export const bodyHandleKeyPress = ({
   announce,
   keyboard,
   selectionsAPI = null,
-  moveToCell,
 }) => {
   const isInSelectionMode = selectionsAPI?.isModal();
 
@@ -144,7 +143,12 @@ export const bodyHandleKeyPress = ({
     case 'ArrowUp':
     case 'ArrowDown':
       // Shift + up/down arrow keys: select multiple values
-      moveToCell && selectionDispatch({ type: 'select', payload: { cell, evt, announce, moveToCell } });
+      // When at the first row of the cell, shift + arrow up key, no value is selected
+      evt.shiftKey &&
+        ((evt.key === 'ArrowUp' && cell.rowIdx !== 0) || evt.key === 'ArrowDown') &&
+        cell.isSelectable &&
+        isAnalysisMode &&
+        selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
       moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isInSelectionMode);
       break;
     case 'ArrowRight':
