@@ -1,15 +1,14 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Box from '@mui/material/Box';
-import Select from '@mui/material/Select';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 
+import { StyledSelect, StyledIconButton } from '../styles';
 import { handleLastTab } from '../utils/handle-key-press';
 
 const icons = {
@@ -58,6 +57,7 @@ function PaginationContent({
 
   if (!paginationNeeded) return null;
 
+  const paginationTheme = theme.table.pagination;
   const onFirstPage = page === 0;
   const onLastPage = page >= totalPages - 1;
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
@@ -78,34 +78,24 @@ function PaginationContent({
 
   const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, selectionsAPI.isModal()) : null;
 
-  const selectStyle = {
-    backgroundColor: 'inherit',
-    '& .MuiNativeSelect-icon': { color: theme.table.pagination.iconColor },
-  };
-
   const getButton = (disabledCondition, pageNumber, type, onKeyDown = null) => {
     const iconType = `${type}${direction === 'rtl' ? 'RTL' : ''}`;
     const IconComponent = icons[iconType];
-    const buttonStyle = disabledCondition
-      ? {
-          color: theme.table.pagination.disabledIconColor,
-          cursor: 'default',
-        }
-      : { color: theme.table.pagination.iconColor };
 
     return (
-      <IconButton
+      <StyledIconButton
+        disabledCondition={disabledCondition}
+        paginationTheme={paginationTheme}
         data-testid="pagination-action-icon-button"
         onClick={!disabledCondition ? () => handleChangePage(pageNumber) : null}
         aria-disabled={disabledCondition}
         aria-label={translator.get(`SNTable.Pagination.${type}`)}
         title={!constraints.passive ? translator.get(`SNTable.Pagination.${type}`) : undefined}
         tabIndex={tabIndex}
-        sx={{ ...buttonStyle, height: 32 }}
         onKeyDown={onKeyDown}
       >
         <IconComponent />
-      </IconButton>
+      </StyledIconButton>
     );
   };
 
@@ -116,17 +106,23 @@ function PaginationContent({
       tabIndex,
       id,
       'data-testid': id,
-      style: { color: theme.table.pagination.color, height: 30 },
+      style: { color: paginationTheme.color, height: 30 },
     };
 
     return (
       <FormControl sx={{ px: 2.5 }}>
-        <InputLabel sx={{ color: theme.table.pagination.color }} htmlFor={id} shrink={false}>
+        <InputLabel sx={{ color: paginationTheme.color }} htmlFor={id} shrink={false}>
           {`${translator.get(translationName)}:`}
         </InputLabel>
-        <Select sx={selectStyle} native value={value} onChange={handleChange} inputProps={inputProps}>
+        <StyledSelect
+          paginationTheme={paginationTheme}
+          native
+          value={value}
+          onChange={handleChange}
+          inputProps={inputProps}
+        >
           {options}
-        </Select>
+        </StyledSelect>
       </FormControl>
     );
   };
