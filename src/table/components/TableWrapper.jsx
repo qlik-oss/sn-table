@@ -160,7 +160,12 @@ export default function TableWrapper(props) {
       </TableContainer>
       {!constraints.active && (
         <FooterWrapper theme={theme} footerContainer={footerContainer}>
-          <PaginationContent {...props} handleChangePage={handleChangePage} announce={announce} />
+          <PaginationContent
+            {...props}
+            handleChangePage={handleChangePage}
+            isInSelectionMode={selectionsAPI.isModal()}
+            announce={announce}
+          />
         </FooterWrapper>
       )}
     </Paper>

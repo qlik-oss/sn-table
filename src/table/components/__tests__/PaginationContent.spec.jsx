@@ -14,8 +14,7 @@ describe('<PaginationContent />', () => {
   let handleChangePage;
   let rect;
   let translator;
-  let isModal;
-  let selectionsAPI;
+  let isInSelectionMode;
   let keyboard;
   let constraints;
   let footerContainer;
@@ -33,7 +32,7 @@ describe('<PaginationContent />', () => {
         translator={translator}
         constraints={constraints}
         footerContainer={footerContainer}
-        selectionsAPI={selectionsAPI}
+        isInSelectionMode={isInSelectionMode}
         rect={rect}
         handleChangePage={handleChangePage}
         announce={announce}
@@ -66,8 +65,7 @@ describe('<PaginationContent />', () => {
     handleChangePage = jest.fn();
     rect = { width: 750 };
     translator = { get: (s) => s };
-    isModal = false;
-    selectionsAPI = { isModal: () => isModal };
+    isInSelectionMode = false;
     keyboard = { enabled: true };
     constraints = {};
     announce = jest.fn();
@@ -197,7 +195,7 @@ describe('<PaginationContent />', () => {
     });
 
     it('should not call focusSelectionToolbar when pressing shift + tab on last page button and isInSelectionMode is true', () => {
-      isModal = true;
+      isInSelectionMode = true;
 
       const { queryByTitle } = renderPagination();
       fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab', shiftKey: true });
@@ -205,7 +203,7 @@ describe('<PaginationContent />', () => {
     });
 
     it('should call focusSelectionToolbar when pressing tab on last page button and isInSelectionMode is true', () => {
-      isModal = true;
+      isInSelectionMode = true;
 
       const { queryByTitle } = renderPagination();
       fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab' });
@@ -213,7 +211,7 @@ describe('<PaginationContent />', () => {
     });
 
     it('should call focusSelectionToolbar when pressing tab on next page button, isInSelectionMode is true and tableWidth < 350', () => {
-      isModal = true;
+      isInSelectionMode = true;
       rect.width = 300;
 
       const { queryByTitle } = renderPagination();
