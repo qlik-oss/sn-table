@@ -1,4 +1,4 @@
-import { updateFocus, focusSelectionToolbar } from './handle-accessibility';
+import { updateFocus, focusSelectionToolbar, getCellElement } from './handle-accessibility';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -70,13 +70,10 @@ export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, isInSelec
 };
 
 export const getRowAndColumnCount = (rootElement) => {
-  const rowElements = rootElement.getElementsByClassName('sn-table-row');
-  const rowCount = rowElements.length;
+  const rowCount = rootElement.getElementsByClassName('sn-table-row').length;
+  const columnCount = rootElement.getElementsByClassName('sn-table-head-cell').length;
 
-  const headCellElements = rootElement.getElementsByClassName('sn-table-head-cell');
-  const columnCount = headCellElements.length;
-
-  return { rowElements, rowCount, columnCount };
+  return { rowCount, columnCount };
 };
 
 export const moveFocus = (evt, rootElement, cellCoord, setFocusedCellCoord, announce, isInSelectionMode) => {
@@ -84,14 +81,13 @@ export const moveFocus = (evt, rootElement, cellCoord, setFocusedCellCoord, anno
   evt.target.setAttribute('tabIndex', '-1');
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
   const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, isInSelectionMode);
-  updateFocus({ focusType: 'focus', rowElements: rowAndColumnCount.rowElements, cellCoord: nextCellCoord });
+  const nextCell = getCellElement(rootElement, nextCellCoord);
+  updateFocus({ focusType: 'focus', cell: nextCell });
   setFocusedCellCoord(nextCellCoord);
 
   // handle announce
   if (isInSelectionMode) {
-    const cell =
-      rowAndColumnCount.rowElements[nextCellCoord[0]]?.getElementsByClassName('sn-table-cell')[nextCellCoord[1]];
-    const hasActiveClassName = cell.classList.contains('selected');
+    const hasActiveClassName = nextCell.classList.contains('selected');
     hasActiveClassName
       ? announce({ keys: 'SNTable.SelectionLabel.SelectedValue' })
       : announce({ keys: 'SNTable.SelectionLabel.NotSelectedValue' });
@@ -138,17 +134,15 @@ export const bodyHandleKeyPress = ({
   selectionsAPI = null,
 }) => {
   const isInSelectionMode = selectionsAPI?.isModal();
+  const isMultiValueSelections = () =>
+    (cell.prevQElemNumber || cell.nextQElemNumber) && evt.shiftKey && cell.isSelectable && isAnalysisMode;
 
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
       // Shift + up/down arrow keys: select multiple values
       // When at the first/last row of the cell, shift + arrow up/down key, no value is selected
-      (cell.prevQElemNumber || cell.nextQElemNumber) &&
-        evt.shiftKey &&
-        cell.isSelectable &&
-        isAnalysisMode &&
-        selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
+      isMultiValueSelections() && selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
       moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isInSelectionMode);
       break;
     case 'ArrowRight':

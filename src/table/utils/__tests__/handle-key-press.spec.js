@@ -1,7 +1,6 @@
 import {
   handleTableWrapperKeyDown,
   arrowKeysNavigation,
-  getRowAndColumnCount,
   headHandleKeyPress,
   bodyHandleKeyPress,
   handleLastTab,
@@ -242,24 +241,6 @@ describe('handle-key-press', () => {
       const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
       expect(nextRow).toBe(1);
       expect(nextCol).toBe(1);
-    });
-  });
-
-  describe('getRowAndColumnCount', () => {
-    let resolvedRowCount;
-    let resolvedColumnCount;
-    let resolvedRowElements;
-    const rootElement = {};
-
-    it('should return a rowElements, rowCount, and columnCount', () => {
-      resolvedRowCount = 1;
-      resolvedColumnCount = 1;
-      resolvedRowElements = [{}];
-      rootElement.getElementsByClassName = () => resolvedRowElements;
-      const { rowElements, rowCount, columnCount } = getRowAndColumnCount(rootElement);
-      expect(rowCount).toBe(resolvedRowCount);
-      expect(columnCount).toBe(resolvedColumnCount);
-      expect(rowElements).toBe(resolvedRowElements);
     });
   });
 
