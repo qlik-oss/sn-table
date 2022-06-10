@@ -9,7 +9,7 @@ export const preventDefaultBehavior = (evt) => {
 
 export const handleTableWrapperKeyDown = ({
   evt,
-  totalVerticalCount,
+  totalRowCount,
   page,
   rowsPerPage,
   handleChangePage,
@@ -20,7 +20,7 @@ export const handleTableWrapperKeyDown = ({
   if (isCtrlShift(evt)) {
     preventDefaultBehavior(evt);
     // ctrl + shift + left/right arrow keys: go to previous/next page
-    const lastPage = Math.ceil(totalVerticalCount / rowsPerPage) - 1;
+    const lastPage = Math.ceil(totalRowCount / rowsPerPage) - 1;
     if (evt.key === 'ArrowRight' && page < lastPage) {
       setShouldRefocus();
       handleChangePage(page + 1);
@@ -34,10 +34,8 @@ export const handleTableWrapperKeyDown = ({
   }
 };
 
-export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, selectionState) => {
+export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, isInSelectionMode) => {
   let [nextRow, nextCol] = cellCoord;
-  // check if you have unconfirmed selections, so one or more cells are selected but not confirmed yet.
-  const isInSelectionMode = selectionState?.api?.isModal();
 
   switch (evt.key) {
     case 'ArrowDown':
