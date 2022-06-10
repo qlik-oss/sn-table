@@ -143,12 +143,13 @@ export const bodyHandleKeyPress = ({
     case 'ArrowUp':
     case 'ArrowDown':
       // Shift + up/down arrow keys: select multiple values
-      // When at the first row of the cell, shift + arrow up key, no value is selected
-      evt.shiftKey &&
-        ((evt.key === 'ArrowUp' && cell.rowIdx !== 0) || evt.key === 'ArrowDown') &&
-        cell.isSelectable &&
-        isAnalysisMode &&
-        selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
+      // When at the first/last row of the cell, shift + arrow up/down key, no value is selected
+      if ((evt.key === 'ArrowUp' && cell.prevQElemNumber) || (evt.key === 'ArrowDown' && cell.nextQElemNumber)) {
+        evt.shiftKey &&
+          cell.isSelectable &&
+          isAnalysisMode &&
+          selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
+      }
       moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isInSelectionMode);
       break;
     case 'ArrowRight':
