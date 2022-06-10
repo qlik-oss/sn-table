@@ -12,7 +12,7 @@ import * as handleAccessibility from '../handle-accessibility';
 describe('handle-key-press', () => {
   describe('handleTableWrapperKeyDown', () => {
     let evt = {};
-    let totalVerticalCount;
+    let totalRowCount;
     let page;
     let rowsPerPage;
     let handleChangePage;
@@ -35,7 +35,7 @@ describe('handle-key-press', () => {
 
     it('when shift key is not pressed, handleChangePage should not run', () => {
       evt.shiftKey = false;
-      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalRowCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.toHaveBeenCalled();
       expect(setShouldRefocus).not.toHaveBeenCalled();
     });
@@ -43,16 +43,16 @@ describe('handle-key-press', () => {
     it('when ctrl key or meta key is not pressed, handleChangePage should not run', () => {
       evt.ctrlKey = false;
       evt.metaKey = false;
-      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalRowCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.toHaveBeenCalled();
       expect(setShouldRefocus).not.toHaveBeenCalled();
     });
 
     it('when press arrow right key on the first page which contains all rows, handleChangePage should not run', () => {
       page = 0;
-      totalVerticalCount = 40;
+      totalRowCount = 40;
       rowsPerPage = 40;
-      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalRowCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.toHaveBeenCalled();
       expect(setShouldRefocus).not.toHaveBeenCalled();
     });
@@ -60,28 +60,28 @@ describe('handle-key-press', () => {
     it('when press arrow left key on the first page, handleChangePage should not run', () => {
       evt.key = 'ArrowLeft';
       page = 0;
-      totalVerticalCount = 40;
+      totalRowCount = 40;
       rowsPerPage = 10;
-      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalRowCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.toHaveBeenCalled();
       expect(setShouldRefocus).not.toHaveBeenCalled();
     });
 
     it('when press arrow right key on the page whose next page contains rows, should change page', () => {
-      totalVerticalCount = 40;
+      totalRowCount = 40;
       page = 0;
       rowsPerPage = 10;
-      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalRowCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).toHaveBeenCalledTimes(1);
       expect(setShouldRefocus).toHaveBeenCalledTimes(1);
     });
 
     it('when press arrow left key not on the first page, should change page', () => {
       evt.key = 'ArrowLeft';
-      totalVerticalCount = 40;
+      totalRowCount = 40;
       page = 1;
       rowsPerPage = 40;
-      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalRowCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).toHaveBeenCalledTimes(1);
       expect(setShouldRefocus).toHaveBeenCalledTimes(1);
     });
@@ -95,7 +95,7 @@ describe('handle-key-press', () => {
       keyboard = { enabled: true, blur: jest.fn() };
       handleTableWrapperKeyDown({
         evt,
-        totalVerticalCount,
+        totalRowCount,
         page,
         rowsPerPage,
         handleChangePage,
@@ -117,7 +117,7 @@ describe('handle-key-press', () => {
       isSelectionActive = true;
       handleTableWrapperKeyDown({
         evt,
-        totalVerticalCount,
+        totalRowCount,
         page,
         rowsPerPage,
         handleChangePage,
