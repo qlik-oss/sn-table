@@ -18,9 +18,11 @@ function TableBodyWrapper({
   setShouldRefocus,
   keyboard,
   tableWrapperRef,
+  tableContainerRef,
   announce,
 }) {
   const { rows, columns, paginationNeeded } = tableData;
+  const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
   // active: turn off interactions that affect the state of the visual representation including selection, zoom, scroll, etc.
@@ -61,7 +63,9 @@ function TableBodyWrapper({
                 cell,
                 selectionDispatch,
                 isAnalysisMode: selectionsEnabled,
+                focusedCellCoord,
                 setFocusedCellCoord,
+                tableContainerRef,
                 announce,
                 keyboard,
               });
@@ -103,6 +107,7 @@ TableBodyWrapper.propTypes = {
   setShouldRefocus: PropTypes.func.isRequired,
   keyboard: PropTypes.object.isRequired,
   tableWrapperRef: PropTypes.object.isRequired,
+  tableContainerRef: PropTypes.object.isRequired,
   announce: PropTypes.func.isRequired,
 };
 

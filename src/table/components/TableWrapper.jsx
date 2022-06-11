@@ -12,7 +12,7 @@ import { useContextSelector, TableContext } from '../context';
 import { StyledTableContainer, StyledTableWrapper } from '../styles';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent, getCellElement } from '../utils/handle-accessibility';
-import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
+import { handleHorizontalScroll } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
 
 export default function TableWrapper(props) {
@@ -87,11 +87,6 @@ export default function TableWrapper(props) {
     };
   }, [direction]);
 
-  useEffect(
-    () => handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement }),
-    [tableContainerRef, focusedCellCoord]
-  );
-
   useDidUpdateEffect(() => {
     if (!keyboard.enabled) return;
 
@@ -141,6 +136,7 @@ export default function TableWrapper(props) {
             announce={announce}
             setShouldRefocus={setShouldRefocus}
             tableWrapperRef={tableWrapperRef}
+            tableContainerRef={tableContainerRef}
           />
         </Table>
       </StyledTableContainer>

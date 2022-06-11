@@ -1,4 +1,5 @@
 import { updateFocus, focusSelectionToolbar, getCellElement } from './handle-accessibility';
+import { handleNavigateTop } from './handle-scroll';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -128,7 +129,9 @@ export const bodyHandleKeyPress = ({
   cell,
   selectionDispatch,
   isAnalysisMode,
+  focusedCellCoord,
   setFocusedCellCoord,
+  tableContainerRef,
   announce,
   keyboard,
   selectionsAPI = null,
@@ -137,6 +140,8 @@ export const bodyHandleKeyPress = ({
 
   switch (evt.key) {
     case 'ArrowUp':
+      handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement });
+    // eslint-disable-next-line no-fallthrough
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft':
