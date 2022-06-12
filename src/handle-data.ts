@@ -1,27 +1,37 @@
+import { stardust } from '@nebula.js/stardust';
+
+import { TableLayout, HyperCube, ExtendedNxDimensionInfo, ExtendedNxMeasureInfo, Column } from './types';
+
 const directionMap = {
   A: 'asc',
   D: 'desc',
+  N: 'asc',
 };
 
 const MAX_CELLS = 10000;
 
-export function getHighestPossibleRpp(width, rowsPerPageOptions) {
+export function getHighestPossibleRpp(width: number, rowsPerPageOptions: number[]) {
   const highestPossibleOption = [...rowsPerPageOptions].reverse().find((opt) => opt * width <= MAX_CELLS);
   return highestPossibleOption || Math.floor(MAX_CELLS / width); // covering corner case of lowest option being too high
 }
 
-export function getColumnOrder({ qColumnOrder, qDimensionInfo, qMeasureInfo }) {
+export function getColumnOrder({ qEffectiveInterColumnSortOrder, qDimensionInfo, qMeasureInfo }: HyperCube) {
   const columnsLength = qDimensionInfo.length + qMeasureInfo.length;
-  return qColumnOrder?.length === columnsLength ? qColumnOrder : [...Array(columnsLength).keys()];
+  return qEffectiveInterColumnSortOrder?.length === columnsLength
+    ? qEffectiveInterColumnSortOrder
+    : [...Array(columnsLength).keys()];
 }
 
-export function getColumnInfo(qHyperCube, colIndex) {
+export function getColumnInfo(qHyperCube: HyperCube, colIndex: number) {
   const { qDimensionInfo, qMeasureInfo } = qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIndex < numDims;
-  const info = isDim ? qDimensionInfo[colIndex] : qMeasureInfo[colIndex - numDims];
+  const info = (isDim ? qDimensionInfo[colIndex] : qMeasureInfo[colIndex - numDims]) as
+    | ExtendedNxMeasureInfo
+    | ExtendedNxDimensionInfo;
   const isHidden = info.qError?.qErrorCode === 7005;
-  const isLocked = info.qLocked;
+  const isLocked = isDim && qDimensionInfo[colIndex].qLocked;
+  const align = () => (isDim ? 'left' : 'right');
 
   return (
     !isHidden && {
@@ -30,15 +40,30 @@ export function getColumnInfo(qHyperCube, colIndex) {
       width: 200,
       label: info.qFallbackTitle,
       id: `col-${colIndex}`,
-      align: !info.textAlign || info.textAlign.auto ? (isDim ? 'left' : 'right') : info.textAlign.align,
+      align: !info.textAlign || info.textAlign.auto ? align() : info.textAlign.align,
       stylingInfo: info.qAttrExprInfo.map((expr) => expr.id),
-      sortDirection: directionMap[info.qSortIndicator],
+      sortDirection: info.qSortIndicator ? directionMap[info.qSortIndicator] : directionMap.A,
       dataColIdx: colIndex,
     }
   );
 }
 
-export default async function manageData(model, layout, pageInfo, setPageInfo) {
+interface ManageData {
+  model: EngineAPI.IGenericObject;
+  layout: TableLayout;
+  pageInfo: {
+    page: number;
+    rowsPerPage: number;
+    rowsPerPageOptions: number[];
+  };
+  setPageInfo: stardust.SetStateFn<{
+    page: number;
+    rowsPerPage: number;
+    rowsPerPageOptions: number[];
+  }>;
+}
+
+export default async function manageData({ model, layout, pageInfo, setPageInfo }: ManageData) {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const { qHyperCube } = layout;
   const totalColumnCount = qHyperCube.qSize.qcx;
@@ -62,7 +87,9 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
 
   const columnOrder = getColumnOrder(qHyperCube);
   // using filter to remove hidden columns (represented with false)
-  const columns = columnOrder.map((colIndex) => getColumnInfo(qHyperCube, colIndex)).filter(Boolean);
+  const columns = columnOrder
+    .map((colIndex: number) => getColumnInfo(qHyperCube, colIndex))
+    .filter(Boolean) as Column[];
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
     { qTop: top, qLeft: 0, qHeight: height, qWidth: totalColumnCount },
   ]);

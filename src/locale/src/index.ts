@@ -1,7 +1,7 @@
-// eslint-disable-next-line import/no-unresolved
 import all from '../all.json';
+import { Translator } from '../../types';
 
-export default function registerLocale(translator) {
+export default function registerLocale(translator: Translator) {
   if (translator && translator.get && translator.add) {
     const t = 'SNTable.Accessibility.RowsAndColumns';
     const g = translator.get(t);

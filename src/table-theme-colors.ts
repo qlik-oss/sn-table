@@ -1,11 +1,13 @@
 import { isDarkColor, isTransparentColor } from './table/utils/color-utils';
+import { UseTheme } from './types';
 
-export default function tableThemeColors(theme, rootElement) {
+export default function tableThemeColors(theme: UseTheme, rootElement: HTMLElement) {
   const qvInnerObject = rootElement?.closest('.qv-object .qv-inner-object');
   const objectBackgroundColorFromCSS = qvInnerObject && window.getComputedStyle(qvInnerObject).backgroundColor;
 
   const qvPanelSheet = rootElement?.closest('.qv-panel-sheet');
-  const sheetBackgroundColorFromCSS = qvPanelSheet && window.getComputedStyle(qvPanelSheet).backgroundColor;
+  const sheetBackgroundColorFromCSS =
+    (qvPanelSheet && window.getComputedStyle(qvPanelSheet).backgroundColor) ?? undefined;
 
   const tableBackgroundColorFromTheme = theme.getStyle('', '', 'object.straightTable.backgroundColor');
 

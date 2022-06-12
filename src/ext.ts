@@ -1,3 +1,5 @@
+import { Galaxy } from './types';
+
 const columnCommonHidden = {
   autoSort: {
     ref: 'qDef.autoSort',
@@ -321,7 +323,7 @@ const definition = {
   },
 };
 
-export function indexAdded(array, index) {
+export function indexAdded(array: number[], index: number) {
   let i;
   for (i = 0; i < array.length; ++i) {
     if (array[i] >= 0 && array[i] >= index) {
@@ -331,7 +333,7 @@ export function indexAdded(array, index) {
   array.push(index);
 }
 
-export function indexRemoved(array, index) {
+export function indexRemoved(array: number[], index: number) {
   let removeIndex = 0;
   let i;
   for (i = 0; i < array.length; ++i) {
@@ -345,15 +347,15 @@ export function indexRemoved(array, index) {
   return removeIndex;
 }
 
-export function min(nDimsOrMeas) {
+export function min(nDimsOrMeas: number) {
   return nDimsOrMeas > 0 ? 0 : 1;
 }
 
-export function getDescription(env) {
+export function getDescription(env: Galaxy) {
   return env.translator.get('Visualizations.Descriptions.Column');
 }
 
-export default function ext(env) {
+export default function ext(env: Galaxy) {
   return {
     definition,
     data: {

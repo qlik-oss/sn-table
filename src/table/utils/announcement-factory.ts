@@ -1,4 +1,4 @@
-import { Translator } from '../../types';
+import { Translator, AnnouncementArgs } from '../../types';
 
 /**
  * Enum for announcement elements
@@ -30,14 +30,14 @@ export default function announcementFactory(rootElement: Element, translator: Tr
    * @param {boolean=} announcementArgs.shouldBeAtomic defines the live element should be atomic or not
    * @param {('polite'|'assertive'|'off')=} announcementArgs.politeness the assertive level of the live element
    */
-  return ({ keys, shouldBeAtomic = true, politeness = 'polite' }) => {
+  return ({ keys, shouldBeAtomic = true, politeness = 'polite' }: AnnouncementArgs) => {
     const stringKeys = Array.isArray(keys) ? keys : [keys];
 
     const notation = stringKeys
       .map((key) => {
         if (Array.isArray(key)) {
           const [actualKey, ...rest] = key;
-          return translator.get(actualKey, ...rest);
+          return translator.get(actualKey, rest);
         }
         return translator.get(key);
       })
@@ -46,7 +46,7 @@ export default function announcementFactory(rootElement: Element, translator: Tr
     const announceElement01 = rootElement.querySelector('#sn-table-announcer--01');
     const announceElement02 = rootElement.querySelector('#sn-table-announcer--02');
 
-    let announceElement = null;
+    let announceElement;
 
     if (previousAnnouncementElement === announcerElements.first) {
       announceElement = announceElement02;
@@ -56,9 +56,11 @@ export default function announcementFactory(rootElement: Element, translator: Tr
       previousAnnouncementElement = announcerElements.first;
     }
 
-    announceElement.innerHTML = announceElement.innerHTML.endsWith(` ­`) ? notation : `${notation} ­`;
+    if (announceElement) {
+      announceElement.innerHTML = announceElement.innerHTML.endsWith(` ­`) ? notation : `${notation} ­`;
 
-    announceElement.setAttribute('aria-atomic', shouldBeAtomic);
-    announceElement.setAttribute('aria-live', politeness);
+      announceElement.setAttribute('aria-atomic', shouldBeAtomic.toString());
+      announceElement.setAttribute('aria-live', politeness);
+    }
   };
 }

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
   useElement,
@@ -26,14 +27,25 @@ import sortingFactory from './sorting-factory';
 import { mount, render, teardown } from './table/Root';
 import muiSetup from './mui-setup';
 import tableThemeColors from './table-theme-colors';
+import { Galaxy, TableLayout, Translator, UseOptions, UseTheme, RenderWithCarbonArgument } from './types';
 
 const initialPageInfo = {
   page: 0,
   rowsPerPage: 100,
   rowsPerPageOptions: [10, 25, 100],
 };
-const nothing = async () => {};
-const renderWithCarbon = ({ env, translator, rootElement, model, theme, selectionsAPI, app, rect, layout }) => {
+const nothing = async () => undefined;
+const renderWithCarbon = ({
+  env,
+  translator,
+  rootElement,
+  model,
+  theme,
+  selectionsAPI,
+  app,
+  rect,
+  layout,
+}: RenderWithCarbonArgument) => {
   if (env.carbon) {
     registerLocale(translator);
     const changeSortOrder = sortingFactory(model);
@@ -41,33 +53,34 @@ const renderWithCarbon = ({ env, translator, rootElement, model, theme, selectio
   }
 };
 
-export default function supernova(env) {
+export default function supernova(env: Galaxy) {
   return {
     qae: {
       properties: {
         initial: properties,
       },
-      data: data(env),
+      data: data(),
     },
     component() {
       const rootElement = useElement();
-      const [reactRoot, setReactRoot] = useState();
-      const layout = useStaleLayout();
-      const { direction, footerContainer } = useOptions();
+      const [reactRoot, setReactRoot] = useState(createRoot(rootElement));
+      const layout = useStaleLayout() as TableLayout;
+      const { direction, footerContainer } = useOptions() as UseOptions;
       const app = useApp();
       const model = useModel();
       const constraints = useConstraints();
-      const translator = useTranslator();
+      const translator = useTranslator() as Translator;
       const selectionsAPI = useSelections();
-      const theme = useTheme();
+      const theme = useTheme() as unknown as UseTheme;
       theme.table = tableThemeColors(theme, rootElement);
       const muiTheme = muiSetup(direction);
       const keyboard = useKeyboard();
       const rect = useRect();
       const [pageInfo, setPageInfo] = useState(() => initialPageInfo);
-      const [tableData] = usePromise(() => {
-        return env.carbon ? nothing() : manageData(model, layout, pageInfo, setPageInfo);
-      }, [layout, pageInfo]);
+      const [tableData] = usePromise(
+        async () => (env.carbon ? nothing() : model && manageData({ model, layout, pageInfo, setPageInfo })),
+        [layout, pageInfo, model]
+      );
 
       useEffect(() => {
         if (rootElement) {
@@ -77,7 +90,7 @@ export default function supernova(env) {
       }, [rootElement]);
 
       useEffect(() => {
-        if (layout && tableData && !env.carbon) {
+        if (layout && tableData && !env.carbon && model) {
           registerLocale(translator);
           const changeSortOrder = sortingFactory(model);
           render(reactRoot, {
@@ -100,6 +113,7 @@ export default function supernova(env) {
         }
       }, [
         reactRoot,
+        model,
         tableData,
         constraints,
         direction,

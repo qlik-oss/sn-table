@@ -1,5 +1,7 @@
-export default function sortingFactory(model) {
-  return async (layout, column) => {
+import { TableLayout, Column } from './types';
+
+export default function sortingFactory(model: EngineAPI.IGenericObject) {
+  return async (layout: TableLayout, column: Column) => {
     const { isDim, dataColIdx } = column;
     // The sort order from the properties is needed since it contains hidden columns
     const properties = await model.getEffectiveProperties();
@@ -14,7 +16,7 @@ export default function sortingFactory(model) {
     const patches = [
       {
         qPath: '/qHyperCubeDef/qInterColumnSortOrder',
-        qOp: 'replace',
+        qOp: 'Replace' as EngineAPI.NxPatchOpType,
         qValue: `[${sortOrder.join(',')}]`,
       },
     ];
@@ -27,12 +29,12 @@ export default function sortingFactory(model) {
       const qPath = `/qHyperCubeDef/${isDim ? 'qDimensions' : 'qMeasures'}/${idx}/qDef/qReverseSort`;
 
       patches.push({
+        qOp: 'Replace' as EngineAPI.NxPatchOpType,
         qPath,
-        qOp: 'replace',
         qValue: (!qReverseSort).toString(),
       });
     }
 
-    model.applyPatches(patches, true);
+    model?.applyPatches(patches, true);
   };
 }
