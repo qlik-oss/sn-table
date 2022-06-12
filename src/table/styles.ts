@@ -1,4 +1,7 @@
 import { styled, Paper, TableContainer, TableRow, TableSortLabel, TableBody, Select, IconButton } from '@mui/material';
+import { stardust } from '@nebula.js/stardust';
+
+import { Table } from '../types';
 
 // ---------- AnnounceWrapper ----------
 
@@ -13,7 +16,7 @@ export const TableAnnouncer = styled('div')({
 });
 
 // ---------- FooterWrapper ----------
-
+interface StyledFooterWrapperProps {}
 export const StyledFooterWrapper = styled(Paper, {
   shouldForwardProp: (prop) => prop !== 'tableTheme',
 })(({ tableTheme, theme }) => ({
@@ -32,7 +35,7 @@ export const StyledFooterWrapper = styled(Paper, {
 }));
 
 // ---------- PaginationContent ----------
-
+interface StyledSelectProps {}
 export const StyledSelect = styled(Select, {
   shouldForwardProp: (prop) => prop !== 'paginationTheme',
 })(({ paginationTheme }) => ({
@@ -40,6 +43,7 @@ export const StyledSelect = styled(Select, {
   '& .MuiNativeSelect-icon': { color: paginationTheme.iconColor },
 }));
 
+interface StyledIconButtonProps {}
 export const StyledIconButton = styled(IconButton, {
   shouldForwardProp: (prop) => prop !== 'disabledCondition' && prop !== 'paginationTheme',
 })(({ disabledCondition, paginationTheme }) => ({
@@ -49,7 +53,7 @@ export const StyledIconButton = styled(IconButton, {
 }));
 
 // ---------- TableBodyWrapper ----------
-
+interface StyledTableBodyProps {}
 export const StyledTableBody = styled(TableBody, {
   shouldForwardProp: (prop) => prop !== 'paginationNeeded' && prop !== 'bodyCellStyle',
 })(({ paginationNeeded, bodyCellStyle }) => ({
@@ -65,6 +69,7 @@ export const StyledTableBody = styled(TableBody, {
   },
 }));
 
+interface StyledBodyRowProps {}
 export const StyledBodyRow = styled(TableRow, {
   shouldForwardProp: (prop) => prop !== 'bodyCellStyle',
 })(({ hover, bodyCellStyle }) =>
@@ -81,7 +86,7 @@ export const StyledBodyRow = styled(TableRow, {
 );
 
 // ---------- TableHeadWrapper ----------
-
+interface StyledTableHeaProps {}
 export const StyledHeadRow = styled(TableRow, {
   shouldForwardProp: (prop) => prop !== 'paginationNeeded',
 })(({ paginationNeeded }) => ({
@@ -93,6 +98,7 @@ export const StyledHeadRow = styled(TableRow, {
   },
 }));
 
+interface StyledSortLabelProps {}
 export const StyledSortLabel = styled(TableSortLabel, {
   shouldForwardProp: (prop) => prop !== 'headerStyle',
 })(({ headerStyle }) => ({
@@ -114,10 +120,13 @@ export const VisuallyHidden = styled('span')({
 });
 
 // ---------- TableWrapper ----------
-
+interface StyledTableWrapperProps {
+  tableTheme: Table;
+  paginationNeeded: boolean;
+}
 export const StyledTableWrapper = styled(Paper, {
   shouldForwardProp: (prop) => prop !== 'tableTheme' && prop !== 'paginationNeeded',
-})(({ tableTheme, paginationNeeded }) => ({
+})(({ tableTheme, paginationNeeded }: StyledTableWrapperProps) => ({
   borderWidth: paginationNeeded ? '0px 1px 0px' : '0px',
   borderStyle: 'solid',
   borderColor: tableTheme.borderColor,
@@ -127,9 +136,13 @@ export const StyledTableWrapper = styled(Paper, {
   borderRadius: 'unset',
 }));
 
+interface StyledTableContainerProps {
+  fullHeight: boolean;
+  constraints: stardust.Constraints;
+}
 export const StyledTableContainer = styled(TableContainer, {
   shouldForwardProp: (prop) => prop !== 'fullHeight' && prop !== 'constraints',
-})(({ fullHeight, constraints }) => ({
+})(({ fullHeight, constraints }: StyledTableContainerProps) => ({
   height: fullHeight ? '100%' : 'calc(100% - 49px)',
   overflow: constraints.active ? 'hidden' : 'auto',
 }));

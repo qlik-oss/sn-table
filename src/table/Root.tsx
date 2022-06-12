@@ -2,10 +2,13 @@ import React from 'react';
 import { StyleSheetManager } from 'styled-components';
 import { ThemeProvider } from '@mui/material/styles';
 import rtlPluginSc from 'stylis-plugin-rtl-sc';
+import { Root } from 'react-dom/client';
+
 import TableWrapper from './components/TableWrapper';
 import { TableContextProvider } from './context';
+import { RootProps } from '../types';
 
-export function render(reactRoot, props) {
+export function render(reactRoot: Root, props: RootProps): void {
   const { muiTheme, direction, selectionsAPI } = props;
 
   reactRoot?.render(
@@ -21,7 +24,7 @@ export function render(reactRoot, props) {
   );
 }
 
-export function teardown(reactRoot) {
+export function teardown(reactRoot: Root) {
   reactRoot.unmount();
 }
 

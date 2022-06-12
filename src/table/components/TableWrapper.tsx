@@ -14,8 +14,9 @@ import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent, getCellElement } from '../utils/handle-accessibility';
 import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
+import { TableWrapperProps } from '../../types';
 
-export default function TableWrapper(props) {
+export default function TableWrapper(props: TableWrapperProps) {
   const {
     rootElement,
     tableData,
@@ -31,11 +32,17 @@ export default function TableWrapper(props) {
   } = props;
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
-  const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
-  const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
+  const focusedCellCoord = useContextSelector(
+    TableContext,
+    (value: { focusedCellCoord: number[] }) => value.focusedCellCoord
+  );
+  const setFocusedCellCoord = useContextSelector(
+    TableContext,
+    (value: { setFocusedCellCoord: React.Dispatch<React.SetStateAction<number[]>> }) => value.setFocusedCellCoord
+  );
   const shouldRefocus = useRef(false);
-  const tableContainerRef = useRef();
-  const tableWrapperRef = useRef();
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const tableWrapperRef = useRef<HTMLDivElement>(null);
   const announce = useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
 
   const setShouldRefocus = useCallback(() => {
@@ -43,14 +50,18 @@ export default function TableWrapper(props) {
   }, [rootElement]);
 
   const handleChangePage = useCallback(
-    (pageIdx) => {
+    (pageIdx: number) => {
       setPageInfo({ ...pageInfo, page: pageIdx });
-      announce({ keys: [['SNTable.Pagination.PageStatusReport', [pageIdx + 1, totalPages]]], politeness: 'assertive' });
+      announce({
+        keys: ['SNTable.Pagination.PageStatusReport', [(pageIdx + 1).toString(), totalPages.toString()]],
+        shouldBeAtomic: true,
+        politeness: 'assertive',
+      });
     },
     [pageInfo, setPageInfo, totalPages, announce]
   );
 
-  const handleKeyDown = (evt) => {
+  const handleKeyDown = (evt: React.SyntheticEvent) => {
     handleTableWrapperKeyDown({
       evt,
       totalRowCount,
@@ -113,8 +124,8 @@ export default function TableWrapper(props) {
   }, [rows.length, totalRowCount, totalColumnCount, page]);
 
   const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
-    rows.length + 1,
-    columns.length,
+    (rows.length + 1).toString(),
+    columns.length.toString(),
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
   return (
@@ -128,7 +139,7 @@ export default function TableWrapper(props) {
       <AnnounceElements />
       <StyledTableContainer
         ref={tableContainerRef}
-        fullHeight={footerContainer || constraints.active || !paginationNeeded} // the footerContainer always wants height: 100%
+        fullHeight={footerContainer !== undefined || constraints.active || !paginationNeeded} // the footerContainer always wants height: 100%
         constraints={constraints}
         tabIndex={-1}
         role="application"

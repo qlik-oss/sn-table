@@ -16,7 +16,7 @@ import {
   useRect,
   useApp,
 } from '@nebula.js/stardust';
-import { createRoot } from 'react-dom/client';
+import { createRoot, Root } from 'react-dom/client';
 
 import registerLocale from './locale/src';
 import properties from './object-properties';
@@ -27,7 +27,7 @@ import sortingFactory from './sorting-factory';
 import { mount, render, teardown } from './table/Root';
 import muiSetup from './mui-setup';
 import tableThemeColors from './table-theme-colors';
-import { Galaxy, TableLayout, Translator, UseOptions, UseTheme, RenderWithCarbonArgument } from './types';
+import { Galaxy, TableLayout, Translator, UseOptions, UseTheme, RenderWithCarbonArgs } from './types';
 
 const initialPageInfo = {
   page: 0,
@@ -45,8 +45,8 @@ const renderWithCarbon = ({
   app,
   rect,
   layout,
-}: RenderWithCarbonArgument) => {
-  if (env.carbon) {
+}: RenderWithCarbonArgs) => {
+  if (env.carbon && model && app) {
     registerLocale(translator);
     const changeSortOrder = sortingFactory(model);
     render(rootElement, { layout, model, manageData, theme, selectionsAPI, changeSortOrder, app, rect });
@@ -63,7 +63,7 @@ export default function supernova(env: Galaxy) {
     },
     component() {
       const rootElement = useElement();
-      const [reactRoot, setReactRoot] = useState(createRoot(rootElement));
+      const [reactRoot, setReactRoot] = useState();
       const layout = useStaleLayout() as TableLayout;
       const { direction, footerContainer } = useOptions() as UseOptions;
       const app = useApp();
@@ -93,7 +93,7 @@ export default function supernova(env: Galaxy) {
         if (layout && tableData && !env.carbon && model) {
           registerLocale(translator);
           const changeSortOrder = sortingFactory(model);
-          render(reactRoot, {
+          render(reactRoot as Root, {
             rootElement,
             layout,
             tableData,
@@ -132,7 +132,7 @@ export default function supernova(env: Galaxy) {
 
       useEffect(
         () => () => {
-          reactRoot && teardown(reactRoot);
+          reactRoot && teardown(reactRoot as Root);
         },
         [reactRoot]
       );

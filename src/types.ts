@@ -1,4 +1,6 @@
 import { stardust } from '@nebula.js/stardust';
+import { Root } from 'react-dom/client';
+import { Theme } from '@mui/material/styles';
 
 export interface Translator {
   get: (str: string, args?: string[]) => string;
@@ -22,7 +24,7 @@ export interface TableLayout extends EngineAPI.IGenericHyperCubeLayout {
 
 export interface UseOptions {
   direction: 'ltr' | 'rtl';
-  footerContainer: HTMLElement;
+  footerContainer: HTMLElement | undefined;
 }
 
 export interface Table {
@@ -45,7 +47,7 @@ export interface UseTheme {
   getStyle: (basePath: string, path: string, attribute: string) => string | undefined;
 }
 
-export interface RenderWithCarbonArgument {
+export interface RenderWithCarbonArgs {
   env: Galaxy;
   translator: Translator;
   rootElement: HTMLElement;
@@ -58,7 +60,7 @@ export interface RenderWithCarbonArgument {
 }
 
 export interface AnnouncementArgs {
-  keys: string | string[] | string[][];
+  keys: string | Array<string | Array<string | number>>;
   shouldBeAtomic: boolean;
   politeness: string;
 }
@@ -97,4 +99,56 @@ export interface ExtendedNxDimensionInfo extends Omit<EngineAPI.INxDimensionInfo
 export interface ExtendedNxMeasureInfo extends Omit<EngineAPI.INxMeasureInfo, 'qAttrExprInfo'> {
   textAlign: TextAlign;
   qAttrExprInfo: ExtendedNxAttrExprInfo[];
+}
+
+export interface ManageDataArgs {
+  model: EngineAPI.IGenericObject;
+  layout: TableLayout;
+  pageInfo: {
+    page: number;
+    rowsPerPage: number;
+    rowsPerPageOptions: number[];
+  };
+  setPageInfo: stardust.SetStateFn<{
+    page: number;
+    rowsPerPage: number;
+    rowsPerPageOptions: number[];
+  }>;
+}
+
+export interface TableWrapperProps {
+  rootElement: HTMLElement;
+  tableData: {
+    totalColumnCount: number;
+    totalRowCount: number;
+    totalPages: number;
+    paginationNeeded: boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    rows: any[];
+    columns: Column[];
+  };
+  pageInfo: {
+    page: number;
+    rowsPerPage: number;
+    rowsPerPageOptions: number[];
+  };
+  setPageInfo: stardust.SetStateFn<{
+    page: number;
+    rowsPerPage: number;
+    rowsPerPageOptions: number[];
+  }>;
+  constraints: stardust.Constraints;
+  translator: Translator;
+  selectionsAPI: stardust.ObjectSelections;
+  theme: UseTheme;
+  keyboard: stardust.Keyboard;
+  direction: 'ltr' | 'rtl';
+  footerContainer: HTMLElement | undefined;
+}
+
+export interface RootProps extends TableWrapperProps {
+  layout: TableLayout;
+  muiTheme: Theme;
+  changeSortOrder: (layout: TableLayout, column: Column) => Promise<void>;
+  rect: stardust.Rect;
 }

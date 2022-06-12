@@ -1,6 +1,4 @@
-import { stardust } from '@nebula.js/stardust';
-
-import { TableLayout, HyperCube, ExtendedNxDimensionInfo, ExtendedNxMeasureInfo, Column } from './types';
+import { HyperCube, ExtendedNxDimensionInfo, ExtendedNxMeasureInfo, Column, Row, ManageDataArgs } from './types';
 
 const directionMap = {
   A: 'asc',
@@ -15,7 +13,7 @@ export function getHighestPossibleRpp(width: number, rowsPerPageOptions: number[
   return highestPossibleOption || Math.floor(MAX_CELLS / width); // covering corner case of lowest option being too high
 }
 
-export function getColumnOrder({ qEffectiveInterColumnSortOrder, qDimensionInfo, qMeasureInfo }: HyperCube) {
+export function getColumnOrder({ qEffectiveInterColumnSortOrder, qDimensionInfo, qMeasureInfo }: HyperCube): number[] {
   const columnsLength = qDimensionInfo.length + qMeasureInfo.length;
   return qEffectiveInterColumnSortOrder?.length === columnsLength
     ? qEffectiveInterColumnSortOrder
@@ -48,22 +46,7 @@ export function getColumnInfo(qHyperCube: HyperCube, colIndex: number) {
   );
 }
 
-interface ManageData {
-  model: EngineAPI.IGenericObject;
-  layout: TableLayout;
-  pageInfo: {
-    page: number;
-    rowsPerPage: number;
-    rowsPerPageOptions: number[];
-  };
-  setPageInfo: stardust.SetStateFn<{
-    page: number;
-    rowsPerPage: number;
-    rowsPerPageOptions: number[];
-  }>;
-}
-
-export default async function manageData({ model, layout, pageInfo, setPageInfo }: ManageData) {
+export default async function manageData({ model, layout, pageInfo, setPageInfo }: ManageDataArgs) {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const { qHyperCube } = layout;
   const totalColumnCount = qHyperCube.qSize.qcx;
@@ -94,8 +77,9 @@ export default async function manageData({ model, layout, pageInfo, setPageInfo 
     { qTop: top, qLeft: 0, qHeight: height, qWidth: totalColumnCount },
   ]);
 
-  const rows = dataPages[0].qMatrix.map((r, rowIdx) => {
-    const row = { key: `row-${rowIdx}` };
+  const rows = dataPages[0].qMatrix.map((r: Row, rowIdx: number) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const row = { key: `row-${rowIdx}` } as any;
     columns.forEach((c, colIdx) => {
       row[c.id] = {
         ...r[colIdx],

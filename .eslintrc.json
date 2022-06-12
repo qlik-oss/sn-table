@@ -50,8 +50,8 @@
     {
       "files": ["**/*.{ts,tsx}"],
       "parser": "@typescript-eslint/parser",
-      "extends": ["plugin:@typescript-eslint/recommended"],
-      "plugins": ["jest", "react", "@typescript-eslint"]
+      "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "airbnb-typescript", "prettier"],
+      "plugins": ["react", "@typescript-eslint"]
     },
     {
       "files": ["**/*.spec.{js,jsx}"],

@@ -1,3 +1,5 @@
+import { stardust } from '@nebula.js/stardust';
+
 export const SelectionStates = {
   SELECTED: 'selected',
   POSSIBLE: 'possible',
@@ -125,7 +127,20 @@ const selectCell = (state, payload) => {
   return { ...state, rows: selectedRows, colIdx: -1 };
 };
 
-export const reducer = (state, action) => {
+type State = {
+  api: stardust.ObjectSelections;
+  rows: { [key: string]: number };
+};
+enum ActionKind {
+  select = 'select',
+  reset = 'reset',
+  clear = 'clear',
+}
+type Action = {
+  type: ActionKind;
+  payload: number;
+};
+export const reducer = (state: State, action: Action) => {
   switch (action.type) {
     case 'select':
       return selectCell(state, action.payload);

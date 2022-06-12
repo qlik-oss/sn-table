@@ -26,7 +26,7 @@ export default function announcementFactory(rootElement: Element, translator: Tr
    * the announce function
    *
    * @param {Object} announcementArgs configuration object for announcement
-   * @param {string|Array<string|Array<string|number>} announcementArgs.keys translation keys, that could be a string (single key), an array of strings (for concatenating multiple keys), or a 2-dimensional array with arguments for translations, e.g. `{ keys: ['some string key', ['some other string key', arg1, arg2, ...]] }`
+   * @param {string|Array<string|Array<string|number>>} announcementArgs.keys translation keys, that could be a string (single key), an array of strings (for concatenating multiple keys), or a 2-dimensional array with arguments for translations, e.g. `{ keys: ['some string key', ['some other string key', arg1, arg2, ...]] }`
    * @param {boolean=} announcementArgs.shouldBeAtomic defines the live element should be atomic or not
    * @param {('polite'|'assertive'|'off')=} announcementArgs.politeness the assertive level of the live element
    */
@@ -37,7 +37,10 @@ export default function announcementFactory(rootElement: Element, translator: Tr
       .map((key) => {
         if (Array.isArray(key)) {
           const [actualKey, ...rest] = key;
-          return translator.get(actualKey, rest);
+          return translator.get(
+            actualKey.toString(),
+            rest.map((r) => r.toString())
+          );
         }
         return translator.get(key);
       })
