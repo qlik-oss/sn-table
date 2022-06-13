@@ -26,6 +26,8 @@ export const handleHorizontalScroll = (evt, isRTL, memoedContainer) => {
 };
 
 export const handleNavigateTop = ({ tableContainerRef, focusedCellCoord, rootElement }) => {
+  if (!tableContainerRef.current?.scrollTo || !rootElement) return;
+
   const [x, y] = focusedCellCoord;
   const tableHead = rootElement.getElementsByClassName('sn-table-head-cell')[0];
   const rowElements = rootElement.getElementsByClassName('sn-table-row');

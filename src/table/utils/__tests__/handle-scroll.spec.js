@@ -172,13 +172,6 @@ describe('handle-scroll', () => {
       expect(scrollTo).not.toHaveBeenCalled();
     });
 
-    it('should the scrollbar is at its top when you reach the top two rows', () => {
-      focusedCellCoord = [1, 0];
-
-      handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement });
-      expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' });
-    });
-
     it('should scroll upwards automatically if it detects the cursor gets behind <TableHead />', () => {
       const SCROLL_TOP_IDX = 7;
       focusedCellCoord = [8, 0];
@@ -200,7 +193,7 @@ describe('handle-scroll', () => {
         },
       };
       // targetOffsetTop = tableContainer.current.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
-      // 700 - 100 - 128 = 472 => so our scrollTo function migth be called with 600
+      // 700 - 100 - 128 = 472 => so our scrollTo function might be called with 600
       const targetOffsetTop = 472;
 
       handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement });

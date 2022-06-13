@@ -7,6 +7,7 @@ import {
 } from '../handle-key-press';
 
 import * as handleAccessibility from '../handle-accessibility';
+import * as handleScroll from '../handle-scroll';
 
 describe('handle-key-press', () => {
   describe('handleTableWrapperKeyDown', () => {
@@ -449,6 +450,27 @@ describe('handle-key-press', () => {
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
+    });
+
+    it('when press arrow up key on body cell, should do the same as press arrow down key on body cell and also update scroll position', () => {
+      evt.key = 'ArrowUp';
+      jest.spyOn(handleScroll, 'handleNavigateTop').mockImplementation(() => jest.fn());
+
+      bodyHandleKeyPress({
+        evt,
+        rootElement,
+        cellCoord: [rowIndex, colIndex],
+        selectionsAPI,
+        isAnalysisMode: false,
+        setFocusedCellCoord,
+        announce,
+        keyboard,
+      });
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
+      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
+      expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(1);
     });
 
     it('when press space bar key and dimension, should select value for dimension', () => {
