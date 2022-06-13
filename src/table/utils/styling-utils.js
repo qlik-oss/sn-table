@@ -71,6 +71,7 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
 export function getHeaderStyle(layout, theme) {
   const header = layout.components?.[0]?.header;
   const headerStyle = getBaseStyling(header, 'header', theme);
+  headerStyle.cursor = 'pointer';
   headerStyle.borderWidth = '1px 1px 1px 0px';
 
   // To avoid seeing the table body through the table head:
