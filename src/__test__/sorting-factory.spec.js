@@ -26,7 +26,7 @@ describe('sorting-factory', () => {
     expectedPatches = [
       {
         qPath: '/qHyperCubeDef/qInterColumnSortOrder',
-        qOp: 'replace',
+        qOp: 'Replace',
         qValue: '[0,1,2,3]',
       },
     ];
@@ -43,7 +43,7 @@ describe('sorting-factory', () => {
     column.dataColIdx = 0;
     expectedPatches.push({
       qPath: '/qHyperCubeDef/qDimensions/0/qDef/qReverseSort',
-      qOp: 'replace',
+      qOp: 'Replace',
       qValue: 'true',
     });
 
@@ -57,7 +57,7 @@ describe('sorting-factory', () => {
     expectedPatches[0].qValue = '[2,0,1,3]';
     expectedPatches.push({
       qPath: '/qHyperCubeDef/qMeasures/0/qDef/qReverseSort',
-      qOp: 'replace',
+      qOp: 'Replace',
       qValue: 'true',
     });
 

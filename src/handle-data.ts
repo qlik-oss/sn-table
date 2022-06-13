@@ -15,11 +15,9 @@ export function getHighestPossibleRpp(width: number, rowsPerPageOptions: number[
   return highestPossibleOption || Math.floor(MAX_CELLS / width); // covering corner case of lowest option being too high
 }
 
-export function getColumnOrder({ qEffectiveInterColumnSortOrder, qDimensionInfo, qMeasureInfo }: HyperCube) {
+export function getColumnOrder({ qColumnOrder, qDimensionInfo, qMeasureInfo }: HyperCube) {
   const columnsLength = qDimensionInfo.length + qMeasureInfo.length;
-  return qEffectiveInterColumnSortOrder?.length === columnsLength
-    ? qEffectiveInterColumnSortOrder
-    : [...Array(columnsLength).keys()];
+  return qColumnOrder?.length === columnsLength ? qColumnOrder : [...Array(columnsLength).keys()];
 }
 
 export function getColumnInfo(qHyperCube: HyperCube, colIndex: number) {
