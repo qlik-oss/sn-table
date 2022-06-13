@@ -1,5 +1,5 @@
 export const getCellElement = (rootElement, cellCoord) =>
-  rootElement.getElementsByClassName('sn-table-row')[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[
+  rootElement?.getElementsByClassName('sn-table-row')[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[
     cellCoord[1]
   ];
 
