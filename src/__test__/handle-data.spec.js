@@ -1,24 +1,26 @@
-import manageData, { getColumnOrder, getColumnInfo } from '../handle-data';
+import manageData, { getColumnOrder, getColumnInfo, getTotalInfo } from '../handle-data';
 import { generateDataPages, generateLayout } from './generate-test-data';
 
 describe('handle-data', () => {
   let layout;
   let colIdx;
+  let numDims;
 
   beforeEach(() => {
-    layout = generateLayout(2, 2, 200, [1, 2, 0, 3]);
+    layout = generateLayout(2, 2, 200, [1, 2, 0, 3], [{ qText: '-' }, { qText: '200' }]);
   });
 
   describe('getColumnInfo', () => {
     colIdx = 1;
 
-    const getExpectedInfo = (colIx, isDim, isLocked) => ({
+    const getExpectedInfo = (colIx, isDim, isLocked, totals = '\u00A0') => ({
       isDim,
       width: 200,
       label: `title-${colIx}`,
       id: `col-${colIx}`,
       align: isDim ? 'left' : 'right',
       stylingInfo: [],
+      totalInfo: totals,
       sortDirection: 'asc',
       dataColIdx: colIx,
       isLocked,
@@ -53,16 +55,14 @@ describe('handle-data', () => {
 
     it('should return column info for dimension with isLocked', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qLocked = true;
-
-      const columnInfo = getColumnInfo(layout.qHyperCube, colIdx);
+      const columnInfo = getColumnInfo(layout, colIdx);
       expect(columnInfo).toEqual(getExpectedInfo(colIdx, true, true));
     });
 
     it('should return column info for measure', () => {
       colIdx = 3;
-
       const columnInfo = getColumnInfo(layout, colIdx);
-      expect(columnInfo).toEqual(getExpectedInfo(colIdx, false));
+      expect(columnInfo).toEqual(getExpectedInfo(colIdx, false, undefined, '200'));
     });
   });
 
@@ -152,6 +152,41 @@ describe('handle-data', () => {
 
       expect(tableData).toBeNull();
       expect(setPageInfo).toHaveBeenCalledWith({ ...pageInfo, rowsPerPage: 0 });
+    });
+  });
+
+  describe('getTotalInfo:', () => {
+    beforeEach(() => {
+      numDims = layout.qHyperCube.qDimensionInfo.length;
+    });
+    it('should show all the measures cells total values', () => {
+      expect(getTotalInfo(false, layout, 2, numDims)).toBe('-');
+      expect(getTotalInfo(false, layout, 3, numDims)).toBe('200');
+    });
+
+    it('should show label value as a text for the first dimension and empty for the other dimensions', () => {
+      expect(getTotalInfo(true, layout, 0, numDims)).toBe('Totals');
+      expect(getTotalInfo(true, layout, 1, numDims)).toBe('\u00A0');
+    });
+
+    it('should not get any value when measures grandTotal has no value', () => {
+      layout.qHyperCube.qGrandTotalRow = [];
+      expect(getTotalInfo(true, layout, 0, numDims)).toBe('Totals');
+      expect(getTotalInfo(true, layout, 1, numDims)).toBe('\u00A0');
+      expect(getTotalInfo(false, layout, 2, numDims)).toBe(undefined);
+      expect(getTotalInfo(false, layout, 3, numDims)).toBe(undefined);
+    });
+
+    it('should return new total label value', () => {
+      layout.totals.label = 'Whatever';
+      expect(getTotalInfo(true, layout, 0, numDims)).toBe('Whatever');
+    });
+
+    it('should return default value when the total label value is null or undefined', () => {
+      layout.totals.label = '';
+      expect(getTotalInfo(true, layout, 0, numDims)).toBe('Object.Table.Totals');
+      layout.totals.label = undefined;
+      expect(getTotalInfo(true, layout, 0, numDims)).toBe('Object.Table.Totals');
     });
   });
 });

@@ -133,11 +133,11 @@ describe('handle-accessibility', () => {
     });
   });
 
-  describe('handleClickToFocusCell', () => {
+  describe('handleClickToFocusHead', () => {
     const columnIndex = 2;
 
     it('should indirectly call updateFocus, setFocusedCellCoord and keyboard.focus', () => {
-      handleAccessibility.handleClickToFocusCell(columnIndex, rootElement, setFocusedCellCoord, keyboard);
+      handleAccessibility.handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard);
       expect(cell.setAttribute).toHaveBeenCalledTimes(1);
       expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);

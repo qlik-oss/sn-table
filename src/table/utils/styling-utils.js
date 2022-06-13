@@ -159,18 +159,18 @@ export function getBodyCellStyle(layout, theme) {
  * @param {String} totalsPosition
  * @returns total cell style regarding the total head position
  */
-export function getTotalsCellStyle(totalHeaderStyle, totalsPosition) {
+export function getTotalsCellStyle(totalCellStyle, totalsPosition) {
   if (totalsPosition === 'noTotals') return false;
-  totalHeaderStyle.fontWeight = 'bold';
+  totalCellStyle.fontWeight = 'bold';
   if (totalsPosition === 'top') {
-    totalHeaderStyle.borderWidth = '0px 1px 2px 0px';
-    totalHeaderStyle.top = 35;
+    totalCellStyle.borderWidth = '0px 1px 2px 0px';
+    totalCellStyle.top = 35;
   } else {
-    totalHeaderStyle.borderWidth = '2px 1px 1px 0px';
-    totalHeaderStyle.position = 'sticky';
-    totalHeaderStyle.bottom = 0;
+    totalCellStyle.borderWidth = '2px 1px 1px 0px';
+    totalCellStyle.position = 'sticky';
+    totalCellStyle.bottom = 0;
   }
-  return totalHeaderStyle;
+  return totalCellStyle;
 }
 
 /**

@@ -14,7 +14,7 @@ export function generateDataPages(height, width) {
   return [{ qMatrix }];
 }
 
-export function generateLayout(nDims, nMeas, nRows, qColumnOrder = []) {
+export function generateLayout(nDims, nMeas, nRows, qColumnOrder = [], qGrandTotalRow = []) {
   const createField = (idx) => ({
     qFallbackTitle: `title-${idx}`,
     qAttrExprInfo: [],
@@ -23,6 +23,11 @@ export function generateLayout(nDims, nMeas, nRows, qColumnOrder = []) {
   });
   const qDimensionInfo = [];
   const qMeasureInfo = [];
+  const totals = {
+    show: false,
+    position: 'noTotals',
+    label: 'Totals',
+  };
 
   for (let dim = 0; dim < nDims; dim++) {
     qDimensionInfo.push(createField(dim));
@@ -35,8 +40,10 @@ export function generateLayout(nDims, nMeas, nRows, qColumnOrder = []) {
     qHyperCube: {
       qDimensionInfo,
       qMeasureInfo,
+      qGrandTotalRow,
       qColumnOrder,
       qSize: { qcx: nDims + nMeas, qcy: nRows },
     },
+    totals,
   };
 }

@@ -56,7 +56,7 @@ function TableBodyWrapper({
               bodyHandleKeyPress({
                 evt,
                 rootElement,
-                cellCoord: [rowIndex + 1, columnIndex],
+                cellCoord: totalsPosition === 'top' ? [rowIndex + 2, columnIndex] : [rowIndex + 1, columnIndex],
                 selectionsAPI,
                 cell,
                 selectionDispatch,

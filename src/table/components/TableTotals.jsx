@@ -5,12 +5,12 @@ import TableCell from '@mui/material/TableCell';
 import { useContextSelector, TableContext } from '../context';
 import { getHeaderStyle, getTotalsCellStyle } from '../utils/styling-utils';
 import { totalHandleKeyPress } from '../utils/handle-key-press';
-import { handleClickToFocusCell } from '../utils/handle-accessibility';
+import { removeAndFocus } from '../utils/handle-accessibility';
 
 function TableTotals({ rootElement, tableData, theme, layout, translator, keyboard }) {
   const { columns, paginationNeeded, totalsPosition, rows } = tableData;
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
-  const totalHeaderStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name()]);
+  const totalCellStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name()]);
   const headRowStyle = {
     '& :last-child': {
       borderRight: paginationNeeded && 0,
@@ -26,7 +26,7 @@ function TableTotals({ rootElement, tableData, theme, layout, translator, keyboa
         const cellCoord = [totalsPosition === 'bottom' ? rows.length + 1 : 1, columnIndex];
         return (
           <TableCell
-            sx={getTotalsCellStyle(totalHeaderStyle, totalsPosition)}
+            sx={getTotalsCellStyle(totalCellStyle, totalsPosition)}
             key={column.id}
             align={column.align}
             className="sn-table-total-cell sn-table-cell"
@@ -34,9 +34,9 @@ function TableTotals({ rootElement, tableData, theme, layout, translator, keyboa
             onKeyDown={(e) => {
               totalHandleKeyPress(e, rootElement, cellCoord, setFocusedCellCoord);
             }}
-            onMouseDown={() =>
-              handleClickToFocusCell(columnIndex, rootElement, setFocusedCellCoord, keyboard, cellCoord)
-            }
+            onMouseDown={() => {
+              removeAndFocus(cellCoord, rootElement, setFocusedCellCoord, keyboard);
+            }}
           >
             {translator.get(column.totalInfo)}
           </TableCell>

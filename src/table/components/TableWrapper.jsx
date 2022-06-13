@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useRef, useCallback } from 'react';
 import Table from '@mui/material/Table';
 
-import { TableHead, TableFooter } from '@mui/material';
+import { TableFooter } from '@mui/material';
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
@@ -137,10 +137,7 @@ export default function TableWrapper(props) {
         data-testid="table-container"
       >
         <Table stickyHeader aria-label={tableAriaLabel}>
-          <TableHead>
-            <TableHeadWrapper {...props} />
-            {totalsPosition === 'top' && <TableTotals {...props} />}
-          </TableHead>
+          <TableHeadWrapper {...props} />
           <TableBodyWrapper
             {...props}
             announce={announce}
