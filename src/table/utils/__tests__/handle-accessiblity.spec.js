@@ -146,6 +146,19 @@ describe('handle-accessibility', () => {
     });
   });
 
+  describe('handleMouseDownLabelToFocusHeadCell', () => {
+    const evt = { preventDefault: jest.fn() };
+    const columnIndex = 0;
+
+    it('should indirectly call updateFocus, setFocusedCellCoord and keyboard.focus', () => {
+      handleAccessibility.handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex);
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(cell.focus).toHaveBeenCalledTimes(1);
+      expect(cell.setAttribute).toHaveBeenCalledTimes(1);
+      expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '0');
+    });
+  });
+
   describe('handleResetFocus', () => {
     let shouldRefocus;
     let hasSelections;

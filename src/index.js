@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
   useElement,
@@ -15,15 +16,15 @@ import {
   useRect,
   useApp,
 } from '@nebula.js/stardust';
-import { createRoot } from 'react-dom/client';
 
+import useReactRoot from './table/context/useReactRoot';
 import registerLocale from './locale/src';
 import properties from './object-properties';
 import data from './data';
 import ext from './ext';
 import manageData from './handle-data';
 import sortingFactory from './sorting-factory';
-import { mount, render, teardown } from './table/Root';
+import { render, teardown } from './table/Root';
 import muiSetup from './mui-setup';
 import tableThemeColors from './table-theme-colors';
 
@@ -51,7 +52,7 @@ export default function supernova(env) {
     },
     component() {
       const rootElement = useElement();
-      const [reactRoot, setReactRoot] = useState();
+      const reactRoot = useReactRoot(rootElement);
       const layout = useStaleLayout();
       const { direction, footerContainer } = useOptions();
       const app = useApp();
@@ -68,13 +69,6 @@ export default function supernova(env) {
       const [tableData] = usePromise(() => {
         return env.carbon ? nothing() : manageData(model, layout, pageInfo, setPageInfo);
       }, [layout, pageInfo]);
-
-      useEffect(() => {
-        if (rootElement) {
-          setReactRoot(createRoot(rootElement));
-          mount(rootElement);
-        }
-      }, [rootElement]);
 
       useEffect(() => {
         if (layout && tableData && !env.carbon) {
