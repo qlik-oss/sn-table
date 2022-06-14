@@ -26,7 +26,7 @@ export const handleHorizontalScroll = (evt, isRTL, memoedContainer) => {
 };
 
 export const handleNavigateTop = ({ tableContainerRef, focusedCellCoord, rootElement }) => {
-  if (!tableContainerRef.current?.scrollTo || !rootElement) return;
+  if (!tableContainerRef.current.scrollTo) return;
 
   const [x, y] = focusedCellCoord;
   const tableHead = rootElement.getElementsByClassName('sn-table-head-cell')[0];
@@ -37,7 +37,7 @@ export const handleNavigateTop = ({ tableContainerRef, focusedCellCoord, rootEle
     const targetOffsetTop = tableContainerRef.current.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
     tableContainerRef.current.scrollTo({
       top: Math.max(0, targetOffsetTop),
-      behavior: 'smooth',
+      behavior: 'instant',
     });
   }
 };

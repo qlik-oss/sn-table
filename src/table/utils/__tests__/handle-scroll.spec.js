@@ -198,7 +198,7 @@ describe('handle-scroll', () => {
 
       handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement });
       expect(scrollTo).toHaveBeenCalledTimes(1);
-      expect(scrollTo).toHaveBeenCalledWith({ top: targetOffsetTop, behavior: 'smooth' });
+      expect(scrollTo).toHaveBeenCalledWith({ top: targetOffsetTop, behavior: 'instant' });
     });
   });
 });

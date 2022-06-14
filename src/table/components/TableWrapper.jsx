@@ -92,9 +92,8 @@ export default function TableWrapper(props) {
     const memoedContainer = tableBodyWrapperRef.current;
     if (!memoedContainer) return () => {};
 
-    const keyDownHandler = (evt) => {
+    const keyDownHandler = (evt) =>
       evt.key === 'ArrowUp' && handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement });
-    };
     memoedContainer.addEventListener('keydown', keyDownHandler);
 
     return () => {
