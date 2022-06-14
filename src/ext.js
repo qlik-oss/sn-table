@@ -1,4 +1,5 @@
 import Modifiers from 'qlik-modifiers';
+import { getProperties } from './handle-data';
 
 const columnCommonHidden = {
   autoSort: {
@@ -400,6 +401,17 @@ const getDefinition = (env) => {
                           ]);
                         },
                         defaultValue: env?.anything?.sense?.isUnsupportedFeature?.('totals') ? 'None' : 'Expr',
+                      },
+                      totalsAggrFuncMessage: {
+                        component: 'text',
+                        translation: 'Object.Table.AggrFuncMessage',
+                        show(handler) {
+                          return (
+                            handler &&
+                            !getProperties(handler, 'properties.totals.show') &&
+                            getProperties(handler, 'properties.totals.position') === 'noTotals'
+                          );
+                        },
                       },
                     },
                   },

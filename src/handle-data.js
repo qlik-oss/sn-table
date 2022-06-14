@@ -55,6 +55,29 @@ export function getColumnInfo(layout, colIndex) {
 }
 
 /**
+ * Get data properties
+ * @param {Object} data
+ * @param {String} reference
+ * @param {String} defaultValue
+ * @returns data properties
+ */
+export function getProperties(data, reference, defaultValue) {
+  const steps = reference.split('.');
+  let dataContainer = data;
+  let i;
+  if (dataContainer === undefined) {
+    return defaultValue;
+  }
+  for (i = 0; i < steps.length; ++i) {
+    if (dataContainer[steps[i]] == null) {
+      return defaultValue;
+    }
+    dataContainer = dataContainer[steps[i]];
+  }
+  return dataContainer;
+}
+
+/**
  * Get the total head position of the table
  *
  * @param {Object} layout
