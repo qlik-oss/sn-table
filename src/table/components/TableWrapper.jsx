@@ -119,10 +119,10 @@ export default function TableWrapper(props) {
 
   return (
     <StyledTableWrapper
+      ref={tableWrapperRef}
       tableTheme={theme.table}
       paginationNeeded={paginationNeeded}
       dir={direction}
-      ref={tableWrapperRef}
       onKeyDown={handleKeyDown}
     >
       <AnnounceElements />

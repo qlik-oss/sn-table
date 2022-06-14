@@ -125,7 +125,8 @@ const isMultiValueSelections = (evt, cell, isAnalysisMode) =>
   evt.shiftKey &&
   cell.isSelectable &&
   isAnalysisMode &&
-  ((cell.prevQElemNumber && evt.key === 'ArrowUp') || (cell.nextQElemNumber && evt.key === 'ArrowDown'));
+  ((cell.prevQElemNumber !== undefined && evt.key === 'ArrowUp') ||
+    (cell.nextQElemNumber !== undefined && evt.key === 'ArrowDown'));
 
 export const bodyHandleKeyPress = ({
   evt,
