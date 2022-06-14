@@ -1,27 +1,19 @@
 import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { useContextSelector, TableContext } from '../context';
 import { getHeaderStyle, getTotalsCellStyle } from '../utils/styling-utils';
 import { totalHandleKeyPress } from '../utils/handle-key-press';
 import { removeAndFocus } from '../utils/handle-accessibility';
+import { StyledHeadRow } from '../styles';
 
 function TableTotals({ rootElement, tableData, theme, layout, translator, keyboard }) {
   const { columns, paginationNeeded, totalsPosition, rows } = tableData;
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const totalCellStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name()]);
-  const headRowStyle = {
-    '& :last-child': {
-      borderRight: paginationNeeded && 0,
-    },
-    'th:first-of-type': {
-      borderLeft: !paginationNeeded && '1px solid rgb(217, 217, 217)',
-    },
-  };
 
   return (
-    <TableRow sx={headRowStyle} className="sn-table-row">
+    <StyledHeadRow paginationNeeded={paginationNeeded} className="sn-table-row">
       {columns.map((column, columnIndex) => {
         const cellCoord = [totalsPosition === 'bottom' ? rows.length + 1 : 1, columnIndex];
         return (
@@ -42,7 +34,7 @@ function TableTotals({ rootElement, tableData, theme, layout, translator, keyboa
           </TableCell>
         );
       })}
-    </TableRow>
+    </StyledHeadRow>
   );
 }
 
