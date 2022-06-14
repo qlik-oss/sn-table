@@ -43,6 +43,11 @@ export const handleClickToFocusHead = (columnIndex, rootElement, setFocusedCellC
   removeAndFocus([0, columnIndex], rootElement, setFocusedCellCoord, keyboard);
 };
 
+export const handleMouseDownLabelToFocusHeadCell = (evt, rootElement, columnIndex) => {
+  evt.preventDefault();
+  updateFocus({ focusType: 'focus', cell: getCellElement(rootElement, [0, columnIndex]) });
+};
+
 export const handleResetFocus = ({
   focusedCellCoord,
   rootElement,
