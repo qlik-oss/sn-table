@@ -121,6 +121,12 @@ export const headHandleKeyPress = ({
   }
 };
 
+const isMultiValueSelections = (evt, cell, isAnalysisMode) =>
+  evt.shiftKey &&
+  cell.isSelectable &&
+  isAnalysisMode &&
+  ((cell.prevQElemNumber && evt.key === 'ArrowUp') || (cell.nextQElemNumber && evt.key === 'ArrowDown'));
+
 export const bodyHandleKeyPress = ({
   evt,
   rootElement,
@@ -134,15 +140,13 @@ export const bodyHandleKeyPress = ({
   selectionsAPI = null,
 }) => {
   const isInSelectionMode = selectionsAPI?.isModal();
-  const isMultiValueSelections = () =>
-    (cell.prevQElemNumber || cell.nextQElemNumber) && evt.shiftKey && cell.isSelectable && isAnalysisMode;
-
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
       // Shift + up/down arrow keys: select multiple values
       // When at the first/last row of the cell, shift + arrow up/down key, no value is selected
-      isMultiValueSelections() && selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
+      isMultiValueSelections(evt, cell, isAnalysisMode) &&
+        selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
       moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isInSelectionMode);
       break;
     case 'ArrowRight':
