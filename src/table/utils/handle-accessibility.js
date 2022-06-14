@@ -1,5 +1,5 @@
 export const getCellElement = (rootElement, cellCoord) =>
-  rootElement?.getElementsByClassName('sn-table-row')[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[
+  rootElement.getElementsByClassName('sn-table-row')[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[
     cellCoord[1]
   ];
 
@@ -41,6 +41,11 @@ export const handleClickToFocusBody = (cell, rootElement, setFocusedCellCoord, k
 
 export const handleClickToFocusHead = (columnIndex, rootElement, setFocusedCellCoord, keyboard) => {
   removeAndFocus([0, columnIndex], rootElement, setFocusedCellCoord, keyboard);
+};
+
+export const handleMouseDownLabelToFocusHeadCell = (evt, rootElement, columnIndex) => {
+  evt.preventDefault();
+  updateFocus({ focusType: 'focus', cell: getCellElement(rootElement, [0, columnIndex]) });
 };
 
 export const handleResetFocus = ({
