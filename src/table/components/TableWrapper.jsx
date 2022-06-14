@@ -12,7 +12,7 @@ import { useContextSelector, TableContext } from '../context';
 import { StyledTableContainer, StyledTableWrapper } from '../styles';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, handleFocusoutEvent, getCellElement } from '../utils/handle-accessibility';
-import { handleHorizontalScroll } from '../utils/handle-scroll';
+import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
 import announcementFactory from '../utils/announcement-factory';
 
 export default function TableWrapper(props) {
@@ -36,6 +36,7 @@ export default function TableWrapper(props) {
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
+  const tableBodyWrapperRef = useRef();
   const announce = useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
 
   const setShouldRefocus = useCallback(() => {
@@ -73,7 +74,7 @@ export default function TableWrapper(props) {
     return () => {
       memoedWrapper.removeEventListener('focusout', focusOutCallback);
     };
-  }, []);
+  }, [keyboard]);
 
   useEffect(() => {
     const memoedContainer = tableContainerRef.current;
@@ -86,6 +87,20 @@ export default function TableWrapper(props) {
       memoedContainer.removeEventListener('wheel', horizontalScrollCallback);
     };
   }, [direction]);
+
+  useEffect(() => {
+    const memoedContainer = tableBodyWrapperRef.current;
+    if (!memoedContainer) return () => {};
+
+    const keyDownHandler = (evt) => {
+      evt.key === 'ArrowUp' && handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement });
+    };
+    memoedContainer.addEventListener('keydown', keyDownHandler);
+
+    return () => {
+      memoedContainer.removeEventListener('keydown', keyDownHandler);
+    };
+  }, [focusedCellCoord, rootElement]);
 
   useDidUpdateEffect(() => {
     if (!keyboard.enabled) return;
@@ -133,6 +148,7 @@ export default function TableWrapper(props) {
           <TableHeadWrapper {...props} />
           <TableBodyWrapper
             {...props}
+            ref={tableBodyWrapperRef}
             announce={announce}
             setShouldRefocus={setShouldRefocus}
             tableWrapperRef={tableWrapperRef}
