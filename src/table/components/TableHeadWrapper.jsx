@@ -6,7 +6,7 @@ import { useContextSelector, TableContext } from '../context';
 import { VisuallyHidden, StyledHeadRow, StyledSortLabel } from '../styles';
 import { getHeaderStyle } from '../utils/styling-utils';
 import { headHandleKeyPress } from '../utils/handle-key-press';
-import { handleClickToFocusHead } from '../utils/handle-accessibility';
+import { handleMouseDownLabelToFocusHeadCell, handleClickToFocusHead } from '../utils/handle-accessibility';
 
 function TableHeadWrapper({
   rootElement,
@@ -62,6 +62,7 @@ function TableHeadWrapper({
                 title={!constraints.passive && column.sortDirection} // passive: turn off tooltips.
                 direction={column.sortDirection}
                 tabIndex={-1}
+                onMouseDown={(evt) => handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex)}
               >
                 {column.label}
                 {isFocusInHead && (

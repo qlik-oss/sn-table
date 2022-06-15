@@ -195,6 +195,7 @@ describe('styling-utils', () => {
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
         borderWidth: '1px 1px 1px 0px',
+        cursor: 'pointer',
         sortLabelColor: 'rgba(255,255,255,0.9)',
       });
     });
@@ -212,6 +213,7 @@ describe('styling-utils', () => {
       const resultStyling = getHeaderStyle(layout, theme);
       expect(resultStyling).toEqual({
         color: '#404040',
+        cursor: 'pointer',
         backgroundColor: '#323232',
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
@@ -223,6 +225,7 @@ describe('styling-utils', () => {
       const resultStyling = getHeaderStyle(layout, theme);
       expect(resultStyling).toEqual({
         color: '#404040',
+        cursor: 'pointer',
         fontSize: 44,
         padding: '22px 44px',
         backgroundColor: '#323232',
