@@ -31,6 +31,7 @@ export default function TableWrapper(props) {
   } = props;
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
+  const isSelectionToolbarOn = selectionsAPI.isModal();
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const shouldRefocus = useRef(false);
@@ -59,7 +60,7 @@ export default function TableWrapper(props) {
       handleChangePage,
       setShouldRefocus,
       keyboard,
-      isSelectionActive: selectionsAPI.isModal(),
+      isSelectionToolbarOn,
     });
   };
 
@@ -95,6 +96,9 @@ export default function TableWrapper(props) {
   useDidUpdateEffect(() => {
     if (!keyboard.enabled) return;
 
+    // When Nebula handles keyboard navigation,
+    // a user tabs to the chart and presses Enter or Space,
+    // the focus should be set to the previous focused cell or the first cell in the head
     updateFocus({ focusType: keyboard.active ? 'focus' : 'blur', cell: getCellElement(rootElement, focusedCellCoord) });
   }, [keyboard.active]);
 
@@ -106,7 +110,7 @@ export default function TableWrapper(props) {
       rootElement,
       shouldRefocus,
       setFocusedCellCoord,
-      hasSelections: selectionsAPI.isModal(),
+      isSelectionToolbarOn,
       keyboard,
       announce,
     });
