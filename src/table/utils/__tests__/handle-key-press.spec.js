@@ -1,7 +1,6 @@
 import {
   handleTableWrapperKeyDown,
   arrowKeysNavigation,
-  getRowAndColumnCount,
   headHandleKeyPress,
   bodyHandleKeyPress,
   handleLastTab,
@@ -12,7 +11,7 @@ import * as handleAccessibility from '../handle-accessibility';
 describe('handle-key-press', () => {
   describe('handleTableWrapperKeyDown', () => {
     let evt = {};
-    let totalVerticalCount;
+    let totalRowCount;
     let page;
     let rowsPerPage;
     let handleChangePage;
@@ -35,7 +34,7 @@ describe('handle-key-press', () => {
 
     it('when shift key is not pressed, handleChangePage should not run', () => {
       evt.shiftKey = false;
-      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalRowCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.toHaveBeenCalled();
       expect(setShouldRefocus).not.toHaveBeenCalled();
     });
@@ -43,16 +42,16 @@ describe('handle-key-press', () => {
     it('when ctrl key or meta key is not pressed, handleChangePage should not run', () => {
       evt.ctrlKey = false;
       evt.metaKey = false;
-      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalRowCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.toHaveBeenCalled();
       expect(setShouldRefocus).not.toHaveBeenCalled();
     });
 
     it('when press arrow right key on the first page which contains all rows, handleChangePage should not run', () => {
       page = 0;
-      totalVerticalCount = 40;
+      totalRowCount = 40;
       rowsPerPage = 40;
-      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalRowCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.toHaveBeenCalled();
       expect(setShouldRefocus).not.toHaveBeenCalled();
     });
@@ -60,28 +59,28 @@ describe('handle-key-press', () => {
     it('when press arrow left key on the first page, handleChangePage should not run', () => {
       evt.key = 'ArrowLeft';
       page = 0;
-      totalVerticalCount = 40;
+      totalRowCount = 40;
       rowsPerPage = 10;
-      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalRowCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).not.toHaveBeenCalled();
       expect(setShouldRefocus).not.toHaveBeenCalled();
     });
 
     it('when press arrow right key on the page whose next page contains rows, should change page', () => {
-      totalVerticalCount = 40;
+      totalRowCount = 40;
       page = 0;
       rowsPerPage = 10;
-      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalRowCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).toHaveBeenCalledTimes(1);
       expect(setShouldRefocus).toHaveBeenCalledTimes(1);
     });
 
     it('when press arrow left key not on the first page, should change page', () => {
       evt.key = 'ArrowLeft';
-      totalVerticalCount = 40;
+      totalRowCount = 40;
       page = 1;
       rowsPerPage = 40;
-      handleTableWrapperKeyDown({ evt, totalVerticalCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
+      handleTableWrapperKeyDown({ evt, totalRowCount, page, rowsPerPage, handleChangePage, setShouldRefocus });
       expect(handleChangePage).toHaveBeenCalledTimes(1);
       expect(setShouldRefocus).toHaveBeenCalledTimes(1);
     });
@@ -95,7 +94,7 @@ describe('handle-key-press', () => {
       keyboard = { enabled: true, blur: jest.fn() };
       handleTableWrapperKeyDown({
         evt,
-        totalVerticalCount,
+        totalRowCount,
         page,
         rowsPerPage,
         handleChangePage,
@@ -117,7 +116,7 @@ describe('handle-key-press', () => {
       isSelectionActive = true;
       handleTableWrapperKeyDown({
         evt,
-        totalVerticalCount,
+        totalRowCount,
         page,
         rowsPerPage,
         handleChangePage,
@@ -242,24 +241,6 @@ describe('handle-key-press', () => {
       const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
       expect(nextRow).toBe(1);
       expect(nextCol).toBe(1);
-    });
-  });
-
-  describe('getRowAndColumnCount', () => {
-    let resolvedRowCount;
-    let resolvedColumnCount;
-    let resolvedRowElements;
-    const rootElement = {};
-
-    it('should return a rowElements, rowCount, and columnCount', () => {
-      resolvedRowCount = 1;
-      resolvedColumnCount = 1;
-      resolvedRowElements = [{}];
-      rootElement.getElementsByClassName = () => resolvedRowElements;
-      const { rowElements, rowCount, columnCount } = getRowAndColumnCount(rootElement);
-      expect(rowCount).toBe(resolvedRowCount);
-      expect(columnCount).toBe(resolvedColumnCount);
-      expect(rowElements).toBe(resolvedRowElements);
     });
   });
 
@@ -504,7 +485,7 @@ describe('handle-key-press', () => {
         announce,
       });
       expect(announce).toHaveBeenCalledWith({
-        keys: 'SNTable.SelectionLabel.SelectedValue',
+        keys: ['SNTable.SelectionLabel.SelectedValue'],
       });
     });
 
@@ -521,7 +502,7 @@ describe('handle-key-press', () => {
         announce,
       });
       expect(announce).toHaveBeenCalledWith({
-        keys: 'SNTable.SelectionLabel.NotSelectedValue',
+        keys: ['SNTable.SelectionLabel.NotSelectedValue'],
       });
     });
 
@@ -590,7 +571,7 @@ describe('handle-key-press', () => {
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(selectionsAPI.confirm).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
-      expect(announce).toHaveBeenCalledWith({ keys: 'SNTable.SelectionLabel.SelectionsConfirmed' });
+      expect(announce).toHaveBeenCalledWith({ keys: ['SNTable.SelectionLabel.SelectionsConfirmed'] });
     });
 
     it('when press enter key not in analysis mode, should not confirms selections', () => {
@@ -634,7 +615,7 @@ describe('handle-key-press', () => {
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(selectionsAPI.cancel).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
-      expect(announce).toHaveBeenCalledWith({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
+      expect(announce).toHaveBeenCalledWith({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
     });
 
     it('when press cancel key not in analysis mode, should not cancel selection', () => {

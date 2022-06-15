@@ -77,8 +77,6 @@ export default function TableWrapper(props) {
   );
 
   useDidUpdateEffect(() => {
-    if (!keyboard.enabled) return;
-
     updateFocus({ focusType: keyboard.active ? 'focus' : 'blur', cell: getCellElement(rootElement, focusedCellCoord) });
   }, [keyboard.active]);
 
