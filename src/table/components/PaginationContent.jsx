@@ -60,10 +60,10 @@ function PaginationContent({
   const paginationTheme = theme.table.pagination;
   const onFirstPage = page === 0;
   const onLastPage = page >= totalPages - 1;
-  // The element can be focusable in sequential keyboard navigation:
-  // - When nebula handles keyboard navigation,
-  // a user tabs to the chart and presses Enter or Space
-  // - Or when nebula does not handle keyboard navigation
+  // The elements can be focused in sequential keyboard navigation:
+  // - When nebula handles keyboard navigation
+  // and focus is somewhere inside the extension, or
+  // - When nebula does not handle keyboard navigation
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
   const width = footerContainer ? footerContainer.getBoundingClientRect().width : rect.width;
   const showFirstAndLast = shouldShow('firstLast', width);
