@@ -29,7 +29,9 @@ export const handleTableWrapperKeyDown = ({
       handleChangePage(page - 1);
     }
   } else if (evt.key === 'Escape' && keyboard.enabled && !isSelectionMode) {
-    // escape key: tell Nebula to relinquish focus when not in selection mode
+    // escape key: tell Nebula to relinquish the table's focus to
+    // its parent element when nebula handles keyboard navigation
+    // and not in selection mode
     preventDefaultBehavior(evt);
     keyboard.blur(true);
   }

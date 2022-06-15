@@ -84,6 +84,8 @@ export const handleFocusoutEvent = (evt, shouldRefocus, keyboard) => {
   if (keyboard.enabled && !evt.currentTarget.contains(evt.relatedTarget) && !shouldRefocus.current) {
     evt.currentTarget.querySelector('#sn-table-announcer--01').innerHTML = '';
     evt.currentTarget.querySelector('#sn-table-announcer--02').innerHTML = '';
+    // Blur the table but not focus its parent element
+    // when keyboard.active is false, this has no effect
     keyboard.blur(false);
   }
 };

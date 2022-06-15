@@ -80,6 +80,8 @@ export default function TableWrapper(props) {
   useDidUpdateEffect(() => {
     // When nebula handles keyboard navigation and keyboard.active changes,
     // make sure to blur or focus the cell corresponding to focusedCellCoord
+    // when keyboard.focus() runs, keyboard.active is true
+    // when keyboard.blur() runs, keyboard.active is false
     updateFocus({ focusType: keyboard.active ? 'focus' : 'blur', cell: getCellElement(rootElement, focusedCellCoord) });
   }, [keyboard.active]);
 
