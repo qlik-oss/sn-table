@@ -94,11 +94,8 @@ export default function TableWrapper(props) {
   );
 
   useDidUpdateEffect(() => {
-    // When nebula handles keyboard navigation,
-    // - when a user tabs to the chart and presses Enter or Space (the table is focused),
-    // the focus should be set to the last focused cell or the first cell in the head
-    // - when a user move the focus outside the table (the table is blurred),
-    // the last focused cell should be blurred (loses the focus)
+    // When nebula handles keyboard navigation and keyboard.active changes
+    // make sure to blur or focus the cell corresponding to focusedCellCoord
     updateFocus({ focusType: keyboard.active ? 'focus' : 'blur', cell: getCellElement(rootElement, focusedCellCoord) });
   }, [keyboard.active]);
 
