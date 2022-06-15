@@ -10,15 +10,15 @@ enum AnnouncerElements {
 
 type AnnounceArgs = {
   keys: Array<string | Array<string>>;
-  shouldBeAtomic: boolean;
-  politeness: string;
+  shouldBeAtomic?: boolean;
+  politeness?: 'polite' | 'assertive' | 'off';
 };
 
 /* creates the function for announcement */
 export const announcementFactory = (rootElement: Element, translator: Translator, prevAnnounceEl?: string) => {
   let previousAnnouncementElement = prevAnnounceEl || null;
 
-  /** updates the aria-live elements using the translation keys, makes sure it is announced every time it is called */
+  /* updates the aria-live elements using the translation keys, makes sure it is announced every time it is called */
   return ({ keys, shouldBeAtomic = true, politeness = 'polite' }: AnnounceArgs) => {
     const notation = keys
       .map((key) => {
@@ -34,7 +34,6 @@ export const announcementFactory = (rootElement: Element, translator: Translator
     const announceElement02 = rootElement.querySelector('#sn-table-announcer--02') as Element;
 
     let announceElement: Element;
-
     if (previousAnnouncementElement === AnnouncerElements.FIRST) {
       announceElement = announceElement02;
       previousAnnouncementElement = AnnouncerElements.SECOND;
@@ -44,7 +43,6 @@ export const announcementFactory = (rootElement: Element, translator: Translator
     }
 
     announceElement.innerHTML = announceElement.innerHTML.endsWith(` ­`) ? notation : `${notation} ­`;
-
     announceElement.setAttribute('aria-atomic', shouldBeAtomic.toString());
     announceElement.setAttribute('aria-live', politeness);
   };

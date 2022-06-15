@@ -1,6 +1,8 @@
 import { useMemo } from '@nebula.js/stardust';
 
 export const sortingFactory = (model) => {
+  if (!model) return undefined;
+
   return async (layout, column) => {
     const { isDim, dataColIdx } = column;
     // The sort order from the properties is needed since it contains hidden columns
