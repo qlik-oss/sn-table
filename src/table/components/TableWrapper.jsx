@@ -48,7 +48,7 @@ export default function TableWrapper(props) {
     (pageIdx) => {
       setPageInfo({ ...pageInfo, page: pageIdx });
       announce({
-        keys: [['SNTable.Pagination.PageStatusReport', [(pageIdx + 1).toString(), totalPages.toString()]]],
+        keys: [['SNTable.Pagination.PageStatusReport', (pageIdx + 1).toString(), totalPages.toString()]],
         politeness: 'assertive',
       });
     },

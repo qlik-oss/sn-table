@@ -71,7 +71,7 @@ function PaginationContent({
 
   const handleChangeRowsPerPage = (evt) => {
     setPageInfo({ ...pageInfo, page: 0, rowsPerPage: +evt.target.value });
-    announce({ keys: ['SNTable.Pagination.RowsPerPageChange', evt.target.value], politeness: 'assertive' });
+    announce({ keys: [['SNTable.Pagination.RowsPerPageChange', evt.target.value]], politeness: 'assertive' });
   };
 
   const handleSelectPage = (event) => handleChangePage(+event.target.value);
