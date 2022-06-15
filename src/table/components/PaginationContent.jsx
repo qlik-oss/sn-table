@@ -67,8 +67,8 @@ function PaginationContent({
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
   const width = footerContainer ? footerContainer.getBoundingClientRect().width : rect.width;
   const showFirstAndLast = shouldShow('firstLast', width);
-  const isSelectionToolbarOn = selectionsAPI.isModal();
-  const showRowsPerPage = !isSelectionToolbarOn && shouldShow('rppOptions', width) && totalColumnCount <= 100;
+  const isSelectionMode = selectionsAPI.isModal();
+  const showRowsPerPage = !isSelectionMode && shouldShow('rppOptions', width) && totalColumnCount <= 100;
   const displayedRowsText = translator.get('SNTable.Pagination.DisplayedRowsLabel', [
     `${page * rowsPerPage + 1} - ${Math.min((page + 1) * rowsPerPage, totalRowCount)}`,
     totalRowCount,
@@ -81,7 +81,7 @@ function PaginationContent({
 
   const handleSelectPage = (event) => handleChangePage(+event.target.value);
 
-  const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, isSelectionToolbarOn) : null;
+  const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, isSelectionMode) : null;
 
   const getButton = (disabledCondition, pageNumber, type, onKeyDown = null) => {
     const iconType = `${type}${direction === 'rtl' ? 'RTL' : ''}`;

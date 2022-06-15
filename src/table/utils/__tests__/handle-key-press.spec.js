@@ -17,7 +17,7 @@ describe('handle-key-press', () => {
     let handleChangePage;
     let setShouldRefocus;
     let keyboard;
-    let isSelectionActive;
+    let isSelectionMode;
 
     beforeEach(() => {
       evt = {
@@ -113,7 +113,7 @@ describe('handle-key-press', () => {
         preventDefault: jest.fn(),
       };
       keyboard = { enabled: true, blur: jest.fn() };
-      isSelectionActive = true;
+      isSelectionMode = true;
       handleTableWrapperKeyDown({
         evt,
         totalRowCount,
@@ -122,7 +122,7 @@ describe('handle-key-press', () => {
         handleChangePage,
         setShouldRefocus,
         keyboard,
-        isSelectionActive,
+        isSelectionMode,
       });
       expect(evt.preventDefault).not.toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).not.toHaveBeenCalledTimes(1);

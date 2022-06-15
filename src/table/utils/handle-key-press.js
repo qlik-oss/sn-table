@@ -15,7 +15,7 @@ export const handleTableWrapperKeyDown = ({
   handleChangePage,
   setShouldRefocus,
   keyboard,
-  isSelectionToolbarOn,
+  isSelectionMode,
 }) => {
   if (isCtrlShift(evt)) {
     preventDefaultBehavior(evt);
@@ -28,7 +28,7 @@ export const handleTableWrapperKeyDown = ({
       setShouldRefocus();
       handleChangePage(page - 1);
     }
-  } else if (evt.key === 'Escape' && keyboard.enabled && !isSelectionToolbarOn) {
+  } else if (evt.key === 'Escape' && keyboard.enabled && !isSelectionMode) {
     // escape key: tell Nebula to relinquish focus when not in selection mode
     preventDefaultBehavior(evt);
     keyboard.blur(true);
@@ -174,8 +174,8 @@ export const bodyHandleKeyPress = ({
   }
 };
 
-export const handleLastTab = (evt, isSelectionToolbarOn, keyboard) => {
-  if (isSelectionToolbarOn && evt.key === 'Tab' && !evt.shiftKey) {
+export const handleLastTab = (evt, isSelectionMode, keyboard) => {
+  if (isSelectionMode && evt.key === 'Tab' && !evt.shiftKey) {
     // tab key: focus on the confirm button in the selection toolbar
     preventDefaultBehavior(evt);
     focusSelectionToolbar(evt.target, keyboard, false);
