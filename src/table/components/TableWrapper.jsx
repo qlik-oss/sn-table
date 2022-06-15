@@ -1,20 +1,20 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useRef, useCallback } from 'react';
-import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
-import TableContainer from '@mui/material/TableContainer';
 
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import FooterWrapper from './FooterWrapper';
 import { useContextSelector, TableContext } from '../context';
+import { StyledTableContainer, StyledTableWrapper } from '../styles';
+
 import PaginationContent from './PaginationContent';
 import useDidUpdateEffect from '../hooks/use-did-update-effect';
 import useFocusListener from '../hooks/use-focus-listener';
-import useScrollListener from '../hooks/use-scroll-lietener';
+import useScrollListener from '../hooks/use-scroll-listener';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
-import { updateFocus, handleResetFocus } from '../utils/handle-accessibility';
+import { updateFocus, handleResetFocus, getCellElement } from '../utils/handle-accessibility';
 import { handleNavigateTop } from '../utils/handle-scroll';
 
 export default function TableWrapper(props) {
@@ -47,7 +47,10 @@ export default function TableWrapper(props) {
   const handleChangePage = useCallback(
     (pageIdx) => {
       setPageInfo({ ...pageInfo, page: pageIdx });
-      announce({ keys: [['SNTable.Pagination.PageStatusReport', [pageIdx + 1, totalPages]]], politeness: 'assertive' });
+      announce({
+        keys: [['SNTable.Pagination.PageStatusReport', [(pageIdx + 1).toString(), totalPages.toString()]]],
+        politeness: 'assertive',
+      });
     },
     [pageInfo, setPageInfo, totalPages, announce]
   );
@@ -76,11 +79,7 @@ export default function TableWrapper(props) {
   useDidUpdateEffect(() => {
     if (!keyboard.enabled) return;
 
-    updateFocus({
-      focusType: keyboard.active ? 'focus' : 'blur',
-      rowElements: rootElement.getElementsByClassName('sn-table-row'),
-      cellCoord: focusedCellCoord,
-    });
+    updateFocus({ focusType: keyboard.active ? 'focus' : 'blur', cell: getCellElement(rootElement, focusedCellCoord) });
   }, [keyboard.active]);
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
@@ -92,7 +91,7 @@ export default function TableWrapper(props) {
       shouldRefocus,
       setFocusedCellCoord,
       hasSelections: selectionsAPI.isModal(),
-      shouldAddTabstop: !keyboard.enabled || keyboard.active,
+      keyboard,
       announce,
     });
   }, [rows.length, totalRowCount, totalColumnCount, page]);
@@ -102,28 +101,19 @@ export default function TableWrapper(props) {
     columns.length,
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
-  const paperStyle = {
-    borderWidth: paginationNeeded ? '0px 1px 0px' : '0px',
-    borderStyle: 'solid',
-    borderColor: theme.table.borderColor,
-    height: '100%',
-    backgroundColor: theme.table.tableBackgroundColorFromTheme,
-    boxShadow: 'none',
-    borderRadius: 'unset',
-  };
-
-  const tableContainerStyle = {
-    // the footerContainer always wants height: 100%
-    height: footerContainer || constraints.active || !paginationNeeded ? '100%' : 'calc(100% - 49px)',
-    overflow: constraints.active ? 'hidden' : 'auto',
-  };
-
   return (
-    <Paper dir={direction} sx={paperStyle} ref={tableWrapperRef} onKeyDown={handleKeyDown}>
+    <StyledTableWrapper
+      tableTheme={theme.table}
+      paginationNeeded={paginationNeeded}
+      dir={direction}
+      ref={tableWrapperRef}
+      onKeyDown={handleKeyDown}
+    >
       <AnnounceElements />
-      <TableContainer
+      <StyledTableContainer
         ref={tableContainerRef}
-        sx={tableContainerStyle}
+        fullHeight={footerContainer || constraints.active || !paginationNeeded} // the footerContainer always wants height: 100%
+        constraints={constraints}
         tabIndex={-1}
         role="application"
         data-testid="table-container"
@@ -132,13 +122,13 @@ export default function TableWrapper(props) {
           <TableHeadWrapper {...props} />
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </Table>
-      </TableContainer>
+      </StyledTableContainer>
       {!constraints.active && (
         <FooterWrapper theme={theme} footerContainer={footerContainer}>
           <PaginationContent {...props} handleChangePage={handleChangePage} />
         </FooterWrapper>
       )}
-    </Paper>
+    </StyledTableWrapper>
   );
 }
 

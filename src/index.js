@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
   useElement,
@@ -14,13 +15,13 @@ import {
   useRect,
   useApp,
 } from '@nebula.js/stardust';
-import { createRoot } from 'react-dom/client';
 
 import properties from './object-properties';
 import data from './data';
 import ext from './ext';
 import manageData from './handle-data';
-import { mount, render, teardown } from './table/Root';
+import { render, teardown } from './table/Root';
+import useReactRoot from './nebula-hooks/use-react-root';
 import useAnnounceAndTranslations from './nebula-hooks/use-announce-and-translations';
 import useSorting from './nebula-hooks/use-sorting';
 import useExtendedTheme from './nebula-hooks/use-extended-theme';
@@ -47,6 +48,7 @@ export default function supernova(env) {
     },
     component() {
       const rootElement = useElement();
+      const reactRoot = useReactRoot(rootElement);
       const layout = useStaleLayout();
       const { direction, footerContainer } = useOptions();
       const app = useApp();
@@ -60,18 +62,10 @@ export default function supernova(env) {
       const announce = useAnnounceAndTranslations(rootElement, translator);
       const changeSortOrder = useSorting(model);
 
-      const [reactRoot, setReactRoot] = useState();
       const [pageInfo, setPageInfo] = useState(initialPageInfo);
       const [tableData] = usePromise(() => {
         return env.carbon ? nothing() : manageData(model, layout, pageInfo, setPageInfo);
       }, [layout, pageInfo]);
-
-      useEffect(() => {
-        if (rootElement) {
-          setReactRoot(createRoot(rootElement));
-          mount(rootElement);
-        }
-      }, [rootElement]);
 
       useEffect(() => {
         if (!env.carbon && layout && tableData && announce && changeSortOrder && theme) {

@@ -1,4 +1,4 @@
-import { updateFocus, focusSelectionToolbar } from './handle-accessibility';
+import { updateFocus, focusSelectionToolbar, getCellElement } from './handle-accessibility';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -9,7 +9,7 @@ export const preventDefaultBehavior = (evt) => {
 
 export const handleTableWrapperKeyDown = ({
   evt,
-  totalVerticalCount,
+  totalRowCount,
   page,
   rowsPerPage,
   handleChangePage,
@@ -20,7 +20,7 @@ export const handleTableWrapperKeyDown = ({
   if (isCtrlShift(evt)) {
     preventDefaultBehavior(evt);
     // ctrl + shift + left/right arrow keys: go to previous/next page
-    const lastPage = Math.ceil(totalVerticalCount / rowsPerPage) - 1;
+    const lastPage = Math.ceil(totalRowCount / rowsPerPage) - 1;
     if (evt.key === 'ArrowRight' && page < lastPage) {
       setShouldRefocus();
       handleChangePage(page + 1);
@@ -34,10 +34,8 @@ export const handleTableWrapperKeyDown = ({
   }
 };
 
-export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, selectionState) => {
+export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, isInSelectionMode) => {
   let [nextRow, nextCol] = cellCoord;
-  // check if you have unconfirmed selections, so one or more cells are selected but not confirmed yet.
-  const isInSelectionMode = selectionState?.api?.isModal();
 
   switch (evt.key) {
     case 'ArrowDown':
@@ -72,13 +70,10 @@ export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, selection
 };
 
 export const getRowAndColumnCount = (rootElement) => {
-  const rowElements = rootElement.getElementsByClassName('sn-table-row');
-  const rowCount = rowElements.length;
+  const rowCount = rootElement.getElementsByClassName('sn-table-row').length;
+  const columnCount = rootElement.getElementsByClassName('sn-table-head-cell').length;
 
-  const headCellElements = rootElement.getElementsByClassName('sn-table-head-cell');
-  const columnCount = headCellElements.length;
-
-  return { rowElements, rowCount, columnCount };
+  return { rowCount, columnCount };
 };
 
 export const moveFocus = (evt, rootElement, cellCoord, setFocusedCellCoord, announce, isInSelectionMode) => {
@@ -86,17 +81,16 @@ export const moveFocus = (evt, rootElement, cellCoord, setFocusedCellCoord, anno
   evt.target.setAttribute('tabIndex', '-1');
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
   const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, isInSelectionMode);
-  updateFocus({ focusType: 'focus', rowElements: rowAndColumnCount.rowElements, cellCoord: nextCellCoord });
+  const nextCell = getCellElement(rootElement, nextCellCoord);
+  updateFocus({ focusType: 'focus', cell: nextCell });
   setFocusedCellCoord(nextCellCoord);
 
   // handle announce
   if (isInSelectionMode) {
-    const cell =
-      rowAndColumnCount.rowElements[nextCellCoord[0]]?.getElementsByClassName('sn-table-cell')[nextCellCoord[1]];
-    const hasActiveClassName = cell.classList.contains('selected');
+    const hasActiveClassName = nextCell.classList.contains('selected');
     hasActiveClassName
-      ? announce({ keys: 'SNTable.SelectionLabel.SelectedValue' })
-      : announce({ keys: 'SNTable.SelectionLabel.NotSelectedValue' });
+      ? announce({ keys: ['SNTable.SelectionLabel.SelectedValue'] })
+      : announce({ keys: ['SNTable.SelectionLabel.NotSelectedValue'] });
   }
 };
 
@@ -158,14 +152,14 @@ export const bodyHandleKeyPress = ({
       preventDefaultBehavior(evt);
       if (!isInSelectionMode) break;
       selectionsAPI.confirm();
-      announce({ keys: 'SNTable.SelectionLabel.SelectionsConfirmed' });
+      announce({ keys: ['SNTable.SelectionLabel.SelectionsConfirmed'] });
       break;
     // Esc: Cancels selections. If no selections, do nothing and handleTableWrapperKeyDown should catch it
     case 'Escape':
       if (!isAnalysisMode || !isInSelectionMode) break;
       preventDefaultBehavior(evt);
       selectionsAPI.cancel();
-      announce({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
+      announce({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
       break;
     // Tab: shift + tab, in selection mode and keyboard enabled, focus on selection toolbar
     case 'Tab':
