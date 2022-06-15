@@ -29,7 +29,7 @@ export const handleTableWrapperKeyDown = ({
       handleChangePage(page - 1);
     }
   } else if (evt.key === 'Escape' && keyboard.enabled && !isSelectionToolbarOn) {
-    // escape key: tell Nebula to relinquish focus
+    // escape key: tell Nebula to relinquish focus when not in selection mode
     preventDefaultBehavior(evt);
     keyboard.blur(true);
   }
