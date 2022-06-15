@@ -485,7 +485,7 @@ describe('handle-key-press', () => {
         announce,
       });
       expect(announce).toHaveBeenCalledWith({
-        keys: 'SNTable.SelectionLabel.SelectedValue',
+        keys: ['SNTable.SelectionLabel.SelectedValue'],
       });
     });
 
@@ -502,7 +502,7 @@ describe('handle-key-press', () => {
         announce,
       });
       expect(announce).toHaveBeenCalledWith({
-        keys: 'SNTable.SelectionLabel.NotSelectedValue',
+        keys: ['SNTable.SelectionLabel.NotSelectedValue'],
       });
     });
 
@@ -571,7 +571,7 @@ describe('handle-key-press', () => {
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(selectionsAPI.confirm).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
-      expect(announce).toHaveBeenCalledWith({ keys: 'SNTable.SelectionLabel.SelectionsConfirmed' });
+      expect(announce).toHaveBeenCalledWith({ keys: ['SNTable.SelectionLabel.SelectionsConfirmed'] });
     });
 
     it('when press enter key not in analysis mode, should not confirms selections', () => {
@@ -615,7 +615,7 @@ describe('handle-key-press', () => {
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(selectionsAPI.cancel).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
-      expect(announce).toHaveBeenCalledWith({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
+      expect(announce).toHaveBeenCalledWith({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
     });
 
     it('when press cancel key not in analysis mode, should not cancel selection', () => {
