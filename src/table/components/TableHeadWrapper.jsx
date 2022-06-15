@@ -28,7 +28,7 @@ function TableHeadWrapper({
     <TableHead>
       <StyledHeadRow paginationNeeded={paginationNeeded} className="sn-table-row">
         {columns.map((column, columnIndex) => {
-          // The first cell in the head be focusable in sequential keyboard navigation,
+          // The first cell in the head is focusable in sequential keyboard navigation,
           // when nebula does not handle keyboard navigation
           const tabIndex = columnIndex === 0 && !keyboard.enabled ? 0 : -1;
           const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.dataColIdx;
