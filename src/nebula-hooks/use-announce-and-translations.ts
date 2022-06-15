@@ -35,8 +35,6 @@ export const announcementFactory = (rootElement: Element, translator: Translator
 
     let announceElement: Element;
 
-    console.log(notation);
-
     if (previousAnnouncementElement === AnnouncerElements.FIRST) {
       announceElement = announceElement02;
       previousAnnouncementElement = AnnouncerElements.SECOND;
