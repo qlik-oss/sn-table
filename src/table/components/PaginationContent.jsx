@@ -47,7 +47,7 @@ function PaginationContent({
   translator,
   constraints,
   footerContainer,
-  selectionsAPI,
+  isSelectionMode,
   rect,
   handleChangePage,
   announce,
@@ -67,7 +67,6 @@ function PaginationContent({
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
   const width = footerContainer ? footerContainer.getBoundingClientRect().width : rect.width;
   const showFirstAndLast = shouldShow('firstLast', width);
-  const isSelectionMode = selectionsAPI.isModal();
   const showRowsPerPage = !isSelectionMode && shouldShow('rppOptions', width) && totalColumnCount <= 100;
   const displayedRowsText = translator.get('SNTable.Pagination.DisplayedRowsLabel', [
     `${page * rowsPerPage + 1} - ${Math.min((page + 1) * rowsPerPage, totalRowCount)}`,
@@ -178,12 +177,12 @@ PaginationContent.propTypes = {
   keyboard: PropTypes.object.isRequired,
   translator: PropTypes.object.isRequired,
   constraints: PropTypes.object.isRequired,
-  selectionsAPI: PropTypes.object.isRequired,
-  direction: PropTypes.string,
-  footerContainer: PropTypes.object,
+  isSelectionMode: PropTypes.bool.isRequired,
   rect: PropTypes.object.isRequired,
   handleChangePage: PropTypes.func.isRequired,
   announce: PropTypes.func.isRequired,
+  direction: PropTypes.string,
+  footerContainer: PropTypes.object,
 };
 
 export default memo(PaginationContent);

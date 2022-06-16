@@ -37,7 +37,7 @@ export const handleTableWrapperKeyDown = ({
   }
 };
 
-export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, isInSelectionMode) => {
+export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, isSelectionMode) => {
   let [nextRow, nextCol] = cellCoord;
 
   switch (evt.key) {
@@ -45,10 +45,10 @@ export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, isInSelec
       nextRow + 1 < rowAndColumnCount.rowCount && nextRow++;
       break;
     case 'ArrowUp':
-      nextRow > 0 && (!isInSelectionMode || nextRow !== 1) && nextRow--;
+      nextRow > 0 && (!isSelectionMode || nextRow !== 1) && nextRow--;
       break;
     case 'ArrowRight':
-      if (isInSelectionMode) break;
+      if (isSelectionMode) break;
       if (nextCol < rowAndColumnCount.columnCount - 1) {
         nextCol++;
       } else if (nextRow < rowAndColumnCount.rowCount - 1) {
@@ -57,7 +57,7 @@ export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, isInSelec
       }
       break;
     case 'ArrowLeft':
-      if (isInSelectionMode) break;
+      if (isSelectionMode) break;
       if (nextCol > 0) {
         nextCol--;
       } else if (nextRow > 0) {
@@ -85,19 +85,19 @@ export const moveFocus = (
   cellCoord,
   setFocusedCellCoord,
   announce,
-  isInSelectionMode,
+  isSelectionMode,
   shouldAnnounce = true
 ) => {
   preventDefaultBehavior(evt);
   evt.target.setAttribute('tabIndex', '-1');
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
-  const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, isInSelectionMode);
+  const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, isSelectionMode);
   const nextCell = getCellElement(rootElement, nextCellCoord);
   updateFocus({ focusType: 'focus', cell: nextCell });
   setFocusedCellCoord(nextCellCoord);
 
-  // handle announce
-  if (isInSelectionMode && shouldAnnounce) {
+  // handle announcement
+  if (isSelectionMode && shouldAnnounce) {
     const hasActiveClassName = nextCell.classList.contains('selected');
     hasActiveClassName
       ? announce({ keys: ['SNTable.SelectionLabel.SelectedValue'] })
@@ -151,7 +151,8 @@ export const bodyHandleKeyPress = ({
   keyboard,
   selectionsAPI = null,
 }) => {
-  const isInSelectionMode = selectionsAPI?.isModal();
+  const isSelectionMode = selectionsAPI?.isModal();
+
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
@@ -163,7 +164,7 @@ export const bodyHandleKeyPress = ({
         cellCoord,
         setFocusedCellCoord,
         announce,
-        isInSelectionMode,
+        isSelectionMode,
         !isMultiValueSelections(evt, cell, isAnalysisMode)
       );
       isMultiValueSelections(evt, cell, isAnalysisMode) &&
@@ -171,7 +172,7 @@ export const bodyHandleKeyPress = ({
       break;
     case 'ArrowRight':
     case 'ArrowLeft':
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isInSelectionMode);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isSelectionMode);
       break;
     // Space bar: Selects value.
     case ' ':
@@ -181,20 +182,20 @@ export const bodyHandleKeyPress = ({
     // Enter: Confirms selections.
     case 'Enter':
       preventDefaultBehavior(evt);
-      if (!isInSelectionMode) break;
+      if (!isSelectionMode) break;
       selectionsAPI.confirm();
       announce({ keys: ['SNTable.SelectionLabel.SelectionsConfirmed'] });
       break;
     // Esc: Cancels selections. If no selections, do nothing and handleTableWrapperKeyDown should catch it
     case 'Escape':
-      if (!isAnalysisMode || !isInSelectionMode) break;
+      if (!isAnalysisMode || !isSelectionMode) break;
       preventDefaultBehavior(evt);
       selectionsAPI.cancel();
       announce({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
       break;
     // Tab: shift + tab, in selection mode and keyboard enabled, focus on selection toolbar
     case 'Tab':
-      if (evt.shiftKey && keyboard.enabled && isInSelectionMode) {
+      if (evt.shiftKey && keyboard.enabled && isSelectionMode) {
         preventDefaultBehavior(evt);
         focusSelectionToolbar(evt.target, keyboard, true);
       }
