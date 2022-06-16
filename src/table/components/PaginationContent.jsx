@@ -60,10 +60,15 @@ function PaginationContent({
   const paginationTheme = theme.table.pagination;
   const onFirstPage = page === 0;
   const onLastPage = page >= totalPages - 1;
+  // The elements can be focused in sequential keyboard navigation:
+  // - When nebula handles keyboard navigation
+  // and focus is somewhere inside the extension, or
+  // - When nebula does not handle keyboard navigation
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
   const width = footerContainer ? footerContainer.getBoundingClientRect().width : rect.width;
   const showFirstAndLast = shouldShow('firstLast', width);
-  const showRowsPerPage = !selectionsAPI.isModal() && shouldShow('rppOptions', width) && totalColumnCount <= 100;
+  const isSelectionMode = selectionsAPI.isModal();
+  const showRowsPerPage = !isSelectionMode && shouldShow('rppOptions', width) && totalColumnCount <= 100;
   const displayedRowsText = translator.get('SNTable.Pagination.DisplayedRowsLabel', [
     `${page * rowsPerPage + 1} - ${Math.min((page + 1) * rowsPerPage, totalRowCount)}`,
     totalRowCount,
@@ -76,7 +81,7 @@ function PaginationContent({
 
   const handleSelectPage = (event) => handleChangePage(+event.target.value);
 
-  const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, selectionsAPI.isModal()) : null;
+  const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, isSelectionMode) : null;
 
   const getButton = (disabledCondition, pageNumber, type, onKeyDown = null) => {
     const iconType = `${type}${direction === 'rtl' ? 'RTL' : ''}`;
