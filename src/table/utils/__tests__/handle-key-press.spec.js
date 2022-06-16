@@ -779,7 +779,7 @@ describe('handle-key-press', () => {
 
   describe('handleLastTab', () => {
     let evt;
-    let isInSelectionMode;
+    let isSelectionMode;
 
     beforeEach(() => {
       evt = {
@@ -789,23 +789,23 @@ describe('handle-key-press', () => {
         stopPropagation: jest.fn(),
         preventDefault: jest.fn(),
       };
-      isInSelectionMode = true;
+      isSelectionMode = true;
       jest.spyOn(handleAccessibility, 'focusSelectionToolbar').mockImplementation(() => jest.fn());
     });
 
     afterEach(() => jest.clearAllMocks());
 
-    it('should call focusSelectionToolbar when isInSelectionMode is true and tab is pressed', () => {
-      handleLastTab(evt, isInSelectionMode);
+    it('should call focusSelectionToolbar when isSelectionMode is true and tab is pressed', () => {
+      handleLastTab(evt, isSelectionMode);
 
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(handleAccessibility.focusSelectionToolbar).toHaveBeenCalledTimes(1);
     });
 
-    it('should not call focusSelectionToolbar when isInSelectionMode is false', () => {
-      isInSelectionMode = false;
-      handleLastTab(evt, isInSelectionMode);
+    it('should not call focusSelectionToolbar when isSelectionMode is false', () => {
+      isSelectionMode = false;
+      handleLastTab(evt, isSelectionMode);
 
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(evt.preventDefault).not.toHaveBeenCalled();
@@ -814,7 +814,7 @@ describe('handle-key-press', () => {
 
     it('should not call focusSelectionToolbar when key is not tab', () => {
       evt.key = 'someKey';
-      handleLastTab(evt, isInSelectionMode);
+      handleLastTab(evt, isSelectionMode);
 
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(evt.preventDefault).not.toHaveBeenCalled();
@@ -823,7 +823,7 @@ describe('handle-key-press', () => {
 
     it('should not call focusSelectionToolbar when shift+tab is pressed', () => {
       evt.shiftKey = true;
-      handleLastTab(evt, isInSelectionMode);
+      handleLastTab(evt, isSelectionMode);
 
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(evt.preventDefault).not.toHaveBeenCalled();
