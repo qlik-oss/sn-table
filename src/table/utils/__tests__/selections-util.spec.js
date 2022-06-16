@@ -215,7 +215,10 @@ describe('selections-utils', () => {
       handleAnnounceSelectionStatus({ announce, rowsLength, isAddition });
 
       expect(announce).toHaveBeenCalledWith({
-        keys: ['SNTable.SelectionLabel.SelectedValue', ['SNTable.SelectionLabel.SelectedValues', rowsLength]],
+        keys: [
+          'SNTable.SelectionLabel.SelectedValue',
+          ['SNTable.SelectionLabel.SelectedValues', rowsLength.toString()],
+        ],
       });
     });
 
@@ -234,7 +237,10 @@ describe('selections-utils', () => {
       handleAnnounceSelectionStatus({ announce, rowsLength, isAddition: false });
 
       expect(announce).toHaveBeenCalledWith({
-        keys: ['SNTable.SelectionLabel.DeselectedValue', ['SNTable.SelectionLabel.SelectedValues', rowsLength]],
+        keys: [
+          'SNTable.SelectionLabel.DeselectedValue',
+          ['SNTable.SelectionLabel.SelectedValues', rowsLength.toString()],
+        ],
       });
     });
 
@@ -243,7 +249,7 @@ describe('selections-utils', () => {
       isAddition = false;
       handleAnnounceSelectionStatus({ announce, rowsLength, isAddition });
 
-      expect(announce).toHaveBeenCalledWith({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
+      expect(announce).toHaveBeenCalledWith({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
     });
   });
 

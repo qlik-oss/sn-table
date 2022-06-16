@@ -64,10 +64,10 @@ export const handleAnnounceSelectionStatus = ({ announce, rowsLength, isAddition
     const amountStatus =
       rowsLength === 1
         ? 'SNTable.SelectionLabel.OneSelectedValue'
-        : ['SNTable.SelectionLabel.SelectedValues', rowsLength];
+        : ['SNTable.SelectionLabel.SelectedValues', rowsLength.toString()];
     announce({ keys: [changeStatus, amountStatus] });
   } else {
-    announce({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
+    announce({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
   }
 };
 

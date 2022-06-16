@@ -22,7 +22,7 @@ function TableHeadWrapper({
   const { columns, paginationNeeded } = tableData;
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
-  const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name(), theme.table.backgroundColor]);
+  const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
 
   return (
     <TableHead>

@@ -89,8 +89,8 @@ export const moveFocus = (evt, rootElement, cellCoord, setFocusedCellCoord, anno
   if (isInSelectionMode) {
     const hasActiveClassName = nextCell.classList.contains('selected');
     hasActiveClassName
-      ? announce({ keys: 'SNTable.SelectionLabel.SelectedValue' })
-      : announce({ keys: 'SNTable.SelectionLabel.NotSelectedValue' });
+      ? announce({ keys: ['SNTable.SelectionLabel.SelectedValue'] })
+      : announce({ keys: ['SNTable.SelectionLabel.NotSelectedValue'] });
   }
 };
 
@@ -164,14 +164,14 @@ export const bodyHandleKeyPress = ({
       preventDefaultBehavior(evt);
       if (!isInSelectionMode) break;
       selectionsAPI.confirm();
-      announce({ keys: 'SNTable.SelectionLabel.SelectionsConfirmed' });
+      announce({ keys: ['SNTable.SelectionLabel.SelectionsConfirmed'] });
       break;
     // Esc: Cancels selections. If no selections, do nothing and handleTableWrapperKeyDown should catch it
     case 'Escape':
       if (!isAnalysisMode || !isInSelectionMode) break;
       preventDefaultBehavior(evt);
       selectionsAPI.cancel();
-      announce({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
+      announce({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
       break;
     // Tab: shift + tab, in selection mode and keyboard enabled, focus on selection toolbar
     case 'Tab':
