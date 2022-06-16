@@ -34,6 +34,7 @@ export default function TableWrapper(props) {
   } = props;
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
+  const isSelectionMode = selectionsAPI.isModal();
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const shouldRefocus = useRef(false);
@@ -64,7 +65,7 @@ export default function TableWrapper(props) {
       handleChangePage,
       setShouldRefocus,
       keyboard,
-      isSelectionActive: selectionsAPI.isModal(),
+      isSelectionMode,
     });
   };
 
@@ -77,6 +78,10 @@ export default function TableWrapper(props) {
   );
 
   useDidUpdateEffect(() => {
+    // When nebula handles keyboard navigation and keyboard.active changes,
+    // make sure to blur or focus the cell corresponding to focusedCellCoord
+    // when keyboard.focus() runs, keyboard.active is true
+    // when keyboard.blur() runs, keyboard.active is false
     updateFocus({ focusType: keyboard.active ? 'focus' : 'blur', cell: getCellElement(rootElement, focusedCellCoord) });
   }, [keyboard.active]);
 
@@ -88,7 +93,7 @@ export default function TableWrapper(props) {
       rootElement,
       shouldRefocus,
       setFocusedCellCoord,
-      hasSelections: selectionsAPI.isModal(),
+      isSelectionMode,
       keyboard,
       announce,
     });

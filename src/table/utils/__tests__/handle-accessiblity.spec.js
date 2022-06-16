@@ -161,7 +161,7 @@ describe('handle-accessibility', () => {
 
   describe('handleResetFocus', () => {
     let shouldRefocus;
-    let hasSelections;
+    let isSelectionMode;
     let announce;
 
     const resetFocus = () =>
@@ -169,7 +169,7 @@ describe('handle-accessibility', () => {
         focusedCellCoord,
         rootElement,
         shouldRefocus,
-        hasSelections,
+        isSelectionMode,
         setFocusedCellCoord,
         keyboard,
         announce,
@@ -178,7 +178,7 @@ describe('handle-accessibility', () => {
     beforeEach(() => {
       focusedCellCoord = [2, 1];
       shouldRefocus = { current: false };
-      hasSelections = false;
+      isSelectionMode = false;
       keyboard = { enabled: true, active: true };
       announce = jest.fn();
     });
@@ -211,8 +211,8 @@ describe('handle-accessibility', () => {
       expect(announce).not.toHaveBeenCalled();
     });
 
-    it('should set tabindex on the second cell in currently focused column when hasSelections is true', () => {
-      hasSelections = true;
+    it('should set tabindex on the second cell in currently focused column when isSelectionMode is true', () => {
+      isSelectionMode = true;
       const row = { getElementsByClassName: () => [cell, cell] };
       rootElement = {
         getElementsByClassName: () => [row, row],
@@ -232,7 +232,7 @@ describe('handle-accessibility', () => {
         getElementsByClassName: () => [row, row],
         querySelector: () => cell,
       };
-      hasSelections = true;
+      isSelectionMode = true;
 
       resetFocus();
       expect(announce).toHaveBeenCalledWith({
@@ -250,7 +250,7 @@ describe('handle-accessibility', () => {
         getElementsByClassName: () => [row, row],
         querySelector: () => cell,
       };
-      hasSelections = true;
+      isSelectionMode = true;
 
       resetFocus();
       expect(announce).toHaveBeenCalledWith({
