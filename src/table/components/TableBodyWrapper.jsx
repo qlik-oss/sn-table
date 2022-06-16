@@ -80,6 +80,7 @@ function TableBodyWrapper({
                   tabIndex={-1}
                   announce={announce}
                   onKeyDown={handleKeyDown}
+                  // onKeyUp={(evt) => bodyHandleKeyUp(evt)}
                   onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
                 >
                   {cell.qText}

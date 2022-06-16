@@ -204,6 +204,11 @@ export const bodyHandleKeyPress = ({
   }
 };
 
+// export const bodyHandleKeyUp = ({ evt }) => {
+//   if (evt.shiftKey) {
+//   }
+// };
+
 export const handleLastTab = (evt, isSelectionMode, keyboard) => {
   if (isSelectionMode && evt.key === 'Tab' && !evt.shiftKey) {
     // tab key: focus on the confirm button in the selection toolbar
