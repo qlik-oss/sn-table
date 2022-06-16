@@ -1,7 +1,6 @@
 import {
   handleTableWrapperKeyDown,
   arrowKeysNavigation,
-  getRowAndColumnCount,
   headHandleKeyPress,
   bodyHandleKeyPress,
   handleLastTab,
@@ -18,7 +17,7 @@ describe('handle-key-press', () => {
     let handleChangePage;
     let setShouldRefocus;
     let keyboard;
-    let isSelectionActive;
+    let isSelectionMode;
 
     beforeEach(() => {
       evt = {
@@ -114,7 +113,7 @@ describe('handle-key-press', () => {
         preventDefault: jest.fn(),
       };
       keyboard = { enabled: true, blur: jest.fn() };
-      isSelectionActive = true;
+      isSelectionMode = true;
       handleTableWrapperKeyDown({
         evt,
         totalRowCount,
@@ -123,7 +122,7 @@ describe('handle-key-press', () => {
         handleChangePage,
         setShouldRefocus,
         keyboard,
-        isSelectionActive,
+        isSelectionMode,
       });
       expect(evt.preventDefault).not.toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).not.toHaveBeenCalledTimes(1);
@@ -242,24 +241,6 @@ describe('handle-key-press', () => {
       const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex]);
       expect(nextRow).toBe(1);
       expect(nextCol).toBe(1);
-    });
-  });
-
-  describe('getRowAndColumnCount', () => {
-    let resolvedRowCount;
-    let resolvedColumnCount;
-    let resolvedRowElements;
-    const rootElement = {};
-
-    it('should return a rowElements, rowCount, and columnCount', () => {
-      resolvedRowCount = 1;
-      resolvedColumnCount = 1;
-      resolvedRowElements = [{}];
-      rootElement.getElementsByClassName = () => resolvedRowElements;
-      const { rowElements, rowCount, columnCount } = getRowAndColumnCount(rootElement);
-      expect(rowCount).toBe(resolvedRowCount);
-      expect(columnCount).toBe(resolvedColumnCount);
-      expect(rowElements).toBe(resolvedRowElements);
     });
   });
 
@@ -504,7 +485,7 @@ describe('handle-key-press', () => {
         announce,
       });
       expect(announce).toHaveBeenCalledWith({
-        keys: 'SNTable.SelectionLabel.SelectedValue',
+        keys: ['SNTable.SelectionLabel.SelectedValue'],
       });
     });
 
@@ -521,7 +502,7 @@ describe('handle-key-press', () => {
         announce,
       });
       expect(announce).toHaveBeenCalledWith({
-        keys: 'SNTable.SelectionLabel.NotSelectedValue',
+        keys: ['SNTable.SelectionLabel.NotSelectedValue'],
       });
     });
 
@@ -590,7 +571,7 @@ describe('handle-key-press', () => {
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(selectionsAPI.confirm).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
-      expect(announce).toHaveBeenCalledWith({ keys: 'SNTable.SelectionLabel.SelectionsConfirmed' });
+      expect(announce).toHaveBeenCalledWith({ keys: ['SNTable.SelectionLabel.SelectionsConfirmed'] });
     });
 
     it('when press enter key not in analysis mode, should not confirms selections', () => {
@@ -634,7 +615,7 @@ describe('handle-key-press', () => {
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(selectionsAPI.cancel).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
-      expect(announce).toHaveBeenCalledWith({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
+      expect(announce).toHaveBeenCalledWith({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
     });
 
     it('when press cancel key not in analysis mode, should not cancel selection', () => {
@@ -798,7 +779,7 @@ describe('handle-key-press', () => {
 
   describe('handleLastTab', () => {
     let evt;
-    let isInSelectionMode;
+    let isSelectionMode;
 
     beforeEach(() => {
       evt = {
@@ -808,23 +789,23 @@ describe('handle-key-press', () => {
         stopPropagation: jest.fn(),
         preventDefault: jest.fn(),
       };
-      isInSelectionMode = true;
+      isSelectionMode = true;
       jest.spyOn(handleAccessibility, 'focusSelectionToolbar').mockImplementation(() => jest.fn());
     });
 
     afterEach(() => jest.clearAllMocks());
 
-    it('should call focusSelectionToolbar when isInSelectionMode is true and tab is pressed', () => {
-      handleLastTab(evt, isInSelectionMode);
+    it('should call focusSelectionToolbar when isSelectionMode is true and tab is pressed', () => {
+      handleLastTab(evt, isSelectionMode);
 
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(handleAccessibility.focusSelectionToolbar).toHaveBeenCalledTimes(1);
     });
 
-    it('should not call focusSelectionToolbar when isInSelectionMode is false', () => {
-      isInSelectionMode = false;
-      handleLastTab(evt, isInSelectionMode);
+    it('should not call focusSelectionToolbar when isSelectionMode is false', () => {
+      isSelectionMode = false;
+      handleLastTab(evt, isSelectionMode);
 
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(evt.preventDefault).not.toHaveBeenCalled();
@@ -833,7 +814,7 @@ describe('handle-key-press', () => {
 
     it('should not call focusSelectionToolbar when key is not tab', () => {
       evt.key = 'someKey';
-      handleLastTab(evt, isInSelectionMode);
+      handleLastTab(evt, isSelectionMode);
 
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(evt.preventDefault).not.toHaveBeenCalled();
@@ -842,7 +823,7 @@ describe('handle-key-press', () => {
 
     it('should not call focusSelectionToolbar when shift+tab is pressed', () => {
       evt.shiftKey = true;
-      handleLastTab(evt, isInSelectionMode);
+      handleLastTab(evt, isSelectionMode);
 
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(evt.preventDefault).not.toHaveBeenCalled();

@@ -1,20 +1,21 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useMemo, useRef, useCallback } from 'react';
-import Paper from '@mui/material/Paper';
+import React, { useEffect, useRef, useCallback } from 'react';
 import Table from '@mui/material/Table';
-import TableContainer from '@mui/material/TableContainer';
 
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import FooterWrapper from './FooterWrapper';
-import PaginationContent from './PaginationContent';
-import useDidUpdateEffect from './useDidUpdateEffect';
 import { useContextSelector, TableContext } from '../context';
+import { StyledTableContainer, StyledTableWrapper } from '../styles';
+
+import PaginationContent from './PaginationContent';
+import useDidUpdateEffect from '../hooks/use-did-update-effect';
+import useFocusListener from '../hooks/use-focus-listener';
+import useScrollListener from '../hooks/use-scroll-listener';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
-import { updateFocus, handleResetFocus, handleFocusoutEvent } from '../utils/handle-accessibility';
-import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
-import announcementFactory from '../utils/announcement-factory';
+import { updateFocus, handleResetFocus, getCellElement } from '../utils/handle-accessibility';
+import { handleNavigateTop } from '../utils/handle-scroll';
 
 export default function TableWrapper(props) {
   const {
@@ -29,15 +30,16 @@ export default function TableWrapper(props) {
     keyboard,
     direction,
     footerContainer,
+    announce,
   } = props;
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
+  const isSelectionMode = selectionsAPI.isModal();
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
-  const announce = useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
@@ -46,7 +48,10 @@ export default function TableWrapper(props) {
   const handleChangePage = useCallback(
     (pageIdx) => {
       setPageInfo({ ...pageInfo, page: pageIdx });
-      announce({ keys: [['SNTable.Pagination.PageStatusReport', [pageIdx + 1, totalPages]]], politeness: 'assertive' });
+      announce({
+        keys: [['SNTable.Pagination.PageStatusReport', (pageIdx + 1).toString(), totalPages.toString()]],
+        politeness: 'assertive',
+      });
     },
     [pageInfo, setPageInfo, totalPages, announce]
   );
@@ -60,47 +65,24 @@ export default function TableWrapper(props) {
       handleChangePage,
       setShouldRefocus,
       keyboard,
-      isSelectionActive: selectionsAPI.isModal(),
+      isSelectionMode,
     });
   };
 
-  useEffect(() => {
-    const memoedWrapper = tableWrapperRef.current;
-    if (!memoedWrapper) return () => {};
-
-    const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard);
-    memoedWrapper.addEventListener('focusout', focusOutCallback);
-
-    return () => {
-      memoedWrapper.removeEventListener('focusout', focusOutCallback);
-    };
-  }, []);
-
-  useEffect(() => {
-    const memoedContainer = tableContainerRef.current;
-    if (!memoedContainer) return () => {};
-
-    const horizontalScrollCallback = (evt) => handleHorizontalScroll(evt, direction === 'rtl', memoedContainer);
-    memoedContainer.addEventListener('wheel', horizontalScrollCallback);
-
-    return () => {
-      memoedContainer.removeEventListener('wheel', horizontalScrollCallback);
-    };
-  }, [direction]);
+  useFocusListener(tableWrapperRef, shouldRefocus, keyboard);
+  useScrollListener(tableContainerRef, direction);
 
   useEffect(
     () => handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement }),
-    [tableContainerRef, focusedCellCoord]
+    [tableContainerRef, focusedCellCoord, rootElement]
   );
 
   useDidUpdateEffect(() => {
-    if (!keyboard.enabled) return;
-
-    updateFocus({
-      focusType: keyboard.active ? 'focus' : 'blur',
-      rowElements: rootElement.getElementsByClassName('sn-table-row'),
-      cellCoord: focusedCellCoord,
-    });
+    // When nebula handles keyboard navigation and keyboard.active changes,
+    // make sure to blur or focus the cell corresponding to focusedCellCoord
+    // when keyboard.focus() runs, keyboard.active is true
+    // when keyboard.blur() runs, keyboard.active is false
+    updateFocus({ focusType: keyboard.active ? 'focus' : 'blur', cell: getCellElement(rootElement, focusedCellCoord) });
   }, [keyboard.active]);
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
@@ -111,8 +93,8 @@ export default function TableWrapper(props) {
       rootElement,
       shouldRefocus,
       setFocusedCellCoord,
-      hasSelections: selectionsAPI.isModal(),
-      shouldAddTabstop: !keyboard.enabled || keyboard.active,
+      isSelectionMode,
+      keyboard,
       announce,
     });
   }, [rows.length, totalRowCount, totalColumnCount, page]);
@@ -122,58 +104,38 @@ export default function TableWrapper(props) {
     columns.length,
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
-  const paperStyle = {
-    borderWidth: paginationNeeded ? '0px 1px 0px' : '0px',
-    borderStyle: 'solid',
-    borderColor: theme.table.borderColor,
-    height: '100%',
-    backgroundColor: theme.table.tableBackgroundColorFromTheme,
-    boxShadow: 'none',
-    borderRadius: 'unset',
-  };
-
-  const tableContainerStyle = {
-    // the footerContainer always wants height: 100%
-    height: footerContainer || constraints.active || !paginationNeeded ? '100%' : 'calc(100% - 49px)',
-    overflow: constraints.active ? 'hidden' : 'auto',
-  };
-
   return (
-    <Paper dir={direction} sx={paperStyle} ref={tableWrapperRef} onKeyDown={handleKeyDown}>
+    <StyledTableWrapper
+      tableTheme={theme.table}
+      paginationNeeded={paginationNeeded}
+      dir={direction}
+      ref={tableWrapperRef}
+      onKeyDown={handleKeyDown}
+    >
       <AnnounceElements />
-      <TableContainer
+      <StyledTableContainer
         ref={tableContainerRef}
-        sx={tableContainerStyle}
+        fullHeight={footerContainer || constraints.active || !paginationNeeded} // the footerContainer always wants height: 100%
+        constraints={constraints}
         tabIndex={-1}
         role="application"
         data-testid="table-container"
       >
         <Table stickyHeader aria-label={tableAriaLabel}>
           <TableHeadWrapper {...props} />
-          <TableBodyWrapper
-            {...props}
-            announce={announce}
-            setShouldRefocus={setShouldRefocus}
-            tableWrapperRef={tableWrapperRef}
-          />
+          <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </Table>
-      </TableContainer>
+      </StyledTableContainer>
       {!constraints.active && (
         <FooterWrapper theme={theme} footerContainer={footerContainer}>
-          <PaginationContent
-            {...props}
-            handleChangePage={handleChangePage}
-            isInSelectionMode={selectionsAPI.isModal()}
-            announce={announce}
-          />
+          <PaginationContent {...props} handleChangePage={handleChangePage} isSelectionMode={selectionsAPI.isModal()} />
         </FooterWrapper>
       )}
-    </Paper>
+    </StyledTableWrapper>
   );
 }
 
 TableWrapper.defaultProps = {
-  announcer: null,
   direction: null,
   footerContainer: null,
 };
@@ -188,7 +150,7 @@ TableWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
+  announce: PropTypes.func.isRequired,
   footerContainer: PropTypes.object,
   direction: PropTypes.string,
-  announcer: PropTypes.func,
 };

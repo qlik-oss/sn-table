@@ -22,18 +22,13 @@ describe('handle-accessibility', () => {
 
   describe('updateFocus', () => {
     let focusType;
-    let rowElements;
-    let cellCoord;
-    let providedCell;
 
     beforeEach(() => {
       focusType = 'focus';
-      rowElements = [{ getElementsByClassName: () => [cell] }];
-      cellCoord = [0, 0];
     });
 
     it('should focus cell and call setAttribute when focusType is focus', () => {
-      handleAccessibility.updateFocus({ focusType, rowElements, cellCoord });
+      handleAccessibility.updateFocus({ focusType, cell });
       expect(cell.focus).toHaveBeenCalledTimes(1);
       expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '0');
     });
@@ -41,7 +36,7 @@ describe('handle-accessibility', () => {
     it('should blur cell and call setAttribute when focusType is blur', () => {
       focusType = 'blur';
 
-      handleAccessibility.updateFocus({ focusType, rowElements, cellCoord });
+      handleAccessibility.updateFocus({ focusType, cell });
       expect(cell.blur).toHaveBeenCalledTimes(1);
       expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
     });
@@ -49,7 +44,7 @@ describe('handle-accessibility', () => {
     it('should call setAttribute when focusType is addTab', () => {
       focusType = 'addTab';
 
-      handleAccessibility.updateFocus({ focusType, rowElements, cellCoord });
+      handleAccessibility.updateFocus({ focusType, cell });
       expect(cell.focus).not.toHaveBeenCalled();
       expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '0');
     });
@@ -57,26 +52,15 @@ describe('handle-accessibility', () => {
     it('should call setAttribute when focusType is removeTab', () => {
       focusType = 'removeTab';
 
-      handleAccessibility.updateFocus({ focusType, rowElements, cellCoord });
+      handleAccessibility.updateFocus({ focusType, cell });
       expect(cell.blur).not.toHaveBeenCalled();
       expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
     });
 
-    it('should not focus cell nor cell setAttribute when cell is not found', () => {
-      cellCoord = [1, 0];
+    it('should early return and not throw error when cell is undefined', () => {
+      cell = undefined;
 
-      handleAccessibility.updateFocus({ focusType, rowElements, cellCoord });
-      expect(cell.focus).not.toHaveBeenCalled();
-      expect(cell.blur).not.toHaveBeenCalled();
-      expect(cell.setAttribute).not.toHaveBeenCalled();
-    });
-
-    it('should pick up providedCell element if there was no rowElements provided', () => {
-      providedCell = cell;
-
-      handleAccessibility.updateFocus({ focusType, providedCell });
-      expect(cell.focus).toHaveBeenCalledTimes(1);
-      expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '0');
+      expect(() => handleAccessibility.updateFocus({ focusType, cell })).not.toThrow();
     });
   });
 
@@ -162,30 +146,55 @@ describe('handle-accessibility', () => {
     });
   });
 
+  describe('handleMouseDownLabelToFocusHeadCell', () => {
+    const evt = { preventDefault: jest.fn() };
+    const columnIndex = 0;
+
+    it('should indirectly call updateFocus, setFocusedCellCoord and keyboard.focus', () => {
+      handleAccessibility.handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex);
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(cell.focus).toHaveBeenCalledTimes(1);
+      expect(cell.setAttribute).toHaveBeenCalledTimes(1);
+      expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '0');
+    });
+  });
+
   describe('handleResetFocus', () => {
     let shouldRefocus;
-    let hasSelections;
-    let shouldAddTabstop;
+    let isSelectionMode;
     let announce;
 
-    beforeEach(() => {
-      focusedCellCoord = [2, 1];
-      shouldRefocus = { current: false };
-      hasSelections = false;
-      shouldAddTabstop = true;
-      announce = jest.fn();
-    });
-
-    it('should set tabindex on the first cell and not focus', () => {
+    const resetFocus = () =>
       handleAccessibility.handleResetFocus({
         focusedCellCoord,
         rootElement,
         shouldRefocus,
-        hasSelections,
+        isSelectionMode,
         setFocusedCellCoord,
-        shouldAddTabstop,
+        keyboard,
         announce,
       });
+
+    beforeEach(() => {
+      focusedCellCoord = [2, 1];
+      shouldRefocus = { current: false };
+      isSelectionMode = false;
+      keyboard = { enabled: true, active: true };
+      announce = jest.fn();
+    });
+
+    it('should only remove tabIndex when keyboard.enabled is true and keyboard.active is false', () => {
+      keyboard = { enabled: true, active: false };
+
+      resetFocus();
+      expect(cell.setAttribute).toHaveBeenCalledTimes(1);
+      expect(setFocusedCellCoord).toHaveBeenCalledWith([0, 0]);
+      expect(cell.focus).not.toHaveBeenCalled();
+      expect(announce).not.toHaveBeenCalled();
+    });
+
+    it('should set tabindex on the first cell and not focus', () => {
+      resetFocus();
       expect(cell.setAttribute).toHaveBeenCalledTimes(2);
       expect(setFocusedCellCoord).toHaveBeenCalledWith([0, 0]);
       expect(cell.focus).not.toHaveBeenCalled();
@@ -195,38 +204,22 @@ describe('handle-accessibility', () => {
     it('should set tabindex on the first cell and focus when shouldRefocus is true', () => {
       shouldRefocus.current = true;
 
-      handleAccessibility.handleResetFocus({
-        focusedCellCoord,
-        rootElement,
-        shouldRefocus,
-        hasSelections,
-        setFocusedCellCoord,
-        shouldAddTabstop,
-        announce,
-      });
+      resetFocus();
       expect(cell.setAttribute).toHaveBeenCalledTimes(2);
       expect(setFocusedCellCoord).toHaveBeenCalledWith([0, 0]);
       expect(cell.focus).toHaveBeenCalled();
       expect(announce).not.toHaveBeenCalled();
     });
 
-    it('should set tabindex on the second cell in currently focused column when hasSelections is true', () => {
-      hasSelections = true;
+    it('should set tabindex on the second cell in currently focused column when isSelectionMode is true', () => {
+      isSelectionMode = true;
       const row = { getElementsByClassName: () => [cell, cell] };
       rootElement = {
         getElementsByClassName: () => [row, row],
         querySelector: () => cell,
       };
 
-      handleAccessibility.handleResetFocus({
-        focusedCellCoord,
-        rootElement,
-        shouldRefocus,
-        hasSelections,
-        setFocusedCellCoord,
-        shouldAddTabstop,
-        announce,
-      });
+      resetFocus();
       expect(cell.setAttribute).toHaveBeenCalledTimes(2);
       expect(setFocusedCellCoord).toHaveBeenCalledWith([1, 1]);
       expect(cell.focus).not.toHaveBeenCalled();
@@ -239,18 +232,9 @@ describe('handle-accessibility', () => {
         getElementsByClassName: () => [row, row],
         querySelector: () => cell,
       };
-      hasSelections = true;
+      isSelectionMode = true;
 
-      handleAccessibility.handleResetFocus({
-        focusedCellCoord,
-        rootElement,
-        shouldRefocus,
-        hasSelections,
-        setFocusedCellCoord,
-        shouldAddTabstop,
-        announce,
-      });
-
+      resetFocus();
       expect(announce).toHaveBeenCalledWith({
         keys: ['#something,', 'SNTable.SelectionLabel.NotSelectedValue'],
       });
@@ -266,18 +250,9 @@ describe('handle-accessibility', () => {
         getElementsByClassName: () => [row, row],
         querySelector: () => cell,
       };
-      hasSelections = true;
+      isSelectionMode = true;
 
-      handleAccessibility.handleResetFocus({
-        focusedCellCoord,
-        rootElement,
-        shouldRefocus,
-        hasSelections,
-        setFocusedCellCoord,
-        shouldAddTabstop,
-        announce,
-      });
-
+      resetFocus();
       expect(announce).toHaveBeenCalledWith({
         keys: ['#something,', 'SNTable.SelectionLabel.SelectedValue'],
       });

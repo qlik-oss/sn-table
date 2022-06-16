@@ -1,6 +1,6 @@
-import tableThemeColors from '../table-theme-colors';
+import { tableThemeColors } from '../use-extended-theme';
 
-describe('table-theme-colors', () => {
+describe('tableThemeColors', () => {
   let themeObjectBackgroundColor;
   let themeTableBackgroundColor;
   let rootElement;

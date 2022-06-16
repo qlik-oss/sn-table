@@ -14,7 +14,7 @@ describe('<PaginationContent />', () => {
   let handleChangePage;
   let rect;
   let translator;
-  let isInSelectionMode;
+  let isSelectionMode;
   let keyboard;
   let constraints;
   let footerContainer;
@@ -32,7 +32,7 @@ describe('<PaginationContent />', () => {
         translator={translator}
         constraints={constraints}
         footerContainer={footerContainer}
-        isInSelectionMode={isInSelectionMode}
+        isSelectionMode={isSelectionMode}
         rect={rect}
         handleChangePage={handleChangePage}
         announce={announce}
@@ -65,7 +65,7 @@ describe('<PaginationContent />', () => {
     handleChangePage = jest.fn();
     rect = { width: 750 };
     translator = { get: (s) => s };
-    isInSelectionMode = false;
+    isSelectionMode = false;
     keyboard = { enabled: true };
     constraints = {};
     announce = jest.fn();
@@ -188,30 +188,30 @@ describe('<PaginationContent />', () => {
       expect(handleChangePage).toHaveBeenCalledWith(0);
     });
 
-    it('should not call focusSelectionToolbar when pressing tab on last page button and isInSelectionMode is false', () => {
+    it('should not call focusSelectionToolbar when pressing tab on last page button and isSelectionMode is false', () => {
       const { queryByTitle } = renderPagination();
       fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab' });
       expect(handleAccessibility.focusSelectionToolbar).not.toHaveBeenCalled();
     });
 
-    it('should not call focusSelectionToolbar when pressing shift + tab on last page button and isInSelectionMode is true', () => {
-      isInSelectionMode = true;
+    it('should not call focusSelectionToolbar when pressing shift + tab on last page button and isSelectionMode is true', () => {
+      isSelectionMode = true;
 
       const { queryByTitle } = renderPagination();
       fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab', shiftKey: true });
       expect(handleAccessibility.focusSelectionToolbar).not.toHaveBeenCalled();
     });
 
-    it('should call focusSelectionToolbar when pressing tab on last page button and isInSelectionMode is true', () => {
-      isInSelectionMode = true;
+    it('should call focusSelectionToolbar when pressing tab on last page button and isSelectionMode is true', () => {
+      isSelectionMode = true;
 
       const { queryByTitle } = renderPagination();
       fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab' });
       expect(handleAccessibility.focusSelectionToolbar).toHaveBeenCalledTimes(1);
     });
 
-    it('should call focusSelectionToolbar when pressing tab on next page button, isInSelectionMode is true and tableWidth < 350', () => {
-      isInSelectionMode = true;
+    it('should call focusSelectionToolbar when pressing tab on next page button, isSelectionMode is true and tableWidth < 350', () => {
+      isSelectionMode = true;
       rect.width = 300;
 
       const { queryByTitle } = renderPagination();
