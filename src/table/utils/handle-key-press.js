@@ -76,7 +76,15 @@ export const getRowAndColumnCount = (rootElement) => {
   return { rowCount, columnCount };
 };
 
-export const moveFocus = (evt, rootElement, cellCoord, setFocusedCellCoord, announce, isInSelectionMode) => {
+export const moveFocus = (
+  evt,
+  rootElement,
+  cellCoord,
+  setFocusedCellCoord,
+  announce,
+  isInSelectionMode,
+  shouldAnnounce = true
+) => {
   preventDefaultBehavior(evt);
   evt.target.setAttribute('tabIndex', '-1');
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
@@ -86,7 +94,7 @@ export const moveFocus = (evt, rootElement, cellCoord, setFocusedCellCoord, anno
   setFocusedCellCoord(nextCellCoord);
 
   // handle announce
-  if (isInSelectionMode) {
+  if (isInSelectionMode && shouldAnnounce) {
     const hasActiveClassName = nextCell.classList.contains('selected');
     hasActiveClassName
       ? announce({ keys: ['SNTable.SelectionLabel.SelectedValue'] })
@@ -146,9 +154,9 @@ export const bodyHandleKeyPress = ({
     case 'ArrowDown':
       // Shift + up/down arrow keys: select multiple values
       // When at the first/last row of the cell, shift + arrow up/down key, no value is selected
+      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isInSelectionMode, false);
       isMultiValueSelections(evt, cell, isAnalysisMode) &&
         selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
-      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isInSelectionMode);
       break;
     case 'ArrowRight':
     case 'ArrowLeft':

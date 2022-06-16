@@ -115,7 +115,7 @@ const selectCell = (state, payload) => {
   handleAnnounceSelectionStatus({
     announce,
     rowsLength: selectedRowsLength,
-    isAddition: selectedRowsLength > rows.length,
+    isAddition: selectedRowsLength >= Object.keys(rows).length,
   });
 
   if (selectedRowsLength) {
