@@ -40,7 +40,7 @@ function TableHeadWrapper({
               column,
               changeSortOrder,
               layout,
-              isAnalysisMode: !constraints.active,
+              isSortingEnabled: !constraints.active,
               setFocusedCellCoord,
             });
           };

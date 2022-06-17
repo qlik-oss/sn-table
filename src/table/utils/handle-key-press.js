@@ -104,7 +104,7 @@ export const headHandleKeyPress = ({
   column,
   changeSortOrder,
   layout,
-  isAnalysisMode,
+  isSortingEnabled,
   setFocusedCellCoord,
 }) => {
   switch (evt.key) {
@@ -117,7 +117,7 @@ export const headHandleKeyPress = ({
     case ' ':
     case 'Enter':
       preventDefaultBehavior(evt);
-      isAnalysisMode && changeSortOrder(layout, column);
+      isSortingEnabled && changeSortOrder(layout, column);
       break;
     default:
       break;
@@ -130,10 +130,11 @@ export const bodyHandleKeyPress = ({
   cellCoord,
   cell,
   selectionDispatch,
-  isAnalysisMode,
+  isSelectionsEnabled,
   setFocusedCellCoord,
   announce,
   keyboard,
+  paginationNeeded,
   selectionsAPI = null,
 }) => {
   const isSelectionMode = selectionsAPI?.isModal();
@@ -148,27 +149,37 @@ export const bodyHandleKeyPress = ({
     // Space bar: Selects value.
     case ' ':
       preventDefaultBehavior(evt);
-      cell.isSelectable && isAnalysisMode && selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
+      cell.isSelectable &&
+        isSelectionsEnabled &&
+        selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
       break;
     // Enter: Confirms selections.
     case 'Enter':
       preventDefaultBehavior(evt);
-      if (!isSelectionMode) break;
-      selectionsAPI.confirm();
-      announce({ keys: ['SNTable.SelectionLabel.SelectionsConfirmed'] });
+      if (isSelectionMode) {
+        selectionsAPI.confirm();
+        announce({ keys: ['SNTable.SelectionLabel.SelectionsConfirmed'] });
+      }
       break;
     // Esc: Cancels selections. If no selections, do nothing and handleTableWrapperKeyDown should catch it
     case 'Escape':
-      if (!isAnalysisMode || !isSelectionMode) break;
-      preventDefaultBehavior(evt);
-      selectionsAPI.cancel();
-      announce({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
-      break;
-    // Tab: shift + tab, in selection mode and keyboard enabled, focus on selection toolbar
-    case 'Tab':
-      if (evt.shiftKey && keyboard.enabled && isSelectionMode) {
+      if (isSelectionMode) {
         preventDefaultBehavior(evt);
-        focusSelectionToolbar(evt.target, keyboard, true);
+        selectionsAPI.cancel();
+        announce({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
+      }
+      break;
+    // Tab (+ shift): in selection mode and keyboard enabled, focus on selection toolbar
+    case 'Tab':
+      if (keyboard.enabled && isSelectionMode) {
+        if (evt.shiftKey) {
+          preventDefaultBehavior(evt);
+          focusSelectionToolbar(evt.target, keyboard, true);
+        } else if (!paginationNeeded) {
+          // Tab only: when there are no pagination controls, go tab straight to selection toolbar
+          preventDefaultBehavior(evt);
+          focusSelectionToolbar(evt.target, keyboard, false);
+        }
       }
       break;
     default:
@@ -178,7 +189,7 @@ export const bodyHandleKeyPress = ({
 
 export const handleLastTab = (evt, isSelectionMode, keyboard) => {
   if (isSelectionMode && evt.key === 'Tab' && !evt.shiftKey) {
-    // tab key: focus on the confirm button in the selection toolbar
+    // tab key: focus on the selection toolbar
     preventDefaultBehavior(evt);
     focusSelectionToolbar(evt.target, keyboard, false);
   }

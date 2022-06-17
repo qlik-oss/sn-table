@@ -25,10 +25,10 @@ function TableBodyWrapper({
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
   // active: turn off interactions that affect the state of the visual representation including selection, zoom, scroll, etc.
   // select: turn off selections.
-  const selectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
+  const isSelectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
   const columnRenderers = useMemo(
-    () => columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled)),
-    [columns.length, selectionsEnabled]
+    () => columns.map((column) => getCellRenderer(!!column.stylingInfo.length, isSelectionsEnabled)),
+    [columns.length, isSelectionsEnabled]
   );
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
@@ -57,13 +57,14 @@ function TableBodyWrapper({
                 evt,
                 rootElement,
                 cellCoord: [rowIndex + 1, columnIndex],
-                selectionsAPI,
                 cell,
                 selectionDispatch,
-                isAnalysisMode: selectionsEnabled,
+                isSelectionsEnabled,
                 setFocusedCellCoord,
                 announce,
                 keyboard,
+                paginationNeeded,
+                selectionsAPI,
               });
             };
 
