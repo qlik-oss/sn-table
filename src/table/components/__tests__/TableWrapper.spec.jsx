@@ -6,6 +6,7 @@ import TableWrapper from '../TableWrapper';
 import TableBodyWrapper from '../TableBodyWrapper';
 import TableHeadWrapper from '../TableHeadWrapper';
 import * as handleKeyPress from '../../utils/handle-key-press';
+import * as handleScroll from '../../utils/handle-scroll';
 
 describe('<TableWrapper />', () => {
   let tableData;
@@ -110,9 +111,18 @@ describe('<TableWrapper />', () => {
   });
 
   it('should call handleTableWrapperKeyDown when press control key on the table', () => {
+    jest.spyOn(handleKeyPress, 'handleTableWrapperKeyDown').mockImplementation(() => jest.fn());
     const { queryByLabelText } = renderTableWrapper();
 
     fireEvent.keyDown(queryByLabelText('SNTable.Pagination.RowsPerPage:'), { key: 'Control', code: 'ControlLeft' });
     expect(handleKeyPress.handleTableWrapperKeyDown).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call handleHorizontalScroll when scroll on the table', () => {
+    jest.spyOn(handleScroll, 'handleHorizontalScroll').mockImplementation(() => jest.fn());
+    const { queryByTestId } = renderTableWrapper();
+
+    fireEvent.wheel(queryByTestId('table-container'), { deltaX: 100 });
+    expect(handleScroll.handleHorizontalScroll).toHaveBeenCalledTimes(1);
   });
 });

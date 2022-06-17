@@ -13,11 +13,15 @@ export function addSelectionListeners({ api, selectionDispatch, setShouldRefocus
     selectionDispatch({ type: 'clear' });
   };
   const resetSelectionsAndSetupRefocus = () => {
-    // if there is focus in the chart, set shouldRefocus so that you should either focus or just set the tabstop, after data has reloaded.
-    // if there is no focus on the chart, make sure you blur and focus the entire chart
     if (tableWrapperRef.current?.contains(document.activeElement)) {
+      // if there is a focus in the chart,
+      // set shouldRefocus so that you should either
+      // focus or just set the tabstop, after data has reloaded.
       setShouldRefocus();
     } else if (keyboard.enabled) {
+      // if there is no focus on the chart,
+      // make sure you blur the table
+      // and focus the entire chart (table's parent element)
       keyboard.blur(true);
     }
     resetSelections();
@@ -64,10 +68,10 @@ export const handleAnnounceSelectionStatus = ({ announce, rowsLength, isAddition
     const amountStatus =
       rowsLength === 1
         ? 'SNTable.SelectionLabel.OneSelectedValue'
-        : ['SNTable.SelectionLabel.SelectedValues', rowsLength];
+        : ['SNTable.SelectionLabel.SelectedValues', rowsLength.toString()];
     announce({ keys: [changeStatus, amountStatus] });
   } else {
-    announce({ keys: 'SNTable.SelectionLabel.ExitedSelectionMode' });
+    announce({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
   }
 };
 
@@ -110,7 +114,7 @@ const selectCell = (state, payload) => {
   handleAnnounceSelectionStatus({
     announce,
     rowsLength: selectedRowsLength,
-    isAddition: selectedRowsLength > rows.length,
+    isAddition: selectedRowsLength > Object.keys(rows).length,
   });
 
   if (selectedRowsLength) {

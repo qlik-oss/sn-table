@@ -52,14 +52,14 @@ export const handleResetFocus = ({
   focusedCellCoord,
   rootElement,
   shouldRefocus,
-  hasSelections,
+  isSelectionMode,
   setFocusedCellCoord,
   keyboard,
   announce,
 }) => {
   updateFocus({ focusType: 'removeTab', cell: findCellWithTabStop(rootElement) });
   // If you have selections ongoing, you want to stay on the same column
-  const cellCoord = hasSelections ? [1, focusedCellCoord[1]] : [0, 0];
+  const cellCoord = isSelectionMode ? [1, focusedCellCoord[1]] : [0, 0];
   if (!keyboard.enabled || keyboard.active) {
     // Only run this if updates come from inside table
     const focusType = shouldRefocus.current ? 'focus' : 'addTab';
@@ -67,7 +67,7 @@ export const handleResetFocus = ({
     const cell = getCellElement(rootElement, cellCoord);
     updateFocus({ focusType, cell });
 
-    if (hasSelections) {
+    if (isSelectionMode) {
       const hasSelectedClassName = cell?.classList?.contains('selected');
       announce({
         keys: [
@@ -84,6 +84,8 @@ export const handleFocusoutEvent = (evt, shouldRefocus, keyboard) => {
   if (keyboard.enabled && !evt.currentTarget.contains(evt.relatedTarget) && !shouldRefocus.current) {
     evt.currentTarget.querySelector('#sn-table-announcer--01').innerHTML = '';
     evt.currentTarget.querySelector('#sn-table-announcer--02').innerHTML = '';
+    // Blur the table but not focus its parent element
+    // when keyboard.active is false, this has no effect
     keyboard.blur(false);
   }
 };

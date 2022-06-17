@@ -22,12 +22,14 @@ function TableHeadWrapper({
   const { columns, paginationNeeded } = tableData;
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
-  const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name(), theme.table.backgroundColor]);
+  const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
 
   return (
     <TableHead>
       <StyledHeadRow paginationNeeded={paginationNeeded} className="sn-table-row">
         {columns.map((column, columnIndex) => {
+          // The first cell in the head is focusable in sequential keyboard navigation,
+          // when nebula does not handle keyboard navigation
           const tabIndex = columnIndex === 0 && !keyboard.enabled ? 0 : -1;
           const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.dataColIdx;
           const handleKeyDown = (evt) => {

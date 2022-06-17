@@ -32,9 +32,9 @@ const TableBodyWrapper = forwardRef(
     const selectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
     const columnRenderers = useMemo(
       () => columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled)),
-      [columns.length, selectionsEnabled]
+      [columns, selectionsEnabled]
     );
-    const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme.name()]);
+    const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
     const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
     const cellStyle = { color: bodyCellStyle.color, backgroundColor: theme.table.backgroundColor };
 

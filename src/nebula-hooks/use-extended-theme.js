@@ -1,6 +1,7 @@
-import { isDarkColor, isTransparentColor } from './table/utils/color-utils';
+import { useMemo, useTheme } from '@nebula.js/stardust';
+import { isDarkColor, isTransparentColor } from '../table/utils/color-utils';
 
-export default function tableThemeColors(theme, rootElement) {
+export const tableThemeColors = (theme, rootElement) => {
   const qvInnerObject = rootElement?.closest('.qv-object .qv-inner-object');
   const objectBackgroundColorFromCSS = qvInnerObject && window.getComputedStyle(qvInnerObject).backgroundColor;
 
@@ -36,4 +37,16 @@ export default function tableThemeColors(theme, rootElement) {
     body,
     pagination,
   };
-}
+};
+
+const useExtendedTheme = (rootElement) => {
+  const nebulaTheme = useTheme();
+  const theme = useMemo(
+    () => ({ ...nebulaTheme, table: tableThemeColors(nebulaTheme, rootElement) }),
+    [nebulaTheme.name(), rootElement]
+  );
+
+  return theme;
+};
+
+export default useExtendedTheme;

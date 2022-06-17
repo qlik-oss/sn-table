@@ -1,19 +1,21 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useMemo, useRef, useCallback } from 'react';
+import React, { useRef, useCallback } from 'react';
 import Table from '@mui/material/Table';
 
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import FooterWrapper from './FooterWrapper';
-import PaginationContent from './PaginationContent';
-import useDidUpdateEffect from './useDidUpdateEffect';
 import { useContextSelector, TableContext } from '../context';
 import { StyledTableContainer, StyledTableWrapper } from '../styles';
+
+import PaginationContent from './PaginationContent';
+import useDidUpdateEffect from '../hooks/use-did-update-effect';
+import useFocusListener from '../hooks/use-focus-listener';
+import useScrollListener from '../hooks/use-scroll-listener';
+import useKeyDownListener from '../hooks/use-key-down-listener';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
-import { updateFocus, handleResetFocus, handleFocusoutEvent, getCellElement } from '../utils/handle-accessibility';
-import { handleHorizontalScroll, handleNavigateTop } from '../utils/handle-scroll';
-import announcementFactory from '../utils/announcement-factory';
+import { updateFocus, handleResetFocus, getCellElement } from '../utils/handle-accessibility';
 
 export default function TableWrapper(props) {
   const {
@@ -28,16 +30,17 @@ export default function TableWrapper(props) {
     keyboard,
     direction,
     footerContainer,
+    announce,
   } = props;
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
+  const isSelectionMode = selectionsAPI.isModal();
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
   const tableBodyWrapperRef = useRef();
-  const announce = useMemo(() => announcementFactory(rootElement, translator), [translator.language]);
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
@@ -46,7 +49,10 @@ export default function TableWrapper(props) {
   const handleChangePage = useCallback(
     (pageIdx) => {
       setPageInfo({ ...pageInfo, page: pageIdx });
-      announce({ keys: [['SNTable.Pagination.PageStatusReport', [pageIdx + 1, totalPages]]], politeness: 'assertive' });
+      announce({
+        keys: [['SNTable.Pagination.PageStatusReport', (pageIdx + 1).toString(), totalPages.toString()]],
+        politeness: 'assertive',
+      });
     },
     [pageInfo, setPageInfo, totalPages, announce]
   );
@@ -60,50 +66,19 @@ export default function TableWrapper(props) {
       handleChangePage,
       setShouldRefocus,
       keyboard,
-      isSelectionActive: selectionsAPI.isModal(),
+      isSelectionMode,
     });
   };
 
-  useEffect(() => {
-    const memoedWrapper = tableWrapperRef.current;
-    if (!memoedWrapper) return () => {};
-
-    const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard);
-    memoedWrapper.addEventListener('focusout', focusOutCallback);
-
-    return () => {
-      memoedWrapper.removeEventListener('focusout', focusOutCallback);
-    };
-  }, [keyboard]);
-
-  useEffect(() => {
-    const memoedContainer = tableContainerRef.current;
-    if (!memoedContainer) return () => {};
-
-    const horizontalScrollCallback = (evt) => handleHorizontalScroll(evt, direction === 'rtl', memoedContainer);
-    memoedContainer.addEventListener('wheel', horizontalScrollCallback);
-
-    return () => {
-      memoedContainer.removeEventListener('wheel', horizontalScrollCallback);
-    };
-  }, [direction]);
-
-  useEffect(() => {
-    const memoedContainer = tableBodyWrapperRef.current;
-    if (!memoedContainer) return () => {};
-
-    const keyDownHandler = (evt) =>
-      evt.key === 'ArrowUp' && handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement });
-    memoedContainer.addEventListener('keydown', keyDownHandler);
-
-    return () => {
-      memoedContainer.removeEventListener('keydown', keyDownHandler);
-    };
-  }, [focusedCellCoord, rootElement]);
+  useFocusListener(tableWrapperRef, shouldRefocus, keyboard);
+  useScrollListener(tableContainerRef, direction);
+  useKeyDownListener(tableBodyWrapperRef, tableContainerRef, focusedCellCoord, rootElement);
 
   useDidUpdateEffect(() => {
-    if (!keyboard.enabled) return;
-
+    // When nebula handles keyboard navigation and keyboard.active changes,
+    // make sure to blur or focus the cell corresponding to focusedCellCoord
+    // when keyboard.focus() runs, keyboard.active is true
+    // when keyboard.blur() runs, keyboard.active is false
     updateFocus({ focusType: keyboard.active ? 'focus' : 'blur', cell: getCellElement(rootElement, focusedCellCoord) });
   }, [keyboard.active]);
 
@@ -115,7 +90,7 @@ export default function TableWrapper(props) {
       rootElement,
       shouldRefocus,
       setFocusedCellCoord,
-      hasSelections: selectionsAPI.isModal(),
+      isSelectionMode,
       keyboard,
       announce,
     });
@@ -157,7 +132,7 @@ export default function TableWrapper(props) {
       </StyledTableContainer>
       {!constraints.active && (
         <FooterWrapper theme={theme} footerContainer={footerContainer}>
-          <PaginationContent {...props} handleChangePage={handleChangePage} announce={announce} />
+          <PaginationContent {...props} handleChangePage={handleChangePage} isSelectionMode={selectionsAPI.isModal()} />
         </FooterWrapper>
       )}
     </StyledTableWrapper>
@@ -165,7 +140,6 @@ export default function TableWrapper(props) {
 }
 
 TableWrapper.defaultProps = {
-  announcer: null,
   direction: null,
   footerContainer: null,
 };
@@ -180,7 +154,7 @@ TableWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
+  announce: PropTypes.func.isRequired,
   footerContainer: PropTypes.object,
   direction: PropTypes.string,
-  announcer: PropTypes.func,
 };
