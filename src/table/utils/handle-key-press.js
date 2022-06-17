@@ -132,13 +132,6 @@ export const headHandleKeyPress = ({
   }
 };
 
-const isMultiValueSelections = (evt, cell, isAnalysisMode) =>
-  evt.shiftKey &&
-  cell.isSelectable &&
-  isAnalysisMode &&
-  ((cell.prevQElemNumber !== undefined && evt.key === 'ArrowUp') ||
-    (cell.nextQElemNumber !== undefined && evt.key === 'ArrowDown'));
-
 export const bodyHandleKeyPress = ({
   evt,
   rootElement,
@@ -155,21 +148,23 @@ export const bodyHandleKeyPress = ({
 
   switch (evt.key) {
     case 'ArrowUp':
-    case 'ArrowDown':
+    case 'ArrowDown': {
+      const isSelectMultiValues =
+        evt.shiftKey &&
+        cell.isSelectable &&
+        isAnalysisMode &&
+        ((cell.prevQElemNumber !== undefined && evt.key === 'ArrowUp') ||
+          (cell.nextQElemNumber !== undefined && evt.key === 'ArrowDown'));
       // Shift + up/down arrow keys: select multiple values
       // When at the first/last row of the cell, shift + arrow up/down key, no value is selected
-      moveFocus(
-        evt,
-        rootElement,
-        cellCoord,
-        setFocusedCellCoord,
-        announce,
-        isSelectionMode,
-        !isMultiValueSelections(evt, cell, isAnalysisMode)
-      );
-      isMultiValueSelections(evt, cell, isAnalysisMode) &&
-        selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
+      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isSelectionMode, !isSelectMultiValues);
+      isSelectMultiValues &&
+        selectionDispatch({
+          type: 'select',
+          payload: { cell, evt, announce },
+        });
       break;
+    }
     case 'ArrowRight':
     case 'ArrowLeft':
       !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isSelectionMode);
@@ -205,10 +200,9 @@ export const bodyHandleKeyPress = ({
   }
 };
 
-// export const bodyHandleKeyUp = ({ evt }) => {
-//   if (evt.shiftKey) {
-//   }
-// };
+export const bodyHandleKeyUp = (evt, selectionDispatch) => {
+  evt.key === 'Shift' && selectionDispatch({ type: 'selectMultiValues' });
+};
 
 export const handleLastTab = (evt, isSelectionMode, keyboard) => {
   if (isSelectionMode && evt.key === 'Tab' && !evt.shiftKey) {

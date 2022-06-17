@@ -104,15 +104,12 @@ export const getSelectedRows = ({ selectedRows, cell, evt }) => {
 const selectCell = (state, payload) => {
   const { api, rows, colIdx } = state;
   const { cell, announce, evt } = payload;
+  const isSelectMultiValues = evt.shiftKey && evt.key.includes('Arrow');
   let selectedRows = {};
 
-  if (colIdx === -1) {
-    api.begin('/qHyperCubeDef');
-  } else if (colIdx === cell.colIdx) {
-    selectedRows = { ...rows };
-  } else {
-    return state;
-  }
+  if (colIdx === -1) api.begin('/qHyperCubeDef');
+  else if (colIdx === cell.colIdx) selectedRows = { ...rows };
+  else return state;
 
   selectedRows = getSelectedRows({ selectedRows, cell, evt });
   const selectedRowsLength = Object.keys(selectedRows).length;
@@ -123,21 +120,36 @@ const selectCell = (state, payload) => {
   });
 
   if (selectedRowsLength) {
-    api.select({
-      method: 'selectHyperCubeCells',
-      params: ['/qHyperCubeDef', Object.values(selectedRows), [cell.colIdx]],
-    });
-    return { ...state, rows: selectedRows, colIdx: cell.colIdx };
+    !isSelectMultiValues &&
+      api.select({
+        method: 'selectHyperCubeCells',
+        params: ['/qHyperCubeDef', Object.values(selectedRows), [cell.colIdx]],
+      });
+    return { ...state, rows: selectedRows, colIdx: cell.colIdx, isSelectMultiValues };
   }
 
   api.cancel();
-  return { ...state, rows: selectedRows, colIdx: -1 };
+  return { ...state, rows: selectedRows, colIdx: -1, isSelectMultiValues };
+};
+
+const selectMultiValues = (state) => {
+  const { api, rows, colIdx, isSelectMultiValues } = state;
+
+  isSelectMultiValues &&
+    api.select({
+      method: 'selectHyperCubeCells',
+      params: ['/qHyperCubeDef', Object.values(rows), [colIdx]],
+    });
+
+  return { ...state, isSelectMultiValues: false };
 };
 
 export const reducer = (state, action) => {
   switch (action.type) {
     case 'select':
       return selectCell(state, action.payload);
+    case 'selectMultiValues':
+      return selectMultiValues(state);
     case 'reset':
       return state.api.isModal() ? state : { ...state, rows: {}, colIdx: -1 };
     case 'clear':
