@@ -40,12 +40,17 @@ const renderWithCarbon = ({ env, rootElement, model, theme, selectionsAPI, app, 
 
 export default function supernova(env) {
   return {
+    // Define the properties of the Generic Object
+    // and the shape of the data you expect to consume.
+    // The properties and data are handled by
+    // Qlik's Associative Engine (QAE).
     qae: {
-      properties: {
-        initial: properties,
-      },
-      data: data(env),
+      properties: { initial: properties },
+      data: data(),
     },
+    // Define the extension definition.
+    ext: ext(env),
+    // Render the visual part.
     component() {
       const rootElement = useElement();
       const reactRoot = useReactRoot(rootElement);
@@ -68,7 +73,7 @@ export default function supernova(env) {
       }, [layout, pageInfo]);
 
       useEffect(() => {
-        if (!env.carbon && layout && tableData && announce && changeSortOrder && theme) {
+        if (!env.carbon && reactRoot && layout && tableData && announce && changeSortOrder && theme) {
           render(reactRoot, {
             rootElement,
             layout,
@@ -112,7 +117,5 @@ export default function supernova(env) {
         [reactRoot]
       );
     },
-    // Extension definition
-    ext: ext(env),
   };
 }
