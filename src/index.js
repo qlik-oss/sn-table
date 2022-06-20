@@ -67,6 +67,8 @@ export default function supernova(env) {
         return env.carbon ? nothing() : manageData(model, layout, pageInfo, setPageInfo);
       }, [layout, pageInfo]);
 
+      const isSelectionMode = !!selectionsAPI?.isModal();
+
       useEffect(() => {
         if (!env.carbon && layout && tableData && announce && changeSortOrder && theme) {
           render(reactRoot, {
@@ -92,7 +94,7 @@ export default function supernova(env) {
       // this is the one we want to use for carbon
       useEffect(() => {
         renderWithCarbon({ env, rootElement, model, theme, selectionsAPI, app, rect, layout });
-      }, [layout, model, theme, translator.language(), app, changeSortOrder]);
+      }, [layout, model, isSelectionMode, theme, translator.language(), app, changeSortOrder]);
 
       useEffect(
         () => () => {
