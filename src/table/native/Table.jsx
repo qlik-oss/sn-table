@@ -92,7 +92,7 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
   };
 
   return tableData ? (
-    <View style={styles.body}>
+    <View style={[styles.body, { marginTop: layout?.showTitles ? 40 : 0 }]}>
       <ReactNativeStraightTableViewManager
         theme={tableTheme.current}
         cols={{ header: tableData.columns, footer: layout?.totals.show ? layout.qHyperCube.qGrandTotalRow : undefined }}

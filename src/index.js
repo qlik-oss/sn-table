@@ -102,7 +102,7 @@ export default function supernova(env) {
 
       // this is the one we want to use for carbon
       useEffect(() => {
-        renderWithCarbon({ env, rootElement, model, theme, selectionsAPI, app, rect, layout });
+        renderWithCarbon({ env, rootElement, model, theme, selectionsAPI, app, rect, layout, changeSortOrder });
       }, [layout, model, selectionsAPI.isModal(), theme, translator.language(), app, changeSortOrder]);
 
       useEffect(
