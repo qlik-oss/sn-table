@@ -87,23 +87,12 @@ export default function supernova(env) {
             announce,
           });
         }
-      }, [
-        reactRoot,
-        tableData,
-        constraints,
-        direction,
-        selectionsAPI.isModal(),
-        theme,
-        keyboard.active,
-        rect.width,
-        announce,
-        changeSortOrder,
-      ]);
+      }, [reactRoot, tableData, constraints, direction, theme, keyboard.active, rect.width, announce, changeSortOrder]);
 
       // this is the one we want to use for carbon
       useEffect(() => {
         renderWithCarbon({ env, rootElement, model, theme, selectionsAPI, app, rect, layout });
-      }, [layout, model, selectionsAPI.isModal(), theme, translator.language(), app, changeSortOrder]);
+      }, [layout, model, theme, translator.language(), app, changeSortOrder]);
 
       useEffect(
         () => () => {
