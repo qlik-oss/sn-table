@@ -30,44 +30,35 @@ const Stack = createNativeStackNavigator();
 
 const App = () => {
   const openedApp = useAtomValue(loadableOpenAppAtom);
-
-  const handleClear = useCallback(() => {
-    if (openedApp.data.app) {
-      openedApp.data.app.clearAll();
-    }
-  }, [openedApp]);
-
   const supernovaState = useAtomValue(supernovaStateAtom);
   const resetSupernovaState = useResetAtom(supernovaStateAtom);
   const resetTooltipState = useResetAtom(supernovaToolTipStateAtom);
 
-  const onConfirm = () => {
-    if (supernovaState) {
-      supernovaState.confirmSelection();
+  const handleClear = () => {
+    if (openedApp.data.app) {
+      openedApp.data.app.clearAll();
     }
+  };
+
+  const onConfirm = () => {
+    supernovaState?.confirmSelection?.();
     resetSupernovaState();
     resetTooltipState();
   };
 
   const onCancel = () => {
-    if (supernovaState) {
-      supernovaState.cancelSelection();
-    }
+    supernovaState?.cancelSelection?.();
     resetSupernovaState();
     resetTooltipState();
   };
 
   const onClearSelections = () => {
-    if (supernovaState) {
-      supernovaState.clear();
-    }
+    supernovaState?.clear?.();
     resetTooltipState();
   };
 
   const handleToggledLasso = val => {
-    if (supernovaState) {
-      supernovaState.toggleLasso(val);
-    }
+    supernovaState?.toggleLasso?.(val);
   };
 
   return (
