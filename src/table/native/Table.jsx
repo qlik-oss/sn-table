@@ -58,9 +58,7 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
   const onHeaderPressed = async (event) => {
     try {
       const column = JSON.parse(event.nativeEvent.column);
-      if (column) {
-        changeSortOrder(layout, column, true);
-      }
+      changeSortOrder(layout, column, true);
     } catch (error) {
       console.log('error with sorting', error);
     }
@@ -77,9 +75,7 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
 
   const onEndReached = async () => {
     const data = await dataStreamCaches.current.next();
-    if (data) {
-      setTableData(data);
-    }
+    setTableData(data);
   };
 
   const onSelectionsChanged = (event) => {
