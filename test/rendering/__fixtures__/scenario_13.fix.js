@@ -10,10 +10,7 @@ export default () => ({
         qMeta: {
           privileges: ['read', 'update', 'delete', 'exportdata'],
         },
-        qSelectionInfo: {
-          qInSelections: false,
-          qMadeSelections: false,
-        },
+        qSelectionInfo: {},
         qHyperCube: {
           qSize: {
             qcx: 2,
@@ -118,9 +115,9 @@ export default () => ({
           columnWidths: [-1, -1],
         },
         showTitles: true,
-        title: '',
-        subtitle: '',
-        footnote: '',
+        title: 'Test',
+        subtitle: 'Test',
+        footnote: 'Test',
         disableNavMenu: false,
         showDetails: false,
         showDetailsExpression: false,
@@ -128,33 +125,33 @@ export default () => ({
           {
             key: 'theme',
             content: {
-              fontSize: 22,
+              fontSize: 28,
               fontColor: {
-                index: 13,
-                color: '#138185',
+                index: -1,
+                color: '#65d3da',
               },
-              hoverEffect: true,
+              hoverEffect: false,
               hoverColor: {
-                index: 2,
-                color: '#7b7a78',
+                index: -1,
+                color: null,
               },
               hoverFontColor: {
-                index: 11,
-                color: '#79d69f',
+                index: -1,
+                color: null,
               },
             },
             header: {
-              fontSize: null,
+              fontSize: 40,
               fontColor: {
-                index: -1,
-                color: null,
+                index: 9,
+                color: '#70ba6e',
               },
             },
           },
         ],
         totals: {
-          show: true,
-          position: 'noTotals',
+          show: false,
+          position: 'bottom',
           label: 'Totals',
         },
         visualization: 'sn-table',

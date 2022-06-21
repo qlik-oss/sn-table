@@ -1,6 +1,5 @@
 import { resolveToRGBAorRGB, isDarkColor, removeOpacity } from './color-utils';
 import { SelectionStates } from './selections-utils';
-
 // the order of style
 // default (inl. sprout theme) < Sense theme < styling settings
 // < column < selection (except the selected green) < hover < selected green

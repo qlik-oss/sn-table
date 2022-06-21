@@ -36,6 +36,10 @@ Make sure to commit these after you've **confirmed the screenshot changes**.
 
 Sometimes tests might break, if you are certain no UI changes have been made just re-run the failed workflow.
 
+    docker stop sn-table-playwright
+
+may need to stop the container first.
+
 ## Test cases description
 
 scenario_1.fix.js:
@@ -80,12 +84,24 @@ the hover font color and background color
 scenario_10.fix.js:
 one dimension,
 one measure,
-the hover font color and background color
+the hover font color and background color,
 font size and color for header and body
 
 scenario_11.fix.js:
 one dimension,
 one measure,
-the hover font color and background color
-font size and color for header and body
+the hover font color and background color,
+font size and color for header and body,
 Background and font coloring for a column
+
+scenario_12.fix.js:
+one dimension,
+one measure,
+font size and color for header and body
+scroll to the bottom of the table
+
+scenario_13.fix.js:
+one dimension,
+one measure,
+font size and color for header and body,
+show totals at the bottom

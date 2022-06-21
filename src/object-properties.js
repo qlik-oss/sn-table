@@ -56,6 +56,15 @@ const properties = {
    */
   footnote: '',
   /**
+   * totals settings
+   * @type {object}
+   */
+  totals: {
+    show: true,
+    position: 'noTotals',
+    label: 'Totals',
+  },
+  /**
    * Holds general styling
    * @type {Styling[]}
    */

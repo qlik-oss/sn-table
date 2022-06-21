@@ -1,4 +1,14 @@
-import { styled, Paper, TableContainer, TableRow, TableSortLabel, TableBody, Select, IconButton } from '@mui/material';
+import {
+  styled,
+  Paper,
+  TableContainer,
+  TableRow,
+  TableSortLabel,
+  TableBody,
+  Select,
+  IconButton,
+  TableCell,
+} from '@mui/material';
 
 // ---------- AnnounceWrapper ----------
 
@@ -112,6 +122,19 @@ export const VisuallyHidden = styled('span')({
   top: 20,
   width: 1,
 });
+
+// ---------- TableTotals ----------
+
+export const TotalsCell = styled(TableCell, {
+  shouldForwardProp: (prop) => prop !== 'headerStyle' && prop !== 'isTop',
+})(({ headerStyle, isTop }) => ({
+  ...headerStyle,
+  fontWeight: 'bold',
+  position: 'sticky',
+  borderWidth: isTop ? '0px 1px 2px 0px' : '2px 1px 1px 0px',
+  top: isTop && 35,
+  bottom: !isTop && 0,
+}));
 
 // ---------- TableWrapper ----------
 

@@ -4,6 +4,7 @@ import {
   headHandleKeyPress,
   bodyHandleKeyPress,
   handleLastTab,
+  totalHandleKeyPress,
 } from '../handle-key-press';
 
 import * as handleAccessibility from '../handle-accessibility';
@@ -384,6 +385,56 @@ describe('handle-key-press', () => {
       expect(evt.preventDefault).not.toHaveBeenCalled();
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(changeSortOrder).not.toHaveBeenCalled();
+      expect(setFocusedCellCoord).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('totalHandleKeyPress', () => {
+    let evt = {};
+    let rootElement = {};
+    let setFocusedCellCoord;
+    let cellCoord;
+
+    beforeEach(() => {
+      evt = {
+        key: 'ArrowDown',
+        stopPropagation: jest.fn(),
+        preventDefault: jest.fn(),
+        target: {
+          blur: jest.fn(),
+          setAttribute: jest.fn(),
+        },
+      };
+      cellCoord = [1, 1];
+      rootElement = {
+        getElementsByClassName: () => [{ getElementsByClassName: () => [{ focus: () => {}, setAttribute: () => {} }] }],
+      };
+      setFocusedCellCoord = jest.fn();
+    });
+
+    it('should move the focus from the current cell to the next when arrow key down is pressed on a total cell', () => {
+      totalHandleKeyPress(evt, rootElement, cellCoord, setFocusedCellCoord);
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
+      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not move the focus to the next cell when press ArrowRight and shift and ctrl key', () => {
+      evt.key = 'ArrowRight';
+      evt.shiftKey = true;
+      evt.ctrlKey = true;
+      totalHandleKeyPress(evt, rootElement, cellCoord, setFocusedCellCoord);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
+      expect(evt.stopPropagation).not.toHaveBeenCalled();
+      expect(setFocusedCellCoord).not.toHaveBeenCalled();
+    });
+
+    it('should take the default case when the pressed key is not an arrow key', () => {
+      evt.key = 'Enter';
+      totalHandleKeyPress(evt, rootElement, cellCoord, setFocusedCellCoord);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
+      expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
     });
   });

@@ -44,8 +44,7 @@ describe('<TableBodyWrapper />', () => {
 
   beforeEach(async () => {
     jest.spyOn(selectionsUtils, 'addSelectionListeners').mockImplementation(() => jest.fn());
-
-    tableData = await manageData(model, generateLayout(1, 1, 2), { top: 0, height: 100 });
+    tableData = await manageData(model, generateLayout(1, 1, 2, [], [{ qText: '100' }]), { top: 0, height: 100 });
     constraints = {};
     selectionsAPI = {
       isModal: () => true,
