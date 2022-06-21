@@ -94,4 +94,13 @@ describe('<TableBodyWrapper />', () => {
 
     expect(handleAccessibility.handleClickToFocusBody).toHaveBeenCalledTimes(1);
   });
+
+  it('should call bodyHandleKeyUp on key up', () => {
+    jest.spyOn(handleKeyPress, 'bodyHandleKeyUp').mockImplementation(() => jest.fn());
+
+    const { queryByText } = renderTableBody();
+    fireEvent.keyUp(queryByText(tableData.rows[0]['col-0'].qText));
+
+    expect(handleKeyPress.bodyHandleKeyUp).toHaveBeenCalledTimes(1);
+  });
 });
