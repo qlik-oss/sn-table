@@ -5,7 +5,7 @@ import { useContextSelector, TableContext } from '../context';
 import { StyledTableBody, StyledBodyRow } from '../styles';
 import { addSelectionListeners } from '../utils/selections-utils';
 import { getBodyCellStyle } from '../utils/styling-utils';
-import { bodyHandleKeyPress } from '../utils/handle-key-press';
+import { bodyHandleKeyPress, bodyHandleKeyUp } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
 
 const TableBodyWrapper = forwardRef(
@@ -24,7 +24,7 @@ const TableBodyWrapper = forwardRef(
     },
     ref
   ) => {
-    const { rows, columns, paginationNeeded } = tableData;
+    const { rows, columns, paginationNeeded, totalsPosition } = tableData;
     const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
     const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
     // active: turn off interactions that affect the state of the visual representation including selection, zoom, scroll, etc.
@@ -60,7 +60,7 @@ const TableBodyWrapper = forwardRef(
                 bodyHandleKeyPress({
                   evt,
                   rootElement,
-                  cellCoord: [rowIndex + 1, columnIndex],
+                  cellCoord: totalsPosition === 'top' ? [rowIndex + 2, columnIndex] : [rowIndex + 1, columnIndex],
                   selectionsAPI,
                   cell,
                   selectionDispatch,
@@ -84,6 +84,7 @@ const TableBodyWrapper = forwardRef(
                     tabIndex={-1}
                     announce={announce}
                     onKeyDown={handleKeyDown}
+                    onKeyUp={(evt) => bodyHandleKeyUp(evt, selectionDispatch)}
                     onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
                   >
                     {cell.qText}

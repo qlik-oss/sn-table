@@ -2,9 +2,11 @@ import PropTypes from 'prop-types';
 import React, { useRef, useCallback } from 'react';
 import Table from '@mui/material/Table';
 
+import TableFooter from '@mui/material/TableFooter';
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
+import TableTotals from './TableTotals';
 import FooterWrapper from './FooterWrapper';
 import { useContextSelector, TableContext } from '../context';
 import { StyledTableContainer, StyledTableWrapper } from '../styles';
@@ -32,7 +34,7 @@ export default function TableWrapper(props) {
     footerContainer,
     announce,
   } = props;
-  const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns } = tableData;
+  const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } = tableData;
   const { page, rowsPerPage } = pageInfo;
   const isSelectionMode = selectionsAPI.isModal();
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
@@ -103,10 +105,10 @@ export default function TableWrapper(props) {
 
   return (
     <StyledTableWrapper
+      ref={tableWrapperRef}
       tableTheme={theme.table}
       paginationNeeded={paginationNeeded}
       dir={direction}
-      ref={tableWrapperRef}
       onKeyDown={handleKeyDown}
     >
       <AnnounceElements />
@@ -119,15 +121,20 @@ export default function TableWrapper(props) {
         data-testid="table-container"
       >
         <Table stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper {...props} />
+          <TableHeadWrapper {...props}>
+            {totalsPosition === 'top' ? <TableTotals {...props} /> : undefined}
+          </TableHeadWrapper>
           <TableBodyWrapper
             {...props}
             ref={tableBodyWrapperRef}
-            announce={announce}
             setShouldRefocus={setShouldRefocus}
             tableWrapperRef={tableWrapperRef}
-            tableContainerRef={tableContainerRef}
           />
+          {totalsPosition === 'bottom' && (
+            <TableFooter>
+              <TableTotals {...props} />
+            </TableFooter>
+          )}
         </Table>
       </StyledTableContainer>
       {!constraints.active && (

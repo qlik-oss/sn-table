@@ -93,6 +93,11 @@ export default () => ({
         showDetails: false,
         showDetailsExpression: false,
         components: [],
+        totals: {
+          show: true,
+          position: 'top',
+          label: 'Totals',
+        },
         visualization: 'sn-table',
         version: '1.7.0',
         extensionMeta: {
