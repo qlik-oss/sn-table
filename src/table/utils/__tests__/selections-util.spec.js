@@ -116,12 +116,15 @@ describe('selections-utils', () => {
           select: jest.fn(),
           cancel: jest.fn(),
         },
+        isSelectMultiValues: false,
       };
       cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1 };
       action = {
         type: 'select',
         payload: {
-          evt: {},
+          evt: {
+            shiftKey: false,
+          },
           announce: jest.fn(),
           cell,
         },
@@ -140,6 +143,29 @@ describe('selections-utils', () => {
       expect(state.api.cancel).not.toHaveBeenCalled();
       expect(action.payload.announce).toHaveBeenCalledTimes(1);
     });
+
+    it('should call begin and announce but not select when type is select and isSelectMultiValues is true', () => {
+      state.rows = {};
+      state.colIdx = -1;
+      action.payload.evt.shiftKey = true;
+      action.payload.evt.key = {
+        includes: () => true,
+      };
+      cell.prevQElemNumber = 2;
+
+      const newState = reducer(state, action);
+      expect(newState).toEqual({
+        ...state,
+        rows: { [cell.qElemNumber]: cell.rowIdx, [cell.prevQElemNumber]: cell.rowIdx - 1 },
+        colIdx: cell.colIdx,
+        isSelectMultiValues: true,
+      });
+      expect(state.api.begin).toHaveBeenCalledTimes(1);
+      expect(state.api.select).not.toHaveBeenCalled();
+      expect(state.api.cancel).not.toHaveBeenCalled();
+      expect(action.payload.announce).toHaveBeenCalledTimes(1);
+    });
+
     it('should not call begin but call cancel and announce when same qElemNumber (resulting in empty selectedCells)', () => {
       const newState = reducer(state, action);
       expect(newState).toEqual({ ...state, rows: {}, colIdx: -1 });
@@ -148,6 +174,7 @@ describe('selections-utils', () => {
       expect(state.api.cancel).toHaveBeenCalledWith();
       expect(action.payload.announce).toHaveBeenCalledTimes(1);
     });
+
     it('should return early when excluded columns', () => {
       cell.colIdx = 2;
 
@@ -158,6 +185,25 @@ describe('selections-utils', () => {
       expect(state.api.cancel).not.toHaveBeenCalled();
       expect(state.api.select).not.toHaveBeenCalled();
       expect(action.payload.announce).not.toHaveBeenCalled();
+    });
+
+    it('should call select when type is selectMultiValues, isSelectMultiValues is true and return isSelectMultiValues to be false', () => {
+      action.type = 'selectMultiValues';
+      state.isSelectMultiValues = true;
+      const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
+
+      const newState = reducer(state, action);
+      expect(newState).toEqual({ ...state, isSelectMultiValues: false });
+      expect(state.api.select).toHaveBeenCalledWith({ method: 'selectHyperCubeCells', params });
+    });
+
+    it('should not call select when type is selectMultiValues but isSelectMultiValues is false', () => {
+      action.type = 'selectMultiValues';
+      state.isSelectMultiValues = false;
+
+      const newState = reducer(state, action);
+      expect(newState).toEqual({ ...state, isSelectMultiValues: false });
+      expect(state.api.select).not.toHaveBeenCalled();
     });
 
     it('should return state updated when the app is not in selection modal state when action.type is reset', () => {
@@ -292,6 +338,15 @@ describe('selections-utils', () => {
     it('should return array with selected item added if it was not in selectedRows before', () => {
       const updatedSelectedRows = getSelectedRows({ selectedRows, cell, evt });
       expect(updatedSelectedRows).toEqual({ 1: 1, [cell.qElemNumber]: cell.rowIdx });
+    });
+
+    it('should add the current cell and the next cell to selectedRows when press shift and arrow down key', () => {
+      evt.shiftKey = true;
+      evt.key = 'ArrowDown';
+      cell.nextQElemNumber = 2;
+
+      const updatedSelectedRows = getSelectedRows({ selectedRows, cell, evt });
+      expect(updatedSelectedRows).toEqual({ 1: 1, [cell.qElemNumber]: cell.rowIdx, [cell.nextQElemNumber]: 1 });
     });
   });
 

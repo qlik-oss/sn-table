@@ -62,7 +62,7 @@ function TableHeadWrapper({
               <StyledSortLabel
                 headerStyle={headerStyle}
                 active={isCurrentColumnActive}
-                title={!constraints.passive && column.sortDirection} // passive: turn off tooltips.
+                title={!constraints.passive ? column.sortDirection : undefined} // passive: turn off tooltips.
                 direction={column.sortDirection}
                 tabIndex={-1}
                 onMouseDown={(evt) => handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex)}

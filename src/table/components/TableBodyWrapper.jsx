@@ -5,7 +5,7 @@ import { useContextSelector, TableContext } from '../context';
 import { StyledTableBody, StyledBodyRow } from '../styles';
 import { addSelectionListeners } from '../utils/selections-utils';
 import { getBodyCellStyle } from '../utils/styling-utils';
-import { bodyHandleKeyPress } from '../utils/handle-key-press';
+import { bodyHandleKeyPress, bodyHandleKeyUp } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
 
 function TableBodyWrapper({
@@ -80,6 +80,7 @@ function TableBodyWrapper({
                   tabIndex={-1}
                   announce={announce}
                   onKeyDown={handleKeyDown}
+                  onKeyUp={(evt) => bodyHandleKeyUp(evt, selectionDispatch)}
                   onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
                 >
                   {cell.qText}

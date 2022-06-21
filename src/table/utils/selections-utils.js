@@ -85,7 +85,12 @@ export const getSelectedRows = ({ selectedRows, cell, evt }) => {
     return { [qElemNumber]: rowIdx };
   }
 
-  if (selectedRows[qElemNumber] !== undefined) {
+  if (evt.shiftKey && evt.key.includes('Arrow')) {
+    selectedRows[qElemNumber] = rowIdx;
+    // add the next or previous cell to selectedRows, based on which arrow is pressed
+    selectedRows[evt.key === 'ArrowDown' ? cell.nextQElemNumber : cell.prevQElemNumber] =
+      evt.key === 'ArrowDown' ? rowIdx + 1 : rowIdx - 1;
+  } else if (selectedRows[qElemNumber] !== undefined) {
     // if the selected item is clicked again, that item will be removed
     delete selectedRows[qElemNumber];
   } else {
@@ -99,40 +104,52 @@ export const getSelectedRows = ({ selectedRows, cell, evt }) => {
 const selectCell = (state, payload) => {
   const { api, rows, colIdx } = state;
   const { cell, announce, evt } = payload;
+  const isSelectMultiValues = evt.shiftKey && evt.key.includes('Arrow');
   let selectedRows = {};
 
-  if (colIdx === -1) {
-    api.begin('/qHyperCubeDef');
-  } else if (colIdx === cell.colIdx) {
-    selectedRows = { ...rows };
-  } else {
-    return state;
-  }
+  if (colIdx === -1) api.begin('/qHyperCubeDef');
+  else if (colIdx === cell.colIdx) selectedRows = { ...rows };
+  else return state;
 
   selectedRows = getSelectedRows({ selectedRows, cell, evt });
   const selectedRowsLength = Object.keys(selectedRows).length;
   handleAnnounceSelectionStatus({
     announce,
     rowsLength: selectedRowsLength,
-    isAddition: selectedRowsLength > Object.keys(rows).length,
+    isAddition: selectedRowsLength >= Object.keys(rows).length,
   });
 
   if (selectedRowsLength) {
-    api.select({
-      method: 'selectHyperCubeCells',
-      params: ['/qHyperCubeDef', Object.values(selectedRows), [cell.colIdx]],
-    });
-    return { ...state, rows: selectedRows, colIdx: cell.colIdx };
+    !isSelectMultiValues &&
+      api.select({
+        method: 'selectHyperCubeCells',
+        params: ['/qHyperCubeDef', Object.values(selectedRows), [cell.colIdx]],
+      });
+    return { ...state, rows: selectedRows, colIdx: cell.colIdx, isSelectMultiValues };
   }
 
   api.cancel();
-  return { ...state, rows: selectedRows, colIdx: -1 };
+  return { ...state, rows: selectedRows, colIdx: -1, isSelectMultiValues };
+};
+
+const selectMultiValues = (state) => {
+  const { api, rows, colIdx, isSelectMultiValues } = state;
+
+  isSelectMultiValues &&
+    api.select({
+      method: 'selectHyperCubeCells',
+      params: ['/qHyperCubeDef', Object.values(rows), [colIdx]],
+    });
+
+  return { ...state, isSelectMultiValues: false };
 };
 
 export const reducer = (state, action) => {
   switch (action.type) {
     case 'select':
       return selectCell(state, action.payload);
+    case 'selectMultiValues':
+      return selectMultiValues(state);
     case 'reset':
       return state.api.isModal() ? state : { ...state, rows: {}, colIdx: -1 };
     case 'clear':

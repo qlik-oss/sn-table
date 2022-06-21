@@ -79,7 +79,15 @@ export const getRowAndColumnCount = (rootElement) => {
   return { rowCount, columnCount };
 };
 
-export const moveFocus = (evt, rootElement, cellCoord, setFocusedCellCoord, announce, isSelectionMode) => {
+export const moveFocus = (
+  evt,
+  rootElement,
+  cellCoord,
+  setFocusedCellCoord,
+  announce,
+  isSelectionMode,
+  shouldAnnounce = true
+) => {
   preventDefaultBehavior(evt);
   evt.target.setAttribute('tabIndex', '-1');
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
@@ -88,8 +96,8 @@ export const moveFocus = (evt, rootElement, cellCoord, setFocusedCellCoord, anno
   updateFocus({ focusType: 'focus', cell: nextCell });
   setFocusedCellCoord(nextCellCoord);
 
-  // handle announce
-  if (isSelectionMode) {
+  // handle announcement
+  if (isSelectionMode && shouldAnnounce) {
     const hasActiveClassName = nextCell.classList.contains('selected');
     hasActiveClassName
       ? announce({ keys: ['SNTable.SelectionLabel.SelectedValue'] })
@@ -162,7 +170,23 @@ export const bodyHandleKeyPress = ({
 
   switch (evt.key) {
     case 'ArrowUp':
-    case 'ArrowDown':
+    case 'ArrowDown': {
+      const isSelectMultiValues =
+        evt.shiftKey &&
+        cell.isSelectable &&
+        isAnalysisMode &&
+        ((cell.prevQElemNumber !== undefined && evt.key === 'ArrowUp') ||
+          (cell.nextQElemNumber !== undefined && evt.key === 'ArrowDown'));
+      // Shift + up/down arrow keys: select multiple values
+      // When at the first/last row of the cell, shift + arrow up/down key, no value is selected
+      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isSelectionMode, !isSelectMultiValues);
+      isSelectMultiValues &&
+        selectionDispatch({
+          type: 'select',
+          payload: { cell, evt, announce },
+        });
+      break;
+    }
     case 'ArrowRight':
     case 'ArrowLeft':
       !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isSelectionMode);
@@ -196,6 +220,10 @@ export const bodyHandleKeyPress = ({
     default:
       break;
   }
+};
+
+export const bodyHandleKeyUp = (evt, selectionDispatch) => {
+  evt.key === 'Shift' && selectionDispatch({ type: 'selectMultiValues' });
 };
 
 export const handleLastTab = (evt, isSelectionMode, keyboard) => {
