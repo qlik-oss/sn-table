@@ -6,6 +6,7 @@ import TableWrapper from '../TableWrapper';
 import TableBodyWrapper from '../TableBodyWrapper';
 import TableHeadWrapper from '../TableHeadWrapper';
 import * as handleKeyPress from '../../utils/handle-key-press';
+import * as handleAccessibility from '../../utils/handle-accessibility';
 import * as handleScroll from '../../utils/handle-scroll';
 
 describe('<TableWrapper />', () => {
@@ -43,7 +44,11 @@ describe('<TableWrapper />', () => {
     // When wrapping a component in memo, the actual functional component is stored on type
     jest.spyOn(TableHeadWrapper, 'type').mockImplementation(() => <thead />);
     // When wrapping a component in forwardRef, the actual functional component is stored on type.render
-    jest.spyOn(TableBodyWrapper.type, 'render').mockImplementation(() => <thead />);
+    jest.spyOn(TableBodyWrapper.type, 'render').mockImplementation(() => (
+      <tbody>
+        <td>test</td>
+      </tbody>
+    ));
     jest.spyOn(handleKeyPress, 'handleTableWrapperKeyDown').mockImplementation(() => jest.fn());
 
     tableData = {
@@ -116,6 +121,14 @@ describe('<TableWrapper />', () => {
 
     fireEvent.keyDown(queryByLabelText('SNTable.Pagination.RowsPerPage:'), { key: 'Control', code: 'ControlLeft' });
     expect(handleKeyPress.handleTableWrapperKeyDown).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call handleFocusoutEvent when table is focus out', () => {
+    jest.spyOn(handleAccessibility, 'handleFocusoutEvent').mockImplementation(() => jest.fn());
+    const { queryByTestId } = renderTableWrapper();
+
+    fireEvent.focusOut(queryByTestId('table-wrapper'));
+    expect(handleAccessibility.handleFocusoutEvent).toHaveBeenCalledTimes(1);
   });
 
   it('should call handleHorizontalScroll when scroll on the table', () => {

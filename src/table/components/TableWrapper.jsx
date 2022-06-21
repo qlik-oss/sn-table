@@ -110,6 +110,7 @@ export default function TableWrapper(props) {
       paginationNeeded={paginationNeeded}
       dir={direction}
       onKeyDown={handleKeyDown}
+      data-testid="table-wrapper"
     >
       <AnnounceElements />
       <StyledTableContainer
