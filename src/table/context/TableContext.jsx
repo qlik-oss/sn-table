@@ -13,6 +13,7 @@ export const TableContextProvider = ({ children, selectionsAPI, cellCoordMock, s
     rows: [],
     colIdx: -1,
     api: selectionsAPI,
+    isSelectMultiValues: false,
   });
 
   return (
