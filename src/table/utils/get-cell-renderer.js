@@ -1,7 +1,7 @@
 import TableCell from '@mui/material/TableCell';
-import withColumnStyling from './withColumnStyling';
-import withSelections from './withSelections';
-import withStyling from './withStyling';
+import withColumnStyling from '../components/withColumnStyling';
+import withSelections from '../components/withSelections';
+import withStyling from '../components/withStyling';
 
 export default function getCellRenderer(hasColumnStyling, isSelectionsEnabled) {
   // withStyling always runs last, applying whatever styling it gets

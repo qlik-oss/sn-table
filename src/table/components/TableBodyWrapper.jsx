@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, memo } from 'react';
 import PropTypes from 'prop-types';
-import getCellRenderer from './renderer';
+import getCellRenderer from '../utils/get-cell-renderer';
 import { useContextSelector, TableContext } from '../context';
 import { StyledTableBody, StyledBodyRow } from '../styles';
 import { addSelectionListeners } from '../utils/selections-utils';
 import { getBodyCellStyle } from '../utils/styling-utils';
-import { bodyHandleKeyPress } from '../utils/handle-key-press';
+import { bodyHandleKeyPress, bodyHandleKeyUp } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
 
 function TableBodyWrapper({
@@ -20,7 +20,7 @@ function TableBodyWrapper({
   tableWrapperRef,
   announce,
 }) {
-  const { rows, columns, paginationNeeded } = tableData;
+  const { rows, columns, paginationNeeded, totalsPosition } = tableData;
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
   // active: turn off interactions that affect the state of the visual representation including selection, zoom, scroll, etc.
@@ -56,7 +56,7 @@ function TableBodyWrapper({
               bodyHandleKeyPress({
                 evt,
                 rootElement,
-                cellCoord: [rowIndex + 1, columnIndex],
+                cellCoord: totalsPosition === 'top' ? [rowIndex + 2, columnIndex] : [rowIndex + 1, columnIndex],
                 cell,
                 selectionDispatch,
                 isSelectionsEnabled,
@@ -81,6 +81,7 @@ function TableBodyWrapper({
                   tabIndex={-1}
                   announce={announce}
                   onKeyDown={handleKeyDown}
+                  onKeyUp={(evt) => bodyHandleKeyUp(evt, selectionDispatch)}
                   onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
                 >
                   {cell.qText}
