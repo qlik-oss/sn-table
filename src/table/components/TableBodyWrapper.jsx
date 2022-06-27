@@ -28,7 +28,7 @@ function TableBodyWrapper({
   const isSelectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
   const columnRenderers = useMemo(
     () => columns.map((column) => getCellRenderer(!!column.stylingInfo.length, isSelectionsEnabled)),
-    [columns.length, isSelectionsEnabled]
+    [columns, isSelectionsEnabled]
   );
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
@@ -57,6 +57,7 @@ function TableBodyWrapper({
                 evt,
                 rootElement,
                 cellCoord: totalsPosition === 'top' ? [rowIndex + 2, columnIndex] : [rowIndex + 1, columnIndex],
+                selectionsAPI,
                 cell,
                 selectionDispatch,
                 isSelectionsEnabled,
@@ -64,7 +65,6 @@ function TableBodyWrapper({
                 announce,
                 keyboard,
                 paginationNeeded,
-                selectionsAPI,
               });
             };
 
