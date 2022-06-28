@@ -61,7 +61,7 @@ describe('handle-data', () => {
     it('should return column info for measure', () => {
       colIdx = 3;
       const columnInfo = getColumnInfo(layout, colIdx);
-      expect(columnInfo).toEqual(getExpectedInfo(colIdx, false, undefined, '200'));
+      expect(columnInfo).toEqual(getExpectedInfo(colIdx, false, false, '200'));
     });
   });
 
