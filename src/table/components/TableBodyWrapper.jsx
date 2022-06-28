@@ -21,6 +21,7 @@ function TableBodyWrapper({
   announce,
 }) {
   const { rows, columns, paginationNeeded, totalsPosition } = tableData;
+  const columnsStylingInfoJSON = JSON.stringify(columns.map((column) => column.stylingInfo));
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
   // constraints.active: true - turn off interactions that affect the state of the visual
@@ -28,8 +29,9 @@ function TableBodyWrapper({
   // constraints.select: true - turn off selections.
   const selectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
   const columnRenderers = useMemo(
-    () => columns.map((column) => getCellRenderer(!!column.stylingInfo.length, selectionsEnabled)),
-    [columns, selectionsEnabled]
+    () =>
+      JSON.parse(columnsStylingInfoJSON).map((stylingInfo) => getCellRenderer(!!stylingInfo.length, selectionsEnabled)),
+    [columnsStylingInfoJSON, selectionsEnabled]
   );
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
