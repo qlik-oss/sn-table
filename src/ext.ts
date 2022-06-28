@@ -1,4 +1,8 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import Modifiers from 'qlik-modifiers';
+
+import { Translator } from './types';
 
 const columnCommonHidden = {
   autoSort: {
@@ -19,7 +23,7 @@ const columnExpressionItems = {
     translation: 'Object.Table.Columns.VisibilityCondition',
     defaultValue: { qv: '' },
     tid: 'visibilityCondition',
-    isExpression: (val) => typeof val === 'string' && val.trim().length > 0,
+    isExpression: (val: string) => typeof val === 'string' && val.trim().length > 0,
   },
   tableCellColoring: {
     component: 'attribute-expression-reference',
@@ -95,11 +99,24 @@ const textAlignItems = {
       },
     ],
     defaultValue: 'left',
-    show: (data) => data.qDef.textAlign !== undefined && !data.qDef.textAlign.auto,
+    show: (data: {
+      qDef: {
+        textAlign: {
+          auto: boolean;
+        };
+      };
+    }) => data.qDef.textAlign !== undefined && !data.qDef.textAlign.auto,
   },
 };
 
-const getStyleSettings = (env) => {
+const getStyleSettings = (env: {
+  translator: Translator;
+  anything: {
+    sense: {
+      isUnsupportedFeature: (feature: string) => boolean;
+    };
+  };
+}) => {
   return [
     {
       type: 'items',
@@ -150,7 +167,7 @@ const getStyleSettings = (env) => {
                   component: 'integer',
                   // placeholder: () => parseInt(styleService.getStyle('header', 'fontSize'), 10),
                   maxlength: 3,
-                  change(data) {
+                  change(data: { header: { fontSize: number } }) {
                     data.header.fontSize = Math.max(5, Math.min(300, Math.floor(data.header.fontSize)));
                   },
                 },
@@ -169,7 +186,7 @@ const getStyleSettings = (env) => {
                   component: 'integer',
                   // placeholder: () => parseInt(styleService.getStyle('content', 'fontSize'), 10),
                   maxlength: 3,
-                  change(data) {
+                  change(data: { content: { fontSize: number } }) {
                     data.content.fontSize = Math.max(5, Math.min(300, Math.floor(data.content.fontSize)));
                   },
                 },
@@ -199,7 +216,11 @@ const getStyleSettings = (env) => {
                   ],
                 },
                 hoverColor: {
-                  show: (data) => !!data.content.hoverEffect,
+                  show: (data: {
+                    content: {
+                      hoverEffect: boolean;
+                    };
+                  }) => !!data.content.hoverEffect,
                   ref: 'content.hoverColor',
                   translation: 'ThemeStyleEditor.style.hoverStyle',
                   type: 'object',
@@ -207,7 +228,11 @@ const getStyleSettings = (env) => {
                   dualOutput: true,
                 },
                 hoverFontColor: {
-                  show: (data) => !!data.content.hoverEffect,
+                  show: (data: {
+                    content: {
+                      hoverEffect: boolean;
+                    };
+                  }) => !!data.content.hoverEffect,
                   ref: 'content.hoverFontColor',
                   translation: 'ThemeStyleEditor.style.hoverFontStyle',
                   type: 'object',
@@ -260,7 +285,11 @@ const getStyleSettings = (env) => {
             },
           ],
           defaultValue: 'noTotals',
-          show(data) {
+          show(data: {
+            totals: {
+              show: boolean;
+            };
+          }) {
             return !data.totals.show;
           },
         },
@@ -279,7 +308,14 @@ const getStyleSettings = (env) => {
   ];
 };
 
-const getDefinition = (env) => {
+const getDefinition = (env: {
+  translator: Translator;
+  anything: {
+    sense: {
+      isUnsupportedFeature: (feature: string) => boolean;
+    };
+  };
+}) => {
   return {
     type: 'items',
     component: 'accordion',
@@ -305,13 +341,13 @@ const getDefinition = (env) => {
                 libraryItemType: 'dimension',
                 ref: 'qLibraryId',
                 translation: 'Common.Dimension',
-                show(itemData) {
+                show(itemData: { qLibraryId: string }) {
                   return itemData.qLibraryId;
                 },
               },
               inlineDimension: {
                 component: 'inline-dimension',
-                show(itemData) {
+                show(itemData: { qLibraryId: string }) {
                   return !itemData.qLibraryId;
                 },
               },
@@ -339,11 +375,11 @@ const getDefinition = (env) => {
                 libraryItemType: 'measure',
                 ref: 'qLibraryId',
                 translation: 'Common.Measure',
-                show: (itemData) => itemData.qLibraryId,
+                show: (itemData: { qLibraryId: string }) => itemData.qLibraryId,
               },
               inlineMeasure: {
                 component: 'inline-measure',
-                show: (itemData) => !itemData.qLibraryId,
+                show: (itemData: { qLibraryId: string }) => !itemData.qLibraryId,
               },
               ...columnCommonHidden,
               ...columnExpressionItems,
@@ -360,7 +396,12 @@ const getDefinition = (env) => {
                         component: 'dropdown',
                         ref: 'qDef.qAggrFunc',
                         translation: 'Object.Table.AggrFunc',
-                        options(data, handler) {
+                        options(
+                          data: object[],
+                          handler: {
+                            properties: object;
+                          }
+                        ) {
                           const hasActiveModifiers = Modifiers.hasActiveModifiers({
                             measures: [data],
                             properties: handler.properties,
@@ -445,7 +486,7 @@ const getDefinition = (env) => {
   };
 };
 
-export function indexAdded(array, index) {
+export function indexAdded(array: number[], index: number) {
   let i;
   for (i = 0; i < array.length; ++i) {
     if (array[i] >= 0 && array[i] >= index) {
@@ -455,7 +496,7 @@ export function indexAdded(array, index) {
   array.push(index);
 }
 
-export function indexRemoved(array, index) {
+export function indexRemoved(array: number[], index: number) {
   let removeIndex = 0;
   let i;
   for (i = 0; i < array.length; ++i) {
@@ -469,15 +510,22 @@ export function indexRemoved(array, index) {
   return removeIndex;
 }
 
-export function min(nDimsOrMeas) {
+export function min(nDimsOrMeas: number) {
   return nDimsOrMeas > 0 ? 0 : 1;
 }
 
-export function getDescription(env) {
+export function getDescription(env: { translator: Translator }) {
   return env.translator.get('Visualizations.Descriptions.Column');
 }
 
-export default function ext(env) {
+export default function ext(env: {
+  translator: Translator;
+  anything: {
+    sense: {
+      isUnsupportedFeature: (feature: string) => boolean;
+    };
+  };
+}) {
   return {
     definition: getDefinition(env),
     data: {
@@ -485,7 +533,19 @@ export default function ext(env) {
         min,
         max: 1000,
         description: () => getDescription(env),
-        add(measure, data, hcHandler) {
+        add(
+          measure: undefined,
+          data: undefined,
+          hcHandler: {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            hcProperties: {
+              qColumnOrder: number[];
+              columnWidths: number[];
+            };
+            getDimensions: () => string[];
+            getMeasures: () => string[];
+          }
+        ) {
           const { qColumnOrder, columnWidths } = hcHandler.hcProperties;
           const ix = hcHandler.getDimensions().length + hcHandler.getMeasures().length - 1;
 
@@ -493,7 +553,18 @@ export default function ext(env) {
 
           columnWidths.splice(qColumnOrder[ix], 0, -1); // -1 is auto
         },
-        remove(measure, data, hcHandler, idx) {
+        remove(
+          measure: undefined,
+          data: undefined,
+          hcHandler: {
+            hcProperties: {
+              qDimensions: string[];
+              qColumnOrder: number[];
+              columnWidths: number[];
+            };
+          },
+          idx: number
+        ) {
           const { qColumnOrder, columnWidths } = hcHandler.hcProperties;
           const columnIx = (hcHandler.hcProperties.qDimensions ? hcHandler.hcProperties.qDimensions.length : 0) + idx;
           indexRemoved(qColumnOrder, columnIx);
@@ -504,7 +575,17 @@ export default function ext(env) {
         min,
         max: 1000,
         description: () => getDescription(env),
-        add(dimension, data, hcHandler) {
+        add(
+          dimension: number,
+          data: undefined,
+          hcHandler: {
+            hcProperties: {
+              columnWidths: number[];
+              qColumnOrder: number[];
+            };
+            getDimensions: () => string[];
+          }
+        ) {
           const { qColumnOrder, columnWidths } = hcHandler.hcProperties;
           const ix = hcHandler.getDimensions().length - 1;
           indexAdded(qColumnOrder, ix);
@@ -512,7 +593,17 @@ export default function ext(env) {
 
           return dimension;
         },
-        remove(dimension, data, hcHandler, idx) {
+        remove(
+          dimension: undefined,
+          data: undefined,
+          hcHandler: {
+            hcProperties: {
+              qColumnOrder: number[];
+              columnWidths: number[];
+            };
+          },
+          idx: number
+        ) {
           const { qColumnOrder, columnWidths } = hcHandler.hcProperties;
           indexRemoved(qColumnOrder, idx);
           columnWidths.splice(qColumnOrder[idx], 1);
