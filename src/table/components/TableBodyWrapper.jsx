@@ -19,6 +19,7 @@ function TableBodyWrapper({
   keyboard,
   tableWrapperRef,
   announce,
+  children,
 }) {
   const { rows, columns, paginationNeeded, totalsPosition } = tableData;
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
@@ -40,6 +41,7 @@ function TableBodyWrapper({
 
   return (
     <StyledTableBody paginationNeeded={paginationNeeded} bodyCellStyle={bodyCellStyle}>
+      {children}
       {rows.map((row, rowIndex) => (
         <StyledBodyRow
           bodyCellStyle={bodyCellStyle}
@@ -94,6 +96,10 @@ function TableBodyWrapper({
   );
 }
 
+TableBodyWrapper.defaultProps = {
+  children: undefined,
+};
+
 TableBodyWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
@@ -105,6 +111,7 @@ TableBodyWrapper.propTypes = {
   keyboard: PropTypes.object.isRequired,
   tableWrapperRef: PropTypes.object.isRequired,
   announce: PropTypes.func.isRequired,
+  children: PropTypes.object,
 };
 
 export default memo(TableBodyWrapper);

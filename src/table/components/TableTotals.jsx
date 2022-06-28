@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useContextSelector, TableContext } from '../context';
-import { getHeaderStyle } from '../utils/styling-utils';
+import { getHeaderStyle, getBodyCellStyle } from '../utils/styling-utils';
 import { totalHandleKeyPress } from '../utils/handle-key-press';
 import { removeAndFocus } from '../utils/handle-accessibility';
 import { StyledHeadRow, TotalsCell } from '../styles';
@@ -10,6 +10,7 @@ function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
   const { columns, paginationNeeded, totalsPosition, rows } = tableData;
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name()]);
+  const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme.name()]);
   const isTop = totalsPosition === 'top';
 
   return (
@@ -19,6 +20,7 @@ function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
         return (
           <TotalsCell
             headerStyle={headerStyle}
+            bodyCellStyle={bodyCellStyle}
             isTop={isTop}
             key={column.id}
             align={column.align}

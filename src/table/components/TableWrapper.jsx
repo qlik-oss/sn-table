@@ -124,10 +124,10 @@ export default function TableWrapper(props) {
         data-testid="table-container"
       >
         <Table stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper {...props}>
+          <TableHeadWrapper {...props} />
+          <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef}>
             {totalsPosition === 'top' ? <TableTotals {...props} /> : undefined}
-          </TableHeadWrapper>
-          <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
+          </TableBodyWrapper>
           {totalsPosition === 'bottom' && (
             <TableFooter>
               <TableTotals {...props} />

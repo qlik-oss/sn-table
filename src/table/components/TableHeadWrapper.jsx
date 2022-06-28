@@ -18,7 +18,6 @@ function TableHeadWrapper({
   translator,
   selectionsAPI,
   keyboard,
-  children,
 }) {
   const { columns, paginationNeeded } = tableData;
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
@@ -78,14 +77,9 @@ function TableHeadWrapper({
           );
         })}
       </StyledHeadRow>
-      {children}
     </TableHead>
   );
 }
-
-TableHeadWrapper.defaultProps = {
-  children: undefined,
-};
 
 TableHeadWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
@@ -97,7 +91,6 @@ TableHeadWrapper.propTypes = {
   translator: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
-  children: PropTypes.object,
 };
 
 export default memo(TableHeadWrapper);
