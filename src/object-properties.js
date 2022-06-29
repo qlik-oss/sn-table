@@ -15,12 +15,12 @@ const properties = {
    */
   qHyperCubeDef: {
     /**
-     * The maximum amount of dimensions is 15
+     * The maximum amount of dimensions is 1000
      * @type {DimensionProperties[]}
      */
     qDimensions: [],
     /**
-     * The maximum amount of measures is 15
+     * The maximum amount of measures is 1000
      * @type {MeasureProperties[]}
      */
     qMeasures: [],
@@ -60,8 +60,20 @@ const properties = {
    * @type {object}
    */
   totals: {
+    /**
+     * Determines if the way totals row is showing is handle automatically, if `true` the other props will be ignored
+     * @type {boolean=}
+     */
     show: true,
+    /**
+     * The position of the totals row, hiding it if set to `noTotals`
+     * @type {('top'|'bottom'|'noTotals')=}
+     */
     position: 'noTotals',
+    /**
+     * The label of the totals row, shown in the leftmost column
+     * @type {string=}
+     */
     label: 'Totals',
   },
   /**
