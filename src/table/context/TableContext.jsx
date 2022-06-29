@@ -8,6 +8,7 @@ export const TableContext = createContext();
 const ProviderWithSelector = createSelectorProvider(TableContext);
 
 export const TableContextProvider = ({ children, selectionsAPI, cellCoordMock, selectionDispatchMock }) => {
+  const [headRowHeight, setHeadRowHeight] = useState();
   const [focusedCellCoord, setFocusedCellCoord] = useState(cellCoordMock || [0, 0]);
   const [selectionState, selectionDispatch] = useReducer(reducer, {
     rows: [],
@@ -19,6 +20,8 @@ export const TableContextProvider = ({ children, selectionsAPI, cellCoordMock, s
   return (
     <ProviderWithSelector
       value={{
+        headRowHeight,
+        setHeadRowHeight,
         focusedCellCoord,
         setFocusedCellCoord,
         selectionState,

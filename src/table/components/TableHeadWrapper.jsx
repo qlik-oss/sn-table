@@ -1,7 +1,8 @@
-import React, { memo, useMemo } from 'react';
+import React, { memo, useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
+
 import { useContextSelector, TableContext } from '../context';
 import { VisuallyHidden, StyledHeadRow, StyledSortLabel } from '../styles';
 import { getHeaderStyle } from '../utils/styling-utils';
@@ -21,13 +22,19 @@ function TableHeadWrapper({
   children,
 }) {
   const { columns, paginationNeeded } = tableData;
+  const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
+  const headRowRef = useRef();
+
+  useEffect(() => {
+    setHeadRowHeight(headRowRef.current.clientHeight);
+  }, [headRowRef.current]);
 
   return (
     <TableHead>
-      <StyledHeadRow paginationNeeded={paginationNeeded} className="sn-table-row">
+      <StyledHeadRow ref={headRowRef} paginationNeeded={paginationNeeded} className="sn-table-row">
         {columns.map((column, columnIndex) => {
           // The first cell in the head is focusable in sequential keyboard navigation,
           // when nebula does not handle keyboard navigation
