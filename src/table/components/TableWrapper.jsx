@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback, useState } from 'react';
 import Table from '@mui/material/Table';
 
 import TableFooter from '@mui/material/TableFooter';
@@ -106,6 +106,12 @@ export default function TableWrapper(props) {
     columns.length,
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
+  const [height, setHeight] = useState(0);
+
+  const updateCellHeight = (newHeight) => {
+    setHeight(newHeight);
+  };
+
   return (
     <StyledTableWrapper
       ref={tableWrapperRef}
@@ -124,9 +130,9 @@ export default function TableWrapper(props) {
         data-testid="table-container"
       >
         <Table stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper {...props} />
+          <TableHeadWrapper {...props} updateCellHeight={updateCellHeight} />
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef}>
-            {totalsPosition === 'top' ? <TableTotals {...props} /> : undefined}
+            {totalsPosition === 'top' ? <TableTotals {...props} height={height} /> : undefined}
           </TableBodyWrapper>
           {totalsPosition === 'bottom' && (
             <TableFooter>

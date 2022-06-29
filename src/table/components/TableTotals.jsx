@@ -6,7 +6,7 @@ import { totalHandleKeyPress } from '../utils/handle-key-press';
 import { removeAndFocus } from '../utils/handle-accessibility';
 import { StyledHeadRow, TotalsCell } from '../styles';
 
-function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
+function TableTotals({ rootElement, tableData, theme, layout, keyboard, height }) {
   const { columns, paginationNeeded, totalsPosition, rows } = tableData;
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name()]);
@@ -21,6 +21,7 @@ function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
           <TotalsCell
             headerStyle={headerStyle}
             bodyCellStyle={bodyCellStyle}
+            headCellHeight={height}
             isTop={isTop}
             key={column.id}
             align={column.align}
@@ -41,12 +42,17 @@ function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
   );
 }
 
+TableTotals.defaultProps = {
+  height: undefined,
+};
+
 TableTotals.propTypes = {
   rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
+  height: PropTypes.number,
 };
 
 export default memo(TableTotals);

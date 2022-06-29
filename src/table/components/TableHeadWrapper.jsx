@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react';
+import React, { memo, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
@@ -18,11 +18,17 @@ function TableHeadWrapper({
   translator,
   selectionsAPI,
   keyboard,
+  updateCellHeight,
 }) {
   const { columns, paginationNeeded } = tableData;
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
+
+  useEffect(() => {
+    const height = rootElement.getElementsByClassName('sn-table-head-cell')[0].offsetHeight - 0.5;
+    updateCellHeight(height);
+  }, [headerStyle.fontSize]);
 
   return (
     <TableHead>
@@ -91,6 +97,7 @@ TableHeadWrapper.propTypes = {
   translator: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
+  updateCellHeight: PropTypes.func.isRequired,
 };
 
 export default memo(TableHeadWrapper);

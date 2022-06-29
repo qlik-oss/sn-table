@@ -126,16 +126,19 @@ export const VisuallyHidden = styled('span')({
 // ---------- TableTotals ----------
 
 export const TotalsCell = styled(TableCell, {
-  shouldForwardProp: (prop) => prop !== 'headerStyle' && prop !== 'isTop' && prop !== 'bodyCellStyle',
-})(({ headerStyle, bodyCellStyle, isTop }) => {
+  shouldForwardProp: (prop) =>
+    prop !== 'headerStyle' && prop !== 'isTop' && prop !== 'bodyCellStyle' && prop !== 'headCellHeight',
+})(({ headerStyle, bodyCellStyle, isTop, headCellHeight }) => {
   return {
     ...bodyCellStyle,
     position: 'sticky',
     backgroundColor: headerStyle.backgroundColor,
     fontWeight: 'bold',
     borderWidth: isTop ? '0px 1px 2px 0px' : '2px 1px 1px 0px',
-    boxShadow: isTop ? '0px 3px 5px -5px #a6a6a6' : '3px 0px 5px -5px #a6a6a6',
-    top: isTop && 35,
+    // Since the shadow is applied cell by cell and shadowbox blur at cell corners spreads little bit less, the end result is
+    // a wavy shadow at bottom of the total row.
+    // boxShadow: isTop ? '0px 3px 5px -5px #a6a6a6' : '3px 0px 5px -5px #a6a6a6',
+    top: isTop && headCellHeight,
     bottom: !isTop && 0,
   };
 });
