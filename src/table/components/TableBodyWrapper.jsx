@@ -28,7 +28,7 @@ function TableBodyWrapper({
   const isSelectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
   const columnRenderers = useMemo(
     () => columns.map((column) => getCellRenderer(!!column.stylingInfo.length, isSelectionsEnabled)),
-    [columns, isSelectionsEnabled]
+    [columns.length, isSelectionsEnabled]
   );
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;

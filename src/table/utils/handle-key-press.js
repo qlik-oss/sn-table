@@ -166,22 +166,22 @@ export const bodyHandleKeyPress = ({
   selectionsAPI = null,
 }) => {
   const isSelectionMode = selectionsAPI?.isModal();
-  const cellCoord = [cell.rawRowIdx + (totalsPosition === 'top' ? 2 : 1), cell.rawRowIdx];
+  const cellCoord = [cell.rawRowIdx + (totalsPosition === 'top' ? 2 : 1), cell.rawColIdx];
 
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown': {
+      const topAllowedRow = getTopAllowedRow(isSelectionMode, totalsPosition);
+      const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, topAllowedRow);
       const isSelectMultiValues =
         evt.shiftKey &&
         cell.isSelectable &&
         isSelectionsEnabled &&
         ((cell.prevQElemNumber !== undefined && evt.key === 'ArrowUp') ||
           (cell.nextQElemNumber !== undefined && evt.key === 'ArrowDown'));
-      const topAllowedRow = getTopAllowedRow(isSelectionMode, totalsPosition);
-      const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, topAllowedRow);
+      // Shift + up/down arrow keys: select multiple values
+      // When at the first/last row of the cell, shift + arrow up/down key, no value is selected
       if (isSelectMultiValues) {
-        // Shift + up/down arrow keys: select multiple values
-        // When at the first/last row of the cell, shift + arrow up/down key, no value is selected
         selectionDispatch({
           type: 'select',
           payload: { cell, evt, announce },
