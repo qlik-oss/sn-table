@@ -40,7 +40,7 @@ function TableBodyWrapper({
 
   return (
     <StyledTableBody paginationNeeded={paginationNeeded} bodyCellStyle={bodyCellStyle}>
-      {rows.map((row, rowIndex) => (
+      {rows.map((row) => (
         <StyledBodyRow
           bodyCellStyle={bodyCellStyle}
           hover={hoverEffect}
@@ -56,7 +56,6 @@ function TableBodyWrapper({
               bodyHandleKeyPress({
                 evt,
                 rootElement,
-                cellCoord: totalsPosition === 'top' ? [rowIndex + 2, columnIndex] : [rowIndex + 1, columnIndex],
                 selectionsAPI,
                 cell,
                 selectionDispatch,
@@ -65,6 +64,7 @@ function TableBodyWrapper({
                 announce,
                 keyboard,
                 paginationNeeded,
+                totalsPosition,
               });
             };
 

@@ -1,6 +1,18 @@
-import { updateFocus, focusSelectionToolbar, getCellElement } from './handle-accessibility';
+import { updateFocus, focusSelectionToolbar, getCellElement, announceSelectionState } from './handle-accessibility';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
+
+/**
+ * Get the index of the topmost row you are able to navigate to, depends on selection mode and totals position
+ *
+ * @param {boolean} isSelectionMode
+ * @param {string} totalsPosition
+ * @returns {bool}
+ */
+const getTopAllowedRow = (isSelectionMode, totalsPosition) => {
+  if (!isSelectionMode) return 0;
+  return totalsPosition === 'top' ? 2 : 1;
+};
 
 export const preventDefaultBehavior = (evt) => {
   evt.stopPropagation();
@@ -37,18 +49,18 @@ export const handleTableWrapperKeyDown = ({
   }
 };
 
-export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, isSelectionMode) => {
+export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, topAllowedRow) => {
   let [nextRow, nextCol] = cellCoord;
 
   switch (evt.key) {
     case 'ArrowDown':
-      nextRow + 1 < rowAndColumnCount.rowCount && nextRow++;
+      nextRow < rowAndColumnCount.rowCount - 1 && nextRow++;
       break;
     case 'ArrowUp':
-      nextRow > 0 && (!isSelectionMode || nextRow !== 1) && nextRow--;
+      nextRow > topAllowedRow && nextRow--;
       break;
     case 'ArrowRight':
-      if (isSelectionMode) break;
+      if (topAllowedRow > 0) break;
       if (nextCol < rowAndColumnCount.columnCount - 1) {
         nextCol++;
       } else if (nextRow < rowAndColumnCount.rowCount - 1) {
@@ -57,7 +69,7 @@ export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, isSelecti
       }
       break;
     case 'ArrowLeft':
-      if (isSelectionMode) break;
+      if (topAllowedRow > 0) break;
       if (nextCol > 0) {
         nextCol--;
       } else if (nextRow > 0) {
@@ -79,30 +91,16 @@ export const getRowAndColumnCount = (rootElement) => {
   return { rowCount, columnCount };
 };
 
-export const moveFocus = (
-  evt,
-  rootElement,
-  cellCoord,
-  setFocusedCellCoord,
-  announce,
-  isSelectionMode,
-  shouldAnnounce = true
-) => {
+export const moveFocus = (evt, rootElement, cellCoord, setFocusedCellCoord, topAllowedRow = 0) => {
   preventDefaultBehavior(evt);
   evt.target.setAttribute('tabIndex', '-1');
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
-  const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, isSelectionMode);
+  const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, topAllowedRow);
   const nextCell = getCellElement(rootElement, nextCellCoord);
   updateFocus({ focusType: 'focus', cell: nextCell });
   setFocusedCellCoord(nextCellCoord);
 
-  // handle announcement
-  if (isSelectionMode && shouldAnnounce) {
-    const hasActiveClassName = nextCell.classList.contains('selected');
-    hasActiveClassName
-      ? announce({ keys: ['SNTable.SelectionLabel.SelectedValue'] })
-      : announce({ keys: ['SNTable.SelectionLabel.NotSelectedValue'] });
-  }
+  return nextCell;
 };
 
 export const headHandleKeyPress = ({
@@ -157,7 +155,6 @@ export const totalHandleKeyPress = (evt, rootElement, cellCoord, setFocusedCellC
 export const bodyHandleKeyPress = ({
   evt,
   rootElement,
-  cellCoord,
   cell,
   selectionDispatch,
   isSelectionsEnabled,
@@ -165,9 +162,11 @@ export const bodyHandleKeyPress = ({
   announce,
   keyboard,
   paginationNeeded,
+  totalsPosition,
   selectionsAPI = null,
 }) => {
   const isSelectionMode = selectionsAPI?.isModal();
+  const cellCoord = [cell.rawRowIdx + (totalsPosition === 'top' ? 2 : 1), cell.rawRowIdx];
 
   switch (evt.key) {
     case 'ArrowUp':
@@ -178,19 +177,24 @@ export const bodyHandleKeyPress = ({
         isSelectionsEnabled &&
         ((cell.prevQElemNumber !== undefined && evt.key === 'ArrowUp') ||
           (cell.nextQElemNumber !== undefined && evt.key === 'ArrowDown'));
-      // Shift + up/down arrow keys: select multiple values
-      // When at the first/last row of the cell, shift + arrow up/down key, no value is selected
-      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isSelectionMode, !isSelectMultiValues);
-      isSelectMultiValues &&
+      const topAllowedRow = getTopAllowedRow(isSelectionMode, totalsPosition);
+      const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, topAllowedRow);
+      if (isSelectMultiValues) {
+        // Shift + up/down arrow keys: select multiple values
+        // When at the first/last row of the cell, shift + arrow up/down key, no value is selected
         selectionDispatch({
           type: 'select',
           payload: { cell, evt, announce },
         });
+      } else {
+        // When not selecting multiple we need to announce the selection state of the cell
+        announceSelectionState(announce, nextCell, isSelectionMode);
+      }
       break;
     }
     case 'ArrowRight':
     case 'ArrowLeft':
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isSelectionMode);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
       break;
     // Space bar: Selects value.
     case ' ':
