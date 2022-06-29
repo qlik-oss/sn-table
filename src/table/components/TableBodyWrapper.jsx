@@ -21,14 +21,18 @@ function TableBodyWrapper({
   announce,
 }) {
   const { rows, columns, paginationNeeded, totalsPosition } = tableData;
+  const columnsStylingInfoJSON = JSON.stringify(columns.map((column) => column.stylingInfo));
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
   // active: turn off interactions that affect the state of the visual representation including selection, zoom, scroll, etc.
   // select: turn off selections.
   const isSelectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
   const columnRenderers = useMemo(
-    () => columns.map((column) => getCellRenderer(!!column.stylingInfo.length, isSelectionsEnabled)),
-    [columns.length, isSelectionsEnabled]
+    () =>
+      JSON.parse(columnsStylingInfoJSON).map((stylingInfo) =>
+        getCellRenderer(!!stylingInfo.length, isSelectionsEnabled)
+      ),
+    [columnsStylingInfoJSON, isSelectionsEnabled]
   );
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
