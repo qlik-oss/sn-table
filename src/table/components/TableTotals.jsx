@@ -8,7 +8,6 @@ import { StyledHeadRow, TotalsCell } from '../styles';
 
 function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
   const { columns, paginationNeeded, totalsPosition, rows } = tableData;
-  const headRowHeight = useContextSelector(TableContext, (value) => value.headRowHeight);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name()]);
   const isTop = totalsPosition === 'top';
@@ -20,7 +19,6 @@ function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
         return (
           <TotalsCell
             headerStyle={headerStyle}
-            headRowHeight={headRowHeight}
             isTop={isTop}
             key={column.id}
             align={column.align}
