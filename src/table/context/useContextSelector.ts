@@ -1,10 +1,10 @@
 import { Context, useContext, useEffect, useMemo, useReducer, useRef } from 'react';
-import { getSelectorContext } from './createSelectorProvider';
+import { getSelectorContext, SelectorContextType } from './createSelectorProvider';
 
 type Selector<TContext, TSelected> = (state: TContext) => TSelected;
 
 export function useContextSelector<T, TSelected>(context: Context<T>, selector: Selector<T, TSelected>): TSelected {
-  const accessorContext = getSelectorContext(context);
+  const accessorContext = getSelectorContext(context) as Context<SelectorContextType<T>>;
   const [accessor, listeners] = useContext(accessorContext);
   const [, forceUpdate] = useReducer((dummy) => dummy + 1, 0);
 
