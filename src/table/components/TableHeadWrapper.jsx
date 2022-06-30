@@ -30,7 +30,7 @@ function TableHeadWrapper({
 
   useEffect(() => {
     setHeadRowHeight(headRowRef.current.clientHeight);
-  }, [headRowRef.current]);
+  }, [headRowRef.current, headerStyle.fontSize]);
 
   return (
     <TableHead>
