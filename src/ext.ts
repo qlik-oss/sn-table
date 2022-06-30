@@ -23,7 +23,7 @@ const columnExpressionItems = {
     translation: 'Object.Table.Columns.VisibilityCondition',
     defaultValue: { qv: '' },
     tid: 'visibilityCondition',
-    isExpression: (val: string) => typeof val === 'string' && val.trim().length > 0,
+    isExpression: (val?: string) => typeof val === 'string' && val.trim().length > 0,
   },
   tableCellColoring: {
     component: 'attribute-expression-reference',
