@@ -1,5 +1,5 @@
 import { stardust } from '@nebula.js/stardust';
-import { TableLayout, HyperCube, ExtendedNxDimensionInfo, ExtendedNxMeasureInfo, Column, PageInfo } from './types';
+import { TableLayout, HyperCube, ExtendedNxDimensionInfo, ExtendedNxMeasureInfo, Row, Column, PageInfo } from './types';
 
 const directionMap = {
   A: 'asc',
@@ -116,8 +116,7 @@ export default async function manageData(
   ]);
 
   const rows = dataPages[0].qMatrix.map((r, rowIdx: number) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const row = { key: `row-${rowIdx}` } as any;
+    const row: Row = { key: `row-${rowIdx}` };
     columns.forEach((c, colIdx) => {
       row[c.id] = {
         ...r[colIdx],

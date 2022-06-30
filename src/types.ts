@@ -18,6 +18,23 @@ export interface TableLayout extends EngineAPI.IGenericHyperCubeLayout {
   };
 }
 
+export interface Cell {
+  qText?: string;
+  qAttrExps: EngineAPI.INxAttributeExpressionValues;
+  rowIdx: number;
+  colIdx: number;
+  isSelectable: boolean;
+  rawRowIdx: number;
+  rawColIdx: number;
+  prevQElemNumber: number;
+  nextQElemNumber: number;
+}
+
+export interface Row {
+  // for the row key, string is needed
+  [key: string]: Cell | string;
+}
+
 export interface Column {
   id: string;
   isDim: boolean;
