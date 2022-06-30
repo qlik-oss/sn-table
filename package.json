@@ -81,7 +81,7 @@
     "@nebula.js/cli-build": "2.13.0",
     "@nebula.js/cli-sense": "2.13.0",
     "@nebula.js/cli-serve": "2.13.0",
-    "@playwright/test": "1.23.0",
+    "@playwright/test": "1.22.2",
     "@qlik/react-native-simple-grid": "1.0.11",
     "@react-native-async-storage/async-storage": "1.17.7",
     "@rollup/plugin-typescript": "8.3.3",
