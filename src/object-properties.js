@@ -61,7 +61,7 @@ const properties = {
    */
   totals: {
     /**
-     * Determines if the way totals row is showing is handle automatically, if `true` the other props will be ignored
+     * Determines if the way totals row is showing is handle automatically, if `true` the `position` prop will be ignored
      * @type {boolean=}
      */
     show: true,
