@@ -1,3 +1,28 @@
+# [1.14.0](https://github.com/qlik-oss/sn-table/compare/v1.13.0...v1.14.0) (2022-07-01)
+
+### Bug Fixes
+
+- clicking the header cell does not always sets the focus ([#562](https://github.com/qlik-oss/sn-table/issues/562)) ([25e0681](https://github.com/qlik-oss/sn-table/commit/25e0681fdec6c82f8b1c041ea1902c93fc8583c5))
+- column styling updates immediately when color expression changes ([#571](https://github.com/qlik-oss/sn-table/issues/571)) ([d5c34f7](https://github.com/qlik-oss/sn-table/commit/d5c34f7616381907cb950a44a4469a29e132a894))
+- next page command and block header with focus in selections ([#556](https://github.com/qlik-oss/sn-table/issues/556)) ([cd71437](https://github.com/qlik-oss/sn-table/commit/cd71437ad53c833083a3c55c319459efaf7a80d2))
+- pass isInSelectionMode explicitly ([#567](https://github.com/qlik-oss/sn-table/issues/567)) ([c7348c8](https://github.com/qlik-oss/sn-table/commit/c7348c8035ceec7034f8723983b5700918a2b592))
+- pressing esc in selection mode blurs everything ([#583](https://github.com/qlik-oss/sn-table/issues/583)) ([e76ae70](https://github.com/qlik-oss/sn-table/commit/e76ae707f5c5246219bbcba1b4f1350a4fb5e086))
+- remove strict mode ([#565](https://github.com/qlik-oss/sn-table/issues/565)) ([2c985ae](https://github.com/qlik-oss/sn-table/commit/2c985aed971985d97d82dd6ec180ffbd9debe7bc))
+- screen reader does not announce correctly when doing selections ([#566](https://github.com/qlik-oss/sn-table/issues/566)) ([a114b98](https://github.com/qlik-oss/sn-table/commit/a114b980397d265192f8734970c7e891178fd20a))
+
+### Features
+
+- add totals function to sn-table ([#536](https://github.com/qlik-oss/sn-table/issues/536)) ([24ace75](https://github.com/qlik-oss/sn-table/commit/24ace752c66888c386411c350e0b816f448847e7))
+- shift + arrow up/down to select multiple values ([#555](https://github.com/qlik-oss/sn-table/issues/555)) ([cb6f05d](https://github.com/qlik-oss/sn-table/commit/cb6f05dec531a218f2d889cb3efd28d51044a566))
+
+### Performance Improvements
+
+- call handleHorizontalScroll when scroll horizontally not vertically on the table ([#563](https://github.com/qlik-oss/sn-table/issues/563)) ([387d904](https://github.com/qlik-oss/sn-table/commit/387d904dbd89d586f972d9e842a11639a4a636c9))
+
+### Reverts
+
+- Revert "chore(deps): update minor and patch (#579)" (#590) ([1bfa798](https://github.com/qlik-oss/sn-table/commit/1bfa798338b9d1a79cc336e6dcb8e2c35419792d)), closes [#579](https://github.com/qlik-oss/sn-table/issues/579) [#590](https://github.com/qlik-oss/sn-table/issues/590) [#579](https://github.com/qlik-oss/sn-table/issues/579)
+
 # [1.13.0](https://github.com/qlik-oss/sn-table/compare/v1.12.6...v1.13.0) (2022-06-09)
 
 ### Features
