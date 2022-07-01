@@ -12,6 +12,7 @@ export default function withStyling(CellComponent) {
       tabIndex,
       onKeyDown,
       onMouseDown,
+      onKeyUp,
       onMouseUp,
     } = props;
 
@@ -25,6 +26,7 @@ export default function withStyling(CellComponent) {
         sx={style}
         onKeyDown={onKeyDown}
         onMouseDown={onMouseDown}
+        onKeyUp={onKeyUp}
         onMouseUp={onMouseUp}
       >
         {children}
@@ -46,6 +48,7 @@ export default function withStyling(CellComponent) {
     scope: PropTypes.string,
     tabIndex: PropTypes.number.isRequired,
     onKeyDown: PropTypes.func.isRequired,
+    onKeyUp: PropTypes.func.isRequired,
     onMouseDown: PropTypes.func.isRequired,
     onMouseUp: PropTypes.func,
   };

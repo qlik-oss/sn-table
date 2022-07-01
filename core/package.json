@@ -1,8 +1,8 @@
 {
   "module": "esm/index.js",
   "peerDependencies": {
-    "@nebula.js/stardust": "2.x",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0"
+    "@nebula.js/stardust": "2.x || ^3.0.0-alpha",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

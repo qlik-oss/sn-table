@@ -92,6 +92,11 @@ export default () => ({
         disableNavMenu: false,
         showDetails: false,
         components: [],
+        totals: {
+          show: true,
+          position: 'noTotals',
+          label: 'Totals',
+        },
         visualization: 'sn-table',
         version: '1.0.3',
         extensionMeta: {

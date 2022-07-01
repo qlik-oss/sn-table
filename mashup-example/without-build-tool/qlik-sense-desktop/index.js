@@ -24,9 +24,13 @@
         theme: 'dark',
         keyboardNavigation: true,
         constraints: {
-          active: false, // turn off interactions that affect the state of the visual representation including selection, zoom, scroll, etc.
-          select: false, // turn off selections.
-          passive: false, // turn off interactions like tooltips.
+          // active: true - turn off interactions that affect the state
+          // of the visual representation including selection, zoom, scroll, etc.
+          active: false,
+          // select: true - turn off selections.
+          select: false,
+          // passive: true - turn off interactions like tooltips.
+          passive: false,
         },
       },
       types: [

@@ -152,6 +152,11 @@ export default () => ({
             },
           },
         ],
+        totals: {
+          show: true,
+          position: 'noTotals',
+          label: 'Totals',
+        },
         visualization: 'sn-table',
         version: '1.10.0',
         extensionMeta: {
