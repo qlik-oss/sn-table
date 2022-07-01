@@ -24,8 +24,9 @@ function TableBodyWrapper({
   const columnsStylingInfoJSON = JSON.stringify(columns.map((column) => column.stylingInfo));
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
-  // active: turn off interactions that affect the state of the visual representation including selection, zoom, scroll, etc.
-  // select: turn off selections.
+  // constraints.active: true - turn off interactions that affect the state of the visual
+  // representation including selection, zoom, scroll, etc.
+  // constraints.select: true - turn off selections.
   const isSelectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
   const columnRenderers = useMemo(
     () =>
