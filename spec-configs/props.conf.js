@@ -52,4 +52,14 @@ module.exports = {
       },
     },
   },
+
+  toDts: {
+    spec: './api-specifications/properties.json',
+    output: {
+      file: './types/index.d.ts',
+    },
+    dependencies: {
+      references: ['qlik-engineapi'],
+    },
+  },
 };
