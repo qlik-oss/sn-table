@@ -27,11 +27,13 @@ function TableBodyWrapper({
   // constraints.active: true - turn off interactions that affect the state of the visual
   // representation including selection, zoom, scroll, etc.
   // constraints.select: true - turn off selections.
-  const selectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
+  const isSelectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
   const columnRenderers = useMemo(
     () =>
-      JSON.parse(columnsStylingInfoJSON).map((stylingInfo) => getCellRenderer(!!stylingInfo.length, selectionsEnabled)),
-    [columnsStylingInfoJSON, selectionsEnabled]
+      JSON.parse(columnsStylingInfoJSON).map((stylingInfo) =>
+        getCellRenderer(!!stylingInfo.length, isSelectionsEnabled)
+      ),
+    [columnsStylingInfoJSON, isSelectionsEnabled]
   );
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
@@ -43,7 +45,7 @@ function TableBodyWrapper({
 
   return (
     <StyledTableBody paginationNeeded={paginationNeeded} bodyCellStyle={bodyCellStyle}>
-      {rows.map((row, rowIndex) => (
+      {rows.map((row) => (
         <StyledBodyRow
           bodyCellStyle={bodyCellStyle}
           hover={hoverEffect}
@@ -59,14 +61,15 @@ function TableBodyWrapper({
               bodyHandleKeyPress({
                 evt,
                 rootElement,
-                cellCoord: totalsPosition === 'top' ? [rowIndex + 2, columnIndex] : [rowIndex + 1, columnIndex],
                 selectionsAPI,
                 cell,
                 selectionDispatch,
-                isAnalysisMode: selectionsEnabled,
+                isSelectionsEnabled,
                 setFocusedCellCoord,
                 announce,
                 keyboard,
+                paginationNeeded,
+                totalsPosition,
               });
             };
 
