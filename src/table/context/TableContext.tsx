@@ -1,16 +1,29 @@
 import React, { useState, useReducer, createContext } from 'react';
+import { stardust } from '@nebula.js/stardust';
 import PropTypes from 'prop-types';
 import { createSelectorProvider } from './createSelectorProvider';
 import { reducer } from '../utils/selections-utils';
 
-export const TableContext = createContext();
+export const TableContext = createContext({});
 
 const ProviderWithSelector = createSelectorProvider(TableContext);
 
-export const TableContextProvider = ({ children, selectionsAPI, cellCoordMock, selectionDispatchMock }) => {
+interface ContextProviderProps {
+  children: JSX.Element;
+  selectionsAPI: stardust.ObjectSelections;
+  cellCoordMock: [number, number];
+  selectionDispatchMock: jest.Mock<any, any>;
+}
+
+export const TableContextProvider = ({
+  children,
+  selectionsAPI,
+  cellCoordMock,
+  selectionDispatchMock,
+}: ContextProviderProps) => {
   const [focusedCellCoord, setFocusedCellCoord] = useState(cellCoordMock || [0, 0]);
   const [selectionState, selectionDispatch] = useReducer(reducer, {
-    rows: [],
+    rows: {},
     colIdx: -1,
     api: selectionsAPI,
     isSelectMultiValues: false,
