@@ -1,6 +1,6 @@
-import { useState, useEffect } from '@nebula.js/stardust';
+import { stardust, useState, useEffect } from '@nebula.js/stardust';
 import registerLocale from '../locale/src';
-import { Translator } from '../types';
+import { AnnounceArgs } from '../types';
 
 // eslint-disable-next-line no-shadow
 enum AnnouncerElements {
@@ -8,14 +8,8 @@ enum AnnouncerElements {
   SECOND = 'second-announcer-element',
 }
 
-type AnnounceArgs = {
-  keys: Array<string | Array<string>>;
-  shouldBeAtomic?: boolean;
-  politeness?: 'polite' | 'assertive' | 'off';
-};
-
 /* creates the function for announcement */
-export const announcementFactory = (rootElement: Element, translator: Translator, prevAnnounceEl?: string) => {
+export const announcementFactory = (rootElement: Element, translator: stardust.Translator, prevAnnounceEl?: string) => {
   let previousAnnouncementElement = prevAnnounceEl || null;
 
   /* updates the aria-live elements using the translation keys, makes sure it is announced every time it is called */
@@ -48,7 +42,7 @@ export const announcementFactory = (rootElement: Element, translator: Translator
   };
 };
 
-const useAnnounceAndTranslations = (rootElement: Element, translator: Translator) => {
+const useAnnounceAndTranslations = (rootElement: Element, translator: stardust.Translator) => {
   const [announce, setAnnounce] = useState<undefined | ((arg0: AnnounceArgs) => void)>(undefined);
 
   useEffect(() => {
