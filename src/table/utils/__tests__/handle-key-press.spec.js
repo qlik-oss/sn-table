@@ -243,6 +243,40 @@ describe('handle-key-press', () => {
       expect(nextRow).toBe(1);
       expect(nextCol).toBe(1);
     });
+
+    it('should stay at the current cell when topAllowed cell is 1 and trying to move up from rowIdx 1', () => {
+      evt.key = 'ArrowUp';
+      const topAllowedRow = 1;
+      rowAndColumnCount.rowCount = 3;
+      rowIndex = 1;
+      const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex], topAllowedRow);
+      expect(nextRow).toBe(1);
+      expect(nextCol).toBe(0);
+    });
+
+    it('should stay at the current cell when trying to move left and topAllowedRow is > 0 (i.e in selection mode', () => {
+      evt.key = 'ArrowLeft';
+      const topAllowedRow = 1;
+      rowAndColumnCount.rowCount = 3;
+      rowAndColumnCount.colCount = 3;
+      rowIndex = 1;
+      colIndex = 1;
+      const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex], topAllowedRow);
+      expect(nextRow).toBe(1);
+      expect(nextCol).toBe(1);
+    });
+
+    it('should stay at the current cell when trying to move right and topAllowedRow is > 0 (i.e in selection mode', () => {
+      evt.key = 'ArrowRight';
+      const topAllowedRow = 1;
+      rowAndColumnCount.rowCount = 3;
+      rowAndColumnCount.colCount = 3;
+      rowIndex = 1;
+      colIndex = 1;
+      const [nextRow, nextCol] = arrowKeysNavigation(evt, rowAndColumnCount, [rowIndex, colIndex], topAllowedRow);
+      expect(nextRow).toBe(1);
+      expect(nextCol).toBe(1);
+    });
   });
 
   describe('headHandleKeyPress', () => {
@@ -253,8 +287,20 @@ describe('handle-key-press', () => {
     let rootElement = {};
     let changeSortOrder;
     let layout;
-    let isAnalysisMode;
+    let isSortingEnabled;
     let setFocusedCellCoord;
+
+    const callHeadHandleKeyPress = () =>
+      headHandleKeyPress({
+        evt,
+        rootElement,
+        cellCoord: [rowIndex, colIndex],
+        column,
+        changeSortOrder,
+        layout,
+        isSortingEnabled,
+        setFocusedCellCoord,
+      });
 
     beforeEach(() => {
       rowIndex = 0;
@@ -273,21 +319,12 @@ describe('handle-key-press', () => {
         getElementsByClassName: () => [{ getElementsByClassName: () => [{ focus: () => {}, setAttribute: () => {} }] }],
       };
       changeSortOrder = jest.fn();
-      isAnalysisMode = true;
+      isSortingEnabled = true;
       setFocusedCellCoord = jest.fn();
     });
 
     it('when press arrow down key on head cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
-      headHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        column,
-        changeSortOrder: null,
-        layout: null,
-        isAnalysisMode: null,
-        setFocusedCellCoord,
-      });
+      callHeadHandleKeyPress();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
@@ -296,35 +333,17 @@ describe('handle-key-press', () => {
 
     it('when press space bar key, should update the sorting', () => {
       evt.key = ' ';
-      headHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        column,
-        changeSortOrder,
-        layout,
-        isAnalysisMode,
-        setFocusedCellCoord,
-      });
+      callHeadHandleKeyPress();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(changeSortOrder).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
     });
 
-    it('when press space bar key not in analysis mode, should not update the sorting', () => {
+    it('when press space bar key and sorting is not enabled, should not update the sorting', () => {
       evt.key = ' ';
-      isAnalysisMode = false;
-      headHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        column,
-        changeSortOrder,
-        layout,
-        isAnalysisMode,
-        setFocusedCellCoord,
-      });
+      isSortingEnabled = false;
+      callHeadHandleKeyPress();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(changeSortOrder).not.toHaveBeenCalled();
@@ -333,35 +352,17 @@ describe('handle-key-press', () => {
 
     it('when press enter key, should update the sorting', () => {
       evt.key = 'Enter';
-      headHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        column,
-        changeSortOrder,
-        layout,
-        isAnalysisMode,
-        setFocusedCellCoord,
-      });
+      callHeadHandleKeyPress();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(changeSortOrder).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
     });
 
-    it('when press enter key not in analysis mode, should not update the sorting', () => {
+    it('when press enter key and sorting is not enabled, should not update the sorting', () => {
       evt.key = 'Enter';
-      isAnalysisMode = false;
-      headHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        column,
-        changeSortOrder,
-        layout,
-        isAnalysisMode,
-        setFocusedCellCoord,
-      });
+      isSortingEnabled = false;
+      callHeadHandleKeyPress();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(changeSortOrder).not.toHaveBeenCalled();
@@ -372,16 +373,7 @@ describe('handle-key-press', () => {
       evt.key = 'ArrowRight';
       evt.shiftKey = true;
       evt.ctrlKey = true;
-      headHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        column,
-        changeSortOrder,
-        layout,
-        isAnalysisMode,
-        setFocusedCellCoord,
-      });
+      callHeadHandleKeyPress();
       expect(evt.preventDefault).not.toHaveBeenCalled();
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(changeSortOrder).not.toHaveBeenCalled();
@@ -447,11 +439,27 @@ describe('handle-key-press', () => {
     let selectionsAPI;
     let cell = [];
     let selectionDispatch;
-    let isAnalysisMode;
+    let isSelectionsEnabled;
     let setFocusedCellCoord;
     let isModal;
     let keyboard;
     let announce;
+    let paginationNeeded;
+
+    const runBodyHandleKeyPress = () =>
+      bodyHandleKeyPress({
+        evt,
+        rootElement,
+        cellCoord: [rowIndex, colIndex],
+        selectionsAPI,
+        cell,
+        selectionDispatch,
+        isSelectionsEnabled,
+        setFocusedCellCoord,
+        announce,
+        keyboard,
+        paginationNeeded,
+      });
 
     beforeEach(() => {
       rowIndex = 0;
@@ -477,73 +485,49 @@ describe('handle-key-press', () => {
       cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1, isSelectable: true };
       keyboard = { enabled: true };
       selectionDispatch = jest.fn();
-      isAnalysisMode = true;
+      isSelectionsEnabled = true;
       setFocusedCellCoord = jest.fn();
       announce = jest.fn();
+      paginationNeeded = true;
       jest.spyOn(handleAccessibility, 'focusSelectionToolbar').mockImplementation(() => jest.fn());
+      jest.spyOn(handleAccessibility, 'announceSelectionState').mockImplementation(() => jest.fn());
     });
 
     afterEach(() => jest.clearAllMocks());
 
     it('when press arrow down key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        isAnalysisMode: false,
-        setFocusedCellCoord,
-        announce,
-        keyboard,
-      });
+      runBodyHandleKeyPress();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
+      expect(handleAccessibility.announceSelectionState).toHaveBeenCalledTimes(1);
     });
 
     it('when press shift + arrow down key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell, and select values for dimension', () => {
       cell.nextQElemNumber = 1;
       evt.shiftKey = true;
 
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        selectionDispatch,
-        isAnalysisMode,
-        setFocusedCellCoord,
-        announce,
-        keyboard,
-      });
+      runBodyHandleKeyPress();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(selectionDispatch).toHaveBeenCalledTimes(1);
+      expect(handleAccessibility.announceSelectionState).not.toHaveBeenCalled();
     });
 
     it('when press shift + arrow down key on the last row cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell, but not select values for dimension', () => {
       cell.nextQElemNumber = undefined;
       evt.shiftKey = true;
 
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        selectionDispatch,
-        isAnalysisMode,
-        setFocusedCellCoord,
-        announce,
-        keyboard,
-      });
+      runBodyHandleKeyPress();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(selectionDispatch).not.toHaveBeenCalled();
+      expect(handleAccessibility.announceSelectionState).toHaveBeenCalledTimes(1);
     });
 
     it('when press shift + arrow up key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell, and select values for dimension', () => {
@@ -551,22 +535,13 @@ describe('handle-key-press', () => {
       evt.shiftKey = true;
       evt.key = 'ArrowUp';
 
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        selectionDispatch,
-        isAnalysisMode,
-        setFocusedCellCoord,
-        announce,
-        keyboard,
-      });
+      runBodyHandleKeyPress();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(selectionDispatch).toHaveBeenCalledTimes(1);
+      expect(handleAccessibility.announceSelectionState).not.toHaveBeenCalled();
     });
 
     it('when press shift + arrow up key on the second row cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell, but not select values for dimension', () => {
@@ -574,100 +549,30 @@ describe('handle-key-press', () => {
       evt.shiftKey = true;
       evt.key = 'ArrowUp';
 
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        selectionDispatch,
-        isAnalysisMode,
-        setFocusedCellCoord,
-        announce,
-        keyboard,
-      });
+      runBodyHandleKeyPress();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(selectionDispatch).not.toHaveBeenCalled();
+      expect(handleAccessibility.announceSelectionState).toHaveBeenCalledTimes(1);
     });
 
     it('when press space bar key and dimension, should select value for dimension', () => {
       evt.key = ' ';
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        selectionDispatch,
-        isAnalysisMode,
-        setFocusedCellCoord,
-        announce,
-        keyboard,
-      });
+      runBodyHandleKeyPress();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(selectionDispatch).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
     });
 
-    it('when moving to a cell on a dimension column which is selected, also have some selections already, should announce the value is selected', () => {
-      isModal = true;
-      cell = global.document.createElement('td');
-      cell.classList.add('selected');
-      rootElement = { getElementsByClassName: () => [{ getElementsByClassName: () => [cell] }] };
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        selectionDispatch,
-        isAnalysisMode,
-        setFocusedCellCoord,
-        announce,
-        selectionsAPI,
-      });
-      expect(announce).toHaveBeenCalledWith({
-        keys: ['SNTable.SelectionLabel.SelectedValue'],
-      });
-    });
-
-    it('when moving to a cell on a dimension column which is not selected, also have some selections already, should announce the value is not selected', () => {
-      isModal = true;
-      cell = global.document.createElement('td');
-      rootElement = { getElementsByClassName: () => [{ getElementsByClassName: () => [cell] }] };
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        selectionDispatch,
-        isAnalysisMode,
-        setFocusedCellCoord,
-        announce,
-        selectionsAPI,
-      });
-      expect(announce).toHaveBeenCalledWith({
-        keys: ['SNTable.SelectionLabel.NotSelectedValue'],
-      });
-    });
-
-    it('when press space bar key not on a dimension which is selectable, should not select value for measure', () => {
+    it('when press space bar key on a cell that is not selectable, should not select value', () => {
       evt.key = ' ';
       cell = {
         isSelectable: false,
       };
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        selectionDispatch,
-        isAnalysisMode: false,
-        setFocusedCellCoord,
-        announce,
-        keyboard,
-      });
+      runBodyHandleKeyPress();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(selectionDispatch).not.toHaveBeenCalled();
@@ -675,20 +580,10 @@ describe('handle-key-press', () => {
       expect(announce).not.toHaveBeenCalled();
     });
 
-    it('when press space bar key not in analysis mode, should not select value for measure', () => {
+    it('when press space bar key and selections are not enabled, should not select value', () => {
       evt.key = ' ';
-      isAnalysisMode = false;
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        selectionDispatch,
-        isAnalysisMode: false,
-        setFocusedCellCoord,
-        announce,
-        keyboard,
-      });
+      isSelectionsEnabled = false;
+      runBodyHandleKeyPress();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(selectionDispatch).not.toHaveBeenCalled();
@@ -699,18 +594,7 @@ describe('handle-key-press', () => {
     it('when press enter key, should confirms selections', () => {
       evt.key = 'Enter';
       isModal = true;
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        selectionDispatch,
-        isAnalysisMode,
-        setFocusedCellCoord,
-        announce,
-        keyboard,
-        selectionsAPI,
-      });
+      runBodyHandleKeyPress();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(selectionsAPI.confirm).toHaveBeenCalledTimes(1);
@@ -718,21 +602,9 @@ describe('handle-key-press', () => {
       expect(announce).toHaveBeenCalledWith({ keys: ['SNTable.SelectionLabel.SelectionsConfirmed'] });
     });
 
-    it('when press enter key not in analysis mode, should not confirms selections', () => {
+    it('when press enter key and not in selections mode, should not confirms selections', () => {
       evt.key = 'Enter';
-      isAnalysisMode = false;
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        selectionDispatch,
-        isAnalysisMode,
-        setFocusedCellCoord,
-        announce,
-        keyboard,
-        selectionsAPI,
-      });
+      runBodyHandleKeyPress();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(selectionsAPI.confirm).not.toHaveBeenCalled();
@@ -740,21 +612,10 @@ describe('handle-key-press', () => {
       expect(announce).not.toHaveBeenCalled();
     });
 
-    it('when press esc key, should cancel selection', () => {
-      isModal = true;
+    it('when press esc key and in selections mode, should cancel selection', () => {
       evt.key = 'Escape';
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        selectionDispatch,
-        isAnalysisMode,
-        setFocusedCellCoord,
-        announce,
-        keyboard,
-        selectionsAPI,
-      });
+      isModal = true;
+      runBodyHandleKeyPress();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(selectionsAPI.cancel).toHaveBeenCalledTimes(1);
@@ -762,22 +623,9 @@ describe('handle-key-press', () => {
       expect(announce).toHaveBeenCalledWith({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
     });
 
-    it('when press cancel key not in analysis mode, should not cancel selection', () => {
-      isModal = true;
+    it('when press esc key not in selection mode, should not cancel selection', () => {
       evt.key = 'Escape';
-      isAnalysisMode = false;
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        selectionDispatch,
-        isAnalysisMode,
-        setFocusedCellCoord,
-        announce,
-        keyboard,
-        selectionsAPI,
-      });
+      runBodyHandleKeyPress();
       expect(evt.preventDefault).not.toHaveBeenCalled();
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(selectionsAPI.cancel).not.toHaveBeenCalled();
@@ -789,18 +637,7 @@ describe('handle-key-press', () => {
       evt.key = 'ArrowRight';
       evt.shiftKey = true;
       evt.ctrlKey = true;
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        selectionDispatch,
-        isAnalysisMode,
-        setFocusedCellCoord,
-        announce,
-        keyboard,
-        selectionsAPI,
-      });
+      runBodyHandleKeyPress();
       expect(evt.preventDefault).not.toHaveBeenCalled();
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(selectionsAPI.cancel).not.toHaveBeenCalled();
@@ -808,23 +645,11 @@ describe('handle-key-press', () => {
       expect(announce).not.toHaveBeenCalled();
     });
 
-    it('when shift + tab is pressed should prevent default and call focusSelectionToolbar', () => {
+    it('when shift + tab is pressed and in selections mode, should prevent default and call focusSelectionToolbar', () => {
       evt.key = 'Tab';
       evt.shiftKey = true;
       isModal = true;
-
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        selectionDispatch,
-        isAnalysisMode,
-        setFocusedCellCoord,
-        announce,
-        keyboard,
-        selectionsAPI,
-      });
+      runBodyHandleKeyPress();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(handleAccessibility.focusSelectionToolbar).toHaveBeenCalledTimes(1);
@@ -834,39 +659,28 @@ describe('handle-key-press', () => {
     it('when only tab is pressed should not prevent default nor call focusSelectionToolbar', () => {
       evt.key = 'Tab';
       isModal = true;
-
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        selectionDispatch,
-        isAnalysisMode,
-        setFocusedCellCoord,
-        announce,
-        keyboard,
-      });
+      runBodyHandleKeyPress();
       expect(evt.preventDefault).not.toHaveBeenCalled();
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(handleAccessibility.focusSelectionToolbar).not.toHaveBeenCalled();
       expect(announce).not.toHaveBeenCalled();
     });
 
+    it('when tab is pressed and paginatioNeeded is false, should prevent default and call focusSelectionToolbar', () => {
+      evt.key = 'Tab';
+      isModal = true;
+      paginationNeeded = false;
+      runBodyHandleKeyPress();
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(handleAccessibility.focusSelectionToolbar).toHaveBeenCalledTimes(1);
+      expect(announce).not.toHaveBeenCalled();
+    });
+
     it('when shift + tab is pressed but not in selection mode, should not prevent default nor call focusSelectionToolbar', () => {
       evt.key = 'Tab';
       evt.shiftKey = true;
-
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        selectionDispatch,
-        isAnalysisMode,
-        setFocusedCellCoord,
-        announce,
-        keyboard,
-      });
+      runBodyHandleKeyPress();
       expect(evt.preventDefault).not.toHaveBeenCalled();
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(handleAccessibility.focusSelectionToolbar).not.toHaveBeenCalled();
@@ -876,18 +690,7 @@ describe('handle-key-press', () => {
       evt.key = 'Tab';
       evt.shiftKey = true;
       keyboard.enabled = false;
-
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        cell,
-        selectionDispatch,
-        isAnalysisMode,
-        setFocusedCellCoord,
-        announce,
-        keyboard,
-      });
+      runBodyHandleKeyPress();
       expect(evt.preventDefault).not.toHaveBeenCalled();
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(handleAccessibility.focusSelectionToolbar).not.toHaveBeenCalled();
@@ -896,25 +699,13 @@ describe('handle-key-press', () => {
 
     it('when other keys are pressed, should not do anything', () => {
       evt.key = 'Control';
-      bodyHandleKeyPress({
-        evt,
-        rootElement,
-        cellCoord: [rowIndex, colIndex],
-        selectionsAPI,
-        cell,
-        selectionDispatch,
-        isAnalysisMode,
-        setFocusedCellCoord,
-        announce,
-        keyboard,
-      });
+      runBodyHandleKeyPress();
       expect(evt.preventDefault).not.toHaveBeenCalled();
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(evt.target.blur).not.toHaveBeenCalled();
       expect(evt.target.setAttribute).not.toHaveBeenCalled();
       expect(selectionsAPI.cancel).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
-      expect(announce).not.toHaveBeenCalled();
     });
   });
 

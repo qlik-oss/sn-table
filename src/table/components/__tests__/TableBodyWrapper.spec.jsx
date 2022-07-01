@@ -5,7 +5,7 @@ import manageData from '../../../handle-data';
 import { TableContextProvider } from '../../context';
 import TableBodyWrapper from '../TableBodyWrapper';
 import * as selectionsUtils from '../../utils/selections-utils';
-import * as getCellRenderer from '../renderer';
+import * as getCellRenderer from '../../utils/get-cell-renderer';
 import * as handleKeyPress from '../../utils/handle-key-press';
 import * as handleAccessibility from '../../utils/handle-accessibility';
 

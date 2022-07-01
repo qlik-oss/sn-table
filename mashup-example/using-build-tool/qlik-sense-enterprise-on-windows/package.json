@@ -1,6 +1,7 @@
 {
   "name": "table-mashup",
-  "version": "0.0.1",
+  "private": true,
+  "version": "0.1.0",
   "author": {
     "name": "",
     "email": ""
@@ -12,14 +13,18 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "types:check": "tsc --noEmit"
   },
   "dependencies": {
     "@nebula.js/sn-table": "1.13.0",
-    "@nebula.js/stardust": "2.13.0",
+    "@nebula.js/stardust": "2.12.0",
     "enigma.js": "2.9.0"
   },
   "devDependencies": {
-    "vite": "2.9.13"
+    "@types/enigma.js": "2.2.2",
+    "@types/qlik-engineapi": "12.67.12",
+    "typescript": "4.7.4",
+    "vite": "2.9.12"
   }
 }

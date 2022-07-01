@@ -334,4 +334,40 @@ describe('handle-accessibility', () => {
       expect(keyboard.focusSelection).toHaveBeenCalledWith(false);
     });
   });
+
+  describe('announceSelectionState', () => {
+    let isSelected;
+    let announce;
+    let nextCell;
+    let isSelectionMode;
+
+    beforeEach(() => {
+      isSelected = false;
+      announce = jest.fn();
+      nextCell = {
+        classList: {
+          contains: () => isSelected,
+        },
+      };
+      isSelectionMode = false;
+    });
+
+    it('should do nothing when not in selection mode', () => {
+      handleAccessibility.announceSelectionState(announce, nextCell, isSelectionMode);
+      expect(announce).not.toHaveBeenCalled();
+    });
+
+    it('should call announce with SelectedValue key when in selection mode and value is selected', () => {
+      isSelectionMode = true;
+      isSelected = true;
+      handleAccessibility.announceSelectionState(announce, nextCell, isSelectionMode);
+      expect(announce).toHaveBeenCalledWith({ keys: ['SNTable.SelectionLabel.SelectedValue'] });
+    });
+
+    it('should Call announce with NotSelectedValue key when in selection mode and value is not selected', () => {
+      isSelectionMode = true;
+      handleAccessibility.announceSelectionState(announce, nextCell, isSelectionMode);
+      expect(announce).toHaveBeenCalledWith({ keys: ['SNTable.SelectionLabel.NotSelectedValue'] });
+    });
+  });
 });
