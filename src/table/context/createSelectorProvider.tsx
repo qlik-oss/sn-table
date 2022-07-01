@@ -19,7 +19,7 @@ interface ProviderProps<T> {
 type ContextAccessor<T> = () => T | undefined;
 type ContextListener<T> = (state: T) => void;
 type ContextListeners<T> = Set<ContextListener<T>>;
-type SelectorContextType<T> = readonly [ContextAccessor<T>, ContextListeners<T>];
+export type SelectorContextType<T> = readonly [ContextAccessor<T>, ContextListeners<T>];
 
 export function createSelectorProvider<T>(OriginalContext: Context<T>): FunctionComponent<ProviderProps<T>> {
   const SelectorContext = createContext<SelectorContextType<T>>([() => undefined, new Set()]);

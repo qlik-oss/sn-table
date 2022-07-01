@@ -29,7 +29,7 @@ export function useContextSelector<T, TSelected>(context: Context<T>, selector: 
       const newSelectedState = latestSelector.current && latestSelector.current(nextValue);
 
       if (newSelectedState !== latestSelectedState.current) {
-        forceUpdate({});
+        forceUpdate();
       }
     };
 
