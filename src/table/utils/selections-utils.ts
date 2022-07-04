@@ -3,13 +3,15 @@ import React from 'react';
 import {
   TableCell,
   SelectionState,
-  SelectionActions,
+  SelectionAction,
   ExtendedSelectionAPI,
   SelectPayload,
   AnnounceFn,
   SelectedRows,
+  ContextValue,
 } from '../../types';
 
+// eslint-disable-next-line no-shadow
 export enum SelectionStates {
   SELECTED = 'selected',
   POSSIBLE = 'possible',
@@ -19,7 +21,7 @@ export enum SelectionStates {
 
 type AddSelectionListenersArgs = {
   api: ExtendedSelectionAPI;
-  selectionDispatch: React.Dispatch<SelectionActions>;
+  selectionDispatch: React.Dispatch<SelectionAction>;
   setShouldRefocus(): void;
   keyboard: stardust.Keyboard;
   tableWrapperRef: React.MutableRefObject<any>;
@@ -72,7 +74,7 @@ export function addSelectionListeners({
   };
 }
 
-export const getCellSelectionState = (cell: TableCell, value: any): SelectionStates => {
+export const getCellSelectionState = (cell: TableCell, value: ContextValue): SelectionStates => {
   const {
     selectionState: { colIdx, rows, api },
   } = value;
@@ -173,7 +175,7 @@ const selectMultiValues = (state: SelectionState) => {
   return { ...state, isSelectMultiValues: false };
 };
 
-export const reducer = (state: SelectionState, action: SelectionActions): SelectionState => {
+export const reducer = (state: SelectionState, action: SelectionAction): SelectionState => {
   switch (action.type) {
     case 'select':
       return selectCell(state, action.payload);

@@ -44,8 +44,16 @@ export interface SelectPayload {
   evt: React.KeyboardEvent<HTMLInputElement>;
 }
 
-export type SelectionActions =
+export type SelectionAction =
+  | { type: 'select'; payload: SelectPayload }
   | { type: 'selectMultiValues' }
   | { type: 'reset' }
-  | { type: 'clear' }
-  | { type: 'select'; payload: SelectPayload };
+  | { type: 'clear' };
+
+// everything but selectionState optional here to simplify testing
+export interface ContextValue {
+  focusedCellCoord?: [number, number];
+  setFocusedCellCoord?: React.Dispatch<React.SetStateAction<[number, number]>>;
+  selectionState: SelectionState;
+  selectionDispatch?: React.Dispatch<SelectionAction> | jest.Mock<any, any>;
+}
