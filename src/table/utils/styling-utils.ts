@@ -35,7 +35,6 @@ export function getPadding(styleObj: ContentStyling | undefined): string | undef
  */
 export function getColor(defaultColor: string, theme: stardust.Theme, color = {}): string {
   const resolvedColor = theme.getColorPickerColor(color);
-
   return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
 }
 
@@ -64,8 +63,8 @@ export const getBaseStyling = (
     // When we do not set padding for content or header, but set font size,
     // we need to calculate the padding based on the font size
     padding: getPadding(styleObj),
-    borderStyle: StylingDefaults.BORDER_STYLE,
-    borderColor: theme.table.body.borderColor,
+    borderStyle: 'solid',
+    borderColor: theme?.table?.body.borderColor || 'black',
   };
   // Remove all undefined and null values
   Object.keys(baseStyle).forEach((key) => {
@@ -89,20 +88,17 @@ export function getHeaderStyle(layout: TableLayout, theme: ExtendedTheme): Gener
   // there is a header background color depending on the header font color
   // - When the table background color from the sense theme has opacity,
   // removing that.
-  const headerBackgroundColor = isDarkColor(headerStyle.color)
-    ? StylingDefaults.HEAD_BACKGROUND_LIGHT
-    : StylingDefaults.HEAD_BACKGROUND_DARK;
-  headerStyle.backgroundColor = theme.table.isBackgroundTransparentColor
+  const headerBackgroundColor = isDarkColor(headerStyle.color) ? '#FAFAFA' : '#323232';
+  headerStyle.backgroundColor = theme?.table?.isBackgroundTransparentColor
     ? headerBackgroundColor
-    : removeOpacity(theme.table.backgroundColor);
+    : removeOpacity(theme?.table?.backgroundColor);
 
   // When you set the header font color,
   // the sort label color should be same.
   // When there is no header content color setting,
   // the sort label color is depending on the header background color.
   headerStyle.sortLabelColor =
-    headerStyle.color ??
-    (isDarkColor(headerStyle.backgroundColor) ? StylingDefaults.SORT_LABEL_LIGHT : StylingDefaults.SORT_LABEL_DARK);
+    headerStyle.color ?? (isDarkColor(headerStyle?.backgroundColor) ? 'rgba(255,255,255,0.9)' : 'rgba(0, 0, 0, 0.54)');
 
   return headerStyle;
 }
@@ -167,6 +163,7 @@ export function getBodyCellStyle(layout: TableLayout, theme: ExtendedTheme): Gen
     ...contentStyle,
     hoverBackgroundColor,
     hoverFontColor,
+    rowHeight: content?.rowHeight || 1,
   };
 }
 

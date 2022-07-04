@@ -70,6 +70,22 @@ Compress the generated 'sn-table-ext' folder into the 'application/zip' file for
 | :-----------------------------------------------------------------------------: | :--------------------------------------------------------------: | :------------------------------------------------------------------------: |
 | Copy sn-table-ext into https://your-tenant.us.qlikcloud.com/console/extensions/ | Copy sn-table-ext into Qlik Management Console (QMC)->Extensions | Copy sn-table-ext into ..\Users\<UserName>\Documents\Qlik\Sense\Extensions |
 
+## React Native
+
+### Pre-reqs
+
+1. Install [react-native dev environment](https://reactnative.dev/docs/0.68/environment-setup). This includes Xcode and Android Studio.
+2. A QCS Account with an API Key
+3. An app with a table.
+
+### Running
+
+** Please Note this can take a while to build if it's the first time **
+
+1. `yarn`
+2. `yarn setup:rn:dev`
+3. `yarn ios`
+
 ## API
 
 The API can also be found in [the Qlik developer portal](https://qlik.dev/apis/javascript/nebula-table)

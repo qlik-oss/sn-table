@@ -29,3 +29,7 @@ test/rendering/state.json
 #pack files
 *.tgz
 build
+
+#react-native
+react-native-dev
+.vscode
