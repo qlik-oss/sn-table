@@ -38,22 +38,27 @@ export interface AnnounceArgs {
 
 export type AnnounceFn = (arg0: AnnounceArgs) => void;
 
-export interface SelectPayload {
+export interface ActionPayload {
   cell: TableCell;
   announce: (arg0: AnnounceArgs) => void;
-  evt: React.KeyboardEvent<HTMLInputElement>;
+  evt: React.KeyboardEvent | React.MouseEvent;
 }
 
-export type SelectionAction =
-  | { type: 'select'; payload: SelectPayload }
-  | { type: 'selectMultiValues' }
-  | { type: 'reset' }
-  | { type: 'clear' };
+export interface Action {
+  type: 'select' | 'selectMultiValues' | 'reset' | 'clear';
+  payload?: ActionPayload;
+}
+
+// export type SelectionAction =
+//   | { type: 'select'; payload: SelectPayload }
+//   | { type: 'selectMultiValues'; payload?: SelectPayload }
+//   | { type: 'reset'; payload?: SelectPayload }
+//   | { type: 'clear'; payload?: SelectPayload };
 
 // everything but selectionState optional here to simplify testing
 export interface ContextValue {
   focusedCellCoord?: [number, number];
   setFocusedCellCoord?: React.Dispatch<React.SetStateAction<[number, number]>>;
   selectionState: SelectionState;
-  selectionDispatch?: React.Dispatch<SelectionAction> | jest.Mock<any, any>;
+  selectionDispatch?: React.Dispatch<ActionPayload> | jest.Mock<any, any>;
 }

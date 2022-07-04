@@ -1,11 +1,11 @@
 import { stardust } from '@nebula.js/stardust';
-import React from 'react';
+import React, { ReactFragment } from 'react';
 import {
   TableCell,
   SelectionState,
-  SelectionAction,
+  Action,
   ExtendedSelectionAPI,
-  SelectPayload,
+  ActionPayload,
   AnnounceFn,
   SelectedRows,
   ContextValue,
@@ -21,10 +21,10 @@ export enum SelectionStates {
 
 type AddSelectionListenersArgs = {
   api: ExtendedSelectionAPI;
-  selectionDispatch: React.Dispatch<SelectionAction>;
+  selectionDispatch: React.Dispatch<Action>;
   setShouldRefocus(): void;
   keyboard: stardust.Keyboard;
-  tableWrapperRef: React.MutableRefObject<any>;
+  tableWrapperRef: React.MutableRefObject<JSX.Element>;
 };
 
 export function addSelectionListeners({
@@ -108,7 +108,7 @@ export const handleAnnounceSelectionStatus = (announce: AnnounceFn, rowsLength: 
 export const getSelectedRows = (
   selectedRows: SelectedRows,
   cell: TableCell,
-  evt: React.KeyboardEvent
+  evt: React.KeyboardEvent | React.MouseEvent
 ): SelectedRows => {
   const { qElemNumber, rowIdx } = cell;
 
@@ -119,11 +119,12 @@ export const getSelectedRows = (
     return { [qElemNumber]: rowIdx };
   }
 
-  if (evt.shiftKey && evt.key.includes('Arrow')) {
+  const key = (evt as React.KeyboardEvent)?.key;
+  if (evt.shiftKey && key.includes('Arrow')) {
     selectedRows[qElemNumber] = rowIdx;
     // add the next or previous cell to selectedRows, based on which arrow is pressed
-    selectedRows[evt.key === 'ArrowDown' ? cell.nextQElemNumber : cell.prevQElemNumber] =
-      evt.key === 'ArrowDown' ? rowIdx + 1 : rowIdx - 1;
+    selectedRows[key === 'ArrowDown' ? cell.nextQElemNumber : cell.prevQElemNumber] =
+      key === 'ArrowDown' ? rowIdx + 1 : rowIdx - 1;
   } else if (selectedRows[qElemNumber] !== undefined) {
     // if the selected item is clicked again, that item will be removed
     delete selectedRows[qElemNumber];
@@ -135,10 +136,10 @@ export const getSelectedRows = (
   return { ...selectedRows };
 };
 
-const selectCell = (state: SelectionState, payload: SelectPayload) => {
+const selectCell = (state: SelectionState, payload: ActionPayload) => {
   const { api, rows, colIdx } = state;
   const { cell, announce, evt } = payload;
-  const isSelectMultiValues = evt.shiftKey && evt.key.includes('Arrow');
+  const isSelectMultiValues = evt.shiftKey && (evt as React.KeyboardEvent)?.key.includes('Arrow');
   let selectedRows: SelectedRows = {};
 
   if (colIdx === -1) api.begin(['/qHyperCubeDef']);
@@ -175,10 +176,10 @@ const selectMultiValues = (state: SelectionState) => {
   return { ...state, isSelectMultiValues: false };
 };
 
-export const reducer = (state: SelectionState, action: SelectionAction): SelectionState => {
+export const reducer = (state: SelectionState, action: Action): SelectionState => {
   switch (action.type) {
     case 'select':
-      return selectCell(state, action.payload);
+      return selectCell(state, action.payload as ActionPayload);
     case 'selectMultiValues':
       return selectMultiValues(state);
     case 'reset':

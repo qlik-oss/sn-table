@@ -10,22 +10,22 @@ import {
 import {
   TableCell,
   SelectionState,
-  SelectionAction,
   ExtendedSelectionAPI,
   AnnounceFn,
   SelectedRows,
   ContextValue,
+  Action,
 } from '../../../types';
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {
     const listenerNames = ['deactivated', 'canceled', 'confirmed', 'cleared'];
     let api: ExtendedSelectionAPI;
-    let selectionDispatch: React.Dispatch<SelectionAction>;
+    let selectionDispatch: jest.Mock<any, any>;
     let setShouldRefocus: jest.Mock<any, any>;
     let keyboard: stardust.Keyboard;
     let containsActiveElement: boolean;
-    let tableWrapperRef: any;
+    let tableWrapperRef: React.MutableRefObject<HTMLElement>;
 
     beforeEach(() => {
       selectionDispatch = jest.fn();
@@ -40,7 +40,7 @@ describe('selections-utils', () => {
         current: {
           contains: () => containsActiveElement,
         },
-      };
+      } as unknown as React.MutableRefObject<HTMLElement>;
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -81,6 +81,7 @@ describe('selections-utils', () => {
       } as unknown as ExtendedSelectionAPI;
 
       addSelectionListeners({ api, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
+      // @ts-ignore
       confirmCallback();
       expect(setShouldRefocus).not.toHaveBeenCalled();
       expect(keyboard.blur).toHaveBeenCalledTimes(1);
@@ -98,6 +99,7 @@ describe('selections-utils', () => {
       } as unknown as ExtendedSelectionAPI;
 
       addSelectionListeners({ api, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
+      // @ts-ignore
       confirmCallback();
       expect(setShouldRefocus).not.toHaveBeenCalled();
       expect(keyboard.blur).not.toHaveBeenCalled();
@@ -106,7 +108,8 @@ describe('selections-utils', () => {
 
   describe('reducer', () => {
     let state: SelectionState;
-    let action: SelectionAction;
+    let action: Action;
+    let announce: jest.Mock<any, any>;
     let cell: TableCell;
 
     beforeEach(() => {
@@ -122,13 +125,14 @@ describe('selections-utils', () => {
         isSelectMultiValues: false,
       };
       cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1 } as TableCell;
+      announce = jest.fn();
       action = {
         type: 'select',
         payload: {
           evt: {
             shiftKey: false,
-          } as any,
-          announce: jest.fn(),
+          } as React.KeyboardEvent,
+          announce,
           cell,
         },
       };
@@ -144,17 +148,23 @@ describe('selections-utils', () => {
       expect(state.api.begin).toHaveBeenCalledTimes(1);
       expect(state.api.select).toHaveBeenCalledWith({ method: 'selectHyperCubeCells', params });
       expect(state.api.cancel).not.toHaveBeenCalled();
-      // expect(action.payload.announce).toHaveBeenCalledTimes(1);
+      expect(action?.payload?.announce).toHaveBeenCalledTimes(1);
     });
 
     it('should call begin and announce but not select when type is select and isSelectMultiValues is true', () => {
       state.rows = {};
       state.colIdx = -1;
-      action.payload.evt.shiftKey = true;
-      action.payload.evt.key = {
-        includes: () => true,
+      action = {
+        type: 'select',
+        payload: {
+          evt: {
+            shiftKey: true,
+            key: 'DownArrow',
+          } as React.KeyboardEvent,
+          announce,
+          cell,
+        },
       };
-      cell.prevQElemNumber = 2;
 
       const newState = reducer(state, action);
       expect(newState).toEqual({
@@ -166,7 +176,7 @@ describe('selections-utils', () => {
       expect(state.api.begin).toHaveBeenCalledTimes(1);
       expect(state.api.select).not.toHaveBeenCalled();
       expect(state.api.cancel).not.toHaveBeenCalled();
-      expect(action.payload.announce).toHaveBeenCalledTimes(1);
+      expect(action?.payload?.announce).toHaveBeenCalledTimes(1);
     });
 
     it('should not call begin but call cancel and announce when same qElemNumber (resulting in empty selectedCells)', () => {
@@ -175,7 +185,7 @@ describe('selections-utils', () => {
       expect(state.api.begin).not.toHaveBeenCalled();
       expect(state.api.select).not.toHaveBeenCalled();
       expect(state.api.cancel).toHaveBeenCalledWith();
-      expect(action.payload.announce).toHaveBeenCalledTimes(1);
+      expect(action?.payload?.announce).toHaveBeenCalledTimes(1);
     });
 
     it('should return early when excluded columns', () => {
@@ -187,7 +197,7 @@ describe('selections-utils', () => {
       expect(state.api.begin).not.toHaveBeenCalled();
       expect(state.api.cancel).not.toHaveBeenCalled();
       expect(state.api.select).not.toHaveBeenCalled();
-      expect(action.payload.announce).not.toHaveBeenCalled();
+      expect(action?.payload?.announce).not.toHaveBeenCalled();
     });
 
     it('should call select when type is selectMultiValues, isSelectMultiValues is true and return isSelectMultiValues to be false', () => {
