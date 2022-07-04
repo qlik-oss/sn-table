@@ -153,9 +153,9 @@ export const bodyHandleKeyPress = ({
   keyboard,
   paginationNeeded,
   totalsPosition,
-  selectionsAPI = null,
+  selectionsAPI,
 }) => {
-  const isSelectionMode = selectionsAPI?.isModal();
+  const isSelectionMode = selectionsAPI.isModal();
   // Adjust the cellCoord depending on the totals position
   const firstBodyRowIdx = totalsPosition === 'top' ? 2 : 1;
   const cellCoord = [cell.rawRowIdx + firstBodyRowIdx, cell.rawColIdx];

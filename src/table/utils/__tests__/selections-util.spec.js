@@ -42,13 +42,6 @@ describe('selections-utils', () => {
         expect(api.on).toHaveBeenNthCalledWith(index + 1, name, expect.anything());
       });
     });
-    it('should not call call api.on nor api.removeListener when no api', () => {
-      api = undefined;
-
-      const destroyFn = addSelectionListeners({ api, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
-      // Not a great check, but this would crash if the this case worked incorrectly
-      expect(destroyFn).toBeInstanceOf(Function);
-    });
     it('should call api.on with the same callback for all listener names, that calls selectionDispatch', () => {
       const callbacks = [];
       api = {
