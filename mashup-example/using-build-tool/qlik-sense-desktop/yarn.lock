@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@nebula.js/sn-table@1.13.0":
-  version "1.13.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/sn-table/-/sn-table-1.13.0.tgz#cf81575a8b781b1d65e33db1513ae8d39ba5a519"
-  integrity sha512-RffqGvdTeJLpe9nYubxaJI2zQWa27SwRcJFnr7w2q+XxpVYxAYX7CF+yy7X+tjlUusfitBheRLPYNVhWkUfTMQ==
+"@nebula.js/sn-table@1.14.0":
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/sn-table/-/sn-table-1.14.0.tgz#238fdb5a25bb856ee54fbf6d15f5ae090fd26547"
+  integrity sha512-8YUkZqXCG6Y/NENQPEispmt5cqnFrYLdLNmzZ4CsarxS6oc9+xYUZLQnrI3GFUmSOizuEwaDpiBVBKMlILf4nw==
 
 "@nebula.js/stardust@2.13.0":
   version "2.13.0"
