@@ -10,7 +10,7 @@ export function render(reactRoot, props) {
   const { direction, selectionsAPI } = props;
   const muiTheme = muiSetup(direction);
 
-  reactRoot?.render(
+  reactRoot.render(
     <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : []}>
       <ThemeProvider theme={muiTheme}>
         <TableContextProvider selectionsAPI={selectionsAPI}>
