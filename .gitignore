@@ -28,3 +28,6 @@ test/rendering/test-report
 test/rendering/state.json
 #pack files
 *.tgz
+
+#react-native
+react-native-dev

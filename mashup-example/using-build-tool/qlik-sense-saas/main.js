@@ -5,9 +5,9 @@ import './style.css';
 
 async function run() {
   const app = await connect({
-    url: '<Qlik tenant url>', // 'xxxx.us.qlik.com',
-    webIntegrationId: '<Qlik web integration id>', // 'xxx-xxxxxxx-xxxxxxxx',
-    appId: '<App id>', // 'xxxx-xxx-xxx-xxx-xxxxxxx',
+    url: 'wastelands.us.qlikcloud.com', // 'xxxx.us.qlik.com',
+    webIntegrationId: 'TGzZjWAv7OK6F4lp0oQhf_7Y-XCK_DtN', // 'xxx-xxxxxxx-xxxxxxxx',
+    appId: '95ab782b-1d7d-4ecc-acaa-4dd17a3841da', // 'xxxx-xxx-xxx-xxx-xxxxxxx',
   });
 
   const nuked = embed(app);
