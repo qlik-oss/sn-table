@@ -1,4 +1,4 @@
-import { updateFocus, focusSelectionToolbar, getCellElement } from './handle-accessibility';
+import { updateFocus, focusSelectionToolbar, getCellElement, announceSelectionState } from './handle-accessibility';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -37,18 +37,19 @@ export const handleTableWrapperKeyDown = ({
   }
 };
 
-export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, isSelectionMode) => {
+export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, topAllowedRow = 0) => {
   let [nextRow, nextCol] = cellCoord;
 
   switch (evt.key) {
     case 'ArrowDown':
-      nextRow + 1 < rowAndColumnCount.rowCount && nextRow++;
+      nextRow < rowAndColumnCount.rowCount - 1 && nextRow++;
       break;
     case 'ArrowUp':
-      nextRow > 0 && (!isSelectionMode || nextRow !== 1) && nextRow--;
+      nextRow > topAllowedRow && nextRow--;
       break;
     case 'ArrowRight':
-      if (isSelectionMode) break;
+      // topAllowedRow greater than 0 means we are in selection mode
+      if (topAllowedRow > 0) break;
       if (nextCol < rowAndColumnCount.columnCount - 1) {
         nextCol++;
       } else if (nextRow < rowAndColumnCount.rowCount - 1) {
@@ -57,7 +58,8 @@ export const arrowKeysNavigation = (evt, rowAndColumnCount, cellCoord, isSelecti
       }
       break;
     case 'ArrowLeft':
-      if (isSelectionMode) break;
+      // topAllowedRow greater than 0 means we are in selection mode
+      if (topAllowedRow > 0) break;
       if (nextCol > 0) {
         nextCol--;
       } else if (nextRow > 0) {
@@ -79,30 +81,16 @@ export const getRowAndColumnCount = (rootElement) => {
   return { rowCount, columnCount };
 };
 
-export const moveFocus = (
-  evt,
-  rootElement,
-  cellCoord,
-  setFocusedCellCoord,
-  announce,
-  isSelectionMode,
-  shouldAnnounce = true
-) => {
+export const moveFocus = (evt, rootElement, cellCoord, setFocusedCellCoord, topAllowedRow) => {
   preventDefaultBehavior(evt);
   evt.target.setAttribute('tabIndex', '-1');
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
-  const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, isSelectionMode);
+  const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, topAllowedRow);
   const nextCell = getCellElement(rootElement, nextCellCoord);
   updateFocus({ focusType: 'focus', cell: nextCell });
   setFocusedCellCoord(nextCellCoord);
 
-  // handle announcement
-  if (isSelectionMode && shouldAnnounce) {
-    const hasActiveClassName = nextCell.classList.contains('selected');
-    hasActiveClassName
-      ? announce({ keys: ['SNTable.SelectionLabel.SelectedValue'] })
-      : announce({ keys: ['SNTable.SelectionLabel.NotSelectedValue'] });
-  }
+  return nextCell;
 };
 
 export const headHandleKeyPress = ({
@@ -112,7 +100,7 @@ export const headHandleKeyPress = ({
   column,
   changeSortOrder,
   layout,
-  isAnalysisMode,
+  isSortingEnabled,
   setFocusedCellCoord,
 }) => {
   switch (evt.key) {
@@ -125,7 +113,7 @@ export const headHandleKeyPress = ({
     case ' ':
     case 'Enter':
       preventDefaultBehavior(evt);
-      isAnalysisMode && changeSortOrder(layout, column);
+      isSortingEnabled && changeSortOrder(layout, column);
       break;
     default:
       break;
@@ -157,64 +145,84 @@ export const totalHandleKeyPress = (evt, rootElement, cellCoord, setFocusedCellC
 export const bodyHandleKeyPress = ({
   evt,
   rootElement,
-  cellCoord,
   cell,
   selectionDispatch,
-  isAnalysisMode,
+  isSelectionsEnabled,
   setFocusedCellCoord,
   announce,
   keyboard,
+  paginationNeeded,
+  totalsPosition,
   selectionsAPI = null,
 }) => {
   const isSelectionMode = selectionsAPI?.isModal();
+  // Adjust the cellCoord depending on the totals position
+  const firstBodyRowIdx = totalsPosition === 'top' ? 2 : 1;
+  const cellCoord = [cell.rawRowIdx + firstBodyRowIdx, cell.rawColIdx];
 
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown': {
+      // Make sure you can't navigate to header (and totals) in selection mode
+      const topAllowedRow = isSelectionMode ? firstBodyRowIdx : 0;
+      const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, topAllowedRow);
+      // Shift + up/down arrow keys: select multiple values
+      // When at the first/last row of the cell, shift + arrow up/down key, no value is selected
       const isSelectMultiValues =
         evt.shiftKey &&
         cell.isSelectable &&
-        isAnalysisMode &&
+        isSelectionsEnabled &&
         ((cell.prevQElemNumber !== undefined && evt.key === 'ArrowUp') ||
           (cell.nextQElemNumber !== undefined && evt.key === 'ArrowDown'));
-      // Shift + up/down arrow keys: select multiple values
-      // When at the first/last row of the cell, shift + arrow up/down key, no value is selected
-      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isSelectionMode, !isSelectMultiValues);
-      isSelectMultiValues &&
+      if (isSelectMultiValues) {
         selectionDispatch({
           type: 'select',
           payload: { cell, evt, announce },
         });
+      } else {
+        // When not selecting multiple we need to announce the selection state of the cell
+        announceSelectionState(announce, nextCell, isSelectionMode);
+      }
       break;
     }
     case 'ArrowRight':
     case 'ArrowLeft':
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, announce, isSelectionMode);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
       break;
     // Space bar: Selects value.
     case ' ':
       preventDefaultBehavior(evt);
-      cell.isSelectable && isAnalysisMode && selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
+      cell.isSelectable &&
+        isSelectionsEnabled &&
+        selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
       break;
     // Enter: Confirms selections.
     case 'Enter':
       preventDefaultBehavior(evt);
-      if (!isSelectionMode) break;
-      selectionsAPI.confirm();
-      announce({ keys: ['SNTable.SelectionLabel.SelectionsConfirmed'] });
+      if (isSelectionMode) {
+        selectionsAPI.confirm();
+        announce({ keys: ['SNTable.SelectionLabel.SelectionsConfirmed'] });
+      }
       break;
     // Esc: Cancels selections. If no selections, do nothing and handleTableWrapperKeyDown should catch it
     case 'Escape':
-      if (!isAnalysisMode || !isSelectionMode) break;
-      preventDefaultBehavior(evt);
-      selectionsAPI.cancel();
-      announce({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
-      break;
-    // Tab: shift + tab, in selection mode and keyboard enabled, focus on selection toolbar
-    case 'Tab':
-      if (evt.shiftKey && keyboard.enabled && isSelectionMode) {
+      if (isSelectionMode) {
         preventDefaultBehavior(evt);
-        focusSelectionToolbar(evt.target, keyboard, true);
+        selectionsAPI.cancel();
+        announce({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
+      }
+      break;
+    // Tab (+ shift): in selection mode and keyboard enabled, focus on selection toolbar
+    case 'Tab':
+      if (keyboard.enabled && isSelectionMode) {
+        if (evt.shiftKey) {
+          preventDefaultBehavior(evt);
+          focusSelectionToolbar(evt.target, keyboard, true);
+        } else if (!paginationNeeded) {
+          // Tab only: when there are no pagination controls, go tab straight to selection toolbar
+          preventDefaultBehavior(evt);
+          focusSelectionToolbar(evt.target, keyboard, false);
+        }
       }
       break;
     default:
@@ -228,7 +236,7 @@ export const bodyHandleKeyUp = (evt, selectionDispatch) => {
 
 export const handleLastTab = (evt, isSelectionMode, keyboard) => {
   if (isSelectionMode && evt.key === 'Tab' && !evt.shiftKey) {
-    // tab key: focus on the confirm button in the selection toolbar
+    // tab key: focus on the selection toolbar
     preventDefaultBehavior(evt);
     focusSelectionToolbar(evt.target, keyboard, false);
   }

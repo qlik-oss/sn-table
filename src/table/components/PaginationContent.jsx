@@ -80,7 +80,7 @@ function PaginationContent({
 
   const handleSelectPage = (event) => handleChangePage(+event.target.value);
 
-  const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, isSelectionMode) : null;
+  const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, isSelectionMode, keyboard) : null;
 
   const getButton = (disabledCondition, pageNumber, type, onKeyDown = null) => {
     const iconType = `${type}${direction === 'rtl' ? 'RTL' : ''}`;

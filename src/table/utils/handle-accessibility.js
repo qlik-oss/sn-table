@@ -100,3 +100,12 @@ export const focusSelectionToolbar = (element, keyboard, last) => {
   }
   keyboard.focusSelection(last);
 };
+
+export const announceSelectionState = (announce, nextCell, isSelectionMode) => {
+  if (isSelectionMode) {
+    const hasActiveClassName = nextCell.classList.contains('selected');
+    hasActiveClassName
+      ? announce({ keys: ['SNTable.SelectionLabel.SelectedValue'] })
+      : announce({ keys: ['SNTable.SelectionLabel.NotSelectedValue'] });
+  }
+};
