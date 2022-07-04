@@ -27,10 +27,6 @@ export function addSelectionListeners({ api, selectionDispatch, setShouldRefocus
     resetSelections();
   };
 
-  if (!api) {
-    return () => {};
-  }
-
   api.on('deactivated', resetSelections);
   api.on('canceled', resetSelections);
   api.on('confirmed', resetSelectionsAndSetupRefocus);
