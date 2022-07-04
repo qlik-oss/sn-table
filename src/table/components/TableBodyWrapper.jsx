@@ -27,7 +27,7 @@ function TableBodyWrapper({
   // constraints.active: true - turn off interactions that affect the state of the visual
   // representation including selection, zoom, scroll, etc.
   // constraints.select: true - turn off selections.
-  const isSelectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
+  const isSelectionsEnabled = !constraints.active && !constraints.select;
   const columnRenderers = useMemo(
     () =>
       JSON.parse(columnsStylingInfoJSON).map((stylingInfo) =>
