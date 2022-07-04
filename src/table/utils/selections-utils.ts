@@ -1,5 +1,4 @@
 import { stardust } from '@nebula.js/stardust';
-import React, { ReactFragment } from 'react';
 import {
   TableCell,
   SelectionState,
@@ -24,7 +23,7 @@ type AddSelectionListenersArgs = {
   selectionDispatch: React.Dispatch<Action>;
   setShouldRefocus(): void;
   keyboard: stardust.Keyboard;
-  tableWrapperRef: React.MutableRefObject<JSX.Element>;
+  tableWrapperRef: React.MutableRefObject<HTMLElement>;
 };
 
 export function addSelectionListeners({
@@ -136,7 +135,7 @@ export const getSelectedRows = (
   return { ...selectedRows };
 };
 
-const selectCell = (state: SelectionState, payload: ActionPayload) => {
+const selectCell = (state: SelectionState, payload: ActionPayload): SelectionState => {
   const { api, rows, colIdx } = state;
   const { cell, announce, evt } = payload;
   const isSelectMultiValues = evt.shiftKey && (evt as React.KeyboardEvent)?.key.includes('Arrow');
@@ -164,7 +163,7 @@ const selectCell = (state: SelectionState, payload: ActionPayload) => {
   return { ...state, rows: selectedRows, colIdx: -1, isSelectMultiValues };
 };
 
-const selectMultiValues = (state: SelectionState) => {
+const selectMultiValues = (state: SelectionState): SelectionState => {
   const { api, rows, colIdx, isSelectMultiValues } = state;
 
   isSelectMultiValues &&
