@@ -1,5 +1,5 @@
 {
-  "scriptappy": "1.0.0",
+  "scriptappy": "1.1.0",
   "info": {
     "name": "@nebula.js/sn-table:properties",
     "description": "Table generic object definition",
@@ -36,8 +36,7 @@
             {
               "type": "StringExpression"
             }
-          ],
-          "type": "any"
+          ]
         },
         "qHyperCubeDef": {
           "description": "Extends HyperCubeDef, see Engine API: HyperCubeDef",
@@ -106,8 +105,7 @@
             {
               "type": "StringExpression"
             }
-          ],
-          "type": "any"
+          ]
         },
         "title": {
           "description": "Visualization title",
@@ -121,12 +119,11 @@
             {
               "type": "StringExpression"
             }
-          ],
-          "type": "any"
+          ]
         },
         "totals": {
           "description": "totals settings",
-          "kind": "object",
+          "type": "object",
           "entries": {
             "label": {
               "description": "The label of the totals row, shown in the leftmost column",
@@ -152,8 +149,7 @@
                   "kind": "literal",
                   "value": "'noTotals'"
                 }
-              ],
-              "type": "string"
+              ]
             },
             "show": {
               "description": "Determines if the way totals row is showing is handle automatically, if `true` the `position` prop will be ignored",
@@ -178,53 +174,58 @@
           "type": "NxAttrExprDef"
         }
       ],
-      "kind": "object",
-      "entries": {
-        "id": {
-          "description": "specifying what the color applies to",
-          "kind": "union",
-          "items": [
-            {
-              "kind": "literal",
-              "value": "'cellForegroundColor'"
-            },
-            {
-              "kind": "literal",
-              "value": "'cellBackgroundColor'"
-            }
-          ],
-          "type": "string"
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "id": {
+            "description": "specifying what the color applies to",
+            "kind": "union",
+            "items": [
+              {
+                "kind": "literal",
+                "value": "'cellForegroundColor'"
+              },
+              {
+                "kind": "literal",
+                "value": "'cellBackgroundColor'"
+              }
+            ]
+          }
         }
       }
     },
     "ContentStyling": {
       "description": "Holds properties for font size, font color and hover styling.",
-      "kind": "object",
-      "entries": {
-        "fontSize": {
-          "description": "Defaults to `14`",
-          "optional": true,
-          "type": "number"
-        },
-        "fontColor": {
-          "description": "Defaults to `#404040`",
-          "optional": true,
-          "type": "#/definitions/PaletteColor"
-        },
-        "hoverEffect": {
-          "description": "Toggles hover effect",
-          "optional": true,
-          "type": "boolean"
-        },
-        "hoverColor": {
-          "description": "Background hover color. Uses `#f4f4f4` if no hover colors are set, is transparent if only `hoverFontColor` is set",
-          "optional": true,
-          "type": "#/definitions/PaletteColor"
-        },
-        "hoverFontColor": {
-          "description": "When only `hoverColor` is set, this is adjusted to either `#f4f4f4` or `#ffffff` for optimal contrast",
-          "optional": true,
-          "type": "#/definitions/PaletteColor"
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "fontColor": {
+            "description": "Defaults to `#404040`",
+            "optional": true,
+            "type": "#/definitions/PaletteColor"
+          },
+          "fontSize": {
+            "description": "Defaults to `14`",
+            "optional": true,
+            "type": "number"
+          },
+          "hoverColor": {
+            "description": "Background hover color. Uses `#f4f4f4` if no hover colors are set, is transparent if only `hoverFontColor` is set",
+            "optional": true,
+            "type": "#/definitions/PaletteColor"
+          },
+          "hoverEffect": {
+            "description": "Toggles hover effect",
+            "optional": true,
+            "type": "boolean"
+          },
+          "hoverFontColor": {
+            "description": "When only `hoverColor` is set, this is adjusted to either `#f4f4f4` or `#ffffff` for optimal contrast",
+            "optional": true,
+            "type": "#/definitions/PaletteColor"
+          }
         }
       }
     },
@@ -235,32 +236,38 @@
           "type": "NxDimension"
         }
       ],
-      "kind": "object",
-      "entries": {
-        "qDef": {
-          "type": "#/definitions/InlineDimensionDef"
-        },
-        "qAttributeExpressions": {
-          "kind": "array",
-          "items": {
-            "type": "#/definitions/AttributeExpressionProperties"
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "qAttributeExpressions": {
+            "kind": "array",
+            "items": {
+              "type": "#/definitions/AttributeExpressionProperties"
+            }
+          },
+          "qDef": {
+            "type": "#/definitions/InlineDimensionDef"
           }
         }
       }
     },
     "HeaderStyling": {
       "description": "Holds properties for font size and color.",
-      "kind": "object",
-      "entries": {
-        "fontSize": {
-          "description": "Defaults to `14`",
-          "optional": true,
-          "type": "number"
-        },
-        "fontColor": {
-          "description": "Defaults to `#404040`",
-          "optional": true,
-          "type": "#/definitions/PaletteColor"
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "fontColor": {
+            "description": "Defaults to `#404040`",
+            "optional": true,
+            "type": "#/definitions/PaletteColor"
+          },
+          "fontSize": {
+            "description": "Defaults to `14`",
+            "optional": true,
+            "type": "number"
+          }
         }
       }
     },
@@ -271,11 +278,14 @@
           "type": "NxInlineDimensionDef"
         }
       ],
-      "kind": "object",
-      "entries": {
-        "textAlign": {
-          "optional": true,
-          "type": "#/definitions/TextAlign"
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "textAlign": {
+            "optional": true,
+            "type": "#/definitions/TextAlign"
+          }
         }
       }
     },
@@ -286,11 +296,14 @@
           "type": "NxInlineMeasureDef"
         }
       ],
-      "kind": "object",
-      "entries": {
-        "textAlign": {
-          "optional": true,
-          "type": "#/definitions/TextAlign"
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "textAlign": {
+            "optional": true,
+            "type": "#/definitions/TextAlign"
+          }
         }
       }
     },
@@ -301,48 +314,57 @@
           "type": "NxMeasure"
         }
       ],
-      "kind": "object",
-      "entries": {
-        "qDef": {
-          "type": "NxInlineMeasureDef"
-        },
-        "qAttributeExpressions": {
-          "kind": "array",
-          "items": {
-            "type": "#/definitions/AttributeExpressionProperties"
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "qAttributeExpressions": {
+            "kind": "array",
+            "items": {
+              "type": "#/definitions/AttributeExpressionProperties"
+            }
+          },
+          "qDef": {
+            "type": "NxInlineMeasureDef"
           }
         }
       }
     },
     "PaletteColor": {
       "description": "Color information structure. Holds the actual color and index in palette",
-      "kind": "object",
-      "entries": {
-        "color": {
-          "description": "Color as hex string (mandatory if index: -1)",
-          "type": "string"
-        },
-        "index": {
-          "description": "Index in palette",
-          "type": "number"
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "color": {
+            "description": "Color as hex string (mandatory if index: -1)",
+            "type": "string"
+          },
+          "index": {
+            "description": "Index in palette",
+            "type": "string"
+          }
         }
       }
     },
     "Styling": {
       "description": "General styling for all columns.\nSplit up into header and content (body) styling.\nIf any property is not set, default values specific for each property is used.",
-      "kind": "object",
-      "entries": {
-        "key": {
-          "description": "This should be set to `theme`",
-          "type": "string"
-        },
-        "content": {
-          "optional": true,
-          "type": "#/definitions/ContentStyling"
-        },
-        "header": {
-          "optional": true,
-          "type": "#/definitions/HeaderStyling"
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "key": {
+            "description": "This should be set to `theme`",
+            "type": "string"
+          },
+          "content": {
+            "optional": true,
+            "type": "#/definitions/ContentStyling"
+          },
+          "header": {
+            "optional": true,
+            "type": "#/definitions/HeaderStyling"
+          }
         }
       }
     },
@@ -353,30 +375,18 @@
           "type": "NxInlineDimensionDef"
         }
       ],
-      "kind": "object",
-      "entries": {
-        "auto": {
-          "description": "If true, sets the alignment based on the type of column (left for dimension, right for measure)",
-          "type": "boolean"
-        },
-        "align": {
-          "description": "Is used (and mandatory) if `auto` is false",
-          "kind": "union",
-          "items": [
-            {
-              "kind": "literal",
-              "value": "'left'"
-            },
-            {
-              "kind": "literal",
-              "value": "'center'"
-            },
-            {
-              "kind": "literal",
-              "value": "'right'"
-            }
-          ],
-          "type": "string"
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "align": {
+            "description": "Is used (and mandatory) if `auto` is false",
+            "type": "boolean"
+          },
+          "auto": {
+            "description": "If true, sets the alignment based on the type of column (left for dimension, right for measure)",
+            "type": "boolean"
+          }
         }
       }
     }
