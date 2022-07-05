@@ -49,16 +49,11 @@ export function addSelectionListeners({
       // if there is no focus on the chart,
       // make sure you blur the table
       // and focus the entire chart (table's parent element)
-      // TODO: fix nebula api so that blur has the correct argument type
-      // @ts-ignore
+      // @ts-ignore TODO: fix nebula api so that blur has the correct argument type
       keyboard.blur?.(true);
     }
     resetSelections();
   };
-
-  if (!api) {
-    return undefined;
-  }
 
   api.on('deactivated', resetSelections);
   api.on('canceled', resetSelections);

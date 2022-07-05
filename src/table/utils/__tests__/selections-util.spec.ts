@@ -81,7 +81,7 @@ describe('selections-utils', () => {
       } as unknown as ExtendedSelectionAPI;
 
       addSelectionListeners({ api, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
-      // @ts-ignore
+      // @ts-ignore ts does not understand that this has been assigned in the api.on() call
       confirmCallback();
       expect(setShouldRefocus).not.toHaveBeenCalled();
       expect(keyboard.blur).toHaveBeenCalledTimes(1);
@@ -99,7 +99,7 @@ describe('selections-utils', () => {
       } as unknown as ExtendedSelectionAPI;
 
       addSelectionListeners({ api, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
-      // @ts-ignore
+      // @ts-ignore ts does not understand that this has been assigned in the api.on() call
       confirmCallback();
       expect(setShouldRefocus).not.toHaveBeenCalled();
       expect(keyboard.blur).not.toHaveBeenCalled();

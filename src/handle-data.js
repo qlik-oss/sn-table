@@ -36,6 +36,7 @@ export function getColumnInfo(layout, colIndex) {
   const info = isDim ? qDimensionInfo[colIndex] : qMeasureInfo[colIndex - numDims];
   const isHidden = info.qError?.qErrorCode === 7005;
   const isLocked = info.qLocked;
+  const autoAlign = isDim ? 'left' : 'right';
 
   return (
     !isHidden && {
@@ -44,7 +45,7 @@ export function getColumnInfo(layout, colIndex) {
       width: 200,
       label: info.qFallbackTitle,
       id: `col-${colIndex}`,
-      align: !info.textAlign || info.textAlign.auto ? (isDim ? 'left' : 'right') : info.textAlign.align,
+      align: !info.textAlign || info.textAlign.auto ? autoAlign : info.textAlign.align,
       stylingInfo: info.qAttrExprInfo.map((expr) => expr.id),
       sortDirection: directionMap[info.qSortIndicator],
       dataColIdx: colIndex,

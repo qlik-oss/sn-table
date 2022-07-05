@@ -45,7 +45,7 @@
       }
     ],
     "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
-    "@typescript-eslint/ban-ts-comment": "off"
+    "@typescript-eslint/ban-ts-comment": ["error", { "ts-ignore": "allow-with-description" }]
   },
   "overrides": [
     {

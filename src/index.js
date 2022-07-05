@@ -41,11 +41,10 @@ const renderWithCarbon = ({ env, rootElement, model, theme, selectionsAPI, app, 
 export default function supernova(env) {
   return {
     qae: {
-      properties: {
-        initial: properties,
-      },
-      data: data(env),
+      properties: { initial: properties },
+      data: data(),
     },
+    ext: ext(env),
     component() {
       const rootElement = useElement();
       const reactRoot = useReactRoot(rootElement);
@@ -68,7 +67,7 @@ export default function supernova(env) {
       }, [layout, pageInfo]);
 
       useEffect(() => {
-        if (!env.carbon && layout && tableData && announce && changeSortOrder && theme) {
+        if (!env.carbon && reactRoot && layout && tableData && announce && changeSortOrder && theme) {
           render(reactRoot, {
             rootElement,
             layout,
@@ -112,7 +111,5 @@ export default function supernova(env) {
         [reactRoot]
       );
     },
-    // Extension definition
-    ext: ext(env),
   };
 }
