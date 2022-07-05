@@ -138,6 +138,8 @@ describe('selections-utils', () => {
       };
     });
 
+    afterEach(() => jest.clearAllMocks());
+
     it('should call begin, select and announce when type is select and no previous selections', () => {
       state.rows = {};
       state.colIdx = -1;
@@ -374,8 +376,10 @@ describe('selections-utils', () => {
           } as ExtendedSelectionAPI,
           isSelectMultiValues: false,
         },
-      };
+      } as unknown as ContextValue;
     });
+
+    afterEach(() => jest.clearAllMocks());
 
     it('should return selected when selected', () => {
       const cellState = getCellSelectionState(cell, value);

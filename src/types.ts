@@ -57,8 +57,8 @@ export interface Action {
 
 // everything but selectionState optional here to simplify testing
 export interface ContextValue {
-  focusedCellCoord?: [number, number];
-  setFocusedCellCoord?: React.Dispatch<React.SetStateAction<[number, number]>>;
+  focusedCellCoord: [number, number];
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   selectionState: SelectionState;
-  selectionDispatch?: React.Dispatch<ActionPayload> | jest.Mock<any, any>;
+  selectionDispatch: React.Dispatch<ActionPayload> | jest.Mock<any, any>;
 }
