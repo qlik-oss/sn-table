@@ -7,15 +7,7 @@ import {
   getCellSelectionState,
   SelectionStates,
 } from '../selections-utils';
-import {
-  TableCell,
-  SelectionState,
-  ExtendedSelectionAPI,
-  AnnounceFn,
-  SelectedRows,
-  ContextValue,
-  Action,
-} from '../../../types';
+import { TableCell, SelectionState, ExtendedSelectionAPI, AnnounceFn, ContextValue, Action } from '../../../types';
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {
@@ -306,7 +298,7 @@ describe('selections-utils', () => {
   });
 
   describe('getSelectedRows', () => {
-    let selectedRows: SelectedRows;
+    let selectedRows: Record<string, number>;
     let cell: TableCell;
     let evt: React.KeyboardEvent;
 

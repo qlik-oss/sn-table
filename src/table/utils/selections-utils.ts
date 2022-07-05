@@ -6,11 +6,9 @@ import {
   ExtendedSelectionAPI,
   ActionPayload,
   AnnounceFn,
-  SelectedRows,
   ContextValue,
 } from '../../types';
 
-// eslint-disable-next-line no-shadow
 export enum SelectionStates {
   SELECTED = 'selected',
   POSSIBLE = 'possible',
@@ -100,10 +98,10 @@ export const handleAnnounceSelectionStatus = (announce: AnnounceFn, rowsLength: 
 };
 
 export const getSelectedRows = (
-  selectedRows: SelectedRows,
+  selectedRows: Record<string, number>,
   cell: TableCell,
   evt: React.KeyboardEvent | React.MouseEvent
-): SelectedRows => {
+): Record<string, number> => {
   const { qElemNumber, rowIdx } = cell;
 
   if (evt.ctrlKey || evt.metaKey) {
@@ -134,7 +132,7 @@ const selectCell = (state: SelectionState, payload: ActionPayload): SelectionSta
   const { api, rows, colIdx } = state;
   const { cell, announce, evt } = payload;
   const isSelectMultiValues = evt.shiftKey && (evt as React.KeyboardEvent)?.key.includes('Arrow');
-  let selectedRows: SelectedRows = {};
+  let selectedRows: Record<string, number> = {};
 
   if (colIdx === -1) api.begin(['/qHyperCubeDef']);
   else if (colIdx === cell.colIdx) selectedRows = { ...rows };

@@ -19,12 +19,8 @@ export interface ExtendedSelectionAPI extends stardust.ObjectSelections {
   removeListener(eventType: string, callback: () => void): void;
 }
 
-export interface SelectedRows {
-  [key: string]: number;
-}
-
 export interface SelectionState {
-  rows: SelectedRows;
+  rows: Record<string, number>;
   colIdx: number;
   api: ExtendedSelectionAPI;
   isSelectMultiValues: boolean;
@@ -55,7 +51,6 @@ export interface Action {
 //   | { type: 'reset'; payload?: SelectPayload }
 //   | { type: 'clear'; payload?: SelectPayload };
 
-// everything but selectionState optional here to simplify testing
 export interface ContextValue {
   focusedCellCoord: [number, number];
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
