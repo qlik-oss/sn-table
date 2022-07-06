@@ -43,8 +43,6 @@ export default function TableWrapper(props) {
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
 
-  console.log('cellcoord', focusedCellCoord);
-
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   }, [rootElement]);
