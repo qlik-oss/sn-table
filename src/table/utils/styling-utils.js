@@ -70,8 +70,10 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
 export function getHeaderStyle(layout, theme) {
   const header = layout.components?.[0]?.header;
   const headerStyle = getBaseStyling(header, 'header', theme);
+
   headerStyle.cursor = 'pointer';
-  headerStyle.borderWidth = '1px 1px 1px 0px';
+  headerStyle.borderTop = '1px solid #D9D9D9';
+  headerStyle.borderLeft = '0px';
 
   // To avoid seeing the table body through the table head:
   // - When the table background color from the sense theme is transparent,
