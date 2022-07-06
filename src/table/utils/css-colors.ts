@@ -1,4 +1,11 @@
-const cssColors = {
+type rgbColor = {
+  r: number;
+  g: number;
+  b: number;
+  a?: number;
+};
+
+const cssColors: Record<string, rgbColor> = {
   aliceblue: { r: 240, g: 248, b: 255 },
   antiquewhite: { r: 250, g: 235, b: 215 },
   aqua: { r: 0, g: 255, b: 255 },
