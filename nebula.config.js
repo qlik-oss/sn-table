@@ -12,7 +12,7 @@ module.exports = {
     replacementStrings,
   },
   serve: {
-    keyboardNavigation: true,
+    keyboardNavigation: false,
     themes: [
       {
         id: 'Test',
