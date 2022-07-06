@@ -34,9 +34,10 @@ export const removeAndFocus = (newCoord, rootElement, setFocusedCellCoord, keybo
   keyboard.enabled && keyboard.focus();
 };
 
-export const handleClickToFocusBody = (cell, rootElement, setFocusedCellCoord, keyboard) => {
+export const handleClickToFocusBody = (cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition) => {
   const { rawRowIdx, rawColIdx } = cell;
-  removeAndFocus([rawRowIdx + 1, rawColIdx], rootElement, setFocusedCellCoord, keyboard);
+  const firstBodyRowIdx = totalsPosition === 'top' ? 2 : 1;
+  removeAndFocus([rawRowIdx + firstBodyRowIdx, rawColIdx], rootElement, setFocusedCellCoord, keyboard);
 };
 
 export const handleClickToFocusHead = (columnIndex, rootElement, setFocusedCellCoord, keyboard) => {

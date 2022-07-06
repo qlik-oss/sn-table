@@ -87,7 +87,9 @@ function TableBodyWrapper({
                   announce={announce}
                   onKeyDown={handleKeyDown}
                   onKeyUp={(evt) => bodyHandleKeyUp(evt, selectionDispatch)}
-                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
+                  onMouseDown={() =>
+                    handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition)
+                  }
                 >
                   {cell.qText}
                 </CellRenderer>
