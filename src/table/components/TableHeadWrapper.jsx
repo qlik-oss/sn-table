@@ -25,6 +25,7 @@ function TableHeadWrapper({
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
+  // const headerStyle = getHeaderStyle(layout, theme);
   const headRowRef = useRef();
 
   useEffect(() => {
@@ -54,7 +55,8 @@ function TableHeadWrapper({
 
           return (
             <TableCell
-              sx={headerStyle}
+              // sx={headerStyle}
+              style={headerStyle}
               key={column.id}
               align={column.align}
               className="sn-table-head-cell sn-table-cell"

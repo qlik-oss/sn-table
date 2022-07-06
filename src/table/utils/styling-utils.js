@@ -71,7 +71,7 @@ export function getHeaderStyle(layout, theme) {
   const header = layout.components?.[0]?.header;
   const headerStyle = getBaseStyling(header, 'header', theme);
   headerStyle.cursor = 'pointer';
-  headerStyle.borderWidth = '1px 1px 1px 0px';
+  // headerStyle.borderWidth = '1px 1px 1px 0px';
 
   // To avoid seeing the table body through the table head:
   // - When the table background color from the sense theme is transparent,
@@ -96,7 +96,7 @@ export function getHeaderStyle(layout, theme) {
 export function getBodyCellStyle(layout, theme) {
   const content = layout.components?.[0]?.content;
   const contentStyle = getBaseStyling(content, 'content', theme);
-  contentStyle.borderWidth = '0px 1px 1px 0px';
+  // contentStyle.borderWidth = '0px 1px 1px 0px';
 
   const hoverBackgroundColorFromLayout = content?.hoverColor;
   const hoverFontColorFromLayout = content?.hoverFontColor;

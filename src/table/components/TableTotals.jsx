@@ -11,6 +11,7 @@ function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
   const headRowHeight = useContextSelector(TableContext, (value) => value.headRowHeight);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const totalsStyle = useMemo(() => getTotalsCellStyle(layout, theme), [layout, theme.name()]);
+  // const totalsStyle = getTotalsCellStyle(layout, theme);
   const isTop = totalsPosition === 'top';
 
   return (
@@ -19,7 +20,8 @@ function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
         const cellCoord = [isTop ? 1 : rows.length + 1, columnIndex];
         return (
           <StyledTotalsCell
-            totalsStyle={totalsStyle}
+            // totalsStyle={totalsStyle}
+            style={totalsStyle}
             headRowHeight={headRowHeight}
             isTop={isTop}
             key={column.id}
