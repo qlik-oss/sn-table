@@ -27,7 +27,6 @@
     "arrow-body-style": 0,
     "prefer-arrow-callback": 0,
     "no-unused-expressions": 0,
-    "no-nested-ternary": 0,
     "react/forbid-prop-types": 0,
     "react/jsx-props-no-spreading": 0,
     "react-hooks/rules-of-hooks": 2,
@@ -45,7 +44,10 @@
         "tsx": "never"
       }
     ],
-    "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }]
+    "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+    "@typescript-eslint/ban-ts-comment": ["error", { "ts-ignore": "allow-with-description" }],
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"]
   },
   "overrides": [
     {
