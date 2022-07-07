@@ -1,8 +1,8 @@
-import { useMemo, useTheme, stardust } from '@nebula.js/stardust';
+import { useMemo, useTheme } from '@nebula.js/stardust';
 import { isDarkColor, isTransparentColor } from '../table/utils/color-utils';
 import { ExtendedTheme, TableThemeColors } from '../types';
 
-export const tableThemeColors = (theme: stardust.Theme, rootElement: HTMLElement): TableThemeColors => {
+export const tableThemeColors = (theme: ExtendedTheme, rootElement: HTMLElement): TableThemeColors => {
   const qvInnerObject = rootElement?.closest('.qv-object .qv-inner-object');
   const objectBackgroundColorFromCSS = qvInnerObject && window.getComputedStyle(qvInnerObject).backgroundColor;
 

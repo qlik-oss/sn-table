@@ -154,7 +154,9 @@ describe('tableThemeColors', () => {
   describe('client', () => {
     rootElement = {
       closest: (selector: string): HTMLElement => {
+        // This needs to return a proper HTMLelement for getComputedStyle to work later
         const el = document.createElement('div');
+        // Need to split the selector since it can be two classes
         el.classList.add(...selector.split(' '));
         return el;
       },
