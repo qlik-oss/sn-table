@@ -1,16 +1,55 @@
-export const SelectionStates = {
-  SELECTED: 'selected',
-  POSSIBLE: 'possible',
-  EXCLUDED: 'excluded',
-  INACTIVE: 'inactive',
+// TODO: add this to global rules
+/* eslint-disable @typescript-eslint/no-empty-interface */
+import { stardust } from '@nebula.js/stardust';
+import { TableCell, SelectionState, ExtendedSelectionAPI, ActionPayload, AnnounceFn, ContextValue } from '../../types';
+
+export enum SelectionStates {
+  SELECTED = 'selected',
+  POSSIBLE = 'possible',
+  EXCLUDED = 'excluded',
+  INACTIVE = 'inactive',
+}
+
+export enum SelectionActions {
+  SELECT = 'select',
+  RESET = 'reset',
+  CLEAR = 'clear',
+  SELECT_MULTI_VALUES = 'selectMultiValues',
+}
+
+export interface Action<T = any> {
+  type: T;
+}
+
+export interface SelectAction extends Action<SelectionActions.SELECT> {
+  payload: ActionPayload;
+}
+export interface SelectMultiValuesAction extends Action<SelectionActions.SELECT_MULTI_VALUES> {}
+export interface ResetAction extends Action<SelectionActions.RESET> {}
+export interface ClearAction extends Action<SelectionActions.CLEAR> {}
+
+export type TSelectionActions = SelectAction | ResetAction | ClearAction | SelectMultiValuesAction;
+
+type AddSelectionListenersArgs = {
+  api: ExtendedSelectionAPI;
+  selectionDispatch: React.Dispatch<Action>;
+  setShouldRefocus(): void;
+  keyboard: stardust.Keyboard;
+  tableWrapperRef: React.MutableRefObject<HTMLElement>;
 };
 
-export function addSelectionListeners({ api, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef }) {
+export function addSelectionListeners({
+  api,
+  selectionDispatch,
+  setShouldRefocus,
+  keyboard,
+  tableWrapperRef,
+}: AddSelectionListenersArgs) {
   const resetSelections = () => {
-    selectionDispatch({ type: 'reset' });
+    selectionDispatch({ type: SelectionActions.RESET });
   };
   const clearSelections = () => {
-    selectionDispatch({ type: 'clear' });
+    selectionDispatch({ type: SelectionActions.CLEAR });
   };
   const resetSelectionsAndSetupRefocus = () => {
     if (tableWrapperRef.current?.contains(document.activeElement)) {
@@ -22,7 +61,8 @@ export function addSelectionListeners({ api, selectionDispatch, setShouldRefocus
       // if there is no focus on the chart,
       // make sure you blur the table
       // and focus the entire chart (table's parent element)
-      keyboard.blur(true);
+      // @ts-ignore TODO: fix nebula api so that blur has the correct argument type
+      keyboard.blur?.(true);
     }
     resetSelections();
   };
@@ -40,7 +80,7 @@ export function addSelectionListeners({ api, selectionDispatch, setShouldRefocus
   };
 }
 
-export const getCellSelectionState = (cell, value) => {
+export const getCellSelectionState = (cell: TableCell, value: ContextValue): SelectionStates => {
   const {
     selectionState: { colIdx, rows, api },
   } = value;
@@ -58,7 +98,7 @@ export const getCellSelectionState = (cell, value) => {
   return cellState;
 };
 
-export const handleAnnounceSelectionStatus = ({ announce, rowsLength, isAddition }) => {
+export const handleAnnounceSelectionStatus = (announce: AnnounceFn, rowsLength: number, isAddition: boolean) => {
   if (rowsLength) {
     const changeStatus = isAddition ? 'SNTable.SelectionLabel.SelectedValue' : 'SNTable.SelectionLabel.DeselectedValue';
     const amountStatus =
@@ -71,7 +111,11 @@ export const handleAnnounceSelectionStatus = ({ announce, rowsLength, isAddition
   }
 };
 
-export const getSelectedRows = ({ selectedRows, cell, evt }) => {
+export const getSelectedRows = (
+  selectedRows: Record<string, number>,
+  cell: TableCell,
+  evt: React.KeyboardEvent | React.MouseEvent
+): Record<string, number> => {
   const { qElemNumber, rowIdx } = cell;
 
   if (evt.ctrlKey || evt.metaKey) {
@@ -81,11 +125,12 @@ export const getSelectedRows = ({ selectedRows, cell, evt }) => {
     return { [qElemNumber]: rowIdx };
   }
 
-  if (evt.shiftKey && evt.key.includes('Arrow')) {
+  const key = (evt as React.KeyboardEvent)?.key;
+  if (evt.shiftKey && key.includes('Arrow')) {
     selectedRows[qElemNumber] = rowIdx;
     // add the next or previous cell to selectedRows, based on which arrow is pressed
-    selectedRows[evt.key === 'ArrowDown' ? cell.nextQElemNumber : cell.prevQElemNumber] =
-      evt.key === 'ArrowDown' ? rowIdx + 1 : rowIdx - 1;
+    selectedRows[key === 'ArrowDown' ? cell.nextQElemNumber : cell.prevQElemNumber] =
+      key === 'ArrowDown' ? rowIdx + 1 : rowIdx - 1;
   } else if (selectedRows[qElemNumber] !== undefined) {
     // if the selected item is clicked again, that item will be removed
     delete selectedRows[qElemNumber];
@@ -97,23 +142,20 @@ export const getSelectedRows = ({ selectedRows, cell, evt }) => {
   return { ...selectedRows };
 };
 
-const selectCell = (state, payload) => {
+const selectCell = (state: SelectionState, payload: ActionPayload): SelectionState => {
   const { api, rows, colIdx } = state;
   const { cell, announce, evt } = payload;
-  const isSelectMultiValues = evt.shiftKey && evt.key.includes('Arrow');
-  let selectedRows = {};
+  const isSelectMultiValues = evt.shiftKey && (evt as React.KeyboardEvent)?.key.includes('Arrow');
+  let selectedRows: Record<string, number> = {};
 
-  if (colIdx === -1) api.begin('/qHyperCubeDef');
+  if (colIdx === -1) api.begin(['/qHyperCubeDef']);
   else if (colIdx === cell.colIdx) selectedRows = { ...rows };
   else return state;
 
-  selectedRows = getSelectedRows({ selectedRows, cell, evt });
+  selectedRows = getSelectedRows(selectedRows, cell, evt);
   const selectedRowsLength = Object.keys(selectedRows).length;
-  handleAnnounceSelectionStatus({
-    announce,
-    rowsLength: selectedRowsLength,
-    isAddition: selectedRowsLength >= Object.keys(rows).length,
-  });
+  const isAddition = selectedRowsLength >= Object.keys(rows).length;
+  handleAnnounceSelectionStatus(announce, selectedRowsLength, isAddition);
 
   if (selectedRowsLength) {
     !isSelectMultiValues &&
@@ -128,7 +170,7 @@ const selectCell = (state, payload) => {
   return { ...state, rows: selectedRows, colIdx: -1, isSelectMultiValues };
 };
 
-const selectMultiValues = (state) => {
+const selectMultiValues = (state: SelectionState): SelectionState => {
   const { api, rows, colIdx, isSelectMultiValues } = state;
 
   isSelectMultiValues &&
@@ -140,15 +182,15 @@ const selectMultiValues = (state) => {
   return { ...state, isSelectMultiValues: false };
 };
 
-export const reducer = (state, action) => {
+export const reducer = (state: SelectionState, action: TSelectionActions): SelectionState => {
   switch (action.type) {
-    case 'select':
+    case SelectionActions.SELECT:
       return selectCell(state, action.payload);
-    case 'selectMultiValues':
+    case SelectionActions.SELECT_MULTI_VALUES:
       return selectMultiValues(state);
-    case 'reset':
+    case SelectionActions.RESET:
       return state.api.isModal() ? state : { ...state, rows: {}, colIdx: -1 };
-    case 'clear':
+    case SelectionActions.CLEAR:
       return Object.keys(state.rows).length ? { ...state, rows: {} } : state;
     default:
       throw new Error('reducer called with invalid action type');

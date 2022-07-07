@@ -125,15 +125,16 @@ export const VisuallyHidden = styled('span')({
 
 // ---------- TableTotals ----------
 
-export const TotalsCell = styled(TableCell, {
-  shouldForwardProp: (prop) => prop !== 'headerStyle' && prop !== 'isTop',
-})(({ headerStyle, isTop }) => ({
-  ...headerStyle,
+export const StyledTotalsCell = styled(TableCell, {
+  shouldForwardProp: (prop) => prop !== 'isTop' && prop !== 'headRowHeight' && prop !== 'totalsStyle',
+})(({ totalsStyle, isTop, headRowHeight }) => ({
+  ...totalsStyle,
   fontWeight: 'bold',
   position: 'sticky',
   borderWidth: isTop ? '0px 1px 2px 0px' : '2px 1px 1px 0px',
-  top: isTop && 35,
+  top: isTop && headRowHeight,
   bottom: !isTop && 0,
+  marginTop: 0,
 }));
 
 // ---------- TableWrapper ----------

@@ -3,6 +3,7 @@ import { stardust } from '@nebula.js/stardust';
 import PropTypes from 'prop-types';
 import { createSelectorProvider } from './createSelectorProvider';
 import { reducer } from '../utils/selections-utils';
+import { ExtendedSelectionAPI } from '../../types';
 
 export const TableContext = createContext({});
 
@@ -21,17 +22,20 @@ export const TableContextProvider = ({
   cellCoordMock,
   selectionDispatchMock,
 }: ContextProviderProps) => {
+  const [headRowHeight, setHeadRowHeight] = useState();
   const [focusedCellCoord, setFocusedCellCoord] = useState(cellCoordMock || [0, 0]);
   const [selectionState, selectionDispatch] = useReducer(reducer, {
     rows: {},
     colIdx: -1,
-    api: selectionsAPI,
+    api: selectionsAPI as ExtendedSelectionAPI, // TODO: update nebula api with correct selection api type
     isSelectMultiValues: false,
   });
 
   return (
     <ProviderWithSelector
       value={{
+        headRowHeight,
+        setHeadRowHeight,
         focusedCellCoord,
         setFocusedCellCoord,
         selectionState,

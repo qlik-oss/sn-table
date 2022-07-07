@@ -3,6 +3,7 @@ import { render, fireEvent } from '@testing-library/react';
 
 import { TableContextProvider } from '../../context';
 import * as withSelections from '../withSelections';
+import { SelectionActions } from '../../utils/selections-utils';
 
 describe('withSelections', () => {
   const selectionsAPI = { isModal: () => false };
@@ -61,7 +62,7 @@ describe('withSelections', () => {
 
     expect(selectionDispatchMock).toHaveBeenCalledTimes(1);
     expect(selectionDispatchMock).toHaveBeenCalledWith({
-      type: 'select',
+      type: SelectionActions.SELECT,
       payload: { cell, evt: expect.anything(), announce },
     });
   });

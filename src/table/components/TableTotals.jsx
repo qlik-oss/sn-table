@@ -1,15 +1,16 @@
 import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useContextSelector, TableContext } from '../context';
-import { getHeaderStyle } from '../utils/styling-utils';
+import { getTotalsCellStyle } from '../utils/styling-utils';
 import { totalHandleKeyPress } from '../utils/handle-key-press';
 import { removeAndFocus } from '../utils/handle-accessibility';
-import { StyledHeadRow, TotalsCell } from '../styles';
+import { StyledHeadRow, StyledTotalsCell } from '../styles';
 
 function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
   const { columns, paginationNeeded, totalsPosition, rows } = tableData;
+  const headRowHeight = useContextSelector(TableContext, (value) => value.headRowHeight);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
-  const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme.name()]);
+  const totalsStyle = useMemo(() => getTotalsCellStyle(layout, theme), [layout, theme.name()]);
   const isTop = totalsPosition === 'top';
 
   return (
@@ -17,8 +18,9 @@ function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
       {columns.map((column, columnIndex) => {
         const cellCoord = [isTop ? 1 : rows.length + 1, columnIndex];
         return (
-          <TotalsCell
-            headerStyle={headerStyle}
+          <StyledTotalsCell
+            totalsStyle={totalsStyle}
+            headRowHeight={headRowHeight}
             isTop={isTop}
             key={column.id}
             align={column.align}
@@ -32,7 +34,7 @@ function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
             }}
           >
             {column.totalInfo}
-          </TotalsCell>
+          </StyledTotalsCell>
         );
       })}
     </StyledHeadRow>
