@@ -1,13 +1,7 @@
+// TODO: add this to global rules
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import { stardust } from '@nebula.js/stardust';
-import {
-  TableCell,
-  SelectionState,
-  Action,
-  ExtendedSelectionAPI,
-  ActionPayload,
-  AnnounceFn,
-  ContextValue,
-} from '../../types';
+import { TableCell, SelectionState, ExtendedSelectionAPI, ActionPayload, AnnounceFn, ContextValue } from '../../types';
 
 export enum SelectionStates {
   SELECTED = 'selected',
@@ -15,6 +9,26 @@ export enum SelectionStates {
   EXCLUDED = 'excluded',
   INACTIVE = 'inactive',
 }
+
+export enum SelectionActions {
+  SELECT = 'select',
+  RESET = 'reset',
+  CLEAR = 'clear',
+  SELECT_MULTI_VALUES = 'selectMultiValues',
+}
+
+export interface Action<T = any> {
+  type: T;
+}
+
+export interface SelectAction extends Action<SelectionActions.SELECT> {
+  payload: ActionPayload;
+}
+export interface SelectMultiValuesAction extends Action<SelectionActions.SELECT_MULTI_VALUES> {}
+export interface ResetAction extends Action<SelectionActions.RESET> {}
+export interface ClearAction extends Action<SelectionActions.CLEAR> {}
+
+export type TSelectionActions = SelectAction | ResetAction | ClearAction | SelectMultiValuesAction;
 
 type AddSelectionListenersArgs = {
   api: ExtendedSelectionAPI;
@@ -32,10 +46,10 @@ export function addSelectionListeners({
   tableWrapperRef,
 }: AddSelectionListenersArgs) {
   const resetSelections = () => {
-    selectionDispatch({ type: 'reset' });
+    selectionDispatch({ type: SelectionActions.RESET });
   };
   const clearSelections = () => {
-    selectionDispatch({ type: 'clear' });
+    selectionDispatch({ type: SelectionActions.CLEAR });
   };
   const resetSelectionsAndSetupRefocus = () => {
     if (tableWrapperRef.current?.contains(document.activeElement)) {
@@ -168,15 +182,15 @@ const selectMultiValues = (state: SelectionState): SelectionState => {
   return { ...state, isSelectMultiValues: false };
 };
 
-export const reducer = (state: SelectionState, action: Action): SelectionState => {
+export const reducer = (state: SelectionState, action: TSelectionActions): SelectionState => {
   switch (action.type) {
-    case 'select':
-      return selectCell(state, action.payload as ActionPayload);
-    case 'selectMultiValues':
+    case SelectionActions.SELECT:
+      return selectCell(state, action.payload);
+    case SelectionActions.SELECT_MULTI_VALUES:
       return selectMultiValues(state);
-    case 'reset':
+    case SelectionActions.RESET:
       return state.api.isModal() ? state : { ...state, rows: {}, colIdx: -1 };
-    case 'clear':
+    case SelectionActions.CLEAR:
       return Object.keys(state.rows).length ? { ...state, rows: {} } : state;
     default:
       throw new Error('reducer called with invalid action type');

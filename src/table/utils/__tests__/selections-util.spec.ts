@@ -6,8 +6,13 @@ import {
   getSelectedRows,
   getCellSelectionState,
   SelectionStates,
+  SelectionActions,
+  SelectMultiValuesAction,
+  SelectAction,
+  ResetAction,
+  ClearAction,
 } from '../selections-utils';
-import { TableCell, SelectionState, ExtendedSelectionAPI, AnnounceFn, ContextValue, Action } from '../../../types';
+import { TableCell, SelectionState, ExtendedSelectionAPI, AnnounceFn, ContextValue } from '../../../types';
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {
@@ -56,7 +61,7 @@ describe('selections-utils', () => {
       addSelectionListeners({ api, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
       callbacks.forEach((cb) => {
         cb();
-        expect(selectionDispatch).toHaveBeenCalledWith({ type: 'reset' });
+        expect(selectionDispatch).toHaveBeenCalledWith({ type: SelectionActions.RESET });
       });
       // only for confirm events
       expect(setShouldRefocus).toHaveBeenCalledTimes(1);
@@ -100,8 +105,6 @@ describe('selections-utils', () => {
 
   describe('reducer', () => {
     let state: SelectionState;
-    let action: Action;
-    let announce: jest.Mock<any, any>;
     let cell: TableCell;
 
     beforeEach(() => {
@@ -117,119 +120,126 @@ describe('selections-utils', () => {
         isSelectMultiValues: false,
       };
       cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1 } as TableCell;
-      announce = jest.fn();
-      action = {
-        type: 'select',
-        payload: {
-          evt: {
-            shiftKey: false,
-          } as React.KeyboardEvent,
-          announce,
-          cell,
-        },
-      };
     });
 
     afterEach(() => jest.clearAllMocks());
 
-    it('should call begin, select and announce when type is select and no previous selections', () => {
-      state.rows = {};
-      state.colIdx = -1;
-      const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
+    describe('select', () => {
+      let action: SelectAction;
+      let announce: jest.Mock<any, any>;
 
-      const newState = reducer(state, action);
-      expect(newState).toEqual({ ...state, rows: { [cell.qElemNumber]: cell.rowIdx }, colIdx: cell.colIdx });
-      expect(state.api.begin).toHaveBeenCalledTimes(1);
-      expect(state.api.select).toHaveBeenCalledWith({ method: 'selectHyperCubeCells', params });
-      expect(state.api.cancel).not.toHaveBeenCalled();
-      expect(action?.payload?.announce).toHaveBeenCalledTimes(1);
-    });
+      beforeEach(() => {
+        announce = jest.fn();
+        action = {
+          type: SelectionActions.SELECT,
+          payload: {
+            evt: {
+              shiftKey: false,
+            } as React.KeyboardEvent,
+            announce,
+            cell,
+          },
+        };
+      });
 
-    it('should call begin and announce but not select when type is select and isSelectMultiValues is true', () => {
-      state.rows = {};
-      state.colIdx = -1;
-      action = {
-        type: 'select',
-        payload: {
+      it('should call begin, select and announce when type is select and no previous selections', () => {
+        state.rows = {};
+        state.colIdx = -1;
+        const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
+
+        const newState = reducer(state, action);
+        expect(newState).toEqual({ ...state, rows: { [cell.qElemNumber]: cell.rowIdx }, colIdx: cell.colIdx });
+        expect(state.api.begin).toHaveBeenCalledTimes(1);
+        expect(state.api.select).toHaveBeenCalledWith({ method: 'selectHyperCubeCells', params });
+        expect(state.api.cancel).not.toHaveBeenCalled();
+        expect(action.payload.announce).toHaveBeenCalledTimes(1);
+      });
+
+      it('should call begin and announce but not select when type is select and isSelectMultiValues is true', () => {
+        state.rows = {};
+        state.colIdx = -1;
+        action.payload = {
           evt: {
             shiftKey: true,
             key: 'DownArrow',
           } as React.KeyboardEvent,
           announce,
           cell,
-        },
-      };
+        };
 
-      const newState = reducer(state, action);
-      expect(newState).toEqual({
-        ...state,
-        rows: { [cell.qElemNumber]: cell.rowIdx, [cell.prevQElemNumber]: cell.rowIdx - 1 },
-        colIdx: cell.colIdx,
-        isSelectMultiValues: true,
+        const newState = reducer(state, action);
+        expect(newState).toEqual({
+          ...state,
+          rows: { [cell.qElemNumber]: cell.rowIdx, [cell.prevQElemNumber]: cell.rowIdx - 1 },
+          colIdx: cell.colIdx,
+          isSelectMultiValues: true,
+        });
+        expect(state.api.begin).toHaveBeenCalledTimes(1);
+        expect(state.api.select).not.toHaveBeenCalled();
+        expect(state.api.cancel).not.toHaveBeenCalled();
+        expect(action.payload.announce).toHaveBeenCalledTimes(1);
       });
-      expect(state.api.begin).toHaveBeenCalledTimes(1);
-      expect(state.api.select).not.toHaveBeenCalled();
-      expect(state.api.cancel).not.toHaveBeenCalled();
-      expect(action?.payload?.announce).toHaveBeenCalledTimes(1);
+
+      it('should not call begin but call cancel and announce when same qElemNumber (resulting in empty selectedCells)', () => {
+        const newState = reducer(state, action);
+        expect(newState).toEqual({ ...state, rows: {}, colIdx: -1 });
+        expect(state.api.begin).not.toHaveBeenCalled();
+        expect(state.api.select).not.toHaveBeenCalled();
+        expect(state.api.cancel).toHaveBeenCalledWith();
+        expect(action.payload.announce).toHaveBeenCalledTimes(1);
+      });
+
+      it('should return early when excluded columns', () => {
+        cell.colIdx = 2;
+
+        const newState = reducer(state, action);
+        expect(newState).toBe(state);
+
+        expect(state.api.begin).not.toHaveBeenCalled();
+        expect(state.api.cancel).not.toHaveBeenCalled();
+        expect(state.api.select).not.toHaveBeenCalled();
+        expect(action.payload.announce).not.toHaveBeenCalled();
+      });
     });
 
-    it('should not call begin but call cancel and announce when same qElemNumber (resulting in empty selectedCells)', () => {
-      const newState = reducer(state, action);
-      expect(newState).toEqual({ ...state, rows: {}, colIdx: -1 });
-      expect(state.api.begin).not.toHaveBeenCalled();
-      expect(state.api.select).not.toHaveBeenCalled();
-      expect(state.api.cancel).toHaveBeenCalledWith();
-      expect(action?.payload?.announce).toHaveBeenCalledTimes(1);
-    });
+    describe('other', () => {
+      it('should call select when type is selectMultiValues, isSelectMultiValues is true and return isSelectMultiValues to be false', () => {
+        const action = { type: SelectionActions.SELECT_MULTI_VALUES } as SelectMultiValuesAction;
+        state.isSelectMultiValues = true;
+        const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
 
-    it('should return early when excluded columns', () => {
-      cell.colIdx = 2;
+        const newState = reducer(state, action);
+        expect(newState).toEqual({ ...state, isSelectMultiValues: false });
+        expect(state.api.select).toHaveBeenCalledWith({ method: 'selectHyperCubeCells', params });
+      });
 
-      const newState = reducer(state, action);
-      expect(newState).toBe(state);
+      it('should not call select when type is selectMultiValues but isSelectMultiValues is false', () => {
+        const action = { type: SelectionActions.SELECT_MULTI_VALUES } as SelectMultiValuesAction;
+        state.isSelectMultiValues = false;
 
-      expect(state.api.begin).not.toHaveBeenCalled();
-      expect(state.api.cancel).not.toHaveBeenCalled();
-      expect(state.api.select).not.toHaveBeenCalled();
-      expect(action?.payload?.announce).not.toHaveBeenCalled();
-    });
+        const newState = reducer(state, action);
+        expect(newState).toEqual({ ...state, isSelectMultiValues: false });
+        expect(state.api.select).not.toHaveBeenCalled();
+      });
 
-    it('should call select when type is selectMultiValues, isSelectMultiValues is true and return isSelectMultiValues to be false', () => {
-      action.type = 'selectMultiValues';
-      state.isSelectMultiValues = true;
-      const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
+      it('should return state updated when the app is not in selection modal state when action.type is reset', () => {
+        const action = { type: SelectionActions.RESET } as ResetAction;
+        const newState = reducer(state, action);
+        expect(newState).toEqual({ ...state, rows: {}, colIdx: -1 });
+      });
 
-      const newState = reducer(state, action);
-      expect(newState).toEqual({ ...state, isSelectMultiValues: false });
-      expect(state.api.select).toHaveBeenCalledWith({ method: 'selectHyperCubeCells', params });
-    });
+      it('should return state updated with rows when action.type is clear', () => {
+        const action = { type: SelectionActions.CLEAR } as ClearAction;
+        const newState = reducer(state, action);
+        expect(newState).toEqual({ ...state, rows: {} });
+      });
 
-    it('should not call select when type is selectMultiValues but isSelectMultiValues is false', () => {
-      action.type = 'selectMultiValues';
-      state.isSelectMultiValues = false;
-
-      const newState = reducer(state, action);
-      expect(newState).toEqual({ ...state, isSelectMultiValues: false });
-      expect(state.api.select).not.toHaveBeenCalled();
-    });
-
-    it('should return state updated when the app is not in selection modal state when action.type is reset', () => {
-      action.type = 'reset';
-      const newState = reducer(state, action);
-      expect(newState).toEqual({ ...state, rows: {}, colIdx: -1 });
-    });
-
-    it('should return state updated with rows when action.type is clear', () => {
-      action.type = 'clear';
-      const newState = reducer(state, action);
-      expect(newState).toEqual({ ...state, rows: {} });
-    });
-
-    it('should return state unchanged when the app is in selection modal state and action.type is reset', () => {
-      action.type = 'reset';
-      state.api.isModal = () => true;
-      const newState = reducer(state, action);
-      expect(newState).toEqual(state);
+      it('should return state unchanged when the app is in selection modal state and action.type is reset', () => {
+        const action = { type: SelectionActions.RESET } as ResetAction;
+        state.api.isModal = () => true;
+        const newState = reducer(state, action);
+        expect(newState).toEqual(state);
+      });
     });
   });
 

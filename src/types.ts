@@ -40,17 +40,6 @@ export interface ActionPayload {
   evt: React.KeyboardEvent | React.MouseEvent;
 }
 
-export interface Action {
-  type: 'select' | 'selectMultiValues' | 'reset' | 'clear';
-  payload?: ActionPayload;
-}
-
-// export type SelectionAction =
-//   | { type: 'select'; payload: SelectPayload }
-//   | { type: 'selectMultiValues'; payload?: SelectPayload }
-//   | { type: 'reset'; payload?: SelectPayload }
-//   | { type: 'clear'; payload?: SelectPayload };
-
 export interface ContextValue {
   focusedCellCoord: [number, number];
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
