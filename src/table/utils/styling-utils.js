@@ -153,6 +153,11 @@ export function getBodyCellStyle(layout, theme) {
   };
 }
 
+export function getTotalsCellStyle(layout, theme) {
+  const headerStyle = getHeaderStyle(layout, theme);
+  return { ...getBodyCellStyle(layout, theme), backgroundColor: headerStyle.backgroundColor };
+}
+
 /**
  * You can set the background color expression and/or text color expression
  * for measure data and/or dimension data.

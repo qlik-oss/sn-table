@@ -64,7 +64,6 @@
     ]
   },
   "devDependencies": {
-    "@babel/cli": "7.17.10",
     "@babel/core": "7.18.5",
     "@babel/eslint-parser": "7.18.2",
     "@babel/preset-env": "7.18.2",
@@ -75,7 +74,6 @@
     "@mui/icons-material": "5.8.4",
     "@mui/material": "5.8.6",
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
-    "@mui/styles": "5.8.6",
     "@mui/system": "5.8.6",
     "@nebula.js/cli": "2.13.0",
     "@nebula.js/cli-build": "2.13.0",
