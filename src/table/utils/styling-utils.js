@@ -53,15 +53,15 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
   const fontFamily = theme.getStyle('object', `straightTable.${objetName}`, 'fontFamily');
   const color = theme.getStyle('object', `straightTable.${objetName}`, 'color');
   const fontSize = theme.getStyle('object', `straightTable.${objetName}`, 'fontSize');
+  const { borderColor } = theme.table.body;
 
   const baseStyle = {
     fontFamily,
     color: isSet(styleObj?.fontColor) ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj.fontColor) : color,
     fontSize: styleObj?.fontSize || fontSize,
     padding: getPadding(styleObj, STYLING_DEFAULTS.PADDING),
-    borderStyle: 'solid',
-    border: 'none',
-    borderColor: theme.table.body.borderColor,
+    borderColor,
+    boxShadow: `inset 0 -1px 0 ${borderColor}, inset 1px 0 0 ${borderColor}`,
   };
   // Remove all Undefined Values from an Object
   Object.keys(baseStyle).forEach((key) => baseStyle[key] == null && delete baseStyle[key]);
@@ -72,8 +72,7 @@ export function getHeaderStyle(layout, theme) {
   const header = layout.components?.[0]?.header;
   const headerStyle = getBaseStyling(header, 'header', theme);
   headerStyle.cursor = 'pointer';
-  const { borderColor } = theme.table.body;
-  headerStyle.boxShadow = `inset 0 1px 0 ${borderColor}, inset 0 -1px 0 ${borderColor}, inset 1px 0 0 ${borderColor}`;
+  headerStyle.boxShadow = `inset 0 -1px 0 ${headerStyle.borderColor}, inset 1px 1px 0 ${headerStyle.borderColor}`;
 
   // To avoid seeing the table body through the table head:
   // - When the table background color from the sense theme is transparent,
@@ -98,8 +97,6 @@ export function getHeaderStyle(layout, theme) {
 export function getBodyCellStyle(layout, theme) {
   const content = layout.components?.[0]?.content;
   const contentStyle = getBaseStyling(content, 'content', theme);
-  const { borderColor } = theme.table.body;
-  contentStyle.boxShadow = `inset 1px 0 0 ${borderColor}`;
 
   const hoverBackgroundColorFromLayout = content?.hoverColor;
   const hoverFontColorFromLayout = content?.hoverFontColor;
@@ -158,12 +155,10 @@ export function getBodyCellStyle(layout, theme) {
 
 export function getTotalsCellStyle(layout, theme) {
   const headerStyle = getHeaderStyle(layout, theme);
-  const { borderColor } = theme.table.body;
 
   return {
     ...getBodyCellStyle(layout, theme),
     backgroundColor: headerStyle.backgroundColor,
-    boxShadow: `inset 0 -1px 0 ${borderColor}, inset 1px 0 0 ${borderColor}`,
   };
 }
 

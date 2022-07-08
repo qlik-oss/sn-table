@@ -106,13 +106,7 @@ export default function TableWrapper(props) {
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
   return (
-    <StyledTableWrapper
-      ref={tableWrapperRef}
-      tableTheme={theme.table}
-      paginationNeeded={paginationNeeded}
-      dir={direction}
-      onKeyDown={handleKeyDown}
-    >
+    <StyledTableWrapper ref={tableWrapperRef} tableTheme={theme.table} dir={direction} onKeyDown={handleKeyDown}>
       <AnnounceElements />
       <StyledTableContainer
         ref={tableContainerRef}

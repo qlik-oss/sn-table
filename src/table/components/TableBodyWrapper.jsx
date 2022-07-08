@@ -49,12 +49,12 @@ function TableBodyWrapper({
   }, []);
 
   return (
-    <StyledTableBody paginationNeeded={paginationNeeded} bodyCellStyle={bodyCellStyle}>
+    <StyledTableBody bodyCellStyle={bodyCellStyle}>
       {totalsPosition === 'top' ? children : undefined}
       {rows.map((row) => (
         <StyledBodyRow
           bodyCellStyle={bodyCellStyle}
-          isHover={hoverEffect}
+          hover={hoverEffect}
           tabIndex={-1}
           key={row.key}
           className="sn-table-row"

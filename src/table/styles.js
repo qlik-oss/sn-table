@@ -33,10 +33,6 @@ export const StyledFooterWrapper = styled(Paper, {
   alignItems: 'center',
   paddingRight: theme.spacing(1),
   boxShadow: 'none',
-  borderStyle: 'solid',
-  borderWidth: '0px 0px 1px 0px',
-  borderRadius: 0,
-  borderColor: tableTheme.pagination.borderColor,
   color: tableTheme.pagination.color,
   backgroundColor: tableTheme.backgroundColor,
 }));
@@ -61,14 +57,8 @@ export const StyledIconButton = styled(IconButton, {
 // ---------- TableBodyWrapper ----------
 
 export const StyledTableBody = styled(TableBody, {
-  shouldForwardProp: (prop) => prop !== 'paginationNeeded' && prop !== 'bodyCellStyle',
-})(({ paginationNeeded, bodyCellStyle }) => ({
-  'tr :last-child': {
-    borderRight: paginationNeeded && 0,
-  },
-  'tr :first-child': {
-    borderLeft: !paginationNeeded && '1px solid rgb(217, 217, 217)',
-  },
+  shouldForwardProp: (prop) => prop !== 'bodyCellStyle',
+})(({ bodyCellStyle }) => ({
   '& td, th': {
     fontSize: bodyCellStyle.fontSize,
     padding: bodyCellStyle.padding,
@@ -77,29 +67,25 @@ export const StyledTableBody = styled(TableBody, {
 
 export const StyledBodyRow = styled(TableRow, {
   shouldForwardProp: (prop) => prop !== 'bodyCellStyle',
-})(({ isHover, bodyCellStyle }) => ({
+})(({ hover, bodyCellStyle }) => ({
   '&&:hover': {
     '& td:not(.selected), th:not(.selected)': {
-      backgroundColor: isHover && bodyCellStyle.hoverBackgroundColor,
-      color: isHover && bodyCellStyle.hoverFontColor,
+      backgroundColor: hover && bodyCellStyle.hoverBackgroundColor,
+      color: hover && bodyCellStyle.hoverFontColor,
     },
   },
-  'th:first-of-type': {
-    boxShadow: 'none',
+  '& :last-child': {
+    boxShadow: `inset 1px -1px 0 ${bodyCellStyle.borderColor}, inset -1px 0 0 ${bodyCellStyle.borderColor}`,
   },
 }));
 
 // ---------- TableHeadWrapper ----------
 
 export const StyledHeadRow = styled(TableRow, {
-  shouldForwardProp: (prop) => prop !== 'paginationNeeded',
-})(({ paginationNeeded }) => ({
-  '& :last-child': {
-    borderRight: paginationNeeded && 0,
-  },
-  'th:first-of-type': {
-    boxShadow: 'inset 0 1px 0 #d9d9d9, inset 0 -1px 0 #d9d9d9',
-    borderLeft: !paginationNeeded && '1px solid rgb(217, 217, 217)',
+  shouldForwardProp: (prop) => prop !== 'headerStyle',
+})(({ headerStyle }) => ({
+  'th:last-of-type': {
+    boxShadow: `inset 1px 1px 0 ${headerStyle.borderColor}, inset -1px -1px 0 ${headerStyle.borderColor}`,
   },
 }));
 
@@ -131,32 +117,23 @@ export const StyledTotalsCell = styled(TableCell, {
   ...totalsStyle,
   fontWeight: 'bold',
   position: 'sticky',
-  borderWidth: isTop ? '0px 1px 2px 0px' : '2px 1px 1px 0px',
   top: isTop && headRowHeight,
   bottom: !isTop && 0,
-  marginTop: 0,
 }));
 
 export const StyledTotalsRow = styled(TableRow, {
-  shouldForwardProp: (prop) => prop !== 'paginationNeeded',
-})(({ paginationNeeded }) => ({
+  shouldForwardProp: (prop) => prop !== 'totalsStyle',
+})(({ totalsStyle }) => ({
   '& :last-child': {
-    borderRight: paginationNeeded && 0,
-  },
-  'td:first-of-type': {
-    boxShadow: 'inset 0px -1px #d9d9d9',
-    borderLeft: !paginationNeeded && '1px solid rgb(217, 217, 217)',
+    boxShadow: `inset 1px 0 0 ${totalsStyle.borderColor}, inset -1px -1px 0 ${totalsStyle.borderColor}`,
   },
 }));
 
 // ---------- TableWrapper ----------
 
 export const StyledTableWrapper = styled(Paper, {
-  shouldForwardProp: (prop) => prop !== 'tableTheme' && prop !== 'paginationNeeded',
-})(({ tableTheme, paginationNeeded }) => ({
-  borderWidth: paginationNeeded ? '0px 1px 0px' : '0px',
-  borderStyle: 'solid',
-  borderColor: tableTheme.borderColor,
+  shouldForwardProp: (prop) => prop !== 'tableTheme',
+})(({ tableTheme }) => ({
   height: '100%',
   backgroundColor: tableTheme.tableBackgroundColorFromTheme,
   boxShadow: 'none',

@@ -10,7 +10,8 @@ export default function muiSetup(direction) {
     muiConfig.components.MuiTableSortLabel.styleOverrides.root['&.Mui-active'].color = 'inherit';
     muiConfig.components.MuiTableSortLabel.styleOverrides.root['&:hover'].color = 'inherit';
     muiConfig.components.MuiTableRow.styleOverrides.root['&&:hover'].backgroundColor = 'rgba(0, 0, 0, 0)';
-    muiConfig.components.MuiTableCell.styleOverrides.root.borderRight = 'none';
+    muiConfig.components.MuiTableCell.styleOverrides.root.border = 'none';
+    muiConfig.components.MuiTableCell.styleOverrides.stickyHeader.border = 'none';
     muiConfig.components.MuiTableCell.styleOverrides.root.padding = '7px 14px';
     muiConfig.components.MuiTableCell.styleOverrides.root.height = 'auto';
     muiConfig.components.MuiTableCell.styleOverrides.root.lineHeight = '130%';

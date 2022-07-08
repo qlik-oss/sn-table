@@ -7,14 +7,14 @@ import { removeAndFocus } from '../utils/handle-accessibility';
 import { StyledTotalsRow, StyledTotalsCell } from '../styles';
 
 function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
-  const { columns, paginationNeeded, totalsPosition, rows } = tableData;
+  const { columns, totalsPosition, rows } = tableData;
   const headRowHeight = useContextSelector(TableContext, (value) => value.headRowHeight);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const totalsStyle = useMemo(() => getTotalsCellStyle(layout, theme), [layout, theme.name()]);
   const isTop = totalsPosition === 'top';
 
   return (
-    <StyledTotalsRow paginationNeeded={paginationNeeded} className="sn-table-row">
+    <StyledTotalsRow totalsStyle={totalsStyle} className="sn-table-row">
       {columns.map((column, columnIndex) => {
         const cellCoord = [isTop ? 1 : rows.length + 1, columnIndex];
         return (
