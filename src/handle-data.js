@@ -23,13 +23,13 @@ export function getColumnOrder({ qColumnOrder, qDimensionInfo, qMeasureInfo }) {
  * @param {Number} numDims
  * @returns dimensions and measures total cell values as strings
  */
-export function getTotalInfo(isDim, layout, colIndex, numDims, colOrder) {
+export function getTotalInfo(isDim, layout, colIndex, numDims, columnOrder) {
   if (!isDim) return layout.qHyperCube.qGrandTotalRow[colIndex - numDims]?.qText;
-  if (colIndex === 0 && colOrder[0] === 0) return layout.totals.label;
+  if (colIndex === 0 && columnOrder[0] === 0) return layout.totals.label;
   return '';
 }
 
-export function getColumnInfo(layout, colIndex, colOrder) {
+export function getColumnInfo(layout, colIndex, columnOrder) {
   const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIndex < numDims;
@@ -48,7 +48,7 @@ export function getColumnInfo(layout, colIndex, colOrder) {
       stylingInfo: info.qAttrExprInfo.map((expr) => expr.id),
       sortDirection: directionMap[info.qSortIndicator],
       dataColIdx: colIndex,
-      totalInfo: getTotalInfo(isDim, layout, colIndex, numDims, colOrder),
+      totalInfo: getTotalInfo(isDim, layout, colIndex, numDims, columnOrder),
     }
   );
 }
