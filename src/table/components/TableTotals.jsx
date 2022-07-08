@@ -4,7 +4,7 @@ import { useContextSelector, TableContext } from '../context';
 import { getTotalsCellStyle } from '../utils/styling-utils';
 import { totalHandleKeyPress } from '../utils/handle-key-press';
 import { removeAndFocus } from '../utils/handle-accessibility';
-import { StyledHeadRow, StyledTotalsCell } from '../styles';
+import { StyledTotalsRow, StyledTotalsCell } from '../styles';
 
 function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
   const { columns, paginationNeeded, totalsPosition, rows } = tableData;
@@ -14,7 +14,7 @@ function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
   const isTop = totalsPosition === 'top';
 
   return (
-    <StyledHeadRow paginationNeeded={paginationNeeded} className="sn-table-row">
+    <StyledTotalsRow paginationNeeded={paginationNeeded} className="sn-table-row">
       {columns.map((column, columnIndex) => {
         const cellCoord = [isTop ? 1 : rows.length + 1, columnIndex];
         return (
@@ -37,7 +37,7 @@ function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
           </StyledTotalsCell>
         );
       })}
-    </StyledHeadRow>
+    </StyledTotalsRow>
   );
 }
 

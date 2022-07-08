@@ -38,7 +38,11 @@ function TableBodyWrapper({
   );
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
-  const cellStyle = { color: bodyCellStyle.color, backgroundColor: theme.table.backgroundColor };
+  const cellStyle = {
+    color: bodyCellStyle.color,
+    boxShadow: bodyCellStyle.boxShadow,
+    backgroundColor: theme.table.backgroundColor,
+  };
 
   useEffect(() => {
     addSelectionListeners({ api: selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
@@ -50,7 +54,7 @@ function TableBodyWrapper({
       {rows.map((row) => (
         <StyledBodyRow
           bodyCellStyle={bodyCellStyle}
-          hover={hoverEffect}
+          isHover={hoverEffect}
           tabIndex={-1}
           key={row.key}
           className="sn-table-row"

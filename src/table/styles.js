@@ -77,18 +77,17 @@ export const StyledTableBody = styled(TableBody, {
 
 export const StyledBodyRow = styled(TableRow, {
   shouldForwardProp: (prop) => prop !== 'bodyCellStyle',
-})(({ hover, bodyCellStyle }) =>
-  hover
-    ? {
-        '&&:hover': {
-          '& td:not(.selected), th:not(.selected)': {
-            backgroundColor: bodyCellStyle.hoverBackgroundColor,
-            color: bodyCellStyle.hoverFontColor,
-          },
-        },
-      }
-    : {}
-);
+})(({ isHover, bodyCellStyle }) => ({
+  '&&:hover': {
+    '& td:not(.selected), th:not(.selected)': {
+      backgroundColor: isHover && bodyCellStyle.hoverBackgroundColor,
+      color: isHover && bodyCellStyle.hoverFontColor,
+    },
+  },
+  'th:first-of-type': {
+    boxShadow: 'none',
+  },
+}));
 
 // ---------- TableHeadWrapper ----------
 
@@ -99,6 +98,7 @@ export const StyledHeadRow = styled(TableRow, {
     borderRight: paginationNeeded && 0,
   },
   'th:first-of-type': {
+    boxShadow: 'inset 0 1px 0 #d9d9d9, inset 0 -1px 0 #d9d9d9',
     borderLeft: !paginationNeeded && '1px solid rgb(217, 217, 217)',
   },
 }));
@@ -135,6 +135,18 @@ export const StyledTotalsCell = styled(TableCell, {
   top: isTop && headRowHeight,
   bottom: !isTop && 0,
   marginTop: 0,
+}));
+
+export const StyledTotalsRow = styled(TableRow, {
+  shouldForwardProp: (prop) => prop !== 'paginationNeeded',
+})(({ paginationNeeded }) => ({
+  '& :last-child': {
+    borderRight: paginationNeeded && 0,
+  },
+  'td:first-of-type': {
+    boxShadow: 'inset 0px -1px #d9d9d9',
+    borderLeft: !paginationNeeded && '1px solid rgb(217, 217, 217)',
+  },
 }));
 
 // ---------- TableWrapper ----------
