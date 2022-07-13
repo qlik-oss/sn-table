@@ -1,18 +1,21 @@
+import { number } from 'yargs';
 import { handleHorizontalScroll, handleNavigateTop } from '../handle-scroll';
 
 describe('handle-scroll', () => {
   describe('handleHorizontalScroll', () => {
-    let evt;
-    let memoedContainer;
-    let isRTL;
+    let evt: WheelEvent;
+    let memoedContainer: HTMLDivElement;
+    let isRTL: boolean;
 
     beforeEach(() => {
       evt = {
+        ...evt,
         stopPropagation: jest.fn(),
         preventDefault: jest.fn(),
         deltaX: -1,
       };
       memoedContainer = {
+        ...memoedContainer,
         scrollWidth: 200,
         offsetWidth: 100,
         scrollLeft: 0,
@@ -110,61 +113,87 @@ describe('handle-scroll', () => {
   });
 
   describe('handleNavigateTop', () => {
-    let rowHeight;
-    let scrollTo;
-    let tableContainerRef;
-    let focusedCellCoord;
-    let rootElement;
+    let tableContainerRef: {
+      current: {
+        scrollTo?: () => void;
+        scrollTop?: number;
+      };
+    };
+    let focusedCellCoord: [number, number];
+    let rootElement: Element;
+    let rowHeight: number;
 
     beforeEach(() => {
       rowHeight = 100;
-      scrollTo = jest.fn();
-      tableContainerRef = { current: { scrollTo } };
+      tableContainerRef = {
+        current: {
+          scrollTo: jest.fn(),
+        },
+      };
       focusedCellCoord = [0, 0];
-      rootElement = {};
     });
 
     it('should not do anything when ref is not setup yet', () => {
-      tableContainerRef.current = {};
-
-      handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement });
-      expect(scrollTo).not.toHaveBeenCalled();
+      delete tableContainerRef.current.scrollTo;
+      expect(
+        handleNavigateTop({
+          tableContainerRef: tableContainerRef as React.MutableRefObject<HTMLDivElement>,
+          focusedCellCoord,
+          rootElement,
+        })
+      ).toBe(undefined);
     });
 
     it('should the scrollbar is at its top when you reach the top two rows', () => {
       focusedCellCoord = [1, 0];
 
-      handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement });
-      expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' });
+      handleNavigateTop({
+        tableContainerRef: tableContainerRef as React.MutableRefObject<HTMLDivElement>,
+        focusedCellCoord,
+        rootElement,
+      });
+      expect(tableContainerRef.current.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' });
     });
 
     it('should scroll upwards automatically if it detects the cursor gets behind <TableHead />', () => {
       const SCROLL_TOP_IDX = 7;
       focusedCellCoord = [8, 0];
-      tableContainerRef = { current: { scrollTo, scrollTop: SCROLL_TOP_IDX * rowHeight } };
+      tableContainerRef = {
+        current: {
+          scrollTo: jest.fn(),
+          scrollTop: SCROLL_TOP_IDX * rowHeight,
+        },
+      };
+
       rootElement = {
-        getElementsByClassName: (query) => {
+        getElementsByClassName: (query: string) => {
           if (query === 'sn-table-head-cell') {
             return [{ offsetHeight: 128 }];
           }
-
           return Array.from(Array(10).keys()).map((idx) => {
-            const rowCell = {
-              offsetHeight: rowHeight,
-              offsetTop: idx * rowHeight,
+            return {
+              getElementsByClassName: () => [
+                {
+                  offsetHeight: rowHeight,
+                  offsetTop: idx * rowHeight,
+                },
+              ],
             };
-
-            return { getElementsByClassName: () => [rowCell] };
           });
         },
       };
+
       // targetOffsetTop = tableContainer.current.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
-      // 700 - 100 - 128 = 472 => so our scrollTo function migth be called with 600
+      // 700 - 100 - 128 = 472 => so our scrollTo function might be called with 600
       const targetOffsetTop = 472;
 
-      handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement });
-      expect(scrollTo).toHaveBeenCalledTimes(1);
-      expect(scrollTo).toHaveBeenCalledWith({ top: targetOffsetTop, behavior: 'smooth' });
+      handleNavigateTop({
+        tableContainerRef: tableContainerRef as React.MutableRefObject<HTMLDivElement>,
+        focusedCellCoord,
+        rootElement,
+      });
+      expect(tableContainerRef.current.scrollTo).toHaveBeenCalledTimes(1);
+      expect(tableContainerRef.current.scrollTo).toHaveBeenCalledWith({ top: targetOffsetTop, behavior: 'smooth' });
     });
   });
 });

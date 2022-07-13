@@ -1,4 +1,4 @@
-export const handleHorizontalScroll = (evt, isRTL, memoedContainer) => {
+export const handleHorizontalScroll = (evt: WheelEvent, isRTL: boolean, memoedContainer: HTMLDivElement) => {
   if (evt.deltaX === 0) return;
 
   evt.stopPropagation();
@@ -26,7 +26,13 @@ export const handleHorizontalScroll = (evt, isRTL, memoedContainer) => {
   }
 };
 
-export const handleNavigateTop = ({ tableContainerRef, focusedCellCoord, rootElement }) => {
+interface IHandleNavigateTopProps {
+  tableContainerRef: React.MutableRefObject<HTMLDivElement>;
+  focusedCellCoord: [number, number];
+  rootElement: Element;
+}
+
+export const handleNavigateTop = ({ tableContainerRef, focusedCellCoord, rootElement }: IHandleNavigateTopProps) => {
   const MIN_ROW_COUNT = 2;
 
   if (!tableContainerRef.current?.scrollTo) return;
@@ -38,9 +44,9 @@ export const handleNavigateTop = ({ tableContainerRef, focusedCellCoord, rootEle
     });
   } else {
     const [x, y] = focusedCellCoord;
-    const tableHead = rootElement.getElementsByClassName('sn-table-head-cell')[0];
-    const rowElements = rootElement.getElementsByClassName('sn-table-row');
-    const cell = rowElements[x]?.getElementsByClassName('sn-table-cell')[y];
+    const tableHead = rootElement.getElementsByClassName('sn-table-head-cell')[0] as HTMLTableCellElement;
+    const rowElements = rootElement.getElementsByClassName('sn-table-row') as HTMLCollectionOf<HTMLTableRowElement>;
+    const cell = rowElements[x]?.getElementsByClassName('sn-table-cell')[y] as HTMLTableCellElement;
 
     if (cell.offsetTop - tableHead.offsetHeight - cell.offsetHeight <= tableContainerRef.current.scrollTop) {
       const targetOffsetTop = tableContainerRef.current.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
