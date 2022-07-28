@@ -96,7 +96,7 @@ describe('styling-utils', () => {
       const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
+        boxShadow: 'inset 0 -1px 0 #D9D9D9, inset 1px 0 0 #D9D9D9',
         color: '#fff',
         fontSize: 12,
         padding: '6px 12px',
@@ -107,7 +107,7 @@ describe('styling-utils', () => {
       const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
+        boxShadow: 'inset 0 -1px 0 #D9D9D9, inset 1px 0 0 #D9D9D9',
         fontSize: 12,
         padding: '6px 12px',
       });
@@ -118,7 +118,7 @@ describe('styling-utils', () => {
       const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
+        boxShadow: 'inset 0 -1px 0 #D9D9D9, inset 1px 0 0 #D9D9D9',
         fontSize: 12,
         padding: '6px 12px',
       });
@@ -133,7 +133,7 @@ describe('styling-utils', () => {
       const resultStyling = getBaseStyling(styleObj, objetName, customTheme);
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
+        boxShadow: 'inset 0 -1px 0 #D9D9D9, inset 1px 0 0 #D9D9D9',
         color: '#111',
         fontSize: 12,
         padding: '6px 12px',
@@ -146,7 +146,7 @@ describe('styling-utils', () => {
       const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
+        boxShadow: 'inset 0 -1px 0 #D9D9D9, inset 1px 0 0 #D9D9D9',
         color: 'fff',
         fontSize: 12,
         padding: '6px 12px',
@@ -159,7 +159,7 @@ describe('styling-utils', () => {
       expect(resultStyling).toEqual({
         color: '#fff',
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
+        boxShadow: 'inset 0 -1px 0 #D9D9D9, inset 1px 0 0 #D9D9D9',
       });
     });
     it('should return styling with custom padding', () => {
@@ -193,8 +193,7 @@ describe('styling-utils', () => {
       expect(resultStyling).toEqual({
         backgroundColor: '#323232',
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
-        borderWidth: '1px 1px 1px 0px',
+        boxShadow: 'inset 0 -1px 0 #D9D9D9, inset 1px 1px 0 #D9D9D9',
         cursor: 'pointer',
         sortLabelColor: 'rgba(255,255,255,0.9)',
       });
@@ -216,8 +215,7 @@ describe('styling-utils', () => {
         cursor: 'pointer',
         backgroundColor: '#323232',
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
-        borderWidth: '1px 1px 1px 0px',
+        boxShadow: 'inset 0 -1px 0 #D9D9D9, inset 1px 1px 0 #D9D9D9',
         sortLabelColor: '#404040',
       });
     });
@@ -230,8 +228,7 @@ describe('styling-utils', () => {
         padding: '22px 44px',
         backgroundColor: '#323232',
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
-        borderWidth: '1px 1px 1px 0px',
+        boxShadow: 'inset 0 -1px 0 #D9D9D9, inset 1px 1px 0 #D9D9D9',
         sortLabelColor: '#404040',
       });
     });
@@ -275,8 +272,7 @@ describe('styling-utils', () => {
         hoverFontColor: '',
         borderColor: '#D9D9D9',
         hoverBackgroundColor: '#f4f4f4',
-        borderStyle: 'solid',
-        borderWidth: '0px 1px 1px 0px',
+        boxShadow: 'inset 0 -1px 0 #D9D9D9, inset 1px 0 0 #D9D9D9',
       });
     });
     it('should return styling with fontColor, fontSize, padding plus default hoverBackgroundColor and hoverFontColor', () => {
@@ -288,8 +284,7 @@ describe('styling-utils', () => {
         hoverBackgroundColor: '#f4f4f4',
         hoverFontColor: '',
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
-        borderWidth: '0px 1px 1px 0px',
+        boxShadow: 'inset 0 -1px 0 #D9D9D9, inset 1px 0 0 #D9D9D9',
       });
     });
     // Only checking hover properties from here on
