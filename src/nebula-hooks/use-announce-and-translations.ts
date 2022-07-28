@@ -8,6 +8,10 @@ enum AnnouncerElements {
   SECOND = 'second-announcer-element',
 }
 
+interface Translator extends stardust.Translator {
+  language: () => string;
+}
+
 /* creates the function for announcement */
 export const announcementFactory = (rootElement: Element, translator: stardust.Translator, prevAnnounceEl?: string) => {
   let previousAnnouncementElement = prevAnnounceEl || null;
@@ -42,7 +46,7 @@ export const announcementFactory = (rootElement: Element, translator: stardust.T
   };
 };
 
-const useAnnounceAndTranslations = (rootElement: Element, translator: stardust.Translator) => {
+const useAnnounceAndTranslations = (rootElement: Element, translator: Translator) => {
   const [announce, setAnnounce] = useState<undefined | ((arg0: AnnounceArgs) => void)>(undefined);
 
   useEffect(() => {
