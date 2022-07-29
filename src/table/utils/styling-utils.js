@@ -42,7 +42,6 @@ export function getPadding(styleObj, defaultPadding) {
 
 export function getColor(defaultColor, theme, color = {}) {
   const resolvedColor = theme.getColorPickerColor(color);
-
   return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
 }
 
@@ -60,7 +59,7 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
     fontSize: styleObj?.fontSize || fontSize,
     padding: getPadding(styleObj, STYLING_DEFAULTS.PADDING),
     borderStyle: 'solid',
-    borderColor: theme.table.body.borderColor,
+    borderColor: theme?.table?.body.borderColor || 'black',
   };
   // Remove all Undefined Values from an Object
   Object.keys(baseStyle).forEach((key) => baseStyle[key] == null && delete baseStyle[key]);
@@ -79,16 +78,16 @@ export function getHeaderStyle(layout, theme) {
   // - When the table background color from the sense theme has opacity,
   // removing that.
   const headerBackgroundColor = isDarkColor(headerStyle.color) ? '#FAFAFA' : '#323232';
-  headerStyle.backgroundColor = theme.table.isBackgroundTransparentColor
+  headerStyle.backgroundColor = theme?.table?.isBackgroundTransparentColor
     ? headerBackgroundColor
-    : removeOpacity(theme.table.backgroundColor);
+    : removeOpacity(theme?.table?.backgroundColor);
 
   // When you set the header font color,
   // the sort label color should be same.
   // When there is no header content color setting,
   // the sort label color is depending on the header background color.
   headerStyle.sortLabelColor =
-    headerStyle.color ?? (isDarkColor(headerStyle.backgroundColor) ? 'rgba(255,255,255,0.9)' : 'rgba(0, 0, 0, 0.54)');
+    headerStyle.color ?? (isDarkColor(headerStyle?.backgroundColor) ? 'rgba(255,255,255,0.9)' : 'rgba(0, 0, 0, 0.54)');
 
   return headerStyle;
 }
@@ -150,6 +149,7 @@ export function getBodyCellStyle(layout, theme) {
     ...contentStyle,
     hoverBackgroundColor,
     hoverFontColor,
+    rowHeight: content?.rowHeight || 1,
   };
 }
 

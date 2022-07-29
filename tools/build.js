@@ -51,7 +51,10 @@ const configureReactNative = () => {
   // cleanup old build
   const reactNativeFolder = './react-native';
   fs.removeSync(path.resolve(process.cwd(), `${reactNativeFolder}/dist`));
-  rnSnTablePackage.version = snTablePackage.version;
+  const nextVersion = snTablePackage.version.split('.');
+  const minor = parseInt(nextVersion[nextVersion.length - 1], 10) + 1;
+  nextVersion[nextVersion.length - 1] = minor;
+  rnSnTablePackage.version = nextVersion.join('.');
   rnSnTablePackage.peerDependencies = { ...rnSnTablePackage.peerDependencies, ...snTablePackage.peerDependencies };
   fs.writeFileSync(`${reactNativeFolder}/package.json`, JSON.stringify(rnSnTablePackage, null, 2));
 };

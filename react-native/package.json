@@ -1,6 +1,6 @@
 {
   "name": "@nebula.js/react-native-sn-table",
-  "version": "1.6.0",
+  "version": "1.14.3",
   "description": "react native table supernova",
   "license": "MIT",
   "author": "QlikTech International AB",
@@ -25,7 +25,7 @@
   "peerDependencies": {
     "react": "18.2.0",
     "react-native": "0.69.1",
-    "@nebula.js/stardust": "2.x"
+    "@nebula.js/stardust": "2.x || ^3.0.0-alpha"
   },
   "resolutions": {
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"

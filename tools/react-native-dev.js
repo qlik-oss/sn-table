@@ -31,7 +31,7 @@ function main() {
 
   if (args.w) {
     log('Watching...');
-    const dstDir = 'examples/ReactNativeTable/node_modules/@nebula.js/react-native-sn-table';
+    const dstDir = 'react-native-dev/TableApp/node_modules/@nebula.js/react-native-sn-table';
 
     fs.watch(srcDir, { recursive: true }, (e, f) => {
       const dstFile = `${dstDir}/${f}`;
