@@ -98,126 +98,165 @@ const textAlignItems = {
     show: (data) => data.qDef.textAlign !== undefined && !data.qDef.textAlign.auto,
   },
 };
-
+const headerFontColor = {
+  title: 'Header font color',
+  component: 'panel-section',
+  items: {
+    headerFontColorItem: {
+      component: 'items',
+      ref: 'components',
+      key: 'theme',
+      items: {
+        headerFontColorWrapper: {
+          component: 'inline-wrapper',
+          items: {
+            fontColorPicker: {
+              show: true,
+              ref: 'header.fontColor',
+              translation: 'ThemeStyleEditor.style.headerFontColor',
+              type: 'object',
+              component: 'color-picker',
+              dualOutput: true,
+            },
+          },
+        },
+      },
+    },
+  },
+};
 const getStyleSettings = (env) => {
   return [
     {
       type: 'items',
       items: [
-        {
-          component: 'style-editor',
-          translation: 'LayerStyleEditor.component.styling',
-          subtitle: 'LayerStyleEditor.component.styling',
-          resetBtnTranslation: 'LayerStyleEditor.component.resetAll',
-          key: 'theme',
-          ref: 'components',
-          defaultValue: [], // used by chart conversion
-          defaultValues: {
-            // used by style editor
-            key: 'theme',
-            content: {
-              fontSize: null,
-              fontColor: {
-                index: -1,
-                color: null,
-              },
-              hoverEffect: false,
-              hoverColor: {
-                index: -1,
-                color: null,
-              },
-              hoverFontColor: {
-                index: -1,
-                color: null,
-              },
-            },
-            header: {
-              fontSize: null,
-              fontColor: {
-                index: -1,
-                color: null,
-              },
-            },
-          },
-          items: {
-            chart: {
-              type: 'items',
+        true
+          ? {
+              component: 'styling-panel',
+              chartTitle: 'Object.table',
+              translation: 'LayerStyleEditor.component.styling',
+              subtitle: 'LayerStyleEditor.component.styling',
+              ref: 'components',
+              useGeneral: true,
+              key: 'theme',
+              defaultValue: [],
               items: {
-                headerFontSize: {
-                  show: true,
-                  ref: 'header.fontSize',
-                  translation: 'ThemeStyleEditor.style.headerFontSize',
-                  component: 'integer',
-                  // placeholder: () => parseInt(styleService.getStyle('header', 'fontSize'), 10),
-                  maxlength: 3,
-                  change(data) {
-                    data.header.fontSize = Math.max(5, Math.min(300, Math.floor(data.header.fontSize)));
+                headerFontColorSection: headerFontColor,
+              },
+            }
+          : {
+              component: 'style-editor',
+              translation: 'LayerStyleEditor.component.styling',
+              subtitle: 'LayerStyleEditor.component.styling',
+              resetBtnTranslation: 'LayerStyleEditor.component.resetAll',
+              key: 'theme',
+              ref: 'components',
+              defaultValue: [], // used by chart conversion
+              defaultValues: {
+                // used by style editor
+                key: 'theme',
+                content: {
+                  fontSize: null,
+                  fontColor: {
+                    index: -1,
+                    color: null,
+                  },
+                  hoverEffect: false,
+                  hoverColor: {
+                    index: -1,
+                    color: null,
+                  },
+                  hoverFontColor: {
+                    index: -1,
+                    color: null,
                   },
                 },
-                headerFontColor: {
-                  show: true,
-                  ref: 'header.fontColor',
-                  translation: 'ThemeStyleEditor.style.headerFontColor',
-                  type: 'object',
-                  component: 'color-picker',
-                  dualOutput: true,
-                },
-                fontSize: {
-                  show: true,
-                  translation: 'ThemeStyleEditor.style.cellFontSize',
-                  ref: 'content.fontSize',
-                  component: 'integer',
-                  // placeholder: () => parseInt(styleService.getStyle('content', 'fontSize'), 10),
-                  maxlength: 3,
-                  change(data) {
-                    data.content.fontSize = Math.max(5, Math.min(300, Math.floor(data.content.fontSize)));
+                header: {
+                  fontSize: null,
+                  fontColor: {
+                    index: -1,
+                    color: null,
                   },
                 },
-                fontColor: {
-                  show: true,
-                  ref: 'content.fontColor',
-                  translation: 'ThemeStyleEditor.style.cellFontColor',
-                  type: 'object',
-                  component: 'color-picker',
-                  dualOutput: true,
-                },
-                hoverEffect: {
-                  show: true,
-                  ref: 'content.hoverEffect',
-                  translation: 'ThemeStyleEditor.style.hoverEffect',
-                  type: 'boolean',
-                  component: 'switch',
-                  options: [
-                    {
-                      value: true,
-                      translation: 'properties.on',
+              },
+              items: {
+                chart: {
+                  type: 'items',
+                  items: {
+                    headerFontSize: {
+                      show: true,
+                      ref: 'header.fontSize',
+                      translation: 'ThemeStyleEditor.style.headerFontSize',
+                      component: 'integer',
+                      // placeholder: () => parseInt(styleService.getStyle('header', 'fontSize'), 10),
+                      maxlength: 3,
+                      change(data) {
+                        data.header.fontSize = Math.max(5, Math.min(300, Math.floor(data.header.fontSize)));
+                      },
                     },
-                    {
-                      value: false,
-                      translation: 'properties.off',
+                    headerFontColor: {
+                      show: true,
+                      ref: 'header.fontColor',
+                      translation: 'ThemeStyleEditor.style.headerFontColor',
+                      type: 'object',
+                      component: 'color-picker',
+                      dualOutput: true,
                     },
-                  ],
-                },
-                hoverColor: {
-                  show: (data) => !!data.content.hoverEffect,
-                  ref: 'content.hoverColor',
-                  translation: 'ThemeStyleEditor.style.hoverStyle',
-                  type: 'object',
-                  component: 'color-picker',
-                  dualOutput: true,
-                },
-                hoverFontColor: {
-                  show: (data) => !!data.content.hoverEffect,
-                  ref: 'content.hoverFontColor',
-                  translation: 'ThemeStyleEditor.style.hoverFontStyle',
-                  type: 'object',
-                  component: 'color-picker',
-                  dualOutput: true,
+                    fontSize: {
+                      show: true,
+                      translation: 'ThemeStyleEditor.style.cellFontSize',
+                      ref: 'content.fontSize',
+                      component: 'integer',
+                      // placeholder: () => parseInt(styleService.getStyle('content', 'fontSize'), 10),
+                      maxlength: 3,
+                      change(data) {
+                        data.content.fontSize = Math.max(5, Math.min(300, Math.floor(data.content.fontSize)));
+                      },
+                    },
+                    fontColor: {
+                      show: true,
+                      ref: 'content.fontColor',
+                      translation: 'ThemeStyleEditor.style.cellFontColor',
+                      type: 'object',
+                      component: 'color-picker',
+                      dualOutput: true,
+                    },
+                    hoverEffect: {
+                      show: true,
+                      ref: 'content.hoverEffect',
+                      translation: 'ThemeStyleEditor.style.hoverEffect',
+                      type: 'boolean',
+                      component: 'switch',
+                      options: [
+                        {
+                          value: true,
+                          translation: 'properties.on',
+                        },
+                        {
+                          value: false,
+                          translation: 'properties.off',
+                        },
+                      ],
+                    },
+                    hoverColor: {
+                      show: (data) => !!data.content.hoverEffect,
+                      ref: 'content.hoverColor',
+                      translation: 'ThemeStyleEditor.style.hoverStyle',
+                      type: 'object',
+                      component: 'color-picker',
+                      dualOutput: true,
+                    },
+                    hoverFontColor: {
+                      show: (data) => !!data.content.hoverEffect,
+                      ref: 'content.hoverFontColor',
+                      translation: 'ThemeStyleEditor.style.hoverFontStyle',
+                      type: 'object',
+                      component: 'color-picker',
+                      dualOutput: true,
+                    },
+                  },
                 },
               },
             },
-          },
-        },
       ],
     },
     {
