@@ -68,7 +68,7 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
 };
 
 export function getHeaderStyle(layout, theme) {
-  const header = layout.components?.[0]?.header;
+  const header = layout.components?.[1]?.header;
   const headerStyle = getBaseStyling(header, 'header', theme);
   headerStyle.cursor = 'pointer';
   headerStyle.borderWidth = '1px 1px 1px 0px';
@@ -94,7 +94,7 @@ export function getHeaderStyle(layout, theme) {
 }
 
 export function getBodyCellStyle(layout, theme) {
-  const content = layout.components?.[0]?.content;
+  const content = layout.components?.[1]?.content;
   const contentStyle = getBaseStyling(content, 'content', theme);
   contentStyle.borderWidth = '0px 1px 1px 0px';
 
