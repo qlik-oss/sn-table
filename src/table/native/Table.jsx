@@ -12,9 +12,11 @@ import { getBodyCellStyle, getHeaderStyle } from '../utils/styling-utils';
 const styles = StyleSheet.create({
   body: {
     flex: 1,
+    overflow: 'hidden',
   },
   table: {
     flex: 1,
+    overflow: 'hidden',
   },
 });
 
@@ -102,6 +104,7 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
     storeColumnWidths(app, layout, event.nativeEvent.widths);
   };
 
+  console.log(tableData);
   return tableData ? (
     <View style={styles.body}>
       <ReactNativeStraightTableViewManager
