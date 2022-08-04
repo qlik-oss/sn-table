@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { View, StyleSheet, useWindowDimensions } from 'react-native';
 import PropTypes from 'prop-types';
@@ -19,6 +20,21 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
 });
+
+function transformRepresentation(e, theme) {
+  if (e.representation?.miniChart?.colors && theme) {
+    const { colors } = e.representation.miniChart;
+    console.log('colors', colors);
+    for (const [key, value] of Object.entries(colors)) {
+      if ((colors[key]?.color !== 'none' && value.index > 0) || !colors[key].color) {
+        colors[key].index -= 1;
+        colors[key].color = theme.getColorPickerColor(colors[key]);
+      }
+    }
+    e.representation.miniChart.colors = colors;
+  }
+  return e.representation;
+}
 
 const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app, rect, theme }) => {
   const selectionsCaches = useRef(new SelectionCaches(selectionsAPI));
@@ -50,11 +66,14 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
         const columnWidths = await loadColumnWidths(app, layout, windowDims.width);
         const { qHyperCube } = layout;
         const activeSortHeader = qHyperCube?.qEffectiveInterColumnSortOrder[0] || 0;
-        data.columns = data.columns.map((e, index) => ({
-          ...e,
-          width: columnWidths[index],
-          active: index === activeSortHeader,
-        }));
+        data.columns = data.columns.map((e, index) => {
+          return {
+            ...e,
+            width: columnWidths[index],
+            active: index === activeSortHeader,
+            representation: transformRepresentation(e, theme),
+          };
+        });
       } else {
         const { qHyperCube } = layout;
         const activeSortHeader = qHyperCube?.qEffectiveInterColumnSortOrder[0] || 0;
@@ -66,6 +85,7 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
       setTableData(data);
     };
     handleData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [app, layout, model, windowDims]);
 
   const onHeaderPressed = async (event) => {
@@ -104,7 +124,6 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
     storeColumnWidths(app, layout, event.nativeEvent.widths);
   };
 
-  console.log(tableData);
   return tableData ? (
     <View style={styles.body}>
       <ReactNativeStraightTableViewManager

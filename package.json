@@ -85,7 +85,7 @@
     "@nebula.js/cli-sense": "2.13.0",
     "@nebula.js/cli-serve": "2.13.0",
     "@playwright/test": "1.23.1",
-    "@qlik/react-native-simple-grid": "^1.0.11",
+    "@qlik/react-native-simple-grid": "1.1.0-alpha.9",
     "@rollup/plugin-typescript": "8.3.3",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "13.3.0",

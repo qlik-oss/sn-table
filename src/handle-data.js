@@ -50,6 +50,11 @@ export function getColumnInfo(layout, colIndex, columnOrder) {
       sortDirection: directionMap[info.qSortIndicator],
       dataColIdx: colIndex,
       totalInfo: getTotalInfo(isDim, layout, colIndex, numDims, columnOrder),
+      representation: {
+        ...info.representation,
+        globalMax: isDim ? undefined : info?.qMiniChart?.qYMax,
+        globalMin: isDim ? undefined : info?.qMiniChart?.qYMin,
+      },
     }
   );
 }

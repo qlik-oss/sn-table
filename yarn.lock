@@ -2650,10 +2650,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.5.tgz#db5a11bf66bdab39569719555b0f76e138d7bd64"
   integrity sha512-9X2obfABZuDVLCgPK9aX0a/x4jaOEweTTWE2+9sr0Qqqevj2Uv5XorvusThmc9XGYpS9yI+fhh8RTafBtGposw==
 
-"@qlik/react-native-simple-grid@^1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@qlik/react-native-simple-grid/-/react-native-simple-grid-1.0.11.tgz#f418c41778c2be03b6d304506bb6e0d74d34fa5f"
-  integrity sha512-5XhSOwq1u24gV5BMY764ntJcvRKDX4/e/wM7z7aEcqhQobvS6NlqhY9UcaLzU2XjPgQwxBfzY2uGtVHpjrKhGg==
+"@qlik/react-native-simple-grid@1.1.0-alpha.9":
+  version "1.1.0-alpha.9"
+  resolved "https://registry.yarnpkg.com/@qlik/react-native-simple-grid/-/react-native-simple-grid-1.1.0-alpha.9.tgz#f67c4895633ffccf40417ebb993dc7211732256a"
+  integrity sha512-WtKnxdyBXIHjV77bzaQHhzM65RFnZd9FJRkZeTlK1JK6LdE5LNrBUgUwWPkw8X1DvZuBsX97U7mOvRqov1E5uQ==
 
 "@react-native-async-storage/async-storage@^1.17.7":
   version "1.17.7"
