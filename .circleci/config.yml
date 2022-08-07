@@ -58,7 +58,10 @@ jobs:
           name: Lint
           command: yarn run lint
       - run:
-          name: Locale
+          name: Check types
+          command: yarn run types:check
+      - run:
+          name: Verify locale
           command: yarn run locale:verify
       - run:
           name: Update spec
