@@ -1,3 +1,5 @@
+import { getIndicator } from './conditional-colors';
+
 const directionMap = {
   A: 'asc',
   D: 'desc',
@@ -29,6 +31,29 @@ export function getTotalInfo(isDim, layout, colIndex, numDims, columnOrder) {
   return '';
 }
 
+function getRepresenstation(isDim, info) {
+  return {
+    ...info.representation,
+    globalMax: isDim ? undefined : info?.qMiniChart?.qYMax,
+    globalMin: isDim ? undefined : info?.qMiniChart?.qYMin,
+  };
+}
+
+function getMinMaxMeasureInfo(isDim, info) {
+  return isDim
+    ? undefined
+    : {
+        qMax: info?.qMax,
+        qMin: info?.qMin,
+      };
+}
+function initConidtionalColor(isDim, info) {
+  if (!isDim && info.conditionalColoring) {
+    return info.conditionalColoring;
+  }
+  return undefined;
+}
+
 export function getColumnInfo(layout, colIndex, columnOrder) {
   const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
@@ -50,11 +75,9 @@ export function getColumnInfo(layout, colIndex, columnOrder) {
       sortDirection: directionMap[info.qSortIndicator],
       dataColIdx: colIndex,
       totalInfo: getTotalInfo(isDim, layout, colIndex, numDims, columnOrder),
-      representation: {
-        ...info.representation,
-        globalMax: isDim ? undefined : info?.qMiniChart?.qYMax,
-        globalMin: isDim ? undefined : info?.qMiniChart?.qYMin,
-      },
+      conditionalColoring: initConidtionalColor(isDim, info),
+      representation: getRepresenstation(isDim, info),
+      ...getMinMaxMeasureInfo(isDim, info),
     }
   );
 }
@@ -122,6 +145,7 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
         rawColIdx: colIdx,
         prevQElemNumber: dataPages[0].qMatrix[rowIdx - 1]?.[colIdx]?.qElemNumber,
         nextQElemNumber: dataPages[0].qMatrix[rowIdx + 1]?.[colIdx]?.qElemNumber,
+        indicator: getIndicator(c, r[colIdx]),
       };
     });
     return row;

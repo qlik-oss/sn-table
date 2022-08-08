@@ -130,6 +130,8 @@
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^1.17.7"
+    "@react-native-async-storage/async-storage": "^1.17.7",
+    "d3-color": "^3.1.0",
+    "d3-interpolate": "^3.0.1"
   }
 }

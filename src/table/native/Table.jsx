@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
 function transformRepresentation(e, theme) {
   if (e.representation?.miniChart?.colors && theme) {
     const { colors } = e.representation.miniChart;
-    console.log('colors', colors);
     for (const [key, value] of Object.entries(colors)) {
       if ((colors[key]?.color !== 'none' && value.index > 0) || !colors[key].color) {
         colors[key].index -= 1;
@@ -80,6 +79,7 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
         data.columns = data.columns.map((e, index) => ({
           ...e,
           active: index === activeSortHeader,
+          representation: transformRepresentation(e, theme),
         }));
       }
       setTableData(data);

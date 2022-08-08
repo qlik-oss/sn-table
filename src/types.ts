@@ -12,6 +12,7 @@ export interface TableCell {
   rawColIdx: number;
   prevQElemNumber: number;
   nextQElemNumber: number;
+  qNum?: number;
 }
 
 export interface ExtendedSelectionAPI extends stardust.ObjectSelections {
