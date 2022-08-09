@@ -1,3 +1,5 @@
+import { HyperCube, TableLayout, TotalsPosition } from '../types';
+
 export function generateDataPages(height: number, width: number) {
   const qMatrix: Record<string, string>[][] = [];
 
@@ -14,7 +16,13 @@ export function generateDataPages(height: number, width: number) {
   return [{ qMatrix }];
 }
 
-export function generateLayout(nDims: number, nMeas: number, nRows: number, qColumnOrder = [], qGrandTotalRow = []) {
+export function generateLayout(
+  nDims: number,
+  nMeas: number,
+  nRows: number,
+  qColumnOrder = [],
+  qGrandTotalRow = []
+): TableLayout {
   const createField = (idx: number) => ({
     qFallbackTitle: `title-${idx}`,
     qAttrExprInfo: [],
@@ -25,7 +33,7 @@ export function generateLayout(nDims: number, nMeas: number, nRows: number, qCol
   const qMeasureInfo = [];
   const totals = {
     show: false,
-    position: 'noTotals',
+    position: 'noTotals' as TotalsPosition,
     label: 'Totals',
   };
 
@@ -38,12 +46,12 @@ export function generateLayout(nDims: number, nMeas: number, nRows: number, qCol
 
   return {
     qHyperCube: {
-      qDimensionInfo,
-      qMeasureInfo,
+      qDimensionInfo: qDimensionInfo as unknown as EngineAPI.INxDimensionInfo[],
+      qMeasureInfo: qMeasureInfo as unknown as EngineAPI.INxMeasureInfo[],
       qGrandTotalRow,
       qColumnOrder,
       qSize: { qcx: nDims + nMeas, qcy: nRows },
-    },
+    } as unknown as HyperCube,
     totals,
-  };
+  } as TableLayout;
 }

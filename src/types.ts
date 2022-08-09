@@ -79,6 +79,8 @@ export interface HyperCube extends EngineAPI.IHyperCube {
   textAlign: string;
 }
 
+export type TotalsPosition = 'top' | 'bottom' | 'noTotals';
+
 export interface TableLayout extends EngineAPI.IGenericHyperCubeLayout {
   qHyperCube: HyperCube;
   totals: {
