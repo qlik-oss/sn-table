@@ -24,7 +24,3 @@ export function render(reactRoot, props) {
 export function teardown(reactRoot) {
   reactRoot.unmount();
 }
-
-export function mount() {
-  /* noop in web */
-}

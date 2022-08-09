@@ -1,7 +1,8 @@
 import { useMemo, useTheme } from '@nebula.js/stardust';
 import { isDarkColor, isTransparentColor } from '../table/utils/color-utils';
+import { ExtendedTheme, TableThemeColors } from '../types';
 
-export const tableThemeColors = (theme, rootElement) => {
+export const tableThemeColors = (theme: ExtendedTheme, rootElement: HTMLElement): TableThemeColors => {
   const qvInnerObject = rootElement?.closest('.qv-object .qv-inner-object');
   const objectBackgroundColorFromCSS = qvInnerObject && window.getComputedStyle(qvInnerObject).backgroundColor;
 
@@ -39,10 +40,11 @@ export const tableThemeColors = (theme, rootElement) => {
   };
 };
 
-const useExtendedTheme = (rootElement) => {
-  const nebulaTheme = useTheme();
+const useExtendedTheme = (rootElement: HTMLElement): ExtendedTheme => {
+  // TODO: add name method to stardust.Theme
+  const nebulaTheme = useTheme() as ExtendedTheme;
   const theme = useMemo(
-    () => ({ ...nebulaTheme, table: tableThemeColors(nebulaTheme, rootElement) }),
+    () => ({ ...nebulaTheme, table: tableThemeColors(nebulaTheme, rootElement) } as ExtendedTheme),
     [nebulaTheme.name(), rootElement]
   );
 
