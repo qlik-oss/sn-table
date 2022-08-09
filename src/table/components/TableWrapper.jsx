@@ -32,7 +32,7 @@ export default function TableWrapper(props) {
     footerContainer,
     announce,
   } = props;
-  const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns } = tableData;
+  const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } = tableData;
   const { page, rowsPerPage } = pageInfo;
   const isSelectionMode = selectionsAPI.isModal();
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
@@ -72,7 +72,7 @@ export default function TableWrapper(props) {
 
   useFocusListener(tableWrapperRef, shouldRefocus, keyboard);
   useScrollListener(tableContainerRef, direction);
-  useKeyDownListener(tableBodyWrapperRef, tableContainerRef, focusedCellCoord, rootElement);
+  useKeyDownListener(tableBodyWrapperRef, tableContainerRef, focusedCellCoord, rootElement, totalsPosition);
 
   useDidUpdateEffect(() => {
     // When nebula handles keyboard navigation and keyboard.active changes,

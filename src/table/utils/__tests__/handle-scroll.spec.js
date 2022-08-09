@@ -115,6 +115,7 @@ describe('handle-scroll', () => {
     let tableContainerRef;
     let focusedCellCoord;
     let rootElement;
+    let totalsPosition;
 
     beforeEach(() => {
       rowHeight = 100;
@@ -122,12 +123,13 @@ describe('handle-scroll', () => {
       tableContainerRef = { current: { scrollTo } };
       focusedCellCoord = [0, 0];
       rootElement = {};
+      totalsPosition = 'bottom';
     });
 
     it('should not do anything when ref is not setup yet', () => {
       tableContainerRef.current = {};
 
-      handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement });
+      handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement, totalsPosition });
       expect(scrollTo).not.toHaveBeenCalled();
     });
 
@@ -155,7 +157,7 @@ describe('handle-scroll', () => {
       // 700 - 100 - 128 = 472 => so our scrollTo function might be called with 600
       const targetOffsetTop = 472;
 
-      handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement });
+      handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement, totalsPosition });
       expect(scrollTo).toHaveBeenCalledTimes(1);
       expect(scrollTo).toHaveBeenCalledWith({ top: targetOffsetTop, behavior: 'instant' });
     });

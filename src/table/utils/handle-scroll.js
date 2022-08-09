@@ -26,7 +26,7 @@ export const handleHorizontalScroll = (evt, isRTL, memoedContainer) => {
   }
 };
 
-export const handleNavigateTop = ({ tableContainerRef, focusedCellCoord, rootElement }) => {
+export const handleNavigateTop = ({ tableContainerRef, focusedCellCoord, rootElement, totalsPosition }) => {
   if (!tableContainerRef.current.scrollTo) return;
 
   const [x, y] = focusedCellCoord;
@@ -34,7 +34,12 @@ export const handleNavigateTop = ({ tableContainerRef, focusedCellCoord, rootEle
   const rowElements = rootElement.getElementsByClassName('sn-table-row');
   const cell = rowElements[x]?.getElementsByClassName('sn-table-cell')[y];
 
-  if (cell.offsetTop - tableHead.offsetHeight - cell.offsetHeight < tableContainerRef.current.scrollTop) {
+  // when totalsPosition is 'top', the table head should include the totals row
+  // when totalsPosition is 'bottom' or 'noTotals', the table head should not include the totals row
+  const tableHeadHeight =
+    totalsPosition === 'top' ? tableHead.offsetHeight + cell.offsetHeight : tableHead.offsetHeight;
+
+  if (cell.offsetTop - tableHeadHeight - cell.offsetHeight < tableContainerRef.current.scrollTop) {
     const targetOffsetTop = tableContainerRef.current.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
     tableContainerRef.current.scrollTo({
       top: Math.max(0, targetOffsetTop),
