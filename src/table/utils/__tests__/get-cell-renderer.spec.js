@@ -5,8 +5,8 @@ import * as withStyling from '../../components/withStyling';
 
 describe('render', () => {
   describe('getCellRenderer', () => {
-    let selectionsEnabled: boolean;
-    let hasColumnStyling: boolean;
+    let selectionsEnabled;
+    let hasColumnStyling;
 
     beforeEach(() => {
       selectionsEnabled = false;
