@@ -4,7 +4,7 @@ import { handleHorizontalScroll } from '../utils/handle-scroll';
 const useScrollListener = (tableContainerRef: React.MutableRefObject<HTMLDivElement>, direction: string) => {
   useEffect(() => {
     const memoedContainer = tableContainerRef.current;
-    if (!memoedContainer) return () => undefined;
+    if (!memoedContainer) return undefined;
 
     const horizontalScrollCallback = (evt: WheelEvent) =>
       handleHorizontalScroll(evt, direction === 'rtl', memoedContainer);
