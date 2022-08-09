@@ -1,5 +1,5 @@
-export function generateDataPages(height, width) {
-  const qMatrix = [];
+export function generateDataPages(height: number, width: number) {
+  const qMatrix: Record<string, string>[][] = [];
 
   for (let row = 0; row < height; row++) {
     qMatrix.push([]);
@@ -14,8 +14,8 @@ export function generateDataPages(height, width) {
   return [{ qMatrix }];
 }
 
-export function generateLayout(nDims, nMeas, nRows, qColumnOrder = [], qGrandTotalRow = []) {
-  const createField = (idx) => ({
+export function generateLayout(nDims: number, nMeas: number, nRows: number, qColumnOrder = [], qGrandTotalRow = []) {
+  const createField = (idx: number) => ({
     qFallbackTitle: `title-${idx}`,
     qAttrExprInfo: [],
     qSortIndicator: 'A',
