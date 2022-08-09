@@ -2,8 +2,8 @@
 
 ## Developing
 
-1. Install with `yarn`
-1. Transpile code: `yarn build` (or `yarn build:watch`)
+1. Install dependencies with `yarn`
+1. Transpile code with `yarn build` (or `yarn build:watch`)
 1. Run it using nebula development server with `yarn start`
    - The development server needs to connect to and communicate with the Qlik Associative Engine running within any of Qlik's product offerings.
    - For the Saas Edition of Qlik Sense, you can add your webIntegrationId and pointing the engine URL to your tenant following [Nebula serve configuration file](https://qlik.dev/libraries-and-tools/nebulajs/nebula-serve#configuration-file) or the introduction page of `http://localhost:8000` when you run the development server.
@@ -11,9 +11,13 @@
 
 ## Testing
 
+### Unit test
+
 Run unit tests with:
 
     yarn test:unit
+
+### Rendering test
 
 Run rendering tests with:
 
@@ -32,7 +36,13 @@ Look into [overview and guide](../test/rendering/README.md) to learn more about 
 
 Run lint with:
 
-`yarn lint`
+    yarn lint
+
+## Type checking
+
+Run type checking with:
+
+    yarn types:check
 
 ## Releasing
 
