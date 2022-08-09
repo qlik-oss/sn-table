@@ -109,27 +109,46 @@ describe('handle-accessibility', () => {
   });
 
   describe('handleClickToFocusBody', () => {
+    let totalsPosition;
+
     const cellData = {
       rawRowIdx: 0,
       rawColIdx: 0,
     };
 
+    beforeEach(() => {
+      totalsPosition = 'noTotals';
+    });
+
     it('should indirectly call setFocusedCellCoord with adjusted index, and keyboard.focus', () => {
-      handleAccessibility.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard);
+      handleAccessibility.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard, totalsPosition);
       expect(cell.setAttribute).toHaveBeenCalledTimes(1);
       expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledWith([1, 0]);
       expect(keyboard.focus).toHaveBeenCalledTimes(1);
     });
+
     it('should indirectly call setFocusedCellCoord with adjusted index, but not keyboard.focus when keyboard.enabled is falsey', () => {
       keyboard.enabled = false;
-      handleAccessibility.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard);
+
+      handleAccessibility.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard, totalsPosition);
       expect(cell.setAttribute).toHaveBeenCalledTimes(1);
       expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledWith([1, 0]);
       expect(keyboard.focus).not.toHaveBeenCalled();
+    });
+
+    it('should indirectly call setFocusedCellCoord with index adjusted for totals on top, and keyboard.focus', () => {
+      totalsPosition = 'top';
+
+      handleAccessibility.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard, totalsPosition);
+      expect(cell.setAttribute).toHaveBeenCalledTimes(1);
+      expect(cell.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
+      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
+      expect(setFocusedCellCoord).toHaveBeenCalledWith([2, 0]);
+      expect(keyboard.focus).toHaveBeenCalledTimes(1);
     });
   });
 

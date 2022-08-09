@@ -1,4 +1,5 @@
 import { updateFocus, focusSelectionToolbar, getCellElement, announceSelectionState } from './handle-accessibility';
+import { SelectionActions } from './selections-utils';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -153,9 +154,9 @@ export const bodyHandleKeyPress = ({
   keyboard,
   paginationNeeded,
   totalsPosition,
-  selectionsAPI = null,
+  selectionsAPI,
 }) => {
-  const isSelectionMode = selectionsAPI?.isModal();
+  const isSelectionMode = selectionsAPI.isModal();
   // Adjust the cellCoord depending on the totals position
   const firstBodyRowIdx = totalsPosition === 'top' ? 2 : 1;
   const cellCoord = [cell.rawRowIdx + firstBodyRowIdx, cell.rawColIdx];
@@ -176,7 +177,7 @@ export const bodyHandleKeyPress = ({
           (cell.nextQElemNumber !== undefined && evt.key === 'ArrowDown'));
       if (isSelectMultiValues) {
         selectionDispatch({
-          type: 'select',
+          type: SelectionActions.SELECT,
           payload: { cell, evt, announce },
         });
       } else {
@@ -194,7 +195,7 @@ export const bodyHandleKeyPress = ({
       preventDefaultBehavior(evt);
       cell.isSelectable &&
         isSelectionsEnabled &&
-        selectionDispatch({ type: 'select', payload: { cell, evt, announce } });
+        selectionDispatch({ type: SelectionActions.SELECT, payload: { cell, evt, announce } });
       break;
     // Enter: Confirms selections.
     case 'Enter':
@@ -231,7 +232,7 @@ export const bodyHandleKeyPress = ({
 };
 
 export const bodyHandleKeyUp = (evt, selectionDispatch) => {
-  evt.key === 'Shift' && selectionDispatch({ type: 'selectMultiValues' });
+  evt.key === 'Shift' && selectionDispatch({ type: SelectionActions.SELECT_MULTI_VALUES });
 };
 
 export const handleLastTab = (evt, isSelectionMode, keyboard) => {

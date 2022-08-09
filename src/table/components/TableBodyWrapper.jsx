@@ -21,6 +21,7 @@ const TableBodyWrapper = forwardRef(
       keyboard,
       tableWrapperRef,
       announce,
+      children,
     },
     ref
   ) => {
@@ -31,7 +32,7 @@ const TableBodyWrapper = forwardRef(
     // constraints.active: true - turn off interactions that affect the state of the visual
     // representation including selection, zoom, scroll, etc.
     // constraints.select: true - turn off selections.
-    const isSelectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
+    const isSelectionsEnabled = !constraints.active && !constraints.select;
     const columnRenderers = useMemo(
       () =>
         JSON.parse(columnsStylingInfoJSON).map((stylingInfo) =>
@@ -49,6 +50,7 @@ const TableBodyWrapper = forwardRef(
 
     return (
       <StyledTableBody ref={ref} paginationNeeded={paginationNeeded} bodyCellStyle={bodyCellStyle}>
+        {totalsPosition === 'top' ? children : undefined}
         {rows.map((row) => (
           <StyledBodyRow
             bodyCellStyle={bodyCellStyle}
@@ -91,7 +93,9 @@ const TableBodyWrapper = forwardRef(
                     announce={announce}
                     onKeyDown={handleKeyDown}
                     onKeyUp={(evt) => bodyHandleKeyUp(evt, selectionDispatch)}
-                    onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
+                    onMouseDown={() =>
+                      handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition)
+                    }
                   >
                     {cell.qText}
                   </CellRenderer>
@@ -100,6 +104,7 @@ const TableBodyWrapper = forwardRef(
             })}
           </StyledBodyRow>
         ))}
+        {totalsPosition === 'bottom' ? children : undefined}
       </StyledTableBody>
     );
   }
@@ -118,6 +123,7 @@ TableBodyWrapper.propTypes = {
   keyboard: PropTypes.object.isRequired,
   tableWrapperRef: PropTypes.object.isRequired,
   announce: PropTypes.func.isRequired,
+  children: PropTypes.object.isRequired,
 };
 
 export default memo(TableBodyWrapper);
