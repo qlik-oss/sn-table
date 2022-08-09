@@ -26,7 +26,7 @@ jobs:
   install:
     <<: *defaults
     docker:
-      - image: circleci/node:16.7.0
+      - image: circleci/node:16.12.0
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
@@ -46,7 +46,7 @@ jobs:
   build:
     <<: *defaults
     docker:
-      - image: circleci/node:16.7.0-browsers
+      - image: circleci/node:16.12.0-browsers
       - image: mcr.microsoft.com/playwright:focal
     steps:
       - attach_workspace:
@@ -58,7 +58,10 @@ jobs:
           name: Lint
           command: yarn run lint
       - run:
-          name: Locale
+          name: Check types
+          command: yarn run types:check
+      - run:
+          name: Verify locale
           command: yarn run locale:verify
       - run:
           name: Update spec
@@ -97,7 +100,7 @@ jobs:
   publish-dev:
     <<: *defaults
     docker:
-      - image: circleci/node:16.7.0
+      - image: circleci/node:16.12.0
     steps:
       - attach_workspace:
           at: ~/table
@@ -108,7 +111,7 @@ jobs:
   publish:
     <<: *defaults
     docker:
-      - image: circleci/node:16.7.0
+      - image: circleci/node:16.12.0
     steps:
       - attach_workspace:
           at: ~/table
