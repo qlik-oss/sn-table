@@ -19,6 +19,10 @@ export interface ExtendedSelectionAPI extends stardust.ObjectSelections {
   removeListener(eventType: string, callback: () => void): void;
 }
 
+export interface ExtendedTranslator extends stardust.Translator {
+  language(): string;
+}
+
 export interface SelectionState {
   rows: Record<string, number>;
   colIdx: number;
@@ -47,4 +51,53 @@ export interface ContextValue {
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   selectionState: SelectionState;
   selectionDispatch: React.Dispatch<ActionPayload> | jest.Mock<any, any>;
+}
+
+export interface PaginationColors {
+  borderColor: string;
+  color: string;
+  iconColor: string;
+  disabledIconColor: string;
+}
+export interface TableThemeColors {
+  tableBackgroundColorFromTheme: string;
+  backgroundColor: string | undefined;
+  isBackgroundTransparentColor: boolean;
+  isBackgroundDarkColor: boolean;
+  borderColor: string;
+  body: object;
+  pagination: PaginationColors;
+}
+
+export interface ExtendedTheme extends stardust.Theme {
+  name(): string;
+  table: TableThemeColors;
+}
+
+export interface HyperCube extends EngineAPI.IHyperCube {
+  qColumnOrder: number[];
+  textAlign: string;
+}
+
+export type TotalsPosition = 'top' | 'bottom' | 'noTotals';
+
+export interface TableLayout extends EngineAPI.IGenericHyperCubeLayout {
+  qHyperCube: HyperCube;
+  totals: {
+    show: boolean;
+    position: 'top' | 'bottom' | 'noTotals';
+    label: string;
+  };
+}
+
+export interface Column {
+  id: string;
+  isDim: boolean;
+  isLocked: boolean;
+  dataColIdx: number;
+  width: number;
+  label: string;
+  align: string;
+  stylingInfo: string[];
+  sortDirection: string;
 }

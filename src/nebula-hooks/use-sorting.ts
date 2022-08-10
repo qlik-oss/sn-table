@@ -1,9 +1,10 @@
 import { useMemo } from '@nebula.js/stardust';
+import { TableLayout, Column } from '../types';
 
-export const sortingFactory = (model) => {
+export const sortingFactory = (model: EngineAPI.IGenericObject | undefined) => {
   if (!model) return undefined;
 
-  return async (layout, column) => {
+  return async (layout: TableLayout, column: Column) => {
     const { isDim, dataColIdx } = column;
     // The sort order from the properties is needed since it contains hidden columns
     const properties = await model.getEffectiveProperties();
@@ -18,7 +19,7 @@ export const sortingFactory = (model) => {
     const patches = [
       {
         qPath: '/qHyperCubeDef/qInterColumnSortOrder',
-        qOp: 'replace',
+        qOp: 'Replace' as EngineAPI.NxPatchOpType,
         qValue: `[${sortOrder.join(',')}]`,
       },
     ];
@@ -32,7 +33,7 @@ export const sortingFactory = (model) => {
 
       patches.push({
         qPath,
-        qOp: 'replace',
+        qOp: 'Replace' as EngineAPI.NxPatchOpType,
         qValue: (!qReverseSort).toString(),
       });
     }
@@ -41,7 +42,7 @@ export const sortingFactory = (model) => {
   };
 };
 
-const useSorting = (model) => {
+const useSorting = (model: EngineAPI.IGenericObject | undefined) => {
   const changeSortOrder = useMemo(() => sortingFactory(model), [model]);
 
   return changeSortOrder;

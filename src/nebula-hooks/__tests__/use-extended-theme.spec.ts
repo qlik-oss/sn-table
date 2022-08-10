@@ -1,16 +1,18 @@
+import { ExtendedTheme } from '../../types';
 import { tableThemeColors } from '../use-extended-theme';
 
 describe('tableThemeColors', () => {
-  let themeObjectBackgroundColor;
-  let themeTableBackgroundColor;
-  let rootElement;
+  let themeObjectBackgroundColor: string | undefined;
+  let themeTableBackgroundColor: string | undefined;
+  let rootElement: HTMLElement;
+  let backgroundColor: string | undefined;
   const theme = {
-    getStyle: (base, path, attribute) =>
+    getStyle: (base: string, path: string, attribute: string) =>
       attribute === 'backgroundColor' ? themeObjectBackgroundColor : themeTableBackgroundColor,
-  };
+  } as ExtendedTheme;
   let valueWithLightBackgroundColor = {
     tableBackgroundColorFromTheme: 'inherit',
-    backgroundColor: undefined,
+    backgroundColor,
     isBackgroundDarkColor: false,
     isBackgroundTransparentColor: false,
     body: { borderColor: '#D9D9D9' },
@@ -43,11 +45,11 @@ describe('tableThemeColors', () => {
   describe('mashup', () => {
     rootElement = {
       closest: () => null,
-    };
+    } as unknown as HTMLElement;
 
     describe('when there is no background color in the theme file', () => {
       it('should return the valueWithLightBackgroundColor', () => {
-        const result = tableThemeColors(theme);
+        const result = tableThemeColors(theme, rootElement);
         expect(result).toEqual(valueWithLightBackgroundColor);
       });
     });
@@ -151,13 +153,22 @@ describe('tableThemeColors', () => {
 
   describe('client', () => {
     rootElement = {
-      closest: (selector) => selector,
-    };
-    let qvPanelSheetBackgroundColor;
-    let qvInnerObjectBackgroundColor;
-    global.window.getComputedStyle = (selector) => ({
-      backgroundColor: selector === '.qv-panel-sheet' ? qvPanelSheetBackgroundColor : qvInnerObjectBackgroundColor,
-    });
+      closest: (selector: string): HTMLElement => {
+        // This needs to return a proper HTMLelement for getComputedStyle to work later
+        const el = document.createElement('div');
+        // Need to split the selector since it can be two classes
+        el.classList.add(...selector.split(' '));
+        return el;
+      },
+    } as HTMLElement;
+    let qvPanelSheetBackgroundColor: string;
+    let qvInnerObjectBackgroundColor: string;
+    global.window.getComputedStyle = (selector) =>
+      ({
+        backgroundColor: selector.classList.contains('.qv-panel-sheet')
+          ? qvPanelSheetBackgroundColor
+          : qvInnerObjectBackgroundColor,
+      } as CSSStyleDeclaration);
 
     beforeEach(() => {
       valueWithLightBackgroundColor = {

@@ -1,13 +1,14 @@
+import { AnnounceFn, ExtendedTranslator } from '../../types';
 import { announcementFactory } from '../use-announce-and-translations';
 
 describe('announcementFactory', () => {
-  let rootElement;
-  let translator;
-  let announcer;
-  let announcerElement01;
-  let announcerElement02;
-  let previousAnnouncementElement;
-  let junkChar;
+  let rootElement: HTMLElement;
+  let translator: ExtendedTranslator;
+  let announcer: AnnounceFn;
+  let announcerElement01: HTMLElement;
+  let announcerElement02: HTMLElement;
+  let previousAnnouncementElement: string;
+  let junkChar: string;
 
   beforeEach(() => {
     announcerElement01 = global.document.createElement('div');
@@ -16,14 +17,14 @@ describe('announcementFactory', () => {
     announcerElement02.setAttribute('id', '#sn-table-announcer--02');
 
     rootElement = {
-      querySelector: (query) => {
+      querySelector: (query: string) => {
         if (query === '#sn-table-announcer--01') return announcerElement01;
         if (query === '#sn-table-announcer--02') return announcerElement02;
         return announcerElement01;
       },
-    };
-    translator = { get: (key) => key };
-    previousAnnouncementElement = null;
+    } as HTMLElement;
+    translator = { get: (key) => key } as ExtendedTranslator;
+    previousAnnouncementElement = '';
     junkChar = ' ­';
   });
 
@@ -58,7 +59,7 @@ describe('announcementFactory', () => {
 
   it('should render multiple keys with arguments', () => {
     announcer = announcementFactory(rootElement, translator);
-    const keys = ['key#01', ['key#02', 1, 2]];
+    const keys = ['key#01', ['key#02', '1', '2']];
     announcer({ keys });
 
     expect(announcerElement01.innerHTML).toBe(`key#01 key#02${junkChar}`);
