@@ -46,8 +46,8 @@ describe('color-utils', () => {
       const result = resolveToRGBAorRGB(color);
       expect(result).toBe('rgba(255,255,255,0)');
     });
-    it('should return when nothing is provided', () => {
-      const result = resolveToRGBAorRGB();
+    it('should return when empty string is provided', () => {
+      const result = resolveToRGBAorRGB('');
       expect(result).toBe('none');
     });
   });
@@ -154,8 +154,8 @@ describe('color-utils', () => {
       expect(result).toBe(false);
     });
 
-    it('should be false when nothing is provided', () => {
-      const result = isTransparentColor();
+    it('should be false when empty string is provided', () => {
+      const result = isTransparentColor('');
       expect(result).toBe(false);
     });
     it('should be true when the color is transparent in rgba', () => {
