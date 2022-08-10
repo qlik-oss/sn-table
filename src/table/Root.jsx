@@ -25,6 +25,7 @@ export function teardown(reactRoot) {
   reactRoot.unmount();
 }
 
+// eslint-disable-next-line no-unused-vars
 export function mount(rootElement) {
-  return rootElement;
+  /* noop in web */
 }
