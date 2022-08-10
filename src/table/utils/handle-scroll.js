@@ -26,27 +26,27 @@ export const handleHorizontalScroll = (evt, isRTL, memoedContainer) => {
   }
 };
 
-export const handleNavigateTop = ({ tableContainerRef, focusedCellCoord, rootElement }) => {
+export const handleNavigateTop = (cellCoord, rootElement) => {
+  const tableContainer = rootElement.getElementsByClassName('sn-table-container')[0];
+  if (!tableContainer?.scrollTo) return;
+
+  const [x, y] = cellCoord;
   const MIN_ROW_COUNT = 2;
-
-  if (!tableContainerRef.current?.scrollTo) return;
-
-  if (focusedCellCoord[0] < MIN_ROW_COUNT) {
-    tableContainerRef.current.scrollTo({
+  if (x < MIN_ROW_COUNT) {
+    tableContainer.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: 'instant',
     });
   } else {
-    const [x, y] = focusedCellCoord;
     const tableHead = rootElement.getElementsByClassName('sn-table-head-cell')[0];
     const rowElements = rootElement.getElementsByClassName('sn-table-row');
     const cell = rowElements[x]?.getElementsByClassName('sn-table-cell')[y];
 
-    if (cell.offsetTop - tableHead.offsetHeight - cell.offsetHeight <= tableContainerRef.current.scrollTop) {
-      const targetOffsetTop = tableContainerRef.current.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
-      tableContainerRef.current.scrollTo({
+    if (cell.offsetTop - tableHead.offsetHeight - cell.offsetHeight <= tableContainer.scrollTop) {
+      const targetOffsetTop = tableContainer.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
+      tableContainer.scrollTo({
         top: Math.max(0, targetOffsetTop),
-        behavior: 'smooth',
+        behavior: 'instant',
       });
     }
   }
