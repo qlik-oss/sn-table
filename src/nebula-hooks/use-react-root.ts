@@ -10,7 +10,7 @@ export default function useReactRoot(rootElement: HTMLElement) {
   useEffect(() => {
     if (rootElement) {
       setReactRoot(createRoot(rootElement));
-      mount(rootElement);
+      mount(rootElement); // only does something in native env
     }
   }, [rootElement]);
 
