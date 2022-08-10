@@ -72,7 +72,7 @@ export default function TableWrapper(props) {
 
   useFocusListener(tableWrapperRef, shouldRefocus, keyboard);
   useScrollListener(tableContainerRef, direction);
-  useKeyDownListener(tableBodyWrapperRef, tableContainerRef, focusedCellCoord, rootElement, totalsPosition);
+  useKeyDownListener(tableBodyWrapperRef, focusedCellCoord, rootElement, totalsPosition);
 
   useDidUpdateEffect(() => {
     // When nebula handles keyboard navigation and keyboard.active changes,
@@ -112,6 +112,7 @@ export default function TableWrapper(props) {
     >
       <AnnounceElements />
       <StyledTableContainer
+        className="sn-table-container"
         ref={tableContainerRef}
         fullHeight={footerContainer || constraints.active || !paginationNeeded} // the footerContainer always wants height: 100%
         constraints={constraints}

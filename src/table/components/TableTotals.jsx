@@ -14,7 +14,7 @@ function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
   const isTop = totalsPosition === 'top';
 
   return (
-    <StyledHeadRow paginationNeeded={paginationNeeded} className="sn-table-row">
+    <StyledHeadRow paginationNeeded={paginationNeeded} className="sn-table-totals sn-table-row">
       {columns.map((column, columnIndex) => {
         const cellCoord = [isTop ? 1 : rows.length + 1, columnIndex];
         return (

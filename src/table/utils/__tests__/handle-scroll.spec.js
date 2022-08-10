@@ -112,7 +112,6 @@ describe('handle-scroll', () => {
   describe('handleNavigateTop', () => {
     let rowHeight;
     let scrollTo;
-    let tableContainerRef;
     let focusedCellCoord;
     let rootElement;
     let totalsPosition;
@@ -120,25 +119,27 @@ describe('handle-scroll', () => {
     beforeEach(() => {
       rowHeight = 100;
       scrollTo = jest.fn();
-      tableContainerRef = { current: { scrollTo } };
       focusedCellCoord = [0, 0];
-      rootElement = {};
+      rootElement = {
+        getElementsByClassName: () => [{}],
+      };
       totalsPosition = 'bottom';
     });
 
-    it('should not do anything when ref is not setup yet', () => {
-      tableContainerRef.current = {};
-
-      handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement, totalsPosition });
+    it('should not do anything when tableContainer is not setup yet', () => {
+      handleNavigateTop({ focusedCellCoord, rootElement, totalsPosition });
       expect(scrollTo).not.toHaveBeenCalled();
     });
 
     it('should scroll upwards automatically if it detects the cursor gets behind <TableHead />', () => {
       const SCROLL_TOP_IDX = 7;
       focusedCellCoord = [8, 0];
-      tableContainerRef = { current: { scrollTo, scrollTop: SCROLL_TOP_IDX * rowHeight } };
       rootElement = {
         getElementsByClassName: (query) => {
+          if (query === 'sn-table-container') {
+            return [{ scrollTo, scrollTop: SCROLL_TOP_IDX * rowHeight }];
+          }
+
           if (query === 'sn-table-head-cell') {
             return [{ offsetHeight: 128 }];
           }
@@ -157,7 +158,7 @@ describe('handle-scroll', () => {
       // 700 - 100 - 128 = 472 => so our scrollTo function might be called with 600
       const targetOffsetTop = 472;
 
-      handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement, totalsPosition });
+      handleNavigateTop({ focusedCellCoord, rootElement, totalsPosition });
       expect(scrollTo).toHaveBeenCalledTimes(1);
       expect(scrollTo).toHaveBeenCalledWith({ top: targetOffsetTop, behavior: 'instant' });
     });
