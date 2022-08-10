@@ -1,43 +1,34 @@
 const createStylingPanelDefinition = () => {
-  const headerFontSize = {
-    label: 'Header font size',
+  const headerFontSection = {
+    translation: 'ThemeStyleEditor.style.headerFontColor',
     component: 'panel-section',
     items: {
-      headerFontSizeItem: {
+      headerFontItem: {
         component: 'items',
         ref: 'components',
         key: 'general',
         items: {
-          headerFontSizeInteger: {
-            component: 'string',
-            ref: 'header.fontSize',
-            translation: 'ThemeStyleEditor.style.headerFontSize',
-            // placeholder: () => parseInt(styleService.getStyle('header', 'fontSize'), 10),
-            maxlength: 3,
-            change(data) {
-              data.header.fontSize = Math.max(5, Math.min(300, Math.floor(data.header.fontSize)));
-            },
-          },
-        },
-      },
-    },
-  };
-  const headerFontColor = {
-    label: 'Header font Color',
-    component: 'panel-section',
-    items: {
-      headerFontColorItem: {
-        component: 'items',
-        ref: 'components',
-        key: 'general',
-        items: {
-          headerFontColorWrapper: {
+          headerFontWrapper: {
             component: 'inline-wrapper',
             items: {
-              fontColorPicker: {
+              headerFontSize: {
+                component: 'integer',
+                ref: 'header.fontSize',
+                type: 'integer',
+                width: 9,
+                min: 5,
+                max: 300,
+                // placeholder: parseInt(styleService.getStyle('header', 'fontSize'), 10),
+                change(data) {
+                  console.log('changed data=>', data);
+                  data.header.fontSize = !data.header.fontSize
+                    ? data.header.fontSize
+                    : Math.max(5, Math.min(300, Math.floor(data.header.fontSize)));
+                },
+              },
+              headerFontColor: {
                 show: true,
                 ref: 'header.fontColor',
-                translation: 'ThemeStyleEditor.style.headerFontColor',
                 type: 'object',
                 component: 'color-picker',
                 dualOutput: true,
@@ -48,44 +39,34 @@ const createStylingPanelDefinition = () => {
       },
     },
   };
-  const contentFontSize = {
-    label: 'Content font size',
+  const contentFontSection = {
     component: 'panel-section',
+    translation: 'ThemeStyleEditor.style.cellFontSize',
     items: {
-      contentFontSizeItem: {
+      contentFontItem: {
         component: 'items',
         ref: 'components',
-        key: 'general',
+        key: 'theme',
         items: {
-          contentFontSizeInteger: {
-            translation: 'ThemeStyleEditor.style.cellFontSize',
-            ref: 'content.fontSize',
-            component: 'string',
-            // placeholder: () => parseInt(styleService.getStyle('content', 'fontSize'), 10),
-            maxlength: 3,
-            change(data) {
-              data.content.fontSize = Math.max(5, Math.min(300, Math.floor(data.content.fontSize)));
-            },
-          },
-        },
-      },
-    },
-  };
-  const contentFontColor = {
-    label: 'Content font color',
-    component: 'panel-section',
-    items: {
-      contentFontColorItem: {
-        component: 'items',
-        ref: 'components',
-        key: 'general',
-        items: {
-          contentFontColorWrapper: {
+          contentFontWrapper: {
             component: 'inline-wrapper',
             items: {
-              contentFontColorPicker: {
+              contentFontSize: {
+                component: 'integer',
+                ref: 'content.fontSize',
+                type: 'integer',
+                width: 9,
+                min: 5,
+                max: 300,
+                // placeholder: parseInt(styleService.getStyle('content', 'fontSize'), 10),
+                change(data) {
+                  data.content.fontSize = !data.content.fontSize
+                    ? data.content.fontSize
+                    : Math.max(5, Math.min(300, Math.floor(data.content.fontSize)));
+                },
+              },
+              contentFontColor: {
                 ref: 'content.fontColor',
-                translation: 'ThemeStyleEditor.style.cellFontColor',
                 type: 'object',
                 component: 'color-picker',
                 dualOutput: true,
@@ -96,56 +77,6 @@ const createStylingPanelDefinition = () => {
       },
     },
   };
-
-  // Uncomment to combined hover-color and hover-font-color under hoverEffect
-
-  // const hoverEffect = {
-  //   title: 'Highlight rows on hover',
-  //   component: 'panel-section',
-  //   items: {
-  //     hoverEffectItem: {
-  //       component: 'items',
-  //       ref: 'components',
-  //       key: 'general',
-  //       items: {
-  //         hoverEffectSwitch: {
-  //           show: true,
-  //           ref: 'content.hoverEffect',
-  //           translation: 'ThemeStyleEditor.style.hoverEffect',
-  //           type: 'boolean',
-  //           component: 'switch',
-  //           options: [
-  //             {
-  //               value: true,
-  //               translation: 'properties.on',
-  //             },
-  //             {
-  //               value: false,
-  //               translation: 'properties.off',
-  //             },
-  //           ],
-  //           defaultValue: false
-  //         },
-  //         hoverEffectColorItem: {
-  //           show: (data) => !!data?.content?.hoverEffect,
-  //           ref: 'content.hoverColor',
-  //           translation: 'ThemeStyleEditor.style.hoverStyle',
-  //           type: 'object',
-  //           component: 'color-picker',
-  //           dualOutput: true,
-  //         },
-  //         hoverEffectFontColorItem: {
-  //           show: (data) => !!data?.content?.hoverEffect,
-  //           ref: 'content.hoverFontColor',
-  //           translation: 'ThemeStyleEditor.style.hoverFontStyle',
-  //           type: 'object',
-  //           component: 'color-picker',
-  //           dualOutput: true,
-  //         },
-  //       },
-  //     },
-  //   },
-  // };
 
   const hoverEffect = {
     label: 'Highlight rows on hover',
@@ -241,10 +172,8 @@ const createStylingPanelDefinition = () => {
     key: 'theme',
     defaultValue: [],
     items: {
-      headerFontSizeSection: headerFontSize,
-      headerFontColorSection: headerFontColor,
-      fontSizeSection: contentFontSize,
-      contentFontColorSection: contentFontColor,
+      headerSection: headerFontSection,
+      contentSection: contentFontSection,
       hoverEffectSection: hoverEffect,
       hoverColorSection: hoverColor,
       hoverFontColorSection: hoverFontColor,
