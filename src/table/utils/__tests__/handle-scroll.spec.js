@@ -124,7 +124,7 @@ describe('handle-scroll', () => {
       };
     });
 
-    it('should not do anything when ref is not setup yet', () => {
+    it('should not do anything when rootElement is not setup yet', () => {
       handleNavigateTop(cellCoord, rootElement);
       expect(scrollTo).not.toHaveBeenCalled();
     });

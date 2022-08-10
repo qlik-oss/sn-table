@@ -42,7 +42,7 @@ export const handleNavigateTop = (cellCoord, rootElement) => {
     const rowElements = rootElement.getElementsByClassName('sn-table-row');
     const cell = rowElements[x]?.getElementsByClassName('sn-table-cell')[y];
 
-    if (cell.offsetTop - tableHead.offsetHeight - cell.offsetHeight <= tableContainer.scrollTop) {
+    if (cell.offsetTop - tableHead.offsetHeight < tableContainer.scrollTop) {
       const targetOffsetTop = tableContainer.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
       tableContainer.scrollTo({
         top: Math.max(0, targetOffsetTop),
