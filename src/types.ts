@@ -109,12 +109,12 @@ export interface Column {
 
 export interface PaletteColor {
   index: number;
-  color: string;
+  color: string | null;
 }
 
 export interface StylingLayout {
-  fontColor: PaletteColor;
-  fontSize: number;
+  fontColor?: PaletteColor;
+  fontSize?: number;
   hoverColor?: PaletteColor;
   hoverEffect?: boolean;
   hoverFontColor?: PaletteColor;

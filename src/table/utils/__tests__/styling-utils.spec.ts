@@ -7,15 +7,16 @@ import {
   getBodyCellStyle,
   getColumnStyle,
   getSelectionStyle,
-} from '../styling-utils.ts';
+} from '../styling-utils';
 import { SelectionStates } from '../selections-utils';
+import { ExtendedTheme, PaletteColor, StylingLayout, TableLayout, CellStyle } from '../../../types';
 
 describe('styling-utils', () => {
-  let resolvedColor;
-  let altResolvedColor;
+  let resolvedColor: string;
+  let altResolvedColor: string;
   const theme = {
     // very simple mock of getColorPickerColor. Normally color.color has to be null for the fn to return null
-    getColorPickerColor: ({ index, color }) => {
+    getColorPickerColor: ({ index, color }: PaletteColor) => {
       switch (index) {
         case -1:
           return color;
@@ -29,16 +30,16 @@ describe('styling-utils', () => {
           return null;
       }
     },
-    getStyle: () => {},
+    getStyle: () => undefined,
     table: {
       body: { borderColor: '#D9D9D9' },
       backgroundColor: '#323232',
     },
-  };
+  } as unknown as ExtendedTheme;
 
   describe('getColor', () => {
-    let color;
-    let defaultColor;
+    let color: PaletteColor;
+    let defaultColor: string;
 
     beforeEach(() => {
       defaultColor = '#000';
@@ -69,16 +70,14 @@ describe('styling-utils', () => {
     });
 
     it('should return a default color when color is undefined', () => {
-      color = undefined;
-
-      const resultColor = getColor(defaultColor, theme, color);
+      const resultColor = getColor(defaultColor, theme, undefined);
       expect(resultColor).toBe(defaultColor);
     });
   });
 
   describe('getBaseStyling', () => {
-    let styleObj;
-    let objetName;
+    let styleObj: StylingLayout;
+    let objetName: string;
 
     beforeEach(() => {
       resolvedColor = '#fff';
@@ -103,7 +102,7 @@ describe('styling-utils', () => {
       });
     });
     it('should return styling with fontSize and padding', () => {
-      styleObj.fontColor = null;
+      styleObj.fontColor = undefined;
       const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
@@ -128,7 +127,7 @@ describe('styling-utils', () => {
       const customTheme = {
         ...theme,
         getStyle: () => '#111',
-      };
+      } as unknown as ExtendedTheme;
 
       const resultStyling = getBaseStyling(styleObj, objetName, customTheme);
       expect(resultStyling).toEqual({
@@ -153,7 +152,7 @@ describe('styling-utils', () => {
       });
     });
     it('should return styling with fontColor as the font size and padding are from sprout theme', () => {
-      styleObj.fontSize = null;
+      styleObj.fontSize = undefined;
 
       const resultStyling = getBaseStyling(styleObj, objetName, theme);
       expect(resultStyling).toEqual({
@@ -171,7 +170,7 @@ describe('styling-utils', () => {
   });
 
   describe('getHeaderStyle', () => {
-    let layout;
+    let layout: TableLayout;
 
     beforeEach(() => {
       layout = {
@@ -183,11 +182,11 @@ describe('styling-utils', () => {
             },
           },
         ],
-      };
+      } as unknown as TableLayout;
     });
 
     it('should return empty object except backgroundColor and border as the padding and font size are from sprout theme', () => {
-      layout = {};
+      layout = {} as unknown as TableLayout;
 
       const resultStyling = getHeaderStyle(layout, theme);
       expect(resultStyling).toEqual({
@@ -208,7 +207,7 @@ describe('styling-utils', () => {
             },
           },
         ],
-      };
+      } as unknown as TableLayout;
 
       const resultStyling = getHeaderStyle(layout, theme);
       expect(resultStyling).toEqual({
@@ -238,7 +237,7 @@ describe('styling-utils', () => {
   });
 
   describe('getBodyCellStyle', () => {
-    let layout;
+    let layout: TableLayout;
 
     beforeEach(() => {
       resolvedColor = '#222222'; // dark color
@@ -264,11 +263,11 @@ describe('styling-utils', () => {
             },
           },
         ],
-      };
+      } as unknown as TableLayout;
     });
 
     it('should return styling with default hoverBackgroundColor and hoverFontColor', () => {
-      layout = {};
+      layout = {} as unknown as TableLayout;
 
       const resultStyling = getBodyCellStyle(layout, theme);
       expect(resultStyling).toEqual({
@@ -339,14 +338,17 @@ describe('styling-utils', () => {
   });
 
   describe('getColumnStyle', () => {
-    let styling;
-    let qAttrExps;
-    let stylingInfo;
+    let styling: CellStyle;
+    let qAttrExps: EngineAPI.INxAttributeExpressionValues;
+    let stylingInfo: string[];
 
     beforeEach(() => {
-      styling = { color: 'someFontColor' };
+      styling = { color: 'someFontColor', backgroundColor: 'someBgColor' };
       qAttrExps = {
-        qValues: [{ qText: '#dddddd' }, { qText: '#111111' }],
+        qValues: [
+          { qText: '#dddddd', qNum: NaN },
+          { qText: '#111111', qNum: NaN },
+        ],
       };
       stylingInfo = ['cellBackgroundColor', 'cellForegroundColor'];
     });
@@ -373,7 +375,6 @@ describe('styling-utils', () => {
       expect(columnStyle.color).toBe(STYLING_DEFAULTS.FONT_COLOR);
     });
     it('should return styling unchanged', () => {
-      qAttrExps = undefined;
       stylingInfo = [];
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
@@ -383,20 +384,19 @@ describe('styling-utils', () => {
   });
 
   describe('getSelectionStyle', () => {
-    let styling;
-    let cellSelectionState;
-    let themeBackgroundColor;
+    let styling: CellStyle;
+    let cellSelectionState: SelectionStates;
 
     beforeEach(() => {
       styling = {
-        otherStyling: 'otherStyling',
+        color: '#654321',
         backgroundColor: '#123456',
       };
       cellSelectionState = SelectionStates.SELECTED;
     });
 
     it('should return selected when selected styling', () => {
-      const selectionStyling = getSelectionStyle(styling, cellSelectionState, themeBackgroundColor);
+      const selectionStyling = getSelectionStyle(styling, cellSelectionState);
       expect(selectionStyling).toEqual({ ...styling, ...SELECTION_STYLING.SELECTED });
     });
 
@@ -414,7 +414,7 @@ describe('styling-utils', () => {
       cellSelectionState = SelectionStates.EXCLUDED;
       styling.backgroundColor = 'someColor';
 
-      const selectionStyling = getSelectionStyle(styling, cellSelectionState, themeBackgroundColor);
+      const selectionStyling = getSelectionStyle(styling, cellSelectionState);
       expect(selectionStyling).toEqual({
         ...styling,
         background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${styling.backgroundColor}`,
@@ -424,14 +424,14 @@ describe('styling-utils', () => {
     it('should return possible styling when active and available to select', () => {
       cellSelectionState = SelectionStates.POSSIBLE;
 
-      const selectionStyling = getSelectionStyle(styling, cellSelectionState, themeBackgroundColor);
+      const selectionStyling = getSelectionStyle(styling, cellSelectionState);
       expect(selectionStyling).toEqual({ ...styling, ...SELECTION_STYLING.POSSIBLE });
     });
 
     it('should return empty object when no active selections', () => {
       cellSelectionState = SelectionStates.INACTIVE;
 
-      const selectionStyling = getSelectionStyle(styling, cellSelectionState, themeBackgroundColor);
+      const selectionStyling = getSelectionStyle(styling, cellSelectionState);
       expect(selectionStyling).toEqual(styling);
     });
   });

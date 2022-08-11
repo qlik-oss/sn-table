@@ -32,10 +32,10 @@ export const SELECTION_STYLING = {
 };
 
 /**
- * Determines if a palette color is set or not. Both index !== -1 and color !== null must be true for it to be set
+ * Determines if a palette color is set or not. Both index !== -1 and color !== null must be true for it to be unset
  */
-export const isColorSet = (prop: PaletteColor): boolean =>
-  prop && JSON.stringify(prop) !== JSON.stringify({ index: -1, color: null });
+export const isColorSet = (prop: PaletteColor | undefined): boolean =>
+  !!prop && JSON.stringify(prop) !== JSON.stringify({ index: -1, color: null });
 
 /**
  * Gets specified padding from layout if defined, otherwise calculates it based on specified font size if defined, otherwise returns default padding.
@@ -85,7 +85,7 @@ export const getBaseStyling = (styleObj: StylingLayout, objetName: string, theme
   // Remove all undefined and null values
   Object.keys(baseStyle).forEach((key) => {
     const typedKey = key as keyof GeneratedStyling;
-    baseStyle[typedKey] == null && delete baseStyle[typedKey];
+    baseStyle[typedKey] == null && delete baseStyle[typedKey]; // == catches null and undefined but not 0
   });
   return baseStyle;
 };
