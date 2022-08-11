@@ -27,7 +27,7 @@ export function resolveToRGBAorRGB(input: string): string {
   // argb
   matches = /^argb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i.exec(input);
   if (matches) {
-    const a = Math.round(Number(matches[1]) / 2.55) / 100;
+    const a = Math.round(+matches[1] / 2.55) / 100;
     return `rgba(${matches[2]},${matches[3]},${matches[4]},${a})`;
   }
   // hex (#rgb, #rgba, #rrggbb, and #rrggbbaa)
