@@ -19,6 +19,7 @@ function TableBodyWrapper({
   keyboard,
   tableWrapperRef,
   announce,
+  children,
 }) {
   const { rows, columns, paginationNeeded, totalsPosition } = tableData;
   const columnsStylingInfoJSON = JSON.stringify(columns.map((column) => column.stylingInfo));
@@ -27,7 +28,7 @@ function TableBodyWrapper({
   // constraints.active: true - turn off interactions that affect the state of the visual
   // representation including selection, zoom, scroll, etc.
   // constraints.select: true - turn off selections.
-  const isSelectionsEnabled = !!selectionsAPI && !constraints.active && !constraints.select;
+  const isSelectionsEnabled = !constraints.active && !constraints.select;
   const columnRenderers = useMemo(
     () =>
       JSON.parse(columnsStylingInfoJSON).map((stylingInfo) =>
@@ -45,6 +46,7 @@ function TableBodyWrapper({
 
   return (
     <StyledTableBody paginationNeeded={paginationNeeded} bodyCellStyle={bodyCellStyle}>
+      {totalsPosition === 'top' ? children : undefined}
       {rows.map((row) => (
         <StyledBodyRow
           bodyCellStyle={bodyCellStyle}
@@ -87,7 +89,9 @@ function TableBodyWrapper({
                   announce={announce}
                   onKeyDown={handleKeyDown}
                   onKeyUp={(evt) => bodyHandleKeyUp(evt, selectionDispatch)}
-                  onMouseDown={() => handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard)}
+                  onMouseDown={() =>
+                    handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition)
+                  }
                 >
                   {cell.qText}
                 </CellRenderer>
@@ -96,6 +100,7 @@ function TableBodyWrapper({
           })}
         </StyledBodyRow>
       ))}
+      {totalsPosition === 'bottom' ? children : undefined}
     </StyledTableBody>
   );
 }
@@ -111,6 +116,7 @@ TableBodyWrapper.propTypes = {
   keyboard: PropTypes.object.isRequired,
   tableWrapperRef: PropTypes.object.isRequired,
   announce: PropTypes.func.isRequired,
+  children: PropTypes.object.isRequired,
 };
 
 export default memo(TableBodyWrapper);

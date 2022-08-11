@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useRef, useCallback } from 'react';
 import Table from '@mui/material/Table';
 
-import TableFooter from '@mui/material/TableFooter';
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
@@ -17,7 +16,6 @@ import useFocusListener from '../hooks/use-focus-listener';
 import useScrollListener from '../hooks/use-scroll-listener';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, getCellElement } from '../utils/handle-accessibility';
-import { handleNavigateTop } from '../utils/handle-scroll';
 
 export default function TableWrapper(props) {
   const {
@@ -34,7 +32,7 @@ export default function TableWrapper(props) {
     footerContainer,
     announce,
   } = props;
-  const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } = tableData;
+  const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
   const isSelectionMode = selectionsAPI.isModal();
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
@@ -74,11 +72,6 @@ export default function TableWrapper(props) {
   useFocusListener(tableWrapperRef, shouldRefocus, keyboard);
   useScrollListener(tableContainerRef, direction);
 
-  useEffect(
-    () => handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement }),
-    [tableContainerRef, focusedCellCoord, rootElement]
-  );
-
   useDidUpdateEffect(() => {
     // When nebula handles keyboard navigation and keyboard.active changes,
     // make sure to blur or focus the cell corresponding to focusedCellCoord
@@ -117,6 +110,7 @@ export default function TableWrapper(props) {
       <AnnounceElements />
       <StyledTableContainer
         ref={tableContainerRef}
+        className="sn-table-container"
         fullHeight={footerContainer || constraints.active || !paginationNeeded} // the footerContainer always wants height: 100%
         constraints={constraints}
         tabIndex={-1}
@@ -124,15 +118,10 @@ export default function TableWrapper(props) {
         data-testid="table-container"
       >
         <Table stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper {...props}>
-            {totalsPosition === 'top' ? <TableTotals {...props} /> : undefined}
-          </TableHeadWrapper>
-          <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
-          {totalsPosition === 'bottom' && (
-            <TableFooter>
-              <TableTotals {...props} />
-            </TableFooter>
-          )}
+          <TableHeadWrapper {...props} />
+          <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef}>
+            <TableTotals {...props} />
+          </TableBodyWrapper>
         </Table>
       </StyledTableContainer>
       {!constraints.active && (

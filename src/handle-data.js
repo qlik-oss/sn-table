@@ -5,20 +5,6 @@ const directionMap = {
 
 const MAX_CELLS = 10000;
 
-/**
- * Get total cell info
- * @param {Boolean} isDim
- * @param {Object} layout
- * @param {Number} colIndex
- * @param {Number} numDims
- * @returns dimensions and measures total cell values as strings
- */
-export function getTotalInfo(isDim, layout, colIndex, numDims) {
-  if (!isDim) return layout.qHyperCube.qGrandTotalRow[colIndex - numDims]?.qText;
-  if (colIndex !== 0) return '';
-  return layout.totals.label;
-}
-
 export function getHighestPossibleRpp(width, rowsPerPageOptions) {
   const highestPossibleOption = [...rowsPerPageOptions].reverse().find((opt) => opt * width <= MAX_CELLS);
   return highestPossibleOption || Math.floor(MAX_CELLS / width); // covering corner case of lowest option being too high
@@ -29,13 +15,28 @@ export function getColumnOrder({ qColumnOrder, qDimensionInfo, qMeasureInfo }) {
   return qColumnOrder?.length === columnsLength ? qColumnOrder : [...Array(columnsLength).keys()];
 }
 
-export function getColumnInfo(layout, colIndex) {
+/**
+ * Get total cell info
+ * @param {Boolean} isDim
+ * @param {Object} layout
+ * @param {Number} colIndex
+ * @param {Number} numDims
+ * @returns dimensions and measures total cell values as strings
+ */
+export function getTotalInfo(isDim, layout, colIndex, numDims, columnOrder) {
+  if (!isDim) return layout.qHyperCube.qGrandTotalRow[colIndex - numDims]?.qText;
+  if (colIndex === 0 && columnOrder[0] === 0) return layout.totals.label;
+  return '';
+}
+
+export function getColumnInfo(layout, colIndex, columnOrder) {
   const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIndex < numDims;
   const info = isDim ? qDimensionInfo[colIndex] : qMeasureInfo[colIndex - numDims];
   const isHidden = info.qError?.qErrorCode === 7005;
   const isLocked = info.qLocked;
+  const autoAlign = isDim ? 'left' : 'right';
 
   return (
     !isHidden && {
@@ -44,11 +45,11 @@ export function getColumnInfo(layout, colIndex) {
       width: 200,
       label: info.qFallbackTitle,
       id: `col-${colIndex}`,
-      align: !info.textAlign || info.textAlign.auto ? (isDim ? 'left' : 'right') : info.textAlign.align,
+      align: !info.textAlign || info.textAlign.auto ? autoAlign : info.textAlign.align,
       stylingInfo: info.qAttrExprInfo.map((expr) => expr.id),
       sortDirection: directionMap[info.qSortIndicator],
       dataColIdx: colIndex,
-      totalInfo: getTotalInfo(isDim, layout, colIndex, numDims),
+      totalInfo: getTotalInfo(isDim, layout, colIndex, numDims, columnOrder),
     }
   );
 }
@@ -99,7 +100,7 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
 
   const columnOrder = getColumnOrder(qHyperCube);
   // using filter to remove hidden columns (represented with false)
-  const columns = columnOrder.map((colIndex) => getColumnInfo(layout, colIndex)).filter(Boolean);
+  const columns = columnOrder.map((colIndex) => getColumnInfo(layout, colIndex, columnOrder)).filter(Boolean);
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
     { qTop: top, qLeft: 0, qHeight: height, qWidth: totalColumnCount },
   ]);
