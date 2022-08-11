@@ -340,7 +340,7 @@ describe('styling-utils', () => {
   describe('getColumnStyle', () => {
     let styling: CellStyle;
     let qAttrExps: EngineAPI.INxAttributeExpressionValues;
-    let stylingInfo: string[];
+    let stylingIDs: string[];
 
     beforeEach(() => {
       styling = { color: 'someFontColor', backgroundColor: 'someBgColor' };
@@ -350,34 +350,34 @@ describe('styling-utils', () => {
           { qText: '#111111', qNum: NaN },
         ],
       };
-      stylingInfo = ['cellBackgroundColor', 'cellForegroundColor'];
+      stylingIDs = ['cellBackgroundColor', 'cellForegroundColor'];
     });
 
     it('should return styling with both new fontColor and backgroundColor when selected', () => {
-      const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
+      const columnStyle = getColumnStyle(styling, qAttrExps, stylingIDs);
       expect(columnStyle.backgroundColor).toBe('rgb(221,221,221)');
       expect(columnStyle.color).toBe('rgb(17,17,17)');
     });
     it('should return styling with new fontColor', () => {
       qAttrExps.qValues = [qAttrExps.qValues[1]];
-      stylingInfo = [stylingInfo[1]];
+      stylingIDs = [stylingIDs[1]];
 
-      const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
+      const columnStyle = getColumnStyle(styling, qAttrExps, stylingIDs);
       expect(columnStyle.backgroundColor).toBe(undefined);
       expect(columnStyle.color).toBe('rgb(17,17,17)');
     });
     it('should return styling with backgroundColor', () => {
       qAttrExps.qValues = [qAttrExps.qValues[0]];
-      stylingInfo = [stylingInfo[0]];
+      stylingIDs = [stylingIDs[0]];
 
-      const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
+      const columnStyle = getColumnStyle(styling, qAttrExps, stylingIDs);
       expect(columnStyle.backgroundColor).toBe('rgb(221,221,221)');
       expect(columnStyle.color).toBe(STYLING_DEFAULTS.FONT_COLOR);
     });
     it('should return styling unchanged', () => {
-      stylingInfo = [];
+      stylingIDs = [];
 
-      const columnStyle = getColumnStyle(styling, qAttrExps, stylingInfo);
+      const columnStyle = getColumnStyle(styling, qAttrExps, stylingIDs);
       expect(columnStyle.backgroundColor).toBe(undefined);
       expect(columnStyle.color).toBe('someFontColor');
     });

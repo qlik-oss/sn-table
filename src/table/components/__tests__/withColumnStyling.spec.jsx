@@ -19,7 +19,7 @@ describe('withColumnStyling', () => {
       qAttrExps: {},
     };
     column = {
-      stylingInfo: [],
+      stylingIDs: [],
     };
   });
 
@@ -33,6 +33,6 @@ describe('withColumnStyling', () => {
     );
 
     expect(queryByText('someValue')).toBeVisible();
-    expect(stylingUtils.getColumnStyle).toHaveBeenCalledWith(styling, cell.qAttrExps, column.stylingInfo);
+    expect(stylingUtils.getColumnStyle).toHaveBeenCalledWith(styling, cell.qAttrExps, column.stylingIDs);
   });
 });

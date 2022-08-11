@@ -182,13 +182,13 @@ export function getTotalsCellStyle(layout, theme) {
  * get style from qAttributeExpressions in qDimensions or qMeasures
  * @param {Object} styling - style from styling in CellRenderer in TableBodyWrapper
  * @param {?Object} qAttrExps - qAttributeExpressions from each cell
- * @param {Array} stylingInfo - stylingInfo from each column
+ * @param {Array} stylingIDs - stylingIDs from each column
  * @returns {Object} cell font color and background color used for cells in specific columns
  */
-export function getColumnStyle(styling, qAttrExps, stylingInfo) {
+export function getColumnStyle(styling, qAttrExps, stylingIDs) {
   const columnColors = {};
   qAttrExps?.qValues.forEach((val, i) => {
-    columnColors[stylingInfo[i]] = resolveToRGBAorRGB(val.qText);
+    columnColors[stylingIDs[i]] = resolveToRGBAorRGB(val.qText);
   });
 
   if (columnColors.cellBackgroundColor && !columnColors.cellForegroundColor)
