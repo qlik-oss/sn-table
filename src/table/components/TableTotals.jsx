@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useContextSelector, TableContext } from '../context';
-import { getTotalsCellStyle } from '../utils/styling-utils';
+import { getTotalsCellStyle } from '../utils/styling-utils.ts';
 import { totalHandleKeyPress } from '../utils/handle-key-press';
 import { removeAndFocus } from '../utils/handle-accessibility';
 import { StyledHeadRow, StyledTotalsCell } from '../styles';

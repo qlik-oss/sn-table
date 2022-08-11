@@ -46,7 +46,7 @@ export function getColumnInfo(layout, colIndex, columnOrder) {
       label: info.qFallbackTitle,
       id: `col-${colIndex}`,
       align: !info.textAlign || info.textAlign.auto ? autoAlign : info.textAlign.align,
-      stylingInfo: info.qAttrExprInfo.map((expr) => expr.id),
+      stylingIDs: info.qAttrExprInfo.map((expr) => expr.id),
       sortDirection: directionMap[info.qSortIndicator],
       dataColIdx: colIndex,
       totalInfo: getTotalInfo(isDim, layout, colIndex, numDims, columnOrder),

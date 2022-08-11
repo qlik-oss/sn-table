@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 
 import * as withColumnStyling from '../withColumnStyling';
-import * as stylingUtils from '../../utils/styling-utils';
+import * as stylingUtils from '../../utils/styling-utils.ts';
 
 describe('withColumnStyling', () => {
   let HOC;

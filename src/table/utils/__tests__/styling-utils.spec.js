@@ -7,7 +7,7 @@ import {
   getBodyCellStyle,
   getColumnStyle,
   getSelectionStyle,
-} from '../styling-utils';
+} from '../styling-utils.ts';
 import { SelectionStates } from '../selections-utils';
 
 describe('styling-utils', () => {

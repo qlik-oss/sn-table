@@ -4,7 +4,7 @@ import getCellRenderer from '../utils/get-cell-renderer';
 import { useContextSelector, TableContext } from '../context';
 import { StyledTableBody, StyledBodyRow } from '../styles';
 import { addSelectionListeners } from '../utils/selections-utils';
-import { getBodyCellStyle } from '../utils/styling-utils';
+import { getBodyCellStyle } from '../utils/styling-utils.ts';
 import { bodyHandleKeyPress, bodyHandleKeyUp } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
 
@@ -22,7 +22,7 @@ function TableBodyWrapper({
   children,
 }) {
   const { rows, columns, paginationNeeded, totalsPosition } = tableData;
-  const columnsStylingInfoJSON = JSON.stringify(columns.map((column) => column.stylingInfo));
+  const columnsStylingIDsJSON = JSON.stringify(columns.map((column) => column.stylingIDs));
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
   // constraints.active: true - turn off interactions that affect the state of the visual
@@ -31,10 +31,8 @@ function TableBodyWrapper({
   const isSelectionsEnabled = !constraints.active && !constraints.select;
   const columnRenderers = useMemo(
     () =>
-      JSON.parse(columnsStylingInfoJSON).map((stylingInfo) =>
-        getCellRenderer(!!stylingInfo.length, isSelectionsEnabled)
-      ),
-    [columnsStylingInfoJSON, isSelectionsEnabled]
+      JSON.parse(columnsStylingIDsJSON).map((stylingIDs) => getCellRenderer(!!stylingIDs.length, isSelectionsEnabled)),
+    [columnsStylingIDsJSON, isSelectionsEnabled]
   );
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;

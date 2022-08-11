@@ -59,13 +59,17 @@ export interface PaginationColors {
   iconColor: string;
   disabledIconColor: string;
 }
+
+export interface BodyColors {
+  borderColor: string;
+}
 export interface TableThemeColors {
   tableBackgroundColorFromTheme: string;
   backgroundColor: string | undefined;
   isBackgroundTransparentColor: boolean;
   isBackgroundDarkColor: boolean;
   borderColor: string;
-  body: object;
+  body: BodyColors;
   pagination: PaginationColors;
 }
 
@@ -88,6 +92,7 @@ export interface TableLayout extends EngineAPI.IGenericHyperCubeLayout {
     position: 'top' | 'bottom' | 'noTotals';
     label: string;
   };
+  components?: any;
 }
 
 export interface Column {
@@ -98,6 +103,42 @@ export interface Column {
   width: number;
   label: string;
   align: string;
-  stylingInfo: string[];
+  stylingIDs: string[];
   sortDirection: string;
+}
+
+export interface PaletteColor {
+  index: number;
+  color: string;
+}
+
+export interface StylingLayout {
+  fontColor: PaletteColor;
+  fontSize: number;
+  hoverColor?: PaletteColor;
+  hoverEffect?: boolean;
+  hoverFontColor?: PaletteColor;
+  padding?: string; // not available as option in the styling panel
+}
+
+export interface GeneratedStyling {
+  fontFamily: string;
+  color: string;
+  fontSize: number;
+  padding: string;
+  borderStyle: string;
+  borderColor: string;
+  cursor?: string;
+  borderWidth?: string;
+  backgroundColor?: string;
+  sortLabelColor?: string;
+  hoverBackgroundColor?: string;
+  hoverFontColor?: string;
+}
+
+export interface CellStyle {
+  backgroundColor: string;
+  background?: string;
+  color?: string;
+  selectedCellClass?: string;
 }

@@ -5,7 +5,7 @@ import TableHead from '@mui/material/TableHead';
 
 import { useContextSelector, TableContext } from '../context';
 import { VisuallyHidden, StyledHeadRow, StyledSortLabel } from '../styles';
-import { getHeaderStyle } from '../utils/styling-utils';
+import { getHeaderStyle } from '../utils/styling-utils.ts';
 import { headHandleKeyPress } from '../utils/handle-key-press';
 import { handleMouseDownLabelToFocusHeadCell, handleClickToFocusHead } from '../utils/handle-accessibility';
 
