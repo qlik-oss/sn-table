@@ -4,7 +4,7 @@ import getCellRenderer from '../utils/get-cell-renderer';
 import { useContextSelector, TableContext } from '../context';
 import { StyledTableBody, StyledBodyRow } from '../styles';
 import { addSelectionListeners } from '../utils/selections-utils';
-import { getBodyCellStyle } from '../utils/styling-utils.ts';
+import { getBodyCellStyle } from '../utils/styling-utils';
 import { bodyHandleKeyPress, bodyHandleKeyUp } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
 

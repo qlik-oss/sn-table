@@ -225,6 +225,11 @@
           "description": "When only `hoverColor` is set, this is adjusted to either `#f4f4f4` or `#ffffff` for optimal contrast",
           "optional": true,
           "type": "#/definitions/PaletteColor"
+        },
+        "padding": {
+          "description": "padding for the body cells on css format",
+          "optional": true,
+          "type": "string"
         }
       }
     },
@@ -261,6 +266,11 @@
           "description": "Defaults to `#404040`",
           "optional": true,
           "type": "#/definitions/PaletteColor"
+        },
+        "padding": {
+          "description": "padding for the header cells on css format",
+          "optional": true,
+          "type": "string"
         }
       }
     },
