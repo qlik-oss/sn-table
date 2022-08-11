@@ -46,8 +46,8 @@ describe('color-utils', () => {
       const result = resolveToRGBAorRGB(color);
       expect(result).toBe('rgba(255,255,255,0)');
     });
-    it('should return when nothing is provided', () => {
-      const result = resolveToRGBAorRGB();
+    it('should return none when invalid color', () => {
+      const result = resolveToRGBAorRGB('invalid');
       expect(result).toBe('none');
     });
   });
@@ -129,49 +129,48 @@ describe('color-utils', () => {
   });
 
   describe('isTransparentColor', () => {
-    let color = 'black';
-
     it('should be false when the the color is a color term', () => {
+      const color = 'black';
       const result = isTransparentColor(color);
       expect(result).toBe(false);
     });
     it('should be false when the the color is opaque in rgba', () => {
-      color = 'rgba(0, 0, 0, 0.9)';
+      const color = 'rgba(0, 0, 0, 0.9)';
 
       const result = isTransparentColor(color);
       expect(result).toBe(false);
     });
     it('should be false when the the color is opaque in rgb', () => {
-      color = 'rgb(0, 0, 0)';
+      const color = 'rgb(0, 0, 0)';
 
       const result = isTransparentColor(color);
       expect(result).toBe(false);
     });
     it('should be false when the the color is opaque in hex', () => {
-      color = '#000000';
+      const color = '#000000';
 
       const result = isTransparentColor(color);
       expect(result).toBe(false);
     });
 
-    it('should be false when nothing is provided', () => {
-      const result = isTransparentColor();
+    it('should be false when color is undefined', () => {
+      const result = isTransparentColor(undefined);
       expect(result).toBe(false);
     });
     it('should be true when the color is transparent in rgba', () => {
-      color = 'rgba(0, 0, 0, 0)';
+      const color = 'rgba(0, 0, 0, 0)';
 
       const result = isTransparentColor(color);
       expect(result).toBe(true);
     });
     it('should be true when the color is transparent in hex', () => {
-      color = '#00000000';
+      const color = '#00000000';
 
       const result = isTransparentColor(color);
       expect(result).toBe(true);
     });
     it('should be true when the color is transparent', () => {
-      color = 'transparent';
+      const color = 'transparent';
 
       const result = isTransparentColor(color);
       expect(result).toBe(true);
@@ -197,8 +196,8 @@ describe('color-utils', () => {
       const result = removeOpacity(color);
       expect(result).toBe('rgb(0,0,0)');
     });
-    it('should return undefined when nothing is provided', () => {
-      const result = removeOpacity();
+    it('should return undefined when color is undefined', () => {
+      const result = removeOpacity(undefined);
       expect(result).toBe(undefined);
     });
   });
