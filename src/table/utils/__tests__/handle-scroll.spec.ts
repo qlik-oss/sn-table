@@ -2,21 +2,21 @@ import { handleHorizontalScroll, handleNavigateTop } from '../handle-scroll';
 
 describe('handle-scroll', () => {
   describe('handleHorizontalScroll', () => {
-    let evt;
-    let memoedContainer;
-    let isRTL;
+    let evt: WheelEvent;
+    let memoedContainer: HTMLDivElement;
+    let isRTL: boolean;
 
     beforeEach(() => {
       evt = {
         stopPropagation: jest.fn(),
         preventDefault: jest.fn(),
         deltaX: -1,
-      };
+      } as unknown as WheelEvent;
       memoedContainer = {
         scrollWidth: 200,
         offsetWidth: 100,
         scrollLeft: 0,
-      };
+      } as HTMLDivElement;
       isRTL = true;
     });
 
@@ -110,10 +110,10 @@ describe('handle-scroll', () => {
   });
 
   describe('handleNavigateTop', () => {
-    let rowHeight;
-    let scrollTo;
-    let cellCoord;
-    let rootElement;
+    let rowHeight: number;
+    let scrollTo: () => void;
+    let cellCoord: number[];
+    let rootElement: HTMLDivElement;
 
     beforeEach(() => {
       rowHeight = 100;
@@ -121,7 +121,7 @@ describe('handle-scroll', () => {
       cellCoord = [0, 0];
       rootElement = {
         getElementsByClassName: () => [{}],
-      };
+      } as unknown as HTMLDivElement;
     });
 
     it('should not do anything when rootElement is not setup yet', () => {
@@ -133,10 +133,10 @@ describe('handle-scroll', () => {
       cellCoord = [1, 0];
       rootElement = {
         getElementsByClassName: () => [{ scrollTo }],
-      };
+      } as unknown as HTMLDivElement;
 
       handleNavigateTop(cellCoord, rootElement);
-      expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'instant' });
+      expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'auto' });
     });
 
     it('should scroll upwards automatically if it detects the cursor gets behind <TableHead />', () => {
@@ -144,7 +144,7 @@ describe('handle-scroll', () => {
       cellCoord = [8, 0];
 
       rootElement = {
-        getElementsByClassName: (query) => {
+        getElementsByClassName: (query: string) => {
           if (query === 'sn-table-container') {
             return [{ scrollTo, scrollTop: SCROLL_TOP_IDX * rowHeight }];
           }
@@ -162,14 +162,14 @@ describe('handle-scroll', () => {
             return { getElementsByClassName: () => [rowCell] };
           });
         },
-      };
+      } as unknown as HTMLDivElement;
       // targetOffsetTop = tableContainer.current.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
       // 700 - 100 - 128 = 472 => so our scrollTo function is called with 472
       const targetOffsetTop = 472;
 
       handleNavigateTop(cellCoord, rootElement);
       expect(scrollTo).toHaveBeenCalledTimes(1);
-      expect(scrollTo).toHaveBeenCalledWith({ top: targetOffsetTop, behavior: 'instant' });
+      expect(scrollTo).toHaveBeenCalledWith({ top: targetOffsetTop, behavior: 'auto' });
     });
   });
 });

@@ -1,4 +1,4 @@
-export const handleHorizontalScroll = (evt, isRTL, memoedContainer) => {
+export const handleHorizontalScroll = (evt: WheelEvent, isRTL: boolean, memoedContainer: HTMLDivElement) => {
   if (evt.deltaX === 0) return;
 
   evt.stopPropagation();
@@ -26,7 +26,7 @@ export const handleHorizontalScroll = (evt, isRTL, memoedContainer) => {
   }
 };
 
-export const handleNavigateTop = (cellCoord, rootElement) => {
+export const handleNavigateTop = (cellCoord: number[], rootElement: HTMLElement) => {
   const tableContainer = rootElement.getElementsByClassName('sn-table-container')[0];
   if (!tableContainer?.scrollTo) return;
 
@@ -35,18 +35,18 @@ export const handleNavigateTop = (cellCoord, rootElement) => {
   if (x < MIN_ROW_COUNT) {
     tableContainer.scrollTo({
       top: 0,
-      behavior: 'instant',
+      behavior: 'auto',
     });
   } else {
-    const tableHead = rootElement.getElementsByClassName('sn-table-head-cell')[0];
+    const tableHead = rootElement.getElementsByClassName('sn-table-head-cell')[0] as HTMLElement;
     const rowElements = rootElement.getElementsByClassName('sn-table-row');
-    const cell = rowElements[x]?.getElementsByClassName('sn-table-cell')[y];
+    const cell = rowElements[x]?.getElementsByClassName('sn-table-cell')[y] as HTMLElement;
 
     if (cell.offsetTop - tableHead.offsetHeight < tableContainer.scrollTop) {
       const targetOffsetTop = tableContainer.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
       tableContainer.scrollTo({
         top: Math.max(0, targetOffsetTop),
-        behavior: 'instant',
+        behavior: 'auto',
       });
     }
   }
