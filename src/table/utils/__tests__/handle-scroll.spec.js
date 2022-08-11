@@ -112,38 +112,43 @@ describe('handle-scroll', () => {
   describe('handleNavigateTop', () => {
     let rowHeight;
     let scrollTo;
-    let tableContainerRef;
-    let focusedCellCoord;
+    let cellCoord;
     let rootElement;
 
     beforeEach(() => {
       rowHeight = 100;
       scrollTo = jest.fn();
-      tableContainerRef = { current: { scrollTo } };
-      focusedCellCoord = [0, 0];
-      rootElement = {};
+      cellCoord = [0, 0];
+      rootElement = {
+        getElementsByClassName: () => [{}],
+      };
     });
 
-    it('should not do anything when ref is not setup yet', () => {
-      tableContainerRef.current = {};
-
-      handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement });
+    it('should not do anything when rootElement is not setup yet', () => {
+      handleNavigateTop(cellCoord, rootElement);
       expect(scrollTo).not.toHaveBeenCalled();
     });
 
     it('should the scrollbar is at its top when you reach the top two rows', () => {
-      focusedCellCoord = [1, 0];
+      cellCoord = [1, 0];
+      rootElement = {
+        getElementsByClassName: () => [{ scrollTo }],
+      };
 
-      handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement });
-      expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' });
+      handleNavigateTop(cellCoord, rootElement);
+      expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'instant' });
     });
 
     it('should scroll upwards automatically if it detects the cursor gets behind <TableHead />', () => {
       const SCROLL_TOP_IDX = 7;
-      focusedCellCoord = [8, 0];
-      tableContainerRef = { current: { scrollTo, scrollTop: SCROLL_TOP_IDX * rowHeight } };
+      cellCoord = [8, 0];
+
       rootElement = {
         getElementsByClassName: (query) => {
+          if (query === 'sn-table-container') {
+            return [{ scrollTo, scrollTop: SCROLL_TOP_IDX * rowHeight }];
+          }
+
           if (query === 'sn-table-head-cell') {
             return [{ offsetHeight: 128 }];
           }
@@ -159,12 +164,12 @@ describe('handle-scroll', () => {
         },
       };
       // targetOffsetTop = tableContainer.current.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
-      // 700 - 100 - 128 = 472 => so our scrollTo function migth be called with 600
+      // 700 - 100 - 128 = 472 => so our scrollTo function is called with 472
       const targetOffsetTop = 472;
 
-      handleNavigateTop({ tableContainerRef, focusedCellCoord, rootElement });
+      handleNavigateTop(cellCoord, rootElement);
       expect(scrollTo).toHaveBeenCalledTimes(1);
-      expect(scrollTo).toHaveBeenCalledWith({ top: targetOffsetTop, behavior: 'smooth' });
+      expect(scrollTo).toHaveBeenCalledWith({ top: targetOffsetTop, behavior: 'instant' });
     });
   });
 });
