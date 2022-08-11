@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { handleFocusoutEvent } from '../utils/handle-accessibility';
 
 const useFocusListener = (
-  tableWrapperRef: React.MutableRefObject<HTMLElement>,
+  tableWrapperRef: React.MutableRefObject<HTMLDivElement>,
   shouldRefocus: boolean,
   keyboard: stardust.Keyboard
 ) => {
