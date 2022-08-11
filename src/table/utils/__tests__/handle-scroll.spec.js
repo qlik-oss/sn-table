@@ -164,7 +164,7 @@ describe('handle-scroll', () => {
         },
       };
       // targetOffsetTop = tableContainer.current.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
-      // 700 - 100 - 128 = 472 => so our scrollTo function might be called with 472
+      // 700 - 100 - 128 = 472 => so our scrollTo function is called with 472
       const targetOffsetTop = 472;
 
       handleNavigateTop(cellCoord, rootElement);

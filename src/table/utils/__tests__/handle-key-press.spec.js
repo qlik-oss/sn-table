@@ -9,6 +9,7 @@ import {
 } from '../handle-key-press';
 
 import * as handleAccessibility from '../handle-accessibility';
+import * as handleScroll from '../handle-scroll';
 
 describe('handle-key-press', () => {
   describe('handleTableWrapperKeyDown', () => {
@@ -492,6 +493,7 @@ describe('handle-key-press', () => {
       paginationNeeded = true;
       jest.spyOn(handleAccessibility, 'focusSelectionToolbar').mockImplementation(() => jest.fn());
       jest.spyOn(handleAccessibility, 'announceSelectionState').mockImplementation(() => jest.fn());
+      jest.spyOn(handleScroll, 'handleNavigateTop').mockImplementation(() => jest.fn());
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -503,6 +505,19 @@ describe('handle-key-press', () => {
       expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(handleAccessibility.announceSelectionState).toHaveBeenCalledTimes(1);
+      expect(handleScroll.handleNavigateTop).not.toHaveBeenCalled();
+    });
+
+    it('when press arrow up key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell and call handleNavigateTop', () => {
+      evt.key = 'ArrowUp';
+
+      runBodyHandleKeyPress();
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
+      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
+      expect(handleAccessibility.announceSelectionState).toHaveBeenCalledTimes(1);
+      expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(1);
     });
 
     it('when press shift + arrow down key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell, and select values for dimension', () => {
@@ -516,6 +531,7 @@ describe('handle-key-press', () => {
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(selectionDispatch).toHaveBeenCalledTimes(1);
       expect(handleAccessibility.announceSelectionState).not.toHaveBeenCalled();
+      expect(handleScroll.handleNavigateTop).not.toHaveBeenCalled();
     });
 
     it('when press shift + arrow down key on the last row cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell, but not select values for dimension', () => {
@@ -529,6 +545,7 @@ describe('handle-key-press', () => {
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(selectionDispatch).not.toHaveBeenCalled();
       expect(handleAccessibility.announceSelectionState).toHaveBeenCalledTimes(1);
+      expect(handleScroll.handleNavigateTop).not.toHaveBeenCalled();
     });
 
     it('when press shift + arrow up key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell, and select values for dimension', () => {
@@ -543,6 +560,7 @@ describe('handle-key-press', () => {
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(selectionDispatch).toHaveBeenCalledTimes(1);
       expect(handleAccessibility.announceSelectionState).not.toHaveBeenCalled();
+      expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(1);
     });
 
     it('when press shift + arrow up key on the second row cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell, but not select values for dimension', () => {
@@ -557,6 +575,7 @@ describe('handle-key-press', () => {
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(selectionDispatch).not.toHaveBeenCalled();
       expect(handleAccessibility.announceSelectionState).toHaveBeenCalledTimes(1);
+      expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(1);
     });
 
     it('when press space bar key and dimension, should select value for dimension', () => {
