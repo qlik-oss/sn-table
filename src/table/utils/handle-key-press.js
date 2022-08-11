@@ -1,5 +1,6 @@
 import { updateFocus, focusSelectionToolbar, getCellElement, announceSelectionState } from './handle-accessibility';
 import { SelectionActions } from './selections-utils';
+import { handleNavigateTop } from './handle-scroll';
 
 const isCtrlShift = (evt) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -164,6 +165,7 @@ export const bodyHandleKeyPress = ({
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown': {
+      evt.key === 'ArrowUp' && handleNavigateTop([cell.rawRowIdx, cell.rawColIdx], rootElement);
       // Make sure you can't navigate to header (and totals) in selection mode
       const topAllowedRow = isSelectionMode ? firstBodyRowIdx : 0;
       const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, topAllowedRow);
