@@ -74,16 +74,19 @@ export const getBaseStyling = (styleObj: StylingLayout, objetName: string, theme
   const color = theme.getStyle('object', `straightTable.${objetName}`, 'color');
   const fontSize = theme.getStyle('object', `straightTable.${objetName}`, 'fontSize');
 
-  const baseStyle = {
+  const baseStyle: GeneratedStyling = {
     fontFamily,
     color: isColorSet(styleObj?.fontColor) ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj.fontColor) : color,
-    fontSize: styleObj?.fontSize || fontSize,
+    fontSize: (styleObj?.fontSize && `${styleObj.fontSize}px`) || fontSize,
     padding: getPadding(styleObj, STYLING_DEFAULTS.PADDING),
     borderStyle: 'solid',
     borderColor: theme.table.body.borderColor,
   };
-  // Remove all Undefined Values from an Object
-  Object.keys(baseStyle).forEach((key) => baseStyle[key] == null && delete baseStyle[key]);
+  // Remove all undefined and null values
+  Object.keys(baseStyle).forEach((key) => {
+    const typedKey = key as keyof GeneratedStyling;
+    baseStyle[typedKey] == null && delete baseStyle[typedKey];
+  });
   return baseStyle;
 };
 

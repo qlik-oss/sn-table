@@ -122,12 +122,12 @@ export interface StylingLayout {
 }
 
 export interface GeneratedStyling {
-  fontFamily: string;
-  color: string;
-  fontSize: number;
   padding: string;
   borderStyle: string;
   borderColor: string;
+  fontFamily?: string;
+  color?: string;
+  fontSize?: string; // following the theme format so this should always be a string
   cursor?: string;
   borderWidth?: string;
   backgroundColor?: string;
