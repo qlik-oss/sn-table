@@ -23,6 +23,16 @@ export interface ExtendedTranslator extends stardust.Translator {
   language(): string;
 }
 
+export interface Galaxy {
+  translator: ExtendedTranslator;
+  carbon: boolean;
+}
+
+export interface UseOptions {
+  direction: 'ltr' | 'rtl';
+  footerContainer: HTMLElement;
+}
+
 export interface SelectionState {
   rows: Record<string, number>;
   colIdx: number;
@@ -100,4 +110,16 @@ export interface Column {
   align: string;
   stylingInfo: string[];
   sortDirection: string;
+}
+
+export interface RenderWithCarbonArguments {
+  env: Galaxy;
+  rootElement: HTMLElement;
+  model: EngineAPI.IGenericObject | undefined;
+  theme: ExtendedTheme;
+  selectionsAPI: stardust.ObjectSelections;
+  app: EngineAPI.IApp | undefined;
+  rect: stardust.Rect;
+  layout: TableLayout;
+  changeSortOrder: ((layout: TableLayout, column: Column) => Promise<void>) | undefined;
 }

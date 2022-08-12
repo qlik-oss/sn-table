@@ -25,20 +25,31 @@ import useReactRoot from './nebula-hooks/use-react-root';
 import useAnnounceAndTranslations from './nebula-hooks/use-announce-and-translations';
 import useSorting from './nebula-hooks/use-sorting';
 import useExtendedTheme from './nebula-hooks/use-extended-theme';
+import { RenderWithCarbonArguments, Galaxy, TableLayout, UseOptions, ExtendedTranslator } from './types';
 
 const initialPageInfo = {
   page: 0,
   rowsPerPage: 100,
   rowsPerPageOptions: [10, 25, 100],
 };
-const nothing = async () => {};
-const renderWithCarbon = ({ env, rootElement, model, theme, selectionsAPI, app, rect, layout, changeSortOrder }) => {
+const nothing = async () => undefined;
+const renderWithCarbon = ({
+  env,
+  rootElement,
+  model,
+  theme,
+  selectionsAPI,
+  app,
+  rect,
+  layout,
+  changeSortOrder,
+}: RenderWithCarbonArguments) => {
   if (env.carbon && changeSortOrder && theme) {
     render(rootElement, { layout, model, manageData, theme, selectionsAPI, changeSortOrder, app, rect });
   }
 };
 
-export default function supernova(env) {
+export default function supernova(env: Galaxy) {
   return {
     qae: {
       properties: { initial: properties },
@@ -48,12 +59,12 @@ export default function supernova(env) {
     component() {
       const rootElement = useElement();
       const reactRoot = useReactRoot(rootElement);
-      const layout = useStaleLayout();
-      const { direction, footerContainer } = useOptions();
+      const layout = useStaleLayout() as TableLayout;
+      const { direction, footerContainer } = useOptions() as UseOptions;
       const app = useApp();
       const model = useModel();
       const constraints = useConstraints();
-      const translator = useTranslator();
+      const translator = useTranslator() as ExtendedTranslator;
       const selectionsAPI = useSelections();
       const keyboard = useKeyboard();
       const rect = useRect();
@@ -62,9 +73,10 @@ export default function supernova(env) {
       const changeSortOrder = useSorting(model);
 
       const [pageInfo, setPageInfo] = useState(initialPageInfo);
-      const [tableData] = usePromise(() => {
-        return env.carbon ? nothing() : manageData(model, layout, pageInfo, setPageInfo);
-      }, [layout, pageInfo]);
+      const [tableData] = usePromise(
+        async () => (env.carbon ? nothing() : manageData(model, layout, pageInfo, setPageInfo)),
+        [layout, pageInfo]
+      );
 
       useEffect(() => {
         if (!env.carbon && reactRoot && layout && tableData && announce && changeSortOrder && theme) {
@@ -101,7 +113,7 @@ export default function supernova(env) {
 
       // this is the one we want to use for carbon
       useEffect(() => {
-        renderWithCarbon({ env, rootElement, model, theme, selectionsAPI, app, rect, layout });
+        renderWithCarbon({ env, rootElement, model, theme, selectionsAPI, app, rect, layout, changeSortOrder });
       }, [layout, model, selectionsAPI.isModal(), theme, translator.language(), app, changeSortOrder]);
 
       useEffect(
