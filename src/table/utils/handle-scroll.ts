@@ -40,7 +40,8 @@ export const handleNavigateTop = (cellCoord: number[], rootElement: HTMLElement)
   } else {
     const tableHead = rootElement.getElementsByClassName('sn-table-head-cell')[0] as HTMLElement;
     const rowElements = rootElement.getElementsByClassName('sn-table-row');
-    const cell = rowElements[x]?.getElementsByClassName('sn-table-cell')[y] as HTMLElement;
+    const cell = rowElements[x]?.getElementsByClassName('sn-table-cell')[y] as HTMLElement | undefined;
+    if (!cell) return;
 
     if (cell.offsetTop - tableHead.offsetHeight < tableContainer.scrollTop) {
       const targetOffsetTop = tableContainer.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
