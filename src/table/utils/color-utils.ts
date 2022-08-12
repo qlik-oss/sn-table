@@ -47,11 +47,7 @@ export function resolveToRGBAorRGB(input: string): string {
 }
 
 export function isDarkColor(color: string | undefined | null): boolean {
-<<<<<<< HEAD
-  if (!color) return false;
-=======
   if (color == null) return false;
->>>>>>> main
 
   const rgba = resolveToRGBAorRGB(color);
   const matches =
