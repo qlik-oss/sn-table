@@ -97,7 +97,7 @@ describe('styling-utils', () => {
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
         color: '#fff',
-        fontSize: 12,
+        fontSize: '12px',
         padding: '6px 12px',
       });
     });
@@ -107,7 +107,7 @@ describe('styling-utils', () => {
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
-        fontSize: 12,
+        fontSize: '12px',
         padding: '6px 12px',
       });
     });
@@ -118,7 +118,7 @@ describe('styling-utils', () => {
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
-        fontSize: 12,
+        fontSize: '12px',
         padding: '6px 12px',
       });
     });
@@ -134,7 +134,7 @@ describe('styling-utils', () => {
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
         color: '#111',
-        fontSize: 12,
+        fontSize: '12px',
         padding: '6px 12px',
         fontFamily: '#111',
       });
@@ -147,7 +147,7 @@ describe('styling-utils', () => {
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
         color: 'fff',
-        fontSize: 12,
+        fontSize: '12px',
         padding: '6px 12px',
       });
     });
@@ -159,6 +159,7 @@ describe('styling-utils', () => {
         color: '#fff',
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
+        padding: '7px 14px',
       });
     });
     it('should return styling with custom padding', () => {
@@ -195,6 +196,7 @@ describe('styling-utils', () => {
         borderStyle: 'solid',
         borderWidth: '1px 1px 1px 0px',
         cursor: 'pointer',
+        padding: '7px 14px',
         sortLabelColor: 'rgba(255,255,255,0.9)',
       });
     });
@@ -217,6 +219,7 @@ describe('styling-utils', () => {
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
         borderWidth: '1px 1px 1px 0px',
+        padding: '7px 14px',
         sortLabelColor: '#404040',
       });
     });
@@ -225,7 +228,7 @@ describe('styling-utils', () => {
       expect(resultStyling).toEqual({
         color: '#404040',
         cursor: 'pointer',
-        fontSize: 44,
+        fontSize: '44px',
         padding: '22px 44px',
         backgroundColor: '#323232',
         borderColor: '#D9D9D9',
@@ -276,12 +279,13 @@ describe('styling-utils', () => {
         hoverBackgroundColor: '#f4f4f4',
         borderStyle: 'solid',
         borderWidth: '0px 1px 1px 0px',
+        padding: '7px 14px',
       });
     });
     it('should return styling with fontColor, fontSize, padding plus default hoverBackgroundColor and hoverFontColor', () => {
       const resultStyling = getBodyCellStyle(layout, theme);
       expect(resultStyling).toEqual({
-        fontSize: 22,
+        fontSize: '22px',
         color: '#222222',
         padding: '11px 22px',
         hoverBackgroundColor: '#f4f4f4',
@@ -378,8 +382,7 @@ describe('styling-utils', () => {
       stylingIDs = [];
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingIDs);
-      expect(columnStyle.backgroundColor).toBe(undefined);
-      expect(columnStyle.color).toBe('someFontColor');
+      expect(columnStyle).toBe(styling);
     });
   });
 

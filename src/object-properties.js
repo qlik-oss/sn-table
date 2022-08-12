@@ -147,7 +147,6 @@ const properties = {
  * @property {boolean=} hoverEffect - Toggles hover effect
  * @property {PaletteColor=} hoverColor - Background hover color. Uses `#f4f4f4` if no hover colors are set, is transparent if only `hoverFontColor` is set
  * @property {PaletteColor=} hoverFontColor - When only `hoverColor` is set, this is adjusted to either `#f4f4f4` or `#ffffff` for optimal contrast
- * @property {string=} padding - padding for the body cells on css format
  */
 
 /**
@@ -155,7 +154,6 @@ const properties = {
  * @typedef {object} HeaderStyling
  * @property {number=} fontSize - Defaults to `14`
  * @property {PaletteColor=} fontColor - Defaults to `#404040`
- * @property {string=} padding - padding for the header cells on css format
  */
 
 /**
