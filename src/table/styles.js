@@ -74,7 +74,9 @@ export const StyledBodyRow = styled(TableRow, {
       color: hover && bodyCellStyle.hoverFontColor,
     },
   },
+  // the last cell in each body row
   '& :last-child': {
+    // left, bottom, right
     boxShadow: `inset 1px -1px 0 ${bodyCellStyle.borderColor}, inset -1px 0 0 ${bodyCellStyle.borderColor}`,
   },
 }));
@@ -84,7 +86,9 @@ export const StyledBodyRow = styled(TableRow, {
 export const StyledHeadRow = styled(TableRow, {
   shouldForwardProp: (prop) => prop !== 'headerStyle',
 })(({ headerStyle }) => ({
+  // the last cell in the head row
   'th:last-of-type': {
+    // left, bottom, right
     boxShadow: `inset 1px 1px 0 ${headerStyle.borderColor}, inset -1px -1px 0 ${headerStyle.borderColor}`,
   },
 }));
@@ -124,7 +128,9 @@ export const StyledTotalsCell = styled(TableCell, {
 export const StyledTotalsRow = styled(TableRow, {
   shouldForwardProp: (prop) => prop !== 'totalsStyle',
 })(({ totalsStyle }) => ({
+  // the last cell in the totals row
   '& :last-child': {
+    // left, bottom, right
     boxShadow: `inset 1px 0 0 ${totalsStyle.borderColor}, inset -1px -1px 0 ${totalsStyle.borderColor}`,
   },
 }));

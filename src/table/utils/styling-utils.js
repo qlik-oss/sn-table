@@ -61,6 +61,7 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
     fontSize: styleObj?.fontSize || fontSize,
     padding: getPadding(styleObj, STYLING_DEFAULTS.PADDING),
     borderColor,
+    // left, bottom
     boxShadow: `inset 0 -1px 0 ${borderColor}, inset 1px 0 0 ${borderColor}`,
   };
   // Remove all Undefined Values from an Object
