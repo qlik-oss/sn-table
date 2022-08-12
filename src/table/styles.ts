@@ -25,7 +25,7 @@ export const TableAnnouncer = styled('div')({
 // ---------- FooterWrapper ----------
 
 export const StyledFooterWrapper = styled(Paper, {
-  shouldForwardProp: (prop) => prop !== 'tableTheme',
+  shouldForwardProp: (prop: string) => prop !== 'tableTheme',
 })(({ tableTheme, theme }) => ({
   height: 48,
   display: 'flex',
@@ -44,14 +44,14 @@ export const StyledFooterWrapper = styled(Paper, {
 // ---------- PaginationContent ----------
 
 export const StyledSelect = styled(Select, {
-  shouldForwardProp: (prop) => prop !== 'paginationTheme',
+  shouldForwardProp: (prop: string) => prop !== 'paginationTheme',
 })(({ paginationTheme }) => ({
   backgroundColor: 'inherit',
   '& .MuiNativeSelect-icon': { color: paginationTheme.iconColor },
 }));
 
 export const StyledIconButton = styled(IconButton, {
-  shouldForwardProp: (prop) => prop !== 'disabledCondition' && prop !== 'paginationTheme',
+  shouldForwardProp: (prop: string) => prop !== 'disabledCondition' && prop !== 'paginationTheme',
 })(({ disabledCondition, paginationTheme }) => ({
   color: disabledCondition ? paginationTheme.disabledIconColor : paginationTheme.iconColor,
   cursor: disabledCondition ? 'default' : 'pointer',
@@ -61,7 +61,7 @@ export const StyledIconButton = styled(IconButton, {
 // ---------- TableBodyWrapper ----------
 
 export const StyledTableBody = styled(TableBody, {
-  shouldForwardProp: (prop) => prop !== 'paginationNeeded' && prop !== 'bodyCellStyle',
+  shouldForwardProp: (prop: string) => prop !== 'paginationNeeded' && prop !== 'bodyCellStyle',
 })(({ paginationNeeded, bodyCellStyle }) => ({
   'tr :last-child': {
     borderRight: paginationNeeded && 0,
@@ -76,7 +76,7 @@ export const StyledTableBody = styled(TableBody, {
 }));
 
 export const StyledBodyRow = styled(TableRow, {
-  shouldForwardProp: (prop) => prop !== 'bodyCellStyle',
+  shouldForwardProp: (prop: string) => prop !== 'bodyCellStyle',
 })(({ hover, bodyCellStyle }) =>
   hover
     ? {
@@ -93,7 +93,7 @@ export const StyledBodyRow = styled(TableRow, {
 // ---------- TableHeadWrapper ----------
 
 export const StyledHeadRow = styled(TableRow, {
-  shouldForwardProp: (prop) => prop !== 'paginationNeeded',
+  shouldForwardProp: (prop: string) => prop !== 'paginationNeeded',
 })(({ paginationNeeded }) => ({
   '& :last-child': {
     borderRight: paginationNeeded && 0,
@@ -104,7 +104,7 @@ export const StyledHeadRow = styled(TableRow, {
 }));
 
 export const StyledSortLabel = styled(TableSortLabel, {
-  shouldForwardProp: (prop) => prop !== 'headerStyle',
+  shouldForwardProp: (prop: string) => prop !== 'headerStyle',
 })(({ headerStyle }) => ({
   '&.Mui-active .MuiTableSortLabel-icon': {
     color: headerStyle.sortLabelColor,
@@ -126,7 +126,7 @@ export const VisuallyHidden = styled('span')({
 // ---------- TableTotals ----------
 
 export const StyledTotalsCell = styled(TableCell, {
-  shouldForwardProp: (prop) => prop !== 'isTop' && prop !== 'headRowHeight' && prop !== 'totalsStyle',
+  shouldForwardProp: (prop: string) => prop !== 'isTop' && prop !== 'headRowHeight' && prop !== 'totalsStyle',
 })(({ totalsStyle, isTop, headRowHeight }) => ({
   ...totalsStyle,
   fontWeight: 'bold',
@@ -140,7 +140,7 @@ export const StyledTotalsCell = styled(TableCell, {
 // ---------- TableWrapper ----------
 
 export const StyledTableWrapper = styled(Paper, {
-  shouldForwardProp: (prop) => prop !== 'tableTheme' && prop !== 'paginationNeeded',
+  shouldForwardProp: (prop: string) => prop !== 'tableTheme' && prop !== 'paginationNeeded',
 })(({ tableTheme, paginationNeeded }) => ({
   borderWidth: paginationNeeded ? '0px 1px 0px' : '0px',
   borderStyle: 'solid',
@@ -152,7 +152,7 @@ export const StyledTableWrapper = styled(Paper, {
 }));
 
 export const StyledTableContainer = styled(TableContainer, {
-  shouldForwardProp: (prop) => prop !== 'fullHeight' && prop !== 'constraints',
+  shouldForwardProp: (prop: string) => prop !== 'fullHeight' && prop !== 'constraints',
 })(({ fullHeight, constraints }) => ({
   height: fullHeight ? '100%' : 'calc(100% - 49px)',
   overflow: constraints.active ? 'hidden' : 'auto',
