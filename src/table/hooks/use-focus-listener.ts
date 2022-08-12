@@ -1,12 +1,17 @@
+import { stardust } from '@nebula.js/stardust';
 import { useEffect } from 'react';
 import { handleFocusoutEvent } from '../utils/handle-accessibility';
 
-const useFocusListener = (tableWrapperRef, shouldRefocus, keyboard) => {
+const useFocusListener = (
+  tableWrapperRef: React.MutableRefObject<HTMLDivElement>,
+  shouldRefocus: boolean,
+  keyboard: stardust.Keyboard
+) => {
   useEffect(() => {
     const memoedWrapper = tableWrapperRef.current;
-    if (!memoedWrapper) return () => {};
+    if (!memoedWrapper) return undefined;
 
-    const focusOutCallback = (evt) => handleFocusoutEvent(evt, shouldRefocus, keyboard);
+    const focusOutCallback = (evt: FocusEvent) => handleFocusoutEvent(evt, shouldRefocus, keyboard);
     memoedWrapper.addEventListener('focusout', focusOutCallback);
 
     return () => {
