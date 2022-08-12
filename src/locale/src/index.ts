@@ -1,6 +1,6 @@
 import { stardust } from '@nebula.js/stardust';
 
-import * as all from '../all.json';
+import all from '../all.json';
 
 export default function registerLocale(translator: stardust.Translator) {
   if (translator && translator.get && translator.add) {
