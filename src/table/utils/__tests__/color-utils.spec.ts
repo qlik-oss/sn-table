@@ -53,75 +53,80 @@ describe('color-utils', () => {
   });
 
   describe('isDarkColor', () => {
-    let color = 'black';
-
     it('should be true when the the color term is a dark color', () => {
+      const color = 'black';
       const result = isDarkColor(color);
       expect(result).toBe(true);
     });
     it('should be false when the color term is a light color', () => {
-      color = 'white';
+      const color = 'white';
 
       const result = isDarkColor(color);
       expect(result).toBe(false);
     });
     it('should be false when the color is transparent', () => {
-      color = 'transparent';
+      const color = 'transparent';
 
       const result = isDarkColor(color);
       expect(result).toBe(false);
     });
     it('should be false when the color is inherit', () => {
-      color = 'inherit';
+      const color = 'inherit';
 
       const result = isDarkColor(color);
       expect(result).toBe(false);
     });
     it('should be false when the color is undefined', () => {
-      color = 'undefined';
+      const color = undefined;
+
+      const result = isDarkColor(color);
+      expect(result).toBe(false);
+    });
+    it('should be false when the color is null', () => {
+      const color = null;
 
       const result = isDarkColor(color);
       expect(result).toBe(false);
     });
     it('should be false when the color is a light color in hex code', () => {
-      color = '#ffffff';
+      const color = '#ffffff';
 
       const result = isDarkColor(color);
       expect(result).toBe(false);
     });
     it('should be true when the color is a dark color in hex code', () => {
-      color = '#000000';
+      const color = '#000000';
 
       const result = isDarkColor(color);
       expect(result).toBe(true);
     });
     it('should be false when the color is a light color in rgb', () => {
-      color = 'rgba(255, 255, 255)';
+      const color = 'rgba(255, 255, 255)';
 
       const result = isDarkColor(color);
       expect(result).toBe(false);
     });
 
     it('should be false when the color is a light color in rgba - case 2', () => {
-      color = 'rgba(0, 0, 0, 0.1)';
+      const color = 'rgba(0, 0, 0, 0.1)';
 
       const result = isDarkColor(color);
       expect(result).toBe(true);
     });
     it('should be true when the color is a dark color in rgb', () => {
-      color = 'rgb(0, 0, 0)';
+      const color = 'rgb(0, 0, 0)';
 
       const result = isDarkColor(color);
       expect(result).toBe(true);
     });
     it('should be true when the color is a dark color in rgba', () => {
-      color = 'rgba(0, 0, 0, 0.9)';
+      const color = 'rgba(0, 0, 0, 0.9)';
 
       const result = isDarkColor(color);
       expect(result).toBe(true);
     });
     it('should be true when the color is a transparent color in rgba', () => {
-      color = 'rgba(0, 0, 0, 0)';
+      const color = 'rgba(0, 0, 0, 0)';
 
       const result = isDarkColor(color);
       expect(result).toBe(true);
