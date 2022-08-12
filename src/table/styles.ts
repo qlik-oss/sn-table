@@ -76,7 +76,7 @@ export const StyledBodyRow = styled(TableRow, {
   },
   // the last cell in each body row
   '& :last-child': {
-    // left, bottom, right
+    // bottom, left, right
     boxShadow: `inset 1px -1px 0 ${bodyCellStyle.borderColor}, inset -1px 0 0 ${bodyCellStyle.borderColor}`,
   },
 }));

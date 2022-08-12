@@ -61,7 +61,7 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
     fontSize: styleObj?.fontSize || fontSize,
     padding: getPadding(styleObj, STYLING_DEFAULTS.PADDING),
     borderColor,
-    // left, bottom
+    // bottom, left
     boxShadow: `inset 0 -1px 0 ${borderColor}, inset 1px 0 0 ${borderColor}`,
   };
   // Remove all Undefined Values from an Object
@@ -73,6 +73,7 @@ export function getHeaderStyle(layout, theme) {
   const header = layout.components?.[0]?.header;
   const headerStyle = getBaseStyling(header, 'header', theme);
   headerStyle.cursor = 'pointer';
+  // bottom, left, top
   headerStyle.boxShadow = `inset 0 -1px 0 ${headerStyle.borderColor}, inset 1px 1px 0 ${headerStyle.borderColor}`;
 
   // To avoid seeing the table body through the table head:
