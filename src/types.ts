@@ -101,3 +101,45 @@ export interface Column {
   stylingInfo: string[];
   sortDirection: string;
 }
+
+export type TableData =
+  | {
+      totalColumnCount: number;
+      totalRowCount: number;
+      totalPages: number;
+      paginationNeeded: boolean;
+      rows: number[];
+      columns: number[];
+      totalsPosition: string;
+    }
+  | null
+  | undefined;
+
+export interface PageInfo {
+  page: number;
+  rowsPerPage: number;
+  rowsPerPageOptions: number[];
+}
+
+export type SetPageInfo = stardust.SetStateFn<{
+  page: number;
+  rowsPerPage: number;
+  rowsPerPageOptions: number[];
+}>;
+
+export type Announce = ((arg0: AnnounceArgs) => void) | undefined;
+
+export interface RenderProps {
+  direction: 'ltr' | 'rtl';
+  selectionsAPI: stardust.ObjectSelections;
+  rootElement: HTMLElement;
+  tableData: object;
+  pageInfo: PageInfo;
+  setPageInfo: SetPageInfo;
+  constraints: stardust.Constraints;
+  translator: ExtendedTranslator;
+  theme: ExtendedTheme;
+  keyboard: stardust.Keyboard;
+  footerContainer: HTMLElement;
+  announce: (...args: any[]) => any;
+}
