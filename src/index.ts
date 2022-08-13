@@ -79,7 +79,8 @@ export default function supernova(env: Galaxy) {
       );
 
       useEffect(() => {
-        if (!env.carbon && reactRoot && layout && tableData && announce && changeSortOrder && theme) {
+        const isReadyToRender = !env.carbon && reactRoot && layout && tableData && announce && changeSortOrder && theme;
+        isReadyToRender &&
           render(reactRoot, {
             rootElement,
             layout,
@@ -97,7 +98,6 @@ export default function supernova(env: Galaxy) {
             footerContainer,
             announce,
           });
-        }
       }, [
         reactRoot,
         tableData,
