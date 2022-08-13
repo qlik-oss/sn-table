@@ -10,5 +10,6 @@ declare module 'styled-components' {
     target?: HTMLElement | ShadowRoot | undefined;
   }
 
+  // eslint-disable-next-line react/prefer-stateless-function
   export class StyleSheetManager extends React.Component<StyleSheetManagerProps> {}
 }
