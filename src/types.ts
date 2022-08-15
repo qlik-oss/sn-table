@@ -102,19 +102,6 @@ export interface Column {
   sortDirection: string;
 }
 
-export type TableData =
-  | {
-      totalColumnCount: number;
-      totalRowCount: number;
-      totalPages: number;
-      paginationNeeded: boolean;
-      rows: number[];
-      columns: number[];
-      totalsPosition: string;
-    }
-  | null
-  | undefined;
-
 export interface PageInfo {
   page: number;
   rowsPerPage: number;

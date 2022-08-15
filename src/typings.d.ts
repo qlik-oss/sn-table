@@ -3,11 +3,11 @@ declare module 'styled-components' {
 
   export interface StyleSheetManagerProps {
     children?: React.ReactNode;
-    disableCSSOMInjection?: boolean | undefined;
-    disableVendorPrefixes?: boolean | undefined;
-    stylisPlugins?: StylisPlugin[] | undefined;
-    sheet?: ServerStyleSheet | undefined;
-    target?: HTMLElement | ShadowRoot | undefined;
+    disableCSSOMInjection?: boolean;
+    disableVendorPrefixes?: boolean;
+    stylisPlugins?: StylisPlugin[];
+    sheet?: ServerStyleSheet;
+    target?: HTMLElement | ShadowRoot;
   }
 
   // eslint-disable-next-line react/prefer-stateless-function
