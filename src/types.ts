@@ -137,8 +137,8 @@ export interface GeneratedStyling {
 }
 
 export interface CellStyle {
-  backgroundColor: string;
-  background?: string;
+  backgroundColor: string | undefined; // This is always set but could be undefined in the theme
   color: string;
+  background?: string;
   selectedCellClass?: string;
 }
