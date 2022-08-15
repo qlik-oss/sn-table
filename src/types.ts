@@ -14,6 +14,11 @@ export interface TableCell {
   nextQElemNumber: number;
 }
 
+export interface Row {
+  // for the row key, string is needed
+  [key: string]: TableCell | string;
+}
+
 export interface ExtendedSelectionAPI extends stardust.ObjectSelections {
   on(eventType: string, callback: () => void): void;
   removeListener(eventType: string, callback: () => void): void;
@@ -36,11 +41,11 @@ export interface AnnounceArgs {
   politeness?: 'polite' | 'assertive' | 'off';
 }
 
-export type AnnounceFn = (arg0: AnnounceArgs) => void;
+export type Announce = (arg0: AnnounceArgs) => void;
 
 export interface ActionPayload {
   cell: TableCell;
-  announce: (arg0: AnnounceArgs) => void;
+  announce: Announce;
   evt: React.KeyboardEvent | React.MouseEvent;
 }
 
@@ -114,13 +119,21 @@ export type SetPageInfo = stardust.SetStateFn<{
   rowsPerPageOptions: number[];
 }>;
 
-export type Announce = ((arg0: AnnounceArgs) => void) | undefined;
+export type TableData = {
+  totalColumnCount: number;
+  totalRowCount: number;
+  totalPages: number;
+  paginationNeeded: boolean;
+  rows: Row[];
+  columns: Column[];
+  totalsPosition: string;
+};
 
 export interface RenderProps {
   direction: 'ltr' | 'rtl';
   selectionsAPI: stardust.ObjectSelections;
   rootElement: HTMLElement;
-  tableData: object;
+  tableData: TableData;
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
   constraints: stardust.Constraints;
@@ -128,5 +141,5 @@ export interface RenderProps {
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
   footerContainer: HTMLElement;
-  announce: (...args: any[]) => any;
+  announce: Announce;
 }
