@@ -139,6 +139,6 @@ export interface GeneratedStyling {
 export interface CellStyle {
   backgroundColor: string;
   background?: string;
-  color?: string;
+  color: string;
   selectedCellClass?: string;
 }
