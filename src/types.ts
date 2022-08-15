@@ -2,7 +2,7 @@ import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 
 export interface TableCell {
-  qText: string | undefined;
+  qText?: string;
   qAttrExps: EngineAPI.INxAttributeExpressionValues;
   qElemNumber: number;
   rowIdx: number;
@@ -26,6 +26,16 @@ export interface ExtendedSelectionAPI extends stardust.ObjectSelections {
 
 export interface ExtendedTranslator extends stardust.Translator {
   language(): string;
+}
+
+export interface Galaxy {
+  translator: ExtendedTranslator;
+  carbon: boolean;
+}
+
+export interface UseOptions {
+  direction: 'ltr' | 'rtl';
+  footerContainer: HTMLElement;
 }
 
 export interface SelectionState {
@@ -66,7 +76,7 @@ export interface PaginationColors {
 }
 export interface TableThemeColors {
   tableBackgroundColorFromTheme: string;
-  backgroundColor: string | undefined;
+  backgroundColor?: string;
   isBackgroundTransparentColor: boolean;
   isBackgroundDarkColor: boolean;
   borderColor: string;
@@ -107,6 +117,20 @@ export interface Column {
   sortDirection: string;
 }
 
+export type ChangeSortOrder = (layout: TableLayout, column: Column) => Promise<void>;
+
+export interface RenderWithCarbonArguments {
+  env: Galaxy;
+  rootElement: HTMLElement;
+  model?: EngineAPI.IGenericObject;
+  theme: ExtendedTheme;
+  selectionsAPI: stardust.ObjectSelections;
+  app?: EngineAPI.IApp;
+  rect: stardust.Rect;
+  layout: TableLayout;
+  changeSortOrder?: ChangeSortOrder;
+}
+
 export interface PageInfo {
   page: number;
   rowsPerPage: number;
@@ -130,9 +154,34 @@ export type TableData = {
 };
 
 export interface RenderProps {
+  direction?: 'ltr' | 'rtl';
+  selectionsAPI: stardust.ObjectSelections;
+  rootElement?: HTMLElement;
+  layout: TableLayout;
+  changeSortOrder: ChangeSortOrder;
+  rect: stardust.Rect;
+  tableData?: TableData;
+  pageInfo?: PageInfo;
+  setPageInfo?: SetPageInfo;
+  constraints?: stardust.Constraints;
+  translator?: ExtendedTranslator;
+  theme: ExtendedTheme;
+  keyboard?: stardust.Keyboard;
+  footerContainer?: HTMLElement;
+  announce?: Announce;
+  model?: EngineAPI.IGenericObject;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  manageData?: Function;
+  app?: EngineAPI.IApp;
+}
+
+export interface RootProps {
   direction: 'ltr' | 'rtl';
   selectionsAPI: stardust.ObjectSelections;
   rootElement: HTMLElement;
+  layout: TableLayout;
+  changeSortOrder: ChangeSortOrder;
+  rect: stardust.Rect;
   tableData: TableData;
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
