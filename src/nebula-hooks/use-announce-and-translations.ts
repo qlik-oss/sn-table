@@ -52,7 +52,7 @@ const useAnnounceAndTranslations = (rootElement: HTMLElement, translator: Extend
   useEffect(() => {
     if (rootElement && translator) {
       registerLocale(translator);
-      setAnnounce(announcementFactory(rootElement, translator));
+      setAnnounce(() => announcementFactory(rootElement, translator));
     }
   }, [rootElement, translator.language()]);
 
