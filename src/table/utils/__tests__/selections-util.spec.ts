@@ -22,7 +22,7 @@ describe('selections-utils', () => {
     let setShouldRefocus: jest.Mock<any, any>;
     let keyboard: stardust.Keyboard;
     let containsActiveElement: boolean;
-    let tableWrapperRef: React.MutableRefObject<HTMLElement>;
+    let tableWrapperRef: React.MutableRefObject<HTMLDivElement>;
 
     beforeEach(() => {
       selectionDispatch = jest.fn();
@@ -37,7 +37,7 @@ describe('selections-utils', () => {
         current: {
           contains: () => containsActiveElement,
         },
-      } as unknown as React.MutableRefObject<HTMLElement>;
+      } as unknown as React.MutableRefObject<HTMLDivElement>;
     });
 
     afterEach(() => jest.clearAllMocks());
