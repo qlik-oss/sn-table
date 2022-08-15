@@ -2,7 +2,7 @@ import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 
 export interface TableCell {
-  qText: string | undefined;
+  qText?: string;
   qAttrExps: EngineAPI.INxAttributeExpressionValues;
   qElemNumber: number;
   rowIdx: number;
@@ -71,7 +71,7 @@ export interface PaginationColors {
 }
 export interface TableThemeColors {
   tableBackgroundColorFromTheme: string;
-  backgroundColor: string | undefined;
+  backgroundColor?: string;
   isBackgroundTransparentColor: boolean;
   isBackgroundDarkColor: boolean;
   borderColor: string;
@@ -115,11 +115,11 @@ export interface Column {
 export interface RenderWithCarbonArguments {
   env: Galaxy;
   rootElement: HTMLElement;
-  model: EngineAPI.IGenericObject | undefined;
+  model?: EngineAPI.IGenericObject;
   theme: ExtendedTheme;
   selectionsAPI: stardust.ObjectSelections;
-  app: EngineAPI.IApp | undefined;
+  app?: EngineAPI.IApp;
   rect: stardust.Rect;
   layout: TableLayout;
-  changeSortOrder: ((layout: TableLayout, column: Column) => Promise<void>) | undefined;
+  changeSortOrder?: (layout: TableLayout, column: Column) => Promise<void>;
 }
