@@ -1,18 +1,29 @@
 import { stardust } from '@nebula.js/stardust';
-import { BaseSyntheticEvent, FocusEvent } from 'react';
+import { BaseSyntheticEvent } from 'react';
 
-export const getCellElement = (rootElement: Element, cellCoord: [number, number]) =>
+interface ICellFocusProps {
+  focusType: string;
+  cell: HTMLTableCellElement | undefined;
+}
+interface IHandleResetFocusProps {
+  focusedCellCoord: [number, number];
+  rootElement: HTMLDivElement;
+  shouldRefocus: {
+    current: boolean;
+  };
+  isSelectionMode: boolean;
+  setFocusedCellCoord: (coord: [number, number]) => void;
+  keyboard: stardust.Keyboard;
+  announce: (arg: { keys: string[] }) => void;
+}
+
+export const getCellElement = (rootElement: HTMLDivElement, cellCoord: [number, number]) =>
   rootElement.getElementsByClassName('sn-table-row')[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[
     cellCoord[1]
   ] as HTMLTableCellElement;
 
 export const findCellWithTabStop = (rootElement: Element) =>
   rootElement.querySelector("td[tabindex='0'], th[tabindex='0']") as HTMLTableCellElement;
-
-interface ICellFocusProps {
-  focusType: string;
-  cell: HTMLTableCellElement;
-}
 
 export const updateFocus = ({ focusType, cell }: ICellFocusProps) => {
   if (!cell) return;
@@ -45,7 +56,7 @@ export const removeAndFocus = (
 ) => {
   updateFocus({ focusType: 'removeTab', cell: findCellWithTabStop(rootElement) });
   setFocusedCellCoord(newCoord);
-  keyboard.enabled && keyboard.focus;
+  keyboard.enabled && keyboard.focus?.();
 };
 
 export const handleClickToFocusBody = (
@@ -71,24 +82,12 @@ export const handleClickToFocusHead = (
 
 export const handleMouseDownLabelToFocusHeadCell = (
   evt: BaseSyntheticEvent,
-  rootElement: Element,
+  rootElement: HTMLDivElement,
   columnIndex: number
 ) => {
   evt.preventDefault();
   updateFocus({ focusType: 'focus', cell: getCellElement(rootElement, [0, columnIndex]) });
 };
-
-interface IHandleResetFocusProps {
-  focusedCellCoord: [number, number];
-  rootElement: Element;
-  shouldRefocus: {
-    current: boolean;
-  };
-  isSelectionMode: boolean;
-  setFocusedCellCoord: (coord: [number, number]) => void;
-  keyboard: stardust.Keyboard;
-  announce: (arg: { keys: string[] }) => void;
-}
 
 export const handleResetFocus = ({
   focusedCellCoord,
@@ -122,14 +121,13 @@ export const handleResetFocus = ({
   setFocusedCellCoord(cellCoord);
 };
 
-interface IHandleFocusOutProps {
+export const handleFocusoutEvent = (
+  evt: FocusEvent,
   shouldRefocus: {
     current: boolean;
-  };
-  keyboard: stardust.Keyboard;
-}
-
-export const handleFocusoutEvent = (evt: FocusEvent, { shouldRefocus, keyboard }: IHandleFocusOutProps) => {
+  },
+  keyboard: stardust.Keyboard
+) => {
   const targetElement = evt.currentTarget as HTMLDivElement;
   if (keyboard?.enabled && !targetElement.contains(evt.relatedTarget as Node) && !shouldRefocus.current) {
     targetElement.querySelector('#sn-table-announcer--01')!.innerHTML = '';
@@ -141,7 +139,6 @@ export const handleFocusoutEvent = (evt: FocusEvent, { shouldRefocus, keyboard }
 };
 
 export const focusSelectionToolbar = (element: HTMLTableCellElement, keyboard: stardust.Keyboard, last: boolean) => {
-  console.log(element);
   const clientConfirmButton = element
     .closest('.qv-object-wrapper')
     ?.querySelector('.sel-toolbar-confirm')?.parentElement;
@@ -154,7 +151,11 @@ export const focusSelectionToolbar = (element: HTMLTableCellElement, keyboard: s
 
 export const announceSelectionState = (
   announce: (arg: { keys: string[] }) => void,
-  nextCell: HTMLTableCellElement,
+  nextCell: {
+    classList: {
+      contains: (token: string) => boolean;
+    };
+  },
   isSelectionMode: boolean
 ) => {
   if (isSelectionMode) {
