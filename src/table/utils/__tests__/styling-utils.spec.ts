@@ -297,7 +297,7 @@ describe('styling-utils', () => {
     });
     // Only checking hover properties from here on
     it('should return styling with no hoverBackgroundColor and the specified hoverFontColor', () => {
-      layout.components[0].content.hoverFontColor.index = 1;
+      if (layout.components?.[0].content?.hoverFontColor) layout.components[0].content.hoverFontColor.index = 1;
 
       const resultStyling = getBodyCellStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).toBe('');
@@ -318,22 +318,22 @@ describe('styling-utils', () => {
       expect(resultStyling.hoverFontColor).toBe(STYLING_DEFAULTS.FONT_COLOR);
     });
     it('should return styling with dark hoverBackgroundColor and white hoverFontColor', () => {
-      layout.components[0].content.hoverColor.index = 1;
+      if (layout.components?.[0].content?.hoverColor) layout.components[0].content.hoverColor.index = 1;
 
       const resultStyling = getBodyCellStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).toBe(resolvedColor);
       expect(resultStyling.hoverFontColor).toBe(STYLING_DEFAULTS.WHITE);
     });
     it('should return styling with light hoverBackgroundColor and the default hoverFontColor', () => {
-      layout.components[0].content.hoverColor.index = 2;
+      if (layout.components?.[0].content?.hoverColor) layout.components[0].content.hoverColor.index = 2;
 
       const resultStyling = getBodyCellStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).toBe(altResolvedColor);
       expect(resultStyling.hoverFontColor).toBe(STYLING_DEFAULTS.FONT_COLOR);
     });
     it('should return styling with set hoverBackgroundColor and hoverFontColor', () => {
-      layout.components[0].content.hoverColor.index = 1;
-      layout.components[0].content.hoverFontColor.index = 2;
+      if (layout.components?.[0].content?.hoverColor) layout.components[0].content.hoverColor.index = 1;
+      if (layout.components?.[0].content?.hoverFontColor) layout.components[0].content.hoverFontColor.index = 2;
 
       const resultStyling = getBodyCellStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).toBe(resolvedColor);

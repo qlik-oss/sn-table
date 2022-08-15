@@ -85,16 +85,6 @@ export interface HyperCube extends EngineAPI.IHyperCube {
 
 export type TotalsPosition = 'top' | 'bottom' | 'noTotals';
 
-export interface TableLayout extends EngineAPI.IGenericHyperCubeLayout {
-  qHyperCube: HyperCube;
-  totals: {
-    show: boolean;
-    position: 'top' | 'bottom' | 'noTotals';
-    label: string;
-  };
-  components?: any;
-}
-
 export interface Column {
   id: string;
   isDim: boolean;
@@ -141,4 +131,20 @@ export interface CellStyle {
   color: string;
   background?: string;
   selectedCellClass?: string;
+}
+
+export interface Components {
+  key: string;
+  content?: StylingLayout;
+  header?: StylingLayout;
+}
+
+export interface TableLayout extends EngineAPI.IGenericHyperCubeLayout {
+  qHyperCube: HyperCube;
+  totals: {
+    show: boolean;
+    position: 'top' | 'bottom' | 'noTotals';
+    label: string;
+  };
+  components?: Components[];
 }

@@ -41,7 +41,7 @@ export const isColorSet = (prop: PaletteColor | undefined): boolean =>
  * Gets specified padding from layout if defined, otherwise calculates it based on specified font size if defined, otherwise returns default padding.
  * Note that the padding property can't be set in the styling panel
  */
-export function getPadding(styleObj: StylingLayout, defaultPadding: string): string {
+export function getPadding(styleObj: StylingLayout | undefined, defaultPadding: string): string {
   let padding = defaultPadding;
   if (styleObj?.padding) {
     ({ padding } = styleObj);
@@ -69,14 +69,18 @@ export const getAutoFontColor = (backgroundColor: string): string =>
 /**
  * Gets base styling for either header or body taking table theme settings into account
  */
-export const getBaseStyling = (styleObj: StylingLayout, objetName: string, theme: ExtendedTheme): GeneratedStyling => {
+export const getBaseStyling = (
+  styleObj: StylingLayout | undefined,
+  objetName: string,
+  theme: ExtendedTheme
+): GeneratedStyling => {
   const fontFamily = theme.getStyle('object', `straightTable.${objetName}`, 'fontFamily');
   const color = theme.getStyle('object', `straightTable.${objetName}`, 'color');
   const fontSize = theme.getStyle('object', `straightTable.${objetName}`, 'fontSize');
 
   const baseStyle: GeneratedStyling = {
     fontFamily,
-    color: isColorSet(styleObj?.fontColor) ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj.fontColor) : color,
+    color: isColorSet(styleObj?.fontColor) ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj?.fontColor) : color,
     fontSize: (styleObj?.fontSize && `${styleObj.fontSize}px`) || fontSize,
     padding: getPadding(styleObj, STYLING_DEFAULTS.PADDING),
     borderStyle: 'solid',
