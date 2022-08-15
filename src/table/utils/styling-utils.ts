@@ -218,11 +218,12 @@ export function getColumnStyle(
   qAttrExps: EngineAPI.INxAttributeExpressionValues,
   stylingIDs: string[]
 ): CellStyle {
-  if (!stylingIDs.length || !qAttrExps?.qValues.length) return styling;
-
   const columnColors: Record<string, string> = {};
   qAttrExps.qValues.forEach((val, i) => {
-    columnColors[stylingIDs[i]] = resolveToRGBAorRGB(val.qText as string);
+    const resolvedColor = val.qText && resolveToRGBAorRGB(val.qText);
+    if (resolvedColor && resolvedColor !== 'none') {
+      columnColors[stylingIDs[i]] = resolvedColor;
+    }
   });
   if (columnColors.cellBackgroundColor && !columnColors.cellForegroundColor)
     columnColors.cellForegroundColor = getAutoFontColor(columnColors.cellBackgroundColor);
@@ -230,7 +231,7 @@ export function getColumnStyle(
   return {
     ...styling,
     color: columnColors.cellForegroundColor || styling.color,
-    backgroundColor: columnColors.cellBackgroundColor,
+    backgroundColor: columnColors.cellBackgroundColor || styling.backgroundColor,
   };
 }
 

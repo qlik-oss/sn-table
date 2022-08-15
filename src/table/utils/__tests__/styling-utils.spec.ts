@@ -367,10 +367,10 @@ describe('styling-utils', () => {
       stylingIDs = [stylingIDs[1]];
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingIDs);
-      expect(columnStyle.backgroundColor).toBe(undefined);
+      expect(columnStyle.backgroundColor).toBe('someBgColor');
       expect(columnStyle.color).toBe('rgb(17,17,17)');
     });
-    it('should return styling with backgroundColor', () => {
+    it('should return styling with backgroundColor and automatic font color', () => {
       qAttrExps.qValues = [qAttrExps.qValues[0]];
       stylingIDs = [stylingIDs[0]];
 
@@ -378,11 +378,20 @@ describe('styling-utils', () => {
       expect(columnStyle.backgroundColor).toBe('rgb(221,221,221)');
       expect(columnStyle.color).toBe(STYLING_DEFAULTS.FONT_COLOR);
     });
-    it('should return styling unchanged', () => {
-      stylingIDs = [];
+    it('should return styling unchanged when no qText', () => {
+      qAttrExps.qValues = [{ qNum: NaN }, { qNum: NaN }];
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingIDs);
-      expect(columnStyle).toBe(styling);
+      expect(columnStyle).toEqual(styling);
+    });
+    it('should return styling unchanged when qText is an invalid color', () => {
+      qAttrExps.qValues = [
+        { qNum: NaN, qText: 'invalidColor' },
+        { qNum: NaN, qText: 'invalidColor' },
+      ];
+
+      const columnStyle = getColumnStyle(styling, qAttrExps, stylingIDs);
+      expect(columnStyle).toEqual(styling);
     });
   });
 
