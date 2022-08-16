@@ -2,7 +2,7 @@ import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 
 export interface TableCell {
-  qText: string | undefined;
+  qText?: string;
   qAttrExps: EngineAPI.INxAttributeExpressionValues;
   qElemNumber: number;
   rowIdx: number;
@@ -21,6 +21,16 @@ export interface ExtendedSelectionAPI extends stardust.ObjectSelections {
 
 export interface ExtendedTranslator extends stardust.Translator {
   language(): string;
+}
+
+export interface Galaxy {
+  translator: ExtendedTranslator;
+  carbon: boolean;
+}
+
+export interface UseOptions {
+  direction: 'ltr' | 'rtl';
+  footerContainer: HTMLElement;
 }
 
 export interface SelectionState {
@@ -65,7 +75,7 @@ export interface BodyColors {
 }
 export interface TableThemeColors {
   tableBackgroundColorFromTheme: string;
-  backgroundColor: string | undefined;
+  backgroundColor?: string;
   isBackgroundTransparentColor: boolean;
   isBackgroundDarkColor: boolean;
   borderColor: string;
@@ -95,6 +105,18 @@ export interface Column {
   align: string;
   stylingIDs: string[];
   sortDirection: string;
+}
+
+export interface RenderWithCarbonArguments {
+  env: Galaxy;
+  rootElement: HTMLElement;
+  model?: EngineAPI.IGenericObject;
+  theme: ExtendedTheme;
+  selectionsAPI: stardust.ObjectSelections;
+  app?: EngineAPI.IApp;
+  rect: stardust.Rect;
+  layout: TableLayout;
+  changeSortOrder?: (layout: TableLayout, column: Column) => Promise<void>;
 }
 
 export interface PaletteColor {
