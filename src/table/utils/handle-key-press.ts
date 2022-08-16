@@ -4,7 +4,7 @@ import React from 'react';
 import { updateFocus, focusSelectionToolbar, getCellElement, announceSelectionState } from './handle-accessibility';
 import { SelectionActions, TSelectionActions } from './selections-utils';
 import { handleNavigateTop } from './handle-scroll';
-import { AnnounceArgs, Column, ExtendedSelectionAPI, TableCell, TableLayout, TotalsPosition } from '../../types';
+import { AnnounceFn, Column, ExtendedSelectionAPI, TableCell, TableLayout, TotalsPosition } from '../../types';
 
 const isCtrlShift = (evt: React.KeyboardEvent) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -58,17 +58,19 @@ export const handleWrapperKeyDown = ({
 /**
  * Calculates the next cell to focus
  */
-export const arrowKeysNavigation = (
+export const getNextCellCoord = (
   evt: React.KeyboardEvent,
-  rowAndColumnCount: { rowCount: number; columnCount: number },
+  rootElement: HTMLElement,
   cellCoord: [number, number],
   topAllowedRow = 0
 ): [number, number] => {
+  const rowCount = rootElement.getElementsByClassName('sn-table-row').length;
+  const columnCount = rootElement.getElementsByClassName('sn-table-head-cell').length;
   let [nextRow, nextCol] = cellCoord;
 
   switch (evt.key) {
     case 'ArrowDown':
-      nextRow < rowAndColumnCount.rowCount - 1 && nextRow++;
+      nextRow < rowCount - 1 && nextRow++;
       break;
     case 'ArrowUp':
       nextRow > topAllowedRow && nextRow--;
@@ -76,9 +78,9 @@ export const arrowKeysNavigation = (
     case 'ArrowRight':
       // topAllowedRow greater than 0 means we are in selection mode
       if (topAllowedRow > 0) break;
-      if (nextCol < rowAndColumnCount.columnCount - 1) {
+      if (nextCol < columnCount - 1) {
         nextCol++;
-      } else if (nextRow < rowAndColumnCount.rowCount - 1) {
+      } else if (nextRow < rowCount - 1) {
         nextRow++;
         nextCol = 0;
       }
@@ -90,7 +92,7 @@ export const arrowKeysNavigation = (
         nextCol--;
       } else if (nextRow > 0) {
         nextRow--;
-        nextCol = rowAndColumnCount.columnCount - 1;
+        nextCol = columnCount - 1;
       }
       break;
     default:
@@ -122,8 +124,7 @@ export const moveFocus = (
 ) => {
   preventDefaultBehavior(evt);
   (evt.target as HTMLElement).setAttribute('tabIndex', '-1');
-  const rowAndColumnCount = getRowAndColumnCount(rootElement);
-  const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, topAllowedRow);
+  const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, topAllowedRow);
   const nextCell = getCellElement(rootElement, nextCellCoord);
   updateFocus({ focusType: 'focus', cell: nextCell });
   setFocusedCellCoord(nextCellCoord);
@@ -201,7 +202,7 @@ interface handleBodyProps {
   selectionDispatch: React.Dispatch<TSelectionActions>;
   isSelectionsEnabled: boolean;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
-  announce(args: AnnounceArgs): void;
+  announce: AnnounceFn;
   keyboard: stardust.Keyboard;
   totalsPosition: TotalsPosition;
   paginationNeeded: boolean;
