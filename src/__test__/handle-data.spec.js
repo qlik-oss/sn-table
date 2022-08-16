@@ -18,7 +18,7 @@ describe('handle-data', () => {
       label: `title-${colIx}`,
       id: `col-${colIx}`,
       align: isDim ? 'left' : 'right',
-      stylingInfo: [],
+      stylingIDs: [],
       totalInfo: totals,
       sortDirection: 'asc',
       dataColIdx: colIx,
@@ -36,10 +36,10 @@ describe('handle-data', () => {
       expected.align = 'center';
     });
 
-    it('should return column info for dimension with stylingInfo', () => {
+    it('should return column info for dimension with stylingIDs', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qAttrExprInfo = [{ id: 'someId' }];
       const expected = getExpectedInfo(colIdx, true);
-      expected.stylingInfo = ['someId'];
+      expected.stylingIDs = ['someId'];
 
       const columnInfo = getColumnInfo(layout, colIdx);
       expect(columnInfo).toEqual(expected);
