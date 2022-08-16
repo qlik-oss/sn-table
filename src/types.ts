@@ -70,19 +70,57 @@ export interface PaginationColors {
   disabledIconColor: string;
 }
 
+export interface BodyColors {
+  borderColor: string;
+}
+
 export interface TableThemeColors {
   tableBackgroundColorFromTheme: string;
   backgroundColor?: string;
   isBackgroundTransparentColor: boolean;
   isBackgroundDarkColor: boolean;
   borderColor: string;
-  body: object;
+  body: BodyColors;
   pagination: PaginationColors;
 }
 
 export interface ExtendedTheme extends stardust.Theme {
   name(): string;
   table: TableThemeColors;
+}
+
+export interface PageInfo {
+  page: number;
+  rowsPerPage: number;
+  rowsPerPageOptions: number[];
+}
+
+export type SetPageInfo = stardust.SetStateFn<{
+  page: number;
+  rowsPerPage: number;
+  rowsPerPageOptions: number[];
+}>;
+
+export interface Row {
+  // for the row key, string is needed
+  [key: string]: TableCell | string;
+}
+
+export interface Column {
+  id: string;
+  isDim: boolean;
+  isLocked: boolean;
+  dataColIdx: number;
+  width: number;
+  label: string;
+  align: string;
+  stylingIDs: string[];
+  sortDirection: string;
+}
+
+export interface PaletteColor {
+  index: number;
+  color: string | null;
 }
 
 interface TextAlign {
@@ -116,7 +154,42 @@ export interface HyperCube extends Omit<EngineAPI.IHyperCube, 'qDimensionInfo' |
   qMeasureInfo: ExtendedNxMeasureInfo[];
 }
 
-export type TotalsPosition = 'top' | 'bottom' | 'noTotals';
+export interface StylingLayout {
+  fontColor?: PaletteColor;
+  fontSize?: number;
+  hoverColor?: PaletteColor;
+  hoverEffect?: boolean;
+  hoverFontColor?: PaletteColor;
+  padding?: string; // not available as option in the styling panel
+}
+
+export interface GeneratedStyling {
+  padding: string;
+  borderStyle: string;
+  borderColor: string;
+  fontFamily?: string;
+  color?: string;
+  fontSize?: string; // following the theme format so this should always be a string
+  cursor?: string;
+  borderWidth?: string;
+  backgroundColor?: string;
+  sortLabelColor?: string;
+  hoverBackgroundColor?: string;
+  hoverFontColor?: string;
+}
+
+export interface CellStyle {
+  backgroundColor: string | undefined; // This is always set but could be undefined in the theme
+  color: string;
+  background?: string;
+  selectedCellClass?: string;
+}
+
+export interface Components {
+  key: string;
+  content?: StylingLayout;
+  header?: StylingLayout;
+}
 
 export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, 'qHyperCube'> {
   qHyperCube: HyperCube;
@@ -125,35 +198,7 @@ export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, 'qH
     position: 'top' | 'bottom' | 'noTotals';
     label: string;
   };
-}
-
-export interface PageInfo {
-  page: number;
-  rowsPerPage: number;
-  rowsPerPageOptions: number[];
-}
-
-export type SetPageInfo = stardust.SetStateFn<{
-  page: number;
-  rowsPerPage: number;
-  rowsPerPageOptions: number[];
-}>;
-
-export interface Row {
-  // for the row key, string is needed
-  [key: string]: TableCell | string;
-}
-
-export interface Column {
-  id: string;
-  isDim: boolean;
-  isLocked: boolean;
-  dataColIdx: number;
-  width: number;
-  label: string;
-  align: string;
-  stylingInfo: string[];
-  sortDirection: string;
+  components?: Components[];
 }
 
 export interface RenderWithCarbonArguments {
@@ -167,6 +212,8 @@ export interface RenderWithCarbonArguments {
   layout: TableLayout;
   changeSortOrder?: (layout: TableLayout, column: Column) => Promise<void>;
 }
+
+export type TotalsPosition = 'top' | 'bottom' | 'noTotals';
 
 export type TableData = {
   totalColumnCount: number;

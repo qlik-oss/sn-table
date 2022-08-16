@@ -15,7 +15,7 @@ Visual regression testing flow:
 5. Capture screenshot by Playwright
 6. Compare screenshot with baseline image
 
-To capture same screenshot on the same operating system both locally and on a CI server, we use a docker instance to take the contents of `dist` and start a http-server. The rendering tests then run on your local machine or on the CI server.
+> Note: To capture same screenshot on the same operating system both locally and on a CI server, we use the Playwright Docker image to run the tests in a preconfigured environment. More info can be found [here](https://playwright.dev/docs/docker).
 
 ## Updating snapshots
 
@@ -39,6 +39,15 @@ Sometimes tests might break, if you are certain no UI changes have been made jus
     docker stop sn-table-playwright
 
 may need to stop the container first.
+
+## Add test cases
+
+To get the necessary Layout and HyperCubeData for a fixture file, you can find the app used in the rendering case in [data/apps](../../data/apps).
+
+- Add a new testing fixture file in [test/rendering/fixtures](./__fixtures__)
+- Check the new test case in [run-rendering-tests] to make sure it work(./utils/run-rendering-tests.ts)
+- Add a new baseline image following the steps [above](#updating-snapshots).
+- add a new test case description [below](#test-cases-description).
 
 ## Test cases description
 
