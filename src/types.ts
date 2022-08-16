@@ -2,7 +2,7 @@ import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 
 export interface TableCell {
-  qText: string | undefined;
+  qText?: string;
   qAttrExps: EngineAPI.INxAttributeExpressionValues;
   qElemNumber: number;
   rowIdx: number;
@@ -21,6 +21,16 @@ export interface ExtendedSelectionAPI extends stardust.ObjectSelections {
 
 export interface ExtendedTranslator extends stardust.Translator {
   language(): string;
+}
+
+export interface Galaxy {
+  translator: ExtendedTranslator;
+  carbon: boolean;
+}
+
+export interface UseOptions {
+  direction: 'ltr' | 'rtl';
+  footerContainer: HTMLElement;
 }
 
 export interface SelectionState {
@@ -59,13 +69,17 @@ export interface PaginationColors {
   iconColor: string;
   disabledIconColor: string;
 }
+
+export interface BodyColors {
+  borderColor: string;
+}
 export interface TableThemeColors {
   tableBackgroundColorFromTheme: string;
-  backgroundColor: string | undefined;
+  backgroundColor?: string;
   isBackgroundTransparentColor: boolean;
   isBackgroundDarkColor: boolean;
   borderColor: string;
-  body: object;
+  body: BodyColors;
   pagination: PaginationColors;
 }
 
@@ -81,15 +95,6 @@ export interface HyperCube extends EngineAPI.IHyperCube {
 
 export type TotalsPosition = 'top' | 'bottom' | 'noTotals';
 
-export interface TableLayout extends EngineAPI.IGenericHyperCubeLayout {
-  qHyperCube: HyperCube;
-  totals: {
-    show: boolean;
-    position: 'top' | 'bottom' | 'noTotals';
-    label: string;
-  };
-}
-
 export interface Column {
   id: string;
   isDim: boolean;
@@ -98,6 +103,70 @@ export interface Column {
   width: number;
   label: string;
   align: string;
-  stylingInfo: string[];
+  stylingIDs: string[];
   sortDirection: string;
+}
+
+export interface PaletteColor {
+  index: number;
+  color: string | null;
+}
+
+export interface StylingLayout {
+  fontColor?: PaletteColor;
+  fontSize?: number;
+  hoverColor?: PaletteColor;
+  hoverEffect?: boolean;
+  hoverFontColor?: PaletteColor;
+  padding?: string; // not available as option in the styling panel
+}
+
+export interface GeneratedStyling {
+  padding: string;
+  borderStyle: string;
+  borderColor: string;
+  fontFamily?: string;
+  color?: string;
+  fontSize?: string; // following the theme format so this should always be a string
+  cursor?: string;
+  borderWidth?: string;
+  backgroundColor?: string;
+  sortLabelColor?: string;
+  hoverBackgroundColor?: string;
+  hoverFontColor?: string;
+}
+
+export interface CellStyle {
+  backgroundColor: string | undefined; // This is always set but could be undefined in the theme
+  color: string;
+  background?: string;
+  selectedCellClass?: string;
+}
+
+export interface Components {
+  key: string;
+  content?: StylingLayout;
+  header?: StylingLayout;
+}
+
+export interface TableLayout extends EngineAPI.IGenericHyperCubeLayout {
+  qHyperCube: HyperCube;
+  totals: {
+    show: boolean;
+    position: 'top' | 'bottom' | 'noTotals';
+    label: string;
+  };
+  components?: Components[];
+}
+
+export interface RenderWithCarbonArguments {
+  env: Galaxy;
+  rootElement: HTMLElement;
+  model?: EngineAPI.IGenericObject;
+  theme: ExtendedTheme;
+  selectionsAPI: stardust.ObjectSelections;
+  app?: EngineAPI.IApp;
+  rect: stardust.Rect;
+  layout: TableLayout;
+  changeSortOrder?: (layout: TableLayout, column: Column) => Promise<void>;
 }
