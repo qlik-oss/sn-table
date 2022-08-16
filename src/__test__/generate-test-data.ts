@@ -20,8 +20,8 @@ export function generateLayout(
   nDims: number,
   nMeas: number,
   nRows: number,
-  qColumnOrder = [],
-  qGrandTotalRow = []
+  qColumnOrder = [] as number[],
+  qGrandTotalRow = [] as Record<string, string>[]
 ): TableLayout {
   const createField = (idx: number) => ({
     qFallbackTitle: `title-${idx}`,

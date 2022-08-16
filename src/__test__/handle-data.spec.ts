@@ -1,9 +1,11 @@
 import manageData, { getColumnOrder, getColumnInfo, getTotalInfo, getTotalPosition } from '../handle-data';
 import { generateDataPages, generateLayout } from './generate-test-data';
+import { TableLayout, PageInfo, SetPageInfo, TableData, TableCell, ExtendedNxAttrExprInfo } from '../types';
 
 describe('handle-data', () => {
-  let layout;
-  let colIdx;
+  let layout: TableLayout;
+  let colIdx: number;
+  let columnOrder: number[];
 
   beforeEach(() => {
     layout = generateLayout(2, 2, 200, [1, 2, 0, 3], [{ qText: '-' }, { qText: '200' }]);
@@ -11,14 +13,15 @@ describe('handle-data', () => {
 
   describe('getColumnInfo', () => {
     colIdx = 1;
+    columnOrder = [0, 1];
 
-    const getExpectedInfo = (colIx, isDim, isLocked, totals = '') => ({
+    const getExpectedInfo = (colIx: number, isDim: boolean, isLocked?: boolean, totals = '') => ({
       isDim,
       width: 200,
       label: `title-${colIx}`,
       id: `col-${colIx}`,
       align: isDim ? 'left' : 'right',
-      stylingInfo: [],
+      stylingInfo: [] as string[],
       totalInfo: totals,
       sortDirection: 'asc',
       dataColIdx: colIx,
@@ -26,7 +29,7 @@ describe('handle-data', () => {
     });
 
     it('should return column info for dimension', () => {
-      const columnInfo = getColumnInfo(layout, colIdx);
+      const columnInfo = getColumnInfo(layout, colIdx, columnOrder);
       expect(columnInfo).toEqual(getExpectedInfo(colIdx, true));
     });
 
@@ -37,31 +40,33 @@ describe('handle-data', () => {
     });
 
     it('should return column info for dimension with stylingInfo', () => {
-      layout.qHyperCube.qDimensionInfo[colIdx].qAttrExprInfo = [{ id: 'someId' }];
+      layout.qHyperCube.qDimensionInfo[colIdx].qAttrExprInfo = [
+        { id: 'someId' },
+      ] as unknown as ExtendedNxAttrExprInfo[];
       const expected = getExpectedInfo(colIdx, true);
       expected.stylingInfo = ['someId'];
 
-      const columnInfo = getColumnInfo(layout, colIdx);
+      const columnInfo = getColumnInfo(layout, colIdx, columnOrder);
       expect(columnInfo).toEqual(expected);
     });
 
     it('should return false for hidden column', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qError = { qErrorCode: 7005 };
 
-      const columnInfo = getColumnInfo(layout, colIdx);
+      const columnInfo = getColumnInfo(layout, colIdx, columnOrder);
       expect(columnInfo).toBe(false);
     });
 
     it('should return column info for dimension with isLocked', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qLocked = true;
-      const columnInfo = getColumnInfo(layout, colIdx);
+      const columnInfo = getColumnInfo(layout, colIdx, columnOrder);
       expect(columnInfo).toEqual(getExpectedInfo(colIdx, true, true));
     });
 
     it('should return column info for measure', () => {
       colIdx = 3;
-      const columnInfo = getColumnInfo(layout, colIdx);
-      expect(columnInfo).toEqual(getExpectedInfo(colIdx, false, undefined, '200'));
+      const columnInfo = getColumnInfo(layout, colIdx, columnOrder);
+      expect(columnInfo).toEqual(getExpectedInfo(colIdx, false, false, '200'));
     });
   });
 
@@ -80,38 +85,38 @@ describe('handle-data', () => {
   });
 
   describe('manageData', () => {
-    let model;
-    let pageInfo;
-    let setPageInfo;
+    let model: EngineAPI.IGenericObject | undefined;
+    let pageInfo: PageInfo;
+    let setPageInfo: SetPageInfo;
 
     beforeEach(() => {
       pageInfo = { page: 1, rowsPerPage: 100, rowsPerPageOptions: [10, 25, 100] };
-      model = { getHyperCubeData: async () => generateDataPages(100, 4) };
+      model = { getHyperCubeData: async () => generateDataPages(100, 4) } as unknown as EngineAPI.IGenericObject;
       setPageInfo = jest.fn();
     });
 
     it('should return size, rows and columns correctly formatted', async () => {
-      const { totalColumnCount, totalRowCount, paginationNeeded, rows, columns } = await manageData(
+      const { totalColumnCount, totalRowCount, paginationNeeded, rows, columns } = (await manageData(
         model,
         layout,
         pageInfo,
         setPageInfo
-      );
+      )) as TableData;
 
       expect(totalColumnCount).toBe(layout.qHyperCube.qSize.qcx);
       expect(totalRowCount).toBe(layout.qHyperCube.qSize.qcy);
       expect(paginationNeeded).toBe(true);
       expect(rows).toHaveLength(100);
-      expect(rows[0]['col-0'].qText).toBe('2');
-      expect(rows[0]['col-0'].rowIdx).toBe(100);
-      expect(rows[0]['col-0'].colIdx).toBe(0);
-      expect(rows[0]['col-0'].rawRowIdx).toBe(0);
-      expect(rows[0]['col-0'].rawColIdx).toBe(2);
-      expect(rows[0]['col-1'].qText).toBe('0');
-      expect(rows[0]['col-1'].rowIdx).toBe(100);
-      expect(rows[0]['col-1'].colIdx).toBe(1);
-      expect(rows[0]['col-1'].rawRowIdx).toBe(0);
-      expect(rows[0]['col-1'].rawColIdx).toBe(0);
+      expect((<TableCell>rows[0]['col-0']).qText).toBe('2');
+      expect((<TableCell>rows[0]['col-0']).rowIdx).toBe(100);
+      expect((<TableCell>rows[0]['col-0']).colIdx).toBe(0);
+      expect((<TableCell>rows[0]['col-0']).rawRowIdx).toBe(0);
+      expect((<TableCell>rows[0]['col-0']).rawColIdx).toBe(2);
+      expect((<TableCell>rows[0]['col-1']).qText).toBe('0');
+      expect((<TableCell>rows[0]['col-1']).rowIdx).toBe(100);
+      expect((<TableCell>rows[0]['col-1']).colIdx).toBe(1);
+      expect((<TableCell>rows[0]['col-1']).rawRowIdx).toBe(0);
+      expect((<TableCell>rows[0]['col-1']).rawColIdx).toBe(0);
       expect(columns).toHaveLength(4);
       columns.forEach((c, i) => {
         expect(c.id).toBe(Object.keys(rows[0])[i + 1]); // skip the first key
@@ -155,7 +160,8 @@ describe('handle-data', () => {
   });
 
   describe('getTotalInfo:', () => {
-    const columnOrder = [0, 1, 2, 3];
+    columnOrder = [0, 1, 2, 3];
+
     it('should show all the measures cells total values', () => {
       expect(getTotalInfo(false, layout, 2, 2, columnOrder)).toBe('-');
       expect(getTotalInfo(false, layout, 3, 2, columnOrder)).toBe('200');
