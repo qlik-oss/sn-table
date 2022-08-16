@@ -1,6 +1,6 @@
 const createStylingPanelDefinition = () => {
   const headerFontSection = {
-    translation: 'ThemeStyleEditor.style.headerFontColor',
+    translation: 'properties.Header',
     component: 'panel-section',
     items: {
       headerFontItem: {
@@ -18,9 +18,8 @@ const createStylingPanelDefinition = () => {
                 width: 9,
                 min: 5,
                 max: 300,
-                // placeholder: parseInt(styleService.getStyle('header', 'fontSize'), 10),
+                // placeholder: () => parseInt(styleService.getStyle('header', 'fontSize'), 10), // Not sure about placeholder, as qlik-oss do not have theme integrated in it
                 change(data) {
-                  console.log('changed data=>', data);
                   data.header.fontSize = !data.header.fontSize
                     ? data.header.fontSize
                     : Math.max(5, Math.min(300, Math.floor(data.header.fontSize)));
@@ -41,12 +40,12 @@ const createStylingPanelDefinition = () => {
   };
   const contentFontSection = {
     component: 'panel-section',
-    translation: 'ThemeStyleEditor.style.cellFontSize',
+    translation: 'properties.Content',
     items: {
       contentFontItem: {
         component: 'items',
         ref: 'components',
-        key: 'theme',
+        key: 'general',
         items: {
           contentFontWrapper: {
             component: 'inline-wrapper',
@@ -58,7 +57,7 @@ const createStylingPanelDefinition = () => {
                 width: 9,
                 min: 5,
                 max: 300,
-                // placeholder: parseInt(styleService.getStyle('content', 'fontSize'), 10),
+                // placeholder: () => parseInt(styleService.getStyle('content', 'fontSize'), 10), // Not sure about placeholder, as qlik-oss do not have theme integrated in it
                 change(data) {
                   data.content.fontSize = !data.content.fontSize
                     ? data.content.fontSize
@@ -79,7 +78,7 @@ const createStylingPanelDefinition = () => {
   };
 
   const hoverEffect = {
-    label: 'Highlight rows on hover',
+    translation: 'properties.RowHover',
     component: 'panel-section',
     items: {
       hoverEffectItem: {
@@ -104,53 +103,20 @@ const createStylingPanelDefinition = () => {
             ],
             defaultValue: false,
           },
-        },
-      },
-    },
-  };
-
-  const hoverColor = {
-    label: 'Row hover color',
-    component: 'panel-section',
-    show(data) {
-      if (data?.components[0]?.content?.hoverEffect) {
-        return true;
-      }
-      return false;
-    },
-    items: {
-      hoverEffectColorItem: {
-        component: 'items',
-        ref: 'components',
-        key: 'general',
-        items: {
-          hoverEffectColorWrapper: {
+          hoverEffectColorItem: {
+            show(data) {
+              return data?.content?.hoverEffect;
+            },
             ref: 'content.hoverColor',
             translation: 'ThemeStyleEditor.style.hoverStyle',
             type: 'object',
             component: 'color-picker',
             dualOutput: true,
           },
-        },
-      },
-    },
-  };
-  const hoverFontColor = {
-    label: 'Row hover font color',
-    component: 'panel-section',
-    show(data) {
-      if (data?.components[0]?.content?.hoverEffect) {
-        return true;
-      }
-      return false;
-    },
-    items: {
-      hoverEffectFontColorItem: {
-        component: 'items',
-        ref: 'components',
-        key: 'general',
-        items: {
-          hoverEffectFontColorWrapper: {
+          hoverEffectFontColorItem: {
+            show(data) {
+              return data?.content?.hoverEffect;
+            },
             ref: 'content.hoverFontColor',
             translation: 'ThemeStyleEditor.style.hoverFontStyle',
             type: 'object',
@@ -164,7 +130,7 @@ const createStylingPanelDefinition = () => {
 
   return {
     component: 'styling-panel',
-    chartTitle: 'Object.table',
+    chartTitle: 'Straight table',
     translation: 'LayerStyleEditor.component.styling',
     subtitle: 'LayerStyleEditor.component.styling',
     ref: 'components',
@@ -175,8 +141,6 @@ const createStylingPanelDefinition = () => {
       headerSection: headerFontSection,
       contentSection: contentFontSection,
       hoverEffectSection: hoverEffect,
-      hoverColorSection: hoverColor,
-      hoverFontColorSection: hoverFontColor,
     },
   };
 };

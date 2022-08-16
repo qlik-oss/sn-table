@@ -101,12 +101,11 @@ const textAlignItems = {
 };
 
 const getStyleSettings = (env) => {
-  console.log('ENV=>', env);
   return [
     {
       type: 'items',
       items: [
-        env.flags.isEnabled('SENSECLIENT_PS_17478_STYLINGPANEL_STRAIGHT_TABLE')
+        env.flags.isEnabled('SENSECLIENT_PS_17478_STYLINGPANEL_STRAIGHT_TABLE_OSS')
           ? createStylingPanelDefinition()
           : createStylingEditorDefinition(),
       ],
