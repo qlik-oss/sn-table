@@ -170,7 +170,7 @@ describe('selections-utils', () => {
         const newState = reducer(state, action);
         expect(newState).toEqual({
           ...state,
-          rows: { [cell.qElemNumber]: cell.rowIdx, [cell.prevQElemNumber]: cell.rowIdx - 1 },
+          rows: { [cell.qElemNumber]: cell.rowIdx, [cell.prevQElemNumber as number]: cell.rowIdx - 1 },
           colIdx: cell.colIdx,
           isSelectMultiValues: true,
         });
