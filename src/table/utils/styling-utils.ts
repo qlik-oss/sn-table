@@ -1,5 +1,8 @@
+import { stardust } from '@nebula.js/stardust';
+
 import { resolveToRGBAorRGB, isDarkColor, removeOpacity } from './color-utils';
 import { SelectionStates } from './selections-utils';
+import { TableLayout, ExtendedTheme, StylingLayout, GeneratedStyling, CellStyle, PaletteColor } from '../../types';
 // the order of style
 // default (inl. sprout theme) < Sense theme < styling settings
 // < column < selection (except the selected green) < hover < selected green
@@ -12,6 +15,7 @@ export const STYLING_DEFAULTS = {
   EXCLUDED_BACKGROUND:
     'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px)',
   WHITE: '#fff',
+  PADDING: '7px 14px',
 };
 
 export const SELECTION_STYLING = {
@@ -27,10 +31,17 @@ export const SELECTION_STYLING = {
   },
 };
 
-// Both index !== -1 and color !== null must be true for the property to be set
-export const isSet = (prop) => prop && JSON.stringify(prop) !== JSON.stringify({ index: -1, color: null });
+/**
+ * Determines if a palette color is set or not. Both index !== -1 and color !== null must be true for it to be unset
+ */
+export const isColorSet = (prop: PaletteColor | undefined): boolean =>
+  !!prop && JSON.stringify(prop) !== JSON.stringify({ index: -1, color: null });
 
-export function getPadding(styleObj, defaultPadding) {
+/**
+ * Gets specified padding from layout if defined, otherwise calculates it based on specified font size if defined, otherwise returns default padding.
+ * Note that the padding property can't be set in the styling panel
+ */
+export function getPadding(styleObj: StylingLayout | undefined, defaultPadding: string): string {
   let padding = defaultPadding;
   if (styleObj?.padding) {
     ({ padding } = styleObj);
@@ -40,34 +51,53 @@ export function getPadding(styleObj, defaultPadding) {
   return padding;
 }
 
-export function getColor(defaultColor, theme, color = {}) {
+/**
+ * Gets color from color picker. Defaults to default color if resolved color is invalid
+ */
+export function getColor(defaultColor: string, theme: stardust.Theme, color = {}): string {
   const resolvedColor = theme.getColorPickerColor(color);
 
   return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
 }
 
-export const getAutoFontColor = (backgroundColor) =>
+/**
+ * Gets font color based on background, making sure contrast is good enough
+ */
+export const getAutoFontColor = (backgroundColor: string): string =>
   isDarkColor(backgroundColor) ? STYLING_DEFAULTS.WHITE : STYLING_DEFAULTS.FONT_COLOR;
 
-export const getBaseStyling = (styleObj, objetName, theme) => {
+/**
+ * Gets base styling for either header or body taking table theme settings into account
+ */
+export const getBaseStyling = (
+  styleObj: StylingLayout | undefined,
+  objetName: string,
+  theme: ExtendedTheme
+): GeneratedStyling => {
   const fontFamily = theme.getStyle('object', `straightTable.${objetName}`, 'fontFamily');
   const color = theme.getStyle('object', `straightTable.${objetName}`, 'color');
   const fontSize = theme.getStyle('object', `straightTable.${objetName}`, 'fontSize');
 
-  const baseStyle = {
+  const baseStyle: GeneratedStyling = {
     fontFamily,
-    color: isSet(styleObj?.fontColor) ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj.fontColor) : color,
-    fontSize: styleObj?.fontSize || fontSize,
+    color: isColorSet(styleObj?.fontColor) ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj?.fontColor) : color,
+    fontSize: (styleObj?.fontSize && `${styleObj.fontSize}px`) || fontSize,
     padding: getPadding(styleObj, STYLING_DEFAULTS.PADDING),
     borderStyle: 'solid',
     borderColor: theme.table.body.borderColor,
   };
-  // Remove all Undefined Values from an Object
-  Object.keys(baseStyle).forEach((key) => baseStyle[key] == null && delete baseStyle[key]);
+  // Remove all undefined and null values
+  Object.keys(baseStyle).forEach((key) => {
+    const typedKey = key as keyof GeneratedStyling;
+    baseStyle[typedKey] == null && delete baseStyle[typedKey]; // == catches null and undefined but not 0
+  });
   return baseStyle;
 };
 
-export function getHeaderStyle(layout, theme) {
+/**
+ * Gets complete styling for the header. Extends base styling with header specific styling
+ */
+export function getHeaderStyle(layout: TableLayout, theme: ExtendedTheme): GeneratedStyling {
   const header = layout.components?.[0]?.header;
   const headerStyle = getBaseStyling(header, 'header', theme);
   headerStyle.cursor = 'pointer';
@@ -93,7 +123,10 @@ export function getHeaderStyle(layout, theme) {
   return headerStyle;
 }
 
-export function getBodyCellStyle(layout, theme) {
+/**
+ * Gets complete styling for the body. Extends base styling with hover styling
+ */
+export function getBodyCellStyle(layout: TableLayout, theme: ExtendedTheme): GeneratedStyling {
   const content = layout.components?.[0]?.content;
   const contentStyle = getBaseStyling(content, 'content', theme);
   contentStyle.borderWidth = '0px 1px 1px 0px';
@@ -121,12 +154,12 @@ export function getBodyCellStyle(layout, theme) {
 
   // Note: Hover colors from Layout have a higher priority than those from theme.
 
-  const isHoverFontColorSet = isSet(hoverFontColorFromLayout) || !!hoverFontColorFromTheme;
-  const isHoverBackgroundColorSet = isSet(hoverBackgroundColorFromLayout) || !!hoverBackgroundColorFromTheme;
+  const isHoverFontColorSet = isColorSet(hoverFontColorFromLayout) || !!hoverFontColorFromTheme;
+  const isHoverBackgroundColorSet = isColorSet(hoverBackgroundColorFromLayout) || !!hoverBackgroundColorFromTheme;
   const isHoverFontOrBackgroundColorSet = isHoverFontColorSet || isHoverBackgroundColorSet;
 
   let hoverBackgroundColor;
-  if (isSet(hoverBackgroundColorFromLayout)) {
+  if (isColorSet(hoverBackgroundColorFromLayout)) {
     // case 1 or 4
     hoverBackgroundColor = getColor(STYLING_DEFAULTS.HOVER_BACKGROUND, theme, hoverBackgroundColorFromLayout);
   } else if (hoverBackgroundColorFromTheme) {
@@ -142,7 +175,7 @@ export function getBodyCellStyle(layout, theme) {
     ? getColor(
         getAutoFontColor(hoverBackgroundColor),
         theme,
-        isSet(hoverFontColorFromLayout) ? hoverFontColorFromLayout : hoverFontColorFromTheme
+        isColorSet(hoverFontColorFromLayout) ? hoverFontColorFromLayout : hoverFontColorFromTheme
       ) // case 1 or 3 or 4
     : ''; // case 2;
 
@@ -153,7 +186,10 @@ export function getBodyCellStyle(layout, theme) {
   };
 }
 
-export function getTotalsCellStyle(layout, theme) {
+/**
+ * Gets complete styling for the totals cells. Based on the body style but with the background from the body
+ */
+export function getTotalsCellStyle(layout: TableLayout, theme: ExtendedTheme) {
   const headerStyle = getHeaderStyle(layout, theme);
   return { ...getBodyCellStyle(layout, theme), backgroundColor: headerStyle.backgroundColor };
 }
@@ -180,37 +216,34 @@ export function getTotalsCellStyle(layout, theme) {
  * }}
  *
  * get style from qAttributeExpressions in qDimensions or qMeasures
- * @param {Object} styling - style from styling in CellRenderer in TableBodyWrapper
- * @param {?Object} qAttrExps - qAttributeExpressions from each cell
- * @param {Array} stylingInfo - stylingInfo from each column
- * @returns {Object} cell font color and background color used for cells in specific columns
  */
-export function getColumnStyle(styling, qAttrExps, stylingInfo) {
-  const columnColors = {};
-  qAttrExps?.qValues.forEach((val, i) => {
-    columnColors[stylingInfo[i]] = resolveToRGBAorRGB(val.qText);
+export function getColumnStyle(
+  styling: CellStyle,
+  qAttrExps: EngineAPI.INxAttributeExpressionValues,
+  stylingIDs: string[]
+): CellStyle {
+  const columnColors: Record<string, string> = {};
+  qAttrExps.qValues.forEach((val, i) => {
+    const resolvedColor = val.qText && resolveToRGBAorRGB(val.qText);
+    if (resolvedColor && resolvedColor !== 'none') {
+      columnColors[stylingIDs[i]] = resolvedColor;
+    }
   });
-
   if (columnColors.cellBackgroundColor && !columnColors.cellForegroundColor)
     columnColors.cellForegroundColor = getAutoFontColor(columnColors.cellBackgroundColor);
 
   return {
     ...styling,
     color: columnColors.cellForegroundColor || styling.color,
-    backgroundColor: columnColors.cellBackgroundColor,
+    backgroundColor: columnColors.cellBackgroundColor || styling.backgroundColor,
   };
 }
 
 /**
- * Get the style for one cell based on wether it is
- * selected, possible, excluded or no extra styling at all (not in selection mode)
- * @param {Object} styling - Styling already calculated for the cell
- * @param {String} cellSelectionState - The selection state the cell is in
- * @param {?String} [themeBackgroundColor='#fff'] - The background color from nebula theme or sense theme
- * @returns {Object} The style for the cell
+ * Extends the cell styling with selection styling based on whether it is
+ * selected, possible, excluded or not in in selection mode (no changes)
  */
-
-export function getSelectionStyle(styling, cellSelectionState) {
+export function getSelectionStyle(styling: CellStyle, cellSelectionState: SelectionStates): CellStyle {
   let selectionStyling = {};
   switch (cellSelectionState) {
     case SelectionStates.SELECTED:
