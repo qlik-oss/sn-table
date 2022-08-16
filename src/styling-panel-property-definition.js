@@ -130,7 +130,7 @@ const createStylingPanelDefinition = () => {
 
   return {
     component: 'styling-panel',
-    chartTitle: 'Straight table',
+    chartTitle: 'Object.StraightTable',
     translation: 'LayerStyleEditor.component.styling',
     subtitle: 'LayerStyleEditor.component.styling',
     ref: 'components',
