@@ -103,16 +103,6 @@ export const getNextCellCoord = (
 };
 
 /**
- * get the number of rows and columns
- */
-export const getRowAndColumnCount = (rootElement: HTMLElement): { rowCount: number; columnCount: number } => {
-  const rowCount = rootElement.getElementsByClassName('sn-table-row').length;
-  const columnCount = rootElement.getElementsByClassName('sn-table-head-cell').length;
-
-  return { rowCount, columnCount };
-};
-
-/**
  * resets and adds new focus to a table cell based which key is pressed
  */
 export const moveFocus = (
