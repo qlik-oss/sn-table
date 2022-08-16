@@ -10,8 +10,8 @@ export interface TableCell {
   isSelectable: boolean;
   rawRowIdx: number;
   rawColIdx: number;
-  prevQElemNumber: number;
-  nextQElemNumber: number;
+  prevQElemNumber: number | undefined;
+  nextQElemNumber: number | undefined;
 }
 
 export interface ExtendedSelectionAPI extends stardust.ObjectSelections {

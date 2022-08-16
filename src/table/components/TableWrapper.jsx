@@ -14,7 +14,7 @@ import PaginationContent from './PaginationContent';
 import useDidUpdateEffect from '../hooks/use-did-update-effect';
 import useFocusListener from '../hooks/use-focus-listener';
 import useScrollListener from '../hooks/use-scroll-listener';
-import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
+import { handleWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, getCellElement } from '../utils/handle-accessibility';
 
 export default function TableWrapper(props) {
@@ -57,7 +57,7 @@ export default function TableWrapper(props) {
   );
 
   const handleKeyDown = (evt) => {
-    handleTableWrapperKeyDown({
+    handleWrapperKeyDown({
       evt,
       totalRowCount,
       page,

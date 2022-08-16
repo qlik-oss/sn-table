@@ -1,10 +1,10 @@
-import { updateFocus, focusSelectionToolbar, getCellElement, announceSelectionState } from './handle-accessibility';
-import { SelectionActions } from './selections-utils';
-import { handleNavigateTop } from './handle-scroll';
 import { stardust } from '@nebula.js/stardust';
 import React from 'react';
-import { Column, ExtendedSelectionAPI, TableCell, TableLayout, TotalsPosition } from '../../types';
-import { Action } from './selections-utils';
+
+import { updateFocus, focusSelectionToolbar, getCellElement, announceSelectionState } from './handle-accessibility';
+import { SelectionActions, TSelectionActions } from './selections-utils';
+import { handleNavigateTop } from './handle-scroll';
+import { AnnounceArgs, Column, ExtendedSelectionAPI, TableCell, TableLayout, TotalsPosition } from '../../types';
 
 const isCtrlShift = (evt: React.KeyboardEvent) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -13,7 +13,7 @@ export const preventDefaultBehavior = (evt: React.KeyboardEvent) => {
   evt.preventDefault();
 };
 
-interface props {
+interface HandleWrapperProps {
   evt: React.KeyboardEvent;
   totalRowCount: number;
   page: number;
@@ -24,7 +24,7 @@ interface props {
   isSelectionMode: boolean;
 }
 
-export const handleTableWrapperKeyDown = ({
+export const handleWrapperKeyDown = ({
   evt,
   totalRowCount,
   page,
@@ -33,7 +33,7 @@ export const handleTableWrapperKeyDown = ({
   setShouldRefocus,
   keyboard,
   isSelectionMode,
-}: props) => {
+}: HandleWrapperProps) => {
   if (isCtrlShift(evt)) {
     preventDefaultBehavior(evt);
     // ctrl + shift + left/right arrow keys: go to previous/next page
@@ -50,16 +50,20 @@ export const handleTableWrapperKeyDown = ({
     // its parent element when nebula handles keyboard navigation
     // and not in selection mode
     preventDefaultBehavior(evt);
-    keyboard.blur(true);
+    // @ts-ignore TODO: fix nebula api so that blur has the correct argument type
+    keyboard.blur?.(true);
   }
 };
 
+/**
+ * Calculates the next cell to focus
+ */
 export const arrowKeysNavigation = (
   evt: React.KeyboardEvent,
-  rowAndColumnCount: any,
+  rowAndColumnCount: { rowCount: number; columnCount: number },
   cellCoord: [number, number],
   topAllowedRow = 0
-) => {
+): [number, number] => {
   let [nextRow, nextCol] = cellCoord;
 
   switch (evt.key) {
@@ -96,22 +100,28 @@ export const arrowKeysNavigation = (
   return [nextRow, nextCol];
 };
 
-export const getRowAndColumnCount = (rootElement: HTMLElement) => {
+/**
+ * get the number of rows and columns
+ */
+export const getRowAndColumnCount = (rootElement: HTMLElement): { rowCount: number; columnCount: number } => {
   const rowCount = rootElement.getElementsByClassName('sn-table-row').length;
   const columnCount = rootElement.getElementsByClassName('sn-table-head-cell').length;
 
   return { rowCount, columnCount };
 };
 
+/**
+ * resets and adds new focus to a table cell based which key is pressed
+ */
 export const moveFocus = (
   evt: React.KeyboardEvent,
   rootElement: HTMLElement,
   cellCoord: [number, number],
-  setFocusedCellCoord: any,
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
   topAllowedRow?: number
 ) => {
   preventDefaultBehavior(evt);
-  evt.target.setAttribute('tabIndex', '-1');
+  (evt.target as HTMLElement).setAttribute('tabIndex', '-1');
   const rowAndColumnCount = getRowAndColumnCount(rootElement);
   const nextCellCoord = arrowKeysNavigation(evt, rowAndColumnCount, cellCoord, topAllowedRow);
   const nextCell = getCellElement(rootElement, nextCellCoord);
@@ -121,18 +131,21 @@ export const moveFocus = (
   return nextCell;
 };
 
-interface headProps {
+interface handleHeadProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;
   cellCoord: [number, number];
   column: Column;
-  changeSortOrder: any;
+  changeSortOrder: (layout: TableLayout, column: Column) => Promise<void>;
   layout: TableLayout;
   isSortingEnabled: boolean;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
 }
 
-export const headHandleKeyPress = ({
+/**
+ * handles keydown events for the head cells (move focus, change sort order)
+ */
+export const handleHeadKeyDown = ({
   evt,
   rootElement,
   cellCoord,
@@ -141,7 +154,7 @@ export const headHandleKeyPress = ({
   layout,
   isSortingEnabled,
   setFocusedCellCoord,
-}: headProps) => {
+}: handleHeadProps) => {
   switch (evt.key) {
     case 'ArrowDown':
     case 'ArrowRight':
@@ -160,14 +173,14 @@ export const headHandleKeyPress = ({
 };
 
 /**
- * Handle totals row key press
- *
- * @param {event} evt
- * @param {Object} rootElement
- * @param {Array} cellCoord
- * @param {Function} setFocusedCellCoord
+ * handles keydown events for the totals cells (move focus)
  */
-export const totalHandleKeyPress = (evt: React.KeyboardEvent, rootElement: , cellCoord, setFocusedCellCoord) => {
+export const handleTotalKeyDown = (
+  evt: React.KeyboardEvent,
+  rootElement: HTMLElement,
+  cellCoord: [number, number],
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
+) => {
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
@@ -181,21 +194,24 @@ export const totalHandleKeyPress = (evt: React.KeyboardEvent, rootElement: , cel
   }
 };
 
-interface bodyProps {
+interface handleBodyProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;
-  cell: TableCell
-  selectionDispatch: React.Dispatch<Action>
+  cell: TableCell;
+  selectionDispatch: React.Dispatch<TSelectionActions>;
   isSelectionsEnabled: boolean;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
-  announce(AnnounceArgs): void;
+  announce(args: AnnounceArgs): void;
   keyboard: stardust.Keyboard;
   totalsPosition: TotalsPosition;
   paginationNeeded: boolean;
   selectionsAPI: ExtendedSelectionAPI;
 }
 
-export const bodyHandleKeyPress = ({
+/**
+ * handles keydown events for the body cells (move focus, make selections tabbing to other elements)
+ */
+export const handleBodyKeyDown = ({
   evt,
   rootElement,
   cell,
@@ -207,11 +223,11 @@ export const bodyHandleKeyPress = ({
   paginationNeeded,
   totalsPosition,
   selectionsAPI,
-}: bodyProps) => {
+}: handleBodyProps) => {
   const isSelectionMode = selectionsAPI.isModal();
   // Adjust the cellCoord depending on the totals position
   const firstBodyRowIdx = totalsPosition === 'top' ? 2 : 1;
-  const cellCoord = [cell.rawRowIdx + firstBodyRowIdx, cell.rawColIdx];
+  const cellCoord: [number, number] = [cell.rawRowIdx + firstBodyRowIdx, cell.rawColIdx];
 
   switch (evt.key) {
     case 'ArrowUp':
@@ -284,10 +300,16 @@ export const bodyHandleKeyPress = ({
   }
 };
 
-export const bodyHandleKeyUp = (evt: React.KeyboardEvent, selectionDispatch: React.Dispatch<Action>) => {
+/**
+ * confirms selections when making multiple selections with shift + arrows and shit is released
+ */
+export const handleBodyKeyUp = (evt: React.KeyboardEvent, selectionDispatch: React.Dispatch<TSelectionActions>) => {
   evt.key === 'Shift' && selectionDispatch({ type: SelectionActions.SELECT_MULTI_VALUES });
 };
 
+/**
+ * Manually focuses the selection toolbar if tabbing from the last focusable element
+ */
 export const handleLastTab = (evt: React.KeyboardEvent, isSelectionMode: boolean, keyboard: stardust.Keyboard) => {
   if (isSelectionMode && evt.key === 'Tab' && !evt.shiftKey) {
     // tab key: focus on the selection toolbar
