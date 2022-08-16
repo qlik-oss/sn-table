@@ -219,13 +219,13 @@ export const handleBodyKeyDown = ({
   // Adjust the cellCoord depending on the totals position
   const firstBodyRowIdx = totalsPosition === 'top' ? 2 : 1;
   const cellCoord: [number, number] = [cell.rawRowIdx + firstBodyRowIdx, cell.rawColIdx];
+  // Make sure you can't navigate to header (and totals) in selection mode
+  const topAllowedRow = isSelectionMode ? firstBodyRowIdx : 0;
 
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown': {
       evt.key === 'ArrowUp' && handleNavigateTop([cell.rawRowIdx, cell.rawColIdx], rootElement);
-      // Make sure you can't navigate to header (and totals) in selection mode
-      const topAllowedRow = isSelectionMode ? firstBodyRowIdx : 0;
       const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, topAllowedRow);
       // Shift + up/down arrow keys: select multiple values
       // When at the first/last row of the cell, shift + arrow up/down key, no value is selected
@@ -248,7 +248,7 @@ export const handleBodyKeyDown = ({
     }
     case 'ArrowRight':
     case 'ArrowLeft':
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
+      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, topAllowedRow);
       break;
     // Space bar: Selects value.
     case ' ':
