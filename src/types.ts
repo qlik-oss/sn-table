@@ -107,18 +107,6 @@ export interface Column {
   sortDirection: string;
 }
 
-export interface RenderWithCarbonArguments {
-  env: Galaxy;
-  rootElement: HTMLElement;
-  model?: EngineAPI.IGenericObject;
-  theme: ExtendedTheme;
-  selectionsAPI: stardust.ObjectSelections;
-  app?: EngineAPI.IApp;
-  rect: stardust.Rect;
-  layout: TableLayout;
-  changeSortOrder?: (layout: TableLayout, column: Column) => Promise<void>;
-}
-
 export interface PaletteColor {
   index: number;
   color: string | null;
@@ -169,4 +157,16 @@ export interface TableLayout extends EngineAPI.IGenericHyperCubeLayout {
     label: string;
   };
   components?: Components[];
+}
+
+export interface RenderWithCarbonArguments {
+  env: Galaxy;
+  rootElement: HTMLElement;
+  model?: EngineAPI.IGenericObject;
+  theme: ExtendedTheme;
+  selectionsAPI: stardust.ObjectSelections;
+  app?: EngineAPI.IApp;
+  rect: stardust.Rect;
+  layout: TableLayout;
+  changeSortOrder?: (layout: TableLayout, column: Column) => Promise<void>;
 }
