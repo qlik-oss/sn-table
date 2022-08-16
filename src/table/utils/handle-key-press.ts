@@ -274,7 +274,7 @@ export const handleBodyKeyDown = ({
         announce({ keys: ['SNTable.SelectionLabel.SelectionsConfirmed'] });
       }
       break;
-    // Esc: Cancels selections. If no selections, do nothing and handleTableWrapperKeyDown should catch it
+    // Esc: Cancels selections. If no selections, do nothing and handleWrapperKeyDown should catch it
     case 'Escape':
       if (isSelectionMode) {
         preventDefaultBehavior(evt);

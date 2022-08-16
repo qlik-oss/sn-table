@@ -284,7 +284,7 @@ describe('handle-key-press', () => {
     });
   });
 
-  describe('headHandleKeyPress', () => {
+  describe('handleHeadKeyDown', () => {
     let rowIndex: number;
     let colIndex: number;
     let column: Column;
@@ -324,9 +324,9 @@ describe('handle-key-press', () => {
         getElementsByClassName: () => [
           {
             getElementsByClassName: () => [{ focus: () => undefined, setAttribute: () => undefined }],
-          } as unknown as HTMLElement[],
+          },
         ],
-      };
+      } as unknown as HTMLElement;
       changeSortOrder = jest.fn();
       isSortingEnabled = true;
       setFocusedCellCoord = jest.fn();
@@ -336,7 +336,7 @@ describe('handle-key-press', () => {
       callHandleHeadKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
+      expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
     });
 
@@ -390,7 +390,7 @@ describe('handle-key-press', () => {
     });
   });
 
-  describe('totalHandleKeyPress', () => {
+  describe('handleTotalKeyDown', () => {
     let evt: React.KeyboardEvent;
     let rootElement: HTMLElement;
     let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
@@ -404,14 +404,14 @@ describe('handle-key-press', () => {
         target: {
           blur: jest.fn(),
           setAttribute: jest.fn(),
-        },
-      };
+        } as unknown as HTMLElement,
+      } as unknown as React.KeyboardEvent;
       cellCoord = [1, 1];
       rootElement = {
         getElementsByClassName: () => [
           { getElementsByClassName: () => [{ focus: () => undefined, setAttribute: () => undefined }] },
         ],
-      };
+      } as unknown as HTMLElement;
       setFocusedCellCoord = jest.fn();
     });
 
@@ -419,7 +419,7 @@ describe('handle-key-press', () => {
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
+      expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
     });
 
@@ -480,13 +480,13 @@ describe('handle-key-press', () => {
         target: {
           blur: jest.fn(),
           setAttribute: jest.fn(),
-        },
-      };
+        } as unknown as HTMLElement,
+      } as unknown as React.KeyboardEvent;
       rootElement = {
         getElementsByClassName: () => [
           { getElementsByClassName: () => [{ focus: () => undefined, setAttribute: () => undefined }] },
         ],
-      };
+      } as unknown as HTMLElement;
       selectionsAPI = {
         confirm: jest.fn(),
         cancel: jest.fn(),
@@ -511,7 +511,7 @@ describe('handle-key-press', () => {
       runHandleBodyKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
+      expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(handleAccessibility.announceSelectionState).toHaveBeenCalledTimes(1);
       expect(handleScroll.handleNavigateTop).not.toHaveBeenCalled();
@@ -523,7 +523,7 @@ describe('handle-key-press', () => {
       runHandleBodyKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
+      expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(handleAccessibility.announceSelectionState).toHaveBeenCalledTimes(1);
       expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(1);
@@ -536,7 +536,7 @@ describe('handle-key-press', () => {
       runHandleBodyKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
+      expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(selectionDispatch).toHaveBeenCalledTimes(1);
       expect(handleAccessibility.announceSelectionState).not.toHaveBeenCalled();
@@ -550,7 +550,7 @@ describe('handle-key-press', () => {
       runHandleBodyKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
+      expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(selectionDispatch).not.toHaveBeenCalled();
       expect(handleAccessibility.announceSelectionState).toHaveBeenCalledTimes(1);
@@ -565,7 +565,7 @@ describe('handle-key-press', () => {
       runHandleBodyKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
+      expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(selectionDispatch).toHaveBeenCalledTimes(1);
       expect(handleAccessibility.announceSelectionState).not.toHaveBeenCalled();
@@ -580,7 +580,7 @@ describe('handle-key-press', () => {
       runHandleBodyKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(evt.target.setAttribute).toHaveBeenCalledTimes(1);
+      expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(selectionDispatch).not.toHaveBeenCalled();
       expect(handleAccessibility.announceSelectionState).toHaveBeenCalledTimes(1);
@@ -600,7 +600,7 @@ describe('handle-key-press', () => {
       evt.key = ' ';
       cell = {
         isSelectable: false,
-      };
+      } as TableCell;
       runHandleBodyKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
@@ -695,7 +695,7 @@ describe('handle-key-press', () => {
       expect(announce).not.toHaveBeenCalled();
     });
 
-    it('when tab is pressed and paginatioNeeded is false, should prevent default and call focusSelectionToolbar', () => {
+    it('when tab is pressed and paginationNeeded is false, should prevent default and call focusSelectionToolbar', () => {
       evt.key = 'Tab';
       isModal = true;
       paginationNeeded = false;
@@ -731,8 +731,8 @@ describe('handle-key-press', () => {
       runHandleBodyKeyDown();
       expect(evt.preventDefault).not.toHaveBeenCalled();
       expect(evt.stopPropagation).not.toHaveBeenCalled();
-      expect(evt.target.blur).not.toHaveBeenCalled();
-      expect(evt.target.setAttribute).not.toHaveBeenCalled();
+      expect((evt.target as HTMLElement).blur).not.toHaveBeenCalled();
+      expect((evt.target as HTMLElement).setAttribute).not.toHaveBeenCalled();
       expect(selectionsAPI.cancel).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
     });
