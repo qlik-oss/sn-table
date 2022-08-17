@@ -122,7 +122,7 @@ export interface PaletteColor {
 
 interface TextAlign {
   auto: boolean;
-  align: string;
+  align: 'left' | 'center' | 'right';
 }
 
 export interface ExtendedNxAttrExprInfo extends EngineAPI.INxAttrExprInfo {
@@ -141,7 +141,6 @@ export interface ExtendedNxMeasureInfo extends EngineAPI.INxMeasureInfo {
 
 export interface HyperCube extends Omit<EngineAPI.IHyperCube, 'qDimensionInfo' | 'qMeasureInfo'> {
   qColumnOrder: number[];
-  textAlign: string;
   qDimensionInfo: ExtendedNxDimensionInfo[];
   qMeasureInfo: ExtendedNxMeasureInfo[];
 }

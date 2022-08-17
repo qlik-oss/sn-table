@@ -8,7 +8,7 @@ const properties = {
    * @type {string}
    * @default
    */
-  version: process.env.PACKAGE_VERSION,
+  version: JSON.stringify(process.env.PACKAGE_VERSION),
   /**
    * Extends HyperCubeDef, see Engine API: HyperCubeDef
    * @extends {HyperCubeDef}
@@ -78,7 +78,7 @@ const properties = {
   },
   /**
    * Holds general styling
-   * @type {Styling[]}
+   * @type {?Styling[]}
    */
   components: [],
 };
