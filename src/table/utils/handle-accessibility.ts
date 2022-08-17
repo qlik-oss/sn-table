@@ -1,6 +1,6 @@
-import React, { BaseSyntheticEvent } from 'react';
+import { BaseSyntheticEvent } from 'react';
 import { stardust } from '@nebula.js/stardust';
-import { AnnounceFn } from '../../types';
+import { AnnounceFn, TableCell, TotalsPosition } from '../../types';
 
 interface ICellFocusProps {
   focusType: string;
@@ -8,7 +8,7 @@ interface ICellFocusProps {
 }
 interface IHandleResetFocusProps {
   focusedCellCoord: [number, number];
-  rootElement: HTMLDivElement;
+  rootElement: HTMLElement;
   shouldRefocus: React.MutableRefObject<boolean>;
   isSelectionMode: boolean;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
@@ -16,12 +16,12 @@ interface IHandleResetFocusProps {
   announce: AnnounceFn;
 }
 
-export const getCellElement = (rootElement: HTMLDivElement, cellCoord: [number, number]) =>
+export const getCellElement = (rootElement: HTMLElement, cellCoord: [number, number]) =>
   rootElement.getElementsByClassName('sn-table-row')[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[
     cellCoord[1]
   ] as HTMLTableCellElement;
 
-export const findCellWithTabStop = (rootElement: HTMLDivElement) =>
+export const findCellWithTabStop = (rootElement: HTMLElement) =>
   rootElement.querySelector("td[tabindex='0'], th[tabindex='0']") as HTMLTableCellElement;
 
 export const updateFocus = ({ focusType, cell }: ICellFocusProps) => {
@@ -50,7 +50,7 @@ export const updateFocus = ({ focusType, cell }: ICellFocusProps) => {
 export const removeAndFocus = (
   newCoord: [number, number],
   rootElement: HTMLDivElement,
-  setFocusedCellCoord: (coord: [number, number]) => void,
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
   keyboard: stardust.Keyboard
 ) => {
   updateFocus({ focusType: 'removeTab', cell: findCellWithTabStop(rootElement) });
@@ -59,11 +59,11 @@ export const removeAndFocus = (
 };
 
 export const handleClickToFocusBody = (
-  cell: { rawRowIdx: number; rawColIdx: number },
+  cell: TableCell,
   rootElement: HTMLDivElement,
-  setFocusedCellCoord: (coord: [number, number]) => void,
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
   keyboard: stardust.Keyboard,
-  totalsPosition: string
+  totalsPosition: TotalsPosition
 ) => {
   const { rawRowIdx, rawColIdx } = cell;
   const adjustedRowIdx = totalsPosition === 'top' ? rawRowIdx + 2 : rawRowIdx + 1;
@@ -73,7 +73,7 @@ export const handleClickToFocusBody = (
 export const handleClickToFocusHead = (
   columnIndex: number,
   rootElement: HTMLDivElement,
-  setFocusedCellCoord: (coord: [number, number]) => void,
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
   keyboard: stardust.Keyboard
 ) => {
   removeAndFocus([0, columnIndex], rootElement, setFocusedCellCoord, keyboard);
@@ -99,7 +99,7 @@ export const handleResetFocus = ({
 }: IHandleResetFocusProps) => {
   updateFocus({ focusType: 'removeTab', cell: findCellWithTabStop(rootElement) });
   // If you have selections ongoing, you want to stay on the same column
-  const cellCoord = (isSelectionMode ? [1, focusedCellCoord[1]] : [0, 0]) as [number, number];
+  const cellCoord: [number, number] = isSelectionMode ? [1, focusedCellCoord[1]] : [0, 0];
   if (!keyboard.enabled || keyboard.active) {
     // Only run this if updates come from inside table
     const focusType = shouldRefocus.current ? 'focus' : 'addTab';
@@ -122,9 +122,7 @@ export const handleResetFocus = ({
 
 export const handleFocusoutEvent = (
   evt: FocusEvent,
-  shouldRefocus: {
-    current: boolean;
-  },
+  shouldRefocus: React.MutableRefObject<boolean>,
   keyboard: stardust.Keyboard
 ) => {
   const targetElement = evt.currentTarget as HTMLDivElement;
@@ -133,11 +131,12 @@ export const handleFocusoutEvent = (
     targetElement.querySelector('#sn-table-announcer--02')!.innerHTML = '';
     // Blur the table but not focus its parent element
     // when keyboard.active is false, this has no effect
+    // @ts-ignore TODO: fix nebula api so that blur has the correct argument type
     keyboard.blur?.(false);
   }
 };
 
-export const focusSelectionToolbar = (element: HTMLTableCellElement, keyboard: stardust.Keyboard, last: boolean) => {
+export const focusSelectionToolbar = (element: HTMLElement, keyboard: stardust.Keyboard, last: boolean) => {
   const clientConfirmButton = element
     .closest('.qv-object-wrapper')
     ?.querySelector('.sel-toolbar-confirm')?.parentElement;
@@ -145,16 +144,13 @@ export const focusSelectionToolbar = (element: HTMLTableCellElement, keyboard: s
     clientConfirmButton.focus();
     return;
   }
+  // @ts-ignore TODO: fix nebula api so that blur has the correct argument type
   keyboard.focusSelection?.(last);
 };
 
 export const announceSelectionState = (
   announce: AnnounceFn,
-  nextCell: {
-    classList: {
-      contains: (token: string) => boolean;
-    };
-  },
+  nextCell: HTMLTableCellElement,
   isSelectionMode: boolean
 ) => {
   if (isSelectionMode) {

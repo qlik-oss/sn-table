@@ -1,5 +1,5 @@
 import { stardust } from '@nebula.js/stardust';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { handleFocusoutEvent } from '../utils/handle-accessibility';
 
 const useFocusListener = (

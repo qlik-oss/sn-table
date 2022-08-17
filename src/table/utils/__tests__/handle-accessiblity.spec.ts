@@ -1,15 +1,14 @@
 import React, { BaseSyntheticEvent } from 'react';
 import { stardust } from '@nebula.js/stardust';
-import { AnnounceFn } from '../../../types';
+import { AnnounceFn, TotalsPosition, TableCell } from '../../../types';
 import * as handleAccessibility from '../handle-accessibility';
 
 describe('handle-accessibility', () => {
-  let focusType: string;
   let cell: HTMLTableCellElement | undefined;
   let keyboard: stardust.Keyboard;
   let rootElement: HTMLDivElement;
   let focusedCellCoord: [number, number];
-  let setFocusedCellCoord: () => void;
+  let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   let evt: BaseSyntheticEvent;
 
   beforeEach(() => {
@@ -32,6 +31,7 @@ describe('handle-accessibility', () => {
   afterEach(() => jest.clearAllMocks());
 
   describe('updateFocus', () => {
+    let focusType: string;
     beforeEach(() => {
       focusType = 'focus';
     });
@@ -108,21 +108,18 @@ describe('handle-accessibility', () => {
     });
 
     it('should return null', () => {
-      cell = elementCreator('div', '-1') as HTMLTableCellElement;
-
+      const tmpCell = elementCreator('div', '-1') as HTMLDivElement;
       const cellElement = handleAccessibility.findCellWithTabStop(rootElement);
-
       expect(cellElement).toBeNull();
     });
   });
 
   describe('handleClickToFocusBody', () => {
-    let totalsPosition: string;
-
+    let totalsPosition: TotalsPosition;
     const cellData = {
       rawRowIdx: 0,
       rawColIdx: 0,
-    };
+    } as TableCell;
 
     beforeEach(() => {
       totalsPosition = 'noTotals';
@@ -290,7 +287,7 @@ describe('handle-accessibility', () => {
 
   describe('handleFocusoutEvent', () => {
     let containsRelatedTarget: boolean;
-    let evt0: FocusEvent;
+    let focusoutEvent: FocusEvent;
     let shouldRefocus: {
       current: boolean;
     };
@@ -305,7 +302,7 @@ describe('handle-accessibility', () => {
       containsRelatedTarget = false;
       announcement1 = { innerHTML: 'firstAnnouncement' };
       announcement2 = { innerHTML: 'secondAnnouncement' };
-      evt0 = {
+      focusoutEvent = {
         currentTarget: {
           contains: () => containsRelatedTarget,
           querySelector: (identifier: string) => (identifier.slice(-1) === '1' ? announcement1 : announcement2),
@@ -316,7 +313,7 @@ describe('handle-accessibility', () => {
     });
 
     it('should call blur and remove announcements when currentTarget does not contain relatedTarget, shouldRefocus is false and keyboard.enabled is true', () => {
-      handleAccessibility.handleFocusoutEvent(evt0, shouldRefocus, keyboard);
+      handleAccessibility.handleFocusoutEvent(focusoutEvent, shouldRefocus, keyboard);
       expect(keyboard.blur).toHaveBeenCalledWith(false);
       expect(announcement1.innerHTML).toBe('');
       expect(announcement2.innerHTML).toBe('');
@@ -325,27 +322,27 @@ describe('handle-accessibility', () => {
     it('should not call blur when currentTarget contains relatedTarget', () => {
       containsRelatedTarget = true;
 
-      handleAccessibility.handleFocusoutEvent(evt0, shouldRefocus, keyboard);
+      handleAccessibility.handleFocusoutEvent(focusoutEvent, shouldRefocus, keyboard);
       expect(keyboard.blur).not.toHaveBeenCalled();
     });
 
     it('should not call blur when shouldRefocus is true', () => {
       shouldRefocus.current = true;
 
-      handleAccessibility.handleFocusoutEvent(evt0, shouldRefocus, keyboard);
+      handleAccessibility.handleFocusoutEvent(focusoutEvent, shouldRefocus, keyboard);
       expect(keyboard.blur).not.toHaveBeenCalled();
     });
 
     it('should not call blur when keyboard.enabled is falsy', () => {
       keyboard.enabled = false;
 
-      handleAccessibility.handleFocusoutEvent(evt0, shouldRefocus, keyboard);
+      handleAccessibility.handleFocusoutEvent(focusoutEvent, shouldRefocus, keyboard);
       expect(keyboard.blur).not.toHaveBeenCalled();
     });
   });
 
   describe('focusSelectionToolbar', () => {
-    let element: HTMLTableCellElement;
+    let element: HTMLElement;
     let parentElement: HTMLElement | null;
     let last: boolean;
 
@@ -353,7 +350,7 @@ describe('handle-accessibility', () => {
       parentElement = { focus: jest.fn() } as unknown as HTMLElement;
       element = {
         closest: () => ({ querySelector: () => ({ parentElement }) }),
-      } as unknown as HTMLTableCellElement;
+      } as unknown as HTMLElement;
       last = false;
     });
 
@@ -373,11 +370,7 @@ describe('handle-accessibility', () => {
   describe('announceSelectionState', () => {
     let isSelected: boolean;
     let announce: AnnounceFn;
-    let nextCell: {
-      classList: {
-        contains: () => boolean;
-      };
-    };
+    let nextCell: HTMLTableCellElement;
     let isSelectionMode: boolean;
 
     beforeEach(() => {
@@ -387,7 +380,7 @@ describe('handle-accessibility', () => {
         classList: {
           contains: () => isSelected,
         },
-      };
+      } as unknown as HTMLTableCellElement;
       isSelectionMode = false;
     });
 
