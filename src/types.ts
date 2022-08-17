@@ -95,11 +95,7 @@ export interface PageInfo {
   rowsPerPageOptions: number[];
 }
 
-export type SetPageInfo = stardust.SetStateFn<{
-  page: number;
-  rowsPerPage: number;
-  rowsPerPageOptions: number[];
-}>;
+export type SetPageInfo = stardust.SetStateFn<PageInfo>;
 
 export interface Row {
   // for the row key, string is needed
