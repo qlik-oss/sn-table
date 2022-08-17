@@ -49,7 +49,7 @@ export const updateFocus = ({ focusType, cell }: ICellFocusProps) => {
 
 export const removeAndFocus = (
   newCoord: [number, number],
-  rootElement: HTMLDivElement,
+  rootElement: HTMLElement,
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
   keyboard: stardust.Keyboard
 ) => {
@@ -60,7 +60,7 @@ export const removeAndFocus = (
 
 export const handleClickToFocusBody = (
   cell: TableCell,
-  rootElement: HTMLDivElement,
+  rootElement: HTMLElement,
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
   keyboard: stardust.Keyboard,
   totalsPosition: TotalsPosition
@@ -72,7 +72,7 @@ export const handleClickToFocusBody = (
 
 export const handleClickToFocusHead = (
   columnIndex: number,
-  rootElement: HTMLDivElement,
+  rootElement: HTMLElement,
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
   keyboard: stardust.Keyboard
 ) => {
@@ -81,7 +81,7 @@ export const handleClickToFocusHead = (
 
 export const handleMouseDownLabelToFocusHeadCell = (
   evt: BaseSyntheticEvent,
-  rootElement: HTMLDivElement,
+  rootElement: HTMLElement,
   columnIndex: number
 ) => {
   evt.preventDefault();

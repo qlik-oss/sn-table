@@ -6,7 +6,7 @@ import * as handleAccessibility from '../handle-accessibility';
 describe('handle-accessibility', () => {
   let cell: HTMLTableCellElement | undefined;
   let keyboard: stardust.Keyboard;
-  let rootElement: HTMLDivElement;
+  let rootElement: HTMLElement;
   let focusedCellCoord: [number, number];
   let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   let evt: BaseSyntheticEvent;
@@ -288,9 +288,7 @@ describe('handle-accessibility', () => {
   describe('handleFocusoutEvent', () => {
     let containsRelatedTarget: boolean;
     let focusoutEvent: FocusEvent;
-    let shouldRefocus: {
-      current: boolean;
-    };
+    let shouldRefocus: React.MutableRefObject<boolean>;
     let announcement1: {
       innerHTML: string;
     };
