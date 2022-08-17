@@ -45,7 +45,7 @@ const renderWithCarbon = ({
   changeSortOrder,
 }: RenderWithCarbonArguments) => {
   if (env.carbon && changeSortOrder && theme) {
-    render(rootElement, { layout, model, manageData, theme, selectionsAPI, changeSortOrder, app, rect });
+    render(rootElement, { layout, model, theme, selectionsAPI, changeSortOrder, app, rect });
   }
 };
 
@@ -113,7 +113,17 @@ export default function supernova(env: Galaxy) {
 
       // this is the one we want to use for carbon
       useEffect(() => {
-        renderWithCarbon({ env, rootElement, model, theme, selectionsAPI, app, rect, layout, changeSortOrder });
+        renderWithCarbon({
+          env,
+          rootElement,
+          model,
+          theme,
+          selectionsAPI,
+          app,
+          rect,
+          layout,
+          changeSortOrder,
+        });
       }, [layout, model, selectionsAPI.isModal(), theme, translator.language(), app, changeSortOrder]);
 
       useEffect(

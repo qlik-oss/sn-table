@@ -1,6 +1,6 @@
 import manageData, { getColumnOrder, getColumnInfo, getTotalInfo, getTotalPosition } from '../handle-data';
 import { generateDataPages, generateLayout } from './generate-test-data';
-import { TableLayout, PageInfo, SetPageInfo, TableData, TableCell, ExtendedNxAttrExprInfo } from '../types';
+import { TableLayout, PageInfo, SetPageInfo, TableData, Row, TableCell, ExtendedNxAttrExprInfo } from '../types';
 
 describe('handle-data', () => {
   let layout: TableLayout;
@@ -102,24 +102,27 @@ describe('handle-data', () => {
         pageInfo,
         setPageInfo
       )) as TableData;
+      const typeRows = rows as Row[];
+      const firstColCell = <TableCell>typeRows[0]['col-0'];
+      const secondColCell = <TableCell>typeRows[0]['col-1'];
 
       expect(totalColumnCount).toBe(layout.qHyperCube.qSize.qcx);
       expect(totalRowCount).toBe(layout.qHyperCube.qSize.qcy);
       expect(paginationNeeded).toBe(true);
       expect(rows).toHaveLength(100);
-      expect((<TableCell>rows[0]['col-0']).qText).toBe('2');
-      expect((<TableCell>rows[0]['col-0']).rowIdx).toBe(100);
-      expect((<TableCell>rows[0]['col-0']).colIdx).toBe(0);
-      expect((<TableCell>rows[0]['col-0']).rawRowIdx).toBe(0);
-      expect((<TableCell>rows[0]['col-0']).rawColIdx).toBe(2);
-      expect((<TableCell>rows[0]['col-1']).qText).toBe('0');
-      expect((<TableCell>rows[0]['col-1']).rowIdx).toBe(100);
-      expect((<TableCell>rows[0]['col-1']).colIdx).toBe(1);
-      expect((<TableCell>rows[0]['col-1']).rawRowIdx).toBe(0);
-      expect((<TableCell>rows[0]['col-1']).rawColIdx).toBe(0);
+      expect(firstColCell.qText).toBe('2');
+      expect(firstColCell.rowIdx).toBe(100);
+      expect(firstColCell.colIdx).toBe(0);
+      expect(firstColCell.rawRowIdx).toBe(0);
+      expect(firstColCell.rawColIdx).toBe(2);
+      expect(secondColCell.qText).toBe('0');
+      expect(secondColCell.rowIdx).toBe(100);
+      expect(secondColCell.colIdx).toBe(1);
+      expect(secondColCell.rawRowIdx).toBe(0);
+      expect(secondColCell.rawColIdx).toBe(0);
       expect(columns).toHaveLength(4);
       columns.forEach((c, i) => {
-        expect(c.id).toBe(Object.keys(rows[0])[i + 1]); // skip the first key
+        expect(c.id).toBe(Object.keys(typeRows[0])[i + 1]); // skip the first key
       });
     });
 

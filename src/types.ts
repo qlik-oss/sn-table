@@ -1,6 +1,8 @@
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 
+import manageData from './handle-data';
+
 export interface TableCell {
   qText?: string;
   qAttrExps: EngineAPI.INxAttributeExpressionValues;
@@ -12,11 +14,6 @@ export interface TableCell {
   rawColIdx: number;
   prevQElemNumber: number;
   nextQElemNumber: number;
-}
-
-export interface Row {
-  // for the row key, string is needed
-  [key: string]: TableCell | string;
 }
 
 export interface ExtendedSelectionAPI extends stardust.ObjectSelections {
@@ -212,26 +209,16 @@ export interface RenderWithCarbonArguments {
   changeSortOrder?: ChangeSortOrder;
 }
 
-export interface PageInfo {
-  page: number;
-  rowsPerPage: number;
-  rowsPerPageOptions: number[];
-}
-
-export type SetPageInfo = stardust.SetStateFn<{
-  page: number;
-  rowsPerPage: number;
-  rowsPerPageOptions: number[];
-}>;
+export type TotalsPosition = 'top' | 'bottom' | 'noTotals';
 
 export type TableData = {
   totalColumnCount: number;
   totalRowCount: number;
   totalPages: number;
   paginationNeeded: boolean;
-  rows: Row[];
+  rows: Row[] | undefined;
   columns: Column[];
-  totalsPosition: string;
+  totalsPosition: TotalsPosition;
 };
 
 export interface RenderProps {
@@ -251,8 +238,7 @@ export interface RenderProps {
   footerContainer?: HTMLElement;
   announce?: Announce;
   model?: EngineAPI.IGenericObject;
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  manageData?: Function;
+  manageData?: typeof manageData;
   app?: EngineAPI.IApp;
 }
 
@@ -273,15 +259,3 @@ export interface RootProps {
   footerContainer: HTMLElement;
   announce: Announce;
 }
-
-export type TotalsPosition = 'top' | 'bottom' | 'noTotals';
-
-export type TableData = {
-  totalColumnCount: number;
-  totalRowCount: number;
-  totalPages: number;
-  paginationNeeded: boolean;
-  rows: Row[];
-  columns: Column[];
-  totalsPosition: TotalsPosition;
-};
