@@ -9,6 +9,16 @@
    - For the Saas Edition of Qlik Sense, you can add your webIntegrationId and pointing the engine URL to your tenant following [Nebula serve configuration file](https://qlik.dev/libraries-and-tools/nebulajs/nebula-serve#configuration-file) or the introduction page of `http://localhost:8000` when you run the development server.
 1. Or, Upload the /dist folder as an extension on [Qlik Sense Enterprise for Windows](https://help.qlik.com/en-US/sense-developer/November2021/Subsystems/Extensions/Content/Sense_Extensions/Howtos/deploy-extensions.htm) or [Qlik Sense SaaS](https://help.qlik.com/en-US/cloud-services/Subsystems/Hub/Content/Sense_Hub/Admin/mc-extensions.htm)
 
+## API spec generating and verification
+
+Run API spec generating and verification with:
+
+    yarn spec
+
+It verifies the [table object properties](../src/object-properties.js) (a JSDoc file) and generates a [Scriptappy](https://github.com/qlik-oss/scriptappy) definition documentation (a API spec) from that file.
+
+> Note: When there is any change for the [API spec](../api-specifications/properties.json), DO NOT commit the file. The change will be merged into the main branch when doing the Releasing.
+
 ## Testing
 
 ### Unit test
