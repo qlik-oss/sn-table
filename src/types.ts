@@ -1,5 +1,7 @@
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
+import { TSelectionActions } from './table/utils/selections-utils';
+import { TableCellProps } from '@mui/material';
 
 export interface TableCell {
   qText?: string;
@@ -55,12 +57,12 @@ export interface ActionPayload {
 }
 
 export interface ContextValue {
-  headRowHeight: number;
-  setHeadRowHeight: React.Dispatch<React.SetStateAction<number>>;
-  focusedCellCoord: [number, number];
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
-  selectionState: SelectionState;
-  selectionDispatch: React.Dispatch<ActionPayload> | jest.Mock<any, any>;
+  headRowHeight?: number;
+  setHeadRowHeight?: React.Dispatch<React.SetStateAction<number>>;
+  focusedCellCoord?: [number, number];
+  setFocusedCellCoord?: React.Dispatch<React.SetStateAction<[number, number]>>;
+  selectionState?: SelectionState;
+  selectionDispatch?: React.Dispatch<TSelectionActions> | jest.Mock<any, any>;
 }
 
 export interface PaginationColors {
@@ -216,3 +218,41 @@ export type TableData = {
   columns: Column[];
   totalsPosition: TotalsPosition;
 };
+
+// export type WithStylingProps = {
+//   scope: 'row' | undefined;
+//   component: 'th' | undefined;
+//   align: 'left' | 'right';
+//   styling: CellStyle;
+//   tabIndex: number;
+//   onKeyDown: React.KeyboardEventHandler<HTMLTableCellElement>;
+//   onKeyUp: React.KeyboardEventHandler<HTMLTableCellElement>;
+//   onMouseDown: React.MouseEventHandler<HTMLTableCellElement>;
+//   onMouseUp: React.MouseEventHandler<HTMLTableCellElement>;
+//   children: string;
+// };
+
+// export interface WithSelectionProps extends WithStylingProps {
+//   cell: TableCell;
+//   announce: AnnounceFn;
+// }
+
+// export interface WithColumnStylingProps extends WithSelectionProps {
+//   column: Column;
+// }
+
+export interface hocProps extends TableCellProps {
+  scope: 'row' | undefined;
+  component: 'th' | undefined;
+  // align: 'left' | 'right';
+  styling: CellStyle;
+  // tabIndex: number;
+  // onKeyDown: React.KeyboardEventHandler<HTMLTableCellElement>;
+  // onKeyUp: React.KeyboardEventHandler<HTMLTableCellElement>;
+  // onMouseDown: React.MouseEventHandler<HTMLTableCellElement>;
+  // onMouseUp: React.MouseEventHandler<HTMLTableCellElement>;
+  // children: string;
+  cell: TableCell;
+  column: Column;
+  announce: AnnounceFn;
+}

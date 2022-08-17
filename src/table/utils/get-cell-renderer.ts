@@ -5,7 +5,7 @@ import withStyling from '../components/withStyling';
 
 export default function getCellRenderer(hasColumnStyling: boolean, isSelectionsEnabled: boolean) {
   // withStyling always runs last, applying whatever styling it gets
-  let cell: React.ElementType = withStyling(TableCell);
+  let cell = withStyling(TableCell);
   if (isSelectionsEnabled) cell = withSelections(cell);
   if (hasColumnStyling) cell = withColumnStyling(cell);
   return cell;

@@ -361,7 +361,7 @@ describe('selections-utils', () => {
   describe('getCellSelectionState', () => {
     let isModal: boolean;
     let cell: TableCell;
-    let value: ContextValue;
+    let selectionState: SelectionState;
 
     beforeEach(() => {
       isModal = true;
@@ -369,45 +369,44 @@ describe('selections-utils', () => {
         qElemNumber: 1,
         colIdx: 1,
       } as TableCell;
-      value = {
-        selectionState: {
-          colIdx: 1,
-          rows: { 1: 1 },
-          api: {
-            isModal: () => isModal,
-          } as ExtendedSelectionAPI,
-          isSelectMultiValues: false,
-        },
-      } as unknown as ContextValue;
+
+      selectionState = {
+        colIdx: 1,
+        rows: { 1: 1 },
+        api: {
+          isModal: () => isModal,
+        } as ExtendedSelectionAPI,
+        isSelectMultiValues: false,
+      };
     });
 
     afterEach(() => jest.clearAllMocks());
 
     it('should return selected when selected', () => {
-      const cellState = getCellSelectionState(cell, value);
+      const cellState = getCellSelectionState(cell, selectionState);
       expect(cellState).toEqual(SelectionStates.SELECTED);
     });
 
     it('should return possible when row is not selected', () => {
       cell.qElemNumber = 2;
 
-      const cellState = getCellSelectionState(cell, value);
+      const cellState = getCellSelectionState(cell, selectionState);
       expect(cellState).toEqual(SelectionStates.POSSIBLE);
     });
 
     it('should return excluded when colIdx is not in selectionState', () => {
       cell.colIdx = 2;
 
-      const cellState = getCellSelectionState(cell, value);
+      const cellState = getCellSelectionState(cell, selectionState);
       expect(cellState).toEqual(SelectionStates.EXCLUDED);
     });
 
     it('should return inactive when when isModal is false', () => {
-      value.selectionState.colIdx = -1;
-      value.selectionState.rows = {};
+      selectionState.colIdx = -1;
+      selectionState.rows = {};
       isModal = false;
 
-      const cellState = getCellSelectionState(cell, value);
+      const cellState = getCellSelectionState(cell, selectionState);
       expect(cellState).toEqual(SelectionStates.INACTIVE);
     });
   });

@@ -32,7 +32,7 @@ export type TSelectionActions = SelectAction | ResetAction | ClearAction | Selec
 
 type AddSelectionListenersArgs = {
   api: ExtendedSelectionAPI;
-  selectionDispatch: React.Dispatch<Action>;
+  selectionDispatch: React.Dispatch<TSelectionActions>;
   setShouldRefocus(): void;
   keyboard: stardust.Keyboard;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement>;
@@ -80,10 +80,8 @@ export function addSelectionListeners({
   };
 }
 
-export const getCellSelectionState = (cell: TableCell, value: ContextValue): SelectionStates => {
-  const {
-    selectionState: { colIdx, rows, api },
-  } = value;
+export const getCellSelectionState = (cell: TableCell, selectionState: SelectionState): SelectionStates => {
+  const { colIdx, rows, api } = selectionState;
   let cellState = SelectionStates.INACTIVE;
   if (api.isModal()) {
     if (colIdx !== cell.colIdx) {
