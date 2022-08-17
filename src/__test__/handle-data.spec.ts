@@ -85,7 +85,7 @@ describe('handle-data', () => {
   });
 
   describe('manageData', () => {
-    let model: EngineAPI.IGenericObject | undefined;
+    let model: EngineAPI.IGenericObject;
     let pageInfo: PageInfo;
     let setPageInfo: SetPageInfo;
 
@@ -102,9 +102,9 @@ describe('handle-data', () => {
         pageInfo,
         setPageInfo
       )) as TableData;
-      const typeRows = rows as Row[];
-      const firstColCell = <TableCell>typeRows[0]['col-0'];
-      const secondColCell = <TableCell>typeRows[0]['col-1'];
+
+      const firstColCell = <TableCell>rows[0]['col-0'];
+      const secondColCell = <TableCell>rows[0]['col-1'];
 
       expect(totalColumnCount).toBe(layout.qHyperCube.qSize.qcx);
       expect(totalRowCount).toBe(layout.qHyperCube.qSize.qcy);
@@ -122,7 +122,7 @@ describe('handle-data', () => {
       expect(secondColCell.rawColIdx).toBe(0);
       expect(columns).toHaveLength(4);
       columns.forEach((c, i) => {
-        expect(c.id).toBe(Object.keys(typeRows[0])[i + 1]); // skip the first key
+        expect(c.id).toBe(Object.keys(rows[0])[i + 1]); // skip the first key
       });
     });
 

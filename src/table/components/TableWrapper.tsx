@@ -16,8 +16,9 @@ import useFocusListener from '../hooks/use-focus-listener';
 import useScrollListener from '../hooks/use-scroll-listener';
 import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, getCellElement } from '../utils/handle-accessibility';
+import { RootProps } from '../../types';
 
-export default function TableWrapper(props) {
+export default function TableWrapper(props: RootProps) {
   const {
     rootElement,
     tableData,
@@ -35,18 +36,18 @@ export default function TableWrapper(props) {
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
   const isSelectionMode = selectionsAPI.isModal();
-  const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
-  const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
+  const focusedCellCoord = useContextSelector(TableContext, (value) => value?.focusedCellCoord);
+  const setFocusedCellCoord = useContextSelector(TableContext, (value) => value?.setFocusedCellCoord);
   const shouldRefocus = useRef(false);
-  const tableContainerRef = useRef();
-  const tableWrapperRef = useRef();
+  const tableContainerRef = useRef<HTMLDivElement>();
+  const tableWrapperRef = useRef<HTMLDivElement>();
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   }, [rootElement]);
 
   const handleChangePage = useCallback(
-    (pageIdx) => {
+    (pageIdx: number) => {
       setPageInfo({ ...pageInfo, page: pageIdx });
       announce({
         keys: [['SNTable.Pagination.PageStatusReport', (pageIdx + 1).toString(), totalPages.toString()]],
@@ -56,7 +57,7 @@ export default function TableWrapper(props) {
     [pageInfo, setPageInfo, totalPages, announce]
   );
 
-  const handleKeyDown = (evt) => {
+  const handleKeyDown = (evt: React.KeyboardEvent) => {
     handleTableWrapperKeyDown({
       evt,
       totalRowCount,
@@ -69,8 +70,8 @@ export default function TableWrapper(props) {
     });
   };
 
-  useFocusListener(tableWrapperRef, shouldRefocus, keyboard);
-  useScrollListener(tableContainerRef, direction);
+  useFocusListener(tableWrapperRef as React.MutableRefObject<HTMLDivElement>, shouldRefocus, keyboard);
+  useScrollListener(tableContainerRef as React.MutableRefObject<HTMLDivElement>, direction);
 
   useDidUpdateEffect(() => {
     // When nebula handles keyboard navigation and keyboard.active changes,
@@ -92,11 +93,11 @@ export default function TableWrapper(props) {
       keyboard,
       announce,
     });
-  }, [rows.length, totalRowCount, totalColumnCount, page]);
+  }, [rows?.length, totalRowCount, totalColumnCount, page]);
 
   const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
-    rows.length + 1,
-    columns.length,
+    String(rows.length + 1),
+    String(columns.length),
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
   return (

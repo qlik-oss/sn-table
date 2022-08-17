@@ -74,8 +74,11 @@ export default function supernova(env: Galaxy) {
 
       const [pageInfo, setPageInfo] = useState(initialPageInfo);
       const [tableData] = usePromise(
-        async () => (env.carbon ? nothing() : manageData(model, layout, pageInfo, setPageInfo)),
-        [layout, pageInfo]
+        async () =>
+          env.carbon && !model?.getHyperCubeData
+            ? nothing()
+            : manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo),
+        [layout, pageInfo, model]
       );
 
       useEffect(() => {

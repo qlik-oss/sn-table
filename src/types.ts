@@ -30,7 +30,7 @@ export interface Galaxy {
 
 export interface UseOptions {
   direction: 'ltr' | 'rtl';
-  footerContainer: HTMLElement;
+  footerContainer?: HTMLElement;
 }
 
 export interface SelectionState {
@@ -214,7 +214,7 @@ export type TableData = {
   totalRowCount: number;
   totalPages: number;
   paginationNeeded: boolean;
-  rows: Row[] | undefined;
+  rows: Row[];
   columns: Column[];
   totalsPosition: TotalsPosition;
 };
@@ -259,6 +259,15 @@ export interface RootProps {
   translator: ExtendedTranslator;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
-  footerContainer: HTMLElement;
+  footerContainer?: HTMLElement;
   announce: Announce;
+}
+
+export interface AppContextInterface {
+  headRowHeight: number | undefined;
+  setHeadRowHeight: stardust.SetStateFn<number | undefined>;
+  focusedCellCoord: [number, number];
+  setFocusedCellCoord: stardust.SetStateFn<[number, number]>;
+  selectionState: SelectionState;
+  selectionDispatch: React.Dispatch<SelectionState>;
 }
