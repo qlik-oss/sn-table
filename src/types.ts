@@ -1,8 +1,6 @@
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 
-import manageData from './handle-data';
-
 export interface TableCell {
   qText?: string;
   qAttrExps: EngineAPI.INxAttributeExpressionValues;
@@ -238,7 +236,12 @@ export interface RenderProps {
   footerContainer?: HTMLElement;
   announce?: Announce;
   model?: EngineAPI.IGenericObject;
-  manageData?: typeof manageData;
+  manageData?(
+    model: EngineAPI.IGenericObject | undefined,
+    layout: TableLayout,
+    pageInfo: PageInfo,
+    setPageInfo: SetPageInfo
+  ): Promise<TableData | null>;
   app?: EngineAPI.IApp;
 }
 
