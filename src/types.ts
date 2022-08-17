@@ -112,6 +112,7 @@ export interface Column {
   align: string;
   stylingIDs: string[];
   sortDirection: string;
+  totalInfo?: string;
 }
 
 export interface PaletteColor {
@@ -126,11 +127,6 @@ interface TextAlign {
 
 export interface ExtendedNxAttrExprInfo extends EngineAPI.INxAttrExprInfo {
   id: string;
-  qMin: number;
-  qMax: number;
-  qContinuousAxes: boolean;
-  qIsCyclic: boolean;
-  qFallbackTitle: string;
 }
 
 export interface ExtendedNxDimensionInfo extends Omit<EngineAPI.INxDimensionInfo, 'qAttrExprInfo'> {

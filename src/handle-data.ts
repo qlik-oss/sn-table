@@ -27,14 +27,7 @@ export function getColumnOrder({ qColumnOrder, qDimensionInfo, qMeasureInfo }: H
   return qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
 }
 
-/**
- * Get total cell info
- * @param {Boolean} isDim
- * @param {Object} layout
- * @param {Number} colIndex
- * @param {Number} numDims
- * @returns dimensions and measures total cell values as strings
- */
+// Get total cell info
 export function getTotalInfo(
   isDim: boolean,
   layout: TableLayout,
@@ -47,7 +40,7 @@ export function getTotalInfo(
   return '';
 }
 
-export function getColumnInfo(layout: TableLayout, colIndex: number, columnOrder: number[]) {
+export function getColumnInfo(layout: TableLayout, colIndex: number, columnOrder: number[]): false | Column {
   const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIndex < numDims;
@@ -74,12 +67,7 @@ export function getColumnInfo(layout: TableLayout, colIndex: number, columnOrder
   );
 }
 
-/**
- * Get the total head position of the table
- *
- * @param {Object} layout
- * @returns the position as a string, it can be any of top, bottom or noTotals
- */
+// Get the position of the totals
 export function getTotalPosition(layout: TableLayout) {
   const [hasOnlyMeasure, hasDimension, hasGrandTotal, hasMeasure, isTotalModeAuto] = [
     layout.qHyperCube.qDimensionInfo.length === 0,
