@@ -1,10 +1,10 @@
-import { stardust } from '@nebula.js/stardust';
 import React from 'react';
+import { stardust } from '@nebula.js/stardust';
 
 import { updateFocus, focusSelectionToolbar, getCellElement, announceSelectionState } from './handle-accessibility';
 import { SelectionActions, TSelectionActions } from './selections-utils';
 import { handleNavigateTop } from './handle-scroll';
-import { AnnounceFn, Column, ExtendedSelectionAPI, TableCell, TableLayout, TotalsPosition } from '../../types';
+import { HandleWrapperKeyDownProps, handleHeadKeyDownProps, handleBodyKeyDownProps } from '../../types';
 
 const isCtrlShift = (evt: React.KeyboardEvent) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -13,17 +13,9 @@ export const preventDefaultBehavior = (evt: React.KeyboardEvent) => {
   evt.preventDefault();
 };
 
-interface HandleWrapperProps {
-  evt: React.KeyboardEvent;
-  totalRowCount: number;
-  page: number;
-  rowsPerPage: number;
-  handleChangePage(pageIdx: number): void;
-  setShouldRefocus(): void;
-  keyboard: stardust.Keyboard;
-  isSelectionMode: boolean;
-}
-
+/**
+ * handles keydown events for the tableWrapper element (move focus, change page)
+ */
 export const handleWrapperKeyDown = ({
   evt,
   totalRowCount,
@@ -33,7 +25,7 @@ export const handleWrapperKeyDown = ({
   setShouldRefocus,
   keyboard,
   isSelectionMode,
-}: HandleWrapperProps) => {
+}: HandleWrapperKeyDownProps) => {
   if (isCtrlShift(evt)) {
     preventDefaultBehavior(evt);
     // ctrl + shift + left/right arrow keys: go to previous/next page
@@ -122,17 +114,6 @@ export const moveFocus = (
   return nextCell;
 };
 
-interface handleHeadProps {
-  evt: React.KeyboardEvent;
-  rootElement: HTMLElement;
-  cellCoord: [number, number];
-  column: Column;
-  changeSortOrder: (layout: TableLayout, column: Column) => Promise<void>;
-  layout: TableLayout;
-  isSortingEnabled: boolean;
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
-}
-
 /**
  * handles keydown events for the head cells (move focus, change sort order)
  */
@@ -145,7 +126,7 @@ export const handleHeadKeyDown = ({
   layout,
   isSortingEnabled,
   setFocusedCellCoord,
-}: handleHeadProps) => {
+}: handleHeadKeyDownProps) => {
   switch (evt.key) {
     case 'ArrowDown':
     case 'ArrowRight':
@@ -185,20 +166,6 @@ export const handleTotalKeyDown = (
   }
 };
 
-interface handleBodyProps {
-  evt: React.KeyboardEvent;
-  rootElement: HTMLElement;
-  cell: TableCell;
-  selectionDispatch: React.Dispatch<TSelectionActions>;
-  isSelectionsEnabled: boolean;
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
-  announce: AnnounceFn;
-  keyboard: stardust.Keyboard;
-  totalsPosition: TotalsPosition;
-  paginationNeeded: boolean;
-  selectionsAPI: ExtendedSelectionAPI;
-}
-
 /**
  * handles keydown events for the body cells (move focus, make selections tabbing to other elements)
  */
@@ -214,7 +181,7 @@ export const handleBodyKeyDown = ({
   paginationNeeded,
   totalsPosition,
   selectionsAPI,
-}: handleBodyProps) => {
+}: handleBodyKeyDownProps) => {
   const isSelectionMode = selectionsAPI.isModal();
   // Adjust the cellCoord depending on the totals position
   const firstBodyRowIdx = totalsPosition === 'top' ? 2 : 1;

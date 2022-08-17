@@ -548,7 +548,6 @@ describe('handle-key-press', () => {
     });
 
     it('when press shift + arrow down key on the last row cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell, but not select values for dimension', () => {
-      cell.nextQElemNumber = undefined;
       evt.shiftKey = true;
 
       runHandleBodyKeyDown();
@@ -577,7 +576,6 @@ describe('handle-key-press', () => {
     });
 
     it('when press shift + arrow up key on the second row cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell, but not select values for dimension', () => {
-      cell.prevQElemNumber;
       evt.shiftKey = true;
       evt.key = 'ArrowUp';
 

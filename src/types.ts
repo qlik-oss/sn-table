@@ -1,5 +1,6 @@
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
+import { TSelectionActions } from './table/utils/selections-utils';
 
 export interface TableCell {
   qText?: string;
@@ -159,6 +160,8 @@ export interface TableLayout extends EngineAPI.IGenericHyperCubeLayout {
   components?: Components[];
 }
 
+export type ChangeSortOrder = (layout: TableLayout, column: Column) => Promise<void>;
+
 export interface RenderWithCarbonArguments {
   env: Galaxy;
   rootElement: HTMLElement;
@@ -168,5 +171,41 @@ export interface RenderWithCarbonArguments {
   app?: EngineAPI.IApp;
   rect: stardust.Rect;
   layout: TableLayout;
-  changeSortOrder?: (layout: TableLayout, column: Column) => Promise<void>;
+  changeSortOrder?: ChangeSortOrder;
+}
+
+export interface HandleWrapperKeyDownProps {
+  evt: React.KeyboardEvent;
+  totalRowCount: number;
+  page: number;
+  rowsPerPage: number;
+  handleChangePage(pageIdx: number): void;
+  setShouldRefocus(): void;
+  keyboard: stardust.Keyboard;
+  isSelectionMode: boolean;
+}
+
+export interface handleHeadKeyDownProps {
+  evt: React.KeyboardEvent;
+  rootElement: HTMLElement;
+  cellCoord: [number, number];
+  column: Column;
+  changeSortOrder: ChangeSortOrder;
+  layout: TableLayout;
+  isSortingEnabled: boolean;
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+}
+
+export interface handleBodyKeyDownProps {
+  evt: React.KeyboardEvent;
+  rootElement: HTMLElement;
+  cell: TableCell;
+  selectionDispatch: React.Dispatch<TSelectionActions>;
+  isSelectionsEnabled: boolean;
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  announce: AnnounceFn;
+  keyboard: stardust.Keyboard;
+  totalsPosition: TotalsPosition;
+  paginationNeeded: boolean;
+  selectionsAPI: ExtendedSelectionAPI;
 }
