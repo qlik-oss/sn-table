@@ -218,5 +218,5 @@ export type TableData = {
   paginationNeeded: boolean;
   rows: Row[];
   columns: Column[];
-  totalsPosition: string;
+  totalsPosition: TotalsPosition;
 };
