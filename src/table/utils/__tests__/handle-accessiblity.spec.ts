@@ -1,5 +1,6 @@
-import { BaseSyntheticEvent } from 'react';
+import React, { BaseSyntheticEvent } from 'react';
 import { stardust } from '@nebula.js/stardust';
+import { AnnounceFn } from '../../../types';
 import * as handleAccessibility from '../handle-accessibility';
 
 describe('handle-accessibility', () => {
@@ -186,11 +187,9 @@ describe('handle-accessibility', () => {
   });
 
   describe('handleResetFocus', () => {
-    let shouldRefocus: {
-      current: boolean;
-    };
+    let shouldRefocus: React.MutableRefObject<boolean>;
     let isSelectionMode: boolean;
-    let announce: (arg: { keys: string[] }) => void;
+    let announce: AnnounceFn;
 
     const resetFocus = () =>
       handleAccessibility.handleResetFocus({
@@ -373,7 +372,7 @@ describe('handle-accessibility', () => {
 
   describe('announceSelectionState', () => {
     let isSelected: boolean;
-    let announce: () => void;
+    let announce: AnnounceFn;
     let nextCell: {
       classList: {
         contains: () => boolean;
@@ -383,7 +382,7 @@ describe('handle-accessibility', () => {
 
     beforeEach(() => {
       isSelected = false;
-      announce = jest.fn();
+      announce = jest.fn() as AnnounceFn;
       nextCell = {
         classList: {
           contains: () => isSelected,

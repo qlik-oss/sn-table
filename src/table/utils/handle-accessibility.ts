@@ -1,5 +1,6 @@
+import React, { BaseSyntheticEvent } from 'react';
 import { stardust } from '@nebula.js/stardust';
-import { BaseSyntheticEvent } from 'react';
+import { AnnounceFn } from '../../types';
 
 interface ICellFocusProps {
   focusType: string;
@@ -8,13 +9,11 @@ interface ICellFocusProps {
 interface IHandleResetFocusProps {
   focusedCellCoord: [number, number];
   rootElement: HTMLDivElement;
-  shouldRefocus: {
-    current: boolean;
-  };
+  shouldRefocus: React.MutableRefObject<boolean>;
   isSelectionMode: boolean;
-  setFocusedCellCoord: (coord: [number, number]) => void;
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   keyboard: stardust.Keyboard;
-  announce: (arg: { keys: string[] }) => void;
+  announce: AnnounceFn;
 }
 
 export const getCellElement = (rootElement: HTMLDivElement, cellCoord: [number, number]) =>
@@ -22,7 +21,7 @@ export const getCellElement = (rootElement: HTMLDivElement, cellCoord: [number, 
     cellCoord[1]
   ] as HTMLTableCellElement;
 
-export const findCellWithTabStop = (rootElement: Element) =>
+export const findCellWithTabStop = (rootElement: HTMLDivElement) =>
   rootElement.querySelector("td[tabindex='0'], th[tabindex='0']") as HTMLTableCellElement;
 
 export const updateFocus = ({ focusType, cell }: ICellFocusProps) => {
@@ -50,7 +49,7 @@ export const updateFocus = ({ focusType, cell }: ICellFocusProps) => {
 
 export const removeAndFocus = (
   newCoord: [number, number],
-  rootElement: Element,
+  rootElement: HTMLDivElement,
   setFocusedCellCoord: (coord: [number, number]) => void,
   keyboard: stardust.Keyboard
 ) => {
@@ -61,7 +60,7 @@ export const removeAndFocus = (
 
 export const handleClickToFocusBody = (
   cell: { rawRowIdx: number; rawColIdx: number },
-  rootElement: Element,
+  rootElement: HTMLDivElement,
   setFocusedCellCoord: (coord: [number, number]) => void,
   keyboard: stardust.Keyboard,
   totalsPosition: string
@@ -73,7 +72,7 @@ export const handleClickToFocusBody = (
 
 export const handleClickToFocusHead = (
   columnIndex: number,
-  rootElement: Element,
+  rootElement: HTMLDivElement,
   setFocusedCellCoord: (coord: [number, number]) => void,
   keyboard: stardust.Keyboard
 ) => {
@@ -150,7 +149,7 @@ export const focusSelectionToolbar = (element: HTMLTableCellElement, keyboard: s
 };
 
 export const announceSelectionState = (
-  announce: (arg: { keys: string[] }) => void,
+  announce: AnnounceFn,
   nextCell: {
     classList: {
       contains: (token: string) => boolean;
