@@ -73,6 +73,7 @@ export interface PaginationColors {
 export interface BodyColors {
   borderColor: string;
 }
+
 export interface TableThemeColors {
   tableBackgroundColorFromTheme: string;
   backgroundColor?: string;
@@ -88,12 +89,18 @@ export interface ExtendedTheme extends stardust.Theme {
   table: TableThemeColors;
 }
 
-export interface HyperCube extends EngineAPI.IHyperCube {
-  qColumnOrder: number[];
-  textAlign: string;
+export interface PageInfo {
+  page: number;
+  rowsPerPage: number;
+  rowsPerPageOptions: number[];
 }
 
-export type TotalsPosition = 'top' | 'bottom' | 'noTotals';
+export type SetPageInfo = stardust.SetStateFn<PageInfo>;
+
+export interface Row {
+  // for the row key, string is needed
+  [key: string]: TableCell | string;
+}
 
 export interface Column {
   id: string;
@@ -105,11 +112,38 @@ export interface Column {
   align: string;
   stylingIDs: string[];
   sortDirection: string;
+  totalInfo?: string;
 }
 
 export interface PaletteColor {
   index: number;
   color: string | null;
+}
+
+interface TextAlign {
+  auto: boolean;
+  align: string;
+}
+
+export interface ExtendedNxAttrExprInfo extends EngineAPI.INxAttrExprInfo {
+  id: string;
+}
+
+export interface ExtendedNxDimensionInfo extends Omit<EngineAPI.INxDimensionInfo, 'qAttrExprInfo'> {
+  textAlign: TextAlign;
+  qAttrExprInfo: ExtendedNxAttrExprInfo[];
+}
+
+export interface ExtendedNxMeasureInfo extends EngineAPI.INxMeasureInfo {
+  textAlign: TextAlign;
+  qAttrExprInfo: ExtendedNxAttrExprInfo[];
+}
+
+export interface HyperCube extends Omit<EngineAPI.IHyperCube, 'qDimensionInfo' | 'qMeasureInfo'> {
+  qColumnOrder: number[];
+  textAlign: string;
+  qDimensionInfo: ExtendedNxDimensionInfo[];
+  qMeasureInfo: ExtendedNxMeasureInfo[];
 }
 
 export interface StylingLayout {
@@ -149,7 +183,7 @@ export interface Components {
   header?: StylingLayout;
 }
 
-export interface TableLayout extends EngineAPI.IGenericHyperCubeLayout {
+export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, 'qHyperCube'> {
   qHyperCube: HyperCube;
   totals: {
     show: boolean;
@@ -170,3 +204,15 @@ export interface RenderWithCarbonArguments {
   layout: TableLayout;
   changeSortOrder?: (layout: TableLayout, column: Column) => Promise<void>;
 }
+
+export type TotalsPosition = 'top' | 'bottom' | 'noTotals';
+
+export type TableData = {
+  totalColumnCount: number;
+  totalRowCount: number;
+  totalPages: number;
+  paginationNeeded: boolean;
+  rows: Row[];
+  columns: Column[];
+  totalsPosition: TotalsPosition;
+};
