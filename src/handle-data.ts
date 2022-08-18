@@ -7,6 +7,7 @@ import {
   ExtendedNxMeasureInfo,
   ExtendedNxDimensionInfo,
   Column,
+  TableData,
 } from './types';
 
 const directionMap = {
@@ -89,7 +90,7 @@ export default async function manageData(
   layout: TableLayout,
   pageInfo: PageInfo,
   setPageInfo: SetPageInfo
-) {
+): Promise<TableData | null> {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const { qHyperCube } = layout;
   const totalColumnCount = qHyperCube.qSize.qcx;

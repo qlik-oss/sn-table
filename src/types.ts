@@ -47,11 +47,11 @@ export interface AnnounceArgs {
   politeness?: 'polite' | 'assertive' | 'off';
 }
 
-export type AnnounceFn = (arg0: AnnounceArgs) => void;
+export type Announce = (arg0: AnnounceArgs) => void;
 
 export interface ActionPayload {
   cell: TableCell;
-  announce: (arg0: AnnounceArgs) => void;
+  announce: Announce;
   evt: React.KeyboardEvent | React.MouseEvent;
 }
 
@@ -219,7 +219,7 @@ export interface HandleWrapperKeyDownProps {
   isSelectionMode: boolean;
 }
 
-export interface handleHeadKeyDownProps {
+export interface HandleHeadKeyDownProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;
   cellCoord: [number, number];
@@ -231,33 +231,26 @@ export interface handleHeadKeyDownProps {
 }
 
 export type TotalsPosition = 'top' | 'bottom' | 'noTotals';
-export interface handleBodyKeyDownProps {
+
+export interface HandleBodyKeyDownProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;
   cell: TableCell;
   selectionDispatch: React.Dispatch<TSelectionActions>;
   isSelectionsEnabled: boolean;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
-  announce: AnnounceFn;
+  announce: Announce;
   keyboard: stardust.Keyboard;
   totalsPosition: TotalsPosition;
   paginationNeeded: boolean;
   selectionsAPI: ExtendedSelectionAPI;
 }
 
-export type TableData = {
-  totalColumnCount: number;
-  totalRowCount: number;
-  totalPages: number;
-  paginationNeeded: boolean;
-  rows: Row[];
-  columns: Column[];
-  totalsPosition: TotalsPosition;
-};
 export interface CellFocusProps {
   focusType: string;
   cell: HTMLTableCellElement | undefined;
 }
+
 export interface HandleResetFocusProps {
   focusedCellCoord: [number, number];
   rootElement: HTMLElement;
@@ -265,5 +258,59 @@ export interface HandleResetFocusProps {
   isSelectionMode: boolean;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   keyboard: stardust.Keyboard;
-  announce: AnnounceFn;
+  announce: Announce;
+}
+
+export type TableData = {
+  totalColumnCount: number;
+  totalRowCount: number;
+  totalPages: number;
+  paginationNeeded: boolean;
+  rows: Row[] | undefined;
+  columns: Column[];
+  totalsPosition: TotalsPosition;
+};
+
+export interface RenderProps {
+  direction?: 'ltr' | 'rtl';
+  selectionsAPI: stardust.ObjectSelections;
+  rootElement?: HTMLElement;
+  layout: TableLayout;
+  changeSortOrder: ChangeSortOrder;
+  rect: stardust.Rect;
+  tableData?: TableData;
+  pageInfo?: PageInfo;
+  setPageInfo?: SetPageInfo;
+  constraints?: stardust.Constraints;
+  translator?: ExtendedTranslator;
+  theme: ExtendedTheme;
+  keyboard?: stardust.Keyboard;
+  footerContainer?: HTMLElement;
+  announce?: Announce;
+  model?: EngineAPI.IGenericObject;
+  manageData?(
+    model: EngineAPI.IGenericObject | undefined,
+    layout: TableLayout,
+    pageInfo: PageInfo,
+    setPageInfo: SetPageInfo
+  ): Promise<TableData | null>;
+  app?: EngineAPI.IApp;
+}
+
+export interface RootProps {
+  direction: 'ltr' | 'rtl';
+  selectionsAPI: stardust.ObjectSelections;
+  rootElement: HTMLElement;
+  layout: TableLayout;
+  changeSortOrder: ChangeSortOrder;
+  rect: stardust.Rect;
+  tableData: TableData;
+  pageInfo: PageInfo;
+  setPageInfo: SetPageInfo;
+  constraints: stardust.Constraints;
+  translator: ExtendedTranslator;
+  theme: ExtendedTheme;
+  keyboard: stardust.Keyboard;
+  footerContainer: HTMLElement;
+  announce: Announce;
 }

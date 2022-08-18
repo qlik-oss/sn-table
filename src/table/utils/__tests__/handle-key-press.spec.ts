@@ -12,7 +12,7 @@ import {
 } from '../handle-key-press';
 import * as handleAccessibility from '../handle-accessibility';
 import * as handleScroll from '../handle-scroll';
-import { AnnounceFn, Column, ExtendedSelectionAPI, TableCell, TableLayout, TotalsPosition } from '../../../types';
+import { Announce, Column, ExtendedSelectionAPI, TableCell, TableLayout, TotalsPosition } from '../../../types';
 import { TSelectionActions } from '../selections-utils';
 
 describe('handle-key-press', () => {
@@ -456,7 +456,7 @@ describe('handle-key-press', () => {
     let isSelectionsEnabled: boolean;
     let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
     let keyboard: stardust.Keyboard;
-    let announce: AnnounceFn;
+    let announce: Announce;
     let paginationNeeded: boolean;
     let totalsPosition: TotalsPosition;
 

@@ -4,7 +4,7 @@ import { stardust } from '@nebula.js/stardust';
 import { updateFocus, focusSelectionToolbar, getCellElement, announceSelectionState } from './handle-accessibility';
 import { SelectionActions, TSelectionActions } from './selections-utils';
 import { handleNavigateTop } from './handle-scroll';
-import { HandleWrapperKeyDownProps, handleHeadKeyDownProps, handleBodyKeyDownProps } from '../../types';
+import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownProps } from '../../types';
 
 const isCtrlShift = (evt: React.KeyboardEvent) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -126,7 +126,7 @@ export const handleHeadKeyDown = ({
   layout,
   isSortingEnabled,
   setFocusedCellCoord,
-}: handleHeadKeyDownProps) => {
+}: HandleHeadKeyDownProps) => {
   switch (evt.key) {
     case 'ArrowDown':
     case 'ArrowRight':
@@ -181,7 +181,7 @@ export const handleBodyKeyDown = ({
   paginationNeeded,
   totalsPosition,
   selectionsAPI,
-}: handleBodyKeyDownProps) => {
+}: HandleBodyKeyDownProps) => {
   const isSelectionMode = selectionsAPI.isModal();
   // Adjust the cellCoord depending on the totals position
   const firstBodyRowIdx = totalsPosition === 'top' ? 2 : 1;

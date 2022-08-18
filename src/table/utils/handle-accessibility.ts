@@ -1,6 +1,6 @@
 import { MouseEvent } from 'react';
 import { stardust } from '@nebula.js/stardust';
-import { AnnounceFn, TableCell, TotalsPosition, CellFocusProps, HandleResetFocusProps } from '../../types';
+import { Announce, TableCell, TotalsPosition, CellFocusProps, HandleResetFocusProps } from '../../types';
 
 export const getCellElement = (rootElement: HTMLElement, cellCoord: [number, number]) =>
   rootElement.getElementsByClassName('sn-table-row')[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[
@@ -131,7 +131,7 @@ export const focusSelectionToolbar = (element: HTMLElement, keyboard: stardust.K
 };
 
 export const announceSelectionState = (
-  announce: AnnounceFn,
+  announce: Announce,
   nextCell: HTMLTableCellElement,
   isSelectionMode: boolean
 ) => {

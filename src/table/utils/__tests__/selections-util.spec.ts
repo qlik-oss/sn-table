@@ -12,7 +12,7 @@ import {
   ResetAction,
   ClearAction,
 } from '../selections-utils';
-import { TableCell, SelectionState, ExtendedSelectionAPI, AnnounceFn, ContextValue } from '../../../types';
+import { TableCell, SelectionState, ExtendedSelectionAPI, Announce, ContextValue } from '../../../types';
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {
@@ -245,7 +245,7 @@ describe('selections-utils', () => {
   });
 
   describe('handleAnnounceSelectionStatus', () => {
-    let announce: AnnounceFn;
+    let announce: Announce;
     let rowsLength: number;
     let isAddition: boolean;
 
