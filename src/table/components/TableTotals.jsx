@@ -2,7 +2,7 @@ import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useContextSelector, TableContext } from '../context';
 import { getTotalsCellStyle } from '../utils/styling-utils';
-import { totalHandleKeyPress } from '../utils/handle-key-press';
+import { handleTotalKeyDown } from '../utils/handle-key-press';
 import { removeAndFocus } from '../utils/handle-accessibility';
 import { StyledHeadRow, StyledTotalsCell } from '../styles';
 
@@ -27,7 +27,7 @@ function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
             className="sn-table-cell"
             tabIndex={-1}
             onKeyDown={(e) => {
-              totalHandleKeyPress(e, rootElement, cellCoord, setFocusedCellCoord);
+              handleTotalKeyDown(e, rootElement, cellCoord, setFocusedCellCoord);
             }}
             onMouseDown={() => {
               removeAndFocus(cellCoord, rootElement, setFocusedCellCoord, keyboard);

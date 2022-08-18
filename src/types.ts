@@ -1,5 +1,6 @@
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
+import { TSelectionActions } from './table/utils/selections-utils';
 
 export interface TableCell {
   qText?: string;
@@ -10,8 +11,8 @@ export interface TableCell {
   isSelectable: boolean;
   rawRowIdx: number;
   rawColIdx: number;
-  prevQElemNumber: number;
-  nextQElemNumber: number;
+  prevQElemNumber: number | undefined;
+  nextQElemNumber: number | undefined;
 }
 
 export interface ExtendedSelectionAPI extends stardust.ObjectSelections {
@@ -207,7 +208,43 @@ export interface RenderWithCarbonArguments {
   changeSortOrder?: ChangeSortOrder;
 }
 
+export interface HandleWrapperKeyDownProps {
+  evt: React.KeyboardEvent;
+  totalRowCount: number;
+  page: number;
+  rowsPerPage: number;
+  handleChangePage(pageIdx: number): void;
+  setShouldRefocus(): void;
+  keyboard: stardust.Keyboard;
+  isSelectionMode: boolean;
+}
+
+export interface HandleHeadKeyDownProps {
+  evt: React.KeyboardEvent;
+  rootElement: HTMLElement;
+  cellCoord: [number, number];
+  column: Column;
+  changeSortOrder: ChangeSortOrder;
+  layout: TableLayout;
+  isSortingEnabled: boolean;
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+}
+
 export type TotalsPosition = 'top' | 'bottom' | 'noTotals';
+
+export interface HandleBodyKeyDownProps {
+  evt: React.KeyboardEvent;
+  rootElement: HTMLElement;
+  cell: TableCell;
+  selectionDispatch: React.Dispatch<TSelectionActions>;
+  isSelectionsEnabled: boolean;
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  announce: Announce;
+  keyboard: stardust.Keyboard;
+  totalsPosition: TotalsPosition;
+  paginationNeeded: boolean;
+  selectionsAPI: ExtendedSelectionAPI;
+}
 
 export type TableData = {
   totalColumnCount: number;

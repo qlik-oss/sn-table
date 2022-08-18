@@ -98,13 +98,13 @@ describe('<TableHeadWrapper />', () => {
     expect(changeSortOrder).not.toHaveBeenCalled();
   });
 
-  it('should call headHandleKeyPress when keyDown on a header cell', () => {
-    jest.spyOn(handleKeyPress, 'headHandleKeyPress').mockImplementation(() => jest.fn());
+  it('should call handleHeadKeyDown when keyDown on a header cell', () => {
+    jest.spyOn(handleKeyPress, 'handleHeadKeyDown').mockImplementation(() => jest.fn());
 
     const { queryByText } = renderTableHead();
     fireEvent.keyDown(queryByText(tableData.columns[0].label));
 
-    expect(handleKeyPress.headHandleKeyPress).toHaveBeenCalledTimes(1);
+    expect(handleKeyPress.handleHeadKeyDown).toHaveBeenCalledTimes(1);
   });
 
   it('should call handleClickToFocusHead and handleMouseDownLabelToFocusHeadCell when clicking a header cell label', () => {
