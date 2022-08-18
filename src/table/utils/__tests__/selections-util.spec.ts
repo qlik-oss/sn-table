@@ -31,7 +31,8 @@ describe('selections-utils', () => {
         on: jest.fn(),
         removeListener: jest.fn(),
       } as unknown as ExtendedSelectionAPI;
-      keyboard = { enabled: true, active: false, blur: jest.fn() };
+      keyboard = { enabled: true, active: false, blur: jest.fn(), focus: jest.fn(), focusSelection: jest.fn() };
+
       containsActiveElement = true;
       tableWrapperRef = {
         current: {
