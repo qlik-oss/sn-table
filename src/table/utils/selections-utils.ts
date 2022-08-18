@@ -127,8 +127,11 @@ export const getSelectedRows = (
   if (evt.shiftKey && key.includes('Arrow')) {
     selectedRows[qElemNumber] = rowIdx;
     // add the next or previous cell to selectedRows, based on which arrow is pressed
-    selectedRows[key === 'ArrowDown' ? cell.nextQElemNumber : cell.prevQElemNumber] =
-      key === 'ArrowDown' ? rowIdx + 1 : rowIdx - 1;
+    if (key === 'ArrowDown') {
+      selectedRows[cell.nextQElemNumber as number] = rowIdx + 1;
+    } else {
+      selectedRows[cell.prevQElemNumber as number] = rowIdx - 1;
+    }
   } else if (selectedRows[qElemNumber] !== undefined) {
     // if the selected item is clicked again, that item will be removed
     delete selectedRows[qElemNumber];

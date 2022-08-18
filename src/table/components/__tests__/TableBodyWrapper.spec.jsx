@@ -76,13 +76,13 @@ describe('<TableBodyWrapper />', () => {
     expect(queryByText(tableData.rows[1]['col-1'].qText)).toBeVisible();
   });
 
-  it('should call bodyHandleKeyPress on key down', () => {
-    jest.spyOn(handleKeyPress, 'bodyHandleKeyPress').mockImplementation(() => jest.fn());
+  it('should call handleBodyKeyDown on key down', () => {
+    jest.spyOn(handleKeyPress, 'handleBodyKeyDown').mockImplementation(() => jest.fn());
 
     const { queryByText } = renderTableBody();
     fireEvent.keyDown(queryByText(tableData.rows[0]['col-0'].qText));
 
-    expect(handleKeyPress.bodyHandleKeyPress).toHaveBeenCalledTimes(1);
+    expect(handleKeyPress.handleBodyKeyDown).toHaveBeenCalledTimes(1);
   });
 
   it('should call handleClickToFocusBody on mouseDown', () => {
@@ -94,12 +94,12 @@ describe('<TableBodyWrapper />', () => {
     expect(handleAccessibility.handleClickToFocusBody).toHaveBeenCalledTimes(1);
   });
 
-  it('should call bodyHandleKeyUp on key up', () => {
-    jest.spyOn(handleKeyPress, 'bodyHandleKeyUp').mockImplementation(() => jest.fn());
+  it('should call handleBodyKeyUp on key up', () => {
+    jest.spyOn(handleKeyPress, 'handleBodyKeyUp').mockImplementation(() => jest.fn());
 
     const { queryByText } = renderTableBody();
     fireEvent.keyUp(queryByText(tableData.rows[0]['col-0'].qText));
 
-    expect(handleKeyPress.bodyHandleKeyUp).toHaveBeenCalledTimes(1);
+    expect(handleKeyPress.handleBodyKeyUp).toHaveBeenCalledTimes(1);
   });
 });
