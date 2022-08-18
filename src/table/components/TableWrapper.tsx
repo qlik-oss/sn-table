@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { useRef, useCallback } from 'react';
 import Table from '@mui/material/Table';
 
@@ -70,8 +69,8 @@ export default function TableWrapper(props: RootProps) {
     });
   };
 
-  useFocusListener(tableWrapperRef as React.MutableRefObject<HTMLDivElement>, shouldRefocus, keyboard);
-  useScrollListener(tableContainerRef as React.MutableRefObject<HTMLDivElement>, direction);
+  useFocusListener(tableWrapperRef, shouldRefocus, keyboard);
+  useScrollListener(tableContainerRef, direction);
 
   useDidUpdateEffect(() => {
     // When nebula handles keyboard navigation and keyboard.active changes,
@@ -133,23 +132,3 @@ export default function TableWrapper(props: RootProps) {
     </StyledTableWrapper>
   );
 }
-
-TableWrapper.defaultProps = {
-  direction: null,
-  footerContainer: null,
-};
-
-TableWrapper.propTypes = {
-  rootElement: PropTypes.object.isRequired,
-  tableData: PropTypes.object.isRequired,
-  pageInfo: PropTypes.object.isRequired,
-  setPageInfo: PropTypes.func.isRequired,
-  translator: PropTypes.object.isRequired,
-  constraints: PropTypes.object.isRequired,
-  selectionsAPI: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-  keyboard: PropTypes.object.isRequired,
-  announce: PropTypes.func.isRequired,
-  footerContainer: PropTypes.object,
-  direction: PropTypes.string,
-};

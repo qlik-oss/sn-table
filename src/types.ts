@@ -30,7 +30,7 @@ export interface Galaxy {
 }
 
 export interface UseOptions {
-  direction: 'ltr' | 'rtl';
+  direction?: 'ltr' | 'rtl';
   footerContainer?: HTMLElement;
 }
 
@@ -298,7 +298,7 @@ export interface RenderProps {
 }
 
 export interface RootProps {
-  direction: 'ltr' | 'rtl';
+  direction?: 'ltr' | 'rtl';
   selectionsAPI: stardust.ObjectSelections;
   rootElement: HTMLElement;
   layout: TableLayout;
