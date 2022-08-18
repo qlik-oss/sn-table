@@ -1,6 +1,6 @@
 import manageData, { getColumnOrder, getColumnInfo, getTotalInfo, getTotalPosition } from '../handle-data';
 import { generateDataPages, generateLayout } from './generate-test-data';
-import { TableLayout, PageInfo, SetPageInfo, TableData, TableCell, ExtendedNxAttrExprInfo } from '../types';
+import { TableLayout, PageInfo, SetPageInfo, TableData, Cell, ExtendedNxAttrExprInfo } from '../types';
 
 describe('handle-data', () => {
   let layout: TableLayout;
@@ -107,16 +107,16 @@ describe('handle-data', () => {
       expect(totalRowCount).toBe(layout.qHyperCube.qSize.qcy);
       expect(paginationNeeded).toBe(true);
       expect(rows).toHaveLength(100);
-      expect((<TableCell>rows[0]['col-0']).qText).toBe('2');
-      expect((<TableCell>rows[0]['col-0']).rowIdx).toBe(100);
-      expect((<TableCell>rows[0]['col-0']).colIdx).toBe(0);
-      expect((<TableCell>rows[0]['col-0']).rawRowIdx).toBe(0);
-      expect((<TableCell>rows[0]['col-0']).rawColIdx).toBe(2);
-      expect((<TableCell>rows[0]['col-1']).qText).toBe('0');
-      expect((<TableCell>rows[0]['col-1']).rowIdx).toBe(100);
-      expect((<TableCell>rows[0]['col-1']).colIdx).toBe(1);
-      expect((<TableCell>rows[0]['col-1']).rawRowIdx).toBe(0);
-      expect((<TableCell>rows[0]['col-1']).rawColIdx).toBe(0);
+      expect((<Cell>rows[0]['col-0']).qText).toBe('2');
+      expect((<Cell>rows[0]['col-0']).rowIdx).toBe(100);
+      expect((<Cell>rows[0]['col-0']).colIdx).toBe(0);
+      expect((<Cell>rows[0]['col-0']).rawRowIdx).toBe(0);
+      expect((<Cell>rows[0]['col-0']).rawColIdx).toBe(2);
+      expect((<Cell>rows[0]['col-1']).qText).toBe('0');
+      expect((<Cell>rows[0]['col-1']).rowIdx).toBe(100);
+      expect((<Cell>rows[0]['col-1']).colIdx).toBe(1);
+      expect((<Cell>rows[0]['col-1']).rawRowIdx).toBe(0);
+      expect((<Cell>rows[0]['col-1']).rawColIdx).toBe(0);
       expect(columns).toHaveLength(4);
       columns.forEach((c, i) => {
         expect(c.id).toBe(Object.keys(rows[0])[i + 1]); // skip the first key

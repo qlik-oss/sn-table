@@ -11,13 +11,15 @@ export function render(reactRoot, props) {
   const muiTheme = muiSetup(direction);
 
   reactRoot.render(
-    <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : []}>
-      <ThemeProvider theme={muiTheme}>
-        <TableContextProvider selectionsAPI={selectionsAPI}>
-          <TableWrapper {...props} />
-        </TableContextProvider>
-      </ThemeProvider>
-    </StyleSheetManager>
+    <React.StrictMode>
+      <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : []}>
+        <ThemeProvider theme={muiTheme}>
+          <TableContextProvider selectionsAPI={selectionsAPI}>
+            <TableWrapper {...props} />
+          </TableContextProvider>
+        </ThemeProvider>
+      </StyleSheetManager>
+    </React.StrictMode>
   );
 }
 
