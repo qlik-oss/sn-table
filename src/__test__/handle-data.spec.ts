@@ -1,6 +1,6 @@
 import manageData, { getColumnOrder, getColumnInfo, getTotalInfo, getTotalPosition } from '../handle-data';
 import { generateDataPages, generateLayout } from './generate-test-data';
-import { TableLayout, PageInfo, SetPageInfo, TableData, Row, TableCell, ExtendedNxAttrExprInfo } from '../types';
+import { TableLayout, PageInfo, SetPageInfo, TableData, TableCell, ExtendedNxAttrExprInfo } from '../types';
 
 describe('handle-data', () => {
   let layout: TableLayout;
@@ -103,8 +103,8 @@ describe('handle-data', () => {
         setPageInfo
       )) as TableData;
 
-      const firstColCell = <TableCell>rows[0]['col-0'];
-      const secondColCell = <TableCell>rows[0]['col-1'];
+      const firstColCell = rows[0]['col-0'] as TableCell;
+      const secondColCell = rows[0]['col-1'] as TableCell;
 
       expect(totalColumnCount).toBe(layout.qHyperCube.qSize.qcx);
       expect(totalRowCount).toBe(layout.qHyperCube.qSize.qcy);
