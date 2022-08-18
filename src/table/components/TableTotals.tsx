@@ -5,8 +5,9 @@ import { getTotalsCellStyle } from '../utils/styling-utils';
 import { handleTotalKeyDown } from '../utils/handle-key-press';
 import { removeAndFocus } from '../utils/handle-accessibility';
 import { StyledHeadRow, StyledTotalsCell } from '../styles';
+import { TableTotalsProps } from '../../types';
 
-function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
+function TableTotals({ rootElement, tableData, theme, layout, keyboard }: TableTotalsProps) {
   const { columns, paginationNeeded, totalsPosition, rows } = tableData;
   const headRowHeight = useContextSelector(TableContext, (value) => value.headRowHeight);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
@@ -16,7 +17,7 @@ function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
   return (
     <StyledHeadRow paginationNeeded={paginationNeeded} className="sn-table-row">
       {columns.map((column, columnIndex) => {
-        const cellCoord = [isTop ? 1 : rows.length + 1, columnIndex];
+        const cellCoord: [number, number] = [isTop || !rows ? 1 : rows.length + 1, columnIndex];
         return (
           <StyledTotalsCell
             totalsStyle={totalsStyle}
@@ -26,7 +27,7 @@ function TableTotals({ rootElement, tableData, theme, layout, keyboard }) {
             align={column.align}
             className="sn-table-cell"
             tabIndex={-1}
-            onKeyDown={(e) => {
+            onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
               handleTotalKeyDown(e, rootElement, cellCoord, setFocusedCellCoord);
             }}
             onMouseDown={() => {
