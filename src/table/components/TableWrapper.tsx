@@ -36,8 +36,8 @@ export default function TableWrapper(props: RootProps) {
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns } = tableData;
   const { page, rowsPerPage } = pageInfo;
   const isSelectionMode = selectionsAPI.isModal();
-  const focusedCellCoord = useContextSelector(TableContext, (value) => value?.focusedCellCoord);
-  const setFocusedCellCoord = useContextSelector(TableContext, (value) => value?.setFocusedCellCoord);
+  const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
+  const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef<HTMLDivElement>();
   const tableWrapperRef = useRef<HTMLDivElement>();

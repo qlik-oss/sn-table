@@ -299,12 +299,3 @@ export interface RootProps {
   footerContainer?: HTMLElement;
   announce: Announce;
 }
-
-export interface AppContextInterface {
-  headRowHeight: number | undefined;
-  setHeadRowHeight: stardust.SetStateFn<number | undefined>;
-  focusedCellCoord: [number, number];
-  setFocusedCellCoord: stardust.SetStateFn<[number, number]>;
-  selectionState: SelectionState;
-  selectionDispatch: React.Dispatch<SelectionState>;
-}
