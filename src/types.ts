@@ -57,12 +57,12 @@ export interface ActionPayload {
 }
 
 export interface ContextValue {
-  headRowHeight?: number;
-  setHeadRowHeight?: React.Dispatch<React.SetStateAction<number>>;
-  focusedCellCoord?: [number, number];
-  setFocusedCellCoord?: React.Dispatch<React.SetStateAction<[number, number]>>;
-  selectionState?: SelectionState;
-  selectionDispatch?: React.Dispatch<TSelectionActions> | jest.Mock<any, any>;
+  headRowHeight: number;
+  setHeadRowHeight: React.Dispatch<React.SetStateAction<number>>;
+  focusedCellCoord: [number, number];
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  selectionState: SelectionState;
+  selectionDispatch: React.Dispatch<TSelectionActions> | jest.Mock<any, any>;
 }
 
 export interface PaginationColors {

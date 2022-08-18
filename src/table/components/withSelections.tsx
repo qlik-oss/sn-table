@@ -8,12 +8,9 @@ export default function withSelections(CellComponent: (props: hocProps) => JSX.E
   const HOC = (props: hocProps) => {
     const { cell, styling, announce } = props;
     const cellSelectionState = useContextSelector(TableContext, (value) =>
-      getCellSelectionState(cell, value.selectionState as SelectionState)
+      getCellSelectionState(cell, value.selectionState)
     );
-    const selectionDispatch = useContextSelector(
-      TableContext,
-      (value) => value.selectionDispatch as React.Dispatch<TSelectionActions>
-    );
+    const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
 
     const handleMouseUp = (evt: React.MouseEvent) =>
       cell.isSelectable &&
