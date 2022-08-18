@@ -45,7 +45,7 @@ const renderWithCarbon = ({
   changeSortOrder,
 }: RenderWithCarbonArguments) => {
   if (env.carbon && changeSortOrder && theme) {
-    render(rootElement, { layout, model, theme, selectionsAPI, changeSortOrder, app, rect });
+    render(rootElement, { layout, model, manageData, theme, selectionsAPI, changeSortOrder, app, rect });
   }
 };
 
