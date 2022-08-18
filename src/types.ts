@@ -230,6 +230,7 @@ export interface handleHeadKeyDownProps {
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
 }
 
+export type TotalsPosition = 'top' | 'bottom' | 'noTotals';
 export interface handleBodyKeyDownProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;
@@ -243,8 +244,6 @@ export interface handleBodyKeyDownProps {
   paginationNeeded: boolean;
   selectionsAPI: ExtendedSelectionAPI;
 }
-
-export type TotalsPosition = 'top' | 'bottom' | 'noTotals';
 
 export type TableData = {
   totalColumnCount: number;
