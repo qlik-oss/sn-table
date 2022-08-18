@@ -84,6 +84,7 @@ export default function supernova(env) {
             rect,
             footerContainer,
             announce,
+            model,
           });
         }
       }, [
