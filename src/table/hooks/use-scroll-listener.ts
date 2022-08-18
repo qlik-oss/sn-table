@@ -6,7 +6,7 @@ const useScrollListener = (
   direction?: string
 ) => {
   useEffect(() => {
-    const memoedContainer = tableContainerRef?.current;
+    const memoedContainer = tableContainerRef.current;
     if (!memoedContainer) return undefined;
 
     const horizontalScrollCallback = (evt: WheelEvent) =>
