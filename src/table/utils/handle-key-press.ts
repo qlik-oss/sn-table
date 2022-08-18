@@ -245,10 +245,12 @@ export const handleBodyKeyDown = ({
       if (keyboard.enabled && isSelectionMode) {
         if (evt.shiftKey) {
           preventDefaultBehavior(evt);
+          // @ts-ignore TODO: fix nebula api so that target has the correct argument type
           focusSelectionToolbar(evt.target, keyboard, true);
         } else if (!paginationNeeded) {
           // Tab only: when there are no pagination controls, go tab straight to selection toolbar
           preventDefaultBehavior(evt);
+          // @ts-ignore TODO: fix nebula api so that target has the correct argument type
           focusSelectionToolbar(evt.target, keyboard, false);
         }
       }
@@ -272,6 +274,7 @@ export const handleLastTab = (evt: React.KeyboardEvent, isSelectionMode: boolean
   if (isSelectionMode && evt.key === 'Tab' && !evt.shiftKey) {
     // tab key: focus on the selection toolbar
     preventDefaultBehavior(evt);
+    // @ts-ignore TODO: fix nebula api so that target has the correct argument type
     focusSelectionToolbar(evt.target, keyboard, false);
   }
 };

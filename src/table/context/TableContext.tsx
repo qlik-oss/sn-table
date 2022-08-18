@@ -22,7 +22,7 @@ export const TableContextProvider = ({
   cellCoordMock,
   selectionDispatchMock,
 }: ContextProviderProps) => {
-  const [headRowHeight, setHeadRowHeight] = useState<number>(0);
+  const [headRowHeight, setHeadRowHeight] = useState(0);
   const [focusedCellCoord, setFocusedCellCoord] = useState(cellCoordMock || [0, 0]);
   const [selectionState, selectionDispatch] = useReducer(reducer, {
     rows: {},
