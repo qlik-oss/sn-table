@@ -44,12 +44,10 @@ export const tableThemeColors = (theme: ExtendedTheme, rootElement: HTMLElement)
 const useExtendedTheme = (rootElement: HTMLElement): ExtendedTheme => {
   // TODO: add name method to stardust.Theme
   const nebulaTheme = useTheme() as ExtendedTheme;
-  const theme = useMemo(
+  return useMemo(
     () => ({ ...nebulaTheme, table: tableThemeColors(nebulaTheme, rootElement) } as ExtendedTheme),
     [nebulaTheme.name(), rootElement]
   );
-
-  return theme;
 };
 
 export default useExtendedTheme;

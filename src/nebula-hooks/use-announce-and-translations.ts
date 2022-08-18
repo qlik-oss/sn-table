@@ -1,4 +1,6 @@
-import { useState, useEffect } from '@nebula.js/stardust';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useMemo } from '@nebula.js/stardust';
+
 import registerLocale from '../locale/src';
 import { AnnounceArgs, ExtendedTranslator, Announce } from '../types';
 
@@ -46,17 +48,10 @@ export const announcementFactory = (
   };
 };
 
-const useAnnounceAndTranslations = (rootElement: HTMLElement, translator: ExtendedTranslator) => {
-  const [announce, setAnnounce] = useState<undefined | Announce>(undefined);
-
-  useEffect(() => {
-    if (rootElement && translator) {
-      registerLocale(translator);
-      setAnnounce(() => announcementFactory(rootElement, translator));
-    }
+const useAnnounceAndTranslations = (rootElement: HTMLElement, translator: ExtendedTranslator) =>
+  useMemo(() => {
+    registerLocale(translator);
+    return () => announcementFactory(rootElement, translator);
   }, [rootElement, translator.language()]);
-
-  return announce;
-};
 
 export default useAnnounceAndTranslations;
