@@ -127,15 +127,15 @@ describe('<TableWrapper />', () => {
     expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeNull();
   });
 
-  it('should call handleTableWrapperKeyDown when press control key on the table', () => {
-    jest.spyOn(handleKeyPress, 'handleTableWrapperKeyDown').mockImplementation(() => jest.fn());
+  it('should call handleWrapperKeyDown when press control key on the table', () => {
+    jest.spyOn(handleKeyPress, 'handleWrapperKeyDown').mockImplementation(() => jest.fn());
     const { queryByLabelText } = renderTableWrapper();
 
     fireEvent.keyDown(queryByLabelText('SNTable.Pagination.RowsPerPage:') as HTMLElement, {
       key: 'Control',
       code: 'ControlLeft',
     });
-    expect(handleKeyPress.handleTableWrapperKeyDown).toHaveBeenCalledTimes(1);
+    expect(handleKeyPress.handleWrapperKeyDown).toHaveBeenCalledTimes(1);
   });
 
   it('should call handleHorizontalScroll when scroll on the table', () => {

@@ -68,11 +68,11 @@ describe('<TableTotals />', () => {
       layout.totals.position = 'top';
     });
     afterEach(() => jest.clearAllMocks());
-    it('should call totalHandleKeyPress when keyDown on a total cell', () => {
-      jest.spyOn(handleKeyPress, 'totalHandleKeyPress').mockImplementation(() => jest.fn());
+    it('should call handleTotalKeyDown when keyDown on a total cell', () => {
+      jest.spyOn(handleKeyPress, 'handleTotalKeyDown').mockImplementation(() => jest.fn());
       const { queryByText } = renderTableTotals();
       fireEvent.keyDown(queryByText(tableData.columns[0].totalInfo));
-      expect(handleKeyPress.totalHandleKeyPress).toHaveBeenCalledTimes(1);
+      expect(handleKeyPress.handleTotalKeyDown).toHaveBeenCalledTimes(1);
     });
 
     it('should call removeAndFocus when clicking a total cell', () => {

@@ -14,7 +14,7 @@ import PaginationContent from './PaginationContent';
 import useDidUpdateEffect from '../hooks/use-did-update-effect';
 import useFocusListener from '../hooks/use-focus-listener';
 import useScrollListener from '../hooks/use-scroll-listener';
-import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
+import { handleWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, getCellElement } from '../utils/handle-accessibility';
 import { RootProps } from '../../types';
 
@@ -58,7 +58,7 @@ export default function TableWrapper(props: RootProps) {
   );
 
   const handleKeyDown = (evt: React.KeyboardEvent) => {
-    handleTableWrapperKeyDown({
+    handleWrapperKeyDown({
       evt,
       totalRowCount,
       page,
@@ -93,7 +93,7 @@ export default function TableWrapper(props: RootProps) {
       keyboard,
       announce,
     });
-  }, [rows?.length, totalRowCount, totalColumnCount, page]);
+  }, [rows.length, totalRowCount, totalColumnCount, page]);
 
   const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
     String(rows.length + 1),
