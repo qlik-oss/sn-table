@@ -1,4 +1,4 @@
-import React, { BaseSyntheticEvent } from 'react';
+import { MouseEvent } from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { AnnounceFn, TotalsPosition, TableCell } from '../../../types';
 import * as handleAccessibility from '../handle-accessibility';
@@ -9,7 +9,7 @@ describe('handle-accessibility', () => {
   let rootElement: HTMLElement;
   let focusedCellCoord: [number, number];
   let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
-  let evt: BaseSyntheticEvent;
+  let evt: MouseEvent;
 
   beforeEach(() => {
     cell = { focus: jest.fn(), blur: jest.fn(), setAttribute: jest.fn() } as unknown as HTMLTableCellElement;
@@ -171,7 +171,7 @@ describe('handle-accessibility', () => {
   });
 
   describe('handleMouseDownLabelToFocusHeadCell', () => {
-    evt = { preventDefault: jest.fn() } as unknown as BaseSyntheticEvent;
+    evt = { preventDefault: jest.fn() } as unknown as MouseEvent;
     const columnIndex = 0;
 
     it('should indirectly call updateFocus, setFocusedCellCoord and keyboard.focus', () => {
@@ -243,7 +243,7 @@ describe('handle-accessibility', () => {
       rootElement = {
         getElementsByClassName: () => [row, row],
         querySelector: () => cell,
-      } as unknown as HTMLDivElement;
+      } as unknown as HTMLElement;
 
       resetFocus();
       expect(cell?.setAttribute).toHaveBeenCalledTimes(2);
@@ -257,7 +257,7 @@ describe('handle-accessibility', () => {
       rootElement = {
         getElementsByClassName: () => [row, row],
         querySelector: () => cell,
-      } as unknown as HTMLDivElement;
+      } as unknown as HTMLElement;
       isSelectionMode = true;
 
       resetFocus();
@@ -267,7 +267,7 @@ describe('handle-accessibility', () => {
     });
 
     it('should announce cell content and selection status for selected first cell after focusing on it', () => {
-      const tmpCell = global.document.createElement('td') as HTMLDivElement;
+      const tmpCell = global.document.createElement('td');
       tmpCell?.classList.add('selected');
 
       cell = { ...cell, classList: tmpCell?.classList, textContent: '#something' } as HTMLTableCellElement;
@@ -275,7 +275,7 @@ describe('handle-accessibility', () => {
       rootElement = {
         getElementsByClassName: () => [row, row],
         querySelector: () => cell,
-      } as unknown as HTMLDivElement;
+      } as unknown as HTMLElement;
       isSelectionMode = true;
 
       resetFocus();
@@ -331,7 +331,7 @@ describe('handle-accessibility', () => {
       expect(keyboard.blur).not.toHaveBeenCalled();
     });
 
-    it('should not call blur when keyboard.enabled is falsy', () => {
+    it('should not call blur when keyboard.enabled is false', () => {
       keyboard.enabled = false;
 
       handleAccessibility.handleFocusoutEvent(focusoutEvent, shouldRefocus, keyboard);

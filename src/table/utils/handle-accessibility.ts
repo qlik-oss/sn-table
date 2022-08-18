@@ -1,20 +1,6 @@
-import { BaseSyntheticEvent } from 'react';
+import { MouseEvent } from 'react';
 import { stardust } from '@nebula.js/stardust';
-import { AnnounceFn, TableCell, TotalsPosition } from '../../types';
-
-interface ICellFocusProps {
-  focusType: string;
-  cell: HTMLTableCellElement | undefined;
-}
-interface IHandleResetFocusProps {
-  focusedCellCoord: [number, number];
-  rootElement: HTMLElement;
-  shouldRefocus: React.MutableRefObject<boolean>;
-  isSelectionMode: boolean;
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
-  keyboard: stardust.Keyboard;
-  announce: AnnounceFn;
-}
+import { AnnounceFn, TableCell, TotalsPosition, CellFocusProps, HandleResetFocusProps } from '../../types';
 
 export const getCellElement = (rootElement: HTMLElement, cellCoord: [number, number]) =>
   rootElement.getElementsByClassName('sn-table-row')[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[
@@ -24,7 +10,7 @@ export const getCellElement = (rootElement: HTMLElement, cellCoord: [number, num
 export const findCellWithTabStop = (rootElement: HTMLElement) =>
   rootElement.querySelector("td[tabindex='0'], th[tabindex='0']") as HTMLTableCellElement;
 
-export const updateFocus = ({ focusType, cell }: ICellFocusProps) => {
+export const updateFocus = ({ focusType, cell }: CellFocusProps) => {
   if (!cell) return;
 
   switch (focusType) {
@@ -79,11 +65,7 @@ export const handleClickToFocusHead = (
   removeAndFocus([0, columnIndex], rootElement, setFocusedCellCoord, keyboard);
 };
 
-export const handleMouseDownLabelToFocusHeadCell = (
-  evt: BaseSyntheticEvent,
-  rootElement: HTMLElement,
-  columnIndex: number
-) => {
+export const handleMouseDownLabelToFocusHeadCell = (evt: MouseEvent, rootElement: HTMLElement, columnIndex: number) => {
   evt.preventDefault();
   updateFocus({ focusType: 'focus', cell: getCellElement(rootElement, [0, columnIndex]) });
 };
@@ -96,7 +78,7 @@ export const handleResetFocus = ({
   setFocusedCellCoord,
   keyboard,
   announce,
-}: IHandleResetFocusProps) => {
+}: HandleResetFocusProps) => {
   updateFocus({ focusType: 'removeTab', cell: findCellWithTabStop(rootElement) });
   // If you have selections ongoing, you want to stay on the same column
   const cellCoord: [number, number] = isSelectionMode ? [1, focusedCellCoord[1]] : [0, 0];

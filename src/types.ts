@@ -255,3 +255,16 @@ export type TableData = {
   columns: Column[];
   totalsPosition: TotalsPosition;
 };
+export interface CellFocusProps {
+  focusType: string;
+  cell: HTMLTableCellElement | undefined;
+}
+export interface HandleResetFocusProps {
+  focusedCellCoord: [number, number];
+  rootElement: HTMLElement;
+  shouldRefocus: React.MutableRefObject<boolean>;
+  isSelectionMode: boolean;
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  keyboard: stardust.Keyboard;
+  announce: AnnounceFn;
+}
