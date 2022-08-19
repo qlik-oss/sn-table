@@ -5,15 +5,15 @@ import * as withStyling from '../../components/withStyling';
 
 describe('render', () => {
   describe('getCellRenderer', () => {
-    let selectionsEnabled;
-    let hasColumnStyling;
+    let selectionsEnabled: boolean;
+    let hasColumnStyling: boolean;
 
     beforeEach(() => {
       selectionsEnabled = false;
       hasColumnStyling = false;
-      jest.spyOn(withSelections, 'default').mockImplementation(() => jest.fn());
-      jest.spyOn(withColumnStyling, 'default').mockImplementation(() => jest.fn());
-      jest.spyOn(withStyling, 'default').mockImplementation(() => jest.fn());
+      jest.spyOn(withSelections, 'default');
+      jest.spyOn(withColumnStyling, 'default');
+      jest.spyOn(withStyling, 'default');
     });
 
     afterEach(() => jest.clearAllMocks());
