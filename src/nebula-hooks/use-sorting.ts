@@ -42,10 +42,5 @@ export const sortingFactory = (model?: EngineAPI.IGenericObject) => {
   };
 };
 
-const useSorting = (model?: EngineAPI.IGenericObject) => {
-  const changeSortOrder = useMemo(() => sortingFactory(model), [model]);
-
-  return changeSortOrder;
-};
-
+const useSorting = (model?: EngineAPI.IGenericObject) => useMemo(() => sortingFactory(model), [model]);
 export default useSorting;
