@@ -105,9 +105,9 @@ const getStyleSettings = (env) => {
     {
       type: 'items',
       items: [
-        env.flags.isEnabled('SENSECLIENT_PS_17478_STYLINGPANEL_STRAIGHT_TABLE_OSS')
-          ? createStylingPanelDefinition()
-          : createStylingEditorDefinition(),
+        env?.flags?.isEnabled('SENSECLIENT_PS_17478_STYLINGPANEL_SN_TABLE_OSS')
+          ? createStylingPanelDefinition
+          : createStylingEditorDefinition,
       ],
     },
     {
