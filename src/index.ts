@@ -16,8 +16,8 @@ import {
   useApp,
 } from '@nebula.js/stardust';
 
-import properties from './object-properties';
-import data from './data';
+import properties from './qae/object-properties';
+import data from './qae/data';
 import ext from './ext';
 import manageData from './handle-data';
 import { render, teardown } from './table/Root';
