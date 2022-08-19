@@ -5,7 +5,7 @@ import TableCell from '@mui/material/TableCell';
 import { TableContextProvider } from '../../context';
 import * as withSelections from '../withSelections';
 import { SelectionActions } from '../../utils/selections-utils';
-import { AnnounceFn, CellStyle, ExtendedSelectionAPI, hocProps, Cell, Column } from '../../../types';
+import { Announce, CellStyle, ExtendedSelectionAPI, hocProps, Cell, Column } from '../../../types';
 
 describe('withSelections', () => {
   const value = '100';
@@ -14,7 +14,7 @@ describe('withSelections', () => {
   let cell: Cell;
   let evt: React.MouseEvent;
   let styling: CellStyle;
-  let announce: AnnounceFn;
+  let announce: Announce;
   let column: Column;
   let selectionDispatchMock: jest.Mock<any, any>;
 
@@ -34,7 +34,7 @@ describe('withSelections', () => {
     } as unknown as Cell;
     evt = { button: 0 } as unknown as React.MouseEvent;
     styling = {} as unknown as CellStyle;
-    announce = () => undefined as unknown as AnnounceFn;
+    announce = () => undefined as unknown as Announce;
     selectionDispatchMock = jest.fn();
   });
 

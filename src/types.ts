@@ -1,5 +1,5 @@
 import React from 'react';
-import { TableCellProps } from '@mui/material';
+import { TableCellProps } from '@mui/material/TableCell';
 import { stardust } from '@nebula.js/stardust';
 import { TSelectionActions } from './table/utils/selections-utils';
 
