@@ -2,7 +2,7 @@ import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { TSelectionActions } from './table/utils/selections-utils';
 
-export interface TableCell {
+export interface Cell {
   qText?: string;
   qAttrExps: EngineAPI.INxAttributeExpressionValues;
   qElemNumber: number;
@@ -50,7 +50,7 @@ export interface AnnounceArgs {
 export type Announce = (arg0: AnnounceArgs) => void;
 
 export interface ActionPayload {
-  cell: TableCell;
+  cell: Cell;
   announce: Announce;
   evt: React.KeyboardEvent | React.MouseEvent;
 }
@@ -100,7 +100,7 @@ export type SetPageInfo = stardust.SetStateFn<PageInfo>;
 
 export interface Row {
   // for the row key, string is needed
-  [key: string]: TableCell | string;
+  [key: string]: Cell | string;
 }
 
 export interface Column {
@@ -234,7 +234,7 @@ export type TotalsPosition = 'top' | 'bottom' | 'noTotals';
 export interface HandleBodyKeyDownProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;
-  cell: TableCell;
+  cell: Cell;
   selectionDispatch: React.Dispatch<TSelectionActions>;
   isSelectionsEnabled: boolean;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;

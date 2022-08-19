@@ -12,7 +12,7 @@ import {
 } from '../handle-key-press';
 import * as handleAccessibility from '../handle-accessibility';
 import * as handleScroll from '../handle-scroll';
-import { Announce, Column, ExtendedSelectionAPI, TableCell, TableLayout, TotalsPosition } from '../../../types';
+import { Announce, Column, ExtendedSelectionAPI, Cell, TableLayout, TotalsPosition } from '../../../types';
 import { TSelectionActions } from '../selections-utils';
 
 describe('handle-key-press', () => {
@@ -451,7 +451,7 @@ describe('handle-key-press', () => {
     let evt: React.KeyboardEvent;
     let rootElement: HTMLElement;
     let selectionsAPI: ExtendedSelectionAPI;
-    let cell: TableCell;
+    let cell: Cell;
     let selectionDispatch: React.Dispatch<TSelectionActions>;
     let isSelectionsEnabled: boolean;
     let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
@@ -496,7 +496,7 @@ describe('handle-key-press', () => {
         cancel: jest.fn(),
         isModal: () => isModal,
       } as unknown as ExtendedSelectionAPI;
-      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1, isSelectable: true } as unknown as TableCell;
+      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1, isSelectable: true } as unknown as Cell;
       keyboard = { enabled: true } as unknown as stardust.Keyboard;
       selectionDispatch = jest.fn();
       isSelectionsEnabled = true;
@@ -602,7 +602,7 @@ describe('handle-key-press', () => {
       evt.key = ' ';
       cell = {
         isSelectable: false,
-      } as TableCell;
+      } as Cell;
       runHandleBodyKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
