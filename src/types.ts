@@ -332,5 +332,5 @@ export interface TableTotalsProps {
 export interface FooterWrapperProps {
   children: JSX.Element;
   theme: ExtendedTheme;
-  footerContainer: HTMLElement | undefined;
+  footerContainer?: HTMLElement;
 }
