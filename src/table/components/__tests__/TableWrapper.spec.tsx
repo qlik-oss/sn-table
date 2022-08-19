@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
+import { stardust } from '@nebula.js/stardust';
 
 import { TableContextProvider } from '../../context';
 import TableWrapper from '../TableWrapper';
@@ -7,19 +8,34 @@ import TableBodyWrapper from '../TableBodyWrapper';
 import TableHeadWrapper from '../TableHeadWrapper';
 import * as handleKeyPress from '../../utils/handle-key-press';
 import * as handleScroll from '../../utils/handle-scroll';
+import {
+  TableLayout,
+  TableData,
+  PageInfo,
+  SetPageInfo,
+  ExtendedTranslator,
+  ExtendedTheme,
+  Announce,
+  Column,
+  ChangeSortOrder,
+} from '../../../types';
 
 describe('<TableWrapper />', () => {
-  let tableData;
-  let pageInfo;
-  let setPageInfo;
-  let constraints;
-  let selectionsAPI;
-  let modal;
-  let rootElement;
-  let keyboard;
-  let translator;
-  let rect;
-  let theme;
+  let tableData: TableData;
+  let pageInfo: PageInfo;
+  let setPageInfo: SetPageInfo;
+  let constraints: stardust.Constraints;
+  let selectionsAPI: stardust.ObjectSelections;
+  let modal: boolean;
+  let rootElement: HTMLElement;
+  let keyboard: stardust.Keyboard;
+  let translator: ExtendedTranslator;
+  let rect: stardust.Rect;
+  let theme: ExtendedTheme;
+  let direction: 'ltr' | 'rtl';
+  let announce: Announce;
+  let changeSortOrder: ChangeSortOrder;
+  let layout: TableLayout;
 
   const renderTableWrapper = () =>
     render(
@@ -35,6 +51,10 @@ describe('<TableWrapper />', () => {
           translator={translator}
           rect={rect}
           theme={theme}
+          direction={direction}
+          announce={announce}
+          changeSortOrder={changeSortOrder}
+          layout={layout}
         />
       </TableContextProvider>
     );
@@ -49,27 +69,27 @@ describe('<TableWrapper />', () => {
       totalColumnCount: 10,
       paginationNeeded: true,
       rows: [{ qText: '1' }],
-      columns: [{}],
-    };
+      columns: [{}] as Column[],
+    } as unknown as TableData;
     pageInfo = { page: 0, rowsPerPage: 100, rowsPerPageOptions: [10, 25, 100] };
     setPageInfo = jest.fn();
     constraints = {};
     selectionsAPI = {
       isModal: () => modal,
-    };
+    } as unknown as stardust.ObjectSelections;
     modal = false;
     rootElement = {
       getElementsByClassName: () => [],
       getElementsByTagName: () => [{ clientHeight: {}, contains: jest.fn() }],
-      querySelector: () => {},
-    };
+      querySelector: () => undefined,
+    } as unknown as HTMLElement;
     keyboard = { enabled: false, active: false };
-    translator = { get: (s) => s };
+    translator = { get: (s: string) => s } as unknown as ExtendedTranslator;
     rect = {
       width: 750,
-    };
+    } as unknown as stardust.Rect;
     theme = {
-      getStyle: () => {},
+      getStyle: () => undefined,
       table: {
         body: {
           borderColor: '',
@@ -78,7 +98,7 @@ describe('<TableWrapper />', () => {
           borderColor: '',
         },
       },
-    };
+    } as unknown as ExtendedTheme;
   });
 
   afterEach(() => jest.clearAllMocks());
@@ -89,8 +109,8 @@ describe('<TableWrapper />', () => {
     expect(
       queryByLabelText(`${'SNTable.Accessibility.RowsAndColumns'} ${'SNTable.Accessibility.NavigationInstructions'}`)
     ).toBeVisible();
-    expect(queryByTestId('table-container').getAttribute('tabindex')).toBe('-1');
-    expect(queryByTestId('table-container').getAttribute('role')).toBe('application');
+    expect(queryByTestId('table-container')?.getAttribute('tabindex')).toBe('-1');
+    expect(queryByTestId('table-container')?.getAttribute('role')).toBe('application');
     // Just checking that the pagination has rendered, we do more thorough checking in the PaginationContent tests
     expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeVisible();
   });
@@ -102,24 +122,27 @@ describe('<TableWrapper />', () => {
     expect(
       queryByLabelText(`${'SNTable.Accessibility.RowsAndColumns'} ${'SNTable.Accessibility.NavigationInstructions'}`)
     ).toBeVisible();
-    expect(queryByTestId('table-container').getAttribute('tabindex')).toBe('-1');
-    expect(queryByTestId('table-container').getAttribute('role')).toBe('application');
+    expect(queryByTestId('table-container')?.getAttribute('tabindex')).toBe('-1');
+    expect(queryByTestId('table-container')?.getAttribute('role')).toBe('application');
     expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeNull();
   });
 
-  it('should call handleTableWrapperKeyDown when press control key on the table', () => {
-    jest.spyOn(handleKeyPress, 'handleTableWrapperKeyDown').mockImplementation(() => jest.fn());
+  it('should call handleWrapperKeyDown when press control key on the table', () => {
+    jest.spyOn(handleKeyPress, 'handleWrapperKeyDown').mockImplementation(() => jest.fn());
     const { queryByLabelText } = renderTableWrapper();
 
-    fireEvent.keyDown(queryByLabelText('SNTable.Pagination.RowsPerPage:'), { key: 'Control', code: 'ControlLeft' });
-    expect(handleKeyPress.handleTableWrapperKeyDown).toHaveBeenCalledTimes(1);
+    fireEvent.keyDown(queryByLabelText('SNTable.Pagination.RowsPerPage:') as HTMLElement, {
+      key: 'Control',
+      code: 'ControlLeft',
+    });
+    expect(handleKeyPress.handleWrapperKeyDown).toHaveBeenCalledTimes(1);
   });
 
   it('should call handleHorizontalScroll when scroll on the table', () => {
     jest.spyOn(handleScroll, 'handleHorizontalScroll').mockImplementation(() => jest.fn());
     const { queryByTestId } = renderTableWrapper();
 
-    fireEvent.wheel(queryByTestId('table-container'), { deltaX: 100 });
+    fireEvent.wheel(queryByTestId('table-container') as HTMLElement, { deltaX: 100 });
     expect(handleScroll.handleHorizontalScroll).toHaveBeenCalledTimes(1);
   });
 });

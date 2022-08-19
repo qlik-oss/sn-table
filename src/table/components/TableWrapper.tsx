@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { useRef, useCallback, useState } from 'react';
 import Table from '@mui/material/Table';
 
@@ -14,10 +13,11 @@ import PaginationContent from './PaginationContent';
 import useDidUpdateEffect from '../hooks/use-did-update-effect';
 import useFocusListener from '../hooks/use-focus-listener';
 import useScrollListener from '../hooks/use-scroll-listener';
-import { handleTableWrapperKeyDown } from '../utils/handle-key-press';
+import { handleWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, getCellElement } from '../utils/handle-accessibility';
+import { RootProps } from '../../types';
 
-export default function TableWrapper(props) {
+export default function TableWrapper(props: RootProps) {
   const {
     rootElement,
     tableData,
@@ -38,8 +38,8 @@ export default function TableWrapper(props) {
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const shouldRefocus = useRef(false);
-  const tableContainerRef = useRef();
-  const tableWrapperRef = useRef();
+  const tableContainerRef = useRef<HTMLDivElement>();
+  const tableWrapperRef = useRef<HTMLDivElement>();
   const [engagedColumn, setEngagedColumn] = useState(undefined);
 
   const setShouldRefocus = useCallback(() => {
@@ -47,7 +47,7 @@ export default function TableWrapper(props) {
   }, [rootElement]);
 
   const handleChangePage = useCallback(
-    (pageIdx) => {
+    (pageIdx: number) => {
       setPageInfo({ ...pageInfo, page: pageIdx });
       announce({
         keys: [['SNTable.Pagination.PageStatusReport', (pageIdx + 1).toString(), totalPages.toString()]],
@@ -57,8 +57,8 @@ export default function TableWrapper(props) {
     [pageInfo, setPageInfo, totalPages, announce]
   );
 
-  const handleKeyDown = (evt) => {
-    handleTableWrapperKeyDown({
+  const handleKeyDown = (evt: React.KeyboardEvent) => {
+    handleWrapperKeyDown({
       evt,
       totalRowCount,
       page,
@@ -96,8 +96,8 @@ export default function TableWrapper(props) {
   }, [rows.length, totalRowCount, totalColumnCount, page]);
 
   const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
-    rows.length + 1,
-    columns.length,
+    String(rows.length + 1),
+    String(columns.length),
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
   return (
@@ -138,23 +138,3 @@ export default function TableWrapper(props) {
     </StyledTableWrapper>
   );
 }
-
-TableWrapper.defaultProps = {
-  direction: null,
-  footerContainer: null,
-};
-
-TableWrapper.propTypes = {
-  rootElement: PropTypes.object.isRequired,
-  tableData: PropTypes.object.isRequired,
-  pageInfo: PropTypes.object.isRequired,
-  setPageInfo: PropTypes.func.isRequired,
-  translator: PropTypes.object.isRequired,
-  constraints: PropTypes.object.isRequired,
-  selectionsAPI: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-  keyboard: PropTypes.object.isRequired,
-  announce: PropTypes.func.isRequired,
-  footerContainer: PropTypes.object,
-  direction: PropTypes.string,
-};

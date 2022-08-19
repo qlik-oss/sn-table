@@ -1,20 +1,12 @@
 import React, { useState, useReducer, createContext } from 'react';
-import { stardust } from '@nebula.js/stardust';
-import PropTypes from 'prop-types';
+
 import { createSelectorProvider } from './createSelectorProvider';
 import { reducer } from '../utils/selections-utils';
-import { ExtendedSelectionAPI } from '../../types';
+import { ExtendedSelectionAPI, ContextValue, ContextProviderProps } from '../../types';
 
-export const TableContext = createContext({});
+export const TableContext = createContext<ContextValue>({} as ContextValue);
 
 const ProviderWithSelector = createSelectorProvider(TableContext);
-
-interface ContextProviderProps {
-  children: JSX.Element;
-  selectionsAPI: stardust.ObjectSelections;
-  cellCoordMock: [number, number];
-  selectionDispatchMock: jest.Mock<any, any>;
-}
 
 export const TableContextProvider = ({
   children,
@@ -22,8 +14,8 @@ export const TableContextProvider = ({
   cellCoordMock,
   selectionDispatchMock,
 }: ContextProviderProps) => {
-  const [headRowHeight, setHeadRowHeight] = useState();
-  const [focusedCellCoord, setFocusedCellCoord] = useState(cellCoordMock || [0, 0]);
+  const [headRowHeight, setHeadRowHeight] = useState(0);
+  const [focusedCellCoord, setFocusedCellCoord] = useState((cellCoordMock || [0, 0]) as [number, number]);
   const [selectionState, selectionDispatch] = useReducer(reducer, {
     rows: {},
     colIdx: -1,
@@ -45,16 +37,4 @@ export const TableContextProvider = ({
       {children}
     </ProviderWithSelector>
   );
-};
-
-TableContextProvider.defaultProps = {
-  cellCoordMock: undefined,
-  selectionDispatchMock: undefined,
-};
-
-TableContextProvider.propTypes = {
-  children: PropTypes.any.isRequired,
-  selectionsAPI: PropTypes.object.isRequired,
-  cellCoordMock: PropTypes.arrayOf(PropTypes.number),
-  selectionDispatchMock: PropTypes.func,
 };

@@ -1,7 +1,7 @@
 import { useMemo } from '@nebula.js/stardust';
 import { TableLayout, Column } from '../types';
 
-export const sortingFactory = (model: EngineAPI.IGenericObject | undefined) => {
+export const sortingFactory = (model?: EngineAPI.IGenericObject) => {
   if (!model) return undefined;
 
   return async (layout: TableLayout, column: Column) => {
@@ -42,10 +42,5 @@ export const sortingFactory = (model: EngineAPI.IGenericObject | undefined) => {
   };
 };
 
-const useSorting = (model: EngineAPI.IGenericObject | undefined) => {
-  const changeSortOrder = useMemo(() => sortingFactory(model), [model]);
-
-  return changeSortOrder;
-};
-
+const useSorting = (model?: EngineAPI.IGenericObject) => useMemo(() => sortingFactory(model), [model]);
 export default useSorting;

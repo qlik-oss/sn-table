@@ -1,41 +1,55 @@
+import {
+  TableLayout,
+  PageInfo,
+  SetPageInfo,
+  HyperCube,
+  Row,
+  ExtendedNxMeasureInfo,
+  ExtendedNxDimensionInfo,
+  Column,
+  TableData,
+} from './types';
+
 const directionMap = {
   A: 'asc',
   D: 'desc',
+  N: 'asc',
 };
 
 const MAX_CELLS = 10000;
 
-export function getHighestPossibleRpp(width, rowsPerPageOptions) {
+export function getHighestPossibleRpp(width: number, rowsPerPageOptions: number[]) {
   const highestPossibleOption = [...rowsPerPageOptions].reverse().find((opt) => opt * width <= MAX_CELLS);
   return highestPossibleOption || Math.floor(MAX_CELLS / width); // covering corner case of lowest option being too high
 }
 
-export function getColumnOrder({ qColumnOrder, qDimensionInfo, qMeasureInfo }) {
+export function getColumnOrder({ qColumnOrder, qDimensionInfo, qMeasureInfo }: HyperCube): number[] {
   const columnsLength = qDimensionInfo.length + qMeasureInfo.length;
-  return qColumnOrder?.length === columnsLength ? qColumnOrder : [...Array(columnsLength).keys()];
+  return qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
 }
 
-/**
- * Get total cell info
- * @param {Boolean} isDim
- * @param {Object} layout
- * @param {Number} colIndex
- * @param {Number} numDims
- * @returns dimensions and measures total cell values as strings
- */
-export function getTotalInfo(isDim, layout, colIndex, numDims, columnOrder) {
+// Get total cell info
+export function getTotalInfo(
+  isDim: boolean,
+  layout: TableLayout,
+  colIndex: number,
+  numDims: number,
+  columnOrder: number[]
+) {
   if (!isDim) return layout.qHyperCube.qGrandTotalRow[colIndex - numDims]?.qText;
   if (colIndex === 0 && columnOrder[0] === 0) return layout.totals.label;
   return '';
 }
 
-export function getColumnInfo(layout, colIndex, columnOrder) {
+export function getColumnInfo(layout: TableLayout, colIndex: number, columnOrder: number[]): false | Column {
   const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIndex < numDims;
-  const info = isDim ? qDimensionInfo[colIndex] : qMeasureInfo[colIndex - numDims];
+  const info = (isDim ? qDimensionInfo[colIndex] : qMeasureInfo[colIndex - numDims]) as
+    | ExtendedNxMeasureInfo
+    | ExtendedNxDimensionInfo;
   const isHidden = info.qError?.qErrorCode === 7005;
-  const isLocked = info.qLocked;
+  const isLocked = isDim && (info as ExtendedNxDimensionInfo).qLocked;
   const autoAlign = isDim ? 'left' : 'right';
 
   return (
@@ -46,21 +60,16 @@ export function getColumnInfo(layout, colIndex, columnOrder) {
       label: info.qFallbackTitle,
       id: `col-${colIndex}`,
       align: !info.textAlign || info.textAlign.auto ? autoAlign : info.textAlign.align,
-      stylingInfo: info.qAttrExprInfo.map((expr) => expr.id),
-      sortDirection: directionMap[info.qSortIndicator],
+      stylingIDs: info.qAttrExprInfo.map((expr) => expr.id),
+      sortDirection: info.qSortIndicator ? directionMap[info.qSortIndicator] : directionMap.A,
       dataColIdx: colIndex,
       totalInfo: getTotalInfo(isDim, layout, colIndex, numDims, columnOrder),
     }
   );
 }
 
-/**
- * Get the total head position of the table
- *
- * @param {Object} layout
- * @returns the position as a string, it can be any of top, bottom or noTotals
- */
-export function getTotalPosition(layout) {
+// Get the position of the totals
+export function getTotalPosition(layout: TableLayout) {
   const [hasOnlyMeasure, hasDimension, hasGrandTotal, hasMeasure, isTotalModeAuto] = [
     layout.qHyperCube.qDimensionInfo.length === 0,
     layout.qHyperCube.qDimensionInfo.length > 0,
@@ -76,7 +85,12 @@ export function getTotalPosition(layout) {
   return 'noTotals';
 }
 
-export default async function manageData(model, layout, pageInfo, setPageInfo) {
+export default async function manageData(
+  model: EngineAPI.IGenericObject,
+  layout: TableLayout,
+  pageInfo: PageInfo,
+  setPageInfo: SetPageInfo
+): Promise<TableData | null> {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const { qHyperCube } = layout;
   const totalColumnCount = qHyperCube.qSize.qcx;
@@ -100,13 +114,15 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
 
   const columnOrder = getColumnOrder(qHyperCube);
   // using filter to remove hidden columns (represented with false)
-  const columns = columnOrder.map((colIndex) => getColumnInfo(layout, colIndex, columnOrder)).filter(Boolean);
+  const columns = columnOrder
+    .map((colIndex) => getColumnInfo(layout, colIndex, columnOrder))
+    .filter(Boolean) as Column[];
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
     { qTop: top, qLeft: 0, qHeight: height, qWidth: totalColumnCount },
   ]);
 
   const rows = dataPages[0].qMatrix.map((r, rowIdx) => {
-    const row = { key: `row-${rowIdx}` };
+    const row: Row = { key: `row-${rowIdx}` };
     columns.forEach((c, colIdx) => {
       row[c.id] = {
         ...r[colIdx],
