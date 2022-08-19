@@ -2,8 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { StyledFooterWrapper } from '../styles';
+import { FooterWrapperProps } from '../../types';
 
-export default function FooterWrapper({ children, theme, footerContainer }) {
+export default function FooterWrapper({ children, theme, footerContainer }: FooterWrapperProps) {
   return footerContainer ? (
     ReactDOM.createPortal(children, footerContainer)
   ) : (
