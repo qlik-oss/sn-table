@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { stardust } from '@nebula.js/stardust';
-
 import { TableContextProvider } from '../../context';
 import TableWrapper from '../TableWrapper';
 import TableBodyWrapper from '../TableBodyWrapper';
@@ -18,6 +17,7 @@ import {
   Announce,
   Column,
   ChangeSortOrder,
+  ExtendedSelectionAPI,
 } from '../../../types';
 
 describe('<TableWrapper />', () => {
@@ -25,7 +25,7 @@ describe('<TableWrapper />', () => {
   let pageInfo: PageInfo;
   let setPageInfo: SetPageInfo;
   let constraints: stardust.Constraints;
-  let selectionsAPI: stardust.ObjectSelections;
+  let selectionsAPI: ExtendedSelectionAPI;
   let modal: boolean;
   let rootElement: HTMLElement;
   let keyboard: stardust.Keyboard;
@@ -36,6 +36,9 @@ describe('<TableWrapper />', () => {
   let announce: Announce;
   let changeSortOrder: ChangeSortOrder;
   let layout: TableLayout;
+  let setShouldRefocus: () => void;
+  let tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
+  let children: JSX.Element;
 
   const renderTableWrapper = () =>
     render(
@@ -55,7 +58,11 @@ describe('<TableWrapper />', () => {
           announce={announce}
           changeSortOrder={changeSortOrder}
           layout={layout}
-        />
+          setShouldRefocus={setShouldRefocus}
+          tableWrapperRef={tableWrapperRef}
+        >
+          {children}
+        </TableWrapper>
       </TableContextProvider>
     );
 
@@ -76,7 +83,7 @@ describe('<TableWrapper />', () => {
     constraints = {};
     selectionsAPI = {
       isModal: () => modal,
-    } as unknown as stardust.ObjectSelections;
+    } as unknown as ExtendedSelectionAPI;
     modal = false;
     rootElement = {
       getElementsByClassName: () => [],

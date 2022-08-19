@@ -327,7 +327,7 @@ export interface RenderProps {
 
 export interface RootProps {
   direction?: 'ltr' | 'rtl';
-  selectionsAPI: stardust.ObjectSelections;
+  selectionsAPI: ExtendedSelectionAPI;
   rootElement: HTMLElement;
   layout: TableLayout;
   changeSortOrder: ChangeSortOrder;
@@ -341,6 +341,9 @@ export interface RootProps {
   keyboard: stardust.Keyboard;
   footerContainer?: HTMLElement;
   announce: Announce;
+  setShouldRefocus(): void;
+  tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
+  children: JSX.Element;
 }
 
 export interface ContextProviderProps {

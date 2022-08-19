@@ -1,4 +1,5 @@
 import React from 'react';
+import { stardust } from '@nebula.js/stardust';
 import { render, fireEvent } from '@testing-library/react';
 import { generateDataPages, generateLayout } from '../../../__test__/generate-test-data';
 import manageData from '../../../handle-data';
@@ -8,21 +9,41 @@ import * as selectionsUtils from '../../utils/selections-utils';
 import * as getCellRenderer from '../../utils/get-cell-renderer';
 import * as handleKeyPress from '../../utils/handle-key-press';
 import * as handleAccessibility from '../../utils/handle-accessibility';
+import {
+  TableData,
+  ExtendedSelectionAPI,
+  TableLayout,
+  ExtendedTheme,
+  ChangeSortOrder,
+  PageInfo,
+  SetPageInfo,
+  ExtendedTranslator,
+  Cell,
+} from '../../../types';
 
 describe('<TableBodyWrapper />', () => {
-  const rootElement = {};
-  const setShouldRefocus = () => {};
-  const keyboard = {};
-  const tableWrapperRef = {};
-  const announce = () => {};
-  const model = { getHyperCubeData: async () => generateDataPages(2, 2, 2) };
+  const rootElement = {} as HTMLElement;
+  const setShouldRefocus = () => undefined;
+  const keyboard = {} as stardust.Keyboard;
+  const tableWrapperRef = {} as React.MutableRefObject<HTMLDivElement | undefined>;
+  const announce = () => undefined;
+  const model = { getHyperCubeData: async () => generateDataPages(2, 2) } as unknown as EngineAPI.IGenericObject;
 
-  let tableData;
-  let constraints;
-  let selectionsAPI;
-  let layout;
-  let theme;
-  let cellRendererSpy;
+  let tableData: TableData;
+  let constraints: stardust.Constraints;
+  let selectionsAPI: ExtendedSelectionAPI;
+  let layout: TableLayout;
+  let theme: ExtendedTheme;
+  let children: JSX.Element;
+  let changeSortOrder: ChangeSortOrder;
+  let rect: stardust.Rect;
+  let pageInfo: PageInfo;
+  let setPageInfo: SetPageInfo;
+  let translator: ExtendedTranslator;
+  let tableFirstRow: Cell;
+  let tableSecondRow: Cell;
+
+  let cellRendererSpy: () => void;
 
   const renderTableBody = () =>
     render(
@@ -38,25 +59,38 @@ describe('<TableBodyWrapper />', () => {
           keyboard={keyboard}
           tableWrapperRef={tableWrapperRef}
           announce={announce}
-        />
+          changeSortOrder={changeSortOrder}
+          rect={rect}
+          pageInfo={pageInfo}
+          setPageInfo={setPageInfo}
+          translator={translator}
+        >
+          {children}
+        </TableBodyWrapper>
       </TableContextProvider>
     );
 
   beforeEach(async () => {
     jest.spyOn(selectionsUtils, 'addSelectionListeners').mockImplementation(() => jest.fn());
-    tableData = await manageData(model, generateLayout(1, 1, 2, [], [{ qText: '100' }]), { top: 0, height: 100 });
+    tableData = (await manageData(
+      model,
+      generateLayout(1, 1, 2, [], [{ qText: '100' }]),
+      { top: 0, height: 100 } as unknown as PageInfo,
+      () => undefined
+    )) as TableData;
     constraints = {};
     selectionsAPI = {
       isModal: () => true,
-    };
+    } as ExtendedSelectionAPI;
     theme = {
-      getColorPickerColor: () => {},
-      name: () => {},
-      getStyle: () => {},
+      getColorPickerColor: () => undefined,
+      name: () => undefined,
+      getStyle: () => undefined,
       table: { body: { borderColor: '' } },
-    };
-    layout = {};
+    } as unknown as ExtendedTheme;
+    layout = {} as TableLayout;
     cellRendererSpy = jest.fn();
+    tableFirstRow = tableData.rows[0]['col-0'] as Cell;
   });
 
   afterEach(() => jest.clearAllMocks());
@@ -64,23 +98,24 @@ describe('<TableBodyWrapper />', () => {
   it('should render 2x2 table body and call CellRenderer', () => {
     jest.spyOn(getCellRenderer, 'default').mockImplementation(() => {
       cellRendererSpy();
-      return 'td';
+      return 'td' as unknown as React.FunctionComponent<any>;
     });
 
     const { queryByText } = renderTableBody();
+    tableSecondRow = tableData.rows[0]['col-1'] as Cell;
 
     expect(cellRendererSpy).toHaveBeenCalledTimes(2);
-    expect(queryByText(tableData.rows[0]['col-0'].qText)).toBeVisible();
-    expect(queryByText(tableData.rows[0]['col-1'].qText)).toBeVisible();
-    expect(queryByText(tableData.rows[1]['col-0'].qText)).toBeVisible();
-    expect(queryByText(tableData.rows[1]['col-1'].qText)).toBeVisible();
+    expect(queryByText(tableFirstRow.qText as string)).toBeVisible();
+    expect(queryByText(tableSecondRow.qText as string)).toBeVisible();
+    expect(queryByText(tableFirstRow.qText as string)).toBeVisible();
+    expect(queryByText(tableSecondRow.qText as string)).toBeVisible();
   });
 
   it('should call handleBodyKeyDown on key down', () => {
     jest.spyOn(handleKeyPress, 'handleBodyKeyDown').mockImplementation(() => jest.fn());
 
     const { queryByText } = renderTableBody();
-    fireEvent.keyDown(queryByText(tableData.rows[0]['col-0'].qText));
+    fireEvent.keyDown(queryByText(tableFirstRow.qText as string) as unknown as HTMLElement);
 
     expect(handleKeyPress.handleBodyKeyDown).toHaveBeenCalledTimes(1);
   });
@@ -89,7 +124,7 @@ describe('<TableBodyWrapper />', () => {
     jest.spyOn(handleAccessibility, 'handleClickToFocusBody').mockImplementation(() => jest.fn());
 
     const { queryByText } = renderTableBody();
-    fireEvent.mouseDown(queryByText(tableData.rows[0]['col-0'].qText));
+    fireEvent.mouseDown(queryByText(tableFirstRow.qText as string) as unknown as HTMLElement);
 
     expect(handleAccessibility.handleClickToFocusBody).toHaveBeenCalledTimes(1);
   });
@@ -98,7 +133,7 @@ describe('<TableBodyWrapper />', () => {
     jest.spyOn(handleKeyPress, 'handleBodyKeyUp').mockImplementation(() => jest.fn());
 
     const { queryByText } = renderTableBody();
-    fireEvent.keyUp(queryByText(tableData.rows[0]['col-0'].qText));
+    fireEvent.keyUp(queryByText(tableFirstRow.qText as string) as unknown as HTMLElement);
 
     expect(handleKeyPress.handleBodyKeyUp).toHaveBeenCalledTimes(1);
   });

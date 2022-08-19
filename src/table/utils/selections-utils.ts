@@ -35,7 +35,7 @@ type AddSelectionListenersArgs = {
   selectionDispatch: React.Dispatch<TSelectionActions>;
   setShouldRefocus(): void;
   keyboard: stardust.Keyboard;
-  tableWrapperRef: React.MutableRefObject<HTMLDivElement>;
+  tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
 };
 
 export function addSelectionListeners({
