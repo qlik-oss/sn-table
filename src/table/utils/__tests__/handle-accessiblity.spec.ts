@@ -1,6 +1,6 @@
 import { MouseEvent } from 'react';
 import { stardust } from '@nebula.js/stardust';
-import { AnnounceFn, TotalsPosition, TableCell } from '../../../types';
+import { AnnounceFn, TotalsPosition, Cell } from '../../../types';
 import * as handleAccessibility from '../handle-accessibility';
 
 describe('handle-accessibility', () => {
@@ -119,7 +119,7 @@ describe('handle-accessibility', () => {
     const cellData = {
       rawRowIdx: 0,
       rawColIdx: 0,
-    } as TableCell;
+    } as Cell;
 
     beforeEach(() => {
       totalsPosition = 'noTotals';

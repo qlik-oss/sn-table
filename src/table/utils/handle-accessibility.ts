@@ -1,6 +1,6 @@
 import { MouseEvent } from 'react';
 import { stardust } from '@nebula.js/stardust';
-import { AnnounceFn, TableCell, TotalsPosition, CellFocusProps, HandleResetFocusProps } from '../../types';
+import { AnnounceFn, Cell, TotalsPosition, CellFocusProps, HandleResetFocusProps } from '../../types';
 
 export const getCellElement = (rootElement: HTMLElement, cellCoord: [number, number]) =>
   rootElement.getElementsByClassName('sn-table-row')[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[
@@ -45,7 +45,7 @@ export const removeAndFocus = (
 };
 
 export const handleClickToFocusBody = (
-  cell: TableCell,
+  cell: Cell,
   rootElement: HTMLElement,
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
   keyboard: stardust.Keyboard,
