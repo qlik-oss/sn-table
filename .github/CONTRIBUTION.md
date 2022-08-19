@@ -17,7 +17,7 @@ Run API spec generating and verification with:
 
 It verifies the [table object properties](../src/object-properties.js) (a JSDoc file) and generates a [Scriptappy](https://github.com/qlik-oss/scriptappy) definition documentation (a API spec) from that file.
 
-> Note: When there is any change for the [API spec](../api-specifications/properties.json), DO NOT commit the file. The change will be merged into the main branch when doing the Releasing.
+> Note: When there is any change in the [API spec](../api-specifications/properties.json), DO NOT commit the file. The change will be updated and merged into the main branch when doing the next release
 
 ## Testing
 
