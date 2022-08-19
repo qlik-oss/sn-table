@@ -337,3 +337,9 @@ export interface TableTotalsProps {
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
 }
+
+export interface FooterWrapperProps {
+  children: JSX.Element;
+  theme: ExtendedTheme;
+  footerContainer?: HTMLElement;
+}
