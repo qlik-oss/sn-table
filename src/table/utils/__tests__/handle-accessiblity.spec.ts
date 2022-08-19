@@ -108,7 +108,7 @@ describe('handle-accessibility', () => {
     });
 
     it('should return null', () => {
-      const tmpCell = elementCreator('div', '-1') as HTMLDivElement;
+      cell = elementCreator('div', '-1') as HTMLTableCellElement;
       const cellElement = handleAccessibility.findCellWithTabStop(rootElement);
       expect(cellElement).toBeNull();
     });

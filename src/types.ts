@@ -30,8 +30,8 @@ export interface Galaxy {
 }
 
 export interface UseOptions {
-  direction: 'ltr' | 'rtl';
-  footerContainer: HTMLElement;
+  direction?: 'ltr' | 'rtl';
+  footerContainer?: HTMLElement;
 }
 
 export interface SelectionState {
@@ -266,7 +266,7 @@ export type TableData = {
   totalRowCount: number;
   totalPages: number;
   paginationNeeded: boolean;
-  rows: Row[] | undefined;
+  rows: Row[];
   columns: Column[];
   totalsPosition: TotalsPosition;
 };
@@ -298,7 +298,7 @@ export interface RenderProps {
 }
 
 export interface RootProps {
-  direction: 'ltr' | 'rtl';
+  direction?: 'ltr' | 'rtl';
   selectionsAPI: stardust.ObjectSelections;
   rootElement: HTMLElement;
   layout: TableLayout;
@@ -311,6 +311,6 @@ export interface RootProps {
   translator: ExtendedTranslator;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
-  footerContainer: HTMLElement;
+  footerContainer?: HTMLElement;
   announce: Announce;
 }

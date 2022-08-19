@@ -86,7 +86,7 @@ export function getTotalPosition(layout: TableLayout) {
 }
 
 export default async function manageData(
-  model: EngineAPI.IGenericObject | undefined,
+  model: EngineAPI.IGenericObject,
   layout: TableLayout,
   pageInfo: PageInfo,
   setPageInfo: SetPageInfo
@@ -117,11 +117,11 @@ export default async function manageData(
   const columns = columnOrder
     .map((colIndex) => getColumnInfo(layout, colIndex, columnOrder))
     .filter(Boolean) as Column[];
-  const dataPages = await model?.getHyperCubeData('/qHyperCubeDef', [
+  const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
     { qTop: top, qLeft: 0, qHeight: height, qWidth: totalColumnCount },
   ]);
 
-  const rows = dataPages?.[0].qMatrix.map((r, rowIdx) => {
+  const rows = dataPages[0].qMatrix.map((r, rowIdx) => {
     const row: Row = { key: `row-${rowIdx}` };
     columns.forEach((c, colIdx) => {
       row[c.id] = {
