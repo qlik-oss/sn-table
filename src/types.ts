@@ -320,3 +320,11 @@ export interface ContextProviderProps {
   cellCoordMock?: [number, number];
   selectionDispatchMock?: jest.Mock<any, any>;
 }
+
+export interface TableTotalsProps {
+  rootElement: HTMLElement;
+  tableData: TableData;
+  layout: TableLayout;
+  theme: ExtendedTheme;
+  keyboard: stardust.Keyboard;
+}
