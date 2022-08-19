@@ -1,7 +1,7 @@
 // TODO: add this to global rules
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { stardust } from '@nebula.js/stardust';
-import { TableCell, SelectionState, ExtendedSelectionAPI, ActionPayload, Announce, ContextValue } from '../../types';
+import { Cell, SelectionState, ExtendedSelectionAPI, ActionPayload, Announce, ContextValue } from '../../types';
 
 export enum SelectionStates {
   SELECTED = 'selected',
@@ -80,7 +80,7 @@ export function addSelectionListeners({
   };
 }
 
-export const getCellSelectionState = (cell: TableCell, value: ContextValue): SelectionStates => {
+export const getCellSelectionState = (cell: Cell, value: ContextValue): SelectionStates => {
   const {
     selectionState: { colIdx, rows, api },
   } = value;
@@ -113,7 +113,7 @@ export const handleAnnounceSelectionStatus = (announce: Announce, rowsLength: nu
 
 export const getSelectedRows = (
   selectedRows: Record<string, number>,
-  cell: TableCell,
+  cell: Cell,
   evt: React.KeyboardEvent | React.MouseEvent
 ): Record<string, number> => {
   const { qElemNumber, rowIdx } = cell;

@@ -1,14 +1,12 @@
-import {
-  styled,
-  Paper,
-  TableContainer,
-  TableRow,
-  TableSortLabel,
-  TableBody,
-  Select,
-  IconButton,
-  TableCell,
-} from '@mui/material';
+import styled from '@mui/system/styled';
+import Paper from '@mui/material/Paper';
+import TableContainer from '@mui/material/TableContainer';
+import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
+import TableBody from '@mui/material/TableBody';
+import Select from '@mui/material/Select';
+import IconButton from '@mui/material/IconButton';
+import TableCell from '@mui/material/TableCell';
 
 // ---------- AnnounceWrapper ----------
 

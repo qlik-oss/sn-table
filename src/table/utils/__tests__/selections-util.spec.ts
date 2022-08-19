@@ -12,7 +12,7 @@ import {
   ResetAction,
   ClearAction,
 } from '../selections-utils';
-import { TableCell, SelectionState, ExtendedSelectionAPI, Announce, ContextValue } from '../../../types';
+import { Cell, SelectionState, ExtendedSelectionAPI, Announce, ContextValue } from '../../../types';
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {
@@ -106,7 +106,7 @@ describe('selections-utils', () => {
 
   describe('reducer', () => {
     let state: SelectionState;
-    let cell: TableCell;
+    let cell: Cell;
 
     beforeEach(() => {
       state = {
@@ -120,7 +120,7 @@ describe('selections-utils', () => {
         } as unknown as ExtendedSelectionAPI,
         isSelectMultiValues: false,
       };
-      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1 } as TableCell;
+      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1 } as Cell;
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -310,7 +310,7 @@ describe('selections-utils', () => {
 
   describe('getSelectedRows', () => {
     let selectedRows: Record<string, number>;
-    let cell: TableCell;
+    let cell: Cell;
     let evt: React.KeyboardEvent;
 
     beforeEach(() => {
@@ -318,7 +318,7 @@ describe('selections-utils', () => {
       cell = {
         qElemNumber: 0,
         rowIdx: 0,
-      } as TableCell;
+      } as Cell;
       evt = {} as React.KeyboardEvent;
     });
 
@@ -361,7 +361,7 @@ describe('selections-utils', () => {
 
   describe('getCellSelectionState', () => {
     let isModal: boolean;
-    let cell: TableCell;
+    let cell: Cell;
     let value: ContextValue;
 
     beforeEach(() => {
@@ -369,7 +369,7 @@ describe('selections-utils', () => {
       cell = {
         qElemNumber: 1,
         colIdx: 1,
-      } as TableCell;
+      } as Cell;
       value = {
         selectionState: {
           colIdx: 1,
