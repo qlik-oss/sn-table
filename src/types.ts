@@ -1,4 +1,5 @@
 import React from 'react';
+import { TableCellProps } from '@mui/material/TableCell';
 import { stardust } from '@nebula.js/stardust';
 import { TSelectionActions } from './table/utils/selections-utils';
 
@@ -320,6 +321,14 @@ export interface ContextProviderProps {
   cellCoordMock?: [number, number];
   selectionDispatchMock?: jest.Mock<any, any>;
 }
+export interface CellHOCProps extends TableCellProps {
+  styling: CellStyle;
+  cell: Cell;
+  column: Column;
+  announce: Announce;
+}
+
+export type CellHOC = (props: CellHOCProps) => JSX.Element;
 
 export interface TableTotalsProps {
   rootElement: HTMLElement;

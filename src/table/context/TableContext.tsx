@@ -4,6 +4,10 @@ import { createSelectorProvider } from './createSelectorProvider';
 import { reducer } from '../utils/selections-utils';
 import { ExtendedSelectionAPI, ContextValue, ContextProviderProps } from '../../types';
 
+// In order to not have typing issues when using properties on the context,
+// the initial value for the context is casted to ContextValue.
+// In practice it will always be populated since TableContextProvider
+// runs before anything using props on the context
 export const TableContext = createContext<ContextValue>({} as ContextValue);
 
 const ProviderWithSelector = createSelectorProvider(TableContext);

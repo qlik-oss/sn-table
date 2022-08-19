@@ -1,8 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import TableCell from '@mui/material/TableCell';
+import { CellHOCProps } from '../../types';
 
-export default function withStyling(CellComponent) {
-  const HOC = (props) => {
+export default function withStyling(CellComponent: typeof TableCell) {
+  const HOC = (props: CellHOCProps) => {
     const {
       styling: { selectedCellClass, ...style },
       component,
@@ -32,25 +33,6 @@ export default function withStyling(CellComponent) {
         {children}
       </CellComponent>
     );
-  };
-
-  HOC.defaultProps = {
-    component: null,
-    scope: null,
-    onMouseUp: null,
-  };
-
-  HOC.propTypes = {
-    styling: PropTypes.object.isRequired,
-    component: PropTypes.string,
-    align: PropTypes.string.isRequired,
-    children: PropTypes.node.isRequired,
-    scope: PropTypes.string,
-    tabIndex: PropTypes.number.isRequired,
-    onKeyDown: PropTypes.func.isRequired,
-    onKeyUp: PropTypes.func.isRequired,
-    onMouseDown: PropTypes.func.isRequired,
-    onMouseUp: PropTypes.func,
   };
 
   return HOC;
