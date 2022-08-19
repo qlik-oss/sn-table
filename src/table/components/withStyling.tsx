@@ -1,9 +1,9 @@
 import React from 'react';
-import { TableCellProps } from '@mui/material';
-import { hocProps } from '../../types';
+import TableCell from '@mui/material/TableCell';
+import { CellHOCProps } from '../../types';
 
-export default function withStyling(CellComponent: (props: TableCellProps) => JSX.Element) {
-  const HOC = (props: hocProps) => {
+export default function withStyling(CellComponent: typeof TableCell) {
+  const HOC = (props: CellHOCProps) => {
     const {
       styling: { selectedCellClass, ...style },
       component,

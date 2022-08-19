@@ -5,12 +5,12 @@ import TableCell from '@mui/material/TableCell';
 import { TableContextProvider } from '../../context';
 import * as withSelections from '../withSelections';
 import { SelectionActions } from '../../utils/selections-utils';
-import { Announce, CellStyle, ExtendedSelectionAPI, hocProps, Cell, Column } from '../../../types';
+import { Announce, CellStyle, ExtendedSelectionAPI, CellHOCProps, Cell, Column } from '../../../types';
 
 describe('withSelections', () => {
   const value = '100';
   const selectionsAPI = { isModal: () => false } as unknown as ExtendedSelectionAPI;
-  let HOC: (props: hocProps) => JSX.Element;
+  let HOC: (props: CellHOCProps) => JSX.Element;
   let cell: Cell;
   let evt: React.MouseEvent;
   let styling: CellStyle;
@@ -28,7 +28,7 @@ describe('withSelections', () => {
     );
 
   beforeEach(() => {
-    HOC = withSelections.default((props: hocProps) => <TableCell {...props}>{props.children}</TableCell>);
+    HOC = withSelections.default((props: CellHOCProps) => <TableCell {...props}>{props.children}</TableCell>);
     cell = {
       isSelectable: true,
     } as unknown as Cell;

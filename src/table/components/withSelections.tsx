@@ -1,11 +1,11 @@
 import React from 'react';
 import { useContextSelector, TableContext } from '../context';
 import { getSelectionStyle } from '../utils/styling-utils';
-import { getCellSelectionState, SelectionActions, TSelectionActions } from '../utils/selections-utils';
-import { hocProps, SelectionState } from '../../types';
+import { getCellSelectionState, SelectionActions } from '../utils/selections-utils';
+import { CellHOC, CellHOCProps } from '../../types';
 
-export default function withSelections(CellComponent: (props: hocProps) => JSX.Element) {
-  const HOC = (props: hocProps) => {
+export default function withSelections(CellComponent: CellHOC) {
+  const HOC = (props: CellHOCProps) => {
     const { cell, styling, announce } = props;
     const cellSelectionState = useContextSelector(TableContext, (value) =>
       getCellSelectionState(cell, value.selectionState)

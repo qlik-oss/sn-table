@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import { getColumnStyle } from '../utils/styling-utils';
-import { hocProps } from '../../types';
+import { CellHOCProps, CellHOC } from '../../types';
 
-export default function withColumnStyling(CellComponent: (props: hocProps) => JSX.Element) {
-  const HOC = (props: hocProps) => {
+export default function withColumnStyling(CellComponent: CellHOC) {
+  const HOC = (props: CellHOCProps) => {
     const { cell, column, styling } = props;
 
     const columnStyling = useMemo(

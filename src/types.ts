@@ -321,12 +321,14 @@ export interface ContextProviderProps {
   cellCoordMock?: [number, number];
   selectionDispatchMock?: jest.Mock<any, any>;
 }
-export interface hocProps extends TableCellProps {
+export interface CellHOCProps extends TableCellProps {
   styling: CellStyle;
   cell: Cell;
   column: Column;
   announce: Announce;
 }
+
+export type CellHOC = (props: CellHOCProps) => JSX.Element;
 
 export interface TableTotalsProps {
   rootElement: HTMLElement;
