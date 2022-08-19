@@ -9,7 +9,7 @@ import { getHeaderStyle } from '../utils/styling-utils';
 import { headHandleKeyPress } from '../utils/handle-key-press';
 import { handleMouseDownLabelToFocusHeadCell, handleClickToFocusHead } from '../utils/handle-accessibility';
 import { handleDragStart, handleDragOver, handleDragEnd } from '../utils/handle-drag-columns';
-import useDrag from '../hooks/use-drag';
+import createThrottler from '../utils/throttler';
 
 function TableHeadWrapper({
   rootElement,
@@ -23,6 +23,8 @@ function TableHeadWrapper({
   keyboard,
   model,
   direction,
+  engagedColumn,
+  setEngagedColumn,
 }) {
   const { columns, paginationNeeded } = tableData;
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
@@ -33,7 +35,7 @@ function TableHeadWrapper({
   const headRowRef = useRef();
   const tableCellRefs = useRef([]);
   tableCellRefs.current = columns.map((el, i) => tableCellRefs.current[i] ?? createRef());
-  const [engagedColumn, setEngagedColumn] = useDrag();
+  const throttler = createThrottler((event) => handleDragOver({ event, model, rtl, columns, setEngagedColumn }), 100);
 
   useEffect(() => {
     setHeadRowHeight(headRowRef.current.getBoundingClientRect().height);
@@ -49,7 +51,12 @@ function TableHeadWrapper({
 
   return (
     <TableHead>
-      <StyledHeadRow ref={headRowRef} paginationNeeded={paginationNeeded} className="sn-table-row">
+      <StyledHeadRow
+        ref={headRowRef}
+        paginationNeeded={paginationNeeded}
+        className="sn-table-row"
+        onDragOver={(event) => throttler(event)}
+      >
         {columns.map((column, columnIndex) => {
           // The first cell in the head is focusable in sequential keyboard navigation,
           // when nebula does not handle keyboard navigation
@@ -92,8 +99,7 @@ function TableHeadWrapper({
                   cell: column,
                 })
               }
-              onDragOver={(event) => handleDragOver({ event, rtl, columns, setEngagedColumn })}
-              onDragEnd={() => handleDragEnd(model, setEngagedColumn)}
+              onDragEnd={() => handleDragEnd({ model, setEngagedColumn })}
             >
               <StyledSortLabel
                 headerStyle={headerStyle}
@@ -118,6 +124,11 @@ function TableHeadWrapper({
   );
 }
 
+TableHeadWrapper.defaultProps = {
+  direction: undefined,
+  engagedColumn: undefined,
+};
+
 TableHeadWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
@@ -129,8 +140,9 @@ TableHeadWrapper.propTypes = {
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
   model: PropTypes.object.isRequired,
-  // eslint-disable-next-line react/require-default-props
   direction: PropTypes.string,
+  engagedColumn: PropTypes.number,
+  setEngagedColumn: PropTypes.func.isRequired,
 };
 
 export default memo(TableHeadWrapper);

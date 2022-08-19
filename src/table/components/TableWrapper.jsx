@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useState } from 'react';
 import Table from '@mui/material/Table';
 
 import AnnounceElements from './AnnounceElements';
@@ -40,6 +40,7 @@ export default function TableWrapper(props) {
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef();
   const tableWrapperRef = useRef();
+  const [engagedColumn, setEngagedColumn] = useState(undefined);
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
@@ -118,9 +119,14 @@ export default function TableWrapper(props) {
         data-testid="table-container"
       >
         <Table stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper {...props} />
-          <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef}>
-            <TableTotals {...props} />
+          <TableHeadWrapper {...props} engagedColumn={engagedColumn} setEngagedColumn={setEngagedColumn} />
+          <TableBodyWrapper
+            {...props}
+            setShouldRefocus={setShouldRefocus}
+            tableWrapperRef={tableWrapperRef}
+            engagedColumn={engagedColumn}
+          >
+            <TableTotals {...props} engagedColumn={engagedColumn} />
           </TableBodyWrapper>
         </Table>
       </StyledTableContainer>

@@ -7,7 +7,6 @@ import { addSelectionListeners } from '../utils/selections-utils';
 import { getBodyCellStyle } from '../utils/styling-utils';
 import { bodyHandleKeyPress, bodyHandleKeyUp } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
-import useDrag from '../hooks/use-drag';
 
 function TableBodyWrapper({
   rootElement,
@@ -21,6 +20,7 @@ function TableBodyWrapper({
   tableWrapperRef,
   announce,
   children,
+  engagedColumn,
 }) {
   const { rows, columns, paginationNeeded, totalsPosition } = tableData;
   const columnsStylingInfoJSON = JSON.stringify(columns.map((column) => column.stylingInfo));
@@ -30,23 +30,26 @@ function TableBodyWrapper({
   // representation including selection, zoom, scroll, etc.
   // constraints.select: true - turn off selections.
   const isSelectionsEnabled = !constraints.active && !constraints.select;
-  const [engagedColumn] = useDrag();
   const columnRenderers = useMemo(
     () =>
       JSON.parse(columnsStylingInfoJSON).map((stylingInfo) =>
         getCellRenderer(!!stylingInfo.length, isSelectionsEnabled)
       ),
-    [columnsStylingInfoJSON, isSelectionsEnabled, engagedColumn]
+    [columnsStylingInfoJSON, isSelectionsEnabled]
   );
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
-  const cellStyle = { color: bodyCellStyle.color, backgroundColor: theme.table.backgroundColor };
+  const getCellStyle = (columnIndex) => {
+    return {
+      color: bodyCellStyle.color,
+      backgroundColor: theme.table.backgroundColor,
+      opacity: engagedColumn !== undefined && engagedColumn !== columnIndex ? '50%' : null,
+    };
+  };
 
   useEffect(() => {
     addSelectionListeners({ api: selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
   }, []);
-
-  console.log('engagedColumn');
 
   return (
     <StyledTableBody paginationNeeded={paginationNeeded} bodyCellStyle={bodyCellStyle}>
@@ -88,8 +91,7 @@ function TableBodyWrapper({
                   column={column}
                   key={id}
                   align={align}
-                  styling={cellStyle}
-                  style={{ opacity: engagedColumn !== undefined && engagedColumn !== columnIndex ? '50%' : null }}
+                  styling={getCellStyle(columnIndex)}
                   tabIndex={-1}
                   announce={announce}
                   onKeyDown={handleKeyDown}
@@ -110,6 +112,10 @@ function TableBodyWrapper({
   );
 }
 
+TableBodyWrapper.defaultProps = {
+  engagedColumn: undefined,
+};
+
 TableBodyWrapper.propTypes = {
   rootElement: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
@@ -122,6 +128,7 @@ TableBodyWrapper.propTypes = {
   tableWrapperRef: PropTypes.object.isRequired,
   announce: PropTypes.func.isRequired,
   children: PropTypes.object.isRequired,
+  engagedColumn: PropTypes.number,
 };
 
 export default memo(TableBodyWrapper);

@@ -24,6 +24,11 @@ type DragOverProps = {
   setEngagedColumn: (i: number) => void;
 };
 
+type DragEndProps = {
+  model: EngineAPI.IGenericObject;
+  setEngagedColumn: (arg0: undefined) => void;
+};
+
 const applyColumnOrderSoftPatch = (model: any, add: string, columnOrder: number[]) => {
   const op = add ? 'add' : 'replace';
 
@@ -43,16 +48,18 @@ let column: Column;
 let startPosition: number;
 let cellXPositon: number;
 let order: Array<number>;
+let previousX: number;
 
 export const handleDragStart = ({ event, layout, cellRef, headRowRef, cell }: DragStartProps) => {
   tableWidth = headRowRef.current!.clientWidth;
   column = cell;
   cellXPositon = cellRef.current!.offsetLeft;
   startPosition = event.clientX;
+  previousX = event.clientX;
   order = layout.qHyperCube.qColumnOrder;
 };
 
-export const handleDragOver = ({ event, rtl, columns, setEngagedColumn }: DragOverProps) => {
+export const handleDragOver = ({ event, model, rtl, columns, setEngagedColumn }: DragOverProps) => {
   event.preventDefault();
   event.dataTransfer.dropEffect = 'move';
   // compute new visible index for the reordering column
@@ -79,11 +86,12 @@ export const handleDragOver = ({ event, rtl, columns, setEngagedColumn }: DragOv
     index += 1;
     offset += columns[i].width;
   }
-  const currentIndex = columns.indexOf(column);
+  const currentIndex = columns.findIndex((c) => c.dataColIdx === column.dataColIdx);
   let visibleMapping: number[];
   let newMapping: number[];
   let newOrder: number[];
-  if (currentIndex !== index) {
+  if (currentIndex !== index && Math.abs(previousX - event.clientX) > 5) {
+    previousX = event.clientX;
     visibleMapping = columns.map((h) => order.indexOf(h.dataColIdx));
     newMapping = visibleMapping.slice();
     // move the column from visible position at prevIndex to index
@@ -95,11 +103,11 @@ export const handleDragOver = ({ event, rtl, columns, setEngagedColumn }: DragOv
     });
     order = newOrder;
     setEngagedColumn(index);
+    applyColumnOrderSoftPatch(model, 'replace', order);
   }
 };
 
-export const handleDragEnd = (model: EngineAPI.IGenericObject, setEngagedColumn: (arg0: undefined) => void) => {
-  applyColumnOrderSoftPatch(model, 'replace', order);
+export const handleDragEnd = ({ model, setEngagedColumn }: DragEndProps) => {
   model.getEffectiveProperties().then((properties: EngineAPI.IGenericObjectProperties) => {
     const oldProperties = extend(true, {}, properties);
     storeColumnWidths(properties.qHyperCubeDef);
