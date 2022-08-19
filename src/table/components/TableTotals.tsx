@@ -1,5 +1,4 @@
 import React, { memo, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { useContextSelector, TableContext } from '../context';
 import { getTotalsCellStyle } from '../utils/styling-utils';
 import { handleTotalKeyDown } from '../utils/handle-key-press';
@@ -17,7 +16,7 @@ function TableTotals({ rootElement, tableData, theme, layout, keyboard }: TableT
   return (
     <StyledHeadRow paginationNeeded={paginationNeeded} className="sn-table-row">
       {columns.map((column, columnIndex) => {
-        const cellCoord: [number, number] = [isTop || !rows ? 1 : rows.length + 1, columnIndex];
+        const cellCoord: [number, number] = [isTop ? 1 : rows.length + 1, columnIndex];
         return (
           <StyledTotalsCell
             totalsStyle={totalsStyle}
@@ -41,13 +40,5 @@ function TableTotals({ rootElement, tableData, theme, layout, keyboard }: TableT
     </StyledHeadRow>
   );
 }
-
-TableTotals.propTypes = {
-  rootElement: PropTypes.object.isRequired,
-  tableData: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-  layout: PropTypes.object.isRequired,
-  keyboard: PropTypes.object.isRequired,
-};
 
 export default memo(TableTotals);

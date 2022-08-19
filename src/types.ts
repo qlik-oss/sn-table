@@ -321,7 +321,7 @@ export interface ContextProviderProps {
   selectionDispatchMock?: jest.Mock<any, any>;
 }
 
-  export interface TableTotalsProps {
+export interface TableTotalsProps {
   rootElement: HTMLElement;
   tableData: TableData;
   layout: TableLayout;

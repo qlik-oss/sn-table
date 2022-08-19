@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, Matcher } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import { stardust } from '@nebula.js/stardust';
 import TableTotals from '../TableTotals';
 import { TableContextProvider } from '../../context';
@@ -20,7 +20,7 @@ describe('<TableTotals />', () => {
   const renderTableTotals = (cellCoordMock?: [number, number]) =>
     render(
       <TableContextProvider selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
-        {((getTotalPosition(layout) === 'top') as unknown as HTMLElement) && (
+        {getTotalPosition(layout) === 'top' ? (
           <TableTotals
             rootElement={rootElement}
             tableData={tableData}
@@ -28,6 +28,8 @@ describe('<TableTotals />', () => {
             layout={layout}
             keyboard={keyboard}
           />
+        ) : (
+          <></>
         )}
       </TableContextProvider>
     );
@@ -58,8 +60,8 @@ describe('<TableTotals />', () => {
   it('should show the total row when table total is rendered', () => {
     layout.totals.position = 'top';
     const { queryByText } = renderTableTotals();
-    expect(queryByText(tableData.columns[0].totalInfo as Matcher)).toHaveTextContent('Totals');
-    expect(queryByText(tableData.columns[1].totalInfo as Matcher)).toHaveTextContent('350');
+    expect(queryByText(tableData.columns[0].totalInfo as string)).toHaveTextContent('Totals');
+    expect(queryByText(tableData.columns[1].totalInfo as string)).toHaveTextContent('350');
   });
 
   describe('Handle keys call when TableTotals is rendered', () => {
@@ -70,14 +72,14 @@ describe('<TableTotals />', () => {
     it('should call handleTotalKeyDown when keyDown on a total cell', () => {
       jest.spyOn(handleKeyPress, 'handleTotalKeyDown').mockImplementation(() => jest.fn());
       const { queryByText } = renderTableTotals();
-      fireEvent.keyDown(queryByText(tableData.columns[0].totalInfo as Matcher) as Element);
+      fireEvent.keyDown(queryByText(tableData.columns[0].totalInfo as string) as Element);
       expect(handleKeyPress.handleTotalKeyDown).toHaveBeenCalledTimes(1);
     });
 
     it('should call removeAndFocus when clicking a total cell', () => {
       jest.spyOn(handleAccessibility, 'removeAndFocus').mockImplementation(() => jest.fn());
       const { queryByText } = renderTableTotals();
-      fireEvent.mouseDown(queryByText(tableData.columns[0].totalInfo as Matcher) as Element);
+      fireEvent.mouseDown(queryByText(tableData.columns[0].totalInfo as string) as Element);
       expect(handleAccessibility.removeAndFocus).toHaveBeenCalledTimes(1);
     });
   });
