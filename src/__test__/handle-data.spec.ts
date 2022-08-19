@@ -85,7 +85,7 @@ describe('handle-data', () => {
   });
 
   describe('manageData', () => {
-    let model: EngineAPI.IGenericObject | undefined;
+    let model: EngineAPI.IGenericObject;
     let pageInfo: PageInfo;
     let setPageInfo: SetPageInfo;
 
@@ -103,20 +103,23 @@ describe('handle-data', () => {
         setPageInfo
       )) as TableData;
 
+      const firstColCell = rows[0]['col-0'] as Cell;
+      const secondColCell = rows[0]['col-1'] as Cell;
+
       expect(totalColumnCount).toBe(layout.qHyperCube.qSize.qcx);
       expect(totalRowCount).toBe(layout.qHyperCube.qSize.qcy);
       expect(paginationNeeded).toBe(true);
       expect(rows).toHaveLength(100);
-      expect((<Cell>rows[0]['col-0']).qText).toBe('2');
-      expect((<Cell>rows[0]['col-0']).rowIdx).toBe(100);
-      expect((<Cell>rows[0]['col-0']).colIdx).toBe(0);
-      expect((<Cell>rows[0]['col-0']).rawRowIdx).toBe(0);
-      expect((<Cell>rows[0]['col-0']).rawColIdx).toBe(2);
-      expect((<Cell>rows[0]['col-1']).qText).toBe('0');
-      expect((<Cell>rows[0]['col-1']).rowIdx).toBe(100);
-      expect((<Cell>rows[0]['col-1']).colIdx).toBe(1);
-      expect((<Cell>rows[0]['col-1']).rawRowIdx).toBe(0);
-      expect((<Cell>rows[0]['col-1']).rawColIdx).toBe(0);
+      expect(firstColCell.qText).toBe('2');
+      expect(firstColCell.rowIdx).toBe(100);
+      expect(firstColCell.colIdx).toBe(0);
+      expect(firstColCell.rawRowIdx).toBe(0);
+      expect(firstColCell.rawColIdx).toBe(2);
+      expect(secondColCell.qText).toBe('0');
+      expect(secondColCell.rowIdx).toBe(100);
+      expect(secondColCell.colIdx).toBe(1);
+      expect(secondColCell.rawRowIdx).toBe(0);
+      expect(secondColCell.rawColIdx).toBe(0);
       expect(columns).toHaveLength(4);
       columns.forEach((c, i) => {
         expect(c.id).toBe(Object.keys(rows[0])[i + 1]); // skip the first key

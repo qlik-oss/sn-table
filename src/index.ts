@@ -16,8 +16,8 @@ import {
   useApp,
 } from '@nebula.js/stardust';
 
-import properties from './object-properties';
-import data from './data';
+import properties from './qae/object-properties';
+import data from './qae/data';
 import ext from './ext';
 import manageData from './handle-data';
 import { render, teardown } from './table/Root';
@@ -74,12 +74,15 @@ export default function supernova(env: Galaxy) {
 
       const [pageInfo, setPageInfo] = useState(initialPageInfo);
       const [tableData] = usePromise(
-        async () => (env.carbon ? nothing() : manageData(model, layout, pageInfo, setPageInfo)),
-        [layout, pageInfo]
+        async () =>
+          env.carbon && !model?.getHyperCubeData
+            ? nothing()
+            : manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo),
+        [layout, pageInfo, model]
       );
 
       useEffect(() => {
-        const isReadyToRender = !env.carbon && reactRoot && layout && tableData && announce && changeSortOrder && theme;
+        const isReadyToRender = !env.carbon && reactRoot && layout && tableData && changeSortOrder && theme;
         isReadyToRender &&
           render(reactRoot, {
             rootElement,
@@ -113,7 +116,17 @@ export default function supernova(env: Galaxy) {
 
       // this is the one we want to use for carbon
       useEffect(() => {
-        renderWithCarbon({ env, rootElement, model, theme, selectionsAPI, app, rect, layout, changeSortOrder });
+        renderWithCarbon({
+          env,
+          rootElement,
+          model,
+          theme,
+          selectionsAPI,
+          app,
+          rect,
+          layout,
+          changeSortOrder,
+        });
       }, [layout, model, selectionsAPI.isModal(), theme, translator.language(), app, changeSortOrder]);
 
       useEffect(

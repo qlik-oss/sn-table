@@ -31,8 +31,8 @@ export interface Galaxy {
 }
 
 export interface UseOptions {
-  direction: 'ltr' | 'rtl';
-  footerContainer: HTMLElement;
+  direction?: 'ltr' | 'rtl';
+  footerContainer?: HTMLElement;
 }
 
 export interface SelectionState {
@@ -48,11 +48,11 @@ export interface AnnounceArgs {
   politeness?: 'polite' | 'assertive' | 'off';
 }
 
-export type AnnounceFn = (arg0: AnnounceArgs) => void;
+export type Announce = (arg0: AnnounceArgs) => void;
 
 export interface ActionPayload {
   cell: Cell;
-  announce: (arg0: AnnounceArgs) => void;
+  announce: Announce;
   evt: React.KeyboardEvent | React.MouseEvent;
 }
 
@@ -124,7 +124,7 @@ export interface PaletteColor {
 
 interface TextAlign {
   auto: boolean;
-  align: string;
+  align: 'left' | 'center' | 'right';
 }
 
 export interface ExtendedNxAttrExprInfo extends EngineAPI.INxAttrExprInfo {
@@ -143,7 +143,6 @@ export interface ExtendedNxMeasureInfo extends EngineAPI.INxMeasureInfo {
 
 export interface HyperCube extends Omit<EngineAPI.IHyperCube, 'qDimensionInfo' | 'qMeasureInfo'> {
   qColumnOrder: number[];
-  textAlign: string;
   qDimensionInfo: ExtendedNxDimensionInfo[];
   qMeasureInfo: ExtendedNxMeasureInfo[];
 }
@@ -220,7 +219,7 @@ export interface HandleWrapperKeyDownProps {
   isSelectionMode: boolean;
 }
 
-export interface handleHeadKeyDownProps {
+export interface HandleHeadKeyDownProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;
   cellCoord: [number, number];
@@ -233,18 +232,33 @@ export interface handleHeadKeyDownProps {
 
 export type TotalsPosition = 'top' | 'bottom' | 'noTotals';
 
-export interface handleBodyKeyDownProps {
+export interface HandleBodyKeyDownProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;
   cell: Cell;
   selectionDispatch: React.Dispatch<TSelectionActions>;
   isSelectionsEnabled: boolean;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
-  announce: AnnounceFn;
+  announce: Announce;
   keyboard: stardust.Keyboard;
   totalsPosition: TotalsPosition;
   paginationNeeded: boolean;
   selectionsAPI: ExtendedSelectionAPI;
+}
+
+export interface CellFocusProps {
+  focusType: string;
+  cell: HTMLTableCellElement | undefined;
+}
+
+export interface HandleResetFocusProps {
+  focusedCellCoord: [number, number];
+  rootElement: HTMLElement;
+  shouldRefocus: React.MutableRefObject<boolean>;
+  isSelectionMode: boolean;
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  keyboard: stardust.Keyboard;
+  announce: Announce;
 }
 
 export type TableData = {
@@ -256,22 +270,60 @@ export type TableData = {
   columns: Column[];
   totalsPosition: TotalsPosition;
 };
-export interface CellFocusProps {
-  focusType: string;
-  cell: HTMLTableCellElement | undefined;
+
+export interface RenderProps {
+  direction?: 'ltr' | 'rtl';
+  selectionsAPI: stardust.ObjectSelections;
+  rootElement?: HTMLElement;
+  layout: TableLayout;
+  changeSortOrder: ChangeSortOrder;
+  rect: stardust.Rect;
+  tableData?: TableData;
+  pageInfo?: PageInfo;
+  setPageInfo?: SetPageInfo;
+  constraints?: stardust.Constraints;
+  translator?: ExtendedTranslator;
+  theme: ExtendedTheme;
+  keyboard?: stardust.Keyboard;
+  footerContainer?: HTMLElement;
+  announce?: Announce;
+  model?: EngineAPI.IGenericObject;
+  manageData?(
+    model: EngineAPI.IGenericObject | undefined,
+    layout: TableLayout,
+    pageInfo: PageInfo,
+    setPageInfo: SetPageInfo
+  ): Promise<TableData | null>;
+  app?: EngineAPI.IApp;
 }
-export interface HandleResetFocusProps {
-  focusedCellCoord: [number, number];
+
+export interface RootProps {
+  direction?: 'ltr' | 'rtl';
+  selectionsAPI: stardust.ObjectSelections;
   rootElement: HTMLElement;
-  shouldRefocus: React.MutableRefObject<boolean>;
-  isSelectionMode: boolean;
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  layout: TableLayout;
+  changeSortOrder: ChangeSortOrder;
+  rect: stardust.Rect;
+  tableData: TableData;
+  pageInfo: PageInfo;
+  setPageInfo: SetPageInfo;
+  constraints: stardust.Constraints;
+  translator: ExtendedTranslator;
+  theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
-  announce: AnnounceFn;
+  footerContainer?: HTMLElement;
+  announce: Announce;
+}
+
+export interface ContextProviderProps {
+  children: JSX.Element;
+  selectionsAPI: stardust.ObjectSelections;
+  cellCoordMock?: [number, number];
+  selectionDispatchMock?: jest.Mock<any, any>;
 }
 export interface hocProps extends TableCellProps {
   styling: CellStyle;
   cell: Cell;
   column: Column;
-  announce: AnnounceFn;
+  announce: Announce;
 }

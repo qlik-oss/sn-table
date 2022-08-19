@@ -1,6 +1,6 @@
 import { MouseEvent } from 'react';
 import { stardust } from '@nebula.js/stardust';
-import { AnnounceFn, TotalsPosition, Cell } from '../../../types';
+import { Announce, TotalsPosition, Cell } from '../../../types';
 import * as handleAccessibility from '../handle-accessibility';
 
 describe('handle-accessibility', () => {
@@ -108,7 +108,7 @@ describe('handle-accessibility', () => {
     });
 
     it('should return null', () => {
-      const tmpCell = elementCreator('div', '-1') as HTMLDivElement;
+      cell = elementCreator('div', '-1') as HTMLTableCellElement;
       const cellElement = handleAccessibility.findCellWithTabStop(rootElement);
       expect(cellElement).toBeNull();
     });
@@ -186,7 +186,7 @@ describe('handle-accessibility', () => {
   describe('handleResetFocus', () => {
     let shouldRefocus: React.MutableRefObject<boolean>;
     let isSelectionMode: boolean;
-    let announce: AnnounceFn;
+    let announce: Announce;
 
     const resetFocus = () =>
       handleAccessibility.handleResetFocus({
@@ -367,13 +367,13 @@ describe('handle-accessibility', () => {
 
   describe('announceSelectionState', () => {
     let isSelected: boolean;
-    let announce: AnnounceFn;
+    let announce: Announce;
     let nextCell: HTMLTableCellElement;
     let isSelectionMode: boolean;
 
     beforeEach(() => {
       isSelected = false;
-      announce = jest.fn() as AnnounceFn;
+      announce = jest.fn() as Announce;
       nextCell = {
         classList: {
           contains: () => isSelected,

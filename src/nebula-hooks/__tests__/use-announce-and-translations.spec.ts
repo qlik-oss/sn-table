@@ -1,10 +1,10 @@
-import { AnnounceFn, ExtendedTranslator } from '../../types';
+import { Announce, ExtendedTranslator } from '../../types';
 import { announcementFactory } from '../use-announce-and-translations';
 
 describe('announcementFactory', () => {
   let rootElement: HTMLElement;
   let translator: ExtendedTranslator;
-  let announcer: AnnounceFn;
+  let announcer: Announce;
   let announcerElement01: HTMLElement;
   let announcerElement02: HTMLElement;
   let previousAnnouncementElement: string;

@@ -1,7 +1,7 @@
 // TODO: add this to global rules
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { stardust } from '@nebula.js/stardust';
-import { Cell, SelectionState, ExtendedSelectionAPI, ActionPayload, AnnounceFn } from '../../types';
+import { Cell, SelectionState, ExtendedSelectionAPI, ActionPayload, Announce } from '../../types';
 
 export enum SelectionStates {
   SELECTED = 'selected',
@@ -96,7 +96,7 @@ export const getCellSelectionState = (cell: Cell, selectionState: SelectionState
   return cellState;
 };
 
-export const handleAnnounceSelectionStatus = (announce: AnnounceFn, rowsLength: number, isAddition: boolean) => {
+export const handleAnnounceSelectionStatus = (announce: Announce, rowsLength: number, isAddition: boolean) => {
   if (rowsLength) {
     const changeStatus = isAddition ? 'SNTable.SelectionLabel.SelectedValue' : 'SNTable.SelectionLabel.DeselectedValue';
     const amountStatus =

@@ -1,18 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from '@nebula.js/stardust';
-import ReactDom, { createRoot } from 'react-dom/client';
+import { useMemo } from '@nebula.js/stardust';
+import { createRoot } from 'react-dom/client';
 
 import { mount } from '../table/Root';
 
-export default function useReactRoot(rootElement: HTMLElement) {
-  const [reactRoot, setReactRoot] = useState<ReactDom.Root | undefined>(undefined);
-
-  useEffect(() => {
-    if (rootElement) {
-      setReactRoot(createRoot(rootElement));
-      mount(rootElement); // only does something in native env
-    }
+const useReactRoot = (rootElement: HTMLElement) =>
+  useMemo(() => {
+    mount(rootElement);
+    return createRoot(rootElement);
   }, [rootElement]);
 
-  return reactRoot;
-}
+export default useReactRoot;
