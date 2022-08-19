@@ -61,7 +61,7 @@ export interface ContextValue {
   focusedCellCoord: [number, number];
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   selectionState: SelectionState;
-  selectionDispatch: React.Dispatch<ActionPayload> | jest.Mock<any, any>;
+  selectionDispatch: React.Dispatch<TSelectionActions> | jest.Mock<any, any>;
 }
 
 export interface PaginationColors {
@@ -313,4 +313,11 @@ export interface RootProps {
   keyboard: stardust.Keyboard;
   footerContainer?: HTMLElement;
   announce: Announce;
+}
+
+export interface ContextProviderProps {
+  children: JSX.Element;
+  selectionsAPI: stardust.ObjectSelections;
+  cellCoordMock?: [number, number];
+  selectionDispatchMock?: jest.Mock<any, any>;
 }
