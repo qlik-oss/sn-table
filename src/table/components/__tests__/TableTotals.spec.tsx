@@ -1,33 +1,35 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
+import { stardust } from '@nebula.js/stardust';
 import TableTotals from '../TableTotals';
 import { TableContextProvider } from '../../context';
 import { getTotalPosition } from '../../../handle-data';
 import * as handleKeyPress from '../../utils/handle-key-press';
 import * as handleAccessibility from '../../utils/handle-accessibility';
 import { generateLayout } from '../../../__test__/generate-test-data';
+import { TableData, ExtendedTheme, TableLayout } from '../../../types';
 
 describe('<TableTotals />', () => {
-  const rootElement = {};
-  let tableData;
-  let theme;
-  let layout;
-  let selectionsAPI;
-  let keyboard;
-  let translator;
+  const rootElement = {} as HTMLElement;
+  let tableData: TableData;
+  let theme: ExtendedTheme;
+  let layout: TableLayout;
+  let selectionsAPI: stardust.ObjectSelections;
+  let keyboard: stardust.Keyboard;
 
-  const renderTableTotals = (cellCoordMock) =>
+  const renderTableTotals = (cellCoordMock?: [number, number]) =>
     render(
       <TableContextProvider selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
-        {getTotalPosition(layout) === 'top' && (
+        {getTotalPosition(layout) === 'top' ? (
           <TableTotals
             rootElement={rootElement}
             tableData={tableData}
             theme={theme}
             layout={layout}
             keyboard={keyboard}
-            translator={translator}
           />
+        ) : (
+          <></>
         )}
       </TableContextProvider>
     );
@@ -39,28 +41,27 @@ describe('<TableTotals />', () => {
         { id: 2, isDim: false, dataColIdx: 1, totalInfo: '350' },
       ],
       rows: ['rowOne', 'rowTwo'],
-    };
+    } as unknown as TableData;
     theme = {
-      getColorPickerColor: () => {},
-      name: () => {},
-      getStyle: () => {},
+      getColorPickerColor: () => undefined,
+      name: () => undefined,
+      getStyle: () => undefined,
       table: { body: { borderColor: '' } },
-    };
+    } as unknown as ExtendedTheme;
     layout = generateLayout(2, 2, 10, [], [{ qText: '350' }, { qText: '-' }]);
     keyboard = {
       enabled: false,
-    };
-    translator = { get: (s) => s };
+    } as stardust.Keyboard;
     selectionsAPI = {
       isModal: () => false,
-    };
+    } as stardust.ObjectSelections;
   });
 
   it('should show the total row when table total is rendered', () => {
     layout.totals.position = 'top';
     const { queryByText } = renderTableTotals();
-    expect(queryByText(tableData.columns[0].totalInfo)).toHaveTextContent('Totals');
-    expect(queryByText(tableData.columns[1].totalInfo)).toHaveTextContent('350');
+    expect(queryByText(tableData.columns[0].totalInfo as string)).toHaveTextContent('Totals');
+    expect(queryByText(tableData.columns[1].totalInfo as string)).toHaveTextContent('350');
   });
 
   describe('Handle keys call when TableTotals is rendered', () => {
@@ -71,14 +72,14 @@ describe('<TableTotals />', () => {
     it('should call handleTotalKeyDown when keyDown on a total cell', () => {
       jest.spyOn(handleKeyPress, 'handleTotalKeyDown').mockImplementation(() => jest.fn());
       const { queryByText } = renderTableTotals();
-      fireEvent.keyDown(queryByText(tableData.columns[0].totalInfo));
+      fireEvent.keyDown(queryByText(tableData.columns[0].totalInfo as string) as Element);
       expect(handleKeyPress.handleTotalKeyDown).toHaveBeenCalledTimes(1);
     });
 
     it('should call removeAndFocus when clicking a total cell', () => {
       jest.spyOn(handleAccessibility, 'removeAndFocus').mockImplementation(() => jest.fn());
       const { queryByText } = renderTableTotals();
-      fireEvent.mouseDown(queryByText(tableData.columns[0].totalInfo));
+      fireEvent.mouseDown(queryByText(tableData.columns[0].totalInfo as string) as Element);
       expect(handleAccessibility.removeAndFocus).toHaveBeenCalledTimes(1);
     });
   });

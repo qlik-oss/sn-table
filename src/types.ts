@@ -327,3 +327,11 @@ export interface hocProps extends TableCellProps {
   column: Column;
   announce: Announce;
 }
+
+export interface TableTotalsProps {
+  rootElement: HTMLElement;
+  tableData: TableData;
+  layout: TableLayout;
+  theme: ExtendedTheme;
+  keyboard: stardust.Keyboard;
+}
