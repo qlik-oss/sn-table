@@ -327,4 +327,5 @@ export interface TableTotalsProps {
   layout: TableLayout;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
+  engagedColumn: number | undefined;
 }

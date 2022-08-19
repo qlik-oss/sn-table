@@ -6,7 +6,7 @@ import { removeAndFocus } from '../utils/handle-accessibility';
 import { StyledHeadRow, StyledTotalsCell } from '../styles';
 import { TableTotalsProps } from '../../types';
 
-function TableTotals({ rootElement, tableData, theme, layout, keyboard }: TableTotalsProps) {
+function TableTotals({ rootElement, tableData, theme, layout, keyboard, engagedColumn }: TableTotalsProps) {
   const { columns, paginationNeeded, totalsPosition, rows } = tableData;
   const headRowHeight = useContextSelector(TableContext, (value) => value.headRowHeight);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
