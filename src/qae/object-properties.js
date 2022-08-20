@@ -1,5 +1,6 @@
 /**
- * @extends {GenericObjectProperties}
+ * @interface Properties
+ * @extends {EngineAPI.IGenericObjectProperties}
  * @entry
  */
 const properties = {
@@ -11,7 +12,8 @@ const properties = {
   version: JSON.stringify(process.env.PACKAGE_VERSION),
   /**
    * Extends HyperCubeDef, see Engine API: HyperCubeDef
-   * @extends {HyperCubeDef}
+   * @interface HyperCubeProperties
+   * @extends {EngineAPI.IHyperCubeDef}
    */
   qHyperCubeDef: {
     /**
@@ -24,7 +26,7 @@ const properties = {
      * @type {MeasureProperties[]}
      */
     qMeasures: [],
-    /** @type {schemasNxHypercubeMode} */
+    /** @type {EngineAPI.INxHypercubeMode} */
     qMode: 'S',
     /** @type {boolean} */
     qSuppressZero: false,
@@ -42,22 +44,22 @@ const properties = {
   showTitles: true,
   /**
    * Visualization title
-   * @type {(string|StringExpression)=}
+   * @type {(string|EngineAPI.IStringExpression)=}
    */
   title: '',
   /**
    * Visualization subtitle
-   * @type {(string|StringExpression)=}
+   * @type {(string|EngineAPI.IStringExpression)=}
    */
   subtitle: '',
   /**
    * Visualization footnote
-   * @type {(string|StringExpression)=}
+   * @type {(string|EngineAPI.IStringExpression)=}
    */
   footnote: '',
   /**
    * totals settings
-   * @type {object}
+   * @typedef {object} Totals
    */
   totals: {
     /**
@@ -85,46 +87,39 @@ const properties = {
 
 /**
  * Extends `NxDimension`, see Engine API: `NxDimension`
- * @typedef {object} DimensionProperties
- * @extends NxDimension
- * @property {InlineDimensionDef} qDef
- * @property {AttributeExpressionProperties[]} qAttributeExpressions
- */
-
-/**
- * Extends `NxMeasure`, see Engine API: `NxMeasure`
- * @typedef {object} MeasureProperties
- * @extends NxMeasure
+ * @interface DimensionProperties
+ * @extends EngineAPI.INxDimension
  * @property {NxInlineMeasureDef} qDef
  * @property {AttributeExpressionProperties[]} qAttributeExpressions
  */
 
 /**
- * Extends `NxInlineDimensionDef`, see Engine API: `NxInlineDimensionDef`.
- * @typedef {object} InlineDimensionDef
- * @extends NxInlineDimensionDef
- * @property {TextAlign=} textAlign
+ * Extends `NxMeasure`, see Engine API: `NxMeasure`
+ * @interface MeasureProperties
+ * @extends EngineAPI.INxMeasure
+ * @property {NxInlineMeasureDef} qDef
+ * @property {AttributeExpressionProperties[]} qAttributeExpressions
  */
 
 /**
  * Extends `NxInlineMeasureDef`, see Engine API: `NxInlineMeasureDef`.
- * @typedef {object} InlineMeasureDef
- * @extends NxInlineMeasureDef
+ * @interface NxInlineMeasureDef
+ * @extends EngineAPI.INxInlineMeasureDef
  * @property {TextAlign=} textAlign
  */
 
 /**
  * Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`.
  * Column specific styling overrides general styling, that is defined in `components`.
- * @typedef {object} AttributeExpressionProperties
- * @extends NxAttrExprDef - expression resolving into a valid color
+ * @interface AttributeExpressionProperties
+ * @extends EngineAPI.INxAttrExprDef - expression resolving into a valid color
  * @property {('cellForegroundColor'|'cellBackgroundColor')} id - specifying what the color applies to
  */
 
 /**
  * Holds text alignment for a specific column.
- * @typedef {object} TextAlign
- * @extends NxInlineDimensionDef
+ * @interface TextAlign
+ * @extends EngineAPI.INxInlineDimensionDef
  * @property {boolean} auto - If true, sets the alignment based on the type of column (left for dimension, right for measure)
  * @property {('left'|'center'|'right')} align - Is used (and mandatory) if `auto` is false
  */
@@ -133,7 +128,7 @@ const properties = {
  * General styling for all columns.
  * Split up into header and content (body) styling.
  * If any property is not set, default values specific for each property is used.
- * @typedef {object} Styling
+ * @interface Styling
  * @property {string} key - This should be set to `theme`
  * @property {ContentStyling=} content
  * @property {HeaderStyling=} header
@@ -141,7 +136,7 @@ const properties = {
 
 /**
  * Holds properties for font size, font color and hover styling.
- * @typedef {object} ContentStyling
+ * @interface ContentStyling
  * @property {number=} fontSize - Defaults to `14`
  * @property {PaletteColor=} fontColor - Defaults to `#404040`
  * @property {boolean=} hoverEffect - Toggles hover effect
@@ -151,14 +146,14 @@ const properties = {
 
 /**
  * Holds properties for font size and color.
- * @typedef {object} HeaderStyling
+ * @interface HeaderStyling
  * @property {number=} fontSize - Defaults to `14`
  * @property {PaletteColor=} fontColor - Defaults to `#404040`
  */
 
 /**
  * Color information structure. Holds the actual color and index in palette
- * @typedef {object} PaletteColor
+ * @interface PaletteColor
  * @property {string} color - Color as hex string (mandatory if index: -1)
  * @property {number} index - Index in palette
  */

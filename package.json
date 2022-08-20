@@ -19,11 +19,13 @@
     "type": "git",
     "url": "https://github.com/qlik-oss/sn-table.git"
   },
+  "types": "types/index.d.ts",
   "files": [
     "dist",
     "api-specifications",
     "core",
-    "sn-table-ext"
+    "sn-table-ext",
+    "types"
   ],
   "engines": {
     "node": ">=16"
@@ -44,12 +46,13 @@
     "copy:ext": "node ./tools/copy-ext.js",
     "locale:verify": "node src/locale/tools/verify-translations.ts",
     "locale:generate": "node src/locale/scripts/generate-all.mjs",
-    "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
+    "spec": "sy from-jsdoc -c ./spec-configs/props.conf.js",
+    "dts": "sy to-dts -c ./spec-configs/props.conf.js",
     "test:unit": "jest",
     "test:rendering": "playwright test",
     "test:local:rendering": "./test/rendering/scripts/run-rendering-test.sh",
     "test:local:update:screenshots": "./test/rendering/scripts/update-screenshots.sh",
-    "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
+    "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec && yarn dts",
     "prepack": "./tools/prepare-sn-pack.js",
     "prepare": "husky install",
     "preversion": "yarn build",
@@ -114,7 +117,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.69.4",
-    "scriptappy-from-jsdoc": "0.7.0",
+    "@scriptappy/cli": "0.1.0",
+    "@scriptappy/to-dts": "1.0.0-beta.4",
     "shx": "0.3.4",
     "styled-components": "5.3.5",
     "stylis": "3.5.4",

@@ -5,7 +5,7 @@ const validateScripts = (pkg) => {
   if (pkg.scripts.build !== 'yarn run locale:generate && node ./tools/build.js --core --ext && shx cp assets/* dist') {
     throw new Error('package.json does not have correct build script');
   }
-  if (pkg.scripts.prepublishOnly !== 'NODE_ENV=production yarn run build && yarn spec') {
+  if (pkg.scripts.prepublishOnly !== 'NODE_ENV=production yarn run build && yarn spec && yarn dts') {
     throw new Error('package.json does not have correct prepublishOnly script');
   }
   if (pkg.scripts.prepack !== './tools/prepare-sn-pack.js') {
@@ -45,11 +45,12 @@ const validateFiles = (pkg) => {
     'bugs',
     'repository',
     'files',
+    'types',
     'main',
     'peerDependencies',
   ];
   // files
-  const mustHaveFiles = ['dist', 'core', 'api-specifications', 'sn-table-ext'];
+  const mustHaveFiles = ['dist', 'core', 'api-specifications', 'sn-table-ext', 'types'];
   const allowedFiles = ['assets', ...mustHaveFiles];
   const missing = mustHaveFiles.filter((f) => (pkg.files || []).indexOf(f) === -1);
   if (missing.length) {
