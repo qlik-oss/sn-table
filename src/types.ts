@@ -157,7 +157,7 @@ export interface StylingLayout {
 }
 
 export interface GeneratedStyling {
-  padding: string;
+  padding?: string;
   borderStyle: string;
   borderColor: string;
   fontFamily?: string;
