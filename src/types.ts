@@ -1,6 +1,7 @@
 import React from 'react';
 import { TableCellProps } from '@mui/material/TableCell';
 import { stardust } from '@nebula.js/stardust';
+
 import { TSelectionActions } from './table/utils/selections-utils';
 
 export interface Cell {
@@ -147,9 +148,45 @@ export interface HyperCube extends Omit<EngineAPI.IHyperCube, 'qDimensionInfo' |
   qMeasureInfo: ExtendedNxMeasureInfo[];
 }
 
+interface InlineDimensionDef extends EngineAPI.INxInlineDimensionDef {
+  textAlign: TextAlign;
+}
+interface InlineMeasureDef extends EngineAPI.INxInlineMeasureDef {
+  textAlign: TextAlign;
+}
+interface AttributeExpressionProperty extends EngineAPI.INxAttrExprDef {
+  id: 'cellForegroundColor' | 'cellBackgroundColor';
+}
+interface DimensionProperty extends Omit<EngineAPI.INxDimension, 'qDef' | 'qAttributeExpressions'> {
+  qDef: InlineDimensionDef;
+  qAttributeExpressions: AttributeExpressionProperty[];
+}
+interface MeasureProperty extends Omit<EngineAPI.INxMeasure, 'qDef' | 'qAttributeExpressions'> {
+  qDef: InlineMeasureDef;
+  qAttributeExpressions: AttributeExpressionProperty[];
+}
+export interface QHyperCubeDef extends Omit<EngineAPI.IHyperCubeDef, 'qDimensions' | 'qMeasures'> {
+  qDimensions: DimensionProperty[];
+  qMeasures: MeasureProperty;
+  qColumnOrder: number[];
+  columnWidths: number[];
+}
+
 export interface StylingLayout {
   fontColor?: PaletteColor;
   fontSize?: number;
+  hoverColor?: PaletteColor;
+  hoverEffect?: boolean;
+  hoverFontColor?: PaletteColor;
+  padding?: string; // not available as option in the styling panel
+}
+
+interface HeaderStyling {
+  fontColor?: PaletteColor;
+  fontSize?: number;
+}
+
+interface ContentStyling extends HeaderStyling {
   hoverColor?: PaletteColor;
   hoverEffect?: boolean;
   hoverFontColor?: PaletteColor;
@@ -178,10 +215,10 @@ export interface CellStyle {
   selectedCellClass?: string;
 }
 
-export interface Components {
+export interface Component {
   key: string;
-  content?: StylingLayout;
-  header?: StylingLayout;
+  content?: ContentStyling;
+  header?: HeaderStyling;
 }
 
 export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, 'qHyperCube'> {
@@ -191,7 +228,7 @@ export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, 'qH
     position: 'top' | 'bottom' | 'noTotals';
     label: string;
   };
-  components?: Components[];
+  components?: Component[];
 }
 
 export type ChangeSortOrder = (layout: TableLayout, column: Column) => Promise<void>;

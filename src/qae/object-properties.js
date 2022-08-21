@@ -16,20 +16,14 @@ const properties = {
   qHyperCubeDef: {
     /**
      * The maximum amount of dimensions is 1000
-     * @type {DimensionProperties[]}
+     * @type {DimensionProperty[]}
      */
     qDimensions: [],
     /**
      * The maximum amount of measures is 1000
-     * @type {MeasureProperties[]}
+     * @type {MeasureProperty[]}
      */
     qMeasures: [],
-    /** @type {schemasNxHypercubeMode} */
-    qMode: 'S',
-    /** @type {boolean} */
-    qSuppressZero: false,
-    /** @type {boolean} */
-    qSuppressMissing: true,
     /** @type {number[]} */
     qColumnOrder: [],
     /** @type {number[]} */
@@ -78,25 +72,25 @@ const properties = {
   },
   /**
    * Holds general styling
-   * @type {?Styling[]}
+   * @type {?Component[]}
    */
   components: [],
 };
 
 /**
  * Extends `NxDimension`, see Engine API: `NxDimension`
- * @typedef {object} DimensionProperties
+ * @typedef {object} DimensionProperty
  * @extends NxDimension
  * @property {InlineDimensionDef} qDef
- * @property {AttributeExpressionProperties[]} qAttributeExpressions
+ * @property {AttributeExpressionProperty[]} qAttributeExpressions
  */
 
 /**
  * Extends `NxMeasure`, see Engine API: `NxMeasure`
- * @typedef {object} MeasureProperties
+ * @typedef {object} MeasureProperty
  * @extends NxMeasure
- * @property {NxInlineMeasureDef} qDef
- * @property {AttributeExpressionProperties[]} qAttributeExpressions
+ * @property {InlineMeasureDef} qDef
+ * @property {AttributeExpressionProperty[]} qAttributeExpressions
  */
 
 /**
@@ -116,7 +110,7 @@ const properties = {
 /**
  * Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`.
  * Column specific styling overrides general styling, that is defined in `components`.
- * @typedef {object} AttributeExpressionProperties
+ * @typedef {object} AttributeExpressionProperty
  * @extends NxAttrExprDef - expression resolving into a valid color
  * @property {('cellForegroundColor'|'cellBackgroundColor')} id - specifying what the color applies to
  */
@@ -133,7 +127,7 @@ const properties = {
  * General styling for all columns.
  * Split up into header and content (body) styling.
  * If any property is not set, default values specific for each property is used.
- * @typedef {object} Styling
+ * @typedef {object} Component
  * @property {string} key - This should be set to `theme`
  * @property {ContentStyling=} content
  * @property {HeaderStyling=} header
@@ -147,6 +141,7 @@ const properties = {
  * @property {boolean=} hoverEffect - Toggles hover effect
  * @property {PaletteColor=} hoverColor - Background hover color. Uses `#f4f4f4` if no hover colors are set, is transparent if only `hoverFontColor` is set
  * @property {PaletteColor=} hoverFontColor - When only `hoverColor` is set, this is adjusted to either `#f4f4f4` or `#ffffff` for optimal contrast
+ * @property {string=} Padding - Defaults to `7px 14px`
  */
 
 /**
