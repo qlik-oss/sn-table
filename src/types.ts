@@ -274,7 +274,7 @@ export type TableData = {
 export interface RenderProps {
   direction?: 'ltr' | 'rtl';
   selectionsAPI: stardust.ObjectSelections;
-  rootElement?: HTMLElement;
+  rootElement: HTMLElement;
   layout: TableLayout;
   changeSortOrder: ChangeSortOrder;
   rect: stardust.Rect;
@@ -297,7 +297,7 @@ export interface RenderProps {
   app?: EngineAPI.IApp;
 }
 
-export interface RootProps {
+export interface TableWrapperProps {
   direction?: 'ltr' | 'rtl';
   selectionsAPI: stardust.ObjectSelections;
   rootElement: HTMLElement;
