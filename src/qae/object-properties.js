@@ -16,12 +16,12 @@ const properties = {
   qHyperCubeDef: {
     /**
      * The maximum amount of dimensions is 1000
-     * @type {DimensionProperty[]}
+     * @type {DimensionProperties[]}
      */
     qDimensions: [],
     /**
      * The maximum amount of measures is 1000
-     * @type {MeasureProperty[]}
+     * @type {MeasureProperties[]}
      */
     qMeasures: [],
     /** @type {number[]} */
@@ -79,18 +79,18 @@ const properties = {
 
 /**
  * Extends `NxDimension`, see Engine API: `NxDimension`
- * @typedef {object} DimensionProperty
+ * @typedef {object} DimensionProperties
  * @extends NxDimension
  * @property {InlineDimensionDef} qDef
- * @property {AttributeExpressionProperty[]} qAttributeExpressions
+ * @property {AttributeExpressionProperties[]} qAttributeExpressions
  */
 
 /**
  * Extends `NxMeasure`, see Engine API: `NxMeasure`
- * @typedef {object} MeasureProperty
+ * @typedef {object} MeasureProperties
  * @extends NxMeasure
  * @property {InlineMeasureDef} qDef
- * @property {AttributeExpressionProperty[]} qAttributeExpressions
+ * @property {AttributeExpressionProperties[]} qAttributeExpressions
  */
 
 /**
@@ -110,7 +110,7 @@ const properties = {
 /**
  * Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`.
  * Column specific styling overrides general styling, that is defined in `components`.
- * @typedef {object} AttributeExpressionProperty
+ * @typedef {object} AttributeExpressionProperties
  * @extends NxAttrExprDef - expression resolving into a valid color
  * @property {('cellForegroundColor'|'cellBackgroundColor')} id - specifying what the color applies to
  */

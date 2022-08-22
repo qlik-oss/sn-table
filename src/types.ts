@@ -154,20 +154,20 @@ interface InlineDimensionDef extends EngineAPI.INxInlineDimensionDef {
 interface InlineMeasureDef extends EngineAPI.INxInlineMeasureDef {
   textAlign: TextAlign;
 }
-interface AttributeExpressionProperty extends EngineAPI.INxAttrExprDef {
+interface AttributeExpressionProperties extends EngineAPI.INxAttrExprDef {
   id: 'cellForegroundColor' | 'cellBackgroundColor';
 }
-interface DimensionProperty extends Omit<EngineAPI.INxDimension, 'qDef' | 'qAttributeExpressions'> {
+interface DimensionProperties extends Omit<EngineAPI.INxDimension, 'qDef' | 'qAttributeExpressions'> {
   qDef: InlineDimensionDef;
-  qAttributeExpressions: AttributeExpressionProperty[];
+  qAttributeExpressions: AttributeExpressionProperties[];
 }
-interface MeasureProperty extends Omit<EngineAPI.INxMeasure, 'qDef' | 'qAttributeExpressions'> {
+interface MeasureProperties extends Omit<EngineAPI.INxMeasure, 'qDef' | 'qAttributeExpressions'> {
   qDef: InlineMeasureDef;
-  qAttributeExpressions: AttributeExpressionProperty[];
+  qAttributeExpressions: AttributeExpressionProperties[];
 }
 export interface QHyperCubeDef extends Omit<EngineAPI.IHyperCubeDef, 'qDimensions' | 'qMeasures'> {
-  qDimensions: DimensionProperty[];
-  qMeasures: MeasureProperty;
+  qDimensions: DimensionProperties[];
+  qMeasures: MeasureProperties;
   qColumnOrder: number[];
   columnWidths: number[];
 }
