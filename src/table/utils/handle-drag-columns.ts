@@ -4,7 +4,7 @@ import { storeColumnWidths, updateColumnInfoOrders, fixTableHypercubeOrders } fr
 import saveSoftProperties from './save-soft-properties';
 import { TableLayout } from '../../types';
 
-interface Model extends EngineAPI.IGenericObject {
+export interface Model extends EngineAPI.IGenericObject {
   applyPatches: (arg0: Array<{ qPath: string; qOp: string; qValue: string }>, arg1: boolean) => Promise<void>;
 }
 
@@ -34,9 +34,7 @@ type DragEndProps = {
   setEngagedColumn: (arg0: undefined) => void;
 };
 
-const applyColumnOrderSoftPatch = (model: Model, add: string, columnOrder: number[]) => {
-  const op = add ? 'add' : 'replace';
-
+const applyColumnOrderSoftPatch = (model: Model, op: string, columnOrder: number[]) => {
   const patches = [
     {
       qPath: '/qHyperCubeDef/qColumnOrder',
@@ -112,8 +110,8 @@ export const handleDragOver = ({ event, model, rtl, columns, setEngagedColumn }:
   }
 };
 
-export const handleDragEnd = ({ model, setEngagedColumn }: DragEndProps) => {
-  model.getEffectiveProperties().then((properties: EngineAPI.IGenericObjectProperties) => {
+export const handleDragEnd = async ({ model, setEngagedColumn }: DragEndProps) => {
+  await model.getEffectiveProperties().then((properties: EngineAPI.IGenericObjectProperties) => {
     const oldProperties = extend(true, {}, properties);
     storeColumnWidths(properties.qHyperCubeDef);
     fixTableHypercubeOrders(properties.qHyperCubeDef);
