@@ -328,3 +328,8 @@ export interface TableTotalsProps {
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
 }
+
+export interface PaginationContentProps extends RootProps {
+  isSelectionMode: boolean;
+  handleChangePage(pageIdx: number): void;
+}
