@@ -128,6 +128,10 @@ function TableHeadWrapper({
 TableHeadWrapper.defaultProps = {
   direction: undefined,
   engagedColumn: undefined,
+  model: undefined,
+  flags: {
+    isEnabled: undefined,
+  },
 };
 
 TableHeadWrapper.propTypes = {
@@ -140,11 +144,11 @@ TableHeadWrapper.propTypes = {
   translator: PropTypes.object.isRequired,
   selectionsAPI: PropTypes.object.isRequired,
   keyboard: PropTypes.object.isRequired,
-  model: PropTypes.object.isRequired,
+  model: PropTypes.object,
   direction: PropTypes.string,
   engagedColumn: PropTypes.number,
   setEngagedColumn: PropTypes.func.isRequired,
-  flags: PropTypes.object.isRequired,
+  flags: PropTypes.object,
 };
 
 export default memo(TableHeadWrapper);

@@ -299,7 +299,7 @@ export interface RenderProps {
     setPageInfo: SetPageInfo
   ): Promise<TableData | null>;
   app?: EngineAPI.IApp;
-  flags: Flags;
+  flags?: Flags;
 }
 
 export interface RootProps {
@@ -333,5 +333,5 @@ export interface TableTotalsProps {
   layout: TableLayout;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
-  engagedColumn: number | undefined;
+  engagedColumn?: number | undefined;
 }

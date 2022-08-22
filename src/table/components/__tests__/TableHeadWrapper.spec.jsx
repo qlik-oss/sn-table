@@ -15,6 +15,7 @@ describe('<TableHeadWrapper />', () => {
   let selectionsAPI;
   let keyboard;
   let translator;
+  let flags;
 
   const renderTableHead = (cellCoordMock) =>
     render(
@@ -29,6 +30,7 @@ describe('<TableHeadWrapper />', () => {
           changeSortOrder={changeSortOrder}
           keyboard={keyboard}
           translator={translator}
+          flags={flags}
         />
       </TableContextProvider>
     );
@@ -62,6 +64,7 @@ describe('<TableHeadWrapper />', () => {
       enabled: false,
     };
     translator = { get: (s) => s };
+    flags = { isEnabled: jest.fn().mockReturnValue(false) };
   });
 
   it('should render table head', () => {
