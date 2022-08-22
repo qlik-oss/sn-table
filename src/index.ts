@@ -71,6 +71,7 @@ export default function supernova(env: Galaxy) {
       const theme = useExtendedTheme(rootElement);
       const announce = useAnnounceAndTranslations(rootElement, translator);
       const changeSortOrder = useSorting(model);
+      const { flags } = env;
 
       const [pageInfo, setPageInfo] = useState(initialPageInfo);
       const [tableData] = usePromise(
@@ -101,6 +102,7 @@ export default function supernova(env: Galaxy) {
             footerContainer,
             announce,
             model,
+            flags,
           });
       }, [
         reactRoot,

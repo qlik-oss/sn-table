@@ -13,6 +13,9 @@ module.exports = {
   },
   serve: {
     keyboardNavigation: false,
+    flags: {
+      DRAGGING_COLUMNS_IN_TABLE: true,
+    },
     themes: [
       {
         id: 'Test',

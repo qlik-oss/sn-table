@@ -25,6 +25,7 @@ function TableHeadWrapper({
   direction,
   engagedColumn,
   setEngagedColumn,
+  flags,
 }) {
   const { columns, paginationNeeded } = tableData;
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
@@ -36,7 +37,7 @@ function TableHeadWrapper({
   const tableCellRefs = useRef([]);
   tableCellRefs.current = columns.map((el, i) => tableCellRefs.current[i] ?? createRef());
   const throttler = createThrottler((event) => handleDragOver({ event, model, rtl, columns, setEngagedColumn }), 100);
-
+  const isDraggable = flags.isEnabled('DRAGGING_COLUMNS_IN_TABLE') ?? false;
   useEffect(() => {
     setHeadRowHeight(headRowRef.current.getBoundingClientRect().height);
   }, [headRowRef.current, headerStyle.fontSize, headRowRef.current?.getBoundingClientRect().height]);
@@ -89,7 +90,7 @@ function TableHeadWrapper({
               onKeyDown={handleKeyDown}
               onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
               onClick={() => !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column)}
-              draggable
+              draggable={isDraggable}
               onDragStart={(event) =>
                 handleDragStart({
                   event,
@@ -143,6 +144,7 @@ TableHeadWrapper.propTypes = {
   direction: PropTypes.string,
   engagedColumn: PropTypes.number,
   setEngagedColumn: PropTypes.func.isRequired,
+  flags: PropTypes.object.isRequired,
 };
 
 export default memo(TableHeadWrapper);

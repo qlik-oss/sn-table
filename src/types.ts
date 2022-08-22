@@ -24,9 +24,14 @@ export interface ExtendedTranslator extends stardust.Translator {
   language(): string;
 }
 
+export interface Flags {
+  isEnabled: (flag: string) => boolean;
+}
+
 export interface Galaxy {
   translator: ExtendedTranslator;
   carbon: boolean;
+  flags: Flags;
 }
 
 export interface UseOptions {
@@ -294,6 +299,7 @@ export interface RenderProps {
     setPageInfo: SetPageInfo
   ): Promise<TableData | null>;
   app?: EngineAPI.IApp;
+  flags: Flags;
 }
 
 export interface RootProps {
