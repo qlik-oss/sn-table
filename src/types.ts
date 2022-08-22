@@ -1,4 +1,5 @@
 import React from 'react';
+import { TableCellProps } from '@mui/material/TableCell';
 import { stardust } from '@nebula.js/stardust';
 import { TSelectionActions } from './table/utils/selections-utils';
 
@@ -156,7 +157,7 @@ export interface StylingLayout {
 }
 
 export interface GeneratedStyling {
-  padding: string;
+  padding?: string;
   borderStyle: string;
   borderColor: string;
   fontFamily?: string;
@@ -320,6 +321,14 @@ export interface ContextProviderProps {
   cellCoordMock?: [number, number];
   selectionDispatchMock?: jest.Mock<any, any>;
 }
+export interface CellHOCProps extends TableCellProps {
+  styling: CellStyle;
+  cell: Cell;
+  column: Column;
+  announce: Announce;
+}
+
+export type CellHOC = (props: CellHOCProps) => JSX.Element;
 
 export interface TableTotalsProps {
   rootElement: HTMLElement;
@@ -332,4 +341,9 @@ export interface TableTotalsProps {
 export interface PaginationContentProps extends RootProps {
   isSelectionMode: boolean;
   handleChangePage(pageIdx: number): void;
+}
+export interface FooterWrapperProps {
+  children: JSX.Element;
+  theme: ExtendedTheme;
+  footerContainer?: HTMLElement;
 }
