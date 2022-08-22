@@ -9,7 +9,7 @@ import {
   getSelectionStyle,
 } from '../styling-utils';
 import { SelectionStates } from '../selections-utils';
-import { ExtendedTheme, PaletteColor, StylingLayout, TableLayout, CellStyle } from '../../../types';
+import { ExtendedTheme, PaletteColor, HeaderStyling, ContentStyling, TableLayout, CellStyle } from '../../../types';
 
 describe('styling-utils', () => {
   let resolvedColor: string;
@@ -76,7 +76,7 @@ describe('styling-utils', () => {
   });
 
   describe('getBaseStyling', () => {
-    let styleObj: StylingLayout;
+    let styleObj: HeaderStyling | ContentStyling;
     let objetName: string;
 
     beforeEach(() => {
@@ -162,7 +162,7 @@ describe('styling-utils', () => {
       });
     });
     it('should return styling with custom padding', () => {
-      styleObj.padding = '4px';
+      (<ContentStyling>styleObj).padding = '4px';
 
       const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling.padding).toBe('4px');

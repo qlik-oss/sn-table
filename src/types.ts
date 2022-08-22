@@ -172,21 +172,12 @@ export interface QHyperCubeDef extends Omit<EngineAPI.IHyperCubeDef, 'qDimension
   columnWidths: number[];
 }
 
-export interface StylingLayout {
-  fontColor?: PaletteColor;
-  fontSize?: number;
-  hoverColor?: PaletteColor;
-  hoverEffect?: boolean;
-  hoverFontColor?: PaletteColor;
-  padding?: string; // not available as option in the styling panel
-}
-
-interface HeaderStyling {
+export interface HeaderStyling {
   fontColor?: PaletteColor;
   fontSize?: number;
 }
 
-interface ContentStyling extends HeaderStyling {
+export interface ContentStyling extends HeaderStyling {
   hoverColor?: PaletteColor;
   hoverEffect?: boolean;
   hoverFontColor?: PaletteColor;
