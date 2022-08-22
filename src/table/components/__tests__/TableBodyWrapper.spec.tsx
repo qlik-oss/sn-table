@@ -19,6 +19,7 @@ import {
   SetPageInfo,
   ExtendedTranslator,
   Cell,
+  CellHOC,
 } from '../../../types';
 
 describe('<TableBodyWrapper />', () => {
@@ -35,15 +36,10 @@ describe('<TableBodyWrapper />', () => {
   let layout: TableLayout;
   let theme: ExtendedTheme;
   let children: JSX.Element;
-  let changeSortOrder: ChangeSortOrder;
-  let rect: stardust.Rect;
-  let pageInfo: PageInfo;
-  let setPageInfo: SetPageInfo;
-  let translator: ExtendedTranslator;
   let tableFirstRow: Cell;
   let tableSecondRow: Cell;
 
-  let cellRendererSpy: () => void;
+  let cellRendererSpy: () => CellHOC;
 
   const renderTableBody = () =>
     render(
@@ -59,11 +55,6 @@ describe('<TableBodyWrapper />', () => {
           keyboard={keyboard}
           tableWrapperRef={tableWrapperRef}
           announce={announce}
-          changeSortOrder={changeSortOrder}
-          rect={rect}
-          pageInfo={pageInfo}
-          setPageInfo={setPageInfo}
-          translator={translator}
         >
           {children}
         </TableBodyWrapper>
@@ -98,7 +89,7 @@ describe('<TableBodyWrapper />', () => {
   it('should render 2x2 table body and call CellRenderer', () => {
     jest.spyOn(getCellRenderer, 'default').mockImplementation(() => {
       cellRendererSpy();
-      return 'td' as unknown as React.FunctionComponent<any>;
+      return 'td' as unknown as CellHOC;
     });
 
     const { queryByText } = renderTableBody();

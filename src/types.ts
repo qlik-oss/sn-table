@@ -343,8 +343,8 @@ export interface RootProps {
   announce: Announce;
 }
 
-export interface BodyWrapperProps extends Omit<RootProps, 'selectionsAPI'> {
-  selectionsAPI: ExtendedSelectionAPI;
+export interface BodyWrapperProps
+  extends Omit<RootProps, 'changeSortOrder' | 'rect' | 'pageInfo' | 'setPageInfo' | 'footerContainer' | 'translator'> {
   setShouldRefocus(): void;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
   children: JSX.Element;
