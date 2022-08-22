@@ -156,7 +156,7 @@ function PaginationContent({
 
   const pageOptions = (
     <>
-      {[...Array(totalPages).keys()].map((pageIdx, index) => (
+      {Array.from(Array(totalPages).keys()).map((pageIdx, index) => (
         <option key={pageIdx} value={index}>
           {pageIdx + 1}
         </option>
