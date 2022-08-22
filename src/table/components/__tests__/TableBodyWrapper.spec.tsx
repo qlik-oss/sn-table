@@ -39,8 +39,6 @@ describe('<TableBodyWrapper />', () => {
   let tableFirstRow: Cell;
   let tableSecondRow: Cell;
 
-  let cellRendererSpy: () => CellHOC;
-
   const renderTableBody = () =>
     render(
       <TableContextProvider selectionsAPI={selectionsAPI}>
@@ -80,33 +78,28 @@ describe('<TableBodyWrapper />', () => {
       table: { body: { borderColor: '' } },
     } as unknown as ExtendedTheme;
     layout = {} as TableLayout;
-    cellRendererSpy = jest.fn();
     tableFirstRow = tableData.rows[0]['col-0'] as Cell;
   });
 
   afterEach(() => jest.clearAllMocks());
 
   it('should render 2x2 table body and call CellRenderer', () => {
-    jest.spyOn(getCellRenderer, 'default').mockImplementation(() => {
-      cellRendererSpy();
-      return 'td' as unknown as CellHOC;
-    });
-
-    const { queryByText } = renderTableBody();
+    jest.spyOn(getCellRenderer, 'default');
+    const { getByText } = renderTableBody();
     tableSecondRow = tableData.rows[0]['col-1'] as Cell;
 
-    expect(cellRendererSpy).toHaveBeenCalledTimes(2);
-    expect(queryByText(tableFirstRow.qText as string)).toBeVisible();
-    expect(queryByText(tableSecondRow.qText as string)).toBeVisible();
-    expect(queryByText(tableFirstRow.qText as string)).toBeVisible();
-    expect(queryByText(tableSecondRow.qText as string)).toBeVisible();
+    expect(getCellRenderer.default).toHaveBeenCalledTimes(2);
+    expect(getByText(tableFirstRow.qText as string)).toBeVisible();
+    expect(getByText(tableSecondRow.qText as string)).toBeVisible();
+    expect(getByText(tableFirstRow.qText as string)).toBeVisible();
+    expect(getByText(tableSecondRow.qText as string)).toBeVisible();
   });
 
   it('should call handleBodyKeyDown on key down', () => {
-    jest.spyOn(handleKeyPress, 'handleBodyKeyDown').mockImplementation(() => jest.fn());
+    jest.spyOn(handleKeyPress, 'handleBodyKeyDown');
 
-    const { queryByText } = renderTableBody();
-    fireEvent.keyDown(queryByText(tableFirstRow.qText as string) as unknown as HTMLElement);
+    const { getByText } = renderTableBody();
+    fireEvent.keyDown(getByText(tableFirstRow.qText as string));
 
     expect(handleKeyPress.handleBodyKeyDown).toHaveBeenCalledTimes(1);
   });
@@ -114,17 +107,17 @@ describe('<TableBodyWrapper />', () => {
   it('should call handleClickToFocusBody on mouseDown', () => {
     jest.spyOn(handleAccessibility, 'handleClickToFocusBody').mockImplementation(() => jest.fn());
 
-    const { queryByText } = renderTableBody();
-    fireEvent.mouseDown(queryByText(tableFirstRow.qText as string) as unknown as HTMLElement);
+    const { getByText } = renderTableBody();
+    fireEvent.mouseDown(getByText(tableFirstRow.qText as string));
 
     expect(handleAccessibility.handleClickToFocusBody).toHaveBeenCalledTimes(1);
   });
 
   it('should call handleBodyKeyUp on key up', () => {
-    jest.spyOn(handleKeyPress, 'handleBodyKeyUp').mockImplementation(() => jest.fn());
+    jest.spyOn(handleKeyPress, 'handleBodyKeyUp');
 
-    const { queryByText } = renderTableBody();
-    fireEvent.keyUp(queryByText(tableFirstRow.qText as string) as unknown as HTMLElement);
+    const { getByText } = renderTableBody();
+    fireEvent.keyUp(getByText(tableFirstRow.qText as string));
 
     expect(handleKeyPress.handleBodyKeyUp).toHaveBeenCalledTimes(1);
   });

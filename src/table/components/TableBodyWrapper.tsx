@@ -41,7 +41,7 @@ function TableBodyWrapper({
   const cellStyle = { color: bodyCellStyle.color, backgroundColor: theme.table.backgroundColor };
   useEffect(() => {
     addSelectionListeners({
-      api: selectionsAPI as ExtendedSelectionAPI,
+      api: selectionsAPI,
       selectionDispatch,
       setShouldRefocus,
       keyboard,
@@ -77,7 +77,7 @@ function TableBodyWrapper({
                 keyboard,
                 paginationNeeded,
                 totalsPosition,
-              }) as unknown as HandleBodyKeyDownProps;
+              });
             };
 
             return (
