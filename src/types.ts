@@ -341,6 +341,10 @@ export interface RootProps {
   keyboard: stardust.Keyboard;
   footerContainer?: HTMLElement;
   announce: Announce;
+}
+
+export interface BodyWrapperProps extends Omit<RootProps, 'selectionsAPI'> {
+  selectionsAPI: ExtendedSelectionAPI;
   setShouldRefocus(): void;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
   children: JSX.Element;
