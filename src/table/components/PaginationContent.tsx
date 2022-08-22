@@ -74,9 +74,8 @@ function PaginationContent({
   ]);
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = event.target;
-    setPageInfo({ ...pageInfo, page: 0, rowsPerPage: +value });
-    announce({ keys: [['SNTable.Pagination.RowsPerPageChange', value]], politeness: 'assertive' });
+    setPageInfo({ ...pageInfo, page: 0, rowsPerPage: +event.target.value });
+    announce({ keys: [['SNTable.Pagination.RowsPerPageChange', event.target.value]], politeness: 'assertive' });
   };
 
   const handleSelectPage = (event: React.ChangeEvent<HTMLSelectElement>) => handleChangePage(+event.target.value);
