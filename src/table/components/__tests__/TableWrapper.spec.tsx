@@ -104,34 +104,34 @@ describe('<TableWrapper />', () => {
   afterEach(() => jest.clearAllMocks());
 
   it('should render table with pagination', () => {
-    const { queryByLabelText, queryByText, queryByTestId } = renderTableWrapper();
+    const { getByLabelText, getByText, getByTestId } = renderTableWrapper();
 
     expect(
-      queryByLabelText(`${'SNTable.Accessibility.RowsAndColumns'} ${'SNTable.Accessibility.NavigationInstructions'}`)
+      getByLabelText(`${'SNTable.Accessibility.RowsAndColumns'} ${'SNTable.Accessibility.NavigationInstructions'}`)
     ).toBeVisible();
-    expect(queryByTestId('table-container')?.getAttribute('tabindex')).toBe('-1');
-    expect(queryByTestId('table-container')?.getAttribute('role')).toBe('application');
+    expect(getByTestId('table-container').getAttribute('tabindex')).toBe('-1');
+    expect(getByTestId('table-container').getAttribute('role')).toBe('application');
     // Just checking that the pagination has rendered, we do more thorough checking in the PaginationContent tests
-    expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeVisible();
+    expect(getByText('SNTable.Pagination.DisplayedRowsLabel')).toBeVisible();
   });
 
   it('should not render pagination when constraints.active is true', () => {
     constraints.active = true;
-    const { queryByLabelText, queryByText, queryByTestId } = renderTableWrapper();
+    const { getByLabelText, queryByText, getByTestId } = renderTableWrapper();
 
     expect(
-      queryByLabelText(`${'SNTable.Accessibility.RowsAndColumns'} ${'SNTable.Accessibility.NavigationInstructions'}`)
+      getByLabelText(`${'SNTable.Accessibility.RowsAndColumns'} ${'SNTable.Accessibility.NavigationInstructions'}`)
     ).toBeVisible();
-    expect(queryByTestId('table-container')?.getAttribute('tabindex')).toBe('-1');
-    expect(queryByTestId('table-container')?.getAttribute('role')).toBe('application');
+    expect(getByTestId('table-container').getAttribute('tabindex')).toBe('-1');
+    expect(getByTestId('table-container').getAttribute('role')).toBe('application');
     expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeNull();
   });
 
   it('should call handleWrapperKeyDown when press control key on the table', () => {
     jest.spyOn(handleKeyPress, 'handleWrapperKeyDown').mockImplementation(() => jest.fn());
-    const { queryByLabelText } = renderTableWrapper();
+    const { getByLabelText } = renderTableWrapper();
 
-    fireEvent.keyDown(queryByLabelText('SNTable.Pagination.RowsPerPage:') as HTMLElement, {
+    fireEvent.keyDown(getByLabelText('SNTable.Pagination.RowsPerPage:'), {
       key: 'Control',
       code: 'ControlLeft',
     });
@@ -140,9 +140,9 @@ describe('<TableWrapper />', () => {
 
   it('should call handleHorizontalScroll when scroll on the table', () => {
     jest.spyOn(handleScroll, 'handleHorizontalScroll').mockImplementation(() => jest.fn());
-    const { queryByTestId } = renderTableWrapper();
+    const { getByTestId } = renderTableWrapper();
 
-    fireEvent.wheel(queryByTestId('table-container') as HTMLElement, { deltaX: 100 });
+    fireEvent.wheel(getByTestId('table-container'), { deltaX: 100 });
     expect(handleScroll.handleHorizontalScroll).toHaveBeenCalledTimes(1);
   });
 });
