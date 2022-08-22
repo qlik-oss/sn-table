@@ -48,7 +48,7 @@ describe('withSelections', () => {
 
   it('should call selectCell on mouseUp', () => {
     const { getByText } = renderWithSelections();
-    fireEvent.mouseUp(getByText(value));
+    fireEvent.mouseUp(getByText(value), evt);
 
     expect(selectionDispatchMock).toHaveBeenCalledTimes(1);
     expect(selectionDispatchMock).toHaveBeenCalledWith({
@@ -61,7 +61,7 @@ describe('withSelections', () => {
     cell.isSelectable = false;
 
     const { getByText } = renderWithSelections();
-    fireEvent.mouseUp(getByText(value));
+    fireEvent.mouseUp(getByText(value), evt);
 
     expect(selectionDispatchMock).not.toHaveBeenCalled();
   });
@@ -70,7 +70,7 @@ describe('withSelections', () => {
     evt.button = 2;
 
     const { getByText } = renderWithSelections();
-    fireEvent.mouseUp(getByText(value));
+    fireEvent.mouseUp(getByText(value), evt);
 
     expect(selectionDispatchMock).not.toHaveBeenCalled();
   });
