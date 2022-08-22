@@ -33,14 +33,14 @@ export const SELECTION_STYLING = {
 /**
  * Determines if a palette color is set or not. Both index !== -1 and color !== null must be true for it to be unset
  */
-export const isColorSet = (prop?: PaletteColor): boolean =>
+export const isColorSet = (prop: PaletteColor | undefined): boolean =>
   !!prop && JSON.stringify(prop) !== JSON.stringify({ index: -1, color: null });
 
 /**
  * Gets specified padding from layout if defined, otherwise calculates it based on specified font size if defined, otherwise returns default padding.
  * Note that the padding property can't be set in the styling panel
  */
-export function getPadding(styleObj?: StylingLayout): string | undefined {
+export function getPadding(styleObj: StylingLayout | undefined): string | undefined {
   let padding;
   if (styleObj?.padding) {
     ({ padding } = styleObj);
@@ -68,7 +68,11 @@ export const getAutoFontColor = (backgroundColor: string): string =>
 /**
  * Gets base styling for either header or body taking table theme settings into account
  */
-export const getBaseStyling = (objetName: string, theme: ExtendedTheme, styleObj?: StylingLayout): GeneratedStyling => {
+export const getBaseStyling = (
+  objetName: string,
+  theme: ExtendedTheme,
+  styleObj: StylingLayout | undefined
+): GeneratedStyling => {
   const fontFamily = theme.getStyle('object', `straightTable.${objetName}`, 'fontFamily');
   const color = theme.getStyle('object', `straightTable.${objetName}`, 'color');
   const fontSize = theme.getStyle('object', `straightTable.${objetName}`, 'fontSize');
