@@ -98,6 +98,7 @@ describe('styling-utils', () => {
         borderStyle: 'solid',
         color: '#fff',
         fontSize: '12px',
+        padding: '6px 12px',
       });
     });
     it('should return styling with fontSize and padding', () => {
@@ -107,6 +108,18 @@ describe('styling-utils', () => {
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
         fontSize: '12px',
+        padding: '6px 12px',
+      });
+    });
+    it('should return styling with padding', () => {
+      styleObj.fontColor = undefined;
+      styleObj.fontSize = undefined;
+      (<ContentStyling>styleObj).padding = '20px';
+      const resultStyling = getBaseStyling(objetName, theme, styleObj);
+      expect(resultStyling).toEqual({
+        borderColor: '#D9D9D9',
+        borderStyle: 'solid',
+        padding: '20px',
       });
     });
     it('should return styling with fontSize and padding when the index for font color is -1 and color is null', () => {
@@ -117,6 +130,7 @@ describe('styling-utils', () => {
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
         fontSize: '12px',
+        padding: '6px 12px',
       });
     });
     it('should return styling with fontSize, padding and font color when the index for font color is -1 and color is null and there is a color from theme', () => {
@@ -133,6 +147,7 @@ describe('styling-utils', () => {
         color: '#111',
         fontSize: '12px',
         fontFamily: '#111',
+        padding: '6px 12px',
       });
     });
     it('should return styling with fontSize, padding and font color when the index for font color is -1 and the color is not null', () => {
@@ -144,6 +159,7 @@ describe('styling-utils', () => {
         borderStyle: 'solid',
         color: 'fff',
         fontSize: '12px',
+        padding: '6px 12px',
       });
     });
     it('should return styling with fontColor as the font size and padding are from sprout theme', () => {
@@ -221,6 +237,7 @@ describe('styling-utils', () => {
         color: '#404040',
         cursor: 'pointer',
         fontSize: '44px',
+        padding: '22px 44px',
         backgroundColor: '#323232',
         borderColor: '#D9D9D9',
         borderStyle: 'solid',

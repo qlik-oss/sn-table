@@ -141,7 +141,7 @@ const properties = {
  * @property {boolean=} hoverEffect - Toggles hover effect
  * @property {PaletteColor=} hoverColor - Background hover color. Uses `#f4f4f4` if no hover colors are set, is transparent if only `hoverFontColor` is set
  * @property {PaletteColor=} hoverFontColor - When only `hoverColor` is set, this is adjusted to either `#f4f4f4` or `#ffffff` for optimal contrast
- * @property {string=} Padding - Defaults to `7px 14px`
+ * @property {string=} padding - Defaults to `7px 14px`
  */
 
 /**

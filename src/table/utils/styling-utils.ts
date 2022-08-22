@@ -49,13 +49,14 @@ export const isColorSet = (prop: PaletteColor | undefined): boolean =>
  * Note that the padding property can't be set in the styling panel
  */
 export function getPadding(styleObj: ContentStyling | undefined): string | undefined {
-  let padding;
-  if (styleObj?.padding) {
-    ({ padding } = styleObj);
-  } else if (styleObj?.fontSize) {
-    padding = `${styleObj.fontSize / 2}px ${styleObj.fontSize}px`;
+  if (styleObj && (styleObj?.fontSize || 'padding' in styleObj)) {
+    let padding;
+    if (styleObj?.padding) ({ padding } = styleObj);
+    else if (styleObj?.fontSize) padding = `${styleObj.fontSize / 2}px ${styleObj.fontSize}px`;
+
+    return padding;
   }
-  return padding;
+  return undefined;
 }
 
 /**
@@ -89,7 +90,9 @@ export const getBaseStyling = (
     fontFamily,
     color: isColorSet(styleObj?.fontColor) ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj?.fontColor) : color,
     fontSize: (styleObj?.fontSize && `${styleObj.fontSize}px`) || fontSize,
-    padding: styleObj && 'padding' in styleObj ? getPadding(styleObj) : undefined,
+    // When we do not set padding for content or header, but set font size,
+    // we need to calculate the padding based on the font size
+    padding: getPadding(styleObj),
     borderStyle: 'solid',
     borderColor: theme.table.body.borderColor,
   };
