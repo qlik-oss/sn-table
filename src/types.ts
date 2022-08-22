@@ -342,6 +342,7 @@ export interface PaginationContentProps extends RootProps {
   isSelectionMode: boolean;
   handleChangePage(pageIdx: number): void;
 }
+
 export interface FooterWrapperProps {
   children: JSX.Element;
   theme: ExtendedTheme;
