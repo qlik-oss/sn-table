@@ -46,7 +46,7 @@ export function resolveToRGBAorRGB(input: string): string {
   return 'none';
 }
 
-export function isDarkColor(color?: string | null): boolean {
+export function isDarkColor(color: string | undefined | null): boolean {
   if (color == null) return false;
 
   const rgba = resolveToRGBAorRGB(color);
@@ -63,7 +63,7 @@ export function isDarkColor(color?: string | null): boolean {
   return validRGB ? 0.299 * +r + 0.587 * +g + 0.114 * +b < 125 : false;
 }
 
-export function isTransparentColor(color?: string): boolean {
+export function isTransparentColor(color: string | undefined): boolean {
   if (color === undefined) return false;
 
   const rgba = resolveToRGBAorRGB(color);
@@ -72,7 +72,7 @@ export function isTransparentColor(color?: string): boolean {
   return a !== undefined ? +a === 0 : false;
 }
 
-export function removeOpacity(color?: string): string | undefined {
+export function removeOpacity(color: string | undefined): string | undefined {
   if (color !== undefined) {
     const rgba = resolveToRGBAorRGB(color);
     const matches = /^rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d(\.\d+)?)\s*\)$/i.exec(rgba);

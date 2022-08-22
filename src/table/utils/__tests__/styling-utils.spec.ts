@@ -92,7 +92,7 @@ describe('styling-utils', () => {
     });
 
     it('should return styling with fontColor, fontSize and padding', () => {
-      const resultStyling = getBaseStyling(styleObj, objetName, theme);
+      const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
@@ -103,7 +103,7 @@ describe('styling-utils', () => {
     });
     it('should return styling with fontSize and padding', () => {
       styleObj.fontColor = undefined;
-      const resultStyling = getBaseStyling(styleObj, objetName, theme);
+      const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
@@ -114,7 +114,7 @@ describe('styling-utils', () => {
     it('should return styling with fontSize and padding when the index for font color is -1 and color is null', () => {
       styleObj.fontColor = { index: -1, color: null };
 
-      const resultStyling = getBaseStyling(styleObj, objetName, theme);
+      const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
@@ -129,7 +129,7 @@ describe('styling-utils', () => {
         getStyle: () => '#111',
       } as unknown as ExtendedTheme;
 
-      const resultStyling = getBaseStyling(styleObj, objetName, customTheme);
+      const resultStyling = getBaseStyling(objetName, customTheme, styleObj);
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
@@ -142,7 +142,7 @@ describe('styling-utils', () => {
     it('should return styling with fontSize, padding and font color when the index for font color is -1 and the color is not null', () => {
       styleObj.fontColor = { index: -1, color: 'fff' };
 
-      const resultStyling = getBaseStyling(styleObj, objetName, theme);
+      const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
@@ -154,18 +154,17 @@ describe('styling-utils', () => {
     it('should return styling with fontColor as the font size and padding are from sprout theme', () => {
       styleObj.fontSize = undefined;
 
-      const resultStyling = getBaseStyling(styleObj, objetName, theme);
+      const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling).toEqual({
         color: '#fff',
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
-        padding: '7px 14px',
       });
     });
     it('should return styling with custom padding', () => {
       styleObj.padding = '4px';
 
-      const resultStyling = getBaseStyling(styleObj, objetName, theme);
+      const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling.padding).toBe('4px');
     });
   });
@@ -196,7 +195,6 @@ describe('styling-utils', () => {
         borderStyle: 'solid',
         borderWidth: '1px 1px 1px 0px',
         cursor: 'pointer',
-        padding: '7px 14px',
         sortLabelColor: 'rgba(255,255,255,0.9)',
       });
     });
@@ -219,7 +217,6 @@ describe('styling-utils', () => {
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
         borderWidth: '1px 1px 1px 0px',
-        padding: '7px 14px',
         sortLabelColor: '#404040',
       });
     });
@@ -279,7 +276,6 @@ describe('styling-utils', () => {
         hoverBackgroundColor: '#f4f4f4',
         borderStyle: 'solid',
         borderWidth: '0px 1px 1px 0px',
-        padding: '7px 14px',
       });
     });
     it('should return styling with fontColor, fontSize, padding plus default hoverBackgroundColor and hoverFontColor', () => {

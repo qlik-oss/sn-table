@@ -194,7 +194,7 @@ interface ContentStyling extends HeaderStyling {
 }
 
 export interface GeneratedStyling {
-  padding: string;
+  padding?: string;
   borderStyle: string;
   borderColor: string;
   fontFamily?: string;
