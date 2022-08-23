@@ -7,14 +7,14 @@ import { getTotalPosition } from '../../../handle-data';
 import * as handleKeyPress from '../../utils/handle-key-press';
 import * as handleAccessibility from '../../utils/handle-accessibility';
 import { generateLayout } from '../../../__test__/generate-test-data';
-import { TableData, ExtendedTheme, TableLayout } from '../../../types';
+import { TableData, ExtendedTheme, TableLayout, ExtendedSelectionAPI } from '../../../types';
 
 describe('<TableTotals />', () => {
   const rootElement = {} as HTMLElement;
   let tableData: TableData;
   let theme: ExtendedTheme;
   let layout: TableLayout;
-  let selectionsAPI: stardust.ObjectSelections;
+  let selectionsAPI: ExtendedSelectionAPI;
   let keyboard: stardust.Keyboard;
 
   const renderTableTotals = (cellCoordMock?: [number, number]) =>
@@ -54,7 +54,7 @@ describe('<TableTotals />', () => {
     } as stardust.Keyboard;
     selectionsAPI = {
       isModal: () => false,
-    } as stardust.ObjectSelections;
+    } as ExtendedSelectionAPI;
   });
 
   it('should show the total row when table total is rendered', () => {

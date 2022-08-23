@@ -113,14 +113,14 @@ export interface HandleResetFocusProps {
 
 export interface ContextProviderProps {
   children: JSX.Element;
-  selectionsAPI: stardust.ObjectSelections;
+  selectionsAPI: ExtendedSelectionAPI;
   cellCoordMock?: [number, number];
   selectionDispatchMock?: jest.Mock<any, any>;
 }
 
 export interface RenderProps {
   direction?: 'ltr' | 'rtl';
-  selectionsAPI: stardust.ObjectSelections;
+  selectionsAPI: ExtendedSelectionAPI;
   rootElement?: HTMLElement;
   layout: TableLayout;
   changeSortOrder: ChangeSortOrder;
@@ -146,7 +146,7 @@ export interface RenderProps {
 
 export interface RootProps {
   direction?: 'ltr' | 'rtl';
-  selectionsAPI: stardust.ObjectSelections;
+  selectionsAPI: ExtendedSelectionAPI;
   rootElement: HTMLElement;
   layout: TableLayout;
   changeSortOrder: ChangeSortOrder;
@@ -175,13 +175,18 @@ export interface PaginationContentProps
   isSelectionMode: boolean;
   handleChangePage(pageIdx: number): void;
 }
+export interface BodyWrapperProps
+  extends Omit<RootProps, 'changeSortOrder' | 'rect' | 'pageInfo' | 'setPageInfo' | 'footerContainer' | 'translator'> {
+  setShouldRefocus(): void;
+  tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
+  children: JSX.Element;
+}
 
 export interface FooterWrapperProps {
   children: JSX.Element;
   theme: ExtendedTheme;
   footerContainer?: HTMLElement;
 }
-
 export interface CellHOCProps extends TableCellProps {
   styling: CellStyle;
   cell: Cell;

@@ -193,7 +193,7 @@ export interface RenderWithCarbonArguments {
   rootElement: HTMLElement;
   model?: EngineAPI.IGenericObject;
   theme: ExtendedTheme;
-  selectionsAPI: stardust.ObjectSelections;
+  selectionsAPI: ExtendedSelectionAPI;
   app?: EngineAPI.IApp;
   rect: stardust.Rect;
   layout: TableLayout;
