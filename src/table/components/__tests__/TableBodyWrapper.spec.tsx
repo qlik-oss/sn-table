@@ -60,7 +60,7 @@ describe('<TableBodyWrapper />', () => {
     );
 
   beforeEach(async () => {
-    jest.spyOn(selectionsUtils, 'addSelectionListeners').mockImplementation(() => jest.fn());
+    jest.spyOn(selectionsUtils, 'addSelectionListeners').mockImplementation();
     tableData = (await manageData(
       model,
       generateLayout(1, 1, 2, [], [{ qText: '100' }]),
@@ -105,7 +105,7 @@ describe('<TableBodyWrapper />', () => {
   });
 
   it('should call handleClickToFocusBody on mouseDown', () => {
-    jest.spyOn(handleAccessibility, 'handleClickToFocusBody').mockImplementation(() => jest.fn());
+    jest.spyOn(handleAccessibility, 'handleClickToFocusBody').mockImplementation();
 
     const { getByText } = renderTableBody();
     fireEvent.mouseDown(getByText(tableFirstRow.qText as string));
