@@ -1,7 +1,8 @@
 // TODO: add this to global rules
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { stardust } from '@nebula.js/stardust';
-import { Cell, SelectionState, ExtendedSelectionAPI, ActionPayload, Announce } from '../../types';
+import { Cell, ExtendedSelectionAPI, Announce } from '../../types';
+import { SelectionState, ActionPayload } from '../types';
 
 export enum SelectionStates {
   SELECTED = 'selected',

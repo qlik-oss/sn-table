@@ -2,7 +2,8 @@ import React, { useState, useReducer, createContext } from 'react';
 
 import { createSelectorProvider } from './createSelectorProvider';
 import { reducer } from '../utils/selections-utils';
-import { ExtendedSelectionAPI, ContextValue, ContextProviderProps } from '../../types';
+import { ExtendedSelectionAPI } from '../../types';
+import { ContextValue, ContextProviderProps } from '../types';
 
 // In order to not have typing issues when using properties on the context,
 // the initial value for the context is casted to ContextValue.

@@ -7,7 +7,7 @@ import rtlPluginSc from 'stylis-plugin-rtl-sc';
 import TableWrapper from './components/TableWrapper';
 import { TableContextProvider } from './context';
 import muiSetup from './mui-setup';
-import { RenderProps, RootProps } from '../types';
+import { RenderProps, RootProps } from './types';
 
 export function render(reactRoot: ReactDom.Root | HTMLElement, props: RenderProps) {
   const { direction, selectionsAPI } = props;

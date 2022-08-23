@@ -5,7 +5,8 @@ import TableCell from '@mui/material/TableCell';
 import { TableContextProvider } from '../../context';
 import * as withSelections from '../withSelections';
 import { SelectionActions } from '../../utils/selections-utils';
-import { Announce, CellStyle, ExtendedSelectionAPI, CellHOCProps, Cell, Column } from '../../../types';
+import { Announce, ExtendedSelectionAPI, Cell, Column } from '../../../types';
+import { CellStyle, CellHOCProps } from '../../types';
 
 describe('withSelections', () => {
   const value = '100';

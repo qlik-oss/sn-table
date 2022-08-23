@@ -4,7 +4,8 @@ import TableCell from '@mui/material/TableCell';
 
 import * as withColumnStyling from '../withColumnStyling';
 import * as stylingUtils from '../../utils/styling-utils';
-import { Cell, CellStyle, Column, CellHOCProps, Announce } from '../../../types';
+import { Cell, Column, Announce } from '../../../types';
+import { CellStyle, CellHOCProps } from '../../types';
 
 describe('withColumnStyling', () => {
   let HOC: (props: CellHOCProps) => JSX.Element;
