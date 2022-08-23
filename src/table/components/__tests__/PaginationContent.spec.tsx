@@ -4,17 +4,7 @@ import { stardust } from '@nebula.js/stardust';
 
 import PaginationContent from '../PaginationContent';
 import * as handleAccessibility from '../../utils/handle-accessibility';
-import {
-  Announce,
-  ChangeSortOrder,
-  ExtendedSelectionAPI,
-  ExtendedTheme,
-  ExtendedTranslator,
-  PageInfo,
-  SetPageInfo,
-  TableData,
-  TableLayout,
-} from '../../../types';
+import { Announce, ExtendedTheme, ExtendedTranslator, PageInfo, SetPageInfo, TableData } from '../../../types';
 
 describe('<PaginationContent />', () => {
   let theme: ExtendedTheme;
@@ -31,10 +21,6 @@ describe('<PaginationContent />', () => {
   let constraints: stardust.Constraints;
   let footerContainer: HTMLElement;
   let announce: Announce;
-  let SelectionsAPI: ExtendedSelectionAPI;
-  let rootElement: HTMLElement;
-  let layout: TableLayout;
-  let changeSortOrder: ChangeSortOrder;
 
   const renderPagination = () =>
     render(
@@ -52,10 +38,6 @@ describe('<PaginationContent />', () => {
         rect={rect}
         handleChangePage={handleChangePage}
         announce={announce}
-        selectionsAPI={SelectionsAPI}
-        rootElement={rootElement}
-        layout={layout}
-        changeSortOrder={changeSortOrder}
       />
     );
 

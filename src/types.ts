@@ -338,7 +338,8 @@ export interface TableTotalsProps {
   keyboard: stardust.Keyboard;
 }
 
-export interface PaginationContentProps extends RootProps {
+export interface PaginationContentProps
+  extends Omit<RootProps, 'selectionsAPI' | 'rootElement' | 'layout' | 'changeSortOrder'> {
   isSelectionMode: boolean;
   handleChangePage(pageIdx: number): void;
 }
