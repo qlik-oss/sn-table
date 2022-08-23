@@ -1,9 +1,9 @@
-import { HyperCube, Component } from '../types';
+import { QHyperCubeDef, Component } from '../types';
 
 declare module 'object-properties' {
   declare const properties: {
     version: string;
-    qHyperCubeDef: HyperCube;
+    qHyperCubeDef: QHyperCubeDef;
     showTitles?: boolean;
     title?: string;
     subtitle?: string;
