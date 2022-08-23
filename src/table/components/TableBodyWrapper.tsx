@@ -20,6 +20,7 @@ function TableBodyWrapper({
   tableWrapperRef,
   announce,
   children,
+  engagedColumn,
 }: BodyWrapperProps) {
   const { rows, columns, paginationNeeded, totalsPosition } = tableData;
   const columnsStylingIDsJSON = JSON.stringify(columns.map((column) => column.stylingIDs));
@@ -38,7 +39,7 @@ function TableBodyWrapper({
   );
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
-  const getCellStyle = (columnIndex) => {
+  const getCellStyle = (columnIndex: number) => {
     return {
       color: bodyCellStyle.color,
       backgroundColor: theme.table.backgroundColor,

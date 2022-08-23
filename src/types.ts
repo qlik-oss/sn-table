@@ -354,6 +354,7 @@ export interface BodyWrapperProps
   setShouldRefocus(): void;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
   children: JSX.Element;
+  engagedColumn?: number | undefined;
 }
 
 export interface ContextProviderProps {
