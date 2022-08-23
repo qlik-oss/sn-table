@@ -1,5 +1,4 @@
 import React, { memo } from 'react';
-import PropTypes from 'prop-types';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Box from '@mui/material/Box';
@@ -10,8 +9,9 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 
 import { StyledSelect, StyledIconButton } from '../styles';
 import { handleLastTab } from '../utils/handle-key-press';
+import { PaginationContentProps } from '../../types';
 
-const icons = {
+const icons: Record<string, typeof FirstPageIcon> = {
   FirstPage: FirstPageIcon,
   PreviousPage: KeyboardArrowLeft,
   NextPage: KeyboardArrowRight,
@@ -22,7 +22,7 @@ const icons = {
   LastPageRTL: FirstPageIcon,
 };
 
-export const shouldShow = (component, width) => {
+export const shouldShow = (component: string, width: number) => {
   switch (component) {
     case 'selectPage':
       return width > 700;
@@ -51,7 +51,7 @@ function PaginationContent({
   rect,
   handleChangePage,
   announce,
-}) {
+}: PaginationContentProps) {
   const { totalRowCount, totalColumnCount, totalPages, paginationNeeded } = tableData;
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
 
@@ -70,19 +70,26 @@ function PaginationContent({
   const showRowsPerPage = !isSelectionMode && shouldShow('rppOptions', width) && totalColumnCount <= 100;
   const displayedRowsText = translator.get('SNTable.Pagination.DisplayedRowsLabel', [
     `${page * rowsPerPage + 1} - ${Math.min((page + 1) * rowsPerPage, totalRowCount)}`,
-    totalRowCount,
+    totalRowCount.toString(),
   ]);
 
-  const handleChangeRowsPerPage = (evt) => {
-    setPageInfo({ ...pageInfo, page: 0, rowsPerPage: +evt.target.value });
-    announce({ keys: [['SNTable.Pagination.RowsPerPageChange', evt.target.value]], politeness: 'assertive' });
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setPageInfo({ ...pageInfo, page: 0, rowsPerPage: +event.target.value });
+    announce({ keys: [['SNTable.Pagination.RowsPerPageChange', event.target.value]], politeness: 'assertive' });
   };
 
-  const handleSelectPage = (event) => handleChangePage(+event.target.value);
+  const handleSelectPage = (event: React.ChangeEvent<HTMLSelectElement>) => handleChangePage(+event.target.value);
 
-  const handleLastButtonTab = keyboard.enabled ? (event) => handleLastTab(event, isSelectionMode, keyboard) : null;
+  const handleLastButtonTab = keyboard.enabled
+    ? (event: React.KeyboardEvent) => handleLastTab(event, isSelectionMode, keyboard)
+    : null;
 
-  const getButton = (disabledCondition, pageNumber, type, onKeyDown = null) => {
+  const getButton = (
+    disabledCondition: boolean,
+    pageNumber: number,
+    type: string,
+    onKeyDown: ((event: React.KeyboardEvent) => void) | null
+  ) => {
     const iconType = `${type}${direction === 'rtl' ? 'RTL' : ''}`;
     const IconComponent = icons[iconType];
 
@@ -103,7 +110,12 @@ function PaginationContent({
     );
   };
 
-  const getDropdown = (name, value, options, handleChange) => {
+  const getDropdown = (
+    name: string,
+    value: number,
+    options: JSX.Element,
+    handleChange: (event: React.ChangeEvent<HTMLSelectElement>) => void
+  ) => {
     const translationName = `SNTable.Pagination.${name}`;
     const id = `${name}-dropdown`;
     const inputProps = {
@@ -143,7 +155,7 @@ function PaginationContent({
 
   const pageOptions = (
     <>
-      {[...Array(totalPages).keys()].map((pageIdx, index) => (
+      {Array.from(Array(totalPages).keys()).map((pageIdx, index) => (
         <option key={pageIdx} value={index}>
           {pageIdx + 1}
         </option>
@@ -156,33 +168,12 @@ function PaginationContent({
       {showRowsPerPage && getDropdown('RowsPerPage', rowsPerPage, rppOptions, handleChangeRowsPerPage)}
       {shouldShow('displayedRows', width) && <Box>{displayedRowsText}</Box>}
       {shouldShow('selectPage', width) && getDropdown('SelectPage', page, pageOptions, handleSelectPage)}
-      {showFirstAndLast && getButton(onFirstPage, 0, 'FirstPage')}
-      {getButton(onFirstPage, page - 1, 'PreviousPage')}
+      {showFirstAndLast && getButton(onFirstPage, 0, 'FirstPage', null)}
+      {getButton(onFirstPage, page - 1, 'PreviousPage', null)}
       {getButton(onLastPage, page + 1, 'NextPage', !showFirstAndLast ? handleLastButtonTab : null)}
       {showFirstAndLast && getButton(onLastPage, totalPages - 1, 'LastPage', handleLastButtonTab)}
     </>
   );
 }
-
-PaginationContent.defaultProps = {
-  direction: null,
-  footerContainer: null,
-};
-
-PaginationContent.propTypes = {
-  theme: PropTypes.object.isRequired,
-  tableData: PropTypes.object.isRequired,
-  pageInfo: PropTypes.object.isRequired,
-  setPageInfo: PropTypes.func.isRequired,
-  keyboard: PropTypes.object.isRequired,
-  translator: PropTypes.object.isRequired,
-  constraints: PropTypes.object.isRequired,
-  isSelectionMode: PropTypes.bool.isRequired,
-  rect: PropTypes.object.isRequired,
-  handleChangePage: PropTypes.func.isRequired,
-  announce: PropTypes.func.isRequired,
-  direction: PropTypes.string,
-  footerContainer: PropTypes.object,
-};
 
 export default memo(PaginationContent);
