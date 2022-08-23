@@ -1,22 +1,31 @@
 import React from 'react';
+import { stardust } from '@nebula.js/stardust';
 import { render, fireEvent } from '@testing-library/react';
 import TableHeadWrapper from '../TableHeadWrapper';
 import { TableContextProvider } from '../../context';
 import * as handleKeyPress from '../../utils/handle-key-press';
 import * as handleAccessibility from '../../utils/handle-accessibility';
+import {
+  TableData,
+  TableLayout,
+  ExtendedTheme,
+  ChangeSortOrder,
+  ExtendedTranslator,
+  ExtendedSelectionAPI,
+} from '../../../types';
 
 describe('<TableHeadWrapper />', () => {
-  const rootElement = {};
-  let tableData;
-  let theme;
-  let layout;
-  let changeSortOrder;
-  let constraints;
-  let selectionsAPI;
-  let keyboard;
-  let translator;
+  const rootElement = {} as HTMLElement;
+  let tableData: TableData;
+  let theme: ExtendedTheme;
+  let layout: TableLayout;
+  let changeSortOrder: ChangeSortOrder;
+  let constraints: stardust.Constraints;
+  let selectionsAPI: ExtendedSelectionAPI;
+  let keyboard: stardust.Keyboard;
+  let translator: ExtendedTranslator;
 
-  const renderTableHead = (cellCoordMock) =>
+  const renderTableHead = (cellCoordMock?: [number, number]) =>
     render(
       <TableContextProvider selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
         <TableHeadWrapper
@@ -39,29 +48,29 @@ describe('<TableHeadWrapper />', () => {
         { id: 1, align: 'left', label: 'someDim', sortDirection: 'asc', isDim: true, dataColIdx: 0 },
         { id: 2, align: 'right', label: 'someMsr', sortDirection: 'desc', isDim: false, dataColIdx: 1 },
       ],
-    };
+    } as unknown as TableData;
     theme = {
-      getColorPickerColor: () => {},
-      name: () => {},
-      getStyle: () => {},
+      getColorPickerColor: () => undefined,
+      name: () => undefined,
+      getStyle: () => undefined,
       table: { body: { borderColor: '' } },
-    };
+    } as unknown as ExtendedTheme;
     layout = {
       qHyperCube: {
         qEffectiveInterColumnSortOrder: [0, 1],
       },
-    };
-    changeSortOrder = jest.fn();
+    } as TableLayout;
+    changeSortOrder = jest.fn() as ChangeSortOrder;
     constraints = {
       active: false,
-    };
+    } as stardust.Constraints;
     selectionsAPI = {
       isModal: () => false,
-    };
+    } as ExtendedSelectionAPI;
     keyboard = {
       enabled: false,
-    };
-    translator = { get: (s) => s };
+    } as stardust.Keyboard;
+    translator = { get: (s) => s } as ExtendedTranslator;
   });
 
   it('should render table head', () => {
@@ -72,8 +81,8 @@ describe('<TableHeadWrapper />', () => {
   });
 
   it('should call changeSortOrder when clicking a header cell', () => {
-    const { queryByText } = renderTableHead();
-    fireEvent.click(queryByText(tableData.columns[0].label));
+    const { getByText } = renderTableHead();
+    fireEvent.click(getByText(tableData.columns[0].label));
 
     expect(changeSortOrder).toHaveBeenCalledWith(layout, tableData.columns[0]);
   });
@@ -82,8 +91,8 @@ describe('<TableHeadWrapper />', () => {
     constraints = {
       active: true,
     };
-    const { queryByText } = renderTableHead();
-    fireEvent.click(queryByText(tableData.columns[0].label));
+    const { getByText } = renderTableHead();
+    fireEvent.click(getByText(tableData.columns[0].label));
 
     expect(changeSortOrder).not.toHaveBeenCalled();
   });
@@ -91,9 +100,9 @@ describe('<TableHeadWrapper />', () => {
   it('should not call changeSortOrder when clicking a header cell and cells are selected', () => {
     selectionsAPI = {
       isModal: () => true,
-    };
-    const { queryByText } = renderTableHead();
-    fireEvent.click(queryByText(tableData.columns[0].label));
+    } as ExtendedSelectionAPI;
+    const { getByText } = renderTableHead();
+    fireEvent.click(getByText(tableData.columns[0].label));
 
     expect(changeSortOrder).not.toHaveBeenCalled();
   });
@@ -101,8 +110,8 @@ describe('<TableHeadWrapper />', () => {
   it('should call handleHeadKeyDown when keyDown on a header cell', () => {
     jest.spyOn(handleKeyPress, 'handleHeadKeyDown').mockImplementation(() => jest.fn());
 
-    const { queryByText } = renderTableHead();
-    fireEvent.keyDown(queryByText(tableData.columns[0].label));
+    const { getByText } = renderTableHead();
+    fireEvent.keyDown(getByText(tableData.columns[0].label));
 
     expect(handleKeyPress.handleHeadKeyDown).toHaveBeenCalledTimes(1);
   });
@@ -111,8 +120,8 @@ describe('<TableHeadWrapper />', () => {
     jest.spyOn(handleAccessibility, 'handleClickToFocusHead').mockImplementation(() => jest.fn());
     jest.spyOn(handleAccessibility, 'handleMouseDownLabelToFocusHeadCell').mockImplementation(() => jest.fn());
 
-    const { queryByText } = renderTableHead();
-    fireEvent.mouseDown(queryByText(tableData.columns[0].label));
+    const { getByText } = renderTableHead();
+    fireEvent.mouseDown(getByText(tableData.columns[0].label));
 
     expect(handleAccessibility.handleClickToFocusHead).toHaveBeenCalledTimes(1);
     expect(handleAccessibility.handleMouseDownLabelToFocusHeadCell).toHaveBeenCalledTimes(1);
@@ -124,17 +133,16 @@ describe('<TableHeadWrapper />', () => {
         { ...tableData.columns[0], sortDirection: 'desc' },
         { ...tableData.columns[1], sortDirection: 'asc' },
       ],
-      columnOrder: tableData.columnOrder,
-    };
+    } as unknown as TableData;
     layout = {
       qHyperCube: {
         qEffectiveInterColumnSortOrder: [1, 0],
       },
-    };
+    } as TableLayout;
 
-    const { queryByText } = renderTableHead();
-    const firstColQuery = queryByText(tableData.columns[0].label).closest('th');
-    const secondColQuery = queryByText(tableData.columns[1].label).closest('th');
+    const { getByText } = renderTableHead();
+    const firstColQuery = getByText(tableData.columns[0].label).closest('th') as HTMLTableCellElement;
+    const secondColQuery = getByText(tableData.columns[1].label).closest('th') as HTMLTableCellElement;
 
     expect(firstColQuery.getAttribute('aria-sort')).toBeNull();
     expect(firstColQuery.getAttribute('aria-pressed')).toBe('false');
@@ -143,14 +151,14 @@ describe('<TableHeadWrapper />', () => {
   });
 
   it('should render the visually hidden text instead of `aria-label` and has correct `scope` properly', () => {
-    const { queryByText, queryByTestId } = renderTableHead();
+    const { getByText, getByTestId } = renderTableHead();
 
     // check scope
-    const tableColumn = queryByText(tableData.columns[0].label).closest('th');
-    expect(tableColumn.getAttribute('scope')).toBe('col');
+    const tableColumn = getByText(tableData.columns[0].label).closest('th');
+    expect(tableColumn?.getAttribute('scope')).toBe('col');
 
     // check label
-    const tableColumnSortlabel = queryByTestId('VHL-for-col-0');
+    const tableColumnSortlabel = getByTestId('VHL-for-col-0');
     expect(tableColumnSortlabel).toHaveTextContent('SNTable.SortLabel.PressSpaceToSort');
   });
 

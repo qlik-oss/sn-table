@@ -6,7 +6,7 @@ import { addSelectionListeners } from '../utils/selections-utils';
 import { getBodyCellStyle } from '../utils/styling-utils';
 import { handleBodyKeyDown, handleBodyKeyUp } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
-import { ExtendedSelectionAPI, HandleBodyKeyDownProps, Cell, BodyWrapperProps } from '../../types';
+import { ExtendedSelectionAPI, HandleBodyKeyDownProps, Cell, TableBodyWrapperProps } from '../../types';
 
 function TableBodyWrapper({
   rootElement,
@@ -20,7 +20,7 @@ function TableBodyWrapper({
   tableWrapperRef,
   announce,
   children,
-}: BodyWrapperProps) {
+}: TableBodyWrapperProps) {
   const { rows, columns, paginationNeeded, totalsPosition } = tableData;
   const columnsStylingIDsJSON = JSON.stringify(columns.map((column) => column.stylingIDs));
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
