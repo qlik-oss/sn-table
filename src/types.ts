@@ -229,7 +229,7 @@ export interface RenderWithCarbonArguments {
   rootElement: HTMLElement;
   model?: EngineAPI.IGenericObject;
   theme: ExtendedTheme;
-  selectionsAPI: stardust.ObjectSelections;
+  selectionsAPI: ExtendedSelectionAPI;
   app?: EngineAPI.IApp;
   rect: stardust.Rect;
   layout: TableLayout;
@@ -301,7 +301,7 @@ export type TableData = {
 
 export interface RenderProps {
   direction?: 'ltr' | 'rtl';
-  selectionsAPI: stardust.ObjectSelections;
+  selectionsAPI: ExtendedSelectionAPI;
   rootElement?: HTMLElement;
   layout: TableLayout;
   changeSortOrder: ChangeSortOrder;
@@ -327,7 +327,7 @@ export interface RenderProps {
 
 export interface RootProps {
   direction?: 'ltr' | 'rtl';
-  selectionsAPI: stardust.ObjectSelections;
+  selectionsAPI: ExtendedSelectionAPI;
   rootElement: HTMLElement;
   layout: TableLayout;
   changeSortOrder: ChangeSortOrder;
@@ -343,9 +343,16 @@ export interface RootProps {
   announce: Announce;
 }
 
+export interface BodyWrapperProps
+  extends Omit<RootProps, 'changeSortOrder' | 'rect' | 'pageInfo' | 'setPageInfo' | 'footerContainer' | 'translator'> {
+  setShouldRefocus(): void;
+  tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
+  children: JSX.Element;
+}
+
 export interface ContextProviderProps {
   children: JSX.Element;
-  selectionsAPI: stardust.ObjectSelections;
+  selectionsAPI: ExtendedSelectionAPI;
   cellCoordMock?: [number, number];
   selectionDispatchMock?: jest.Mock<any, any>;
 }
