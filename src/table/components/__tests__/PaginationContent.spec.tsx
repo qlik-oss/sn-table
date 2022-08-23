@@ -1,24 +1,26 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
+import { stardust } from '@nebula.js/stardust';
 
 import PaginationContent from '../PaginationContent';
 import * as handleAccessibility from '../../utils/handle-accessibility';
+import { Announce, ExtendedTheme, ExtendedTranslator, PageInfo, SetPageInfo, TableData } from '../../../types';
 
 describe('<PaginationContent />', () => {
-  let theme;
-  let direction;
-  let tableData;
-  let pageInfo;
-  let setPageInfo;
-  let titles;
-  let handleChangePage;
-  let rect;
-  let translator;
-  let isSelectionMode;
-  let keyboard;
-  let constraints;
-  let footerContainer;
-  let announce;
+  let theme: ExtendedTheme;
+  let direction: 'ltr' | 'rtl' | undefined;
+  let tableData: TableData;
+  let pageInfo: PageInfo;
+  let setPageInfo: SetPageInfo;
+  let titles: string[];
+  let handleChangePage: () => void;
+  let rect: stardust.Rect;
+  let translator: ExtendedTranslator;
+  let isSelectionMode: boolean;
+  let keyboard: stardust.Keyboard;
+  let constraints: stardust.Constraints;
+  let footerContainer: HTMLElement;
+  let announce: Announce;
 
   const renderPagination = () =>
     render(
@@ -42,7 +44,7 @@ describe('<PaginationContent />', () => {
   beforeEach(() => {
     theme = {
       table: { pagination: { color: '', iconColor: '' } },
-    };
+    } as unknown as ExtendedTheme;
     direction = 'ltr';
     titles = [
       'SNTable.Pagination.FirstPage',
@@ -55,7 +57,7 @@ describe('<PaginationContent />', () => {
       totalColumnCount: 5,
       paginationNeeded: true,
       totalPages: 3,
-    };
+    } as unknown as TableData;
     pageInfo = {
       page: 0,
       rowsPerPage: 25,
@@ -63,10 +65,10 @@ describe('<PaginationContent />', () => {
     };
     setPageInfo = jest.fn();
     handleChangePage = jest.fn();
-    rect = { width: 750 };
-    translator = { get: (s) => s };
+    rect = { width: 750 } as unknown as stardust.Rect;
+    translator = { get: (s: string) => s } as unknown as ExtendedTranslator;
     isSelectionMode = false;
-    keyboard = { enabled: true };
+    keyboard = { enabled: true } as unknown as stardust.Keyboard;
     constraints = {};
     announce = jest.fn();
     jest.spyOn(handleAccessibility, 'focusSelectionToolbar').mockImplementation(() => jest.fn());
@@ -159,54 +161,54 @@ describe('<PaginationContent />', () => {
 
   describe('interaction', () => {
     it('should call handleChangePage when clicking next page', () => {
-      const { queryByTitle } = renderPagination();
+      const { getByTitle } = renderPagination();
 
-      fireEvent.click(queryByTitle('SNTable.Pagination.NextPage'));
+      fireEvent.click(getByTitle('SNTable.Pagination.NextPage'));
       expect(handleChangePage).toHaveBeenCalledWith(1);
     });
 
     it('should call handleChangePage when clicking previous page', () => {
       pageInfo.page = 1;
-      const { queryByTitle } = renderPagination();
+      const { getByTitle } = renderPagination();
 
-      fireEvent.click(queryByTitle('SNTable.Pagination.PreviousPage'));
+      fireEvent.click(getByTitle('SNTable.Pagination.PreviousPage'));
       expect(handleChangePage).toHaveBeenCalledWith(0);
     });
 
     it('should call handleChangePage when clicking last page', () => {
-      const { queryByTitle } = renderPagination();
+      const { getByTitle } = renderPagination();
 
-      fireEvent.click(queryByTitle('SNTable.Pagination.LastPage'));
+      fireEvent.click(getByTitle('SNTable.Pagination.LastPage'));
       expect(handleChangePage).toHaveBeenCalledWith(2);
     });
 
     it('should call handleChangePage when clicking first page', () => {
       pageInfo.page = 2;
-      const { queryByTitle } = renderPagination();
+      const { getByTitle } = renderPagination();
 
-      fireEvent.click(queryByTitle('SNTable.Pagination.FirstPage'));
+      fireEvent.click(getByTitle('SNTable.Pagination.FirstPage'));
       expect(handleChangePage).toHaveBeenCalledWith(0);
     });
 
     it('should not call focusSelectionToolbar when pressing tab on last page button and isSelectionMode is false', () => {
-      const { queryByTitle } = renderPagination();
-      fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab' });
+      const { getByTitle } = renderPagination();
+      fireEvent.keyDown(getByTitle('SNTable.Pagination.LastPage'), { key: 'Tab' });
       expect(handleAccessibility.focusSelectionToolbar).not.toHaveBeenCalled();
     });
 
     it('should not call focusSelectionToolbar when pressing shift + tab on last page button and isSelectionMode is true', () => {
       isSelectionMode = true;
 
-      const { queryByTitle } = renderPagination();
-      fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab', shiftKey: true });
+      const { getByTitle } = renderPagination();
+      fireEvent.keyDown(getByTitle('SNTable.Pagination.LastPage'), { key: 'Tab', shiftKey: true });
       expect(handleAccessibility.focusSelectionToolbar).not.toHaveBeenCalled();
     });
 
     it('should call focusSelectionToolbar when pressing tab on last page button and isSelectionMode is true', () => {
       isSelectionMode = true;
 
-      const { queryByTitle } = renderPagination();
-      fireEvent.keyDown(queryByTitle('SNTable.Pagination.LastPage'), { key: 'Tab' });
+      const { getByTitle } = renderPagination();
+      fireEvent.keyDown(getByTitle('SNTable.Pagination.LastPage'), { key: 'Tab' });
       expect(handleAccessibility.focusSelectionToolbar).toHaveBeenCalledTimes(1);
     });
 
@@ -214,24 +216,24 @@ describe('<PaginationContent />', () => {
       isSelectionMode = true;
       rect.width = 300;
 
-      const { queryByTitle } = renderPagination();
-      fireEvent.keyDown(queryByTitle('SNTable.Pagination.NextPage'), { key: 'Tab' });
+      const { getByTitle } = renderPagination();
+      fireEvent.keyDown(getByTitle('SNTable.Pagination.NextPage'), { key: 'Tab' });
       expect(handleAccessibility.focusSelectionToolbar).toHaveBeenCalledTimes(1);
     });
 
     it('should call handleChangePage when selecting page from dropdown', () => {
       pageInfo.page = 0;
-      const { queryByTestId } = renderPagination();
+      const { getByTestId } = renderPagination();
 
-      fireEvent.change(queryByTestId('SelectPage-dropdown'), { target: { value: 1 } });
+      fireEvent.change(getByTestId('SelectPage-dropdown'), { target: { value: 1 } });
       expect(handleChangePage).toHaveBeenCalledWith(1);
     });
 
     it('should call setPageInfo when selecting rows per page from dropdown', () => {
       const targetRowsPerPage = 10;
-      const { queryByTestId } = renderPagination();
+      const { getByTestId } = renderPagination();
 
-      fireEvent.change(queryByTestId('RowsPerPage-dropdown'), { target: { value: targetRowsPerPage } });
+      fireEvent.change(getByTestId('RowsPerPage-dropdown'), { target: { value: targetRowsPerPage } });
       expect(setPageInfo).toHaveBeenCalledWith({ ...pageInfo, rowsPerPage: targetRowsPerPage });
       expect(announce).toHaveBeenCalledWith({
         keys: [['SNTable.Pagination.RowsPerPageChange', `${targetRowsPerPage}`]],

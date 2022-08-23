@@ -1,7 +1,7 @@
 // TODO: add this to global rules
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { stardust } from '@nebula.js/stardust';
-import { Cell, SelectionState, ExtendedSelectionAPI, ActionPayload, Announce, ContextValue } from '../../types';
+import { Cell, SelectionState, ExtendedSelectionAPI, ActionPayload, Announce } from '../../types';
 
 export enum SelectionStates {
   SELECTED = 'selected',
@@ -35,7 +35,7 @@ type AddSelectionListenersArgs = {
   selectionDispatch: React.Dispatch<TSelectionActions>;
   setShouldRefocus(): void;
   keyboard: stardust.Keyboard;
-  tableWrapperRef: React.MutableRefObject<HTMLDivElement>;
+  tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
 };
 
 export function addSelectionListeners({
@@ -80,10 +80,8 @@ export function addSelectionListeners({
   };
 }
 
-export const getCellSelectionState = (cell: Cell, value: ContextValue): SelectionStates => {
-  const {
-    selectionState: { colIdx, rows, api },
-  } = value;
+export const getCellSelectionState = (cell: Cell, selectionState: SelectionState): SelectionStates => {
+  const { colIdx, rows, api } = selectionState;
   let cellState = SelectionStates.INACTIVE;
   if (api.isModal()) {
     if (colIdx !== cell.colIdx) {

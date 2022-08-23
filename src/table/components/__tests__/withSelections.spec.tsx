@@ -1,50 +1,40 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
+import TableCell from '@mui/material/TableCell';
 
 import { TableContextProvider } from '../../context';
 import * as withSelections from '../withSelections';
 import { SelectionActions } from '../../utils/selections-utils';
+import { Announce, CellStyle, ExtendedSelectionAPI, CellHOCProps, Cell, Column } from '../../../types';
 
 describe('withSelections', () => {
-  const selectionsAPI = { isModal: () => false };
-  let HOC;
-  let value;
-  let cell;
-  let evt;
-  let styling;
-  let announce;
-  let theme;
-  let themeBackgroundColor;
-  let selectionDispatchMock;
+  const value = '100';
+  const selectionsAPI = { isModal: () => false } as unknown as ExtendedSelectionAPI;
+  let HOC: (props: CellHOCProps) => JSX.Element;
+  let cell: Cell;
+  let evt: React.MouseEvent;
+  let styling: CellStyle;
+  let announce: Announce;
+  let column: Column;
+  let selectionDispatchMock: jest.Mock<any, any>;
 
   const renderWithSelections = () =>
     render(
       <TableContextProvider selectionsAPI={selectionsAPI} selectionDispatchMock={selectionDispatchMock}>
-        <HOC
-          value={value}
-          cell={cell}
-          styling={styling}
-          theme={theme}
-          announce={announce}
-          themeBackgroundColor={themeBackgroundColor}
-        />
+        <HOC cell={cell} styling={styling} announce={announce} column={column}>
+          {value}
+        </HOC>
       </TableContextProvider>
     );
 
   beforeEach(() => {
-    HOC = withSelections.default((props) => <div {...props}>{props.value}</div>);
-
-    value = '100';
+    HOC = withSelections.default((props: CellHOCProps) => <TableCell {...props}>{props.children}</TableCell>);
     cell = {
       isSelectable: true,
-    };
-    evt = { button: 0 };
-    styling = {};
-    announce = jest.fn();
-    theme = {
-      getStyle: () => {},
-    };
-    themeBackgroundColor = '#123456';
+    } as unknown as Cell;
+    evt = { button: 0 } as unknown as React.MouseEvent;
+    styling = {} as unknown as CellStyle;
+    announce = () => undefined as unknown as Announce;
     selectionDispatchMock = jest.fn();
   });
 
@@ -58,7 +48,8 @@ describe('withSelections', () => {
 
   it('should call selectCell on mouseUp', () => {
     const { queryByText } = renderWithSelections();
-    fireEvent.mouseUp(queryByText(value));
+    const renderedCell = queryByText(value) as HTMLElement;
+    fireEvent.mouseUp(renderedCell);
 
     expect(selectionDispatchMock).toHaveBeenCalledTimes(1);
     expect(selectionDispatchMock).toHaveBeenCalledWith({
@@ -71,7 +62,8 @@ describe('withSelections', () => {
     cell.isSelectable = false;
 
     const { queryByText } = renderWithSelections();
-    fireEvent.mouseUp(queryByText(value));
+    const renderedCell = queryByText(value) as HTMLElement;
+    fireEvent.mouseUp(renderedCell);
 
     expect(selectionDispatchMock).not.toHaveBeenCalled();
   });
@@ -80,7 +72,8 @@ describe('withSelections', () => {
     evt.button = 2;
 
     const { queryByText } = renderWithSelections();
-    fireEvent.mouseUp(queryByText(value), evt);
+    const renderedCell = queryByText(value) as HTMLElement;
+    fireEvent.mouseUp(renderedCell, evt);
 
     expect(selectionDispatchMock).not.toHaveBeenCalled();
   });
