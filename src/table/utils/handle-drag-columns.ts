@@ -30,6 +30,7 @@ type DragOverProps = {
 };
 
 type DragEndProps = {
+  event: DragEvent;
   model: EngineAPI.IGenericObject;
   setEngagedColumn: (arg0: undefined) => void;
 };
@@ -110,7 +111,7 @@ export const handleDragOver = ({ event, model, rtl, columns, setEngagedColumn }:
   }
 };
 
-export const handleDragEnd = async ({ model, setEngagedColumn }: DragEndProps) => {
+export const handleDragEnd = async ({ event, model, setEngagedColumn }: DragEndProps) => {
   await model.getEffectiveProperties().then((properties: EngineAPI.IGenericObjectProperties) => {
     const oldProperties = extend(true, {}, properties);
     storeColumnWidths(properties.qHyperCubeDef);
@@ -118,5 +119,6 @@ export const handleDragEnd = async ({ model, setEngagedColumn }: DragEndProps) =
     updateColumnInfoOrders(properties.qHyperCubeDef);
     saveSoftProperties(model, oldProperties, properties);
   });
+  (event.target as HTMLTableElement)?.blur();
   setEngagedColumn(undefined);
 };

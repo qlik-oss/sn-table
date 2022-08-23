@@ -100,7 +100,7 @@ function TableHeadWrapper({
                   cell: column,
                 })
               }
-              onDragEnd={() => handleDragEnd({ model, setEngagedColumn })}
+              onDragEnd={(event) => handleDragEnd({ event, model, setEngagedColumn })}
             >
               <StyledSortLabel
                 headerStyle={headerStyle}

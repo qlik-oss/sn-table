@@ -93,7 +93,8 @@ describe('handleDrag', () => {
   });
 
   it('should save properties when drag is end', async () => {
-    await handleDragEnd({ model, setEngagedColumn });
+    const event = { target: { blur: jest.fn() } } as unknown as DragEvent;
+    await handleDragEnd({ event, model, setEngagedColumn });
 
     expect(ColumnsSortingsUtil.storeColumnWidths).toBeCalledTimes(1);
     expect(ColumnsSortingsUtil.storeColumnWidths).toBeCalledWith({});
@@ -104,6 +105,7 @@ describe('handleDrag', () => {
     expect(SaveSoftProperties.default).toBeCalledTimes(1);
     expect(SaveSoftProperties.default).toBeCalledWith(model, { qHyperCubeDef: {} }, { qHyperCubeDef: {} });
 
+    expect((event.target as HTMLTableElement).blur).toBeCalledTimes(1);
     expect(setEngagedColumn).toBeCalledTimes(1);
     expect(setEngagedColumn).toBeCalledWith(undefined);
   });
