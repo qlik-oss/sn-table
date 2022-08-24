@@ -7,7 +7,7 @@ import { getBodyCellStyle } from '../utils/styling-utils';
 import { handleBodyKeyDown, handleBodyKeyUp } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
 import { Cell } from '../../types';
-import { BodyWrapperProps } from '../types';
+import { TableBodyWrapperProps } from '../types';
 
 function TableBodyWrapper({
   rootElement,
@@ -21,7 +21,7 @@ function TableBodyWrapper({
   tableWrapperRef,
   announce,
   children,
-}: BodyWrapperProps) {
+}: TableBodyWrapperProps) {
   const { rows, columns, paginationNeeded, totalsPosition } = tableData;
   const columnsStylingIDsJSON = JSON.stringify(columns.map((column) => column.stylingIDs));
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);

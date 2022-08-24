@@ -144,7 +144,7 @@ export interface RenderProps {
   app?: EngineAPI.IApp;
 }
 
-export interface RootProps {
+export interface TableWrapperProps {
   direction?: 'ltr' | 'rtl';
   selectionsAPI: ExtendedSelectionAPI;
   rootElement: HTMLElement;
@@ -162,6 +162,21 @@ export interface RootProps {
   announce: Announce;
 }
 
+export type TableHeadWrapperProps = Omit<
+  TableWrapperProps,
+  'rect' | 'pageInfo' | 'setPageInfo' | 'footerContainer' | 'announce'
+>;
+
+export interface TableBodyWrapperProps
+  extends Omit<
+    TableWrapperProps,
+    'changeSortOrder' | 'pageInfo' | 'setPageInfo' | 'translator' | 'footContainer' | 'rect'
+  > {
+  setShouldRefocus(): void;
+  tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
+  children: JSX.Element;
+}
+
 export interface TableTotalsProps {
   rootElement: HTMLElement;
   tableData: TableData;
@@ -171,15 +186,9 @@ export interface TableTotalsProps {
 }
 
 export interface PaginationContentProps
-  extends Omit<RootProps, 'selectionsAPI' | 'rootElement' | 'layout' | 'changeSortOrder'> {
+  extends Omit<TableWrapperProps, 'selectionsAPI' | 'rootElement' | 'layout' | 'changeSortOrder'> {
   isSelectionMode: boolean;
   handleChangePage(pageIdx: number): void;
-}
-export interface BodyWrapperProps
-  extends Omit<RootProps, 'changeSortOrder' | 'rect' | 'pageInfo' | 'setPageInfo' | 'footerContainer' | 'translator'> {
-  setShouldRefocus(): void;
-  tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
-  children: JSX.Element;
 }
 
 export interface FooterWrapperProps {

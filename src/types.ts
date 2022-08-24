@@ -107,7 +107,7 @@ export interface Column {
   dataColIdx: number;
   width: number;
   label: string;
-  align: string;
+  align: 'left' | 'center' | 'right';
   stylingIDs: string[];
   sortDirection: string;
   totalInfo?: string;

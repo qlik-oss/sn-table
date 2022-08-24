@@ -52,7 +52,7 @@ const renderWithCarbon = ({
   changeSortOrder,
 }: RenderWithCarbonArguments) => {
   if (env.carbon && changeSortOrder && theme) {
-    render(rootElement, { layout, model, manageData, theme, selectionsAPI, changeSortOrder, app, rect });
+    render({ rootElement, layout, model, manageData, theme, selectionsAPI, changeSortOrder, app, rect });
   }
 };
 
@@ -91,23 +91,26 @@ export default function supernova(env: Galaxy) {
       useEffect(() => {
         const isReadyToRender = !env.carbon && reactRoot && layout && tableData && changeSortOrder && theme;
         isReadyToRender &&
-          render(reactRoot, {
-            rootElement,
-            layout,
-            tableData,
-            direction,
-            pageInfo,
-            setPageInfo,
-            constraints,
-            translator,
-            selectionsAPI,
-            theme,
-            changeSortOrder,
-            keyboard,
-            rect,
-            footerContainer,
-            announce,
-          });
+          render(
+            {
+              rootElement,
+              layout,
+              tableData,
+              direction,
+              pageInfo,
+              setPageInfo,
+              constraints,
+              translator,
+              selectionsAPI,
+              theme,
+              changeSortOrder,
+              keyboard,
+              rect,
+              footerContainer,
+              announce,
+            },
+            reactRoot
+          );
       }, [
         reactRoot,
         tableData,
