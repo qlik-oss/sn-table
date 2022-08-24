@@ -112,7 +112,7 @@ export interface Column {
   dataColIdx: number;
   width: number;
   label: string;
-  align: string;
+  align: 'left' | 'center' | 'right';
   stylingIDs: string[];
   sortDirection: string;
   totalInfo?: string;
@@ -343,12 +343,17 @@ export interface RootProps {
   announce: Announce;
 }
 
-export interface BodyWrapperProps
-  extends Omit<RootProps, 'changeSortOrder' | 'rect' | 'pageInfo' | 'setPageInfo' | 'footerContainer' | 'translator'> {
+export interface TableBodyWrapperProps
+  extends Omit<RootProps, 'changeSortOrder' | 'pageInfo' | 'setPageInfo' | 'translator' | 'footContainer' | 'rect'> {
   setShouldRefocus(): void;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
   children: JSX.Element;
 }
+
+export type TableHeadWrapperProps = Omit<
+  RootProps,
+  'rect' | 'pageInfo' | 'setPageInfo' | 'footerContainer' | 'announce'
+>;
 
 export interface ContextProviderProps {
   children: JSX.Element;

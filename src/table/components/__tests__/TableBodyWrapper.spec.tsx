@@ -9,18 +9,7 @@ import * as selectionsUtils from '../../utils/selections-utils';
 import * as getCellRenderer from '../../utils/get-cell-renderer';
 import * as handleKeyPress from '../../utils/handle-key-press';
 import * as handleAccessibility from '../../utils/handle-accessibility';
-import {
-  TableData,
-  ExtendedSelectionAPI,
-  TableLayout,
-  ExtendedTheme,
-  ChangeSortOrder,
-  PageInfo,
-  SetPageInfo,
-  ExtendedTranslator,
-  Cell,
-  CellHOC,
-} from '../../../types';
+import { TableData, ExtendedSelectionAPI, TableLayout, ExtendedTheme, PageInfo, Cell } from '../../../types';
 
 describe('<TableBodyWrapper />', () => {
   const rootElement = {} as HTMLElement;
