@@ -1,6 +1,6 @@
 import React, { DragEvent } from 'react';
-import { handleDragStart, handleDragOver, handleDragEnd, Model } from '../handle-drag-columns';
-import { TableLayout, HyperCube } from '../../../types';
+import { handleDragStart, handleDragOver, handleDragEnd } from '../handle-drag-columns';
+import { TableLayout, HyperCube, Model, Column } from '../../../types';
 import * as ColumnsSortingsUtil from '../columns-sorting-util';
 import * as SaveSoftProperties from '../save-soft-properties';
 
@@ -11,10 +11,7 @@ describe('handleDrag', () => {
   let qHyperCube: HyperCube;
   let cellRef: React.RefObject<HTMLTableElement>;
   let headRowRef: React.RefObject<HTMLTableElement>;
-  let cell: {
-    width: number;
-    dataColIdx: number;
-  };
+  let cell: Column;
   let model: Model;
   const columns = [
     {
@@ -33,7 +30,7 @@ describe('handleDrag', () => {
       width: 245,
       dataColIdx: 3,
     },
-  ];
+  ] as unknown as Column[];
   const setEngagedColumn = jest.fn();
   jest.spyOn(ColumnsSortingsUtil, 'storeColumnWidths').mockImplementation(() => jest.fn());
   jest.spyOn(ColumnsSortingsUtil, 'fixTableHypercubeOrders').mockImplementation(() => jest.fn());
@@ -48,7 +45,7 @@ describe('handleDrag', () => {
     cell = {
       width: 86,
       dataColIdx: 0,
-    };
+    } as unknown as Column;
     model = {
       applyPatches: jest.fn(),
       getEffectiveProperties: async () => Promise.resolve({ qHyperCubeDef: {} }),

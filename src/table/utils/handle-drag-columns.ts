@@ -1,39 +1,7 @@
-import React, { DragEvent } from 'react';
 import extend from 'extend';
 import { storeColumnWidths, updateColumnInfoOrders, fixTableHypercubeOrders } from './columns-sorting-util';
 import saveSoftProperties from './save-soft-properties';
-import { TableLayout } from '../../types';
-
-export interface Model extends EngineAPI.IGenericObject {
-  applyPatches: (arg0: Array<{ qPath: string; qOp: string; qValue: string }>, arg1: boolean) => Promise<void>;
-}
-
-type Column = {
-  width: number;
-  dataColIdx: number;
-};
-
-type DragStartProps = {
-  event: DragEvent;
-  layout: TableLayout;
-  cellRef: React.RefObject<HTMLTableElement>;
-  headRowRef: React.RefObject<HTMLTableElement>;
-  cell: Column;
-};
-
-type DragOverProps = {
-  event: DragEvent;
-  model: Model;
-  rtl: boolean;
-  columns: Column[];
-  setEngagedColumn: (i: number) => void;
-};
-
-type DragEndProps = {
-  event: DragEvent;
-  model: EngineAPI.IGenericObject;
-  setEngagedColumn: (arg0: undefined) => void;
-};
+import { Column, Model, DragStartProps, DragOverProps, DragEndProps } from '../../types';
 
 const applyColumnOrderSoftPatch = (model: Model, op: string, columnOrder: number[]) => {
   const patches = [

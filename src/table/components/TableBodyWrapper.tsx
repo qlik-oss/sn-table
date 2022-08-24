@@ -39,13 +39,11 @@ function TableBodyWrapper({
   );
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
-  const getCellStyle = (columnIndex: number) => {
-    return {
-      color: bodyCellStyle.color,
-      backgroundColor: theme.table.backgroundColor,
-      opacity: engagedColumn !== undefined && engagedColumn !== columnIndex ? '50%' : null,
-    };
-  };
+  const getCellStyle = (columnIndex: number) => ({
+    color: bodyCellStyle.color,
+    backgroundColor: theme.table.backgroundColor,
+    opacity: engagedColumn !== undefined && engagedColumn !== columnIndex ? '50%' : null,
+  });
 
   useEffect(() => {
     addSelectionListeners({

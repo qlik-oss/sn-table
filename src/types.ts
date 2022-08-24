@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { DragEvent } from 'react';
 import { TableCellProps } from '@mui/material/TableCell';
 import { stardust } from '@nebula.js/stardust';
 
@@ -392,3 +392,28 @@ export interface FooterWrapperProps {
   theme: ExtendedTheme;
   footerContainer?: HTMLElement;
 }
+export interface Model extends EngineAPI.IGenericObject {
+  applyPatches: (arg0: Array<{ qPath: string; qOp: string; qValue: string }>, arg1: boolean) => Promise<void>;
+}
+
+export type DragStartProps = {
+  event: DragEvent;
+  layout: TableLayout;
+  cellRef: React.RefObject<HTMLTableElement>;
+  headRowRef: React.RefObject<HTMLTableElement>;
+  cell: Column;
+};
+
+export type DragOverProps = {
+  event: DragEvent;
+  model: Model;
+  rtl: boolean;
+  columns: Column[];
+  setEngagedColumn: (i: number) => void;
+};
+
+export type DragEndProps = {
+  event: DragEvent;
+  model: EngineAPI.IGenericObject;
+  setEngagedColumn: (arg0: undefined) => void;
+};
