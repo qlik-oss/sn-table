@@ -9,7 +9,7 @@ import {
   getSelectionStyle,
 } from '../styling-utils';
 import { SelectionStates } from '../selections-utils';
-import { ExtendedTheme, PaletteColor, StylingLayout, TableLayout, CellStyle } from '../../../types';
+import { ExtendedTheme, PaletteColor, HeaderStyling, ContentStyling, TableLayout, CellStyle } from '../../../types';
 
 describe('styling-utils', () => {
   let resolvedColor: string;
@@ -76,7 +76,7 @@ describe('styling-utils', () => {
   });
 
   describe('getBaseStyling', () => {
-    let styleObj: StylingLayout;
+    let styleObj: HeaderStyling | ContentStyling;
     let objetName: string;
 
     beforeEach(() => {
@@ -111,6 +111,17 @@ describe('styling-utils', () => {
         padding: '6px 12px',
       });
     });
+    it('should return styling with padding', () => {
+      styleObj.fontColor = undefined;
+      styleObj.fontSize = undefined;
+      (<ContentStyling>styleObj).padding = '20px';
+      const resultStyling = getBaseStyling(objetName, theme, styleObj);
+      expect(resultStyling).toEqual({
+        borderColor: '#D9D9D9',
+        borderStyle: 'solid',
+        padding: '20px',
+      });
+    });
     it('should return styling with fontSize and padding when the index for font color is -1 and color is null', () => {
       styleObj.fontColor = { index: -1, color: null };
 
@@ -135,8 +146,8 @@ describe('styling-utils', () => {
         borderStyle: 'solid',
         color: '#111',
         fontSize: '12px',
-        padding: '6px 12px',
         fontFamily: '#111',
+        padding: '6px 12px',
       });
     });
     it('should return styling with fontSize, padding and font color when the index for font color is -1 and the color is not null', () => {
@@ -162,7 +173,7 @@ describe('styling-utils', () => {
       });
     });
     it('should return styling with custom padding', () => {
-      styleObj.padding = '4px';
+      (<ContentStyling>styleObj).padding = '4px';
 
       const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling.padding).toBe('4px');
@@ -260,6 +271,7 @@ describe('styling-utils', () => {
                 index: -1,
                 color: null,
               },
+              padding: '11px 22px',
             },
           },
         ],
