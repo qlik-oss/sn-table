@@ -15,9 +15,9 @@ import useFocusListener from '../hooks/use-focus-listener';
 import useScrollListener from '../hooks/use-scroll-listener';
 import { handleWrapperKeyDown } from '../utils/handle-key-press';
 import { updateFocus, handleResetFocus, getCellElement } from '../utils/handle-accessibility';
-import { RootProps } from '../../types';
+import { TableWrapperProps } from '../../types';
 
-export default function TableWrapper(props: RootProps) {
+export default function TableWrapper(props: TableWrapperProps) {
   const {
     rootElement,
     tableData,

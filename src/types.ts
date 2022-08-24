@@ -302,7 +302,7 @@ export type TableData = {
 export interface RenderProps {
   direction?: 'ltr' | 'rtl';
   selectionsAPI: ExtendedSelectionAPI;
-  rootElement?: HTMLElement;
+  rootElement: HTMLElement;
   layout: TableLayout;
   changeSortOrder: ChangeSortOrder;
   rect: stardust.Rect;
@@ -325,7 +325,7 @@ export interface RenderProps {
   app?: EngineAPI.IApp;
 }
 
-export interface RootProps {
+export interface TableWrapperProps {
   direction?: 'ltr' | 'rtl';
   selectionsAPI: ExtendedSelectionAPI;
   rootElement: HTMLElement;
@@ -344,14 +344,17 @@ export interface RootProps {
 }
 
 export interface TableBodyWrapperProps
-  extends Omit<RootProps, 'changeSortOrder' | 'pageInfo' | 'setPageInfo' | 'translator' | 'footContainer' | 'rect'> {
+  extends Omit<
+    TableWrapperProps,
+    'changeSortOrder' | 'pageInfo' | 'setPageInfo' | 'translator' | 'footContainer' | 'rect'
+  > {
   setShouldRefocus(): void;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
   children: JSX.Element;
 }
 
 export type TableHeadWrapperProps = Omit<
-  RootProps,
+  TableWrapperProps,
   'rect' | 'pageInfo' | 'setPageInfo' | 'footerContainer' | 'announce'
 >;
 
@@ -379,7 +382,7 @@ export interface TableTotalsProps {
 }
 
 export interface PaginationContentProps
-  extends Omit<RootProps, 'selectionsAPI' | 'rootElement' | 'layout' | 'changeSortOrder'> {
+  extends Omit<TableWrapperProps, 'selectionsAPI' | 'rootElement' | 'layout' | 'changeSortOrder'> {
   isSelectionMode: boolean;
   handleChangePage(pageIdx: number): void;
 }

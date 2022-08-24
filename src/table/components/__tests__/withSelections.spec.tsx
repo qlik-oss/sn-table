@@ -47,9 +47,8 @@ describe('withSelections', () => {
   });
 
   it('should call selectCell on mouseUp', () => {
-    const { queryByText } = renderWithSelections();
-    const renderedCell = queryByText(value) as HTMLElement;
-    fireEvent.mouseUp(renderedCell);
+    const { getByText } = renderWithSelections();
+    fireEvent.mouseUp(getByText(value), evt);
 
     expect(selectionDispatchMock).toHaveBeenCalledTimes(1);
     expect(selectionDispatchMock).toHaveBeenCalledWith({
@@ -61,9 +60,8 @@ describe('withSelections', () => {
   it('should not call selectCell on mouseUp when measure', () => {
     cell.isSelectable = false;
 
-    const { queryByText } = renderWithSelections();
-    const renderedCell = queryByText(value) as HTMLElement;
-    fireEvent.mouseUp(renderedCell);
+    const { getByText } = renderWithSelections();
+    fireEvent.mouseUp(getByText(value), evt);
 
     expect(selectionDispatchMock).not.toHaveBeenCalled();
   });
@@ -71,9 +69,8 @@ describe('withSelections', () => {
   it('should not call selectCell on mouseUp when right button', () => {
     evt.button = 2;
 
-    const { queryByText } = renderWithSelections();
-    const renderedCell = queryByText(value) as HTMLElement;
-    fireEvent.mouseUp(renderedCell, evt);
+    const { getByText } = renderWithSelections();
+    fireEvent.mouseUp(getByText(value), evt);
 
     expect(selectionDispatchMock).not.toHaveBeenCalled();
   });
