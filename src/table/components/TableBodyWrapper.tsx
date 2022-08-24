@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, memo } from 'react';
-import PropTypes from 'prop-types';
 import getCellRenderer from '../utils/get-cell-renderer';
 import { useContextSelector, TableContext } from '../context';
 import { StyledTableBody, StyledBodyRow } from '../styles';
@@ -7,6 +6,7 @@ import { addSelectionListeners } from '../utils/selections-utils';
 import { getBodyCellStyle } from '../utils/styling-utils';
 import { handleBodyKeyDown, handleBodyKeyUp } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
+import { ExtendedSelectionAPI, HandleBodyKeyDownProps, Cell, TableBodyWrapperProps } from '../../types';
 
 function TableBodyWrapper({
   rootElement,
@@ -20,7 +20,7 @@ function TableBodyWrapper({
   tableWrapperRef,
   announce,
   children,
-}) {
+}: TableBodyWrapperProps) {
   const { rows, columns, paginationNeeded, totalsPosition } = tableData;
   const columnsStylingIDsJSON = JSON.stringify(columns.map((column) => column.stylingIDs));
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
@@ -31,15 +31,22 @@ function TableBodyWrapper({
   const isSelectionsEnabled = !constraints.active && !constraints.select;
   const columnRenderers = useMemo(
     () =>
-      JSON.parse(columnsStylingIDsJSON).map((stylingIDs) => getCellRenderer(!!stylingIDs.length, isSelectionsEnabled)),
+      JSON.parse(columnsStylingIDsJSON).map((stylingIDs: string[]) =>
+        getCellRenderer(!!stylingIDs.length, isSelectionsEnabled)
+      ),
     [columnsStylingIDsJSON, isSelectionsEnabled]
   );
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
   const cellStyle = { color: bodyCellStyle.color, backgroundColor: theme.table.backgroundColor };
-
   useEffect(() => {
-    addSelectionListeners({ api: selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
+    addSelectionListeners({
+      api: selectionsAPI,
+      selectionDispatch,
+      setShouldRefocus,
+      keyboard,
+      tableWrapperRef,
+    });
   }, []);
 
   return (
@@ -55,9 +62,9 @@ function TableBodyWrapper({
         >
           {columns.map((column, columnIndex) => {
             const { id, align } = column;
-            const cell = row[id];
+            const cell = row[id] as Cell;
             const CellRenderer = columnRenderers[columnIndex];
-            const handleKeyDown = (evt) => {
+            const handleKeyDown = (evt: React.KeyboardEvent) => {
               handleBodyKeyDown({
                 evt,
                 rootElement,
@@ -86,7 +93,7 @@ function TableBodyWrapper({
                   tabIndex={-1}
                   announce={announce}
                   onKeyDown={handleKeyDown}
-                  onKeyUp={(evt) => handleBodyKeyUp(evt, selectionDispatch)}
+                  onKeyUp={(evt: React.KeyboardEvent) => handleBodyKeyUp(evt, selectionDispatch)}
                   onMouseDown={() =>
                     handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition)
                   }
@@ -102,19 +109,5 @@ function TableBodyWrapper({
     </StyledTableBody>
   );
 }
-
-TableBodyWrapper.propTypes = {
-  rootElement: PropTypes.object.isRequired,
-  tableData: PropTypes.object.isRequired,
-  constraints: PropTypes.object.isRequired,
-  selectionsAPI: PropTypes.object.isRequired,
-  layout: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-  setShouldRefocus: PropTypes.func.isRequired,
-  keyboard: PropTypes.object.isRequired,
-  tableWrapperRef: PropTypes.object.isRequired,
-  announce: PropTypes.func.isRequired,
-  children: PropTypes.object.isRequired,
-};
 
 export default memo(TableBodyWrapper);

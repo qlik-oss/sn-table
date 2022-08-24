@@ -25,7 +25,14 @@ import useReactRoot from './nebula-hooks/use-react-root';
 import useAnnounceAndTranslations from './nebula-hooks/use-announce-and-translations';
 import useSorting from './nebula-hooks/use-sorting';
 import useExtendedTheme from './nebula-hooks/use-extended-theme';
-import { RenderWithCarbonArguments, Galaxy, TableLayout, UseOptions, ExtendedTranslator } from './types';
+import {
+  RenderWithCarbonArguments,
+  Galaxy,
+  TableLayout,
+  UseOptions,
+  ExtendedTranslator,
+  ExtendedSelectionAPI,
+} from './types';
 
 const initialPageInfo = {
   page: 0,
@@ -65,7 +72,7 @@ export default function supernova(env: Galaxy) {
       const model = useModel();
       const constraints = useConstraints();
       const translator = useTranslator() as ExtendedTranslator;
-      const selectionsAPI = useSelections();
+      const selectionsAPI = useSelections() as ExtendedSelectionAPI;
       const keyboard = useKeyboard();
       const rect = useRect();
       const theme = useExtendedTheme(rootElement);

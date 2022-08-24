@@ -1,6 +1,7 @@
 import React from 'react';
 import { TableCellProps } from '@mui/material/TableCell';
 import { stardust } from '@nebula.js/stardust';
+
 import { TSelectionActions } from './table/utils/selections-utils';
 
 export interface Cell {
@@ -111,7 +112,7 @@ export interface Column {
   dataColIdx: number;
   width: number;
   label: string;
-  align: string;
+  align: 'left' | 'center' | 'right';
   stylingIDs: string[];
   sortDirection: string;
   totalInfo?: string;
@@ -147,9 +148,36 @@ export interface HyperCube extends Omit<EngineAPI.IHyperCube, 'qDimensionInfo' |
   qMeasureInfo: ExtendedNxMeasureInfo[];
 }
 
-export interface StylingLayout {
+interface InlineDimensionDef extends EngineAPI.INxInlineDimensionDef {
+  textAlign: TextAlign;
+}
+interface InlineMeasureDef extends EngineAPI.INxInlineMeasureDef {
+  textAlign: TextAlign;
+}
+interface AttributeExpressionProperties extends EngineAPI.INxAttrExprDef {
+  id: 'cellForegroundColor' | 'cellBackgroundColor';
+}
+interface DimensionProperties extends Omit<EngineAPI.INxDimension, 'qDef' | 'qAttributeExpressions'> {
+  qDef: InlineDimensionDef;
+  qAttributeExpressions: AttributeExpressionProperties[];
+}
+interface MeasureProperties extends Omit<EngineAPI.INxMeasure, 'qDef' | 'qAttributeExpressions'> {
+  qDef: InlineMeasureDef;
+  qAttributeExpressions: AttributeExpressionProperties[];
+}
+export interface QHyperCubeDef extends Omit<EngineAPI.IHyperCubeDef, 'qDimensions' | 'qMeasures'> {
+  qDimensions: DimensionProperties[];
+  qMeasures: MeasureProperties;
+  qColumnOrder: number[];
+  columnWidths: number[];
+}
+
+export interface HeaderStyling {
   fontColor?: PaletteColor;
   fontSize?: number;
+}
+
+export interface ContentStyling extends HeaderStyling {
   hoverColor?: PaletteColor;
   hoverEffect?: boolean;
   hoverFontColor?: PaletteColor;
@@ -178,10 +206,10 @@ export interface CellStyle {
   selectedCellClass?: string;
 }
 
-export interface Components {
+export interface Component {
   key: string;
-  content?: StylingLayout;
-  header?: StylingLayout;
+  content?: ContentStyling;
+  header?: HeaderStyling;
 }
 
 export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, 'qHyperCube'> {
@@ -191,7 +219,7 @@ export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, 'qH
     position: 'top' | 'bottom' | 'noTotals';
     label: string;
   };
-  components?: Components[];
+  components?: Component[];
 }
 
 export type ChangeSortOrder = (layout: TableLayout, column: Column) => Promise<void>;
@@ -201,7 +229,7 @@ export interface RenderWithCarbonArguments {
   rootElement: HTMLElement;
   model?: EngineAPI.IGenericObject;
   theme: ExtendedTheme;
-  selectionsAPI: stardust.ObjectSelections;
+  selectionsAPI: ExtendedSelectionAPI;
   app?: EngineAPI.IApp;
   rect: stardust.Rect;
   layout: TableLayout;
@@ -273,7 +301,7 @@ export type TableData = {
 
 export interface RenderProps {
   direction?: 'ltr' | 'rtl';
-  selectionsAPI: stardust.ObjectSelections;
+  selectionsAPI: ExtendedSelectionAPI;
   rootElement: HTMLElement;
   layout: TableLayout;
   changeSortOrder: ChangeSortOrder;
@@ -299,7 +327,7 @@ export interface RenderProps {
 
 export interface TableWrapperProps {
   direction?: 'ltr' | 'rtl';
-  selectionsAPI: stardust.ObjectSelections;
+  selectionsAPI: ExtendedSelectionAPI;
   rootElement: HTMLElement;
   layout: TableLayout;
   changeSortOrder: ChangeSortOrder;
@@ -315,9 +343,24 @@ export interface TableWrapperProps {
   announce: Announce;
 }
 
+export interface TableBodyWrapperProps
+  extends Omit<
+    TableWrapperProps,
+    'changeSortOrder' | 'pageInfo' | 'setPageInfo' | 'translator' | 'footContainer' | 'rect'
+  > {
+  setShouldRefocus(): void;
+  tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
+  children: JSX.Element;
+}
+
+export type TableHeadWrapperProps = Omit<
+  TableWrapperProps,
+  'rect' | 'pageInfo' | 'setPageInfo' | 'footerContainer' | 'announce'
+>;
+
 export interface ContextProviderProps {
   children: JSX.Element;
-  selectionsAPI: stardust.ObjectSelections;
+  selectionsAPI: ExtendedSelectionAPI;
   cellCoordMock?: [number, number];
   selectionDispatchMock?: jest.Mock<any, any>;
 }
@@ -336,6 +379,12 @@ export interface TableTotalsProps {
   layout: TableLayout;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
+}
+
+export interface PaginationContentProps
+  extends Omit<TableWrapperProps, 'selectionsAPI' | 'rootElement' | 'layout' | 'changeSortOrder'> {
+  isSelectionMode: boolean;
+  handleChangePage(pageIdx: number): void;
 }
 
 export interface FooterWrapperProps {

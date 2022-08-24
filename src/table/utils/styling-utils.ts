@@ -2,7 +2,15 @@ import { stardust } from '@nebula.js/stardust';
 
 import { resolveToRGBAorRGB, isDarkColor, removeOpacity } from './color-utils';
 import { SelectionStates } from './selections-utils';
-import { TableLayout, ExtendedTheme, StylingLayout, GeneratedStyling, CellStyle, PaletteColor } from '../../types';
+import {
+  TableLayout,
+  ExtendedTheme,
+  HeaderStyling,
+  ContentStyling,
+  GeneratedStyling,
+  CellStyle,
+  PaletteColor,
+} from '../../types';
 // the order of style
 // default (inl. sprout theme) < Sense theme < styling settings
 // < column < selection (except the selected green) < hover < selected green
@@ -40,14 +48,15 @@ export const isColorSet = (prop: PaletteColor | undefined): boolean =>
  * Gets specified padding from layout if defined, otherwise calculates it based on specified font size if defined, otherwise returns default padding.
  * Note that the padding property can't be set in the styling panel
  */
-export function getPadding(styleObj: StylingLayout | undefined): string | undefined {
-  let padding;
-  if (styleObj?.padding) {
-    ({ padding } = styleObj);
-  } else if (styleObj?.fontSize) {
-    padding = `${styleObj.fontSize / 2}px ${styleObj.fontSize}px`;
+export function getPadding(styleObj: ContentStyling | undefined): string | undefined {
+  if (styleObj && (styleObj?.fontSize || 'padding' in styleObj)) {
+    let padding;
+    if (styleObj?.padding) ({ padding } = styleObj);
+    else if (styleObj?.fontSize) padding = `${styleObj.fontSize / 2}px ${styleObj.fontSize}px`;
+
+    return padding;
   }
-  return padding;
+  return undefined;
 }
 
 /**
@@ -71,7 +80,7 @@ export const getAutoFontColor = (backgroundColor: string): string =>
 export const getBaseStyling = (
   objetName: string,
   theme: ExtendedTheme,
-  styleObj: StylingLayout | undefined
+  styleObj: HeaderStyling | ContentStyling | undefined
 ): GeneratedStyling => {
   const fontFamily = theme.getStyle('object', `straightTable.${objetName}`, 'fontFamily');
   const color = theme.getStyle('object', `straightTable.${objetName}`, 'color');
@@ -81,6 +90,8 @@ export const getBaseStyling = (
     fontFamily,
     color: isColorSet(styleObj?.fontColor) ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj?.fontColor) : color,
     fontSize: (styleObj?.fontSize && `${styleObj.fontSize}px`) || fontSize,
+    // When we do not set padding for content or header, but set font size,
+    // we need to calculate the padding based on the font size
     padding: getPadding(styleObj),
     borderStyle: 'solid',
     borderColor: theme.table.body.borderColor,

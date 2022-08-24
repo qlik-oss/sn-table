@@ -18,6 +18,7 @@ import {
   Announce,
   Column,
   ChangeSortOrder,
+  ExtendedSelectionAPI,
 } from '../../../types';
 
 describe('<TableWrapper />', () => {
@@ -25,7 +26,7 @@ describe('<TableWrapper />', () => {
   let pageInfo: PageInfo;
   let setPageInfo: SetPageInfo;
   let constraints: stardust.Constraints;
-  let selectionsAPI: stardust.ObjectSelections;
+  let selectionsAPI: ExtendedSelectionAPI;
   let modal: boolean;
   let rootElement: HTMLElement;
   let keyboard: stardust.Keyboard;
@@ -76,7 +77,7 @@ describe('<TableWrapper />', () => {
     constraints = {};
     selectionsAPI = {
       isModal: () => modal,
-    } as unknown as stardust.ObjectSelections;
+    } as unknown as ExtendedSelectionAPI;
     modal = false;
     rootElement = {
       getElementsByClassName: () => [],
