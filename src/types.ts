@@ -162,17 +162,19 @@ interface InlineMeasureDef extends EngineAPI.INxInlineMeasureDef {
 interface AttributeExpressionProperties extends EngineAPI.INxAttrExprDef {
   id: 'cellForegroundColor' | 'cellBackgroundColor';
 }
-interface DimensionProperties extends Omit<EngineAPI.INxDimension, 'qDef' | 'qAttributeExpressions'> {
+export interface DimensionProperties extends Omit<EngineAPI.INxDimension, 'qDef' | 'qAttributeExpressions'> {
   qDef: InlineDimensionDef;
   qAttributeExpressions: AttributeExpressionProperties[];
+  columnWidth: number;
 }
-interface MeasureProperties extends Omit<EngineAPI.INxMeasure, 'qDef' | 'qAttributeExpressions'> {
+export interface MeasureProperties extends Omit<EngineAPI.INxMeasure, 'qDef' | 'qAttributeExpressions'> {
   qDef: InlineMeasureDef;
   qAttributeExpressions: AttributeExpressionProperties[];
+  columnWidth: number;
 }
 export interface QHyperCubeDef extends Omit<EngineAPI.IHyperCubeDef, 'qDimensions' | 'qMeasures'> {
   qDimensions: DimensionProperties[];
-  qMeasures: MeasureProperties;
+  qMeasures: MeasureProperties[];
   qColumnOrder: number[];
   columnWidths: number[];
 }

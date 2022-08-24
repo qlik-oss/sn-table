@@ -1,3 +1,4 @@
+import { QHyperCubeDef, DimensionProperties, MeasureProperties } from '../../types';
 /**
  * Swap two items in an array.
  *
@@ -5,7 +6,11 @@
  * @param firstIndex
  * @param secondIndex
  */
-const swap = (array, firstIndex, secondIndex) => {
+const swap = (
+  array: MeasureProperties[] | DimensionProperties[] | number[],
+  firstIndex: number,
+  secondIndex: number
+) => {
   const firstItem = array[firstIndex];
   array[firstIndex] = array[secondIndex];
   array[secondIndex] = firstItem;
@@ -23,9 +28,9 @@ const swap = (array, firstIndex, secondIndex) => {
  * @param array
  * @returns {boolean}
  */
-const isInvalidOrderArray = (dimensions, measures, array) => {
-  const indexSet = {};
-  let sortedArray = [];
+const isInvalidOrderArray = (dimensions: DimensionProperties[], measures: MeasureProperties[], array: number[]) => {
+  const indexSet = {} as Record<number, boolean>;
+  let sortedArray = [] as number[];
   let isInvalid = false;
 
   array.forEach((item) => {
@@ -61,7 +66,7 @@ const isInvalidOrderArray = (dimensions, measures, array) => {
  *
  * @param hypercubeDef
  */
-const validateTableHyperCube = (hypercubeDef) => {
+const validateTableHyperCube = (hypercubeDef: QHyperCubeDef) => {
   const dimensions = hypercubeDef.qDimensions;
   const measures = hypercubeDef.qMeasures;
 
@@ -97,15 +102,15 @@ const validateTableHyperCube = (hypercubeDef) => {
  *
  * @param hypercubeDef
  */
-export const fixTableHypercubeOrders = (hypercubeDef) => {
+export const fixTableHypercubeOrders = (hypercubeDef: QHyperCubeDef) => {
   validateTableHyperCube(hypercubeDef);
 
   const dimensions = hypercubeDef.qDimensions;
   const measures = hypercubeDef.qMeasures;
   const columnOrder = hypercubeDef.qColumnOrder;
   const interColSortOrder = hypercubeDef.qInterColumnSortOrder;
-  const dimColOrders = [];
-  const measColOrders = [];
+  const dimColOrders = [] as number[];
+  const measColOrders = [] as number[];
   let order;
 
   for (let i = 0; i < columnOrder.length; i++) {
@@ -151,7 +156,7 @@ export const fixTableHypercubeOrders = (hypercubeDef) => {
   fixMeasures();
 };
 
-export const storeColumnWidths = (hcDef) => {
+export const storeColumnWidths = (hcDef: QHyperCubeDef) => {
   const { qDimensions, qMeasures, columnWidths } = hcDef;
   for (let i = 0; i < qDimensions.length; i++) {
     qDimensions[i].columnWidth = columnWidths[i];
@@ -161,13 +166,13 @@ export const storeColumnWidths = (hcDef) => {
   }
 };
 
-export const updateColumnInfoOrders = (hcDef) => {
+export const updateColumnInfoOrders = (hcDef: QHyperCubeDef) => {
   const { qColumnOrder, columnWidths, qDimensions, qMeasures } = hcDef;
   const numDimensions = qDimensions.length;
   qColumnOrder.forEach((item) => {
     columnWidths[item] =
       item < numDimensions ? qDimensions[item].columnWidth : qMeasures[item - numDimensions].columnWidth;
   });
-  qDimensions.forEach((item) => delete item.columnWidth);
-  qMeasures.forEach((item) => delete item.columnWidth);
+  qDimensions.forEach((item: { columnWidth?: number }) => delete item.columnWidth);
+  qMeasures.forEach((item: { columnWidth?: number }) => delete item.columnWidth);
 };

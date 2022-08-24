@@ -35,7 +35,7 @@ describe('handleDrag', () => {
   jest.spyOn(ColumnsSortingsUtil, 'storeColumnWidths').mockImplementation(() => jest.fn());
   jest.spyOn(ColumnsSortingsUtil, 'fixTableHypercubeOrders').mockImplementation(() => jest.fn());
   jest.spyOn(ColumnsSortingsUtil, 'updateColumnInfoOrders').mockImplementation(() => jest.fn());
-  jest.spyOn(SaveSoftProperties, 'default').mockImplementation(() => jest.fn());
+  jest.spyOn(SaveSoftProperties, 'default').mockImplementation();
 
   beforeEach(() => {
     qHyperCube = { qColumnOrder: [0, 1, 2, 3] } as unknown as HyperCube;

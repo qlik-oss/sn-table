@@ -1,7 +1,11 @@
 import extend from 'extend';
 import JSONPatch from './json-patch';
 
-const saveSoftProperties = (model, prevEffectiveProperties, effectiveProperties) => {
+const saveSoftProperties = (
+  model: EngineAPI.IGenericObject,
+  prevEffectiveProperties: EngineAPI.IGenericObjectProperties,
+  effectiveProperties: EngineAPI.IGenericObjectProperties
+) => {
   if (!model) {
     return Promise.resolve();
   }
