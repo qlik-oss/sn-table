@@ -86,6 +86,7 @@
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "13.3.0",
     "@testing-library/react-hooks": "8.0.1",
+    "@types/extend": "^3.0.1",
     "@types/jest": "28.1.7",
     "@types/react-native": "0.69.5",
     "@typescript-eslint/eslint-plugin": "5.33.1",
