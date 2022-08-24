@@ -6,13 +6,15 @@
  *
  * @returns {function} Returns the new throttled function.
  */
-export default function createThrottler(fn, wait = 50) {
-  let context;
-  let argus;
+export default function createThrottler(fn: () => void, wait = 50) {
+  let context: any;
+  let argus: any;
   let last = 0;
-  let timer;
+  let timer: any;
 
-  return function throttled(...args) {
+  return function throttled(...args: any[]) {
+    // @ts-ignore not sure how to set this type
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     context = this;
     argus = args;
 

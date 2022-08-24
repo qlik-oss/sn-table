@@ -6,7 +6,7 @@ import { QHyperCubeDef, DimensionProperties, MeasureProperties } from '../../typ
  * @param firstIndex
  * @param secondIndex
  */
-const swap = (
+export const swap = (
   array: MeasureProperties[] | DimensionProperties[] | number[],
   firstIndex: number,
   secondIndex: number
@@ -28,7 +28,11 @@ const swap = (
  * @param array
  * @returns {boolean}
  */
-const isInvalidOrderArray = (dimensions: DimensionProperties[], measures: MeasureProperties[], array: number[]) => {
+export const isInvalidOrderArray = (
+  dimensions: DimensionProperties[],
+  measures: MeasureProperties[],
+  array: number[]
+) => {
   const indexSet = {} as Record<number, boolean>;
   let sortedArray = [] as number[];
   let isInvalid = false;

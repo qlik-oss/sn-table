@@ -2,7 +2,7 @@ import extend from 'extend';
 import JSONPatch from './json-patch';
 
 const saveSoftProperties = (
-  model: EngineAPI.IGenericObject,
+  model: EngineAPI.IGenericObject | undefined,
   prevEffectiveProperties: EngineAPI.IGenericObjectProperties,
   effectiveProperties: EngineAPI.IGenericObjectProperties
 ) => {
