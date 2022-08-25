@@ -18,11 +18,11 @@ export enum SelectionActions {
   SELECT_MULTI_VALUES = 'selectMultiValues',
 }
 
-export interface Action<T = any> {
+interface Action<T = any> {
   type: T;
 }
 
-export interface SelectAction extends Action<SelectionActions.SELECT> {
+interface SelectAction extends Action<SelectionActions.SELECT> {
   payload: ActionPayload;
 }
 
