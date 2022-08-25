@@ -4,7 +4,7 @@ import { getTotalsCellStyle } from '../utils/styling-utils';
 import { handleTotalKeyDown } from '../utils/handle-key-press';
 import { removeAndFocus } from '../utils/handle-accessibility';
 import { StyledHeadRow, StyledTotalsCell } from '../styles';
-import { TableTotalsProps } from '../../types';
+import { TableTotalsProps } from '../types';
 
 function TableTotals({ rootElement, tableData, theme, layout, keyboard }: TableTotalsProps) {
   const { columns, paginationNeeded, totalsPosition, rows } = tableData;

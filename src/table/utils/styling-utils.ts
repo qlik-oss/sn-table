@@ -2,15 +2,9 @@ import { stardust } from '@nebula.js/stardust';
 
 import { resolveToRGBAorRGB, isDarkColor, removeOpacity } from './color-utils';
 import { SelectionStates } from './selections-utils';
-import {
-  TableLayout,
-  ExtendedTheme,
-  HeaderStyling,
-  ContentStyling,
-  GeneratedStyling,
-  CellStyle,
-  PaletteColor,
-} from '../../types';
+import { TableLayout, ExtendedTheme, HeaderStyling, ContentStyling, PaletteColor } from '../../types';
+import { GeneratedStyling, CellStyle } from '../types';
+
 // the order of style
 // default (inl. sprout theme) < Sense theme < styling settings
 // < column < selection (except the selected green) < hover < selected green

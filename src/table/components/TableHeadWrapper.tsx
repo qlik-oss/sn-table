@@ -7,7 +7,7 @@ import { VisuallyHidden, StyledHeadRow, StyledSortLabel } from '../styles';
 import { getHeaderStyle } from '../utils/styling-utils';
 import { handleHeadKeyDown } from '../utils/handle-key-press';
 import { handleMouseDownLabelToFocusHeadCell, handleClickToFocusHead } from '../utils/handle-accessibility';
-import { TableHeadWrapperProps } from '../../types';
+import { TableHeadWrapperProps } from '../types';
 
 function TableHeadWrapper({
   rootElement,

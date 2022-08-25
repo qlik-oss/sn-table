@@ -6,7 +6,8 @@ import { addSelectionListeners } from '../utils/selections-utils';
 import { getBodyCellStyle } from '../utils/styling-utils';
 import { handleBodyKeyDown, handleBodyKeyUp } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
-import { ExtendedSelectionAPI, HandleBodyKeyDownProps, Cell, TableBodyWrapperProps } from '../../types';
+import { Cell } from '../../types';
+import { TableBodyWrapperProps } from '../types';
 
 function TableBodyWrapper({
   rootElement,

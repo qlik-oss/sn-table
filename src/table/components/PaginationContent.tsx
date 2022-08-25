@@ -9,7 +9,7 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 
 import { StyledSelect, StyledIconButton } from '../styles';
 import { handleLastTab } from '../utils/handle-key-press';
-import { PaginationContentProps } from '../../types';
+import { PaginationContentProps } from '../types';
 
 const icons: Record<string, typeof FirstPageIcon> = {
   FirstPage: FirstPageIcon,
