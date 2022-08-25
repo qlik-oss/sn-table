@@ -22,23 +22,22 @@ interface Action<T = any> {
   type: T;
 }
 
-interface SelectAction extends Action<SelectionActions.SELECT> {
+export interface SelectAction extends Action<SelectionActions.SELECT> {
   payload: ActionPayload;
 }
+export interface SelectMultiValuesAction extends Action<SelectionActions.SELECT_MULTI_VALUES> {}
+export interface ResetAction extends Action<SelectionActions.RESET> {}
+export interface ClearAction extends Action<SelectionActions.CLEAR> {}
 
-export type TSelectionActions =
-  | SelectAction
-  | Action<SelectionActions.SELECT_MULTI_VALUES>
-  | Action<SelectionActions.RESET>
-  | Action<SelectionActions.CLEAR>;
+export type TSelectionActions = SelectAction | ResetAction | ClearAction | SelectMultiValuesAction;
 
-type AddSelectionListenersArgs = {
+interface AddSelectionListenersArgs {
   api: ExtendedSelectionAPI;
   selectionDispatch: React.Dispatch<TSelectionActions>;
   setShouldRefocus(): void;
   keyboard: stardust.Keyboard;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
-};
+}
 
 export function addSelectionListeners({
   api,

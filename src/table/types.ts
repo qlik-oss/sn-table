@@ -144,49 +144,61 @@ export interface RenderProps {
   app?: EngineAPI.IApp;
 }
 
-export interface TableWrapperProps {
+export interface CommonTableProps {
+  tableData: TableData;
+  theme: ExtendedTheme;
+  keyboard: stardust.Keyboard;
+}
+
+export interface TableWrapperProps extends CommonTableProps {
   direction?: 'ltr' | 'rtl';
   selectionsAPI: ExtendedSelectionAPI;
   rootElement: HTMLElement;
   layout: TableLayout;
   changeSortOrder: ChangeSortOrder;
   rect: stardust.Rect;
-  tableData: TableData;
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
   constraints: stardust.Constraints;
   translator: ExtendedTranslator;
-  theme: ExtendedTheme;
-  keyboard: stardust.Keyboard;
   footerContainer?: HTMLElement;
   announce: Announce;
 }
 
-export type TableHeadWrapperProps = Omit<
-  TableWrapperProps,
-  'rect' | 'pageInfo' | 'setPageInfo' | 'footerContainer' | 'announce'
->;
+export interface TableHeadWrapperProps extends CommonTableProps {
+  selectionsAPI: ExtendedSelectionAPI;
+  rootElement: HTMLElement;
+  layout: TableLayout;
+  changeSortOrder: ChangeSortOrder;
+  constraints: stardust.Constraints;
+  translator: ExtendedTranslator;
+}
 
-export interface TableBodyWrapperProps
-  extends Omit<
-    TableWrapperProps,
-    'changeSortOrder' | 'pageInfo' | 'setPageInfo' | 'translator' | 'footContainer' | 'rect'
-  > {
+export interface TableBodyWrapperProps extends CommonTableProps {
+  selectionsAPI: ExtendedSelectionAPI;
+  rootElement: HTMLElement;
+  layout: TableLayout;
+  constraints: stardust.Constraints;
+  announce: Announce;
   setShouldRefocus(): void;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
   children: JSX.Element;
 }
 
-export interface TableTotalsProps {
+export interface TableTotalsProps extends CommonTableProps {
   rootElement: HTMLElement;
-  tableData: TableData;
   layout: TableLayout;
-  theme: ExtendedTheme;
-  keyboard: stardust.Keyboard;
 }
 
-export interface PaginationContentProps
-  extends Omit<TableWrapperProps, 'selectionsAPI' | 'rootElement' | 'layout' | 'changeSortOrder'> {
+export interface PaginationContentProps extends CommonTableProps {
+  direction?: 'ltr' | 'rtl';
+  rect: stardust.Rect;
+  pageInfo: PageInfo;
+  setPageInfo: SetPageInfo;
+  constraints: stardust.Constraints;
+  translator: ExtendedTranslator;
+  footerContainer?: HTMLElement;
+  announce: Announce;
   isSelectionMode: boolean;
   handleChangePage(pageIdx: number): void;
 }
