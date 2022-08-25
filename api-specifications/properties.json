@@ -3,7 +3,7 @@
   "info": {
     "name": "@nebula.js/sn-table:properties",
     "description": "Table generic object definition",
-    "version": "1.14.0",
+    "version": "1.15.0",
     "license": "MIT",
     "stability": "experimental",
     "x-qlik-visibility": "public"
@@ -19,9 +19,10 @@
       "entries": {
         "components": {
           "description": "Holds general styling",
+          "nullable": true,
           "kind": "array",
           "items": {
-            "type": "#/definitions/Styling"
+            "type": "#/definitions/Component"
           }
         },
         "footnote": {
@@ -73,18 +74,6 @@
               "items": {
                 "type": "#/definitions/MeasureProperties"
               }
-            },
-            "qMode": {
-              "defaultValue": "S",
-              "type": "schemasNxHypercubeMode"
-            },
-            "qSuppressMissing": {
-              "defaultValue": true,
-              "type": "boolean"
-            },
-            "qSuppressZero": {
-              "defaultValue": false,
-              "type": "boolean"
             }
           }
         },
@@ -197,6 +186,24 @@
         }
       }
     },
+    "Component": {
+      "description": "General styling for all columns.\nSplit up into header and content (body) styling.\nIf any property is not set, default values specific for each property is used.",
+      "kind": "object",
+      "entries": {
+        "key": {
+          "description": "This should be set to `theme`",
+          "type": "string"
+        },
+        "content": {
+          "optional": true,
+          "type": "#/definitions/ContentStyling"
+        },
+        "header": {
+          "optional": true,
+          "type": "#/definitions/HeaderStyling"
+        }
+      }
+    },
     "ContentStyling": {
       "description": "Holds properties for font size, font color and hover styling.",
       "kind": "object",
@@ -225,6 +232,11 @@
           "description": "When only `hoverColor` is set, this is adjusted to either `#f4f4f4` or `#ffffff` for optimal contrast",
           "optional": true,
           "type": "#/definitions/PaletteColor"
+        },
+        "padding": {
+          "description": "Defaults to `7px 14px`",
+          "optional": true,
+          "type": "string"
         }
       }
     },
@@ -304,7 +316,7 @@
       "kind": "object",
       "entries": {
         "qDef": {
-          "type": "NxInlineMeasureDef"
+          "type": "#/definitions/InlineMeasureDef"
         },
         "qAttributeExpressions": {
           "kind": "array",
@@ -325,24 +337,6 @@
         "index": {
           "description": "Index in palette",
           "type": "number"
-        }
-      }
-    },
-    "Styling": {
-      "description": "General styling for all columns.\nSplit up into header and content (body) styling.\nIf any property is not set, default values specific for each property is used.",
-      "kind": "object",
-      "entries": {
-        "key": {
-          "description": "This should be set to `theme`",
-          "type": "string"
-        },
-        "content": {
-          "optional": true,
-          "type": "#/definitions/ContentStyling"
-        },
-        "header": {
-          "optional": true,
-          "type": "#/definitions/HeaderStyling"
         }
       }
     },

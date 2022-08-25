@@ -1,3 +1,21 @@
+# [1.15.0](https://github.com/qlik-oss/sn-table/compare/v1.14.0...v1.15.0) (2022-08-25)
+
+### Bug Fixes
+
+- adjust cell coord to totals position when clikcing to focus ([#606](https://github.com/qlik-oss/sn-table/issues/606)) ([02cb531](https://github.com/qlik-oss/sn-table/commit/02cb53185377a003e272e599f4fa7eaa6577666a))
+- block left/right movement in selection mode ([#641](https://github.com/qlik-oss/sn-table/issues/641)) ([897d0b2](https://github.com/qlik-oss/sn-table/commit/897d0b223b7b905c59797ef21fb0d69c78b4be46))
+- errors when doing typescript compiling ([#619](https://github.com/qlik-oss/sn-table/issues/619)) ([511a117](https://github.com/qlik-oss/sn-table/commit/511a1179a795b6b0ec0dc8d1578a13747448ff68))
+- include nebula-stardust 3.x alpha versions ([#596](https://github.com/qlik-oss/sn-table/issues/596)) ([85d95a7](https://github.com/qlik-oss/sn-table/commit/85d95a73937799e340cbc13b909ddb20b1933892))
+- move focus to selection toolbar + block focus from totals when selecting ([#568](https://github.com/qlik-oss/sn-table/issues/568)) ([27da8a6](https://github.com/qlik-oss/sn-table/commit/27da8a61be48f9e88d1a85f9401d9282f643e1a9))
+- object properties delcaration file ([#660](https://github.com/qlik-oss/sn-table/issues/660)) ([e7eaf96](https://github.com/qlik-oss/sn-table/commit/e7eaf968bfc57ae7e36f6c975e4ebe7dfd312bc5))
+- optional to undefined for parameter ([#662](https://github.com/qlik-oss/sn-table/issues/662)) ([478d879](https://github.com/qlik-oss/sn-table/commit/478d87986c33fb6237974a355e3601176a389bf4))
+- remove sanity check for selections API ([#600](https://github.com/qlik-oss/sn-table/issues/600)) ([3ee7203](https://github.com/qlik-oss/sn-table/commit/3ee72030773c59b6134d9dcc117f4b75ac460f89))
+- revert remove mount ([#625](https://github.com/qlik-oss/sn-table/issues/625)) ([65329b7](https://github.com/qlik-oss/sn-table/commit/65329b7dc3205a255fd12264ac640a56fa9d5b0e))
+- table moves up when doing selection ([#627](https://github.com/qlik-oss/sn-table/issues/627)) ([1b4f749](https://github.com/qlik-oss/sn-table/commit/1b4f749f1830301e73627b8cc276e0de8b5bac40))
+- total label should appear only on dimension with zero column order ([#612](https://github.com/qlik-oss/sn-table/issues/612)) ([41c9f49](https://github.com/qlik-oss/sn-table/commit/41c9f4963b74106ca06c01960712d2a4cf6ad83b))
+- totals row overlapping table head row ([#585](https://github.com/qlik-oss/sn-table/issues/585)) ([dc63d75](https://github.com/qlik-oss/sn-table/commit/dc63d75edfc7451e25cfafa26d4be01310a64c60))
+- type error ([#630](https://github.com/qlik-oss/sn-table/issues/630)) ([4c34d8a](https://github.com/qlik-oss/sn-table/commit/4c34d8a503cf0fdde603735cc99eb9cbccb96a3b))
+
 # [1.14.0](https://github.com/qlik-oss/sn-table/compare/v1.13.0...v1.14.0) (2022-07-01)
 
 ### Bug Fixes
