@@ -1,5 +1,5 @@
 import Modifiers from 'qlik-modifiers';
-import { createStylingPanelDefinition, createStylingEditorDefinition } from './styling-panel-property-definition';
+import { stylingPanelDefinition, stylingEditorDefinition } from './styling-panel-property-definition';
 
 const columnCommonHidden = {
   autoSort: {
@@ -106,8 +106,8 @@ const getStyleSettings = (env) => {
       type: 'items',
       items: [
         env?.flags?.isEnabled('SENSECLIENT_PS_17478_STYLINGPANEL_SN_TABLE_OSS')
-          ? createStylingPanelDefinition
-          : createStylingEditorDefinition,
+          ? stylingPanelDefinition
+          : stylingEditorDefinition,
       ],
     },
     {

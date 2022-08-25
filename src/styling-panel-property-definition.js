@@ -1,4 +1,4 @@
-const createStylingPanelDefinition = {
+const stylingPanelDefinition = {
   component: 'styling-panel',
   chartTitle: 'Object.StraightTable',
   translation: 'LayerStyleEditor.component.styling',
@@ -138,7 +138,7 @@ const createStylingPanelDefinition = {
   },
 };
 
-const createStylingEditorDefinition = {
+const stylingEditorDefinition = {
   component: 'style-editor',
   translation: 'LayerStyleEditor.component.styling',
   subtitle: 'LayerStyleEditor.component.styling',
@@ -253,4 +253,4 @@ const createStylingEditorDefinition = {
   },
 };
 
-export { createStylingPanelDefinition, createStylingEditorDefinition };
+export { stylingPanelDefinition, stylingEditorDefinition };
