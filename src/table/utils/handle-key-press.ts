@@ -128,6 +128,9 @@ export const handleHeadKeyDown = ({
   setFocusedCellCoord,
 }: HandleHeadKeyDownProps) => {
   switch (evt.key) {
+    case 'ArrowUp':
+      preventDefaultBehavior(evt);
+      break;
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft':
