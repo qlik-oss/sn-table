@@ -22,15 +22,16 @@ const shouldBubble = (
   keyboardEnabled = false,
   paginationNeeded = true
 ) => {
-  const possibleTabBubble = evt.key === 'Tab' && !(keyboardEnabled && isSelectionMode);
-  const tabbingToSelectionToolbar = evt.shiftKey || (!evt.shiftKey && !paginationNeeded);
+  const shouldGoToSelToolbar = keyboardEnabled && isSelectionMode;
+  const bubbleWithoutShift = !evt.shiftKey && (paginationNeeded || !shouldGoToSelToolbar);
+  const bubbleWithShift = evt.shiftKey && !shouldGoToSelToolbar;
   return (
     // ctrl + shift + arrow to change page
     (isCtrlShift(evt) && (evt.key === 'ArrowRight' || evt.key === 'ArrowRight')) ||
     // esc to blur object
     (evt.key === 'Escape' && !isSelectionMode) ||
     // default tab to pagination or tab to blur
-    (possibleTabBubble && !tabbingToSelectionToolbar)
+    (evt.key === 'Tab' && (bubbleWithoutShift || bubbleWithShift))
   );
 };
 
