@@ -16,6 +16,7 @@ describe('<TableTotals />', () => {
   let layout: TableLayout;
   let selectionsAPI: ExtendedSelectionAPI;
   let keyboard: stardust.Keyboard;
+  let isSelectionMode: boolean;
 
   const renderTableTotals = (cellCoordMock?: [number, number]) =>
     render(
@@ -27,6 +28,7 @@ describe('<TableTotals />', () => {
             theme={theme}
             layout={layout}
             keyboard={keyboard}
+            isSelectionMode={isSelectionMode}
           />
         ) : (
           <></>
@@ -55,6 +57,7 @@ describe('<TableTotals />', () => {
     selectionsAPI = {
       isModal: () => false,
     } as ExtendedSelectionAPI;
+    isSelectionMode = false;
   });
 
   it('should show the total row when table total is rendered', () => {
