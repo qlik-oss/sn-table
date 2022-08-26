@@ -78,8 +78,8 @@ export interface HandleHeadKeyDownProps {
   column: Column;
   changeSortOrder: ChangeSortOrder;
   layout: TableLayout;
-  isSortingEnabled: boolean;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  isInteractionEnabled: boolean;
 }
 
 export interface HandleBodyKeyDownProps {

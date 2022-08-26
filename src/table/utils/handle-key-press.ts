@@ -14,6 +14,27 @@ export const preventDefaultBehavior = (evt: React.KeyboardEvent) => {
 };
 
 /**
+ * Checks if events caught by head, totals and body handles should bubble to the wrapper handler or default behavior
+ */
+const shouldBubble = (
+  evt: React.KeyboardEvent,
+  isSelectionMode = false,
+  keyboardEnabled = false,
+  paginationNeeded = true
+) => {
+  const possibleTabBubble = evt.key === 'Tab' && !(keyboardEnabled && isSelectionMode);
+  const tabbingToSelectionToolbar = evt.shiftKey || (!evt.shiftKey && !paginationNeeded);
+  return (
+    // ctrl + shift + arrow to change page
+    (isCtrlShift(evt) && (evt.key === 'ArrowRight' || evt.key === 'ArrowRight')) ||
+    // esc to blur object
+    (evt.key === 'Escape' && !isSelectionMode) ||
+    // default tab to pagination or tab to blur
+    (possibleTabBubble && !tabbingToSelectionToolbar)
+  );
+};
+
+/**
  * handles keydown events for the tableWrapper element (move focus, change page)
  */
 export const handleWrapperKeyDown = ({
@@ -26,6 +47,7 @@ export const handleWrapperKeyDown = ({
   keyboard,
   isSelectionMode,
 }: HandleWrapperKeyDownProps) => {
+  console.log('bubbles');
   if (isCtrlShift(evt)) {
     preventDefaultBehavior(evt);
     // ctrl + shift + left/right arrow keys: go to previous/next page
@@ -104,8 +126,7 @@ export const moveFocus = (
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
   topAllowedRow?: number
 ) => {
-  preventDefaultBehavior(evt);
-  (evt.target as HTMLElement).setAttribute('tabIndex', '-1');
+  updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
   const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, topAllowedRow);
   const nextCell = getCellElement(rootElement, nextCellCoord);
   updateFocus({ focusType: 'focus', cell: nextCell });
@@ -124,23 +145,23 @@ export const handleHeadKeyDown = ({
   column,
   changeSortOrder,
   layout,
-  isSortingEnabled,
   setFocusedCellCoord,
+  isInteractionEnabled,
 }: HandleHeadKeyDownProps) => {
+  if (shouldBubble(evt)) return;
+  preventDefaultBehavior(evt);
+  if (!isInteractionEnabled) return;
+
   switch (evt.key) {
-    case 'ArrowUp':
-      preventDefaultBehavior(evt);
-      break;
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft':
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
+      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
       break;
     // Space bar / Enter: update the sorting
     case ' ':
     case 'Enter':
-      preventDefaultBehavior(evt);
-      isSortingEnabled && changeSortOrder(layout, column);
+      changeSortOrder(layout, column);
       break;
     default:
       break;
@@ -186,6 +207,9 @@ export const handleBodyKeyDown = ({
   selectionsAPI,
 }: HandleBodyKeyDownProps) => {
   const isSelectionMode = selectionsAPI.isModal();
+  if (shouldBubble(evt, isSelectionMode, keyboard.enabled, paginationNeeded)) return;
+  preventDefaultBehavior(evt);
+
   // Adjust the cellCoord depending on the totals position
   const firstBodyRowIdx = totalsPosition === 'top' ? 2 : 1;
   const cellCoord: [number, number] = [cell.rawRowIdx + firstBodyRowIdx, cell.rawColIdx];
@@ -218,18 +242,16 @@ export const handleBodyKeyDown = ({
     }
     case 'ArrowRight':
     case 'ArrowLeft':
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, topAllowedRow);
+      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, topAllowedRow);
       break;
     // Space bar: Selects value.
     case ' ':
-      preventDefaultBehavior(evt);
       cell.isSelectable &&
         isSelectionsEnabled &&
         selectionDispatch({ type: SelectionActions.SELECT, payload: { cell, evt, announce } });
       break;
     // Enter: Confirms selections.
     case 'Enter':
-      preventDefaultBehavior(evt);
       if (isSelectionMode) {
         selectionsAPI.confirm();
         announce({ keys: ['SNTable.SelectionLabel.SelectionsConfirmed'] });
@@ -237,26 +259,13 @@ export const handleBodyKeyDown = ({
       break;
     // Esc: Cancels selections. If no selections, do nothing and handleWrapperKeyDown should catch it
     case 'Escape':
-      if (isSelectionMode) {
-        preventDefaultBehavior(evt);
-        selectionsAPI.cancel();
-        announce({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
-      }
+      selectionsAPI.cancel();
+      announce({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
       break;
     // Tab (+ shift): in selection mode and keyboard enabled, focus on selection toolbar
     case 'Tab':
-      if (keyboard.enabled && isSelectionMode) {
-        if (evt.shiftKey) {
-          preventDefaultBehavior(evt);
-          // @ts-ignore TODO: fix nebula api so that target has the correct argument type
-          focusSelectionToolbar(evt.target, keyboard, true);
-        } else if (!paginationNeeded) {
-          // Tab only: when there are no pagination controls, go tab straight to selection toolbar
-          preventDefaultBehavior(evt);
-          // @ts-ignore TODO: fix nebula api so that target has the correct argument type
-          focusSelectionToolbar(evt.target, keyboard, false);
-        }
-      }
+      // @ts-ignore TODO: fix nebula api so that target has the correct argument type
+      focusSelectionToolbar(evt.target, keyboard, evt.shiftKey);
       break;
     default:
       break;
