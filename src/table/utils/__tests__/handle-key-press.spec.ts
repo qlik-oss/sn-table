@@ -622,6 +622,18 @@ describe('handle-key-press', () => {
       expect(handleScroll.handleNavigateTop).not.toHaveBeenCalled();
     });
 
+    it('when press arrow left key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
+      evt.key = 'ArrowLeft';
+
+      runHandleBodyKeyDown();
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
+      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
+      expect(handleAccessibility.announceSelectionState).not.toHaveBeenCalled();
+      expect(handleScroll.handleNavigateTop).not.toHaveBeenCalled();
+    });
+
     it('when press arrow up key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell and call handleNavigateTop', () => {
       evt.key = 'ArrowUp';
 
