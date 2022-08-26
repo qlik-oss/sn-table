@@ -14,28 +14,6 @@ export const preventDefaultBehavior = (evt: React.KeyboardEvent) => {
 };
 
 /**
- * Checks if events caught by head, totals and body handles should bubble to the wrapper handler or default behavior
- */
-const shouldBubble = (
-  evt: React.KeyboardEvent,
-  isSelectionMode = false,
-  keyboardEnabled = false,
-  paginationNeeded = true
-) => {
-  const shouldGoToSelToolbar = keyboardEnabled && isSelectionMode;
-  const bubbleWithoutShift = !evt.shiftKey && (paginationNeeded || !shouldGoToSelToolbar);
-  const bubbleWithShift = evt.shiftKey && !shouldGoToSelToolbar;
-  return (
-    // ctrl + shift + arrow to change page
-    (isCtrlShift(evt) && (evt.key === 'ArrowRight' || evt.key === 'ArrowRight')) ||
-    // esc to blur object
-    (evt.key === 'Escape' && !isSelectionMode) ||
-    // default tab to pagination or tab to blur
-    (evt.key === 'Tab' && (bubbleWithoutShift || bubbleWithShift))
-  );
-};
-
-/**
  * handles keydown events for the tableWrapper element (move focus, change page)
  */
 export const handleWrapperKeyDown = ({
@@ -48,7 +26,6 @@ export const handleWrapperKeyDown = ({
   keyboard,
   isSelectionMode,
 }: HandleWrapperKeyDownProps) => {
-  console.log('bubbles');
   if (isCtrlShift(evt)) {
     preventDefaultBehavior(evt);
     // ctrl + shift + left/right arrow keys: go to previous/next page
@@ -68,6 +45,28 @@ export const handleWrapperKeyDown = ({
     // @ts-ignore TODO: fix nebula api so that blur has the correct argument type
     keyboard.blur?.(true);
   }
+};
+
+/**
+ * Checks if events caught by head, totals and body handles should bubble to the wrapper handler or default behavior
+ */
+export const shouldBubble = (
+  evt: React.KeyboardEvent,
+  isSelectionMode = false,
+  keyboardEnabled = false,
+  paginationNeeded = true
+) => {
+  const shouldGoToSelToolbar = keyboardEnabled && isSelectionMode;
+  const bubbleWithoutShift = !evt.shiftKey && (paginationNeeded || !shouldGoToSelToolbar);
+  const bubbleWithShift = evt.shiftKey && !shouldGoToSelToolbar;
+  return (
+    // esc to blur object
+    (evt.key === 'Escape' && !isSelectionMode) ||
+    // default tab to pagination or tab to blur
+    (evt.key === 'Tab' && (bubbleWithoutShift || bubbleWithShift)) ||
+    // ctrl + shift + arrow to change page
+    ((evt.key === 'ArrowLeft' || evt.key === 'ArrowRight') && isCtrlShift(evt))
+  );
 };
 
 /**
@@ -146,8 +145,8 @@ export const handleHeadKeyDown = ({
   column,
   changeSortOrder,
   layout,
-  setFocusedCellCoord,
   isInteractionEnabled,
+  setFocusedCellCoord,
 }: HandleHeadKeyDownProps) => {
   if (shouldBubble(evt)) return;
   preventDefaultBehavior(evt);
@@ -176,14 +175,19 @@ export const handleTotalKeyDown = (
   evt: React.KeyboardEvent,
   rootElement: HTMLElement,
   cellCoord: [number, number],
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
+  isSelectionMode: boolean
 ) => {
+  if (shouldBubble(evt)) return;
+  preventDefaultBehavior(evt);
+  if (isSelectionMode) return;
+
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown':
     case 'ArrowRight':
     case 'ArrowLeft': {
-      !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
+      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
       break;
     }
     default:

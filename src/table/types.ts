@@ -78,8 +78,8 @@ export interface HandleHeadKeyDownProps {
   column: Column;
   changeSortOrder: ChangeSortOrder;
   layout: TableLayout;
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   isInteractionEnabled: boolean;
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
 }
 
 export interface HandleBodyKeyDownProps {
@@ -188,6 +188,7 @@ export interface TableBodyWrapperProps extends CommonTableProps {
 export interface TableTotalsProps extends CommonTableProps {
   rootElement: HTMLElement;
   layout: TableLayout;
+  isSelectionMode: boolean;
 }
 
 export interface PaginationContentProps extends CommonTableProps {

@@ -120,13 +120,13 @@ export default function TableWrapper(props: TableWrapperProps) {
         <Table stickyHeader aria-label={tableAriaLabel}>
           <TableHeadWrapper {...props} />
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef}>
-            <TableTotals {...props} />
+            <TableTotals {...props} isSelectionMode={isSelectionMode} />
           </TableBodyWrapper>
         </Table>
       </StyledTableContainer>
       {!constraints.active && (
         <FooterWrapper theme={theme} footerContainer={footerContainer}>
-          <PaginationContent {...props} handleChangePage={handleChangePage} isSelectionMode={selectionsAPI.isModal()} />
+          <PaginationContent {...props} handleChangePage={handleChangePage} isSelectionMode={isSelectionMode} />
         </FooterWrapper>
       )}
     </StyledTableWrapper>
