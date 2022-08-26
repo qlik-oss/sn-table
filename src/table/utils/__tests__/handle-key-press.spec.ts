@@ -453,6 +453,14 @@ describe('handle-key-press', () => {
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
     });
+
+    it('should not take any action when the pressed key is the space bar', () => {
+      evt.key = ' ';
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord);
+      expect(evt.preventDefault).toHaveBeenCalled();
+      expect(evt.stopPropagation).toHaveBeenCalled();
+      expect(setFocusedCellCoord).not.toHaveBeenCalled();
+    });
   });
 
   describe('handleBodyKeyDown', () => {

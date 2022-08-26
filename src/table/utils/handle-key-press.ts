@@ -164,6 +164,9 @@ export const handleTotalKeyDown = (
       !isCtrlShift(evt) && moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
       break;
     }
+    case ' ':
+      preventDefaultBehavior(evt);
+      break;
     default:
       break;
   }
