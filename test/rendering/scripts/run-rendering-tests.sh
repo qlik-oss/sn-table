@@ -15,6 +15,6 @@ playwrightVersion=$(npm list @playwright/test | awk '{print $2}' | cut -d "@" -f
 docker run -d --name sn-table-playwright --rm --network host -v $(pwd):/work/ -w /work/ -it mcr.microsoft.com/playwright:v$playwrightVersion-focal
 
 # The actual rendering test is running from the machine running this shell script
-docker exec sn-table-playwright /bin/sh -c "yarn test:rendering"
+docker exec sn-table-playwright /bin/sh -c "yarn test:rendering $@"
 
 docker stop sn-table-playwright
