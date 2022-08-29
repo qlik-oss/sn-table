@@ -1,7 +1,8 @@
 // TODO: add this to global rules
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { stardust } from '@nebula.js/stardust';
-import { Cell, SelectionState, ExtendedSelectionAPI, ActionPayload, Announce } from '../../types';
+import { Cell, ExtendedSelectionAPI, Announce } from '../../types';
+import { SelectionState, ActionPayload } from '../types';
 
 export enum SelectionStates {
   SELECTED = 'selected',
@@ -17,7 +18,7 @@ export enum SelectionActions {
   SELECT_MULTI_VALUES = 'selectMultiValues',
 }
 
-export interface Action<T = any> {
+interface Action<T = any> {
   type: T;
 }
 
@@ -30,13 +31,13 @@ export interface ClearAction extends Action<SelectionActions.CLEAR> {}
 
 export type TSelectionActions = SelectAction | ResetAction | ClearAction | SelectMultiValuesAction;
 
-type AddSelectionListenersArgs = {
+interface AddSelectionListenersArgs {
   api: ExtendedSelectionAPI;
   selectionDispatch: React.Dispatch<TSelectionActions>;
   setShouldRefocus(): void;
   keyboard: stardust.Keyboard;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
-};
+}
 
 export function addSelectionListeners({
   api,

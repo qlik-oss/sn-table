@@ -12,7 +12,8 @@ import {
   ResetAction,
   ClearAction,
 } from '../selections-utils';
-import { Cell, SelectionState, ExtendedSelectionAPI, Announce } from '../../../types';
+import { Cell, ExtendedSelectionAPI, Announce } from '../../../types';
+import { SelectionState } from '../../types';
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {

@@ -392,6 +392,15 @@ describe('handle-key-press', () => {
       expect(changeSortOrder).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
     });
+
+    it('when press ArrowUp should call nothing but preventDefaultBehavior', () => {
+      evt.key = 'ArrowUp';
+      callHandleHeadKeyDown();
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(changeSortOrder).not.toHaveBeenCalled();
+      expect(setFocusedCellCoord).not.toHaveBeenCalled();
+    });
   });
 
   describe('handleTotalKeyDown', () => {

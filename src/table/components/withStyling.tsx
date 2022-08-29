@@ -1,6 +1,6 @@
 import React from 'react';
 import TableCell from '@mui/material/TableCell';
-import { CellHOCProps } from '../../types';
+import { CellHOCProps } from '../types';
 
 export default function withStyling(CellComponent: typeof TableCell) {
   const HOC = (props: CellHOCProps) => {

@@ -7,19 +7,17 @@ import rtlPluginSc from 'stylis-plugin-rtl-sc';
 import TableWrapper from './components/TableWrapper';
 import { TableContextProvider } from './context';
 import muiSetup from './mui-setup';
-import { RenderProps, RootProps } from '../types';
+import { RenderProps, TableWrapperProps } from './types';
 
-export function render(reactRoot: ReactDom.Root | HTMLElement, props: RenderProps) {
+export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   const { direction, selectionsAPI } = props;
   const muiTheme = muiSetup(direction);
-  const root = reactRoot as ReactDom.Root;
-  const rootProps = props as RootProps;
 
-  root.render(
+  reactRoot?.render(
     <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : undefined}>
       <ThemeProvider theme={muiTheme}>
         <TableContextProvider selectionsAPI={selectionsAPI}>
-          <TableWrapper {...rootProps} />
+          <TableWrapper {...(props as TableWrapperProps)} />
         </TableContextProvider>
       </ThemeProvider>
     </StyleSheetManager>

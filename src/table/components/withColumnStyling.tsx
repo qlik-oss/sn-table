@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { getColumnStyle } from '../utils/styling-utils';
-import { CellHOCProps, CellHOC } from '../../types';
+import { CellHOCProps, CellHOC } from '../types';
 
 export default function withColumnStyling(CellComponent: CellHOC) {
   const HOC = (props: CellHOCProps) => {

@@ -9,7 +9,8 @@ import {
   getSelectionStyle,
 } from '../styling-utils';
 import { SelectionStates } from '../selections-utils';
-import { ExtendedTheme, PaletteColor, HeaderStyling, ContentStyling, TableLayout, CellStyle } from '../../../types';
+import { ExtendedTheme, PaletteColor, HeaderStyling, ContentStyling, TableLayout } from '../../../types';
+import { CellStyle } from '../../types';
 
 describe('styling-utils', () => {
   let resolvedColor: string;
