@@ -26,4 +26,4 @@ docker run -d --name sn-table-playwright --rm --network host -v $(pwd):/work/ -w
 container_started=true
 
 # The actual rendering test is running from the machine running this shell script
-docker exec sn-table-playwright /bin/sh -c "yarn test:rendering"
+docker exec sn-table-playwright /bin/sh -c "yarn test:rendering $@"
