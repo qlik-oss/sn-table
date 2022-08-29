@@ -6,7 +6,7 @@
  *
  * @returns {function} Returns the new throttled function.
  */
-export default function createThrottler(fn: () => void, wait = 50) {
+export default function createThrottler(fn: (args: any) => void, wait = 50) {
   let context: any;
   let argus: any;
   let last = 0;

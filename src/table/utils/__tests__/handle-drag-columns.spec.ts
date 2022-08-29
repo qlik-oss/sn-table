@@ -1,6 +1,7 @@
 import React, { DragEvent } from 'react';
 import { handleDragStart, handleDragOver, handleDragEnd } from '../handle-drag-columns';
-import { TableLayout, HyperCube, Model, Column } from '../../../types';
+import { TableLayout, HyperCube, Column } from '../../../types';
+import { Model } from '../../types';
 import * as ColumnsSortingsUtil from '../columns-sorting-util';
 import * as SaveSoftProperties from '../save-soft-properties';
 

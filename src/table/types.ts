@@ -1,3 +1,4 @@
+import { DragEvent } from 'react';
 import { TableCellProps } from '@mui/material';
 import { stardust } from '@nebula.js/stardust';
 import {
@@ -142,12 +143,17 @@ export interface RenderProps {
     setPageInfo: SetPageInfo
   ): Promise<TableData | null>;
   app?: EngineAPI.IApp;
+  flags?: { isEnabled: (flag: string) => boolean };
 }
 
 export interface CommonTableProps {
   tableData: TableData;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
+}
+
+export interface Model extends EngineAPI.IGenericObject {
+  applyPatches: (arg0: Array<{ qPath: string; qOp: string; qValue: string }>, arg1: boolean) => Promise<void>;
 }
 
 export interface TableWrapperProps extends CommonTableProps {
@@ -163,6 +169,8 @@ export interface TableWrapperProps extends CommonTableProps {
   translator: ExtendedTranslator;
   footerContainer?: HTMLElement;
   announce: Announce;
+  flags: { isEnabled: (flag: string) => boolean };
+  model: Model;
 }
 
 export interface TableHeadWrapperProps extends CommonTableProps {
@@ -172,6 +180,11 @@ export interface TableHeadWrapperProps extends CommonTableProps {
   changeSortOrder: ChangeSortOrder;
   constraints: stardust.Constraints;
   translator: ExtendedTranslator;
+  model: Model;
+  direction?: 'ltr' | 'rtl';
+  engagedColumn: number | undefined;
+  setEngagedColumn: (i: number | undefined) => void;
+  flags: { isEnabled: (flag: string) => boolean };
 }
 
 export interface TableBodyWrapperProps extends CommonTableProps {
@@ -183,11 +196,13 @@ export interface TableBodyWrapperProps extends CommonTableProps {
   setShouldRefocus(): void;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
   children: JSX.Element;
+  engagedColumn: number | undefined;
 }
 
 export interface TableTotalsProps extends CommonTableProps {
   rootElement: HTMLElement;
   layout: TableLayout;
+  engagedColumn: number | undefined;
 }
 
 export interface PaginationContentProps extends CommonTableProps {
@@ -216,3 +231,25 @@ export interface CellHOCProps extends TableCellProps {
 }
 
 export type CellHOC = (props: CellHOCProps) => JSX.Element;
+
+export type DragStartProps = {
+  event: DragEvent;
+  layout: TableLayout;
+  cellRef: React.RefObject<HTMLTableElement>;
+  headRowRef: React.RefObject<HTMLTableElement> | null;
+  cell: Column;
+};
+
+export type DragOverProps = {
+  event: DragEvent;
+  model: Model;
+  rtl: boolean;
+  columns: Column[];
+  setEngagedColumn: (i: number | undefined) => void;
+};
+
+export type DragEndProps = {
+  event: DragEvent;
+  model: EngineAPI.IGenericObject;
+  setEngagedColumn: (i: number | undefined) => void;
+};

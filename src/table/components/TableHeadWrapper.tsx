@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useMemo, useRef, createRef } from 'react';
+import React, { memo, useEffect, useMemo, useRef, createRef, DragEvent } from 'react';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 
@@ -34,10 +34,13 @@ function TableHeadWrapper({
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
   const rtl = direction === 'rtl';
   const tableCellRefs = useRef([]);
-  tableCellRefs.current = columns.map((el, i) => tableCellRefs.current[i] ?? createRef());
-  const throttler = createThrottler((event) => handleDragOver({ event, model, rtl, columns, setEngagedColumn }), 100);
+  tableCellRefs.current = columns.map((el, i) => tableCellRefs.current[i] ?? createRef<HTMLTableElement>());
+  const throttler = createThrottler(
+    (event: DragEvent) => handleDragOver({ event, model, rtl, columns, setEngagedColumn }),
+    100
+  );
   const isDraggable = flags.isEnabled('DRAGGING_COLUMNS_IN_TABLE') ?? false;
-  const headRowRef = useRef<HTMLElement>();
+  const headRowRef = useRef<HTMLTableElement>(null);
 
   useEffect(() => {
     headRowRef.current && setHeadRowHeight(headRowRef.current.getBoundingClientRect().height);
@@ -45,8 +48,10 @@ function TableHeadWrapper({
 
   useEffect(() => {
     columns.forEach((column, i) => {
-      if (tableCellRefs.current[i].current) {
-        column.width = tableCellRefs.current[i].current.clientWidth;
+      // @ts-ignore  Need check with teams how to handle store columnwidth properly
+      if (tableCellRefs.current[i]!.current) {
+        // @ts-ignore Need check with teams how to handle store columnwidth properly
+        column.width = tableCellRefs.current[i]!.current.clientWidth;
       }
     });
   }, [tableCellRefs.current]);
@@ -57,7 +62,7 @@ function TableHeadWrapper({
         ref={headRowRef}
         paginationNeeded={paginationNeeded}
         className="sn-table-row"
-        onDragOver={(event) => throttler(event)}
+        onDragOver={(event: DragEvent) => throttler(event)}
       >
         {columns.map((column, columnIndex) => {
           // The first cell in the head is focusable in sequential keyboard navigation,
@@ -84,7 +89,7 @@ function TableHeadWrapper({
           return (
             <TableCell
               sx={headerStyle}
-              style={{ opacity: engagedColumn !== undefined && engagedColumn !== columnIndex ? '50%' : null }}
+              style={{ opacity: engagedColumn !== undefined && engagedColumn !== columnIndex ? '50%' : undefined }}
               ref={tableCellRefs.current[columnIndex]}
               key={column.id}
               align={column.align}

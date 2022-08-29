@@ -42,6 +42,7 @@ describe('<TableBodyWrapper />', () => {
           keyboard={keyboard}
           tableWrapperRef={tableWrapperRef}
           announce={announce}
+          engagedColumn={undefined}
         >
           {children}
         </TableBodyWrapper>

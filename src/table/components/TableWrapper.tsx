@@ -40,7 +40,7 @@ export default function TableWrapper(props: TableWrapperProps) {
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef<HTMLDivElement>();
   const tableWrapperRef = useRef<HTMLDivElement>();
-  const [engagedColumn, setEngagedColumn] = useState(undefined);
+  const [engagedColumn, setEngagedColumn] = useState<number | undefined>(undefined);
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);

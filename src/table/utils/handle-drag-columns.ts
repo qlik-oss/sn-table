@@ -1,7 +1,8 @@
 import extend from 'extend';
 import { storeColumnWidths, updateColumnInfoOrders, fixTableHypercubeOrders } from './columns-sorting-util';
 import saveSoftProperties from './save-soft-properties';
-import { Column, Model, DragStartProps, DragOverProps, DragEndProps } from '../../types';
+import { Column } from '../../types';
+import { Model, DragStartProps, DragOverProps, DragEndProps } from '../types';
 
 const applyColumnOrderSoftPatch = (model: Model, op: string, columnOrder: number[]) => {
   const patches = [
@@ -23,7 +24,7 @@ let order: Array<number>;
 let previousX: number;
 
 export const handleDragStart = ({ event, layout, cellRef, headRowRef, cell }: DragStartProps) => {
-  tableWidth = headRowRef.current!.clientWidth;
+  tableWidth = headRowRef?.current!.clientWidth ?? 0;
   column = cell;
   cellXPositon = cellRef.current!.offsetLeft;
   startPosition = event.clientX;
@@ -33,7 +34,7 @@ export const handleDragStart = ({ event, layout, cellRef, headRowRef, cell }: Dr
 
 export const handleDragOver = ({ event, model, rtl, columns, setEngagedColumn }: DragOverProps) => {
   event.preventDefault();
-  event.dataTransfer.dropEffect = 'move';
+  event.dataTransfer!.dropEffect = 'move';
   // compute new visible index for the reordering column
   let index = 0;
   let offset = 0;

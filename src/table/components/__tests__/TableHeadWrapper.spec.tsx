@@ -13,6 +13,7 @@ import {
   ExtendedTranslator,
   ExtendedSelectionAPI,
 } from '../../../types';
+import { Model } from '../../types';
 
 describe('<TableHeadWrapper />', () => {
   const rootElement = {} as HTMLElement;
@@ -24,6 +25,8 @@ describe('<TableHeadWrapper />', () => {
   let selectionsAPI: ExtendedSelectionAPI;
   let keyboard: stardust.Keyboard;
   let translator: ExtendedTranslator;
+  let flags: { isEnabled: (flag: string) => boolean };
+  let model: Model;
 
   const renderTableHead = (cellCoordMock?: [number, number]) =>
     render(
@@ -39,6 +42,9 @@ describe('<TableHeadWrapper />', () => {
           keyboard={keyboard}
           translator={translator}
           flags={flags}
+          model={model}
+          engagedColumn={undefined}
+          setEngagedColumn={jest.fn()}
         />
       </TableContextProvider>
     );
@@ -72,6 +78,9 @@ describe('<TableHeadWrapper />', () => {
       enabled: false,
     } as stardust.Keyboard;
     translator = { get: (s) => s } as ExtendedTranslator;
+    flags = {
+      isEnabled: () => false,
+    };
   });
 
   it('should render table head', () => {

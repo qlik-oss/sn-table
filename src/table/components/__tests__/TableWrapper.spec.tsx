@@ -20,6 +20,7 @@ import {
   ChangeSortOrder,
   ExtendedSelectionAPI,
 } from '../../../types';
+import { Model } from '../../types';
 
 describe('<TableWrapper />', () => {
   let tableData: TableData;
@@ -37,6 +38,8 @@ describe('<TableWrapper />', () => {
   let announce: Announce;
   let changeSortOrder: ChangeSortOrder;
   let layout: TableLayout;
+  let model: Model;
+  let flags: { isEnabled: (flag: string) => boolean };
 
   const renderTableWrapper = () =>
     render(
@@ -56,6 +59,8 @@ describe('<TableWrapper />', () => {
           announce={announce}
           changeSortOrder={changeSortOrder}
           layout={layout}
+          flags={flags}
+          model={model}
         />
       </TableContextProvider>
     );
