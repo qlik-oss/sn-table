@@ -148,9 +148,12 @@ export const handleHeadKeyDown = ({
   isInteractionEnabled,
   setFocusedCellCoord,
 }: HandleHeadKeyDownProps) => {
+  if (!isInteractionEnabled) {
+    preventDefaultBehavior(evt);
+    return;
+  }
   if (shouldBubble(evt)) return;
   preventDefaultBehavior(evt);
-  if (!isInteractionEnabled) return;
 
   switch (evt.key) {
     case 'ArrowDown':
@@ -178,9 +181,12 @@ export const handleTotalKeyDown = (
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
   isSelectionMode: boolean
 ) => {
+  if (isSelectionMode) {
+    preventDefaultBehavior(evt);
+    return;
+  }
   if (shouldBubble(evt)) return;
   preventDefaultBehavior(evt);
-  if (isSelectionMode) return;
 
   switch (evt.key) {
     case 'ArrowUp':
