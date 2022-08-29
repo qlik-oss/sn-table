@@ -24,7 +24,6 @@ describe('<TableBodyWrapper />', () => {
   let selectionsAPI: ExtendedSelectionAPI;
   let layout: TableLayout;
   let theme: ExtendedTheme;
-  let children: JSX.Element;
   let tableFirstRow: Cell;
   let tableSecondRow: Cell;
 
@@ -42,9 +41,7 @@ describe('<TableBodyWrapper />', () => {
           keyboard={keyboard}
           tableWrapperRef={tableWrapperRef}
           announce={announce}
-        >
-          {children}
-        </TableBodyWrapper>
+        />
       </TableContextProvider>
     );
 
