@@ -52,8 +52,8 @@ function TableHeadWrapper({
               column,
               changeSortOrder,
               layout,
-              setFocusedCellCoord,
               isInteractionEnabled,
+              setFocusedCellCoord,
             });
           };
 
