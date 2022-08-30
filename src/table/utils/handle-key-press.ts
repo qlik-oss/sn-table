@@ -42,7 +42,10 @@ export const getNextCellCoord = (
   evt: React.KeyboardEvent,
   rootElement: HTMLElement,
   cellCoord: [number, number],
-  topAllowedRow = 0
+  allowedRows: {
+    top: number;
+    bottom: number;
+  } = { top: 0, bottom: 0 }
 ): [number, number] => {
   const rowCount = rootElement.getElementsByClassName('sn-table-row').length;
   const columnCount = rootElement.getElementsByClassName('sn-table-head-cell').length;
@@ -50,14 +53,14 @@ export const getNextCellCoord = (
 
   switch (evt.key) {
     case 'ArrowDown':
-      nextRow < rowCount - 1 && nextRow++;
+      nextRow < rowCount - 1 - allowedRows.bottom && nextRow++;
       break;
     case 'ArrowUp':
-      nextRow > topAllowedRow && nextRow--;
+      nextRow > allowedRows.top && nextRow--;
       break;
     case 'ArrowRight':
-      // topAllowedRow greater than 0 means we are in selection mode
-      if (topAllowedRow > 0) break;
+      // allowedRows.top greater than 0 means we are in selection mode
+      if (allowedRows.top > 0) break;
       if (nextCol < columnCount - 1) {
         nextCol++;
       } else if (nextRow < rowCount - 1) {
@@ -66,11 +69,11 @@ export const getNextCellCoord = (
       }
       break;
     case 'ArrowLeft':
-      // topAllowedRow greater than 0 means we are in selection mode
-      if (topAllowedRow > 0) break;
+      // allowedRows.top greater than 0 means we are in selection mode
+      if (allowedRows.top > 0) break;
       if (nextCol > 0) {
         nextCol--;
-      } else if (nextRow > 0) {
+      } else if (nextRow > allowedRows.top) {
         nextRow--;
         nextCol = columnCount - 1;
       }
@@ -90,10 +93,13 @@ export const moveFocus = (
   rootElement: HTMLElement,
   cellCoord: [number, number],
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  topAllowedRow?: number
+  allowedRows?: {
+    top: number;
+    bottom: number;
+  }
 ) => {
   updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
-  const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, topAllowedRow);
+  const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, allowedRows);
   const nextCell = getCellElement(rootElement, nextCellCoord);
   updateFocus({ focusType: 'focus', cell: nextCell });
   setFocusedCellCoord(nextCellCoord);
@@ -240,13 +246,16 @@ export const handleBodyKeyDown = ({
   const firstBodyRowIdx = totalsPosition === 'top' ? 2 : 1;
   const cellCoord: [number, number] = [cell.rawRowIdx + firstBodyRowIdx, cell.rawColIdx];
   // Make sure you can't navigate to header (and totals) in selection mode
-  const topAllowedRow = isSelectionMode ? firstBodyRowIdx : 0;
+  const allowedRows = {
+    top: isSelectionMode ? firstBodyRowIdx : 0,
+    bottom: isSelectionMode && totalsPosition === 'bottom' ? 1 : 0,
+  };
 
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown': {
       evt.key === 'ArrowUp' && handleNavigateTop([cell.rawRowIdx, cell.rawColIdx], rootElement);
-      const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, topAllowedRow);
+      const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, allowedRows);
       // Shift + up/down arrow keys: select multiple values
       // When at the first/last row of the cell, shift + arrow up/down key, no value is selected
       const isSelectMultiValues =
@@ -268,7 +277,7 @@ export const handleBodyKeyDown = ({
     }
     case 'ArrowRight':
     case 'ArrowLeft':
-      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, topAllowedRow);
+      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, allowedRows);
       break;
     // Space bar: Selects value.
     case ' ':

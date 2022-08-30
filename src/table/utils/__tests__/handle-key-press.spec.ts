@@ -274,6 +274,17 @@ describe('handle-key-press', () => {
       expect(nextCol).toBe(0);
     });
 
+    it('should go one cell forward when the last cell is not selected and the key is pressed down to bottom Totals row', () => {
+      evt.key = 'ArrowDown';
+      const allowedRows = { top: 0, bottom: 0 };
+      rowCount = 3;
+      rowIndex = 1;
+      colIndex = 0;
+      const [nextRow, nextCol] = getNextCellCoord(evt, rootElement, [rowIndex, colIndex], allowedRows);
+      expect(nextRow).toBe(2);
+      expect(nextCol).toBe(0);
+    });
+
     it('should stay the current cell when move up', () => {
       evt.key = 'ArrowUp';
       const [nextRow, nextCol] = getNextCellCoord(evt, rootElement, [rowIndex, colIndex]);
@@ -283,7 +294,7 @@ describe('handle-key-press', () => {
 
     it('should go to one row down cell', () => {
       evt.key = 'ArrowDown';
-      rowCount = 2;
+      rowCount = 3;
       const [nextRow, nextCol] = getNextCellCoord(evt, rootElement, [rowIndex, colIndex]);
       expect(nextRow).toBe(1);
       expect(nextCol).toBe(0);
@@ -324,12 +335,12 @@ describe('handle-key-press', () => {
 
     it('should move to the next row when you reach to the end of the current row', () => {
       evt.key = 'ArrowRight';
-      rowCount = 3;
+      rowCount = 5;
       columnCount = 3;
-      rowIndex = 1;
+      rowIndex = 2;
       colIndex = 3;
       const [nextRow, nextCol] = getNextCellCoord(evt, rootElement, [rowIndex, colIndex]);
-      expect(nextRow).toBe(2);
+      expect(nextRow).toBe(3);
       expect(nextCol).toBe(0);
     });
 
@@ -366,36 +377,36 @@ describe('handle-key-press', () => {
       expect(nextCol).toBe(1);
     });
 
-    it('should stay at the current cell when topAllowed cell is 1 and trying to move up from rowIdx 1', () => {
+    it('should stay at the current cell when allowedRows cell index is 1 and trying to move up from rowIdx 1', () => {
       evt.key = 'ArrowUp';
-      const topAllowedRow = 1;
+      const allowedRows = { top: 1, bottom: 0 };
       rowCount = 3;
       rowIndex = 1;
-      const [nextRow, nextCol] = getNextCellCoord(evt, rootElement, [rowIndex, colIndex], topAllowedRow);
+      const [nextRow, nextCol] = getNextCellCoord(evt, rootElement, [rowIndex, colIndex], allowedRows);
       expect(nextRow).toBe(1);
       expect(nextCol).toBe(0);
     });
 
-    it('should stay at the current cell when trying to move left and topAllowedRow is > 0 (i.e in selection mode', () => {
+    it('should stay at the current cell when trying to move left and allowedRows is > 0 (i.e in selection mode', () => {
       evt.key = 'ArrowLeft';
-      const topAllowedRow = 1;
+      const allowedRows = { top: 1, bottom: 0 };
       rowCount = 3;
       columnCount = 3;
       rowIndex = 1;
       colIndex = 1;
-      const [nextRow, nextCol] = getNextCellCoord(evt, rootElement, [rowIndex, colIndex], topAllowedRow);
+      const [nextRow, nextCol] = getNextCellCoord(evt, rootElement, [rowIndex, colIndex], allowedRows);
       expect(nextRow).toBe(1);
       expect(nextCol).toBe(1);
     });
 
-    it('should stay at the current cell when trying to move right and topAllowedRow is > 0 (i.e in selection mode', () => {
+    it('should stay at the current cell when trying to move right and allowedRows is > 0 (i.e in selection mode', () => {
       evt.key = 'ArrowRight';
-      const topAllowedRow = 1;
+      const allowedRows = { top: 1, bottom: 0 };
       rowCount = 3;
       columnCount = 3;
       rowIndex = 1;
       colIndex = 1;
-      const [nextRow, nextCol] = getNextCellCoord(evt, rootElement, [rowIndex, colIndex], topAllowedRow);
+      const [nextRow, nextCol] = getNextCellCoord(evt, rootElement, [rowIndex, colIndex], allowedRows);
       expect(nextRow).toBe(1);
       expect(nextCol).toBe(1);
     });
