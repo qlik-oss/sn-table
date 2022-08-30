@@ -12,7 +12,6 @@ import { GeneratedStyling, CellStyle } from '../types';
 export const STYLING_DEFAULTS = {
   FONT_COLOR: '#404040',
   HOVER_BACKGROUND: '#f4f4f4',
-  SELECTED_CLASS: 'selected',
   SELECTED_BACKGROUND: '#009845',
   EXCLUDED_BACKGROUND:
     'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px)',
@@ -24,7 +23,7 @@ export const SELECTION_STYLING = {
     color: STYLING_DEFAULTS.WHITE,
     background: STYLING_DEFAULTS.SELECTED_BACKGROUND,
     // Setting a specific class for selected cells styling to override hover effect
-    selectedCellClass: STYLING_DEFAULTS.SELECTED_CLASS,
+    selectedCellClass: SelectionStates.SELECTED,
   },
   POSSIBLE: {
     color: STYLING_DEFAULTS.FONT_COLOR,
@@ -259,6 +258,7 @@ export function getSelectionStyle(styling: CellStyle, cellSelectionState: Select
     case SelectionStates.EXCLUDED:
       selectionStyling = {
         background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${styling.backgroundColor}`,
+        selectedCellClass: SelectionStates.EXCLUDED,
       };
       break;
     default:

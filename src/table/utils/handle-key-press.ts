@@ -217,6 +217,10 @@ export const handleBodyKeyDown = ({
   totalsPosition,
   selectionsAPI,
 }: HandleBodyKeyDownProps) => {
+  if ((evt.target as HTMLTableCellElement).classList.contains('excluded')) {
+    preventDefaultBehavior(evt);
+    return;
+  }
   const isSelectionMode = selectionsAPI.isModal();
   if (shouldBubble(evt, isSelectionMode, keyboard.enabled, paginationNeeded)) return;
   preventDefaultBehavior(evt);
