@@ -4,7 +4,6 @@ import Table from '@mui/material/Table';
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
-import TableTotals from './TableTotals';
 import FooterWrapper from './FooterWrapper';
 import { useContextSelector, TableContext } from '../context';
 import { StyledTableContainer, StyledTableWrapper } from '../styles';
@@ -119,9 +118,7 @@ export default function TableWrapper(props: TableWrapperProps) {
       >
         <Table stickyHeader aria-label={tableAriaLabel}>
           <TableHeadWrapper {...props} />
-          <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef}>
-            <TableTotals {...props} isSelectionMode={isSelectionMode} />
-          </TableBodyWrapper>
+          <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </Table>
       </StyledTableContainer>
       {!constraints.active && (

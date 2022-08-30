@@ -8,6 +8,7 @@ import { handleBodyKeyDown, handleBodyKeyUp } from '../utils/handle-key-press';
 import { handleClickToFocusBody } from '../utils/handle-accessibility';
 import { Cell } from '../../types';
 import { TableBodyWrapperProps } from '../types';
+import TableTotals from './TableTotals';
 
 function TableBodyWrapper({
   rootElement,
@@ -20,7 +21,6 @@ function TableBodyWrapper({
   keyboard,
   tableWrapperRef,
   announce,
-  children,
 }: TableBodyWrapperProps) {
   const { rows, columns, paginationNeeded, totalsPosition } = tableData;
   const columnsStylingIDsJSON = JSON.stringify(columns.map((column) => column.stylingIDs));
@@ -50,9 +50,20 @@ function TableBodyWrapper({
     });
   }, []);
 
+  const totals = (
+    <TableTotals
+      rootElement={rootElement}
+      tableData={tableData}
+      theme={theme}
+      layout={layout}
+      keyboard={keyboard}
+      isSelectionMode={selectionsAPI.isModal()}
+    />
+  );
+
   return (
     <StyledTableBody paginationNeeded={paginationNeeded} bodyCellStyle={bodyCellStyle}>
-      {totalsPosition === 'top' ? children : undefined}
+      {totalsPosition === 'top' ? totals : undefined}
       {rows.map((row) => (
         <StyledBodyRow
           bodyCellStyle={bodyCellStyle}
@@ -106,7 +117,7 @@ function TableBodyWrapper({
           })}
         </StyledBodyRow>
       ))}
-      {totalsPosition === 'bottom' ? children : undefined}
+      {totalsPosition === 'bottom' ? totals : undefined}
     </StyledTableBody>
   );
 }

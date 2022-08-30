@@ -182,7 +182,6 @@ export interface TableBodyWrapperProps extends CommonTableProps {
   announce: Announce;
   setShouldRefocus(): void;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
-  children: JSX.Element;
 }
 
 export interface TableTotalsProps extends CommonTableProps {
