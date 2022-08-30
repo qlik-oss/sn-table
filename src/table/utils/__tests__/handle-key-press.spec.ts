@@ -549,6 +549,7 @@ describe('handle-key-press', () => {
 
   describe('handleBodyKeyDown', () => {
     let isModal: boolean;
+    let isExcluded: boolean;
     let evt: React.KeyboardEvent;
     let rootElement: HTMLElement;
     let selectionsAPI: ExtendedSelectionAPI;
@@ -578,6 +579,7 @@ describe('handle-key-press', () => {
 
     beforeEach(() => {
       isModal = false;
+      isExcluded = false;
       evt = {
         key: 'ArrowDown',
         stopPropagation: jest.fn(),
@@ -585,6 +587,9 @@ describe('handle-key-press', () => {
         target: {
           blur: jest.fn(),
           setAttribute: jest.fn(),
+          classList: {
+            contains: () => isExcluded,
+          },
         } as unknown as HTMLElement,
       } as unknown as React.KeyboardEvent;
       rootElement = {
@@ -791,6 +796,17 @@ describe('handle-key-press', () => {
 
     it('when other keys are pressed, should only prevent default behavior', () => {
       evt.key = 'A';
+      runHandleBodyKeyDown();
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect((evt.target as HTMLElement).blur).not.toHaveBeenCalled();
+      expect((evt.target as HTMLElement).setAttribute).not.toHaveBeenCalled();
+      expect(selectionsAPI.cancel).not.toHaveBeenCalled();
+      expect(setFocusedCellCoord).not.toHaveBeenCalled();
+    });
+
+    it('when event is coming from excluded cell, should only prevent default behavior', () => {
+      isExcluded = true;
       runHandleBodyKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);

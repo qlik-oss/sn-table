@@ -428,6 +428,7 @@ describe('styling-utils', () => {
       expect(selectionStyling).toEqual({
         ...styling,
         background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${styling.backgroundColor}`,
+        selectedCellClass: SelectionStates.EXCLUDED,
       });
     });
 
@@ -439,6 +440,7 @@ describe('styling-utils', () => {
       expect(selectionStyling).toEqual({
         ...styling,
         background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${styling.backgroundColor}`,
+        selectedCellClass: SelectionStates.EXCLUDED,
       });
     });
 
