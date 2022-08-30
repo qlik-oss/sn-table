@@ -14,40 +14,6 @@ export const preventDefaultBehavior = (evt: React.KeyboardEvent) => {
 };
 
 /**
- * handles keydown events for the tableWrapper element (move focus, change page)
- */
-export const handleWrapperKeyDown = ({
-  evt,
-  totalRowCount,
-  page,
-  rowsPerPage,
-  handleChangePage,
-  setShouldRefocus,
-  keyboard,
-  isSelectionMode,
-}: HandleWrapperKeyDownProps) => {
-  if (isCtrlShift(evt)) {
-    preventDefaultBehavior(evt);
-    // ctrl + shift + left/right arrow keys: go to previous/next page
-    const lastPage = Math.ceil(totalRowCount / rowsPerPage) - 1;
-    if (evt.key === 'ArrowRight' && page < lastPage) {
-      setShouldRefocus();
-      handleChangePage(page + 1);
-    } else if (evt.key === 'ArrowLeft' && page > 0) {
-      setShouldRefocus();
-      handleChangePage(page - 1);
-    }
-  } else if (evt.key === 'Escape' && keyboard.enabled && !isSelectionMode) {
-    // escape key: tell Nebula to relinquish the table's focus to
-    // its parent element when nebula handles keyboard navigation
-    // and not in selection mode
-    preventDefaultBehavior(evt);
-    // @ts-ignore TODO: fix nebula api so that blur has the correct argument type
-    keyboard.blur?.(true);
-  }
-};
-
-/**
  * Checks if events caught by head, totals and body handles should bubble to the wrapper handler or default behavior
  */
 export const shouldBubble = (
@@ -133,6 +99,51 @@ export const moveFocus = (
   setFocusedCellCoord(nextCellCoord);
 
   return nextCell;
+};
+
+/**
+ * ----------- Key handlers -----------
+ * General pattern for handling keydown events:
+ * 1. Event caught by inner handlers (head, totals or body)
+ * 2. Check if they are disabled completely (in selection mode, on an excluded cell etc), then run preventDefaultBehavior and early return
+ * 3. Check if the event should bubble
+ * 4a. If it should bubble, early return and let handleWrapperKeyDown catch the event.
+ * If the key pressed is not relevant to the wrapper, it will keep bubbling (e.g. tab)
+ * 4b. If it shouldn't bubble, run preventDefaultBehavior and run the logic for that specific component
+ */
+
+/**
+ * handles keydown events for the tableWrapper element (move focus, change page)
+ */
+export const handleWrapperKeyDown = ({
+  evt,
+  totalRowCount,
+  page,
+  rowsPerPage,
+  handleChangePage,
+  setShouldRefocus,
+  keyboard,
+  isSelectionMode,
+}: HandleWrapperKeyDownProps) => {
+  if (isCtrlShift(evt)) {
+    preventDefaultBehavior(evt);
+    // ctrl + shift + left/right arrow keys: go to previous/next page
+    const lastPage = Math.ceil(totalRowCount / rowsPerPage) - 1;
+    if (evt.key === 'ArrowRight' && page < lastPage) {
+      setShouldRefocus();
+      handleChangePage(page + 1);
+    } else if (evt.key === 'ArrowLeft' && page > 0) {
+      setShouldRefocus();
+      handleChangePage(page - 1);
+    }
+  } else if (evt.key === 'Escape' && keyboard.enabled && !isSelectionMode) {
+    // escape key: tell Nebula to relinquish the table's focus to
+    // its parent element when nebula handles keyboard navigation
+    // and not in selection mode
+    preventDefaultBehavior(evt);
+    // @ts-ignore TODO: fix nebula api so that blur has the correct argument type
+    keyboard.blur?.(true);
+  }
 };
 
 /**
