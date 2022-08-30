@@ -290,8 +290,7 @@ export const handleBodyKeyDown = ({
       break;
     // Tab (+ shift): in selection mode and keyboard enabled, focus on selection toolbar
     case 'Tab':
-      // @ts-ignore TODO: fix nebula api so that target has the correct argument type
-      focusSelectionToolbar(evt.target, keyboard, evt.shiftKey);
+      focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
       break;
     default:
       break;
