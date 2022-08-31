@@ -97,7 +97,7 @@ export const handleResetFocus = ({
       const hasSelectedClassName = cell?.classList?.contains('selected');
       announce({
         keys: [
-          `${cell.textContent},`,
+          `${cell?.textContent},`,
           hasSelectedClassName ? 'SNTable.SelectionLabel.SelectedValue' : 'SNTable.SelectionLabel.NotSelectedValue',
         ],
       });
