@@ -6,7 +6,7 @@ import { removeAndFocus } from '../utils/handle-accessibility';
 import { StyledHeadRow, StyledTotalsCell } from '../styles';
 import { TableTotalsProps } from '../types';
 
-function TableTotals({ rootElement, tableData, theme, layout, keyboard }: TableTotalsProps) {
+function TableTotals({ rootElement, tableData, theme, layout, keyboard, isSelectionMode }: TableTotalsProps) {
   const { columns, paginationNeeded, totalsPosition, rows } = tableData;
   const headRowHeight = useContextSelector(TableContext, (value) => value.headRowHeight);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
@@ -27,7 +27,7 @@ function TableTotals({ rootElement, tableData, theme, layout, keyboard }: TableT
             className="sn-table-cell"
             tabIndex={-1}
             onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
-              handleTotalKeyDown(e, rootElement, cellCoord, setFocusedCellCoord);
+              handleTotalKeyDown(e, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
             }}
             onMouseDown={() => {
               removeAndFocus(cellCoord, rootElement, setFocusedCellCoord, keyboard);

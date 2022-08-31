@@ -26,6 +26,7 @@ function TableHeadWrapper({
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
   const headRowRef = useRef<HTMLElement>();
+  const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
 
   useEffect(() => {
     headRowRef.current && setHeadRowHeight(headRowRef.current.getBoundingClientRect().height);
@@ -51,7 +52,7 @@ function TableHeadWrapper({
               column,
               changeSortOrder,
               layout,
-              isSortingEnabled: !constraints.active,
+              isInteractionEnabled,
               setFocusedCellCoord,
             });
           };
@@ -67,7 +68,7 @@ function TableHeadWrapper({
               aria-pressed={isCurrentColumnActive}
               onKeyDown={handleKeyDown}
               onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
-              onClick={() => !selectionsAPI.isModal() && !constraints.active && changeSortOrder(layout, column)}
+              onClick={() => isInteractionEnabled && changeSortOrder(layout, column)}
             >
               <StyledSortLabel
                 headerStyle={headerStyle}

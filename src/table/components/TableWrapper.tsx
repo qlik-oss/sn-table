@@ -123,7 +123,7 @@ export default function TableWrapper(props: TableWrapperProps) {
       </StyledTableContainer>
       {!constraints.active && (
         <FooterWrapper theme={theme} footerContainer={footerContainer}>
-          <PaginationContent {...props} handleChangePage={handleChangePage} isSelectionMode={selectionsAPI.isModal()} />
+          <PaginationContent {...props} handleChangePage={handleChangePage} isSelectionMode={isSelectionMode} />
         </FooterWrapper>
       )}
     </StyledTableWrapper>

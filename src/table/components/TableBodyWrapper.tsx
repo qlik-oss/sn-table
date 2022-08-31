@@ -51,7 +51,14 @@ function TableBodyWrapper({
   }, []);
 
   const totals = (
-    <TableTotals rootElement={rootElement} tableData={tableData} theme={theme} layout={layout} keyboard={keyboard} />
+    <TableTotals
+      rootElement={rootElement}
+      tableData={tableData}
+      theme={theme}
+      layout={layout}
+      keyboard={keyboard}
+      isSelectionMode={selectionsAPI.isModal()}
+    />
   );
 
   return (
