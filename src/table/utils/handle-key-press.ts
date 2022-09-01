@@ -73,7 +73,7 @@ export const getNextCellCoord = (
       if (allowedRows.top > 0) break;
       if (nextCol > 0) {
         nextCol--;
-      } else if (nextRow > allowedRows.top) {
+      } else if (nextRow > 0) {
         nextRow--;
         nextCol = columnCount - 1;
       }

@@ -274,14 +274,14 @@ describe('handle-key-press', () => {
       expect(nextCol).toBe(0);
     });
 
-    it('should go one cell forward when the last cell is not selected and the key is pressed down to bottom Totals row', () => {
+    it('should not move to the next row when the totals row is set at the bottom', () => {
       evt.key = 'ArrowDown';
-      const allowedRows = { top: 0, bottom: 0 };
+      const allowedRows = { top: 0, bottom: 1 };
       rowCount = 3;
       rowIndex = 1;
       colIndex = 0;
       const [nextRow, nextCol] = getNextCellCoord(evt, rootElement, [rowIndex, colIndex], allowedRows);
-      expect(nextRow).toBe(2);
+      expect(nextRow).toBe(1);
       expect(nextCol).toBe(0);
     });
 
@@ -294,7 +294,7 @@ describe('handle-key-press', () => {
 
     it('should go to one row down cell', () => {
       evt.key = 'ArrowDown';
-      rowCount = 3;
+      rowCount = 2;
       const [nextRow, nextCol] = getNextCellCoord(evt, rootElement, [rowIndex, colIndex]);
       expect(nextRow).toBe(1);
       expect(nextCol).toBe(0);
@@ -335,12 +335,12 @@ describe('handle-key-press', () => {
 
     it('should move to the next row when you reach to the end of the current row', () => {
       evt.key = 'ArrowRight';
-      rowCount = 5;
+      rowCount = 3;
       columnCount = 3;
-      rowIndex = 2;
+      rowIndex = 1;
       colIndex = 3;
       const [nextRow, nextCol] = getNextCellCoord(evt, rootElement, [rowIndex, colIndex]);
-      expect(nextRow).toBe(3);
+      expect(nextRow).toBe(2);
       expect(nextCol).toBe(0);
     });
 
