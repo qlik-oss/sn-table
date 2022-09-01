@@ -79,10 +79,12 @@ export const handleResetFocus = ({
   setFocusedCellCoord,
   keyboard,
   announce,
+  totalsPosition,
 }: HandleResetFocusProps) => {
   updateFocus({ focusType: 'removeTab', cell: findCellWithTabStop(rootElement) });
   // If you have selections ongoing, you want to stay on the same column
-  const cellCoord: [number, number] = isSelectionMode ? [1, focusedCellCoord[1]] : [0, 0];
+  const selectionCellCoord: [number, number] = [totalsPosition === 'top' ? 2 : 1, focusedCellCoord[1]];
+  const cellCoord: [number, number] = isSelectionMode ? selectionCellCoord : [0, 0];
   if (!keyboard.enabled || keyboard.active) {
     // Only run this if updates come from inside table
     const focusType = shouldRefocus.current ? 'focus' : 'addTab';

@@ -31,7 +31,7 @@ export default function TableWrapper(props: TableWrapperProps) {
     footerContainer,
     announce,
   } = props;
-  const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns } = tableData;
+  const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } = tableData;
   const { page, rowsPerPage } = pageInfo;
   const isSelectionMode = selectionsAPI.isModal();
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
@@ -90,6 +90,7 @@ export default function TableWrapper(props: TableWrapperProps) {
       isSelectionMode,
       keyboard,
       announce,
+      totalsPosition,
     });
   }, [rows.length, totalRowCount, totalColumnCount, page]);
 

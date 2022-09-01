@@ -187,6 +187,7 @@ describe('handle-accessibility', () => {
     let shouldRefocus: React.MutableRefObject<boolean>;
     let isSelectionMode: boolean;
     let announce: Announce;
+    let totalsPosition: string;
 
     const resetFocus = () =>
       handleAccessibility.handleResetFocus({
@@ -197,6 +198,7 @@ describe('handle-accessibility', () => {
         setFocusedCellCoord,
         keyboard,
         announce,
+        totalsPosition,
       });
 
     beforeEach(() => {
@@ -205,6 +207,7 @@ describe('handle-accessibility', () => {
       isSelectionMode = false;
       keyboard.enabled = true;
       keyboard.active = true;
+      totalsPosition = 'bottom';
       announce = jest.fn();
     });
 
@@ -249,6 +252,20 @@ describe('handle-accessibility', () => {
       expect(cell?.setAttribute).toHaveBeenCalledTimes(2);
       expect(setFocusedCellCoord).toHaveBeenCalledWith([1, 1]);
       expect(cell?.focus).not.toHaveBeenCalled();
+    });
+
+    it('should set focus on the first body cell when isSelectionMode is true and totals is on top', () => {
+      const row = { getElementsByClassName: () => [cell, cell] };
+      rootElement = {
+        getElementsByClassName: () => [row, row, row],
+        querySelector: () => cell,
+      } as unknown as HTMLElement;
+      isSelectionMode = true;
+      focusedCellCoord = [5, 0];
+      totalsPosition = 'top';
+
+      resetFocus();
+      expect(setFocusedCellCoord).toHaveBeenCalledWith([2, 0]);
     });
 
     it('should announce cell content and selection status for non selected first cell after focusing on it', () => {

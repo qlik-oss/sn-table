@@ -109,6 +109,7 @@ export interface HandleResetFocusProps {
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   keyboard: stardust.Keyboard;
   announce: Announce;
+  totalsPosition: string;
 }
 
 export interface ContextProviderProps {
