@@ -255,6 +255,11 @@ describe('handle-accessibility', () => {
     });
 
     it('should set focus on the first body cell when isSelectionMode is true and totals is on top', () => {
+      const row = { getElementsByClassName: () => [cell, cell] };
+      rootElement = {
+        getElementsByClassName: () => [row, row, row],
+        querySelector: () => cell,
+      } as unknown as HTMLElement;
       isSelectionMode = true;
       focusedCellCoord = [5, 0];
       totalsPosition = 'top';
