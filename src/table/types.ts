@@ -183,13 +183,13 @@ export interface TableBodyWrapperProps extends CommonTableProps {
   announce: Announce;
   setShouldRefocus(): void;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
-  isSelectionMode: boolean;
+  // isSelectionMode: boolean;
 }
 
 export interface TableTotalsProps extends CommonTableProps {
   rootElement: HTMLElement;
   layout: TableLayout;
-  isSelectionMode: boolean;
+  selectionsAPI: ExtendedSelectionAPI;
 }
 
 export interface PaginationContentProps extends CommonTableProps {

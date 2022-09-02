@@ -41,7 +41,6 @@ describe('<TableBodyWrapper />', () => {
           keyboard={keyboard}
           tableWrapperRef={tableWrapperRef}
           announce={announce}
-          isSelectionMode={false}
         />
       </TableContextProvider>
     );

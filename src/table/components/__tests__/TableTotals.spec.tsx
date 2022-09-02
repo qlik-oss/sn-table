@@ -27,7 +27,7 @@ describe('<TableTotals />', () => {
             theme={theme}
             layout={layout}
             keyboard={keyboard}
-            isSelectionMode={false}
+            selectionsAPI={selectionsAPI}
           />
         ) : (
           <></>

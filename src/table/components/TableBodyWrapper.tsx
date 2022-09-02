@@ -21,7 +21,6 @@ function TableBodyWrapper({
   keyboard,
   tableWrapperRef,
   announce,
-  isSelectionMode,
 }: TableBodyWrapperProps) {
   const { rows, columns, paginationNeeded, totalsPosition } = tableData;
   const columnsStylingIDsJSON = JSON.stringify(columns.map((column) => column.stylingIDs));
@@ -58,7 +57,7 @@ function TableBodyWrapper({
       theme={theme}
       layout={layout}
       keyboard={keyboard}
-      isSelectionMode={isSelectionMode}
+      selectionsAPI={selectionsAPI}
     />
   );
 
