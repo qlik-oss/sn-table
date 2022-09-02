@@ -183,7 +183,6 @@ export interface TableBodyWrapperProps extends CommonTableProps {
   announce: Announce;
   setShouldRefocus(): void;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
-  // isSelectionMode: boolean;
 }
 
 export interface TableTotalsProps extends CommonTableProps {
