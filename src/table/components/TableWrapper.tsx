@@ -119,7 +119,12 @@ export default function TableWrapper(props: TableWrapperProps) {
       >
         <Table stickyHeader aria-label={tableAriaLabel}>
           <TableHeadWrapper {...props} />
-          <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
+          <TableBodyWrapper
+            {...props}
+            setShouldRefocus={setShouldRefocus}
+            tableWrapperRef={tableWrapperRef}
+            isSelectionMode={isSelectionMode}
+          />
         </Table>
       </StyledTableContainer>
       {!constraints.active && (
