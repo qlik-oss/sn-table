@@ -417,4 +417,24 @@ describe('handle-accessibility', () => {
       expect(announce).toHaveBeenCalledWith({ keys: ['SNTable.SelectionLabel.NotSelectedValue'] });
     });
   });
+
+  describe('copyCellValue: ', () => {
+    let cellValue: Cell;
+    beforeEach(() => {
+      cellValue = {
+        qText: '251',
+      } as Cell;
+      console.log = jest.fn();
+    });
+
+    it('should copying value to clipboard successfully', () => {
+      Object.assign(navigator, {
+        clipboard: {
+          writeText: jest.fn().mockReturnValueOnce(Promise.resolve()),
+        },
+      });
+      handleAccessibility.copyCellValue(cellValue);
+      expect(console.log).not.toHaveBeenCalled();
+    });
+  });
 });

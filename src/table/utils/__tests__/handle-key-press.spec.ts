@@ -572,6 +572,7 @@ describe('handle-key-press', () => {
     let announce: Announce;
     let paginationNeeded: boolean;
     let totalsPosition: TotalsPosition;
+    let isFlagEnabled: (flag: string) => boolean;
 
     const runHandleBodyKeyDown = () =>
       handleBodyKeyDown({
@@ -586,6 +587,7 @@ describe('handle-key-press', () => {
         keyboard,
         paginationNeeded,
         totalsPosition,
+        isFlagEnabled,
       });
 
     beforeEach(() => {
@@ -621,12 +623,16 @@ describe('handle-key-press', () => {
       announce = jest.fn();
       paginationNeeded = true;
       totalsPosition = 'noTotals';
+      isFlagEnabled = jest.fn().mockReturnValue(true);
       jest.spyOn(handleAccessibility, 'focusSelectionToolbar').mockImplementation(() => jest.fn());
       jest.spyOn(handleAccessibility, 'announceSelectionState').mockImplementation(() => jest.fn());
+      jest.spyOn(handleAccessibility, 'copyCellValue');
       jest.spyOn(handleScroll, 'handleNavigateTop').mockImplementation(() => jest.fn());
     });
 
-    afterEach(() => jest.clearAllMocks());
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
 
     it('when press arrow down key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
       runHandleBodyKeyDown();
@@ -803,6 +809,28 @@ describe('handle-key-press', () => {
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(handleAccessibility.focusSelectionToolbar).toHaveBeenCalledTimes(1);
       expect(announce).not.toHaveBeenCalled();
+    });
+
+    it('should call copyCellValue when the pressed keys are Ctrl and C keys', () => {
+      evt.key = 'c';
+      evt.ctrlKey = true;
+      runHandleBodyKeyDown();
+      expect(handleAccessibility.copyCellValue).toHaveBeenCalled();
+    });
+
+    it('should call copyCellValue when the pressed keys are Meta and C keys', () => {
+      evt.key = 'c';
+      evt.metaKey = true;
+      runHandleBodyKeyDown();
+      expect(handleAccessibility.copyCellValue).toHaveBeenCalled();
+    });
+
+    it('should not call copyCellValue when the flag is disabled', () => {
+      evt.key = 'c';
+      evt.metaKey = true;
+      isFlagEnabled = jest.fn().mockReturnValue(false);
+      runHandleBodyKeyDown();
+      expect(handleAccessibility.copyCellValue).not.toHaveBeenCalled();
     });
 
     it('when other keys are pressed, should only prevent default behavior', () => {
