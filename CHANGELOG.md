@@ -1,3 +1,17 @@
+# [1.16.0](https://github.com/qlik-oss/sn-table/compare/v1.15.0...v1.16.0) (2022-09-05)
+
+### Bug Fixes
+
+- block ArrowUp on header ([#668](https://github.com/qlik-oss/sn-table/issues/668)) ([fca8f2c](https://github.com/qlik-oss/sn-table/commit/fca8f2ceacf0258c98e35afed65cd549291bf8a2))
+- ctrl and shift key focus issue on Totals ([#681](https://github.com/qlik-oss/sn-table/issues/681)) ([4c3732b](https://github.com/qlik-oss/sn-table/commit/4c3732b6ae71348f7facb7c1987c9c10da3925e1))
+- move total to reduce rerenders ([#677](https://github.com/qlik-oss/sn-table/issues/677)) ([34852a7](https://github.com/qlik-oss/sn-table/commit/34852a7761606e9895b87fa5c373745914017c37))
+- possibility of focus on totals cell when cell is in selection mode ([#679](https://github.com/qlik-oss/sn-table/issues/679)) ([7c77fd3](https://github.com/qlik-oss/sn-table/commit/7c77fd326cd7ea6b6e68cc2e0a71233911276c78))
+- seperately check if we should prevent default/stop prpogation ([#670](https://github.com/qlik-oss/sn-table/issues/670)) ([40c0f55](https://github.com/qlik-oss/sn-table/commit/40c0f55c4ccb61ac73535dc6b75cb480de1e1cb4))
+
+### Features
+
+- add TotalsAggrFuncMessage to sn-table property panel ([#673](https://github.com/qlik-oss/sn-table/issues/673)) ([dc73b47](https://github.com/qlik-oss/sn-table/commit/dc73b4789234449cd1674ba5507f1abfef4dfb55))
+
 # [1.15.0](https://github.com/qlik-oss/sn-table/compare/v1.14.0...v1.15.0) (2022-08-25)
 
 ### Bug Fixes
