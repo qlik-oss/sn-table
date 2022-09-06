@@ -188,7 +188,7 @@ export interface TableBodyWrapperProps extends CommonTableProps {
 export interface TableTotalsProps extends CommonTableProps {
   rootElement: HTMLElement;
   layout: TableLayout;
-  isSelectionMode: boolean;
+  selectionsAPI: ExtendedSelectionAPI;
 }
 
 export interface PaginationContentProps extends CommonTableProps {

@@ -57,7 +57,7 @@ function TableBodyWrapper({
       theme={theme}
       layout={layout}
       keyboard={keyboard}
-      isSelectionMode={selectionsAPI.isModal()}
+      selectionsAPI={selectionsAPI}
     />
   );
 
