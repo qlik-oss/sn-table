@@ -162,7 +162,7 @@ export const resetFocus = ({
 };
 
 /**
- * On focus is no longer in the table, resets the announcer and calls keyboard.blur
+ * When focus is no longer in the table, resets the announcer and calls keyboard.blur
  */
 export const handleFocusoutEvent = (
   evt: FocusEvent,
