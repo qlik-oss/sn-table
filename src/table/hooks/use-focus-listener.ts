@@ -1,6 +1,6 @@
 import { stardust } from '@nebula.js/stardust';
 import { useEffect } from 'react';
-import { handleFocusoutEvent } from '../utils/handle-accessibility';
+import { handleFocusoutEvent } from '../utils/accessibility-utils';
 
 const useFocusListener = (
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>,

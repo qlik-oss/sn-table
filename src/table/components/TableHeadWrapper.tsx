@@ -6,7 +6,7 @@ import { useContextSelector, TableContext } from '../context';
 import { VisuallyHidden, StyledHeadRow, StyledSortLabel } from '../styles';
 import { getHeaderStyle } from '../utils/styling-utils';
 import { handleHeadKeyDown } from '../utils/handle-key-press';
-import { handleMouseDownLabelToFocusHeadCell, handleClickToFocusHead } from '../utils/handle-accessibility';
+import { handleMouseDownLabelToFocusHeadCell, handleClickToFocusHead } from '../utils/handle-click';
 import { TableHeadWrapperProps } from '../types';
 
 function TableHeadWrapper({

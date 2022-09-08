@@ -4,7 +4,7 @@ import { render, fireEvent } from '@testing-library/react';
 import TableHeadWrapper from '../TableHeadWrapper';
 import { TableContextProvider } from '../../context';
 import * as handleKeyPress from '../../utils/handle-key-press';
-import * as handleAccessibility from '../../utils/handle-accessibility';
+import * as handleClick from '../../utils/handle-click';
 import {
   TableData,
   TableLayout,
@@ -117,14 +117,14 @@ describe('<TableHeadWrapper />', () => {
   });
 
   it('should call handleClickToFocusHead and handleMouseDownLabelToFocusHeadCell when clicking a header cell label', () => {
-    jest.spyOn(handleAccessibility, 'handleClickToFocusHead').mockImplementation(() => jest.fn());
-    jest.spyOn(handleAccessibility, 'handleMouseDownLabelToFocusHeadCell').mockImplementation(() => jest.fn());
+    jest.spyOn(handleClick, 'handleClickToFocusHead').mockImplementation(() => jest.fn());
+    jest.spyOn(handleClick, 'handleMouseDownLabelToFocusHeadCell').mockImplementation(() => jest.fn());
 
     const { getByText } = renderTableHead();
     fireEvent.mouseDown(getByText(tableData.columns[0].label));
 
-    expect(handleAccessibility.handleClickToFocusHead).toHaveBeenCalledTimes(1);
-    expect(handleAccessibility.handleMouseDownLabelToFocusHeadCell).toHaveBeenCalledTimes(1);
+    expect(handleClick.handleClickToFocusHead).toHaveBeenCalledTimes(1);
+    expect(handleClick.handleMouseDownLabelToFocusHeadCell).toHaveBeenCalledTimes(1);
   });
 
   it('should change `aria-pressed` and `aria-sort` when you sort by second column', () => {

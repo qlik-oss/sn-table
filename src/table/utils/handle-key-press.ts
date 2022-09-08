@@ -1,7 +1,7 @@
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 
-import { updateFocus, focusSelectionToolbar, getCellElement, announceSelectionState } from './handle-accessibility';
+import { focusSelectionToolbar, announceSelectionState, moveFocus } from './accessibility-utils';
 import { SelectionActions, TSelectionActions } from './selections-utils';
 import { handleNavigateTop } from './handle-scroll';
 import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownProps } from '../types';
@@ -33,78 +33,6 @@ export const shouldBubble = (
     // ctrl + shift + arrow to change page
     ((evt.key === 'ArrowLeft' || evt.key === 'ArrowRight') && isCtrlShift(evt))
   );
-};
-
-/**
- * Calculates the next cell to focus
- */
-export const getNextCellCoord = (
-  evt: React.KeyboardEvent,
-  rootElement: HTMLElement,
-  cellCoord: [number, number],
-  allowedRows: {
-    top: number;
-    bottom: number;
-  } = { top: 0, bottom: 0 }
-): [number, number] => {
-  const rowCount = rootElement.getElementsByClassName('sn-table-row').length;
-  const columnCount = rootElement.getElementsByClassName('sn-table-head-cell').length;
-  let [nextRow, nextCol] = cellCoord;
-
-  switch (evt.key) {
-    case 'ArrowDown':
-      nextRow < rowCount - 1 - allowedRows.bottom && nextRow++;
-      break;
-    case 'ArrowUp':
-      nextRow > allowedRows.top && nextRow--;
-      break;
-    case 'ArrowRight':
-      // allowedRows.top greater than 0 means we are in selection mode
-      if (allowedRows.top > 0) break;
-      if (nextCol < columnCount - 1) {
-        nextCol++;
-      } else if (nextRow < rowCount - 1) {
-        nextRow++;
-        nextCol = 0;
-      }
-      break;
-    case 'ArrowLeft':
-      // allowedRows.top greater than 0 means we are in selection mode
-      if (allowedRows.top > 0) break;
-      if (nextCol > 0) {
-        nextCol--;
-      } else if (nextRow > 0) {
-        nextRow--;
-        nextCol = columnCount - 1;
-      }
-      break;
-    default:
-      break;
-  }
-
-  return [nextRow, nextCol];
-};
-
-/**
- * resets and adds new focus to a table cell based which key is pressed
- */
-export const moveFocus = (
-  evt: React.KeyboardEvent,
-  rootElement: HTMLElement,
-  cellCoord: [number, number],
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  allowedRows?: {
-    top: number;
-    bottom: number;
-  }
-) => {
-  updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
-  const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, allowedRows);
-  const nextCell = getCellElement(rootElement, nextCellCoord);
-  updateFocus({ focusType: 'focus', cell: nextCell });
-  setFocusedCellCoord(nextCellCoord);
-
-  return nextCell;
 };
 
 /**

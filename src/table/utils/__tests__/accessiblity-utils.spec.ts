@@ -1,7 +1,7 @@
-import { MouseEvent } from 'react';
 import { stardust } from '@nebula.js/stardust';
-import { Announce, TotalsPosition, Cell } from '../../../types';
-import * as handleAccessibility from '../handle-accessibility';
+import React from 'react';
+import { Announce } from '../../../types';
+import * as accessibilityUtils from '../accessibility-utils';
 
 describe('handle-accessibility', () => {
   let cell: HTMLTableCellElement | undefined;
@@ -9,7 +9,6 @@ describe('handle-accessibility', () => {
   let rootElement: HTMLElement;
   let focusedCellCoord: [number, number];
   let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
-  let evt: MouseEvent;
 
   beforeEach(() => {
     cell = { focus: jest.fn(), blur: jest.fn(), setAttribute: jest.fn() } as unknown as HTMLTableCellElement;
@@ -37,7 +36,7 @@ describe('handle-accessibility', () => {
     });
 
     it('should focus cell and call setAttribute when focusType is focus', () => {
-      handleAccessibility.updateFocus({ focusType, cell });
+      accessibilityUtils.updateFocus({ focusType, cell });
       expect(cell?.focus).toHaveBeenCalledTimes(1);
       expect(cell?.setAttribute).toHaveBeenCalledWith('tabIndex', '0');
     });
@@ -45,7 +44,7 @@ describe('handle-accessibility', () => {
     it('should blur cell and call setAttribute when focusType is blur', () => {
       focusType = 'blur';
 
-      handleAccessibility.updateFocus({ focusType, cell });
+      accessibilityUtils.updateFocus({ focusType, cell });
       expect(cell?.blur).toHaveBeenCalledTimes(1);
       expect(cell?.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
     });
@@ -53,7 +52,7 @@ describe('handle-accessibility', () => {
     it('should call setAttribute when focusType is addTab', () => {
       focusType = 'addTab';
 
-      handleAccessibility.updateFocus({ focusType, cell });
+      accessibilityUtils.updateFocus({ focusType, cell });
       expect(cell?.focus).not.toHaveBeenCalled();
       expect(cell?.setAttribute).toHaveBeenCalledWith('tabIndex', '0');
     });
@@ -61,14 +60,14 @@ describe('handle-accessibility', () => {
     it('should call setAttribute when focusType is removeTab', () => {
       focusType = 'removeTab';
 
-      handleAccessibility.updateFocus({ focusType, cell });
+      accessibilityUtils.updateFocus({ focusType, cell });
       expect(cell?.blur).not.toHaveBeenCalled();
       expect(cell?.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
     });
 
     it('should early return and not throw error when cell is undefined', () => {
       cell = undefined;
-      expect(() => handleAccessibility.updateFocus({ focusType, cell })).not.toThrow();
+      expect(() => accessibilityUtils.updateFocus({ focusType, cell })).not.toThrow();
     });
   });
 
@@ -91,7 +90,7 @@ describe('handle-accessibility', () => {
     it('should return active td element', () => {
       cell = elementCreator('td', '0') as HTMLTableCellElement;
 
-      const cellElement = handleAccessibility.findCellWithTabStop(rootElement);
+      const cellElement = accessibilityUtils.findCellWithTabStop(rootElement);
 
       expect(cellElement).not.toBeNull();
       expect(cellElement.tagName).toBe('TD');
@@ -100,7 +99,7 @@ describe('handle-accessibility', () => {
 
     it('should return active th element', () => {
       cell = elementCreator('th', '0') as HTMLTableCellElement;
-      const cellElement = handleAccessibility.findCellWithTabStop(rootElement);
+      const cellElement = accessibilityUtils.findCellWithTabStop(rootElement);
 
       expect(cellElement).not.toBeNull();
       expect(cellElement.tagName).toBe('TH');
@@ -109,77 +108,8 @@ describe('handle-accessibility', () => {
 
     it('should return null', () => {
       cell = elementCreator('div', '-1') as HTMLTableCellElement;
-      const cellElement = handleAccessibility.findCellWithTabStop(rootElement);
+      const cellElement = accessibilityUtils.findCellWithTabStop(rootElement);
       expect(cellElement).toBeNull();
-    });
-  });
-
-  describe('handleClickToFocusBody', () => {
-    let totalsPosition: TotalsPosition;
-    const cellData = {
-      rawRowIdx: 0,
-      rawColIdx: 0,
-    } as Cell;
-
-    beforeEach(() => {
-      totalsPosition = 'noTotals';
-    });
-
-    it('should indirectly call setFocusedCellCoord with adjusted index, and keyboard.focus', () => {
-      handleAccessibility.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard, totalsPosition);
-      expect(cell?.setAttribute).toHaveBeenCalledTimes(1);
-      expect(cell?.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
-      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).toHaveBeenCalledWith([1, 0]);
-      expect(keyboard.focus).toHaveBeenCalledTimes(1);
-    });
-
-    it('should indirectly call setFocusedCellCoord with adjusted index, but not keyboard.focus when keyboard.enabled is falsey', () => {
-      keyboard.enabled = false;
-
-      handleAccessibility.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard, totalsPosition);
-      expect(cell?.setAttribute).toHaveBeenCalledTimes(1);
-      expect(cell?.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
-      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).toHaveBeenCalledWith([1, 0]);
-      expect(keyboard.focus).not.toHaveBeenCalled();
-    });
-
-    it('should indirectly call setFocusedCellCoord with index adjusted for totals on top, and keyboard.focus', () => {
-      totalsPosition = 'top';
-
-      handleAccessibility.handleClickToFocusBody(cellData, rootElement, setFocusedCellCoord, keyboard, totalsPosition);
-      expect(cell?.setAttribute).toHaveBeenCalledTimes(1);
-      expect(cell?.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
-      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).toHaveBeenCalledWith([2, 0]);
-      expect(keyboard.focus).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('handleClickToFocusHead', () => {
-    const columnIndex = 2;
-
-    it('should indirectly call updateFocus, setFocusedCellCoord and keyboard.focus', () => {
-      handleAccessibility.handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard);
-      expect(cell?.setAttribute).toHaveBeenCalledTimes(1);
-      expect(cell?.setAttribute).toHaveBeenCalledWith('tabIndex', '-1');
-      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).toHaveBeenCalledWith([0, 2]);
-      expect(keyboard.focus).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('handleMouseDownLabelToFocusHeadCell', () => {
-    evt = { preventDefault: jest.fn() } as unknown as MouseEvent;
-    const columnIndex = 0;
-
-    it('should indirectly call updateFocus, setFocusedCellCoord and keyboard.focus', () => {
-      handleAccessibility.handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex);
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(cell?.focus).toHaveBeenCalledTimes(1);
-      expect(cell?.setAttribute).toHaveBeenCalledTimes(1);
-      expect(cell?.setAttribute).toHaveBeenCalledWith('tabIndex', '0');
     });
   });
 
@@ -190,7 +120,7 @@ describe('handle-accessibility', () => {
     let totalsPosition: string;
 
     const resetFocus = () =>
-      handleAccessibility.handleResetFocus({
+      accessibilityUtils.resetFocus({
         focusedCellCoord,
         rootElement,
         shouldRefocus,
@@ -328,7 +258,7 @@ describe('handle-accessibility', () => {
     });
 
     it('should call blur and remove announcements when currentTarget does not contain relatedTarget, shouldRefocus is false and keyboard.enabled is true', () => {
-      handleAccessibility.handleFocusoutEvent(focusoutEvent, shouldRefocus, keyboard);
+      accessibilityUtils.handleFocusoutEvent(focusoutEvent, shouldRefocus, keyboard);
       expect(keyboard.blur).toHaveBeenCalledWith(false);
       expect(announcement1.innerHTML).toBe('');
       expect(announcement2.innerHTML).toBe('');
@@ -337,21 +267,21 @@ describe('handle-accessibility', () => {
     it('should not call blur when currentTarget contains relatedTarget', () => {
       containsRelatedTarget = true;
 
-      handleAccessibility.handleFocusoutEvent(focusoutEvent, shouldRefocus, keyboard);
+      accessibilityUtils.handleFocusoutEvent(focusoutEvent, shouldRefocus, keyboard);
       expect(keyboard.blur).not.toHaveBeenCalled();
     });
 
     it('should not call blur when shouldRefocus is true', () => {
       shouldRefocus.current = true;
 
-      handleAccessibility.handleFocusoutEvent(focusoutEvent, shouldRefocus, keyboard);
+      accessibilityUtils.handleFocusoutEvent(focusoutEvent, shouldRefocus, keyboard);
       expect(keyboard.blur).not.toHaveBeenCalled();
     });
 
     it('should not call blur when keyboard.enabled is false', () => {
       keyboard.enabled = false;
 
-      handleAccessibility.handleFocusoutEvent(focusoutEvent, shouldRefocus, keyboard);
+      accessibilityUtils.handleFocusoutEvent(focusoutEvent, shouldRefocus, keyboard);
       expect(keyboard.blur).not.toHaveBeenCalled();
     });
   });
@@ -370,14 +300,14 @@ describe('handle-accessibility', () => {
     });
 
     it('should call parentElement.focus when clientConfirmButton exists', () => {
-      handleAccessibility.focusSelectionToolbar(element, keyboard, last);
+      accessibilityUtils.focusSelectionToolbar(element, keyboard, last);
       expect(parentElement?.focus).toHaveBeenCalledTimes(1);
       expect(keyboard.focusSelection).not.toHaveBeenCalled();
     });
 
     it("should call keyboard.focusSelection when clientConfirmButton doesn't exist", () => {
       parentElement = null;
-      handleAccessibility.focusSelectionToolbar(element, keyboard, last);
+      accessibilityUtils.focusSelectionToolbar(element, keyboard, last);
       expect(keyboard.focusSelection).toHaveBeenCalledWith(false);
     });
   });
@@ -400,21 +330,205 @@ describe('handle-accessibility', () => {
     });
 
     it('should do nothing when not in selection mode', () => {
-      handleAccessibility.announceSelectionState(announce, nextCell, isSelectionMode);
+      accessibilityUtils.announceSelectionState(announce, nextCell, isSelectionMode);
       expect(announce).not.toHaveBeenCalled();
     });
 
     it('should call announce with SelectedValue key when in selection mode and value is selected', () => {
       isSelectionMode = true;
       isSelected = true;
-      handleAccessibility.announceSelectionState(announce, nextCell, isSelectionMode);
+      accessibilityUtils.announceSelectionState(announce, nextCell, isSelectionMode);
       expect(announce).toHaveBeenCalledWith({ keys: ['SNTable.SelectionLabel.SelectedValue'] });
     });
 
     it('should Call announce with NotSelectedValue key when in selection mode and value is not selected', () => {
       isSelectionMode = true;
-      handleAccessibility.announceSelectionState(announce, nextCell, isSelectionMode);
+      accessibilityUtils.announceSelectionState(announce, nextCell, isSelectionMode);
       expect(announce).toHaveBeenCalledWith({ keys: ['SNTable.SelectionLabel.NotSelectedValue'] });
+    });
+  });
+
+  describe('getNextCellCoord', () => {
+    let rowCount: number;
+    let columnCount: number;
+    let rowIndex: number;
+    let colIndex: number;
+    let evt: React.KeyboardEvent;
+
+    beforeEach(() => {
+      evt = {} as unknown as React.KeyboardEvent;
+      rowCount = 1;
+      columnCount = 1;
+      rootElement = {
+        getElementsByClassName: (className: string) =>
+          className === 'sn-table-row' ? Array(rowCount) : Array(columnCount),
+      } as unknown as HTMLElement;
+      rowIndex = 0;
+      colIndex = 0;
+    });
+
+    it('should stay the current cell when move down', () => {
+      evt.key = 'ArrowDown';
+      const [nextRow, nextCol] = accessibilityUtils.getNextCellCoord(evt, rootElement, [rowIndex, colIndex]);
+      expect(nextRow).toBe(0);
+      expect(nextCol).toBe(0);
+    });
+
+    it('should not move to the next row when the totals row is set at the bottom', () => {
+      evt.key = 'ArrowDown';
+      const allowedRows = { top: 0, bottom: 1 };
+      rowCount = 3;
+      rowIndex = 1;
+      colIndex = 0;
+      const [nextRow, nextCol] = accessibilityUtils.getNextCellCoord(
+        evt,
+        rootElement,
+        [rowIndex, colIndex],
+        allowedRows
+      );
+      expect(nextRow).toBe(1);
+      expect(nextCol).toBe(0);
+    });
+
+    it('should stay the current cell when move up', () => {
+      evt.key = 'ArrowUp';
+      const [nextRow, nextCol] = accessibilityUtils.getNextCellCoord(evt, rootElement, [rowIndex, colIndex]);
+      expect(nextRow).toBe(0);
+      expect(nextCol).toBe(0);
+    });
+
+    it('should go to one row down cell', () => {
+      evt.key = 'ArrowDown';
+      rowCount = 2;
+      const [nextRow, nextCol] = accessibilityUtils.getNextCellCoord(evt, rootElement, [rowIndex, colIndex]);
+      expect(nextRow).toBe(1);
+      expect(nextCol).toBe(0);
+    });
+
+    it('should go to one row up cell', () => {
+      evt.key = 'ArrowUp';
+      rowCount = 2;
+      rowIndex = 1;
+      const [nextRow, nextCol] = accessibilityUtils.getNextCellCoord(evt, rootElement, [rowIndex, colIndex]);
+      expect(nextRow).toBe(0);
+      expect(nextCol).toBe(0);
+    });
+
+    it('should go to one column left cell', () => {
+      evt.key = 'ArrowLeft';
+      columnCount = 2;
+      colIndex = 1;
+      const [nextRow, nextCol] = accessibilityUtils.getNextCellCoord(evt, rootElement, [rowIndex, colIndex]);
+      expect(nextRow).toBe(0);
+      expect(nextCol).toBe(0);
+    });
+
+    it('should go to one column right cell', () => {
+      evt.key = 'ArrowRight';
+      columnCount = 2;
+      const [nextRow, nextCol] = accessibilityUtils.getNextCellCoord(evt, rootElement, [rowIndex, colIndex]);
+      expect(nextRow).toBe(0);
+      expect(nextCol).toBe(1);
+    });
+
+    it('should stay the current cell when other keys are pressed', () => {
+      evt.key = 'Control';
+      const [nextRow, nextCol] = accessibilityUtils.getNextCellCoord(evt, rootElement, [rowIndex, colIndex]);
+      expect(nextRow).toBe(0);
+      expect(nextCol).toBe(0);
+    });
+
+    it('should move to the next row when you reach to the end of the current row', () => {
+      evt.key = 'ArrowRight';
+      rowCount = 3;
+      columnCount = 3;
+      rowIndex = 1;
+      colIndex = 3;
+      const [nextRow, nextCol] = accessibilityUtils.getNextCellCoord(evt, rootElement, [rowIndex, colIndex]);
+      expect(nextRow).toBe(2);
+      expect(nextCol).toBe(0);
+    });
+
+    it('should move to the prev row when we reach to the beginning of the current row', () => {
+      evt.key = 'ArrowLeft';
+      rowCount = 3;
+      columnCount = 3;
+      rowIndex = 2;
+      colIndex = 0;
+      const [nextRow, nextCol] = accessibilityUtils.getNextCellCoord(evt, rootElement, [rowIndex, colIndex]);
+      expect(nextRow).toBe(1);
+      expect(nextCol).toBe(2);
+    });
+
+    it('should stay at the first row and first col of table when we reached to the beginning of the table', () => {
+      evt.key = 'ArrowLeft';
+      rowCount = 2;
+      columnCount = 2;
+      rowIndex = 0;
+      colIndex = 0;
+      const [nextRow, nextCol] = accessibilityUtils.getNextCellCoord(evt, rootElement, [rowIndex, colIndex]);
+      expect(nextRow).toBe(0);
+      expect(nextCol).toBe(0);
+    });
+
+    it('should stay at the end row and end col of table when you reached to the end of the table', () => {
+      evt.key = 'ArrowRight';
+      rowCount = 2;
+      columnCount = 2;
+      rowIndex = 1;
+      colIndex = 1;
+      const [nextRow, nextCol] = accessibilityUtils.getNextCellCoord(evt, rootElement, [rowIndex, colIndex]);
+      expect(nextRow).toBe(1);
+      expect(nextCol).toBe(1);
+    });
+
+    it('should stay at the current cell when allowedRows cell index is 1 and trying to move up from rowIdx 1', () => {
+      evt.key = 'ArrowUp';
+      const allowedRows = { top: 1, bottom: 0 };
+      rowCount = 3;
+      rowIndex = 1;
+      const [nextRow, nextCol] = accessibilityUtils.getNextCellCoord(
+        evt,
+        rootElement,
+        [rowIndex, colIndex],
+        allowedRows
+      );
+      expect(nextRow).toBe(1);
+      expect(nextCol).toBe(0);
+    });
+
+    it('should stay at the current cell when trying to move left and allowedRows is > 0 (i.e in selection mode', () => {
+      evt.key = 'ArrowLeft';
+      const allowedRows = { top: 1, bottom: 0 };
+      rowCount = 3;
+      columnCount = 3;
+      rowIndex = 1;
+      colIndex = 1;
+      const [nextRow, nextCol] = accessibilityUtils.getNextCellCoord(
+        evt,
+        rootElement,
+        [rowIndex, colIndex],
+        allowedRows
+      );
+      expect(nextRow).toBe(1);
+      expect(nextCol).toBe(1);
+    });
+
+    it('should stay at the current cell when trying to move right and allowedRows is > 0 (i.e in selection mode', () => {
+      evt.key = 'ArrowRight';
+      const allowedRows = { top: 1, bottom: 0 };
+      rowCount = 3;
+      columnCount = 3;
+      rowIndex = 1;
+      colIndex = 1;
+      const [nextRow, nextCol] = accessibilityUtils.getNextCellCoord(
+        evt,
+        rootElement,
+        [rowIndex, colIndex],
+        allowedRows
+      );
+      expect(nextRow).toBe(1);
+      expect(nextCol).toBe(1);
     });
   });
 });
