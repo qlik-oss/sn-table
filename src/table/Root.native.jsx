@@ -5,7 +5,7 @@ export function mount(rootElement) {
   rootElement.mount((props) => <Table {...props} element={rootElement} />);
 }
 
-export function render(rootElement, data) {
+export function render({ rootElement, ...data }) {
   rootElement.renderComponent(data);
 }
 

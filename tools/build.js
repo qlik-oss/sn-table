@@ -58,21 +58,21 @@ const configureReactNative = () => {
 
 const main = async () => {
   console.log('---> BUILDING SUPERNOVA');
+
   const watcher = await build(buildArgs);
   if (buildExt) {
     buildExtension();
     if (watch) {
       watcher.on('event', (event) => {
-        if (event.code === 'BUNDLE_END') {
-          buildExtension();
-        }
+        event.code === 'BUNDLE_END' && buildExtension();
       });
     }
   }
+
   if (reactNative) {
     configureReactNative();
+    await build(buildArgs);
   }
-  build(buildArgs);
 };
 
 main();

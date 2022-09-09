@@ -12,7 +12,8 @@ import {
   ResetAction,
   ClearAction,
 } from '../selections-utils';
-import { TableCell, SelectionState, ExtendedSelectionAPI, AnnounceFn, ContextValue } from '../../../types';
+import { Cell, ExtendedSelectionAPI, Announce } from '../../../types';
+import { SelectionState } from '../../types';
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {
@@ -22,7 +23,7 @@ describe('selections-utils', () => {
     let setShouldRefocus: jest.Mock<any, any>;
     let keyboard: stardust.Keyboard;
     let containsActiveElement: boolean;
-    let tableWrapperRef: React.MutableRefObject<HTMLElement>;
+    let tableWrapperRef: React.MutableRefObject<HTMLDivElement>;
 
     beforeEach(() => {
       selectionDispatch = jest.fn();
@@ -31,13 +32,14 @@ describe('selections-utils', () => {
         on: jest.fn(),
         removeListener: jest.fn(),
       } as unknown as ExtendedSelectionAPI;
-      keyboard = { enabled: true, active: false, blur: jest.fn() };
+      keyboard = { enabled: true, active: false, blur: jest.fn(), focus: jest.fn(), focusSelection: jest.fn() };
+
       containsActiveElement = true;
       tableWrapperRef = {
         current: {
           contains: () => containsActiveElement,
         },
-      } as unknown as React.MutableRefObject<HTMLElement>;
+      } as unknown as React.MutableRefObject<HTMLDivElement>;
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -105,7 +107,7 @@ describe('selections-utils', () => {
 
   describe('reducer', () => {
     let state: SelectionState;
-    let cell: TableCell;
+    let cell: Cell;
 
     beforeEach(() => {
       state = {
@@ -119,7 +121,7 @@ describe('selections-utils', () => {
         } as unknown as ExtendedSelectionAPI,
         isSelectMultiValues: false,
       };
-      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1 } as TableCell;
+      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1 } as Cell;
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -170,7 +172,7 @@ describe('selections-utils', () => {
         const newState = reducer(state, action);
         expect(newState).toEqual({
           ...state,
-          rows: { [cell.qElemNumber]: cell.rowIdx, [cell.prevQElemNumber]: cell.rowIdx - 1 },
+          rows: { [cell.qElemNumber]: cell.rowIdx, [cell.prevQElemNumber as number]: cell.rowIdx - 1 },
           colIdx: cell.colIdx,
           isSelectMultiValues: true,
         });
@@ -244,7 +246,7 @@ describe('selections-utils', () => {
   });
 
   describe('handleAnnounceSelectionStatus', () => {
-    let announce: AnnounceFn;
+    let announce: Announce;
     let rowsLength: number;
     let isAddition: boolean;
 
@@ -309,7 +311,7 @@ describe('selections-utils', () => {
 
   describe('getSelectedRows', () => {
     let selectedRows: Record<string, number>;
-    let cell: TableCell;
+    let cell: Cell;
     let evt: React.KeyboardEvent;
 
     beforeEach(() => {
@@ -317,7 +319,7 @@ describe('selections-utils', () => {
       cell = {
         qElemNumber: 0,
         rowIdx: 0,
-      } as TableCell;
+      } as Cell;
       evt = {} as React.KeyboardEvent;
     });
 
@@ -360,54 +362,53 @@ describe('selections-utils', () => {
 
   describe('getCellSelectionState', () => {
     let isModal: boolean;
-    let cell: TableCell;
-    let value: ContextValue;
+    let cell: Cell;
+    let selectionState: SelectionState;
 
     beforeEach(() => {
       isModal = true;
       cell = {
         qElemNumber: 1,
         colIdx: 1,
-      } as TableCell;
-      value = {
-        selectionState: {
-          colIdx: 1,
-          rows: { 1: 1 },
-          api: {
-            isModal: () => isModal,
-          } as ExtendedSelectionAPI,
-          isSelectMultiValues: false,
-        },
-      } as unknown as ContextValue;
+      } as Cell;
+
+      selectionState = {
+        colIdx: 1,
+        rows: { 1: 1 },
+        api: {
+          isModal: () => isModal,
+        } as ExtendedSelectionAPI,
+        isSelectMultiValues: false,
+      };
     });
 
     afterEach(() => jest.clearAllMocks());
 
     it('should return selected when selected', () => {
-      const cellState = getCellSelectionState(cell, value);
+      const cellState = getCellSelectionState(cell, selectionState);
       expect(cellState).toEqual(SelectionStates.SELECTED);
     });
 
     it('should return possible when row is not selected', () => {
       cell.qElemNumber = 2;
 
-      const cellState = getCellSelectionState(cell, value);
+      const cellState = getCellSelectionState(cell, selectionState);
       expect(cellState).toEqual(SelectionStates.POSSIBLE);
     });
 
     it('should return excluded when colIdx is not in selectionState', () => {
       cell.colIdx = 2;
 
-      const cellState = getCellSelectionState(cell, value);
+      const cellState = getCellSelectionState(cell, selectionState);
       expect(cellState).toEqual(SelectionStates.EXCLUDED);
     });
 
     it('should return inactive when when isModal is false', () => {
-      value.selectionState.colIdx = -1;
-      value.selectionState.rows = {};
+      selectionState.colIdx = -1;
+      selectionState.rows = {};
       isModal = false;
 
-      const cellState = getCellSelectionState(cell, value);
+      const cellState = getCellSelectionState(cell, selectionState);
       expect(cellState).toEqual(SelectionStates.INACTIVE);
     });
   });

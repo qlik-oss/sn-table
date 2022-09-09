@@ -1,6 +1,8 @@
-import { stardust, useState, useEffect } from '@nebula.js/stardust';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useMemo } from '@nebula.js/stardust';
+
 import registerLocale from '../locale/src';
-import { AnnounceArgs } from '../types';
+import { AnnounceArgs, ExtendedTranslator, Announce } from '../types';
 
 // eslint-disable-next-line no-shadow
 enum AnnouncerElements {
@@ -9,7 +11,11 @@ enum AnnouncerElements {
 }
 
 /* creates the function for announcement */
-export const announcementFactory = (rootElement: Element, translator: stardust.Translator, prevAnnounceEl?: string) => {
+export const announcementFactory = (
+  rootElement: HTMLElement,
+  translator: ExtendedTranslator,
+  prevAnnounceEl?: string
+): Announce => {
   let previousAnnouncementElement = prevAnnounceEl || null;
 
   /* updates the aria-live elements using the translation keys, makes sure it is announced every time it is called */
@@ -42,17 +48,10 @@ export const announcementFactory = (rootElement: Element, translator: stardust.T
   };
 };
 
-const useAnnounceAndTranslations = (rootElement: Element, translator: stardust.Translator) => {
-  const [announce, setAnnounce] = useState<undefined | ((arg0: AnnounceArgs) => void)>(undefined);
-
-  useEffect(() => {
-    if (rootElement && translator) {
-      registerLocale(translator);
-      setAnnounce(() => announcementFactory(rootElement, translator));
-    }
+const useAnnounceAndTranslations = (rootElement: HTMLElement, translator: ExtendedTranslator) =>
+  useMemo(() => {
+    registerLocale(translator);
+    return () => announcementFactory(rootElement, translator);
   }, [rootElement, translator.language()]);
-
-  return announce;
-};
 
 export default useAnnounceAndTranslations;
