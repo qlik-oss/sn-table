@@ -113,7 +113,7 @@ describe('handle-accessibility', () => {
     });
   });
 
-  describe('handleResetFocus', () => {
+  describe('resetFocus', () => {
     let shouldRefocus: React.MutableRefObject<boolean>;
     let isSelectionMode: boolean;
     let announce: Announce;
@@ -529,6 +529,23 @@ describe('handle-accessibility', () => {
       );
       expect(nextRow).toBe(1);
       expect(nextCol).toBe(1);
+    });
+  });
+
+  describe('removeTabAndFocusCell', () => {
+    const newCoord: [number, number] = [1, 1];
+
+    it('should call setFocusedCellCoord but not keyboard.focus when keyboard.enabled is false', () => {
+      keyboard.enabled = false;
+      accessibilityUtils.removeTabAndFocusCell(newCoord, rootElement, setFocusedCellCoord, keyboard);
+      expect(setFocusedCellCoord).toHaveBeenCalledWith(newCoord);
+      expect(keyboard.focus).not.toHaveBeenCalled();
+    });
+
+    it('should call update setFocusedCellCoord and keyboard.focus when keyboard.enabled is true', () => {
+      accessibilityUtils.removeTabAndFocusCell(newCoord, rootElement, setFocusedCellCoord, keyboard);
+      expect(setFocusedCellCoord).toHaveBeenCalledWith(newCoord);
+      expect(keyboard.focus).toHaveBeenCalledTimes(1);
     });
   });
 });

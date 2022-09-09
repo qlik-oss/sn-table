@@ -11,7 +11,7 @@ export const findCellWithTabStop = (rootElement: HTMLElement) =>
   rootElement.querySelector("td[tabindex='0'], th[tabindex='0']") as HTMLTableCellElement;
 
 /**
- * Removes/adds tab stop and sometimes focuses or blurs the cell, depending on focusTupe
+ * Removes/adds tab stop and sometimes focus/blurs the cell, depending on focusType
  */
 export const updateFocus = ({ focusType, cell }: CellFocusProps) => {
   if (!cell) return;
@@ -109,7 +109,7 @@ export const moveFocus = (
 };
 
 /**
- * Resets and adds new focus to the cell at position newCoord
+ * Resets and adds new focus to the cell at position newCoord. no need for element.focus() since that is done natively
  */
 export const removeTabAndFocusCell = (
   newCoord: [number, number],
