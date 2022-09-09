@@ -1,6 +1,6 @@
 const RowProps = Object.freeze({
   rowHeight: 40,
-  headerHeight: 48,
+  headerHeight: 40,
   borderRadius: 4,
   headerBackgroundColor: '#F0F0F0',
   borderBackgroundColor: '#DFDFDF',

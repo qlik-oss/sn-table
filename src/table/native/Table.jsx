@@ -1,12 +1,12 @@
 /* eslint-disable no-restricted-syntax */
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { View, StyleSheet, useWindowDimensions } from 'react-native';
+import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import { View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import ReactNativeStraightTableViewManager from '@qlik/react-native-simple-grid';
 import { RowProps } from './Props';
 import SelectionCaches from './SelectionCaches';
 import DataCacheStream from './DataCachesStream';
-import { loadColumnWidths, storeColumnWidths } from './ColumnWidthStorage';
+import { getKey } from './ColumnWidthStorage';
 import { freezeFirstColumn } from '../utils/scrolling-props';
 import { getBodyCellStyle, getHeaderStyle } from '../utils/styling-utils';
 
@@ -21,28 +21,16 @@ const styles = StyleSheet.create({
   },
 });
 
-function transformRepresentation(e, theme) {
-  if (e.representation?.miniChart?.colors && theme) {
-    const { colors } = e.representation.miniChart;
-    for (const [key, value] of Object.entries(colors)) {
-      if ((colors[key]?.color !== 'none' && value.index > 0) || !colors[key].color) {
-        colors[key].index -= 1;
-        colors[key].color = theme.getColorPickerColor(colors[key]);
-      }
-    }
-    e.representation.miniChart.colors = colors;
-  }
-  return e.representation;
-}
-
 const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app, rect, theme }) => {
   const selectionsCaches = useRef(new SelectionCaches(selectionsAPI));
-  const windowDims = useWindowDimensions();
   const [tableData, setTableData] = useState(undefined);
   const [clearSelections, setClearSelections] = useState('no');
   const dataStreamCaches = useRef(new DataCacheStream(manageData));
   const tableTheme = useRef({ ...RowProps });
-  const mounted = useRef(false);
+
+  const name = useMemo(() => {
+    return getKey(app, layout);
+  }, [app, layout]);
 
   const contentStyle = useMemo(() => {
     const cellStyle = getBodyCellStyle(layout, theme);
@@ -54,50 +42,52 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
 
   useEffect(() => {
     const handleData = async () => {
+      function transformRepresentation(e) {
+        if (e.representation?.miniChart?.colors && theme) {
+          const { colors } = e.representation.miniChart;
+          for (const [key, value] of Object.entries(colors)) {
+            if ((colors[key]?.color !== 'none' && value.index > 0) || !colors[key].color) {
+              colors[key].index -= 1;
+              colors[key].color = theme.getColorPickerColor(colors[key]);
+            }
+          }
+          e.representation.miniChart.colors = colors;
+        }
+        return e.representation;
+      }
+
       const data = await dataStreamCaches.current.invalidate(model, layout, {
         page: 0,
         rowsPerPage: 100,
         rowsPerPageOptions: [],
       });
-      // only load from storage if it just got mounted
-      if (!mounted.current) {
-        mounted.current = true;
-        const columnWidths = await loadColumnWidths(app, layout, windowDims.width);
-        const { qHyperCube } = layout;
-        const activeSortHeader = qHyperCube?.qEffectiveInterColumnSortOrder[0] || 0;
-        data.columns = data.columns.map((e, index) => {
-          return {
-            ...e,
-            width: columnWidths[index],
-            active: index === activeSortHeader,
-            representation: transformRepresentation(e, theme),
-          };
-        });
-      } else {
-        const { qHyperCube } = layout;
-        const activeSortHeader = qHyperCube?.qEffectiveInterColumnSortOrder[0] || 0;
-        data.columns = data.columns.map((e, index) => ({
-          ...e,
-          active: index === activeSortHeader,
-          representation: transformRepresentation(e, theme),
-        }));
-      }
+
+      const { qHyperCube } = layout;
+      const activeSortHeader = qHyperCube?.qEffectiveInterColumnSortOrder[0] || 0;
+      data.columns = data.columns.map((e, index) => ({
+        ...e,
+        active: index === activeSortHeader,
+        representation: transformRepresentation(e, theme),
+      }));
       setTableData(data);
     };
     handleData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [app, layout, model, windowDims]);
+  }, [app, layout, model]);
 
-  const onHeaderPressed = async (event) => {
-    try {
-      const column = JSON.parse(event.nativeEvent.column);
-      if (column) {
-        changeSortOrder(layout, column, true);
+  const onHeaderPressed = useCallback(
+    async (event) => {
+      try {
+        const column = JSON.parse(event.nativeEvent.column);
+        if (column) {
+          changeSortOrder(layout, column, true);
+        }
+      } catch (error) {
+        console.log('error with sorting', error);
       }
-    } catch (error) {
-      console.log('error with sorting', error);
-    }
-  };
+    },
+    [changeSortOrder, layout]
+  );
 
   useEffect(() => {
     selectionsAPI.on('canceled', () => {
@@ -108,39 +98,43 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
     });
   }, [selectionsAPI]);
 
-  const onEndReached = async () => {
+  const onEndReached = useCallback(async () => {
     const data = await dataStreamCaches.current.next();
     if (data) {
       setTableData(data);
     }
-  };
+  }, []);
 
-  const onSelectionsChanged = (event) => {
+  const onSelectionsChanged = useCallback((event) => {
     selectionsCaches.current.toggleSelected(event.nativeEvent.selections);
     setClearSelections('no');
-  };
-
-  const onColumnsResized = (event) => {
-    storeColumnWidths(app, layout, event.nativeEvent.widths);
-  };
+  }, []);
 
   return tableData ? (
     <View style={styles.body}>
       <ReactNativeStraightTableViewManager
         theme={tableTheme.current}
-        cols={{ header: tableData.columns, footer: layout?.totals.show ? layout.qHyperCube.qGrandTotalRow : undefined }}
-        rows={{ rows: tableData.rows, reset: tableData.reset }}
+        cols={{
+          header: tableData?.columns,
+          footer: layout?.totals.show ? layout.qHyperCube.qGrandTotalRow : undefined,
+          totals:
+            layout?.totals?.show || layout?.totals?.position !== 'noTotals'
+              ? { ...layout.totals, rows: layout.qHyperCube.qGrandTotalRow }
+              : undefined,
+        }}
+        rows={{ rows: tableData?.rows, reset: tableData?.reset }}
         style={styles.table}
         size={layout.qHyperCube.qSize}
         onEndReached={onEndReached}
         containerWidth={rect.width}
         onSelectionsChanged={onSelectionsChanged}
-        onColumnsResized={onColumnsResized}
         clearSelections={clearSelections}
         onHeaderPressed={onHeaderPressed}
         freezeFirstColumn={freezeFirstColumn(layout)}
         cellContentStyle={contentStyle.cellStyle}
         headerContentStyle={contentStyle.headerStyle}
+        name={name}
+        isDataView={layout?.isDataView}
       />
     </View>
   ) : null;
