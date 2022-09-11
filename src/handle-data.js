@@ -133,7 +133,7 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
     { qTop: top, qLeft: 0, qHeight: height, qWidth: totalColumnCount },
   ]);
 
-  const rows = dataPages[0].qMatrix.map((r, rowIdx) => {
+  const rows = dataPages[0]?.qMatrix.map((r, rowIdx) => {
     const row = { key: `row-${rowIdx}` };
     columns.forEach((c, colIdx) => {
       row[c.id] = {

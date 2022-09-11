@@ -22,8 +22,19 @@ export type ConditionalColoring = {
   segments: Segments;
 };
 
+export type Indicator = {
+  applySegmentColors: boolean;
+  position: string;
+  showTextValues: boolean;
+};
+
+export type Respresentaton = {
+  indicator: Indicator;
+};
+
 export type Column = {
   conditionalColoring: ConditionalColoring;
+  representation: Respresentaton;
   qMin?: number;
   qMax?: number;
 };
@@ -135,7 +146,7 @@ function shouldBlend(segmentInfo: Segments, colorIndex: number) {
 
 export function getConditionalColor(paletteIndex: number, value: number, column: Column): PaletteColor {
   if (!shouldBlend(column.conditionalColoring.segments, paletteIndex)) {
-    return column.conditionalColoring.segments.paletteColors[paletteIndex];
+    return { ...column.conditionalColoring.segments.paletteColors[paletteIndex], ...column.representation.indicator };
   }
 
   const { paletteColors } = column.conditionalColoring.segments;
@@ -178,6 +189,7 @@ export function getConditionalColor(paletteIndex: number, value: number, column:
   }
 
   return {
+    ...column.representation.indicator,
     ...paletteColors[paletteIndex],
     color: lerp(paletteColors[paletteIndex].color, color, t),
   };
@@ -190,7 +202,11 @@ export function getIndicator(column: Column, tableCell: TableCell): PaletteColor
     while (index < cl && tableCell.qNum > column.conditionalColoring.segments.limits[index].value) {
       index++;
     }
-    return getConditionalColor(index, tableCell.qNum, column);
+    const idc = getConditionalColor(index, tableCell.qNum, column);
+    return idc;
+  }
+  if (column.conditionalColoring && tableCell.qNum && column.conditionalColoring.segments.paletteColors.length === 1) {
+    return { ...column.conditionalColoring.segments.paletteColors[0], ...column.representation.indicator };
   }
   return undefined;
 }
