@@ -10,8 +10,8 @@
       "presets": ["@babel/preset-react"]
     }
   },
-  "extends": ["airbnb", "prettier", "plugin:react/recommended"],
-  "plugins": ["prettier", "react", "react-hooks"],
+  "extends": ["airbnb", "prettier", "plugin:react/recommended", "plugin:jsx-a11y/recommended"],
+  "plugins": ["prettier", "react", "react-hooks", "jsx-a11y"],
   "settings": {
     "import/resolver": {
       "node": {
