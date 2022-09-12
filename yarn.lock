@@ -15,6 +15,14 @@
     "@jridgewell/gen-mapping" "^0.1.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
+"@axe-core/playwright@^4.4.4":
+  version "4.4.4"
+  resolved "https://registry.yarnpkg.com/@axe-core/playwright/-/playwright-4.4.4.tgz#3786c5f6bba38d1991b608584b00ae2744544573"
+  integrity sha512-VA7MR1WCqW5tFcUGCXDaaqV9pJUCdOGIR4DiZJrOxGjeRYxz3VwyMc1MDg/yiJ5fQA/QYMx+w0mvqYEr3CPx7w==
+  dependencies:
+    axe-core "^4.4.2"
+    playwright ">= 1.0.0"
+
 "@babel/cli@7.17.10":
   version "7.17.10"
   resolved "https://registry.yarnpkg.com/@babel/cli/-/cli-7.17.10.tgz#5ea0bf6298bb78f3b59c7c06954f9bd1c79d5943"
@@ -3439,7 +3447,7 @@ atob@^2.1.2:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-axe-core@^4.4.3:
+axe-core@^4.4.2, axe-core@^4.4.3:
   version "4.4.3"
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.4.3.tgz#11c74d23d5013c0fa5d183796729bc3482bd2f6f"
   integrity sha512-32+ub6kkdhhWick/UjvEwRchgoetXqTK14INLqbGm5U2TzBkBNF3nQtLYm8ovxSkQWArjEQvftCKryjZaATu3w==
@@ -9286,6 +9294,18 @@ playwright-core@1.25.0:
   version "1.25.0"
   resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.25.0.tgz#54dc867c6c2cc5e4233905e249206a02914d14f1"
   integrity sha512-kZ3Jwaf3wlu0GgU0nB8UMQ+mXFTqBIFz9h1svTlNduNKjnbPXFxw7mJanLVjqxHJRn62uBfmgBj93YHidk2N5Q==
+
+playwright-core@1.25.2:
+  version "1.25.2"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.25.2.tgz#ea4baa398a4d45fcdfe48799482b599e3d0f033f"
+  integrity sha512-0yTbUE9lIddkEpLHL3u8PoCL+pWiZtj5A/j3U7YoNjcmKKDGBnCrgHJMzwd2J5vy6l28q4ki3JIuz7McLHhl1A==
+
+"playwright@>= 1.0.0":
+  version "1.25.2"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.25.2.tgz#0fc67e4385a52a51371ff9114bf68e3ad50a7f41"
+  integrity sha512-RwMB5SFRV/8wSfK+tK8ycpqdzORvoqUNz9DUeRfSgZFrZej5uuBl9wFjWcc+OkXFEtaPmx1acAVGG7hA4IJ1kg==
+  dependencies:
+    playwright-core "1.25.2"
 
 plist@^3.0.2:
   version "3.0.6"

@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
 
-import runRenderingTests from './utils/run-rendering-tests';
+import runRenderingTests from './run-rendering-tests';
 
 const customTheme = {
   straightTable: {

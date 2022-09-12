@@ -7,10 +7,10 @@ const config: PlaywrightTestConfig = {
     // Record trace for each test, but remove it from successful test runs.
     trace: 'retain-on-failure',
   },
-  // Look for test files in the "test/rendering" directory, relative to this configuration file
-  testDir: 'test/rendering',
-  testMatch: /.*\.render\.ts/,
-  outputDir: './test/rendering/artifacts/',
+  // Look for test files in the "test" directory, relative to this configuration file
+  testDir: 'test',
+  testMatch: [/.*\.render\.ts/, /.*\.a11y\.ts/],
+  outputDir: './test/artifacts/',
   reporter: [
     ['list'],
     [

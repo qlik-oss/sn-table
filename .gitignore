@@ -23,6 +23,7 @@ sn-table-ext
 
 # testing
 coverage
+test/a11y/sn-table-a11y-info.json
 test/rendering/artifacts
 test/rendering/test-report
 test/rendering/state.json

@@ -3,13 +3,13 @@ import path from 'path';
 import serve from '@nebula.js/cli-serve';
 import { test, expect } from '@playwright/test';
 
-import events from './events';
-import createNebulaRoutes from './routes';
-import createPlaywright from './playwright';
+import events from '../utils/events';
+import createNebulaRoutes from '../utils/routes';
+import createPlaywright from '../utils/playwright';
 
-const paths = { fixtures: path.join(__dirname, '../__fixtures__') };
+const paths = { fixtures: path.join(__dirname, './__fixtures__') };
 
-const runRenderingTests = (theme: Object | Function, themeType: String, language: String) => {
+const runRenderingTests = (theme: object, themeType: string, language: string) => {
   let nebulaServer;
   let playwright;
   let route;
@@ -18,7 +18,7 @@ const runRenderingTests = (theme: Object | Function, themeType: String, language
     nebulaServer = await serve({
       // the entry is equal to path.resolve(__dirname, '../../dist/sn-table.js'),
       // so before run the testing, yarn build should run first to generate /dist
-      entry: path.resolve(__dirname, '../../../'),
+      entry: path.resolve(__dirname, '../../'),
       type: 'sn-table',
       open: false,
       build: false,
