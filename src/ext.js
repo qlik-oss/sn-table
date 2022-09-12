@@ -428,6 +428,13 @@ const getDefinition = (env) => {
                         },
                         defaultValue: env?.anything?.sense?.isUnsupportedFeature?.('totals') ? 'None' : 'Expr',
                       },
+                      totalsAggrFuncMessage: {
+                        component: 'text',
+                        translation: 'Object.Table.AggrFuncMessage',
+                        show(data, handler) {
+                          return handler?.properties.totals.position === 'noTotals' && !handler.properties.totals.show;
+                        },
+                      },
                     },
                   },
                 },
