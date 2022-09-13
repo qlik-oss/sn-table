@@ -13,14 +13,17 @@ import {
   TableData,
   TableLayout,
   TotalsPosition,
+  Row,
 } from '../types';
 import { TSelectionActions } from './utils/selections-utils';
 
 export interface SelectionState {
+  allRows: Row[];
   rows: Record<string, number>;
   colIdx: number;
   api: ExtendedSelectionAPI;
   isSelectMultiValues: boolean;
+  firstCell?: Cell;
 }
 
 export interface ActionPayload {
@@ -29,13 +32,14 @@ export interface ActionPayload {
   evt: React.KeyboardEvent | React.MouseEvent;
 }
 
+export type SelectionDispatch = React.Dispatch<TSelectionActions> | jest.Mock<any, any>;
 export interface ContextValue {
   headRowHeight: number;
   setHeadRowHeight: React.Dispatch<React.SetStateAction<number>>;
   focusedCellCoord: [number, number];
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   selectionState: SelectionState;
-  selectionDispatch: React.Dispatch<TSelectionActions> | jest.Mock<any, any>;
+  selectionDispatch: SelectionDispatch;
 }
 
 export interface GeneratedStyling {
@@ -115,6 +119,7 @@ export interface HandleResetFocusProps {
 export interface ContextProviderProps {
   children: JSX.Element;
   selectionsAPI: ExtendedSelectionAPI;
+  tableRows: Row[];
   cellCoordMock?: [number, number];
   selectionDispatchMock?: jest.Mock<any, any>;
 }

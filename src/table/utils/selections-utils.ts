@@ -1,7 +1,7 @@
 // TODO: add this to global rules
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { stardust } from '@nebula.js/stardust';
-import { Cell, ExtendedSelectionAPI, Announce } from '../../types';
+import { Cell, ExtendedSelectionAPI, Announce, Row } from '../../types';
 import { SelectionState, ActionPayload } from '../types';
 
 export enum SelectionStates {
@@ -13,9 +13,12 @@ export enum SelectionStates {
 
 export enum SelectionActions {
   SELECT = 'select',
+  SELECT_MULTI_START = 'SelectMultiStart',
+  SELECT_MULTI_ADD = 'SelectMultiAdd',
+  SELECT_MULTI_END = 'selectMultiEnd',
   RESET = 'reset',
   CLEAR = 'clear',
-  SELECT_MULTI_VALUES = 'selectMultiValues',
+  UPDATE_ALL_ROWS = 'updateAllRows',
 }
 
 interface Action<T = any> {
@@ -25,11 +28,27 @@ interface Action<T = any> {
 export interface SelectAction extends Action<SelectionActions.SELECT> {
   payload: ActionPayload;
 }
-export interface SelectMultiValuesAction extends Action<SelectionActions.SELECT_MULTI_VALUES> {}
+export interface SelectMultiStartAction extends Action<SelectionActions.SELECT_MULTI_START> {
+  payload: { cell: Cell };
+}
+export interface SelectMultiAddAction extends Action<SelectionActions.SELECT_MULTI_ADD> {
+  payload: ActionPayload;
+}
+export interface SelectMultiEndAction extends Action<SelectionActions.SELECT_MULTI_END> {}
 export interface ResetAction extends Action<SelectionActions.RESET> {}
 export interface ClearAction extends Action<SelectionActions.CLEAR> {}
+export interface UpdateAllRowsAction extends Action<SelectionActions.UPDATE_ALL_ROWS> {
+  payload: { allRows: Row[] };
+}
 
-export type TSelectionActions = SelectAction | ResetAction | ClearAction | SelectMultiValuesAction;
+export type TSelectionActions =
+  | SelectAction
+  | SelectMultiStartAction
+  | SelectMultiAddAction
+  | SelectMultiEndAction
+  | ResetAction
+  | ClearAction
+  | UpdateAllRowsAction;
 
 interface AddSelectionListenersArgs {
   api: ExtendedSelectionAPI;
@@ -97,7 +116,14 @@ export const getCellSelectionState = (cell: Cell, selectionState: SelectionState
   return cellState;
 };
 
-export const handleAnnounceSelectionStatus = (announce: Announce, rowsLength: number, isAddition: boolean) => {
+export const handleAnnounceSelectionStatus = (
+  announce: Announce,
+  newSelectedRows: Record<string, number>,
+  oldSelectedRows: Record<string, number>
+) => {
+  const rowsLength = Object.keys(newSelectedRows).length;
+  const isAddition = rowsLength >= Object.keys(oldSelectedRows).length;
+
   if (rowsLength) {
     const changeStatus = isAddition ? 'SNTable.SelectionLabel.SelectedValue' : 'SNTable.SelectionLabel.DeselectedValue';
     const amountStatus =
@@ -124,16 +150,7 @@ export const getSelectedRows = (
     return { [qElemNumber]: rowIdx };
   }
 
-  const key = (evt as React.KeyboardEvent)?.key;
-  if (evt.shiftKey && key.includes('Arrow')) {
-    selectedRows[qElemNumber] = rowIdx;
-    // add the next or previous cell to selectedRows, based on which arrow is pressed
-    if (key === 'ArrowDown') {
-      selectedRows[cell.nextQElemNumber as number] = rowIdx + 1;
-    } else {
-      selectedRows[cell.prevQElemNumber as number] = rowIdx - 1;
-    }
-  } else if (selectedRows[qElemNumber] !== undefined) {
+  if (selectedRows[qElemNumber] !== undefined) {
     // if the selected item is clicked again, that item will be removed
     delete selectedRows[qElemNumber];
   } else {
@@ -144,10 +161,41 @@ export const getSelectedRows = (
   return { ...selectedRows };
 };
 
+export const getMultiSelectedRows = (
+  selectedRows: Record<string, number>,
+  allRows: Row[],
+  evt: React.KeyboardEvent | React.MouseEvent,
+  cell: Cell,
+  firstCell?: Cell
+): Record<string, number> => {
+  const newSelectedRows = { ...selectedRows };
+
+  if ('key' in evt && evt.shiftKey && evt.key.includes('Arrow')) {
+    newSelectedRows[cell.qElemNumber] = cell.rowIdx;
+    // add the next or previous cell to selectedRows, based on which arrow is pressed
+    if (evt.key === 'ArrowDown') {
+      newSelectedRows[cell.nextQElemNumber as number] = cell.rowIdx + 1;
+    } else {
+      newSelectedRows[cell.prevQElemNumber as number] = cell.rowIdx - 1;
+    }
+    return newSelectedRows;
+  }
+
+  if (!firstCell) return selectedRows;
+  const lowestCellIdx = Math.min(firstCell.rawRowIdx, cell.rawRowIdx);
+  const highestCellIdx = Math.max(firstCell.rawRowIdx, cell.rawRowIdx);
+
+  for (let idx = lowestCellIdx; idx <= highestCellIdx; idx++) {
+    const selectedCell = allRows[idx][`col-${firstCell.rawColIdx}`] as Cell;
+    newSelectedRows[selectedCell.qElemNumber] = selectedCell.rowIdx;
+  }
+
+  return newSelectedRows;
+};
+
 const selectCell = (state: SelectionState, payload: ActionPayload): SelectionState => {
   const { api, rows, colIdx } = state;
   const { cell, announce, evt } = payload;
-  const isSelectMultiValues = evt.shiftKey && (evt as React.KeyboardEvent)?.key.includes('Arrow');
   let selectedRows: Record<string, number> = {};
 
   if (colIdx === -1) api.begin(['/qHyperCubeDef']);
@@ -155,24 +203,42 @@ const selectCell = (state: SelectionState, payload: ActionPayload): SelectionSta
   else return state;
 
   selectedRows = getSelectedRows(selectedRows, cell, evt);
-  const selectedRowsLength = Object.keys(selectedRows).length;
-  const isAddition = selectedRowsLength >= Object.keys(rows).length;
-  handleAnnounceSelectionStatus(announce, selectedRowsLength, isAddition);
+  handleAnnounceSelectionStatus(announce, selectedRows, rows);
 
-  if (selectedRowsLength) {
-    !isSelectMultiValues &&
-      api.select({
-        method: 'selectHyperCubeCells',
-        params: ['/qHyperCubeDef', Object.values(selectedRows), [cell.colIdx]],
-      });
-    return { ...state, rows: selectedRows, colIdx: cell.colIdx, isSelectMultiValues };
+  // only send a select call if there are rows selected, otherwise cancel selections
+  if (Object.keys(selectedRows).length) {
+    api.select({
+      method: 'selectHyperCubeCells',
+      params: ['/qHyperCubeDef', Object.values(selectedRows), [cell.colIdx]],
+    });
+    return { ...state, rows: selectedRows, colIdx: cell.colIdx };
   }
 
   api.cancel();
-  return { ...state, rows: selectedRows, colIdx: -1, isSelectMultiValues };
+  return { ...state, rows: selectedRows, colIdx: -1 };
 };
 
-const selectMultiValues = (state: SelectionState): SelectionState => {
+const selectMultipleCells = (state: SelectionState, payload: ActionPayload): SelectionState => {
+  const { api, rows, colIdx, allRows, firstCell } = state;
+  const { cell, announce, evt } = payload;
+  let selectedRows: Record<string, number> = {};
+
+  if (colIdx === -1) api.begin(['/qHyperCubeDef']);
+  else selectedRows = { ...rows };
+
+  selectedRows = getMultiSelectedRows(selectedRows, allRows, evt, cell, firstCell);
+  handleAnnounceSelectionStatus(announce, selectedRows, rows);
+
+  return { ...state, rows: selectedRows, colIdx: firstCell?.colIdx || cell.colIdx, isSelectMultiValues: true };
+};
+
+const startSelectMulti = (state: SelectionState, cell: Cell): SelectionState => ({
+  ...state,
+  isSelectMultiValues: true,
+  firstCell: cell,
+});
+
+const endSelectMulti = (state: SelectionState): SelectionState => {
   const { api, rows, colIdx, isSelectMultiValues } = state;
 
   isSelectMultiValues &&
@@ -181,19 +247,25 @@ const selectMultiValues = (state: SelectionState): SelectionState => {
       params: ['/qHyperCubeDef', Object.values(rows), [colIdx]],
     });
 
-  return { ...state, isSelectMultiValues: false };
+  return { ...state, isSelectMultiValues: false, firstCell: undefined };
 };
 
 export const reducer = (state: SelectionState, action: TSelectionActions): SelectionState => {
   switch (action.type) {
     case SelectionActions.SELECT:
       return selectCell(state, action.payload);
-    case SelectionActions.SELECT_MULTI_VALUES:
-      return selectMultiValues(state);
+    case SelectionActions.SELECT_MULTI_START:
+      return startSelectMulti(state, action.payload.cell);
+    case SelectionActions.SELECT_MULTI_ADD:
+      return selectMultipleCells(state, action.payload);
+    case SelectionActions.SELECT_MULTI_END:
+      return endSelectMulti(state);
     case SelectionActions.RESET:
       return state.api.isModal() ? state : { ...state, rows: {}, colIdx: -1 };
     case SelectionActions.CLEAR:
       return Object.keys(state.rows).length ? { ...state, rows: {} } : state;
+    case SelectionActions.UPDATE_ALL_ROWS:
+      return { ...state, allRows: action.payload.allRows };
     default:
       throw new Error('reducer called with invalid action type');
   }

@@ -206,7 +206,7 @@ describe('selections-utils', () => {
 
     describe('other', () => {
       it('should call select when type is selectMultiValues, isSelectMultiValues is true and return isSelectMultiValues to be false', () => {
-        const action = { type: SelectionActions.SELECT_MULTI_VALUES } as SelectMultiValuesAction;
+        const action = { type: SelectionActions.SELECT_MULTI_END } as SelectMultiValuesAction;
         state.isSelectMultiValues = true;
         const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
 
@@ -216,7 +216,7 @@ describe('selections-utils', () => {
       });
 
       it('should not call select when type is selectMultiValues but isSelectMultiValues is false', () => {
-        const action = { type: SelectionActions.SELECT_MULTI_VALUES } as SelectMultiValuesAction;
+        const action = { type: SelectionActions.SELECT_MULTI_END } as SelectMultiValuesAction;
         state.isSelectMultiValues = false;
 
         const newState = reducer(state, action);

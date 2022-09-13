@@ -194,7 +194,7 @@ export const handleBodyKeyDown = ({
           (cell.nextQElemNumber !== undefined && evt.key === 'ArrowDown'));
       if (isSelectMultiValues) {
         selectionDispatch({
-          type: SelectionActions.SELECT,
+          type: SelectionActions.SELECT_MULTI_ADD,
           payload: { cell, evt, announce },
         });
       } else {
@@ -238,7 +238,7 @@ export const handleBodyKeyDown = ({
  * confirms selections when making multiple selections with shift + arrows and shit is released
  */
 export const handleBodyKeyUp = (evt: React.KeyboardEvent, selectionDispatch: React.Dispatch<TSelectionActions>) => {
-  evt.key === 'Shift' && selectionDispatch({ type: SelectionActions.SELECT_MULTI_VALUES });
+  evt.key === 'Shift' && selectionDispatch({ type: SelectionActions.SELECT_MULTI_END });
 };
 
 /**
