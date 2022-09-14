@@ -57,6 +57,9 @@ const renderWithCarbon = ({
 };
 
 export default function supernova(env: Galaxy) {
+  const {
+    flags: { isEnabled: isFlagEnabled },
+  } = env;
   return {
     qae: {
       properties: { initial: properties },
@@ -108,6 +111,7 @@ export default function supernova(env: Galaxy) {
               rect,
               footerContainer,
               announce,
+              isFlagEnabled,
             },
             reactRoot
           );

@@ -1,7 +1,13 @@
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 
-import { updateFocus, focusSelectionToolbar, getCellElement, announceSelectionState } from './handle-accessibility';
+import {
+  updateFocus,
+  focusSelectionToolbar,
+  getCellElement,
+  announceSelectionState,
+  copyCellValue,
+} from './handle-accessibility';
 import { SelectionActions, TSelectionActions } from './selections-utils';
 import { handleNavigateTop } from './handle-scroll';
 import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownProps } from '../types';
@@ -233,6 +239,7 @@ export const handleBodyKeyDown = ({
   paginationNeeded,
   totalsPosition,
   selectionsAPI,
+  isFlagEnabled,
 }: HandleBodyKeyDownProps) => {
   if ((evt.target as HTMLTableCellElement).classList.contains('excluded')) {
     preventDefaultBehavior(evt);
@@ -300,6 +307,9 @@ export const handleBodyKeyDown = ({
     // Tab (+ shift): in selection mode and keyboard enabled, focus on selection toolbar
     case 'Tab':
       focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
+      break;
+    case 'c':
+      isFlagEnabled?.('PS_15585_SN_TABLE_BASIC_FEATURES') && (evt.ctrlKey || evt.metaKey) && copyCellValue(cell);
       break;
     default:
       break;

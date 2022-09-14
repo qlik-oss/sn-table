@@ -145,3 +145,11 @@ export const announceSelectionState = (
       : announce({ keys: ['SNTable.SelectionLabel.NotSelectedValue'] });
   }
 };
+
+export const copyCellValue = async (cell: Cell) => {
+  try {
+    await navigator.clipboard.writeText(cell.qText as string);
+  } catch (error) {
+    console.log(error);
+  }
+};
