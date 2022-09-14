@@ -1,6 +1,6 @@
 import { stardust } from '@nebula.js/stardust';
 import React from 'react';
-import { Announce } from '../../../types';
+import { Announce, Cell } from '../../../types';
 import * as accessibilityUtils from '../accessibility-utils';
 
 describe('handle-accessibility', () => {
@@ -546,6 +546,25 @@ describe('handle-accessibility', () => {
       accessibilityUtils.removeTabAndFocusCell(newCoord, rootElement, setFocusedCellCoord, keyboard);
       expect(setFocusedCellCoord).toHaveBeenCalledWith(newCoord);
       expect(keyboard.focus).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('copyCellValue: ', () => {
+    let cellValue: Cell;
+    beforeEach(() => {
+      cellValue = {
+        qText: '251',
+      } as Cell;
+      console.log = jest.fn();
+    });
+    it('should copying value to clipboard successfully', () => {
+      Object.assign(navigator, {
+        clipboard: {
+          writeText: jest.fn().mockReturnValueOnce(Promise.resolve()),
+        },
+      });
+      accessibilityUtils.copyCellValue(cellValue);
+      expect(console.log).not.toHaveBeenCalled();
     });
   });
 });

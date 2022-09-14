@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, memo } from 'react';
+import { stardust } from '@nebula.js/stardust';
 import getCellRenderer from '../utils/get-cell-renderer';
 import { useContextSelector, TableContext } from '../context';
 import { StyledTableBody, StyledBodyRow } from '../styles';
@@ -21,6 +22,7 @@ function TableBodyWrapper({
   keyboard,
   tableWrapperRef,
   announce,
+  isFlagEnabled,
 }: TableBodyWrapperProps) {
   const { rows, columns, paginationNeeded, totalsPosition } = tableData;
   const columnsStylingIDsJSON = JSON.stringify(columns.map((column) => column.stylingIDs));
@@ -89,6 +91,7 @@ function TableBodyWrapper({
                 keyboard,
                 paginationNeeded,
                 totalsPosition,
+                isFlagEnabled,
               });
             };
 
