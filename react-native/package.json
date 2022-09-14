@@ -24,7 +24,7 @@
   "main": "dist/sn-table.js",
   "peerDependencies": {
     "react": "18.2.0",
-    "react-native": "0.69.4",
+    "react-native": "0.70.0",
     "@nebula.js/stardust": "2.x"
   },
   "resolutions": {
