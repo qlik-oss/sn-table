@@ -1,5 +1,5 @@
 import { stardust } from '@nebula.js/stardust';
-import { Announce } from '../../types';
+import { Announce, Cell } from '../../types';
 import { CellFocusProps, HandleResetFocusProps } from '../types';
 
 export const getCellElement = (rootElement: HTMLElement, cellCoord: [number, number]) =>
@@ -208,5 +208,13 @@ export const announceSelectionState = (
     hasActiveClassName
       ? announce({ keys: ['SNTable.SelectionLabel.SelectedValue'] })
       : announce({ keys: ['SNTable.SelectionLabel.NotSelectedValue'] });
+  }
+};
+
+export const copyCellValue = async (cell: Cell) => {
+  try {
+    await navigator.clipboard.writeText(cell.qText as string);
+  } catch (error) {
+    console.log(error);
   }
 };
