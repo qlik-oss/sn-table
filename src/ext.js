@@ -129,11 +129,10 @@ const getStyleSettings = (env) => {
                         headerFontSize: {
                           component: 'integer',
                           ref: 'header.fontSize',
-                          type: 'integer',
                           width: 9,
                           min: 5,
                           max: 300,
-                          // placeholder: () => parseInt(styleService.getStyle('header', 'fontSize'), 10), // Not sure about placeholder, as qlik-oss do not have theme integrated in it
+                          placeholder: '',
                           change(data) {
                             data.header.fontSize = !data.header.fontSize
                               ? data.header.fontSize
@@ -168,11 +167,10 @@ const getStyleSettings = (env) => {
                         contentFontSize: {
                           component: 'integer',
                           ref: 'content.fontSize',
-                          type: 'integer',
                           width: 9,
                           min: 5,
                           max: 300,
-                          // placeholder: () => parseInt(styleService.getStyle('content', 'fontSize'), 10), // Not sure about placeholder, as qlik-oss do not have theme integrated in it
+                          placeholder: '',
                           change(data) {
                             data.content.fontSize = !data.content.fontSize
                               ? data.content.fontSize
