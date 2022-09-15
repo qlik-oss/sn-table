@@ -6,7 +6,7 @@ import { StyledTableBody, StyledBodyRow } from '../styles';
 import { addSelectionListeners } from '../utils/selections-utils';
 import { getBodyCellStyle } from '../utils/styling-utils';
 import { handleBodyKeyDown, handleBodyKeyUp } from '../utils/handle-key-press';
-import { handleClickToFocusBody } from '../utils/handle-accessibility';
+import { handleClickToFocusBody } from '../utils/handle-click';
 import { Cell } from '../../types';
 import { TableBodyWrapperProps } from '../types';
 import TableTotals from './TableTotals';

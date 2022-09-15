@@ -8,7 +8,7 @@ import TableBodyWrapper from '../TableBodyWrapper';
 import * as selectionsUtils from '../../utils/selections-utils';
 import * as getCellRenderer from '../../utils/get-cell-renderer';
 import * as handleKeyPress from '../../utils/handle-key-press';
-import * as handleAccessibility from '../../utils/handle-accessibility';
+import * as handleClick from '../../utils/handle-click';
 import { TableData, ExtendedSelectionAPI, TableLayout, ExtendedTheme, PageInfo, Cell } from '../../../types';
 
 describe('<TableBodyWrapper />', () => {
@@ -93,12 +93,12 @@ describe('<TableBodyWrapper />', () => {
   });
 
   it('should call handleClickToFocusBody on mouseDown', () => {
-    jest.spyOn(handleAccessibility, 'handleClickToFocusBody').mockImplementation();
+    jest.spyOn(handleClick, 'handleClickToFocusBody').mockImplementation();
 
     const { getByText } = renderTableBody();
     fireEvent.mouseDown(getByText(tableFirstRow.qText as string));
 
-    expect(handleAccessibility.handleClickToFocusBody).toHaveBeenCalledTimes(1);
+    expect(handleClick.handleClickToFocusBody).toHaveBeenCalledTimes(1);
   });
 
   it('should call handleBodyKeyUp on key up', () => {
