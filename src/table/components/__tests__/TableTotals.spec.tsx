@@ -5,7 +5,7 @@ import TableTotals from '../TableTotals';
 import { TableContextProvider } from '../../context';
 import { getTotalPosition } from '../../../handle-data';
 import * as handleKeyPress from '../../utils/handle-key-press';
-import * as handleAccessibility from '../../utils/handle-accessibility';
+import * as handleAccessibility from '../../utils/accessibility-utils';
 import { generateLayout } from '../../../__test__/generate-test-data';
 import { TableData, ExtendedTheme, TableLayout, ExtendedSelectionAPI } from '../../../types';
 
@@ -78,10 +78,10 @@ describe('<TableTotals />', () => {
     });
 
     it('should call removeAndFocus when clicking a total cell', () => {
-      jest.spyOn(handleAccessibility, 'removeAndFocus').mockImplementation(() => jest.fn());
+      jest.spyOn(handleAccessibility, 'removeTabAndFocusCell').mockImplementation(() => jest.fn());
       const { getByText } = renderTableTotals();
       fireEvent.mouseDown(getByText(tableData.columns[0].totalInfo as string));
-      expect(handleAccessibility.removeAndFocus).toHaveBeenCalledTimes(1);
+      expect(handleAccessibility.removeTabAndFocusCell).toHaveBeenCalledTimes(1);
     });
   });
 });

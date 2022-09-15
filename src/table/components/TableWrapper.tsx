@@ -13,7 +13,7 @@ import useDidUpdateEffect from '../hooks/use-did-update-effect';
 import useFocusListener from '../hooks/use-focus-listener';
 import useScrollListener from '../hooks/use-scroll-listener';
 import { handleWrapperKeyDown } from '../utils/handle-key-press';
-import { updateFocus, handleResetFocus, getCellElement } from '../utils/handle-accessibility';
+import { updateFocus, resetFocus, getCellElement } from '../utils/accessibility-utils';
 import { TableWrapperProps } from '../types';
 
 export default function TableWrapper(props: TableWrapperProps) {
@@ -82,7 +82,7 @@ export default function TableWrapper(props: TableWrapperProps) {
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
   useDidUpdateEffect(() => {
-    handleResetFocus({
+    resetFocus({
       focusedCellCoord,
       rootElement,
       shouldRefocus,

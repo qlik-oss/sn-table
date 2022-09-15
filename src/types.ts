@@ -186,6 +186,7 @@ export type ChangeSortOrder = (layout: TableLayout, column: Column) => Promise<v
 export interface Galaxy {
   translator: ExtendedTranslator;
   carbon: boolean;
+  flags: stardust.Flags;
 }
 
 export interface RenderWithCarbonArguments {

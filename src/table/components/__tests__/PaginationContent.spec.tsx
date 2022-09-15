@@ -3,7 +3,7 @@ import { render, fireEvent } from '@testing-library/react';
 import { stardust } from '@nebula.js/stardust';
 
 import PaginationContent from '../PaginationContent';
-import * as handleAccessibility from '../../utils/handle-accessibility';
+import * as handleAccessibility from '../../utils/accessibility-utils';
 import { Announce, ExtendedTheme, ExtendedTranslator, PageInfo, SetPageInfo, TableData } from '../../../types';
 
 describe('<PaginationContent />', () => {
