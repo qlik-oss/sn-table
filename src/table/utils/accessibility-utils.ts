@@ -1,5 +1,5 @@
 import { stardust } from '@nebula.js/stardust';
-import { Announce } from '../../types';
+import { Announce, Cell } from '../../types';
 import { CellFocusProps, HandleResetFocusProps } from '../types';
 
 export const getCellElement = (rootElement: HTMLElement, cellCoord: [number, number]) =>
