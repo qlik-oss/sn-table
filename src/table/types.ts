@@ -98,7 +98,7 @@ export interface HandleBodyKeyDownProps {
   totalsPosition: TotalsPosition;
   paginationNeeded: boolean;
   selectionsAPI: ExtendedSelectionAPI;
-  isFlagEnabled?(flag: string): boolean;
+  isFlagEnabled(flag: string): boolean;
 }
 
 export interface CellFocusProps {
@@ -171,7 +171,7 @@ export interface TableWrapperProps extends CommonTableProps {
   translator: ExtendedTranslator;
   footerContainer?: HTMLElement;
   announce: Announce;
-  isFlagEnabled?(flag: string): boolean;
+  isFlagEnabled(flag: string): boolean;
 }
 
 export interface TableHeadWrapperProps extends CommonTableProps {
@@ -191,7 +191,7 @@ export interface TableBodyWrapperProps extends CommonTableProps {
   announce: Announce;
   setShouldRefocus(): void;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
-  isFlagEnabled?(flag: string): boolean;
+  isFlagEnabled(flag: string): boolean;
 }
 
 export interface TableTotalsProps extends CommonTableProps {

@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, memo } from 'react';
-import { stardust } from '@nebula.js/stardust';
 import getCellRenderer from '../utils/get-cell-renderer';
 import { useContextSelector, TableContext } from '../context';
 import { StyledTableBody, StyledBodyRow } from '../styles';
