@@ -178,7 +178,7 @@ export const handleBodyKeyDown = ({
   paginationNeeded,
   totalsPosition,
   selectionsAPI,
-  isFlagEnabled,
+  areBasicFeaturesEnabled,
 }: HandleBodyKeyDownProps) => {
   if ((evt.target as HTMLTableCellElement).classList.contains('excluded')) {
     preventDefaultBehavior(evt);
@@ -243,7 +243,9 @@ export const handleBodyKeyDown = ({
       focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
       break;
     case KeyCodes.C:
-      basicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(cell);
+      areBasicFeaturesEnabled &&
+        (evt.ctrlKey || evt.metaKey) &&
+        copyCellValue((evt.target as HTMLElement).textContent as string);
       break;
     default:
       break;

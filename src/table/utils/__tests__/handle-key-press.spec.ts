@@ -413,6 +413,7 @@ describe('handle-key-press', () => {
     let announce: Announce;
     let paginationNeeded: boolean;
     let totalsPosition: TotalsPosition;
+    let areBasicFeaturesEnabled: boolean;
 
     const runHandleBodyKeyDown = () =>
       handleBodyKeyDown({
@@ -427,7 +428,7 @@ describe('handle-key-press', () => {
         keyboard,
         paginationNeeded,
         totalsPosition,
-        isFlagEnabled,
+        areBasicFeaturesEnabled,
       });
 
     beforeEach(() => {
@@ -463,6 +464,7 @@ describe('handle-key-press', () => {
       announce = jest.fn();
       paginationNeeded = true;
       totalsPosition = 'noTotals';
+      areBasicFeaturesEnabled = true;
       jest.spyOn(handleAccessibility, 'focusSelectionToolbar').mockImplementation(() => jest.fn());
       jest.spyOn(handleAccessibility, 'announceSelectionState').mockImplementation(() => jest.fn());
       jest.spyOn(handleAccessibility, 'copyCellValue');
@@ -667,7 +669,7 @@ describe('handle-key-press', () => {
     it('should not call copyCellValue when the flag is disabled', () => {
       evt.key = KeyCodes.C;
       evt.metaKey = true;
-      isFlagEnabled = (flag: string) => !flag;
+      areBasicFeaturesEnabled = false;
       runHandleBodyKeyDown();
       expect(handleAccessibility.copyCellValue).not.toHaveBeenCalled();
     });

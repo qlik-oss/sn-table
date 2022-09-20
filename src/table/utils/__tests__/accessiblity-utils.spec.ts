@@ -557,11 +557,9 @@ describe('handle-accessibility', () => {
   });
 
   describe('copyCellValue: ', () => {
-    let cellValue: Cell;
+    let cellValue: string;
     beforeEach(() => {
-      cellValue = {
-        qText: '251',
-      } as Cell;
+      cellValue = '';
       console.log = jest.fn();
     });
     it('should copying value to clipboard successfully', () => {

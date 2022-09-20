@@ -26,7 +26,7 @@ describe('<TableBodyWrapper />', () => {
   let theme: ExtendedTheme;
   let tableFirstRow: Cell;
   let tableSecondRow: Cell;
-  let isFlagEnabled: (flag: string) => boolean;
+  let areBasicFeaturesEnabled: boolean;
 
   const renderTableBody = () =>
     render(
@@ -43,7 +43,7 @@ describe('<TableBodyWrapper />', () => {
           keyboard={keyboard}
           tableWrapperRef={tableWrapperRef}
           announce={announce}
-          isFlagEnabled={isFlagEnabled}
+          areBasicFeaturesEnabled={areBasicFeaturesEnabled}
         />
       </TableContextProvider>
     );

@@ -21,7 +21,7 @@ function TableBodyWrapper({
   keyboard,
   tableWrapperRef,
   announce,
-  isFlagEnabled,
+  areBasicFeaturesEnabled,
 }: TableBodyWrapperProps) {
   const { rows, columns, paginationNeeded, totalsPosition } = tableData;
   const columnsStylingIDsJSON = JSON.stringify(columns.map((column) => column.stylingIDs));
@@ -90,7 +90,7 @@ function TableBodyWrapper({
                 keyboard,
                 paginationNeeded,
                 totalsPosition,
-                isFlagEnabled,
+                areBasicFeaturesEnabled,
               });
             };
 
