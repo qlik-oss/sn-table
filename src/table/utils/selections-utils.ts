@@ -219,6 +219,7 @@ const selectCell = (state: SelectionState, payload: ActionPayload): SelectionSta
 };
 
 const selectMultipleCells = (state: SelectionState, payload: ActionPayload): SelectionState => {
+  if (!state.isSelectMultiValues) return state;
   const { api, rows, colIdx, allRows, firstCell } = state;
   const { cell, announce, evt } = payload;
   let selectedRows: Record<string, number> = {};
@@ -232,11 +233,17 @@ const selectMultipleCells = (state: SelectionState, payload: ActionPayload): Sel
   return { ...state, rows: selectedRows, colIdx: firstCell?.colIdx || cell.colIdx, isSelectMultiValues: true };
 };
 
-const startSelectMulti = (state: SelectionState, cell: Cell): SelectionState => ({
-  ...state,
-  isSelectMultiValues: true,
-  firstCell: cell,
-});
+const startSelectMulti = (state: SelectionState, cell: Cell): SelectionState => {
+  if (state.colIdx === -1 || state.colIdx === cell.colIdx) {
+    return {
+      ...state,
+      isSelectMultiValues: true,
+      firstCell: cell,
+    };
+  }
+
+  return state;
+};
 
 const endSelectMulti = (state: SelectionState): SelectionState => {
   const { api, rows, colIdx, isSelectMultiValues } = state;
