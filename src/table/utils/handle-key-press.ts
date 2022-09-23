@@ -180,6 +180,8 @@ export const handleBodyKeyDown = ({
     bottom: isSelectionMode && totalsPosition === 'bottom' ? 1 : 0,
   };
 
+  const basicFeaturesEnabled = isFlagEnabled('PS_15585_SN_TABLE_BASIC_FEATURES');
+
   switch (evt.key) {
     case 'ArrowUp':
     case 'ArrowDown': {
@@ -187,13 +189,14 @@ export const handleBodyKeyDown = ({
       const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, allowedRows);
       // Shift + up/down arrow keys: select multiple values
       // When at the first/last row of the cell, shift + arrow up/down key, no value is selected
-      const isSelectMultiValues =
+      const shouldSelectMultiValues =
+        basicFeaturesEnabled &&
         evt.shiftKey &&
         cell.isSelectable &&
         isSelectionsEnabled &&
         ((cell.prevQElemNumber !== undefined && evt.key === 'ArrowUp') ||
           (cell.nextQElemNumber !== undefined && evt.key === 'ArrowDown'));
-      if (isSelectMultiValues) {
+      if (shouldSelectMultiValues) {
         selectionDispatch({
           type: SelectionActions.SELECT_MULTI_ADD,
           payload: { cell, evt, announce },
@@ -231,7 +234,7 @@ export const handleBodyKeyDown = ({
       focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
       break;
     case 'c':
-      isFlagEnabled('PS_15585_SN_TABLE_BASIC_FEATURES') && (evt.ctrlKey || evt.metaKey) && copyCellValue(cell);
+      basicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(cell);
       break;
     default:
       break;
@@ -241,8 +244,14 @@ export const handleBodyKeyDown = ({
 /**
  * confirms selections when making multiple selections with shift + arrows and shit is released
  */
-export const handleBodyKeyUp = (evt: React.KeyboardEvent, selectionDispatch: React.Dispatch<TSelectionActions>) => {
-  evt.key === 'Shift' && selectionDispatch({ type: SelectionActions.SELECT_MULTI_END });
+export const handleBodyKeyUp = (
+  evt: React.KeyboardEvent,
+  selectionDispatch: React.Dispatch<TSelectionActions>,
+  isFlagEnabled: (flag: string) => boolean
+) => {
+  isFlagEnabled('PS_15585_SN_TABLE_BASIC_FEATURES') &&
+    evt.key === 'Shift' &&
+    selectionDispatch({ type: SelectionActions.SELECT_MULTI_END });
 };
 
 /**

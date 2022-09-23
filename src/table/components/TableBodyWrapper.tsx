@@ -106,8 +106,9 @@ function TableBodyWrapper({
                   styling={cellStyle}
                   tabIndex={-1}
                   announce={announce}
+                  isFlagEnabled={isFlagEnabled}
                   onKeyDown={handleKeyDown}
-                  onKeyUp={(evt: React.KeyboardEvent) => handleBodyKeyUp(evt, selectionDispatch)}
+                  onKeyUp={(evt: React.KeyboardEvent) => handleBodyKeyUp(evt, selectionDispatch, isFlagEnabled)}
                   onClick={() =>
                     handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition)
                   }
