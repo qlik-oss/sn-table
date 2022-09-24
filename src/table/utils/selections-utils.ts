@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { stardust } from '@nebula.js/stardust';
 import { Cell, ExtendedSelectionAPI, Announce } from '../../types';
+// eslint-disable-next-line import/no-cycle
 import { SelectionState, ActionPayload } from '../types';
 
 export enum SelectionStates {

@@ -14,6 +14,7 @@ import {
   TableLayout,
   TotalsPosition,
 } from '../types';
+// eslint-disable-next-line import/no-cycle
 import { TSelectionActions } from './utils/selections-utils';
 
 export interface SelectionState {
