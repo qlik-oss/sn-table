@@ -73,6 +73,7 @@ export default function supernova(env: Galaxy) {
       const { direction, footerContainer } = useOptions() as UseOptions;
       const app = useApp();
       const model = useModel();
+
       const constraints = useConstraints();
       const translator = useTranslator() as ExtendedTranslator;
       const selectionsAPI = useSelections() as ExtendedSelectionAPI;
@@ -98,6 +99,7 @@ export default function supernova(env: Galaxy) {
             {
               rootElement,
               layout,
+              model,
               tableData,
               direction,
               pageInfo,

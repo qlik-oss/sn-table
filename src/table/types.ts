@@ -167,6 +167,7 @@ export interface TableWrapperProps extends CommonTableProps {
   footerContainer?: HTMLElement;
   announce: Announce;
   isFlagEnabled(flag: string): boolean;
+  model: any;
 }
 
 export interface TableHeadWrapperProps extends CommonTableProps {
