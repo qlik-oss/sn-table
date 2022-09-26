@@ -122,7 +122,7 @@ export const removeTabAndFocusCell = (
   if (keyboard.enabled && !keyboard.active) {
     keyboard.focus?.();
   } else {
-    updateFocus({ focusType: 'focus', cell: getCellElement(rootElement, newCoord) });
+    updateFocus({ focusType: 'addTab', cell: getCellElement(rootElement, newCoord) });
   }
 };
 

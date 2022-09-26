@@ -542,7 +542,7 @@ describe('handle-accessibility', () => {
       expect(keyboard.focus).not.toHaveBeenCalled();
     });
 
-    it('should call update setFocusedCellCoord but no keyboard.focus when keyboard.enabled is true and active is true', () => {
+    it('should call update setFocusedCellCoord but not keyboard.focus when keyboard.enabled is true and active is true', () => {
       keyboard.active = true;
       accessibilityUtils.removeTabAndFocusCell(newCoord, rootElement, setFocusedCellCoord, keyboard);
       expect(setFocusedCellCoord).toHaveBeenCalledWith(newCoord);
