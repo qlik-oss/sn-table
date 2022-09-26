@@ -119,7 +119,11 @@ export const removeTabAndFocusCell = (
 ) => {
   updateFocus({ focusType: 'removeTab', cell: findCellWithTabStop(rootElement) });
   setFocusedCellCoord(newCoord);
-  keyboard.enabled && keyboard.focus?.();
+  if (keyboard.enabled && !keyboard.active) {
+    keyboard.focus?.();
+  } else {
+    updateFocus({ focusType: 'focus', cell: getCellElement(rootElement, newCoord) });
+  }
 };
 
 /**
