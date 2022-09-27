@@ -1,5 +1,3 @@
-// TODO: add this to global rules
-/* eslint-disable @typescript-eslint/no-empty-interface */
 import { stardust } from '@nebula.js/stardust';
 import { Cell, ExtendedSelectionAPI, Announce } from '../../types';
 import { SelectionState, ActionPayload, SelectionActionTypes } from '../types';

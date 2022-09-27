@@ -10,7 +10,7 @@ import {
   TableData,
 } from './types';
 
-enum directionMap {
+enum DirectionMap {
   A = 'asc',
   D = 'desc',
   N = 'asc',
@@ -61,7 +61,7 @@ export function getColumnInfo(layout: TableLayout, colIndex: number, columnOrder
       id: `col-${colIndex}`,
       align: !info.textAlign || info.textAlign.auto ? autoAlign : info.textAlign.align,
       stylingIDs: info.qAttrExprInfo.map((expr) => expr.id),
-      sortDirection: info.qSortIndicator ? directionMap[info.qSortIndicator] : directionMap.A,
+      sortDirection: info.qSortIndicator ? DirectionMap[info.qSortIndicator] : DirectionMap.A,
       dataColIdx: colIndex,
       totalInfo: getTotalInfo(isDim, layout, colIndex, numDims, columnOrder),
     }
