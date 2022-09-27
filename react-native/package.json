@@ -25,7 +25,7 @@
   "peerDependencies": {
     "react": "18.2.0",
     "react-native": "0.70.1",
-    "@nebula.js/stardust": "2.x"
+    "@nebula.js/stardust": "3.x"
   },
   "resolutions": {
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
