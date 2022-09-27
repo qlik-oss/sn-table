@@ -56,7 +56,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "yarn lint && yarn types:check"
+      "yarn lint"
     ],
     "*.{json,css,md}": [
       "yarn format"
