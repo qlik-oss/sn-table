@@ -54,6 +54,14 @@ Run type checking with:
 
     yarn types:check
 
+## Git hooks
+
+When you commit, linting your commit message and linting, type/formatting checking your code are running.
+
+You can skip git commit hooks with:
+
+    git commit -m "commit message" --no-verify
+
 ## Releasing
 
 Currently only admins are able to create a release. A release consists of the following:

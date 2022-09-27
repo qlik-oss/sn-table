@@ -1,58 +1,11 @@
-// TODO: add this to global rules
-/* eslint-disable @typescript-eslint/no-empty-interface */
 import { stardust } from '@nebula.js/stardust';
 import { Cell, ExtendedSelectionAPI, Announce, Row } from '../../types';
-import { SelectionState, ActionPayload } from '../types';
-
-export enum SelectionStates {
-  SELECTED = 'selected',
-  POSSIBLE = 'possible',
-  EXCLUDED = 'excluded',
-  INACTIVE = 'inactive',
-}
-
-export enum SelectionActions {
-  SELECT = 'select',
-  SELECT_MULTI_START = 'SelectMultiStart',
-  SELECT_MULTI_ADD = 'SelectMultiAdd',
-  SELECT_MULTI_END = 'selectMultiEnd',
-  RESET = 'reset',
-  CLEAR = 'clear',
-  UPDATE_ALL_ROWS = 'updateAllRows',
-}
-
-interface Action<T = any> {
-  type: T;
-}
-
-export interface SelectAction extends Action<SelectionActions.SELECT> {
-  payload: ActionPayload;
-}
-export interface SelectMultiStartAction extends Action<SelectionActions.SELECT_MULTI_START> {
-  payload: { cell: Cell };
-}
-export interface SelectMultiAddAction extends Action<SelectionActions.SELECT_MULTI_ADD> {
-  payload: ActionPayload;
-}
-export interface SelectMultiEndAction extends Action<SelectionActions.SELECT_MULTI_END> {}
-export interface ResetAction extends Action<SelectionActions.RESET> {}
-export interface ClearAction extends Action<SelectionActions.CLEAR> {}
-export interface UpdateAllRowsAction extends Action<SelectionActions.UPDATE_ALL_ROWS> {
-  payload: { allRows: Row[] };
-}
-
-export type TSelectionActions =
-  | SelectAction
-  | SelectMultiStartAction
-  | SelectMultiAddAction
-  | SelectMultiEndAction
-  | ResetAction
-  | ClearAction
-  | UpdateAllRowsAction;
+import { SelectionState, ActionPayload, SelectionActionTypes } from '../types';
+import { SelectionActions, SelectionStates, KeyCodes } from '../constants';
 
 interface AddSelectionListenersArgs {
   api: ExtendedSelectionAPI;
-  selectionDispatch: React.Dispatch<TSelectionActions>;
+  selectionDispatch: React.Dispatch<SelectionActionTypes>;
   setShouldRefocus(): void;
   keyboard: stardust.Keyboard;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
@@ -173,7 +126,7 @@ export const getMultiSelectedRows = (
   if ('key' in evt && evt.shiftKey && evt.key.includes('Arrow')) {
     newSelectedRows[cell.qElemNumber] = cell.rowIdx;
     // add the next or previous cell to selectedRows, based on which arrow is pressed
-    if (evt.key === 'ArrowDown') {
+    if (evt.key === KeyCodes.DOWN) {
       newSelectedRows[cell.nextQElemNumber as number] = cell.rowIdx + 1;
     } else {
       newSelectedRows[cell.prevQElemNumber as number] = cell.rowIdx - 1;
@@ -257,7 +210,7 @@ const endSelectMulti = (state: SelectionState): SelectionState => {
   return { ...state, isSelectMultiValues: false, firstCell: undefined };
 };
 
-export const reducer = (state: SelectionState, action: TSelectionActions): SelectionState => {
+export const reducer = (state: SelectionState, action: SelectionActionTypes): SelectionState => {
   switch (action.type) {
     case SelectionActions.SELECT:
       return selectCell(state, action.payload);

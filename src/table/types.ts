@@ -15,7 +15,44 @@ import {
   TotalsPosition,
   Row,
 } from '../types';
-import { TSelectionActions } from './utils/selections-utils';
+import { SelectionActions } from './constants';
+
+interface Action<T = any> {
+  type: T;
+}
+
+export interface ActionPayload {
+  cell: Cell;
+  announce: Announce;
+  evt: React.KeyboardEvent | React.MouseEvent;
+}
+
+export interface SelectAction extends Action<SelectionActions.SELECT> {
+  payload: ActionPayload;
+}
+export interface SelectMultiStartAction extends Action<SelectionActions.SELECT_MULTI_START> {
+  payload: { cell: Cell };
+}
+export interface SelectMultiAddAction extends Action<SelectionActions.SELECT_MULTI_ADD> {
+  payload: ActionPayload;
+}
+export interface SelectMultiEndAction extends Action<SelectionActions.SELECT_MULTI_END> {}
+export interface ResetAction extends Action<SelectionActions.RESET> {}
+export interface ClearAction extends Action<SelectionActions.CLEAR> {}
+export interface UpdateAllRowsAction extends Action<SelectionActions.UPDATE_ALL_ROWS> {
+  payload: { allRows: Row[] };
+}
+
+export type SelectionActionTypes =
+  | SelectAction
+  | SelectMultiStartAction
+  | SelectMultiAddAction
+  | SelectMultiEndAction
+  | ResetAction
+  | ClearAction
+  | UpdateAllRowsAction;
+
+export type SelectionDispatch = React.Dispatch<SelectionActionTypes> | jest.Mock<any, any>;
 
 export interface SelectionState {
   allRows: Row[];
@@ -26,13 +63,6 @@ export interface SelectionState {
   firstCell?: Cell;
 }
 
-export interface ActionPayload {
-  cell: Cell;
-  announce: Announce;
-  evt: React.KeyboardEvent | React.MouseEvent;
-}
-
-export type SelectionDispatch = React.Dispatch<TSelectionActions> | jest.Mock<any, any>;
 export interface ContextValue {
   headRowHeight: number;
   setHeadRowHeight: React.Dispatch<React.SetStateAction<number>>;
@@ -90,7 +120,7 @@ export interface HandleBodyKeyDownProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;
   cell: Cell;
-  selectionDispatch: React.Dispatch<TSelectionActions>;
+  selectionDispatch: React.Dispatch<SelectionActionTypes>;
   isSelectionsEnabled: boolean;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   announce: Announce;

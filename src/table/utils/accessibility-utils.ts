@@ -119,7 +119,11 @@ export const removeTabAndFocusCell = (
 ) => {
   updateFocus({ focusType: 'removeTab', cell: findCellWithTabStop(rootElement) });
   setFocusedCellCoord(newCoord);
-  keyboard.enabled && keyboard.focus?.();
+  if (keyboard.enabled && !keyboard.active) {
+    keyboard.focus?.();
+  } else {
+    updateFocus({ focusType: 'addTab', cell: getCellElement(rootElement, newCoord) });
+  }
 };
 
 /**
@@ -170,7 +174,7 @@ export const handleFocusoutEvent = (
   keyboard: stardust.Keyboard
 ) => {
   const targetElement = evt.currentTarget as HTMLDivElement;
-  if (keyboard?.enabled && !targetElement.contains(evt.relatedTarget as Node) && !shouldRefocus.current) {
+  if (keyboard.enabled && !targetElement.contains(evt.relatedTarget as Node) && !shouldRefocus.current) {
     targetElement.querySelector('#sn-table-announcer--01')!.innerHTML = '';
     targetElement.querySelector('#sn-table-announcer--02')!.innerHTML = '';
     // Blur the table but not focus its parent element

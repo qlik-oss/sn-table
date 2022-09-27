@@ -2,9 +2,14 @@ import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 
 import { focusSelectionToolbar, announceSelectionState, moveFocus, copyCellValue } from './accessibility-utils';
-import { SelectionActions, TSelectionActions } from './selections-utils';
 import { handleNavigateTop } from './handle-scroll';
-import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownProps } from '../types';
+import {
+  HandleWrapperKeyDownProps,
+  HandleHeadKeyDownProps,
+  HandleBodyKeyDownProps,
+  SelectionActionTypes,
+} from '../types';
+import { KeyCodes, SelectionActions } from '../constants';
 
 const isCtrlShift = (evt: React.KeyboardEvent) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
@@ -27,11 +32,11 @@ export const shouldBubble = (
   const bubbleWithShift = evt.shiftKey && !shouldGoToSelToolbar;
   return (
     // esc to blur object
-    (evt.key === 'Escape' && !isSelectionMode) ||
+    (evt.key === KeyCodes.ESC && !isSelectionMode) ||
     // default tab to pagination or tab to blur
-    (evt.key === 'Tab' && (bubbleWithoutShift || bubbleWithShift)) ||
+    (evt.key === KeyCodes.TAB && (bubbleWithoutShift || bubbleWithShift)) ||
     // ctrl + shift + arrow to change page
-    ((evt.key === 'ArrowLeft' || evt.key === 'ArrowRight') && isCtrlShift(evt))
+    ((evt.key === KeyCodes.LEFT || evt.key === KeyCodes.RIGHT) && isCtrlShift(evt))
   );
 };
 
@@ -63,14 +68,14 @@ export const handleWrapperKeyDown = ({
     preventDefaultBehavior(evt);
     // ctrl + shift + left/right arrow keys: go to previous/next page
     const lastPage = Math.ceil(totalRowCount / rowsPerPage) - 1;
-    if (evt.key === 'ArrowRight' && page < lastPage) {
+    if (evt.key === KeyCodes.RIGHT && page < lastPage) {
       setShouldRefocus();
       handleChangePage(page + 1);
-    } else if (evt.key === 'ArrowLeft' && page > 0) {
+    } else if (evt.key === KeyCodes.LEFT && page > 0) {
       setShouldRefocus();
       handleChangePage(page - 1);
     }
-  } else if (evt.key === 'Escape' && keyboard.enabled && !isSelectionMode) {
+  } else if (evt.key === KeyCodes.ESC && keyboard.enabled && !isSelectionMode) {
     // escape key: tell Nebula to relinquish the table's focus to
     // its parent element when nebula handles keyboard navigation
     // and not in selection mode
@@ -101,14 +106,14 @@ export const handleHeadKeyDown = ({
   preventDefaultBehavior(evt);
 
   switch (evt.key) {
-    case 'ArrowDown':
-    case 'ArrowRight':
-    case 'ArrowLeft':
+    case KeyCodes.LEFT:
+    case KeyCodes.RIGHT:
+    case KeyCodes.DOWN:
       moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
       break;
-    // Space bar / Enter: update the sorting
-    case ' ':
-    case 'Enter':
+    case KeyCodes.SPACE:
+    case KeyCodes.ENTER:
+      // Space bar / Enter: update the sorting
       changeSortOrder(layout, column);
       break;
     default:
@@ -134,10 +139,10 @@ export const handleTotalKeyDown = (
   preventDefaultBehavior(evt);
 
   switch (evt.key) {
-    case 'ArrowUp':
-    case 'ArrowDown':
-    case 'ArrowRight':
-    case 'ArrowLeft': {
+    case KeyCodes.LEFT:
+    case KeyCodes.RIGHT:
+    case KeyCodes.UP:
+    case KeyCodes.DOWN: {
       moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
       break;
     }
@@ -183,9 +188,9 @@ export const handleBodyKeyDown = ({
   const basicFeaturesEnabled = isFlagEnabled('PS_15585_SN_TABLE_BASIC_FEATURES');
 
   switch (evt.key) {
-    case 'ArrowUp':
-    case 'ArrowDown': {
-      evt.key === 'ArrowUp' && handleNavigateTop([cell.rawRowIdx, cell.rawColIdx], rootElement);
+    case KeyCodes.UP:
+    case KeyCodes.DOWN: {
+      evt.key === KeyCodes.UP && handleNavigateTop([cell.rawRowIdx, cell.rawColIdx], rootElement);
       const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, allowedRows);
       // Shift + up/down arrow keys: select multiple values
       // When at the first/last row of the cell, shift + arrow up/down key, no value is selected
@@ -194,8 +199,8 @@ export const handleBodyKeyDown = ({
         evt.shiftKey &&
         cell.isSelectable &&
         isSelectionsEnabled &&
-        ((cell.prevQElemNumber !== undefined && evt.key === 'ArrowUp') ||
-          (cell.nextQElemNumber !== undefined && evt.key === 'ArrowDown'));
+        ((cell.prevQElemNumber !== undefined && evt.key === KeyCodes.UP) ||
+          (cell.nextQElemNumber !== undefined && evt.key === KeyCodes.DOWN));
       if (shouldSelectMultiValues) {
         selectionDispatch({
           type: SelectionActions.SELECT_MULTI_ADD,
@@ -207,34 +212,34 @@ export const handleBodyKeyDown = ({
       }
       break;
     }
-    case 'ArrowRight':
-    case 'ArrowLeft':
+    case KeyCodes.LEFT:
+    case KeyCodes.RIGHT:
       moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, allowedRows);
       break;
     // Space bar: Selects value.
-    case ' ':
+    case KeyCodes.SPACE:
       cell.isSelectable &&
         isSelectionsEnabled &&
         selectionDispatch({ type: SelectionActions.SELECT, payload: { cell, evt, announce } });
       break;
     // Enter: Confirms selections.
-    case 'Enter':
+    case KeyCodes.ENTER:
       if (isSelectionMode) {
         selectionsAPI.confirm();
         announce({ keys: ['SNTable.SelectionLabel.SelectionsConfirmed'] });
       }
       break;
     // Esc: Cancels selections. If no selections, do nothing and handleWrapperKeyDown should catch it
-    case 'Escape':
+    case KeyCodes.ESC:
       selectionsAPI.cancel();
       announce({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
       break;
     // Tab (+ shift): in selection mode and keyboard enabled, focus on selection toolbar
-    case 'Tab':
+    case KeyCodes.TAB:
       focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
       break;
-    case 'c':
-      basicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(cell);
+    case KeyCodes.C:
+      isFlagEnabled('PS_15585_SN_TABLE_BASIC_FEATURES') && (evt.ctrlKey || evt.metaKey) && copyCellValue(cell);
       break;
     default:
       break;
@@ -246,11 +251,11 @@ export const handleBodyKeyDown = ({
  */
 export const handleBodyKeyUp = (
   evt: React.KeyboardEvent,
-  selectionDispatch: React.Dispatch<TSelectionActions>,
+  selectionDispatch: React.Dispatch<SelectionActionTypes>,
   isFlagEnabled: (flag: string) => boolean
 ) => {
   isFlagEnabled('PS_15585_SN_TABLE_BASIC_FEATURES') &&
-    evt.key === 'Shift' &&
+    evt.key === KeyCodes.SHIFT &&
     selectionDispatch({ type: SelectionActions.SELECT_MULTI_END });
 };
 
@@ -258,7 +263,7 @@ export const handleBodyKeyUp = (
  * Manually focuses the selection toolbar if tabbing from the last focusable element
  */
 export const handleLastTab = (evt: React.KeyboardEvent, isSelectionMode: boolean, keyboard: stardust.Keyboard) => {
-  if (isSelectionMode && evt.key === 'Tab' && !evt.shiftKey) {
+  if (isSelectionMode && evt.key === KeyCodes.TAB && !evt.shiftKey) {
     // tab key: focus on the selection toolbar
     preventDefaultBehavior(evt);
     // @ts-ignore TODO: fix nebula api so that target has the correct argument type

@@ -1,9 +1,9 @@
 import { MouseEvent } from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { Announce, Cell, TotalsPosition } from '../../types';
-import { SelectionActions } from './selections-utils';
-import { removeTabAndFocusCell, updateFocus, getCellElement } from './accessibility-utils';
 import { SelectionDispatch } from '../types';
+import { SelectionActions } from '../constants';
+import { removeTabAndFocusCell, updateFocus, getCellElement } from './accessibility-utils';
 
 export const handleClickToFocusBody = (
   cell: Cell,

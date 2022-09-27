@@ -1,10 +1,11 @@
 import React, { useState, useReducer, createContext } from 'react';
 
 import { createSelectorProvider } from './createSelectorProvider';
-import { reducer, SelectionActions } from '../utils/selections-utils';
+import { reducer } from '../utils/selections-utils';
 import { ExtendedSelectionAPI } from '../../types';
 import { ContextValue, ContextProviderProps } from '../types';
 import useDidUpdateEffect from '../hooks/use-did-update-effect';
+import { SelectionActions } from '../constants';
 
 // In order to not have typing issues when using properties on the context,
 // the initial value for the context is casted to ContextValue.

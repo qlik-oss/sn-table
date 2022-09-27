@@ -56,7 +56,8 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "yarn lint"
+      "yarn lint",
+      "bash -c 'yarn types:check'"
     ],
     "*.{json,css,md}": [
       "yarn format"
@@ -92,6 +93,7 @@
     "conventional-changelog-cli": "2.2.2",
     "eslint": "8.23.1",
     "eslint-config-airbnb": "18.2.1",
+    "eslint-config-airbnb-typescript": "17.0.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jest": "27.0.4",

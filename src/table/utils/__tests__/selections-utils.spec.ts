@@ -5,15 +5,10 @@ import {
   handleAnnounceSelectionStatus,
   getSelectedRows,
   getCellSelectionState,
-  SelectionStates,
-  SelectionActions,
-  SelectMultiValuesAction,
-  SelectAction,
-  ResetAction,
-  ClearAction,
 } from '../selections-utils';
 import { Cell, ExtendedSelectionAPI, Announce } from '../../../types';
-import { SelectionState } from '../../types';
+import { SelectionState, SelectMultiValuesAction, SelectAction, ResetAction, ClearAction } from '../../types';
+import { SelectionStates, SelectionActions } from '../../constants';
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {

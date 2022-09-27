@@ -4,7 +4,7 @@ import TableCell from '@mui/material/TableCell';
 
 import { TableContextProvider } from '../../context';
 import * as withSelections from '../withSelections';
-import { SelectionActions } from '../../utils/selections-utils';
+import { SelectionActions } from '../../constants';
 import { Announce, ExtendedSelectionAPI, Cell, Column } from '../../../types';
 import { CellStyle, CellHOCProps } from '../../types';
 

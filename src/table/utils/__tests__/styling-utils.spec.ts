@@ -1,6 +1,4 @@
 import {
-  STYLING_DEFAULTS,
-  SELECTION_STYLING,
   getColor,
   getBaseStyling,
   getHeaderStyle,
@@ -8,9 +6,9 @@ import {
   getColumnStyle,
   getSelectionStyle,
 } from '../styling-utils';
-import { SelectionStates } from '../selections-utils';
 import { ExtendedTheme, PaletteColor, HeaderStyling, ContentStyling, TableLayout } from '../../../types';
 import { CellStyle } from '../../types';
+import { SelectionStates, StylingDefaults, SELECTION_STYLING } from '../../constants';
 
 describe('styling-utils', () => {
   let resolvedColor: string;
@@ -317,28 +315,28 @@ describe('styling-utils', () => {
 
       const resultStyling = getBodyCellStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).toBe('#111');
-      expect(resultStyling.hoverFontColor).toBe(STYLING_DEFAULTS.WHITE);
+      expect(resultStyling.hoverFontColor).toBe(StylingDefaults.WHITE);
     });
     it('should return styling with light hoverBackgroundColor from theme and the default hoverFontColor', () => {
       theme.getStyle = () => '#fff';
 
       const resultStyling = getBodyCellStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).toBe('#fff');
-      expect(resultStyling.hoverFontColor).toBe(STYLING_DEFAULTS.FONT_COLOR);
+      expect(resultStyling.hoverFontColor).toBe(StylingDefaults.FONT_COLOR);
     });
     it('should return styling with dark hoverBackgroundColor and white hoverFontColor', () => {
       if (layout.components?.[0].content?.hoverColor) layout.components[0].content.hoverColor.index = 1;
 
       const resultStyling = getBodyCellStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).toBe(resolvedColor);
-      expect(resultStyling.hoverFontColor).toBe(STYLING_DEFAULTS.WHITE);
+      expect(resultStyling.hoverFontColor).toBe(StylingDefaults.WHITE);
     });
     it('should return styling with light hoverBackgroundColor and the default hoverFontColor', () => {
       if (layout.components?.[0].content?.hoverColor) layout.components[0].content.hoverColor.index = 2;
 
       const resultStyling = getBodyCellStyle(layout, theme);
       expect(resultStyling.hoverBackgroundColor).toBe(altResolvedColor);
-      expect(resultStyling.hoverFontColor).toBe(STYLING_DEFAULTS.FONT_COLOR);
+      expect(resultStyling.hoverFontColor).toBe(StylingDefaults.FONT_COLOR);
     });
     it('should return styling with set hoverBackgroundColor and hoverFontColor', () => {
       if (layout.components?.[0].content?.hoverColor) layout.components[0].content.hoverColor.index = 1;
@@ -385,7 +383,7 @@ describe('styling-utils', () => {
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingIDs);
       expect(columnStyle.backgroundColor).toBe('rgb(221,221,221)');
-      expect(columnStyle.color).toBe(STYLING_DEFAULTS.FONT_COLOR);
+      expect(columnStyle.color).toBe(StylingDefaults.FONT_COLOR);
     });
     it('should return styling unchanged when no qText', () => {
       qAttrExps.qValues = [{ qNum: NaN }, { qNum: NaN }];
@@ -427,7 +425,7 @@ describe('styling-utils', () => {
       const selectionStyling = getSelectionStyle(styling, cellSelectionState);
       expect(selectionStyling).toEqual({
         ...styling,
-        background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${styling.backgroundColor}`,
+        background: `${StylingDefaults.EXCLUDED_BACKGROUND}, ${styling.backgroundColor}`,
         selectedCellClass: SelectionStates.EXCLUDED,
       });
     });
@@ -439,7 +437,7 @@ describe('styling-utils', () => {
       const selectionStyling = getSelectionStyle(styling, cellSelectionState);
       expect(selectionStyling).toEqual({
         ...styling,
-        background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${styling.backgroundColor}`,
+        background: `${StylingDefaults.EXCLUDED_BACKGROUND}, ${styling.backgroundColor}`,
         selectedCellClass: SelectionStates.EXCLUDED,
       });
     });
