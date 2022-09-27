@@ -10,11 +10,11 @@ import {
   TableData,
 } from './types';
 
-const directionMap = {
-  A: 'asc',
-  D: 'desc',
-  N: 'asc',
-};
+enum directionMap {
+  A = 'asc',
+  D = 'desc',
+  N = 'asc',
+}
 
 const MAX_CELLS = 10000;
 
