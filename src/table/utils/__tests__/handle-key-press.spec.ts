@@ -13,7 +13,7 @@ import {
 import * as handleAccessibility from '../accessibility-utils';
 import * as handleScroll from '../handle-scroll';
 import { Announce, Column, ExtendedSelectionAPI, Cell, TableLayout, TotalsPosition } from '../../../types';
-import { TSelectionActions } from '../selections-utils';
+import { SelectionActionTypes } from '../../types';
 
 describe('handle-key-press', () => {
   describe('shouldBubble', () => {
@@ -375,7 +375,7 @@ describe('handle-key-press', () => {
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
     });
 
-    it('should only call preventDefaultBehavior when isSlectioNmode is true', () => {
+    it('should only call preventDefaultBehavior when isSelectionMode is true', () => {
       isSelectionMode = true;
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
@@ -399,7 +399,7 @@ describe('handle-key-press', () => {
     let rootElement: HTMLElement;
     let selectionsAPI: ExtendedSelectionAPI;
     let cell: Cell;
-    let selectionDispatch: React.Dispatch<TSelectionActions>;
+    let selectionDispatch: React.Dispatch<SelectionActionTypes>;
     let isSelectionsEnabled: boolean;
     let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
     let keyboard: stardust.Keyboard;
@@ -692,7 +692,7 @@ describe('handle-key-press', () => {
 
   describe('handleBodyKeyUp', () => {
     let evt: React.KeyboardEvent;
-    let selectionDispatch: React.Dispatch<TSelectionActions>;
+    let selectionDispatch: React.Dispatch<SelectionActionTypes>;
 
     beforeEach(() => {
       evt = {

@@ -1,40 +1,11 @@
-// TODO: add this to global rules
-/* eslint-disable @typescript-eslint/no-empty-interface */
 import { stardust } from '@nebula.js/stardust';
 import { Cell, ExtendedSelectionAPI, Announce } from '../../types';
-// eslint-disable-next-line import/no-cycle
-import { SelectionState, ActionPayload } from '../types';
-
-export enum SelectionStates {
-  SELECTED = 'selected',
-  POSSIBLE = 'possible',
-  EXCLUDED = 'excluded',
-  INACTIVE = 'inactive',
-}
-
-export enum SelectionActions {
-  SELECT = 'select',
-  RESET = 'reset',
-  CLEAR = 'clear',
-  SELECT_MULTI_VALUES = 'selectMultiValues',
-}
-
-interface Action<T = any> {
-  type: T;
-}
-
-export interface SelectAction extends Action<SelectionActions.SELECT> {
-  payload: ActionPayload;
-}
-export interface SelectMultiValuesAction extends Action<SelectionActions.SELECT_MULTI_VALUES> {}
-export interface ResetAction extends Action<SelectionActions.RESET> {}
-export interface ClearAction extends Action<SelectionActions.CLEAR> {}
-
-export type TSelectionActions = SelectAction | ResetAction | ClearAction | SelectMultiValuesAction;
+import { SelectionState, ActionPayload, SelectionActionTypes } from '../types';
+import { SelectionActions, SelectionStates, KeyCodes } from '../constants';
 
 interface AddSelectionListenersArgs {
   api: ExtendedSelectionAPI;
-  selectionDispatch: React.Dispatch<TSelectionActions>;
+  selectionDispatch: React.Dispatch<SelectionActionTypes>;
   setShouldRefocus(): void;
   keyboard: stardust.Keyboard;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
@@ -129,7 +100,7 @@ export const getSelectedRows = (
   if (evt.shiftKey && key.includes('Arrow')) {
     selectedRows[qElemNumber] = rowIdx;
     // add the next or previous cell to selectedRows, based on which arrow is pressed
-    if (key === 'ArrowDown') {
+    if (key === KeyCodes.DOWN) {
       selectedRows[cell.nextQElemNumber as number] = rowIdx + 1;
     } else {
       selectedRows[cell.prevQElemNumber as number] = rowIdx - 1;
@@ -185,7 +156,7 @@ const selectMultiValues = (state: SelectionState): SelectionState => {
   return { ...state, isSelectMultiValues: false };
 };
 
-export const reducer = (state: SelectionState, action: TSelectionActions): SelectionState => {
+export const reducer = (state: SelectionState, action: SelectionActionTypes): SelectionState => {
   switch (action.type) {
     case SelectionActions.SELECT:
       return selectCell(state, action.payload);

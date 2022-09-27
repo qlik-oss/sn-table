@@ -1,35 +1,13 @@
 import { stardust } from '@nebula.js/stardust';
 
 import { resolveToRGBAorRGB, isDarkColor, removeOpacity } from './color-utils';
-import { SelectionStates } from './selections-utils';
 import { TableLayout, ExtendedTheme, HeaderStyling, ContentStyling, PaletteColor } from '../../types';
 import { GeneratedStyling, CellStyle } from '../types';
+import { SelectionStates, StylingDefaults, SELECTION_STYLING } from '../constants';
 
 // the order of style
 // default (inl. sprout theme) < Sense theme < styling settings
 // < column < selection (except the selected green) < hover < selected green
-
-export const STYLING_DEFAULTS = {
-  FONT_COLOR: '#404040',
-  HOVER_BACKGROUND: '#f4f4f4',
-  SELECTED_BACKGROUND: '#009845',
-  EXCLUDED_BACKGROUND:
-    'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px)',
-  WHITE: '#fff',
-};
-
-export const SELECTION_STYLING = {
-  SELECTED: {
-    color: STYLING_DEFAULTS.WHITE,
-    background: STYLING_DEFAULTS.SELECTED_BACKGROUND,
-    // Setting a specific class for selected cells styling to override hover effect
-    selectedCellClass: SelectionStates.SELECTED,
-  },
-  POSSIBLE: {
-    color: STYLING_DEFAULTS.FONT_COLOR,
-    background: STYLING_DEFAULTS.WHITE,
-  },
-};
 
 /**
  * Determines if a palette color is set or not. Both index !== -1 and color !== null must be true for it to be unset
@@ -65,7 +43,7 @@ export function getColor(defaultColor: string, theme: stardust.Theme, color = {}
  * Gets font color based on background, making sure contrast is good enough
  */
 export const getAutoFontColor = (backgroundColor: string): string =>
-  isDarkColor(backgroundColor) ? STYLING_DEFAULTS.WHITE : STYLING_DEFAULTS.FONT_COLOR;
+  isDarkColor(backgroundColor) ? StylingDefaults.WHITE : StylingDefaults.FONT_COLOR;
 
 /**
  * Gets base styling for either header or body taking table theme settings into account
@@ -81,12 +59,12 @@ export const getBaseStyling = (
 
   const baseStyle: GeneratedStyling = {
     fontFamily,
-    color: isColorSet(styleObj?.fontColor) ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj?.fontColor) : color,
+    color: isColorSet(styleObj?.fontColor) ? getColor(StylingDefaults.FONT_COLOR, theme, styleObj?.fontColor) : color,
     fontSize: (styleObj?.fontSize && `${styleObj.fontSize}px`) || fontSize,
     // When we do not set padding for content or header, but set font size,
     // we need to calculate the padding based on the font size
     padding: getPadding(styleObj),
-    borderStyle: 'solid',
+    borderStyle: StylingDefaults.BORDER_STYLE,
     borderColor: theme.table.body.borderColor,
   };
   // Remove all undefined and null values
@@ -103,15 +81,17 @@ export const getBaseStyling = (
 export function getHeaderStyle(layout: TableLayout, theme: ExtendedTheme): GeneratedStyling {
   const header = layout.components?.[0]?.header;
   const headerStyle = getBaseStyling('header', theme, header);
-  headerStyle.cursor = 'pointer';
-  headerStyle.borderWidth = '1px 1px 1px 0px';
+  headerStyle.cursor = StylingDefaults.HEAD_CURSOR;
+  headerStyle.borderWidth = StylingDefaults.HEAD_BORDER;
 
   // To avoid seeing the table body through the table head:
   // - When the table background color from the sense theme is transparent,
   // there is a header background color depending on the header font color
   // - When the table background color from the sense theme has opacity,
   // removing that.
-  const headerBackgroundColor = isDarkColor(headerStyle.color) ? '#FAFAFA' : '#323232';
+  const headerBackgroundColor = isDarkColor(headerStyle.color)
+    ? StylingDefaults.HEAD_BACKGROUND_LIGHT
+    : StylingDefaults.HEAD_BACKGROUND_DARK;
   headerStyle.backgroundColor = theme.table.isBackgroundTransparentColor
     ? headerBackgroundColor
     : removeOpacity(theme.table.backgroundColor);
@@ -121,7 +101,8 @@ export function getHeaderStyle(layout: TableLayout, theme: ExtendedTheme): Gener
   // When there is no header content color setting,
   // the sort label color is depending on the header background color.
   headerStyle.sortLabelColor =
-    headerStyle.color ?? (isDarkColor(headerStyle.backgroundColor) ? 'rgba(255,255,255,0.9)' : 'rgba(0, 0, 0, 0.54)');
+    headerStyle.color ??
+    (isDarkColor(headerStyle.backgroundColor) ? StylingDefaults.SORT_LABEL_LIGHT : StylingDefaults.SORT_LABEL_DARK);
 
   return headerStyle;
 }
@@ -132,7 +113,7 @@ export function getHeaderStyle(layout: TableLayout, theme: ExtendedTheme): Gener
 export function getBodyCellStyle(layout: TableLayout, theme: ExtendedTheme): GeneratedStyling {
   const content = layout.components?.[0]?.content;
   const contentStyle = getBaseStyling('content', theme, content);
-  contentStyle.borderWidth = '0px 1px 1px 0px';
+  contentStyle.borderWidth = StylingDefaults.BODY_BORDER;
 
   const hoverBackgroundColorFromLayout = content?.hoverColor;
   const hoverFontColorFromLayout = content?.hoverFontColor;
@@ -164,14 +145,14 @@ export function getBodyCellStyle(layout: TableLayout, theme: ExtendedTheme): Gen
   let hoverBackgroundColor;
   if (isColorSet(hoverBackgroundColorFromLayout)) {
     // case 1 or 4
-    hoverBackgroundColor = getColor(STYLING_DEFAULTS.HOVER_BACKGROUND, theme, hoverBackgroundColorFromLayout);
+    hoverBackgroundColor = getColor(StylingDefaults.HOVER_BACKGROUND, theme, hoverBackgroundColorFromLayout);
   } else if (hoverBackgroundColorFromTheme) {
     // case 1 or 4
     hoverBackgroundColor = hoverBackgroundColorFromTheme;
   } else if (isHoverFontColorSet) {
     hoverBackgroundColor = ''; // case 3
   } else {
-    hoverBackgroundColor = STYLING_DEFAULTS.HOVER_BACKGROUND; // case 2
+    hoverBackgroundColor = StylingDefaults.HOVER_BACKGROUND; // case 2
   }
 
   const hoverFontColor = isHoverFontOrBackgroundColorSet
@@ -257,7 +238,7 @@ export function getSelectionStyle(styling: CellStyle, cellSelectionState: Select
       break;
     case SelectionStates.EXCLUDED:
       selectionStyling = {
-        background: `${STYLING_DEFAULTS.EXCLUDED_BACKGROUND}, ${styling.backgroundColor}`,
+        background: `${StylingDefaults.EXCLUDED_BACKGROUND}, ${styling.backgroundColor}`,
         selectedCellClass: SelectionStates.EXCLUDED,
       };
       break;

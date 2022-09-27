@@ -1,8 +1,9 @@
 import React from 'react';
 import { useContextSelector, TableContext } from '../context';
 import { getSelectionStyle } from '../utils/styling-utils';
-import { getCellSelectionState, SelectionActions } from '../utils/selections-utils';
+import { getCellSelectionState } from '../utils/selections-utils';
 import { CellHOC, CellHOCProps } from '../types';
+import { SelectionActions } from '../constants';
 
 export default function withSelections(CellComponent: CellHOC) {
   const HOC = (props: CellHOCProps) => {

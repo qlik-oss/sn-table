@@ -14,14 +14,10 @@ import {
   TableLayout,
   TotalsPosition,
 } from '../types';
-// eslint-disable-next-line import/no-cycle
-import { TSelectionActions } from './utils/selections-utils';
+import { SelectionActions } from './constants';
 
-export interface SelectionState {
-  rows: Record<string, number>;
-  colIdx: number;
-  api: ExtendedSelectionAPI;
-  isSelectMultiValues: boolean;
+interface Action<T = any> {
+  type: T;
 }
 
 export interface ActionPayload {
@@ -30,13 +26,29 @@ export interface ActionPayload {
   evt: React.KeyboardEvent | React.MouseEvent;
 }
 
+export interface SelectAction extends Action<SelectionActions.SELECT> {
+  payload: ActionPayload;
+}
+export type SelectMultiValuesAction = Action<SelectionActions.SELECT_MULTI_VALUES>;
+export type ResetAction = Action<SelectionActions.RESET>;
+export type ClearAction = Action<SelectionActions.CLEAR>;
+
+export type SelectionActionTypes = SelectAction | ResetAction | ClearAction | SelectMultiValuesAction;
+
+export interface SelectionState {
+  rows: Record<string, number>;
+  colIdx: number;
+  api: ExtendedSelectionAPI;
+  isSelectMultiValues: boolean;
+}
+
 export interface ContextValue {
   headRowHeight: number;
   setHeadRowHeight: React.Dispatch<React.SetStateAction<number>>;
   focusedCellCoord: [number, number];
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   selectionState: SelectionState;
-  selectionDispatch: React.Dispatch<TSelectionActions> | jest.Mock<any, any>;
+  selectionDispatch: React.Dispatch<SelectionActionTypes> | jest.Mock<any, any>;
 }
 
 export interface GeneratedStyling {
@@ -87,7 +99,7 @@ export interface HandleBodyKeyDownProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;
   cell: Cell;
-  selectionDispatch: React.Dispatch<TSelectionActions>;
+  selectionDispatch: React.Dispatch<SelectionActionTypes>;
   isSelectionsEnabled: boolean;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   announce: Announce;

@@ -174,7 +174,7 @@ export const handleFocusoutEvent = (
   keyboard: stardust.Keyboard
 ) => {
   const targetElement = evt.currentTarget as HTMLDivElement;
-  if (keyboard?.enabled && !targetElement.contains(evt.relatedTarget as Node) && !shouldRefocus.current) {
+  if (keyboard.enabled && !targetElement.contains(evt.relatedTarget as Node) && !shouldRefocus.current) {
     targetElement.querySelector('#sn-table-announcer--01')!.innerHTML = '';
     targetElement.querySelector('#sn-table-announcer--02')!.innerHTML = '';
     // Blur the table but not focus its parent element
