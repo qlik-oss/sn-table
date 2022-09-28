@@ -34,29 +34,25 @@ export const handleMouseDownLabelToFocusHeadCell = (evt: MouseEvent, rootElement
 export const getMouseHandlers = (
   cell: Cell,
   announce: Announce,
-  onClick: React.MouseEventHandler<HTMLTableCellElement> | undefined,
+  onMouseDown: React.MouseEventHandler<HTMLTableCellElement> | undefined,
   selectionDispatch: SelectionDispatch,
   isFlagEnabled: (flag: string) => boolean
 ) => {
   const selectMultiEnabled = isFlagEnabled('PS_15585_SN_TABLE_BASIC_FEATURES');
 
   const handleMouseDown = (evt: React.MouseEvent) => {
-    // Prevent focus to be set to the cell, done on mouse up instead
-    evt.preventDefault();
-    evt.stopPropagation();
+    // run handleClickToFocusBody
+    onMouseDown?.(evt as React.MouseEvent<HTMLTableCellElement>);
     if (selectMultiEnabled && cell.isSelectable)
       selectionDispatch({ type: SelectionActions.SELECT_MULTI_START, payload: { cell } });
   };
 
   const handleMouseOver = (evt: React.MouseEvent) => {
-    if (selectMultiEnabled && evt.button === 0 && evt.buttons === 1)
+    if (selectMultiEnabled && evt.buttons === 1)
       selectionDispatch({ type: SelectionActions.SELECT_MULTI_ADD, payload: { cell, evt, announce } });
   };
 
   const handleMouseUp = (evt: React.MouseEvent) => {
-    // update focusCellCoord and manually focus the element
-    onClick?.(evt as React.MouseEvent<HTMLTableCellElement>);
-    (evt.target as HTMLElement).focus();
     if (selectMultiEnabled && evt.button === 0) selectionDispatch({ type: SelectionActions.SELECT_MULTI_END });
   };
 

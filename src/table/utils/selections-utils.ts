@@ -89,6 +89,8 @@ export const handleAnnounceSelectionStatus = (
   }
 };
 
+const isShiftArrow = (evt: React.KeyboardEvent) => evt.shiftKey && evt.key.includes('Arrow');
+
 export const getSelectedRows = (
   selectedRows: Record<string, number>,
   cell: Cell,
@@ -123,7 +125,7 @@ export const getMultiSelectedRows = (
 ): Record<string, number> => {
   const newSelectedRows = { ...selectedRows };
 
-  if ('key' in evt && evt.shiftKey && evt.key.includes('Arrow')) {
+  if ('key' in evt && isShiftArrow(evt)) {
     newSelectedRows[cell.qElemNumber] = cell.rowIdx;
     // add the next or previous cell to selectedRows, based on which arrow is pressed
     if (evt.key === KeyCodes.DOWN) {
@@ -172,10 +174,11 @@ const selectCell = (state: SelectionState, payload: ActionPayload): SelectionSta
 };
 
 const selectMultipleCells = (state: SelectionState, payload: ActionPayload): SelectionState => {
-  if (!state.isSelectMultiValues) return state;
-  const { api, rows, colIdx, allRows, firstCell } = state;
+  const { api, rows, colIdx, allRows, firstCell, isSelectMultiValues } = state;
   const { cell, announce, evt } = payload;
   let selectedRows: Record<string, number> = {};
+
+  if (!isSelectMultiValues && 'key' in evt && !isShiftArrow(evt)) return state;
 
   if (colIdx === -1) api.begin(['/qHyperCubeDef']);
   else selectedRows = { ...rows };

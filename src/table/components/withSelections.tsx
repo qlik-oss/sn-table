@@ -7,7 +7,7 @@ import { CellHOC, CellHOCProps } from '../types';
 
 export default function withSelections(CellComponent: CellHOC) {
   const HOC = (props: CellHOCProps) => {
-    const { cell, styling, announce, onClick, isFlagEnabled } = props;
+    const { cell, styling, announce, onMouseDown, isFlagEnabled } = props;
     const cellSelectionState = useContextSelector(TableContext, (value) =>
       getCellSelectionState(cell, value.selectionState)
     );
@@ -16,7 +16,7 @@ export default function withSelections(CellComponent: CellHOC) {
     const { handleMouseDown, handleMouseOver, handleMouseUp, handleMouseClick } = getMouseHandlers(
       cell,
       announce,
-      onClick,
+      onMouseDown,
       selectionDispatch,
       isFlagEnabled
     );
