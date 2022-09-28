@@ -69,13 +69,13 @@ export const getCellSelectionState = (cell: Cell, selectionState: SelectionState
   return cellState;
 };
 
-export const handleAnnounceSelectionStatus = (
+export const announceSelectionStatus = (
   announce: Announce,
-  newSelectedRows: Record<string, number>,
-  oldSelectedRows: Record<string, number>
+  oldRows: Record<string, number>,
+  newRows: Record<string, number>
 ) => {
-  const rowsLength = Object.keys(newSelectedRows).length;
-  const isAddition = rowsLength >= Object.keys(oldSelectedRows).length;
+  const rowsLength = Object.keys(newRows).length;
+  const isAddition = rowsLength >= Object.keys(oldRows).length;
 
   if (rowsLength) {
     const changeStatus = isAddition ? 'SNTable.SelectionLabel.SelectedValue' : 'SNTable.SelectionLabel.DeselectedValue';
@@ -117,10 +117,10 @@ export const getSelectedRows = (
 };
 
 export const getMultiSelectedRows = (
-  selectedRows: Record<string, number>,
   allRows: Row[],
-  evt: React.KeyboardEvent | React.MouseEvent,
+  selectedRows: Record<string, number>,
   cell: Cell,
+  evt: React.KeyboardEvent | React.MouseEvent,
   firstCell?: Cell
 ): Record<string, number> => {
   const newSelectedRows = { ...selectedRows };
@@ -158,7 +158,7 @@ const selectCell = (state: SelectionState, payload: ActionPayload): SelectionSta
   else return state;
 
   selectedRows = getSelectedRows(selectedRows, cell, evt);
-  handleAnnounceSelectionStatus(announce, selectedRows, rows);
+  announceSelectionStatus(announce, rows, selectedRows);
 
   // only send a select call if there are rows selected, otherwise cancel selections
   if (Object.keys(selectedRows).length) {
@@ -183,8 +183,8 @@ const selectMultipleCells = (state: SelectionState, payload: ActionPayload): Sel
   if (colIdx === -1) api.begin(['/qHyperCubeDef']);
   else selectedRows = { ...rows };
 
-  selectedRows = getMultiSelectedRows(selectedRows, allRows, evt, cell, firstCell);
-  handleAnnounceSelectionStatus(announce, selectedRows, rows);
+  selectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt, firstCell);
+  announceSelectionStatus(announce, rows, selectedRows);
 
   return { ...state, rows: selectedRows, colIdx: firstCell?.colIdx || cell.colIdx, isSelectMultiValues: true };
 };

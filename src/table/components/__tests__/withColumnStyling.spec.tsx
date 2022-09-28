@@ -13,6 +13,7 @@ describe('withColumnStyling', () => {
   let styling: CellStyle;
   let column: Column;
   let announce: Announce;
+  let isFlagEnabled: (flag: string) => boolean;
 
   beforeEach(() => {
     HOC = withColumnStyling.default((props: CellHOCProps) => <TableCell {...props}>{props.children}</TableCell>);
@@ -34,7 +35,7 @@ describe('withColumnStyling', () => {
 
   it('should render table head', () => {
     const { queryByText } = render(
-      <HOC cell={cell} column={column} styling={styling} announce={announce}>
+      <HOC cell={cell} column={column} styling={styling} announce={announce} isFlagEnabled={isFlagEnabled}>
         someValue
       </HOC>
     );

@@ -2,12 +2,13 @@ import { stardust } from '@nebula.js/stardust';
 import {
   addSelectionListeners,
   reducer,
-  handleAnnounceSelectionStatus,
+  announceSelectionStatus,
   getSelectedRows,
   getCellSelectionState,
+  getMultiSelectedRows,
 } from '../selections-utils';
-import { Cell, ExtendedSelectionAPI, Announce } from '../../../types';
-import { SelectionState, SelectMultiValuesAction, SelectAction, ResetAction, ClearAction } from '../../types';
+import { Cell, ExtendedSelectionAPI, Announce, Row } from '../../../types';
+import { SelectionState, SelectMultiEndAction, SelectAction, ResetAction, ClearAction } from '../../types';
 import { SelectionStates, SelectionActions } from '../../constants';
 
 describe('selections-utils', () => {
@@ -106,6 +107,7 @@ describe('selections-utils', () => {
 
     beforeEach(() => {
       state = {
+        allRows: [] as Row[],
         rows: { 1: 1 },
         colIdx: 1,
         api: {
@@ -152,31 +154,6 @@ describe('selections-utils', () => {
         expect(action.payload.announce).toHaveBeenCalledTimes(1);
       });
 
-      it('should call begin and announce but not select when type is select and isSelectMultiValues is true', () => {
-        state.rows = {};
-        state.colIdx = -1;
-        action.payload = {
-          evt: {
-            shiftKey: true,
-            key: 'DownArrow',
-          } as React.KeyboardEvent,
-          announce,
-          cell,
-        };
-
-        const newState = reducer(state, action);
-        expect(newState).toEqual({
-          ...state,
-          rows: { [cell.qElemNumber]: cell.rowIdx, [cell.prevQElemNumber as number]: cell.rowIdx - 1 },
-          colIdx: cell.colIdx,
-          isSelectMultiValues: true,
-        });
-        expect(state.api.begin).toHaveBeenCalledTimes(1);
-        expect(state.api.select).not.toHaveBeenCalled();
-        expect(state.api.cancel).not.toHaveBeenCalled();
-        expect(action.payload.announce).toHaveBeenCalledTimes(1);
-      });
-
       it('should not call begin but call cancel and announce when same qElemNumber (resulting in empty selectedCells)', () => {
         const newState = reducer(state, action);
         expect(newState).toEqual({ ...state, rows: {}, colIdx: -1 });
@@ -199,9 +176,10 @@ describe('selections-utils', () => {
       });
     });
 
-    describe('other', () => {
+    // TODO: rewrite and extend
+    describe('select multiple', () => {
       it('should call select when type is selectMultiValues, isSelectMultiValues is true and return isSelectMultiValues to be false', () => {
-        const action = { type: SelectionActions.SELECT_MULTI_END } as SelectMultiValuesAction;
+        const action = { type: SelectionActions.SELECT_MULTI_END } as SelectMultiEndAction;
         state.isSelectMultiValues = true;
         const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
 
@@ -211,14 +189,16 @@ describe('selections-utils', () => {
       });
 
       it('should not call select when type is selectMultiValues but isSelectMultiValues is false', () => {
-        const action = { type: SelectionActions.SELECT_MULTI_END } as SelectMultiValuesAction;
+        const action = { type: SelectionActions.SELECT_MULTI_END } as SelectMultiEndAction;
         state.isSelectMultiValues = false;
 
         const newState = reducer(state, action);
         expect(newState).toEqual({ ...state, isSelectMultiValues: false });
         expect(state.api.select).not.toHaveBeenCalled();
       });
+    });
 
+    describe('other', () => {
       it('should return state updated when the app is not in selection modal state when action.type is reset', () => {
         const action = { type: SelectionActions.RESET } as ResetAction;
         const newState = reducer(state, action);
@@ -242,63 +222,56 @@ describe('selections-utils', () => {
 
   describe('handleAnnounceSelectionStatus', () => {
     let announce: Announce;
-    let rowsLength: number;
-    let isAddition: boolean;
+    let oldRows: Record<string, number>;
+    let newRows: Record<string, number>;
 
     beforeEach(() => {
       announce = jest.fn();
-      rowsLength = 1;
-      isAddition = true;
+      oldRows = { '1': 1 };
+      newRows = { '1': 1 };
     });
 
     afterEach(() => jest.clearAllMocks());
 
-    it('should announce selected value and one selected value when rowsLength is 1 and isAddition is true', () => {
-      handleAnnounceSelectionStatus(announce, rowsLength, isAddition);
+    it('should announce selected value and one selected value when oldRows.length === newRows.length === 1', () => {
+      announceSelectionStatus(announce, oldRows, newRows);
 
       expect(announce).toHaveBeenCalledWith({
         keys: ['SNTable.SelectionLabel.SelectedValue', 'SNTable.SelectionLabel.OneSelectedValue'],
       });
     });
 
-    it('should announce selected value and two selected values when rowsLength is 2 and isAddition is true', () => {
-      rowsLength = 2;
-      handleAnnounceSelectionStatus(announce, rowsLength, isAddition);
+    it('should announce selected value and two selected values when one row is added, 1->2', () => {
+      newRows = { '1': 1, '2': 2 };
+      announceSelectionStatus(announce, oldRows, newRows);
 
       expect(announce).toHaveBeenCalledWith({
-        keys: [
-          'SNTable.SelectionLabel.SelectedValue',
-          ['SNTable.SelectionLabel.SelectedValues', rowsLength.toString()],
-        ],
+        keys: ['SNTable.SelectionLabel.SelectedValue', ['SNTable.SelectionLabel.SelectedValues', '2']],
       });
     });
 
-    it('should announce deselected value and one selected value when rowsLength is 1 and isAddition is false', () => {
-      isAddition = false;
-      handleAnnounceSelectionStatus(announce, rowsLength, isAddition);
+    it('should announce deselected value and one selected value when one row is removed, 2->1', () => {
+      oldRows = { '1': 1, '2': 2 };
+      announceSelectionStatus(announce, oldRows, newRows);
 
       expect(announce).toHaveBeenCalledWith({
         keys: ['SNTable.SelectionLabel.DeselectedValue', 'SNTable.SelectionLabel.OneSelectedValue'],
       });
     });
 
-    it('should announce deselected value and two selected values when rowsLength is 2 and isAddition is false', () => {
-      rowsLength = 2;
-      isAddition = false;
-      handleAnnounceSelectionStatus(announce, rowsLength, isAddition);
+    it('should announce deselected value and two selected values when one row is removed, 3->2', () => {
+      oldRows = { '1': 1, '2': 2, '3': 3 };
+      newRows = { '1': 1, '2': 2 };
+      announceSelectionStatus(announce, oldRows, newRows);
 
       expect(announce).toHaveBeenCalledWith({
-        keys: [
-          'SNTable.SelectionLabel.DeselectedValue',
-          ['SNTable.SelectionLabel.SelectedValues', rowsLength.toString()],
-        ],
+        keys: ['SNTable.SelectionLabel.DeselectedValue', ['SNTable.SelectionLabel.SelectedValues', '2']],
       });
     });
 
     it('should announce deselected value and exited selection mode when you have deselected the last value', () => {
-      rowsLength = 0;
-      isAddition = false;
-      handleAnnounceSelectionStatus(announce, rowsLength, isAddition);
+      newRows = {};
+      announceSelectionStatus(announce, oldRows, newRows);
 
       expect(announce).toHaveBeenCalledWith({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
     });
@@ -344,14 +317,35 @@ describe('selections-utils', () => {
       const updatedSelectedRows = getSelectedRows(selectedRows, cell, evt);
       expect(updatedSelectedRows).toEqual({ 1: 1, [cell.qElemNumber]: cell.rowIdx });
     });
+  });
+
+  // TODO: rewrite and extend
+  describe('getMultiSelectedRows', () => {
+    let selectedRows: Record<string, number>;
+    let allRows: Row[];
+    let cell: Cell;
+    let evt: React.KeyboardEvent;
+
+    beforeEach(() => {
+      selectedRows = { '2': 2 };
+      cell = {
+        qElemNumber: 0,
+        rowIdx: 0,
+      } as Cell;
+      evt = {} as React.KeyboardEvent;
+    });
 
     it('should add the current cell and the next cell to selectedRows when press shift and arrow down key', () => {
       evt.shiftKey = true;
       evt.key = 'ArrowDown';
-      cell.nextQElemNumber = 2;
+      cell.nextQElemNumber = 1;
 
-      const updatedSelectedRows = getSelectedRows(selectedRows, cell, evt);
-      expect(updatedSelectedRows).toEqual({ 1: 1, [cell.qElemNumber]: cell.rowIdx, [cell.nextQElemNumber]: 1 });
+      const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt);
+      expect(updatedSelectedRows).toEqual({
+        ...selectedRows,
+        [cell.qElemNumber]: cell.rowIdx,
+        [cell.nextQElemNumber]: 1,
+      });
     });
   });
 
@@ -368,6 +362,7 @@ describe('selections-utils', () => {
       } as Cell;
 
       selectionState = {
+        allRows: [],
         colIdx: 1,
         rows: { 1: 1 },
         api: {

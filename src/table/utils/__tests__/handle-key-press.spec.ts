@@ -16,6 +16,12 @@ import { Announce, Column, ExtendedSelectionAPI, Cell, TableLayout, TotalsPositi
 import { SelectionActionTypes } from '../../types';
 
 describe('handle-key-press', () => {
+  let isFlagEnabled: (flag: string) => boolean;
+
+  beforeEach(() => {
+    isFlagEnabled = (flag: string) => !!flag;
+  });
+
   describe('shouldBubble', () => {
     let evt: React.KeyboardEvent;
     let isSelectionMode: boolean;
@@ -406,7 +412,6 @@ describe('handle-key-press', () => {
     let announce: Announce;
     let paginationNeeded: boolean;
     let totalsPosition: TotalsPosition;
-    let isFlagEnabled: (flag: string) => boolean;
 
     const runHandleBodyKeyDown = () =>
       handleBodyKeyDown({
@@ -457,7 +462,6 @@ describe('handle-key-press', () => {
       announce = jest.fn();
       paginationNeeded = true;
       totalsPosition = 'noTotals';
-      isFlagEnabled = jest.fn().mockReturnValue(true);
       jest.spyOn(handleAccessibility, 'focusSelectionToolbar').mockImplementation(() => jest.fn());
       jest.spyOn(handleAccessibility, 'announceSelectionState').mockImplementation(() => jest.fn());
       jest.spyOn(handleAccessibility, 'copyCellValue');
@@ -662,7 +666,7 @@ describe('handle-key-press', () => {
     it('should not call copyCellValue when the flag is disabled', () => {
       evt.key = 'c';
       evt.metaKey = true;
-      isFlagEnabled = jest.fn().mockReturnValue(false);
+      isFlagEnabled = (flag: string) => !flag;
       runHandleBodyKeyDown();
       expect(handleAccessibility.copyCellValue).not.toHaveBeenCalled();
     });
@@ -702,7 +706,7 @@ describe('handle-key-press', () => {
     });
 
     it('when the shift key is pressed, should run selectionDispatch', () => {
-      handleBodyKeyUp(evt, selectionDispatch);
+      handleBodyKeyUp(evt, selectionDispatch, isFlagEnabled);
 
       expect(selectionDispatch).toHaveBeenCalledTimes(1);
     });
@@ -710,7 +714,7 @@ describe('handle-key-press', () => {
     it('when other keys are pressed, should not do anything', () => {
       evt.key = 'Control';
 
-      handleBodyKeyUp(evt, selectionDispatch);
+      handleBodyKeyUp(evt, selectionDispatch, isFlagEnabled);
 
       expect(selectionDispatch).not.toHaveBeenCalled();
     });

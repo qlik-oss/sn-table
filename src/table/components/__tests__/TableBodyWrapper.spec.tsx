@@ -30,7 +30,7 @@ describe('<TableBodyWrapper />', () => {
 
   const renderTableBody = () =>
     render(
-      <TableContextProvider selectionsAPI={selectionsAPI}>
+      <TableContextProvider selectionsAPI={selectionsAPI} tableRows={[]}>
         <TableBodyWrapper
           tableData={tableData}
           constraints={constraints}
@@ -67,6 +67,7 @@ describe('<TableBodyWrapper />', () => {
     } as unknown as ExtendedTheme;
     layout = {} as TableLayout;
     tableFirstRow = tableData.rows[0]['col-0'] as Cell;
+    isFlagEnabled = (flag) => !!flag;
   });
 
   afterEach(() => jest.clearAllMocks());
