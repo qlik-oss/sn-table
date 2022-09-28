@@ -2,7 +2,7 @@ import React from 'react';
 import { useContextSelector, TableContext } from '../context';
 import { getSelectionStyle } from '../utils/styling-utils';
 import { getCellSelectionState } from '../utils/selections-utils';
-import { getMouseHandlers } from '../utils/handle-click';
+import { getSelectionMouseHandlers } from '../utils/handle-click';
 import { CellHOC, CellHOCProps } from '../types';
 
 export default function withSelections(CellComponent: CellHOC) {
@@ -13,7 +13,7 @@ export default function withSelections(CellComponent: CellHOC) {
     );
     const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
 
-    const { handleMouseDown, handleMouseOver, handleMouseUp, handleMouseClick } = getMouseHandlers(
+    const { handleMouseDown, handleMouseOver, handleMouseUp, handleMouseClick } = getSelectionMouseHandlers(
       cell,
       announce,
       onMouseDown,

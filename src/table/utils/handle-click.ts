@@ -31,7 +31,7 @@ export const handleMouseDownLabelToFocusHeadCell = (evt: MouseEvent, rootElement
   updateFocus({ focusType: 'focus', cell: getCellElement(rootElement, [0, columnIndex]) });
 };
 
-export const getMouseHandlers = (
+export const getSelectionMouseHandlers = (
   cell: Cell,
   announce: Announce,
   onMouseDown: React.MouseEventHandler<HTMLTableCellElement> | undefined,
