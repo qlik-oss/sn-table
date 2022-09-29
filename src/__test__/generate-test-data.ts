@@ -1,4 +1,4 @@
-import { HyperCube, TableLayout, TotalsPosition } from '../types';
+import { HyperCube, TableLayout, TotalsPosition, Cell, Row } from '../types';
 
 export function generateDataPages(height: number, width: number) {
   const qMatrix: Record<string, string>[][] = [];
@@ -55,3 +55,23 @@ export function generateLayout(
     totals,
   } as TableLayout;
 }
+
+export const createCell = (rowIdx: number, colIdx = 0) =>
+  ({
+    qElemNumber: rowIdx,
+    rowIdx,
+    colIdx,
+    rawRowIdx: rowIdx,
+    rawColIdx: colIdx,
+  } as unknown as Cell);
+
+/**
+ * creates a simplified Rows[] with one column. Used to create the allRows that is in the selection state
+ */
+export const createAllRows = (rows: number, colIdx = 0) => {
+  const allRows: Row[] = [];
+  for (let idx = 0; idx <= rows; idx++) {
+    allRows.push({ [`col-${colIdx}`]: createCell(idx, colIdx) });
+  }
+  return allRows;
+};

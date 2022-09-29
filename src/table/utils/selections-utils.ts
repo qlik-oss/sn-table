@@ -11,6 +11,9 @@ interface AddSelectionListenersArgs {
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
 }
 
+/**
+ * Adds callbacks to events on the selection api
+ */
 export function addSelectionListeners({
   api,
   selectionDispatch,
@@ -53,6 +56,9 @@ export function addSelectionListeners({
   };
 }
 
+/**
+ * Gets the selection state of the given cell
+ */
 export const getCellSelectionState = (cell: Cell, selectionState: SelectionState): SelectionStates => {
   const { colIdx, rows, api } = selectionState;
   let cellState = SelectionStates.INACTIVE;
@@ -69,6 +75,9 @@ export const getCellSelectionState = (cell: Cell, selectionState: SelectionState
   return cellState;
 };
 
+/**
+ * Announces the change in selections
+ */
 export const announceSelectionStatus = (
   announce: Announce,
   oldRows: Record<string, number>,
@@ -91,6 +100,9 @@ export const announceSelectionStatus = (
 
 const isShiftArrow = (evt: React.KeyboardEvent) => evt.shiftKey && evt.key.includes('Arrow');
 
+/**
+ * Get the updated selected rows for when (de)selecting one row
+ */
 export const getSelectedRows = (
   selectedRows: Record<string, number>,
   cell: Cell,
@@ -116,6 +128,37 @@ export const getSelectedRows = (
   return { ...selectedRows };
 };
 
+/**
+ * Updates the selection state and calls the backend when (de)selecting one row
+ */
+const selectCell = (state: SelectionState, payload: ActionPayload): SelectionState => {
+  const { api, rows, colIdx } = state;
+  const { cell, announce, evt } = payload;
+  let selectedRows: Record<string, number> = {};
+
+  if (colIdx === -1) api.begin(['/qHyperCubeDef']);
+  else if (colIdx === cell.colIdx) selectedRows = { ...rows };
+  else return state;
+
+  selectedRows = getSelectedRows(selectedRows, cell, evt);
+  announceSelectionStatus(announce, rows, selectedRows);
+
+  // only send a select call if there are rows selected, otherwise cancel selections
+  if (Object.keys(selectedRows).length) {
+    api.select({
+      method: 'selectHyperCubeCells',
+      params: ['/qHyperCubeDef', Object.values(selectedRows), [cell.colIdx]],
+    });
+    return { ...state, rows: selectedRows, colIdx: cell.colIdx };
+  }
+
+  api.cancel();
+  return { ...state, rows: selectedRows, colIdx: -1 };
+};
+
+/**
+ * Get the updated selected rows for when selecting multiple rows
+ */
 export const getMultiSelectedRows = (
   allRows: Row[],
   selectedRows: Record<string, number>,
@@ -148,37 +191,15 @@ export const getMultiSelectedRows = (
   return newSelectedRows;
 };
 
-const selectCell = (state: SelectionState, payload: ActionPayload): SelectionState => {
-  const { api, rows, colIdx } = state;
-  const { cell, announce, evt } = payload;
-  let selectedRows: Record<string, number> = {};
-
-  if (colIdx === -1) api.begin(['/qHyperCubeDef']);
-  else if (colIdx === cell.colIdx) selectedRows = { ...rows };
-  else return state;
-
-  selectedRows = getSelectedRows(selectedRows, cell, evt);
-  announceSelectionStatus(announce, rows, selectedRows);
-
-  // only send a select call if there are rows selected, otherwise cancel selections
-  if (Object.keys(selectedRows).length) {
-    api.select({
-      method: 'selectHyperCubeCells',
-      params: ['/qHyperCubeDef', Object.values(selectedRows), [cell.colIdx]],
-    });
-    return { ...state, rows: selectedRows, colIdx: cell.colIdx };
-  }
-
-  api.cancel();
-  return { ...state, rows: selectedRows, colIdx: -1 };
-};
-
+/**
+ * Updates the selection state but bot the backend when selecting multiple rows
+ */
 const selectMultipleCells = (state: SelectionState, payload: ActionPayload): SelectionState => {
   const { api, rows, colIdx, allRows, firstCell, isSelectMultiValues } = state;
   const { cell, announce, evt } = payload;
   let selectedRows: Record<string, number> = {};
 
-  if (!isSelectMultiValues && 'key' in evt && !isShiftArrow(evt)) return state;
+  if (!isSelectMultiValues && !('key' in evt && isShiftArrow(evt))) return state;
 
   if (colIdx === -1) api.begin(['/qHyperCubeDef']);
   else selectedRows = { ...rows };
@@ -189,6 +210,9 @@ const selectMultipleCells = (state: SelectionState, payload: ActionPayload): Sel
   return { ...state, rows: selectedRows, colIdx: firstCell?.colIdx || cell.colIdx, isSelectMultiValues: true };
 };
 
+/**
+ * Initiates selecting multiple rows on mousedown
+ */
 const startSelectMulti = (state: SelectionState, cell: Cell): SelectionState => {
   if (state.colIdx === -1 || state.colIdx === cell.colIdx) {
     return {
@@ -201,6 +225,9 @@ const startSelectMulti = (state: SelectionState, cell: Cell): SelectionState => 
   return state;
 };
 
+/**
+ * Ends selecting multiple rows by calling backend, for both keyup (shift) and mouseup
+ */
 const endSelectMulti = (state: SelectionState): SelectionState => {
   const { api, rows, colIdx, isSelectMultiValues } = state;
 

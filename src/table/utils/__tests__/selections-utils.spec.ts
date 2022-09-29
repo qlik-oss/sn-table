@@ -8,8 +8,18 @@ import {
   getMultiSelectedRows,
 } from '../selections-utils';
 import { Cell, ExtendedSelectionAPI, Announce, Row } from '../../../types';
-import { SelectionState, SelectMultiEndAction, SelectAction, ResetAction, ClearAction } from '../../types';
-import { SelectionStates, SelectionActions } from '../../constants';
+import {
+  SelectionState,
+  SelectMultiEndAction,
+  SelectAction,
+  ResetAction,
+  ClearAction,
+  UpdateAllRowsAction,
+  SelectMultiStartAction,
+  SelectMultiAddAction,
+} from '../../types';
+import { SelectionStates, SelectionActions, KeyCodes } from '../../constants';
+import { createCell, createAllRows } from '../../../__test__/generate-test-data';
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {
@@ -118,7 +128,7 @@ describe('selections-utils', () => {
         } as unknown as ExtendedSelectionAPI,
         isSelectMultiValues: false,
       };
-      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1 } as Cell;
+      cell = createCell(1, 1);
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -140,6 +150,8 @@ describe('selections-utils', () => {
           },
         };
       });
+
+      afterEach(() => jest.clearAllMocks());
 
       it('should call begin, select and announce when type is select and no previous selections', () => {
         state.rows = {};
@@ -176,9 +188,78 @@ describe('selections-utils', () => {
       });
     });
 
-    // TODO: rewrite and extend
     describe('select multiple', () => {
-      it('should call select when type is selectMultiValues, isSelectMultiValues is true and return isSelectMultiValues to be false', () => {
+      let evt: React.KeyboardEvent;
+      let announce: jest.Mock<any, any>;
+
+      beforeEach(() => {
+        state.allRows = createAllRows(4, 1);
+        evt = { shiftKey: false, key: KeyCodes.DOWN } as React.KeyboardEvent;
+        announce = jest.fn();
+      });
+
+      afterEach(() => jest.clearAllMocks());
+
+      it('should return state unchanged, when type is selectMultiStart, state.colIdx > 0 and not cell.colIdx', () => {
+        state.colIdx = 2;
+        const action = { type: SelectionActions.SELECT_MULTI_START, payload: { cell } } as SelectMultiStartAction;
+        const newState = reducer(state, action);
+        expect(newState).toEqual(state);
+      });
+
+      it('should return state with isSelectMultiValues true and firstCell, when type is selectMultiStart and state.colIdx === cell.colIdx', () => {
+        const action = { type: SelectionActions.SELECT_MULTI_START, payload: { cell } } as SelectMultiStartAction;
+        const newState = reducer(state, action);
+        expect(newState).toEqual({ ...state, isSelectMultiValues: true, firstCell: cell });
+      });
+
+      it('should return state with isSelectMultiValues true and firstCell, when type is selectMultiStart and state.colIdx === -1', () => {
+        state.colIdx = -1;
+        const action = { type: SelectionActions.SELECT_MULTI_START, payload: { cell } } as SelectMultiStartAction;
+        const newState = reducer(state, action);
+        expect(newState).toEqual({ ...state, isSelectMultiValues: true, firstCell: cell });
+      });
+
+      it('should return state unchanged, when type is selectMultiAdd, isSelectMultiValues is false and isShiftArrow returns false', () => {
+        state.rows = {};
+        state.colIdx = -1;
+        const action = {
+          type: SelectionActions.SELECT_MULTI_ADD,
+          payload: { cell, announce, evt },
+        } as SelectMultiAddAction;
+        const newState = reducer(state, action);
+        expect(newState).toEqual(state);
+      });
+
+      it('should call begin, announce and return state with added rows, when type is selectMultiAdd isSelectMultiValues is true and colIdx is -1', () => {
+        state.rows = {};
+        state.colIdx = -1;
+        state.isSelectMultiValues = true;
+        state.firstCell = createCell(2, 1);
+        const action = {
+          type: SelectionActions.SELECT_MULTI_ADD,
+          payload: { cell, announce, evt },
+        } as SelectMultiAddAction;
+        const newState = reducer(state, action);
+        expect(newState).toEqual({ ...state, colIdx: cell.colIdx, rows: { '1': 1, '2': 2 } });
+        expect(state.api.begin).toHaveBeenCalledTimes(1);
+        expect(announce).toHaveBeenCalledTimes(1);
+      });
+
+      it('should call not call begin, but announce return state with added rows, when type is selectMultiAdd isSelectMultiValues is true and colIdx is not -1', () => {
+        state.isSelectMultiValues = true;
+        state.firstCell = createCell(2, 1);
+        const action = {
+          type: SelectionActions.SELECT_MULTI_ADD,
+          payload: { cell, announce, evt },
+        } as SelectMultiAddAction;
+        const newState = reducer(state, action);
+        expect(newState).toEqual({ ...state, colIdx: cell.colIdx, rows: { '1': 1, '2': 2 } });
+        expect(state.api.begin).toHaveBeenCalledTimes(0);
+        expect(announce).toHaveBeenCalledTimes(1);
+      });
+
+      it('should call select when type is selectMultiEnd, isSelectMultiValues is true and return isSelectMultiValues to be false', () => {
         const action = { type: SelectionActions.SELECT_MULTI_END } as SelectMultiEndAction;
         state.isSelectMultiValues = true;
         const params = ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]];
@@ -188,7 +269,7 @@ describe('selections-utils', () => {
         expect(state.api.select).toHaveBeenCalledWith({ method: 'selectHyperCubeCells', params });
       });
 
-      it('should not call select when type is selectMultiValues but isSelectMultiValues is false', () => {
+      it('should not call select when type is selectMultiEnd but isSelectMultiValues is false', () => {
         const action = { type: SelectionActions.SELECT_MULTI_END } as SelectMultiEndAction;
         state.isSelectMultiValues = false;
 
@@ -216,6 +297,14 @@ describe('selections-utils', () => {
         state.api.isModal = () => true;
         const newState = reducer(state, action);
         expect(newState).toEqual(state);
+      });
+
+      it('should return state updated with allRows when action.type is updateAllRows', () => {
+        const allRows = [{} as unknown as Row];
+        const action = { type: SelectionActions.UPDATE_ALL_ROWS, payload: { allRows } } as UpdateAllRowsAction;
+        state.api.isModal = () => true;
+        const newState = reducer(state, action);
+        expect(newState).toEqual({ ...state, allRows });
       });
     });
   });
@@ -312,7 +401,6 @@ describe('selections-utils', () => {
       const updatedSelectedRows = getSelectedRows(selectedRows, cell, evt);
       expect(updatedSelectedRows).toEqual({});
     });
-
     it('should return array with selected item added if it was not in selectedRows before', () => {
       const updatedSelectedRows = getSelectedRows(selectedRows, cell, evt);
       expect(updatedSelectedRows).toEqual({ 1: 1, [cell.qElemNumber]: cell.rowIdx });
@@ -321,23 +409,23 @@ describe('selections-utils', () => {
 
   // TODO: rewrite and extend
   describe('getMultiSelectedRows', () => {
-    let selectedRows: Record<string, number>;
     let allRows: Row[];
+    let selectedRows: Record<string, number>;
     let cell: Cell;
     let evt: React.KeyboardEvent;
+    let firstCell: Cell;
 
     beforeEach(() => {
+      allRows = createAllRows(3);
       selectedRows = { '2': 2 };
-      cell = {
-        qElemNumber: 0,
-        rowIdx: 0,
-      } as Cell;
+      cell = createCell(0);
       evt = {} as React.KeyboardEvent;
+      firstCell = createCell(3);
     });
 
     it('should add the current cell and the next cell to selectedRows when press shift and arrow down key', () => {
       evt.shiftKey = true;
-      evt.key = 'ArrowDown';
+      evt.key = KeyCodes.DOWN;
       cell.nextQElemNumber = 1;
 
       const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt);
@@ -346,6 +434,33 @@ describe('selections-utils', () => {
         [cell.qElemNumber]: cell.rowIdx,
         [cell.nextQElemNumber]: 1,
       });
+    });
+
+    it('should add the current cell and the next cell to selectedRows when press shift and arrow up key', () => {
+      evt.shiftKey = true;
+      evt.key = KeyCodes.UP;
+      cell = {
+        qElemNumber: 1,
+        rowIdx: 1,
+      } as Cell;
+      cell.prevQElemNumber = 0;
+
+      const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt);
+      expect(updatedSelectedRows).toEqual({
+        ...selectedRows,
+        [cell.qElemNumber]: cell.rowIdx,
+        [cell.prevQElemNumber]: 0,
+      });
+    });
+
+    it('should return selectedRows unchanged when not shift+arrow but firstCell is undefined', () => {
+      const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt, undefined);
+      expect(updatedSelectedRows).toEqual(selectedRows);
+    });
+
+    it('should return rows updated with all rows between firstCell and cell', () => {
+      const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt, firstCell);
+      expect(updatedSelectedRows).toEqual({ '0': 0, '1': 1, '2': 2, '3': 3 });
     });
   });
 
