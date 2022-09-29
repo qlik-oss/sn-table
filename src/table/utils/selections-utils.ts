@@ -1,11 +1,11 @@
 import { stardust } from '@nebula.js/stardust';
 import { Cell, ExtendedSelectionAPI, Announce, Row } from '../../types';
-import { SelectionState, ActionPayload, SelectionActionTypes } from '../types';
+import { SelectionState, ActionPayload, SelectionActionTypes, SelectionDispatch } from '../types';
 import { SelectionActions, SelectionStates, KeyCodes } from '../constants';
 
 interface AddSelectionListenersArgs {
   api: ExtendedSelectionAPI;
-  selectionDispatch: React.Dispatch<SelectionActionTypes>;
+  selectionDispatch: SelectionDispatch;
   setShouldRefocus(): void;
   keyboard: stardust.Keyboard;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;

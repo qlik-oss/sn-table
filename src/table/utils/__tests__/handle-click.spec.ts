@@ -114,6 +114,7 @@ describe('handle-click', () => {
       handleMouseUp(evt);
 
       expect(selectionDispatch).toHaveBeenCalledTimes(0);
+      // Still should call onMouseDown attached at the body level
       expect(onMouseDown).toHaveBeenCalledTimes(1);
     });
 

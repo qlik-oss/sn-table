@@ -120,7 +120,7 @@ export interface HandleBodyKeyDownProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;
   cell: Cell;
-  selectionDispatch: React.Dispatch<SelectionActionTypes>;
+  selectionDispatch: SelectionDispatch;
   isSelectionsEnabled: boolean;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   announce: Announce;

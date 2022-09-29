@@ -246,7 +246,7 @@ describe('selections-utils', () => {
         expect(announce).toHaveBeenCalledTimes(1);
       });
 
-      it('should call not call begin, but announce return state with added rows, when type is selectMultiAdd isSelectMultiValues is true and colIdx is not -1', () => {
+      it('should call not call begin, but announce return state with added rows, when type is selectMultiAdd, isSelectMultiValues is true and colIdx is not -1', () => {
         state.isSelectMultiValues = true;
         state.firstCell = createCell(2, 1);
         const action = {
@@ -302,7 +302,6 @@ describe('selections-utils', () => {
       it('should return state updated with allRows when action.type is updateAllRows', () => {
         const allRows = [{} as unknown as Row];
         const action = { type: SelectionActions.UPDATE_ALL_ROWS, payload: { allRows } } as UpdateAllRowsAction;
-        state.api.isModal = () => true;
         const newState = reducer(state, action);
         expect(newState).toEqual({ ...state, allRows });
       });
@@ -407,20 +406,19 @@ describe('selections-utils', () => {
     });
   });
 
-  // TODO: rewrite and extend
   describe('getMultiSelectedRows', () => {
     let allRows: Row[];
     let selectedRows: Record<string, number>;
     let cell: Cell;
     let evt: React.KeyboardEvent;
-    let firstCell: Cell;
+    let firstCell: Cell | undefined;
 
     beforeEach(() => {
       allRows = createAllRows(3);
       selectedRows = { '2': 2 };
       cell = createCell(0);
       evt = {} as React.KeyboardEvent;
-      firstCell = createCell(3);
+      firstCell = undefined;
     });
 
     it('should add the current cell and the next cell to selectedRows when press shift and arrow down key', () => {
@@ -428,7 +426,7 @@ describe('selections-utils', () => {
       evt.key = KeyCodes.DOWN;
       cell.nextQElemNumber = 1;
 
-      const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt);
+      const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt, firstCell);
       expect(updatedSelectedRows).toEqual({
         ...selectedRows,
         [cell.qElemNumber]: cell.rowIdx,
@@ -445,7 +443,7 @@ describe('selections-utils', () => {
       } as Cell;
       cell.prevQElemNumber = 0;
 
-      const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt);
+      const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt, firstCell);
       expect(updatedSelectedRows).toEqual({
         ...selectedRows,
         [cell.qElemNumber]: cell.rowIdx,
@@ -454,11 +452,12 @@ describe('selections-utils', () => {
     });
 
     it('should return selectedRows unchanged when not shift+arrow but firstCell is undefined', () => {
-      const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt, undefined);
+      const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt, firstCell);
       expect(updatedSelectedRows).toEqual(selectedRows);
     });
 
     it('should return rows updated with all rows between firstCell and cell', () => {
+      firstCell = createCell(3);
       const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt, firstCell);
       expect(updatedSelectedRows).toEqual({ '0': 0, '1': 1, '2': 2, '3': 3 });
     });

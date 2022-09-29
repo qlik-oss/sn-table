@@ -13,7 +13,7 @@ import {
 import * as handleAccessibility from '../accessibility-utils';
 import * as handleScroll from '../handle-scroll';
 import { Announce, Column, ExtendedSelectionAPI, Cell, TableLayout, TotalsPosition } from '../../../types';
-import { SelectionActionTypes } from '../../types';
+import { SelectionDispatch } from '../../types';
 
 describe('handle-key-press', () => {
   let isFlagEnabled: (flag: string) => boolean;
@@ -405,7 +405,7 @@ describe('handle-key-press', () => {
     let rootElement: HTMLElement;
     let selectionsAPI: ExtendedSelectionAPI;
     let cell: Cell;
-    let selectionDispatch: React.Dispatch<SelectionActionTypes>;
+    let selectionDispatch: SelectionDispatch;
     let isSelectionsEnabled: boolean;
     let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
     let keyboard: stardust.Keyboard;
@@ -696,7 +696,7 @@ describe('handle-key-press', () => {
 
   describe('handleBodyKeyUp', () => {
     let evt: React.KeyboardEvent;
-    let selectionDispatch: React.Dispatch<SelectionActionTypes>;
+    let selectionDispatch: SelectionDispatch;
 
     beforeEach(() => {
       evt = {

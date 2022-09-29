@@ -3,12 +3,7 @@ import { stardust } from '@nebula.js/stardust';
 
 import { focusSelectionToolbar, announceSelectionState, moveFocus, copyCellValue } from './accessibility-utils';
 import { handleNavigateTop } from './handle-scroll';
-import {
-  HandleWrapperKeyDownProps,
-  HandleHeadKeyDownProps,
-  HandleBodyKeyDownProps,
-  SelectionActionTypes,
-} from '../types';
+import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownProps, SelectionDispatch } from '../types';
 import { KeyCodes, SelectionActions } from '../constants';
 
 const isCtrlShift = (evt: React.KeyboardEvent) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
@@ -239,7 +234,7 @@ export const handleBodyKeyDown = ({
       focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
       break;
     case KeyCodes.C:
-      isFlagEnabled('PS_15585_SN_TABLE_BASIC_FEATURES') && (evt.ctrlKey || evt.metaKey) && copyCellValue(cell);
+      basicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(cell);
       break;
     default:
       break;
@@ -251,7 +246,7 @@ export const handleBodyKeyDown = ({
  */
 export const handleBodyKeyUp = (
   evt: React.KeyboardEvent,
-  selectionDispatch: React.Dispatch<SelectionActionTypes>,
+  selectionDispatch: SelectionDispatch,
   isFlagEnabled: (flag: string) => boolean
 ) => {
   isFlagEnabled('PS_15585_SN_TABLE_BASIC_FEATURES') &&
