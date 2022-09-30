@@ -566,6 +566,7 @@ export default function ext(env) {
       exportData: true,
       snapshot: true,
       viewData: false,
+      exploration: true,
     },
   };
 }

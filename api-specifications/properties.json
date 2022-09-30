@@ -25,6 +25,12 @@
             "type": "#/definitions/Component"
           }
         },
+        "enableChartExploration": {
+          "description": "Show chart exploration option in context menu",
+          "optional": true,
+          "defaultValue": false,
+          "type": "boolean"
+        },
         "footnote": {
           "description": "Visualization footnote",
           "optional": true,
