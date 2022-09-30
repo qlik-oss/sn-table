@@ -207,7 +207,7 @@ const selectMultipleCells = (state: SelectionState, payload: ActionPayload): Sel
   selectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt, firstCell);
   announceSelectionStatus(announce, rows, selectedRows);
 
-  return { ...state, rows: selectedRows, colIdx: firstCell?.colIdx || cell.colIdx, isSelectMultiValues: true };
+  return { ...state, rows: selectedRows, colIdx: firstCell?.colIdx ?? cell.colIdx, isSelectMultiValues: true };
 };
 
 /**
