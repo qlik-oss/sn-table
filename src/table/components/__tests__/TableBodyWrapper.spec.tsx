@@ -30,7 +30,8 @@ describe('<TableBodyWrapper />', () => {
 
   const renderTableBody = () =>
     render(
-      <TableContextProvider selectionsAPI={selectionsAPI}>
+      // Need to mock selectionDispatch since UPDATE_ALL_ROWS action can create infinite loop
+      <TableContextProvider selectionsAPI={selectionsAPI} selectionDispatchMock={jest.fn()}>
         <TableBodyWrapper
           tableData={tableData}
           constraints={constraints}
