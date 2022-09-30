@@ -52,7 +52,7 @@ export type SelectionActionTypes =
   | ClearAction
   | UpdateAllRowsAction;
 
-export type SelectionDispatch = React.Dispatch<SelectionActionTypes> | jest.Mock<any, any>;
+export type SelectionDispatch = React.Dispatch<SelectionActionTypes>;
 
 export interface SelectionState {
   allRows: Row[];
@@ -150,7 +150,7 @@ export interface HandleResetFocusProps {
 export interface ContextProviderProps {
   children: JSX.Element;
   selectionsAPI: ExtendedSelectionAPI;
-  tableRows: Row[];
+  tableRows?: Row[];
   cellCoordMock?: [number, number];
   selectionDispatchMock?: jest.Mock<any, any>;
 }

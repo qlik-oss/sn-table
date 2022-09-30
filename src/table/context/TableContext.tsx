@@ -18,7 +18,7 @@ const ProviderWithSelector = createSelectorProvider(TableContext);
 export const TableContextProvider = ({
   children,
   selectionsAPI,
-  tableRows,
+  tableRows = [],
   cellCoordMock,
   selectionDispatchMock,
 }: ContextProviderProps) => {

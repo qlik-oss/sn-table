@@ -8,7 +8,6 @@ import TableWrapper from './components/TableWrapper';
 import { TableContextProvider } from './context';
 import muiSetup from './mui-setup';
 import { RenderProps, TableWrapperProps } from './types';
-import { Row } from '../types';
 
 export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   const { direction, selectionsAPI, tableData } = props;
@@ -17,7 +16,7 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   reactRoot?.render(
     <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : undefined}>
       <ThemeProvider theme={muiTheme}>
-        <TableContextProvider selectionsAPI={selectionsAPI} tableRows={tableData?.rows as Row[]}>
+        <TableContextProvider selectionsAPI={selectionsAPI} tableRows={tableData?.rows}>
           <TableWrapper {...(props as TableWrapperProps)} />
         </TableContextProvider>
       </ThemeProvider>

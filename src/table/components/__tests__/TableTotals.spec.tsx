@@ -19,7 +19,7 @@ describe('<TableTotals />', () => {
 
   const renderTableTotals = (cellCoordMock?: [number, number]) =>
     render(
-      <TableContextProvider selectionsAPI={selectionsAPI} tableRows={[]} cellCoordMock={cellCoordMock}>
+      <TableContextProvider selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
         {getTotalPosition(layout) === 'top' ? (
           <TableTotals
             rootElement={rootElement}

@@ -63,7 +63,7 @@ export const createCell = (rowIdx: number, colIdx = 0) =>
     colIdx,
     rawRowIdx: rowIdx,
     rawColIdx: colIdx,
-  } as unknown as Cell);
+  } as Cell);
 
 /**
  * creates a simplified Rows[] with one column. Used to create the allRows that is in the selection state

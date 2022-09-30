@@ -20,7 +20,7 @@ describe('withSelections', () => {
 
   const renderWithSelections = () =>
     render(
-      <TableContextProvider selectionsAPI={selectionsAPI} tableRows={[]} selectionDispatchMock={selectionDispatchMock}>
+      <TableContextProvider selectionsAPI={selectionsAPI} selectionDispatchMock={selectionDispatchMock}>
         <HOC cell={cell} styling={styling} announce={announce} column={column} isFlagEnabled={isFlagEnabled}>
           {value}
         </HOC>

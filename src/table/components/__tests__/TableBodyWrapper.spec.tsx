@@ -30,7 +30,7 @@ describe('<TableBodyWrapper />', () => {
 
   const renderTableBody = () =>
     render(
-      <TableContextProvider selectionsAPI={selectionsAPI} tableRows={[]}>
+      <TableContextProvider selectionsAPI={selectionsAPI}>
         <TableBodyWrapper
           tableData={tableData}
           constraints={constraints}

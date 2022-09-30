@@ -41,7 +41,7 @@ describe('<TableWrapper />', () => {
 
   const renderTableWrapper = () =>
     render(
-      <TableContextProvider selectionsAPI={selectionsAPI} tableRows={[]}>
+      <TableContextProvider selectionsAPI={selectionsAPI}>
         <TableWrapper
           tableData={tableData}
           pageInfo={pageInfo}

@@ -27,7 +27,7 @@ describe('<TableHeadWrapper />', () => {
 
   const renderTableHead = (cellCoordMock?: [number, number]) =>
     render(
-      <TableContextProvider selectionsAPI={selectionsAPI} tableRows={[]} cellCoordMock={cellCoordMock}>
+      <TableContextProvider selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
         <TableHeadWrapper
           rootElement={rootElement}
           constraints={constraints}
