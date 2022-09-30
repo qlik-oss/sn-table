@@ -3,12 +3,7 @@ import { stardust } from '@nebula.js/stardust';
 
 import { focusSelectionToolbar, announceSelectionState, moveFocus, copyCellValue } from './accessibility-utils';
 import { handleNavigateTop } from './handle-scroll';
-import {
-  HandleWrapperKeyDownProps,
-  HandleHeadKeyDownProps,
-  HandleBodyKeyDownProps,
-  SelectionActionTypes,
-} from '../types';
+import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownProps, SelectionDispatch } from '../types';
 import { KeyCodes, SelectionActions } from '../constants';
 
 const isCtrlShift = (evt: React.KeyboardEvent) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
@@ -185,6 +180,8 @@ export const handleBodyKeyDown = ({
     bottom: isSelectionMode && totalsPosition === 'bottom' ? 1 : 0,
   };
 
+  const basicFeaturesEnabled = isFlagEnabled('PS_15585_SN_TABLE_BASIC_FEATURES');
+
   switch (evt.key) {
     case KeyCodes.UP:
     case KeyCodes.DOWN: {
@@ -192,15 +189,16 @@ export const handleBodyKeyDown = ({
       const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, allowedRows);
       // Shift + up/down arrow keys: select multiple values
       // When at the first/last row of the cell, shift + arrow up/down key, no value is selected
-      const isSelectMultiValues =
+      const shouldSelectMultiValues =
+        basicFeaturesEnabled &&
         evt.shiftKey &&
         cell.isSelectable &&
         isSelectionsEnabled &&
         ((cell.prevQElemNumber !== undefined && evt.key === KeyCodes.UP) ||
           (cell.nextQElemNumber !== undefined && evt.key === KeyCodes.DOWN));
-      if (isSelectMultiValues) {
+      if (shouldSelectMultiValues) {
         selectionDispatch({
-          type: SelectionActions.SELECT,
+          type: SelectionActions.SELECT_MULTI_ADD,
           payload: { cell, evt, announce },
         });
       } else {
@@ -236,7 +234,7 @@ export const handleBodyKeyDown = ({
       focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
       break;
     case KeyCodes.C:
-      isFlagEnabled('PS_15585_SN_TABLE_BASIC_FEATURES') && (evt.ctrlKey || evt.metaKey) && copyCellValue(cell);
+      basicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(cell);
       break;
     default:
       break;
@@ -246,8 +244,14 @@ export const handleBodyKeyDown = ({
 /**
  * confirms selections when making multiple selections with shift + arrows and shit is released
  */
-export const handleBodyKeyUp = (evt: React.KeyboardEvent, selectionDispatch: React.Dispatch<SelectionActionTypes>) => {
-  evt.key === KeyCodes.SHIFT && selectionDispatch({ type: SelectionActions.SELECT_MULTI_VALUES });
+export const handleBodyKeyUp = (
+  evt: React.KeyboardEvent,
+  selectionDispatch: SelectionDispatch,
+  isFlagEnabled: (flag: string) => boolean
+) => {
+  isFlagEnabled('PS_15585_SN_TABLE_BASIC_FEATURES') &&
+    evt.key === KeyCodes.SHIFT &&
+    selectionDispatch({ type: SelectionActions.SELECT_MULTI_END });
 };
 
 /**

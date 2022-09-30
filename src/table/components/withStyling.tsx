@@ -15,6 +15,8 @@ export default function withStyling(CellComponent: typeof TableCell) {
       onMouseDown,
       onKeyUp,
       onMouseUp,
+      onClick,
+      onMouseOver,
     } = props;
 
     return (
@@ -29,6 +31,8 @@ export default function withStyling(CellComponent: typeof TableCell) {
         onMouseDown={onMouseDown}
         onKeyUp={onKeyUp}
         onMouseUp={onMouseUp}
+        onClick={onClick}
+        onMouseOver={onMouseOver}
       >
         {children}
       </CellComponent>

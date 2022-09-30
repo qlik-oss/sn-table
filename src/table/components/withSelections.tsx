@@ -2,25 +2,37 @@ import React from 'react';
 import { useContextSelector, TableContext } from '../context';
 import { getSelectionStyle } from '../utils/styling-utils';
 import { getCellSelectionState } from '../utils/selections-utils';
+import { getSelectionMouseHandlers } from '../utils/handle-click';
 import { CellHOC, CellHOCProps } from '../types';
-import { SelectionActions } from '../constants';
 
 export default function withSelections(CellComponent: CellHOC) {
   const HOC = (props: CellHOCProps) => {
-    const { cell, styling, announce } = props;
+    const { cell, styling, announce, onMouseDown, isFlagEnabled } = props;
     const cellSelectionState = useContextSelector(TableContext, (value) =>
       getCellSelectionState(cell, value.selectionState)
     );
     const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
 
-    const handleMouseUp = (evt: React.MouseEvent) =>
-      cell.isSelectable &&
-      evt.button === 0 &&
-      selectionDispatch({ type: SelectionActions.SELECT, payload: { cell, evt, announce } });
+    const { handleMouseDown, handleMouseOver, handleMouseUp, handleMouseClick } = getSelectionMouseHandlers(
+      cell,
+      announce,
+      onMouseDown,
+      selectionDispatch,
+      isFlagEnabled
+    );
 
     const selectionStyling = getSelectionStyle(styling, cellSelectionState);
 
-    return <CellComponent {...props} styling={selectionStyling} onMouseUp={handleMouseUp} />;
+    return (
+      <CellComponent
+        {...props}
+        styling={selectionStyling}
+        onMouseUp={handleMouseUp}
+        onMouseDown={handleMouseDown}
+        onMouseOver={handleMouseOver}
+        onClick={handleMouseClick}
+      />
+    );
   };
 
   return HOC;

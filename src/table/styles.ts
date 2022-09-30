@@ -70,6 +70,7 @@ export const StyledTableBody = styled(TableBody, {
   '& td, th': {
     fontSize: bodyCellStyle.fontSize,
     padding: bodyCellStyle.padding,
+    userSelect: 'none',
   },
 }));
 
