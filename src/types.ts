@@ -91,8 +91,7 @@ export interface Cell {
   isSelectable: boolean;
   rawRowIdx: number;
   rawColIdx: number;
-  prevQElemNumber: number | undefined;
-  nextQElemNumber: number | undefined;
+  isLastRow: boolean;
 }
 
 export interface Row {

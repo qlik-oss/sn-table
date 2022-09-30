@@ -4,6 +4,7 @@ import { stardust } from '@nebula.js/stardust';
 import { focusSelectionToolbar, announceSelectionState, moveFocus, copyCellValue } from './accessibility-utils';
 import { handleNavigateTop } from './handle-scroll';
 import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownProps, SelectionDispatch } from '../types';
+import { Cell } from '../../types';
 import { KeyCodes, SelectionActions } from '../constants';
 
 const isCtrlShift = (evt: React.KeyboardEvent) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
@@ -34,6 +35,22 @@ export const shouldBubble = (
     ((evt.key === KeyCodes.LEFT || evt.key === KeyCodes.RIGHT) && isCtrlShift(evt))
   );
 };
+
+/**
+ * Checks if should select with shift + arrow.
+ * When at the first/last row of the cell, shift + arrow up/down should not select anything
+ */
+const shouldSelectMultiValues = (
+  basicFeaturesEnabled: boolean,
+  isSelectionsEnabled: boolean,
+  evt: React.KeyboardEvent,
+  cell: Cell
+) =>
+  evt.shiftKey &&
+  ((evt.key === KeyCodes.UP && cell.rawRowIdx !== 0) || (evt.key === KeyCodes.DOWN && !cell.isLastRow)) &&
+  basicFeaturesEnabled &&
+  isSelectionsEnabled &&
+  cell.isSelectable;
 
 /**
  * ----------- Key handlers -----------
@@ -188,15 +205,7 @@ export const handleBodyKeyDown = ({
       evt.key === KeyCodes.UP && handleNavigateTop([cell.rawRowIdx, cell.rawColIdx], rootElement);
       const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, allowedRows);
       // Shift + up/down arrow keys: select multiple values
-      // When at the first/last row of the cell, shift + arrow up/down key, no value is selected
-      const shouldSelectMultiValues =
-        basicFeaturesEnabled &&
-        evt.shiftKey &&
-        cell.isSelectable &&
-        isSelectionsEnabled &&
-        ((cell.prevQElemNumber !== undefined && evt.key === KeyCodes.UP) ||
-          (cell.nextQElemNumber !== undefined && evt.key === KeyCodes.DOWN));
-      if (shouldSelectMultiValues) {
+      if (shouldSelectMultiValues(basicFeaturesEnabled, isSelectionsEnabled, evt, cell)) {
         selectionDispatch({
           type: SelectionActions.SELECT_MULTI_ADD,
           payload: { cell, evt, announce },

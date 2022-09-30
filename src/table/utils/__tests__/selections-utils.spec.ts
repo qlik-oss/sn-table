@@ -416,7 +416,7 @@ describe('selections-utils', () => {
     beforeEach(() => {
       allRows = createAllRows(3);
       selectedRows = { '2': 2 };
-      cell = createCell(0);
+      cell = createCell(1);
       evt = {} as React.KeyboardEvent;
       firstCell = undefined;
     });
@@ -424,30 +424,24 @@ describe('selections-utils', () => {
     it('should add the current cell and the next cell to selectedRows when press shift and arrow down key', () => {
       evt.shiftKey = true;
       evt.key = KeyCodes.DOWN;
-      cell.nextQElemNumber = 1;
 
       const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt, firstCell);
       expect(updatedSelectedRows).toEqual({
         ...selectedRows,
         [cell.qElemNumber]: cell.rowIdx,
-        [cell.nextQElemNumber]: 1,
+        '1': 1,
       });
     });
 
     it('should add the current cell and the next cell to selectedRows when press shift and arrow up key', () => {
       evt.shiftKey = true;
       evt.key = KeyCodes.UP;
-      cell = {
-        qElemNumber: 1,
-        rowIdx: 1,
-      } as Cell;
-      cell.prevQElemNumber = 0;
 
       const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt, firstCell);
       expect(updatedSelectedRows).toEqual({
         ...selectedRows,
         [cell.qElemNumber]: cell.rowIdx,
-        [cell.prevQElemNumber]: 0,
+        '0': 0,
       });
     });
 
@@ -459,7 +453,7 @@ describe('selections-utils', () => {
     it('should return rows updated with all rows between firstCell and cell', () => {
       firstCell = createCell(3);
       const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt, firstCell);
-      expect(updatedSelectedRows).toEqual({ '0': 0, '1': 1, '2': 2, '3': 3 });
+      expect(updatedSelectedRows).toEqual({ '1': 1, '2': 2, '3': 3 });
     });
   });
 
@@ -476,7 +470,7 @@ describe('selections-utils', () => {
       } as Cell;
 
       selectionState = {
-        allRows: [],
+        allRows: createAllRows(4),
         colIdx: 1,
         rows: { 1: 1 },
         api: {
