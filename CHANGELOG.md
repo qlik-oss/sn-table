@@ -1,3 +1,18 @@
+# [1.17.0](https://github.com/qlik-oss/sn-table/compare/v1.16.0...v1.17.0) (2022-10-01)
+
+### Bug Fixes
+
+- make sure totals updates on selection start ([#682](https://github.com/qlik-oss/sn-table/issues/682)) ([8f7868b](https://github.com/qlik-oss/sn-table/commit/8f7868b67652bfabde322e5b95d22797cbf26444))
+- properly focus cell on click ([#701](https://github.com/qlik-oss/sn-table/issues/701)) ([1a4ebc7](https://github.com/qlik-oss/sn-table/commit/1a4ebc76331b85e9d9354405e7960ff053879e63))
+- remove 'yarn types:check' in lint staged ([#703](https://github.com/qlik-oss/sn-table/issues/703)) ([783a250](https://github.com/qlik-oss/sn-table/commit/783a25014122eee6a8dbaabdacbab39578172043))
+
+### Features
+
+- be able to copy table cell via keyboard ([#684](https://github.com/qlik-oss/sn-table/issues/684)) ([ed4c217](https://github.com/qlik-oss/sn-table/commit/ed4c2177b9217522872b359c53c3b0447773ec1c))
+- checking types when committing ([#704](https://github.com/qlik-oss/sn-table/issues/704)) ([b6e7ad3](https://github.com/qlik-oss/sn-table/commit/b6e7ad3a4dbb446d72c478a0719db62612e84889))
+- enabled new styling panel for sn table ([#642](https://github.com/qlik-oss/sn-table/issues/642)) ([c552382](https://github.com/qlik-oss/sn-table/commit/c552382c815a80629359ebd3a096ef957b4e3a66))
+- Introduce drag with mouse to select multiple cells ([#689](https://github.com/qlik-oss/sn-table/issues/689)) ([ed33599](https://github.com/qlik-oss/sn-table/commit/ed33599752d9fbd33ccaefc953f70778d3b4da58))
+
 # [1.16.0](https://github.com/qlik-oss/sn-table/compare/v1.15.0...v1.16.0) (2022-09-05)
 
 ### Bug Fixes
