@@ -11,7 +11,7 @@ export const loadColumnWidths = async (app, layout, viewPortWidth) => {
   try {
     const loadDefault = () => {
       const { qHyperCube } = layout;
-      const numCols = qHyperCube.columnWidths.length;
+      const numCols = qHyperCube.columnWidths.length || qHyperCube.columnOrder.length;
       let defaultWidth = 0;
       if (numCols <= 4) {
         defaultWidth = (viewPortWidth - 16) / numCols;
