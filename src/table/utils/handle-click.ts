@@ -47,8 +47,10 @@ export const getSelectionMouseHandlers = (
     // run handleClickToFocusBody
     onMouseDown?.(evt as React.MouseEvent<HTMLTableCellElement>);
     // only need to check isSelectable here. once you are holding you want to be able to drag outside the current column
-    if (selectMultiEnabled && cell.isSelectable)
-      selectionDispatch({ type: SelectionActions.SELECT_MULTI_START, payload: { cell } });
+    if (selectMultiEnabled && cell.isSelectable) {
+      const callback = () => selectionDispatch({ type: SelectionActions.SELECT_MULTI_END });
+      selectionDispatch({ type: SelectionActions.SELECT_MULTI_START, payload: { cell, callback } });
+    }
   };
 
   const handleMouseOver = (evt: React.MouseEvent) => {

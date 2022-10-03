@@ -21,20 +21,20 @@ interface Action<T = any> {
   type: T;
 }
 
-export interface ActionPayload {
+export interface SelectPayload {
   cell: Cell;
   announce: Announce;
   evt: React.KeyboardEvent | React.MouseEvent;
 }
 
 export interface SelectAction extends Action<SelectionActions.SELECT> {
-  payload: ActionPayload;
+  payload: SelectPayload;
 }
 export interface SelectMultiStartAction extends Action<SelectionActions.SELECT_MULTI_START> {
-  payload: { cell: Cell };
+  payload: { cell: Cell; callback(): void };
 }
 export interface SelectMultiAddAction extends Action<SelectionActions.SELECT_MULTI_ADD> {
-  payload: ActionPayload;
+  payload: SelectPayload;
 }
 export interface SelectMultiEndAction extends Action<SelectionActions.SELECT_MULTI_END> {}
 export interface ResetAction extends Action<SelectionActions.RESET> {}
@@ -61,6 +61,7 @@ export interface SelectionState {
   api: ExtendedSelectionAPI;
   isSelectMultiValues: boolean;
   firstCell?: Cell;
+  callback?(): void;
 }
 
 export interface ContextValue {
