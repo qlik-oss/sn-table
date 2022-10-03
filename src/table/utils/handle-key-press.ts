@@ -204,11 +204,10 @@ export const handleBodyKeyDown = ({
       const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, allowedRows);
       // Shift + up/down arrow keys: select multiple values
       if (shouldSelectMultiValues(areBasicFeaturesEnabled, isSelectionsEnabled, evt, cell)) {
-        areBasicFeaturesEnabled &&
-          selectionDispatch({
-            type: SelectionActions.SELECT_MULTI_ADD,
-            payload: { cell, evt, announce },
-          });
+        selectionDispatch({
+          type: SelectionActions.SELECT_MULTI_ADD,
+          payload: { cell, evt, announce },
+        });
       } else {
         // When not selecting multiple we need to announce the selection state of the cell
         announceSelectionState(announce, nextCell, isSelectionMode);
