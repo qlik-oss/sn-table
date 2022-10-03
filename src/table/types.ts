@@ -31,7 +31,7 @@ export interface SelectAction extends Action<SelectionActions.SELECT> {
   payload: SelectPayload;
 }
 export interface SelectMultiStartAction extends Action<SelectionActions.SELECT_MULTI_START> {
-  payload: { cell: Cell; callback(): void };
+  payload: { cell: Cell; mouseupOutsideCallback(): void };
 }
 export interface SelectMultiAddAction extends Action<SelectionActions.SELECT_MULTI_ADD> {
   payload: SelectPayload;
@@ -61,7 +61,7 @@ export interface SelectionState {
   api: ExtendedSelectionAPI;
   isSelectMultiValues: boolean;
   firstCell?: Cell;
-  callback?(): void;
+  mouseupOutsideCallback?(): void;
 }
 
 export interface ContextValue {

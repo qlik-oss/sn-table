@@ -211,14 +211,17 @@ const selectMultipleCells = (state: SelectionState, payload: SelectPayload): Sel
 /**
  * Initiates selecting multiple rows on mousedown
  */
-const startSelectMulti = (state: SelectionState, cell: Cell, callback: () => void): SelectionState => {
-  if (state.colIdx === -1 || state.colIdx === cell.colIdx) {
-    document.addEventListener('mouseup', callback);
+const startSelectMulti = (
+  state: SelectionState,
+  payload: { cell: Cell; mouseupOutsideCallback(): void }
+): SelectionState => {
+  if (state.colIdx === -1 || state.colIdx === payload.cell.colIdx) {
+    document.addEventListener('mouseup', payload.mouseupOutsideCallback);
 
     return {
       ...state,
       isSelectMultiValues: true,
-      firstCell: cell,
+      firstCell: payload.cell,
     };
   }
 
@@ -229,10 +232,10 @@ const startSelectMulti = (state: SelectionState, cell: Cell, callback: () => voi
  * Ends selecting multiple rows by calling backend, for both keyup (shift) and mouseup
  */
 const endSelectMulti = (state: SelectionState): SelectionState => {
-  const { api, rows, colIdx, isSelectMultiValues, callback } = state;
+  const { api, rows, colIdx, isSelectMultiValues, mouseupOutsideCallback } = state;
 
   if (isSelectMultiValues) {
-    callback && document.removeEventListener('mouseup', callback);
+    mouseupOutsideCallback && document.removeEventListener('mouseup', mouseupOutsideCallback);
     api.select({
       method: 'selectHyperCubeCells',
       params: ['/qHyperCubeDef', Object.values(rows), [colIdx]],
@@ -247,7 +250,7 @@ export const reducer = (state: SelectionState, action: SelectionActionTypes): Se
     case SelectionActions.SELECT:
       return selectCell(state, action.payload);
     case SelectionActions.SELECT_MULTI_START:
-      return startSelectMulti(state, action.payload.cell, action.payload.callback);
+      return startSelectMulti(state, action.payload);
     case SelectionActions.SELECT_MULTI_ADD:
       return selectMultipleCells(state, action.payload);
     case SelectionActions.SELECT_MULTI_END:
