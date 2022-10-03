@@ -213,15 +213,15 @@ const selectMultipleCells = (state: SelectionState, payload: SelectPayload): Sel
  */
 const startSelectMulti = (
   state: SelectionState,
-  payload: { cell: Cell; mouseupOutsideCallback(): void }
+  { cell, mouseupOutsideCallback }: { cell: Cell; mouseupOutsideCallback(): void }
 ): SelectionState => {
-  if (state.colIdx === -1 || state.colIdx === payload.cell.colIdx) {
-    document.addEventListener('mouseup', payload.mouseupOutsideCallback);
-
+  if (state.colIdx === -1 || state.colIdx === cell.colIdx) {
+    document.addEventListener('mouseup', mouseupOutsideCallback);
     return {
       ...state,
+      firstCell: cell,
       isSelectMultiValues: true,
-      firstCell: payload.cell,
+      mouseupOutsideCallback,
     };
   }
 
@@ -242,7 +242,7 @@ const endSelectMulti = (state: SelectionState): SelectionState => {
     });
   }
 
-  return { ...state, isSelectMultiValues: false, firstCell: undefined };
+  return { ...state, isSelectMultiValues: false, firstCell: undefined, mouseupOutsideCallback: undefined };
 };
 
 export const reducer = (state: SelectionState, action: SelectionActionTypes): SelectionState => {
