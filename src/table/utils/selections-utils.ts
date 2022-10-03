@@ -170,12 +170,10 @@ export const getMultiSelectedRows = (
 
   if ('key' in evt && isShiftArrow(evt)) {
     newSelectedRows[cell.qElemNumber] = cell.rowIdx;
-    // add the next or previous cell to selectedRows, based on which arrow is pressed
-    if (evt.key === KeyCodes.DOWN) {
-      newSelectedRows[cell.nextQElemNumber as number] = cell.rowIdx + 1;
-    } else {
-      newSelectedRows[cell.prevQElemNumber as number] = cell.rowIdx - 1;
-    }
+    // also add the next or previous cell to selectedRows, based on which arrow is pressed
+    const idxShift = evt.key === KeyCodes.DOWN ? 1 : -1;
+    const nextCell = allRows[cell.rawRowIdx + idxShift][`col-${cell.rawColIdx}`] as Cell;
+    newSelectedRows[nextCell.qElemNumber] = cell.rowIdx + idxShift;
     return newSelectedRows;
   }
 
