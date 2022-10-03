@@ -5,7 +5,7 @@ declare module 'object-properties' {
     version: string;
     qHyperCubeDef: QHyperCubeDef;
     showTitles?: boolean;
-    enableExplorationChart?: boolean;
+    enableChartExploration?: boolean;
     title?: string;
     subtitle?: string;
     footnote?: string;
