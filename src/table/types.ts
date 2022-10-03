@@ -253,7 +253,7 @@ export interface CellHOCProps extends TableCellProps {
   cell: Cell;
   column: Column;
   announce: Announce;
-  isFlagEnabled(flag: string): boolean;
+  areBasicFeaturesEnabled: boolean;
 }
 
 export type CellHOC = (props: CellHOCProps) => JSX.Element;

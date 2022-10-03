@@ -68,7 +68,7 @@ describe('<TableBodyWrapper />', () => {
     } as unknown as ExtendedTheme;
     layout = {} as TableLayout;
     tableFirstRow = tableData.rows[0]['col-0'] as Cell;
-    isFlagEnabled = (flag) => !!flag;
+    areBasicFeaturesEnabled = true;
   });
 
   afterEach(() => jest.clearAllMocks());

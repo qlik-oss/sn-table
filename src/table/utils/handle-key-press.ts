@@ -41,14 +41,14 @@ export const shouldBubble = (
  * When at the first/last row of the cell, shift + arrow up/down should not select anything
  */
 const shouldSelectMultiValues = (
-  basicFeaturesEnabled: boolean,
+  areBasicFeaturesEnabled: boolean,
   isSelectionsEnabled: boolean,
   evt: React.KeyboardEvent,
   cell: Cell
 ) =>
   evt.shiftKey &&
   ((evt.key === KeyCodes.UP && cell.rawRowIdx !== 0) || (evt.key === KeyCodes.DOWN && !cell.isLastRow)) &&
-  basicFeaturesEnabled &&
+  areBasicFeaturesEnabled &&
   isSelectionsEnabled &&
   cell.isSelectable;
 
@@ -197,19 +197,18 @@ export const handleBodyKeyDown = ({
     bottom: isSelectionMode && totalsPosition === 'bottom' ? 1 : 0,
   };
 
-  const basicFeaturesEnabled = isFlagEnabled('PS_15585_SN_TABLE_BASIC_FEATURES');
-
   switch (evt.key) {
     case KeyCodes.UP:
     case KeyCodes.DOWN: {
       evt.key === KeyCodes.UP && handleNavigateTop([cell.rawRowIdx, cell.rawColIdx], rootElement);
       const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, allowedRows);
       // Shift + up/down arrow keys: select multiple values
-      if (shouldSelectMultiValues(basicFeaturesEnabled, isSelectionsEnabled, evt, cell)) {
-        selectionDispatch({
-          type: SelectionActions.SELECT_MULTI_ADD,
-          payload: { cell, evt, announce },
-        });
+      if (shouldSelectMultiValues(areBasicFeaturesEnabled, isSelectionsEnabled, evt, cell)) {
+        areBasicFeaturesEnabled &&
+          selectionDispatch({
+            type: SelectionActions.SELECT_MULTI_ADD,
+            payload: { cell, evt, announce },
+          });
       } else {
         // When not selecting multiple we need to announce the selection state of the cell
         announceSelectionState(announce, nextCell, isSelectionMode);
@@ -258,9 +257,9 @@ export const handleBodyKeyDown = ({
 export const handleBodyKeyUp = (
   evt: React.KeyboardEvent,
   selectionDispatch: SelectionDispatch,
-  isFlagEnabled: (flag: string) => boolean
+  areBasicFeaturesEnabled: boolean
 ) => {
-  isFlagEnabled('PS_15585_SN_TABLE_BASIC_FEATURES') &&
+  areBasicFeaturesEnabled &&
     evt.key === KeyCodes.SHIFT &&
     selectionDispatch({ type: SelectionActions.SELECT_MULTI_END });
 };

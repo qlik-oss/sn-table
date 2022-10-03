@@ -16,12 +16,18 @@ describe('withSelections', () => {
   let announce: Announce;
   let column: Column;
   let selectionDispatchMock: jest.Mock<any, any>;
-  let isFlagEnabled: (flag: string) => boolean;
+  let areBasicFeaturesEnabled: boolean;
 
   const renderWithSelections = () =>
     render(
       <TableContextProvider selectionsAPI={selectionsAPI} selectionDispatchMock={selectionDispatchMock}>
-        <HOC cell={cell} styling={styling} announce={announce} column={column} isFlagEnabled={isFlagEnabled}>
+        <HOC
+          cell={cell}
+          styling={styling}
+          announce={announce}
+          column={column}
+          areBasicFeaturesEnabled={areBasicFeaturesEnabled}
+        >
           {value}
         </HOC>
       </TableContextProvider>
@@ -35,7 +41,7 @@ describe('withSelections', () => {
     styling = {} as unknown as CellStyle;
     announce = () => undefined as unknown as Announce;
     selectionDispatchMock = jest.fn();
-    isFlagEnabled = (flag) => !!flag;
+    areBasicFeaturesEnabled = true;
   });
 
   afterEach(() => jest.clearAllMocks());

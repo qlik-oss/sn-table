@@ -17,10 +17,10 @@ import { SelectionDispatch } from '../../types';
 import { KeyCodes } from '../../constants';
 
 describe('handle-key-press', () => {
-  let isFlagEnabled: (flag: string) => boolean;
+  let areBasicFeaturesEnabled: boolean;
 
   beforeEach(() => {
-    isFlagEnabled = (flag: string) => !!flag;
+    areBasicFeaturesEnabled = true;
   });
 
   describe('shouldBubble', () => {
@@ -413,7 +413,6 @@ describe('handle-key-press', () => {
     let announce: Announce;
     let paginationNeeded: boolean;
     let totalsPosition: TotalsPosition;
-    let areBasicFeaturesEnabled: boolean;
 
     const runHandleBodyKeyDown = () =>
       handleBodyKeyDown({
@@ -709,7 +708,7 @@ describe('handle-key-press', () => {
     });
 
     it('when the shift key is pressed, should run selectionDispatch', () => {
-      handleBodyKeyUp(evt, selectionDispatch, isFlagEnabled);
+      handleBodyKeyUp(evt, selectionDispatch, areBasicFeaturesEnabled);
 
       expect(selectionDispatch).toHaveBeenCalledTimes(1);
     });
@@ -717,7 +716,7 @@ describe('handle-key-press', () => {
     it('when other keys are pressed, should not do anything', () => {
       evt.key = 'Control';
 
-      handleBodyKeyUp(evt, selectionDispatch, isFlagEnabled);
+      handleBodyKeyUp(evt, selectionDispatch, areBasicFeaturesEnabled);
 
       expect(selectionDispatch).not.toHaveBeenCalled();
     });

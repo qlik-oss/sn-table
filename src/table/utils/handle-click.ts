@@ -39,9 +39,9 @@ export const getSelectionMouseHandlers = (
   announce: Announce,
   onMouseDown: React.MouseEventHandler<HTMLTableCellElement> | undefined,
   selectionDispatch: SelectionDispatch,
-  isFlagEnabled: (flag: string) => boolean
+  areBasicFeaturesEnabled: boolean
 ) => {
-  const selectMultiEnabled = isFlagEnabled('PS_15585_SN_TABLE_BASIC_FEATURES');
+  const selectMultiEnabled = areBasicFeaturesEnabled;
 
   const handleMouseDown = (evt: React.MouseEvent) => {
     // run handleClickToFocusBody

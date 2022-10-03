@@ -1,6 +1,6 @@
 import { stardust } from '@nebula.js/stardust';
 import React from 'react';
-import { Announce, Cell } from '../../../types';
+import { Announce } from '../../../types';
 import * as accessibilityUtils from '../accessibility-utils';
 
 describe('handle-accessibility', () => {
