@@ -26,7 +26,7 @@ describe('<TableBodyWrapper />', () => {
   let theme: ExtendedTheme;
   let tableFirstRow: Cell;
   let tableSecondRow: Cell;
-  let isFlagEnabled: (flag: string) => boolean;
+  let areBasicFeaturesEnabled: boolean;
 
   const renderTableBody = () =>
     render(
@@ -43,7 +43,7 @@ describe('<TableBodyWrapper />', () => {
           keyboard={keyboard}
           tableWrapperRef={tableWrapperRef}
           announce={announce}
-          isFlagEnabled={isFlagEnabled}
+          areBasicFeaturesEnabled={areBasicFeaturesEnabled}
         />
       </TableContextProvider>
     );
@@ -68,7 +68,7 @@ describe('<TableBodyWrapper />', () => {
     } as unknown as ExtendedTheme;
     layout = {} as TableLayout;
     tableFirstRow = tableData.rows[0]['col-0'] as Cell;
-    isFlagEnabled = (flag) => !!flag;
+    areBasicFeaturesEnabled = true;
   });
 
   afterEach(() => jest.clearAllMocks());

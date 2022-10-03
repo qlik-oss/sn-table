@@ -90,9 +90,10 @@ describe('handle-click', () => {
     let announce: Announce;
     let onMouseDown: React.MouseEventHandler<HTMLTableCellElement> | undefined;
     let selectionDispatch: SelectionDispatch;
-    let isFlagEnabled: (flag: string) => boolean;
+    let areBasicFeaturesEnabled: boolean;
 
-    const getHandlers = () => getSelectionMouseHandlers(cell, announce, onMouseDown, selectionDispatch, isFlagEnabled);
+    const getHandlers = () =>
+      getSelectionMouseHandlers(cell, announce, onMouseDown, selectionDispatch, areBasicFeaturesEnabled);
 
     beforeEach(() => {
       cell = {
@@ -101,13 +102,13 @@ describe('handle-click', () => {
       announce = jest.fn();
       onMouseDown = jest.fn();
       selectionDispatch = jest.fn();
-      isFlagEnabled = (flag) => !!flag;
+      areBasicFeaturesEnabled = true;
     });
 
     afterEach(() => jest.clearAllMocks());
 
     it('should not call selectionDispatch for down, over nor up when basic features flag is disabled', () => {
-      isFlagEnabled = (flag) => !flag;
+      areBasicFeaturesEnabled = false;
       const { handleMouseDown, handleMouseOver, handleMouseUp } = getHandlers();
       handleMouseDown(evt);
       handleMouseOver(evt);

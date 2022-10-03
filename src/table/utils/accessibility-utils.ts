@@ -1,5 +1,6 @@
 import { stardust } from '@nebula.js/stardust';
-import { Announce, Cell } from '../../types';
+import React from 'react';
+import { Announce } from '../../types';
 import { CellFocusProps, HandleResetFocusProps } from '../types';
 
 export const getCellElement = (rootElement: HTMLElement, cellCoord: [number, number]) =>
@@ -215,9 +216,9 @@ export const announceSelectionState = (
   }
 };
 
-export const copyCellValue = async (cell: Cell) => {
+export const copyCellValue = async (value: string) => {
   try {
-    await navigator.clipboard.writeText(cell.qText as string);
+    await navigator.clipboard.writeText(value);
   } catch (error) {
     console.log(error);
   }
