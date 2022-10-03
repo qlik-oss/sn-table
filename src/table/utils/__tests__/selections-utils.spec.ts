@@ -189,6 +189,7 @@ describe('selections-utils', () => {
     });
 
     describe('select multiple', () => {
+      const mouseupOutsideCallback = () => {};
       let evt: React.KeyboardEvent;
       let announce: jest.Mock<any, any>;
 
@@ -200,24 +201,39 @@ describe('selections-utils', () => {
 
       afterEach(() => jest.clearAllMocks());
 
-      it('should return state unchanged, when type is selectMultiStart, state.colIdx > 0 and not cell.colIdx', () => {
-        state.colIdx = 2;
+      it('should return state unchanged, when type is selectMultiStart and mouseupOutsideCallback is undefined', () => {
         const action = { type: SelectionActions.SELECT_MULTI_START, payload: { cell } } as SelectMultiStartAction;
         const newState = reducer(state, action);
         expect(newState).toEqual(state);
       });
 
-      it('should return state with isSelectMultiValues true and firstCell, when type is selectMultiStart and state.colIdx === cell.colIdx', () => {
-        const action = { type: SelectionActions.SELECT_MULTI_START, payload: { cell } } as SelectMultiStartAction;
+      it('should return state unchanged, when type is selectMultiStart, state.colIdx > 0 and not cell.colIdx', () => {
+        state.colIdx = 2;
+        const action = {
+          type: SelectionActions.SELECT_MULTI_START,
+          payload: { cell, mouseupOutsideCallback },
+        } as SelectMultiStartAction;
         const newState = reducer(state, action);
-        expect(newState).toEqual({ ...state, isSelectMultiValues: true, firstCell: cell });
+        expect(newState).toEqual(state);
+      });
+
+      it('should return state with isSelectMultiValues true and firstCell, when type is selectMultiStart and state.colIdx === cell.colIdx', () => {
+        const action = {
+          type: SelectionActions.SELECT_MULTI_START,
+          payload: { cell, mouseupOutsideCallback },
+        } as SelectMultiStartAction;
+        const newState = reducer(state, action);
+        expect(newState).toEqual({ ...state, isSelectMultiValues: true, firstCell: cell, mouseupOutsideCallback });
       });
 
       it('should return state with isSelectMultiValues true and firstCell, when type is selectMultiStart and state.colIdx === -1', () => {
         state.colIdx = -1;
-        const action = { type: SelectionActions.SELECT_MULTI_START, payload: { cell } } as SelectMultiStartAction;
+        const action = {
+          type: SelectionActions.SELECT_MULTI_START,
+          payload: { cell, mouseupOutsideCallback },
+        } as SelectMultiStartAction;
         const newState = reducer(state, action);
-        expect(newState).toEqual({ ...state, isSelectMultiValues: true, firstCell: cell });
+        expect(newState).toEqual({ ...state, isSelectMultiValues: true, firstCell: cell, mouseupOutsideCallback });
       });
 
       it('should return state unchanged, when type is selectMultiAdd, isSelectMultiValues is false and isShiftArrow returns false', () => {

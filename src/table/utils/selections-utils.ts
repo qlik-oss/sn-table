@@ -215,7 +215,7 @@ const startSelectMulti = (
   state: SelectionState,
   { cell, mouseupOutsideCallback }: { cell: Cell; mouseupOutsideCallback(): void }
 ): SelectionState => {
-  if (state.colIdx === -1 || state.colIdx === cell.colIdx) {
+  if (mouseupOutsideCallback && (state.colIdx === -1 || state.colIdx === cell.colIdx)) {
     document.addEventListener('mouseup', mouseupOutsideCallback);
     return {
       ...state,
