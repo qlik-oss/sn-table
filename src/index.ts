@@ -81,18 +81,16 @@ export default function supernova(env: Galaxy) {
       const theme = useExtendedTheme(rootElement);
       const announce = useAnnounceAndTranslations(rootElement, translator);
       const changeSortOrder = useSorting(model);
-
       const [pageInfo, setPageInfo] = useState(initialPageInfo);
       const [tableData] = usePromise(
-        async () =>
-          env.carbon && !model?.getHyperCubeData
-            ? nothing()
-            : manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo),
+        async () => (true ? nothing() : manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo)),
         [layout, pageInfo, model]
       );
 
+      useEffect(() => console.log('new layout', layout), [layout]);
+
       useEffect(() => {
-        const isReadyToRender = !env.carbon && reactRoot && layout && tableData && changeSortOrder && theme;
+        const isReadyToRender = !env.carbon && reactRoot && layout && changeSortOrder && theme;
         isReadyToRender &&
           render(
             {
@@ -112,6 +110,7 @@ export default function supernova(env: Galaxy) {
               footerContainer,
               announce,
               isFlagEnabled,
+              model,
             },
             reactRoot
           );

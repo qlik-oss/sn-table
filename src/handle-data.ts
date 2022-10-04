@@ -37,7 +37,7 @@ export function getTotalInfo(
   columnOrder: number[]
 ) {
   if (!isDim) return layout.qHyperCube.qGrandTotalRow[colIndex - numDims]?.qText;
-  if (colIndex === 0 && columnOrder[0] === 0) return layout.totals.label;
+  if (colIndex === 0 && columnOrder[0] === 0) return layout?.totals?.label;
   return '';
 }
 

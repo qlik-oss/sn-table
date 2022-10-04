@@ -8,6 +8,9 @@ import TableWrapper from './components/TableWrapper';
 import { TableContextProvider } from './context';
 import muiSetup from './mui-setup';
 import { RenderProps, TableWrapperProps } from './types';
+import VirualizedTable from './components/virtualized-table/Wrapper';
+
+const VIRTUAL_SCROLL = true;
 
 export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   const { direction, selectionsAPI } = props;
@@ -17,7 +20,7 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
     <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : undefined}>
       <ThemeProvider theme={muiTheme}>
         <TableContextProvider selectionsAPI={selectionsAPI}>
-          <TableWrapper {...(props as TableWrapperProps)} />
+          {VIRTUAL_SCROLL ? <VirualizedTable {...props} /> : <TableWrapper {...(props as TableWrapperProps)} />}
         </TableContextProvider>
       </ThemeProvider>
     </StyleSheetManager>

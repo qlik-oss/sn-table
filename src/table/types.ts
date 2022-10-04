@@ -1,5 +1,6 @@
 import { TableCellProps } from '@mui/material';
 import { stardust } from '@nebula.js/stardust';
+import { VariableSizeGrid } from 'react-window';
 import {
   Announce,
   Cell,
@@ -221,3 +222,7 @@ export interface CellHOCProps extends TableCellProps {
 }
 
 export type CellHOC = (props: CellHOCProps) => JSX.Element;
+
+export interface VirtualTableProps extends RenderProps {
+  forwardRef: React.RefObject<VariableSizeGrid<any>>;
+}
