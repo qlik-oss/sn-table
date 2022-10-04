@@ -114,6 +114,7 @@ export interface HandleHeadKeyDownProps {
   layout: TableLayout;
   isInteractionEnabled: boolean;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  areBasicFeaturesEnabled: boolean;
 }
 
 export interface HandleBodyKeyDownProps {
@@ -211,6 +212,7 @@ export interface TableHeadWrapperProps extends CommonTableProps {
   changeSortOrder: ChangeSortOrder;
   constraints: stardust.Constraints;
   translator: ExtendedTranslator;
+  areBasicFeaturesEnabled: boolean;
 }
 
 export interface TableBodyWrapperProps extends CommonTableProps {
@@ -228,6 +230,7 @@ export interface TableTotalsProps extends CommonTableProps {
   rootElement: HTMLElement;
   layout: TableLayout;
   selectionsAPI: ExtendedSelectionAPI;
+  areBasicFeaturesEnabled: boolean;
 }
 
 export interface PaginationContentProps extends CommonTableProps {

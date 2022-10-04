@@ -11,7 +11,7 @@ export default function useContextMenu(areBasicFeaturesEnabled: boolean) {
         icon: 'lui-icon lui-icon--copy',
         tid: 'copy-cell-context-item',
         select: async () => {
-          copyCellValue(event.target.firstChild.textContent);
+          copyCellValue(event);
         },
       });
   });
