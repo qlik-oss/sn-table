@@ -72,6 +72,14 @@ Compress the generated 'sn-table-ext' folder into the 'application/zip' file for
 
 ## React Native
 
+SN-Table supports react-native rendering. It uses the native implementation of the optimized lists on their respective platforms. For iOS it uses UICollectionView and for Android it uses RecyclerView. For more information on React Native integration with Nebula and Picasso, see the following repos;
+
+- [Helium](https://github.com/qlik-oss/react-native-helium) -> A high performnce rendering engine that uses a GPU backed Skia implementation
+- [Carbon](https://github.com/qlik-oss/react-native-carbon) -> The business logic behind rendering Supernova's in React Native
+- [react-native-simple-grid](https://github.com/qlik-oss/react-native-simple-grid) -> The native sn-table
+
+To run the example app in React-Native;
+
 ### Pre-reqs
 
 1. Install [react-native dev environment](https://reactnative.dev/docs/0.68/environment-setup). This includes Xcode and Android Studio.

@@ -6,7 +6,6 @@ import { RowProps } from './Props';
 import SelectionCaches from './SelectionCaches';
 import DataCacheStream from './DataCachesStream';
 import { loadColumnWidths, storeColumnWidths } from './ColumnWidthStorage';
-import { freezeFirstColumn } from '../utils/scrolling-props';
 import { getBodyCellStyle, getHeaderStyle } from '../utils/styling-utils';
 
 const styles = StyleSheet.create({
@@ -118,7 +117,7 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
         onColumnsResized={onColumnsResized}
         clearSelections={clearSelections}
         onHeaderPressed={onHeaderPressed}
-        freezeFirstColumn={freezeFirstColumn(layout)}
+        freezeFirstColumn={layout.scrolling?.keepFirstColumnInView}
         cellContentStyle={contentStyle.cellStyle}
         headerContentStyle={contentStyle.headerStyle}
       />
