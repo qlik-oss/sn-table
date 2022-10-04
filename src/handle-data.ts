@@ -131,8 +131,7 @@ export default async function manageData(
         isSelectable: c.isDim && !c.isLocked,
         rawRowIdx: rowIdx,
         rawColIdx: colIdx,
-        prevQElemNumber: dataPages[0].qMatrix[rowIdx - 1]?.[colIdx]?.qElemNumber,
-        nextQElemNumber: dataPages[0].qMatrix[rowIdx + 1]?.[colIdx]?.qElemNumber,
+        isLastRow: rowIdx === height - 1,
       };
     });
     return row;

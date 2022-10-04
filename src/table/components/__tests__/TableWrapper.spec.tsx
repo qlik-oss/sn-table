@@ -37,7 +37,7 @@ describe('<TableWrapper />', () => {
   let announce: Announce;
   let changeSortOrder: ChangeSortOrder;
   let layout: TableLayout;
-  let isFlagEnabled: (flag: string) => boolean;
+  let areBasicFeaturesEnabled: boolean;
 
   const renderTableWrapper = () =>
     render(
@@ -57,7 +57,7 @@ describe('<TableWrapper />', () => {
           announce={announce}
           changeSortOrder={changeSortOrder}
           layout={layout}
-          isFlagEnabled={isFlagEnabled}
+          areBasicFeaturesEnabled={areBasicFeaturesEnabled}
         />
       </TableContextProvider>
     );

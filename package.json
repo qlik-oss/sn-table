@@ -1,6 +1,6 @@
 {
   "name": "@nebula.js/sn-table",
-  "version": "1.16.0",
+  "version": "1.17.1",
   "description": "table supernova",
   "license": "MIT",
   "author": "QlikTech International AB",
@@ -75,10 +75,10 @@
     "@mui/material": "5.10.5",
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
     "@mui/system": "5.10.5",
-    "@nebula.js/cli": "3.0.2",
-    "@nebula.js/cli-build": "3.0.2",
-    "@nebula.js/cli-sense": "3.0.2",
-    "@nebula.js/cli-serve": "3.0.2",
+    "@nebula.js/cli": "3.0.3",
+    "@nebula.js/cli-build": "3.0.3",
+    "@nebula.js/cli-sense": "3.0.3",
+    "@nebula.js/cli-serve": "3.0.3",
     "@playwright/test": "1.25.2",
     "@qlik/react-native-simple-grid": "1.0.11",
     "@react-native-async-storage/async-storage": "1.17.10",
@@ -125,7 +125,7 @@
     "yargs": "17.5.1"
   },
   "peerDependencies": {
-    "@nebula.js/stardust": "3.x"
+    "@nebula.js/stardust": ">=3.0.3"
   },
   "resolutions": {
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"

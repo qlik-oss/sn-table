@@ -10,13 +10,13 @@ import muiSetup from './mui-setup';
 import { RenderProps, TableWrapperProps } from './types';
 
 export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
-  const { direction, selectionsAPI } = props;
+  const { direction, selectionsAPI, tableData } = props;
   const muiTheme = muiSetup(direction);
 
   reactRoot?.render(
     <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : undefined}>
       <ThemeProvider theme={muiTheme}>
-        <TableContextProvider selectionsAPI={selectionsAPI}>
+        <TableContextProvider selectionsAPI={selectionsAPI} tableRows={tableData?.rows}>
           <TableWrapper {...(props as TableWrapperProps)} />
         </TableContextProvider>
       </ThemeProvider>
