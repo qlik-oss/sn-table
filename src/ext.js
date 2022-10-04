@@ -469,18 +469,20 @@ const getDefinition = (env) => {
             translation: 'properties.presentation',
             items: getStyleSettings(env),
           },
-          chartExploration: {
-            type: 'items',
-            translation: 'properties.chartExploration',
-            items: {
-              chartExplorationToggler: {
-                type: 'items',
-                component: 'chart-exploration-toggler',
-                translation: 'properties.enableChartExploration',
-                ref: 'enableChartExploration',
+          ...(env.flags.isEnabled('PS_18291_TABLE_EXPLORATION') && {
+            chartExploration: {
+              type: 'items',
+              translation: 'properties.chartExploration',
+              items: {
+                chartExplorationToggler: {
+                  type: 'items',
+                  component: 'chart-exploration-toggler',
+                  translation: 'properties.enableChartExploration',
+                  ref: 'enableChartExploration',
+                },
               },
             },
-          },
+          }),
         },
       },
     },
