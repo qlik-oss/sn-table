@@ -2,7 +2,7 @@
 
 ## Developing
 
-To test your changes there are two ways
+To test your changes there are two simple ways. Either run the nebula development server or build the extension and add it to Qlik Sense
 
 1. Install dependencies with `yarn`
 1. Transpile code with `yarn build` (or `yarn build:watch`)
@@ -89,3 +89,5 @@ If you would run `npm version` and it for some reason fails, or you would like t
 
 1. Run `git tag` to check if a new tag was created (or already existed).
 1. If a tag was created, delete it with `git tag -d <tag>`.
+
+If there was a commit made, make sure to revert that too.

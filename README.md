@@ -10,7 +10,7 @@ More specifics and information about the sn-table can be found in [the Qlik deve
 
 ## Contribution
 
-To learn how to run a sn-table extension using nebula development server and develop, **see our [contributing guide](./.github/CONTRIBUTION.md)**.
+Information about developing and contributing can be found in our [contributing guide](./.github/CONTRIBUTION.md).
 
 ## Mashup Usage
 
