@@ -10,7 +10,7 @@ More specifics and information about the sn-table can be found in [the Qlik deve
 
 ## Contribution
 
-Information about developing and contributing can be found in our [contributing guide](./.github/CONTRIBUTION.md).
+Information about developing and contributing can be found in our [contribution guide](./.github/CONTRIBUTION.md).
 
 ## Mashup Usage
 

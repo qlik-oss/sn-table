@@ -2,7 +2,7 @@
 
 ## Developing
 
-To test your changes there are two simple ways. Either run the nebula development server or build the extension and add it to Qlik Sense
+There are two simple ways of testing your changes. Either run the nebula development server or build the extension and add it to Qlik Sense
 
 1. Install dependencies with `yarn`
 1. Transpile code with `yarn build` (or `yarn build:watch`)
