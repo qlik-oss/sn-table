@@ -1,0 +1,58 @@
+export enum SelectionStates {
+  SELECTED = 'selected',
+  POSSIBLE = 'possible',
+  EXCLUDED = 'excluded',
+  INACTIVE = 'inactive',
+}
+
+export enum SelectionActions {
+  SELECT = 'select',
+  SELECT_MULTI_START = 'SelectMultiStart',
+  SELECT_MULTI_ADD = 'SelectMultiAdd',
+  SELECT_MULTI_END = 'selectMultiEnd',
+  RESET = 'reset',
+  CLEAR = 'clear',
+  UPDATE_ALL_ROWS = 'updateAllRows',
+}
+
+export enum KeyCodes {
+  ENTER = 'Enter',
+  SPACE = ' ',
+  ESC = 'Escape',
+  TAB = 'Tab',
+  SHIFT = 'Shift',
+  LEFT = 'ArrowLeft',
+  RIGHT = 'ArrowRight',
+  UP = 'ArrowUp',
+  DOWN = 'ArrowDown',
+  C = 'c',
+}
+
+export enum StylingDefaults {
+  BORDER_STYLE = 'solid',
+  BODY_BORDER = '0px 1px 1px 0px',
+  HEAD_BORDER = '1px 1px 1px 0px',
+  HEAD_CURSOR = 'pointer',
+  HEAD_BACKGROUND_LIGHT = '#FAFAFA',
+  HEAD_BACKGROUND_DARK = '#323232',
+  SORT_LABEL_LIGHT = 'rgba(255,255,255,0.9)',
+  SORT_LABEL_DARK = 'rgba(0, 0, 0, 0.54)',
+  FONT_COLOR = '#404040',
+  WHITE = '#fff',
+  HOVER_BACKGROUND = '#f4f4f4',
+  SELECTED_BACKGROUND = '#009845',
+  EXCLUDED_BACKGROUND = 'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px)',
+}
+
+export const SELECTION_STYLING = {
+  SELECTED: {
+    color: StylingDefaults.WHITE,
+    background: StylingDefaults.SELECTED_BACKGROUND,
+    // Setting a specific class for selected cells styling to override hover effect
+    selectedCellClass: SelectionStates.SELECTED,
+  },
+  POSSIBLE: {
+    color: StylingDefaults.FONT_COLOR,
+    background: StylingDefaults.WHITE,
+  },
+};

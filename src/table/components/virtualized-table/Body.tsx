@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect } from 'react';
 import { VariableSizeGrid } from 'react-window';
 import useInfiniteScrollData from '../../hooks/use-infinite-scroll-data';
 import { VirtualTableProps } from '../../types';

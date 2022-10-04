@@ -21,7 +21,7 @@ function TableBodyWrapper({
   keyboard,
   tableWrapperRef,
   announce,
-  isFlagEnabled,
+  areBasicFeaturesEnabled,
 }: TableBodyWrapperProps) {
   const { rows, columns, paginationNeeded, totalsPosition } = tableData;
   const columnsStylingIDsJSON = JSON.stringify(columns.map((column) => column.stylingIDs));
@@ -90,7 +90,7 @@ function TableBodyWrapper({
                 keyboard,
                 paginationNeeded,
                 totalsPosition,
-                isFlagEnabled,
+                areBasicFeaturesEnabled,
               });
             };
 
@@ -106,8 +106,11 @@ function TableBodyWrapper({
                   styling={cellStyle}
                   tabIndex={-1}
                   announce={announce}
+                  areBasicFeaturesEnabled={areBasicFeaturesEnabled}
                   onKeyDown={handleKeyDown}
-                  onKeyUp={(evt: React.KeyboardEvent) => handleBodyKeyUp(evt, selectionDispatch)}
+                  onKeyUp={(evt: React.KeyboardEvent) =>
+                    handleBodyKeyUp(evt, selectionDispatch, areBasicFeaturesEnabled)
+                  }
                   onMouseDown={() =>
                     handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition)
                   }

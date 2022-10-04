@@ -1,6 +1,6 @@
 import { stardust } from '@nebula.js/stardust';
 import React from 'react';
-import { Announce, Cell } from '../../../types';
+import { Announce } from '../../../types';
 import * as accessibilityUtils from '../accessibility-utils';
 
 describe('handle-accessibility', () => {
@@ -542,7 +542,14 @@ describe('handle-accessibility', () => {
       expect(keyboard.focus).not.toHaveBeenCalled();
     });
 
-    it('should call update setFocusedCellCoord and keyboard.focus when keyboard.enabled is true', () => {
+    it('should call update setFocusedCellCoord but not keyboard.focus when keyboard.enabled is true and active is true', () => {
+      keyboard.active = true;
+      accessibilityUtils.removeTabAndFocusCell(newCoord, rootElement, setFocusedCellCoord, keyboard);
+      expect(setFocusedCellCoord).toHaveBeenCalledWith(newCoord);
+      expect(keyboard.focus).not.toHaveBeenCalled();
+    });
+
+    it('should call update setFocusedCellCoord and keyboard.focus when keyboard.enabled is true and active is false', () => {
       accessibilityUtils.removeTabAndFocusCell(newCoord, rootElement, setFocusedCellCoord, keyboard);
       expect(setFocusedCellCoord).toHaveBeenCalledWith(newCoord);
       expect(keyboard.focus).toHaveBeenCalledTimes(1);
@@ -550,11 +557,9 @@ describe('handle-accessibility', () => {
   });
 
   describe('copyCellValue: ', () => {
-    let cellValue: Cell;
+    let cellValue: string;
     beforeEach(() => {
-      cellValue = {
-        qText: '251',
-      } as Cell;
+      cellValue = '';
       console.log = jest.fn();
     });
     it('should copying value to clipboard successfully', () => {

@@ -25,6 +25,7 @@ import useReactRoot from './nebula-hooks/use-react-root';
 import useAnnounceAndTranslations from './nebula-hooks/use-announce-and-translations';
 import useSorting from './nebula-hooks/use-sorting';
 import useExtendedTheme from './nebula-hooks/use-extended-theme';
+import useContextMenu from './nebula-hooks/use-context-menu';
 import {
   RenderWithCarbonArguments,
   Galaxy,
@@ -57,9 +58,7 @@ const renderWithCarbon = ({
 };
 
 export default function supernova(env: Galaxy) {
-  const {
-    flags: { isEnabled: isFlagEnabled },
-  } = env;
+  const areBasicFeaturesEnabled = env.flags.isEnabled('PS_15585_SN_TABLE_BASIC_FEATURES');
   return {
     qae: {
       properties: { initial: properties },
@@ -89,8 +88,10 @@ export default function supernova(env: Galaxy) {
 
       useEffect(() => console.log('new layout', layout), [layout]);
 
+      useContextMenu(areBasicFeaturesEnabled);
+
       useEffect(() => {
-        const isReadyToRender = !env.carbon && reactRoot && layout && changeSortOrder && theme;
+        const isReadyToRender = !env.carbon && reactRoot && layout && changeSortOrder && theme && tableData;
         isReadyToRender &&
           render(
             {
@@ -109,8 +110,8 @@ export default function supernova(env: Galaxy) {
               rect,
               footerContainer,
               announce,
-              isFlagEnabled,
               model,
+              areBasicFeaturesEnabled,
             },
             reactRoot
           );

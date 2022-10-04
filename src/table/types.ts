@@ -14,14 +14,12 @@ import {
   TableData,
   TableLayout,
   TotalsPosition,
+  Row,
 } from '../types';
-import { TSelectionActions } from './utils/selections-utils';
+import { SelectionActions } from './constants';
 
-export interface SelectionState {
-  rows: Record<string, number>;
-  colIdx: number;
-  api: ExtendedSelectionAPI;
-  isSelectMultiValues: boolean;
+interface Action<T = any> {
+  type: T;
 }
 
 export interface ActionPayload {
@@ -30,13 +28,49 @@ export interface ActionPayload {
   evt: React.KeyboardEvent | React.MouseEvent;
 }
 
+export interface SelectAction extends Action<SelectionActions.SELECT> {
+  payload: ActionPayload;
+}
+export interface SelectMultiStartAction extends Action<SelectionActions.SELECT_MULTI_START> {
+  payload: { cell: Cell };
+}
+export interface SelectMultiAddAction extends Action<SelectionActions.SELECT_MULTI_ADD> {
+  payload: ActionPayload;
+}
+export interface SelectMultiEndAction extends Action<SelectionActions.SELECT_MULTI_END> {}
+export interface ResetAction extends Action<SelectionActions.RESET> {}
+export interface ClearAction extends Action<SelectionActions.CLEAR> {}
+export interface UpdateAllRowsAction extends Action<SelectionActions.UPDATE_ALL_ROWS> {
+  payload: { allRows: Row[] };
+}
+
+export type SelectionActionTypes =
+  | SelectAction
+  | SelectMultiStartAction
+  | SelectMultiAddAction
+  | SelectMultiEndAction
+  | ResetAction
+  | ClearAction
+  | UpdateAllRowsAction;
+
+export type SelectionDispatch = React.Dispatch<SelectionActionTypes>;
+
+export interface SelectionState {
+  allRows: Row[];
+  rows: Record<string, number>;
+  colIdx: number;
+  api: ExtendedSelectionAPI;
+  isSelectMultiValues: boolean;
+  firstCell?: Cell;
+}
+
 export interface ContextValue {
   headRowHeight: number;
   setHeadRowHeight: React.Dispatch<React.SetStateAction<number>>;
   focusedCellCoord: [number, number];
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   selectionState: SelectionState;
-  selectionDispatch: React.Dispatch<TSelectionActions> | jest.Mock<any, any>;
+  selectionDispatch: SelectionDispatch;
 }
 
 export interface GeneratedStyling {
@@ -87,7 +121,7 @@ export interface HandleBodyKeyDownProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;
   cell: Cell;
-  selectionDispatch: React.Dispatch<TSelectionActions>;
+  selectionDispatch: SelectionDispatch;
   isSelectionsEnabled: boolean;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   announce: Announce;
@@ -95,7 +129,7 @@ export interface HandleBodyKeyDownProps {
   totalsPosition: TotalsPosition;
   paginationNeeded: boolean;
   selectionsAPI: ExtendedSelectionAPI;
-  isFlagEnabled(flag: string): boolean;
+  areBasicFeaturesEnabled: boolean;
 }
 
 export interface CellFocusProps {
@@ -117,6 +151,7 @@ export interface HandleResetFocusProps {
 export interface ContextProviderProps {
   children: JSX.Element;
   selectionsAPI: ExtendedSelectionAPI;
+  tableRows?: Row[];
   cellCoordMock?: [number, number];
   selectionDispatchMock?: jest.Mock<any, any>;
 }
@@ -145,7 +180,7 @@ export interface RenderProps {
     setPageInfo: SetPageInfo
   ): Promise<TableData | null>;
   app?: EngineAPI.IApp;
-  isFlagEnabled?(flag: string): boolean;
+  areBasicFeaturesEnabled?: boolean;
 }
 
 export interface CommonTableProps {
@@ -167,7 +202,7 @@ export interface TableWrapperProps extends CommonTableProps {
   translator: ExtendedTranslator;
   footerContainer?: HTMLElement;
   announce: Announce;
-  isFlagEnabled(flag: string): boolean;
+  areBasicFeaturesEnabled: boolean;
 }
 
 export interface TableHeadWrapperProps extends CommonTableProps {
@@ -187,7 +222,7 @@ export interface TableBodyWrapperProps extends CommonTableProps {
   announce: Announce;
   setShouldRefocus(): void;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
-  isFlagEnabled(flag: string): boolean;
+  areBasicFeaturesEnabled: boolean;
 }
 
 export interface TableTotalsProps extends CommonTableProps {
@@ -219,6 +254,7 @@ export interface CellHOCProps extends TableCellProps {
   cell: Cell;
   column: Column;
   announce: Announce;
+  areBasicFeaturesEnabled: boolean;
 }
 
 export type CellHOC = (props: CellHOCProps) => JSX.Element;

@@ -1,5 +1,6 @@
 import { stardust } from '@nebula.js/stardust';
-import { Announce, Cell } from '../../types';
+import React from 'react';
+import { Announce } from '../../types';
 import { CellFocusProps, HandleResetFocusProps } from '../types';
 
 export const getCellElement = (rootElement: HTMLElement, cellCoord: [number, number]) =>
@@ -119,7 +120,11 @@ export const removeTabAndFocusCell = (
 ) => {
   updateFocus({ focusType: 'removeTab', cell: findCellWithTabStop(rootElement) });
   setFocusedCellCoord(newCoord);
-  keyboard.enabled && keyboard.focus?.();
+  if (keyboard.enabled && !keyboard.active) {
+    keyboard.focus?.();
+  } else {
+    updateFocus({ focusType: 'addTab', cell: getCellElement(rootElement, newCoord) });
+  }
 };
 
 /**
@@ -170,7 +175,7 @@ export const handleFocusoutEvent = (
   keyboard: stardust.Keyboard
 ) => {
   const targetElement = evt.currentTarget as HTMLDivElement;
-  if (keyboard?.enabled && !targetElement.contains(evt.relatedTarget as Node) && !shouldRefocus.current) {
+  if (keyboard.enabled && !targetElement.contains(evt.relatedTarget as Node) && !shouldRefocus.current) {
     targetElement.querySelector('#sn-table-announcer--01')!.innerHTML = '';
     targetElement.querySelector('#sn-table-announcer--02')!.innerHTML = '';
     // Blur the table but not focus its parent element
@@ -211,9 +216,9 @@ export const announceSelectionState = (
   }
 };
 
-export const copyCellValue = async (cell: Cell) => {
+export const copyCellValue = async (value: string) => {
   try {
-    await navigator.clipboard.writeText(cell.qText as string);
+    await navigator.clipboard.writeText(value);
   } catch (error) {
     console.log(error);
   }

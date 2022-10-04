@@ -91,8 +91,7 @@ export interface Cell {
   isSelectable: boolean;
   rawRowIdx: number;
   rawColIdx: number;
-  prevQElemNumber: number | undefined;
-  nextQElemNumber: number | undefined;
+  isLastRow: boolean;
 }
 
 export interface Row {
@@ -199,4 +198,14 @@ export interface RenderWithCarbonArguments {
   rect: stardust.Rect;
   layout: TableLayout;
   changeSortOrder?: ChangeSortOrder;
+}
+
+interface AddItemProps {
+  translation: string;
+  icon: string;
+  tid: string;
+  select(): Promise<void>;
+}
+export interface Menu {
+  addItem(props: AddItemProps): void;
 }
