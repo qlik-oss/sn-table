@@ -17,10 +17,10 @@ import { SelectionDispatch } from '../../types';
 import { KeyCodes } from '../../constants';
 
 describe('handle-key-press', () => {
-  let isFlagEnabled: (flag: string) => boolean;
+  let areBasicFeaturesEnabled: boolean;
 
   beforeEach(() => {
-    isFlagEnabled = (flag: string) => !!flag;
+    areBasicFeaturesEnabled = true;
   });
 
   describe('shouldBubble', () => {
@@ -427,7 +427,7 @@ describe('handle-key-press', () => {
         keyboard,
         paginationNeeded,
         totalsPosition,
-        isFlagEnabled,
+        areBasicFeaturesEnabled,
       });
 
     beforeEach(() => {
@@ -463,6 +463,7 @@ describe('handle-key-press', () => {
       announce = jest.fn();
       paginationNeeded = true;
       totalsPosition = 'noTotals';
+      areBasicFeaturesEnabled = true;
       jest.spyOn(handleAccessibility, 'focusSelectionToolbar').mockImplementation(() => jest.fn());
       jest.spyOn(handleAccessibility, 'announceSelectionState').mockImplementation(() => jest.fn());
       jest.spyOn(handleAccessibility, 'copyCellValue');
@@ -667,7 +668,7 @@ describe('handle-key-press', () => {
     it('should not call copyCellValue when the flag is disabled', () => {
       evt.key = KeyCodes.C;
       evt.metaKey = true;
-      isFlagEnabled = (flag: string) => !flag;
+      areBasicFeaturesEnabled = false;
       runHandleBodyKeyDown();
       expect(handleAccessibility.copyCellValue).not.toHaveBeenCalled();
     });
@@ -707,7 +708,7 @@ describe('handle-key-press', () => {
     });
 
     it('when the shift key is pressed, should run selectionDispatch', () => {
-      handleBodyKeyUp(evt, selectionDispatch, isFlagEnabled);
+      handleBodyKeyUp(evt, selectionDispatch, areBasicFeaturesEnabled);
 
       expect(selectionDispatch).toHaveBeenCalledTimes(1);
     });
@@ -715,7 +716,7 @@ describe('handle-key-press', () => {
     it('when other keys are pressed, should not do anything', () => {
       evt.key = 'Control';
 
-      handleBodyKeyUp(evt, selectionDispatch, isFlagEnabled);
+      handleBodyKeyUp(evt, selectionDispatch, areBasicFeaturesEnabled);
 
       expect(selectionDispatch).not.toHaveBeenCalled();
     });

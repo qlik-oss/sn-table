@@ -199,3 +199,13 @@ export interface RenderWithCarbonArguments {
   layout: TableLayout;
   changeSortOrder?: ChangeSortOrder;
 }
+
+interface AddItemProps {
+  translation: string;
+  icon: string;
+  tid: string;
+  select(): Promise<void>;
+}
+export interface Menu {
+  addItem(props: AddItemProps): void;
+}

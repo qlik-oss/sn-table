@@ -1,6 +1,6 @@
 import { stardust } from '@nebula.js/stardust';
 import React from 'react';
-import { Announce, Cell } from '../../../types';
+import { Announce } from '../../../types';
 import * as accessibilityUtils from '../accessibility-utils';
 
 describe('handle-accessibility', () => {
@@ -557,11 +557,9 @@ describe('handle-accessibility', () => {
   });
 
   describe('copyCellValue: ', () => {
-    let cellValue: Cell;
+    let cellValue: string;
     beforeEach(() => {
-      cellValue = {
-        qText: '251',
-      } as Cell;
+      cellValue = '';
       console.log = jest.fn();
     });
     it('should copying value to clipboard successfully', () => {
