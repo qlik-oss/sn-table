@@ -1,6 +1,8 @@
-# Contribution Guiding
+# Contribution Guide
 
 ## Developing
+
+To test your changes there are two ways
 
 1. Install dependencies with `yarn`
 1. Transpile code with `yarn build` (or `yarn build:watch`)
@@ -15,7 +17,7 @@ Run API spec generating and verification with:
 
     yarn spec
 
-It verifies the [table object properties](../src/object-properties.js) (a JSDoc file) and generates a [Scriptappy](https://github.com/qlik-oss/scriptappy) definition documentation (a API spec) from that file.
+It verifies the [table object properties](../src/object-properties.js) (a JSDoc file) and generates a [Scriptappy](https://github.com/qlik-oss/scriptappy) definition documentation (an API spec) from that file.
 
 > Note: When there is any change in the [API spec](../api-specifications/properties.json), DO NOT commit the file. The change will be updated and merged into the main branch when doing the next release
 
@@ -64,19 +66,20 @@ You can skip git commit hooks with:
 
 ## Releasing
 
-Currently only admins are able to create a release. A release consists of the following:
+Currently only admins are able to create a release, since you have to **commit and push straight to main branch** for the release script to run on Circle CI.
+A release consists of the following:
 
 - Bumping the package version based on your commits
 - Updating the API specification
 - Creating a new commit with the changed files
 - Creating a tag with the new version
-- Pushing the release commit and tag to master
+- Pushing the release commit and tag to main
 
 ### Step-By-Step
 
-1. Check out master and run `git pull`.
-1. Run `git clean -dfx && yarn` to make sure depenencies are up-to-date.
-1. Run `npm version [major | minor | patch] -m "chore(release): v%s"`. Use semver string based on conventional commits since last release. Ex: `npm version patch -m "chore(release): v%s"`.
+1. Check out main and run `git pull`.
+1. Run `git clean -dfx && yarn` to make sure dependencies are up-to-date.
+1. Run `npm version [major | minor | patch] -m "chore(release): v%s"`. Use a [semVer string based on conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) since last release. Ex: `npm version patch -m "chore(release): v%s"`.
 1. Run `git push && git push --tags` to push commit and tag.
 1. Make sure all checks pass, then Circle CI automatically publishes to NPM.
 

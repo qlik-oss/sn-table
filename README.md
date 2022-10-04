@@ -8,6 +8,10 @@ Table supernova for [nebula.js]
 
 More specifics and information about the sn-table can be found in [the Qlik developer portal](https://qlik.dev/libraries-and-tools/visualizations/table).
 
+## Contribution
+
+To learn how to run a sn-table extension using nebula development server and develop, **see our [contributing guide](./.github/CONTRIBUTION.md)**.
+
 ## Mashup Usage
 
 ### Installing
@@ -73,10 +77,6 @@ Compress the generated 'sn-table-ext' folder into the 'application/zip' file for
 ## API
 
 The API can also be found in [the Qlik developer portal](https://qlik.dev/apis/javascript/nebula-table)
-
-## Contribution
-
-To learn how to run a sn-table extension using nebula development server and develop, see our [contributing guide](./.github/CONTRIBUTION.md).
 
 ## Package
 
