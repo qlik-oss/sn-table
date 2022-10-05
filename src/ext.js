@@ -469,6 +469,20 @@ const getDefinition = (env) => {
             translation: 'properties.presentation',
             items: getStyleSettings(env),
           },
+          ...(env.flags.isEnabled('PS_18291_TABLE_EXPLORATION') && {
+            chartExploration: {
+              type: 'items',
+              translation: 'properties.chartExploration',
+              items: {
+                chartExplorationToggler: {
+                  type: 'items',
+                  component: 'chart-exploration-toggler',
+                  translation: 'properties.enableChartExploration',
+                  ref: 'enableChartExploration',
+                },
+              },
+            },
+          }),
         },
       },
     },
@@ -554,6 +568,7 @@ export default function ext(env) {
       exportData: true,
       snapshot: true,
       viewData: false,
+      exploration: true,
     },
   };
 }
