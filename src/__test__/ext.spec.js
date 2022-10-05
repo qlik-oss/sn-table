@@ -1,9 +1,17 @@
 import ext, { indexAdded, indexRemoved, min, getDescription } from '../ext';
 
 describe('ext', () => {
+  const mockFlags = {
+    PS_18291_TABLE_EXPLORATION: true,
+  };
   const env = {
     translator: {
       get: jest.fn(),
+    },
+    flags: {
+      isEnabled: (flag) => {
+        return mockFlags[flag];
+      },
     },
   };
   let array;
