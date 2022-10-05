@@ -23,6 +23,8 @@ describe('handle-key-press', () => {
     areBasicFeaturesEnabled = true;
   });
 
+  afterEach(() => jest.clearAllMocks());
+
   describe('shouldBubble', () => {
     let evt: React.KeyboardEvent;
     let isSelectionMode: boolean;
@@ -163,8 +165,8 @@ describe('handle-key-press', () => {
         ctrlKey: true,
         metaKey: true,
         key: KeyCodes.RIGHT,
-        stopPropagation: () => undefined,
-        preventDefault: () => undefined,
+        stopPropagation: jest.fn(),
+        preventDefault: jest.fn(),
       } as unknown as React.KeyboardEvent;
       handleChangePage = jest.fn();
       setShouldRefocus = jest.fn();
@@ -223,6 +225,8 @@ describe('handle-key-press', () => {
       callHandleWrapperKeyDown();
       expect(handleChangePage).toHaveBeenCalledTimes(1);
       expect(setShouldRefocus).toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
     });
 
     it('when press escape is pressed and keyboard.enabled is true, should call keyboard.blur', () => {
@@ -238,7 +242,7 @@ describe('handle-key-press', () => {
       expect(keyboard.blur).toHaveBeenCalledWith(true);
     });
 
-    it('should ignore keyboard.blur while you are focusing on the pagination and pressing Esc key', () => {
+    it('should run keyboard.blur when you are in selection mode, keyboard.enabled is true and pressing Esc key', () => {
       evt = {
         key: KeyCodes.ESC,
         stopPropagation: jest.fn(),
@@ -247,9 +251,18 @@ describe('handle-key-press', () => {
       keyboard.enabled = true;
       isSelectionMode = true;
       callHandleWrapperKeyDown();
-      expect(evt.preventDefault).not.toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).not.toHaveBeenCalledTimes(1);
-      expect(keyboard.blur).not.toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).toHaveBeenCalledTimes(0);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(0);
+      expect(keyboard.blur).toHaveBeenCalledTimes(0);
+    });
+
+    it('should run preventDefaultBehavior when pressing arrow key but not shift + ctrl/cmd', () => {
+      evt.key = KeyCodes.DOWN;
+      callHandleWrapperKeyDown();
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(handleChangePage).toHaveBeenCalledTimes(0);
+      expect(setShouldRefocus).toHaveBeenCalledTimes(0);
     });
   });
 
@@ -468,10 +481,6 @@ describe('handle-key-press', () => {
       jest.spyOn(handleAccessibility, 'announceSelectionState').mockImplementation(() => jest.fn());
       jest.spyOn(handleAccessibility, 'copyCellValue');
       jest.spyOn(handleScroll, 'handleNavigateTop').mockImplementation(() => jest.fn());
-    });
-
-    afterEach(() => {
-      jest.clearAllMocks();
     });
 
     it('when press arrow down key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
@@ -738,8 +747,6 @@ describe('handle-key-press', () => {
       isSelectionMode = true;
       jest.spyOn(handleAccessibility, 'focusSelectionToolbar').mockImplementation(() => jest.fn());
     });
-
-    afterEach(() => jest.clearAllMocks());
 
     it('should call focusSelectionToolbar when isSelectionMode is true and tab is pressed', () => {
       handleLastTab(evt, isSelectionMode, keyboard);

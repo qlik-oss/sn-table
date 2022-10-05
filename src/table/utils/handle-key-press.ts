@@ -9,6 +9,9 @@ import { KeyCodes, SelectionActions } from '../constants';
 
 const isCtrlShift = (evt: React.KeyboardEvent) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
+export const isArrowKey = (key: string) =>
+  [KeyCodes.LEFT, KeyCodes.RIGHT, KeyCodes.UP, KeyCodes.DOWN].includes(key as KeyCodes);
+
 export const preventDefaultBehavior = (evt: React.KeyboardEvent) => {
   evt.stopPropagation();
   evt.preventDefault();
@@ -94,6 +97,9 @@ export const handleWrapperKeyDown = ({
     preventDefaultBehavior(evt);
     // @ts-ignore TODO: fix nebula api so that blur has the correct argument type
     keyboard.blur?.(true);
+  } else if (isArrowKey(evt.key)) {
+    // Arrow key events should never bubble out of the table
+    preventDefaultBehavior(evt);
   }
 };
 
