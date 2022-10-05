@@ -7,9 +7,10 @@ export enum SelectionStates {
 
 export enum SelectionActions {
   SELECT = 'select',
-  SELECT_MULTI_START = 'SelectMultiStart',
-  SELECT_MULTI_ADD = 'SelectMultiAdd',
+  SELECT_MOUSE_DOWN = 'selectMouseDown',
+  SELECT_MULTI_ADD = 'selectMultiAdd',
   SELECT_MULTI_END = 'selectMultiEnd',
+  SELECT_MOUSE_UP = 'selectMouseUp',
   RESET = 'reset',
   CLEAR = 'clear',
   UPDATE_ALL_ROWS = 'updateAllRows',

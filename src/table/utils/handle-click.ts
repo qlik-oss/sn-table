@@ -47,7 +47,7 @@ export const getSelectionMouseHandlers = (
     // only need to check isSelectable here. once you are holding you want to be able to drag outside the current column
     if (areBasicFeaturesEnabled && cell.isSelectable) {
       const mouseupOutsideCallback = () => selectionDispatch({ type: SelectionActions.SELECT_MULTI_END });
-      selectionDispatch({ type: SelectionActions.SELECT_MULTI_START, payload: { cell, mouseupOutsideCallback } });
+      selectionDispatch({ type: SelectionActions.SELECT_MOUSE_DOWN, payload: { cell, mouseupOutsideCallback } });
     }
   };
 
@@ -57,11 +57,13 @@ export const getSelectionMouseHandlers = (
   };
 
   const handleMouseUp = (evt: React.MouseEvent) => {
-    if (areBasicFeaturesEnabled && evt.button === 0) selectionDispatch({ type: SelectionActions.SELECT_MULTI_END });
+    if (areBasicFeaturesEnabled && evt.button === 0)
+      selectionDispatch({ type: SelectionActions.SELECT_MOUSE_UP, payload: { cell, evt, announce } });
   };
 
+  // This is only for when the basic features flag is disabled, we can remove the handler all together when it is toggled on everywhere
   const handleMouseClick = (evt: React.MouseEvent) => {
-    if (cell.isSelectable && evt.button === 0)
+    if (!areBasicFeaturesEnabled && cell.isSelectable && evt.button === 0)
       selectionDispatch({ type: SelectionActions.SELECT, payload: { cell, evt, announce } });
   };
 

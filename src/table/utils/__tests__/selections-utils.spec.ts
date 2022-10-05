@@ -15,7 +15,7 @@ import {
   ResetAction,
   ClearAction,
   UpdateAllRowsAction,
-  SelectMultiStartAction,
+  SelectMouseDownAction,
   SelectMultiAddAction,
 } from '../../types';
 import { SelectionStates, SelectionActions, KeyCodes } from '../../constants';
@@ -202,7 +202,7 @@ describe('selections-utils', () => {
       afterEach(() => jest.clearAllMocks());
 
       it('should return state unchanged, when type is selectMultiStart and mouseupOutsideCallback is undefined', () => {
-        const action = { type: SelectionActions.SELECT_MULTI_START, payload: { cell } } as SelectMultiStartAction;
+        const action = { type: SelectionActions.SELECT_MOUSE_DOWN, payload: { cell } } as SelectMouseDownAction;
         const newState = reducer(state, action);
         expect(newState).toEqual(state);
       });
@@ -210,33 +210,33 @@ describe('selections-utils', () => {
       it('should return state unchanged, when type is selectMultiStart, state.colIdx > 0 and not cell.colIdx', () => {
         state.colIdx = 2;
         const action = {
-          type: SelectionActions.SELECT_MULTI_START,
+          type: SelectionActions.SELECT_MOUSE_DOWN,
           payload: { cell, mouseupOutsideCallback },
-        } as SelectMultiStartAction;
+        } as SelectMouseDownAction;
         const newState = reducer(state, action);
         expect(newState).toEqual(state);
       });
 
-      it('should return state with isSelectMultiValues true and firstCell, when type is selectMultiStart and state.colIdx === cell.colIdx', () => {
+      it('should return state with firstCell and mouseupOutsideCallback, when type is selectMultiStart and state.colIdx === cell.colIdx', () => {
         const action = {
-          type: SelectionActions.SELECT_MULTI_START,
+          type: SelectionActions.SELECT_MOUSE_DOWN,
           payload: { cell, mouseupOutsideCallback },
-        } as SelectMultiStartAction;
+        } as SelectMouseDownAction;
         const newState = reducer(state, action);
-        expect(newState).toEqual({ ...state, isSelectMultiValues: true, firstCell: cell, mouseupOutsideCallback });
+        expect(newState).toEqual({ ...state, firstCell: cell, mouseupOutsideCallback });
       });
 
-      it('should return state with isSelectMultiValues true and firstCell, when type is selectMultiStart and state.colIdx === -1', () => {
+      it('should return state with firstCell and mouseupOutsideCallback, when type is selectMultiStart and state.colIdx === -1', () => {
         state.colIdx = -1;
         const action = {
-          type: SelectionActions.SELECT_MULTI_START,
+          type: SelectionActions.SELECT_MOUSE_DOWN,
           payload: { cell, mouseupOutsideCallback },
-        } as SelectMultiStartAction;
+        } as SelectMouseDownAction;
         const newState = reducer(state, action);
-        expect(newState).toEqual({ ...state, isSelectMultiValues: true, firstCell: cell, mouseupOutsideCallback });
+        expect(newState).toEqual({ ...state, firstCell: cell, mouseupOutsideCallback });
       });
 
-      it('should return state unchanged, when type is selectMultiAdd, isSelectMultiValues is false and isShiftArrow returns false', () => {
+      it('should return state unchanged, when type is selectMultiAdd, firstCell is undefined and isShiftArrow returns false', () => {
         state.rows = {};
         state.colIdx = -1;
         const action = {

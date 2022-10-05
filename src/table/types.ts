@@ -30,8 +30,11 @@ export interface SelectPayload {
 export interface SelectAction extends Action<SelectionActions.SELECT> {
   payload: SelectPayload;
 }
-export interface SelectMultiStartAction extends Action<SelectionActions.SELECT_MULTI_START> {
+export interface SelectMouseDownAction extends Action<SelectionActions.SELECT_MOUSE_DOWN> {
   payload: { cell: Cell; mouseupOutsideCallback(): void };
+}
+export interface SelectMouseUpAction extends Action<SelectionActions.SELECT_MOUSE_UP> {
+  payload: SelectPayload;
 }
 export interface SelectMultiAddAction extends Action<SelectionActions.SELECT_MULTI_ADD> {
   payload: SelectPayload;
@@ -45,7 +48,8 @@ export interface UpdateAllRowsAction extends Action<SelectionActions.UPDATE_ALL_
 
 export type SelectionActionTypes =
   | SelectAction
-  | SelectMultiStartAction
+  | SelectMouseDownAction
+  | SelectMouseUpAction
   | SelectMultiAddAction
   | SelectMultiEndAction
   | ResetAction

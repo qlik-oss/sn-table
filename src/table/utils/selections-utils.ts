@@ -193,11 +193,11 @@ export const getMultiSelectedRows = (
  * Updates the selection state but bot the backend when selecting multiple rows
  */
 const selectMultipleCells = (state: SelectionState, payload: SelectPayload): SelectionState => {
-  const { api, rows, colIdx, allRows, firstCell, isSelectMultiValues } = state;
+  const { api, rows, colIdx, allRows, firstCell } = state;
   const { cell, announce, evt } = payload;
   let selectedRows: Record<string, number> = {};
 
-  if (!isSelectMultiValues && !('key' in evt && isShiftArrow(evt))) return state;
+  if (!firstCell && !('key' in evt && isShiftArrow(evt))) return state;
 
   if (colIdx === -1) api.begin(['/qHyperCubeDef']);
   else selectedRows = { ...rows };
@@ -209,9 +209,9 @@ const selectMultipleCells = (state: SelectionState, payload: SelectPayload): Sel
 };
 
 /**
- * Initiates selecting multiple rows on mousedown
+ * Initiates selecting multiple rows on mouse down
  */
-const startSelectMulti = (
+const selectOnMouseDown = (
   state: SelectionState,
   { cell, mouseupOutsideCallback }: { cell: Cell; mouseupOutsideCallback(): void }
 ): SelectionState => {
@@ -220,7 +220,6 @@ const startSelectMulti = (
     return {
       ...state,
       firstCell: cell,
-      isSelectMultiValues: true,
       mouseupOutsideCallback,
     };
   }
@@ -233,9 +232,9 @@ const startSelectMulti = (
  */
 const endSelectMulti = (state: SelectionState): SelectionState => {
   const { api, rows, colIdx, isSelectMultiValues, mouseupOutsideCallback } = state;
+  mouseupOutsideCallback && document.removeEventListener('mouseup', mouseupOutsideCallback);
 
   if (isSelectMultiValues) {
-    mouseupOutsideCallback && document.removeEventListener('mouseup', mouseupOutsideCallback);
     api.select({
       method: 'selectHyperCubeCells',
       params: ['/qHyperCubeDef', Object.values(rows), [colIdx]],
@@ -245,12 +244,20 @@ const endSelectMulti = (state: SelectionState): SelectionState => {
   return { ...state, isSelectMultiValues: false, firstCell: undefined, mouseupOutsideCallback: undefined };
 };
 
+/**
+ * Calls endSelectMulti with the state as is if multiple are selected, otherwise runs selectCell and treats it as a click on single cell
+ */
+const selectOnMouseUp = (state: SelectionState, payload: SelectPayload) =>
+  endSelectMulti(!state.isSelectMultiValues && state.firstCell === payload.cell ? selectCell(state, payload) : state);
+
 export const reducer = (state: SelectionState, action: SelectionActionTypes): SelectionState => {
   switch (action.type) {
     case SelectionActions.SELECT:
       return selectCell(state, action.payload);
-    case SelectionActions.SELECT_MULTI_START:
-      return startSelectMulti(state, action.payload);
+    case SelectionActions.SELECT_MOUSE_DOWN:
+      return selectOnMouseDown(state, action.payload);
+    case SelectionActions.SELECT_MOUSE_UP:
+      return selectOnMouseUp(state, action.payload);
     case SelectionActions.SELECT_MULTI_ADD:
       return selectMultipleCells(state, action.payload);
     case SelectionActions.SELECT_MULTI_END:
