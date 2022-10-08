@@ -6,7 +6,15 @@ import { removeTabAndFocusCell } from '../utils/accessibility-utils';
 import { StyledHeadRow, StyledTotalsCell } from '../styles';
 import { TableTotalsProps } from '../types';
 
-function TableTotals({ rootElement, tableData, theme, layout, keyboard, selectionsAPI }: TableTotalsProps) {
+function TableTotals({
+  rootElement,
+  tableData,
+  theme,
+  layout,
+  keyboard,
+  selectionsAPI,
+  areBasicFeaturesEnabled,
+}: TableTotalsProps) {
   const { columns, paginationNeeded, totalsPosition, rows } = tableData;
   const headRowHeight = useContextSelector(TableContext, (value) => value.headRowHeight);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
@@ -27,7 +35,14 @@ function TableTotals({ rootElement, tableData, theme, layout, keyboard, selectio
             className="sn-table-cell"
             tabIndex={-1}
             onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
-              handleTotalKeyDown(e, rootElement, cellCoord, setFocusedCellCoord, selectionsAPI.isModal());
+              handleTotalKeyDown(
+                e,
+                rootElement,
+                cellCoord,
+                setFocusedCellCoord,
+                selectionsAPI.isModal(),
+                areBasicFeaturesEnabled
+              );
             }}
             onMouseDown={() => {
               removeTabAndFocusCell(cellCoord, rootElement, setFocusedCellCoord, keyboard);
