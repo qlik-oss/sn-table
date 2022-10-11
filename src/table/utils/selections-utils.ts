@@ -2,7 +2,7 @@ import { stardust } from '@nebula.js/stardust';
 import { Cell, ExtendedSelectionAPI, Announce, Row } from '../../types';
 import { SelectionState, ActionPayload, SelectionActionTypes, SelectionDispatch } from '../types';
 import { SelectionActions, SelectionStates, KeyCodes } from '../constants';
-import { isArrowKey } from './handle-key-press';
+import { isShiftArrow } from './handle-key-press';
 
 interface AddSelectionListenersArgs {
   api: ExtendedSelectionAPI;
@@ -98,8 +98,6 @@ export const announceSelectionStatus = (
     announce({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
   }
 };
-
-const isShiftArrow = (evt: React.KeyboardEvent) => evt.shiftKey && isArrowKey(evt.key);
 
 /**
  * Get the updated selected rows for when (de)selecting one row

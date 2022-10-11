@@ -9,8 +9,10 @@ import { KeyCodes, SelectionActions } from '../constants';
 
 const isCtrlShift = (evt: React.KeyboardEvent) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
-export const isArrowKey = (key: string) =>
+const isArrowKey = (key: string) =>
   [KeyCodes.LEFT, KeyCodes.RIGHT, KeyCodes.UP, KeyCodes.DOWN].includes(key as KeyCodes);
+
+export const isShiftArrow = (evt: React.KeyboardEvent) => evt.shiftKey && isArrowKey(evt.key);
 
 export const preventDefaultBehavior = (evt: React.KeyboardEvent) => {
   evt.stopPropagation();
