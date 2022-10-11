@@ -57,15 +57,12 @@ export const getSelectionMouseHandlers = (
   };
 
   const handleMouseUp = (evt: React.MouseEvent) => {
-    if (areBasicFeaturesEnabled && evt.button === 0)
+    if (areBasicFeaturesEnabled && evt.button === 0) {
       selectionDispatch({ type: SelectionActions.SELECT_MOUSE_UP, payload: { cell, evt, announce } });
-  };
-
-  // This is only for when the basic features flag is disabled, we can remove the handler all together when it is toggled on everywhere
-  const handleMouseClick = (evt: React.MouseEvent) => {
-    if (!areBasicFeaturesEnabled && cell.isSelectable && evt.button === 0)
+    } else if (!areBasicFeaturesEnabled && cell.isSelectable) {
       selectionDispatch({ type: SelectionActions.SELECT, payload: { cell, evt, announce } });
+    }
   };
 
-  return { handleMouseDown, handleMouseOver, handleMouseUp, handleMouseClick };
+  return { handleMouseDown, handleMouseOver, handleMouseUp };
 };

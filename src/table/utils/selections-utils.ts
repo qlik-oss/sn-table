@@ -245,7 +245,7 @@ const endSelectMulti = (state: SelectionState): SelectionState => {
 };
 
 /**
- * Calls endSelectMulti with the state as is if multiple are selected, otherwise runs selectCell and treats it as a click on single cell
+ * Calls endSelectMulti with the state as it is if multiple are selected, otherwise runs selectCell and treats it as a click on single cell
  */
 const selectOnMouseUp = (state: SelectionState, payload: SelectPayload) =>
   endSelectMulti(!state.isSelectMultiValues && state.firstCell === payload.cell ? selectCell(state, payload) : state);
