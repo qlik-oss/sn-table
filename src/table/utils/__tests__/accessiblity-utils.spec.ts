@@ -557,9 +557,35 @@ describe('handle-accessibility', () => {
   });
 
   describe('copyCellValue: ', () => {
-    let cellValue: string;
+    let evt: {
+      target: {
+        children: [
+          {
+            firstChild: {
+              textContent: string;
+            };
+          }
+        ];
+        firstChild: {
+          textContent: string;
+        };
+      };
+    };
     beforeEach(() => {
-      cellValue = '';
+      evt = {
+        target: {
+          children: [
+            {
+              firstChild: {
+                textContent: '',
+              },
+            },
+          ],
+          firstChild: {
+            textContent: '',
+          },
+        },
+      };
       console.log = jest.fn();
     });
     it('should copying value to clipboard successfully', () => {
@@ -568,7 +594,7 @@ describe('handle-accessibility', () => {
           writeText: jest.fn().mockReturnValueOnce(Promise.resolve()),
         },
       });
-      accessibilityUtils.copyCellValue(cellValue);
+      accessibilityUtils.copyCellValue(evt);
       expect(console.log).not.toHaveBeenCalled();
     });
   });

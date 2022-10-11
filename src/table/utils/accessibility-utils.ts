@@ -216,9 +216,14 @@ export const announceSelectionState = (
   }
 };
 
-export const copyCellValue = async (value: string) => {
+export const copyCellValue = async (evt: any, isHeadCell: boolean = false) => {
+  const target = evt.target as HTMLElement;
+  const value =
+    isHeadCell && target.children[0].firstChild
+      ? target.children[0].firstChild?.textContent
+      : target.firstChild && target.firstChild?.textContent;
   try {
-    await navigator.clipboard.writeText(value);
+    value && (await navigator.clipboard.writeText(String(value)));
   } catch (error) {
     console.log(error);
   }

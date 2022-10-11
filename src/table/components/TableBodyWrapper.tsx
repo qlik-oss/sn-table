@@ -59,6 +59,7 @@ function TableBodyWrapper({
       layout={layout}
       keyboard={keyboard}
       selectionsAPI={selectionsAPI}
+      areBasicFeaturesEnabled={areBasicFeaturesEnabled}
     />
   );
 

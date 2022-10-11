@@ -19,6 +19,7 @@ function TableHeadWrapper({
   translator,
   selectionsAPI,
   keyboard,
+  areBasicFeaturesEnabled,
 }: TableHeadWrapperProps) {
   const { columns, paginationNeeded } = tableData;
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
@@ -54,6 +55,7 @@ function TableHeadWrapper({
               layout,
               isInteractionEnabled,
               setFocusedCellCoord,
+              areBasicFeaturesEnabled,
             });
           };
 

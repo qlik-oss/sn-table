@@ -16,6 +16,7 @@ describe('<TableTotals />', () => {
   let layout: TableLayout;
   let selectionsAPI: ExtendedSelectionAPI;
   let keyboard: stardust.Keyboard;
+  let areBasicFeaturesEnabled: boolean;
 
   const renderTableTotals = (cellCoordMock?: [number, number]) =>
     render(
@@ -28,6 +29,7 @@ describe('<TableTotals />', () => {
             layout={layout}
             keyboard={keyboard}
             selectionsAPI={selectionsAPI}
+            areBasicFeaturesEnabled={areBasicFeaturesEnabled}
           />
         ) : (
           <></>

@@ -108,7 +108,6 @@ const getStyleSettings = (env) => {
           component: 'styling-panel',
           chartTitle: 'Object.StraightTable',
           translation: 'LayerStyleEditor.component.styling',
-          subtitle: 'LayerStyleEditor.component.styling',
           ref: 'components',
           useGeneral: true,
           key: 'theme',

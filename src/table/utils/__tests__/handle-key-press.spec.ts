@@ -43,6 +43,8 @@ describe('handle-key-press', () => {
       isSelectionMode = false;
       keyboardEnabled = false;
       paginationNeeded = true;
+      areBasicFeaturesEnabled = true;
+      jest.spyOn(handleAccessibility, 'copyCellValue');
     });
 
     it('should return true when esc is pressed and isSelectionMode is false', () => {
@@ -287,6 +289,7 @@ describe('handle-key-press', () => {
         layout,
         isInteractionEnabled,
         setFocusedCellCoord,
+        areBasicFeaturesEnabled,
       });
 
     beforeEach(() => {
@@ -300,6 +303,13 @@ describe('handle-key-press', () => {
         target: {
           blur: jest.fn(),
           setAttribute: jest.fn(),
+          children: [
+            {
+              firstChild: {
+                textContent: '',
+              },
+            },
+          ],
         } as unknown as HTMLElement,
       } as unknown as React.KeyboardEvent;
       rootElement = {
@@ -312,6 +322,7 @@ describe('handle-key-press', () => {
       changeSortOrder = jest.fn();
       isInteractionEnabled = true;
       setFocusedCellCoord = jest.fn();
+      jest.spyOn(handleAccessibility, 'copyCellValue');
     });
 
     it('when press arrow down key on head cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
@@ -358,6 +369,28 @@ describe('handle-key-press', () => {
       expect(changeSortOrder).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
     });
+
+    it('should call copyCellValue on Head cell when the pressed keys are Ctrl and C keys', () => {
+      evt.key = KeyCodes.C;
+      evt.ctrlKey = true;
+      callHandleHeadKeyDown();
+      expect(handleAccessibility.copyCellValue).toHaveBeenCalled();
+    });
+
+    it('should call copyCellValue on Head cell when the pressed keys are Meta and C keys', () => {
+      evt.key = KeyCodes.C;
+      evt.metaKey = true;
+      callHandleHeadKeyDown();
+      expect(handleAccessibility.copyCellValue).toHaveBeenCalled();
+    });
+
+    it('should not call copyCellValue on Head cell when the flag is disabled', () => {
+      evt.key = KeyCodes.C;
+      evt.metaKey = true;
+      areBasicFeaturesEnabled = false;
+      callHandleHeadKeyDown();
+      expect(handleAccessibility.copyCellValue).not.toHaveBeenCalled();
+    });
   });
 
   describe('handleTotalKeyDown', () => {
@@ -385,10 +418,11 @@ describe('handle-key-press', () => {
       } as unknown as HTMLElement;
       setFocusedCellCoord = jest.fn();
       isSelectionMode = false;
+      jest.spyOn(handleAccessibility, 'copyCellValue');
     });
 
     it('should move the focus from the current cell to the next when arrow key down is pressed on a total cell', () => {
-      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode, areBasicFeaturesEnabled);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
@@ -397,7 +431,7 @@ describe('handle-key-press', () => {
 
     it('should only call preventDefaultBehavior when isSelectionMode is true', () => {
       isSelectionMode = true;
-      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode, areBasicFeaturesEnabled);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
@@ -405,10 +439,32 @@ describe('handle-key-press', () => {
 
     it('should take the default case when the pressed key is not an arrow key', () => {
       evt.key = KeyCodes.ENTER;
-      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode, areBasicFeaturesEnabled);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
+    });
+
+    it('should call copyCellValue on Total cell when the pressed keys are Ctrl and C keys', () => {
+      evt.key = KeyCodes.C;
+      evt.ctrlKey = true;
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode, areBasicFeaturesEnabled);
+      expect(handleAccessibility.copyCellValue).toHaveBeenCalled();
+    });
+
+    it('should call copyCellValue on Total cell when the pressed keys are Meta and C keys', async () => {
+      evt.key = KeyCodes.C;
+      evt.metaKey = true;
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode, areBasicFeaturesEnabled);
+      expect(handleAccessibility.copyCellValue).toHaveBeenCalled();
+    });
+
+    it('should not call copyCellValue on Total cell when the flag is disabled', () => {
+      evt.key = KeyCodes.C;
+      evt.metaKey = true;
+      areBasicFeaturesEnabled = false;
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode, areBasicFeaturesEnabled);
+      expect(handleAccessibility.copyCellValue).not.toHaveBeenCalled();
     });
   });
 
