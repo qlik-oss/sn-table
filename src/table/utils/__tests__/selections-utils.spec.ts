@@ -255,7 +255,7 @@ describe('selections-utils', () => {
         });
       });
 
-      it('should return state with unchanged rows but reset isSelectMultiValues and firstCell, firstCell is not payload.cell', () => {
+      it('should return state with unchanged rows but reset isSelectMultiValues and firstCell, when firstCell is not payload.cell', () => {
         state.firstCell = createCell(2, 1);
         evt = { shiftKey: false } as React.MouseEvent;
         const action = {
