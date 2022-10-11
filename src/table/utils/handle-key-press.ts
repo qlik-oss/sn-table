@@ -1,7 +1,8 @@
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 
-import { focusSelectionToolbar, announceSelectionState, moveFocus, copyCellValue } from './accessibility-utils';
+import { focusSelectionToolbar, announceSelectionState, moveFocus } from './accessibility-utils';
+import copyCellValue from './copy-utils';
 import { handleNavigateTop } from './handle-scroll';
 import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownProps, SelectionDispatch } from '../types';
 import { Cell } from '../../types';
@@ -130,7 +131,7 @@ export const handleHeadKeyDown = ({
       changeSortOrder(layout, column);
       break;
     case KeyCodes.C: {
-      areBasicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(evt, true);
+      areBasicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(evt);
       break;
     }
     default:

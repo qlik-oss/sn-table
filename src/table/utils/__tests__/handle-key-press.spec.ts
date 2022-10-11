@@ -12,6 +12,7 @@ import {
 } from '../handle-key-press';
 import * as handleAccessibility from '../accessibility-utils';
 import * as handleScroll from '../handle-scroll';
+import * as handleCopy from '../copy-utils';
 import { Announce, Column, ExtendedSelectionAPI, Cell, TableLayout, TotalsPosition } from '../../../types';
 import { SelectionDispatch } from '../../types';
 import { KeyCodes } from '../../constants';
@@ -21,6 +22,7 @@ describe('handle-key-press', () => {
 
   beforeEach(() => {
     areBasicFeaturesEnabled = true;
+    jest.spyOn(handleCopy, 'default');
   });
 
   afterEach(() => {
@@ -46,7 +48,6 @@ describe('handle-key-press', () => {
       keyboardEnabled = false;
       paginationNeeded = true;
       areBasicFeaturesEnabled = true;
-      jest.spyOn(handleAccessibility, 'copyCellValue');
     });
 
     it('should return true when esc is pressed and isSelectionMode is false', () => {
@@ -294,13 +295,7 @@ describe('handle-key-press', () => {
         target: {
           blur: jest.fn(),
           setAttribute: jest.fn(),
-          children: [
-            {
-              firstChild: {
-                textContent: '',
-              },
-            },
-          ],
+          children: [],
         } as unknown as HTMLElement,
       } as unknown as React.KeyboardEvent;
       rootElement = {
@@ -313,7 +308,6 @@ describe('handle-key-press', () => {
       changeSortOrder = jest.fn();
       isInteractionEnabled = true;
       setFocusedCellCoord = jest.fn();
-      jest.spyOn(handleAccessibility, 'copyCellValue');
     });
 
     it('when press arrow down key on head cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
@@ -365,14 +359,14 @@ describe('handle-key-press', () => {
       evt.key = KeyCodes.C;
       evt.ctrlKey = true;
       callHandleHeadKeyDown();
-      expect(handleAccessibility.copyCellValue).toHaveBeenCalled();
+      expect(handleCopy.default).toHaveBeenCalled();
     });
 
     it('should call copyCellValue on Head cell when the pressed keys are Meta and C keys', () => {
       evt.key = KeyCodes.C;
       evt.metaKey = true;
       callHandleHeadKeyDown();
-      expect(handleAccessibility.copyCellValue).toHaveBeenCalled();
+      expect(handleCopy.default).toHaveBeenCalled();
     });
 
     it('should not call copyCellValue on Head cell when the flag is disabled', () => {
@@ -380,7 +374,7 @@ describe('handle-key-press', () => {
       evt.metaKey = true;
       areBasicFeaturesEnabled = false;
       callHandleHeadKeyDown();
-      expect(handleAccessibility.copyCellValue).not.toHaveBeenCalled();
+      expect(handleCopy.default).not.toHaveBeenCalled();
     });
   });
 
@@ -399,6 +393,7 @@ describe('handle-key-press', () => {
         target: {
           blur: jest.fn(),
           setAttribute: jest.fn(),
+          children: [],
         } as unknown as HTMLElement,
       } as unknown as React.KeyboardEvent;
       cellCoord = [1, 1];
@@ -409,7 +404,6 @@ describe('handle-key-press', () => {
       } as unknown as HTMLElement;
       setFocusedCellCoord = jest.fn();
       isSelectionMode = false;
-      jest.spyOn(handleAccessibility, 'copyCellValue');
     });
 
     it('should move the focus from the current cell to the next when arrow key down is pressed on a total cell', () => {
@@ -440,14 +434,14 @@ describe('handle-key-press', () => {
       evt.key = KeyCodes.C;
       evt.ctrlKey = true;
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode, areBasicFeaturesEnabled);
-      expect(handleAccessibility.copyCellValue).toHaveBeenCalled();
+      expect(handleCopy.default).toHaveBeenCalled();
     });
 
     it('should call copyCellValue on Total cell when the pressed keys are Meta and C keys', async () => {
       evt.key = KeyCodes.C;
       evt.metaKey = true;
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode, areBasicFeaturesEnabled);
-      expect(handleAccessibility.copyCellValue).toHaveBeenCalled();
+      expect(handleCopy.default).toHaveBeenCalled();
     });
 
     it('should not call copyCellValue on Total cell when the flag is disabled', () => {
@@ -455,7 +449,7 @@ describe('handle-key-press', () => {
       evt.metaKey = true;
       areBasicFeaturesEnabled = false;
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode, areBasicFeaturesEnabled);
-      expect(handleAccessibility.copyCellValue).not.toHaveBeenCalled();
+      expect(handleCopy.default).not.toHaveBeenCalled();
     });
   });
 
@@ -503,6 +497,7 @@ describe('handle-key-press', () => {
           classList: {
             contains: () => isExcluded,
           },
+          children: [],
         } as unknown as HTMLElement,
       } as unknown as React.KeyboardEvent;
       rootElement = {
@@ -526,7 +521,6 @@ describe('handle-key-press', () => {
       areBasicFeaturesEnabled = true;
       jest.spyOn(handleAccessibility, 'focusSelectionToolbar').mockImplementation(() => jest.fn());
       jest.spyOn(handleAccessibility, 'announceSelectionState').mockImplementation(() => jest.fn());
-      jest.spyOn(handleAccessibility, 'copyCellValue');
       jest.spyOn(handleScroll, 'handleNavigateTop').mockImplementation(() => jest.fn());
     });
 
@@ -711,14 +705,14 @@ describe('handle-key-press', () => {
       evt.key = KeyCodes.C;
       evt.ctrlKey = true;
       runHandleBodyKeyDown();
-      expect(handleAccessibility.copyCellValue).toHaveBeenCalled();
+      expect(handleCopy.default).toHaveBeenCalled();
     });
 
     it('should call copyCellValue when the pressed keys are Meta and C keys', () => {
       evt.key = KeyCodes.C;
       evt.metaKey = true;
       runHandleBodyKeyDown();
-      expect(handleAccessibility.copyCellValue).toHaveBeenCalled();
+      expect(handleCopy.default).toHaveBeenCalled();
     });
 
     it('should not call copyCellValue when the flag is disabled', () => {
@@ -726,7 +720,7 @@ describe('handle-key-press', () => {
       evt.metaKey = true;
       areBasicFeaturesEnabled = false;
       runHandleBodyKeyDown();
-      expect(handleAccessibility.copyCellValue).not.toHaveBeenCalled();
+      expect(handleCopy.default).not.toHaveBeenCalled();
     });
 
     it('when other keys are pressed, should only prevent default behavior', () => {

@@ -1,6 +1,6 @@
 // @ts-ignore  TODO: remove tag when onContextMenu is declared in nebula/stardust
 import { onContextMenu } from '@nebula.js/stardust';
-import { copyCellValue } from '../table/utils/accessibility-utils';
+import copyCellValue from '../table/utils/copy-utils';
 
 export default function useContextMenu(areBasicFeaturesEnabled: boolean) {
   onContextMenu?.((menu: any, event: any) => {
