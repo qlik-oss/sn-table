@@ -17,6 +17,7 @@ import {
   UpdateAllRowsAction,
   SelectMouseDownAction,
   SelectMultiAddAction,
+  SelectMouseUpAction,
 } from '../../types';
 import { SelectionStates, SelectionActions, KeyCodes } from '../../constants';
 import { createCell, createAllRows } from '../../../__test__/generate-test-data';
@@ -190,11 +191,12 @@ describe('selections-utils', () => {
 
     describe('select multiple', () => {
       const mouseupOutsideCallback = () => {};
-      let evt: React.KeyboardEvent;
+      let evt: React.KeyboardEvent | React.MouseEvent;
       let announce: jest.Mock<any, any>;
 
       beforeEach(() => {
         state.allRows = createAllRows(4, 1);
+        state.firstCell = undefined;
         evt = { shiftKey: false, key: KeyCodes.DOWN } as React.KeyboardEvent;
         announce = jest.fn();
       });
@@ -234,6 +236,38 @@ describe('selections-utils', () => {
         } as SelectMouseDownAction;
         const newState = reducer(state, action);
         expect(newState).toEqual({ ...state, firstCell: cell, mouseupOutsideCallback });
+      });
+
+      it('should return state with current cell added and reset isSelectMultiValues and firstCell, when isSelectMultiValues is undefined and firstCell is payload.cell', () => {
+        cell = createCell(2, 1);
+        state.firstCell = cell;
+        evt = { shiftKey: false } as React.MouseEvent;
+        const action = {
+          type: SelectionActions.SELECT_MOUSE_UP,
+          payload: { evt, announce, cell },
+        } as SelectMouseUpAction;
+        const newState = reducer(state, action);
+        expect(newState).toEqual({
+          ...state,
+          rows: { '1': 1, '2': 2 },
+          isSelectMultiValues: false,
+          firstCell: undefined,
+        });
+      });
+
+      it('should return state with unchanged rows but reset isSelectMultiValues and firstCell, firstCell is not payload.cell', () => {
+        state.firstCell = createCell(2, 1);
+        evt = { shiftKey: false } as React.MouseEvent;
+        const action = {
+          type: SelectionActions.SELECT_MOUSE_UP,
+          payload: { evt, announce, cell },
+        } as SelectMouseUpAction;
+        const newState = reducer(state, action);
+        expect(newState).toEqual({
+          ...state,
+          isSelectMultiValues: false,
+          firstCell: undefined,
+        });
       });
 
       it('should return state unchanged, when type is selectMultiAdd, firstCell is undefined and isShiftArrow returns false', () => {
