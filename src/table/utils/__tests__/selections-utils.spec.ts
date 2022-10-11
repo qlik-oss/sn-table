@@ -204,7 +204,7 @@ describe('selections-utils', () => {
       it('should return state unchanged, when type is selectMultiStart and mouseupOutsideCallback is undefined', () => {
         const action = { type: SelectionActions.SELECT_MOUSE_DOWN, payload: { cell } } as SelectMouseDownAction;
         const newState = reducer(state, action);
-        expect(newState).toEqual(state);
+        expect(newState).toBe(state);
       });
 
       it('should return state unchanged, when type is selectMultiStart, state.colIdx > 0 and not cell.colIdx', () => {
@@ -214,7 +214,7 @@ describe('selections-utils', () => {
           payload: { cell, mouseupOutsideCallback },
         } as SelectMouseDownAction;
         const newState = reducer(state, action);
-        expect(newState).toEqual(state);
+        expect(newState).toBe(state);
       });
 
       it('should return state with firstCell and mouseupOutsideCallback, when type is selectMultiStart and state.colIdx === cell.colIdx', () => {
@@ -244,7 +244,7 @@ describe('selections-utils', () => {
           payload: { cell, announce, evt },
         } as SelectMultiAddAction;
         const newState = reducer(state, action);
-        expect(newState).toEqual(state);
+        expect(newState).toBe(state);
       });
 
       it('should call begin, announce and return state with added rows, when type is selectMultiAdd isSelectMultiValues is true and colIdx is -1', () => {
@@ -312,7 +312,7 @@ describe('selections-utils', () => {
         const action = { type: SelectionActions.RESET } as ResetAction;
         state.api.isModal = () => true;
         const newState = reducer(state, action);
-        expect(newState).toEqual(state);
+        expect(newState).toBe(state);
       });
 
       it('should return state updated with allRows when action.type is updateAllRows', () => {
@@ -463,7 +463,7 @@ describe('selections-utils', () => {
 
     it('should return selectedRows unchanged when not shift+arrow but firstCell is undefined', () => {
       const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt, firstCell);
-      expect(updatedSelectedRows).toEqual(selectedRows);
+      expect(updatedSelectedRows).toBe(selectedRows);
     });
 
     it('should return rows updated with all rows between firstCell and cell', () => {
