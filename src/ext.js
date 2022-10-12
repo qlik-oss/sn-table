@@ -484,6 +484,8 @@ const getDefinition = (env) => {
           }),
         },
       },
+      // This property will not be shown in the property panel in edit mode.
+      // This properties define the component to be rendered in the exploration menu.
       ...(env.flags.isEnabled('PS_18291_TABLE_EXPLORATION') && {
         exploration: {
           component: 'items',
