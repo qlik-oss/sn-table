@@ -484,6 +484,22 @@ const getDefinition = (env) => {
           }),
         },
       },
+      ...(env.flags.isEnabled('PS_18291_TABLE_EXPLORATION') && {
+        exploration: {
+          component: 'items',
+          items: {
+            columnHandler: {
+              component: 'column-handler',
+              search: true,
+              selectAll: true,
+            },
+          },
+          classification: {
+            tags: ['exploration'],
+            exclusive: true,
+          },
+        },
+      }),
     },
   };
 };
