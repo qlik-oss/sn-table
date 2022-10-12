@@ -484,24 +484,6 @@ const getDefinition = (env) => {
           }),
         },
       },
-      // This property will not be shown in the property panel in edit mode.
-      // This property define the component to be rendered in the exploration menu.
-      ...(env.flags.isEnabled('PS_18291_TABLE_EXPLORATION') && {
-        exploration: {
-          component: 'items',
-          items: {
-            columnHandler: {
-              component: 'column-handler',
-              search: true,
-              selectAll: true,
-            },
-          },
-          classification: {
-            tags: ['exploration'],
-            exclusive: true,
-          },
-        },
-      }),
     },
   };
 };
@@ -541,6 +523,23 @@ export function getDescription(env) {
 export default function ext(env) {
   return {
     definition: getDefinition(env),
+    // the exploration property works like the definition above, but for defining the exploration menu
+    ...(env.flags.isEnabled('PS_18291_TABLE_EXPLORATION') && {
+      exploration: {
+        component: 'items',
+        items: {
+          columnHandler: {
+            component: 'column-handler',
+            search: true,
+            selectAll: true,
+          },
+        },
+        classification: {
+          tags: ['exploration'],
+          exclusive: true,
+        },
+      },
+    }),
     data: {
       measures: {
         min,
