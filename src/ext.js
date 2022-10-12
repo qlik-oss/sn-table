@@ -484,6 +484,24 @@ const getDefinition = (env) => {
           }),
         },
       },
+      // This property will not be shown in the property panel in edit mode.
+      // This property define the component to be rendered in the exploration menu.
+      ...(env.flags.isEnabled('PS_18291_TABLE_EXPLORATION') && {
+        exploration: {
+          component: 'items',
+          items: {
+            columnHandler: {
+              component: 'column-handler',
+              search: true,
+              selectAll: true,
+            },
+          },
+          classification: {
+            tags: ['exploration'],
+            exclusive: true,
+          },
+        },
+      }),
     },
   };
 };

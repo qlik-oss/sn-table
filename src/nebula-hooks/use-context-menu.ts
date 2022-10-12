@@ -3,7 +3,7 @@ import { onContextMenu } from '@nebula.js/stardust';
 import { copyCellValue } from '../table/utils/accessibility-utils';
 
 export default function useContextMenu(areBasicFeaturesEnabled: boolean) {
-  onContextMenu((menu: any, event: any) => {
+  onContextMenu?.((menu: any, event: any) => {
     areBasicFeaturesEnabled &&
       event.target &&
       menu.addItem({
