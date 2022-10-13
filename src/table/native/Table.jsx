@@ -110,6 +110,11 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
     setClearSelections('no');
   }, []);
 
+  const onConfirmSelections = useCallback(() => {
+    setClearSelections('yes');
+    selectionsCaches.current.confirm();
+  }, []);
+
   return tableData ? (
     <View style={styles.body}>
       <ReactNativeStraightTableViewManager
@@ -128,6 +133,7 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
         onEndReached={onEndReached}
         containerWidth={rect.width}
         onSelectionsChanged={onSelectionsChanged}
+        onConfirmSelections={onConfirmSelections}
         clearSelections={clearSelections}
         onHeaderPressed={onHeaderPressed}
         freezeFirstColumn={freezeFirstColumn(layout)}

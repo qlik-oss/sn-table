@@ -32,6 +32,14 @@ class SelectionCaches {
       console.log('Error toggling selections', error);
     }
   }
+
+  async confirm() {
+    try {
+      this.selectionsAPI.confirm();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 export default SelectionCaches;

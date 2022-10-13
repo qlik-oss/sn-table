@@ -16,7 +16,8 @@
       "cwd": "${workspaceFolder}",
       "type": "reactnativedirect",
       "request": "launch",
-      "platform": "ios"
+      "platform": "ios",
+      "runArguments": ["--simulator", "iPhone 14"]
     }
   ]
 }
