@@ -33,7 +33,7 @@ export const TableContextProvider = ({
   });
 
   useDidUpdateEffect(() => {
-    selectionDispatch({ type: SelectionActions.UPDATE_ALL_ROWS, payload: { pageRows } });
+    selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows } });
   }, [pageRows]);
 
   return (

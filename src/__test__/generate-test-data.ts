@@ -68,7 +68,7 @@ export const createCell = (rowIdx: number, colIdx = 0) =>
 /**
  * creates a simplified Rows[] with one column. Used to create the pageRows that is in the selection state
  */
-export const createAllRows = (rows: number, colIdx = 0) => {
+export const createPageRows = (rows: number, colIdx = 0) => {
   const pageRows: Row[] = [];
   for (let idx = 0; idx <= rows; idx++) {
     pageRows.push({ [`col-${colIdx}`]: createCell(idx, colIdx) });

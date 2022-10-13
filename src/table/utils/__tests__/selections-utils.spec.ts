@@ -14,13 +14,13 @@ import {
   SelectAction,
   ResetAction,
   ClearAction,
-  UpdateAllRowsAction,
+  UpdatePageRowsAction,
   SelectMouseDownAction,
   SelectMultiAddAction,
   SelectMouseUpAction,
 } from '../../types';
 import { SelectionStates, SelectionActions, KeyCodes } from '../../constants';
-import { createCell, createAllRows } from '../../../__test__/generate-test-data';
+import { createCell, createPageRows } from '../../../__test__/generate-test-data';
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {
@@ -195,7 +195,7 @@ describe('selections-utils', () => {
       let announce: jest.Mock<any, any>;
 
       beforeEach(() => {
-        state.pageRows = createAllRows(4, 1);
+        state.pageRows = createPageRows(4, 1);
         state.firstCell = undefined;
         evt = { shiftKey: false, key: KeyCodes.DOWN } as React.KeyboardEvent;
         announce = jest.fn();
@@ -349,9 +349,9 @@ describe('selections-utils', () => {
         expect(newState).toBe(state);
       });
 
-      it('should return state updated with pageRows when action.type is updateAllRows', () => {
+      it('should return state updated with pageRows when action.type is updatePageRows', () => {
         const pageRows = [{} as unknown as Row];
-        const action = { type: SelectionActions.UPDATE_ALL_ROWS, payload: { pageRows } } as UpdateAllRowsAction;
+        const action = { type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows } } as UpdatePageRowsAction;
         const newState = reducer(state, action);
         expect(newState).toEqual({ ...state, pageRows });
       });
@@ -464,7 +464,7 @@ describe('selections-utils', () => {
     let firstCell: Cell | undefined;
 
     beforeEach(() => {
-      pageRows = createAllRows(3);
+      pageRows = createPageRows(3);
       selectedRows = { '2': 2 };
       cell = createCell(1);
       evt = {} as React.KeyboardEvent;
@@ -520,7 +520,7 @@ describe('selections-utils', () => {
       } as Cell;
 
       selectionState = {
-        pageRows: createAllRows(4),
+        pageRows: createPageRows(4),
         colIdx: 1,
         rows: { 1: 1 },
         api: {

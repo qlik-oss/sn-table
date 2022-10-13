@@ -266,7 +266,7 @@ export const reducer = (state: SelectionState, action: SelectionActionTypes): Se
       return state.api.isModal() ? state : { ...state, rows: {}, colIdx: -1 };
     case SelectionActions.CLEAR:
       return Object.keys(state.rows).length ? { ...state, rows: {} } : state;
-    case SelectionActions.UPDATE_ALL_ROWS:
+    case SelectionActions.UPDATE_PAGE_ROWS:
       return { ...state, pageRows: action.payload.pageRows };
     default:
       throw new Error('reducer called with invalid action type');
