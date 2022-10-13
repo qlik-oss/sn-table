@@ -160,74 +160,86 @@ const getTotalsAggr = (env) => ({
   show: !env?.anything?.sense?.isUnsupportedFeature?.('totals'),
 });
 
-const getData = (env) => ({
-  type: 'items',
-  component: 'columns',
-  translation: 'Common.Data',
-  sortIndexRef: 'qHyperCubeDef.qColumnOrder',
-  allowMove: true,
-  allowAdd: true,
-  addTranslation: 'Common.Columns',
-  items: {
-    dimensions: {
-      type: 'array',
-      component: 'expandable-items',
-      ref: 'qHyperCubeDef.qDimensions',
-      grouped: true,
-      items: {
-        libraryId: {
-          type: 'string',
-          component: 'library-item',
-          libraryItemType: 'dimension',
-          ref: 'qLibraryId',
-          translation: 'Common.Dimension',
-          show(itemData) {
-            return itemData.qLibraryId;
+const getData = (env) =>
+  env.flags.isEnabled('PS_18291_TABLE_EXPLORATION')
+    ? {
+        type: 'items',
+        translation: 'Common.Data',
+        items: {
+          dataAssets: {
+            type: 'items',
+            component: 'data-assets-panel',
           },
         },
-        inlineDimension: {
-          component: 'inline-dimension',
-          show(itemData) {
-            return !itemData.qLibraryId;
+      }
+    : {
+        type: 'items',
+        component: 'columns',
+        translation: 'Common.Data',
+        sortIndexRef: 'qHyperCubeDef.qColumnOrder',
+        allowMove: true,
+        allowAdd: true,
+        addTranslation: 'Common.Columns',
+        items: {
+          dimensions: {
+            type: 'array',
+            component: 'expandable-items',
+            ref: 'qHyperCubeDef.qDimensions',
+            grouped: true,
+            items: {
+              libraryId: {
+                type: 'string',
+                component: 'library-item',
+                libraryItemType: 'dimension',
+                ref: 'qLibraryId',
+                translation: 'Common.Dimension',
+                show(itemData) {
+                  return itemData.qLibraryId;
+                },
+              },
+              inlineDimension: {
+                component: 'inline-dimension',
+                show(itemData) {
+                  return !itemData.qLibraryId;
+                },
+              },
+              nullSuppression: {
+                type: 'boolean',
+                ref: 'qNullSuppression',
+                defaultValue: false,
+                translation: 'properties.dimensions.showNull',
+                inverted: true,
+              },
+              ...columnCommonHidden,
+              ...columnExpressionItems,
+              ...textAlignItems,
+            },
+          },
+          measures: {
+            type: 'array',
+            component: 'expandable-items',
+            ref: 'qHyperCubeDef.qMeasures',
+            grouped: true,
+            items: {
+              libraryId: {
+                type: 'string',
+                component: 'library-item',
+                libraryItemType: 'measure',
+                ref: 'qLibraryId',
+                translation: 'Common.Measure',
+                show: (itemData) => itemData.qLibraryId,
+              },
+              inlineMeasure: {
+                component: 'inline-measure',
+                show: (itemData) => !itemData.qLibraryId,
+              },
+              ...columnCommonHidden,
+              ...columnExpressionItems,
+              ...textAlignItems,
+              totalsAggr: getTotalsAggr(env),
+            },
           },
         },
-        nullSuppression: {
-          type: 'boolean',
-          ref: 'qNullSuppression',
-          defaultValue: false,
-          translation: 'properties.dimensions.showNull',
-          inverted: true,
-        },
-        ...columnCommonHidden,
-        ...columnExpressionItems,
-        ...textAlignItems,
-      },
-    },
-    measures: {
-      type: 'array',
-      component: 'expandable-items',
-      ref: 'qHyperCubeDef.qMeasures',
-      grouped: true,
-      items: {
-        libraryId: {
-          type: 'string',
-          component: 'library-item',
-          libraryItemType: 'measure',
-          ref: 'qLibraryId',
-          translation: 'Common.Measure',
-          show: (itemData) => itemData.qLibraryId,
-        },
-        inlineMeasure: {
-          component: 'inline-measure',
-          show: (itemData) => !itemData.qLibraryId,
-        },
-        ...columnCommonHidden,
-        ...columnExpressionItems,
-        ...textAlignItems,
-        totalsAggr: getTotalsAggr(env),
-      },
-    },
-  },
-});
+      };
 
 export default getData;
