@@ -555,47 +555,4 @@ describe('handle-accessibility', () => {
       expect(keyboard.focus).toHaveBeenCalledTimes(1);
     });
   });
-
-  describe('copyCellValue: ', () => {
-    let evt: {
-      target: {
-        children: [
-          {
-            firstChild: {
-              textContent: string;
-            };
-          }
-        ];
-        firstChild: {
-          textContent: string;
-        };
-      };
-    };
-    beforeEach(() => {
-      evt = {
-        target: {
-          children: [
-            {
-              firstChild: {
-                textContent: '',
-              },
-            },
-          ],
-          firstChild: {
-            textContent: '',
-          },
-        },
-      };
-      console.log = jest.fn();
-    });
-    it('should copying value to clipboard successfully', () => {
-      Object.assign(navigator, {
-        clipboard: {
-          writeText: jest.fn().mockReturnValueOnce(Promise.resolve()),
-        },
-      });
-      accessibilityUtils.copyCellValue(evt);
-      expect(console.log).not.toHaveBeenCalled();
-    });
-  });
 });
