@@ -510,7 +510,7 @@ describe('handle-key-press', () => {
         cancel: jest.fn(),
         isModal: () => isModal,
       } as unknown as ExtendedSelectionAPI;
-      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1, isSelectable: true, isLastRow: false, rawRowIdx: 1 } as Cell;
+      cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1, isSelectable: true, isLastRow: false, pageRowIdx: 1 } as Cell;
       keyboard = { enabled: true } as unknown as stardust.Keyboard;
       selectionDispatch = jest.fn();
       isSelectionsEnabled = true;
@@ -600,7 +600,7 @@ describe('handle-key-press', () => {
     });
 
     it('when press shift + arrow up key on the second row cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell, but not select values for dimension', () => {
-      cell.rawRowIdx = 0;
+      cell.pageRowIdx = 0;
       evt.shiftKey = true;
       evt.key = KeyCodes.UP;
 

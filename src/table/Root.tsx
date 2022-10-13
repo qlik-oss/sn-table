@@ -16,7 +16,7 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   reactRoot?.render(
     <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : undefined}>
       <ThemeProvider theme={muiTheme}>
-        <TableContextProvider selectionsAPI={selectionsAPI} tableRows={tableData?.rows}>
+        <TableContextProvider selectionsAPI={selectionsAPI} pageRows={tableData?.rows}>
           <TableWrapper {...(props as TableWrapperProps)} />
         </TableContextProvider>
       </ThemeProvider>

@@ -62,7 +62,7 @@ function TableBodyWrapper({
       areBasicFeaturesEnabled={areBasicFeaturesEnabled}
     />
   );
-
+  console.log('body rows', rows);
   return (
     <StyledTableBody paginationNeeded={paginationNeeded} bodyCellStyle={bodyCellStyle}>
       {totalsPosition === 'top' ? totals : undefined}

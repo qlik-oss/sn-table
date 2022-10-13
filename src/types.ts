@@ -88,9 +88,9 @@ export interface Cell {
   qElemNumber: number;
   rowIdx: number;
   colIdx: number;
+  pageRowIdx: number;
+  pageColIdx: number;
   isSelectable: boolean;
-  rawRowIdx: number;
-  rawColIdx: number;
   isLastRow: boolean;
 }
 

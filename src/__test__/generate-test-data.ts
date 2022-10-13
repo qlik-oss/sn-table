@@ -61,17 +61,17 @@ export const createCell = (rowIdx: number, colIdx = 0) =>
     qElemNumber: rowIdx,
     rowIdx,
     colIdx,
-    rawRowIdx: rowIdx,
-    rawColIdx: colIdx,
+    pageRowIdx: rowIdx,
+    pageColIdx: colIdx,
   } as Cell);
 
 /**
- * creates a simplified Rows[] with one column. Used to create the allRows that is in the selection state
+ * creates a simplified Rows[] with one column. Used to create the pageRows that is in the selection state
  */
 export const createAllRows = (rows: number, colIdx = 0) => {
-  const allRows: Row[] = [];
+  const pageRows: Row[] = [];
   for (let idx = 0; idx <= rows; idx++) {
-    allRows.push({ [`col-${colIdx}`]: createCell(idx, colIdx) });
+    pageRows.push({ [`col-${colIdx}`]: createCell(idx, colIdx) });
   }
-  return allRows;
+  return pageRows;
 };

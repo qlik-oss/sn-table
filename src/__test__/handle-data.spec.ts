@@ -113,13 +113,13 @@ describe('handle-data', () => {
       expect(firstColCell.qText).toBe('2');
       expect(firstColCell.rowIdx).toBe(100);
       expect(firstColCell.colIdx).toBe(0);
-      expect(firstColCell.rawRowIdx).toBe(0);
-      expect(firstColCell.rawColIdx).toBe(2);
+      expect(firstColCell.pageRowIdx).toBe(0);
+      expect(firstColCell.pageColIdx).toBe(2);
       expect(secondColCell.qText).toBe('0');
       expect(secondColCell.rowIdx).toBe(100);
       expect(secondColCell.colIdx).toBe(1);
-      expect(secondColCell.rawRowIdx).toBe(0);
-      expect(secondColCell.rawColIdx).toBe(0);
+      expect(secondColCell.pageRowIdx).toBe(0);
+      expect(secondColCell.pageColIdx).toBe(0);
       expect(columns).toHaveLength(4);
       columns.forEach((c, i) => {
         expect(c.id).toBe(Object.keys(rows[0])[i + 1]); // skip the first key

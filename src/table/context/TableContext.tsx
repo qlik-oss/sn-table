@@ -18,14 +18,14 @@ const ProviderWithSelector = createSelectorProvider(TableContext);
 export const TableContextProvider = ({
   children,
   selectionsAPI,
-  tableRows = [],
+  pageRows = [],
   cellCoordMock,
   selectionDispatchMock,
 }: ContextProviderProps) => {
   const [headRowHeight, setHeadRowHeight] = useState(0);
   const [focusedCellCoord, setFocusedCellCoord] = useState((cellCoordMock || [0, 0]) as [number, number]);
   const [selectionState, selectionDispatch] = useReducer(reducer, {
-    allRows: tableRows,
+    pageRows,
     rows: {},
     colIdx: -1,
     api: selectionsAPI as ExtendedSelectionAPI, // TODO: update nebula api with correct selection api type
@@ -33,8 +33,8 @@ export const TableContextProvider = ({
   });
 
   useDidUpdateEffect(() => {
-    selectionDispatch({ type: SelectionActions.UPDATE_ALL_ROWS, payload: { allRows: tableRows } });
-  }, [tableRows]);
+    selectionDispatch({ type: SelectionActions.UPDATE_ALL_ROWS, payload: { pageRows } });
+  }, [pageRows]);
 
   return (
     <ProviderWithSelector
