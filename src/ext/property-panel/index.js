@@ -21,17 +21,15 @@ const addOns = {
   },
 };
 
-const getPropertyPanelDefinition = (env) => {
-  return {
-    type: 'items',
-    component: 'accordion',
-    items: {
-      data: getData(env),
-      sorting,
-      addOns,
-      settings: getSettings(env),
-    },
-  };
-};
+const getPropertyPanelDefinition = (env) => ({
+  type: 'items',
+  component: 'accordion',
+  items: {
+    data: getData(env),
+    sorting,
+    addOns,
+    settings: getSettings(env),
+  },
+});
 
 export default getPropertyPanelDefinition;

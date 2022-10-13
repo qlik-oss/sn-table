@@ -213,19 +213,17 @@ const getChartExploration = (env) =>
     },
   };
 
-const getSettings = (env) => {
-  return {
-    uses: 'settings',
-    items: {
-      presentation: {
-        grouped: true,
-        type: 'items',
-        translation: 'properties.presentation',
-        items: [stylingPanel, getTotals(env)],
-      },
-      ...getChartExploration(env),
+const getSettings = (env) => ({
+  uses: 'settings',
+  items: {
+    presentation: {
+      grouped: true,
+      type: 'items',
+      translation: 'properties.presentation',
+      items: [stylingPanel, getTotals(env)],
     },
-  };
-};
+    ...getChartExploration(env),
+  },
+});
 
 export default getSettings;

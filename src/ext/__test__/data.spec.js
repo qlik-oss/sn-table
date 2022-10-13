@@ -10,9 +10,7 @@ describe('data', () => {
       get: jest.fn(),
     },
     flags: {
-      isEnabled: (flag) => {
-        return mockFlags[flag];
-      },
+      isEnabled: (flag) => mockFlags[flag],
     },
   };
   let array;

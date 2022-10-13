@@ -9,9 +9,7 @@ describe('ext', () => {
       get: jest.fn(),
     },
     flags: {
-      isEnabled: (flag) => {
-        return mockFlags[flag];
-      },
+      isEnabled: (flag) => mockFlags[flag],
     },
   };
 
