@@ -62,7 +62,7 @@ function TableBodyWrapper({
       areBasicFeaturesEnabled={areBasicFeaturesEnabled}
     />
   );
-  console.log('body rows', rows);
+
   return (
     <StyledTableBody paginationNeeded={paginationNeeded} bodyCellStyle={bodyCellStyle}>
       {totalsPosition === 'top' ? totals : undefined}
@@ -76,6 +76,8 @@ function TableBodyWrapper({
         >
           {columns.map((column, columnIndex) => {
             const { id, align } = column;
+            // Note that rows are not necessarily ordered in qColumnOrder.
+            // So for each row, the cells are mapped according to column.id
             const cell = row[id] as Cell;
             const CellRenderer = columnRenderers[columnIndex];
             const handleKeyDown = (evt: React.KeyboardEvent) => {

@@ -123,7 +123,7 @@ export default async function manageData(
 
   const rows = dataPages[0].qMatrix.map((r, rowIdx) => {
     const row: Row = { key: `row-${rowIdx}` };
-    // the backend indexes are stored as col/rowIdx while the indexes shown on a page is pageCol/RowIdx
+    // the backend indexes are stored as col/rowIdx while the indexes for the loaded page is pageCol/RowIdx
     columns.forEach((c, colIdx) => {
       row[c.id] = {
         ...r[colIdx],
