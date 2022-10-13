@@ -1,3 +1,17 @@
+# [1.18.0](https://github.com/qlik-oss/sn-table/compare/v1.17.1...v1.18.0) (2022-10-13)
+
+### Bug Fixes
+
+- call api.select on mouseup outside table body ([#710](https://github.com/qlik-oss/sn-table/issues/710)) ([aaf6dce](https://github.com/qlik-oss/sn-table/commit/aaf6dce5d82a4e3a173100d11cd27bb9ee7e2083))
+- sanity check to avaoid crash on old nebula versions ([#714](https://github.com/qlik-oss/sn-table/issues/714)) ([20cc2f4](https://github.com/qlik-oss/sn-table/commit/20cc2f4b93fae66182f36621f721108e5ec13cb6))
+
+### Features
+
+- add exploration props and fix context menu ([#717](https://github.com/qlik-oss/sn-table/issues/717)) ([0abb6e6](https://github.com/qlik-oss/sn-table/commit/0abb6e695c51f15ca744387971e587ccca38639d))
+- added new trnslation for sn-table and remove subtitle ([#707](https://github.com/qlik-oss/sn-table/issues/707)) ([7d7b617](https://github.com/qlik-oss/sn-table/commit/7d7b617de2b956a08124502a1f321ec7ae9ab612))
+- chart-exploration-toggler ([#706](https://github.com/qlik-oss/sn-table/issues/706)) ([8fad59d](https://github.com/qlik-oss/sn-table/commit/8fad59d5ee523465e3b9446a6da8d6a322a5b225))
+- extend copyCellValue via keyDown to Heads and Total cells ([#693](https://github.com/qlik-oss/sn-table/issues/693)) ([4fb7954](https://github.com/qlik-oss/sn-table/commit/4fb79544cfd8105cc87e902b59c1d29b169adfea))
+
 ## [1.17.1](https://github.com/qlik-oss/sn-table/compare/v1.17.0...v1.17.1) (2022-10-04)
 
 # [1.17.0](https://github.com/qlik-oss/sn-table/compare/v1.16.0...v1.17.0) (2022-10-04)

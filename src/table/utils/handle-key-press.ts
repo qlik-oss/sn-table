@@ -1,7 +1,8 @@
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 
-import { focusSelectionToolbar, announceSelectionState, moveFocus, copyCellValue } from './accessibility-utils';
+import { focusSelectionToolbar, announceSelectionState, moveFocus } from './accessibility-utils';
+import copyCellValue from './copy-utils';
 import { handleNavigateTop } from './handle-scroll';
 import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownProps, SelectionDispatch } from '../types';
 import { Cell } from '../../types';
@@ -109,6 +110,7 @@ export const handleHeadKeyDown = ({
   layout,
   isInteractionEnabled,
   setFocusedCellCoord,
+  areBasicFeaturesEnabled,
 }: HandleHeadKeyDownProps) => {
   if (!isInteractionEnabled) {
     preventDefaultBehavior(evt);
@@ -128,6 +130,10 @@ export const handleHeadKeyDown = ({
       // Space bar / Enter: update the sorting
       changeSortOrder(layout, column);
       break;
+    case KeyCodes.C: {
+      areBasicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(evt);
+      break;
+    }
     default:
       break;
   }
@@ -141,7 +147,8 @@ export const handleTotalKeyDown = (
   rootElement: HTMLElement,
   cellCoord: [number, number],
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  isSelectionMode: boolean
+  isSelectionMode: boolean,
+  areBasicFeaturesEnabled: boolean
 ) => {
   if (isSelectionMode) {
     preventDefaultBehavior(evt);
@@ -156,6 +163,10 @@ export const handleTotalKeyDown = (
     case KeyCodes.UP:
     case KeyCodes.DOWN: {
       moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
+      break;
+    }
+    case KeyCodes.C: {
+      areBasicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(evt);
       break;
     }
     default:
@@ -241,9 +252,7 @@ export const handleBodyKeyDown = ({
       focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
       break;
     case KeyCodes.C:
-      areBasicFeaturesEnabled &&
-        (evt.ctrlKey || evt.metaKey) &&
-        copyCellValue((evt.target as HTMLElement).textContent as string);
+      areBasicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(evt);
       break;
     default:
       break;

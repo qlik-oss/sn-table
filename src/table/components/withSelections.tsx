@@ -13,7 +13,7 @@ export default function withSelections(CellComponent: CellHOC) {
     );
     const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
 
-    const { handleMouseDown, handleMouseOver, handleMouseUp, handleMouseClick } = getSelectionMouseHandlers(
+    const { handleMouseDown, handleMouseOver, handleMouseUp } = getSelectionMouseHandlers(
       cell,
       announce,
       onMouseDown,
@@ -30,7 +30,6 @@ export default function withSelections(CellComponent: CellHOC) {
         onMouseUp={handleMouseUp}
         onMouseDown={handleMouseDown}
         onMouseOver={handleMouseOver}
-        onClick={handleMouseClick}
       />
     );
   };

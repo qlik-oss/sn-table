@@ -24,6 +24,7 @@ describe('<TableHeadWrapper />', () => {
   let selectionsAPI: ExtendedSelectionAPI;
   let keyboard: stardust.Keyboard;
   let translator: ExtendedTranslator;
+  let areBasicFeaturesEnabled: boolean;
 
   const renderTableHead = (cellCoordMock?: [number, number]) =>
     render(
@@ -38,6 +39,7 @@ describe('<TableHeadWrapper />', () => {
           changeSortOrder={changeSortOrder}
           keyboard={keyboard}
           translator={translator}
+          areBasicFeaturesEnabled={areBasicFeaturesEnabled}
         />
       </TableContextProvider>
     );

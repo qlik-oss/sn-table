@@ -555,21 +555,4 @@ describe('handle-accessibility', () => {
       expect(keyboard.focus).toHaveBeenCalledTimes(1);
     });
   });
-
-  describe('copyCellValue: ', () => {
-    let cellValue: string;
-    beforeEach(() => {
-      cellValue = '';
-      console.log = jest.fn();
-    });
-    it('should copying value to clipboard successfully', () => {
-      Object.assign(navigator, {
-        clipboard: {
-          writeText: jest.fn().mockReturnValueOnce(Promise.resolve()),
-        },
-      });
-      accessibilityUtils.copyCellValue(cellValue);
-      expect(console.log).not.toHaveBeenCalled();
-    });
-  });
 });

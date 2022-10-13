@@ -1,10 +1,9 @@
 // @ts-ignore  TODO: remove tag when onContextMenu is declared in nebula/stardust
 import { onContextMenu } from '@nebula.js/stardust';
-import { copyCellValue } from '../table/utils/accessibility-utils';
-import { Menu } from '../types';
+import copyCellValue from '../table/utils/copy-utils';
 
 export default function useContextMenu(areBasicFeaturesEnabled: boolean) {
-  onContextMenu((menu: Menu, event: any) => {
+  onContextMenu?.((menu: any, event: any) => {
     areBasicFeaturesEnabled &&
       event.target &&
       menu.addItem({
@@ -12,7 +11,7 @@ export default function useContextMenu(areBasicFeaturesEnabled: boolean) {
         icon: 'lui-icon lui-icon--copy',
         tid: 'copy-cell-context-item',
         select: async () => {
-          copyCellValue(event.target.firstChild.textContent);
+          copyCellValue(event);
         },
       });
   });
