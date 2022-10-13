@@ -1,15 +1,20 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useMemo, useRef } from 'react';
 import { VariableSizeGrid } from 'react-window';
-import { RenderProps } from '../../types';
+import { getColumns } from '../../../handle-data';
+import useColumnSize from '../../hooks/use-column-size';
+import { VirtualizedTableProps } from '../../types';
 import Body from './Body';
 import FullSizeContainer from './FullSizeContainer';
 import Header from './Header';
 
-export default function Wrapper(props: RenderProps) {
+export default function Wrapper(props: VirtualizedTableProps) {
   const { layout, rect } = props;
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeGrid>(null);
   const bodyRef = useRef<VariableSizeGrid>(null);
+  const { columns } = useMemo(() => getColumns(layout), [layout]);
+  const { width } = useColumnSize(rect, columns);
+  const fullWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
 
   const onScrollHandler = (event: React.SyntheticEvent) => {
     if (headerRef.current) {
@@ -45,9 +50,9 @@ export default function Wrapper(props: RenderProps) {
       }}
       onScroll={onScrollHandler}
     >
-      <FullSizeContainer width={layout.qHyperCube.qSize.qcx * 125} height={layout.qHyperCube.qSize.qcy * 32}>
-        <Header {...props} forwardRef={headerRef} />
-        <Body {...props} forwardRef={bodyRef} />
+      <FullSizeContainer width={fullWidth} height={layout.qHyperCube.qSize.qcy * 32}>
+        <Header {...props} columns={columns} columnWidth={width} forwardRef={headerRef} />
+        <Body {...props} columns={columns} columnWidth={width} forwardRef={bodyRef} />
       </FullSizeContainer>
     </div>
   );

@@ -110,6 +110,7 @@ export interface Column {
   stylingIDs: string[];
   sortDirection: string;
   totalInfo?: string;
+  qApprMaxGlyphCount: number;
 }
 
 export type TotalsPosition = 'top' | 'bottom' | 'noTotals';

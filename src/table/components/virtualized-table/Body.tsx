@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useLayoutEffect } from 'react';
+import React, { useCallback, useLayoutEffect } from 'react';
 import { VariableSizeGrid } from 'react-window';
 import useInfiniteScrollData from '../../hooks/use-infinite-scroll-data';
-import { VirtualTableProps } from '../../types';
+import { VirtualizedTableProps } from '../../types';
 import Cell from './Cell';
 
 interface OnItemsRendered {
@@ -15,11 +15,9 @@ interface OnItemsRendered {
   visibleRowStopIndex: number;
 }
 
-const VirtualScrollBody = (props: VirtualTableProps) => {
-  const { rect, layout, model, forwardRef } = props;
-  const { data: rows, columns, loadData, debouncedLoadData } = useInfiniteScrollData(model, layout);
-
-  useEffect(() => console.log('rows', rows), [rows]);
+const VirtualScrollBody = (props: VirtualizedTableProps) => {
+  const { rect, layout, model, forwardRef, columns, columnWidth } = props;
+  const { data: rows, loadData, debouncedLoadData } = useInfiniteScrollData(model, layout);
 
   useLayoutEffect(() => {
     if (!layout) return;
@@ -51,7 +49,7 @@ const VirtualScrollBody = (props: VirtualTableProps) => {
       ref={forwardRef}
       style={{ position: 'sticky', top: '33px', left: '0px', overflow: 'hidden' }}
       columnCount={layout.qHyperCube.qSize.qcx}
-      columnWidth={() => 125}
+      columnWidth={(index) => columnWidth[index]}
       height={rect.height - 33} // - the height of the headers
       rowCount={layout.qHyperCube.qSize.qcy}
       rowHeight={() => 32}

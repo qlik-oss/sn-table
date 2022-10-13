@@ -20,7 +20,7 @@ import properties from './qae/object-properties';
 import data from './qae/data';
 import ext from './ext';
 import manageData from './handle-data';
-import { render, teardown } from './table/Root';
+import { render, renderVirtualizedlTable, teardown, renderOldLikeTable } from './table/Root';
 import useReactRoot from './nebula-hooks/use-react-root';
 import useAnnounceAndTranslations from './nebula-hooks/use-announce-and-translations';
 import useSorting from './nebula-hooks/use-sorting';
@@ -82,13 +82,46 @@ export default function supernova(env: Galaxy) {
       const changeSortOrder = useSorting(model);
       const [pageInfo, setPageInfo] = useState(initialPageInfo);
       const [tableData] = usePromise(
-        async () => (true ? nothing() : manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo)),
+        async () =>
+          env.carbon || layout.type === 1 || layout.type === 2
+            ? nothing()
+            : manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo),
         [layout, pageInfo, model]
       );
 
-      useEffect(() => console.log('new layout', layout), [layout]);
-
       useContextMenu(areBasicFeaturesEnabled);
+
+      useEffect(() => {
+        if (layout.type !== 1) return;
+
+        console.log(layout.title, layout);
+
+        renderVirtualizedlTable(
+          {
+            layout,
+            model,
+            rect,
+            theme,
+          },
+          reactRoot
+        );
+      }, [layout, model, rect, theme]);
+
+      useEffect(() => {
+        if (layout.type !== 2) return;
+
+        console.log(layout.title, layout);
+
+        renderOldLikeTable(
+          {
+            layout,
+            model,
+            rect,
+            theme,
+          },
+          reactRoot
+        );
+      }, [layout, model, rect, theme]);
 
       useEffect(() => {
         const isReadyToRender = !env.carbon && reactRoot && layout && changeSortOrder && theme && tableData;

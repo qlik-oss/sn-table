@@ -64,6 +64,7 @@ export function getColumnInfo(layout: TableLayout, colIndex: number, columnOrder
       sortDirection: info.qSortIndicator ? DirectionMap[info.qSortIndicator] : DirectionMap.A,
       dataColIdx: colIndex,
       totalInfo: getTotalInfo(isDim, layout, colIndex, numDims, columnOrder),
+      qApprMaxGlyphCount: info.qApprMaxGlyphCount,
     }
   );
 }
@@ -83,6 +84,16 @@ export function getTotalPosition(layout: TableLayout) {
     if (!isTotalModeAuto && layout.totals.position === 'bottom') return 'bottom';
   }
   return 'noTotals';
+}
+
+export function getColumns(layout: TableLayout): { columns: Column[]; columnOrder: number[] } {
+  const columnOrder = getColumnOrder(layout.qHyperCube);
+  // using filter to remove hidden columns (represented with false)
+  const columns = columnOrder
+    .map((colIndex) => getColumnInfo(layout, colIndex, columnOrder))
+    .filter(Boolean) as Column[];
+
+  return { columns, columnOrder };
 }
 
 export default async function manageData(
@@ -112,11 +123,7 @@ export default async function manageData(
     return null;
   }
 
-  const columnOrder = getColumnOrder(qHyperCube);
-  // using filter to remove hidden columns (represented with false)
-  const columns = columnOrder
-    .map((colIndex) => getColumnInfo(layout, colIndex, columnOrder))
-    .filter(Boolean) as Column[];
+  const { columns, columnOrder } = getColumns(layout);
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
     { qTop: top, qLeft: 0, qHeight: height, qWidth: totalColumnCount },
   ]);

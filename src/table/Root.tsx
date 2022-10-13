@@ -7,10 +7,9 @@ import rtlPluginSc from 'stylis-plugin-rtl-sc';
 import TableWrapper from './components/TableWrapper';
 import { TableContextProvider } from './context';
 import muiSetup from './mui-setup';
-import { RenderProps, TableWrapperProps } from './types';
+import { RenderProps, TableWrapperProps, VirtualizedTableProps, VirtualizedTableRenderProps } from './types';
 import VirualizedTable from './components/virtualized-table/Wrapper';
-
-const VIRTUAL_SCROLL = true;
+import OldLikeTable from './components/oldlike-table/Wrapper';
 
 export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   const { direction, selectionsAPI, tableData } = props;
@@ -20,10 +19,25 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
     <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : undefined}>
       <ThemeProvider theme={muiTheme}>
         <TableContextProvider selectionsAPI={selectionsAPI} tableRows={tableData?.rows}>
-          {VIRTUAL_SCROLL ? <VirualizedTable {...props} /> : <TableWrapper {...(props as TableWrapperProps)} />}
+          <TableWrapper {...(props as TableWrapperProps)} />
         </TableContextProvider>
       </ThemeProvider>
     </StyleSheetManager>
+  );
+}
+
+export function renderVirtualizedlTable(props: VirtualizedTableRenderProps, reactRoot?: ReactDom.Root) {
+  reactRoot?.render(<VirualizedTable {...(props as VirtualizedTableProps)} />);
+}
+
+export function renderOldLikeTable(props: VirtualizedTableRenderProps, reactRoot?: ReactDom.Root) {
+  const { direction } = props;
+  const muiTheme = muiSetup(direction);
+
+  reactRoot?.render(
+    <ThemeProvider theme={muiTheme}>
+      <OldLikeTable {...(props as VirtualizedTableProps)} />
+    </ThemeProvider>
   );
 }
 
