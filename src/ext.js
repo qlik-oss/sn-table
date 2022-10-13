@@ -307,141 +307,154 @@ const getDefinition = (env) => {
     type: 'items',
     component: 'accordion',
     items: {
-      data: {
-        type: 'items',
-        component: 'columns',
-        translation: 'Common.Data',
-        sortIndexRef: 'qHyperCubeDef.qColumnOrder',
-        allowMove: true,
-        allowAdd: true,
-        addTranslation: 'Common.Columns',
-        items: {
-          dimensions: {
-            type: 'array',
-            component: 'expandable-items',
-            ref: 'qHyperCubeDef.qDimensions',
-            grouped: true,
+      data: env.flags.isEnabled('PS_18291_TABLE_EXPLORATION')
+        ? {
+            type: 'items',
+            translation: 'Common.Data',
             items: {
-              libraryId: {
-                type: 'string',
-                component: 'library-item',
-                libraryItemType: 'dimension',
-                ref: 'qLibraryId',
-                translation: 'Common.Dimension',
-                show(itemData) {
-                  return itemData.qLibraryId;
-                },
-              },
-              inlineDimension: {
-                component: 'inline-dimension',
-                show(itemData) {
-                  return !itemData.qLibraryId;
-                },
-              },
-              nullSuppression: {
-                type: 'boolean',
-                ref: 'qNullSuppression',
-                defaultValue: false,
-                translation: 'properties.dimensions.showNull',
-                inverted: true,
-              },
-              ...columnCommonHidden,
-              ...columnExpressionItems,
-              ...textAlignItems,
-            },
-          },
-          measures: {
-            type: 'array',
-            component: 'expandable-items',
-            ref: 'qHyperCubeDef.qMeasures',
-            grouped: true,
-            items: {
-              libraryId: {
-                type: 'string',
-                component: 'library-item',
-                libraryItemType: 'measure',
-                ref: 'qLibraryId',
-                translation: 'Common.Measure',
-                show: (itemData) => itemData.qLibraryId,
-              },
-              inlineMeasure: {
-                component: 'inline-measure',
-                show: (itemData) => !itemData.qLibraryId,
-              },
-              ...columnCommonHidden,
-              ...columnExpressionItems,
-              ...textAlignItems,
-              totalsAggr: {
+              dataAssets: {
                 type: 'items',
+                component: 'data-assets-panel',
+              },
+            },
+          }
+        : {
+            type: 'items',
+            component: 'columns',
+            translation: 'Common.Data',
+            sortIndexRef: 'qHyperCubeDef.qColumnOrder',
+            allowMove: true,
+            allowAdd: true,
+            addTranslation: 'Common.Columns',
+            items: {
+              dimensions: {
+                type: 'array',
+                component: 'expandable-items',
+                ref: 'qHyperCubeDef.qDimensions',
                 grouped: true,
                 items: {
-                  totalsAggrGroup: {
+                  libraryId: {
+                    type: 'string',
+                    component: 'library-item',
+                    libraryItemType: 'dimension',
+                    ref: 'qLibraryId',
+                    translation: 'Common.Dimension',
+                    show(itemData) {
+                      return itemData.qLibraryId;
+                    },
+                  },
+                  inlineDimension: {
+                    component: 'inline-dimension',
+                    show(itemData) {
+                      return !itemData.qLibraryId;
+                    },
+                  },
+                  nullSuppression: {
+                    type: 'boolean',
+                    ref: 'qNullSuppression',
+                    defaultValue: false,
+                    translation: 'properties.dimensions.showNull',
+                    inverted: true,
+                  },
+                  ...columnCommonHidden,
+                  ...columnExpressionItems,
+                  ...textAlignItems,
+                },
+              },
+              measures: {
+                type: 'array',
+                component: 'expandable-items',
+                ref: 'qHyperCubeDef.qMeasures',
+                grouped: true,
+                items: {
+                  libraryId: {
+                    type: 'string',
+                    component: 'library-item',
+                    libraryItemType: 'measure',
+                    ref: 'qLibraryId',
+                    translation: 'Common.Measure',
+                    show: (itemData) => itemData.qLibraryId,
+                  },
+                  inlineMeasure: {
+                    component: 'inline-measure',
+                    show: (itemData) => !itemData.qLibraryId,
+                  },
+                  ...columnCommonHidden,
+                  ...columnExpressionItems,
+                  ...textAlignItems,
+                  totalsAggr: {
                     type: 'items',
+                    grouped: true,
                     items: {
-                      totalsAggrFunc: {
-                        type: 'string',
-                        component: 'dropdown',
-                        ref: 'qDef.qAggrFunc',
-                        translation: 'Object.Table.AggrFunc',
-                        options(data, handler) {
-                          const hasActiveModifiers = Modifiers.hasActiveModifiers({
-                            measures: [data],
-                            properties: handler.properties,
-                          });
-                          const enableTotal = !hasActiveModifiers || Modifiers.ifEnableTotalsFunction(data);
-                          const autoOption = enableTotal
-                            ? [
+                      totalsAggrGroup: {
+                        type: 'items',
+                        items: {
+                          totalsAggrFunc: {
+                            type: 'string',
+                            component: 'dropdown',
+                            ref: 'qDef.qAggrFunc',
+                            translation: 'Object.Table.AggrFunc',
+                            options(data, handler) {
+                              const hasActiveModifiers = Modifiers.hasActiveModifiers({
+                                measures: [data],
+                                properties: handler.properties,
+                              });
+                              const enableTotal = !hasActiveModifiers || Modifiers.ifEnableTotalsFunction(data);
+                              const autoOption = enableTotal
+                                ? [
+                                    {
+                                      value: 'Expr',
+                                      translation: 'Common.Auto',
+                                    },
+                                  ]
+                                : [];
+                              return autoOption.concat([
                                 {
-                                  value: 'Expr',
-                                  translation: 'Common.Auto',
+                                  value: 'Avg',
+                                  translation: 'Object.Table.AggrFunc.Avg',
                                 },
-                              ]
-                            : [];
-                          return autoOption.concat([
-                            {
-                              value: 'Avg',
-                              translation: 'Object.Table.AggrFunc.Avg',
+                                {
+                                  value: 'Count',
+                                  translation: 'Object.Table.AggrFunc.Count',
+                                },
+                                {
+                                  value: 'Max',
+                                  translation: 'Object.Table.AggrFunc.Max',
+                                },
+                                {
+                                  value: 'Min',
+                                  translation: 'Object.Table.AggrFunc.Min',
+                                },
+                                {
+                                  value: 'Sum',
+                                  translation: 'Object.Table.AggrFunc.Sum',
+                                },
+                                {
+                                  value: 'None',
+                                  translation: 'Object.Table.AggrFunc.None',
+                                },
+                              ]);
                             },
-                            {
-                              value: 'Count',
-                              translation: 'Object.Table.AggrFunc.Count',
+                            defaultValue: env?.anything?.sense?.isUnsupportedFeature?.('totals') ? 'None' : 'Expr',
+                          },
+                          totalsAggrFuncMessage: {
+                            component: 'text',
+                            translation: 'Object.Table.AggrFuncMessage',
+                            show(data, handler) {
+                              return (
+                                handler?.properties.totals.position === 'noTotals' && !handler.properties.totals.show
+                              );
                             },
-                            {
-                              value: 'Max',
-                              translation: 'Object.Table.AggrFunc.Max',
-                            },
-                            {
-                              value: 'Min',
-                              translation: 'Object.Table.AggrFunc.Min',
-                            },
-                            {
-                              value: 'Sum',
-                              translation: 'Object.Table.AggrFunc.Sum',
-                            },
-                            {
-                              value: 'None',
-                              translation: 'Object.Table.AggrFunc.None',
-                            },
-                          ]);
-                        },
-                        defaultValue: env?.anything?.sense?.isUnsupportedFeature?.('totals') ? 'None' : 'Expr',
-                      },
-                      totalsAggrFuncMessage: {
-                        component: 'text',
-                        translation: 'Object.Table.AggrFuncMessage',
-                        show(data, handler) {
-                          return handler?.properties.totals.position === 'noTotals' && !handler.properties.totals.show;
+                          },
                         },
                       },
                     },
+                    show: !env?.anything?.sense?.isUnsupportedFeature?.('totals'),
                   },
                 },
-                show: !env?.anything?.sense?.isUnsupportedFeature?.('totals'),
               },
             },
           },
-        },
-      },
       sorting: {
         uses: 'sorting',
       },
