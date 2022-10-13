@@ -1,6 +1,6 @@
 import { stardust } from '@nebula.js/stardust';
 import { Cell, ExtendedSelectionAPI, Announce, Row } from '../../types';
-import { SelectionState, ActionPayload, SelectionActionTypes, SelectionDispatch } from '../types';
+import { SelectionState, SelectPayload, SelectionActionTypes, SelectionDispatch } from '../types';
 import { SelectionActions, SelectionStates, KeyCodes } from '../constants';
 
 interface AddSelectionListenersArgs {
@@ -131,7 +131,7 @@ export const getSelectedRows = (
 /**
  * Updates the selection state and calls the backend when (de)selecting one row
  */
-const selectCell = (state: SelectionState, payload: ActionPayload): SelectionState => {
+const selectCell = (state: SelectionState, payload: SelectPayload): SelectionState => {
   const { api, rows, colIdx } = state;
   const { cell, announce, evt } = payload;
   let selectedRows: Record<string, number> = {};
@@ -192,12 +192,12 @@ export const getMultiSelectedRows = (
 /**
  * Updates the selection state but bot the backend when selecting multiple rows
  */
-const selectMultipleCells = (state: SelectionState, payload: ActionPayload): SelectionState => {
-  const { api, rows, colIdx, allRows, firstCell, isSelectMultiValues } = state;
+const selectMultipleCells = (state: SelectionState, payload: SelectPayload): SelectionState => {
+  const { api, rows, colIdx, allRows, firstCell } = state;
   const { cell, announce, evt } = payload;
   let selectedRows: Record<string, number> = {};
 
-  if (!isSelectMultiValues && !('key' in evt && isShiftArrow(evt))) return state;
+  if (!firstCell && !('key' in evt && isShiftArrow(evt))) return state;
 
   if (colIdx === -1) api.begin(['/qHyperCubeDef']);
   else selectedRows = { ...rows };
@@ -209,14 +209,18 @@ const selectMultipleCells = (state: SelectionState, payload: ActionPayload): Sel
 };
 
 /**
- * Initiates selecting multiple rows on mousedown
+ * Initiates selecting multiple rows on mouse down
  */
-const startSelectMulti = (state: SelectionState, cell: Cell): SelectionState => {
-  if (state.colIdx === -1 || state.colIdx === cell.colIdx) {
+const selectOnMouseDown = (
+  state: SelectionState,
+  { cell, mouseupOutsideCallback }: { cell: Cell; mouseupOutsideCallback(): void }
+): SelectionState => {
+  if (mouseupOutsideCallback && (state.colIdx === -1 || state.colIdx === cell.colIdx)) {
+    document.addEventListener('mouseup', mouseupOutsideCallback);
     return {
       ...state,
-      isSelectMultiValues: true,
       firstCell: cell,
+      mouseupOutsideCallback,
     };
   }
 
@@ -227,23 +231,33 @@ const startSelectMulti = (state: SelectionState, cell: Cell): SelectionState => 
  * Ends selecting multiple rows by calling backend, for both keyup (shift) and mouseup
  */
 const endSelectMulti = (state: SelectionState): SelectionState => {
-  const { api, rows, colIdx, isSelectMultiValues } = state;
+  const { api, rows, colIdx, isSelectMultiValues, mouseupOutsideCallback } = state;
+  mouseupOutsideCallback && document.removeEventListener('mouseup', mouseupOutsideCallback);
 
-  isSelectMultiValues &&
+  if (isSelectMultiValues) {
     api.select({
       method: 'selectHyperCubeCells',
       params: ['/qHyperCubeDef', Object.values(rows), [colIdx]],
     });
+  }
 
-  return { ...state, isSelectMultiValues: false, firstCell: undefined };
+  return { ...state, isSelectMultiValues: false, firstCell: undefined, mouseupOutsideCallback: undefined };
 };
+
+/**
+ * Calls endSelectMulti with the state as it is if multiple are selected, otherwise runs selectCell and treats it as a click on single cell
+ */
+const selectOnMouseUp = (state: SelectionState, payload: SelectPayload) =>
+  endSelectMulti(!state.isSelectMultiValues && state.firstCell === payload.cell ? selectCell(state, payload) : state);
 
 export const reducer = (state: SelectionState, action: SelectionActionTypes): SelectionState => {
   switch (action.type) {
     case SelectionActions.SELECT:
       return selectCell(state, action.payload);
-    case SelectionActions.SELECT_MULTI_START:
-      return startSelectMulti(state, action.payload.cell);
+    case SelectionActions.SELECT_MOUSE_DOWN:
+      return selectOnMouseDown(state, action.payload);
+    case SelectionActions.SELECT_MOUSE_UP:
+      return selectOnMouseUp(state, action.payload);
     case SelectionActions.SELECT_MULTI_ADD:
       return selectMultipleCells(state, action.payload);
     case SelectionActions.SELECT_MULTI_END:
