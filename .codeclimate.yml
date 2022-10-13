@@ -10,7 +10,7 @@ plugins:
 checks:
   method-lines:
     config:
-      threshold: 80
+      threshold: 100
   method-complexity:
     config:
       threshold: 10
