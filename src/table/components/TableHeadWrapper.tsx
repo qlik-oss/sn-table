@@ -25,6 +25,7 @@ function TableHeadWrapper({
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
+  const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
   const headRowRef = useRef<HTMLElement>();
   const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
@@ -61,7 +62,7 @@ function TableHeadWrapper({
 
           return (
             <TableCell
-              sx={headerStyle}
+              sx={{ ...headerStyle, width: `${columnWidths[columnIndex]}%` }}
               key={column.id}
               align={column.align}
               className="sn-table-head-cell sn-table-cell"

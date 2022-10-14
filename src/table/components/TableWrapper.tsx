@@ -5,6 +5,7 @@ import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import FooterWrapper from './FooterWrapper';
+import ColumnAdjuster from './ColumnAdjuster';
 import { useContextSelector, TableContext } from '../context';
 import { StyledTableContainer, StyledTableWrapper } from '../styles';
 
@@ -36,6 +37,7 @@ export default function TableWrapper(props: TableWrapperProps) {
   const isSelectionMode = selectionsAPI.isModal();
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
+  const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef<HTMLDivElement>();
   const tableWrapperRef = useRef<HTMLDivElement>();
@@ -108,6 +110,7 @@ export default function TableWrapper(props: TableWrapperProps) {
       onKeyDown={handleKeyDown}
     >
       <AnnounceElements />
+      <ColumnAdjuster rootElement={rootElement} />
       <StyledTableContainer
         ref={tableContainerRef}
         className="sn-table-container"
@@ -117,7 +120,11 @@ export default function TableWrapper(props: TableWrapperProps) {
         role="application"
         data-testid="table-container"
       >
-        <Table stickyHeader aria-label={tableAriaLabel}>
+        <Table
+          stickyHeader
+          aria-label={tableAriaLabel}
+          sx={{ tableLayout: 'fixed', width: `${columnWidths.reduce((a, b) => a + b, 0)}%` }}
+        >
           <TableHeadWrapper {...props} />
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </Table>

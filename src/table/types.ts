@@ -75,6 +75,8 @@ export interface ContextValue {
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   selectionState: SelectionState;
   selectionDispatch: SelectionDispatch;
+  columnWidths: number[];
+  setColumnWidths: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 export interface GeneratedStyling {

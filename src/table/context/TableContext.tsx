@@ -1,8 +1,7 @@
-import React, { useState, useReducer, createContext } from 'react';
-
+import React, { useState, useReducer, createContext, useEffect } from 'react';
 import { createSelectorProvider } from './createSelectorProvider';
 import { reducer } from '../utils/selections-utils';
-import { ExtendedSelectionAPI } from '../../types';
+import { ExtendedSelectionAPI, Row } from '../../types';
 import { ContextValue, ContextProviderProps } from '../types';
 import useDidUpdateEffect from '../hooks/use-did-update-effect';
 import { SelectionActions } from '../constants';
@@ -31,8 +30,18 @@ export const TableContextProvider = ({
     api: selectionsAPI as ExtendedSelectionAPI, // TODO: update nebula api with correct selection api type
     isSelectMultiValues: false,
   });
+  let numberOfColumns = Object.keys((pageRows as Row[])[0]).length - 1;
+  // When there is more that 5 columns, make the total more that 100%
+  let percentage = Math.round(100 / (numberOfColumns > 5 ? 5 : numberOfColumns));
+  let initialWidths = Array(numberOfColumns).fill(percentage);
+  const [columnWidths, setColumnWidths] = useState(initialWidths);
 
   useDidUpdateEffect(() => {
+    numberOfColumns = Object.keys((pageRows as Row[])[0]).length - 1;
+    // When there is more that 5 columns, make the total more that 100%
+    percentage = Math.round(100 / (numberOfColumns > 5 ? 5 : numberOfColumns));
+    initialWidths = Array(numberOfColumns).fill(percentage);
+    setColumnWidths(initialWidths);
     selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows } });
   }, [pageRows]);
 
@@ -45,6 +54,8 @@ export const TableContextProvider = ({
         setFocusedCellCoord,
         selectionState,
         selectionDispatch: selectionDispatchMock || selectionDispatch,
+        columnWidths,
+        setColumnWidths,
       }}
     >
       {children}
