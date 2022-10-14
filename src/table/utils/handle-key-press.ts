@@ -8,12 +8,17 @@ import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownPro
 import { Cell } from '../../types';
 import { KeyCodes, SelectionActions } from '../constants';
 
-const isCtrlShift = (evt: React.KeyboardEvent) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
-
-export const preventDefaultBehavior = (evt: React.KeyboardEvent) => {
+const preventDefaultBehavior = (evt: React.KeyboardEvent) => {
   evt.stopPropagation();
   evt.preventDefault();
 };
+
+const isCtrlShift = (evt: React.KeyboardEvent) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
+
+const isArrowKey = (key: string) =>
+  [KeyCodes.LEFT, KeyCodes.RIGHT, KeyCodes.UP, KeyCodes.DOWN].includes(key as KeyCodes);
+
+export const isShiftArrow = (evt: React.KeyboardEvent) => evt.shiftKey && isArrowKey(evt.key);
 
 /**
  * Checks if events caught by head, totals and body handles should bubble to the wrapper handler or default behavior
@@ -95,6 +100,9 @@ export const handleWrapperKeyDown = ({
     preventDefaultBehavior(evt);
     // @ts-ignore TODO: fix nebula api so that blur has the correct argument type
     keyboard.blur?.(true);
+  } else if (isArrowKey(evt.key)) {
+    // Arrow key events should never bubble out of the table
+    preventDefaultBehavior(evt);
   }
 };
 
