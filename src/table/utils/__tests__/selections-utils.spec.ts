@@ -14,13 +14,13 @@ import {
   SelectAction,
   ResetAction,
   ClearAction,
-  UpdateAllRowsAction,
+  UpdatePageRowsAction,
   SelectMouseDownAction,
   SelectMultiAddAction,
   SelectMouseUpAction,
 } from '../../types';
 import { SelectionStates, SelectionActions, KeyCodes } from '../../constants';
-import { createCell, createAllRows } from '../../../__test__/generate-test-data';
+import { createCell, createPageRows } from '../../../__test__/generate-test-data';
 
 describe('selections-utils', () => {
   describe('addSelectionListeners', () => {
@@ -118,7 +118,7 @@ describe('selections-utils', () => {
 
     beforeEach(() => {
       state = {
-        allRows: [] as Row[],
+        pageRows: [] as Row[],
         rows: { 1: 1 },
         colIdx: 1,
         api: {
@@ -195,7 +195,7 @@ describe('selections-utils', () => {
       let announce: jest.Mock<any, any>;
 
       beforeEach(() => {
-        state.allRows = createAllRows(4, 1);
+        state.pageRows = createPageRows(4, 1);
         state.firstCell = undefined;
         evt = { shiftKey: false, key: KeyCodes.DOWN } as React.KeyboardEvent;
         announce = jest.fn();
@@ -349,11 +349,11 @@ describe('selections-utils', () => {
         expect(newState).toBe(state);
       });
 
-      it('should return state updated with allRows when action.type is updateAllRows', () => {
-        const allRows = [{} as unknown as Row];
-        const action = { type: SelectionActions.UPDATE_ALL_ROWS, payload: { allRows } } as UpdateAllRowsAction;
+      it('should return state updated with pageRows when action.type is updatePageRows', () => {
+        const pageRows = [{} as unknown as Row];
+        const action = { type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows } } as UpdatePageRowsAction;
         const newState = reducer(state, action);
-        expect(newState).toEqual({ ...state, allRows });
+        expect(newState).toEqual({ ...state, pageRows });
       });
     });
   });
@@ -457,14 +457,14 @@ describe('selections-utils', () => {
   });
 
   describe('getMultiSelectedRows', () => {
-    let allRows: Row[];
+    let pageRows: Row[];
     let selectedRows: Record<string, number>;
     let cell: Cell;
     let evt: React.KeyboardEvent;
     let firstCell: Cell | undefined;
 
     beforeEach(() => {
-      allRows = createAllRows(3);
+      pageRows = createPageRows(3);
       selectedRows = { '2': 2 };
       cell = createCell(1);
       evt = {} as React.KeyboardEvent;
@@ -475,7 +475,7 @@ describe('selections-utils', () => {
       evt.shiftKey = true;
       evt.key = KeyCodes.DOWN;
 
-      const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt, firstCell);
+      const updatedSelectedRows = getMultiSelectedRows(pageRows, selectedRows, cell, evt, firstCell);
       expect(updatedSelectedRows).toEqual({
         ...selectedRows,
         [cell.qElemNumber]: cell.rowIdx,
@@ -487,7 +487,7 @@ describe('selections-utils', () => {
       evt.shiftKey = true;
       evt.key = KeyCodes.UP;
 
-      const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt, firstCell);
+      const updatedSelectedRows = getMultiSelectedRows(pageRows, selectedRows, cell, evt, firstCell);
       expect(updatedSelectedRows).toEqual({
         ...selectedRows,
         [cell.qElemNumber]: cell.rowIdx,
@@ -496,13 +496,13 @@ describe('selections-utils', () => {
     });
 
     it('should return selectedRows unchanged when not shift+arrow but firstCell is undefined', () => {
-      const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt, firstCell);
+      const updatedSelectedRows = getMultiSelectedRows(pageRows, selectedRows, cell, evt, firstCell);
       expect(updatedSelectedRows).toBe(selectedRows);
     });
 
     it('should return rows updated with all rows between firstCell and cell', () => {
       firstCell = createCell(3);
-      const updatedSelectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt, firstCell);
+      const updatedSelectedRows = getMultiSelectedRows(pageRows, selectedRows, cell, evt, firstCell);
       expect(updatedSelectedRows).toEqual({ '1': 1, '2': 2, '3': 3 });
     });
   });
@@ -520,7 +520,7 @@ describe('selections-utils', () => {
       } as Cell;
 
       selectionState = {
-        allRows: createAllRows(4),
+        pageRows: createPageRows(4),
         colIdx: 1,
         rows: { 1: 1 },
         api: {

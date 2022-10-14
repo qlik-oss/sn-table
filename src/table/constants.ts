@@ -13,7 +13,7 @@ export enum SelectionActions {
   SELECT_MULTI_END = 'selectMultiEnd',
   RESET = 'reset',
   CLEAR = 'clear',
-  UPDATE_ALL_ROWS = 'updateAllRows',
+  UPDATE_PAGE_ROWS = 'updatePageRows',
 }
 
 export enum KeyCodes {

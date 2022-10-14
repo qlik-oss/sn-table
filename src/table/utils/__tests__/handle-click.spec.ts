@@ -31,8 +31,8 @@ describe('handle-click', () => {
   describe('handleClickToFocusBody', () => {
     let totalsPosition: TotalsPosition;
     const cell = {
-      rawRowIdx: 0,
-      rawColIdx: 0,
+      pageRowIdx: 0,
+      pageColIdx: 0,
     } as Cell;
 
     beforeEach(() => {

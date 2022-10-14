@@ -12,9 +12,9 @@ export const handleClickToFocusBody = (
   keyboard: stardust.Keyboard,
   totalsPosition: TotalsPosition
 ) => {
-  const { rawRowIdx, rawColIdx } = cell;
-  const adjustedRowIdx = totalsPosition === 'top' ? rawRowIdx + 2 : rawRowIdx + 1;
-  removeTabAndFocusCell([adjustedRowIdx, rawColIdx], rootElement, setFocusedCellCoord, keyboard);
+  const { pageRowIdx, pageColIdx } = cell;
+  const adjustedRowIdx = totalsPosition === 'top' ? pageRowIdx + 2 : pageRowIdx + 1;
+  removeTabAndFocusCell([adjustedRowIdx, pageColIdx], rootElement, setFocusedCellCoord, keyboard);
 };
 
 export const handleClickToFocusHead = (

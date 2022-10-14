@@ -53,7 +53,7 @@ const shouldSelectMultiValues = (
   cell: Cell
 ) =>
   evt.shiftKey &&
-  ((evt.key === KeyCodes.UP && cell.rawRowIdx !== 0) || (evt.key === KeyCodes.DOWN && !cell.isLastRow)) &&
+  ((evt.key === KeyCodes.UP && cell.pageRowIdx !== 0) || (evt.key === KeyCodes.DOWN && !cell.isLastRow)) &&
   areBasicFeaturesEnabled &&
   isSelectionsEnabled &&
   cell.isSelectable;
@@ -209,7 +209,7 @@ export const handleBodyKeyDown = ({
 
   // Adjust the cellCoord depending on the totals position
   const firstBodyRowIdx = totalsPosition === 'top' ? 2 : 1;
-  const cellCoord: [number, number] = [cell.rawRowIdx + firstBodyRowIdx, cell.rawColIdx];
+  const cellCoord: [number, number] = [cell.pageRowIdx + firstBodyRowIdx, cell.pageColIdx];
   // Make sure you can't navigate to header (and totals) in selection mode
   const allowedRows = {
     top: isSelectionMode ? firstBodyRowIdx : 0,
@@ -219,7 +219,7 @@ export const handleBodyKeyDown = ({
   switch (evt.key) {
     case KeyCodes.UP:
     case KeyCodes.DOWN: {
-      evt.key === KeyCodes.UP && handleNavigateTop([cell.rawRowIdx, cell.rawColIdx], rootElement);
+      evt.key === KeyCodes.UP && handleNavigateTop([cell.pageRowIdx, cell.pageColIdx], rootElement);
       const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, allowedRows);
       // Shift + up/down arrow keys: select multiple values
       if (shouldSelectMultiValues(areBasicFeaturesEnabled, isSelectionsEnabled, evt, cell)) {

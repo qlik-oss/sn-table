@@ -159,7 +159,7 @@ const selectCell = (state: SelectionState, payload: SelectPayload): SelectionSta
  * Get the updated selected rows for when selecting multiple rows
  */
 export const getMultiSelectedRows = (
-  allRows: Row[],
+  pageRows: Row[],
   selectedRows: Record<string, number>,
   cell: Cell,
   evt: React.KeyboardEvent | React.MouseEvent,
@@ -171,17 +171,17 @@ export const getMultiSelectedRows = (
     newSelectedRows[cell.qElemNumber] = cell.rowIdx;
     // also add the next or previous cell to selectedRows, based on which arrow is pressed
     const idxShift = evt.key === KeyCodes.DOWN ? 1 : -1;
-    const nextCell = allRows[cell.rawRowIdx + idxShift][`col-${cell.rawColIdx}`] as Cell;
+    const nextCell = pageRows[cell.pageRowIdx + idxShift][`col-${cell.colIdx}`] as Cell;
     newSelectedRows[nextCell.qElemNumber] = cell.rowIdx + idxShift;
     return newSelectedRows;
   }
 
   if (!firstCell) return selectedRows;
-  const lowestCellIdx = Math.min(firstCell.rawRowIdx, cell.rawRowIdx);
-  const highestCellIdx = Math.max(firstCell.rawRowIdx, cell.rawRowIdx);
+  const lowestRowIdx = Math.min(firstCell.pageRowIdx, cell.pageRowIdx);
+  const highestRowIdx = Math.max(firstCell.pageRowIdx, cell.pageRowIdx);
 
-  for (let idx = lowestCellIdx; idx <= highestCellIdx; idx++) {
-    const selectedCell = allRows[idx][`col-${firstCell.rawColIdx}`] as Cell;
+  for (let idx = lowestRowIdx; idx <= highestRowIdx; idx++) {
+    const selectedCell = pageRows[idx][`col-${firstCell.colIdx}`] as Cell;
     newSelectedRows[selectedCell.qElemNumber] = selectedCell.rowIdx;
   }
 
@@ -192,7 +192,7 @@ export const getMultiSelectedRows = (
  * Updates the selection state but bot the backend when selecting multiple rows
  */
 const selectMultipleCells = (state: SelectionState, payload: SelectPayload): SelectionState => {
-  const { api, rows, colIdx, allRows, firstCell } = state;
+  const { api, rows, colIdx, pageRows, firstCell } = state;
   const { cell, announce, evt } = payload;
   let selectedRows: Record<string, number> = {};
 
@@ -201,7 +201,7 @@ const selectMultipleCells = (state: SelectionState, payload: SelectPayload): Sel
   if (colIdx === -1) api.begin(['/qHyperCubeDef']);
   else selectedRows = { ...rows };
 
-  selectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt, firstCell);
+  selectedRows = getMultiSelectedRows(pageRows, selectedRows, cell, evt, firstCell);
   announceSelectionStatus(announce, rows, selectedRows);
 
   return { ...state, rows: selectedRows, colIdx: firstCell?.colIdx ?? cell.colIdx, isSelectMultiValues: true };
@@ -265,8 +265,8 @@ export const reducer = (state: SelectionState, action: SelectionActionTypes): Se
       return state.api.isModal() ? state : { ...state, rows: {}, colIdx: -1 };
     case SelectionActions.CLEAR:
       return Object.keys(state.rows).length ? { ...state, rows: {} } : state;
-    case SelectionActions.UPDATE_ALL_ROWS:
-      return { ...state, allRows: action.payload.allRows };
+    case SelectionActions.UPDATE_PAGE_ROWS:
+      return { ...state, pageRows: action.payload.pageRows };
     default:
       throw new Error('reducer called with invalid action type');
   }

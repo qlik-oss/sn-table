@@ -123,19 +123,22 @@ export default async function manageData(
 
   const rows = dataPages[0].qMatrix.map((r, rowIdx) => {
     const row: Row = { key: `row-${rowIdx}` };
+    // the backend indexes are stored as col/rowIdx while the indexes for the loaded page is pageCol/RowIdx
     columns.forEach((c, colIdx) => {
       row[c.id] = {
         ...r[colIdx],
         rowIdx: rowIdx + top,
         colIdx: columnOrder[colIdx],
+        pageRowIdx: rowIdx,
+        pageColIdx: colIdx,
         isSelectable: c.isDim && !c.isLocked,
-        rawRowIdx: rowIdx,
-        rawColIdx: colIdx,
         isLastRow: rowIdx === height - 1,
       };
     });
     return row;
   });
+
   const totalsPosition = getTotalPosition(layout);
+
   return { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition };
 }

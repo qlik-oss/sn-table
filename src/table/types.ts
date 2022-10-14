@@ -42,8 +42,8 @@ export interface SelectMultiAddAction extends Action<SelectionActions.SELECT_MUL
 export interface SelectMultiEndAction extends Action<SelectionActions.SELECT_MULTI_END> {}
 export interface ResetAction extends Action<SelectionActions.RESET> {}
 export interface ClearAction extends Action<SelectionActions.CLEAR> {}
-export interface UpdateAllRowsAction extends Action<SelectionActions.UPDATE_ALL_ROWS> {
-  payload: { allRows: Row[] };
+export interface UpdatePageRowsAction extends Action<SelectionActions.UPDATE_PAGE_ROWS> {
+  payload: { pageRows: Row[] };
 }
 
 export type SelectionActionTypes =
@@ -54,12 +54,12 @@ export type SelectionActionTypes =
   | SelectMultiEndAction
   | ResetAction
   | ClearAction
-  | UpdateAllRowsAction;
+  | UpdatePageRowsAction;
 
 export type SelectionDispatch = React.Dispatch<SelectionActionTypes>;
 
 export interface SelectionState {
-  allRows: Row[];
+  pageRows: Row[];
   rows: Record<string, number>;
   colIdx: number;
   api: ExtendedSelectionAPI;
@@ -156,7 +156,7 @@ export interface HandleResetFocusProps {
 export interface ContextProviderProps {
   children: JSX.Element;
   selectionsAPI: ExtendedSelectionAPI;
-  tableRows?: Row[];
+  pageRows?: Row[];
   cellCoordMock?: [number, number];
   selectionDispatchMock?: jest.Mock<any, any>;
 }
