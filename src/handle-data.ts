@@ -140,6 +140,5 @@ export default async function manageData(
 
   const totalsPosition = getTotalPosition(layout);
 
-  console.log('data rows', rows);
   return { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition };
 }
