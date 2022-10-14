@@ -1,4 +1,6 @@
 import React, { memo, useMemo } from 'react';
+import Box from '@mui/material/Box';
+
 import { useContextSelector, TableContext } from '../context';
 import { getTotalsCellStyle } from '../utils/styling-utils';
 import { handleTotalKeyDown } from '../utils/handle-key-press';
@@ -48,7 +50,9 @@ function TableTotals({
               removeTabAndFocusCell(cellCoord, rootElement, setFocusedCellCoord, keyboard);
             }}
           >
-            {column.totalInfo}
+            <Box component="span" className="sn-table-cell-text">
+              {column.totalInfo}
+            </Box>
           </StyledTotalsCell>
         );
       })}

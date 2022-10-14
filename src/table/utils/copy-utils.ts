@@ -1,9 +1,11 @@
 const copyCellValue = async (evt: any) => {
-  const target = evt.target as HTMLElement;
+  let target = evt.target as HTMLElement;
 
-  const value = target.children[0]?.firstChild
-    ? target.children[0].firstChild.textContent
-    : target.firstChild?.textContent;
+  if (!target.classList.contains('sn-table-cell')) {
+    target = target.closest('.sn-table-cell') as HTMLElement;
+  }
+  const value = target.querySelector('.sn-table-cell-text')?.textContent;
+
   try {
     value && (await navigator.clipboard.writeText(String(value)));
   } catch (error) {

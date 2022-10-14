@@ -22,7 +22,7 @@ describe('handle-key-press', () => {
 
   beforeEach(() => {
     areBasicFeaturesEnabled = true;
-    jest.spyOn(handleCopy, 'default');
+    jest.spyOn(handleCopy, 'default').mockImplementation(() => new Promise(() => {}));
   });
 
   afterEach(() => jest.clearAllMocks());
@@ -304,7 +304,6 @@ describe('handle-key-press', () => {
         target: {
           blur: jest.fn(),
           setAttribute: jest.fn(),
-          children: [],
         } as unknown as HTMLElement,
       } as unknown as React.KeyboardEvent;
       rootElement = {
@@ -402,7 +401,6 @@ describe('handle-key-press', () => {
         target: {
           blur: jest.fn(),
           setAttribute: jest.fn(),
-          children: [],
         } as unknown as HTMLElement,
       } as unknown as React.KeyboardEvent;
       cellCoord = [1, 1];
@@ -506,7 +504,6 @@ describe('handle-key-press', () => {
           classList: {
             contains: () => isExcluded,
           },
-          children: [],
         } as unknown as HTMLElement,
       } as unknown as React.KeyboardEvent;
       rootElement = {

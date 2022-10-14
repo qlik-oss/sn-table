@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useMemo, useRef } from 'react';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
+import Box from '@mui/material/Box';
 
 import { useContextSelector, TableContext } from '../context';
 import { VisuallyHidden, StyledHeadRow, StyledSortLabel } from '../styles';
@@ -82,7 +83,9 @@ function TableHeadWrapper({
                   handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex)
                 }
               >
-                {column.label}
+                <Box component="span" className="sn-table-cell-text">
+                  {column.label}
+                </Box>
                 {isFocusInHead && (
                   <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>
                     {translator.get('SNTable.SortLabel.PressSpaceToSort')}

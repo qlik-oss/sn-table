@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, memo } from 'react';
+import Box from '@mui/material/Box';
+
 import getCellRenderer from '../utils/get-cell-renderer';
 import { useContextSelector, TableContext } from '../context';
 import { StyledTableBody, StyledBodyRow } from '../styles';
@@ -118,7 +120,9 @@ function TableBodyWrapper({
                     handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition)
                   }
                 >
-                  {cell.qText}
+                  <Box component="span" className="sn-table-cell-text">
+                    {cell.qText}
+                  </Box>
                 </CellRenderer>
               )
             );
