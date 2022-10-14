@@ -14,68 +14,79 @@ describe('ext', () => {
   };
 
   describe('definition', () => {
-    const { items } = getData(env);
+    describe('Test current data assets panel', () => {
+      mockFlags.PS_18291_TABLE_EXPLORATION = false;
 
-    describe('dimension/measure properties', () => {
-      const dimensionItems = items.dimensions.items;
+      const { items } = getData(env);
 
-      describe('visibilityCondition.isExpression', () => {
-        let val;
+      describe('dimension/measure properties', () => {
+        const dimensionItems = items.dimensions.items;
 
-        beforeEach(() => {
-          val = 'someExpresison';
+        describe('visibilityCondition.isExpression', () => {
+          let val;
+
+          beforeEach(() => {
+            val = 'someExpresison';
+          });
+
+          it('should return true for valid expression', () => {
+            const isExpression = dimensionItems.visibilityCondition.isExpression(val);
+            expect(isExpression).toBe(true);
+          });
+
+          it('should return false for non string', () => {
+            val = 1;
+
+            const isExpression = dimensionItems.visibilityCondition.isExpression(val);
+            expect(isExpression).toBe(false);
+          });
+
+          it('should return false for string only containing white space', () => {
+            val = ' ';
+
+            const isExpression = dimensionItems.visibilityCondition.isExpression(val);
+            expect(isExpression).toBe(false);
+          });
         });
 
-        it('should return true for valid expression', () => {
-          const isExpression = dimensionItems.visibilityCondition.isExpression(val);
-          expect(isExpression).toBe(true);
-        });
+        describe('textAlign.show', () => {
+          let data;
 
-        it('should return false for non string', () => {
-          val = 1;
+          beforeEach(() => {
+            data = {
+              qDef: {
+                textAlign: {
+                  auto: false,
+                },
+              },
+            };
+          });
 
-          const isExpression = dimensionItems.visibilityCondition.isExpression(val);
-          expect(isExpression).toBe(false);
-        });
+          it('should return true when auto is false', () => {
+            const show = dimensionItems.textAlign.show(data);
+            expect(show).toBe(true);
+          });
 
-        it('should return false for string only containing white space', () => {
-          val = ' ';
+          it('should return false when auto is true', () => {
+            data.qDef.textAlign.auto = true;
 
-          const isExpression = dimensionItems.visibilityCondition.isExpression(val);
-          expect(isExpression).toBe(false);
+            const show = dimensionItems.textAlign.show(data);
+            expect(show).toBe(false);
+          });
+
+          it('should return false when textAlign is undefined', () => {
+            data.qDef.textAlign = undefined;
+            const show = dimensionItems.textAlign.show(data);
+            expect(show).toBe(false);
+          });
         });
       });
-
-      describe('textAlign.show', () => {
-        let data;
-
-        beforeEach(() => {
-          data = {
-            qDef: {
-              textAlign: {
-                auto: false,
-              },
-            },
-          };
-        });
-
-        it('should return true when auto is false', () => {
-          const show = dimensionItems.textAlign.show(data);
-          expect(show).toBe(true);
-        });
-
-        it('should return false when auto is true', () => {
-          data.qDef.textAlign.auto = true;
-
-          const show = dimensionItems.textAlign.show(data);
-          expect(show).toBe(false);
-        });
-
-        it('should return false when textAlign is undefined', () => {
-          data.qDef.textAlign = undefined;
-          const show = dimensionItems.textAlign.show(data);
-          expect(show).toBe(false);
-        });
+    });
+    describe('Test new data assets panel', () => {
+      mockFlags.PS_18291_TABLE_EXPLORATION = true;
+      const { items } = getData(env);
+      it('should render data assets panel', () => {
+        expect(items.dataAssets.component).toEqual('data-assets-panel');
       });
     });
   });
