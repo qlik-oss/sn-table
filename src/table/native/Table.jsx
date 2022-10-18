@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app, rect, theme }) => {
+const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app, rect, theme, translator }) => {
   const selectionsCaches = useRef(new SelectionCaches(selectionsAPI));
   const [tableData, setTableData] = useState(undefined);
   const [clearSelections, setClearSelections] = useState('no');
@@ -31,6 +31,16 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
   const name = useMemo(() => {
     return getKey(app, layout);
   }, [app, layout]);
+
+  const translations = useMemo(
+    () => ({
+      menu: {
+        copy: translator?.translate?.('Copy') || 'Copy',
+        expand: translator?.translate?.('ExpandRow') || 'Expand Row',
+      },
+    }),
+    [translator]
+  );
 
   const contentStyle = useMemo(() => {
     const cellStyle = getBodyCellStyle(layout, theme);
@@ -141,6 +151,7 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
         headerContentStyle={contentStyle.headerStyle}
         name={name}
         isDataView={layout?.isDataView}
+        translations={translations}
       />
     </View>
   ) : null;
@@ -155,6 +166,7 @@ Table.propTypes = {
   changeSortOrder: PropTypes.func.isRequired,
   rect: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  translator: PropTypes.object.isRequired,
 };
 
 export default Table;

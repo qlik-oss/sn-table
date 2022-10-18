@@ -32,9 +32,20 @@ const initialPageInfo = {
   rowsPerPageOptions: [10, 25, 100],
 };
 const nothing = async () => {};
-const renderWithCarbon = ({ env, rootElement, model, theme, selectionsAPI, app, rect, layout, changeSortOrder }) => {
+const renderWithCarbon = ({
+  env,
+  rootElement,
+  model,
+  theme,
+  selectionsAPI,
+  app,
+  rect,
+  layout,
+  changeSortOrder,
+  translator,
+}) => {
   if (env.carbon && changeSortOrder && theme) {
-    render(rootElement, { layout, model, manageData, theme, selectionsAPI, changeSortOrder, app, rect });
+    render(rootElement, { layout, model, manageData, theme, selectionsAPI, changeSortOrder, app, rect, translator });
   }
 };
 
@@ -101,8 +112,19 @@ export default function supernova(env) {
 
       // this is the one we want to use for carbon
       useEffect(() => {
-        renderWithCarbon({ env, rootElement, model, theme, selectionsAPI, app, rect, layout, changeSortOrder });
-      }, [layout, model, selectionsAPI.isModal(), theme, translator.language(), app, changeSortOrder]);
+        renderWithCarbon({
+          env,
+          rootElement,
+          model,
+          theme,
+          selectionsAPI,
+          app,
+          rect,
+          layout,
+          changeSortOrder,
+          translator,
+        });
+      }, [layout, model, selectionsAPI.isModal(), theme, translator.language(), app, changeSortOrder, translator]);
 
       useEffect(
         () => () => {
