@@ -47,6 +47,7 @@ export interface ExtendedNxMeasureInfo extends EngineAPI.INxMeasureInfo {
 
 export interface HyperCube extends Omit<EngineAPI.IHyperCube, 'qDimensionInfo' | 'qMeasureInfo'> {
   qColumnOrder: number[];
+  columnWidths: number[];
   qDimensionInfo: ExtendedNxDimensionInfo[];
   qMeasureInfo: ExtendedNxMeasureInfo[];
 }
@@ -79,6 +80,7 @@ export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, 'qH
     position: 'top' | 'bottom' | 'noTotals';
     label: string;
   };
+  resize: { dynamic: boolean; fitToView: boolean };
   components?: Component[];
 }
 

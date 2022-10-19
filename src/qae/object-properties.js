@@ -75,6 +75,10 @@ const properties = {
      */
     label: 'Totals',
   },
+  resize: {
+    dynamic: false,
+    fitToView: false,
+  },
   /**
    * Holds general styling
    * @type {?Component[]}

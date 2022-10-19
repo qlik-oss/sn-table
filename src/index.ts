@@ -111,6 +111,7 @@ export default function supernova(env: Galaxy) {
               footerContainer,
               announce,
               areBasicFeaturesEnabled,
+              model,
             },
             reactRoot
           );

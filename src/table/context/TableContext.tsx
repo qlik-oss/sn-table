@@ -1,4 +1,4 @@
-import React, { useState, useReducer, createContext, useEffect } from 'react';
+import React, { useState, useReducer, createContext } from 'react';
 import { createSelectorProvider } from './createSelectorProvider';
 import { reducer } from '../utils/selections-utils';
 import { ExtendedSelectionAPI, Row } from '../../types';
@@ -17,6 +17,7 @@ const ProviderWithSelector = createSelectorProvider(TableContext);
 export const TableContextProvider = ({
   children,
   selectionsAPI,
+  layout,
   pageRows = [],
   cellCoordMock,
   selectionDispatchMock,
@@ -30,20 +31,30 @@ export const TableContextProvider = ({
     api: selectionsAPI as ExtendedSelectionAPI, // TODO: update nebula api with correct selection api type
     isSelectMultiValues: false,
   });
-  let numberOfColumns = Object.keys((pageRows as Row[])[0]).length - 1;
-  // When there is more that 5 columns, make the total more that 100%
-  let percentage = Math.round(100 / (numberOfColumns > 5 ? 5 : numberOfColumns));
-  let initialWidths = Array(numberOfColumns).fill(percentage);
-  const [columnWidths, setColumnWidths] = useState(initialWidths);
+  const getWidths = () => {
+    const layoutColumnWidths = layout?.qHyperCube.columnWidths;
+    if (layoutColumnWidths?.length && !layoutColumnWidths.every((w) => w === -1)) return layoutColumnWidths;
+
+    const numberOfColumns = Object.keys((pageRows as Row[])[0]).length - 1;
+    if (layout?.resize.dynamic) {
+      // When there is more that 5 columns, make the total more that 100%
+      const percentage = Math.round(100 / numberOfColumns) / 100; // (numberOfColumns > 5 ? 5 : numberOfColumns));
+      return Array(numberOfColumns).fill(percentage);
+    }
+
+    return Array(numberOfColumns).fill(100);
+  };
+
+  const [columnWidths, setColumnWidths] = useState(getWidths);
 
   useDidUpdateEffect(() => {
-    numberOfColumns = Object.keys((pageRows as Row[])[0]).length - 1;
-    // When there is more that 5 columns, make the total more that 100%
-    percentage = Math.round(100 / (numberOfColumns > 5 ? 5 : numberOfColumns));
-    initialWidths = Array(numberOfColumns).fill(percentage);
-    setColumnWidths(initialWidths);
     selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows } });
   }, [pageRows]);
+
+  useDidUpdateEffect(() => {
+    const newWidths = getWidths();
+    setColumnWidths(newWidths);
+  }, [layout?.qHyperCube.columnWidths]);
 
   return (
     <ProviderWithSelector

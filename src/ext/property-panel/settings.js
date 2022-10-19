@@ -197,6 +197,47 @@ const getTotals = (env) => ({
   show: !env?.anything?.sense?.isUnsupportedFeature?.('totals'),
 });
 
+const resizing = {
+  type: 'items',
+  items: [
+    {
+      ref: 'resize.dynamic',
+      translation: 'dynamic',
+      type: 'boolean',
+      component: 'switch',
+      options: [
+        {
+          value: true,
+          translation: 'properties.on',
+        },
+        {
+          value: false,
+          translation: 'properties.off',
+        },
+      ],
+      defaultValue: true,
+    },
+    {
+      ref: 'resize.fitToView',
+      translation: 'fit to view',
+      type: 'boolean',
+      component: 'switch',
+      options: [
+        {
+          value: true,
+          translation: 'properties.on',
+        },
+        {
+          value: false,
+          translation: 'properties.off',
+        },
+      ],
+      defaultValue: false,
+      show: (data) => data.resize.dynamic,
+    },
+  ],
+};
+
 const getChartExploration = (env) =>
   env.flags.isEnabled('PS_18291_TABLE_EXPLORATION') && {
     chartExploration: {
@@ -220,7 +261,7 @@ const getSettings = (env) => ({
       grouped: true,
       type: 'items',
       translation: 'properties.presentation',
-      items: [stylingPanel, getTotals(env)],
+      items: [stylingPanel, getTotals(env), resizing],
     },
     ...getChartExploration(env),
   },

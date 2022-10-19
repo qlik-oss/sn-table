@@ -2,6 +2,7 @@ import React, { memo, useEffect, useMemo, useRef } from 'react';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 
+import ColumnAdjuster from './ColumnAdjuster';
 import { useContextSelector, TableContext } from '../context';
 import { VisuallyHidden, StyledHeadRow, StyledSortLabel } from '../styles';
 import { getHeaderStyle } from '../utils/styling-utils';
@@ -20,6 +21,7 @@ function TableHeadWrapper({
   selectionsAPI,
   keyboard,
   areBasicFeaturesEnabled,
+  model,
 }: TableHeadWrapperProps) {
   const { columns, paginationNeeded } = tableData;
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
@@ -60,9 +62,13 @@ function TableHeadWrapper({
             });
           };
 
+          const width =
+            columnWidths[columnIndex] > 1 ? `${columnWidths[columnIndex]}px` : `${columnWidths[columnIndex] * 100}%`;
+
           return (
             <TableCell
-              sx={{ ...headerStyle, width: `${columnWidths[columnIndex]}%` }}
+              sx={headerStyle}
+              style={{ width }}
               key={column.id}
               align={column.align}
               className="sn-table-head-cell sn-table-cell"
@@ -90,6 +96,7 @@ function TableHeadWrapper({
                   </VisuallyHidden>
                 )}
               </StyledSortLabel>
+              <ColumnAdjuster rootElement={rootElement} columnIndex={columnIndex} model={model} layout={layout} />
             </TableCell>
           );
         })}

@@ -1,11 +1,10 @@
 import React, { useRef, useCallback } from 'react';
 import Table from '@mui/material/Table';
 
-import AnnounceElements from './AnnounceElements';
+// import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import FooterWrapper from './FooterWrapper';
-import ColumnAdjuster from './ColumnAdjuster';
 import { useContextSelector, TableContext } from '../context';
 import { StyledTableContainer, StyledTableWrapper } from '../styles';
 
@@ -101,6 +100,11 @@ export default function TableWrapper(props: TableWrapperProps) {
     String(columns.length),
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
+  const width =
+    columnWidths[0] > 1
+      ? `${columnWidths.reduce((a, b) => a + b, 0)}px`
+      : `${columnWidths.reduce((a, b) => a + b * 100, 0)}%`;
+
   return (
     <StyledTableWrapper
       ref={tableWrapperRef}
@@ -109,8 +113,6 @@ export default function TableWrapper(props: TableWrapperProps) {
       dir={direction}
       onKeyDown={handleKeyDown}
     >
-      <AnnounceElements />
-      <ColumnAdjuster rootElement={rootElement} />
       <StyledTableContainer
         ref={tableContainerRef}
         className="sn-table-container"
@@ -120,11 +122,7 @@ export default function TableWrapper(props: TableWrapperProps) {
         role="application"
         data-testid="table-container"
       >
-        <Table
-          stickyHeader
-          aria-label={tableAriaLabel}
-          sx={{ tableLayout: 'fixed', width: `${columnWidths.reduce((a, b) => a + b, 0)}%` }}
-        >
+        <Table stickyHeader aria-label={tableAriaLabel} style={{ tableLayout: 'fixed', width }} className="sn-table">
           <TableHeadWrapper {...props} />
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </Table>
