@@ -8,6 +8,7 @@ import { getHeaderStyle } from '../utils/styling-utils';
 import { handleHeadKeyDown } from '../utils/handle-key-press';
 import { handleMouseDownLabelToFocusHeadCell, handleClickToFocusHead } from '../utils/handle-click';
 import { TableHeadWrapperProps } from '../types';
+import CellText from './CellText';
 
 function TableHeadWrapper({
   rootElement,
@@ -82,7 +83,7 @@ function TableHeadWrapper({
                   handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex)
                 }
               >
-                {column.label}
+                <CellText>{column.label}</CellText>
                 {isFocusInHead && (
                   <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>
                     {translator.get('SNTable.SortLabel.PressSpaceToSort')}

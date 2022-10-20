@@ -1,10 +1,12 @@
 import React, { memo, useMemo } from 'react';
+
 import { useContextSelector, TableContext } from '../context';
 import { getTotalsCellStyle } from '../utils/styling-utils';
 import { handleTotalKeyDown } from '../utils/handle-key-press';
 import { removeTabAndFocusCell } from '../utils/accessibility-utils';
 import { StyledHeadRow, StyledTotalsCell } from '../styles';
 import { TableTotalsProps } from '../types';
+import CellText from './CellText';
 
 function TableTotals({
   rootElement,
@@ -48,7 +50,7 @@ function TableTotals({
               removeTabAndFocusCell(cellCoord, rootElement, setFocusedCellCoord, keyboard);
             }}
           >
-            {column.totalInfo}
+            <CellText>{column.totalInfo}</CellText>
           </StyledTotalsCell>
         );
       })}

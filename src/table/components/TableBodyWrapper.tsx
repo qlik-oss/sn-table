@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, memo } from 'react';
+
 import getCellRenderer from '../utils/get-cell-renderer';
 import { useContextSelector, TableContext } from '../context';
 import { StyledTableBody, StyledBodyRow } from '../styles';
@@ -9,6 +10,7 @@ import { handleClickToFocusBody } from '../utils/handle-click';
 import { Cell } from '../../types';
 import { TableBodyWrapperProps } from '../types';
 import TableTotals from './TableTotals';
+import CellText from './CellText';
 
 function TableBodyWrapper({
   rootElement,
@@ -118,7 +120,7 @@ function TableBodyWrapper({
                     handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition)
                   }
                 >
-                  {cell.qText}
+                  <CellText>{cell.qText}</CellText>
                 </CellRenderer>
               )
             );
