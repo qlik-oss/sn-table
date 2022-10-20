@@ -1,3 +1,15 @@
+# [1.19.0](https://github.com/qlik-oss/sn-table/compare/v1.18.0...v1.19.0) (2022-10-20)
+
+### Bug Fixes
+
+- block arrow keys from propagating ([#715](https://github.com/qlik-oss/sn-table/issues/715)) ([d77149e](https://github.com/qlik-oss/sn-table/commit/d77149ec674a2e96c9e2bea92156201655c95e48))
+- copyCellValue on head cell when context menu is used ([#722](https://github.com/qlik-oss/sn-table/issues/722)) ([2312c4c](https://github.com/qlik-oss/sn-table/commit/2312c4cbabf0596f4677aeb3c3d247011cccb1b7))
+- correct index usage for select multiple ([#721](https://github.com/qlik-oss/sn-table/issues/721)) ([35ab029](https://github.com/qlik-oss/sn-table/commit/35ab029289cc028c7aa4d3d524d386fe803c193e))
+
+### Features
+
+- viz-1465 add-data-assets-panel ([#720](https://github.com/qlik-oss/sn-table/issues/720)) ([266be70](https://github.com/qlik-oss/sn-table/commit/266be70a510471089e5b2d4f9ee39682883a06bf))
+
 # [1.18.0](https://github.com/qlik-oss/sn-table/compare/v1.17.1...v1.18.0) (2022-10-13)
 
 ### Bug Fixes
