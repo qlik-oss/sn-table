@@ -2,12 +2,11 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
-import ReactNativeStraightTableViewManager from '@qlik/react-native-simple-grid';
+import { SimpleGrid } from '@qlik/react-native-simple-grid';
 import { RowProps } from './Props';
 import SelectionCaches from './SelectionCaches';
 import DataCacheStream from './DataCachesStream';
 import { getKey } from './ColumnWidthStorage';
-import { freezeFirstColumn } from '../utils/scrolling-props';
 import { getBodyCellStyle, getHeaderStyle } from '../utils/styling-utils';
 
 const styles = StyleSheet.create({
@@ -127,31 +126,20 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
 
   return tableData ? (
     <View style={styles.body}>
-      <ReactNativeStraightTableViewManager
+      <SimpleGrid
         theme={tableTheme.current}
-        cols={{
-          header: tableData?.columns,
-          footer: layout?.totals.show ? layout.qHyperCube.qGrandTotalRow : undefined,
-          totals:
-            layout?.totals?.show || layout?.totals?.position !== 'noTotals'
-              ? { ...layout.totals, rows: layout.qHyperCube.qGrandTotalRow }
-              : undefined,
-        }}
-        rows={{ rows: tableData?.rows, reset: tableData?.reset }}
-        style={styles.table}
-        size={layout.qHyperCube.qSize}
+        tableData={tableData}
+        style={styles}
+        rect={rect}
         onEndReached={onEndReached}
-        containerWidth={rect.width}
         onSelectionsChanged={onSelectionsChanged}
         onConfirmSelections={onConfirmSelections}
         clearSelections={clearSelections}
         onHeaderPressed={onHeaderPressed}
-        freezeFirstColumn={freezeFirstColumn(layout)}
-        cellContentStyle={contentStyle.cellStyle}
-        headerContentStyle={contentStyle.headerStyle}
+        contentStyle={contentStyle}
         name={name}
-        isDataView={layout?.isDataView}
         translations={translations}
+        layout={layout}
       />
     </View>
   ) : null;
