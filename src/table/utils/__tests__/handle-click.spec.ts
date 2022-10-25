@@ -176,6 +176,7 @@ describe('handle-click', () => {
       });
 
       it('should call selectionDispatch with type SELECT when cell.isSelectable is true and flag is false', () => {
+        evt.button = 0;
         areBasicFeaturesEnabled = false;
         const { handleMouseUp } = getHandlers();
         handleMouseUp(evt);
@@ -188,6 +189,7 @@ describe('handle-click', () => {
       });
 
       it('should not call selectionDispatch when cell.isSelectable is false and flag is false', () => {
+        evt.button = 0;
         areBasicFeaturesEnabled = false;
         cell.isSelectable = false;
         const { handleMouseUp } = getHandlers();
