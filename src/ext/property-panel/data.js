@@ -1,5 +1,52 @@
 import Modifiers from 'qlik-modifiers';
 
+const columnResize = {
+  type: {
+    type: 'string',
+    component: 'dropdown',
+    ref: 'qDef.columnSizeType',
+    translation: 'resize type',
+    options: [
+      {
+        value: 'fill',
+        translation: 'fill',
+      },
+      {
+        value: 'hug',
+        translation: 'hug',
+      },
+      {
+        value: 'pixels',
+        translation: 'pixels',
+      },
+      {
+        value: 'percentage',
+        translation: 'percentage',
+      },
+    ],
+    defaultValue: 'fill',
+  },
+  sizePixels: {
+    ref: 'qDef.columnSize',
+    translation: 'column size [px]',
+    type: 'number',
+    expression: 'optional',
+    min: 1,
+    defaulValue: 200,
+    show: (data) => data.qDef.columnSizeType === 'pixels',
+  },
+  sizePercentage: {
+    ref: 'qDef.columnSize',
+    translation: 'column size [%]',
+    type: 'number',
+    expression: 'optional',
+    min: 1,
+    max: 100,
+    defaultValue: 20,
+    show: (data) => data.qDef.columnSizeType === 'percentage',
+  },
+};
+
 const columnCommonHidden = {
   autoSort: {
     ref: 'qDef.autoSort',
@@ -213,6 +260,7 @@ const getData = (env) =>
               ...columnCommonHidden,
               ...columnExpressionItems,
               ...textAlignItems,
+              ...columnResize,
             },
           },
           measures: {
@@ -237,6 +285,7 @@ const getData = (env) =>
               ...columnExpressionItems,
               ...textAlignItems,
               totalsAggr: getTotalsAggr(env),
+              ...columnResize,
             },
           },
         },

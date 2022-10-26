@@ -64,6 +64,9 @@ export function getColumnInfo(layout: TableLayout, colIndex: number, columnOrder
       sortDirection: info.qSortIndicator ? DirectionMap[info.qSortIndicator] : DirectionMap.A,
       dataColIdx: colIndex,
       totalInfo: getTotalInfo(isDim, layout, colIndex, numDims, columnOrder),
+      columnSize: info.columnSize,
+      columnSizeType: info.columnSizeType,
+      qApprMaxGlyphCount: info.qApprMaxGlyphCount,
     }
   );
 }

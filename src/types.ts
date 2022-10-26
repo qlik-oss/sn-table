@@ -38,11 +38,15 @@ export interface ExtendedNxAttrExprInfo extends EngineAPI.INxAttrExprInfo {
 export interface ExtendedNxDimensionInfo extends Omit<EngineAPI.INxDimensionInfo, 'qAttrExprInfo'> {
   textAlign: TextAlign;
   qAttrExprInfo: ExtendedNxAttrExprInfo[];
+  columnSizeType: string;
+  columnSize: number;
 }
 
 export interface ExtendedNxMeasureInfo extends EngineAPI.INxMeasureInfo {
   textAlign: TextAlign;
   qAttrExprInfo: ExtendedNxAttrExprInfo[];
+  columnSizeType: string;
+  columnSize: number;
 }
 
 export interface HyperCube extends Omit<EngineAPI.IHyperCube, 'qDimensionInfo' | 'qMeasureInfo'> {
@@ -110,6 +114,9 @@ export interface Column {
   stylingIDs: string[];
   sortDirection: string;
   totalInfo?: string;
+  columnSize: number;
+  columnSizeType: string;
+  qApprMaxGlyphCount: number;
 }
 
 export type TotalsPosition = 'top' | 'bottom' | 'noTotals';

@@ -89,7 +89,9 @@ export default function supernova(env: Galaxy) {
             : manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo),
         [layout, pageInfo, model]
       );
+
       useContextMenu(areBasicFeaturesEnabled);
+
       useEffect(() => {
         const isReadyToRender = !env.carbon && reactRoot && layout && tableData && changeSortOrder && theme;
         isReadyToRender &&
@@ -111,6 +113,7 @@ export default function supernova(env: Galaxy) {
               footerContainer,
               announce,
               areBasicFeaturesEnabled,
+              model,
             },
             reactRoot
           );

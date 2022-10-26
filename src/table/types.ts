@@ -75,6 +75,8 @@ export interface ContextValue {
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   selectionState: SelectionState;
   selectionDispatch: SelectionDispatch;
+  columnWidths: number[];
+  setColumnWidths: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 export interface GeneratedStyling {
@@ -156,7 +158,8 @@ export interface HandleResetFocusProps {
 export interface ContextProviderProps {
   children: JSX.Element;
   selectionsAPI: ExtendedSelectionAPI;
-  pageRows?: Row[];
+  tableData: TableData;
+  tableWidth: number;
   cellCoordMock?: [number, number];
   selectionDispatchMock?: jest.Mock<any, any>;
 }
@@ -208,6 +211,7 @@ export interface TableWrapperProps extends CommonTableProps {
   footerContainer?: HTMLElement;
   announce: Announce;
   areBasicFeaturesEnabled: boolean;
+  model: EngineAPI.IGenericObject;
 }
 
 export interface TableHeadWrapperProps extends CommonTableProps {
@@ -218,6 +222,7 @@ export interface TableHeadWrapperProps extends CommonTableProps {
   constraints: stardust.Constraints;
   translator: ExtendedTranslator;
   areBasicFeaturesEnabled: boolean;
+  model: EngineAPI.IGenericObject;
 }
 
 export interface TableBodyWrapperProps extends CommonTableProps {

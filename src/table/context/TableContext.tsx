@@ -6,6 +6,7 @@ import { ExtendedSelectionAPI } from '../../types';
 import { ContextValue, ContextProviderProps } from '../types';
 import useDidUpdateEffect from '../hooks/use-did-update-effect';
 import { SelectionActions } from '../constants';
+import getColumnWidths from '../hooks/use-column-widths';
 
 // In order to not have typing issues when using properties on the context,
 // the initial value for the context is casted to ContextValue.
@@ -18,14 +19,18 @@ const ProviderWithSelector = createSelectorProvider(TableContext);
 export const TableContextProvider = ({
   children,
   selectionsAPI,
-  pageRows = [],
+  tableData,
+  tableWidth,
   cellCoordMock,
   selectionDispatchMock,
 }: ContextProviderProps) => {
+  const { rows, columns } = tableData;
   const [headRowHeight, setHeadRowHeight] = useState(0);
   const [focusedCellCoord, setFocusedCellCoord] = useState((cellCoordMock || [0, 0]) as [number, number]);
+  const [columnWidths, setColumnWidths] = useState(getColumnWidths(columns, tableWidth));
+  // const [tableWidths, setTableWidths] = useColumnWidths(tableWidth, columns);
   const [selectionState, selectionDispatch] = useReducer(reducer, {
-    pageRows,
+    pageRows: rows,
     rows: {},
     colIdx: -1,
     api: selectionsAPI as ExtendedSelectionAPI, // TODO: update nebula api with correct selection api type
@@ -33,8 +38,12 @@ export const TableContextProvider = ({
   });
 
   useDidUpdateEffect(() => {
-    selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows } });
-  }, [pageRows]);
+    selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows: rows } });
+  }, [rows]);
+
+  useDidUpdateEffect(() => {
+    setColumnWidths(getColumnWidths(columns, tableWidth));
+  }, [columns, tableWidth]);
 
   return (
     <ProviderWithSelector
@@ -45,6 +54,8 @@ export const TableContextProvider = ({
         setFocusedCellCoord,
         selectionState,
         selectionDispatch: selectionDispatchMock || selectionDispatch,
+        columnWidths,
+        setColumnWidths,
       }}
     >
       {children}

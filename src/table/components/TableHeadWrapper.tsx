@@ -2,6 +2,7 @@ import React, { memo, useEffect, useMemo, useRef } from 'react';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 
+import ColumnAdjuster from './ColumnAdjuster';
 import { useContextSelector, TableContext } from '../context';
 import { VisuallyHidden, StyledHeadRow, StyledSortLabel } from '../styles';
 import { getHeaderStyle } from '../utils/styling-utils';
@@ -21,11 +22,13 @@ function TableHeadWrapper({
   selectionsAPI,
   keyboard,
   areBasicFeaturesEnabled,
+  model,
 }: TableHeadWrapperProps) {
   const { columns, paginationNeeded } = tableData;
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
+  const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
   const headRowRef = useRef<HTMLElement>();
   const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
@@ -59,10 +62,11 @@ function TableHeadWrapper({
               areBasicFeaturesEnabled,
             });
           };
-
+          // console.log(columnWidths[columnIndex] || 200);
           return (
             <TableCell
               sx={headerStyle}
+              style={{ width: (columnWidths[columnIndex] || 200) - 28 }}
               key={column.id}
               align={column.align}
               className="sn-table-head-cell sn-table-cell"
@@ -71,7 +75,7 @@ function TableHeadWrapper({
               aria-pressed={isCurrentColumnActive}
               onKeyDown={handleKeyDown}
               onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
-              onClick={() => isInteractionEnabled && changeSortOrder(layout, column)}
+              onClick={() => false && changeSortOrder(layout, column)}
             >
               <StyledSortLabel
                 headerStyle={headerStyle}
@@ -90,6 +94,7 @@ function TableHeadWrapper({
                   </VisuallyHidden>
                 )}
               </StyledSortLabel>
+              <ColumnAdjuster column={column} model={model} layout={layout} />
             </TableCell>
           );
         })}
