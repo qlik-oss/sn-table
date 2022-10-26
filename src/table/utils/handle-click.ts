@@ -57,10 +57,12 @@ export const getSelectionMouseHandlers = (
   };
 
   const handleMouseUp = (evt: React.MouseEvent) => {
-    if (areBasicFeaturesEnabled && evt.button === 0) {
-      selectionDispatch({ type: SelectionActions.SELECT_MOUSE_UP, payload: { cell, evt, announce } });
-    } else if (!areBasicFeaturesEnabled && cell.isSelectable) {
-      selectionDispatch({ type: SelectionActions.SELECT, payload: { cell, evt, announce } });
+    if (evt.button === 0) {
+      if (areBasicFeaturesEnabled) {
+        selectionDispatch({ type: SelectionActions.SELECT_MOUSE_UP, payload: { cell, evt, announce } });
+      } else if (cell.isSelectable) {
+        selectionDispatch({ type: SelectionActions.SELECT, payload: { cell, evt, announce } });
+      }
     }
   };
 
