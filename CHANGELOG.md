@@ -1,3 +1,9 @@
+## [1.19.1](https://github.com/qlik-oss/sn-table/compare/v1.19.0...v1.19.1) (2022-10-27)
+
+### Bug Fixes
+
+- only make selections on left click ([#727](https://github.com/qlik-oss/sn-table/issues/727)) ([bbecea8](https://github.com/qlik-oss/sn-table/commit/bbecea811c52d8a5fd0f2d2acdcaa5f9166d2599))
+
 # [1.19.0](https://github.com/qlik-oss/sn-table/compare/v1.18.0...v1.19.0) (2022-10-20)
 
 ### Bug Fixes
