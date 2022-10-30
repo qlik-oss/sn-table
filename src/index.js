@@ -78,7 +78,7 @@ export default function supernova(env) {
       }, [layout, pageInfo]);
 
       useEffect(() => {
-        if (!env.carbon && reactRoot && layout && tableData && announce && changeSortOrder && theme) {
+        if (!env.carbon && reactRoot && layout && tableData && announce && changeSortOrder && theme && setPageInfo) {
           render(reactRoot, {
             rootElement,
             layout,
@@ -108,6 +108,7 @@ export default function supernova(env) {
         rect.width,
         announce,
         changeSortOrder,
+        setPageInfo,
       ]);
 
       // this is the one we want to use for carbon

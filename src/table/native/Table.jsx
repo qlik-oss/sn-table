@@ -20,6 +20,20 @@ const styles = StyleSheet.create({
   },
 });
 
+function transformRepresentation(e, theme) {
+  if (e.representation?.miniChart?.colors && theme) {
+    const { colors } = e.representation.miniChart;
+    for (const [key, value] of Object.entries(colors)) {
+      if ((colors[key]?.color !== 'none' && value.index > 0) || !colors[key].color) {
+        colors[key].index -= 1;
+        colors[key].color = theme.getColorPickerColor(colors[key]);
+      }
+    }
+    e.representation.miniChart.colors = colors;
+  }
+  return e.representation;
+}
+
 const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app, rect, theme, translator }) => {
   const selectionsCaches = useRef(new SelectionCaches(selectionsAPI));
   const [tableData, setTableData] = useState(undefined);
@@ -51,34 +65,24 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
 
   useEffect(() => {
     const handleData = async () => {
-      function transformRepresentation(e) {
-        if (e.representation?.miniChart?.colors && theme) {
-          const { colors } = e.representation.miniChart;
-          for (const [key, value] of Object.entries(colors)) {
-            if ((colors[key]?.color !== 'none' && value.index > 0) || !colors[key].color) {
-              colors[key].index -= 1;
-              colors[key].color = theme.getColorPickerColor(colors[key]);
-            }
-          }
-          e.representation.miniChart.colors = colors;
-        }
-        return e.representation;
+      try {
+        const data = await dataStreamCaches.current.invalidate(model, layout, {
+          page: 0,
+          rowsPerPage: 100,
+          rowsPerPageOptions: [],
+        });
+
+        const { qHyperCube } = layout;
+        const activeSortHeader = qHyperCube?.qEffectiveInterColumnSortOrder[0] || 0;
+        data.columns = data.columns.map((e, index) => ({
+          ...e,
+          active: index === activeSortHeader,
+          representation: transformRepresentation(e, theme),
+        }));
+        setTableData(data);
+      } catch (error) {
+        console.log('error', error);
       }
-
-      const data = await dataStreamCaches.current.invalidate(model, layout, {
-        page: 0,
-        rowsPerPage: 100,
-        rowsPerPageOptions: [],
-      });
-
-      const { qHyperCube } = layout;
-      const activeSortHeader = qHyperCube?.qEffectiveInterColumnSortOrder[0] || 0;
-      data.columns = data.columns.map((e, index) => ({
-        ...e,
-        active: index === activeSortHeader,
-        representation: transformRepresentation(e, theme),
-      }));
-      setTableData(data);
     };
     handleData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -105,14 +109,23 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
     selectionsAPI.on('cleared', () => {
       setClearSelections('yes');
     });
+    selectionsAPI.on('confirmed', () => {
+      setClearSelections('yes');
+    });
   }, [selectionsAPI]);
 
   const onEndReached = useCallback(async () => {
     const data = await dataStreamCaches.current.next();
     if (data) {
+      const { qHyperCube } = layout;
+      const activeSortHeader = qHyperCube?.qEffectiveInterColumnSortOrder[0] || 0;
+      data.columns = data.columns.map((e, index) => ({
+        ...e,
+        active: index === activeSortHeader,
+      }));
       setTableData(data);
     }
-  }, []);
+  }, [layout]);
 
   const onSelectionsChanged = useCallback((event) => {
     selectionsCaches.current.toggleSelected(event.nativeEvent.selections);
