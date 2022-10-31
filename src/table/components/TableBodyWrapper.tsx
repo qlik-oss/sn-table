@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, memo } from 'react';
+
 import getCellRenderer from '../utils/get-cell-renderer';
 import { useContextSelector, TableContext } from '../context';
 import { StyledTableBody, StyledBodyRow } from '../styles';
@@ -9,6 +10,7 @@ import { handleClickToFocusBody } from '../utils/handle-click';
 import { Cell } from '../../types';
 import { TableBodyWrapperProps } from '../types';
 import TableTotals from './TableTotals';
+import CellText from './CellText';
 
 function TableBodyWrapper({
   rootElement,
@@ -59,6 +61,7 @@ function TableBodyWrapper({
       layout={layout}
       keyboard={keyboard}
       selectionsAPI={selectionsAPI}
+      areBasicFeaturesEnabled={areBasicFeaturesEnabled}
     />
   );
 
@@ -75,6 +78,8 @@ function TableBodyWrapper({
         >
           {columns.map((column, columnIndex) => {
             const { id, align } = column;
+            // Note that rows are not necessarily ordered in qColumnOrder.
+            // So for each row, the cells are mapped according to column.id
             const cell = row[id] as Cell;
             const CellRenderer = columnRenderers[columnIndex];
             const handleKeyDown = (evt: React.KeyboardEvent) => {
@@ -115,7 +120,7 @@ function TableBodyWrapper({
                     handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition)
                   }
                 >
-                  {cell.qText}
+                  <CellText>{cell.qText}</CellText>
                 </CellRenderer>
               )
             );

@@ -1,18 +1,24 @@
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 
-import { focusSelectionToolbar, announceSelectionState, moveFocus, copyCellValue } from './accessibility-utils';
+import { focusSelectionToolbar, announceSelectionState, moveFocus } from './accessibility-utils';
+import copyCellValue from './copy-utils';
 import { handleNavigateTop } from './handle-scroll';
 import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownProps, SelectionDispatch } from '../types';
 import { Cell } from '../../types';
 import { KeyCodes, SelectionActions } from '../constants';
 
-const isCtrlShift = (evt: React.KeyboardEvent) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
-
-export const preventDefaultBehavior = (evt: React.KeyboardEvent) => {
+const preventDefaultBehavior = (evt: React.KeyboardEvent) => {
   evt.stopPropagation();
   evt.preventDefault();
 };
+
+const isCtrlShift = (evt: React.KeyboardEvent) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
+
+const isArrowKey = (key: string) =>
+  [KeyCodes.LEFT, KeyCodes.RIGHT, KeyCodes.UP, KeyCodes.DOWN].includes(key as KeyCodes);
+
+export const isShiftArrow = (evt: React.KeyboardEvent) => evt.shiftKey && isArrowKey(evt.key);
 
 /**
  * Checks if events caught by head, totals and body handles should bubble to the wrapper handler or default behavior
@@ -47,7 +53,7 @@ const shouldSelectMultiValues = (
   cell: Cell
 ) =>
   evt.shiftKey &&
-  ((evt.key === KeyCodes.UP && cell.rawRowIdx !== 0) || (evt.key === KeyCodes.DOWN && !cell.isLastRow)) &&
+  ((evt.key === KeyCodes.UP && cell.pageRowIdx !== 0) || (evt.key === KeyCodes.DOWN && !cell.isLastRow)) &&
   areBasicFeaturesEnabled &&
   isSelectionsEnabled &&
   cell.isSelectable;
@@ -94,6 +100,9 @@ export const handleWrapperKeyDown = ({
     preventDefaultBehavior(evt);
     // @ts-ignore TODO: fix nebula api so that blur has the correct argument type
     keyboard.blur?.(true);
+  } else if (isArrowKey(evt.key)) {
+    // Arrow key events should never bubble out of the table
+    preventDefaultBehavior(evt);
   }
 };
 
@@ -109,6 +118,7 @@ export const handleHeadKeyDown = ({
   layout,
   isInteractionEnabled,
   setFocusedCellCoord,
+  areBasicFeaturesEnabled,
 }: HandleHeadKeyDownProps) => {
   if (!isInteractionEnabled) {
     preventDefaultBehavior(evt);
@@ -128,6 +138,10 @@ export const handleHeadKeyDown = ({
       // Space bar / Enter: update the sorting
       changeSortOrder(layout, column);
       break;
+    case KeyCodes.C: {
+      areBasicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(evt);
+      break;
+    }
     default:
       break;
   }
@@ -141,7 +155,8 @@ export const handleTotalKeyDown = (
   rootElement: HTMLElement,
   cellCoord: [number, number],
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  isSelectionMode: boolean
+  isSelectionMode: boolean,
+  areBasicFeaturesEnabled: boolean
 ) => {
   if (isSelectionMode) {
     preventDefaultBehavior(evt);
@@ -156,6 +171,10 @@ export const handleTotalKeyDown = (
     case KeyCodes.UP:
     case KeyCodes.DOWN: {
       moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
+      break;
+    }
+    case KeyCodes.C: {
+      areBasicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(evt);
       break;
     }
     default:
@@ -190,7 +209,7 @@ export const handleBodyKeyDown = ({
 
   // Adjust the cellCoord depending on the totals position
   const firstBodyRowIdx = totalsPosition === 'top' ? 2 : 1;
-  const cellCoord: [number, number] = [cell.rawRowIdx + firstBodyRowIdx, cell.rawColIdx];
+  const cellCoord: [number, number] = [cell.pageRowIdx + firstBodyRowIdx, cell.pageColIdx];
   // Make sure you can't navigate to header (and totals) in selection mode
   const allowedRows = {
     top: isSelectionMode ? firstBodyRowIdx : 0,
@@ -200,7 +219,7 @@ export const handleBodyKeyDown = ({
   switch (evt.key) {
     case KeyCodes.UP:
     case KeyCodes.DOWN: {
-      evt.key === KeyCodes.UP && handleNavigateTop([cell.rawRowIdx, cell.rawColIdx], rootElement);
+      evt.key === KeyCodes.UP && handleNavigateTop([cell.pageRowIdx, cell.pageColIdx], rootElement);
       const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, allowedRows);
       // Shift + up/down arrow keys: select multiple values
       if (shouldSelectMultiValues(areBasicFeaturesEnabled, isSelectionsEnabled, evt, cell)) {
@@ -241,9 +260,7 @@ export const handleBodyKeyDown = ({
       focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
       break;
     case KeyCodes.C:
-      areBasicFeaturesEnabled &&
-        (evt.ctrlKey || evt.metaKey) &&
-        copyCellValue((evt.target as HTMLElement).textContent as string);
+      areBasicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(evt);
       break;
     default:
       break;

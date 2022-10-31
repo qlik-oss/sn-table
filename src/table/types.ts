@@ -22,46 +22,51 @@ interface Action<T = any> {
   type: T;
 }
 
-export interface ActionPayload {
+export interface SelectPayload {
   cell: Cell;
   announce: Announce;
   evt: React.KeyboardEvent | React.MouseEvent;
 }
 
 export interface SelectAction extends Action<SelectionActions.SELECT> {
-  payload: ActionPayload;
+  payload: SelectPayload;
 }
-export interface SelectMultiStartAction extends Action<SelectionActions.SELECT_MULTI_START> {
-  payload: { cell: Cell };
+export interface SelectMouseDownAction extends Action<SelectionActions.SELECT_MOUSE_DOWN> {
+  payload: { cell: Cell; mouseupOutsideCallback(): void };
+}
+export interface SelectMouseUpAction extends Action<SelectionActions.SELECT_MOUSE_UP> {
+  payload: SelectPayload;
 }
 export interface SelectMultiAddAction extends Action<SelectionActions.SELECT_MULTI_ADD> {
-  payload: ActionPayload;
+  payload: SelectPayload;
 }
 export interface SelectMultiEndAction extends Action<SelectionActions.SELECT_MULTI_END> {}
 export interface ResetAction extends Action<SelectionActions.RESET> {}
 export interface ClearAction extends Action<SelectionActions.CLEAR> {}
-export interface UpdateAllRowsAction extends Action<SelectionActions.UPDATE_ALL_ROWS> {
-  payload: { allRows: Row[] };
+export interface UpdatePageRowsAction extends Action<SelectionActions.UPDATE_PAGE_ROWS> {
+  payload: { pageRows: Row[] };
 }
 
 export type SelectionActionTypes =
   | SelectAction
-  | SelectMultiStartAction
+  | SelectMouseDownAction
+  | SelectMouseUpAction
   | SelectMultiAddAction
   | SelectMultiEndAction
   | ResetAction
   | ClearAction
-  | UpdateAllRowsAction;
+  | UpdatePageRowsAction;
 
 export type SelectionDispatch = React.Dispatch<SelectionActionTypes>;
 
 export interface SelectionState {
-  allRows: Row[];
+  pageRows: Row[];
   rows: Record<string, number>;
   colIdx: number;
   api: ExtendedSelectionAPI;
   isSelectMultiValues: boolean;
   firstCell?: Cell;
+  mouseupOutsideCallback?(): void;
 }
 
 export interface ContextValue {
@@ -115,6 +120,7 @@ export interface HandleHeadKeyDownProps {
   layout: TableLayout;
   isInteractionEnabled: boolean;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  areBasicFeaturesEnabled: boolean;
 }
 
 export interface HandleBodyKeyDownProps {
@@ -151,7 +157,7 @@ export interface HandleResetFocusProps {
 export interface ContextProviderProps {
   children: JSX.Element;
   selectionsAPI: ExtendedSelectionAPI;
-  tableRows?: Row[];
+  pageRows?: Row[];
   cellCoordMock?: [number, number];
   selectionDispatchMock?: jest.Mock<any, any>;
 }
@@ -212,6 +218,7 @@ export interface TableHeadWrapperProps extends CommonTableProps {
   changeSortOrder: ChangeSortOrder;
   constraints: stardust.Constraints;
   translator: ExtendedTranslator;
+  areBasicFeaturesEnabled: boolean;
 }
 
 export interface TableBodyWrapperProps extends CommonTableProps {
@@ -229,6 +236,7 @@ export interface TableTotalsProps extends CommonTableProps {
   rootElement: HTMLElement;
   layout: TableLayout;
   selectionsAPI: ExtendedSelectionAPI;
+  areBasicFeaturesEnabled: boolean;
 }
 
 export interface PaginationContentProps extends CommonTableProps {

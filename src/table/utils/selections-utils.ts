@@ -1,7 +1,8 @@
 import { stardust } from '@nebula.js/stardust';
 import { Cell, ExtendedSelectionAPI, Announce, Row } from '../../types';
-import { SelectionState, ActionPayload, SelectionActionTypes, SelectionDispatch } from '../types';
+import { SelectionState, SelectPayload, SelectionActionTypes, SelectionDispatch } from '../types';
 import { SelectionActions, SelectionStates, KeyCodes } from '../constants';
+import { isShiftArrow } from './handle-key-press';
 
 interface AddSelectionListenersArgs {
   api: ExtendedSelectionAPI;
@@ -98,8 +99,6 @@ export const announceSelectionStatus = (
   }
 };
 
-const isShiftArrow = (evt: React.KeyboardEvent) => evt.shiftKey && evt.key.includes('Arrow');
-
 /**
  * Get the updated selected rows for when (de)selecting one row
  */
@@ -131,7 +130,7 @@ export const getSelectedRows = (
 /**
  * Updates the selection state and calls the backend when (de)selecting one row
  */
-const selectCell = (state: SelectionState, payload: ActionPayload): SelectionState => {
+const selectCell = (state: SelectionState, payload: SelectPayload): SelectionState => {
   const { api, rows, colIdx } = state;
   const { cell, announce, evt } = payload;
   let selectedRows: Record<string, number> = {};
@@ -160,7 +159,7 @@ const selectCell = (state: SelectionState, payload: ActionPayload): SelectionSta
  * Get the updated selected rows for when selecting multiple rows
  */
 export const getMultiSelectedRows = (
-  allRows: Row[],
+  pageRows: Row[],
   selectedRows: Record<string, number>,
   cell: Cell,
   evt: React.KeyboardEvent | React.MouseEvent,
@@ -172,17 +171,17 @@ export const getMultiSelectedRows = (
     newSelectedRows[cell.qElemNumber] = cell.rowIdx;
     // also add the next or previous cell to selectedRows, based on which arrow is pressed
     const idxShift = evt.key === KeyCodes.DOWN ? 1 : -1;
-    const nextCell = allRows[cell.rawRowIdx + idxShift][`col-${cell.rawColIdx}`] as Cell;
+    const nextCell = pageRows[cell.pageRowIdx + idxShift][`col-${cell.colIdx}`] as Cell;
     newSelectedRows[nextCell.qElemNumber] = cell.rowIdx + idxShift;
     return newSelectedRows;
   }
 
   if (!firstCell) return selectedRows;
-  const lowestCellIdx = Math.min(firstCell.rawRowIdx, cell.rawRowIdx);
-  const highestCellIdx = Math.max(firstCell.rawRowIdx, cell.rawRowIdx);
+  const lowestRowIdx = Math.min(firstCell.pageRowIdx, cell.pageRowIdx);
+  const highestRowIdx = Math.max(firstCell.pageRowIdx, cell.pageRowIdx);
 
-  for (let idx = lowestCellIdx; idx <= highestCellIdx; idx++) {
-    const selectedCell = allRows[idx][`col-${firstCell.rawColIdx}`] as Cell;
+  for (let idx = lowestRowIdx; idx <= highestRowIdx; idx++) {
+    const selectedCell = pageRows[idx][`col-${firstCell.colIdx}`] as Cell;
     newSelectedRows[selectedCell.qElemNumber] = selectedCell.rowIdx;
   }
 
@@ -192,31 +191,35 @@ export const getMultiSelectedRows = (
 /**
  * Updates the selection state but bot the backend when selecting multiple rows
  */
-const selectMultipleCells = (state: SelectionState, payload: ActionPayload): SelectionState => {
-  const { api, rows, colIdx, allRows, firstCell, isSelectMultiValues } = state;
+const selectMultipleCells = (state: SelectionState, payload: SelectPayload): SelectionState => {
+  const { api, rows, colIdx, pageRows, firstCell } = state;
   const { cell, announce, evt } = payload;
   let selectedRows: Record<string, number> = {};
 
-  if (!isSelectMultiValues && !('key' in evt && isShiftArrow(evt))) return state;
+  if (!firstCell && !('key' in evt && isShiftArrow(evt))) return state;
 
   if (colIdx === -1) api.begin(['/qHyperCubeDef']);
   else selectedRows = { ...rows };
 
-  selectedRows = getMultiSelectedRows(allRows, selectedRows, cell, evt, firstCell);
+  selectedRows = getMultiSelectedRows(pageRows, selectedRows, cell, evt, firstCell);
   announceSelectionStatus(announce, rows, selectedRows);
 
   return { ...state, rows: selectedRows, colIdx: firstCell?.colIdx ?? cell.colIdx, isSelectMultiValues: true };
 };
 
 /**
- * Initiates selecting multiple rows on mousedown
+ * Initiates selecting multiple rows on mouse down
  */
-const startSelectMulti = (state: SelectionState, cell: Cell): SelectionState => {
-  if (state.colIdx === -1 || state.colIdx === cell.colIdx) {
+const selectOnMouseDown = (
+  state: SelectionState,
+  { cell, mouseupOutsideCallback }: { cell: Cell; mouseupOutsideCallback(): void }
+): SelectionState => {
+  if (mouseupOutsideCallback && (state.colIdx === -1 || state.colIdx === cell.colIdx)) {
+    document.addEventListener('mouseup', mouseupOutsideCallback);
     return {
       ...state,
-      isSelectMultiValues: true,
       firstCell: cell,
+      mouseupOutsideCallback,
     };
   }
 
@@ -227,23 +230,33 @@ const startSelectMulti = (state: SelectionState, cell: Cell): SelectionState => 
  * Ends selecting multiple rows by calling backend, for both keyup (shift) and mouseup
  */
 const endSelectMulti = (state: SelectionState): SelectionState => {
-  const { api, rows, colIdx, isSelectMultiValues } = state;
+  const { api, rows, colIdx, isSelectMultiValues, mouseupOutsideCallback } = state;
+  mouseupOutsideCallback && document.removeEventListener('mouseup', mouseupOutsideCallback);
 
-  isSelectMultiValues &&
+  if (isSelectMultiValues) {
     api.select({
       method: 'selectHyperCubeCells',
       params: ['/qHyperCubeDef', Object.values(rows), [colIdx]],
     });
+  }
 
-  return { ...state, isSelectMultiValues: false, firstCell: undefined };
+  return { ...state, isSelectMultiValues: false, firstCell: undefined, mouseupOutsideCallback: undefined };
 };
+
+/**
+ * Calls endSelectMulti with the state as it is if multiple are selected, otherwise runs selectCell and treats it as a click on single cell
+ */
+const selectOnMouseUp = (state: SelectionState, payload: SelectPayload) =>
+  endSelectMulti(!state.isSelectMultiValues && state.firstCell === payload.cell ? selectCell(state, payload) : state);
 
 export const reducer = (state: SelectionState, action: SelectionActionTypes): SelectionState => {
   switch (action.type) {
     case SelectionActions.SELECT:
       return selectCell(state, action.payload);
-    case SelectionActions.SELECT_MULTI_START:
-      return startSelectMulti(state, action.payload.cell);
+    case SelectionActions.SELECT_MOUSE_DOWN:
+      return selectOnMouseDown(state, action.payload);
+    case SelectionActions.SELECT_MOUSE_UP:
+      return selectOnMouseUp(state, action.payload);
     case SelectionActions.SELECT_MULTI_ADD:
       return selectMultipleCells(state, action.payload);
     case SelectionActions.SELECT_MULTI_END:
@@ -252,8 +265,8 @@ export const reducer = (state: SelectionState, action: SelectionActionTypes): Se
       return state.api.isModal() ? state : { ...state, rows: {}, colIdx: -1 };
     case SelectionActions.CLEAR:
       return Object.keys(state.rows).length ? { ...state, rows: {} } : state;
-    case SelectionActions.UPDATE_ALL_ROWS:
-      return { ...state, allRows: action.payload.allRows };
+    case SelectionActions.UPDATE_PAGE_ROWS:
+      return { ...state, pageRows: action.payload.pageRows };
     default:
       throw new Error('reducer called with invalid action type');
   }

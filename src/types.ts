@@ -88,9 +88,9 @@ export interface Cell {
   qElemNumber: number;
   rowIdx: number;
   colIdx: number;
+  pageRowIdx: number;
+  pageColIdx: number;
   isSelectable: boolean;
-  rawRowIdx: number;
-  rawColIdx: number;
   isLastRow: boolean;
 }
 
@@ -199,14 +199,4 @@ export interface RenderWithCarbonArguments {
   rect: stardust.Rect;
   layout: TableLayout;
   changeSortOrder?: ChangeSortOrder;
-}
-
-interface AddItemProps {
-  translation: string;
-  icon: string;
-  tid: string;
-  select(): Promise<void>;
-}
-export interface Menu {
-  addItem(props: AddItemProps): void;
 }

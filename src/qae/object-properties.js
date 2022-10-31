@@ -35,6 +35,11 @@ const properties = {
    */
   showTitles: true,
   /**
+   * Show chart exploration option in context menu
+   * @type {boolean=}
+   */
+  enableChartExploration: false,
+  /**
    * Visualization title
    * @type {(string|StringExpression)=}
    */

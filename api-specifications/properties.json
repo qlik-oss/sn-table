@@ -3,7 +3,7 @@
   "info": {
     "name": "@nebula.js/sn-table:properties",
     "description": "Table generic object definition",
-    "version": "1.17.0",
+    "version": "1.19.1",
     "license": "MIT",
     "stability": "experimental",
     "x-qlik-visibility": "public"
@@ -24,6 +24,12 @@
           "items": {
             "type": "#/definitions/Component"
           }
+        },
+        "enableChartExploration": {
+          "description": "Show chart exploration option in context menu",
+          "optional": true,
+          "defaultValue": false,
+          "type": "boolean"
         },
         "footnote": {
           "description": "Visualization footnote",
