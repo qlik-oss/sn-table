@@ -1,4 +1,5 @@
 import { getIndicator } from './conditional-colors';
+import { isDarkColor, resolveToRGBAorRGB } from './table/utils/color-utils';
 
 const directionMap = {
   A: 'asc',
@@ -104,6 +105,32 @@ export function getTotalPosition(layout) {
   return 'noTotals';
 }
 
+const getExpressionColor = (col, row, key) => {
+  if (col.stylingInfo?.length > 0 && row.qAttrExps?.qValues?.length > 0) {
+    const bgIndex = col.stylingInfo.indexOf(key);
+    if (bgIndex !== -1 && bgIndex < row.qAttrExps.qValues.length) {
+      const rgbString = resolveToRGBAorRGB(row.qAttrExps.qValues[bgIndex].qText);
+      if (rgbString !== 'none') {
+        return `#${rgbString
+          .slice(4, -1)
+          .split(',')
+          .map((x) => (+x).toString(16).padStart(2, 0))
+          .join('')}`;
+      }
+    }
+  }
+  return undefined;
+};
+
+const getCellBackgroundColor = (col, row) => {
+  const cellBackgroundColor = getExpressionColor(col, row, 'cellBackgroundColor');
+  let cellForegroundColor = getExpressionColor(col, row, 'cellForegroundColor');
+  if (cellBackgroundColor && isDarkColor(cellBackgroundColor) && !cellForegroundColor) {
+    cellForegroundColor = '#FFFFFF';
+  }
+  return { cellBackgroundColor, cellForegroundColor };
+};
+
 export default async function manageData(model, layout, pageInfo, setPageInfo) {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const { qHyperCube } = layout;
@@ -147,6 +174,7 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
         prevQElemNumber: dataPages[0].qMatrix[rowIdx - 1]?.[colIdx]?.qElemNumber,
         nextQElemNumber: dataPages[0].qMatrix[rowIdx + 1]?.[colIdx]?.qElemNumber,
         indicator: getIndicator(c, r[colIdx]),
+        ...getCellBackgroundColor(c, r[colIdx]),
       };
     });
     return row;
