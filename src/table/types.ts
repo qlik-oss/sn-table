@@ -269,6 +269,7 @@ export interface VirtualizedTableRenderProps {
 
 export interface VirtualizedTableProps extends VirtualizedTableRenderProps {
   forwardRef: React.RefObject<VariableSizeGrid<any>>;
+  innerForwardRef: React.RefObject<HTMLDivElement>;
   columns: Column[];
   columnWidth: number[];
   theme: ExtendedTheme;

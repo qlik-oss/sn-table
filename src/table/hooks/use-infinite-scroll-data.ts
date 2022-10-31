@@ -1,22 +1,29 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { debouncer } from 'qlik-chart-modules';
 import { Row, TableLayout } from '../../types';
 
 interface UseInfiniteScrollData {
-  data: Row[];
+  rows: Row[];
   loadData: (left: number, top: number, width: number, height: number) => void;
   debouncedLoadData: (left: number, top: number, width: number, height: number) => void;
 }
 
-const createNewRow = (matrixRow: EngineAPI.INxCellRows, prevRows: Row[], matrixRowIdx: number, top: number) => {
+const createNewRow = (
+  matrixRow: EngineAPI.INxCellRows,
+  prevRows: Row[],
+  matrixRowIdx: number,
+  top: number,
+  left: number
+) => {
   const rowIdx = matrixRowIdx + top;
   const row: Row = prevRows[rowIdx] || { key: `row-${rowIdx}` };
 
   matrixRow.forEach((cell, matrixColIdx: number) => {
-    row[`col-${matrixColIdx + 0}`] = {
+    const colIdx = matrixColIdx + left;
+    row[`col-${colIdx}`] = {
       ...cell,
       rowIdx,
-      colIdx: matrixColIdx + 0,
+      colIdx,
       isSelectable: false, // TODO
       rawRowIdx: matrixRowIdx,
       rawColIdx: matrixColIdx,
@@ -34,59 +41,31 @@ const useInfiniteScrollData = (
   model: EngineAPI.IGenericObject | undefined,
   layout: TableLayout
 ): UseInfiniteScrollData => {
-  const [data, setData] = useState<Row[]>([]);
-  const [area, setArea] = useState<EngineAPI.IRect>({ qLeft: 0, qTop: 0, qWidth: 0, qHeight: 0 } as EngineAPI.IRect);
+  const [rows, setRows] = useState<Row[]>([]);
 
-  const loadRow = useCallback(
-    async (start: number, rowCount: number) => {
-      if (!model || !layout) return;
-
-      const [dataPage] = await model.getHyperCubeData('/qHyperCubeDef', [
-        {
-          qTop: start,
-          qLeft: 0,
-          qHeight: rowCount,
-          qWidth: area.qWidth,
-        },
-      ]);
-
-      setData((prevRows) => {
-        const newRows = [...prevRows];
-        dataPage.qMatrix.forEach((matrixRow, matrixRowIdx: number) => {
-          const { row } = createNewRow(matrixRow, newRows, matrixRowIdx, dataPage.qArea.qTop);
-
-          newRows[dataPage.qArea.qTop + matrixRowIdx] = row;
-        });
-
-        return newRows;
-      });
-
-      setArea(dataPage.qArea);
-    },
-    [model, layout, area]
-  );
+  useEffect(() => setRows([]), [layout]);
 
   const loadData = useCallback(
     async (left: number, top: number, width: number, height: number) => {
-      if (!model || !layout) return;
+      if (!model) return;
+
+      console.log('LOADING DATA', left, top);
 
       const [dataPage] = await model.getHyperCubeData('/qHyperCubeDef', [
         { qTop: top, qLeft: left, qHeight: height, qWidth: width },
       ]);
 
-      setData((prevRows) => {
+      setRows((prevRows) => {
         dataPage.qMatrix.forEach((matrixRow, matrixRowIdx: number) => {
-          const { row, rowIdx } = createNewRow(matrixRow, prevRows, matrixRowIdx, top);
+          const { row, rowIdx } = createNewRow(matrixRow, prevRows, matrixRowIdx, top, left);
 
           prevRows[rowIdx] = row;
         });
 
         return [...prevRows];
       });
-
-      setArea(dataPage.qArea);
     },
-    [model, layout]
+    [model]
   );
 
   const memoizedLoadData = useMemo(() => debouncer(loadData, 50), [loadData]);
@@ -94,8 +73,7 @@ const useInfiniteScrollData = (
   const debouncedLoadData = useCallback(memoizedLoadData, [memoizedLoadData]);
 
   return {
-    data,
-    loadRow,
+    rows,
     loadData,
     debouncedLoadData,
   };

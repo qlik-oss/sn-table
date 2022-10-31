@@ -1,5 +1,6 @@
-import React, { useLayoutEffect, useMemo, useRef } from 'react';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { VariableSizeGrid } from 'react-window';
+import { DEFAULT_ROW_HEIGHT } from './constants';
 import { getColumns } from '../../../handle-data';
 import useColumnSize from '../../hooks/use-column-size';
 import { VirtualizedTableProps } from '../../types';
@@ -12,9 +13,12 @@ export default function Wrapper(props: VirtualizedTableProps) {
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeGrid>(null);
   const bodyRef = useRef<VariableSizeGrid>(null);
+  const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
   const { columns } = useMemo(() => getColumns(layout), [layout]);
   const { width } = useColumnSize(rect, columns);
-  const fullWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
+  const totalWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
+  const [totalHeight, setTotalHeight] = useState(layout.qHyperCube.qSize.qcy * DEFAULT_ROW_HEIGHT);
+  console.log('RENDERING WRAPPER');
 
   const onScrollHandler = (event: React.SyntheticEvent) => {
     if (headerRef.current) {
@@ -30,10 +34,17 @@ export default function Wrapper(props: VirtualizedTableProps) {
         scrollTop: event.currentTarget.scrollTop,
       });
     }
+
+    if (innerForwardRef.current) {
+      // Keep full size container in sync with the height calculation in react-window is doing
+      setTotalHeight(innerForwardRef.current.clientHeight);
+    }
+
+    event.preventDefault();
   };
 
   useLayoutEffect(() => {
-    if (layout && ref.current) {
+    if (ref.current) {
       ref.current.scrollLeft = 0;
       ref.current.scrollTop = 0;
     }
@@ -41,6 +52,7 @@ export default function Wrapper(props: VirtualizedTableProps) {
 
   return (
     <div
+      data-key="wrapper"
       ref={ref}
       style={{
         overflow: 'auto',
@@ -50,9 +62,9 @@ export default function Wrapper(props: VirtualizedTableProps) {
       }}
       onScroll={onScrollHandler}
     >
-      <FullSizeContainer width={fullWidth} height={layout.qHyperCube.qSize.qcy * 32}>
+      <FullSizeContainer width={totalWidth} height={totalHeight}>
         <Header {...props} columns={columns} columnWidth={width} forwardRef={headerRef} />
-        <Body {...props} columns={columns} columnWidth={width} forwardRef={bodyRef} />
+        <Body {...props} columns={columns} columnWidth={width} forwardRef={bodyRef} innerForwardRef={innerForwardRef} />
       </FullSizeContainer>
     </div>
   );

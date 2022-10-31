@@ -1,5 +1,6 @@
-import React, { useCallback, useLayoutEffect } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, memo, useMemo } from 'react';
 import { VariableSizeGrid } from 'react-window';
+import { DEFAULT_ROW_HEIGHT, HEADER_HEIGHT } from './constants';
 import useInfiniteScrollData from '../../hooks/use-infinite-scroll-data';
 import { VirtualizedTableProps } from '../../types';
 import Cell from './Cell';
@@ -15,14 +16,40 @@ interface OnItemsRendered {
   visibleRowStopIndex: number;
 }
 
-const VirtualScrollBody = (props: VirtualizedTableProps) => {
-  const { rect, layout, model, forwardRef, columns, columnWidth } = props;
-  const { data: rows, loadData, debouncedLoadData } = useInfiniteScrollData(model, layout);
+const Body = (props: VirtualizedTableProps) => {
+  const { rect, layout, model, forwardRef, columns, columnWidth, innerForwardRef } = props;
+  const { rows, loadData, debouncedLoadData } = useInfiniteScrollData(model, layout);
+  const visibleRowCount = Math.min(layout.qHyperCube.qSize.qcy, Math.ceil(rect.height / DEFAULT_ROW_HEIGHT));
+  const visibleColumnCount = useMemo(
+    () =>
+      columnWidth.reduce(
+        (data, colWidth) => {
+          if (data.width < rect.width) {
+            data.width += colWidth;
+            data.count += 1;
+          }
+
+          return data;
+        },
+        { count: 0, width: 0 }
+      ),
+    [rect, columnWidth]
+  ).count;
+
+  console.log('RENDERING BODY', rows);
+
+  useEffect(() => {
+    // Initial data load
+    setTimeout(() => {
+      loadData(0, 0, visibleColumnCount, visibleRowCount);
+    }, 5000);
+  }, [layout, visibleRowCount, visibleColumnCount, loadData]);
 
   useLayoutEffect(() => {
-    if (!layout) return;
-    forwardRef?.current?.resetAfterColumnIndex(0, true);
-    forwardRef?.current?.scrollTo({ scrollLeft: 0, scrollTop: 0 });
+    if (!forwardRef.current) return;
+
+    forwardRef.current.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: true });
+    forwardRef.current.scrollTo({ scrollLeft: 0, scrollTop: 0 });
   }, [layout, forwardRef]);
 
   const handleItemsRendered = useCallback(
@@ -32,27 +59,28 @@ const VirtualScrollBody = (props: VirtualizedTableProps) => {
       overscanRowStartIndex,
       overscanRowStopIndex,
     }: OnItemsRendered) => {
-      const width = overscanColumnStopIndex - overscanColumnStartIndex;
-      const height = overscanRowStopIndex - overscanRowStartIndex;
+      if (overscanColumnStartIndex > 0 || overscanRowStartIndex > 0) {
+        const width = overscanColumnStopIndex - overscanColumnStartIndex + 1;
+        const height = overscanRowStopIndex - overscanRowStartIndex + 1;
 
-      if (overscanColumnStartIndex === 0 && overscanRowStartIndex === 0) {
-        loadData(0, 0, width + 1, height + 1); // TODO Act as a way to load data on first render or layout changes. But will also be trigged when user scrolls to top
-      } else {
-        debouncedLoadData(overscanColumnStartIndex, overscanRowStartIndex, width + 1, height + 1);
+        debouncedLoadData(overscanColumnStartIndex, overscanRowStartIndex, width, height);
       }
     },
-    [loadData, debouncedLoadData]
+    [debouncedLoadData]
   );
 
   return (
     <VariableSizeGrid
+      data-key="body"
       ref={forwardRef}
-      style={{ position: 'sticky', top: '33px', left: '0px', overflow: 'hidden' }}
+      innerRef={innerForwardRef}
+      style={{ position: 'sticky', top: `${HEADER_HEIGHT}px`, left: '0px', overflow: 'hidden' }}
       columnCount={layout.qHyperCube.qSize.qcx}
       columnWidth={(index) => columnWidth[index]}
-      height={rect.height - 33} // - the height of the headers
+      height={rect.height - HEADER_HEIGHT}
       rowCount={layout.qHyperCube.qSize.qcy}
-      rowHeight={() => 32}
+      rowHeight={() => DEFAULT_ROW_HEIGHT}
+      estimatedRowHeight={DEFAULT_ROW_HEIGHT}
       width={rect.width}
       itemData={{ rows, columns }}
       onItemsRendered={handleItemsRendered}
@@ -62,4 +90,4 @@ const VirtualScrollBody = (props: VirtualizedTableProps) => {
   );
 };
 
-export default VirtualScrollBody;
+export default memo(Body);

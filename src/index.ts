@@ -20,7 +20,7 @@ import properties from './qae/object-properties';
 import data from './qae/data';
 import ext from './ext';
 import manageData from './handle-data';
-import { render, renderVirtualizedlTable, teardown, renderOldLikeTable } from './table/Root';
+import { render, renderVirtualizedlTable, teardown } from './table/Root';
 import useReactRoot from './nebula-hooks/use-react-root';
 import useAnnounceAndTranslations from './nebula-hooks/use-announce-and-translations';
 import useSorting from './nebula-hooks/use-sorting';
@@ -97,22 +97,6 @@ export default function supernova(env: Galaxy) {
         console.log(layout.title, layout);
 
         renderVirtualizedlTable(
-          {
-            layout,
-            model,
-            rect,
-            theme,
-          },
-          reactRoot
-        );
-      }, [layout, model, rect, theme]);
-
-      useEffect(() => {
-        if (layout.type !== 2) return;
-
-        console.log(layout.title, layout);
-
-        renderOldLikeTable(
           {
             layout,
             model,

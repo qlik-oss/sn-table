@@ -1,4 +1,5 @@
 import React from 'react';
+import { areEqual } from 'react-window';
 import { Column, Row } from '../../../types';
 
 interface CellProps {
@@ -47,4 +48,4 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
   return <div style={{ ...style, borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc' }} />;
 };
 
-export default Cell;
+export default React.memo(Cell, areEqual);

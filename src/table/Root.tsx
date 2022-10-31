@@ -9,7 +9,6 @@ import { TableContextProvider } from './context';
 import muiSetup from './mui-setup';
 import { RenderProps, TableWrapperProps, VirtualizedTableProps, VirtualizedTableRenderProps } from './types';
 import VirualizedTable from './components/virtualized-table/Wrapper';
-import OldLikeTable from './components/oldlike-table/Wrapper';
 
 export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   const { direction, selectionsAPI, tableData } = props;
@@ -29,18 +28,6 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
 export function renderVirtualizedlTable(props: VirtualizedTableRenderProps, reactRoot?: ReactDom.Root) {
   reactRoot?.render(<VirualizedTable {...(props as VirtualizedTableProps)} />);
 }
-
-export function renderOldLikeTable(props: VirtualizedTableRenderProps, reactRoot?: ReactDom.Root) {
-  const { direction } = props;
-  const muiTheme = muiSetup(direction);
-
-  reactRoot?.render(
-    <ThemeProvider theme={muiTheme}>
-      <OldLikeTable {...(props as VirtualizedTableProps)} />
-    </ThemeProvider>
-  );
-}
-
 export function teardown(reactRoot: ReactDom.Root) {
   reactRoot.unmount();
 }
