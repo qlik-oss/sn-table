@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { debouncer } from 'qlik-chart-modules';
-import { Row, TableLayout } from '../../types';
+import { Row, TableLayout } from '../../../../types';
 
 interface UseInfiniteScrollData {
   rows: Row[];

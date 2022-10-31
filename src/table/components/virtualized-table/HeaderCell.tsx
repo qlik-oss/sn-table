@@ -22,9 +22,11 @@ const HeaderCell = ({ columnIndex, style, data }: HeaderCellProps) => {
           ...style,
           display: 'flex',
           alignItems: 'center',
+          // borderTop: '1px solid #ccc',
           borderRight: '1px solid #ccc',
-          borderBottom: '1px solid #ccc',
+          // borderBottom: '1px solid #ccc',
           justifyContent: datum.align,
+          boxSizing: 'border-box',
         }}
       >
         <span

@@ -83,7 +83,7 @@ export default function supernova(env: Galaxy) {
       const [pageInfo, setPageInfo] = useState(initialPageInfo);
       const [tableData] = usePromise(
         async () =>
-          env.carbon || layout.type === 1 || layout.type === 2
+          env.carbon || layout.scrollType === 'virtualized'
             ? nothing()
             : manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo),
         [layout, pageInfo, model]
@@ -92,7 +92,7 @@ export default function supernova(env: Galaxy) {
       useContextMenu(areBasicFeaturesEnabled);
 
       useEffect(() => {
-        if (layout.type !== 1) return;
+        if (layout.scrollType !== 'virtualized') return;
 
         console.log(layout.title, layout);
 
@@ -102,10 +102,12 @@ export default function supernova(env: Galaxy) {
             model,
             rect,
             theme,
+            keyboard,
+            translator,
           },
           reactRoot
         );
-      }, [layout, model, rect, theme]);
+      }, [layout, model, rect, theme, keyboard, translator]);
 
       useEffect(() => {
         const isReadyToRender = !env.carbon && reactRoot && layout && changeSortOrder && theme && tableData;

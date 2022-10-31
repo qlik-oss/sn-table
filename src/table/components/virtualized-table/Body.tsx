@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useLayoutEffect, memo, useMemo } from 'react';
 import { VariableSizeGrid } from 'react-window';
 import { DEFAULT_ROW_HEIGHT, HEADER_HEIGHT } from './constants';
-import useInfiniteScrollData from '../../hooks/use-infinite-scroll-data';
-import { VirtualizedTableProps } from '../../types';
+import useInfiniteScrollData from './hooks/use-infinite-scroll-data';
+import { VirtualizedTableProps } from './types';
 import Cell from './Cell';
 
 interface OnItemsRendered {

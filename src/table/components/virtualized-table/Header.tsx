@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, memo } from 'react';
 import { VariableSizeGrid } from 'react-window';
-import { VirtualizedTableProps } from '../../types';
+import { VirtualizedTableProps } from './types';
 import { DEFAULT_ROW_HEIGHT, HEADER_HEIGHT } from './constants';
 import HeaderCell from './HeaderCell';
 
@@ -16,7 +16,15 @@ const Header = (props: VirtualizedTableProps) => {
   return (
     <VariableSizeGrid
       ref={forwardRef}
-      style={{ position: 'sticky', top: 0, left: 0, overflow: 'hidden', backgroundColor: 'rgb(247, 247, 247)' }}
+      style={{
+        position: 'sticky',
+        top: 0,
+        left: 0,
+        overflow: 'hidden',
+        backgroundColor: '#fafafa',
+        borderTop: '1px solid #ccc',
+        borderBottom: '1px solid #ccc',
+      }}
       columnCount={layout.qHyperCube.qSize.qcx}
       columnWidth={(index) => columnWidth[index]}
       height={HEADER_HEIGHT}

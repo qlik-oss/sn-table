@@ -266,19 +266,3 @@ export interface CellHOCProps extends TableCellProps {
 }
 
 export type CellHOC = (props: CellHOCProps) => JSX.Element;
-
-export interface VirtualizedTableRenderProps {
-  model?: EngineAPI.IGenericObject;
-  layout: TableLayout;
-  rect: stardust.Rect;
-  theme: ExtendedTheme;
-  direction?: 'ltr' | 'rtl';
-}
-
-export interface VirtualizedTableProps extends VirtualizedTableRenderProps {
-  forwardRef: React.RefObject<VariableSizeGrid<any>>;
-  innerForwardRef: React.RefObject<HTMLDivElement>;
-  columns: Column[];
-  columnWidth: number[];
-  theme: ExtendedTheme;
-}

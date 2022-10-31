@@ -28,6 +28,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           borderRight: '1px solid #ccc',
           borderBottom: '1px solid #ccc',
           justifyContent: columns[columnIndex].align,
+          boxSizing: 'border-box',
         }}
       >
         <span
@@ -45,7 +46,9 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
     );
   }
 
-  return <div style={{ ...style, borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc' }} />;
+  return (
+    <div style={{ ...style, borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', boxSizing: 'border-box' }} />
+  );
 };
 
 export default React.memo(Cell, areEqual);

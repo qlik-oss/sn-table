@@ -7,8 +7,9 @@ import rtlPluginSc from 'stylis-plugin-rtl-sc';
 import TableWrapper from './components/TableWrapper';
 import { TableContextProvider } from './context';
 import muiSetup from './mui-setup';
-import { RenderProps, TableWrapperProps, VirtualizedTableProps, VirtualizedTableRenderProps } from './types';
+import { RenderProps, TableWrapperProps } from './types';
 import VirualizedTable from './components/virtualized-table/Wrapper';
+import { VirtualizedTableProps, VirtualizedTableRenderProps } from './components/virtualized-table/types';
 
 export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   const { direction, selectionsAPI, tableData } = props;

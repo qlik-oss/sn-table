@@ -3,15 +3,17 @@ import { VariableSizeGrid } from 'react-window';
 import { DEFAULT_ROW_HEIGHT } from './constants';
 import { getColumns } from '../../../handle-data';
 import useColumnSize from '../../hooks/use-column-size';
-import { VirtualizedTableProps } from '../../types';
+import { VirtualizedTableProps } from './types';
 import Body from './Body';
 import FullSizeContainer from './FullSizeContainer';
 import Header from './Header';
 import PaginationContent from '../PaginationContent';
-import { StyledTableContainer, StyledTableWrapper } from '../../styles';
+import { StyledTableWrapper } from '../../styles';
+import { PageInfo, TableData } from '../../../types';
+import FooterWrapper from '../FooterWrapper';
 
 export default function Wrapper(props: VirtualizedTableProps) {
-  const { layout, rect, theme } = props;
+  const { layout, rect, theme, keyboard, translator } = props;
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeGrid>(null);
   const bodyRef = useRef<VariableSizeGrid>(null);
@@ -53,17 +55,14 @@ export default function Wrapper(props: VirtualizedTableProps) {
   }, [layout]);
 
   return (
-    <StyledTableWrapper data-key="wrapper" tableTheme={theme.table} paginationNeeded={false} dir="ltr">
-      <StyledTableContainer
+    <StyledTableWrapper data-key="wrapper" tableTheme={theme.table} paginationNeeded dir="ltr">
+      <div
         data-key="table-container"
         ref={ref}
-        fullHeight
-        constraints={{ active: false }}
         style={{
           overflow: 'auto',
-          width: rect.width,
-          height: rect.height,
-          border: '1px solid #ccc',
+          width: '100%',
+          height: rect.height - 49,
         }}
         onScroll={onScrollHandler}
       >
@@ -77,8 +76,29 @@ export default function Wrapper(props: VirtualizedTableProps) {
             innerForwardRef={innerForwardRef}
           />
         </FullSizeContainer>
-      </StyledTableContainer>
-      {/* <PaginationContent {...props} handleChangePage={() => console.log()} isSelectionMode={false} /> */}
+      </div>
+      <FooterWrapper theme={theme}>
+        <PaginationContent
+          theme={theme}
+          handleChangePage={() => console.log()}
+          isSelectionMode={false}
+          tableData={
+            {
+              totalRowCount: layout.qHyperCube.qSize.qcy,
+              totalColumnCount: layout.qHyperCube.qSize.qcx,
+              totalPages: 1,
+              paginationNeeded: true,
+            } as TableData
+          }
+          pageInfo={{ page: 1, rowsPerPage: 10, rowsPerPageOptions: [10] } as unknown as PageInfo}
+          setPageInfo={() => {}}
+          keyboard={keyboard}
+          translator={translator}
+          constraints={{}}
+          rect={rect}
+          announce={() => {}}
+        />
+      </FooterWrapper>
     </StyledTableWrapper>
   );
 }

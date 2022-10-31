@@ -3,10 +3,12 @@ import ReactDOM from 'react-dom';
 import { StyledFooterWrapper } from '../styles';
 import { FooterWrapperProps } from '../types';
 
-export default function FooterWrapper({ children, theme, footerContainer }: FooterWrapperProps) {
+export default function FooterWrapper({ children, theme, footerContainer, ...props }: FooterWrapperProps) {
   return footerContainer ? (
     ReactDOM.createPortal(children, footerContainer)
   ) : (
-    <StyledFooterWrapper tableTheme={theme.table}>{children}</StyledFooterWrapper>
+    <StyledFooterWrapper {...props} tableTheme={theme.table}>
+      {children}
+    </StyledFooterWrapper>
   );
 }
