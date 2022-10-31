@@ -28,7 +28,6 @@ export const TableContextProvider = ({
   const [headRowHeight, setHeadRowHeight] = useState(0);
   const [focusedCellCoord, setFocusedCellCoord] = useState((cellCoordMock || [0, 0]) as [number, number]);
   const [columnWidths, setColumnWidths] = useColumnWidth(columns, tableWidth);
-  // const [tableWidths, setTableWidths] = useColumnWidths(tableWidth, columns);
   const [selectionState, selectionDispatch] = useReducer(reducer, {
     pageRows: rows,
     rows: {},
@@ -40,10 +39,6 @@ export const TableContextProvider = ({
   useDidUpdateEffect(() => {
     selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows: rows } });
   }, [rows]);
-
-  // useDidUpdateEffect(() => {
-  //   setColumnWidths(getColumnWidths(columns, tableWidth));
-  // }, [columns, tableWidth]);
 
   return (
     <ProviderWithSelector
