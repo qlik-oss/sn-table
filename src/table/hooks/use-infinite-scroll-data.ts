@@ -25,8 +25,8 @@ const createNewRow = (
       rowIdx,
       colIdx,
       isSelectable: false, // TODO
-      rawRowIdx: matrixRowIdx,
-      rawColIdx: matrixColIdx,
+      pageRowIdx: -1,
+      pageColIdx: -1,
       isLastRow: false, // TODO
     };
   });

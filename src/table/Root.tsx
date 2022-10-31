@@ -26,7 +26,15 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
 }
 
 export function renderVirtualizedlTable(props: VirtualizedTableRenderProps, reactRoot?: ReactDom.Root) {
-  reactRoot?.render(<VirualizedTable {...(props as VirtualizedTableProps)} />);
+  const muiTheme = muiSetup('ltr');
+
+  reactRoot?.render(
+    <React.StrictMode>
+      <ThemeProvider theme={muiTheme}>
+        <VirualizedTable {...(props as VirtualizedTableProps)} />
+      </ThemeProvider>
+    </React.StrictMode>
+  );
 }
 export function teardown(reactRoot: ReactDom.Root) {
   reactRoot.unmount();
