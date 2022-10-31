@@ -10103,6 +10103,11 @@ q@^1.5.1:
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha512-kV/CThkXo6xyFEZUugw/+pIOywXcDbFYgSct5cT3gqlbkBE1SJdwy6UQoZvodiWF/ckQLZyDE/Bu1M6gVu5lVw==
 
+qlik-chart-modules@0.43.0:
+  version "0.43.0"
+  resolved "https://registry.yarnpkg.com/qlik-chart-modules/-/qlik-chart-modules-0.43.0.tgz#9c5f05167363df7998f75e3e5f85f8becfac514b"
+  integrity sha512-yZJSTh0dWuF69IOkhchM5II9TU6pH4q7UCW3uyKdvQLyKTkViK1+BQHasvviWIJa/0d919UNjdQzPvM8TaV41w==
+
 qlik-modifiers@0.8.2:
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/qlik-modifiers/-/qlik-modifiers-0.8.2.tgz#9a987cd093c815f9b2f75ce9e1f56d44b932b13c"

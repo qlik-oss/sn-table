@@ -1,24 +1,16 @@
-// import { useState, useMemo, useEffect } from 'react';
+import { useState } from 'react';
 import { Column } from '../../types';
+import useEstimateWidth from './use-estimate-width';
+import { EstimateWidth } from '../types';
+import useDidUpdateEffect from './use-did-update-effect';
 
-const getHugWidth = (column: Column) => {
-  const el = document.createElement('canvas').getContext('2d');
-  if (el) {
-    el.font = '12px arial';
-    const headerWidthEst = el.measureText(column.label).width + 25;
-    const bodyWidthEst = el.measureText('M').width * column.qApprMaxGlyphCount + 25;
-    return Math.max(headerWidthEst, bodyWidthEst);
-  }
-  return 0;
-};
-
-export default function getColumnWidths(columns: Column[], containerWidth: number) {
-  if (!columns?.length || containerWidth === 0) return [];
+export const getColumnWidths = (columns: Column[], tableWidth: number, estimateWidth: EstimateWidth) => {
+  if (!columns?.length || tableWidth === 0) return [];
 
   const MIN_WIDTH = 100;
   const columnWidths: number[] = [];
-  const fillColumnIdxs: number[] = [];
-  let allFillWidths = containerWidth;
+  const fillColumnIndexes: number[] = [];
+  let allFillWidths = tableWidth;
 
   columns.forEach((col, idx) => {
     let newWidth = 0;
@@ -28,15 +20,15 @@ export default function getColumnWidths(columns: Column[], containerWidth: numbe
         newWidth = col.columnSize;
         break;
       case 'percentage':
-        newWidth = (col.columnSize / 100) * containerWidth;
+        newWidth = (col.columnSize / 100) * tableWidth;
         break;
       case 'hug':
-        newWidth = getHugWidth(col);
+        newWidth = estimateWidth(col);
         break;
       case 'fill':
       case undefined:
         // stores the indexes of fill columns to loop over later
-        fillColumnIdxs.push(idx);
+        fillColumnIndexes.push(idx);
         break;
       default:
         break;
@@ -48,29 +40,29 @@ export default function getColumnWidths(columns: Column[], containerWidth: numbe
     }
   });
 
-  if (fillColumnIdxs.length) {
+  if (fillColumnIndexes.length) {
     // divides remaining width evenly between fill columns
-    const fillWidth = allFillWidths / fillColumnIdxs.length;
-    fillColumnIdxs.forEach((fillIdx) => {
+    const fillWidth = allFillWidths / fillColumnIndexes.length;
+    fillColumnIndexes.forEach((fillIdx) => {
       columnWidths[fillIdx] = Math.max(MIN_WIDTH, fillWidth);
     });
   }
 
   return columnWidths;
-}
+};
 
-// const useColumnWidth = (containerWidth: number, columns: Column[]) => {
-//   const { measureText, estimateWidth } = useMeasureText('13px', 'Arial');
-//   const widths = useMemo(
-//     () =>
-//       columns.map((c) => {
-//         // const fillWidth = rect.width / columns.length;
-//         const maxWidth = Math.max(measureText(c.label), estimateWidth(c.qApprMaxGlyphCount));
-//         // return Math.min(500, maxWidth);
-//         return maxWidth;
-//       }),
-//     [containerWidth, columns, measureText, estimateWidth]
-//   );
-//   return widths;
-// };
-// export default useColumnSize;
+const useColumnWidth = (
+  columns: Column[],
+  tableWidth: number
+): [number[], React.Dispatch<React.SetStateAction<number[]>>] => {
+  const estimateWidth = useEstimateWidth('13px', 'Arial');
+  const [columnWidths, setColumnWidths] = useState(getColumnWidths(columns, tableWidth, estimateWidth));
+
+  useDidUpdateEffect(() => {
+    setColumnWidths(getColumnWidths(columns, tableWidth, estimateWidth));
+  }, [columns, tableWidth]);
+
+  return [columnWidths, setColumnWidths];
+};
+
+export default useColumnWidth;

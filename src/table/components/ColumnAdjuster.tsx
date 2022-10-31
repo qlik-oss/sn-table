@@ -41,14 +41,13 @@ function ColumnAdjuster({ column: { isDim, dataColIdx }, model, layout: { qHyper
     const patches = [
       {
         qPath: `${columnPath}columnSize`,
-        qOp: 'Replace' as EngineAPI.NxPatchOpType,
-        qValue: localColumnWidths.current[dataColIdx].toString(),
+        qOp: 'Add' as EngineAPI.NxPatchOpType,
+        qValue: JSON.stringify(localColumnWidths.current[dataColIdx]),
       },
       {
         qPath: `${columnPath}columnSizeType`,
-        qOp: 'Replace' as EngineAPI.NxPatchOpType,
-        // eslint-disable-next-line prettier/prettier, no-useless-escape
-        qValue: '"pixels"',
+        qOp: 'Add' as EngineAPI.NxPatchOpType,
+        qValue: JSON.stringify('pixels'),
       },
     ];
 
@@ -65,7 +64,7 @@ function ColumnAdjuster({ column: { isDim, dataColIdx }, model, layout: { qHyper
     document.addEventListener('mouseup', mouseUpHandler);
   };
 
-  const mouseDoubleClickHandler = (e: React.MouseEvent) => {
+  const mouseDoubleClickHandler = () => {
     const index = isDim ? dataColIdx : dataColIdx - qHyperCube.qDimensionInfo.length;
     const columnPath = `/qHyperCubeDef/${isDim ? 'qDimensions' : 'qMeasures'}/${index}/qDef/`;
     // const qOp = (qHyperCube.qDimensionInfo[index].columnSize ? 'replace' : 'add') as EngineAPI.NxPatchOpType;
@@ -78,7 +77,6 @@ function ColumnAdjuster({ column: { isDim, dataColIdx }, model, layout: { qHyper
       },
     ];
 
-    console.log('double');
     model.applyPatches(patches, true);
   };
 

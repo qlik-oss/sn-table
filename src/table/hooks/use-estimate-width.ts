@@ -1,16 +1,11 @@
 import { useMemo, useRef } from 'react';
 import { memoize } from 'qlik-chart-modules';
-
-export interface MeasureTextHook {
-  estimateWidth: (length: number) => number;
-  measureText: (text: string) => number;
-}
+import { EstimateWidth } from '../types';
 
 const MAGIC_DEFAULT_CHAR = 'M';
-
 const LEEWAY_WIDTH = 25; // Used to make sure there is some leeway in the measurement of a text
 
-export default function useMeasureText(fontSize: string, fontFamily: string): MeasureTextHook {
+export default function useEstimateWidth(fontSize: string, fontFamily: string): EstimateWidth {
   const context = useRef<CanvasRenderingContext2D | null>(null);
 
   useMemo(() => {
@@ -19,12 +14,9 @@ export default function useMeasureText(fontSize: string, fontFamily: string): Me
     }
   }, [context]);
 
-  const { estimateWidth, measureText } = useMemo((): MeasureTextHook => {
+  const estimateWidth = useMemo((): EstimateWidth => {
     if (context.current === null) {
-      return {
-        measureText: () => 0,
-        estimateWidth: () => 0,
-      };
+      return () => 0;
     }
 
     context.current.font = `${fontSize} ${fontFamily}`;
@@ -32,11 +24,10 @@ export default function useMeasureText(fontSize: string, fontFamily: string): Me
       text: string
     ) => TextMetrics;
 
-    return {
-      measureText: (text) => memoizedMeasureText(text).width + LEEWAY_WIDTH,
-      estimateWidth: (length: number) => memoizedMeasureText(MAGIC_DEFAULT_CHAR).width * length + LEEWAY_WIDTH,
-    };
+    return ({ label, qApprMaxGlyphCount }) =>
+      Math.max(memoizedMeasureText(label).width, memoizedMeasureText(MAGIC_DEFAULT_CHAR).width * qApprMaxGlyphCount) +
+      LEEWAY_WIDTH;
   }, [context, fontSize, fontFamily]);
 
-  return { estimateWidth, measureText };
+  return estimateWidth;
 }

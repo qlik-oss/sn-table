@@ -270,3 +270,5 @@ export interface CellHOCProps extends TableCellProps {
 }
 
 export type CellHOC = (props: CellHOCProps) => JSX.Element;
+
+export type EstimateWidth = (column: Column) => number;

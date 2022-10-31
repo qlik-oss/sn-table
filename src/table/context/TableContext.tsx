@@ -6,7 +6,7 @@ import { ExtendedSelectionAPI } from '../../types';
 import { ContextValue, ContextProviderProps } from '../types';
 import useDidUpdateEffect from '../hooks/use-did-update-effect';
 import { SelectionActions } from '../constants';
-import getColumnWidths from '../hooks/use-column-widths';
+import useColumnWidth from '../hooks/use-column-widths';
 
 // In order to not have typing issues when using properties on the context,
 // the initial value for the context is casted to ContextValue.
@@ -27,7 +27,7 @@ export const TableContextProvider = ({
   const { rows, columns } = tableData;
   const [headRowHeight, setHeadRowHeight] = useState(0);
   const [focusedCellCoord, setFocusedCellCoord] = useState((cellCoordMock || [0, 0]) as [number, number]);
-  const [columnWidths, setColumnWidths] = useState(getColumnWidths(columns, tableWidth));
+  const [columnWidths, setColumnWidths] = useColumnWidth(columns, tableWidth);
   // const [tableWidths, setTableWidths] = useColumnWidths(tableWidth, columns);
   const [selectionState, selectionDispatch] = useReducer(reducer, {
     pageRows: rows,
@@ -41,9 +41,9 @@ export const TableContextProvider = ({
     selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows: rows } });
   }, [rows]);
 
-  useDidUpdateEffect(() => {
-    setColumnWidths(getColumnWidths(columns, tableWidth));
-  }, [columns, tableWidth]);
+  // useDidUpdateEffect(() => {
+  //   setColumnWidths(getColumnWidths(columns, tableWidth));
+  // }, [columns, tableWidth]);
 
   return (
     <ProviderWithSelector
