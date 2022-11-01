@@ -9,7 +9,6 @@ interface FullSizeContainerProps {
 }
 
 const FullSizeContainer = ({ width, height, paginationNeeded, children }: FullSizeContainerProps): JSX.Element => {
-  console.log('RENDERING FULL CONTAINER');
   return (
     <div
       data-key="full-size-container"

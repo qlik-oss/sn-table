@@ -1,6 +1,5 @@
 import { TableCellProps } from '@mui/material';
 import { stardust } from '@nebula.js/stardust';
-import { VariableSizeGrid } from 'react-window';
 import {
   Announce,
   Cell,

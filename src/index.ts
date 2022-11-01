@@ -20,7 +20,7 @@ import properties from './qae/object-properties';
 import data from './qae/data';
 import ext from './ext';
 import manageData from './handle-data';
-import { render, renderVirtualizedlTable, teardown } from './table/Root';
+import { render, renderVirtualizedTable, teardown } from './table/Root';
 import useReactRoot from './nebula-hooks/use-react-root';
 import useAnnounceAndTranslations from './nebula-hooks/use-announce-and-translations';
 import useSorting from './nebula-hooks/use-sorting';
@@ -81,9 +81,10 @@ export default function supernova(env: Galaxy) {
       const announce = useAnnounceAndTranslations(rootElement, translator);
       const changeSortOrder = useSorting(model);
       const [pageInfo, setPageInfo] = useState(initialPageInfo);
+      const shouldRenderVirtualizedTable = layout.scrollType === 'virtualized';
       const [tableData] = usePromise(
         async () =>
-          env.carbon || layout.scrollType === 'virtualized'
+          env.carbon || shouldRenderVirtualizedTable
             ? nothing()
             : manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo),
         [layout, pageInfo, model]
@@ -92,11 +93,9 @@ export default function supernova(env: Galaxy) {
       useContextMenu(areBasicFeaturesEnabled);
 
       useEffect(() => {
-        if (layout.scrollType !== 'virtualized') return;
+        if (!shouldRenderVirtualizedTable) return;
 
-        console.log(layout.title, layout);
-
-        renderVirtualizedlTable(
+        renderVirtualizedTable(
           {
             layout,
             model,

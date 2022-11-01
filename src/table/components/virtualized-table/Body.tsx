@@ -37,8 +37,6 @@ const Body = (props: VirtualizedTableContainerProps) => {
     [rect, columnWidth]
   ).count;
 
-  console.log('RENDERING BODY', rows, rowCount);
-
   useEffect(() => {
     // Initial data load
     // TODO remove setTimeout..

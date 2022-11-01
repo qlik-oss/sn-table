@@ -19,8 +19,6 @@ export default function TableContainer(props: VirtualizedTableContainerProps) {
   const totalWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
   const [totalHeight, setTotalHeight] = useState(pageInfo.rowsPerPage * DEFAULT_ROW_HEIGHT);
 
-  console.log('RENDERING TABLE CONTAINER', pageInfo);
-
   const onScrollHandler = (event: React.SyntheticEvent) => {
     if (headerRef.current) {
       headerRef.current.scrollTo({

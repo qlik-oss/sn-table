@@ -24,8 +24,6 @@ export default function Wrapper(props: VirtualizedTableProps) {
     paginationNeeded,
   } as TableData;
 
-  console.log('RENDERING WRAPPER', theme);
-
   return (
     <StyledTableWrapper data-key="wrapper" tableTheme={theme.table} paginationNeeded={paginationNeeded} dir="ltr">
       <TableContainer {...props} pageInfo={pageInfo} paginationNeeded={paginationNeeded} />

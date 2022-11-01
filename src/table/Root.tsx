@@ -26,7 +26,7 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   );
 }
 
-export function renderVirtualizedlTable(props: VirtualizedTableRenderProps, reactRoot?: ReactDom.Root) {
+export function renderVirtualizedTable(props: VirtualizedTableRenderProps, reactRoot?: ReactDom.Root) {
   const muiTheme = muiSetup('ltr');
 
   reactRoot?.render(
