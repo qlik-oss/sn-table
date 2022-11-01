@@ -191,6 +191,8 @@ export type Announce = (arg0: AnnounceArgs) => void;
 
 export type ChangeSortOrder = (layout: TableLayout, column: Column) => Promise<void>;
 
+export type UpdateColumnWidth = (newColumnSize: { type?: string; widthPx?: number }, column: Column) => void;
+
 export interface Galaxy {
   translator: ExtendedTranslator;
   carbon: boolean;

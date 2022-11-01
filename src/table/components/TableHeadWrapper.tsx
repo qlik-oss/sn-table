@@ -22,7 +22,7 @@ function TableHeadWrapper({
   selectionsAPI,
   keyboard,
   areBasicFeaturesEnabled,
-  model,
+  updateColumnWidth,
 }: TableHeadWrapperProps) {
   const { columns, paginationNeeded } = tableData;
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
@@ -63,7 +63,7 @@ function TableHeadWrapper({
               areBasicFeaturesEnabled,
             });
           };
-          // console.log(columnWidths[columnIndex] || 200);
+
           return (
             <TableCell
               sx={headerStyle}
@@ -95,7 +95,7 @@ function TableHeadWrapper({
                   </VisuallyHidden>
                 )}
               </StyledSortLabel>
-              <ColumnAdjuster column={column} layout={layout} model={model} isLastColumn={isLastColumn} />
+              <ColumnAdjuster column={column} isLastColumn={isLastColumn} updateColumnWidth={updateColumnWidth} />
             </TableCell>
           );
         })}

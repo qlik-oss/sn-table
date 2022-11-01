@@ -14,6 +14,7 @@ import {
   TableLayout,
   TotalsPosition,
   Row,
+  UpdateColumnWidth,
 } from '../types';
 import { SelectionActions } from './constants';
 
@@ -189,6 +190,7 @@ export interface RenderProps {
   ): Promise<TableData | null>;
   app?: EngineAPI.IApp;
   areBasicFeaturesEnabled?: boolean;
+  updateColumnWidth?: UpdateColumnWidth;
 }
 
 export interface CommonTableProps {
@@ -211,7 +213,7 @@ export interface TableWrapperProps extends CommonTableProps {
   footerContainer?: HTMLElement;
   announce: Announce;
   areBasicFeaturesEnabled: boolean;
-  model: EngineAPI.IGenericObject;
+  updateColumnWidth: UpdateColumnWidth;
 }
 
 export interface TableHeadWrapperProps extends CommonTableProps {
@@ -222,7 +224,7 @@ export interface TableHeadWrapperProps extends CommonTableProps {
   constraints: stardust.Constraints;
   translator: ExtendedTranslator;
   areBasicFeaturesEnabled: boolean;
-  model: EngineAPI.IGenericObject;
+  updateColumnWidth: UpdateColumnWidth;
 }
 
 export interface TableBodyWrapperProps extends CommonTableProps {
@@ -254,6 +256,11 @@ export interface PaginationContentProps extends CommonTableProps {
   announce: Announce;
   isSelectionMode: boolean;
   handleChangePage(pageIdx: number): void;
+}
+export interface AdjusterProps {
+  column: Column;
+  isLastColumn: boolean;
+  updateColumnWidth: UpdateColumnWidth;
 }
 
 export interface FooterWrapperProps {

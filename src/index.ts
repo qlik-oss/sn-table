@@ -26,6 +26,7 @@ import useAnnounceAndTranslations from './nebula-hooks/use-announce-and-translat
 import useSorting from './nebula-hooks/use-sorting';
 import useExtendedTheme from './nebula-hooks/use-extended-theme';
 import useContextMenu from './nebula-hooks/use-context-menu';
+import useColumnResize from './nebula-hooks/use-column-resize';
 import {
   RenderWithCarbonArguments,
   Galaxy,
@@ -80,6 +81,7 @@ export default function supernova(env: Galaxy) {
       const theme = useExtendedTheme(rootElement);
       const announce = useAnnounceAndTranslations(rootElement, translator);
       const changeSortOrder = useSorting(model);
+      const updateColumnWidth = useColumnResize(model, layout.qHyperCube);
 
       const [pageInfo, setPageInfo] = useState(initialPageInfo);
       const [tableData] = usePromise(
@@ -113,7 +115,7 @@ export default function supernova(env: Galaxy) {
               footerContainer,
               announce,
               areBasicFeaturesEnabled,
-              model,
+              updateColumnWidth,
             },
             reactRoot
           );
@@ -128,6 +130,7 @@ export default function supernova(env: Galaxy) {
         rect.width,
         announce,
         changeSortOrder,
+        updateColumnWidth,
       ]);
 
       // this is the one we want to use for carbon
