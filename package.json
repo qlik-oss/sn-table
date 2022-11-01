@@ -1,6 +1,6 @@
 {
   "name": "@nebula.js/sn-table",
-  "version": "1.19.0",
+  "version": "1.19.1",
   "description": "table supernova",
   "license": "MIT",
   "author": "QlikTech International AB",
@@ -82,7 +82,7 @@
     "@playwright/test": "1.27.1",
     "@qlik/react-native-simple-grid": "1.0.11",
     "@react-native-async-storage/async-storage": "1.17.10",
-    "@rollup/plugin-typescript": "8.5.0",
+    "@rollup/plugin-typescript": "9.0.2",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "13.4.0",
     "@testing-library/react-hooks": "8.0.1",

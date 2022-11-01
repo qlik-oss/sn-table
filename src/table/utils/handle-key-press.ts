@@ -115,7 +115,6 @@ export const handleHeadKeyDown = ({
   cellCoord,
   column,
   changeSortOrder,
-  layout,
   isInteractionEnabled,
   setFocusedCellCoord,
   areBasicFeaturesEnabled,
@@ -136,7 +135,7 @@ export const handleHeadKeyDown = ({
     case KeyCodes.SPACE:
     case KeyCodes.ENTER:
       // Space bar / Enter: update the sorting
-      changeSortOrder(layout, column);
+      changeSortOrder(column);
       break;
     case KeyCodes.C: {
       areBasicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(evt);

@@ -13,7 +13,7 @@ import {
 import * as handleAccessibility from '../accessibility-utils';
 import * as handleScroll from '../handle-scroll';
 import * as handleCopy from '../copy-utils';
-import { Announce, Column, ExtendedSelectionAPI, Cell, TableLayout, TotalsPosition } from '../../../types';
+import { Announce, Column, ExtendedSelectionAPI, Cell, TotalsPosition } from '../../../types';
 import { SelectionDispatch } from '../../types';
 import { KeyCodes } from '../../constants';
 
@@ -275,8 +275,7 @@ describe('handle-key-press', () => {
     let column: Column;
     let evt: React.KeyboardEvent;
     let rootElement: HTMLElement;
-    let changeSortOrder: (layout: TableLayout, column: Column) => Promise<void>;
-    let layout: TableLayout;
+    let changeSortOrder: (column: Column) => Promise<void>;
     let isInteractionEnabled: boolean;
     let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
 
@@ -287,7 +286,6 @@ describe('handle-key-press', () => {
         cellCoord: [rowIndex, colIndex],
         column,
         changeSortOrder,
-        layout,
         isInteractionEnabled,
         setFocusedCellCoord,
         areBasicFeaturesEnabled,

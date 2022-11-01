@@ -57,7 +57,6 @@ function TableHeadWrapper({
               cellCoord: [0, columnIndex],
               column,
               changeSortOrder,
-              layout,
               isInteractionEnabled,
               setFocusedCellCoord,
               areBasicFeaturesEnabled,
@@ -76,7 +75,7 @@ function TableHeadWrapper({
               aria-pressed={isCurrentColumnActive}
               onKeyDown={handleKeyDown}
               onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
-              onClick={() => false && changeSortOrder(layout, column)}
+              onClick={() => isInteractionEnabled && changeSortOrder(column)}
             >
               <StyledSortLabel
                 headerStyle={headerStyle}

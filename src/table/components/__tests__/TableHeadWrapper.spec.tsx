@@ -86,7 +86,7 @@ describe('<TableHeadWrapper />', () => {
     const { getByText } = renderTableHead();
     fireEvent.click(getByText(tableData.columns[0].label));
 
-    expect(changeSortOrder).toHaveBeenCalledWith(layout, tableData.columns[0]);
+    expect(changeSortOrder).toHaveBeenCalledWith(tableData.columns[0]);
   });
 
   it('should not call changeSortOrder when clicking a header cell in edit mode', () => {
