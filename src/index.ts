@@ -109,7 +109,7 @@ export default function supernova(env: Galaxy) {
       }, [layout, model, rect, theme, keyboard, translator]);
 
       useEffect(() => {
-        const isReadyToRender = !env.carbon && reactRoot && layout && changeSortOrder && theme && tableData;
+        const isReadyToRender = !env.carbon && reactRoot && layout && tableData && changeSortOrder && theme;
         isReadyToRender &&
           render(
             {

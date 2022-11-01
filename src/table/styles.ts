@@ -152,7 +152,7 @@ export const StyledTableWrapper = styled(Paper, {
 
 export const StyledTableContainer = styled(TableContainer, {
   shouldForwardProp: (prop: string) => prop !== 'fullHeight' && prop !== 'constraints',
-})(({ fullHeight, constraints, virtualScroll }) => ({
+})(({ fullHeight, constraints }) => ({
   height: fullHeight ? '100%' : 'calc(100% - 49px)',
-  overflow: constraints.active || virtualScroll ? 'hidden' : 'auto',
+  overflow: constraints.active ? 'hidden' : 'auto',
 }));
