@@ -180,7 +180,7 @@ export interface AnnounceArgs {
 
 export type Announce = (arg0: AnnounceArgs) => void;
 
-export type ChangeSortOrder = (layout: TableLayout, column: Column) => Promise<void>;
+export type ChangeSortOrder = (column: Column) => Promise<void>;
 
 export interface Galaxy {
   translator: ExtendedTranslator;
