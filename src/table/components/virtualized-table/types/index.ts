@@ -1,6 +1,6 @@
 import { stardust } from '@nebula.js/stardust';
 import { VariableSizeGrid } from 'react-window';
-import { Column, ExtendedTheme, ExtendedTranslator, TableLayout } from '../../../../types';
+import { Column, ExtendedTheme, ExtendedTranslator, PageInfo, TableLayout } from '../../../../types';
 
 export interface VirtualizedTableRenderProps {
   model?: EngineAPI.IGenericObject;
@@ -18,4 +18,9 @@ export interface VirtualizedTableProps extends VirtualizedTableRenderProps {
   columns: Column[];
   columnWidth: number[];
   theme: ExtendedTheme;
+}
+
+export interface VirtualizedTableContainerProps extends VirtualizedTableProps {
+  pageInfo: PageInfo;
+  paginationNeeded: boolean;
 }

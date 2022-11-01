@@ -1,39 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { VirtualizedTableProps } from './types';
 import PaginationContent from '../PaginationContent';
 import { StyledTableWrapper } from '../../styles';
 import { PageInfo, TableData } from '../../../types';
 import FooterWrapper from '../FooterWrapper';
 import TableContainer from './TableContainer';
+import { MAX_PAGE_SIZE } from './constants';
 
 export default function Wrapper(props: VirtualizedTableProps) {
   const { rect, layout, keyboard, translator, theme } = props;
+  const totalRowCount = layout.qHyperCube.qSize.qcy;
+  const pageSize = Math.min(MAX_PAGE_SIZE, totalRowCount);
+  const [pageInfo, setPageInfo] = useState<PageInfo>({
+    page: 0,
+    rowsPerPage: pageSize,
+    rowsPerPageOptions: [],
+  });
+  const paginationNeeded = totalRowCount > MAX_PAGE_SIZE;
+  const tableData = {
+    totalRowCount,
+    totalColumnCount: layout.qHyperCube.qSize.qcx,
+    totalPages: Math.ceil(totalRowCount / pageSize),
+    paginationNeeded,
+  } as TableData;
+
+  console.log('RENDERING WRAPPER', theme);
 
   return (
-    <StyledTableWrapper data-key="wrapper" tableTheme={theme.table} paginationNeeded dir="ltr">
-      <TableContainer {...props} />
-      <FooterWrapper theme={theme}>
-        <PaginationContent
-          theme={theme}
-          handleChangePage={() => console.log()}
-          isSelectionMode={false}
-          tableData={
-            {
-              totalRowCount: layout.qHyperCube.qSize.qcy,
-              totalColumnCount: layout.qHyperCube.qSize.qcx,
-              totalPages: 1,
-              paginationNeeded: true,
-            } as TableData
-          }
-          pageInfo={{ page: 1, rowsPerPage: 10, rowsPerPageOptions: [10] } as unknown as PageInfo}
-          setPageInfo={() => {}}
-          keyboard={keyboard}
-          translator={translator}
-          constraints={{}}
-          rect={rect}
-          announce={() => {}}
-        />
-      </FooterWrapper>
+    <StyledTableWrapper data-key="wrapper" tableTheme={theme.table} paginationNeeded={paginationNeeded} dir="ltr">
+      <TableContainer {...props} pageInfo={pageInfo} paginationNeeded={paginationNeeded} />
+      {paginationNeeded && (
+        <FooterWrapper theme={theme}>
+          <PaginationContent
+            theme={theme}
+            handleChangePage={(page) => setPageInfo((prev) => ({ ...prev, page }))}
+            isSelectionMode={false}
+            tableData={tableData}
+            pageInfo={pageInfo}
+            setPageInfo={() => {}}
+            keyboard={keyboard}
+            translator={translator}
+            constraints={{}}
+            rect={rect}
+            announce={() => {}}
+          />
+        </FooterWrapper>
+      )}
     </StyledTableWrapper>
   );
 }

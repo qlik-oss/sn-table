@@ -67,7 +67,11 @@ function PaginationContent({
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
   const width = footerContainer ? footerContainer.getBoundingClientRect().width : rect.width;
   const showFirstAndLast = shouldShow('firstLast', width);
-  const showRowsPerPage = !isSelectionMode && shouldShow('rppOptions', width) && totalColumnCount <= 100;
+  const showRowsPerPage =
+    !!pageInfo.rowsPerPageOptions.length &&
+    !isSelectionMode &&
+    shouldShow('rppOptions', width) &&
+    totalColumnCount <= 100;
   const displayedRowsText = translator.get('SNTable.Pagination.DisplayedRowsLabel', [
     `${page * rowsPerPage + 1} - ${Math.min((page + 1) * rowsPerPage, totalRowCount)}`,
     totalRowCount.toString(),

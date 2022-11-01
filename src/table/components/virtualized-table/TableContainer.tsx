@@ -3,13 +3,13 @@ import { VariableSizeGrid } from 'react-window';
 import { getColumns } from '../../../handle-data';
 import useColumnSize from '../../hooks/use-column-size';
 import Body from './Body';
-import { DEFAULT_ROW_HEIGHT } from './constants';
+import { DEFAULT_ROW_HEIGHT, PAGINATION_HEIGHT } from './constants';
 import FullSizeContainer from './FullSizeContainer';
 import Header from './Header';
-import { VirtualizedTableProps } from './types';
+import { VirtualizedTableContainerProps } from './types';
 
-export default function TableContainer(props: VirtualizedTableProps) {
-  const { layout, rect, theme } = props;
+export default function TableContainer(props: VirtualizedTableContainerProps) {
+  const { layout, rect, pageInfo, paginationNeeded } = props;
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeGrid>(null);
   const bodyRef = useRef<VariableSizeGrid>(null);
@@ -17,8 +17,9 @@ export default function TableContainer(props: VirtualizedTableProps) {
   const { columns } = useMemo(() => getColumns(layout), [layout]);
   const { width } = useColumnSize(rect, columns);
   const totalWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
-  const [totalHeight, setTotalHeight] = useState(layout.qHyperCube.qSize.qcy * DEFAULT_ROW_HEIGHT);
-  console.log('RENDERING WRAPPER', theme);
+  const [totalHeight, setTotalHeight] = useState(pageInfo.rowsPerPage * DEFAULT_ROW_HEIGHT);
+
+  console.log('RENDERING TABLE CONTAINER', pageInfo);
 
   const onScrollHandler = (event: React.SyntheticEvent) => {
     if (headerRef.current) {
@@ -39,8 +40,6 @@ export default function TableContainer(props: VirtualizedTableProps) {
       // Keep full size container in sync with the height calculation in react-window is doing
       setTotalHeight(innerForwardRef.current.clientHeight);
     }
-
-    event.preventDefault();
   };
 
   useLayoutEffect(() => {
@@ -48,7 +47,7 @@ export default function TableContainer(props: VirtualizedTableProps) {
       ref.current.scrollLeft = 0;
       ref.current.scrollTop = 0;
     }
-  }, [layout]);
+  }, [layout, pageInfo]);
 
   return (
     <div
@@ -57,11 +56,11 @@ export default function TableContainer(props: VirtualizedTableProps) {
       style={{
         overflow: 'auto',
         width: '100%',
-        height: rect.height - 49,
+        height: rect.height - PAGINATION_HEIGHT,
       }}
       onScroll={onScrollHandler}
     >
-      <FullSizeContainer width={totalWidth} height={totalHeight}>
+      <FullSizeContainer width={totalWidth} height={totalHeight} paginationNeeded={paginationNeeded}>
         <Header {...props} columns={columns} columnWidth={width} forwardRef={headerRef} />
         <Body {...props} columns={columns} columnWidth={width} forwardRef={bodyRef} innerForwardRef={innerForwardRef} />
       </FullSizeContainer>
