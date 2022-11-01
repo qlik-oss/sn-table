@@ -4,7 +4,7 @@ const columnResize = {
   type: {
     type: 'string',
     component: 'dropdown',
-    ref: 'qDef.columnSizeType',
+    ref: 'qDef.columnSize.type',
     translation: 'resize type',
     options: [
       {
@@ -27,17 +27,17 @@ const columnResize = {
     defaultValue: 'fill',
   },
   sizePixels: {
-    ref: 'qDef.columnSize',
-    translation: 'column size [px]',
+    ref: 'qDef.columnSize.widthPx',
+    translation: 'column pixel width',
     type: 'number',
     expression: 'optional',
     min: 1,
-    defaulValue: 200,
+    defaultValue: 200,
     show: (data) => data.qDef.columnSizeType === 'pixels',
   },
   sizePercentage: {
-    ref: 'qDef.columnSize',
-    translation: 'column size [%]',
+    ref: 'qDef.columnSize.widthPr',
+    translation: 'column percentage width',
     type: 'number',
     expression: 'optional',
     min: 1,

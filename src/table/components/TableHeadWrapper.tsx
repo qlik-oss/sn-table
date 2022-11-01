@@ -44,6 +44,7 @@ function TableHeadWrapper({
           // The first cell in the head is focusable in sequential keyboard navigation,
           // when nebula does not handle keyboard navigation
           const tabIndex = columnIndex === 0 && !keyboard.enabled ? 0 : -1;
+          const isLastColumn = columnIndex === columns.length - 1;
           const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.dataColIdx;
           const ariaSort = isCurrentColumnActive
             ? (`${column.sortDirection}ending` as 'ascending' | 'descending')
@@ -66,7 +67,7 @@ function TableHeadWrapper({
           return (
             <TableCell
               sx={headerStyle}
-              style={{ width: (columnWidths[columnIndex] || 200) - 28 }}
+              style={{ width: (columnWidths[columnIndex] || 200) - 28, zIndex: columns.length - columnIndex }}
               key={column.id}
               align={column.align}
               className="sn-table-head-cell sn-table-cell"
@@ -94,7 +95,7 @@ function TableHeadWrapper({
                   </VisuallyHidden>
                 )}
               </StyledSortLabel>
-              <ColumnAdjuster column={column} model={model} layout={layout} />
+              <ColumnAdjuster column={column} layout={layout} model={model} isLastColumn={isLastColumn} />
             </TableCell>
           );
         })}

@@ -10,39 +10,49 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, estimateW
   const MIN_WIDTH = 100;
   const columnWidths: number[] = [];
   const fillColumnIndexes: number[] = [];
-  let allFillWidths = tableWidth;
+  let sumFillWidths = tableWidth;
 
   columns.forEach((col, idx) => {
-    let newWidth = 0;
+    if (col.columnSize) {
+      const {
+        columnSize: { type, widthPx, widthPr },
+      } = col;
+      let newWidth = 0;
 
-    switch (col.columnSizeType) {
-      case 'pixels':
-        newWidth = col.columnSize;
-        break;
-      case 'percentage':
-        newWidth = (col.columnSize / 100) * tableWidth;
-        break;
-      case 'hug':
-        newWidth = estimateWidth(col);
-        break;
-      case 'fill':
-      case undefined:
-        // stores the indexes of fill columns to loop over later
-        fillColumnIndexes.push(idx);
-        break;
-      default:
-        break;
-    }
+      const replaceKnownWidth = () => {
+        columnWidths[idx] = Math.max(MIN_WIDTH, newWidth);
+        sumFillWidths -= columnWidths[idx];
+      };
 
-    if (col.columnSizeType && col.columnSizeType !== 'fill') {
-      columnWidths[idx] = Math.max(MIN_WIDTH, newWidth);
-      allFillWidths -= columnWidths[idx];
+      switch (type) {
+        case 'pixels':
+          newWidth = widthPx;
+          replaceKnownWidth();
+          break;
+        case 'percentage':
+          newWidth = (widthPr / 100) * tableWidth;
+          replaceKnownWidth();
+          break;
+        case 'hug':
+          newWidth = estimateWidth(col);
+          replaceKnownWidth();
+          break;
+        case 'fill':
+        case undefined:
+          // stores the indexes of fill columns to loop over later
+          fillColumnIndexes.push(idx);
+          break;
+        default:
+          throw new Error(`${type} is not a valid column width type`);
+      }
+    } else {
+      fillColumnIndexes.push(idx);
     }
   });
 
   if (fillColumnIndexes.length) {
     // divides remaining width evenly between fill columns
-    const fillWidth = allFillWidths / fillColumnIndexes.length;
+    const fillWidth = sumFillWidths / fillColumnIndexes.length;
     fillColumnIndexes.forEach((fillIdx) => {
       columnWidths[fillIdx] = Math.max(MIN_WIDTH, fillWidth);
     });
@@ -55,6 +65,7 @@ const useColumnWidth = (
   columns: Column[],
   tableWidth: number
 ): [number[], React.Dispatch<React.SetStateAction<number[]>>] => {
+  // TODO use actual font size (and font eventually)
   const estimateWidth = useEstimateWidth('13px', 'Arial');
   const [columnWidths, setColumnWidths] = useState(getColumnWidths(columns, tableWidth, estimateWidth));
 

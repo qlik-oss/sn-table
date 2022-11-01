@@ -38,15 +38,13 @@ export interface ExtendedNxAttrExprInfo extends EngineAPI.INxAttrExprInfo {
 export interface ExtendedNxDimensionInfo extends Omit<EngineAPI.INxDimensionInfo, 'qAttrExprInfo'> {
   textAlign: TextAlign;
   qAttrExprInfo: ExtendedNxAttrExprInfo[];
-  columnSizeType: string;
-  columnSize: number;
+  columnSize: ColumnSize;
 }
 
 export interface ExtendedNxMeasureInfo extends EngineAPI.INxMeasureInfo {
   textAlign: TextAlign;
   qAttrExprInfo: ExtendedNxAttrExprInfo[];
-  columnSizeType: string;
-  columnSize: number;
+  columnSize: ColumnSize;
 }
 
 export interface HyperCube extends Omit<EngineAPI.IHyperCube, 'qDimensionInfo' | 'qMeasureInfo'> {
@@ -103,19 +101,23 @@ export interface Row {
   [key: string]: Cell | string;
 }
 
+export interface ColumnSize {
+  type: string;
+  widthPx: number;
+  widthPr: number;
+}
+
 export interface Column {
   id: string;
   isDim: boolean;
   isLocked: boolean;
   dataColIdx: number;
-  width: number;
   label: string;
   align: 'left' | 'center' | 'right';
   stylingIDs: string[];
   sortDirection: string;
   totalInfo?: string;
-  columnSize: number;
-  columnSizeType: string;
+  columnSize: ColumnSize;
   qApprMaxGlyphCount: number;
 }
 

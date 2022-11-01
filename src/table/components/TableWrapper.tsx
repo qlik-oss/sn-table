@@ -1,12 +1,11 @@
 import React, { useRef, useCallback } from 'react';
-import Table from '@mui/material/Table';
 
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './TableBodyWrapper';
 import TableHeadWrapper from './TableHeadWrapper';
 import FooterWrapper from './FooterWrapper';
 import { useContextSelector, TableContext } from '../context';
-import { StyledTableContainer, StyledTableWrapper } from '../styles';
+import { StyledTableContainer, StyledTableWrapper, StyledTable } from '../styles';
 
 import PaginationContent from './PaginationContent';
 import useDidUpdateEffect from '../hooks/use-did-update-effect';
@@ -36,7 +35,6 @@ export default function TableWrapper(props: TableWrapperProps) {
   const isSelectionMode = selectionsAPI.isModal();
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
-  // const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef<HTMLDivElement>();
   const tableWrapperRef = useRef<HTMLDivElement>();
@@ -118,15 +116,10 @@ export default function TableWrapper(props: TableWrapperProps) {
         role="application"
         data-testid="table-container"
       >
-        <Table stickyHeader aria-label={tableAriaLabel} style={{ tableLayout: 'fixed', width: 'max-content' }}>
-          {/* <colgroup>
-            {columns.map((_, idx) => (
-              <col style={{ width: columnWidths[idx] || 200 }} />
-            ))}
-          </colgroup> */}
+        <StyledTable stickyHeader aria-label={tableAriaLabel}>
           <TableHeadWrapper {...props} />
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
-        </Table>
+        </StyledTable>
       </StyledTableContainer>
       {!constraints.active && (
         <FooterWrapper theme={theme} footerContainer={footerContainer}>

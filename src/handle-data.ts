@@ -56,7 +56,6 @@ export function getColumnInfo(layout: TableLayout, colIndex: number, columnOrder
     !isHidden && {
       isDim,
       isLocked,
-      width: 200,
       label: info.qFallbackTitle,
       id: `col-${colIndex}`,
       align: !info.textAlign || info.textAlign.auto ? autoAlign : info.textAlign.align,
@@ -65,7 +64,6 @@ export function getColumnInfo(layout: TableLayout, colIndex: number, columnOrder
       dataColIdx: colIndex,
       totalInfo: getTotalInfo(isDim, layout, colIndex, numDims, columnOrder),
       columnSize: info.columnSize,
-      columnSizeType: info.columnSizeType,
       qApprMaxGlyphCount: info.qApprMaxGlyphCount,
     }
   );

@@ -7,10 +7,12 @@ import TableBody from '@mui/material/TableBody';
 import Select from '@mui/material/Select';
 import IconButton from '@mui/material/IconButton';
 import TableCell from '@mui/material/TableCell';
+import Box from '@mui/material/Box';
+import Table from '@mui/material/Table';
 
 // ---------- AnnounceWrapper ----------
 
-export const TableAnnouncer = styled('div')({
+export const TableAnnouncer = styled(Box)({
   clip: 'rect(0 0 0 0)',
   clipPath: 'inset(50%)',
   height: '1px',
@@ -122,6 +124,42 @@ export const VisuallyHidden = styled('span')({
   width: 1,
 });
 
+export const AdjusterHitArea = styled(Box, {
+  shouldForwardProp: (prop: string) => prop !== 'isLastColumn',
+})(({ isLastColumn }) => ({
+  display: 'flex',
+  position: 'absolute',
+  height: '100%',
+  top: 0,
+  left: `100%`,
+  cursor: 'col-resize',
+  width: isLastColumn ? '8px' : '16px',
+  justifyContent: isLastColumn ? 'flex-end' : 'center',
+  marginLeft: isLastColumn ? '-8px' : '-7.5px',
+  '&&:hover': {
+    '& .sn-table-head-border': {
+      background: 'black',
+    },
+  },
+  '&&:active': {
+    '& .sn-table-head-border, .sn-table-body-border': {
+      background: 'blue',
+    },
+  },
+}));
+
+export const AdjusterHeadBorder = styled(Box)({
+  position: 'absolute',
+  height: '100%',
+  width: '3px',
+});
+
+export const AdjusterBodyBorder = styled(Box)({
+  position: 'absolute',
+  height: '999999px',
+  width: '1px',
+});
+
 // ---------- TableTotals ----------
 
 export const StyledTotalsCell = styled(TableCell, {
@@ -156,3 +194,9 @@ export const StyledTableContainer = styled(TableContainer, {
   height: fullHeight ? '100%' : 'calc(100% - 49px)',
   overflow: constraints.active ? 'hidden' : 'auto',
 }));
+
+export const StyledTable = styled(Table)({
+  tableLayout: 'fixed',
+  width: 'max-content',
+  overflow: 'hidden',
+});
