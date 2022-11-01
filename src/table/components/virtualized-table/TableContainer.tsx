@@ -56,7 +56,7 @@ export default function TableContainer(props: VirtualizedTableContainerProps) {
       style={{
         overflow: 'auto',
         width: '100%',
-        height: rect.height - PAGINATION_HEIGHT,
+        height: rect.height - (paginationNeeded ? PAGINATION_HEIGHT : 0),
       }}
       onScroll={onScrollHandler}
     >
