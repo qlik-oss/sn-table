@@ -35,7 +35,7 @@ function TableHeadWrapper({
 
   useEffect(() => {
     headRowRef.current && setHeadRowHeight(headRowRef.current.getBoundingClientRect().height);
-  }, [headRowRef.current, headerStyle.fontSize, headRowRef.current?.getBoundingClientRect().height]);
+  }, [headRowRef.current, headerStyle.fontSize, headRowRef.current?.getBoundingClientRect().height, columnWidths]);
 
   return (
     <TableHead>

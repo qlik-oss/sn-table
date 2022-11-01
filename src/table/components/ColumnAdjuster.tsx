@@ -14,10 +14,7 @@ interface AdjusterProps {
 function ColumnAdjuster({ column: { isDim, dataColIdx }, layout: { qHyperCube }, model, isLastColumn }: AdjusterProps) {
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setColumnWidths = useContextSelector(TableContext, (value) => value.setColumnWidths);
-  const localColumnWidths = useRef(columnWidths);
-
-  let x = 0;
-  let w = 0;
+  const tempWidths = useRef({ columnWidths, initX: 0, initWidth: 0 });
 
   const applyPatch = (newColumnSize: { type?: string; widthPx?: number }) => {
     const index = isDim ? dataColIdx : dataColIdx - qHyperCube.qDimensionInfo.length;
@@ -39,32 +36,27 @@ function ColumnAdjuster({ column: { isDim, dataColIdx }, layout: { qHyperCube },
   };
 
   const mouseMoveHandler = (e: MouseEvent) => {
-    // Determine how far the mouse has been moved
-    const dx = e.clientX - x;
-    const newColumnWidths = [...columnWidths];
-    newColumnWidths[dataColIdx] = w + dx;
-
-    // Update the width of column
-    localColumnWidths.current = newColumnWidths;
+    // Need to create a new array for the context to detect the change
+    const newColumnWidths = [...tempWidths.current.columnWidths];
+    // Add the change in x position to the column width at mouse down
+    newColumnWidths[dataColIdx] = tempWidths.current.initWidth + e.clientX - tempWidths.current.initX;
+    tempWidths.current.columnWidths = newColumnWidths;
     setColumnWidths(newColumnWidths);
   };
 
-  // When user releases the mouse, remove the existing event listeners
   const mouseUpHandler = () => {
     document.removeEventListener('mousemove', mouseMoveHandler);
     document.removeEventListener('mouseup', mouseUpHandler);
 
-    applyPatch({ type: 'pixels', widthPx: localColumnWidths.current[dataColIdx] });
+    if (tempWidths.current.columnWidths[dataColIdx] !== tempWidths.current.initWidth)
+      applyPatch({ type: 'pixels', widthPx: tempWidths.current.columnWidths[dataColIdx] });
   };
 
   const mouseDownHandler = (e: React.MouseEvent) => {
+    // Prevent other header mouse down listeners
     e.preventDefault();
     e.stopPropagation();
-    // Get the current mouse position
-    x = e.clientX;
-    // // Calculate the current width of column
-    w = columnWidths[dataColIdx];
-    // Attach listeners for document's events
+    tempWidths.current = { initX: e.clientX, initWidth: columnWidths[dataColIdx], columnWidths };
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler);
   };
@@ -74,7 +66,6 @@ function ColumnAdjuster({ column: { isDim, dataColIdx }, layout: { qHyperCube },
       isLastColumn={isLastColumn}
       key={`adjuster-${dataColIdx}`}
       onMouseDown={mouseDownHandler}
-      // TODO: make sure that mouseDown/up waits for double
       onDoubleClick={() => applyPatch({ type: 'hug' })}
     >
       <AdjusterHeadBorder className="sn-table-head-border" />
