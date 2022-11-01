@@ -18,7 +18,7 @@ interface OnItemsRendered {
 
 const Body = (props: VirtualizedTableContainerProps) => {
   const { rect, layout, model, forwardRef, columns, columnWidth, innerForwardRef, pageInfo, paginationNeeded } = props;
-  const { rows, loadData, debouncedLoadData } = useInfiniteScrollData(model, layout, pageInfo);
+  const { rowsInPage, loadData, debouncedLoadData } = useInfiniteScrollData(model, layout, pageInfo);
   const rowCount = Math.min(pageInfo.rowsPerPage, layout.qHyperCube.qSize.qcy - pageInfo.page * pageInfo.rowsPerPage);
   const visibleRowCount = Math.min(rowCount, Math.ceil(rect.height / DEFAULT_ROW_HEIGHT));
   const visibleColumnCount = useMemo(
@@ -39,11 +39,8 @@ const Body = (props: VirtualizedTableContainerProps) => {
 
   useEffect(() => {
     // Initial data load
-    // TODO remove setTimeout..
-    setTimeout(() => {
-      const top = pageInfo.page * pageInfo.rowsPerPage;
-      loadData(0, top, visibleColumnCount, visibleRowCount);
-    }, 250);
+    const top = pageInfo.page * pageInfo.rowsPerPage;
+    loadData(0, top, visibleColumnCount, visibleRowCount);
   }, [layout, visibleRowCount, visibleColumnCount, loadData, pageInfo]);
 
   useLayoutEffect(() => {
@@ -85,7 +82,7 @@ const Body = (props: VirtualizedTableContainerProps) => {
       rowHeight={() => DEFAULT_ROW_HEIGHT}
       estimatedRowHeight={DEFAULT_ROW_HEIGHT}
       width={rect.width}
-      itemData={{ rows, columns }}
+      itemData={{ rowsInPage, columns }}
       onItemsRendered={handleItemsRendered}
     >
       {Cell}

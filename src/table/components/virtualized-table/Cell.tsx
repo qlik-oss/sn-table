@@ -7,14 +7,14 @@ interface CellProps {
   rowIndex: number;
   style: React.CSSProperties;
   data: {
-    rows: Row[];
+    rowsInPage: Row[];
     columns: Column[];
   };
 }
 
 const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
-  const { rows, columns } = data;
-  const datum = rows[rowIndex]?.[`col-${columnIndex}`];
+  const { rowsInPage, columns } = data;
+  const datum = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
 
   if (datum) {
     const isLeftAligned = columns[columnIndex].align === 'left';

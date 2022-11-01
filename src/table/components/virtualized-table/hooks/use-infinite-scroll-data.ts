@@ -2,10 +2,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { debouncer } from 'qlik-chart-modules';
 import { PageInfo, Row, TableLayout } from '../../../../types';
 
+type LoadData = (left: number, top: number, width: number, height: number) => void;
+
 interface UseInfiniteScrollData {
-  rows: Row[];
-  loadData: (left: number, top: number, width: number, height: number) => void;
-  debouncedLoadData: (left: number, top: number, width: number, height: number) => void;
+  rowsInPage: Row[];
+  loadData: LoadData;
+  debouncedLoadData: LoadData;
 }
 
 const createNewRow = (
@@ -16,9 +18,9 @@ const createNewRow = (
   qLeft: number,
   pageRowStartIdx: number
 ) => {
-  const rowIdx = matrixRowIdx + qTop;
+  const rowIdx = qTop + matrixRowIdx;
   const pageRowIdx = pageRowStartIdx + matrixRowIdx;
-  const row: Row = prevRows[pageRowIdx] || { key: `row-${pageRowIdx}` };
+  const row: Row = prevRows[pageRowIdx] ?? { key: `row-${pageRowIdx}` };
 
   matrixRow.forEach((cell, matrixColIdx: number) => {
     const colIdx = matrixColIdx + qLeft;
@@ -48,22 +50,13 @@ const useInfiniteScrollData = (
 
   useEffect(() => setRowsInPage([]), [layout, pageInfo]);
 
-  const loadData = useCallback(
+  const loadData: LoadData = useCallback(
     async (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
       if (!model) return;
 
       const pageRowStartIdx = qTop - pageInfo.page * pageInfo.rowsPerPage;
 
-      console.log('LOADING DATA', qLeft, qTop, qTop + qHeight);
-
-      const [dataPage] = await model.getHyperCubeData('/qHyperCubeDef', [
-        {
-          qTop,
-          qLeft,
-          qHeight,
-          qWidth,
-        },
-      ]);
+      const [dataPage] = await model.getHyperCubeData('/qHyperCubeDef', [{ qTop, qLeft, qHeight, qWidth }]);
 
       setRowsInPage((prevRows) => {
         dataPage.qMatrix.forEach((matrixRow, matrixRowIdx: number) => {
@@ -78,12 +71,12 @@ const useInfiniteScrollData = (
     [model, pageInfo]
   );
 
-  const memoizedLoadData = useMemo(() => debouncer(loadData, 50), [loadData]);
+  const memoizedLoadData = useMemo<LoadData>(() => debouncer(loadData, 150), [loadData]);
 
   const debouncedLoadData = useCallback(memoizedLoadData, [memoizedLoadData]);
 
   return {
-    rows: rowsInPage,
+    rowsInPage,
     loadData,
     debouncedLoadData,
   };
