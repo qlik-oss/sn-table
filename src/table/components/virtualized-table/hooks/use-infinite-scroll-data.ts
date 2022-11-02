@@ -42,7 +42,7 @@ const createNewRow = (
 };
 
 const useInfiniteScrollData = (
-  model: EngineAPI.IGenericObject | undefined,
+  model: EngineAPI.IGenericObject,
   layout: TableLayout,
   pageInfo: PageInfo
 ): UseInfiniteScrollData => {
@@ -52,8 +52,6 @@ const useInfiniteScrollData = (
 
   const loadData: LoadData = useCallback(
     async (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
-      if (!model) return;
-
       const pageRowStartIdx = qTop - pageInfo.page * pageInfo.rowsPerPage;
 
       const [dataPage] = await model.getHyperCubeData('/qHyperCubeDef', [{ qTop, qLeft, qHeight, qWidth }]);

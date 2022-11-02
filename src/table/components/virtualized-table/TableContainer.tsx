@@ -6,10 +6,10 @@ import Body from './Body';
 import { DEFAULT_ROW_HEIGHT, PAGINATION_HEIGHT } from './constants';
 import FullSizeContainer from './FullSizeContainer';
 import Header from './Header';
-import { VirtualizedTableContainerProps } from './types';
+import { TableContainerProps } from './types';
 
-export default function TableContainer(props: VirtualizedTableContainerProps) {
-  const { layout, rect, pageInfo, paginationNeeded } = props;
+export default function TableContainer(props: TableContainerProps) {
+  const { layout, rect, pageInfo, paginationNeeded, model } = props;
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeGrid>(null);
   const bodyRef = useRef<VariableSizeGrid>(null);
@@ -59,8 +59,25 @@ export default function TableContainer(props: VirtualizedTableContainerProps) {
       onScroll={onScrollHandler}
     >
       <FullSizeContainer width={totalWidth} height={totalHeight} paginationNeeded={paginationNeeded}>
-        <Header {...props} columns={columns} columnWidth={width} forwardRef={headerRef} />
-        <Body {...props} columns={columns} columnWidth={width} forwardRef={bodyRef} innerForwardRef={innerForwardRef} />
+        <Header
+          layout={layout}
+          rect={rect}
+          pageInfo={pageInfo}
+          columns={columns}
+          columnWidth={width}
+          forwardRef={headerRef}
+        />
+        <Body
+          model={model}
+          layout={layout}
+          rect={rect}
+          pageInfo={pageInfo}
+          paginationNeeded={paginationNeeded}
+          columns={columns}
+          columnWidth={width}
+          forwardRef={bodyRef}
+          innerForwardRef={innerForwardRef}
+        />
       </FullSizeContainer>
     </div>
   );

@@ -93,7 +93,7 @@ export default function supernova(env: Galaxy) {
       useContextMenu(areBasicFeaturesEnabled);
 
       useEffect(() => {
-        if (!shouldRenderVirtualizedTable) return;
+        if (!shouldRenderVirtualizedTable || !model) return;
 
         renderVirtualizedTable(
           {

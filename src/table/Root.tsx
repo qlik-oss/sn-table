@@ -9,7 +9,7 @@ import { TableContextProvider } from './context';
 import muiSetup from './mui-setup';
 import { RenderProps, TableWrapperProps } from './types';
 import VirualizedTable from './components/virtualized-table/Wrapper';
-import { VirtualizedTableProps, VirtualizedTableRenderProps } from './components/virtualized-table/types';
+import { WrapperProps } from './components/virtualized-table/types';
 
 export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   const { direction, selectionsAPI, tableData } = props;
@@ -26,13 +26,13 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   );
 }
 
-export function renderVirtualizedTable(props: VirtualizedTableRenderProps, reactRoot?: ReactDom.Root) {
+export function renderVirtualizedTable(props: WrapperProps, reactRoot?: ReactDom.Root) {
   const muiTheme = muiSetup('ltr');
 
   reactRoot?.render(
     <React.StrictMode>
       <ThemeProvider theme={muiTheme}>
-        <VirualizedTable {...(props as VirtualizedTableProps)} />
+        <VirualizedTable {...props} />
       </ThemeProvider>
     </React.StrictMode>
   );

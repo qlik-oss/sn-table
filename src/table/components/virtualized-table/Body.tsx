@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useLayoutEffect, memo, useMemo } from 'r
 import { VariableSizeGrid } from 'react-window';
 import { DEFAULT_ROW_HEIGHT, HEADER_HEIGHT, PAGINATION_HEIGHT } from './constants';
 import useInfiniteScrollData from './hooks/use-infinite-scroll-data';
-import { VirtualizedTableContainerProps } from './types';
+import { BodyProps } from './types';
 import Cell from './Cell';
 
 interface OnItemsRendered {
@@ -16,7 +16,7 @@ interface OnItemsRendered {
   visibleRowStopIndex: number;
 }
 
-const Body = (props: VirtualizedTableContainerProps) => {
+const Body = (props: BodyProps) => {
   const { rect, layout, model, forwardRef, columns, columnWidth, innerForwardRef, pageInfo, paginationNeeded } = props;
   const { rowsInPage, loadData, debouncedLoadData } = useInfiniteScrollData(model, layout, pageInfo);
   const rowCount = Math.min(pageInfo.rowsPerPage, layout.qHyperCube.qSize.qcy - pageInfo.page * pageInfo.rowsPerPage);

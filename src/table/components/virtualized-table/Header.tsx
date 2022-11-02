@@ -1,10 +1,10 @@
 import React, { useLayoutEffect, memo } from 'react';
 import { VariableSizeGrid } from 'react-window';
-import { VirtualizedTableContainerProps } from './types';
+import { HeaderProps } from './types';
 import { DEFAULT_ROW_HEIGHT, HEADER_HEIGHT } from './constants';
 import HeaderCell from './HeaderCell';
 
-const Header = (props: VirtualizedTableContainerProps) => {
+const Header = (props: HeaderProps) => {
   const { layout, rect, forwardRef, columns, columnWidth, pageInfo } = props;
 
   useLayoutEffect(() => {

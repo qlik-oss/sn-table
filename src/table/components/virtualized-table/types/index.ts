@@ -2,8 +2,8 @@ import { stardust } from '@nebula.js/stardust';
 import { VariableSizeGrid } from 'react-window';
 import { Column, ExtendedTheme, ExtendedTranslator, PageInfo, TableLayout } from '../../../../types';
 
-export interface VirtualizedTableRenderProps {
-  model?: EngineAPI.IGenericObject;
+export interface WrapperProps {
+  model: EngineAPI.IGenericObject;
   layout: TableLayout;
   rect: stardust.Rect;
   theme: ExtendedTheme;
@@ -12,15 +12,31 @@ export interface VirtualizedTableRenderProps {
   translator: ExtendedTranslator;
 }
 
-export interface VirtualizedTableProps extends VirtualizedTableRenderProps {
-  forwardRef: React.RefObject<VariableSizeGrid<any>>;
-  innerForwardRef: React.RefObject<HTMLDivElement>;
-  columns: Column[];
-  columnWidth: number[];
-  theme: ExtendedTheme;
-}
-
-export interface VirtualizedTableContainerProps extends VirtualizedTableProps {
+export interface TableContainerProps {
+  layout: TableLayout;
+  rect: stardust.Rect;
   pageInfo: PageInfo;
   paginationNeeded: boolean;
+  model: EngineAPI.IGenericObject;
+}
+
+export interface HeaderProps {
+  layout: TableLayout;
+  rect: stardust.Rect;
+  pageInfo: PageInfo;
+  forwardRef: React.RefObject<VariableSizeGrid<any>>;
+  columns: Column[];
+  columnWidth: number[];
+}
+
+export interface BodyProps {
+  model: EngineAPI.IGenericObject;
+  layout: TableLayout;
+  rect: stardust.Rect;
+  pageInfo: PageInfo;
+  paginationNeeded: boolean;
+  columns: Column[];
+  columnWidth: number[];
+  forwardRef: React.RefObject<VariableSizeGrid<any>>;
+  innerForwardRef: React.RefObject<HTMLDivElement>;
 }
