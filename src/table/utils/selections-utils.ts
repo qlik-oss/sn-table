@@ -64,13 +64,20 @@ export const getCellSelectionState = (cell: Cell, selectionState: SelectionState
   const { colIdx, rows, api } = selectionState;
   let cellState = SelectionStates.INACTIVE;
   if (api.isModal()) {
-    if (colIdx !== cell.colIdx) {
-      cellState = SelectionStates.EXCLUDED;
-    } else if (rows[cell.qElemNumber] !== undefined) {
+    if (cell.qState === 'O' || cell.qState === 'A') {
+      cellState = SelectionStates.POSSIBLE;
+    } else if (cell.qState === 'S') {
       cellState = SelectionStates.SELECTED;
     } else {
-      cellState = SelectionStates.POSSIBLE;
+      cellState = SelectionStates.EXCLUDED;
     }
+    // if (false && colIdx !== cell.colIdx) {
+    //   cellState = SelectionStates.EXCLUDED;
+    // } else if (rows[cell.qElemNumber] !== undefined) {
+    //   cellState = SelectionStates.SELECTED;
+    // } else {
+    //   cellState = SelectionStates.POSSIBLE;
+    // }
   }
 
   return cellState;
@@ -137,7 +144,13 @@ const selectCell = (state: SelectionState, payload: SelectPayload): SelectionSta
 
   if (colIdx === -1) api.begin(['/qHyperCubeDef']);
   else if (colIdx === cell.colIdx) selectedRows = { ...rows };
-  else return state;
+  else {
+    api.select({
+      method: 'selectHyperCubeCells',
+      params: ['/qHyperCubeDef', [cell.rowIdx], [cell.colIdx]],
+    });
+    return state;
+  }
 
   selectedRows = getSelectedRows(selectedRows, cell, evt);
   announceSelectionStatus(announce, rows, selectedRows);

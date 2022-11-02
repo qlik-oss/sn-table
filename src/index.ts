@@ -14,6 +14,7 @@ import {
   useKeyboard,
   useRect,
   useApp,
+  useLayout,
 } from '@nebula.js/stardust';
 
 import properties from './qae/object-properties';
@@ -68,7 +69,8 @@ export default function supernova(env: Galaxy) {
     component() {
       const rootElement = useElement();
       const reactRoot = useReactRoot(rootElement);
-      const layout = useStaleLayout() as TableLayout;
+      // const layout = useStaleLayout() as TableLayout;
+      const layout = useLayout() as TableLayout;
       const { direction, footerContainer } = useOptions() as UseOptions;
       const app = useApp();
       const model = useModel();
@@ -82,13 +84,11 @@ export default function supernova(env: Galaxy) {
       const changeSortOrder = useSorting(model, layout.qHyperCube);
 
       const [pageInfo, setPageInfo] = useState(initialPageInfo);
-      const [tableData] = usePromise(
-        async () =>
-          env.carbon && !model?.getHyperCubeData
-            ? nothing()
-            : manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo),
-        [layout, pageInfo, model]
-      );
+      const [tableData] = usePromise(async () => {
+        return env.carbon && !model?.getHyperCubeData
+          ? nothing()
+          : manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo);
+      }, [layout, pageInfo, model]);
       useContextMenu(areBasicFeaturesEnabled);
       useEffect(() => {
         const isReadyToRender = !env.carbon && reactRoot && layout && tableData && changeSortOrder && theme;
