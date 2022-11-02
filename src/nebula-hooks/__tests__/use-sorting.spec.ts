@@ -6,7 +6,8 @@ describe('use-sorting', () => {
   describe('sortingFactory', () => {
     it('should return undefined when model is undefined', async () => {
       const model = undefined;
-      const changeSortOrder = sortingFactory(model);
+      const hyperCube = {} as HyperCube;
+      const changeSortOrder = sortingFactory(model, hyperCube);
       expect(changeSortOrder).toBeUndefined();
     });
   });
@@ -16,7 +17,7 @@ describe('use-sorting', () => {
     let column: Column;
     let layout: TableLayout;
     let model: EngineAPI.IGenericObject;
-    let changeSortOrder: ((layout: TableLayout, column: Column) => Promise<void>) | undefined;
+    let changeSortOrder: ((column: Column) => Promise<void>) | undefined;
     let expectedPatches: EngineAPI.INxPatch[];
 
     beforeEach(() => {
@@ -32,7 +33,7 @@ describe('use-sorting', () => {
             } as unknown as HyperCube,
           }),
       } as unknown as EngineAPI.IGenericObject;
-      changeSortOrder = sortingFactory(model);
+      changeSortOrder = sortingFactory(model, layout.qHyperCube);
       expectedPatches = [
         {
           qPath: '/qHyperCubeDef/qInterColumnSortOrder',
@@ -46,7 +47,7 @@ describe('use-sorting', () => {
       expectedPatches[0].qValue = '[1,0,2,3]';
 
       if (changeSortOrder) {
-        await changeSortOrder(layout, column);
+        await changeSortOrder(column);
       }
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });
@@ -60,7 +61,7 @@ describe('use-sorting', () => {
       });
 
       if (changeSortOrder) {
-        await changeSortOrder(layout, column);
+        await changeSortOrder(column);
       }
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });
@@ -76,7 +77,7 @@ describe('use-sorting', () => {
       });
 
       if (changeSortOrder) {
-        await changeSortOrder(layout, column);
+        await changeSortOrder(column);
       }
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });

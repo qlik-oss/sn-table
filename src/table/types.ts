@@ -116,7 +116,6 @@ export interface HandleHeadKeyDownProps {
   cellCoord: [number, number];
   column: Column;
   changeSortOrder: ChangeSortOrder;
-  layout: TableLayout;
   isInteractionEnabled: boolean;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   areBasicFeaturesEnabled: boolean;
