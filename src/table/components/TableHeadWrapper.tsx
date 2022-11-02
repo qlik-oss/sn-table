@@ -51,9 +51,8 @@ function TableHeadWrapper({
             : undefined;
 
           const style = {
-            ...headerStyle,
             ...(areBasicFeaturesEnabled && {
-              width: (columnWidths[columnIndex] || 200) - 28,
+              width: (columnWidths[columnIndex] || 200) - (columnIndex === 0 ? 30 : 29), // subtract padding and border
               zIndex: columns.length - columnIndex,
             }),
           };
@@ -73,6 +72,7 @@ function TableHeadWrapper({
 
           return (
             <TableCell
+              sx={headerStyle}
               style={style}
               key={column.id}
               align={column.align}
