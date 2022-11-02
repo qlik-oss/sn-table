@@ -1,51 +1,54 @@
 import Modifiers from 'qlik-modifiers';
 
-const columnResize = {
-  type: {
-    type: 'string',
-    component: 'dropdown',
-    ref: 'qDef.columnSize.type',
-    translation: 'resize type',
-    options: [
-      {
-        value: 'fill',
-        translation: 'fill',
-      },
-      {
-        value: 'hug',
-        translation: 'hug',
-      },
-      {
-        value: 'pixels',
-        translation: 'pixels',
-      },
-      {
-        value: 'percentage',
-        translation: 'percentage',
-      },
-    ],
-    defaultValue: 'fill',
-  },
-  sizePixels: {
-    ref: 'qDef.columnSize.widthPx',
-    translation: 'column pixel width',
-    type: 'number',
-    expression: 'optional',
-    min: 1,
-    defaultValue: 200,
-    show: (data) => data.qDef.columnSizeType === 'pixels',
-  },
-  sizePercentage: {
-    ref: 'qDef.columnSize.widthPr',
-    translation: 'column percentage width',
-    type: 'number',
-    expression: 'optional',
-    min: 1,
-    max: 100,
-    defaultValue: 20,
-    show: (data) => data.qDef.columnSizeType === 'percentage',
-  },
-};
+const getColumnResize = (env) =>
+  env.flags.isEnabled('PS_15585_SN_TABLE_BASIC_FEATURES')
+    ? {
+        type: {
+          type: 'string',
+          component: 'dropdown',
+          ref: 'qDef.columnSize.type',
+          translation: 'resize type',
+          options: [
+            {
+              value: 'fill',
+              translation: 'fill',
+            },
+            {
+              value: 'hug',
+              translation: 'hug',
+            },
+            {
+              value: 'pixels',
+              translation: 'pixels',
+            },
+            {
+              value: 'percentage',
+              translation: 'percentage',
+            },
+          ],
+          defaultValue: 'fill',
+        },
+        sizePixels: {
+          ref: 'qDef.columnSize.widthPx',
+          translation: 'column pixel width',
+          type: 'number',
+          expression: 'optional',
+          min: 1,
+          defaultValue: 200,
+          show: (data) => data.qDef.columnSizeType === 'pixels',
+        },
+        sizePercentage: {
+          ref: 'qDef.columnSize.widthPr',
+          translation: 'column percentage width',
+          type: 'number',
+          expression: 'optional',
+          min: 1,
+          max: 100,
+          defaultValue: 20,
+          show: (data) => data.qDef.columnSizeType === 'percentage',
+        },
+      }
+    : {};
 
 const columnCommonHidden = {
   autoSort: {
@@ -260,7 +263,7 @@ const getData = (env) =>
               ...columnCommonHidden,
               ...columnExpressionItems,
               ...textAlignItems,
-              ...columnResize,
+              ...getColumnResize(env),
             },
           },
           measures: {
@@ -285,7 +288,7 @@ const getData = (env) =>
               ...columnExpressionItems,
               ...textAlignItems,
               totalsAggr: getTotalsAggr(env),
-              ...columnResize,
+              ...getColumnResize(env),
             },
           },
         },

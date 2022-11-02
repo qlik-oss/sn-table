@@ -138,7 +138,7 @@ export const AdjusterHitArea = styled(Box, {
   marginLeft: isLastColumn ? '-8px' : '-7.5px',
   '&&:hover': {
     '& .sn-table-head-border': {
-      background: 'black',
+      background: 'inherit',
     },
   },
   '&&:active': {
@@ -195,8 +195,14 @@ export const StyledTableContainer = styled(TableContainer, {
   overflow: constraints.active ? 'hidden' : 'auto',
 }));
 
-export const StyledTable = styled(Table)({
-  tableLayout: 'fixed',
-  width: 'max-content',
-  overflow: 'hidden',
-});
+export const StyledTable = styled(Table, {
+  shouldForwardProp: (prop: string) => prop !== 'customWidth',
+})(({ customWidth }) =>
+  customWidth
+    ? {
+        tableLayout: 'fixed',
+        width: 'max-content',
+        overflow: 'hidden',
+      }
+    : {}
+);

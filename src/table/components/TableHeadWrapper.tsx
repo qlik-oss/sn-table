@@ -50,6 +50,14 @@ function TableHeadWrapper({
             ? (`${column.sortDirection}ending` as 'ascending' | 'descending')
             : undefined;
 
+          const style = {
+            ...headerStyle,
+            ...(areBasicFeaturesEnabled && {
+              width: (columnWidths[columnIndex] || 200) - 28,
+              zIndex: columns.length - columnIndex,
+            }),
+          };
+
           const handleKeyDown = (evt: React.KeyboardEvent) => {
             handleHeadKeyDown({
               evt,
@@ -65,8 +73,7 @@ function TableHeadWrapper({
 
           return (
             <TableCell
-              sx={headerStyle}
-              style={{ width: (columnWidths[columnIndex] || 200) - 28, zIndex: columns.length - columnIndex }}
+              style={style}
               key={column.id}
               align={column.align}
               className="sn-table-head-cell sn-table-cell"
@@ -94,7 +101,9 @@ function TableHeadWrapper({
                   </VisuallyHidden>
                 )}
               </StyledSortLabel>
-              <ColumnAdjuster column={column} isLastColumn={isLastColumn} updateColumnWidth={updateColumnWidth} />
+              {areBasicFeaturesEnabled && (
+                <ColumnAdjuster column={column} isLastColumn={isLastColumn} updateColumnWidth={updateColumnWidth} />
+              )}
             </TableCell>
           );
         })}

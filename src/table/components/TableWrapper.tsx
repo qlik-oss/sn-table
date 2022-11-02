@@ -29,6 +29,7 @@ export default function TableWrapper(props: TableWrapperProps) {
     direction,
     footerContainer,
     announce,
+    areBasicFeaturesEnabled,
   } = props;
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } = tableData;
   const { page, rowsPerPage } = pageInfo;
@@ -116,7 +117,7 @@ export default function TableWrapper(props: TableWrapperProps) {
         role="application"
         data-testid="table-container"
       >
-        <StyledTable stickyHeader aria-label={tableAriaLabel}>
+        <StyledTable customWidth={areBasicFeaturesEnabled} stickyHeader aria-label={tableAriaLabel}>
           <TableHeadWrapper {...props} />
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </StyledTable>

@@ -10,16 +10,18 @@ const ColumnAdjuster = ({ column, isLastColumn, updateColumnWidth }: AdjusterPro
   const setColumnWidths = useContextSelector(TableContext, (value) => value.setColumnWidths);
   const tempWidths = useRef({ columnWidths, initX: 0, initWidth: 0 });
 
-  const mouseMoveHandler = (e: MouseEvent) => {
+  const mouseMoveHandler = (evt: MouseEvent) => {
     // Need to create a new array for the context to detect the change
     const newColumnWidths = [...tempWidths.current.columnWidths];
     // Add the change in x position to the column width at mouse down
-    newColumnWidths[dataColIdx] = tempWidths.current.initWidth + e.clientX - tempWidths.current.initX;
+    newColumnWidths[dataColIdx] = tempWidths.current.initWidth + evt.clientX - tempWidths.current.initX;
     tempWidths.current.columnWidths = newColumnWidths;
     setColumnWidths(newColumnWidths);
   };
 
-  const mouseUpHandler = () => {
+  const mouseUpHandler = (evt: MouseEvent) => {
+    evt.preventDefault();
+    evt.stopPropagation();
     document.removeEventListener('mousemove', mouseMoveHandler);
     document.removeEventListener('mouseup', mouseUpHandler);
 
@@ -27,11 +29,12 @@ const ColumnAdjuster = ({ column, isLastColumn, updateColumnWidth }: AdjusterPro
       updateColumnWidth({ type: 'pixels', widthPx: tempWidths.current.columnWidths[dataColIdx] }, column);
   };
 
-  const mouseDownHandler = (e: React.MouseEvent) => {
+  const mouseDownHandler = (evt: React.MouseEvent) => {
     // Prevent other header mouse down listeners
-    e.preventDefault();
-    e.stopPropagation();
-    tempWidths.current = { initX: e.clientX, initWidth: columnWidths[dataColIdx], columnWidths };
+    evt.preventDefault();
+    evt.stopPropagation();
+
+    tempWidths.current = { initX: evt.clientX, initWidth: columnWidths[dataColIdx], columnWidths };
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler);
   };
