@@ -162,7 +162,6 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
 
   const rows = dataPages[0]?.qMatrix.map((r, rowIdx) => {
     const row = { key: `row-${rowIdx}` };
-    // console.log(row);
     columns.forEach((c, colIdx) => {
       row[c.id] = {
         ...r[colIdx],
