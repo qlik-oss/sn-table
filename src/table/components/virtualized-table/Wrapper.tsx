@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { VirtualizedTableProps } from './types';
+import { VirtualizedTableProps, VirtualizedTableRenderProps } from './types';
 import PaginationContent from '../PaginationContent';
 import { StyledTableWrapper } from '../../styles';
 import { PageInfo, TableData } from '../../../types';
@@ -7,7 +7,7 @@ import FooterWrapper from '../FooterWrapper';
 import TableContainer from './TableContainer';
 import { MAX_PAGE_SIZE } from './constants';
 
-export default function Wrapper(props: VirtualizedTableProps) {
+export default function Wrapper(props: VirtualizedTableRenderProps) {
   const { rect, layout, keyboard, translator, theme } = props;
   const totalRowCount = layout.qHyperCube.qSize.qcy;
   const pageSize = Math.min(MAX_PAGE_SIZE, totalRowCount);
@@ -25,8 +25,14 @@ export default function Wrapper(props: VirtualizedTableProps) {
   } as TableData;
 
   return (
-    <StyledTableWrapper data-key="wrapper" tableTheme={theme.table} paginationNeeded={paginationNeeded} dir="ltr">
-      <TableContainer {...props} pageInfo={pageInfo} paginationNeeded={paginationNeeded} />
+    <StyledTableWrapper
+      data-key="wrapper"
+      tableTheme={theme.table}
+      paginationNeeded={paginationNeeded}
+      dir="ltr"
+      style={{ borderWidth: paginationNeeded ? '0px 1px 0px' : '0px 1px 1px' }}
+    >
+      <TableContainer {...(props as VirtualizedTableProps)} pageInfo={pageInfo} paginationNeeded={paginationNeeded} />
       {paginationNeeded && (
         <FooterWrapper theme={theme}>
           <PaginationContent
