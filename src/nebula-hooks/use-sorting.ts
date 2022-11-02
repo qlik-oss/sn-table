@@ -5,15 +5,15 @@ export const sortingFactory = (model: EngineAPI.IGenericObject | undefined, hype
   if (!model) return undefined;
 
   return async (column: Column) => {
-    const { isDim, dataColIdx } = column;
+    const { isDim, colIdx } = column;
     // The sort order from the properties is needed since it contains hidden columns
     const properties = await model.getEffectiveProperties();
     const sortOrder = properties.qHyperCubeDef.qInterColumnSortOrder;
     const topSortIdx = sortOrder[0];
 
-    if (dataColIdx !== topSortIdx) {
-      sortOrder.splice(sortOrder.indexOf(dataColIdx), 1);
-      sortOrder.unshift(dataColIdx);
+    if (colIdx !== topSortIdx) {
+      sortOrder.splice(sortOrder.indexOf(colIdx), 1);
+      sortOrder.unshift(colIdx);
     }
 
     const patches = [
@@ -25,9 +25,9 @@ export const sortingFactory = (model: EngineAPI.IGenericObject | undefined, hype
     ];
 
     // reverse
-    if (dataColIdx === topSortIdx) {
+    if (colIdx === topSortIdx) {
       const { qDimensionInfo, qMeasureInfo } = hyperCube;
-      const idx = isDim ? dataColIdx : dataColIdx - qDimensionInfo.length;
+      const idx = isDim ? colIdx : colIdx - qDimensionInfo.length;
       const { qReverseSort } = isDim ? qDimensionInfo[idx] : qMeasureInfo[idx];
       const qPath = `/qHyperCubeDef/${isDim ? 'qDimensions' : 'qMeasures'}/${idx}/qDef/qReverseSort`;
 
