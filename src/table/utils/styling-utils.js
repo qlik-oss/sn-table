@@ -89,6 +89,8 @@ export function getHeaderStyle(layout, theme) {
   headerStyle.sortLabelColor =
     headerStyle.color ?? (isDarkColor(headerStyle?.backgroundColor) ? 'rgba(255,255,255,0.9)' : 'rgba(0, 0, 0, 0.54)');
 
+  headerStyle.wrap = layout?.multiline?.wrapTextInHeaders;
+
   return headerStyle;
 }
 
@@ -150,6 +152,7 @@ export function getBodyCellStyle(layout, theme) {
     hoverBackgroundColor,
     hoverFontColor,
     rowHeight: content?.rowHeight || 1,
+    wrap: layout.multiline.wrapTextInCells,
   };
 }
 
