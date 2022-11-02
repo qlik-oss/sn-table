@@ -50,6 +50,7 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
       menu: {
         copy: translator?.translate?.('Copy') || 'Copy',
         expand: translator?.translate?.('ExpandRow') || 'Expand Row',
+        share: translator?.translate?.('Share') || 'Share',
       },
     }),
     [translator]
