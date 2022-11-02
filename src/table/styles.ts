@@ -138,7 +138,7 @@ export const AdjusterHitArea = styled(Box, {
   marginLeft: isLastColumn ? '-8px' : '-7.5px',
   '&&:hover': {
     '& .sn-table-head-border': {
-      background: 'inherit',
+      background: '#D9D9D9',
     },
   },
   '&&:active': {
