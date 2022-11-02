@@ -18,9 +18,31 @@ enum DirectionMap {
 
 const MAX_CELLS = 10000;
 
+/**
+ * Calculates the highest amount of rows that can be shown given the amount of columns
+ */
 export function getHighestPossibleRpp(width: number, rowsPerPageOptions: number[]) {
   const highestPossibleOption = [...rowsPerPageOptions].reverse().find((opt) => opt * width <= MAX_CELLS);
   return highestPossibleOption || Math.floor(MAX_CELLS / width); // covering corner case of lowest option being too high
+}
+
+/**
+ * Get the position of the totals
+ */
+export function getTotalPosition(layout: TableLayout) {
+  const [hasDimension, hasMeasure, hasGrandTotal, isTotalModeAuto, position] = [
+    layout.qHyperCube.qDimensionInfo.length > 0,
+    layout.qHyperCube.qMeasureInfo.length > 0,
+    layout.qHyperCube.qGrandTotalRow.length > 0,
+    layout.totals?.show,
+    layout.totals.position,
+  ];
+
+  if (hasGrandTotal && ((hasDimension && hasMeasure) || (!isTotalModeAuto && !hasDimension))) {
+    if (isTotalModeAuto || position === 'top') return 'top';
+    if (!isTotalModeAuto && position === 'bottom') return 'bottom';
+  }
+  return 'noTotals';
 }
 
 /**
@@ -69,24 +91,15 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
     }
   );
 }
-/**
- * Get the position of the totals
- */
-export function getTotalPosition(layout: TableLayout) {
-  const [hasDimension, hasMeasure, hasGrandTotal, isTotalModeAuto, position] = [
-    layout.qHyperCube.qDimensionInfo.length > 0,
-    layout.qHyperCube.qMeasureInfo.length > 0,
-    layout.qHyperCube.qGrandTotalRow.length > 0,
-    layout.totals?.show,
-    layout.totals.position,
-  ];
 
-  if (hasGrandTotal && ((hasDimension && hasMeasure) || (!isTotalModeAuto && !hasDimension))) {
-    if (isTotalModeAuto || position === 'top') return 'top';
-    if (!isTotalModeAuto && position === 'bottom') return 'bottom';
-  }
-  return 'noTotals';
-}
+const getColumns = (layout: TableLayout) => {
+  const columnOrder = getColumnOrder(layout.qHyperCube);
+  // using filter to remove hidden columns (represented with false)
+  const columns = columnOrder
+    .map((colIdx, pageColIdx) => getColumnInfo(layout, colIdx, pageColIdx))
+    .filter(Boolean) as Column[];
+  return { columns, columnOrder };
+};
 
 /**
  * Fetches the data for the given pageInfo. Returns rows and columns, sorted in the order they will be displayed,
@@ -105,7 +118,6 @@ export default async function manageData(
   const totalRowCount = qHyperCube.qSize.qcy;
   const totalPages = Math.ceil(totalRowCount / rowsPerPage);
 
-  const paginationNeeded = totalRowCount > 10; // TODO: This might not be true if you have > 1000 columns
   const top = page * rowsPerPage;
   const height = Math.min(rowsPerPage, totalRowCount - top);
   // When the number of rows is reduced (e.g. confirming selections),
@@ -120,11 +132,10 @@ export default async function manageData(
     return null;
   }
 
-  const columnOrder = getColumnOrder(qHyperCube);
-  // using filter to remove hidden columns (represented with false)
-  const columns = columnOrder
-    .map((colIdx, pageColIdx) => getColumnInfo(layout, colIdx, pageColIdx))
-    .filter(Boolean) as Column[];
+  const paginationNeeded = totalRowCount > 10; // TODO: This might not be true if you have > 1000 columns
+  const totalsPosition = getTotalPosition(layout);
+  const { columns, columnOrder } = getColumns(layout);
+
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
     { qTop: top, qLeft: 0, qHeight: height, qWidth: totalColumnCount },
   ]);
@@ -145,7 +156,5 @@ export default async function manageData(
     return row;
   });
 
-  const totalsPosition = getTotalPosition(layout);
-
-  return { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition };
+  return { totalColumnCount, totalRowCount, totalPages, paginationNeeded, totalsPosition, columns, rows };
 }

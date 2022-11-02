@@ -96,7 +96,6 @@ describe('handle-data', () => {
       pageInfo = { page: 1, rowsPerPage: 100, rowsPerPageOptions: [10, 25, 100] };
       model = { getHyperCubeData: async () => generateDataPages(100, 4) } as unknown as EngineAPI.IGenericObject;
       setPageInfo = jest.fn();
-      // console.log(generateDataPages(100, 4)[0].qMatrix[0]);
     });
 
     it('should return size, rows and columns correctly formatted', async () => {
@@ -109,8 +108,6 @@ describe('handle-data', () => {
 
       const firstColCell = rows[0]['col-0'] as Cell;
       const secondColCell = rows[0]['col-1'] as Cell;
-
-      console.log(rows);
 
       expect(totalColumnCount).toBe(layout.qHyperCube.qSize.qcx);
       expect(totalRowCount).toBe(layout.qHyperCube.qSize.qcy);
@@ -186,8 +183,6 @@ describe('handle-data', () => {
 
     it('should not get any total measure value when qGrandTotalRow has no value', () => {
       layout.qHyperCube.qGrandTotalRow = [];
-      expect(getTotalInfo(layout, 0, 0, 2)).toBe('Totals');
-      expect(getTotalInfo(layout, 1, 1, 2)).toBe('');
       expect(getTotalInfo(layout, 2, 2, 2)).toBe(undefined);
       expect(getTotalInfo(layout, 3, 3, 2)).toBe(undefined);
     });
