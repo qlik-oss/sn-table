@@ -152,7 +152,7 @@ export function getBodyCellStyle(layout, theme) {
     hoverBackgroundColor,
     hoverFontColor,
     rowHeight: content?.rowHeight || 1,
-    wrap: layout.multiline.wrapTextInCells,
+    wrap: layout?.multiline?.wrapTextInCells,
   };
 }
 
