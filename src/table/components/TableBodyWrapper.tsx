@@ -66,7 +66,7 @@ function TableBodyWrapper({
   );
 
   return (
-    <StyledTableBody paginationNeeded={paginationNeeded} bodyCellStyle={bodyCellStyle}>
+    <StyledTableBody bodyCellStyle={bodyCellStyle}>
       {totalsPosition === 'top' ? totals : undefined}
       {rows.map((row) => (
         <StyledBodyRow

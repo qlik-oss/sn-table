@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { AdjusterProps } from '../types';
 import { useContextSelector, TableContext } from '../context';
 import { AdjusterHitArea, AdjusterHeadBorder, AdjusterBodyBorder } from '../styles';
+import { MIN_COLUMN_WIDTH } from '../constants';
 
 // TODO: now we assume correct column order, need to respect that later
 const ColumnAdjuster = ({ column, isLastColumn, updateColumnWidth }: AdjusterProps) => {
@@ -14,7 +15,10 @@ const ColumnAdjuster = ({ column, isLastColumn, updateColumnWidth }: AdjusterPro
     // Need to create a new array for the context to detect the change
     const newColumnWidths = [...tempWidths.current.columnWidths];
     // Add the change in x position to the column width at mouse down
-    newColumnWidths[pageColIdx] = tempWidths.current.initWidth + evt.clientX - tempWidths.current.initX;
+    newColumnWidths[pageColIdx] = Math.max(
+      MIN_COLUMN_WIDTH,
+      tempWidths.current.initWidth + evt.clientX - tempWidths.current.initX
+    );
     tempWidths.current.columnWidths = newColumnWidths;
     setColumnWidths(newColumnWidths);
   };

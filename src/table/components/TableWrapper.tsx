@@ -100,13 +100,7 @@ export default function TableWrapper(props: TableWrapperProps) {
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
   return (
-    <StyledTableWrapper
-      ref={tableWrapperRef}
-      tableTheme={theme.table}
-      paginationNeeded={paginationNeeded}
-      dir={direction}
-      onKeyDown={handleKeyDown}
-    >
+    <StyledTableWrapper ref={tableWrapperRef} tableTheme={theme.table} dir={direction} onKeyDown={handleKeyDown}>
       <AnnounceElements />
       <StyledTableContainer
         ref={tableContainerRef}
@@ -117,7 +111,12 @@ export default function TableWrapper(props: TableWrapperProps) {
         role="application"
         data-testid="table-container"
       >
-        <StyledTable customWidth={areBasicFeaturesEnabled} stickyHeader aria-label={tableAriaLabel}>
+        <StyledTable
+          customWidth={areBasicFeaturesEnabled}
+          borderColor={theme.table.borderColor}
+          stickyHeader
+          aria-label={tableAriaLabel}
+        >
           <TableHeadWrapper {...props} />
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </StyledTable>

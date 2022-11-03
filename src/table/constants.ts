@@ -57,3 +57,5 @@ export const SELECTION_STYLING = {
     background: StylingDefaults.WHITE,
   },
 };
+
+export const MIN_COLUMN_WIDTH = 120;

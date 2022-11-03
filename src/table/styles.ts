@@ -34,7 +34,7 @@ export const StyledFooterWrapper = styled(Paper, {
   paddingRight: theme.spacing(1),
   boxShadow: 'none',
   borderStyle: 'solid',
-  borderWidth: '0px 0px 1px 0px',
+  borderWidth: '1px',
   borderRadius: 0,
   borderColor: tableTheme.pagination.borderColor,
   color: tableTheme.pagination.color,
@@ -61,13 +61,10 @@ export const StyledIconButton = styled(IconButton, {
 // ---------- TableBodyWrapper ----------
 
 export const StyledTableBody = styled(TableBody, {
-  shouldForwardProp: (prop: string) => prop !== 'paginationNeeded' && prop !== 'bodyCellStyle',
-})(({ paginationNeeded, bodyCellStyle }) => ({
-  'tr :last-child': {
-    borderRight: paginationNeeded && 0,
-  },
+  shouldForwardProp: (prop: string) => prop !== 'bodyCellStyle',
+})(({ bodyCellStyle }) => ({
   'tr :first-child': {
-    borderLeft: !paginationNeeded && '1px solid rgb(217, 217, 217)',
+    borderLeft: `1px solid ${bodyCellStyle.borderColor}`,
   },
   '& td, th': {
     fontSize: bodyCellStyle.fontSize,
@@ -94,13 +91,10 @@ export const StyledBodyRow = styled(TableRow, {
 // ---------- TableHeadWrapper ----------
 
 export const StyledHeadRow = styled(TableRow, {
-  shouldForwardProp: (prop: string) => prop !== 'paginationNeeded',
-})(({ paginationNeeded }) => ({
-  '& :last-child': {
-    borderRight: paginationNeeded && 0,
-  },
+  shouldForwardProp: (prop: string) => prop !== 'borderColor',
+})(({ borderColor }) => ({
   'th:first-of-type': {
-    borderLeft: !paginationNeeded && '1px solid rgb(217, 217, 217)',
+    borderLeft: `1px solid ${borderColor}`,
   },
 }));
 
@@ -177,11 +171,11 @@ export const StyledTotalsCell = styled(TableCell, {
 // ---------- TableWrapper ----------
 
 export const StyledTableWrapper = styled(Paper, {
-  shouldForwardProp: (prop: string) => prop !== 'tableTheme' && prop !== 'paginationNeeded',
-})(({ tableTheme, paginationNeeded }) => ({
-  borderWidth: paginationNeeded ? '0px 1px 0px' : '0px',
-  borderStyle: 'solid',
-  borderColor: tableTheme.borderColor,
+  shouldForwardProp: (prop: string) => prop !== 'tableTheme',
+})(({ tableTheme }) => ({
+  // borderWidth: '0px',
+  // borderStyle: 'solid',
+  // borderColor: tableTheme.borderColor,
   height: '100%',
   backgroundColor: tableTheme.tableBackgroundColorFromTheme,
   boxShadow: 'none',
@@ -196,13 +190,15 @@ export const StyledTableContainer = styled(TableContainer, {
 }));
 
 export const StyledTable = styled(Table, {
-  shouldForwardProp: (prop: string) => prop !== 'customWidth',
-})(({ customWidth }) =>
+  shouldForwardProp: (prop: string) => prop !== 'customWidth' && prop !== 'borderColor',
+})(({ customWidth, borderColor }) =>
   customWidth
     ? {
         tableLayout: 'fixed',
         width: 'max-content',
         overflow: 'hidden',
+        borderWidth: '0px 1px 0px',
+        borderColor,
       }
     : {}
 );

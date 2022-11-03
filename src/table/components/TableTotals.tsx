@@ -17,14 +17,14 @@ function TableTotals({
   selectionsAPI,
   areBasicFeaturesEnabled,
 }: TableTotalsProps) {
-  const { columns, paginationNeeded, totalsPosition, rows } = tableData;
+  const { columns, totalsPosition, rows } = tableData;
   const headRowHeight = useContextSelector(TableContext, (value) => value.headRowHeight);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const totalsStyle = useMemo(() => getTotalsCellStyle(layout, theme), [layout, theme.name()]);
   const isTop = totalsPosition === 'top';
 
   return (
-    <StyledHeadRow paginationNeeded={paginationNeeded} className="sn-table-row">
+    <StyledHeadRow className="sn-table-row">
       {columns.map((column, columnIndex) => {
         const cellCoord: [number, number] = [isTop ? 1 : rows.length + 1, columnIndex];
         return (

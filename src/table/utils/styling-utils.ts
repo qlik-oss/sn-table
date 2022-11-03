@@ -16,21 +16,6 @@ export const isColorSet = (prop: PaletteColor | undefined): boolean =>
   !!prop && JSON.stringify(prop) !== JSON.stringify({ index: -1, color: null });
 
 /**
- * Gets specified padding from layout if defined, otherwise calculates it based on specified font size if defined, otherwise returns default padding.
- * Note that the padding property can't be set in the styling panel
- */
-export function getPadding(styleObj: ContentStyling | undefined): string | undefined {
-  if (styleObj && (styleObj?.fontSize || 'padding' in styleObj)) {
-    let padding;
-    if (styleObj?.padding) ({ padding } = styleObj);
-    else if (styleObj?.fontSize) padding = `${styleObj.fontSize / 2}px ${styleObj.fontSize}px`;
-
-    return padding;
-  }
-  return undefined;
-}
-
-/**
  * Gets color from color picker. Defaults to default color if resolved color is invalid
  */
 export function getColor(defaultColor: string, theme: stardust.Theme, color = {}): string {
@@ -63,7 +48,7 @@ export const getBaseStyling = (
     fontSize: (styleObj?.fontSize && `${styleObj.fontSize}px`) || fontSize,
     // When we do not set padding for content or header, but set font size,
     // we need to calculate the padding based on the font size
-    padding: getPadding(styleObj),
+    padding: styleObj && 'padding' in styleObj ? styleObj.padding : undefined,
     borderStyle: StylingDefaults.BORDER_STYLE,
     borderColor: theme.table.body.borderColor,
   };

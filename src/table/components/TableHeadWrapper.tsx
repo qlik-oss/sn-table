@@ -13,7 +13,7 @@ import CellText from './CellText';
 
 function TableHeadWrapper({
   rootElement,
-  tableData,
+  tableData: { columns },
   theme,
   layout,
   changeSortOrder,
@@ -24,7 +24,6 @@ function TableHeadWrapper({
   areBasicFeaturesEnabled,
   updateColumnWidth,
 }: TableHeadWrapperProps) {
-  const { columns, paginationNeeded } = tableData;
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
@@ -39,7 +38,7 @@ function TableHeadWrapper({
 
   return (
     <TableHead>
-      <StyledHeadRow ref={headRowRef} paginationNeeded={paginationNeeded} className="sn-table-row">
+      <StyledHeadRow ref={headRowRef} borderColor={theme.table.borderColor} className="sn-table-row">
         {columns.map((column, columnIndex) => {
           // The first cell in the head is focusable in sequential keyboard navigation,
           // when nebula does not handle keyboard navigation
