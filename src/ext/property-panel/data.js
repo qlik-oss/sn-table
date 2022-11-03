@@ -35,7 +35,7 @@ const getColumnResize = (env) =>
           expression: 'optional',
           min: 1,
           defaultValue: 200,
-          show: (data) => data.qDef.columnSizeType === 'pixels',
+          show: (data) => data.qDef.columnSize?.type === 'pixels',
         },
         sizePercentage: {
           ref: 'qDef.columnSize.widthPr',
@@ -45,7 +45,7 @@ const getColumnResize = (env) =>
           min: 1,
           max: 100,
           defaultValue: 20,
-          show: (data) => data.qDef.columnSizeType === 'percentage',
+          show: (data) => data.qDef.columnSize?.type === 'percentage',
         },
       }
     : {};

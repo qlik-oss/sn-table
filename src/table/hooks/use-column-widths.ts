@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Column } from '../../types';
 import { EstimateWidth } from '../types';
-import { MIN_COLUMN_WIDTH } from '../constants';
+import { MIN_COLUMN_WIDTH, ColumnWidthTypes } from '../constants';
 import useEstimateWidth from './use-estimate-width';
 import useDidUpdateEffect from './use-did-update-effect';
 
@@ -31,19 +31,19 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, estimateW
       };
 
       switch (type) {
-        case 'pixels':
+        case ColumnWidthTypes.PIXELS:
           newWidth = widthPx;
           replaceKnownWidth();
           break;
-        case 'percentage':
+        case ColumnWidthTypes.PERCENTAGE:
           newWidth = (widthPr / 100) * tableWidth;
           replaceKnownWidth();
           break;
-        case 'hug':
+        case ColumnWidthTypes.HUG:
           newWidth = estimateWidth(col);
           replaceKnownWidth();
           break;
-        case 'fill':
+        case ColumnWidthTypes.FILL:
         case undefined:
           // stores the indexes of fill columns to loop over later
           fillColumnIndexes.push(idx);

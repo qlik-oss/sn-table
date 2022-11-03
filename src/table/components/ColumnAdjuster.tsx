@@ -2,9 +2,8 @@ import React, { useRef } from 'react';
 import { AdjusterProps } from '../types';
 import { useContextSelector, TableContext } from '../context';
 import { AdjusterHitArea, AdjusterHeadBorder, AdjusterBodyBorder } from '../styles';
-import { MIN_COLUMN_WIDTH } from '../constants';
+import { ColumnWidthTypes, MIN_COLUMN_WIDTH } from '../constants';
 
-// TODO: now we assume correct column order, need to respect that later
 const ColumnAdjuster = ({ column, isLastColumn, updateColumnWidth }: AdjusterProps) => {
   const { pageColIdx } = column;
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
@@ -29,8 +28,10 @@ const ColumnAdjuster = ({ column, isLastColumn, updateColumnWidth }: AdjusterPro
     document.removeEventListener('mousemove', mouseMoveHandler);
     document.removeEventListener('mouseup', mouseUpHandler);
 
-    if (tempWidths.current.columnWidths[pageColIdx] !== tempWidths.current.initWidth)
-      updateColumnWidth({ type: 'pixels', widthPx: tempWidths.current.columnWidths[pageColIdx] }, column);
+    if (tempWidths.current.columnWidths[pageColIdx] !== tempWidths.current.initWidth) {
+      const newWidthData = { type: ColumnWidthTypes.PIXELS, widthPx: tempWidths.current.columnWidths[pageColIdx] };
+      updateColumnWidth(newWidthData, column);
+    }
   };
 
   const mouseDownHandler = (evt: React.MouseEvent) => {
@@ -43,7 +44,7 @@ const ColumnAdjuster = ({ column, isLastColumn, updateColumnWidth }: AdjusterPro
     document.addEventListener('mouseup', mouseUpHandler);
   };
 
-  const handleDoubleClick = () => updateColumnWidth({ type: 'hug' }, column);
+  const handleDoubleClick = () => updateColumnWidth({ type: ColumnWidthTypes.HUG }, column);
 
   return (
     <AdjusterHitArea

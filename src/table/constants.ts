@@ -59,3 +59,10 @@ export const SELECTION_STYLING = {
 };
 
 export const MIN_COLUMN_WIDTH = 120;
+
+export enum ColumnWidthTypes {
+  PIXELS = 'pixels',
+  PERCENTAGE = 'percentage',
+  HUG = 'hug',
+  FILL = 'fill',
+}

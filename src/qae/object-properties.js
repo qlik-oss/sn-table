@@ -26,8 +26,6 @@ const properties = {
     qMeasures: [],
     /** @type {number[]} */
     qColumnOrder: [],
-    /** @type {number[]} */
-    columnWidths: [],
   },
   /**
    * Show title for the visualization
@@ -103,6 +101,7 @@ const properties = {
  * @typedef {object} InlineDimensionDef
  * @extends NxInlineDimensionDef
  * @property {TextAlign=} textAlign
+ * @property {ColumnSize=} columnSize
  */
 
 /**
@@ -110,6 +109,7 @@ const properties = {
  * @typedef {object} InlineMeasureDef
  * @extends NxInlineMeasureDef
  * @property {TextAlign=} textAlign
+ * @property {ColumnSize=} columnSize
  */
 
 /**
@@ -123,9 +123,20 @@ const properties = {
 /**
  * Holds text alignment for a specific column.
  * @typedef {object} TextAlign
- * @extends NxInlineDimensionDef
  * @property {boolean} auto - If true, sets the alignment based on the type of column (left for dimension, right for measure)
  * @property {('left'|'center'|'right')} align - Is used (and mandatory) if `auto` is false
+ */
+
+/**
+ * Holds column size for a specific column, which can have three types
+ * - pixels allows you to set a specified pixel value
+ * - percentage allows you to set a specific percentage. If the sum is over 100, there will be horizontal scrolling
+ * - hug will automatically adjust the size to the column content
+ * - fill takes the remaining width and divides it equally between the columns with type fill
+ * @typedef {object} ColumnSize
+ * @property {('pixels'|'percentage'|'hug'|'fill')=} type - what type of width the column has
+ * @property {number} widthPx - width in pixels
+ * @property {number} widthPr - width in percent
  */
 
 /**
