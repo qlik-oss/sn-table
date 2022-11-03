@@ -1,4 +1,4 @@
-import manageData, { getColumnOrder, getColumnInfo, getTotalInfo, getTotalPosition } from '../handle-data';
+import manageData, { getColumns, getColumnInfo, getTotalInfo, getTotalPosition } from '../handle-data';
 import { generateDataPages, generateLayout } from './generate-test-data';
 import { TableLayout, PageInfo, SetPageInfo, TableData, Cell, ExtendedNxAttrExprInfo } from '../types';
 
@@ -73,18 +73,26 @@ describe('handle-data', () => {
     });
   });
 
-  describe('getColumnOrder', () => {
-    it('should return qColumnOrder when length of qColumnOrder equals the number of columns', () => {
-      const columnLayout = getColumnOrder(layout.qHyperCube);
-      expect(columnLayout).toBe(layout.qHyperCube.qColumnOrder);
-    });
-
-    it('should return [0, 1, ... , number of columns] when length of qColumnOrder does not equal number of columns', () => {
+  describe('getColumns', () => {
+    it('should return columns in default order when length of qColumnOrder does not equal number of columns', () => {
       layout.qHyperCube.qColumnOrder = [];
 
-      const columnLayout = getColumnOrder(layout.qHyperCube);
-      expect(columnLayout).toEqual([0, 1, 2, 3]);
+      const columns = getColumns(layout);
+      expect(columns[0].colIdx).toBe(0);
+      expect(columns[1].colIdx).toBe(1);
+      expect(columns[2].colIdx).toBe(2);
+      expect(columns[3].colIdx).toBe(3);
     });
+
+    it('should return columns in defined column order when qColumnOrder is set', () => {
+      const columns = getColumns(layout);
+      expect(columns[0].colIdx).toBe(1);
+      expect(columns[1].colIdx).toBe(2);
+      expect(columns[2].colIdx).toBe(0);
+      expect(columns[3].colIdx).toBe(3);
+    });
+
+    // it('should return [0, 1, ... , number of columns] when length of qColumnOrder does not equal number of columns', () => {});
   });
 
   describe('manageData', () => {

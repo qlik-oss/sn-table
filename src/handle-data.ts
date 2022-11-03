@@ -2,7 +2,6 @@ import {
   TableLayout,
   PageInfo,
   SetPageInfo,
-  HyperCube,
   Row,
   ExtendedNxMeasureInfo,
   ExtendedNxDimensionInfo,
@@ -46,14 +45,6 @@ export function getTotalPosition(layout: TableLayout) {
 }
 
 /**
- * Gets columns order, if it does not exist, create a new default one, [1, 2, ... nCols]
- */
-export function getColumnOrder({ qColumnOrder, qDimensionInfo, qMeasureInfo }: HyperCube): number[] {
-  const columnsLength = qDimensionInfo.length + qMeasureInfo.length;
-  return qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
-}
-
-/**
  * Gets the totals text for a column
  */
 export function getTotalInfo(layout: TableLayout, colIdx: number, pageColIdx: number, numDims: number) {
@@ -92,13 +83,18 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
   );
 }
 
-const getColumns = (layout: TableLayout) => {
-  const columnOrder = getColumnOrder(layout.qHyperCube);
-  // using filter to remove hidden columns (represented with false)
-  const columns = columnOrder
-    .map((colIdx, pageColIdx) => getColumnInfo(layout, colIdx, pageColIdx))
-    .filter(Boolean) as Column[];
-  return { columns, columnOrder };
+/**
+ * Gets the column order and generates the column info.
+ * Hidden columns are filtered out.
+ */
+export const getColumns = (layout: TableLayout) => {
+  const {
+    qHyperCube: { qColumnOrder, qDimensionInfo, qMeasureInfo },
+  } = layout;
+  const columnsLength = qDimensionInfo.length + qMeasureInfo.length;
+  const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
+
+  return columnOrder.map((colIdx, pageColIdx) => getColumnInfo(layout, colIdx, pageColIdx)).filter(Boolean) as Column[];
 };
 
 /**
@@ -113,9 +109,8 @@ export default async function manageData(
   setPageInfo: SetPageInfo
 ): Promise<TableData | null> {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
-  const { qHyperCube } = layout;
-  const totalColumnCount = qHyperCube.qSize.qcx;
-  const totalRowCount = qHyperCube.qSize.qcy;
+  const totalColumnCount = layout.qHyperCube.qSize.qcx;
+  const totalRowCount = layout.qHyperCube.qSize.qcy;
   const totalPages = Math.ceil(totalRowCount / rowsPerPage);
 
   const top = page * rowsPerPage;
@@ -134,7 +129,7 @@ export default async function manageData(
 
   const paginationNeeded = totalRowCount > 10; // TODO: This might not be true if you have > 1000 columns
   const totalsPosition = getTotalPosition(layout);
-  const { columns, columnOrder } = getColumns(layout);
+  const columns = getColumns(layout);
 
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
     { qTop: top, qLeft: 0, qHeight: height, qWidth: totalColumnCount },
@@ -146,7 +141,7 @@ export default async function manageData(
       row[c.id] = {
         ...r[pageColIdx],
         rowIdx: pageRowIdx + top,
-        colIdx: columnOrder[pageColIdx],
+        colIdx: c.colIdx,
         pageRowIdx,
         pageColIdx,
         isSelectable: c.isDim && !c.isLocked,
