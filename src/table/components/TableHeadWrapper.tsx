@@ -45,7 +45,7 @@ function TableHeadWrapper({
           // when nebula does not handle keyboard navigation
           const tabIndex = columnIndex === 0 && !keyboard.enabled ? 0 : -1;
           const isLastColumn = columnIndex === columns.length - 1;
-          const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.dataColIdx;
+          const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
           const ariaSort = isCurrentColumnActive
             ? (`${column.sortDirection}ending` as 'ascending' | 'descending')
             : undefined;

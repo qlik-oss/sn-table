@@ -4,8 +4,8 @@ import { HyperCube, UpdateColumnWidth } from '../types';
 const updateColumnWidthFactory =
   (model: EngineAPI.IGenericObject | undefined, qHyperCube: HyperCube): UpdateColumnWidth =>
   (newColumnSize, column) => {
-    const { isDim, dataColIdx } = column;
-    const index = isDim ? dataColIdx : dataColIdx - qHyperCube.qDimensionInfo.length;
+    const { isDim, colIdx } = column;
+    const index = isDim ? colIdx : colIdx - qHyperCube.qDimensionInfo.length;
     const qPath = `/qHyperCubeDef/${isDim ? 'qDimensions' : 'qMeasures'}/${index}/qDef/columnSize`;
     const oldColumnSize = qHyperCube[isDim ? 'qDimensionInfo' : 'qMeasureInfo'][index].columnSize;
     const patch = oldColumnSize

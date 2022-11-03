@@ -111,7 +111,8 @@ export interface Column {
   id: string;
   isDim: boolean;
   isLocked: boolean;
-  dataColIdx: number;
+  colIdx: number;
+  pageColIdx: number;
   label: string;
   align: 'left' | 'center' | 'right';
   stylingIDs: string[];

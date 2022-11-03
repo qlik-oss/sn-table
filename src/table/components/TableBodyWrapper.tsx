@@ -73,7 +73,7 @@ function TableBodyWrapper({
           bodyCellStyle={bodyCellStyle}
           hover={hoverEffect}
           tabIndex={-1}
-          key={row.key}
+          key={row.id}
           className="sn-table-row"
         >
           {columns.map((column, columnIndex) => {

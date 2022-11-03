@@ -1,11 +1,11 @@
-import manageData, { getColumnOrder, getColumnInfo, getTotalInfo, getTotalPosition } from '../handle-data';
+import manageData, { getColumns, getColumnInfo, getTotalInfo, getTotalPosition } from '../handle-data';
 import { generateDataPages, generateLayout } from './generate-test-data';
 import { TableLayout, PageInfo, SetPageInfo, TableData, Cell, ExtendedNxAttrExprInfo } from '../types';
 
 describe('handle-data', () => {
   let layout: TableLayout;
   let colIdx: number;
-  let columnOrder: number[];
+  let pageColIdx: number;
 
   beforeEach(() => {
     layout = generateLayout(2, 2, 200, [1, 2, 0, 3], [{ qText: '-' }, { qText: '200' }]);
@@ -13,75 +13,86 @@ describe('handle-data', () => {
 
   describe('getColumnInfo', () => {
     colIdx = 1;
-    columnOrder = [0, 1];
+    pageColIdx = 2;
 
-    const getExpectedInfo = (colIx: number, isDim: boolean, isLocked?: boolean, totals = '') => ({
+    const getExpectedInfo = (isDim: boolean, isLocked?: boolean, totals = '') => ({
       isDim,
-      width: 200,
-      label: `title-${colIx}`,
-      id: `col-${colIx}`,
+      label: `title-${colIdx}`,
+      id: `col-${pageColIdx}`,
       align: isDim ? 'left' : 'right',
       stylingIDs: [] as string[],
       totalInfo: totals,
       sortDirection: 'asc',
-      dataColIdx: colIx,
+      colIdx,
+      pageColIdx,
       isLocked,
     });
 
     it('should return column info for dimension', () => {
-      const columnInfo = getColumnInfo(layout, colIdx, columnOrder);
-      expect(columnInfo).toEqual(getExpectedInfo(colIdx, true));
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
+      expect(columnInfo).toEqual(getExpectedInfo(true));
     });
 
     it('should return column info for dimension with align center', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].textAlign = { auto: false, align: 'center' };
-      const expected = getExpectedInfo(colIdx, true);
+      const expected = getExpectedInfo(true);
       expected.align = 'center';
+
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
+      expect(columnInfo).toEqual(expected);
     });
 
     it('should return column info for dimension with stylingIDs', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qAttrExprInfo = [
         { id: 'someId' },
       ] as unknown as ExtendedNxAttrExprInfo[];
-      const expected = getExpectedInfo(colIdx, true);
+      const expected = getExpectedInfo(true);
       expected.stylingIDs = ['someId'];
 
-      const columnInfo = getColumnInfo(layout, colIdx, columnOrder);
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
       expect(columnInfo).toEqual(expected);
     });
 
     it('should return false for hidden column', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qError = { qErrorCode: 7005 };
 
-      const columnInfo = getColumnInfo(layout, colIdx, columnOrder);
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
       expect(columnInfo).toBe(false);
     });
 
     it('should return column info for dimension with isLocked', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qLocked = true;
-      const columnInfo = getColumnInfo(layout, colIdx, columnOrder);
-      expect(columnInfo).toEqual(getExpectedInfo(colIdx, true, true));
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
+      expect(columnInfo).toEqual(getExpectedInfo(true, true));
     });
 
     it('should return column info for measure', () => {
       colIdx = 3;
-      const columnInfo = getColumnInfo(layout, colIdx, columnOrder);
-      expect(columnInfo).toEqual(getExpectedInfo(colIdx, false, false, '200'));
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
+      expect(columnInfo).toEqual(getExpectedInfo(false, false, '200'));
     });
   });
 
-  describe('getColumnOrder', () => {
-    it('should return qColumnOrder when length of qColumnOrder equals the number of columns', () => {
-      const columnLayout = getColumnOrder(layout.qHyperCube);
-      expect(columnLayout).toBe(layout.qHyperCube.qColumnOrder);
-    });
-
-    it('should return [0, 1, ... , number of columns] when length of qColumnOrder does not equal number of columns', () => {
+  describe('getColumns', () => {
+    it('should return columns in default order when length of qColumnOrder does not equal number of columns', () => {
       layout.qHyperCube.qColumnOrder = [];
 
-      const columnLayout = getColumnOrder(layout.qHyperCube);
-      expect(columnLayout).toEqual([0, 1, 2, 3]);
+      const columns = getColumns(layout);
+      expect(columns[0].colIdx).toBe(0);
+      expect(columns[1].colIdx).toBe(1);
+      expect(columns[2].colIdx).toBe(2);
+      expect(columns[3].colIdx).toBe(3);
     });
+
+    it('should return columns in defined column order when qColumnOrder is set', () => {
+      const columns = getColumns(layout);
+      expect(columns[0].colIdx).toBe(1);
+      expect(columns[1].colIdx).toBe(2);
+      expect(columns[2].colIdx).toBe(0);
+      expect(columns[3].colIdx).toBe(3);
+    });
+
+    // it('should return [0, 1, ... , number of columns] when length of qColumnOrder does not equal number of columns', () => {});
   });
 
   describe('manageData', () => {
@@ -110,16 +121,16 @@ describe('handle-data', () => {
       expect(totalRowCount).toBe(layout.qHyperCube.qSize.qcy);
       expect(paginationNeeded).toBe(true);
       expect(rows).toHaveLength(100);
-      expect(firstColCell.qText).toBe('2');
+      expect(firstColCell.qText).toBe('0');
       expect(firstColCell.rowIdx).toBe(100);
-      expect(firstColCell.colIdx).toBe(0);
+      expect(firstColCell.colIdx).toBe(1);
       expect(firstColCell.pageRowIdx).toBe(0);
-      expect(firstColCell.pageColIdx).toBe(2);
-      expect(secondColCell.qText).toBe('0');
+      expect(firstColCell.pageColIdx).toBe(0);
+      expect(secondColCell.qText).toBe('1');
       expect(secondColCell.rowIdx).toBe(100);
-      expect(secondColCell.colIdx).toBe(1);
+      expect(secondColCell.colIdx).toBe(2);
       expect(secondColCell.pageRowIdx).toBe(0);
-      expect(secondColCell.pageColIdx).toBe(0);
+      expect(secondColCell.pageColIdx).toBe(1);
       expect(columns).toHaveLength(4);
       columns.forEach((c, i) => {
         expect(c.id).toBe(Object.keys(rows[0])[i + 1]); // skip the first key
@@ -163,39 +174,35 @@ describe('handle-data', () => {
   });
 
   describe('getTotalInfo:', () => {
-    columnOrder = [0, 1, 2, 3];
-
     it('should show all the measures cells total values', () => {
-      expect(getTotalInfo(false, layout, 2, 2, columnOrder)).toBe('-');
-      expect(getTotalInfo(false, layout, 3, 2, columnOrder)).toBe('200');
+      expect(getTotalInfo(layout, 2, 2, 2)).toBe('-');
+      expect(getTotalInfo(layout, 3, 3, 2)).toBe('200');
     });
 
     it('should show Totals label for the first dimension and empty for the other dimensions', () => {
-      expect(getTotalInfo(true, layout, 0, 2, columnOrder)).toBe('Totals');
-      expect(getTotalInfo(true, layout, 1, 2, columnOrder)).toBe('');
+      expect(getTotalInfo(layout, 0, 0, 2)).toBe('Totals');
+      expect(getTotalInfo(layout, 1, 1, 2)).toBe('');
     });
 
     it('should not show Totals label if the dimension is in another column order than 0', () => {
-      expect(getTotalInfo(true, layout, 0, 2, [2, 3, 0, 1])).toBe('');
-      expect(getTotalInfo(true, layout, 1, 2, [2, 3, 0, 1])).toBe('');
+      expect(getTotalInfo(layout, 0, 2, 2)).toBe('');
+      expect(getTotalInfo(layout, 1, 3, 2)).toBe('');
     });
 
     it('should not get any total measure value when qGrandTotalRow has no value', () => {
       layout.qHyperCube.qGrandTotalRow = [];
-      expect(getTotalInfo(true, layout, 0, 2, columnOrder)).toBe('Totals');
-      expect(getTotalInfo(true, layout, 1, 2, columnOrder)).toBe('');
-      expect(getTotalInfo(false, layout, 2, 2, columnOrder)).toBe(undefined);
-      expect(getTotalInfo(false, layout, 3, 2, columnOrder)).toBe(undefined);
+      expect(getTotalInfo(layout, 2, 2, 2)).toBe(undefined);
+      expect(getTotalInfo(layout, 3, 3, 2)).toBe(undefined);
     });
 
     it('should return new total label value', () => {
       layout.totals.label = 'Whatever';
-      expect(getTotalInfo(true, layout, 0, 2, columnOrder)).toBe('Whatever');
+      expect(getTotalInfo(layout, 0, 0, 2)).toBe('Whatever');
     });
 
     it('should return first dimension total value as empty when the label is set to empty', () => {
       layout.totals.label = '';
-      expect(getTotalInfo(true, layout, 0, 2, columnOrder)).toBe('');
+      expect(getTotalInfo(layout, 0, 0, 2)).toBe('');
     });
   });
 

@@ -5,7 +5,7 @@ import { AdjusterHitArea, AdjusterHeadBorder, AdjusterBodyBorder } from '../styl
 
 // TODO: now we assume correct column order, need to respect that later
 const ColumnAdjuster = ({ column, isLastColumn, updateColumnWidth }: AdjusterProps) => {
-  const { dataColIdx } = column;
+  const { pageColIdx } = column;
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setColumnWidths = useContextSelector(TableContext, (value) => value.setColumnWidths);
   const tempWidths = useRef({ columnWidths, initX: 0, initWidth: 0 });
@@ -14,7 +14,7 @@ const ColumnAdjuster = ({ column, isLastColumn, updateColumnWidth }: AdjusterPro
     // Need to create a new array for the context to detect the change
     const newColumnWidths = [...tempWidths.current.columnWidths];
     // Add the change in x position to the column width at mouse down
-    newColumnWidths[dataColIdx] = tempWidths.current.initWidth + evt.clientX - tempWidths.current.initX;
+    newColumnWidths[pageColIdx] = tempWidths.current.initWidth + evt.clientX - tempWidths.current.initX;
     tempWidths.current.columnWidths = newColumnWidths;
     setColumnWidths(newColumnWidths);
   };
@@ -25,8 +25,8 @@ const ColumnAdjuster = ({ column, isLastColumn, updateColumnWidth }: AdjusterPro
     document.removeEventListener('mousemove', mouseMoveHandler);
     document.removeEventListener('mouseup', mouseUpHandler);
 
-    if (tempWidths.current.columnWidths[dataColIdx] !== tempWidths.current.initWidth)
-      updateColumnWidth({ type: 'pixels', widthPx: tempWidths.current.columnWidths[dataColIdx] }, column);
+    if (tempWidths.current.columnWidths[pageColIdx] !== tempWidths.current.initWidth)
+      updateColumnWidth({ type: 'pixels', widthPx: tempWidths.current.columnWidths[pageColIdx] }, column);
   };
 
   const mouseDownHandler = (evt: React.MouseEvent) => {
@@ -34,7 +34,7 @@ const ColumnAdjuster = ({ column, isLastColumn, updateColumnWidth }: AdjusterPro
     evt.preventDefault();
     evt.stopPropagation();
 
-    tempWidths.current = { initX: evt.clientX, initWidth: columnWidths[dataColIdx], columnWidths };
+    tempWidths.current = { initX: evt.clientX, initWidth: columnWidths[pageColIdx], columnWidths };
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler);
   };
@@ -44,7 +44,7 @@ const ColumnAdjuster = ({ column, isLastColumn, updateColumnWidth }: AdjusterPro
   return (
     <AdjusterHitArea
       isLastColumn={isLastColumn}
-      key={`adjuster-${dataColIdx}`}
+      key={`adjuster-${pageColIdx}`}
       onMouseDown={mouseDownHandler}
       onDoubleClick={handleDoubleClick}
     >

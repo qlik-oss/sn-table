@@ -4,6 +4,12 @@ import useEstimateWidth from './use-estimate-width';
 import { EstimateWidth } from '../types';
 import useDidUpdateEffect from './use-did-update-effect';
 
+/**
+ * Calculates column widths in pixels, based on column settings and the table width.
+ * First, pixel values for the three independent types ('pixels', 'percentage', 'hug') are set.
+ * Then the remaining width is divided equally between the 'fill' columns, if there is any
+ * The widths are sorted in the order they will be displayed
+ */
 export const getColumnWidths = (columns: Column[], tableWidth: number, estimateWidth: EstimateWidth) => {
   if (!columns?.length || tableWidth === 0) return [];
 
