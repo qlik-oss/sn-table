@@ -52,6 +52,9 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
         expand: translator?.translate?.('ExpandRow') || 'Expand Row',
         share: translator?.translate?.('Share') || 'Share',
       },
+      misc: {
+        of: translator?.translate?.('Of') || 'of',
+      },
     }),
     [translator]
   );
