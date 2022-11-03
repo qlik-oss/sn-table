@@ -24,7 +24,7 @@ function TableTotals({
   const isTop = totalsPosition === 'top';
 
   return (
-    <StyledHeadRow sticky className="sn-table-row">
+    <StyledHeadRow className="sn-table-row">
       {columns.map((column, columnIndex) => {
         const cellCoord: [number, number] = [isTop ? 1 : rows.length + 1, columnIndex];
         return (

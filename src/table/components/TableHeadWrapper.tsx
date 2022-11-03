@@ -38,7 +38,7 @@ function TableHeadWrapper({
 
   return (
     <TableHead>
-      <StyledHeadRow sticky ref={headRowRef} borderColor={theme.table.borderColor} className="sn-table-row">
+      <StyledHeadRow ref={headRowRef} borderColor={theme.table.borderColor} className="sn-table-row">
         {columns.map((column, columnIndex) => {
           // The first cell in the head is focusable in sequential keyboard navigation,
           // when nebula does not handle keyboard navigation
