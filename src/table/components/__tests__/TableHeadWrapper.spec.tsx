@@ -163,8 +163,8 @@ describe('<TableHeadWrapper />', () => {
     expect(tableColumn?.getAttribute('scope')).toBe('col');
 
     // check label
-    const tableColumnSortlabel = getByTestId('VHL-for-col-0');
-    expect(tableColumnSortlabel).toHaveTextContent('SNTable.SortLabel.PressSpaceToSort');
+    const tableColumnSortLabel = getByTestId('VHL-for-col-0');
+    expect(tableColumnSortLabel).toHaveTextContent('SNTable.SortLabel.PressSpaceToSort');
   });
 
   it('should not render visually hidden text while you are out of table header', () => {
