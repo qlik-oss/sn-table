@@ -4,6 +4,7 @@ import { createSelectorProvider } from './createSelectorProvider';
 import { ContextValue, ContextProviderProps } from '../types';
 import useSelectionReducer from '../hooks/use-selection-reducer';
 import useColumnWidth from '../hooks/use-column-widths';
+import { TableData } from '../../types';
 
 // In order to not have typing issues when using properties on the context,
 // the initial value for the context is casted to ContextValue.
@@ -16,8 +17,8 @@ const ProviderWithSelector = createSelectorProvider(TableContext);
 export const TableContextProvider = ({
   children,
   selectionsAPI,
-  tableData,
-  tableWidth,
+  tableData = { rows: [], columns: [] } as unknown as TableData,
+  tableWidth = 0,
   cellCoordMock,
   selectionDispatchMock,
 }: ContextProviderProps) => {

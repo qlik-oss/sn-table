@@ -158,8 +158,8 @@ export interface HandleResetFocusProps {
 export interface ContextProviderProps {
   children: JSX.Element;
   selectionsAPI: ExtendedSelectionAPI;
-  tableData: TableData;
-  tableWidth: number;
+  tableData?: TableData;
+  tableWidth?: number;
   cellCoordMock?: [number, number];
   selectionDispatchMock?: jest.Mock<any, any>;
 }

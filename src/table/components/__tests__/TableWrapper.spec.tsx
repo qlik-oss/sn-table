@@ -19,6 +19,7 @@ import {
   Column,
   ChangeSortOrder,
   ExtendedSelectionAPI,
+  UpdateColumnWidth,
 } from '../../../types';
 
 describe('<TableWrapper />', () => {
@@ -38,6 +39,7 @@ describe('<TableWrapper />', () => {
   let changeSortOrder: ChangeSortOrder;
   let layout: TableLayout;
   let areBasicFeaturesEnabled: boolean;
+  let updateColumnWidth: UpdateColumnWidth;
 
   const renderTableWrapper = () =>
     render(
@@ -58,6 +60,7 @@ describe('<TableWrapper />', () => {
           changeSortOrder={changeSortOrder}
           layout={layout}
           areBasicFeaturesEnabled={areBasicFeaturesEnabled}
+          updateColumnWidth={updateColumnWidth}
         />
       </TableContextProvider>
     );

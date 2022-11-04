@@ -90,24 +90,22 @@ describe('styling-utils', () => {
       objetName = '';
     });
 
-    it('should return styling with fontColor, fontSize and padding', () => {
+    it('should return styling with fontColor and fontSize', () => {
       const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
         color: '#fff',
         fontSize: '12px',
-        padding: '6px 12px',
       });
     });
-    it('should return styling with fontSize and padding', () => {
+    it('should return styling with fontSize', () => {
       styleObj.fontColor = undefined;
       const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
         fontSize: '12px',
-        padding: '6px 12px',
       });
     });
     it('should return styling with padding', () => {
@@ -121,7 +119,7 @@ describe('styling-utils', () => {
         padding: '20px',
       });
     });
-    it('should return styling with fontSize and padding when the index for font color is -1 and color is null', () => {
+    it('should return styling with fontSize when the index for font color is -1 and color is null', () => {
       styleObj.fontColor = { index: -1, color: null };
 
       const resultStyling = getBaseStyling(objetName, theme, styleObj);
@@ -129,10 +127,9 @@ describe('styling-utils', () => {
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
         fontSize: '12px',
-        padding: '6px 12px',
       });
     });
-    it('should return styling with fontSize, padding and font color when the index for font color is -1 and color is null and there is a color from theme', () => {
+    it('should return styling with fontSize and font color when the index for font color is -1 and color is null and there is a color from theme', () => {
       styleObj.fontColor = { index: -1, color: null };
       const customTheme = {
         ...theme,
@@ -146,10 +143,9 @@ describe('styling-utils', () => {
         color: '#111',
         fontSize: '12px',
         fontFamily: '#111',
-        padding: '6px 12px',
       });
     });
-    it('should return styling with fontSize, padding and font color when the index for font color is -1 and the color is not null', () => {
+    it('should return styling with fontSize, and font color when the index for font color is -1 and the color is not null', () => {
       styleObj.fontColor = { index: -1, color: 'fff' };
 
       const resultStyling = getBaseStyling(objetName, theme, styleObj);
@@ -158,7 +154,6 @@ describe('styling-utils', () => {
         borderStyle: 'solid',
         color: 'fff',
         fontSize: '12px',
-        padding: '6px 12px',
       });
     });
     it('should return styling with fontColor as the font size and padding are from sprout theme', () => {
@@ -236,7 +231,6 @@ describe('styling-utils', () => {
         color: '#404040',
         cursor: 'pointer',
         fontSize: '44px',
-        padding: '22px 44px',
         backgroundColor: '#323232',
         borderColor: '#D9D9D9',
         borderStyle: 'solid',
@@ -270,7 +264,6 @@ describe('styling-utils', () => {
                 index: -1,
                 color: null,
               },
-              padding: '11px 22px',
             },
           },
         ],
@@ -289,12 +282,11 @@ describe('styling-utils', () => {
         borderWidth: '0px 1px 1px 0px',
       });
     });
-    it('should return styling with fontColor, fontSize, padding plus default hoverBackgroundColor and hoverFontColor', () => {
+    it('should return styling with fontColor, fontSizex§ plus default hoverBackgroundColor and hoverFontColor', () => {
       const resultStyling = getBodyCellStyle(layout, theme);
       expect(resultStyling).toEqual({
         fontSize: '22px',
         color: '#222222',
-        padding: '11px 22px',
         hoverBackgroundColor: '#f4f4f4',
         hoverFontColor: '',
         borderColor: '#D9D9D9',

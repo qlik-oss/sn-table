@@ -12,6 +12,7 @@ import {
   ChangeSortOrder,
   ExtendedTranslator,
   ExtendedSelectionAPI,
+  UpdateColumnWidth,
 } from '../../../types';
 
 describe('<TableHeadWrapper />', () => {
@@ -25,6 +26,7 @@ describe('<TableHeadWrapper />', () => {
   let keyboard: stardust.Keyboard;
   let translator: ExtendedTranslator;
   let areBasicFeaturesEnabled: boolean;
+  let updateColumnWidth: UpdateColumnWidth;
 
   const renderTableHead = (cellCoordMock?: [number, number]) =>
     render(
@@ -40,6 +42,7 @@ describe('<TableHeadWrapper />', () => {
           keyboard={keyboard}
           translator={translator}
           areBasicFeaturesEnabled={areBasicFeaturesEnabled}
+          updateColumnWidth={updateColumnWidth}
         />
       </TableContextProvider>
     );
