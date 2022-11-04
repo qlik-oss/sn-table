@@ -23,7 +23,7 @@ describe('use-sorting', () => {
     beforeEach(() => {
       originalOrder = [0, 1, 2, 3];
       layout = generateLayout(2, 2, 2);
-      column = { isDim: true, dataColIdx: 1 } as Column;
+      column = { isDim: true, colIdx: 1 } as Column;
       model = {
         applyPatches: jest.fn(),
         getEffectiveProperties: async () =>
@@ -53,7 +53,7 @@ describe('use-sorting', () => {
     });
 
     it('should call apply patches with another patch for qReverseSort for dimension', async () => {
-      column.dataColIdx = 0;
+      column.colIdx = 0;
       expectedPatches.push({
         qPath: '/qHyperCubeDef/qDimensions/0/qDef/qReverseSort',
         qOp: 'Replace' as EngineAPI.NxPatchOpType,
@@ -67,7 +67,7 @@ describe('use-sorting', () => {
     });
 
     it('should call apply patches with another patch for qReverseSort for measure', async () => {
-      column = { isDim: false, dataColIdx: 2 } as Column;
+      column = { isDim: false, colIdx: 2 } as Column;
       originalOrder = [2, 0, 1, 3];
       expectedPatches[0].qValue = '[2,0,1,3]';
       expectedPatches.push({

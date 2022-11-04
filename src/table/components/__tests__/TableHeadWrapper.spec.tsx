@@ -47,8 +47,8 @@ describe('<TableHeadWrapper />', () => {
   beforeEach(() => {
     tableData = {
       columns: [
-        { id: 1, align: 'left', label: 'someDim', sortDirection: 'asc', isDim: true, dataColIdx: 0 },
-        { id: 2, align: 'right', label: 'someMsr', sortDirection: 'desc', isDim: false, dataColIdx: 1 },
+        { id: 1, align: 'left', label: 'someDim', sortDirection: 'asc', isDim: true, colIdx: 0 },
+        { id: 2, align: 'right', label: 'someMsr', sortDirection: 'desc', isDim: false, colIdx: 1 },
       ],
     } as unknown as TableData;
     theme = {
