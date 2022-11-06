@@ -56,7 +56,7 @@ export const getBaseStyling = (styleObj, objetName, theme) => {
   const baseStyle = {
     fontFamily,
     color: isSet(styleObj?.fontColor) ? getColor(STYLING_DEFAULTS.FONT_COLOR, theme, styleObj.fontColor) : color,
-    fontSize: styleObj?.fontSize || fontSize,
+    fontSize: styleObj?.fontSize ? styleObj.fontSize : fontSize,
     padding: getPadding(styleObj, STYLING_DEFAULTS.PADDING),
     borderStyle: 'solid',
     borderColor: theme?.table?.body.borderColor || 'black',

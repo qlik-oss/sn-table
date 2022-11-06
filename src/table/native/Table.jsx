@@ -78,11 +78,12 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
 
         const { qHyperCube } = layout;
         const activeSortHeader = qHyperCube?.qEffectiveInterColumnSortOrder[0] || 0;
-        data.columns = data.columns.map((e, index) => ({
+        data.columns = data.columns.map((e) => ({
           ...e,
-          active: index === activeSortHeader,
+          active: e.dataColIdx === activeSortHeader,
           representation: transformRepresentation(e, theme),
         }));
+
         setTableData(data);
       } catch (error) {
         console.log('error', error);
@@ -123,9 +124,9 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
     if (data) {
       const { qHyperCube } = layout;
       const activeSortHeader = qHyperCube?.qEffectiveInterColumnSortOrder[0] || 0;
-      data.columns = data.columns.map((e, index) => ({
+      data.columns = data.columns.map((e) => ({
         ...e,
-        active: index === activeSortHeader,
+        active: e.dataColIdx === activeSortHeader,
       }));
       setTableData(data);
     }

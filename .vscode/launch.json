@@ -17,7 +17,7 @@
       "type": "reactnativedirect",
       "request": "launch",
       "platform": "ios",
-      "runArguments": ["--simulator", "iPhone 14"]
+      "runArguments": ["--simulator", "iPhone 14 Pro"]
     }
   ]
 }
