@@ -72,6 +72,7 @@ export default function TableContainer(props: TableContainerProps) {
           forwardRef={headerRef}
         />
         <Body
+          bodyStyle={bodyStyle}
           model={model}
           layout={layout}
           rect={rect}

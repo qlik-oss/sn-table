@@ -1,6 +1,7 @@
 import React from 'react';
 import { areEqual } from 'react-window';
 import { Column, Row } from '../../../types';
+import { GeneratedStyling } from '../../types';
 
 interface CellProps {
   columnIndex: number;
@@ -9,11 +10,12 @@ interface CellProps {
   data: {
     rowsInPage: Row[];
     columns: Column[];
+    bodyStyle: GeneratedStyling;
   };
 }
 
 const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
-  const { rowsInPage, columns } = data;
+  const { rowsInPage, columns, bodyStyle } = data;
   const datum = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
 
   if (datum) {
@@ -25,14 +27,18 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           ...style,
           display: 'flex',
           alignItems: 'center',
-          borderRight: '1px solid #ccc',
-          borderBottom: '1px solid #ccc',
+          borderColor: bodyStyle.borderColor,
+          borderStyle: bodyStyle.borderStyle,
+          borderWidth: `0px 1px 1px 0px`,
           justifyContent: columns[columnIndex].align,
           boxSizing: 'border-box',
         }}
       >
         <span
           style={{
+            fontSize: bodyStyle.fontSize,
+            fontFamily: bodyStyle.fontFamily,
+            color: bodyStyle.color,
             paddingLeft: isLeftAligned ? '14px' : '4px',
             paddingRight: isLeftAligned ? '4px' : '14px',
             overflow: 'hidden',
@@ -47,7 +53,15 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
   }
 
   return (
-    <div style={{ ...style, borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', boxSizing: 'border-box' }} />
+    <div
+      style={{
+        ...style,
+        borderColor: bodyStyle.borderColor,
+        borderStyle: bodyStyle.borderStyle,
+        borderWidth: `0px 1px 1px 0px`,
+        boxSizing: 'border-box',
+      }}
+    />
   );
 };
 

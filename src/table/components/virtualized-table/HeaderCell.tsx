@@ -49,7 +49,16 @@ const HeaderCell = ({ columnIndex, style, data }: HeaderCellProps) => {
     );
   }
 
-  return <div style={{ ...style, borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc' }} />;
+  return (
+    <div
+      style={{
+        ...style,
+        borderColor: headerStyle.borderColor,
+        borderStyle: headerStyle.borderStyle,
+        borderWidth: `0px 1px 0px 0px`,
+      }}
+    />
+  );
 };
 
 export default HeaderCell;

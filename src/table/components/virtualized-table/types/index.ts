@@ -42,4 +42,5 @@ export interface BodyProps {
   columnWidth: number[];
   forwardRef: React.RefObject<VariableSizeGrid<any>>;
   innerForwardRef: React.RefObject<HTMLDivElement>;
+  bodyStyle: GeneratedStyling;
 }

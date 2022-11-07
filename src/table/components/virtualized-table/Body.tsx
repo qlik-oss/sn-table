@@ -17,7 +17,18 @@ interface OnItemsRendered {
 }
 
 const Body = (props: BodyProps) => {
-  const { rect, layout, model, forwardRef, columns, columnWidth, innerForwardRef, pageInfo, paginationNeeded } = props;
+  const {
+    rect,
+    layout,
+    model,
+    forwardRef,
+    columns,
+    columnWidth,
+    innerForwardRef,
+    pageInfo,
+    paginationNeeded,
+    bodyStyle,
+  } = props;
   const { rowsInPage, loadData, debouncedLoadData } = useInfiniteScrollData(model, layout, pageInfo);
   const rowCount = Math.min(pageInfo.rowsPerPage, layout.qHyperCube.qSize.qcy - pageInfo.page * pageInfo.rowsPerPage);
   const visibleRowCount = Math.min(rowCount, Math.ceil(rect.height / DEFAULT_ROW_HEIGHT));
@@ -82,7 +93,7 @@ const Body = (props: BodyProps) => {
       rowHeight={() => DEFAULT_ROW_HEIGHT}
       estimatedRowHeight={DEFAULT_ROW_HEIGHT}
       width={rect.width}
-      itemData={{ rowsInPage, columns }}
+      itemData={{ rowsInPage, columns, bodyStyle }}
       onItemsRendered={handleItemsRendered}
     >
       {Cell}
