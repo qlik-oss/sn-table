@@ -1,6 +1,6 @@
 import { stardust } from '@nebula.js/stardust';
 import { useMemo } from 'react';
-import { Column } from '../../types';
+import { Column } from '../../../../types';
 import useMeasureText from './use-measure-text';
 
 const useColumnSize = (rect: stardust.Rect, columns: Column[]) => {

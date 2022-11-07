@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { VariableSizeGrid } from 'react-window';
 import { getColumns } from '../../../handle-data';
-import useColumnSize from '../../hooks/use-column-size';
+import useColumnSize from './hooks/use-column-size';
 import Body from './Body';
 import { DEFAULT_ROW_HEIGHT, PAGINATION_HEIGHT } from './constants';
 import FullSizeContainer from './FullSizeContainer';

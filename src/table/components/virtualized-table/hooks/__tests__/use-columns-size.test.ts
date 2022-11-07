@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react';
 import { stardust } from '@nebula.js/stardust';
 import useMeasureText, { MeasureTextHook } from '../use-measure-text';
 import useColumnSize from '../use-column-size';
-import { Column } from '../../../types';
+import { Column } from '../../../../../types';
 
 jest.mock('../use-measure-text');
 
