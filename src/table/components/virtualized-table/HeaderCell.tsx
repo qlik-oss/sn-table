@@ -26,7 +26,7 @@ const HeaderCell = ({ columnIndex, style, data }: HeaderCellProps) => {
           alignItems: 'center',
           borderColor: headerStyle.borderColor,
           borderStyle: headerStyle.borderStyle,
-          borderWidth: `0px 1px 0px 0px`,
+          borderWidth: '0px 1px 0px 0px',
           justifyContent: datum.align,
           boxSizing: 'border-box',
         }}
@@ -55,7 +55,7 @@ const HeaderCell = ({ columnIndex, style, data }: HeaderCellProps) => {
         ...style,
         borderColor: headerStyle.borderColor,
         borderStyle: headerStyle.borderStyle,
-        borderWidth: `0px 1px 0px 0px`,
+        borderWidth: '0px 1px 0px 0px',
       }}
     />
   );

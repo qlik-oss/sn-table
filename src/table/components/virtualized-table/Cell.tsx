@@ -29,7 +29,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           alignItems: 'center',
           borderColor: bodyStyle.borderColor,
           borderStyle: bodyStyle.borderStyle,
-          borderWidth: `0px 1px 1px 0px`,
+          borderWidth: '0px 1px 1px 0px',
           justifyContent: columns[columnIndex].align,
           boxSizing: 'border-box',
         }}
@@ -58,7 +58,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         ...style,
         borderColor: bodyStyle.borderColor,
         borderStyle: bodyStyle.borderStyle,
-        borderWidth: `0px 1px 1px 0px`,
+        borderWidth: '0px 1px 1px 0px',
         boxSizing: 'border-box',
       }}
     />
