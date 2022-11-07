@@ -158,6 +158,7 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
         name={name}
         translations={translations}
         layout={layout}
+        model={model}
       />
     </View>
   ) : null;
