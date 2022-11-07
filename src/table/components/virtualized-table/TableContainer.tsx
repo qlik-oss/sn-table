@@ -14,7 +14,7 @@ export default function TableContainer(props: TableContainerProps) {
   const headerRef = useRef<VariableSizeGrid>(null);
   const bodyRef = useRef<VariableSizeGrid>(null);
   const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
-  const { columns } = useMemo(() => getColumns(layout), [layout]);
+  const columns = useMemo(() => getColumns(layout), [layout]);
   const { width } = useColumnSize(rect, columns);
   const totalWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
   const [totalHeight, setTotalHeight] = useState(pageInfo.rowsPerPage * DEFAULT_ROW_HEIGHT);

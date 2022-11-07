@@ -1,11 +1,8 @@
-import React, { useState, useReducer, createContext } from 'react';
+import React, { useState, createContext } from 'react';
 
 import { createSelectorProvider } from './createSelectorProvider';
-import { reducer } from '../utils/selections-utils';
-import { ExtendedSelectionAPI } from '../../types';
 import { ContextValue, ContextProviderProps } from '../types';
-import useDidUpdateEffect from '../hooks/use-did-update-effect';
-import { SelectionActions } from '../constants';
+import useSelectionReducer from '../hooks/use-selection-reducer';
 
 // In order to not have typing issues when using properties on the context,
 // the initial value for the context is casted to ContextValue.
@@ -24,17 +21,7 @@ export const TableContextProvider = ({
 }: ContextProviderProps) => {
   const [headRowHeight, setHeadRowHeight] = useState(0);
   const [focusedCellCoord, setFocusedCellCoord] = useState((cellCoordMock || [0, 0]) as [number, number]);
-  const [selectionState, selectionDispatch] = useReducer(reducer, {
-    pageRows,
-    rows: {},
-    colIdx: -1,
-    api: selectionsAPI as ExtendedSelectionAPI, // TODO: update nebula api with correct selection api type
-    isSelectMultiValues: false,
-  });
-
-  useDidUpdateEffect(() => {
-    selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows } });
-  }, [pageRows]);
+  const [selectionState, selectionDispatch] = useSelectionReducer(pageRows, selectionsAPI);
 
   return (
     <ProviderWithSelector

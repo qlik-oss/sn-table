@@ -47,8 +47,8 @@ describe('<TableHeadWrapper />', () => {
   beforeEach(() => {
     tableData = {
       columns: [
-        { id: 1, align: 'left', label: 'someDim', sortDirection: 'asc', isDim: true, dataColIdx: 0 },
-        { id: 2, align: 'right', label: 'someMsr', sortDirection: 'desc', isDim: false, dataColIdx: 1 },
+        { id: 1, align: 'left', label: 'someDim', sortDirection: 'asc', isDim: true, colIdx: 0 },
+        { id: 2, align: 'right', label: 'someMsr', sortDirection: 'desc', isDim: false, colIdx: 1 },
       ],
     } as unknown as TableData;
     theme = {
@@ -86,7 +86,7 @@ describe('<TableHeadWrapper />', () => {
     const { getByText } = renderTableHead();
     fireEvent.click(getByText(tableData.columns[0].label));
 
-    expect(changeSortOrder).toHaveBeenCalledWith(layout, tableData.columns[0]);
+    expect(changeSortOrder).toHaveBeenCalledWith(tableData.columns[0]);
   });
 
   it('should not call changeSortOrder when clicking a header cell in edit mode', () => {

@@ -104,8 +104,8 @@ export interface Column {
   id: string;
   isDim: boolean;
   isLocked: boolean;
-  dataColIdx: number;
-  width: number;
+  colIdx: number;
+  pageColIdx: number;
   label: string;
   align: 'left' | 'center' | 'right';
   stylingIDs: string[];
@@ -182,7 +182,7 @@ export interface AnnounceArgs {
 
 export type Announce = (arg0: AnnounceArgs) => void;
 
-export type ChangeSortOrder = (layout: TableLayout, column: Column) => Promise<void>;
+export type ChangeSortOrder = (column: Column) => Promise<void>;
 
 export interface Galaxy {
   translator: ExtendedTranslator;

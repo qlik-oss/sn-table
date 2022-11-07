@@ -79,7 +79,8 @@ export default function supernova(env: Galaxy) {
       const rect = useRect();
       const theme = useExtendedTheme(rootElement);
       const announce = useAnnounceAndTranslations(rootElement, translator);
-      const changeSortOrder = useSorting(model);
+      const changeSortOrder = useSorting(model, layout.qHyperCube);
+
       const [pageInfo, setPageInfo] = useState(initialPageInfo);
       const shouldRenderVirtualizedTable = layout.scrollType === 'virtualized';
       const [tableData] = usePromise(

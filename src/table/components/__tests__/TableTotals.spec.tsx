@@ -40,8 +40,8 @@ describe('<TableTotals />', () => {
   beforeEach(() => {
     tableData = {
       columns: [
-        { id: 1, isDim: true, dataColIdx: 0, totalInfo: 'Totals' },
-        { id: 2, isDim: false, dataColIdx: 1, totalInfo: '350' },
+        { id: 1, isDim: true, colIdx: 0, totalInfo: 'Totals' },
+        { id: 2, isDim: false, colIdx: 1, totalInfo: '350' },
       ],
       rows: ['rowOne', 'rowTwo'],
     } as unknown as TableData;

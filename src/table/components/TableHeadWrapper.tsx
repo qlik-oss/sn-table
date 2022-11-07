@@ -41,7 +41,7 @@ function TableHeadWrapper({
           // The first cell in the head is focusable in sequential keyboard navigation,
           // when nebula does not handle keyboard navigation
           const tabIndex = columnIndex === 0 && !keyboard.enabled ? 0 : -1;
-          const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.dataColIdx;
+          const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
           const ariaSort = isCurrentColumnActive
             ? (`${column.sortDirection}ending` as 'ascending' | 'descending')
             : undefined;
@@ -53,7 +53,6 @@ function TableHeadWrapper({
               cellCoord: [0, columnIndex],
               column,
               changeSortOrder,
-              layout,
               isInteractionEnabled,
               setFocusedCellCoord,
               areBasicFeaturesEnabled,
@@ -71,7 +70,7 @@ function TableHeadWrapper({
               aria-pressed={isCurrentColumnActive}
               onKeyDown={handleKeyDown}
               onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
-              onClick={() => isInteractionEnabled && changeSortOrder(layout, column)}
+              onClick={() => isInteractionEnabled && changeSortOrder(column)}
             >
               <StyledSortLabel
                 headerStyle={headerStyle}

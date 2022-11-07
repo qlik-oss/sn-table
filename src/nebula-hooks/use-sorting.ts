@@ -1,19 +1,19 @@
 import { useMemo } from '@nebula.js/stardust';
-import { TableLayout, Column } from '../types';
+import { Column, HyperCube } from '../types';
 
-export const sortingFactory = (model: EngineAPI.IGenericObject | undefined) => {
+export const sortingFactory = (model: EngineAPI.IGenericObject | undefined, hyperCube: HyperCube) => {
   if (!model) return undefined;
 
-  return async (layout: TableLayout, column: Column) => {
-    const { isDim, dataColIdx } = column;
+  return async (column: Column) => {
+    const { isDim, colIdx } = column;
     // The sort order from the properties is needed since it contains hidden columns
     const properties = await model.getEffectiveProperties();
     const sortOrder = properties.qHyperCubeDef.qInterColumnSortOrder;
     const topSortIdx = sortOrder[0];
 
-    if (dataColIdx !== topSortIdx) {
-      sortOrder.splice(sortOrder.indexOf(dataColIdx), 1);
-      sortOrder.unshift(dataColIdx);
+    if (colIdx !== topSortIdx) {
+      sortOrder.splice(sortOrder.indexOf(colIdx), 1);
+      sortOrder.unshift(colIdx);
     }
 
     const patches = [
@@ -25,9 +25,9 @@ export const sortingFactory = (model: EngineAPI.IGenericObject | undefined) => {
     ];
 
     // reverse
-    if (dataColIdx === topSortIdx) {
-      const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
-      const idx = isDim ? dataColIdx : dataColIdx - qDimensionInfo.length;
+    if (colIdx === topSortIdx) {
+      const { qDimensionInfo, qMeasureInfo } = hyperCube;
+      const idx = isDim ? colIdx : colIdx - qDimensionInfo.length;
       const { qReverseSort } = isDim ? qDimensionInfo[idx] : qMeasureInfo[idx];
       const qPath = `/qHyperCubeDef/${isDim ? 'qDimensions' : 'qMeasures'}/${idx}/qDef/qReverseSort`;
 
@@ -42,5 +42,6 @@ export const sortingFactory = (model: EngineAPI.IGenericObject | undefined) => {
   };
 };
 
-const useSorting = (model: EngineAPI.IGenericObject | undefined) => useMemo(() => sortingFactory(model), [model]);
+const useSorting = (model: EngineAPI.IGenericObject | undefined, hyperCube: HyperCube) =>
+  useMemo(() => sortingFactory(model, hyperCube), [model, hyperCube]);
 export default useSorting;
