@@ -49,7 +49,7 @@ export default function TableContainer(props: TableContainerProps) {
 
   return (
     <div
-      data-key="table-container"
+      data-testid="table-container"
       ref={ref}
       style={{
         overflow: 'auto',

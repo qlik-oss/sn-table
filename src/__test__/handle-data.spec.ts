@@ -26,6 +26,7 @@ describe('handle-data', () => {
       sortDirection: 'asc',
       dataColIdx: colIx,
       isLocked,
+      qApprMaxGlyphCount: 3,
     });
 
     it('should return column info for dimension', () => {

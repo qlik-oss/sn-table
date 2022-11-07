@@ -11,7 +11,7 @@ const useColumnSize = (rect: stardust.Rect, columns: Column[]) => {
       columns.map((c) => {
         const fillWidth = rect.width / columns.length;
         const maxWidth = Math.max(fillWidth, measureText(c.label), estimateWidth(c.qApprMaxGlyphCount));
-        // return Math.min(500, maxWidth);
+
         return maxWidth;
       }),
     [rect, columns, measureText, estimateWidth]

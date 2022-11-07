@@ -28,6 +28,7 @@ export function generateLayout(
     qAttrExprInfo: [],
     qSortIndicator: 'A',
     qReverseSort: false,
+    qApprMaxGlyphCount: 3,
   });
   const qDimensionInfo = [];
   const qMeasureInfo = [];
