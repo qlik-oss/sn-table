@@ -72,7 +72,7 @@ export function getColumnInfo(layout, colIndex, columnOrder) {
       label: info.qFallbackTitle,
       id: `col-${colIndex}`,
       align: !info.textAlign || info.textAlign.auto ? autoAlign : info.textAlign.align,
-      stylingInfo: info.qAttrExprInfo.map((expr) => expr.id),
+      stylingInfo: info.qAttrExprInfo.map((expr) => expr.id ?? ''), // need to coalesce to string value for native decode
       sortDirection: directionMap[info.qSortIndicator],
       dataColIdx: colIndex,
       totalInfo: getTotalInfo(isDim, layout, colIndex, numDims, columnOrder),
