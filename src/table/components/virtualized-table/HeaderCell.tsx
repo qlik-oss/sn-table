@@ -1,16 +1,18 @@
 import React from 'react';
 import { Column } from '../../../types';
+import { GeneratedStyling } from '../../types';
 
 interface HeaderCellProps {
   columnIndex: number;
   style: React.CSSProperties;
   data: {
     columns: Column[];
+    headerStyle: GeneratedStyling;
   };
 }
 
 const HeaderCell = ({ columnIndex, style, data }: HeaderCellProps) => {
-  const { columns } = data;
+  const { columns, headerStyle } = data;
   const datum = columns[columnIndex];
 
   if (datum) {
@@ -22,15 +24,18 @@ const HeaderCell = ({ columnIndex, style, data }: HeaderCellProps) => {
           ...style,
           display: 'flex',
           alignItems: 'center',
-          // borderTop: '1px solid #ccc',
-          borderRight: '1px solid #ccc',
-          // borderBottom: '1px solid #ccc',
+          borderColor: headerStyle.borderColor,
+          borderStyle: headerStyle.borderStyle,
+          borderWidth: `0px 1px 0px 0px`,
           justifyContent: datum.align,
           boxSizing: 'border-box',
         }}
       >
         <span
           style={{
+            fontSize: headerStyle.fontSize,
+            fontFamily: headerStyle.fontFamily,
+            color: headerStyle.color,
             paddingLeft: isLeftAligned ? '14px' : '4px',
             paddingRight: isLeftAligned ? '4px' : '14px',
             overflow: 'hidden',

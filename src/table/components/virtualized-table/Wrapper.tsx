@@ -38,6 +38,7 @@ export default function Wrapper(props: WrapperProps) {
         model={model}
         pageInfo={pageInfo}
         paginationNeeded={paginationNeeded}
+        theme={theme}
       />
       {paginationNeeded && (
         <FooterWrapper theme={theme}>

@@ -45,12 +45,8 @@ describe('<Wrapper />', () => {
     theme = {
       getStyle: () => undefined,
       table: {
-        body: {
-          borderColor: '',
-        },
-        pagination: {
-          borderColor: '',
-        },
+        body: { borderColor: '' },
+        pagination: { borderColor: '' },
       },
     } as unknown as ExtendedTheme;
   });

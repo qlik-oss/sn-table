@@ -1,6 +1,7 @@
 import { stardust } from '@nebula.js/stardust';
 import { VariableSizeGrid } from 'react-window';
 import { Column, ExtendedTheme, ExtendedTranslator, PageInfo, TableLayout } from '../../../../types';
+import { GeneratedStyling } from '../../../types';
 
 export interface WrapperProps {
   model: EngineAPI.IGenericObject;
@@ -18,6 +19,7 @@ export interface TableContainerProps {
   pageInfo: PageInfo;
   paginationNeeded: boolean;
   model: EngineAPI.IGenericObject;
+  theme: ExtendedTheme;
 }
 
 export interface HeaderProps {
@@ -27,6 +29,7 @@ export interface HeaderProps {
   forwardRef: React.RefObject<VariableSizeGrid<any>>;
   columns: Column[];
   columnWidth: number[];
+  headerStyle: GeneratedStyling;
 }
 
 export interface BodyProps {

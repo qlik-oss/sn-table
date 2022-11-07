@@ -3,7 +3,7 @@ import { render, waitFor } from '@testing-library/react';
 import { stardust } from '@nebula.js/stardust';
 
 import TableContainer from '../TableContainer';
-import { PageInfo, TableLayout } from '../../../../types';
+import { ExtendedTheme, PageInfo, TableLayout } from '../../../../types';
 import { generateDataPages, generateLayout } from '../../../../__test__/generate-test-data';
 
 describe('<TableContainer />', () => {
@@ -13,6 +13,7 @@ describe('<TableContainer />', () => {
   let pageInfo: PageInfo;
   let paginationNeeded: boolean;
   let model: EngineAPI.IGenericObject;
+  let theme: ExtendedTheme;
 
   const renderTableContainer = () =>
     render(
@@ -22,6 +23,7 @@ describe('<TableContainer />', () => {
         rect={rect}
         layout={layout}
         paginationNeeded={paginationNeeded}
+        theme={theme}
       />
     );
 
@@ -52,6 +54,14 @@ describe('<TableContainer />', () => {
       getHyperCubeData: jest.fn() as jest.MockedFunction<() => Promise<EngineAPI.INxPivotPage[]>>,
     } as unknown as EngineAPI.IGenericObject;
     (model.getHyperCubeData as jest.Mock).mockResolvedValue(generateDataPages(5, 2));
+
+    theme = {
+      getStyle: () => undefined,
+      table: {
+        body: { borderColor: '' },
+        pagination: { borderColor: '' },
+      },
+    } as unknown as ExtendedTheme;
   });
 
   afterEach(() => jest.restoreAllMocks());
