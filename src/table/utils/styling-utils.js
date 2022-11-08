@@ -42,6 +42,10 @@ export function getPadding(styleObj, defaultPadding) {
 
 export function getColor(defaultColor, theme, color = {}) {
   const resolvedColor = theme.getColorPickerColor(color);
+  // for legacy checks
+  if (color.color && resolvedColor !== color.color) {
+    return color.color;
+  }
   return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
 }
 
