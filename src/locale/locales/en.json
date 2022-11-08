@@ -51,6 +51,14 @@
     "value": "Sorted in descending order.",
     "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)"
   },
+  "SNTable.MenuItem.SortAscending": {
+    "value": "Sort ascending",
+    "comment": "label for menu item to sort ascending."
+  },
+  "SNTable.MenuItem.SortDescending": {
+    "value": "Sort descending",
+    "comment": "label for menu item to sort descending."
+  },
   "SNTable.SortLabel.PressSpaceToSort": {
     "value": "Press space to sort on this column",
     "comment": "instructions for sorting, announced by screen readers. (tew 210929)"

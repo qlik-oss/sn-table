@@ -1,11 +1,12 @@
 import { MouseEvent } from 'react';
 import { stardust } from '@nebula.js/stardust';
-import { TotalsPosition, Cell, Announce } from '../../../types';
+import { TotalsPosition, Cell, Announce, ChangeSortOrder, Column } from '../../../types';
 import {
   handleClickToFocusBody,
   handleClickToFocusHead,
   handleMouseDownLabelToFocusHeadCell,
   getSelectionMouseHandlers,
+  handleClickToSort,
 } from '../handle-click';
 import * as accessibilityUtils from '../accessibility-utils';
 import { SelectionDispatch } from '../../types';
@@ -72,6 +73,38 @@ describe('handle-click', () => {
         setFocusedCellCoord,
         keyboard
       );
+    });
+  });
+
+  describe('handleClickToSort', () => {
+    let changeSortOrder: ChangeSortOrder;
+    let column: Column;
+    let isInteractionEnabled: boolean;
+
+    beforeEach(() => {
+      changeSortOrder = jest.fn() as ChangeSortOrder;
+      column = {} as unknown as Column;
+      isInteractionEnabled = true;
+    });
+
+    it('should sort the column when the event target is not on the head cell menu button', () => {
+      evt = {
+        target: {
+          closest: () => false,
+        } as unknown as HTMLElement,
+      } as unknown as MouseEvent;
+      handleClickToSort(evt, column, changeSortOrder, isInteractionEnabled);
+      expect(changeSortOrder).toHaveBeenCalled();
+    });
+
+    it('should not sort the column when the event target is on the head cell menu button', () => {
+      evt = {
+        target: {
+          closest: () => true,
+        } as unknown as HTMLElement,
+      } as unknown as MouseEvent;
+      handleClickToSort(evt, column, changeSortOrder, isInteractionEnabled);
+      expect(changeSortOrder).not.toHaveBeenCalled();
     });
   });
 

@@ -82,7 +82,17 @@ describe('<TableHeadWrapper />', () => {
     expect(queryByText(tableData.columns[1].label)).toBeVisible();
   });
 
-  it('should call changeSortOrder when clicking a header cell', () => {
+  it('should show the menu button when the head cell is on focus', async () => {
+    areBasicFeaturesEnabled = true;
+    const { getByText } = renderTableHead();
+
+    const element = getByText(tableData.columns[0].label).closest('th') as HTMLTableCellElement;
+    expect(element.querySelector('#sn-table-head-menu-button')).not.toBeVisible();
+    element.focus();
+    expect(element.querySelector('#sn-table-head-menu-button')).toBeVisible();
+  });
+
+  it('should call changeSortOrder when clicking the header cell', () => {
     const { getByText } = renderTableHead();
     fireEvent.click(getByText(tableData.columns[0].label));
 
