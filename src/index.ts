@@ -85,7 +85,7 @@ export default function supernova(env: Galaxy) {
       const shouldRenderVirtualizedTable = layout.scrollType === 'virtualized';
       const [tableData] = usePromise(
         async () =>
-          env.carbon || shouldRenderVirtualizedTable
+          (env.carbon && !model?.getHyperCubeData) || shouldRenderVirtualizedTable
             ? nothing()
             : manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo),
         [layout, pageInfo, model]
