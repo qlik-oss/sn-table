@@ -23,7 +23,7 @@ const Header = (props: HeaderProps) => {
         backgroundColor: headerStyle.backgroundColor,
         borderColor: headerStyle.borderColor,
         borderStyle: headerStyle.borderStyle,
-        borderWidth: `1px 0px`,
+        borderWidth: '1px 0px',
       }}
       columnCount={layout.qHyperCube.qSize.qcx}
       columnWidth={(index) => columnWidth[index]}

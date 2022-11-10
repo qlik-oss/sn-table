@@ -39,7 +39,9 @@ export default function TableContainer(props: TableContainerProps) {
 
     if (innerForwardRef.current) {
       // Keep full size container in sync with the height calculation in react-window is doing
-      setTotalHeight(innerForwardRef.current.clientHeight);
+      if (totalHeight !== innerForwardRef.current.clientHeight) {
+        setTotalHeight(innerForwardRef.current.clientHeight);
+      }
     }
   };
 
