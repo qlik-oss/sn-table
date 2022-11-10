@@ -3,7 +3,7 @@ import { Column } from '../../../types';
 import { GeneratedStyling } from '../../types';
 
 interface HeaderCellProps {
-  columnIndex: number;
+  index: number;
   style: React.CSSProperties;
   data: {
     columns: Column[];
@@ -11,12 +11,12 @@ interface HeaderCellProps {
   };
 }
 
-const HeaderCell = ({ columnIndex, style, data }: HeaderCellProps) => {
+const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
   const { columns, headerStyle } = data;
-  const datum = columns[columnIndex];
+  const datum = columns[index];
 
   if (datum) {
-    const isLeftAligned = columns[columnIndex].align === 'left';
+    const isLeftAligned = columns[index].align === 'left';
 
     return (
       <div

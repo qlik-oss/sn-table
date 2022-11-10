@@ -1,5 +1,5 @@
 import { stardust } from '@nebula.js/stardust';
-import { VariableSizeGrid } from 'react-window';
+import { VariableSizeGrid, VariableSizeList } from 'react-window';
 import { Column, ExtendedTheme, ExtendedTranslator, PageInfo, TableLayout } from '../../../../types';
 import { GeneratedStyling } from '../../../types';
 
@@ -26,7 +26,7 @@ export interface HeaderProps {
   layout: TableLayout;
   rect: stardust.Rect;
   pageInfo: PageInfo;
-  forwardRef: React.RefObject<VariableSizeGrid<any>>;
+  forwardRef: React.RefObject<VariableSizeList<any>>;
   columns: Column[];
   columnWidth: number[];
   headerStyle: GeneratedStyling;

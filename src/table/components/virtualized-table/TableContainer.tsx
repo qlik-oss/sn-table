@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { VariableSizeGrid } from 'react-window';
+import { VariableSizeGrid, VariableSizeList } from 'react-window';
 import { getColumns } from '../../../handle-data';
 import useColumnSize from './hooks/use-column-size';
 import Body from './Body';
@@ -12,7 +12,7 @@ import { getHeaderStyle, getBodyCellStyle } from '../../utils/styling-utils';
 export default function TableContainer(props: TableContainerProps) {
   const { layout, rect, pageInfo, paginationNeeded, model, theme } = props;
   const ref = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<VariableSizeGrid>(null);
+  const headerRef = useRef<VariableSizeList>(null);
   const bodyRef = useRef<VariableSizeGrid>(null);
   const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
@@ -24,10 +24,7 @@ export default function TableContainer(props: TableContainerProps) {
 
   const onScrollHandler = (event: React.SyntheticEvent) => {
     if (headerRef.current) {
-      headerRef.current.scrollTo({
-        scrollLeft: event.currentTarget.scrollLeft,
-        scrollTop: event.currentTarget.scrollTop,
-      });
+      headerRef.current.scrollTo(event.currentTarget.scrollLeft);
     }
 
     if (bodyRef.current) {
