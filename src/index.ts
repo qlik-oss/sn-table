@@ -82,7 +82,7 @@ export default function supernova(env: Galaxy) {
       const changeSortOrder = useSorting(model, layout.qHyperCube);
 
       const [pageInfo, setPageInfo] = useState(initialPageInfo);
-      const shouldRenderVirtualizedTable = false; // layout.scrollType === 'virtualized';
+      const shouldRenderVirtualizedTable = false; // layout.scrollMode === 1;
       const [tableData] = usePromise(
         async () =>
           (env.carbon && !model?.getHyperCubeData) || shouldRenderVirtualizedTable

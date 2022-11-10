@@ -80,7 +80,7 @@ export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, 'qH
     label: string;
   };
   components?: Component[];
-  scrollType?: 'pagination' | 'virtualized';
+  scrollMode?: 0 | 1;
 }
 
 export interface Cell {
