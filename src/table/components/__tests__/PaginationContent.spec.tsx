@@ -116,6 +116,7 @@ describe('<PaginationContent />', () => {
       expect(queryByTestId('RowsPerPage-dropdown')).toBeNull();
       expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeVisible();
     });
+
     it('should only render previous/next buttons and current rows info', () => {
       rect.width = 300;
 
@@ -127,6 +128,7 @@ describe('<PaginationContent />', () => {
       expect(queryByTestId('RowsPerPage-dropdown')).toBeNull();
       expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeVisible();
     });
+
     it('should only render previous/next buttons', () => {
       rect.width = 200;
 
@@ -137,6 +139,15 @@ describe('<PaginationContent />', () => {
       expect(queryByTestId('SelectPage-dropdown')).toBeNull();
       expect(queryByTestId('RowsPerPage-dropdown')).toBeNull();
       expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeNull();
+    });
+
+    it('should not render rpp/page dropdown when rowsPerPageOptions is empty', () => {
+      pageInfo.rowsPerPageOptions = [];
+      isSelectionMode = false;
+
+      const { queryByTestId } = renderPagination();
+
+      expect(queryByTestId('RowsPerPage-dropdown')).toBeNull();
     });
 
     it('should render all buttons in right order when left-to-right direction', () => {

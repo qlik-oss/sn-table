@@ -20,7 +20,7 @@ import properties from './qae/object-properties';
 import data from './qae/data';
 import ext from './ext';
 import manageData from './handle-data';
-import { render, teardown } from './table/Root';
+import { render, renderVirtualizedTable, teardown } from './table/Root';
 import useReactRoot from './nebula-hooks/use-react-root';
 import useAnnounceAndTranslations from './nebula-hooks/use-announce-and-translations';
 import useSorting from './nebula-hooks/use-sorting';
@@ -82,14 +82,33 @@ export default function supernova(env: Galaxy) {
       const changeSortOrder = useSorting(model, layout.qHyperCube);
 
       const [pageInfo, setPageInfo] = useState(initialPageInfo);
+      const shouldRenderVirtualizedTable = false; // layout.scrollMode === 1;
       const [tableData] = usePromise(
         async () =>
-          env.carbon && !model?.getHyperCubeData
+          (env.carbon && !model?.getHyperCubeData) || shouldRenderVirtualizedTable
             ? nothing()
             : manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo),
         [layout, pageInfo, model]
       );
+
       useContextMenu(areBasicFeaturesEnabled);
+
+      useEffect(() => {
+        if (!shouldRenderVirtualizedTable || !model) return;
+
+        renderVirtualizedTable(
+          {
+            layout,
+            model,
+            rect,
+            theme,
+            keyboard,
+            translator,
+          },
+          reactRoot
+        );
+      }, [layout, model, rect, theme, keyboard, translator]);
+
       useEffect(() => {
         const isReadyToRender = !env.carbon && reactRoot && layout && tableData && changeSortOrder && theme;
         isReadyToRender &&

@@ -8,6 +8,8 @@ import TableWrapper from './components/TableWrapper';
 import { TableContextProvider } from './context';
 import muiSetup from './mui-setup';
 import { RenderProps, TableWrapperProps } from './types';
+import VirualizedTable from './components/virtualized-table/Wrapper';
+import { WrapperProps } from './components/virtualized-table/types';
 
 export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   const { direction, selectionsAPI, tableData } = props;
@@ -24,6 +26,17 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   );
 }
 
+export function renderVirtualizedTable(props: WrapperProps, reactRoot?: ReactDom.Root) {
+  const muiTheme = muiSetup('ltr');
+
+  reactRoot?.render(
+    <React.StrictMode>
+      <ThemeProvider theme={muiTheme}>
+        <VirualizedTable {...props} />
+      </ThemeProvider>
+    </React.StrictMode>
+  );
+}
 export function teardown(reactRoot: ReactDom.Root) {
   reactRoot.unmount();
 }

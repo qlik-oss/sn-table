@@ -80,6 +80,7 @@ export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, 'qH
     label: string;
   };
   components?: Component[];
+  scrollMode?: 0 | 1;
 }
 
 export interface Cell {
@@ -110,6 +111,7 @@ export interface Column {
   stylingIDs: string[];
   sortDirection: string;
   totalInfo?: string;
+  qApprMaxGlyphCount: number;
 }
 
 export type TotalsPosition = 'top' | 'bottom' | 'noTotals';

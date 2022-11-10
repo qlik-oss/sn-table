@@ -79,6 +79,7 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
       stylingIDs: info.qAttrExprInfo.map((expr) => expr.id),
       sortDirection: info.qSortIndicator ? DirectionMap[info.qSortIndicator] : DirectionMap.A,
       totalInfo: getTotalInfo(layout, colIdx, pageColIdx, numDims),
+      qApprMaxGlyphCount: info.qApprMaxGlyphCount,
     }
   );
 }
