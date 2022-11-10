@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, useWindowDimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import { SimpleGrid } from '@qlik/react-native-simple-grid';
 import { RowProps } from './Props';
@@ -40,6 +40,7 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
   const [clearSelections, setClearSelections] = useState('no');
   const dataStreamCaches = useRef(new DataCacheStream(manageData));
   const tableTheme = useRef({ ...RowProps });
+  const dims = useWindowDimensions();
 
   const name = useMemo(() => {
     return getKey(app, layout);
@@ -108,16 +109,29 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
   );
 
   useEffect(() => {
-    selectionsAPI.on('canceled', () => {
+    const canceledSub = selectionsAPI.on('canceled', () => {
       setClearSelections('yes');
     });
-    selectionsAPI.on('cleared', () => {
+    const clearedSub = selectionsAPI.on('cleared', () => {
       setClearSelections('yes');
     });
-    selectionsAPI.on('confirmed', () => {
+    const confirmedSub = selectionsAPI.on('confirmed', () => {
       setClearSelections('yes');
     });
+
+    return () => {
+      canceledSub?.remove();
+      clearedSub?.remove();
+      confirmedSub?.remove();
+    };
   }, [selectionsAPI]);
+
+  useEffect(() => {
+    if (selectionsAPI) {
+      selectionsAPI.cancel();
+      setClearSelections('yes');
+    }
+  }, [dims, selectionsAPI]);
 
   const onEndReached = useCallback(async () => {
     const data = await dataStreamCaches.current.next();
