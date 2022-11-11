@@ -81,6 +81,8 @@ const properties = {
    * @type {Styling[]}
    */
   components: [],
+
+  disableLasso: true,
 };
 
 /**
