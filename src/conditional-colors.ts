@@ -196,9 +196,14 @@ export function getConditionalColor(paletteIndex: number, value: number, column:
 }
 
 export function getIndicator(column: Column, tableCell: TableCell): PaletteColor | undefined {
-  if (column.conditionalColoring && tableCell.qNum && column.conditionalColoring.segments.limits.length > 0) {
+  if (
+    column.conditionalColoring &&
+    tableCell.qNum !== undefined &&
+    column.conditionalColoring.segments.limits.length > 0
+  ) {
     let index = 0;
     const cl = column.conditionalColoring.segments.limits.length;
+
     while (index < cl && tableCell.qNum > column.conditionalColoring.segments.limits[index].value) {
       index++;
     }
