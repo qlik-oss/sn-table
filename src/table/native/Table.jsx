@@ -156,6 +156,8 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
     selectionsCaches.current.confirm();
   }, []);
 
+  console.log(tableData);
+
   return tableData ? (
     <View style={styles.body}>
       <SimpleGrid

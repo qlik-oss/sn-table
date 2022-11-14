@@ -50,6 +50,7 @@ function getMinMaxMeasureInfo(isDim, info) {
 }
 function initConidtionalColor(isDim, info) {
   if (!isDim && info.conditionalColoring) {
+    info.conditionalColoring?.segments?.limits.sort((a, b) => a?.value - b?.value);
     return info.conditionalColoring;
   }
   return undefined;
