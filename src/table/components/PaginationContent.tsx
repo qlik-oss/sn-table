@@ -1,13 +1,11 @@
 import React, { memo } from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
 import Box from '@mui/material/Box';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 
-import { StyledSelect, StyledIconButton } from '../styles';
+import { StyledSelect, StyledIconButton, StyledInputLabel, StyledFormControl } from '../styles';
 import { handleLastTab } from '../utils/handle-key-press';
 import { PaginationContentProps } from '../types';
 
@@ -126,14 +124,14 @@ function PaginationContent({
       tabIndex,
       id,
       'data-testid': id,
-      style: { color: paginationTheme.color, height: 30 },
+      style: { color: paginationTheme.color },
     };
 
     return (
-      <FormControl sx={{ px: 2.5 }}>
-        <InputLabel sx={{ color: paginationTheme.color }} htmlFor={id} shrink={false}>
+      <StyledFormControl size="small">
+        <StyledInputLabel sx={{ color: paginationTheme.color }} htmlFor={id} shrink={false}>
           {`${translator.get(translationName)}:`}
-        </InputLabel>
+        </StyledInputLabel>
         <StyledSelect
           paginationTheme={paginationTheme}
           native
@@ -143,7 +141,7 @@ function PaginationContent({
         >
           {options}
         </StyledSelect>
-      </FormControl>
+      </StyledFormControl>
     );
   };
 

@@ -1,9 +1,8 @@
 import React, { memo, useEffect, useMemo, useRef } from 'react';
-import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 
 import { useContextSelector, TableContext } from '../context';
-import { VisuallyHidden, StyledHeadRow, StyledSortLabel } from '../styles';
+import { VisuallyHidden, StyledHeadRow, StyledSortLabel, StyledHeadCell } from '../styles';
 import { getHeaderStyle } from '../utils/styling-utils';
 import { handleHeadKeyDown } from '../utils/handle-key-press';
 import { handleMouseDownLabelToFocusHeadCell, handleClickToFocusHead } from '../utils/handle-click';
@@ -60,7 +59,7 @@ function TableHeadWrapper({
           };
 
           return (
-            <TableCell
+            <StyledHeadCell
               sx={headerStyle}
               key={column.id}
               align={column.align}
@@ -89,7 +88,7 @@ function TableHeadWrapper({
                   </VisuallyHidden>
                 )}
               </StyledSortLabel>
-            </TableCell>
+            </StyledHeadCell>
           );
         })}
       </StyledHeadRow>
