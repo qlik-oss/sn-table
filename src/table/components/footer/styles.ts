@@ -46,6 +46,12 @@ export const StyledInputLabel = styled(InputLabel, {
   shouldForwardProp: (prop: string) => prop !== 'color',
 })(({ color }) => ({
   color,
+  fontSize: 14,
+  width: 'fit-content',
+  position: 'relative',
+  padding: 8,
+  transform: 'none',
+  fontWeight: 400,
 }));
 
 export const StyledFormControl = styled(FormControl)({

@@ -25,7 +25,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
           display: 'flex',
           alignItems: 'center',
           borderColor: headerStyle.borderColor,
-          borderStyle: headerStyle.borderStyle,
+          borderStyle: 'solid',
           borderWidth: '0px 1px 0px 0px',
           justifyContent: datum.align,
           boxSizing: 'border-box',
@@ -54,7 +54,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
       style={{
         ...style,
         borderColor: headerStyle.borderColor,
-        borderStyle: headerStyle.borderStyle,
+        borderStyle: 'solid',
         borderWidth: '0px 1px 0px 0px',
       }}
     />

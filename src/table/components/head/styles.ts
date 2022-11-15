@@ -24,6 +24,8 @@ export const StyledHeadCell = styled(TableCell, {
   ...cellCommon,
   ...headerStyle,
   lineHeight: '150%',
+  pointer: 'cursor',
+  borderWidth: '1px 1px 1px 0px',
 }));
 
 export const StyledSortLabel = styled(TableSortLabel, {

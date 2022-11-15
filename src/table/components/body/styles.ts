@@ -41,6 +41,7 @@ export const StyledBodyRow = styled(TableRow, {
 
 export const StyledBodyCell = styled(TableCell)({
   ...cellCommon,
+  borderWidth: '0px 1px 1px 0px',
 });
 
 // ---------- TableTotals ----------

@@ -9,6 +9,7 @@ export const cellCommon = {
   padding: '7px 14px',
   height: 'auto',
   lineHeight: '130%',
+  borderStyle: 'solid',
   '&:focus': {
     boxShadow: '0 0 0 2px #3f8ab3 inset',
     outline: 'none',

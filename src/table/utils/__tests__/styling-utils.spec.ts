@@ -94,7 +94,6 @@ describe('styling-utils', () => {
       const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
         color: '#fff',
         fontSize: '12px',
         padding: '6px 12px',
@@ -105,7 +104,6 @@ describe('styling-utils', () => {
       const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
         fontSize: '12px',
         padding: '6px 12px',
       });
@@ -117,7 +115,6 @@ describe('styling-utils', () => {
       const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
         padding: '20px',
       });
     });
@@ -127,7 +124,6 @@ describe('styling-utils', () => {
       const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
         fontSize: '12px',
         padding: '6px 12px',
       });
@@ -142,7 +138,6 @@ describe('styling-utils', () => {
       const resultStyling = getBaseStyling(objetName, customTheme, styleObj);
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
         color: '#111',
         fontSize: '12px',
         fontFamily: '#111',
@@ -155,7 +150,6 @@ describe('styling-utils', () => {
       const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling).toEqual({
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
         color: 'fff',
         fontSize: '12px',
         padding: '6px 12px',
@@ -168,7 +162,6 @@ describe('styling-utils', () => {
       expect(resultStyling).toEqual({
         color: '#fff',
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
       });
     });
     it('should return styling with custom padding', () => {
@@ -202,9 +195,6 @@ describe('styling-utils', () => {
       expect(resultStyling).toEqual({
         backgroundColor: '#323232',
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
-        borderWidth: '1px 1px 1px 0px',
-        cursor: 'pointer',
         sortLabelColor: 'rgba(255,255,255,0.9)',
       });
     });
@@ -222,11 +212,8 @@ describe('styling-utils', () => {
       const resultStyling = getHeaderStyle(layout, theme);
       expect(resultStyling).toEqual({
         color: '#404040',
-        cursor: 'pointer',
         backgroundColor: '#323232',
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
-        borderWidth: '1px 1px 1px 0px',
         sortLabelColor: '#404040',
       });
     });
@@ -234,13 +221,10 @@ describe('styling-utils', () => {
       const resultStyling = getHeaderStyle(layout, theme);
       expect(resultStyling).toEqual({
         color: '#404040',
-        cursor: 'pointer',
         fontSize: '44px',
         padding: '22px 44px',
         backgroundColor: '#323232',
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
-        borderWidth: '1px 1px 1px 0px',
         sortLabelColor: '#404040',
       });
     });
@@ -285,8 +269,6 @@ describe('styling-utils', () => {
         hoverFontColor: '',
         borderColor: '#D9D9D9',
         hoverBackgroundColor: '#f4f4f4',
-        borderStyle: 'solid',
-        borderWidth: '0px 1px 1px 0px',
       });
     });
     it('should return styling with fontColor, fontSize, padding plus default hoverBackgroundColor and hoverFontColor', () => {
@@ -298,8 +280,6 @@ describe('styling-utils', () => {
         hoverBackgroundColor: '#f4f4f4',
         hoverFontColor: '',
         borderColor: '#D9D9D9',
-        borderStyle: 'solid',
-        borderWidth: '0px 1px 1px 0px',
       });
     });
     // Only checking hover properties from here on

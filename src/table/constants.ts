@@ -30,10 +30,6 @@ export enum KeyCodes {
 }
 
 export enum StylingDefaults {
-  BORDER_STYLE = 'solid',
-  BODY_BORDER = '0px 1px 1px 0px',
-  HEAD_BORDER = '1px 1px 1px 0px',
-  HEAD_CURSOR = 'pointer',
   HEAD_BACKGROUND_LIGHT = '#FAFAFA',
   HEAD_BACKGROUND_DARK = '#323232',
   SORT_LABEL_LIGHT = 'rgba(255,255,255,0.9)',

@@ -9,7 +9,7 @@ import FooterWrapper from '../../footer/FooterWrapper';
 import { MAX_PAGE_SIZE } from '../constants';
 
 jest.mock('../TableContainer');
-jest.mock('../../FooterWrapper');
+jest.mock('../../footer/FooterWrapper');
 
 describe('<Wrapper />', () => {
   let translator: ExtendedTranslator;
