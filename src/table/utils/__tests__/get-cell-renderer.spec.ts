@@ -1,7 +1,7 @@
 import getCellRenderer from '../get-cell-renderer';
-import * as withSelections from '../../components/withSelections';
-import * as withColumnStyling from '../../components/withColumnStyling';
-import * as withStyling from '../../components/withStyling';
+import * as withSelections from '../../components/body/withSelections';
+import * as withColumnStyling from '../../components/body/withColumnStyling';
+import * as withStyling from '../../components/body/withStyling';
 
 describe('render', () => {
   describe('getCellRenderer', () => {

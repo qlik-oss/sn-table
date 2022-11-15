@@ -2,13 +2,13 @@ import React, { useRef, useCallback } from 'react';
 import Table from '@mui/material/Table';
 
 import AnnounceElements from './AnnounceElements';
-import TableBodyWrapper from './TableBodyWrapper';
-import TableHeadWrapper from './TableHeadWrapper';
-import FooterWrapper from './FooterWrapper';
+import TableBodyWrapper from './body/TableBodyWrapper';
+import TableHeadWrapper from './head/TableHeadWrapper';
+import FooterWrapper from './footer/FooterWrapper';
 import { useContextSelector, TableContext } from '../context';
-import { StyledTableContainer, StyledTableWrapper } from '../styles';
+import { StyledTableContainer, StyledTableWrapper } from './styles';
 
-import PaginationContent from './PaginationContent';
+import PaginationContent from './footer/PaginationContent';
 import useDidUpdateEffect from '../hooks/use-did-update-effect';
 import useFocusListener from '../hooks/use-focus-listener';
 import useScrollListener from '../hooks/use-scroll-listener';

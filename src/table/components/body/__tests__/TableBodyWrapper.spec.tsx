@@ -1,15 +1,15 @@
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { render, fireEvent } from '@testing-library/react';
-import { generateDataPages, generateLayout } from '../../../__test__/generate-test-data';
-import manageData from '../../../handle-data';
-import { TableContextProvider } from '../../context';
+import { generateDataPages, generateLayout } from '../../../../__test__/generate-test-data';
+import manageData from '../../../../handle-data';
+import { TableContextProvider } from '../../../context';
 import TableBodyWrapper from '../TableBodyWrapper';
-import * as selectionsUtils from '../../utils/selections-utils';
-import * as getCellRenderer from '../../utils/get-cell-renderer';
-import * as handleKeyPress from '../../utils/handle-key-press';
-import * as handleClick from '../../utils/handle-click';
-import { TableData, ExtendedSelectionAPI, TableLayout, ExtendedTheme, PageInfo, Cell } from '../../../types';
+import * as selectionsUtils from '../../../utils/selections-utils';
+import * as getCellRenderer from '../../../utils/get-cell-renderer';
+import * as handleKeyPress from '../../../utils/handle-key-press';
+import * as handleClick from '../../../utils/handle-click';
+import { TableData, ExtendedSelectionAPI, TableLayout, ExtendedTheme, PageInfo, Cell } from '../../../../types';
 
 describe('<TableBodyWrapper />', () => {
   const rootElement = {} as HTMLElement;
