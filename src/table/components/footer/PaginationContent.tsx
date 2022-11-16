@@ -5,9 +5,9 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 
-import { StyledSelect, StyledIconButton, StyledInputLabel, StyledFormControl } from '../styles';
-import { handleLastTab } from '../utils/handle-key-press';
-import { PaginationContentProps } from '../types';
+import { StyledSelect, StyledIconButton, StyledInputLabel, StyledFormControl } from './styles';
+import { handleLastTab } from '../../utils/handle-key-press';
+import { PaginationContentProps } from '../../types';
 
 const icons: Record<string, typeof FirstPageIcon> = {
   FirstPage: FirstPageIcon,
@@ -129,7 +129,7 @@ function PaginationContent({
 
     return (
       <StyledFormControl size="small">
-        <StyledInputLabel sx={{ color: paginationTheme.color }} htmlFor={id} shrink={false}>
+        <StyledInputLabel color={paginationTheme.color} htmlFor={id} shrink={false}>
           {`${translator.get(translationName)}:`}
         </StyledInputLabel>
         <StyledSelect

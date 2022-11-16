@@ -2,9 +2,9 @@ import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { render, fireEvent } from '@testing-library/react';
 import TableHeadWrapper from '../TableHeadWrapper';
-import { TableContextProvider } from '../../context';
-import * as handleKeyPress from '../../utils/handle-key-press';
-import * as handleClick from '../../utils/handle-click';
+import { TableContextProvider } from '../../../context';
+import * as handleKeyPress from '../../../utils/handle-key-press';
+import * as handleClick from '../../../utils/handle-click';
 import {
   TableData,
   TableLayout,
@@ -12,7 +12,7 @@ import {
   ChangeSortOrder,
   ExtendedTranslator,
   ExtendedSelectionAPI,
-} from '../../../types';
+} from '../../../../types';
 
 describe('<TableHeadWrapper />', () => {
   const rootElement = {} as HTMLElement;

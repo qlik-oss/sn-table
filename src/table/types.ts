@@ -78,9 +78,8 @@ export interface ContextValue {
 }
 
 export interface GeneratedStyling {
-  padding?: string;
-  borderStyle: string;
   borderColor: string;
+  padding?: string;
   fontFamily?: string;
   color?: string;
   fontSize?: string; // following the theme format so this should always be a string
