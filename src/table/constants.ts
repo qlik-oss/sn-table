@@ -41,6 +41,17 @@ export enum StylingDefaults {
   EXCLUDED_BACKGROUND = 'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px)',
 }
 
+export const COMMON_CELL_STYLING = {
+  padding: '7px 14px',
+  height: 'auto',
+  lineHeight: '130%',
+  borderStyle: 'solid',
+  '&:focus': {
+    boxShadow: '0 0 0 2px #3f8ab3 inset',
+    outline: 'none',
+  },
+};
+
 export const SELECTION_STYLING = {
   SELECTED: {
     color: StylingDefaults.WHITE,

@@ -3,7 +3,7 @@ import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 
-import { cellCommon } from '../styles';
+import { COMMON_CELL_STYLING } from '../../constants';
 
 // ---------- TableBodyWrapper ----------
 
@@ -40,7 +40,7 @@ export const StyledBodyRow = styled(TableRow, {
 }));
 
 export const StyledBodyCell = styled(TableCell)({
-  ...cellCommon,
+  ...COMMON_CELL_STYLING,
   borderWidth: '0px 1px 1px 0px',
 });
 
@@ -49,7 +49,7 @@ export const StyledBodyCell = styled(TableCell)({
 export const StyledTotalsCell = styled(TableCell, {
   shouldForwardProp: (prop: string) => prop !== 'isTop' && prop !== 'headRowHeight' && prop !== 'totalsStyle',
 })(({ totalsStyle, isTop, headRowHeight }) => ({
-  ...cellCommon,
+  ...COMMON_CELL_STYLING,
   ...totalsStyle,
   fontWeight: 'bold',
   position: 'sticky',

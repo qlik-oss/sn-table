@@ -3,7 +3,7 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import TableCell from '@mui/material/TableCell';
 
-import { cellCommon } from '../styles';
+import { COMMON_CELL_STYLING } from '../../constants';
 
 // ---------- TableHeadWrapper ----------
 
@@ -21,7 +21,7 @@ export const StyledHeadRow = styled(TableRow, {
 export const StyledHeadCell = styled(TableCell, {
   shouldForwardProp: (prop: string) => prop !== 'headerStyle',
 })(({ headerStyle }) => ({
-  ...cellCommon,
+  ...COMMON_CELL_STYLING,
   ...headerStyle,
   lineHeight: '150%',
   pointer: 'cursor',

@@ -3,19 +3,6 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import TableContainer from '@mui/material/TableContainer';
 
-// ---------- Common ----------
-
-export const cellCommon = {
-  padding: '7px 14px',
-  height: 'auto',
-  lineHeight: '130%',
-  borderStyle: 'solid',
-  '&:focus': {
-    boxShadow: '0 0 0 2px #3f8ab3 inset',
-    outline: 'none',
-  },
-};
-
 // ---------- AnnounceWrapper ----------
 
 export const TableAnnouncer = styled('div')({
