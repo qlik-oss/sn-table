@@ -165,12 +165,8 @@ const getData = (env) =>
     ? {
         type: 'items',
         translation: 'Common.Data',
-        items: {
-          dataAssets: {
-            type: 'items',
-            component: 'data-assets-panel',
-          },
-        },
+        component: 'data-assets-panel',
+        items: {},
       }
     : {
         type: 'items',
