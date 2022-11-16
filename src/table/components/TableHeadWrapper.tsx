@@ -61,7 +61,7 @@ function TableHeadWrapper({
 
           return (
             <StyledHeadCell
-              sx={{ ...headerStyle, zIndex: columns.length - columnIndex }}
+              sx={headerStyle}
               key={column.id}
               align={column.align}
               className="sn-table-head-cell sn-table-cell"
