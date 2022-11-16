@@ -7,6 +7,20 @@ import TableBody from '@mui/material/TableBody';
 import Select from '@mui/material/Select';
 import IconButton from '@mui/material/IconButton';
 import TableCell from '@mui/material/TableCell';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+
+// ---------- Common ----------
+
+const cellCommon = {
+  padding: '7px 14px',
+  height: 'auto',
+  lineHeight: '130%',
+  '&:focus': {
+    boxShadow: '0 0 0 2px #3f8ab3 inset',
+    outline: 'none',
+  },
+};
 
 // ---------- AnnounceWrapper ----------
 
@@ -45,6 +59,7 @@ export const StyledSelect = styled(Select, {
   shouldForwardProp: (prop: string) => prop !== 'paginationTheme',
 })(({ paginationTheme }) => ({
   backgroundColor: 'inherit',
+  // padding: '0px 12px',
   '& .MuiNativeSelect-icon': { color: paginationTheme.iconColor },
 }));
 
@@ -54,7 +69,21 @@ export const StyledIconButton = styled(IconButton, {
   color: disabledCondition ? paginationTheme.disabledIconColor : paginationTheme.iconColor,
   cursor: disabledCondition ? 'default' : 'pointer',
   height: '32px',
+  padding: '0px 7px',
 }));
+
+export const StyledInputLabel = styled(InputLabel)({
+  fontSize: 14,
+  width: 'fit-content',
+  position: 'relative',
+  padding: 8,
+  transform: 'none',
+  fontWeight: 400,
+});
+
+export const StyledFormControl = styled(FormControl)({
+  padding: '0px 20px',
+});
 
 // ---------- TableBodyWrapper ----------
 
@@ -76,18 +105,23 @@ export const StyledTableBody = styled(TableBody, {
 
 export const StyledBodyRow = styled(TableRow, {
   shouldForwardProp: (prop: string) => prop !== 'bodyCellStyle',
-})(({ hover, bodyCellStyle }) =>
-  hover
-    ? {
-        '&&:hover': {
-          '& td:not(.selected), th:not(.selected)': {
-            backgroundColor: bodyCellStyle.hoverBackgroundColor,
-            color: bodyCellStyle.hoverFontColor,
-          },
-        },
-      }
-    : {}
-);
+})(({ hover, bodyCellStyle }) => ({
+  '&&:hover': {
+    background: 'none',
+  },
+  ...(hover && {
+    '&&:hover': {
+      '& td:not(.selected), th:not(.selected)': {
+        backgroundColor: bodyCellStyle.hoverBackgroundColor,
+        color: bodyCellStyle.hoverFontColor,
+      },
+    },
+  }),
+}));
+
+export const StyledBodyCell = styled(TableCell)({
+  ...cellCommon,
+});
 
 // ---------- TableHeadWrapper ----------
 
@@ -102,9 +136,21 @@ export const StyledHeadRow = styled(TableRow, {
   },
 }));
 
+export const StyledHeadCell = styled(TableCell)({
+  ...cellCommon,
+  lineHeight: '150%',
+});
+
 export const StyledSortLabel = styled(TableSortLabel, {
   shouldForwardProp: (prop: string) => prop !== 'headerStyle',
 })(({ headerStyle }) => ({
+  color: 'inherit',
+  '&:hover': {
+    color: 'inherit',
+  },
+  '&.Mui-active': {
+    color: 'inherit',
+  },
   '&.Mui-active .MuiTableSortLabel-icon': {
     color: headerStyle.sortLabelColor,
   },
@@ -127,6 +173,7 @@ export const VisuallyHidden = styled('span')({
 export const StyledTotalsCell = styled(TableCell, {
   shouldForwardProp: (prop: string) => prop !== 'isTop' && prop !== 'headRowHeight' && prop !== 'totalsStyle',
 })(({ totalsStyle, isTop, headRowHeight }) => ({
+  ...cellCommon,
   ...totalsStyle,
   fontWeight: 'bold',
   position: 'sticky',
@@ -155,4 +202,5 @@ export const StyledTableContainer = styled(TableContainer, {
 })(({ fullHeight, constraints }) => ({
   height: fullHeight ? '100%' : 'calc(100% - 49px)',
   overflow: constraints.active ? 'hidden' : 'auto',
+  border: 'none',
 }));
