@@ -45,7 +45,6 @@ export const StyledBodyCell = styled(TableCell, {
   ...COMMON_CELL_STYLING,
   ...cellStyle,
   borderWidth: '0px 1px 1px 0px',
-  borderColor: 'rgba(0,0,0,0.15)',
 }));
 
 // ---------- TableTotals ----------
