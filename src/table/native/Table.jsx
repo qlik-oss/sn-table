@@ -20,18 +20,24 @@ const styles = StyleSheet.create({
   },
 });
 
-function transformRepresentation(e, theme) {
-  if (e.representation?.miniChart?.colors && theme) {
-    const { colors } = e.representation.miniChart;
-    for (const [key, value] of Object.entries(colors)) {
-      if ((colors[key]?.color !== 'none' && value.index > 0) || !colors[key].color) {
-        colors[key].index -= 1;
-        colors[key].color = theme.getColorPickerColor(colors[key]);
+function transformRepresentation(element, theme) {
+  try {
+    const cloned = JSON.parse(JSON.stringify(element));
+    if (cloned.representation?.miniChart?.colors && theme) {
+      const { colors } = cloned.representation.miniChart;
+      for (const [key, value] of Object.entries(colors)) {
+        if ((colors[key]?.color !== 'none' && value.index > 0) || !colors[key].color) {
+          colors[key].index -= 1;
+          colors[key].color = theme.getColorPickerColor(colors[key]);
+        }
       }
+      cloned.representation.miniChart.colors = colors;
     }
-    e.representation.miniChart.colors = colors;
+    return cloned?.representation;
+  } catch (error) {
+    console.log(error);
   }
-  return e.representation;
+  return undefined;
 }
 
 const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app, rect, theme, translator }) => {
@@ -141,10 +147,11 @@ const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app,
       data.columns = data.columns.map((e) => ({
         ...e,
         active: e.dataColIdx === activeSortHeader,
+        representation: transformRepresentation(e, theme),
       }));
       setTableData(data);
     }
-  }, [layout]);
+  }, [layout, theme]);
 
   const onSelectionsChanged = useCallback((event) => {
     selectionsCaches.current.toggleSelected(event.nativeEvent.selections);

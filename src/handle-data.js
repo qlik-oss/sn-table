@@ -50,8 +50,9 @@ function getMinMaxMeasureInfo(isDim, info) {
 }
 function initConidtionalColor(isDim, info) {
   if (!isDim && info.conditionalColoring) {
-    info.conditionalColoring?.segments?.limits.sort((a, b) => a?.value - b?.value);
-    return info.conditionalColoring;
+    const cloned = JSON.parse(JSON.stringify(info.conditionalColoring));
+    cloned?.segments?.limits.sort((a, b) => a?.value - b?.value);
+    return cloned;
   }
   return undefined;
 }
