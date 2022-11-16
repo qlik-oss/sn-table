@@ -51,6 +51,16 @@ describe('useColumnSize', () => {
     expect(result.current.width).toEqual([100, 100, 100]);
   });
 
+  test('fill width should not be included when space available is filled', () => {
+    rect.width = 1000;
+    (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValueOnce(1000);
+    (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValue(50);
+    (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValue(50);
+    const { result } = renderHook(() => useColumnSize(rect, columns, headerStyle, bodyStyle));
+
+    expect(result.current.width).toEqual([1000, 50, 50]);
+  });
+
   test('should use estimated width given it produces the largest value', () => {
     (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValueOnce(500);
     (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValueOnce(400);
