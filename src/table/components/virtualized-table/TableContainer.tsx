@@ -55,7 +55,7 @@ export default function TableContainer(props: TableContainerProps) {
       ref={ref}
       style={{
         overflow: 'auto',
-        width: '100%',
+        width: rect.width,
         height: rect.height - (paginationNeeded ? PAGINATION_HEIGHT : 0),
       }}
       onScroll={onScrollHandler}

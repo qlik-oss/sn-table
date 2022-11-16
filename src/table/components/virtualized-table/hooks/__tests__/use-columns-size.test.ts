@@ -23,7 +23,7 @@ describe('useColumnSize', () => {
       estimateWidth: jest.fn() as jest.MockedFunction<(length: number) => number>,
     };
     mockedUseMeasureText.mockReturnValue(mockedMeasureText);
-    columns = [{} as Column];
+    columns = [{}, {}, {}] as Column[];
     headerStyle = {} as GeneratedStyling;
     bodyStyle = {} as GeneratedStyling;
   });
@@ -32,8 +32,9 @@ describe('useColumnSize', () => {
     jest.restoreAllMocks();
   });
 
-  test('should use fill width when there is space available', () => {
-    rect.width = 200; // fillWidth => 200;
+  test('should fill up available space given a single column', () => {
+    columns = [{}] as Column[];
+    rect.width = 200;
     (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValue(50);
     (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValue(25);
     const { result } = renderHook(() => useColumnSize(rect, columns, headerStyle, bodyStyle));
@@ -41,19 +42,32 @@ describe('useColumnSize', () => {
     expect(result.current.width).toEqual([200]);
   });
 
-  test('should use estimated width given it produces the largest value', () => {
-    (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValue(500);
+  test('should fill up available space given multiple columns', () => {
+    rect.width = 300;
+    (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValue(50);
     (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValue(25);
     const { result } = renderHook(() => useColumnSize(rect, columns, headerStyle, bodyStyle));
 
-    expect(result.current.width).toEqual([500]);
+    expect(result.current.width).toEqual([100, 100, 100]);
+  });
+
+  test('should use estimated width given it produces the largest value', () => {
+    (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValueOnce(500);
+    (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValueOnce(400);
+    (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValueOnce(300);
+    (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValue(25);
+    const { result } = renderHook(() => useColumnSize(rect, columns, headerStyle, bodyStyle));
+
+    expect(result.current.width).toEqual([500, 400, 300]);
   });
 
   test('should use measured text width given it produces the largest value', () => {
     (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValue(50);
-    (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValue(250);
+    (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValueOnce(500);
+    (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValueOnce(400);
+    (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValueOnce(300);
     const { result } = renderHook(() => useColumnSize(rect, columns, headerStyle, bodyStyle));
 
-    expect(result.current.width).toEqual([250]);
+    expect(result.current.width).toEqual([500, 400, 300]);
   });
 });
