@@ -53,11 +53,11 @@
   },
   "SNTable.MenuItem.SortAscending": {
     "value": "Sort ascending",
-    "comment": "label for menu item to sort ascending."
+    "comment": "label for menu item to sort ascending. (tew 221116)"
   },
   "SNTable.MenuItem.SortDescending": {
     "value": "Sort descending",
-    "comment": "label for menu item to sort descending."
+    "comment": "label for menu item to sort descending. (tew 221116)"
   },
   "SNTable.SortLabel.PressSpaceToSort": {
     "value": "Press space to sort on this column",
