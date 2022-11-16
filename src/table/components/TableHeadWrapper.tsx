@@ -59,29 +59,6 @@ function TableHeadWrapper({
             });
           };
 
-          /* eslint-disable */
-          const HeadCell = () => {
-            return (
-              <StyledSortLabel
-                headerStyle={headerStyle}
-                active={isCurrentColumnActive}
-                title={!constraints.passive ? column.sortDirection : undefined} // passive: turn off tooltips.
-                direction={column.sortDirection}
-                tabIndex={-1}
-                onMouseDown={(evt: React.MouseEvent) =>
-                  handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex)
-                }
-              >
-                <CellText>{column.label}</CellText>
-                {isFocusInHead && (
-                  <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>
-                    {translator.get('SNTable.SortLabel.PressSpaceToSort')}
-                  </VisuallyHidden>
-                )}
-              </StyledSortLabel>
-            );
-          };
-
           return (
             <StyledHeadCell
               sx={{ ...headerStyle, zIndex: columns.length - columnIndex }}
@@ -95,16 +72,26 @@ function TableHeadWrapper({
               onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
               onClick={(evt: React.MouseEvent) => handleClickToSort(evt, column, changeSortOrder, isInteractionEnabled)}
             >
-              {areBasicFeaturesEnabled ? (
-                <HeadCellContent>
-                  <HeadCell />
-                  <HeadCellMenu headerStyle={headerStyle} translator={translator} />
-                </HeadCellContent>
-              ) : (
-                <HeadCellContent>
-                  <HeadCell />
-                </HeadCellContent>
-              )}
+              <HeadCellContent>
+                <StyledSortLabel
+                  headerStyle={headerStyle}
+                  active={isCurrentColumnActive}
+                  title={!constraints.passive ? column.sortDirection : undefined} // passive: turn off tooltips.
+                  direction={column.sortDirection}
+                  tabIndex={-1}
+                  onMouseDown={(evt: React.MouseEvent) =>
+                    handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex)
+                  }
+                >
+                  <CellText>{column.label}</CellText>
+                  {isFocusInHead && (
+                    <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>
+                      {translator.get('SNTable.SortLabel.PressSpaceToSort')}
+                    </VisuallyHidden>
+                  )}
+                </StyledSortLabel>
+                {areBasicFeaturesEnabled && <HeadCellMenu headerStyle={headerStyle} translator={translator} />}
+              </HeadCellContent>
             </StyledHeadCell>
           );
         })}

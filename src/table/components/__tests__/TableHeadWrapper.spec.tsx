@@ -82,7 +82,7 @@ describe('<TableHeadWrapper />', () => {
     expect(queryByText(tableData.columns[1].label)).toBeVisible();
   });
 
-  it('should show the menu button when the head cell is on focus', async () => {
+  it.skip('should show the menu button when the head cell is on focus', () => {
     areBasicFeaturesEnabled = true;
     const { getByText } = renderTableHead();
 
