@@ -1,8 +1,8 @@
 import React from 'react';
-import TableCell from '@mui/material/TableCell';
+import { StyledBodyCell } from './styles';
 import { CellHOCProps } from '../../types';
 
-export default function withStyling(CellComponent: typeof TableCell) {
+export default function withStyling(CellComponent: typeof StyledBodyCell) {
   const HOC = (props: CellHOCProps) => {
     const {
       styling: { selectedCellClass, ...style },
@@ -20,12 +20,12 @@ export default function withStyling(CellComponent: typeof TableCell) {
 
     return (
       <CellComponent
+        cellStyle={style}
         component={component}
         scope={scope}
         align={align}
         tabIndex={tabIndex}
         className={`sn-table-cell ${selectedCellClass || ''}`}
-        style={style}
         onKeyDown={onKeyDown}
         onMouseDown={onMouseDown}
         onKeyUp={onKeyUp}

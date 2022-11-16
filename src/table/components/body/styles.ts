@@ -24,7 +24,7 @@ export const StyledTableBody = styled(TableBody, {
 }));
 
 export const StyledBodyRow = styled(TableRow, {
-  shouldForwardProp: (prop: string) => prop !== 'bodyCellStyle',
+  shouldForwardProp: (prop: string) => prop !== 'bodyCellStyle' && prop !== 'hover',
 })(({ hover, bodyCellStyle }) => ({
   '&&:hover': {
     background: 'none',
@@ -39,10 +39,14 @@ export const StyledBodyRow = styled(TableRow, {
   }),
 }));
 
-export const StyledBodyCell = styled(TableCell)({
+export const StyledBodyCell = styled(TableCell, {
+  shouldForwardProp: (prop: string) => prop !== 'cellStyle',
+})(({ cellStyle }) => ({
   ...COMMON_CELL_STYLING,
+  ...cellStyle,
   borderWidth: '0px 1px 1px 0px',
-});
+  borderColor: 'rgba(0,0,0,0.15)',
+}));
 
 // ---------- TableTotals ----------
 
