@@ -2,12 +2,13 @@ import React, { memo, useEffect, useMemo, useRef } from 'react';
 import TableHead from '@mui/material/TableHead';
 
 import { useContextSelector, TableContext } from '../context';
-import { VisuallyHidden, StyledHeadRow, StyledSortLabel, StyledHeadCell } from '../styles';
+import { VisuallyHidden, StyledHeadRow, StyledSortLabel, StyledHeadCell, HeadCellContent } from '../styles';
 import { getHeaderStyle } from '../utils/styling-utils';
 import { handleHeadKeyDown } from '../utils/handle-key-press';
-import { handleMouseDownLabelToFocusHeadCell, handleClickToFocusHead } from '../utils/handle-click';
+import { handleMouseDownLabelToFocusHeadCell, handleClickToFocusHead, handleClickToSort } from '../utils/handle-click';
 import { TableHeadWrapperProps } from '../types';
 import CellText from './CellText';
+import HeadCellMenu from './HeadCellMenu';
 
 function TableHeadWrapper({
   rootElement,
@@ -69,25 +70,28 @@ function TableHeadWrapper({
               aria-pressed={isCurrentColumnActive}
               onKeyDown={handleKeyDown}
               onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
-              onClick={() => isInteractionEnabled && changeSortOrder(column)}
+              onClick={(evt: React.MouseEvent) => handleClickToSort(evt, column, changeSortOrder, isInteractionEnabled)}
             >
-              <StyledSortLabel
-                headerStyle={headerStyle}
-                active={isCurrentColumnActive}
-                title={!constraints.passive ? column.sortDirection : undefined} // passive: turn off tooltips.
-                direction={column.sortDirection}
-                tabIndex={-1}
-                onMouseDown={(evt: React.MouseEvent) =>
-                  handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex)
-                }
-              >
-                <CellText>{column.label}</CellText>
-                {isFocusInHead && (
-                  <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>
-                    {translator.get('SNTable.SortLabel.PressSpaceToSort')}
-                  </VisuallyHidden>
-                )}
-              </StyledSortLabel>
+              <HeadCellContent>
+                <StyledSortLabel
+                  headerStyle={headerStyle}
+                  active={isCurrentColumnActive}
+                  title={!constraints.passive ? column.sortDirection : undefined} // passive: turn off tooltips.
+                  direction={column.sortDirection}
+                  tabIndex={-1}
+                  onMouseDown={(evt: React.MouseEvent) =>
+                    handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex)
+                  }
+                >
+                  <CellText>{column.label}</CellText>
+                  {isFocusInHead && (
+                    <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>
+                      {translator.get('SNTable.SortLabel.PressSpaceToSort')}
+                    </VisuallyHidden>
+                  )}
+                </StyledSortLabel>
+                {areBasicFeaturesEnabled && <HeadCellMenu headerStyle={headerStyle} translator={translator} />}
+              </HeadCellContent>
             </StyledHeadCell>
           );
         })}
