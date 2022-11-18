@@ -50,7 +50,15 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
     );
   }
 
-  return <EmptyCell style={style} emptyStyle={bodyStyle} />;
+  return (
+    <EmptyCell
+      style={{
+        ...style,
+        borderColor: bodyStyle.borderColor,
+        borderStyle: bodyStyle.borderStyle,
+      }}
+    />
+  );
 };
 
 export default React.memo(Cell, areEqual);
