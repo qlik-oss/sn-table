@@ -14,7 +14,7 @@ const useColumnSize = (
   const { estimateWidth } = useMeasureText(bodyStyle.fontSize, bodyStyle.fontFamily);
 
   const width = useMemo(() => {
-    let measuredWidths: number[] = [];
+    const measuredWidths: number[] = [];
     let totalWidth = 0;
     columns.forEach((col) => {
       const colWidth = Math.max(measureText(col.label), estimateWidth(col.qApprMaxGlyphCount));
@@ -26,7 +26,7 @@ const useColumnSize = (
       // If the width of all columns is less then the available width, spread it evenly among all columns
       const diff = rect.width - totalWidth;
       const spread = diff / columns.length;
-      measuredWidths = measuredWidths.map((w) => spread + w);
+      return measuredWidths.map((w) => spread + w);
     }
 
     return measuredWidths;
