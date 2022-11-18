@@ -2,6 +2,7 @@ import React from 'react';
 import { areEqual } from 'react-window';
 import { Column, Row } from '../../../types';
 import { GeneratedStyling } from '../../types';
+import EmptyCell from './EmptyCell';
 
 interface CellProps {
   columnIndex: number;
@@ -19,8 +20,6 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
   const datum = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
 
   if (datum) {
-    const isLeftAligned = columns[columnIndex].align === 'left';
-
     return (
       <div
         style={{
@@ -31,6 +30,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           borderStyle: bodyStyle.borderStyle,
           borderWidth: '0px 1px 1px 0px',
           justifyContent: columns[columnIndex].align,
+          padding: '0px 14px',
           boxSizing: 'border-box',
         }}
       >
@@ -39,8 +39,6 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
             fontSize: bodyStyle.fontSize,
             fontFamily: bodyStyle.fontFamily,
             color: bodyStyle.color,
-            paddingLeft: isLeftAligned ? '14px' : '4px',
-            paddingRight: isLeftAligned ? '4px' : '14px',
             overflow: 'hidden',
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
@@ -52,17 +50,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
     );
   }
 
-  return (
-    <div
-      style={{
-        ...style,
-        borderColor: bodyStyle.borderColor,
-        borderStyle: bodyStyle.borderStyle,
-        borderWidth: '0px 1px 1px 0px',
-        boxSizing: 'border-box',
-      }}
-    />
-  );
+  return <EmptyCell style={style} emptyStyle={bodyStyle} />;
 };
 
 export default React.memo(Cell, areEqual);
