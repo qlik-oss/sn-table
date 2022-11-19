@@ -56,7 +56,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "yarn lint",
+      "bash -c 'yarn lint'",
       "bash -c 'yarn types:check'"
     ],
     "*.{json,css,md}": [
