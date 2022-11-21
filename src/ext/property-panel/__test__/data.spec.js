@@ -84,9 +84,9 @@ describe('ext', () => {
     });
     describe('Test new data assets panel', () => {
       mockFlags.PS_18291_TABLE_EXPLORATION = true;
-      const { items } = getData(env);
+      const { component } = getData(env);
       it('should render data assets panel', () => {
-        expect(items.dataAssets.component).toEqual('data-assets-panel');
+        expect(component).toEqual('data-assets-panel');
       });
     });
   });
