@@ -29,6 +29,7 @@
     "node": ">=16"
   },
   "main": "dist/sn-table.js",
+  "systemjs": "dist/sn-table.systemjs.js",
   "scripts": {
     "build": "yarn run locale:generate && node ./tools/build.js --core --ext && shx cp assets/* dist",
     "build:dev": "yarn run locale:generate && node ./tools/build.js --core --ext --mode development && shx cp assets/* dist",
@@ -64,7 +65,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "7.19.3",
+    "@babel/core": "7.19.6",
     "@babel/eslint-parser": "7.19.1",
     "@babel/preset-env": "7.19.4",
     "@babel/preset-react": "7.18.6",
@@ -75,10 +76,10 @@
     "@mui/material": "5.10.9",
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
     "@mui/system": "5.10.9",
-    "@nebula.js/cli": "3.0.3",
+    "@nebula.js/cli": "3.0.4",
     "@nebula.js/cli-build": "3.0.3",
-    "@nebula.js/cli-sense": "3.0.3",
-    "@nebula.js/cli-serve": "3.0.3",
+    "@nebula.js/cli-sense": "3.0.4",
+    "@nebula.js/cli-serve": "3.0.4",
     "@playwright/test": "1.27.1",
     "@qlik/react-native-simple-grid": "1.0.11",
     "@react-native-async-storage/async-storage": "1.17.10",
