@@ -9,6 +9,16 @@
     "comment": "number of rows and columns announced by the screen reader. (tew 210929)",
     "version": "HKjzXNhL9hPs/kFY0XyjTQ=="
   },
+  "SNTable.MenuItem.SortAscending": {
+    "value": "升序排序",
+    "comment": "label for menu item to sort ascending. (tew 221116)",
+    "version": "g6ZRLI/3yCFWc8tq56E5nA=="
+  },
+  "SNTable.MenuItem.SortDescending": {
+    "value": "降序排序",
+    "comment": "label for menu item to sort descending. (tew 221116)",
+    "version": "NelZ0Zonmd4DCfix1e3tGA=="
+  },
   "SNTable.Pagination.DisplayedRowsLabel": {
     "value": "{0} / {1}",
     "comment": "label for the displayed rows, e.g. '1-100 of 234' (tew 211004)",
