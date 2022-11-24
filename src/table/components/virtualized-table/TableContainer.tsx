@@ -10,7 +10,7 @@ import { TableContainerProps } from './types';
 import { getHeaderStyle, getBodyCellStyle } from '../../utils/styling-utils';
 
 export default function TableContainer(props: TableContainerProps) {
-  const { layout, rect, pageInfo, paginationNeeded, model, theme } = props;
+  const { layout, rect, pageInfo, paginationNeeded, model, theme, selectionsAPI } = props;
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);
   const bodyRef = useRef<VariableSizeGrid>(null);
@@ -81,6 +81,7 @@ export default function TableContainer(props: TableContainerProps) {
           columnWidth={width}
           forwardRef={bodyRef}
           innerForwardRef={innerForwardRef}
+          selectionsAPI={selectionsAPI}
         />
       </FullSizeContainer>
     </div>

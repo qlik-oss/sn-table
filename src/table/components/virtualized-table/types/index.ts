@@ -1,6 +1,13 @@
 import { stardust } from '@nebula.js/stardust';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
-import { Column, ExtendedTheme, ExtendedTranslator, PageInfo, TableLayout } from '../../../../types';
+import {
+  Column,
+  ExtendedSelectionAPI,
+  ExtendedTheme,
+  ExtendedTranslator,
+  PageInfo,
+  TableLayout,
+} from '../../../../types';
 import { GeneratedStyling } from '../../../types';
 
 export interface WrapperProps {
@@ -11,6 +18,7 @@ export interface WrapperProps {
   direction?: 'ltr' | 'rtl';
   keyboard: stardust.Keyboard;
   translator: ExtendedTranslator;
+  selectionsAPI: ExtendedSelectionAPI;
 }
 
 export interface TableContainerProps {
@@ -20,6 +28,7 @@ export interface TableContainerProps {
   paginationNeeded: boolean;
   model: EngineAPI.IGenericObject;
   theme: ExtendedTheme;
+  selectionsAPI: ExtendedSelectionAPI;
 }
 
 export interface HeaderProps {
@@ -43,4 +52,5 @@ export interface BodyProps {
   forwardRef: React.RefObject<VariableSizeGrid<any>>;
   innerForwardRef: React.RefObject<HTMLDivElement>;
   bodyStyle: GeneratedStyling;
+  selectionsAPI: ExtendedSelectionAPI;
 }

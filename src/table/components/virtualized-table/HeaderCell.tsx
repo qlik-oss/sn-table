@@ -29,6 +29,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
           borderWidth: '0px 1px 0px 0px',
           justifyContent: datum.align,
           boxSizing: 'border-box',
+          cursor: 'default',
         }}
       >
         <span

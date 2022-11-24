@@ -1,7 +1,9 @@
+/* eslint jsx-a11y/no-static-element-interactions: 0 jsx-a11y/mouse-events-have-key-events: 0 */
 import React from 'react';
 import { areEqual } from 'react-window';
 import { Column, Row } from '../../../types';
 import { GeneratedStyling } from '../../types';
+import useSelector from './hooks/use-selector';
 
 interface CellProps {
   columnIndex: number;
@@ -18,13 +20,16 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
   const { rowsInPage, columns, bodyStyle } = data;
   const datum = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
 
-  if (datum) {
+  const { handleMouseDown, handleMouseOver, handleMouseUp, selectionStyling } = useSelector(datum);
+
+  if (typeof datum === 'object') {
     const isLeftAligned = columns[columnIndex].align === 'left';
 
     return (
       <div
         style={{
           ...style,
+          ...selectionStyling,
           display: 'flex',
           alignItems: 'center',
           borderColor: bodyStyle.borderColor,
@@ -32,7 +37,11 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           borderWidth: '0px 1px 1px 0px',
           justifyContent: columns[columnIndex].align,
           boxSizing: 'border-box',
+          cursor: 'default',
         }}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onMouseOver={handleMouseOver}
       >
         <span
           style={{
@@ -46,7 +55,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
             textOverflow: 'ellipsis',
           }}
         >
-          {typeof datum === 'string' ? datum : datum.qText}
+          {datum.qText}
         </span>
       </div>
     );

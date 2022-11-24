@@ -4,6 +4,7 @@ import { DEFAULT_ROW_HEIGHT, HEADER_HEIGHT, PAGINATION_HEIGHT } from './constant
 import useInfiniteScrollData from './hooks/use-infinite-scroll-data';
 import { BodyProps } from './types';
 import Cell from './Cell';
+import useSelectionsEffect from './hooks/use-selections-effect';
 
 interface OnItemsRendered {
   overscanColumnStartIndex: number;
@@ -28,8 +29,9 @@ const Body = (props: BodyProps) => {
     pageInfo,
     paginationNeeded,
     bodyStyle,
+    selectionsAPI,
   } = props;
-  const { rowsInPage, loadData, debouncedLoadData } = useInfiniteScrollData(model, layout, pageInfo);
+  const { rowsInPage, loadData, debouncedLoadData } = useInfiniteScrollData(model, layout, pageInfo, columns);
   const rowCount = Math.min(pageInfo.rowsPerPage, layout.qHyperCube.qSize.qcy - pageInfo.page * pageInfo.rowsPerPage);
   const visibleRowCount = Math.min(rowCount, Math.ceil(rect.height / DEFAULT_ROW_HEIGHT));
   const visibleColumnCount = useMemo(
@@ -47,6 +49,8 @@ const Body = (props: BodyProps) => {
       ),
     [rect, columnWidth]
   ).count;
+
+  useSelectionsEffect(selectionsAPI, rowsInPage);
 
   useEffect(() => {
     // Initial data load

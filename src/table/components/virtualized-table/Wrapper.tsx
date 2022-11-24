@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { WrapperProps } from './types';
 import PaginationContent from '../PaginationContent';
 import { StyledTableWrapper } from '../../styles';
@@ -8,14 +8,19 @@ import TableContainer from './TableContainer';
 import { MAX_PAGE_SIZE } from './constants';
 
 export default function Wrapper(props: WrapperProps) {
-  const { rect, layout, keyboard, translator, theme, model } = props;
+  const { rect, layout, keyboard, translator, theme, model, selectionsAPI } = props;
   const totalRowCount = layout.qHyperCube.qSize.qcy;
   const pageSize = Math.min(MAX_PAGE_SIZE, totalRowCount);
-  const [pageInfo, setPageInfo] = useState<PageInfo>({
-    page: 0,
-    rowsPerPage: pageSize,
-    rowsPerPageOptions: [],
-  });
+  const [page, setPage] = useState(0);
+  const [prevLayout, setPrevLayout] = useState(layout);
+  const pageInfo = useMemo<PageInfo>(
+    () => ({
+      page,
+      rowsPerPage: pageSize,
+      rowsPerPageOptions: [],
+    }),
+    [pageSize, page]
+  );
   const paginationNeeded = totalRowCount > MAX_PAGE_SIZE;
   const tableData = {
     totalRowCount,
@@ -23,6 +28,12 @@ export default function Wrapper(props: WrapperProps) {
     totalPages: Math.ceil(totalRowCount / pageSize),
     paginationNeeded,
   } as TableData;
+
+  // Reset page on new layout
+  if (layout !== prevLayout) {
+    setPrevLayout(layout);
+    setPage(0);
+  }
 
   return (
     <StyledTableWrapper
@@ -39,12 +50,13 @@ export default function Wrapper(props: WrapperProps) {
         pageInfo={pageInfo}
         paginationNeeded={paginationNeeded}
         theme={theme}
+        selectionsAPI={selectionsAPI}
       />
       {paginationNeeded && (
         <FooterWrapper theme={theme}>
           <PaginationContent
             theme={theme}
-            handleChangePage={(page) => setPageInfo((prev) => ({ ...prev, page }))}
+            handleChangePage={(currentPage) => setPage(currentPage)}
             isSelectionMode={false}
             tableData={tableData}
             pageInfo={pageInfo}

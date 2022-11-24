@@ -3,8 +3,9 @@ import { render, waitFor } from '@testing-library/react';
 import { stardust } from '@nebula.js/stardust';
 
 import TableContainer from '../TableContainer';
-import { ExtendedTheme, PageInfo, TableLayout } from '../../../../types';
+import { ExtendedSelectionAPI, ExtendedTheme, PageInfo, TableLayout } from '../../../../types';
 import { generateDataPages, generateLayout } from '../../../../__test__/generate-test-data';
+import { TableContextProvider } from '../../../context';
 
 describe('<TableContainer />', () => {
   let measureTextMock: jest.Mock<{ width: number }>;
@@ -14,17 +15,22 @@ describe('<TableContainer />', () => {
   let paginationNeeded: boolean;
   let model: EngineAPI.IGenericObject;
   let theme: ExtendedTheme;
+  let selectionsAPI: ExtendedSelectionAPI;
 
   const renderTableContainer = () =>
     render(
-      <TableContainer
-        model={model}
-        pageInfo={pageInfo}
-        rect={rect}
-        layout={layout}
-        paginationNeeded={paginationNeeded}
-        theme={theme}
-      />
+      // Need to mock selectionDispatch since UPDATE_PAGE_ROWS action can create infinite loop
+      <TableContextProvider selectionsAPI={selectionsAPI} selectionDispatchMock={jest.fn()}>
+        <TableContainer
+          model={model}
+          pageInfo={pageInfo}
+          rect={rect}
+          layout={layout}
+          paginationNeeded={paginationNeeded}
+          theme={theme}
+          selectionsAPI={selectionsAPI}
+        />
+      </TableContextProvider>
     );
 
   beforeEach(() => {
@@ -62,6 +68,8 @@ describe('<TableContainer />', () => {
         pagination: { borderColor: '' },
       },
     } as unknown as ExtendedTheme;
+
+    selectionsAPI = { on: () => {}, removeListener: () => {}, isModal: () => false } as unknown as ExtendedSelectionAPI;
   });
 
   afterEach(() => jest.restoreAllMocks());
