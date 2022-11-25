@@ -4,6 +4,7 @@ import { areEqual } from 'react-window';
 import { Column, Row } from '../../../types';
 import { CellStyle, GeneratedStyling } from '../../types';
 import useSelector from './hooks/use-selector';
+import EmptyCell from './EmptyCell';
 
 interface CellProps {
   columnIndex: number;
@@ -25,8 +26,6 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
   } as CellStyle);
 
   if (typeof datum === 'object') {
-    const isLeftAligned = columns[columnIndex].align === 'left';
-
     return (
       <div
         style={{
@@ -37,6 +36,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           alignItems: 'center',
           borderWidth: '0px 1px 1px 0px',
           justifyContent: columns[columnIndex].align,
+          padding: '0px 14px',
           boxSizing: 'border-box',
           cursor: 'default',
         }}
@@ -47,8 +47,6 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
       >
         <span
           style={{
-            paddingLeft: isLeftAligned ? '14px' : '4px',
-            paddingRight: isLeftAligned ? '4px' : '14px',
             overflow: 'hidden',
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
@@ -61,7 +59,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
   }
 
   return (
-    <div
+    <EmptyCell
       style={{
         ...style,
         ...bodyStyle,

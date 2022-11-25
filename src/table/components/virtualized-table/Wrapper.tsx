@@ -4,15 +4,15 @@ import PaginationContent from '../PaginationContent';
 import { StyledTableWrapper } from '../../styles';
 import { PageInfo, TableData } from '../../../types';
 import FooterWrapper from '../FooterWrapper';
-import TableContainer from './TableContainer';
+import Table from './TableContainer';
 import { MAX_PAGE_SIZE } from './constants';
+import useOnPropsChange from './hooks/use-on-props-change';
 
 export default function Wrapper(props: WrapperProps) {
   const { rect, layout, keyboard, translator, theme, model, selectionsAPI } = props;
   const totalRowCount = layout.qHyperCube.qSize.qcy;
   const pageSize = Math.min(MAX_PAGE_SIZE, totalRowCount);
   const [page, setPage] = useState(0);
-  const [prevLayout, setPrevLayout] = useState(layout);
   const pageInfo = useMemo<PageInfo>(
     () => ({
       page,
@@ -30,10 +30,7 @@ export default function Wrapper(props: WrapperProps) {
   } as TableData;
 
   // Reset page on new layout
-  if (layout !== prevLayout) {
-    setPrevLayout(layout);
-    setPage(0);
-  }
+  useOnPropsChange(() => setPage(0), [layout]);
 
   return (
     <StyledTableWrapper
@@ -43,7 +40,7 @@ export default function Wrapper(props: WrapperProps) {
       dir="ltr"
       style={{ borderWidth: paginationNeeded ? '0px 1px 0px' : '0px 1px 1px' }}
     >
-      <TableContainer
+      <Table
         layout={layout}
         rect={rect}
         model={model}

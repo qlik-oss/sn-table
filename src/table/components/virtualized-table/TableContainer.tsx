@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { memo, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
 import { getColumns } from '../../../handle-data';
 import useColumnSize from './hooks/use-column-size';
@@ -9,7 +9,7 @@ import Header from './Header';
 import { TableContainerProps } from './types';
 import { getHeaderStyle, getBodyCellStyle } from '../../utils/styling-utils';
 
-export default function TableContainer(props: TableContainerProps) {
+const TableContainer = (props: TableContainerProps) => {
   const { layout, rect, pageInfo, paginationNeeded, model, theme, selectionsAPI } = props;
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);
@@ -62,7 +62,7 @@ export default function TableContainer(props: TableContainerProps) {
       ref={ref}
       style={{
         overflow: 'auto',
-        width: '100%',
+        width: rect.width,
         height: rect.height - (paginationNeeded ? PAGINATION_HEIGHT : 0),
       }}
       onScroll={onScrollHandler}
@@ -93,4 +93,9 @@ export default function TableContainer(props: TableContainerProps) {
       </FullSizeContainer>
     </div>
   );
-}
+};
+
+// Export non memoized version for testing purpose
+export { TableContainer };
+
+export default memo(TableContainer);

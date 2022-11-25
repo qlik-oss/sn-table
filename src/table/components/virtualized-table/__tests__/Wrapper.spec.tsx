@@ -1,10 +1,9 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { stardust } from '@nebula.js/stardust';
-
 import Wrapper from '../Wrapper';
 import { ExtendedSelectionAPI, ExtendedTheme, ExtendedTranslator, TableLayout } from '../../../../types';
-import TableContainer from '../TableContainer';
+import { TableContainer } from '../TableContainer';
 import FooterWrapper from '../../FooterWrapper';
 import { MAX_PAGE_SIZE } from '../constants';
 

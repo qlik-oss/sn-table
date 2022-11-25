@@ -72,16 +72,22 @@ const Body = (props: BodyProps) => {
       overscanRowStartIndex,
       overscanRowStopIndex,
     }: OnItemsRendered) => {
+      if (overscanRowStartIndex > rowCount) {
+        // Safe guard against when a new page is loaded and the user have scrolled on the previously loaded page.
+        // In such case overscanRowStartIndex could be larger than the actual amount of rows available
+        return;
+      }
+
       if (overscanColumnStartIndex > 0 || overscanRowStartIndex > 0) {
         const left = overscanColumnStartIndex;
-        const top = overscanRowStartIndex + pageInfo.page * pageInfo.rowsPerPage;
+        const top = overscanRowStartIndex - pageInfo.page * pageInfo.rowsPerPage;
         const width = overscanColumnStopIndex - overscanColumnStartIndex + 1;
         const height = overscanRowStopIndex - overscanRowStartIndex + 1;
 
         debouncedLoadData(left, top, width, height);
       }
     },
-    [debouncedLoadData, pageInfo]
+    [debouncedLoadData, pageInfo, rowCount]
   );
 
   return (

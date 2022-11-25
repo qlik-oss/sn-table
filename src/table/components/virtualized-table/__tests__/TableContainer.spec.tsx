@@ -1,8 +1,7 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import { stardust } from '@nebula.js/stardust';
-
-import TableContainer from '../TableContainer';
+import { TableContainer } from '../TableContainer';
 import { ExtendedSelectionAPI, ExtendedTheme, PageInfo, TableLayout } from '../../../../types';
 import { generateDataPages, generateLayout } from '../../../../__test__/generate-test-data';
 import { TableContextProvider } from '../../../context';
