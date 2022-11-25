@@ -13,16 +13,21 @@ const useColumnSize = (
   const { measureText } = useMeasureText(headerStyle.fontSize, headerStyle.fontFamily);
   const { estimateWidth } = useMeasureText(bodyStyle.fontSize, bodyStyle.fontFamily);
 
-  const width = useMemo(
-    () =>
-      columns.map((c) => {
-        const fillWidth = rect.width / columns.length;
-        const maxWidth = Math.max(fillWidth, measureText(c.label), estimateWidth(c.qApprMaxGlyphCount));
+  const width = useMemo(() => {
+    const measuredWidths = columns.map((col) =>
+      Math.max(measureText(col.label), estimateWidth(col.qApprMaxGlyphCount))
+    );
+    const totalWidth = measuredWidths.reduce((sum, w) => sum + w, 0);
 
-        return maxWidth;
-      }),
-    [rect, columns, measureText, estimateWidth]
-  );
+    if (totalWidth < rect.width) {
+      // If the width of all columns is less then the available width, spread it evenly among all columns
+      const diff = rect.width - totalWidth;
+      const spread = diff / columns.length;
+      return measuredWidths.map((w) => spread + w);
+    }
+
+    return measuredWidths;
+  }, [rect.width, columns, measureText, estimateWidth]);
 
   return { width };
 };
