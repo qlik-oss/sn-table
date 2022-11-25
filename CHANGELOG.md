@@ -1,3 +1,15 @@
+# [1.20.0](https://github.com/qlik-oss/sn-table/compare/v1.19.1...v1.20.0) (2022-11-25)
+
+### Bug Fixes
+
+- cell padding in virtualized mode ([#742](https://github.com/qlik-oss/sn-table/issues/742)) ([377dd47](https://github.com/qlik-oss/sn-table/commit/377dd47d59bc5cf0f3bb57893335b522029c76a0))
+- column width calc ([#741](https://github.com/qlik-oss/sn-table/issues/741)) ([335512c](https://github.com/qlik-oss/sn-table/commit/335512cc3121b29e9a8ead7c9cfab8288142f4c5))
+
+### Features
+
+- change data section definition ([#740](https://github.com/qlik-oss/sn-table/issues/740)) ([9fa8337](https://github.com/qlik-oss/sn-table/commit/9fa83375b4e27b06ee6a0cdc69afe1cee956a72d))
+- initial infinite scroll ([#733](https://github.com/qlik-oss/sn-table/issues/733)) ([f319a71](https://github.com/qlik-oss/sn-table/commit/f319a71de7de58b7ea2cc2dbc8c41a16e8dc7ced))
+
 ## [1.19.1](https://github.com/qlik-oss/sn-table/compare/v1.19.0...v1.19.1) (2022-10-27)
 
 ### Bug Fixes
