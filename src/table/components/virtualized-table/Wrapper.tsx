@@ -1,21 +1,26 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { WrapperProps } from './types';
 import PaginationContent from '../PaginationContent';
 import { StyledTableWrapper } from '../../styles';
 import { PageInfo, TableData } from '../../../types';
 import FooterWrapper from '../FooterWrapper';
-import TableContainer from './TableContainer';
+import Table from './TableContainer';
 import { MAX_PAGE_SIZE } from './constants';
+import useOnPropsChange from './hooks/use-on-props-change';
 
 export default function Wrapper(props: WrapperProps) {
   const { rect, layout, keyboard, translator, theme, model } = props;
   const totalRowCount = layout.qHyperCube.qSize.qcy;
   const pageSize = Math.min(MAX_PAGE_SIZE, totalRowCount);
-  const [pageInfo, setPageInfo] = useState<PageInfo>({
-    page: 0,
-    rowsPerPage: pageSize,
-    rowsPerPageOptions: [],
-  });
+  const [page, setPage] = useState(0);
+  const pageInfo = useMemo<PageInfo>(
+    () => ({
+      page,
+      rowsPerPage: pageSize,
+      rowsPerPageOptions: [],
+    }),
+    [pageSize, page]
+  );
   const paginationNeeded = totalRowCount > MAX_PAGE_SIZE;
   const tableData = {
     totalRowCount,
@@ -23,6 +28,9 @@ export default function Wrapper(props: WrapperProps) {
     totalPages: Math.ceil(totalRowCount / pageSize),
     paginationNeeded,
   } as TableData;
+
+  // Reset page on new layout
+  useOnPropsChange(() => setPage(0), [layout]);
 
   return (
     <StyledTableWrapper
@@ -32,7 +40,7 @@ export default function Wrapper(props: WrapperProps) {
       dir="ltr"
       style={{ borderWidth: paginationNeeded ? '0px 1px 0px' : '0px 1px 1px' }}
     >
-      <TableContainer
+      <Table
         layout={layout}
         rect={rect}
         model={model}
@@ -44,7 +52,7 @@ export default function Wrapper(props: WrapperProps) {
         <FooterWrapper theme={theme}>
           <PaginationContent
             theme={theme}
-            handleChangePage={(page) => setPageInfo((prev) => ({ ...prev, page }))}
+            handleChangePage={(newPage) => setPage(newPage)}
             isSelectionMode={false}
             tableData={tableData}
             pageInfo={pageInfo}
