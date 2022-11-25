@@ -10,7 +10,7 @@ const NOOP_ANNOUNCE = () => {};
 
 const PREVENT_DEFAULT = (e: React.MouseEvent<HTMLTableCellElement>) => e.preventDefault();
 
-export default function useSelector(datum: Cell | string) {
+export default function useSelector(datum: Cell | string, cellStyle: CellStyle) {
   const hasData = typeof datum === 'object';
 
   const cellSelectionState = useContextSelector(TableContext, (value) =>
@@ -28,7 +28,7 @@ export default function useSelector(datum: Cell | string) {
       true
     );
 
-    const selectionStyling = getSelectionStyle({} as CellStyle, cellSelectionState);
+    const selectionStyling = getSelectionStyle(cellStyle, cellSelectionState);
 
     return {
       handleMouseDown,

@@ -16,7 +16,14 @@ export default function TableContainer(props: TableContainerProps) {
   const bodyRef = useRef<VariableSizeGrid>(null);
   const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
-  const bodyStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
+  const bodyStyle = useMemo(
+    () => ({
+      ...getBodyCellStyle(layout, theme),
+      backgroundColor: theme.table.backgroundColor, // Append both background and backgroundColor to avoid conflicting prop error when selecting styling is applied
+      background: theme.table.backgroundColor,
+    }),
+    [layout, theme]
+  );
   const columns = useMemo(() => getColumns(layout), [layout]);
   const { width } = useColumnSize(rect, columns, headerStyle, bodyStyle);
   const totalWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
