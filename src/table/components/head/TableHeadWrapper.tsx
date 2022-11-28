@@ -63,6 +63,11 @@ function TableHeadWrapper({
             });
           };
 
+          const sortFromMenu = (evt: React.MouseEvent, sortOrder: string) => {
+            evt.stopPropagation();
+            changeSortOrder(column, sortOrder);
+          };
+
           return (
             <StyledHeadCell
               headerStyle={headerStyle}
@@ -94,7 +99,9 @@ function TableHeadWrapper({
                     </VisuallyHidden>
                   )}
                 </StyledSortLabel>
-                {areBasicFeaturesEnabled && <HeadCellMenu headerStyle={headerStyle} translator={translator} />}
+                {areBasicFeaturesEnabled && (
+                  <HeadCellMenu headerStyle={headerStyle} translator={translator} sortFromMenu={sortFromMenu} />
+                )}
               </HeadCellContent>
             </StyledHeadCell>
           );

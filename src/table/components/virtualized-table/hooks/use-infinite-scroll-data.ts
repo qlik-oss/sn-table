@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { debouncer } from 'qlik-chart-modules';
 import { PageInfo, Row, TableLayout } from '../../../../types';
+import useOnPropsChange from './use-on-props-change';
 
 type LoadData = (left: number, top: number, width: number, height: number) => void;
 
@@ -47,8 +48,7 @@ const useInfiniteScrollData = (
   pageInfo: PageInfo
 ): UseInfiniteScrollData => {
   const [rowsInPage, setRowsInPage] = useState<Row[]>([]);
-
-  useEffect(() => setRowsInPage([]), [layout, pageInfo]);
+  useOnPropsChange(() => setRowsInPage([]), [layout, pageInfo]);
 
   const loadData: LoadData = useCallback(
     async (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
@@ -57,13 +57,14 @@ const useInfiniteScrollData = (
       const [dataPage] = await model.getHyperCubeData('/qHyperCubeDef', [{ qTop, qLeft, qHeight, qWidth }]);
 
       setRowsInPage((prevRows) => {
+        const nextRows = [...prevRows];
         dataPage.qMatrix.forEach((matrixRow, matrixRowIdx: number) => {
-          const { row, pageRowIdx } = createNewRow(matrixRow, prevRows, matrixRowIdx, qTop, qLeft, pageRowStartIdx);
+          const { row, pageRowIdx } = createNewRow(matrixRow, nextRows, matrixRowIdx, qTop, qLeft, pageRowStartIdx);
 
-          prevRows[pageRowIdx] = row;
+          nextRows[pageRowIdx] = row;
         });
 
-        return [...prevRows];
+        return nextRows;
       });
     },
     [model, pageInfo]
