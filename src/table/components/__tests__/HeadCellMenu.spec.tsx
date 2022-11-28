@@ -44,16 +44,16 @@ describe('<HeadCellMenu />', () => {
     expect(queryByRole('menu')).not.toBeInTheDocument();
     fireEvent.click(getByRole('button'));
     expect(getByRole('menu')).toBeVisible();
-    expect(getByText('SNTable.SortItem.SortAscending')).toBeVisible();
-    expect(getByText('SNTable.SortItem.SortDescending')).toBeVisible();
+    expect(getByText('SNTable.MenuItem.SortAscending')).toBeVisible();
+    expect(getByText('SNTable.MenuItem.SortDescending')).toBeVisible();
   });
 
   it('should call changeSortOrder when the sort item is clicked', () => {
     const { getByRole, getByText } = renderTableHeadCellMenu();
     fireEvent.click(getByRole('button'));
-    fireEvent.click(getByText('SNTable.SortItem.SortAscending'));
+    fireEvent.click(getByText('SNTable.MenuItem.SortAscending'));
     expect(sortFromMenu).toHaveBeenCalled();
-    fireEvent.click(getByText('SNTable.SortItem.SortDescending'));
+    fireEvent.click(getByText('SNTable.MenuItem.SortDescending'));
     expect(sortFromMenu).toHaveBeenCalled();
   });
 });

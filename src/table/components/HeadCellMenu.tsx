@@ -100,7 +100,7 @@ export default function HeadCellMenu({
                   aria-labelledby="sn-table-head-menu-button"
                 >
                   <MenuItem
-                    itemTitle={translator.get('SNTable.SortItem.SortAscending')}
+                    itemTitle={translator.get('SNTable.MenuItem.SortAscending')}
                     sortOrder="A"
                     sortFromMenu={sortFromMenu}
                   >
@@ -108,7 +108,7 @@ export default function HeadCellMenu({
                   </MenuItem>
 
                   <MenuItem
-                    itemTitle={translator.get('SNTable.SortItem.SortDescending')}
+                    itemTitle={translator.get('SNTable.MenuItem.SortDescending')}
                     sortOrder="D"
                     sortFromMenu={sortFromMenu}
                   >
