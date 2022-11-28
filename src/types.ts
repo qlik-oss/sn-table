@@ -182,7 +182,7 @@ export interface AnnounceArgs {
 
 export type Announce = (arg0: AnnounceArgs) => void;
 
-export type ChangeSortOrder = (column: Column) => Promise<void>;
+export type ChangeSortOrder = (column: Column, sortOrder?: string) => Promise<void>;
 
 export interface Galaxy {
   translator: ExtendedTranslator;

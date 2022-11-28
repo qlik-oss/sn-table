@@ -15,10 +15,20 @@ import { StyledMenuIconButton, StyledCellMenu } from '../styles';
 import { GeneratedStyling } from '../types';
 import { ExtendedTranslator } from '../../types';
 
-const ListItems = ({ children, itemTitle }: { children: any; itemTitle: string }) => {
+const MenuItem = ({
+  children,
+  itemTitle,
+  sortOrder,
+  sortFromMenu,
+}: {
+  children: any;
+  itemTitle: string;
+  sortOrder: string;
+  sortFromMenu(evt: React.MouseEvent, sortOrder: string): void;
+}) => {
   return (
     <ListItem disablePadding>
-      <ListItemButton>
+      <ListItemButton onClick={(evt) => sortFromMenu(evt, sortOrder)}>
         <ListItemIcon sx={{ minWidth: '25px' }}>{children}</ListItemIcon>
         <ListItemText primary={itemTitle} />
       </ListItemButton>
@@ -29,9 +39,11 @@ const ListItems = ({ children, itemTitle }: { children: any; itemTitle: string }
 export default function HeadCellMenu({
   headerStyle,
   translator,
+  sortFromMenu,
 }: {
   headerStyle: GeneratedStyling;
   translator: ExtendedTranslator;
+  sortFromMenu: (evt: React.MouseEvent, sortOrder: string) => void;
 }) {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
@@ -87,12 +99,21 @@ export default function HeadCellMenu({
                   className="sn-table-head-menu"
                   aria-labelledby="sn-table-head-menu-button"
                 >
-                  <ListItems itemTitle={translator.get('SNTable.SortItem.SortAscending')}>
+                  <MenuItem
+                    itemTitle={translator.get('SNTable.MenuItem.SortAscending')}
+                    sortOrder="A"
+                    sortFromMenu={sortFromMenu}
+                  >
                     <ArrowUpwardIcon />
-                  </ListItems>
-                  <ListItems itemTitle={translator.get('SNTable.SortItem.SortDescending')}>
+                  </MenuItem>
+
+                  <MenuItem
+                    itemTitle={translator.get('SNTable.MenuItem.SortDescending')}
+                    sortOrder="D"
+                    sortFromMenu={sortFromMenu}
+                  >
                     <ArrowDownwardIcon />
-                  </ListItems>
+                  </MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>
