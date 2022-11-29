@@ -20,7 +20,7 @@ If you use npm:
 
 `npm install @nebula.js/sn-table`
 
-Or without build tool, You can also load the sn-table through the script tag from [unpkg](https://unpkg.com/@nebula.js/sn-table).
+Or without a build tool, You can also load the sn-table through the script tag from [unpkg](https://unpkg.com/@nebula.js/sn-table).
 
 ```html
 <script src="https://unpkg.com/@nebula.js/sn-table"></script>
@@ -50,7 +50,7 @@ nuked.render({
 
 Look into [Build a simple mashup using nebula.js](https://qlik.dev/tutorials/build-a-simple-mashup-using-nebulajs) and [Embed a visualization](https://qlik.dev/libraries-and-tools/nebulajs/rendering) to learn more.
 
-[Check full examples](./mashup-example) of the mashup usage.
+Check full [examples](./mashup-example) of mashup usage for sn-table.
 
 ## Visualization Extension Usage
 
