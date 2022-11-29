@@ -1,10 +1,10 @@
 import React from 'react';
-import Box from '@mui/material/Box';
+import { StyledCellText } from './styles';
 
 export default function CellText({ children }: { children: React.ReactNode }) {
   return (
-    <Box component="span" className="sn-table-cell-text" sx={{ borderLeft: '0 !important' }}>
+    <StyledCellText component="span" className="sn-table-cell-text">
       {children}
-    </Box>
+    </StyledCellText>
   );
 }

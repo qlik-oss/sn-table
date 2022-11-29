@@ -1,14 +1,18 @@
 import React, { memo, useEffect, useMemo, useRef } from 'react';
 import TableHead from '@mui/material/TableHead';
 
-import { useContextSelector, TableContext } from '../context';
-import { VisuallyHidden, StyledHeadRow, StyledSortLabel, StyledHeadCell, HeadCellContent } from '../styles';
-import { getHeaderStyle } from '../utils/styling-utils';
-import { handleHeadKeyDown } from '../utils/handle-key-press';
-import { handleMouseDownLabelToFocusHeadCell, handleClickToFocusHead, handleClickToSort } from '../utils/handle-click';
-import { TableHeadWrapperProps } from '../types';
-import CellText from './CellText';
+import { useContextSelector, TableContext } from '../../context';
+import { VisuallyHidden, StyledHeadRow, StyledSortLabel, StyledHeadCell, HeadCellContent } from './styles';
+import { getHeaderStyle } from '../../utils/styling-utils';
+import { handleHeadKeyDown } from '../../utils/handle-key-press';
+import {
+  handleMouseDownLabelToFocusHeadCell,
+  handleClickToFocusHead,
+  handleClickToSort,
+} from '../../utils/handle-click';
+import { TableHeadWrapperProps } from '../../types';
 import HeadCellMenu from './HeadCellMenu';
+import CellText from '../CellText';
 
 function TableHeadWrapper({
   rootElement,
@@ -66,7 +70,7 @@ function TableHeadWrapper({
 
           return (
             <StyledHeadCell
-              sx={headerStyle}
+              headerStyle={headerStyle}
               key={column.id}
               align={column.align}
               className="sn-table-head-cell sn-table-cell"

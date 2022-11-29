@@ -30,10 +30,6 @@ export enum KeyCodes {
 }
 
 export enum StylingDefaults {
-  BORDER_STYLE = 'solid',
-  BODY_BORDER = '0px 1px 1px 0px',
-  HEAD_BORDER = '1px 1px 1px 0px',
-  HEAD_CURSOR = 'pointer',
   HEAD_BACKGROUND_LIGHT = '#FAFAFA',
   HEAD_BACKGROUND_DARK = '#323232',
   SORT_LABEL_LIGHT = 'rgba(255,255,255,0.9)',
@@ -44,6 +40,17 @@ export enum StylingDefaults {
   SELECTED_BACKGROUND = '#009845',
   EXCLUDED_BACKGROUND = 'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px)',
 }
+
+export const COMMON_CELL_STYLING = {
+  padding: '7px 14px',
+  height: 'auto',
+  lineHeight: '130%',
+  borderStyle: 'solid',
+  '&:focus': {
+    boxShadow: '0 0 0 2px #3f8ab3 inset',
+    outline: 'none',
+  },
+};
 
 export const SELECTION_STYLING = {
   SELECTED: {

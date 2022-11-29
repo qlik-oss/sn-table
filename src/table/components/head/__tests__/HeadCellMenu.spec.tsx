@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import { TableContextProvider } from '../../context';
-import { ExtendedTranslator, ExtendedSelectionAPI } from '../../../types';
-import { GeneratedStyling } from '../../types';
+import { TableContextProvider } from '../../../context';
+import { ExtendedTranslator, ExtendedSelectionAPI } from '../../../../types';
+import { GeneratedStyling } from '../../../types';
 import HeadCellMenu from '../HeadCellMenu';
 
 describe('<HeadCellMenu />', () => {
@@ -25,7 +25,6 @@ describe('<HeadCellMenu />', () => {
     translator = { get: (s) => s } as ExtendedTranslator;
     headerStyle = {
       sortLabelColor: '#4287f5',
-      borderStyle: 'solid',
       borderColor: '#4287f5',
     };
     sortFromMenu = jest.fn();

@@ -11,9 +11,9 @@ import ListItemText from '@mui/material/ListItemText';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
-import { StyledMenuIconButton, StyledCellMenu } from '../styles';
-import { GeneratedStyling } from '../types';
-import { ExtendedTranslator } from '../../types';
+import { StyledMenuIconButton, StyledCellMenu } from './styles';
+import { GeneratedStyling } from '../../types';
+import { ExtendedTranslator } from '../../../types';
 
 const MenuItem = ({
   children,

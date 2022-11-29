@@ -27,7 +27,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           display: 'flex',
           alignItems: 'center',
           borderColor: bodyStyle.borderColor,
-          borderStyle: bodyStyle.borderStyle,
+          borderStyle: 'solid',
           borderWidth: '0px 1px 1px 0px',
           justifyContent: columns[columnIndex].align,
           padding: '0px 14px',
@@ -55,7 +55,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
       style={{
         ...style,
         borderColor: bodyStyle.borderColor,
-        borderStyle: bodyStyle.borderStyle,
+        borderStyle: 'solid',
       }}
     />
   );

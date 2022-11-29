@@ -1,9 +1,9 @@
 import React from 'react';
-import { useContextSelector, TableContext } from '../context';
-import { getSelectionStyle } from '../utils/styling-utils';
-import { getCellSelectionState } from '../utils/selections-utils';
-import { getSelectionMouseHandlers } from '../utils/handle-click';
-import { CellHOC, CellHOCProps } from '../types';
+import { useContextSelector, TableContext } from '../../context';
+import { getSelectionStyle } from '../../utils/styling-utils';
+import { getCellSelectionState } from '../../utils/selections-utils';
+import { getSelectionMouseHandlers } from '../../utils/handle-click';
+import { CellHOC, CellHOCProps } from '../../types';
 
 export default function withSelections(CellComponent: CellHOC) {
   const HOC = (props: CellHOCProps) => {
