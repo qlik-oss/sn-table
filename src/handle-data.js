@@ -133,7 +133,20 @@ const getCellBackgroundColor = (col, row) => {
   return { cellBackgroundColor, cellForegroundColor };
 };
 
-export default async function manageData(model, layout, pageInfo, setPageInfo) {
+const validateImageUrl = (row, col, colIdx, imageOrigins) => {
+  if (col?.representation?.type === 'image') {
+    const urlIndex = col.stylingInfo?.indexOf('imageUrl');
+    if (urlIndex !== -1) {
+      const url = row[colIdx].qAttrExps?.qValues?.[urlIndex].qText;
+      const allowed = imageOrigins.some((s) => url.includes(s));
+      if (!allowed) {
+        row[colIdx].qAttrExps.qValues[urlIndex].qText = null;
+      }
+    }
+  }
+};
+
+export default async function manageData(model, layout, pageInfo, setPageInfo, qaeProps) {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const { qHyperCube } = layout;
   const totalColumnCount = qHyperCube.qSize.qcx;
@@ -165,6 +178,7 @@ export default async function manageData(model, layout, pageInfo, setPageInfo) {
   const rows = dataPages[0]?.qMatrix.map((r, rowIdx) => {
     const row = { key: `row-${rowIdx}` };
     columns.forEach((c, colIdx) => {
+      validateImageUrl(r, c, colIdx, qaeProps.imageOrigins);
       row[c.id] = {
         ...r[colIdx],
         rowIdx: rowIdx + top,

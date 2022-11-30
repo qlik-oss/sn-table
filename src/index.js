@@ -45,7 +45,18 @@ const renderWithCarbon = ({
   translator,
 }) => {
   if (env.carbon && changeSortOrder && theme) {
-    render(rootElement, { layout, model, manageData, theme, selectionsAPI, changeSortOrder, app, rect, translator });
+    render(rootElement, {
+      layout,
+      model,
+      manageData,
+      theme,
+      selectionsAPI,
+      changeSortOrder,
+      app,
+      rect,
+      translator,
+      qaeProps: env.qaeProps,
+    });
   }
 };
 

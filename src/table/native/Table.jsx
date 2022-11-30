@@ -40,11 +40,22 @@ function transformRepresentation(element, theme) {
   return undefined;
 }
 
-const Table = ({ layout, model, manageData, selectionsAPI, changeSortOrder, app, rect, theme, translator }) => {
+const Table = ({
+  layout,
+  model,
+  manageData,
+  selectionsAPI,
+  changeSortOrder,
+  app,
+  rect,
+  theme,
+  translator,
+  qaeProps,
+}) => {
   const selectionsCaches = useRef(new SelectionCaches(selectionsAPI));
   const [tableData, setTableData] = useState(undefined);
   const [clearSelections, setClearSelections] = useState('no');
-  const dataStreamCaches = useRef(new DataCacheStream(manageData));
+  const dataStreamCaches = useRef(new DataCacheStream(manageData, qaeProps));
   const tableTheme = useRef({ ...RowProps });
   const dims = useWindowDimensions();
 
@@ -195,6 +206,7 @@ Table.propTypes = {
   rect: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
   translator: PropTypes.object.isRequired,
+  qaeProps: PropTypes.object.isRequired,
 };
 
 export default Table;
