@@ -1,19 +1,20 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import { TableContextProvider } from '../../context';
-import { ExtendedTranslator, ExtendedSelectionAPI } from '../../../types';
-import { GeneratedStyling } from '../../types';
+import { TableContextProvider } from '../../../context';
+import { ExtendedTranslator, ExtendedSelectionAPI } from '../../../../types';
+import { GeneratedStyling } from '../../../types';
 import HeadCellMenu from '../HeadCellMenu';
 
 describe('<HeadCellMenu />', () => {
   let translator: ExtendedTranslator;
   let selectionsAPI: ExtendedSelectionAPI;
   let headerStyle: GeneratedStyling;
+  let sortFromMenu: (evt: React.MouseEvent, sortOrder: string) => void;
 
   const renderTableHeadCellMenu = (cellCoordMock?: [number, number]) =>
     render(
       <TableContextProvider selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
-        <HeadCellMenu headerStyle={headerStyle} translator={translator} />
+        <HeadCellMenu headerStyle={headerStyle} translator={translator} sortFromMenu={sortFromMenu} />
       </TableContextProvider>
     );
 
@@ -24,9 +25,9 @@ describe('<HeadCellMenu />', () => {
     translator = { get: (s) => s } as ExtendedTranslator;
     headerStyle = {
       sortLabelColor: '#4287f5',
-      borderStyle: 'solid',
       borderColor: '#4287f5',
     };
+    sortFromMenu = jest.fn();
   });
 
   it('should render head cell menu button', () => {
@@ -42,7 +43,16 @@ describe('<HeadCellMenu />', () => {
     expect(queryByRole('menu')).not.toBeInTheDocument();
     fireEvent.click(getByRole('button'));
     expect(getByRole('menu')).toBeVisible();
-    expect(getByText('SNTable.SortItem.SortAscending')).toBeVisible();
-    expect(getByText('SNTable.SortItem.SortDescending')).toBeVisible();
+    expect(getByText('SNTable.MenuItem.SortAscending')).toBeVisible();
+    expect(getByText('SNTable.MenuItem.SortDescending')).toBeVisible();
+  });
+
+  it('should call changeSortOrder when the sort item is clicked', () => {
+    const { getByRole, getByText } = renderTableHeadCellMenu();
+    fireEvent.click(getByRole('button'));
+    fireEvent.click(getByText('SNTable.MenuItem.SortAscending'));
+    expect(sortFromMenu).toHaveBeenCalled();
+    fireEvent.click(getByText('SNTable.MenuItem.SortDescending'));
+    expect(sortFromMenu).toHaveBeenCalled();
   });
 });

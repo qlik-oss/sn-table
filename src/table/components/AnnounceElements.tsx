@@ -1,5 +1,5 @@
 import React from 'react';
-import { TableAnnouncer } from '../styles';
+import { TableAnnouncer } from './styles';
 
 const AnnounceElements = () => {
   return (

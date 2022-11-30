@@ -17,7 +17,7 @@ describe('use-sorting', () => {
     let column: Column;
     let layout: TableLayout;
     let model: EngineAPI.IGenericObject;
-    let changeSortOrder: ((column: Column) => Promise<void>) | undefined;
+    let changeSortOrder: ((column: Column, sortOrder?: string) => Promise<void>) | undefined;
     let expectedPatches: EngineAPI.INxPatch[];
 
     beforeEach(() => {
@@ -78,6 +78,53 @@ describe('use-sorting', () => {
 
       if (changeSortOrder) {
         await changeSortOrder(column);
+      }
+      expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
+    });
+
+    it('should not apply patches for qReverseSort for dimension when sortOrder and qSortIndicator are both ascending', async () => {
+      column.colIdx = 0;
+      if (changeSortOrder) {
+        await changeSortOrder(column, 'A');
+      }
+      expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
+    });
+
+    it('should not apply patches for qReverseSort for dimension when sortOrder and qSortIndicator are both descending', async () => {
+      column.colIdx = 0;
+      layout.qHyperCube.qDimensionInfo[0].qSortIndicator = 'D';
+
+      if (changeSortOrder) {
+        await changeSortOrder(column, 'D');
+      }
+      expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
+    });
+
+    it('should apply patches for qReverseSort for dimension when sortOrder is ascending and qSortIndicator is descending', async () => {
+      column.colIdx = 0;
+      layout.qHyperCube.qDimensionInfo[0].qSortIndicator = 'D';
+      expectedPatches.push({
+        qPath: '/qHyperCubeDef/qDimensions/0/qDef/qReverseSort',
+        qOp: 'Replace' as EngineAPI.NxPatchOpType,
+        qValue: 'true',
+      });
+
+      if (changeSortOrder) {
+        await changeSortOrder(column, 'A');
+      }
+      expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
+    });
+
+    it('should apply patches for qReverseSort for dimension when sortOrder is descending and qSortIndicator is ascending', async () => {
+      column.colIdx = 0;
+      expectedPatches.push({
+        qPath: '/qHyperCubeDef/qDimensions/0/qDef/qReverseSort',
+        qOp: 'Replace' as EngineAPI.NxPatchOpType,
+        qValue: 'true',
+      });
+
+      if (changeSortOrder) {
+        await changeSortOrder(column, 'D');
       }
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });

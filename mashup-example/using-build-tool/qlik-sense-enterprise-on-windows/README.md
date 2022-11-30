@@ -6,7 +6,7 @@
 
 - [Deploying Qlik Sense Enterprise on Windows (QSEoW)](https://help.qlik.com/en-US/sense-admin/May2022/Subsystems/DeployAdministerQSE/Content/Sense_DeployAdminister/QSEoW/Deploy_QSEoW/Qlik-Sense-installation.htm)
 - [Log in to the Qlik Management Console (QMC)](https://help.qlik.com/en-US/sense-admin/May2022/Subsystems/DeployAdministerQSE/Content/Sense_DeployAdminister/QSEoW/Administer_QSEoW/Managing_QSEoW/start-the-QMC.htm)
-- Import the `Example_Dashboard.qvf` app from `data/apps` into QMC Apps.
+- Import the `Executive_Dashboard.qvf` app from `data/apps` into QMC Apps.
 - Add a dev url(such as localhost:4200) to the [**virtual proxy host white list**](https://help.qlik.com/en-US/sense-admin/May2022/Subsystems/DeployAdministerQSE/Content/Sense_DeployAdminister/QSEoW/Administer_QSEoW/Managing_QSEoW/virtual-proxies-overview.htm)
   ![Virtual proxy host white list](image/host-white-list.png)
 - Set the [**SameSite https attribute**](https://help.qlik.com/en-US/sense-admin/May2022/Subsystems/DeployAdministerQSE/Content/Sense_DeployAdminister/QSEoW/Administer_QSEoW/Managing_QSEoW/SameSite-attribute.htm) from Lax to None

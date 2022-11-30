@@ -64,7 +64,6 @@ export const getBaseStyling = (
     // When we do not set padding for content or header, but set font size,
     // we need to calculate the padding based on the font size
     padding: getPadding(styleObj),
-    borderStyle: StylingDefaults.BORDER_STYLE,
     borderColor: theme.table.body.borderColor,
   };
   // Remove all undefined and null values
@@ -81,8 +80,6 @@ export const getBaseStyling = (
 export function getHeaderStyle(layout: TableLayout, theme: ExtendedTheme): GeneratedStyling {
   const header = layout.components?.[0]?.header;
   const headerStyle = getBaseStyling('header', theme, header);
-  headerStyle.cursor = StylingDefaults.HEAD_CURSOR;
-  headerStyle.borderWidth = StylingDefaults.HEAD_BORDER;
 
   // To avoid seeing the table body through the table head:
   // - When the table background color from the sense theme is transparent,
@@ -113,7 +110,6 @@ export function getHeaderStyle(layout: TableLayout, theme: ExtendedTheme): Gener
 export function getBodyCellStyle(layout: TableLayout, theme: ExtendedTheme): GeneratedStyling {
   const content = layout.components?.[0]?.content;
   const contentStyle = getBaseStyling('content', theme, content);
-  contentStyle.borderWidth = StylingDefaults.BODY_BORDER;
 
   const hoverBackgroundColorFromLayout = content?.hoverColor;
   const hoverFontColorFromLayout = content?.hoverFontColor;

@@ -4,11 +4,11 @@ import { stardust } from '@nebula.js/stardust';
 import Wrapper from '../Wrapper';
 import { ExtendedSelectionAPI, ExtendedTheme, ExtendedTranslator, TableLayout } from '../../../../types';
 import { TableContainer } from '../TableContainer';
-import FooterWrapper from '../../FooterWrapper';
+import FooterWrapper from '../../footer/FooterWrapper';
 import { MAX_PAGE_SIZE } from '../constants';
 
 jest.mock('../TableContainer');
-jest.mock('../../FooterWrapper');
+jest.mock('../../footer/FooterWrapper');
 
 describe('<Wrapper />', () => {
   let translator: ExtendedTranslator;
