@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useMemo, useRef } from 'react';
 import TableHead from '@mui/material/TableHead';
 
+import LockIcon from '@mui/icons-material/Lock';
 import { useContextSelector, TableContext } from '../../context';
 import { VisuallyHidden, StyledHeadRow, StyledSortLabel, StyledHeadCell, HeadCellContent } from './styles';
 import { getHeaderStyle } from '../../utils/styling-utils';
@@ -50,6 +51,7 @@ function TableHeadWrapper({
             ? (`${column.sortDirection}ending` as 'ascending' | 'descending')
             : undefined;
 
+          console.log('column.isLocked:', column.isLocked);
           const handleKeyDown = (evt: React.KeyboardEvent) => {
             handleHeadKeyDown({
               evt,
@@ -92,6 +94,7 @@ function TableHeadWrapper({
                     handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex)
                   }
                 >
+                  {column.isLocked && <LockIcon fontSize="small" />}
                   <CellText>{column.label}</CellText>
                   {isFocusInHead && (
                     <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>
