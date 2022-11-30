@@ -9,7 +9,7 @@ import { MAX_PAGE_SIZE } from './constants';
 import useOnPropsChange from './hooks/use-on-props-change';
 
 export default function Wrapper(props: WrapperProps) {
-  const { rect, layout, keyboard, translator, theme, model } = props;
+  const { rect, layout, keyboard, translator, theme, model, constraints } = props;
   const totalRowCount = layout.qHyperCube.qSize.qcy;
   const pageSize = Math.min(MAX_PAGE_SIZE, totalRowCount);
   const [page, setPage] = useState(0);
@@ -21,7 +21,7 @@ export default function Wrapper(props: WrapperProps) {
     }),
     [pageSize, page]
   );
-  const paginationNeeded = totalRowCount > MAX_PAGE_SIZE;
+  const paginationNeeded = totalRowCount > MAX_PAGE_SIZE && !constraints.active;
   const tableData = {
     totalRowCount,
     totalColumnCount: layout.qHyperCube.qSize.qcx,
@@ -47,6 +47,7 @@ export default function Wrapper(props: WrapperProps) {
         pageInfo={pageInfo}
         paginationNeeded={paginationNeeded}
         theme={theme}
+        constraints={constraints}
       />
       {paginationNeeded && (
         <FooterWrapper theme={theme}>
@@ -59,7 +60,7 @@ export default function Wrapper(props: WrapperProps) {
             setPageInfo={() => {}}
             keyboard={keyboard}
             translator={translator}
-            constraints={{}}
+            constraints={constraints}
             rect={rect}
             announce={() => {}}
           />

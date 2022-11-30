@@ -23,6 +23,7 @@ describe('<TableContainer />', () => {
         layout={layout}
         paginationNeeded={paginationNeeded}
         theme={theme}
+        constraints={{}}
       />
     );
 

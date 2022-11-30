@@ -11,6 +11,7 @@ export interface WrapperProps {
   direction?: 'ltr' | 'rtl';
   keyboard: stardust.Keyboard;
   translator: ExtendedTranslator;
+  constraints: stardust.Constraints;
 }
 
 export interface TableContainerProps {
@@ -20,6 +21,7 @@ export interface TableContainerProps {
   paginationNeeded: boolean;
   model: EngineAPI.IGenericObject;
   theme: ExtendedTheme;
+  constraints: stardust.Constraints;
 }
 
 export interface HeaderProps {
