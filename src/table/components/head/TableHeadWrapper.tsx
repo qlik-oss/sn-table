@@ -1,4 +1,6 @@
-import React, { memo, useEffect, useMemo, useRef } from 'react';
+import React, { memo, useState, useEffect, useMemo, useRef } from 'react';
+import { stardust } from '@nebula.js/stardust';
+
 import TableHead from '@mui/material/TableHead';
 
 import { useContextSelector, TableContext } from '../../context';
@@ -24,6 +26,8 @@ function TableHeadWrapper({
   translator,
   selectionsAPI,
   keyboard,
+  // embed,
+  app,
   areBasicFeaturesEnabled,
 }: TableHeadWrapperProps) {
   const { columns, paginationNeeded } = tableData;
@@ -99,8 +103,16 @@ function TableHeadWrapper({
                     </VisuallyHidden>
                   )}
                 </StyledSortLabel>
+
                 {areBasicFeaturesEnabled && (
-                  <HeadCellMenu headerStyle={headerStyle} translator={translator} sortFromMenu={sortFromMenu} />
+                  <HeadCellMenu
+                    headerStyle={headerStyle}
+                    translator={translator}
+                    sortFromMenu={sortFromMenu}
+                    // embed={embed}
+                    layout={layout}
+                    app={app}
+                  />
                 )}
               </HeadCellContent>
             </StyledHeadCell>

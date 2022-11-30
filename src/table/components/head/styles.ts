@@ -64,7 +64,7 @@ export const HeadCellContent = styled(Box)({
 });
 
 export const StyledMenuIconButton = styled(IconButton)({
-  opacity: 0,
+  // opacity: 0,
   minWidth: '30px',
   padding: '4px',
   radius: '3px',
@@ -87,3 +87,10 @@ export const StyledCellMenu = styled('div', {
     color: headerStyle.sortLabelColor,
   },
 }));
+
+export const NebulaListBox = styled('div')({
+  borderTop: '4px solid red',
+  borderBottom: '4px solid red',
+  padding: '1rem',
+  boxSizing: 'border-box',
+});

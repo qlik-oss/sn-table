@@ -1,5 +1,6 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useState, useEffect } from 'react';
 import Table from '@mui/material/Table';
+import { stardust, embed } from '@nebula.js/stardust';
 
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './body/TableBodyWrapper';
@@ -17,6 +18,7 @@ import { updateFocus, resetFocus, getCellElement } from '../utils/accessibility-
 import { TableWrapperProps } from '../types';
 
 export default function TableWrapper(props: TableWrapperProps) {
+  // const { app, layout } = props;
   const {
     rootElement,
     tableData,
@@ -30,6 +32,9 @@ export default function TableWrapper(props: TableWrapperProps) {
     direction,
     footerContainer,
     announce,
+    // layout,
+    // embed,
+    // app,
   } = props;
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } = tableData;
   const { page, rowsPerPage } = pageInfo;
@@ -98,6 +103,41 @@ export default function TableWrapper(props: TableWrapperProps) {
     String(rows.length + 1),
     String(columns.length),
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
+
+  // 000000000000000000000000000000000000000000000000
+  // const elRef = useRef<HTMLElement>();
+  // const [listboxInstance, setListboxInstance] = useState<stardust.FieldInstance>();
+
+  // const nebulaInstance = embed(app!);
+  // useEffect(() => {
+  //   if (!layout || !nebulaInstance) {
+  //     return;
+  //   }
+
+  //   console.log({ layout });
+
+  //   nebulaInstance.field(layout.qHyperCube.qDimensionInfo[0].qFallbackTitle).then((res) => {
+  //     setListboxInstance(res);
+  //   });
+  // }, [layout]);
+
+  // useEffect(() => {
+  //   console.log(0, { listboxInstance, elRef });
+  //   if (!elRef.current || !listboxInstance || !layout?.qHyperCube?.qDimensionInfo) {
+  //     console.log(1111);
+  //     return undefined;
+  //   }
+
+  //   console.log(222, { qDimensionInfo: layout?.qHyperCube?.qDimensionInfo });
+
+  //   listboxInstance.mount(elRef.current);
+  //   return () => {
+  //     listboxInstance.unmount();
+  //   };
+  // }, [elRef.current, listboxInstance]);
+
+  // return <div ref={elRef} />;
+  // 000000000000000000000000000000000000000000000000
 
   return (
     <StyledTableWrapper

@@ -184,6 +184,7 @@ export interface RenderProps {
   ): Promise<TableData | null>;
   app?: EngineAPI.IApp;
   areBasicFeaturesEnabled?: boolean;
+  embed?: stardust.Embed | undefined;
 }
 
 export interface CommonTableProps {
@@ -193,6 +194,7 @@ export interface CommonTableProps {
 }
 
 export interface TableWrapperProps extends CommonTableProps {
+  app?: EngineAPI.IApp;
   direction?: 'ltr' | 'rtl';
   selectionsAPI: ExtendedSelectionAPI;
   rootElement: HTMLElement;
@@ -206,9 +208,11 @@ export interface TableWrapperProps extends CommonTableProps {
   footerContainer?: HTMLElement;
   announce: Announce;
   areBasicFeaturesEnabled: boolean;
+  embed: stardust.Embed | undefined;
 }
 
 export interface TableHeadWrapperProps extends CommonTableProps {
+  app?: EngineAPI.IApp;
   selectionsAPI: ExtendedSelectionAPI;
   rootElement: HTMLElement;
   layout: TableLayout;
@@ -216,6 +220,7 @@ export interface TableHeadWrapperProps extends CommonTableProps {
   constraints: stardust.Constraints;
   translator: ExtendedTranslator;
   areBasicFeaturesEnabled: boolean;
+  embed: stardust.Embed | undefined;
 }
 
 export interface TableBodyWrapperProps extends CommonTableProps {

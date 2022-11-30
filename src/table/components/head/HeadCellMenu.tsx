@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import { stardust, embed } from '@nebula.js/stardust';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
 import Paper from '@mui/material/Paper';
@@ -11,9 +12,9 @@ import ListItemText from '@mui/material/ListItemText';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
-import { StyledMenuIconButton, StyledCellMenu } from './styles';
+import { StyledMenuIconButton, StyledCellMenu, NebulaListBox } from './styles';
 import { GeneratedStyling } from '../../types';
-import { ExtendedTranslator } from '../../../types';
+import { ExtendedTranslator, TableLayout } from '../../../types';
 
 const MenuItem = ({
   children,
@@ -40,13 +41,22 @@ export default function HeadCellMenu({
   headerStyle,
   translator,
   sortFromMenu,
+  // embed,
+  app,
+  layout,
 }: {
   headerStyle: GeneratedStyling;
   translator: ExtendedTranslator;
   sortFromMenu: (evt: React.MouseEvent, sortOrder: string) => void;
+  // embed: stardust.Embed | undefined;
+  layout: TableLayout;
+  app: EngineAPI.IApp | undefined;
 }) {
+  console.log('£11111');
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
+  const elRef = useRef<HTMLElement>();
+  const [listboxInstance, setListboxInstance] = useState<stardust.FieldInstance>();
 
   const handleClickMenuOpen = () => {
     setOpen(true);
@@ -55,6 +65,37 @@ export default function HeadCellMenu({
   const handleClickMenuClose = (event: Event | React.SyntheticEvent) => {
     !anchorRef.current?.contains(event.target as HTMLElement) && setOpen(false);
   };
+
+  // 000000000000000000000000000000000000000000000000
+  const nebulaInstance = embed(app!);
+  useEffect(() => {
+    if (!layout || !nebulaInstance) {
+      return;
+    }
+
+    console.log({ layout });
+
+    nebulaInstance.field(layout.qHyperCube.qDimensionInfo[0].qFallbackTitle).then((res) => {
+      setListboxInstance(res);
+    });
+  }, [layout]);
+
+  useEffect(() => {
+    console.log(0, { listboxInstance, elRef });
+    if (!elRef.current || !listboxInstance || !layout?.qHyperCube?.qDimensionInfo) {
+      console.log(1111);
+      return undefined;
+    }
+
+    console.log(222, { qDimensionInfo: layout?.qHyperCube?.qDimensionInfo });
+
+    listboxInstance.mount(elRef.current);
+    return () => {
+      listboxInstance.unmount();
+    };
+  }, [elRef.current, listboxInstance]);
+
+  // 000000000000000000000000000000000000000000000000
 
   return (
     <StyledCellMenu headerStyle={headerStyle}>
@@ -115,6 +156,9 @@ export default function HeadCellMenu({
                     <ArrowDownwardIcon />
                   </MenuItem>
                 </MenuList>
+              </ClickAwayListener>
+              <ClickAwayListener onClickAway={handleClickMenuClose}>
+                <NebulaListBox ref={elRef} />
               </ClickAwayListener>
             </Paper>
           </Grow>
