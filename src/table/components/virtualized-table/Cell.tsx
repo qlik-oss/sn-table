@@ -22,6 +22,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
   if (datum) {
     return (
       <div
+        className="sn-table-cell"
         style={{
           ...style,
           display: 'flex',
@@ -35,6 +36,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         }}
       >
         <span
+          className="sn-table-cell-text"
           style={{
             fontSize: bodyStyle.fontSize,
             fontFamily: bodyStyle.fontFamily,
