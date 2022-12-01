@@ -51,7 +51,6 @@ function TableHeadWrapper({
             ? (`${column.sortDirection}ending` as 'ascending' | 'descending')
             : undefined;
 
-          console.log('column.isLocked:', column.isLocked);
           const handleKeyDown = (evt: React.KeyboardEvent) => {
             handleHeadKeyDown({
               evt,
@@ -94,7 +93,7 @@ function TableHeadWrapper({
                     handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex)
                   }
                 >
-                  {column.isLocked && <LockIcon fontSize="small" />}
+                  {column.isLocked && <LockIcon fontSize="small" data-testid="head-cell-lock-icon" />}
                   <CellText>{column.label}</CellText>
                   {isFocusInHead && (
                     <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>
