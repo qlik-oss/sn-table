@@ -47,7 +47,7 @@ describe('<TableHeadWrapper />', () => {
   beforeEach(() => {
     tableData = {
       columns: [
-        { id: 1, align: 'left', label: 'someDim', sortDirection: 'asc', isDim: true, colIdx: 0 },
+        { id: 1, align: 'left', label: 'someDim', sortDirection: 'asc', isDim: true, isLocked: false, colIdx: 0 },
         { id: 2, align: 'right', label: 'someMsr', sortDirection: 'desc', isDim: false, colIdx: 1 },
       ],
     } as unknown as TableData;
@@ -117,6 +117,14 @@ describe('<TableHeadWrapper />', () => {
     fireEvent.click(getByText(tableData.columns[0].label));
 
     expect(changeSortOrder).not.toHaveBeenCalled();
+  });
+
+  it('should show the lock icon only when the selections on dimensions are locked', () => {
+    const { queryByTestId } = renderTableHead();
+    expect(queryByTestId('head-cell-lock-icon')).toBeNull();
+    tableData.columns[0].isLocked = true;
+    renderTableHead();
+    expect(queryByTestId('head-cell-lock-icon')).toBeTruthy();
   });
 
   it('should call handleHeadKeyDown when keyDown on a header cell', () => {
