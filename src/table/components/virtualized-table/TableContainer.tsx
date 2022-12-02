@@ -3,7 +3,7 @@ import { VariableSizeGrid, VariableSizeList } from 'react-window';
 import { getColumns } from '../../../handle-data';
 import useColumnSize from './hooks/use-column-size';
 import Body from './Body';
-import { DEFAULT_ROW_HEIGHT, PAGINATION_HEIGHT } from './constants';
+import { DEFAULT_ROW_HEIGHT, HEADER_HEIGHT, PAGINATION_HEIGHT } from './constants';
 import FullSizeContainer from './FullSizeContainer';
 import Header from './Header';
 import { TableContainerProps } from './types';
@@ -20,7 +20,7 @@ const TableContainer = (props: TableContainerProps) => {
   const columns = useMemo(() => getColumns(layout), [layout]);
   const { width } = useColumnSize(rect, columns, headerStyle, bodyStyle);
   const totalWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
-  const [totalHeight, setTotalHeight] = useState(pageInfo.rowsPerPage * DEFAULT_ROW_HEIGHT);
+  const [totalHeight, setTotalHeight] = useState(pageInfo.rowsPerPage * DEFAULT_ROW_HEIGHT + HEADER_HEIGHT);
 
   const onScrollHandler = (event: React.SyntheticEvent) => {
     if (headerRef.current) {
@@ -37,7 +37,7 @@ const TableContainer = (props: TableContainerProps) => {
     if (innerForwardRef.current) {
       // Keep full size container in sync with the height calculation in react-window is doing
       if (totalHeight !== innerForwardRef.current.clientHeight) {
-        setTotalHeight(innerForwardRef.current.clientHeight);
+        setTotalHeight(innerForwardRef.current.clientHeight + HEADER_HEIGHT);
       }
     }
   };
