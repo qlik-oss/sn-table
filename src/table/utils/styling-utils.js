@@ -12,7 +12,7 @@ export const STYLING_DEFAULTS = {
   EXCLUDED_BACKGROUND:
     'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px)',
   WHITE: '#fff',
-  DATA_VIEW_FONTSIZE: 14,
+  DATA_VIEW_FONTSIZE: 16,
 };
 
 export const SELECTION_STYLING = {
