@@ -23,21 +23,25 @@ const Body = (props: BodyProps) => {
   } = props;
   const { scrollHandler, scrollDirection } = useScrollDirection();
   const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(layout, pageInfo, rect, columnWidth);
-  const { rowsInPage, loadDataByRows, loadDataByColumns } = useInfiniteScrollData(
+
+  const { rowsInPage, loadRows, loadColumns } = useInfiniteScrollData(
     model,
     layout,
     pageInfo,
     visibleRowCount,
     visibleColumnCount
   );
+
   const handleItemsRendered = useItemsRendererHandler({
     layout,
-    loadDataByRows,
-    loadDataByColumns,
+    loadRows,
+    loadColumns,
     scrollDirection,
     rowCount,
     pageInfo,
   });
+
+  const itemData = useMemo(() => ({ rowsInPage, columns, bodyStyle }), [rowsInPage, columns, bodyStyle]);
 
   useLayoutEffect(() => {
     if (!forwardRef.current) return;
@@ -45,8 +49,6 @@ const Body = (props: BodyProps) => {
     forwardRef.current.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: true });
     forwardRef.current.scrollTo({ scrollLeft: 0, scrollTop: 0 });
   }, [layout, pageInfo.page, forwardRef, columnWidth]);
-
-  const itemData = useMemo(() => ({ rowsInPage, columns, bodyStyle }), [rowsInPage, columns, bodyStyle]);
 
   return (
     <VariableSizeGrid

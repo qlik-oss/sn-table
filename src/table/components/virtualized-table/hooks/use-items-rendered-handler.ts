@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { PageInfo, TableLayout } from '../../../../types';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../constants';
-import { LoadDataByRows } from './use-infinite-scroll-data';
+import { LoadBy } from './use-infinite-scroll-data';
 import { ScrollDirection } from './use-scroll-direction';
 
 interface OnItemsRendered {
@@ -17,8 +17,8 @@ interface OnItemsRendered {
 
 interface ItemsHandlerProps {
   layout: TableLayout;
-  loadDataByRows: LoadDataByRows;
-  loadDataByColumns: LoadDataByRows;
+  loadRows: LoadBy;
+  loadColumns: LoadBy;
   scrollDirection: React.MutableRefObject<ScrollDirection>;
   rowCount: number;
   pageInfo: PageInfo;
@@ -26,8 +26,8 @@ interface ItemsHandlerProps {
 
 const useItemsRendererHandler = ({
   layout,
-  loadDataByRows,
-  loadDataByColumns,
+  loadRows,
+  loadColumns,
   scrollDirection,
   rowCount,
   pageInfo,
@@ -50,43 +50,45 @@ const useItemsRendererHandler = ({
         return;
       }
 
-      const qLeft = overscanColumnStartIndex;
+      const pageLeft = overscanColumnStartIndex;
       const qTop = overscanRowStartIndex + pageInfo.page * pageInfo.rowsPerPage;
       const qWidth = overscanColumnStopIndex - overscanColumnStartIndex + 1;
       const qHeight = overscanRowStopIndex - overscanRowStartIndex + 1;
 
-      // Load data for visiable grid
-      await loadDataByRows(qLeft, qTop, qWidth, qHeight);
-
-      // Load data for buffer grid
+      // Load data for visible grid and buffer grid
       switch (scrollDirection.current) {
-        case ScrollDirection.Down:
-          await loadDataByRows(qLeft, overscanRowStopIndex, qWidth, ROW_DATA_BUFFER_SIZE);
+        case ScrollDirection.Down: {
+          const buffedHeight = qHeight + ROW_DATA_BUFFER_SIZE;
+          const remainingRowsOnPage = rowCount - overscanRowStartIndex;
+          const cappedHeight = overscanRowStartIndex + buffedHeight > rowCount ? remainingRowsOnPage : buffedHeight;
+          await loadRows(pageLeft, qTop, qWidth, cappedHeight);
           break;
+        }
+
         case ScrollDirection.Up: {
-          const cappedTop = Math.max(0, pageInfo.page * pageInfo.rowsPerPage, qTop - ROW_DATA_BUFFER_SIZE);
-          await loadDataByRows(qLeft, cappedTop, qWidth, ROW_DATA_BUFFER_SIZE);
+          const buffedHeight = qHeight + ROW_DATA_BUFFER_SIZE;
+          const qTopStartIndexForPage = pageInfo.page * pageInfo.rowsPerPage;
+          const cappedTop = Math.max(qTopStartIndexForPage, qTop - ROW_DATA_BUFFER_SIZE);
+          await loadRows(pageLeft, cappedTop, qWidth, buffedHeight);
           break;
         }
+
         case ScrollDirection.Right: {
-          const startLeft = qLeft + COLUMN_DATA_BUFFER_SIZE;
-          const cappedWidth = Math.min(
-            COLUMN_DATA_BUFFER_SIZE,
-            layout.qHyperCube.qSize.qcx - qLeft + COLUMN_DATA_BUFFER_SIZE
-          );
-          await loadDataByColumns(startLeft, qTop, cappedWidth, qHeight);
+          const cappedWidth = Math.min(COLUMN_DATA_BUFFER_SIZE + qWidth, layout.qHyperCube.qSize.qcx - pageLeft);
+          await loadColumns(pageLeft, qTop, cappedWidth, qHeight);
           break;
         }
+
         case ScrollDirection.Left: {
-          const cappedLeft = Math.max(0, qLeft - COLUMN_DATA_BUFFER_SIZE);
-          await loadDataByColumns(cappedLeft, qTop, COLUMN_DATA_BUFFER_SIZE, qHeight);
+          const cappedLeft = Math.max(0, pageLeft - COLUMN_DATA_BUFFER_SIZE);
+          await loadColumns(cappedLeft, qTop, qWidth, qHeight);
           break;
         }
         default:
           break;
       }
     },
-    [pageInfo, loadDataByRows, loadDataByColumns, scrollDirection, rowCount, layout.qHyperCube.qSize.qcx]
+    [pageInfo, loadRows, loadColumns, scrollDirection, rowCount, layout.qHyperCube.qSize]
   );
 
   return handleItemsRendered;
