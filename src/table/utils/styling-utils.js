@@ -12,6 +12,7 @@ export const STYLING_DEFAULTS = {
   EXCLUDED_BACKGROUND:
     'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px)',
   WHITE: '#fff',
+  DATA_VIEW_FONTSIZE: 14,
 };
 
 export const SELECTION_STYLING = {
@@ -76,6 +77,9 @@ export function getHeaderStyle(layout, theme) {
   const headerStyle = getBaseStyling(header, 'header', theme);
   headerStyle.cursor = 'pointer';
   headerStyle.borderWidth = '1px 1px 1px 0px';
+  if (layout.isDataView) {
+    headerStyle.fontSize = STYLING_DEFAULTS.DATA_VIEW_FONTSIZE;
+  }
 
   // To avoid seeing the table body through the table head:
   // - When the table background color from the sense theme is transparent,
@@ -104,7 +108,11 @@ export function getBodyCellStyle(layout, theme) {
   const content = themeComponent?.content ? themeComponent.content : layout.components?.[0]?.content;
   const contentStyle = getBaseStyling(content, 'content', theme);
   contentStyle.borderWidth = '0px 1px 1px 0px';
-
+  let rowHeight = content?.rowHeight || 1;
+  if (layout.isDataView) {
+    contentStyle.fontSize = STYLING_DEFAULTS.DATA_VIEW_FONTSIZE;
+    rowHeight = 1;
+  }
   const hoverBackgroundColorFromLayout = content?.hoverColor;
   const hoverFontColorFromLayout = content?.hoverFontColor;
 
@@ -157,7 +165,7 @@ export function getBodyCellStyle(layout, theme) {
     ...contentStyle,
     hoverBackgroundColor,
     hoverFontColor,
-    rowHeight: content?.rowHeight || 1,
+    rowHeight,
     wrap: layout?.multiline?.wrapTextInCells,
   };
 }
