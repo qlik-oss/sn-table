@@ -1,15 +1,15 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { PageInfo, Row, TableLayout } from '../../../../types';
 import useOnPropsChange from './use-on-props-change';
 import { ROW_DATA_BUFFER_SIZE } from '../constants';
+import useQueue from './use-queue';
 
 type LoadData = (left: number, top: number, width: number, height: number) => void;
 
-export type LoadBy = (left: number, top: number, width: number, height: number) => Promise<void>;
+export type LoadBy = (left: number, top: number, width: number, height: number) => void;
 
 interface UseInfiniteScrollData {
   rowsInPage: Row[];
-  loadData: LoadData;
   loadRows: LoadBy;
   loadColumns: LoadBy;
 }
@@ -93,6 +93,8 @@ const isColumnMissingData = (rows: Row[], x: number, y: number, height: number) 
   return targetRows.some((row) => !row[`col-${x}`]);
 };
 
+const pageToKey = ({ qLeft, qTop, qWidth, qHeight }: EngineAPI.INxPage) => `${qLeft}-${qTop}-${qWidth}-${qHeight}-`;
+
 const useInfiniteScrollData = (
   model: EngineAPI.IGenericObject,
   layout: TableLayout,
@@ -101,10 +103,29 @@ const useInfiniteScrollData = (
   visibleColumnCount: number
 ): UseInfiniteScrollData => {
   const [rowsInPage, setRowsInPage] = useState<Row[]>([]);
-  useOnPropsChange(() => setRowsInPage([]), [layout, pageInfo.page]);
-  const queue = useRef(new Set());
 
-  // useEffect(() => console.log('rowsInPage', rowsInPage), [rowsInPage]);
+  useEffect(() => console.log(rowsInPage), [rowsInPage]);
+
+  useOnPropsChange(() => setRowsInPage([]), [layout, pageInfo.page]);
+
+  const onLoad = useCallback(
+    async (pages: EngineAPI.INxPage[]) => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(null);
+        }, 5000);
+      }).then(() => {
+        return model.getHyperCubeData('/qHyperCubeDef', pages).then((dataPages) => {
+          setRowsInPage(curriedSetRowsInPageCallback(dataPages, pageInfo));
+        });
+      });
+    },
+    [model, pageInfo]
+  );
+
+  // The queue takes a EngineAPI.INxPage object as items and adds them to a queue and
+  // exists to prevent the same page from being fetched more than once.
+  const queue = useQueue<EngineAPI.INxPage>(onLoad, [layout, pageInfo]);
 
   const loadData: LoadData = useCallback(
     async (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
@@ -127,63 +148,50 @@ const useInfiniteScrollData = (
   );
 
   const loadColumns: LoadBy = useCallback(
-    async (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
-      const pages = [];
-
+    (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
       for (let left = qLeft; left < qLeft + qWidth; left++) {
         if (isColumnMissingData(rowsInPage, left, qTop, qHeight)) {
-          pages.push({ qLeft: left, qTop, qHeight, qWidth: 1 });
+          const page = {
+            qLeft: left,
+            qTop,
+            qHeight,
+            qWidth: 1,
+          };
+          const key = pageToKey(page);
+          queue.enqueue(key, page);
         }
       }
 
-      if (pages.length === 0) {
-        console.log('no data to lload', rowsInPage);
-        return Promise.resolve();
-      }
-
-      console.log('loadColumns', qLeft, qWidth);
-
-      const dataPages = await model.getHyperCubeData('/qHyperCubeDef', pages);
-
-      setRowsInPage(curriedSetRowsInPageCallback(dataPages, pageInfo));
-
-      return Promise.resolve();
+      queue.load();
     },
-    [model, rowsInPage, pageInfo]
+    [rowsInPage, queue]
   );
 
   const loadRows: LoadBy = useCallback(
-    async (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
-      const pages = [];
-
+    (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
       for (let top = qTop; top < qTop + qHeight; top++) {
         const pageTop = Math.max(0, top - pageInfo.page * pageInfo.rowsPerPage);
         if (isRowMissingData(rowsInPage, qLeft, pageTop, qWidth)) {
-          pages.push({ qLeft, qTop: top, qHeight: 1, qWidth });
+          const page = {
+            qLeft,
+            qTop: top,
+            qHeight: 1,
+            qWidth,
+          };
+          const key = pageToKey(page);
+          queue.enqueue(key, page);
         }
       }
 
-      if (pages.length === 0) {
-        return Promise.resolve();
-      }
-
-      queue.current.add(pages);
-      const dataPages = await model.getHyperCubeData('/qHyperCubeDef', pages);
-      queue.current.delete(pages);
-
-      setRowsInPage(curriedSetRowsInPageCallback(dataPages, pageInfo));
-
-      return Promise.resolve();
+      queue.load();
     },
-    [model, rowsInPage, pageInfo, queue]
+    [rowsInPage, queue, pageInfo]
   );
-
-  console.log('in queue', queue.current.size);
 
   useEffect(() => {
     // Initial data load
     const top = pageInfo.page * pageInfo.rowsPerPage;
-    console.log('init load', layout.qHyperCube.qSize);
+
     // Ensure that the data request size is never over 10 000
     const width = Math.min(100, layout.qHyperCube.qSize.qcx, visibleColumnCount + 0); // TODO replace 0 with col buffer size
     const height = Math.min(100, layout.qHyperCube.qSize.qcy, visibleRowCount + ROW_DATA_BUFFER_SIZE);
@@ -193,7 +201,6 @@ const useInfiniteScrollData = (
 
   return {
     rowsInPage,
-    loadData,
     loadRows,
     loadColumns,
   };

@@ -33,7 +33,7 @@ const useItemsRendererHandler = ({
   pageInfo,
 }: ItemsHandlerProps) => {
   const handleItemsRendered = useCallback(
-    async ({
+    ({
       overscanColumnStartIndex,
       overscanColumnStopIndex,
       overscanRowStartIndex,
@@ -61,7 +61,7 @@ const useItemsRendererHandler = ({
           const buffedHeight = qHeight + ROW_DATA_BUFFER_SIZE;
           const remainingRowsOnPage = rowCount - overscanRowStartIndex;
           const cappedHeight = overscanRowStartIndex + buffedHeight > rowCount ? remainingRowsOnPage : buffedHeight;
-          await loadRows(pageLeft, qTop, qWidth, cappedHeight);
+          loadRows(pageLeft, qTop, qWidth, cappedHeight);
           break;
         }
 
@@ -69,19 +69,19 @@ const useItemsRendererHandler = ({
           const buffedHeight = qHeight + ROW_DATA_BUFFER_SIZE;
           const qTopStartIndexForPage = pageInfo.page * pageInfo.rowsPerPage;
           const cappedTop = Math.max(qTopStartIndexForPage, qTop - ROW_DATA_BUFFER_SIZE);
-          await loadRows(pageLeft, cappedTop, qWidth, buffedHeight);
+          loadRows(pageLeft, cappedTop, qWidth, buffedHeight);
           break;
         }
 
         case ScrollDirection.Right: {
           const cappedWidth = Math.min(COLUMN_DATA_BUFFER_SIZE + qWidth, layout.qHyperCube.qSize.qcx - pageLeft);
-          await loadColumns(pageLeft, qTop, cappedWidth, qHeight);
+          loadColumns(pageLeft, qTop, cappedWidth, qHeight); // TODO fix area values
           break;
         }
 
         case ScrollDirection.Left: {
           const cappedLeft = Math.max(0, pageLeft - COLUMN_DATA_BUFFER_SIZE);
-          await loadColumns(cappedLeft, qTop, qWidth, qHeight);
+          loadColumns(cappedLeft, qTop, qWidth, qHeight); // TODO fix area values
           break;
         }
         default:
