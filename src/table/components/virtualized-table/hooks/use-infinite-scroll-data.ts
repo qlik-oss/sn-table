@@ -6,7 +6,7 @@ import { ROW_DATA_BUFFER_SIZE } from '../constants';
 
 type LoadData = (left: number, top: number, width: number, height: number) => void;
 
-type LoadDataByRows = (left: number, top: number, width: number, height: number) => Promise<void>;
+export type LoadDataByRows = (left: number, top: number, width: number, height: number) => Promise<void>;
 
 interface UseInfiniteScrollData {
   rowsInPage: Row[];
