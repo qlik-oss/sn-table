@@ -1,6 +1,7 @@
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { render, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import TableHeadWrapper from '../TableHeadWrapper';
 import { TableContextProvider } from '../../../context';
 import * as handleKeyPress from '../../../utils/handle-key-press';
@@ -82,13 +83,25 @@ describe('<TableHeadWrapper />', () => {
     expect(queryByText(tableData.columns[1].label)).toBeVisible();
   });
 
-  it.skip('should show the menu button when the head cell is on focus', () => {
+  it('should show the menu button when the head cell is on focus', () => {
     areBasicFeaturesEnabled = true;
     const { getByText } = renderTableHead();
 
     const element = getByText(tableData.columns[0].label).closest('th') as HTMLTableCellElement;
     expect(element.querySelector('#sn-table-head-menu-button')).not.toBeVisible();
+    // It works properly on the browser but not on test
+    // I also tried clicking event but didn't change the result.
     element.focus();
+    expect(element.querySelector('#sn-table-head-menu-button')).toBeVisible();
+  });
+
+  it('should show the menu button when the head cell is hovered', () => {
+    areBasicFeaturesEnabled = true;
+    const { getByText } = renderTableHead();
+
+    const element = getByText(tableData.columns[0].label).closest('th') as HTMLTableCellElement;
+    expect(element.querySelector('#sn-table-head-menu-button')).not.toBeVisible();
+    userEvent.hover(element);
     expect(element.querySelector('#sn-table-head-menu-button')).toBeVisible();
   });
 
