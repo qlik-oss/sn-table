@@ -134,7 +134,7 @@ const getCellBackgroundColor = (col, row) => {
 };
 
 const validateImageUrl = (row, col, colIdx, imageOrigins) => {
-  if (col?.representation?.type === 'image') {
+  if (col?.representation?.type === 'image' && imageOrigins) {
     const urlIndex = col.stylingInfo?.indexOf('imageUrl');
     if (urlIndex !== -1) {
       const url = row[colIdx].qAttrExps?.qValues?.[urlIndex].qText;
