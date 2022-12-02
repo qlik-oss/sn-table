@@ -18,6 +18,7 @@ describe('<Wrapper />', () => {
   let layout: TableLayout;
   let keyboard: stardust.Keyboard;
   let model: EngineAPI.IGenericObject;
+  let constraints: stardust.Constraints;
   const mockTableContainer = TableContainer as jest.MockedFunction<typeof TableContainer>;
   mockTableContainer.mockReturnValue(<div data-testid="table-container" />);
   const mockFooterWrapper = FooterWrapper as jest.MockedFunction<typeof FooterWrapper>;
@@ -25,7 +26,15 @@ describe('<Wrapper />', () => {
 
   const renderWrapper = () =>
     render(
-      <Wrapper model={model} translator={translator} rect={rect} theme={theme} layout={layout} keyboard={keyboard} />
+      <Wrapper
+        model={model}
+        translator={translator}
+        rect={rect}
+        theme={theme}
+        layout={layout}
+        keyboard={keyboard}
+        constraints={constraints}
+      />
     );
 
   beforeEach(() => {
@@ -49,6 +58,8 @@ describe('<Wrapper />', () => {
         pagination: { borderColor: '' },
       },
     } as unknown as ExtendedTheme;
+
+    constraints = { active: false };
   });
 
   afterEach(() => jest.clearAllMocks());
@@ -65,6 +76,15 @@ describe('<Wrapper />', () => {
       }),
       expect.anything()
     );
+  });
+
+  it('should not render table with pagination when constraints active is enabled', () => {
+    constraints.active = true;
+    layout.qHyperCube.qSize.qcy = MAX_PAGE_SIZE + 1;
+    const { getByTestId, queryByTestId } = renderWrapper();
+
+    expect(getByTestId('table-container')).toBeVisible();
+    expect(queryByTestId('footer-wrapper')).toBeNull();
   });
 
   it('should render table with pagination', () => {
