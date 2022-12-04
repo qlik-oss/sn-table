@@ -1,22 +1,44 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { PageInfo, TableLayout } from '../../../../types';
+import useOnPropsChange from './use-on-props-change';
 
 type ClearOnDepsChanged = [TableLayout, PageInfo];
 
-const useQueue = <T>(onLoad: (value: T[]) => Promise<void>, deps: ClearOnDepsChanged) => {
+export interface AbortablePromise {
+  isCancelled: boolean;
+  isLoaded: boolean;
+  pagesToRetrieve: EngineAPI.INxDataPage[];
+}
+
+const useQueue = (
+  fetchHandler: (pages: EngineAPI.INxPage[]) => Promise<EngineAPI.INxDataPage[]>,
+  onResolved: (dataPages: EngineAPI.INxDataPage[]) => void,
+  deps: ClearOnDepsChanged
+) => {
   const [layout, pageInfo] = deps;
-  const queued = useRef(new Map<string, T>());
+  const queued = useRef(new Map<string, EngineAPI.INxPage>());
   const loaded = useRef(new Set<string>());
-  const [shouldAbort, setShouldAbort] = useState(false); // TODO does not work
+  const ongoing = useRef(new Set<AbortablePromise>());
+
+  useOnPropsChange(() => {
+    // Cancel all ongoing requests
+    ongoing.current.forEach((abortablePromise) => {
+      abortablePromise.isCancelled = true;
+    });
+
+    ongoing.current.clear();
+    queued.current.clear();
+    loaded.current.clear();
+  }, [layout, pageInfo]);
 
   const queue = useMemo(
     () => ({
-      enqueue: (key: string, item: T) => {
+      enqueue: (key: string, page: EngineAPI.INxPage) => {
         if (loaded.current.has(key)) {
           return;
         }
 
-        queued.current.set(key, item);
+        queued.current.set(key, page);
         loaded.current.add(key);
       },
       load: async () => {
@@ -24,29 +46,29 @@ const useQueue = <T>(onLoad: (value: T[]) => Promise<void>, deps: ClearOnDepsCha
           return;
         }
 
-        const items = Array.from(queued.current.values());
+        const pagesToRetrieve = Array.from(queued.current.values());
         queued.current.clear();
 
-        if (shouldAbort) {
-          return;
+        const abortablePromise: AbortablePromise = { isCancelled: false };
+
+        try {
+          ongoing.current.add(abortablePromise);
+          const dataPages = await fetchHandler(pagesToRetrieve);
+
+          // console.log('isCancelled', abortablePromise.isCancelled);
+          if (!abortablePromise.isCancelled) {
+            // console.log('calling onResolved', dataPages);
+            onResolved(dataPages);
+          }
+        } catch (error) {
+          console.error('failed to load', error);
+        } finally {
+          ongoing.current.delete(abortablePromise);
         }
-        await onLoad(items);
       },
     }),
-    [queued, loaded, onLoad, shouldAbort]
+    [queued, loaded, fetchHandler, onResolved]
   );
-
-  useEffect(() => {
-    setShouldAbort(false);
-    queued.current.clear();
-    loaded.current.clear();
-
-    return () => {
-      setShouldAbort(true);
-    };
-  }, [layout, pageInfo]);
-
-  useEffect(() => console.log('shouldAbort', shouldAbort), [shouldAbort]);
 
   return queue;
 };

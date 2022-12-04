@@ -104,28 +104,35 @@ const useInfiniteScrollData = (
 ): UseInfiniteScrollData => {
   const [rowsInPage, setRowsInPage] = useState<Row[]>([]);
 
-  useEffect(() => console.log(rowsInPage), [rowsInPage]);
+  // useEffect(() => console.log(rowsInPage), [rowsInPage]);
 
-  useOnPropsChange(() => setRowsInPage([]), [layout, pageInfo.page]);
+  useOnPropsChange(() => {
+    setRowsInPage([]);
+  }, [layout, pageInfo.page]);
 
-  const onLoad = useCallback(
+  const fetchHandler = useCallback(
     async (pages: EngineAPI.INxPage[]) => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(null);
-        }, 5000);
-      }).then(() => {
-        return model.getHyperCubeData('/qHyperCubeDef', pages).then((dataPages) => {
-          setRowsInPage(curriedSetRowsInPageCallback(dataPages, pageInfo));
-        });
-      });
+      // await new Promise((resolve) => {
+      //   setTimeout(() => {
+      //     resolve([]);
+      //   }, 10000);
+      // });
+
+      return model.getHyperCubeData('/qHyperCubeDef', pages);
     },
-    [model, pageInfo]
+    [model]
+  );
+
+  const resolvedHandler = useCallback(
+    (dataPages: EngineAPI.INxDataPage[]) => {
+      setRowsInPage(curriedSetRowsInPageCallback(dataPages, pageInfo));
+    },
+    [pageInfo]
   );
 
   // The queue takes a EngineAPI.INxPage object as items and adds them to a queue and
   // exists to prevent the same page from being fetched more than once.
-  const queue = useQueue<EngineAPI.INxPage>(onLoad, [layout, pageInfo]);
+  const queue = useQueue(fetchHandler, resolvedHandler, [layout, pageInfo]);
 
   const loadData: LoadData = useCallback(
     async (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
