@@ -55,7 +55,7 @@ export default function HeadCellMenu({
 }) {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
-  const elRef = useRef<HTMLElement>();
+  const elRef = useRef<HTMLElement | undefined>();
   const {} = useListboxFilter({ elRef, layout, embed, columnIndex, open });
 
   const handleClickMenuOpen = () => {

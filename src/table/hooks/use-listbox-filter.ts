@@ -17,7 +17,8 @@ export default function useListboxFilter({ elRef, layout, embed, columnIndex, op
   useEffect(() => {
     if (!layout || !embed) return;
 
-    console.log('outer');
+    console.log('#outer');
+    console.log({ layout, ref: elRef.current, embed, columnIndex });
 
     embed.field(layout.qHyperCube.qDimensionInfo[columnIndex]?.qFallbackTitle).then((instance) => {
       // setListboxInstance(instance);
@@ -27,9 +28,7 @@ export default function useListboxFilter({ elRef, layout, embed, columnIndex, op
         setIsMounted(true);
       }
     });
-    // NOT OPEN IN DEP LIST
-    // CLICK IN CONSOLE TO TRIGGER A RERENDER IN LIST BOX
-  }, [layout, elRef.current, embed, columnIndex]);
+  }, [layout, embed, columnIndex, open]);
 
   // useEffect(() => {
   //   if (!elRef.current || !listboxInstance || !layout?.qHyperCube?.qDimensionInfo) return undefined;

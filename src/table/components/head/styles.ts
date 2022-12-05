@@ -93,4 +93,5 @@ export const NebulaListBox = styled('div')({
   borderTop: '4px solid red',
   borderBottom: '4px solid red',
   boxSizing: 'border-box',
+  background: 'antiquewhite',
 });
