@@ -111,15 +111,7 @@ const useInfiniteScrollData = (
   }, [layout, pageInfo.page]);
 
   const fetchHandler = useCallback(
-    async (pages: EngineAPI.INxPage[]) => {
-      // await new Promise((resolve) => {
-      //   setTimeout(() => {
-      //     resolve([]);
-      //   }, 10000);
-      // });
-
-      return model.getHyperCubeData('/qHyperCubeDef', pages);
-    },
+    async (pages: EngineAPI.INxPage[]) => model.getHyperCubeData('/qHyperCubeDef', pages),
     [model]
   );
 

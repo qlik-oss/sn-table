@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
 import { PageInfo, TableLayout } from '../../../../types';
 import useOnPropsChange from './use-on-props-change';
 
@@ -6,8 +6,6 @@ type ClearOnDepsChanged = [TableLayout, PageInfo];
 
 export interface AbortablePromise {
   isCancelled: boolean;
-  isLoaded: boolean;
-  pagesToRetrieve: EngineAPI.INxDataPage[];
 }
 
 const useQueue = (
@@ -16,9 +14,9 @@ const useQueue = (
   deps: ClearOnDepsChanged
 ) => {
   const [layout, pageInfo] = deps;
-  const queued = useRef(new Map<string, EngineAPI.INxPage>());
-  const loaded = useRef(new Set<string>());
-  const ongoing = useRef(new Set<AbortablePromise>());
+  const queued = useRef(new Map<string, EngineAPI.INxPage>()); // Keep track of all unique pages that should be retrieved
+  const loaded = useRef(new Set<string>()); // Keep track of all unqiue pages that have been retried
+  const ongoing = useRef(new Set<AbortablePromise>()); // Keep track of ongoing request and abort them if page is changed or layout is updated
 
   useOnPropsChange(() => {
     // Cancel all ongoing requests
@@ -55,13 +53,11 @@ const useQueue = (
           ongoing.current.add(abortablePromise);
           const dataPages = await fetchHandler(pagesToRetrieve);
 
-          // console.log('isCancelled', abortablePromise.isCancelled);
           if (!abortablePromise.isCancelled) {
-            // console.log('calling onResolved', dataPages);
             onResolved(dataPages);
           }
         } catch (error) {
-          console.error('failed to load', error);
+          // TODO If this means that it failed to retrieve the pages they should be removed from "loaded" so they can be fetched again
         } finally {
           ongoing.current.delete(abortablePromise);
         }
