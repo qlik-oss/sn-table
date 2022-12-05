@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { stardust, embed } from '@nebula.js/stardust';
+import { stardust } from '@nebula.js/stardust';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
 import Paper from '@mui/material/Paper';
@@ -15,6 +15,7 @@ import MoreHoriz from '@mui/icons-material/MoreHoriz';
 import { StyledMenuIconButton, StyledCellMenu, NebulaListBox } from './styles';
 import { GeneratedStyling } from '../../types';
 import { ExtendedTranslator, TableLayout } from '../../../types';
+import useListboxFilter from '../../hooks/use-listbox-filter';
 
 const MenuItem = ({
   children,
@@ -41,22 +42,21 @@ export default function HeadCellMenu({
   headerStyle,
   translator,
   sortFromMenu,
-  // embed,
-  app,
+  embed,
   layout,
+  columnIndex,
 }: {
   headerStyle: GeneratedStyling;
   translator: ExtendedTranslator;
   sortFromMenu: (evt: React.MouseEvent, sortOrder: string) => void;
-  // embed: stardust.Embed | undefined;
+  embed: stardust.Embed | undefined;
   layout: TableLayout;
-  app: EngineAPI.IApp | undefined;
+  columnIndex: number;
 }) {
-  console.log('£11111');
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
   const elRef = useRef<HTMLElement>();
-  const [listboxInstance, setListboxInstance] = useState<stardust.FieldInstance>();
+  const {} = useListboxFilter({ elRef, layout, embed, columnIndex, open });
 
   const handleClickMenuOpen = () => {
     setOpen(true);
@@ -66,37 +66,13 @@ export default function HeadCellMenu({
     !anchorRef.current?.contains(event.target as HTMLElement) && setOpen(false);
   };
 
-  // 000000000000000000000000000000000000000000000000
-  const nebulaInstance = embed(app!);
-  useEffect(() => {
-    if (!layout || !nebulaInstance) {
-      return;
-    }
-
-    console.log({ layout });
-
-    nebulaInstance.field(layout.qHyperCube.qDimensionInfo[0].qFallbackTitle).then((res) => {
-      setListboxInstance(res);
-    });
-  }, [layout]);
-
-  useEffect(() => {
-    console.log(0, { listboxInstance, elRef });
-    if (!elRef.current || !listboxInstance || !layout?.qHyperCube?.qDimensionInfo) {
-      console.log(1111);
-      return undefined;
-    }
-
-    console.log(222, { qDimensionInfo: layout?.qHyperCube?.qDimensionInfo });
-
-    listboxInstance.mount(elRef.current);
-    return () => {
-      listboxInstance.unmount();
-    };
-  }, [elRef.current, listboxInstance]);
-
-  // 000000000000000000000000000000000000000000000000
-
+  // TODO:
+  // there is a problem now:
+  // if we select something from table -> from filter list box
+  // it will send req to engine
+  // engine will notify table
+  // table rerender
+  // everything rerender again!
   return (
     <StyledCellMenu headerStyle={headerStyle}>
       <StyledMenuIconButton
@@ -135,30 +111,31 @@ export default function HeadCellMenu({
           >
             <Paper sx={{ boxShadow: 15 }}>
               <ClickAwayListener onClickAway={handleClickMenuClose}>
-                <MenuList
-                  autoFocusItem={open}
-                  className="sn-table-head-menu"
-                  aria-labelledby="sn-table-head-menu-button"
-                >
-                  <MenuItem
-                    itemTitle={translator.get('SNTable.MenuItem.SortAscending')}
-                    sortOrder="A"
-                    sortFromMenu={sortFromMenu}
+                <div>
+                  <MenuList
+                    autoFocusItem={open}
+                    className="sn-table-head-menu"
+                    aria-labelledby="sn-table-head-menu-button"
                   >
-                    <ArrowUpwardIcon />
-                  </MenuItem>
+                    <MenuItem
+                      itemTitle={translator.get('SNTable.MenuItem.SortAscending')}
+                      sortOrder="A"
+                      sortFromMenu={sortFromMenu}
+                    >
+                      <ArrowUpwardIcon />
+                    </MenuItem>
 
-                  <MenuItem
-                    itemTitle={translator.get('SNTable.MenuItem.SortDescending')}
-                    sortOrder="D"
-                    sortFromMenu={sortFromMenu}
-                  >
-                    <ArrowDownwardIcon />
-                  </MenuItem>
-                </MenuList>
-              </ClickAwayListener>
-              <ClickAwayListener onClickAway={handleClickMenuClose}>
-                <NebulaListBox ref={elRef} />
+                    <MenuItem
+                      itemTitle={translator.get('SNTable.MenuItem.SortDescending')}
+                      sortOrder="D"
+                      sortFromMenu={sortFromMenu}
+                    >
+                      <ArrowDownwardIcon />
+                    </MenuItem>
+                  </MenuList>
+
+                  <NebulaListBox ref={elRef} />
+                </div>
               </ClickAwayListener>
             </Paper>
           </Grow>

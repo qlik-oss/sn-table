@@ -89,8 +89,8 @@ export const StyledCellMenu = styled('div', {
 }));
 
 export const NebulaListBox = styled('div')({
+  height: '350px',
   borderTop: '4px solid red',
   borderBottom: '4px solid red',
-  padding: '1rem',
   boxSizing: 'border-box',
 });

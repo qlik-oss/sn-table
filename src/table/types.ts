@@ -194,7 +194,6 @@ export interface CommonTableProps {
 }
 
 export interface TableWrapperProps extends CommonTableProps {
-  app?: EngineAPI.IApp;
   direction?: 'ltr' | 'rtl';
   selectionsAPI: ExtendedSelectionAPI;
   rootElement: HTMLElement;
@@ -212,7 +211,6 @@ export interface TableWrapperProps extends CommonTableProps {
 }
 
 export interface TableHeadWrapperProps extends CommonTableProps {
-  app?: EngineAPI.IApp;
   selectionsAPI: ExtendedSelectionAPI;
   rootElement: HTMLElement;
   layout: TableLayout;
