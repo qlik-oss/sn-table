@@ -48,9 +48,9 @@ const useQueue = (
         queued.current.clear();
 
         const abortablePromise: AbortablePromise = { isCancelled: false };
+        ongoing.current.add(abortablePromise);
 
         try {
-          ongoing.current.add(abortablePromise);
           const dataPages = await fetchHandler(pagesToRetrieve);
 
           if (!abortablePromise.isCancelled) {
