@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { PageInfo, Row, TableLayout } from '../../../../types';
 import useOnPropsChange from './use-on-props-change';
-import { ROW_DATA_BUFFER_SIZE } from '../constants';
+import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../constants';
 import useQueue from './use-queue';
 
 type LoadData = (left: number, top: number, width: number, height: number) => void;
@@ -49,12 +49,12 @@ const curriedSetRowsInPageCallback = (dataPages: EngineAPI.INxDataPage[], pageIn
   const nextRows = [...prevRows];
 
   dataPages.forEach((dataPage) => {
-    dataPage.qMatrix.forEach((matrixRow) => {
+    dataPage.qMatrix.forEach((matrixRow, matrixRowIdx) => {
       const pageRowStartIdx = dataPage.qArea.qTop - pageInfo.page * pageInfo.rowsPerPage;
       const { row, pageRowIdx } = createNewRow(
         matrixRow,
         nextRows,
-        0,
+        matrixRowIdx,
         dataPage.qArea.qTop,
         dataPage.qArea.qLeft,
         pageRowStartIdx
@@ -93,7 +93,7 @@ const isColumnMissingData = (rows: Row[], x: number, y: number, height: number) 
   return targetRows.some((row) => !row[`col-${x}`]);
 };
 
-const pageToKey = ({ qLeft, qTop, qWidth, qHeight }: EngineAPI.INxPage) => `${qLeft}-${qTop}-${qWidth}-${qHeight}-`;
+const pageToKey = ({ qLeft, qTop, qWidth, qHeight }: EngineAPI.INxPage) => `${qLeft}-${qTop}-${qWidth}-${qHeight}`;
 
 const useInfiniteScrollData = (
   model: EngineAPI.IGenericObject,
@@ -103,8 +103,6 @@ const useInfiniteScrollData = (
   visibleColumnCount: number
 ): UseInfiniteScrollData => {
   const [rowsInPage, setRowsInPage] = useState<Row[]>([]);
-
-  // useEffect(() => console.log(rowsInPage), [rowsInPage]);
 
   useOnPropsChange(() => {
     setRowsInPage([]);
@@ -116,9 +114,7 @@ const useInfiniteScrollData = (
   );
 
   const resolvedHandler = useCallback(
-    (dataPages: EngineAPI.INxDataPage[]) => {
-      setRowsInPage(curriedSetRowsInPageCallback(dataPages, pageInfo));
-    },
+    (dataPages: EngineAPI.INxDataPage[]) => setRowsInPage(curriedSetRowsInPageCallback(dataPages, pageInfo)),
     [pageInfo]
   );
 
@@ -192,7 +188,7 @@ const useInfiniteScrollData = (
     const top = pageInfo.page * pageInfo.rowsPerPage;
 
     // Ensure that the data request size is never over 10 000
-    const width = Math.min(100, layout.qHyperCube.qSize.qcx, visibleColumnCount + 0); // TODO replace 0 with col buffer size
+    const width = Math.min(100, layout.qHyperCube.qSize.qcx, visibleColumnCount + COLUMN_DATA_BUFFER_SIZE);
     const height = Math.min(100, layout.qHyperCube.qSize.qcy, visibleRowCount + ROW_DATA_BUFFER_SIZE);
 
     loadData(0, top, width, height);

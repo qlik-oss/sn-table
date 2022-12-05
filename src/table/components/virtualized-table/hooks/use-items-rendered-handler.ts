@@ -50,7 +50,7 @@ const useItemsRendererHandler = ({
         return;
       }
 
-      const pageLeft = overscanColumnStartIndex;
+      const qLeft = overscanColumnStartIndex;
       const qTop = overscanRowStartIndex + pageInfo.page * pageInfo.rowsPerPage;
       const qWidth = overscanColumnStopIndex - overscanColumnStartIndex + 1;
       const qHeight = overscanRowStopIndex - overscanRowStartIndex + 1;
@@ -61,7 +61,7 @@ const useItemsRendererHandler = ({
           const buffedHeight = qHeight + ROW_DATA_BUFFER_SIZE;
           const remainingRowsOnPage = rowCount - overscanRowStartIndex;
           const cappedHeight = overscanRowStartIndex + buffedHeight > rowCount ? remainingRowsOnPage : buffedHeight;
-          loadRows(pageLeft, qTop, qWidth, cappedHeight);
+          loadRows(qLeft, qTop, qWidth, cappedHeight);
           break;
         }
 
@@ -69,19 +69,22 @@ const useItemsRendererHandler = ({
           const buffedHeight = qHeight + ROW_DATA_BUFFER_SIZE;
           const qTopStartIndexForPage = pageInfo.page * pageInfo.rowsPerPage;
           const cappedTop = Math.max(qTopStartIndexForPage, qTop - ROW_DATA_BUFFER_SIZE);
-          loadRows(pageLeft, cappedTop, qWidth, buffedHeight);
+          loadRows(qLeft, cappedTop, qWidth, buffedHeight);
           break;
         }
 
         case ScrollDirection.Right: {
-          const cappedWidth = Math.min(COLUMN_DATA_BUFFER_SIZE + qWidth, layout.qHyperCube.qSize.qcx - pageLeft);
-          loadColumns(pageLeft, qTop, cappedWidth, qHeight); // TODO fix area values
+          const remainingColumns = layout.qHyperCube.qSize.qcx - qLeft;
+          const buffedWidth = qWidth + COLUMN_DATA_BUFFER_SIZE;
+          const cappedWidth = Math.min(remainingColumns, buffedWidth);
+          loadColumns(qLeft, qTop, cappedWidth, qHeight);
           break;
         }
 
         case ScrollDirection.Left: {
-          const cappedLeft = Math.max(0, pageLeft - COLUMN_DATA_BUFFER_SIZE);
-          loadColumns(cappedLeft, qTop, qWidth, qHeight); // TODO fix area values
+          const cappedLeft = Math.max(0, qLeft - COLUMN_DATA_BUFFER_SIZE);
+          const buffedWidth = Math.min(layout.qHyperCube.qSize.qcx, qWidth + COLUMN_DATA_BUFFER_SIZE);
+          loadColumns(cappedLeft, qTop, buffedWidth, qHeight);
           break;
         }
         default:

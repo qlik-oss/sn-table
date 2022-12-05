@@ -52,7 +52,6 @@ const useQueue = (
 
         try {
           const dataPages = await fetchHandler(pagesToRetrieve);
-
           if (!abortablePromise.isCancelled) {
             onResolved(dataPages);
           }
