@@ -38,27 +38,26 @@ const useQueue = (
 
         queued.current.set(key, page);
         loaded.current.add(key);
-      },
-      load: async () => {
-        if (queued.current.size === 0) {
-          return;
-        }
 
-        const pagesToRetrieve = Array.from(queued.current.values());
-        queued.current.clear();
+        if (queued.current.size === 1) {
+          queueMicrotask(async () => {
+            const pagesToRetrieve = Array.from(queued.current.values());
+            queued.current.clear();
 
-        const abortablePromise: AbortablePromise = { isCancelled: false };
-        ongoing.current.add(abortablePromise);
+            const abortablePromise: AbortablePromise = { isCancelled: false };
+            ongoing.current.add(abortablePromise);
 
-        try {
-          const dataPages = await fetchHandler(pagesToRetrieve);
-          if (!abortablePromise.isCancelled) {
-            onResolved(dataPages);
-          }
-        } catch (error) {
-          // TODO If this means that it failed to retrieve the pages they should be removed from "loaded" so they can be fetched again
-        } finally {
-          ongoing.current.delete(abortablePromise);
+            try {
+              const dataPages = await fetchHandler(pagesToRetrieve);
+              if (!abortablePromise.isCancelled) {
+                onResolved(dataPages);
+              }
+            } catch (error) {
+              // TODO If this means that it failed to retrieve the pages they should be removed from "loaded" so they can be fetched again
+            } finally {
+              ongoing.current.delete(abortablePromise);
+            }
+          });
         }
       },
     }),

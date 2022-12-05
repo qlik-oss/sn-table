@@ -156,8 +156,6 @@ const useInfiniteScrollData = (
           queue.enqueue(key, page);
         }
       }
-
-      queue.load();
     },
     [rowsInPage, queue]
   );
@@ -177,8 +175,6 @@ const useInfiniteScrollData = (
           queue.enqueue(key, page);
         }
       }
-
-      queue.load();
     },
     [rowsInPage, queue, pageInfo]
   );
