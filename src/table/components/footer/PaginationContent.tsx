@@ -8,7 +8,7 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import { StyledSelect, StyledIconButton, StyledInputLabel, StyledFormControl } from './styles';
 import { handleLastTab } from '../../utils/handle-key-press';
 import { PaginationContentProps } from '../../types';
-import { getPaginationStyle } from '../../utils/styling-utils';
+import { getFooterStyle } from '../../utils/styling-utils';
 
 const icons: Record<string, typeof FirstPageIcon> = {
   FirstPage: FirstPageIcon,
@@ -53,7 +53,7 @@ function PaginationContent({
 }: PaginationContentProps) {
   const { totalRowCount, totalColumnCount, totalPages, paginationNeeded } = tableData;
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
-  const paginationStyle = useMemo(() => getPaginationStyle(theme.background), [theme]);
+  const footerStyle = useMemo(() => getFooterStyle(theme.background), [theme]);
 
   if (!paginationNeeded) return null;
 
@@ -99,7 +99,7 @@ function PaginationContent({
     return (
       <StyledIconButton
         disabledCondition={disabledCondition}
-        paginationStyle={paginationStyle}
+        footerStyle={footerStyle}
         data-testid="pagination-action-icon-button"
         onClick={!disabledCondition ? () => handleChangePage(pageNumber) : null}
         aria-disabled={disabledCondition}
@@ -125,21 +125,15 @@ function PaginationContent({
       tabIndex,
       id,
       'data-testid': id,
-      style: { color: paginationStyle.color },
+      style: { color: footerStyle.color },
     };
 
     return (
       <StyledFormControl size="small">
-        <StyledInputLabel color={paginationStyle.color} htmlFor={id} shrink={false}>
+        <StyledInputLabel color={footerStyle.color} htmlFor={id} shrink={false}>
           {`${translator.get(translationName)}:`}
         </StyledInputLabel>
-        <StyledSelect
-          paginationStyle={paginationStyle}
-          native
-          value={value}
-          onChange={handleChange}
-          inputProps={inputProps}
-        >
+        <StyledSelect footerStyle={footerStyle} native value={value} onChange={handleChange} inputProps={inputProps}>
           {options}
         </StyledSelect>
       </StyledFormControl>

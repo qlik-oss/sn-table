@@ -8,35 +8,37 @@ import FormControl from '@mui/material/FormControl';
 // ---------- FooterWrapper ----------
 
 export const StyledFooterWrapper = styled(Paper, {
-  shouldForwardProp: (prop: string) => prop !== 'paginationStyle',
-})(({ paginationStyle, theme }) => ({
-  height: 48,
-  display: 'flex',
-  justifyContent: 'flex-end',
-  alignItems: 'center',
-  paddingRight: theme.spacing(1),
-  boxShadow: 'none',
-  borderStyle: 'solid',
-  borderWidth: '0px 0px 1px 0px',
-  borderRadius: 0,
-  borderColor: paginationStyle.borderColor,
-  color: paginationStyle.color,
-  backgroundColor: paginationStyle.backgroundColor,
-}));
+  shouldForwardProp: (prop: string) => prop !== 'footerStyle',
+})(({ footerStyle, theme }) => {
+  return {
+    height: 48,
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingRight: theme.spacing(1),
+    boxShadow: 'none',
+    borderStyle: 'solid',
+    borderWidth: '0px 0px 1px 0px',
+    borderRadius: 0,
+    borderColor: footerStyle.borderColor,
+    color: footerStyle.color,
+    backgroundColor: footerStyle.backgroundColor,
+  };
+});
 
 // ---------- PaginationContent ----------
 
 export const StyledSelect = styled(Select, {
-  shouldForwardProp: (prop: string) => prop !== 'paginationStyle',
-})(({ paginationStyle }) => ({
+  shouldForwardProp: (prop: string) => prop !== 'footerStyle',
+})(({ footerStyle }) => ({
   backgroundColor: 'inherit',
-  '& .MuiNativeSelect-icon': { color: paginationStyle.iconColor },
+  '& .MuiNativeSelect-icon': { color: footerStyle.iconColor },
 }));
 
 export const StyledIconButton = styled(IconButton, {
-  shouldForwardProp: (prop: string) => prop !== 'disabledCondition' && prop !== 'paginationStyle',
-})(({ disabledCondition, paginationStyle }) => ({
-  color: disabledCondition ? paginationStyle.disabledIconColor : paginationStyle.iconColor,
+  shouldForwardProp: (prop: string) => prop !== 'disabledCondition' && prop !== 'footerStyle',
+})(({ disabledCondition, footerStyle }) => ({
+  color: disabledCondition ? footerStyle.disabledIconColor : footerStyle.iconColor,
   cursor: disabledCondition ? 'default' : 'pointer',
   height: '32px',
   padding: '0px 7px',

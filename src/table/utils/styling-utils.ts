@@ -34,7 +34,6 @@ export function getPadding(styleObj: ContentStyling | undefined): string | undef
  * Gets color from color picker. Defaults to default color if resolved color is invalid
  */
 export function getColor(defaultColor: string, theme: stardust.Theme, color = {}): string {
-  console.log(color);
   const resolvedColor = theme.getColorPickerColor(color);
 
   return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
@@ -172,17 +171,17 @@ export function getBodyCellStyle(layout: TableLayout, theme: ExtendedTheme): Gen
   };
 }
 
-export const getPaginationStyle = (background: BackgroundColors) =>
+export const getFooterStyle = (background: BackgroundColors) =>
   background.isDark
     ? {
-        background: background.color,
+        backgroundColor: background.color,
         borderColor: '#F2F2F2',
         color: 'rgba(255, 255, 255, 0.9)',
         iconColor: 'rgba(255, 255, 255, 0.9)',
         disabledIconColor: 'rgba(255, 255, 255, 0.3)',
       }
     : {
-        background: background.color,
+        backgroundColor: background.color,
         borderColor: '#D9D9D9',
         color: '#404040',
         iconColor: 'rgba(0, 0, 0, 0.54)',
