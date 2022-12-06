@@ -37,7 +37,10 @@ export const handleClickToSort = (
   changeSortOrder: ChangeSortOrder,
   isInteractionEnabled: boolean
 ) => {
-  !(evt.target as HTMLElement).closest('#sn-table-head-menu-button') && isInteractionEnabled && changeSortOrder(column);
+  !document.querySelector('.sn-table-head-menu') &&
+    !(evt.target as HTMLElement).closest('#sn-table-head-menu-button') &&
+    isInteractionEnabled &&
+    changeSortOrder(column);
 };
 
 /**

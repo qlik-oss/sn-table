@@ -45,16 +45,8 @@ export default function HeadCellMenu({
   translator: ExtendedTranslator;
   sortFromMenu: (evt: React.MouseEvent, sortOrder: string) => void;
 }) {
-  const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
-
-  const handleClickMenuOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClickMenuClose = (event: Event | React.SyntheticEvent) => {
-    !anchorRef.current?.contains(event.target as HTMLElement) && setOpen(false);
-  };
 
   return (
     <StyledCellMenu headerStyle={headerStyle}>
@@ -62,10 +54,10 @@ export default function HeadCellMenu({
         ref={anchorRef}
         tabIndex={-1}
         id="sn-table-head-menu-button"
-        aria-controls={open ? 'sn-table-head-menu' : undefined}
-        aria-expanded={open ? 'true' : undefined}
+        aria-controls={menuOpen ? 'sn-table-head-menu' : undefined}
+        aria-expanded={menuOpen ? 'true' : undefined}
         aria-haspopup="true"
-        onClick={handleClickMenuOpen}
+        onClick={() => setMenuOpen(!menuOpen)}
       >
         <MoreHoriz />
       </StyledMenuIconButton>
@@ -78,7 +70,7 @@ export default function HeadCellMenu({
             },
           },
         ]}
-        open={open}
+        open={menuOpen}
         anchorEl={anchorRef.current}
         role={undefined}
         placement="bottom-start"
@@ -93,9 +85,9 @@ export default function HeadCellMenu({
             }}
           >
             <Paper sx={{ boxShadow: 15 }}>
-              <ClickAwayListener onClickAway={handleClickMenuClose}>
+              <ClickAwayListener onClickAway={() => setMenuOpen(false)}>
                 <MenuList
-                  autoFocusItem={open}
+                  autoFocusItem={menuOpen}
                   className="sn-table-head-menu"
                   aria-labelledby="sn-table-head-menu-button"
                 >
