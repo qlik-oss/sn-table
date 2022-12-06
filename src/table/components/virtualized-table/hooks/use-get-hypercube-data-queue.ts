@@ -10,7 +10,7 @@ export interface AbortablePromise {
 
 const useGetHyperCubeDataQueue = (
   fetchHandler: (pages: EngineAPI.INxPage[]) => Promise<EngineAPI.INxDataPage[]>,
-  onResolved: (dataPages: EngineAPI.INxDataPage[]) => void,
+  resolvedHandler: (dataPages: EngineAPI.INxDataPage[]) => void,
   deps: ClearOnDepsChanged
 ) => {
   const [layout, pageInfo] = deps;
@@ -41,16 +41,16 @@ const useGetHyperCubeDataQueue = (
 
         if (queued.current.size === 1) {
           queueMicrotask(async () => {
-            const pagesToRetrieve = Array.from(queued.current.values());
+            const qPages = Array.from(queued.current.values());
             queued.current.clear();
 
             const abortablePromise: AbortablePromise = { isCancelled: false };
             ongoing.current.add(abortablePromise);
 
             try {
-              const dataPages = await fetchHandler(pagesToRetrieve);
+              const dataPages = await fetchHandler(qPages);
               if (!abortablePromise.isCancelled) {
-                onResolved(dataPages);
+                resolvedHandler(dataPages);
               }
             } catch (error) {
               // TODO If this means that it failed to retrieve the pages they should be removed from "loaded" so they can be fetched again
@@ -61,7 +61,7 @@ const useGetHyperCubeDataQueue = (
         }
       },
     }),
-    [queued, loaded, fetchHandler, onResolved]
+    [queued, loaded, fetchHandler, resolvedHandler]
   );
 
   return queue;

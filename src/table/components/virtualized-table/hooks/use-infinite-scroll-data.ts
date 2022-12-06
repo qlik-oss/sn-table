@@ -14,20 +14,19 @@ interface UseInfiniteScrollData {
   loadColumns: LoadBy;
 }
 
-const createNewRow = (
-  matrixRow: EngineAPI.INxCellRows,
+const createRow = (
   prevRows: Row[],
+  matrixRow: EngineAPI.INxCellRows,
   matrixRowIdx: number,
-  qTop: number,
-  qLeft: number,
+  qArea: EngineAPI.IRect,
   pageRowStartIdx: number
 ) => {
-  const rowIdx = qTop + matrixRowIdx;
+  const rowIdx = qArea.qTop + matrixRowIdx;
   const pageRowIdx = pageRowStartIdx + matrixRowIdx;
   const row: Row = prevRows[pageRowIdx] ?? { key: `row-${pageRowIdx}` };
 
   matrixRow.forEach((cell, matrixColIdx: number) => {
-    const colIdx = matrixColIdx + qLeft;
+    const colIdx = matrixColIdx + qArea.qLeft;
     row[`col-${colIdx}`] = {
       ...cell,
       rowIdx,
@@ -43,28 +42,6 @@ const createNewRow = (
     row,
     pageRowIdx,
   };
-};
-
-const curriedSetRowsInPageCallback = (dataPages: EngineAPI.INxDataPage[], pageInfo: PageInfo) => (prevRows: Row[]) => {
-  const nextRows = [...prevRows];
-
-  dataPages.forEach((dataPage) => {
-    dataPage.qMatrix.forEach((matrixRow, matrixRowIdx) => {
-      const pageRowStartIdx = dataPage.qArea.qTop - pageInfo.page * pageInfo.rowsPerPage;
-      const { row, pageRowIdx } = createNewRow(
-        matrixRow,
-        nextRows,
-        matrixRowIdx,
-        dataPage.qArea.qTop,
-        dataPage.qArea.qLeft,
-        pageRowStartIdx
-      );
-
-      nextRows[pageRowIdx] = row;
-    });
-  });
-
-  return nextRows;
 };
 
 const isRowMissingData = (rows: Row[], x: number, y: number, width: number) => {
@@ -114,7 +91,21 @@ const useInfiniteScrollData = (
   );
 
   const resolvedHandler = useCallback(
-    (dataPages: EngineAPI.INxDataPage[]) => setRowsInPage(curriedSetRowsInPageCallback(dataPages, pageInfo)),
+    (dataPages: EngineAPI.INxDataPage[]) =>
+      setRowsInPage((prevRows) => {
+        const nextRows = [...prevRows];
+
+        dataPages.forEach((dataPage) => {
+          dataPage.qMatrix.forEach((matrixRow, matrixRowIdx) => {
+            const pageRowStartIdx = dataPage.qArea.qTop - pageInfo.page * pageInfo.rowsPerPage;
+            const { row, pageRowIdx } = createRow(nextRows, matrixRow, matrixRowIdx, dataPage.qArea, pageRowStartIdx);
+
+            nextRows[pageRowIdx] = row;
+          });
+        });
+
+        return nextRows;
+      }),
     [pageInfo]
   );
 
@@ -124,22 +115,11 @@ const useInfiniteScrollData = (
 
   const loadData: LoadData = useCallback(
     async (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
-      const pageRowStartIdx = qTop - pageInfo.page * pageInfo.rowsPerPage;
+      const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [{ qTop, qLeft, qHeight, qWidth }]);
 
-      const [dataPage] = await model.getHyperCubeData('/qHyperCubeDef', [{ qTop, qLeft, qHeight, qWidth }]);
-
-      setRowsInPage((prevRows) => {
-        const nextRows = [...prevRows];
-        dataPage.qMatrix.forEach((matrixRow, matrixRowIdx: number) => {
-          const { row, pageRowIdx } = createNewRow(matrixRow, nextRows, matrixRowIdx, qTop, qLeft, pageRowStartIdx);
-
-          nextRows[pageRowIdx] = row;
-        });
-
-        return nextRows;
-      });
+      resolvedHandler(dataPages);
     },
-    [model, pageInfo]
+    [model, resolvedHandler]
   );
 
   const loadColumns: LoadBy = useCallback(
