@@ -1,3 +1,4 @@
+import { Direction } from '@mui/material/styles';
 import { stardust } from '@nebula.js/stardust';
 
 interface TextAlign {
@@ -167,7 +168,7 @@ export interface ExtendedTheme extends stardust.Theme {
 }
 
 export interface UseOptions {
-  direction?: 'ltr' | 'rtl';
+  direction?: Direction;
   footerContainer?: HTMLElement;
 }
 
