@@ -9,22 +9,20 @@ import FormControl from '@mui/material/FormControl';
 
 export const StyledFooterWrapper = styled(Paper, {
   shouldForwardProp: (prop: string) => prop !== 'footerStyle',
-})(({ footerStyle, theme }) => {
-  return {
-    height: 48,
-    display: 'flex',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    paddingRight: theme.spacing(1),
-    boxShadow: 'none',
-    borderStyle: 'solid',
-    borderWidth: '0px 0px 1px 0px',
-    borderRadius: 0,
-    borderColor: footerStyle.borderColor,
-    color: footerStyle.color,
-    backgroundColor: footerStyle.backgroundColor,
-  };
-});
+})(({ footerStyle, theme }) => ({
+  height: 48,
+  display: 'flex',
+  justifyContent: 'flex-end',
+  alignItems: 'center',
+  paddingRight: theme.spacing(1),
+  boxShadow: 'none',
+  borderStyle: 'solid',
+  borderWidth: '0px 0px 1px 0px',
+  borderRadius: 0,
+  borderColor: footerStyle.borderColor,
+  color: footerStyle.color,
+  backgroundColor: footerStyle.backgroundColor,
+}));
 
 // ---------- PaginationContent ----------
 
