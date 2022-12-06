@@ -1,4 +1,4 @@
-import { Direction } from '@mui/material/styles';
+import { Direction } from '@mui/material';
 import { stardust } from '@nebula.js/stardust';
 
 interface TextAlign {
