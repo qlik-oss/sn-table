@@ -17,18 +17,20 @@ export default function useListboxFilter({ elRef, layout, embed, columnIndex, op
   useEffect(() => {
     if (!layout || !embed) return;
 
-    console.log('#outer');
+    console.log('#outer #02');
     console.log({ layout, ref: elRef.current, embed, columnIndex });
 
     embed.field(layout.qHyperCube.qDimensionInfo[columnIndex]?.qFallbackTitle).then((instance) => {
       // setListboxInstance(instance);
-      if (elRef.current && elRef.current.children.length === 0) {
-        console.log({ kidCount: elRef?.current.children.length });
+      if (elRef.current && !isMounted) {
+        console.log({ kidCount: elRef.current.children.length });
         instance.mount(elRef.current);
         setIsMounted(true);
       }
     });
-  }, [layout, embed, columnIndex, open]);
+
+    if (!open) setIsMounted(false);
+  }, [layout, embed, columnIndex, open, isMounted]);
 
   // useEffect(() => {
   //   if (!elRef.current || !listboxInstance || !layout?.qHyperCube?.qDimensionInfo) return undefined;
@@ -46,5 +48,5 @@ export default function useListboxFilter({ elRef, layout, embed, columnIndex, op
   //   };
   // }, [elRef.current, listboxInstance, open, isMounted]);
 
-  return { isMounted, listboxInstance };
+  return { listboxInstance };
 }
