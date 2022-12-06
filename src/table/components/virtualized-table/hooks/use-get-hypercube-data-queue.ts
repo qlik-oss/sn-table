@@ -8,7 +8,7 @@ export interface AbortablePromise {
   isCancelled: boolean;
 }
 
-const useQueue = (
+const useGetHyperCubeDataQueue = (
   fetchHandler: (pages: EngineAPI.INxPage[]) => Promise<EngineAPI.INxDataPage[]>,
   onResolved: (dataPages: EngineAPI.INxDataPage[]) => void,
   deps: ClearOnDepsChanged
@@ -67,4 +67,4 @@ const useQueue = (
   return queue;
 };
 
-export default useQueue;
+export default useGetHyperCubeDataQueue;

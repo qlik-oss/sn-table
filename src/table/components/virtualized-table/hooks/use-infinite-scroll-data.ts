@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { PageInfo, Row, TableLayout } from '../../../../types';
 import useOnPropsChange from './use-on-props-change';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../constants';
-import useQueue from './use-queue';
+import useGetHyperCubeDataQueue from './use-get-hypercube-data-queue';
 
 type LoadData = (left: number, top: number, width: number, height: number) => void;
 
@@ -120,7 +120,7 @@ const useInfiniteScrollData = (
 
   // The queue takes a EngineAPI.INxPage object as items and adds them to a queue and
   // exists to prevent the same page from being fetched more than once.
-  const queue = useQueue(fetchHandler, resolvedHandler, [layout, pageInfo]);
+  const queue = useGetHyperCubeDataQueue(fetchHandler, resolvedHandler, [layout, pageInfo]);
 
   const loadData: LoadData = useCallback(
     async (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
