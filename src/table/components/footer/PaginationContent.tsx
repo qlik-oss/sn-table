@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
@@ -8,6 +8,7 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import { StyledSelect, StyledIconButton, StyledInputLabel, StyledFormControl } from './styles';
 import { handleLastTab } from '../../utils/handle-key-press';
 import { PaginationContentProps } from '../../types';
+import { getPaginationStyle } from '../../utils/styling-utils';
 
 const icons: Record<string, typeof FirstPageIcon> = {
   FirstPage: FirstPageIcon,
@@ -52,10 +53,10 @@ function PaginationContent({
 }: PaginationContentProps) {
   const { totalRowCount, totalColumnCount, totalPages, paginationNeeded } = tableData;
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
+  const paginationStyle = useMemo(() => getPaginationStyle(theme.background), [theme]);
 
   if (!paginationNeeded) return null;
 
-  const paginationTheme = theme.table.pagination;
   const onFirstPage = page === 0;
   const onLastPage = page >= totalPages - 1;
   // The elements can be focused in sequential keyboard navigation:
@@ -98,7 +99,7 @@ function PaginationContent({
     return (
       <StyledIconButton
         disabledCondition={disabledCondition}
-        paginationTheme={paginationTheme}
+        paginationStyle={paginationStyle}
         data-testid="pagination-action-icon-button"
         onClick={!disabledCondition ? () => handleChangePage(pageNumber) : null}
         aria-disabled={disabledCondition}
@@ -124,16 +125,16 @@ function PaginationContent({
       tabIndex,
       id,
       'data-testid': id,
-      style: { color: paginationTheme.color },
+      style: { color: paginationStyle.color },
     };
 
     return (
       <StyledFormControl size="small">
-        <StyledInputLabel color={paginationTheme.color} htmlFor={id} shrink={false}>
+        <StyledInputLabel color={paginationStyle.color} htmlFor={id} shrink={false}>
           {`${translator.get(translationName)}:`}
         </StyledInputLabel>
         <StyledSelect
-          paginationTheme={paginationTheme}
+          paginationStyle={paginationStyle}
           native
           value={value}
           onChange={handleChange}

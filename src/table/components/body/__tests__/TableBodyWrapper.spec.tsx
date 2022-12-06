@@ -64,7 +64,7 @@ describe('<TableBodyWrapper />', () => {
       getColorPickerColor: () => undefined,
       name: () => undefined,
       getStyle: () => undefined,
-      table: { body: { borderColor: '' } },
+      background: { isDark: false },
     } as unknown as ExtendedTheme;
     layout = {} as TableLayout;
     tableFirstRow = tableData.rows[0]['col-0'] as Cell;

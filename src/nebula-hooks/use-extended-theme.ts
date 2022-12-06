@@ -1,43 +1,35 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo, useTheme } from '@nebula.js/stardust';
 import { isDarkColor, isTransparentColor } from '../table/utils/color-utils';
-import { ExtendedTheme, TableThemeColors } from '../types';
+import { ExtendedTheme, BackgroundColors } from '../types';
 
-export const tableThemeColors = (theme: ExtendedTheme, rootElement: HTMLElement): TableThemeColors => {
+/**
+ * The colors in the table can depend on background colors set on table, object and sheet level.
+ * Even though not officially supported, it is expected that css settings on object and sheet are respected
+ * The priority order is: table theme > object css > object theme > sheet css
+ * If the result of those is transparent, we use the sheet css color
+ */
+export const getBackgroundColors = (theme: ExtendedTheme, rootElement: HTMLElement): BackgroundColors => {
   const qvInnerObject = rootElement?.closest('.qv-object .qv-inner-object');
-  const objectBackgroundColorFromCSS = qvInnerObject && window.getComputedStyle(qvInnerObject).backgroundColor;
+  const objectColorFromCSS = qvInnerObject && window.getComputedStyle(qvInnerObject).backgroundColor;
 
   const qvPanelSheet = rootElement?.closest('.qv-panel-sheet');
-  const sheetBackgroundColorFromCSS = qvPanelSheet && window.getComputedStyle(qvPanelSheet).backgroundColor;
+  const sheetColorFromCSS = qvPanelSheet && window.getComputedStyle(qvPanelSheet).backgroundColor;
 
-  const tableBackgroundColorFromTheme = theme.getStyle('', '', 'object.straightTable.backgroundColor');
+  // tableColorFromTheme is undefined if nothing is set specifically for object.straightTable.backgroundColor
+  const tableColorFromTheme = theme.getStyle('', '', 'object.straightTable.backgroundColor');
+  // colorFromTheme traverses the theme tree until it finds a value for backgroundColor, is undefined if there is no value
+  const colorFromTheme = theme.getStyle('object', 'straightTable', 'backgroundColor');
 
-  const backgroundColorFromTheme = theme.getStyle('object', 'straightTable', 'backgroundColor');
-  const backgroundColor = tableBackgroundColorFromTheme || objectBackgroundColorFromCSS || backgroundColorFromTheme;
-  const isBackgroundTransparentColor = isTransparentColor(backgroundColor);
-  const isBackgroundDarkColor = isDarkColor(
-    isBackgroundTransparentColor ? sheetBackgroundColorFromCSS : backgroundColor
-  );
-
-  const BORDER_COLOR = isBackgroundDarkColor ? ' #F2F2F2' : '#D9D9D9';
-
-  const borderColor = BORDER_COLOR;
-  const body = { borderColor: BORDER_COLOR };
-  const pagination = {
-    borderColor: BORDER_COLOR,
-    color: isBackgroundDarkColor ? 'rgba(255, 255, 255, 0.9)' : '#404040',
-    iconColor: isBackgroundDarkColor ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.54)',
-    disabledIconColor: isBackgroundDarkColor ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)',
-  };
+  const color = tableColorFromTheme || objectColorFromCSS || colorFromTheme;
+  const isTransparent = isTransparentColor(color);
+  const isDark = isDarkColor(isTransparent ? sheetColorFromCSS : color);
 
   return {
-    tableBackgroundColorFromTheme: tableBackgroundColorFromTheme || 'inherit',
-    backgroundColor,
-    isBackgroundTransparentColor,
-    isBackgroundDarkColor,
-    borderColor,
-    body,
-    pagination,
+    tableColorFromTheme: tableColorFromTheme || 'inherit',
+    color,
+    isDark,
+    isTransparent,
   };
 };
 
@@ -45,7 +37,7 @@ const useExtendedTheme = (rootElement: HTMLElement): ExtendedTheme => {
   // TODO: add name method to stardust.Theme
   const nebulaTheme = useTheme() as ExtendedTheme;
   return useMemo(
-    () => ({ ...nebulaTheme, table: tableThemeColors(nebulaTheme, rootElement) } as ExtendedTheme),
+    () => ({ ...nebulaTheme, background: getBackgroundColors(nebulaTheme, rootElement) } as ExtendedTheme),
     [nebulaTheme.name(), rootElement]
   );
 };
