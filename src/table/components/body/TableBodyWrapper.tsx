@@ -42,7 +42,7 @@ function TableBodyWrapper({
   );
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
-  const cellStyle = { color: bodyCellStyle.color, backgroundColor: theme.table.backgroundColor };
+  const cellStyle = { color: bodyCellStyle.color, backgroundColor: theme.background.color };
   useEffect(() => {
     addSelectionListeners({
       api: selectionsAPI,

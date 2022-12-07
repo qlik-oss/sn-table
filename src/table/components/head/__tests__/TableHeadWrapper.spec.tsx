@@ -56,7 +56,7 @@ describe('<TableHeadWrapper />', () => {
       getColorPickerColor: () => undefined,
       name: () => undefined,
       getStyle: () => undefined,
-      table: { body: { borderColor: '' } },
+      background: { isDark: false },
     } as unknown as ExtendedTheme;
     layout = {
       qHyperCube: {

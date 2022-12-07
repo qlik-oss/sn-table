@@ -35,7 +35,7 @@ export default function Wrapper(props: WrapperProps) {
   return (
     <StyledTableWrapper
       data-key="wrapper"
-      tableTheme={theme.table}
+      background={theme.background}
       paginationNeeded={paginationNeeded}
       dir="ltr"
       style={{ borderWidth: paginationNeeded ? '0px 1px 0px' : '0px 1px 1px' }}
