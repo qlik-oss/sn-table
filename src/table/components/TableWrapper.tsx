@@ -101,7 +101,7 @@ export default function TableWrapper(props: TableWrapperProps) {
   return (
     <StyledTableWrapper
       ref={tableWrapperRef}
-      tableTheme={theme.table}
+      background={theme.background}
       paginationNeeded={paginationNeeded}
       dir={direction}
       onKeyDown={handleKeyDown}

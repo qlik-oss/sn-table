@@ -59,7 +59,7 @@ const Body = (props: BodyProps) => {
 
     forwardRef.current.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: true });
     forwardRef.current.scrollTo({ scrollLeft: 0, scrollTop: 0 });
-  }, [layout, pageInfo, forwardRef]);
+  }, [layout, pageInfo, forwardRef, columnWidth]);
 
   const handleItemsRendered = useCallback(
     ({

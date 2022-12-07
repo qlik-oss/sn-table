@@ -5,7 +5,7 @@ import './style.css';
 
 async function run() {
   const app = await connect({
-    url: '<Qlik tenant url>', // 'https://xxxx.us.qlik.com'  note: https:// is needed
+    url: '<Qlik tenant url>', // 'xxxx.us.qlik.com',
     webIntegrationId: '<Qlik web integration id>', // 'xxx-xxxxxxx-xxxxxxxx',
     appId: '<App id>', // 'xxxx-xxx-xxx-xxx-xxxxxxx',
   });

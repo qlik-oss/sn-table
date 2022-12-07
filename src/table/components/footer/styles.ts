@@ -8,8 +8,8 @@ import FormControl from '@mui/material/FormControl';
 // ---------- FooterWrapper ----------
 
 export const StyledFooterWrapper = styled(Paper, {
-  shouldForwardProp: (prop: string) => prop !== 'tableTheme',
-})(({ tableTheme, theme }) => ({
+  shouldForwardProp: (prop: string) => prop !== 'footerStyle',
+})(({ footerStyle, theme }) => ({
   height: 48,
   display: 'flex',
   justifyContent: 'flex-end',
@@ -19,24 +19,24 @@ export const StyledFooterWrapper = styled(Paper, {
   borderStyle: 'solid',
   borderWidth: '0px 0px 1px 0px',
   borderRadius: 0,
-  borderColor: tableTheme.pagination.borderColor,
-  color: tableTheme.pagination.color,
-  backgroundColor: tableTheme.backgroundColor,
+  borderColor: footerStyle.borderColor,
+  color: footerStyle.color,
+  backgroundColor: footerStyle.backgroundColor,
 }));
 
 // ---------- PaginationContent ----------
 
 export const StyledSelect = styled(Select, {
-  shouldForwardProp: (prop: string) => prop !== 'paginationTheme',
-})(({ paginationTheme }) => ({
+  shouldForwardProp: (prop: string) => prop !== 'footerStyle',
+})(({ footerStyle }) => ({
   backgroundColor: 'inherit',
-  '& .MuiNativeSelect-icon': { color: paginationTheme.iconColor },
+  '& .MuiNativeSelect-icon': { color: footerStyle.iconColor },
 }));
 
 export const StyledIconButton = styled(IconButton, {
-  shouldForwardProp: (prop: string) => prop !== 'disabledCondition' && prop !== 'paginationTheme',
-})(({ disabledCondition, paginationTheme }) => ({
-  color: disabledCondition ? paginationTheme.disabledIconColor : paginationTheme.iconColor,
+  shouldForwardProp: (prop: string) => prop !== 'disabledCondition' && prop !== 'footerStyle',
+})(({ disabledCondition, footerStyle }) => ({
+  color: disabledCondition ? footerStyle.disabledIconColor : footerStyle.iconColor,
   cursor: disabledCondition ? 'default' : 'pointer',
   height: '32px',
   padding: '0px 7px',

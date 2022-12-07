@@ -18,13 +18,14 @@ export const TableAnnouncer = styled('div')({
 // ---------- TableWrapper ----------
 
 export const StyledTableWrapper = styled(Paper, {
-  shouldForwardProp: (prop: string) => prop !== 'tableTheme' && prop !== 'paginationNeeded',
-})(({ tableTheme, paginationNeeded }) => ({
+  shouldForwardProp: (prop: string) => prop !== 'background' && prop !== 'paginationNeeded',
+})(({ background, paginationNeeded }) => ({
   borderWidth: paginationNeeded ? '0px 1px 0px' : '0px',
   borderStyle: 'solid',
-  borderColor: tableTheme.borderColor,
+  borderColor: background.isDark ? '#F2F2F2' : '#D9D9D9',
   height: '100%',
-  backgroundColor: tableTheme.tableBackgroundColorFromTheme,
+  // TODO: see if we really need this or if we can use background.color
+  backgroundColor: background.tableColorFromTheme,
   boxShadow: 'none',
   borderRadius: 'unset',
 }));

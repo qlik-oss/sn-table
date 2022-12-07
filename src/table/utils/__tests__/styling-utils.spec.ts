@@ -30,10 +30,7 @@ describe('styling-utils', () => {
       }
     },
     getStyle: () => undefined,
-    table: {
-      body: { borderColor: '#D9D9D9' },
-      backgroundColor: '#323232',
-    },
+    background: { isDark: false, color: '#323232' },
   } as unknown as ExtendedTheme;
 
   describe('getColor', () => {

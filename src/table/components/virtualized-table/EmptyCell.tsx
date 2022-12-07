@@ -7,6 +7,7 @@ interface EmptyCellProps {
 
 const EmptyCell = ({ style }: EmptyCellProps) => (
   <div
+    className="sn-table-cell"
     style={{
       ...style,
       borderWidth: '0px 1px 1px 0px',

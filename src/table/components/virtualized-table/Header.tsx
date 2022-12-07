@@ -10,7 +10,7 @@ const Header = (props: HeaderProps) => {
   useLayoutEffect(() => {
     forwardRef?.current?.resetAfterIndex(0, true);
     forwardRef?.current?.scrollTo(0);
-  }, [layout, pageInfo, forwardRef]);
+  }, [layout, pageInfo, forwardRef, columnWidth]);
 
   return (
     <VariableSizeList

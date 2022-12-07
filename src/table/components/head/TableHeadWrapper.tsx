@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useMemo, useRef } from 'react';
 import TableHead from '@mui/material/TableHead';
 
+import LockIcon from '@mui/icons-material/Lock';
 import { useContextSelector, TableContext } from '../../context';
 import { VisuallyHidden, StyledHeadRow, StyledSortLabel, StyledHeadCell, HeadCellContent } from './styles';
 import { getHeaderStyle } from '../../utils/styling-utils';
@@ -93,6 +94,7 @@ function TableHeadWrapper({
                     handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex)
                   }
                 >
+                  {column.isLocked && <LockIcon fontSize="small" data-testid="head-cell-lock-icon" />}
                   <CellText>{column.label}</CellText>
                   {isFocusInHead && (
                     <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>

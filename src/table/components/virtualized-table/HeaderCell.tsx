@@ -17,6 +17,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
 
   return (
     <div
+      className="sn-table-cell"
       style={{
         ...style,
         display: 'flex',
@@ -30,6 +31,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
       }}
     >
       <span
+        className="sn-table-cell-text"
         style={{
           fontSize: headerStyle.fontSize,
           fontFamily: headerStyle.fontFamily,
