@@ -1,5 +1,6 @@
 import { renderHook } from '@testing-library/react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
+import { HEADER_HEIGHT } from '../../constants';
 import useScrollHandler from '../use-scroll-handler';
 
 describe('useScrollHandler', () => {
@@ -66,6 +67,6 @@ describe('useScrollHandler', () => {
 
     result.current(event);
 
-    expect(setTotalHeight).toHaveBeenCalledWith(innerForwardRef.current?.clientHeight);
+    expect(setTotalHeight).toHaveBeenCalledWith((innerForwardRef.current?.clientHeight as number) + HEADER_HEIGHT);
   });
 });
