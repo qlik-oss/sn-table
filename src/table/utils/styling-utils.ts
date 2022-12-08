@@ -1,8 +1,8 @@
 import { stardust } from '@nebula.js/stardust';
 
 import { resolveToRGBAorRGB, isDarkColor, removeOpacity } from './color-utils';
-import { TableLayout, ExtendedTheme, HeaderStyling, ContentStyling, PaletteColor } from '../../types';
-import { GeneratedStyling, CellStyle } from '../types';
+import { TableLayout, ExtendedTheme, HeaderStyling, ContentStyling, PaletteColor, BackgroundColors } from '../../types';
+import { GeneratedStyling, CellStyle, FooterStyle } from '../types';
 import { SelectionStates, StylingDefaults, SELECTION_STYLING } from '../constants';
 
 // the order of style
@@ -10,10 +10,10 @@ import { SelectionStates, StylingDefaults, SELECTION_STYLING } from '../constant
 // < column < selection (except the selected green) < hover < selected green
 
 /**
- * Determines if a palette color is set or not. Both index !== -1 and color !== null must be true for it to be unset
+ * Determines if a palette color is set or not. Both index !== -1 and color !== null must be true for it to be set
  */
 export const isColorSet = (prop: PaletteColor | undefined): boolean =>
-  !!prop && JSON.stringify(prop) !== JSON.stringify({ index: -1, color: null });
+  !!prop && (prop.color !== null || prop.index > -1);
 
 /**
  * Gets specified padding from layout if defined, otherwise calculates it based on specified font size if defined, otherwise returns default padding.
@@ -46,6 +46,11 @@ export const getAutoFontColor = (backgroundColor: string): string =>
   isDarkColor(backgroundColor) ? StylingDefaults.WHITE : StylingDefaults.FONT_COLOR;
 
 /**
+ * get the border color based on the color of the background, returns bright color if background is darka dn vice versa
+ */
+export const getBorderColor = (isBackgroundDark: boolean): string => (isBackgroundDark ? '#F2F2F2' : '#D9D9D9');
+
+/**
  * Gets base styling for either header or body taking table theme settings into account
  */
 export const getBaseStyling = (
@@ -64,7 +69,7 @@ export const getBaseStyling = (
     // When we do not set padding for content or header, but set font size,
     // we need to calculate the padding based on the font size
     padding: getPadding(styleObj),
-    borderColor: theme.table.body.borderColor,
+    borderColor: getBorderColor(theme.background.isDark),
   };
   // Remove all undefined and null values
   Object.keys(baseStyle).forEach((key) => {
@@ -89,9 +94,9 @@ export function getHeaderStyle(layout: TableLayout, theme: ExtendedTheme): Gener
   const headerBackgroundColor = isDarkColor(headerStyle.color)
     ? StylingDefaults.HEAD_BACKGROUND_LIGHT
     : StylingDefaults.HEAD_BACKGROUND_DARK;
-  headerStyle.backgroundColor = theme.table.isBackgroundTransparentColor
+  headerStyle.backgroundColor = theme.background.isTransparent
     ? headerBackgroundColor
-    : removeOpacity(theme.table.backgroundColor);
+    : removeOpacity(theme.background.color);
 
   // When you set the header font color,
   // the sort label color should be same.
@@ -165,6 +170,23 @@ export function getBodyCellStyle(layout: TableLayout, theme: ExtendedTheme): Gen
     hoverFontColor,
   };
 }
+
+export const getFooterStyle = (background: BackgroundColors): FooterStyle =>
+  background.isDark
+    ? {
+        backgroundColor: background.color,
+        borderColor: '#F2F2F2',
+        color: 'rgba(255, 255, 255, 0.9)',
+        iconColor: 'rgba(255, 255, 255, 0.9)',
+        disabledIconColor: 'rgba(255, 255, 255, 0.3)',
+      }
+    : {
+        backgroundColor: background.color,
+        borderColor: '#D9D9D9',
+        color: '#404040',
+        iconColor: 'rgba(0, 0, 0, 0.54)',
+        disabledIconColor: 'rgba(0, 0, 0, 0.3)',
+      };
 
 /**
  * Gets complete styling for the totals cells. Based on the body style but with the background from the body

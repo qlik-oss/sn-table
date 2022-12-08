@@ -43,7 +43,7 @@ describe('<PaginationContent />', () => {
 
   beforeEach(() => {
     theme = {
-      table: { pagination: { color: '', iconColor: '' } },
+      background: { isDark: false },
     } as unknown as ExtendedTheme;
     direction = 'ltr';
     titles = [

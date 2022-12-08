@@ -52,13 +52,13 @@ const renderWithCarbon = ({
   layout,
   changeSortOrder,
 }: RenderWithCarbonArguments) => {
-  if (env.carbon && changeSortOrder && theme) {
+  if (env.carbon && changeSortOrder && theme && selectionsAPI) {
     render({ rootElement, layout, model, manageData, theme, selectionsAPI, changeSortOrder, app, rect });
   }
 };
 
 export default function supernova(env: Galaxy) {
-  const areBasicFeaturesEnabled = env.flags.isEnabled('PS_15585_SN_TABLE_BASIC_FEATURES');
+  const areBasicFeaturesEnabled = env.flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES');
   return {
     qae: {
       properties: { initial: properties },
@@ -104,14 +104,16 @@ export default function supernova(env: Galaxy) {
             theme,
             keyboard,
             translator,
+            constraints,
             selectionsAPI,
           },
           reactRoot
         );
-      }, [layout, model, rect, theme, keyboard, translator, selectionsAPI]);
+      }, [layout, model, rect, theme, keyboard, translator, constraints, selectionsAPI]);
 
       useEffect(() => {
-        const isReadyToRender = !env.carbon && reactRoot && layout && tableData && changeSortOrder && theme;
+        const isReadyToRender =
+          !env.carbon && reactRoot && layout && tableData && changeSortOrder && theme && selectionsAPI;
         isReadyToRender &&
           render(
             {
@@ -139,7 +141,7 @@ export default function supernova(env: Galaxy) {
         tableData,
         constraints,
         direction,
-        selectionsAPI.isModal(),
+        selectionsAPI?.isModal(),
         theme,
         keyboard.active,
         rect.width,
@@ -160,7 +162,7 @@ export default function supernova(env: Galaxy) {
           layout,
           changeSortOrder,
         });
-      }, [layout, model, selectionsAPI.isModal(), theme, translator.language(), app, changeSortOrder]);
+      }, [layout, model, selectionsAPI?.isModal(), theme, translator.language(), app, changeSortOrder]);
 
       useEffect(
         () => () => {

@@ -20,15 +20,22 @@ const MenuItem = ({
   itemTitle,
   sortOrder,
   sortFromMenu,
+  setOpen,
 }: {
   children: any;
   itemTitle: string;
   sortOrder: string;
   sortFromMenu(evt: React.MouseEvent, sortOrder: string): void;
+  setOpen: any;
 }) => {
   return (
     <ListItem disablePadding>
-      <ListItemButton onClick={(evt) => sortFromMenu(evt, sortOrder)}>
+      <ListItemButton
+        onClick={(evt) => {
+          sortFromMenu(evt, sortOrder);
+          setOpen(false);
+        }}
+      >
         <ListItemIcon sx={{ minWidth: '25px' }}>{children}</ListItemIcon>
         <ListItemText primary={itemTitle} />
       </ListItemButton>
@@ -48,14 +55,6 @@ export default function HeadCellMenu({
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
 
-  const handleClickMenuOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClickMenuClose = (event: Event | React.SyntheticEvent) => {
-    !anchorRef.current?.contains(event.target as HTMLElement) && setOpen(false);
-  };
-
   return (
     <StyledCellMenu headerStyle={headerStyle}>
       <StyledMenuIconButton
@@ -65,7 +64,7 @@ export default function HeadCellMenu({
         aria-controls={open ? 'sn-table-head-menu' : undefined}
         aria-expanded={open ? 'true' : undefined}
         aria-haspopup="true"
-        onClick={handleClickMenuOpen}
+        onClick={() => setOpen(!open)}
       >
         <MoreHoriz />
       </StyledMenuIconButton>
@@ -93,7 +92,7 @@ export default function HeadCellMenu({
             }}
           >
             <Paper sx={{ boxShadow: 15 }}>
-              <ClickAwayListener onClickAway={handleClickMenuClose}>
+              <ClickAwayListener onClickAway={() => setOpen(false)}>
                 <MenuList
                   autoFocusItem={open}
                   className="sn-table-head-menu"
@@ -103,6 +102,7 @@ export default function HeadCellMenu({
                     itemTitle={translator.get('SNTable.MenuItem.SortAscending')}
                     sortOrder="A"
                     sortFromMenu={sortFromMenu}
+                    setOpen={setOpen}
                   >
                     <ArrowUpwardIcon />
                   </MenuItem>
@@ -111,6 +111,7 @@ export default function HeadCellMenu({
                     itemTitle={translator.get('SNTable.MenuItem.SortDescending')}
                     sortOrder="D"
                     sortFromMenu={sortFromMenu}
+                    setOpen={setOpen}
                   >
                     <ArrowDownwardIcon />
                   </MenuItem>

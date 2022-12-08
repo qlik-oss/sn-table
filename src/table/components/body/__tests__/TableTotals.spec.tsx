@@ -49,7 +49,7 @@ describe('<TableTotals />', () => {
       getColorPickerColor: () => undefined,
       name: () => undefined,
       getStyle: () => undefined,
-      table: { body: { borderColor: '' } },
+      background: { isDark: false },
     } as unknown as ExtendedTheme;
     layout = generateLayout(2, 2, 10, [], [{ qText: '350' }, { qText: '-' }]);
     keyboard = {

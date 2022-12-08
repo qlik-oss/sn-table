@@ -9,7 +9,7 @@ import { MAX_PAGE_SIZE } from './constants';
 import useOnPropsChange from './hooks/use-on-props-change';
 
 export default function Wrapper(props: WrapperProps) {
-  const { rect, layout, keyboard, translator, theme, model, selectionsAPI } = props;
+  const { rect, layout, keyboard, translator, theme, model, constraints, selectionsAPI } = props;
   const totalRowCount = layout.qHyperCube.qSize.qcy;
   const pageSize = Math.min(MAX_PAGE_SIZE, totalRowCount);
   const [page, setPage] = useState(0);
@@ -21,7 +21,7 @@ export default function Wrapper(props: WrapperProps) {
     }),
     [pageSize, page]
   );
-  const paginationNeeded = totalRowCount > MAX_PAGE_SIZE;
+  const paginationNeeded = totalRowCount > MAX_PAGE_SIZE && !constraints.active;
   const tableData = {
     totalRowCount,
     totalColumnCount: layout.qHyperCube.qSize.qcx,
@@ -35,7 +35,7 @@ export default function Wrapper(props: WrapperProps) {
   return (
     <StyledTableWrapper
       data-key="wrapper"
-      tableTheme={theme.table}
+      background={theme.background}
       paginationNeeded={paginationNeeded}
       dir="ltr"
       style={{ borderWidth: paginationNeeded ? '0px 1px 0px' : '0px 1px 1px' }}
@@ -48,6 +48,7 @@ export default function Wrapper(props: WrapperProps) {
         paginationNeeded={paginationNeeded}
         theme={theme}
         selectionsAPI={selectionsAPI}
+        constraints={constraints}
       />
       {paginationNeeded && (
         <FooterWrapper theme={theme}>
@@ -60,7 +61,7 @@ export default function Wrapper(props: WrapperProps) {
             setPageInfo={() => {}}
             keyboard={keyboard}
             translator={translator}
-            constraints={{}}
+            constraints={constraints}
             rect={rect}
             announce={() => {}}
           />

@@ -19,6 +19,7 @@ export interface WrapperProps {
   keyboard: stardust.Keyboard;
   translator: ExtendedTranslator;
   selectionsAPI: ExtendedSelectionAPI;
+  constraints: stardust.Constraints;
 }
 
 export interface TableContainerProps {
@@ -29,6 +30,7 @@ export interface TableContainerProps {
   model: EngineAPI.IGenericObject;
   theme: ExtendedTheme;
   selectionsAPI: ExtendedSelectionAPI;
+  constraints: stardust.Constraints;
 }
 
 export interface HeaderProps {

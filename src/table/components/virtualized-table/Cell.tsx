@@ -28,6 +28,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
   if (typeof datum === 'object') {
     return (
       <div
+        className={`sn-table-cell ${selectionStyling?.selectedCellClass ?? ''}`}
         style={{
           ...style,
           ...bodyStyle,
@@ -35,6 +36,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           display: 'flex',
           alignItems: 'center',
           borderWidth: '0px 1px 1px 0px',
+          borderStyle: 'solid',
           justifyContent: columns[columnIndex].align,
           padding: '0px 14px',
           boxSizing: 'border-box',
@@ -43,9 +45,9 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onMouseOver={handleMouseOver}
-        className={selectionStyling?.selectedCellClass}
       >
         <span
+          className="sn-table-cell-text"
           style={{
             overflow: 'hidden',
             whiteSpace: 'nowrap',
@@ -64,6 +66,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         ...style,
         ...bodyStyle,
         borderWidth: '0px 1px 1px 0px',
+        borderStyle: 'solid',
         boxSizing: 'border-box',
       }}
     />
