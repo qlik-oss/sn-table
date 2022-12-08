@@ -31,13 +31,13 @@ export function renderVirtualizedTable(props: WrapperProps, reactRoot?: ReactDom
   const muiTheme = muiSetup('ltr');
 
   reactRoot?.render(
-    <React.StrictMode>
-      <ThemeProvider theme={muiTheme}>
-        <TableContextProvider selectionsAPI={selectionsAPI} pageRows={[]}>
-          <VirualizedTable {...props} />
-        </TableContextProvider>
-      </ThemeProvider>
-    </React.StrictMode>
+    // <React.StrictMode> TODO disable for now as it makes double seletions
+    <ThemeProvider theme={muiTheme}>
+      <TableContextProvider selectionsAPI={selectionsAPI} pageRows={[]}>
+        <VirualizedTable {...props} />
+      </TableContextProvider>
+    </ThemeProvider>
+    // </React.StrictMode>
   );
 }
 export function teardown(reactRoot: ReactDom.Root) {
