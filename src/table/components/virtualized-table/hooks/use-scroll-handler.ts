@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
+import { HEADER_HEIGHT } from '../constants';
 
 const useScrollHandler = (
   headerRef: React.RefObject<VariableSizeList<any>>,
@@ -24,7 +25,7 @@ const useScrollHandler = (
       if (innerForwardRef.current) {
         // Keep full size container in sync with the height calculation in react-window is doing
         if (totalHeight !== innerForwardRef.current.clientHeight) {
-          setTotalHeight(innerForwardRef.current.clientHeight);
+          setTotalHeight(innerForwardRef.current.clientHeight + HEADER_HEIGHT);
         }
       }
     },
