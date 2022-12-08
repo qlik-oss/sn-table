@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { PageInfo, Row, TableLayout } from '../../../../types';
+import { PageInfo, Row, TableLayout, Column } from '../../../../types';
 import useOnPropsChange from './use-on-props-change';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../constants';
 import useGetHyperCubeDataQueue from './use-get-hypercube-data-queue';
@@ -17,7 +17,8 @@ const createRow = (
   matrixRow: EngineAPI.INxCellRows,
   matrixRowIdx: number,
   qArea: EngineAPI.IRect,
-  pageRowStartIdx: number
+  pageRowStartIdx: number,
+  columns: Column[]
 ) => {
   const rowIdx = qArea.qTop + matrixRowIdx;
   const pageRowIdx = pageRowStartIdx + matrixRowIdx;
@@ -29,7 +30,7 @@ const createRow = (
       ...cell,
       rowIdx,
       colIdx,
-      isSelectable: false, // TODO
+      isSelectable: columns[colIdx].isDim && !columns[colIdx].isLocked,
       pageRowIdx,
       pageColIdx: colIdx,
       isLastRow: false, // TODO
@@ -73,7 +74,8 @@ const useInfiniteScrollData = (
   layout: TableLayout,
   pageInfo: PageInfo,
   visibleRowCount: number,
-  visibleColumnCount: number
+  visibleColumnCount: number,
+  columns: Column[]
 ): UseInfiniteScrollData => {
   const [rowsInPage, setRowsInPage] = useState<Row[]>([]);
 
@@ -90,7 +92,14 @@ const useInfiniteScrollData = (
         dataPages.forEach((dataPage) => {
           dataPage.qMatrix.forEach((matrixRow, matrixRowIdx) => {
             const pageRowStartIdx = dataPage.qArea.qTop - pageInfo.page * pageInfo.rowsPerPage;
-            const { row, pageRowIdx } = createRow(nextRows, matrixRow, matrixRowIdx, dataPage.qArea, pageRowStartIdx);
+            const { row, pageRowIdx } = createRow(
+              nextRows,
+              matrixRow,
+              matrixRowIdx,
+              dataPage.qArea,
+              pageRowStartIdx,
+              columns
+            );
 
             nextRows[pageRowIdx] = row;
           });
@@ -98,7 +107,7 @@ const useInfiniteScrollData = (
 
         return nextRows;
       }),
-    [pageInfo]
+    [pageInfo, columns]
   );
 
   // The queue takes a EngineAPI.INxPage object as items and adds them to a queue and

@@ -22,12 +22,13 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         ...style,
         display: 'flex',
         alignItems: 'center',
-        borderColor: 'solid',
+        borderColor: headerStyle.borderColor,
         borderStyle: 'solid',
         borderWidth: '0px 1px 0px 0px',
         padding: '0px 14px',
         justifyContent: datum.align,
         boxSizing: 'border-box',
+        cursor: 'default',
       }}
     >
       <span

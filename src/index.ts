@@ -52,7 +52,7 @@ const renderWithCarbon = ({
   layout,
   changeSortOrder,
 }: RenderWithCarbonArguments) => {
-  if (env.carbon && changeSortOrder && theme) {
+  if (env.carbon && changeSortOrder && theme && selectionsAPI) {
     render({ rootElement, layout, model, manageData, theme, selectionsAPI, changeSortOrder, app, rect });
   }
 };
@@ -105,13 +105,15 @@ export default function supernova(env: Galaxy) {
             keyboard,
             translator,
             constraints,
+            selectionsAPI,
           },
           reactRoot
         );
-      }, [layout, model, rect, theme, keyboard, translator, constraints]);
+      }, [layout, model, rect, theme, keyboard, translator, constraints, selectionsAPI]);
 
       useEffect(() => {
-        const isReadyToRender = !env.carbon && reactRoot && layout && tableData && changeSortOrder && theme;
+        const isReadyToRender =
+          !env.carbon && reactRoot && layout && tableData && changeSortOrder && theme && selectionsAPI;
         isReadyToRender &&
           render(
             {
@@ -139,7 +141,7 @@ export default function supernova(env: Galaxy) {
         tableData,
         constraints,
         direction,
-        selectionsAPI.isModal(),
+        selectionsAPI?.isModal(),
         theme,
         keyboard.active,
         rect.width,
@@ -160,7 +162,7 @@ export default function supernova(env: Galaxy) {
           layout,
           changeSortOrder,
         });
-      }, [layout, model, selectionsAPI.isModal(), theme, translator.language(), app, changeSortOrder]);
+      }, [layout, model, selectionsAPI?.isModal(), theme, translator.language(), app, changeSortOrder]);
 
       useEffect(
         () => () => {

@@ -11,13 +11,20 @@ import { getHeaderStyle, getBodyCellStyle } from '../../utils/styling-utils';
 import useScrollHandler from './hooks/use-scroll-handler';
 
 const TableContainer = (props: TableContainerProps) => {
-  const { layout, rect, pageInfo, paginationNeeded, model, theme, constraints } = props;
+  const { layout, rect, pageInfo, paginationNeeded, model, theme, constraints, selectionsAPI } = props;
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);
   const bodyRef = useRef<VariableSizeGrid>(null);
   const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
-  const bodyStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
+  const bodyStyle = useMemo(
+    () => ({
+      ...getBodyCellStyle(layout, theme),
+      backgroundColor: theme.background.color, // Append both background and backgroundColor to avoid conflicting prop error when selecting styling is applied
+      background: theme.background.color,
+    }),
+    [layout, theme]
+  );
   const columns = useMemo(() => getColumns(layout), [layout]);
   const { width } = useColumnSize(rect, columns, headerStyle, bodyStyle);
   const totalWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
@@ -63,6 +70,7 @@ const TableContainer = (props: TableContainerProps) => {
           columnWidth={width}
           forwardRef={bodyRef}
           innerForwardRef={innerForwardRef}
+          selectionsAPI={selectionsAPI}
         />
       </FullSizeContainer>
     </div>

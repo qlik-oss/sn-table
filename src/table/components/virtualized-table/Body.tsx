@@ -7,6 +7,7 @@ import Cell from './Cell';
 import useScrollDirection from './hooks/use-scroll-direction';
 import useTableCount from './hooks/use-table-count';
 import useItemsRendererHandler from './hooks/use-items-rendered-handler';
+import useSelectionsEffect from './hooks/use-selections-effect';
 
 const Body = (props: BodyProps) => {
   const {
@@ -20,6 +21,7 @@ const Body = (props: BodyProps) => {
     pageInfo,
     paginationNeeded,
     bodyStyle,
+    selectionsAPI,
   } = props;
   const { scrollHandler, scrollDirection } = useScrollDirection();
   const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(layout, pageInfo, rect, columnWidth);
@@ -29,7 +31,8 @@ const Body = (props: BodyProps) => {
     layout,
     pageInfo,
     visibleRowCount,
-    visibleColumnCount
+    visibleColumnCount,
+    columns
   );
 
   const handleItemsRendered = useItemsRendererHandler({
@@ -42,6 +45,8 @@ const Body = (props: BodyProps) => {
   });
 
   const itemData = useMemo(() => ({ rowsInPage, columns, bodyStyle }), [rowsInPage, columns, bodyStyle]);
+
+  useSelectionsEffect(selectionsAPI, rowsInPage);
 
   useLayoutEffect(() => {
     if (!forwardRef.current) return;

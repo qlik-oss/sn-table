@@ -1,6 +1,6 @@
 {
   "name": "@nebula.js/sn-table",
-  "version": "1.20.0",
+  "version": "1.21.0",
   "description": "table supernova",
   "license": "MIT",
   "author": "QlikTech International AB",
@@ -87,7 +87,7 @@
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "13.4.0",
     "@testing-library/react-hooks": "8.0.1",
-    "@testing-library/user-event": "^14.4.3",
+    "@testing-library/user-event": "14.4.3",
     "@types/jest": "29.1.2",
     "@types/react-native": "0.70.4",
     "@types/react-window": "1.8.5",
