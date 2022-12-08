@@ -6,7 +6,7 @@ import useGetHyperCubeDataQueue from './use-get-hypercube-data-queue';
 
 export type LoadData = (left: number, top: number, width: number, height: number) => void;
 
-interface UseInfiniteScrollData {
+export interface UseInfiniteScrollData {
   rowsInPage: Row[];
   loadRows: LoadData;
   loadColumns: LoadData;

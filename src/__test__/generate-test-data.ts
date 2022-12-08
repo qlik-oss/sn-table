@@ -13,7 +13,7 @@ export function generateDataPages(height: number, width: number) {
     }
   }
 
-  return [{ qMatrix }];
+  return [{ qMatrix, qArea: { qLeft: 0, qTop: 0, qWidth: width, qHeight: height } }];
 }
 
 export function generateLayout(
