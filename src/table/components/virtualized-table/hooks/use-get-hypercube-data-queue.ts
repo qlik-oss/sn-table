@@ -1,67 +1,64 @@
 import { useMemo, useRef } from 'react';
-import { PageInfo, TableLayout } from '../../../../types';
-import useOnPropsChange from './use-on-props-change';
-
-type ClearOnDepsChanged = [TableLayout, PageInfo];
 
 export interface AbortablePromise {
   isCancelled: boolean;
 }
 
+const pageToKey = ({ qLeft, qTop, qWidth, qHeight }: EngineAPI.INxPage) => `${qLeft}-${qTop}-${qWidth}-${qHeight}`;
+
 const useGetHyperCubeDataQueue = (
-  fetchHandler: (pages: EngineAPI.INxPage[]) => Promise<EngineAPI.INxDataPage[]>,
-  resolvedHandler: (dataPages: EngineAPI.INxDataPage[]) => void,
-  deps: ClearOnDepsChanged
+  getDataPages: (qPages: EngineAPI.INxPage[]) => Promise<EngineAPI.INxDataPage[]>,
+  handleDataPages: (qDataPages: EngineAPI.INxDataPage[]) => void
 ) => {
-  const [layout, pageInfo] = deps;
-  const queued = useRef(new Map<string, EngineAPI.INxPage>()); // Keep track of all unique pages that should be retrieved
-  const loaded = useRef(new Set<string>()); // Keep track of all unqiue pages that have been retried
-  const ongoing = useRef(new Set<AbortablePromise>()); // Keep track of ongoing request and abort them if page is changed or layout is updated
-
-  useOnPropsChange(() => {
-    // Cancel all ongoing requests
-    ongoing.current.forEach((abortablePromise) => {
-      abortablePromise.isCancelled = true;
-    });
-
-    ongoing.current.clear();
-    queued.current.clear();
-    loaded.current.clear();
-  }, [layout, pageInfo]);
+  const queued = useRef(new Set<EngineAPI.INxPage>()); // Keep track of all unique pages that should be retrieved
+  const ongoing = useRef(new Set<EngineAPI.INxPage[]>()); // Keep track of ongoing request. Should be aborted if page info or layout is changed
+  const finished = useRef(new Set<string>()); // Keep track of all unqiue pages that have added to the queue
 
   const queue = useMemo(
     () => ({
-      enqueue: (key: string, page: EngineAPI.INxPage) => {
-        if (loaded.current.has(key)) {
+      enqueue: (page: EngineAPI.INxPage) => {
+        const key = pageToKey(page);
+
+        if (finished.current.has(key)) {
           return;
         }
 
-        queued.current.set(key, page);
-        loaded.current.add(key);
+        queued.current.add(page);
+        // Add to finished before it's actually finished. That makes it easier to check if the page should be retrieved or not
+        // as otherwise all three sets (queued, ongoing and finished) have to be queried for presence.
+        finished.current.add(key);
 
         if (queued.current.size === 1) {
           queueMicrotask(async () => {
             const qPages = Array.from(queued.current.values());
-            queued.current.clear();
 
-            const abortablePromise: AbortablePromise = { isCancelled: false };
-            ongoing.current.add(abortablePromise);
+            queued.current.clear();
+            ongoing.current.add(qPages);
 
             try {
-              const dataPages = await fetchHandler(qPages);
-              if (!abortablePromise.isCancelled) {
-                resolvedHandler(dataPages);
+              const qDataPages = await getDataPages(qPages);
+
+              if (ongoing.current.has(qPages)) {
+                handleDataPages(qDataPages);
               }
             } catch (error) {
-              // TODO If this means that it failed to retrieve the pages they should be removed from "loaded" so they can be fetched again
+              // Could mean that it failed to retrieve or handle the data pages. Removed them from "finished" so they can be fetched again
+              qPages.forEach((p) => {
+                finished.current.delete(pageToKey(p));
+              });
             } finally {
-              ongoing.current.delete(abortablePromise);
+              ongoing.current.delete(qPages);
             }
           });
         }
       },
+      clear: () => {
+        queued.current.clear();
+        ongoing.current.clear();
+        finished.current.clear();
+      },
     }),
-    [queued, loaded, fetchHandler, resolvedHandler]
+    [getDataPages, handleDataPages]
   );
 
   return queue;

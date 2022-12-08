@@ -4,14 +4,12 @@ import useOnPropsChange from './use-on-props-change';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../constants';
 import useGetHyperCubeDataQueue from './use-get-hypercube-data-queue';
 
-type LoadData = (left: number, top: number, width: number, height: number) => void;
-
-export type LoadBy = (left: number, top: number, width: number, height: number) => void;
+export type LoadData = (left: number, top: number, width: number, height: number) => void;
 
 interface UseInfiniteScrollData {
   rowsInPage: Row[];
-  loadRows: LoadBy;
-  loadColumns: LoadBy;
+  loadRows: LoadData;
+  loadColumns: LoadData;
 }
 
 const createRow = (
@@ -70,8 +68,6 @@ const isColumnMissingData = (rows: Row[], x: number, y: number, height: number) 
   return targetRows.some((row) => !row[`col-${x}`]);
 };
 
-const pageToKey = ({ qLeft, qTop, qWidth, qHeight }: EngineAPI.INxPage) => `${qLeft}-${qTop}-${qWidth}-${qHeight}`;
-
 const useInfiniteScrollData = (
   model: EngineAPI.IGenericObject,
   layout: TableLayout,
@@ -81,16 +77,12 @@ const useInfiniteScrollData = (
 ): UseInfiniteScrollData => {
   const [rowsInPage, setRowsInPage] = useState<Row[]>([]);
 
-  useOnPropsChange(() => {
-    setRowsInPage([]);
-  }, [layout, pageInfo.page]);
-
-  const fetchHandler = useCallback(
+  const getDataPages = useCallback(
     async (pages: EngineAPI.INxPage[]) => model.getHyperCubeData('/qHyperCubeDef', pages),
     [model]
   );
 
-  const resolvedHandler = useCallback(
+  const handleDataPages = useCallback(
     (dataPages: EngineAPI.INxDataPage[]) =>
       setRowsInPage((prevRows) => {
         const nextRows = [...prevRows];
@@ -111,18 +103,23 @@ const useInfiniteScrollData = (
 
   // The queue takes a EngineAPI.INxPage object as items and adds them to a queue and
   // exists to prevent the same page from being fetched more than once.
-  const queue = useGetHyperCubeDataQueue(fetchHandler, resolvedHandler, [layout, pageInfo]);
+  const queue = useGetHyperCubeDataQueue(getDataPages, handleDataPages);
+
+  useOnPropsChange(() => {
+    queue.clear();
+    setRowsInPage([]);
+  }, [layout, pageInfo.page]);
 
   const loadData: LoadData = useCallback(
     async (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
-      const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [{ qTop, qLeft, qHeight, qWidth }]);
+      const qDataPages = await getDataPages([{ qTop, qLeft, qHeight, qWidth }]);
 
-      resolvedHandler(dataPages);
+      handleDataPages(qDataPages);
     },
-    [model, resolvedHandler]
+    [getDataPages, handleDataPages]
   );
 
-  const loadColumns: LoadBy = useCallback(
+  const loadColumns: LoadData = useCallback(
     (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
       for (let left = qLeft; left < qLeft + qWidth; left++) {
         if (isColumnMissingData(rowsInPage, left, qTop, qHeight)) {
@@ -132,15 +129,15 @@ const useInfiniteScrollData = (
             qHeight,
             qWidth: 1,
           };
-          const key = pageToKey(page);
-          queue.enqueue(key, page);
+
+          queue.enqueue(page);
         }
       }
     },
     [rowsInPage, queue]
   );
 
-  const loadRows: LoadBy = useCallback(
+  const loadRows: LoadData = useCallback(
     (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
       for (let top = qTop; top < qTop + qHeight; top++) {
         const pageTop = Math.max(0, top - pageInfo.page * pageInfo.rowsPerPage);
@@ -151,8 +148,8 @@ const useInfiniteScrollData = (
             qHeight: 1,
             qWidth,
           };
-          const key = pageToKey(page);
-          queue.enqueue(key, page);
+
+          queue.enqueue(page);
         }
       }
     },

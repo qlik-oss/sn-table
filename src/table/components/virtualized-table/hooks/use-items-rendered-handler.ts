@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { PageInfo, TableLayout } from '../../../../types';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../constants';
-import { LoadBy } from './use-infinite-scroll-data';
+import { LoadData } from './use-infinite-scroll-data';
 import { ScrollDirection } from './use-scroll-direction';
 
 interface OnItemsRendered {
@@ -17,8 +17,8 @@ interface OnItemsRendered {
 
 interface ItemsHandlerProps {
   layout: TableLayout;
-  loadRows: LoadBy;
-  loadColumns: LoadBy;
+  loadRows: LoadData;
+  loadColumns: LoadData;
   scrollDirection: React.MutableRefObject<ScrollDirection>;
   rowCount: number;
   pageInfo: PageInfo;
