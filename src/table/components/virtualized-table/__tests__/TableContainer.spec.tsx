@@ -23,6 +23,7 @@ describe('<TableContainer />', () => {
         layout={layout}
         paginationNeeded={paginationNeeded}
         theme={theme}
+        constraints={{}}
       />
     );
 
@@ -56,10 +57,7 @@ describe('<TableContainer />', () => {
 
     theme = {
       getStyle: () => undefined,
-      table: {
-        body: { borderColor: '' },
-        pagination: { borderColor: '' },
-      },
+      background: { isDark: false },
     } as unknown as ExtendedTheme;
   });
 

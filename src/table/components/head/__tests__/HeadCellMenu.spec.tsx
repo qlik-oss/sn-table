@@ -47,6 +47,24 @@ describe('<HeadCellMenu />', () => {
     expect(getByText('SNTable.MenuItem.SortDescending')).toBeVisible();
   });
 
+  it('should close the menu when the menu item is clicked', () => {
+    const { getByRole, getByText } = renderTableHeadCellMenu();
+
+    fireEvent.click(getByRole('button'));
+    expect(getByRole('menu')).toBeVisible();
+    fireEvent.click(getByText('SNTable.MenuItem.SortAscending'));
+    expect(getByRole('menu')).not.toBeVisible();
+  });
+
+  it('should close the menu by clicking the menu button when the context menu is open', () => {
+    const { getAllByRole, getByRole } = renderTableHeadCellMenu();
+
+    fireEvent.click(getAllByRole('button')[0]);
+    expect(getByRole('menu')).toBeVisible();
+    fireEvent.click(getAllByRole('button')[0]);
+    expect(getByRole('menu')).not.toBeVisible();
+  });
+
   it('should call changeSortOrder when the sort item is clicked', () => {
     const { getByRole, getByText } = renderTableHeadCellMenu();
     fireEvent.click(getByRole('button'));

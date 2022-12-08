@@ -58,7 +58,7 @@ const renderWithCarbon = ({
 };
 
 export default function supernova(env: Galaxy) {
-  const areBasicFeaturesEnabled = env.flags.isEnabled('PS_15585_SN_TABLE_BASIC_FEATURES');
+  const areBasicFeaturesEnabled = env.flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES');
   return {
     qae: {
       properties: { initial: properties },
@@ -104,10 +104,11 @@ export default function supernova(env: Galaxy) {
             theme,
             keyboard,
             translator,
+            constraints,
           },
           reactRoot
         );
-      }, [layout, model, rect, theme, keyboard, translator]);
+      }, [layout, model, rect, theme, keyboard, translator, constraints]);
 
       useEffect(() => {
         const isReadyToRender = !env.carbon && reactRoot && layout && tableData && changeSortOrder && theme;
