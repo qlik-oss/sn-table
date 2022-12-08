@@ -8,7 +8,7 @@ import { getSelectionStyle } from '../../../utils/styling-utils';
 
 const NOOP_ANNOUNCE = () => {};
 
-const PREVENT_DEFAULT = (e: React.MouseEvent<HTMLTableCellElement>) => e.preventDefault();
+const onMouseDown = (e: React.MouseEvent<HTMLTableCellElement>) => e.preventDefault();
 
 export default function useSelector(datum: Cell | string, cellStyle: CellStyle) {
   const hasData = typeof datum === 'object';
@@ -23,7 +23,7 @@ export default function useSelector(datum: Cell | string, cellStyle: CellStyle) 
     const { handleMouseDown, handleMouseOver, handleMouseUp } = getSelectionMouseHandlers(
       datum as Cell,
       NOOP_ANNOUNCE,
-      PREVENT_DEFAULT,
+      onMouseDown,
       selectionDispatch,
       true
     );
