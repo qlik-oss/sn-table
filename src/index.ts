@@ -105,10 +105,11 @@ export default function supernova(env: Galaxy) {
             keyboard,
             translator,
             constraints,
+            selectionsAPI,
           },
           reactRoot
         );
-      }, [layout, model, rect, theme, keyboard, translator, constraints]);
+      }, [layout, model, rect, theme, keyboard, translator, constraints, selectionsAPI]);
 
       useEffect(() => {
         const isReadyToRender =
