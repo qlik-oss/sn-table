@@ -35,7 +35,9 @@ jobs:
           command: |
             set -eo pipefail
             # Amend auth token for access to private github packages, to access sprout
-            echo "@qlik-trial:registry=https://npm.pkg.github.com/\n//npm.pkg.github.com/:_authToken=$GITHUB_TOKEN\n//npm.pkg.github.com/:always-auth=true" >> ~/.npmrc
+            echo "@qlik-trial:registry=https://npm.pkg.github.com/
+            //npm.pkg.github.com/:_authToken=$GITHUB_TOKEN
+            //npm.pkg.github.com/:always-auth=true" >> ~/.npmrc
       - run:
           name: Install dependencies
           command: yarn install --frozen-lockfile
