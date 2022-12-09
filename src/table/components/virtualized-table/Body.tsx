@@ -23,7 +23,7 @@ const Body = (props: BodyProps) => {
     bodyStyle,
     selectionsAPI,
   } = props;
-  const { scrollHandler, scrollDirection } = useScrollDirection();
+  const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
   const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(layout, pageInfo, rect, columnWidth);
 
   const { rowsInPage, loadRows, loadColumns } = useInfiniteScrollData(
@@ -39,7 +39,8 @@ const Body = (props: BodyProps) => {
     layout,
     loadRows,
     loadColumns,
-    scrollDirection,
+    verticalScrollDirection,
+    horizontalScrollDirection,
     rowCount,
     pageInfo,
   });

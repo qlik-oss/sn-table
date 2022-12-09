@@ -19,7 +19,8 @@ interface ItemsHandlerProps {
   layout: TableLayout;
   loadRows: LoadData;
   loadColumns: LoadData;
-  scrollDirection: React.MutableRefObject<ScrollDirection>;
+  verticalScrollDirection: React.MutableRefObject<ScrollDirection>;
+  horizontalScrollDirection: React.MutableRefObject<ScrollDirection>;
   rowCount: number;
   pageInfo: PageInfo;
 }
@@ -28,7 +29,8 @@ const useItemsRendererHandler = ({
   layout,
   loadRows,
   loadColumns,
-  scrollDirection,
+  verticalScrollDirection,
+  horizontalScrollDirection,
   rowCount,
   pageInfo,
 }: ItemsHandlerProps) => {
@@ -56,7 +58,7 @@ const useItemsRendererHandler = ({
       const qHeight = overscanRowStopIndex - overscanRowStartIndex + 1;
 
       // Load data for visible grid and buffer grid
-      switch (scrollDirection.current) {
+      switch (verticalScrollDirection.current) {
         case ScrollDirection.Down: {
           const buffedHeight = qHeight + ROW_DATA_BUFFER_SIZE;
           const remainingRowsOnPage = rowCount - overscanRowStartIndex;
@@ -72,7 +74,11 @@ const useItemsRendererHandler = ({
           loadRows(qLeft, cappedTop, qWidth, buffedHeight);
           break;
         }
+        default:
+          break;
+      }
 
+      switch (horizontalScrollDirection.current) {
         case ScrollDirection.Right: {
           const remainingColumns = layout.qHyperCube.qSize.qcx - qLeft;
           const buffedWidth = qWidth + COLUMN_DATA_BUFFER_SIZE;
@@ -91,7 +97,15 @@ const useItemsRendererHandler = ({
           break;
       }
     },
-    [pageInfo, loadRows, loadColumns, scrollDirection, rowCount, layout.qHyperCube.qSize]
+    [
+      pageInfo,
+      loadRows,
+      loadColumns,
+      verticalScrollDirection,
+      horizontalScrollDirection,
+      rowCount,
+      layout.qHyperCube.qSize,
+    ]
   );
 
   return handleItemsRendered;

@@ -10,34 +10,45 @@ export enum ScrollDirection {
   Right = 'Right',
   Up = 'Up',
   Down = 'Down',
+  None = 'None', // If the user is not scrolling in any direction, use this value
 }
 
 const useScrollDirection = () => {
   const prevScrollLeft = useRef(0);
   const prevScrollTop = useRef(0);
-  const scrollDirection = useRef(ScrollDirection.Down);
+  const verticalScrollDirection = useRef(ScrollDirection.None);
+  const horizontalScrollDirection = useRef(ScrollDirection.None);
 
   const scrollHandler = useCallback(
     ({ scrollTop, scrollLeft }: OnScroll) => {
+      // Set vertical scroll direction
       if (scrollTop > prevScrollTop.current) {
-        scrollDirection.current = ScrollDirection.Down;
+        verticalScrollDirection.current = ScrollDirection.Down;
       } else if (scrollTop < prevScrollTop.current) {
-        scrollDirection.current = ScrollDirection.Up;
-      } else if (scrollLeft > prevScrollLeft.current) {
-        scrollDirection.current = ScrollDirection.Right;
+        verticalScrollDirection.current = ScrollDirection.Up;
+      } else {
+        verticalScrollDirection.current = ScrollDirection.None;
+      }
+
+      // Set horizontal scroll direction
+      if (scrollLeft > prevScrollLeft.current) {
+        horizontalScrollDirection.current = ScrollDirection.Right;
       } else if (scrollLeft < prevScrollLeft.current) {
-        scrollDirection.current = ScrollDirection.Left;
+        horizontalScrollDirection.current = ScrollDirection.Left;
+      } else {
+        horizontalScrollDirection.current = ScrollDirection.None;
       }
 
       prevScrollTop.current = scrollTop;
       prevScrollLeft.current = scrollLeft;
     },
-    [prevScrollTop, prevScrollLeft, scrollDirection]
+    [prevScrollTop, prevScrollLeft, verticalScrollDirection, horizontalScrollDirection]
   );
 
   return {
     scrollHandler,
-    scrollDirection,
+    verticalScrollDirection,
+    horizontalScrollDirection,
   };
 };
 
