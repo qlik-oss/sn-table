@@ -58,43 +58,27 @@ const useItemsRendererHandler = ({
       const qHeight = overscanRowStopIndex - overscanRowStartIndex + 1;
 
       // Load data for visible grid and buffer grid
-      switch (verticalScrollDirection.current) {
-        case ScrollDirection.Down: {
-          const buffedHeight = qHeight + ROW_DATA_BUFFER_SIZE;
-          const remainingRowsOnPage = rowCount - overscanRowStartIndex;
-          const cappedHeight = overscanRowStartIndex + buffedHeight > rowCount ? remainingRowsOnPage : buffedHeight;
-          loadRows(qLeft, qTop, qWidth, cappedHeight);
-          break;
-        }
-
-        case ScrollDirection.Up: {
-          const buffedHeight = qHeight + ROW_DATA_BUFFER_SIZE;
-          const qTopStartIndexForPage = pageInfo.page * pageInfo.rowsPerPage;
-          const cappedTop = Math.max(qTopStartIndexForPage, qTop - ROW_DATA_BUFFER_SIZE);
-          loadRows(qLeft, cappedTop, qWidth, buffedHeight);
-          break;
-        }
-        default:
-          break;
+      if (verticalScrollDirection.current === ScrollDirection.Down) {
+        const buffedHeight = qHeight + ROW_DATA_BUFFER_SIZE;
+        const remainingRowsOnPage = rowCount - overscanRowStartIndex;
+        const cappedHeight = overscanRowStartIndex + buffedHeight > rowCount ? remainingRowsOnPage : buffedHeight;
+        loadRows(qLeft, qTop, qWidth, cappedHeight);
+      } else if (verticalScrollDirection.current === ScrollDirection.Up) {
+        const buffedHeight = qHeight + ROW_DATA_BUFFER_SIZE;
+        const qTopStartIndexForPage = pageInfo.page * pageInfo.rowsPerPage;
+        const cappedTop = Math.max(qTopStartIndexForPage, qTop - ROW_DATA_BUFFER_SIZE);
+        loadRows(qLeft, cappedTop, qWidth, buffedHeight);
       }
 
-      switch (horizontalScrollDirection.current) {
-        case ScrollDirection.Right: {
-          const remainingColumns = layout.qHyperCube.qSize.qcx - qLeft;
-          const buffedWidth = qWidth + COLUMN_DATA_BUFFER_SIZE;
-          const cappedWidth = Math.min(remainingColumns, buffedWidth);
-          loadColumns(qLeft, qTop, cappedWidth, qHeight);
-          break;
-        }
-
-        case ScrollDirection.Left: {
-          const cappedLeft = Math.max(0, qLeft - COLUMN_DATA_BUFFER_SIZE);
-          const buffedWidth = Math.min(layout.qHyperCube.qSize.qcx, qWidth + COLUMN_DATA_BUFFER_SIZE);
-          loadColumns(cappedLeft, qTop, buffedWidth, qHeight);
-          break;
-        }
-        default:
-          break;
+      if (horizontalScrollDirection.current === ScrollDirection.Right) {
+        const remainingColumns = layout.qHyperCube.qSize.qcx - qLeft;
+        const buffedWidth = qWidth + COLUMN_DATA_BUFFER_SIZE;
+        const cappedWidth = Math.min(remainingColumns, buffedWidth);
+        loadColumns(qLeft, qTop, cappedWidth, qHeight);
+      } else if (horizontalScrollDirection.current === ScrollDirection.Left) {
+        const cappedLeft = Math.max(0, qLeft - COLUMN_DATA_BUFFER_SIZE);
+        const buffedWidth = Math.min(layout.qHyperCube.qSize.qcx, qWidth + COLUMN_DATA_BUFFER_SIZE);
+        loadColumns(cappedLeft, qTop, buffedWidth, qHeight);
       }
     },
     [
