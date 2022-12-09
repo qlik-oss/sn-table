@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, memo, useMemo } from 'react';
 import { VariableSizeGrid } from 'react-window';
 import { DEFAULT_ROW_HEIGHT, HEADER_HEIGHT, PAGINATION_HEIGHT } from './constants';
-import useInfiniteScrollData from './hooks/use-infinite-scroll-data';
+import useData from './hooks/use-data';
 import { BodyProps } from './types';
 import Cell from './Cell';
 import useScrollDirection from './hooks/use-scroll-direction';
@@ -26,7 +26,7 @@ const Body = (props: BodyProps) => {
   const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
   const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(layout, pageInfo, rect, columnWidth);
 
-  const { rowsInPage, loadRows, loadColumns } = useInfiniteScrollData(
+  const { rowsInPage, loadRows, loadColumns } = useData(
     model,
     layout,
     pageInfo,

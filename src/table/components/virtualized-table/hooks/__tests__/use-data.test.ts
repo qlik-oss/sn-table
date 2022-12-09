@@ -1,14 +1,14 @@
 import { act, renderHook, RenderHookResult, waitFor } from '@testing-library/react';
 import { Cell, Column, PageInfo, Row, TableLayout } from '../../../../../types';
 import { generateDataPages, generateLayout } from '../../../../../__test__/generate-test-data';
-import useInfiniteScrollData, { UseInfiniteScrollData } from '../use-infinite-scroll-data';
+import useData, { UseData } from '../use-data';
 
-describe('useInfiniteScrollData', () => {
+describe('useData', () => {
   let model: EngineAPI.IGenericObject;
   let layout: TableLayout;
   let pageInfo: PageInfo;
   let columns: Column[];
-  let renderHookResult: RenderHookResult<UseInfiniteScrollData, unknown>;
+  let renderHookResult: RenderHookResult<UseData, unknown>;
 
   beforeEach(() => {
     layout = generateLayout(1, 1, 5);
@@ -34,7 +34,7 @@ describe('useInfiniteScrollData', () => {
 
   test('should load initial data and update rowsInPage', async () => {
     await act(async () => {
-      renderHookResult = renderHook(() => useInfiniteScrollData(model, layout, pageInfo, 1, 1, columns));
+      renderHookResult = renderHook(() => useData(model, layout, pageInfo, 1, 1, columns));
     });
 
     const { result } = renderHookResult;
@@ -57,11 +57,11 @@ describe('useInfiniteScrollData', () => {
     await waitFor(() => expect(result.current.rowsInPage).toEqual(expectedRows));
   });
 
-  // test('should insert row data at correct index based on current page', async () => {
+  // test.only('should insert row data at correct index based on current page', async () => {
   //   // Load data on the second page, for test purpose only load 1 row of data
   //   pageInfo = { ...pageInfo, page: 1 };
   //   await act(async () => {
-  //     renderHookResult = renderHook(() => useInfiniteScrollData(model, layout, pageInfo, 1, 1, columns));
+  //     renderHookResult = renderHook(() => useData(model, layout, pageInfo, 1, 1, columns));
   //   });
 
   //   const { result } = renderHookResult;
@@ -86,7 +86,7 @@ describe('useInfiniteScrollData', () => {
 
   test('should reset rowsInPage when pageInfo changes', async () => {
     await act(async () => {
-      renderHookResult = renderHook(() => useInfiniteScrollData(model, layout, pageInfo, 1, 1, columns));
+      renderHookResult = renderHook(() => useData(model, layout, pageInfo, 1, 1, columns));
     });
 
     const { rerender } = renderHookResult;
@@ -103,7 +103,7 @@ describe('useInfiniteScrollData', () => {
 
   test('should reset rowsInPage when layout changes', async () => {
     await act(async () => {
-      renderHookResult = renderHook(() => useInfiniteScrollData(model, layout, pageInfo, 1, 1, columns));
+      renderHookResult = renderHook(() => useData(model, layout, pageInfo, 1, 1, columns));
     });
 
     const { rerender } = renderHookResult;
@@ -122,7 +122,7 @@ describe('useInfiniteScrollData', () => {
     test('when column is a dimension and not locked', async () => {
       columns = [{ isDim: true, isLocked: false } as Column];
       await act(async () => {
-        renderHookResult = renderHook(() => useInfiniteScrollData(model, layout, pageInfo, 1, 1, columns));
+        renderHookResult = renderHook(() => useData(model, layout, pageInfo, 1, 1, columns));
       });
 
       const { result } = renderHookResult;
@@ -133,7 +133,7 @@ describe('useInfiniteScrollData', () => {
     test('when column is a dimension and is locked', async () => {
       columns = [{ isDim: true, isLocked: true } as Column];
       await act(async () => {
-        renderHookResult = renderHook(() => useInfiniteScrollData(model, layout, pageInfo, 1, 1, columns));
+        renderHookResult = renderHook(() => useData(model, layout, pageInfo, 1, 1, columns));
       });
 
       const { result } = renderHookResult;
@@ -144,7 +144,7 @@ describe('useInfiniteScrollData', () => {
     test('when column is a measure', async () => {
       columns = [{ isDim: false, isLocked: false } as Column];
       await act(async () => {
-        renderHookResult = renderHook(() => useInfiniteScrollData(model, layout, pageInfo, 1, 1, columns));
+        renderHookResult = renderHook(() => useData(model, layout, pageInfo, 1, 1, columns));
       });
 
       const { result } = renderHookResult;
