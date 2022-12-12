@@ -1,6 +1,6 @@
 import { HyperCube, TableLayout, TotalsPosition, Cell, Row } from '../types';
 
-export function generateDataPages(height: number, width: number) {
+export function generateDataPages(height: number, width: number, qLeft = 0, qTop = 0) {
   const qMatrix: Record<string, string>[][] = [];
 
   for (let row = 0; row < height; row++) {
@@ -13,7 +13,7 @@ export function generateDataPages(height: number, width: number) {
     }
   }
 
-  return [{ qMatrix, qArea: { qLeft: 0, qTop: 0, qWidth: width, qHeight: height } }];
+  return [{ qMatrix, qArea: { qLeft, qTop, qWidth: width, qHeight: height } }];
 }
 
 export function generateLayout(
