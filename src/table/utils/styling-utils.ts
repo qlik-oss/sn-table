@@ -2,7 +2,7 @@ import { stardust } from '@nebula.js/stardust';
 
 import { resolveToRGBAorRGB, isDarkColor, removeOpacity } from './color-utils';
 import { TableLayout, ExtendedTheme, HeaderStyling, ContentStyling, PaletteColor, BackgroundColors } from '../../types';
-import { GeneratedStyling, CellStyle } from '../types';
+import { GeneratedStyling, CellStyle, FooterStyle } from '../types';
 import { SelectionStates, StylingDefaults, SELECTION_STYLING } from '../constants';
 
 // the order of style
@@ -171,7 +171,7 @@ export function getBodyCellStyle(layout: TableLayout, theme: ExtendedTheme): Gen
   };
 }
 
-export const getFooterStyle = (background: BackgroundColors) =>
+export const getFooterStyle = (background: BackgroundColors): FooterStyle =>
   background.isDark
     ? {
         backgroundColor: background.color,

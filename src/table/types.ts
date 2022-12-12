@@ -91,6 +91,14 @@ export interface GeneratedStyling {
   hoverFontColor?: string;
 }
 
+export interface FooterStyle {
+  borderColor: string;
+  color: string;
+  iconColor: string;
+  disabledIconColor: string;
+  backgroundColor?: string;
+}
+
 export interface CellStyle {
   backgroundColor: string | undefined; // This is always set but could be undefined in the theme
   color: string;

@@ -28,6 +28,9 @@ export const StyledHeadCell = styled(TableCell, {
   lineHeight: '150%',
   pointer: 'cursor',
   borderWidth: '1px 1px 1px 0px',
+  '&&:hover, &&:focus': {
+    '& svg, & button': { opacity: 1 },
+  },
 }));
 
 export const StyledSortLabel = styled(TableSortLabel, {
