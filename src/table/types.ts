@@ -78,9 +78,8 @@ export interface ContextValue {
 }
 
 export interface GeneratedStyling {
-  padding?: string;
-  borderStyle: string;
   borderColor: string;
+  padding?: string;
   fontFamily?: string;
   color?: string;
   fontSize?: string; // following the theme format so this should always be a string
@@ -90,6 +89,14 @@ export interface GeneratedStyling {
   sortLabelColor?: string;
   hoverBackgroundColor?: string;
   hoverFontColor?: string;
+}
+
+export interface FooterStyle {
+  borderColor: string;
+  color: string;
+  iconColor: string;
+  disabledIconColor: string;
+  backgroundColor?: string;
 }
 
 export interface CellStyle {

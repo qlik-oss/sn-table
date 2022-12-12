@@ -1,10 +1,11 @@
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
+import useEvent from '@testing-library/user-event';
 import TableHeadWrapper from '../TableHeadWrapper';
-import { TableContextProvider } from '../../context';
-import * as handleKeyPress from '../../utils/handle-key-press';
-import * as handleClick from '../../utils/handle-click';
+import { TableContextProvider } from '../../../context';
+import * as handleKeyPress from '../../../utils/handle-key-press';
+import * as handleClick from '../../../utils/handle-click';
 import {
   TableData,
   TableLayout,
@@ -12,7 +13,7 @@ import {
   ChangeSortOrder,
   ExtendedTranslator,
   ExtendedSelectionAPI,
-} from '../../../types';
+} from '../../../../types';
 
 describe('<TableHeadWrapper />', () => {
   const rootElement = {} as HTMLElement;
@@ -47,7 +48,7 @@ describe('<TableHeadWrapper />', () => {
   beforeEach(() => {
     tableData = {
       columns: [
-        { id: 1, align: 'left', label: 'someDim', sortDirection: 'asc', isDim: true, colIdx: 0 },
+        { id: 1, align: 'left', label: 'someDim', sortDirection: 'asc', isDim: true, isLocked: false, colIdx: 0 },
         { id: 2, align: 'right', label: 'someMsr', sortDirection: 'desc', isDim: false, colIdx: 1 },
       ],
     } as unknown as TableData;
@@ -55,7 +56,7 @@ describe('<TableHeadWrapper />', () => {
       getColorPickerColor: () => undefined,
       name: () => undefined,
       getStyle: () => undefined,
-      table: { body: { borderColor: '' } },
+      background: { isDark: false },
     } as unknown as ExtendedTheme;
     layout = {
       qHyperCube: {
@@ -73,6 +74,7 @@ describe('<TableHeadWrapper />', () => {
       enabled: false,
     } as stardust.Keyboard;
     translator = { get: (s) => s } as ExtendedTranslator;
+    areBasicFeaturesEnabled = false;
   });
 
   it('should render table head', () => {
@@ -82,7 +84,35 @@ describe('<TableHeadWrapper />', () => {
     expect(queryByText(tableData.columns[1].label)).toBeVisible();
   });
 
-  it('should call changeSortOrder when clicking a header cell', () => {
+  it('should show the menu button when the head cell is on focus', () => {
+    areBasicFeaturesEnabled = true;
+    const { getByText } = renderTableHead();
+
+    const element = getByText(tableData.columns[0].label).closest('th') as HTMLTableCellElement;
+    expect(element.querySelector('#sn-table-head-menu-button')).not.toBeVisible();
+    element.focus();
+    waitFor(async () => {
+      expect(element.querySelector('#sn-table-head-menu-button')).toBeVisible();
+    });
+  });
+
+  it('should show the menu button when the head cell is hovered', () => {
+    areBasicFeaturesEnabled = true;
+    const { getByText } = renderTableHead();
+
+    const element = getByText(tableData.columns[0].label).closest('th') as HTMLTableCellElement;
+    expect(element.querySelector('#sn-table-head-menu-button')).not.toBeVisible();
+    useEvent.hover(element);
+    waitFor(async () => {
+      expect(element.querySelector('#sn-table-head-menu-button')).toBeVisible();
+    });
+    useEvent.unhover(element);
+    waitFor(async () => {
+      expect(element.querySelector('#sn-table-head-menu-button')).not.toBeVisible();
+    });
+  });
+
+  it('should call changeSortOrder when clicking the header cell', () => {
     const { getByText } = renderTableHead();
     fireEvent.click(getByText(tableData.columns[0].label));
 
@@ -107,6 +137,14 @@ describe('<TableHeadWrapper />', () => {
     fireEvent.click(getByText(tableData.columns[0].label));
 
     expect(changeSortOrder).not.toHaveBeenCalled();
+  });
+
+  it('should show the lock icon only when the selections on dimensions are locked', () => {
+    const { queryByTestId } = renderTableHead();
+    expect(queryByTestId('head-cell-lock-icon')).toBeNull();
+    tableData.columns[0].isLocked = true;
+    renderTableHead();
+    expect(queryByTestId('head-cell-lock-icon')).toBeTruthy();
   });
 
   it('should call handleHeadKeyDown when keyDown on a header cell', () => {

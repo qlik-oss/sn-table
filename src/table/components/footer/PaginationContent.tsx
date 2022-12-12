@@ -1,15 +1,14 @@
-import React, { memo } from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
+import React, { memo, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 
-import { StyledSelect, StyledIconButton } from '../styles';
-import { handleLastTab } from '../utils/handle-key-press';
-import { PaginationContentProps } from '../types';
+import { StyledSelect, StyledIconButton, StyledInputLabel, StyledFormControl } from './styles';
+import { handleLastTab } from '../../utils/handle-key-press';
+import { PaginationContentProps } from '../../types';
+import { getFooterStyle } from '../../utils/styling-utils';
 
 const icons: Record<string, typeof FirstPageIcon> = {
   FirstPage: FirstPageIcon,
@@ -54,10 +53,10 @@ function PaginationContent({
 }: PaginationContentProps) {
   const { totalRowCount, totalColumnCount, totalPages, paginationNeeded } = tableData;
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
+  const footerStyle = useMemo(() => getFooterStyle(theme.background), [theme]);
 
   if (!paginationNeeded) return null;
 
-  const paginationTheme = theme.table.pagination;
   const onFirstPage = page === 0;
   const onLastPage = page >= totalPages - 1;
   // The elements can be focused in sequential keyboard navigation:
@@ -100,7 +99,7 @@ function PaginationContent({
     return (
       <StyledIconButton
         disabledCondition={disabledCondition}
-        paginationTheme={paginationTheme}
+        footerStyle={footerStyle}
         data-testid="pagination-action-icon-button"
         onClick={!disabledCondition ? () => handleChangePage(pageNumber) : null}
         aria-disabled={disabledCondition}
@@ -126,24 +125,18 @@ function PaginationContent({
       tabIndex,
       id,
       'data-testid': id,
-      style: { color: paginationTheme.color, height: 30 },
+      style: { color: footerStyle.color },
     };
 
     return (
-      <FormControl sx={{ px: 2.5 }}>
-        <InputLabel sx={{ color: paginationTheme.color }} htmlFor={id} shrink={false}>
+      <StyledFormControl size="small">
+        <StyledInputLabel color={footerStyle.color} htmlFor={id} shrink={false}>
           {`${translator.get(translationName)}:`}
-        </InputLabel>
-        <StyledSelect
-          paginationTheme={paginationTheme}
-          native
-          value={value}
-          onChange={handleChange}
-          inputProps={inputProps}
-        >
+        </StyledInputLabel>
+        <StyledSelect footerStyle={footerStyle} native value={value} onChange={handleChange} inputProps={inputProps}>
           {options}
         </StyledSelect>
-      </FormControl>
+      </StyledFormControl>
     );
   };
 

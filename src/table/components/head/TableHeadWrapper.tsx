@@ -1,14 +1,19 @@
 import React, { memo, useEffect, useMemo, useRef } from 'react';
-import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 
-import { useContextSelector, TableContext } from '../context';
-import { VisuallyHidden, StyledHeadRow, StyledSortLabel } from '../styles';
-import { getHeaderStyle } from '../utils/styling-utils';
-import { handleHeadKeyDown } from '../utils/handle-key-press';
-import { handleMouseDownLabelToFocusHeadCell, handleClickToFocusHead } from '../utils/handle-click';
-import { TableHeadWrapperProps } from '../types';
-import CellText from './CellText';
+import LockIcon from '@mui/icons-material/Lock';
+import { useContextSelector, TableContext } from '../../context';
+import { VisuallyHidden, StyledHeadRow, StyledSortLabel, StyledHeadCell, HeadCellContent } from './styles';
+import { getHeaderStyle } from '../../utils/styling-utils';
+import { handleHeadKeyDown } from '../../utils/handle-key-press';
+import {
+  handleMouseDownLabelToFocusHeadCell,
+  handleClickToFocusHead,
+  handleClickToSort,
+} from '../../utils/handle-click';
+import { TableHeadWrapperProps } from '../../types';
+import HeadCellMenu from './HeadCellMenu';
+import CellText from '../CellText';
 
 function TableHeadWrapper({
   rootElement,
@@ -59,9 +64,14 @@ function TableHeadWrapper({
             });
           };
 
+          const sortFromMenu = (evt: React.MouseEvent, sortOrder: string) => {
+            evt.stopPropagation();
+            changeSortOrder(column, sortOrder);
+          };
+
           return (
-            <TableCell
-              sx={headerStyle}
+            <StyledHeadCell
+              headerStyle={headerStyle}
               key={column.id}
               align={column.align}
               className="sn-table-head-cell sn-table-cell"
@@ -70,26 +80,32 @@ function TableHeadWrapper({
               aria-pressed={isCurrentColumnActive}
               onKeyDown={handleKeyDown}
               onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
-              onClick={() => isInteractionEnabled && changeSortOrder(column)}
+              onClick={(evt: React.MouseEvent) => handleClickToSort(evt, column, changeSortOrder, isInteractionEnabled)}
             >
-              <StyledSortLabel
-                headerStyle={headerStyle}
-                active={isCurrentColumnActive}
-                title={!constraints.passive ? column.sortDirection : undefined} // passive: turn off tooltips.
-                direction={column.sortDirection}
-                tabIndex={-1}
-                onMouseDown={(evt: React.MouseEvent) =>
-                  handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex)
-                }
-              >
-                <CellText>{column.label}</CellText>
-                {isFocusInHead && (
-                  <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>
-                    {translator.get('SNTable.SortLabel.PressSpaceToSort')}
-                  </VisuallyHidden>
+              <HeadCellContent>
+                <StyledSortLabel
+                  headerStyle={headerStyle}
+                  active={isCurrentColumnActive}
+                  title={!constraints.passive ? column.sortDirection : undefined} // passive: turn off tooltips.
+                  direction={column.sortDirection}
+                  tabIndex={-1}
+                  onMouseDown={(evt: React.MouseEvent) =>
+                    handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex)
+                  }
+                >
+                  {column.isLocked && <LockIcon fontSize="small" data-testid="head-cell-lock-icon" />}
+                  <CellText>{column.label}</CellText>
+                  {isFocusInHead && (
+                    <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>
+                      {translator.get('SNTable.SortLabel.PressSpaceToSort')}
+                    </VisuallyHidden>
+                  )}
+                </StyledSortLabel>
+                {areBasicFeaturesEnabled && (
+                  <HeadCellMenu headerStyle={headerStyle} translator={translator} sortFromMenu={sortFromMenu} />
                 )}
-              </StyledSortLabel>
-            </TableCell>
+              </HeadCellContent>
+            </StyledHeadCell>
           );
         })}
       </StyledHeadRow>

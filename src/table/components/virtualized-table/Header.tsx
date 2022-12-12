@@ -10,7 +10,7 @@ const Header = (props: HeaderProps) => {
   useLayoutEffect(() => {
     forwardRef?.current?.resetAfterIndex(0, true);
     forwardRef?.current?.scrollTo(0);
-  }, [layout, pageInfo, forwardRef]);
+  }, [layout, pageInfo, forwardRef, columnWidth]);
 
   return (
     <VariableSizeList
@@ -23,7 +23,7 @@ const Header = (props: HeaderProps) => {
         overflow: 'hidden',
         backgroundColor: headerStyle.backgroundColor,
         borderColor: headerStyle.borderColor,
-        borderStyle: headerStyle.borderStyle,
+        borderStyle: 'solid',
         borderWidth: '1px 0px',
       }}
       itemCount={layout.qHyperCube.qSize.qcx}

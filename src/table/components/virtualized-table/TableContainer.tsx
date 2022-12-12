@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { memo, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
 import { getColumns } from '../../../handle-data';
 import useColumnSize from './hooks/use-column-size';
@@ -8,39 +8,28 @@ import FullSizeContainer from './FullSizeContainer';
 import Header from './Header';
 import { TableContainerProps } from './types';
 import { getHeaderStyle, getBodyCellStyle } from '../../utils/styling-utils';
+import useScrollHandler from './hooks/use-scroll-handler';
 
-export default function TableContainer(props: TableContainerProps) {
-  const { layout, rect, pageInfo, paginationNeeded, model, theme } = props;
+const TableContainer = (props: TableContainerProps) => {
+  const { layout, rect, pageInfo, paginationNeeded, model, theme, constraints, selectionsAPI } = props;
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);
   const bodyRef = useRef<VariableSizeGrid>(null);
   const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
-  const bodyStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
+  const bodyStyle = useMemo(
+    () => ({
+      ...getBodyCellStyle(layout, theme),
+      backgroundColor: theme.background.color, // Append both background and backgroundColor to avoid conflicting prop error when selecting styling is applied
+      background: theme.background.color,
+    }),
+    [layout, theme]
+  );
   const columns = useMemo(() => getColumns(layout), [layout]);
   const { width } = useColumnSize(rect, columns, headerStyle, bodyStyle);
   const totalWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
   const [totalHeight, setTotalHeight] = useState(pageInfo.rowsPerPage * DEFAULT_ROW_HEIGHT);
-
-  const onScrollHandler = (event: React.SyntheticEvent) => {
-    if (headerRef.current) {
-      headerRef.current.scrollTo(event.currentTarget.scrollLeft);
-    }
-
-    if (bodyRef.current) {
-      bodyRef.current.scrollTo({
-        scrollLeft: event.currentTarget.scrollLeft,
-        scrollTop: event.currentTarget.scrollTop,
-      });
-    }
-
-    if (innerForwardRef.current) {
-      // Keep full size container in sync with the height calculation in react-window is doing
-      if (totalHeight !== innerForwardRef.current.clientHeight) {
-        setTotalHeight(innerForwardRef.current.clientHeight);
-      }
-    }
-  };
+  const scrollHandler = useScrollHandler(headerRef, bodyRef, innerForwardRef, totalHeight, setTotalHeight);
 
   useLayoutEffect(() => {
     if (ref.current) {
@@ -54,11 +43,11 @@ export default function TableContainer(props: TableContainerProps) {
       data-testid="table-container"
       ref={ref}
       style={{
-        overflow: 'auto',
-        width: '100%',
+        overflow: constraints.active ? 'hidden' : 'auto',
+        width: rect.width,
         height: rect.height - (paginationNeeded ? PAGINATION_HEIGHT : 0),
       }}
-      onScroll={onScrollHandler}
+      onScroll={scrollHandler}
     >
       <FullSizeContainer width={totalWidth} height={totalHeight} paginationNeeded={paginationNeeded}>
         <Header
@@ -81,8 +70,14 @@ export default function TableContainer(props: TableContainerProps) {
           columnWidth={width}
           forwardRef={bodyRef}
           innerForwardRef={innerForwardRef}
+          selectionsAPI={selectionsAPI}
         />
       </FullSizeContainer>
     </div>
   );
-}
+};
+
+// Export non memoized version for testing purpose
+export { TableContainer };
+
+export default memo(TableContainer);

@@ -2,12 +2,12 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { stardust } from '@nebula.js/stardust';
 import TableTotals from '../TableTotals';
-import { TableContextProvider } from '../../context';
-import { getTotalPosition } from '../../../handle-data';
-import * as handleKeyPress from '../../utils/handle-key-press';
-import * as handleAccessibility from '../../utils/accessibility-utils';
-import { generateLayout } from '../../../__test__/generate-test-data';
-import { TableData, ExtendedTheme, TableLayout, ExtendedSelectionAPI } from '../../../types';
+import { TableContextProvider } from '../../../context';
+import { getTotalPosition } from '../../../../handle-data';
+import * as handleKeyPress from '../../../utils/handle-key-press';
+import * as handleAccessibility from '../../../utils/accessibility-utils';
+import { generateLayout } from '../../../../__test__/generate-test-data';
+import { TableData, ExtendedTheme, TableLayout, ExtendedSelectionAPI } from '../../../../types';
 
 describe('<TableTotals />', () => {
   const rootElement = {} as HTMLElement;
@@ -49,7 +49,7 @@ describe('<TableTotals />', () => {
       getColorPickerColor: () => undefined,
       name: () => undefined,
       getStyle: () => undefined,
-      table: { body: { borderColor: '' } },
+      background: { isDark: false },
     } as unknown as ExtendedTheme;
     layout = generateLayout(2, 2, 10, [], [{ qText: '350' }, { qText: '-' }]);
     keyboard = {

@@ -13,6 +13,9 @@ const hexToRGBAorRGB = (hex: string): string => {
   return typeof a !== 'undefined' ? `rgba(${r},${g},${b},${a / 255})` : `rgb(${r},${g},${b})`;
 };
 
+/**
+ * Converts rgb, argb, rgba, hex and css colors to rgba(a)
+ */
 export function resolveToRGBAorRGB(input: string): string {
   // rgb
   let matches = /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i.exec(input);
@@ -46,6 +49,9 @@ export function resolveToRGBAorRGB(input: string): string {
   return 'none';
 }
 
+/**
+ * Determines if color is dark or bright by estimating the perceived brightness
+ */
 export function isDarkColor(color: string | undefined | null): boolean {
   if (color == null) return false;
 
@@ -58,11 +64,14 @@ export function isDarkColor(color: string | undefined | null): boolean {
   const b = matches?.[3];
   const validRGB = r !== undefined && g !== undefined && b !== undefined;
 
-  // Using the HSP (Highly Sensitive Poo) value, determine whether the color is light or dark
+  // Using the HSP (Highly Sensitive Perceived brightness) value, determine whether the color is light or dark
   // HSP < 125, the color is dark, otherwise, the color is light
   return validRGB ? 0.299 * +r + 0.587 * +g + 0.114 * +b < 125 : false;
 }
 
+/**
+ * Checks if color is completely transparent. Returns false if color is undefined
+ */
 export function isTransparentColor(color: string | undefined): boolean {
   if (color === undefined) return false;
 
@@ -72,6 +81,9 @@ export function isTransparentColor(color: string | undefined): boolean {
   return a !== undefined ? +a === 0 : false;
 }
 
+/**
+ * Removes the opacity from color, making it opaque. Returns undefined if color is undefined
+ */
 export function removeOpacity(color: string | undefined): string | undefined {
   if (color !== undefined) {
     const rgba = resolveToRGBAorRGB(color);

@@ -2,10 +2,10 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import TableCell from '@mui/material/TableCell';
 
-import { TableContextProvider } from '../../context';
+import { TableContextProvider } from '../../../context';
 import * as withSelections from '../withSelections';
-import { Announce, ExtendedSelectionAPI, Cell, Column } from '../../../types';
-import { CellStyle, CellHOCProps } from '../../types';
+import { Announce, ExtendedSelectionAPI, Cell, Column } from '../../../../types';
+import { CellStyle, CellHOCProps } from '../../../types';
 
 describe('withSelections', () => {
   const value = '100';

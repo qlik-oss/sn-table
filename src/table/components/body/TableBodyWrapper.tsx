@@ -1,16 +1,16 @@
 import React, { useEffect, useMemo, memo } from 'react';
 
-import getCellRenderer from '../utils/get-cell-renderer';
-import { useContextSelector, TableContext } from '../context';
-import { StyledTableBody, StyledBodyRow } from '../styles';
-import { addSelectionListeners } from '../utils/selections-utils';
-import { getBodyCellStyle } from '../utils/styling-utils';
-import { handleBodyKeyDown, handleBodyKeyUp } from '../utils/handle-key-press';
-import { handleClickToFocusBody } from '../utils/handle-click';
-import { Cell } from '../../types';
-import { TableBodyWrapperProps } from '../types';
+import getCellRenderer from '../../utils/get-cell-renderer';
+import { useContextSelector, TableContext } from '../../context';
+import { StyledTableBody, StyledBodyRow } from './styles';
+import { addSelectionListeners } from '../../utils/selections-utils';
+import { getBodyCellStyle } from '../../utils/styling-utils';
+import { handleBodyKeyDown, handleBodyKeyUp } from '../../utils/handle-key-press';
+import { handleClickToFocusBody } from '../../utils/handle-click';
+import { Cell } from '../../../types';
+import { TableBodyWrapperProps } from '../../types';
 import TableTotals from './TableTotals';
-import CellText from './CellText';
+import CellText from '../CellText';
 
 function TableBodyWrapper({
   rootElement,
@@ -42,7 +42,7 @@ function TableBodyWrapper({
   );
   const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
-  const cellStyle = { color: bodyCellStyle.color, backgroundColor: theme.table.backgroundColor };
+  const cellStyle = { color: bodyCellStyle.color, backgroundColor: theme.background.color };
   useEffect(() => {
     addSelectionListeners({
       api: selectionsAPI,

@@ -145,14 +145,11 @@ export interface PaginationColors {
   disabledIconColor: string;
 }
 
-export interface TableThemeColors {
-  tableBackgroundColorFromTheme: string;
-  backgroundColor?: string;
-  isBackgroundTransparentColor: boolean;
-  isBackgroundDarkColor: boolean;
-  borderColor: string;
-  body: BodyColors;
-  pagination: PaginationColors;
+export interface BackgroundColors {
+  tableColorFromTheme: string;
+  color?: string;
+  isDark: boolean;
+  isTransparent: boolean;
 }
 
 export interface ExtendedSelectionAPI extends stardust.ObjectSelections {
@@ -166,7 +163,7 @@ export interface ExtendedTranslator extends stardust.Translator {
 
 export interface ExtendedTheme extends stardust.Theme {
   name(): string;
-  table: TableThemeColors;
+  background: BackgroundColors;
 }
 
 export interface UseOptions {
@@ -182,7 +179,7 @@ export interface AnnounceArgs {
 
 export type Announce = (arg0: AnnounceArgs) => void;
 
-export type ChangeSortOrder = (column: Column) => Promise<void>;
+export type ChangeSortOrder = (column: Column, sortOrder?: string) => Promise<void>;
 
 export interface Galaxy {
   translator: ExtendedTranslator;

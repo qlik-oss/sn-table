@@ -4,6 +4,7 @@ import { DEFAULT_ROW_HEIGHT, HEADER_HEIGHT, PAGINATION_HEIGHT } from './constant
 import useInfiniteScrollData from './hooks/use-infinite-scroll-data';
 import { BodyProps } from './types';
 import Cell from './Cell';
+import useSelectionsEffect from './hooks/use-selections-effect';
 
 interface OnItemsRendered {
   overscanColumnStartIndex: number;
@@ -28,8 +29,9 @@ const Body = (props: BodyProps) => {
     pageInfo,
     paginationNeeded,
     bodyStyle,
+    selectionsAPI,
   } = props;
-  const { rowsInPage, loadData, debouncedLoadData } = useInfiniteScrollData(model, layout, pageInfo);
+  const { rowsInPage, loadData, debouncedLoadData } = useInfiniteScrollData(model, layout, pageInfo, columns);
   const rowCount = Math.min(pageInfo.rowsPerPage, layout.qHyperCube.qSize.qcy - pageInfo.page * pageInfo.rowsPerPage);
   const visibleRowCount = Math.min(rowCount, Math.ceil(rect.height / DEFAULT_ROW_HEIGHT));
   const visibleColumnCount = useMemo(
@@ -48,6 +50,8 @@ const Body = (props: BodyProps) => {
     [rect, columnWidth]
   ).count;
 
+  useSelectionsEffect(selectionsAPI, rowsInPage);
+
   useEffect(() => {
     // Initial data load
     const top = pageInfo.page * pageInfo.rowsPerPage;
@@ -59,7 +63,7 @@ const Body = (props: BodyProps) => {
 
     forwardRef.current.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: true });
     forwardRef.current.scrollTo({ scrollLeft: 0, scrollTop: 0 });
-  }, [layout, pageInfo, forwardRef]);
+  }, [layout, pageInfo, forwardRef, columnWidth]);
 
   const handleItemsRendered = useCallback(
     ({
@@ -68,16 +72,22 @@ const Body = (props: BodyProps) => {
       overscanRowStartIndex,
       overscanRowStopIndex,
     }: OnItemsRendered) => {
+      if (overscanRowStartIndex > rowCount) {
+        // Safe guard against when a new page is loaded and the user have scrolled on the previously loaded page.
+        // In such case overscanRowStartIndex could be larger than the actual amount of rows available
+        return;
+      }
+
       if (overscanColumnStartIndex > 0 || overscanRowStartIndex > 0) {
         const left = overscanColumnStartIndex;
-        const top = overscanRowStartIndex + pageInfo.page * pageInfo.rowsPerPage;
+        const top = overscanRowStartIndex - pageInfo.page * pageInfo.rowsPerPage;
         const width = overscanColumnStopIndex - overscanColumnStartIndex + 1;
         const height = overscanRowStopIndex - overscanRowStartIndex + 1;
 
         debouncedLoadData(left, top, width, height);
       }
     },
-    [debouncedLoadData, pageInfo]
+    [debouncedLoadData, pageInfo, rowCount]
   );
 
   return (

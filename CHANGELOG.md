@@ -1,3 +1,32 @@
+# [1.21.0](https://github.com/qlik-oss/sn-table/compare/v1.20.0...v1.21.0) (2022-12-08)
+
+### Bug Fixes
+
+- clicking conditions that results closing the context menu ([#761](https://github.com/qlik-oss/sn-table/issues/761)) ([20854fe](https://github.com/qlik-oss/sn-table/commit/20854fec1ceceb8cd7e5406227d004b67fd99f8f))
+- rename flag ([#768](https://github.com/qlik-oss/sn-table/issues/768)) ([a70936e](https://github.com/qlik-oss/sn-table/commit/a70936e8341fb13a04df2f6ea0c6387c1d1ea9dc))
+- resize colum width on rect change in vt mode ([#756](https://github.com/qlik-oss/sn-table/issues/756)) ([c476c7e](https://github.com/qlik-oss/sn-table/commit/c476c7e66cea2f636b4f09fb514e4514f762944e))
+- sanity check for selections api ([#767](https://github.com/qlik-oss/sn-table/issues/767)) ([2aab197](https://github.com/qlik-oss/sn-table/commit/2aab197c7986ea010db15d9227779cea69c93109))
+- to large data fetch in virtualized table ([#749](https://github.com/qlik-oss/sn-table/issues/749)) ([d401d2c](https://github.com/qlik-oss/sn-table/commit/d401d2c4382ce6011c916e68e292b94fd16959e3))
+
+### Features
+
+- add functionality to head cell menu sorting options ([#747](https://github.com/qlik-oss/sn-table/issues/747)) ([9e39a5f](https://github.com/qlik-oss/sn-table/commit/9e39a5f922e068a53b653e7ba371f5ea6b0230d6))
+- add lock icon to the head cell ([#758](https://github.com/qlik-oss/sn-table/issues/758)) ([2370a23](https://github.com/qlik-oss/sn-table/commit/2370a23fb810869ffcd8552b8ca0bcecc7031aeb))
+- copy cell value in vt mode ([#759](https://github.com/qlik-oss/sn-table/issues/759)) ([874313a](https://github.com/qlik-oss/sn-table/commit/874313a7694869cd4be5c92d9a6daa136bbe67d6))
+- use constraints in vt mode ([#757](https://github.com/qlik-oss/sn-table/issues/757)) ([eac5ee9](https://github.com/qlik-oss/sn-table/commit/eac5ee9375a9a234136ab56254d68231f2153355))
+
+# [1.20.0](https://github.com/qlik-oss/sn-table/compare/v1.19.1...v1.20.0) (2022-11-25)
+
+### Bug Fixes
+
+- cell padding in virtualized mode ([#742](https://github.com/qlik-oss/sn-table/issues/742)) ([377dd47](https://github.com/qlik-oss/sn-table/commit/377dd47d59bc5cf0f3bb57893335b522029c76a0))
+- column width calc ([#741](https://github.com/qlik-oss/sn-table/issues/741)) ([335512c](https://github.com/qlik-oss/sn-table/commit/335512cc3121b29e9a8ead7c9cfab8288142f4c5))
+
+### Features
+
+- change data section definition ([#740](https://github.com/qlik-oss/sn-table/issues/740)) ([9fa8337](https://github.com/qlik-oss/sn-table/commit/9fa83375b4e27b06ee6a0cdc69afe1cee956a72d))
+- initial infinite scroll ([#733](https://github.com/qlik-oss/sn-table/issues/733)) ([f319a71](https://github.com/qlik-oss/sn-table/commit/f319a71de7de58b7ea2cc2dbc8c41a16e8dc7ced))
+
 ## [1.19.1](https://github.com/qlik-oss/sn-table/compare/v1.19.0...v1.19.1) (2022-10-27)
 
 ### Bug Fixes
