@@ -2,7 +2,7 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TableContextProvider } from '../../../context';
-import { ExtendedTranslator, ExtendedSelectionAPI } from '../../../../types';
+import { ExtendedTranslator, ExtendedSelectionAPI, SortDirection } from '../../../../types';
 import { GeneratedStyling } from '../../../types';
 import HeadCellMenu from '../HeadCellMenu';
 
@@ -11,7 +11,7 @@ describe('<HeadCellMenu />', () => {
   let selectionsAPI: ExtendedSelectionAPI;
   let headerStyle: GeneratedStyling;
   let sortFromMenu: (evt: React.MouseEvent, sortOrder: string) => void;
-  const sortDirection: string = 'asc';
+  const sortDirection: SortDirection = 'asc';
   let isInteractionEnabled: boolean = true;
   let isCurrentColumnActive: boolean = false;
 

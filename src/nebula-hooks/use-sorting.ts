@@ -1,10 +1,10 @@
 import { useMemo } from '@nebula.js/stardust';
-import { Column, HyperCube } from '../types';
+import { Column, HyperCube, SortDirection } from '../types';
 
 export const sortingFactory = (model: EngineAPI.IGenericObject | undefined, hyperCube: HyperCube) => {
   if (!model) return undefined;
 
-  return async (column: Column, sortDirection?: string) => {
+  return async (column: Column, sortDirection?: SortDirection) => {
     const { isDim, colIdx } = column;
     const { qDimensionInfo, qMeasureInfo } = hyperCube;
     const idx = isDim ? colIdx : colIdx - qDimensionInfo.length;
@@ -29,7 +29,10 @@ export const sortingFactory = (model: EngineAPI.IGenericObject | undefined, hype
     ];
 
     // Revers
-    if ((sortDirection && sortDirection !== qSortIndicator) || (!sortDirection && colIdx === topSortIdx)) {
+    if (
+      (sortDirection && sortDirection?.charAt(0).toUpperCase() !== qSortIndicator) ||
+      (!sortDirection && colIdx === topSortIdx)
+    ) {
       const qPath = `/qHyperCubeDef/${isDim ? 'qDimensions' : 'qMeasures'}/${idx}/qDef/qReverseSort`;
 
       patches.push({

@@ -13,7 +13,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
 import { StyledMenuIconButton, StyledCellMenu } from './styles';
 import { GeneratedStyling } from '../../types';
-import { ExtendedTranslator } from '../../../types';
+import { ExtendedTranslator, SortDirection } from '../../../types';
 
 const MenuItem = ({
   children,
@@ -35,14 +35,14 @@ const MenuItem = ({
   isCurrentColumnActive: boolean;
 }) => {
   let isDisabled = false;
-  isDisabled = !isInteractionEnabled || (isCurrentColumnActive && sortOrder === (sortDirection === 'asc' ? 'A' : 'D'));
+  isDisabled = !isInteractionEnabled || (isCurrentColumnActive && sortOrder === sortDirection);
   return (
     <ListItem disablePadding>
       <ListItemButton
         disabled={isDisabled}
         className="sn-table-head-menu-item-button"
         onClick={(evt) => {
-          sortFromMenu(evt, sortOrder);
+          sortFromMenu(evt, sortOrder.charAt(0).toUpperCase());
           setOpen(false);
         }}
       >
@@ -63,8 +63,8 @@ export default function HeadCellMenu({
 }: {
   headerStyle: GeneratedStyling;
   translator: ExtendedTranslator;
-  sortDirection: string;
-  sortFromMenu: (evt: React.MouseEvent, sortOrder: string) => void;
+  sortDirection: SortDirection;
+  sortFromMenu: (evt: React.MouseEvent, sortOrder: SortDirection) => void;
   isInteractionEnabled: boolean;
   isCurrentColumnActive: boolean;
 }) {
@@ -116,7 +116,7 @@ export default function HeadCellMenu({
                 >
                   <MenuItem
                     itemTitle={translator.get('SNTable.MenuItem.SortAscending')}
-                    sortOrder="A"
+                    sortOrder="asc"
                     sortDirection={sortDirection}
                     sortFromMenu={sortFromMenu}
                     setOpen={setOpen}
@@ -128,7 +128,7 @@ export default function HeadCellMenu({
 
                   <MenuItem
                     itemTitle={translator.get('SNTable.MenuItem.SortDescending')}
-                    sortOrder="D"
+                    sortOrder="desc"
                     sortDirection={sortDirection}
                     sortFromMenu={sortFromMenu}
                     setOpen={setOpen}
