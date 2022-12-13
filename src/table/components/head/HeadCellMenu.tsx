@@ -34,13 +34,14 @@ const MenuItem = ({
   isInteractionEnabled: boolean;
   isCurrentColumnActive: boolean;
 }) => {
-  const isDisabled = isCurrentColumnActive && sortOrder === (sortDirection === 'asc' ? 'A' : 'D');
-//  const isDisabled = false;
+  let isDisabled = false;
+  isDisabled =
+    (!isInteractionEnabled ? !isDisabled : isDisabled) ||
+    (isCurrentColumnActive && sortOrder === (sortDirection === 'asc' ? 'A' : 'D'));
   return (
     <ListItem disablePadding>
       <ListItemButton
-      	disabled={isDisabled}
-        //disabled={!isInteractionEnabled ? !isDisabled : isDisabled}
+        disabled={isDisabled}
         className="sn-table-head-menu-item-button"
         onClick={(evt) => {
           sortFromMenu(evt, sortOrder);
@@ -69,7 +70,6 @@ export default function HeadCellMenu({
   isInteractionEnabled: boolean;
   isCurrentColumnActive: boolean;
 }) {
-  console.log('HeadMenu isInteractionEnabled: ', isInteractionEnabled);
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
 
@@ -122,7 +122,7 @@ export default function HeadCellMenu({
                     sortDirection={sortDirection}
                     sortFromMenu={sortFromMenu}
                     setOpen={setOpen}
-		    isInteractionEnabled={isInteractionEnabled}
+                    isInteractionEnabled={isInteractionEnabled}
                     isCurrentColumnActive={isCurrentColumnActive}
                   >
                     <ArrowUpwardIcon />
@@ -134,7 +134,7 @@ export default function HeadCellMenu({
                     sortDirection={sortDirection}
                     sortFromMenu={sortFromMenu}
                     setOpen={setOpen}
-		    isInteractionEnabled={isInteractionEnabled}
+                    isInteractionEnabled={isInteractionEnabled}
                     isCurrentColumnActive={isCurrentColumnActive}
                   >
                     <ArrowDownwardIcon />

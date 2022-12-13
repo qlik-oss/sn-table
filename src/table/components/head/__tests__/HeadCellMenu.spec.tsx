@@ -23,7 +23,7 @@ describe('<HeadCellMenu />', () => {
           translator={translator}
           sortDirection={sortDirection}
           sortFromMenu={sortFromMenu}
-	  isInteractionEnabled={isInteractionEnabled}
+          isInteractionEnabled={isInteractionEnabled}
           isCurrentColumnActive={isCurrentColumnActive}
         />
       </TableContextProvider>
