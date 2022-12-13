@@ -78,17 +78,18 @@ export interface ContextValue {
 }
 
 export interface GeneratedStyling {
-  borderColor: string;
+  borderBottomColor: string;
+  borderRightColor: string;
   padding?: string;
   fontFamily?: string;
   color?: string;
   fontSize?: string; // following the theme format so this should always be a string
-  cursor?: string;
-  borderWidth?: string;
   backgroundColor?: string;
   sortLabelColor?: string;
-  hoverBackgroundColor?: string;
-  hoverFontColor?: string;
+  hoverColors?: {
+    hoverBackgroundColor: string;
+    hoverFontColor: string;
+  };
 }
 
 export interface FooterStyle {
@@ -233,7 +234,7 @@ export interface TableBodyWrapperProps extends CommonTableProps {
   constraints: stardust.Constraints;
   announce: Announce;
   setShouldRefocus(): void;
-  tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
+  tableWrapperRef: React.MutableRefObject<HTMLDivElement | null>;
   areBasicFeaturesEnabled: boolean;
 }
 

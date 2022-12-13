@@ -10,7 +10,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import MoreHoriz from '@mui/icons-material/MoreHoriz';
+import More from '@qlik-trial/sprout/icons/More';
+
 import { StyledMenuIconButton, StyledCellMenu } from './styles';
 import { GeneratedStyling } from '../../types';
 import { ExtendedTranslator } from '../../../types';
@@ -59,6 +60,7 @@ export default function HeadCellMenu({
     <StyledCellMenu headerStyle={headerStyle}>
       <StyledMenuIconButton
         ref={anchorRef}
+        size="small"
         tabIndex={-1}
         id="sn-table-head-menu-button"
         aria-controls={open ? 'sn-table-head-menu' : undefined}
@@ -66,7 +68,7 @@ export default function HeadCellMenu({
         aria-haspopup="true"
         onClick={() => setOpen(!open)}
       >
-        <MoreHoriz />
+        <More size="small" />
       </StyledMenuIconButton>
       <Popper
         modifiers={[

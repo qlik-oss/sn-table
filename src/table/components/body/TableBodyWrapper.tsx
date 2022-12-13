@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, memo } from 'react';
+import TableBody from '@mui/material/TableBody';
 
 import getCellRenderer from '../../utils/get-cell-renderer';
 import { useContextSelector, TableContext } from '../../context';
-import { StyledTableBody, StyledBodyRow } from './styles';
+import { StyledBodyRow } from './styles';
 import { addSelectionListeners } from '../../utils/selections-utils';
 import { getBodyCellStyle } from '../../utils/styling-utils';
 import { handleBodyKeyDown, handleBodyKeyUp } from '../../utils/handle-key-press';
@@ -40,9 +41,10 @@ function TableBodyWrapper({
       ),
     [columnsStylingIDsJSON, isSelectionsEnabled]
   );
-  const bodyCellStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
+  const { hoverColors, ...cellStyle } = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
-  const cellStyle = { color: bodyCellStyle.color, backgroundColor: theme.background.color };
+  cellStyle.backgroundColor = theme.background.color;
+
   useEffect(() => {
     addSelectionListeners({
       api: selectionsAPI,
@@ -66,11 +68,11 @@ function TableBodyWrapper({
   );
 
   return (
-    <StyledTableBody paginationNeeded={paginationNeeded} bodyCellStyle={bodyCellStyle}>
+    <TableBody>
       {totalsPosition === 'top' ? totals : undefined}
       {rows.map((row) => (
         <StyledBodyRow
-          bodyCellStyle={bodyCellStyle}
+          hoverColors={hoverColors}
           hover={hoverEffect}
           tabIndex={-1}
           key={row.id}
@@ -108,7 +110,7 @@ function TableBodyWrapper({
                   column={column}
                   key={id}
                   align={align}
-                  styling={cellStyle}
+                  styling={cellStyle} // TODO see if we should rename this to cellStyle
                   tabIndex={-1}
                   announce={announce}
                   areBasicFeaturesEnabled={areBasicFeaturesEnabled}
@@ -128,7 +130,7 @@ function TableBodyWrapper({
         </StyledBodyRow>
       ))}
       {totalsPosition === 'bottom' ? totals : undefined}
-    </StyledTableBody>
+    </TableBody>
   );
 }
 

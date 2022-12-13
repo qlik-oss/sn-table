@@ -1,9 +1,10 @@
 import React, { memo, useEffect, useMemo, useRef } from 'react';
 import TableHead from '@mui/material/TableHead';
-
+import TableRow from '@mui/material/TableRow';
 import LockIcon from '@mui/icons-material/Lock';
+
 import { useContextSelector, TableContext } from '../../context';
-import { VisuallyHidden, StyledHeadRow, StyledSortLabel, StyledHeadCell, HeadCellContent } from './styles';
+import { VisuallyHidden, StyledSortLabel, StyledHeadCell, HeadCellContent } from './styles';
 import { getHeaderStyle } from '../../utils/styling-utils';
 import { handleHeadKeyDown } from '../../utils/handle-key-press';
 import {
@@ -27,12 +28,12 @@ function TableHeadWrapper({
   keyboard,
   areBasicFeaturesEnabled,
 }: TableHeadWrapperProps) {
-  const { columns, paginationNeeded } = tableData;
+  const { columns } = tableData;
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
-  const headRowRef = useRef<HTMLElement>();
+  const headRowRef = useRef<HTMLTableRowElement>(null);
   const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
 
   useEffect(() => {
@@ -41,7 +42,7 @@ function TableHeadWrapper({
 
   return (
     <TableHead>
-      <StyledHeadRow ref={headRowRef} paginationNeeded={paginationNeeded} className="sn-table-row">
+      <TableRow ref={headRowRef} className="sn-table-row">
         {columns.map((column, columnIndex) => {
           // The first cell in the head is focusable in sequential keyboard navigation,
           // when nebula does not handle keyboard navigation
@@ -108,7 +109,7 @@ function TableHeadWrapper({
             </StyledHeadCell>
           );
         })}
-      </StyledHeadRow>
+      </TableRow>
     </TableHead>
   );
 }

@@ -1,5 +1,4 @@
 import styled from '@mui/system/styled';
-import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import TableContainer from '@mui/material/TableContainer';
 
@@ -17,17 +16,12 @@ export const TableAnnouncer = styled('div')({
 
 // ---------- TableWrapper ----------
 
-export const StyledTableWrapper = styled(Paper, {
-  shouldForwardProp: (prop: string) => prop !== 'background' && prop !== 'paginationNeeded',
-})(({ background, paginationNeeded }) => ({
-  borderWidth: paginationNeeded ? '0px 1px 0px' : '0px',
-  borderStyle: 'solid',
-  borderColor: background.isDark ? '#F2F2F2' : '#D9D9D9',
+export const StyledTableWrapper = styled(Box, {
+  shouldForwardProp: (prop: string) => prop !== 'background',
+})(({ background }) => ({
   height: '100%',
   // TODO: see if we really need this or if we can use background.color
   backgroundColor: background.tableColorFromTheme,
-  boxShadow: 'none',
-  borderRadius: 'unset',
 }));
 
 export const StyledTableContainer = styled(TableContainer, {
@@ -41,5 +35,7 @@ export const StyledTableContainer = styled(TableContainer, {
 // ---------- CellText ----------
 
 export const StyledCellText = styled(Box)({
-  borderLeft: '0 !important',
+  margin: '0px 8px',
+  lineHeight: 'calc(4/3)',
+  fontSize: 'inherit',
 });

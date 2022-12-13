@@ -16,21 +16,6 @@ export const isColorSet = (prop: PaletteColor | undefined): boolean =>
   !!prop && (prop.color !== null || prop.index > -1);
 
 /**
- * Gets specified padding from layout if defined, otherwise calculates it based on specified font size if defined, otherwise returns default padding.
- * Note that the padding property can't be set in the styling panel
- */
-export function getPadding(styleObj: ContentStyling | undefined): string | undefined {
-  if (styleObj && (styleObj?.fontSize || 'padding' in styleObj)) {
-    let padding;
-    if (styleObj?.padding) ({ padding } = styleObj);
-    else if (styleObj?.fontSize) padding = `${styleObj.fontSize / 2}px ${styleObj.fontSize}px`;
-
-    return padding;
-  }
-  return undefined;
-}
-
-/**
  * Gets color from color picker. Defaults to default color if resolved color is invalid
  */
 export function getColor(defaultColor: string, theme: stardust.Theme, color = {}): string {
@@ -48,7 +33,10 @@ export const getAutoFontColor = (backgroundColor: string): string =>
 /**
  * get the border color based on the color of the background, returns bright color if background is darka dn vice versa
  */
-export const getBorderColor = (isBackgroundDark: boolean): string => (isBackgroundDark ? '#F2F2F2' : '#D9D9D9');
+export const getBorderColors = (isBackgroundDark: boolean) =>
+  isBackgroundDark
+    ? { borderBottomColor: '#F2F2F2', borderRightColor: '' }
+    : { borderBottomColor: '#EBEBEB', borderRightColor: '#D9D9D9' };
 
 /**
  * Gets base styling for either header or body taking table theme settings into account
@@ -68,8 +56,8 @@ export const getBaseStyling = (
     fontSize: (styleObj?.fontSize && `${styleObj.fontSize}px`) || fontSize,
     // When we do not set padding for content or header, but set font size,
     // we need to calculate the padding based on the font size
-    padding: getPadding(styleObj),
-    borderColor: getBorderColor(theme.background.isDark),
+    padding: styleObj && 'padding' in styleObj ? styleObj?.padding : undefined,
+    ...getBorderColors(theme.background.isDark),
   };
   // Remove all undefined and null values
   Object.keys(baseStyle).forEach((key) => {
@@ -92,7 +80,7 @@ export function getHeaderStyle(layout: TableLayout, theme: ExtendedTheme): Gener
   // - When the table background color from the sense theme has opacity,
   // removing that.
   const headerBackgroundColor = isDarkColor(headerStyle.color)
-    ? StylingDefaults.HEAD_BACKGROUND_LIGHT
+    ? StylingDefaults.WHITE
     : StylingDefaults.HEAD_BACKGROUND_DARK;
   headerStyle.backgroundColor = theme.background.isTransparent
     ? headerBackgroundColor
@@ -166,8 +154,10 @@ export function getBodyCellStyle(layout: TableLayout, theme: ExtendedTheme): Gen
 
   return {
     ...contentStyle,
-    hoverBackgroundColor,
-    hoverFontColor,
+    hoverColors: {
+      hoverBackgroundColor,
+      hoverFontColor,
+    },
   };
 }
 

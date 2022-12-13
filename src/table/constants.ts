@@ -42,12 +42,13 @@ export enum StylingDefaults {
 }
 
 export const COMMON_CELL_STYLING = {
-  padding: '7px 14px',
   height: 'auto',
-  lineHeight: '130%',
+  lineHeight: 'unset',
+  padding: '4px',
   borderStyle: 'solid',
+  borderWidth: '0px 1px 1px 0px',
   '&:focus': {
-    boxShadow: '0 0 0 2px #3f8ab3 inset',
+    boxShadow: '0 0 0 2px #177fe6 inset, 0 0 0 3px #fff inset',
     outline: 'none',
   },
 };
