@@ -35,9 +35,7 @@ const MenuItem = ({
   isCurrentColumnActive: boolean;
 }) => {
   let isDisabled = false;
-  isDisabled =
-    (!isInteractionEnabled ? !isDisabled : isDisabled) ||
-    (isCurrentColumnActive && sortOrder === (sortDirection === 'asc' ? 'A' : 'D'));
+  isDisabled = !isInteractionEnabled || (isCurrentColumnActive && sortOrder === (sortDirection === 'asc' ? 'A' : 'D'));
   return (
     <ListItem disablePadding>
       <ListItemButton
