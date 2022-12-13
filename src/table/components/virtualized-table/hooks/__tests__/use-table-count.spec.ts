@@ -64,7 +64,7 @@ describe('useTableCount', () => {
   });
 
   describe('visibleRowCount', () => {
-    test('should handle when number of rows is less then the number of rows that can be rendered', () => {
+    test('should handle when number of rows is less than the number of rows that can be rendered', () => {
       const expectedVisibleRowCount = 10;
       layout.qHyperCube.qSize.qcy = expectedVisibleRowCount;
       rect.height = 20 * DEFAULT_ROW_HEIGHT; // number of rows that can be rendered
@@ -74,7 +74,7 @@ describe('useTableCount', () => {
       expect(result.current.visibleRowCount).toEqual(expectedVisibleRowCount);
     });
 
-    test('should handle when number of rows is more then the number of rows that can be rendered', () => {
+    test('should handle when number of rows is more than the number of rows that can be rendered', () => {
       const expectedVisibleRowCount = 10;
       layout.qHyperCube.qSize.qcy = 20 * DEFAULT_ROW_HEIGHT; // number of rows
       rect.height = expectedVisibleRowCount * DEFAULT_ROW_HEIGHT; // number of rows that can be rendered
@@ -86,7 +86,7 @@ describe('useTableCount', () => {
   });
 
   describe('visibleColumnCount', () => {
-    test('should handle when number of columns is less then the number of columns that can be rendered', () => {
+    test('should handle when number of columns is less than the number of columns that can be rendered', () => {
       columnWidth = [50, 50, 50, 50];
       layout.qHyperCube.qSize.qcx = columnWidth.length;
       rect.width = 50 * columnWidth.length + 50;
@@ -96,7 +96,7 @@ describe('useTableCount', () => {
       expect(result.current.visibleColumnCount).toEqual(columnWidth.length);
     });
 
-    test('should handle when number of columns is more then the number of columns that can be rendered', () => {
+    test('should handle when number of columns is more than the number of columns that can be rendered', () => {
       columnWidth = [50, 50, 50, 50];
       layout.qHyperCube.qSize.qcx = columnWidth.length;
       rect.width = 50 * columnWidth.length - 50;

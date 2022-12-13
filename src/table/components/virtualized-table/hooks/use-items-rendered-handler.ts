@@ -4,7 +4,7 @@ import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../constants';
 import { LoadData } from './use-data';
 import { ScrollDirection } from './use-scroll-direction';
 
-interface OnItemsRendered {
+export interface OnItemsRendered {
   overscanColumnStartIndex: number;
   overscanColumnStopIndex: number;
   overscanRowStartIndex: number;
@@ -15,7 +15,7 @@ interface OnItemsRendered {
   visibleRowStopIndex: number;
 }
 
-interface ItemsHandlerProps {
+export interface ItemsHandlerProps {
   layout: TableLayout;
   loadRows: LoadData;
   loadColumns: LoadData;
