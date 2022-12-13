@@ -78,6 +78,7 @@ function TableHeadWrapper({
               tabIndex={tabIndex}
               aria-sort={ariaSort}
               aria-pressed={isCurrentColumnActive}
+              isInteractionEnabled={isInteractionEnabled}
               onKeyDown={handleKeyDown}
               onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
               onClick={(evt: React.MouseEvent) => handleClickToSort(evt, column, changeSortOrder, isInteractionEnabled)}
@@ -101,12 +102,13 @@ function TableHeadWrapper({
                     </VisuallyHidden>
                   )}
                 </StyledSortLabel>
-                {areBasicFeaturesEnabled && (
+                {true && (
                   <HeadCellMenu
                     headerStyle={headerStyle}
                     translator={translator}
                     sortDirection={column.sortDirection}
                     sortFromMenu={sortFromMenu}
+		    isInteractionEnabled={isInteractionEnabled}
                     isCurrentColumnActive={isCurrentColumnActive}
                   />
                 )}

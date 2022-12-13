@@ -22,6 +22,7 @@ const MenuItem = ({
   sortDirection,
   sortFromMenu,
   setOpen,
+  isInteractionEnabled,
   isCurrentColumnActive,
 }: {
   children: any;
@@ -30,13 +31,16 @@ const MenuItem = ({
   sortDirection: string;
   sortFromMenu(evt: React.MouseEvent, sortOrder: string): void;
   setOpen: any;
+  isInteractionEnabled: boolean;
   isCurrentColumnActive: boolean;
 }) => {
   const isDisabled = isCurrentColumnActive && sortOrder === (sortDirection === 'asc' ? 'A' : 'D');
+//  const isDisabled = false;
   return (
     <ListItem disablePadding>
       <ListItemButton
-        disabled={isDisabled}
+      	disabled={isDisabled}
+        //disabled={!isInteractionEnabled ? !isDisabled : isDisabled}
         className="sn-table-head-menu-item-button"
         onClick={(evt) => {
           sortFromMenu(evt, sortOrder);
@@ -55,14 +59,17 @@ export default function HeadCellMenu({
   translator,
   sortDirection,
   sortFromMenu,
+  isInteractionEnabled,
   isCurrentColumnActive,
 }: {
   headerStyle: GeneratedStyling;
   translator: ExtendedTranslator;
   sortDirection: string;
   sortFromMenu: (evt: React.MouseEvent, sortOrder: string) => void;
+  isInteractionEnabled: boolean;
   isCurrentColumnActive: boolean;
 }) {
+  console.log('HeadMenu isInteractionEnabled: ', isInteractionEnabled);
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
 
@@ -115,6 +122,7 @@ export default function HeadCellMenu({
                     sortDirection={sortDirection}
                     sortFromMenu={sortFromMenu}
                     setOpen={setOpen}
+		    isInteractionEnabled={isInteractionEnabled}
                     isCurrentColumnActive={isCurrentColumnActive}
                   >
                     <ArrowUpwardIcon />
@@ -126,6 +134,7 @@ export default function HeadCellMenu({
                     sortDirection={sortDirection}
                     sortFromMenu={sortFromMenu}
                     setOpen={setOpen}
+		    isInteractionEnabled={isInteractionEnabled}
                     isCurrentColumnActive={isCurrentColumnActive}
                   >
                     <ArrowDownwardIcon />

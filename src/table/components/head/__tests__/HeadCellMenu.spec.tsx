@@ -10,6 +10,7 @@ describe('<HeadCellMenu />', () => {
   let translator: ExtendedTranslator;
   let selectionsAPI: ExtendedSelectionAPI;
   let headerStyle: GeneratedStyling;
+  let isInteractionEnabled: boolean;
   let sortFromMenu: (evt: React.MouseEvent, sortOrder: string) => void;
   const sortDirection: string = 'asc';
   let isCurrentColumnActive: boolean = false;
@@ -22,6 +23,7 @@ describe('<HeadCellMenu />', () => {
           translator={translator}
           sortDirection={sortDirection}
           sortFromMenu={sortFromMenu}
+	  isInteractionEnabled={isInteractionEnabled}
           isCurrentColumnActive={isCurrentColumnActive}
         />
       </TableContextProvider>
