@@ -2,7 +2,7 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TableContextProvider } from '../../../context';
-import { ExtendedTranslator, ExtendedSelectionAPI } from '../../../../types';
+import { ExtendedTranslator, ExtendedSelectionAPI, SortDirection } from '../../../../types';
 import { GeneratedStyling } from '../../../types';
 import HeadCellMenu from '../HeadCellMenu';
 
@@ -11,7 +11,8 @@ describe('<HeadCellMenu />', () => {
   let selectionsAPI: ExtendedSelectionAPI;
   let headerStyle: GeneratedStyling;
   let sortFromMenu: (evt: React.MouseEvent, sortOrder: string) => void;
-  const sortDirection: string = 'asc';
+  const sortDirection: SortDirection = 'asc';
+  let isInteractionEnabled: boolean = true;
   let isCurrentColumnActive: boolean = false;
 
   const renderTableHeadCellMenu = (cellCoordMock?: [number, number]) =>
@@ -22,6 +23,7 @@ describe('<HeadCellMenu />', () => {
           translator={translator}
           sortDirection={sortDirection}
           sortFromMenu={sortFromMenu}
+          isInteractionEnabled={isInteractionEnabled}
           isCurrentColumnActive={isCurrentColumnActive}
         />
       </TableContextProvider>
@@ -63,6 +65,20 @@ describe('<HeadCellMenu />', () => {
     const element = getByText('SNTable.MenuItem.SortAscending').closest('.sn-table-head-menu-item-button');
     expect(element).toHaveAttribute('aria-disabled', 'true');
     userEvent.click(element as HTMLElement);
+    expect(sortFromMenu).not.toHaveBeenCalled();
+  });
+
+  it('should disable sorting option when the column is in selection mode', () => {
+    isInteractionEnabled = false;
+    const { getByRole, getByText } = renderTableHeadCellMenu();
+    fireEvent.click(getByRole('button'));
+    const ascendingBtn = getByText('SNTable.MenuItem.SortAscending').closest('.sn-table-head-menu-item-button');
+    const descendingBtn = getByText('SNTable.MenuItem.SortDescending').closest('.sn-table-head-menu-item-button');
+    expect(ascendingBtn).toHaveAttribute('aria-disabled', 'true');
+    expect(descendingBtn).toHaveAttribute('aria-disabled', 'true');
+    userEvent.click(ascendingBtn as HTMLElement);
+    expect(sortFromMenu).not.toHaveBeenCalled();
+    userEvent.click(descendingBtn as HTMLElement);
     expect(sortFromMenu).not.toHaveBeenCalled();
   });
 

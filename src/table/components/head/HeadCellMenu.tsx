@@ -13,7 +13,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
 import { StyledMenuIconButton, StyledCellMenu } from './styles';
 import { GeneratedStyling } from '../../types';
-import { ExtendedTranslator } from '../../../types';
+import { ExtendedTranslator, SortDirection } from '../../../types';
 
 const MenuItem = ({
   children,
@@ -22,6 +22,7 @@ const MenuItem = ({
   sortDirection,
   sortFromMenu,
   setOpen,
+  isInteractionEnabled,
   isCurrentColumnActive,
 }: {
   children: any;
@@ -30,9 +31,11 @@ const MenuItem = ({
   sortDirection: string;
   sortFromMenu(evt: React.MouseEvent, sortOrder: string): void;
   setOpen: any;
+  isInteractionEnabled: boolean;
   isCurrentColumnActive: boolean;
 }) => {
-  const isDisabled = isCurrentColumnActive && sortOrder === (sortDirection === 'asc' ? 'A' : 'D');
+  let isDisabled = false;
+  isDisabled = !isInteractionEnabled || (isCurrentColumnActive && sortOrder === sortDirection);
   return (
     <ListItem disablePadding>
       <ListItemButton
@@ -55,12 +58,14 @@ export default function HeadCellMenu({
   translator,
   sortDirection,
   sortFromMenu,
+  isInteractionEnabled,
   isCurrentColumnActive,
 }: {
   headerStyle: GeneratedStyling;
   translator: ExtendedTranslator;
-  sortDirection: string;
-  sortFromMenu: (evt: React.MouseEvent, sortOrder: string) => void;
+  sortDirection: SortDirection;
+  sortFromMenu: (evt: React.MouseEvent, sortOrder: SortDirection) => void;
+  isInteractionEnabled: boolean;
   isCurrentColumnActive: boolean;
 }) {
   const [open, setOpen] = useState(false);
@@ -111,10 +116,11 @@ export default function HeadCellMenu({
                 >
                   <MenuItem
                     itemTitle={translator.get('SNTable.MenuItem.SortAscending')}
-                    sortOrder="A"
+                    sortOrder="asc"
                     sortDirection={sortDirection}
                     sortFromMenu={sortFromMenu}
                     setOpen={setOpen}
+                    isInteractionEnabled={isInteractionEnabled}
                     isCurrentColumnActive={isCurrentColumnActive}
                   >
                     <ArrowUpwardIcon />
@@ -122,10 +128,11 @@ export default function HeadCellMenu({
 
                   <MenuItem
                     itemTitle={translator.get('SNTable.MenuItem.SortDescending')}
-                    sortOrder="D"
+                    sortOrder="desc"
                     sortDirection={sortDirection}
                     sortFromMenu={sortFromMenu}
                     setOpen={setOpen}
+                    isInteractionEnabled={isInteractionEnabled}
                     isCurrentColumnActive={isCurrentColumnActive}
                   >
                     <ArrowDownwardIcon />

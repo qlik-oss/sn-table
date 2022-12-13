@@ -29,7 +29,7 @@ export const StyledHeadCell = styled(TableCell, {
   pointer: 'cursor',
   borderWidth: '1px 1px 1px 0px',
   '&&:hover, &&:focus': {
-    '& svg, & button': { opacity: 1 },
+    '& button, & svg': { opacity: 1 },
   },
 }));
 
