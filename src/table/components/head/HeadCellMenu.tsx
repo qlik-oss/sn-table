@@ -42,7 +42,7 @@ const MenuItem = ({
         disabled={isDisabled}
         className="sn-table-head-menu-item-button"
         onClick={(evt) => {
-          sortFromMenu(evt, sortOrder.charAt(0).toUpperCase());
+          sortFromMenu(evt, sortOrder);
           setOpen(false);
         }}
       >

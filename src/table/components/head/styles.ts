@@ -21,16 +21,15 @@ export const StyledHeadRow = styled(TableRow, {
 }));
 
 export const StyledHeadCell = styled(TableCell, {
-  shouldForwardProp: (prop: string) => prop !== 'headerStyle' && prop !== 'isInteractionEnabled',
-})(({ headerStyle, isInteractionEnabled }) => ({
+  shouldForwardProp: (prop: string) => prop !== 'headerStyle',
+})(({ headerStyle }) => ({
   ...COMMON_CELL_STYLING,
   ...headerStyle,
   lineHeight: '150%',
   pointer: 'cursor',
   borderWidth: '1px 1px 1px 0px',
   '&&:hover, &&:focus': {
-    '& button': { opacity: 1 },
-    '& svg': { opacity: isInteractionEnabled ? 1 : 0 },
+    '& button, & svg': { opacity: 1 },
   },
 }));
 

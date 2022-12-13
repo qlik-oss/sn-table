@@ -79,7 +79,6 @@ function TableHeadWrapper({
               tabIndex={tabIndex}
               aria-sort={ariaSort}
               aria-pressed={isCurrentColumnActive}
-              isInteractionEnabled={isInteractionEnabled}
               onKeyDown={handleKeyDown}
               onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
               onClick={(evt: React.MouseEvent) => handleClickToSort(evt, column, changeSortOrder, isInteractionEnabled)}
