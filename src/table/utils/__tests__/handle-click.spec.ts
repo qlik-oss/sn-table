@@ -90,6 +90,7 @@ describe('handle-click', () => {
     it('should sort the column when the event target is not on the head cell menu button', () => {
       evt = {
         target: {
+          getElementsByClassName: () => [{ ariaDisabled: false }],
           closest: () => false,
         } as unknown as HTMLElement,
       } as unknown as MouseEvent;
@@ -100,7 +101,19 @@ describe('handle-click', () => {
     it('should not sort the column when the event target is on the head cell menu button', () => {
       evt = {
         target: {
+          getElementsByClassName: () => [{ ariaDisabled: false }],
           closest: () => true,
+        } as unknown as HTMLElement,
+      } as unknown as MouseEvent;
+      handleClickToSort(evt, column, changeSortOrder, isInteractionEnabled);
+      expect(changeSortOrder).not.toHaveBeenCalled();
+    });
+
+    it('should not sort the column when the event target on menu item button is disabled', () => {
+      evt = {
+        target: {
+          getElementsByClassName: () => [{ ariaDisabled: true }],
+          closest: () => false,
         } as unknown as HTMLElement,
       } as unknown as MouseEvent;
       handleClickToSort(evt, column, changeSortOrder, isInteractionEnabled);

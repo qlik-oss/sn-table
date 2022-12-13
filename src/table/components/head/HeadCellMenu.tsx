@@ -19,18 +19,25 @@ const MenuItem = ({
   children,
   itemTitle,
   sortOrder,
+  sortDirection,
   sortFromMenu,
   setOpen,
+  isCurrentColumnActive,
 }: {
   children: any;
   itemTitle: string;
   sortOrder: string;
+  sortDirection: string;
   sortFromMenu(evt: React.MouseEvent, sortOrder: string): void;
   setOpen: any;
+  isCurrentColumnActive: boolean;
 }) => {
+  const isDisabled = isCurrentColumnActive && sortOrder === (sortDirection === 'asc' ? 'A' : 'D');
   return (
     <ListItem disablePadding>
       <ListItemButton
+        disabled={isDisabled}
+        className="sn-table-head-menu-item-button"
         onClick={(evt) => {
           sortFromMenu(evt, sortOrder);
           setOpen(false);
@@ -46,11 +53,15 @@ const MenuItem = ({
 export default function HeadCellMenu({
   headerStyle,
   translator,
+  sortDirection,
   sortFromMenu,
+  isCurrentColumnActive,
 }: {
   headerStyle: GeneratedStyling;
   translator: ExtendedTranslator;
+  sortDirection: string;
   sortFromMenu: (evt: React.MouseEvent, sortOrder: string) => void;
+  isCurrentColumnActive: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
@@ -101,8 +112,10 @@ export default function HeadCellMenu({
                   <MenuItem
                     itemTitle={translator.get('SNTable.MenuItem.SortAscending')}
                     sortOrder="A"
+                    sortDirection={sortDirection}
                     sortFromMenu={sortFromMenu}
                     setOpen={setOpen}
+                    isCurrentColumnActive={isCurrentColumnActive}
                   >
                     <ArrowUpwardIcon />
                   </MenuItem>
@@ -110,8 +123,10 @@ export default function HeadCellMenu({
                   <MenuItem
                     itemTitle={translator.get('SNTable.MenuItem.SortDescending')}
                     sortOrder="D"
+                    sortDirection={sortDirection}
                     sortFromMenu={sortFromMenu}
                     setOpen={setOpen}
+                    isCurrentColumnActive={isCurrentColumnActive}
                   >
                     <ArrowDownwardIcon />
                   </MenuItem>

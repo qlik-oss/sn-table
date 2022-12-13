@@ -102,7 +102,13 @@ function TableHeadWrapper({
                   )}
                 </StyledSortLabel>
                 {areBasicFeaturesEnabled && (
-                  <HeadCellMenu headerStyle={headerStyle} translator={translator} sortFromMenu={sortFromMenu} />
+                  <HeadCellMenu
+                    headerStyle={headerStyle}
+                    translator={translator}
+                    sortDirection={column.sortDirection}
+                    sortFromMenu={sortFromMenu}
+                    isCurrentColumnActive={isCurrentColumnActive}
+                  />
                 )}
               </HeadCellContent>
             </StyledHeadCell>
