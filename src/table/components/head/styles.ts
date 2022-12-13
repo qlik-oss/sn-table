@@ -30,7 +30,7 @@ export const StyledHeadCell = styled(TableCell, {
   borderWidth: '1px 1px 1px 0px',
   '&&:hover, &&:focus': {
     '& button': { opacity: 1 },
-    '& svg': { opacity: !isInteractionEnabled ? 0 : 1 },
+    '& svg': { opacity: isInteractionEnabled ? 1 : 0 },
   },
 }));
 

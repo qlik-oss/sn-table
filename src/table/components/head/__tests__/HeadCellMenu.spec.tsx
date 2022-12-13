@@ -10,9 +10,9 @@ describe('<HeadCellMenu />', () => {
   let translator: ExtendedTranslator;
   let selectionsAPI: ExtendedSelectionAPI;
   let headerStyle: GeneratedStyling;
-  let isInteractionEnabled: boolean;
   let sortFromMenu: (evt: React.MouseEvent, sortOrder: string) => void;
   const sortDirection: string = 'asc';
+  let isInteractionEnabled: boolean = true;
   let isCurrentColumnActive: boolean = false;
 
   const renderTableHeadCellMenu = (cellCoordMock?: [number, number]) =>
@@ -65,6 +65,20 @@ describe('<HeadCellMenu />', () => {
     const element = getByText('SNTable.MenuItem.SortAscending').closest('.sn-table-head-menu-item-button');
     expect(element).toHaveAttribute('aria-disabled', 'true');
     userEvent.click(element as HTMLElement);
+    expect(sortFromMenu).not.toHaveBeenCalled();
+  });
+
+  it('should disable sorting option when the column is in selection mode', () => {
+    isInteractionEnabled = false;
+    const { getByRole, getByText } = renderTableHeadCellMenu();
+    fireEvent.click(getByRole('button'));
+    const ascendingBtn = getByText('SNTable.MenuItem.SortAscending').closest('.sn-table-head-menu-item-button');
+    const descendingBtn = getByText('SNTable.MenuItem.SortDescending').closest('.sn-table-head-menu-item-button');
+    expect(ascendingBtn).toHaveAttribute('aria-disabled', 'true');
+    expect(descendingBtn).toHaveAttribute('aria-disabled', 'true');
+    userEvent.click(ascendingBtn as HTMLElement);
+    expect(sortFromMenu).not.toHaveBeenCalled();
+    userEvent.click(descendingBtn as HTMLElement);
     expect(sortFromMenu).not.toHaveBeenCalled();
   });
 

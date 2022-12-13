@@ -102,7 +102,7 @@ function TableHeadWrapper({
                     </VisuallyHidden>
                   )}
                 </StyledSortLabel>
-                {areBasicFeaturesEnabled && (
+                {true && (
                   <HeadCellMenu
                     headerStyle={headerStyle}
                     translator={translator}
