@@ -63,10 +63,6 @@ class SnTable {
     return { innerText, sort };
   }
 
-  async getTableHeaderValues(): Promise<string[]> {
-    return this.getTextFromLocator('body', selectors.header.cells);
-  }
-
   async getTextFromLocator(parent: Locator | string, child: Locator | string): Promise<string[]> {
     let parentLocator: Locator;
     let childLocator: Locator;
@@ -86,40 +82,6 @@ class SnTable {
     return workArray;
   }
 
-  async getCellValuesFromTableBody(arr: number[][] = [[1, 1]], selector?: string): Promise<string[]> {
-    const length: number = arr.length;
-    const values: string[] = [];
-    if (length === 1) {
-      const loc: Locator = this.page.locator(selectors.cell(arr[0][0], arr[0][1], selector));
-      const val: string = await this.getInnerText(loc);
-      values.push(val);
-    }
-    if (length === 2) {
-      const workArray: any[] = [];
-      const [startX, startY] = arr[0];
-      const [endX, endY] = arr[1];
-      for (let i: number = startX; i <= endX; i++) {
-        for (let j: number = startY; j <= endY; j++) {
-          workArray.push([i, j]);
-        }
-      }
-      for await (const iterator of workArray) {
-        const loc: Locator = this.page.locator(selectors.cell(iterator[0], iterator[1], selector));
-        const val: string = await this.getInnerText(loc);
-        values.push(val);
-      }
-    }
-    if (length > 2) {
-      for await (const iterator of arr) {
-        const val: string = await this.getInnerText(
-          this.page.locator(selectors.cell(iterator[0], iterator[1], selector))
-        );
-        values.push(val);
-      }
-    }
-    return values;
-  }
-
   async getInnerText(loc: Locator): Promise<string> {
     await loc.isVisible();
     return loc.innerText();
@@ -127,7 +89,7 @@ class SnTable {
 
   async getInnerTextAndReplace(loc: Locator, searchValue: string | RegExp, replaceValue: string): Promise<string> {
     let innerText: string = await this.getInnerText(loc);
-    innerText = innerText.replaceAll(searchValue, replaceValue);
+    innerText = innerText.replace(searchValue, replaceValue);
     return innerText;
   }
 
@@ -139,27 +101,6 @@ class SnTable {
     const target: Locator = this.getCellByText(loc, text);
     const firstTarget: Locator = target.first();
     await firstTarget.click();
-  }
-
-  // pagination:
-  async setRowsPerPage(loc: Locator, rows: number): Promise<void> {
-    const select: Locator = loc.locator(selectors.pagination.rowsPerPage);
-    await select.selectOption(String(rows));
-  }
-
-  async getRange(loc: Locator): Promise<string> {
-    const element: Locator = loc.locator(selectors.pagination.range);
-    return element.innerText();
-  }
-
-  async getPaginationButtonsStatuses(loc: Locator): Promise<string[]> {
-    const arr: any[] = [];
-    const elements: Locator = loc.locator(selectors.pagination.buttons);
-    for (let i = 0; i < (await elements.count()); i++) {
-      const element = elements.nth(i);
-      arr.push((await element.getAttribute('aria-disabled')) as string);
-    }
-    return arr;
   }
 
   // keyboard:
@@ -184,20 +125,6 @@ class SnTable {
       await this.page.keyboard.press(step?.key);
     }
     if (steps.length) await this.pressKeys(steps);
-  }
-
-  // test
-  async pressKeysAndWaitThenCheckSelectedAndFocusedText(table: Locator, expectation: Collection): Promise<void> {
-    for await (const step of expectation.steps) {
-      await test.step('Do actions', async () => {
-        await this.pressKeys(step.keys);
-        await this.page.locator(step.waitFor.selector).waitFor(step.waitFor.options);
-      });
-      await test.step('Check expectations', async () => {
-        await expect.poll(async () => this.getSelectedCellsText(table)).toMatchObject(step.selected);
-        await expect.poll(async () => this.getFocusedCellsText(table)).toBe(step.focused);
-      });
-    }
   }
 }
 

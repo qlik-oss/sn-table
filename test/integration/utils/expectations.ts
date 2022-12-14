@@ -19,21 +19,34 @@ function getStep(key: Key, times: number = 1): Collection {
 }
 
 const expectations: Collection = {
-  scenario_1: {
+  before: {
+    clickOnCell: '&lowbar;',
+  },
+  navigateWithArrows: {
     steps: [
       {
         step: 1,
-        description: 'cmd/ctrl + shift + right to change to next',
-        keys: [getStep('Meta+Shift+ArrowRight')],
-        page: 2,
-        buttonsDisabled: ['false', 'false', 'false', 'false'],
+        description: 'Press Arrow Up then the focused cell should be "&oline;"',
+        keys: [getStep('ArrowUp')],
+        content: '&oline;',
       },
       {
         step: 2,
-        description: 'cmd/ctrl + shift + left to change to prev',
-        keys: [getStep('Meta+Shift+ArrowLeft')],
-        page: 1,
-        buttonsDisabled: ['true', 'true', 'false', 'false'],
+        description: 'Press Arrow Right 4x then the focused cell should be "Low Line"',
+        keys: [getStep('ArrowRight', 4)],
+        content: 'Low Line',
+      },
+      {
+        step: 3,
+        description: 'Press Arrow Down 2x then the focused cell should be "En Dash"',
+        keys: [getStep('ArrowDown', 2)],
+        content: 'En Dash',
+      },
+      {
+        step: 4,
+        description: 'Press Arrow Left 3x then the focused cell should be "Hyphen"',
+        keys: [getStep('ArrowLeft', 3)],
+        content: 'Hyphen',
       },
     ],
   },
