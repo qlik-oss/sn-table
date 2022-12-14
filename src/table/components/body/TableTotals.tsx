@@ -21,7 +21,10 @@ function TableTotals({
   const { columns, totalsPosition, rows } = tableData;
   const headRowHeight = useContextSelector(TableContext, (value) => value.headRowHeight);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
-  const totalsStyle = useMemo(() => getTotalsCellStyle(layout, theme), [layout, theme.name()]);
+  const totalsStyle = useMemo(
+    () => getTotalsCellStyle(layout, theme, totalsPosition),
+    [layout, theme.name(), totalsPosition]
+  );
   const isTop = totalsPosition === 'top';
 
   return (

@@ -28,11 +28,12 @@ function TableHeadWrapper({
   keyboard,
   areBasicFeaturesEnabled,
 }: TableHeadWrapperProps) {
-  const { columns } = tableData;
+  const { columns, totalsPosition } = tableData;
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
-  const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
+  const borderSeparator = totalsPosition === 'top' ? '' : 'bottom';
+  const headerStyle = useMemo(() => getHeaderStyle(layout, theme, borderSeparator), [layout, theme, totalsPosition]);
   const headRowRef = useRef<HTMLTableRowElement>(null);
   const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
 

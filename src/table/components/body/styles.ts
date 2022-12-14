@@ -27,7 +27,6 @@ export const StyledBodyCell = styled(TableCell, {
 })(({ cellStyle }) => ({
   ...COMMON_CELL_STYLING,
   ...cellStyle,
-  userSelect: 'none',
 }));
 
 // ---------- TableTotals ----------
@@ -39,8 +38,8 @@ export const StyledTotalsCell = styled(TableCell, {
   ...totalsStyle,
   fontWeight: 'bold',
   position: 'sticky',
-  borderWidth: isTop ? '0px 1px 2px 0px' : '2px 1px 1px 0px',
+  borderWidth: isTop ? '0px 1px 1px 0px' : '1px 1px 1px 0px',
   top: isTop && headRowHeight,
   bottom: !isTop && 0,
-  marginTop: 0,
+  // marginTop: 0,
 }));

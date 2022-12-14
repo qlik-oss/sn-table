@@ -47,6 +47,7 @@ export const COMMON_CELL_STYLING = {
   padding: '4px',
   borderStyle: 'solid',
   borderWidth: '0px 1px 1px 0px',
+  userSelect: 'none',
   '&:focus': {
     boxShadow: '0 0 0 2px #177fe6 inset, 0 0 0 3px #fff inset',
     outline: 'none',
