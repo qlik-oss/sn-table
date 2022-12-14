@@ -11,7 +11,7 @@ describe('<HeadCellMenu />', () => {
   let selectionsAPI: ExtendedSelectionAPI;
   let headerStyle: GeneratedStyling;
   let sortFromMenu: (evt: React.MouseEvent, sortOrder: string) => void;
-  const sortDirection: SortDirection = 'asc';
+  const sortDirection: SortDirection = 'A';
   let isInteractionEnabled: boolean = true;
   let isCurrentColumnActive: boolean = false;
 

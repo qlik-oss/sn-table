@@ -1,14 +1,12 @@
 import { useMemo } from '@nebula.js/stardust';
 import { Column, HyperCube, SortDirection } from '../types';
 
-export const sortingFactory = (model: EngineAPI.IGenericObject | undefined, hyperCube: HyperCube) => {
+export const sortingFactory = (model: EngineAPI.IGenericObject | undefined, dimensionLength: number) => {
   if (!model) return undefined;
 
-  return async (column: Column, sortDirection?: SortDirection) => {
-    const { isDim, colIdx } = column;
-    const { qDimensionInfo, qMeasureInfo } = hyperCube;
-    const idx = isDim ? colIdx : colIdx - qDimensionInfo.length;
-    const { qReverseSort, qSortIndicator } = isDim ? qDimensionInfo[idx] : qMeasureInfo[idx];
+  return async (column: Column, newSortDirection?: SortDirection) => {
+    const { isDim, colIdx, sortDirection, qReverseSort } = column;
+    const idx = isDim ? colIdx : colIdx - dimensionLength;
 
     // The sort order from the properties is needed since it contains hidden columns
     const properties = await model.getEffectiveProperties();
@@ -29,10 +27,7 @@ export const sortingFactory = (model: EngineAPI.IGenericObject | undefined, hype
     ];
 
     // Revers
-    if (
-      (sortDirection && sortDirection?.charAt(0).toUpperCase() !== qSortIndicator) ||
-      (!sortDirection && colIdx === topSortIdx)
-    ) {
+    if ((newSortDirection && newSortDirection !== sortDirection) || (!newSortDirection && colIdx === topSortIdx)) {
       const qPath = `/qHyperCubeDef/${isDim ? 'qDimensions' : 'qMeasures'}/${idx}/qDef/qReverseSort`;
 
       patches.push({
@@ -46,5 +41,5 @@ export const sortingFactory = (model: EngineAPI.IGenericObject | undefined, hype
 };
 
 const useSorting = (model: EngineAPI.IGenericObject | undefined, hyperCube: HyperCube) =>
-  useMemo(() => sortingFactory(model, hyperCube), [model, hyperCube]);
+  useMemo(() => sortingFactory(model, hyperCube.qDimensionInfo.length), [model, hyperCube]);
 export default useSorting;
