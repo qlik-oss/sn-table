@@ -82,6 +82,7 @@ describe('<TableContainer />', () => {
     theme = {
       getStyle: () => undefined,
       background: { isDark: false },
+      name: () => 'theme',
     } as unknown as ExtendedTheme;
 
     selectionsAPI = {

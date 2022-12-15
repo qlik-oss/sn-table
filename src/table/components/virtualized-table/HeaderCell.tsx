@@ -36,6 +36,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         style={{
           fontSize: headerStyle.fontSize,
           fontFamily: headerStyle.fontFamily,
+          fontWeight: 'bold',
           color: headerStyle.color,
           overflow: 'hidden',
           whiteSpace: 'nowrap',

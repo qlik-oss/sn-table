@@ -10,6 +10,8 @@ import {
 } from '../../../../types';
 import { GeneratedStyling } from '../../../types';
 
+export type TotalsPosition = 'bottom' | 'noTotals' | 'top';
+
 export interface WrapperProps {
   model: EngineAPI.IGenericObject;
   layout: TableLayout;
@@ -43,6 +45,17 @@ export interface HeaderProps {
   headerStyle: GeneratedStyling;
 }
 
+export interface TotalsProps {
+  layout: TableLayout;
+  rect: stardust.Rect;
+  pageInfo: PageInfo;
+  forwardRef: React.RefObject<VariableSizeList<any>>;
+  columns: Column[];
+  columnWidth: number[];
+  totalsStyle: GeneratedStyling;
+  totalsPosition: TotalsPosition;
+}
+
 export interface BodyProps {
   model: EngineAPI.IGenericObject;
   layout: TableLayout;
@@ -55,4 +68,5 @@ export interface BodyProps {
   innerForwardRef: React.RefObject<HTMLDivElement>;
   bodyStyle: GeneratedStyling;
   selectionsAPI: ExtendedSelectionAPI;
+  totalsPosition: TotalsPosition;
 }
