@@ -11,6 +11,7 @@ import { getHeaderStyle, getBodyCellStyle } from '../../utils/styling-utils';
 import useScrollHandler from './hooks/use-scroll-handler';
 import Totals from './Totals';
 import useTotals from './hooks/use-totals';
+import useOnPropsChange from './hooks/use-on-props-change';
 
 const TableContainer = (props: TableContainerProps) => {
   const { layout, rect, pageInfo, paginationNeeded, model, theme, constraints, selectionsAPI } = props;
@@ -42,6 +43,10 @@ const TableContainer = (props: TableContainerProps) => {
     totals.shrinkBodyHeightBy,
     setTotalHeight
   );
+
+  useOnPropsChange(() => {
+    setTotalHeight(pageInfo.rowsPerPage * DEFAULT_ROW_HEIGHT + totals.shrinkBodyHeightBy);
+  }, [layout]);
 
   useLayoutEffect(() => {
     if (ref.current) {

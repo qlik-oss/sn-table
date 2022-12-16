@@ -54,6 +54,7 @@ const Body = (props: BodyProps) => {
   let { height: bodyHeight } = rect;
   bodyHeight -= paginationNeeded ? PAGINATION_HEIGHT : 0;
   bodyHeight -= totals.shrinkBodyHeightBy;
+  bodyHeight = Math.min(rowCount * DEFAULT_ROW_HEIGHT, bodyHeight);
 
   useSelectionsEffect(selectionsAPI, rowsInPage);
 

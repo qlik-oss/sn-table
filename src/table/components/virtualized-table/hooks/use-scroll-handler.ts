@@ -12,24 +12,18 @@ const useScrollHandler = (
 ) =>
   useCallback(
     (event: React.SyntheticEvent) => {
-      if (headerRef.current) {
-        headerRef.current.scrollTo(event.currentTarget.scrollLeft);
-      }
+      headerRef.current?.scrollTo(event.currentTarget.scrollLeft);
 
-      if (totalsRef.current) {
-        totalsRef.current.scrollTo(event.currentTarget.scrollLeft);
-      }
+      totalsRef.current?.scrollTo(event.currentTarget.scrollLeft);
 
-      if (bodyRef.current) {
-        bodyRef.current.scrollTo({
-          scrollLeft: event.currentTarget.scrollLeft,
-          scrollTop: event.currentTarget.scrollTop,
-        });
-      }
+      bodyRef.current?.scrollTo({
+        scrollLeft: event.currentTarget.scrollLeft,
+        scrollTop: event.currentTarget.scrollTop,
+      });
 
       if (innerForwardRef.current) {
         // Keep full size container in sync with the height calculation in react-window is doing
-        if (totalHeight !== innerForwardRef.current.clientHeight) {
+        if (totalHeight !== innerForwardRef.current.clientHeight + shrinkBodyHeightBy) {
           setTotalHeight(innerForwardRef.current.clientHeight + shrinkBodyHeightBy);
         }
       }
