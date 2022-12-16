@@ -14,10 +14,6 @@ const Totals = (props: TotalsProps) => {
     forwardRef?.current?.scrollTo(0);
   }, [layout, pageInfo, forwardRef, columnWidth]);
 
-  if (!totals.isVisible) {
-    return null;
-  }
-
   let top = totals.atTop ? HEADER_HEIGHT : rect.height - HEADER_HEIGHT;
   top -= totals.atBottom && paginationNeeded ? PAGINATION_HEIGHT : 0;
 
