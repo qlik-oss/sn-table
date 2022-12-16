@@ -32,20 +32,22 @@ const TableContainer = (props: TableContainerProps) => {
   const totals = useTotals(layout);
   const columns = useMemo(() => getColumns(layout), [layout]);
   const { width } = useColumnSize(rect, columns, headerStyle, bodyStyle);
-  const totalWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
-  const [totalHeight, setTotalHeight] = useState(pageInfo.rowsPerPage * DEFAULT_ROW_HEIGHT + totals.shrinkBodyHeightBy);
+  const containerWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
+  const [containerHeight, setContainerHeight] = useState(
+    pageInfo.rowsPerPage * DEFAULT_ROW_HEIGHT + totals.shrinkBodyHeightBy
+  );
   const scrollHandler = useScrollHandler(
     headerRef,
     totalsRef,
     bodyRef,
     innerForwardRef,
-    totalHeight,
+    containerHeight,
     totals.shrinkBodyHeightBy,
-    setTotalHeight
+    setContainerHeight
   );
 
   useOnPropsChange(() => {
-    setTotalHeight(pageInfo.rowsPerPage * DEFAULT_ROW_HEIGHT + totals.shrinkBodyHeightBy);
+    setContainerHeight(pageInfo.rowsPerPage * DEFAULT_ROW_HEIGHT + totals.shrinkBodyHeightBy);
   }, [layout]);
 
   useLayoutEffect(() => {
@@ -80,7 +82,7 @@ const TableContainer = (props: TableContainerProps) => {
       }}
       onScroll={scrollHandler}
     >
-      <FullSizeContainer width={totalWidth} height={totalHeight} paginationNeeded={paginationNeeded}>
+      <FullSizeContainer width={containerWidth} height={containerHeight} paginationNeeded={paginationNeeded}>
         <Header
           headerStyle={headerStyle}
           layout={layout}

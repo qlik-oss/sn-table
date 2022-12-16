@@ -6,9 +6,9 @@ const useScrollHandler = (
   totalsRef: React.RefObject<VariableSizeList<any>>,
   bodyRef: React.RefObject<VariableSizeGrid<any>>,
   innerForwardRef: React.RefObject<HTMLDivElement>,
-  totalHeight: number,
+  containerHeight: number,
   shrinkBodyHeightBy: number,
-  setTotalHeight: React.Dispatch<React.SetStateAction<number>>
+  setContainerHeight: React.Dispatch<React.SetStateAction<number>>
 ) =>
   useCallback(
     (event: React.SyntheticEvent) => {
@@ -23,12 +23,12 @@ const useScrollHandler = (
 
       if (innerForwardRef.current) {
         // Keep full size container in sync with the height calculation in react-window is doing
-        if (totalHeight !== innerForwardRef.current.clientHeight + shrinkBodyHeightBy) {
-          setTotalHeight(innerForwardRef.current.clientHeight + shrinkBodyHeightBy);
+        if (containerHeight !== innerForwardRef.current.clientHeight + shrinkBodyHeightBy) {
+          setContainerHeight(innerForwardRef.current.clientHeight + shrinkBodyHeightBy);
         }
       }
     },
-    [headerRef, totalsRef, bodyRef, innerForwardRef, totalHeight, shrinkBodyHeightBy, setTotalHeight]
+    [headerRef, totalsRef, bodyRef, innerForwardRef, containerHeight, shrinkBodyHeightBy, setContainerHeight]
   );
 
 export default useScrollHandler;
