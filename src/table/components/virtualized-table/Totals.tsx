@@ -1,20 +1,25 @@
-import React, { useLayoutEffect, memo } from 'react';
+import React, { useLayoutEffect, memo, useMemo } from 'react';
 import { VariableSizeList } from 'react-window';
 import { TotalsProps } from './types';
-import { HEADER_HEIGHT } from './constants';
+import { HEADER_HEIGHT, PAGINATION_HEIGHT } from './constants';
 import TotalsCell from './TotalsCell';
+import { getTotalsCellStyle } from '../../utils/styling-utils';
 
 const Totals = (props: TotalsProps) => {
-  const { layout, rect, forwardRef, columnWidth, pageInfo, totalsStyle, totalsPosition } = props;
+  const { layout, rect, forwardRef, columnWidth, pageInfo, theme, totals, paginationNeeded } = props;
+  const totalsStyle = useMemo(() => getTotalsCellStyle(layout, theme), [layout, theme.name()]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useLayoutEffect(() => {
     forwardRef?.current?.resetAfterIndex(0, true);
     forwardRef?.current?.scrollTo(0);
   }, [layout, pageInfo, forwardRef, columnWidth]);
 
-  if (totalsPosition === 'noTotals') {
+  if (!totals.isVisible) {
     return null;
   }
+
+  let top = totals.atTop ? HEADER_HEIGHT : rect.height - HEADER_HEIGHT;
+  top -= totals.atBottom && paginationNeeded ? PAGINATION_HEIGHT : 0;
 
   return (
     <VariableSizeList
@@ -22,13 +27,15 @@ const Totals = (props: TotalsProps) => {
       layout="horizontal"
       style={{
         position: 'sticky',
-        top: totalsPosition === 'top' ? HEADER_HEIGHT : rect.height - HEADER_HEIGHT,
+        top,
         left: 0,
         overflow: 'hidden',
         backgroundColor: totalsStyle.backgroundColor,
         borderColor: totalsStyle.borderColor,
         borderStyle: 'solid',
-        borderWidth: totalsPosition === 'top' ? '0px 0px 1px 0px' : '1px 0px 0px 0px',
+        borderWidth: '0px',
+        borderTopWidth: totals.atBottom ? '1px' : '0px',
+        borderBottomWidth: totals.atTop || paginationNeeded ? '1px' : '0px',
         boxSizing: 'border-box',
       }}
       itemCount={layout.qHyperCube.qSize.qcx}

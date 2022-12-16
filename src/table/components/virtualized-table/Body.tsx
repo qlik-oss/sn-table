@@ -30,7 +30,7 @@ const Body = (props: BodyProps) => {
     paginationNeeded,
     bodyStyle,
     selectionsAPI,
-    totalsPosition,
+    totals,
   } = props;
   const { rowsInPage, loadData, debouncedLoadData } = useInfiniteScrollData(model, layout, pageInfo, columns);
   const rowCount = Math.min(pageInfo.rowsPerPage, layout.qHyperCube.qSize.qcy - pageInfo.page * pageInfo.rowsPerPage);
@@ -50,10 +50,10 @@ const Body = (props: BodyProps) => {
       ),
     [rect, columnWidth]
   ).count;
-  const stickyTop = totalsPosition === 'top' ? HEADER_AND_TOTALS_HEIGHT : HEADER_HEIGHT;
+  const stickyTop = totals.atTop ? HEADER_AND_TOTALS_HEIGHT : HEADER_HEIGHT;
   let { height: bodyHeight } = rect;
   bodyHeight -= paginationNeeded ? PAGINATION_HEIGHT : 0;
-  bodyHeight -= totalsPosition === 'noTotals' ? HEADER_HEIGHT : HEADER_AND_TOTALS_HEIGHT;
+  bodyHeight -= totals.shrinkBodyHeightBy;
 
   useSelectionsEffect(selectionsAPI, rowsInPage);
 
