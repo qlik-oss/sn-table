@@ -193,59 +193,64 @@ describe('<TableContainer />', () => {
   });
 
   describe('totals', () => {
-    it('should render with totals at the top when total is in auto mode', async () => {
-      const totalRow = { qText: 'value' } as EngineAPI.INxCell;
+    const TOP_POSITION = 2;
+    const BOTTOM_POSITION = 4;
+    let totalRow: EngineAPI.INxCell;
+
+    beforeEach(() => {
+      totalRow = { qText: 'value' } as EngineAPI.INxCell;
+      layout.qHyperCube.qGrandTotalRow = layout.qHyperCube.qMeasureInfo.map(() => totalRow);
+
       layout.totals = {
         show: true,
         position: 'top',
         label: 'totals label',
       };
-      layout.qHyperCube.qGrandTotalRow = layout.qHyperCube.qMeasureInfo.map(() => totalRow);
-      const { getByTestId, getByText } = renderTableContainer();
+    });
 
-      expect(getByTestId('table-container')).toBeVisible();
+    it('should render with totals at the top when total is in auto mode', async () => {
+      layout.totals.show = true;
+      const { getByText } = renderTableContainer();
+
+      await waitFor(() => {
+        const body = getByText('dimension-c0-r0').parentNode as ParentNode;
+        const totals = getByText(layout.totals.label).parentNode as ParentNode;
+        expect(body.compareDocumentPosition(totals)).toBe(TOP_POSITION);
+      });
       await waitFor(() => expect(getByText(layout.totals.label)).toBeVisible());
       await waitFor(() => expect(getByText(totalRow.qText as string)).toBeVisible());
     });
 
     it('should render with totals at the top', async () => {
-      const totalRow = { qText: 'value' } as EngineAPI.INxCell;
-      layout.totals = {
-        show: false,
-        position: 'top',
-        label: 'totals label',
-      };
-      layout.qHyperCube.qGrandTotalRow = layout.qHyperCube.qMeasureInfo.map(() => totalRow);
-      const { getByTestId, getByText } = renderTableContainer();
+      layout.totals.show = false;
+      const { getByText } = renderTableContainer();
 
-      expect(getByTestId('table-container')).toBeVisible();
+      await waitFor(() => {
+        const body = getByText('dimension-c0-r0').parentNode as ParentNode;
+        const totals = getByText(layout.totals.label).parentNode as ParentNode;
+        expect(body.compareDocumentPosition(totals)).toBe(TOP_POSITION);
+      });
       await waitFor(() => expect(getByText(layout.totals.label)).toBeVisible());
       await waitFor(() => expect(getByText(totalRow.qText as string)).toBeVisible());
     });
 
     it('should render with totals at the bottom', async () => {
-      const totalRow = { qText: 'value' } as EngineAPI.INxCell;
-      layout.totals = {
-        show: false,
-        position: 'bottom',
-        label: 'totals label',
-      };
-      layout.qHyperCube.qGrandTotalRow = layout.qHyperCube.qMeasureInfo.map(() => totalRow);
-      const { getByTestId, getByText } = renderTableContainer();
+      layout.totals.show = false;
+      layout.totals.position = 'bottom';
+      const { getByText } = renderTableContainer();
 
-      expect(getByTestId('table-container')).toBeVisible();
+      await waitFor(() => {
+        const body = getByText('dimension-c0-r0').parentNode as ParentNode;
+        const totals = getByText(layout.totals.label).parentNode as ParentNode;
+        expect(body.compareDocumentPosition(totals)).toBe(BOTTOM_POSITION);
+      });
       await waitFor(() => expect(getByText(layout.totals.label)).toBeVisible());
       await waitFor(() => expect(getByText(totalRow.qText as string)).toBeVisible());
     });
 
     it('should render without totals', async () => {
-      const totalRow = { qText: 'value' } as EngineAPI.INxCell;
-      layout.totals = {
-        show: false,
-        position: 'noTotals',
-        label: 'totals label',
-      };
-      layout.qHyperCube.qGrandTotalRow = layout.qHyperCube.qMeasureInfo.map(() => totalRow);
+      layout.totals.show = false;
+      layout.totals.position = 'noTotals';
       const { getByTestId, queryByText } = renderTableContainer();
 
       expect(getByTestId('table-container')).toBeVisible();
