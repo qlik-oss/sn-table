@@ -191,4 +191,66 @@ describe('<TableContainer />', () => {
       await waitFor(() => expect(getByText('measure-c2-r0').parentNode).toHaveClass('excluded'));
     });
   });
+
+  describe('totals', () => {
+    it('should render with totals at the top when total is in auto mode', async () => {
+      const totalRow = { qText: 'value' } as EngineAPI.INxCell;
+      layout.totals = {
+        show: true,
+        position: 'top',
+        label: 'totals label',
+      };
+      layout.qHyperCube.qGrandTotalRow = layout.qHyperCube.qMeasureInfo.map(() => totalRow);
+      const { getByTestId, getByText } = renderTableContainer();
+
+      expect(getByTestId('table-container')).toBeVisible();
+      await waitFor(() => expect(getByText(layout.totals.label)).toBeVisible());
+      await waitFor(() => expect(getByText(totalRow.qText as string)).toBeVisible());
+    });
+
+    it('should render with totals at the top', async () => {
+      const totalRow = { qText: 'value' } as EngineAPI.INxCell;
+      layout.totals = {
+        show: false,
+        position: 'top',
+        label: 'totals label',
+      };
+      layout.qHyperCube.qGrandTotalRow = layout.qHyperCube.qMeasureInfo.map(() => totalRow);
+      const { getByTestId, getByText } = renderTableContainer();
+
+      expect(getByTestId('table-container')).toBeVisible();
+      await waitFor(() => expect(getByText(layout.totals.label)).toBeVisible());
+      await waitFor(() => expect(getByText(totalRow.qText as string)).toBeVisible());
+    });
+
+    it('should render with totals at the bottom', async () => {
+      const totalRow = { qText: 'value' } as EngineAPI.INxCell;
+      layout.totals = {
+        show: false,
+        position: 'bottom',
+        label: 'totals label',
+      };
+      layout.qHyperCube.qGrandTotalRow = layout.qHyperCube.qMeasureInfo.map(() => totalRow);
+      const { getByTestId, getByText } = renderTableContainer();
+
+      expect(getByTestId('table-container')).toBeVisible();
+      await waitFor(() => expect(getByText(layout.totals.label)).toBeVisible());
+      await waitFor(() => expect(getByText(totalRow.qText as string)).toBeVisible());
+    });
+
+    it('should render without totals', async () => {
+      const totalRow = { qText: 'value' } as EngineAPI.INxCell;
+      layout.totals = {
+        show: false,
+        position: 'noTotals',
+        label: 'totals label',
+      };
+      layout.qHyperCube.qGrandTotalRow = layout.qHyperCube.qMeasureInfo.map(() => totalRow);
+      const { getByTestId, queryByText } = renderTableContainer();
+
+      expect(getByTestId('table-container')).toBeVisible();
+      await waitFor(() => expect(queryByText(layout.totals.label)).toBeNull());
+      await waitFor(() => expect(queryByText(totalRow.qText as string)).toBeNull());
+    });
+  });
 });
