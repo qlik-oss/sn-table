@@ -33,7 +33,7 @@ export const StyledTableWrapper = styled(Paper, {
 export const StyledTableContainer = styled(TableContainer, {
   shouldForwardProp: (prop: string) => prop !== 'fullHeight' && prop !== 'constraints',
 })(({ fullHeight, constraints }) => ({
-  height: fullHeight ? '100%' : 'calc(100% - 49px)',
+  height: fullHeight ? '100%' : 'calc(100% - 42px)',
   overflow: constraints.active ? 'hidden' : 'auto',
   border: 'none',
 }));

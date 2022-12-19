@@ -34,10 +34,12 @@ function TableHeadWrapper({
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
   const headRowRef = useRef<HTMLElement>();
   const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
+  const headHeight = headRowRef.current?.getBoundingClientRect().height;
 
   useEffect(() => {
-    headRowRef.current && setHeadRowHeight(headRowRef.current.getBoundingClientRect().height);
-  }, [headRowRef.current, headerStyle.fontSize, headRowRef.current?.getBoundingClientRect().height]);
+    console.log(headHeight);
+    headHeight && setHeadRowHeight(headHeight);
+  }, [headRowRef.current, headerStyle.fontSize, headHeight]);
 
   return (
     <TableHead>
