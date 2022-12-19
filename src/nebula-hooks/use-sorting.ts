@@ -1,12 +1,12 @@
 import { useMemo } from '@nebula.js/stardust';
 import { Column, HyperCube, SortDirection } from '../types';
 
-export const sortingFactory = (model: EngineAPI.IGenericObject | undefined, dimensionLength: number) => {
+export const sortingFactory = (model: EngineAPI.IGenericObject | undefined, dimensionsLength: number) => {
   if (!model) return undefined;
 
   return async (column: Column, newSortDirection?: SortDirection) => {
     const { isDim, colIdx, sortDirection, qReverseSort } = column;
-    const idx = isDim ? colIdx : colIdx - dimensionLength;
+    const idx = isDim ? colIdx : colIdx - dimensionsLength;
 
     // The sort order from the properties is needed since it contains hidden columns
     const properties = await model.getEffectiveProperties();
@@ -41,5 +41,5 @@ export const sortingFactory = (model: EngineAPI.IGenericObject | undefined, dime
 };
 
 const useSorting = (model: EngineAPI.IGenericObject | undefined, hyperCube: HyperCube) =>
-  useMemo(() => sortingFactory(model, hyperCube.qDimensionInfo.length), [model, hyperCube]);
+  useMemo(() => sortingFactory(model, hyperCube.qDimensionInfo.length), [model, hyperCube.qDimensionInfo.length]);
 export default useSorting;
