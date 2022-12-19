@@ -1,20 +1,8 @@
-import { Locator, Page, test, expect } from '@playwright/test';
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-await-in-loop */
+import { Locator, Page } from '@playwright/test';
+import { Collection, Key } from '../types';
 
-type Collection = { [key: string]: any };
-type Key =
-  | 'ArrowUp'
-  | 'ArrowDown'
-  | 'ArrowLeft'
-  | 'ArrowRight'
-  | 'Enter'
-  | 'Tab'
-  | 'Space'
-  | 'Control+Space'
-  | 'Shift+Tab'
-  | 'Meta+Shift+ArrowRight'
-  | 'Meta+Shift+ArrowLeft'
-  | 'Escape';
-type Pagination = 'first' | 'previous' | 'next' | 'last';
 type KeyPress = {
   key: Key;
   times: number;
@@ -22,25 +10,8 @@ type KeyPress = {
 
 const selectors: Collection = {
   chart: '#chart-container',
-  header: {
-    cells: 'div.cell[class*="active"] thead > tr > th',
-    selected: (parent?: string): string => `${parent || 'div.cell[class*="active"]'} th[aria-pressed="true"]`,
-  },
-  cell: (row: number, column: number, parent?: string): string =>
-    `${parent || 'div.cell[class*="active"]'} tbody > tr:nth-child(${row}) > th:nth-child(${column}), ${
-      parent || 'div.cell[class*="active"]'
-    }  tbody > tr:nth-child(${row}) > td:nth-child(${column})`,
-  pagination: {
-    rowsPerPage: '[data-testid="RowsPerPage-dropdown"]',
-    buttons: '[data-testid="pagination-action-icon-button"]',
-    range: 'div[data-testid="table-container"] + div >> div:has-text("of")',
-    action: (page: Pagination): string => `[aria-label="Go to the ${page} page"]`,
-    pageSelect: '#SelectPage-dropdown',
-  },
-  refresh: '[tid="selection-toolbar.refresh"]',
   text: (text: string): string => `text=${text}`,
   focused: 'th[tabindex="0"], td[tabindex="0"]',
-  selected: '.selected',
 };
 
 const textToDelete: string = '\nPress space to sort on this column';

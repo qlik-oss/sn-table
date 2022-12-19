@@ -1,8 +1,5 @@
-type Collection = { [key: string]: any };
-
-function pad(str: string, p: number = 20, f: string = ' '): string {
-  return str.padEnd(p, f);
-}
+/* eslint-disable import/prefer-default-export */
+import { Collection } from '../types';
 
 function navigateWithArrowsMsg(step: Collection): string {
   return `

@@ -2,15 +2,17 @@ import path from 'path';
 import serve from '@nebula.js/cli-serve';
 import createNebulaRoutes from '../../rendering/utils/routes';
 
-const paths = { fixtures: path.join(__dirname, '../__fixtures__') };
-
 class NebulaFixture {
   public theme;
+
   public themeType;
+
   public language;
+
   public renderUrl;
 
   public nebulaServer;
+
   public route;
 
   constructor(theme: Object | Function, themeType: String, language: String) {
@@ -38,7 +40,7 @@ class NebulaFixture {
     this.route = createNebulaRoutes(this.nebulaServer.url);
   }
 
-  async renderFixture(fileName:string) {
+  async renderFixture(fileName: string) {
     const fixturePath = `./${fileName}&theme=${this.themeType}&language=${this.language}`;
     this.renderUrl = await this.route.renderFixture(fixturePath);
     return this.getRenderUrl();

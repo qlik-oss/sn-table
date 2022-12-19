@@ -1,18 +1,4 @@
-type Collection = { [key: string]: any };
-type Key =
-  | 'ArrowUp'
-  | 'ArrowDown'
-  | 'ArrowLeft'
-  | 'ArrowRight'
-  | 'Enter'
-  | 'Tab'
-  | 'Space'
-  | 'Control+Space'
-  | 'Shift+Tab'
-  | 'Meta+Shift+ArrowRight'
-  | 'Meta+Shift+ArrowLeft'
-  | 'Escape';
-
+import { Collection, Key } from '../types';
 
 function getStep(key: Key, times: number = 1): Collection {
   return { key, times };
@@ -50,6 +36,6 @@ const expectations: Collection = {
       },
     ],
   },
-}
+};
 
-export { expectations };
+export default expectations;

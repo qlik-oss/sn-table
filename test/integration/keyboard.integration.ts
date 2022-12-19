@@ -1,18 +1,21 @@
-import { test, expect } from '@playwright/test';
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable @typescript-eslint/no-loop-func */
+import { test, expect, Page, Locator } from '@playwright/test';
 
 import senseHorizon from '../rendering/theme/sense-horizon';
 import NebulaFixture from './utils/nebula-fixture';
 
 import SnTable from './utils/sn-table';
-import { expectations } from './utils/expectations';
+import expectations from './utils/expectations';
 import { navigateWithArrowsMsg } from './utils/custom-error-messages';
+import { Collection } from './types';
 
-test.describe('Fixture rendering', () => {
-  let page;
-  let table;
-  let snTable;
-  let expectation;
-  
+test.describe('Tests served by: fixture-file rendering by Nebula', () => {
+  let page: Page;
+  let table: Locator;
+  let snTable: SnTable;
+  let expectation: Collection;
+
   const environment = new NebulaFixture(senseHorizon('light'), 'light', 'en-EN');
 
   test.beforeAll(async ({ browser }) => {
@@ -22,8 +25,8 @@ test.describe('Fixture rendering', () => {
   });
 
   test.beforeEach(async () => {
-    await environment.renderFixture('html-ascii-reference.fix.js')
-    await page.goto(environment.getRenderUrl())
+    await environment.renderFixture('html-ascii-reference.fix.js');
+    await page.goto(environment.getRenderUrl());
     table = page.locator(snTable.selectors.chart);
     await snTable.clickOnCellByText(table, expectations.before.clickOnCell);
   });
@@ -38,7 +41,7 @@ test.describe('Fixture rendering', () => {
       expectation = expectations.navigateWithArrows;
     });
     for await (const step of expectation.steps) {
-      await test.step('Do actions', async () => {
+      await test.step(step.description, async () => {
         await snTable.pressKeys(step.keys);
       });
       await test.step('Check expectations', async () => {
