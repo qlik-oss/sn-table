@@ -127,7 +127,6 @@ function PaginationContent({
       tabIndex,
       id,
       'data-testid': id,
-      style: { color: footerStyle.color },
     };
 
     return (

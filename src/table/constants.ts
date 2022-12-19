@@ -64,3 +64,5 @@ export const SELECTION_STYLING = {
     background: StylingDefaults.WHITE,
   },
 };
+
+export const PAGINATION_HEIGHT = 40;

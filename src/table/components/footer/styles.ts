@@ -4,12 +4,14 @@ import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
+import { PAGINATION_HEIGHT } from '../../constants';
+
 // ---------- FooterWrapper ----------
 
 export const StyledFooterWrapper = styled(Box, {
   shouldForwardProp: (prop: string) => prop !== 'footerStyle',
 })(({ footerStyle, theme }) => ({
-  height: 40,
+  height: PAGINATION_HEIGHT,
   display: 'flex',
   justifyContent: 'flex-end',
   alignItems: 'center',
@@ -27,7 +29,7 @@ export const StyledSelect = styled(Select, {
 })(({ footerStyle, theme }) => ({
   backgroundColor: 'inherit',
   marginRight: theme.spacing(1),
-  '& .MuiNativeSelect-icon': { color: footerStyle.iconColor },
+  '& .MuiNativeSelect-icon, .MuiNativeSelect-select': { color: footerStyle.iconColor },
 }));
 
 export const StyledButton = styled(Button, {
