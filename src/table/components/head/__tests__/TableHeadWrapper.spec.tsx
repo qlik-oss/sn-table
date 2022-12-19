@@ -194,7 +194,7 @@ describe('<TableHeadWrapper />', () => {
     const secondColQuery = getByText(tableData.columns[1].label).closest('th') as HTMLTableCellElement;
 
     expect(firstColQuery.getAttribute('aria-sort')).toBeNull();
-    expect(firstColQuery.getAttribute('aria-pressed')).toBeNull();
+    expect(firstColQuery.getAttribute('aria-pressed')).toBe('false');
     expect(secondColQuery.getAttribute('aria-sort')).toBe('ascending');
     expect(secondColQuery.getAttribute('aria-pressed')).toBe('true');
   });
