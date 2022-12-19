@@ -82,6 +82,7 @@ describe('<TableContainer />', () => {
     theme = {
       getStyle: () => undefined,
       background: { isDark: false },
+      name: () => 'theme',
     } as unknown as ExtendedTheme;
 
     selectionsAPI = {
@@ -188,6 +189,73 @@ describe('<TableContainer />', () => {
 
       await waitFor(() => expect(getByText('dimension-c1-r0').parentNode).toHaveClass('excluded'));
       await waitFor(() => expect(getByText('measure-c2-r0').parentNode).toHaveClass('excluded'));
+    });
+  });
+
+  describe('totals', () => {
+    const TOP_POSITION = 2;
+    const BOTTOM_POSITION = 4;
+    let totalRow: EngineAPI.INxCell;
+
+    beforeEach(() => {
+      totalRow = { qText: 'value' } as EngineAPI.INxCell;
+      layout.qHyperCube.qGrandTotalRow = layout.qHyperCube.qMeasureInfo.map(() => totalRow);
+
+      layout.totals = {
+        show: true,
+        position: 'top',
+        label: 'totals label',
+      };
+    });
+
+    it('should render with totals at the top when total is in auto mode', async () => {
+      layout.totals.show = true;
+      const { getByText } = renderTableContainer();
+
+      await waitFor(() => {
+        const body = getByText('dimension-c0-r0').parentNode as ParentNode;
+        const totals = getByText(layout.totals.label).parentNode as ParentNode;
+        expect(body.compareDocumentPosition(totals)).toBe(TOP_POSITION);
+      });
+      await waitFor(() => expect(getByText(layout.totals.label)).toBeVisible());
+      await waitFor(() => expect(getByText(totalRow.qText as string)).toBeVisible());
+    });
+
+    it('should render with totals at the top', async () => {
+      layout.totals.show = false;
+      const { getByText } = renderTableContainer();
+
+      await waitFor(() => {
+        const body = getByText('dimension-c0-r0').parentNode as ParentNode;
+        const totals = getByText(layout.totals.label).parentNode as ParentNode;
+        expect(body.compareDocumentPosition(totals)).toBe(TOP_POSITION);
+      });
+      await waitFor(() => expect(getByText(layout.totals.label)).toBeVisible());
+      await waitFor(() => expect(getByText(totalRow.qText as string)).toBeVisible());
+    });
+
+    it('should render with totals at the bottom', async () => {
+      layout.totals.show = false;
+      layout.totals.position = 'bottom';
+      const { getByText } = renderTableContainer();
+
+      await waitFor(() => {
+        const body = getByText('dimension-c0-r0').parentNode as ParentNode;
+        const totals = getByText(layout.totals.label).parentNode as ParentNode;
+        expect(body.compareDocumentPosition(totals)).toBe(BOTTOM_POSITION);
+      });
+      await waitFor(() => expect(getByText(layout.totals.label)).toBeVisible());
+      await waitFor(() => expect(getByText(totalRow.qText as string)).toBeVisible());
+    });
+
+    it('should render without totals', async () => {
+      layout.totals.show = false;
+      layout.totals.position = 'noTotals';
+      const { getByTestId, queryByText } = renderTableContainer();
+
+      expect(getByTestId('table-container')).toBeVisible();
+      await waitFor(() => expect(queryByText(layout.totals.label)).toBeNull());
+      await waitFor(() => expect(queryByText(totalRow.qText as string)).toBeNull());
     });
   });
 });
