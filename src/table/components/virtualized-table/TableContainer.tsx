@@ -46,16 +46,16 @@ const TableContainer = (props: TableContainerProps) => {
     setContainerHeight
   );
 
+  useOnPropsChange(() => {
+    setContainerHeight(pageInfo.rowsPerPage * DEFAULT_ROW_HEIGHT + totals.shrinkBodyHeightBy);
+  }, [layout]);
+
   useLayoutEffect(() => {
     if (ref.current) {
       ref.current.scrollLeft = 0;
       ref.current.scrollTop = 0;
     }
   }, [layout, pageInfo]);
-
-  useOnPropsChange(() => {
-    setContainerHeight(pageInfo.rowsPerPage * DEFAULT_ROW_HEIGHT + totals.shrinkBodyHeightBy);
-  }, [layout]);
 
   const TotalsComponent = (
     <Totals
