@@ -5,8 +5,8 @@ import { test, expect, Page, Locator } from '@playwright/test';
 import senseHorizon from '../rendering/theme/sense-horizon';
 import NebulaFixture from './utils/nebula-fixture';
 
-import SnTable from './utils/sn-table';
-import expectations from './utils/expectations';
+import SnTable from './page-object-model/sn-table';
+import expectations from './expectations/keyboard.expectations';
 import { navigateWithArrowsMsg } from './utils/custom-error-messages';
 import { Collection } from './types';
 

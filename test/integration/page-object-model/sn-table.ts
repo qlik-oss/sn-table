@@ -38,10 +38,17 @@ class SnTable {
     let parentLocator: Locator;
     let childLocator: Locator;
 
-    if (typeof parent === 'string') parentLocator = this.page.locator(parent);
-    else parentLocator = parent;
-    if (typeof child === 'string') childLocator = parentLocator.locator(child);
-    else childLocator = child;
+    if (typeof parent === 'string') {
+      parentLocator = this.page.locator(parent);
+    } else {
+      parentLocator = parent;
+    }
+
+    if (typeof child === 'string') {
+      childLocator = parentLocator.locator(child);
+    } else {
+      childLocator = child;
+    }
 
     const workArray: string[] = [];
     const lenght: number = await childLocator.count();
