@@ -25,6 +25,7 @@ const Header = (props: HeaderProps) => {
         borderColor: headerStyle.borderColor,
         borderStyle: 'solid',
         borderWidth: '1px 0px',
+        boxSizing: 'border-box',
       }}
       itemCount={layout.qHyperCube.qSize.qcx}
       itemSize={(index) => columnWidth[index]}

@@ -100,6 +100,7 @@ export interface Row {
   // for the row key, string is needed
   [key: string]: Cell | string;
 }
+export type SortDirection = 'asc' | 'desc';
 
 export interface Column {
   id: string;
@@ -110,7 +111,7 @@ export interface Column {
   label: string;
   align: 'left' | 'center' | 'right';
   stylingIDs: string[];
-  sortDirection: string;
+  sortDirection: SortDirection;
   totalInfo?: string;
   qApprMaxGlyphCount: number;
 }
@@ -180,7 +181,7 @@ export interface AnnounceArgs {
 
 export type Announce = (arg0: AnnounceArgs) => void;
 
-export type ChangeSortOrder = (column: Column, sortOrder?: string) => Promise<void>;
+export type ChangeSortOrder = (column: Column, sortOrder?: SortDirection) => Promise<void>;
 
 export interface Galaxy {
   translator: ExtendedTranslator;
