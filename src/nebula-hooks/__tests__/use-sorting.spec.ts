@@ -1,6 +1,6 @@
 import { sortingFactory } from '../use-sorting';
 import { generateLayout } from '../../__test__/generate-test-data';
-import { Column, TableLayout, HyperCube } from '../../types';
+import { Column, TableLayout, HyperCube, SortDirection } from '../../types';
 
 describe('use-sorting', () => {
   describe('sortingFactory', () => {
@@ -17,7 +17,7 @@ describe('use-sorting', () => {
     let column: Column;
     let layout: TableLayout;
     let model: EngineAPI.IGenericObject;
-    let changeSortOrder: ((column: Column, sortOrder?: string) => Promise<void>) | undefined;
+    let changeSortOrder: ((column: Column, sortOrder?: SortDirection) => Promise<void>) | undefined;
     let expectedPatches: EngineAPI.INxPatch[];
 
     beforeEach(() => {
@@ -85,7 +85,7 @@ describe('use-sorting', () => {
     it('should not apply patches for qReverseSort for dimension when sortOrder and qSortIndicator are both ascending', async () => {
       column.colIdx = 0;
       if (changeSortOrder) {
-        await changeSortOrder(column, 'A');
+        await changeSortOrder(column, 'asc');
       }
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });
@@ -95,7 +95,7 @@ describe('use-sorting', () => {
       layout.qHyperCube.qDimensionInfo[0].qSortIndicator = 'D';
 
       if (changeSortOrder) {
-        await changeSortOrder(column, 'D');
+        await changeSortOrder(column, 'desc');
       }
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });
@@ -110,7 +110,7 @@ describe('use-sorting', () => {
       });
 
       if (changeSortOrder) {
-        await changeSortOrder(column, 'A');
+        await changeSortOrder(column, 'asc');
       }
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });
@@ -124,7 +124,7 @@ describe('use-sorting', () => {
       });
 
       if (changeSortOrder) {
-        await changeSortOrder(column, 'D');
+        await changeSortOrder(column, 'desc');
       }
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });

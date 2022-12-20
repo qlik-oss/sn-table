@@ -4,7 +4,7 @@ import { PAGINATION_HEIGHT } from './constants';
 interface FullSizeContainerProps {
   width: number;
   height: number;
-  children: JSX.Element[] | JSX.Element;
+  children: (JSX.Element | null)[] | JSX.Element;
   paginationNeeded: boolean;
 }
 

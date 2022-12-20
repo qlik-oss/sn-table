@@ -14,6 +14,7 @@ import {
 import { TableHeadWrapperProps } from '../../types';
 import HeadCellMenu from './HeadCellMenu';
 import CellText from '../CellText';
+import { SortDirection } from '../../../types';
 
 function TableHeadWrapper({
   rootElement,
@@ -64,7 +65,7 @@ function TableHeadWrapper({
             });
           };
 
-          const sortFromMenu = (evt: React.MouseEvent, sortOrder: string) => {
+          const sortFromMenu = (evt: React.MouseEvent, sortOrder: SortDirection) => {
             evt.stopPropagation();
             changeSortOrder(column, sortOrder);
           };
@@ -102,7 +103,14 @@ function TableHeadWrapper({
                   )}
                 </StyledSortLabel>
                 {areBasicFeaturesEnabled && (
-                  <HeadCellMenu headerStyle={headerStyle} translator={translator} sortFromMenu={sortFromMenu} />
+                  <HeadCellMenu
+                    headerStyle={headerStyle}
+                    translator={translator}
+                    sortDirection={column.sortDirection}
+                    sortFromMenu={sortFromMenu}
+                    isInteractionEnabled={isInteractionEnabled}
+                    isCurrentColumnActive={isCurrentColumnActive}
+                  />
                 )}
               </HeadCellContent>
             </StyledHeadCell>

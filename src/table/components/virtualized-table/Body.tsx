@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, memo, useMemo } from 'react';
 import { VariableSizeGrid } from 'react-window';
-import { DEFAULT_ROW_HEIGHT, HEADER_HEIGHT, PAGINATION_HEIGHT } from './constants';
+import { DEFAULT_ROW_HEIGHT, HEADER_AND_TOTALS_HEIGHT, HEADER_HEIGHT, PAGINATION_HEIGHT } from './constants';
 import useData from './hooks/use-data';
 import { BodyProps } from './types';
 import Cell from './Cell';
@@ -22,9 +22,15 @@ const Body = (props: BodyProps) => {
     paginationNeeded,
     bodyStyle,
     selectionsAPI,
+    totals,
   } = props;
   const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
   const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(layout, pageInfo, rect, columnWidth);
+  const stickyTop = totals.atTop ? HEADER_AND_TOTALS_HEIGHT : HEADER_HEIGHT;
+  let { height: bodyHeight } = rect;
+  bodyHeight -= paginationNeeded ? PAGINATION_HEIGHT : 0;
+  bodyHeight -= totals.shrinkBodyHeightBy;
+  bodyHeight = Math.min(rowCount * DEFAULT_ROW_HEIGHT, bodyHeight);
 
   const { rowsInPage, loadRows, loadColumns } = useData(
     model,
@@ -61,10 +67,10 @@ const Body = (props: BodyProps) => {
       data-key="body"
       ref={forwardRef}
       innerRef={innerForwardRef}
-      style={{ position: 'sticky', top: `${HEADER_HEIGHT}px`, left: '0px', overflow: 'hidden' }}
+      style={{ position: 'sticky', top: `${stickyTop}px`, left: '0px', overflow: 'hidden' }}
       columnCount={layout.qHyperCube.qSize.qcx}
       columnWidth={(index) => columnWidth[index]}
-      height={rect.height - HEADER_HEIGHT - (paginationNeeded ? PAGINATION_HEIGHT : 0)}
+      height={bodyHeight}
       rowCount={rowCount}
       rowHeight={() => DEFAULT_ROW_HEIGHT}
       estimatedRowHeight={DEFAULT_ROW_HEIGHT}
