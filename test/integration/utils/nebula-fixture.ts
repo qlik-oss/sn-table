@@ -1,6 +1,10 @@
 import path from 'path';
-import serve from '@nebula.js/cli-serve';
+import serve, { NebulaServer } from '@nebula.js/cli-serve';
 import createNebulaRoutes from '../../rendering/utils/routes';
+
+type Route = {
+  renderFixture: (path: string) => Promise<string>;
+};
 
 class NebulaFixture {
   public theme;
@@ -9,11 +13,11 @@ class NebulaFixture {
 
   public language;
 
-  public renderUrl;
+  public renderUrl: string | undefined;
 
-  public nebulaServer;
+  public nebulaServer: NebulaServer | undefined;
 
-  public route;
+  public route: Route | undefined;
 
   constructor(theme: Object | Function, themeType: String, language: String) {
     this.theme = theme;
@@ -37,21 +41,21 @@ class NebulaFixture {
       ],
       fixturePath: 'test/integration/__fixtures__',
     });
-    this.route = createNebulaRoutes(this.nebulaServer.url);
+    this.route = createNebulaRoutes(this.nebulaServer.url) as unknown as Route;
   }
 
   async renderFixture(fileName: string) {
     const fixturePath = `./${fileName}&theme=${this.themeType}&language=${this.language}`;
-    this.renderUrl = await this.route.renderFixture(fixturePath);
+    this.renderUrl = await this.route?.renderFixture(fixturePath);
     return this.getRenderUrl();
   }
 
   getRenderUrl() {
-    return this.renderUrl;
+    return this.renderUrl as string; // Assume that it has been assigned a value
   }
 
   async teardown() {
-    this.nebulaServer.close();
+    this.nebulaServer?.close();
   }
 }
 
