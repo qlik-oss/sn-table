@@ -36,17 +36,22 @@ export const getAutoFontColor = (backgroundColor: string): string =>
 export const getBorderColors = (isBackgroundDark: boolean, borderSeparator: string) => {
   // TODO: proper borders for dark background
   if (isBackgroundDark) {
-    return { borderBottomColor: '#F2F2F2', borderRightColor: '#F2F2F2' };
+    return { borderBottomColor: '#F2F2F2', borderRightColor: '#F2F2F2', borderLeftColor: '#F2F2F2' };
   }
 
   const borderRightColor = '#D9D9D9';
   if (borderSeparator === 'bottom') {
-    return { borderBottomColor: '#808080', borderRightColor };
+    return { borderBottomColor: '#808080', borderRightColor, borderLeftColor: borderRightColor };
   }
   if (borderSeparator === 'top') {
-    return { borderTopColor: '#808080', borderBottomColor: '#EBEBEB', borderRightColor };
+    return {
+      borderTopColor: '#808080',
+      borderBottomColor: '#EBEBEB',
+      borderRightColor,
+      borderLeftColor: borderRightColor,
+    };
   }
-  return { borderBottomColor: '#EBEBEB', borderRightColor };
+  return { borderBottomColor: '#EBEBEB', borderRightColor, borderLeftColor: borderRightColor };
 };
 
 /**

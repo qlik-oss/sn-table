@@ -52,6 +52,9 @@ export const COMMON_CELL_STYLING = {
     boxShadow: '0 0 0 2px #177fe6 inset, 0 0 0 3px #fff inset',
     outline: 'none',
   },
+  '&:first-child': {
+    borderLeftWidth: '1px',
+  },
 };
 
 export const SELECTION_STYLING = {
