@@ -16,10 +16,7 @@ export const StyledFooterWrapper = styled(Paper, {
   alignItems: 'center',
   paddingRight: theme.spacing(1),
   boxShadow: 'none',
-  borderStyle: 'solid',
-  borderWidth: '0px 0px 1px 0px',
-  borderRadius: 0,
-  borderColor: footerStyle.borderColor,
+  borderWidth: '0px',
   color: footerStyle.color,
   backgroundColor: footerStyle.backgroundColor,
 }));

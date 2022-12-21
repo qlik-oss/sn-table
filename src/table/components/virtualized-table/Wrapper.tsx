@@ -33,13 +33,7 @@ export default function Wrapper(props: WrapperProps) {
   useOnPropsChange(() => setPage(0), [layout]);
 
   return (
-    <StyledTableWrapper
-      data-key="wrapper"
-      background={theme.background}
-      paginationNeeded={paginationNeeded}
-      dir="ltr"
-      style={{ borderWidth: paginationNeeded ? '0px 1px 0px' : '0px 1px 1px' }}
-    >
+    <StyledTableWrapper data-key="wrapper" background={theme.background} dir="ltr">
       <Table
         layout={layout}
         rect={rect}

@@ -42,7 +42,8 @@ const useData = (
               matrixRowIdx,
               dataPage.qArea,
               pageRowStartIdx,
-              columns
+              columns,
+              pageInfo.rowsPerPage
             );
 
             nextRows[pageRowIdx] = row;

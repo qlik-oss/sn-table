@@ -24,7 +24,7 @@ const Header = (props: HeaderProps) => {
         backgroundColor: headerStyle.backgroundColor,
         borderColor: headerStyle.borderColor,
         borderStyle: 'solid',
-        borderWidth: '1px 0px',
+        borderWidth: '0px 0px 1px 0px',
         boxSizing: 'border-box',
       }}
       itemCount={layout.qHyperCube.qSize.qcx}

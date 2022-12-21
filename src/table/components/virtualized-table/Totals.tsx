@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, memo, useMemo } from 'react';
 import { VariableSizeList } from 'react-window';
 import { TotalsProps } from './types';
-import { HEADER_HEIGHT, PAGINATION_HEIGHT } from './constants';
+import { HEADER_AND_TOTALS_HEIGHT, HEADER_HEIGHT, PAGINATION_HEIGHT } from './constants';
 import TotalsCell from './TotalsCell';
 import { getTotalsCellStyle } from '../../utils/styling-utils';
 
@@ -14,7 +14,7 @@ const Totals = (props: TotalsProps) => {
     forwardRef?.current?.scrollTo(0);
   }, [layout, pageInfo, forwardRef, columnWidth]);
 
-  let top = totals.atTop ? HEADER_HEIGHT : rect.height - HEADER_HEIGHT;
+  let top = totals.atTop ? HEADER_HEIGHT : rect.height - HEADER_AND_TOTALS_HEIGHT;
   top -= totals.atBottom && paginationNeeded ? PAGINATION_HEIGHT : 0;
 
   return (
@@ -31,7 +31,7 @@ const Totals = (props: TotalsProps) => {
         borderStyle: 'solid',
         borderWidth: '0px',
         borderTopWidth: totals.atBottom ? '1px' : '0px',
-        borderBottomWidth: totals.atTop || paginationNeeded ? '1px' : '0px',
+        borderBottomWidth: totals.atTop ? '1px' : '0px',
         boxSizing: 'border-box',
       }}
       itemCount={layout.qHyperCube.qSize.qcx}

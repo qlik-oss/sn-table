@@ -6,7 +6,8 @@ const createRow = (
   matrixRowIdx: number,
   qArea: EngineAPI.IRect,
   pageRowStartIdx: number,
-  columns: Column[]
+  columns: Column[],
+  rowsPerPage: number
 ) => {
   const rowIdx = qArea.qTop + matrixRowIdx;
   const pageRowIdx = pageRowStartIdx + matrixRowIdx;
@@ -21,7 +22,7 @@ const createRow = (
       isSelectable: columns[colIdx].isDim && !columns[colIdx].isLocked,
       pageRowIdx,
       pageColIdx: colIdx,
-      isLastRow: false, // TODO
+      isLastRow: pageRowIdx === rowsPerPage - 1,
     };
   });
 

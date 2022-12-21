@@ -1,5 +1,6 @@
 import React, { memo, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
+import { stardust } from '@nebula.js/stardust';
 import { getColumns } from '../../../handle-data';
 import useColumnSize from './hooks/use-column-size';
 import Body from './Body';
@@ -13,6 +14,22 @@ import Totals from './Totals';
 import useTotals from './hooks/use-totals';
 import useOnPropsChange from './hooks/use-on-props-change';
 import useTableCount from './hooks/use-table-count';
+import ScrollableContainer from './ScrollableContainer';
+
+const toTableContainerRect = (
+  rect: stardust.Rect,
+  rowCount: number,
+  paginationNeeded: boolean,
+  shrinkBodyHeightBy: number
+) => {
+  let height = rect.height - (paginationNeeded ? PAGINATION_HEIGHT : 0);
+  height = Math.min(rowCount * DEFAULT_ROW_HEIGHT + shrinkBodyHeightBy, height);
+
+  return {
+    ...rect,
+    height,
+  };
+};
 
 const TableContainer = (props: TableContainerProps) => {
   const { layout, rect, pageInfo, paginationNeeded, model, theme, constraints, selectionsAPI } = props;
@@ -71,16 +88,16 @@ const TableContainer = (props: TableContainerProps) => {
     />
   );
 
+  const tableContainerRect = toTableContainerRect(rect, rowCount, paginationNeeded, totals.shrinkBodyHeightBy);
+
   return (
-    <div
-      data-testid="table-container"
-      ref={ref}
-      style={{
-        overflow: constraints.active ? 'hidden' : 'auto',
-        width: rect.width,
-        height: rect.height - (paginationNeeded ? PAGINATION_HEIGHT : 0),
-      }}
+    <ScrollableContainer
+      forwardRef={ref}
+      constraints={constraints}
+      width={tableContainerRect.width}
+      height={tableContainerRect.height}
       onScroll={scrollHandler}
+      style={bodyStyle}
     >
       <FullSizeContainer width={containerWidth} height={containerHeight}>
         <Header
@@ -109,7 +126,7 @@ const TableContainer = (props: TableContainerProps) => {
         />
         {totals.atBottom ? TotalsComponent : null}
       </FullSizeContainer>
-    </div>
+    </ScrollableContainer>
   );
 };
 

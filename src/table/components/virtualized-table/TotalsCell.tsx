@@ -22,6 +22,7 @@ function getTotalInfo(layout: TableLayout, colIdx: number) {
 const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
   const { layout, totalsStyle } = data;
   const label = getTotalInfo(layout, index);
+  const isLastColumn = layout.qHyperCube.qSize.qcx - 1 === index;
 
   return (
     <div
@@ -32,7 +33,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
         alignItems: 'center',
         borderColor: totalsStyle.borderColor,
         borderStyle: 'solid',
-        borderWidth: '0px 1px 0px 0px',
+        borderWidth: isLastColumn ? '0px' : '0px 1px 0px 0px',
         padding: '0px 14px',
         justifyContent: index === 0 ? 'left' : 'right',
         boxSizing: 'border-box',
