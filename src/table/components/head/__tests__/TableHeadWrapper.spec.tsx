@@ -48,8 +48,17 @@ describe('<TableHeadWrapper />', () => {
   beforeEach(() => {
     tableData = {
       columns: [
-        { id: 1, align: 'left', label: 'someDim', sortDirection: 'asc', isDim: true, isLocked: false, colIdx: 0 },
-        { id: 2, align: 'right', label: 'someMsr', sortDirection: 'desc', isDim: false, colIdx: 1 },
+        {
+          id: 1,
+          align: 'left',
+          label: 'someDim',
+          sortDirection: 'A',
+          isDim: true,
+          isLocked: false,
+          colIdx: 0,
+          qReverseSort: false,
+        },
+        { id: 2, align: 'right', label: 'someMsr', sortDirection: 'D', isDim: false, colIdx: 1, qReverseSort: false },
       ],
     } as unknown as TableData;
     theme = {
@@ -170,8 +179,8 @@ describe('<TableHeadWrapper />', () => {
   it('should change `aria-pressed` and `aria-sort` when you sort by second column', () => {
     tableData = {
       columns: [
-        { ...tableData.columns[0], sortDirection: 'desc' },
-        { ...tableData.columns[1], sortDirection: 'asc' },
+        { ...tableData.columns[0], sortDirection: 'D' },
+        { ...tableData.columns[1], sortDirection: 'A' },
       ],
     } as unknown as TableData;
     layout = {
