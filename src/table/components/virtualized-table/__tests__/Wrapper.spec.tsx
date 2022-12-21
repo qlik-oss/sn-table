@@ -55,6 +55,7 @@ describe('<Wrapper />', () => {
     theme = {
       getStyle: () => undefined,
       background: { isDark: false },
+      name: () => 'theme',
     } as unknown as ExtendedTheme;
 
     constraints = { active: false };

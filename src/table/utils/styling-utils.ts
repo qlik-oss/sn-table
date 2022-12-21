@@ -31,7 +31,7 @@ export const getAutoFontColor = (backgroundColor: string): string =>
   isDarkColor(backgroundColor) ? StylingDefaults.WHITE : StylingDefaults.FONT_COLOR;
 
 /**
- * get the border color based on the color of the background, returns bright color if background is darka dn vice versa
+ * get the border color based on the color of the background, returns bright color if background is dark and vice versa
  */
 export const getBorderColors = (isBackgroundDark: boolean, borderSeparator: string) => {
   // TODO: proper borders for dark background

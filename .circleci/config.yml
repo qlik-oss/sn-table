@@ -98,6 +98,13 @@ jobs:
           path: test/rendering/artifacts
       - store_artifacts:
           path: test/rendering/test-report
+      - run:
+          name: Run integration tests
+          command: yarn test:integration
+      - store_artifacts:
+          path: test/integration/artifacts
+      - store_artifacts:
+          path: test/integration/test-report
       - persist_to_workspace:
           root: ~/table
           paths:

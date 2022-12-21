@@ -1,21 +1,13 @@
-import React, { useCallback, useEffect, useLayoutEffect, memo, useMemo } from 'react';
+import React, { useLayoutEffect, memo, useMemo } from 'react';
 import { VariableSizeGrid } from 'react-window';
-import { DEFAULT_ROW_HEIGHT, HEADER_HEIGHT, PAGINATION_HEIGHT } from './constants';
-import useInfiniteScrollData from './hooks/use-infinite-scroll-data';
+import { DEFAULT_ROW_HEIGHT, HEADER_AND_TOTALS_HEIGHT, HEADER_HEIGHT, PAGINATION_HEIGHT } from './constants';
+import useData from './hooks/use-data';
 import { BodyProps } from './types';
 import Cell from './Cell';
+import useScrollDirection from './hooks/use-scroll-direction';
+import useTableCount from './hooks/use-table-count';
+import useItemsRendererHandler from './hooks/use-items-rendered-handler';
 import useSelectionsEffect from './hooks/use-selections-effect';
-
-interface OnItemsRendered {
-  overscanColumnStartIndex: number;
-  overscanColumnStopIndex: number;
-  overscanRowStartIndex: number;
-  overscanRowStopIndex: number;
-  visibleColumnStartIndex: number;
-  visibleColumnStopIndex: number;
-  visibleRowStartIndex: number;
-  visibleRowStopIndex: number;
-}
 
 const Body = (props: BodyProps) => {
   const {
@@ -30,81 +22,62 @@ const Body = (props: BodyProps) => {
     paginationNeeded,
     bodyStyle,
     selectionsAPI,
+    totals,
   } = props;
-  const { rowsInPage, loadData, debouncedLoadData } = useInfiniteScrollData(model, layout, pageInfo, columns);
-  const rowCount = Math.min(pageInfo.rowsPerPage, layout.qHyperCube.qSize.qcy - pageInfo.page * pageInfo.rowsPerPage);
-  const visibleRowCount = Math.min(rowCount, Math.ceil(rect.height / DEFAULT_ROW_HEIGHT));
-  const visibleColumnCount = useMemo(
-    () =>
-      columnWidth.reduce(
-        (data, colWidth) => {
-          if (data.width < rect.width) {
-            data.width += colWidth;
-            data.count += 1;
-          }
+  const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
+  const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(layout, pageInfo, rect, columnWidth);
+  const stickyTop = totals.atTop ? HEADER_AND_TOTALS_HEIGHT : HEADER_HEIGHT;
+  let { height: bodyHeight } = rect;
+  bodyHeight -= paginationNeeded ? PAGINATION_HEIGHT : 0;
+  bodyHeight -= totals.shrinkBodyHeightBy;
+  bodyHeight = Math.min(rowCount * DEFAULT_ROW_HEIGHT, bodyHeight);
 
-          return data;
-        },
-        { count: 0, width: 0 }
-      ),
-    [rect, columnWidth]
-  ).count;
+  const { rowsInPage, loadRows, loadColumns } = useData(
+    model,
+    layout,
+    pageInfo,
+    visibleRowCount,
+    visibleColumnCount,
+    columns
+  );
+
+  const handleItemsRendered = useItemsRendererHandler({
+    layout,
+    loadRows,
+    loadColumns,
+    verticalScrollDirection,
+    horizontalScrollDirection,
+    rowCount,
+    pageInfo,
+  });
+
+  const itemData = useMemo(() => ({ rowsInPage, columns, bodyStyle }), [rowsInPage, columns, bodyStyle]);
 
   useSelectionsEffect(selectionsAPI, rowsInPage);
-
-  useEffect(() => {
-    // Initial data load
-    const top = pageInfo.page * pageInfo.rowsPerPage;
-    loadData(0, top, visibleColumnCount, visibleRowCount);
-  }, [layout, visibleRowCount, visibleColumnCount, loadData, pageInfo]);
 
   useLayoutEffect(() => {
     if (!forwardRef.current) return;
 
     forwardRef.current.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: true });
     forwardRef.current.scrollTo({ scrollLeft: 0, scrollTop: 0 });
-  }, [layout, pageInfo, forwardRef, columnWidth]);
-
-  const handleItemsRendered = useCallback(
-    ({
-      overscanColumnStartIndex,
-      overscanColumnStopIndex,
-      overscanRowStartIndex,
-      overscanRowStopIndex,
-    }: OnItemsRendered) => {
-      if (overscanRowStartIndex > rowCount) {
-        // Safe guard against when a new page is loaded and the user have scrolled on the previously loaded page.
-        // In such case overscanRowStartIndex could be larger than the actual amount of rows available
-        return;
-      }
-
-      if (overscanColumnStartIndex > 0 || overscanRowStartIndex > 0) {
-        const left = overscanColumnStartIndex;
-        const top = overscanRowStartIndex - pageInfo.page * pageInfo.rowsPerPage;
-        const width = overscanColumnStopIndex - overscanColumnStartIndex + 1;
-        const height = overscanRowStopIndex - overscanRowStartIndex + 1;
-
-        debouncedLoadData(left, top, width, height);
-      }
-    },
-    [debouncedLoadData, pageInfo, rowCount]
-  );
+  }, [layout, pageInfo.page, forwardRef, columnWidth]);
 
   return (
     <VariableSizeGrid
       data-key="body"
       ref={forwardRef}
       innerRef={innerForwardRef}
-      style={{ position: 'sticky', top: `${HEADER_HEIGHT}px`, left: '0px', overflow: 'hidden' }}
+      style={{ position: 'sticky', top: `${stickyTop}px`, left: '0px', overflow: 'hidden' }}
       columnCount={layout.qHyperCube.qSize.qcx}
       columnWidth={(index) => columnWidth[index]}
-      height={rect.height - HEADER_HEIGHT - (paginationNeeded ? PAGINATION_HEIGHT : 0)}
+      height={bodyHeight}
       rowCount={rowCount}
       rowHeight={() => DEFAULT_ROW_HEIGHT}
       estimatedRowHeight={DEFAULT_ROW_HEIGHT}
       width={rect.width}
-      itemData={{ rowsInPage, columns, bodyStyle }}
+      itemData={itemData}
       onItemsRendered={handleItemsRendered}
+      onScroll={scrollHandler}
     >
       {Cell}
     </VariableSizeGrid>

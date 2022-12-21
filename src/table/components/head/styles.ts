@@ -15,7 +15,7 @@ export const StyledHeadCell = styled(TableCell, {
   ...headerStyle,
   pointer: 'cursor',
   '&&:hover, &&:focus': {
-    '& svg, & button': { opacity: 1 },
+    '& button, & svg': { opacity: 1 },
   },
 }));
 
