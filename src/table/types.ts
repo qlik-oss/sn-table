@@ -227,7 +227,7 @@ export interface TableHeadWrapperProps extends CommonTableProps {
   areBasicFeaturesEnabled: boolean;
 }
 
-export interface TableHeadCellMenu {
+export interface HeadCellMenuProps {
   headerStyle: GeneratedStyling;
   translator: ExtendedTranslator;
   sortDirection: SortDirection;

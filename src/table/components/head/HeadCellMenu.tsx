@@ -12,7 +12,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
 import { StyledMenuIconButton, StyledCellMenu } from './styles';
-import { TableHeadCellMenu } from '../../types';
+import { HeadCellMenuProps } from '../../types';
 import { SortDirection } from '../../../types';
 
 export default function HeadCellMenu({
@@ -22,7 +22,7 @@ export default function HeadCellMenu({
   sortFromMenu,
   isInteractionEnabled,
   isCurrentColumnActive,
-}: TableHeadCellMenu) {
+}: HeadCellMenuProps) {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
 
