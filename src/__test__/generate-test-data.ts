@@ -1,4 +1,4 @@
-import { HyperCube, TableLayout, TotalsPosition, Cell, Row } from '../types';
+import { HyperCube, TableLayout, Cell, Row } from '../types';
 
 export function generateDataPages(height: number, width: number, qLeft = 0, qTop = 0) {
   const qMatrix: Record<string, string>[][] = [];
@@ -34,7 +34,7 @@ export function generateLayout(
   const qMeasureInfo = [];
   const totals = {
     show: false,
-    position: 'noTotals' as TotalsPosition,
+    position: 'noTotals',
     label: 'Totals',
   };
 

@@ -72,6 +72,7 @@ export interface Component {
   content?: ContentStyling;
   header?: HeaderStyling;
 }
+
 export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, 'qHyperCube'> {
   qHyperCube: HyperCube;
   totals: {
@@ -117,7 +118,7 @@ export interface Column {
   qApprMaxGlyphCount: number;
 }
 
-export type TotalsPosition = 'top' | 'bottom' | 'noTotals';
+export type TotalsPosition = { atTop: boolean; atBottom: boolean };
 
 export type TableData = {
   totalColumnCount: number;

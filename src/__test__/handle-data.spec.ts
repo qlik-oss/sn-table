@@ -1,6 +1,6 @@
 import manageData, { getColumns, getColumnInfo, getTotalInfo, getTotalPosition } from '../handle-data';
 import { generateDataPages, generateLayout } from './generate-test-data';
-import { TableLayout, PageInfo, SetPageInfo, TableData, Cell, ExtendedNxAttrExprInfo } from '../types';
+import { TableLayout, PageInfo, SetPageInfo, TableData, Cell, ExtendedNxAttrExprInfo, TotalsPosition } from '../types';
 
 describe('handle-data', () => {
   let layout: TableLayout;
@@ -209,36 +209,46 @@ describe('handle-data', () => {
   });
 
   describe('getTotalPosition:', () => {
+    let expectedPosition: TotalsPosition;
+
+    beforeEach(() => {
+      expectedPosition = { atBottom: false, atTop: false };
+    });
+
     describe('When total auto mode is off', () => {
-      it('should return top and show totals when the position is set to top', () => {
+      it('should show totals at top when the position is set to top', () => {
         layout.totals.position = 'top';
-        expect(getTotalPosition(layout)).toBe('top');
+        expectedPosition.atTop = true;
+        expect(getTotalPosition(layout)).toEqual(expectedPosition);
       });
 
-      it('should return noTotals and not to show totals when the position is set to none', () => {
-        layout.totals.position = 'noTotals';
-        expect(getTotalPosition(layout)).toBe('noTotals');
-      });
-
-      it('should return bottom when the position is set to bottom', () => {
+      it('should show totals at bottom when the position is set to bottom', () => {
         layout.totals.position = 'bottom';
-        expect(getTotalPosition(layout)).toBe('bottom');
+        expectedPosition.atBottom = true;
+        expect(getTotalPosition(layout)).toEqual(expectedPosition);
       });
 
-      it('should not show totals when the position is set to be visible but there is no grandTotal', () => {
+      it('should not show totals when the position is set to none', () => {
+        expect(getTotalPosition(layout)).toEqual(expectedPosition);
+      });
+
+      it('should not show totals when position is set to top but there is no grandTotal', () => {
+        layout.totals.position = 'top';
         layout.qHyperCube.qGrandTotalRow.length = 0;
-        expect(getTotalPosition(layout)).toBe('noTotals');
+        expect(getTotalPosition(layout)).toEqual(expectedPosition);
       });
 
-      it('should not show totals when position is set to be visible but table has only dimension', () => {
+      it('should not show totals when position is set to top but table has only dimensions', () => {
+        layout.totals.position = 'top';
         layout.qHyperCube.qMeasureInfo.length = 0;
-        expect(getTotalPosition(layout)).toBe('noTotals');
+        expect(getTotalPosition(layout)).toEqual(expectedPosition);
       });
 
       it('should show totals when table has only measure', () => {
         layout.qHyperCube.qDimensionInfo.length = 0;
         layout.totals.position = 'top';
-        expect(getTotalPosition(layout)).toBe('top');
+        expectedPosition.atTop = true;
+        expect(getTotalPosition(layout)).toEqual(expectedPosition);
       });
     });
 
@@ -246,13 +256,14 @@ describe('handle-data', () => {
       it('should show totals at top by default', () => {
         layout.totals.show = true;
         layout.totals.position = 'noTotals';
-        expect(getTotalPosition(layout)).toBe('top');
+        expectedPosition.atTop = true;
+        expect(getTotalPosition(layout)).toEqual(expectedPosition);
       });
 
-      it('should return not show totals when table has only measure', () => {
+      it('should not show totals when table has only measures', () => {
         layout.totals.show = true;
         layout.qHyperCube.qDimensionInfo.length = 0;
-        expect(getTotalPosition(layout)).toBe('noTotals');
+        expect(getTotalPosition(layout)).toEqual(expectedPosition);
       });
     });
   });

@@ -50,14 +50,14 @@ export const StyledBodyCell = styled(TableCell, {
 // ---------- TableTotals ----------
 
 export const StyledTotalsCell = styled(TableCell, {
-  shouldForwardProp: (prop: string) => prop !== 'isTop' && prop !== 'headRowHeight' && prop !== 'totalsStyle',
-})(({ totalsStyle, isTop, headRowHeight }) => ({
+  shouldForwardProp: (prop: string) => prop !== 'atTop' && prop !== 'headRowHeight' && prop !== 'totalsStyle',
+})(({ totalsStyle, atTop, headRowHeight }) => ({
   ...COMMON_CELL_STYLING,
   ...totalsStyle,
   fontWeight: 'bold',
   position: 'sticky',
-  borderWidth: isTop ? '0px 1px 2px 0px' : '2px 1px 1px 0px',
-  top: isTop && headRowHeight,
-  bottom: !isTop && 0,
+  borderWidth: atTop ? '0px 1px 2px 0px' : '2px 1px 1px 0px',
+  top: atTop && headRowHeight,
+  bottom: !atTop && 0,
   marginTop: 0,
 }));

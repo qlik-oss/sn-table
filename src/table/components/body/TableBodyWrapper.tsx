@@ -67,7 +67,7 @@ function TableBodyWrapper({
 
   return (
     <StyledTableBody paginationNeeded={paginationNeeded} bodyCellStyle={bodyCellStyle}>
-      {totalsPosition === 'top' ? totals : undefined}
+      {totalsPosition.atTop ? totals : undefined}
       {rows.map((row) => (
         <StyledBodyRow
           bodyCellStyle={bodyCellStyle}
@@ -127,7 +127,7 @@ function TableBodyWrapper({
           })}
         </StyledBodyRow>
       ))}
-      {totalsPosition === 'bottom' ? totals : undefined}
+      {totalsPosition.atBottom ? totals : undefined}
     </StyledTableBody>
   );
 }
