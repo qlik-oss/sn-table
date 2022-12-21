@@ -15,7 +15,7 @@ describe('<TableBodyWrapper />', () => {
   const rootElement = {} as HTMLElement;
   const setShouldRefocus = () => undefined;
   const keyboard = {} as stardust.Keyboard;
-  const tableWrapperRef = {} as React.MutableRefObject<HTMLDivElement | undefined>;
+  const tableWrapperRef = {} as React.MutableRefObject<HTMLDivElement | null>;
   const announce = () => undefined;
   const model = { getHyperCubeData: async () => generateDataPages(2, 2) } as unknown as EngineAPI.IGenericObject;
 

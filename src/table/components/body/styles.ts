@@ -41,5 +41,4 @@ export const StyledTotalsCell = styled(TableCell, {
   borderWidth: isTop ? '0px 1px 1px 0px' : '1px 1px 1px 0px',
   top: isTop && headRowHeight,
   bottom: !isTop && 0,
-  // marginTop: 0,
 }));

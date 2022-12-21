@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom/client';
 import { StyleSheetManager } from 'styled-components';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import rtlPluginSc from 'stylis-plugin-rtl-sc';
 
 import TableWrapper from './components/TableWrapper';
@@ -14,8 +14,6 @@ import { WrapperProps } from './components/virtualized-table/types';
 export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   const { direction, selectionsAPI, tableData } = props;
   const muiTheme = muiSetup(direction);
-  const defaultTheme = createTheme();
-  console.log(defaultTheme);
 
   reactRoot?.render(
     <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : undefined}>
