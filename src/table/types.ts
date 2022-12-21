@@ -236,17 +236,6 @@ export interface TableHeadCellMenu {
   isCurrentColumnActive: boolean;
 }
 
-export interface TableHeadCellMenuItem {
-  children: JSX.Element;
-  itemTitle: string;
-  sortOrder: SortDirection;
-  sortDirection: SortDirection;
-  sortFromMenu(evt: React.MouseEvent, sortOrder: SortDirection): void;
-  setOpen: any;
-  isInteractionEnabled: boolean;
-  isCurrentColumnActive: boolean;
-}
-
 export interface TableBodyWrapperProps extends CommonTableProps {
   selectionsAPI: ExtendedSelectionAPI;
   rootElement: HTMLElement;

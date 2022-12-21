@@ -12,9 +12,9 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
 import { StyledMenuIconButton, StyledCellMenu } from './styles';
-import { TableHeadCellMenu, TableHeadCellMenuItem } from '../../types';
+import { TableHeadCellMenu } from '../../types';
+import { SortDirection } from '../../../types';
 
-}: {
 export default function HeadCellMenu({
   headerStyle,
   translator,
