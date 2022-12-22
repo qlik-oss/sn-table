@@ -93,6 +93,7 @@ export interface Cell {
   pageColIdx: number;
   isSelectable: boolean;
   isLastRow: boolean;
+  isLastColumn?: boolean;
 }
 
 export interface Row {

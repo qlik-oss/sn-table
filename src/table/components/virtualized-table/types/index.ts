@@ -13,15 +13,14 @@ import { Totals } from '../hooks/use-totals';
 
 export type TotalsPosition = 'bottom' | 'noTotals' | 'top';
 
-export interface TableRect {
+interface Rect {
   width: number;
   height: number;
 }
 
-export interface StickyContainerRect {
-  width: number;
-  height: number;
-}
+export interface TableRect extends Rect {}
+
+export interface StickyContainerRect extends Rect {}
 
 export interface WrapperProps {
   model: EngineAPI.IGenericObject;

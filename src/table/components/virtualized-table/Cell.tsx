@@ -26,8 +26,6 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
   } as CellStyle);
 
   if (typeof datum === 'object') {
-    const isLastColumn = columns.length - 1 === columnIndex;
-
     return (
       <div
         className={`sn-table-cell ${selectionStyling?.selectedCellClass ?? ''}`}
@@ -39,7 +37,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           alignItems: 'center',
           borderWidth: '0px',
           borderBottomWidth: datum.isLastRow ? '0px' : '1px',
-          borderRightWidth: isLastColumn ? '0px' : '1px',
+          borderRightWidth: datum.isLastColumn ? '0px' : '1px',
           borderStyle: 'solid',
           justifyContent: columns[columnIndex].align,
           padding: '0px 14px',
