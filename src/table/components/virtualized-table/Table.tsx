@@ -6,7 +6,7 @@ import Body from './Body';
 import { DEFAULT_ROW_HEIGHT } from './constants';
 import FullSizeContainer from './FullSizeContainer';
 import Header from './Header';
-import { TableContainerProps } from './types';
+import { TableProps } from './types';
 import { getHeaderStyle, getBodyCellStyle } from '../../utils/styling-utils';
 import useScrollHandler from './hooks/use-scroll-handler';
 import Totals from './Totals';
@@ -17,7 +17,7 @@ import ScrollableContainer from './ScrollableContainer';
 import StickyContainer from './StickyContainer';
 import { toTableRect, toStickyContainerRect } from './utils/to-rect';
 
-const Table = (props: TableContainerProps) => {
+const Table = (props: TableProps) => {
   const { layout, rect, pageInfo, paginationNeeded, model, theme, constraints, selectionsAPI } = props;
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);

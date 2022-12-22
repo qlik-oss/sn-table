@@ -13,6 +13,16 @@ import { Totals } from '../hooks/use-totals';
 
 export type TotalsPosition = 'bottom' | 'noTotals' | 'top';
 
+export interface TableRect {
+  width: number;
+  height: number;
+}
+
+export interface StickyContainerRect {
+  width: number;
+  height: number;
+}
+
 export interface WrapperProps {
   model: EngineAPI.IGenericObject;
   layout: TableLayout;
@@ -25,7 +35,7 @@ export interface WrapperProps {
   constraints: stardust.Constraints;
 }
 
-export interface TableContainerProps {
+export interface TableProps {
   layout: TableLayout;
   rect: stardust.Rect;
   pageInfo: PageInfo;
@@ -38,7 +48,7 @@ export interface TableContainerProps {
 
 export interface HeaderProps {
   layout: TableLayout;
-  rect: stardust.Rect;
+  rect: StickyContainerRect;
   pageInfo: PageInfo;
   forwardRef: React.RefObject<VariableSizeList<any>>;
   columns: Column[];
@@ -48,7 +58,7 @@ export interface HeaderProps {
 
 export interface TotalsProps {
   layout: TableLayout;
-  rect: stardust.Rect;
+  rect: StickyContainerRect;
   pageInfo: PageInfo;
   forwardRef: React.RefObject<VariableSizeList<any>>;
   columns: Column[];
@@ -60,7 +70,7 @@ export interface TotalsProps {
 export interface BodyProps {
   model: EngineAPI.IGenericObject;
   layout: TableLayout;
-  rect: stardust.Rect;
+  rect: StickyContainerRect;
   pageInfo: PageInfo;
   columns: Column[];
   columnWidth: number[];

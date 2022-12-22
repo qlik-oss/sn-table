@@ -1,10 +1,10 @@
-import { stardust } from '@nebula.js/stardust';
 import React from 'react';
 import { GeneratedStyling } from '../../types';
+import { StickyContainerRect } from './types';
 
 interface StickyContainerProps {
   children: (JSX.Element | null)[] | JSX.Element;
-  rect: stardust.Rect;
+  rect: StickyContainerRect;
   style: GeneratedStyling;
 }
 
