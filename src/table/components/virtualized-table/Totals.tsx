@@ -1,12 +1,12 @@
 import React, { useLayoutEffect, memo, useMemo } from 'react';
 import { VariableSizeList } from 'react-window';
 import { TotalsProps } from './types';
-import { HEADER_AND_TOTALS_HEIGHT, HEADER_HEIGHT, PAGINATION_HEIGHT } from './constants';
+import { HEADER_HEIGHT } from './constants';
 import TotalsCell from './TotalsCell';
 import { getTotalsCellStyle } from '../../utils/styling-utils';
 
 const Totals = (props: TotalsProps) => {
-  const { layout, rect, forwardRef, columnWidth, pageInfo, theme, totals, paginationNeeded } = props;
+  const { layout, rect, forwardRef, columnWidth, pageInfo, theme, totals } = props;
   const totalsStyle = useMemo(() => getTotalsCellStyle(layout, theme), [layout, theme.name()]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useLayoutEffect(() => {
@@ -14,17 +14,11 @@ const Totals = (props: TotalsProps) => {
     forwardRef?.current?.scrollTo(0);
   }, [layout, pageInfo, forwardRef, columnWidth]);
 
-  let top = totals.atTop ? HEADER_HEIGHT : rect.height - HEADER_AND_TOTALS_HEIGHT;
-  top -= totals.atBottom && paginationNeeded ? PAGINATION_HEIGHT : 0;
-
   return (
     <VariableSizeList
       ref={forwardRef}
       layout="horizontal"
       style={{
-        position: 'sticky',
-        top,
-        left: 0,
         overflow: 'hidden',
         backgroundColor: totalsStyle.backgroundColor,
         borderColor: totalsStyle.borderColor,

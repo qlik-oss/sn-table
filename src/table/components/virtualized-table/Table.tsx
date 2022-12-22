@@ -1,10 +1,9 @@
 import React, { memo, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
-import { stardust } from '@nebula.js/stardust';
 import { getColumns } from '../../../handle-data';
 import useColumnSize from './hooks/use-column-size';
 import Body from './Body';
-import { DEFAULT_ROW_HEIGHT, PAGINATION_HEIGHT } from './constants';
+import { DEFAULT_ROW_HEIGHT } from './constants';
 import FullSizeContainer from './FullSizeContainer';
 import Header from './Header';
 import { TableContainerProps } from './types';
@@ -15,23 +14,10 @@ import useTotals from './hooks/use-totals';
 import useOnPropsChange from './hooks/use-on-props-change';
 import useTableCount from './hooks/use-table-count';
 import ScrollableContainer from './ScrollableContainer';
+import StickyContainer from './StickyContainer';
+import { toTableRect, toStickyContainerRect } from './utils/to-rect';
 
-const toTableContainerRect = (
-  rect: stardust.Rect,
-  rowCount: number,
-  paginationNeeded: boolean,
-  shrinkBodyHeightBy: number
-) => {
-  let height = rect.height - (paginationNeeded ? PAGINATION_HEIGHT : 0);
-  height = Math.min(rowCount * DEFAULT_ROW_HEIGHT + shrinkBodyHeightBy, height);
-
-  return {
-    ...rect,
-    height,
-  };
-};
-
-const TableContainer = (props: TableContainerProps) => {
+const Table = (props: TableContainerProps) => {
   const { layout, rect, pageInfo, paginationNeeded, model, theme, constraints, selectionsAPI } = props;
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);
@@ -49,10 +35,12 @@ const TableContainer = (props: TableContainerProps) => {
   );
   const totals = useTotals(layout);
   const columns = useMemo(() => getColumns(layout), [layout]);
-  const { width } = useColumnSize(rect, columns, headerStyle, bodyStyle);
-  const { rowCount } = useTableCount(layout, pageInfo, rect, width);
+  const tableRect = toTableRect(rect, paginationNeeded);
+  const { width } = useColumnSize(tableRect, columns, headerStyle, bodyStyle);
+  const { rowCount } = useTableCount(layout, pageInfo, tableRect, width);
   const containerWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
   const [containerHeight, setContainerHeight] = useState(rowCount * DEFAULT_ROW_HEIGHT + totals.shrinkBodyHeightBy);
+  const stickyContainerRect = toStickyContainerRect(tableRect, rowCount, totals.shrinkBodyHeightBy);
   const scrollHandler = useScrollHandler(
     headerRef,
     totalsRef,
@@ -78,9 +66,8 @@ const TableContainer = (props: TableContainerProps) => {
     <Totals
       theme={theme}
       layout={layout}
-      rect={rect}
+      rect={stickyContainerRect}
       pageInfo={pageInfo}
-      paginationNeeded={paginationNeeded}
       columns={columns}
       columnWidth={width}
       forwardRef={totalsRef}
@@ -88,49 +75,47 @@ const TableContainer = (props: TableContainerProps) => {
     />
   );
 
-  const tableContainerRect = toTableContainerRect(rect, rowCount, paginationNeeded, totals.shrinkBodyHeightBy);
-
   return (
     <ScrollableContainer
       forwardRef={ref}
       constraints={constraints}
-      width={tableContainerRect.width}
-      height={tableContainerRect.height}
+      width={tableRect.width}
+      height={tableRect.height}
       onScroll={scrollHandler}
-      style={bodyStyle}
     >
       <FullSizeContainer width={containerWidth} height={containerHeight}>
-        <Header
-          headerStyle={headerStyle}
-          layout={layout}
-          rect={rect}
-          pageInfo={pageInfo}
-          columns={columns}
-          columnWidth={width}
-          forwardRef={headerRef}
-        />
-        {totals.atTop ? TotalsComponent : null}
-        <Body
-          bodyStyle={bodyStyle}
-          model={model}
-          layout={layout}
-          rect={rect}
-          pageInfo={pageInfo}
-          paginationNeeded={paginationNeeded}
-          columns={columns}
-          columnWidth={width}
-          forwardRef={bodyRef}
-          innerForwardRef={innerForwardRef}
-          selectionsAPI={selectionsAPI}
-          totals={totals}
-        />
-        {totals.atBottom ? TotalsComponent : null}
+        <StickyContainer rect={stickyContainerRect} style={bodyStyle}>
+          <Header
+            headerStyle={headerStyle}
+            layout={layout}
+            rect={stickyContainerRect}
+            pageInfo={pageInfo}
+            columns={columns}
+            columnWidth={width}
+            forwardRef={headerRef}
+          />
+          {totals.atTop ? TotalsComponent : null}
+          <Body
+            bodyStyle={bodyStyle}
+            model={model}
+            layout={layout}
+            rect={stickyContainerRect}
+            pageInfo={pageInfo}
+            columns={columns}
+            columnWidth={width}
+            forwardRef={bodyRef}
+            innerForwardRef={innerForwardRef}
+            selectionsAPI={selectionsAPI}
+            totals={totals}
+          />
+          {totals.atBottom ? TotalsComponent : null}
+        </StickyContainer>
       </FullSizeContainer>
     </ScrollableContainer>
   );
 };
 
 // Export non memoized version for testing purpose
-export { TableContainer };
+export { Table as TestableTable };
 
-export default memo(TableContainer);
+export default memo(Table);

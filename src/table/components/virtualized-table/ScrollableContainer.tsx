@@ -1,13 +1,11 @@
 import { stardust } from '@nebula.js/stardust';
 import React from 'react';
-import { GeneratedStyling } from '../../types';
 
 interface ScrollableContainerProps {
   children: (JSX.Element | null)[] | JSX.Element;
   forwardRef: React.RefObject<HTMLDivElement>;
   height: number;
   width: number;
-  style: GeneratedStyling;
   constraints: stardust.Constraints;
   onScroll: (event: React.SyntheticEvent<Element, Event>) => void;
 }
@@ -16,7 +14,6 @@ const ScrollableContainer = ({
   children,
   width,
   height,
-  style,
   forwardRef,
   constraints,
   onScroll,
@@ -29,10 +26,6 @@ const ScrollableContainer = ({
         overflow: constraints.active ? 'hidden' : 'auto',
         width,
         height,
-        borderStyle: 'solid',
-        borderWidth: '1px',
-        borderColor: style.borderColor,
-        // boxSizing: 'border-box',
       }}
       onScroll={onScroll}
     >

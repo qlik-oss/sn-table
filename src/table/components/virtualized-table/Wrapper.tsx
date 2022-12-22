@@ -4,7 +4,7 @@ import PaginationContent from '../footer/PaginationContent';
 import { StyledTableWrapper } from '../styles';
 import { PageInfo, TableData } from '../../../types';
 import FooterWrapper from '../footer/FooterWrapper';
-import Table from './TableContainer';
+import Table from './Table';
 import { MAX_PAGE_SIZE } from './constants';
 import useOnPropsChange from './hooks/use-on-props-change';
 

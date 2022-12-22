@@ -50,7 +50,6 @@ export interface TotalsProps {
   layout: TableLayout;
   rect: stardust.Rect;
   pageInfo: PageInfo;
-  paginationNeeded: boolean;
   forwardRef: React.RefObject<VariableSizeList<any>>;
   columns: Column[];
   columnWidth: number[];
@@ -63,7 +62,6 @@ export interface BodyProps {
   layout: TableLayout;
   rect: stardust.Rect;
   pageInfo: PageInfo;
-  paginationNeeded: boolean;
   columns: Column[];
   columnWidth: number[];
   forwardRef: React.RefObject<VariableSizeGrid<any>>;

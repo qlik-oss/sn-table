@@ -2,12 +2,12 @@ import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { stardust } from '@nebula.js/stardust';
-import { TableContainer } from '../TableContainer';
+import { TestableTable } from '../Table';
 import { ExtendedSelectionAPI, ExtendedTheme, PageInfo, TableLayout } from '../../../../types';
 import { generateDataPages, generateLayout } from '../../../../__test__/generate-test-data';
 import { TableContextProvider } from '../../../context';
 
-describe('<TableContainer />', () => {
+describe('<Table />', () => {
   let measureTextMock: jest.Mock<{ width: number }>;
   let rect: stardust.Rect;
   let layout: TableLayout;
@@ -21,11 +21,11 @@ describe('<TableContainer />', () => {
   const measureCount = 1;
   const rowCount = 5;
 
-  const renderTableContainer = () => ({
+  const renderTable = () => ({
     user: userEvent.setup(),
     ...render(
       <TableContextProvider selectionsAPI={selectionsAPI} pageRows={[]}>
-        <TableContainer
+        <TestableTable
           model={model}
           pageInfo={pageInfo}
           rect={rect}
@@ -102,9 +102,9 @@ describe('<TableContainer />', () => {
   afterEach(() => jest.restoreAllMocks());
 
   it('should render', async () => {
-    const { getByTestId, getByText } = renderTableContainer();
+    const { getByTestId, getByText } = renderTable();
 
-    expect(getByTestId('table-container')).toBeVisible();
+    expect(getByTestId('sticky-container')).toBeVisible();
     await waitFor(() => expect(getByText('title-0')).toBeVisible()); // A header value
     await waitFor(() => expect(getByText('title-1')).toBeVisible()); // A header value
     await waitFor(() => expect(getByText('dimension-c0-r0')).toBeVisible()); // A dimension value
@@ -116,7 +116,7 @@ describe('<TableContainer />', () => {
     it('should be able to select a dimension cell', async () => {
       const cellText = 'dimension-c0-r0';
 
-      const { getByText, user } = renderTableContainer();
+      const { getByText, user } = renderTable();
 
       await waitFor(() => expect(getByText(cellText)).toBeVisible());
 
@@ -131,7 +131,7 @@ describe('<TableContainer />', () => {
       const dimCell0 = 'dimension-c0-r0';
       const dimCell1 = 'dimension-c0-r1';
 
-      const { getByText, user } = renderTableContainer();
+      const { getByText, user } = renderTable();
 
       await waitFor(() => expect(getByText(dimCell0)).toBeVisible());
 
@@ -148,7 +148,7 @@ describe('<TableContainer />', () => {
     it('should be able to select and de-select a dimension cell', async () => {
       const cellText = 'dimension-c0-r0';
 
-      const { getByText, user } = renderTableContainer();
+      const { getByText, user } = renderTable();
 
       await waitFor(() => expect(getByText(cellText)).toBeVisible());
 
@@ -165,7 +165,7 @@ describe('<TableContainer />', () => {
       jest.spyOn(selectionsAPI, 'begin');
       const cellText = 'measure-c2-r0';
 
-      const { getByText, user } = renderTableContainer();
+      const { getByText, user } = renderTable();
 
       await waitFor(() => expect(getByText(cellText)).toBeVisible());
 
@@ -181,7 +181,7 @@ describe('<TableContainer />', () => {
     it('when a dimension has selection/s all other columns should be excluded', async () => {
       const cellText = 'dimension-c0-r0';
 
-      const { getByText, user } = renderTableContainer();
+      const { getByText, user } = renderTable();
 
       await waitFor(() => expect(getByText(cellText)).toBeVisible());
 
@@ -210,7 +210,7 @@ describe('<TableContainer />', () => {
 
     it('should render with totals at the top when total is in auto mode', async () => {
       layout.totals.show = true;
-      const { getByText } = renderTableContainer();
+      const { getByText } = renderTable();
 
       await waitFor(() => {
         const body = getByText('dimension-c0-r0').parentNode as ParentNode;
@@ -223,7 +223,7 @@ describe('<TableContainer />', () => {
 
     it('should render with totals at the top', async () => {
       layout.totals.show = false;
-      const { getByText } = renderTableContainer();
+      const { getByText } = renderTable();
 
       await waitFor(() => {
         const body = getByText('dimension-c0-r0').parentNode as ParentNode;
@@ -237,7 +237,7 @@ describe('<TableContainer />', () => {
     it('should render with totals at the bottom', async () => {
       layout.totals.show = false;
       layout.totals.position = 'bottom';
-      const { getByText } = renderTableContainer();
+      const { getByText } = renderTable();
 
       await waitFor(() => {
         const body = getByText('dimension-c0-r0').parentNode as ParentNode;
@@ -251,9 +251,9 @@ describe('<TableContainer />', () => {
     it('should render without totals', async () => {
       layout.totals.show = false;
       layout.totals.position = 'noTotals';
-      const { getByTestId, queryByText } = renderTableContainer();
+      const { getByTestId, queryByText } = renderTable();
 
-      expect(getByTestId('table-container')).toBeVisible();
+      expect(getByTestId('sticky-container')).toBeVisible();
       await waitFor(() => expect(queryByText(layout.totals.label)).toBeNull());
       await waitFor(() => expect(queryByText(totalRow.qText as string)).toBeNull());
     });
