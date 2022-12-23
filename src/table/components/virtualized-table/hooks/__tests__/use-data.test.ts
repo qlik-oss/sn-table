@@ -106,6 +106,31 @@ describe('useData', () => {
       await waitFor(() => expect(result.current.rowsInPage).toEqual(expectedRows));
     });
 
+    test('should flag last row', async () => {
+      await doRenderHook();
+      const { result } = renderHookResult;
+
+      await act(async () => {
+        result.current.loadRows(0, 4, 1, 1);
+      });
+
+      const expectedRow: Row = {
+        'col-0': {
+          colIdx: 0,
+          isLastRow: true,
+          isLastColumn: false,
+          isSelectable: false,
+          pageColIdx: 0,
+          pageRowIdx: 4,
+          qText: '0',
+          rowIdx: 4,
+        } as Cell,
+        key: 'row-4',
+      };
+
+      await waitFor(() => expect(result.current.rowsInPage[4]).toEqual(expectedRow));
+    });
+
     test('should not fetch duplicate data pages', async () => {
       await doRenderHook();
       const { result } = renderHookResult;
