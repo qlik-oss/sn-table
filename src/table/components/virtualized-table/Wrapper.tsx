@@ -45,7 +45,7 @@ export default function Wrapper(props: WrapperProps) {
         constraints={constraints}
       />
       {paginationNeeded && (
-        <FooterWrapper theme={theme}>
+        <FooterWrapper theme={theme} withoutBorders>
           <PaginationContent
             theme={theme}
             handleChangePage={(currentPage) => setPage(currentPage)}

@@ -8,17 +8,19 @@ import FormControl from '@mui/material/FormControl';
 // ---------- FooterWrapper ----------
 
 export const StyledFooterWrapper = styled(Paper, {
-  shouldForwardProp: (prop: string) => prop !== 'footerStyle',
-})(({ footerStyle, theme }) => ({
+  shouldForwardProp: (prop: string) => prop !== 'footerStyle' && prop !== 'withoutBorders',
+})(({ footerStyle, theme, withoutBorders }) => ({
   height: 48,
   display: 'flex',
   justifyContent: 'flex-end',
   alignItems: 'center',
   paddingRight: theme.spacing(1),
   boxShadow: 'none',
-  borderWidth: '0px',
   color: footerStyle.color,
   backgroundColor: footerStyle.backgroundColor,
+  ...(withoutBorders
+    ? { borderWidth: '0px' }
+    : { borderStyle: 'solid', borderWidth: '0px 0px 1px 0px', borderRadius: 0, borderColor: footerStyle.borderColor }),
 }));
 
 // ---------- PaginationContent ----------

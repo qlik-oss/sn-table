@@ -271,6 +271,7 @@ export interface FooterWrapperProps {
   children: JSX.Element;
   theme: ExtendedTheme;
   footerContainer?: HTMLElement;
+  withoutBorders?: boolean;
 }
 export interface CellHOCProps extends TableCellProps {
   styling: CellStyle;
