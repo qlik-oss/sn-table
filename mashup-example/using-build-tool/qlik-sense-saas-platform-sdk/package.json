@@ -21,6 +21,6 @@
     "@qlik/sdk": "0.16.0"
   },
   "devDependencies": {
-    "vite": "4.0.2"
+    "vite": "4.0.3"
   }
 }
