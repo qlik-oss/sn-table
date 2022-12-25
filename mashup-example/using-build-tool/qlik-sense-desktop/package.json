@@ -21,6 +21,6 @@
     "enigma.js": "2.10.0"
   },
   "devDependencies": {
-    "vite": "4.0.2"
+    "vite": "4.0.3"
   }
 }
