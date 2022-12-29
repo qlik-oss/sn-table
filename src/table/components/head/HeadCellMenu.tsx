@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useMemo } from 'react';
 import { stardust } from '@nebula.js/stardust';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
@@ -9,8 +9,13 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ListSubheader from '@mui/material/ListSubheader';
+// import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+// import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import SearchIcon from '@mui/icons-material/Search';
+import SelectAllIcon from '@mui/icons-material/SelectAll';
+import DeselectIcon from '@mui/icons-material/Deselect';
+import HighlightAltIcon from '@mui/icons-material/HighlightAlt';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
 import { StyledMenuIconButton, StyledCellMenu, NebulaListBox } from './styles';
 import { GeneratedStyling } from '../../types';
@@ -65,6 +70,36 @@ export default function HeadCellMenu({
   const elRef = useRef<HTMLElement | undefined>();
   const {} = useListboxFilter({ elRef, layout, embed, columnIndex, open });
 
+  const getMenuItems = useMemo(
+    () => [
+      {
+        id: 0,
+        label: translator.get('SNTable.MenuItem.Search'),
+        onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => console.log('hi from search'),
+        icon: <SearchIcon />,
+      },
+      {
+        id: 1,
+        label: translator.get('SNTable.MenuItem.Possible'),
+        onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => console.log('hi from possible'),
+        icon: <SelectAllIcon />,
+      },
+      {
+        id: 2,
+        label: translator.get('SNTable.MenuItem.Excluded'),
+        onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => console.log('hi from excluded'),
+        icon: <HighlightAltIcon />,
+      },
+      {
+        id: 3,
+        label: translator.get('SNTable.MenuItem.ClearOthers'),
+        onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => console.log('hi from Clear others'),
+        icon: <DeselectIcon />,
+      },
+    ],
+    [translator]
+  );
+
   return (
     <StyledCellMenu headerStyle={headerStyle}>
       <StyledMenuIconButton
@@ -108,8 +143,22 @@ export default function HeadCellMenu({
                     autoFocusItem={open}
                     className="sn-table-head-menu"
                     aria-labelledby="sn-table-head-menu-button"
+                    subheader={
+                      <ListSubheader component="div" id="nested-list-subheader">
+                        {translator.get('SNTable.MenuList.Subheader')}
+                      </ListSubheader>
+                    }
                   >
-                    <MenuItem
+                    {getMenuItems.map(({ id, label, onClick, icon }) => (
+                      <ListItem disablePadding key={id}>
+                        <ListItemButton onClick={onClick}>
+                          <ListItemIcon sx={{ minWidth: '25px' }}>{icon}</ListItemIcon>
+                          <ListItemText primary={label} />
+                        </ListItemButton>
+                      </ListItem>
+                    ))}
+
+                    {/* <MenuItem
                       itemTitle={translator.get('SNTable.MenuItem.SortAscending')}
                       sortOrder="A"
                       sortFromMenu={sortFromMenu}
@@ -125,7 +174,7 @@ export default function HeadCellMenu({
                       setOpen={setOpen}
                     >
                       <ArrowDownwardIcon />
-                    </MenuItem>
+                    </MenuItem> */}
                   </MenuList>
                   <NebulaListBox ref={elRef} />
                 </div>

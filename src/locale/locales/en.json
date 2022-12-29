@@ -51,6 +51,26 @@
     "value": "Sorted in descending order.",
     "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)"
   },
+  "SNTable.MenuList.Subheader": {
+    "value": "Selections",
+    "comment": "label for heading of column menu list."
+  },
+  "SNTable.MenuItem.Search": {
+    "value": "Search",
+    "comment": "label for menu item to search in dimention."
+  },
+  "SNTable.MenuItem.Possible": {
+    "value": "Possible",
+    "comment": "label for menu item to search in dimention."
+  },
+  "SNTable.MenuItem.Excluded": {
+    "value": "Excluded",
+    "comment": "label for menu item to search in dimention."
+  },
+  "SNTable.MenuItem.ClearOthers": {
+    "value": "Clear other fields",
+    "comment": "label for menu item to search in dimention."
+  },
   "SNTable.MenuItem.SortAscending": {
     "value": "Sort ascending",
     "comment": "label for menu item to sort ascending. (tew 221116)"

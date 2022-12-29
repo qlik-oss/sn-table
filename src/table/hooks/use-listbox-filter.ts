@@ -18,7 +18,7 @@ export default function useListboxFilter({ elRef, layout, embed, columnIndex, op
     if (!layout || !embed) return;
 
     // console.log('#outer #02');
-    console.log({ layout, ref: elRef.current, embed, columnIndex });
+    // console.log({ layout, ref: elRef.current, embed, columnIndex });
 
     embed.field(layout.qHyperCube.qDimensionInfo[columnIndex]?.qFallbackTitle).then((instance) => {
       // setListboxInstance(instance);
