@@ -7,30 +7,37 @@ type UseListBoxProps = {
   layout: TableLayout;
   embed: stardust.Embed | undefined;
   columnIndex: number;
-  open: boolean;
+  openSecondaryDropdown: boolean;
 };
 
-export default function useListboxFilter({ elRef, layout, embed, columnIndex, open }: UseListBoxProps) {
+export default function useListboxFilter({
+  elRef,
+  layout,
+  embed,
+  columnIndex,
+  openSecondaryDropdown,
+}: UseListBoxProps) {
   const [listboxInstance, setListboxInstance] = useState<stardust.FieldInstance>();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     if (!layout || !embed) return;
 
-    // console.log('#outer #02');
-    // console.log({ layout, ref: elRef.current, embed, columnIndex });
+    if (!openSecondaryDropdown) {
+      setIsMounted(false);
+      return;
+    }
 
-    embed.field(layout.qHyperCube.qDimensionInfo[columnIndex]?.qFallbackTitle).then((instance) => {
-      // setListboxInstance(instance);
-      if (elRef.current && !isMounted) {
-        // console.log({ kidCount: elRef.current.children.length });
-        instance.mount(elRef.current);
-        setIsMounted(true);
-      }
-    });
-
-    if (!open) setIsMounted(false);
-  }, [layout, embed, columnIndex, open, isMounted]);
+    if (!isMounted) {
+      embed.field(layout.qHyperCube.qDimensionInfo[columnIndex]?.qFallbackTitle).then((instance) => {
+        setListboxInstance(instance);
+        if (elRef.current) {
+          instance.mount(elRef.current);
+          setIsMounted(true);
+        }
+      });
+    }
+  }, [elRef.current, layout, embed, columnIndex, openSecondaryDropdown, isMounted]);
 
   // useEffect(() => {
   //   if (!elRef.current || !listboxInstance || !layout?.qHyperCube?.qDimensionInfo) return undefined;
@@ -46,7 +53,7 @@ export default function useListboxFilter({ elRef, layout, embed, columnIndex, op
   //     console.log('unmount');
   //     listboxInstance.unmount();
   //   };
-  // }, [elRef.current, listboxInstance, open, isMounted]);
+  // }, [elRef.current, listboxInstance, openPrimaryDropdown, isMounted]);
 
   return { listboxInstance };
 }

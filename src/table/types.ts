@@ -242,6 +242,13 @@ export interface HeadCellMenuProps {
   columnIndex: number;
 }
 
+export interface HeadCellMenuItemProps {
+  children: React.ReactElement;
+  itemTitle: string;
+  isDisabled: boolean;
+  onClick: (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+}
+
 export interface TableBodyWrapperProps extends CommonTableProps {
   selectionsAPI: ExtendedSelectionAPI;
   rootElement: HTMLElement;
