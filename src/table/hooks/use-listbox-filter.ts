@@ -7,6 +7,7 @@ type UseListBoxProps = {
   layout: TableLayout;
   embed: stardust.Embed | undefined;
   columnIndex: number;
+  openPrimaryDropdown: boolean;
   openSecondaryDropdown: boolean;
 };
 
@@ -15,45 +16,39 @@ export default function useListboxFilter({
   layout,
   embed,
   columnIndex,
+  openPrimaryDropdown,
   openSecondaryDropdown,
 }: UseListBoxProps) {
   const [listboxInstance, setListboxInstance] = useState<stardust.FieldInstance>();
   const [isMounted, setIsMounted] = useState(false);
 
+  // embedding
   useEffect(() => {
     if (!layout || !embed) return;
 
-    if (!openSecondaryDropdown) {
+    embed.field(layout.qHyperCube.qDimensionInfo[columnIndex]?.qFallbackTitle).then((instance) => {
+      setListboxInstance(instance);
+    });
+  }, [elRef.current, layout, embed, columnIndex]);
+
+  // mounting
+  useEffect(() => {
+    // we need a way for setting isMounted to false
+    // here we do it when we are in primary dropdown state
+    if (openPrimaryDropdown) {
       setIsMounted(false);
       return;
     }
 
+    // guard before mounting
+    if (!elRef.current || !listboxInstance) return;
+
+    // if not mounted, then mount it!
     if (!isMounted) {
-      embed.field(layout.qHyperCube.qDimensionInfo[columnIndex]?.qFallbackTitle).then((instance) => {
-        setListboxInstance(instance);
-        if (elRef.current) {
-          instance.mount(elRef.current);
-          setIsMounted(true);
-        }
-      });
+      listboxInstance.mount(elRef.current);
+      setIsMounted(true);
     }
-  }, [elRef.current, layout, embed, columnIndex, openSecondaryDropdown, isMounted]);
-
-  // useEffect(() => {
-  //   if (!elRef.current || !listboxInstance || !layout?.qHyperCube?.qDimensionInfo) return undefined;
-
-  //   console.log({ isMounted });
-
-  //   if (elRef.current.children.length <= 0) {
-  //     listboxInstance.mount(elRef.current);
-  //     setIsMounted(true);
-  //   }
-
-  //   return () => {
-  //     console.log('unmount');
-  //     listboxInstance.unmount();
-  //   };
-  // }, [elRef.current, listboxInstance, openPrimaryDropdown, isMounted]);
+  }, [elRef.current, isMounted, openSecondaryDropdown, openPrimaryDropdown]);
 
   return { listboxInstance };
 }

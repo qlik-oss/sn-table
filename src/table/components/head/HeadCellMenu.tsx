@@ -32,7 +32,7 @@ export default function HeadCellMenu({
   const [openSecondaryDropdown, setOpenSecondaryDropdown] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
   const elRef = useRef<HTMLElement | undefined>();
-  const {} = useListboxFilter({ elRef, layout, embed, columnIndex, openSecondaryDropdown });
+  const {} = useListboxFilter({ elRef, layout, embed, columnIndex, openSecondaryDropdown, openPrimaryDropdown });
 
   const getMenuItems = useMemo(
     () => [
