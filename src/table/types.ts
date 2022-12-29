@@ -14,6 +14,7 @@ import {
   TableLayout,
   TotalsPosition,
   Row,
+  SortDirection,
 } from '../types';
 import { SelectionActions } from './constants';
 
@@ -227,6 +228,18 @@ export interface TableHeadWrapperProps extends CommonTableProps {
   translator: ExtendedTranslator;
   areBasicFeaturesEnabled: boolean;
   embed: stardust.Embed | undefined;
+}
+
+export interface HeadCellMenuProps {
+  headerStyle: GeneratedStyling;
+  translator: ExtendedTranslator;
+  sortDirection: SortDirection;
+  sortFromMenu: (evt: React.MouseEvent, sortOrder: SortDirection) => void;
+  isInteractionEnabled: boolean;
+  isCurrentColumnActive: boolean;
+  embed: stardust.Embed | undefined;
+  layout: TableLayout;
+  columnIndex: number;
 }
 
 export interface TableBodyWrapperProps extends CommonTableProps {

@@ -10,8 +10,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
-// import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-// import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import SearchIcon from '@mui/icons-material/Search';
 import SelectAllIcon from '@mui/icons-material/SelectAll';
 import DeselectIcon from '@mui/icons-material/Deselect';
@@ -19,6 +19,8 @@ import HighlightAltIcon from '@mui/icons-material/HighlightAlt';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
 import { StyledMenuIconButton, StyledCellMenu, NebulaListBox } from './styles';
 import { GeneratedStyling } from '../../types';
+import { HeadCellMenuProps } from '../../types';
+import { SortDirection } from '../../../types';
 import { ExtendedTranslator, TableLayout } from '../../../types';
 import useListboxFilter from '../../hooks/use-listbox-filter';
 
@@ -53,18 +55,14 @@ const MenuItem = ({
 export default function HeadCellMenu({
   headerStyle,
   translator,
+  sortDirection,
   sortFromMenu,
   embed,
   layout,
   columnIndex,
-}: {
-  headerStyle: GeneratedStyling;
-  translator: ExtendedTranslator;
-  sortFromMenu: (evt: React.MouseEvent, sortOrder: string) => void;
-  embed: stardust.Embed | undefined;
-  layout: TableLayout;
-  columnIndex: number;
-}) {
+  isInteractionEnabled,
+  isCurrentColumnActive,
+}: HeadCellMenuProps) {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
   const elRef = useRef<HTMLElement | undefined>();
@@ -74,24 +72,36 @@ export default function HeadCellMenu({
     () => [
       {
         id: 0,
+        label: translator.get('SNTable.MenuItem.SortAscending'),
+        onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => console.log('hi from sort up'),
+        icon: <ArrowUpwardIcon />,
+      },
+      {
+        id: 1,
+        label: translator.get('SNTable.MenuItem.SortDescending'),
+        onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => console.log('hi from sort down'),
+        icon: <ArrowDownwardIcon />,
+      },
+      {
+        id: 2,
         label: translator.get('SNTable.MenuItem.Search'),
         onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => console.log('hi from search'),
         icon: <SearchIcon />,
       },
       {
-        id: 1,
+        id: 3,
         label: translator.get('SNTable.MenuItem.Possible'),
         onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => console.log('hi from possible'),
         icon: <SelectAllIcon />,
       },
       {
-        id: 2,
+        id: 4,
         label: translator.get('SNTable.MenuItem.Excluded'),
         onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => console.log('hi from excluded'),
         icon: <HighlightAltIcon />,
       },
       {
-        id: 3,
+        id: 5,
         label: translator.get('SNTable.MenuItem.ClearOthers'),
         onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => console.log('hi from Clear others'),
         icon: <DeselectIcon />,
@@ -99,6 +109,33 @@ export default function HeadCellMenu({
     ],
     [translator]
   );
+
+  const MenuItem = ({
+    children,
+    itemTitle,
+    newSortDirection,
+  }: {
+    children: any;
+    itemTitle: string;
+    newSortDirection: SortDirection;
+  }) => {
+    const isDisabled = !isInteractionEnabled || (isCurrentColumnActive && newSortDirection === sortDirection);
+    return (
+      <ListItem disablePadding>
+        <ListItemButton
+          disabled={isDisabled}
+          className="sn-table-head-menu-item-button"
+          onClick={(evt) => {
+            sortFromMenu(evt, newSortDirection);
+            setOpen(false);
+          }}
+        >
+          <ListItemIcon sx={{ minWidth: '25px' }}>{children}</ListItemIcon>
+          <ListItemText primary={itemTitle} />
+        </ListItemButton>
+      </ListItem>
+    );
+  };
 
   return (
     <StyledCellMenu headerStyle={headerStyle}>
@@ -178,6 +215,20 @@ export default function HeadCellMenu({
                   </MenuList>
                   <NebulaListBox ref={elRef} />
                 </div>
+
+                {/* <MenuList
+                  autoFocusItem={open}
+                  className="sn-table-head-menu"
+                  aria-labelledby="sn-table-head-menu-button"
+                >
+                  <MenuItem itemTitle={translator.get('SNTable.MenuItem.SortAscending')} newSortDirection="A">
+                    <ArrowUpwardIcon />
+                  </MenuItem>
+
+                  <MenuItem itemTitle={translator.get('SNTable.MenuItem.SortDescending')} newSortDirection="D">
+                    <ArrowDownwardIcon />
+                  </MenuItem>
+                </MenuList> */}
               </ClickAwayListener>
             </Paper>
           </Grow>

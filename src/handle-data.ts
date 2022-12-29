@@ -9,12 +9,6 @@ import {
   TableData,
 } from './types';
 
-enum DirectionMap {
-  A = 'asc',
-  D = 'desc',
-  N = 'asc',
-}
-
 const MAX_CELLS = 10000;
 
 /**
@@ -63,7 +57,8 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
   const info = (isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims]) as
     | ExtendedNxMeasureInfo
     | ExtendedNxDimensionInfo;
-  const isHidden = info.qError?.qErrorCode === 7005;
+  const { qError, qFallbackTitle, textAlign, qAttrExprInfo, qSortIndicator, qReverseSort, qApprMaxGlyphCount } = info;
+  const isHidden = qError?.qErrorCode === 7005;
   const isLocked = isDim && (info as ExtendedNxDimensionInfo).qLocked;
   const autoAlign = isDim ? 'left' : 'right';
 
@@ -73,13 +68,15 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
       isLocked,
       colIdx,
       pageColIdx,
+      qApprMaxGlyphCount,
+      qReverseSort,
       id: `col-${pageColIdx}`,
-      label: info.qFallbackTitle,
-      align: !info.textAlign || info.textAlign.auto ? autoAlign : info.textAlign.align,
-      stylingIDs: info.qAttrExprInfo.map((expr) => expr.id),
-      sortDirection: info.qSortIndicator ? DirectionMap[info.qSortIndicator] : DirectionMap.A,
+      label: qFallbackTitle,
+      align: !textAlign || textAlign.auto ? autoAlign : textAlign.align,
+      stylingIDs: qAttrExprInfo.map((expr) => expr.id),
+      // making sure that qSortIndicator is either A or D
+      sortDirection: qSortIndicator && qSortIndicator !== 'N' ? qSortIndicator : 'A',
       totalInfo: getTotalInfo(layout, colIdx, pageColIdx, numDims),
-      qApprMaxGlyphCount: info.qApprMaxGlyphCount,
     }
   );
 }

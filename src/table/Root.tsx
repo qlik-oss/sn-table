@@ -27,12 +27,15 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
 }
 
 export function renderVirtualizedTable(props: WrapperProps, reactRoot?: ReactDom.Root) {
+  const { selectionsAPI } = props;
   const muiTheme = muiSetup('ltr');
 
   reactRoot?.render(
     <React.StrictMode>
       <ThemeProvider theme={muiTheme}>
-        <VirualizedTable {...props} />
+        <TableContextProvider selectionsAPI={selectionsAPI} pageRows={[]}>
+          <VirualizedTable {...props} />
+        </TableContextProvider>
       </ThemeProvider>
     </React.StrictMode>
   );

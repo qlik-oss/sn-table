@@ -9,20 +9,46 @@ import Header from './Header';
 import { TableContainerProps } from './types';
 import { getHeaderStyle, getBodyCellStyle } from '../../utils/styling-utils';
 import useScrollHandler from './hooks/use-scroll-handler';
+import Totals from './Totals';
+import useTotals from './hooks/use-totals';
+import useOnPropsChange from './hooks/use-on-props-change';
+import useTableCount from './hooks/use-table-count';
 
 const TableContainer = (props: TableContainerProps) => {
-  const { layout, rect, pageInfo, paginationNeeded, model, theme, constraints } = props;
+  const { layout, rect, pageInfo, paginationNeeded, model, theme, constraints, selectionsAPI } = props;
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);
+  const totalsRef = useRef<VariableSizeList>(null);
   const bodyRef = useRef<VariableSizeGrid>(null);
   const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
-  const bodyStyle = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
+  const bodyStyle = useMemo(
+    () => ({
+      ...getBodyCellStyle(layout, theme),
+      backgroundColor: theme.background.color, // Append both background and backgroundColor to avoid conflicting prop error when selecting styling is applied
+      background: theme.background.color,
+    }),
+    [layout, theme]
+  );
+  const totals = useTotals(layout);
   const columns = useMemo(() => getColumns(layout), [layout]);
   const { width } = useColumnSize(rect, columns, headerStyle, bodyStyle);
-  const totalWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
-  const [totalHeight, setTotalHeight] = useState(pageInfo.rowsPerPage * DEFAULT_ROW_HEIGHT);
-  const scrollHandler = useScrollHandler(headerRef, bodyRef, innerForwardRef, totalHeight, setTotalHeight);
+  const { rowCount } = useTableCount(layout, pageInfo, rect, width);
+  const containerWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
+  const [containerHeight, setContainerHeight] = useState(rowCount * DEFAULT_ROW_HEIGHT + totals.shrinkBodyHeightBy);
+  const scrollHandler = useScrollHandler(
+    headerRef,
+    totalsRef,
+    bodyRef,
+    innerForwardRef,
+    containerHeight,
+    totals.shrinkBodyHeightBy,
+    setContainerHeight
+  );
+
+  useOnPropsChange(() => {
+    setContainerHeight(rowCount * DEFAULT_ROW_HEIGHT + totals.shrinkBodyHeightBy);
+  }, [rowCount, totals.shrinkBodyHeightBy]);
 
   useLayoutEffect(() => {
     if (ref.current) {
@@ -30,6 +56,20 @@ const TableContainer = (props: TableContainerProps) => {
       ref.current.scrollTop = 0;
     }
   }, [layout, pageInfo]);
+
+  const TotalsComponent = (
+    <Totals
+      theme={theme}
+      layout={layout}
+      rect={rect}
+      pageInfo={pageInfo}
+      paginationNeeded={paginationNeeded}
+      columns={columns}
+      columnWidth={width}
+      forwardRef={totalsRef}
+      totals={totals}
+    />
+  );
 
   return (
     <div
@@ -42,7 +82,7 @@ const TableContainer = (props: TableContainerProps) => {
       }}
       onScroll={scrollHandler}
     >
-      <FullSizeContainer width={totalWidth} height={totalHeight} paginationNeeded={paginationNeeded}>
+      <FullSizeContainer width={containerWidth} height={containerHeight}>
         <Header
           headerStyle={headerStyle}
           layout={layout}
@@ -52,6 +92,7 @@ const TableContainer = (props: TableContainerProps) => {
           columnWidth={width}
           forwardRef={headerRef}
         />
+        {totals.atTop ? TotalsComponent : null}
         <Body
           bodyStyle={bodyStyle}
           model={model}
@@ -63,7 +104,10 @@ const TableContainer = (props: TableContainerProps) => {
           columnWidth={width}
           forwardRef={bodyRef}
           innerForwardRef={innerForwardRef}
+          selectionsAPI={selectionsAPI}
+          totals={totals}
         />
+        {totals.atBottom ? TotalsComponent : null}
       </FullSizeContainer>
     </div>
   );

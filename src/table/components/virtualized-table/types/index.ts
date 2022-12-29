@@ -1,7 +1,17 @@
 import { stardust } from '@nebula.js/stardust';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
-import { Column, ExtendedTheme, ExtendedTranslator, PageInfo, TableLayout } from '../../../../types';
+import {
+  Column,
+  ExtendedSelectionAPI,
+  ExtendedTheme,
+  ExtendedTranslator,
+  PageInfo,
+  TableLayout,
+} from '../../../../types';
 import { GeneratedStyling } from '../../../types';
+import { Totals } from '../hooks/use-totals';
+
+export type TotalsPosition = 'bottom' | 'noTotals' | 'top';
 
 export interface WrapperProps {
   model: EngineAPI.IGenericObject;
@@ -11,6 +21,7 @@ export interface WrapperProps {
   direction?: 'ltr' | 'rtl';
   keyboard: stardust.Keyboard;
   translator: ExtendedTranslator;
+  selectionsAPI: ExtendedSelectionAPI;
   constraints: stardust.Constraints;
 }
 
@@ -21,6 +32,7 @@ export interface TableContainerProps {
   paginationNeeded: boolean;
   model: EngineAPI.IGenericObject;
   theme: ExtendedTheme;
+  selectionsAPI: ExtendedSelectionAPI;
   constraints: stardust.Constraints;
 }
 
@@ -34,6 +46,18 @@ export interface HeaderProps {
   headerStyle: GeneratedStyling;
 }
 
+export interface TotalsProps {
+  layout: TableLayout;
+  rect: stardust.Rect;
+  pageInfo: PageInfo;
+  paginationNeeded: boolean;
+  forwardRef: React.RefObject<VariableSizeList<any>>;
+  columns: Column[];
+  columnWidth: number[];
+  theme: ExtendedTheme;
+  totals: Totals;
+}
+
 export interface BodyProps {
   model: EngineAPI.IGenericObject;
   layout: TableLayout;
@@ -45,4 +69,6 @@ export interface BodyProps {
   forwardRef: React.RefObject<VariableSizeGrid<any>>;
   innerForwardRef: React.RefObject<HTMLDivElement>;
   bodyStyle: GeneratedStyling;
+  selectionsAPI: ExtendedSelectionAPI;
+  totals: Totals;
 }
