@@ -4,7 +4,6 @@ import Grow from '@mui/material/Grow';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import MenuList from '@mui/material/MenuList';
-import ListSubheader from '@mui/material/ListSubheader';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import SearchIcon from '@mui/icons-material/Search';
@@ -12,7 +11,7 @@ import SelectAllIcon from '@mui/icons-material/SelectAll';
 import DeselectIcon from '@mui/icons-material/Deselect';
 import HighlightAltIcon from '@mui/icons-material/HighlightAlt';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
-import { StyledMenuIconButton, StyledCellMenu, NebulaListBox } from './styles';
+import { StyledMenuIconButton, StyledCellMenu, NebulaListBox, PrimaryDropdownPaper } from './styles';
 import { HeadCellMenuProps } from '../../types';
 import useListboxFilter from '../../hooks/use-listbox-filter';
 import MenuItem from './MenuItem';
@@ -105,14 +104,7 @@ export default function HeadCellMenu({
         <MoreHoriz />
       </StyledMenuIconButton>
       <Popper
-        modifiers={[
-          {
-            name: 'offset',
-            options: {
-              offset: [0, 9],
-            },
-          },
-        ]}
+        modifiers={[{ name: 'offset', options: { offset: [0, 9] } }]}
         open={openPrimaryDropdown}
         anchorEl={anchorRef.current}
         role={undefined}
@@ -127,17 +119,12 @@ export default function HeadCellMenu({
               transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
             }}
           >
-            <Paper sx={{ boxShadow: 15 }}>
+            <PrimaryDropdownPaper sx={{ boxShadow: 15 }}>
               <ClickAwayListener onClickAway={() => setOpenPrimaryDropdown(false)}>
                 <MenuList
                   autoFocusItem={openPrimaryDropdown}
                   className="sn-table-head-menu"
                   aria-labelledby="sn-table-head-menu-button"
-                  subheader={
-                    <ListSubheader component="div" id="nested-list-subheader">
-                      {translator.get('SNTable.MenuList.Subheader')}
-                    </ListSubheader>
-                  }
                 >
                   {getMenuItems.map(({ id, icon, ...rest }) => (
                     <MenuItem key={id} {...rest}>
@@ -146,20 +133,13 @@ export default function HeadCellMenu({
                   ))}
                 </MenuList>
               </ClickAwayListener>
-            </Paper>
+            </PrimaryDropdownPaper>
           </Grow>
         )}
       </Popper>
 
       <Popper
-        modifiers={[
-          {
-            name: 'offset',
-            options: {
-              offset: [0, 9],
-            },
-          },
-        ]}
+        modifiers={[{ name: 'offset', options: { offset: [0, 9] } }]}
         open={openSecondaryDropdown}
         anchorEl={anchorRef.current}
         role={undefined}
