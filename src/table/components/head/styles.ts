@@ -83,7 +83,7 @@ export const StyledCellMenu = styled('div', {
 })(({ headerStyle, theme }) => ({
   '.MuiPaper-root': {
     width: '210px',
-    backgroundColor: 'unset',
+    // backgroundColor: 'unset',
     borderRadius: theme.spacing(1),
   },
   '.MuiListItemText-primary, .MuiSvgIcon-root': {
@@ -98,53 +98,51 @@ export const StyledCellMenu = styled('div', {
 export const PrimaryDropdownPaper = styled(Paper)(({ theme }) => ({
   '.sn-table-head-menu': {
     backgroundColor: theme.palette.common.white,
-    borderRadius: theme.spacing(0.75),
-    border: `2px solid ${theme.palette.grey[200]}`,
+    // borderRadius: theme.spacing(0.75),
+    border: `1px solid ${theme.palette.grey[200]}`,
     padding: 0,
   },
 
-  '& li:first-child > div': {
-    marginTop: theme.spacing(0.76),
-  },
+  // '& li:first-child > div': {
+  //   marginTop: theme.spacing(0.76),
+  // },
 
-  '& li:last-child > div': {
-    marginBottom: theme.spacing(0.76),
-  },
+  // '& li:last-child > div': {
+  //   marginBottom: theme.spacing(0.76),
+  // },
 
-  '.sn-table-head-menu-item-button': {
-    margin: theme.spacing(0.38, 0.76),
-    borderRadius: theme.spacing(0.5),
-    height: theme.spacing(4.5),
-    position: 'relative',
+  // '.sn-table-head-menu-item-button': {
+  //   margin: theme.spacing(0.38, 0.76),
+  //   borderRadius: theme.spacing(0.5),
+  //   height: theme.spacing(4.5),
+  //   position: 'relative',
 
-    '::before': {
-      content: '""',
-      height: '75%',
-      width: theme.spacing(0.5),
-      position: 'absolute',
-      left: 0,
-      opacity: 0,
-      borderRadius: theme.spacing(0, 0.4, 0.4, 0),
-      backgroundColor: theme.palette.primary.light,
-      transition: theme.transitions.create(['opacity'], {
-        duration: theme.transitions.duration.standard,
-      }),
-    },
+  //   '::before': {
+  //     content: '""',
+  //     height: '75%',
+  //     width: theme.spacing(0.5),
+  //     position: 'absolute',
+  //     left: 0,
+  //     opacity: 0,
+  //     borderRadius: theme.spacing(0, 0.4, 0.4, 0),
+  //     backgroundColor: theme.palette.primary.light,
+  //     transition: theme.transitions.create(['opacity'], {
+  //       duration: theme.transitions.duration.standard,
+  //     }),
+  //   },
 
-    '&:hover::before': {
-      opacity: 1,
-    },
-  },
+  //   '&:hover::before': {
+  //     opacity: 1,
+  //   },
+  // },
 }));
 
 export const MenuListDivider = styled(Divider)(({ theme }) => ({
   margin: theme.spacing(0, 1),
 }));
 
-export const NebulaListBox = styled('div')({
+export const NebulaListBox = styled('div')(({ theme }) => ({
   height: '350px',
-  borderTop: '4px solid red',
-  borderBottom: '4px solid red',
   boxSizing: 'border-box',
-  background: 'antiquewhite',
-});
+  background: theme.palette.common.white,
+}));
