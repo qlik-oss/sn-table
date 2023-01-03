@@ -67,7 +67,8 @@ export default function HeadCellMenu({
           {
             id: 1,
             itemTitle: translator.get('SNTable.MenuItem.Search'),
-            onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            onClick: (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+              evt.stopPropagation();
               setOpenPrimaryDropdown(false);
               setOpenSecondaryDropdown(true);
             },
