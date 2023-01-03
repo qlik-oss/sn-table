@@ -83,7 +83,6 @@ export const StyledCellMenu = styled('div', {
 })(({ headerStyle, theme }) => ({
   '.MuiPaper-root': {
     width: '210px',
-    // backgroundColor: 'unset',
     borderRadius: theme.spacing(1),
   },
   '.MuiListItemText-primary, .MuiSvgIcon-root': {
@@ -98,43 +97,9 @@ export const StyledCellMenu = styled('div', {
 export const PrimaryDropdownPaper = styled(Paper)(({ theme }) => ({
   '.sn-table-head-menu': {
     backgroundColor: theme.palette.common.white,
-    // borderRadius: theme.spacing(0.75),
     border: `1px solid ${theme.palette.grey[200]}`,
     padding: 0,
   },
-
-  // '& li:first-child > div': {
-  //   marginTop: theme.spacing(0.76),
-  // },
-
-  // '& li:last-child > div': {
-  //   marginBottom: theme.spacing(0.76),
-  // },
-
-  // '.sn-table-head-menu-item-button': {
-  //   margin: theme.spacing(0.38, 0.76),
-  //   borderRadius: theme.spacing(0.5),
-  //   height: theme.spacing(4.5),
-  //   position: 'relative',
-
-  //   '::before': {
-  //     content: '""',
-  //     height: '75%',
-  //     width: theme.spacing(0.5),
-  //     position: 'absolute',
-  //     left: 0,
-  //     opacity: 0,
-  //     borderRadius: theme.spacing(0, 0.4, 0.4, 0),
-  //     backgroundColor: theme.palette.primary.light,
-  //     transition: theme.transitions.create(['opacity'], {
-  //       duration: theme.transitions.duration.standard,
-  //     }),
-  //   },
-
-  //   '&:hover::before': {
-  //     opacity: 1,
-  //   },
-  // },
 }));
 
 export const MenuListDivider = styled(Divider)(({ theme }) => ({

@@ -90,7 +90,7 @@ function TableHeadWrapper({
               aria-pressed={isCurrentColumnActive}
               onKeyDown={handleKeyDown}
               onMouseDown={() => handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard)}
-              // onClick={(evt: React.MouseEvent) => handleClickToSort(evt, column, changeSortOrder, isInteractionEnabled)}
+              onClick={(evt: React.MouseEvent) => handleClickToSort(evt, column, changeSortOrder, isInteractionEnabled)}
             >
               <HeadCellContent>
                 <StyledSortLabel
