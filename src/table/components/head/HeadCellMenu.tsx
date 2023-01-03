@@ -11,10 +11,11 @@ import SelectAllIcon from '@mui/icons-material/SelectAll';
 import DeselectIcon from '@mui/icons-material/Deselect';
 import HighlightAltIcon from '@mui/icons-material/HighlightAlt';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
-import { StyledMenuIconButton, StyledCellMenu, NebulaListBox, PrimaryDropdownPaper } from './styles';
-import { HeadCellMenuProps } from '../../types';
+import SettingsIcon from '@mui/icons-material/Settings';
+import { HeadCellMenuProps, HeadCellMenuGroup } from '../../types';
 import useListboxFilter from '../../hooks/use-listbox-filter';
-import MenuItem from './MenuItem';
+import MenuGroup from './MenuGroup';
+import { StyledMenuIconButton, StyledCellMenu, NebulaListBox, PrimaryDropdownPaper, MenuListDivider } from './styles';
 
 export default function HeadCellMenu({
   headerStyle,
@@ -33,58 +34,144 @@ export default function HeadCellMenu({
   const elRef = useRef<HTMLElement | undefined>();
   const {} = useListboxFilter({ elRef, layout, embed, columnIndex, openSecondaryDropdown, openPrimaryDropdown });
 
-  const getMenuItems = useMemo(
+  const getMenuItems = useMemo<HeadCellMenuGroup[]>(
     () => [
       {
-        id: 0,
-        itemTitle: translator.get('SNTable.MenuItem.SortAscending'),
-        onClick: (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-          sortFromMenu(evt, 'A');
-          setOpenPrimaryDropdown(false);
-        },
-        icon: <ArrowUpwardIcon />,
-        isDisabled: !isInteractionEnabled || (isCurrentColumnActive && sortDirection === 'A'),
-      },
-      {
         id: 1,
-        itemTitle: translator.get('SNTable.MenuItem.SortDescending'),
-        onClick: (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-          sortFromMenu(evt, 'D');
-          setOpenPrimaryDropdown(false);
-        },
-        icon: <ArrowDownwardIcon />,
-        isDisabled: !isInteractionEnabled || (isCurrentColumnActive && sortDirection === 'D'),
+        menus: [
+          {
+            id: 1,
+            itemTitle: translator.get('SNTable.MenuItem.SortAscending'),
+            onClick: (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+              sortFromMenu(evt, 'A');
+              setOpenPrimaryDropdown(false);
+            },
+            icon: <ArrowUpwardIcon />,
+            isDisabled: !isInteractionEnabled || (isCurrentColumnActive && sortDirection === 'A'),
+          },
+          {
+            id: 2,
+            itemTitle: translator.get('SNTable.MenuItem.SortDescending'),
+            onClick: (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+              sortFromMenu(evt, 'D');
+              setOpenPrimaryDropdown(false);
+            },
+            icon: <ArrowDownwardIcon />,
+            isDisabled: !isInteractionEnabled || (isCurrentColumnActive && sortDirection === 'D'),
+          },
+        ],
       },
       {
         id: 2,
-        itemTitle: translator.get('SNTable.MenuItem.Search'),
-        onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-          setOpenPrimaryDropdown(false);
-          setOpenSecondaryDropdown(true);
-        },
-        icon: <SearchIcon />,
-        isDisabled: false,
+        menus: [
+          {
+            id: 1,
+            itemTitle: translator.get('SNTable.MenuItem.Search'),
+            onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+              setOpenPrimaryDropdown(false);
+              setOpenSecondaryDropdown(true);
+            },
+            icon: <SearchIcon />,
+            isDisabled: false,
+          },
+        ],
       },
       {
         id: 3,
-        itemTitle: translator.get('SNTable.MenuItem.Possible'),
-        onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => console.log('hi from possible'),
-        icon: <SelectAllIcon />,
-        isDisabled: false,
+        menus: [
+          {
+            id: 1,
+            itemTitle: translator.get('SNTable.MenuItem.Selections'),
+            onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => console.log('Hi from selections'),
+            icon: <HighlightAltIcon />,
+            isDisabled: false,
+            subMenu: [
+              {
+                id: 1,
+                menus: [
+                  {
+                    id: 1,
+                    itemTitle: translator.get('SNTable.MenuItem.SelectAll'),
+                    onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => console.log('hi from SelectAll'),
+                    icon: <SelectAllIcon />,
+                    isDisabled: false,
+                  },
+                  {
+                    id: 2,
+                    itemTitle: translator.get('SNTable.MenuItem.ClearSelection'),
+                    onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+                      console.log('hi from ClearSelection'),
+                    icon: <HighlightAltIcon />,
+                    isDisabled: true,
+                  },
+                ],
+              },
+              {
+                id: 2,
+                menus: [
+                  {
+                    id: 1,
+                    itemTitle: translator.get('SNTable.MenuItem.SelectPossible'),
+                    onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+                      console.log('hi from SelectPossible'),
+                    icon: <SelectAllIcon />,
+                    isDisabled: false,
+                  },
+                  {
+                    id: 2,
+                    itemTitle: translator.get('SNTable.MenuItem.SelectAlternative'),
+                    onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+                      console.log('hi from SelectAlternative'),
+                    icon: <DeselectIcon />,
+                    isDisabled: false,
+                  },
+                  {
+                    id: 3,
+                    itemTitle: translator.get('SNTable.MenuItem.SelectExcluded'),
+                    onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+                      console.log('hi from SelectExcluded'),
+                    icon: <HighlightAltIcon />,
+                    isDisabled: false,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
       {
         id: 4,
-        itemTitle: translator.get('SNTable.MenuItem.Excluded'),
-        onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => console.log('hi from excluded'),
-        icon: <HighlightAltIcon />,
-        isDisabled: false,
-      },
-      {
-        id: 5,
-        itemTitle: translator.get('SNTable.MenuItem.ClearOthers'),
-        onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => console.log('hi from Clear others'),
-        icon: <DeselectIcon />,
-        isDisabled: false,
+        menus: [
+          {
+            id: 1,
+            itemTitle: translator.get('SNTable.MenuItem.Utilities'),
+            onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => console.log('Hi from Utilities'),
+            icon: <SettingsIcon />,
+            isDisabled: false,
+            subMenu: [
+              {
+                id: 1,
+                menus: [
+                  {
+                    id: 1,
+                    itemTitle: translator.get('Util Menu #01'),
+                    onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => console.log('hi from SelectAll'),
+                    icon: <SelectAllIcon />,
+                    isDisabled: false,
+                  },
+                  {
+                    id: 2,
+                    itemTitle: translator.get('Util Menu #02'),
+                    onClick: (_evt: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+                      console.log('hi from ClearSelection'),
+                    icon: <HighlightAltIcon />,
+                    isDisabled: false,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
     ],
     [translator, isInteractionEnabled, isCurrentColumnActive, sortDirection]
@@ -126,10 +213,12 @@ export default function HeadCellMenu({
                   className="sn-table-head-menu"
                   aria-labelledby="sn-table-head-menu-button"
                 >
-                  {getMenuItems.map(({ id, icon, ...rest }) => (
-                    <MenuItem key={id} {...rest}>
-                      {icon}
-                    </MenuItem>
+                  {Object.entries(getMenuItems).map(([, menuGroup], i) => (
+                    <MenuGroup
+                      key={i}
+                      {...menuGroup}
+                      shouldShowDevider={i !== Object.entries(getMenuItems).length - 1}
+                    />
                   ))}
                 </MenuList>
               </ClickAwayListener>
@@ -152,7 +241,6 @@ export default function HeadCellMenu({
             {...TransitionProps}
             style={{
               transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
-              backgroundColor: 'ORANGE',
             }}
           >
             <Paper sx={{ boxShadow: 15 }}>

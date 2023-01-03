@@ -5,6 +5,7 @@ import TableCell from '@mui/material/TableCell';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
+import Divider from '@mui/material/Divider';
 
 import { COMMON_CELL_STYLING } from '../../constants';
 
@@ -134,6 +135,10 @@ export const PrimaryDropdownPaper = styled(Paper)(({ theme }) => ({
       opacity: 1,
     },
   },
+}));
+
+export const MenuListDivider = styled(Divider)(({ theme }) => ({
+  margin: theme.spacing(0, 1),
 }));
 
 export const NebulaListBox = styled('div')({
