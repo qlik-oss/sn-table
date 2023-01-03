@@ -45,7 +45,7 @@ export default function useListboxFilter({
 
     // if not mounted, then mount it!
     if (!isMounted) {
-      listboxInstance.mount(elRef.current);
+      listboxInstance.mount(elRef.current, { title: ' ' });
       setIsMounted(true);
     }
   }, [elRef.current, isMounted, openSecondaryDropdown, openPrimaryDropdown]);
