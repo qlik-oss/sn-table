@@ -22,11 +22,12 @@ describe('handle-data', () => {
       align: isDim ? 'left' : 'right',
       stylingIDs: [] as string[],
       totalInfo: totals,
-      sortDirection: 'asc',
+      sortDirection: 'A',
       colIdx,
       pageColIdx,
       isLocked,
       qApprMaxGlyphCount: 3,
+      qReverseSort: false,
     });
 
     it('should return column info for dimension', () => {

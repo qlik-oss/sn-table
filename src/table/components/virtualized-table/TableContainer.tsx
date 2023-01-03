@@ -12,6 +12,7 @@ import useScrollHandler from './hooks/use-scroll-handler';
 import Totals from './Totals';
 import useTotals from './hooks/use-totals';
 import useOnPropsChange from './hooks/use-on-props-change';
+import useTableCount from './hooks/use-table-count';
 
 const TableContainer = (props: TableContainerProps) => {
   const { layout, rect, pageInfo, paginationNeeded, model, theme, constraints, selectionsAPI } = props;
@@ -32,10 +33,9 @@ const TableContainer = (props: TableContainerProps) => {
   const totals = useTotals(layout);
   const columns = useMemo(() => getColumns(layout), [layout]);
   const { width } = useColumnSize(rect, columns, headerStyle, bodyStyle);
+  const { rowCount } = useTableCount(layout, pageInfo, rect, width);
   const containerWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
-  const [containerHeight, setContainerHeight] = useState(
-    pageInfo.rowsPerPage * DEFAULT_ROW_HEIGHT + totals.shrinkBodyHeightBy
-  );
+  const [containerHeight, setContainerHeight] = useState(rowCount * DEFAULT_ROW_HEIGHT + totals.shrinkBodyHeightBy);
   const scrollHandler = useScrollHandler(
     headerRef,
     totalsRef,
@@ -47,8 +47,8 @@ const TableContainer = (props: TableContainerProps) => {
   );
 
   useOnPropsChange(() => {
-    setContainerHeight(pageInfo.rowsPerPage * DEFAULT_ROW_HEIGHT + totals.shrinkBodyHeightBy);
-  }, [layout]);
+    setContainerHeight(rowCount * DEFAULT_ROW_HEIGHT + totals.shrinkBodyHeightBy);
+  }, [rowCount, totals.shrinkBodyHeightBy]);
 
   useLayoutEffect(() => {
     if (ref.current) {
@@ -82,7 +82,7 @@ const TableContainer = (props: TableContainerProps) => {
       }}
       onScroll={scrollHandler}
     >
-      <FullSizeContainer width={containerWidth} height={containerHeight} paginationNeeded={paginationNeeded}>
+      <FullSizeContainer width={containerWidth} height={containerHeight}>
         <Header
           headerStyle={headerStyle}
           layout={layout}

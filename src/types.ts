@@ -100,7 +100,8 @@ export interface Row {
   // for the row key, string is needed
   [key: string]: Cell | string;
 }
-export type SortDirection = 'asc' | 'desc';
+
+export type SortDirection = 'A' | 'D';
 
 export interface Column {
   id: string;
@@ -112,6 +113,7 @@ export interface Column {
   align: 'left' | 'center' | 'right';
   stylingIDs: string[];
   sortDirection: SortDirection;
+  qReverseSort: boolean;
   totalInfo?: string;
   qApprMaxGlyphCount: number;
 }

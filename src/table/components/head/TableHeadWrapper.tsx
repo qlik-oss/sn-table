@@ -11,10 +11,20 @@ import {
   handleClickToFocusHead,
   handleClickToSort,
 } from '../../utils/handle-click';
+import { SortDirection } from '../../../types';
 import { TableHeadWrapperProps } from '../../types';
 import HeadCellMenu from './HeadCellMenu';
 import CellText from '../CellText';
-import { SortDirection } from '../../../types';
+
+enum FullSortDirection {
+  A = 'ascending',
+  D = 'descending',
+}
+
+enum ShortSortDirection {
+  A = 'asc',
+  D = 'desc',
+}
 
 function TableHeadWrapper({
   rootElement,
@@ -48,9 +58,7 @@ function TableHeadWrapper({
           // when nebula does not handle keyboard navigation
           const tabIndex = columnIndex === 0 && !keyboard.enabled ? 0 : -1;
           const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
-          const ariaSort = isCurrentColumnActive
-            ? (`${column.sortDirection}ending` as 'ascending' | 'descending')
-            : undefined;
+          const ariaSort = isCurrentColumnActive ? FullSortDirection[column.sortDirection] : undefined;
 
           const handleKeyDown = (evt: React.KeyboardEvent) => {
             handleHeadKeyDown({
@@ -65,9 +73,9 @@ function TableHeadWrapper({
             });
           };
 
-          const sortFromMenu = (evt: React.MouseEvent, sortOrder: SortDirection) => {
+          const sortFromMenu = (evt: React.MouseEvent, newSortDirection: SortDirection) => {
             evt.stopPropagation();
-            changeSortOrder(column, sortOrder);
+            changeSortOrder(column, newSortDirection);
           };
 
           return (
@@ -87,8 +95,8 @@ function TableHeadWrapper({
                 <StyledSortLabel
                   headerStyle={headerStyle}
                   active={isCurrentColumnActive}
-                  title={!constraints.passive ? column.sortDirection : undefined} // passive: turn off tooltips.
-                  direction={column.sortDirection}
+                  title={!constraints.passive ? FullSortDirection[column.sortDirection] : undefined} // passive: turn off tooltips.
+                  direction={ShortSortDirection[column.sortDirection]}
                   tabIndex={-1}
                   onMouseDown={(evt: React.MouseEvent) =>
                     handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex)
