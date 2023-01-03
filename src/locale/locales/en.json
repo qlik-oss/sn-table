@@ -55,38 +55,6 @@
     "value": "Search",
     "comment": "label for menu item to search in dimention."
   },
-  "SNTable.MenuItem.Utilities": {
-    "value": "Utilities",
-    "comment": "label for menu item for Utilities in dimention."
-  },
-  "SNTable.MenuItem.Selections": {
-    "value": "Selections",
-    "comment": "label for menu item for selection in dimention."
-  },
-  "SNTable.MenuItem.SelectAll": {
-    "value": "Select all",
-    "comment": "label for menu item for selecting all items in dimention."
-  },
-  "SNTable.MenuItem.ClearSelection": {
-    "value": "Clear Selection",
-    "comment": "label for menu item for clearing all selections in dimention."
-  },
-  "SNTable.MenuItem.SelectPossible": {
-    "value": "Select Possible",
-    "comment": "label for menu item to select possible items in dimention."
-  },
-  "SNTable.MenuItem.SelectAlternative": {
-    "value": "Select alternative",
-    "comment": "label for menu item to select alternative in dimention."
-  },
-  "SNTable.MenuItem.SelectExcluded": {
-    "value": "Select Excluded",
-    "comment": "label for menu item to select excluded items in dimention."
-  },
-  "SNTable.MenuItem.ClearOthers": {
-    "value": "Clear other fields",
-    "comment": "label for menu item to search in dimention."
-  },
   "SNTable.MenuItem.SortAscending": {
     "value": "Sort ascending",
     "comment": "label for menu item to sort ascending. (tew 221116)"
