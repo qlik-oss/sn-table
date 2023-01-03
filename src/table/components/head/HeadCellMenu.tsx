@@ -28,7 +28,7 @@ export default function HeadCellMenu({
   const [openSecondaryDropdown, setOpenSecondaryDropdown] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
   const elRef = useRef<HTMLElement | undefined>();
-  const {} = useListboxFilter({ elRef, layout, embed, columnIndex, openSecondaryDropdown, openPrimaryDropdown });
+  const {} = useListboxFilter({ elRef, layout, embed, columnIndex, openPrimaryDropdown });
 
   const getMenuItems = useMemo<HeadCellMenuGroup[]>(
     () => [
@@ -99,13 +99,8 @@ export default function HeadCellMenu({
         transition
         disablePortal
       >
-        {({ TransitionProps, placement }) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
-            }}
-          >
+        {({ TransitionProps }) => (
+          <Grow {...TransitionProps} style={{ transformOrigin: 'left top' }}>
             <PrimaryDropdownPaper sx={{ boxShadow: 15 }}>
               <ClickAwayListener onClickAway={() => setOpenPrimaryDropdown(false)}>
                 <MenuList
@@ -136,13 +131,8 @@ export default function HeadCellMenu({
         transition
         disablePortal
       >
-        {({ TransitionProps, placement }) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
-            }}
-          >
+        {({ TransitionProps }) => (
+          <Grow {...TransitionProps} style={{ transformOrigin: 'left top' }}>
             <Paper sx={{ boxShadow: 15 }}>
               <ClickAwayListener onClickAway={() => setOpenSecondaryDropdown(false)}>
                 <NebulaListBox ref={elRef} />
