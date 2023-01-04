@@ -33,17 +33,17 @@ export const getAutoFontColor = (backgroundColor: string): string =>
 /**
  * get the border color based on the color of the background, returns bright color if background is dark and vice versa
  */
-export const getBorderColors = (isBackgroundDark: boolean, borderSeparator: string) => {
+export const getBorderColors = (isBackgroundDark: boolean, separatingBorder: string) => {
   // TODO: proper borders for dark background
   if (isBackgroundDark) {
     return { borderBottomColor: '#F2F2F2', borderRightColor: '#F2F2F2', borderLeftColor: '#F2F2F2' };
   }
 
   const borderRightColor = '#D9D9D9';
-  if (borderSeparator === 'bottom') {
+  if (separatingBorder === 'bottom') {
     return { borderBottomColor: '#808080', borderRightColor, borderLeftColor: borderRightColor };
   }
-  if (borderSeparator === 'top') {
+  if (separatingBorder === 'top') {
     return {
       borderTopColor: '#808080',
       borderBottomColor: '#EBEBEB',
@@ -61,7 +61,7 @@ export const getBaseStyling = (
   objetName: string,
   theme: ExtendedTheme,
   styleObj: HeaderStyling | ContentStyling | undefined,
-  borderSeparator = ''
+  separatingBorder = ''
 ): GeneratedStyling => {
   const fontFamily = theme.getStyle('object', `straightTable.${objetName}`, 'fontFamily');
   const color = theme.getStyle('object', `straightTable.${objetName}`, 'color');
@@ -74,7 +74,7 @@ export const getBaseStyling = (
     // When we do not set padding for content or header, but set font size,
     // we need to calculate the padding based on the font size
     padding: styleObj && 'padding' in styleObj ? styleObj?.padding : undefined,
-    ...getBorderColors(theme.background.isDark, borderSeparator),
+    ...getBorderColors(theme.background.isDark, separatingBorder),
   };
   // Remove all undefined and null values
   Object.keys(baseStyle).forEach((key) => {
@@ -85,11 +85,11 @@ export const getBaseStyling = (
 };
 
 /**
- * Gets complete styling for the header. Extends base styling with header specific styling
+ * Gets complete styling for the header. Extends base styling with header specific styling se
  */
-export function getHeaderStyle(layout: TableLayout, theme: ExtendedTheme, borderSeparator: string): GeneratedStyling {
+export function getHeaderStyle(layout: TableLayout, theme: ExtendedTheme, separatingBorder: string): GeneratedStyling {
   const header = layout.components?.[0]?.header;
-  const headerStyle = getBaseStyling('header', theme, header, borderSeparator);
+  const headerStyle = getBaseStyling('header', theme, header, separatingBorder);
 
   // To avoid seeing the table body through the table head:
   // - When the table background color from the sense theme is transparent,
@@ -199,8 +199,8 @@ export const getFooterStyle = (background: BackgroundColors): FooterStyle =>
  * Gets complete styling for the totals cells. Based on the body style but with the background and borders from header
  */
 export function getTotalsCellStyle(layout: TableLayout, theme: ExtendedTheme, totalsPosition: string) {
-  const borderSeparator = totalsPosition === 'top' ? 'bottom' : 'top';
-  const { borderBottomColor, borderTopColor, backgroundColor } = getHeaderStyle(layout, theme, borderSeparator);
+  const separatingBorder = totalsPosition === 'top' ? 'bottom' : 'top';
+  const { borderBottomColor, borderTopColor, backgroundColor } = getHeaderStyle(layout, theme, separatingBorder);
   return { ...getBodyCellStyle(layout, theme), borderBottomColor, backgroundColor, borderTopColor };
 }
 

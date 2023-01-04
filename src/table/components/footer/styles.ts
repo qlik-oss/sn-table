@@ -16,8 +16,7 @@ export const StyledFooterWrapper = styled(Box, {
   justifyContent: 'flex-end',
   alignItems: 'center',
   padding: theme.spacing(0, 1, 0, 1),
-  borderTop: `1px solid ${footerStyle.borderColor}`,
-  borderBottom: `1px solid ${footerStyle.borderColor}`,
+  border: `1px solid ${footerStyle.borderColor}`,
   color: footerStyle.color,
   backgroundColor: footerStyle.backgroundColor,
 }));
