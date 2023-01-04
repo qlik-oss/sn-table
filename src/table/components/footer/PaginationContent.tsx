@@ -1,24 +1,24 @@
 import React, { memo, useMemo } from 'react';
-import Box from '@mui/material/Box';
-import FirstPageIcon from '@mui/icons-material/FirstPage';
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import LastPageIcon from '@mui/icons-material/LastPage';
+import { SelectChangeEvent } from '@mui/material/Select';
+import ArrowLeft from '@qlik-trial/sprout/icons/ArrowLeft';
+import ArrowLeftStop from '@qlik-trial/sprout/icons/ArrowLeftStop';
+import ArrowRight from '@qlik-trial/sprout/icons/ArrowRight';
+import ArrowRightStop from '@qlik-trial/sprout/icons/ArrowRightStop';
 
-import { StyledSelect, StyledIconButton, StyledInputLabel, StyledFormControl } from './styles';
+import { StyledSelect, StyledButton, StyledTypography } from './styles';
 import { handleLastTab } from '../../utils/handle-key-press';
 import { PaginationContentProps } from '../../types';
 import { getFooterStyle } from '../../utils/styling-utils';
 
-const icons: Record<string, typeof FirstPageIcon> = {
-  FirstPage: FirstPageIcon,
-  PreviousPage: KeyboardArrowLeft,
-  NextPage: KeyboardArrowRight,
-  LastPage: LastPageIcon,
-  FirstPageRTL: LastPageIcon,
-  PreviousPageRTL: KeyboardArrowRight,
-  NextPageRTL: KeyboardArrowLeft,
-  LastPageRTL: FirstPageIcon,
+const icons: Record<string, typeof ArrowLeft> = {
+  FirstPage: ArrowLeftStop,
+  PreviousPage: ArrowLeft,
+  NextPage: ArrowRight,
+  LastPage: ArrowRightStop,
+  FirstPageRTL: ArrowRightStop,
+  PreviousPageRTL: ArrowRight,
+  NextPageRTL: ArrowLeft,
+  LastPageRTL: ArrowLeftStop,
 };
 
 export const shouldShow = (component: string, width: number) => {
@@ -51,12 +51,9 @@ function PaginationContent({
   handleChangePage,
   announce,
 }: PaginationContentProps) {
-  const { totalRowCount, totalColumnCount, totalPages, paginationNeeded } = tableData;
+  const { totalRowCount, totalColumnCount, totalPages } = tableData;
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const footerStyle = useMemo(() => getFooterStyle(theme.background), [theme]);
-
-  if (!paginationNeeded) return null;
-
   const onFirstPage = page === 0;
   const onLastPage = page >= totalPages - 1;
   // The elements can be focused in sequential keyboard navigation:
@@ -76,12 +73,15 @@ function PaginationContent({
     totalRowCount.toString(),
   ]);
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChangeRowsPerPage = (event: SelectChangeEvent<number>) => {
     setPageInfo({ ...pageInfo, page: 0, rowsPerPage: +event.target.value });
-    announce({ keys: [['SNTable.Pagination.RowsPerPageChange', event.target.value]], politeness: 'assertive' });
+    announce({
+      keys: [['SNTable.Pagination.RowsPerPageChange', event.target.value.toString()]],
+      politeness: 'assertive',
+    });
   };
 
-  const handleSelectPage = (event: React.ChangeEvent<HTMLSelectElement>) => handleChangePage(+event.target.value);
+  const handleSelectPage = (event: SelectChangeEvent<number>) => handleChangePage(+event.target.value);
 
   const handleLastButtonTab = keyboard.enabled
     ? (event: React.KeyboardEvent) => handleLastTab(event, isSelectionMode, keyboard)
@@ -97,9 +97,10 @@ function PaginationContent({
     const IconComponent = icons[iconType];
 
     return (
-      <StyledIconButton
-        disabledCondition={disabledCondition}
+      <StyledButton
         footerStyle={footerStyle}
+        disabledCondition={disabledCondition}
+        size="small"
         data-testid="pagination-action-icon-button"
         onClick={!disabledCondition ? () => handleChangePage(pageNumber) : null}
         aria-disabled={disabledCondition}
@@ -108,8 +109,8 @@ function PaginationContent({
         tabIndex={tabIndex}
         onKeyDown={onKeyDown}
       >
-        <IconComponent />
-      </StyledIconButton>
+        <IconComponent size="small" />
+      </StyledButton>
     );
   };
 
@@ -117,26 +118,34 @@ function PaginationContent({
     name: string,
     value: number,
     options: JSX.Element,
-    handleChange: (event: React.ChangeEvent<HTMLSelectElement>) => void
+    handleChange: (event: SelectChangeEvent<number>) => void
   ) => {
-    const translationName = `SNTable.Pagination.${name}`;
+    const label = translator.get(`SNTable.Pagination.${name}`);
     const id = `${name}-dropdown`;
+    const labelId = `${id}-label`;
     const inputProps = {
       tabIndex,
       id,
       'data-testid': id,
-      style: { color: footerStyle.color },
     };
 
     return (
-      <StyledFormControl size="small">
-        <StyledInputLabel color={footerStyle.color} htmlFor={id} shrink={false}>
-          {`${translator.get(translationName)}:`}
-        </StyledInputLabel>
-        <StyledSelect footerStyle={footerStyle} native value={value} onChange={handleChange} inputProps={inputProps}>
+      <>
+        <StyledTypography variant="caption" id={labelId}>
+          {label}:
+        </StyledTypography>
+        <StyledSelect
+          footerStyle={footerStyle}
+          size="small"
+          native
+          value={value}
+          onChange={handleChange}
+          inputProps={inputProps}
+          aria-labelledby={labelId}
+        >
           {options}
         </StyledSelect>
-      </StyledFormControl>
+      </>
     );
   };
 
@@ -163,8 +172,8 @@ function PaginationContent({
   return (
     <>
       {showRowsPerPage && getDropdown('RowsPerPage', rowsPerPage, rppOptions, handleChangeRowsPerPage)}
-      {shouldShow('displayedRows', width) && <Box>{displayedRowsText}</Box>}
       {shouldShow('selectPage', width) && getDropdown('SelectPage', page, pageOptions, handleSelectPage)}
+      {shouldShow('displayedRows', width) && <StyledTypography variant="caption">{displayedRowsText}</StyledTypography>}
       {showFirstAndLast && getButton(onFirstPage, 0, 'FirstPage', null)}
       {getButton(onFirstPage, page - 1, 'PreviousPage', null)}
       {getButton(onLastPage, page + 1, 'NextPage', !showFirstAndLast ? handleLastButtonTab : null)}

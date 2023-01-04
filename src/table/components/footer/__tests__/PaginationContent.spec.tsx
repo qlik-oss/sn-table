@@ -55,7 +55,6 @@ describe('<PaginationContent />', () => {
     tableData = {
       totalRowCount: 200,
       totalColumnCount: 5,
-      paginationNeeded: true,
       totalPages: 3,
     } as unknown as TableData;
     pageInfo = {
@@ -77,12 +76,6 @@ describe('<PaginationContent />', () => {
   afterEach(() => jest.clearAllMocks());
 
   describe('rendering', () => {
-    it('should return null when paginationNeeded is false', () => {
-      tableData.paginationNeeded = false;
-      const { queryByText } = renderPagination();
-      expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeNull();
-    });
-
     it('should render all sub-components', () => {
       const { getAllByTestId, queryByTestId, queryByText } = renderPagination();
       const buttons = getAllByTestId('pagination-action-icon-button');

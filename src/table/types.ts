@@ -1,4 +1,4 @@
-import { TableCellProps } from '@mui/material';
+import { Direction, TableCellProps } from '@mui/material';
 import { stardust } from '@nebula.js/stardust';
 import {
   Announce,
@@ -169,7 +169,7 @@ export interface ContextProviderProps {
 }
 
 export interface RenderProps {
-  direction?: 'ltr' | 'rtl';
+  direction?: Direction;
   selectionsAPI: ExtendedSelectionAPI;
   rootElement?: HTMLElement;
   layout: TableLayout;
@@ -202,7 +202,7 @@ export interface CommonTableProps {
 }
 
 export interface TableWrapperProps extends CommonTableProps {
-  direction?: 'ltr' | 'rtl';
+  direction?: Direction;
   selectionsAPI: ExtendedSelectionAPI;
   rootElement: HTMLElement;
   layout: TableLayout;
@@ -271,6 +271,7 @@ export interface FooterWrapperProps {
   children: JSX.Element;
   theme: ExtendedTheme;
   footerContainer?: HTMLElement;
+  paginationNeeded?: boolean;
 }
 export interface CellHOCProps extends TableCellProps {
   styling: CellStyle;
