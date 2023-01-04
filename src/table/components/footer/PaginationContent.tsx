@@ -120,7 +120,7 @@ function PaginationContent({
     options: JSX.Element,
     handleChange: (event: SelectChangeEvent<number>) => void
   ) => {
-    const label = translator.get(`SNTable.Pagination.${name}:`);
+    const label = translator.get(`SNTable.Pagination.${name}`);
     const id = `${name}-dropdown`;
     const labelId = `${id}-label`;
     const inputProps = {
@@ -132,7 +132,7 @@ function PaginationContent({
     return (
       <>
         <StyledTypography variant="caption" id={labelId}>
-          {label}
+          {label}:
         </StyledTypography>
         <StyledSelect
           footerStyle={footerStyle}
