@@ -2,10 +2,12 @@ import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { render, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { ThemeProvider } from '@mui/material/styles';
 import { TableContextProvider } from '../../../context';
 import { ExtendedTranslator, ExtendedSelectionAPI, SortDirection, TableLayout } from '../../../../types';
 import { GeneratedStyling } from '../../../types';
 import HeadCellMenu from '../HeadCellMenu';
+import muiSetup from '../../../mui-setup';
 
 describe('<HeadCellMenu />', () => {
   let translator: ExtendedTranslator;
@@ -18,22 +20,25 @@ describe('<HeadCellMenu />', () => {
   let embed: stardust.Embed | undefined;
   let layout: TableLayout;
   let columnIndex: number;
+  const direction: 'ltr' | 'rtl' = 'ltr';
 
   const renderTableHeadCellMenu = (cellCoordMock?: [number, number]) =>
     render(
-      <TableContextProvider selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
-        <HeadCellMenu
-          headerStyle={headerStyle}
-          translator={translator}
-          sortDirection={sortDirection}
-          sortFromMenu={sortFromMenu}
-          isInteractionEnabled={isInteractionEnabled}
-          isCurrentColumnActive={isCurrentColumnActive}
-          embed={embed}
-          layout={layout}
-          columnIndex={columnIndex}
-        />
-      </TableContextProvider>
+      <ThemeProvider theme={muiSetup(direction)}>
+        <TableContextProvider selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
+          <HeadCellMenu
+            headerStyle={headerStyle}
+            translator={translator}
+            sortDirection={sortDirection}
+            sortFromMenu={sortFromMenu}
+            isInteractionEnabled={isInteractionEnabled}
+            isCurrentColumnActive={isCurrentColumnActive}
+            embed={embed}
+            layout={layout}
+            columnIndex={columnIndex}
+          />
+        </TableContextProvider>
+      </ThemeProvider>
     );
 
   beforeEach(() => {
