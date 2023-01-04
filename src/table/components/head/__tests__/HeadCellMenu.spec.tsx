@@ -1,6 +1,6 @@
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThemeProvider } from '@mui/material/styles';
 import { TableContextProvider } from '../../../context';
@@ -51,6 +51,22 @@ describe('<HeadCellMenu />', () => {
       borderColor: '#4287f5',
     };
     sortFromMenu = jest.fn();
+    embed = {
+      field: jest.fn().mockResolvedValueOnce({ instance: true }),
+      render: jest.fn(),
+      selections: jest.fn(),
+      context: jest.fn(),
+      getRegisteredTypes: jest.fn(),
+    };
+    layout = {
+      qHyperCube: {
+        qDimensionInfo: [{ qFallbackTitle: 'someTitle' }],
+      },
+    } as TableLayout;
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   it('should render head cell menu button', () => {
@@ -119,5 +135,13 @@ describe('<HeadCellMenu />', () => {
     expect(sortFromMenu).toHaveBeenCalled();
     fireEvent.click(getByText('SNTable.MenuItem.SortDescending'));
     expect(sortFromMenu).toHaveBeenCalled();
+  });
+
+  it('should call `embed.field` once while trying to open listbox filter', () => {
+    renderTableHeadCellMenu();
+    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByText('SNTable.MenuItem.Search'));
+    expect(screen.getByRole('menu')).not.toBeVisible();
+    expect(embed?.field).toHaveBeenCalledTimes(1);
   });
 });

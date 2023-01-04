@@ -18,8 +18,8 @@ export default function MenuGroup({ menus, shouldShowDevider }: MenuGroupProps) 
     <div ref={anchorRef}>
       {menus.map(({ id, icon, itemTitle, isDisabled, subMenu, onClick }, i) => (
         <ListItem
-          disablePadding
           key={id}
+          disablePadding
           onMouseEnter={() => subMenu && setOpenMenu(true)}
           onMouseLeave={() => subMenu && setOpenMenu(false)}
         >
@@ -32,7 +32,6 @@ export default function MenuGroup({ menus, shouldShowDevider }: MenuGroupProps) 
             <ListItemText primary={itemTitle} />
             {subMenu && <ArrowForwardIosIcon />}
           </ListItemButton>
-
           <Popper
             modifiers={[{ name: 'offset', options: { offset: [208, -42] } }]}
             open={openMenu}
@@ -54,7 +53,7 @@ export default function MenuGroup({ menus, shouldShowDevider }: MenuGroupProps) 
                 <Paper sx={{ boxShadow: 15 }}>
                   {subMenu &&
                     subMenu.map((menuGroup) => (
-                      <MenuGroup shouldShowDevider={i !== subMenu.length - 1} {...menuGroup} />
+                      <MenuGroup key={menuGroup.id} shouldShowDevider={i !== subMenu.length - 1} {...menuGroup} />
                     ))}
                 </Paper>
               </Grow>
