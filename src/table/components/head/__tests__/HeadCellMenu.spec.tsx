@@ -1,8 +1,9 @@
 import React from 'react';
+import { stardust } from '@nebula.js/stardust';
 import { render, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TableContextProvider } from '../../../context';
-import { ExtendedTranslator, ExtendedSelectionAPI, SortDirection } from '../../../../types';
+import { ExtendedTranslator, ExtendedSelectionAPI, SortDirection, TableLayout } from '../../../../types';
 import { GeneratedStyling } from '../../../types';
 import HeadCellMenu from '../HeadCellMenu';
 
@@ -14,6 +15,9 @@ describe('<HeadCellMenu />', () => {
   const sortDirection: SortDirection = 'A';
   let isInteractionEnabled: boolean = true;
   let isCurrentColumnActive: boolean = false;
+  let embed: stardust.Embed | undefined;
+  let layout: TableLayout;
+  let columnIndex: number;
 
   const renderTableHeadCellMenu = (cellCoordMock?: [number, number]) =>
     render(
@@ -25,6 +29,9 @@ describe('<HeadCellMenu />', () => {
           sortFromMenu={sortFromMenu}
           isInteractionEnabled={isInteractionEnabled}
           isCurrentColumnActive={isCurrentColumnActive}
+          embed={embed}
+          layout={layout}
+          columnIndex={columnIndex}
         />
       </TableContextProvider>
     );

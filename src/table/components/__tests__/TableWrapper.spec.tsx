@@ -38,6 +38,7 @@ describe('<TableWrapper />', () => {
   let changeSortOrder: ChangeSortOrder;
   let layout: TableLayout;
   let areBasicFeaturesEnabled: boolean;
+  let embed: stardust.Embed;
 
   const renderTableWrapper = () =>
     render(
@@ -58,6 +59,7 @@ describe('<TableWrapper />', () => {
           changeSortOrder={changeSortOrder}
           layout={layout}
           areBasicFeaturesEnabled={areBasicFeaturesEnabled}
+          embed={embed}
         />
       </TableContextProvider>
     );

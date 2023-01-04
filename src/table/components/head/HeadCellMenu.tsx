@@ -11,7 +11,7 @@ import MoreHoriz from '@mui/icons-material/MoreHoriz';
 import { HeadCellMenuProps, HeadCellMenuGroup } from '../../types';
 import useListboxFilter from '../../hooks/use-listbox-filter';
 import MenuGroup from './MenuGroup';
-import { StyledMenuIconButton, StyledCellMenu, NebulaListBox, PrimaryDropdownPaper, MenuListDivider } from './styles';
+import { StyledMenuIconButton, StyledCellMenu, NebulaListBox, PrimaryDropdownPaper } from './styles';
 
 export default function HeadCellMenu({
   headerStyle,
@@ -28,7 +28,7 @@ export default function HeadCellMenu({
   const [openSecondaryDropdown, setOpenSecondaryDropdown] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
   const elRef = useRef<HTMLElement | undefined>();
-  const {} = useListboxFilter({ elRef, layout, embed, columnIndex, openPrimaryDropdown });
+  useListboxFilter({ elRef, layout, embed, columnIndex, openPrimaryDropdown });
 
   const getMenuItems = useMemo<HeadCellMenuGroup[]>(
     () => [
@@ -108,11 +108,11 @@ export default function HeadCellMenu({
                   className="sn-table-head-menu"
                   aria-labelledby="sn-table-head-menu-button"
                 >
-                  {Object.entries(getMenuItems).map(([, menuGroup], i) => (
+                  {Object.entries(getMenuItems).map(([key, menuGroup]) => (
                     <MenuGroup
-                      key={i}
+                      key={key}
                       {...menuGroup}
-                      shouldShowDevider={i !== Object.entries(getMenuItems).length - 1}
+                      shouldShowDevider={Number(key) !== Object.entries(getMenuItems).length - 1}
                     />
                   ))}
                 </MenuList>

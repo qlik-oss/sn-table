@@ -1,15 +1,14 @@
 import React, { useState, useRef } from 'react';
-import { MenuGroupProps } from '../../types';
-import { MenuListDivider } from './styles';
 import Grow from '@mui/material/Grow';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
-
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { MenuGroupProps } from '../../types';
+import { MenuListDivider } from './styles';
 
 export default function MenuGroup({ menus, shouldShowDevider }: MenuGroupProps) {
   const [openMenu, setOpenMenu] = useState(false);
