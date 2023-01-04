@@ -116,7 +116,7 @@ export default function TableWrapper(props: TableWrapperProps) {
         </Table>
       </StyledTableContainer>
       {!constraints.active && (
-        <FooterWrapper theme={theme} footerContainer={footerContainer}>
+        <FooterWrapper theme={theme} footerContainer={footerContainer} paginationNeeded={paginationNeeded}>
           <PaginationContent {...props} handleChangePage={handleChangePage} isSelectionMode={isSelectionMode} />
         </FooterWrapper>
       )}
