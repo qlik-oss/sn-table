@@ -32,26 +32,26 @@ export const getAutoFontColor = (backgroundColor: string): string =>
 
 /**
  * get the border color based on the color of the background, returns bright color if background is dark and vice versa
+ * the borderLeftColor is only used for the leftmost cells, but that is added/removed by changing borderWidth
+ * the same thing applies to the borderTopColor which is only used for totals when it is at the bottom
  */
 export const getBorderColors = (isBackgroundDark: boolean, separatingBorder: string) => {
   // TODO: proper borders for dark background
   if (isBackgroundDark) {
-    return { borderBottomColor: '#F2F2F2', borderRightColor: '#F2F2F2', borderLeftColor: '#F2F2F2' };
-  }
-
-  const borderRightColor = '#D9D9D9';
-  if (separatingBorder === 'bottom') {
-    return { borderBottomColor: '#808080', borderRightColor, borderLeftColor: borderRightColor };
-  }
-  if (separatingBorder === 'top') {
     return {
-      borderTopColor: '#808080',
-      borderBottomColor: '#EBEBEB',
-      borderRightColor,
-      borderLeftColor: borderRightColor,
+      borderBottomColor: '#F2F2F2',
+      borderRightColor: '#F2F2F2',
+      borderLeftColor: '#F2F2F2',
+      borderTopColor: '#F2F2F2',
     };
   }
-  return { borderBottomColor: '#EBEBEB', borderRightColor, borderLeftColor: borderRightColor };
+
+  return {
+    borderLeftColor: '#D9D9D9',
+    borderRightColor: '#D9D9D9',
+    borderTopColor: '#808080',
+    borderBottomColor: separatingBorder === 'bottom' ? '#808080' : '#EBEBEB',
+  };
 };
 
 /**

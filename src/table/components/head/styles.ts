@@ -32,9 +32,6 @@ export const StyledSortLabel = styled(TableSortLabel, {
   '&.Mui-active .MuiTableSortLabel-icon': {
     color: headerStyle.sortLabelColor,
   },
-  '& .MuiTableSortLabel-iconDirectionDesc': {
-    transform: 'rotate(0deg)',
-  },
 }));
 
 export const VisuallyHidden = styled('span')({

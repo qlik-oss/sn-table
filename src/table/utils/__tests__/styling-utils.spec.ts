@@ -5,6 +5,7 @@ import {
   getBodyCellStyle,
   getColumnStyle,
   getSelectionStyle,
+  getBorderColors,
 } from '../styling-utils';
 import { ExtendedTheme, PaletteColor, HeaderStyling, ContentStyling, TableLayout } from '../../../types';
 import { CellStyle } from '../../types';
@@ -32,8 +33,10 @@ describe('styling-utils', () => {
     getStyle: () => undefined,
     background: { isDark: false, color: '#323232' },
   } as unknown as ExtendedTheme;
+  // TODO: switch these to sprout color constants
   const defaultBorderColors = {
     borderBottomColor: '#EBEBEB',
+    borderTopColor: '#808080',
     borderRightColor: '#D9D9D9',
     borderLeftColor: '#D9D9D9',
   };
@@ -73,6 +76,43 @@ describe('styling-utils', () => {
     it('should return a default color when color is undefined', () => {
       const resultColor = getColor(defaultColor, theme, undefined);
       expect(resultColor).toBe(defaultColor);
+    });
+  });
+
+  describe('getBorderColors', () => {
+    let isBackgroundDark: boolean;
+    let separatingBorder: string;
+
+    beforeEach(() => {
+      isBackgroundDark = false;
+      separatingBorder = '';
+    });
+
+    it('should return default border colors when background is not dark and no separating border', () => {
+      const borders = getBorderColors(isBackgroundDark, separatingBorder);
+      expect(borders).toEqual(defaultBorderColors);
+    });
+
+    it('should return border colors with dark bottom border when background is not dark and separatingBorder is bottom', () => {
+      separatingBorder = 'bottom';
+
+      const borders = getBorderColors(isBackgroundDark, separatingBorder);
+      expect(borders).toEqual({
+        ...defaultBorderColors,
+        borderBottomColor: '#808080',
+      });
+    });
+
+    it('should return light border colors background is dark', () => {
+      isBackgroundDark = true;
+
+      const borders = getBorderColors(isBackgroundDark, separatingBorder);
+      expect(borders).toEqual({
+        borderBottomColor: '#F2F2F2',
+        borderTopColor: '#F2F2F2',
+        borderRightColor: '#F2F2F2',
+        borderLeftColor: '#F2F2F2',
+      });
     });
   });
 
