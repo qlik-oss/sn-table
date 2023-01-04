@@ -18,7 +18,7 @@ export default function useSelectionsEffect(selectionsAPI: ExtendedSelectionAPI,
       selectionDispatch,
       setShouldRefocus: () => {}, // TODO No focus support
       keyboard: { enabled: false } as stardust.Keyboard, // TODO No keyboard navigation support
-      tableWrapperRef: { current: undefined }, // TODO No focus support
+      tableWrapperRef: { current: null }, // TODO No focus support
     });
   }, [selectionsAPI, selectionDispatch]);
 }

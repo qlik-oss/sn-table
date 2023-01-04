@@ -21,7 +21,11 @@ const TableContainer = (props: TableContainerProps) => {
   const totalsRef = useRef<VariableSizeList>(null);
   const bodyRef = useRef<VariableSizeGrid>(null);
   const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
-  const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
+  const totals = useTotals(layout);
+  const headerStyle = useMemo(
+    () => getHeaderStyle(layout, theme, totals.atTop ? '' : 'bottom'),
+    [layout, theme, totals]
+  );
   const bodyStyle = useMemo(
     () => ({
       ...getBodyCellStyle(layout, theme),
@@ -30,7 +34,6 @@ const TableContainer = (props: TableContainerProps) => {
     }),
     [layout, theme]
   );
-  const totals = useTotals(layout);
   const columns = useMemo(() => getColumns(layout), [layout]);
   const { width } = useColumnSize(rect, columns, headerStyle, bodyStyle);
   const { rowCount } = useTableCount(layout, pageInfo, rect, width);

@@ -5,6 +5,7 @@ import { Column, Row } from '../../../types';
 import { CellStyle, GeneratedStyling } from '../../types';
 import useSelector from './hooks/use-selector';
 import EmptyCell from './EmptyCell';
+import CellText from '../CellText';
 
 interface CellProps {
   columnIndex: number;
@@ -35,10 +36,10 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           ...selectionStyling,
           display: 'flex',
           alignItems: 'center',
-          borderWidth: '0px 1px 1px 0px',
+          borderWidth: columnIndex === 0 ? '0px 1px 1px 1px' : '0px 1px 1px 0px',
           borderStyle: 'solid',
           justifyContent: columns[columnIndex].align,
-          padding: '0px 14px',
+          padding: '4px',
           boxSizing: 'border-box',
           cursor: 'default',
         }}
@@ -46,16 +47,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         onMouseUp={handleMouseUp}
         onMouseOver={handleMouseOver}
       >
-        <span
-          className="sn-table-cell-text"
-          style={{
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
-          }}
-        >
-          {datum.qText}
-        </span>
+        <CellText>{datum.qText}</CellText>
       </div>
     );
   }
