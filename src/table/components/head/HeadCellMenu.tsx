@@ -13,8 +13,8 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import More from '@qlik-trial/sprout/icons/More';
 
 import { StyledMenuIconButton, StyledCellMenu } from './styles';
-import { GeneratedStyling } from '../../types';
-import { ExtendedTranslator, SortDirection } from '../../../types';
+import { HeadCellMenuProps } from '../../types';
+import { SortDirection } from '../../../types';
 
 export default function HeadCellMenu({
   headerStyle,
@@ -23,14 +23,7 @@ export default function HeadCellMenu({
   sortFromMenu,
   isInteractionEnabled,
   isCurrentColumnActive,
-}: {
-  headerStyle: GeneratedStyling;
-  translator: ExtendedTranslator;
-  sortDirection: SortDirection;
-  sortFromMenu: (evt: React.MouseEvent, sortOrder: SortDirection) => void;
-  isInteractionEnabled: boolean;
-  isCurrentColumnActive: boolean;
-}) {
+}: HeadCellMenuProps) {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
 

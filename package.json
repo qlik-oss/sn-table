@@ -67,7 +67,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "7.20.5",
+    "@babel/core": "7.20.7",
     "@babel/eslint-parser": "7.19.1",
     "@babel/preset-env": "7.20.2",
     "@babel/preset-react": "7.18.6",
@@ -86,7 +86,7 @@
     "@nebula.js/cli-build": "3.0.3",
     "@nebula.js/cli-sense": "3.0.4",
     "@nebula.js/cli-serve": "3.0.4",
-    "@playwright/test": "1.29.0",
+"@playwright/test": "1.29.1",
     "@qlik-trial/sprout": "2.43.1",
     "@qlik/react-native-simple-grid": "1.0.11",
     "@react-native-async-storage/async-storage": "1.17.11",
