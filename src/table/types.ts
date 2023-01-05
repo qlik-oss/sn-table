@@ -240,6 +240,7 @@ export interface HeadCellMenuProps {
   embed: stardust.Embed;
   layout: TableLayout;
   columnIndex: number;
+  isDimension: boolean;
 }
 
 export interface HeadCellMenuGroup {

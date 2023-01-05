@@ -123,6 +123,7 @@ function TableHeadWrapper({
                     sortDirection={column.sortDirection}
                     isInteractionEnabled={isInteractionEnabled}
                     isCurrentColumnActive={isCurrentColumnActive}
+                    isDimension={column.isDim}
                   />
                 )}
               </HeadCellContent>

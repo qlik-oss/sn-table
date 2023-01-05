@@ -27,6 +27,7 @@ describe('<HeadCellMenu />', () => {
       <ThemeProvider theme={muiSetup(direction)}>
         <TableContextProvider selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
           <HeadCellMenu
+            isDimension
             headerStyle={headerStyle}
             translator={translator}
             sortDirection={sortDirection}

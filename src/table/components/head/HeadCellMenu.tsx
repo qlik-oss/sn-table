@@ -23,6 +23,7 @@ export default function HeadCellMenu({
   columnIndex,
   isInteractionEnabled,
   isCurrentColumnActive,
+  isDimension,
 }: HeadCellMenuProps) {
   const [openPrimaryDropdown, setOpenPrimaryDropdown] = useState(false);
   const [openSecondaryDropdown, setOpenSecondaryDropdown] = useState(false);
@@ -55,24 +56,28 @@ export default function HeadCellMenu({
           },
         ],
       },
-      {
-        id: 2,
-        menus: [
-          {
-            id: 1,
-            itemTitle: translator.get('SNTable.MenuItem.Search'),
-            onClick: (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-              evt.stopPropagation();
-              setOpenPrimaryDropdown(false);
-              setOpenSecondaryDropdown(true);
+      ...(isDimension
+        ? [
+            {
+              id: 2,
+              menus: [
+                {
+                  id: 1,
+                  itemTitle: translator.get('SNTable.MenuItem.Search'),
+                  onClick: (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+                    evt.stopPropagation();
+                    setOpenPrimaryDropdown(false);
+                    setOpenSecondaryDropdown(true);
+                  },
+                  icon: <SearchIcon />,
+                  isDisabled: false,
+                },
+              ],
             },
-            icon: <SearchIcon />,
-            isDisabled: false,
-          },
-        ],
-      },
+          ]
+        : []),
     ],
-    [translator, isInteractionEnabled, isCurrentColumnActive, sortDirection]
+    [translator, isInteractionEnabled, isCurrentColumnActive, sortDirection, isDimension]
   );
 
   return (
