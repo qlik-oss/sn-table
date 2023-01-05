@@ -119,7 +119,6 @@ export default function supernova(env: Galaxy) {
         isReadyToRender &&
           render(
             {
-              app,
               rootElement,
               layout,
               tableData,

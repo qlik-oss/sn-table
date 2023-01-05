@@ -53,7 +53,7 @@
   },
   "SNTable.MenuItem.Search": {
     "value": "Search",
-    "comment": "label for menu item to search in dimention."
+    "comment": "label for menu item to search in dimension."
   },
   "SNTable.MenuItem.SortAscending": {
     "value": "Sort ascending",

@@ -9,9 +9,9 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import SearchIcon from '@mui/icons-material/Search';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
 import { HeadCellMenuProps, HeadCellMenuGroup } from '../../types';
-import useListboxFilter from '../../hooks/use-listbox-filter';
 import MenuGroup from './MenuGroup';
 import { StyledMenuIconButton, StyledCellMenu, NebulaListBox, PrimaryDropdownPaper } from './styles';
+import { ListBoxWrapper, ListBoxWrapperRenderProps } from './ListBoxWrapper';
 
 export default function HeadCellMenu({
   headerStyle,
@@ -27,8 +27,6 @@ export default function HeadCellMenu({
   const [openPrimaryDropdown, setOpenPrimaryDropdown] = useState(false);
   const [openSecondaryDropdown, setOpenSecondaryDropdown] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
-  const elRef = useRef<HTMLElement | undefined>();
-  useListboxFilter({ elRef, layout, embed, columnIndex, openPrimaryDropdown });
 
   const getMenuItems = useMemo<HeadCellMenuGroup[]>(
     () => [
@@ -134,9 +132,13 @@ export default function HeadCellMenu({
         {({ TransitionProps }) => (
           <Grow {...TransitionProps} style={{ transformOrigin: 'left top' }}>
             <Paper sx={{ boxShadow: 15 }}>
-              <ClickAwayListener onClickAway={() => setOpenSecondaryDropdown(false)}>
-                <NebulaListBox ref={elRef} />
-              </ClickAwayListener>
+              <ListBoxWrapper layout={layout} embed={embed} columnIndex={columnIndex}>
+                {({ ref }: ListBoxWrapperRenderProps) => (
+                  <ClickAwayListener onClickAway={() => setOpenSecondaryDropdown(false)}>
+                    <NebulaListBox ref={ref} />
+                  </ClickAwayListener>
+                )}
+              </ListBoxWrapper>
             </Paper>
           </Grow>
         )}
