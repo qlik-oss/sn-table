@@ -34,7 +34,6 @@ export const ListBoxWrapper = ({ children, embed, layout, columnIndex }: ListBox
     listboxInstance.mount(ref.current, { title: ' ' });
 
     return () => {
-      // eslint-disable-next-line consistent-return
       listboxInstance.unmount();
     };
   }, [ref.current, listboxInstance]);
