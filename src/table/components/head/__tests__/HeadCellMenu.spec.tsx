@@ -17,7 +17,7 @@ describe('<HeadCellMenu />', () => {
   const sortDirection: SortDirection = 'A';
   let isInteractionEnabled: boolean = true;
   let isCurrentColumnActive: boolean = false;
-  let embed: stardust.Embed | undefined;
+  let embed: stardust.Embed;
   let layout: TableLayout;
   let columnIndex: number;
   const direction: 'ltr' | 'rtl' = 'ltr';

@@ -193,7 +193,7 @@ export interface RenderProps {
   ): Promise<TableData | null>;
   app?: EngineAPI.IApp;
   areBasicFeaturesEnabled?: boolean;
-  embed?: stardust.Embed | undefined;
+  embed?: stardust.Embed;
 }
 
 export interface CommonTableProps {
@@ -216,7 +216,7 @@ export interface TableWrapperProps extends CommonTableProps {
   footerContainer?: HTMLElement;
   announce: Announce;
   areBasicFeaturesEnabled: boolean;
-  embed: stardust.Embed | undefined;
+  embed: stardust.Embed;
 }
 
 export interface TableHeadWrapperProps extends CommonTableProps {
@@ -227,7 +227,7 @@ export interface TableHeadWrapperProps extends CommonTableProps {
   constraints: stardust.Constraints;
   translator: ExtendedTranslator;
   areBasicFeaturesEnabled: boolean;
-  embed: stardust.Embed | undefined;
+  embed: stardust.Embed;
 }
 
 export interface HeadCellMenuProps {
@@ -237,7 +237,7 @@ export interface HeadCellMenuProps {
   sortFromMenu: (evt: React.MouseEvent, sortOrder: SortDirection) => void;
   isInteractionEnabled: boolean;
   isCurrentColumnActive: boolean;
-  embed: stardust.Embed | undefined;
+  embed: stardust.Embed;
   layout: TableLayout;
   columnIndex: number;
 }
