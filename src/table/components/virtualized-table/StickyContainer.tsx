@@ -19,7 +19,7 @@ const StickyContainer = ({ children, rect, style }: StickyContainerProps): JSX.E
         width: rect.width,
         height: rect.height,
         borderStyle: 'solid',
-        borderWidth: '1px',
+        borderWidth: '0px 1px 1px 1px',
         borderColor: style.borderColor,
       }}
     >
