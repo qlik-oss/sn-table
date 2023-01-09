@@ -105,7 +105,7 @@ function TableHeadWrapper({
                   }
                 >
                   {column.isLocked && <LockIcon fontSize="small" data-testid="head-cell-lock-icon" />}
-                  <CellText>{column.label}</CellText>
+                  <CellText style={{ padding: '0px 8px' }}>{column.label}</CellText>
                   {isFocusInHead && (
                     <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>
                       {translator.get('SNTable.SortLabel.PressSpaceToSort')}

@@ -46,11 +46,13 @@ export const VisuallyHidden = styled('span')({
   width: 1,
 });
 
-export const HeadCellContent = styled(Box)({
+export const HeadCellContent = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'inherit',
   justifyContent: 'space-between',
-});
+  alignItems: 'center',
+  gap: theme.spacing(1),
+}));
 
 export const StyledMenuIconButton = styled(Button)({
   opacity: 0,

@@ -80,8 +80,9 @@ export interface ContextValue {
 
 export interface GeneratedStyling {
   borderBottomColor: string;
+  borderTopColor: string;
+  borderLeftColor: string;
   borderRightColor: string;
-  borderTopColor?: string;
   padding?: string;
   fontFamily?: string;
   color?: string;

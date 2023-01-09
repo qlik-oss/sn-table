@@ -37,13 +37,13 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
         alignItems: 'center',
         borderStyle: 'solid',
         borderWidth: index === 0 ? '0px 1px 0px 1px' : '0px 1px 0px 0px',
-        padding: '4px',
+        padding: '4px 12px',
         justifyContent: index === 0 ? 'left' : 'right',
         boxSizing: 'border-box',
         cursor: 'default',
       }}
     >
-      <CellText>{label}</CellText>
+      <CellText singleLine>{label}</CellText>
     </div>
   );
 };

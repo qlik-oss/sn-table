@@ -29,13 +29,14 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         alignItems: 'center',
         borderStyle: 'solid',
         borderWidth: index === 0 ? '0px 1px 0px 1px' : '0px 1px 0px 0px',
-        padding: '4px',
+        padding: '4px 12px',
         justifyContent: datum.align,
         boxSizing: 'border-box',
         cursor: 'default',
+        fontWeight: 'bold',
       }}
     >
-      <CellText style={{ fontWeight: 'bold' }}>{datum.label}</CellText>
+      <CellText singleLine>{datum.label}</CellText>
     </div>
   );
 };

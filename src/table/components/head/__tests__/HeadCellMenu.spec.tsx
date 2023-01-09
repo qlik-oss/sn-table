@@ -37,6 +37,8 @@ describe('<HeadCellMenu />', () => {
     headerStyle = {
       borderBottomColor: '#4287f5',
       borderRightColor: '#4287f5',
+      borderLeftColor: '#4287f5',
+      borderTopColor: '#4287f5',
     };
     sortFromMenu = jest.fn();
   });

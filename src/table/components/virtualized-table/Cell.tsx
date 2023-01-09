@@ -39,7 +39,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           borderWidth: columnIndex === 0 ? '0px 1px 1px 1px' : '0px 1px 1px 0px',
           borderStyle: 'solid',
           justifyContent: columns[columnIndex].align,
-          padding: '4px',
+          padding: '4px 12px',
           boxSizing: 'border-box',
           cursor: 'default',
         }}
@@ -47,7 +47,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         onMouseUp={handleMouseUp}
         onMouseOver={handleMouseOver}
       >
-        <CellText>{datum.qText}</CellText>
+        <CellText singleLine>{datum.qText}</CellText>
       </div>
     );
   }

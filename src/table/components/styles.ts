@@ -35,11 +35,15 @@ export const StyledTableContainer = styled(TableContainer, {
 
 // ---------- CellText ----------
 
-export const StyledCellText = styled(Box)({
-  margin: '0px 8px',
+export const StyledCellText = styled(Box, {
+  shouldForwardProp: (prop: string) => prop !== 'singleLine' && prop !== 'singleLine',
+})(({ style, singleLine }) => ({
+  ...style,
   lineHeight: 'calc(4/3)',
   fontSize: 'inherit',
-  overflow: 'hidden',
-  whiteSpace: 'nowrap',
-  textOverflow: 'ellipsis',
-});
+  ...(singleLine && {
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+  }),
+}));
