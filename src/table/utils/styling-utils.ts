@@ -121,11 +121,12 @@ export function getBodyCellStyle(layout: TableLayout, theme: ExtendedTheme): Gen
   const content = layout.components?.[0]?.content;
   const contentStyle = getBaseStyling('content', theme, content);
 
-  const hoverBackgroundColorFromLayout = content?.hoverColor;
-  const hoverFontColorFromLayout = content?.hoverFontColor;
+  // All following colors concern hover
+  const backgroundColorFromLayout = content?.hoverColor;
+  const fontColorFromLayout = content?.hoverFontColor;
 
-  const hoverBackgroundColorFromTheme = theme.getStyle('object', '', 'straightTable.content.hover.backgroundColor');
-  const hoverFontColorFromTheme = theme.getStyle('object', '', 'straightTable.content.hover.color');
+  const backgroundColorFromTheme = theme.getStyle('object', '', 'straightTable.content.hover.backgroundColor');
+  const fontColorFromTheme = theme.getStyle('object', '', 'straightTable.content.hover.color');
 
   // Cases when hoverEffect is true:
   // 1. There is no hover font color but a hover background color,
@@ -144,36 +145,36 @@ export function getBodyCellStyle(layout: TableLayout, theme: ExtendedTheme): Gen
 
   // Note: Hover colors from Layout have a higher priority than those from theme.
 
-  const isHoverFontColorSet = isColorSet(hoverFontColorFromLayout) || !!hoverFontColorFromTheme;
-  const isHoverBackgroundColorSet = isColorSet(hoverBackgroundColorFromLayout) || !!hoverBackgroundColorFromTheme;
-  const isHoverFontOrBackgroundColorSet = isHoverFontColorSet || isHoverBackgroundColorSet;
+  const isFontColorSet = isColorSet(fontColorFromLayout) || !!fontColorFromTheme;
+  const isBackgroundColorSet = isColorSet(backgroundColorFromLayout) || !!backgroundColorFromTheme;
+  const isFontOrBackgroundColorSet = isFontColorSet || isBackgroundColorSet;
 
-  let hoverBackgroundColor;
-  if (isColorSet(hoverBackgroundColorFromLayout)) {
+  let backgroundColor;
+  if (isColorSet(backgroundColorFromLayout)) {
     // case 1 or 4
-    hoverBackgroundColor = getColor(StylingDefaults.HOVER_BACKGROUND, theme, hoverBackgroundColorFromLayout);
-  } else if (hoverBackgroundColorFromTheme) {
+    backgroundColor = getColor(StylingDefaults.HOVER_BACKGROUND, theme, backgroundColorFromLayout);
+  } else if (backgroundColorFromTheme) {
     // case 1 or 4
-    hoverBackgroundColor = hoverBackgroundColorFromTheme;
-  } else if (isHoverFontColorSet) {
-    hoverBackgroundColor = ''; // case 3
+    backgroundColor = backgroundColorFromTheme;
+  } else if (isFontColorSet) {
+    backgroundColor = ''; // case 3
   } else {
-    hoverBackgroundColor = StylingDefaults.HOVER_BACKGROUND; // case 2
+    backgroundColor = StylingDefaults.HOVER_BACKGROUND; // case 2
   }
 
-  const hoverFontColor = isHoverFontOrBackgroundColorSet
+  const color = isFontOrBackgroundColorSet
     ? getColor(
-        getAutoFontColor(hoverBackgroundColor),
+        getAutoFontColor(backgroundColor),
         theme,
-        isColorSet(hoverFontColorFromLayout) ? hoverFontColorFromLayout : hoverFontColorFromTheme
+        isColorSet(fontColorFromLayout) ? fontColorFromLayout : fontColorFromTheme
       ) // case 1 or 3 or 4
     : ''; // case 2;
 
   return {
     ...contentStyle,
     hoverColors: {
-      hoverBackgroundColor,
-      hoverFontColor,
+      backgroundColor,
+      color,
     },
   };
 }

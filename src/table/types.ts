@@ -90,8 +90,8 @@ export interface GeneratedStyling {
   backgroundColor?: string;
   sortLabelColor?: string;
   hoverColors?: {
-    hoverBackgroundColor: string;
-    hoverFontColor: string;
+    backgroundColor: string;
+    color: string;
   };
 }
 

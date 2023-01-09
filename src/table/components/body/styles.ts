@@ -14,10 +14,7 @@ export const StyledBodyRow = styled(TableRow, {
   },
   ...(hover && {
     '&&:hover': {
-      '& td:not(.selected), th:not(.selected)': {
-        backgroundColor: hoverColors.hoverBackgroundColor,
-        color: hoverColors.hoverFontColor,
-      },
+      '& td:not(.selected), th:not(.selected)': hoverColors,
     },
   }),
 }));

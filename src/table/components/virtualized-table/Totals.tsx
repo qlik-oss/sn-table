@@ -31,7 +31,7 @@ const Totals = (props: TotalsProps) => {
         overflow: 'hidden',
         backgroundColor: totalsStyle.backgroundColor,
         borderTop: totals.atBottom ? `1px solid ${totalsStyle.borderTopColor}` : '0px',
-        borderBottom: totals.atTop || paginationNeeded ? `1px solid ${totalsStyle.borderBottomColor}` : '0px',
+        borderBottom: totals.atTop || !paginationNeeded ? `1px solid ${totalsStyle.borderBottomColor}` : '0px',
         boxSizing: 'border-box',
       }}
       itemCount={layout.qHyperCube.qSize.qcx}
