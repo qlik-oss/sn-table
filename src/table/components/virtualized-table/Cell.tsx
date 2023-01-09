@@ -32,7 +32,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
 
     return (
       <div
-        className="sn-table-cell"
+        className={`sn-table-cell ${cellSelectionState}`}
         style={{
           ...style,
           ...cellStyle,
