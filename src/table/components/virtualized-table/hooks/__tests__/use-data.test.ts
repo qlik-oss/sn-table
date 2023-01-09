@@ -22,7 +22,7 @@ describe('useData', () => {
   let pageInfo: PageInfo;
   let columns: Column[];
   let renderHookResult: RenderHookResult<UseData, unknown>;
-  let doRenderHook: (renderWithProps?: OverrideUseDataProps) => Promise<undefined>;
+  let doRenderHook: (renderWithProps?: OverrideUseDataProps) => Promise<void>;
 
   beforeEach(() => {
     layout = generateLayout(1, 1, 5);

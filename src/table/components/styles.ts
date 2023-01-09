@@ -2,6 +2,7 @@ import styled from '@mui/system/styled';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import TableContainer from '@mui/material/TableContainer';
+import { PAGINATION_HEIGHT } from '../constants';
 
 // ---------- AnnounceWrapper ----------
 
@@ -33,7 +34,7 @@ export const StyledTableWrapper = styled(Paper, {
 export const StyledTableContainer = styled(TableContainer, {
   shouldForwardProp: (prop: string) => prop !== 'fullHeight' && prop !== 'constraints',
 })(({ fullHeight, constraints }) => ({
-  height: fullHeight ? '100%' : 'calc(100% - 49px)',
+  height: fullHeight ? '100%' : `calc(100% - ${PAGINATION_HEIGHT + 2}px)`, // +2 for top and bottom border
   overflow: constraints.active ? 'hidden' : 'auto',
   border: 'none',
 }));
