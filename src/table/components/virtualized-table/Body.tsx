@@ -8,7 +8,7 @@ import useScrollDirection from './hooks/use-scroll-direction';
 import useTableCount from './hooks/use-table-count';
 import useItemsRendererHandler from './hooks/use-items-rendered-handler';
 import useSelectionsEffect from './hooks/use-selections-effect';
-import useHoverEffect from './hooks/useHoverEffect';
+import useHoverEffect from './hooks/use-hover-effect';
 
 const Body = (props: BodyProps) => {
   const {
