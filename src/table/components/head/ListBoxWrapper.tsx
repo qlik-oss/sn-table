@@ -4,7 +4,6 @@ import { TableLayout } from '../../../types';
 
 export interface ListBoxWrapperRenderProps {
   ref: React.MutableRefObject<HTMLElement | null>;
-  listboxInstance: stardust.FieldInstance | undefined;
 }
 
 interface ListBoxWrapperProps {
@@ -38,5 +37,5 @@ export const ListBoxWrapper = ({ children, embed, layout, columnIndex }: ListBox
     };
   }, [ref.current, listboxInstance]);
 
-  return children({ ref, listboxInstance });
+  return children({ ref });
 };

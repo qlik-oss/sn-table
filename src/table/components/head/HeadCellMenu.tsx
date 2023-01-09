@@ -29,7 +29,7 @@ export default function HeadCellMenu({
   const [openSecondaryDropdown, setOpenSecondaryDropdown] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
 
-  const getMenuItems = useMemo<HeadCellMenuGroup[]>(
+  const menuItems = useMemo<HeadCellMenuGroup[]>(
     () => [
       {
         id: 1,
@@ -111,12 +111,8 @@ export default function HeadCellMenu({
                   className="sn-table-head-menu"
                   aria-labelledby="sn-table-head-menu-button"
                 >
-                  {Object.entries(getMenuItems).map(([key, menuGroup]) => (
-                    <MenuGroup
-                      key={key}
-                      {...menuGroup}
-                      shouldShowDevider={Number(key) !== Object.entries(getMenuItems).length - 1}
-                    />
+                  {menuItems.map((menuGroup, i) => (
+                    <MenuGroup key={menuGroup.id} {...menuGroup} shouldShowDevider={i !== menuItems.length - 1} />
                   ))}
                 </MenuList>
               </ClickAwayListener>
