@@ -76,6 +76,8 @@ export interface ContextValue {
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   selectionState: SelectionState;
   selectionDispatch: SelectionDispatch;
+  hoverIndex: number;
+  setHoverIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export interface GeneratedStyling {
