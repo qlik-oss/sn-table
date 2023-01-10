@@ -13,6 +13,10 @@ import { Totals } from '../hooks/use-totals';
 
 export type TotalsPosition = 'bottom' | 'noTotals' | 'top';
 
+export interface BodyStyle extends GeneratedStyling {
+  background: string;
+}
+
 export interface WrapperProps {
   model: EngineAPI.IGenericObject;
   layout: TableLayout;
@@ -68,7 +72,7 @@ export interface BodyProps {
   columnWidth: number[];
   forwardRef: React.RefObject<VariableSizeGrid<any>>;
   innerForwardRef: React.RefObject<HTMLDivElement>;
-  bodyStyle: GeneratedStyling;
+  bodyStyle: BodyStyle;
   selectionsAPI: ExtendedSelectionAPI;
   totals: Totals;
 }

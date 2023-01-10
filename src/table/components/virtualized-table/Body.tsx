@@ -8,6 +8,7 @@ import useScrollDirection from './hooks/use-scroll-direction';
 import useTableCount from './hooks/use-table-count';
 import useItemsRendererHandler from './hooks/use-items-rendered-handler';
 import useSelectionsEffect from './hooks/use-selections-effect';
+import useHoverEffect from './hooks/use-hover-effect';
 
 const Body = (props: BodyProps) => {
   const {
@@ -24,6 +25,7 @@ const Body = (props: BodyProps) => {
     selectionsAPI,
     totals,
   } = props;
+  const { hoverIndex, setHoverIndex, showHoverEffect } = useHoverEffect(layout);
   const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
   const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(layout, pageInfo, rect, columnWidth);
   const stickyTop = totals.atTop ? HEADER_AND_TOTALS_HEIGHT : HEADER_HEIGHT;
@@ -51,7 +53,10 @@ const Body = (props: BodyProps) => {
     pageInfo,
   });
 
-  const itemData = useMemo(() => ({ rowsInPage, columns, bodyStyle }), [rowsInPage, columns, bodyStyle]);
+  const itemData = useMemo(
+    () => ({ rowsInPage, columns, bodyStyle, hoverIndex, setHoverIndex, showHoverEffect }),
+    [rowsInPage, columns, bodyStyle, hoverIndex, setHoverIndex, showHoverEffect]
+  );
 
   useSelectionsEffect(selectionsAPI, rowsInPage);
 

@@ -6,7 +6,7 @@ import Body from './Body';
 import { DEFAULT_ROW_HEIGHT, PAGINATION_HEIGHT } from './constants';
 import FullSizeContainer from './FullSizeContainer';
 import Header from './Header';
-import { TableContainerProps } from './types';
+import { TableContainerProps, BodyStyle } from './types';
 import { getHeaderStyle, getBodyCellStyle } from '../../utils/styling-utils';
 import useScrollHandler from './hooks/use-scroll-handler';
 import Totals from './Totals';
@@ -22,13 +22,12 @@ const TableContainer = (props: TableContainerProps) => {
   const bodyRef = useRef<VariableSizeGrid>(null);
   const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
-  const bodyStyle = useMemo(
+  const bodyStyle = useMemo<BodyStyle>(
     () => ({
       ...getBodyCellStyle(layout, theme),
-      backgroundColor: theme.background.color, // Append both background and backgroundColor to avoid conflicting prop error when selecting styling is applied
-      background: theme.background.color,
+      background: theme.background.color ?? 'transparent',
     }),
-    [layout, theme]
+    [layout, theme.name()] // eslint-disable-line react-hooks/exhaustive-deps
   );
   const totals = useTotals(layout);
   const columns = useMemo(() => getColumns(layout), [layout]);
