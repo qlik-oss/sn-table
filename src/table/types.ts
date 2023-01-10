@@ -258,7 +258,6 @@ export interface HeadCellMenuItem {
   itemTitle: string;
   isDisabled: boolean;
   onClick: (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-  subMenu?: HeadCellMenuGroup[];
 }
 
 export interface TableBodyWrapperProps extends CommonTableProps {

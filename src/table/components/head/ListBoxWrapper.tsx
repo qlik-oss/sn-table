@@ -9,7 +9,7 @@ export interface ListBoxWrapperRenderProps {
 interface ListBoxWrapperProps {
   children: (props: ListBoxWrapperRenderProps) => JSX.Element;
   layout: TableLayout;
-  embed: stardust.Embed | undefined;
+  embed: stardust.Embed;
   columnIndex: number;
 }
 

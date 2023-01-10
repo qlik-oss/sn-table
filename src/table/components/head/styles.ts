@@ -94,7 +94,7 @@ export const StyledCellMenu = styled('div', {
   },
 }));
 
-export const PrimaryDropdownPaper = styled(Paper)(({ theme }) => ({
+export const MenuDropdownPaper = styled(Paper)(({ theme }) => ({
   '.sn-table-head-menu': {
     backgroundColor: theme.palette.common.white,
     border: `1px solid ${theme.palette.grey[200]}`,

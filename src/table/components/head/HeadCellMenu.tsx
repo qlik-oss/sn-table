@@ -10,7 +10,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
 import { HeadCellMenuProps, HeadCellMenuGroup } from '../../types';
 import MenuGroup from './MenuGroup';
-import { StyledMenuIconButton, StyledCellMenu, NebulaListBox, PrimaryDropdownPaper } from './styles';
+import { StyledMenuIconButton, StyledCellMenu, NebulaListBox, MenuDropdownPaper } from './styles';
 import { ListBoxWrapper, ListBoxWrapperRenderProps } from './ListBoxWrapper';
 
 export default function HeadCellMenu({
@@ -25,8 +25,8 @@ export default function HeadCellMenu({
   isCurrentColumnActive,
   isDimension,
 }: HeadCellMenuProps) {
-  const [openPrimaryDropdown, setOpenPrimaryDropdown] = useState(false);
-  const [openSecondaryDropdown, setOpenSecondaryDropdown] = useState(false);
+  const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
+  const [openListboxDropdown, setOpenListboxDropdown] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
 
   const menuItems = useMemo<HeadCellMenuGroup[]>(
@@ -39,7 +39,7 @@ export default function HeadCellMenu({
             itemTitle: translator.get('SNTable.MenuItem.SortAscending'),
             onClick: (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
               sortFromMenu(evt, 'A');
-              setOpenPrimaryDropdown(false);
+              setOpenMenuDropdown(false);
             },
             icon: <ArrowUpwardIcon />,
             isDisabled: !isInteractionEnabled || (isCurrentColumnActive && sortDirection === 'A'),
@@ -49,7 +49,7 @@ export default function HeadCellMenu({
             itemTitle: translator.get('SNTable.MenuItem.SortDescending'),
             onClick: (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
               sortFromMenu(evt, 'D');
-              setOpenPrimaryDropdown(false);
+              setOpenMenuDropdown(false);
             },
             icon: <ArrowDownwardIcon />,
             isDisabled: !isInteractionEnabled || (isCurrentColumnActive && sortDirection === 'D'),
@@ -66,8 +66,8 @@ export default function HeadCellMenu({
                   itemTitle: translator.get('SNTable.MenuItem.Search'),
                   onClick: (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                     evt.stopPropagation();
-                    setOpenPrimaryDropdown(false);
-                    setOpenSecondaryDropdown(true);
+                    setOpenMenuDropdown(false);
+                    setOpenListboxDropdown(true);
                   },
                   icon: <SearchIcon />,
                   isDisabled: false,
@@ -86,16 +86,16 @@ export default function HeadCellMenu({
         ref={anchorRef}
         tabIndex={-1}
         id="sn-table-head-menu-button"
-        aria-controls={openPrimaryDropdown ? 'sn-table-head-menu' : undefined}
-        aria-expanded={openPrimaryDropdown ? 'true' : undefined}
+        aria-controls={openMenuDropdown ? 'sn-table-head-menu' : undefined}
+        aria-expanded={openMenuDropdown ? 'true' : undefined}
         aria-haspopup="true"
-        onClick={() => setOpenPrimaryDropdown(!openPrimaryDropdown)}
+        onClick={() => setOpenMenuDropdown(!openMenuDropdown)}
       >
         <MoreHoriz />
       </StyledMenuIconButton>
       <Popper
         modifiers={[{ name: 'offset', options: { offset: [0, 9] } }]}
-        open={openPrimaryDropdown}
+        open={openMenuDropdown}
         anchorEl={anchorRef.current}
         role={undefined}
         placement="bottom-start"
@@ -104,10 +104,10 @@ export default function HeadCellMenu({
       >
         {({ TransitionProps }) => (
           <Grow {...TransitionProps} style={{ transformOrigin: 'left top' }}>
-            <PrimaryDropdownPaper sx={{ boxShadow: 15 }}>
-              <ClickAwayListener onClickAway={() => setOpenPrimaryDropdown(false)}>
+            <MenuDropdownPaper sx={{ boxShadow: 15 }}>
+              <ClickAwayListener onClickAway={() => setOpenMenuDropdown(false)}>
                 <MenuList
-                  autoFocusItem={openPrimaryDropdown}
+                  autoFocusItem={openMenuDropdown}
                   className="sn-table-head-menu"
                   aria-labelledby="sn-table-head-menu-button"
                 >
@@ -116,14 +116,14 @@ export default function HeadCellMenu({
                   ))}
                 </MenuList>
               </ClickAwayListener>
-            </PrimaryDropdownPaper>
+            </MenuDropdownPaper>
           </Grow>
         )}
       </Popper>
 
       <Popper
         modifiers={[{ name: 'offset', options: { offset: [0, 9] } }]}
-        open={openSecondaryDropdown}
+        open={openListboxDropdown}
         anchorEl={anchorRef.current}
         role={undefined}
         placement="bottom-start"
@@ -135,7 +135,7 @@ export default function HeadCellMenu({
             <Paper sx={{ boxShadow: 15 }}>
               <ListBoxWrapper layout={layout} embed={embed} columnIndex={columnIndex}>
                 {({ ref }: ListBoxWrapperRenderProps) => (
-                  <ClickAwayListener onClickAway={() => setOpenSecondaryDropdown(false)}>
+                  <ClickAwayListener onClickAway={() => setOpenListboxDropdown(false)}>
                     <NebulaListBox ref={ref} />
                   </ClickAwayListener>
                 )}
