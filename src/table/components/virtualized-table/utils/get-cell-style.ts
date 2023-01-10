@@ -1,50 +1,41 @@
 import { SelectionStates, SELECTION_STYLING, StylingDefaults } from '../../../constants';
-import { GeneratedStyling } from '../../../types';
 import { BodyStyle } from '../types';
 
-const getHoverStyle = (bodyStyle: GeneratedStyling) => ({
-  background: bodyStyle.hoverBackgroundColor,
-  color: bodyStyle.hoverFontColor,
-});
-
-const getSelectionStyle = (cellSelectionState: SelectionStates, background: string) => {
-  switch (cellSelectionState) {
-    case SelectionStates.SELECTED:
-      return SELECTION_STYLING.SELECTED;
-    case SelectionStates.POSSIBLE:
-      return SELECTION_STYLING.POSSIBLE;
-    case SelectionStates.EXCLUDED:
-      return {
-        background: `${StylingDefaults.EXCLUDED_BACKGROUND}, ${background}`,
-      };
-    default:
-      return {};
-  }
-};
-
 const getCellStyle = (
-  showHover: boolean,
+  showHoverEffect: boolean,
   hoverIndex: number,
   rowIndex: number,
   cellSelectionState: SelectionStates,
   bodyStyle: BodyStyle
-) => {
-  const isHoveringOnRow = showHover && hoverIndex === rowIndex;
-  const hoverStyle = isHoveringOnRow ? getHoverStyle(bodyStyle) : undefined;
+): BodyStyle => {
+  const isHoveringOnRow = showHoverEffect && hoverIndex === rowIndex;
 
-  const shouldUseSelectionStyle =
-    cellSelectionState === SelectionStates.SELECTED ||
-    cellSelectionState === SelectionStates.EXCLUDED ||
-    !isHoveringOnRow;
+  if (cellSelectionState === SelectionStates.SELECTED) {
+    return {
+      ...bodyStyle,
+      ...SELECTION_STYLING.SELECTED,
+    };
+  }
 
-  const overrideBodyStyle = shouldUseSelectionStyle
-    ? getSelectionStyle(cellSelectionState, hoverStyle?.background ?? bodyStyle.background)
-    : hoverStyle;
+  if (cellSelectionState === SelectionStates.EXCLUDED) {
+    return {
+      ...bodyStyle,
+      color: isHoveringOnRow ? bodyStyle.hoverFontColor : bodyStyle.color,
+      background: `${StylingDefaults.EXCLUDED_BACKGROUND}, ${
+        isHoveringOnRow ? bodyStyle.hoverBackgroundColor : bodyStyle.background
+      }`,
+    };
+  }
 
-  return {
-    ...bodyStyle,
-    ...overrideBodyStyle,
-  };
+  if (isHoveringOnRow) {
+    return {
+      ...bodyStyle,
+      background: bodyStyle.hoverBackgroundColor,
+      color: bodyStyle.hoverFontColor,
+    } as BodyStyle;
+  }
+
+  return bodyStyle;
 };
 
 export default getCellStyle;
