@@ -7,10 +7,10 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { MenuGroupProps } from '../../types';
 import { MenuListDivider } from './styles';
 
-export default function MenuGroup({ menus, shouldShowDevider }: MenuGroupProps) {
+export default function MenuGroup({ options, shouldShowDevider }: MenuGroupProps) {
   return (
     <div>
-      {menus.map(({ id, icon, itemTitle, isDisabled, subMenu, onClick }) => (
+      {options.map(({ id, icon, itemTitle, isDisabled, subMenu, onClick }) => (
         <ListItem key={id} disablePadding>
           <ListItemButton
             disabled={isDisabled}

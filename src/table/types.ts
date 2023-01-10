@@ -245,7 +245,7 @@ export interface HeadCellMenuProps {
 
 export interface HeadCellMenuGroup {
   id: number;
-  menus: HeadCellMenuItem[];
+  options: HeadCellMenuItem[];
 }
 
 export interface MenuGroupProps extends HeadCellMenuGroup {

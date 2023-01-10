@@ -25,7 +25,7 @@ describe('<MenuGroup />', () => {
     menuGroup = {
       id: 1,
       shouldShowDevider: false,
-      menus: [
+      options: [
         {
           id: 1,
           itemTitle: 'menu#01',
@@ -39,6 +39,6 @@ describe('<MenuGroup />', () => {
     expect(screen.getAllByRole('button').length).toBe(1);
     expect(screen.getByText('menu#01')).toBeVisible();
     fireEvent.click(screen.getByText('menu#01'));
-    expect(menuGroup.menus[0].onClick).toHaveBeenCalledTimes(1);
+    expect(menuGroup.options[0].onClick).toHaveBeenCalledTimes(1);
   });
 });

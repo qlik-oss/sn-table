@@ -33,7 +33,7 @@ export default function HeadCellMenu({
     () => [
       {
         id: 1,
-        menus: [
+        options: [
           {
             id: 1,
             itemTitle: translator.get('SNTable.MenuItem.SortAscending'),
@@ -60,7 +60,7 @@ export default function HeadCellMenu({
         ? [
             {
               id: 2,
-              menus: [
+              options: [
                 {
                   id: 1,
                   itemTitle: translator.get('SNTable.MenuItem.Search'),
