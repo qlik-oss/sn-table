@@ -37,7 +37,7 @@ describe('handle-click', () => {
     } as Cell;
 
     beforeEach(() => {
-      totalsPosition = 'noTotals';
+      totalsPosition = { atTop: false, atBottom: false };
     });
 
     it('should call removeTabAndFocusCell with cellCoord [1,0]', () => {
@@ -51,7 +51,7 @@ describe('handle-click', () => {
     });
 
     it('should call removeTabAndFocusCell with cellCoord [2,0] when totals is on top', () => {
-      totalsPosition = 'top';
+      totalsPosition.atTop = true;
       handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition);
       expect(accessibilityUtils.removeTabAndFocusCell).toHaveBeenCalledWith(
         [2, 0],

@@ -13,7 +13,7 @@ export const handleClickToFocusBody = (
   totalsPosition: TotalsPosition
 ) => {
   const { pageRowIdx, pageColIdx } = cell;
-  const adjustedRowIdx = totalsPosition === 'top' ? pageRowIdx + 2 : pageRowIdx + 1;
+  const adjustedRowIdx = totalsPosition.atTop ? pageRowIdx + 2 : pageRowIdx + 1;
   removeTabAndFocusCell([adjustedRowIdx, pageColIdx], rootElement, setFocusedCellCoord, keyboard);
 };
 

@@ -32,10 +32,15 @@ export function getTotalPosition(layout: TableLayout) {
   ];
 
   if (hasGrandTotal && ((hasDimension && hasMeasure) || (!isTotalModeAuto && !hasDimension))) {
-    if (isTotalModeAuto || position === 'top') return 'top';
-    if (!isTotalModeAuto && position === 'bottom') return 'bottom';
+    if (isTotalModeAuto || position === 'top') {
+      return { atTop: true, atBottom: false };
+    }
+    if (!isTotalModeAuto && position === 'bottom') {
+      return { atTop: false, atBottom: true };
+    }
   }
-  return 'noTotals';
+
+  return { atTop: false, atBottom: false };
 }
 
 /**
