@@ -36,6 +36,7 @@ function TableHeadWrapper({
   translator,
   selectionsAPI,
   keyboard,
+  embed,
   areBasicFeaturesEnabled,
 }: TableHeadWrapperProps) {
   const { columns, paginationNeeded } = tableData;
@@ -110,14 +111,19 @@ function TableHeadWrapper({
                     </VisuallyHidden>
                   )}
                 </StyledSortLabel>
+
                 {areBasicFeaturesEnabled && (
                   <HeadCellMenu
                     headerStyle={headerStyle}
                     translator={translator}
-                    sortDirection={column.sortDirection}
                     sortFromMenu={sortFromMenu}
+                    embed={embed}
+                    layout={layout}
+                    columnIndex={columnIndex}
+                    sortDirection={column.sortDirection}
                     isInteractionEnabled={isInteractionEnabled}
                     isCurrentColumnActive={isCurrentColumnActive}
+                    isDimension={column.isDim}
                   />
                 )}
               </HeadCellContent>

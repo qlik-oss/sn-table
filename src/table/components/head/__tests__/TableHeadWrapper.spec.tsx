@@ -26,6 +26,7 @@ describe('<TableHeadWrapper />', () => {
   let keyboard: stardust.Keyboard;
   let translator: ExtendedTranslator;
   let areBasicFeaturesEnabled: boolean;
+  let embed: stardust.Embed;
 
   const renderTableHead = (cellCoordMock?: [number, number]) =>
     render(
@@ -41,6 +42,7 @@ describe('<TableHeadWrapper />', () => {
           keyboard={keyboard}
           translator={translator}
           areBasicFeaturesEnabled={areBasicFeaturesEnabled}
+          embed={embed}
         />
       </TableContextProvider>
     );

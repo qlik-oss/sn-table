@@ -51,6 +51,10 @@
     "value": "Sorted in descending order.",
     "comment": "direction of sorting for a column, announced by screen readers. (tew 210929)"
   },
+  "SNTable.MenuItem.Search": {
+    "value": "Search",
+    "comment": "label for menu item to search in dimension."
+  },
   "SNTable.MenuItem.SortAscending": {
     "value": "Sort ascending",
     "comment": "label for menu item to sort ascending. (tew 221116)"
