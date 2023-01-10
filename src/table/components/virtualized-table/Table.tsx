@@ -84,7 +84,7 @@ const Table = (props: TableProps) => {
       onScroll={scrollHandler}
     >
       <FullSizeContainer width={containerWidth} height={containerHeight}>
-        <StickyContainer rect={stickyContainerRect} style={bodyStyle}>
+        <StickyContainer rect={stickyContainerRect}>
           <Header
             headerStyle={headerStyle}
             layout={layout}

@@ -1,14 +1,12 @@
 import React from 'react';
-import { GeneratedStyling } from '../../types';
 import { StickyContainerRect } from './types';
 
 interface StickyContainerProps {
   children: (JSX.Element | null)[] | JSX.Element;
   rect: StickyContainerRect;
-  style: GeneratedStyling;
 }
 
-const StickyContainer = ({ children, rect, style }: StickyContainerProps): JSX.Element => {
+const StickyContainer = ({ children, rect }: StickyContainerProps): JSX.Element => {
   return (
     <div
       data-testid="sticky-container"
@@ -18,9 +16,6 @@ const StickyContainer = ({ children, rect, style }: StickyContainerProps): JSX.E
         left: '0px',
         width: rect.width,
         height: rect.height,
-        borderStyle: 'solid',
-        borderWidth: '0px 1px 1px 1px',
-        borderColor: style.borderColor,
       }}
     >
       {children}
