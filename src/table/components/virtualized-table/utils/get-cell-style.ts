@@ -2,14 +2,10 @@ import { SelectionStates, SELECTION_STYLING, StylingDefaults } from '../../../co
 import { BodyStyle } from '../types';
 
 const getCellStyle = (
-  showHoverEffect: boolean,
-  hoverIndex: number,
-  rowIndex: number,
+  isHoveringOnRow: boolean,
   cellSelectionState: SelectionStates,
   bodyStyle: BodyStyle
 ): BodyStyle => {
-  const isHoveringOnRow = showHoverEffect && hoverIndex === rowIndex;
-
   if (cellSelectionState === SelectionStates.SELECTED) {
     return {
       ...bodyStyle,

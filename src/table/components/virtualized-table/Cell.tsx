@@ -28,7 +28,8 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
   const { handleMouseDown, handleMouseOver, handleMouseUp, cellSelectionState } = useSelector(datum);
 
   if (typeof datum === 'object') {
-    const cellStyle = getCellStyle(showHoverEffect, hoverIndex, rowIndex, cellSelectionState, bodyStyle);
+    const isHoveringOnRow = showHoverEffect && hoverIndex === rowIndex;
+    const cellStyle = getCellStyle(isHoveringOnRow, cellSelectionState, bodyStyle);
 
     return (
       <div
