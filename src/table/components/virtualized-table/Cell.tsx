@@ -2,6 +2,7 @@
 import React from 'react';
 import { areEqual } from 'react-window';
 import { Column, Row } from '../../../types';
+import { useContextSelector, TableContext } from '../../context';
 import useSelector from './hooks/use-selector';
 import EmptyCell from './EmptyCell';
 import getCellStyle from './utils/get-cell-style';
@@ -15,21 +16,21 @@ interface CellProps {
     rowsInPage: Row[];
     columns: Column[];
     bodyStyle: BodyStyle;
-    hoverIndex: number;
-    setHoverIndex: React.Dispatch<React.SetStateAction<number>>;
     showHoverEffect: boolean;
   };
 }
 
 const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
-  const { rowsInPage, columns, bodyStyle, hoverIndex, setHoverIndex, showHoverEffect } = data;
+  const { rowsInPage, columns, bodyStyle, showHoverEffect } = data;
   const datum = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
+
+  const rowIsHovered = useContextSelector(TableContext, (value) => value.hoverIndex === rowIndex);
+  const setHoverIndex = useContextSelector(TableContext, (value) => value.setHoverIndex);
 
   const { handleMouseDown, handleMouseOver, handleMouseUp, cellSelectionState } = useSelector(datum);
 
   if (typeof datum === 'object') {
-    const isHoveringOnRow = showHoverEffect && hoverIndex === rowIndex;
-    const cellStyle = getCellStyle(isHoveringOnRow, cellSelectionState, bodyStyle);
+    const cellStyle = getCellStyle(rowIsHovered, showHoverEffect, cellSelectionState, bodyStyle);
 
     return (
       <div
