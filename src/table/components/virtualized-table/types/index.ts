@@ -13,14 +13,10 @@ import { Totals } from '../hooks/use-totals';
 
 export type TotalsPosition = 'bottom' | 'noTotals' | 'top';
 
-interface Rect {
+export interface Rect {
   width: number;
   height: number;
 }
-
-export interface TableRect extends Rect {}
-
-export interface StickyContainerRect extends Rect {}
 
 export interface WrapperProps {
   model: EngineAPI.IGenericObject;
@@ -47,7 +43,7 @@ export interface TableProps {
 
 export interface HeaderProps {
   layout: TableLayout;
-  rect: StickyContainerRect;
+  rect: Rect;
   pageInfo: PageInfo;
   forwardRef: React.RefObject<VariableSizeList<any>>;
   columns: Column[];
@@ -57,7 +53,7 @@ export interface HeaderProps {
 
 export interface TotalsProps {
   layout: TableLayout;
-  rect: StickyContainerRect;
+  rect: Rect;
   pageInfo: PageInfo;
   forwardRef: React.RefObject<VariableSizeList<any>>;
   columns: Column[];
@@ -69,7 +65,7 @@ export interface TotalsProps {
 export interface BodyProps {
   model: EngineAPI.IGenericObject;
   layout: TableLayout;
-  rect: StickyContainerRect;
+  rect: Rect;
   pageInfo: PageInfo;
   columns: Column[];
   columnWidth: number[];

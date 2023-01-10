@@ -77,7 +77,7 @@ const Table = (props: TableProps) => {
 
   return (
     <ScrollableContainer
-      forwardRef={ref}
+      ref={ref}
       constraints={constraints}
       width={tableRect.width}
       height={tableRect.height}

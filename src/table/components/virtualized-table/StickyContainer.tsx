@@ -1,9 +1,9 @@
 import React from 'react';
-import { StickyContainerRect } from './types';
+import { Rect } from './types';
 
 interface StickyContainerProps {
   children: (JSX.Element | null)[] | JSX.Element;
-  rect: StickyContainerRect;
+  rect: Rect;
 }
 
 const StickyContainer = ({ children, rect }: StickyContainerProps): JSX.Element => {

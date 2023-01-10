@@ -3,25 +3,19 @@ import React from 'react';
 
 interface ScrollableContainerProps {
   children: (JSX.Element | null)[] | JSX.Element;
-  forwardRef: React.RefObject<HTMLDivElement>;
   height: number;
   width: number;
   constraints: stardust.Constraints;
   onScroll: (event: React.SyntheticEvent<Element, Event>) => void;
 }
 
-const ScrollableContainer = ({
-  children,
-  width,
-  height,
-  forwardRef,
-  constraints,
-  onScroll,
-}: ScrollableContainerProps): JSX.Element => {
+const ScrollableContainer = React.forwardRef<HTMLDivElement, ScrollableContainerProps>((props, ref) => {
+  const { children, width, height, constraints, onScroll } = props;
+
   return (
     <div
       data-testid="scrollable-container"
-      ref={forwardRef}
+      ref={ref}
       style={{
         overflow: constraints.active ? 'hidden' : 'auto',
         width,
@@ -32,6 +26,6 @@ const ScrollableContainer = ({
       {children}
     </div>
   );
-};
+});
 
 export default ScrollableContainer;
