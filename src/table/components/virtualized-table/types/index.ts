@@ -17,6 +17,9 @@ export interface Rect {
   width: number;
   height: number;
 }
+export interface BodyStyle extends GeneratedStyling {
+  background: string;
+}
 
 export interface WrapperProps {
   model: EngineAPI.IGenericObject;
@@ -71,7 +74,7 @@ export interface BodyProps {
   columnWidth: number[];
   forwardRef: React.RefObject<VariableSizeGrid<any>>;
   innerForwardRef: React.RefObject<HTMLDivElement>;
-  bodyStyle: GeneratedStyling;
+  bodyStyle: BodyStyle;
   selectionsAPI: ExtendedSelectionAPI;
   totals: Totals;
 }
