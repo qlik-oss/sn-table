@@ -16,12 +16,12 @@ interface CellProps {
     rowsInPage: Row[];
     columns: Column[];
     bodyStyle: BodyStyle;
-    showHoverEffect: boolean;
+    isHoverEnabled: boolean;
   };
 }
 
 const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
-  const { rowsInPage, columns, bodyStyle, showHoverEffect } = data;
+  const { rowsInPage, columns, bodyStyle, isHoverEnabled } = data;
   const datum = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
 
   const rowIsHovered = useContextSelector(TableContext, (value) => value.hoverIndex === rowIndex);
@@ -30,7 +30,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
   const { handleMouseDown, handleMouseOver, handleMouseUp, cellSelectionState } = useSelector(datum);
 
   if (typeof datum === 'object') {
-    const cellStyle = getCellStyle(rowIsHovered, showHoverEffect, cellSelectionState, bodyStyle);
+    const cellStyle = getCellStyle(isHoverEnabled && rowIsHovered, cellSelectionState, bodyStyle);
 
     return (
       <div
@@ -50,8 +50,8 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onMouseOver={handleMouseOver}
-        onMouseEnter={showHoverEffect ? () => setHoverIndex(rowIndex) : undefined}
-        onMouseLeave={showHoverEffect ? () => setHoverIndex(-1) : undefined}
+        onMouseEnter={isHoverEnabled ? () => setHoverIndex(rowIndex) : undefined}
+        onMouseLeave={isHoverEnabled ? () => setHoverIndex(-1) : undefined}
       >
         <span
           className="sn-table-cell-text"

@@ -2,13 +2,10 @@ import { SelectionStates, SELECTION_STYLING, StylingDefaults } from '../../../co
 import { BodyStyle } from '../types';
 
 const getCellStyle = (
-  isRowHovered: boolean,
   showHoverEffect: boolean,
   cellSelectionState: SelectionStates,
   bodyStyle: BodyStyle
 ): BodyStyle => {
-  const isHoveringOnRow = isRowHovered && showHoverEffect;
-
   if (cellSelectionState === SelectionStates.SELECTED) {
     return {
       ...bodyStyle,
@@ -19,14 +16,14 @@ const getCellStyle = (
   if (cellSelectionState === SelectionStates.EXCLUDED) {
     return {
       ...bodyStyle,
-      color: isHoveringOnRow ? bodyStyle.hoverFontColor : bodyStyle.color,
+      color: showHoverEffect ? bodyStyle.hoverFontColor : bodyStyle.color,
       background: `${StylingDefaults.EXCLUDED_BACKGROUND}, ${
-        isHoveringOnRow ? bodyStyle.hoverBackgroundColor : bodyStyle.background
+        showHoverEffect ? bodyStyle.hoverBackgroundColor : bodyStyle.background
       }`,
     };
   }
 
-  if (isHoveringOnRow) {
+  if (showHoverEffect) {
     return {
       ...bodyStyle,
       background: bodyStyle.hoverBackgroundColor,

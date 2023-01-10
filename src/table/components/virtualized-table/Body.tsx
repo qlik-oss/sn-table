@@ -24,7 +24,7 @@ const Body = (props: BodyProps) => {
     selectionsAPI,
     totals,
   } = props;
-  const showHoverEffect = !!layout.components?.[0]?.content?.hoverEffect;
+  const isHoverEnabled = !!layout.components?.[0]?.content?.hoverEffect;
   const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
   const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(layout, pageInfo, rect, columnWidth);
   const stickyTop = totals.atTop ? HEADER_AND_TOTALS_HEIGHT : HEADER_HEIGHT;
@@ -53,8 +53,8 @@ const Body = (props: BodyProps) => {
   });
 
   const itemData = useMemo(
-    () => ({ rowsInPage, columns, bodyStyle, showHoverEffect }),
-    [rowsInPage, columns, bodyStyle, showHoverEffect]
+    () => ({ rowsInPage, columns, bodyStyle, isHoverEnabled }),
+    [rowsInPage, columns, bodyStyle, isHoverEnabled]
   );
 
   useSelectionsEffect(selectionsAPI, rowsInPage);
