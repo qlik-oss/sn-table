@@ -3,7 +3,7 @@ import { stardust } from '@nebula.js/stardust';
 import { TableLayout } from '../../../types';
 
 export interface ListBoxWrapperRenderProps {
-  ref: React.MutableRefObject<HTMLElement | null>;
+  ref: React.RefObject<HTMLElement>;
 }
 
 interface ListBoxWrapperProps {
