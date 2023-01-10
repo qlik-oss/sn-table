@@ -15,7 +15,7 @@ const useTotals = (layout: TableLayout) => {
   return useMemo(
     () => ({
       ...totalsPosition,
-      shrinkBodyHeightBy: totalsPosition.atTop || totalsPosition.atTop ? HEADER_AND_TOTALS_HEIGHT : HEADER_HEIGHT,
+      shrinkBodyHeightBy: totalsPosition.atTop || totalsPosition.atBottom ? HEADER_AND_TOTALS_HEIGHT : HEADER_HEIGHT,
     }),
     [totalsPosition]
   );
