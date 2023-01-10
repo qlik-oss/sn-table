@@ -28,7 +28,7 @@ export const StyledTableWrapper = styled(Box, {
 export const StyledTableContainer = styled(TableContainer, {
   shouldForwardProp: (prop: string) => prop !== 'fullHeight' && prop !== 'constraints',
 })(({ fullHeight, constraints }) => ({
-  height: fullHeight ? '100%' : `calc(100% - ${PAGINATION_HEIGHT + 2}px)`, // +2 for top and bottom border
+  height: fullHeight ? '100%' : `calc(100% - ${PAGINATION_HEIGHT + 1}px)`, // + 1 for top border
   overflow: constraints.active ? 'hidden' : 'auto',
   border: 'none',
 }));

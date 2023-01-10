@@ -3,7 +3,7 @@ import { stardust } from '@nebula.js/stardust';
 import { resolveToRGBAorRGB, isDarkColor, removeOpacity } from './color-utils';
 import { TableLayout, ExtendedTheme, HeaderStyling, ContentStyling, PaletteColor, BackgroundColors } from '../../types';
 import { GeneratedStyling, CellStyle, FooterStyle } from '../types';
-import { SelectionStates, StylingDefaults, SELECTION_STYLING } from '../constants';
+import { SelectionStates, StylingDefaults, SELECTION_STYLING, PAGINATION_HEIGHT } from '../constants';
 
 // the order of style
 // default (inl. sprout theme) < Sense theme < styling settings
@@ -115,11 +115,33 @@ export function getHeaderStyle(layout: TableLayout, theme: ExtendedTheme, separa
 }
 
 /**
+ * Get border widths for body. adds a bottom border if the rendered rows height is estimated to be greater than the container height
+ */
+const getLastRowBottomBorder = (fontSize: string | undefined, rowsLength?: number, rootElement?: HTMLElement) => {
+  if (fontSize && rowsLength && rootElement) {
+    // add line height (133%), padding and borders
+    const rowHeight = (+fontSize.slice(0, -2) * 4) / 3 + 9;
+    // multiply with number of rows plus header and totals. Compare if greater than container
+    const showBottomBorder = rowHeight * (rowsLength + 2) < rootElement.offsetHeight - PAGINATION_HEIGHT;
+    return showBottomBorder ? '1px' : '0px';
+  }
+  return '0px';
+};
+
+/**
  * Gets complete styling for the body. Extends base styling with hover styling
  */
-export function getBodyCellStyle(layout: TableLayout, theme: ExtendedTheme): GeneratedStyling {
+export function getBodyCellStyle(
+  layout: TableLayout,
+  theme: ExtendedTheme,
+  rowsLength?: number,
+  rootElement?: HTMLElement
+): GeneratedStyling {
   const content = layout.components?.[0]?.content;
   const contentStyle = getBaseStyling('content', theme, content);
+  contentStyle.backgroundColor = theme.background.color;
+
+  const lastRowBottomBorder = getLastRowBottomBorder(contentStyle?.fontSize, rowsLength, rootElement);
 
   // All following colors concern hover
   const backgroundColorFromLayout = content?.hoverColor;
@@ -172,6 +194,7 @@ export function getBodyCellStyle(layout: TableLayout, theme: ExtendedTheme): Gen
 
   return {
     ...contentStyle,
+    lastRowBottomBorder,
     hoverColors: {
       backgroundColor,
       color,
@@ -200,9 +223,12 @@ export const getFooterStyle = (background: BackgroundColors): FooterStyle =>
  * Gets complete styling for the totals cells. Based on the body style but with the background and borders from header
  */
 export function getTotalsCellStyle(layout: TableLayout, theme: ExtendedTheme, totalsPosition: string) {
+  const content = layout.components?.[0]?.content;
+  const contentStyle = getBaseStyling('content', theme, content);
+
   const separatingBorder = totalsPosition === 'top' ? 'bottom' : 'top';
   const { borderBottomColor, borderTopColor, backgroundColor } = getHeaderStyle(layout, theme, separatingBorder);
-  return { ...getBodyCellStyle(layout, theme), borderBottomColor, backgroundColor, borderTopColor };
+  return { ...contentStyle, borderBottomColor, backgroundColor, borderTopColor };
 }
 
 /**

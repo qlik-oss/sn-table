@@ -83,6 +83,7 @@ export interface GeneratedStyling {
   borderTopColor: string;
   borderLeftColor: string;
   borderRightColor: string;
+  lastRowBottomBorder?: string;
   padding?: string;
   fontFamily?: string;
   color?: string;

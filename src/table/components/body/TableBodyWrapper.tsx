@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo, memo } from 'react';
-import TableBody from '@mui/material/TableBody';
 
 import getCellRenderer from '../../utils/get-cell-renderer';
 import { useContextSelector, TableContext } from '../../context';
-import { StyledBodyRow } from './styles';
+import { StyledBodyRow, StyledBody } from './styles';
 import { addSelectionListeners } from '../../utils/selections-utils';
 import { getBodyCellStyle } from '../../utils/styling-utils';
 import { handleBodyKeyDown, handleBodyKeyUp } from '../../utils/handle-key-press';
@@ -41,9 +40,11 @@ function TableBodyWrapper({
       ),
     [columnsStylingIDsJSON, isSelectionsEnabled]
   );
-  const { hoverColors, ...cellStyle } = useMemo(() => getBodyCellStyle(layout, theme), [layout, theme]);
+  const { hoverColors, lastRowBottomBorder, ...cellStyle } = useMemo(
+    () => getBodyCellStyle(layout, theme, rows.length, rootElement),
+    [layout, theme, rows.length, rootElement]
+  );
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
-  cellStyle.backgroundColor = theme.background.color;
 
   useEffect(() => {
     addSelectionListeners({
@@ -68,7 +69,7 @@ function TableBodyWrapper({
   );
 
   return (
-    <TableBody>
+    <StyledBody lastRowBottomBorder={lastRowBottomBorder}>
       {totalsPosition === 'top' ? totals : undefined}
       {rows.map((row) => (
         <StyledBodyRow
@@ -130,7 +131,7 @@ function TableBodyWrapper({
         </StyledBodyRow>
       ))}
       {totalsPosition === 'bottom' ? totals : undefined}
-    </TableBody>
+    </StyledBody>
   );
 }
 

@@ -1,10 +1,21 @@
 import styled from '@mui/system/styled';
+import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 
 import { COMMON_CELL_STYLING } from '../../constants';
 
 // ---------- TableBodyWrapper ----------
+
+export const StyledBody = styled(TableBody, {
+  shouldForwardProp: (prop: string) => prop !== 'lastRowBottomBorder',
+})(({ lastRowBottomBorder }) => ({
+  '& tr:last-child': {
+    '& td, th': {
+      borderBottomWidth: lastRowBottomBorder,
+    },
+  },
+}));
 
 export const StyledBodyRow = styled(TableRow, {
   shouldForwardProp: (prop: string) => prop !== 'hoverColors' && prop !== 'hover',
