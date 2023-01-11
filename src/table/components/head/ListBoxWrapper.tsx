@@ -15,10 +15,10 @@ interface ListBoxWrapperProps {
 
 const getFieldId = (layout: TableLayout, columnIndex: number): string | stardust.LibraryField | undefined =>
   layout.qHyperCube.qDimensionInfo[columnIndex]?.qLibraryId
-    ? ({
+    ? {
         type: 'dimension',
         qLibraryId: layout.qHyperCube.qDimensionInfo[columnIndex]?.qLibraryId,
-      } as stardust.LibraryField)
+      }
     : layout.qHyperCube.qDimensionInfo[columnIndex]?.qFallbackTitle;
 
 export const ListBoxWrapper = ({ children, embed, layout, columnIndex }: ListBoxWrapperProps) => {
