@@ -22,14 +22,10 @@ const TableContainer = (props: TableContainerProps) => {
   const bodyRef = useRef<VariableSizeGrid>(null);
   const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
   const totals = useTotals(layout);
-  const headerStyle = useMemo(
-    () => getHeaderStyle(layout, theme, totals.atTop ? '' : 'bottom'),
-    [layout, theme, totals]
-  );
+  const headerStyle = useMemo(() => getHeaderStyle(layout, theme, !totals.atTop), [layout, theme, totals]);
   const bodyStyle = useMemo(
     () => ({
       ...getBodyCellStyle(layout, theme),
-      backgroundColor: theme.background.color, // Append both background and backgroundColor to avoid conflicting prop error when selecting styling is applied
       background: theme.background.color,
     }),
     [layout, theme]

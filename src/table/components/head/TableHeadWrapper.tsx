@@ -43,8 +43,10 @@ function TableHeadWrapper({
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
-  const borderSeparator = totalsPosition === 'top' ? '' : 'bottom';
-  const headerStyle = useMemo(() => getHeaderStyle(layout, theme, borderSeparator), [layout, theme, totalsPosition]);
+  const headerStyle = useMemo(
+    () => getHeaderStyle(layout, theme, totalsPosition !== 'top'),
+    [layout, theme, totalsPosition]
+  );
   const headRowRef = useRef<HTMLTableRowElement>(null);
   const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
 

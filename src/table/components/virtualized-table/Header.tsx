@@ -22,7 +22,7 @@ const Header = (props: HeaderProps) => {
         left: 0,
         overflow: 'hidden',
         borderBottom: `1px solid ${headerStyle.borderBottomColor}`,
-        backgroundColor: headerStyle.backgroundColor,
+        background: headerStyle.background,
         boxSizing: 'border-box',
       }}
       itemCount={layout.qHyperCube.qSize.qcx}

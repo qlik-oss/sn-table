@@ -88,10 +88,10 @@ export interface GeneratedStyling {
   fontFamily?: string;
   color?: string;
   fontSize?: string; // following the theme format so this should always be a string
-  backgroundColor?: string;
+  background?: string;
   sortLabelColor?: string;
   hoverColors?: {
-    backgroundColor: string;
+    background: string;
     color: string;
   };
 }
@@ -101,13 +101,12 @@ export interface FooterStyle {
   color: string;
   iconColor: string;
   disabledIconColor: string;
-  backgroundColor?: string;
+  background?: string;
 }
 
 export interface CellStyle {
-  backgroundColor: string | undefined; // This is always set but could be undefined in the theme
+  background: string | undefined; // This is always set but could be undefined in the theme
   color: string;
-  background?: string;
   selectedCellClass?: string;
 }
 

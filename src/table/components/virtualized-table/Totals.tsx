@@ -29,7 +29,7 @@ const Totals = (props: TotalsProps) => {
         top,
         left: 0,
         overflow: 'hidden',
-        backgroundColor: totalsStyle.backgroundColor,
+        background: totalsStyle.background,
         borderTop: totals.atBottom ? `1px solid ${totalsStyle.borderTopColor}` : '0px',
         borderBottom: totals.atTop || !paginationNeeded ? `1px solid ${totalsStyle.borderBottomColor}` : '0px',
         boxSizing: 'border-box',

@@ -23,7 +23,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
   const datum = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
 
   const { handleMouseDown, handleMouseOver, handleMouseUp, selectionStyling } = useSelector(datum, {
-    backgroundColor: bodyStyle.backgroundColor,
+    background: bodyStyle.background,
   } as CellStyle);
 
   if (typeof datum === 'object') {

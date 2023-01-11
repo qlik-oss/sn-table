@@ -22,7 +22,7 @@ export const StyledTableWrapper = styled(Box, {
 })(({ background }) => ({
   height: '100%',
   // TODO: see if we really need this or if we can use background.color
-  backgroundColor: background.tableColorFromTheme,
+  background: background.tableColorFromTheme,
 }));
 
 export const StyledTableContainer = styled(TableContainer, {

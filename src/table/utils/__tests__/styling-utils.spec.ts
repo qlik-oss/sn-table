@@ -81,11 +81,11 @@ describe('styling-utils', () => {
 
   describe('getBorderColors', () => {
     let isBackgroundDark: boolean;
-    let separatingBorder: string;
+    let separatingBorder: boolean;
 
     beforeEach(() => {
       isBackgroundDark = false;
-      separatingBorder = '';
+      separatingBorder = false;
     });
 
     it('should return default border colors when background is not dark and no separating border', () => {
@@ -94,7 +94,7 @@ describe('styling-utils', () => {
     });
 
     it('should return border colors with dark bottom border when background is not dark and separatingBorder is bottom', () => {
-      separatingBorder = 'bottom';
+      separatingBorder = true;
 
       const borders = getBorderColors(isBackgroundDark, separatingBorder);
       expect(borders).toEqual({
@@ -231,18 +231,18 @@ describe('styling-utils', () => {
       } as unknown as TableLayout;
     });
 
-    it('should return empty object except backgroundColor and border as the padding and font size are from sprout theme', () => {
+    it('should return empty object except background and border as the padding and font size are from sprout theme', () => {
       layout = {} as unknown as TableLayout;
 
-      const resultStyling = getHeaderStyle(layout, theme, '');
+      const resultStyling = getHeaderStyle(layout, theme, false);
       expect(resultStyling).toEqual({
-        backgroundColor: '#323232',
+        background: '#323232',
         sortLabelColor: 'rgba(255,255,255,0.9)',
         ...defaultBorderColors,
       });
     });
 
-    it('should return header style with only fontColor except backgroundColor and border', () => {
+    it('should return header style with only fontColor except background and border', () => {
       layout = {
         components: [
           {
@@ -253,21 +253,21 @@ describe('styling-utils', () => {
         ],
       } as unknown as TableLayout;
 
-      const resultStyling = getHeaderStyle(layout, theme, '');
+      const resultStyling = getHeaderStyle(layout, theme, false);
       expect(resultStyling).toEqual({
         color: '#404040',
-        backgroundColor: '#323232',
+        background: '#323232',
         sortLabelColor: '#404040',
         ...defaultBorderColors,
       });
     });
 
     it('should return all header style from layout', () => {
-      const resultStyling = getHeaderStyle(layout, theme, '');
+      const resultStyling = getHeaderStyle(layout, theme, false);
       expect(resultStyling).toEqual({
         color: '#404040',
         fontSize: '44px',
-        backgroundColor: '#323232',
+        background: '#323232',
         sortLabelColor: '#404040',
         ...defaultBorderColors,
       });
@@ -276,7 +276,7 @@ describe('styling-utils', () => {
 
   describe('getBodyCellStyle', () => {
     let layout: TableLayout;
-    const defaultHoverColors = { backgroundColor: '#f4f4f4', color: '' };
+    const defaultHoverColors = { background: '#f4f4f4', color: '' };
 
     beforeEach(() => {
       resolvedColor = '#222222'; // dark color
@@ -311,6 +311,8 @@ describe('styling-utils', () => {
       const resultStyling = getBodyCellStyle(layout, theme);
       expect(resultStyling).toEqual({
         hoverColors: defaultHoverColors,
+        background: '#323232',
+        lastRowBottomBorder: '0px',
         ...defaultBorderColors,
       });
     });
@@ -322,6 +324,8 @@ describe('styling-utils', () => {
         color: '#222222',
         padding: '11px 22px',
         hoverColors: defaultHoverColors,
+        background: '#323232',
+        lastRowBottomBorder: '0px',
         ...defaultBorderColors,
       });
     });
@@ -331,7 +335,7 @@ describe('styling-utils', () => {
       if (layout.components?.[0].content?.hoverFontColor) layout.components[0].content.hoverFontColor.index = 1;
 
       const { hoverColors } = getBodyCellStyle(layout, theme);
-      expect(hoverColors?.backgroundColor).toBe('');
+      expect(hoverColors?.background).toBe('');
       expect(hoverColors?.color).toBe(resolvedColor);
     });
 
@@ -339,7 +343,7 @@ describe('styling-utils', () => {
       theme.getStyle = () => '#111';
 
       const { hoverColors } = getBodyCellStyle(layout, theme);
-      expect(hoverColors?.backgroundColor).toBe('#111');
+      expect(hoverColors?.background).toBe('#111');
       expect(hoverColors?.color).toBe(StylingDefaults.WHITE);
     });
 
@@ -347,7 +351,7 @@ describe('styling-utils', () => {
       theme.getStyle = () => '#fff';
 
       const { hoverColors } = getBodyCellStyle(layout, theme);
-      expect(hoverColors?.backgroundColor).toBe('#fff');
+      expect(hoverColors?.background).toBe('#fff');
       expect(hoverColors?.color).toBe(StylingDefaults.FONT_COLOR);
     });
 
@@ -355,7 +359,7 @@ describe('styling-utils', () => {
       if (layout.components?.[0].content?.hoverColor) layout.components[0].content.hoverColor.index = 1;
 
       const { hoverColors } = getBodyCellStyle(layout, theme);
-      expect(hoverColors?.backgroundColor).toBe(resolvedColor);
+      expect(hoverColors?.background).toBe(resolvedColor);
       expect(hoverColors?.color).toBe(StylingDefaults.WHITE);
     });
 
@@ -363,7 +367,7 @@ describe('styling-utils', () => {
       if (layout.components?.[0].content?.hoverColor) layout.components[0].content.hoverColor.index = 2;
 
       const { hoverColors } = getBodyCellStyle(layout, theme);
-      expect(hoverColors?.backgroundColor).toBe(altResolvedColor);
+      expect(hoverColors?.background).toBe(altResolvedColor);
       expect(hoverColors?.color).toBe(StylingDefaults.FONT_COLOR);
     });
 
@@ -372,7 +376,7 @@ describe('styling-utils', () => {
       if (layout.components?.[0].content?.hoverFontColor) layout.components[0].content.hoverFontColor.index = 2;
 
       const { hoverColors } = getBodyCellStyle(layout, theme);
-      expect(hoverColors?.backgroundColor).toBe(resolvedColor);
+      expect(hoverColors?.background).toBe(resolvedColor);
       expect(hoverColors?.color).toBe(altResolvedColor);
     });
   });
@@ -383,7 +387,7 @@ describe('styling-utils', () => {
     let stylingIDs: string[];
 
     beforeEach(() => {
-      styling = { color: 'someFontColor', backgroundColor: 'someBgColor' };
+      styling = { color: 'someFontColor', background: 'someBgColor' };
       qAttrExps = {
         qValues: [
           { qText: '#dddddd', qNum: NaN },
@@ -393,9 +397,9 @@ describe('styling-utils', () => {
       stylingIDs = ['cellBackgroundColor', 'cellForegroundColor'];
     });
 
-    it('should return styling with both new fontColor and backgroundColor when selected', () => {
+    it('should return styling with both new fontColor and background when selected', () => {
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingIDs);
-      expect(columnStyle.backgroundColor).toBe('rgb(221,221,221)');
+      expect(columnStyle.background).toBe('rgb(221,221,221)');
       expect(columnStyle.color).toBe('rgb(17,17,17)');
     });
     it('should return styling with new fontColor', () => {
@@ -403,15 +407,15 @@ describe('styling-utils', () => {
       stylingIDs = [stylingIDs[1]];
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingIDs);
-      expect(columnStyle.backgroundColor).toBe('someBgColor');
+      expect(columnStyle.background).toBe('someBgColor');
       expect(columnStyle.color).toBe('rgb(17,17,17)');
     });
-    it('should return styling with backgroundColor and automatic font color', () => {
+    it('should return styling with background and automatic font color', () => {
       qAttrExps.qValues = [qAttrExps.qValues[0]];
       stylingIDs = [stylingIDs[0]];
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingIDs);
-      expect(columnStyle.backgroundColor).toBe('rgb(221,221,221)');
+      expect(columnStyle.background).toBe('rgb(221,221,221)');
       expect(columnStyle.color).toBe(StylingDefaults.FONT_COLOR);
     });
     it('should return styling unchanged when no qText', () => {
@@ -438,7 +442,7 @@ describe('styling-utils', () => {
     beforeEach(() => {
       styling = {
         color: '#654321',
-        backgroundColor: '#123456',
+        background: '#123456',
       };
       cellSelectionState = SelectionStates.SELECTED;
     });
@@ -454,19 +458,19 @@ describe('styling-utils', () => {
       const selectionStyling = getSelectionStyle(styling, cellSelectionState);
       expect(selectionStyling).toEqual({
         ...styling,
-        background: `${StylingDefaults.EXCLUDED_BACKGROUND}, ${styling.backgroundColor}`,
+        background: `${StylingDefaults.EXCLUDED_BACKGROUND}, ${styling.background}`,
         selectedCellClass: SelectionStates.EXCLUDED,
       });
     });
 
     it('should return excluded styling with columns background when other column and background color exists', () => {
       cellSelectionState = SelectionStates.EXCLUDED;
-      styling.backgroundColor = 'someColor';
+      styling.background = 'someColor';
 
       const selectionStyling = getSelectionStyle(styling, cellSelectionState);
       expect(selectionStyling).toEqual({
         ...styling,
-        background: `${StylingDefaults.EXCLUDED_BACKGROUND}, ${styling.backgroundColor}`,
+        background: `${StylingDefaults.EXCLUDED_BACKGROUND}, ${styling.background}`,
         selectedCellClass: SelectionStates.EXCLUDED,
       });
     });

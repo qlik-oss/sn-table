@@ -30,7 +30,6 @@ export enum KeyCodes {
 }
 
 export enum StylingDefaults {
-  HEAD_BACKGROUND_LIGHT = '#FAFAFA',
   HEAD_BACKGROUND_DARK = '#323232',
   SORT_LABEL_LIGHT = 'rgba(255,255,255,0.9)',
   SORT_LABEL_DARK = 'rgba(0, 0, 0, 0.54)',
