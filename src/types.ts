@@ -39,6 +39,7 @@ export interface ExtendedNxAttrExprInfo extends EngineAPI.INxAttrExprInfo {
 export interface ExtendedNxDimensionInfo extends Omit<EngineAPI.INxDimensionInfo, 'qAttrExprInfo'> {
   textAlign: TextAlign;
   qAttrExprInfo: ExtendedNxAttrExprInfo[];
+  qLibraryId: string;
 }
 
 export interface ExtendedNxMeasureInfo extends EngineAPI.INxMeasureInfo {
