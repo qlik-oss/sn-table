@@ -87,8 +87,6 @@ export const getBaseStyling = (
       ? getColor(StylingDefaults.FONT_COLOR, theme, styleObj?.fontColor)
       : color,
     fontSize: (styleObj?.fontSize && `${styleObj.fontSize}px`) || fontSize,
-    // When we do not set padding for content or header, but set font size,
-    // we d to calculate the padding based on the font size
     padding: styleObj && 'padding' in styleObj ? styleObj?.padding : undefined,
     ...getBorderColors(theme.background.isDark, bottomSeparatingBorder),
   };
@@ -101,7 +99,7 @@ export const getBaseStyling = (
 };
 
 /**
- * Gets complete styling for the header. Extends base styling with header specific styling se
+ * Gets complete styling for the header. Extends base styling with header specific styling
  */
 export function getHeaderStyle(
   layout: TableLayout,
@@ -133,7 +131,7 @@ export function getHeaderStyle(
 }
 
 /**
- * Gets complete styling for the body. Extends base styling with hover styling
+ * Gets complete styling for the body. Extends base styling with hover styling and last row border
  */
 export function getBodyStyle(
   layout: TableLayout,

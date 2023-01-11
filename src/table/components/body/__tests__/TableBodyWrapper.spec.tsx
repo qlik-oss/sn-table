@@ -87,7 +87,6 @@ describe('<TableBodyWrapper />', () => {
   });
 
   it('should render table with totals', () => {
-    console.log(tableData.columns[0]);
     tableData.totalsPosition.atTop = true;
     const { queryByText } = renderTableBody();
 

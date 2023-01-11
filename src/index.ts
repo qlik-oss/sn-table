@@ -59,7 +59,7 @@ const renderWithCarbon = ({
 };
 
 export default function supernova(env: Galaxy) {
-  const areBasicFeaturesEnabled = true; //   env.flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES');
+  const areBasicFeaturesEnabled = env.flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES');
   return {
     qae: {
       properties: { initial: properties },
@@ -84,7 +84,7 @@ export default function supernova(env: Galaxy) {
       const embed = useEmbed();
 
       const [pageInfo, setPageInfo] = useState(initialPageInfo);
-      const shouldRenderVirtualizedTable = true; // layout.scrollMode === 1;
+      const shouldRenderVirtualizedTable = false; // layout.scrollMode === 1;
       const [tableData] = usePromise(
         async () =>
           (env.carbon && !model?.getHyperCubeData) || shouldRenderVirtualizedTable
