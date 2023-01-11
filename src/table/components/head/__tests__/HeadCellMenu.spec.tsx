@@ -19,7 +19,7 @@ describe('<HeadCellMenu />', () => {
   let isCurrentColumnActive: boolean = false;
   let embed: stardust.Embed;
   let layout: TableLayout;
-  let columnIndex: number;
+  const columnIndex = 0;
   const direction: 'ltr' | 'rtl' = 'ltr';
 
   const renderTableHeadCellMenu = (cellCoordMock?: [number, number]) =>
