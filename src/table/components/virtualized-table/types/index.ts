@@ -1,6 +1,7 @@
 import { stardust } from '@nebula.js/stardust';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
 import {
+  ChangeSortOrder,
   Column,
   ExtendedSelectionAPI,
   ExtendedTheme,
@@ -31,6 +32,8 @@ export interface WrapperProps {
   translator: ExtendedTranslator;
   selectionsAPI: ExtendedSelectionAPI;
   constraints: stardust.Constraints;
+  embed: stardust.Embed;
+  changeSortOrder: ChangeSortOrder;
 }
 
 export interface TableProps {
@@ -42,6 +45,9 @@ export interface TableProps {
   theme: ExtendedTheme;
   selectionsAPI: ExtendedSelectionAPI;
   constraints: stardust.Constraints;
+  embed: stardust.Embed;
+  translator: ExtendedTranslator;
+  changeSortOrder: ChangeSortOrder;
 }
 
 export interface HeaderProps {
@@ -52,6 +58,9 @@ export interface HeaderProps {
   columns: Column[];
   columnWidth: number[];
   headerStyle: GeneratedStyling;
+  embed: stardust.Embed;
+  translator: ExtendedTranslator;
+  changeSortOrder: ChangeSortOrder;
 }
 
 export interface TotalsProps {

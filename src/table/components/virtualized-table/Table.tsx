@@ -18,7 +18,19 @@ import StickyContainer from './StickyContainer';
 import { toTableRect, toStickyContainerRect } from './utils/to-rect';
 
 const Table = (props: TableProps) => {
-  const { layout, rect, pageInfo, paginationNeeded, model, theme, constraints, selectionsAPI } = props;
+  const {
+    layout,
+    rect,
+    pageInfo,
+    paginationNeeded,
+    model,
+    theme,
+    constraints,
+    selectionsAPI,
+    embed,
+    translator,
+    changeSortOrder,
+  } = props;
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);
   const totalsRef = useRef<VariableSizeList>(null);
@@ -92,6 +104,9 @@ const Table = (props: TableProps) => {
             columns={columns}
             columnWidth={width}
             forwardRef={headerRef}
+            embed={embed}
+            translator={translator}
+            changeSortOrder={changeSortOrder}
           />
           {totals.atTop ? TotalsComponent : null}
           <Body

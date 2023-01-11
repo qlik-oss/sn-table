@@ -243,6 +243,7 @@ export interface HeadCellMenuProps {
   layout: TableLayout;
   columnIndex: number;
   isDimension: boolean;
+  disablePortal?: boolean;
 }
 
 export interface HeadCellMenuGroup {
