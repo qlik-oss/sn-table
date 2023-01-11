@@ -13,6 +13,14 @@ interface ListBoxWrapperProps {
   columnIndex: number;
 }
 
+const getFieldId = (layout: TableLayout, columnIndex: number): string | stardust.LibraryField | undefined =>
+  layout.qHyperCube.qDimensionInfo[columnIndex]?.qLibraryId
+    ? ({
+        type: 'dimension',
+        qLibraryId: layout.qHyperCube.qDimensionInfo[columnIndex]?.qLibraryId,
+      } as stardust.LibraryField)
+    : layout.qHyperCube.qDimensionInfo[columnIndex]?.qFallbackTitle;
+
 export const ListBoxWrapper = ({ children, embed, layout, columnIndex }: ListBoxWrapperProps) => {
   const [listboxInstance, setListboxInstance] = useState<stardust.FieldInstance>();
   const ref = useRef<HTMLElement>(null);
@@ -21,7 +29,13 @@ export const ListBoxWrapper = ({ children, embed, layout, columnIndex }: ListBox
   useEffect(() => {
     if (!layout || !embed) return;
 
-    embed.field(layout.qHyperCube.qDimensionInfo[columnIndex]?.qFallbackTitle).then((instance) => {
+    const fieldId = getFieldId(layout, columnIndex);
+
+    if (fieldId === undefined) {
+      return;
+    }
+
+    embed.field(fieldId).then((instance) => {
       setListboxInstance(instance);
     });
   }, []);
