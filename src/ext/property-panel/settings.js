@@ -209,6 +209,21 @@ const getChartExploration = (env) =>
           translation: 'properties.enableChartExploration',
           ref: 'enableChartExploration',
         },
+        visibilityDropdown: {
+          component: 'buttongroup',
+          translation: 'Visibility option',
+          ref: 'chartExploration.menuVisibility',
+          options: [
+            {
+              value: 'auto',
+              translation: 'Auto',
+            },
+            {
+              value: 'minimized',
+              translation: 'Minimized',
+            },
+          ],
+        },
       },
     },
   };
