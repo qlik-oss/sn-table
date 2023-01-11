@@ -14,6 +14,7 @@ interface HeaderCellProps {
 const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
   const { columns, headerStyle } = data;
   const datum = columns[index];
+  const isLastColumn = columns.length - 1 === index;
 
   return (
     <div
@@ -24,7 +25,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         alignItems: 'center',
         borderColor: headerStyle.borderColor,
         borderStyle: 'solid',
-        borderWidth: '0px 1px 0px 0px',
+        borderWidth: isLastColumn ? '0px' : '0px 1px 0px 0px',
         padding: '0px 14px',
         justifyContent: datum.align,
         boxSizing: 'border-box',
