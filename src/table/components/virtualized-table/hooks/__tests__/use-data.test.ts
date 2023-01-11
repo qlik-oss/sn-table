@@ -78,6 +78,7 @@ describe('useData', () => {
             // From initial data load
             colIdx: 0,
             isLastRow: false,
+            isLastColumn: false,
             isSelectable: false,
             pageColIdx: 0,
             pageRowIdx: 0,
@@ -91,6 +92,7 @@ describe('useData', () => {
             // From loadRows
             colIdx: 0,
             isLastRow: false,
+            isLastColumn: false,
             isSelectable: false,
             pageColIdx: 0,
             pageRowIdx: 1,
@@ -102,6 +104,31 @@ describe('useData', () => {
       ];
 
       await waitFor(() => expect(result.current.rowsInPage).toEqual(expectedRows));
+    });
+
+    test('should flag last row', async () => {
+      await doRenderHook();
+      const { result } = renderHookResult;
+
+      await act(async () => {
+        result.current.loadRows(0, 4, 1, 1);
+      });
+
+      const expectedRow: Row = {
+        'col-0': {
+          colIdx: 0,
+          isLastRow: true,
+          isLastColumn: false,
+          isSelectable: false,
+          pageColIdx: 0,
+          pageRowIdx: 4,
+          qText: '0',
+          rowIdx: 4,
+        } as Cell,
+        key: 'row-4',
+      };
+
+      await waitFor(() => expect(result.current.rowsInPage[4]).toEqual(expectedRow));
     });
 
     test('should not fetch duplicate data pages', async () => {
@@ -155,6 +182,7 @@ describe('useData', () => {
             // From initial data load
             colIdx: 0,
             isLastRow: false,
+            isLastColumn: false,
             isSelectable: false,
             pageColIdx: 0,
             pageRowIdx: 0,
@@ -165,6 +193,7 @@ describe('useData', () => {
             // From loadColumns
             colIdx: 1,
             isLastRow: false,
+            isLastColumn: true,
             isSelectable: false,
             pageColIdx: 1,
             pageRowIdx: 0,
@@ -222,6 +251,7 @@ describe('useData', () => {
           'col-0': {
             colIdx: 0,
             isLastRow: false,
+            isLastColumn: false,
             isSelectable: false,
             pageColIdx: 0,
             pageRowIdx: 0,
@@ -247,6 +277,7 @@ describe('useData', () => {
           'col-0': {
             colIdx: 0,
             isLastRow: false,
+            isLastColumn: false,
             isSelectable: false,
             pageColIdx: 0,
             pageRowIdx: 0,

@@ -14,6 +14,7 @@ import {
   useKeyboard,
   useRect,
   useApp,
+  useEmbed,
 } from '@nebula.js/stardust';
 
 import properties from './qae/object-properties';
@@ -80,6 +81,7 @@ export default function supernova(env: Galaxy) {
       const theme = useExtendedTheme(rootElement);
       const announce = useAnnounceAndTranslations(rootElement, translator);
       const changeSortOrder = useSorting(model, layout.qHyperCube);
+      const embed = useEmbed();
 
       const [pageInfo, setPageInfo] = useState(initialPageInfo);
       const shouldRenderVirtualizedTable = true; // layout.scrollMode === 1;
@@ -113,7 +115,7 @@ export default function supernova(env: Galaxy) {
 
       useEffect(() => {
         const isReadyToRender =
-          !env.carbon && reactRoot && layout && tableData && changeSortOrder && theme && selectionsAPI;
+          !env.carbon && reactRoot && layout && tableData && changeSortOrder && theme && selectionsAPI && embed;
         isReadyToRender &&
           render(
             {
@@ -133,6 +135,7 @@ export default function supernova(env: Galaxy) {
               footerContainer,
               announce,
               areBasicFeaturesEnabled,
+              embed,
             },
             reactRoot
           );

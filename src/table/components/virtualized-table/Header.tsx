@@ -17,9 +17,6 @@ const Header = (props: HeaderProps) => {
       ref={forwardRef}
       layout="horizontal"
       style={{
-        position: 'sticky',
-        top: 0,
-        left: 0,
         overflow: 'hidden',
         borderBottom: `1px solid ${headerStyle.borderBottomColor}`,
         background: headerStyle.background,

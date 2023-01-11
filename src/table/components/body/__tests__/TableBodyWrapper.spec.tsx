@@ -68,21 +68,34 @@ describe('<TableBodyWrapper />', () => {
     } as unknown as ExtendedTheme;
     layout = {} as TableLayout;
     tableFirstRow = tableData.rows[0]['col-0'] as Cell;
+    tableSecondRow = tableData.rows[0]['col-1'] as Cell;
     areBasicFeaturesEnabled = true;
+    jest.spyOn(getCellRenderer, 'default');
   });
 
   afterEach(() => jest.clearAllMocks());
 
-  it('should render 2x2 table body and call CellRenderer', () => {
-    jest.spyOn(getCellRenderer, 'default');
-    const { getByText } = renderTableBody();
-    tableSecondRow = tableData.rows[0]['col-1'] as Cell;
+  it('should render 2x2 table body and call CellRenderer, without totals', () => {
+    const { queryByText } = renderTableBody();
 
     expect(getCellRenderer.default).toHaveBeenCalledTimes(2);
-    expect(getByText(tableFirstRow.qText as string)).toBeVisible();
-    expect(getByText(tableSecondRow.qText as string)).toBeVisible();
-    expect(getByText(tableFirstRow.qText as string)).toBeVisible();
-    expect(getByText(tableSecondRow.qText as string)).toBeVisible();
+    expect(queryByText(tableFirstRow.qText as string)).toBeVisible();
+    expect(queryByText(tableSecondRow.qText as string)).toBeVisible();
+    expect(queryByText(tableFirstRow.qText as string)).toBeVisible();
+    expect(queryByText(tableSecondRow.qText as string)).toBeVisible();
+    expect(queryByText(tableData.columns[0].totalInfo as string)).toBeNull();
+  });
+
+  it('should render table with totals', () => {
+    console.log(tableData.columns[0]);
+    tableData.totalsPosition.atTop = true;
+    const { queryByText } = renderTableBody();
+
+    expect(queryByText(tableFirstRow.qText as string)).toBeVisible();
+    expect(queryByText(tableSecondRow.qText as string)).toBeVisible();
+    expect(queryByText(tableFirstRow.qText as string)).toBeVisible();
+    expect(queryByText(tableSecondRow.qText as string)).toBeVisible();
+    expect(queryByText(tableData.columns[0].totalInfo as string)).toBeVisible();
   });
 
   it('should call handleBodyKeyDown on key down', () => {

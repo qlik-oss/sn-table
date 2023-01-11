@@ -37,6 +37,7 @@ function TableHeadWrapper({
   translator,
   selectionsAPI,
   keyboard,
+  embed,
   areBasicFeaturesEnabled,
 }: TableHeadWrapperProps) {
   const { columns, totalsPosition } = tableData;
@@ -44,7 +45,7 @@ function TableHeadWrapper({
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const headerStyle = useMemo(
-    () => getHeaderStyle(layout, theme, totalsPosition !== 'top'),
+    () => getHeaderStyle(layout, theme, !totalsPosition.atTop),
     [layout, theme, totalsPosition]
   );
   const headRowRef = useRef<HTMLTableRowElement>(null);
@@ -114,14 +115,19 @@ function TableHeadWrapper({
                     </VisuallyHidden>
                   )}
                 </StyledSortLabel>
+
                 {areBasicFeaturesEnabled && (
                   <HeadCellMenu
                     headerStyle={headerStyle}
                     translator={translator}
-                    sortDirection={column.sortDirection}
                     sortFromMenu={sortFromMenu}
+                    embed={embed}
+                    layout={layout}
+                    columnIndex={columnIndex}
+                    sortDirection={column.sortDirection}
                     isInteractionEnabled={isInteractionEnabled}
                     isCurrentColumnActive={isCurrentColumnActive}
+                    isDimension={column.isDim}
                   />
                 )}
               </HeadCellContent>

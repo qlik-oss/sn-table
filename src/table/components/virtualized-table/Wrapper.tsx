@@ -4,7 +4,7 @@ import PaginationContent from '../footer/PaginationContent';
 import { StyledTableWrapper } from '../styles';
 import { PageInfo, TableData } from '../../../types';
 import FooterWrapper from '../footer/FooterWrapper';
-import Table from './TableContainer';
+import Table from './Table';
 import { MAX_PAGE_SIZE } from './constants';
 import useOnPropsChange from './hooks/use-on-props-change';
 
@@ -33,13 +33,7 @@ export default function Wrapper(props: WrapperProps) {
   useOnPropsChange(() => setPage(0), [layout]);
 
   return (
-    <StyledTableWrapper
-      data-key="wrapper"
-      background={theme.background}
-      paginationNeeded={paginationNeeded}
-      dir="ltr"
-      style={{ borderWidth: paginationNeeded ? '0px 1px 0px' : '0px 1px 1px' }}
-    >
+    <StyledTableWrapper data-key="wrapper" background={theme.background} dir="ltr">
       <Table
         layout={layout}
         rect={rect}
@@ -51,7 +45,7 @@ export default function Wrapper(props: WrapperProps) {
         constraints={constraints}
       />
       {paginationNeeded && (
-        <FooterWrapper theme={theme}>
+        <FooterWrapper theme={theme} withoutBorders>
           <PaginationContent
             theme={theme}
             handleChangePage={(currentPage) => setPage(currentPage)}

@@ -26,6 +26,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
     totalsStyle: { hoverColors, ...applicableStyling },
   } = data;
   const label = getTotalInfo(layout, index);
+  const isLastColumn = layout.qHyperCube.qSize.qcx - 1 === index;
 
   return (
     <div
@@ -36,7 +37,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
         display: 'flex',
         alignItems: 'center',
         borderStyle: 'solid',
-        borderWidth: index === 0 ? '0px 1px 0px 1px' : '0px 1px 0px 0px',
+        borderWidth: isLastColumn ? '0px' : '0px 1px 0px 0px',
         padding: '4px 12px',
         justifyContent: index === 0 ? 'left' : 'right',
         boxSizing: 'border-box',

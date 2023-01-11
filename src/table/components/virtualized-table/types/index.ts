@@ -13,6 +13,14 @@ import { Totals } from '../hooks/use-totals';
 
 export type TotalsPosition = 'bottom' | 'noTotals' | 'top';
 
+export interface Rect {
+  width: number;
+  height: number;
+}
+export interface BodyStyle extends GeneratedStyling {
+  background: string;
+}
+
 export interface WrapperProps {
   model: EngineAPI.IGenericObject;
   layout: TableLayout;
@@ -25,7 +33,7 @@ export interface WrapperProps {
   constraints: stardust.Constraints;
 }
 
-export interface TableContainerProps {
+export interface TableProps {
   layout: TableLayout;
   rect: stardust.Rect;
   pageInfo: PageInfo;
@@ -38,7 +46,7 @@ export interface TableContainerProps {
 
 export interface HeaderProps {
   layout: TableLayout;
-  rect: stardust.Rect;
+  rect: Rect;
   pageInfo: PageInfo;
   forwardRef: React.RefObject<VariableSizeList<any>>;
   columns: Column[];
@@ -48,9 +56,8 @@ export interface HeaderProps {
 
 export interface TotalsProps {
   layout: TableLayout;
-  rect: stardust.Rect;
+  rect: Rect;
   pageInfo: PageInfo;
-  paginationNeeded: boolean;
   forwardRef: React.RefObject<VariableSizeList<any>>;
   columns: Column[];
   columnWidth: number[];
@@ -61,14 +68,13 @@ export interface TotalsProps {
 export interface BodyProps {
   model: EngineAPI.IGenericObject;
   layout: TableLayout;
-  rect: stardust.Rect;
+  rect: Rect;
   pageInfo: PageInfo;
-  paginationNeeded: boolean;
   columns: Column[];
   columnWidth: number[];
   forwardRef: React.RefObject<VariableSizeGrid<any>>;
   innerForwardRef: React.RefObject<HTMLDivElement>;
-  bodyStyle: GeneratedStyling;
+  bodyStyle: BodyStyle;
   selectionsAPI: ExtendedSelectionAPI;
   totals: Totals;
 }

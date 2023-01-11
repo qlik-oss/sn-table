@@ -9,16 +9,16 @@ import { PAGINATION_HEIGHT } from '../../constants';
 // ---------- FooterWrapper ----------
 
 export const StyledFooterWrapper = styled(Box, {
-  shouldForwardProp: (prop: string) => prop !== 'footerStyle',
-})(({ footerStyle, theme }) => ({
+  shouldForwardProp: (prop: string) => prop !== 'footerStyle' && prop !== 'withoutBorders',
+})(({ footerStyle, theme, withoutBorders }) => ({
   height: PAGINATION_HEIGHT,
   display: 'flex',
   justifyContent: 'flex-end',
   alignItems: 'center',
   padding: theme.spacing(0, 1, 0, 1),
-  borderTop: `1px solid ${footerStyle.borderColor}`,
   color: footerStyle.color,
   background: footerStyle.background,
+  ...(withoutBorders ? { borderWidth: '0px' } : { borderTop: `1px solid ${footerStyle.borderColor}` }),
 }));
 
 // ---------- PaginationContent ----------

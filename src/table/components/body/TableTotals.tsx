@@ -18,24 +18,24 @@ function TableTotals({
   selectionsAPI,
   areBasicFeaturesEnabled,
 }: TableTotalsProps) {
-  const { columns, totalsPosition, rows } = tableData;
+  const {
+    columns,
+    totalsPosition: { atTop },
+    rows,
+  } = tableData;
   const headRowHeight = useContextSelector(TableContext, (value) => value.headRowHeight);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
-  const totalsStyle = useMemo(
-    () => getTotalsCellStyle(layout, theme, totalsPosition),
-    [layout, theme.name(), totalsPosition]
-  );
-  const isTop = totalsPosition === 'top';
+  const totalsStyle = useMemo(() => getTotalsCellStyle(layout, theme, atTop), [layout, theme.name(), atTop]);
 
   return (
     <TableRow className="sn-table-row">
       {columns.map((column, columnIndex) => {
-        const cellCoord: [number, number] = [isTop ? 1 : rows.length + 1, columnIndex];
+        const cellCoord: [number, number] = [atTop ? 1 : rows.length + 1, columnIndex];
         return (
           <StyledTotalsCell
             totalsStyle={totalsStyle}
             headRowHeight={headRowHeight}
-            isTop={isTop}
+            atTop={atTop}
             key={column.id}
             align={column.align}
             className="sn-table-cell"

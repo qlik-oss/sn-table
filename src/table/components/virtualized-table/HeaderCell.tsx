@@ -18,6 +18,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
     headerStyle: { sortLabelColor, ...applicableStyle },
   } = data;
   const datum = columns[index];
+  const isLastColumn = columns.length - 1 === index;
 
   return (
     <div
@@ -28,7 +29,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         display: 'flex',
         alignItems: 'center',
         borderStyle: 'solid',
-        borderWidth: index === 0 ? '0px 1px 0px 1px' : '0px 1px 0px 0px',
+        borderWidth: isLastColumn ? '0px' : '0px 1px 0px 0px',
         padding: '4px 12px',
         justifyContent: datum.align,
         boxSizing: 'border-box',

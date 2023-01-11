@@ -207,12 +207,12 @@ export const handleBodyKeyDown = ({
   preventDefaultBehavior(evt);
 
   // Adjust the cellCoord depending on the totals position
-  const firstBodyRowIdx = totalsPosition === 'top' ? 2 : 1;
+  const firstBodyRowIdx = totalsPosition.atTop ? 2 : 1;
   const cellCoord: [number, number] = [cell.pageRowIdx + firstBodyRowIdx, cell.pageColIdx];
   // Make sure you can't navigate to header (and totals) in selection mode
   const allowedRows = {
     top: isSelectionMode ? firstBodyRowIdx : 0,
-    bottom: isSelectionMode && totalsPosition === 'bottom' ? 1 : 0,
+    bottom: isSelectionMode && totalsPosition.atBottom ? 1 : 0,
   };
 
   switch (evt.key) {

@@ -76,6 +76,8 @@ export interface ContextValue {
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   selectionState: SelectionState;
   selectionDispatch: SelectionDispatch;
+  hoverIndex: number;
+  setHoverIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export interface GeneratedStyling {
@@ -160,7 +162,7 @@ export interface HandleResetFocusProps {
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   keyboard: stardust.Keyboard;
   announce: Announce;
-  totalsPosition: string;
+  totalsPosition: TotalsPosition;
 }
 
 export interface ContextProviderProps {
@@ -196,6 +198,7 @@ export interface RenderProps {
   ): Promise<TableData | null>;
   app?: EngineAPI.IApp;
   areBasicFeaturesEnabled?: boolean;
+  embed?: stardust.Embed;
 }
 
 export interface CommonTableProps {
@@ -218,6 +221,7 @@ export interface TableWrapperProps extends CommonTableProps {
   footerContainer?: HTMLElement;
   announce: Announce;
   areBasicFeaturesEnabled: boolean;
+  embed: stardust.Embed;
 }
 
 export interface TableHeadWrapperProps extends CommonTableProps {
@@ -228,6 +232,7 @@ export interface TableHeadWrapperProps extends CommonTableProps {
   constraints: stardust.Constraints;
   translator: ExtendedTranslator;
   areBasicFeaturesEnabled: boolean;
+  embed: stardust.Embed;
 }
 
 export interface HeadCellMenuProps {
@@ -237,6 +242,27 @@ export interface HeadCellMenuProps {
   sortFromMenu: (evt: React.MouseEvent, sortOrder: SortDirection) => void;
   isInteractionEnabled: boolean;
   isCurrentColumnActive: boolean;
+  embed: stardust.Embed;
+  layout: TableLayout;
+  columnIndex: number;
+  isDimension: boolean;
+}
+
+export interface HeadCellMenuGroup {
+  id: number;
+  options: HeadCellMenuItem[];
+}
+
+export interface MenuGroupProps extends HeadCellMenuGroup {
+  shouldShowDevider: boolean;
+}
+
+export interface HeadCellMenuItem {
+  id: number;
+  icon: React.ReactElement;
+  itemTitle: string;
+  isDisabled: boolean;
+  onClick: (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
 export interface TableBodyWrapperProps extends CommonTableProps {
@@ -274,6 +300,7 @@ export interface FooterWrapperProps {
   children: JSX.Element;
   theme: ExtendedTheme;
   footerContainer?: HTMLElement;
+  withoutBorders?: boolean;
   paginationNeeded?: boolean;
 }
 export interface CellHOCProps extends TableCellProps {

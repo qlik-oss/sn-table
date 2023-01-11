@@ -209,6 +209,21 @@ const getChartExploration = (env) =>
           translation: 'properties.enableChartExploration',
           ref: 'enableChartExploration',
         },
+        visibilityToggler: {
+          component: 'buttongroup',
+          translation: 'properties.visibilityOption',
+          ref: 'chartExploration.menuVisibility',
+          options: [
+            {
+              value: 'auto',
+              translation: 'Common.Auto',
+            },
+            {
+              value: 'minimized',
+              translation: 'properties.minimized',
+            },
+          ],
+        },
       },
     },
   };

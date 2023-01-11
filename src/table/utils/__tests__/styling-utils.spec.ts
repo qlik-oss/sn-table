@@ -2,7 +2,7 @@ import {
   getColor,
   getBaseStyling,
   getHeaderStyle,
-  getBodyCellStyle,
+  getBodyStyle,
   getColumnStyle,
   getSelectionStyle,
   getBorderColors,
@@ -274,7 +274,7 @@ describe('styling-utils', () => {
     });
   });
 
-  describe('getBodyCellStyle', () => {
+  describe('getBodyStyle', () => {
     let layout: TableLayout;
     const defaultHoverColors = { background: '#f4f4f4', color: '' };
 
@@ -308,7 +308,7 @@ describe('styling-utils', () => {
     it('should return default hover and border colors', () => {
       layout = {} as unknown as TableLayout;
 
-      const resultStyling = getBodyCellStyle(layout, theme);
+      const resultStyling = getBodyStyle(layout, theme);
       expect(resultStyling).toEqual({
         hoverColors: defaultHoverColors,
         background: '#323232',
@@ -318,7 +318,7 @@ describe('styling-utils', () => {
     });
 
     it('should return styling with fontColor, fontSize and padding plus default hover colors', () => {
-      const resultStyling = getBodyCellStyle(layout, theme);
+      const resultStyling = getBodyStyle(layout, theme);
       expect(resultStyling).toEqual({
         fontSize: '22px',
         color: '#222222',
@@ -334,7 +334,7 @@ describe('styling-utils', () => {
     it('should return hover colors with no background color and the specified font color', () => {
       if (layout.components?.[0].content?.hoverFontColor) layout.components[0].content.hoverFontColor.index = 1;
 
-      const { hoverColors } = getBodyCellStyle(layout, theme);
+      const { hoverColors } = getBodyStyle(layout, theme);
       expect(hoverColors?.background).toBe('');
       expect(hoverColors?.color).toBe(resolvedColor);
     });
@@ -342,7 +342,7 @@ describe('styling-utils', () => {
     it('should return colors with dark background from theme and the white font color', () => {
       theme.getStyle = () => '#111';
 
-      const { hoverColors } = getBodyCellStyle(layout, theme);
+      const { hoverColors } = getBodyStyle(layout, theme);
       expect(hoverColors?.background).toBe('#111');
       expect(hoverColors?.color).toBe(StylingDefaults.WHITE);
     });
@@ -350,7 +350,7 @@ describe('styling-utils', () => {
     it('should return hover colors with light background color from theme and the default font color', () => {
       theme.getStyle = () => '#fff';
 
-      const { hoverColors } = getBodyCellStyle(layout, theme);
+      const { hoverColors } = getBodyStyle(layout, theme);
       expect(hoverColors?.background).toBe('#fff');
       expect(hoverColors?.color).toBe(StylingDefaults.FONT_COLOR);
     });
@@ -358,7 +358,7 @@ describe('styling-utils', () => {
     it('should return hover colors with dark background color and white font color', () => {
       if (layout.components?.[0].content?.hoverColor) layout.components[0].content.hoverColor.index = 1;
 
-      const { hoverColors } = getBodyCellStyle(layout, theme);
+      const { hoverColors } = getBodyStyle(layout, theme);
       expect(hoverColors?.background).toBe(resolvedColor);
       expect(hoverColors?.color).toBe(StylingDefaults.WHITE);
     });
@@ -366,7 +366,7 @@ describe('styling-utils', () => {
     it('should return hover colors with light background color and the default font color', () => {
       if (layout.components?.[0].content?.hoverColor) layout.components[0].content.hoverColor.index = 2;
 
-      const { hoverColors } = getBodyCellStyle(layout, theme);
+      const { hoverColors } = getBodyStyle(layout, theme);
       expect(hoverColors?.background).toBe(altResolvedColor);
       expect(hoverColors?.color).toBe(StylingDefaults.FONT_COLOR);
     });
@@ -375,7 +375,7 @@ describe('styling-utils', () => {
       if (layout.components?.[0].content?.hoverColor) layout.components[0].content.hoverColor.index = 1;
       if (layout.components?.[0].content?.hoverFontColor) layout.components[0].content.hoverFontColor.index = 2;
 
-      const { hoverColors } = getBodyCellStyle(layout, theme);
+      const { hoverColors } = getBodyStyle(layout, theme);
       expect(hoverColors?.background).toBe(resolvedColor);
       expect(hoverColors?.color).toBe(altResolvedColor);
     });

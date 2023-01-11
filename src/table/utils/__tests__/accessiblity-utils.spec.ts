@@ -1,6 +1,6 @@
 import { stardust } from '@nebula.js/stardust';
 import React from 'react';
-import { Announce } from '../../../types';
+import { Announce, TotalsPosition } from '../../../types';
 import * as accessibilityUtils from '../accessibility-utils';
 
 describe('handle-accessibility', () => {
@@ -117,7 +117,7 @@ describe('handle-accessibility', () => {
     let shouldRefocus: React.MutableRefObject<boolean>;
     let isSelectionMode: boolean;
     let announce: Announce;
-    let totalsPosition: string;
+    let totalsPosition: TotalsPosition;
 
     const resetFocus = () =>
       accessibilityUtils.resetFocus({
@@ -137,7 +137,7 @@ describe('handle-accessibility', () => {
       isSelectionMode = false;
       keyboard.enabled = true;
       keyboard.active = true;
-      totalsPosition = 'bottom';
+      totalsPosition = { atTop: false, atBottom: true };
       announce = jest.fn();
     });
 
@@ -192,7 +192,7 @@ describe('handle-accessibility', () => {
       } as unknown as HTMLElement;
       isSelectionMode = true;
       focusedCellCoord = [5, 0];
-      totalsPosition = 'top';
+      totalsPosition = { atTop: true, atBottom: false };
 
       resetFocus();
       expect(setFocusedCellCoord).toHaveBeenCalledWith([2, 0]);

@@ -4,7 +4,7 @@ import getCellRenderer from '../../utils/get-cell-renderer';
 import { useContextSelector, TableContext } from '../../context';
 import { StyledBodyRow, StyledBody } from './styles';
 import { addSelectionListeners } from '../../utils/selections-utils';
-import { getBodyCellStyle } from '../../utils/styling-utils';
+import { getBodyStyle } from '../../utils/styling-utils';
 import { handleBodyKeyDown, handleBodyKeyUp } from '../../utils/handle-key-press';
 import { handleClickToFocusBody } from '../../utils/handle-click';
 import { Cell } from '../../../types';
@@ -41,7 +41,7 @@ function TableBodyWrapper({
     [columnsStylingIDsJSON, isSelectionsEnabled]
   );
   const { hoverColors, lastRowBottomBorder, ...cellStyle } = useMemo(
-    () => getBodyCellStyle(layout, theme, rows.length, rootElement),
+    () => getBodyStyle(layout, theme, rows.length, rootElement),
     [layout, theme, rows.length, rootElement]
   );
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
@@ -70,7 +70,7 @@ function TableBodyWrapper({
 
   return (
     <StyledBody lastRowBottomBorder={lastRowBottomBorder}>
-      {totalsPosition === 'top' ? totals : undefined}
+      {totalsPosition.atTop ? totals : undefined}
       {rows.map((row) => (
         <StyledBodyRow
           hoverColors={hoverColors}
@@ -130,7 +130,7 @@ function TableBodyWrapper({
           })}
         </StyledBodyRow>
       ))}
-      {totalsPosition === 'bottom' ? totals : undefined}
+      {totalsPosition.atBottom ? totals : undefined}
     </StyledBody>
   );
 }

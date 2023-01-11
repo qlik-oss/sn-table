@@ -1,10 +1,13 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { stardust } from '@nebula.js/stardust';
+import { render, fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { ThemeProvider } from '@mui/material/styles';
 import { TableContextProvider } from '../../../context';
-import { ExtendedTranslator, ExtendedSelectionAPI, SortDirection } from '../../../../types';
+import { ExtendedTranslator, ExtendedSelectionAPI, SortDirection, TableLayout } from '../../../../types';
 import { GeneratedStyling } from '../../../types';
 import HeadCellMenu from '../HeadCellMenu';
+import muiSetup from '../../../mui-setup';
 
 describe('<HeadCellMenu />', () => {
   let translator: ExtendedTranslator;
@@ -14,19 +17,29 @@ describe('<HeadCellMenu />', () => {
   const sortDirection: SortDirection = 'A';
   let isInteractionEnabled: boolean = true;
   let isCurrentColumnActive: boolean = false;
+  let embed: stardust.Embed;
+  let layout: TableLayout;
+  const columnIndex = 0;
+  const direction: 'ltr' | 'rtl' = 'ltr';
 
   const renderTableHeadCellMenu = (cellCoordMock?: [number, number]) =>
     render(
-      <TableContextProvider selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
-        <HeadCellMenu
-          headerStyle={headerStyle}
-          translator={translator}
-          sortDirection={sortDirection}
-          sortFromMenu={sortFromMenu}
-          isInteractionEnabled={isInteractionEnabled}
-          isCurrentColumnActive={isCurrentColumnActive}
-        />
-      </TableContextProvider>
+      <ThemeProvider theme={muiSetup(direction)}>
+        <TableContextProvider selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
+          <HeadCellMenu
+            isDimension
+            headerStyle={headerStyle}
+            translator={translator}
+            sortDirection={sortDirection}
+            sortFromMenu={sortFromMenu}
+            isInteractionEnabled={isInteractionEnabled}
+            isCurrentColumnActive={isCurrentColumnActive}
+            embed={embed}
+            layout={layout}
+            columnIndex={columnIndex}
+          />
+        </TableContextProvider>
+      </ThemeProvider>
     );
 
   beforeEach(() => {
@@ -41,6 +54,22 @@ describe('<HeadCellMenu />', () => {
       borderTopColor: '#4287f5',
     };
     sortFromMenu = jest.fn();
+    embed = {
+      field: jest.fn().mockResolvedValueOnce({ instance: true }),
+      render: jest.fn(),
+      selections: jest.fn(),
+      context: jest.fn(),
+      getRegisteredTypes: jest.fn(),
+    };
+    layout = {
+      qHyperCube: {
+        qDimensionInfo: [{ qFallbackTitle: 'someTitle' }],
+      },
+    } as TableLayout;
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   it('should render head cell menu button', () => {
@@ -109,5 +138,41 @@ describe('<HeadCellMenu />', () => {
     expect(sortFromMenu).toHaveBeenCalled();
     fireEvent.click(getByText('SNTable.MenuItem.SortDescending'));
     expect(sortFromMenu).toHaveBeenCalled();
+  });
+
+  it('should call `embed.field` once while trying to open listbox filter for a library dimension', () => {
+    layout = {
+      qHyperCube: {
+        qDimensionInfo: [{ qLibraryId: 'id' }],
+      },
+    } as TableLayout;
+    renderTableHeadCellMenu();
+    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByText('SNTable.MenuItem.Search'));
+    expect(screen.getByRole('menu')).not.toBeVisible();
+    expect(embed?.field).toHaveBeenCalledTimes(1);
+    expect(embed?.field).toHaveBeenCalledWith({ qLibraryId: 'id', type: 'dimension' });
+  });
+
+  it('should call `embed.field` once while trying to open listbox filter for a dimension', () => {
+    renderTableHeadCellMenu();
+    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByText('SNTable.MenuItem.Search'));
+    expect(screen.getByRole('menu')).not.toBeVisible();
+    expect(embed?.field).toHaveBeenCalledTimes(1);
+    expect(embed?.field).toHaveBeenCalledWith('someTitle');
+  });
+
+  it('should not call `embed.field` if field ID is not found', () => {
+    layout = {
+      qHyperCube: {
+        qDimensionInfo: [],
+      },
+    } as unknown as TableLayout;
+    renderTableHeadCellMenu();
+    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByText('SNTable.MenuItem.Search'));
+    expect(screen.getByRole('menu')).not.toBeVisible();
+    expect(embed?.field).toHaveBeenCalledTimes(0);
   });
 });

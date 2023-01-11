@@ -41,14 +41,14 @@ export const StyledBodyCell = styled(TableCell, {
 // ---------- TableTotals ----------
 
 export const StyledTotalsCell = styled(TableCell, {
-  shouldForwardProp: (prop: string) => prop !== 'isTop' && prop !== 'headRowHeight' && prop !== 'totalsStyle',
-})(({ totalsStyle, isTop, headRowHeight, theme }) => ({
+  shouldForwardProp: (prop: string) => prop !== 'atTop' && prop !== 'headRowHeight' && prop !== 'totalsStyle',
+})(({ totalsStyle, atTop, headRowHeight, theme }) => ({
   ...COMMON_CELL_STYLING,
   ...totalsStyle,
   fontWeight: 'bold',
   position: 'sticky',
   padding: theme.spacing(0.5, 1.5),
-  borderWidth: isTop ? '0px 1px 1px 0px' : '1px 1px 1px 0px',
-  top: isTop && headRowHeight,
-  bottom: !isTop && 0,
+  borderWidth: atTop ? '0px 1px 1px 0px' : '1px 1px 1px 0px',
+  top: atTop && headRowHeight,
+  bottom: !atTop && 0,
 }));

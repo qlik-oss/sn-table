@@ -2,7 +2,9 @@ import styled from '@mui/system/styled';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import TableCell from '@mui/material/TableCell';
 import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 
 import { COMMON_CELL_STYLING } from '../../constants';
 
@@ -63,9 +65,10 @@ export const StyledMenuIconButton = styled(Button)({
 
 export const StyledCellMenu = styled('div', {
   shouldForwardProp: (prop: string) => prop !== 'headerStyle',
-})(({ headerStyle }) => ({
+})(({ headerStyle, theme }) => ({
   '.MuiPaper-root': {
-    width: '220px',
+    width: '210px',
+    borderRadius: theme.spacing(1),
   },
   '.MuiListItemText-primary, .MuiSvgIcon-root': {
     fontSize: '16px',
@@ -74,4 +77,22 @@ export const StyledCellMenu = styled('div', {
   '.head-cell-menu': {
     color: headerStyle.sortLabelColor,
   },
+}));
+
+export const MenuDropdownPaper = styled(Paper)(({ theme }) => ({
+  '.sn-table-head-menu': {
+    backgroundColor: theme.palette.common.white,
+    border: `1px solid ${theme.palette.grey[200]}`,
+    padding: 0,
+  },
+}));
+
+export const MenuListDivider = styled(Divider)(({ theme }) => ({
+  margin: theme.spacing(0, 1),
+}));
+
+export const NebulaListBox = styled('div')(({ theme }) => ({
+  height: '350px',
+  boxSizing: 'border-box',
+  background: theme.palette.common.white,
 }));

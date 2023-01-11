@@ -3,11 +3,11 @@ import { render } from '@testing-library/react';
 import { stardust } from '@nebula.js/stardust';
 import Wrapper from '../Wrapper';
 import { ExtendedSelectionAPI, ExtendedTheme, ExtendedTranslator, TableLayout } from '../../../../types';
-import { TableContainer } from '../TableContainer';
+import { TestableTable } from '../Table';
 import FooterWrapper from '../../footer/FooterWrapper';
 import { MAX_PAGE_SIZE } from '../constants';
 
-jest.mock('../TableContainer');
+jest.mock('../Table');
 jest.mock('../../footer/FooterWrapper');
 
 describe('<Wrapper />', () => {
@@ -19,8 +19,8 @@ describe('<Wrapper />', () => {
   let model: EngineAPI.IGenericObject;
   let selectionsAPI: ExtendedSelectionAPI;
   let constraints: stardust.Constraints;
-  const mockTableContainer = TableContainer as jest.MockedFunction<typeof TableContainer>;
-  mockTableContainer.mockReturnValue(<div data-testid="table-container" />);
+  const mockTable = TestableTable as jest.MockedFunction<typeof TestableTable>;
+  mockTable.mockReturnValue(<div data-testid="table-container" />);
   const mockFooterWrapper = FooterWrapper as jest.MockedFunction<typeof FooterWrapper>;
   mockFooterWrapper.mockReturnValue(<div data-testid="footer-wrapper" />);
 
@@ -69,7 +69,7 @@ describe('<Wrapper />', () => {
 
     expect(getByTestId('table-container')).toBeVisible();
     expect(queryByTestId('footer-wrapper')).toBeNull();
-    expect(mockTableContainer).toHaveBeenCalledWith(
+    expect(mockTable).toHaveBeenCalledWith(
       expect.objectContaining({
         pageInfo: expect.objectContaining({ rowsPerPage: MAX_PAGE_SIZE - 1 }),
       }),
@@ -92,7 +92,7 @@ describe('<Wrapper />', () => {
 
     expect(getByTestId('table-container')).toBeVisible();
     expect(getByTestId('footer-wrapper')).toBeVisible();
-    expect(mockTableContainer).toHaveBeenCalledWith(
+    expect(mockTable).toHaveBeenCalledWith(
       expect.objectContaining({
         pageInfo: expect.objectContaining({ rowsPerPage: MAX_PAGE_SIZE }),
       }),
