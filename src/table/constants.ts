@@ -30,7 +30,6 @@ export enum KeyCodes {
 }
 
 export enum StylingDefaults {
-  HEAD_BACKGROUND_LIGHT = '#FAFAFA',
   HEAD_BACKGROUND_DARK = '#323232',
   SORT_LABEL_LIGHT = 'rgba(255,255,255,0.9)',
   SORT_LABEL_DARK = 'rgba(0, 0, 0, 0.54)',
@@ -42,13 +41,18 @@ export enum StylingDefaults {
 }
 
 export const COMMON_CELL_STYLING = {
-  padding: '7px 14px',
   height: 'auto',
-  lineHeight: '130%',
+  lineHeight: 'unset',
+  padding: '4px',
   borderStyle: 'solid',
+  borderWidth: '0px 1px 1px 0px',
+  userSelect: 'none',
   '&:focus': {
-    boxShadow: '0 0 0 2px #3f8ab3 inset',
+    boxShadow: '0 0 0 2px #177fe6 inset, 0 0 0 3px #fff inset',
     outline: 'none',
+  },
+  '&:last-child': {
+    borderRightWidth: '0px',
   },
 };
 

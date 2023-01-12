@@ -7,7 +7,6 @@ import TableHeadWrapper from './head/TableHeadWrapper';
 import FooterWrapper from './footer/FooterWrapper';
 import { useContextSelector, TableContext } from '../context';
 import { StyledTableContainer, StyledTableWrapper } from './styles';
-
 import PaginationContent from './footer/PaginationContent';
 import useDidUpdateEffect from '../hooks/use-did-update-effect';
 import useFocusListener from '../hooks/use-focus-listener';
@@ -37,8 +36,8 @@ export default function TableWrapper(props: TableWrapperProps) {
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const shouldRefocus = useRef(false);
-  const tableContainerRef = useRef<HTMLDivElement>();
-  const tableWrapperRef = useRef<HTMLDivElement>();
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const tableWrapperRef = useRef<HTMLDivElement>(null);
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
@@ -100,13 +99,7 @@ export default function TableWrapper(props: TableWrapperProps) {
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
   return (
-    <StyledTableWrapper
-      ref={tableWrapperRef}
-      background={theme.background}
-      paginationNeeded={paginationNeeded}
-      dir={direction}
-      onKeyDown={handleKeyDown}
-    >
+    <StyledTableWrapper ref={tableWrapperRef} background={theme.background} dir={direction} onKeyDown={handleKeyDown}>
       <AnnounceElements />
       <StyledTableContainer
         ref={tableContainerRef}

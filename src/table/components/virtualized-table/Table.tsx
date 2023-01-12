@@ -7,7 +7,7 @@ import { DEFAULT_ROW_HEIGHT } from './constants';
 import FullSizeContainer from './FullSizeContainer';
 import Header from './Header';
 import { TableProps, BodyStyle } from './types';
-import { getHeaderStyle, getBodyCellStyle } from '../../utils/styling-utils';
+import { getHeaderStyle, getBodyStyle } from '../../utils/styling-utils';
 import useScrollHandler from './hooks/use-scroll-handler';
 import Totals from './Totals';
 import useTotals from './hooks/use-totals';
@@ -24,15 +24,15 @@ const Table = (props: TableProps) => {
   const totalsRef = useRef<VariableSizeList>(null);
   const bodyRef = useRef<VariableSizeGrid>(null);
   const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
-  const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
+  const totals = useTotals(layout);
+  const headerStyle = useMemo(() => getHeaderStyle(layout, theme, !totals.atTop), [layout, theme, totals]);
   const bodyStyle = useMemo<BodyStyle>(
     () => ({
-      ...getBodyCellStyle(layout, theme),
+      ...getBodyStyle(layout, theme),
       background: theme.background.color ?? 'transparent',
     }),
     [layout, theme.name()] // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const totals = useTotals(layout);
   const columns = useMemo(() => getColumns(layout), [layout]);
   const tableRect = toTableRect(rect, paginationNeeded);
   const { width } = useColumnSize(tableRect, columns, headerStyle, bodyStyle);

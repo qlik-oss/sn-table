@@ -17,10 +17,8 @@ export const StyledFooterWrapper = styled(Box, {
   alignItems: 'center',
   padding: theme.spacing(0, 1, 0, 1),
   color: footerStyle.color,
-  backgroundColor: footerStyle.backgroundColor,
-  ...(withoutBorders
-    ? { borderWidth: '0px' }
-    : { borderTop: `1px solid ${footerStyle.borderColor}`, borderBottom: `1px solid ${footerStyle.borderColor}` }),
+  background: footerStyle.background,
+  ...(withoutBorders ? { borderWidth: '0px' } : { borderTop: `1px solid ${footerStyle.borderColor}` }),
 }));
 
 // ---------- PaginationContent ----------
@@ -28,7 +26,7 @@ export const StyledFooterWrapper = styled(Box, {
 export const StyledSelect = styled(Select, {
   shouldForwardProp: (prop: string) => prop !== 'footerStyle',
 })(({ footerStyle, theme }) => ({
-  backgroundColor: 'inherit',
+  background: 'inherit',
   marginRight: theme.spacing(1),
   '& .MuiNativeSelect-icon, .MuiNativeSelect-select': { color: footerStyle.iconColor },
 }));
