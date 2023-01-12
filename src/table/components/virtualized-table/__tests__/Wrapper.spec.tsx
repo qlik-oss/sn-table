@@ -2,7 +2,13 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { stardust } from '@nebula.js/stardust';
 import Wrapper from '../Wrapper';
-import { ExtendedSelectionAPI, ExtendedTheme, ExtendedTranslator, TableLayout } from '../../../../types';
+import {
+  ChangeSortOrder,
+  ExtendedSelectionAPI,
+  ExtendedTheme,
+  ExtendedTranslator,
+  TableLayout,
+} from '../../../../types';
 import { TestableTable } from '../Table';
 import FooterWrapper from '../../footer/FooterWrapper';
 import { MAX_PAGE_SIZE } from '../constants';
@@ -19,6 +25,9 @@ describe('<Wrapper />', () => {
   let model: EngineAPI.IGenericObject;
   let selectionsAPI: ExtendedSelectionAPI;
   let constraints: stardust.Constraints;
+  let embed: stardust.Embed;
+  let changeSortOrder: ChangeSortOrder;
+
   const mockTable = TestableTable as jest.MockedFunction<typeof TestableTable>;
   mockTable.mockReturnValue(<div data-testid="table-container" />);
   const mockFooterWrapper = FooterWrapper as jest.MockedFunction<typeof FooterWrapper>;
@@ -35,6 +44,8 @@ describe('<Wrapper />', () => {
         keyboard={keyboard}
         selectionsAPI={selectionsAPI}
         constraints={constraints}
+        embed={embed}
+        changeSortOrder={changeSortOrder}
       />
     );
 

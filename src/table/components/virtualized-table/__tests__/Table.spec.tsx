@@ -3,7 +3,14 @@ import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { stardust } from '@nebula.js/stardust';
 import { TestableTable } from '../Table';
-import { ExtendedSelectionAPI, ExtendedTheme, PageInfo, TableLayout } from '../../../../types';
+import {
+  ChangeSortOrder,
+  ExtendedSelectionAPI,
+  ExtendedTheme,
+  ExtendedTranslator,
+  PageInfo,
+  TableLayout,
+} from '../../../../types';
 import { generateDataPages, generateLayout } from '../../../../__test__/generate-test-data';
 import { TableContextProvider } from '../../../context';
 
@@ -17,6 +24,9 @@ describe('<Table />', () => {
   let theme: ExtendedTheme;
   let selectionsAPI: ExtendedSelectionAPI;
   let isModal = false;
+  let embed: stardust.Embed;
+  let changeSortOrder: ChangeSortOrder;
+  let translator: ExtendedTranslator;
   const dimensionCount = 2;
   const measureCount = 1;
   const rowCount = 5;
@@ -34,6 +44,9 @@ describe('<Table />', () => {
           theme={theme}
           selectionsAPI={selectionsAPI}
           constraints={{}}
+          embed={embed}
+          changeSortOrder={changeSortOrder}
+          translator={translator}
         />
       </TableContextProvider>
     ),
@@ -47,7 +60,10 @@ describe('<Table />', () => {
     jest.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(context);
     measureTextMock.mockReturnValue({ width: 150 });
 
+    translator = { get: (s) => s } as ExtendedTranslator;
+
     layout = generateLayout(dimensionCount, measureCount, rowCount);
+    layout.qHyperCube.qEffectiveInterColumnSortOrder = [0];
 
     rect = {
       width: 750,
