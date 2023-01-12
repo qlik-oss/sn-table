@@ -62,6 +62,7 @@ describe('<TableHeadWrapper />', () => {
         },
         { id: 2, align: 'right', label: 'someMsr', sortDirection: 'D', isDim: false, colIdx: 1, qReverseSort: false },
       ],
+      totalsPosition: { atTop: false, atBottom: false },
     } as unknown as TableData;
     theme = {
       getColorPickerColor: () => undefined,
@@ -184,6 +185,7 @@ describe('<TableHeadWrapper />', () => {
         { ...tableData.columns[0], sortDirection: 'D' },
         { ...tableData.columns[1], sortDirection: 'A' },
       ],
+      totalsPosition: { atTop: false, atBottom: false },
     } as unknown as TableData;
     layout = {
       qHyperCube: {

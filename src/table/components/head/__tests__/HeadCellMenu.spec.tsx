@@ -48,8 +48,10 @@ describe('<HeadCellMenu />', () => {
     } as ExtendedSelectionAPI;
     translator = { get: (s) => s } as ExtendedTranslator;
     headerStyle = {
-      sortLabelColor: '#4287f5',
-      borderColor: '#4287f5',
+      borderBottomColor: '#4287f5',
+      borderRightColor: '#4287f5',
+      borderLeftColor: '#4287f5',
+      borderTopColor: '#4287f5',
     };
     sortFromMenu = jest.fn();
     embed = {

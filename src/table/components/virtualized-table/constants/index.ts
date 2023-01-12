@@ -1,4 +1,4 @@
-const DEFAULT_ROW_HEIGHT = 32;
+const DEFAULT_ROW_HEIGHT = 24;
 
 const HEADER_HEIGHT = 32;
 

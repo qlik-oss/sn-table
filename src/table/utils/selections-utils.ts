@@ -9,7 +9,7 @@ interface AddSelectionListenersArgs {
   selectionDispatch: SelectionDispatch;
   setShouldRefocus(): void;
   keyboard: stardust.Keyboard;
-  tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
+  tableWrapperRef: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 /**

@@ -5,6 +5,7 @@ import { Column, Row } from '../../../types';
 import { useContextSelector, TableContext } from '../../context';
 import useSelector from './hooks/use-selector';
 import EmptyCell from './EmptyCell';
+import CellText from '../CellText';
 import getCellStyle from './utils/get-cell-style';
 import { BodyStyle } from './types';
 
@@ -45,7 +46,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           borderRightWidth: datum.isLastColumn ? '0px' : '1px',
           borderStyle: 'solid',
           justifyContent: columns[columnIndex].align,
-          padding: '0px 14px',
+          padding: '4px 12px',
           boxSizing: 'border-box',
           cursor: 'default',
         }}
@@ -55,16 +56,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         onMouseEnter={isHoverEnabled ? () => setHoverIndex(rowIndex) : undefined}
         onMouseLeave={isHoverEnabled ? () => setHoverIndex(-1) : undefined}
       >
-        <span
-          className="sn-table-cell-text"
-          style={{
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
-          }}
-        >
-          {datum.qText}
-        </span>
+        <CellText singleLine>{datum.qText}</CellText>
       </div>
     );
   }

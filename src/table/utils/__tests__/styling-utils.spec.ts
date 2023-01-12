@@ -2,9 +2,10 @@ import {
   getColor,
   getBaseStyling,
   getHeaderStyle,
-  getBodyCellStyle,
+  getBodyStyle,
   getColumnStyle,
   getSelectionStyle,
+  getBorderColors,
 } from '../styling-utils';
 import { ExtendedTheme, PaletteColor, HeaderStyling, ContentStyling, TableLayout } from '../../../types';
 import { CellStyle } from '../../types';
@@ -32,6 +33,13 @@ describe('styling-utils', () => {
     getStyle: () => undefined,
     background: { isDark: false, color: '#323232' },
   } as unknown as ExtendedTheme;
+  // TODO: switch these to sprout color constants
+  const defaultBorderColors = {
+    borderBottomColor: '#EBEBEB',
+    borderTopColor: '#808080',
+    borderRightColor: '#D9D9D9',
+    borderLeftColor: '#D9D9D9',
+  };
 
   describe('getColor', () => {
     let color: PaletteColor;
@@ -71,6 +79,43 @@ describe('styling-utils', () => {
     });
   });
 
+  describe('getBorderColors', () => {
+    let isBackgroundDark: boolean;
+    let separatingBorder: boolean;
+
+    beforeEach(() => {
+      isBackgroundDark = false;
+      separatingBorder = false;
+    });
+
+    it('should return default border colors when background is not dark and no separating border', () => {
+      const borders = getBorderColors(isBackgroundDark, separatingBorder);
+      expect(borders).toEqual(defaultBorderColors);
+    });
+
+    it('should return border colors with dark bottom border when background is not dark and separatingBorder is bottom', () => {
+      separatingBorder = true;
+
+      const borders = getBorderColors(isBackgroundDark, separatingBorder);
+      expect(borders).toEqual({
+        ...defaultBorderColors,
+        borderBottomColor: '#808080',
+      });
+    });
+
+    it('should return light border colors background is dark', () => {
+      isBackgroundDark = true;
+
+      const borders = getBorderColors(isBackgroundDark, separatingBorder);
+      expect(borders).toEqual({
+        borderBottomColor: '#F2F2F2',
+        borderTopColor: '#F2F2F2',
+        borderRightColor: '#F2F2F2',
+        borderLeftColor: '#F2F2F2',
+      });
+    });
+  });
+
   describe('getBaseStyling', () => {
     let styleObj: HeaderStyling | ContentStyling;
     let objetName: string;
@@ -87,80 +132,81 @@ describe('styling-utils', () => {
       objetName = '';
     });
 
-    it('should return styling with fontColor, fontSize and padding', () => {
+    it('should return styling with fontColor, fontSize and border colors', () => {
       const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling).toEqual({
-        borderColor: '#D9D9D9',
         color: '#fff',
         fontSize: '12px',
-        padding: '6px 12px',
+        ...defaultBorderColors,
       });
     });
-    it('should return styling with fontSize and padding', () => {
+
+    it('should return styling with fontSize and border colors', () => {
       styleObj.fontColor = undefined;
+
       const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling).toEqual({
-        borderColor: '#D9D9D9',
         fontSize: '12px',
-        padding: '6px 12px',
+        ...defaultBorderColors,
       });
     });
-    it('should return styling with padding', () => {
+
+    it('should return styling with only borderColors', () => {
       styleObj.fontColor = undefined;
       styleObj.fontSize = undefined;
-      (<ContentStyling>styleObj).padding = '20px';
+
       const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling).toEqual({
-        borderColor: '#D9D9D9',
-        padding: '20px',
+        ...defaultBorderColors,
       });
     });
-    it('should return styling with fontSize and padding when the index for font color is -1 and color is null', () => {
+
+    it('should return styling with fontSize and border colors when the index for font color is -1 and color is null', () => {
       styleObj.fontColor = { index: -1, color: null };
 
       const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling).toEqual({
-        borderColor: '#D9D9D9',
         fontSize: '12px',
-        padding: '6px 12px',
+        ...defaultBorderColors,
       });
     });
+
     it('should return styling with fontSize, padding and font color when the index for font color is -1 and color is null and there is a color from theme', () => {
       styleObj.fontColor = { index: -1, color: null };
       const customTheme = {
         ...theme,
-        getStyle: () => '#111',
+        getStyle: (basePath: string, path: string, prop: string) => (prop === 'color' ? '#111' : undefined),
       } as unknown as ExtendedTheme;
 
       const resultStyling = getBaseStyling(objetName, customTheme, styleObj);
       expect(resultStyling).toEqual({
-        borderColor: '#D9D9D9',
         color: '#111',
         fontSize: '12px',
-        fontFamily: '#111',
-        padding: '6px 12px',
+        ...defaultBorderColors,
       });
     });
+
     it('should return styling with fontSize, padding and font color when the index for font color is -1 and the color is not null', () => {
       styleObj.fontColor = { index: -1, color: 'fff' };
 
       const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling).toEqual({
-        borderColor: '#D9D9D9',
         color: 'fff',
         fontSize: '12px',
-        padding: '6px 12px',
+        ...defaultBorderColors,
       });
     });
+
     it('should return styling with fontColor as the font size and padding are from sprout theme', () => {
       styleObj.fontSize = undefined;
 
       const resultStyling = getBaseStyling(objetName, theme, styleObj);
       expect(resultStyling).toEqual({
         color: '#fff',
-        borderColor: '#D9D9D9',
+        ...defaultBorderColors,
       });
     });
+
     it('should return styling with custom padding', () => {
       (<ContentStyling>styleObj).padding = '4px';
 
@@ -185,17 +231,18 @@ describe('styling-utils', () => {
       } as unknown as TableLayout;
     });
 
-    it('should return empty object except backgroundColor and border as the padding and font size are from sprout theme', () => {
+    it('should return empty object except background and border as the padding and font size are from sprout theme', () => {
       layout = {} as unknown as TableLayout;
 
-      const resultStyling = getHeaderStyle(layout, theme);
+      const resultStyling = getHeaderStyle(layout, theme, false);
       expect(resultStyling).toEqual({
-        backgroundColor: '#323232',
-        borderColor: '#D9D9D9',
+        background: '#323232',
         sortLabelColor: 'rgba(255,255,255,0.9)',
+        ...defaultBorderColors,
       });
     });
-    it('should return header style with only fontColor except backgroundColor and border', () => {
+
+    it('should return header style with only fontColor except background and border', () => {
       layout = {
         components: [
           {
@@ -206,34 +253,34 @@ describe('styling-utils', () => {
         ],
       } as unknown as TableLayout;
 
-      const resultStyling = getHeaderStyle(layout, theme);
+      const resultStyling = getHeaderStyle(layout, theme, false);
       expect(resultStyling).toEqual({
         color: '#404040',
-        backgroundColor: '#323232',
-        borderColor: '#D9D9D9',
+        background: '#323232',
         sortLabelColor: '#404040',
+        ...defaultBorderColors,
       });
     });
+
     it('should return all header style from layout', () => {
-      const resultStyling = getHeaderStyle(layout, theme);
+      const resultStyling = getHeaderStyle(layout, theme, false);
       expect(resultStyling).toEqual({
         color: '#404040',
         fontSize: '44px',
-        padding: '22px 44px',
-        backgroundColor: '#323232',
-        borderColor: '#D9D9D9',
+        background: '#323232',
         sortLabelColor: '#404040',
+        ...defaultBorderColors,
       });
     });
   });
 
-  describe('getBodyCellStyle', () => {
+  describe('getBodyStyle', () => {
     let layout: TableLayout;
+    const defaultHoverColors = { background: '#f4f4f4', color: '' };
 
     beforeEach(() => {
       resolvedColor = '#222222'; // dark color
       altResolvedColor = '#dddddd'; // light color
-
       layout = {
         components: [
           {
@@ -258,70 +305,79 @@ describe('styling-utils', () => {
       } as unknown as TableLayout;
     });
 
-    it('should return styling with default hoverBackgroundColor and hoverFontColor', () => {
+    it('should return default hover and border colors', () => {
       layout = {} as unknown as TableLayout;
 
-      const resultStyling = getBodyCellStyle(layout, theme);
+      const resultStyling = getBodyStyle(layout, theme);
       expect(resultStyling).toEqual({
-        hoverFontColor: '',
-        borderColor: '#D9D9D9',
-        hoverBackgroundColor: '#f4f4f4',
+        hoverColors: defaultHoverColors,
+        background: '#323232',
+        lastRowBottomBorder: '0px',
+        ...defaultBorderColors,
       });
     });
-    it('should return styling with fontColor, fontSize, padding plus default hoverBackgroundColor and hoverFontColor', () => {
-      const resultStyling = getBodyCellStyle(layout, theme);
+
+    it('should return styling with fontColor, fontSize and padding plus default hover colors', () => {
+      const resultStyling = getBodyStyle(layout, theme);
       expect(resultStyling).toEqual({
         fontSize: '22px',
         color: '#222222',
         padding: '11px 22px',
-        hoverBackgroundColor: '#f4f4f4',
-        hoverFontColor: '',
-        borderColor: '#D9D9D9',
+        hoverColors: defaultHoverColors,
+        background: '#323232',
+        lastRowBottomBorder: '0px',
+        ...defaultBorderColors,
       });
     });
+
     // Only checking hover properties from here on
-    it('should return styling with no hoverBackgroundColor and the specified hoverFontColor', () => {
+    it('should return hover colors with no background color and the specified font color', () => {
       if (layout.components?.[0].content?.hoverFontColor) layout.components[0].content.hoverFontColor.index = 1;
 
-      const resultStyling = getBodyCellStyle(layout, theme);
-      expect(resultStyling.hoverBackgroundColor).toBe('');
-      expect(resultStyling.hoverFontColor).toBe(resolvedColor);
+      const { hoverColors } = getBodyStyle(layout, theme);
+      expect(hoverColors?.background).toBe('');
+      expect(hoverColors?.color).toBe(resolvedColor);
     });
-    it('should return styling with dark hoverBackgroundColor from theme and the white hoverFontColor', () => {
+
+    it('should return colors with dark background from theme and the white font color', () => {
       theme.getStyle = () => '#111';
 
-      const resultStyling = getBodyCellStyle(layout, theme);
-      expect(resultStyling.hoverBackgroundColor).toBe('#111');
-      expect(resultStyling.hoverFontColor).toBe(StylingDefaults.WHITE);
+      const { hoverColors } = getBodyStyle(layout, theme);
+      expect(hoverColors?.background).toBe('#111');
+      expect(hoverColors?.color).toBe(StylingDefaults.WHITE);
     });
-    it('should return styling with light hoverBackgroundColor from theme and the default hoverFontColor', () => {
+
+    it('should return hover colors with light background color from theme and the default font color', () => {
       theme.getStyle = () => '#fff';
 
-      const resultStyling = getBodyCellStyle(layout, theme);
-      expect(resultStyling.hoverBackgroundColor).toBe('#fff');
-      expect(resultStyling.hoverFontColor).toBe(StylingDefaults.FONT_COLOR);
+      const { hoverColors } = getBodyStyle(layout, theme);
+      expect(hoverColors?.background).toBe('#fff');
+      expect(hoverColors?.color).toBe(StylingDefaults.FONT_COLOR);
     });
-    it('should return styling with dark hoverBackgroundColor and white hoverFontColor', () => {
+
+    it('should return hover colors with dark background color and white font color', () => {
       if (layout.components?.[0].content?.hoverColor) layout.components[0].content.hoverColor.index = 1;
 
-      const resultStyling = getBodyCellStyle(layout, theme);
-      expect(resultStyling.hoverBackgroundColor).toBe(resolvedColor);
-      expect(resultStyling.hoverFontColor).toBe(StylingDefaults.WHITE);
+      const { hoverColors } = getBodyStyle(layout, theme);
+      expect(hoverColors?.background).toBe(resolvedColor);
+      expect(hoverColors?.color).toBe(StylingDefaults.WHITE);
     });
-    it('should return styling with light hoverBackgroundColor and the default hoverFontColor', () => {
+
+    it('should return hover colors with light background color and the default font color', () => {
       if (layout.components?.[0].content?.hoverColor) layout.components[0].content.hoverColor.index = 2;
 
-      const resultStyling = getBodyCellStyle(layout, theme);
-      expect(resultStyling.hoverBackgroundColor).toBe(altResolvedColor);
-      expect(resultStyling.hoverFontColor).toBe(StylingDefaults.FONT_COLOR);
+      const { hoverColors } = getBodyStyle(layout, theme);
+      expect(hoverColors?.background).toBe(altResolvedColor);
+      expect(hoverColors?.color).toBe(StylingDefaults.FONT_COLOR);
     });
-    it('should return styling with set hoverBackgroundColor and hoverFontColor', () => {
+
+    it('should return hover colors with set background and font color', () => {
       if (layout.components?.[0].content?.hoverColor) layout.components[0].content.hoverColor.index = 1;
       if (layout.components?.[0].content?.hoverFontColor) layout.components[0].content.hoverFontColor.index = 2;
 
-      const resultStyling = getBodyCellStyle(layout, theme);
-      expect(resultStyling.hoverBackgroundColor).toBe(resolvedColor);
-      expect(resultStyling.hoverFontColor).toBe(altResolvedColor);
+      const { hoverColors } = getBodyStyle(layout, theme);
+      expect(hoverColors?.background).toBe(resolvedColor);
+      expect(hoverColors?.color).toBe(altResolvedColor);
     });
   });
 
@@ -331,7 +387,7 @@ describe('styling-utils', () => {
     let stylingIDs: string[];
 
     beforeEach(() => {
-      styling = { color: 'someFontColor', backgroundColor: 'someBgColor' };
+      styling = { color: 'someFontColor', background: 'someBgColor' };
       qAttrExps = {
         qValues: [
           { qText: '#dddddd', qNum: NaN },
@@ -341,9 +397,9 @@ describe('styling-utils', () => {
       stylingIDs = ['cellBackgroundColor', 'cellForegroundColor'];
     });
 
-    it('should return styling with both new fontColor and backgroundColor when selected', () => {
+    it('should return styling with both new fontColor and background when selected', () => {
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingIDs);
-      expect(columnStyle.backgroundColor).toBe('rgb(221,221,221)');
+      expect(columnStyle.background).toBe('rgb(221,221,221)');
       expect(columnStyle.color).toBe('rgb(17,17,17)');
     });
     it('should return styling with new fontColor', () => {
@@ -351,15 +407,15 @@ describe('styling-utils', () => {
       stylingIDs = [stylingIDs[1]];
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingIDs);
-      expect(columnStyle.backgroundColor).toBe('someBgColor');
+      expect(columnStyle.background).toBe('someBgColor');
       expect(columnStyle.color).toBe('rgb(17,17,17)');
     });
-    it('should return styling with backgroundColor and automatic font color', () => {
+    it('should return styling with background and automatic font color', () => {
       qAttrExps.qValues = [qAttrExps.qValues[0]];
       stylingIDs = [stylingIDs[0]];
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingIDs);
-      expect(columnStyle.backgroundColor).toBe('rgb(221,221,221)');
+      expect(columnStyle.background).toBe('rgb(221,221,221)');
       expect(columnStyle.color).toBe(StylingDefaults.FONT_COLOR);
     });
     it('should return styling unchanged when no qText', () => {
@@ -386,7 +442,7 @@ describe('styling-utils', () => {
     beforeEach(() => {
       styling = {
         color: '#654321',
-        backgroundColor: '#123456',
+        background: '#123456',
       };
       cellSelectionState = SelectionStates.SELECTED;
     });
@@ -402,19 +458,19 @@ describe('styling-utils', () => {
       const selectionStyling = getSelectionStyle(styling, cellSelectionState);
       expect(selectionStyling).toEqual({
         ...styling,
-        background: `${StylingDefaults.EXCLUDED_BACKGROUND}, ${styling.backgroundColor}`,
+        background: `${StylingDefaults.EXCLUDED_BACKGROUND}, ${styling.background}`,
         selectedCellClass: SelectionStates.EXCLUDED,
       });
     });
 
     it('should return excluded styling with columns background when other column and background color exists', () => {
       cellSelectionState = SelectionStates.EXCLUDED;
-      styling.backgroundColor = 'someColor';
+      styling.background = 'someColor';
 
       const selectionStyling = getSelectionStyle(styling, cellSelectionState);
       expect(selectionStyling).toEqual({
         ...styling,
-        background: `${StylingDefaults.EXCLUDED_BACKGROUND}, ${styling.backgroundColor}`,
+        background: `${StylingDefaults.EXCLUDED_BACKGROUND}, ${styling.background}`,
         selectedCellClass: SelectionStates.EXCLUDED,
       });
     });
