@@ -31,7 +31,7 @@ export const TableContextProvider = ({
   const [hoverIndex, setHoverIndex] = useState(-1);
   const baseProps = useMemo(
     () => ({ selectionsAPI, layout, model, translator, constraints, theme, keyboard }),
-    [selectionsAPI, layout, model, translator, constraints, theme, keyboard]
+    [selectionsAPI, layout, model, translator, constraints, theme.name(), keyboard] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   return (
