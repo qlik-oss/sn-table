@@ -20,19 +20,18 @@ interface HeaderCellProps {
   };
 }
 
-const StyledHeaderCellContainer = styled(Box, {
-  shouldForwardProp: (prop: string) => prop !== 'borderColor' && prop !== 'borderWidth',
-})(({ borderColor, borderWidth }) => ({
+const StyledHeaderCell = styled(Box, {
+  shouldForwardProp: (prop: string) => prop !== 'borderWidth',
+})(({ borderWidth }) => ({
   display: 'flex',
   flexDirection: 'row',
-  borderColor,
   borderStyle: 'solid',
   borderWidth,
   padding: '4px 12px',
   justifyContent: 'space-between',
   alignItems: 'center',
   boxSizing: 'border-box',
-  '&&:hover, &&:focus': {
+  '&&:hover': {
     '& button, & svg': { opacity: 1 },
   },
   fontWeight: 'bold',
@@ -51,7 +50,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
   };
 
   return (
-    <StyledHeaderCellContainer
+    <StyledHeaderCell
       style={{ ...style, ...applicableStyle }}
       borderWidth={isLastColumn ? '0px' : '0px 1px 0px 0px'}
       className="sn-table-cell"
@@ -80,7 +79,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         isDimension={column.isDim}
         disablePortal={false}
       />
-    </StyledHeaderCellContainer>
+    </StyledHeaderCell>
   );
 };
 
