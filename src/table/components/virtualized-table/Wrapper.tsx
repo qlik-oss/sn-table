@@ -10,7 +10,6 @@ import useOnPropsChange from './hooks/use-on-props-change';
 import { TableContext, useContextSelector } from '../../context';
 
 export default function Wrapper(props: WrapperProps) {
-  console.count('Wrapper');
   const { rect } = props;
   const { layout, keyboard, translator, theme, constraints } = useContextSelector(
     TableContext,

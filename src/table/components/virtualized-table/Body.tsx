@@ -11,12 +11,11 @@ import useSelectionsEffect from './hooks/use-selections-effect';
 import { useContextSelector, TableContext } from '../../context';
 
 const Body = (props: BodyProps) => {
-  console.count('Body');
   const { rect, forwardRef, columns, columnWidth, innerForwardRef, pageInfo, bodyStyle, totals } = props;
-  const { layout, selectionsAPI } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
   const isHoverEnabled = !!layout.components?.[0]?.content?.hoverEffect;
   const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
-  const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(layout, pageInfo, rect, columnWidth);
+  const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(pageInfo, rect, columnWidth);
   let { height: bodyHeight } = rect;
   bodyHeight -= totals.shrinkBodyHeightBy;
   bodyHeight = Math.min(rowCount * DEFAULT_ROW_HEIGHT, bodyHeight);
@@ -24,7 +23,6 @@ const Body = (props: BodyProps) => {
   const { rowsInPage, loadRows, loadColumns } = useData(pageInfo, visibleRowCount, visibleColumnCount, columns);
 
   const handleItemsRendered = useItemsRendererHandler({
-    layout,
     loadRows,
     loadColumns,
     verticalScrollDirection,
@@ -38,7 +36,7 @@ const Body = (props: BodyProps) => {
     [rowsInPage, columns, bodyStyle, isHoverEnabled]
   );
 
-  useSelectionsEffect(selectionsAPI, rowsInPage);
+  useSelectionsEffect(rowsInPage);
 
   useLayoutEffect(() => {
     if (!forwardRef.current) return;

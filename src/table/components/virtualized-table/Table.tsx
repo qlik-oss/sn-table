@@ -19,7 +19,6 @@ import { toTableRect, toStickyContainerRect } from './utils/to-rect';
 import { useContextSelector, TableContext } from '../../context';
 
 const Table = (props: TableProps) => {
-  console.count('Table');
   const { rect, pageInfo, paginationNeeded } = props;
   const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const ref = useRef<HTMLDivElement>(null);
@@ -35,11 +34,11 @@ const Table = (props: TableProps) => {
     }),
     [layout, theme.name()] // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const totals = useTotals(layout);
+  const totals = useTotals();
   const columns = useMemo(() => getColumns(layout), [layout]);
   const tableRect = toTableRect(rect, paginationNeeded);
   const { width } = useColumnSize(tableRect, columns, headerStyle, bodyStyle);
-  const { rowCount } = useTableCount(layout, pageInfo, tableRect, width);
+  const { rowCount } = useTableCount(pageInfo, tableRect, width);
   const containerWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
   const [containerHeight, setContainerHeight] = useState(rowCount * DEFAULT_ROW_HEIGHT + totals.shrinkBodyHeightBy);
   const stickyContainerRect = toStickyContainerRect(tableRect, rowCount, totals.shrinkBodyHeightBy);

@@ -9,7 +9,6 @@ interface ScrollableContainerProps {
 }
 
 const ScrollableContainer = React.forwardRef<HTMLDivElement, ScrollableContainerProps>((props, ref) => {
-  console.count('ScrollableContainer');
   const { children, width, height, onScroll } = props;
   const { constraints } = useContextSelector(TableContext, (value) => value.baseProps);
 

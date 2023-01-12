@@ -7,7 +7,6 @@ import { getTotalsCellStyle } from '../../utils/styling-utils';
 import { useContextSelector, TableContext } from '../../context';
 
 const Totals = (props: TotalsProps) => {
-  console.count('Totals');
   const { rect, forwardRef, columnWidth, pageInfo, totals } = props;
   const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const totalsStyle = useMemo(() => getTotalsCellStyle(layout, theme), [layout, theme.name()]); // eslint-disable-line react-hooks/exhaustive-deps

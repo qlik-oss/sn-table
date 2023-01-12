@@ -20,7 +20,6 @@ function getTotalInfo(layout: TableLayout, colIdx: number) {
 }
 
 const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
-  console.count('TotalsCell');
   const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
   const { totalsStyle } = data;
   const label = getTotalInfo(layout, index);

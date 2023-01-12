@@ -6,7 +6,6 @@ import HeaderCell from './HeaderCell';
 import { useContextSelector, TableContext } from '../../context';
 
 const Header = (props: HeaderProps) => {
-  console.count('Header');
   const { rect, forwardRef, columns, columnWidth, pageInfo, headerStyle } = props;
   const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
 

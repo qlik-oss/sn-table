@@ -7,7 +7,6 @@ interface FullSizeContainerProps {
 }
 
 const FullSizeContainer = ({ width, height, children }: FullSizeContainerProps): JSX.Element => {
-  console.count('FullSizeContainer');
   return (
     <div
       data-key="full-size-container"

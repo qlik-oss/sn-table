@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { PageInfo, Row, TableLayout, Column } from '../../../../../types';
+import { PageInfo, Row, Column } from '../../../../../types';
 import useOnPropsChange from '../use-on-props-change';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
 import useGetHyperCubeDataQueue from '../use-get-hypercube-data-queue';
@@ -24,7 +24,7 @@ const useData = (
   const [rowsInPage, setRowsInPage] = useState<Row[]>([]);
 
   const getDataPages = useCallback(
-    async (pages: EngineAPI.INxPage[]) => model?.getHyperCubeData('/qHyperCubeDef', pages),
+    async (pages: EngineAPI.INxPage[]) => (model as EngineAPI.IGenericObject).getHyperCubeData('/qHyperCubeDef', pages),
     [model]
   );
 

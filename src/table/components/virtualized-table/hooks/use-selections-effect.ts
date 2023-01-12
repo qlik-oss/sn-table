@@ -1,11 +1,12 @@
 import { stardust } from '@nebula.js/stardust';
 import { useEffect } from 'react';
-import { ExtendedSelectionAPI, Row } from '../../../../types';
+import { Row } from '../../../../types';
 import { SelectionActions } from '../../../constants';
 import { TableContext, useContextSelector } from '../../../context';
 import { addSelectionListeners } from '../../../utils/selections-utils';
 
-export default function useSelectionsEffect(selectionsAPI: ExtendedSelectionAPI, rowsInPage: Row[]) {
+export default function useSelectionsEffect(rowsInPage: Row[]) {
+  const { selectionsAPI } = useContextSelector(TableContext, (value) => value.baseProps);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
 
   useEffect(() => {
