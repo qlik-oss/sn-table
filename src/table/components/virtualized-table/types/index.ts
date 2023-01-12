@@ -34,18 +34,12 @@ export interface WrapperProps {
 }
 
 export interface TableProps {
-  layout: TableLayout;
   rect: stardust.Rect;
   pageInfo: PageInfo;
   paginationNeeded: boolean;
-  model: EngineAPI.IGenericObject;
-  theme: ExtendedTheme;
-  selectionsAPI: ExtendedSelectionAPI;
-  constraints: stardust.Constraints;
 }
 
 export interface HeaderProps {
-  layout: TableLayout;
   rect: Rect;
   pageInfo: PageInfo;
   forwardRef: React.RefObject<VariableSizeList<any>>;
@@ -55,19 +49,15 @@ export interface HeaderProps {
 }
 
 export interface TotalsProps {
-  layout: TableLayout;
   rect: Rect;
   pageInfo: PageInfo;
   forwardRef: React.RefObject<VariableSizeList<any>>;
   columns: Column[];
   columnWidth: number[];
-  theme: ExtendedTheme;
   totals: Totals;
 }
 
 export interface BodyProps {
-  model: EngineAPI.IGenericObject;
-  layout: TableLayout;
   rect: Rect;
   pageInfo: PageInfo;
   columns: Column[];
@@ -75,6 +65,5 @@ export interface BodyProps {
   forwardRef: React.RefObject<VariableSizeGrid<any>>;
   innerForwardRef: React.RefObject<HTMLDivElement>;
   bodyStyle: BodyStyle;
-  selectionsAPI: ExtendedSelectionAPI;
   totals: Totals;
 }

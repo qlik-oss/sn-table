@@ -1,4 +1,4 @@
-import React, { useState, createContext } from 'react';
+import React, { useState, createContext, useMemo } from 'react';
 
 import { createSelectorProvider } from './createSelectorProvider';
 import { ContextValue, ContextProviderProps } from '../types';
@@ -18,11 +18,21 @@ export const TableContextProvider = ({
   pageRows = [],
   cellCoordMock,
   selectionDispatchMock,
+  layout,
+  model,
+  translator,
+  constraints,
+  theme,
+  keyboard,
 }: ContextProviderProps) => {
   const [headRowHeight, setHeadRowHeight] = useState(0);
   const [focusedCellCoord, setFocusedCellCoord] = useState((cellCoordMock || [0, 0]) as [number, number]);
   const [selectionState, selectionDispatch] = useSelectionReducer(pageRows, selectionsAPI);
   const [hoverIndex, setHoverIndex] = useState(-1);
+  const baseProps = useMemo(
+    () => ({ selectionsAPI, layout, model, translator, constraints, theme, keyboard }),
+    [selectionsAPI, layout, model, translator, constraints, theme, keyboard]
+  );
 
   return (
     <ProviderWithSelector
@@ -35,6 +45,7 @@ export const TableContextProvider = ({
         selectionDispatch: selectionDispatchMock || selectionDispatch,
         hoverIndex,
         setHoverIndex,
+        baseProps,
       }}
     >
       {children}

@@ -4,9 +4,12 @@ import { TotalsProps } from './types';
 import { HEADER_HEIGHT } from './constants';
 import TotalsCell from './TotalsCell';
 import { getTotalsCellStyle } from '../../utils/styling-utils';
+import { useContextSelector, TableContext } from '../../context';
 
 const Totals = (props: TotalsProps) => {
-  const { layout, rect, forwardRef, columnWidth, pageInfo, theme, totals } = props;
+  console.count('Totals');
+  const { rect, forwardRef, columnWidth, pageInfo, totals } = props;
+  const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const totalsStyle = useMemo(() => getTotalsCellStyle(layout, theme), [layout, theme.name()]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useLayoutEffect(() => {
@@ -32,7 +35,7 @@ const Totals = (props: TotalsProps) => {
       itemSize={(index) => columnWidth[index]}
       height={HEADER_HEIGHT}
       width={rect.width}
-      itemData={{ layout, totalsStyle }}
+      itemData={{ totalsStyle }}
     >
       {TotalsCell}
     </VariableSizeList>

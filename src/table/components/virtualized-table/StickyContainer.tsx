@@ -7,6 +7,7 @@ interface StickyContainerProps {
 }
 
 const StickyContainer = ({ children, rect }: StickyContainerProps): JSX.Element => {
+  console.count('StickyContainer');
   return (
     <div
       data-testid="sticky-container"

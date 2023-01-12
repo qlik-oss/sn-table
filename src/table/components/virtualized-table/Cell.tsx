@@ -21,6 +21,7 @@ interface CellProps {
 }
 
 const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
+  console.count('Cell');
   const { rowsInPage, columns, bodyStyle, isHoverEnabled } = data;
   const datum = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
 

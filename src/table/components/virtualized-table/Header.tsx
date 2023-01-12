@@ -3,9 +3,12 @@ import { VariableSizeList } from 'react-window';
 import { HeaderProps } from './types';
 import { HEADER_HEIGHT } from './constants';
 import HeaderCell from './HeaderCell';
+import { useContextSelector, TableContext } from '../../context';
 
 const Header = (props: HeaderProps) => {
-  const { layout, rect, forwardRef, columns, columnWidth, pageInfo, headerStyle } = props;
+  console.count('Header');
+  const { rect, forwardRef, columns, columnWidth, pageInfo, headerStyle } = props;
+  const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
 
   useLayoutEffect(() => {
     forwardRef?.current?.resetAfterIndex(0, true);

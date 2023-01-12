@@ -12,6 +12,7 @@ interface HeaderCellProps {
 }
 
 const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
+  console.count('HeaderCell');
   const { columns, headerStyle } = data;
   const datum = columns[index];
   const isLastColumn = columns.length - 1 === index;

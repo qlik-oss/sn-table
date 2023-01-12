@@ -12,13 +12,21 @@ import VirualizedTable from './components/virtualized-table/Wrapper';
 import { WrapperProps } from './components/virtualized-table/types';
 
 export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
-  const { direction, selectionsAPI, tableData } = props;
+  const { direction, selectionsAPI, tableData, layout, translator, constraints, theme, keyboard } = props;
   const muiTheme = muiSetup(direction);
 
   reactRoot?.render(
     <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : undefined}>
       <ThemeProvider theme={muiTheme}>
-        <TableContextProvider selectionsAPI={selectionsAPI} pageRows={tableData?.rows}>
+        <TableContextProvider
+          selectionsAPI={selectionsAPI}
+          pageRows={tableData?.rows}
+          layout={layout}
+          translator={translator}
+          constraints={constraints}
+          theme={theme}
+          keyboard={keyboard}
+        >
           <TableWrapper {...(props as TableWrapperProps)} />
         </TableContextProvider>
       </ThemeProvider>
@@ -27,13 +35,22 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
 }
 
 export function renderVirtualizedTable(props: WrapperProps, reactRoot?: ReactDom.Root) {
-  const { selectionsAPI } = props;
+  const { selectionsAPI, layout, model, translator, constraints, theme, keyboard } = props;
   const muiTheme = muiSetup('ltr');
 
   reactRoot?.render(
     <React.StrictMode>
       <ThemeProvider theme={muiTheme}>
-        <TableContextProvider selectionsAPI={selectionsAPI} pageRows={[]}>
+        <TableContextProvider
+          selectionsAPI={selectionsAPI}
+          pageRows={[]}
+          layout={layout}
+          model={model}
+          translator={translator}
+          constraints={constraints}
+          theme={theme}
+          keyboard={keyboard}
+        >
           <VirualizedTable {...props} />
         </TableContextProvider>
       </ThemeProvider>
