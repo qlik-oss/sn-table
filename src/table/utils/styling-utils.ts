@@ -59,10 +59,10 @@ export const getBorderColors = (isBackgroundDark: boolean, bottomSeparatingBorde
  */
 const getLastRowBottomBorder = (fontSize: string | undefined, rowsLength?: number, rootElement?: HTMLElement) => {
   if (fontSize && rowsLength && rootElement) {
-    // add line height (133%), padding and borders
-    const rowHeight = (+fontSize.slice(0, -2) * 4) / 3 + 9;
+    // font size * line height + top/bottom padding and border (4 + 4 + 1)
+    const rowHeight = parseInt(fontSize, 10) * (4 / 3) + 9;
     // multiply with number of rows plus header and totals. Compare if greater than container
-    const showBottomBorder = rowHeight * (rowsLength + 2) < rootElement.offsetHeight - PAGINATION_HEIGHT;
+    const showBottomBorder = rowHeight * (rowsLength + 2) < rootElement.clientHeight - PAGINATION_HEIGHT;
     return showBottomBorder ? '1px' : '0px';
   }
   return '0px';
