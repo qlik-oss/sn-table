@@ -209,6 +209,8 @@ export const getFooterStyle = (background: BackgroundColors): FooterStyle => {
         borderColor: COLORING.DARK_MODE_BORDER,
         color: COLORING.DARK_MODE_TEXT,
         disabledColor: COLORING.DARK_MODE_DISABLED,
+        // the icon needs a specific color to override it in dark mode
+        iconColor: COLORING.DARK_MODE_TEXT,
       }
     : {
         background: background.color,

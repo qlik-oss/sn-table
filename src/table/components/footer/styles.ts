@@ -24,11 +24,12 @@ export const StyledFooterWrapper = styled(Box, {
 // ---------- PaginationContent ----------
 
 export const StyledSelect = styled(Select, {
-  shouldForwardProp: (prop: string) => prop !== 'color',
-})(({ color, theme }) => ({
+  shouldForwardProp: (prop: string) => prop !== 'footerStyle',
+})(({ footerStyle, theme }) => ({
   background: 'inherit',
   marginRight: theme.spacing(1),
-  '& .MuiNativeSelect-icon, .MuiNativeSelect-select': { color },
+  color: footerStyle.color,
+  '& .MuiNativeSelect-icon, .MuiNativeSelect-select': { color: footerStyle.iconColor },
 }));
 
 export const StyledButton = styled(Button, {

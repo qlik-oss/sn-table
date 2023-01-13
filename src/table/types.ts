@@ -101,6 +101,7 @@ export interface FooterStyle {
   borderColor: string;
   color: string;
   disabledColor: string;
+  iconColor?: string;
   background?: string;
 }
 
