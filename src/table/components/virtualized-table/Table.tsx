@@ -45,6 +45,7 @@ const Table = (props: TableProps) => {
     }),
     [layout, theme.name()] // eslint-disable-line react-hooks/exhaustive-deps
   );
+  const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
   const columns = useMemo(() => getColumns(layout), [layout]);
   const tableRect = toTableRect(rect, paginationNeeded);
   const { width } = useColumnSize(tableRect, columns, headerStyle, bodyStyle);
@@ -107,6 +108,7 @@ const Table = (props: TableProps) => {
             embed={embed}
             translator={translator}
             changeSortOrder={changeSortOrder}
+            isInteractionEnabled={isInteractionEnabled}
           />
           {totals.atTop ? TotalsComponent : null}
           <Body

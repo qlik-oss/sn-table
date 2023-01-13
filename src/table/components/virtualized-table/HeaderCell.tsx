@@ -17,6 +17,7 @@ interface HeaderCellProps {
     embed: stardust.Embed;
     translator: ExtendedTranslator;
     changeSortOrder: ChangeSortOrder;
+    isInteractionEnabled: boolean;
   };
 }
 
@@ -38,7 +39,7 @@ const StyledHeaderCell = styled(Box, {
 }));
 
 const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
-  const { columns, headerStyle, embed, layout, translator, changeSortOrder } = data;
+  const { columns, headerStyle, embed, layout, translator, changeSortOrder, isInteractionEnabled } = data;
   const { sortLabelColor, ...applicableStyle } = headerStyle;
   const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
@@ -74,7 +75,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         layout={layout}
         columnIndex={column.colIdx}
         sortDirection={column.sortDirection}
-        isInteractionEnabled
+        isInteractionEnabled={isInteractionEnabled}
         isCurrentColumnActive={isCurrentColumnActive}
         isDimension={column.isDim}
         disablePortal={false}

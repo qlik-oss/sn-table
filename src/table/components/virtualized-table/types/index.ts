@@ -61,6 +61,7 @@ export interface HeaderProps {
   embed: stardust.Embed;
   translator: ExtendedTranslator;
   changeSortOrder: ChangeSortOrder;
+  isInteractionEnabled: boolean;
 }
 
 export interface TotalsProps {

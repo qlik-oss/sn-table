@@ -5,8 +5,19 @@ import { HEADER_HEIGHT } from './constants';
 import HeaderCell from './HeaderCell';
 
 const Header = (props: HeaderProps) => {
-  const { layout, rect, forwardRef, columns, columnWidth, pageInfo, headerStyle, embed, translator, changeSortOrder } =
-    props;
+  const {
+    layout,
+    rect,
+    forwardRef,
+    columns,
+    columnWidth,
+    pageInfo,
+    headerStyle,
+    embed,
+    translator,
+    changeSortOrder,
+    isInteractionEnabled,
+  } = props;
 
   useLayoutEffect(() => {
     forwardRef?.current?.resetAfterIndex(0, true);
@@ -27,7 +38,7 @@ const Header = (props: HeaderProps) => {
       itemSize={(index) => columnWidth[index]}
       height={HEADER_HEIGHT}
       width={rect.width}
-      itemData={{ columns, headerStyle, layout, embed, translator, changeSortOrder }}
+      itemData={{ columns, headerStyle, layout, embed, translator, changeSortOrder, isInteractionEnabled }}
     >
       {HeaderCell}
     </VariableSizeList>
