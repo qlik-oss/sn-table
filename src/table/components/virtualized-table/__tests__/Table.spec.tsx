@@ -47,6 +47,7 @@ describe('<Table />', () => {
           embed={embed}
           changeSortOrder={changeSortOrder}
           translator={translator}
+          rootElement={{} as HTMLElement}
         />
       </TableContextProvider>
     ),

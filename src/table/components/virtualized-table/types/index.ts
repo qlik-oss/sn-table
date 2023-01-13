@@ -34,6 +34,7 @@ export interface WrapperProps {
   constraints: stardust.Constraints;
   embed: stardust.Embed;
   changeSortOrder: ChangeSortOrder;
+  rootElement: HTMLElement;
 }
 
 export interface TableProps {
@@ -48,6 +49,7 @@ export interface TableProps {
   embed: stardust.Embed;
   translator: ExtendedTranslator;
   changeSortOrder: ChangeSortOrder;
+  rootElement: HTMLElement;
 }
 
 export interface HeaderProps {
@@ -62,6 +64,7 @@ export interface HeaderProps {
   translator: ExtendedTranslator;
   changeSortOrder: ChangeSortOrder;
   isInteractionEnabled: boolean;
+  rootElement: HTMLElement;
 }
 
 export interface TotalsProps {

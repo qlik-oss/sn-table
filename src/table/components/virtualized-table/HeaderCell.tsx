@@ -18,6 +18,7 @@ interface HeaderCellProps {
     translator: ExtendedTranslator;
     changeSortOrder: ChangeSortOrder;
     isInteractionEnabled: boolean;
+    rootElement: HTMLElement;
   };
 }
 
@@ -39,7 +40,7 @@ const StyledHeaderCell = styled(Box, {
 }));
 
 const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
-  const { columns, headerStyle, embed, layout, translator, changeSortOrder, isInteractionEnabled } = data;
+  const { columns, headerStyle, embed, layout, translator, changeSortOrder, isInteractionEnabled, rootElement } = data;
   const { sortLabelColor, ...applicableStyle } = headerStyle;
   const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
@@ -78,7 +79,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         isInteractionEnabled={isInteractionEnabled}
         isCurrentColumnActive={isCurrentColumnActive}
         isDimension={column.isDim}
-        disablePortal={false}
+        container={rootElement}
       />
     </StyledHeaderCell>
   );

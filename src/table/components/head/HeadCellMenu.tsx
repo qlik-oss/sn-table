@@ -24,7 +24,7 @@ export default function HeadCellMenu({
   isInteractionEnabled,
   isCurrentColumnActive,
   isDimension,
-  disablePortal = true,
+  container,
 }: HeadCellMenuProps) {
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
   const [openListboxDropdown, setOpenListboxDropdown] = useState(false);
@@ -102,7 +102,8 @@ export default function HeadCellMenu({
         role={undefined}
         placement="bottom-start"
         transition
-        disablePortal={disablePortal}
+        disablePortal={!container}
+        container={container}
       >
         {({ TransitionProps }) => (
           <Grow {...TransitionProps} style={{ transformOrigin: 'left top' }}>
@@ -130,7 +131,8 @@ export default function HeadCellMenu({
         role={undefined}
         placement="bottom-start"
         transition
-        disablePortal={disablePortal}
+        disablePortal={!container}
+        container={container}
       >
         {({ TransitionProps }) => (
           <Grow {...TransitionProps} style={{ transformOrigin: 'left top' }}>
