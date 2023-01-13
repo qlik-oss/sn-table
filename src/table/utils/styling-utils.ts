@@ -79,8 +79,8 @@ export const getBaseStyling = (
   bottomSeparatingBorder = false
 ): GeneratedStyling => {
   const fontFamily = theme.getStyle('object', `straightTable.${objetName}`, 'fontFamily');
-  const color = undefined; // theme.getStyle('object', `straightTable.${objetName}`, 'color');
-  const fontSize = undefined; // theme.getStyle('object', `straightTable.${objetName}`, 'fontSize');
+  const color = theme.getStyle('object', `straightTable.${objetName}`, 'color');
+  const fontSize = theme.getStyle('object', `straightTable.${objetName}`, 'fontSize');
 
   const baseStyle: GeneratedStyling = {
     fontFamily,
