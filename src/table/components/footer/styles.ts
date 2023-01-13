@@ -9,8 +9,8 @@ import { PAGINATION_HEIGHT } from '../../constants';
 // ---------- FooterWrapper ----------
 
 export const StyledFooterWrapper = styled(Box, {
-  shouldForwardProp: (prop: string) => prop !== 'footerStyle' && prop !== 'withoutBorders',
-})(({ footerStyle, theme, withoutBorders }) => ({
+  shouldForwardProp: (prop: string) => prop !== 'footerStyle',
+})(({ footerStyle, theme }) => ({
   height: PAGINATION_HEIGHT,
   display: 'flex',
   justifyContent: 'flex-end',
@@ -18,7 +18,7 @@ export const StyledFooterWrapper = styled(Box, {
   padding: theme.spacing(0, 1, 0, 1),
   color: footerStyle.color,
   background: footerStyle.background,
-  ...(withoutBorders ? { borderWidth: '0px' } : { borderTop: `1px solid ${footerStyle.borderColor}` }),
+  borderTop: `1px solid ${footerStyle.borderColor}`,
 }));
 
 // ---------- PaginationContent ----------
