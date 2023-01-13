@@ -1,23 +1,20 @@
 import React from 'react';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import { MenuGroupProps } from '../../types';
-import { MenuListDivider } from './styles';
+import Typography from '@mui/material/Typography';
+import { HeadCellMenuGroup, HeadCellMenuItem } from '../../types';
+import { StyledMenuItem, StyledDivider, StyledListItemIcon } from './styles';
 
-export default function MenuGroup({ options, shouldShowDevider }: MenuGroupProps) {
+export default function MenuGroup({ options }: HeadCellMenuGroup) {
   return (
-    <div>
-      {options.map(({ id, icon, itemTitle, isDisabled, onClick }) => (
-        <ListItem key={id} disablePadding>
-          <ListItemButton disabled={isDisabled} className="sn-table-head-menu-item-button" onClick={onClick}>
-            <ListItemIcon sx={{ minWidth: '25px' }}>{icon}</ListItemIcon>
-            <ListItemText primary={itemTitle} />
-          </ListItemButton>
-        </ListItem>
+    <>
+      {options.map(({ id, icon, itemTitle, isDisabled, onClick, hasDivider }: HeadCellMenuItem) => (
+        <>
+          <StyledMenuItem key={id} className="sn-table-head-menu-item" onClick={onClick} disabled={isDisabled}>
+            <StyledListItemIcon>{icon}</StyledListItemIcon>
+            <Typography variant="body2">{itemTitle}</Typography>
+          </StyledMenuItem>
+          {hasDivider && <StyledDivider variant="middle" />}
+        </>
       ))}
-      {shouldShowDevider && <MenuListDivider />}
-    </div>
+    </>
   );
 }

@@ -4,6 +4,8 @@ import TableCell from '@mui/material/TableCell';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 
 import { COMMON_CELL_STYLING } from '../../constants';
@@ -56,39 +58,32 @@ export const HeadCellContent = styled(Box)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-export const StyledMenuIconButton = styled(Button)({
-  opacity: 0,
+// ---------- HeadCellMenu ----------
+
+export const StyledMenuIconButton = styled(Button, {
+  shouldForwardProp: (prop: string) => prop !== 'isVisible',
+})(({ isVisible }) => ({
+  opacity: isVisible ? 1 : 0,
   '&:focus': {
     opacity: 1,
   },
-});
+}));
 
-export const StyledCellMenu = styled('div', {
-  shouldForwardProp: (prop: string) => prop !== 'headerStyle',
-})(({ headerStyle, theme }) => ({
-  '.MuiPaper-root': {
-    width: '210px',
-    borderRadius: theme.spacing(1),
-  },
-  '.MuiListItemText-primary, .MuiSvgIcon-root': {
-    fontSize: '16px',
-    color: headerStyle.sortLabelColor,
-  },
-  '.head-cell-menu': {
-    color: headerStyle.sortLabelColor,
+export const StyledDivider = styled(Divider)(({ theme }) => ({
+  '&.MuiDivider-root': {
+    margin: theme.spacing(0.5),
   },
 }));
 
-export const MenuDropdownPaper = styled(Paper)(({ theme }) => ({
-  '.sn-table-head-menu': {
-    backgroundColor: theme.palette.common.white,
-    border: `1px solid ${theme.palette.grey[200]}`,
-    padding: 0,
-  },
+export const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
+  borderRadius: '4px',
+  margin: theme.spacing(0, 0.5),
+  padding: theme.spacing(1, 1.5),
 }));
 
-export const MenuListDivider = styled(Divider)(({ theme }) => ({
-  margin: theme.spacing(0, 1),
+export const StyledListItemIcon = styled(ListItemIcon)(({ theme }) => ({
+  marginRight: theme.spacing(1.5),
+  lineHeight: 0,
 }));
 
 export const NebulaListBox = styled('div')(({ theme }) => ({

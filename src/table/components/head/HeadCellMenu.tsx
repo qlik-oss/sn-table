@@ -1,20 +1,16 @@
 import React, { useRef, useState, useMemo } from 'react';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Grow from '@mui/material/Grow';
-import Paper from '@mui/material/Paper';
-import Popper from '@mui/material/Popper';
-import MenuList from '@mui/material/MenuList';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import SearchIcon from '@mui/icons-material/Search';
+import Menu from '@mui/material/Menu';
 import More from '@qlik-trial/sprout/icons/More';
+import Search from '@qlik-trial/sprout/icons/Search';
+import Descending from '@qlik-trial/sprout/icons/Descending';
+import Ascending from '@qlik-trial/sprout/icons/Ascending';
+
 import { HeadCellMenuProps, HeadCellMenuGroup } from '../../types';
 import MenuGroup from './MenuGroup';
-import { StyledMenuIconButton, StyledCellMenu, NebulaListBox, MenuDropdownPaper } from './styles';
+import { StyledMenuIconButton, NebulaListBox } from './styles';
 import { ListBoxWrapper, ListBoxWrapperRenderProps } from './ListBoxWrapper';
 
 export default function HeadCellMenu({
-  headerStyle,
   translator,
   sortDirection,
   sortFromMenu,
@@ -32,26 +28,26 @@ export default function HeadCellMenu({
   const menuItems = useMemo<HeadCellMenuGroup[]>(
     () => [
       {
-        id: 1,
+        id: 'group-0',
         options: [
           {
             id: 1,
             itemTitle: translator.get('SNTable.MenuItem.SortAscending'),
-            onClick: (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
               sortFromMenu(evt, 'A');
               setOpenMenuDropdown(false);
             },
-            icon: <ArrowUpwardIcon />,
+            icon: <Ascending />,
             isDisabled: !isInteractionEnabled || (isCurrentColumnActive && sortDirection === 'A'),
           },
           {
             id: 2,
             itemTitle: translator.get('SNTable.MenuItem.SortDescending'),
-            onClick: (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
               sortFromMenu(evt, 'D');
               setOpenMenuDropdown(false);
             },
-            icon: <ArrowDownwardIcon />,
+            icon: <Descending />,
             isDisabled: !isInteractionEnabled || (isCurrentColumnActive && sortDirection === 'D'),
           },
         ],
@@ -59,17 +55,17 @@ export default function HeadCellMenu({
       ...(isDimension
         ? [
             {
-              id: 2,
+              id: 'group-1',
               options: [
                 {
-                  id: 1,
+                  id: 3,
                   itemTitle: translator.get('SNTable.MenuItem.Search'),
-                  onClick: (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+                  onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
                     evt.stopPropagation();
                     setOpenMenuDropdown(false);
                     setOpenListboxDropdown(true);
                   },
-                  icon: <SearchIcon />,
+                  icon: <Search />,
                   isDisabled: false,
                 },
               ],
@@ -81,8 +77,9 @@ export default function HeadCellMenu({
   );
 
   return (
-    <StyledCellMenu headerStyle={headerStyle}>
+    <>
       <StyledMenuIconButton
+        isVisible={openListboxDropdown || openMenuDropdown}
         ref={anchorRef}
         size="small"
         tabIndex={-1}
@@ -94,57 +91,30 @@ export default function HeadCellMenu({
       >
         <More size="small" />
       </StyledMenuIconButton>
-      <Popper
-        modifiers={[{ name: 'offset', options: { offset: [0, 9] } }]}
+
+      <Menu
+        className="sn-table-head-menu"
+        aria-labelledby="sn-table-head-menu-button"
         open={openMenuDropdown}
         anchorEl={anchorRef.current}
-        role={undefined}
-        placement="bottom-start"
-        transition
-        disablePortal
+        onClose={() => setOpenMenuDropdown(false)}
       >
-        {({ TransitionProps }) => (
-          <Grow {...TransitionProps} style={{ transformOrigin: 'left top' }}>
-            <MenuDropdownPaper sx={{ boxShadow: 15 }}>
-              <ClickAwayListener onClickAway={() => setOpenMenuDropdown(false)}>
-                <MenuList
-                  autoFocusItem={openMenuDropdown}
-                  className="sn-table-head-menu"
-                  aria-labelledby="sn-table-head-menu-button"
-                >
-                  {menuItems.map((menuGroup, i) => (
-                    <MenuGroup key={menuGroup.id} {...menuGroup} shouldShowDevider={i !== menuItems.length - 1} />
-                  ))}
-                </MenuList>
-              </ClickAwayListener>
-            </MenuDropdownPaper>
-          </Grow>
-        )}
-      </Popper>
+        {menuItems.map((menuGroup) => (
+          <MenuGroup key={menuGroup.id} {...menuGroup} />
+        ))}
+      </Menu>
 
-      <Popper
-        modifiers={[{ name: 'offset', options: { offset: [0, 9] } }]}
+      <Menu
+        className="sn-table-head-menu"
+        aria-labelledby="sn-table-head-menu-button"
         open={openListboxDropdown}
         anchorEl={anchorRef.current}
-        role={undefined}
-        placement="bottom-start"
-        transition
-        disablePortal
+        onClose={() => setOpenListboxDropdown(false)}
       >
-        {({ TransitionProps }) => (
-          <Grow {...TransitionProps} style={{ transformOrigin: 'left top' }}>
-            <Paper sx={{ boxShadow: 15 }}>
-              <ListBoxWrapper layout={layout} embed={embed} columnIndex={columnIndex}>
-                {({ ref }: ListBoxWrapperRenderProps) => (
-                  <ClickAwayListener onClickAway={() => setOpenListboxDropdown(false)}>
-                    <NebulaListBox ref={ref} />
-                  </ClickAwayListener>
-                )}
-              </ListBoxWrapper>
-            </Paper>
-          </Grow>
-        )}
-      </Popper>
-    </StyledCellMenu>
+        <ListBoxWrapper layout={layout} embed={embed} columnIndex={columnIndex}>
+          {({ ref }: ListBoxWrapperRenderProps) => <NebulaListBox ref={ref} />}
+        </ListBoxWrapper>
+      </Menu>
+    </>
   );
 }

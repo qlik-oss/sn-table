@@ -249,12 +249,8 @@ export interface HeadCellMenuProps {
 }
 
 export interface HeadCellMenuGroup {
-  id: number;
+  id: string;
   options: HeadCellMenuItem[];
-}
-
-export interface MenuGroupProps extends HeadCellMenuGroup {
-  shouldShowDevider: boolean;
 }
 
 export interface HeadCellMenuItem {
@@ -262,7 +258,8 @@ export interface HeadCellMenuItem {
   icon: React.ReactElement;
   itemTitle: string;
   isDisabled: boolean;
-  onClick: (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  hasDivider?: boolean;
+  onClick: (evt: React.MouseEvent<HTMLLIElement>) => void;
 }
 
 export interface TableBodyWrapperProps extends CommonTableProps {
