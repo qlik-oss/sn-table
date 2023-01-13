@@ -3,7 +3,7 @@ import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 
-import { COMMON_CELL_STYLING } from '../../constants';
+import { COMMON_CELL_STYLING } from '../../styling-defaults';
 
 // ---------- TableBodyWrapper ----------
 

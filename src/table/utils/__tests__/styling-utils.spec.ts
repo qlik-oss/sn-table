@@ -9,7 +9,8 @@ import {
 } from '../styling-utils';
 import { ExtendedTheme, PaletteColor, HeaderStyling, ContentStyling, TableLayout } from '../../../types';
 import { CellStyle } from '../../types';
-import { SelectionStates, StylingDefaults, SELECTION_STYLING } from '../../constants';
+import { SelectionStates } from '../../constants';
+import { COLORING, SELECTION_STYLING } from '../../styling-defaults';
 
 describe('styling-utils', () => {
   let resolvedColor: string;
@@ -35,7 +36,7 @@ describe('styling-utils', () => {
   } as unknown as ExtendedTheme;
   // TODO: switch these to sprout color constants
   const defaultBorderColors = {
-    borderBottomColor: '#EBEBEB',
+    borderBottomColor: '#E6E6E6',
     borderTopColor: '#808080',
     borderRightColor: '#D9D9D9',
     borderLeftColor: '#D9D9D9',
@@ -237,7 +238,7 @@ describe('styling-utils', () => {
       const resultStyling = getHeaderStyle(layout, theme, false);
       expect(resultStyling).toEqual({
         background: '#323232',
-        sortLabelColor: 'rgba(255,255,255,0.9)',
+        color: 'rgba(255,255,255,0.9)',
         ...defaultBorderColors,
       });
     });
@@ -257,7 +258,6 @@ describe('styling-utils', () => {
       expect(resultStyling).toEqual({
         color: '#404040',
         background: '#323232',
-        sortLabelColor: '#404040',
         ...defaultBorderColors,
       });
     });
@@ -268,7 +268,6 @@ describe('styling-utils', () => {
         color: '#404040',
         fontSize: '44px',
         background: '#323232',
-        sortLabelColor: '#404040',
         ...defaultBorderColors,
       });
     });
@@ -276,7 +275,7 @@ describe('styling-utils', () => {
 
   describe('getBodyStyle', () => {
     let layout: TableLayout;
-    const defaultHoverColors = { background: '#f4f4f4', color: '' };
+    const defaultHoverColors = { background: 'rgba(0, 0, 0, 0.03)', color: '' };
 
     beforeEach(() => {
       resolvedColor = '#222222'; // dark color
@@ -344,7 +343,7 @@ describe('styling-utils', () => {
 
       const { hoverColors } = getBodyStyle(layout, theme);
       expect(hoverColors?.background).toBe('#111');
-      expect(hoverColors?.color).toBe(StylingDefaults.WHITE);
+      expect(hoverColors?.color).toBe(COLORING.WHITE);
     });
 
     it('should return hover colors with light background color from theme and the default font color', () => {
@@ -352,7 +351,7 @@ describe('styling-utils', () => {
 
       const { hoverColors } = getBodyStyle(layout, theme);
       expect(hoverColors?.background).toBe('#fff');
-      expect(hoverColors?.color).toBe(StylingDefaults.FONT_COLOR);
+      expect(hoverColors?.color).toBe(COLORING.TEXT);
     });
 
     it('should return hover colors with dark background color and white font color', () => {
@@ -360,7 +359,7 @@ describe('styling-utils', () => {
 
       const { hoverColors } = getBodyStyle(layout, theme);
       expect(hoverColors?.background).toBe(resolvedColor);
-      expect(hoverColors?.color).toBe(StylingDefaults.WHITE);
+      expect(hoverColors?.color).toBe(COLORING.WHITE);
     });
 
     it('should return hover colors with light background color and the default font color', () => {
@@ -368,7 +367,7 @@ describe('styling-utils', () => {
 
       const { hoverColors } = getBodyStyle(layout, theme);
       expect(hoverColors?.background).toBe(altResolvedColor);
-      expect(hoverColors?.color).toBe(StylingDefaults.FONT_COLOR);
+      expect(hoverColors?.color).toBe(COLORING.TEXT);
     });
 
     it('should return hover colors with set background and font color', () => {
@@ -416,7 +415,7 @@ describe('styling-utils', () => {
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingIDs);
       expect(columnStyle.background).toBe('rgb(221,221,221)');
-      expect(columnStyle.color).toBe(StylingDefaults.FONT_COLOR);
+      expect(columnStyle.color).toBe(COLORING.TEXT);
     });
     it('should return styling unchanged when no qText', () => {
       qAttrExps.qValues = [{ qNum: NaN }, { qNum: NaN }];
@@ -458,7 +457,7 @@ describe('styling-utils', () => {
       const selectionStyling = getSelectionStyle(styling, cellSelectionState);
       expect(selectionStyling).toEqual({
         ...styling,
-        background: `${StylingDefaults.EXCLUDED_BACKGROUND}, ${styling.background}`,
+        background: `${SELECTION_STYLING.EXCLUDED_BACKGROUND}, ${styling.background}`,
         selectedCellClass: SelectionStates.EXCLUDED,
       });
     });
@@ -470,7 +469,7 @@ describe('styling-utils', () => {
       const selectionStyling = getSelectionStyle(styling, cellSelectionState);
       expect(selectionStyling).toEqual({
         ...styling,
-        background: `${StylingDefaults.EXCLUDED_BACKGROUND}, ${styling.background}`,
+        background: `${SELECTION_STYLING.EXCLUDED_BACKGROUND}, ${styling.background}`,
         selectedCellClass: SelectionStates.EXCLUDED,
       });
     });

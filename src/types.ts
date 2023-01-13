@@ -145,13 +145,6 @@ export interface BodyColors {
   borderColor: string;
 }
 
-export interface PaginationColors {
-  borderColor: string;
-  color: string;
-  iconColor: string;
-  disabledIconColor: string;
-}
-
 export interface BackgroundColors {
   tableColorFromTheme: string;
   color?: string;

@@ -135,7 +135,7 @@ function PaginationContent({
           {label}:
         </StyledTypography>
         <StyledSelect
-          footerStyle={footerStyle}
+          color={footerStyle.color}
           size="small"
           native
           value={value}
