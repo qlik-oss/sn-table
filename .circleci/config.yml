@@ -60,6 +60,7 @@ jobs:
             - dist
             - package.json
             - core
+            - src/locale/all.json
 
   integration-tests:
     <<: *defaults
