@@ -59,7 +59,7 @@ const renderWithCarbon = ({
 };
 
 export default function supernova(env: Galaxy) {
-  const areBasicFeaturesEnabled = true; //env.flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES');
+  const areBasicFeaturesEnabled = env.flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES');
   return {
     qae: {
       properties: { initial: properties },
