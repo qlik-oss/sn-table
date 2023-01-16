@@ -17,7 +17,6 @@ const Header = (props: HeaderProps) => {
     translator,
     changeSortOrder,
     isInteractionEnabled,
-    rootElement,
   } = props;
 
   useLayoutEffect(() => {
@@ -39,7 +38,7 @@ const Header = (props: HeaderProps) => {
       itemSize={(index) => columnWidth[index]}
       height={HEADER_HEIGHT}
       width={rect.width}
-      itemData={{ columns, headerStyle, layout, embed, translator, changeSortOrder, isInteractionEnabled, rootElement }}
+      itemData={{ columns, headerStyle, layout, embed, translator, changeSortOrder, isInteractionEnabled }}
     >
       {HeaderCell}
     </VariableSizeList>

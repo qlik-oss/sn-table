@@ -100,7 +100,6 @@ export default function supernova(env: Galaxy) {
 
         renderVirtualizedTable(
           {
-            rootElement,
             layout,
             model,
             rect,

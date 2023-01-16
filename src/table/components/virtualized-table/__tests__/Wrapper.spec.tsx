@@ -46,7 +46,6 @@ describe('<Wrapper />', () => {
         constraints={constraints}
         embed={embed}
         changeSortOrder={changeSortOrder}
-        rootElement={{} as HTMLElement}
       />
     );
 

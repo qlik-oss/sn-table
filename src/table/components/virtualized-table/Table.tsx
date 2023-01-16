@@ -30,7 +30,6 @@ const Table = (props: TableProps) => {
     embed,
     translator,
     changeSortOrder,
-    rootElement,
   } = props;
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);
@@ -110,7 +109,6 @@ const Table = (props: TableProps) => {
             translator={translator}
             changeSortOrder={changeSortOrder}
             isInteractionEnabled={isInteractionEnabled}
-            rootElement={rootElement}
           />
           {totals.atTop ? TotalsComponent : null}
           <Body

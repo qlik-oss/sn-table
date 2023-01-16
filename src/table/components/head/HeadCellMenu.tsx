@@ -13,6 +13,8 @@ import MenuGroup from './MenuGroup';
 import { StyledMenuIconButton, StyledCellMenu, NebulaListBox, MenuDropdownPaper } from './styles';
 import { ListBoxWrapper, ListBoxWrapperRenderProps } from './ListBoxWrapper';
 
+const POPPER_Z_INDEX = 1020;
+
 export default function HeadCellMenu({
   headerStyle,
   translator,
@@ -24,7 +26,6 @@ export default function HeadCellMenu({
   isInteractionEnabled,
   isCurrentColumnActive,
   isDimension,
-  container,
 }: HeadCellMenuProps) {
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
   const [openListboxDropdown, setOpenListboxDropdown] = useState(false);
@@ -96,14 +97,13 @@ export default function HeadCellMenu({
         <More size="small" />
       </StyledMenuIconButton>
       <Popper
+        style={{ zIndex: POPPER_Z_INDEX }}
         modifiers={[{ name: 'offset', options: { offset: [0, 9] } }]}
         open={openMenuDropdown}
         anchorEl={anchorRef.current}
         role={undefined}
         placement="bottom-start"
         transition
-        disablePortal={!container}
-        container={container}
       >
         {({ TransitionProps }) => (
           <Grow {...TransitionProps} style={{ transformOrigin: 'left top' }}>
@@ -125,14 +125,13 @@ export default function HeadCellMenu({
       </Popper>
 
       <Popper
+        style={{ zIndex: POPPER_Z_INDEX }}
         modifiers={[{ name: 'offset', options: { offset: [0, 9] } }]}
         open={openListboxDropdown}
         anchorEl={anchorRef.current}
         role={undefined}
         placement="bottom-start"
         transition
-        disablePortal={!container}
-        container={container}
       >
         {({ TransitionProps }) => (
           <Grow {...TransitionProps} style={{ transformOrigin: 'left top' }}>
@@ -144,6 +143,11 @@ export default function HeadCellMenu({
                   </ClickAwayListener>
                 )}
               </ListBoxWrapper>
+              {/* TODO Hack to get the popper to re-position when it overflows the container.
+                  It should work out-of-the box but when disablePortal=true and mounting
+                  the listbox via a useEffect it just does not.
+              */}
+              <div style={{ width: '250px' }} />
             </Paper>
           </Grow>
         )}
