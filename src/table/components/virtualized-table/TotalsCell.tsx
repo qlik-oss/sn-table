@@ -3,6 +3,7 @@ import React from 'react';
 import { TableLayout } from '../../../types';
 import { useContextSelector, TableContext } from '../../context';
 import { GeneratedStyling } from '../../types';
+import CellText from '../CellText';
 
 interface TotalsCellProps {
   index: number;
@@ -21,7 +22,9 @@ function getTotalInfo(layout: TableLayout, colIdx: number) {
 
 const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
   const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
-  const { totalsStyle } = data;
+  const {
+    totalsStyle: { hoverColors, ...applicableStyling },
+  } = data;
   const label = getTotalInfo(layout, index);
   const isLastColumn = layout.qHyperCube.qSize.qcx - 1 === index;
 
@@ -30,31 +33,18 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
       className="sn-table-cell"
       style={{
         ...style,
+        ...applicableStyling,
         display: 'flex',
         alignItems: 'center',
-        borderColor: totalsStyle.borderColor,
         borderStyle: 'solid',
         borderWidth: isLastColumn ? '0px' : '0px 1px 0px 0px',
-        padding: '0px 14px',
+        padding: '4px 12px',
         justifyContent: index === 0 ? 'left' : 'right',
         boxSizing: 'border-box',
         cursor: 'default',
       }}
     >
-      <span
-        className="sn-table-cell-text"
-        style={{
-          fontSize: totalsStyle.fontSize,
-          fontFamily: totalsStyle.fontFamily,
-          fontWeight: 'bold',
-          color: totalsStyle.color,
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis',
-        }}
-      >
-        {label}
-      </span>
+      <CellText singleLine>{label}</CellText>
     </div>
   );
 };

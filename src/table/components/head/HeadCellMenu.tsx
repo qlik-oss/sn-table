@@ -7,7 +7,7 @@ import MenuList from '@mui/material/MenuList';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import SearchIcon from '@mui/icons-material/Search';
-import MoreHoriz from '@mui/icons-material/MoreHoriz';
+import More from '@qlik-trial/sprout/icons/More';
 import { HeadCellMenuProps, HeadCellMenuGroup } from '../../types';
 import MenuGroup from './MenuGroup';
 import { StyledMenuIconButton, StyledCellMenu, NebulaListBox, MenuDropdownPaper } from './styles';
@@ -84,6 +84,7 @@ export default function HeadCellMenu({
     <StyledCellMenu headerStyle={headerStyle}>
       <StyledMenuIconButton
         ref={anchorRef}
+        size="small"
         tabIndex={-1}
         id="sn-table-head-menu-button"
         aria-controls={openMenuDropdown ? 'sn-table-head-menu' : undefined}
@@ -91,7 +92,7 @@ export default function HeadCellMenu({
         aria-haspopup="true"
         onClick={() => setOpenMenuDropdown(!openMenuDropdown)}
       >
-        <MoreHoriz />
+        <More size="small" />
       </StyledMenuIconButton>
       <Popper
         modifiers={[{ name: 'offset', options: { offset: [0, 9] } }]}

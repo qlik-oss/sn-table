@@ -41,7 +41,7 @@ export default function Wrapper(props: WrapperProps) {
     <StyledTableWrapper data-key="wrapper" background={theme.background} dir="ltr">
       <Table rect={rect} pageInfo={pageInfo} paginationNeeded={paginationNeeded} />
       {paginationNeeded && (
-        <FooterWrapper theme={theme} withoutBorders>
+        <FooterWrapper theme={theme}>
           <PaginationContent
             theme={theme}
             handleChangePage={(currentPage) => setPage(currentPage)}

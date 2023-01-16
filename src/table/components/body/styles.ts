@@ -3,61 +3,52 @@ import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 
-import { COMMON_CELL_STYLING } from '../../constants';
+import { COMMON_CELL_STYLING } from '../../styling-defaults';
 
 // ---------- TableBodyWrapper ----------
 
-export const StyledTableBody = styled(TableBody, {
-  shouldForwardProp: (prop: string) => prop !== 'paginationNeeded' && prop !== 'bodyCellStyle',
-})(({ paginationNeeded, bodyCellStyle }) => ({
-  'tr :last-child': {
-    borderRight: paginationNeeded && 0,
-  },
-  'tr :first-child': {
-    borderLeft: !paginationNeeded && '1px solid rgb(217, 217, 217)',
-  },
-  '& td, th': {
-    fontSize: bodyCellStyle.fontSize,
-    padding: bodyCellStyle.padding,
-    userSelect: 'none',
+export const StyledBody = styled(TableBody, {
+  shouldForwardProp: (prop: string) => prop !== 'lastRowBottomBorder',
+})(({ lastRowBottomBorder }) => ({
+  '& tr:last-child': {
+    '& td, th': {
+      borderBottomWidth: lastRowBottomBorder,
+    },
   },
 }));
 
 export const StyledBodyRow = styled(TableRow, {
-  shouldForwardProp: (prop: string) => prop !== 'bodyCellStyle' && prop !== 'hover',
-})(({ hover, bodyCellStyle }) => ({
+  shouldForwardProp: (prop: string) => prop !== 'hoverColors' && prop !== 'hover',
+})(({ hover, hoverColors }) => ({
   '&&:hover': {
     background: 'none',
   },
   ...(hover && {
     '&&:hover': {
-      '& td:not(.selected), th:not(.selected)': {
-        backgroundColor: bodyCellStyle.hoverBackgroundColor,
-        color: bodyCellStyle.hoverFontColor,
-      },
+      '& td:not(.selected), th:not(.selected)': hoverColors,
     },
   }),
 }));
 
 export const StyledBodyCell = styled(TableCell, {
   shouldForwardProp: (prop: string) => prop !== 'cellStyle',
-})(({ cellStyle }) => ({
+})(({ cellStyle, theme }) => ({
   ...COMMON_CELL_STYLING,
   ...cellStyle,
-  borderWidth: '0px 1px 1px 0px',
+  padding: theme.spacing(0.5, 1.5),
 }));
 
 // ---------- TableTotals ----------
 
 export const StyledTotalsCell = styled(TableCell, {
   shouldForwardProp: (prop: string) => prop !== 'atTop' && prop !== 'headRowHeight' && prop !== 'totalsStyle',
-})(({ totalsStyle, atTop, headRowHeight }) => ({
+})(({ totalsStyle, atTop, headRowHeight, theme }) => ({
   ...COMMON_CELL_STYLING,
   ...totalsStyle,
   fontWeight: 'bold',
   position: 'sticky',
-  borderWidth: atTop ? '0px 1px 2px 0px' : '2px 1px 1px 0px',
+  padding: theme.spacing(0.5, 1.5),
+  borderWidth: atTop ? '0px 1px 1px 0px' : '1px 1px 1px 0px',
   top: atTop && headRowHeight,
   bottom: !atTop && 0,
-  marginTop: 0,
 }));
