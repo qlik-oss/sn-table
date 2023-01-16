@@ -11,9 +11,18 @@ interface ListBoxWrapperProps {
   layout: TableLayout;
   embed: stardust.Embed;
   columnIndex: number;
+  onSelectionConfirm: () => void;
+  onSelectionCancel: () => void;
 }
 
-export const ListBoxWrapper = ({ children, embed, layout, columnIndex }: ListBoxWrapperProps) => {
+export const ListBoxWrapper = ({
+  children,
+  embed,
+  layout,
+  columnIndex,
+  onSelectionConfirm,
+  onSelectionCancel,
+}: ListBoxWrapperProps) => {
   const [listboxInstance, setListboxInstance] = useState<stardust.FieldInstance>();
   const ref = useRef<HTMLElement>(null);
 
@@ -32,7 +41,12 @@ export const ListBoxWrapper = ({ children, embed, layout, columnIndex }: ListBox
 
     // passing title: ' ' (an empty space)
     // because of passing null or undefined will still endup showing title
-    listboxInstance.mount(ref.current, { title: ' ' });
+    listboxInstance.mount(ref.current, {
+      title: ' ',
+      // @ts-ignore: should fix in nebula before merging this
+      onSelectionConfirm,
+      onSelectionCancel,
+    });
 
     return () => {
       listboxInstance.unmount();

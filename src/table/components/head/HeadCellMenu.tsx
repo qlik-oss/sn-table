@@ -133,7 +133,13 @@ export default function HeadCellMenu({
         {({ TransitionProps }) => (
           <Grow {...TransitionProps} style={{ transformOrigin: 'left top' }}>
             <Paper sx={{ boxShadow: 15 }}>
-              <ListBoxWrapper layout={layout} embed={embed} columnIndex={columnIndex}>
+              <ListBoxWrapper
+                layout={layout}
+                embed={embed}
+                columnIndex={columnIndex}
+                onSelectionConfirm={() => setOpenListboxDropdown(false)}
+                onSelectionCancel={() => setOpenListboxDropdown(false)}
+              >
                 {({ ref }: ListBoxWrapperRenderProps) => (
                   <ClickAwayListener onClickAway={() => setOpenListboxDropdown(false)}>
                     <NebulaListBox ref={ref} />
