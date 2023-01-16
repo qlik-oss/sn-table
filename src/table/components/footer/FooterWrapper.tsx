@@ -8,15 +8,12 @@ export default function FooterWrapper({
   children,
   theme,
   footerContainer,
-  withoutBorders,
   paginationNeeded = true,
 }: FooterWrapperProps) {
   const footerStyle = useMemo(() => getFooterStyle(theme.background), [theme]);
 
   const pagination = paginationNeeded ? (
-    <StyledFooterWrapper footerStyle={footerStyle} withoutBorders={withoutBorders}>
-      {children}
-    </StyledFooterWrapper>
+    <StyledFooterWrapper footerStyle={footerStyle}>{children}</StyledFooterWrapper>
   ) : null;
 
   return footerContainer ? ReactDOM.createPortal(children, footerContainer) : pagination;

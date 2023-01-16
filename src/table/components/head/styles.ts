@@ -6,7 +6,7 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 
-import { COMMON_CELL_STYLING } from '../../constants';
+import { COMMON_CELL_STYLING } from '../../styling-defaults';
 
 // ---------- TableHeadWrapper ----------
 
@@ -32,7 +32,7 @@ export const StyledSortLabel = styled(TableSortLabel, {
     color: 'inherit',
   },
   '&.Mui-active .MuiTableSortLabel-icon': {
-    color: headerStyle.sortLabelColor,
+    color: headerStyle.color,
   },
 }));
 
@@ -72,10 +72,10 @@ export const StyledCellMenu = styled('div', {
   },
   '.MuiListItemText-primary, .MuiSvgIcon-root': {
     fontSize: '16px',
-    color: headerStyle.sortLabelColor,
+    color: headerStyle.color,
   },
   '.head-cell-menu': {
-    color: headerStyle.sortLabelColor,
+    color: headerStyle.color,
   },
 }));
 

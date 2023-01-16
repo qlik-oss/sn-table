@@ -3,7 +3,8 @@ import { stardust } from '@nebula.js/stardust';
 import { resolveToRGBAorRGB, isDarkColor, removeOpacity } from './color-utils';
 import { TableLayout, ExtendedTheme, HeaderStyling, ContentStyling, PaletteColor, BackgroundColors } from '../../types';
 import { GeneratedStyling, CellStyle, FooterStyle } from '../types';
-import { SelectionStates, StylingDefaults, SELECTION_STYLING, PAGINATION_HEIGHT } from '../constants';
+import { SelectionStates, PAGINATION_HEIGHT } from '../constants';
+import { SELECTION_STYLING, COLORING } from '../styling-defaults';
 
 // the order of style
 // default (inl. sprout theme) < Sense theme < styling settings
@@ -28,7 +29,7 @@ export function getColor(defaultColor: string, theme: stardust.Theme, color = {}
  * Gets font color based on background, making sure contrast is good enough
  */
 export const getAutoFontColor = (background: string): string =>
-  isDarkColor(background) ? StylingDefaults.WHITE : StylingDefaults.FONT_COLOR;
+  isDarkColor(background) ? COLORING.WHITE : COLORING.TEXT;
 
 /**
  * get the border color based on the color of the background, returns bright color if background is dark and vice versa
@@ -39,18 +40,18 @@ export const getBorderColors = (isBackgroundDark: boolean, bottomSeparatingBorde
   // TODO: proper borders for dark background
   if (isBackgroundDark) {
     return {
-      borderBottomColor: '#F2F2F2',
-      borderRightColor: '#F2F2F2',
-      borderLeftColor: '#F2F2F2',
-      borderTopColor: '#F2F2F2',
+      borderBottomColor: COLORING.DARK_MODE_BORDER,
+      borderRightColor: COLORING.DARK_MODE_BORDER,
+      borderLeftColor: COLORING.DARK_MODE_BORDER,
+      borderTopColor: COLORING.DARK_MODE_BORDER,
     };
   }
 
   return {
-    borderLeftColor: '#D9D9D9',
-    borderRightColor: '#D9D9D9',
-    borderTopColor: '#808080',
-    borderBottomColor: bottomSeparatingBorder ? '#808080' : '#EBEBEB',
+    borderLeftColor: COLORING.BORDER_MEDIUM,
+    borderRightColor: COLORING.BORDER_MEDIUM,
+    borderTopColor: COLORING.BORDER_HEAVY,
+    borderBottomColor: bottomSeparatingBorder ? COLORING.BORDER_HEAVY : COLORING.BORDER_LIGHT,
   };
 };
 
@@ -84,8 +85,8 @@ export const getBaseStyling = (
   const baseStyle: GeneratedStyling = {
     fontFamily,
     color: isPaletteColorSet(styleObj?.fontColor)
-      ? getColor(StylingDefaults.FONT_COLOR, theme, styleObj?.fontColor)
-      : color,
+      ? getColor(COLORING.TEXT, theme, styleObj?.fontColor)
+      : color || COLORING.TEXT,
     fontSize: (styleObj?.fontSize && `${styleObj.fontSize}px`) || fontSize,
     padding: styleObj && 'padding' in styleObj ? styleObj?.padding : undefined,
     ...getBorderColors(theme.background.isDark, bottomSeparatingBorder),
@@ -114,18 +115,15 @@ export function getHeaderStyle(
   // there is a header background color depending on the header font color
   // - When the table background color from the sense theme has opacity,
   // removing that.
-  const headerBackground = isDarkColor(headerStyle.color)
-    ? StylingDefaults.WHITE
-    : StylingDefaults.HEAD_BACKGROUND_DARK;
-  headerStyle.background = theme.background.isTransparent ? headerBackground : removeOpacity(theme.background.color);
+  const defaultBackground = isDarkColor(headerStyle.color) ? COLORING.WHITE : COLORING.DARK_MODE_BACKGROUND;
+  headerStyle.background = theme.background.isTransparent ? defaultBackground : removeOpacity(theme.background.color);
 
   // When you set the header font color,
   // the sort label color should be same.
   // When there is no header content color setting,
   // the sort label color is depending on the header background color.
-  headerStyle.sortLabelColor =
-    headerStyle.color ??
-    (isDarkColor(headerStyle.background) ? StylingDefaults.SORT_LABEL_LIGHT : StylingDefaults.SORT_LABEL_DARK);
+  headerStyle.color =
+    headerStyle.color ?? (isDarkColor(headerStyle.background) ? COLORING.DARK_MODE_TEXT : COLORING.TEXT);
 
   return headerStyle;
 }
@@ -176,14 +174,14 @@ export function getBodyStyle(
   let background;
   if (isPaletteColorSet(backgroundFromLayout)) {
     // case 1 or 4
-    background = getColor(StylingDefaults.HOVER_BACKGROUND, theme, backgroundFromLayout);
+    background = getColor(COLORING.HOVER, theme, backgroundFromLayout);
   } else if (backgroundFromTheme) {
     // case 1 or 4
     background = backgroundFromTheme;
   } else if (isColorSet) {
     background = ''; // case 3
   } else {
-    background = StylingDefaults.HOVER_BACKGROUND; // case 2
+    background = COLORING.HOVER; // case 2
   }
 
   const color = isColorOrBackgroundSet
@@ -204,22 +202,23 @@ export function getBodyStyle(
   };
 }
 
-export const getFooterStyle = (background: BackgroundColors): FooterStyle =>
-  background.isDark
+export const getFooterStyle = (background: BackgroundColors): FooterStyle => {
+  return background.isDark
     ? {
         background: background.color,
-        borderColor: '#F2F2F2',
-        color: 'rgba(255, 255, 255, 0.9)',
-        iconColor: 'rgba(255, 255, 255, 0.9)',
-        disabledIconColor: 'rgba(255, 255, 255, 0.3)',
+        borderColor: COLORING.DARK_MODE_BORDER,
+        color: COLORING.DARK_MODE_TEXT,
+        disabledColor: COLORING.DARK_MODE_DISABLED,
+        // the icon needs a specific color to override it in dark mode
+        iconColor: COLORING.DARK_MODE_TEXT,
       }
     : {
         background: background.color,
-        borderColor: '#D9D9D9',
-        color: '#404040',
-        iconColor: 'rgba(0, 0, 0, 0.54)',
-        disabledIconColor: 'rgba(0, 0, 0, 0.3)',
+        borderColor: COLORING.BORDER_MEDIUM,
+        color: COLORING.TEXT,
+        disabledColor: COLORING.DISABLED,
       };
+};
 
 /**
  * Gets complete styling for the totals cells. Based on the body style but with the background and borders from header
@@ -291,7 +290,7 @@ export function getSelectionStyle(styling: CellStyle, cellSelectionState: Select
       break;
     case SelectionStates.EXCLUDED:
       selectionStyling = {
-        background: `${StylingDefaults.EXCLUDED_BACKGROUND}, ${styling.background}`,
+        background: `${SELECTION_STYLING.EXCLUDED_BACKGROUND}, ${styling.background}`,
         selectedCellClass: SelectionStates.EXCLUDED,
       };
       break;
