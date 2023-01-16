@@ -3,39 +3,43 @@ import { VariableSizeGrid, VariableSizeList } from 'react-window';
 import { getColumns } from '../../../handle-data';
 import useColumnSize from './hooks/use-column-size';
 import Body from './Body';
-import { DEFAULT_ROW_HEIGHT, PAGINATION_HEIGHT } from './constants';
+import { DEFAULT_ROW_HEIGHT } from './constants';
 import FullSizeContainer from './FullSizeContainer';
 import Header from './Header';
-import { TableContainerProps } from './types';
-import { getHeaderStyle, getBodyCellStyle } from '../../utils/styling-utils';
+import { TableProps, BodyStyle } from './types';
+import { getHeaderStyle, getBodyStyle } from '../../utils/styling-utils';
 import useScrollHandler from './hooks/use-scroll-handler';
 import Totals from './Totals';
 import useTotals from './hooks/use-totals';
 import useOnPropsChange from './hooks/use-on-props-change';
 import useTableCount from './hooks/use-table-count';
+import ScrollableContainer from './ScrollableContainer';
+import StickyContainer from './StickyContainer';
+import { toTableRect, toStickyContainerRect } from './utils/to-rect';
 
-const TableContainer = (props: TableContainerProps) => {
+const Table = (props: TableProps) => {
   const { layout, rect, pageInfo, paginationNeeded, model, theme, constraints, selectionsAPI } = props;
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);
   const totalsRef = useRef<VariableSizeList>(null);
   const bodyRef = useRef<VariableSizeGrid>(null);
   const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
-  const headerStyle = useMemo(() => getHeaderStyle(layout, theme), [layout, theme]);
-  const bodyStyle = useMemo(
-    () => ({
-      ...getBodyCellStyle(layout, theme),
-      backgroundColor: theme.background.color, // Append both background and backgroundColor to avoid conflicting prop error when selecting styling is applied
-      background: theme.background.color,
-    }),
-    [layout, theme]
-  );
   const totals = useTotals(layout);
+  const headerStyle = useMemo(() => getHeaderStyle(layout, theme, !totals.atTop), [layout, theme, totals]);
+  const bodyStyle = useMemo<BodyStyle>(
+    () => ({
+      ...getBodyStyle(layout, theme),
+      background: theme.background.color ?? 'transparent',
+    }),
+    [layout, theme.name()] // eslint-disable-line react-hooks/exhaustive-deps
+  );
   const columns = useMemo(() => getColumns(layout), [layout]);
-  const { width } = useColumnSize(rect, columns, headerStyle, bodyStyle);
-  const { rowCount } = useTableCount(layout, pageInfo, rect, width);
+  const tableRect = toTableRect(rect, paginationNeeded);
+  const { width } = useColumnSize(tableRect, columns, headerStyle, bodyStyle);
+  const { rowCount } = useTableCount(layout, pageInfo, tableRect, width);
   const containerWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
   const [containerHeight, setContainerHeight] = useState(rowCount * DEFAULT_ROW_HEIGHT + totals.shrinkBodyHeightBy);
+  const stickyContainerRect = toStickyContainerRect(tableRect, rowCount, totals.shrinkBodyHeightBy);
   const scrollHandler = useScrollHandler(
     headerRef,
     totalsRef,
@@ -61,9 +65,8 @@ const TableContainer = (props: TableContainerProps) => {
     <Totals
       theme={theme}
       layout={layout}
-      rect={rect}
+      rect={stickyContainerRect}
       pageInfo={pageInfo}
-      paginationNeeded={paginationNeeded}
       columns={columns}
       columnWidth={width}
       forwardRef={totalsRef}
@@ -72,48 +75,46 @@ const TableContainer = (props: TableContainerProps) => {
   );
 
   return (
-    <div
-      data-testid="table-container"
+    <ScrollableContainer
       ref={ref}
-      style={{
-        overflow: constraints.active ? 'hidden' : 'auto',
-        width: rect.width,
-        height: rect.height - (paginationNeeded ? PAGINATION_HEIGHT : 0),
-      }}
+      constraints={constraints}
+      width={tableRect.width}
+      height={tableRect.height}
       onScroll={scrollHandler}
     >
       <FullSizeContainer width={containerWidth} height={containerHeight}>
-        <Header
-          headerStyle={headerStyle}
-          layout={layout}
-          rect={rect}
-          pageInfo={pageInfo}
-          columns={columns}
-          columnWidth={width}
-          forwardRef={headerRef}
-        />
-        {totals.atTop ? TotalsComponent : null}
-        <Body
-          bodyStyle={bodyStyle}
-          model={model}
-          layout={layout}
-          rect={rect}
-          pageInfo={pageInfo}
-          paginationNeeded={paginationNeeded}
-          columns={columns}
-          columnWidth={width}
-          forwardRef={bodyRef}
-          innerForwardRef={innerForwardRef}
-          selectionsAPI={selectionsAPI}
-          totals={totals}
-        />
-        {totals.atBottom ? TotalsComponent : null}
+        <StickyContainer rect={stickyContainerRect}>
+          <Header
+            headerStyle={headerStyle}
+            layout={layout}
+            rect={stickyContainerRect}
+            pageInfo={pageInfo}
+            columns={columns}
+            columnWidth={width}
+            forwardRef={headerRef}
+          />
+          {totals.atTop ? TotalsComponent : null}
+          <Body
+            bodyStyle={bodyStyle}
+            model={model}
+            layout={layout}
+            rect={stickyContainerRect}
+            pageInfo={pageInfo}
+            columns={columns}
+            columnWidth={width}
+            forwardRef={bodyRef}
+            innerForwardRef={innerForwardRef}
+            selectionsAPI={selectionsAPI}
+            totals={totals}
+          />
+          {totals.atBottom ? TotalsComponent : null}
+        </StickyContainer>
       </FullSizeContainer>
-    </div>
+    </ScrollableContainer>
   );
 };
 
 // Export non memoized version for testing purpose
-export { TableContainer };
+export { Table as TestableTable };
 
-export default memo(TableContainer);
+export default memo(Table);

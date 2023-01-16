@@ -1,16 +1,14 @@
 import { Cell } from '../../../../types';
 import { SelectionStates } from '../../../constants';
 import { TableContext, useContextSelector } from '../../../context';
-import { CellStyle } from '../../../types';
 import { getSelectionMouseHandlers } from '../../../utils/handle-click';
 import { getCellSelectionState } from '../../../utils/selections-utils';
-import { getSelectionStyle } from '../../../utils/styling-utils';
 
 const NOOP_ANNOUNCE = () => {};
 
 const onMouseDown = (e: React.MouseEvent<HTMLTableCellElement>) => e.preventDefault();
 
-export default function useSelector(datum: Cell | string, cellStyle: CellStyle) {
+export default function useSelector(datum: Cell | string) {
   const hasData = typeof datum === 'object';
 
   const cellSelectionState = useContextSelector(TableContext, (value) =>
@@ -28,15 +26,13 @@ export default function useSelector(datum: Cell | string, cellStyle: CellStyle) 
       true
     );
 
-    const selectionStyling = getSelectionStyle(cellStyle, cellSelectionState);
-
     return {
       handleMouseDown,
       handleMouseOver,
       handleMouseUp,
-      selectionStyling,
+      cellSelectionState,
     };
   }
 
-  return {};
+  return { cellSelectionState };
 }

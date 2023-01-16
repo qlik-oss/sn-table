@@ -2,6 +2,8 @@ version: 2
 
 defaults: &defaults
   working_directory: ~/table
+  docker:
+    - image: circleci/node:16.12.0
   # Available images https://hub.docker.com/r/circleci/node/tags/
 
 aliases:
@@ -16,20 +18,21 @@ aliases:
     paths:
       - ~/.cache/yarn
     key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-  - &filter_master
-    branches:
-      only: master
-  - &attach
-    at: ~/project
 
 jobs:
   install:
     <<: *defaults
-    docker:
-      - image: circleci/node:16.12.0
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
+      - run:
+          name: Setup github packages access
+          command: |
+            set -eo pipefail
+            # Amend auth token for access to private github packages, to access sprout
+            echo "@qlik-trial:registry=https://npm.pkg.github.com/
+            //npm.pkg.github.com/:_authToken=$GITHUB_TOKEN
+            //npm.pkg.github.com/:always-auth=true" >> ~/.npmrc
       - run:
           name: Install dependencies
           command: yarn install --frozen-lockfile
@@ -45,6 +48,22 @@ jobs:
 
   build:
     <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/table
+      - run:
+          name: Build
+          command: yarn run build
+      - persist_to_workspace:
+          root: ~/table
+          paths:
+            - dist
+            - package.json
+            - core
+            - src/locale/all.json
+
+  integration-tests:
+    <<: *defaults
     docker:
       - image: circleci/node:16.12.0-browsers
       - image: mcr.microsoft.com/playwright:focal
@@ -52,32 +71,24 @@ jobs:
       - attach_workspace:
           at: ~/table
       - run:
-          name: Build
-          command: yarn run build
+          name: Install playwright
+          command: npx playwright install
       - run:
-          name: Lint
-          command: yarn run lint
-      - run:
-          name: Check types
-          command: yarn run types:check
-      - run:
-          name: Verify locale
-          command: yarn run locale:verify
-      - run:
-          name: Update spec
-          command: yarn run spec
-      - run:
-          name: Run unit tests and publish to codeclimate
-          command: |
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-            chmod +x ./cc-test-reporter
-            ./cc-test-reporter before-build
-            yarn test:unit --runInBand --coverage --reporters=default --reporters=jest-junit
-            ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
-          environment:
-            JEST_JUNIT_OUTPUT_DIR: ./coverage/junit/
+          name: Run integration tests
+          command: yarn test:integration
       - store_artifacts:
-          path: coverage
+          path: test/integration/artifacts
+      - store_artifacts:
+          path: test/integration/test-report
+
+  rendering-tests:
+    <<: *defaults
+    docker:
+      - image: circleci/node:16.12.0-browsers
+      - image: mcr.microsoft.com/playwright:focal
+    steps:
+      - attach_workspace:
+          at: ~/table
       - run:
           name: Install playwright
           command: npx playwright install
@@ -90,24 +101,63 @@ jobs:
           path: test/rendering/artifacts
       - store_artifacts:
           path: test/rendering/test-report
+
+  api-spec:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/table
       - run:
-          name: Run integration tests
-          command: yarn test:integration
+          name: Update spec
+          command: yarn run spec
+
+  locale:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/table
+      - run:
+          name: Verify locale
+          command: yarn run locale:verify
+
+  types:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/table
+      - run:
+            name: Check types
+            command: yarn run types:check
+
+  lint:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/table
+      - run:
+          name: Lint
+          command: yarn run lint
+
+  unit-tests:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/table
+      - run:
+          name: Run unit tests and publish to codeclimate
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+            ./cc-test-reporter before-build
+            yarn test:unit --runInBand --coverage --reporters=default --reporters=jest-junit
+            ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
+          environment:
+            JEST_JUNIT_OUTPUT_DIR: ./coverage/junit/
       - store_artifacts:
-          path: test/integration/artifacts
-      - store_artifacts:
-          path: test/integration/test-report
-      - persist_to_workspace:
-          root: ~/table
-          paths:
-            - dist
-            - package.json
-            - core
+          path: coverage
 
   publish-dev:
     <<: *defaults
-    docker:
-      - image: circleci/node:16.12.0
     steps:
       - attach_workspace:
           at: ~/table
@@ -117,8 +167,6 @@ jobs:
 
   publish:
     <<: *defaults
-    docker:
-      - image: circleci/node:16.12.0
     steps:
       - attach_workspace:
           at: ~/table
@@ -189,6 +237,27 @@ workflows:
       - build:
           requires:
             - install
+      - unit-tests:
+          requires:
+            - build
+      - lint:
+          requires:
+            - build
+      - types:
+          requires:
+            - build
+      - locale:
+          requires:
+            - build
+      - api-spec:
+          requires:
+            - build
+      - rendering-tests:
+          requires:
+            - build
+      - integration-tests:
+          requires:
+            - build
       - api-governance:
           context: api-compliance
           filters:
@@ -204,6 +273,13 @@ workflows:
       - publish:
           requires:
             - build
+            - unit-tests
+            - rendering-tests
+            - integration-tests
+            - lint
+            - types
+            - api-spec
+            - locale
           filters:
             branches:
               only:

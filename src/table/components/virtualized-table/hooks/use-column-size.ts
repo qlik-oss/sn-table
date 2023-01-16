@@ -1,15 +1,10 @@
-import { stardust } from '@nebula.js/stardust';
 import { useMemo } from 'react';
 import { Column } from '../../../../types';
 import { GeneratedStyling } from '../../../types';
+import { Rect } from '../types';
 import useMeasureText from './use-measure-text';
 
-const useColumnSize = (
-  rect: stardust.Rect,
-  columns: Column[],
-  headerStyle: GeneratedStyling,
-  bodyStyle: GeneratedStyling
-) => {
+const useColumnSize = (rect: Rect, columns: Column[], headerStyle: GeneratedStyling, bodyStyle: GeneratedStyling) => {
   const { measureText } = useMeasureText(headerStyle.fontSize, headerStyle.fontFamily);
   const { estimateWidth } = useMeasureText(bodyStyle.fontSize, bodyStyle.fontFamily);
 

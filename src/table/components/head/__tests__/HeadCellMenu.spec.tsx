@@ -19,7 +19,7 @@ describe('<HeadCellMenu />', () => {
   let isCurrentColumnActive: boolean = false;
   let embed: stardust.Embed;
   let layout: TableLayout;
-  let columnIndex: number;
+  const columnIndex = 0;
   const direction: 'ltr' | 'rtl' = 'ltr';
 
   const renderTableHeadCellMenu = (cellCoordMock?: [number, number]) =>
@@ -48,8 +48,10 @@ describe('<HeadCellMenu />', () => {
     } as ExtendedSelectionAPI;
     translator = { get: (s) => s } as ExtendedTranslator;
     headerStyle = {
-      sortLabelColor: '#4287f5',
-      borderColor: '#4287f5',
+      borderBottomColor: '#4287f5',
+      borderRightColor: '#4287f5',
+      borderLeftColor: '#4287f5',
+      borderTopColor: '#4287f5',
     };
     sortFromMenu = jest.fn();
     embed = {
@@ -138,11 +140,39 @@ describe('<HeadCellMenu />', () => {
     expect(sortFromMenu).toHaveBeenCalled();
   });
 
-  it('should call `embed.field` once while trying to open listbox filter', () => {
+  it('should call `embed.field` once while trying to open listbox filter for a library dimension', () => {
+    layout = {
+      qHyperCube: {
+        qDimensionInfo: [{ qLibraryId: 'id' }],
+      },
+    } as TableLayout;
     renderTableHeadCellMenu();
     fireEvent.click(screen.getByRole('button'));
     fireEvent.click(screen.getByText('SNTable.MenuItem.Search'));
     expect(screen.getByRole('menu')).not.toBeVisible();
     expect(embed?.field).toHaveBeenCalledTimes(1);
+    expect(embed?.field).toHaveBeenCalledWith({ qLibraryId: 'id', type: 'dimension' });
+  });
+
+  it('should call `embed.field` once while trying to open listbox filter for a dimension', () => {
+    renderTableHeadCellMenu();
+    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByText('SNTable.MenuItem.Search'));
+    expect(screen.getByRole('menu')).not.toBeVisible();
+    expect(embed?.field).toHaveBeenCalledTimes(1);
+    expect(embed?.field).toHaveBeenCalledWith('someTitle');
+  });
+
+  it('should not call `embed.field` if field ID is not found', () => {
+    layout = {
+      qHyperCube: {
+        qDimensionInfo: [],
+      },
+    } as unknown as TableLayout;
+    renderTableHeadCellMenu();
+    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByText('SNTable.MenuItem.Search'));
+    expect(screen.getByRole('menu')).not.toBeVisible();
+    expect(embed?.field).toHaveBeenCalledTimes(0);
   });
 });

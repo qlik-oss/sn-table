@@ -42,7 +42,8 @@ const useData = (
               matrixRowIdx,
               dataPage.qArea,
               pageRowStartIdx,
-              columns
+              columns,
+              layout.qHyperCube.qSize
             );
 
             nextRows[pageRowIdx] = row;
@@ -51,7 +52,7 @@ const useData = (
 
         return nextRows;
       }),
-    [pageInfo, columns]
+    [pageInfo, columns, layout]
   );
 
   // The queue takes a EngineAPI.INxPage object as items and adds them to a queue and

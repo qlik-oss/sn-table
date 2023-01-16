@@ -1,4 +1,4 @@
-import { TableCellProps } from '@mui/material';
+import { Direction, TableCellProps } from '@mui/material';
 import { stardust } from '@nebula.js/stardust';
 import {
   Announce,
@@ -76,34 +76,38 @@ export interface ContextValue {
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   selectionState: SelectionState;
   selectionDispatch: SelectionDispatch;
+  hoverIndex: number;
+  setHoverIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export interface GeneratedStyling {
-  borderColor: string;
+  borderBottomColor: string;
+  borderTopColor: string;
+  borderLeftColor: string;
+  borderRightColor: string;
+  lastRowBottomBorder?: string;
   padding?: string;
   fontFamily?: string;
   color?: string;
   fontSize?: string; // following the theme format so this should always be a string
-  cursor?: string;
-  borderWidth?: string;
-  backgroundColor?: string;
-  sortLabelColor?: string;
-  hoverBackgroundColor?: string;
-  hoverFontColor?: string;
+  background?: string;
+  hoverColors?: {
+    background: string;
+    color: string;
+  };
 }
 
 export interface FooterStyle {
   borderColor: string;
   color: string;
-  iconColor: string;
-  disabledIconColor: string;
-  backgroundColor?: string;
+  disabledColor: string;
+  iconColor?: string;
+  background?: string;
 }
 
 export interface CellStyle {
-  backgroundColor: string | undefined; // This is always set but could be undefined in the theme
+  background: string | undefined; // This is always set but could be undefined in the theme
   color: string;
-  background?: string;
   selectedCellClass?: string;
 }
 
@@ -157,7 +161,7 @@ export interface HandleResetFocusProps {
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   keyboard: stardust.Keyboard;
   announce: Announce;
-  totalsPosition: string;
+  totalsPosition: TotalsPosition;
 }
 
 export interface ContextProviderProps {
@@ -169,7 +173,7 @@ export interface ContextProviderProps {
 }
 
 export interface RenderProps {
-  direction?: 'ltr' | 'rtl';
+  direction?: Direction;
   selectionsAPI: ExtendedSelectionAPI;
   rootElement?: HTMLElement;
   layout: TableLayout;
@@ -203,7 +207,7 @@ export interface CommonTableProps {
 }
 
 export interface TableWrapperProps extends CommonTableProps {
-  direction?: 'ltr' | 'rtl';
+  direction?: Direction;
   selectionsAPI: ExtendedSelectionAPI;
   rootElement: HTMLElement;
   layout: TableLayout;
@@ -267,7 +271,7 @@ export interface TableBodyWrapperProps extends CommonTableProps {
   constraints: stardust.Constraints;
   announce: Announce;
   setShouldRefocus(): void;
-  tableWrapperRef: React.MutableRefObject<HTMLDivElement | undefined>;
+  tableWrapperRef: React.MutableRefObject<HTMLDivElement | null>;
   areBasicFeaturesEnabled: boolean;
 }
 
@@ -295,6 +299,8 @@ export interface FooterWrapperProps {
   children: JSX.Element;
   theme: ExtendedTheme;
   footerContainer?: HTMLElement;
+  withoutBorders?: boolean;
+  paginationNeeded?: boolean;
 }
 export interface CellHOCProps extends TableCellProps {
   styling: CellStyle;

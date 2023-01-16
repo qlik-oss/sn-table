@@ -3,4 +3,5 @@ module.exports = {
   testRegex: 'src/.+\\.(test|spec)\\.[jt]sx?$',
   setupFilesAfterEnv: ['./jest.setup.js'],
   modulePathIgnorePatterns: ['<rootDir>/mashup-example'],
+  transformIgnorePatterns: ['<rootDir>/node_modules/(?!(@qlik-trial)/)'],
 };

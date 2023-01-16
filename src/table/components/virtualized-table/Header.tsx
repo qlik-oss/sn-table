@@ -17,14 +17,9 @@ const Header = (props: HeaderProps) => {
       ref={forwardRef}
       layout="horizontal"
       style={{
-        position: 'sticky',
-        top: 0,
-        left: 0,
         overflow: 'hidden',
-        backgroundColor: headerStyle.backgroundColor,
-        borderColor: headerStyle.borderColor,
-        borderStyle: 'solid',
-        borderWidth: '1px 0px',
+        borderBottom: `1px solid ${headerStyle.borderBottomColor}`,
+        background: headerStyle.background,
         boxSizing: 'border-box',
       }}
       itemCount={layout.qHyperCube.qSize.qcx}

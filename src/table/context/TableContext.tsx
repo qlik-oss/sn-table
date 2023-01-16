@@ -22,6 +22,7 @@ export const TableContextProvider = ({
   const [headRowHeight, setHeadRowHeight] = useState(0);
   const [focusedCellCoord, setFocusedCellCoord] = useState((cellCoordMock || [0, 0]) as [number, number]);
   const [selectionState, selectionDispatch] = useSelectionReducer(pageRows, selectionsAPI);
+  const [hoverIndex, setHoverIndex] = useState(-1);
 
   return (
     <ProviderWithSelector
@@ -32,6 +33,8 @@ export const TableContextProvider = ({
         setFocusedCellCoord,
         selectionState,
         selectionDispatch: selectionDispatchMock || selectionDispatch,
+        hoverIndex,
+        setHoverIndex,
       }}
     >
       {children}

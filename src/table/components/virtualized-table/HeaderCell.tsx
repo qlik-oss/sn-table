@@ -1,6 +1,7 @@
 import React from 'react';
 import { Column } from '../../../types';
 import { GeneratedStyling } from '../../types';
+import CellText from '../CellText';
 
 interface HeaderCellProps {
   index: number;
@@ -12,39 +13,31 @@ interface HeaderCellProps {
 }
 
 const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
-  const { columns, headerStyle } = data;
+  const {
+    columns,
+    headerStyle: { ...applicableStyle },
+  } = data;
   const datum = columns[index];
+  const isLastColumn = columns.length - 1 === index;
 
   return (
     <div
       className="sn-table-cell"
       style={{
         ...style,
+        ...applicableStyle,
         display: 'flex',
         alignItems: 'center',
-        borderColor: headerStyle.borderColor,
         borderStyle: 'solid',
-        borderWidth: '0px 1px 0px 0px',
-        padding: '0px 14px',
+        borderWidth: isLastColumn ? '0px' : '0px 1px 0px 0px',
+        padding: '4px 12px',
         justifyContent: datum.align,
         boxSizing: 'border-box',
         cursor: 'default',
+        fontWeight: 'bold',
       }}
     >
-      <span
-        className="sn-table-cell-text"
-        style={{
-          fontSize: headerStyle.fontSize,
-          fontFamily: headerStyle.fontFamily,
-          fontWeight: 'bold',
-          color: headerStyle.color,
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis',
-        }}
-      >
-        {datum.label}
-      </span>
+      <CellText singleLine>{datum.label}</CellText>
     </div>
   );
 };

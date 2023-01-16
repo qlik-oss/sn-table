@@ -29,38 +29,4 @@ export enum KeyCodes {
   C = 'c',
 }
 
-export enum StylingDefaults {
-  HEAD_BACKGROUND_LIGHT = '#FAFAFA',
-  HEAD_BACKGROUND_DARK = '#323232',
-  SORT_LABEL_LIGHT = 'rgba(255,255,255,0.9)',
-  SORT_LABEL_DARK = 'rgba(0, 0, 0, 0.54)',
-  FONT_COLOR = '#404040',
-  WHITE = '#fff',
-  HOVER_BACKGROUND = '#f4f4f4',
-  SELECTED_BACKGROUND = '#009845',
-  EXCLUDED_BACKGROUND = 'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px)',
-}
-
-export const COMMON_CELL_STYLING = {
-  padding: '7px 14px',
-  height: 'auto',
-  lineHeight: '130%',
-  borderStyle: 'solid',
-  '&:focus': {
-    boxShadow: '0 0 0 2px #3f8ab3 inset',
-    outline: 'none',
-  },
-};
-
-export const SELECTION_STYLING = {
-  SELECTED: {
-    color: StylingDefaults.WHITE,
-    background: StylingDefaults.SELECTED_BACKGROUND,
-    // Setting a specific class for selected cells styling to override hover effect
-    selectedCellClass: SelectionStates.SELECTED,
-  },
-  POSSIBLE: {
-    color: StylingDefaults.FONT_COLOR,
-    background: StylingDefaults.WHITE,
-  },
-};
+export const PAGINATION_HEIGHT = 40;

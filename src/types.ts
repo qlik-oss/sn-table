@@ -1,3 +1,4 @@
+import { Direction } from '@mui/material';
 import { stardust } from '@nebula.js/stardust';
 
 interface TextAlign {
@@ -38,6 +39,7 @@ export interface ExtendedNxAttrExprInfo extends EngineAPI.INxAttrExprInfo {
 export interface ExtendedNxDimensionInfo extends Omit<EngineAPI.INxDimensionInfo, 'qAttrExprInfo'> {
   textAlign: TextAlign;
   qAttrExprInfo: ExtendedNxAttrExprInfo[];
+  qLibraryId: string;
 }
 
 export interface ExtendedNxMeasureInfo extends EngineAPI.INxMeasureInfo {
@@ -72,6 +74,7 @@ export interface Component {
   content?: ContentStyling;
   header?: HeaderStyling;
 }
+
 export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, 'qHyperCube'> {
   qHyperCube: HyperCube;
   totals: {
@@ -93,6 +96,7 @@ export interface Cell {
   pageColIdx: number;
   isSelectable: boolean;
   isLastRow: boolean;
+  isLastColumn?: boolean;
 }
 
 export interface Row {
@@ -117,7 +121,7 @@ export interface Column {
   qApprMaxGlyphCount: number;
 }
 
-export type TotalsPosition = 'top' | 'bottom' | 'noTotals';
+export type TotalsPosition = { atTop: boolean; atBottom: boolean };
 
 export type TableData = {
   totalColumnCount: number;
@@ -139,13 +143,6 @@ export type SetPageInfo = stardust.SetStateFn<PageInfo>;
 
 export interface BodyColors {
   borderColor: string;
-}
-
-export interface PaginationColors {
-  borderColor: string;
-  color: string;
-  iconColor: string;
-  disabledIconColor: string;
 }
 
 export interface BackgroundColors {
@@ -170,7 +167,7 @@ export interface ExtendedTheme extends stardust.Theme {
 }
 
 export interface UseOptions {
-  direction?: 'ltr' | 'rtl';
+  direction?: Direction;
   footerContainer?: HTMLElement;
 }
 

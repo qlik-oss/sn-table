@@ -1,7 +1,7 @@
 import styled from '@mui/system/styled';
-import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import TableContainer from '@mui/material/TableContainer';
+import { PAGINATION_HEIGHT } from '../constants';
 
 // ---------- AnnounceWrapper ----------
 
@@ -17,29 +17,33 @@ export const TableAnnouncer = styled('div')({
 
 // ---------- TableWrapper ----------
 
-export const StyledTableWrapper = styled(Paper, {
-  shouldForwardProp: (prop: string) => prop !== 'background' && prop !== 'paginationNeeded',
-})(({ background, paginationNeeded }) => ({
-  borderWidth: paginationNeeded ? '0px 1px 0px' : '0px',
-  borderStyle: 'solid',
-  borderColor: background.isDark ? '#F2F2F2' : '#D9D9D9',
+export const StyledTableWrapper = styled(Box, {
+  shouldForwardProp: (prop: string) => prop !== 'background',
+})(({ background }) => ({
   height: '100%',
   // TODO: see if we really need this or if we can use background.color
-  backgroundColor: background.tableColorFromTheme,
-  boxShadow: 'none',
-  borderRadius: 'unset',
+  background: background.tableColorFromTheme,
 }));
 
 export const StyledTableContainer = styled(TableContainer, {
   shouldForwardProp: (prop: string) => prop !== 'fullHeight' && prop !== 'constraints',
 })(({ fullHeight, constraints }) => ({
-  height: fullHeight ? '100%' : 'calc(100% - 49px)',
+  height: fullHeight ? '100%' : `calc(100% - ${PAGINATION_HEIGHT + 1}px)`, // + 1 for top border
   overflow: constraints.active ? 'hidden' : 'auto',
   border: 'none',
 }));
 
 // ---------- CellText ----------
 
-export const StyledCellText = styled(Box)({
-  borderLeft: '0 !important',
-});
+export const StyledCellText = styled(Box, {
+  shouldForwardProp: (prop: string) => prop !== 'singleLine' && prop !== 'singleLine',
+})(({ style, singleLine }) => ({
+  ...style,
+  lineHeight: 'calc(4/3)',
+  fontSize: 'inherit',
+  ...(singleLine && {
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+  }),
+}));

@@ -15,6 +15,14 @@ interface ListBoxWrapperProps {
   onSelectionCancel: () => void;
 }
 
+const getFieldId = (layout: TableLayout, columnIndex: number): string | stardust.LibraryField | undefined =>
+  layout.qHyperCube.qDimensionInfo[columnIndex]?.qLibraryId
+    ? {
+        type: 'dimension',
+        qLibraryId: layout.qHyperCube.qDimensionInfo[columnIndex]?.qLibraryId,
+      }
+    : layout.qHyperCube.qDimensionInfo[columnIndex]?.qFallbackTitle;
+
 export const ListBoxWrapper = ({
   children,
   embed,
@@ -30,7 +38,13 @@ export const ListBoxWrapper = ({
   useEffect(() => {
     if (!layout || !embed) return;
 
-    embed.field(layout.qHyperCube.qDimensionInfo[columnIndex]?.qFallbackTitle).then((instance) => {
+    const fieldId = getFieldId(layout, columnIndex);
+
+    if (fieldId === undefined) {
+      return;
+    }
+
+    embed.field(fieldId).then((instance) => {
       setListboxInstance(instance);
     });
   }, []);
