@@ -5,10 +5,10 @@ import Search from '@qlik-trial/sprout/icons/Search';
 import Descending from '@qlik-trial/sprout/icons/Descending';
 import Ascending from '@qlik-trial/sprout/icons/Ascending';
 
-import { HeadCellMenuProps, HeadCellMenuGroup } from '../../types';
-import MenuGroup from './MenuGroup';
+import { HeadCellMenuProps, MenuItemGroup } from '../../types';
 import { StyledMenuIconButton, NebulaListBox } from './styles';
 import { ListBoxWrapper, ListBoxWrapperRenderProps } from './ListBoxWrapper';
+import MenuItems from './MenuItems';
 
 export default function HeadCellMenu({
   translator,
@@ -25,51 +25,45 @@ export default function HeadCellMenu({
   const [openListboxDropdown, setOpenListboxDropdown] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
 
-  const menuItems = useMemo<HeadCellMenuGroup[]>(
+  const menuItemGroups = useMemo<MenuItemGroup[]>(
     () => [
-      {
-        id: 'group-0',
-        options: [
-          {
-            id: 1,
-            itemTitle: translator.get('SNTable.MenuItem.SortAscending'),
-            onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
-              sortFromMenu(evt, 'A');
-              setOpenMenuDropdown(false);
-            },
-            icon: <Ascending />,
-            isDisabled: !isInteractionEnabled || (isCurrentColumnActive && sortDirection === 'A'),
+      [
+        {
+          id: 1,
+          itemTitle: translator.get('SNTable.MenuItem.SortAscending'),
+          onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
+            sortFromMenu(evt, 'A');
+            setOpenMenuDropdown(false);
           },
-          {
-            id: 2,
-            itemTitle: translator.get('SNTable.MenuItem.SortDescending'),
-            onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
-              sortFromMenu(evt, 'D');
-              setOpenMenuDropdown(false);
-            },
-            icon: <Descending />,
-            isDisabled: !isInteractionEnabled || (isCurrentColumnActive && sortDirection === 'D'),
+          icon: <Ascending />,
+          isDisabled: !isInteractionEnabled || (isCurrentColumnActive && sortDirection === 'A'),
+        },
+        {
+          id: 2,
+          itemTitle: translator.get('SNTable.MenuItem.SortDescending'),
+          onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
+            sortFromMenu(evt, 'D');
+            setOpenMenuDropdown(false);
           },
-        ],
-      },
+          icon: <Descending />,
+          isDisabled: !isInteractionEnabled || (isCurrentColumnActive && sortDirection === 'D'),
+        },
+      ],
       ...(isDimension
         ? [
-            {
-              id: 'group-1',
-              options: [
-                {
-                  id: 3,
-                  itemTitle: translator.get('SNTable.MenuItem.Search'),
-                  onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
-                    evt.stopPropagation();
-                    setOpenMenuDropdown(false);
-                    setOpenListboxDropdown(true);
-                  },
-                  icon: <Search />,
-                  isDisabled: false,
+            [
+              {
+                id: 3,
+                itemTitle: translator.get('SNTable.MenuItem.Search'),
+                onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
+                  evt.stopPropagation();
+                  setOpenMenuDropdown(false);
+                  setOpenListboxDropdown(true);
                 },
-              ],
-            },
+                icon: <Search />,
+                isDisabled: false,
+              },
+            ],
           ]
         : []),
     ],
@@ -93,20 +87,19 @@ export default function HeadCellMenu({
       </StyledMenuIconButton>
 
       <Menu
+        key="menu"
         className="sn-table-head-menu"
         aria-labelledby="sn-table-head-menu-button"
         open={openMenuDropdown}
         anchorEl={anchorRef.current}
         onClose={() => setOpenMenuDropdown(false)}
+        autoFocus={false}
       >
-        {menuItems.map((menuGroup) => (
-          <MenuGroup key={menuGroup.id} {...menuGroup} />
-        ))}
+        {MenuItems({ itemGroups: menuItemGroups })}
       </Menu>
 
       <Menu
-        className="sn-table-head-menu"
-        aria-labelledby="sn-table-head-menu-button"
+        key="listbox"
         open={openListboxDropdown}
         anchorEl={anchorRef.current}
         onClose={() => setOpenListboxDropdown(false)}

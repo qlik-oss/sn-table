@@ -2,7 +2,7 @@ import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import { ThemeProvider } from '@mui/material/styles';
 import { TableContextProvider } from '../../../context';
-import MenuGroup from '../MenuGroup';
+import MenuGroup from '../MenuItems';
 import muiSetup from '../../../mui-setup';
 import { MenuGroupProps } from '../../../types';
 import { ExtendedSelectionAPI } from '../../../../types';

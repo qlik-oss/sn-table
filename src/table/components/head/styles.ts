@@ -2,7 +2,6 @@ import styled from '@mui/system/styled';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import TableCell from '@mui/material/TableCell';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';

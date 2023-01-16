@@ -248,10 +248,7 @@ export interface HeadCellMenuProps {
   isDimension: boolean;
 }
 
-export interface HeadCellMenuGroup {
-  id: string;
-  options: HeadCellMenuItem[];
-}
+export type MenuItemGroup = HeadCellMenuItem[];
 
 export interface HeadCellMenuItem {
   id: number;
