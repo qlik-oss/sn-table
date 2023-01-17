@@ -40,7 +40,7 @@ const TestWithProviders = ({
   } as unknown as ExtendedTheme,
   pageRows = undefined,
   cellCoordMock = undefined,
-  selectionDispatchMock = undefined, // Need to mock selectionDispatch since UPDATE_PAGE_ROWS action can create infinite loop
+  selectionDispatchMock = undefined, // Can be used to avoid selectionDispatch infinite loop
   direction = 'ltr',
 }: ProviderProps) => {
   return (

@@ -15,12 +15,11 @@ describe('withSelections', () => {
   let styling: CellStyle;
   let announce: Announce;
   let column: Column;
-  let selectionDispatchMock: jest.Mock<any, any>;
   let areBasicFeaturesEnabled: boolean;
 
   const renderWithSelections = () =>
     render(
-      <TestWithProviders selectionsAPI={selectionsAPI} selectionDispatchMock={selectionDispatchMock}>
+      <TestWithProviders selectionsAPI={selectionsAPI}>
         <HOC
           cell={cell}
           styling={styling}
@@ -40,7 +39,6 @@ describe('withSelections', () => {
     } as unknown as Cell;
     styling = {} as unknown as CellStyle;
     announce = () => undefined as unknown as Announce;
-    selectionDispatchMock = jest.fn();
     areBasicFeaturesEnabled = true;
   });
 
