@@ -43,7 +43,6 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
       <ThemeProvider theme={muiTheme}>
         <TableContextProvider
           selectionsAPI={selectionsAPI}
-          pageRows={[]}
           layout={layout}
           model={model}
           translator={translator}

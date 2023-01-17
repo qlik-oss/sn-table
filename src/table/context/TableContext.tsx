@@ -3,6 +3,7 @@ import React, { useState, createContext, useMemo } from 'react';
 import { createSelectorProvider } from './createSelectorProvider';
 import { ContextValue, ContextProviderProps } from '../types';
 import useSelectionReducer from '../hooks/use-selection-reducer';
+import { Row } from '../../types';
 
 // In order to not have typing issues when using properties on the context,
 // the initial value for the context is casted to ContextValue.
@@ -12,10 +13,12 @@ export const TableContext = createContext<ContextValue>({} as ContextValue);
 
 const ProviderWithSelector = createSelectorProvider(TableContext);
 
+const EMPTY_PAGE_ROWS: Row[] = [];
+
 export const TableContextProvider = ({
   children,
   selectionsAPI,
-  pageRows = [],
+  pageRows = EMPTY_PAGE_ROWS, // Always use the same array to avoid triggers infinite loop in use-selection-reducer.ts
   cellCoordMock,
   selectionDispatchMock,
   layout,
