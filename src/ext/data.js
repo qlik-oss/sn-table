@@ -64,9 +64,11 @@ export default function getData(env) {
         return dimension;
       },
       remove(dimension, data, hcHandler, idx) {
-        const { qColumnOrder, columnWidths } = hcHandler.hcProperties;
-        indexRemoved(qColumnOrder, idx);
-        columnWidths.splice(qColumnOrder[idx], 1);
+        if (!dimension.isAlternative) {
+          const { qColumnOrder, columnWidths } = hcHandler.hcProperties;
+          indexRemoved(qColumnOrder, idx);
+          columnWidths.splice(qColumnOrder[idx], 1);
+        }
       },
     },
   };
