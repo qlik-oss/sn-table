@@ -60,6 +60,7 @@ export const ListBoxWrapper = ({
       // @ts-ignore: should fix in nebula before merging this
       onSelectionConfirm,
       onSelectionCancel,
+      shouldShowToolbar: true,
     });
 
     return () => {
