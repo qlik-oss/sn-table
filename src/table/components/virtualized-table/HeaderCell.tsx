@@ -15,7 +15,7 @@ interface HeaderCellProps {
 const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
   const {
     columns,
-    headerStyle: { sortLabelColor, ...applicableStyle },
+    headerStyle: { ...applicableStyle },
   } = data;
   const datum = columns[index];
   const isLastColumn = columns.length - 1 === index;

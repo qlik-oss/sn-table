@@ -91,7 +91,6 @@ export interface GeneratedStyling {
   color?: string;
   fontSize?: string; // following the theme format so this should always be a string
   background?: string;
-  sortLabelColor?: string;
   hoverColors?: {
     background: string;
     color: string;
@@ -101,8 +100,8 @@ export interface GeneratedStyling {
 export interface FooterStyle {
   borderColor: string;
   color: string;
-  iconColor: string;
-  disabledIconColor: string;
+  disabledColor: string;
+  iconColor?: string;
   background?: string;
 }
 

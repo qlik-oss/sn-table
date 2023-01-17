@@ -1,4 +1,5 @@
-import { SelectionStates, SELECTION_STYLING, StylingDefaults } from '../../../constants';
+import { SelectionStates } from '../../../constants';
+import { SELECTION_STYLING } from '../../../styling-defaults';
 import { BodyStyle } from '../types';
 
 const getCellStyle = (
@@ -20,7 +21,7 @@ const getCellStyle = (
       ...styling,
       // TODO: proper typing for each styling (header, totals, body)
       color: showHoverEffect ? hoverColors?.color : styling.color,
-      background: `${StylingDefaults.EXCLUDED_BACKGROUND}, ${
+      background: `${SELECTION_STYLING.EXCLUDED_BACKGROUND}, ${
         showHoverEffect ? hoverColors?.background : bodyStyle.background
       }`,
     };

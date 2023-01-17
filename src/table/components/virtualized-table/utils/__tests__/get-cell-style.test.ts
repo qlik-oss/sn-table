@@ -1,4 +1,5 @@
 import { SelectionStates } from '../../../../constants';
+import { SELECTION_STYLING } from '../../../../styling-defaults';
 import { BodyStyle } from '../../types';
 import getCellStyle from '../get-cell-style';
 
@@ -44,8 +45,8 @@ describe('getCellStyle', () => {
 
       expect(s).toEqual({
         ...borderColors,
-        color: '#fff',
-        background: '#009845',
+        color: SELECTION_STYLING.SELECTED.color,
+        background: SELECTION_STYLING.SELECTED.background,
         selectedCellClass: 'selected',
       });
     });
@@ -88,8 +89,8 @@ describe('getCellStyle', () => {
 
       expect(s).toEqual({
         ...borderColors,
-        color: '#fff',
-        background: '#009845',
+        color: SELECTION_STYLING.SELECTED.color,
+        background: SELECTION_STYLING.SELECTED.background,
         selectedCellClass: 'selected',
       });
     });

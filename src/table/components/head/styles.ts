@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 
-import { COMMON_CELL_STYLING } from '../../constants';
+import { COMMON_CELL_STYLING } from '../../styling-defaults';
 
 // ---------- TableHeadWrapper ----------
 
@@ -33,7 +33,7 @@ export const StyledSortLabel = styled(TableSortLabel, {
     color: 'inherit',
   },
   '&.Mui-active .MuiTableSortLabel-icon': {
-    color: headerStyle.sortLabelColor,
+    color: headerStyle.color,
   },
 }));
 
