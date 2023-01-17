@@ -24,7 +24,7 @@ const useData = (
   const [rowsInPage, setRowsInPage] = useState<Row[]>([]);
 
   const getDataPages = useCallback(
-    async (pages: EngineAPI.INxPage[]) => (model as EngineAPI.IGenericObject).getHyperCubeData('/qHyperCubeDef', pages),
+    async (pages: EngineAPI.INxPage[]) => model.getHyperCubeData('/qHyperCubeDef', pages),
     [model]
   );
 
