@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { getTotalPosition } from '../../../../handle-data';
-import { useContextSelector, TableContext } from '../../../context';
+import { TableLayout } from '../../../../types';
 import { HEADER_HEIGHT, HEADER_AND_TOTALS_HEIGHT } from '../constants';
 
 export interface Totals {
@@ -9,8 +9,7 @@ export interface Totals {
   shrinkBodyHeightBy: number;
 }
 
-const useTotals = () => {
-  const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
+const useTotals = (layout: TableLayout) => {
   const totalsPosition = getTotalPosition(layout);
 
   return useMemo(

@@ -2,10 +2,10 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import TableCell from '@mui/material/TableCell';
 
-import { TableContextProvider } from '../../../context';
 import * as withSelections from '../withSelections';
 import { Announce, ExtendedSelectionAPI, Cell, Column } from '../../../../types';
 import { CellStyle, CellHOCProps } from '../../../types';
+import TestWithProviders from '../../../../__test__/test-with-providers';
 
 describe('withSelections', () => {
   const value = '100';
@@ -20,7 +20,7 @@ describe('withSelections', () => {
 
   const renderWithSelections = () =>
     render(
-      <TableContextProvider selectionsAPI={selectionsAPI} selectionDispatchMock={selectionDispatchMock}>
+      <TestWithProviders selectionsAPI={selectionsAPI} selectionDispatchMock={selectionDispatchMock}>
         <HOC
           cell={cell}
           styling={styling}
@@ -30,7 +30,7 @@ describe('withSelections', () => {
         >
           {value}
         </HOC>
-      </TableContextProvider>
+      </TestWithProviders>
     );
 
   beforeEach(() => {

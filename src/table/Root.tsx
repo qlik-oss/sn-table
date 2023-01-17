@@ -9,7 +9,7 @@ import { TableContextProvider } from './context';
 import muiSetup from './mui-setup';
 import { RenderProps, TableWrapperProps } from './types';
 import VirualizedTable from './components/virtualized-table/Wrapper';
-import { WrapperProps } from './components/virtualized-table/types';
+import { VirtualTableRenderProps } from './components/virtualized-table/types';
 
 export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   const { direction, selectionsAPI, tableData, layout, translator, constraints, theme, keyboard } = props;
@@ -34,8 +34,8 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   );
 }
 
-export function renderVirtualizedTable(props: WrapperProps, reactRoot?: ReactDom.Root) {
-  const { selectionsAPI, layout, model, translator, constraints, theme, keyboard } = props;
+export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot?: ReactDom.Root) {
+  const { selectionsAPI, layout, model, translator, constraints, theme, keyboard, rect } = props;
   const muiTheme = muiSetup('ltr');
 
   reactRoot?.render(
@@ -51,7 +51,7 @@ export function renderVirtualizedTable(props: WrapperProps, reactRoot?: ReactDom
           theme={theme}
           keyboard={keyboard}
         >
-          <VirualizedTable {...props} />
+          <VirualizedTable rect={rect} />
         </TableContextProvider>
       </ThemeProvider>
     </React.StrictMode>

@@ -2,12 +2,10 @@ import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { render, fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ThemeProvider } from '@mui/material/styles';
-import { TableContextProvider } from '../../../context';
 import { ExtendedTranslator, ExtendedSelectionAPI, SortDirection, TableLayout } from '../../../../types';
 import { GeneratedStyling } from '../../../types';
 import HeadCellMenu from '../HeadCellMenu';
-import muiSetup from '../../../mui-setup';
+import TestWithProviders from '../../../../__test__/test-with-providers';
 
 describe('<HeadCellMenu />', () => {
   let translator: ExtendedTranslator;
@@ -24,22 +22,20 @@ describe('<HeadCellMenu />', () => {
 
   const renderTableHeadCellMenu = (cellCoordMock?: [number, number]) =>
     render(
-      <ThemeProvider theme={muiSetup(direction)}>
-        <TableContextProvider selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
-          <HeadCellMenu
-            isDimension
-            headerStyle={headerStyle}
-            translator={translator}
-            sortDirection={sortDirection}
-            sortFromMenu={sortFromMenu}
-            isInteractionEnabled={isInteractionEnabled}
-            isCurrentColumnActive={isCurrentColumnActive}
-            embed={embed}
-            layout={layout}
-            columnIndex={columnIndex}
-          />
-        </TableContextProvider>
-      </ThemeProvider>
+      <TestWithProviders selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock} direction={direction}>
+        <HeadCellMenu
+          isDimension
+          headerStyle={headerStyle}
+          translator={translator}
+          sortDirection={sortDirection}
+          sortFromMenu={sortFromMenu}
+          isInteractionEnabled={isInteractionEnabled}
+          isCurrentColumnActive={isCurrentColumnActive}
+          embed={embed}
+          layout={layout}
+          columnIndex={columnIndex}
+        />
+      </TestWithProviders>
     );
 
   beforeEach(() => {

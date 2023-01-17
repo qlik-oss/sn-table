@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import { PageInfo, Row, Column } from '../../../../../types';
+import { PageInfo, Row, Column, TableLayout } from '../../../../../types';
 import useOnPropsChange from '../use-on-props-change';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
 import useGetHyperCubeDataQueue from '../use-get-hypercube-data-queue';
 import { createRow, isColumnMissingData, isRowMissingData } from './utils';
-import { useContextSelector, TableContext } from '../../../../context';
 
 export type LoadData = (left: number, top: number, width: number, height: number) => void;
 
@@ -15,12 +14,13 @@ export interface UseData {
 }
 
 const useData = (
+  layout: TableLayout,
+  model: EngineAPI.IGenericObject,
   pageInfo: PageInfo,
   visibleRowCount: number,
   visibleColumnCount: number,
   columns: Column[]
 ): UseData => {
-  const { layout, model } = useContextSelector(TableContext, (value) => value.baseProps);
   const [rowsInPage, setRowsInPage] = useState<Row[]>([]);
 
   const getDataPages = useCallback(

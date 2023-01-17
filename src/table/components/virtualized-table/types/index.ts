@@ -21,16 +21,19 @@ export interface BodyStyle extends GeneratedStyling {
   background: string;
 }
 
-export interface WrapperProps {
-  model: EngineAPI.IGenericObject;
-  layout: TableLayout;
-  rect: stardust.Rect;
-  theme: ExtendedTheme;
-  direction?: 'ltr' | 'rtl';
-  keyboard: stardust.Keyboard;
-  translator: ExtendedTranslator;
+export interface VirtualTableRenderProps {
   selectionsAPI: ExtendedSelectionAPI;
+  layout: TableLayout;
+  model: EngineAPI.IGenericObject;
+  translator: ExtendedTranslator;
   constraints: stardust.Constraints;
+  theme: ExtendedTheme;
+  keyboard: stardust.Keyboard;
+  rect: stardust.Rect;
+}
+
+export interface WrapperProps {
+  rect: stardust.Rect;
 }
 
 export interface TableProps {

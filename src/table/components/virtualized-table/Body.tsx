@@ -12,17 +12,25 @@ import { useContextSelector, TableContext } from '../../context';
 
 const Body = (props: BodyProps) => {
   const { rect, forwardRef, columns, columnWidth, innerForwardRef, pageInfo, bodyStyle, totals } = props;
-  const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, model } = useContextSelector(TableContext, (value) => value.baseProps);
   const isHoverEnabled = !!layout.components?.[0]?.content?.hoverEffect;
   const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
-  const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(pageInfo, rect, columnWidth);
+  const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(layout, pageInfo, rect, columnWidth);
   let { height: bodyHeight } = rect;
   bodyHeight -= totals.shrinkBodyHeightBy;
   bodyHeight = Math.min(rowCount * DEFAULT_ROW_HEIGHT, bodyHeight);
 
-  const { rowsInPage, loadRows, loadColumns } = useData(pageInfo, visibleRowCount, visibleColumnCount, columns);
+  const { rowsInPage, loadRows, loadColumns } = useData(
+    layout,
+    model as EngineAPI.IGenericObject,
+    pageInfo,
+    visibleRowCount,
+    visibleColumnCount,
+    columns
+  );
 
   const handleItemsRendered = useItemsRendererHandler({
+    layout,
     loadRows,
     loadColumns,
     verticalScrollDirection,

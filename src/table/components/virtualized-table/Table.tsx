@@ -26,7 +26,7 @@ const Table = (props: TableProps) => {
   const totalsRef = useRef<VariableSizeList>(null);
   const bodyRef = useRef<VariableSizeGrid>(null);
   const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
-  const totals = useTotals();
+  const totals = useTotals(layout);
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme, !totals.atTop), [layout, theme, totals]);
   const bodyStyle = useMemo<BodyStyle>(
     () => ({
@@ -38,7 +38,7 @@ const Table = (props: TableProps) => {
   const columns = useMemo(() => getColumns(layout), [layout]);
   const tableRect = toTableRect(rect, paginationNeeded);
   const { width } = useColumnSize(tableRect, columns, headerStyle, bodyStyle);
-  const { rowCount } = useTableCount(pageInfo, tableRect, width);
+  const { rowCount } = useTableCount(layout, pageInfo, tableRect, width);
   const containerWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
   const [containerHeight, setContainerHeight] = useState(rowCount * DEFAULT_ROW_HEIGHT + totals.shrinkBodyHeightBy);
   const stickyContainerRect = toStickyContainerRect(tableRect, rowCount, totals.shrinkBodyHeightBy);

@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
-import { PageInfo } from '../../../../types';
-import { useContextSelector, TableContext } from '../../../context';
+import { PageInfo, TableLayout } from '../../../../types';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../constants';
 import { LoadData } from './use-data';
 import { ScrollDirection } from './use-scroll-direction';
@@ -17,6 +16,7 @@ export interface OnItemsRendered {
 }
 
 export interface ItemsHandlerProps {
+  layout: TableLayout;
   loadRows: LoadData;
   loadColumns: LoadData;
   verticalScrollDirection: React.MutableRefObject<ScrollDirection>;
@@ -26,6 +26,7 @@ export interface ItemsHandlerProps {
 }
 
 const useItemsRendererHandler = ({
+  layout,
   loadRows,
   loadColumns,
   verticalScrollDirection,
@@ -33,8 +34,6 @@ const useItemsRendererHandler = ({
   rowCount,
   pageInfo,
 }: ItemsHandlerProps) => {
-  const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
-
   const handleItemsRendered = useCallback(
     ({
       overscanColumnStartIndex,

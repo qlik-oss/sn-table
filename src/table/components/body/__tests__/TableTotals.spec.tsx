@@ -2,12 +2,12 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { stardust } from '@nebula.js/stardust';
 import TableTotals from '../TableTotals';
-import { TableContextProvider } from '../../../context';
 import manageData from '../../../../handle-data';
 import * as handleKeyPress from '../../../utils/handle-key-press';
 import * as handleAccessibility from '../../../utils/accessibility-utils';
 import { generateDataPages, generateLayout } from '../../../../__test__/generate-test-data';
 import { TableData, ExtendedTheme, ExtendedSelectionAPI, PageInfo } from '../../../../types';
+import TestWithProviders from '../../../../__test__/test-with-providers';
 
 describe('<TableTotals />', () => {
   const rootElement = {} as HTMLElement;
@@ -21,7 +21,7 @@ describe('<TableTotals />', () => {
 
   const renderTableTotals = (cellCoordMock?: [number, number]) =>
     render(
-      <TableContextProvider selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
+      <TestWithProviders selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
         <TableTotals
           rootElement={rootElement}
           tableData={tableData}
@@ -31,7 +31,7 @@ describe('<TableTotals />', () => {
           selectionsAPI={selectionsAPI}
           areBasicFeaturesEnabled={areBasicFeaturesEnabled}
         />
-      </TableContextProvider>
+      </TestWithProviders>
     );
 
   beforeEach(async () => {

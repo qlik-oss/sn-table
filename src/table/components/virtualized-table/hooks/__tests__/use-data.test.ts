@@ -47,8 +47,8 @@ describe('useData', () => {
       return act(async () => {
         renderHookResult = renderHook(() =>
           useData(
-            renderWithProps.model ?? model,
             renderWithProps.layout ?? layout,
+            renderWithProps.model ?? model,
             renderWithProps.pageInfo ?? pageInfo,
             renderWithProps.visibleRowCount ?? 1,
             renderWithProps.visibleColumnCount ?? 1,
