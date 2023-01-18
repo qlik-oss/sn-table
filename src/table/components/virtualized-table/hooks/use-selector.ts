@@ -15,9 +15,12 @@ export default function useSelector(datum: Cell | string) {
     hasData ? getCellSelectionState(datum as Cell, value.selectionState) : SelectionStates.INACTIVE
   );
 
+  const { constraints } = useContextSelector(TableContext, (value) => value.baseProps);
+  const isSelectionsEnabled = !constraints.active && !constraints.select;
+
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
 
-  if (hasData) {
+  if (hasData && isSelectionsEnabled) {
     const { handleMouseDown, handleMouseOver, handleMouseUp } = getSelectionMouseHandlers(
       datum as Cell,
       NOOP_ANNOUNCE,
