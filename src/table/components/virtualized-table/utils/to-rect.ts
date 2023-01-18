@@ -1,9 +1,14 @@
 import { stardust } from '@nebula.js/stardust';
-import { DEFAULT_ROW_HEIGHT, PAGINATION_HEIGHT } from '../constants';
+import { PAGINATION_HEIGHT } from '../constants';
 import { Rect } from '../types';
 
-export const toStickyContainerRect = (rect: Rect, rowCount: number, shrinkBodyHeightBy: number): Rect => {
-  const fullHeight = rowCount * DEFAULT_ROW_HEIGHT + shrinkBodyHeightBy;
+export const toStickyContainerRect = (
+  rect: Rect,
+  rowCount: number,
+  headerAndTotalsHeight: number,
+  bodyRowHeight: number
+): Rect => {
+  const fullHeight = rowCount * bodyRowHeight + headerAndTotalsHeight;
   const height = Math.min(fullHeight, rect.height);
 
   return {

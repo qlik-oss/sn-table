@@ -1,11 +1,16 @@
 import { useMemo } from 'react';
 import { PageInfo, TableLayout } from '../../../../types';
-import { DEFAULT_ROW_HEIGHT } from '../constants';
 import { Rect } from '../types';
 
-const useTableCount = (layout: TableLayout, pageInfo: PageInfo, rect: Rect, columnWidth: number[]) => {
+const useTableCount = (
+  layout: TableLayout,
+  pageInfo: PageInfo,
+  rect: Rect,
+  columnWidth: number[],
+  bodyRowHeight: number
+) => {
   const rowCount = Math.min(pageInfo.rowsPerPage, layout.qHyperCube.qSize.qcy - pageInfo.page * pageInfo.rowsPerPage);
-  const visibleRowCount = Math.min(rowCount, Math.ceil(rect.height / DEFAULT_ROW_HEIGHT));
+  const visibleRowCount = Math.min(rowCount, Math.ceil(rect.height / bodyRowHeight));
   const visibleColumnCount = useMemo(
     () =>
       columnWidth.reduce(

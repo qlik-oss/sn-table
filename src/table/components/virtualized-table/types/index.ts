@@ -9,7 +9,11 @@ import {
   TableLayout,
 } from '../../../../types';
 import { GeneratedStyling } from '../../../types';
-import { Totals } from '../hooks/use-totals';
+
+export interface Totals {
+  atBottom: boolean;
+  atTop: boolean;
+}
 
 export type TotalsPosition = 'bottom' | 'noTotals' | 'top';
 
@@ -49,6 +53,7 @@ export interface HeaderProps {
   columns: Column[];
   columnWidth: number[];
   headerStyle: GeneratedStyling;
+  rowHeight: number;
 }
 
 export interface TotalsProps {
@@ -58,6 +63,7 @@ export interface TotalsProps {
   columns: Column[];
   columnWidth: number[];
   totals: Totals;
+  rowHeight: number;
 }
 
 export interface BodyProps {
@@ -68,5 +74,6 @@ export interface BodyProps {
   forwardRef: React.RefObject<VariableSizeGrid<any>>;
   innerForwardRef: React.RefObject<HTMLDivElement>;
   bodyStyle: BodyStyle;
-  totals: Totals;
+  rowHeight: number;
+  headerAndTotalsHeight: number;
 }

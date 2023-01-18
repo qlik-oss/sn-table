@@ -1,7 +1,7 @@
 import { stardust } from '@nebula.js/stardust';
 import { renderHook } from '@testing-library/react';
 import { PageInfo, TableLayout } from '../../../../../types';
-import { DEFAULT_ROW_HEIGHT, MAX_PAGE_SIZE } from '../../constants';
+import { MIN_BODY_ROW_HEIGHT, MAX_PAGE_SIZE } from '../../constants';
 import useTableCount from '../use-table-count';
 
 describe('useTableCount', () => {
@@ -30,7 +30,7 @@ describe('useTableCount', () => {
       left: 0,
       top: 0,
       width: 200,
-      height: 10 * DEFAULT_ROW_HEIGHT,
+      height: 10 * MIN_BODY_ROW_HEIGHT,
     };
 
     columnWidth = [50, 150, 200];
@@ -39,7 +39,7 @@ describe('useTableCount', () => {
   describe('rowCount', () => {
     test('should be capped at max page size', () => {
       layout.qHyperCube.qSize.qcy = MAX_PAGE_SIZE * 2;
-      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth));
+      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth, MIN_BODY_ROW_HEIGHT));
 
       expect(result.current.rowCount).toEqual(MAX_PAGE_SIZE);
     });
@@ -49,7 +49,7 @@ describe('useTableCount', () => {
       layout.qHyperCube.qSize.qcy = MAX_PAGE_SIZE + expectedRowCount;
       pageInfo.page = 1;
 
-      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth));
+      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth, MIN_BODY_ROW_HEIGHT));
 
       expect(result.current.rowCount).toEqual(expectedRowCount);
     });
@@ -57,7 +57,7 @@ describe('useTableCount', () => {
     test('should return rowCount when number of data rows is less than max page size', () => {
       layout.qHyperCube.qSize.qcy = 2500;
 
-      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth));
+      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth, MIN_BODY_ROW_HEIGHT));
 
       expect(result.current.rowCount).toEqual(2500);
     });
@@ -67,19 +67,19 @@ describe('useTableCount', () => {
     test('should handle when number of rows is less than the number of rows that can be rendered', () => {
       const expectedVisibleRowCount = 10;
       layout.qHyperCube.qSize.qcy = expectedVisibleRowCount;
-      rect.height = 20 * DEFAULT_ROW_HEIGHT; // number of rows that can be rendered
+      rect.height = 20 * MIN_BODY_ROW_HEIGHT; // number of rows that can be rendered
 
-      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth));
+      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth, MIN_BODY_ROW_HEIGHT));
 
       expect(result.current.visibleRowCount).toEqual(expectedVisibleRowCount);
     });
 
     test('should handle when number of rows is more than the number of rows that can be rendered', () => {
       const expectedVisibleRowCount = 10;
-      layout.qHyperCube.qSize.qcy = 20 * DEFAULT_ROW_HEIGHT; // number of rows
-      rect.height = expectedVisibleRowCount * DEFAULT_ROW_HEIGHT; // number of rows that can be rendered
+      layout.qHyperCube.qSize.qcy = 20 * MIN_BODY_ROW_HEIGHT; // number of rows
+      rect.height = expectedVisibleRowCount * MIN_BODY_ROW_HEIGHT; // number of rows that can be rendered
 
-      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth));
+      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth, MIN_BODY_ROW_HEIGHT));
 
       expect(result.current.visibleRowCount).toEqual(expectedVisibleRowCount);
     });
@@ -91,7 +91,7 @@ describe('useTableCount', () => {
       layout.qHyperCube.qSize.qcx = columnWidth.length;
       rect.width = 50 * columnWidth.length + 50;
 
-      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth));
+      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth, MIN_BODY_ROW_HEIGHT));
 
       expect(result.current.visibleColumnCount).toEqual(columnWidth.length);
     });
@@ -101,7 +101,7 @@ describe('useTableCount', () => {
       layout.qHyperCube.qSize.qcx = columnWidth.length;
       rect.width = 50 * columnWidth.length - 50;
 
-      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth));
+      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth, MIN_BODY_ROW_HEIGHT));
 
       expect(result.current.visibleColumnCount).toEqual(columnWidth.length - 1);
     });
