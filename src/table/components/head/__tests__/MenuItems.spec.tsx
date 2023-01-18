@@ -1,27 +1,25 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import MenuGroup from '../MenuGroup';
-import { MenuGroupProps } from '../../../types';
+import MenuItems from '../MenuItems';
+import { MenuItemGroup } from '../../../types';
 import { ExtendedSelectionAPI } from '../../../../types';
 import TestWithProviders from '../../../../__test__/test-with-providers';
 
 describe('<MenuGroup />', () => {
   let selectionsAPI: ExtendedSelectionAPI;
   const direction: 'ltr' | 'rtl' = 'ltr';
-  let menuGroup: MenuGroupProps;
+  let menuItemGroups: MenuItemGroup[];
 
-  const renderMenuGroup = (menuGroupProp: MenuGroupProps) =>
+  const renderMenuGroup = (itemGroups: MenuItemGroup[]) =>
     render(
       <TestWithProviders selectionsAPI={selectionsAPI} direction={direction}>
-        <MenuGroup {...menuGroupProp} />
+        <>{MenuItems({ itemGroups })}</>
       </TestWithProviders>
     );
 
   it('should render given menu group', () => {
-    menuGroup = {
-      id: 1,
-      shouldShowDevider: false,
-      options: [
+    menuItemGroups = [
+      [
         {
           id: 1,
           itemTitle: 'menu#01',
@@ -30,11 +28,21 @@ describe('<MenuGroup />', () => {
           isDisabled: false,
         },
       ],
-    };
-    renderMenuGroup(menuGroup);
-    expect(screen.getAllByRole('button').length).toBe(1);
+      [
+        {
+          id: 2,
+          itemTitle: 'menu#02',
+          onClick: jest.fn(),
+          icon: <></>,
+          isDisabled: false,
+        },
+      ],
+    ];
+    renderMenuGroup(menuItemGroups);
+    expect(screen.getAllByRole('menuitem').length).toBe(2);
     expect(screen.getByText('menu#01')).toBeVisible();
+    expect(screen.getByText('menu#02')).toBeVisible();
     fireEvent.click(screen.getByText('menu#01'));
-    expect(menuGroup.options[0].onClick).toHaveBeenCalledTimes(1);
+    expect(menuItemGroups[0][0].onClick).toHaveBeenCalledTimes(1);
   });
 });

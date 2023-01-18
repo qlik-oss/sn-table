@@ -45,7 +45,7 @@ export const ListBoxWrapper = ({ children, embed, layout, columnIndex }: ListBox
     if (!ref.current || !listboxInstance) return undefined;
 
     // passing title: ' ' (an empty space)
-    // because of passing null or undefined will still endup showing title
+    // because of passing null or undefined will still end up showing title
     listboxInstance.mount(ref.current, { title: ' ' });
 
     return () => {
