@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { PageInfo, Row, TableLayout, Column } from '../../../../../types';
+import { PageInfo, Row, Column, TableLayout } from '../../../../../types';
 import useOnPropsChange from '../use-on-props-change';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
 import useGetHyperCubeDataQueue from '../use-get-hypercube-data-queue';
@@ -14,8 +14,8 @@ export interface UseData {
 }
 
 const useData = (
-  model: EngineAPI.IGenericObject,
   layout: TableLayout,
+  model: EngineAPI.IGenericObject,
   pageInfo: PageInfo,
   visibleRowCount: number,
   visibleColumnCount: number,

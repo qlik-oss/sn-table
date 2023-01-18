@@ -7,22 +7,21 @@ import useScrollDirection from './hooks/use-scroll-direction';
 import useTableCount from './hooks/use-table-count';
 import useItemsRendererHandler from './hooks/use-items-rendered-handler';
 import useSelectionsEffect from './hooks/use-selections-effect';
+import { useContextSelector, TableContext } from '../../context';
 
 const Body = (props: BodyProps) => {
   const {
     rect,
-    layout,
-    model,
     forwardRef,
     columns,
     columnWidth,
     innerForwardRef,
     pageInfo,
     bodyStyle,
-    selectionsAPI,
     rowHeight,
     headerAndTotalsHeight,
   } = props;
+  const { layout, model } = useContextSelector(TableContext, (value) => value.baseProps);
   const isHoverEnabled = !!layout.components?.[0]?.content?.hoverEffect;
   const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
   const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(
@@ -37,8 +36,8 @@ const Body = (props: BodyProps) => {
   bodyHeight = Math.min(rowCount * rowHeight, bodyHeight);
 
   const { rowsInPage, loadRows, loadColumns } = useData(
-    model,
     layout,
+    model as EngineAPI.IGenericObject,
     pageInfo,
     visibleRowCount,
     visibleColumnCount,
@@ -60,7 +59,7 @@ const Body = (props: BodyProps) => {
     [rowsInPage, columns, bodyStyle, isHoverEnabled]
   );
 
-  useSelectionsEffect(selectionsAPI, rowsInPage);
+  useSelectionsEffect(rowsInPage);
 
   useLayoutEffect(() => {
     if (!forwardRef.current) return;

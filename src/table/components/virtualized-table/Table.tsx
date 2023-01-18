@@ -14,10 +14,12 @@ import useTableCount from './hooks/use-table-count';
 import ScrollableContainer from './ScrollableContainer';
 import StickyContainer from './StickyContainer';
 import { toTableRect, toStickyContainerRect } from './utils/to-rect';
+import { useContextSelector, TableContext } from '../../context';
 import getHeights from './utils/get-height';
 
 const Table = (props: TableProps) => {
-  const { layout, rect, pageInfo, paginationNeeded, model, theme, constraints, selectionsAPI } = props;
+  const { rect, pageInfo, paginationNeeded } = props;
+  const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);
   const totalsRef = useRef<VariableSizeList>(null);
@@ -63,8 +65,6 @@ const Table = (props: TableProps) => {
 
   const TotalsComponent = (
     <Totals
-      theme={theme}
-      layout={layout}
       rect={stickyContainerRect}
       pageInfo={pageInfo}
       columns={columns}
@@ -76,18 +76,11 @@ const Table = (props: TableProps) => {
   );
 
   return (
-    <ScrollableContainer
-      ref={ref}
-      constraints={constraints}
-      width={tableRect.width}
-      height={tableRect.height}
-      onScroll={scrollHandler}
-    >
+    <ScrollableContainer ref={ref} width={tableRect.width} height={tableRect.height} onScroll={scrollHandler}>
       <FullSizeContainer width={containerWidth} height={containerHeight}>
         <StickyContainer rect={stickyContainerRect}>
           <Header
             headerStyle={headerStyle}
-            layout={layout}
             rect={stickyContainerRect}
             pageInfo={pageInfo}
             columns={columns}
@@ -98,15 +91,12 @@ const Table = (props: TableProps) => {
           {totals.atTop ? TotalsComponent : null}
           <Body
             bodyStyle={bodyStyle}
-            model={model}
-            layout={layout}
             rect={stickyContainerRect}
             pageInfo={pageInfo}
             columns={columns}
             columnWidth={width}
             forwardRef={bodyRef}
             innerForwardRef={innerForwardRef}
-            selectionsAPI={selectionsAPI}
             rowHeight={bodyRowHeight}
             headerAndTotalsHeight={headerAndTotalsHeight}
           />

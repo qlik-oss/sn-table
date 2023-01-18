@@ -1,6 +1,7 @@
 import React from 'react';
 // import { getTotalInfo } from '../../../handle-data';
 import { TableLayout } from '../../../types';
+import { useContextSelector, TableContext } from '../../context';
 import { GeneratedStyling } from '../../types';
 import CellText from '../CellText';
 
@@ -8,7 +9,6 @@ interface TotalsCellProps {
   index: number;
   style: React.CSSProperties;
   data: {
-    layout: TableLayout;
     totalsStyle: GeneratedStyling;
   };
 }
@@ -21,8 +21,8 @@ function getTotalInfo(layout: TableLayout, colIdx: number) {
 }
 
 const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
+  const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
   const {
-    layout,
     totalsStyle: { hoverColors, ...applicableStyling },
   } = data;
   const label = getTotalInfo(layout, index);

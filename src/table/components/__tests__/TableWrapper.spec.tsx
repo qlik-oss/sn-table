@@ -1,8 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { stardust } from '@nebula.js/stardust';
-
-import { TableContextProvider } from '../../context';
 import TableWrapper from '../TableWrapper';
 import TableBodyWrapper from '../body/TableBodyWrapper';
 import TableHeadWrapper from '../head/TableHeadWrapper';
@@ -20,6 +18,7 @@ import {
   ChangeSortOrder,
   ExtendedSelectionAPI,
 } from '../../../types';
+import TestWithProviders from '../../../__test__/test-with-providers';
 
 describe('<TableWrapper />', () => {
   let tableData: TableData;
@@ -42,7 +41,13 @@ describe('<TableWrapper />', () => {
 
   const renderTableWrapper = () =>
     render(
-      <TableContextProvider selectionsAPI={selectionsAPI}>
+      <TestWithProviders
+        selectionsAPI={selectionsAPI}
+        layout={layout}
+        translator={translator}
+        constraints={constraints}
+        keyboard={keyboard}
+      >
         <TableWrapper
           tableData={tableData}
           pageInfo={pageInfo}
@@ -61,7 +66,7 @@ describe('<TableWrapper />', () => {
           areBasicFeaturesEnabled={areBasicFeaturesEnabled}
           embed={embed}
         />
-      </TableContextProvider>
+      </TestWithProviders>
     );
 
   beforeEach(() => {

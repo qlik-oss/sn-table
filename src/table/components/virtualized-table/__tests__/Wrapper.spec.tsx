@@ -1,23 +1,19 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { stardust } from '@nebula.js/stardust';
 import Wrapper from '../Wrapper';
-import { ExtendedSelectionAPI, ExtendedTheme, ExtendedTranslator, TableLayout } from '../../../../types';
+import { TableLayout } from '../../../../types';
 import { TestableTable } from '../Table';
 import FooterWrapper from '../../footer/FooterWrapper';
 import { MAX_PAGE_SIZE } from '../constants';
+import TestWithProviders from '../../../../__test__/test-with-providers';
 
 jest.mock('../Table');
 jest.mock('../../footer/FooterWrapper');
 
 describe('<Wrapper />', () => {
-  let translator: ExtendedTranslator;
   let rect: stardust.Rect;
-  let theme: ExtendedTheme;
   let layout: TableLayout;
-  let keyboard: stardust.Keyboard;
-  let model: EngineAPI.IGenericObject;
-  let selectionsAPI: ExtendedSelectionAPI;
   let constraints: stardust.Constraints;
   const mockTable = TestableTable as jest.MockedFunction<typeof TestableTable>;
   mockTable.mockReturnValue(<div data-testid="table-container" />);
@@ -26,16 +22,9 @@ describe('<Wrapper />', () => {
 
   const renderWrapper = () =>
     render(
-      <Wrapper
-        model={model}
-        translator={translator}
-        rect={rect}
-        theme={theme}
-        layout={layout}
-        keyboard={keyboard}
-        selectionsAPI={selectionsAPI}
-        constraints={constraints}
-      />
+      <TestWithProviders constraints={constraints} layout={layout}>
+        <Wrapper rect={rect} />
+      </TestWithProviders>
     );
 
   beforeEach(() => {
@@ -47,16 +36,9 @@ describe('<Wrapper />', () => {
         },
       },
     } as TableLayout;
-    keyboard = { enabled: false, active: false };
-    translator = { get: (s: string) => s } as unknown as ExtendedTranslator;
     rect = {
       width: 750,
     } as unknown as stardust.Rect;
-    theme = {
-      getStyle: () => undefined,
-      background: { isDark: false },
-      name: () => 'theme',
-    } as unknown as ExtendedTheme;
 
     constraints = { active: false };
   });
@@ -65,10 +47,10 @@ describe('<Wrapper />', () => {
 
   it('should not render table with pagination', () => {
     layout.qHyperCube.qSize.qcy = MAX_PAGE_SIZE - 1;
-    const { queryByTestId, getByTestId } = renderWrapper();
+    renderWrapper();
 
-    expect(getByTestId('table-container')).toBeVisible();
-    expect(queryByTestId('footer-wrapper')).toBeNull();
+    expect(screen.getByTestId('table-container')).toBeVisible();
+    expect(screen.queryByTestId('footer-wrapper')).toBeNull();
     expect(mockTable).toHaveBeenCalledWith(
       expect.objectContaining({
         pageInfo: expect.objectContaining({ rowsPerPage: MAX_PAGE_SIZE - 1 }),
@@ -80,18 +62,18 @@ describe('<Wrapper />', () => {
   it('should not render table with pagination when constraints active is enabled', () => {
     constraints.active = true;
     layout.qHyperCube.qSize.qcy = MAX_PAGE_SIZE + 1;
-    const { getByTestId, queryByTestId } = renderWrapper();
+    renderWrapper();
 
-    expect(getByTestId('table-container')).toBeVisible();
-    expect(queryByTestId('footer-wrapper')).toBeNull();
+    expect(screen.getByTestId('table-container')).toBeVisible();
+    expect(screen.queryByTestId('footer-wrapper')).toBeNull();
   });
 
   it('should render table with pagination', () => {
     layout.qHyperCube.qSize.qcy = MAX_PAGE_SIZE + 1;
-    const { getByTestId } = renderWrapper();
+    renderWrapper();
 
-    expect(getByTestId('table-container')).toBeVisible();
-    expect(getByTestId('footer-wrapper')).toBeVisible();
+    expect(screen.getByTestId('table-container')).toBeVisible();
+    expect(screen.getByTestId('footer-wrapper')).toBeVisible();
     expect(mockTable).toHaveBeenCalledWith(
       expect.objectContaining({
         pageInfo: expect.objectContaining({ rowsPerPage: MAX_PAGE_SIZE }),

@@ -35,6 +35,7 @@ import {
   ExtendedTranslator,
   ExtendedSelectionAPI,
 } from './types';
+import { RenderProps } from './table/types';
 
 const initialPageInfo = {
   page: 0,
@@ -54,7 +55,7 @@ const renderWithCarbon = ({
   changeSortOrder,
 }: RenderWithCarbonArguments) => {
   if (env.carbon && changeSortOrder && theme && selectionsAPI) {
-    render({ rootElement, layout, model, manageData, theme, selectionsAPI, changeSortOrder, app, rect });
+    render({ rootElement, layout, model, manageData, theme, selectionsAPI, changeSortOrder, app, rect } as RenderProps); // Does not pass in all required props so force typecheck to pass
   }
 };
 

@@ -3,13 +3,13 @@ import { stardust } from '@nebula.js/stardust';
 import { render, fireEvent } from '@testing-library/react';
 import { generateDataPages, generateLayout } from '../../../../__test__/generate-test-data';
 import manageData from '../../../../handle-data';
-import { TableContextProvider } from '../../../context';
 import TableBodyWrapper from '../TableBodyWrapper';
 import * as selectionsUtils from '../../../utils/selections-utils';
 import * as getCellRenderer from '../../../utils/get-cell-renderer';
 import * as handleKeyPress from '../../../utils/handle-key-press';
 import * as handleClick from '../../../utils/handle-click';
 import { TableData, ExtendedSelectionAPI, TableLayout, ExtendedTheme, PageInfo, Cell } from '../../../../types';
+import TestWithProviders from '../../../../__test__/test-with-providers';
 
 describe('<TableBodyWrapper />', () => {
   const rootElement = {} as HTMLElement;
@@ -30,8 +30,7 @@ describe('<TableBodyWrapper />', () => {
 
   const renderTableBody = () =>
     render(
-      // Need to mock selectionDispatch since UPDATE_PAGE_ROWS action can create infinite loop
-      <TableContextProvider selectionsAPI={selectionsAPI} selectionDispatchMock={jest.fn()}>
+      <TestWithProviders selectionsAPI={selectionsAPI}>
         <TableBodyWrapper
           tableData={tableData}
           constraints={constraints}
@@ -45,7 +44,7 @@ describe('<TableBodyWrapper />', () => {
           announce={announce}
           areBasicFeaturesEnabled={areBasicFeaturesEnabled}
         />
-      </TableContextProvider>
+      </TestWithProviders>
     );
 
   beforeEach(async () => {
