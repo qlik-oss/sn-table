@@ -1,11 +1,12 @@
 import React, { useLayoutEffect, memo } from 'react';
 import { VariableSizeList } from 'react-window';
 import { HeaderProps } from './types';
-import { HEADER_HEIGHT } from './constants';
 import HeaderCell from './HeaderCell';
+import { useContextSelector, TableContext } from '../../context';
 
 const Header = (props: HeaderProps) => {
-  const { layout, rect, forwardRef, columns, columnWidth, pageInfo, headerStyle } = props;
+  const { rect, forwardRef, columns, columnWidth, pageInfo, headerStyle, rowHeight } = props;
+  const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
 
   useLayoutEffect(() => {
     forwardRef?.current?.resetAfterIndex(0, true);
@@ -24,7 +25,7 @@ const Header = (props: HeaderProps) => {
       }}
       itemCount={layout.qHyperCube.qSize.qcx}
       itemSize={(index) => columnWidth[index]}
-      height={HEADER_HEIGHT}
+      height={rowHeight}
       width={rect.width}
       itemData={{ columns, headerStyle }}
     >

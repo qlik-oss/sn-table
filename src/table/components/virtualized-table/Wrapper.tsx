@@ -7,9 +7,14 @@ import FooterWrapper from '../footer/FooterWrapper';
 import Table from './Table';
 import { MAX_PAGE_SIZE } from './constants';
 import useOnPropsChange from './hooks/use-on-props-change';
+import { TableContext, useContextSelector } from '../../context';
 
 export default function Wrapper(props: WrapperProps) {
-  const { rect, layout, keyboard, translator, theme, model, constraints, selectionsAPI } = props;
+  const { rect } = props;
+  const { layout, keyboard, translator, theme, constraints } = useContextSelector(
+    TableContext,
+    (value) => value.baseProps
+  );
   const totalRowCount = layout.qHyperCube.qSize.qcy;
   const pageSize = Math.min(MAX_PAGE_SIZE, totalRowCount);
   const [page, setPage] = useState(0);
@@ -34,16 +39,7 @@ export default function Wrapper(props: WrapperProps) {
 
   return (
     <StyledTableWrapper data-key="wrapper" background={theme.background} dir="ltr">
-      <Table
-        layout={layout}
-        rect={rect}
-        model={model}
-        pageInfo={pageInfo}
-        paginationNeeded={paginationNeeded}
-        theme={theme}
-        selectionsAPI={selectionsAPI}
-        constraints={constraints}
-      />
+      <Table rect={rect} pageInfo={pageInfo} paginationNeeded={paginationNeeded} />
       {paginationNeeded && (
         <FooterWrapper theme={theme}>
           <PaginationContent

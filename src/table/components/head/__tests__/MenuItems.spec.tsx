@@ -1,11 +1,9 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import { ThemeProvider } from '@mui/material/styles';
-import { TableContextProvider } from '../../../context';
 import MenuItems from '../MenuItems';
-import muiSetup from '../../../mui-setup';
 import { MenuItemGroup } from '../../../types';
 import { ExtendedSelectionAPI } from '../../../../types';
+import TestWithProviders from '../../../../__test__/test-with-providers';
 
 describe('<MenuGroup />', () => {
   let selectionsAPI: ExtendedSelectionAPI;
@@ -14,11 +12,9 @@ describe('<MenuGroup />', () => {
 
   const renderMenuGroup = (itemGroups: MenuItemGroup[]) =>
     render(
-      <ThemeProvider theme={muiSetup(direction)}>
-        <TableContextProvider selectionsAPI={selectionsAPI}>
-          <>{MenuItems({ itemGroups })}</>
-        </TableContextProvider>
-      </ThemeProvider>
+      <TestWithProviders selectionsAPI={selectionsAPI} direction={direction}>
+        <>{MenuItems({ itemGroups })}</>
+      </TestWithProviders>
     );
 
   it('should render given menu group', () => {
