@@ -38,7 +38,8 @@ export const handleClickToSort = (
   isInteractionEnabled: boolean
 ) => {
   const target = evt.target as HTMLElement;
-  !target.closest('.sn-table-head-menu-item')?.ariaDisabled &&
+  !target.closest('#sn-table-head-menu-button') &&
+    !target.closest('.sn-table-head-menu-item')?.ariaDisabled &&
     !target.closest('.sn-table-head-menu') &&
     !target.closest('.MuiBackdrop-root') &&
     isInteractionEnabled &&
