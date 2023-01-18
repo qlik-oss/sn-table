@@ -100,8 +100,8 @@ describe('<HeadCellMenu />', () => {
     isInteractionEnabled = false;
     const { getByRole, getByText } = renderTableHeadCellMenu();
     fireEvent.click(getByRole('button'));
-    const ascendingBtn = getByText('SNTable.MenuItem.SortAscending').closest('.sn-table-head-menu-item');
-    const descendingBtn = getByText('SNTable.MenuItem.SortDescending').closest('.sn-table-head-menu-item');
+    const ascendingBtn = getByText('SNTable.MenuItem.SortAscending').closest('.sn-table-head-menu-item-button');
+    const descendingBtn = getByText('SNTable.MenuItem.SortDescending').closest('.sn-table-head-menu-item-button');
     expect(ascendingBtn).toHaveAttribute('aria-disabled', 'true');
     expect(descendingBtn).toHaveAttribute('aria-disabled', 'true');
     userEvent.click(ascendingBtn as HTMLElement);

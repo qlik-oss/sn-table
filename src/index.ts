@@ -60,7 +60,7 @@ const renderWithCarbon = ({
 };
 
 export default function supernova(env: Galaxy) {
-  const areBasicFeaturesEnabled = env.flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES');
+  const areBasicFeaturesEnabled = true; // env.flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES');
   return {
     qae: {
       properties: { initial: properties },
@@ -97,7 +97,7 @@ export default function supernova(env: Galaxy) {
       useContextMenu(areBasicFeaturesEnabled);
 
       useEffect(() => {
-        if (!shouldRenderVirtualizedTable || !model) return;
+        if (!shouldRenderVirtualizedTable || !model || !changeSortOrder) return;
 
         renderVirtualizedTable(
           {
@@ -109,10 +109,12 @@ export default function supernova(env: Galaxy) {
             translator,
             constraints,
             selectionsAPI,
+            embed,
+            changeSortOrder,
           },
           reactRoot
         );
-      }, [layout, model, rect, theme, keyboard, translator, constraints, selectionsAPI]);
+      }, [layout, model, rect, theme, keyboard, translator, constraints, selectionsAPI, embed, changeSortOrder]);
 
       useEffect(() => {
         const isReadyToRender =

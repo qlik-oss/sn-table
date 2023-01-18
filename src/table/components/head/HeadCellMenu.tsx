@@ -2,8 +2,6 @@ import React, { useRef, useState, useMemo } from 'react';
 import Menu from '@mui/material/Menu';
 import More from '@qlik-trial/sprout/icons/More';
 import Search from '@qlik-trial/sprout/icons/Search';
-import Descending from '@qlik-trial/sprout/icons/Descending';
-import Ascending from '@qlik-trial/sprout/icons/Ascending';
 
 import { HeadCellMenuProps, MenuItemGroup } from '../../types';
 import { StyledMenuIconButton, NebulaListBox } from './styles';
@@ -12,14 +10,11 @@ import MenuItems from './MenuItems';
 
 export default function HeadCellMenu({
   translator,
-  sortDirection,
-  sortFromMenu,
   embed,
   layout,
   columnIndex,
-  isInteractionEnabled,
-  isCurrentColumnActive,
   isDimension,
+  tabIndex,
 }: HeadCellMenuProps) {
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
   const [openListboxDropdown, setOpenListboxDropdown] = useState(false);
@@ -27,28 +22,6 @@ export default function HeadCellMenu({
 
   const menuItemGroups = useMemo<MenuItemGroup[]>(
     () => [
-      [
-        {
-          id: 1,
-          itemTitle: translator.get('SNTable.MenuItem.SortAscending'),
-          onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
-            sortFromMenu(evt, 'A');
-            setOpenMenuDropdown(false);
-          },
-          icon: <Ascending />,
-          isDisabled: !isInteractionEnabled || (isCurrentColumnActive && sortDirection === 'A'),
-        },
-        {
-          id: 2,
-          itemTitle: translator.get('SNTable.MenuItem.SortDescending'),
-          onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
-            sortFromMenu(evt, 'D');
-            setOpenMenuDropdown(false);
-          },
-          icon: <Descending />,
-          isDisabled: !isInteractionEnabled || (isCurrentColumnActive && sortDirection === 'D'),
-        },
-      ],
       ...(isDimension
         ? [
             [
@@ -67,16 +40,16 @@ export default function HeadCellMenu({
           ]
         : []),
     ],
-    [translator, isInteractionEnabled, isCurrentColumnActive, sortDirection, isDimension]
+    [translator, isDimension]
   );
 
-  return (
+  return menuItemGroups.length ? (
     <>
       <StyledMenuIconButton
         isVisible={openListboxDropdown || openMenuDropdown}
         ref={anchorRef}
         size="small"
-        tabIndex={-1}
+        tabIndex={tabIndex}
         id="sn-table-head-menu-button"
         aria-controls={openMenuDropdown ? 'sn-table-head-menu' : undefined}
         aria-expanded={openMenuDropdown ? 'true' : undefined}
@@ -103,5 +76,5 @@ export default function HeadCellMenu({
         </ListBoxWrapper>
       </Menu>
     </>
-  );
+  ) : null;
 }

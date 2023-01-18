@@ -29,4 +29,14 @@ export enum KeyCodes {
   C = 'c',
 }
 
+export enum FullSortDirection {
+  A = 'ascending',
+  D = 'descending',
+}
+
+export enum ShortSortDirection {
+  A = 'asc',
+  D = 'desc',
+}
+
 export const PAGINATION_HEIGHT = 40;

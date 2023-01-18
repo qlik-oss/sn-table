@@ -2534,10 +2534,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.6.tgz#cee20bd55e68a1720bdab363ecf0c821ded4cd45"
   integrity sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==
 
-"@qlik-trial/sprout@2.43.1":
-  version "2.43.1"
-  resolved "https://npm.pkg.github.com/download/@qlik-trial/sprout/2.43.1/07e83b4e8038174eb514f688f5b84c30cb9431d1#07e83b4e8038174eb514f688f5b84c30cb9431d1"
-  integrity sha512-0F5UKD5ZqMiP5d+fb5HMiEqx2j30pLa1W1IbVes6dI4IjHd0afGu96G9jRu6cTZsNuAMHBCO6V/UCSX/PJcmOw==
+"@qlik-trial/sprout@2.43.7":
+  version "2.43.7"
+  resolved "https://npm.pkg.github.com/download/@qlik-trial/sprout/2.43.7/f94c68f65d07a05f44017b3ec14805deb153ed0f#f94c68f65d07a05f44017b3ec14805deb153ed0f"
+  integrity sha512-IuniyD7G2GFDRq0ttK/JgFfd/s6sCxg+hUGrR80kjsC6Xv5nf/KiNPbVUvU0pQdfydxMbnsi0c5Ocs3ZW7SaCA==
 
 "@qlik/react-native-simple-grid@1.0.11":
   version "1.0.11"

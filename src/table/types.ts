@@ -14,7 +14,6 @@ import {
   TableLayout,
   TotalsPosition,
   Row,
-  SortDirection,
 } from '../types';
 import { SelectionActions } from './constants';
 
@@ -249,17 +248,29 @@ export interface TableHeadWrapperProps extends CommonTableProps {
   embed: stardust.Embed;
 }
 
-export interface HeadCellMenuProps {
+export interface HeadCellContentProps {
+  column: Column;
+  columnIndex: number;
   headerStyle: GeneratedStyling;
-  translator: ExtendedTranslator;
-  sortDirection: SortDirection;
-  sortFromMenu: (evt: React.MouseEvent, sortOrder: SortDirection) => void;
-  isInteractionEnabled: boolean;
   isCurrentColumnActive: boolean;
+  isFocusInHead: boolean;
+  layout: TableLayout;
+  constraints: stardust.Constraints;
+  translator: ExtendedTranslator;
+  embed: stardust.Embed;
+  areBasicFeaturesEnabled: boolean;
+  isInteractionEnabled: boolean;
+  changeSortOrder: ChangeSortOrder;
+  tabIndex: number;
+}
+
+export interface HeadCellMenuProps {
+  translator: ExtendedTranslator;
   embed: stardust.Embed;
   layout: TableLayout;
   columnIndex: number;
   isDimension: boolean;
+  tabIndex: number;
 }
 
 export type MenuItemGroup = HeadCellMenuItem[];
