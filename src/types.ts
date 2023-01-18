@@ -88,7 +88,7 @@ export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, 'qH
 
 export interface Cell {
   qText?: string;
-  qAttrExps: EngineAPI.INxAttributeExpressionValues;
+  qAttrExps?: EngineAPI.INxAttributeExpressionValues;
   qElemNumber: number;
   rowIdx: number;
   colIdx: number;

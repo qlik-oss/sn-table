@@ -1,9 +1,12 @@
+import { Cell, Column } from '../../../../../types';
 import { SelectionStates } from '../../../../constants';
 import { SELECTION_STYLING } from '../../../../styling-defaults';
 import { BodyStyle } from '../../types';
 import getCellStyle from '../get-cell-style';
 
 interface OverridableProps {
+  cell?: Cell;
+  column?: Column;
   isHoveringOnRow?: boolean;
   cellSelectionState?: SelectionStates;
 }
@@ -29,8 +32,14 @@ describe('getCellStyle', () => {
       },
     };
 
-    fn = ({ isHoveringOnRow, cellSelectionState }: OverridableProps) =>
-      getCellStyle(isHoveringOnRow ?? false, cellSelectionState ?? SelectionStates.INACTIVE, bodyStyle);
+    fn = ({ cell, column, isHoveringOnRow, cellSelectionState }: OverridableProps) =>
+      getCellStyle(
+        cell ?? ({} as Cell),
+        column ?? ({} as Column),
+        isHoveringOnRow ?? false,
+        cellSelectionState ?? SelectionStates.INACTIVE,
+        bodyStyle
+      );
   });
 
   describe('user is NOT hovering row', () => {
@@ -71,6 +80,91 @@ describe('getCellStyle', () => {
           'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px), bodyBackground',
       });
     });
+
+    test('with column styling and selection state is INACTIVE', () => {
+      const column = {
+        stylingIDs: ['cellBackgroundColor', 'cellForegroundColor'],
+      } as Column;
+
+      const cell = {
+        qAttrExps: {
+          qValues: [
+            {
+              qText: 'RGB(128,0,0)',
+              qNum: 4286578688,
+            },
+            {
+              qText: 'RGB(0,128,0)',
+              qNum: 4278222848,
+            },
+          ],
+        },
+      } as unknown as Cell;
+
+      const s = fn({ cell, column, isHoveringOnRow: false, cellSelectionState: SelectionStates.INACTIVE });
+
+      expect(s).toEqual({ ...borderColors, color: 'rgb(0,128,0)', background: 'rgb(128,0,0)' });
+    });
+
+    test('with column styling and selection state is SELECTED', () => {
+      const column = {
+        stylingIDs: ['cellBackgroundColor', 'cellForegroundColor'],
+      } as Column;
+
+      const cell = {
+        qAttrExps: {
+          qValues: [
+            {
+              qText: 'RGB(128,0,0)',
+              qNum: 4286578688,
+            },
+            {
+              qText: 'RGB(0,128,0)',
+              qNum: 4278222848,
+            },
+          ],
+        },
+      } as unknown as Cell;
+
+      const s = fn({ cell, column, isHoveringOnRow: false, cellSelectionState: SelectionStates.SELECTED });
+
+      expect(s).toEqual({
+        ...borderColors,
+        color: SELECTION_STYLING.SELECTED.color,
+        background: SELECTION_STYLING.SELECTED.background,
+        selectedCellClass: 'selected',
+      });
+    });
+
+    test('with column styling and selection state is EXCLUDED', () => {
+      const column = {
+        stylingIDs: ['cellBackgroundColor', 'cellForegroundColor'],
+      } as Column;
+
+      const cell = {
+        qAttrExps: {
+          qValues: [
+            {
+              qText: 'RGB(128,0,0)',
+              qNum: 4286578688,
+            },
+            {
+              qText: 'RGB(0,128,0)',
+              qNum: 4278222848,
+            },
+          ],
+        },
+      } as unknown as Cell;
+
+      const s = fn({ cell, column, isHoveringOnRow: false, cellSelectionState: SelectionStates.EXCLUDED });
+
+      expect(s).toEqual({
+        ...borderColors,
+        color: 'rgb(0,128,0)',
+        background:
+          'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px), rgb(128,0,0)',
+      });
+    });
   });
 
   describe('user is hovering row', () => {
@@ -107,6 +201,95 @@ describe('getCellStyle', () => {
 
     test('selection state is EXCLUDED', () => {
       const s = fn({ isHoveringOnRow: true, cellSelectionState: SelectionStates.EXCLUDED });
+
+      expect(s).toEqual({
+        ...borderColors,
+        color: 'hoverFontColor',
+        background:
+          'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px), hoverBackgroundColor',
+      });
+    });
+
+    test('with column styling and selection state is INACTIVE', () => {
+      const column = {
+        stylingIDs: ['cellBackgroundColor', 'cellForegroundColor'],
+      } as Column;
+
+      const cell = {
+        qAttrExps: {
+          qValues: [
+            {
+              qText: 'RGB(128,0,0)',
+              qNum: 4286578688,
+            },
+            {
+              qText: 'RGB(0,128,0)',
+              qNum: 4278222848,
+            },
+          ],
+        },
+      } as unknown as Cell;
+
+      const s = fn({ cell, column, isHoveringOnRow: true, cellSelectionState: SelectionStates.INACTIVE });
+
+      expect(s).toEqual({
+        ...borderColors,
+        color: 'hoverFontColor',
+        background: 'hoverBackgroundColor',
+      });
+    });
+
+    test('with column styling and selection state is SELECTED', () => {
+      const column = {
+        stylingIDs: ['cellBackgroundColor', 'cellForegroundColor'],
+      } as Column;
+
+      const cell = {
+        qAttrExps: {
+          qValues: [
+            {
+              qText: 'RGB(128,0,0)',
+              qNum: 4286578688,
+            },
+            {
+              qText: 'RGB(0,128,0)',
+              qNum: 4278222848,
+            },
+          ],
+        },
+      } as unknown as Cell;
+
+      const s = fn({ cell, column, isHoveringOnRow: true, cellSelectionState: SelectionStates.SELECTED });
+
+      expect(s).toEqual({
+        ...borderColors,
+        color: SELECTION_STYLING.SELECTED.color,
+        background: SELECTION_STYLING.SELECTED.background,
+        selectedCellClass: 'selected',
+      });
+    });
+
+    test('with column styling and selection state is EXCLUDED', () => {
+      const column = {
+        stylingIDs: ['cellBackgroundColor', 'cellForegroundColor'],
+      } as Column;
+
+      const cell = {
+        qAttrExps: {
+          qValues: [
+            {
+              qText: 'RGB(128,0,0)',
+              qNum: 4286578688,
+            },
+            {
+              qText: 'RGB(0,128,0)',
+              qNum: 4278222848,
+            },
+          ],
+        },
+      } as unknown as Cell;
+
+      const s = fn({ cell, column, isHoveringOnRow: true, cellSelectionState: SelectionStates.EXCLUDED });
 
       expect(s).toEqual({
         ...borderColors,
