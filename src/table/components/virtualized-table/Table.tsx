@@ -1,6 +1,6 @@
 import React, { memo, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
-import { getColumns } from '../../../handle-data';
+import { getColumns, getTotalPosition } from '../../../handle-data';
 import useColumnSize from './hooks/use-column-size';
 import Body from './Body';
 import FullSizeContainer from './FullSizeContainer';
@@ -9,7 +9,6 @@ import { TableProps, BodyStyle } from './types';
 import { getHeaderStyle, getBodyStyle } from '../../utils/styling-utils';
 import useScrollHandler from './hooks/use-scroll-handler';
 import Totals from './Totals';
-import useTotals from './hooks/use-totals';
 import useOnPropsChange from './hooks/use-on-props-change';
 import useTableCount from './hooks/use-table-count';
 import ScrollableContainer from './ScrollableContainer';
@@ -24,7 +23,7 @@ const Table = (props: TableProps) => {
   const totalsRef = useRef<VariableSizeList>(null);
   const bodyRef = useRef<VariableSizeGrid>(null);
   const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
-  const totals = useTotals(layout);
+  const totals = useMemo(() => getTotalPosition(layout), [layout]);
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme, !totals.atTop), [layout, theme, totals]);
   const bodyStyle = useMemo<BodyStyle>(
     () => ({

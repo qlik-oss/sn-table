@@ -9,7 +9,11 @@ import {
   TableLayout,
 } from '../../../../types';
 import { GeneratedStyling } from '../../../types';
-import { Totals } from '../hooks/use-totals';
+
+interface Totals {
+  atBottom: boolean;
+  atTop: boolean;
+}
 
 export type TotalsPosition = 'bottom' | 'noTotals' | 'top';
 
