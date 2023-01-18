@@ -15,7 +15,6 @@ describe('<Table />', () => {
   let pageInfo: PageInfo;
   let paginationNeeded: boolean;
   let model: EngineAPI.IGenericObject;
-  // let theme: ExtendedTheme;
   let selectionsAPI: ExtendedSelectionAPI;
   let isModal = false;
   let user: UserEvent;
