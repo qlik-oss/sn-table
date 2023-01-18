@@ -127,11 +127,11 @@ describe('<HeadCellMenu />', () => {
   });
 
   it('should close the menu by clicking the menu button when the context menu is open', async () => {
-    const { getByRole, queryByRole } = renderTableHeadCellMenu();
+    renderTableHeadCellMenu();
 
-    const button = getByRole('button');
+    const button = screen.getByRole('button');
     fireEvent.click(button);
-    const menu = queryByRole('menu');
+    const menu = screen.queryByRole('menu');
     await waitFor(() => {
       expect(menu).toBeVisible();
     });
@@ -155,6 +155,7 @@ describe('<HeadCellMenu />', () => {
       },
     } as TableLayout;
     renderTableHeadCellMenu();
+
     fireEvent.click(screen.getByRole('button'));
     const menu = screen.queryByRole('menu');
     fireEvent.click(screen.getByText('SNTable.MenuItem.Search'));

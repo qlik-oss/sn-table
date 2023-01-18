@@ -87,7 +87,6 @@ export default function HeadCellMenu({
       </StyledMenuIconButton>
 
       <Menu
-        key="menu"
         className="sn-table-head-menu"
         aria-labelledby="sn-table-head-menu-button"
         open={openMenuDropdown}
@@ -98,12 +97,7 @@ export default function HeadCellMenu({
         {MenuItems({ itemGroups: menuItemGroups })}
       </Menu>
 
-      <Menu
-        key="listbox"
-        open={openListboxDropdown}
-        anchorEl={anchorRef.current}
-        onClose={() => setOpenListboxDropdown(false)}
-      >
+      <Menu open={openListboxDropdown} anchorEl={anchorRef.current} onClose={() => setOpenListboxDropdown(false)}>
         <ListBoxWrapper layout={layout} embed={embed} columnIndex={columnIndex}>
           {({ ref }: ListBoxWrapperRenderProps) => <NebulaListBox ref={ref} />}
         </ListBoxWrapper>
