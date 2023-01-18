@@ -14,7 +14,7 @@ import useTableCount from './hooks/use-table-count';
 import ScrollableContainer from './ScrollableContainer';
 import StickyContainer from './StickyContainer';
 import { toTableRect, toStickyContainerRect } from './utils/to-rect';
-import { getBodyRowHeight, getHeaderRowHeight } from './utils/get-height';
+import getHeights from './utils/get-height';
 
 const Table = (props: TableProps) => {
   const { layout, rect, pageInfo, paginationNeeded, model, theme, constraints, selectionsAPI } = props;
@@ -32,9 +32,7 @@ const Table = (props: TableProps) => {
     }),
     [layout, theme.name()] // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const headerRowHeight = getHeaderRowHeight(headerStyle);
-  const bodyRowHeight = getBodyRowHeight(bodyStyle);
-  const headerAndTotalsHeight = totals.atTop || totals.atBottom ? headerRowHeight + bodyRowHeight : headerRowHeight;
+  const { headerRowHeight, bodyRowHeight, headerAndTotalsHeight } = getHeights(headerStyle, bodyStyle, totals);
   const columns = useMemo(() => getColumns(layout), [layout]);
   const tableRect = toTableRect(rect, paginationNeeded);
   const { width } = useColumnSize(tableRect, columns, headerStyle, bodyStyle);

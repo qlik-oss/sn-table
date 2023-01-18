@@ -10,7 +10,7 @@ import {
 } from '../../../../types';
 import { GeneratedStyling } from '../../../types';
 
-interface Totals {
+export interface Totals {
   atBottom: boolean;
   atTop: boolean;
 }
