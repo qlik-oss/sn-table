@@ -138,8 +138,7 @@ export default function HeadCellMenu({
                 layout={layout}
                 embed={embed}
                 columnIndex={columnIndex}
-                onSelectionConfirm={() => setOpenListboxDropdown(false)}
-                onSelectionCancel={() => setOpenListboxDropdown(false)}
+                closeListboxDropdown={() => setOpenListboxDropdown(false)}
               >
                 {({ ref }: ListBoxWrapperRenderProps) => (
                   <ClickAwayListener onClickAway={() => setOpenListboxDropdown(false)}>
