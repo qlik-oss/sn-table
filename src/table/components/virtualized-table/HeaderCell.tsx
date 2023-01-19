@@ -45,7 +45,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
   const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
   const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
-  const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
+  const isCurrentColumnActive = layout.qHyperCube?.qEffectiveInterColumnSortOrder?.[0] === column.colIdx;
 
   const sortFromMenu = (evt: React.MouseEvent, newSortDirection: SortDirection) => {
     evt.stopPropagation();
