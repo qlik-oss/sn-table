@@ -35,7 +35,7 @@ describe('getCellStyle', () => {
     fn = ({ cell, column, isHoveringOnRow, cellSelectionState }: OverridableProps) =>
       getCellStyle(
         cell ?? ({} as Cell),
-        column ?? ({} as Column),
+        column ?? ({ stylingIDs: [] } as unknown as Column),
         isHoveringOnRow ?? false,
         cellSelectionState ?? SelectionStates.INACTIVE,
         bodyStyle
