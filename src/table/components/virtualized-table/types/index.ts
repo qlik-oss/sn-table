@@ -10,7 +10,11 @@ import {
   TableLayout,
 } from '../../../../types';
 import { GeneratedStyling } from '../../../types';
-import { Totals } from '../hooks/use-totals';
+
+export interface Totals {
+  atBottom: boolean;
+  atTop: boolean;
+}
 
 export type TotalsPosition = 'bottom' | 'noTotals' | 'top';
 
@@ -22,62 +26,50 @@ export interface BodyStyle extends GeneratedStyling {
   background: string;
 }
 
-export interface WrapperProps {
-  model: EngineAPI.IGenericObject;
-  layout: TableLayout;
-  rect: stardust.Rect;
-  theme: ExtendedTheme;
-  direction?: 'ltr' | 'rtl';
-  keyboard: stardust.Keyboard;
-  translator: ExtendedTranslator;
+export interface VirtualTableRenderProps {
   selectionsAPI: ExtendedSelectionAPI;
+  layout: TableLayout;
+  model: EngineAPI.IGenericObject;
+  translator: ExtendedTranslator;
   constraints: stardust.Constraints;
+  theme: ExtendedTheme;
+  keyboard: stardust.Keyboard;
+  rect: stardust.Rect;
   embed: stardust.Embed;
   changeSortOrder: ChangeSortOrder;
+}
+
+export interface WrapperProps {
+  rect: stardust.Rect;
 }
 
 export interface TableProps {
-  layout: TableLayout;
   rect: stardust.Rect;
   pageInfo: PageInfo;
   paginationNeeded: boolean;
-  model: EngineAPI.IGenericObject;
-  theme: ExtendedTheme;
-  selectionsAPI: ExtendedSelectionAPI;
-  constraints: stardust.Constraints;
-  embed: stardust.Embed;
-  translator: ExtendedTranslator;
-  changeSortOrder: ChangeSortOrder;
 }
 
 export interface HeaderProps {
-  layout: TableLayout;
   rect: Rect;
   pageInfo: PageInfo;
   forwardRef: React.RefObject<VariableSizeList<any>>;
   columns: Column[];
   columnWidth: number[];
   headerStyle: GeneratedStyling;
-  embed: stardust.Embed;
-  translator: ExtendedTranslator;
-  changeSortOrder: ChangeSortOrder;
-  isInteractionEnabled: boolean;
+  rowHeight: number;
 }
 
 export interface TotalsProps {
-  layout: TableLayout;
   rect: Rect;
   pageInfo: PageInfo;
   forwardRef: React.RefObject<VariableSizeList<any>>;
   columns: Column[];
   columnWidth: number[];
-  theme: ExtendedTheme;
   totals: Totals;
+  rowHeight: number;
 }
 
 export interface BodyProps {
-  model: EngineAPI.IGenericObject;
-  layout: TableLayout;
   rect: Rect;
   pageInfo: PageInfo;
   columns: Column[];
@@ -85,6 +77,6 @@ export interface BodyProps {
   forwardRef: React.RefObject<VariableSizeGrid<any>>;
   innerForwardRef: React.RefObject<HTMLDivElement>;
   bodyStyle: BodyStyle;
-  selectionsAPI: ExtendedSelectionAPI;
-  totals: Totals;
+  rowHeight: number;
+  headerAndTotalsHeight: number;
 }

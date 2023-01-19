@@ -78,6 +78,17 @@ export interface ContextValue {
   selectionDispatch: SelectionDispatch;
   hoverIndex: number;
   setHoverIndex: React.Dispatch<React.SetStateAction<number>>;
+  baseProps: {
+    selectionsAPI: ExtendedSelectionAPI;
+    layout: TableLayout;
+    model?: EngineAPI.IGenericObject;
+    translator: ExtendedTranslator;
+    constraints: stardust.Constraints;
+    theme: ExtendedTheme;
+    keyboard: stardust.Keyboard;
+    embed: stardust.Embed;
+    changeSortOrder: ChangeSortOrder;
+  };
 }
 
 export interface GeneratedStyling {
@@ -91,7 +102,6 @@ export interface GeneratedStyling {
   color?: string;
   fontSize?: string; // following the theme format so this should always be a string
   background?: string;
-  sortLabelColor?: string;
   hoverColors?: {
     background: string;
     color: string;
@@ -101,8 +111,8 @@ export interface GeneratedStyling {
 export interface FooterStyle {
   borderColor: string;
   color: string;
-  iconColor: string;
-  disabledIconColor: string;
+  disabledColor: string;
+  iconColor?: string;
   background?: string;
 }
 
@@ -171,6 +181,14 @@ export interface ContextProviderProps {
   pageRows?: Row[];
   cellCoordMock?: [number, number];
   selectionDispatchMock?: jest.Mock<any, any>;
+  layout: TableLayout;
+  model?: EngineAPI.IGenericObject;
+  translator: ExtendedTranslator;
+  constraints: stardust.Constraints;
+  theme: ExtendedTheme;
+  keyboard: stardust.Keyboard;
+  embed: stardust.Embed;
+  changeSortOrder: ChangeSortOrder;
 }
 
 export interface RenderProps {
@@ -183,10 +201,10 @@ export interface RenderProps {
   tableData?: TableData;
   pageInfo?: PageInfo;
   setPageInfo?: SetPageInfo;
-  constraints?: stardust.Constraints;
-  translator?: ExtendedTranslator;
+  constraints: stardust.Constraints;
+  translator: ExtendedTranslator;
   theme: ExtendedTheme;
-  keyboard?: stardust.Keyboard;
+  keyboard: stardust.Keyboard;
   footerContainer?: HTMLElement;
   announce?: Announce;
   model?: EngineAPI.IGenericObject;
@@ -249,21 +267,15 @@ export interface HeadCellMenuProps {
   container?: HTMLElement;
 }
 
-export interface HeadCellMenuGroup {
-  id: number;
-  options: HeadCellMenuItem[];
-}
-
-export interface MenuGroupProps extends HeadCellMenuGroup {
-  shouldShowDevider: boolean;
-}
+export type MenuItemGroup = HeadCellMenuItem[];
 
 export interface HeadCellMenuItem {
   id: number;
   icon: React.ReactElement;
   itemTitle: string;
   isDisabled: boolean;
-  onClick: (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  hasDivider?: boolean;
+  onClick: (evt: React.MouseEvent<HTMLLIElement>) => void;
 }
 
 export interface TableBodyWrapperProps extends CommonTableProps {

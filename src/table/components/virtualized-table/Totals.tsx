@@ -1,12 +1,13 @@
 import React, { memo, useLayoutEffect, useMemo } from 'react';
 import { VariableSizeList } from 'react-window';
 import { getTotalsCellStyle } from '../../utils/styling-utils';
-import { HEADER_HEIGHT } from './constants';
 import TotalsCell from './TotalsCell';
+import { useContextSelector, TableContext } from '../../context';
 import { TotalsProps } from './types';
 
 const Totals = (props: TotalsProps) => {
-  const { layout, rect, forwardRef, columnWidth, pageInfo, theme, totals } = props;
+  const { rect, forwardRef, columnWidth, pageInfo, totals, rowHeight } = props;
+  const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const totalsStyle = useMemo(() => getTotalsCellStyle(layout, theme, totals.atTop), [layout, theme.name(), totals]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useLayoutEffect(() => {
@@ -28,9 +29,9 @@ const Totals = (props: TotalsProps) => {
       }}
       itemCount={layout.qHyperCube.qSize.qcx}
       itemSize={(index) => columnWidth[index]}
-      height={HEADER_HEIGHT}
+      height={rowHeight}
       width={rect.width}
-      itemData={{ layout, totalsStyle }}
+      itemData={{ totalsStyle }}
     >
       {TotalsCell}
     </VariableSizeList>

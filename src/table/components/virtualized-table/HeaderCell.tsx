@@ -1,11 +1,11 @@
 import styled from '@mui/system/styled';
 import Box from '@mui/material/Box';
-import { stardust } from '@nebula.js/stardust';
 import React from 'react';
-import { ChangeSortOrder, Column, ExtendedTranslator, SortDirection, TableLayout } from '../../../types';
+import { Column, SortDirection } from '../../../types';
 import { GeneratedStyling } from '../../types';
 import HeadCellMenu from '../head/HeadCellMenu';
 import CellText from '../CellText';
+import { useContextSelector, TableContext } from '../../context';
 
 interface HeaderCellProps {
   index: number;
@@ -13,11 +13,6 @@ interface HeaderCellProps {
   data: {
     columns: Column[];
     headerStyle: GeneratedStyling;
-    layout: TableLayout;
-    embed: stardust.Embed;
-    translator: ExtendedTranslator;
-    changeSortOrder: ChangeSortOrder;
-    isInteractionEnabled: boolean;
   };
 }
 
@@ -39,8 +34,15 @@ const StyledHeaderCell = styled(Box, {
 }));
 
 const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
-  const { columns, headerStyle, embed, layout, translator, changeSortOrder, isInteractionEnabled } = data;
-  const { sortLabelColor, ...applicableStyle } = headerStyle;
+  const {
+    columns,
+    headerStyle: { ...applicableStyle },
+  } = data;
+  const { layout, translator, embed, constraints, selectionsAPI, changeSortOrder } = useContextSelector(
+    TableContext,
+    (value) => value.baseProps
+  );
+  const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
   const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
   const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
@@ -68,7 +70,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         <CellText singleLine>{column.label}</CellText>
       </div>
       <HeadCellMenu
-        headerStyle={headerStyle}
+        headerStyle={applicableStyle}
         translator={translator}
         sortFromMenu={sortFromMenu}
         embed={embed}

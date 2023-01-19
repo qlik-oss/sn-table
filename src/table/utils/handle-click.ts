@@ -37,8 +37,11 @@ export const handleClickToSort = (
   changeSortOrder: ChangeSortOrder,
   isInteractionEnabled: boolean
 ) => {
-  !(evt.target as HTMLElement).getElementsByClassName('sn-table-head-menu-item-button')[0]?.ariaDisabled &&
-    !(evt.target as HTMLElement).closest('#sn-table-head-menu-button') &&
+  const target = evt.target as HTMLElement;
+  !target.closest('#sn-table-head-menu-button') &&
+    !target.closest('.sn-table-head-menu-item')?.ariaDisabled &&
+    !target.closest('.sn-table-head-menu') &&
+    !target.closest('.MuiBackdrop-root') &&
     isInteractionEnabled &&
     changeSortOrder(column);
 };

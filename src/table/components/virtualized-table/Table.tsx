@@ -1,42 +1,31 @@
 import React, { memo, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
-import { getColumns } from '../../../handle-data';
+import { getColumns, getTotalPosition } from '../../../handle-data';
 import useColumnSize from './hooks/use-column-size';
 import Body from './Body';
-import { DEFAULT_ROW_HEIGHT } from './constants';
 import FullSizeContainer from './FullSizeContainer';
 import Header from './Header';
 import { TableProps, BodyStyle } from './types';
 import { getHeaderStyle, getBodyStyle } from '../../utils/styling-utils';
 import useScrollHandler from './hooks/use-scroll-handler';
 import Totals from './Totals';
-import useTotals from './hooks/use-totals';
 import useOnPropsChange from './hooks/use-on-props-change';
 import useTableCount from './hooks/use-table-count';
 import ScrollableContainer from './ScrollableContainer';
 import StickyContainer from './StickyContainer';
 import { toTableRect, toStickyContainerRect } from './utils/to-rect';
+import { useContextSelector, TableContext } from '../../context';
+import getHeights from './utils/get-height';
 
 const Table = (props: TableProps) => {
-  const {
-    layout,
-    rect,
-    pageInfo,
-    paginationNeeded,
-    model,
-    theme,
-    constraints,
-    selectionsAPI,
-    embed,
-    translator,
-    changeSortOrder,
-  } = props;
+  const { rect, pageInfo, paginationNeeded } = props;
+  const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);
   const totalsRef = useRef<VariableSizeList>(null);
   const bodyRef = useRef<VariableSizeGrid>(null);
   const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
-  const totals = useTotals(layout);
+  const totals = useMemo(() => getTotalPosition(layout), [layout]);
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme, !totals.atTop), [layout, theme, totals]);
   const bodyStyle = useMemo<BodyStyle>(
     () => ({
@@ -45,27 +34,27 @@ const Table = (props: TableProps) => {
     }),
     [layout, theme.name()] // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
+  const { headerRowHeight, bodyRowHeight, headerAndTotalsHeight } = getHeights(headerStyle, bodyStyle, totals);
   const columns = useMemo(() => getColumns(layout), [layout]);
   const tableRect = toTableRect(rect, paginationNeeded);
   const { width } = useColumnSize(tableRect, columns, headerStyle, bodyStyle);
-  const { rowCount } = useTableCount(layout, pageInfo, tableRect, width);
+  const { rowCount } = useTableCount(layout, pageInfo, tableRect, width, bodyRowHeight);
   const containerWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
-  const [containerHeight, setContainerHeight] = useState(rowCount * DEFAULT_ROW_HEIGHT + totals.shrinkBodyHeightBy);
-  const stickyContainerRect = toStickyContainerRect(tableRect, rowCount, totals.shrinkBodyHeightBy);
+  const [containerHeight, setContainerHeight] = useState(rowCount * bodyRowHeight + headerAndTotalsHeight);
+  const stickyContainerRect = toStickyContainerRect(tableRect, rowCount, headerAndTotalsHeight, bodyRowHeight);
   const scrollHandler = useScrollHandler(
     headerRef,
     totalsRef,
     bodyRef,
     innerForwardRef,
     containerHeight,
-    totals.shrinkBodyHeightBy,
+    headerAndTotalsHeight,
     setContainerHeight
   );
 
   useOnPropsChange(() => {
-    setContainerHeight(rowCount * DEFAULT_ROW_HEIGHT + totals.shrinkBodyHeightBy);
-  }, [rowCount, totals.shrinkBodyHeightBy]);
+    setContainerHeight(rowCount * bodyRowHeight + headerAndTotalsHeight);
+  }, [rowCount, headerAndTotalsHeight, bodyRowHeight]);
 
   useLayoutEffect(() => {
     if (ref.current) {
@@ -76,53 +65,40 @@ const Table = (props: TableProps) => {
 
   const TotalsComponent = (
     <Totals
-      theme={theme}
-      layout={layout}
       rect={stickyContainerRect}
       pageInfo={pageInfo}
       columns={columns}
       columnWidth={width}
       forwardRef={totalsRef}
       totals={totals}
+      rowHeight={bodyRowHeight}
     />
   );
 
   return (
-    <ScrollableContainer
-      ref={ref}
-      constraints={constraints}
-      width={tableRect.width}
-      height={tableRect.height}
-      onScroll={scrollHandler}
-    >
+    <ScrollableContainer ref={ref} width={tableRect.width} height={tableRect.height} onScroll={scrollHandler}>
       <FullSizeContainer width={containerWidth} height={containerHeight}>
         <StickyContainer rect={stickyContainerRect}>
           <Header
             headerStyle={headerStyle}
-            layout={layout}
             rect={stickyContainerRect}
             pageInfo={pageInfo}
             columns={columns}
             columnWidth={width}
             forwardRef={headerRef}
-            embed={embed}
-            translator={translator}
-            changeSortOrder={changeSortOrder}
-            isInteractionEnabled={isInteractionEnabled}
+            rowHeight={headerRowHeight}
           />
           {totals.atTop ? TotalsComponent : null}
           <Body
             bodyStyle={bodyStyle}
-            model={model}
-            layout={layout}
             rect={stickyContainerRect}
             pageInfo={pageInfo}
             columns={columns}
             columnWidth={width}
             forwardRef={bodyRef}
             innerForwardRef={innerForwardRef}
-            selectionsAPI={selectionsAPI}
-            totals={totals}
+            rowHeight={bodyRowHeight}
+            headerAndTotalsHeight={headerAndTotalsHeight}
           />
           {totals.atBottom ? TotalsComponent : null}
         </StickyContainer>
