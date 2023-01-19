@@ -34,6 +34,8 @@ export interface VirtualTableRenderProps {
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
   rect: stardust.Rect;
+  rootElement: HTMLElement;
+  embed: stardust.Embed;
 }
 
 export interface WrapperProps {

@@ -4,10 +4,11 @@ import { stardust } from '@nebula.js/stardust';
 
 import PaginationContent from '../PaginationContent';
 import * as handleAccessibility from '../../../utils/accessibility-utils';
-import { Announce, ExtendedTheme, ExtendedTranslator, PageInfo, SetPageInfo, TableData } from '../../../../types';
+import { Announce, PageInfo, SetPageInfo, TableData } from '../../../../types';
+import TestWithProviders from '../../../../__test__/test-with-providers';
 
 describe('<PaginationContent />', () => {
-  let theme: ExtendedTheme;
+  const keyboard = { enabled: true, active: false };
   let direction: 'ltr' | 'rtl' | undefined;
   let tableData: TableData;
   let pageInfo: PageInfo;
@@ -15,36 +16,28 @@ describe('<PaginationContent />', () => {
   let titles: string[];
   let handleChangePage: () => void;
   let rect: stardust.Rect;
-  let translator: ExtendedTranslator;
   let isSelectionMode: boolean;
-  let keyboard: stardust.Keyboard;
-  let constraints: stardust.Constraints;
   let footerContainer: HTMLElement;
   let announce: Announce;
 
   const renderPagination = () =>
     render(
-      <PaginationContent
-        theme={theme}
-        direction={direction}
-        tableData={tableData}
-        pageInfo={pageInfo}
-        setPageInfo={setPageInfo}
-        keyboard={keyboard}
-        translator={translator}
-        constraints={constraints}
-        footerContainer={footerContainer}
-        isSelectionMode={isSelectionMode}
-        rect={rect}
-        handleChangePage={handleChangePage}
-        announce={announce}
-      />
+      <TestWithProviders keyboard={keyboard}>
+        <PaginationContent
+          direction={direction}
+          tableData={tableData}
+          pageInfo={pageInfo}
+          setPageInfo={setPageInfo}
+          footerContainer={footerContainer}
+          isSelectionMode={isSelectionMode}
+          rect={rect}
+          handleChangePage={handleChangePage}
+          announce={announce}
+        />
+      </TestWithProviders>
     );
 
   beforeEach(() => {
-    theme = {
-      background: { isDark: false },
-    } as unknown as ExtendedTheme;
     direction = 'ltr';
     titles = [
       'SNTable.Pagination.FirstPage',
@@ -65,10 +58,7 @@ describe('<PaginationContent />', () => {
     setPageInfo = jest.fn();
     handleChangePage = jest.fn();
     rect = { width: 750 } as unknown as stardust.Rect;
-    translator = { get: (s: string) => s } as unknown as ExtendedTranslator;
     isSelectionMode = false;
-    keyboard = { enabled: true } as unknown as stardust.Keyboard;
-    constraints = {};
     announce = jest.fn();
     jest.spyOn(handleAccessibility, 'focusSelectionToolbar').mockImplementation(() => jest.fn());
   });

@@ -109,6 +109,8 @@ export default function supernova(env: Galaxy) {
             translator,
             constraints,
             selectionsAPI,
+            rootElement,
+            embed,
           },
           reactRoot
         );

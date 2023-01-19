@@ -27,20 +27,12 @@ enum ShortSortDirection {
   D = 'desc',
 }
 
-function TableHeadWrapper({
-  rootElement,
-  tableData,
-  theme,
-  layout,
-  changeSortOrder,
-  constraints,
-  translator,
-  selectionsAPI,
-  keyboard,
-  embed,
-  areBasicFeaturesEnabled,
-}: TableHeadWrapperProps) {
+function TableHeadWrapper({ tableData, changeSortOrder, areBasicFeaturesEnabled }: TableHeadWrapperProps) {
   const { columns, totalsPosition } = tableData;
+  const { layout, theme, constraints, selectionsAPI, rootElement, keyboard, translator } = useContextSelector(
+    TableContext,
+    (value) => value.baseProps
+  );
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
@@ -119,10 +111,7 @@ function TableHeadWrapper({
                 {areBasicFeaturesEnabled && (
                   <HeadCellMenu
                     headerStyle={headerStyle}
-                    translator={translator}
                     sortFromMenu={sortFromMenu}
-                    embed={embed}
-                    layout={layout}
                     columnIndex={columnIndex}
                     sortDirection={column.sortDirection}
                     isInteractionEnabled={isInteractionEnabled}

@@ -1,36 +1,24 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import { stardust } from '@nebula.js/stardust';
 import TableTotals from '../TableTotals';
 import manageData from '../../../../handle-data';
 import * as handleKeyPress from '../../../utils/handle-key-press';
 import * as handleAccessibility from '../../../utils/accessibility-utils';
 import { generateDataPages, generateLayout } from '../../../../__test__/generate-test-data';
-import { TableData, ExtendedTheme, ExtendedSelectionAPI, PageInfo } from '../../../../types';
+import { TableData, ExtendedSelectionAPI, PageInfo } from '../../../../types';
 import TestWithProviders from '../../../../__test__/test-with-providers';
 
 describe('<TableTotals />', () => {
-  const rootElement = {} as HTMLElement;
   const model = { getHyperCubeData: async () => generateDataPages(2, 2) } as unknown as EngineAPI.IGenericObject;
   const layout = generateLayout(1, 1, 2, [], [{ qText: '350' }]);
   let tableData: TableData;
-  let theme: ExtendedTheme;
   let selectionsAPI: ExtendedSelectionAPI;
-  let keyboard: stardust.Keyboard;
   let areBasicFeaturesEnabled: boolean;
 
   const renderTableTotals = (cellCoordMock?: [number, number]) =>
     render(
       <TestWithProviders selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
-        <TableTotals
-          rootElement={rootElement}
-          tableData={tableData}
-          theme={theme}
-          layout={layout}
-          keyboard={keyboard}
-          selectionsAPI={selectionsAPI}
-          areBasicFeaturesEnabled={areBasicFeaturesEnabled}
-        />
+        <TableTotals tableData={tableData} areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
       </TestWithProviders>
     );
 
@@ -41,18 +29,6 @@ describe('<TableTotals />', () => {
       { top: 0, height: 100 } as unknown as PageInfo,
       () => undefined
     )) as TableData;
-    theme = {
-      getColorPickerColor: () => undefined,
-      name: () => undefined,
-      getStyle: () => undefined,
-      background: { isDark: false },
-    } as unknown as ExtendedTheme;
-    keyboard = {
-      enabled: false,
-    } as stardust.Keyboard;
-    selectionsAPI = {
-      isModal: () => false,
-    } as ExtendedSelectionAPI;
   });
 
   afterEach(() => jest.clearAllMocks());

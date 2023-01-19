@@ -86,6 +86,8 @@ export interface ContextValue {
     constraints: stardust.Constraints;
     theme: ExtendedTheme;
     keyboard: stardust.Keyboard;
+    rootElement: HTMLElement;
+    embed: stardust.Embed;
   };
 }
 
@@ -185,6 +187,8 @@ export interface ContextProviderProps {
   constraints: stardust.Constraints;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
+  rootElement: HTMLElement;
+  embed: stardust.Embed;
 }
 
 export interface RenderProps {
@@ -215,49 +219,30 @@ export interface RenderProps {
   embed?: stardust.Embed;
 }
 
-export interface CommonTableProps {
+export interface TableWrapperProps {
   tableData: TableData;
-  theme: ExtendedTheme;
-  keyboard: stardust.Keyboard;
-}
-
-export interface TableWrapperProps extends CommonTableProps {
   direction?: Direction;
-  selectionsAPI: ExtendedSelectionAPI;
-  rootElement: HTMLElement;
-  layout: TableLayout;
   changeSortOrder: ChangeSortOrder;
   rect: stardust.Rect;
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
-  constraints: stardust.Constraints;
-  translator: ExtendedTranslator;
   footerContainer?: HTMLElement;
   announce: Announce;
   areBasicFeaturesEnabled: boolean;
-  embed: stardust.Embed;
 }
 
-export interface TableHeadWrapperProps extends CommonTableProps {
-  selectionsAPI: ExtendedSelectionAPI;
-  rootElement: HTMLElement;
-  layout: TableLayout;
+export interface TableHeadWrapperProps {
+  tableData: TableData;
   changeSortOrder: ChangeSortOrder;
-  constraints: stardust.Constraints;
-  translator: ExtendedTranslator;
   areBasicFeaturesEnabled: boolean;
-  embed: stardust.Embed;
 }
 
 export interface HeadCellMenuProps {
   headerStyle: GeneratedStyling;
-  translator: ExtendedTranslator;
   sortDirection: SortDirection;
   sortFromMenu: (evt: React.MouseEvent, sortOrder: SortDirection) => void;
   isInteractionEnabled: boolean;
   isCurrentColumnActive: boolean;
-  embed: stardust.Embed;
-  layout: TableLayout;
   columnIndex: number;
   isDimension: boolean;
 }
@@ -273,31 +258,25 @@ export interface HeadCellMenuItem {
   onClick: (evt: React.MouseEvent<HTMLLIElement>) => void;
 }
 
-export interface TableBodyWrapperProps extends CommonTableProps {
-  selectionsAPI: ExtendedSelectionAPI;
-  rootElement: HTMLElement;
-  layout: TableLayout;
-  constraints: stardust.Constraints;
+export interface TableBodyWrapperProps {
+  tableData: TableData;
   announce: Announce;
   setShouldRefocus(): void;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | null>;
   areBasicFeaturesEnabled: boolean;
 }
 
-export interface TableTotalsProps extends CommonTableProps {
-  rootElement: HTMLElement;
-  layout: TableLayout;
-  selectionsAPI: ExtendedSelectionAPI;
+export interface TableTotalsProps {
+  tableData: TableData;
   areBasicFeaturesEnabled: boolean;
 }
 
-export interface PaginationContentProps extends CommonTableProps {
+export interface PaginationContentProps {
+  tableData: TableData;
   direction?: 'ltr' | 'rtl';
   rect: stardust.Rect;
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
-  constraints: stardust.Constraints;
-  translator: ExtendedTranslator;
   footerContainer?: HTMLElement;
   announce: Announce;
   isSelectionMode: boolean;
@@ -306,7 +285,6 @@ export interface PaginationContentProps extends CommonTableProps {
 
 export interface FooterWrapperProps {
   children: JSX.Element;
-  theme: ExtendedTheme;
   footerContainer?: HTMLElement;
   withoutBorders?: boolean;
   paginationNeeded?: boolean;

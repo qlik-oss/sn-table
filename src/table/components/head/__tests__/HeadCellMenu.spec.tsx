@@ -2,14 +2,12 @@ import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { render, fireEvent, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ExtendedTranslator, ExtendedSelectionAPI, SortDirection, TableLayout } from '../../../../types';
+import { SortDirection, TableLayout } from '../../../../types';
 import { GeneratedStyling } from '../../../types';
 import HeadCellMenu from '../HeadCellMenu';
 import TestWithProviders from '../../../../__test__/test-with-providers';
 
 describe('<HeadCellMenu />', () => {
-  let translator: ExtendedTranslator;
-  let selectionsAPI: ExtendedSelectionAPI;
   let headerStyle: GeneratedStyling;
   let sortFromMenu: (evt: React.MouseEvent, sortOrder: string) => void;
   const sortDirection: SortDirection = 'A';
@@ -22,27 +20,20 @@ describe('<HeadCellMenu />', () => {
 
   const renderTableHeadCellMenu = (cellCoordMock?: [number, number]) =>
     render(
-      <TestWithProviders selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock} direction={direction}>
+      <TestWithProviders cellCoordMock={cellCoordMock} layout={layout} direction={direction} embed={embed}>
         <HeadCellMenu
           isDimension
           headerStyle={headerStyle}
-          translator={translator}
           sortDirection={sortDirection}
           sortFromMenu={sortFromMenu}
           isInteractionEnabled={isInteractionEnabled}
           isCurrentColumnActive={isCurrentColumnActive}
-          embed={embed}
-          layout={layout}
           columnIndex={columnIndex}
         />
       </TestWithProviders>
     );
 
   beforeEach(() => {
-    selectionsAPI = {
-      isModal: () => false,
-    } as ExtendedSelectionAPI;
-    translator = { get: (s) => s } as ExtendedTranslator;
     headerStyle = {
       borderBottomColor: '#4287f5',
       borderRightColor: '#4287f5',
