@@ -3,7 +3,6 @@ import { stardust } from '@nebula.js/stardust';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import useEvent from '@testing-library/user-event';
 import TableHeadWrapper from '../TableHeadWrapper';
-import { TableContextProvider } from '../../../context';
 import * as handleKeyPress from '../../../utils/handle-key-press';
 import * as handleClick from '../../../utils/handle-click';
 import {
@@ -14,6 +13,7 @@ import {
   ExtendedTranslator,
   ExtendedSelectionAPI,
 } from '../../../../types';
+import TestWithProviders from '../../../../__test__/test-with-providers';
 
 describe('<TableHeadWrapper />', () => {
   const rootElement = {} as HTMLElement;
@@ -30,7 +30,7 @@ describe('<TableHeadWrapper />', () => {
 
   const renderTableHead = (cellCoordMock?: [number, number]) =>
     render(
-      <TableContextProvider selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
+      <TestWithProviders selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
         <TableHeadWrapper
           rootElement={rootElement}
           constraints={constraints}
@@ -44,7 +44,7 @@ describe('<TableHeadWrapper />', () => {
           areBasicFeaturesEnabled={areBasicFeaturesEnabled}
           embed={embed}
         />
-      </TableContextProvider>
+      </TestWithProviders>
     );
 
   beforeEach(() => {

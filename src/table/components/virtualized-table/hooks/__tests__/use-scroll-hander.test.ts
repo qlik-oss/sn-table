@@ -8,7 +8,7 @@ describe('useScrollHandler', () => {
   let totalsRef: React.RefObject<VariableSizeList<any>>;
   let innerForwardRef: React.RefObject<HTMLDivElement>;
   let totalHeight: number;
-  let shrinkBodyHeightBy: number;
+  let headerAndTotalsHeight: number;
   let setTotalHeight: React.Dispatch<React.SetStateAction<number>>;
   let listInstance: VariableSizeList;
   let listTotalsInstance: VariableSizeList;
@@ -29,7 +29,7 @@ describe('useScrollHandler', () => {
 
     totalHeight = 250;
 
-    shrinkBodyHeightBy = 10;
+    headerAndTotalsHeight = 10;
 
     setTotalHeight = jest.fn(() => {});
   });
@@ -44,7 +44,15 @@ describe('useScrollHandler', () => {
     const bodyScrollToSpy = jest.spyOn(gridInstance, 'scrollTo');
 
     const { result } = renderHook(() =>
-      useScrollHandler(headerRef, totalsRef, bodyRef, innerForwardRef, totalHeight, shrinkBodyHeightBy, setTotalHeight)
+      useScrollHandler(
+        headerRef,
+        totalsRef,
+        bodyRef,
+        innerForwardRef,
+        totalHeight,
+        headerAndTotalsHeight,
+        setTotalHeight
+      )
     );
 
     const event = {
@@ -66,7 +74,15 @@ describe('useScrollHandler', () => {
     };
 
     const { result } = renderHook(() =>
-      useScrollHandler(headerRef, totalsRef, bodyRef, innerForwardRef, totalHeight, shrinkBodyHeightBy, setTotalHeight)
+      useScrollHandler(
+        headerRef,
+        totalsRef,
+        bodyRef,
+        innerForwardRef,
+        totalHeight,
+        headerAndTotalsHeight,
+        setTotalHeight
+      )
     );
 
     const event = {
@@ -75,6 +91,8 @@ describe('useScrollHandler', () => {
 
     result.current(event);
 
-    expect(setTotalHeight).toHaveBeenCalledWith((innerForwardRef.current?.clientHeight as number) + shrinkBodyHeightBy);
+    expect(setTotalHeight).toHaveBeenCalledWith(
+      (innerForwardRef.current?.clientHeight as number) + headerAndTotalsHeight
+    );
   });
 });

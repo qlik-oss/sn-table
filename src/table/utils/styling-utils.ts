@@ -6,6 +6,13 @@ import { GeneratedStyling, CellStyle, FooterStyle } from '../types';
 import { SelectionStates, PAGINATION_HEIGHT } from '../constants';
 import { SELECTION_STYLING, COLORING } from '../styling-defaults';
 
+const LINE_HEIGHT = 4 / 3;
+const CELL_PADDING_HEIGHT = 8;
+const CELL_BORDER_HEIGHT = 1;
+
+export const fontSizeToRowHeight = (fontSize: string) =>
+  parseInt(fontSize, 10) * LINE_HEIGHT + CELL_PADDING_HEIGHT + CELL_BORDER_HEIGHT;
+
 // the order of style
 // default (inl. sprout theme) < Sense theme < styling settings
 // < column < selection (except the selected green) < hover < selected green
@@ -60,8 +67,7 @@ export const getBorderColors = (isBackgroundDark: boolean, bottomSeparatingBorde
  */
 const getLastRowBottomBorder = (fontSize: string | undefined, rowsLength?: number, rootElement?: HTMLElement) => {
   if (fontSize && rowsLength && rootElement) {
-    // font size * line height + top/bottom padding and border (4 + 4 + 1)
-    const rowHeight = parseInt(fontSize, 10) * (4 / 3) + 9;
+    const rowHeight = fontSizeToRowHeight(fontSize);
     // multiply with number of rows plus header and totals. Compare if greater than container
     const showBottomBorder = rowHeight * (rowsLength + 2) < rootElement.clientHeight - PAGINATION_HEIGHT;
     return showBottomBorder ? '1px' : '0px';

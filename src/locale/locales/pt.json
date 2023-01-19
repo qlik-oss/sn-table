@@ -9,6 +9,11 @@
     "comment": "number of rows and columns announced by the screen reader. (tew 210929)",
     "version": "HKjzXNhL9hPs/kFY0XyjTQ=="
   },
+  "SNTable.MenuItem.Search": {
+    "value": "Pesquisar",
+    "comment": "label for menu item to search in dimension.",
+    "version": "+fqjoaY7NnQcJ4AboIJThg=="
+  },
   "SNTable.MenuItem.SortAscending": {
     "value": "Classificar em ordem crescente",
     "comment": "label for menu item to sort ascending. (tew 221116)",
