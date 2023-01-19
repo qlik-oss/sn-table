@@ -14,7 +14,7 @@ const getCellStyle = (
 ): BodyStyle => {
   const { hoverColors, lastRowBottomBorder, ...styling } = bodyStyle;
 
-  const withColumnStyle = cell.qAttrExps
+  const withColumnStyle = column.stylingIDs.length
     ? (getColumnStyle(styling as CellStyle, cell.qAttrExps, column.stylingIDs) as BodyStyle)
     : styling;
 
