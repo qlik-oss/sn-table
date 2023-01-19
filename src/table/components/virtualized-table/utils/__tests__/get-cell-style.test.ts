@@ -11,6 +11,25 @@ interface OverridableProps {
   cellSelectionState?: SelectionStates;
 }
 
+const cellWithAttrExps = {
+  qAttrExps: {
+    qValues: [
+      {
+        qText: 'RGB(128,0,0)',
+        qNum: 4286578688,
+      },
+      {
+        qText: 'RGB(0,128,0)',
+        qNum: 4278222848,
+      },
+    ],
+  },
+} as unknown as Cell;
+
+const columnWithStylingIDs = {
+  stylingIDs: ['cellBackgroundColor', 'cellForegroundColor'],
+} as Column;
+
 describe('getCellStyle', () => {
   const borderColors = {
     borderTopColor: 'bodyBorderColor',
@@ -82,51 +101,23 @@ describe('getCellStyle', () => {
     });
 
     test('with column styling and selection state is INACTIVE', () => {
-      const column = {
-        stylingIDs: ['cellBackgroundColor', 'cellForegroundColor'],
-      } as Column;
-
-      const cell = {
-        qAttrExps: {
-          qValues: [
-            {
-              qText: 'RGB(128,0,0)',
-              qNum: 4286578688,
-            },
-            {
-              qText: 'RGB(0,128,0)',
-              qNum: 4278222848,
-            },
-          ],
-        },
-      } as unknown as Cell;
-
-      const s = fn({ cell, column, isHoveringOnRow: false, cellSelectionState: SelectionStates.INACTIVE });
+      const s = fn({
+        cell: cellWithAttrExps,
+        column: columnWithStylingIDs,
+        isHoveringOnRow: false,
+        cellSelectionState: SelectionStates.INACTIVE,
+      });
 
       expect(s).toEqual({ ...borderColors, color: 'rgb(0,128,0)', background: 'rgb(128,0,0)' });
     });
 
     test('with column styling and selection state is SELECTED', () => {
-      const column = {
-        stylingIDs: ['cellBackgroundColor', 'cellForegroundColor'],
-      } as Column;
-
-      const cell = {
-        qAttrExps: {
-          qValues: [
-            {
-              qText: 'RGB(128,0,0)',
-              qNum: 4286578688,
-            },
-            {
-              qText: 'RGB(0,128,0)',
-              qNum: 4278222848,
-            },
-          ],
-        },
-      } as unknown as Cell;
-
-      const s = fn({ cell, column, isHoveringOnRow: false, cellSelectionState: SelectionStates.SELECTED });
+      const s = fn({
+        cell: cellWithAttrExps,
+        column: columnWithStylingIDs,
+        isHoveringOnRow: false,
+        cellSelectionState: SelectionStates.SELECTED,
+      });
 
       expect(s).toEqual({
         ...borderColors,
@@ -137,26 +128,12 @@ describe('getCellStyle', () => {
     });
 
     test('with column styling and selection state is EXCLUDED', () => {
-      const column = {
-        stylingIDs: ['cellBackgroundColor', 'cellForegroundColor'],
-      } as Column;
-
-      const cell = {
-        qAttrExps: {
-          qValues: [
-            {
-              qText: 'RGB(128,0,0)',
-              qNum: 4286578688,
-            },
-            {
-              qText: 'RGB(0,128,0)',
-              qNum: 4278222848,
-            },
-          ],
-        },
-      } as unknown as Cell;
-
-      const s = fn({ cell, column, isHoveringOnRow: false, cellSelectionState: SelectionStates.EXCLUDED });
+      const s = fn({
+        cell: cellWithAttrExps,
+        column: columnWithStylingIDs,
+        isHoveringOnRow: false,
+        cellSelectionState: SelectionStates.EXCLUDED,
+      });
 
       expect(s).toEqual({
         ...borderColors,
@@ -211,26 +188,12 @@ describe('getCellStyle', () => {
     });
 
     test('with column styling and selection state is INACTIVE', () => {
-      const column = {
-        stylingIDs: ['cellBackgroundColor', 'cellForegroundColor'],
-      } as Column;
-
-      const cell = {
-        qAttrExps: {
-          qValues: [
-            {
-              qText: 'RGB(128,0,0)',
-              qNum: 4286578688,
-            },
-            {
-              qText: 'RGB(0,128,0)',
-              qNum: 4278222848,
-            },
-          ],
-        },
-      } as unknown as Cell;
-
-      const s = fn({ cell, column, isHoveringOnRow: true, cellSelectionState: SelectionStates.INACTIVE });
+      const s = fn({
+        cell: cellWithAttrExps,
+        column: columnWithStylingIDs,
+        isHoveringOnRow: true,
+        cellSelectionState: SelectionStates.INACTIVE,
+      });
 
       expect(s).toEqual({
         ...borderColors,
@@ -240,26 +203,12 @@ describe('getCellStyle', () => {
     });
 
     test('with column styling and selection state is SELECTED', () => {
-      const column = {
-        stylingIDs: ['cellBackgroundColor', 'cellForegroundColor'],
-      } as Column;
-
-      const cell = {
-        qAttrExps: {
-          qValues: [
-            {
-              qText: 'RGB(128,0,0)',
-              qNum: 4286578688,
-            },
-            {
-              qText: 'RGB(0,128,0)',
-              qNum: 4278222848,
-            },
-          ],
-        },
-      } as unknown as Cell;
-
-      const s = fn({ cell, column, isHoveringOnRow: true, cellSelectionState: SelectionStates.SELECTED });
+      const s = fn({
+        cell: cellWithAttrExps,
+        column: columnWithStylingIDs,
+        isHoveringOnRow: true,
+        cellSelectionState: SelectionStates.SELECTED,
+      });
 
       expect(s).toEqual({
         ...borderColors,
@@ -270,26 +219,12 @@ describe('getCellStyle', () => {
     });
 
     test('with column styling and selection state is EXCLUDED', () => {
-      const column = {
-        stylingIDs: ['cellBackgroundColor', 'cellForegroundColor'],
-      } as Column;
-
-      const cell = {
-        qAttrExps: {
-          qValues: [
-            {
-              qText: 'RGB(128,0,0)',
-              qNum: 4286578688,
-            },
-            {
-              qText: 'RGB(0,128,0)',
-              qNum: 4278222848,
-            },
-          ],
-        },
-      } as unknown as Cell;
-
-      const s = fn({ cell, column, isHoveringOnRow: true, cellSelectionState: SelectionStates.EXCLUDED });
+      const s = fn({
+        cell: cellWithAttrExps,
+        column: columnWithStylingIDs,
+        isHoveringOnRow: true,
+        cellSelectionState: SelectionStates.EXCLUDED,
+      });
 
       expect(s).toEqual({
         ...borderColors,
