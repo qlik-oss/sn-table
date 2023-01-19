@@ -253,13 +253,12 @@ export interface HeadCellContentProps {
   columnIndex: number;
   headerStyle: GeneratedStyling;
   isCurrentColumnActive: boolean;
-  isFocusInHead: boolean;
   layout: TableLayout;
+  selectionsAPI: ExtendedSelectionAPI;
   constraints: stardust.Constraints;
   translator: ExtendedTranslator;
   embed: stardust.Embed;
   areBasicFeaturesEnabled: boolean;
-  isInteractionEnabled: boolean;
   changeSortOrder: ChangeSortOrder;
   tabIndex: number;
 }

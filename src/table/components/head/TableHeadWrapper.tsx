@@ -26,14 +26,12 @@ function TableHeadWrapper({
 }: TableHeadWrapperProps) {
   const { columns, totalsPosition } = tableData;
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
-  const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   // const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const headerStyle = useMemo(
     () => getHeaderStyle(layout, theme, !totalsPosition.atTop),
     [layout, theme, totalsPosition]
   );
   const headRowRef = useRef<HTMLTableRowElement>(null);
-  const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
   const tabIndex = !keyboard.enabled ? 0 : -1;
 
   useEffect(() => {
@@ -78,10 +76,9 @@ function TableHeadWrapper({
                 translator={translator}
                 embed={embed}
                 layout={layout}
+                selectionsAPI={selectionsAPI}
                 isCurrentColumnActive={isCurrentColumnActive}
-                isFocusInHead={isFocusInHead}
                 areBasicFeaturesEnabled={areBasicFeaturesEnabled}
-                isInteractionEnabled={isInteractionEnabled}
                 changeSortOrder={changeSortOrder}
                 tabIndex={tabIndex}
               />

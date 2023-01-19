@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useContextSelector, TableContext } from '../../context';
 import { HeadCellContentProps } from '../../types';
 import { FullSortDirection } from '../../constants';
 import useHeadIcons from '../../hooks/use-head-icons';
@@ -9,18 +10,20 @@ import HeadCellMenu from './HeadCellMenu';
 function HeadCellContent({
   column,
   columnIndex,
-  isFocusInHead,
   layout,
   constraints,
   translator,
   embed,
   areBasicFeaturesEnabled,
-  isInteractionEnabled,
   changeSortOrder,
   tabIndex,
+  selectionsAPI,
 }: HeadCellContentProps) {
+  const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
+
   const { startIcon, endIcon, lockIcon } = useHeadIcons(column);
   const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
+  const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
   const handleSort = () => isInteractionEnabled && changeSortOrder(column);
 
   return (
