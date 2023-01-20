@@ -5,22 +5,21 @@ import Search from '@qlik-trial/sprout/icons/Search';
 import Descending from '@qlik-trial/sprout/icons/Descending';
 import Ascending from '@qlik-trial/sprout/icons/Ascending';
 
+import { useContextSelector, TableContext } from '../../context';
 import { HeadCellMenuProps, MenuItemGroup } from '../../types';
 import { StyledMenuIconButton, NebulaListBox } from './styles';
 import { ListBoxWrapper, ListBoxWrapperRenderProps } from './ListBoxWrapper';
 import MenuItems from './MenuItems';
 
 export default function HeadCellMenu({
-  translator,
   sortDirection,
   sortFromMenu,
-  embed,
-  layout,
   columnIndex,
   isInteractionEnabled,
   isCurrentColumnActive,
   isDimension,
 }: HeadCellMenuProps) {
+  const { translator } = useContextSelector(TableContext, (value) => value.baseProps);
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
   const [openListboxDropdown, setOpenListboxDropdown] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
@@ -98,7 +97,7 @@ export default function HeadCellMenu({
       </Menu>
 
       <Menu open={openListboxDropdown} anchorEl={anchorRef.current} onClose={() => setOpenListboxDropdown(false)}>
-        <ListBoxWrapper layout={layout} embed={embed} columnIndex={columnIndex}>
+        <ListBoxWrapper columnIndex={columnIndex}>
           {({ ref }: ListBoxWrapperRenderProps) => <NebulaListBox ref={ref} />}
         </ListBoxWrapper>
       </Menu>

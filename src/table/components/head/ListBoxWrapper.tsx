@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { stardust } from '@nebula.js/stardust';
+import { useContextSelector, TableContext } from '../../context';
 import { TableLayout } from '../../../types';
 
 export interface ListBoxWrapperRenderProps {
@@ -8,8 +9,6 @@ export interface ListBoxWrapperRenderProps {
 
 interface ListBoxWrapperProps {
   children: (props: ListBoxWrapperRenderProps) => JSX.Element;
-  layout: TableLayout;
-  embed: stardust.Embed;
   columnIndex: number;
 }
 
@@ -21,7 +20,8 @@ const getFieldId = (layout: TableLayout, columnIndex: number): string | stardust
       }
     : layout.qHyperCube.qDimensionInfo[columnIndex]?.qFallbackTitle;
 
-export const ListBoxWrapper = ({ children, embed, layout, columnIndex }: ListBoxWrapperProps) => {
+export const ListBoxWrapper = ({ children, columnIndex }: ListBoxWrapperProps) => {
+  const { embed, layout } = useContextSelector(TableContext, (value) => value.baseProps);
   const [listboxInstance, setListboxInstance] = useState<stardust.FieldInstance>();
   const ref = useRef<HTMLElement>(null);
 
