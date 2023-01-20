@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, memo, useMemo } from 'react';
+import React, { memo, useMemo, useLayoutEffect } from 'react';
 import { VariableSizeGrid } from 'react-window';
 import useData from './hooks/use-data';
 import { BodyProps } from './types';
@@ -31,14 +31,12 @@ const Body = (props: BodyProps) => {
     columnWidth,
     rowHeight
   );
-  let { height: bodyHeight } = rect;
-  bodyHeight -= headerAndTotalsHeight;
-  bodyHeight = Math.min(rowCount * rowHeight, bodyHeight);
 
-  const { rowsInPage, loadRows, loadColumns } = useData(
+  const { rowsInPage, deferredRowCount, loadRows, loadColumns } = useData(
     layout,
     model as EngineAPI.IGenericObject,
     pageInfo,
+    rowCount,
     visibleRowCount,
     visibleColumnCount,
     columns
@@ -50,7 +48,7 @@ const Body = (props: BodyProps) => {
     loadColumns,
     verticalScrollDirection,
     horizontalScrollDirection,
-    rowCount,
+    rowCount: deferredRowCount,
     pageInfo,
   });
 
@@ -68,6 +66,10 @@ const Body = (props: BodyProps) => {
     forwardRef.current.scrollTo({ scrollLeft: 0, scrollTop: 0 });
   }, [layout, pageInfo.page, forwardRef, columnWidth]);
 
+  let { height: bodyHeight } = rect;
+  bodyHeight -= headerAndTotalsHeight;
+  bodyHeight = Math.min(deferredRowCount * rowHeight, bodyHeight);
+
   return (
     <VariableSizeGrid
       data-key="body"
@@ -77,7 +79,7 @@ const Body = (props: BodyProps) => {
       columnCount={layout.qHyperCube.qSize.qcx}
       columnWidth={(index) => columnWidth[index]}
       height={bodyHeight}
-      rowCount={rowCount}
+      rowCount={deferredRowCount}
       rowHeight={() => rowHeight}
       estimatedRowHeight={rowHeight}
       width={rect.width}

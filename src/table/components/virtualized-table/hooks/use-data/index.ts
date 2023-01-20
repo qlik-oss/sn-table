@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { PageInfo, Row, Column, TableLayout } from '../../../../../types';
-import useOnPropsChange from '../use-on-props-change';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
 import useGetHyperCubeDataQueue from '../use-get-hypercube-data-queue';
 import { createRow, isColumnMissingData, isRowMissingData } from './utils';
@@ -11,17 +10,19 @@ export interface UseData {
   rowsInPage: Row[];
   loadRows: LoadData;
   loadColumns: LoadData;
+  deferredRowCount: number;
 }
 
 const useData = (
   layout: TableLayout,
   model: EngineAPI.IGenericObject,
   pageInfo: PageInfo,
+  rowCount: number,
   visibleRowCount: number,
   visibleColumnCount: number,
   columns: Column[]
 ): UseData => {
-  const [rowsInPage, setRowsInPage] = useState<Row[]>([]);
+  const [rowsInPage, setRowsInPage] = useState<Row[]>(Array(rowCount));
 
   const getDataPages = useCallback(
     async (pages: EngineAPI.INxPage[]) => model.getHyperCubeData('/qHyperCubeDef', pages),
@@ -58,11 +59,6 @@ const useData = (
   // The queue takes a EngineAPI.INxPage object as items and adds them to a queue and
   // exists to prevent the same page from being fetched more than once.
   const queue = useGetHyperCubeDataQueue(getDataPages, handleDataPages);
-
-  useOnPropsChange(() => {
-    queue.clear();
-    setRowsInPage([]);
-  }, [layout, pageInfo.page]);
 
   const loadColumns: LoadData = useCallback(
     (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
@@ -101,20 +97,26 @@ const useData = (
   );
 
   useEffect(() => {
-    // Initial data load
+    // Run this hook everytime "rowsInPage" becomes stale
+    queue.clear();
+
     const qTop = pageInfo.page * pageInfo.rowsPerPage;
 
     // Ensure that the data request size is never over 10 000
     const qWidth = Math.min(100, layout.qHyperCube.qSize.qcx, visibleColumnCount + COLUMN_DATA_BUFFER_SIZE);
     const qHeight = Math.min(100, layout.qHyperCube.qSize.qcy, visibleRowCount + ROW_DATA_BUFFER_SIZE);
 
-    getDataPages([{ qLeft: 0, qTop, qHeight, qWidth }]).then(handleDataPages);
-  }, [getDataPages, handleDataPages, layout, visibleRowCount, visibleColumnCount, pageInfo]);
+    getDataPages([{ qLeft: 0, qTop, qHeight, qWidth }]).then((dataPages) => {
+      setRowsInPage(Array(rowCount)); // Reset rows to initial value
+      handleDataPages(dataPages);
+    });
+  }, [getDataPages, handleDataPages, layout, visibleRowCount, visibleColumnCount, pageInfo, queue, rowCount]);
 
   return {
     rowsInPage,
     loadRows,
     loadColumns,
+    deferredRowCount: rowsInPage.length,
   };
 };
 
