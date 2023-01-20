@@ -12,7 +12,6 @@ import {
   handleClickToFocusHead,
   handleClickToSort,
 } from '../../utils/handle-click';
-import { SortDirection } from '../../../types';
 import { TableHeadWrapperProps } from '../../types';
 import HeadCellMenu from './HeadCellMenu';
 import CellText from '../CellText';
@@ -70,11 +69,6 @@ function TableHeadWrapper({ tableData, changeSortOrder, areBasicFeaturesEnabled 
             });
           };
 
-          const sortFromMenu = (evt: React.MouseEvent, newSortDirection: SortDirection) => {
-            evt.stopPropagation();
-            changeSortOrder(column, newSortDirection);
-          };
-
           return (
             <StyledHeadCell
               headerStyle={headerStyle}
@@ -108,17 +102,7 @@ function TableHeadWrapper({ tableData, changeSortOrder, areBasicFeaturesEnabled 
                   )}
                 </StyledSortLabel>
 
-                {areBasicFeaturesEnabled && (
-                  <HeadCellMenu
-                    headerStyle={headerStyle}
-                    sortFromMenu={sortFromMenu}
-                    columnIndex={columnIndex}
-                    sortDirection={column.sortDirection}
-                    isInteractionEnabled={isInteractionEnabled}
-                    isCurrentColumnActive={isCurrentColumnActive}
-                    isDimension={column.isDim}
-                  />
-                )}
+                {areBasicFeaturesEnabled && <HeadCellMenu columnIndex={columnIndex} isDimension={column.isDim} />}
               </HeadCellContent>
             </StyledHeadCell>
           );
