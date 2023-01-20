@@ -18,13 +18,14 @@ describe('<Table />', () => {
   let selectionsAPI: ExtendedSelectionAPI;
   let isModal = false;
   let user: UserEvent;
+  let constraints: stardust.Constraints;
   const dimensionCount = 2;
   const measureCount = 1;
   const rowCount = 5;
 
   const renderTable = () =>
     render(
-      <TestWithProviders selectionsAPI={selectionsAPI} model={model} layout={layout}>
+      <TestWithProviders selectionsAPI={selectionsAPI} model={model} layout={layout} constraints={constraints}>
         <TestableTable pageInfo={pageInfo} rect={rect} paginationNeeded={paginationNeeded} />
       </TestWithProviders>
     );
@@ -85,6 +86,10 @@ describe('<Table />', () => {
         isModal = true;
       },
     } as unknown as ExtendedSelectionAPI;
+
+    isModal = false;
+
+    constraints = {};
   });
 
   afterEach(() => jest.restoreAllMocks());
@@ -176,6 +181,54 @@ describe('<Table />', () => {
 
       await waitFor(() => expect(screen.getByText('dimension-c1-r0').parentNode).toHaveClass('excluded'));
       await waitFor(() => expect(screen.getByText('measure-c2-r0').parentNode).toHaveClass('excluded'));
+    });
+
+    describe('constraints', () => {
+      it('should not be able to select a cell with "active" and "select" constraints', async () => {
+        constraints.active = true;
+        constraints.select = true;
+        jest.spyOn(selectionsAPI, 'begin');
+        const cellText = 'dimension-c0-r0';
+
+        renderTable();
+
+        await waitFor(() => expect(screen.getByText(cellText)).toBeVisible());
+
+        await waitFor(() => user.click(screen.getByText(cellText)));
+
+        await waitFor(() => expect(screen.getByText(cellText).parentNode).toHaveClass('inactive'));
+        await waitFor(() => expect(selectionsAPI.begin).not.toHaveBeenCalled());
+      });
+
+      it('should not be able to select a cell with "active" constraints', async () => {
+        constraints.active = true;
+        jest.spyOn(selectionsAPI, 'begin');
+        const cellText = 'dimension-c0-r0';
+
+        renderTable();
+
+        await waitFor(() => expect(screen.getByText(cellText)).toBeVisible());
+
+        await waitFor(() => user.click(screen.getByText(cellText)));
+
+        await waitFor(() => expect(screen.getByText(cellText).parentNode).toHaveClass('inactive'));
+        await waitFor(() => expect(selectionsAPI.begin).not.toHaveBeenCalled());
+      });
+
+      it('should not be able to select a cell with "select" constraints', async () => {
+        constraints.select = true;
+        jest.spyOn(selectionsAPI, 'begin');
+        const cellText = 'dimension-c0-r0';
+
+        renderTable();
+
+        await waitFor(() => expect(screen.getByText(cellText)).toBeVisible());
+
+        await waitFor(() => user.click(screen.getByText(cellText)));
+
+        await waitFor(() => expect(screen.getByText(cellText).parentNode).toHaveClass('inactive'));
+        await waitFor(() => expect(selectionsAPI.begin).not.toHaveBeenCalled());
+      });
     });
   });
 
