@@ -14,7 +14,6 @@ import {
   TableLayout,
   TotalsPosition,
   Row,
-  SortDirection,
 } from '../types';
 import { SelectionActions } from './constants';
 
@@ -238,11 +237,6 @@ export interface TableHeadWrapperProps {
 }
 
 export interface HeadCellMenuProps {
-  headerStyle: GeneratedStyling;
-  sortDirection: SortDirection;
-  sortFromMenu: (evt: React.MouseEvent, sortOrder: SortDirection) => void;
-  isInteractionEnabled: boolean;
-  isCurrentColumnActive: boolean;
   columnIndex: number;
   isDimension: boolean;
 }
