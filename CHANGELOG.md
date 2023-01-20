@@ -1,3 +1,31 @@
+# [1.22.0](https://github.com/qlik-oss/sn-table/compare/v1.21.0...v1.22.0) (2023-01-20)
+
+### Bug Fixes
+
+- avoid rerendering when deleting alternative columns ([#802](https://github.com/qlik-oss/sn-table/issues/802)) ([a8c8d73](https://github.com/qlik-oss/sn-table/commit/a8c8d736c5441eba5b72a70bb7208a26350d5cb1))
+- borders in virtual table ([#784](https://github.com/qlik-oss/sn-table/issues/784)) ([9a07e87](https://github.com/qlik-oss/sn-table/commit/9a07e8709fd64f69e56f2255f760712eda5bedfe))
+- invalid listbox field id for lib dimension ([#794](https://github.com/qlik-oss/sn-table/issues/794)) ([ac77a87](https://github.com/qlik-oss/sn-table/commit/ac77a87c8aeb911160282221d71ed3815a6d4df6))
+- totals bottom position in vt mode ([#782](https://github.com/qlik-oss/sn-table/issues/782)) ([2d3f169](https://github.com/qlik-oss/sn-table/commit/2d3f169bbe5f983b968858c06053b21d81bcc086))
+- virtual table header size ([#774](https://github.com/qlik-oss/sn-table/issues/774)) ([b65e88b](https://github.com/qlik-oss/sn-table/commit/b65e88b595ea1b5c0be2724b26acaa632663f2da))
+
+### Features
+
+- check if selections is enabled in vt mode ([#805](https://github.com/qlik-oss/sn-table/issues/805)) ([74c5abd](https://github.com/qlik-oss/sn-table/commit/74c5abd7c517573ff85d7d9de89051570473f33b))
+- disable menu sort option when column is sorted on that direction ([#772](https://github.com/qlik-oss/sn-table/issues/772)) ([280fa2f](https://github.com/qlik-oss/sn-table/commit/280fa2f6547d22639c44a96496b94e41821e18e9))
+- hover effect in vt mode ([#791](https://github.com/qlik-oss/sn-table/issues/791)) ([efa42d0](https://github.com/qlik-oss/sn-table/commit/efa42d035f5235116c0daec723c14388a0b73f15))
+- scale row height based on font size ([#804](https://github.com/qlik-oss/sn-table/issues/804)) ([5a599ca](https://github.com/qlik-oss/sn-table/commit/5a599ca4a95ca44dd4c5bbcbc29f397d6140e059))
+- Search feature in columns dropdown menu ([#788](https://github.com/qlik-oss/sn-table/issues/788)) ([d072aa4](https://github.com/qlik-oss/sn-table/commit/d072aa4b8f7fdf07447e062552c7c3112c2b0da2))
+- selections in virtualized table ([#751](https://github.com/qlik-oss/sn-table/issues/751)) ([decaa8c](https://github.com/qlik-oss/sn-table/commit/decaa8c5065f7d7fbc625b09000b09bc2decd46d))
+- styling for header and body ([#777](https://github.com/qlik-oss/sn-table/issues/777)) ([814eca2](https://github.com/qlik-oss/sn-table/commit/814eca2215c13b758528ed29e3b16d66b2a3be3b))
+- totals in virtual scroll mode ([#778](https://github.com/qlik-oss/sn-table/issues/778)) ([979d228](https://github.com/qlik-oss/sn-table/commit/979d22893ecd9cea4e8034bb566c32ddb1632311))
+- use sprout menu for header ([#799](https://github.com/qlik-oss/sn-table/issues/799)) ([3d05cfb](https://github.com/qlik-oss/sn-table/commit/3d05cfb44dfd62cf4448fa84aecd0f348657cbe7))
+- visibility toggle ([#793](https://github.com/qlik-oss/sn-table/issues/793)) ([c0abd97](https://github.com/qlik-oss/sn-table/commit/c0abd97f13d1a60a231aea84d3a9ee2accb88055))
+
+### Performance Improvements
+
+- data buffer in virtual table mode ([#769](https://github.com/qlik-oss/sn-table/issues/769)) ([453f61d](https://github.com/qlik-oss/sn-table/commit/453f61d5264447aae4c3856b38c0722d985b228d))
+- move hoverIndex to context ([#792](https://github.com/qlik-oss/sn-table/issues/792)) ([c5d1854](https://github.com/qlik-oss/sn-table/commit/c5d1854e0d8294dedb7001f47051e50b0e139f97))
+
 # [1.21.0](https://github.com/qlik-oss/sn-table/compare/v1.20.0...v1.21.0) (2022-12-08)
 
 ### Bug Fixes
