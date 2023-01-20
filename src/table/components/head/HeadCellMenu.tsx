@@ -1,9 +1,9 @@
 import React, { useRef, useState, useMemo } from 'react';
 import Menu from '@mui/material/Menu';
-import More from '@qlik-trial/sprout/icons/More';
-import Search from '@qlik-trial/sprout/icons/Search';
-import Descending from '@qlik-trial/sprout/icons/Descending';
-import Ascending from '@qlik-trial/sprout/icons/Ascending';
+import More from '@qlik-trial/sprout/icons/react/More';
+import Search from '@qlik-trial/sprout/icons/react/Search';
+import Descending from '@qlik-trial/sprout/icons/react/Descending';
+import Ascending from '@qlik-trial/sprout/icons/react/Ascending';
 
 import { HeadCellMenuProps, MenuItemGroup } from '../../types';
 import { StyledMenuIconButton, NebulaListBox } from './styles';
@@ -83,7 +83,7 @@ export default function HeadCellMenu({
         aria-haspopup="true"
         onClick={() => setOpenMenuDropdown(!openMenuDropdown)}
       >
-        <More size="small" />
+        <More height="12px" />
       </StyledMenuIconButton>
 
       <Menu
