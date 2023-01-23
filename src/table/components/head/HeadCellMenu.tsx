@@ -6,7 +6,7 @@ import Descending from '@qlik-trial/sprout/icons/Descending';
 import Ascending from '@qlik-trial/sprout/icons/Ascending';
 
 import { HeadCellMenuProps, MenuItemGroup } from '../../types';
-import { StyledMenuIconButton, NebulaListBox } from './styles';
+import { StyledMenuIconButton } from './styles';
 import { ListBoxWrapper, ListBoxWrapperRenderProps } from './ListBoxWrapper';
 import MenuItems from './MenuItems';
 
@@ -23,7 +23,7 @@ export default function HeadCellMenu({
 }: HeadCellMenuProps) {
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
   const [openListboxDropdown, setOpenListboxDropdown] = useState(false);
-  const anchorRef = useRef<HTMLButtonElement>(null);
+  const anchorRef = useRef<HTMLDivElement>(null);
 
   const menuItemGroups = useMemo<MenuItemGroup[]>(
     () => [
@@ -72,19 +72,31 @@ export default function HeadCellMenu({
 
   return (
     <>
-      <StyledMenuIconButton
-        isVisible={openListboxDropdown || openMenuDropdown}
-        ref={anchorRef}
-        size="small"
-        tabIndex={-1}
-        id="sn-table-head-menu-button"
-        aria-controls={openMenuDropdown ? 'sn-table-head-menu' : undefined}
-        aria-expanded={openMenuDropdown ? 'true' : undefined}
-        aria-haspopup="true"
-        onClick={() => setOpenMenuDropdown(!openMenuDropdown)}
-      >
-        <More size="small" />
-      </StyledMenuIconButton>
+      <div>
+        <StyledMenuIconButton
+          isVisible={openListboxDropdown || openMenuDropdown}
+          ref={anchorRef}
+          size="small"
+          tabIndex={-1}
+          id="sn-table-head-menu-button"
+          aria-controls={openMenuDropdown ? 'sn-table-head-menu' : undefined}
+          aria-expanded={openMenuDropdown ? 'true' : undefined}
+          aria-haspopup="true"
+          onClick={() => setOpenMenuDropdown(!openMenuDropdown)}
+        >
+          <More size="small" />
+        </StyledMenuIconButton>
+        {openListboxDropdown && (
+          <ListBoxWrapper
+            layout={layout}
+            embed={embed}
+            columnIndex={columnIndex}
+            closeListboxDropdown={() => setOpenListboxDropdown(false)}
+          >
+            {({ ref }: ListBoxWrapperRenderProps) => <div ref={ref} />}
+          </ListBoxWrapper>
+        )}
+      </div>
 
       <Menu
         className="sn-table-head-menu"
@@ -95,17 +107,6 @@ export default function HeadCellMenu({
         autoFocus={false}
       >
         {MenuItems({ itemGroups: menuItemGroups })}
-      </Menu>
-
-      <Menu open={openListboxDropdown} anchorEl={anchorRef.current} onClose={() => setOpenListboxDropdown(false)}>
-        <ListBoxWrapper
-          layout={layout}
-          embed={embed}
-          columnIndex={columnIndex}
-          closeListboxDropdown={() => setOpenListboxDropdown(false)}
-        >
-          {({ ref }: ListBoxWrapperRenderProps) => <NebulaListBox ref={ref} />}
-        </ListBoxWrapper>
       </Menu>
     </>
   );

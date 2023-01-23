@@ -3,7 +3,7 @@ import { stardust } from '@nebula.js/stardust';
 import { TableLayout } from '../../../types';
 
 export interface ListBoxWrapperRenderProps {
-  ref: React.RefObject<HTMLElement>;
+  ref: React.RefObject<HTMLDivElement>;
 }
 
 interface ListBoxWrapperProps {
@@ -24,7 +24,7 @@ const getFieldId = (layout: TableLayout, columnIndex: number): string | stardust
 
 export const ListBoxWrapper = ({ children, embed, layout, columnIndex, closeListboxDropdown }: ListBoxWrapperProps) => {
   const [listboxInstance, setListboxInstance] = useState<stardust.FieldInstance>();
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   // embedding
   useEffect(() => {
@@ -49,17 +49,10 @@ export const ListBoxWrapper = ({ children, embed, layout, columnIndex, closeList
     // because of passing null or undefined will still endup showing title
     listboxInstance.mount(ref.current, {
       title: ' ',
-      shouldShowToolbar: true,
+      popover: true,
     });
 
-    listboxInstance.on('selectionConfirm', () => {
-      console.log('LISTENER: CONFIRM SELECTION');
-      closeListboxDropdown();
-    });
-    listboxInstance.on('selectionCancel', () => {
-      console.log('LISTENER: CANCEL SELECTION');
-      closeListboxDropdown();
-    });
+    listboxInstance.on('closePopover', closeListboxDropdown);
 
     return () => {
       listboxInstance.unmount();

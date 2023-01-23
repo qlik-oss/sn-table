@@ -84,9 +84,3 @@ export const StyledListItemIcon = styled(ListItemIcon)(({ theme }) => ({
   marginRight: theme.spacing(1.5),
   lineHeight: 0,
 }));
-
-export const NebulaListBox = styled('div')(({ theme }) => ({
-  height: '350px',
-  boxSizing: 'border-box',
-  background: theme.palette.common.white,
-}));
