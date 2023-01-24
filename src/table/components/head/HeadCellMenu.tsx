@@ -1,7 +1,7 @@
 import React, { useRef, useState, useMemo } from 'react';
 import Menu from '@mui/material/Menu';
-import More from '@qlik-trial/sprout/icons/More';
-import Search from '@qlik-trial/sprout/icons/Search';
+import More from '@qlik-trial/sprout/icons/react/More';
+import Search from '@qlik-trial/sprout/icons/react/Search';
 
 import { useContextSelector, TableContext } from '../../context';
 import { HeadCellMenuProps, MenuItemGroup } from '../../types';
@@ -51,7 +51,7 @@ export default function HeadCellMenu({ columnIndex, isDimension, tabIndex }: Hea
         aria-haspopup="true"
         onClick={() => setOpenMenuDropdown(!openMenuDropdown)}
       >
-        <More size="small" />
+        <More height="12px" />
       </StyledMenuIconButton>
 
       <Menu
