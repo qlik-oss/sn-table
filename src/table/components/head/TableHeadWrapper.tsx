@@ -12,7 +12,6 @@ import {
   handleClickToFocusHead,
   handleClickToSort,
 } from '../../utils/handle-click';
-import { SortDirection } from '../../../types';
 import { TableHeadWrapperProps } from '../../types';
 import HeadCellMenu from './HeadCellMenu';
 import CellText from '../CellText';
@@ -27,20 +26,12 @@ enum ShortSortDirection {
   D = 'desc',
 }
 
-function TableHeadWrapper({
-  rootElement,
-  tableData,
-  theme,
-  layout,
-  changeSortOrder,
-  constraints,
-  translator,
-  selectionsAPI,
-  keyboard,
-  embed,
-  areBasicFeaturesEnabled,
-}: TableHeadWrapperProps) {
+function TableHeadWrapper({ tableData, changeSortOrder, areBasicFeaturesEnabled }: TableHeadWrapperProps) {
   const { columns, totalsPosition } = tableData;
+  const { layout, theme, constraints, selectionsAPI, rootElement, keyboard, translator } = useContextSelector(
+    TableContext,
+    (value) => value.baseProps
+  );
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
@@ -78,11 +69,6 @@ function TableHeadWrapper({
             });
           };
 
-          const sortFromMenu = (evt: React.MouseEvent, newSortDirection: SortDirection) => {
-            evt.stopPropagation();
-            changeSortOrder(column, newSortDirection);
-          };
-
           return (
             <StyledHeadCell
               headerStyle={headerStyle}
@@ -116,20 +102,7 @@ function TableHeadWrapper({
                   )}
                 </StyledSortLabel>
 
-                {areBasicFeaturesEnabled && (
-                  <HeadCellMenu
-                    headerStyle={headerStyle}
-                    translator={translator}
-                    sortFromMenu={sortFromMenu}
-                    embed={embed}
-                    layout={layout}
-                    columnIndex={columnIndex}
-                    sortDirection={column.sortDirection}
-                    isInteractionEnabled={isInteractionEnabled}
-                    isCurrentColumnActive={isCurrentColumnActive}
-                    isDimension={column.isDim}
-                  />
-                )}
+                {areBasicFeaturesEnabled && <HeadCellMenu columnIndex={columnIndex} isDimension={column.isDim} />}
               </HeadCellContent>
             </StyledHeadCell>
           );

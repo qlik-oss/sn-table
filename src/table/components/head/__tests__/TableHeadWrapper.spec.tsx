@@ -5,44 +5,29 @@ import useEvent from '@testing-library/user-event';
 import TableHeadWrapper from '../TableHeadWrapper';
 import * as handleKeyPress from '../../../utils/handle-key-press';
 import * as handleClick from '../../../utils/handle-click';
-import {
-  TableData,
-  TableLayout,
-  ExtendedTheme,
-  ChangeSortOrder,
-  ExtendedTranslator,
-  ExtendedSelectionAPI,
-} from '../../../../types';
+import { TableData, TableLayout, ChangeSortOrder, ExtendedSelectionAPI } from '../../../../types';
 import TestWithProviders from '../../../../__test__/test-with-providers';
 
 describe('<TableHeadWrapper />', () => {
-  const rootElement = {} as HTMLElement;
   let tableData: TableData;
-  let theme: ExtendedTheme;
   let layout: TableLayout;
   let changeSortOrder: ChangeSortOrder;
   let constraints: stardust.Constraints;
   let selectionsAPI: ExtendedSelectionAPI;
-  let keyboard: stardust.Keyboard;
-  let translator: ExtendedTranslator;
   let areBasicFeaturesEnabled: boolean;
-  let embed: stardust.Embed;
 
   const renderTableHead = (cellCoordMock?: [number, number]) =>
     render(
-      <TestWithProviders selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
+      <TestWithProviders
+        selectionsAPI={selectionsAPI}
+        cellCoordMock={cellCoordMock}
+        constraints={constraints}
+        layout={layout}
+      >
         <TableHeadWrapper
-          rootElement={rootElement}
-          constraints={constraints}
-          selectionsAPI={selectionsAPI}
           tableData={tableData}
-          theme={theme}
-          layout={layout}
           changeSortOrder={changeSortOrder}
-          keyboard={keyboard}
-          translator={translator}
           areBasicFeaturesEnabled={areBasicFeaturesEnabled}
-          embed={embed}
         />
       </TestWithProviders>
     );
@@ -64,12 +49,6 @@ describe('<TableHeadWrapper />', () => {
       ],
       totalsPosition: { atTop: false, atBottom: false },
     } as unknown as TableData;
-    theme = {
-      getColorPickerColor: () => undefined,
-      name: () => undefined,
-      getStyle: () => undefined,
-      background: { isDark: false },
-    } as unknown as ExtendedTheme;
     layout = {
       qHyperCube: {
         qEffectiveInterColumnSortOrder: [0, 1],
@@ -82,10 +61,6 @@ describe('<TableHeadWrapper />', () => {
     selectionsAPI = {
       isModal: () => false,
     } as ExtendedSelectionAPI;
-    keyboard = {
-      enabled: false,
-    } as stardust.Keyboard;
-    translator = { get: (s) => s } as ExtendedTranslator;
     areBasicFeaturesEnabled = false;
   });
 

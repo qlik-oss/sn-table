@@ -7,6 +7,7 @@ interface OverrideUseDataProps {
   model?: EngineAPI.IGenericObject;
   layout?: TableLayout;
   pageInfo?: PageInfo;
+  rowCount?: number;
   visibleRowCount?: number;
   visibleColumnCount?: number;
   columns?: Column[];
@@ -50,6 +51,7 @@ describe('useData', () => {
             renderWithProps.layout ?? layout,
             renderWithProps.model ?? model,
             renderWithProps.pageInfo ?? pageInfo,
+            renderWithProps.rowCount ?? 20,
             renderWithProps.visibleRowCount ?? 1,
             renderWithProps.visibleColumnCount ?? 1,
             renderWithProps.columns ?? columns

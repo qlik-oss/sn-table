@@ -20,6 +20,8 @@ interface ProviderProps {
   theme?: ExtendedTheme;
   keyboard?: stardust.Keyboard;
   direction?: 'ltr' | 'rtl';
+  rootElement?: HTMLElement;
+  embed?: stardust.Embed;
 }
 
 const TestWithProviders = ({
@@ -42,6 +44,8 @@ const TestWithProviders = ({
   cellCoordMock = undefined,
   selectionDispatchMock = undefined, // Can be used to avoid selectionDispatch infinite loop
   direction = 'ltr',
+  rootElement = {} as HTMLElement,
+  embed = {} as stardust.Embed,
 }: ProviderProps) => {
   return (
     <ThemeProvider theme={muiSetup(direction)}>
@@ -56,6 +60,8 @@ const TestWithProviders = ({
         pageRows={pageRows}
         cellCoordMock={cellCoordMock}
         selectionDispatchMock={selectionDispatchMock}
+        rootElement={rootElement}
+        embed={embed}
       >
         {children as JSX.Element}
       </TableContextProvider>

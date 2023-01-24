@@ -11,10 +11,7 @@ import { TableContext, useContextSelector } from '../../context';
 
 export default function Wrapper(props: WrapperProps) {
   const { rect } = props;
-  const { layout, keyboard, translator, theme, constraints } = useContextSelector(
-    TableContext,
-    (value) => value.baseProps
-  );
+  const { layout, theme, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
   const totalRowCount = layout.qHyperCube.qSize.qcy;
   const pageSize = Math.min(MAX_PAGE_SIZE, totalRowCount);
   const [page, setPage] = useState(0);
@@ -41,17 +38,13 @@ export default function Wrapper(props: WrapperProps) {
     <StyledTableWrapper data-key="wrapper" background={theme.background} dir="ltr">
       <Table rect={rect} pageInfo={pageInfo} paginationNeeded={paginationNeeded} />
       {paginationNeeded && (
-        <FooterWrapper theme={theme}>
+        <FooterWrapper>
           <PaginationContent
-            theme={theme}
             handleChangePage={(currentPage) => setPage(currentPage)}
             isSelectionMode={false}
             tableData={tableData}
             pageInfo={pageInfo}
             setPageInfo={() => {}}
-            keyboard={keyboard}
-            translator={translator}
-            constraints={constraints}
             rect={rect}
             announce={() => {}}
           />

@@ -6,18 +6,7 @@ import TableBodyWrapper from '../body/TableBodyWrapper';
 import TableHeadWrapper from '../head/TableHeadWrapper';
 import * as handleKeyPress from '../../utils/handle-key-press';
 import * as handleScroll from '../../utils/handle-scroll';
-import {
-  TableLayout,
-  TableData,
-  PageInfo,
-  SetPageInfo,
-  ExtendedTranslator,
-  ExtendedTheme,
-  Announce,
-  Column,
-  ChangeSortOrder,
-  ExtendedSelectionAPI,
-} from '../../../types';
+import { TableLayout, TableData, PageInfo, SetPageInfo, Announce, Column, ChangeSortOrder } from '../../../types';
 import TestWithProviders from '../../../__test__/test-with-providers';
 
 describe('<TableWrapper />', () => {
@@ -25,46 +14,26 @@ describe('<TableWrapper />', () => {
   let pageInfo: PageInfo;
   let setPageInfo: SetPageInfo;
   let constraints: stardust.Constraints;
-  let selectionsAPI: ExtendedSelectionAPI;
-  let modal: boolean;
   let rootElement: HTMLElement;
-  let keyboard: stardust.Keyboard;
-  let translator: ExtendedTranslator;
   let rect: stardust.Rect;
-  let theme: ExtendedTheme;
   let direction: 'ltr' | 'rtl';
   let announce: Announce;
   let changeSortOrder: ChangeSortOrder;
   let layout: TableLayout;
   let areBasicFeaturesEnabled: boolean;
-  let embed: stardust.Embed;
 
   const renderTableWrapper = () =>
     render(
-      <TestWithProviders
-        selectionsAPI={selectionsAPI}
-        layout={layout}
-        translator={translator}
-        constraints={constraints}
-        keyboard={keyboard}
-      >
+      <TestWithProviders layout={layout} constraints={constraints} rootElement={rootElement}>
         <TableWrapper
           tableData={tableData}
           pageInfo={pageInfo}
           setPageInfo={setPageInfo}
-          constraints={constraints}
-          selectionsAPI={selectionsAPI}
-          rootElement={rootElement}
-          keyboard={keyboard}
-          translator={translator}
           rect={rect}
-          theme={theme}
           direction={direction}
           announce={announce}
           changeSortOrder={changeSortOrder}
-          layout={layout}
           areBasicFeaturesEnabled={areBasicFeaturesEnabled}
-          embed={embed}
         />
       </TestWithProviders>
     );
@@ -84,24 +53,14 @@ describe('<TableWrapper />', () => {
     pageInfo = { page: 0, rowsPerPage: 100, rowsPerPageOptions: [10, 25, 100] };
     setPageInfo = jest.fn();
     constraints = {};
-    selectionsAPI = {
-      isModal: () => modal,
-    } as unknown as ExtendedSelectionAPI;
-    modal = false;
     rootElement = {
       getElementsByClassName: () => [],
       getElementsByTagName: () => [{ clientHeight: {}, contains: jest.fn() }],
       querySelector: () => undefined,
     } as unknown as HTMLElement;
-    keyboard = { enabled: false, active: false };
-    translator = { get: (s: string) => s } as unknown as ExtendedTranslator;
     rect = {
       width: 750,
     } as unknown as stardust.Rect;
-    theme = {
-      getStyle: () => undefined,
-      background: { isDark: false },
-    } as unknown as ExtendedTheme;
   });
 
   afterEach(() => jest.clearAllMocks());

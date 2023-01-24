@@ -9,20 +9,16 @@ import { StyledTotalsCell } from './styles';
 import { TableTotalsProps } from '../../types';
 import CellText from '../CellText';
 
-function TableTotals({
-  rootElement,
-  tableData,
-  theme,
-  layout,
-  keyboard,
-  selectionsAPI,
-  areBasicFeaturesEnabled,
-}: TableTotalsProps) {
+function TableTotals({ tableData, areBasicFeaturesEnabled }: TableTotalsProps) {
   const {
     columns,
     totalsPosition: { atTop },
     rows,
   } = tableData;
+  const { layout, theme, rootElement, selectionsAPI, keyboard } = useContextSelector(
+    TableContext,
+    (value) => value.baseProps
+  );
   const headRowHeight = useContextSelector(TableContext, (value) => value.headRowHeight);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const totalsStyle = useMemo(() => getTotalsCellStyle(layout, theme, atTop), [layout, theme.name(), atTop]);
