@@ -26,7 +26,7 @@
     "sn-table-ext"
   ],
   "engines": {
-    "node": ">=18"
+    "node": ">=16"
   },
   "main": "dist/sn-table.js",
   "systemjs": "dist/sn-table.systemjs.js",
