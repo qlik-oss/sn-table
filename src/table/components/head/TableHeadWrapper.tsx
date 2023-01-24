@@ -13,7 +13,6 @@ function TableHeadWrapper({ tableData, changeSortOrder, areBasicFeaturesEnabled 
   const { columns, totalsPosition } = tableData;
   const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
-  // const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const headerStyle = useMemo(
     () => getHeaderStyle(layout, theme, !totalsPosition.atTop),
     [layout, theme, totalsPosition]
