@@ -9,8 +9,8 @@ import TableWrapper from './components/TableWrapper';
 import { TableContextProvider } from './context';
 import muiSetup from './mui-setup';
 import { RenderProps, TableWrapperProps } from './types';
-import VirualizedTable from './components/virtualized-table/Wrapper';
-import { VirtualTableRenderProps } from './components/virtualized-table/types';
+import VirualizedTable from './virtualized-table/Wrapper';
+import { VirtualTableRenderProps } from './virtualized-table/types';
 
 export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   const {

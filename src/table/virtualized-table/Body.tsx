@@ -1,0 +1,95 @@
+import React, { memo, useMemo, useLayoutEffect } from 'react';
+import { VariableSizeGrid } from 'react-window';
+import useData from './hooks/use-data';
+import { BodyProps } from './types';
+import Cell from './Cell';
+import useScrollDirection from './hooks/use-scroll-direction';
+import useTableCount from './hooks/use-table-count';
+import useItemsRendererHandler from './hooks/use-items-rendered-handler';
+import useSelectionsEffect from './hooks/use-selections-effect';
+import { useContextSelector, TableContext } from '../context';
+
+const Body = (props: BodyProps) => {
+  const {
+    rect,
+    forwardRef,
+    columns,
+    columnWidth,
+    innerForwardRef,
+    pageInfo,
+    bodyStyle,
+    rowHeight,
+    headerAndTotalsHeight,
+  } = props;
+  const { layout, model } = useContextSelector(TableContext, (value) => value.baseProps);
+  const isHoverEnabled = !!layout.components?.[0]?.content?.hoverEffect;
+  const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
+  const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(
+    layout,
+    pageInfo,
+    rect,
+    columnWidth,
+    rowHeight
+  );
+
+  const { rowsInPage, deferredRowCount, loadRows, loadColumns } = useData(
+    layout,
+    model as EngineAPI.IGenericObject,
+    pageInfo,
+    rowCount,
+    visibleRowCount,
+    visibleColumnCount,
+    columns
+  );
+
+  const handleItemsRendered = useItemsRendererHandler({
+    layout,
+    loadRows,
+    loadColumns,
+    verticalScrollDirection,
+    horizontalScrollDirection,
+    rowCount: deferredRowCount,
+    pageInfo,
+  });
+
+  const itemData = useMemo(
+    () => ({ rowsInPage, columns, bodyStyle, isHoverEnabled }),
+    [rowsInPage, columns, bodyStyle, isHoverEnabled]
+  );
+
+  useSelectionsEffect(rowsInPage);
+
+  useLayoutEffect(() => {
+    if (!forwardRef.current) return;
+
+    forwardRef.current.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: true });
+    forwardRef.current.scrollTo({ scrollLeft: 0, scrollTop: 0 });
+  }, [layout, pageInfo.page, forwardRef, columnWidth]);
+
+  let { height: bodyHeight } = rect;
+  bodyHeight -= headerAndTotalsHeight;
+  bodyHeight = Math.min(deferredRowCount * rowHeight, bodyHeight);
+
+  return (
+    <VariableSizeGrid
+      data-key="body"
+      ref={forwardRef}
+      innerRef={innerForwardRef}
+      style={{ overflow: 'hidden' }}
+      columnCount={layout.qHyperCube.qSize.qcx}
+      columnWidth={(index) => columnWidth[index]}
+      height={bodyHeight}
+      rowCount={deferredRowCount}
+      rowHeight={() => rowHeight}
+      estimatedRowHeight={rowHeight}
+      width={rect.width}
+      itemData={itemData}
+      onItemsRendered={handleItemsRendered}
+      onScroll={scrollHandler}
+    >
+      {Cell}
+    </VariableSizeGrid>
+  );
+};
+
+export default memo(Body);
