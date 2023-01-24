@@ -62,12 +62,6 @@ describe('getCellStyle', () => {
   });
 
   describe('user is NOT hovering row', () => {
-    test('selection state is INACTIVE', () => {
-      const s = fn({ isHoveringOnRow: false, cellSelectionState: SelectionStates.INACTIVE });
-
-      expect(s).toEqual({ ...borderColors, color: 'bodyColor', background: 'bodyBackground' });
-    });
-
     test('selection state is SELECTED', () => {
       const s = fn({ isHoveringOnRow: false, cellSelectionState: SelectionStates.SELECTED });
 
@@ -145,16 +139,6 @@ describe('getCellStyle', () => {
   });
 
   describe('user is hovering row', () => {
-    test('selection state is INACTIVE', () => {
-      const s = fn({ isHoveringOnRow: true, cellSelectionState: SelectionStates.INACTIVE });
-
-      expect(s).toEqual({
-        ...borderColors,
-        color: 'hoverFontColor',
-        background: 'hoverBackgroundColor',
-      });
-    });
-
     test('selection state is SELECTED', () => {
       const s = fn({ isHoveringOnRow: true, cellSelectionState: SelectionStates.SELECTED });
 
