@@ -240,6 +240,7 @@ export interface HeadCellContentProps {
   column: Column;
   columnIndex: number;
   changeSortOrder: ChangeSortOrder;
+  isActive: boolean;
   areBasicFeaturesEnabled: boolean;
 }
 

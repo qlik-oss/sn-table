@@ -7,8 +7,14 @@ import useHeadIcons from '../../hooks/use-head-icons';
 import { VisuallyHidden, StyledSortButton, StyledHeadCellContent, LockAndLabel } from './styles';
 import HeadCellMenu from './HeadCellMenu';
 
-function HeadCellContent({ column, columnIndex, changeSortOrder, areBasicFeaturesEnabled }: HeadCellContentProps) {
-  const { layout, constraints, selectionsAPI, keyboard, translator } = useContextSelector(
+function HeadCellContent({
+  column,
+  columnIndex,
+  changeSortOrder,
+  isActive,
+  areBasicFeaturesEnabled,
+}: HeadCellContentProps) {
+  const { constraints, selectionsAPI, keyboard, translator } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );
@@ -16,7 +22,6 @@ function HeadCellContent({ column, columnIndex, changeSortOrder, areBasicFeature
 
   const { startIcon, endIcon, lockIcon } = useHeadIcons(column);
   const tabIndex = !keyboard.enabled ? 0 : -1;
-  const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
   const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
 
   const handleSort = () => isInteractionEnabled && changeSortOrder(column);

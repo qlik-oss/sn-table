@@ -4,12 +4,6 @@ import TableRow from '@mui/material/TableRow';
 
 import { useContextSelector, TableContext } from '../../context';
 import { getHeaderStyle } from '../../utils/styling-utils';
-// import { handleHeadKeyDown } from '../../utils/handle-key-press';
-// import {
-//   handleMouseDownLabelToFocusHeadCell,
-//   handleClickToFocusHead,
-//   handleClickToSort,
-// } from '../../utils/handle-click';
 import { TableHeadWrapperProps } from '../../types';
 import { FullSortDirection } from '../../constants';
 import { StyledHeadCell } from './styles';
@@ -36,21 +30,8 @@ function TableHeadWrapper({ tableData, changeSortOrder, areBasicFeaturesEnabled 
         {columns.map((column, columnIndex) => {
           // The first cell in the head is focusable in sequential keyboard navigation,
           // when nebula does not handle keyboard navigation
-          const isCurrentColumnActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
-          const ariaSort = isCurrentColumnActive ? FullSortDirection[column.sortDirection] : undefined;
-
-          // const handleKeyDown = (evt: React.KeyboardEvent) => {
-          //   handleHeadKeyDown({
-          //     evt,
-          //     rootElement,
-          //     cellCoord: [0, columnIndex],
-          //     column,
-          //     changeSortOrder,
-          //     isInteractionEnabled,
-          //     setFocusedCellCoord,
-          //     areBasicFeaturesEnabled,
-          //   });
-          // };
+          const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
+          const ariaSort = isActive ? FullSortDirection[column.sortDirection] : undefined;
 
           return (
             <StyledHeadCell
@@ -64,7 +45,7 @@ function TableHeadWrapper({ tableData, changeSortOrder, areBasicFeaturesEnabled 
                 column={column}
                 columnIndex={columnIndex}
                 changeSortOrder={changeSortOrder}
-                // isCurrentColumnActive={isCurrentColumnActive}
+                isActive={isActive}
                 areBasicFeaturesEnabled={areBasicFeaturesEnabled}
               />
             </StyledHeadCell>
