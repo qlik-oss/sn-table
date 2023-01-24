@@ -23,15 +23,21 @@ interface CellProps {
 
 const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
   const { rowsInPage, columns, bodyStyle, isHoverEnabled } = data;
-  const datum = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
+  const cell = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
 
   const rowIsHovered = useContextSelector(TableContext, (value) => value.hoverIndex === rowIndex);
   const setHoverIndex = useContextSelector(TableContext, (value) => value.setHoverIndex);
 
-  const { handleMouseDown, handleMouseOver, handleMouseUp, cellSelectionState } = useSelector(datum);
+  const { handleMouseDown, handleMouseOver, handleMouseUp, cellSelectionState } = useSelector(cell);
 
-  if (typeof datum === 'object') {
-    const cellStyle = getCellStyle(isHoverEnabled && rowIsHovered, cellSelectionState, bodyStyle);
+  if (typeof cell === 'object') {
+    const cellStyle = getCellStyle(
+      cell,
+      columns[columnIndex],
+      isHoverEnabled && rowIsHovered,
+      cellSelectionState,
+      bodyStyle
+    );
 
     return (
       <div
@@ -42,8 +48,8 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           display: 'flex',
           alignItems: 'center',
           borderWidth: '0px',
-          borderBottomWidth: datum.isLastRow ? '0px' : '1px',
-          borderRightWidth: datum.isLastColumn ? '0px' : '1px',
+          borderBottomWidth: cell.isLastRow ? '0px' : '1px',
+          borderRightWidth: cell.isLastColumn ? '0px' : '1px',
           borderStyle: 'solid',
           justifyContent: columns[columnIndex].align,
           padding: '4px 12px',
@@ -56,7 +62,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         onMouseEnter={isHoverEnabled ? () => setHoverIndex(rowIndex) : undefined}
         onMouseLeave={isHoverEnabled ? () => setHoverIndex(-1) : undefined}
       >
-        <CellText singleLine>{datum.qText}</CellText>
+        <CellText singleLine>{cell.qText}</CellText>
       </div>
     );
   }
