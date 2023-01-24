@@ -228,6 +228,15 @@ const getChartExploration = (env) =>
     },
   };
 
+const getUsePagination = ({ flags }) =>
+  flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES') && {
+    ref: 'presentation.usePagination',
+    translation: 'properties.usePagination',
+    type: 'boolean',
+    component: 'checkbox',
+    defaultValue: true,
+  };
+
 const getSettings = (env) => ({
   uses: 'settings',
   items: {
@@ -235,7 +244,7 @@ const getSettings = (env) => ({
       grouped: true,
       type: 'items',
       translation: 'properties.presentation',
-      items: [stylingPanel, getTotals(env)],
+      items: [stylingPanel, getTotals(env), getUsePagination(env)],
     },
     ...getChartExploration(env),
   },

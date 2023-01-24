@@ -83,7 +83,9 @@ export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, 'qH
     label: string;
   };
   components?: Component[];
-  scrollMode?: 0 | 1;
+  presentation?: {
+    usePagination?: boolean;
+  };
 }
 
 export interface Cell {
