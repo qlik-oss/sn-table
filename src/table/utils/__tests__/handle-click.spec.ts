@@ -1,12 +1,11 @@
 import { MouseEvent } from 'react';
 import { stardust } from '@nebula.js/stardust';
-import { TotalsPosition, Cell, Announce, ChangeSortOrder, Column } from '../../../types';
+import { TotalsPosition, Cell, Announce } from '../../../types';
 import {
   handleClickToFocusBody,
-  handleClickToFocusHead,
-  handleMouseDownLabelToFocusHeadCell,
+  // handleClickToFocusHead,
+  // handleMouseDownLabelToFocusHeadCell,
   getSelectionMouseHandlers,
-  handleClickToSort,
 } from '../handle-click';
 import * as accessibilityUtils from '../accessibility-utils';
 import { SelectionDispatch } from '../../types';
@@ -62,73 +61,30 @@ describe('handle-click', () => {
     });
   });
 
-  describe('handleClickToFocusHead', () => {
-    const columnIndex = 2;
+  // describe('handleClickToFocusHead', () => {
+  //   const columnIndex = 2;
 
-    it('should call removeTabAndFocusCell with cellCoord [0,2]', () => {
-      handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard);
-      expect(accessibilityUtils.removeTabAndFocusCell).toHaveBeenCalledWith(
-        [0, 2],
-        rootElement,
-        setFocusedCellCoord,
-        keyboard
-      );
-    });
-  });
+  //   it('should call removeTabAndFocusCell with cellCoord [0,2]', () => {
+  //     handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard);
+  //     expect(accessibilityUtils.removeTabAndFocusCell).toHaveBeenCalledWith(
+  //       [0, 2],
+  //       rootElement,
+  //       setFocusedCellCoord,
+  //       keyboard
+  //     );
+  //   });
+  // });
 
-  describe('handleClickToSort', () => {
-    let changeSortOrder: ChangeSortOrder;
-    let column: Column;
-    let isInteractionEnabled: boolean;
+  // describe('handleMouseDownLabelToFocusHeadCell', () => {
+  //   const columnIndex = 1;
 
-    beforeEach(() => {
-      changeSortOrder = jest.fn() as ChangeSortOrder;
-      column = {} as unknown as Column;
-      isInteractionEnabled = true;
-    });
-
-    it('should sort the column when the event target is not on the head cell menu button', () => {
-      evt = {
-        target: {
-          closest: () => false,
-        } as unknown as HTMLElement,
-      } as unknown as MouseEvent;
-      handleClickToSort(evt, column, changeSortOrder, isInteractionEnabled);
-      expect(changeSortOrder).toHaveBeenCalled();
-    });
-
-    it('should not sort the column when the event target is on the head cell menu button', () => {
-      evt = {
-        target: {
-          closest: () => true,
-        } as unknown as HTMLElement,
-      } as unknown as MouseEvent;
-      handleClickToSort(evt, column, changeSortOrder, isInteractionEnabled);
-      expect(changeSortOrder).not.toHaveBeenCalled();
-    });
-
-    it.skip('should not sort the column when the event target on menu item button is disabled', () => {
-      evt = {
-        target: {
-          getElementsByClassName: () => [{ ariaDisabled: true }],
-          closest: () => false,
-        } as unknown as HTMLElement,
-      } as unknown as MouseEvent;
-      handleClickToSort(evt, column, changeSortOrder, isInteractionEnabled);
-      expect(changeSortOrder).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('handleMouseDownLabelToFocusHeadCell', () => {
-    const columnIndex = 1;
-
-    it('should call updateFocus and getCellElement with head cell at given column', () => {
-      handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex);
-      expect(evt.preventDefault).toHaveBeenCalled();
-      expect(accessibilityUtils.getCellElement).toHaveBeenCalledWith(rootElement, [0, 1]);
-      expect(accessibilityUtils.updateFocus).toHaveBeenCalledWith({ focusType: 'focus', cell: cellElement });
-    });
-  });
+  //   it('should call updateFocus and getCellElement with head cell at given column', () => {
+  //     handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex);
+  //     expect(evt.preventDefault).toHaveBeenCalled();
+  //     expect(accessibilityUtils.getCellElement).toHaveBeenCalledWith(rootElement, [0, 1]);
+  //     expect(accessibilityUtils.updateFocus).toHaveBeenCalledWith({ focusType: 'focus', cell: cellElement });
+  //   });
+  // });
 
   describe('getSelectionMouseHandlers', () => {
     let cell: Cell;

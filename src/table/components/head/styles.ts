@@ -16,9 +16,6 @@ export const StyledHeadCell = styled(TableCell, {
   ...COMMON_CELL_STYLING,
   ...headerStyle,
   pointer: 'cursor',
-  '&&:hover, &&:focus-within': {
-    '& #sn-table-head-menu-button': { opacity: 1 },
-  },
 }));
 
 export const StyledSortButton = styled(Button, {
@@ -54,6 +51,9 @@ export const StyledHeadCellContent = styled(Box)(({ theme }) => ({
   justifyContent: 'space-between',
   alignItems: 'center',
   gap: theme.spacing(1),
+  '&&:hover, &&:focus-within': {
+    '& #sn-table-head-menu-button': { opacity: 1 },
+  },
 }));
 
 export const LockAndLabel = styled(Box)(({ theme }) => ({
