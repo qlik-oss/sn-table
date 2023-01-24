@@ -1,9 +1,9 @@
 import React, { memo, useMemo } from 'react';
 import { SelectChangeEvent } from '@mui/material/Select';
-import ArrowLeft from '@qlik-trial/sprout/icons/ArrowLeft';
-import ArrowLeftStop from '@qlik-trial/sprout/icons/ArrowLeftStop';
-import ArrowRight from '@qlik-trial/sprout/icons/ArrowRight';
-import ArrowRightStop from '@qlik-trial/sprout/icons/ArrowRightStop';
+import ArrowLeft from '@qlik-trial/sprout/icons/react/ArrowLeft';
+import ArrowLeftStop from '@qlik-trial/sprout/icons/react/ArrowLeftStop';
+import ArrowRight from '@qlik-trial/sprout/icons/react/ArrowRight';
+import ArrowRightStop from '@qlik-trial/sprout/icons/react/ArrowRightStop';
 
 import { StyledSelect, StyledButton, StyledTypography } from './styles';
 import { handleLastTab } from '../../utils/handle-key-press';
@@ -107,7 +107,7 @@ function PaginationContent({
         tabIndex={tabIndex}
         onKeyDown={onKeyDown}
       >
-        <IconComponent size="small" />
+        <IconComponent height="12px" />
       </StyledButton>
     );
   };
