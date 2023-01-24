@@ -85,7 +85,7 @@ export default function supernova(env: Galaxy) {
       const embed = useEmbed();
 
       const [pageInfo, setPageInfo] = useState(initialPageInfo);
-      const shouldRenderVirtualizedTable = false; // layout.scrollMode === 1;
+      const shouldRenderVirtualizedTable = areBasicFeaturesEnabled && layout.presentation?.usePagination === false;
       const [tableData] = usePromise(
         async () =>
           (env.carbon && !model?.getHyperCubeData) || shouldRenderVirtualizedTable
@@ -109,8 +109,8 @@ export default function supernova(env: Galaxy) {
             translator,
             constraints,
             selectionsAPI,
+            rootElement,
             embed,
-            changeSortOrder,
           },
           reactRoot
         );

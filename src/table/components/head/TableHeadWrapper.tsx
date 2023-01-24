@@ -5,26 +5,19 @@ import TableRow from '@mui/material/TableRow';
 import { useContextSelector, TableContext } from '../../context';
 import { getHeaderStyle } from '../../utils/styling-utils';
 // import { handleHeadKeyDown } from '../../utils/handle-key-press';
-// import { handleClickToFocusHead, handleClickToSort } from '../../utils/handle-click';
+// import {
+//   handleMouseDownLabelToFocusHeadCell,
+//   handleClickToFocusHead,
+//   handleClickToSort,
+// } from '../../utils/handle-click';
 import { TableHeadWrapperProps } from '../../types';
 import { FullSortDirection } from '../../constants';
 import { StyledHeadCell } from './styles';
 import HeadCellContent from './HeadCellContent';
 
-function TableHeadWrapper({
-  rootElement,
-  tableData,
-  theme,
-  layout,
-  changeSortOrder,
-  constraints,
-  translator,
-  selectionsAPI,
-  keyboard,
-  embed,
-  areBasicFeaturesEnabled,
-}: TableHeadWrapperProps) {
+function TableHeadWrapper({ tableData, changeSortOrder, areBasicFeaturesEnabled }: TableHeadWrapperProps) {
   const { columns, totalsPosition } = tableData;
+  const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
   // const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const headerStyle = useMemo(
@@ -32,7 +25,6 @@ function TableHeadWrapper({
     [layout, theme, totalsPosition]
   );
   const headRowRef = useRef<HTMLTableRowElement>(null);
-  const tabIndex = !keyboard.enabled ? 0 : -1;
 
   useEffect(() => {
     headRowRef.current && setHeadRowHeight(headRowRef.current.getBoundingClientRect().height);
@@ -71,16 +63,9 @@ function TableHeadWrapper({
               <HeadCellContent
                 column={column}
                 columnIndex={columnIndex}
-                constraints={constraints}
-                headerStyle={headerStyle}
-                translator={translator}
-                embed={embed}
-                layout={layout}
-                selectionsAPI={selectionsAPI}
-                isCurrentColumnActive={isCurrentColumnActive}
-                areBasicFeaturesEnabled={areBasicFeaturesEnabled}
                 changeSortOrder={changeSortOrder}
-                tabIndex={tabIndex}
+                // isCurrentColumnActive={isCurrentColumnActive}
+                areBasicFeaturesEnabled={areBasicFeaturesEnabled}
               />
             </StyledHeadCell>
           );

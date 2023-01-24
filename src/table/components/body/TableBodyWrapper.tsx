@@ -13,26 +13,24 @@ import TableTotals from './TableTotals';
 import CellText from '../CellText';
 
 function TableBodyWrapper({
-  rootElement,
   tableData,
-  constraints,
-  selectionsAPI,
-  layout,
-  theme,
   setShouldRefocus,
-  keyboard,
   tableWrapperRef,
   announce,
   areBasicFeaturesEnabled,
 }: TableBodyWrapperProps) {
   const { rows, columns, paginationNeeded, totalsPosition } = tableData;
-  const columnsStylingIDsJSON = JSON.stringify(columns.map((column) => column.stylingIDs));
+  const { selectionsAPI, rootElement, keyboard, layout, theme, constraints } = useContextSelector(
+    TableContext,
+    (value) => value.baseProps
+  );
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
   // constraints.active: true - turn off interactions that affect the state of the visual
   // representation including selection, zoom, scroll, etc.
   // constraints.select: true - turn off selections.
   const isSelectionsEnabled = !constraints.active && !constraints.select;
+  const columnsStylingIDsJSON = JSON.stringify(columns.map((column) => column.stylingIDs));
   const columnRenderers = useMemo(
     () =>
       JSON.parse(columnsStylingIDsJSON).map((stylingIDs: string[]) =>
@@ -56,17 +54,7 @@ function TableBodyWrapper({
     });
   }, []);
 
-  const totals = (
-    <TableTotals
-      rootElement={rootElement}
-      tableData={tableData}
-      theme={theme}
-      layout={layout}
-      keyboard={keyboard}
-      selectionsAPI={selectionsAPI}
-      areBasicFeaturesEnabled={areBasicFeaturesEnabled}
-    />
-  );
+  const totals = <TableTotals tableData={tableData} areBasicFeaturesEnabled={areBasicFeaturesEnabled} />;
 
   return (
     <StyledBody lastRowBottomBorder={lastRowBottomBorder}>

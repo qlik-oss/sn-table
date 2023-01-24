@@ -261,18 +261,20 @@ export function getTotalsCellStyle(layout: TableLayout, theme: ExtendedTheme, to
  */
 export function getColumnStyle(
   styling: CellStyle,
-  qAttrExps: EngineAPI.INxAttributeExpressionValues,
+  qAttrExps: EngineAPI.INxAttributeExpressionValues | undefined,
   stylingIDs: string[]
 ): CellStyle {
   const columnColors: Record<string, string> = {};
-  qAttrExps.qValues.forEach((val, i) => {
+  qAttrExps?.qValues.forEach((val, i) => {
     const resolvedColor = val.qText && resolveToRGBAorRGB(val.qText);
     if (resolvedColor && resolvedColor !== 'none') {
       columnColors[stylingIDs[i]] = resolvedColor;
     }
   });
-  if (columnColors.cellBackgroundColor && !columnColors.cellForegroundColor)
+
+  if (columnColors.cellBackgroundColor && !columnColors.cellForegroundColor) {
     columnColors.cellForegroundColor = getAutoFontColor(columnColors.cellBackgroundColor);
+  }
 
   return {
     ...styling,
