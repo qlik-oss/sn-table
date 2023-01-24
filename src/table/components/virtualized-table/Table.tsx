@@ -13,7 +13,7 @@ import useOnPropsChange from './hooks/use-on-props-change';
 import useTableCount from './hooks/use-table-count';
 import ScrollableContainer from './ScrollableContainer';
 import StickyContainer from './StickyContainer';
-import { toTableRect, toStickyContainerRect } from './utils/to-rect';
+import toTableRect from './utils/to-rect';
 import { useContextSelector, TableContext } from '../../context';
 import getHeights from './utils/get-height';
 
@@ -36,12 +36,11 @@ const Table = (props: TableProps) => {
   );
   const { headerRowHeight, bodyRowHeight, headerAndTotalsHeight } = getHeights(headerStyle, bodyStyle, totals);
   const columns = useMemo(() => getColumns(layout), [layout]);
-  const tableRect = toTableRect(rect, paginationNeeded);
+  const tableRect = useMemo(() => toTableRect(rect, paginationNeeded), [rect, paginationNeeded]);
   const { width } = useColumnSize(tableRect, columns, headerStyle, bodyStyle);
   const { rowCount } = useTableCount(layout, pageInfo, tableRect, width, bodyRowHeight);
   const containerWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
   const [containerHeight, setContainerHeight] = useState(rowCount * bodyRowHeight + headerAndTotalsHeight);
-  const stickyContainerRect = toStickyContainerRect(tableRect, rowCount, headerAndTotalsHeight, bodyRowHeight);
   const scrollHandler = useScrollHandler(
     headerRef,
     totalsRef,
@@ -65,7 +64,7 @@ const Table = (props: TableProps) => {
 
   const TotalsComponent = (
     <Totals
-      rect={stickyContainerRect}
+      rect={tableRect}
       pageInfo={pageInfo}
       columns={columns}
       columnWidth={width}
@@ -78,10 +77,10 @@ const Table = (props: TableProps) => {
   return (
     <ScrollableContainer ref={ref} width={tableRect.width} height={tableRect.height} onScroll={scrollHandler}>
       <FullSizeContainer width={containerWidth} height={containerHeight}>
-        <StickyContainer rect={stickyContainerRect}>
+        <StickyContainer rect={tableRect}>
           <Header
             headerStyle={headerStyle}
-            rect={stickyContainerRect}
+            rect={tableRect}
             pageInfo={pageInfo}
             columns={columns}
             columnWidth={width}
@@ -91,7 +90,7 @@ const Table = (props: TableProps) => {
           {totals.atTop ? TotalsComponent : null}
           <Body
             bodyStyle={bodyStyle}
-            rect={stickyContainerRect}
+            rect={tableRect}
             pageInfo={pageInfo}
             columns={columns}
             columnWidth={width}
