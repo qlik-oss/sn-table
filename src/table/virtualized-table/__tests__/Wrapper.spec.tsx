@@ -9,7 +9,7 @@ import { MAX_PAGE_SIZE } from '../constants';
 import TestWithProviders from '../../../__test__/test-with-providers';
 
 jest.mock('../Table');
-jest.mock('../../footer/FooterWrapper');
+jest.mock('../../components/footer/FooterWrapper');
 
 describe('<Wrapper />', () => {
   let rect: stardust.Rect;
