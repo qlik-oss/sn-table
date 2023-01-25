@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import { PageInfo, Row, Column, TableLayout } from '../../../../types';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { PageInfo, Row, Column, TableLayout, Cell } from '../../../../types';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
 import useGetHyperCubeDataQueue from '../use-get-hypercube-data-queue';
 import { createRow, isColumnMissingData, isRowMissingData } from './utils';
@@ -11,6 +11,7 @@ export interface UseData {
   loadRows: LoadData;
   loadColumns: LoadData;
   deferredRowCount: number;
+  maxRowHeight: React.MutableRefObject<number>;
 }
 
 const useData = (
@@ -20,9 +21,11 @@ const useData = (
   rowCount: number,
   visibleRowCount: number,
   visibleColumnCount: number,
-  columns: Column[]
+  columns: Column[],
+  measureCellHeight: (text: string, colIdx: number) => { width: number; height: number }
 ): UseData => {
-  const [rowsInPage, setRowsInPage] = useState<Row[]>(Array(rowCount));
+  const maxRowHeight = useRef<number>(0);
+  const [rowsInPage, setRowsInPage] = useState<Row[]>(Array(rowCount).fill(undefined));
 
   const getDataPages = useCallback(
     async (pages: EngineAPI.INxPage[]) => model.getHyperCubeData('/qHyperCubeDef', pages),
@@ -44,16 +47,18 @@ const useData = (
               dataPage.qArea,
               pageRowStartIdx,
               columns,
-              layout.qHyperCube.qSize
+              layout.qHyperCube.qSize,
+              measureCellHeight
             );
 
             nextRows[pageRowIdx] = row;
+            maxRowHeight.current = Math.max(0, maxRowHeight.current, row.height as number);
           });
         });
 
         return nextRows;
       }),
-    [pageInfo, columns, layout]
+    [pageInfo, columns, layout, measureCellHeight]
   );
 
   // The queue takes a EngineAPI.INxPage object as items and adds them to a queue and
@@ -107,7 +112,7 @@ const useData = (
     const qHeight = Math.min(100, layout.qHyperCube.qSize.qcy, visibleRowCount + ROW_DATA_BUFFER_SIZE);
 
     getDataPages([{ qLeft: 0, qTop, qHeight, qWidth }]).then((dataPages) => {
-      setRowsInPage(Array(rowCount)); // Reset rows to initial value
+      setRowsInPage(Array(rowCount).fill(undefined)); // Reset rows to initial value
       handleDataPages(dataPages);
     });
   }, [getDataPages, handleDataPages, layout, visibleRowCount, visibleColumnCount, pageInfo, queue, rowCount]);
@@ -117,6 +122,7 @@ const useData = (
     loadRows,
     loadColumns,
     deferredRowCount: rowsInPage.length,
+    maxRowHeight,
   };
 };
 

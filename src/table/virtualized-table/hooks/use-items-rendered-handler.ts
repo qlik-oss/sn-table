@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { PageInfo, TableLayout } from '../../../types';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../constants';
 import { LoadData } from './use-data';
@@ -34,6 +34,8 @@ const useItemsRendererHandler = ({
   rowCount,
   pageInfo,
 }: ItemsHandlerProps) => {
+  const firstVisisbleRow = useRef<number>(0);
+
   const handleItemsRendered = useCallback(
     ({
       overscanColumnStartIndex,
@@ -41,6 +43,8 @@ const useItemsRendererHandler = ({
       overscanRowStartIndex,
       overscanRowStopIndex,
     }: OnItemsRendered) => {
+      firstVisisbleRow.current = overscanRowStartIndex;
+
       if (overscanRowStartIndex === 0 && overscanColumnStartIndex === 0) {
         // This case should handled by the initial data load
         return;
@@ -89,10 +93,11 @@ const useItemsRendererHandler = ({
       horizontalScrollDirection,
       rowCount,
       layout.qHyperCube.qSize,
+      firstVisisbleRow,
     ]
   );
 
-  return handleItemsRendered;
+  return { handleItemsRendered, firstVisisbleRow };
 };
 
 export default useItemsRendererHandler;

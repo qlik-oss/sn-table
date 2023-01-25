@@ -53,23 +53,23 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
   const muiTheme = muiSetup('ltr');
 
   reactRoot?.render(
-    <React.StrictMode>
-      <ThemeProvider theme={muiTheme}>
-        <TableContextProvider
-          selectionsAPI={selectionsAPI}
-          layout={layout}
-          model={model}
-          translator={translator}
-          constraints={constraints}
-          theme={theme}
-          keyboard={keyboard}
-          rootElement={rootElement}
-          embed={embed}
-        >
-          <VirualizedTable rect={rect} />
-        </TableContextProvider>
-      </ThemeProvider>
-    </React.StrictMode>
+    // <React.StrictMode>
+    <ThemeProvider theme={muiTheme}>
+      <TableContextProvider
+        selectionsAPI={selectionsAPI}
+        layout={layout}
+        model={model}
+        translator={translator}
+        constraints={constraints}
+        theme={theme}
+        keyboard={keyboard}
+        rootElement={rootElement}
+        embed={embed}
+      >
+        <VirualizedTable rect={rect} />
+      </TableContextProvider>
+    </ThemeProvider>
+    // {/* </React.StrictMode> */}
   );
 }
 export function teardown(reactRoot: ReactDom.Root) {

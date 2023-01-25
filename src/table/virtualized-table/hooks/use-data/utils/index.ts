@@ -7,14 +7,16 @@ const createRow = (
   qArea: EngineAPI.IRect,
   pageRowStartIdx: number,
   columns: Column[],
-  qSize: EngineAPI.ISize
+  qSize: EngineAPI.ISize,
+  measureCellHeight: (cell: string, colIdx: number) => { width: number; height: number }
 ) => {
   const rowIdx = qArea.qTop + matrixRowIdx;
   const pageRowIdx = pageRowStartIdx + matrixRowIdx;
-  const row: Row = prevRows[pageRowIdx] ?? { key: `row-${pageRowIdx}` };
+  const row: Row = prevRows[pageRowIdx] ?? { key: `row-${pageRowIdx}`, height: 0 };
 
   matrixRow.forEach((cell, matrixColIdx: number) => {
     const colIdx = matrixColIdx + qArea.qLeft;
+    const { height, width } = measureCellHeight(cell.qText ?? '', colIdx);
     row[`col-${colIdx}`] = {
       ...cell,
       rowIdx,
@@ -24,7 +26,10 @@ const createRow = (
       pageColIdx: colIdx,
       isLastRow: rowIdx === qSize.qcy - 1,
       isLastColumn: colIdx === qSize.qcx - 1,
+      width,
     };
+
+    row.height = Math.max(row.height as number, height);
   });
 
   return {

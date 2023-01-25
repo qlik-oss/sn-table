@@ -99,11 +99,12 @@ export interface Cell {
   isSelectable: boolean;
   isLastRow: boolean;
   isLastColumn?: boolean;
+  width?: number;
 }
 
 export interface Row {
   // for the row key, string is needed
-  [key: string]: Cell | string;
+  [key: string]: Cell | string | number;
 }
 
 export type SortDirection = 'A' | 'D';

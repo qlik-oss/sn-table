@@ -8,7 +8,7 @@ export interface MeasureTextHook {
 
 const MAGIC_DEFAULT_CHAR = 'M';
 
-const ACCOUNT_FOR_PADDING = 32; // Default left and right padding is 2 * 14px, make some extra room for that
+const ACCOUNT_FOR_PADDING = 0; // Default left and right padding is 2 * 14px, make some extra room for that
 
 export default function useMeasureText(fontSize: string | undefined, fontFamily: string | undefined): MeasureTextHook {
   const { estimateWidth, measureText } = useMemo((): MeasureTextHook => {

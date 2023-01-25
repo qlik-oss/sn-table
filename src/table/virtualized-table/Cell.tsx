@@ -41,6 +41,8 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
 
     return (
       <div
+        data-width={cell.width}
+        data-height={rowsInPage[rowIndex].height}
         className={`sn-table-cell ${cellSelectionState}`}
         style={{
           ...style,
@@ -62,7 +64,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         onMouseEnter={isHoverEnabled ? () => setHoverIndex(rowIndex) : undefined}
         onMouseLeave={isHoverEnabled ? () => setHoverIndex(-1) : undefined}
       >
-        <CellText singleLine>{cell.qText}</CellText>
+        <CellText singleLine={false}>{cell.qText}</CellText>
       </div>
     );
   }
