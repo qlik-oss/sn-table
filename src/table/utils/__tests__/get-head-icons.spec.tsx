@@ -20,12 +20,12 @@ describe('getHeadIcons', () => {
     } as Column;
   });
 
-  it('should return ascending as startIcon and no lock icon when sortDirection i A and align is left', () => {
+  it('should return ascending as endIcon and no lock icon when sortDirection i A and align is left', () => {
     const icons = getHeadIcons(column);
     expect(icons).toEqual({ endIcon: ascending, lockIcon: undefined });
   });
 
-  it('should return descending as startIcon and no lock icon when sortDirection i D and align is left', () => {
+  it('should return descending as endIcon and no lock icon when sortDirection i D and align is left', () => {
     column.sortDirection = 'D';
 
     const icons = getHeadIcons(column);
