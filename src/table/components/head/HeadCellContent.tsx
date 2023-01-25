@@ -3,7 +3,7 @@ import React from 'react';
 import { useContextSelector, TableContext } from '../../context';
 import { HeadCellContentProps } from '../../types';
 import { FullSortDirection } from '../../constants';
-import useHeadIcons from '../../utils/get-head-icons';
+import getHeadIcons from '../../utils/get-head-icons';
 import { VisuallyHidden, StyledSortButton, StyledHeadCellContent, LockAndLabel } from './styles';
 import HeadCellMenu from './HeadCellMenu';
 
@@ -20,7 +20,7 @@ function HeadCellContent({
   );
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
 
-  const { startIcon, endIcon, lockIcon } = useHeadIcons(column);
+  const { startIcon, endIcon, lockIcon } = getHeadIcons(column);
   const tabIndex = !keyboard.enabled ? 0 : -1;
   const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
 
