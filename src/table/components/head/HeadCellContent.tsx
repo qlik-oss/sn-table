@@ -3,7 +3,7 @@ import React from 'react';
 import { useContextSelector, TableContext } from '../../context';
 import { HeadCellContentProps } from '../../types';
 import { FullSortDirection } from '../../constants';
-import useHeadIcons from '../../hooks/use-head-icons';
+import useHeadIcons from '../../utils/get-head-icons';
 import { VisuallyHidden, StyledSortButton, StyledHeadCellContent, LockAndLabel } from './styles';
 import HeadCellMenu from './HeadCellMenu';
 
