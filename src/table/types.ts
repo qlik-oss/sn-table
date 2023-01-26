@@ -236,9 +236,18 @@ export interface TableHeadWrapperProps {
   areBasicFeaturesEnabled: boolean;
 }
 
+export interface HeadCellContentProps {
+  column: Column;
+  columnIndex: number;
+  changeSortOrder: ChangeSortOrder;
+  isActive: boolean;
+  areBasicFeaturesEnabled: boolean;
+}
+
 export interface HeadCellMenuProps {
   columnIndex: number;
   isDimension: boolean;
+  tabIndex: number;
 }
 
 export type MenuItemGroup = HeadCellMenuItem[];

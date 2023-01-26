@@ -9,7 +9,7 @@ import { StyledMenuIconButton, NebulaListBox } from './styles';
 import { ListBoxWrapper, ListBoxWrapperRenderProps } from './ListBoxWrapper';
 import MenuItems from './MenuItems';
 
-export default function HeadCellMenu({ columnIndex, isDimension }: HeadCellMenuProps) {
+export default function HeadCellMenu({ columnIndex, isDimension, tabIndex }: HeadCellMenuProps) {
   const { translator } = useContextSelector(TableContext, (value) => value.baseProps);
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
   const [openListboxDropdown, setOpenListboxDropdown] = useState(false);
@@ -44,7 +44,7 @@ export default function HeadCellMenu({ columnIndex, isDimension }: HeadCellMenuP
         isVisible={openListboxDropdown || openMenuDropdown}
         ref={anchorRef}
         size="small"
-        tabIndex={-1}
+        tabIndex={tabIndex}
         id="sn-table-head-menu-button"
         aria-controls={openMenuDropdown ? 'sn-table-head-menu' : undefined}
         aria-expanded={openMenuDropdown ? 'true' : undefined}
