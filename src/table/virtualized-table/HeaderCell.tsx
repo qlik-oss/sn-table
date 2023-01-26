@@ -1,7 +1,8 @@
 import React from 'react';
 import { Column } from '../../types';
+import { useContextSelector, TableContext } from '../context';
 import { GeneratedStyling } from '../types';
-import CellText from '../components/CellText';
+import HeadCellContent from '../components/head/HeadCellContent';
 
 interface HeaderCellProps {
   index: number;
@@ -17,8 +18,10 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
     columns,
     headerStyle: { ...applicableStyle },
   } = data;
+  const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
   const datum = columns[index];
   const isLastColumn = columns.length - 1 === index;
+  const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === datum.colIdx;
 
   return (
     <div
@@ -37,7 +40,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         fontWeight: 'bold',
       }}
     >
-      <CellText singleLine>{datum.label}</CellText>
+      <HeadCellContent column={datum} columnIndex={index} isActive={isActive} areBasicFeaturesEnabled />
     </div>
   );
 };

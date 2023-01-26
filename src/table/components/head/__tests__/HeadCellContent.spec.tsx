@@ -23,11 +23,11 @@ describe('<HeadCellContent />', () => {
         cellCoordMock={cellCoordMock}
         constraints={constraints}
         layout={layout}
+        changeSortOrder={changeSortOrder}
       >
         <HeadCellContent
           column={column}
           columnIndex={columnIndex}
-          changeSortOrder={changeSortOrder}
           isActive={isActive}
           areBasicFeaturesEnabled={areBasicFeaturesEnabled}
         />

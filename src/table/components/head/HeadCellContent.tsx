@@ -7,14 +7,8 @@ import getHeadIcons from '../../utils/get-head-icons';
 import { VisuallyHidden, StyledSortButton, StyledHeadCellContent, LockAndLabel } from './styles';
 import HeadCellMenu from './HeadCellMenu';
 
-function HeadCellContent({
-  column,
-  columnIndex,
-  changeSortOrder,
-  isActive,
-  areBasicFeaturesEnabled,
-}: HeadCellContentProps) {
-  const { constraints, selectionsAPI, keyboard, translator } = useContextSelector(
+function HeadCellContent({ column, columnIndex, isActive, areBasicFeaturesEnabled }: HeadCellContentProps) {
+  const { constraints, selectionsAPI, keyboard, translator, changeSortOrder } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );

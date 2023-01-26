@@ -9,7 +9,7 @@ import { FullSortDirection } from '../../constants';
 import { StyledHeadCell } from './styles';
 import HeadCellContent from './HeadCellContent';
 
-function TableHeadWrapper({ tableData, changeSortOrder, areBasicFeaturesEnabled }: TableHeadWrapperProps) {
+function TableHeadWrapper({ tableData, areBasicFeaturesEnabled }: TableHeadWrapperProps) {
   const { columns, totalsPosition } = tableData;
   const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
@@ -43,7 +43,6 @@ function TableHeadWrapper({ tableData, changeSortOrder, areBasicFeaturesEnabled 
               <HeadCellContent
                 column={column}
                 columnIndex={columnIndex}
-                changeSortOrder={changeSortOrder}
                 isActive={isActive}
                 areBasicFeaturesEnabled={areBasicFeaturesEnabled}
               />

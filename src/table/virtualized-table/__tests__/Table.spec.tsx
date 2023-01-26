@@ -41,7 +41,7 @@ describe('<Table />', () => {
     measureTextMock.mockReturnValue({ width: 150 });
 
     layout = generateLayout(dimensionCount, measureCount, rowCount);
-
+    layout.qHyperCube.qEffectiveInterColumnSortOrder = [0, 1, 2];
     rect = {
       width: 750,
       height: 750,

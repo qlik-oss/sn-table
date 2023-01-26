@@ -1,6 +1,14 @@
 import { stardust } from '@nebula.js/stardust';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
-import { Column, ExtendedSelectionAPI, ExtendedTheme, ExtendedTranslator, PageInfo, TableLayout } from '../../../types';
+import {
+  ChangeSortOrder,
+  Column,
+  ExtendedSelectionAPI,
+  ExtendedTheme,
+  ExtendedTranslator,
+  PageInfo,
+  TableLayout,
+} from '../../../types';
 import { GeneratedStyling } from '../../types';
 
 export interface Totals {
@@ -29,6 +37,7 @@ export interface VirtualTableRenderProps {
   rect: stardust.Rect;
   rootElement: HTMLElement;
   embed: stardust.Embed;
+  changeSortOrder: ChangeSortOrder;
 }
 
 export interface WrapperProps {
