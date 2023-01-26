@@ -57,6 +57,9 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           padding: '4px 12px',
           boxSizing: 'border-box',
           cursor: 'default',
+          transitionProperty: 'height',
+          transitionTimingFunction: 'ease-in',
+          transitionDuration: '0.15s',
         }}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
