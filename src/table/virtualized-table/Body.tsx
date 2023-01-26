@@ -133,7 +133,7 @@ const Body = (props: BodyProps) => {
       height={bodyHeight}
       rowCount={deferredRowCount}
       rowHeight={rowHeightCb}
-      estimatedRowHeight={maxRowHeight.current}
+      estimatedRowHeight={rowHeight}
       width={rect.width}
       itemData={itemData}
       onItemsRendered={handleItemsRendered}
