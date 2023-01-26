@@ -23,8 +23,9 @@ const useScrollHandler = (
 
       if (innerForwardRef.current) {
         // Keep full size container in sync with the height calculation in react-window is doing
-        if (containerHeight !== innerForwardRef.current.clientHeight + headerAndTotalsHeight) {
-          setContainerHeight(innerForwardRef.current.clientHeight + headerAndTotalsHeight);
+        const scrollHeight = innerForwardRef.current.clientHeight + headerAndTotalsHeight;
+        if (scrollHeight > containerHeight) {
+          setContainerHeight(scrollHeight);
         }
       }
     },
