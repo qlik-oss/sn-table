@@ -19,9 +19,9 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
     headerStyle: { ...applicableStyle },
   } = data;
   const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
-  const datum = columns[index];
+  const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
-  const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === datum.colIdx;
+  const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
 
   return (
     <div
@@ -34,13 +34,13 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         borderStyle: 'solid',
         borderWidth: isLastColumn ? '0px' : '0px 1px 0px 0px',
         padding: '4px 12px',
-        justifyContent: datum.align,
+        justifyContent: column.align,
         boxSizing: 'border-box',
         cursor: 'default',
         fontWeight: 'bold',
       }}
     >
-      <HeadCellContent column={datum} columnIndex={index} isActive={isActive} areBasicFeaturesEnabled />
+      <HeadCellContent column={column} columnIndex={index} isActive={isActive} areBasicFeaturesEnabled />
     </div>
   );
 };
