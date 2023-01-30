@@ -1,14 +1,15 @@
 import React, { memo, useMemo } from 'react';
 import { SelectChangeEvent } from '@mui/material/Select';
-import ArrowLeft from '@qlik-trial/sprout/icons/ArrowLeft';
-import ArrowLeftStop from '@qlik-trial/sprout/icons/ArrowLeftStop';
-import ArrowRight from '@qlik-trial/sprout/icons/ArrowRight';
-import ArrowRightStop from '@qlik-trial/sprout/icons/ArrowRightStop';
+import ArrowLeft from '@qlik-trial/sprout/icons/react/ArrowLeft';
+import ArrowLeftStop from '@qlik-trial/sprout/icons/react/ArrowLeftStop';
+import ArrowRight from '@qlik-trial/sprout/icons/react/ArrowRight';
+import ArrowRightStop from '@qlik-trial/sprout/icons/react/ArrowRightStop';
 
 import { StyledSelect, StyledButton, StyledTypography } from './styles';
 import { handleLastTab } from '../../utils/handle-key-press';
 import { PaginationContentProps } from '../../types';
 import { getFooterStyle } from '../../utils/styling-utils';
+import { useContextSelector, TableContext } from '../../context';
 
 const icons: Record<string, typeof ArrowLeft> = {
   FirstPage: ArrowLeftStop,
@@ -37,14 +38,10 @@ export const shouldShow = (component: string, width: number) => {
 };
 
 function PaginationContent({
-  theme,
   direction,
   tableData,
   pageInfo,
   setPageInfo,
-  keyboard,
-  translator,
-  constraints,
   footerContainer,
   isSelectionMode,
   rect,
@@ -53,6 +50,7 @@ function PaginationContent({
 }: PaginationContentProps) {
   const { totalRowCount, totalColumnCount, totalPages } = tableData;
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
+  const { keyboard, translator, theme, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
   const footerStyle = useMemo(() => getFooterStyle(theme.background), [theme]);
   const onFirstPage = page === 0;
   const onLastPage = page >= totalPages - 1;
@@ -109,7 +107,7 @@ function PaginationContent({
         tabIndex={tabIndex}
         onKeyDown={onKeyDown}
       >
-        <IconComponent size="small" />
+        <IconComponent height="12px" />
       </StyledButton>
     );
   };

@@ -4,7 +4,7 @@ import { stardust } from '@nebula.js/stardust';
 import React from 'react';
 import { TableContextProvider } from '../table/context';
 import muiSetup from '../table/mui-setup';
-import { ExtendedSelectionAPI, ExtendedTheme, ExtendedTranslator, Row, TableLayout } from '../types';
+import { ChangeSortOrder, ExtendedSelectionAPI, ExtendedTheme, ExtendedTranslator, Row, TableLayout } from '../types';
 import { generateLayout } from './generate-test-data';
 
 interface ProviderProps {
@@ -20,6 +20,9 @@ interface ProviderProps {
   theme?: ExtendedTheme;
   keyboard?: stardust.Keyboard;
   direction?: 'ltr' | 'rtl';
+  rootElement?: HTMLElement;
+  embed?: stardust.Embed;
+  changeSortOrder?: ChangeSortOrder;
 }
 
 const TestWithProviders = ({
@@ -42,6 +45,9 @@ const TestWithProviders = ({
   cellCoordMock = undefined,
   selectionDispatchMock = undefined, // Can be used to avoid selectionDispatch infinite loop
   direction = 'ltr',
+  rootElement = {} as HTMLElement,
+  embed = {} as stardust.Embed,
+  changeSortOrder = async () => {},
 }: ProviderProps) => {
   return (
     <ThemeProvider theme={muiSetup(direction)}>
@@ -56,6 +62,9 @@ const TestWithProviders = ({
         pageRows={pageRows}
         cellCoordMock={cellCoordMock}
         selectionDispatchMock={selectionDispatchMock}
+        rootElement={rootElement}
+        embed={embed}
+        changeSortOrder={changeSortOrder}
       >
         {children as JSX.Element}
       </TableContextProvider>

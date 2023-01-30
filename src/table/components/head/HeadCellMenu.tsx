@@ -2,10 +2,10 @@ import React, { useRef, useState, useMemo } from 'react';
 import Menu from '@mui/material/Menu';
 import More from '@qlik-trial/sprout/icons/More';
 import Search from '@qlik-trial/sprout/icons/Search';
-import Descending from '@qlik-trial/sprout/icons/Descending';
-import Ascending from '@qlik-trial/sprout/icons/Ascending';
 import { stardust } from '@nebula.js/stardust';
 import { TableLayout } from '../../../types';
+
+import { useContextSelector, TableContext } from '../../context';
 import { HeadCellMenuProps, MenuItemGroup } from '../../types';
 import { StyledMenuIconButton } from './styles';
 import MenuItems from './MenuItems';
@@ -18,45 +18,15 @@ const getFieldId = (layout: TableLayout, columnIndex: number): string | stardust
       }
     : layout.qHyperCube.qDimensionInfo[columnIndex]?.qFallbackTitle;
 
-export default function HeadCellMenu({
-  translator,
-  sortDirection,
-  sortFromMenu,
-  embed,
-  layout,
-  columnIndex,
-  isInteractionEnabled,
-  isCurrentColumnActive,
-  isDimension,
-}: HeadCellMenuProps) {
+export default function HeadCellMenu({ columnIndex, isDimension, tabIndex }: HeadCellMenuProps) {
+  const { translator } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { embed, layout } = useContextSelector(TableContext, (value) => value.baseProps);
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
   const anchorRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
 
   const menuItemGroups = useMemo<MenuItemGroup[]>(
     () => [
-      [
-        {
-          id: 1,
-          itemTitle: translator.get('SNTable.MenuItem.SortAscending'),
-          onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
-            sortFromMenu(evt, 'A');
-            setOpenMenuDropdown(false);
-          },
-          icon: <Ascending />,
-          isDisabled: !isInteractionEnabled || (isCurrentColumnActive && sortDirection === 'A'),
-        },
-        {
-          id: 2,
-          itemTitle: translator.get('SNTable.MenuItem.SortDescending'),
-          onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
-            sortFromMenu(evt, 'D');
-            setOpenMenuDropdown(false);
-          },
-          icon: <Descending />,
-          isDisabled: !isInteractionEnabled || (isCurrentColumnActive && sortDirection === 'D'),
-        },
-      ],
       ...(isDimension
         ? [
             [
@@ -90,27 +60,17 @@ export default function HeadCellMenu({
           ]
         : []),
     ],
-    [
-      translator,
-      isInteractionEnabled,
-      isCurrentColumnActive,
-      sortDirection,
-      isDimension,
-      listboxRef.current,
-      layout,
-      embed,
-      columnIndex,
-    ]
+    [translator, isDimension, listboxRef.current, layout, embed, columnIndex]
   );
 
-  return (
+  return menuItemGroups.length ? (
     <>
       <div>
         <StyledMenuIconButton
           isVisible={openMenuDropdown}
           ref={anchorRef}
           size="small"
-          tabIndex={-1}
+          tabIndex={tabIndex}
           id="sn-table-head-menu-button"
           aria-controls={openMenuDropdown ? 'sn-table-head-menu' : undefined}
           aria-expanded={openMenuDropdown ? 'true' : undefined}
@@ -134,5 +94,5 @@ export default function HeadCellMenu({
         {MenuItems({ itemGroups: menuItemGroups })}
       </Menu>
     </>
-  );
+  ) : null;
 }

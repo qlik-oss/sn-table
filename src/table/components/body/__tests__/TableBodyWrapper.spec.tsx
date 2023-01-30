@@ -1,5 +1,4 @@
 import React from 'react';
-import { stardust } from '@nebula.js/stardust';
 import { render, fireEvent } from '@testing-library/react';
 import { generateDataPages, generateLayout } from '../../../../__test__/generate-test-data';
 import manageData from '../../../../handle-data';
@@ -8,22 +7,17 @@ import * as selectionsUtils from '../../../utils/selections-utils';
 import * as getCellRenderer from '../../../utils/get-cell-renderer';
 import * as handleKeyPress from '../../../utils/handle-key-press';
 import * as handleClick from '../../../utils/handle-click';
-import { TableData, ExtendedSelectionAPI, TableLayout, ExtendedTheme, PageInfo, Cell } from '../../../../types';
+import { TableData, ExtendedSelectionAPI, PageInfo, Cell } from '../../../../types';
 import TestWithProviders from '../../../../__test__/test-with-providers';
 
 describe('<TableBodyWrapper />', () => {
-  const rootElement = {} as HTMLElement;
   const setShouldRefocus = () => undefined;
-  const keyboard = {} as stardust.Keyboard;
   const tableWrapperRef = {} as React.MutableRefObject<HTMLDivElement | null>;
   const announce = () => undefined;
   const model = { getHyperCubeData: async () => generateDataPages(2, 2) } as unknown as EngineAPI.IGenericObject;
 
   let tableData: TableData;
-  let constraints: stardust.Constraints;
   let selectionsAPI: ExtendedSelectionAPI;
-  let layout: TableLayout;
-  let theme: ExtendedTheme;
   let tableFirstRow: Cell;
   let tableSecondRow: Cell;
   let areBasicFeaturesEnabled: boolean;
@@ -33,13 +27,7 @@ describe('<TableBodyWrapper />', () => {
       <TestWithProviders selectionsAPI={selectionsAPI}>
         <TableBodyWrapper
           tableData={tableData}
-          constraints={constraints}
-          selectionsAPI={selectionsAPI}
-          layout={layout}
-          theme={theme}
-          rootElement={rootElement}
           setShouldRefocus={setShouldRefocus}
-          keyboard={keyboard}
           tableWrapperRef={tableWrapperRef}
           announce={announce}
           areBasicFeaturesEnabled={areBasicFeaturesEnabled}
@@ -55,17 +43,6 @@ describe('<TableBodyWrapper />', () => {
       { top: 0, height: 100 } as unknown as PageInfo,
       () => undefined
     )) as TableData;
-    constraints = {};
-    selectionsAPI = {
-      isModal: () => true,
-    } as ExtendedSelectionAPI;
-    theme = {
-      getColorPickerColor: () => undefined,
-      name: () => undefined,
-      getStyle: () => undefined,
-      background: { isDark: false },
-    } as unknown as ExtendedTheme;
-    layout = {} as TableLayout;
     tableFirstRow = tableData.rows[0]['col-0'] as Cell;
     tableSecondRow = tableData.rows[0]['col-1'] as Cell;
     areBasicFeaturesEnabled = true;

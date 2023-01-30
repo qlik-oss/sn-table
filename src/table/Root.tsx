@@ -2,17 +2,30 @@ import React from 'react';
 import ReactDom from 'react-dom/client';
 import { StyleSheetManager } from 'styled-components';
 import { ThemeProvider } from '@mui/material/styles';
+import { stardust } from '@nebula.js/stardust';
 import rtlPluginSc from 'stylis-plugin-rtl-sc';
 
 import TableWrapper from './components/TableWrapper';
 import { TableContextProvider } from './context';
 import muiSetup from './mui-setup';
 import { RenderProps, TableWrapperProps } from './types';
-import VirualizedTable from './components/virtualized-table/Wrapper';
-import { VirtualTableRenderProps } from './components/virtualized-table/types';
+import VirtualizedTable from './virtualized-table/Wrapper';
+import { VirtualTableRenderProps } from './virtualized-table/types';
 
 export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
-  const { direction, selectionsAPI, tableData, layout, translator, constraints, theme, keyboard } = props;
+  const {
+    direction,
+    selectionsAPI,
+    layout,
+    translator,
+    constraints,
+    theme,
+    keyboard,
+    rootElement,
+    embed,
+    changeSortOrder,
+    ...wrapperProps
+  } = props;
   const muiTheme = muiSetup(direction);
 
   reactRoot?.render(
@@ -20,14 +33,17 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
       <ThemeProvider theme={muiTheme}>
         <TableContextProvider
           selectionsAPI={selectionsAPI}
-          pageRows={tableData?.rows}
+          pageRows={props.tableData?.rows}
           layout={layout}
           translator={translator}
           constraints={constraints}
           theme={theme}
           keyboard={keyboard}
+          rootElement={rootElement as HTMLElement}
+          embed={embed as stardust.Embed}
+          changeSortOrder={changeSortOrder}
         >
-          <TableWrapper {...(props as TableWrapperProps)} />
+          <TableWrapper {...(wrapperProps as TableWrapperProps)} />
         </TableContextProvider>
       </ThemeProvider>
     </StyleSheetManager>
@@ -35,7 +51,19 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
 }
 
 export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot?: ReactDom.Root) {
-  const { selectionsAPI, layout, model, translator, constraints, theme, keyboard, rect } = props;
+  const {
+    selectionsAPI,
+    layout,
+    model,
+    translator,
+    constraints,
+    theme,
+    keyboard,
+    rect,
+    rootElement,
+    embed,
+    changeSortOrder,
+  } = props;
   const muiTheme = muiSetup('ltr');
 
   reactRoot?.render(
@@ -49,8 +77,11 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
           constraints={constraints}
           theme={theme}
           keyboard={keyboard}
+          rootElement={rootElement}
+          embed={embed}
+          changeSortOrder={changeSortOrder}
         >
-          <VirualizedTable rect={rect} />
+          <VirtualizedTable rect={rect} />
         </TableContextProvider>
       </ThemeProvider>
     </React.StrictMode>

@@ -211,7 +211,7 @@ const getChartExploration = (env) =>
         },
         visibilityToggler: {
           component: 'buttongroup',
-          translation: 'properties.visibilityOption',
+          translation: 'properties.ChartExploration.VisibilityOption',
           ref: 'chartExploration.menuVisibility',
           options: [
             {
@@ -220,12 +220,21 @@ const getChartExploration = (env) =>
             },
             {
               value: 'minimized',
-              translation: 'properties.minimized',
+              translation: 'properties.ChartExploration.Minimized',
             },
           ],
         },
       },
     },
+  };
+
+const getUsePagination = ({ flags }) =>
+  flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES') && {
+    ref: 'presentation.usePagination',
+    translation: 'properties.usePagination',
+    type: 'boolean',
+    component: 'checkbox',
+    defaultValue: true,
   };
 
 const getSettings = (env) => ({
@@ -235,7 +244,7 @@ const getSettings = (env) => ({
       grouped: true,
       type: 'items',
       translation: 'properties.presentation',
-      items: [stylingPanel, getTotals(env)],
+      items: [stylingPanel, getTotals(env), getUsePagination(env)],
     },
     ...getChartExploration(env),
   },

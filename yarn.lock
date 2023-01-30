@@ -2534,10 +2534,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.6.tgz#cee20bd55e68a1720bdab363ecf0c821ded4cd45"
   integrity sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==
 
-"@qlik-trial/sprout@2.43.1":
-  version "2.43.1"
-  resolved "https://npm.pkg.github.com/download/@qlik-trial/sprout/2.43.1/07e83b4e8038174eb514f688f5b84c30cb9431d1#07e83b4e8038174eb514f688f5b84c30cb9431d1"
-  integrity sha512-0F5UKD5ZqMiP5d+fb5HMiEqx2j30pLa1W1IbVes6dI4IjHd0afGu96G9jRu6cTZsNuAMHBCO6V/UCSX/PJcmOw==
+"@qlik-trial/sprout@2.44.0":
+  version "2.44.0"
+  resolved "https://npm.pkg.github.com/download/@qlik-trial/sprout/2.44.0/c9ee7400f06573f4b1c03b04366adf19ee6da349#c9ee7400f06573f4b1c03b04366adf19ee6da349"
+  integrity sha512-u6vvqwLQ4z9196GqAqa3u6AioiI55vd1hb7CfnvCBPEFNJDjY3JZZv+U4msbqO6Z8m1z+QSIFHsaFx6S9W6HVg==
 
 "@qlik/react-native-simple-grid@1.0.11":
   version "1.0.11"
@@ -2779,10 +2779,10 @@
     "@rollup/pluginutils" "^3.1.0"
     magic-string "^0.25.7"
 
-"@rollup/plugin-typescript@10.0.1":
-  version "10.0.1"
-  resolved "https://registry.yarnpkg.com/@rollup/plugin-typescript/-/plugin-typescript-10.0.1.tgz#270b515b116ea28320e6bb62451c4767d49072d6"
-  integrity sha512-wBykxRLlX7EzL8BmUqMqk5zpx2onnmRMSw/l9M1sVfkJvdwfxogZQVNUM9gVMJbjRLDR5H6U0OMOrlDGmIV45A==
+"@rollup/plugin-typescript@11.0.0":
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/@rollup/plugin-typescript/-/plugin-typescript-11.0.0.tgz#f136272d1df5209daca0cb6f171c574b1d505545"
+  integrity sha512-goPyCWBiimk1iJgSTgsehFD5OOFHiAknrRJjqFCudcW8JtWiBlK284Xnn4flqMqg6YAjVG/EE+3aVzrL5qNSzQ==
   dependencies:
     "@rollup/pluginutils" "^5.0.1"
     resolve "^1.22.1"

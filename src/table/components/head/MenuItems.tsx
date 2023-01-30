@@ -4,7 +4,7 @@ import { HeadCellMenuItem, MenuItemGroup } from '../../types';
 import { StyledMenuItem, StyledListItemIcon, StyledDivider } from './styles';
 
 /**
- * Gets the menu items for the head cell menu. Is provided with an array of item groups
+ * Gets the menu items for the head cell menu from provided array of item groups
  * Creates a menu item component for each item, and a divider between each item group
  */
 export default function MenuItems({ itemGroups }: { itemGroups: MenuItemGroup[] }) {
