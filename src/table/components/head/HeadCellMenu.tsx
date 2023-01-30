@@ -4,11 +4,19 @@ import More from '@qlik-trial/sprout/icons/More';
 import Search from '@qlik-trial/sprout/icons/Search';
 import Descending from '@qlik-trial/sprout/icons/Descending';
 import Ascending from '@qlik-trial/sprout/icons/Ascending';
-
+import { stardust } from '@nebula.js/stardust';
+import { TableLayout } from '../../../types';
 import { HeadCellMenuProps, MenuItemGroup } from '../../types';
 import { StyledMenuIconButton } from './styles';
-import { ListBoxWrapper, ListBoxWrapperRenderProps } from './ListBoxWrapper';
 import MenuItems from './MenuItems';
+
+const getFieldId = (layout: TableLayout, columnIndex: number): string | stardust.LibraryField | undefined =>
+  layout.qHyperCube.qDimensionInfo[columnIndex]?.qLibraryId
+    ? {
+        type: 'dimension',
+        qLibraryId: layout.qHyperCube.qDimensionInfo[columnIndex]?.qLibraryId,
+      }
+    : layout.qHyperCube.qDimensionInfo[columnIndex]?.qFallbackTitle;
 
 export default function HeadCellMenu({
   translator,
@@ -22,8 +30,8 @@ export default function HeadCellMenu({
   isDimension,
 }: HeadCellMenuProps) {
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
-  const [openListboxDropdown, setOpenListboxDropdown] = useState(false);
   const anchorRef = useRef<HTMLDivElement>(null);
+  const listboxRef = useRef<HTMLDivElement>(null);
 
   const menuItemGroups = useMemo<MenuItemGroup[]>(
     () => [
@@ -58,7 +66,22 @@ export default function HeadCellMenu({
                 onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
                   evt.stopPropagation();
                   setOpenMenuDropdown(false);
-                  setOpenListboxDropdown(true);
+
+                  if (!layout || !embed) return;
+                  const fieldId = getFieldId(layout, columnIndex);
+                  if (!fieldId) return;
+                  // @ts-ignore do not use api does not require type check
+                  // eslint-disable-next-line
+                  embed.__DO_NOT_USE__.popover(listboxRef.current, fieldId, {
+                    anchorOrigin: {
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    },
+                    transformOrigin: {
+                      vertical: 'top',
+                      horizontal: 'left',
+                    },
+                  });
                 },
                 icon: <Search />,
                 isDisabled: false,
@@ -67,14 +90,24 @@ export default function HeadCellMenu({
           ]
         : []),
     ],
-    [translator, isInteractionEnabled, isCurrentColumnActive, sortDirection, isDimension]
+    [
+      translator,
+      isInteractionEnabled,
+      isCurrentColumnActive,
+      sortDirection,
+      isDimension,
+      listboxRef.current,
+      layout,
+      embed,
+      columnIndex,
+    ]
   );
 
   return (
     <>
       <div>
         <StyledMenuIconButton
-          isVisible={openListboxDropdown || openMenuDropdown}
+          isVisible={openMenuDropdown}
           ref={anchorRef}
           size="small"
           tabIndex={-1}
@@ -86,16 +119,8 @@ export default function HeadCellMenu({
         >
           <More size="small" />
         </StyledMenuIconButton>
-        {openListboxDropdown && (
-          <ListBoxWrapper
-            layout={layout}
-            embed={embed}
-            columnIndex={columnIndex}
-            closeListboxDropdown={() => setOpenListboxDropdown(false)}
-          >
-            {({ ref }: ListBoxWrapperRenderProps) => <div ref={ref} />}
-          </ListBoxWrapper>
-        )}
+
+        <div ref={listboxRef} />
       </div>
 
       <Menu
