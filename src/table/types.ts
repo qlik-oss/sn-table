@@ -87,6 +87,7 @@ export interface ContextValue {
     keyboard: stardust.Keyboard;
     rootElement: HTMLElement;
     embed: stardust.Embed;
+    changeSortOrder: ChangeSortOrder;
   };
 }
 
@@ -188,6 +189,7 @@ export interface ContextProviderProps {
   keyboard: stardust.Keyboard;
   rootElement: HTMLElement;
   embed: stardust.Embed;
+  changeSortOrder: ChangeSortOrder;
 }
 
 export interface RenderProps {
@@ -221,7 +223,6 @@ export interface RenderProps {
 export interface TableWrapperProps {
   tableData: TableData;
   direction?: Direction;
-  changeSortOrder: ChangeSortOrder;
   rect: stardust.Rect;
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
@@ -232,14 +233,12 @@ export interface TableWrapperProps {
 
 export interface TableHeadWrapperProps {
   tableData: TableData;
-  changeSortOrder: ChangeSortOrder;
   areBasicFeaturesEnabled: boolean;
 }
 
 export interface HeadCellContentProps {
   column: Column;
   columnIndex: number;
-  changeSortOrder: ChangeSortOrder;
   isActive: boolean;
   areBasicFeaturesEnabled: boolean;
 }

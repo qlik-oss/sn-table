@@ -1,23 +1,18 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import TableHeadWrapper from '../TableHeadWrapper';
-import { TableData, TableLayout, ChangeSortOrder } from '../../../../types';
+import { TableData, TableLayout } from '../../../../types';
 import TestWithProviders from '../../../../__test__/test-with-providers';
 
 describe('<TableHeadWrapper />', () => {
   let tableData: TableData;
   let layout: TableLayout;
-  let changeSortOrder: ChangeSortOrder;
   let areBasicFeaturesEnabled: boolean;
 
   const renderTableHead = () =>
     render(
       <TestWithProviders layout={layout}>
-        <TableHeadWrapper
-          tableData={tableData}
-          changeSortOrder={changeSortOrder}
-          areBasicFeaturesEnabled={areBasicFeaturesEnabled}
-        />
+        <TableHeadWrapper tableData={tableData} areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
       </TestWithProviders>
     );
 
@@ -43,7 +38,6 @@ describe('<TableHeadWrapper />', () => {
         qEffectiveInterColumnSortOrder: [0, 1],
       },
     } as TableLayout;
-    changeSortOrder = jest.fn() as ChangeSortOrder;
     areBasicFeaturesEnabled = false;
   });
 

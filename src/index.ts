@@ -97,7 +97,7 @@ export default function supernova(env: Galaxy) {
       useContextMenu(areBasicFeaturesEnabled);
 
       useEffect(() => {
-        if (!shouldRenderVirtualizedTable || !model) return;
+        if (!shouldRenderVirtualizedTable || !model || !changeSortOrder) return;
 
         renderVirtualizedTable(
           {
@@ -111,10 +111,11 @@ export default function supernova(env: Galaxy) {
             selectionsAPI,
             rootElement,
             embed,
+            changeSortOrder,
           },
           reactRoot
         );
-      }, [layout, model, rect, theme, keyboard, translator, constraints, selectionsAPI]);
+      }, [layout, model, rect, theme, keyboard, translator, constraints, selectionsAPI, changeSortOrder]);
 
       useEffect(() => {
         const isReadyToRender =

@@ -6,7 +6,7 @@ import TableBodyWrapper from '../body/TableBodyWrapper';
 import TableHeadWrapper from '../head/TableHeadWrapper';
 import * as handleKeyPress from '../../utils/handle-key-press';
 import * as handleScroll from '../../utils/handle-scroll';
-import { TableLayout, TableData, PageInfo, SetPageInfo, Announce, Column, ChangeSortOrder } from '../../../types';
+import { TableLayout, TableData, PageInfo, SetPageInfo, Announce, Column } from '../../../types';
 import TestWithProviders from '../../../__test__/test-with-providers';
 
 describe('<TableWrapper />', () => {
@@ -18,7 +18,6 @@ describe('<TableWrapper />', () => {
   let rect: stardust.Rect;
   let direction: 'ltr' | 'rtl';
   let announce: Announce;
-  let changeSortOrder: ChangeSortOrder;
   let layout: TableLayout;
   let areBasicFeaturesEnabled: boolean;
 
@@ -32,7 +31,6 @@ describe('<TableWrapper />', () => {
           rect={rect}
           direction={direction}
           announce={announce}
-          changeSortOrder={changeSortOrder}
           areBasicFeaturesEnabled={areBasicFeaturesEnabled}
         />
       </TestWithProviders>

@@ -46,6 +46,7 @@ export const VisuallyHidden = styled('span')({
 });
 
 export const StyledHeadCellContent = styled(Box)(({ theme }) => ({
+  width: '100%',
   display: 'flex',
   flexDirection: 'inherit',
   justifyContent: 'space-between',
