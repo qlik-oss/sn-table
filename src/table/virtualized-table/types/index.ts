@@ -71,4 +71,17 @@ export interface BodyProps {
   bodyStyle: BodyStyle;
   rowHeight: number;
   headerAndTotalsHeight: number;
+  onRowCountChange: (deferredRowCount: number) => void;
+}
+
+export interface RenderedGrid {
+  startRowIndex: number;
+  stopRowIndex: number;
+  startColumnIndex: number;
+  stopColumnIndex: number;
+}
+
+export interface BodyRef {
+  scrollToIndex: (qTop: number) => Promise<void>;
+  scrollTo: (scrollTop: number, count: number) => Promise<void>;
 }

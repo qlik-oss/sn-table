@@ -43,6 +43,8 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
       <div
         data-width={cell.width}
         data-height={rowsInPage[rowIndex].height}
+        data-row-index={rowIndex}
+        data-col-index={columnIndex}
         className={`sn-table-cell ${cellSelectionState}`}
         style={{
           ...style,
@@ -59,7 +61,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           cursor: 'default',
           transitionProperty: 'height',
           transitionTimingFunction: 'ease-in',
-          transitionDuration: '0.15s',
+          transitionDuration: '0.05s',
         }}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
@@ -67,19 +69,30 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         onMouseEnter={isHoverEnabled ? () => setHoverIndex(rowIndex) : undefined}
         onMouseLeave={isHoverEnabled ? () => setHoverIndex(-1) : undefined}
       >
-        <CellText singleLine={false}>{cell.qText}</CellText>
+        <CellText
+          style={{
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            overflowWrap: 'anywhere', // Break anywhere as the line height logic does not account for word breaks at reasonable places like a white space
+          }}
+        >
+          {cell.qText}
+        </CellText>
       </div>
     );
   }
 
   return (
     <EmptyCell
+      rowIndex={rowIndex}
+      columnIndex={columnIndex}
       style={{
         ...style,
         ...bodyStyle,
         borderWidth: '0px 1px 1px 0px',
         borderStyle: 'solid',
         boxSizing: 'border-box',
+        // background: 'orangered',
       }}
     />
   );

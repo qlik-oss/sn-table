@@ -1,45 +1,28 @@
-import React, { memo, useMemo, useLayoutEffect, useCallback } from 'react';
+import React, {
+  memo,
+  useMemo,
+  useLayoutEffect,
+  useCallback,
+  useEffect,
+  useRef,
+  useImperativeHandle,
+  forwardRef as forwardRefFn,
+} from 'react';
 import { VariableSizeGrid } from 'react-window';
+import { debouncer } from 'qlik-chart-modules';
 import useData from './hooks/use-data';
-import { BodyProps } from './types';
+import { BodyProps, BodyRef, RenderedGrid } from './types';
 import useScrollDirection from './hooks/use-scroll-direction';
 import useTableCount from './hooks/use-table-count';
 import useItemsRendererHandler from './hooks/use-items-rendered-handler';
 import useSelectionsEffect from './hooks/use-selections-effect';
 import { useContextSelector, TableContext } from '../context';
-import { Row } from '../../types';
-import useMeasureText from './hooks/use-measure-text';
 import Cell from './Cell';
-import useOnPropsChange from './hooks/use-on-props-change';
+import getCellItemKey from './utils/get-cell-item-key';
+import useDynamicRowHeight from './hooks/use-dynamic-row-height';
+import { ROW_DATA_BUFFER_SIZE } from './constants';
 
-const PADDING = 12 * 2;
-const BORDER = 1;
-
-const getMeasuredRowHeight = (lineHeight: number, row: Row | undefined, measureText: (text: string) => number) => {
-  const cellHeights = Object.entries(row ?? {})
-    .filter(([key]) => key !== 'key')
-    .map(([, cell]) =>
-      typeof cell === 'object'
-        ? Math.max(1, Math.ceil(measureText(cell.qText) / (180 - PADDING - BORDER))) * lineHeight
-        : lineHeight
-    );
-
-  return Math.max(lineHeight, ...cellHeights);
-};
-
-const getMeasuredCellHeight = (
-  lineHeight: number,
-  text: string,
-  columnWidth: number,
-  measureText: (text: string) => number
-) => {
-  const width = measureText(text);
-  const height = Math.max(1, Math.ceil(width / (columnWidth - PADDING - BORDER))) * lineHeight;
-
-  return { width, height };
-};
-
-const Body = (props: BodyProps) => {
+const Body = forwardRefFn((props: BodyProps, ref) => {
   const {
     rect,
     forwardRef,
@@ -50,7 +33,15 @@ const Body = (props: BodyProps) => {
     bodyStyle,
     rowHeight,
     headerAndTotalsHeight,
+    onRowCountChange,
   } = props;
+  const renderedGridRef = useRef<RenderedGrid>({
+    startRowIndex: 0,
+    stopRowIndex: 0,
+    startColumnIndex: 0,
+    stopColumnIndex: 0,
+  });
+  const lastScrolledT = useRef(0);
   const { layout, model } = useContextSelector(TableContext, (value) => value.baseProps);
   const isHoverEnabled = !!layout.components?.[0]?.content?.hoverEffect;
   const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
@@ -62,14 +53,9 @@ const Body = (props: BodyProps) => {
     rowHeight
   );
 
-  const { measureText } = useMeasureText(bodyStyle.fontSize, bodyStyle.fontFamily);
+  const { memoizedMeasureCell } = useDynamicRowHeight({ bodyStyle, rowHeight, columnWidth });
 
-  const measureCellHeight = useCallback(
-    (text: string, colIdx: number) => getMeasuredCellHeight(rowHeight, text, columnWidth[colIdx], measureText),
-    [measureText, rowHeight, columnWidth]
-  );
-
-  const { rowsInPage, deferredRowCount, loadRows, loadColumns, maxRowHeight } = useData(
+  const { rowsInPage, deferredRowCount, loadRows, loadColumns, measuredRowHeights, loadGrid } = useData(
     layout,
     model as EngineAPI.IGenericObject,
     pageInfo,
@@ -77,7 +63,7 @@ const Body = (props: BodyProps) => {
     visibleRowCount,
     visibleColumnCount,
     columns,
-    measureCellHeight
+    memoizedMeasureCell
   );
 
   const rowHeightCb = useCallback(
@@ -93,6 +79,7 @@ const Body = (props: BodyProps) => {
     horizontalScrollDirection,
     rowCount: deferredRowCount,
     pageInfo,
+    renderedGridRef,
   });
 
   const itemData = useMemo(
@@ -100,28 +87,67 @@ const Body = (props: BodyProps) => {
     [rowsInPage, columns, bodyStyle, isHoverEnabled]
   );
 
-  useOnPropsChange(() => {
-    forwardRef.current?.resetAfterRowIndex(firstVisisbleRow.current, false);
-  }, [rowsInPage]);
+  useEffect(() => {
+    onRowCountChange(deferredRowCount);
+  }, [deferredRowCount, onRowCountChange]);
 
   useSelectionsEffect(rowsInPage);
 
   useLayoutEffect(() => {
     if (!forwardRef.current) return;
-    console.log('CALLED');
+
     forwardRef.current.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: true });
     forwardRef.current.scrollTo({ scrollLeft: 0, scrollTop: 0 });
   }, [layout, pageInfo.page, forwardRef, columnWidth]);
 
   let { height: bodyHeight } = rect;
   bodyHeight -= headerAndTotalsHeight;
-  bodyHeight = Math.min(deferredRowCount * rowHeight, bodyHeight);
-
-  if (!rowsInPage[0]) {
-    console.log('render NULL');
-    return null;
+  if (deferredRowCount * rowHeight < bodyHeight) {
+    const measuredBodyHeight = rowsInPage.reduce((height, row) => (row.height as number) + height, 0);
+    bodyHeight = Math.min(measuredBodyHeight, bodyHeight);
   }
 
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        scrollToIndex: debouncer(async (rowIndex: number) => {
+          const qLeft = renderedGridRef.current.startColumnIndex;
+          const qWidth = renderedGridRef.current.stopColumnIndex - renderedGridRef.current.startColumnIndex;
+          const qHeight = renderedGridRef.current.stopRowIndex - renderedGridRef.current.startRowIndex;
+          const qTop = rowIndex;
+          // console.log('load grid', 'qTop', qTop, 'qHeight', qHeight);
+          // await loadGrid(qLeft, qTop, qWidth, qHeight);
+          forwardRef.current?.scrollToItem({ rowIndex: qTop, align: 'start' });
+        }, 100),
+        scrollTo: (scrollTop: number, count: number, t: number) => {
+          // console.log('scrollTop', scrollTop, 'rowCount', count);
+          if (t === 1) {
+            console.log('scrolling to last item');
+            forwardRef.current?.scrollToItem({ rowIndex: deferredRowCount - 1, align: 'start' });
+          } else {
+            forwardRef.current?.scrollTo({ scrollTop: scrollTop - bodyHeight });
+          }
+        },
+      };
+    },
+    [renderedGridRef, loadGrid, forwardRef, bodyHeight, lastScrolledT, deferredRowCount]
+  );
+
+  forwardRef.current?.resetAfterRowIndex(firstVisisbleRow.current, false);
+
+  const estimatedRowHeight = measuredRowHeights.current.totalHeight / measuredRowHeights.current.rowCount;
+
+  // console.log('estimatedRowHeight', estimatedRowHeight);
+
+  // console.log('measuredRowHeights', measuredRowHeights.current);
+  // console.log('rendered grid', renderedGridRef.current);
+  // console.log('clientHeigt', innerForwardRef.current?.clientHeight);
+
+  if (!rowsInPage[0]) {
+    return null;
+  }
+  console.log('clientHeight', innerForwardRef.current?.clientHeight);
   return (
     <VariableSizeGrid
       data-key="body"
@@ -133,15 +159,16 @@ const Body = (props: BodyProps) => {
       height={bodyHeight}
       rowCount={deferredRowCount}
       rowHeight={rowHeightCb}
-      estimatedRowHeight={rowHeight}
+      estimatedRowHeight={estimatedRowHeight}
       width={rect.width}
       itemData={itemData}
       onItemsRendered={handleItemsRendered}
       onScroll={scrollHandler}
+      itemKey={getCellItemKey}
     >
       {Cell}
     </VariableSizeGrid>
   );
-};
+});
 
 export default memo(Body);
