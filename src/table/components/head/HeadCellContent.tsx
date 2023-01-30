@@ -6,6 +6,7 @@ import { FullSortDirection } from '../../constants';
 import getHeadIcons from '../../utils/get-head-icons';
 import { VisuallyHidden, StyledSortButton, StyledHeadCellContent, LockAndLabel } from './styles';
 import HeadCellMenu from './HeadCellMenu';
+import { handleHeadKeyDown } from '../../utils/handle-key-press';
 
 function HeadCellContent({
   column,
@@ -13,24 +14,39 @@ function HeadCellContent({
   changeSortOrder,
   isActive,
   areBasicFeaturesEnabled,
+  isLastCell,
 }: HeadCellContentProps) {
-  const { constraints, selectionsAPI, keyboard, translator } = useContextSelector(
+  const { constraints, selectionsAPI, keyboard, translator, rootElement } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );
+  const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
 
   const { startIcon, endIcon, lockIcon } = getHeadIcons(column);
   const tabIndex = !keyboard.enabled ? 0 : -1;
   const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
+  const isLabelLast = column.align === 'right';
+  const className = isLastCell && isLabelLast ? 'sn-table-head-last-element' : '';
 
   const handleSort = () => isInteractionEnabled && changeSortOrder(column);
+  const onKeyDown = (evt: React.KeyboardEvent) =>
+    handleHeadKeyDown({
+      evt,
+      rootElement,
+      cellCoord: [0, columnIndex],
+      setFocusedCellCoord,
+      isInteractionEnabled,
+      areBasicFeaturesEnabled,
+      isLabelLast,
+    });
 
   return (
-    <StyledHeadCellContent>
+    <StyledHeadCellContent onKeyDown={onKeyDown} className={className}>
       <LockAndLabel>
         {lockIcon}
         <StyledSortButton
+          className="sn-table-head-label"
           isActive={isActive}
           title={!constraints.passive ? FullSortDirection[column.sortDirection] : undefined} // passive: turn off tooltips.
           color="inherit"
@@ -49,7 +65,12 @@ function HeadCellContent({
         </StyledSortButton>
       </LockAndLabel>
       {areBasicFeaturesEnabled && (
-        <HeadCellMenu columnIndex={columnIndex} isDimension={column.isDim} tabIndex={tabIndex} />
+        <HeadCellMenu
+          columnIndex={columnIndex}
+          isDimension={column.isDim}
+          tabIndex={tabIndex}
+          isLastElement={isLastCell && !isLabelLast}
+        />
       )}
     </StyledHeadCellContent>
   );

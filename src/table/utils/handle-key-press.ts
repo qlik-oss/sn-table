@@ -1,7 +1,15 @@
+/* eslint-disable no-case-declarations */
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 
-import { focusSelectionToolbar, announceSelectionState, moveFocus } from './accessibility-utils';
+import {
+  focusSelectionToolbar,
+  announceSelectionState,
+  moveFocus,
+  updateFocus,
+  findCellWithTabStop,
+  getCellCoordFromCell,
+} from './accessibility-utils';
 import copyCellValue from './copy-utils';
 import { handleNavigateTop } from './handle-scroll';
 import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownProps, SelectionDispatch } from '../types';
@@ -29,14 +37,12 @@ export const shouldBubble = (
   keyboardEnabled = false,
   paginationNeeded = true
 ) => {
-  const shouldGoToSelToolbar = keyboardEnabled && isSelectionMode;
-  const bubbleWithoutShift = !evt.shiftKey && (paginationNeeded || !shouldGoToSelToolbar);
-  const bubbleWithShift = evt.shiftKey && !shouldGoToSelToolbar;
+  const bubbleWithoutShift = !evt.shiftKey && (paginationNeeded || !keyboardEnabled);
   return (
     // esc to blur object
     (evt.key === KeyCodes.ESC && !isSelectionMode) ||
     // default tab to pagination or tab to blur
-    (evt.key === KeyCodes.TAB && (bubbleWithoutShift || bubbleWithShift)) ||
+    (evt.key === KeyCodes.TAB && (bubbleWithoutShift || evt.shiftKey)) ||
     // ctrl + shift + arrow to change page
     ((evt.key === KeyCodes.LEFT || evt.key === KeyCodes.RIGHT) && isCtrlShift(evt))
   );
@@ -106,6 +112,18 @@ export const handleWrapperKeyDown = ({
   }
 };
 
+export const focusBodyFromHead = (
+  evt: React.KeyboardEvent,
+  rootElement: HTMLElement,
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
+) => {
+  preventDefaultBehavior(evt);
+  const cell = findCellWithTabStop(rootElement);
+  const newCellCoord = getCellCoordFromCell(rootElement, cell);
+  cell.focus();
+  setFocusedCellCoord(newCellCoord);
+};
+
 /**
  * handles keydown events for the head cells (move focus, change sort order)
  */
@@ -113,34 +131,47 @@ export const handleHeadKeyDown = ({
   evt,
   rootElement,
   cellCoord,
-  column,
-  changeSortOrder,
-  isInteractionEnabled,
   setFocusedCellCoord,
+  isInteractionEnabled,
   areBasicFeaturesEnabled,
+  isLabelLast,
 }: HandleHeadKeyDownProps) => {
   if (!isInteractionEnabled) {
     preventDefaultBehavior(evt);
     return;
   }
-  if (shouldBubble(evt)) return;
-  preventDefaultBehavior(evt);
+
+  // TODO: See if it bubbles correctly
+  // if (shouldBubble(evt)) return;
+  // preventDefaultBehavior(evt);
+
+  const target = evt.target as HTMLElement;
+  const headCells = rootElement.getElementsByClassName('sn-table-head-cell');
+  const isLastHeadCell = target.closest('.sn-table-cell') === headCells[headCells.length - 1];
 
   switch (evt.key) {
     case KeyCodes.LEFT:
     case KeyCodes.RIGHT:
+      if (isLastHeadCell) {
+        focusBodyFromHead(evt, rootElement, setFocusedCellCoord);
+      } else {
+        moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, 'focusButton');
+      }
+      break;
     case KeyCodes.DOWN:
-      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
+      updateFocus({ focusType: 'removeTab', cell: findCellWithTabStop(rootElement) });
+      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, 'focus');
       break;
-    case KeyCodes.SPACE:
-    case KeyCodes.ENTER:
-      // Space bar / Enter: update the sorting
-      changeSortOrder(column);
-      break;
-    case KeyCodes.C: {
+    case KeyCodes.C:
       areBasicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(evt);
       break;
-    }
+    case KeyCodes.TAB:
+      if (evt.shiftKey) break;
+
+      if (isLastHeadCell && !target.classList.contains('sn-table-head-label')) {
+        focusBodyFromHead(evt, rootElement, setFocusedCellCoord);
+      }
+      break;
     default:
       break;
   }
@@ -169,7 +200,7 @@ export const handleTotalKeyDown = (
     case KeyCodes.RIGHT:
     case KeyCodes.UP:
     case KeyCodes.DOWN: {
-      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
+      // moveBodyFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
       break;
     }
     case KeyCodes.C: {
@@ -214,12 +245,21 @@ export const handleBodyKeyDown = ({
     top: isSelectionMode ? firstBodyRowIdx : 0,
     bottom: isSelectionMode && totalsPosition.atBottom ? 1 : 0,
   };
+  let focusType = 'focus';
 
   switch (evt.key) {
     case KeyCodes.UP:
     case KeyCodes.DOWN: {
-      evt.key === KeyCodes.UP && handleNavigateTop([cell.pageRowIdx, cell.pageColIdx], rootElement);
-      const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, allowedRows);
+      // TODO: break this out
+      if (evt.key === KeyCodes.UP) {
+        handleNavigateTop([cell.pageRowIdx, cell.pageColIdx], rootElement);
+        if (cellCoord[0] === 1) focusType = 'focusButton';
+      }
+      if (cellCoord[0] !== 1 || evt.key !== KeyCodes.UP) {
+        console.log('remove tab');
+        updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
+      }
+      const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, focusType, allowedRows);
       // Shift + up/down arrow keys: select multiple values
       if (shouldSelectMultiValues(areBasicFeaturesEnabled, isSelectionsEnabled, evt, cell)) {
         selectionDispatch({
@@ -234,7 +274,8 @@ export const handleBodyKeyDown = ({
     }
     case KeyCodes.LEFT:
     case KeyCodes.RIGHT:
-      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, allowedRows);
+      updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
+      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, focusType, allowedRows);
       break;
     // Space bar: Selects value.
     case KeyCodes.SPACE:

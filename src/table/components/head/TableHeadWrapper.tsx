@@ -31,13 +31,15 @@ function TableHeadWrapper({ tableData, changeSortOrder, areBasicFeaturesEnabled 
           // when nebula does not handle keyboard navigation
           const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
           const ariaSort = isActive ? FullSortDirection[column.sortDirection] : undefined;
+          const isLastCell = columnIndex === columns.length - 1;
+          const className = `sn-table-head-cell sn-table-cell ${isLastCell ? 'sn-table-head-last-cell' : ''}`;
 
           return (
             <StyledHeadCell
               headerStyle={headerStyle}
               key={column.id}
               align={column.align}
-              className="sn-table-head-cell sn-table-cell"
+              className={className}
               aria-sort={ariaSort}
             >
               <HeadCellContent
@@ -46,6 +48,7 @@ function TableHeadWrapper({ tableData, changeSortOrder, areBasicFeaturesEnabled 
                 changeSortOrder={changeSortOrder}
                 isActive={isActive}
                 areBasicFeaturesEnabled={areBasicFeaturesEnabled}
+                isLastCell={isLastCell}
               />
             </StyledHeadCell>
           );

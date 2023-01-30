@@ -136,11 +136,10 @@ export interface HandleHeadKeyDownProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;
   cellCoord: [number, number];
-  column: Column;
-  changeSortOrder: ChangeSortOrder;
-  isInteractionEnabled: boolean;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  isInteractionEnabled: boolean;
   areBasicFeaturesEnabled: boolean;
+  isLabelLast: boolean;
 }
 
 export interface HandleBodyKeyDownProps {
@@ -242,12 +241,14 @@ export interface HeadCellContentProps {
   changeSortOrder: ChangeSortOrder;
   isActive: boolean;
   areBasicFeaturesEnabled: boolean;
+  isLastCell: boolean;
 }
 
 export interface HeadCellMenuProps {
   columnIndex: number;
   isDimension: boolean;
   tabIndex: number;
+  isLastElement: boolean;
 }
 
 export type MenuItemGroup = HeadCellMenuItem[];

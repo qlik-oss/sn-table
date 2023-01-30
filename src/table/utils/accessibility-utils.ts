@@ -1,12 +1,28 @@
 import { stardust } from '@nebula.js/stardust';
 import React from 'react';
 import { Announce } from '../../types';
+import { KeyCodes } from '../constants';
 import { CellFocusProps, HandleResetFocusProps } from '../types';
 
 export const getCellElement = (rootElement: HTMLElement, cellCoord: [number, number]) =>
   rootElement.getElementsByClassName('sn-table-row')[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[
     cellCoord[1]
   ] as HTMLTableCellElement;
+
+export const getCellCoordFromCell = (rootElement: HTMLElement, cell: HTMLTableCellElement): [number, number] => {
+  const width = rootElement.getElementsByClassName('sn-table-head-cell').length;
+  const cells = rootElement.getElementsByClassName('sn-table-cell');
+
+  let cellIdx = 0;
+  for (let idx = 0; idx < cells.length; idx++) {
+    if (cells[idx] === cell) {
+      cellIdx = idx;
+      break;
+    }
+  }
+
+  return [Math.ceil(cellIdx / width), cellIdx % width];
+};
 
 export const findCellWithTabStop = (rootElement: HTMLElement) =>
   rootElement.querySelector("td[tabindex='0'], th[tabindex='0']") as HTMLTableCellElement;
@@ -21,6 +37,11 @@ export const updateFocus = ({ focusType, cell }: CellFocusProps) => {
     case 'focus':
       cell.focus();
       cell.setAttribute('tabIndex', '0');
+      break;
+    case 'focusButton':
+      // eslint-disable-next-line no-case-declarations
+      const button = cell.querySelector('.sn-table-head-label') as HTMLButtonElement;
+      button.focus();
       break;
     case 'blur':
       cell.blur();
@@ -87,30 +108,67 @@ export const getNextCellCoord = (
   return [nextRow, nextCol];
 };
 
-/**
- * Resets and adds new focus to a table cell based which key is pressed
- */
+// /**
+//  * Resets and adds new focus to a table cell based which key is pressed
+//  */
+// export const moveBodyFocus = (
+//   evt: React.KeyboardEvent,
+//   rootElement: HTMLElement,
+//   cellCoord: [number, number],
+//   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
+//   allowedRows?: {
+//     top: number;
+//     bottom: number;
+//   }
+// ) => {
+//   updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
+//   const focusType = cellCoord[0] === 1 && evt.key === KeyCodes.UP ? 'focusButton' : 'focus';
+//   moveFocus();
+// };
+
+// /**
+//  * Resets and adds new focus to a table cell based which key is pressed
+//  */
+// export const moveHeaderFocus = (
+//   evt: React.KeyboardEvent,
+//   rootElement: HTMLElement,
+//   cellCoord: [number, number],
+//   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
+// ) => {
+//   // updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
+//   const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord);
+//   const nextCell = getCellElement(rootElement, nextCellCoord);
+//   const focusType = evt.key !== KeyCodes.DOWN ? 'focusButton' : 'focus';
+//   // TODO: handle right on last head cell
+//   updateFocus({ focusType, cell: nextCell });
+//   setFocusedCellCoord(nextCellCoord);
+
+//   return nextCell;
+// };
+
 export const moveFocus = (
   evt: React.KeyboardEvent,
   rootElement: HTMLElement,
   cellCoord: [number, number],
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
+  focusType: string,
   allowedRows?: {
     top: number;
     bottom: number;
   }
 ) => {
-  updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
   const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, allowedRows);
   const nextCell = getCellElement(rootElement, nextCellCoord);
-  updateFocus({ focusType: 'focus', cell: nextCell });
+  // TODO: handle right on last head cell
+  updateFocus({ focusType, cell: nextCell });
   setFocusedCellCoord(nextCellCoord);
 
   return nextCell;
 };
 
 /**
- * Resets and adds new focus to the cell at position newCoord. no need for element.focus() since that is done natively
+ * Resets and adds new focus to the cell at position newCoord.
+ * No need for element.focus() since that is done natively when clicking.
  */
 export const removeTabAndFocusCell = (
   newCoord: [number, number],
@@ -140,10 +198,11 @@ export const resetFocus = ({
   announce,
   totalsPosition,
 }: HandleResetFocusProps) => {
+  console.log('reset focus');
   updateFocus({ focusType: 'removeTab', cell: findCellWithTabStop(rootElement) });
   // If you have selections ongoing, you want to stay on the same column
   const selectionCellCoord: [number, number] = [totalsPosition.atTop ? 2 : 1, focusedCellCoord[1]];
-  const cellCoord: [number, number] = isSelectionMode ? selectionCellCoord : [0, 0];
+  const cellCoord: [number, number] = isSelectionMode ? selectionCellCoord : [1, 0];
 
   if (!keyboard.enabled || keyboard.active) {
     // Only run this if updates come from inside table
