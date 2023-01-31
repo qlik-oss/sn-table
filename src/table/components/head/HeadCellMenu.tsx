@@ -9,8 +9,7 @@ import { StyledMenuIconButton } from './styles';
 import MenuItems from './MenuItems';
 
 export default function HeadCellMenu({ columnIndex, isDimension, tabIndex }: HeadCellMenuProps) {
-  const { translator } = useContextSelector(TableContext, (value) => value.baseProps);
-  const { embed, layout } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { translator, embed, layout } = useContextSelector(TableContext, (value) => value.baseProps);
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
   const anchorRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
