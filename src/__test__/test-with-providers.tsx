@@ -4,13 +4,20 @@ import { stardust } from '@nebula.js/stardust';
 import React from 'react';
 import { TableContextProvider } from '../table/context';
 import muiSetup from '../table/mui-setup';
-import { ChangeSortOrder, ExtendedSelectionAPI, ExtendedTheme, ExtendedTranslator, Row, TableLayout } from '../types';
+import {
+  ChangeSortOrder,
+  ExtendedSelectionAPI,
+  ExtendedTheme,
+  ExtendedTranslator,
+  TableData,
+  TableLayout,
+} from '../types';
 import { generateLayout } from './generate-test-data';
 
 interface ProviderProps {
   children?: JSX.Element;
   selectionsAPI?: ExtendedSelectionAPI;
-  pageRows?: Row[];
+  tableData?: TableData;
   cellCoordMock?: [number, number];
   selectionDispatchMock?: jest.Mock<any, any>;
   layout?: TableLayout;
@@ -23,6 +30,8 @@ interface ProviderProps {
   rootElement?: HTMLElement;
   embed?: stardust.Embed;
   changeSortOrder?: ChangeSortOrder;
+  updateColumnWidth?: () => void;
+  tableWidth?: number;
 }
 
 const TestWithProviders = ({
@@ -41,13 +50,15 @@ const TestWithProviders = ({
     getStyle: () => undefined,
     background: { isDark: false },
   } as unknown as ExtendedTheme,
-  pageRows = undefined,
+  tableData = undefined,
   cellCoordMock = undefined,
   selectionDispatchMock = undefined, // Can be used to avoid selectionDispatch infinite loop
   direction = 'ltr',
   rootElement = {} as HTMLElement,
   embed = {} as stardust.Embed,
   changeSortOrder = async () => {},
+  updateColumnWidth = () => {},
+  tableWidth = 0,
 }: ProviderProps) => {
   return (
     <ThemeProvider theme={muiSetup(direction)}>
@@ -59,12 +70,14 @@ const TestWithProviders = ({
         theme={theme}
         keyboard={keyboard}
         model={model}
-        pageRows={pageRows}
+        tableData={tableData}
         cellCoordMock={cellCoordMock}
         selectionDispatchMock={selectionDispatchMock}
         rootElement={rootElement}
         embed={embed}
         changeSortOrder={changeSortOrder}
+        updateColumnWidth={updateColumnWidth}
+        tableWidth={tableWidth}
       >
         {children as JSX.Element}
       </TableContextProvider>

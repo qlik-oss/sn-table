@@ -34,4 +34,13 @@ export enum FullSortDirection {
   D = 'descending',
 }
 
+export enum ColumnWidthTypes {
+  PIXELS = 'pixels',
+  PERCENTAGE = 'percentage',
+  HUG = 'hug',
+  FILL = 'fill',
+}
+
+export const MIN_COLUMN_WIDTH = 120;
+
 export const PAGINATION_HEIGHT = 40;

@@ -14,6 +14,7 @@ import {
   TableLayout,
   TotalsPosition,
   Row,
+  UpdateColumnWidth,
 } from '../types';
 import { SelectionActions } from './constants';
 
@@ -77,6 +78,8 @@ export interface ContextValue {
   selectionDispatch: SelectionDispatch;
   hoverIndex: number;
   setHoverIndex: React.Dispatch<React.SetStateAction<number>>;
+  columnWidths: number[];
+  setColumnWidths: React.Dispatch<React.SetStateAction<number[]>>;
   baseProps: {
     selectionsAPI: ExtendedSelectionAPI;
     layout: TableLayout;
@@ -88,6 +91,7 @@ export interface ContextValue {
     rootElement: HTMLElement;
     embed: stardust.Embed;
     changeSortOrder: ChangeSortOrder;
+    updateColumnWidth?: UpdateColumnWidth;
   };
 }
 
@@ -177,8 +181,8 @@ export interface HandleResetFocusProps {
 
 export interface ContextProviderProps {
   children: JSX.Element;
+  tableData?: TableData;
   selectionsAPI: ExtendedSelectionAPI;
-  pageRows?: Row[];
   cellCoordMock?: [number, number];
   selectionDispatchMock?: jest.Mock<any, any>;
   layout: TableLayout;
@@ -190,6 +194,8 @@ export interface ContextProviderProps {
   rootElement: HTMLElement;
   embed: stardust.Embed;
   changeSortOrder: ChangeSortOrder;
+  updateColumnWidth?: UpdateColumnWidth;
+  tableWidth?: number;
 }
 
 export interface RenderProps {
@@ -218,6 +224,7 @@ export interface RenderProps {
   app?: EngineAPI.IApp;
   areBasicFeaturesEnabled?: boolean;
   embed?: stardust.Embed;
+  updateColumnWidth?: UpdateColumnWidth;
 }
 
 export interface TableWrapperProps {
@@ -285,6 +292,12 @@ export interface PaginationContentProps {
   handleChangePage(pageIdx: number): void;
 }
 
+export interface AdjusterProps {
+  column: Column;
+  isLastColumn: boolean;
+  updateColumnWidth: UpdateColumnWidth;
+}
+
 export interface FooterWrapperProps {
   children: JSX.Element;
   footerContainer?: HTMLElement;
@@ -300,3 +313,5 @@ export interface CellHOCProps extends TableCellProps {
 }
 
 export type CellHOC = (props: CellHOCProps) => JSX.Element;
+
+export type EstimateWidth = (column: Column) => number;

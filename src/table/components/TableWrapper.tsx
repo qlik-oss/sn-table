@@ -1,12 +1,11 @@
 import React, { useRef, useCallback } from 'react';
-import Table from '@mui/material/Table';
 
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './body/TableBodyWrapper';
 import TableHeadWrapper from './head/TableHeadWrapper';
 import FooterWrapper from './footer/FooterWrapper';
 import { useContextSelector, TableContext } from '../context';
-import { StyledTableContainer, StyledTableWrapper } from './styles';
+import { StyledTableContainer, StyledTableWrapper, StyledTable } from './styles';
 import PaginationContent from './footer/PaginationContent';
 import useDidUpdateEffect from '../hooks/use-did-update-effect';
 import useFocusListener from '../hooks/use-focus-listener';
@@ -101,10 +100,10 @@ export default function TableWrapper(props: TableWrapperProps) {
         role="application"
         data-testid="table-container"
       >
-        <Table stickyHeader aria-label={tableAriaLabel}>
+        <StyledTable customWidth={areBasicFeaturesEnabled} stickyHeader aria-label={tableAriaLabel}>
           <TableHeadWrapper tableData={tableData} areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
-        </Table>
+        </StyledTable>
       </StyledTableContainer>
       {!constraints.active && (
         <FooterWrapper footerContainer={footerContainer} paginationNeeded={paginationNeeded}>

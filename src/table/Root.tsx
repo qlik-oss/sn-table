@@ -11,6 +11,7 @@ import muiSetup from './mui-setup';
 import { RenderProps, TableWrapperProps } from './types';
 import VirtualizedTable from './virtualized-table/Wrapper';
 import { VirtualTableRenderProps } from './virtualized-table/types';
+import { UpdateColumnWidth } from '../types';
 
 export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   const {
@@ -24,6 +25,7 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
     rootElement,
     embed,
     changeSortOrder,
+    updateColumnWidth,
     ...wrapperProps
   } = props;
   const muiTheme = muiSetup(direction);
@@ -32,8 +34,8 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
     <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : undefined}>
       <ThemeProvider theme={muiTheme}>
         <TableContextProvider
+          tableData={props.tableData}
           selectionsAPI={selectionsAPI}
-          pageRows={props.tableData?.rows}
           layout={layout}
           translator={translator}
           constraints={constraints}
@@ -42,6 +44,8 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
           rootElement={rootElement as HTMLElement}
           embed={embed as stardust.Embed}
           changeSortOrder={changeSortOrder}
+          updateColumnWidth={updateColumnWidth as UpdateColumnWidth}
+          tableWidth={props.rect.width}
         >
           <TableWrapper {...(wrapperProps as TableWrapperProps)} />
         </TableContextProvider>

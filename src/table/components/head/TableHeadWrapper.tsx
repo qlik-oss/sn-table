@@ -8,11 +8,14 @@ import { TableHeadWrapperProps } from '../../types';
 import { FullSortDirection } from '../../constants';
 import { StyledHeadCell } from './styles';
 import HeadCellContent from './HeadCellContent';
+import ColumnAdjuster from './ColumnAdjuster';
+import { UpdateColumnWidth } from '../../../types';
 
 function TableHeadWrapper({ tableData, areBasicFeaturesEnabled }: TableHeadWrapperProps) {
   const { columns, totalsPosition } = tableData;
-  const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, theme, updateColumnWidth } = useContextSelector(TableContext, (value) => value.baseProps);
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
+  const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const headerStyle = useMemo(
     () => getHeaderStyle(layout, theme, !totalsPosition.atTop),
     [layout, theme, totalsPosition]
@@ -31,10 +34,18 @@ function TableHeadWrapper({ tableData, areBasicFeaturesEnabled }: TableHeadWrapp
           // when nebula does not handle keyboard navigation
           const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
           const ariaSort = isActive ? FullSortDirection[column.sortDirection] : undefined;
+          const isLastColumn = columnIndex === columns.length - 1;
+
+          const style = {
+            ...(areBasicFeaturesEnabled && {
+              width: (columnWidths[columnIndex] || 200) - 9, // subtract padding and border
+              zIndex: columns.length - columnIndex,
+            }),
+          };
 
           return (
             <StyledHeadCell
-              headerStyle={headerStyle}
+              headerStyle={{ ...headerStyle, ...style }}
               key={column.id}
               align={column.align}
               className="sn-table-head-cell sn-table-cell"
@@ -46,6 +57,13 @@ function TableHeadWrapper({ tableData, areBasicFeaturesEnabled }: TableHeadWrapp
                 isActive={isActive}
                 areBasicFeaturesEnabled={areBasicFeaturesEnabled}
               />
+              {areBasicFeaturesEnabled && (
+                <ColumnAdjuster
+                  column={column}
+                  isLastColumn={isLastColumn}
+                  updateColumnWidth={updateColumnWidth as UpdateColumnWidth}
+                />
+              )}
             </StyledHeadCell>
           );
         })}
