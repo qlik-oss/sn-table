@@ -19,7 +19,7 @@ export default function HeadCellMenu({ columnIndex, isDimension, tabIndex }: Hea
     if (!layout || !embed) return;
     const fieldId = layout.qHyperCube.qDimensionInfo[columnIndex]?.qFallbackTitle;
     if (!fieldId) return;
-    // @ts-ignore do not use api does not require type check
+    // @ts-ignore `__DO_NOT_USE__` api does not require type check
     // eslint-disable-next-line
     embed.__DO_NOT_USE__.popover(listboxRef.current, fieldId, {
       anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
