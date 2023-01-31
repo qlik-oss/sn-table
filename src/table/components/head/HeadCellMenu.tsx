@@ -2,21 +2,11 @@ import React, { useRef, useState, useMemo } from 'react';
 import Menu from '@mui/material/Menu';
 import More from '@qlik-trial/sprout/icons/More';
 import Search from '@qlik-trial/sprout/icons/Search';
-import { stardust } from '@nebula.js/stardust';
-import { TableLayout } from '../../../types';
 
 import { useContextSelector, TableContext } from '../../context';
 import { HeadCellMenuProps, MenuItemGroup } from '../../types';
 import { StyledMenuIconButton } from './styles';
 import MenuItems from './MenuItems';
-
-const getFieldId = (layout: TableLayout, columnIndex: number): string | stardust.LibraryField | undefined =>
-  layout.qHyperCube.qDimensionInfo[columnIndex]?.qLibraryId
-    ? {
-        type: 'dimension',
-        qLibraryId: layout.qHyperCube.qDimensionInfo[columnIndex]?.qLibraryId,
-      }
-    : layout.qHyperCube.qDimensionInfo[columnIndex]?.qFallbackTitle;
 
 export default function HeadCellMenu({ columnIndex, isDimension, tabIndex }: HeadCellMenuProps) {
   const { translator } = useContextSelector(TableContext, (value) => value.baseProps);
@@ -24,10 +14,23 @@ export default function HeadCellMenu({ columnIndex, isDimension, tabIndex }: Hea
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
   const anchorRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
+  const isMasterDimension = layout.qHyperCube.qDimensionInfo[columnIndex]?.qLibraryId;
+
+  const embedListbox = () => {
+    if (!layout || !embed) return;
+    const fieldId = layout.qHyperCube.qDimensionInfo[columnIndex]?.qFallbackTitle;
+    if (!fieldId) return;
+    // @ts-ignore do not use api does not require type check
+    // eslint-disable-next-line
+    embed.__DO_NOT_USE__.popover(listboxRef.current, fieldId, {
+      anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
+      transformOrigin: { vertical: 'top', horizontal: 'left' },
+    });
+  };
 
   const menuItemGroups = useMemo<MenuItemGroup[]>(
     () => [
-      ...(isDimension
+      ...(isDimension && !isMasterDimension
         ? [
             [
               {
@@ -36,22 +39,7 @@ export default function HeadCellMenu({ columnIndex, isDimension, tabIndex }: Hea
                 onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
                   evt.stopPropagation();
                   setOpenMenuDropdown(false);
-
-                  if (!layout || !embed) return;
-                  const fieldId = getFieldId(layout, columnIndex);
-                  if (!fieldId) return;
-                  // @ts-ignore do not use api does not require type check
-                  // eslint-disable-next-line
-                  embed.__DO_NOT_USE__.popover(listboxRef.current, fieldId, {
-                    anchorOrigin: {
-                      vertical: 'bottom',
-                      horizontal: 'left',
-                    },
-                    transformOrigin: {
-                      vertical: 'top',
-                      horizontal: 'left',
-                    },
-                  });
+                  embedListbox();
                 },
                 icon: <Search />,
                 isDisabled: false,
@@ -60,7 +48,7 @@ export default function HeadCellMenu({ columnIndex, isDimension, tabIndex }: Hea
           ]
         : []),
     ],
-    [translator, isDimension, listboxRef.current, layout, embed, columnIndex]
+    [translator, isDimension, isMasterDimension]
   );
 
   return menuItemGroups.length ? (
