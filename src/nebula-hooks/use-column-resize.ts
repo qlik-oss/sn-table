@@ -1,8 +1,8 @@
 import { useMemo } from '@nebula.js/stardust';
-import { HyperCube, UpdateColumnWidth } from '../types';
+import { HyperCube, ApplyColumnWidths } from '../types';
 
-const updateColumnWidthFactory =
-  (model: EngineAPI.IGenericObject | undefined, qHyperCube: HyperCube): UpdateColumnWidth =>
+const applyColumnWidthsFactory =
+  (model: EngineAPI.IGenericObject | undefined, qHyperCube: HyperCube): ApplyColumnWidths =>
   (newColumnSize, column) => {
     const { isDim, colIdx } = column;
     const index = isDim ? colIdx : colIdx - qHyperCube.qDimensionInfo.length;
@@ -23,7 +23,7 @@ const updateColumnWidthFactory =
     model?.applyPatches([patch], true);
   };
 
-const useColumnResize = (model: EngineAPI.IGenericObject | undefined, hyperCube: HyperCube) =>
-  useMemo(() => updateColumnWidthFactory(model, hyperCube), [model, hyperCube]);
+const useApplyColumnWidths = (model: EngineAPI.IGenericObject | undefined, hyperCube: HyperCube) =>
+  useMemo(() => applyColumnWidthsFactory(model, hyperCube), [model, hyperCube]);
 
-export default useColumnResize;
+export default useApplyColumnWidths;

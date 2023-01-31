@@ -14,7 +14,7 @@ import {
   TableLayout,
   TotalsPosition,
   Row,
-  UpdateColumnWidth,
+  ApplyColumnWidths,
 } from '../types';
 import { SelectionActions } from './constants';
 
@@ -91,7 +91,7 @@ export interface ContextValue {
     rootElement: HTMLElement;
     embed: stardust.Embed;
     changeSortOrder: ChangeSortOrder;
-    updateColumnWidth?: UpdateColumnWidth;
+    applyColumnWidths?: ApplyColumnWidths;
   };
 }
 
@@ -194,7 +194,7 @@ export interface ContextProviderProps {
   rootElement: HTMLElement;
   embed: stardust.Embed;
   changeSortOrder: ChangeSortOrder;
-  updateColumnWidth?: UpdateColumnWidth;
+  applyColumnWidths?: ApplyColumnWidths;
   tableWidth?: number;
 }
 
@@ -224,7 +224,7 @@ export interface RenderProps {
   app?: EngineAPI.IApp;
   areBasicFeaturesEnabled?: boolean;
   embed?: stardust.Embed;
-  updateColumnWidth?: UpdateColumnWidth;
+  applyColumnWidths?: ApplyColumnWidths;
 }
 
 export interface TableWrapperProps {
@@ -295,7 +295,6 @@ export interface PaginationContentProps {
 export interface AdjusterProps {
   column: Column;
   isLastColumn: boolean;
-  updateColumnWidth: UpdateColumnWidth;
 }
 
 export interface FooterWrapperProps {

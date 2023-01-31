@@ -67,7 +67,7 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, estimateW
   return columnWidths;
 };
 
-const useColumnWidth = (
+const useColumnWidths = (
   columns: Column[],
   tableWidth: number
 ): [number[], React.Dispatch<React.SetStateAction<number[]>>] => {
@@ -82,4 +82,4 @@ const useColumnWidth = (
   return [columnWidths, setColumnWidths];
 };
 
-export default useColumnWidth;
+export default useColumnWidths;

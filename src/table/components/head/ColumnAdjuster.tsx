@@ -4,24 +4,29 @@ import { useContextSelector, TableContext } from '../../context';
 import { AdjusterHitArea, AdjusterHeadBorder, AdjusterBodyBorder } from './styles';
 import { ColumnWidthTypes, MIN_COLUMN_WIDTH, PAGINATION_HEIGHT } from '../../constants';
 
-const ColumnAdjuster = ({ column, isLastColumn, updateColumnWidth }: AdjusterProps) => {
+/**
+ * Component that is placed on top of column border.
+ * The vertical borders in the header can be used to change the column width.
+ * When you start dragging, mouse move and mouse up listeners are added.
+ * While dragging the current column is updated, and on mouse up all other columns are updated.
+ */
+const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
   const { pageColIdx } = column;
-  const { rootElement } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { rootElement, applyColumnWidths } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setColumnWidths = useContextSelector(TableContext, (value) => value.setColumnWidths);
-  const tempWidths = useRef({ columnWidths, initX: 0, initWidth: 0 });
-  // initially this was just a really high value together with overflow hidden on the table, but that broke sticky headers
+  const tempWidths = useRef({ columnWidth: 0, initX: 0, initWidth: 0 });
   const borderHeight = rootElement.getBoundingClientRect().height - PAGINATION_HEIGHT + 1;
 
+  if (!applyColumnWidths) return null;
+
   const mouseMoveHandler = (evt: MouseEvent) => {
-    // Need to create a new array for the context to detect the change
-    const newColumnWidths = [...tempWidths.current.columnWidths];
-    // Add the change in x position to the column width at mouse down
-    newColumnWidths[pageColIdx] = Math.max(
-      MIN_COLUMN_WIDTH,
-      tempWidths.current.initWidth + evt.clientX - tempWidths.current.initX
-    );
-    tempWidths.current.columnWidths = newColumnWidths;
+    const deltaWidth = evt.clientX - tempWidths.current.initX;
+    const adjustedWidth = Math.max(tempWidths.current.initWidth + deltaWidth, MIN_COLUMN_WIDTH);
+
+    tempWidths.current.columnWidth = adjustedWidth;
+    const newColumnWidths = [...columnWidths];
+    newColumnWidths[pageColIdx] = adjustedWidth;
     setColumnWidths(newColumnWidths);
   };
 
@@ -31,23 +36,26 @@ const ColumnAdjuster = ({ column, isLastColumn, updateColumnWidth }: AdjusterPro
     document.removeEventListener('mousemove', mouseMoveHandler);
     document.removeEventListener('mouseup', mouseUpHandler);
 
-    if (tempWidths.current.columnWidths[pageColIdx] !== tempWidths.current.initWidth) {
-      const newWidthData = { type: ColumnWidthTypes.PIXELS, widthPx: tempWidths.current.columnWidths[pageColIdx] };
-      updateColumnWidth(newWidthData, column);
+    if (tempWidths.current.columnWidth !== tempWidths.current.initWidth) {
+      const newWidthData = { type: ColumnWidthTypes.PIXELS, widthPx: tempWidths.current.columnWidth };
+      applyColumnWidths(newWidthData, column);
     }
   };
 
   const mouseDownHandler = (evt: React.MouseEvent) => {
-    // Prevent other header mouse down listeners
     evt.preventDefault();
     evt.stopPropagation();
 
-    tempWidths.current = { initX: evt.clientX, initWidth: columnWidths[pageColIdx], columnWidths };
+    tempWidths.current = {
+      initX: evt.clientX,
+      initWidth: columnWidths[pageColIdx],
+      columnWidth: columnWidths[pageColIdx],
+    };
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler);
   };
 
-  const handleDoubleClick = () => updateColumnWidth({ type: ColumnWidthTypes.HUG }, column);
+  const handleDoubleClick = () => applyColumnWidths({ type: ColumnWidthTypes.HUG }, column);
 
   return (
     <AdjusterHitArea
@@ -56,8 +64,8 @@ const ColumnAdjuster = ({ column, isLastColumn, updateColumnWidth }: AdjusterPro
       onMouseDown={mouseDownHandler}
       onDoubleClick={handleDoubleClick}
     >
-      <AdjusterHeadBorder className="sn-table-head-border" />
-      <AdjusterBodyBorder borderHeight={borderHeight} className="sn-table-body-border" />
+      <AdjusterHeadBorder className="sn-table-adjuster-head-border" />
+      <AdjusterBodyBorder borderHeight={borderHeight} className="sn-table-adjuster-head-border" />
     </AdjusterHitArea>
   );
 };

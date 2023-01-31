@@ -31,7 +31,7 @@ export const TableContextProvider = ({
   rootElement,
   embed,
   changeSortOrder,
-  updateColumnWidth,
+  applyColumnWidths,
   tableWidth = 0,
 }: ContextProviderProps) => {
   const [headRowHeight, setHeadRowHeight] = useState(0);
@@ -51,7 +51,7 @@ export const TableContextProvider = ({
       rootElement,
       embed,
       changeSortOrder,
-      updateColumnWidth,
+      applyColumnWidths,
     }),
     [
       selectionsAPI,
@@ -64,7 +64,7 @@ export const TableContextProvider = ({
       rootElement,
       embed,
       changeSortOrder,
-      updateColumnWidth,
+      applyColumnWidths,
     ]
   );
 

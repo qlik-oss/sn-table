@@ -21,33 +21,31 @@ function HeadCellContent({ column, columnIndex, isActive, areBasicFeaturesEnable
   const handleSort = () => isInteractionEnabled && changeSortOrder(column);
 
   return (
-    <>
-      <StyledHeadCellContent>
-        <LockAndLabel>
-          {lockIcon}
-          <StyledSortButton
-            isActive={isActive}
-            title={!constraints.passive ? FullSortDirection[column.sortDirection] : undefined} // passive: turn off tooltips.
-            color="inherit"
-            size="small"
-            startIcon={startIcon}
-            endIcon={endIcon}
-            onClick={handleSort}
-            tabIndex={tabIndex}
-          >
-            {column.label}
-            {isFocusInHead && (
-              <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>
-                {translator.get('SNTable.SortLabel.PressSpaceToSort')}
-              </VisuallyHidden>
-            )}
-          </StyledSortButton>
-        </LockAndLabel>
-        {areBasicFeaturesEnabled && (
-          <HeadCellMenu columnIndex={columnIndex} isDimension={column.isDim} tabIndex={tabIndex} />
-        )}
-      </StyledHeadCellContent>
-    </>
+    <StyledHeadCellContent>
+      <LockAndLabel>
+        {lockIcon}
+        <StyledSortButton
+          isActive={isActive}
+          title={!constraints.passive ? FullSortDirection[column.sortDirection] : undefined} // passive: turn off tooltips.
+          color="inherit"
+          size="small"
+          startIcon={startIcon}
+          endIcon={endIcon}
+          onClick={handleSort}
+          tabIndex={tabIndex}
+        >
+          {column.label}
+          {isFocusInHead && (
+            <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>
+              {translator.get('SNTable.SortLabel.PressSpaceToSort')}
+            </VisuallyHidden>
+          )}
+        </StyledSortButton>
+      </LockAndLabel>
+      {areBasicFeaturesEnabled && (
+        <HeadCellMenu columnIndex={columnIndex} isDimension={column.isDim} tabIndex={tabIndex} />
+      )}
+    </StyledHeadCellContent>
   );
 }
 

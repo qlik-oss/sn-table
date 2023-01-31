@@ -161,7 +161,7 @@ const getTotalsAggr = (env) => ({
 });
 
 const getColumnResize = (env) =>
-  env.flags.isEnabled('PS_15585_SN_TABLE_BASIC_FEATURES')
+  env.flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES')
     ? {
         type: {
           type: 'string',
@@ -259,6 +259,7 @@ const getData = (env) =>
               ...columnCommonHidden,
               ...columnExpressionItems,
               ...textAlignItems,
+              ...getColumnResize(env),
             },
           },
           measures: {

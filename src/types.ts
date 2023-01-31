@@ -192,7 +192,7 @@ export type Announce = (arg0: AnnounceArgs) => void;
 
 export type ChangeSortOrder = (column: Column, sortOrder?: SortDirection) => Promise<void>;
 
-export type UpdateColumnWidth = (newColumnSize: { type?: string; widthPx?: number }, column: Column) => void;
+export type ApplyColumnWidths = (newColumnSize: { type?: string; widthPx?: number }, column: Column) => void;
 
 export interface Galaxy {
   translator: ExtendedTranslator;

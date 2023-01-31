@@ -30,7 +30,7 @@ interface ProviderProps {
   rootElement?: HTMLElement;
   embed?: stardust.Embed;
   changeSortOrder?: ChangeSortOrder;
-  updateColumnWidth?: () => void;
+  applyColumnWidths?: () => void;
   tableWidth?: number;
 }
 
@@ -57,7 +57,7 @@ const TestWithProviders = ({
   rootElement = {} as HTMLElement,
   embed = {} as stardust.Embed,
   changeSortOrder = async () => {},
-  updateColumnWidth = () => {},
+  applyColumnWidths = () => {},
   tableWidth = 0,
 }: ProviderProps) => {
   return (
@@ -76,7 +76,7 @@ const TestWithProviders = ({
         rootElement={rootElement}
         embed={embed}
         changeSortOrder={changeSortOrder}
-        updateColumnWidth={updateColumnWidth}
+        applyColumnWidths={applyColumnWidths}
         tableWidth={tableWidth}
       >
         {children as JSX.Element}
