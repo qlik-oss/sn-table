@@ -3,7 +3,7 @@ import React, { useState, createContext, useMemo } from 'react';
 import { createSelectorProvider } from './createSelectorProvider';
 import { ContextValue, ContextProviderProps } from '../types';
 import useSelectionReducer from '../hooks/use-selection-reducer';
-import useColumnWidth from '../hooks/use-column-widths';
+import useColumnWidths from '../hooks/use-column-widths';
 import { TableData } from '../../types';
 
 // In order to not have typing issues when using properties on the context,
@@ -38,7 +38,7 @@ export const TableContextProvider = ({
   const [focusedCellCoord, setFocusedCellCoord] = useState((cellCoordMock || [0, 0]) as [number, number]);
   const [selectionState, selectionDispatch] = useSelectionReducer(tableData.rows, selectionsAPI);
   const [hoverIndex, setHoverIndex] = useState(-1);
-  const [columnWidths, setColumnWidths] = useColumnWidth(tableData.columns, tableWidth);
+  const [columnWidths, setColumnWidths] = useColumnWidths(tableData.columns, tableWidth);
   const baseProps = useMemo(
     () => ({
       selectionsAPI,

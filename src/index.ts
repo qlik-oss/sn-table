@@ -27,7 +27,7 @@ import useAnnounceAndTranslations from './nebula-hooks/use-announce-and-translat
 import useSorting from './nebula-hooks/use-sorting';
 import useExtendedTheme from './nebula-hooks/use-extended-theme';
 import useContextMenu from './nebula-hooks/use-context-menu';
-import useApplyColumnWidths from './nebula-hooks/use-column-resize';
+import useApplyColumnWidths from './nebula-hooks/use-apply-column-widths';
 import {
   RenderWithCarbonArguments,
   Galaxy,

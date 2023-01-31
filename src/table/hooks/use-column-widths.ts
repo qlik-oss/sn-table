@@ -25,7 +25,7 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, estimateW
       } = col;
       let newWidth = 0;
 
-      const replaceKnownWidth = () => {
+      const addKnownWidth = () => {
         columnWidths[idx] = Math.max(MIN_COLUMN_WIDTH, newWidth);
         sumFillWidths -= columnWidths[idx];
       };
@@ -33,15 +33,15 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, estimateW
       switch (type) {
         case ColumnWidthTypes.PIXELS:
           newWidth = widthPx;
-          replaceKnownWidth();
+          addKnownWidth();
           break;
         case ColumnWidthTypes.PERCENTAGE:
           newWidth = (widthPr / 100) * tableWidth;
-          replaceKnownWidth();
+          addKnownWidth();
           break;
         case ColumnWidthTypes.HUG:
           newWidth = estimateWidth(col);
-          replaceKnownWidth();
+          addKnownWidth();
           break;
         case ColumnWidthTypes.FILL:
         case undefined:
