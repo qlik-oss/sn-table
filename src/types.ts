@@ -111,6 +111,7 @@ export type SortDirection = 'A' | 'D';
 export interface Column {
   id: string;
   isDim: boolean;
+  isMasterDim: boolean;
   isLocked: boolean;
   colIdx: number;
   pageColIdx: number;

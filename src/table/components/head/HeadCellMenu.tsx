@@ -8,28 +8,32 @@ import { HeadCellMenuProps, MenuItemGroup } from '../../types';
 import { StyledMenuIconButton } from './styles';
 import MenuItems from './MenuItems';
 
-export default function HeadCellMenu({ columnIndex, isDimension, tabIndex }: HeadCellMenuProps) {
-  const { translator, embed, layout } = useContextSelector(TableContext, (value) => value.baseProps);
+export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
+  const { translator, embed } = useContextSelector(TableContext, (value) => value.baseProps);
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
+  const [openListboxDropdown, setOpenListboxDropdown] = useState(false);
   const anchorRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
-  const isMasterDimension = layout.qHyperCube.qDimensionInfo[columnIndex]?.qLibraryId;
+  const showListboxMenu = column.isDim && !column.isMasterDim;
 
   const embedListbox = () => {
-    if (!layout || !embed) return;
-    const fieldId = layout.qHyperCube.qDimensionInfo[columnIndex]?.qFallbackTitle;
-    if (!fieldId) return;
-    // @ts-ignore `__DO_NOT_USE__` api does not require type check
+    // @ts-ignore TODO: no types for `__DO_NOT_USE__`, it will improve when it becomes stable
     // eslint-disable-next-line
-    embed.__DO_NOT_USE__.popover(listboxRef.current, fieldId, {
+    embed.__DO_NOT_USE__.popover(listboxRef.current, column.label, {
       anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
       transformOrigin: { vertical: 'top', horizontal: 'left' },
+    });
+
+    // @ts-ignore TODO: no types for `__DO_NOT_USE__`, it will improve when it becomes stable
+    // eslint-disable-next-line
+    embed.__DO_NOT_USE__.on('closePopover', () => {
+      setOpenListboxDropdown(false);
     });
   };
 
   const menuItemGroups = useMemo<MenuItemGroup[]>(
     () => [
-      ...(isDimension && !isMasterDimension
+      ...(showListboxMenu
         ? [
             [
               {
@@ -38,6 +42,7 @@ export default function HeadCellMenu({ columnIndex, isDimension, tabIndex }: Hea
                 onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
                   evt.stopPropagation();
                   setOpenMenuDropdown(false);
+                  setOpenListboxDropdown(true);
                   embedListbox();
                 },
                 icon: <Search />,
@@ -47,14 +52,14 @@ export default function HeadCellMenu({ columnIndex, isDimension, tabIndex }: Hea
           ]
         : []),
     ],
-    [translator, isDimension, isMasterDimension]
+    [translator, showListboxMenu]
   );
 
   return menuItemGroups.length ? (
     <>
       <div>
         <StyledMenuIconButton
-          isVisible={openMenuDropdown}
+          isVisible={openListboxDropdown || openMenuDropdown}
           ref={anchorRef}
           size="small"
           tabIndex={tabIndex}

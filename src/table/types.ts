@@ -244,8 +244,7 @@ export interface HeadCellContentProps {
 }
 
 export interface HeadCellMenuProps {
-  columnIndex: number;
-  isDimension: boolean;
+  column: Column;
   tabIndex: number;
 }
 

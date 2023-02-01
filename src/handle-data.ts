@@ -65,11 +65,13 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
   const { qError, qFallbackTitle, textAlign, qAttrExprInfo, qSortIndicator, qReverseSort, qApprMaxGlyphCount } = info;
   const isHidden = qError?.qErrorCode === 7005;
   const isLocked = isDim && (info as ExtendedNxDimensionInfo).qLocked;
+  const isMasterDim = isDim && !!(info as ExtendedNxDimensionInfo).qLibraryId;
   const autoAlign = isDim ? 'left' : 'right';
 
   return (
     !isHidden && {
       isDim,
+      isMasterDim,
       isLocked,
       colIdx,
       pageColIdx,
