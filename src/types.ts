@@ -45,6 +45,7 @@ export interface ExtendedNxDimensionInfo extends Omit<EngineAPI.INxDimensionInfo
 export interface ExtendedNxMeasureInfo extends EngineAPI.INxMeasureInfo {
   textAlign: TextAlign;
   qAttrExprInfo: ExtendedNxAttrExprInfo[];
+  qLibraryId: string;
 }
 
 export interface HyperCube extends Omit<EngineAPI.IHyperCube, 'qDimensionInfo' | 'qMeasureInfo'> {
@@ -111,7 +112,7 @@ export type SortDirection = 'A' | 'D';
 export interface Column {
   id: string;
   isDim: boolean;
-  isMasterDim: boolean;
+  isMasterItem: boolean;
   isLocked: boolean;
   colIdx: number;
   pageColIdx: number;

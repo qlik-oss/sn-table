@@ -1,7 +1,7 @@
 import React, { useRef, useState, useMemo } from 'react';
 import Menu from '@mui/material/Menu';
-import More from '@qlik-trial/sprout/icons/More';
-import Search from '@qlik-trial/sprout/icons/Search';
+import More from '@qlik-trial/sprout/icons/react/More';
+import Search from '@qlik-trial/sprout/icons/react/Search';
 
 import { useContextSelector, TableContext } from '../../context';
 import { HeadCellMenuProps, MenuItemGroup } from '../../types';
@@ -14,7 +14,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
   const [openListboxDropdown, setOpenListboxDropdown] = useState(false);
   const anchorRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
-  const showListboxMenu = column.isDim && !column.isMasterDim;
+  const showSearchMenuItem = column.isDim && !column.isMasterItem;
 
   const embedListbox = () => {
     // @ts-ignore TODO: no types for `__DO_NOT_USE__`, it will improve when it becomes stable
@@ -26,14 +26,14 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
 
     // @ts-ignore TODO: no types for `__DO_NOT_USE__`, it will improve when it becomes stable
     // eslint-disable-next-line
-    embed.__DO_NOT_USE__.on('closePopover', () => {
+    embed.on('fieldPopoverClose', () => {
       setOpenListboxDropdown(false);
     });
   };
 
   const menuItemGroups = useMemo<MenuItemGroup[]>(
     () => [
-      ...(showListboxMenu
+      ...(showSearchMenuItem
         ? [
             [
               {
@@ -52,7 +52,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
           ]
         : []),
     ],
-    [translator, showListboxMenu]
+    [translator, showSearchMenuItem]
   );
 
   return menuItemGroups.length ? (
@@ -69,7 +69,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
           aria-haspopup="true"
           onClick={() => setOpenMenuDropdown(!openMenuDropdown)}
         >
-          <More size="small" />
+          <More height="12px" />
         </StyledMenuIconButton>
 
         <div ref={listboxRef} />

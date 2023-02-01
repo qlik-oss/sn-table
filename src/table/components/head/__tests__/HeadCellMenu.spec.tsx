@@ -6,15 +6,15 @@ import { Column, TableLayout } from '../../../../types';
 import HeadCellMenu from '../HeadCellMenu';
 import TestWithProviders from '../../../../__test__/test-with-providers';
 
-type EmbedWithDoNotUse = stardust.Embed & {
+type ExtendedEmbed = stardust.Embed & {
   __DO_NOT_USE__: {
     popover: () => void;
-    on: () => void;
   };
+  on: () => void;
 };
 
 describe('<HeadCellMenu />', () => {
-  let embed: EmbedWithDoNotUse;
+  let embed: ExtendedEmbed;
   let layout: TableLayout;
   let column: Column;
   let defaultListboxAnchorOpts: any;
@@ -36,8 +36,8 @@ describe('<HeadCellMenu />', () => {
       getRegisteredTypes: jest.fn(),
       __DO_NOT_USE__: {
         popover: jest.fn(),
-        on: jest.fn(),
       },
+      on: jest.fn(),
     };
     layout = {
       qHyperCube: {

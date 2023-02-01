@@ -78,7 +78,7 @@ describe('<HeadCellContent />', () => {
     areBasicFeaturesEnabled = true;
     column = {
       ...column,
-      isMasterDim: true,
+      isMasterItem: true,
     };
     const { baseElement } = renderTableHead();
     // TODO: add a proper title for the button

@@ -15,9 +15,9 @@ describe('handle-data', () => {
     colIdx = 1;
     pageColIdx = 2;
 
-    const getExpectedInfo = (isDim: boolean, isMasterDim?: boolean, isLocked?: boolean, totals = '') => ({
+    const getExpectedInfo = (isDim: boolean, isMasterItem?: boolean, isLocked?: boolean, totals = '') => ({
       isDim,
-      isMasterDim: isMasterDim || false,
+      isMasterItem: isMasterItem || false,
       label: `title-${colIdx}`,
       id: `col-${pageColIdx}`,
       align: isDim ? 'left' : 'right',
