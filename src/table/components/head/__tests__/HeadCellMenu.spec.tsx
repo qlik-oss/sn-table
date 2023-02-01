@@ -1,21 +1,29 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { render, fireEvent, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
-import { TableLayout } from '../../../../types';
+import { Column, TableLayout } from '../../../../types';
 import HeadCellMenu from '../HeadCellMenu';
 import TestWithProviders from '../../../../__test__/test-with-providers';
 
+type EmbedWithDoNotUse = stardust.Embed & {
+  __DO_NOT_USE__: {
+    popover: () => void;
+    on: () => void;
+  };
+};
+
 describe('<HeadCellMenu />', () => {
-  let embed: stardust.Embed;
+  let embed: EmbedWithDoNotUse;
   let layout: TableLayout;
-  const columnIndex = 0;
+  let column: Column;
+  let defaultListboxAnchorOpts: any;
   const direction: 'ltr' | 'rtl' = 'ltr';
-  let isDimension: boolean;
 
   const renderTableHeadCellMenu = (cellCoordMock?: [number, number]) =>
     render(
       <TestWithProviders cellCoordMock={cellCoordMock} layout={layout} direction={direction} embed={embed}>
-        <HeadCellMenu isDimension={isDimension} columnIndex={columnIndex} tabIndex={0} />
+        <HeadCellMenu column={column} tabIndex={0} />
       </TestWithProviders>
     );
 
@@ -26,13 +34,25 @@ describe('<HeadCellMenu />', () => {
       selections: jest.fn(),
       context: jest.fn(),
       getRegisteredTypes: jest.fn(),
+      __DO_NOT_USE__: {
+        popover: jest.fn(),
+        on: jest.fn(),
+      },
     };
     layout = {
       qHyperCube: {
         qDimensionInfo: [{ qFallbackTitle: 'someTitle' }],
       },
     } as TableLayout;
-    isDimension = true;
+    column = {
+      colIdx: 0,
+      isDim: true,
+      label: 'someDimLabel',
+    } as Column;
+    defaultListboxAnchorOpts = {
+      anchorOrigin: { horizontal: 'left', vertical: 'bottom' },
+      transformOrigin: { horizontal: 'left', vertical: 'top' },
+    };
   });
 
   afterEach(() => {
@@ -48,7 +68,10 @@ describe('<HeadCellMenu />', () => {
   });
 
   it('should not render head cell menu button when isDimension is false', () => {
-    isDimension = false;
+    column = {
+      ...column,
+      isDim: false,
+    } as Column;
     renderTableHeadCellMenu();
 
     const element = screen.queryByRole('button');
@@ -64,7 +87,7 @@ describe('<HeadCellMenu />', () => {
     expect(screen.getByText('SNTable.MenuItem.Search')).toBeVisible();
   });
 
-  it('should close the menu when the menu item is clicked', async () => {
+  it('should close the menu when listbox is about to mount', async () => {
     renderTableHeadCellMenu();
 
     fireEvent.click(screen.getByRole('button'));
@@ -89,10 +112,10 @@ describe('<HeadCellMenu />', () => {
     await waitForElementToBeRemoved(menu);
   });
 
-  it('should call `embed.field` once while trying to open listbox filter for a library dimension', async () => {
+  it('should call `embed.__DO_NOT_USE__.popover()` once while trying to open listbox filter for a library dimension', async () => {
     layout = {
       qHyperCube: {
-        qDimensionInfo: [{ qLibraryId: 'id' }],
+        qDimensionInfo: [{ qFallbackTitle: 'someTitle' }],
       },
     } as TableLayout;
     renderTableHeadCellMenu();
@@ -101,33 +124,11 @@ describe('<HeadCellMenu />', () => {
     const menu = screen.queryByRole('menu');
     fireEvent.click(screen.getByText('SNTable.MenuItem.Search'));
     await waitForElementToBeRemoved(menu);
-    expect(embed?.field).toHaveBeenCalledTimes(1);
-    expect(embed?.field).toHaveBeenCalledWith({ qLibraryId: 'id', type: 'dimension' });
-  });
-
-  it('should call `embed.field` once while trying to open listbox filter for a dimension', async () => {
-    renderTableHeadCellMenu();
-
-    fireEvent.click(screen.getByRole('button'));
-    const menu = screen.queryByRole('menu');
-    fireEvent.click(screen.getByText('SNTable.MenuItem.Search'));
-    await waitForElementToBeRemoved(menu);
-    expect(embed?.field).toHaveBeenCalledTimes(1);
-    expect(embed?.field).toHaveBeenCalledWith('someTitle');
-  });
-
-  it('should not call `embed.field` if field ID is not found', async () => {
-    layout = {
-      qHyperCube: {
-        qDimensionInfo: [],
-      },
-    } as unknown as TableLayout;
-    renderTableHeadCellMenu();
-
-    fireEvent.click(screen.getByRole('button'));
-    const menu = screen.queryByRole('menu');
-    fireEvent.click(screen.getByText('SNTable.MenuItem.Search'));
-    await waitForElementToBeRemoved(menu);
-    expect(embed?.field).toHaveBeenCalledTimes(0);
+    expect(embed.__DO_NOT_USE__.popover).toHaveBeenCalledTimes(1);
+    expect(embed.__DO_NOT_USE__.popover).toHaveBeenCalledWith(
+      expect.any(HTMLDivElement),
+      column.label,
+      defaultListboxAnchorOpts
+    );
   });
 });
