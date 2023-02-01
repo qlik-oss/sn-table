@@ -50,7 +50,6 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           padding: `4px ${PADDING_LEFT_RIGHT}px`,
           boxSizing: 'border-box',
           cursor: 'default',
-          // background: style.height !== rowsInPage[rowIndex].height ? 'orangered' : cellStyle.background,
         }}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
@@ -62,7 +61,6 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           style={{
             textOverflow: 'ellipsis',
             overflow: 'hidden',
-            // overflowWrap: 'anywhere',
             wordBreak: 'break-all', // break-all as the line height logic does not account for word breaks at reasonable places like a white space
           }}
         >
