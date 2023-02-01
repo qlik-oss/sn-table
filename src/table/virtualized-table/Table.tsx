@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { VariableSizeGrid, VariableSizeList } from 'react-window';
+import { VariableSizeList } from 'react-window';
 import { getColumns, getTotalPosition } from '../../handle-data';
 import useColumnSize from './hooks/use-column-size';
 import Body from './Body';
@@ -9,7 +9,6 @@ import { TableProps, BodyStyle, BodyRef } from './types';
 import { getHeaderStyle, getBodyStyle } from '../utils/styling-utils';
 import useScrollHandler from './hooks/use-scroll-handler';
 import Totals from './Totals';
-import useOnPropsChange from './hooks/use-on-props-change';
 import useTableCount from './hooks/use-table-count';
 import ScrollableContainer from './ScrollableContainer';
 import StickyContainer from './StickyContainer';
@@ -23,8 +22,7 @@ const Table = (props: TableProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);
   const totalsRef = useRef<VariableSizeList>(null);
-  const bodyRef = useRef<VariableSizeGrid>(null);
-  const bRef = useRef<BodyRef>(null);
+  const bodyRef = useRef<BodyRef>(null);
   const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
   const totals = useMemo(() => getTotalPosition(layout), [layout]);
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme, !totals.atTop), [layout, theme, totals]);
@@ -42,21 +40,12 @@ const Table = (props: TableProps) => {
   const { rowCount } = useTableCount(layout, pageInfo, tableRect, width, bodyRowHeight);
   const containerWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
   const [containerHeight, setContainerHeight] = useState(rowCount * bodyRowHeight);
-  const scrollHandler = useScrollHandler(
-    headerRef,
-    totalsRef,
-    bodyRef,
-    innerForwardRef,
-    containerHeight,
-    headerAndTotalsHeight,
-    setContainerHeight,
-    bRef
-  );
+  const scrollHandler = useScrollHandler(headerRef, totalsRef, bodyRef);
 
   // Use dererred row count to set a new height, as the row count here and in the `Body` are not always in sync
   const onRowCountChangeHandler = useCallback(
     (deferredRowCount: number) => setContainerHeight(deferredRowCount * bodyRowHeight),
-    [bodyRowHeight, headerAndTotalsHeight]
+    [bodyRowHeight]
   );
 
   useLayoutEffect(() => {
@@ -93,14 +82,13 @@ const Table = (props: TableProps) => {
           />
           {totals.atTop ? TotalsComponent : null}
           <Body
-            ref={bRef}
+            ref={bodyRef}
+            innerForwardRef={innerForwardRef}
             bodyStyle={bodyStyle}
             rect={tableRect}
             pageInfo={pageInfo}
             columns={columns}
             columnWidth={width}
-            forwardRef={bodyRef}
-            innerForwardRef={innerForwardRef}
             rowHeight={bodyRowHeight}
             headerAndTotalsHeight={headerAndTotalsHeight}
             onRowCountChange={onRowCountChangeHandler}

@@ -1,7 +1,6 @@
-import { useCallback, useRef } from 'react';
+import { useCallback } from 'react';
 import { PageInfo, TableLayout } from '../../../types';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../constants';
-import { RenderedGrid } from '../types';
 import { LoadData } from './use-data';
 import { ScrollDirection } from './use-scroll-direction';
 
@@ -24,7 +23,6 @@ export interface ItemsHandlerProps {
   horizontalScrollDirection: React.MutableRefObject<ScrollDirection>;
   rowCount: number;
   pageInfo: PageInfo;
-  renderedGridRef: React.MutableRefObject<RenderedGrid>;
 }
 
 const useItemsRendererHandler = ({
@@ -35,10 +33,7 @@ const useItemsRendererHandler = ({
   horizontalScrollDirection,
   rowCount,
   pageInfo,
-  renderedGridRef,
 }: ItemsHandlerProps) => {
-  const firstVisisbleRow = useRef<number>(0);
-
   const handleItemsRendered = useCallback(
     ({
       overscanColumnStartIndex,
@@ -46,12 +41,6 @@ const useItemsRendererHandler = ({
       overscanRowStartIndex,
       overscanRowStopIndex,
     }: OnItemsRendered) => {
-      firstVisisbleRow.current = overscanRowStartIndex;
-      renderedGridRef.current.startColumnIndex = overscanColumnStartIndex;
-      renderedGridRef.current.stopColumnIndex = overscanColumnStopIndex;
-      renderedGridRef.current.startRowIndex = overscanRowStartIndex;
-      renderedGridRef.current.stopRowIndex = overscanRowStopIndex;
-
       if (overscanRowStartIndex === 0 && overscanColumnStartIndex === 0) {
         // This case should handled by the initial data load
         return;
@@ -100,11 +89,10 @@ const useItemsRendererHandler = ({
       horizontalScrollDirection,
       rowCount,
       layout.qHyperCube.qSize,
-      firstVisisbleRow,
     ]
   );
 
-  return { handleItemsRendered, firstVisisbleRow };
+  return { handleItemsRendered };
 };
 
 export default useItemsRendererHandler;

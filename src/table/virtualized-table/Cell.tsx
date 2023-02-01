@@ -1,24 +1,19 @@
 /* eslint jsx-a11y/no-static-element-interactions: 0 jsx-a11y/mouse-events-have-key-events: 0 */
 import React from 'react';
 import { areEqual } from 'react-window';
-import { Column, Row } from '../../types';
 import { useContextSelector, TableContext } from '../context';
 import useSelector from './hooks/use-selector';
 import EmptyCell from './EmptyCell';
 import CellText from '../components/CellText';
 import getCellStyle from './utils/get-cell-style';
-import { BodyStyle } from './types';
+import { ItemData } from './types';
+import { BORDER_WIDTH, PADDING_LEFT_RIGHT } from './constants';
 
 interface CellProps {
   columnIndex: number;
   rowIndex: number;
   style: React.CSSProperties;
-  data: {
-    rowsInPage: Row[];
-    columns: Column[];
-    bodyStyle: BodyStyle;
-    isHoverEnabled: boolean;
-  };
+  data: ItemData;
 }
 
 const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
@@ -41,10 +36,6 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
 
     return (
       <div
-        data-width={cell.width}
-        data-height={rowsInPage[rowIndex].height}
-        data-row-index={rowIndex}
-        data-col-index={columnIndex}
         className={`sn-table-cell ${cellSelectionState}`}
         style={{
           ...style,
@@ -52,16 +43,14 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           display: 'flex',
           alignItems: 'center',
           borderWidth: '0px',
-          borderBottomWidth: cell.isLastRow ? '0px' : '1px',
-          borderRightWidth: cell.isLastColumn ? '0px' : '1px',
+          borderBottomWidth: cell.isLastRow ? '0px' : `${BORDER_WIDTH}px`,
+          borderRightWidth: cell.isLastColumn ? '0px' : `${BORDER_WIDTH}px`,
           borderStyle: 'solid',
           justifyContent: columns[columnIndex].align,
-          padding: '4px 12px',
+          padding: `4px ${PADDING_LEFT_RIGHT}px`,
           boxSizing: 'border-box',
           cursor: 'default',
-          transitionProperty: 'height',
-          transitionTimingFunction: 'ease-in',
-          transitionDuration: '0.05s',
+          // background: style.height !== rowsInPage[rowIndex].height ? 'orangered' : cellStyle.background,
         }}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
@@ -73,7 +62,8 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           style={{
             textOverflow: 'ellipsis',
             overflow: 'hidden',
-            overflowWrap: 'anywhere', // Break anywhere as the line height logic does not account for word breaks at reasonable places like a white space
+            // overflowWrap: 'anywhere',
+            wordBreak: 'break-all', // break-all as the line height logic does not account for word breaks at reasonable places like a white space
           }}
         >
           {cell.qText}
@@ -92,7 +82,6 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         borderWidth: '0px 1px 1px 0px',
         borderStyle: 'solid',
         boxSizing: 'border-box',
-        // background: 'orangered',
       }}
     />
   );

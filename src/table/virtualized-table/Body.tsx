@@ -2,16 +2,14 @@ import React, {
   memo,
   useMemo,
   useLayoutEffect,
-  useCallback,
   useEffect,
   useRef,
   useImperativeHandle,
   forwardRef as forwardRefFn,
 } from 'react';
 import { VariableSizeGrid } from 'react-window';
-import { debouncer } from 'qlik-chart-modules';
 import useData from './hooks/use-data';
-import { BodyProps, BodyRef, RenderedGrid } from './types';
+import { BodyProps, BodyRef, ItemData } from './types';
 import useScrollDirection from './hooks/use-scroll-direction';
 import useTableCount from './hooks/use-table-count';
 import useItemsRendererHandler from './hooks/use-items-rendered-handler';
@@ -20,12 +18,10 @@ import { useContextSelector, TableContext } from '../context';
 import Cell from './Cell';
 import getCellItemKey from './utils/get-cell-item-key';
 import useDynamicRowHeight from './hooks/use-dynamic-row-height';
-import { ROW_DATA_BUFFER_SIZE } from './constants';
 
 const Body = forwardRefFn((props: BodyProps, ref) => {
   const {
     rect,
-    forwardRef,
     columns,
     columnWidth,
     innerForwardRef,
@@ -35,14 +31,8 @@ const Body = forwardRefFn((props: BodyProps, ref) => {
     headerAndTotalsHeight,
     onRowCountChange,
   } = props;
-  const renderedGridRef = useRef<RenderedGrid>({
-    startRowIndex: 0,
-    stopRowIndex: 0,
-    startColumnIndex: 0,
-    stopColumnIndex: 0,
-  });
-  const lastScrolledT = useRef(0);
-  const { layout, model } = useContextSelector(TableContext, (value) => value.baseProps);
+  const gridRef = useRef<VariableSizeGrid>(null);
+  const { layout, model, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const isHoverEnabled = !!layout.components?.[0]?.content?.hoverEffect;
   const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
   const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(
@@ -53,9 +43,14 @@ const Body = forwardRefFn((props: BodyProps, ref) => {
     rowHeight
   );
 
-  const { memoizedMeasureCell } = useDynamicRowHeight({ bodyStyle, rowHeight, columnWidth });
+  const { setCellSize, getRowHeight, rowMeta, estimatedRowHeight } = useDynamicRowHeight({
+    bodyStyle,
+    rowHeight,
+    columnWidth,
+    gridRef,
+  });
 
-  const { rowsInPage, deferredRowCount, loadRows, loadColumns, measuredRowHeights, loadGrid } = useData(
+  const { rowsInPage, deferredRowCount, loadRows, loadColumns } = useData(
     layout,
     model as EngineAPI.IGenericObject,
     pageInfo,
@@ -63,15 +58,10 @@ const Body = forwardRefFn((props: BodyProps, ref) => {
     visibleRowCount,
     visibleColumnCount,
     columns,
-    memoizedMeasureCell
+    setCellSize
   );
 
-  const rowHeightCb = useCallback(
-    (index: number) => (rowsInPage[index]?.height as number) ?? rowHeight,
-    [rowsInPage, rowHeight]
-  );
-
-  const { handleItemsRendered, firstVisisbleRow } = useItemsRendererHandler({
+  const { handleItemsRendered } = useItemsRendererHandler({
     layout,
     loadRows,
     loadColumns,
@@ -79,10 +69,9 @@ const Body = forwardRefFn((props: BodyProps, ref) => {
     horizontalScrollDirection,
     rowCount: deferredRowCount,
     pageInfo,
-    renderedGridRef,
   });
 
-  const itemData = useMemo(
+  const itemData = useMemo<ItemData>(
     () => ({ rowsInPage, columns, bodyStyle, isHoverEnabled }),
     [rowsInPage, columns, bodyStyle, isHoverEnabled]
   );
@@ -91,80 +80,62 @@ const Body = forwardRefFn((props: BodyProps, ref) => {
     onRowCountChange(deferredRowCount);
   }, [deferredRowCount, onRowCountChange]);
 
+  useEffect(() => {
+    if (rowMeta.current.lastScrollToRatio === 1) {
+      gridRef.current?.scrollToItem({ rowIndex: deferredRowCount - 1, align: 'start' });
+    }
+  });
+
   useSelectionsEffect(rowsInPage);
 
   useLayoutEffect(() => {
-    if (!forwardRef.current) return;
+    if (!gridRef.current) return;
 
-    forwardRef.current.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: true });
-    forwardRef.current.scrollTo({ scrollLeft: 0, scrollTop: 0 });
-  }, [layout, pageInfo.page, forwardRef, columnWidth]);
+    rowMeta.current.lastScrollToRatio = 0;
+    gridRef.current.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: true });
+    gridRef.current.scrollTo({ scrollLeft: 0, scrollTop: 0 });
+  }, [layout, pageInfo.page, gridRef, columnWidth, rowMeta, theme.name()]); // eslint-disable-line react-hooks/exhaustive-deps
 
   let { height: bodyHeight } = rect;
   bodyHeight -= headerAndTotalsHeight;
   if (deferredRowCount * rowHeight < bodyHeight) {
-    const measuredBodyHeight = rowsInPage.reduce((height, row) => (row.height as number) + height, 0);
-    bodyHeight = Math.min(measuredBodyHeight, bodyHeight);
+    bodyHeight = Math.min(rowMeta.current.totalHeight, bodyHeight);
   }
 
-  useImperativeHandle(
+  useImperativeHandle<unknown, BodyRef>(
     ref,
     () => {
       return {
-        scrollToIndex: debouncer(async (rowIndex: number) => {
-          const qLeft = renderedGridRef.current.startColumnIndex;
-          const qWidth = renderedGridRef.current.stopColumnIndex - renderedGridRef.current.startColumnIndex;
-          const qHeight = renderedGridRef.current.stopRowIndex - renderedGridRef.current.startRowIndex;
-          const qTop = rowIndex;
-          // console.log('load grid', 'qTop', qTop, 'qHeight', qHeight);
-          // await loadGrid(qLeft, qTop, qWidth, qHeight);
-          forwardRef.current?.scrollToItem({ rowIndex: qTop, align: 'start' });
-        }, 100),
-        scrollTo: (scrollTop: number, count: number, t: number) => {
-          // console.log('scrollTop', scrollTop, 'rowCount', count);
-          if (t === 1) {
-            console.log('scrolling to last item');
-            forwardRef.current?.scrollToItem({ rowIndex: deferredRowCount - 1, align: 'start' });
-          } else {
-            forwardRef.current?.scrollTo({ scrollTop: scrollTop - bodyHeight });
-          }
+        interpolatedScrollTo: (scrollTopRatio: number, scrollLeft: number) => {
+          const innerHeight = (innerForwardRef.current?.clientHeight ?? bodyHeight) - bodyHeight;
+          const scrollTop = innerHeight * scrollTopRatio;
+          rowMeta.current.lastScrollToRatio = scrollTopRatio;
+
+          gridRef.current?.scrollTo({ scrollTop, scrollLeft });
         },
       };
     },
-    [renderedGridRef, loadGrid, forwardRef, bodyHeight, lastScrolledT, deferredRowCount]
+    [gridRef, innerForwardRef, bodyHeight, rowMeta]
   );
 
-  forwardRef.current?.resetAfterRowIndex(firstVisisbleRow.current, false);
-
-  const estimatedRowHeight = measuredRowHeights.current.totalHeight / measuredRowHeights.current.rowCount;
-
-  // console.log('estimatedRowHeight', estimatedRowHeight);
-
-  // console.log('measuredRowHeights', measuredRowHeights.current);
-  // console.log('rendered grid', renderedGridRef.current);
-  // console.log('clientHeigt', innerForwardRef.current?.clientHeight);
-
-  if (!rowsInPage[0]) {
-    return null;
-  }
-  console.log('clientHeight', innerForwardRef.current?.clientHeight);
   return (
     <VariableSizeGrid
       data-key="body"
-      ref={forwardRef}
+      ref={gridRef}
       innerRef={innerForwardRef}
       style={{ overflow: 'hidden' }}
       columnCount={layout.qHyperCube.qSize.qcx}
       columnWidth={(index) => columnWidth[index]}
       height={bodyHeight}
       rowCount={deferredRowCount}
-      rowHeight={rowHeightCb}
+      rowHeight={getRowHeight}
       estimatedRowHeight={estimatedRowHeight}
       width={rect.width}
       itemData={itemData}
       onItemsRendered={handleItemsRendered}
       onScroll={scrollHandler}
       itemKey={getCellItemKey}
+      useIsScrolling
     >
       {Cell}
     </VariableSizeGrid>

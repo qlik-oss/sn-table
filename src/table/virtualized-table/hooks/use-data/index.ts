@@ -2,25 +2,17 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import sleep from '../../../../debug/sleep';
 import { PageInfo, Row, Column, TableLayout } from '../../../../types';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
+import { SetCellSize } from '../../types';
 import useGetHyperCubeDataQueue from '../use-get-hypercube-data-queue';
 import { createRow, isColumnMissingData, isRowMissingData } from './utils';
 
-interface MeasuredRowHeights {
-  rowCount: number;
-  totalHeight: number;
-  rowHeights: number[];
-}
-
 export type LoadData = (left: number, top: number, width: number, height: number) => void;
-export type LoadDataPromise = (left: number, top: number, width: number, height: number) => Promise<void>;
 
 export interface UseData {
   rowsInPage: Row[];
   loadRows: LoadData;
   loadColumns: LoadData;
   deferredRowCount: number;
-  measuredRowHeights: React.MutableRefObject<MeasuredRowHeights>;
-  loadGrid: LoadDataPromise;
 }
 
 const useData = (
@@ -31,9 +23,8 @@ const useData = (
   visibleRowCount: number,
   visibleColumnCount: number,
   columns: Column[],
-  measureCellHeight: (text: string, colIdx: number) => { width: number; height: number }
+  setCellSize: SetCellSize
 ): UseData => {
-  const measuredRowHeights = useRef<MeasuredRowHeights>({ rowCount: 0, totalHeight: 0, rowHeights: Array(rowCount) });
   const [rowsInPage, setRowsInPage] = useState<Row[]>(Array(rowCount).fill(undefined));
   const stableRowsInPageRef = useRef(rowsInPage);
   stableRowsInPageRef.current = rowsInPage;
@@ -62,27 +53,16 @@ const useData = (
               pageRowStartIdx,
               columns,
               layout.qHyperCube.qSize,
-              measureCellHeight
+              setCellSize
             );
 
             nextRows[pageRowIdx] = row;
-
-            const currentMeasuredHeight = measuredRowHeights.current.rowHeights[pageRowIdx];
-            const diff = (row.height as number) - currentMeasuredHeight;
-            if (diff > 0) {
-              measuredRowHeights.current.totalHeight += diff > 0 ? diff : 0;
-              measuredRowHeights.current.rowHeights[pageRowIdx] = row.height as number;
-            } else if (currentMeasuredHeight === undefined) {
-              measuredRowHeights.current.rowCount += 1;
-              measuredRowHeights.current.totalHeight += row.height as number;
-              measuredRowHeights.current.rowHeights[pageRowIdx] = row.height as number;
-            }
           });
         });
 
         return nextRows;
       }),
-    [pageInfo, columns, layout, measureCellHeight]
+    [pageInfo, columns, layout, setCellSize]
   );
 
   // The queue takes a EngineAPI.INxPage object as items and adds them to a queue and
@@ -125,36 +105,6 @@ const useData = (
     [rowsInPage, queue, pageInfo]
   );
 
-  const loadGrid: LoadDataPromise = useCallback(
-    async (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
-      // await sleep();
-      const pagesToFetch: EngineAPI.INxPage[] = [];
-      for (let top = qTop; top < qTop + qHeight; top++) {
-        const pageTop = Math.max(0, top - pageInfo.page * pageInfo.rowsPerPage);
-        if (isRowMissingData(stableRowsInPageRef.current, qLeft, pageTop, qWidth)) {
-          const page = {
-            qLeft,
-            qTop: top,
-            qHeight: 1,
-            qWidth,
-          };
-          pagesToFetch.push(page);
-        }
-      }
-
-      if (pagesToFetch.length) {
-        return getDataPages([{ qLeft, qTop, qHeight, qWidth }]).then((dataPages) => {
-          handleDataPages(dataPages);
-          // console.log('finished loading data', qTop);
-        });
-      }
-
-      console.log('data is cached');
-      return Promise.resolve();
-    },
-    [getDataPages, handleDataPages, pageInfo.page, pageInfo.rowsPerPage, stableRowsInPageRef]
-  );
-
   useEffect(() => {
     // Run this hook everytime "rowsInPage" becomes stale
     queue.clear();
@@ -176,8 +126,6 @@ const useData = (
     loadRows,
     loadColumns,
     deferredRowCount: rowsInPage.length,
-    measuredRowHeights,
-    loadGrid,
   };
 };
 

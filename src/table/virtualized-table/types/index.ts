@@ -1,6 +1,14 @@
 import { stardust } from '@nebula.js/stardust';
-import { VariableSizeGrid, VariableSizeList } from 'react-window';
-import { Column, ExtendedSelectionAPI, ExtendedTheme, ExtendedTranslator, PageInfo, TableLayout } from '../../../types';
+import { VariableSizeList } from 'react-window';
+import {
+  Column,
+  ExtendedSelectionAPI,
+  ExtendedTheme,
+  ExtendedTranslator,
+  PageInfo,
+  Row,
+  TableLayout,
+} from '../../../types';
 import { GeneratedStyling } from '../../types';
 
 export interface Totals {
@@ -66,7 +74,6 @@ export interface BodyProps {
   pageInfo: PageInfo;
   columns: Column[];
   columnWidth: number[];
-  forwardRef: React.RefObject<VariableSizeGrid<any>>;
   innerForwardRef: React.RefObject<HTMLDivElement>;
   bodyStyle: BodyStyle;
   rowHeight: number;
@@ -74,14 +81,23 @@ export interface BodyProps {
   onRowCountChange: (deferredRowCount: number) => void;
 }
 
-export interface RenderedGrid {
-  startRowIndex: number;
-  stopRowIndex: number;
-  startColumnIndex: number;
-  stopColumnIndex: number;
+export interface BodyRef {
+  interpolatedScrollTo: (scrollTopRatio: number, scrollLeft: number) => void;
 }
 
-export interface BodyRef {
-  scrollToIndex: (qTop: number) => Promise<void>;
-  scrollTo: (scrollTop: number, count: number) => Promise<void>;
+export interface RowMeta {
+  lastScrollToRatio: number;
+  resetAfterRowIndex: number;
+  heights: number[];
+  totalHeight: number;
+  count: number;
 }
+
+export interface ItemData {
+  rowsInPage: Row[];
+  columns: Column[];
+  bodyStyle: BodyStyle;
+  isHoverEnabled: boolean;
+}
+
+export type SetCellSize = (text: string, rowIdx: number, colIdx: number) => void;

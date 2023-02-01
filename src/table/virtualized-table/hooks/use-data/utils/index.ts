@@ -1,4 +1,5 @@
 import { Column, Row } from '../../../../../types';
+import { SetCellSize } from '../../../types';
 
 const createRow = (
   prevRows: Row[],
@@ -8,7 +9,7 @@ const createRow = (
   pageRowStartIdx: number,
   columns: Column[],
   qSize: EngineAPI.ISize,
-  measureCellHeight: (cell: string, colIdx: number) => { width: number; height: number }
+  setCellSize: SetCellSize
 ) => {
   const rowIdx = qArea.qTop + matrixRowIdx;
   const pageRowIdx = pageRowStartIdx + matrixRowIdx;
@@ -16,7 +17,6 @@ const createRow = (
 
   matrixRow.forEach((cell, matrixColIdx: number) => {
     const colIdx = matrixColIdx + qArea.qLeft;
-    const { height, width } = measureCellHeight(cell.qText ?? '', colIdx);
     row[`col-${colIdx}`] = {
       ...cell,
       rowIdx,
@@ -26,10 +26,9 @@ const createRow = (
       pageColIdx: colIdx,
       isLastRow: rowIdx === qSize.qcy - 1,
       isLastColumn: colIdx === qSize.qcx - 1,
-      width,
     };
 
-    row.height = Math.max(row.height as number, height);
+    setCellSize(cell.qText ?? '', pageRowIdx, colIdx);
   });
 
   return {
