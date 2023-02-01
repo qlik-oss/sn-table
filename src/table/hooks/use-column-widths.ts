@@ -76,12 +76,12 @@ const useColumnWidths = (
   columns: Column[],
   tableWidth: number
 ): [number[], React.Dispatch<React.SetStateAction<number[]>>] => {
+  const measureTextMethods = useMeasureText('13px', 'Arial');
   // TODO use actual font size (and font eventually)
-  const measureText = useMeasureText('13px', 'Arial');
-  const [columnWidths, setColumnWidths] = useState(getColumnWidths(columns, tableWidth, measureText));
+  const [columnWidths, setColumnWidths] = useState(getColumnWidths(columns, tableWidth, measureTextMethods));
 
   useDidUpdateEffect(() => {
-    setColumnWidths(getColumnWidths(columns, tableWidth, measureText));
+    setColumnWidths(getColumnWidths(columns, tableWidth, measureTextMethods));
   }, [columns, tableWidth]);
 
   return [columnWidths, setColumnWidths];
