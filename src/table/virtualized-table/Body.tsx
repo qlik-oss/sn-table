@@ -82,6 +82,8 @@ const Body = forwardRefFn((props: BodyProps, ref) => {
 
   useEffect(() => {
     if (rowMeta.current.lastScrollToRatio === 1) {
+      // Hack to deal with the case when a user scrolls to the last row
+      // and data has not yet finished loading
       gridRef.current?.scrollToItem({ rowIndex: deferredRowCount - 1, align: 'start' });
     }
   });
@@ -111,11 +113,18 @@ const Body = forwardRefFn((props: BodyProps, ref) => {
           const scrollTop = innerHeight * scrollTopRatio;
           rowMeta.current.lastScrollToRatio = scrollTopRatio;
 
-          gridRef.current?.scrollTo({ scrollTop, scrollLeft });
+          if (rowMeta.current.lastScrollToRatio === 1) {
+            // Hack to ensure that the last row is scrolled to when row height is dynamic
+            // and row has already been measured
+            gridRef.current?.scrollToItem({ rowIndex: deferredRowCount - 1, align: 'start' });
+            gridRef.current?.scrollTo({ scrollLeft });
+          } else {
+            gridRef.current?.scrollTo({ scrollTop, scrollLeft });
+          }
         },
       };
     },
-    [gridRef, innerForwardRef, bodyHeight, rowMeta]
+    [innerForwardRef, bodyHeight, rowMeta, deferredRowCount]
   );
 
   return (
