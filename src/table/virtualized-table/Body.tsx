@@ -135,7 +135,6 @@ const Body = forwardRefFn((props: BodyProps, ref) => {
       onItemsRendered={handleItemsRendered}
       onScroll={scrollHandler}
       itemKey={getCellItemKey}
-      useIsScrolling
     >
       {Cell}
     </VariableSizeGrid>
