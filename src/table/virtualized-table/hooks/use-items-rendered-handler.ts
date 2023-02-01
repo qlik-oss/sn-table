@@ -92,7 +92,7 @@ const useItemsRendererHandler = ({
     ]
   );
 
-  return { handleItemsRendered };
+  return handleItemsRendered;
 };
 
 export default useItemsRendererHandler;

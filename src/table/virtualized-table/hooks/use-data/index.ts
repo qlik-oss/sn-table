@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import sleep from '../../../../debug/sleep';
+import { useCallback, useEffect, useState } from 'react';
 import { PageInfo, Row, Column, TableLayout } from '../../../../types';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
 import { SetCellSize } from '../../types';
@@ -26,14 +25,9 @@ const useData = (
   setCellSize: SetCellSize
 ): UseData => {
   const [rowsInPage, setRowsInPage] = useState<Row[]>(Array(rowCount).fill(undefined));
-  const stableRowsInPageRef = useRef(rowsInPage);
-  stableRowsInPageRef.current = rowsInPage;
 
   const getDataPages = useCallback(
-    async (pages: EngineAPI.INxPage[]) => {
-      // await sleep();
-      return model.getHyperCubeData('/qHyperCubeDef', pages);
-    },
+    async (pages: EngineAPI.INxPage[]) => model.getHyperCubeData('/qHyperCubeDef', pages),
     [model]
   );
 

@@ -13,7 +13,7 @@ const createRow = (
 ) => {
   const rowIdx = qArea.qTop + matrixRowIdx;
   const pageRowIdx = pageRowStartIdx + matrixRowIdx;
-  const row: Row = prevRows[pageRowIdx] ?? { key: `row-${pageRowIdx}`, height: 0 };
+  const row: Row = prevRows[pageRowIdx] ?? { key: `row-${pageRowIdx}` };
 
   matrixRow.forEach((cell, matrixColIdx: number) => {
     const colIdx = matrixColIdx + qArea.qLeft;

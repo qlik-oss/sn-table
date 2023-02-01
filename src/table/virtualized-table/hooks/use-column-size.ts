@@ -9,9 +9,8 @@ const useColumnSize = (rect: Rect, columns: Column[], headerStyle: GeneratedStyl
   const { estimateWidth } = useMeasureText(bodyStyle.fontSize, bodyStyle.fontFamily);
 
   const width = useMemo(() => {
-    const measuredWidths = columns.map(
-      (col) => 160
-      // (col) => Math.max(measureText(col.label), estimateWidth(col.qApprMaxGlyphCount))
+    const measuredWidths = columns.map((col) =>
+      Math.max(measureText(col.label), estimateWidth(col.qApprMaxGlyphCount))
     );
     const totalWidth = measuredWidths.reduce((sum, w) => sum + w, 0);
 

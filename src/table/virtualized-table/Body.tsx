@@ -61,7 +61,7 @@ const Body = forwardRefFn((props: BodyProps, ref) => {
     setCellSize
   );
 
-  const { handleItemsRendered } = useItemsRendererHandler({
+  const handleItemsRendered = useItemsRendererHandler({
     layout,
     loadRows,
     loadColumns,
