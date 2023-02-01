@@ -1,12 +1,4 @@
-import React, {
-  memo,
-  useMemo,
-  useLayoutEffect,
-  useEffect,
-  useRef,
-  useImperativeHandle,
-  forwardRef as forwardRefFn,
-} from 'react';
+import React, { memo, useMemo, useLayoutEffect, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import { VariableSizeGrid } from 'react-window';
 import useData from './hooks/use-data';
 import { BodyProps, BodyRef, ItemData } from './types';
@@ -20,7 +12,7 @@ import getCellItemKey from './utils/get-cell-item-key';
 import useDynamicRowHeight from './hooks/use-dynamic-row-height';
 import { getBodyHeight } from './utils/get-height';
 
-const Body = forwardRefFn((props: BodyProps, ref) => {
+const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   const {
     rect,
     columns,
@@ -107,7 +99,7 @@ const Body = forwardRefFn((props: BodyProps, ref) => {
     rowMeta.current.totalHeight
   );
 
-  useImperativeHandle<unknown, BodyRef>(
+  useImperativeHandle(
     ref,
     () => {
       return {
