@@ -18,6 +18,7 @@ import { useContextSelector, TableContext } from '../context';
 import Cell from './Cell';
 import getCellItemKey from './utils/get-cell-item-key';
 import useDynamicRowHeight from './hooks/use-dynamic-row-height';
+import { getBodyHeight } from './utils/get-height';
 
 const Body = forwardRefFn((props: BodyProps, ref) => {
   const {
@@ -98,11 +99,13 @@ const Body = forwardRefFn((props: BodyProps, ref) => {
     gridRef.current.scrollTo({ scrollLeft: 0, scrollTop: 0 });
   }, [layout, pageInfo.page, gridRef, columnWidth, rowMeta, theme.name()]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  let { height: bodyHeight } = rect;
-  bodyHeight -= headerAndTotalsHeight;
-  if (deferredRowCount * rowHeight < bodyHeight) {
-    bodyHeight = Math.min(rowMeta.current.totalHeight, bodyHeight);
-  }
+  const bodyHeight = getBodyHeight(
+    rect,
+    headerAndTotalsHeight,
+    deferredRowCount,
+    estimatedRowHeight,
+    rowMeta.current.totalHeight
+  );
 
   useImperativeHandle<unknown, BodyRef>(
     ref,

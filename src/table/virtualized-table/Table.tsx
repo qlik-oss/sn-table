@@ -39,13 +39,13 @@ const Table = (props: TableProps) => {
   const { width } = useColumnSize(tableRect, columns, headerStyle, bodyStyle);
   const { rowCount } = useTableCount(layout, pageInfo, tableRect, width, bodyRowHeight);
   const containerWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
-  const [containerHeight, setContainerHeight] = useState(rowCount * bodyRowHeight);
+  const [containerHeight, setContainerHeight] = useState(rowCount * bodyRowHeight + headerAndTotalsHeight);
   const scrollHandler = useScrollHandler(headerRef, totalsRef, bodyRef);
 
-  // Use dererred row count to set a new height, as the row count here and in the `Body` are not always in sync
+  // Use derrived row count to set a new height, as the row count here and in the `Body` are not always in sync
   const onRowCountChangeHandler = useCallback(
-    (deferredRowCount: number) => setContainerHeight(deferredRowCount * bodyRowHeight),
-    [bodyRowHeight]
+    (deferredRowCount: number) => setContainerHeight(deferredRowCount * bodyRowHeight + headerAndTotalsHeight),
+    [bodyRowHeight, headerAndTotalsHeight]
   );
 
   useLayoutEffect(() => {
