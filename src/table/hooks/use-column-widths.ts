@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Column } from '../../types';
-import { EstimateWidth } from '../types';
 import { MIN_COLUMN_WIDTH, ColumnWidthTypes } from '../constants';
-import useEstimateWidth from './use-estimate-width';
 import useDidUpdateEffect from './use-did-update-effect';
+import useMeasureText, { MeasureTextHook } from '../virtualized-table/hooks/use-measure-text';
 
 /**
  * Calculates column widths in pixels, based on column settings and the table width.
@@ -11,7 +10,11 @@ import useDidUpdateEffect from './use-did-update-effect';
  * Then the remaining width is divided equally between the 'fill' columns, if there is any
  * The widths are sorted in the order they will be displayed
  */
-export const getColumnWidths = (columns: Column[], tableWidth: number, estimateWidth: EstimateWidth) => {
+export const getColumnWidths = (
+  columns: Column[],
+  tableWidth: number,
+  { measureText, estimateWidth }: MeasureTextHook
+) => {
   if (!columns?.length || tableWidth === 0) return [];
 
   const columnWidths: number[] = [];
@@ -22,6 +25,8 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, estimateW
     if (col.columnSize) {
       const {
         columnSize: { type, widthPx, widthPr },
+        label,
+        qApprMaxGlyphCount,
       } = col;
       let newWidth = 0;
 
@@ -40,7 +45,7 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, estimateW
           addKnownWidth();
           break;
         case ColumnWidthTypes.HUG:
-          newWidth = estimateWidth(col);
+          newWidth = Math.max(measureText(label), estimateWidth(qApprMaxGlyphCount));
           addKnownWidth();
           break;
         case ColumnWidthTypes.FILL:
@@ -72,11 +77,11 @@ const useColumnWidths = (
   tableWidth: number
 ): [number[], React.Dispatch<React.SetStateAction<number[]>>] => {
   // TODO use actual font size (and font eventually)
-  const estimateWidth = useEstimateWidth('13px', 'Arial');
-  const [columnWidths, setColumnWidths] = useState(getColumnWidths(columns, tableWidth, estimateWidth));
+  const measureText = useMeasureText('13px', 'Arial');
+  const [columnWidths, setColumnWidths] = useState(getColumnWidths(columns, tableWidth, measureText));
 
   useDidUpdateEffect(() => {
-    setColumnWidths(getColumnWidths(columns, tableWidth, estimateWidth));
+    setColumnWidths(getColumnWidths(columns, tableWidth, measureText));
   }, [columns, tableWidth]);
 
   return [columnWidths, setColumnWidths];

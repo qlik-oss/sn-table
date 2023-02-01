@@ -12,13 +12,13 @@ import { ColumnWidthTypes, MIN_COLUMN_WIDTH, PAGINATION_HEIGHT } from '../../con
  */
 const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
   const { pageColIdx } = column;
-  const { rootElement, applyColumnWidths } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { rootElement, applyColumnWidths, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setColumnWidths = useContextSelector(TableContext, (value) => value.setColumnWidths);
   const tempWidths = useRef({ columnWidth: 0, initX: 0, initWidth: 0 });
   const borderHeight = rootElement.getBoundingClientRect().height - PAGINATION_HEIGHT + 1;
 
-  if (!applyColumnWidths) return null;
+  if (!applyColumnWidths || constraints.active) return null;
 
   const mouseMoveHandler = (evt: MouseEvent) => {
     const deltaWidth = evt.clientX - tempWidths.current.initX;

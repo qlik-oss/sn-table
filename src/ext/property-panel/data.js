@@ -1,4 +1,5 @@
 import Modifiers from 'qlik-modifiers';
+import { ColumnWidthTypes } from '../../table/constants';
 
 const columnCommonHidden = {
   autoSort: {
@@ -167,30 +168,30 @@ const getColumnResize = (env) =>
           type: 'string',
           component: 'dropdown',
           ref: 'qDef.columnSize.type',
-          translation: 'resize type',
+          translation: 'Object.Table.Column.ResizeType',
           options: [
             {
-              value: 'fill',
-              translation: 'fill',
+              value: ColumnWidthTypes.FILL,
+              translation: 'Object.Table.Column.Fill',
             },
             {
-              value: 'hug',
-              translation: 'hug',
+              value: ColumnWidthTypes.HUG,
+              translation: 'Object.Table.Column.Hug',
             },
             {
-              value: 'pixels',
-              translation: 'pixels',
+              value: ColumnWidthTypes.PIXELS,
+              translation: 'Object.Table.Column.Pixels',
             },
             {
-              value: 'percentage',
-              translation: 'percentage',
+              value: ColumnWidthTypes.PERCENTAGE,
+              translation: 'Object.Table.Column.Percentage',
             },
           ],
           defaultValue: 'fill',
         },
         sizePixels: {
           ref: 'qDef.columnSize.widthPx',
-          translation: 'column pixel width',
+          translation: 'Object.Table.Column.PixelWidth',
           type: 'number',
           expression: 'optional',
           min: 1,
@@ -199,7 +200,7 @@ const getColumnResize = (env) =>
         },
         sizePercentage: {
           ref: 'qDef.columnSize.widthPr',
-          translation: 'column percentage width',
+          translation: 'Object.Table.Column.PercentageWidth',
           type: 'number',
           expression: 'optional',
           min: 1,
