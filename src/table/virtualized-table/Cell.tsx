@@ -59,7 +59,8 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
       >
         <CellText
           style={{
-            textOverflow: 'ellipsis',
+            height: '100%',
+            textOverflow: 'ellipsis', // TODO Does not ellipis when text is on multiple lines
             overflow: 'hidden',
             wordBreak: 'break-all', // break-all as the line height logic does not account for word breaks at reasonable places like a white space
           }}

@@ -1,5 +1,7 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { VariableSizeGrid } from 'react-window';
+import { COMMON_CELL_STYLING } from '../../styling-defaults';
+import { CELL_BORDER_HEIGHT, CELL_PADDING_HEIGHT, LINE_HEIGHT } from '../../utils/styling-utils';
 import { PADDING_LEFT_RIGHT } from '../constants';
 import { BodyStyle, RowMeta } from '../types';
 import useMeasureText from './use-measure-text';
@@ -22,17 +24,20 @@ const useDynamicRowHeight = ({ bodyStyle, columnWidth, gridRef, rowHeight }: Pro
     totalHeight: 0,
     count: 0,
   });
+  const [estimatedRowHeight, setEstimatedRowHeight] = useState(rowHeight);
   const { measureText } = useMeasureText(bodyStyle.fontSize, bodyStyle.fontFamily);
+  const lineHeight = parseInt(bodyStyle.fontSize ?? COMMON_CELL_STYLING.fontSize, 10) * LINE_HEIGHT;
 
   const getCellSize = useCallback(
     (text: string, colIdx: number) => {
       const width = measureText(text);
-      const estimatedLineCount = Math.ceil(width / (columnWidth[colIdx] - PADDING - BORDER));
-      const height = Math.max(1, estimatedLineCount) * rowHeight;
+      // Cap the max number of supported lines to avoid issues with to large DOM element with 250k rows of data * 10 lines per row
+      const estimatedLineCount = Math.min(10, Math.ceil(width / (columnWidth[colIdx] - PADDING - BORDER)));
+      const height = Math.max(1, estimatedLineCount) * lineHeight;
 
-      return height;
+      return height + CELL_PADDING_HEIGHT + CELL_BORDER_HEIGHT;
     },
-    [columnWidth, measureText, rowHeight]
+    [columnWidth, measureText, lineHeight]
   );
 
   const setCellSize = useCallback(
@@ -49,16 +54,16 @@ const useDynamicRowHeight = ({ bodyStyle, columnWidth, gridRef, rowHeight }: Pro
         rowMeta.current.totalHeight += height;
         rowMeta.current.heights[rowIdx] = height;
       }
+
+      setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
     },
     [getCellSize]
   );
 
   const getRowHeight = useCallback(
-    (index: number) => rowMeta.current.heights[index] ?? rowHeight,
-    [rowMeta, rowHeight]
+    (index: number) => rowMeta.current.heights[index] ?? estimatedRowHeight,
+    [rowMeta, estimatedRowHeight]
   );
-
-  const estimatedRowHeight = rowMeta.current.totalHeight / rowMeta.current.count;
 
   // Reset the internal cache of react-window, otherwise the size of empty cells
   // would be cached and used on each render
