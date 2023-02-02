@@ -167,7 +167,7 @@ const getColumnResize = (env) =>
         type: {
           type: 'string',
           component: 'dropdown',
-          ref: 'qDef.columnSize.type',
+          ref: 'qDef.columnWidth.type',
           translation: 'Object.Table.Column.ResizeType',
           options: [
             {
@@ -190,23 +190,23 @@ const getColumnResize = (env) =>
           defaultValue: 'fill',
         },
         sizePixels: {
-          ref: 'qDef.columnSize.widthPx',
+          ref: 'qDef.columnWidth.pixels',
           translation: 'Object.Table.Column.PixelWidth',
           type: 'number',
           expression: 'optional',
           min: 1,
           defaultValue: 200,
-          show: (data) => data.qDef.columnSize?.type === 'pixels',
+          show: (data) => data.qDef.columnWidth?.type === ColumnWidthTypes.PIXELS,
         },
         sizePercentage: {
-          ref: 'qDef.columnSize.widthPr',
+          ref: 'qDef.columnWidth.percentage',
           translation: 'Object.Table.Column.PercentageWidth',
           type: 'number',
           expression: 'optional',
           min: 1,
           max: 100,
           defaultValue: 20,
-          show: (data) => data.qDef.columnSize?.type === 'percentage',
+          show: (data) => data.qDef.columnWidth?.type === ColumnWidthTypes.PERCENTAGE,
         },
       }
     : {};
