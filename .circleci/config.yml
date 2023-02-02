@@ -3,7 +3,7 @@ version: 2
 defaults: &defaults
   working_directory: ~/table
   docker:
-    - image: circleci/node:16.12.0
+    - image: cimg/node:lts
   # Available images https://hub.docker.com/r/circleci/node/tags/
 
 aliases:
@@ -65,7 +65,6 @@ jobs:
   integration-tests:
     <<: *defaults
     docker:
-      - image: circleci/node:16.12.0-browsers
       - image: mcr.microsoft.com/playwright:focal
     steps:
       - attach_workspace:
@@ -84,7 +83,6 @@ jobs:
   rendering-tests:
     <<: *defaults
     docker:
-      - image: circleci/node:16.12.0-browsers
       - image: mcr.microsoft.com/playwright:focal
     steps:
       - attach_workspace:

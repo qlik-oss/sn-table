@@ -1,5 +1,4 @@
 import styled from '@mui/system/styled';
-import TableSortLabel from '@mui/material/TableSortLabel';
 import TableCell from '@mui/material/TableCell';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -17,23 +16,20 @@ export const StyledHeadCell = styled(TableCell, {
   ...COMMON_CELL_STYLING,
   ...headerStyle,
   pointer: 'cursor',
-  '&&:hover, &&:focus': {
-    '& button, & svg': { opacity: 1 },
-  },
 }));
 
-export const StyledSortLabel = styled(TableSortLabel, {
-  shouldForwardProp: (prop: string) => prop !== 'headerStyle',
-})(({ headerStyle }) => ({
+export const StyledSortButton = styled(Button, {
+  shouldForwardProp: (prop: string) => prop !== 'isActive',
+})(({ isActive, theme }) => ({
+  padding: theme.spacing(0.5, 1),
   color: 'inherit',
-  '&:hover': {
-    color: 'inherit',
+  '&&:focus, &&:hover': {
+    '& svg': {
+      opacity: isActive ? 1 : 0.5,
+    },
   },
-  '&.Mui-active': {
-    color: 'inherit',
-  },
-  '&.Mui-active .MuiTableSortLabel-icon': {
-    color: headerStyle.color,
+  '& svg': {
+    opacity: isActive ? 1 : 0,
   },
 }));
 
@@ -49,12 +45,24 @@ export const VisuallyHidden = styled('span')({
   width: 1,
 });
 
-export const HeadCellContent = styled(Box)(({ theme }) => ({
+export const StyledHeadCellContent = styled(Box)(({ theme }) => ({
+  width: '100%',
   display: 'flex',
   flexDirection: 'inherit',
   justifyContent: 'space-between',
   alignItems: 'center',
   gap: theme.spacing(1),
+  '&&:hover, &&:focus-within': {
+    '& #sn-table-head-menu-button': { opacity: 1 },
+  },
+}));
+
+export const LockAndLabel = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'inherit',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  gap: theme.spacing(0.5),
 }));
 
 // ---------- HeadCellMenu ----------

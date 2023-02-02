@@ -1,6 +1,7 @@
 import { stardust } from '@nebula.js/stardust';
 import { VariableSizeList } from 'react-window';
 import {
+  ChangeSortOrder,
   Column,
   ExtendedSelectionAPI,
   ExtendedTheme,
@@ -37,6 +38,7 @@ export interface VirtualTableRenderProps {
   rect: stardust.Rect;
   rootElement: HTMLElement;
   embed: stardust.Embed;
+  changeSortOrder: ChangeSortOrder;
 }
 
 export interface WrapperProps {

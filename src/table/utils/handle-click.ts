@@ -1,6 +1,6 @@
 import React, { MouseEvent } from 'react';
 import { stardust } from '@nebula.js/stardust';
-import { Announce, Cell, ChangeSortOrder, TotalsPosition, Column } from '../../types';
+import { Announce, Cell, TotalsPosition } from '../../types';
 import { SelectionDispatch } from '../types';
 import { SelectionActions } from '../constants';
 import { removeTabAndFocusCell, updateFocus, getCellElement } from './accessibility-utils';
@@ -29,21 +29,6 @@ export const handleClickToFocusHead = (
 export const handleMouseDownLabelToFocusHeadCell = (evt: MouseEvent, rootElement: HTMLElement, columnIndex: number) => {
   evt.preventDefault();
   updateFocus({ focusType: 'focus', cell: getCellElement(rootElement, [0, columnIndex]) });
-};
-
-export const handleClickToSort = (
-  evt: React.MouseEvent,
-  column: Column,
-  changeSortOrder: ChangeSortOrder,
-  isInteractionEnabled: boolean
-) => {
-  const target = evt.target as HTMLElement;
-  !target.closest('#sn-table-head-menu-button') &&
-    !target.closest('.sn-table-head-menu-item')?.ariaDisabled &&
-    !target.closest('.sn-table-head-menu') &&
-    !target.closest('.MuiBackdrop-root') &&
-    isInteractionEnabled &&
-    changeSortOrder(column);
 };
 
 /**

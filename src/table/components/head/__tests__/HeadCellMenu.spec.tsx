@@ -15,7 +15,7 @@ describe('<HeadCellMenu />', () => {
   const renderTableHeadCellMenu = (cellCoordMock?: [number, number]) =>
     render(
       <TestWithProviders cellCoordMock={cellCoordMock} layout={layout} direction={direction} embed={embed}>
-        <HeadCellMenu isDimension={isDimension} columnIndex={columnIndex} />
+        <HeadCellMenu isDimension={isDimension} columnIndex={columnIndex} tabIndex={0} />
       </TestWithProviders>
     );
 

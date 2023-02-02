@@ -9,7 +9,7 @@ import TableWrapper from './components/TableWrapper';
 import { TableContextProvider } from './context';
 import muiSetup from './mui-setup';
 import { RenderProps, TableWrapperProps } from './types';
-import VirualizedTable from './virtualized-table/Wrapper';
+import VirtualizedTable from './virtualized-table/Wrapper';
 import { VirtualTableRenderProps } from './virtualized-table/types';
 
 export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
@@ -23,6 +23,7 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
     keyboard,
     rootElement,
     embed,
+    changeSortOrder,
     ...wrapperProps
   } = props;
   const muiTheme = muiSetup(direction);
@@ -40,6 +41,7 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
           keyboard={keyboard}
           rootElement={rootElement as HTMLElement}
           embed={embed as stardust.Embed}
+          changeSortOrder={changeSortOrder}
         >
           <TableWrapper {...(wrapperProps as TableWrapperProps)} />
         </TableContextProvider>
@@ -49,7 +51,19 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
 }
 
 export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot?: ReactDom.Root) {
-  const { selectionsAPI, layout, model, translator, constraints, theme, keyboard, rect, rootElement, embed } = props;
+  const {
+    selectionsAPI,
+    layout,
+    model,
+    translator,
+    constraints,
+    theme,
+    keyboard,
+    rect,
+    rootElement,
+    embed,
+    changeSortOrder,
+  } = props;
   const muiTheme = muiSetup('ltr');
 
   reactRoot?.render(
@@ -65,8 +79,9 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
           keyboard={keyboard}
           rootElement={rootElement}
           embed={embed}
+          changeSortOrder={changeSortOrder}
         >
-          <VirualizedTable rect={rect} />
+          <VirtualizedTable rect={rect} />
         </TableContextProvider>
       </ThemeProvider>
     </React.StrictMode>

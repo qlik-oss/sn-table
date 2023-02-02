@@ -29,14 +29,26 @@ export const TableContextProvider = ({
   keyboard,
   rootElement,
   embed,
+  changeSortOrder,
 }: ContextProviderProps) => {
   const [headRowHeight, setHeadRowHeight] = useState(0);
   const [focusedCellCoord, setFocusedCellCoord] = useState((cellCoordMock || [0, 0]) as [number, number]);
   const [selectionState, selectionDispatch] = useSelectionReducer(pageRows, selectionsAPI);
   const [hoverIndex, setHoverIndex] = useState(-1);
   const baseProps = useMemo(
-    () => ({ selectionsAPI, layout, model, translator, constraints, theme, keyboard, rootElement, embed }),
-    [selectionsAPI, layout, model, translator, constraints, theme.name(), keyboard, rootElement, embed] // eslint-disable-line react-hooks/exhaustive-deps
+    () => ({
+      selectionsAPI,
+      layout,
+      model,
+      translator,
+      constraints,
+      theme,
+      keyboard,
+      rootElement,
+      embed,
+      changeSortOrder,
+    }),
+    [selectionsAPI, layout, model, translator, constraints, theme.name(), keyboard, rootElement, embed, changeSortOrder] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   return (

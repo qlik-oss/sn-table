@@ -210,8 +210,9 @@ const getChartExploration = (env) =>
           ref: 'enableChartExploration',
         },
         visibilityToggler: {
+          show: (itemData) => itemData.enableChartExploration,
           component: 'buttongroup',
-          translation: 'properties.visibilityOption',
+          translation: 'properties.ChartExploration.VisibilityOption',
           ref: 'chartExploration.menuVisibility',
           options: [
             {
@@ -220,7 +221,7 @@ const getChartExploration = (env) =>
             },
             {
               value: 'minimized',
-              translation: 'properties.minimized',
+              translation: 'properties.ChartExploration.Minimized',
             },
           ],
         },
