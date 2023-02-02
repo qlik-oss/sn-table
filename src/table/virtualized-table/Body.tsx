@@ -70,14 +70,12 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   );
 
   useEffect(() => {
-    syncHeight(innerForwardRef.current?.clientHeight ?? 0);
-  });
-
-  useEffect(() => {
     syncHeight(innerForwardRef.current?.clientHeight ?? 0, true);
   }, [deferredRowCount, syncHeight, innerForwardRef]);
 
   useEffect(() => {
+    syncHeight(innerForwardRef.current?.clientHeight ?? 0);
+
     if (rowMeta.current.lastScrollToRatio === 1) {
       // Hack to deal with the case when a user scrolls to the last row
       // and data has not yet finished loading
