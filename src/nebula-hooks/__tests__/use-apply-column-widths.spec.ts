@@ -40,6 +40,7 @@ describe('applyColumnWidths', () => {
       true
     );
   });
+
   it('should call applyPatches with qOp Replace for dimension', () => {
     qHyperCube.qDimensionInfo[0].columnWidth = oldColumnWidth;
 
@@ -49,6 +50,7 @@ describe('applyColumnWidths', () => {
       true
     );
   });
+
   it('should call applyPatches with qOp Add for measure', () => {
     column = { isDim: false, colIdx: 1 } as unknown as Column;
 
@@ -58,6 +60,7 @@ describe('applyColumnWidths', () => {
       true
     );
   });
+
   it('should call applyPatches with qOp Replace for measure', () => {
     column = { isDim: false, colIdx: 1 } as unknown as Column;
     qHyperCube.qMeasureInfo[0].columnWidth = { type: ColumnWidthTypes.PERCENTAGE, percentage: 20 };

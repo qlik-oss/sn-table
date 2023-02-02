@@ -3,19 +3,10 @@ import { HyperCube, ApplyColumnWidths } from '../types';
 
 export const applyColumnWidthsFactory =
   (model: EngineAPI.IGenericObject | undefined, qHyperCube: HyperCube): ApplyColumnWidths =>
-  (newColumnWidth, column) => {
-    const { isDim, colIdx } = column;
-    let qPath;
-    let oldColumnWidth;
-
-    if (isDim) {
-      qPath = `/qHyperCubeDef/qDimension/${colIdx}/qDef/columnWidth`;
-      oldColumnWidth = qHyperCube.qDimensionInfo[colIdx].columnWidth;
-    } else {
-      const index = colIdx - qHyperCube.qDimensionInfo.length;
-      qPath = `/qHyperCubeDef/qMeasures/${index}/qDef/columnWidth`;
-      oldColumnWidth = qHyperCube.qMeasureInfo[index].columnWidth;
-    }
+  (newColumnWidth, { isDim, colIdx }) => {
+    const index = isDim ? colIdx : colIdx - qHyperCube.qDimensionInfo.length;
+    const qPath = `/qHyperCubeDef/${isDim ? 'qDimensions' : 'qMeasures'}/${index}/qDef/columnWidth`;
+    const oldColumnWidth = qHyperCube[isDim ? 'qDimensionInfo' : 'qMeasureInfo'][index].columnWidth;
 
     const patch = oldColumnWidth
       ? {
