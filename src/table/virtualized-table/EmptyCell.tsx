@@ -3,14 +3,10 @@ import { areEqual } from 'react-window';
 
 interface EmptyCellProps {
   style: React.CSSProperties;
-  rowIndex: number;
-  columnIndex: number;
 }
 
-const EmptyCell = ({ style, rowIndex, columnIndex }: EmptyCellProps) => (
+const EmptyCell = ({ style }: EmptyCellProps) => (
   <div
-    data-row-index={rowIndex}
-    data-col-index={columnIndex}
     className="sn-table-cell"
     style={{
       ...style,

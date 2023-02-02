@@ -81,8 +81,6 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
 
   return (
     <EmptyCell
-      rowIndex={rowIndex}
-      columnIndex={columnIndex}
       style={{
         ...style,
         ...bodyStyle,
