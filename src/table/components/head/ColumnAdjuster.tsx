@@ -63,6 +63,7 @@ const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
       key={`adjuster-${pageColIdx}`}
       onMouseDown={mouseDownHandler}
       onDoubleClick={handleDoubleClick}
+      data-testid="sn-table-column-adjuster"
     >
       <AdjusterHeadBorder className="sn-table-adjuster-head-border" />
       <AdjusterBodyBorder borderHeight={borderHeight} className="sn-table-adjuster-head-border" />

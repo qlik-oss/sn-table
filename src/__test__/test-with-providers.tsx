@@ -5,6 +5,7 @@ import React from 'react';
 import { TableContextProvider } from '../table/context';
 import muiSetup from '../table/mui-setup';
 import {
+  ApplyColumnWidths,
   ChangeSortOrder,
   ExtendedSelectionAPI,
   ExtendedTheme,
@@ -30,7 +31,7 @@ interface ProviderProps {
   rootElement?: HTMLElement;
   embed?: stardust.Embed;
   changeSortOrder?: ChangeSortOrder;
-  applyColumnWidths?: () => void;
+  applyColumnWidths?: ApplyColumnWidths;
   tableWidth?: number;
 }
 
@@ -57,7 +58,7 @@ const TestWithProviders = ({
   rootElement = {} as HTMLElement,
   embed = {} as stardust.Embed,
   changeSortOrder = async () => {},
-  applyColumnWidths = () => {},
+  applyColumnWidths = undefined,
   tableWidth = 0,
 }: ProviderProps) => {
   return (
