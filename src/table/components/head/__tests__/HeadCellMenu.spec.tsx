@@ -47,7 +47,7 @@ describe('<HeadCellMenu />', () => {
     column = {
       colIdx: 0,
       isDim: true,
-      label: 'someDimLabel',
+      fieldId: 'someFieldId',
     } as Column;
     defaultListboxAnchorOpts = {
       anchorOrigin: { horizontal: 'left', vertical: 'bottom' },
@@ -112,12 +112,7 @@ describe('<HeadCellMenu />', () => {
     await waitForElementToBeRemoved(menu);
   });
 
-  it('should call `embed.__DO_NOT_USE__.popover()` once while trying to open listbox filter for a library dimension', async () => {
-    layout = {
-      qHyperCube: {
-        qDimensionInfo: [{ qFallbackTitle: 'someTitle' }],
-      },
-    } as TableLayout;
+  it('should call `embed.__DO_NOT_USE__.popover()` once while trying to open listbox filter for a dimension', async () => {
     renderTableHeadCellMenu();
 
     fireEvent.click(screen.getByRole('button'));
@@ -127,7 +122,7 @@ describe('<HeadCellMenu />', () => {
     expect(embed.__DO_NOT_USE__.popover).toHaveBeenCalledTimes(1);
     expect(embed.__DO_NOT_USE__.popover).toHaveBeenCalledWith(
       expect.any(HTMLDivElement),
-      column.label,
+      column.fieldId,
       defaultListboxAnchorOpts
     );
   });

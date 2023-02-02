@@ -19,6 +19,7 @@ describe('handle-data', () => {
       isDim,
       isMasterItem: isMasterItem || false,
       label: `title-${colIdx}`,
+      fieldId: isDim ? `title-${colIdx}` : '',
       id: `col-${pageColIdx}`,
       align: isDim ? 'left' : 'right',
       stylingIDs: [] as string[],

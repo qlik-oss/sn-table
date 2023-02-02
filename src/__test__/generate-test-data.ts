@@ -29,6 +29,8 @@ export function generateLayout(
     qSortIndicator: 'A',
     qReverseSort: false,
     qApprMaxGlyphCount: 3,
+    qGroupPos: 0,
+    qGroupFieldDefs: [`title-${idx}`],
   });
   const qDimensionInfo = [];
   const qMeasureInfo = [];
