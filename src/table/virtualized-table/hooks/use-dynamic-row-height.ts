@@ -1,5 +1,6 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { VariableSizeGrid } from 'react-window';
+import { PageInfo, TableLayout } from '../../../types';
 import { COMMON_CELL_STYLING } from '../../styling-defaults';
 import { CELL_BORDER_HEIGHT, CELL_PADDING_HEIGHT, LINE_HEIGHT } from '../../utils/styling-utils';
 import { MAX_NBR_LINES_OF_TEXT } from '../constants';
@@ -12,9 +13,11 @@ interface Props {
   rowHeight: number;
   columnWidth: number[];
   gridRef: React.RefObject<VariableSizeGrid<any>>;
+  layout: TableLayout;
+  pageInfo: PageInfo;
 }
 
-const useDynamicRowHeight = ({ bodyStyle, columnWidth, gridRef, rowHeight }: Props) => {
+const useDynamicRowHeight = ({ bodyStyle, columnWidth, gridRef, rowHeight, layout, pageInfo }: Props) => {
   const rowMeta = useRef<RowMeta>({
     lastScrollToRatio: 0,
     resetAfterRowIndex: 0, // TODO find a way to implement this, it can potentially improve performance
@@ -25,6 +28,16 @@ const useDynamicRowHeight = ({ bodyStyle, columnWidth, gridRef, rowHeight }: Pro
   const [estimatedRowHeight, setEstimatedRowHeight] = useState(rowHeight);
   const { measureText } = useMeasureText(bodyStyle.fontSize, bodyStyle.fontFamily);
   const lineHeight = parseInt(bodyStyle.fontSize ?? COMMON_CELL_STYLING.fontSize, 10) * LINE_HEIGHT;
+
+  useEffect(() => {
+    rowMeta.current = {
+      lastScrollToRatio: 0,
+      resetAfterRowIndex: 0,
+      heights: [],
+      totalHeight: 0,
+      count: 0,
+    };
+  }, [columnWidth, layout, pageInfo]);
 
   const getCellSize = useCallback(
     (text: string, colIdx: number) => {
