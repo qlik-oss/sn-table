@@ -37,10 +37,12 @@ export const getColumnWidths = (
 
       switch (type) {
         case ColumnWidthTypes.PIXELS:
+          if (!pixels) throw new Error(`pixel value is not defined`);
           newWidth = pixels;
           addKnownWidth();
           break;
         case ColumnWidthTypes.PERCENTAGE:
+          if (!percentage) throw new Error(`pixel value is not defined`);
           newWidth = (percentage / 100) * tableWidth;
           addKnownWidth();
           break;

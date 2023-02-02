@@ -112,8 +112,8 @@ export type SortDirection = 'A' | 'D';
 
 export interface ColumnWidth {
   type: string;
-  pixels: number;
-  percentage: number;
+  pixels?: number;
+  percentage?: number;
 }
 
 export interface Column {

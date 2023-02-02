@@ -3,21 +3,30 @@ import { HyperCube, ApplyColumnWidths } from '../types';
 
 export const applyColumnWidthsFactory =
   (model: EngineAPI.IGenericObject | undefined, qHyperCube: HyperCube): ApplyColumnWidths =>
-  (newColumnSize, column) => {
+  (newColumnWidth, column) => {
     const { isDim, colIdx } = column;
-    const index = isDim ? colIdx : colIdx - qHyperCube.qDimensionInfo.length;
-    const qPath = `/qHyperCubeDef/${isDim ? 'qDimensions' : 'qMeasures'}/${index}/qDef/columnWidth`;
-    const oldColumnSize = qHyperCube[isDim ? 'qDimensionInfo' : 'qMeasureInfo'][index].columnWidth;
-    const patch = oldColumnSize
+    let qPath;
+    let oldColumnWidth;
+
+    if (isDim) {
+      qPath = `/qHyperCubeDef/qDimension/${colIdx}/qDef/columnWidth`;
+      oldColumnWidth = qHyperCube.qDimensionInfo[colIdx].columnWidth;
+    } else {
+      const index = colIdx - qHyperCube.qDimensionInfo.length;
+      qPath = `/qHyperCubeDef/qMeasures/${index}/qDef/columnWidth`;
+      oldColumnWidth = qHyperCube.qMeasureInfo[index].columnWidth;
+    }
+
+    const patch = oldColumnWidth
       ? {
           qPath,
           qOp: 'Replace' as EngineAPI.NxPatchOpType,
-          qValue: JSON.stringify({ ...oldColumnSize, ...newColumnSize }),
+          qValue: JSON.stringify({ ...oldColumnWidth, ...newColumnWidth }),
         }
       : {
           qPath,
           qOp: 'Add' as EngineAPI.NxPatchOpType,
-          qValue: JSON.stringify(newColumnSize),
+          qValue: JSON.stringify(newColumnWidth),
         };
 
     model?.applyPatches([patch], true);

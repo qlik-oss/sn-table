@@ -42,6 +42,8 @@ describe('use-sorting', () => {
       ];
     });
 
+    afterEach(() => jest.clearAllMocks());
+
     it('should call apply patches with second dimension first in sort order', async () => {
       expectedPatches[0].qValue = '[1,0,2,3]';
 
@@ -81,7 +83,7 @@ describe('use-sorting', () => {
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });
 
-    it('should not apply patches for qReverseSort for dimension when newSortDirecion and qSortIndicator are both ascending', async () => {
+    it('should not apply patches for qReverseSort for dimension when newSortDirection and qSortIndicator are both ascending', async () => {
       column.colIdx = 0;
       if (changeSortOrder) {
         await changeSortOrder(column, 'A');
