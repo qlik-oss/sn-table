@@ -39,13 +39,20 @@ const Table = (props: TableProps) => {
   const { width } = useColumnSize(tableRect, columns, headerStyle, bodyStyle);
   const { rowCount } = useTableCount(layout, pageInfo, tableRect, width, bodyRowHeight);
   const containerWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
-  const [containerHeight, setContainerHeight] = useState(rowCount * bodyRowHeight + headerAndTotalsHeight);
+  const [containerHeight, setContainerHeight] = useState(rowCount * bodyRowHeight + headerAndTotalsHeight); // Based on single line height, which is going to be out-of-sync when rows have multiple lines
   const scrollHandler = useScrollHandler(headerRef, totalsRef, bodyRef);
 
-  // Use derrived row count to set a new height, as the row count here and in the `Body` are not always in sync
-  const onRowCountChangeHandler = useCallback(
-    (deferredRowCount: number) => setContainerHeight(deferredRowCount * bodyRowHeight + headerAndTotalsHeight),
-    [bodyRowHeight, headerAndTotalsHeight]
+  const syncHeight = useCallback(
+    (innerHeight: number, forceSync = false) => {
+      const newHeight = innerHeight + headerAndTotalsHeight;
+      // Handle an issue that occur when the measured row heights needs a scrollbar but single line height does not
+      if (containerHeight < tableRect.height && newHeight > tableRect.height) {
+        setContainerHeight(newHeight);
+      } else if (forceSync) {
+        setContainerHeight(newHeight);
+      }
+    },
+    [containerHeight, headerAndTotalsHeight, tableRect.height]
   );
 
   useLayoutEffect(() => {
@@ -91,7 +98,7 @@ const Table = (props: TableProps) => {
             columnWidth={width}
             rowHeight={bodyRowHeight}
             headerAndTotalsHeight={headerAndTotalsHeight}
-            onRowCountChange={onRowCountChangeHandler}
+            syncHeight={syncHeight}
           />
           {totals.atBottom ? TotalsComponent : null}
         </StickyContainer>

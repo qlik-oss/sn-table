@@ -80,7 +80,7 @@ export interface BodyProps {
   bodyStyle: BodyStyle;
   rowHeight: number;
   headerAndTotalsHeight: number;
-  onRowCountChange: (deferredRowCount: number) => void;
+  syncHeight: (innerHeight: number, forceSync?: boolean) => void;
 }
 
 export interface BodyRef {

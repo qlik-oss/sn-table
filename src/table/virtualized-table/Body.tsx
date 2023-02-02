@@ -22,7 +22,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     bodyStyle,
     rowHeight,
     headerAndTotalsHeight,
-    onRowCountChange,
+    syncHeight,
   } = props;
   const gridRef = useRef<VariableSizeGrid>(null);
   const { layout, model, theme } = useContextSelector(TableContext, (value) => value.baseProps);
@@ -70,8 +70,12 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   );
 
   useEffect(() => {
-    onRowCountChange(deferredRowCount);
-  }, [deferredRowCount, onRowCountChange]);
+    syncHeight(innerForwardRef.current?.clientHeight ?? 0);
+  });
+
+  useEffect(() => {
+    syncHeight(innerForwardRef.current?.clientHeight ?? 0, true);
+  }, [deferredRowCount, syncHeight, innerForwardRef]);
 
   useEffect(() => {
     if (rowMeta.current.lastScrollToRatio === 1) {
