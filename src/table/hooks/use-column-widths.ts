@@ -22,9 +22,9 @@ export const getColumnWidths = (
   let sumFillWidths = tableWidth;
 
   columns.forEach((col, idx) => {
-    if (col.columnSize) {
+    if (col.columnWidth) {
       const {
-        columnSize: { type, widthPx, widthPr },
+        columnWidth: { type, pixels, percentage },
         label,
         qApprMaxGlyphCount,
       } = col;
@@ -37,11 +37,11 @@ export const getColumnWidths = (
 
       switch (type) {
         case ColumnWidthTypes.PIXELS:
-          newWidth = widthPx;
+          newWidth = pixels;
           addKnownWidth();
           break;
         case ColumnWidthTypes.PERCENTAGE:
-          newWidth = (widthPr / 100) * tableWidth;
+          newWidth = (percentage / 100) * tableWidth;
           addKnownWidth();
           break;
         case ColumnWidthTypes.HUG:

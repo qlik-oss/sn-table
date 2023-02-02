@@ -19,17 +19,17 @@ describe('useMeasureText', () => {
       {
         label: 'col1',
         qApprMaxGlyphCount: 10,
-        columnSize: { type: ColumnWidthTypes.FILL, widthPx: 150, widthPr: 50 },
+        columnWidth: { type: ColumnWidthTypes.FILL, pixels: 150, percentage: 50 },
       } as Column,
       {
         label: 'col2',
         qApprMaxGlyphCount: 10,
-        columnSize: { type: ColumnWidthTypes.FILL, widthPx: 150, widthPr: 50 },
+        columnWidth: { type: ColumnWidthTypes.FILL, pixels: 150, percentage: 50 },
       } as Column,
       {
         label: 'col3',
         qApprMaxGlyphCount: 10,
-        columnSize: { type: ColumnWidthTypes.FILL, widthPx: 150, widthPr: 50 },
+        columnWidth: { type: ColumnWidthTypes.FILL, pixels: 150, percentage: 50 },
       } as Column,
     ];
     tableWidth = 600;
@@ -51,9 +51,9 @@ describe('useMeasureText', () => {
       });
 
       it('should return equal sizes for all when all types are percentage', () => {
-        columns[0].columnSize.type = ColumnWidthTypes.PERCENTAGE;
-        columns[1].columnSize.type = ColumnWidthTypes.PERCENTAGE;
-        columns[2].columnSize.type = ColumnWidthTypes.PERCENTAGE;
+        columns[0].columnWidth.type = ColumnWidthTypes.PERCENTAGE;
+        columns[1].columnWidth.type = ColumnWidthTypes.PERCENTAGE;
+        columns[2].columnWidth.type = ColumnWidthTypes.PERCENTAGE;
 
         const widths = getColumnWidthsState();
         expect(widths).toEqual([300, 300, 300]);
@@ -61,9 +61,9 @@ describe('useMeasureText', () => {
       });
 
       it('should return equal sizes for all when all types are pixels', () => {
-        columns[0].columnSize.type = ColumnWidthTypes.PIXELS;
-        columns[1].columnSize.type = ColumnWidthTypes.PIXELS;
-        columns[2].columnSize.type = ColumnWidthTypes.PIXELS;
+        columns[0].columnWidth.type = ColumnWidthTypes.PIXELS;
+        columns[1].columnWidth.type = ColumnWidthTypes.PIXELS;
+        columns[2].columnWidth.type = ColumnWidthTypes.PIXELS;
 
         const widths = getColumnWidthsState();
         expect(widths).toEqual([150, 150, 150]);
@@ -72,9 +72,9 @@ describe('useMeasureText', () => {
 
       it('should return one size for hug and equal sizes for two columns with fill', () => {
         measureTextMock.mockReturnValue({ width: 10 });
-        columns[0].columnSize.type = ColumnWidthTypes.HUG;
-        columns[1].columnSize.type = ColumnWidthTypes.HUG;
-        columns[2].columnSize.type = ColumnWidthTypes.HUG;
+        columns[0].columnWidth.type = ColumnWidthTypes.HUG;
+        columns[1].columnWidth.type = ColumnWidthTypes.HUG;
+        columns[2].columnWidth.type = ColumnWidthTypes.HUG;
 
         const widths = getColumnWidthsState();
         expect(widths).toEqual([132, 132, 132]);
@@ -84,7 +84,7 @@ describe('useMeasureText', () => {
 
     describe('all do not have same type', () => {
       it('should return one size for pixel value and equal sizes for two columns with fill', () => {
-        columns[0].columnSize.type = ColumnWidthTypes.PIXELS;
+        columns[0].columnWidth.type = ColumnWidthTypes.PIXELS;
 
         const widths = getColumnWidthsState();
         expect(widths).toEqual([150, 225, 225]);
@@ -92,7 +92,7 @@ describe('useMeasureText', () => {
       });
 
       it('should return one size for percentage and equal sizes for two columns with fill', () => {
-        columns[1].columnSize.type = ColumnWidthTypes.PERCENTAGE;
+        columns[1].columnWidth.type = ColumnWidthTypes.PERCENTAGE;
 
         const widths = getColumnWidthsState();
         expect(widths).toEqual([150, 300, 150]);
@@ -100,8 +100,8 @@ describe('useMeasureText', () => {
       });
 
       it('should return one MIN_COLUMN_WIDTH for small percentage and equal sizes for two columns with fill', () => {
-        columns[1].columnSize.type = ColumnWidthTypes.PERCENTAGE;
-        columns[1].columnSize.widthPr = 10;
+        columns[1].columnWidth.type = ColumnWidthTypes.PERCENTAGE;
+        columns[1].columnWidth.percentage = 10;
 
         const widths = getColumnWidthsState();
         expect(widths).toEqual([240, 120, 240]);
@@ -109,8 +109,8 @@ describe('useMeasureText', () => {
       });
 
       it('should return one large column and equal sizes for two columns with fill, that areMIN_COLUMN_WIDTH', () => {
-        columns[1].columnSize.type = ColumnWidthTypes.PERCENTAGE;
-        columns[1].columnSize.widthPr = 100;
+        columns[1].columnWidth.type = ColumnWidthTypes.PERCENTAGE;
+        columns[1].columnWidth.percentage = 100;
 
         const widths = getColumnWidthsState();
         expect(widths).toEqual([120, 600, 120]);
@@ -119,7 +119,7 @@ describe('useMeasureText', () => {
 
       it('should return one size for hug and equal sizes for two columns with fill', () => {
         measureTextMock.mockReturnValue({ width: 10 });
-        columns[2].columnSize.type = ColumnWidthTypes.HUG;
+        columns[2].columnWidth.type = ColumnWidthTypes.HUG;
 
         const widths = getColumnWidthsState();
         expect(widths).toEqual([234, 234, 132]);

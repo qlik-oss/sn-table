@@ -37,7 +37,7 @@ const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
     document.removeEventListener('mouseup', mouseUpHandler);
 
     if (tempWidths.current.columnWidth !== tempWidths.current.initWidth) {
-      const newWidthData = { type: ColumnWidthTypes.PIXELS, widthPx: tempWidths.current.columnWidth };
+      const newWidthData = { type: ColumnWidthTypes.PIXELS, pixels: tempWidths.current.columnWidth };
       applyColumnWidths(newWidthData, column);
     }
   };
