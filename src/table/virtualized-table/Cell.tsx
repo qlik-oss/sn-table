@@ -16,7 +16,7 @@ interface CellProps {
   data: ItemData;
 }
 
-// Enables ellipsis support on multi lines of  and is support by all major browsers (https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-line-clamp)
+// Enables ellipsis support on multi lines. Should be supported by all major browsers (https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-line-clamp)
 const lineClampStyling: React.CSSProperties = {
   display: '-webkit-box',
   WebkitLineClamp: MAX_NBR_LINES_OF_TEXT,
