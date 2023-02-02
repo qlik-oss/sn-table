@@ -11,7 +11,7 @@ const useScrollHandler = (
   return useCallback(
     (event: React.SyntheticEvent) => {
       const { scrollHeight, clientHeight, scrollTop, scrollLeft } = event.currentTarget;
-      const ratio = scrollTop / (scrollHeight - clientHeight);
+      const ratio = Math.max(0, Math.min(1, scrollTop / (scrollHeight - clientHeight)));
 
       bodyRef.current?.interpolatedScrollTo(ratio, scrollLeft);
 
