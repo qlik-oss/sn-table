@@ -7,7 +7,7 @@ import EmptyCell from './EmptyCell';
 import CellText from '../components/CellText';
 import getCellStyle from './utils/get-cell-style';
 import { ItemData } from './types';
-import { BORDER_WIDTH, PADDING_LEFT_RIGHT } from './constants';
+import { BORDER_WIDTH, MAX_NBR_LINES_OF_TEXT, PADDING_LEFT_RIGHT } from './constants';
 
 interface CellProps {
   columnIndex: number;
@@ -19,7 +19,7 @@ interface CellProps {
 // Enables ellipsis support on multi lines of  and is support by all major browsers (https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-line-clamp)
 const lineClampStyling: React.CSSProperties = {
   display: '-webkit-box',
-  WebkitLineClamp: 10,
+  WebkitLineClamp: MAX_NBR_LINES_OF_TEXT,
   WebkitBoxOrient: 'vertical',
 };
 

@@ -2,8 +2,9 @@ import { useCallback, useRef, useState } from 'react';
 import { VariableSizeGrid } from 'react-window';
 import { COMMON_CELL_STYLING } from '../../styling-defaults';
 import { CELL_BORDER_HEIGHT, CELL_PADDING_HEIGHT, LINE_HEIGHT } from '../../utils/styling-utils';
-import { PADDING_LEFT_RIGHT } from '../constants';
+import { MAX_NBR_LINES_OF_TEXT } from '../constants';
 import { BodyStyle, RowMeta } from '../types';
+import { subtractCellPaddingAndBorder } from '../utils/cell-width-utils';
 import useMeasureText from './use-measure-text';
 
 interface Props {
@@ -12,9 +13,6 @@ interface Props {
   columnWidth: number[];
   gridRef: React.RefObject<VariableSizeGrid<any>>;
 }
-
-const PADDING = PADDING_LEFT_RIGHT * 2;
-const BORDER = 1;
 
 const useDynamicRowHeight = ({ bodyStyle, columnWidth, gridRef, rowHeight }: Props) => {
   const rowMeta = useRef<RowMeta>({
@@ -31,11 +29,12 @@ const useDynamicRowHeight = ({ bodyStyle, columnWidth, gridRef, rowHeight }: Pro
   const getCellSize = useCallback(
     (text: string, colIdx: number) => {
       const width = measureText(text);
+      const cellWidth = subtractCellPaddingAndBorder(columnWidth[colIdx]);
       // Cap the max number of supported lines to avoid issues with to large DOM element with 250k rows of data * 10 lines per row
-      const estimatedLineCount = Math.min(10, Math.ceil(width / (columnWidth[colIdx] - PADDING - BORDER)));
-      const height = Math.max(1, estimatedLineCount) * lineHeight;
+      const estimatedLineCount = Math.min(MAX_NBR_LINES_OF_TEXT, Math.ceil(width / cellWidth));
+      const textHeight = Math.max(1, estimatedLineCount) * lineHeight;
 
-      return height + CELL_PADDING_HEIGHT + CELL_BORDER_HEIGHT;
+      return textHeight + CELL_PADDING_HEIGHT + CELL_BORDER_HEIGHT;
     },
     [columnWidth, measureText, lineHeight]
   );
