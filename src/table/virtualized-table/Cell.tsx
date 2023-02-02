@@ -16,6 +16,13 @@ interface CellProps {
   data: ItemData;
 }
 
+// Enables ellipsis support on multi lines of  and is support by all major browsers (https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-line-clamp)
+const lineClampStyling: React.CSSProperties = {
+  display: '-webkit-box',
+  WebkitLineClamp: 10,
+  WebkitBoxOrient: 'vertical',
+};
+
 const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
   const { rowsInPage, columns, bodyStyle, isHoverEnabled } = data;
   const cell = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
@@ -60,9 +67,10 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         <CellText
           style={{
             height: '100%',
-            textOverflow: 'ellipsis', // TODO Does not ellipis when text is on multiple lines
+            textOverflow: 'ellipsis',
             overflow: 'hidden',
             wordBreak: 'break-all', // break-all as the line height logic does not account for word breaks at reasonable places like a white space
+            ...lineClampStyling,
           }}
         >
           {cell.qText}
