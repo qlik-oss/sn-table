@@ -113,6 +113,7 @@ export interface Column {
   id: string;
   isDim: boolean;
   isMasterItem: boolean;
+  fieldId: string;
   isLocked: boolean;
   colIdx: number;
   pageColIdx: number;

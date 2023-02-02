@@ -68,11 +68,19 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
   const isMasterItem = !!info.qLibraryId;
   const autoAlign = isDim ? 'left' : 'right';
 
+  let fieldIndex = 0;
+  let fieldId = '';
+  if (isDim) {
+    fieldIndex = (info as ExtendedNxDimensionInfo).qGroupPos;
+    fieldId = (info as ExtendedNxDimensionInfo).qGroupFieldDefs[fieldIndex];
+  }
+
   return (
     !isHidden && {
       isDim,
       isMasterItem,
       isLocked,
+      fieldId,
       colIdx,
       pageColIdx,
       qApprMaxGlyphCount,

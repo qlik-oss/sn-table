@@ -19,7 +19,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
   const embedListbox = () => {
     // @ts-ignore TODO: no types for `__DO_NOT_USE__`, it will improve when it becomes stable
     // eslint-disable-next-line
-    embed.__DO_NOT_USE__.popover(listboxRef.current, column.label, {
+    embed.__DO_NOT_USE__.popover(listboxRef.current, column.fieldId, {
       anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
       transformOrigin: { vertical: 'top', horizontal: 'left' },
     });
