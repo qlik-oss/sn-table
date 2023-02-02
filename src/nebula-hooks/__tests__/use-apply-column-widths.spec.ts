@@ -4,7 +4,7 @@ import { generateLayout } from '../../__test__/generate-test-data';
 import { applyColumnWidthsFactory } from '../use-apply-column-widths';
 
 describe('applyColumnWidths', () => {
-  const dimPath = '/qHyperCubeDef/qDimension/0/qDef/columnWidth';
+  const dimPath = '/qHyperCubeDef/qDimensions/0/qDef/columnWidth';
   const meaPath = '/qHyperCubeDef/qMeasures/0/qDef/columnWidth';
   const oldColumnWidth = { type: ColumnWidthTypes.PERCENTAGE, percentage: 20 };
   let model: EngineAPI.IGenericObject;
