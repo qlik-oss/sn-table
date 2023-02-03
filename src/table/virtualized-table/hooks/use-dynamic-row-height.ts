@@ -36,7 +36,7 @@ const useDynamicRowHeight = ({ bodyStyle, columnWidth, gridRef, rowHeight, layou
   const { measureText } = useMeasureText(bodyStyle.fontSize, bodyStyle.fontFamily);
   const lineHeight = parseInt(bodyStyle.fontSize ?? COMMON_CELL_STYLING.fontSize, 10) * LINE_HEIGHT_MULTIPLIER;
 
-  // Find a reasonable max lint count to avoid issue where the react-window container DOM element gets to big
+  // Find a reasonable max line count to avoid issue where the react-window container DOM element gets too big
   const maxCellHeightExcluingPadding = MAX_ELEMENT_DOM_SIZE / rowCount - CELL_PADDING_HEIGHT - CELL_BORDER_HEIGHT;
   const maxLineCount = Math.max(
     0,
