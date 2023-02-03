@@ -2,7 +2,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { VariableSizeGrid } from 'react-window';
 import { PageInfo, TableLayout } from '../../../types';
 import { COMMON_CELL_STYLING } from '../../styling-defaults';
-import { CELL_BORDER_HEIGHT, CELL_PADDING_HEIGHT, LINE_HEIGHT } from '../../utils/styling-utils';
+import {
+  CELL_BORDER_HEIGHT,
+  CELL_PADDING_HEIGHT,
+  LINE_HEIGHT as LINE_HEIGHT_MULTIPLIER,
+} from '../../utils/styling-utils';
 import { MAX_NBR_LINES_OF_TEXT } from '../constants';
 import { BodyStyle, RowMeta } from '../types';
 import { subtractCellPaddingAndBorder } from '../utils/cell-width-utils';
@@ -11,13 +15,16 @@ import useMeasureText from './use-measure-text';
 interface Props {
   bodyStyle: BodyStyle;
   rowHeight: number;
+  rowCount: number;
   columnWidth: number[];
   gridRef: React.RefObject<VariableSizeGrid<any>>;
   layout: TableLayout;
   pageInfo: PageInfo;
 }
 
-const useDynamicRowHeight = ({ bodyStyle, columnWidth, gridRef, rowHeight, layout, pageInfo }: Props) => {
+const MAX_ELEMENT_DOM_SIZE = 15_000_000; // Guestimated max height value in px of a DOM element
+
+const useDynamicRowHeight = ({ bodyStyle, columnWidth, gridRef, rowHeight, layout, pageInfo, rowCount }: Props) => {
   const rowMeta = useRef<RowMeta>({
     lastScrollToRatio: 0,
     resetAfterRowIndex: 0, // TODO find a way to implement this, it can potentially improve performance
@@ -27,7 +34,14 @@ const useDynamicRowHeight = ({ bodyStyle, columnWidth, gridRef, rowHeight, layou
   });
   const [estimatedRowHeight, setEstimatedRowHeight] = useState(rowHeight);
   const { measureText } = useMeasureText(bodyStyle.fontSize, bodyStyle.fontFamily);
-  const lineHeight = parseInt(bodyStyle.fontSize ?? COMMON_CELL_STYLING.fontSize, 10) * LINE_HEIGHT;
+  const lineHeight = parseInt(bodyStyle.fontSize ?? COMMON_CELL_STYLING.fontSize, 10) * LINE_HEIGHT_MULTIPLIER;
+
+  // Find a reasonable max lint count to avoid issue where the react-window container DOM element gets to big
+  const maxCellHeightExcluingPadding = MAX_ELEMENT_DOM_SIZE / rowCount - CELL_PADDING_HEIGHT - CELL_BORDER_HEIGHT;
+  const maxLineCount = Math.max(
+    0,
+    Math.min(MAX_NBR_LINES_OF_TEXT, Math.round(maxCellHeightExcluingPadding / lineHeight))
+  );
 
   useEffect(() => {
     rowMeta.current = {
@@ -43,13 +57,12 @@ const useDynamicRowHeight = ({ bodyStyle, columnWidth, gridRef, rowHeight, layou
     (text: string, colIdx: number) => {
       const width = measureText(text);
       const cellWidth = subtractCellPaddingAndBorder(columnWidth[colIdx]);
-      // Cap the max number of supported lines to avoid issues with to large DOM element with 250k rows of data * 10 lines per row
-      const estimatedLineCount = Math.min(MAX_NBR_LINES_OF_TEXT, Math.ceil(width / cellWidth));
+      const estimatedLineCount = Math.min(maxLineCount, Math.ceil(width / cellWidth));
       const textHeight = Math.max(1, estimatedLineCount) * lineHeight;
 
       return textHeight + CELL_PADDING_HEIGHT + CELL_BORDER_HEIGHT;
     },
-    [columnWidth, measureText, lineHeight]
+    [columnWidth, measureText, lineHeight, maxLineCount]
   );
 
   const setCellSize = useCallback(
@@ -67,7 +80,7 @@ const useDynamicRowHeight = ({ bodyStyle, columnWidth, gridRef, rowHeight, layou
         rowMeta.current.heights[rowIdx] = height;
       }
 
-      setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
+      setEstimatedRowHeight(Math.round(rowMeta.current.totalHeight / rowMeta.current.count));
     },
     [getCellSize]
   );
@@ -81,7 +94,7 @@ const useDynamicRowHeight = ({ bodyStyle, columnWidth, gridRef, rowHeight, layou
   // would be cached and used on each render
   gridRef.current?.resetAfterRowIndex(rowMeta.current.resetAfterRowIndex, false);
 
-  return { setCellSize, getRowHeight, rowMeta, estimatedRowHeight };
+  return { setCellSize, getRowHeight, rowMeta, estimatedRowHeight, maxLineCount };
 };
 
 export default useDynamicRowHeight;

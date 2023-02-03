@@ -7,7 +7,7 @@ import EmptyCell from './EmptyCell';
 import CellText from '../components/CellText';
 import getCellStyle from './utils/get-cell-style';
 import { ItemData } from './types';
-import { BORDER_WIDTH, MAX_NBR_LINES_OF_TEXT, PADDING_LEFT_RIGHT } from './constants';
+import { BORDER_WIDTH, PADDING_LEFT_RIGHT } from './constants';
 
 interface CellProps {
   columnIndex: number;
@@ -16,15 +16,8 @@ interface CellProps {
   data: ItemData;
 }
 
-// Enables ellipsis support on multi lines. Should be supported by all major browsers (https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-line-clamp)
-const lineClampStyling: React.CSSProperties = {
-  display: '-webkit-box',
-  WebkitLineClamp: MAX_NBR_LINES_OF_TEXT,
-  WebkitBoxOrient: 'vertical',
-};
-
 const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
-  const { rowsInPage, columns, bodyStyle, isHoverEnabled } = data;
+  const { rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount } = data;
   const cell = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
 
   const rowIsHovered = useContextSelector(TableContext, (value) => value.hoverIndex === rowIndex);
@@ -70,7 +63,9 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
             textOverflow: 'ellipsis',
             overflow: 'hidden',
             wordBreak: 'break-all', // break-all as the line height logic does not account for word breaks at reasonable places like a white space
-            ...lineClampStyling,
+            display: '-webkit-box', // -webkit-box, -webkit-line-clamp and -webkit-box-orient enables support for ellipsis on multiple lines
+            WebkitLineClamp: maxLineCount,
+            WebkitBoxOrient: 'vertical',
           }}
         >
           {cell.qText}

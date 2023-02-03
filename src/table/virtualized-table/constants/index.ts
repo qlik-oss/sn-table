@@ -16,7 +16,7 @@ const PADDING_TOP_BOTTOM = 4;
 
 const BORDER_WIDTH = 1;
 
-const MAX_NBR_LINES_OF_TEXT = 10;
+const MAX_NBR_LINES_OF_TEXT = 50;
 
 export {
   MIN_BODY_ROW_HEIGHT,

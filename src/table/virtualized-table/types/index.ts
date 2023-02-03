@@ -100,6 +100,7 @@ export interface ItemData {
   columns: Column[];
   bodyStyle: BodyStyle;
   isHoverEnabled: boolean;
+  maxLineCount: number;
 }
 
 export type SetCellSize = (text: string, rowIdx: number, colIdx: number) => void;

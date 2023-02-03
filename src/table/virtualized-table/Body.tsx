@@ -36,13 +36,14 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     rowHeight
   );
 
-  const { setCellSize, getRowHeight, rowMeta, estimatedRowHeight } = useDynamicRowHeight({
+  const { setCellSize, getRowHeight, rowMeta, estimatedRowHeight, maxLineCount } = useDynamicRowHeight({
     layout,
     pageInfo,
     bodyStyle,
     rowHeight,
     columnWidth,
     gridRef,
+    rowCount,
   });
 
   const { rowsInPage, deferredRowCount, loadRows, loadColumns } = useData(
@@ -67,8 +68,8 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   });
 
   const itemData = useMemo<ItemData>(
-    () => ({ rowsInPage, columns, bodyStyle, isHoverEnabled }),
-    [rowsInPage, columns, bodyStyle, isHoverEnabled]
+    () => ({ rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount }),
+    [rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount]
   );
 
   useEffect(() => {
@@ -76,7 +77,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   }, [deferredRowCount, syncHeight, innerForwardRef]);
 
   useEffect(() => {
-    syncHeight(innerForwardRef.current?.clientHeight ?? 0);
+    syncHeight(innerForwardRef.current?.clientHeight ?? 0, false);
 
     if (rowMeta.current.lastScrollToRatio === 1) {
       // Hack to deal with the case when a user scrolls to the last row
@@ -109,7 +110,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
       return {
         interpolatedScrollTo: (scrollTopRatio: number, scrollLeft: number) => {
           const innerHeight = (innerForwardRef.current?.clientHeight ?? bodyHeight) - bodyHeight;
-          const scrollTop = innerHeight * scrollTopRatio;
+          const scrollTop = Math.round(innerHeight * scrollTopRatio);
           rowMeta.current.lastScrollToRatio = scrollTopRatio;
 
           if (rowMeta.current.lastScrollToRatio === 1) {
