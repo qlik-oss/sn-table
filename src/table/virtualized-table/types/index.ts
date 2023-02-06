@@ -1,5 +1,5 @@
 import { stardust } from '@nebula.js/stardust';
-import { VariableSizeGrid, VariableSizeList } from 'react-window';
+import { VariableSizeList } from 'react-window';
 import {
   ChangeSortOrder,
   Column,
@@ -7,6 +7,7 @@ import {
   ExtendedTheme,
   ExtendedTranslator,
   PageInfo,
+  Row,
   TableLayout,
 } from '../../../types';
 import { GeneratedStyling } from '../../types';
@@ -75,9 +76,31 @@ export interface BodyProps {
   pageInfo: PageInfo;
   columns: Column[];
   columnWidth: number[];
-  forwardRef: React.RefObject<VariableSizeGrid<any>>;
   innerForwardRef: React.RefObject<HTMLDivElement>;
   bodyStyle: BodyStyle;
   rowHeight: number;
   headerAndTotalsHeight: number;
+  syncHeight: (innerHeight: number, forceSync?: boolean) => void;
 }
+
+export interface BodyRef {
+  interpolatedScrollTo: (scrollTopRatio: number, scrollLeft: number) => void;
+}
+
+export interface RowMeta {
+  lastScrollToRatio: number;
+  resetAfterRowIndex: number;
+  heights: number[];
+  totalHeight: number;
+  count: number;
+}
+
+export interface ItemData {
+  rowsInPage: Row[];
+  columns: Column[];
+  bodyStyle: BodyStyle;
+  isHoverEnabled: boolean;
+  maxLineCount: number;
+}
+
+export type SetCellSize = (text: string, rowIdx: number, colIdx: number) => void;

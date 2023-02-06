@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { PageInfo, Row, Column, TableLayout } from '../../../../types';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
+import { SetCellSize } from '../../types';
 import useGetHyperCubeDataQueue from '../use-get-hypercube-data-queue';
 import { createRow, isColumnMissingData, isRowMissingData } from './utils';
 
@@ -20,9 +21,10 @@ const useData = (
   rowCount: number,
   visibleRowCount: number,
   visibleColumnCount: number,
-  columns: Column[]
+  columns: Column[],
+  setCellSize: SetCellSize
 ): UseData => {
-  const [rowsInPage, setRowsInPage] = useState<Row[]>(Array(rowCount));
+  const [rowsInPage, setRowsInPage] = useState<Row[]>(Array(rowCount).fill(undefined));
 
   const getDataPages = useCallback(
     async (pages: EngineAPI.INxPage[]) => model.getHyperCubeData('/qHyperCubeDef', pages),
@@ -44,7 +46,8 @@ const useData = (
               dataPage.qArea,
               pageRowStartIdx,
               columns,
-              layout.qHyperCube.qSize
+              layout.qHyperCube.qSize,
+              setCellSize
             );
 
             nextRows[pageRowIdx] = row;
@@ -53,7 +56,7 @@ const useData = (
 
         return nextRows;
       }),
-    [pageInfo, columns, layout]
+    [pageInfo, columns, layout, setCellSize]
   );
 
   // The queue takes a EngineAPI.INxPage object as items and adds them to a queue and
@@ -107,7 +110,7 @@ const useData = (
     const qHeight = Math.min(100, layout.qHyperCube.qSize.qcy, visibleRowCount + ROW_DATA_BUFFER_SIZE);
 
     getDataPages([{ qLeft: 0, qTop, qHeight, qWidth }]).then((dataPages) => {
-      setRowsInPage(Array(rowCount)); // Reset rows to initial value
+      setRowsInPage(Array(rowCount).fill(undefined)); // Reset rows to initial value
       handleDataPages(dataPages);
     });
   }, [getDataPages, handleDataPages, layout, visibleRowCount, visibleColumnCount, pageInfo, queue, rowCount]);
