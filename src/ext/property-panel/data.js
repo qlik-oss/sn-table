@@ -197,9 +197,10 @@ const getColumnResize = (env) =>
           defaultValue: 200,
           show: (data) => data.qDef.columnWidth?.type === ColumnWidthTypes.PIXELS,
           change(data) {
-            data.header.fontSize = !data.header.fontSize
-              ? data.header.fontSize
-              : Math.max(1, Math.min(MAX_COLUMN_WIDTH, Math.floor(data.header.fontSize)));
+            data.qDef.columnWidth.pixels =
+              data.qDef.columnWidth.pixels === undefined
+                ? data.qDef.columnWidth.pixels
+                : Math.max(1, Math.min(MAX_COLUMN_WIDTH, data.qDef.columnWidth.pixels));
           },
         },
         sizePercentage: {
@@ -210,9 +211,10 @@ const getColumnResize = (env) =>
           defaultValue: 20,
           show: (data) => data.qDef.columnWidth?.type === ColumnWidthTypes.PERCENTAGE,
           change(data) {
-            data.header.fontSize = !data.header.fontSize
-              ? data.header.fontSize
-              : Math.max(1, Math.min(MAX_COLUMN_PERCENTAGE_WIDTH, Math.floor(data.header.fontSize)));
+            data.qDef.columnWidth.percentage =
+              data.qDef.columnWidth.percentage === undefined
+                ? data.qDef.columnWidth.percentage
+                : Math.max(1, Math.min(MAX_COLUMN_PERCENTAGE_WIDTH, data.qDef.columnWidth.percentage));
           },
         },
       }
