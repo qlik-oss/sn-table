@@ -55,7 +55,6 @@ export const getColumnWidths = (
           addKnownWidth();
           break;
         case ColumnWidthTypes.FILL:
-        case undefined:
           // stores the indexes of fill columns to loop over later
           fillColumnIndexes.push(idx);
           break;
