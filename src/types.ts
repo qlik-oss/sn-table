@@ -40,11 +40,13 @@ export interface ExtendedNxDimensionInfo extends Omit<EngineAPI.INxDimensionInfo
   textAlign: TextAlign;
   qAttrExprInfo: ExtendedNxAttrExprInfo[];
   qLibraryId: string;
+  columnWidth: ColumnWidth;
 }
 
 export interface ExtendedNxMeasureInfo extends EngineAPI.INxMeasureInfo {
   textAlign: TextAlign;
   qAttrExprInfo: ExtendedNxAttrExprInfo[];
+  columnWidth: ColumnWidth;
 }
 
 export interface HyperCube extends Omit<EngineAPI.IHyperCube, 'qDimensionInfo' | 'qMeasureInfo'> {
@@ -108,6 +110,12 @@ export interface Row {
 
 export type SortDirection = 'A' | 'D';
 
+export interface ColumnWidth {
+  type: string;
+  pixels?: number;
+  percentage?: number;
+}
+
 export interface Column {
   id: string;
   isDim: boolean;
@@ -121,6 +129,7 @@ export interface Column {
   qReverseSort: boolean;
   totalInfo?: string;
   qApprMaxGlyphCount: number;
+  columnWidth: ColumnWidth;
 }
 
 export type TotalsPosition = { atTop: boolean; atBottom: boolean };
@@ -182,6 +191,8 @@ export interface AnnounceArgs {
 export type Announce = (arg0: AnnounceArgs) => void;
 
 export type ChangeSortOrder = (column: Column, sortOrder?: SortDirection) => Promise<void>;
+
+export type ApplyColumnWidths = (newColumnSize: ColumnWidth, column: Column) => void;
 
 export interface Galaxy {
   translator: ExtendedTranslator;

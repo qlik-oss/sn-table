@@ -62,7 +62,16 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
   const info = (isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims]) as
     | ExtendedNxMeasureInfo
     | ExtendedNxDimensionInfo;
-  const { qError, qFallbackTitle, textAlign, qAttrExprInfo, qSortIndicator, qReverseSort, qApprMaxGlyphCount } = info;
+  const {
+    qError,
+    qFallbackTitle,
+    textAlign,
+    qAttrExprInfo,
+    qSortIndicator,
+    qReverseSort,
+    qApprMaxGlyphCount,
+    columnWidth,
+  } = info;
   const isHidden = qError?.qErrorCode === 7005;
   const isLocked = isDim && (info as ExtendedNxDimensionInfo).qLocked;
   const autoAlign = isDim ? 'left' : 'right';
@@ -75,6 +84,7 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
       pageColIdx,
       qApprMaxGlyphCount,
       qReverseSort,
+      columnWidth,
       id: `col-${pageColIdx}`,
       label: qFallbackTitle,
       align: !textAlign || textAlign.auto ? autoAlign : textAlign.align,

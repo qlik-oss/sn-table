@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 
-import { COMMON_CELL_STYLING } from '../../styling-defaults';
+import { BORDER_WIDTH, COMMON_CELL_STYLING, PADDING } from '../../styling-defaults';
 
 // ---------- TableHeadWrapper ----------
 
@@ -16,6 +16,9 @@ export const StyledHeadCell = styled(TableCell, {
   ...COMMON_CELL_STYLING,
   ...headerStyle,
   pointer: 'cursor',
+  '&:focus': {
+    boxShadow: 'none',
+  },
 }));
 
 export const StyledSortButton = styled(Button, {
@@ -97,4 +100,45 @@ export const NebulaListBox = styled('div')(({ theme }) => ({
   height: '350px',
   boxSizing: 'border-box',
   background: theme.palette.common.white,
+}));
+
+// ---------- ColumnAdjuster ----------
+
+export const AdjusterHitArea = styled(Box, {
+  shouldForwardProp: (prop: string) => prop !== 'isLastColumn',
+})(({ isLastColumn }) => ({
+  display: 'flex',
+  position: 'absolute',
+  height: '100%',
+  top: 0,
+  left: `100%`,
+  cursor: 'col-resize',
+  // last column padding, other double padding + border
+  width: `${isLastColumn ? PADDING : PADDING * 2 + BORDER_WIDTH}px`,
+  justifyContent: isLastColumn ? 'flex-end' : 'center',
+  marginLeft: '-4px',
+  '&&:hover': {
+    '& .sn-table-adjuster-head-border': {
+      background: '#D9D9D9',
+    },
+  },
+  '&&:active': {
+    '& .sn-table-adjuster-head-border, .sn-table-adjuster-body-border': {
+      background: '#177fe6',
+    },
+  },
+}));
+
+export const AdjusterHeadBorder = styled(Box)({
+  position: 'absolute',
+  height: '100%',
+  width: '3px',
+});
+
+export const AdjusterBodyBorder = styled(Box, {
+  shouldForwardProp: (prop: string) => prop !== 'borderHeight',
+})(({ borderHeight }) => ({
+  position: 'absolute',
+  height: borderHeight,
+  width: '1px',
 }));
