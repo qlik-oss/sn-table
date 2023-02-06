@@ -1,6 +1,6 @@
 import React, { memo, useLayoutEffect, useMemo } from 'react';
 import { VariableSizeList } from 'react-window';
-import { getTotalsCellStyle } from '../utils/styling-utils';
+import { getTotalsStyle } from '../utils/styling-utils';
 import TotalsCell from './TotalsCell';
 import { useContextSelector, TableContext } from '../context';
 import { TotalsProps } from './types';
@@ -8,7 +8,7 @@ import { TotalsProps } from './types';
 const Totals = (props: TotalsProps) => {
   const { rect, forwardRef, columnWidth, pageInfo, totals, rowHeight } = props;
   const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
-  const totalsStyle = useMemo(() => getTotalsCellStyle(layout, theme, totals.atTop), [layout, theme.name(), totals]); // eslint-disable-line react-hooks/exhaustive-deps
+  const totalsStyle = useMemo(() => getTotalsStyle(layout, theme, totals.atTop), [layout, theme.name(), totals]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useLayoutEffect(() => {
     forwardRef?.current?.resetAfterIndex(0, true);

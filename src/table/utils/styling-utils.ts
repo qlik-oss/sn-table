@@ -229,7 +229,7 @@ export const getFooterStyle = (background: BackgroundColors): FooterStyle => {
 /**
  * Gets complete styling for the totals cells. Based on the body style but with the background and borders from header
  */
-export function getTotalsCellStyle(layout: TableLayout, theme: ExtendedTheme, totalsAtTop: boolean) {
+export function getTotalsStyle(layout: TableLayout, theme: ExtendedTheme, totalsAtTop: boolean) {
   const content = layout.components?.[0]?.content;
   const contentStyle = getBaseStyling('content', theme, content);
   const { borderBottomColor, borderTopColor, background } = getHeaderStyle(layout, theme, totalsAtTop);

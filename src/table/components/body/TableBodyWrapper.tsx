@@ -4,7 +4,6 @@ import getCellRenderer from '../../utils/get-cell-renderer';
 import { useContextSelector, TableContext } from '../../context';
 import { StyledBodyRow, StyledBody } from './styles';
 import { addSelectionListeners } from '../../utils/selections-utils';
-import { getBodyStyle } from '../../utils/styling-utils';
 import { handleBodyKeyDown, handleBodyKeyUp } from '../../utils/handle-key-press';
 import { handleClickToFocusBody } from '../../utils/handle-click';
 import { Cell } from '../../../types';
@@ -20,10 +19,16 @@ function TableBodyWrapper({
   areBasicFeaturesEnabled,
 }: TableBodyWrapperProps) {
   const { rows, columns, paginationNeeded, totalsPosition } = tableData;
-  const { selectionsAPI, rootElement, keyboard, layout, theme, constraints } = useContextSelector(
-    TableContext,
-    (value) => value.baseProps
-  );
+  const {
+    selectionsAPI,
+    rootElement,
+    keyboard,
+    layout,
+    constraints,
+    styling: {
+      body: { hoverColors, lastRowBottomBorder, ...cellStyle },
+    },
+  } = useContextSelector(TableContext, (value) => value.baseProps);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
   // constraints.active: true - turn off interactions that affect the state of the visual
@@ -37,10 +42,6 @@ function TableBodyWrapper({
         getCellRenderer(!!stylingIDs.length, isSelectionsEnabled)
       ),
     [columnsStylingIDsJSON, isSelectionsEnabled]
-  );
-  const { hoverColors, lastRowBottomBorder, ...cellStyle } = useMemo(
-    () => getBodyStyle(layout, theme, rows.length, rootElement),
-    [layout, theme, rows.length, rootElement]
   );
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
 
