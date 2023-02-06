@@ -77,8 +77,8 @@ describe('useMeasureText', () => {
         columns[2].columnWidth.type = ColumnWidthTypes.HUG;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([132, 132, 132]);
-        expect(getTotalWidth(widths)).toBe(132 * 3);
+        expect(widths).toEqual([120, 120, 120]);
+        expect(getTotalWidth(widths)).toBe(120 * 3);
       });
     });
 
@@ -122,7 +122,7 @@ describe('useMeasureText', () => {
         columns[2].columnWidth.type = ColumnWidthTypes.HUG;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([234, 234, 132]);
+        expect(widths).toEqual([240, 240, 120]);
         expect(getTotalWidth(widths)).toBe(tableWidth);
       });
     });
