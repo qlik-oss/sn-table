@@ -1,4 +1,5 @@
 import { Column, Row } from '../../../../../types';
+import { SetCellSize } from '../../../types';
 
 const createRow = (
   prevRows: Row[],
@@ -7,7 +8,8 @@ const createRow = (
   qArea: EngineAPI.IRect,
   pageRowStartIdx: number,
   columns: Column[],
-  qSize: EngineAPI.ISize
+  qSize: EngineAPI.ISize,
+  setCellSize: SetCellSize
 ) => {
   const rowIdx = qArea.qTop + matrixRowIdx;
   const pageRowIdx = pageRowStartIdx + matrixRowIdx;
@@ -25,6 +27,8 @@ const createRow = (
       isLastRow: rowIdx === qSize.qcy - 1,
       isLastColumn: colIdx === qSize.qcx - 1,
     };
+
+    setCellSize(cell.qText ?? '', pageRowIdx, colIdx);
   });
 
   return {

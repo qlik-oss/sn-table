@@ -1,15 +1,14 @@
-import React, { memo, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { VariableSizeGrid, VariableSizeList } from 'react-window';
+import React, { memo, useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { VariableSizeList } from 'react-window';
 import { getColumns, getTotalPosition } from '../../handle-data';
 import useColumnSize from './hooks/use-column-size';
 import Body from './Body';
 import FullSizeContainer from './FullSizeContainer';
 import Header from './Header';
-import { TableProps, BodyStyle } from './types';
+import { TableProps, BodyStyle, BodyRef } from './types';
 import { getHeaderStyle, getBodyStyle } from '../utils/styling-utils';
 import useScrollHandler from './hooks/use-scroll-handler';
 import Totals from './Totals';
-import useOnPropsChange from './hooks/use-on-props-change';
 import useTableCount from './hooks/use-table-count';
 import ScrollableContainer from './ScrollableContainer';
 import StickyContainer from './StickyContainer';
@@ -23,7 +22,7 @@ const Table = (props: TableProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);
   const totalsRef = useRef<VariableSizeList>(null);
-  const bodyRef = useRef<VariableSizeGrid>(null);
+  const bodyRef = useRef<BodyRef>(null);
   const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
   const totals = useMemo(() => getTotalPosition(layout), [layout]);
   const headerStyle = useMemo(() => getHeaderStyle(layout, theme, !totals.atTop), [layout, theme, totals]);
@@ -40,20 +39,21 @@ const Table = (props: TableProps) => {
   const { width } = useColumnSize(tableRect, columns, headerStyle, bodyStyle);
   const { rowCount } = useTableCount(layout, pageInfo, tableRect, width, bodyRowHeight);
   const containerWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
-  const [containerHeight, setContainerHeight] = useState(rowCount * bodyRowHeight + headerAndTotalsHeight);
-  const scrollHandler = useScrollHandler(
-    headerRef,
-    totalsRef,
-    bodyRef,
-    innerForwardRef,
-    containerHeight,
-    headerAndTotalsHeight,
-    setContainerHeight
-  );
+  const [containerHeight, setContainerHeight] = useState(rowCount * bodyRowHeight + headerAndTotalsHeight); // Based on single line height, which is going to be out-of-sync when rows have multiple lines
+  const scrollHandler = useScrollHandler(headerRef, totalsRef, bodyRef);
 
-  useOnPropsChange(() => {
-    setContainerHeight(rowCount * bodyRowHeight + headerAndTotalsHeight);
-  }, [rowCount, headerAndTotalsHeight, bodyRowHeight]);
+  const syncHeight = useCallback(
+    (innerHeight: number, forceSync = false) => {
+      const newHeight = innerHeight + headerAndTotalsHeight;
+      // Handle an issue that occur when the measured row heights needs a scrollbar but single line height does not
+      if (containerHeight < tableRect.height && newHeight > tableRect.height) {
+        setContainerHeight(newHeight);
+      } else if (forceSync) {
+        setContainerHeight(newHeight);
+      }
+    },
+    [containerHeight, headerAndTotalsHeight, tableRect.height]
+  );
 
   useLayoutEffect(() => {
     if (ref.current) {
@@ -89,15 +89,16 @@ const Table = (props: TableProps) => {
           />
           {totals.atTop ? TotalsComponent : null}
           <Body
+            ref={bodyRef}
+            innerForwardRef={innerForwardRef}
             bodyStyle={bodyStyle}
             rect={tableRect}
             pageInfo={pageInfo}
             columns={columns}
             columnWidth={width}
-            forwardRef={bodyRef}
-            innerForwardRef={innerForwardRef}
             rowHeight={bodyRowHeight}
             headerAndTotalsHeight={headerAndTotalsHeight}
+            syncHeight={syncHeight}
           />
           {totals.atBottom ? TotalsComponent : null}
         </StickyContainer>

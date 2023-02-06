@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Column } from '../../../types';
 import { GeneratedStyling } from '../../types';
 import { Rect } from '../types';
+import { appendCellPaddingAndBorder } from '../utils/cell-width-utils';
 import useMeasureText from './use-measure-text';
 
 const useColumnSize = (rect: Rect, columns: Column[], headerStyle: GeneratedStyling, bodyStyle: GeneratedStyling) => {
@@ -10,7 +11,7 @@ const useColumnSize = (rect: Rect, columns: Column[], headerStyle: GeneratedStyl
 
   const width = useMemo(() => {
     const measuredWidths = columns.map((col) =>
-      Math.max(measureText(col.label), estimateWidth(col.qApprMaxGlyphCount))
+      appendCellPaddingAndBorder(Math.max(measureText(col.label), estimateWidth(col.qApprMaxGlyphCount)))
     );
     const totalWidth = measuredWidths.reduce((sum, w) => sum + w, 0);
 
