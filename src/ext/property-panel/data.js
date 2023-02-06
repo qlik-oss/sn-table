@@ -1,5 +1,5 @@
 import Modifiers from 'qlik-modifiers';
-import { ColumnWidthTypes } from '../../table/constants';
+import { ColumnWidthTypes, MAX_COLUMN_PERCENTAGE_WIDTH, MAX_COLUMN_WIDTH } from '../../table/constants';
 
 const columnCommonHidden = {
   autoSort: {
@@ -187,26 +187,33 @@ const getColumnResize = (env) =>
               translation: 'Object.Table.Column.Percentage',
             },
           ],
-          defaultValue: 'fill',
+          defaultValue: ColumnWidthTypes.FILL,
         },
         sizePixels: {
           ref: 'qDef.columnWidth.pixels',
           translation: 'Object.Table.Column.PixelWidth',
           type: 'number',
           expression: 'optional',
-          min: 1,
           defaultValue: 200,
           show: (data) => data.qDef.columnWidth?.type === ColumnWidthTypes.PIXELS,
+          change(data) {
+            data.header.fontSize = !data.header.fontSize
+              ? data.header.fontSize
+              : Math.max(1, Math.min(MAX_COLUMN_WIDTH, Math.floor(data.header.fontSize)));
+          },
         },
         sizePercentage: {
           ref: 'qDef.columnWidth.percentage',
           translation: 'Object.Table.Column.PercentageWidth',
           type: 'number',
           expression: 'optional',
-          min: 1,
-          max: 100,
           defaultValue: 20,
           show: (data) => data.qDef.columnWidth?.type === ColumnWidthTypes.PERCENTAGE,
+          change(data) {
+            data.header.fontSize = !data.header.fontSize
+              ? data.header.fontSize
+              : Math.max(1, Math.min(MAX_COLUMN_PERCENTAGE_WIDTH, Math.floor(data.header.fontSize)));
+          },
         },
       }
     : {};

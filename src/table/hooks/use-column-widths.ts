@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import { Column } from '../../types';
-import { MIN_COLUMN_WIDTH, ColumnWidthTypes } from '../constants';
+import {
+  MIN_COLUMN_WIDTH,
+  ColumnWidthTypes,
+  DEFAULT_COLUMN_PIXEL_WIDTH,
+  DEFAULT_COLUMN_PERCENTAGE_WIDTH,
+  MAX_COLUMN_WIDTH,
+} from '../constants';
 import useDidUpdateEffect from './use-did-update-effect';
 import useMeasureText, { MeasureTextHook } from '../virtualized-table/hooks/use-measure-text';
 
@@ -31,19 +37,17 @@ export const getColumnWidths = (
       let newWidth = 0;
 
       const addKnownWidth = () => {
-        columnWidths[idx] = Math.max(MIN_COLUMN_WIDTH, newWidth);
+        columnWidths[idx] = Math.min(MAX_COLUMN_WIDTH, Math.max(MIN_COLUMN_WIDTH, newWidth));
         sumFillWidths -= columnWidths[idx];
       };
 
       switch (type) {
         case ColumnWidthTypes.PIXELS:
-          if (!pixels) throw new Error(`pixel value is not defined`);
-          newWidth = pixels;
+          newWidth = pixels || DEFAULT_COLUMN_PIXEL_WIDTH;
           addKnownWidth();
           break;
         case ColumnWidthTypes.PERCENTAGE:
-          if (!percentage) throw new Error(`pixel value is not defined`);
-          newWidth = (percentage / 100) * tableWidth;
+          newWidth = ((percentage || DEFAULT_COLUMN_PERCENTAGE_WIDTH) / 100) * tableWidth;
           addKnownWidth();
           break;
         case ColumnWidthTypes.HUG:

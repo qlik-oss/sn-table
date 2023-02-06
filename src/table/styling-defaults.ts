@@ -33,11 +33,14 @@ export const SELECTION_STYLING = {
     'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px)',
 };
 
+export const PADDING = 4;
+export const BORDER_WIDTH = 1;
+
 export const COMMON_CELL_STYLING = {
   height: 'auto',
   fontSize: '12px',
   lineHeight: 'unset',
-  padding: '4px',
+  padding: `${PADDING}PX`,
   borderStyle: 'solid',
   borderWidth: '0px 1px 1px 0px',
   userSelect: 'none',

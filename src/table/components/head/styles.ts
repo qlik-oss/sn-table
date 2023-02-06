@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 
-import { COMMON_CELL_STYLING } from '../../styling-defaults';
+import { BORDER_WIDTH, COMMON_CELL_STYLING, PADDING } from '../../styling-defaults';
 
 // ---------- TableHeadWrapper ----------
 
@@ -16,6 +16,9 @@ export const StyledHeadCell = styled(TableCell, {
   ...COMMON_CELL_STYLING,
   ...headerStyle,
   pointer: 'cursor',
+  '&:focus': {
+    boxShadow: 'none',
+  },
 }));
 
 export const StyledSortButton = styled(Button, {
@@ -111,7 +114,7 @@ export const AdjusterHitArea = styled(Box, {
   left: `100%`,
   cursor: 'col-resize',
   // last column padding, other double padding + border
-  width: isLastColumn ? '4px' : '9px',
+  width: `${isLastColumn ? PADDING : PADDING * 2 + BORDER_WIDTH}px`,
   justifyContent: isLastColumn ? 'flex-end' : 'center',
   marginLeft: '-4px',
   '&&:hover': {

@@ -5,10 +5,11 @@ import TableRow from '@mui/material/TableRow';
 import { useContextSelector, TableContext } from '../../context';
 import { getHeaderStyle } from '../../utils/styling-utils';
 import { TableHeadWrapperProps } from '../../types';
-import { FullSortDirection } from '../../constants';
+import { DEFAULT_COLUMN_PIXEL_WIDTH, FullSortDirection } from '../../constants';
 import { StyledHeadCell } from './styles';
 import HeadCellContent from './HeadCellContent';
 import ColumnAdjuster from './ColumnAdjuster';
+import { BORDER_WIDTH, PADDING } from '../../styling-defaults';
 
 function TableHeadWrapper({ tableData, areBasicFeaturesEnabled }: TableHeadWrapperProps) {
   const { columns, totalsPosition } = tableData;
@@ -37,7 +38,9 @@ function TableHeadWrapper({ tableData, areBasicFeaturesEnabled }: TableHeadWrapp
 
           const widthStyle = {
             ...(areBasicFeaturesEnabled && {
-              width: (columnWidths[columnIndex] || 200) - (isLastColumn ? 8 : 9), // subtract padding and border
+              width:
+                (columnWidths[columnIndex] || DEFAULT_COLUMN_PIXEL_WIDTH) -
+                (isLastColumn ? PADDING * 2 : PADDING * 2 + BORDER_WIDTH),
               zIndex: columns.length - columnIndex,
             }),
           };
