@@ -1,7 +1,9 @@
 import styled from '@mui/system/styled';
 import Box from '@mui/material/Box';
 import TableContainer from '@mui/material/TableContainer';
+import Table from '@mui/material/Table';
 import { PAGINATION_HEIGHT } from '../constants';
+import { BORDER_WIDTH } from '../styling-defaults';
 
 // ---------- AnnounceWrapper ----------
 
@@ -28,15 +30,26 @@ export const StyledTableWrapper = styled(Box, {
 export const StyledTableContainer = styled(TableContainer, {
   shouldForwardProp: (prop: string) => prop !== 'fullHeight' && prop !== 'constraints',
 })(({ fullHeight, constraints }) => ({
-  height: fullHeight ? '100%' : `calc(100% - ${PAGINATION_HEIGHT + 1}px)`, // + 1 for top border
+  height: fullHeight ? '100%' : `calc(100% - ${PAGINATION_HEIGHT + BORDER_WIDTH}px)`,
   overflow: constraints.active ? 'hidden' : 'auto',
   border: 'none',
 }));
 
+export const StyledTable = styled(Table, {
+  shouldForwardProp: (prop: string) => prop !== 'customWidth',
+})(({ customWidth }) =>
+  customWidth
+    ? {
+        tableLayout: 'fixed',
+        width: 'max-content',
+      }
+    : {}
+);
+
 // ---------- CellText ----------
 
 export const StyledCellText = styled(Box, {
-  shouldForwardProp: (prop: string) => prop !== 'singleLine' && prop !== 'singleLine',
+  shouldForwardProp: (prop: string) => prop !== 'style' && prop !== 'singleLine',
 })(({ style, singleLine }) => ({
   ...style,
   lineHeight: 'calc(4/3)',

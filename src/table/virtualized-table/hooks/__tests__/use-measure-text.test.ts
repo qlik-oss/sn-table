@@ -21,7 +21,7 @@ describe('useMeasureText', () => {
       measureTextMock.mockReturnValue({ width: 150 });
       const { result } = renderHook(() => useMeasureText('13px', 'font'));
 
-      expect(result.current.estimateWidth(2)).toBe(332);
+      expect(result.current.estimateWidth(2)).toBe(300);
     });
   });
 
@@ -30,7 +30,7 @@ describe('useMeasureText', () => {
       measureTextMock.mockReturnValue({ width: 150 });
       const { result } = renderHook(() => useMeasureText('13px', 'font'));
 
-      expect(result.current.measureText('some string')).toBe(182);
+      expect(result.current.measureText('some string')).toBe(150);
     });
   });
 });

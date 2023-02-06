@@ -1,4 +1,5 @@
 import Modifiers from 'qlik-modifiers';
+import { ColumnWidthTypes, MAX_COLUMN_PERCENTAGE_WIDTH, MAX_COLUMN_WIDTH } from '../../table/constants';
 
 const columnCommonHidden = {
   autoSort: {
@@ -160,6 +161,65 @@ const getTotalsAggr = (env) => ({
   show: !env?.anything?.sense?.isUnsupportedFeature?.('totals'),
 });
 
+const getColumnResize = (env) =>
+  env.flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES')
+    ? {
+        type: {
+          type: 'string',
+          component: 'dropdown',
+          ref: 'qDef.columnWidth.type',
+          translation: 'Object.Table.Column.ResizeType',
+          options: [
+            {
+              value: ColumnWidthTypes.FILL,
+              translation: 'Object.Table.Column.Fill',
+            },
+            {
+              value: ColumnWidthTypes.HUG,
+              translation: 'Object.Table.Column.Hug',
+            },
+            {
+              value: ColumnWidthTypes.PIXELS,
+              translation: 'Object.Table.Column.Pixels',
+            },
+            {
+              value: ColumnWidthTypes.PERCENTAGE,
+              translation: 'Object.Table.Column.Percentage',
+            },
+          ],
+          defaultValue: ColumnWidthTypes.FILL,
+        },
+        sizePixels: {
+          ref: 'qDef.columnWidth.pixels',
+          translation: 'Object.Table.Column.PixelWidth',
+          type: 'number',
+          expression: 'optional',
+          defaultValue: 200,
+          show: (data) => data.qDef.columnWidth?.type === ColumnWidthTypes.PIXELS,
+          change(data) {
+            data.qDef.columnWidth.pixels =
+              data.qDef.columnWidth.pixels === undefined
+                ? data.qDef.columnWidth.pixels
+                : Math.max(1, Math.min(MAX_COLUMN_WIDTH, data.qDef.columnWidth.pixels));
+          },
+        },
+        sizePercentage: {
+          ref: 'qDef.columnWidth.percentage',
+          translation: 'Object.Table.Column.PercentageWidth',
+          type: 'number',
+          expression: 'optional',
+          defaultValue: 20,
+          show: (data) => data.qDef.columnWidth?.type === ColumnWidthTypes.PERCENTAGE,
+          change(data) {
+            data.qDef.columnWidth.percentage =
+              data.qDef.columnWidth.percentage === undefined
+                ? data.qDef.columnWidth.percentage
+                : Math.max(1, Math.min(MAX_COLUMN_PERCENTAGE_WIDTH, data.qDef.columnWidth.percentage));
+          },
+        },
+      }
+    : {};
+
 const getData = (env) =>
   env.flags.isEnabled('PS_18291_TABLE_EXPLORATION')
     ? {
@@ -209,6 +269,7 @@ const getData = (env) =>
               ...columnCommonHidden,
               ...columnExpressionItems,
               ...textAlignItems,
+              ...getColumnResize(env),
             },
           },
           measures: {
@@ -233,6 +294,7 @@ const getData = (env) =>
               ...columnExpressionItems,
               ...textAlignItems,
               totalsAggr: getTotalsAggr(env),
+              ...getColumnResize(env),
             },
           },
         },
