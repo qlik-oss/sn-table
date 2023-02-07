@@ -8,7 +8,10 @@ import {
   MAX_COLUMN_WIDTH,
 } from '../constants';
 import useDidUpdateEffect from './use-did-update-effect';
-import useMeasureText, { MeasureTextHook } from '../virtualized-table/hooks/use-measure-text';
+import useMeasureText from '../virtualized-table/hooks/use-measure-text';
+import { TableStyling } from '../types';
+
+type GetHugWidth = (headLabel: string, totalsLabel: string, glyphCount: number) => number;
 
 /**
  * Calculates column widths in pixels, based on column settings and the table width.
@@ -16,11 +19,7 @@ import useMeasureText, { MeasureTextHook } from '../virtualized-table/hooks/use-
  * Then the remaining width is divided equally between the 'fill' columns, if there is any
  * The widths are sorted in the order they will be displayed
  */
-export const getColumnWidths = (
-  columns: Column[],
-  tableWidth: number,
-  { measureText, estimateWidth }: MeasureTextHook
-) => {
+export const getColumnWidths = (columns: Column[], tableWidth: number, getHugWidth: GetHugWidth) => {
   if (!columns?.length || tableWidth === 0) return [];
 
   const columnWidths: number[] = [];
@@ -33,6 +32,7 @@ export const getColumnWidths = (
         columnWidth: { type, pixels, percentage },
         label,
         qApprMaxGlyphCount,
+        totalInfo,
       } = col;
       let newWidth = 0;
 
@@ -51,7 +51,7 @@ export const getColumnWidths = (
           addKnownWidth();
           break;
         case ColumnWidthTypes.HUG:
-          newWidth = Math.max(measureText(label), estimateWidth(qApprMaxGlyphCount));
+          newWidth = getHugWidth(label, totalInfo, qApprMaxGlyphCount);
           addKnownWidth();
           break;
         case ColumnWidthTypes.FILL:
@@ -79,14 +79,27 @@ export const getColumnWidths = (
 
 const useColumnWidths = (
   columns: Column[],
-  tableWidth: number
+  tableWidth: number,
+  { head, body }: TableStyling
 ): [number[], React.Dispatch<React.SetStateAction<number[]>>] => {
-  const measureTextMethods = useMeasureText('13px', 'Arial');
-  // TODO use actual font size (and font eventually)
-  const [columnWidths, setColumnWidths] = useState(getColumnWidths(columns, tableWidth, measureTextMethods));
+  const measureHeadLabel = useMeasureText(head.fontSize, head.fontFamily).measureText;
+  const { measureText, estimateWidth } = useMeasureText(body.fontSize, body.fontFamily);
+  const getHugWidth = (headLabel: string, totalsLabel: string, glyphCount: number) => {
+    console.log(
+      'head',
+      measureHeadLabel(headLabel),
+      'totals',
+      measureText(totalsLabel),
+      'body',
+      estimateWidth(glyphCount)
+    );
+    return Math.max(measureHeadLabel(headLabel), measureText(totalsLabel), estimateWidth(glyphCount));
+  };
+
+  const [columnWidths, setColumnWidths] = useState(getColumnWidths(columns, tableWidth, getHugWidth));
 
   useDidUpdateEffect(() => {
-    setColumnWidths(getColumnWidths(columns, tableWidth, measureTextMethods));
+    setColumnWidths(getColumnWidths(columns, tableWidth, getHugWidth));
   }, [columns, tableWidth]);
 
   return [columnWidths, setColumnWidths];
