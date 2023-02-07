@@ -6,7 +6,6 @@ import Body from './Body';
 import FullSizeContainer from './FullSizeContainer';
 import Header from './Header';
 import { TableProps, BodyStyle, BodyRef } from './types';
-import { getHeaderStyle, getBodyStyle } from '../utils/styling-utils';
 import useScrollHandler from './hooks/use-scroll-handler';
 import Totals from './Totals';
 import useTableCount from './hooks/use-table-count';
@@ -18,25 +17,24 @@ import getHeights from './utils/get-height';
 
 const Table = (props: TableProps) => {
   const { rect, pageInfo, paginationNeeded } = props;
-  const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, theme, styling } = useContextSelector(TableContext, (value) => value.baseProps);
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);
   const totalsRef = useRef<VariableSizeList>(null);
   const bodyRef = useRef<BodyRef>(null);
   const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
   const totals = useMemo(() => getTotalPosition(layout), [layout]);
-  const headerStyle = useMemo(() => getHeaderStyle(layout, theme, !totals.atTop), [layout, theme, totals]);
   const bodyStyle = useMemo<BodyStyle>(
     () => ({
-      ...getBodyStyle(layout, theme),
+      ...styling.body,
       background: theme.background.color ?? 'transparent',
     }),
     [layout, theme.name()] // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const { headerRowHeight, bodyRowHeight, headerAndTotalsHeight } = getHeights(headerStyle, bodyStyle, totals);
+  const { headerRowHeight, bodyRowHeight, headerAndTotalsHeight } = getHeights(styling.head, bodyStyle, totals);
   const columns = useMemo(() => getColumns(layout), [layout]);
   const tableRect = useMemo(() => toTableRect(rect, paginationNeeded), [rect, paginationNeeded]);
-  const { width } = useColumnSize(tableRect, columns, headerStyle, bodyStyle);
+  const { width } = useColumnSize(tableRect, columns, styling.head, bodyStyle);
   const { rowCount } = useTableCount(layout, pageInfo, tableRect, width, bodyRowHeight);
   const containerWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
   const [containerHeight, setContainerHeight] = useState(rowCount * bodyRowHeight + headerAndTotalsHeight); // Based on single line height, which is going to be out-of-sync when rows have multiple lines
@@ -79,7 +77,7 @@ const Table = (props: TableProps) => {
       <FullSizeContainer width={containerWidth} height={containerHeight}>
         <StickyContainer rect={tableRect}>
           <Header
-            headerStyle={headerStyle}
+            headerStyle={styling.head}
             rect={tableRect}
             pageInfo={pageInfo}
             columns={columns}

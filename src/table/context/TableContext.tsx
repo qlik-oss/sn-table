@@ -4,6 +4,7 @@ import { createSelectorProvider } from './createSelectorProvider';
 import { ContextValue, ContextProviderProps } from '../types';
 import useSelectionReducer from '../hooks/use-selection-reducer';
 import useColumnWidths from '../hooks/use-column-widths';
+import useTableStyling from '../hooks/use-table-styling';
 import { TableData } from '../../types';
 
 // In order to not have typing issues when using properties on the context,
@@ -14,11 +15,11 @@ export const TableContext = createContext<ContextValue>({} as ContextValue);
 
 const ProviderWithSelector = createSelectorProvider(TableContext);
 
-const EMPTY_TABLE_DATA = { rows: [], columns: [] } as unknown as TableData;
+const EMPTY_TABLE_DATA = { rows: [], columns: [], totalsPosition: {} } as unknown as TableData;
 
 export const TableContextProvider = ({
   children,
-  tableData = EMPTY_TABLE_DATA, // Always use the same array to avoid triggers infinite loop in use-selection-reducer.ts
+  tableData = EMPTY_TABLE_DATA, // Always use the same object to avoid triggers infinite loop in use-selection-reducer.ts
   selectionsAPI,
   cellCoordMock,
   selectionDispatchMock,
@@ -39,6 +40,7 @@ export const TableContextProvider = ({
   const [selectionState, selectionDispatch] = useSelectionReducer(tableData.rows, selectionsAPI);
   const [hoverIndex, setHoverIndex] = useState(-1);
   const [columnWidths, setColumnWidths] = useColumnWidths(tableData.columns, tableWidth);
+  const styling = useTableStyling(layout, theme, tableData, rootElement);
   const baseProps = useMemo(
     () => ({
       selectionsAPI,
@@ -52,6 +54,7 @@ export const TableContextProvider = ({
       embed,
       changeSortOrder,
       applyColumnWidths,
+      styling,
     }),
     [
       selectionsAPI,
@@ -65,6 +68,7 @@ export const TableContextProvider = ({
       embed,
       changeSortOrder,
       applyColumnWidths,
+      styling,
     ]
   );
 

@@ -1,9 +1,8 @@
-import React, { memo, useEffect, useMemo, useRef } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
 import { useContextSelector, TableContext } from '../../context';
-import { getHeaderStyle } from '../../utils/styling-utils';
 import { TableHeadWrapperProps } from '../../types';
 import { DEFAULT_COLUMN_PIXEL_WIDTH, FullSortDirection } from '../../constants';
 import { StyledHeadCell } from './styles';
@@ -12,19 +11,15 @@ import ColumnAdjuster from './ColumnAdjuster';
 import { BORDER_WIDTH, PADDING } from '../../styling-defaults';
 
 function TableHeadWrapper({ tableData, areBasicFeaturesEnabled }: TableHeadWrapperProps) {
-  const { columns, totalsPosition } = tableData;
-  const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { columns } = tableData;
+  const { layout, styling } = useContextSelector(TableContext, (value) => value.baseProps);
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
-  const headerStyle = useMemo(
-    () => getHeaderStyle(layout, theme, !totalsPosition.atTop),
-    [layout, theme, totalsPosition]
-  );
   const headRowRef = useRef<HTMLTableRowElement>(null);
 
   useEffect(() => {
     headRowRef.current && setHeadRowHeight(headRowRef.current.getBoundingClientRect().height);
-  }, [headRowRef.current, headerStyle.fontSize, headRowRef.current?.getBoundingClientRect().height]);
+  }, [headRowRef.current, styling.head.fontSize, headRowRef.current?.getBoundingClientRect().height]);
 
   return (
     <TableHead>
@@ -47,7 +42,7 @@ function TableHeadWrapper({ tableData, areBasicFeaturesEnabled }: TableHeadWrapp
 
           return (
             <StyledHeadCell
-              headerStyle={{ ...headerStyle, ...widthStyle }}
+              headerStyle={{ ...styling.head, ...widthStyle }}
               key={column.id}
               align={column.align}
               className="sn-table-head-cell sn-table-cell"
