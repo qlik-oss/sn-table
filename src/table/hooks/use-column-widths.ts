@@ -84,17 +84,8 @@ const useColumnWidths = (
 ): [number[], React.Dispatch<React.SetStateAction<number[]>>] => {
   const measureHeadLabel = useMeasureText(head.fontSize, head.fontFamily).measureText;
   const { measureText, estimateWidth } = useMeasureText(body.fontSize, body.fontFamily);
-  const getHugWidth = (headLabel: string, totalsLabel: string, glyphCount: number) => {
-    console.log(
-      'head',
-      measureHeadLabel(headLabel),
-      'totals',
-      measureText(totalsLabel),
-      'body',
-      estimateWidth(glyphCount)
-    );
-    return Math.max(measureHeadLabel(headLabel), measureText(totalsLabel), estimateWidth(glyphCount));
-  };
+  const getHugWidth = (headLabel: string, totalsLabel: string, glyphCount: number) =>
+    Math.max(measureHeadLabel(headLabel), measureText(totalsLabel), estimateWidth(glyphCount));
 
   const [columnWidths, setColumnWidths] = useState(getColumnWidths(columns, tableWidth, getHugWidth));
 
