@@ -8,8 +8,10 @@ const useTableStyling = (layout: TableLayout, theme: ExtendedTheme, tableData: T
     const body = getBodyStyle(layout, theme, tableData.rows.length, rootElement);
     const head = getHeaderStyle(layout, theme, !totalsAtTop);
     const totals = getTotalsStyle(layout, theme, totalsAtTop);
+
     return { body, head, totals };
-  }, [layout, theme, tableData, rootElement]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [layout, theme.name(), tableData, rootElement]);
 
   return styling;
 };
