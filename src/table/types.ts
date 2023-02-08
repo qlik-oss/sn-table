@@ -81,6 +81,7 @@ export interface ContextValue {
   columnWidths: number[];
   setColumnWidths: React.Dispatch<React.SetStateAction<number[]>>;
   baseProps: {
+    app: EngineAPI.IApp | undefined;
     selectionsAPI: ExtendedSelectionAPI;
     layout: TableLayout;
     model?: EngineAPI.IGenericObject;
@@ -181,6 +182,7 @@ export interface HandleResetFocusProps {
 
 export interface ContextProviderProps {
   children: JSX.Element;
+  app?: EngineAPI.IApp;
   tableData?: TableData;
   selectionsAPI: ExtendedSelectionAPI;
   cellCoordMock?: [number, number];
@@ -261,7 +263,7 @@ export interface HeadCellMenuItem {
   id: number;
   icon: React.ReactElement;
   itemTitle: string;
-  isDisabled: boolean;
+  enabled: boolean;
   hasDivider?: boolean;
   onClick: (evt: React.MouseEvent<HTMLLIElement>) => void;
 }

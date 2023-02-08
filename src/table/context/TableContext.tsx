@@ -17,6 +17,7 @@ const ProviderWithSelector = createSelectorProvider(TableContext);
 const EMPTY_TABLE_DATA = { rows: [], columns: [] } as unknown as TableData;
 
 export const TableContextProvider = ({
+  app,
   children,
   tableData = EMPTY_TABLE_DATA, // Always use the same array to avoid triggers infinite loop in use-selection-reducer.ts
   selectionsAPI,
@@ -41,6 +42,7 @@ export const TableContextProvider = ({
   const [columnWidths, setColumnWidths] = useColumnWidths(tableData.columns, tableWidth);
   const baseProps = useMemo(
     () => ({
+      app,
       selectionsAPI,
       layout,
       model,
@@ -54,6 +56,7 @@ export const TableContextProvider = ({
       applyColumnWidths,
     }),
     [
+      app,
       selectionsAPI,
       layout,
       model,

@@ -15,6 +15,8 @@ import { ApplyColumnWidths } from '../types';
 
 export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   const {
+    app,
+    model,
     direction,
     selectionsAPI,
     layout,
@@ -34,6 +36,8 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
     <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : undefined}>
       <ThemeProvider theme={muiTheme}>
         <TableContextProvider
+          app={app}
+          model={model as EngineAPI.IGenericObject}
           tableData={props.tableData}
           selectionsAPI={selectionsAPI}
           layout={layout}
