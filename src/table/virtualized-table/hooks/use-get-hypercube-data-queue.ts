@@ -1,9 +1,5 @@
 import { useMemo, useRef } from 'react';
 
-export interface AbortablePromise {
-  isCancelled: boolean;
-}
-
 const pageToKey = ({ qLeft, qTop, qWidth, qHeight }: EngineAPI.INxPage) => `${qLeft}-${qTop}-${qWidth}-${qHeight}`;
 
 const useGetHyperCubeDataQueue = (
