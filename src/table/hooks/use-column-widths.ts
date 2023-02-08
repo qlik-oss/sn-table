@@ -87,7 +87,7 @@ const useColumnWidths = (
   const getHugWidth = (headLabel: string, totalsLabel: string, glyphCount: number) =>
     Math.max(measureHeadLabel(headLabel), measureText(totalsLabel), estimateWidth(glyphCount));
 
-  const [columnWidths, setColumnWidths] = useState(getColumnWidths(columns, tableWidth, getHugWidth));
+  const [columnWidths, setColumnWidths] = useState(() => getColumnWidths(columns, tableWidth, getHugWidth));
 
   useDidUpdateEffect(() => {
     setColumnWidths(getColumnWidths(columns, tableWidth, getHugWidth));
