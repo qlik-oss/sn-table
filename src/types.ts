@@ -127,7 +127,7 @@ export interface Column {
   stylingIDs: string[];
   sortDirection: SortDirection;
   qReverseSort: boolean;
-  totalInfo?: string;
+  totalInfo: string;
   qApprMaxGlyphCount: number;
   columnWidth: ColumnWidth;
 }
