@@ -22,9 +22,9 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
   const listboxRef = useRef<HTMLDivElement>(null);
   const showSearchMenuItem = column.isDim && !column.isMasterItem;
   const [fieldInstance, setFieldInstance] = useState<EngineAPI.IField | null>(null);
-  const [selectionAnalysis, setSelectionAnalysis] = useState<Record<string, boolean>>({
+  const [enabledSelectionActions, setEnabledSelectionActions] = useState<Record<string, boolean>>({
     canSelectAll: false,
-    clearSelections: false,
+    canClearSelections: false,
     canSelectPossible: false,
     canSelectAlternative: false,
     canSelectExcluded: false,
@@ -73,69 +73,69 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
                 id: 1,
                 itemTitle: translator.get('SNTable.MenuItem.SelectAll'),
                 onClick: async () => {
-                  await fieldInstance?.selectAll();
                   setOpenMenuDropdown(false);
+                  await fieldInstance?.selectAll();
                 },
                 icon: <SelectAll />,
-                enabled: selectionAnalysis.canSelectAll,
+                enabled: enabledSelectionActions.canSelectAll,
               },
               {
                 id: 2,
                 itemTitle: translator.get('SNTable.MenuItem.ClearSelections'),
                 onClick: async () => {
-                  await fieldInstance?.clear();
                   setOpenMenuDropdown(false);
+                  await fieldInstance?.clear();
                 },
                 icon: <ClearSelections />,
-                enabled: selectionAnalysis.clearSelections,
+                enabled: enabledSelectionActions.canClearSelections,
               },
               {
                 id: 3,
                 itemTitle: translator.get('SNTable.MenuItem.SelectPossible'),
                 onClick: async () => {
-                  await fieldInstance?.selectPossible();
                   setOpenMenuDropdown(false);
+                  await fieldInstance?.selectPossible();
                 },
                 icon: <SelectPossible />,
-                enabled: selectionAnalysis.canSelectPossible,
+                enabled: enabledSelectionActions.canSelectPossible,
               },
               {
                 id: 4,
                 itemTitle: translator.get('SNTable.MenuItem.SelectAlternative'),
                 onClick: async () => {
-                  await fieldInstance?.selectAlternative();
                   setOpenMenuDropdown(false);
+                  await fieldInstance?.selectAlternative();
                 },
                 icon: <SelectAlternative />,
-                enabled: selectionAnalysis.canSelectAlternative,
+                enabled: enabledSelectionActions.canSelectAlternative,
               },
               {
                 id: 5,
                 itemTitle: translator.get('SNTable.MenuItem.SelectExcluded'),
                 onClick: async () => {
-                  await fieldInstance?.selectExcluded();
                   setOpenMenuDropdown(false);
+                  await fieldInstance?.selectExcluded();
                 },
                 icon: <SelectExcluded />,
-                enabled: selectionAnalysis.canSelectExcluded,
+                enabled: enabledSelectionActions.canSelectExcluded,
               },
             ],
           ]
         : []),
     ],
-    [translator, showSearchMenuItem, fieldInstance, selectionAnalysis]
+    [translator, showSearchMenuItem, fieldInstance, enabledSelectionActions]
   );
 
   const checkStateCountByKey = <T,>(keys: (keyof T)[], obj: T): boolean => {
     return keys.some((key) => obj[key] > 0);
   };
 
-  const runSelectionAnalysis = (layout: TableLayout) => {
+  const updateEnabledSelectionActions = (layout: TableLayout) => {
     const dimInfo = layout.qHyperCube.qDimensionInfo.find((dim) => dim.qFallbackTitle === column.label);
     if (!dimInfo) return;
-    setSelectionAnalysis({
+    setEnabledSelectionActions({
       canSelectAll: checkStateCountByKey(['qOption', 'qAlternative', 'qExcluded', 'qDeselected'], dimInfo.qStateCounts),
-      clearSelections: checkStateCountByKey(['qSelected'], dimInfo.qStateCounts),
+      canClearSelections: checkStateCountByKey(['qSelected'], dimInfo.qStateCounts),
       canSelectPossible: checkStateCountByKey(['qOption'], dimInfo.qStateCounts),
       canSelectAlternative: checkStateCountByKey(['qAlternative'], dimInfo.qStateCounts),
       canSelectExcluded: checkStateCountByKey(['qAlternative', 'qExcluded'], dimInfo.qStateCounts),
@@ -145,7 +145,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
   const handleOpenDropdown = async () => {
     if (!model) return;
     setOpenMenuDropdown(!openMenuDropdown);
-    model.getLayout().then((l) => runSelectionAnalysis(l as TableLayout));
+    model.getLayout().then((l) => updateEnabledSelectionActions(l as TableLayout));
   };
 
   return menuItemGroups.length ? (
