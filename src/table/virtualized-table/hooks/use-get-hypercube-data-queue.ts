@@ -16,7 +16,7 @@ const useGetHyperCubeDataQueue = (
 
   const queue = useMemo(
     () => ({
-      enqueue: (page: EngineAPI.INxPage) => {
+      enqueue: (page: EngineAPI.INxPage, onBeforeHandlePages?: () => void) => {
         const key = pageToKey(page);
 
         if (finished.current.has(key)) {
@@ -39,6 +39,7 @@ const useGetHyperCubeDataQueue = (
               const qDataPages = await getDataPages(qPages);
 
               if (ongoing.current.has(qPages)) {
+                onBeforeHandlePages?.();
                 handleDataPages(qDataPages);
               }
             } catch (error) {
