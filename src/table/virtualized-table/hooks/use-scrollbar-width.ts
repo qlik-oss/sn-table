@@ -1,24 +1,24 @@
-import { useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import useOnPropsChange from './use-on-props-change';
 
 const useScrollbarWidth = (ref: React.RefObject<HTMLDivElement>) => {
-  const prevWidth = useRef({ x: 0, y: 0 });
   const [xScrollbarWidth, setXScrollbarWidth] = useState(0);
   const [yScrollbarWidth, setYScrollbarWidth] = useState(0);
+  const { offsetWidth = 0, offsetHeight = 0, clientWidth = 0, clientHeight = 0 } = ref.current ?? {};
+  const widthDiff = offsetWidth - clientWidth;
+  const heightDiff = offsetHeight - clientHeight;
 
-  if (ref.current) {
-    const widthDiff = ref.current.offsetWidth - ref.current.clientWidth;
-    const heightDiff = ref.current.offsetHeight - ref.current.clientHeight;
-
-    if (prevWidth.current.y !== widthDiff) {
-      setYScrollbarWidth(widthDiff);
-      prevWidth.current.y = widthDiff;
+  useEffect(() => {
+    if (ref.current) {
+      setYScrollbarWidth(ref.current.offsetWidth - ref.current.clientWidth);
+      setXScrollbarWidth(ref.current.offsetHeight - ref.current.clientHeight);
     }
+  }, [ref]);
 
-    if (prevWidth.current.x !== heightDiff) {
-      setXScrollbarWidth(heightDiff);
-      prevWidth.current.x = heightDiff;
-    }
-  }
+  useOnPropsChange(() => {
+    setYScrollbarWidth(widthDiff);
+    setXScrollbarWidth(heightDiff);
+  }, [widthDiff, heightDiff]);
 
   return { xScrollbarWidth, yScrollbarWidth };
 };
