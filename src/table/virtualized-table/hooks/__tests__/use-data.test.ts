@@ -301,6 +301,31 @@ describe('useData', () => {
       await waitFor(() => expect(result.current.rowsInPage).toEqual(expectedRows));
     });
 
+    test('should set correct column index', async () => {
+      columns = [{ isDim: true, isLocked: false, id: 'col-0', colIdx: 3 } as Column];
+      await doRenderHook({ columns });
+
+      const { result } = renderHookResult;
+
+      const expectedRows: Row[] = [
+        {
+          'col-0': {
+            colIdx: 3,
+            isLastRow: false,
+            isLastColumn: false,
+            isSelectable: true,
+            pageColIdx: 0,
+            pageRowIdx: 0,
+            qText: '0',
+            rowIdx: 0,
+          } as Cell,
+          key: 'row-0',
+        },
+      ];
+
+      await waitFor(() => expect(result.current.rowsInPage).toEqual(expectedRows));
+    });
+
     test('should reset rowsInPage when pageInfo changes', async () => {
       await doRenderHook();
       const { rerender } = renderHookResult;
