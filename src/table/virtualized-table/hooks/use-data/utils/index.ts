@@ -16,19 +16,20 @@ const createRow = (
   const row: Row = prevRows[pageRowIdx] ?? { key: `row-${pageRowIdx}` };
 
   matrixRow.forEach((cell, matrixColIdx: number) => {
-    const colIdx = matrixColIdx + qArea.qLeft;
-    row[`col-${colIdx}`] = {
+    const pageColIdx = matrixColIdx + qArea.qLeft;
+    const { colIdx, isDim, isLocked, id } = columns[pageColIdx];
+    row[id] = {
       ...cell,
       rowIdx,
       colIdx,
-      isSelectable: columns[colIdx].isDim && !columns[colIdx].isLocked,
+      isSelectable: isDim && !isLocked,
       pageRowIdx,
-      pageColIdx: colIdx,
+      pageColIdx,
       isLastRow: rowIdx === qSize.qcy - 1,
-      isLastColumn: colIdx === qSize.qcx - 1,
+      isLastColumn: pageColIdx === qSize.qcx - 1,
     };
 
-    setCellSize(cell.qText ?? '', pageRowIdx, colIdx);
+    setCellSize(cell.qText ?? '', pageRowIdx, pageColIdx);
   });
 
   return {
