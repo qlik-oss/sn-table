@@ -96,13 +96,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     gridRef.current.scrollTo({ scrollLeft: 0, scrollTop: 0 });
   }, [layout, pageInfo.page, gridRef, columnWidth, rowMeta, theme.name()]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const bodyHeight = getBodyHeight(
-    rect,
-    headerAndTotalsHeight,
-    deferredRowCount,
-    estimatedRowHeight,
-    rowMeta.current.totalHeight
-  );
+  const bodyHeight = getBodyHeight(rect, headerAndTotalsHeight, deferredRowCount, estimatedRowHeight);
 
   useImperativeHandle(
     ref,

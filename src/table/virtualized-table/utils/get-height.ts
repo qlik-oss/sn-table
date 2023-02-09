@@ -5,10 +5,10 @@ import { MIN_BODY_ROW_HEIGHT, MIN_HEADER_HEIGHT } from '../constants';
 import { BodyStyle, Rect, Totals } from '../types';
 
 const getHeaderRowHeight = ({ fontSize = COMMON_CELL_STYLING.fontSize }: GeneratedStyling) =>
-  Math.max(MIN_HEADER_HEIGHT, Math.round(fontSizeToRowHeight(fontSize)));
+  Math.max(MIN_HEADER_HEIGHT, fontSizeToRowHeight(fontSize));
 
 const getBodyRowHeight = ({ fontSize = COMMON_CELL_STYLING.fontSize }: BodyStyle) =>
-  Math.max(MIN_BODY_ROW_HEIGHT, Math.round(fontSizeToRowHeight(fontSize)));
+  Math.max(MIN_BODY_ROW_HEIGHT, fontSizeToRowHeight(fontSize));
 
 const getHeights = (headerStyle: GeneratedStyling, bodyStyle: BodyStyle, totals: Totals) => {
   const headerRowHeight = getHeaderRowHeight(headerStyle);
@@ -26,13 +26,12 @@ export const getBodyHeight = (
   rect: Rect,
   headerAndTotalsHeight: number,
   deferredRowCount: number,
-  estimatedRowHeight: number,
-  totalHeight: number
+  estimatedRowHeight: number
 ) => {
   let { height: bodyHeight } = rect;
   bodyHeight -= headerAndTotalsHeight;
   if (deferredRowCount * estimatedRowHeight < bodyHeight) {
-    bodyHeight = Math.min(totalHeight, bodyHeight);
+    bodyHeight = Math.min(deferredRowCount * estimatedRowHeight, bodyHeight);
   }
 
   return bodyHeight;
