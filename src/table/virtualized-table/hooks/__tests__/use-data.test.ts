@@ -44,7 +44,10 @@ describe('useData', () => {
       Promise.resolve(pages.map(generateDataPage))
     );
 
-    columns = [{ isDim: false, isLocked: false } as Column, { isDim: false, isLocked: false } as Column];
+    columns = [
+      { isDim: false, isLocked: false, id: 'col-0', colIdx: 0 } as Column,
+      { isDim: false, isLocked: false, id: 'col-1', colIdx: 1 } as Column,
+    ];
 
     setCellSizeMock = jest.fn() as jest.MockedFunction<SetCellSize>;
 
@@ -329,7 +332,7 @@ describe('useData', () => {
 
   describe('should set correct state for isSelectable', () => {
     test('when column is a dimension and not locked', async () => {
-      columns = [{ isDim: true, isLocked: false } as Column];
+      columns = [{ isDim: true, isLocked: false, id: 'col-0', colIdx: 0 } as Column];
       await doRenderHook({ columns });
 
       const { result } = renderHookResult;
@@ -338,7 +341,7 @@ describe('useData', () => {
     });
 
     test('when column is a dimension and is locked', async () => {
-      columns = [{ isDim: true, isLocked: true } as Column];
+      columns = [{ isDim: true, isLocked: true, id: 'col-0', colIdx: 0 } as Column];
       await doRenderHook({ columns });
 
       const { result } = renderHookResult;
@@ -347,7 +350,7 @@ describe('useData', () => {
     });
 
     test('when column is a measure', async () => {
-      columns = [{ isDim: false, isLocked: false } as Column];
+      columns = [{ isDim: false, isLocked: false, id: 'col-0', colIdx: 0 } as Column];
       await doRenderHook({ columns });
 
       const { result } = renderHookResult;
