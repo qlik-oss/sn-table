@@ -35,12 +35,14 @@ export const SELECTION_STYLING = {
 
 export const PADDING = 4;
 export const BORDER_WIDTH = 1;
+export const LINE_HEIGHT = 4 / 3;
+export const DEFAULT_FONT_SIZE = '12px';
 
 export const COMMON_CELL_STYLING = {
   height: 'auto',
-  fontSize: '12px',
+  fontSize: DEFAULT_FONT_SIZE,
   lineHeight: 'unset',
-  padding: `${PADDING}PX`,
+  padding: `${PADDING}px`,
   borderStyle: 'solid',
   borderWidth: '0px 1px 1px 0px',
   userSelect: 'none',

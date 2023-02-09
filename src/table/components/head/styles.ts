@@ -16,16 +16,23 @@ export const StyledHeadCell = styled(TableCell, {
   ...COMMON_CELL_STYLING,
   ...headerStyle,
   pointer: 'cursor',
+  verticalAlign: 'bottom',
   '&:focus': {
     boxShadow: 'none',
   },
 }));
 
+// ---------- HeadCellContent ----------
+
 export const StyledSortButton = styled(Button, {
-  shouldForwardProp: (prop: string) => prop !== 'isActive',
-})(({ isActive, theme }) => ({
+  shouldForwardProp: (prop: string) => prop !== 'isActive' && prop !== 'textAlign',
+})(({ isActive, textAlign, theme }) => ({
+  textAlign,
+  height: 'auto',
+  fontSize: 'inherit',
   padding: theme.spacing(0.5, 1),
   color: 'inherit',
+  alignItems: 'flex-end',
   '&&:focus, &&:hover': {
     '& svg': {
       opacity: isActive ? 1 : 0.5,
@@ -33,6 +40,10 @@ export const StyledSortButton = styled(Button, {
   },
   '& svg': {
     opacity: isActive ? 1 : 0,
+    fontSize: '12px',
+  },
+  '& .MuiButton-endIcon': {
+    marginBottom: '2px',
   },
 }));
 
@@ -52,28 +63,31 @@ export const StyledHeadCellContent = styled(Box)(({ theme }) => ({
   width: '100%',
   display: 'flex',
   flexDirection: 'inherit',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  gap: theme.spacing(1),
+  alignItems: 'flex-end',
+  gap: theme.spacing(0.5),
+  fontSize: 'inherit',
   '&&:hover, &&:focus-within': {
     '& #sn-table-head-menu-button': { opacity: 1 },
   },
 }));
 
-export const LockAndLabel = styled(Box)(({ theme }) => ({
+export const LockWrapper = styled(Box)({
   display: 'flex',
+  justifyContent: 'flex-end',
+  alignItems: 'flex-start',
+  width: '20px',
+  height: '18px',
+  flexShrink: 0,
   flexDirection: 'inherit',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  gap: theme.spacing(0.5),
-}));
+});
 
 // ---------- HeadCellMenu ----------
 
 export const StyledMenuIconButton = styled(Button, {
-  shouldForwardProp: (prop: string) => prop !== 'isVisible',
-})(({ isVisible }) => ({
+  shouldForwardProp: (prop: string) => prop !== 'isVisible' && prop !== 'rightAligned',
+})(({ isVisible, rightAligned }) => ({
   opacity: isVisible ? 1 : 0,
+  ...(rightAligned ? { marginRight: 'auto' } : { marginLeft: 'auto' }),
   '&:focus': {
     opacity: 1,
   },

@@ -71,14 +71,14 @@ describe('useMeasureText', () => {
       });
 
       it('should return one size for hug and equal sizes for two columns with fill', () => {
-        measureTextMock.mockReturnValue({ width: 10 });
+        measureTextMock.mockReturnValue({ width: 20 });
         columns[0].columnWidth.type = ColumnWidthTypes.HUG;
         columns[1].columnWidth.type = ColumnWidthTypes.HUG;
         columns[2].columnWidth.type = ColumnWidthTypes.HUG;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([120, 120, 120]);
-        expect(getTotalWidth(widths)).toBe(120 * 3);
+        expect(widths).toEqual([200, 200, 200]);
+        expect(getTotalWidth(widths)).toBe(200 * 3);
       });
     });
 
@@ -104,7 +104,7 @@ describe('useMeasureText', () => {
         columns[1].columnWidth.percentage = 10;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([240, 120, 240]);
+        expect(widths).toEqual([245, MIN_COLUMN_WIDTH, 245]);
         expect(getTotalWidth(widths)).toBe(tableWidth);
       });
 
@@ -113,7 +113,7 @@ describe('useMeasureText', () => {
         columns[1].columnWidth.percentage = 100;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([120, 600, 120]);
+        expect(widths).toEqual([MIN_COLUMN_WIDTH, 600, MIN_COLUMN_WIDTH]);
         expect(getTotalWidth(widths)).toBe(tableWidth + MIN_COLUMN_WIDTH * 2);
       });
 
@@ -122,7 +122,7 @@ describe('useMeasureText', () => {
         columns[2].columnWidth.type = ColumnWidthTypes.HUG;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([240, 240, 120]);
+        expect(widths).toEqual([245, 245, MIN_COLUMN_WIDTH]);
         expect(getTotalWidth(widths)).toBe(tableWidth);
       });
     });

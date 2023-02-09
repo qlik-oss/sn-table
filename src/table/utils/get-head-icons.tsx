@@ -3,10 +3,17 @@ import Lock from '@qlik-trial/sprout/icons/react/Lock';
 import Descending from '@qlik-trial/sprout/icons/react/Descending';
 import Ascending from '@qlik-trial/sprout/icons/react/Ascending';
 import { Column } from '../../types';
+import { DEFAULT_FONT_SIZE } from '../styling-defaults';
+import { LockWrapper } from '../components/head/styles';
 
 const getHeadIcons = ({ sortDirection, isLocked, align }: Column) => {
-  const sortIcon = sortDirection === 'A' ? <Ascending height="12px" /> : <Descending height="12px" />;
-  const lockIcon = isLocked ? <Lock height="12px" data-testid="head-cell-lock-icon" /> : undefined;
+  const sortIcon =
+    sortDirection === 'A' ? <Ascending height={DEFAULT_FONT_SIZE} /> : <Descending height={DEFAULT_FONT_SIZE} />;
+  const lockIcon = isLocked ? (
+    <LockWrapper>
+      <Lock height={DEFAULT_FONT_SIZE} data-testid="head-cell-lock-icon" />
+    </LockWrapper>
+  ) : undefined;
   return align === 'right' ? { startIcon: sortIcon, lockIcon } : { endIcon: sortIcon, lockIcon };
 };
 

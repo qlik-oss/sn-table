@@ -2534,10 +2534,12 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.6.tgz#cee20bd55e68a1720bdab363ecf0c821ded4cd45"
   integrity sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==
 
-"@qlik-trial/sprout@2.44.0":
-  version "2.44.0"
-  resolved "https://npm.pkg.github.com/download/@qlik-trial/sprout/2.44.0/c9ee7400f06573f4b1c03b04366adf19ee6da349#c9ee7400f06573f4b1c03b04366adf19ee6da349"
-  integrity sha512-u6vvqwLQ4z9196GqAqa3u6AioiI55vd1hb7CfnvCBPEFNJDjY3JZZv+U4msbqO6Z8m1z+QSIFHsaFx6S9W6HVg==
+"@qlik-trial/sprout@2.45.6":
+  version "2.45.6"
+  resolved "https://npm.pkg.github.com/download/@qlik-trial/sprout/2.45.6/f62fa8066cf7ac6ddb3b1f0f1e3cdd65933d060a#f62fa8066cf7ac6ddb3b1f0f1e3cdd65933d060a"
+  integrity sha512-gfWyEtpuCwRo87XfMUERPpiB8fh9PhL3dvkLiZw/UgiLNP9kMVwACK+m6WlxqVjkYVEcqOz35cX8Vi7RNGD3zg==
+  optionalDependencies:
+    "@swc/core-linux-x64-gnu" "1.3.32"
 
 "@qlik/react-native-simple-grid@1.0.11":
   version "1.0.11"
@@ -2840,6 +2842,11 @@
   integrity sha512-BPS4ynJW/o92PUR4wgriz2Ud5gpST5vz6GQfMixEDK0Z8ZCUv2M7SkBLykH56T++Xs+8ln9zTGbOvNGIe02/jw==
   dependencies:
     "@sinonjs/commons" "^1.7.0"
+
+"@swc/core-linux-x64-gnu@1.3.32":
+  version "1.3.32"
+  resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-gnu/-/core-linux-x64-gnu-1.3.32.tgz#2ea5e17d13a70e6a13742282cf30e92e4074f4c5"
+  integrity sha512-ecqtSWX4NBrs7Ji2VX3fDWeqUfrbLlYqBuufAziCM27xMxwlAVgmyGQk4FYgoQ3SAUAu3XFH87+3Q7uWm2X7xg==
 
 "@testing-library/dom@^8.5.0":
   version "8.19.0"

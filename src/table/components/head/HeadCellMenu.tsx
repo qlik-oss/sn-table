@@ -8,6 +8,7 @@ import { HeadCellMenuProps, MenuItemGroup } from '../../types';
 import { StyledMenuIconButton, NebulaListBox } from './styles';
 import { ListBoxWrapper, ListBoxWrapperRenderProps } from './ListBoxWrapper';
 import MenuItems from './MenuItems';
+import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 
 export default function HeadCellMenu({ columnIndex, isDimension, tabIndex }: HeadCellMenuProps) {
   const { translator } = useContextSelector(TableContext, (value) => value.baseProps);
@@ -51,7 +52,7 @@ export default function HeadCellMenu({ columnIndex, isDimension, tabIndex }: Hea
         aria-haspopup="true"
         onClick={() => setOpenMenuDropdown(!openMenuDropdown)}
       >
-        <More height="12px" />
+        <More height={DEFAULT_FONT_SIZE} />
       </StyledMenuIconButton>
 
       <Menu

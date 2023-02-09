@@ -41,7 +41,7 @@ export enum ColumnWidthTypes {
   FILL = 'fill',
 }
 
-export const MIN_COLUMN_WIDTH = 120;
+export const MIN_COLUMN_WIDTH = 110;
 export const MAX_COLUMN_WIDTH = 7680;
 export const MAX_COLUMN_PERCENTAGE_WIDTH = 100;
 export const DEFAULT_COLUMN_PIXEL_WIDTH = 200;
