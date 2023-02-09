@@ -6,38 +6,42 @@ import Body from './Body';
 import FullSizeContainer from './FullSizeContainer';
 import Header from './Header';
 import { TableProps, BodyStyle, BodyRef } from './types';
-import { getHeaderStyle, getBodyStyle } from '../utils/styling-utils';
 import useScrollHandler from './hooks/use-scroll-handler';
 import Totals from './Totals';
 import useTableCount from './hooks/use-table-count';
 import ScrollableContainer from './ScrollableContainer';
 import StickyContainer from './StickyContainer';
-import toTableRect from './utils/to-rect';
+import toTableRect, { toStickyContainerRect } from './utils/to-rect';
 import { useContextSelector, TableContext } from '../context';
 import getHeights from './utils/get-height';
+import useScrollbarWidth from './hooks/use-scrollbar-width';
 
 const Table = (props: TableProps) => {
   const { rect, pageInfo, paginationNeeded } = props;
-  const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, theme, styling } = useContextSelector(TableContext, (value) => value.baseProps);
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);
   const totalsRef = useRef<VariableSizeList>(null);
   const bodyRef = useRef<BodyRef>(null);
   const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
+  const { xScrollbarWidth, yScrollbarWidth } = useScrollbarWidth(ref);
   const totals = useMemo(() => getTotalPosition(layout), [layout]);
-  const headerStyle = useMemo(() => getHeaderStyle(layout, theme, !totals.atTop), [layout, theme, totals]);
   const bodyStyle = useMemo<BodyStyle>(
     () => ({
-      ...getBodyStyle(layout, theme),
+      ...styling.body,
       background: theme.background.color ?? 'transparent',
     }),
     [layout, theme.name()] // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const { headerRowHeight, bodyRowHeight, headerAndTotalsHeight } = getHeights(headerStyle, bodyStyle, totals);
+  const { headerRowHeight, bodyRowHeight, headerAndTotalsHeight } = getHeights(styling.head, bodyStyle, totals);
   const columns = useMemo(() => getColumns(layout), [layout]);
   const tableRect = useMemo(() => toTableRect(rect, paginationNeeded), [rect, paginationNeeded]);
-  const { width } = useColumnSize(tableRect, columns, headerStyle, bodyStyle);
-  const { rowCount } = useTableCount(layout, pageInfo, tableRect, width, bodyRowHeight);
+  const stickyContainerRect = useMemo(
+    () => toStickyContainerRect(tableRect, xScrollbarWidth, yScrollbarWidth),
+    [tableRect, xScrollbarWidth, yScrollbarWidth]
+  );
+  const { width } = useColumnSize(stickyContainerRect, columns, styling.head, bodyStyle);
+  const { rowCount } = useTableCount(layout, pageInfo, stickyContainerRect, width, bodyRowHeight);
   const containerWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
   const [containerHeight, setContainerHeight] = useState(rowCount * bodyRowHeight + headerAndTotalsHeight); // Based on single line height, which is going to be out-of-sync when rows have multiple lines
   const scrollHandler = useScrollHandler(headerRef, totalsRef, bodyRef);
@@ -46,13 +50,13 @@ const Table = (props: TableProps) => {
     (innerHeight: number, forceSync = false) => {
       const newHeight = innerHeight + headerAndTotalsHeight;
       // Handle an issue that occur when the measured row heights needs a scrollbar but single line height does not
-      if (containerHeight < tableRect.height && newHeight > tableRect.height) {
+      if (containerHeight < stickyContainerRect.height && newHeight > stickyContainerRect.height) {
         setContainerHeight(newHeight);
       } else if (forceSync) {
         setContainerHeight(newHeight);
       }
     },
-    [containerHeight, headerAndTotalsHeight, tableRect.height]
+    [containerHeight, headerAndTotalsHeight, stickyContainerRect.height]
   );
 
   useLayoutEffect(() => {
@@ -64,7 +68,7 @@ const Table = (props: TableProps) => {
 
   const TotalsComponent = (
     <Totals
-      rect={tableRect}
+      rect={stickyContainerRect}
       pageInfo={pageInfo}
       columns={columns}
       columnWidth={width}
@@ -77,10 +81,10 @@ const Table = (props: TableProps) => {
   return (
     <ScrollableContainer ref={ref} width={tableRect.width} height={tableRect.height} onScroll={scrollHandler}>
       <FullSizeContainer width={containerWidth} height={containerHeight}>
-        <StickyContainer rect={tableRect}>
+        <StickyContainer rect={stickyContainerRect}>
           <Header
-            headerStyle={headerStyle}
-            rect={tableRect}
+            headerStyle={styling.head}
+            rect={stickyContainerRect}
             pageInfo={pageInfo}
             columns={columns}
             columnWidth={width}
@@ -92,7 +96,7 @@ const Table = (props: TableProps) => {
             ref={bodyRef}
             innerForwardRef={innerForwardRef}
             bodyStyle={bodyStyle}
-            rect={tableRect}
+            rect={stickyContainerRect}
             pageInfo={pageInfo}
             columns={columns}
             columnWidth={width}

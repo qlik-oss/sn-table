@@ -68,6 +68,28 @@ export interface SelectionState {
   firstCell?: Cell;
   mouseupOutsideCallback?(): void;
 }
+export interface GeneratedStyling {
+  borderBottomColor: string;
+  borderTopColor: string;
+  borderLeftColor: string;
+  borderRightColor: string;
+  lastRowBottomBorder?: string;
+  padding?: string;
+  fontFamily?: string;
+  color?: string;
+  fontSize?: string; // following the theme format so this should always be a string
+  background?: string;
+  hoverColors?: {
+    background: string;
+    color: string;
+  };
+}
+
+export interface TableStyling {
+  head: GeneratedStyling;
+  body: GeneratedStyling;
+  totals: GeneratedStyling;
+}
 
 export interface ContextValue {
   headRowHeight: number;
@@ -93,23 +115,7 @@ export interface ContextValue {
     embed: stardust.Embed;
     changeSortOrder: ChangeSortOrder;
     applyColumnWidths?: ApplyColumnWidths;
-  };
-}
-
-export interface GeneratedStyling {
-  borderBottomColor: string;
-  borderTopColor: string;
-  borderLeftColor: string;
-  borderRightColor: string;
-  lastRowBottomBorder?: string;
-  padding?: string;
-  fontFamily?: string;
-  color?: string;
-  fontSize?: string; // following the theme format so this should always be a string
-  background?: string;
-  hoverColors?: {
-    background: string;
-    color: string;
+    styling: TableStyling;
   };
 }
 

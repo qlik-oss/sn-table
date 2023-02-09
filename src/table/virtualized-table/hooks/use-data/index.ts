@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { PageInfo, Row, Column, TableLayout } from '../../../../types';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
 import { SetCellSize } from '../../types';
@@ -25,6 +25,7 @@ const useData = (
   setCellSize: SetCellSize
 ): UseData => {
   const [rowsInPage, setRowsInPage] = useState<Row[]>(Array(rowCount).fill(undefined));
+  const mutableRowsInPage = useRef(rowsInPage);
 
   const getDataPages = useCallback(
     async (pages: EngineAPI.INxPage[]) => model.getHyperCubeData('/qHyperCubeDef', pages),
@@ -35,6 +36,7 @@ const useData = (
     (dataPages: EngineAPI.INxDataPage[]) =>
       setRowsInPage((prevRows) => {
         const nextRows = [...prevRows];
+        mutableRowsInPage.current = nextRows;
 
         dataPages.forEach((dataPage) => {
           dataPage.qMatrix.forEach((matrixRow, matrixRowIdx) => {
@@ -56,7 +58,7 @@ const useData = (
 
         return nextRows;
       }),
-    [pageInfo, columns, layout, setCellSize]
+    [pageInfo, columns, layout, setCellSize, mutableRowsInPage]
   );
 
   // The queue takes a EngineAPI.INxPage object as items and adds them to a queue and
@@ -66,7 +68,7 @@ const useData = (
   const loadColumns: LoadData = useCallback(
     (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
       for (let left = qLeft; left < qLeft + qWidth; left++) {
-        if (isColumnMissingData(rowsInPage, left, qTop, qHeight)) {
+        if (isColumnMissingData(mutableRowsInPage.current, left, qTop, qHeight)) {
           const page = {
             qLeft: left,
             qTop,
@@ -78,14 +80,14 @@ const useData = (
         }
       }
     },
-    [rowsInPage, queue]
+    [mutableRowsInPage, queue]
   );
 
   const loadRows: LoadData = useCallback(
     (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
       for (let top = qTop; top < qTop + qHeight; top++) {
         const pageTop = Math.max(0, top - pageInfo.page * pageInfo.rowsPerPage);
-        if (isRowMissingData(rowsInPage, qLeft, pageTop, qWidth)) {
+        if (isRowMissingData(mutableRowsInPage.current, qLeft, pageTop, qWidth)) {
           const page = {
             qLeft,
             qTop: top,
@@ -96,7 +98,7 @@ const useData = (
         }
       }
     },
-    [rowsInPage, queue, pageInfo]
+    [mutableRowsInPage, queue, pageInfo]
   );
 
   useEffect(() => {
@@ -109,11 +111,12 @@ const useData = (
     const qWidth = Math.min(100, layout.qHyperCube.qSize.qcx, visibleColumnCount + COLUMN_DATA_BUFFER_SIZE);
     const qHeight = Math.min(100, layout.qHyperCube.qSize.qcy, visibleRowCount + ROW_DATA_BUFFER_SIZE);
 
-    getDataPages([{ qLeft: 0, qTop, qHeight, qWidth }]).then((dataPages) => {
+    const onBeforeHandlePages = () => {
       setRowsInPage(Array(rowCount).fill(undefined)); // Reset rows to initial value
-      handleDataPages(dataPages);
-    });
-  }, [getDataPages, handleDataPages, layout, visibleRowCount, visibleColumnCount, pageInfo, queue, rowCount]);
+    };
+
+    queue.enqueue({ qLeft: 0, qTop, qHeight, qWidth }, onBeforeHandlePages);
+  }, [layout, visibleRowCount, visibleColumnCount, pageInfo, queue, rowCount]);
 
   return {
     rowsInPage,

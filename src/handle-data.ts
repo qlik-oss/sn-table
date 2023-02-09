@@ -47,7 +47,7 @@ export function getTotalPosition(layout: TableLayout) {
  * Gets the totals text for a column
  */
 export function getTotalInfo(layout: TableLayout, colIdx: number, pageColIdx: number, numDims: number) {
-  if (colIdx >= numDims) return layout.qHyperCube.qGrandTotalRow[colIdx - numDims]?.qText;
+  if (colIdx >= numDims) return layout.qHyperCube.qGrandTotalRow[colIdx - numDims]?.qText ?? '';
   if (colIdx === 0 && pageColIdx === 0) return layout.totals.label;
   return '';
 }

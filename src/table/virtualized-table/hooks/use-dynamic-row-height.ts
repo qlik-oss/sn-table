@@ -80,7 +80,7 @@ const useDynamicRowHeight = ({ bodyStyle, columnWidth, gridRef, rowHeight, layou
         rowMeta.current.heights[rowIdx] = height;
       }
 
-      setEstimatedRowHeight(Math.round(rowMeta.current.totalHeight / rowMeta.current.count));
+      setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
     },
     [getCellSize]
   );

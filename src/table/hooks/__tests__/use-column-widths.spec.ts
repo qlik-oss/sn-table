@@ -1,12 +1,14 @@
 import { renderHook } from '@testing-library/react';
 import { Column } from '../../../types';
 import { ColumnWidthTypes, MIN_COLUMN_WIDTH } from '../../constants';
+import { TableStyling } from '../../types';
 import useColumnWidths from '../use-column-widths';
 
-describe('useMeasureText', () => {
+describe('use-column-widths', () => {
   let measureTextMock: jest.Mock<{ width: number }>;
   let columns: Column[];
   let tableWidth: number;
+  let styling: TableStyling;
 
   beforeEach(() => {
     measureTextMock = jest.fn();
@@ -33,6 +35,10 @@ describe('useMeasureText', () => {
       } as Column,
     ];
     tableWidth = 600;
+    styling = {
+      body: { fontFamily: 'Arial', fontSize: '12px' },
+      head: { fontFamily: 'Arial', fontSize: '12px' },
+    } as unknown as TableStyling;
   });
 
   afterEach(() => {
@@ -40,10 +46,10 @@ describe('useMeasureText', () => {
   });
 
   // only looking at the state not setState
-  const getColumnWidthsState = () => renderHook(() => useColumnWidths(columns, tableWidth)).result.current[0];
+  const getColumnWidthsState = () => renderHook(() => useColumnWidths(columns, tableWidth, styling)).result.current[0];
   const getTotalWidth = (widths: number[]) => widths.reduce((acc, w) => acc + w, 0);
 
-  describe('use-column-widths', () => {
+  describe('getColumnWidths', () => {
     describe('all have same type', () => {
       it('should return equal sizes when all cols have fill type', () => {
         const widths = getColumnWidthsState();

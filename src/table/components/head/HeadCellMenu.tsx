@@ -37,8 +37,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
       transformOrigin: { vertical: 'top', horizontal: 'left' },
     });
 
-    // @ts-ignore TODO: no types for `__DO_NOT_USE__`, it will improve when it becomes stable
-    // eslint-disable-next-line
+    // @ts-ignore TODO: no types for popover related api until it becomes stable
     embed.on('fieldPopoverClose', () => {
       setOpenListboxDropdown(false);
     });
