@@ -82,10 +82,10 @@
     "@mui/material": "5.11.1",
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
     "@mui/system": "5.11.1",
-    "@nebula.js/cli": "3.0.4",
-    "@nebula.js/cli-build": "3.0.3",
-    "@nebula.js/cli-sense": "3.0.4",
-    "@nebula.js/cli-serve": "3.0.4",
+    "@nebula.js/cli": "3.1.3",
+    "@nebula.js/cli-build": "3.1.3",
+    "@nebula.js/cli-sense": "3.1.3",
+    "@nebula.js/cli-serve": "3.1.3",
     "@playwright/test": "1.29.1",
     "@qlik-trial/sprout": "2.45.6",
     "@qlik/react-native-simple-grid": "1.0.11",
@@ -138,7 +138,7 @@
     "yargs": "17.6.2"
   },
   "peerDependencies": {
-    "@nebula.js/stardust": ">=3.0.4"
+    "@nebula.js/stardust": ">=3.1.3"
   },
   "resolutions": {
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"

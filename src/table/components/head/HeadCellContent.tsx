@@ -25,6 +25,7 @@ function HeadCellContent({ column, columnIndex, isActive, areBasicFeaturesEnable
   return (
     <StyledHeadCellContent>
       {lockIcon}
+
       <StyledSortButton
         isActive={isActive}
         textAlign={column.align}
@@ -45,9 +46,8 @@ function HeadCellContent({ column, columnIndex, isActive, areBasicFeaturesEnable
           </VisuallyHidden>
         )}
       </StyledSortButton>
-      {areBasicFeaturesEnabled && (
-        <HeadCellMenu columnIndex={columnIndex} isDimension={column.isDim} tabIndex={tabIndex} />
-      )}
+
+      {areBasicFeaturesEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
     </StyledHeadCellContent>
   );
 }

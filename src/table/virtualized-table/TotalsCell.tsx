@@ -42,6 +42,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
         justifyContent: index === 0 ? 'left' : 'right',
         boxSizing: 'border-box',
         cursor: 'default',
+        fontWeight: 'bold',
       }}
     >
       <CellText singleLine>{label}</CellText>
