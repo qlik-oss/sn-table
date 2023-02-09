@@ -1,8 +1,7 @@
-import React, { memo, useMemo } from 'react';
+import React, { memo } from 'react';
 import TableRow from '@mui/material/TableRow';
 
 import { useContextSelector, TableContext } from '../../context';
-import { getTotalsCellStyle } from '../../utils/styling-utils';
 import { handleTotalKeyDown } from '../../utils/handle-key-press';
 import { removeTabAndFocusCell } from '../../utils/accessibility-utils';
 import { StyledTotalsCell } from './styles';
@@ -15,13 +14,12 @@ function TableTotals({ tableData, areBasicFeaturesEnabled }: TableTotalsProps) {
     totalsPosition: { atTop },
     rows,
   } = tableData;
-  const { layout, theme, rootElement, selectionsAPI, keyboard } = useContextSelector(
+  const { rootElement, selectionsAPI, keyboard, styling } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );
   const headRowHeight = useContextSelector(TableContext, (value) => value.headRowHeight);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
-  const totalsStyle = useMemo(() => getTotalsCellStyle(layout, theme, atTop), [layout, theme.name(), atTop]);
 
   return (
     <TableRow className="sn-table-row">
@@ -29,7 +27,7 @@ function TableTotals({ tableData, areBasicFeaturesEnabled }: TableTotalsProps) {
         const cellCoord: [number, number] = [atTop ? 1 : rows.length + 1, columnIndex];
         return (
           <StyledTotalsCell
-            totalsStyle={totalsStyle}
+            totalsStyle={styling.totals}
             headRowHeight={headRowHeight}
             atTop={atTop}
             key={column.id}

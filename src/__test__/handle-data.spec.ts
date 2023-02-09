@@ -199,10 +199,10 @@ describe('handle-data', () => {
       expect(getTotalInfo(layout, 1, 3, 2)).toBe('');
     });
 
-    it('should not get any total measure value when qGrandTotalRow has no value', () => {
+    it('should return empty string as total measure value when qGrandTotalRow has no value', () => {
       layout.qHyperCube.qGrandTotalRow = [];
-      expect(getTotalInfo(layout, 2, 2, 2)).toBe(undefined);
-      expect(getTotalInfo(layout, 3, 3, 2)).toBe(undefined);
+      expect(getTotalInfo(layout, 2, 2, 2)).toBe('');
+      expect(getTotalInfo(layout, 3, 3, 2)).toBe('');
     });
 
     it('should return new total label value', () => {

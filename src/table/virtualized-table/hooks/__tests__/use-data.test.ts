@@ -1,6 +1,7 @@
 import { act, renderHook, RenderHookResult, waitFor } from '@testing-library/react';
 import { Cell, Column, PageInfo, Row, TableLayout } from '../../../../types';
 import { generateDataPages, generateLayout } from '../../../../__test__/generate-test-data';
+import { SetCellSize } from '../../types';
 import useData, { UseData } from '../use-data';
 
 interface OverrideUseDataProps {
@@ -24,6 +25,7 @@ describe('useData', () => {
   let columns: Column[];
   let renderHookResult: RenderHookResult<UseData, unknown>;
   let doRenderHook: (renderWithProps?: OverrideUseDataProps) => Promise<void>;
+  let setCellSizeMock: jest.MockedFunction<SetCellSize>;
 
   beforeEach(() => {
     layout = generateLayout(1, 1, 5);
@@ -44,6 +46,8 @@ describe('useData', () => {
 
     columns = [{ isDim: false, isLocked: false } as Column, { isDim: false, isLocked: false } as Column];
 
+    setCellSizeMock = jest.fn() as jest.MockedFunction<SetCellSize>;
+
     doRenderHook = (renderWithProps: OverrideUseDataProps = {}) => {
       return act(async () => {
         renderHookResult = renderHook(() =>
@@ -54,7 +58,8 @@ describe('useData', () => {
             renderWithProps.rowCount ?? 20,
             renderWithProps.visibleRowCount ?? 1,
             renderWithProps.visibleColumnCount ?? 1,
-            renderWithProps.columns ?? columns
+            renderWithProps.columns ?? columns,
+            setCellSizeMock
           )
         );
       });

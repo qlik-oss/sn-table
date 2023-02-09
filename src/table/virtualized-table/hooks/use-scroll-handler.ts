@@ -1,34 +1,25 @@
 import { useCallback } from 'react';
-import { VariableSizeGrid, VariableSizeList } from 'react-window';
+import { VariableSizeList } from 'react-window';
+import { BodyRef } from '../types';
 
 const useScrollHandler = (
   headerRef: React.RefObject<VariableSizeList<any>>,
   totalsRef: React.RefObject<VariableSizeList<any>>,
-  bodyRef: React.RefObject<VariableSizeGrid<any>>,
-  innerForwardRef: React.RefObject<HTMLDivElement>,
-  containerHeight: number,
-  headerAndTotalsHeight: number,
-  setContainerHeight: React.Dispatch<React.SetStateAction<number>>
-) =>
-  useCallback(
+  bodyRef: React.RefObject<BodyRef>
+) => {
+  return useCallback(
     (event: React.SyntheticEvent) => {
-      headerRef.current?.scrollTo(event.currentTarget.scrollLeft);
+      const { scrollHeight, clientHeight, scrollTop, scrollLeft } = event.currentTarget;
+      const ratio = Math.max(0, Math.min(1, scrollTop / (scrollHeight - clientHeight)));
 
-      totalsRef.current?.scrollTo(event.currentTarget.scrollLeft);
+      bodyRef.current?.interpolatedScrollTo(Number.isNaN(ratio) ? 0 : ratio, scrollLeft);
 
-      bodyRef.current?.scrollTo({
-        scrollLeft: event.currentTarget.scrollLeft,
-        scrollTop: event.currentTarget.scrollTop,
-      });
+      headerRef.current?.scrollTo(scrollLeft);
 
-      if (innerForwardRef.current) {
-        // Keep full size container in sync with the height calculation in react-window is doing
-        if (containerHeight !== innerForwardRef.current.clientHeight + headerAndTotalsHeight) {
-          setContainerHeight(innerForwardRef.current.clientHeight + headerAndTotalsHeight);
-        }
-      }
+      totalsRef.current?.scrollTo(scrollLeft);
     },
-    [headerRef, totalsRef, bodyRef, innerForwardRef, containerHeight, headerAndTotalsHeight, setContainerHeight]
+    [headerRef, totalsRef, bodyRef]
   );
+};
 
 export default useScrollHandler;
