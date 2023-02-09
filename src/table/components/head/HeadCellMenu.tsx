@@ -8,6 +8,7 @@ import SelectPossible from '@qlik-trial/sprout/icons/react/SelectPossible';
 import SelectAlternative from '@qlik-trial/sprout/icons/react/SelectAlternative';
 import SelectExcluded from '@qlik-trial/sprout/icons/react/SelectExcluded';
 
+import useFieldSelection from '../../hooks/use-field-selection';
 import { useContextSelector, TableContext } from '../../context';
 import { HeadCellMenuProps, MenuItemGroup } from '../../types';
 import { StyledMenuIconButton } from './styles';
@@ -15,25 +16,18 @@ import { TableLayout } from '../../../types';
 import MenuItems from './MenuItems';
 
 export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
-  const { app, translator, embed, model } = useContextSelector(TableContext, (value) => value.baseProps);
-  const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
-  const [openListboxDropdown, setOpenListboxDropdown] = useState(false);
+  const showSearchMenuItem = column.isDim && !column.isMasterItem;
   const anchorRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
-  const showSearchMenuItem = column.isDim && !column.isMasterItem;
-  const [fieldInstance, setFieldInstance] = useState<EngineAPI.IField | null>(null);
-  const [enabledSelectionActions, setEnabledSelectionActions] = useState<Record<string, boolean>>({
-    canSelectAll: false,
-    canClearSelections: false,
-    canSelectPossible: false,
-    canSelectAlternative: false,
-    canSelectExcluded: false,
-  });
-
-  useEffect(() => {
-    if (!app || !column || !showSearchMenuItem) return;
-    app.getField(column.fieldId).then(setFieldInstance);
-  }, [app, column]);
+  const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
+  const [openListboxDropdown, setOpenListboxDropdown] = useState(false);
+  const { translator, embed, model } = useContextSelector(TableContext, (value) => value.baseProps);
+  const {
+    fieldInstance,
+    selectionActionsEnabledStatus,
+    resetSelectionActionsEnabledStatus,
+    updateSelectionActionsEnabledStatus,
+  } = useFieldSelection(column);
 
   const embedListbox = () => {
     // @ts-ignore TODO: no types for `__DO_NOT_USE__`, it will improve when it becomes stable
@@ -48,6 +42,18 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
     embed.on('fieldPopoverClose', () => {
       setOpenListboxDropdown(false);
     });
+  };
+
+  useEffect(() => {
+    if (!openMenuDropdown) resetSelectionActionsEnabledStatus();
+  }, [openMenuDropdown]);
+
+  const handleOpenDropdown = async () => {
+    if (!openMenuDropdown && model) {
+      const layout = await model.getLayout();
+      updateSelectionActionsEnabledStatus(layout as TableLayout);
+    }
+    setOpenMenuDropdown(!openMenuDropdown);
   };
 
   const menuItemGroups = useMemo<MenuItemGroup[]>(
@@ -77,7 +83,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
                   await fieldInstance?.selectAll();
                 },
                 icon: <SelectAll />,
-                enabled: enabledSelectionActions.canSelectAll,
+                enabled: selectionActionsEnabledStatus.canSelectAll,
               },
               {
                 id: 2,
@@ -87,7 +93,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
                   await fieldInstance?.clear();
                 },
                 icon: <ClearSelections />,
-                enabled: enabledSelectionActions.canClearSelections,
+                enabled: selectionActionsEnabledStatus.canClearSelections,
               },
               {
                 id: 3,
@@ -97,7 +103,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
                   await fieldInstance?.selectPossible();
                 },
                 icon: <SelectPossible />,
-                enabled: enabledSelectionActions.canSelectPossible,
+                enabled: selectionActionsEnabledStatus.canSelectPossible,
               },
               {
                 id: 4,
@@ -107,7 +113,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
                   await fieldInstance?.selectAlternative();
                 },
                 icon: <SelectAlternative />,
-                enabled: enabledSelectionActions.canSelectAlternative,
+                enabled: selectionActionsEnabledStatus.canSelectAlternative,
               },
               {
                 id: 5,
@@ -117,36 +123,14 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
                   await fieldInstance?.selectExcluded();
                 },
                 icon: <SelectExcluded />,
-                enabled: enabledSelectionActions.canSelectExcluded,
+                enabled: selectionActionsEnabledStatus.canSelectExcluded,
               },
             ],
           ]
         : []),
     ],
-    [translator, showSearchMenuItem, fieldInstance, enabledSelectionActions]
+    [translator, showSearchMenuItem, fieldInstance, selectionActionsEnabledStatus]
   );
-
-  const checkStateCountByKey = <T,>(keys: (keyof T)[], obj: T): boolean => {
-    return keys.some((key) => obj[key] > 0);
-  };
-
-  const updateEnabledSelectionActions = (layout: TableLayout) => {
-    const dimInfo = layout.qHyperCube.qDimensionInfo.find((dim) => dim.qFallbackTitle === column.label);
-    if (!dimInfo) return;
-    setEnabledSelectionActions({
-      canSelectAll: checkStateCountByKey(['qOption', 'qAlternative', 'qExcluded', 'qDeselected'], dimInfo.qStateCounts),
-      canClearSelections: checkStateCountByKey(['qSelected'], dimInfo.qStateCounts),
-      canSelectPossible: checkStateCountByKey(['qOption'], dimInfo.qStateCounts),
-      canSelectAlternative: checkStateCountByKey(['qAlternative'], dimInfo.qStateCounts),
-      canSelectExcluded: checkStateCountByKey(['qAlternative', 'qExcluded'], dimInfo.qStateCounts),
-    });
-  };
-
-  const handleOpenDropdown = async () => {
-    if (!model) return;
-    setOpenMenuDropdown(!openMenuDropdown);
-    model.getLayout().then((l) => updateEnabledSelectionActions(l as TableLayout));
-  };
 
   return menuItemGroups.length ? (
     <>
