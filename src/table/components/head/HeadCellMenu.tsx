@@ -5,19 +5,34 @@ import Search from '@qlik-trial/sprout/icons/react/Search';
 
 import { useContextSelector, TableContext } from '../../context';
 import { HeadCellMenuProps, MenuItemGroup } from '../../types';
-import { StyledMenuIconButton, NebulaListBox } from './styles';
-import { ListBoxWrapper, ListBoxWrapperRenderProps } from './ListBoxWrapper';
+import { StyledMenuIconButton } from './styles';
 import MenuItems from './MenuItems';
 
-export default function HeadCellMenu({ columnIndex, isDimension, tabIndex }: HeadCellMenuProps) {
-  const { translator } = useContextSelector(TableContext, (value) => value.baseProps);
+export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
+  const { translator, embed } = useContextSelector(TableContext, (value) => value.baseProps);
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
   const [openListboxDropdown, setOpenListboxDropdown] = useState(false);
-  const anchorRef = useRef<HTMLButtonElement>(null);
+  const anchorRef = useRef<HTMLDivElement>(null);
+  const listboxRef = useRef<HTMLDivElement>(null);
+  const showSearchMenuItem = column.isDim && !column.isMasterItem;
+
+  const embedListbox = () => {
+    // @ts-ignore TODO: no types for `__DO_NOT_USE__`, it will improve when it becomes stable
+    // eslint-disable-next-line
+    embed.__DO_NOT_USE__.popover(listboxRef.current, column.fieldId, {
+      anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
+      transformOrigin: { vertical: 'top', horizontal: 'left' },
+    });
+
+    // @ts-ignore TODO: no types for popover related api until it becomes stable
+    embed.on('fieldPopoverClose', () => {
+      setOpenListboxDropdown(false);
+    });
+  };
 
   const menuItemGroups = useMemo<MenuItemGroup[]>(
     () => [
-      ...(isDimension
+      ...(showSearchMenuItem
         ? [
             [
               {
@@ -27,6 +42,7 @@ export default function HeadCellMenu({ columnIndex, isDimension, tabIndex }: Hea
                   evt.stopPropagation();
                   setOpenMenuDropdown(false);
                   setOpenListboxDropdown(true);
+                  embedListbox();
                 },
                 icon: <Search />,
                 isDisabled: false,
@@ -35,24 +51,28 @@ export default function HeadCellMenu({ columnIndex, isDimension, tabIndex }: Hea
           ]
         : []),
     ],
-    [translator, isDimension]
+    [translator, showSearchMenuItem]
   );
 
   return menuItemGroups.length ? (
     <>
-      <StyledMenuIconButton
-        isVisible={openListboxDropdown || openMenuDropdown}
-        ref={anchorRef}
-        size="small"
-        tabIndex={tabIndex}
-        id="sn-table-head-menu-button"
-        aria-controls={openMenuDropdown ? 'sn-table-head-menu' : undefined}
-        aria-expanded={openMenuDropdown ? 'true' : undefined}
-        aria-haspopup="true"
-        onClick={() => setOpenMenuDropdown(!openMenuDropdown)}
-      >
-        <More height="12px" />
-      </StyledMenuIconButton>
+      <div>
+        <StyledMenuIconButton
+          isVisible={openListboxDropdown || openMenuDropdown}
+          ref={anchorRef}
+          size="small"
+          tabIndex={tabIndex}
+          id="sn-table-head-menu-button"
+          aria-controls={openMenuDropdown ? 'sn-table-head-menu' : undefined}
+          aria-expanded={openMenuDropdown ? 'true' : undefined}
+          aria-haspopup="true"
+          onClick={() => setOpenMenuDropdown(!openMenuDropdown)}
+        >
+          <More height="12px" />
+        </StyledMenuIconButton>
+
+        <div ref={listboxRef} />
+      </div>
 
       <Menu
         className="sn-table-head-menu"
@@ -63,12 +83,6 @@ export default function HeadCellMenu({ columnIndex, isDimension, tabIndex }: Hea
         autoFocus={false}
       >
         {MenuItems({ itemGroups: menuItemGroups })}
-      </Menu>
-
-      <Menu open={openListboxDropdown} anchorEl={anchorRef.current} onClose={() => setOpenListboxDropdown(false)}>
-        <ListBoxWrapper columnIndex={columnIndex}>
-          {({ ref }: ListBoxWrapperRenderProps) => <NebulaListBox ref={ref} />}
-        </ListBoxWrapper>
       </Menu>
     </>
   ) : null;

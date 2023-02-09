@@ -46,6 +46,7 @@ export interface ExtendedNxDimensionInfo extends Omit<EngineAPI.INxDimensionInfo
 export interface ExtendedNxMeasureInfo extends EngineAPI.INxMeasureInfo {
   textAlign: TextAlign;
   qAttrExprInfo: ExtendedNxAttrExprInfo[];
+  qLibraryId: string;
   columnWidth: ColumnWidth;
 }
 
@@ -119,6 +120,8 @@ export interface ColumnWidth {
 export interface Column {
   id: string;
   isDim: boolean;
+  isMasterItem: boolean;
+  fieldId: string;
   isLocked: boolean;
   colIdx: number;
   pageColIdx: number;

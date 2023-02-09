@@ -42,9 +42,7 @@ function HeadCellContent({ column, columnIndex, isActive, areBasicFeaturesEnable
           )}
         </StyledSortButton>
       </LockAndLabel>
-      {areBasicFeaturesEnabled && (
-        <HeadCellMenu columnIndex={columnIndex} isDimension={column.isDim} tabIndex={tabIndex} />
-      )}
+      {areBasicFeaturesEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
     </StyledHeadCellContent>
   );
 }
