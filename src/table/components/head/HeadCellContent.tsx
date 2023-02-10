@@ -24,7 +24,7 @@ function HeadCellContent({
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
 
   const { startIcon, endIcon, lockIcon } = getHeadIcons(column);
-  const tabIndex = !keyboard.enabled ? 0 : -1;
+  const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
   const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
   const isLabelLast = column.align === 'right';
   const className = isLastCell && isLabelLast ? 'sn-table-head-last-element' : '';

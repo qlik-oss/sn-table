@@ -68,7 +68,7 @@ export default function TableWrapper(props: TableWrapperProps) {
     // make sure to blur or focus the cell corresponding to focusedCellCoord
     // when keyboard.focus() runs, keyboard.active is true
     // when keyboard.blur() runs, keyboard.active is false
-    const focusType = keyboard.active ? 'focus' : 'blur';
+    const focusType = keyboard.active ? 'focusButton' : 'blur';
     const cellCoord = keyboard.active ? ([0, 0] as [number, number]) : focusedCellCoord;
     updateFocus({ focusType, cell: getCellElement(rootElement, cellCoord) });
   }, [keyboard.active]);
