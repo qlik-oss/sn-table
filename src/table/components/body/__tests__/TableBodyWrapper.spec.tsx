@@ -25,13 +25,15 @@ describe('<TableBodyWrapper />', () => {
   const renderTableBody = () =>
     render(
       <TestWithProviders selectionsAPI={selectionsAPI}>
-        <TableBodyWrapper
-          tableData={tableData}
-          setShouldRefocus={setShouldRefocus}
-          tableWrapperRef={tableWrapperRef}
-          announce={announce}
-          areBasicFeaturesEnabled={areBasicFeaturesEnabled}
-        />
+        <table>
+          <TableBodyWrapper
+            tableData={tableData}
+            setShouldRefocus={setShouldRefocus}
+            tableWrapperRef={tableWrapperRef}
+            announce={announce}
+            areBasicFeaturesEnabled={areBasicFeaturesEnabled}
+          />
+        </table>
       </TestWithProviders>
     );
 

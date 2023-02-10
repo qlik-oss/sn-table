@@ -16,7 +16,7 @@ describe('withColumnStyling', () => {
   let areBasicFeaturesEnabled: boolean;
 
   beforeEach(() => {
-    HOC = withColumnStyling.default((props: CellHOCProps) => <TableCell {...props}>{props.children}</TableCell>);
+    HOC = withColumnStyling.default((props: CellHOCProps) => <TableCell>{props.children}</TableCell>);
     jest.spyOn(stylingUtils, 'getColumnStyle');
 
     styling = {} as unknown as CellStyle;
@@ -35,15 +35,21 @@ describe('withColumnStyling', () => {
 
   it('should render table head', () => {
     const { queryByText } = render(
-      <HOC
-        cell={cell}
-        column={column}
-        styling={styling}
-        announce={announce}
-        areBasicFeaturesEnabled={areBasicFeaturesEnabled}
-      >
-        someValue
-      </HOC>
+      <table>
+        <tbody>
+          <tr>
+            <HOC
+              cell={cell}
+              column={column}
+              styling={styling}
+              announce={announce}
+              areBasicFeaturesEnabled={areBasicFeaturesEnabled}
+            >
+              someValue
+            </HOC>
+          </tr>
+        </tbody>
+      </table>
     );
 
     expect(queryByText('someValue')).toBeVisible();

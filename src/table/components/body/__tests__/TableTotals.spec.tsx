@@ -18,7 +18,11 @@ describe('<TableTotals />', () => {
   const renderTableTotals = (cellCoordMock?: [number, number]) =>
     render(
       <TestWithProviders selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock}>
-        <TableTotals tableData={tableData} areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
+        <table>
+          <tbody>
+            <TableTotals tableData={tableData} areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
+          </tbody>
+        </table>
       </TestWithProviders>
     );
 
