@@ -177,6 +177,10 @@ describe('<HeadCellMenu />', () => {
     });
     fireEvent.click(button);
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    // it's called 2 times:
+    // 1. default state is false
+    // 2. when we actually close the dropdown
+    expect(resetSelectionActionsEnabledStatusMock).toHaveBeenCalledTimes(2);
   });
 
   it('should call `embed.__DO_NOT_USE__.popover()` once while trying to open listbox filter for a dimension', async () => {
@@ -238,6 +242,7 @@ describe('<HeadCellMenu />', () => {
     };
 
     afterEach(() => {
+      expect(updateSelectionActionsEnabledStatusMock).toHaveBeenCalledTimes(1);
       expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     });
 
