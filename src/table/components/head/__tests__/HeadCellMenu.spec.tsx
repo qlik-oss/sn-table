@@ -83,9 +83,9 @@ describe('<HeadCellMenu />', () => {
       selectExcluded: jest.fn(),
     } as unknown as EngineAPI.IField;
     selectionActionsEnabledStatusMock = {
-      canSelectAll: false,
+      canSelectAll: true,
       canClearSelections: false,
-      canSelectPossible: false,
+      canSelectPossible: true,
       canSelectAlternative: false,
       canSelectExcluded: false,
     };
@@ -194,5 +194,76 @@ describe('<HeadCellMenu />', () => {
       column.fieldId,
       defaultListboxAnchorOpts
     );
+  });
+
+  it('should reflect correct `enabled` status of selection actions based', async () => {
+    renderTableHeadCellMenu();
+
+    fireEvent.click(screen.getByRole('button'));
+    await waitFor(() => {
+      expect(screen.queryByRole('menu')).toBeVisible();
+    });
+    menuLabels.forEach((label) => {
+      expect(screen.getByText(label)).toBeVisible();
+    });
+
+    // enabled actions based on mocked values
+    ['SNTable.MenuItem.SelectAll', 'SNTable.MenuItem.SelectPossible'].forEach((actionLabel) => {
+      expect(screen.queryByText(actionLabel)?.parentNode).not.toHaveAttribute('aria-disabled');
+    });
+
+    // disabled actions based on mocked values
+    [
+      'SNTable.MenuItem.ClearSelections',
+      'SNTable.MenuItem.SelectAlternative',
+      'SNTable.MenuItem.SelectExcluded',
+    ].forEach((actionLabel) => {
+      expect(screen.queryByText(actionLabel)?.parentNode).toHaveAttribute('aria-disabled', 'true');
+    });
+  });
+
+  describe('Selection actions', () => {
+    const handleBeforeEachAction = async (targetAction: string) => {
+      selectionActionsEnabledStatusMock = {
+        ...selectionActionsEnabledStatusMock,
+        [`can${targetAction}`]: true,
+      };
+      renderTableHeadCellMenu();
+      fireEvent.click(screen.getByRole('button'));
+      await waitFor(() => {
+        expect(screen.queryByRole('menu')).toBeVisible();
+      });
+
+      fireEvent.click(screen.getByText(`SNTable.MenuItem.${targetAction}`));
+    };
+
+    afterEach(() => {
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    });
+
+    it('should be able to call "Select All" once when it is enabled', async () => {
+      await handleBeforeEachAction('SelectAll');
+      expect(fieldInstanceMock.selectAll).toHaveBeenCalledTimes(1);
+    });
+
+    it('should be able to call "Clear Selection" all once when it is enabled', async () => {
+      await handleBeforeEachAction('ClearSelections');
+      expect(fieldInstanceMock.clear).toHaveBeenCalledTimes(1);
+    });
+
+    it('should be able to call "Select Possible" all once when it is enabled', async () => {
+      await handleBeforeEachAction('SelectPossible');
+      expect(fieldInstanceMock.selectPossible).toHaveBeenCalledTimes(1);
+    });
+
+    it('should be able to call "Select Alternative" all once when it is enabled', async () => {
+      await handleBeforeEachAction('SelectAlternative');
+      expect(fieldInstanceMock.selectAlternative).toHaveBeenCalledTimes(1);
+    });
+
+    it('should be able to call "Select Excluded" all once when it is enabled', async () => {
+      await handleBeforeEachAction('SelectExcluded');
+      expect(fieldInstanceMock.selectExcluded).toHaveBeenCalledTimes(1);
+    });
   });
 });
