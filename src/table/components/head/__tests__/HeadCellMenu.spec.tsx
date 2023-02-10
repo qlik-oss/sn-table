@@ -1,10 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
-import { render, fireEvent, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import { Column, TableLayout } from '../../../../types';
 import HeadCellMenu from '../HeadCellMenu';
 import TestWithProviders from '../../../../__test__/test-with-providers';
+import * as useFieldSelectionHook from '../../../hooks/use-field-selection';
 
 type ExtendedEmbed = stardust.Embed & {
   __DO_NOT_USE__: {
@@ -18,11 +19,31 @@ describe('<HeadCellMenu />', () => {
   let layout: TableLayout;
   let column: Column;
   let defaultListboxAnchorOpts: any;
+  // let mockLayout: TableLayout;
+  let fieldInstanceMock: EngineAPI.IField;
+  let selectionActionsEnabledStatusMock: Record<string, boolean>;
+  let resetSelectionActionsEnabledStatusMock: jest.Mock<any, any>;
+  let updateSelectionActionsEnabledStatusMock: jest.Mock<any, any>;
+  let model: EngineAPI.IGenericObject;
   const direction: 'ltr' | 'rtl' = 'ltr';
+  const menuLabels = [
+    'SNTable.MenuItem.Search',
+    'SNTable.MenuItem.SelectAll',
+    'SNTable.MenuItem.ClearSelections',
+    'SNTable.MenuItem.SelectPossible',
+    'SNTable.MenuItem.SelectAlternative',
+    'SNTable.MenuItem.SelectExcluded',
+  ];
 
   const renderTableHeadCellMenu = (cellCoordMock?: [number, number]) =>
     render(
-      <TestWithProviders cellCoordMock={cellCoordMock} layout={layout} direction={direction} embed={embed}>
+      <TestWithProviders
+        cellCoordMock={cellCoordMock}
+        layout={layout}
+        direction={direction}
+        embed={embed}
+        model={model}
+      >
         <HeadCellMenu column={column} tabIndex={0} />
       </TestWithProviders>
     );
@@ -47,12 +68,56 @@ describe('<HeadCellMenu />', () => {
     column = {
       colIdx: 0,
       isDim: true,
+      label: 'dim#01',
       fieldId: 'someFieldId',
     } as Column;
     defaultListboxAnchorOpts = {
       anchorOrigin: { horizontal: 'left', vertical: 'bottom' },
       transformOrigin: { horizontal: 'left', vertical: 'top' },
     };
+    fieldInstanceMock = {
+      selectAll: jest.fn(),
+      clear: jest.fn(),
+      selectPossible: jest.fn(),
+      selectAlternative: jest.fn(),
+      selectExcluded: jest.fn(),
+    } as unknown as EngineAPI.IField;
+    selectionActionsEnabledStatusMock = {
+      canSelectAll: false,
+      canClearSelections: false,
+      canSelectPossible: false,
+      canSelectAlternative: false,
+      canSelectExcluded: false,
+    };
+    resetSelectionActionsEnabledStatusMock = jest.fn();
+    updateSelectionActionsEnabledStatusMock = jest.fn();
+    jest.spyOn(useFieldSelectionHook, 'default').mockReturnValue({
+      fieldInstance: fieldInstanceMock,
+      selectionActionsEnabledStatus: selectionActionsEnabledStatusMock,
+      resetSelectionActionsEnabledStatus: resetSelectionActionsEnabledStatusMock,
+      updateSelectionActionsEnabledStatus: updateSelectionActionsEnabledStatusMock,
+    });
+    // mockLayout = {
+    //   qHyperCube: {
+    //     qDimensionInfo: [
+    //       {
+    //         qFallbackTitle: 'dim#01',
+    //         qStateCounts: { qSelected: 0, qOption: 0, qDeselected: 0, qAlternative: 0, qExcluded: 0 },
+    //       },
+    //       {
+    //         qFallbackTitle: 'dim#02',
+    //         qStateCounts: { qSelected: 0, qOption: 0, qDeselected: 0, qAlternative: 0, qExcluded: 0 },
+    //       },
+    //       {
+    //         qFallbackTitle: 'dim#03',
+    //         qStateCounts: { qSelected: 0, qOption: 0, qDeselected: 0, qAlternative: 0, qExcluded: 0 },
+    //       },
+    //     ],
+    //   },
+    // } as TableLayout;
+    model = {
+      getLayout: jest.fn().mockResolvedValue(null),
+    } as unknown as EngineAPI.IGenericObject;
   });
 
   afterEach(() => {
@@ -78,25 +143,28 @@ describe('<HeadCellMenu />', () => {
     expect(element).toBeNull();
   });
 
-  it('should open the menu only when the button is clicked', () => {
+  it('should open the menu only when the button is clicked', async () => {
     renderTableHeadCellMenu();
 
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button'));
-    expect(screen.getByRole('menu')).toBeVisible();
-    expect(screen.getByText('SNTable.MenuItem.Search')).toBeVisible();
+    await waitFor(() => {
+      expect(screen.queryByRole('menu')).toBeVisible();
+    });
+    menuLabels.forEach((label) => {
+      expect(screen.getByText(label)).toBeVisible();
+    });
   });
 
   it('should close the menu when listbox is about to mount', async () => {
     renderTableHeadCellMenu();
 
     fireEvent.click(screen.getByRole('button'));
-    const menu = screen.queryByRole('menu');
     await waitFor(() => {
-      expect(menu).toBeVisible();
+      expect(screen.queryByRole('menu')).toBeVisible();
     });
     fireEvent.click(screen.getByText('SNTable.MenuItem.Search'));
-    await waitForElementToBeRemoved(menu);
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 
   it('should close the menu by clicking the menu button when the context menu is open', async () => {
@@ -104,21 +172,22 @@ describe('<HeadCellMenu />', () => {
 
     const button = screen.getByRole('button');
     fireEvent.click(button);
-    const menu = screen.queryByRole('menu');
     await waitFor(() => {
-      expect(menu).toBeVisible();
+      expect(screen.queryByRole('menu')).toBeVisible();
     });
     fireEvent.click(button);
-    await waitForElementToBeRemoved(menu);
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 
   it('should call `embed.__DO_NOT_USE__.popover()` once while trying to open listbox filter for a dimension', async () => {
     renderTableHeadCellMenu();
 
     fireEvent.click(screen.getByRole('button'));
-    const menu = screen.queryByRole('menu');
+    await waitFor(() => {
+      expect(screen.queryByRole('menu')).toBeVisible();
+    });
     fireEvent.click(screen.getByText('SNTable.MenuItem.Search'));
-    await waitForElementToBeRemoved(menu);
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     expect(embed.__DO_NOT_USE__.popover).toHaveBeenCalledTimes(1);
     expect(embed.__DO_NOT_USE__.popover).toHaveBeenCalledWith(
       expect.any(HTMLDivElement),

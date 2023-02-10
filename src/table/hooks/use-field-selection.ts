@@ -10,7 +10,7 @@ const SELECTION_ACTIONS_ENABLED_DEFAULT_STATUS: Record<string, boolean> = {
   canSelectExcluded: false,
 };
 
-interface UseFieldSelectionOutput {
+export interface UseFieldSelectionOutput {
   fieldInstance: EngineAPI.IField | null;
   selectionActionsEnabledStatus: Record<string, boolean>;
   resetSelectionActionsEnabledStatus: () => void;
