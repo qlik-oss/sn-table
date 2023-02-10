@@ -63,7 +63,7 @@ export const TableContextProvider = ({
       translator,
       constraints,
       theme.name(),
-      keyboard,
+      keyboard.active,
       rootElement,
       embed,
       changeSortOrder,
