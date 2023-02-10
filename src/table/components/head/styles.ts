@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 
-import { BORDER_WIDTH, COMMON_CELL_STYLING, PADDING } from '../../styling-defaults';
+import { BORDER_WIDTH, COMMON_CELL_STYLING, DEFAULT_FONT_SIZE, PADDING } from '../../styling-defaults';
 
 // ---------- TableHeadWrapper ----------
 
@@ -40,7 +40,7 @@ export const StyledSortButton = styled(Button, {
   },
   '& svg': {
     opacity: isActive ? 1 : 0,
-    fontSize: '12px',
+    fontSize: DEFAULT_FONT_SIZE,
   },
   '& .MuiButton-endIcon': {
     marginBottom: '2px',
