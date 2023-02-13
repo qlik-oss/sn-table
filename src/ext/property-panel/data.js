@@ -166,7 +166,90 @@ const getData = (env) =>
         type: 'items',
         translation: 'Common.Data',
         component: 'data-assets-panel',
-        items: {},
+        items: {
+          dimension: {
+            type: 'array',
+            component: 'expandable-items',
+            ref: 'qHyperCubeDef.qDimensions',
+            items: {
+              field: {
+                type: 'items',
+                translation: 'Common.Field',
+                items: {
+                  libraryId: {
+                    type: 'string',
+                    component: 'library-item',
+                    libraryItemType: 'dimension',
+                    ref: 'qLibraryId',
+                    translation: 'Common.Dimension',
+                    show(itemData) {
+                      return itemData.qLibraryId;
+                    },
+                  },
+                  inlineDimension: {
+                    component: 'inline-dimension',
+                    show(itemData) {
+                      return !itemData.qLibraryId;
+                    },
+                  },
+                  nullSuppression: {
+                    type: 'boolean',
+                    ref: 'qNullSuppression',
+                    defaultValue: false,
+                    translation: 'properties.dimensions.showNull',
+                    inverted: true,
+                  },
+                  ...columnCommonHidden,
+                  ...columnExpressionItems,
+                },
+              },
+              presentation: {
+                type: 'items',
+                translation: 'Common.Presentation',
+                items: {
+                  ...textAlignItems,
+                },
+              },
+            },
+          },
+          measure: {
+            type: 'array',
+            component: 'expandable-items',
+            ref: 'qHyperCubeDef.qMeasures',
+            grouped: true,
+            items: {
+              field: {
+                type: 'items',
+                translation: 'Common.Field',
+                items: {
+                  libraryId: {
+                    type: 'string',
+                    component: 'library-item',
+                    libraryItemType: 'measure',
+                    ref: 'qLibraryId',
+                    translation: 'Common.Measure',
+                    show: (itemData) => itemData.qLibraryId,
+                  },
+                  inlineMeasure: {
+                    component: 'inline-measure',
+                    show: (itemData) => !itemData.qLibraryId,
+                  },
+                  ...columnCommonHidden,
+                  ...columnExpressionItems,
+                  ...textAlignItems,
+                  totalsAggr: getTotalsAggr(env),
+                },
+              },
+              presentation: {
+                type: 'items',
+                translation: 'Common.Presentation',
+                items: {
+                  ...textAlignItems,
+                },
+              },
+            },
+          },
+        },
       }
     : {
         type: 'items',
