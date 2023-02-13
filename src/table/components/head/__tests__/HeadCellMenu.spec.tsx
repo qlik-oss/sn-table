@@ -18,12 +18,12 @@ describe('<HeadCellMenu />', () => {
   let embed: ExtendedEmbed;
   let layout: TableLayout;
   let column: Column;
-  let model: EngineAPI.IGenericObject;
   let defaultListboxAnchorOpts: any;
   let fieldInstanceMock: EngineAPI.IField;
   let selectionActionsEnabledStatusMock: Record<string, boolean>;
   let resetSelectionActionsEnabledStatusMock: jest.Mock<any, any>;
   let updateSelectionActionsEnabledStatusMock: jest.Mock<any, any>;
+  let model: EngineAPI.IGenericObject;
   const direction: 'ltr' | 'rtl' = 'ltr';
   const menuLabels = [
     'SNTable.MenuItem.Search',

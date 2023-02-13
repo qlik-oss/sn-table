@@ -30,7 +30,7 @@ const useFieldSelection = (column: Column): UseFieldSelectionOutput => {
   );
 
   useEffect(() => {
-    if (!app || !column || !isMenuVisible) return;
+    if (!app || !app.getField || !column || !isMenuVisible) return;
     app.getField(column.fieldId).then(setFieldInstance);
   }, [app, column, isMenuVisible]);
 
