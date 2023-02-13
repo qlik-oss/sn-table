@@ -121,10 +121,21 @@ export default function supernova(env: Galaxy) {
 
       useEffect(() => {
         const isReadyToRender =
-          !env.carbon && reactRoot && layout && tableData && changeSortOrder && theme && selectionsAPI && embed;
+          !env.carbon &&
+          reactRoot &&
+          model &&
+          app &&
+          layout &&
+          tableData &&
+          changeSortOrder &&
+          theme &&
+          selectionsAPI &&
+          embed;
         isReadyToRender &&
           render(
             {
+              app,
+              model,
               rootElement,
               layout,
               tableData,
@@ -147,6 +158,8 @@ export default function supernova(env: Galaxy) {
             reactRoot
           );
       }, [
+        app,
+        model,
         reactRoot,
         tableData,
         constraints,

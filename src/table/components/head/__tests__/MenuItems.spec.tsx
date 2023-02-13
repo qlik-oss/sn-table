@@ -25,7 +25,7 @@ describe('<MenuGroup />', () => {
           itemTitle: 'menu#01',
           onClick: jest.fn(),
           icon: <></>,
-          isDisabled: false,
+          enabled: true,
         },
       ],
       [
@@ -34,7 +34,7 @@ describe('<MenuGroup />', () => {
           itemTitle: 'menu#02',
           onClick: jest.fn(),
           icon: <></>,
-          isDisabled: false,
+          enabled: true,
         },
       ],
     ];
