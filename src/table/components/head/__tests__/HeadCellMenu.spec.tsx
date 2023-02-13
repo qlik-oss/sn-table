@@ -19,7 +19,6 @@ describe('<HeadCellMenu />', () => {
   let layout: TableLayout;
   let column: Column;
   let defaultListboxAnchorOpts: any;
-  // let mockLayout: TableLayout;
   let fieldInstanceMock: EngineAPI.IField;
   let selectionActionsEnabledStatusMock: Record<string, boolean>;
   let resetSelectionActionsEnabledStatusMock: jest.Mock<any, any>;
@@ -97,24 +96,6 @@ describe('<HeadCellMenu />', () => {
       resetSelectionActionsEnabledStatus: resetSelectionActionsEnabledStatusMock,
       updateSelectionActionsEnabledStatus: updateSelectionActionsEnabledStatusMock,
     });
-    // mockLayout = {
-    //   qHyperCube: {
-    //     qDimensionInfo: [
-    //       {
-    //         qFallbackTitle: 'dim#01',
-    //         qStateCounts: { qSelected: 0, qOption: 0, qDeselected: 0, qAlternative: 0, qExcluded: 0 },
-    //       },
-    //       {
-    //         qFallbackTitle: 'dim#02',
-    //         qStateCounts: { qSelected: 0, qOption: 0, qDeselected: 0, qAlternative: 0, qExcluded: 0 },
-    //       },
-    //       {
-    //         qFallbackTitle: 'dim#03',
-    //         qStateCounts: { qSelected: 0, qOption: 0, qDeselected: 0, qAlternative: 0, qExcluded: 0 },
-    //       },
-    //     ],
-    //   },
-    // } as TableLayout;
     model = {
       getLayout: jest.fn().mockResolvedValue(null),
     } as unknown as EngineAPI.IGenericObject;
