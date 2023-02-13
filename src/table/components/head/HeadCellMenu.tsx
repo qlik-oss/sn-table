@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo, useEffect } from 'react';
+import React, { useRef, useState, useMemo, useEffect, useCallback } from 'react';
 import Menu from '@mui/material/Menu';
 import More from '@qlik-trial/sprout/icons/react/More';
 import Search from '@qlik-trial/sprout/icons/react/Search';
@@ -29,7 +29,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
     updateSelectionActionsEnabledStatus,
   } = useFieldSelection(column);
 
-  const embedListbox = () => {
+  const embedListbox = useCallback(() => {
     // @ts-ignore TODO: no types for `__DO_NOT_USE__`, it will improve when it becomes stable
     // eslint-disable-next-line
     embed.__DO_NOT_USE__.popover(listboxRef.current, column.fieldId, {
@@ -41,11 +41,11 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
     embed.on('fieldPopoverClose', () => {
       setOpenListboxDropdown(false);
     });
-  };
+  }, [embed, column.fieldId]);
 
   useEffect(() => {
     if (!openMenuDropdown) resetSelectionActionsEnabledStatus();
-  }, [openMenuDropdown]);
+  }, [openMenuDropdown, resetSelectionActionsEnabledStatus]);
 
   const handleOpenDropdown = async () => {
     if (!openMenuDropdown && model) {
@@ -128,7 +128,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
           ]
         : []),
     ],
-    [translator, showSearchMenuItem, fieldInstance, selectionActionsEnabledStatus]
+    [translator, showSearchMenuItem, fieldInstance, selectionActionsEnabledStatus, embedListbox]
   );
 
   return menuItemGroups.length ? (

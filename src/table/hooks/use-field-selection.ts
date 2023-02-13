@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useContextSelector, TableContext } from '../context';
 import { Column, TableLayout } from '../../types';
 
@@ -34,8 +34,10 @@ const useFieldSelection = (column: Column): UseFieldSelectionOutput => {
     app.getField(column.fieldId).then(setFieldInstance);
   }, [app, column, isMenuVisible]);
 
-  const resetSelectionActionsEnabledStatus = () =>
-    setSelectionActionsEnabledStatus(SELECTION_ACTIONS_ENABLED_DEFAULT_STATUS);
+  const resetSelectionActionsEnabledStatus = useCallback(
+    () => setSelectionActionsEnabledStatus(SELECTION_ACTIONS_ENABLED_DEFAULT_STATUS),
+    []
+  );
   const updateSelectionActionsEnabledStatus = (layout: TableLayout) => {
     const dimInfo = layout.qHyperCube.qDimensionInfo.find((dim) => dim.qFallbackTitle === column.label);
     if (!dimInfo) return;
