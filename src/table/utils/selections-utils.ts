@@ -171,7 +171,7 @@ export const getMultiSelectedRows = (
     newSelectedRows[cell.qElemNumber] = cell.rowIdx;
     // also add the next or previous cell to selectedRows, based on which arrow is pressed
     const idxShift = evt.key === KeyCodes.DOWN ? 1 : -1;
-    const nextCell = pageRows[cell.pageRowIdx + idxShift][`col-${cell.colIdx}`] as Cell;
+    const nextCell = pageRows[cell.pageRowIdx + idxShift][`col-${cell.pageColIdx}`] as Cell;
     newSelectedRows[nextCell.qElemNumber] = cell.rowIdx + idxShift;
     return newSelectedRows;
   }
@@ -181,7 +181,7 @@ export const getMultiSelectedRows = (
   const highestRowIdx = Math.max(firstCell.pageRowIdx, cell.pageRowIdx);
 
   for (let idx = lowestRowIdx; idx <= highestRowIdx; idx++) {
-    const selectedCell = pageRows[idx][`col-${firstCell.colIdx}`] as Cell;
+    const selectedCell = pageRows[idx][`col-${firstCell.pageColIdx}`] as Cell;
     newSelectedRows[selectedCell.qElemNumber] = selectedCell.rowIdx;
   }
 

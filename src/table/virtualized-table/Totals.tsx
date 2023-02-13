@@ -5,7 +5,7 @@ import { useContextSelector, TableContext } from '../context';
 import { TotalsProps } from './types';
 
 const Totals = (props: TotalsProps) => {
-  const { rect, forwardRef, columnWidth, pageInfo, totals, rowHeight } = props;
+  const { rect, forwardRef, columnWidth, pageInfo, totals, rowHeight, columns } = props;
   const { layout, styling } = useContextSelector(TableContext, (value) => value.baseProps);
 
   useLayoutEffect(() => {
@@ -29,7 +29,7 @@ const Totals = (props: TotalsProps) => {
       itemSize={(index) => columnWidth[index]}
       height={rowHeight}
       width={rect.width}
-      itemData={{ totalsStyle: styling.totals }}
+      itemData={{ totalsStyle: styling.totals, columns }}
     >
       {TotalsCell}
     </VariableSizeList>
