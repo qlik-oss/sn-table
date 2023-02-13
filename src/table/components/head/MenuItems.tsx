@@ -18,6 +18,6 @@ export default function MenuItems({ itemGroups }: { itemGroups: MenuItemGroup[] 
 
   return itemGroups.map((group, index) => [
     getItemComponents(group),
-    index < itemGroups.length - 1 ? <StyledDivider variant="middle" /> : undefined,
+    index < itemGroups.length - 1 ? <StyledDivider variant="middle" key="divider" /> : undefined,
   ]);
 }

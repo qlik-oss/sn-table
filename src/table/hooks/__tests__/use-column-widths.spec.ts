@@ -5,18 +5,11 @@ import { TableStyling } from '../../types';
 import useColumnWidths from '../use-column-widths';
 
 describe('use-column-widths', () => {
-  let measureTextMock: jest.Mock<{ width: number }>;
   let columns: Column[];
   let tableWidth: number;
   let styling: TableStyling;
 
   beforeEach(() => {
-    measureTextMock = jest.fn();
-    const context = {
-      measureText: measureTextMock,
-    } as unknown as CanvasRenderingContext2D;
-    jest.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(context);
-
     columns = [
       {
         label: 'col1',
@@ -39,10 +32,6 @@ describe('use-column-widths', () => {
       body: { fontFamily: 'Arial', fontSize: '12px' },
       head: { fontFamily: 'Arial', fontSize: '12px' },
     } as unknown as TableStyling;
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
   });
 
   // only looking at the state not setState
@@ -77,7 +66,6 @@ describe('use-column-widths', () => {
       });
 
       it('should return one size for hug and equal sizes for two columns with fill', () => {
-        measureTextMock.mockReturnValue({ width: 10 });
         columns[0].columnWidth.type = ColumnWidthTypes.HUG;
         columns[1].columnWidth.type = ColumnWidthTypes.HUG;
         columns[2].columnWidth.type = ColumnWidthTypes.HUG;
@@ -124,7 +112,6 @@ describe('use-column-widths', () => {
       });
 
       it('should return one size for hug and equal sizes for two columns with fill', () => {
-        measureTextMock.mockReturnValue({ width: 10 });
         columns[2].columnWidth.type = ColumnWidthTypes.HUG;
 
         const widths = getColumnWidthsState();

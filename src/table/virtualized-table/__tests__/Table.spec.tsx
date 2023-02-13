@@ -12,7 +12,6 @@ import { EMPTY_TABLE_DATA } from '../../context/TableContext';
 import { getColumns, getTotalPosition } from '../../../handle-data';
 
 describe('<Table />', () => {
-  let measureTextMock: jest.Mock<{ width: number }>;
   let rect: stardust.Rect;
   let layout: TableLayout;
   let pageInfo: PageInfo;
@@ -51,13 +50,6 @@ describe('<Table />', () => {
 
   beforeEach(() => {
     user = userEvent.setup();
-
-    measureTextMock = jest.fn();
-    const context = {
-      measureText: measureTextMock,
-    } as unknown as CanvasRenderingContext2D;
-    jest.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(context);
-    measureTextMock.mockReturnValue({ width: 150 });
 
     layout = generateLayout(dimensionCount, measureCount, rowCount);
     layout.qHyperCube.qEffectiveInterColumnSortOrder = [0, 1, 2];

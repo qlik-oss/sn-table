@@ -12,7 +12,9 @@ describe('<TableHeadWrapper />', () => {
   const renderTableHead = () =>
     render(
       <TestWithProviders layout={layout}>
-        <TableHeadWrapper tableData={tableData} areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
+        <table>
+          <TableHeadWrapper tableData={tableData} areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
+        </table>
       </TestWithProviders>
     );
 
