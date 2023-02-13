@@ -46,14 +46,14 @@ function TableBodyWrapper({
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
 
   useEffect(() => {
-    addSelectionListeners({
+    return addSelectionListeners({
       api: selectionsAPI,
       selectionDispatch,
       setShouldRefocus,
       keyboard,
       tableWrapperRef,
     });
-  }, []);
+  }, [keyboard, selectionDispatch, selectionsAPI, setShouldRefocus, tableWrapperRef]);
 
   const totals = <TableTotals tableData={tableData} areBasicFeaturesEnabled={areBasicFeaturesEnabled} />;
 
