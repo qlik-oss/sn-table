@@ -28,7 +28,7 @@ export default function Wrapper(props: WrapperProps) {
   useOnPropsChange(() => setPage(0), [layout]);
 
   return (
-    <StyledTableWrapper data-key="wrapper" background={theme.background} dir="ltr">
+    <StyledTableWrapper data-testid="sn-table" background={theme.background} dir="ltr">
       <Table rect={rect} pageInfo={pageInfo} tableData={tableData} />
       {paginationNeeded && (
         <FooterWrapper>

@@ -58,9 +58,9 @@ const runRenderingTests = (theme: Object | Function, themeType: String, language
       console.log({ renderUrl });
       // Open page in Nebula which renders fixture
       await playwright.open(renderUrl);
-      if (name === 'scenario_9' || name === 'scenario_10') await page.hover('text=Tampere');
-      if (name === 'scenario_11') await page.hover('text=Valley Solutions');
-      if (name === 'scenario_12') {
+      if (name.includes('scenario_9') || name.includes('scenario_10')) await page.hover('text=Tampere');
+      if (name.includes('scenario_11')) await page.hover('text=Valley Solutions');
+      if (name.includes('scenario_12')) {
         const element = page.locator('text=Zocalo');
         await element.scrollIntoViewIfNeeded();
       }
