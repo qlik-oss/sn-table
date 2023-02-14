@@ -226,7 +226,68 @@ const getData = (env) =>
         type: 'items',
         translation: 'Common.Data',
         component: 'data-assets-panel',
-        items: {},
+        items: {
+          dimensions: {
+            type: 'array',
+            component: 'expandable-items',
+            ref: 'qHyperCubeDef.qDimensions',
+            grouped: true,
+            items: {
+              libraryId: {
+                type: 'string',
+                component: 'library-item',
+                libraryItemType: 'dimension',
+                ref: 'qLibraryId',
+                translation: 'Common.Dimension',
+                show(itemData) {
+                  return itemData.qLibraryId;
+                },
+              },
+              inlineDimension: {
+                component: 'inline-dimension',
+                show(itemData) {
+                  return !itemData.qLibraryId;
+                },
+              },
+              nullSuppression: {
+                type: 'boolean',
+                ref: 'qNullSuppression',
+                defaultValue: false,
+                translation: 'properties.dimensions.showNull',
+                inverted: true,
+              },
+              ...columnCommonHidden,
+              ...columnExpressionItems,
+              ...textAlignItems,
+              ...getColumnResize(env),
+            },
+          },
+          measures: {
+            type: 'array',
+            component: 'expandable-items',
+            ref: 'qHyperCubeDef.qMeasures',
+            grouped: true,
+            items: {
+              libraryId: {
+                type: 'string',
+                component: 'library-item',
+                libraryItemType: 'measure',
+                ref: 'qLibraryId',
+                translation: 'Common.Measure',
+                show: (itemData) => itemData.qLibraryId,
+              },
+              inlineMeasure: {
+                component: 'inline-measure',
+                show: (itemData) => !itemData.qLibraryId,
+              },
+              ...columnCommonHidden,
+              ...columnExpressionItems,
+              ...textAlignItems,
+              totalsAggr: getTotalsAggr(env),
+              ...getColumnResize(env),
+            },
+          },
+        },
       }
     : {
         type: 'items',
