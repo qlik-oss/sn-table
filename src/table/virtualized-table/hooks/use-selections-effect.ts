@@ -3,7 +3,11 @@ import { useEffect } from 'react';
 import { Row } from '../../../types';
 import { SelectionActions } from '../../constants';
 import { TableContext, useContextSelector } from '../../context';
-import { addSelectionListeners } from '../../utils/selections-utils';
+import useSelectionListener from '../../hooks/use-selection-listener';
+
+const keyboard = { enabled: false } as stardust.Keyboard; // TODO No keyboard navigation support
+const setShouldRefocus = () => {}; // TODO No focus support
+const tableWrapperRef = { current: null }; // TODO No focus support
 
 export default function useSelectionsEffect(rowsInPage: Row[]) {
   const { selectionsAPI } = useContextSelector(TableContext, (value) => value.baseProps);
@@ -13,13 +17,11 @@ export default function useSelectionsEffect(rowsInPage: Row[]) {
     selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows: rowsInPage } });
   }, [selectionDispatch, rowsInPage]);
 
-  useEffect(() => {
-    return addSelectionListeners({
-      api: selectionsAPI,
-      selectionDispatch,
-      setShouldRefocus: () => {}, // TODO No focus support
-      keyboard: { enabled: false } as stardust.Keyboard, // TODO No keyboard navigation support
-      tableWrapperRef: { current: null }, // TODO No focus support
-    });
-  }, [selectionsAPI, selectionDispatch]);
+  useSelectionListener({
+    selectionsAPI,
+    selectionDispatch,
+    setShouldRefocus,
+    keyboard,
+    tableWrapperRef,
+  });
 }

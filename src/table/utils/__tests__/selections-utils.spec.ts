@@ -1,6 +1,4 @@
-import { stardust } from '@nebula.js/stardust';
 import {
-  addSelectionListeners,
   reducer,
   announceSelectionStatus,
   getSelectedRows,
@@ -23,95 +21,6 @@ import { SelectionStates, SelectionActions, KeyCodes } from '../../constants';
 import { createCell, createPageRows } from '../../../__test__/generate-test-data';
 
 describe('selections-utils', () => {
-  describe('addSelectionListeners', () => {
-    const listenerNames = ['deactivated', 'canceled', 'confirmed', 'cleared'];
-    let api: ExtendedSelectionAPI;
-    let selectionDispatch: jest.Mock<any, any>;
-    let setShouldRefocus: jest.Mock<any, any>;
-    let keyboard: stardust.Keyboard;
-    let containsActiveElement: boolean;
-    let tableWrapperRef: React.MutableRefObject<HTMLDivElement>;
-
-    beforeEach(() => {
-      selectionDispatch = jest.fn();
-      setShouldRefocus = jest.fn();
-      api = {
-        on: jest.fn(),
-        removeListener: jest.fn(),
-      } as unknown as ExtendedSelectionAPI;
-      keyboard = { enabled: true, active: false, blur: jest.fn(), focus: jest.fn(), focusSelection: jest.fn() };
-
-      containsActiveElement = true;
-      tableWrapperRef = {
-        current: {
-          contains: () => containsActiveElement,
-        },
-      } as unknown as React.MutableRefObject<HTMLDivElement>;
-    });
-
-    afterEach(() => jest.clearAllMocks());
-
-    it('should call api.on and api removeListener for all listeners', () => {
-      addSelectionListeners({ api, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef })?.();
-
-      listenerNames.forEach((name, index) => {
-        expect(api.on).toHaveBeenNthCalledWith(index + 1, name, expect.anything());
-      });
-    });
-    it('should call api.on with the same callback for all listener names, that calls selectionDispatch', () => {
-      const callbacks: Array<() => void> = [];
-      api = {
-        on: (_: string, cb: () => void) => {
-          callbacks.push(cb);
-        },
-        removeListener: () => null,
-      } as unknown as ExtendedSelectionAPI;
-
-      addSelectionListeners({ api, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
-      callbacks.forEach((cb) => {
-        cb();
-        expect(selectionDispatch).toHaveBeenCalledWith({ type: SelectionActions.RESET });
-      });
-      // only for confirm events
-      expect(setShouldRefocus).toHaveBeenCalledTimes(1);
-      expect(keyboard.blur).not.toHaveBeenCalled();
-    });
-    it('should call keyboard blur when confirmed callback is called, keyboard.enabled is true and tableWrapperRef does not contain activeElement', () => {
-      containsActiveElement = false;
-      let confirmCallback: () => void;
-      api = {
-        on: (name: string, cb: () => void) => {
-          if (name === 'confirmed') confirmCallback = cb;
-        },
-        removeListener: () => null,
-      } as unknown as ExtendedSelectionAPI;
-
-      addSelectionListeners({ api, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
-      // @ts-ignore ts does not understand that this has been assigned in the api.on() call
-      confirmCallback();
-      expect(setShouldRefocus).not.toHaveBeenCalled();
-      expect(keyboard.blur).toHaveBeenCalledTimes(1);
-    });
-
-    it('should not call keyboard blur when confirmed callback is called, keyboard.enabled is undefined and tableWrapperRef does not contain activeElement', () => {
-      containsActiveElement = false;
-      keyboard.enabled = false;
-      let confirmCallback;
-      api = {
-        on: (name: string, cb: () => void) => {
-          name === 'confirmed' && (confirmCallback = cb);
-        },
-        removeListener: () => null,
-      } as unknown as ExtendedSelectionAPI;
-
-      addSelectionListeners({ api, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef });
-      // @ts-ignore ts does not understand that this has been assigned in the api.on() call
-      confirmCallback();
-      expect(setShouldRefocus).not.toHaveBeenCalled();
-      expect(keyboard.blur).not.toHaveBeenCalled();
-    });
-  });
-
   describe('reducer', () => {
     let state: SelectionState;
     let cell: Cell;
