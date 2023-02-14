@@ -8,6 +8,7 @@ import {
   ExtendedTranslator,
   PageInfo,
   Row,
+  TableData,
   TableLayout,
 } from '../../../types';
 import { GeneratedStyling } from '../../types';
@@ -16,8 +17,6 @@ export interface Totals {
   atBottom: boolean;
   atTop: boolean;
 }
-
-export type TotalsPosition = 'bottom' | 'noTotals' | 'top';
 
 export interface Rect {
   width: number;
@@ -39,16 +38,18 @@ export interface VirtualTableRenderProps {
   rootElement: HTMLElement;
   embed: stardust.Embed;
   changeSortOrder: ChangeSortOrder;
+  tableData: TableData;
 }
 
 export interface WrapperProps {
   rect: stardust.Rect;
+  tableData: TableData;
 }
 
 export interface TableProps {
   rect: stardust.Rect;
   pageInfo: PageInfo;
-  paginationNeeded: boolean;
+  tableData: TableData;
 }
 
 export interface HeaderProps {

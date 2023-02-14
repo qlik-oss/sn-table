@@ -37,6 +37,7 @@ import {
   ExtendedSelectionAPI,
 } from './types';
 import { RenderProps } from './table/types';
+import getVirtualScrollTableData from './table/virtualized-table/utils/get-table-data';
 
 const initialPageInfo = {
   page: 0,
@@ -88,18 +89,22 @@ export default function supernova(env: Galaxy) {
 
       const [pageInfo, setPageInfo] = useState(initialPageInfo);
       const shouldRenderVirtualizedTable = areBasicFeaturesEnabled && layout.presentation?.usePagination === false;
-      const [tableData] = usePromise(
-        async () =>
-          (env.carbon && !model?.getHyperCubeData) || shouldRenderVirtualizedTable
-            ? nothing()
-            : manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo),
-        [layout, pageInfo, model]
-      );
+      const [tableData] = usePromise(async () => {
+        if (env.carbon && !model?.getHyperCubeData) {
+          return nothing();
+        }
+
+        if (shouldRenderVirtualizedTable) {
+          return getVirtualScrollTableData(layout, constraints);
+        }
+
+        return manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo);
+      }, [layout, pageInfo, model, constraints]);
 
       useContextMenu(areBasicFeaturesEnabled);
 
       useEffect(() => {
-        if (!shouldRenderVirtualizedTable || !model || !changeSortOrder) return;
+        if (!shouldRenderVirtualizedTable || !model || !changeSortOrder || !tableData) return;
 
         renderVirtualizedTable(
           {
@@ -114,10 +119,11 @@ export default function supernova(env: Galaxy) {
             rootElement,
             embed,
             changeSortOrder,
+            tableData,
           },
           reactRoot
         );
-      }, [layout, model, rect, theme, keyboard, translator, constraints, selectionsAPI, changeSortOrder]);
+      }, [layout, model, rect, theme, keyboard, translator, constraints, selectionsAPI, changeSortOrder, tableData]);
 
       useEffect(() => {
         const isReadyToRender =
@@ -132,6 +138,7 @@ export default function supernova(env: Galaxy) {
           selectionsAPI &&
           embed;
         isReadyToRender &&
+          !shouldRenderVirtualizedTable &&
           render(
             {
               app,
@@ -171,6 +178,7 @@ export default function supernova(env: Galaxy) {
         announce,
         changeSortOrder,
         applyColumnWidths,
+        shouldRenderVirtualizedTable,
       ]);
 
       // this is the one we want to use for carbon

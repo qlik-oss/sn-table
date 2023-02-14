@@ -15,7 +15,7 @@ export const TableContext = createContext<ContextValue>({} as ContextValue);
 
 const ProviderWithSelector = createSelectorProvider(TableContext);
 
-const EMPTY_TABLE_DATA = { rows: [], columns: [], totalsPosition: {} } as unknown as TableData;
+export const EMPTY_TABLE_DATA = { rows: [], columns: [], totalsPosition: {} } as unknown as TableData;
 
 export const TableContextProvider = ({
   app,

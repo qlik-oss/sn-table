@@ -71,6 +71,7 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
     rootElement,
     embed,
     changeSortOrder,
+    tableData,
   } = props;
   const muiTheme = muiSetup('ltr');
 
@@ -88,8 +89,9 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
           rootElement={rootElement}
           embed={embed}
           changeSortOrder={changeSortOrder}
+          tableData={tableData}
         >
-          <VirtualizedTable rect={rect} />
+          <VirtualizedTable rect={rect} tableData={tableData} />
         </TableContextProvider>
       </ThemeProvider>
     </React.StrictMode>
