@@ -41,7 +41,11 @@ const TestWithProviders = ({
   app = { getField: () => Promise.resolve({}) } as unknown as EngineAPI.IApp,
   layout = generateLayout(1, 1, 5),
   constraints = {} as stardust.Constraints,
-  selectionsAPI = { isModal: () => false } as ExtendedSelectionAPI,
+  selectionsAPI = {
+    isModal: () => false,
+    on: () => undefined,
+    removeListener: () => undefined,
+  } as unknown as ExtendedSelectionAPI,
   model = {
     getHyperCubeData: () => Promise.resolve(),
   } as unknown as EngineAPI.IGenericObject,
