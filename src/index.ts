@@ -95,7 +95,7 @@ export default function supernova(env: Galaxy) {
         }
 
         if (shouldRenderVirtualizedTable) {
-          return getVirtualScrollTableData(layout, constraints);
+          return undefined;
         }
 
         return manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo);
@@ -104,7 +104,7 @@ export default function supernova(env: Galaxy) {
       useContextMenu(areBasicFeaturesEnabled);
 
       useEffect(() => {
-        if (!shouldRenderVirtualizedTable || !model || !changeSortOrder || !tableData) return;
+        if (!shouldRenderVirtualizedTable || !model || !changeSortOrder) return;
 
         renderVirtualizedTable(
           {
@@ -119,11 +119,11 @@ export default function supernova(env: Galaxy) {
             rootElement,
             embed,
             changeSortOrder,
-            tableData,
+            tableData: getVirtualScrollTableData(layout, constraints),
           },
           reactRoot
         );
-      }, [layout, model, rect, theme, keyboard, translator, constraints, selectionsAPI, changeSortOrder, tableData]);
+      }, [layout, model, rect, theme, keyboard.active, translator, constraints, selectionsAPI, changeSortOrder]);
 
       useEffect(() => {
         const isReadyToRender =
