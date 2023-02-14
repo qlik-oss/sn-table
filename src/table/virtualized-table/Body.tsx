@@ -127,7 +127,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
       ref={gridRef}
       innerRef={innerForwardRef}
       style={{ overflow: 'hidden' }}
-      columnCount={layout.qHyperCube.qSize.qcx}
+      columnCount={columns.length}
       columnWidth={(index) => columnWidth[index]}
       height={bodyHeight}
       rowCount={deferredRowCount}

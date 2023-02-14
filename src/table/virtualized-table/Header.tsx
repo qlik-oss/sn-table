@@ -23,7 +23,7 @@ const Header = (props: HeaderProps) => {
         background: headerStyle.background,
         boxSizing: 'border-box',
       }}
-      itemCount={layout.qHyperCube.qSize.qcx}
+      itemCount={columns.length}
       itemSize={(index) => columnWidth[index]}
       height={rowHeight}
       width={rect.width}

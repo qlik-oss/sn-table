@@ -25,7 +25,7 @@ const Totals = (props: TotalsProps) => {
         borderBottom: totals.atTop ? `1px solid ${styling.totals.borderBottomColor}` : '0px',
         boxSizing: 'border-box',
       }}
-      itemCount={layout.qHyperCube.qSize.qcx}
+      itemCount={columns.length}
       itemSize={(index) => columnWidth[index]}
       height={rowHeight}
       width={rect.width}
