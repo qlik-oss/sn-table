@@ -58,7 +58,7 @@ const MenuGroup = (menuGroup: HeadCellMenuItem[]) => {
 
         {subMenus?.length && (
           <MenuList
-            anchorRef={anchorRef.current}
+            anchorEl={anchorRef.current}
             open={openMenu}
             onClose={() => setOpenMenu(false)}
             menuGroups={subMenusIntercepted(subMenus, setOpenMenu)}

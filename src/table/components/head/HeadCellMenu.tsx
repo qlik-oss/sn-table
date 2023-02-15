@@ -165,7 +165,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
 
       <MenuList
         open={openMenuDropdown}
-        anchorRef={anchorRef.current}
+        anchorEl={anchorRef.current}
         onClose={() => setOpenMenuDropdown(false)}
         menuGroups={menuItemGroups}
       />

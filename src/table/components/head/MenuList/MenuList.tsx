@@ -6,7 +6,7 @@ import MenuGroupWrapper from './MenuGroupWrapper';
 
 interface MenuListProps {
   open: boolean;
-  anchorRef: Element | ((element: Element) => Element) | null;
+  anchorEl: HTMLDivElement | null;
   onClose: () => void;
   menuGroups: MenuItemGroup[];
   popoverProps?: {
@@ -15,15 +15,13 @@ interface MenuListProps {
   };
 }
 
-// TODO:
-// forward ref
-const MenuList = ({ anchorRef, open, onClose, menuGroups, popoverProps }: MenuListProps) => {
+const MenuList = ({ anchorEl, open, onClose, menuGroups, popoverProps }: MenuListProps) => {
   return (
     <Menu
       className="sn-table-head-menu"
       aria-labelledby="sn-table-head-menu-button"
       open={open}
-      anchorEl={anchorRef}
+      anchorEl={anchorEl}
       onClose={onClose}
       autoFocus={false}
       {...(popoverProps?.anchorOrigin ? { anchorOrigin: popoverProps.anchorOrigin } : {})}
