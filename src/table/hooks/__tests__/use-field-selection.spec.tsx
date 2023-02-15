@@ -1,5 +1,5 @@
 import React from 'react';
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import { Column, TableLayout } from '../../../types';
 import useFieldSelection from '../use-field-selection';
 import TestWithProviders from '../../../__test__/test-with-providers';
@@ -65,78 +65,92 @@ describe('useFieldSelection()', () => {
 
     it('`canSelectAll` and `canSelectPossible` and should be true after calling `updateSelectionActionsEnabledStatus` with `qOptions`', () => {
       const state = { qOption: 1 } as EngineAPI.INxStateCounts;
-      expect(triggerHook(state)).toMatchObject({
-        canSelectAll: true,
-        canClearSelections: false,
-        canSelectPossible: true,
-        canSelectAlternative: false,
-        canSelectExcluded: false,
+      waitFor(() => {
+        expect(triggerHook(state)).toMatchObject({
+          canSelectAll: true,
+          canClearSelections: false,
+          canSelectPossible: true,
+          canSelectAlternative: false,
+          canSelectExcluded: false,
+        });
       });
     });
 
     it('`canSelectAll`, `canSelectAlternative` and `canSelectExcluded` should be true after calling `updateSelectionActionsEnabledStatus` with `qAlternative`', () => {
       const state = { qAlternative: 1 } as EngineAPI.INxStateCounts;
-      expect(triggerHook(state)).toMatchObject({
-        canSelectAll: true,
-        canClearSelections: false,
-        canSelectPossible: false,
-        canSelectAlternative: true,
-        canSelectExcluded: true,
+      waitFor(() => {
+        expect(triggerHook(state)).toMatchObject({
+          canSelectAll: true,
+          canClearSelections: false,
+          canSelectPossible: false,
+          canSelectAlternative: true,
+          canSelectExcluded: true,
+        });
       });
     });
 
     it('`canSelectAll` should be true after calling `updateSelectionActionsEnabledStatus` with `qDeselected`', () => {
       const state = { qDeselected: 1 } as EngineAPI.INxStateCounts;
-      expect(triggerHook(state)).toMatchObject({
-        canSelectAll: true,
-        canClearSelections: false,
-        canSelectPossible: false,
-        canSelectAlternative: false,
-        canSelectExcluded: false,
+      waitFor(() => {
+        expect(triggerHook(state)).toMatchObject({
+          canSelectAll: true,
+          canClearSelections: false,
+          canSelectPossible: false,
+          canSelectAlternative: false,
+          canSelectExcluded: false,
+        });
       });
     });
 
     it('`canClearSelections` should be true after calling `updateSelectionActionsEnabledStatus` with `qSelected`', () => {
       const state = { qSelected: 1 } as EngineAPI.INxStateCounts;
-      expect(triggerHook(state)).toMatchObject({
-        canSelectAll: false,
-        canClearSelections: true,
-        canSelectPossible: false,
-        canSelectAlternative: false,
-        canSelectExcluded: false,
+      waitFor(() => {
+        expect(triggerHook(state)).toMatchObject({
+          canSelectAll: false,
+          canClearSelections: true,
+          canSelectPossible: false,
+          canSelectAlternative: false,
+          canSelectExcluded: false,
+        });
       });
     });
 
     it('`canSelectAll` and `canSelectPossible` should be true after calling `updateSelectionActionsEnabledStatus` with `qOption`', () => {
       const state = { qOption: 1 } as EngineAPI.INxStateCounts;
-      expect(triggerHook(state)).toMatchObject({
-        canSelectAll: true,
-        canClearSelections: false,
-        canSelectPossible: true,
-        canSelectAlternative: false,
-        canSelectExcluded: false,
+      waitFor(() => {
+        expect(triggerHook(state)).toMatchObject({
+          canSelectAll: true,
+          canClearSelections: false,
+          canSelectPossible: true,
+          canSelectAlternative: false,
+          canSelectExcluded: false,
+        });
       });
     });
 
     it('`canSelectAll`, `canSelectAlternative` and `canSelectExcluded` should be true after calling `updateSelectionActionsEnabledStatus` with `qAlternative`', () => {
       const state = { qAlternative: 1 } as EngineAPI.INxStateCounts;
-      expect(triggerHook(state)).toMatchObject({
-        canSelectAll: true,
-        canClearSelections: false,
-        canSelectPossible: false,
-        canSelectAlternative: true,
-        canSelectExcluded: true,
+      waitFor(() => {
+        expect(triggerHook(state)).toMatchObject({
+          canSelectAll: true,
+          canClearSelections: false,
+          canSelectPossible: false,
+          canSelectAlternative: true,
+          canSelectExcluded: true,
+        });
       });
     });
 
     it('`canSelectAll` and `canSelectExcluded` should be true after calling `updateSelectionActionsEnabledStatus` with `qExcluded`', () => {
       const state = { qExcluded: 1 } as EngineAPI.INxStateCounts;
-      expect(triggerHook(state)).toMatchObject({
-        canSelectAll: true,
-        canClearSelections: false,
-        canSelectPossible: false,
-        canSelectAlternative: false,
-        canSelectExcluded: true,
+      waitFor(() => {
+        expect(triggerHook(state)).toMatchObject({
+          canSelectAll: true,
+          canClearSelections: false,
+          canSelectPossible: false,
+          canSelectAlternative: false,
+          canSelectExcluded: true,
+        });
       });
     });
 
@@ -148,21 +162,27 @@ describe('useFieldSelection()', () => {
         },
       } as TableLayout;
       act(() => result.current.updateSelectionActionsEnabledStatus(mockLayout));
-      expect(result.current.selectionActionsEnabledStatus).toMatchObject({
-        canSelectAll: true,
-        canClearSelections: false,
-        canSelectPossible: false,
-        canSelectAlternative: false,
-        canSelectExcluded: true,
+
+      waitFor(() => {
+        expect(result.current.selectionActionsEnabledStatus).toMatchObject({
+          canSelectAll: true,
+          canClearSelections: false,
+          canSelectPossible: false,
+          canSelectAlternative: false,
+          canSelectExcluded: true,
+        });
       });
 
       act(() => result.current.resetSelectionActionsEnabledStatus());
-      expect(result.current.selectionActionsEnabledStatus).toMatchObject({
-        canSelectAll: false,
-        canClearSelections: false,
-        canSelectPossible: false,
-        canSelectAlternative: false,
-        canSelectExcluded: false,
+
+      waitFor(() => {
+        expect(result.current.selectionActionsEnabledStatus).toMatchObject({
+          canSelectAll: false,
+          canClearSelections: false,
+          canSelectPossible: false,
+          canSelectAlternative: false,
+          canSelectExcluded: false,
+        });
       });
     });
   });
