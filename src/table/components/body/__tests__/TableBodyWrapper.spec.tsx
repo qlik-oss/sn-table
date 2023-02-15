@@ -3,11 +3,10 @@ import { render, fireEvent } from '@testing-library/react';
 import { generateDataPages, generateLayout } from '../../../../__test__/generate-test-data';
 import manageData from '../../../../handle-data';
 import TableBodyWrapper from '../TableBodyWrapper';
-import * as selectionsUtils from '../../../utils/selections-utils';
 import * as getCellRenderer from '../../../utils/get-cell-renderer';
 import * as handleKeyPress from '../../../utils/handle-key-press';
 import * as handleClick from '../../../utils/handle-click';
-import { TableData, ExtendedSelectionAPI, PageInfo, Cell } from '../../../../types';
+import { TableData, PageInfo, Cell } from '../../../../types';
 import TestWithProviders from '../../../../__test__/test-with-providers';
 
 describe('<TableBodyWrapper />', () => {
@@ -17,26 +16,26 @@ describe('<TableBodyWrapper />', () => {
   const model = { getHyperCubeData: async () => generateDataPages(2, 2) } as unknown as EngineAPI.IGenericObject;
 
   let tableData: TableData;
-  let selectionsAPI: ExtendedSelectionAPI;
   let tableFirstRow: Cell;
   let tableSecondRow: Cell;
   let areBasicFeaturesEnabled: boolean;
 
   const renderTableBody = () =>
     render(
-      <TestWithProviders selectionsAPI={selectionsAPI}>
-        <TableBodyWrapper
-          tableData={tableData}
-          setShouldRefocus={setShouldRefocus}
-          tableWrapperRef={tableWrapperRef}
-          announce={announce}
-          areBasicFeaturesEnabled={areBasicFeaturesEnabled}
-        />
+      <TestWithProviders>
+        <table>
+          <TableBodyWrapper
+            tableData={tableData}
+            setShouldRefocus={setShouldRefocus}
+            tableWrapperRef={tableWrapperRef}
+            announce={announce}
+            areBasicFeaturesEnabled={areBasicFeaturesEnabled}
+          />
+        </table>
       </TestWithProviders>
     );
 
   beforeEach(async () => {
-    jest.spyOn(selectionsUtils, 'addSelectionListeners').mockImplementation();
     tableData = (await manageData(
       model,
       generateLayout(1, 1, 2, [], [{ qText: '100' }]),

@@ -1,6 +1,5 @@
 import React from 'react';
-// import { getTotalInfo } from '../../../handle-data';
-import { TableLayout } from '../../types';
+import { Column } from '../../types';
 import { useContextSelector, TableContext } from '../context';
 import { GeneratedStyling } from '../types';
 import CellText from '../components/CellText';
@@ -10,22 +9,17 @@ interface TotalsCellProps {
   style: React.CSSProperties;
   data: {
     totalsStyle: GeneratedStyling;
+    columns: Column[];
   };
-}
-
-function getTotalInfo(layout: TableLayout, colIdx: number) {
-  const numDims = layout.qHyperCube.qDimensionInfo.length;
-  if (colIdx >= numDims) return layout.qHyperCube.qGrandTotalRow[colIdx - numDims]?.qText;
-  if (colIdx === 0) return layout.totals?.label;
-  return '';
 }
 
 const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
   const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
   const {
     totalsStyle: { hoverColors, ...applicableStyling },
+    columns,
   } = data;
-  const label = getTotalInfo(layout, index);
+  const label = columns[index].totalInfo;
   const isLastColumn = layout.qHyperCube.qSize.qcx - 1 === index;
 
   return (

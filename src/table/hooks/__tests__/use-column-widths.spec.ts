@@ -2,20 +2,25 @@ import { renderHook } from '@testing-library/react';
 import { Column } from '../../../types';
 import { ColumnWidthTypes, MIN_COLUMN_WIDTH } from '../../constants';
 import { TableStyling } from '../../types';
+import useMeasureText, { MeasureTextHook } from '../../virtualized-table/hooks/use-measure-text';
 import useColumnWidths from '../use-column-widths';
 
+jest.mock('../../virtualized-table/hooks/use-measure-text');
+
 describe('use-column-widths', () => {
-  let measureTextMock: jest.Mock<{ width: number }>;
+  let mockedUseMeasureText: jest.MockedFunction<(size: string | undefined, fam: string | undefined) => MeasureTextHook>;
+  let mockedMeasureText: MeasureTextHook;
   let columns: Column[];
   let tableWidth: number;
   let styling: TableStyling;
 
   beforeEach(() => {
-    measureTextMock = jest.fn();
-    const context = {
-      measureText: measureTextMock,
-    } as unknown as CanvasRenderingContext2D;
-    jest.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(context);
+    mockedUseMeasureText = useMeasureText as jest.MockedFunction<typeof useMeasureText>;
+    mockedMeasureText = {
+      measureText: jest.fn() as jest.MockedFunction<(text: string) => number>,
+      estimateWidth: jest.fn() as jest.MockedFunction<(length: number) => number>,
+    };
+    mockedUseMeasureText.mockReturnValue(mockedMeasureText);
 
     columns = [
       {
@@ -76,8 +81,9 @@ describe('use-column-widths', () => {
         expect(getTotalWidth(widths)).toBe(tableWidth * 0.75);
       });
 
-      it('should return one size for hug and equal sizes for two columns with fill', () => {
-        measureTextMock.mockReturnValue({ width: 20 });
+      it('should return equal sizes when all types are hug', () => {
+        (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValue(200);
+        (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValue(200);
         columns[0].columnWidth.type = ColumnWidthTypes.HUG;
         columns[1].columnWidth.type = ColumnWidthTypes.HUG;
         columns[2].columnWidth.type = ColumnWidthTypes.HUG;
@@ -124,11 +130,12 @@ describe('use-column-widths', () => {
       });
 
       it('should return one size for hug and equal sizes for two columns with fill', () => {
-        measureTextMock.mockReturnValue({ width: 10 });
+        (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValue(150);
+        (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValue(150);
         columns[2].columnWidth.type = ColumnWidthTypes.HUG;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([245, 245, MIN_COLUMN_WIDTH]);
+        expect(widths).toEqual([225, 225, 150]);
         expect(getTotalWidth(widths)).toBe(tableWidth);
       });
     });

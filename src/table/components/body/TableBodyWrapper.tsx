@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo, memo } from 'react';
+import React, { useMemo, memo } from 'react';
 
 import getCellRenderer from '../../utils/get-cell-renderer';
 import { useContextSelector, TableContext } from '../../context';
 import { StyledBodyRow, StyledBody } from './styles';
-import { addSelectionListeners } from '../../utils/selections-utils';
 import { handleBodyKeyDown, handleBodyKeyUp } from '../../utils/handle-key-press';
 import { handleClickToFocusBody } from '../../utils/handle-click';
 import { Cell } from '../../../types';
@@ -11,6 +10,7 @@ import { TableBodyWrapperProps } from '../../types';
 import TableTotals from './TableTotals';
 import CellText from '../CellText';
 import CellTextWrapper from '../CellTextWrapper';
+import useSelectionListener from '../../hooks/use-selection-listener';
 
 function TableBodyWrapper({
   tableData,
@@ -46,15 +46,7 @@ function TableBodyWrapper({
   );
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
 
-  useEffect(() => {
-    addSelectionListeners({
-      api: selectionsAPI,
-      selectionDispatch,
-      setShouldRefocus,
-      keyboard,
-      tableWrapperRef,
-    });
-  }, []);
+  useSelectionListener({ keyboard, selectionDispatch, selectionsAPI, setShouldRefocus, tableWrapperRef });
 
   const totals = <TableTotals tableData={tableData} areBasicFeaturesEnabled={areBasicFeaturesEnabled} />;
 

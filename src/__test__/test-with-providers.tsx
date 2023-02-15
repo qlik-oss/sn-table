@@ -16,6 +16,7 @@ import {
 import { generateLayout } from './generate-test-data';
 
 interface ProviderProps {
+  app?: EngineAPI.IApp;
   children?: JSX.Element;
   selectionsAPI?: ExtendedSelectionAPI;
   tableData?: TableData;
@@ -37,9 +38,14 @@ interface ProviderProps {
 
 const TestWithProviders = ({
   children,
+  app = { getField: () => Promise.resolve({}) } as unknown as EngineAPI.IApp,
   layout = generateLayout(1, 1, 5),
   constraints = {} as stardust.Constraints,
-  selectionsAPI = { isModal: () => false } as ExtendedSelectionAPI,
+  selectionsAPI = {
+    isModal: () => false,
+    on: () => undefined,
+    removeListener: () => undefined,
+  } as unknown as ExtendedSelectionAPI,
   model = {
     getHyperCubeData: () => Promise.resolve(),
   } as unknown as EngineAPI.IGenericObject,
@@ -64,6 +70,7 @@ const TestWithProviders = ({
   return (
     <ThemeProvider theme={muiSetup(direction)}>
       <TableContextProvider
+        app={app}
         selectionsAPI={selectionsAPI}
         layout={layout}
         translator={translator}

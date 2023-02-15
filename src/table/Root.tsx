@@ -15,6 +15,8 @@ import { ApplyColumnWidths } from '../types';
 
 export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
   const {
+    app,
+    model,
     direction,
     selectionsAPI,
     layout,
@@ -34,6 +36,8 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
     <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : undefined}>
       <ThemeProvider theme={muiTheme}>
         <TableContextProvider
+          app={app}
+          model={model as EngineAPI.IGenericObject}
           tableData={props.tableData}
           selectionsAPI={selectionsAPI}
           layout={layout}
@@ -67,6 +71,7 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
     rootElement,
     embed,
     changeSortOrder,
+    tableData,
   } = props;
   const muiTheme = muiSetup('ltr');
 
@@ -84,8 +89,9 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
           rootElement={rootElement}
           embed={embed}
           changeSortOrder={changeSortOrder}
+          tableData={tableData}
         >
-          <VirtualizedTable rect={rect} />
+          <VirtualizedTable rect={rect} tableData={tableData} />
         </TableContextProvider>
       </ThemeProvider>
     </React.StrictMode>

@@ -9,8 +9,8 @@ import { StyledMenuItem, StyledListItemIcon, StyledDivider } from './styles';
  */
 export default function MenuItems({ itemGroups }: { itemGroups: MenuItemGroup[] }) {
   const getItemComponents = (items: HeadCellMenuItem[]) =>
-    items.map(({ id, icon, itemTitle, isDisabled, onClick }) => (
-      <StyledMenuItem key={id} className="sn-table-head-menu-item" onClick={onClick} disabled={isDisabled}>
+    items.map(({ id, icon, itemTitle, enabled, onClick }) => (
+      <StyledMenuItem key={id} className="sn-table-head-menu-item" onClick={onClick} disabled={!enabled}>
         <StyledListItemIcon>{icon}</StyledListItemIcon>
         <Typography variant="body2">{itemTitle}</Typography>
       </StyledMenuItem>
@@ -18,6 +18,6 @@ export default function MenuItems({ itemGroups }: { itemGroups: MenuItemGroup[] 
 
   return itemGroups.map((group, index) => [
     getItemComponents(group),
-    index < itemGroups.length - 1 ? <StyledDivider variant="middle" /> : undefined,
+    index < itemGroups.length - 1 ? <StyledDivider variant="middle" key="divider" /> : undefined,
   ]);
 }

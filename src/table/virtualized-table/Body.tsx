@@ -72,6 +72,8 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     [rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount]
   );
 
+  const bodyHeight = getBodyHeight(rect, headerAndTotalsHeight, deferredRowCount, estimatedRowHeight);
+
   useEffect(() => {
     syncHeight(innerForwardRef.current?.clientHeight ?? 0, true);
   }, [deferredRowCount, syncHeight, innerForwardRef]);
@@ -95,8 +97,6 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     gridRef.current.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: true });
     gridRef.current.scrollTo({ scrollLeft: 0, scrollTop: 0 });
   }, [layout, pageInfo.page, gridRef, columnWidth, rowMeta, theme.name()]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const bodyHeight = getBodyHeight(rect, headerAndTotalsHeight, deferredRowCount, estimatedRowHeight);
 
   useImperativeHandle(
     ref,

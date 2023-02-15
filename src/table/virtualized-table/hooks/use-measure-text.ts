@@ -10,16 +10,10 @@ const MAGIC_DEFAULT_CHAR = 'M';
 
 export default function useMeasureText(fontSize: string | undefined, fontFamily: string | undefined): MeasureTextHook {
   const { estimateWidth, measureText } = useMemo((): MeasureTextHook => {
-    const context = document.createElement('canvas').getContext('2d');
-    let memoizedMeasureText: (text: string) => { width: number };
+    const context = document.createElement('canvas').getContext('2d') as CanvasRenderingContext2D;
+    context.font = `${fontSize} ${fontFamily}`;
 
-    // When testing, context is undefined, so we mock measure text
-    if (context) {
-      context.font = `${fontSize} ${fontFamily}`;
-      memoizedMeasureText = memoize(context.measureText.bind(context));
-    } else {
-      memoizedMeasureText = memoize(() => ({ width: 10 }));
-    }
+    const memoizedMeasureText = memoize(context.measureText.bind(context)) as (text: string) => TextMetrics;
 
     return {
       measureText: (text) => memoizedMeasureText(text).width,

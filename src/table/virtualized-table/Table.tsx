@@ -1,6 +1,5 @@
 import React, { memo, useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { VariableSizeList } from 'react-window';
-import { getColumns, getTotalPosition } from '../../handle-data';
 import useColumnSize from './hooks/use-column-size';
 import Body from './Body';
 import FullSizeContainer from './FullSizeContainer';
@@ -17,7 +16,8 @@ import getHeights from './utils/get-height';
 import useScrollbarWidth from './hooks/use-scrollbar-width';
 
 const Table = (props: TableProps) => {
-  const { rect, pageInfo, paginationNeeded } = props;
+  const { rect, pageInfo, tableData } = props;
+  const { totalsPosition, columns, paginationNeeded } = tableData;
   const { layout, theme, styling } = useContextSelector(TableContext, (value) => value.baseProps);
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);
@@ -25,7 +25,6 @@ const Table = (props: TableProps) => {
   const bodyRef = useRef<BodyRef>(null);
   const innerForwardRef = useRef() as React.RefObject<HTMLDivElement>;
   const { xScrollbarWidth, yScrollbarWidth } = useScrollbarWidth(ref);
-  const totals = useMemo(() => getTotalPosition(layout), [layout]);
   const bodyStyle = useMemo<BodyStyle>(
     () => ({
       ...styling.body,
@@ -33,8 +32,7 @@ const Table = (props: TableProps) => {
     }),
     [layout, theme.name()] // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const { headerRowHeight, bodyRowHeight, headerAndTotalsHeight } = getHeights(styling.head, bodyStyle, totals);
-  const columns = useMemo(() => getColumns(layout), [layout]);
+  const { headerRowHeight, bodyRowHeight, headerAndTotalsHeight } = getHeights(styling.head, bodyStyle, totalsPosition);
   const tableRect = useMemo(() => toTableRect(rect, paginationNeeded), [rect, paginationNeeded]);
   const stickyContainerRect = useMemo(
     () => toStickyContainerRect(tableRect, xScrollbarWidth, yScrollbarWidth),
@@ -73,7 +71,7 @@ const Table = (props: TableProps) => {
       columns={columns}
       columnWidth={width}
       forwardRef={totalsRef}
-      totals={totals}
+      totals={totalsPosition}
       rowHeight={bodyRowHeight}
     />
   );
@@ -91,7 +89,7 @@ const Table = (props: TableProps) => {
             forwardRef={headerRef}
             rowHeight={headerRowHeight}
           />
-          {totals.atTop ? TotalsComponent : null}
+          {totalsPosition.atTop ? TotalsComponent : null}
           <Body
             ref={bodyRef}
             innerForwardRef={innerForwardRef}
@@ -104,7 +102,7 @@ const Table = (props: TableProps) => {
             headerAndTotalsHeight={headerAndTotalsHeight}
             syncHeight={syncHeight}
           />
-          {totals.atBottom ? TotalsComponent : null}
+          {totalsPosition.atBottom ? TotalsComponent : null}
         </StickyContainer>
       </FullSizeContainer>
     </ScrollableContainer>
