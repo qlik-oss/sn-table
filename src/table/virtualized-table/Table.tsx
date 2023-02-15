@@ -16,8 +16,8 @@ import getHeights from './utils/get-height';
 import useScrollbarWidth from './hooks/use-scrollbar-width';
 
 const Table = (props: TableProps) => {
-  const { rect, pageInfo, tableData } = props;
-  const { totalsPosition, columns, paginationNeeded } = tableData;
+  const { rect, pageInfo } = props;
+  const { totalsPosition, columns, paginationNeeded } = useContextSelector(TableContext, (value) => value.tableData);
   const { layout, theme, styling } = useContextSelector(TableContext, (value) => value.baseProps);
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);

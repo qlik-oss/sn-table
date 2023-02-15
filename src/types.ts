@@ -202,15 +202,3 @@ export interface Galaxy {
   carbon: boolean;
   flags: stardust.Flags;
 }
-
-export interface RenderWithCarbonArguments {
-  env: Galaxy;
-  rootElement: HTMLElement;
-  model?: EngineAPI.IGenericObject;
-  theme: ExtendedTheme;
-  selectionsAPI: ExtendedSelectionAPI;
-  app?: EngineAPI.IApp;
-  rect: stardust.Rect;
-  layout: TableLayout;
-  changeSortOrder?: ChangeSortOrder;
-}

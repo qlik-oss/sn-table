@@ -91,7 +91,7 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
           changeSortOrder={changeSortOrder}
           tableData={tableData}
         >
-          <VirtualizedTable rect={rect} tableData={tableData} />
+          <VirtualizedTable rect={rect} />
         </TableContextProvider>
       </ThemeProvider>
     </React.StrictMode>
