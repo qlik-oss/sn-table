@@ -10,11 +10,7 @@ interface CellTextProps {
 }
 
 export default function CellTextWrapper({ children, lines = 3 }: CellTextProps) {
-  const {
-    styling: {
-      head: { fontSize },
-    },
-  } = useContextSelector(TableContext, (value) => value.baseProps);
+  const fontSize = useContextSelector(TableContext, (value) => value.baseProps.styling.head.fontSize);
   const size = fontSize ? +fontSize.slice(0, -2) : 12;
 
   return <StyledCellTextWrapper maxHeight={size * LINE_HEIGHT * lines}>{children}</StyledCellTextWrapper>;
