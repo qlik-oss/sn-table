@@ -14,6 +14,7 @@ import { HeadCellMenuProps, MenuItemGroup } from '../../types';
 import { StyledMenuIconButton } from './styles';
 import { TableLayout } from '../../../types';
 import MenuList from './MenuList/MenuList';
+import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 
 export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
   const showSearchMenuItem = column.isDim && !column.isMasterItem;
@@ -157,7 +158,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
           aria-haspopup="true"
           onClick={handleOpenDropdown}
         >
-          <More height="12px" />
+          <More height={DEFAULT_FONT_SIZE} />
         </StyledMenuIconButton>
 
         <div ref={listboxRef} />
