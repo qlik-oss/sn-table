@@ -116,7 +116,7 @@ describe('use-column-widths', () => {
         columns[1].columnWidth.percentage = 10;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([245, MIN_COLUMN_WIDTH, 245]);
+        expect(widths).toEqual([240, MIN_COLUMN_WIDTH, 240]);
         expect(getTotalWidth(widths)).toBe(tableWidth);
       });
 
