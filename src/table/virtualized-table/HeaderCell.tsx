@@ -3,6 +3,7 @@ import { Column } from '../../types';
 import { useContextSelector, TableContext } from '../context';
 import { GeneratedStyling } from '../types';
 import HeadCellContent from '../components/head/HeadCellContent';
+import ColumnAdjuster from '../components/head/ColumnAdjuster';
 
 interface HeaderCellProps {
   index: number;
@@ -41,6 +42,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
       }}
     >
       <HeadCellContent column={column} columnIndex={index} isActive={isActive} areBasicFeaturesEnabled />
+      <ColumnAdjuster column={column} isLastColumn={isLastColumn} />
     </div>
   );
 };

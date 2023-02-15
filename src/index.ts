@@ -88,7 +88,7 @@ export default function supernova(env: Galaxy) {
       const applyColumnWidths = useApplyColumnWidths(model, layout.qHyperCube);
 
       const [pageInfo, setPageInfo] = useState(initialPageInfo);
-      const shouldRenderVirtualizedTable = areBasicFeaturesEnabled && layout.presentation?.usePagination === false;
+      const shouldRenderVirtualizedTable = true; // areBasicFeaturesEnabled && layout.presentation?.usePagination === false;
       const [tableData] = usePromise(async () => {
         if (env.carbon && !model?.getHyperCubeData) {
           return nothing();
@@ -120,6 +120,7 @@ export default function supernova(env: Galaxy) {
             embed,
             changeSortOrder,
             tableData,
+            applyColumnWidths,
           },
           reactRoot
         );

@@ -93,9 +93,9 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   useLayoutEffect(() => {
     if (!gridRef.current) return;
 
-    rowMeta.current.lastScrollToRatio = 0;
+    // rowMeta.current.lastScrollToRatio = 0;
     gridRef.current.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: true });
-    gridRef.current.scrollTo({ scrollLeft: 0, scrollTop: 0 });
+    // gridRef.current.scrollTo({ scrollLeft: 0, scrollTop: 0 });
   }, [layout, pageInfo.page, gridRef, columnWidth, rowMeta, theme.name()]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useImperativeHandle(

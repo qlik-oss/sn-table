@@ -19,6 +19,7 @@ const Table = (props: TableProps) => {
   const { rect, pageInfo, tableData } = props;
   const { totalsPosition, columns, paginationNeeded } = tableData;
   const { layout, theme, styling } = useContextSelector(TableContext, (value) => value.baseProps);
+  const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);
   const totalsRef = useRef<VariableSizeList>(null);
@@ -38,9 +39,9 @@ const Table = (props: TableProps) => {
     () => toStickyContainerRect(tableRect, xScrollbarWidth, yScrollbarWidth),
     [tableRect, xScrollbarWidth, yScrollbarWidth]
   );
-  const { width } = useColumnSize(stickyContainerRect, columns, styling.head, bodyStyle);
-  const { rowCount } = useTableCount(layout, pageInfo, stickyContainerRect, width, bodyRowHeight);
-  const containerWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
+  // const { width } = useColumnSize(stickyContainerRect, columns, styling.head, bodyStyle);
+  const { rowCount } = useTableCount(layout, pageInfo, stickyContainerRect, columnWidths, bodyRowHeight);
+  const containerWidth = columnWidths.reduce((prev, curr) => prev + curr, 0);
   const [containerHeight, setContainerHeight] = useState(rowCount * bodyRowHeight + headerAndTotalsHeight); // Based on single line height, which is going to be out-of-sync when rows have multiple lines
   const scrollHandler = useScrollHandler(headerRef, totalsRef, bodyRef);
 
@@ -69,7 +70,7 @@ const Table = (props: TableProps) => {
       rect={stickyContainerRect}
       pageInfo={pageInfo}
       columns={columns}
-      columnWidth={width}
+      columnWidth={columnWidths}
       forwardRef={totalsRef}
       totals={totalsPosition}
       rowHeight={bodyRowHeight}
@@ -85,7 +86,7 @@ const Table = (props: TableProps) => {
             rect={stickyContainerRect}
             pageInfo={pageInfo}
             columns={columns}
-            columnWidth={width}
+            columnWidth={columnWidths}
             forwardRef={headerRef}
             rowHeight={headerRowHeight}
           />
@@ -97,7 +98,7 @@ const Table = (props: TableProps) => {
             rect={stickyContainerRect}
             pageInfo={pageInfo}
             columns={columns}
-            columnWidth={width}
+            columnWidth={columnWidths}
             rowHeight={bodyRowHeight}
             headerAndTotalsHeight={headerAndTotalsHeight}
             syncHeight={syncHeight}
