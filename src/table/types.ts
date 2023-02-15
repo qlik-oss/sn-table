@@ -117,6 +117,7 @@ export interface ContextValue {
     applyColumnWidths?: ApplyColumnWidths;
     styling: TableStyling;
   };
+  tableData: TableData;
 }
 
 export interface FooterStyle {

@@ -89,6 +89,7 @@ export const TableContextProvider = ({
         columnWidths,
         setColumnWidths,
         baseProps,
+        tableData,
       }}
     >
       {children}

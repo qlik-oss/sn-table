@@ -43,13 +43,11 @@ export interface VirtualTableRenderProps {
 
 export interface WrapperProps {
   rect: stardust.Rect;
-  tableData: TableData;
 }
 
 export interface TableProps {
   rect: stardust.Rect;
   pageInfo: PageInfo;
-  tableData: TableData;
 }
 
 export interface HeaderProps {
