@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import React from 'react';
 import Menu from '@mui/material/Menu';
 import { PopoverOrigin } from '@mui/material';
@@ -9,13 +10,19 @@ interface MenuListProps {
   anchorEl: HTMLDivElement | null;
   onClose: () => void;
   menuGroups: MenuItemGroup[];
-  popoverProps?: {
-    transformOrigin: PopoverOrigin;
-    anchorOrigin: PopoverOrigin;
-  };
+  transformOrigin?: PopoverOrigin | null;
+  anchorOrigin?: PopoverOrigin | null;
 }
 
-const MenuList = ({ anchorEl, open, onClose, menuGroups, popoverProps }: MenuListProps) => {
+const MenuList = ({
+  anchorEl,
+  open,
+  onClose,
+  menuGroups,
+  transformOrigin = { horizontal: 'left', vertical: 'top' },
+  anchorOrigin = { horizontal: 'left', vertical: 'bottom' },
+}: MenuListProps) => {
+  if (!menuGroups.length) return null;
   return (
     <Menu
       className="sn-table-head-menu"
@@ -24,8 +31,8 @@ const MenuList = ({ anchorEl, open, onClose, menuGroups, popoverProps }: MenuLis
       anchorEl={anchorEl}
       onClose={onClose}
       autoFocus={false}
-      {...(popoverProps?.anchorOrigin ? { anchorOrigin: popoverProps.anchorOrigin } : {})}
-      {...(popoverProps?.transformOrigin ? { transformOrigin: popoverProps.transformOrigin } : {})}
+      {...(anchorOrigin ? { anchorOrigin } : {})}
+      {...(transformOrigin ? { transformOrigin } : {})}
     >
       {MenuGroupWrapper({ itemGroups: menuGroups })}
     </Menu>

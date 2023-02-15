@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import React from 'react';
 import { MenuItemGroup } from '../../../types';
 import { StyledDivider } from '../styles';
@@ -9,8 +10,10 @@ interface MenuItemsProps {
 
 const MenuGroupWrapper = ({ itemGroups }: MenuItemsProps) => {
   return itemGroups.map((group, index) => [
-    MenuGroup(group),
-    index < itemGroups.length - 1 ? <StyledDivider variant="middle" key="divider" /> : undefined,
+    MenuGroup({ menuGroup: group }),
+    index < itemGroups.length - 1 ? (
+      <StyledDivider data-testid="group-divider" variant="middle" key="divider" />
+    ) : undefined,
   ]);
 };
 

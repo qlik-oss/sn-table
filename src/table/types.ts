@@ -270,7 +270,6 @@ export interface HeadCellMenuItem {
   icon: React.ReactElement;
   itemTitle: string;
   enabled: boolean;
-  hasDivider?: boolean;
   onClick?: (evt: React.MouseEvent<HTMLLIElement>) => void;
   subMenus?: MenuItemGroup[];
 }

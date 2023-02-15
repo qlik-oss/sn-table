@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import React, { useState, useRef } from 'react';
 import Typography from '@mui/material/Typography';
 import ArrowRight from '@qlik-trial/sprout/icons/react/ArrowRight';
@@ -5,7 +6,11 @@ import { HeadCellMenuItem, MenuItemGroup } from '../../../types';
 import { StyledMenuItem, StyledListItemIcon, StyledMenuItemLabel } from '../styles';
 import MenuList from './MenuList';
 
-const subMenusIntercepted = (
+interface MenuGroupProps {
+  menuGroup: HeadCellMenuItem[];
+}
+
+export const interceptClickOnMenuItems = (
   menuGroups: MenuItemGroup[],
   setOpenMenu: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
@@ -19,7 +24,6 @@ const subMenusIntercepted = (
       ...(menuItem.onClick
         ? {
             onClick: (evt: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-              console.log('closing dropdown before closeing all stuff!');
               setOpenMenu(false);
               if (menuItem.onClick) menuItem.onClick(evt);
             },
@@ -30,7 +34,7 @@ const subMenusIntercepted = (
   return result;
 };
 
-const MenuGroup = (menuGroup: HeadCellMenuItem[]) => {
+const MenuGroup = ({ menuGroup }: MenuGroupProps) => {
   const [openMenu, setOpenMenu] = useState(false);
   const anchorRef = useRef<HTMLDivElement | null>(null);
 
@@ -41,7 +45,7 @@ const MenuGroup = (menuGroup: HeadCellMenuItem[]) => {
     };
 
     return (
-      <div>
+      <div key={id}>
         <StyledMenuItem
           ref={subMenus ? anchorRef : null}
           key={id}
@@ -61,11 +65,9 @@ const MenuGroup = (menuGroup: HeadCellMenuItem[]) => {
             anchorEl={anchorRef.current}
             open={openMenu}
             onClose={() => setOpenMenu(false)}
-            menuGroups={subMenusIntercepted(subMenus, setOpenMenu)}
-            popoverProps={{
-              transformOrigin: { horizontal: 'left', vertical: 'top' },
-              anchorOrigin: { horizontal: 'right', vertical: 'top' },
-            }}
+            menuGroups={interceptClickOnMenuItems(subMenus, setOpenMenu)}
+            transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+            anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
           />
         )}
       </div>
