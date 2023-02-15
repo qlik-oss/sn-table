@@ -9,6 +9,7 @@ import { Cell } from '../../../types';
 import { TableBodyWrapperProps } from '../../types';
 import TableTotals from './TableTotals';
 import CellText from '../CellText';
+import CellTextWrapper from '../CellTextWrapper';
 import useSelectionListener from '../../hooks/use-selection-listener';
 
 function TableBodyWrapper({
@@ -104,7 +105,9 @@ function TableBodyWrapper({
                     handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition)
                   }
                 >
-                  <CellText>{cell.qText}</CellText>
+                  <CellTextWrapper>
+                    <CellText>{cell.qText}</CellText>
+                  </CellTextWrapper>
                 </CellRenderer>
               )
             );

@@ -41,7 +41,7 @@ export const StyledTable = styled(Table, {
   customWidth
     ? {
         tableLayout: 'fixed',
-        width: 'max-content',
+        width: 'min-content',
       }
     : {}
 );
@@ -60,3 +60,8 @@ export const StyledCellText = styled(Box, {
     textOverflow: 'ellipsis',
   }),
 }));
+
+export const StyledCellTextWrapper = styled(Box)({
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+});
