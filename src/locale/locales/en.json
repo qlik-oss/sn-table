@@ -53,7 +53,11 @@
   },
   "SNTable.MenuItem.Search": {
     "value": "Search",
-    "comment": "label for menu item to search in dimension."
+    "comment": "label for menu item to search in field."
+  },
+  "SNTable.MenuItem.Selections": {
+    "value": "Selections",
+    "comment": "label for selections menu in field."
   },
   "SNTable.MenuItem.SelectAll": {
     "value": "Select all",

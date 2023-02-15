@@ -271,7 +271,8 @@ export interface HeadCellMenuItem {
   itemTitle: string;
   enabled: boolean;
   hasDivider?: boolean;
-  onClick: (evt: React.MouseEvent<HTMLLIElement>) => void;
+  onClick?: (evt: React.MouseEvent<HTMLLIElement>) => void;
+  subMenus?: MenuItemGroup[];
 }
 
 export interface TableBodyWrapperProps {
