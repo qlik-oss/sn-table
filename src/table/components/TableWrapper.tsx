@@ -108,7 +108,13 @@ export default function TableWrapper(props: TableWrapperProps) {
       >
         <StyledTable customWidth={areBasicFeaturesEnabled} stickyHeader aria-label={tableAriaLabel}>
           <TableHeadWrapper tableData={tableData} areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
-          <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
+          <TableBodyWrapper
+            tableData={tableData}
+            announce={announce}
+            areBasicFeaturesEnabled={areBasicFeaturesEnabled}
+            setShouldRefocus={setShouldRefocus}
+            tableWrapperRef={tableWrapperRef}
+          />
         </StyledTable>
       </StyledTableContainer>
       {!constraints.active && (

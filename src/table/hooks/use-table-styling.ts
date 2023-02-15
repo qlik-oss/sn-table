@@ -1,8 +1,14 @@
 import { useMemo } from 'react';
 import { getBodyStyle, getHeaderStyle, getTotalsStyle } from '../utils/styling-utils';
 import { ExtendedTheme, TableData, TableLayout } from '../../types';
+import { TableStyling } from '../types';
 
-const useTableStyling = (layout: TableLayout, theme: ExtendedTheme, tableData: TableData, rootElement: HTMLElement) => {
+const useTableStyling = (
+  layout: TableLayout,
+  theme: ExtendedTheme,
+  tableData: TableData,
+  rootElement: HTMLElement
+): TableStyling => {
   const styling = useMemo(() => {
     const totalsAtTop = tableData.totalsPosition.atTop;
     const body = getBodyStyle(layout, theme, tableData.rows.length, rootElement);

@@ -49,7 +49,6 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
           embed={embed as stardust.Embed}
           changeSortOrder={changeSortOrder}
           applyColumnWidths={applyColumnWidths as ApplyColumnWidths}
-          tableWidth={props.rect.width}
         >
           <TableWrapper {...(wrapperProps as TableWrapperProps)} />
         </TableContextProvider>

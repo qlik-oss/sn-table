@@ -83,6 +83,9 @@ export interface GeneratedStyling {
     background: string;
     color: string;
   };
+  '&:last-child'?: {
+    borderRightWidth: string;
+  };
 }
 
 export interface TableStyling {
@@ -203,7 +206,6 @@ export interface ContextProviderProps {
   embed: stardust.Embed;
   changeSortOrder: ChangeSortOrder;
   applyColumnWidths?: ApplyColumnWidths;
-  tableWidth?: number;
 }
 
 export interface RenderProps {

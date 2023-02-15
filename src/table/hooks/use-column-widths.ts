@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Column } from '../../types';
+import { useMemo, useState } from 'react';
+import { Column, ExtendedTheme, TableData, TableLayout } from '../../types';
 import {
   MIN_COLUMN_WIDTH,
   ColumnWidthTypes,
@@ -10,6 +10,7 @@ import {
 import useDidUpdateEffect from './use-did-update-effect';
 import useMeasureText from '../virtualized-table/hooks/use-measure-text';
 import { TableStyling } from '../types';
+import { getBodyStyle, getHeaderStyle, getTotalsStyle } from '../utils/styling-utils';
 
 type GetHugWidth = (headLabel: string, totalsLabel: string, glyphCount: number) => number;
 
@@ -77,11 +78,25 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getHugWid
   return columnWidths;
 };
 
-const useColumnWidths = (
-  columns: Column[],
-  tableWidth: number,
-  { head, body }: TableStyling
-): [number[], React.Dispatch<React.SetStateAction<number[]>>] => {
+const useColumnWidthsAndStyling = (
+  layout: TableLayout,
+  theme: ExtendedTheme,
+  { columns, rows, totalsPosition }: TableData,
+  rootElement: HTMLElement
+): [number[], React.Dispatch<React.SetStateAction<number[]>>, TableStyling] => {
+  const tableWidth = rootElement.clientWidth;
+  const tableHeight = rootElement.clientHeight;
+
+  const { head, body, totals } = useMemo(() => {
+    const totalsAtTop = totalsPosition.atTop;
+    return {
+      body: getBodyStyle(layout, theme, rows.length, tableHeight),
+      head: getHeaderStyle(layout, theme, !totalsAtTop),
+      totals: getTotalsStyle(layout, theme, totalsAtTop),
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [layout, theme.name(), rows, totalsPosition, tableHeight]);
+
   const measureHeadLabel = useMeasureText(head.fontSize, head.fontFamily).measureText;
   const { measureText, estimateWidth } = useMeasureText(body.fontSize, body.fontFamily);
   const getHugWidth = (headLabel: string, totalsLabel: string, glyphCount: number) =>
@@ -89,11 +104,26 @@ const useColumnWidths = (
 
   const [columnWidths, setColumnWidths] = useState(() => getColumnWidths(columns, tableWidth, getHugWidth));
 
+  const styling = useMemo<TableStyling>(() => {
+    const showRightBorder = columnWidths.reduce((sum, w) => sum + w, 0) < tableWidth;
+    const rightBorderStyling = {
+      '&:last-child': {
+        borderRightWidth: showRightBorder ? '1px' : '0px',
+      },
+    };
+    return {
+      body: { ...body, ...rightBorderStyling },
+      head: { ...head, ...rightBorderStyling },
+      totals: { ...totals, ...rightBorderStyling },
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [columns, tableWidth, body, head, totals]);
+
   useDidUpdateEffect(() => {
     setColumnWidths(getColumnWidths(columns, tableWidth, getHugWidth));
   }, [columns, tableWidth]);
 
-  return [columnWidths, setColumnWidths];
+  return [columnWidths, setColumnWidths, styling];
 };
 
-export default useColumnWidths;
+export default useColumnWidthsAndStyling;

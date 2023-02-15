@@ -65,11 +65,11 @@ export const getBorderColors = (isBackgroundDark: boolean, bottomSeparatingBorde
 /**
  * Get border widths for body. adds a bottom border if the rendered rows height is estimated to be greater than the container height
  */
-const getLastRowBottomBorder = (fontSize: string | undefined, rowsLength?: number, rootElement?: HTMLElement) => {
-  if (fontSize && rowsLength && rootElement) {
+const getLastRowBottomBorder = (fontSize: string | undefined, rowsLength?: number, tableHight?: number) => {
+  if (fontSize && rowsLength && tableHight) {
     const rowHeight = fontSizeToRowHeight(fontSize);
     // multiply with number of rows plus header and totals. Compare if greater than container
-    const showBottomBorder = rowHeight * (rowsLength + 2) < rootElement.clientHeight - PAGINATION_HEIGHT;
+    const showBottomBorder = rowHeight * (rowsLength + 2) < tableHight - PAGINATION_HEIGHT;
     return showBottomBorder ? '1px' : '0px';
   }
   return '0px';
@@ -141,13 +141,13 @@ export function getBodyStyle(
   layout: TableLayout,
   theme: ExtendedTheme,
   rowsLength?: number,
-  rootElement?: HTMLElement
+  tableHight?: number
 ): GeneratedStyling {
   const content = layout.components?.[0]?.content;
   const contentStyle = getBaseStyling('content', theme, content);
   contentStyle.background = theme.background.color;
 
-  const lastRowBottomBorder = getLastRowBottomBorder(contentStyle?.fontSize, rowsLength, rootElement);
+  const lastRowBottomBorder = getLastRowBottomBorder(contentStyle?.fontSize, rowsLength, tableHight);
 
   // All following colors concern hover
   const backgroundFromLayout = content?.hoverColor;
@@ -229,7 +229,7 @@ export const getFooterStyle = (background: BackgroundColors): FooterStyle => {
 /**
  * Gets complete styling for the totals cells. Based on the body style but with the background and borders from header
  */
-export function getTotalsStyle(layout: TableLayout, theme: ExtendedTheme, totalsAtTop: boolean) {
+export function getTotalsStyle(layout: TableLayout, theme: ExtendedTheme, totalsAtTop: boolean): GeneratedStyling {
   const content = layout.components?.[0]?.content;
   const contentStyle = getBaseStyling('content', theme, content);
   const { borderBottomColor, borderTopColor, background } = getHeaderStyle(layout, theme, totalsAtTop);

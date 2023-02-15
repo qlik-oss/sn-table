@@ -3,9 +3,8 @@ import React, { useState, createContext, useMemo } from 'react';
 import { createSelectorProvider } from './createSelectorProvider';
 import { ContextValue, ContextProviderProps } from '../types';
 import useSelectionReducer from '../hooks/use-selection-reducer';
-import useColumnWidths from '../hooks/use-column-widths';
-import useTableStyling from '../hooks/use-table-styling';
 import { TableData } from '../../types';
+import useColumnWidthsAndStyling from '../hooks/use-column-widths';
 
 // In order to not have typing issues when using properties on the context,
 // the initial value for the context is casted to ContextValue.
@@ -34,14 +33,13 @@ export const TableContextProvider = ({
   embed,
   changeSortOrder,
   applyColumnWidths,
-  tableWidth = 0,
 }: ContextProviderProps) => {
   const [headRowHeight, setHeadRowHeight] = useState(0);
   const [focusedCellCoord, setFocusedCellCoord] = useState((cellCoordMock || [0, 0]) as [number, number]);
   const [selectionState, selectionDispatch] = useSelectionReducer(tableData.rows, selectionsAPI);
   const [hoverIndex, setHoverIndex] = useState(-1);
-  const styling = useTableStyling(layout, theme, tableData, rootElement);
-  const [columnWidths, setColumnWidths] = useColumnWidths(tableData.columns, tableWidth, styling);
+  const [columnWidths, setColumnWidths, styling] = useColumnWidthsAndStyling(layout, theme, tableData, rootElement);
+
   const baseProps = useMemo(
     () => ({
       app,
