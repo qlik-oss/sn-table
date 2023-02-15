@@ -10,8 +10,8 @@ interface MenuListProps {
   anchorEl: HTMLDivElement | null;
   onClose: () => void;
   menuGroups: MenuItemGroup[];
-  transformOrigin?: PopoverOrigin | null;
-  anchorOrigin?: PopoverOrigin | null;
+  transformOrigin?: PopoverOrigin;
+  anchorOrigin?: PopoverOrigin;
 }
 
 const MenuList = ({
