@@ -9,11 +9,13 @@ import {
   ExtendedTranslator,
   ExtendedTheme,
   UseOptions,
+  Galaxy,
 } from '../types';
 import useAnnounceAndTranslations from './use-announce-and-translations';
 import useApplyColumnWidths from './use-apply-column-widths';
 
 interface UsePaginationTable {
+  env: Galaxy;
   selectionsAPI: ExtendedSelectionAPI;
   rootElement: HTMLElement;
   layout: TableLayout;
@@ -27,7 +29,6 @@ interface UsePaginationTable {
   app?: EngineAPI.IApp;
   areBasicFeaturesEnabled?: boolean;
   embed?: stardust.Embed;
-  shouldRenderPaginationTable: boolean;
   reactRoot: Root;
 }
 
@@ -38,7 +39,7 @@ const initialPageInfo = {
 };
 
 const usePaginationTable = ({
-  shouldRenderPaginationTable,
+  env,
   app,
   model,
   rootElement,
@@ -54,21 +55,22 @@ const usePaginationTable = ({
   embed,
   reactRoot,
 }: UsePaginationTable) => {
+  const shouldRender = !env.carbon && layout.presentation?.usePagination !== false;
   const { direction, footerContainer } = useOptions() as UseOptions;
   const announce = useAnnounceAndTranslations(rootElement, translator);
   const applyColumnWidths = useApplyColumnWidths(model, layout.qHyperCube);
   const [pageInfo, setPageInfo] = useState(initialPageInfo);
   const [tableData] = usePromise(async () => {
-    if (shouldRenderPaginationTable) {
+    if (shouldRender) {
       return manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo);
     }
 
     return null;
-  }, [layout, pageInfo, model, constraints, shouldRenderPaginationTable]);
+  }, [layout, pageInfo, model, constraints, shouldRender]);
 
   useEffect(() => {
     const isReadyToRender =
-      shouldRenderPaginationTable &&
+      shouldRender &&
       reactRoot &&
       model &&
       app &&
@@ -118,7 +120,7 @@ const usePaginationTable = ({
     announce,
     changeSortOrder,
     applyColumnWidths,
-    shouldRenderPaginationTable,
+    shouldRender,
     layout,
     selectionsAPI,
     embed,

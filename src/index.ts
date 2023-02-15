@@ -49,13 +49,10 @@ export default function supernova(env: Galaxy) {
       const embed = useEmbed();
       const changeSortOrder = useSorting(model, layout.qHyperCube);
 
-      const shouldRenderVirtualizedTable = areBasicFeaturesEnabled && layout.presentation?.usePagination === false;
-      const shouldRenderPaginationTable = !env.carbon && !shouldRenderVirtualizedTable;
-
       useContextMenu(areBasicFeaturesEnabled);
 
       useVirtualizedTable({
-        shouldRenderVirtualizedTable,
+        areBasicFeaturesEnabled,
         layout,
         model,
         rect,
@@ -71,7 +68,7 @@ export default function supernova(env: Galaxy) {
       });
 
       usePaginationTable({
-        shouldRenderPaginationTable,
+        env,
         areBasicFeaturesEnabled,
         app,
         model,

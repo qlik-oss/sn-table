@@ -2,7 +2,14 @@ import { stardust, useEffect, useMemo } from '@nebula.js/stardust';
 import { Root } from 'react-dom/client';
 import { renderVirtualizedTable } from '../table/Root';
 import getVirtualScrollTableData from '../table/virtualized-table/utils/get-table-data';
-import { ChangeSortOrder, ExtendedSelectionAPI, ExtendedTheme, ExtendedTranslator, TableLayout } from '../types';
+import {
+  ChangeSortOrder,
+  ExtendedSelectionAPI,
+  ExtendedTheme,
+  ExtendedTranslator,
+  TableData,
+  TableLayout,
+} from '../types';
 
 interface UseVirtualizedTable {
   selectionsAPI: ExtendedSelectionAPI;
@@ -16,7 +23,7 @@ interface UseVirtualizedTable {
   rootElement: HTMLElement;
   embed: stardust.Embed;
   changeSortOrder: ChangeSortOrder | undefined;
-  shouldRenderVirtualizedTable: boolean;
+  areBasicFeaturesEnabled: boolean;
   reactRoot: Root;
 }
 
@@ -30,15 +37,22 @@ const useVirtualizedTable = ({
   constraints,
   selectionsAPI,
   changeSortOrder,
-  shouldRenderVirtualizedTable,
+  areBasicFeaturesEnabled,
   rootElement,
   embed,
   reactRoot,
 }: UseVirtualizedTable) => {
-  const tableData = useMemo(() => getVirtualScrollTableData(layout, constraints), [layout, constraints]);
+  const shouldRender = areBasicFeaturesEnabled && layout.presentation?.usePagination === false;
+  const tableData = useMemo(() => {
+    if (shouldRender) {
+      return getVirtualScrollTableData(layout, constraints);
+    }
+
+    return {} as TableData;
+  }, [layout, constraints, shouldRender]);
 
   useEffect(() => {
-    if (!shouldRenderVirtualizedTable || !model || !changeSortOrder) return;
+    if (!shouldRender || !model || !changeSortOrder) return;
 
     renderVirtualizedTable(
       {
@@ -67,7 +81,7 @@ const useVirtualizedTable = ({
     constraints,
     selectionsAPI,
     changeSortOrder,
-    shouldRenderVirtualizedTable,
+    shouldRender,
     rootElement,
     embed,
     reactRoot,
