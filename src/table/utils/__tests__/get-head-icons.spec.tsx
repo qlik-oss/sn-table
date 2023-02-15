@@ -5,11 +5,17 @@ import Ascending from '@qlik-trial/sprout/icons/react/Ascending';
 
 import getHeadIcons from '../get-head-icons';
 import { Column } from '../../../types';
+import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
+import { LockWrapper } from '../../components/head/styles';
 
 describe('getHeadIcons', () => {
-  const ascending = <Ascending height="12px" />;
-  const descending = <Descending height="12px" />;
-  const lock = <Lock height="12px" data-testid="head-cell-lock-icon" />;
+  const ascending = <Ascending height={DEFAULT_FONT_SIZE} />;
+  const descending = <Descending height={DEFAULT_FONT_SIZE} />;
+  const lock = (
+    <LockWrapper>
+      <Lock height="12px" data-testid="head-cell-lock-icon" />
+    </LockWrapper>
+  );
   let column: Column;
 
   beforeEach(() => {

@@ -10,6 +10,7 @@ import { handleLastTab } from '../../utils/handle-key-press';
 import { PaginationContentProps } from '../../types';
 import { getFooterStyle } from '../../utils/styling-utils';
 import { useContextSelector, TableContext } from '../../context';
+import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 
 const icons: Record<string, typeof ArrowLeft> = {
   FirstPage: ArrowLeftStop,
@@ -107,7 +108,7 @@ function PaginationContent({
         tabIndex={tabIndex}
         onKeyDown={onKeyDown}
       >
-        <IconComponent height="12px" />
+        <IconComponent height={DEFAULT_FONT_SIZE} />
       </StyledButton>
     );
   };
