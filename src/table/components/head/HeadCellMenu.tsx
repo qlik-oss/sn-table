@@ -134,23 +134,22 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
 
   return menuItemGroups.length ? (
     <>
-      <div>
-        <StyledMenuIconButton
-          isVisible={openListboxDropdown || openMenuDropdown}
-          ref={anchorRef}
-          size="small"
-          tabIndex={tabIndex}
-          id="sn-table-head-menu-button"
-          aria-controls={openMenuDropdown ? 'sn-table-head-menu' : undefined}
-          aria-expanded={openMenuDropdown ? 'true' : undefined}
-          aria-haspopup="true"
-          onClick={handleOpenDropdown}
-        >
-          <More height={DEFAULT_FONT_SIZE} />
-        </StyledMenuIconButton>
+      <StyledMenuIconButton
+        isVisible={openListboxDropdown || openMenuDropdown}
+        rightAligned={column.align === 'right'}
+        ref={anchorRef}
+        size="small"
+        tabIndex={tabIndex}
+        id="sn-table-head-menu-button"
+        aria-controls={openMenuDropdown ? 'sn-table-head-menu' : undefined}
+        aria-expanded={openMenuDropdown ? 'true' : undefined}
+        aria-haspopup="true"
+        onClick={handleOpenDropdown}
+      >
+        <More height={DEFAULT_FONT_SIZE} />
+      </StyledMenuIconButton>
 
-        <div ref={listboxRef} />
-      </div>
+      <div ref={listboxRef} />
 
       <Menu
         className="sn-table-head-menu"

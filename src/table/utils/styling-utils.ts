@@ -8,10 +8,11 @@ import { SELECTION_STYLING, COLORING } from '../styling-defaults';
 
 export const LINE_HEIGHT = 4 / 3;
 export const CELL_PADDING_HEIGHT = 8;
+export const HEAD_LABEL_BUTTON_PADDING = 8;
 export const CELL_BORDER_HEIGHT = 1;
 
 export const fontSizeToRowHeight = (fontSize: string) =>
-  parseInt(fontSize, 10) * LINE_HEIGHT + CELL_PADDING_HEIGHT + CELL_BORDER_HEIGHT;
+  parseInt(fontSize, 10) * LINE_HEIGHT + CELL_PADDING_HEIGHT + HEAD_LABEL_BUTTON_PADDING + CELL_BORDER_HEIGHT;
 
 // the order of style
 // default (inl. sprout theme) < Sense theme < styling settings
