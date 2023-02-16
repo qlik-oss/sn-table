@@ -60,6 +60,7 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
 
 export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot?: ReactDom.Root) {
   const {
+    app,
     selectionsAPI,
     layout,
     model,
@@ -79,6 +80,7 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
     <React.StrictMode>
       <ThemeProvider theme={muiTheme}>
         <TableContextProvider
+          app={app}
           selectionsAPI={selectionsAPI}
           layout={layout}
           model={model}
