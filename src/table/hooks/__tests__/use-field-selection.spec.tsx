@@ -63,9 +63,9 @@ describe('useFieldSelection()', () => {
       });
     });
 
-    it('`canSelectAll` and `canSelectPossible` and should be true after calling `updateSelectionActionsEnabledStatus` with `qOptions`', () => {
+    it('`canSelectAll` and `canSelectPossible` and should be true after calling `updateSelectionActionsEnabledStatus` with `qOptions`', async () => {
       const state = { qOption: 1 } as EngineAPI.INxStateCounts;
-      waitFor(() => {
+      await waitFor(() => {
         expect(triggerHook(state)).toMatchObject({
           canSelectAll: true,
           canClearSelections: false,
@@ -76,9 +76,9 @@ describe('useFieldSelection()', () => {
       });
     });
 
-    it('`canSelectAll`, `canSelectAlternative` and `canSelectExcluded` should be true after calling `updateSelectionActionsEnabledStatus` with `qAlternative`', () => {
+    it('`canSelectAll`, `canSelectAlternative` and `canSelectExcluded` should be true after calling `updateSelectionActionsEnabledStatus` with `qAlternative`', async () => {
       const state = { qAlternative: 1 } as EngineAPI.INxStateCounts;
-      waitFor(() => {
+      await waitFor(() => {
         expect(triggerHook(state)).toMatchObject({
           canSelectAll: true,
           canClearSelections: false,
@@ -89,9 +89,9 @@ describe('useFieldSelection()', () => {
       });
     });
 
-    it('`canSelectAll` should be true after calling `updateSelectionActionsEnabledStatus` with `qDeselected`', () => {
+    it('`canSelectAll` should be true after calling `updateSelectionActionsEnabledStatus` with `qDeselected`', async () => {
       const state = { qDeselected: 1 } as EngineAPI.INxStateCounts;
-      waitFor(() => {
+      await waitFor(() => {
         expect(triggerHook(state)).toMatchObject({
           canSelectAll: true,
           canClearSelections: false,
@@ -102,9 +102,9 @@ describe('useFieldSelection()', () => {
       });
     });
 
-    it('`canClearSelections` should be true after calling `updateSelectionActionsEnabledStatus` with `qSelected`', () => {
+    it('`canClearSelections` should be true after calling `updateSelectionActionsEnabledStatus` with `qSelected`', async () => {
       const state = { qSelected: 1 } as EngineAPI.INxStateCounts;
-      waitFor(() => {
+      await waitFor(() => {
         expect(triggerHook(state)).toMatchObject({
           canSelectAll: false,
           canClearSelections: true,
@@ -115,9 +115,9 @@ describe('useFieldSelection()', () => {
       });
     });
 
-    it('`canSelectAll` and `canSelectPossible` should be true after calling `updateSelectionActionsEnabledStatus` with `qOption`', () => {
+    it('`canSelectAll` and `canSelectPossible` should be true after calling `updateSelectionActionsEnabledStatus` with `qOption`', async () => {
       const state = { qOption: 1 } as EngineAPI.INxStateCounts;
-      waitFor(() => {
+      await waitFor(() => {
         expect(triggerHook(state)).toMatchObject({
           canSelectAll: true,
           canClearSelections: false,
@@ -128,9 +128,9 @@ describe('useFieldSelection()', () => {
       });
     });
 
-    it('`canSelectAll`, `canSelectAlternative` and `canSelectExcluded` should be true after calling `updateSelectionActionsEnabledStatus` with `qAlternative`', () => {
+    it('`canSelectAll`, `canSelectAlternative` and `canSelectExcluded` should be true after calling `updateSelectionActionsEnabledStatus` with `qAlternative`', async () => {
       const state = { qAlternative: 1 } as EngineAPI.INxStateCounts;
-      waitFor(() => {
+      await waitFor(() => {
         expect(triggerHook(state)).toMatchObject({
           canSelectAll: true,
           canClearSelections: false,
@@ -141,9 +141,9 @@ describe('useFieldSelection()', () => {
       });
     });
 
-    it('`canSelectAll` and `canSelectExcluded` should be true after calling `updateSelectionActionsEnabledStatus` with `qExcluded`', () => {
+    it('`canSelectAll` and `canSelectExcluded` should be true after calling `updateSelectionActionsEnabledStatus` with `qExcluded`', async () => {
       const state = { qExcluded: 1 } as EngineAPI.INxStateCounts;
-      waitFor(() => {
+      await waitFor(() => {
         expect(triggerHook(state)).toMatchObject({
           canSelectAll: true,
           canClearSelections: false,
@@ -154,7 +154,7 @@ describe('useFieldSelection()', () => {
       });
     });
 
-    it('shoud reset state after calling `resetSelectionActionsEnabledStatus`', () => {
+    it('shoud reset state after calling `resetSelectionActionsEnabledStatus`', async () => {
       const { result } = getFieldSelectionResult();
       const mockLayout = {
         qHyperCube: {
@@ -163,7 +163,7 @@ describe('useFieldSelection()', () => {
       } as TableLayout;
       act(() => result.current.updateSelectionActionsEnabledStatus(mockLayout));
 
-      waitFor(() => {
+      await waitFor(() => {
         expect(result.current.selectionActionsEnabledStatus).toMatchObject({
           canSelectAll: true,
           canClearSelections: false,
@@ -175,7 +175,7 @@ describe('useFieldSelection()', () => {
 
       act(() => result.current.resetSelectionActionsEnabledStatus());
 
-      waitFor(() => {
+      await waitFor(() => {
         expect(result.current.selectionActionsEnabledStatus).toMatchObject({
           canSelectAll: false,
           canClearSelections: false,
