@@ -53,6 +53,7 @@ export default function supernova(env: Galaxy) {
 
       useVirtualizedTable({
         areBasicFeaturesEnabled,
+        app,
         layout,
         model,
         rect,

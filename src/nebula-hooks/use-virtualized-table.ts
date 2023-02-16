@@ -12,6 +12,7 @@ import {
 } from '../types';
 
 interface UseVirtualizedTable {
+  app: EngineAPI.IApp | undefined;
   selectionsAPI: ExtendedSelectionAPI;
   layout: TableLayout;
   model: EngineAPI.IGenericObject | undefined;
@@ -28,6 +29,7 @@ interface UseVirtualizedTable {
 }
 
 const useVirtualizedTable = ({
+  app,
   layout,
   model,
   rect,
@@ -56,6 +58,7 @@ const useVirtualizedTable = ({
 
     renderVirtualizedTable(
       {
+        app,
         layout,
         model,
         rect,
@@ -72,6 +75,7 @@ const useVirtualizedTable = ({
       reactRoot
     );
   }, [
+    app,
     layout,
     model,
     rect,

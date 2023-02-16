@@ -27,6 +27,7 @@ export interface BodyStyle extends GeneratedStyling {
 }
 
 export interface VirtualTableRenderProps {
+  app: EngineAPI.IApp | undefined;
   selectionsAPI: ExtendedSelectionAPI;
   layout: TableLayout;
   model: EngineAPI.IGenericObject;
