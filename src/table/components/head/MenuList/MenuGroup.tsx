@@ -8,18 +8,14 @@ import MenuList from './MenuList';
 
 export const interceptClickOnMenuItems = (menuGroups: MenuItemGroup[], cache: SubMenusOpenStatusCache) => {
   const result = menuGroups.map((grp) => {
-    return grp.map((menuItem) => ({
-      id: menuItem.id,
-      icon: menuItem.icon,
-      enabled: menuItem.enabled,
-      itemTitle: menuItem.itemTitle,
-      ...(menuItem.subMenus ? { subMenus: menuItem.subMenus } : {}),
-      ...(menuItem.onClick
+    return grp.map(({ onClick, ...restProps }) => ({
+      ...restProps,
+      ...(onClick
         ? {
             onClick: (evt: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
               // reset all opened submenu levels here!
               Object.entries(cache).map(([, setter]) => setter(false));
-              if (menuItem.onClick) menuItem.onClick(evt);
+              onClick(evt);
             },
           }
         : {}),
