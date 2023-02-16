@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { memo, useMemo, useState } from 'react';
 import { WrapperProps } from './types';
 import PaginationContent from '../components/footer/PaginationContent';
 import { StyledTableWrapper } from '../components/styles';
@@ -9,11 +9,12 @@ import { MAX_PAGE_SIZE } from './constants';
 import useOnPropsChange from './hooks/use-on-props-change';
 import { TableContext, useContextSelector } from '../context';
 
-export default function Wrapper(props: WrapperProps) {
-  const { rect, tableData } = props;
+const Wrapper = (props: WrapperProps) => {
+  const { rect } = props;
+  const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
+  const tableData = useContextSelector(TableContext, (value) => value.tableData);
   const { paginationNeeded, totalRowCount } = tableData;
   const pageSize = Math.min(MAX_PAGE_SIZE, totalRowCount);
-  const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const [page, setPage] = useState(0);
   const pageInfo = useMemo<PageInfo>(
     () => ({
@@ -29,13 +30,12 @@ export default function Wrapper(props: WrapperProps) {
 
   return (
     <StyledTableWrapper data-testid="sn-table" background={theme.background} dir="ltr">
-      <Table rect={rect} pageInfo={pageInfo} tableData={tableData} />
+      <Table rect={rect} pageInfo={pageInfo} />
       {paginationNeeded && (
         <FooterWrapper>
           <PaginationContent
             handleChangePage={(currentPage) => setPage(currentPage)}
             isSelectionMode={false}
-            tableData={tableData}
             pageInfo={pageInfo}
             setPageInfo={() => {}}
             rect={rect}
@@ -45,4 +45,6 @@ export default function Wrapper(props: WrapperProps) {
       )}
     </StyledTableWrapper>
   );
-}
+};
+
+export default memo(Wrapper);

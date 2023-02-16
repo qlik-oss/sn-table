@@ -40,7 +40,6 @@ export const shouldShow = (component: string, width: number) => {
 
 function PaginationContent({
   direction,
-  tableData,
   pageInfo,
   setPageInfo,
   footerContainer,
@@ -49,7 +48,7 @@ function PaginationContent({
   handleChangePage,
   announce,
 }: PaginationContentProps) {
-  const { totalRowCount, totalColumnCount, totalPages } = tableData;
+  const { totalRowCount, totalColumnCount, totalPages } = useContextSelector(TableContext, (value) => value.tableData);
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const { keyboard, translator, theme, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
   const footerStyle = useMemo(() => getFooterStyle(theme.background), [theme]);

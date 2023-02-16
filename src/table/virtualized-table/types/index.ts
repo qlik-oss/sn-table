@@ -28,6 +28,7 @@ export interface BodyStyle extends GeneratedStyling {
 }
 
 export interface VirtualTableRenderProps {
+  app: EngineAPI.IApp | undefined;
   selectionsAPI: ExtendedSelectionAPI;
   layout: TableLayout;
   model: EngineAPI.IGenericObject;
@@ -45,13 +46,11 @@ export interface VirtualTableRenderProps {
 
 export interface WrapperProps {
   rect: stardust.Rect;
-  tableData: TableData;
 }
 
 export interface TableProps {
   rect: stardust.Rect;
   pageInfo: PageInfo;
-  tableData: TableData;
 }
 
 export interface HeaderProps {

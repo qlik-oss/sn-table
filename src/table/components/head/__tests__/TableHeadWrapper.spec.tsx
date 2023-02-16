@@ -11,9 +11,9 @@ describe('<TableHeadWrapper />', () => {
 
   const renderTableHead = () =>
     render(
-      <TestWithProviders layout={layout}>
+      <TestWithProviders layout={layout} tableData={tableData}>
         <table>
-          <TableHeadWrapper tableData={tableData} areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
+          <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
         </table>
       </TestWithProviders>
     );
@@ -34,6 +34,7 @@ describe('<TableHeadWrapper />', () => {
         { id: 2, align: 'right', label: 'someMsr', sortDirection: 'D', isDim: false, colIdx: 1, qReverseSort: false },
       ],
       totalsPosition: { atTop: false, atBottom: false },
+      rows: [{ qText: '1' }],
     } as unknown as TableData;
     layout = {
       qHyperCube: {
@@ -57,6 +58,7 @@ describe('<TableHeadWrapper />', () => {
         { ...tableData.columns[1], sortDirection: 'A' },
       ],
       totalsPosition: { atTop: false, atBottom: false },
+      rows: [{ qText: '1' }],
     } as unknown as TableData;
     layout = {
       qHyperCube: {

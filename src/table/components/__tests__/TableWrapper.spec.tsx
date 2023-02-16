@@ -23,9 +23,8 @@ describe('<TableWrapper />', () => {
 
   const renderTableWrapper = () =>
     render(
-      <TestWithProviders layout={layout} constraints={constraints} rootElement={rootElement}>
+      <TestWithProviders layout={layout} constraints={constraints} rootElement={rootElement} tableData={tableData}>
         <TableWrapper
-          tableData={tableData}
           pageInfo={pageInfo}
           setPageInfo={setPageInfo}
           rect={rect}
@@ -47,6 +46,7 @@ describe('<TableWrapper />', () => {
       paginationNeeded: true,
       rows: [{ qText: '1' }],
       columns: [{}] as Column[],
+      totalsPosition: { atTop: false, atBottom: false },
     } as unknown as TableData;
     pageInfo = { page: 0, rowsPerPage: 100, rowsPerPageOptions: [10, 25, 100] };
     setPageInfo = jest.fn();

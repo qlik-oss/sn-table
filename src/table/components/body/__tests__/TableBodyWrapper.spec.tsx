@@ -22,10 +22,9 @@ describe('<TableBodyWrapper />', () => {
 
   const renderTableBody = () =>
     render(
-      <TestWithProviders>
+      <TestWithProviders tableData={tableData}>
         <table>
           <TableBodyWrapper
-            tableData={tableData}
             setShouldRefocus={setShouldRefocus}
             tableWrapperRef={tableWrapperRef}
             announce={announce}

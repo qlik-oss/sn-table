@@ -42,7 +42,7 @@ describe('<Table />', () => {
           constraints={constraints}
           tableData={tableData}
         >
-          <TestableTable pageInfo={pageInfo} rect={rect} tableData={tableData} />
+          <TestableTable pageInfo={pageInfo} rect={rect} />
         </TestWithProviders>
       )
     );

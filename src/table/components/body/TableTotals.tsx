@@ -9,12 +9,12 @@ import { TableTotalsProps } from '../../types';
 import CellText from '../CellText';
 import CellTextWrapper from '../CellTextWrapper';
 
-function TableTotals({ tableData, areBasicFeaturesEnabled }: TableTotalsProps) {
+function TableTotals({ areBasicFeaturesEnabled }: TableTotalsProps) {
   const {
     columns,
     totalsPosition: { atTop },
     rows,
-  } = tableData;
+  } = useContextSelector(TableContext, (value) => value.tableData);
   const { rootElement, selectionsAPI, keyboard, styling } = useContextSelector(
     TableContext,
     (value) => value.baseProps

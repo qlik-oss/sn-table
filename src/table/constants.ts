@@ -48,3 +48,5 @@ export const DEFAULT_COLUMN_PIXEL_WIDTH = 200;
 export const DEFAULT_COLUMN_PERCENTAGE_WIDTH = 20;
 
 export const PAGINATION_HEIGHT = 40;
+
+export const DEFAULT_FOCUS_CELL_COORD = [0, 0] as [number, number];

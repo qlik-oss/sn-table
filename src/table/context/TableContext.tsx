@@ -6,6 +6,7 @@ import useSelectionReducer from '../hooks/use-selection-reducer';
 import useColumnWidths from '../hooks/use-column-widths';
 import useTableStyling from '../hooks/use-table-styling';
 import { TableData } from '../../types';
+import { DEFAULT_FOCUS_CELL_COORD } from '../constants';
 
 // In order to not have typing issues when using properties on the context,
 // the initial value for the context is casted to ContextValue.
@@ -37,7 +38,9 @@ export const TableContextProvider = ({
   tableWidth = 0,
 }: ContextProviderProps) => {
   const [headRowHeight, setHeadRowHeight] = useState(0);
-  const [focusedCellCoord, setFocusedCellCoord] = useState((cellCoordMock || [0, 0]) as [number, number]);
+  const [focusedCellCoord, setFocusedCellCoord] = useState(
+    (cellCoordMock || DEFAULT_FOCUS_CELL_COORD) as [number, number]
+  );
   const [selectionState, selectionDispatch] = useSelectionReducer(tableData.rows, selectionsAPI);
   const [hoverIndex, setHoverIndex] = useState(-1);
   const styling = useTableStyling(layout, theme, tableData, rootElement);
@@ -89,6 +92,7 @@ export const TableContextProvider = ({
         columnWidths,
         setColumnWidths,
         baseProps,
+        tableData,
       }}
     >
       {children}

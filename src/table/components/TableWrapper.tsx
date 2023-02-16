@@ -15,8 +15,9 @@ import { updateFocus, resetFocus, getCellElement } from '../utils/accessibility-
 import { TableWrapperProps } from '../types';
 
 export default function TableWrapper(props: TableWrapperProps) {
-  const { tableData, pageInfo, setPageInfo, direction, footerContainer, announce, areBasicFeaturesEnabled } = props;
-  const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } = tableData;
+  const { pageInfo, setPageInfo, direction, footerContainer, announce, areBasicFeaturesEnabled } = props;
+  const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
+    useContextSelector(TableContext, (value) => value.tableData);
   const { page, rowsPerPage } = pageInfo;
   const { selectionsAPI, rootElement, keyboard, translator, theme, constraints } = useContextSelector(
     TableContext,
@@ -107,7 +108,7 @@ export default function TableWrapper(props: TableWrapperProps) {
         data-testid="table-container"
       >
         <StyledTable customWidth={areBasicFeaturesEnabled} stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper tableData={tableData} areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
+          <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </StyledTable>
       </StyledTableContainer>
