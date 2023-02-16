@@ -1,6 +1,7 @@
 import { stardust } from '@nebula.js/stardust';
 import React from 'react';
 import { Announce } from '../../types';
+import { DEFAULT_FOCUS_CELL_COORD } from '../constants';
 import { CellFocusProps, HandleResetFocusProps } from '../types';
 
 export const getCellElement = (rootElement: HTMLElement, cellCoord: [number, number]) =>
@@ -143,7 +144,7 @@ export const resetFocus = ({
   updateFocus({ focusType: 'removeTab', cell: findCellWithTabStop(rootElement) });
   // If you have selections ongoing, you want to stay on the same column
   const selectionCellCoord: [number, number] = [totalsPosition.atTop ? 2 : 1, focusedCellCoord[1]];
-  const cellCoord: [number, number] = isSelectionMode ? selectionCellCoord : [0, 0];
+  const cellCoord: [number, number] = isSelectionMode ? selectionCellCoord : DEFAULT_FOCUS_CELL_COORD;
 
   if (!keyboard.enabled || keyboard.active) {
     // Only run this if updates come from inside table

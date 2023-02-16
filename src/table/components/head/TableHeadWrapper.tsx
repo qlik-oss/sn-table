@@ -10,8 +10,8 @@ import HeadCellContent from './HeadCellContent';
 import ColumnAdjuster from './ColumnAdjuster';
 import { BORDER_WIDTH, PADDING } from '../../styling-defaults';
 
-function TableHeadWrapper({ tableData, areBasicFeaturesEnabled }: TableHeadWrapperProps) {
-  const { columns } = tableData;
+function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
+  const { columns } = useContextSelector(TableContext, (value) => value.tableData);
   const { layout, styling } = useContextSelector(TableContext, (value) => value.baseProps);
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);

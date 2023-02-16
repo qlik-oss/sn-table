@@ -11,9 +11,9 @@ describe('<TableHeadWrapper />', () => {
 
   const renderTableHead = () =>
     render(
-      <TestWithProviders layout={layout}>
+      <TestWithProviders layout={layout} tableData={tableData}>
         <table>
-          <TableHeadWrapper tableData={tableData} areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
+          <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
         </table>
       </TestWithProviders>
     );

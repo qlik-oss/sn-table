@@ -23,9 +23,8 @@ describe('<TableWrapper />', () => {
 
   const renderTableWrapper = () =>
     render(
-      <TestWithProviders layout={layout} constraints={constraints} rootElement={rootElement}>
+      <TestWithProviders layout={layout} constraints={constraints} rootElement={rootElement} tableData={tableData}>
         <TableWrapper
-          tableData={tableData}
           pageInfo={pageInfo}
           setPageInfo={setPageInfo}
           rect={rect}

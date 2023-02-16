@@ -22,10 +22,9 @@ describe('<PaginationContent />', () => {
 
   const renderPagination = () =>
     render(
-      <TestWithProviders keyboard={keyboard}>
+      <TestWithProviders keyboard={keyboard} tableData={tableData}>
         <PaginationContent
           direction={direction}
-          tableData={tableData}
           pageInfo={pageInfo}
           setPageInfo={setPageInfo}
           footerContainer={footerContainer}

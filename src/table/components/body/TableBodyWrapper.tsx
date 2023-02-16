@@ -13,13 +13,15 @@ import CellTextWrapper from '../CellTextWrapper';
 import useSelectionListener from '../../hooks/use-selection-listener';
 
 function TableBodyWrapper({
-  tableData,
   setShouldRefocus,
   tableWrapperRef,
   announce,
   areBasicFeaturesEnabled,
 }: TableBodyWrapperProps) {
-  const { rows, columns, paginationNeeded, totalsPosition } = tableData;
+  const { rows, columns, paginationNeeded, totalsPosition } = useContextSelector(
+    TableContext,
+    (value) => value.tableData
+  );
   const {
     selectionsAPI,
     rootElement,
@@ -48,7 +50,7 @@ function TableBodyWrapper({
 
   useSelectionListener({ keyboard, selectionDispatch, selectionsAPI, setShouldRefocus, tableWrapperRef });
 
-  const totals = <TableTotals tableData={tableData} areBasicFeaturesEnabled={areBasicFeaturesEnabled} />;
+  const totals = <TableTotals areBasicFeaturesEnabled={areBasicFeaturesEnabled} />;
 
   return (
     <StyledBody lastRowBottomBorder={lastRowBottomBorder}>
