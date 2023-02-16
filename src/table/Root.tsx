@@ -28,6 +28,7 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
     embed,
     changeSortOrder,
     applyColumnWidths,
+    tableData,
     ...wrapperProps
   } = props;
   const muiTheme = muiSetup(direction);
@@ -38,7 +39,7 @@ export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
         <TableContextProvider
           app={app}
           model={model as EngineAPI.IGenericObject}
-          tableData={props.tableData}
+          tableData={tableData}
           selectionsAPI={selectionsAPI}
           layout={layout}
           translator={translator}

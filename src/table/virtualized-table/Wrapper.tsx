@@ -36,7 +36,6 @@ const Wrapper = (props: WrapperProps) => {
           <PaginationContent
             handleChangePage={(currentPage) => setPage(currentPage)}
             isSelectionMode={false}
-            tableData={tableData}
             pageInfo={pageInfo}
             setPageInfo={() => {}}
             rect={rect}

@@ -237,7 +237,6 @@ export interface RenderProps {
 }
 
 export interface TableWrapperProps {
-  tableData: TableData;
   direction?: Direction;
   rect: stardust.Rect;
   pageInfo: PageInfo;
@@ -248,7 +247,6 @@ export interface TableWrapperProps {
 }
 
 export interface TableHeadWrapperProps {
-  tableData: TableData;
   areBasicFeaturesEnabled: boolean;
 }
 
@@ -276,7 +274,6 @@ export interface HeadCellMenuItem {
 }
 
 export interface TableBodyWrapperProps {
-  tableData: TableData;
   announce: Announce;
   setShouldRefocus(): void;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | null>;
@@ -284,12 +281,10 @@ export interface TableBodyWrapperProps {
 }
 
 export interface TableTotalsProps {
-  tableData: TableData;
   areBasicFeaturesEnabled: boolean;
 }
 
 export interface PaginationContentProps {
-  tableData: TableData;
   direction?: 'ltr' | 'rtl';
   rect: stardust.Rect;
   pageInfo: PageInfo;
