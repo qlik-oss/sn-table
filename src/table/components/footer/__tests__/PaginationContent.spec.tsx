@@ -48,6 +48,8 @@ describe('<PaginationContent />', () => {
       totalRowCount: 200,
       totalColumnCount: 5,
       totalPages: 3,
+      totalsPosition: { atTop: false, atBottom: false },
+      rows: [{ qText: '1' }],
     } as unknown as TableData;
     pageInfo = {
       page: 0,
