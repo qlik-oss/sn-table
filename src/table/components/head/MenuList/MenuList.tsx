@@ -14,14 +14,7 @@ interface MenuListProps {
   anchorOrigin?: PopoverOrigin;
 }
 
-const MenuList = ({
-  anchorEl,
-  open,
-  onClose,
-  menuGroups,
-  transformOrigin = { horizontal: 'left', vertical: 'top' },
-  anchorOrigin = { horizontal: 'left', vertical: 'bottom' },
-}: MenuListProps) => {
+const MenuList = ({ anchorEl, open, onClose, menuGroups, transformOrigin, anchorOrigin }: MenuListProps) => {
   if (!menuGroups.length) return null;
   return (
     <Menu

@@ -6,14 +6,7 @@ import { HeadCellMenuItem, MenuItemGroup } from '../../../types';
 import { StyledMenuItem, StyledListItemIcon, StyledMenuItemLabel } from '../styles';
 import MenuList from './MenuList';
 
-interface MenuGroupProps {
-  menuGroup: HeadCellMenuItem[];
-}
-
-export const interceptClickOnMenuItems = (
-  menuGroups: MenuItemGroup[],
-  setOpenMenu: React.Dispatch<React.SetStateAction<boolean>>
-) => {
+export const interceptClickOnMenuItems = (menuGroups: MenuItemGroup[], cache: SubMenusOpenStatusCache) => {
   const result = menuGroups.map((grp) => {
     return grp.map((menuItem) => ({
       id: menuItem.id,
@@ -24,7 +17,8 @@ export const interceptClickOnMenuItems = (
       ...(menuItem.onClick
         ? {
             onClick: (evt: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-              setOpenMenu(false);
+              // reset all opened submenu levels here!
+              Object.entries(cache).map(([, setter]) => setter(false));
               if (menuItem.onClick) menuItem.onClick(evt);
             },
           }
@@ -34,45 +28,53 @@ export const interceptClickOnMenuItems = (
   return result;
 };
 
-const MenuGroup = ({ menuGroup }: MenuGroupProps) => {
+type SubMenusOpenStatusCache = Record<string, React.Dispatch<React.SetStateAction<boolean>>>;
+const subMenusOpenStatusCache: SubMenusOpenStatusCache = {};
+
+const MenuGroupItems = ({ id, onClick, itemTitle, icon, enabled, subMenus }: HeadCellMenuItem) => {
   const [openMenu, setOpenMenu] = useState(false);
   const anchorRef = useRef<HTMLDivElement | null>(null);
 
-  return menuGroup.map(({ id, icon, itemTitle, enabled, onClick, subMenus }) => {
-    const handleOnClick = (evt: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-      if (onClick) onClick(evt);
-      if (subMenus?.length) setOpenMenu(true);
-    };
+  const handleOnClick = (evt: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+    if (onClick) onClick(evt);
+    if (subMenus?.length) {
+      setOpenMenu(true);
+      subMenusOpenStatusCache[itemTitle] = setOpenMenu;
+    }
+  };
 
-    return (
-      <div key={id}>
-        <StyledMenuItem
-          ref={subMenus ? anchorRef : null}
-          key={id}
-          className="sn-table-head-menu-item"
-          onClick={handleOnClick}
-          disabled={!enabled}
-        >
-          <StyledMenuItemLabel>
-            <StyledListItemIcon>{icon}</StyledListItemIcon>
-            <Typography variant="body2">{itemTitle}</Typography>
-          </StyledMenuItemLabel>
-          {subMenus?.length ? <ArrowRight /> : null}
-        </StyledMenuItem>
+  return (
+    <div key={id}>
+      <StyledMenuItem
+        ref={subMenus ? anchorRef : null}
+        key={id}
+        className="sn-table-head-menu-item"
+        onClick={handleOnClick}
+        disabled={!enabled}
+      >
+        <StyledMenuItemLabel>
+          <StyledListItemIcon>{icon}</StyledListItemIcon>
+          <Typography variant="body2">{itemTitle}</Typography>
+        </StyledMenuItemLabel>
+        {subMenus?.length ? <ArrowRight /> : null}
+      </StyledMenuItem>
 
-        {subMenus?.length && (
-          <MenuList
-            anchorEl={anchorRef.current}
-            open={openMenu}
-            onClose={() => setOpenMenu(false)}
-            menuGroups={interceptClickOnMenuItems(subMenus, setOpenMenu)}
-            transformOrigin={{ horizontal: 'left', vertical: 'top' }}
-            anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-          />
-        )}
-      </div>
-    );
-  });
+      {subMenus?.length && (
+        <MenuList
+          anchorEl={anchorRef.current}
+          open={openMenu}
+          onClose={() => setOpenMenu(false)}
+          menuGroups={interceptClickOnMenuItems(subMenus, subMenusOpenStatusCache)}
+          transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+          anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+        />
+      )}
+    </div>
+  );
+};
+
+const MenuGroup = ({ menuGroup }: { menuGroup: HeadCellMenuItem[] }) => {
+  return menuGroup.map((groupItem) => <MenuGroupItems {...groupItem} />);
 };
 
 export default MenuGroup;
