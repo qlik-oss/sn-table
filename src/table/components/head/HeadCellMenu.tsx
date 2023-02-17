@@ -169,6 +169,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
         anchorEl={anchorRef.current}
         onClose={() => setOpenMenuDropdown(false)}
         menuGroups={menuItemGroups}
+        ariaLabel="sn-table-head-menu-button"
       />
     </>
   ) : null;

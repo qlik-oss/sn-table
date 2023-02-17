@@ -12,18 +12,19 @@ interface MenuListProps {
   menuGroups: MenuItemGroup[];
   transformOrigin?: PopoverOrigin; // eslint-disable-line react/require-default-props
   anchorOrigin?: PopoverOrigin; // eslint-disable-line react/require-default-props
+  ariaLabel?: string; // eslint-disable-line react/require-default-props
 }
 
-const MenuList = ({ anchorEl, open, onClose, menuGroups, transformOrigin, anchorOrigin }: MenuListProps) => {
+const MenuList = ({ anchorEl, open, onClose, ariaLabel, menuGroups, transformOrigin, anchorOrigin }: MenuListProps) => {
   if (!menuGroups.length) return null;
   return (
     <Menu
       className="sn-table-head-menu"
-      aria-labelledby="sn-table-head-menu-button"
       open={open}
       anchorEl={anchorEl}
       onClose={onClose}
       autoFocus={false}
+      {...(ariaLabel ? { [`aria-labelledby`]: ariaLabel } : {})}
       {...(anchorOrigin ? { anchorOrigin } : {})}
       {...(transformOrigin ? { transformOrigin } : {})}
     >
