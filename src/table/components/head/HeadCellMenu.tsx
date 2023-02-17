@@ -92,24 +92,8 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
                       icon: <SelectAll />,
                       enabled: selectionActionsEnabledStatus.canSelectAll,
                     },
-                    ...(selectionActionsEnabledStatus.canClearSelections
-                      ? [
-                          {
-                            id: 2,
-                            itemTitle: translator.get('SNTable.MenuItem.ClearSelections'),
-                            onClick: async () => {
-                              setOpenMenuDropdown(false);
-                              await fieldInstance?.clear();
-                            },
-                            icon: <ClearSelections />,
-                            enabled: selectionActionsEnabledStatus.canClearSelections,
-                          },
-                        ]
-                      : []),
-                  ],
-                  [
                     {
-                      id: 3,
+                      id: 2,
                       itemTitle: translator.get('SNTable.MenuItem.SelectPossible'),
                       onClick: async () => {
                         setOpenMenuDropdown(false);
@@ -119,7 +103,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
                       enabled: selectionActionsEnabledStatus.canSelectPossible,
                     },
                     {
-                      id: 4,
+                      id: 3,
                       itemTitle: translator.get('SNTable.MenuItem.SelectAlternative'),
                       onClick: async () => {
                         setOpenMenuDropdown(false);
@@ -129,7 +113,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
                       enabled: selectionActionsEnabledStatus.canSelectAlternative,
                     },
                     {
-                      id: 5,
+                      id: 4,
                       itemTitle: translator.get('SNTable.MenuItem.SelectExcluded'),
                       onClick: async () => {
                         setOpenMenuDropdown(false);
@@ -137,6 +121,18 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
                       },
                       icon: <SelectExcluded />,
                       enabled: selectionActionsEnabledStatus.canSelectExcluded,
+                    },
+                  ],
+                  [
+                    {
+                      id: 1,
+                      itemTitle: translator.get('SNTable.MenuItem.ClearSelections'),
+                      onClick: async () => {
+                        setOpenMenuDropdown(false);
+                        await fieldInstance?.clear();
+                      },
+                      icon: <ClearSelections />,
+                      enabled: selectionActionsEnabledStatus.canClearSelections,
                     },
                   ],
                 ],
