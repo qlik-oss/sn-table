@@ -1,26 +1,11 @@
 import styled from '@mui/system/styled';
-import TableCell from '@mui/material/TableCell';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 
-import { BORDER_WIDTH, COMMON_CELL_STYLING, DEFAULT_FONT_SIZE, PADDING } from '../../styling-defaults';
-
-// ---------- TableHeadWrapper ----------
-
-export const StyledHeadCell = styled(TableCell, {
-  shouldForwardProp: (prop: string) => prop !== 'headerStyle',
-})(({ headerStyle }) => ({
-  ...COMMON_CELL_STYLING,
-  ...headerStyle,
-  pointer: 'cursor',
-  verticalAlign: 'bottom',
-  '&:focus': {
-    boxShadow: 'none',
-  },
-}));
+import { BORDER_WIDTH, DEFAULT_FONT_SIZE, PADDING } from '../../styling-defaults';
 
 // ---------- HeadCellContent ----------
 

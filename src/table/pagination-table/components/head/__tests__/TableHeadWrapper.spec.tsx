@@ -1,8 +1,8 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import TableHeadWrapper from '../TableHeadWrapper';
-import { TableData, TableLayout } from '../../../../types';
-import TestWithProviders from '../../../../__test__/test-with-providers';
+import { TableData, TableLayout } from '../../../../../types';
+import TestWithProviders from '../../../../../__test__/test-with-providers';
 
 describe('<TableHeadWrapper />', () => {
   let tableData: TableData;

@@ -1,9 +1,9 @@
 import React, { useRef } from 'react';
-import { AdjusterProps } from '../../types';
-import { useContextSelector, TableContext } from '../../context';
-import { AdjusterHitArea, AdjusterHeadBorder, AdjusterBodyBorder } from './styles';
-import { ColumnWidthTypes, MIN_COLUMN_WIDTH, PAGINATION_HEIGHT } from '../../constants';
-import { BORDER_WIDTH } from '../../styling-defaults';
+import { AdjusterProps } from '../../../types';
+import { useContextSelector, TableContext } from '../../../context';
+import { AdjusterHitArea, AdjusterHeadBorder, AdjusterBodyBorder } from '../../../components/head/styles';
+import { ColumnWidthTypes, MIN_COLUMN_WIDTH, PAGINATION_HEIGHT } from '../../../constants';
+import { BORDER_WIDTH } from '../../../styling-defaults';
 
 /**
  * Component that is placed on top of column border.

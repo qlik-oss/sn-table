@@ -2,13 +2,13 @@ import React, { memo, useEffect, useRef } from 'react';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
-import { useContextSelector, TableContext } from '../../context';
-import { TableHeadWrapperProps } from '../../types';
-import { DEFAULT_COLUMN_PIXEL_WIDTH, FullSortDirection } from '../../constants';
-import { StyledHeadCell } from './styles';
-import HeadCellContent from './HeadCellContent';
+import { useContextSelector, TableContext } from '../../../context';
+import { TableHeadWrapperProps } from '../../../types';
+import { DEFAULT_COLUMN_PIXEL_WIDTH, FullSortDirection } from '../../../constants';
+import HeadCellContent from '../../../components/head/HeadCellContent';
 import ColumnAdjuster from './ColumnAdjuster';
-import { BORDER_WIDTH, PADDING } from '../../styling-defaults';
+import { BORDER_WIDTH, PADDING } from '../../../styling-defaults';
+import { StyledHeadCell } from './styles';
 
 function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
   const { columns } = useContextSelector(TableContext, (value) => value.tableData);

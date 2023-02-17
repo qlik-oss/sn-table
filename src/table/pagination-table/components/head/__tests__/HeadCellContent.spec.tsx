@@ -2,9 +2,9 @@ import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import useEvent from '@testing-library/user-event';
-import HeadCellContent from '../HeadCellContent';
-import { TableLayout, ChangeSortOrder, ExtendedSelectionAPI, Column } from '../../../../types';
-import TestWithProviders from '../../../../__test__/test-with-providers';
+import HeadCellContent from '../../../../components/head/HeadCellContent';
+import { TableLayout, ChangeSortOrder, ExtendedSelectionAPI, Column } from '../../../../../types';
+import TestWithProviders from '../../../../../__test__/test-with-providers';
 
 describe('<HeadCellContent />', () => {
   let column: Column;

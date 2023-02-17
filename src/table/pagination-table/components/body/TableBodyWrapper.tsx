@@ -1,16 +1,16 @@
 import React, { useMemo, memo } from 'react';
 
 import getCellRenderer from '../../utils/get-cell-renderer';
-import { useContextSelector, TableContext } from '../../context';
+import { useContextSelector, TableContext } from '../../../context';
 import { StyledBodyRow, StyledBody } from './styles';
-import { handleBodyKeyDown, handleBodyKeyUp } from '../../utils/handle-key-press';
-import { handleClickToFocusBody } from '../../utils/handle-click';
-import { Cell } from '../../../types';
-import { TableBodyWrapperProps } from '../../types';
+import { handleBodyKeyDown, handleBodyKeyUp } from '../../../utils/handle-key-press';
+import { handleClickToFocusBody } from '../../../utils/handle-click';
+import { Cell } from '../../../../types';
+import { TableBodyWrapperProps } from '../../../types';
 import TableTotals from './TableTotals';
-import CellText from '../CellText';
-import CellTextWrapper from '../CellTextWrapper';
-import useSelectionListener from '../../hooks/use-selection-listener';
+import CellText from '../../../components/CellText';
+import CellTextWrapper from '../../../components/CellTextWrapper';
+import useSelectionListener from '../../../hooks/use-selection-listener';
 
 function TableBodyWrapper({
   setShouldRefocus,

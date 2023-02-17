@@ -1,13 +1,13 @@
 import React, { memo } from 'react';
 import TableRow from '@mui/material/TableRow';
 
-import { useContextSelector, TableContext } from '../../context';
-import { handleTotalKeyDown } from '../../utils/handle-key-press';
-import { removeTabAndFocusCell } from '../../utils/accessibility-utils';
+import { useContextSelector, TableContext } from '../../../context';
+import { handleTotalKeyDown } from '../../../utils/handle-key-press';
+import { removeTabAndFocusCell } from '../../../utils/accessibility-utils';
 import { StyledTotalsCell } from './styles';
-import { TableTotalsProps } from '../../types';
-import CellText from '../CellText';
-import CellTextWrapper from '../CellTextWrapper';
+import { TableTotalsProps } from '../../../types';
+import CellText from '../../../components/CellText';
+import CellTextWrapper from '../../../components/CellTextWrapper';
 
 function TableTotals({ areBasicFeaturesEnabled }: TableTotalsProps) {
   const {

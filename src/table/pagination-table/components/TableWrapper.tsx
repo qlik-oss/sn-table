@@ -3,16 +3,17 @@ import React, { useRef, useCallback } from 'react';
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './body/TableBodyWrapper';
 import TableHeadWrapper from './head/TableHeadWrapper';
-import FooterWrapper from './footer/FooterWrapper';
-import { useContextSelector, TableContext } from '../context';
-import { StyledTableContainer, StyledTableWrapper, StyledTable } from './styles';
-import PaginationContent from './footer/PaginationContent';
-import useDidUpdateEffect from '../hooks/use-did-update-effect';
-import useFocusListener from '../hooks/use-focus-listener';
-import useScrollListener from '../hooks/use-scroll-listener';
-import { handleWrapperKeyDown } from '../utils/handle-key-press';
-import { updateFocus, resetFocus, getCellElement } from '../utils/accessibility-utils';
-import { TableWrapperProps } from '../types';
+import FooterWrapper from '../../components/footer/FooterWrapper';
+import { useContextSelector, TableContext } from '../../context';
+import { StyledTableContainer, StyledTable } from './styles';
+import PaginationContent from '../../components/footer/PaginationContent';
+import useDidUpdateEffect from '../../hooks/use-did-update-effect';
+import useFocusListener from '../../hooks/use-focus-listener';
+import useScrollListener from '../../hooks/use-scroll-listener';
+import { handleWrapperKeyDown } from '../../utils/handle-key-press';
+import { updateFocus, resetFocus, getCellElement } from '../../utils/accessibility-utils';
+import { TableWrapperProps } from '../../types';
+import { StyledTableWrapper } from '../../components/styles';
 
 export default function TableWrapper(props: TableWrapperProps) {
   const { pageInfo, setPageInfo, direction, footerContainer, announce, areBasicFeaturesEnabled } = props;

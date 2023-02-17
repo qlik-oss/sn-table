@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import MenuItems from '../MenuItems';
-import { MenuItemGroup } from '../../../types';
-import { ExtendedSelectionAPI } from '../../../../types';
-import TestWithProviders from '../../../../__test__/test-with-providers';
+import MenuItems from '../../../../components/head/MenuItems';
+import { MenuItemGroup } from '../../../../types';
+import { ExtendedSelectionAPI } from '../../../../../types';
+import TestWithProviders from '../../../../../__test__/test-with-providers';
 
 describe('<MenuGroup />', () => {
   let selectionsAPI: ExtendedSelectionAPI;
