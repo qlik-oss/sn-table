@@ -44,7 +44,7 @@ export const TableContextProvider = ({
   const [selectionState, selectionDispatch] = useSelectionReducer(tableData.rows, selectionsAPI);
   const [hoverIndex, setHoverIndex] = useState(-1);
   const styling = useTableStyling(layout, theme, tableData, rootElement);
-  const [columnWidths, setColumnWidths] = useColumnWidths(tableData.columns, tableWidth, styling);
+  const [columnWidths, setColumnWidths, setYScrollbarWidth] = useColumnWidths(tableData.columns, tableWidth, styling);
   const baseProps = useMemo(
     () => ({
       app,
@@ -93,6 +93,7 @@ export const TableContextProvider = ({
         setColumnWidths,
         baseProps,
         tableData,
+        setYScrollbarWidth,
       }}
     >
       {children}

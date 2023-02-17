@@ -118,6 +118,7 @@ export interface ContextValue {
     styling: TableStyling;
   };
   tableData: TableData;
+  setYScrollbarWidth: (width: number) => void;
 }
 
 export interface FooterStyle {
