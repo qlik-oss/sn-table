@@ -5,7 +5,7 @@ import { MIN_BODY_ROW_HEIGHT, MIN_HEADER_HEIGHT, PADDING_TOP_BOTTOM } from '../c
 import { BodyStyle, Rect, Totals } from '../types';
 
 const getHeaderRowHeight = ({ fontSize = COMMON_CELL_STYLING.fontSize }: GeneratedStyling) =>
-  Math.max(MIN_HEADER_HEIGHT, fontSizeToRowHeight(fontSize) + PADDING_TOP_BOTTOM) * 2;
+  Math.max(MIN_HEADER_HEIGHT, fontSizeToRowHeight(fontSize) + PADDING_TOP_BOTTOM * 2);
 
 const getBodyRowHeight = ({ fontSize = COMMON_CELL_STYLING.fontSize }: BodyStyle) =>
   Math.max(MIN_BODY_ROW_HEIGHT, fontSizeToRowHeight(fontSize));
