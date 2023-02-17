@@ -5,7 +5,7 @@ import { PopoverOrigin } from '@mui/material';
 import { MenuItemGroup } from '../../../types';
 import MenuGroupWrapper from './MenuGroupWrapper';
 
-interface MenuListProps {
+interface RecursiveMenuListProps {
   open: boolean;
   anchorEl: HTMLDivElement | null;
   onClose: () => void;
@@ -15,7 +15,15 @@ interface MenuListProps {
   ariaLabel?: string; // eslint-disable-line react/require-default-props
 }
 
-const MenuList = ({ anchorEl, open, onClose, ariaLabel, menuGroups, transformOrigin, anchorOrigin }: MenuListProps) => {
+const RecursiveMenuList = ({
+  anchorEl,
+  open,
+  onClose,
+  ariaLabel,
+  menuGroups,
+  transformOrigin,
+  anchorOrigin,
+}: RecursiveMenuListProps) => {
   if (!menuGroups.length) return null;
   return (
     <Menu
@@ -33,4 +41,4 @@ const MenuList = ({ anchorEl, open, onClose, ariaLabel, menuGroups, transformOri
   );
 };
 
-export default MenuList;
+export default RecursiveMenuList;

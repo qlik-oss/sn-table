@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import ArrowRight from '@qlik-trial/sprout/icons/react/ArrowRight';
 import { HeadCellMenuItem, MenuItemGroup } from '../../../types';
 import { StyledMenuItem, StyledListItemIcon, StyledMenuItemLabel } from '../styles';
-import MenuList from './MenuList';
+import RecursiveMenuList from './RecursiveMenuList';
 
 export const interceptClickOnMenuItems = (menuGroups: MenuItemGroup[], cache: SubMenusOpenStatusCache) => {
   const result = menuGroups.map((grp) => {
@@ -56,7 +56,7 @@ const MenuGroupItems = ({ id, onClick, itemTitle, icon, enabled, subMenus }: Hea
       </StyledMenuItem>
 
       {subMenus?.length && (
-        <MenuList
+        <RecursiveMenuList
           anchorEl={anchorRef.current}
           open={openMenu}
           onClose={() => setOpenMenu(false)}

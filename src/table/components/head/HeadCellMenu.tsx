@@ -13,7 +13,7 @@ import { useContextSelector, TableContext } from '../../context';
 import { HeadCellMenuProps, MenuItemGroup } from '../../types';
 import { StyledMenuIconButton } from './styles';
 import { TableLayout } from '../../../types';
-import MenuList from './MenuList/MenuList';
+import RecursiveMenuList from './MenuList/RecursiveMenuList';
 import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 
 export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
@@ -164,7 +164,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
         <div ref={listboxRef} />
       </div>
 
-      <MenuList
+      <RecursiveMenuList
         open={openMenuDropdown}
         anchorEl={anchorRef.current}
         onClose={() => setOpenMenuDropdown(false)}
