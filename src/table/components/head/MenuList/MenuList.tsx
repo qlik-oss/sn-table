@@ -10,8 +10,8 @@ interface MenuListProps {
   anchorEl: HTMLDivElement | null;
   onClose: () => void;
   menuGroups: MenuItemGroup[];
-  transformOrigin?: PopoverOrigin;
-  anchorOrigin?: PopoverOrigin;
+  transformOrigin?: PopoverOrigin; // eslint-disable-line react/require-default-props
+  anchorOrigin?: PopoverOrigin; // eslint-disable-line react/require-default-props
 }
 
 const MenuList = ({ anchorEl, open, onClose, menuGroups, transformOrigin, anchorOrigin }: MenuListProps) => {

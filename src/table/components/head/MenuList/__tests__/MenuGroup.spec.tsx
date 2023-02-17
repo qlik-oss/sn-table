@@ -6,24 +6,20 @@ import { HeadCellMenuItem, MenuItemGroup } from '../../../../types';
 describe('MenuGroup', () => {
   describe('interceptClickOnMenuItems', () => {
     let menuGroups: MenuItemGroup[];
-    let setOpenMenu: jest.Mock<any, any>;
-
-    beforeEach(() => {
-      setOpenMenu = jest.fn();
-    });
+    let cache: Record<string, any>;
 
     it('should return proper values per menu', () => {
       menuGroups = [
         [{ id: 1, icon: <i />, itemTitle: 'Menu#01', enabled: true }],
         [{ id: 2, icon: <i />, itemTitle: 'Menu#02', enabled: true }],
       ];
-      const result = interceptClickOnMenuItems(menuGroups, setOpenMenu);
+      const result = interceptClickOnMenuItems(menuGroups, cache);
       expect(result).toMatchObject(menuGroups);
     });
 
     it('should include onClick property if it was provided', () => {
       menuGroups = [[{ id: 1, icon: <i />, enabled: true, itemTitle: 'Menu#01', onClick: () => {} }]];
-      const result = interceptClickOnMenuItems(menuGroups, setOpenMenu);
+      const result = interceptClickOnMenuItems(menuGroups, cache);
       // stringify because onClick function reference could be different in each call
       expect(JSON.stringify(result)).toStrictEqual(JSON.stringify(menuGroups));
     });
@@ -40,7 +36,7 @@ describe('MenuGroup', () => {
           },
         ],
       ];
-      const result = interceptClickOnMenuItems(menuGroups, setOpenMenu);
+      const result = interceptClickOnMenuItems(menuGroups, cache);
       expect(result).toMatchObject(menuGroups);
     });
   });
