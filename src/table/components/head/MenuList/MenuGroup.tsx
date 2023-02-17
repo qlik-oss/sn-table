@@ -25,14 +25,17 @@ export const interceptClickOnMenuItems = (menuGroups: MenuItemGroup[], cache: Su
 };
 
 type SubMenusOpenStatusCache = Record<string, React.Dispatch<React.SetStateAction<boolean>>>;
-const subMenusOpenStatusCache: SubMenusOpenStatusCache = {};
+let subMenusOpenStatusCache: SubMenusOpenStatusCache = {};
 
 const MenuGroupItems = ({ id, onClick, itemTitle, icon, enabled, subMenus }: HeadCellMenuItem) => {
   const [openMenu, setOpenMenu] = useState(false);
   const anchorRef = useRef<HTMLDivElement | null>(null);
 
   const handleOnClick = (evt: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-    if (onClick) onClick(evt);
+    if (onClick) {
+      onClick(evt);
+      subMenusOpenStatusCache = {};
+    }
     if (subMenus?.length) {
       setOpenMenu(true);
       subMenusOpenStatusCache[itemTitle] = setOpenMenu;

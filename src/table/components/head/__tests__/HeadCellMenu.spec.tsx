@@ -24,11 +24,11 @@ describe('<HeadCellMenu />', () => {
   let resetSelectionActionsEnabledStatusMock: jest.Mock<any, any>;
   let updateSelectionActionsEnabledStatusMock: jest.Mock<any, any>;
   let model: EngineAPI.IGenericObject;
+  let useFieldSelectionHookResult: useFieldSelectionHook.UseFieldSelectionOutput;
   const direction: 'ltr' | 'rtl' = 'ltr';
   const menuLabels = [
     'SNTable.MenuItem.Search',
     'SNTable.MenuItem.SelectAll',
-    'SNTable.MenuItem.ClearSelections',
     'SNTable.MenuItem.SelectPossible',
     'SNTable.MenuItem.SelectAlternative',
     'SNTable.MenuItem.SelectExcluded',
@@ -90,12 +90,13 @@ describe('<HeadCellMenu />', () => {
     };
     resetSelectionActionsEnabledStatusMock = jest.fn();
     updateSelectionActionsEnabledStatusMock = jest.fn();
-    jest.spyOn(useFieldSelectionHook, 'default').mockReturnValue({
+    useFieldSelectionHookResult = {
       fieldInstance: fieldInstanceMock,
       selectionActionsEnabledStatus: selectionActionsEnabledStatusMock,
       resetSelectionActionsEnabledStatus: resetSelectionActionsEnabledStatusMock,
       updateSelectionActionsEnabledStatus: updateSelectionActionsEnabledStatusMock,
-    });
+    };
+    jest.spyOn(useFieldSelectionHook, 'default').mockReturnValue(useFieldSelectionHookResult);
     model = {
       getLayout: jest.fn().mockResolvedValue(null),
     } as unknown as EngineAPI.IGenericObject;
@@ -199,6 +200,7 @@ describe('<HeadCellMenu />', () => {
       expect(screen.queryByRole('menu')).toBeVisible();
     });
     fireEvent.click(screen.getByText('SNTable.MenuItem.Selections'));
+    expect(screen.queryByTitle('SNTable.MenuItem.ClearSelections')).not.toBeInTheDocument();
     menuLabels.forEach((label) => {
       expect(screen.getByText(label)).toBeVisible();
     });
@@ -209,21 +211,37 @@ describe('<HeadCellMenu />', () => {
     });
 
     // disabled actions based on mocked values
-    [
-      'SNTable.MenuItem.ClearSelections',
-      'SNTable.MenuItem.SelectAlternative',
-      'SNTable.MenuItem.SelectExcluded',
-    ].forEach((actionLabel) => {
+    ['SNTable.MenuItem.SelectAlternative', 'SNTable.MenuItem.SelectExcluded'].forEach((actionLabel) => {
       expect(screen.queryByText(actionLabel)?.closest('li')).toHaveAttribute('aria-disabled', 'true');
     });
   });
 
+  it('should show `ClearSelections` only when there is selections', async () => {
+    jest.spyOn(useFieldSelectionHook, 'default').mockReturnValue({
+      ...useFieldSelectionHookResult,
+      selectionActionsEnabledStatus: {
+        ...useFieldSelectionHookResult.selectionActionsEnabledStatus,
+        canClearSelections: true,
+      },
+    });
+    renderTableHeadCellMenu();
+    fireEvent.click(screen.getByRole('button'));
+    await waitFor(() => {
+      expect(screen.queryByRole('menu')).toBeVisible();
+    });
+    fireEvent.click(screen.getByText('SNTable.MenuItem.Selections'));
+    expect(screen.queryByText('SNTable.MenuItem.ClearSelections')).toBeInTheDocument();
+  });
+
   describe('Selection actions', () => {
     const handleBeforeEachAction = async (targetAction: string) => {
-      selectionActionsEnabledStatusMock = {
-        ...selectionActionsEnabledStatusMock,
-        [`can${targetAction}`]: true,
-      };
+      jest.spyOn(useFieldSelectionHook, 'default').mockReturnValue({
+        ...useFieldSelectionHookResult,
+        selectionActionsEnabledStatus: {
+          ...useFieldSelectionHookResult.selectionActionsEnabledStatus,
+          [`can${targetAction}`]: true,
+        },
+      });
       renderTableHeadCellMenu();
       fireEvent.click(screen.getByRole('button'));
       await waitFor(() => {
