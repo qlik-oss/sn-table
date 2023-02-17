@@ -22,6 +22,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
   const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
   const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
+  const flexDirection = column.align === 'right' ? 'row-reverse' : 'row';
 
   return (
     <div
@@ -38,6 +39,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         boxSizing: 'border-box',
         cursor: 'default',
         fontWeight: 'bold',
+        flexDirection,
       }}
     >
       <HeadCellContent column={column} columnIndex={index} isActive={isActive} areBasicFeaturesEnabled />
