@@ -64,6 +64,12 @@ const Table = (props: TableProps) => {
     }
   }, [rowCount, columns.length]);
 
+  useLayoutEffect(() => {
+    if (ref.current) {
+      ref.current.scrollTop = 0;
+    }
+  }, [columnWidths]);
+
   const TotalsComponent = (
     <Totals
       rect={stickyContainerRect}

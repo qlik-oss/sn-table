@@ -19,6 +19,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
     columns,
     headerStyle: { ...applicableStyle },
   } = data;
+
   const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
   const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
@@ -34,17 +35,15 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         display: 'flex',
         alignItems: 'center',
         borderStyle: 'solid',
-        borderWidth: isLastColumn ? '0px' : '0px 1px 0px 0px',
+        borderWidth: isLastColumn ? '0px 0px 1px 0px' : '0px 1px 1px 0px',
         padding: '4px 12px',
         justifyContent: column.align,
         boxSizing: 'border-box',
         cursor: 'default',
         fontWeight: 'bold',
-<<<<<<< HEAD
         zIndex: columns.length - index,
-=======
         flexDirection,
->>>>>>> main
+        userSelect: 'none',
       }}
     >
       <HeadCellContent column={column} columnIndex={index} isActive={isActive} areBasicFeaturesEnabled />

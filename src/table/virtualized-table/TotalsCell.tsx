@@ -3,6 +3,7 @@ import { Column } from '../../types';
 import { useContextSelector, TableContext } from '../context';
 import { GeneratedStyling } from '../types';
 import CellText from '../components/CellText';
+import { Totals } from './types';
 
 interface TotalsCellProps {
   index: number;
@@ -10,6 +11,7 @@ interface TotalsCellProps {
   data: {
     totalsStyle: GeneratedStyling;
     columns: Column[];
+    totals: Totals;
   };
 }
 
@@ -18,6 +20,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
   const {
     totalsStyle: { hoverColors, ...applicableStyling },
     columns,
+    totals,
   } = data;
   const label = columns[index].totalInfo;
   const isLastColumn = layout.qHyperCube.qSize.qcx - 1 === index;
@@ -31,7 +34,10 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
         display: 'flex',
         alignItems: 'center',
         borderStyle: 'solid',
-        borderWidth: isLastColumn ? '0px' : '0px 1px 0px 0px',
+        borderWidth: '0px',
+        borderRightWidth: isLastColumn ? '0px' : '1px',
+        borderTopWidth: totals.atBottom ? '1px' : '0px',
+        borderBottomWidth: totals.atTop ? '1px' : '0px',
         padding: '4px 12px',
         justifyContent: index === 0 ? 'left' : 'right',
         boxSizing: 'border-box',

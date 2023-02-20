@@ -1,22 +1,15 @@
-import React, { useLayoutEffect, memo } from 'react';
+import React, { memo } from 'react';
 import { VariableSizeList } from 'react-window';
 import { HeaderProps } from './types';
 import HeaderCell from './HeaderCell';
 import { useContextSelector, TableContext } from '../context';
+import useResetHeader from './hooks/use-reset-header';
 
 const Header = (props: HeaderProps) => {
   const { rect, forwardRef, columns, columnWidth, pageInfo, headerStyle, rowHeight } = props;
   const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
 
-  useLayoutEffect(() => {
-    forwardRef?.current?.resetAfterIndex(0, true);
-  }, [layout, pageInfo, forwardRef, columnWidth]);
-
-  useLayoutEffect(() => {
-    if (!forwardRef.current) return;
-
-    forwardRef.current.scrollTo(0);
-  }, [columns.length, forwardRef]);
+  useResetHeader(forwardRef, layout, pageInfo, columnWidth, columns);
 
   return (
     <VariableSizeList
@@ -24,8 +17,6 @@ const Header = (props: HeaderProps) => {
       layout="horizontal"
       style={{
         overflow: 'hidden',
-        borderBottom: `1px solid ${headerStyle.borderBottomColor}`,
-        background: headerStyle.background,
         boxSizing: 'border-box',
       }}
       itemCount={layout.qHyperCube.qSize.qcx}

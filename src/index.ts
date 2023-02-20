@@ -54,6 +54,7 @@ export default function supernova(env: Galaxy) {
       const embed = useEmbed();
       const changeSortOrder = useSorting(model, layout.qHyperCube);
       const applyColumnWidths = useApplyColumnWidths(model, layout.qHyperCube);
+
       useContextMenu(areBasicFeaturesEnabled);
 
       useVirtualizedTable({
