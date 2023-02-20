@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Column } from '../../types';
 import {
   MIN_COLUMN_WIDTH,
@@ -81,19 +81,23 @@ const useColumnWidths = (
   columns: Column[],
   tableWidth: number,
   { head, body }: TableStyling
-): [number[], React.Dispatch<React.SetStateAction<number[]>>] => {
+): [number[], React.Dispatch<React.SetStateAction<number[]>>, React.Dispatch<React.SetStateAction<number>>] => {
   const measureHeadLabel = useMeasureText(head.fontSize, head.fontFamily).measureText;
   const { measureText, estimateWidth } = useMeasureText(body.fontSize, body.fontFamily);
-  const getHugWidth = (headLabel: string, totalsLabel: string, glyphCount: number) =>
-    Math.max(measureHeadLabel(headLabel), measureText(totalsLabel), estimateWidth(glyphCount));
+  const getHugWidth = useMemo(
+    () => (headLabel: string, totalsLabel: string, glyphCount: number) =>
+      Math.max(measureHeadLabel(headLabel), measureText(totalsLabel), estimateWidth(glyphCount)),
+    [estimateWidth, measureHeadLabel, measureText]
+  );
+  const [yScrollbarWidth, setYScrollbarWidth] = useState(0);
 
   const [columnWidths, setColumnWidths] = useState(() => getColumnWidths(columns, tableWidth, getHugWidth));
 
   useDidUpdateEffect(() => {
-    setColumnWidths(getColumnWidths(columns, tableWidth, getHugWidth));
-  }, [columns, tableWidth]);
+    setColumnWidths(getColumnWidths(columns, tableWidth - yScrollbarWidth, getHugWidth));
+  }, [columns, tableWidth, yScrollbarWidth]);
 
-  return [columnWidths, setColumnWidths];
+  return [columnWidths, setColumnWidths, setYScrollbarWidth];
 };
 
 export default useColumnWidths;
