@@ -38,7 +38,6 @@ const Table = (props: TableProps) => {
     () => toStickyContainerRect(tableRect, xScrollbarWidth, yScrollbarWidth),
     [tableRect, xScrollbarWidth, yScrollbarWidth]
   );
-  // const { width } = useColumnSize(stickyContainerRect, columns, styling.head, bodyStyle);
   const { rowCount } = useTableCount(layout, pageInfo, stickyContainerRect, columnWidths, bodyRowHeight);
   const containerWidth = columnWidths.reduce((prev, curr) => prev + curr, 0);
   const [containerHeight, setContainerHeight] = useState(rowCount * bodyRowHeight + headerAndTotalsHeight); // Based on single line height, which is going to be out-of-sync when rows have multiple lines
