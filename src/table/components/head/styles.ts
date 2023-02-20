@@ -62,6 +62,7 @@ export const VisuallyHidden = styled('span')({
 export const StyledHeadCellContent = styled(Box)(({ theme }) => ({
   width: '100%',
   display: 'flex',
+  justifyContent: 'space-between',
   flexDirection: 'inherit',
   alignItems: 'flex-end',
   gap: theme.spacing(0.5),
@@ -103,6 +104,14 @@ export const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   borderRadius: '4px',
   margin: theme.spacing(0, 0.5),
   padding: theme.spacing(1, 1.5),
+  display: 'flex',
+  justifyContent: 'space-between',
+}));
+
+export const StyledMenuItemLabel = styled('div')(() => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
 }));
 
 export const StyledListItemIcon = styled(ListItemIcon)(({ theme }) => ({

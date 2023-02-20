@@ -1,7 +1,7 @@
 import React, { useRef, useState, useMemo, useEffect, useCallback } from 'react';
-import Menu from '@mui/material/Menu';
 import More from '@qlik-trial/sprout/icons/react/More';
 import Search from '@qlik-trial/sprout/icons/react/Search';
+import Selection from '@qlik-trial/sprout/icons/react/Selection';
 import SelectAll from '@qlik-trial/sprout/icons/react/SelectAll';
 import ClearSelections from '@qlik-trial/sprout/icons/react/ClearSelections';
 import SelectPossible from '@qlik-trial/sprout/icons/react/SelectPossible';
@@ -13,7 +13,7 @@ import { useContextSelector, TableContext } from '../../context';
 import { HeadCellMenuProps, MenuItemGroup } from '../../types';
 import { StyledMenuIconButton } from './styles';
 import { TableLayout } from '../../../types';
-import MenuItems from './MenuItems';
+import RecursiveMenuList from './MenuList/RecursiveMenuList';
 import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 
 export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
@@ -77,53 +77,65 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
             [
               {
                 id: 1,
-                itemTitle: translator.get('SNTable.MenuItem.SelectAll'),
-                onClick: async () => {
-                  setOpenMenuDropdown(false);
-                  await fieldInstance?.selectAll();
-                },
-                icon: <SelectAll />,
-                enabled: selectionActionsEnabledStatus.canSelectAll,
-              },
-              {
-                id: 2,
-                itemTitle: translator.get('SNTable.MenuItem.ClearSelections'),
-                onClick: async () => {
-                  setOpenMenuDropdown(false);
-                  await fieldInstance?.clear();
-                },
-                icon: <ClearSelections />,
-                enabled: selectionActionsEnabledStatus.canClearSelections,
-              },
-              {
-                id: 3,
-                itemTitle: translator.get('SNTable.MenuItem.SelectPossible'),
-                onClick: async () => {
-                  setOpenMenuDropdown(false);
-                  await fieldInstance?.selectPossible();
-                },
-                icon: <SelectPossible />,
-                enabled: selectionActionsEnabledStatus.canSelectPossible,
-              },
-              {
-                id: 4,
-                itemTitle: translator.get('SNTable.MenuItem.SelectAlternative'),
-                onClick: async () => {
-                  setOpenMenuDropdown(false);
-                  await fieldInstance?.selectAlternative();
-                },
-                icon: <SelectAlternative />,
-                enabled: selectionActionsEnabledStatus.canSelectAlternative,
-              },
-              {
-                id: 5,
-                itemTitle: translator.get('SNTable.MenuItem.SelectExcluded'),
-                onClick: async () => {
-                  setOpenMenuDropdown(false);
-                  await fieldInstance?.selectExcluded();
-                },
-                icon: <SelectExcluded />,
-                enabled: selectionActionsEnabledStatus.canSelectExcluded,
+                itemTitle: translator.get('SNTable.MenuItem.Selections'),
+                icon: <Selection />,
+                enabled: true,
+                subMenus: [
+                  [
+                    {
+                      id: 1,
+                      itemTitle: translator.get('SNTable.MenuItem.SelectAll'),
+                      onClick: async () => {
+                        setOpenMenuDropdown(false);
+                        await fieldInstance?.selectAll();
+                      },
+                      icon: <SelectAll />,
+                      enabled: selectionActionsEnabledStatus.canSelectAll,
+                    },
+                    {
+                      id: 2,
+                      itemTitle: translator.get('SNTable.MenuItem.SelectPossible'),
+                      onClick: async () => {
+                        setOpenMenuDropdown(false);
+                        await fieldInstance?.selectPossible();
+                      },
+                      icon: <SelectPossible />,
+                      enabled: selectionActionsEnabledStatus.canSelectPossible,
+                    },
+                    {
+                      id: 3,
+                      itemTitle: translator.get('SNTable.MenuItem.SelectAlternative'),
+                      onClick: async () => {
+                        setOpenMenuDropdown(false);
+                        await fieldInstance?.selectAlternative();
+                      },
+                      icon: <SelectAlternative />,
+                      enabled: selectionActionsEnabledStatus.canSelectAlternative,
+                    },
+                    {
+                      id: 4,
+                      itemTitle: translator.get('SNTable.MenuItem.SelectExcluded'),
+                      onClick: async () => {
+                        setOpenMenuDropdown(false);
+                        await fieldInstance?.selectExcluded();
+                      },
+                      icon: <SelectExcluded />,
+                      enabled: selectionActionsEnabledStatus.canSelectExcluded,
+                    },
+                  ],
+                  [
+                    {
+                      id: 1,
+                      itemTitle: translator.get('SNTable.MenuItem.ClearSelections'),
+                      onClick: async () => {
+                        setOpenMenuDropdown(false);
+                        await fieldInstance?.clear();
+                      },
+                      icon: <ClearSelections />,
+                      enabled: selectionActionsEnabledStatus.canClearSelections,
+                    },
+                  ],
+                ],
               },
             ],
           ]
@@ -134,34 +146,30 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
 
   return menuItemGroups.length ? (
     <>
-      <div>
-        <StyledMenuIconButton
-          isVisible={openListboxDropdown || openMenuDropdown}
-          ref={anchorRef}
-          size="small"
-          tabIndex={tabIndex}
-          id="sn-table-head-menu-button"
-          aria-controls={openMenuDropdown ? 'sn-table-head-menu' : undefined}
-          aria-expanded={openMenuDropdown ? 'true' : undefined}
-          aria-haspopup="true"
-          onClick={handleOpenDropdown}
-        >
-          <More height={DEFAULT_FONT_SIZE} />
-        </StyledMenuIconButton>
+      <StyledMenuIconButton
+        isVisible={openListboxDropdown || openMenuDropdown}
+        rightAligned={column.align === 'right'}
+        ref={anchorRef}
+        size="small"
+        tabIndex={tabIndex}
+        id="sn-table-head-menu-button"
+        aria-controls={openMenuDropdown ? 'sn-table-head-menu' : undefined}
+        aria-expanded={openMenuDropdown ? 'true' : undefined}
+        aria-haspopup="true"
+        onClick={handleOpenDropdown}
+      >
+        <More height={DEFAULT_FONT_SIZE} />
+      </StyledMenuIconButton>
 
-        <div ref={listboxRef} />
-      </div>
+      <div ref={listboxRef} />
 
-      <Menu
-        className="sn-table-head-menu"
-        aria-labelledby="sn-table-head-menu-button"
+      <RecursiveMenuList
         open={openMenuDropdown}
         anchorEl={anchorRef.current}
         onClose={() => setOpenMenuDropdown(false)}
-        autoFocus={false}
-      >
-        {MenuItems({ itemGroups: menuItemGroups })}
-      </Menu>
+        menuGroups={menuItemGroups}
+        ariaLabel="sn-table-head-menu-button"
+      />
     </>
   ) : null;
 }
