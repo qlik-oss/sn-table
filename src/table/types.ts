@@ -118,6 +118,7 @@ export interface ContextValue {
     styling: TableStyling;
   };
   tableData: TableData;
+  setYScrollbarWidth: (width: number) => void;
 }
 
 export interface FooterStyle {
@@ -269,8 +270,8 @@ export interface HeadCellMenuItem {
   icon: React.ReactElement;
   itemTitle: string;
   enabled: boolean;
-  hasDivider?: boolean;
-  onClick: (evt: React.MouseEvent<HTMLLIElement>) => void;
+  onClick?: (evt: React.MouseEvent<HTMLLIElement>) => void;
+  subMenus?: MenuItemGroup[];
 }
 
 export interface TableBodyWrapperProps {

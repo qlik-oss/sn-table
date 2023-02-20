@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
-import { render, fireEvent, screen, waitFor } from '@testing-library/react';
+import { render, fireEvent, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
 import { Column, TableLayout } from '../../../../../types';
 import HeadCellMenu from '../../../../components/head/HeadCellMenu';
 import TestWithProviders from '../../../../../__test__/test-with-providers';
@@ -24,14 +24,15 @@ describe('<HeadCellMenu />', () => {
   let resetSelectionActionsEnabledStatusMock: jest.Mock<any, any>;
   let updateSelectionActionsEnabledStatusMock: jest.Mock<any, any>;
   let model: EngineAPI.IGenericObject;
+  let useFieldSelectionHookResult: useFieldSelectionHook.UseFieldSelectionOutput;
   const direction: 'ltr' | 'rtl' = 'ltr';
   const menuLabels = [
     'SNTable.MenuItem.Search',
     'SNTable.MenuItem.SelectAll',
-    'SNTable.MenuItem.ClearSelections',
     'SNTable.MenuItem.SelectPossible',
     'SNTable.MenuItem.SelectAlternative',
     'SNTable.MenuItem.SelectExcluded',
+    'SNTable.MenuItem.ClearSelections',
   ];
 
   const renderTableHeadCellMenu = (cellCoordMock?: [number, number]) =>
@@ -90,12 +91,13 @@ describe('<HeadCellMenu />', () => {
     };
     resetSelectionActionsEnabledStatusMock = jest.fn();
     updateSelectionActionsEnabledStatusMock = jest.fn();
-    jest.spyOn(useFieldSelectionHook, 'default').mockReturnValue({
+    useFieldSelectionHookResult = {
       fieldInstance: fieldInstanceMock,
       selectionActionsEnabledStatus: selectionActionsEnabledStatusMock,
       resetSelectionActionsEnabledStatus: resetSelectionActionsEnabledStatusMock,
       updateSelectionActionsEnabledStatus: updateSelectionActionsEnabledStatusMock,
-    });
+    };
+    jest.spyOn(useFieldSelectionHook, 'default').mockReturnValue(useFieldSelectionHookResult);
     model = {
       getLayout: jest.fn().mockResolvedValue(null),
     } as unknown as EngineAPI.IGenericObject;
@@ -124,6 +126,19 @@ describe('<HeadCellMenu />', () => {
     expect(element).toBeNull();
   });
 
+  it('should render correct menu items', async () => {
+    renderTableHeadCellMenu();
+
+    fireEvent.click(screen.getByRole('button'));
+    await waitFor(() => {
+      expect(screen.queryByRole('menu')).toBeVisible();
+    });
+
+    ['SNTable.MenuItem.Search', 'SNTable.MenuItem.Selections'].forEach((actionLabel) => {
+      expect(screen.queryByText(actionLabel)).toBeVisible();
+    });
+  });
+
   it('should open the menu only when the button is clicked', async () => {
     renderTableHeadCellMenu();
 
@@ -131,9 +146,6 @@ describe('<HeadCellMenu />', () => {
     fireEvent.click(screen.getByRole('button'));
     await waitFor(() => {
       expect(screen.queryByRole('menu')).toBeVisible();
-    });
-    menuLabels.forEach((label) => {
-      expect(screen.getByText(label)).toBeVisible();
     });
   });
 
@@ -188,42 +200,48 @@ describe('<HeadCellMenu />', () => {
     await waitFor(() => {
       expect(screen.queryByRole('menu')).toBeVisible();
     });
+    fireEvent.click(screen.getByText('SNTable.MenuItem.Selections'));
     menuLabels.forEach((label) => {
       expect(screen.getByText(label)).toBeVisible();
     });
 
     // enabled actions based on mocked values
     ['SNTable.MenuItem.SelectAll', 'SNTable.MenuItem.SelectPossible'].forEach((actionLabel) => {
-      expect(screen.queryByText(actionLabel)?.parentNode).not.toHaveAttribute('aria-disabled');
+      expect(screen.queryByText(actionLabel)?.closest('li')).not.toHaveAttribute('aria-disabled');
     });
 
     // disabled actions based on mocked values
     [
-      'SNTable.MenuItem.ClearSelections',
       'SNTable.MenuItem.SelectAlternative',
       'SNTable.MenuItem.SelectExcluded',
+      'SNTable.MenuItem.ClearSelections',
     ].forEach((actionLabel) => {
-      expect(screen.queryByText(actionLabel)?.parentNode).toHaveAttribute('aria-disabled', 'true');
+      expect(screen.queryByText(actionLabel)?.closest('li')).toHaveAttribute('aria-disabled', 'true');
     });
   });
 
   describe('Selection actions', () => {
     const handleBeforeEachAction = async (targetAction: string) => {
-      selectionActionsEnabledStatusMock = {
-        ...selectionActionsEnabledStatusMock,
-        [`can${targetAction}`]: true,
-      };
+      jest.spyOn(useFieldSelectionHook, 'default').mockReturnValue({
+        ...useFieldSelectionHookResult,
+        selectionActionsEnabledStatus: {
+          ...useFieldSelectionHookResult.selectionActionsEnabledStatus,
+          [`can${targetAction}`]: true,
+        },
+      });
       renderTableHeadCellMenu();
       fireEvent.click(screen.getByRole('button'));
       await waitFor(() => {
         expect(screen.queryByRole('menu')).toBeVisible();
       });
-
+      fireEvent.click(screen.getByText('SNTable.MenuItem.Selections'));
       fireEvent.click(screen.getByText(`SNTable.MenuItem.${targetAction}`));
     };
 
-    afterEach(() => {
+    afterEach(async () => {
       expect(updateSelectionActionsEnabledStatusMock).toHaveBeenCalledTimes(1);
+      fireEvent.click(document);
+      await waitForElementToBeRemoved(() => screen.queryByRole('menu'));
       expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     });
 

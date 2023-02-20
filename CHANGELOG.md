@@ -1,3 +1,37 @@
+# [1.23.0](https://github.com/qlik-oss/sn-table/compare/v1.22.0...v1.23.0) (2023-02-20)
+
+### Bug Fixes
+
+- calculate hug based on real font style ([#824](https://github.com/qlik-oss/sn-table/issues/824)) ([a0f3c10](https://github.com/qlik-oss/sn-table/commit/a0f3c10c97cb9fac400f33753b9d41e2ec93240b))
+- change string names ([#816](https://github.com/qlik-oss/sn-table/issues/816)) ([d14b45f](https://github.com/qlik-oss/sn-table/commit/d14b45fc6e7e80406a1cb54c237b8cdf5215987c))
+- column sort order issues ([#830](https://github.com/qlik-oss/sn-table/issues/830)) ([0963e54](https://github.com/qlik-oss/sn-table/commit/0963e543c72794514d91265483736aa0953feb9f))
+- disable select all for chart exploration column handler ([#822](https://github.com/qlik-oss/sn-table/issues/822)) ([1cb49c3](https://github.com/qlik-oss/sn-table/commit/1cb49c35a4f2d1b380256dd92dd9313d6a26c906))
+- field selection menu in vt mode ([#850](https://github.com/qlik-oss/sn-table/issues/850)) ([2125e8c](https://github.com/qlik-oss/sn-table/commit/2125e8cf867e2fb5fa2fb4a4c5fda146334cb691))
+- flickering on resize ([#827](https://github.com/qlik-oss/sn-table/issues/827)) ([6c8808c](https://github.com/qlik-oss/sn-table/commit/6c8808c591ca3cf038ae6a018cfdca23253cd339))
+- head font size and alignment ([#831](https://github.com/qlik-oss/sn-table/issues/831)) ([7734f4b](https://github.com/qlik-oss/sn-table/commit/7734f4b60b38f2f675eafbd91c39d187cbe99140))
+- header alignment ([#853](https://github.com/qlik-oss/sn-table/issues/853)) ([2d13496](https://github.com/qlik-oss/sn-table/commit/2d13496ec66a25941b8361613f691b9d29140422))
+- reduce flickering with stale data ([#810](https://github.com/qlik-oss/sn-table/issues/810)) ([a8c980a](https://github.com/qlik-oss/sn-table/commit/a8c980a62032563cf63505b83195a3b8500e7f38))
+- remove sort options for head menu ([#809](https://github.com/qlik-oss/sn-table/issues/809)) ([6d3deed](https://github.com/qlik-oss/sn-table/commit/6d3deed85014c501af407869f6c76b607af3901e))
+- scrollbar width vt mode ([#825](https://github.com/qlik-oss/sn-table/issues/825)) ([009c442](https://github.com/qlik-oss/sn-table/commit/009c442c9290dfd94105caf3babfb1cae0cc7ec3))
+- selection listener memleak ([#840](https://github.com/qlik-oss/sn-table/issues/840)) ([8f000d2](https://github.com/qlik-oss/sn-table/commit/8f000d2379a481c593ce85f1110fc4c04bea0bbb))
+- show chart exploration visibility option only if its enabled ([#819](https://github.com/qlik-oss/sn-table/issues/819)) ([9112d6c](https://github.com/qlik-oss/sn-table/commit/9112d6cbe5e6b638a71e350008139dbafe6f580c))
+- table data out of sync ([#847](https://github.com/qlik-oss/sn-table/issues/847)) ([ce4a49a](https://github.com/qlik-oss/sn-table/commit/ce4a49a36dbcc36c59c8d705a44147f447208381))
+- totals border color in vt mode ([#835](https://github.com/qlik-oss/sn-table/issues/835)) ([ba3a332](https://github.com/qlik-oss/sn-table/commit/ba3a332612713364241f09022e2094156afac3eb))
+- totals font weight ([#828](https://github.com/qlik-oss/sn-table/issues/828)) ([4f09eea](https://github.com/qlik-oss/sn-table/commit/4f09eea50a7c983659830a252fc032d0af402c0a))
+- update keyboard ([#833](https://github.com/qlik-oss/sn-table/issues/833)) ([7c74111](https://github.com/qlik-oss/sn-table/commit/7c741118f4cd54147740aa37ea5a598a2f1c1e9d))
+- use react icons ([#808](https://github.com/qlik-oss/sn-table/issues/808)) ([997b759](https://github.com/qlik-oss/sn-table/commit/997b759a8b98d97da37634d0265f40a54397caa9))
+
+### Features
+
+- add definition for property side panel ([#854](https://github.com/qlik-oss/sn-table/issues/854)) ([58ae1cd](https://github.com/qlik-oss/sn-table/commit/58ae1cd8adc9f518aa7ff9188ef35f5856ea502e))
+- color column by expression ([#806](https://github.com/qlik-oss/sn-table/issues/806)) ([2afde19](https://github.com/qlik-oss/sn-table/commit/2afde192e80e48bbce7bcda14f17a045abcf7d43))
+- dynamic row height ([#821](https://github.com/qlik-oss/sn-table/issues/821)) ([84d56f5](https://github.com/qlik-oss/sn-table/commit/84d56f5f3bed04cf6d3f0cc7fd561093950fcabd))
+- field base selections in dropdown ([#826](https://github.com/qlik-oss/sn-table/issues/826)) ([9387e94](https://github.com/qlik-oss/sn-table/commit/9387e94c79e9d0a53f272279e1424cefaf8fb303))
+- resize columns for pagination ([#818](https://github.com/qlik-oss/sn-table/issues/818)) ([a42a3fc](https://github.com/qlik-oss/sn-table/commit/a42a3fc336042f276489c4bd5c8a574f872aaddd))
+- selection actions in sub-menu ([#846](https://github.com/qlik-oss/sn-table/issues/846)) ([5d9858d](https://github.com/qlik-oss/sn-table/commit/5d9858d51bcb4cec05365cf3281c39c80427cc44))
+- sorting and head menu in virtual scroll ([#817](https://github.com/qlik-oss/sn-table/issues/817)) ([915fee6](https://github.com/qlik-oss/sn-table/commit/915fee6e25a8281e0392d25ae7efc1ad433cb6dc))
+- use pagination property ([#811](https://github.com/qlik-oss/sn-table/issues/811)) ([302f5f4](https://github.com/qlik-oss/sn-table/commit/302f5f4c231ca014a2e5ea73eba9fb321e12fcca))
+
 # [1.22.0](https://github.com/qlik-oss/sn-table/compare/v1.21.0...v1.22.0) (2023-01-20)
 
 ### Bug Fixes
