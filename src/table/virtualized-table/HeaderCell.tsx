@@ -39,6 +39,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         boxSizing: 'border-box',
         cursor: 'default',
         fontWeight: 'bold',
+        zIndex: columns.length - index,
       }}
     >
       <HeadCellContent column={column} columnIndex={index} isActive={isActive} areBasicFeaturesEnabled />

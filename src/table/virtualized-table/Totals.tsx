@@ -10,8 +10,13 @@ const Totals = (props: TotalsProps) => {
 
   useLayoutEffect(() => {
     forwardRef?.current?.resetAfterIndex(0, true);
-    forwardRef?.current?.scrollTo(0);
   }, [layout, pageInfo, forwardRef, columnWidth]);
+
+  useLayoutEffect(() => {
+    if (!forwardRef.current) return;
+
+    forwardRef.current.scrollTo(0);
+  }, [columns.length, forwardRef]);
 
   return (
     <VariableSizeList

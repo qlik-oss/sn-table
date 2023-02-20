@@ -1,6 +1,5 @@
 import React, { memo, useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { VariableSizeList } from 'react-window';
-import useColumnSize from './hooks/use-column-size';
 import Body from './Body';
 import FullSizeContainer from './FullSizeContainer';
 import Header from './Header';
@@ -63,7 +62,7 @@ const Table = (props: TableProps) => {
       ref.current.scrollLeft = 0;
       ref.current.scrollTop = 0;
     }
-  }, [layout, pageInfo]);
+  }, [rowCount, columns.length]);
 
   const TotalsComponent = (
     <Totals

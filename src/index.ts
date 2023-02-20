@@ -39,6 +39,10 @@ export default function supernova(env: Galaxy) {
       const rootElement = useElement();
       const reactRoot = useReactRoot(rootElement);
       const layout = useStaleLayout() as TableLayout;
+      if (layout)
+        layout.presentation = {
+          usePagination: false,
+        };
       const app = useApp();
       const model = useModel();
       const constraints = useConstraints();
@@ -50,7 +54,6 @@ export default function supernova(env: Galaxy) {
       const embed = useEmbed();
       const changeSortOrder = useSorting(model, layout.qHyperCube);
       const applyColumnWidths = useApplyColumnWidths(model, layout.qHyperCube);
-
       useContextMenu(areBasicFeaturesEnabled);
 
       useVirtualizedTable({
