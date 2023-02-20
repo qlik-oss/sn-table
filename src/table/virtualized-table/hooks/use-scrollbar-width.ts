@@ -1,24 +1,21 @@
-import { useEffect, useState } from 'react';
-import useOnPropsChange from './use-on-props-change';
+import { useLayoutEffect, useState } from 'react';
+import { useContextSelector, TableContext } from '../../context';
 
 const useScrollbarWidth = (ref: React.RefObject<HTMLDivElement>) => {
+  const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
+  const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const [xScrollbarWidth, setXScrollbarWidth] = useState(0);
   const [yScrollbarWidth, setYScrollbarWidth] = useState(0);
-  const { offsetWidth = 0, offsetHeight = 0, clientWidth = 0, clientHeight = 0 } = ref.current ?? {};
-  const widthDiff = offsetWidth - clientWidth;
-  const heightDiff = offsetHeight - clientHeight;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (ref.current) {
-      setYScrollbarWidth(ref.current.offsetWidth - ref.current.clientWidth);
-      setXScrollbarWidth(ref.current.offsetHeight - ref.current.clientHeight);
+      const { offsetWidth = 0, offsetHeight = 0, clientWidth = 0, clientHeight = 0 } = ref.current ?? {};
+      const widthDiff = offsetWidth - clientWidth;
+      const heightDiff = offsetHeight - clientHeight;
+      setYScrollbarWidth(widthDiff);
+      setXScrollbarWidth(heightDiff);
     }
-  }, [ref]);
-
-  useOnPropsChange(() => {
-    setYScrollbarWidth(widthDiff);
-    setXScrollbarWidth(heightDiff);
-  }, [widthDiff, heightDiff]);
+  }, [ref, layout, columnWidths]);
 
   return { xScrollbarWidth, yScrollbarWidth };
 };
