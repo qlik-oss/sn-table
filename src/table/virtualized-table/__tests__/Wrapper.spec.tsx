@@ -18,12 +18,13 @@ describe('<Wrapper />', () => {
   let layout: TableLayout;
   let tableData: TableData;
   let paginationNeeded: boolean;
-  const mockTable = TestableTable as jest.MockedFunction<typeof TestableTable>;
-  mockTable.mockReturnValue(<div data-testid="table-container" />);
-  const mockFooterWrapper = FooterWrapper as jest.MockedFunction<typeof FooterWrapper>;
-  mockFooterWrapper.mockReturnValue(<div data-testid="footer-wrapper" />);
 
   const renderWrapper = () => {
+    const mockTable = TestableTable as jest.MockedFunction<typeof TestableTable>;
+    mockTable.mockReturnValue(<div data-testid="table-container" />);
+    const mockFooterWrapper = FooterWrapper as jest.MockedFunction<typeof FooterWrapper>;
+    mockFooterWrapper.mockReturnValue(<div data-testid="footer-wrapper" />);
+
     tableData = {
       ...EMPTY_TABLE_DATA,
       paginationNeeded,
