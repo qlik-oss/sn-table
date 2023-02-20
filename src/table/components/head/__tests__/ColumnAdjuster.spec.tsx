@@ -2,9 +2,9 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { stardust } from '@nebula.js/stardust';
 import ColumnAdjuster from '../ColumnAdjuster';
-import TestWithProviders from '../../../../../__test__/test-with-providers';
-import { ColumnWidthTypes } from '../../../../constants';
-import { ApplyColumnWidths, Column } from '../../../../../types';
+import TestWithProviders from '../../../../__test__/test-with-providers';
+import { ColumnWidthTypes } from '../../../constants';
+import { ApplyColumnWidths, Column } from '../../../../types';
 
 describe('<ColumnAdjuster />', () => {
   let columns: Column[];

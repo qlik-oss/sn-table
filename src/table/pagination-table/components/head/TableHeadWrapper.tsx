@@ -6,7 +6,7 @@ import { useContextSelector, TableContext } from '../../../context';
 import { TableHeadWrapperProps } from '../../../types';
 import { DEFAULT_COLUMN_PIXEL_WIDTH, FullSortDirection } from '../../../constants';
 import HeadCellContent from '../../../components/head/HeadCellContent';
-import ColumnAdjuster from './ColumnAdjuster';
+import ColumnAdjuster from '../../../components/head/ColumnAdjuster';
 import { BORDER_WIDTH, PADDING } from '../../../styling-defaults';
 import { StyledHeadCell } from './styles';
 

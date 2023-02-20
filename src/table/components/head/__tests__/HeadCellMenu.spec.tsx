@@ -2,10 +2,10 @@
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { render, fireEvent, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
-import { Column, TableLayout } from '../../../../../types';
-import HeadCellMenu from '../../../../components/head/HeadCellMenu';
-import TestWithProviders from '../../../../../__test__/test-with-providers';
-import * as useFieldSelectionHook from '../../../../hooks/use-field-selection';
+import { Column, TableLayout } from '../../../../types';
+import HeadCellMenu from '../HeadCellMenu';
+import TestWithProviders from '../../../../__test__/test-with-providers';
+import * as useFieldSelectionHook from '../../../hooks/use-field-selection';
 
 type ExtendedEmbed = stardust.Embed & {
   __DO_NOT_USE__: {
