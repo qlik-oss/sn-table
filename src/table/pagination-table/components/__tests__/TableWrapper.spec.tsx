@@ -4,10 +4,10 @@ import { stardust } from '@nebula.js/stardust';
 import TableWrapper from '../TableWrapper';
 import TableBodyWrapper from '../body/TableBodyWrapper';
 import TableHeadWrapper from '../head/TableHeadWrapper';
-import * as handleKeyPress from '../../utils/handle-key-press';
-import * as handleScroll from '../../utils/handle-scroll';
-import { TableLayout, TableData, PageInfo, SetPageInfo, Announce, Column } from '../../../types';
-import TestWithProviders from '../../../__test__/test-with-providers';
+import * as handleKeyPress from '../../../utils/handle-key-press';
+import * as handleScroll from '../../../utils/handle-scroll';
+import { TableLayout, TableData, PageInfo, SetPageInfo, Announce, Column } from '../../../../types';
+import TestWithProviders from '../../../../__test__/test-with-providers';
 
 describe('<TableWrapper />', () => {
   let tableData: TableData;

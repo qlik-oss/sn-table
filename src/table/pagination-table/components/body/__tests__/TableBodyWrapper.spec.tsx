@@ -1,13 +1,13 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import { generateDataPages, generateLayout } from '../../../../__test__/generate-test-data';
-import manageData from '../../../../handle-data';
+import { generateDataPages, generateLayout } from '../../../../../__test__/generate-test-data';
+import manageData from '../../../../../handle-data';
 import TableBodyWrapper from '../TableBodyWrapper';
 import * as getCellRenderer from '../../../utils/get-cell-renderer';
-import * as handleKeyPress from '../../../utils/handle-key-press';
-import * as handleClick from '../../../utils/handle-click';
-import { TableData, PageInfo, Cell } from '../../../../types';
-import TestWithProviders from '../../../../__test__/test-with-providers';
+import * as handleKeyPress from '../../../../utils/handle-key-press';
+import * as handleClick from '../../../../utils/handle-click';
+import { TableData, PageInfo, Cell } from '../../../../../types';
+import TestWithProviders from '../../../../../__test__/test-with-providers';
 
 describe('<TableBodyWrapper />', () => {
   const setShouldRefocus = () => undefined;
