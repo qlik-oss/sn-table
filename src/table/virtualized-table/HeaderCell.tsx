@@ -3,6 +3,7 @@ import { Column } from '../../types';
 import { useContextSelector, TableContext } from '../context';
 import { GeneratedStyling } from '../types';
 import HeadCellContent from '../components/head/HeadCellContent';
+import CellText from '../components/CellText';
 
 interface HeaderCellProps {
   index: number;
@@ -34,7 +35,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         alignItems: 'center',
         borderStyle: 'solid',
         borderWidth: isLastColumn ? '0px' : '0px 1px 0px 0px',
-        padding: '4px 12px',
+        padding: '4px',
         justifyContent: column.align,
         boxSizing: 'border-box',
         cursor: 'default',
@@ -42,7 +43,11 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         flexDirection,
       }}
     >
-      <HeadCellContent column={column} columnIndex={index} isActive={isActive} areBasicFeaturesEnabled />
+      <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled>
+        <CellText wordBreak lines={1}>
+          {column.label}
+        </CellText>
+      </HeadCellContent>
     </div>
   );
 };

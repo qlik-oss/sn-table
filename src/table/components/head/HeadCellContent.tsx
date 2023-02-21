@@ -6,10 +6,8 @@ import { FullSortDirection } from '../../constants';
 import getHeadIcons from '../../utils/get-head-icons';
 import { VisuallyHidden, StyledSortButton, StyledHeadCellContent } from './styles';
 import HeadCellMenu from './HeadCellMenu';
-import CellText from '../CellText';
-import CellTextWrapper from '../CellTextWrapper';
 
-function HeadCellContent({ column, columnIndex, isActive, areBasicFeaturesEnabled }: HeadCellContentProps) {
+function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }: HeadCellContentProps) {
   const { constraints, selectionsAPI, keyboard, translator, changeSortOrder } = useContextSelector(
     TableContext,
     (value) => value.baseProps
@@ -37,11 +35,9 @@ function HeadCellContent({ column, columnIndex, isActive, areBasicFeaturesEnable
         onClick={handleSort}
         tabIndex={tabIndex}
       >
-        <CellTextWrapper>
-          <CellText>{column.label}</CellText>
-        </CellTextWrapper>
+        {children}
         {isFocusInHead && (
-          <VisuallyHidden data-testid={`VHL-for-col-${columnIndex}`}>
+          <VisuallyHidden data-testid={`VHL-for-col-${column.pageColIdx}`}>
             {translator.get('SNTable.SortLabel.PressSpaceToSort')}
           </VisuallyHidden>
         )}

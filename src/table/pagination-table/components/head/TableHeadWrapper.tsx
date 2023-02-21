@@ -7,6 +7,7 @@ import { TableHeadWrapperProps } from '../../../types';
 import { DEFAULT_COLUMN_PIXEL_WIDTH, FullSortDirection } from '../../../constants';
 import HeadCellContent from '../../../components/head/HeadCellContent';
 import ColumnAdjuster from '../../../components/head/ColumnAdjuster';
+import CellText from '../../../components/CellText';
 import { BORDER_WIDTH, PADDING } from '../../../styling-defaults';
 import { StyledHeadCell } from './styles';
 
@@ -48,12 +49,9 @@ function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
               className="sn-table-head-cell sn-table-cell"
               aria-sort={ariaSort}
             >
-              <HeadCellContent
-                column={column}
-                columnIndex={columnIndex}
-                isActive={isActive}
-                areBasicFeaturesEnabled={areBasicFeaturesEnabled}
-              />
+              <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled={areBasicFeaturesEnabled}>
+                <CellText>{column.label}</CellText>
+              </HeadCellContent>
               {areBasicFeaturesEnabled && <ColumnAdjuster column={column} isLastColumn={isLastColumn} />}
             </StyledHeadCell>
           );

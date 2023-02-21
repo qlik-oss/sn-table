@@ -252,8 +252,8 @@ export interface TableHeadWrapperProps {
 }
 
 export interface HeadCellContentProps {
+  children: JSX.Element;
   column: Column;
-  columnIndex: number;
   isActive: boolean;
   areBasicFeaturesEnabled: boolean;
 }

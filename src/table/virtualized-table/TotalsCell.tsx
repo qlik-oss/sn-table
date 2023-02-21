@@ -39,7 +39,9 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
         fontWeight: 'bold',
       }}
     >
-      <CellText singleLine>{label}</CellText>
+      <CellText wordBreak lines={1}>
+        {label}
+      </CellText>
     </div>
   );
 };

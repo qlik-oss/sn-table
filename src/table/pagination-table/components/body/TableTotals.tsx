@@ -7,7 +7,6 @@ import { removeTabAndFocusCell } from '../../../utils/accessibility-utils';
 import { StyledTotalsCell } from './styles';
 import { TableTotalsProps } from '../../../types';
 import CellText from '../../../components/CellText';
-import CellTextWrapper from '../../../components/CellTextWrapper';
 
 function TableTotals({ areBasicFeaturesEnabled }: TableTotalsProps) {
   const {
@@ -49,9 +48,7 @@ function TableTotals({ areBasicFeaturesEnabled }: TableTotalsProps) {
               removeTabAndFocusCell(cellCoord, rootElement, setFocusedCellCoord, keyboard);
             }}
           >
-            <CellTextWrapper>
-              <CellText>{column.totalInfo}</CellText>
-            </CellTextWrapper>
+            <CellText>{column.totalInfo}</CellText>
           </StyledTotalsCell>
         );
       })}
