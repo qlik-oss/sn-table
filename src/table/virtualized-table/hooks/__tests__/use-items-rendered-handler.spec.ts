@@ -1,6 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import { PageInfo, TableLayout } from '../../../../types';
 import { COLUMN_DATA_BUFFER_SIZE, MAX_PAGE_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
+import { GridState } from '../../types';
 import { LoadData } from '../use-data';
 import useItemsRendererHandler, { ItemsHandlerProps, OnItemsRendered } from '../use-items-rendered-handler';
 import { ScrollDirection } from '../use-scroll-direction';
@@ -15,6 +16,7 @@ describe('', () => {
   let pageInfo: PageInfo;
   let itemsHandlerProps: ItemsHandlerProps;
   let onItemsRendered: OnItemsRendered;
+  let gridState: React.MutableRefObject<GridState>;
 
   beforeEach(() => {
     layout = {
@@ -25,6 +27,8 @@ describe('', () => {
         },
       },
     } as TableLayout;
+
+    gridState = { current: { overscanColumnStartIndex: 0, overscanRowStartIndex: 0 } };
 
     loadRows = jest.fn();
     loadColumns = jest.fn();
@@ -42,6 +46,7 @@ describe('', () => {
       horizontalScrollDirection,
       rowCount,
       pageInfo,
+      gridState,
     };
 
     onItemsRendered = {
@@ -65,10 +70,21 @@ describe('', () => {
     onItemsRendered.overscanColumnStartIndex = 0;
     const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-    result.current(onItemsRendered);
+    result.current.handleItemsRendered(onItemsRendered);
 
     expect(loadRows).toHaveBeenCalledTimes(0);
     expect(loadColumns).toHaveBeenCalledTimes(0);
+  });
+
+  test('should update grid state', () => {
+    onItemsRendered.overscanRowStartIndex = 1;
+    onItemsRendered.overscanColumnStartIndex = 2;
+    const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
+
+    result.current.handleItemsRendered(onItemsRendered);
+
+    expect(gridState.current.overscanRowStartIndex).toBe(1);
+    expect(gridState.current.overscanColumnStartIndex).toBe(2);
   });
 
   test('should not fetch data when row start index is larger than row count', () => {
@@ -76,7 +92,7 @@ describe('', () => {
     rowCount = 10;
     const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-    result.current(onItemsRendered);
+    result.current.handleItemsRendered(onItemsRendered);
 
     expect(loadRows).toHaveBeenCalledTimes(0);
     expect(loadColumns).toHaveBeenCalledTimes(0);
@@ -89,7 +105,7 @@ describe('', () => {
     onItemsRendered.overscanColumnStartIndex = 1;
     const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-    result.current(onItemsRendered);
+    result.current.handleItemsRendered(onItemsRendered);
 
     expect(loadRows).toHaveBeenCalledTimes(0);
     expect(loadColumns).toHaveBeenCalledTimes(0);
@@ -102,7 +118,7 @@ describe('', () => {
       onItemsRendered.overscanRowStopIndex = onItemsRendered.overscanRowStartIndex + 10;
       const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-      result.current(onItemsRendered);
+      result.current.handleItemsRendered(onItemsRendered);
 
       expect(loadRows).toHaveBeenCalledWith(0, onItemsRendered.overscanRowStartIndex, 11, 11 + ROW_DATA_BUFFER_SIZE);
     });
@@ -113,7 +129,7 @@ describe('', () => {
       onItemsRendered.overscanRowStopIndex = onItemsRendered.overscanRowStartIndex + 10; // 166 + 10 = 176
       const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-      result.current(onItemsRendered);
+      result.current.handleItemsRendered(onItemsRendered);
 
       expect(loadRows).toHaveBeenCalledWith(0, onItemsRendered.overscanRowStartIndex, 11, ROW_DATA_BUFFER_SIZE + 9);
     });
@@ -126,7 +142,7 @@ describe('', () => {
       onItemsRendered.overscanRowStopIndex = onItemsRendered.overscanRowStartIndex + 10;
       const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-      result.current(onItemsRendered);
+      result.current.handleItemsRendered(onItemsRendered);
 
       expect(loadRows).toHaveBeenCalledWith(
         0,
@@ -142,7 +158,7 @@ describe('', () => {
       onItemsRendered.overscanRowStopIndex = onItemsRendered.overscanRowStartIndex + 10;
       const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-      result.current(onItemsRendered);
+      result.current.handleItemsRendered(onItemsRendered);
 
       expect(loadRows).toHaveBeenCalledWith(0, 0, 11, 11 + ROW_DATA_BUFFER_SIZE);
     });
@@ -155,7 +171,7 @@ describe('', () => {
       onItemsRendered.overscanColumnStopIndex = onItemsRendered.overscanColumnStartIndex + 10;
       const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-      result.current(onItemsRendered);
+      result.current.handleItemsRendered(onItemsRendered);
 
       expect(loadColumns).toHaveBeenCalledWith(
         onItemsRendered.overscanColumnStartIndex,
@@ -171,7 +187,7 @@ describe('', () => {
       onItemsRendered.overscanColumnStopIndex = onItemsRendered.overscanColumnStartIndex + 10; // 96
       const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-      result.current(onItemsRendered);
+      result.current.handleItemsRendered(onItemsRendered);
 
       expect(loadColumns).toHaveBeenCalledWith(onItemsRendered.overscanColumnStartIndex, 0, 14, 11);
     });
@@ -184,7 +200,7 @@ describe('', () => {
       onItemsRendered.overscanColumnStopIndex = onItemsRendered.overscanColumnStartIndex + 10;
       const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-      result.current(onItemsRendered);
+      result.current.handleItemsRendered(onItemsRendered);
 
       expect(loadColumns).toHaveBeenCalledWith(
         onItemsRendered.overscanColumnStartIndex - COLUMN_DATA_BUFFER_SIZE,
@@ -200,7 +216,7 @@ describe('', () => {
       onItemsRendered.overscanColumnStopIndex = onItemsRendered.overscanColumnStartIndex + 10;
       const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-      result.current(onItemsRendered);
+      result.current.handleItemsRendered(onItemsRendered);
 
       expect(loadColumns).toHaveBeenCalledWith(0, 0, 11 + COLUMN_DATA_BUFFER_SIZE, 11);
     });

@@ -1,7 +1,7 @@
 import React, { memo, useMemo, useLayoutEffect, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import { VariableSizeGrid } from 'react-window';
 import useData from './hooks/use-data';
-import { BodyProps, BodyRef, ItemData } from './types';
+import { BodyProps, BodyRef, ItemData, GridState } from './types';
 import useScrollDirection from './hooks/use-scroll-direction';
 import useTableCount from './hooks/use-table-count';
 import useItemsRendererHandler from './hooks/use-items-rendered-handler';
@@ -25,6 +25,10 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     syncHeight,
   } = props;
   const gridRef = useRef<VariableSizeGrid>(null);
+  const gridState = useRef<GridState>({
+    overscanColumnStartIndex: 0,
+    overscanRowStartIndex: 0,
+  });
   const { layout, model, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const isHoverEnabled = !!layout.components?.[0]?.content?.hoverEffect;
   const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
@@ -54,10 +58,11 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     visibleRowCount,
     visibleColumnCount,
     columns,
-    setCellSize
+    setCellSize,
+    gridState
   );
 
-  const handleItemsRendered = useItemsRendererHandler({
+  const { handleItemsRendered } = useItemsRendererHandler({
     layout,
     loadRows,
     loadColumns,
@@ -65,6 +70,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     horizontalScrollDirection,
     rowCount: deferredRowCount,
     pageInfo,
+    gridState,
   });
 
   const itemData = useMemo<ItemData>(

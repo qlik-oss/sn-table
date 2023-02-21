@@ -106,3 +106,8 @@ export interface ItemData {
 }
 
 export type SetCellSize = (text: string, rowIdx: number, colIdx: number) => void;
+
+export interface GridState {
+  overscanColumnStartIndex: number;
+  overscanRowStartIndex: number;
+}

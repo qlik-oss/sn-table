@@ -1,7 +1,7 @@
 import { act, renderHook, RenderHookResult, waitFor } from '@testing-library/react';
 import { Cell, Column, PageInfo, Row, TableLayout } from '../../../../types';
 import { generateDataPages, generateLayout } from '../../../../__test__/generate-test-data';
-import { SetCellSize } from '../../types';
+import { GridState, SetCellSize } from '../../types';
 import useData, { UseData } from '../use-data';
 
 interface OverrideUseDataProps {
@@ -26,9 +26,12 @@ describe('useData', () => {
   let renderHookResult: RenderHookResult<UseData, unknown>;
   let doRenderHook: (renderWithProps?: OverrideUseDataProps) => Promise<void>;
   let setCellSizeMock: jest.MockedFunction<SetCellSize>;
+  let gridState: React.MutableRefObject<GridState>;
 
   beforeEach(() => {
     layout = generateLayout(1, 1, 5);
+
+    gridState = { current: { overscanColumnStartIndex: 0, overscanRowStartIndex: 0 } };
 
     pageInfo = {
       page: 0,
@@ -62,7 +65,8 @@ describe('useData', () => {
             renderWithProps.visibleRowCount ?? 1,
             renderWithProps.visibleColumnCount ?? 1,
             renderWithProps.columns ?? columns,
-            setCellSizeMock
+            setCellSizeMock,
+            gridState
           )
         );
       });
@@ -299,6 +303,32 @@ describe('useData', () => {
       ];
 
       await waitFor(() => expect(result.current.rowsInPage).toEqual(expectedRows));
+    });
+
+    test('should insert row data at correct index based on grid state', async () => {
+      gridState.current.overscanColumnStartIndex = 1;
+      gridState.current.overscanRowStartIndex = 2;
+      await doRenderHook();
+
+      const { result } = renderHookResult;
+
+      const expectedRow: Row = {
+        'col-1': {
+          colIdx: 1,
+          isLastRow: false,
+          isLastColumn: true,
+          isSelectable: false,
+          pageColIdx: 1,
+          pageRowIdx: 2,
+          qText: '0',
+          rowIdx: 2,
+        } as Cell,
+        key: 'row-2',
+      };
+
+      await waitFor(() =>
+        expect(result.current.rowsInPage[gridState.current.overscanRowStartIndex]).toEqual(expectedRow)
+      );
     });
 
     test('should set correct column index', async () => {
