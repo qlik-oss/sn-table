@@ -1,9 +1,8 @@
 import React from 'react';
-import { render, waitFor, screen } from '@testing-library/react';
+import { render, waitFor, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { stardust } from '@nebula.js/stardust';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
-import { act } from 'react-dom/test-utils';
 import { TestableTable } from '../Table';
 import { ExtendedSelectionAPI, PageInfo, TableData, TableLayout } from '../../../types';
 import { generateDataPages, generateLayout } from '../../../__test__/generate-test-data';
@@ -21,6 +20,7 @@ describe('<Table />', () => {
   let user: UserEvent;
   let constraints: stardust.Constraints;
   let tableData: TableData;
+  const app = {} as EngineAPI.IApp;
   const dimensionCount = 2;
   const measureCount = 1;
   const rowCount = 5;
@@ -36,6 +36,7 @@ describe('<Table />', () => {
     await act(() =>
       render(
         <TestWithProviders
+          app={app}
           selectionsAPI={selectionsAPI}
           model={model}
           layout={layout}
