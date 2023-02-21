@@ -103,8 +103,6 @@ const useData = (
 
   useEffect(() => {
     // Run this hook everytime "rowsInPage" becomes stale
-    queue.clear();
-
     const qTop = pageInfo.page * pageInfo.rowsPerPage;
 
     // Ensure that the data request size is never over 10 000
@@ -116,6 +114,10 @@ const useData = (
     };
 
     queue.enqueue({ qLeft: 0, qTop, qHeight, qWidth }, onBeforeHandlePages);
+
+    return () => {
+      queue.clear();
+    };
   }, [layout, visibleRowCount, visibleColumnCount, pageInfo, queue, rowCount]);
 
   return {
