@@ -1,12 +1,12 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import TableTotals from '../TableTotals';
-import manageData from '../../../../handle-data';
-import * as handleKeyPress from '../../../utils/handle-key-press';
-import * as handleAccessibility from '../../../utils/accessibility-utils';
-import { generateDataPages, generateLayout } from '../../../../__test__/generate-test-data';
-import { TableData, ExtendedSelectionAPI, PageInfo } from '../../../../types';
-import TestWithProviders from '../../../../__test__/test-with-providers';
+import manageData from '../../../../../handle-data';
+import * as handleKeyPress from '../../../../utils/handle-key-press';
+import * as handleAccessibility from '../../../../utils/accessibility-utils';
+import { generateDataPages, generateLayout } from '../../../../../__test__/generate-test-data';
+import { TableData, ExtendedSelectionAPI, PageInfo } from '../../../../../types';
+import TestWithProviders from '../../../../../__test__/test-with-providers';
 
 describe('<TableTotals />', () => {
   const model = { getHyperCubeData: async () => generateDataPages(2, 2) } as unknown as EngineAPI.IGenericObject;

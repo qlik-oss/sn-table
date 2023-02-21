@@ -3,16 +3,18 @@ import React, { useRef, useCallback } from 'react';
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './body/TableBodyWrapper';
 import TableHeadWrapper from './head/TableHeadWrapper';
-import FooterWrapper from './footer/FooterWrapper';
-import { useContextSelector, TableContext } from '../context';
-import { StyledTableContainer, StyledTableWrapper, StyledTable } from './styles';
-import PaginationContent from './footer/PaginationContent';
-import useDidUpdateEffect from '../hooks/use-did-update-effect';
-import useFocusListener from '../hooks/use-focus-listener';
-import useScrollListener from '../hooks/use-scroll-listener';
-import { handleWrapperKeyDown } from '../utils/handle-key-press';
-import { updateFocus, resetFocus, getCellElement } from '../utils/accessibility-utils';
-import { TableWrapperProps } from '../types';
+import FooterWrapper from '../../components/footer/FooterWrapper';
+import { useContextSelector, TableContext } from '../../context';
+import { StyledTableContainer, StyledTable } from './styles';
+import PaginationContent from '../../components/footer/PaginationContent';
+import useDidUpdateEffect from '../../hooks/use-did-update-effect';
+import useFocusListener from '../../hooks/use-focus-listener';
+import useScrollListener from '../../hooks/use-scroll-listener';
+import { handleWrapperKeyDown } from '../../utils/handle-key-press';
+import { updateFocus, resetFocus, getCellElement } from '../../utils/accessibility-utils';
+import { TableWrapperProps } from '../../types';
+import { StyledTableWrapper } from '../../components/styles';
+import useScrollbarWidth from '../../virtualized-table/hooks/use-scrollbar-width';
 
 export default function TableWrapper(props: TableWrapperProps) {
   const { pageInfo, setPageInfo, direction, footerContainer, announce, areBasicFeaturesEnabled } = props;
@@ -25,10 +27,12 @@ export default function TableWrapper(props: TableWrapperProps) {
   );
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
+  const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const tableWrapperRef = useRef<HTMLDivElement>(null);
   const isSelectionMode = selectionsAPI.isModal();
+  const { yScrollbarWidth } = useScrollbarWidth(tableContainerRef);
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
@@ -83,6 +87,10 @@ export default function TableWrapper(props: TableWrapperProps) {
       totalsPosition,
     });
   }, [rows.length, totalRowCount, totalColumnCount, page]);
+
+  useDidUpdateEffect(() => {
+    setYScrollbarWidth(yScrollbarWidth);
+  }, [yScrollbarWidth]);
 
   const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
     String(rows.length + 1),

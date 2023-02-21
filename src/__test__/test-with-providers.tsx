@@ -36,6 +36,8 @@ interface ProviderProps {
   tableWidth?: number;
 }
 
+type HookWrapperProps = { children: JSX.Element };
+
 const TestWithProviders = ({
   children,
   app = { getField: () => Promise.resolve({}) } as unknown as EngineAPI.IApp,
@@ -92,5 +94,7 @@ const TestWithProviders = ({
     </ThemeProvider>
   );
 };
+
+export const wrapper = ({ children }: HookWrapperProps) => <TestWithProviders>{children}</TestWithProviders>;
 
 export default TestWithProviders;

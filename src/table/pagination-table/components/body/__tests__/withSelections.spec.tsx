@@ -3,9 +3,9 @@ import { render } from '@testing-library/react';
 import TableCell from '@mui/material/TableCell';
 
 import withSelections from '../withSelections';
-import { Announce, ExtendedSelectionAPI, Cell, Column } from '../../../../types';
-import { CellStyle, CellHOCProps } from '../../../types';
-import TestWithProviders from '../../../../__test__/test-with-providers';
+import { Announce, ExtendedSelectionAPI, Cell, Column } from '../../../../../types';
+import { CellStyle, CellHOCProps } from '../../../../types';
+import TestWithProviders from '../../../../../__test__/test-with-providers';
 
 describe('withSelections', () => {
   const value = '100';

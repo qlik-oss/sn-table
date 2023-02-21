@@ -5,7 +5,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { stardust } from '@nebula.js/stardust';
 import rtlPluginSc from 'stylis-plugin-rtl-sc';
 
-import TableWrapper from './components/TableWrapper';
+import TableWrapper from './pagination-table/components/TableWrapper';
 import { TableContextProvider } from './context';
 import muiSetup from './mui-setup';
 import { RenderProps, TableWrapperProps } from './types';
