@@ -13,12 +13,14 @@ import toTableRect, { toStickyContainerRect } from './utils/to-rect';
 import { useContextSelector, TableContext } from '../context';
 import getHeights from './utils/get-height';
 import useScrollbarWidth from './hooks/use-scrollbar-width';
+import useDidUpdateEffect from '../hooks/use-did-update-effect';
 
 const Table = (props: TableProps) => {
   const { rect, pageInfo } = props;
   const { totalsPosition, columns, paginationNeeded } = useContextSelector(TableContext, (value) => value.tableData);
   const { layout, theme, styling } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
+  const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);
   const totalsRef = useRef<VariableSizeList>(null);
@@ -68,6 +70,10 @@ const Table = (props: TableProps) => {
       ref.current.scrollTop = 0;
     }
   }, [columnWidths]);
+
+  useDidUpdateEffect(() => {
+    setYScrollbarWidth(yScrollbarWidth);
+  }, [yScrollbarWidth]);
 
   const TotalsComponent = (
     <Totals
