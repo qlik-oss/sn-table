@@ -9,7 +9,7 @@ const Totals = (props: TotalsProps) => {
   const { rect, forwardRef, columnWidth, pageInfo, totals, rowHeight, columns } = props;
   const { layout, styling } = useContextSelector(TableContext, (value) => value.baseProps);
 
-  useResetHeader(forwardRef, layout, pageInfo, columnWidth, columns);
+  useResetHeader(forwardRef, layout, pageInfo, columnWidth);
 
   return (
     <VariableSizeList

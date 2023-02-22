@@ -102,13 +102,6 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     gridRef.current.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: true });
   }, [layout, pageInfo.page, gridRef, columnWidth, rowMeta, theme.name()]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useLayoutEffect(() => {
-    if (!gridRef.current) return;
-
-    rowMeta.current.lastScrollToRatio = 0;
-    gridRef.current.scrollTo({ scrollLeft: 0, scrollTop: 0 });
-  }, [columns.length, deferredRowCount, gridRef, rowMeta]);
-
   useImperativeHandle(
     ref,
     () => {

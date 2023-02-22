@@ -9,7 +9,7 @@ const Header = (props: HeaderProps) => {
   const { rect, forwardRef, columns, columnWidth, pageInfo, headerStyle, rowHeight } = props;
   const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
 
-  useResetHeader(forwardRef, layout, pageInfo, columnWidth, columns);
+  useResetHeader(forwardRef, layout, pageInfo, columnWidth);
 
   return (
     <VariableSizeList
