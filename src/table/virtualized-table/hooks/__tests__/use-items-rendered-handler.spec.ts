@@ -70,7 +70,7 @@ describe('', () => {
     onItemsRendered.overscanColumnStartIndex = 0;
     const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-    result.current.handleItemsRendered(onItemsRendered);
+    result.current(onItemsRendered);
 
     expect(loadRows).toHaveBeenCalledTimes(0);
     expect(loadColumns).toHaveBeenCalledTimes(0);
@@ -81,7 +81,7 @@ describe('', () => {
     onItemsRendered.overscanColumnStartIndex = 2;
     const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-    result.current.handleItemsRendered(onItemsRendered);
+    result.current(onItemsRendered);
 
     expect(gridState.current.overscanRowStartIndex).toBe(1);
     expect(gridState.current.overscanColumnStartIndex).toBe(2);
@@ -92,7 +92,7 @@ describe('', () => {
     rowCount = 10;
     const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-    result.current.handleItemsRendered(onItemsRendered);
+    result.current(onItemsRendered);
 
     expect(loadRows).toHaveBeenCalledTimes(0);
     expect(loadColumns).toHaveBeenCalledTimes(0);
@@ -105,7 +105,7 @@ describe('', () => {
     onItemsRendered.overscanColumnStartIndex = 1;
     const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-    result.current.handleItemsRendered(onItemsRendered);
+    result.current(onItemsRendered);
 
     expect(loadRows).toHaveBeenCalledTimes(0);
     expect(loadColumns).toHaveBeenCalledTimes(0);
@@ -118,7 +118,7 @@ describe('', () => {
       onItemsRendered.overscanRowStopIndex = onItemsRendered.overscanRowStartIndex + 10;
       const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-      result.current.handleItemsRendered(onItemsRendered);
+      result.current(onItemsRendered);
 
       expect(loadRows).toHaveBeenCalledWith(0, onItemsRendered.overscanRowStartIndex, 11, 11 + ROW_DATA_BUFFER_SIZE);
     });
@@ -129,7 +129,7 @@ describe('', () => {
       onItemsRendered.overscanRowStopIndex = onItemsRendered.overscanRowStartIndex + 10; // 166 + 10 = 176
       const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-      result.current.handleItemsRendered(onItemsRendered);
+      result.current(onItemsRendered);
 
       expect(loadRows).toHaveBeenCalledWith(0, onItemsRendered.overscanRowStartIndex, 11, ROW_DATA_BUFFER_SIZE + 9);
     });
@@ -142,7 +142,7 @@ describe('', () => {
       onItemsRendered.overscanRowStopIndex = onItemsRendered.overscanRowStartIndex + 10;
       const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-      result.current.handleItemsRendered(onItemsRendered);
+      result.current(onItemsRendered);
 
       expect(loadRows).toHaveBeenCalledWith(
         0,
@@ -158,7 +158,7 @@ describe('', () => {
       onItemsRendered.overscanRowStopIndex = onItemsRendered.overscanRowStartIndex + 10;
       const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-      result.current.handleItemsRendered(onItemsRendered);
+      result.current(onItemsRendered);
 
       expect(loadRows).toHaveBeenCalledWith(0, 0, 11, 11 + ROW_DATA_BUFFER_SIZE);
     });
@@ -171,7 +171,7 @@ describe('', () => {
       onItemsRendered.overscanColumnStopIndex = onItemsRendered.overscanColumnStartIndex + 10;
       const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-      result.current.handleItemsRendered(onItemsRendered);
+      result.current(onItemsRendered);
 
       expect(loadColumns).toHaveBeenCalledWith(
         onItemsRendered.overscanColumnStartIndex,
@@ -187,7 +187,7 @@ describe('', () => {
       onItemsRendered.overscanColumnStopIndex = onItemsRendered.overscanColumnStartIndex + 10; // 96
       const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-      result.current.handleItemsRendered(onItemsRendered);
+      result.current(onItemsRendered);
 
       expect(loadColumns).toHaveBeenCalledWith(onItemsRendered.overscanColumnStartIndex, 0, 14, 11);
     });
@@ -200,7 +200,7 @@ describe('', () => {
       onItemsRendered.overscanColumnStopIndex = onItemsRendered.overscanColumnStartIndex + 10;
       const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-      result.current.handleItemsRendered(onItemsRendered);
+      result.current(onItemsRendered);
 
       expect(loadColumns).toHaveBeenCalledWith(
         onItemsRendered.overscanColumnStartIndex - COLUMN_DATA_BUFFER_SIZE,
@@ -216,7 +216,7 @@ describe('', () => {
       onItemsRendered.overscanColumnStopIndex = onItemsRendered.overscanColumnStartIndex + 10;
       const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
 
-      result.current.handleItemsRendered(onItemsRendered);
+      result.current(onItemsRendered);
 
       expect(loadColumns).toHaveBeenCalledWith(0, 0, 11 + COLUMN_DATA_BUFFER_SIZE, 11);
     });

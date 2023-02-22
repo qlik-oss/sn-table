@@ -99,7 +99,7 @@ const useItemsRendererHandler = ({
     ]
   );
 
-  return { handleItemsRendered, gridState };
+  return handleItemsRendered;
 };
 
 export default useItemsRendererHandler;

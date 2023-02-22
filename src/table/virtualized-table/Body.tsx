@@ -62,7 +62,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     gridState
   );
 
-  const { handleItemsRendered } = useItemsRendererHandler({
+  const handleItemsRendered = useItemsRendererHandler({
     layout,
     loadRows,
     loadColumns,
