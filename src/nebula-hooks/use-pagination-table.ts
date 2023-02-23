@@ -10,9 +10,9 @@ import {
   ExtendedTheme,
   UseOptions,
   Galaxy,
+  ApplyColumnWidths,
 } from '../types';
 import useAnnounceAndTranslations from './use-announce-and-translations';
-import useApplyColumnWidths from './use-apply-column-widths';
 
 interface UsePaginationTable {
   env: Galaxy;
@@ -30,6 +30,7 @@ interface UsePaginationTable {
   areBasicFeaturesEnabled?: boolean;
   embed?: stardust.Embed;
   reactRoot: Root;
+  applyColumnWidths: ApplyColumnWidths;
 }
 
 const initialPageInfo = {
@@ -54,11 +55,11 @@ const usePaginationTable = ({
   areBasicFeaturesEnabled,
   embed,
   reactRoot,
+  applyColumnWidths,
 }: UsePaginationTable) => {
   const shouldRender = !env.carbon && layout.presentation?.usePagination !== false;
   const { direction, footerContainer } = useOptions() as UseOptions;
   const announce = useAnnounceAndTranslations(rootElement, translator);
-  const applyColumnWidths = useApplyColumnWidths(model, layout.qHyperCube);
   const [pageInfo, setPageInfo] = useState(initialPageInfo);
   const [tableData] = usePromise(async () => {
     if (shouldRender) {

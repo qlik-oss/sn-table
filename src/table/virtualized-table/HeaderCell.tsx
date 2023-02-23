@@ -4,6 +4,7 @@ import { useContextSelector, TableContext } from '../context';
 import { GeneratedStyling } from '../types';
 import HeadCellContent from '../components/head/HeadCellContent';
 import CellText from '../components/CellText';
+import ColumnAdjuster from '../components/head/ColumnAdjuster';
 
 interface HeaderCellProps {
   index: number;
@@ -19,6 +20,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
     columns,
     headerStyle: { ...applicableStyle },
   } = data;
+
   const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
   const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
@@ -34,13 +36,15 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         display: 'flex',
         alignItems: 'center',
         borderStyle: 'solid',
-        borderWidth: isLastColumn ? '0px' : '0px 1px 0px 0px',
-        padding: '4px',
+        borderWidth: isLastColumn ? '0px 0px 1px 0px' : '0px 1px 1px 0px',
+        padding: '4px 12px',
         justifyContent: column.align,
         boxSizing: 'border-box',
         cursor: 'default',
         fontWeight: 'bold',
+        zIndex: columns.length - index,
         flexDirection,
+        userSelect: 'none',
       }}
     >
       <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled>
@@ -48,6 +52,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
           {column.label}
         </CellText>
       </HeadCellContent>
+      <ColumnAdjuster column={column} isLastColumn={isLastColumn} />
     </div>
   );
 };

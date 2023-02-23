@@ -20,6 +20,7 @@ describe('<Table />', () => {
   let user: UserEvent;
   let constraints: stardust.Constraints;
   let tableData: TableData;
+  let rootElement: HTMLElement;
   const app = {} as EngineAPI.IApp;
   const dimensionCount = 2;
   const measureCount = 1;
@@ -42,6 +43,8 @@ describe('<Table />', () => {
           layout={layout}
           constraints={constraints}
           tableData={tableData}
+          rootElement={rootElement}
+          tableWidth={rect.width}
         >
           <TestableTable pageInfo={pageInfo} rect={rect} />
         </TestWithProviders>
@@ -100,6 +103,10 @@ describe('<Table />', () => {
     isModal = false;
 
     constraints = {};
+
+    rootElement = {
+      getBoundingClientRect: () => ({ height: rect.height }),
+    } as unknown as HTMLElement;
   });
 
   afterEach(() => jest.restoreAllMocks());
