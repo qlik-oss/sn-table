@@ -54,6 +54,7 @@ export function generateLayout(
       qGrandTotalRow,
       qColumnOrder,
       qSize: { qcx: nDims + nMeas, qcy: nRows },
+      qDataPages: [],
     } as unknown as HyperCube,
     totals,
   } as TableLayout;

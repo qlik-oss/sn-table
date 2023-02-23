@@ -3,9 +3,17 @@ import { PageInfo, Row, Column, TableLayout } from '../../../../types';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
 import { SetCellSize } from '../../types';
 import useGetHyperCubeDataQueue from '../use-get-hypercube-data-queue';
-import { createRow, isColumnMissingData, isRowMissingData } from './utils';
+import useMutableProp from '../use-mutable-prop';
+import useOnPropsChange from '../use-on-props-change';
+import { createEmptyState, isColumnMissingData, isRowMissingData, toRows } from './utils';
 
-export type LoadData = (left: number, top: number, width: number, height: number) => void;
+export type LoadData = (
+  left: number,
+  top: number,
+  width: number,
+  height: number,
+  onBeforeHandlePages?: () => void
+) => void;
 
 export interface UseData {
   rowsInPage: Row[];
@@ -24,49 +32,38 @@ const useData = (
   columns: Column[],
   setCellSize: SetCellSize
 ): UseData => {
-  const [rowsInPage, setRowsInPage] = useState<Row[]>(Array(rowCount).fill(undefined));
-  const mutableRowsInPage = useRef(rowsInPage);
+  const mutableRowsInPage = useRef<Row[]>([]);
+  const mutableSetCellSize = useMutableProp<SetCellSize>(setCellSize);
+  const memoizedToRows = useCallback(
+    (qDataPages: EngineAPI.INxDataPage[], prevState?: Row[]) => {
+      const nextState = Array.isArray(prevState) ? [...prevState] : createEmptyState(rowCount);
 
-  const getDataPages = useCallback(
-    async (pages: EngineAPI.INxPage[]) => model.getHyperCubeData('/qHyperCubeDef', pages),
-    [model]
+      toRows(qDataPages, pageInfo, nextState, columns, layout, mutableSetCellSize.current);
+
+      mutableRowsInPage.current = nextState;
+
+      return nextState;
+    },
+    [rowCount, pageInfo, columns, layout, mutableSetCellSize]
   );
+  const [rowsInPage, setRowsInPage] = useState<Row[]>(() => memoizedToRows(layout.qHyperCube.qDataPages));
 
-  const handleDataPages = useCallback(
-    (dataPages: EngineAPI.INxDataPage[]) =>
-      setRowsInPage((prevRows) => {
-        const nextRows = [...prevRows];
-        mutableRowsInPage.current = nextRows;
+  useOnPropsChange(() => {
+    // Derive state (rowsInPage) from prop (layout)
+    setRowsInPage(memoizedToRows(layout.qHyperCube.qDataPages));
+  }, [layout]);
 
-        dataPages.forEach((dataPage) => {
-          dataPage.qMatrix.forEach((matrixRow, matrixRowIdx) => {
-            const pageRowStartIdx = dataPage.qArea.qTop - pageInfo.page * pageInfo.rowsPerPage;
-            const { row, pageRowIdx } = createRow(
-              nextRows,
-              matrixRow,
-              matrixRowIdx,
-              dataPage.qArea,
-              pageRowStartIdx,
-              columns,
-              layout.qHyperCube.qSize,
-              setCellSize
-            );
+  const getDataPages = (pages: EngineAPI.INxPage[]) => model.getHyperCubeData('/qHyperCubeDef', pages);
 
-            nextRows[pageRowIdx] = row;
-          });
-        });
-
-        return nextRows;
-      }),
-    [pageInfo, columns, layout, setCellSize, mutableRowsInPage]
-  );
+  const handleDataPages = (dataPages: EngineAPI.INxDataPage[]) =>
+    setRowsInPage((prevState) => memoizedToRows(dataPages, prevState));
 
   // The queue takes a EngineAPI.INxPage object as items and adds them to a queue and
   // exists to prevent the same page from being fetched more than once.
   const queue = useGetHyperCubeDataQueue(getDataPages, handleDataPages);
 
   const loadColumns: LoadData = useCallback(
-    (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
+    (qLeft, qTop, qWidth, qHeight, onBeforeHandlePages) => {
       for (let left = qLeft; left < qLeft + qWidth; left++) {
         if (isColumnMissingData(mutableRowsInPage.current, left, qTop, qHeight)) {
           const page = {
@@ -76,7 +73,7 @@ const useData = (
             qWidth: 1,
           };
 
-          queue.enqueue(page);
+          queue.enqueue(page, onBeforeHandlePages);
         }
       }
     },
@@ -84,17 +81,17 @@ const useData = (
   );
 
   const loadRows: LoadData = useCallback(
-    (qLeft: number, qTop: number, qWidth: number, qHeight: number) => {
+    (qLeft, qTop, qWidth, qHeight, onBeforeHandlePages) => {
       for (let top = qTop; top < qTop + qHeight; top++) {
         const pageTop = Math.max(0, top - pageInfo.page * pageInfo.rowsPerPage);
-        if (isRowMissingData(mutableRowsInPage.current, qLeft, pageTop, qWidth)) {
+        if (isRowMissingData(mutableRowsInPage.current, qLeft, pageTop, qWidth, top)) {
           const page = {
             qLeft,
             qTop: top,
             qHeight: 1,
             qWidth,
           };
-          queue.enqueue(page);
+          queue.enqueue(page, onBeforeHandlePages);
         }
       }
     },
@@ -110,15 +107,16 @@ const useData = (
     const qHeight = Math.min(100, layout.qHyperCube.qSize.qcy, visibleRowCount + ROW_DATA_BUFFER_SIZE);
 
     const onBeforeHandlePages = () => {
-      setRowsInPage(Array(rowCount).fill(undefined)); // Reset rows to initial value
+      setRowsInPage(memoizedToRows(layout.qHyperCube.qDataPages));
     };
 
-    queue.enqueue({ qLeft: 0, qTop, qHeight, qWidth }, onBeforeHandlePages);
+    // TODO use grid state
+    loadRows(0, qTop, qWidth, qHeight, onBeforeHandlePages);
 
     return () => {
       queue.clear();
     };
-  }, [layout, visibleRowCount, visibleColumnCount, pageInfo, queue, rowCount]);
+  }, [layout, visibleRowCount, visibleColumnCount, pageInfo, queue, loadRows, memoizedToRows]);
 
   return {
     rowsInPage,
