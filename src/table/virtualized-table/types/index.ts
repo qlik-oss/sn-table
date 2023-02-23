@@ -1,6 +1,7 @@
 import { stardust } from '@nebula.js/stardust';
 import { VariableSizeList } from 'react-window';
 import {
+  ApplyColumnWidths,
   ChangeSortOrder,
   Column,
   ExtendedSelectionAPI,
@@ -40,6 +41,7 @@ export interface VirtualTableRenderProps {
   embed: stardust.Embed;
   changeSortOrder: ChangeSortOrder;
   tableData: TableData;
+  applyColumnWidths: ApplyColumnWidths;
 }
 
 export interface WrapperProps {
@@ -104,3 +106,8 @@ export interface ItemData {
 }
 
 export type SetCellSize = (text: string, rowIdx: number, colIdx: number) => void;
+
+export interface GridState {
+  overscanColumnStartIndex: number;
+  overscanRowStartIndex: number;
+}

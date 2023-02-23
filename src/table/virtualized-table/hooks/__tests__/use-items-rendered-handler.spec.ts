@@ -1,6 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import { PageInfo, TableLayout } from '../../../../types';
 import { COLUMN_DATA_BUFFER_SIZE, MAX_PAGE_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
+import { GridState } from '../../types';
 import { LoadData } from '../use-data';
 import useItemsRendererHandler, { ItemsHandlerProps, OnItemsRendered } from '../use-items-rendered-handler';
 import { ScrollDirection } from '../use-scroll-direction';
@@ -15,6 +16,7 @@ describe('', () => {
   let pageInfo: PageInfo;
   let itemsHandlerProps: ItemsHandlerProps;
   let onItemsRendered: OnItemsRendered;
+  let gridState: React.MutableRefObject<GridState>;
 
   beforeEach(() => {
     layout = {
@@ -25,6 +27,8 @@ describe('', () => {
         },
       },
     } as TableLayout;
+
+    gridState = { current: { overscanColumnStartIndex: 0, overscanRowStartIndex: 0 } };
 
     loadRows = jest.fn();
     loadColumns = jest.fn();
@@ -42,6 +46,7 @@ describe('', () => {
       horizontalScrollDirection,
       rowCount,
       pageInfo,
+      gridState,
     };
 
     onItemsRendered = {
@@ -69,6 +74,17 @@ describe('', () => {
 
     expect(loadRows).toHaveBeenCalledTimes(0);
     expect(loadColumns).toHaveBeenCalledTimes(0);
+  });
+
+  test('should update grid state', () => {
+    onItemsRendered.overscanRowStartIndex = 1;
+    onItemsRendered.overscanColumnStartIndex = 2;
+    const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
+
+    result.current(onItemsRendered);
+
+    expect(gridState.current.overscanRowStartIndex).toBe(1);
+    expect(gridState.current.overscanColumnStartIndex).toBe(2);
   });
 
   test('should not fetch data when row start index is larger than row count', () => {
