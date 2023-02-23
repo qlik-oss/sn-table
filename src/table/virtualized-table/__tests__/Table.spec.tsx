@@ -105,7 +105,7 @@ describe('<Table />', () => {
     constraints = {};
 
     rootElement = {
-      getBoundingClientRect: () => ({ height: rect.width }),
+      getBoundingClientRect: () => ({ height: rect.height }),
     } as unknown as HTMLElement;
   });
 
