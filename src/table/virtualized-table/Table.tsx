@@ -1,6 +1,5 @@
 import React, { memo, useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { VariableSizeList } from 'react-window';
-import useColumnSize from './hooks/use-column-size';
 import Body from './Body';
 import FullSizeContainer from './FullSizeContainer';
 import Header from './Header';
@@ -14,11 +13,14 @@ import toTableRect, { toStickyContainerRect } from './utils/to-rect';
 import { useContextSelector, TableContext } from '../context';
 import getHeights from './utils/get-height';
 import useScrollbarWidth from './hooks/use-scrollbar-width';
+import useDidUpdateEffect from '../hooks/use-did-update-effect';
 
 const Table = (props: TableProps) => {
   const { rect, pageInfo } = props;
   const { totalsPosition, columns, paginationNeeded } = useContextSelector(TableContext, (value) => value.tableData);
   const { layout, theme, styling } = useContextSelector(TableContext, (value) => value.baseProps);
+  const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
+  const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
   const ref = useRef<HTMLDivElement>(null);
   const headerRef = useRef<VariableSizeList>(null);
   const totalsRef = useRef<VariableSizeList>(null);
@@ -38,9 +40,8 @@ const Table = (props: TableProps) => {
     () => toStickyContainerRect(tableRect, xScrollbarWidth, yScrollbarWidth),
     [tableRect, xScrollbarWidth, yScrollbarWidth]
   );
-  const { width } = useColumnSize(stickyContainerRect, columns, styling.head, bodyStyle);
-  const { rowCount } = useTableCount(layout, pageInfo, stickyContainerRect, width, bodyRowHeight);
-  const containerWidth = columns.reduce((prev, curr, index) => prev + width[index], 0);
+  const { rowCount } = useTableCount(layout, pageInfo, stickyContainerRect, columnWidths, bodyRowHeight);
+  const containerWidth = columnWidths.reduce((prev, curr) => prev + curr, 0);
   const [containerHeight, setContainerHeight] = useState(rowCount * bodyRowHeight + headerAndTotalsHeight); // Based on single line height, which is going to be out-of-sync when rows have multiple lines
   const scrollHandler = useScrollHandler(headerRef, totalsRef, bodyRef);
 
@@ -62,14 +63,24 @@ const Table = (props: TableProps) => {
       ref.current.scrollLeft = 0;
       ref.current.scrollTop = 0;
     }
-  }, [layout, pageInfo]);
+  }, [rowCount, columns.length]);
+
+  useLayoutEffect(() => {
+    if (ref.current) {
+      ref.current.scrollTop = 0;
+    }
+  }, [columnWidths]);
+
+  useDidUpdateEffect(() => {
+    setYScrollbarWidth(yScrollbarWidth);
+  }, [yScrollbarWidth]);
 
   const TotalsComponent = (
     <Totals
       rect={stickyContainerRect}
       pageInfo={pageInfo}
       columns={columns}
-      columnWidth={width}
+      columnWidth={columnWidths}
       forwardRef={totalsRef}
       totals={totalsPosition}
       rowHeight={bodyRowHeight}
@@ -85,7 +96,7 @@ const Table = (props: TableProps) => {
             rect={stickyContainerRect}
             pageInfo={pageInfo}
             columns={columns}
-            columnWidth={width}
+            columnWidth={columnWidths}
             forwardRef={headerRef}
             rowHeight={headerRowHeight}
           />
@@ -97,7 +108,7 @@ const Table = (props: TableProps) => {
             rect={stickyContainerRect}
             pageInfo={pageInfo}
             columns={columns}
-            columnWidth={width}
+            columnWidth={columnWidths}
             rowHeight={bodyRowHeight}
             headerAndTotalsHeight={headerAndTotalsHeight}
             syncHeight={syncHeight}

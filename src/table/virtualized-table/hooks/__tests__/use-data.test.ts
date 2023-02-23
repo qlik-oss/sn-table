@@ -2,7 +2,7 @@ import { act, renderHook, RenderHookResult, waitFor } from '@testing-library/rea
 import { Cell, Column, PageInfo, Row, TableLayout } from '../../../../types';
 import { generateDataPages, generateLayout } from '../../../../__test__/generate-test-data';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
-import { SetCellSize } from '../../types';
+import { SetCellSize, GridState } from '../../types';
 import useData, { UseData } from '../use-data';
 
 interface OverrideUseDataProps {
@@ -33,6 +33,7 @@ describe('useData', () => {
   let renderHookResult: RenderHookResult<UseData, unknown>;
   let doRenderHook: (renderWithProps?: OverrideUseDataProps) => Promise<void>;
   let setCellSizeMock: jest.MockedFunction<SetCellSize>;
+  let gridState: React.MutableRefObject<GridState>;
 
   beforeEach(() => {
     layout = generateLayout(1, 1, QCY);
@@ -41,6 +42,8 @@ describe('useData', () => {
       INIT_DATA_FETCH_HEIGHT,
       INIT_DATA_FETCH_WIDTH
     ) as unknown as EngineAPI.INxDataPage[];
+
+    gridState = { current: { overscanColumnStartIndex: 0, overscanRowStartIndex: 0 } };
 
     pageInfo = {
       page: 0,
@@ -73,7 +76,8 @@ describe('useData', () => {
             renderWithProps.visibleRowCount ?? VISIBLE_ROW_COUNT,
             renderWithProps.visibleColumnCount ?? VISIBLE_COLUMN_COUNT,
             renderWithProps.columns ?? columns,
-            setCellSizeMock
+            setCellSizeMock,
+            gridState
           )
         );
       });
@@ -341,6 +345,29 @@ describe('useData', () => {
           .fill(undefined)
           .forEach((_, rowIdx) => {
             expect(result.current.rowsInPage[rowIdx]?.key).toEqual(`row-${rowIdx}`);
+          });
+      });
+    });
+
+    test('should insert row data at correct index based on grid state', async () => {
+      gridState.current.overscanColumnStartIndex = 50;
+      gridState.current.overscanRowStartIndex = 100;
+      await doRenderHook();
+
+      const { result } = renderHookResult;
+
+      await waitFor(() =>
+        expect(result.current.rowsInPage[gridState.current.overscanRowStartIndex - 1]).toBeUndefined()
+      );
+      await waitFor(() => {
+        Array(VISIBLE_ROW_COUNT + ROW_DATA_BUFFER_SIZE)
+          .fill(undefined)
+          .forEach((_, idx) => {
+            const rowIdx = gridState.current.overscanRowStartIndex + idx;
+            const row = result.current.rowsInPage[rowIdx] as Row;
+            expect(row.key).toEqual(`row-${rowIdx}`);
+            expect(row[`col-${gridState.current.overscanColumnStartIndex}`]).not.toBeUndefined();
+            expect(row[`col-${gridState.current.overscanColumnStartIndex - 1}`]).toBeUndefined();
           });
       });
     });

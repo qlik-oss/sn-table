@@ -3,6 +3,7 @@ import { Root } from 'react-dom/client';
 import { renderVirtualizedTable } from '../table/Root';
 import getVirtualScrollTableData from '../table/virtualized-table/utils/get-table-data';
 import {
+  ApplyColumnWidths,
   ChangeSortOrder,
   ExtendedSelectionAPI,
   ExtendedTheme,
@@ -26,6 +27,7 @@ interface UseVirtualizedTable {
   changeSortOrder: ChangeSortOrder | undefined;
   areBasicFeaturesEnabled: boolean;
   reactRoot: Root;
+  applyColumnWidths: ApplyColumnWidths;
 }
 
 const NO_TABLE_DATA = {} as TableData;
@@ -45,6 +47,7 @@ const useVirtualizedTable = ({
   rootElement,
   embed,
   reactRoot,
+  applyColumnWidths,
 }: UseVirtualizedTable) => {
   const shouldRender = areBasicFeaturesEnabled && layout.presentation?.usePagination === false;
   const tableData = useMemo(() => {
@@ -73,6 +76,7 @@ const useVirtualizedTable = ({
         embed,
         changeSortOrder,
         tableData,
+        applyColumnWidths,
       },
       reactRoot
     );
@@ -92,6 +96,7 @@ const useVirtualizedTable = ({
     embed,
     reactRoot,
     tableData,
+    applyColumnWidths,
   ]);
 };
 

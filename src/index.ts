@@ -25,6 +25,7 @@ import { Galaxy, TableLayout, ExtendedTranslator, ExtendedSelectionAPI } from '.
 import useVirtualizedTable from './nebula-hooks/use-virtualized-table';
 import usePaginationTable from './nebula-hooks/use-pagination-table';
 import useCarbonTable from './nebula-hooks/use-carbon-table';
+import useApplyColumnWidths from './nebula-hooks/use-apply-column-widths';
 
 export default function supernova(env: Galaxy) {
   const areBasicFeaturesEnabled = env.flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES');
@@ -48,6 +49,7 @@ export default function supernova(env: Galaxy) {
       const theme = useExtendedTheme(rootElement);
       const embed = useEmbed();
       const changeSortOrder = useSorting(model, layout.qHyperCube);
+      const applyColumnWidths = useApplyColumnWidths(model, layout.qHyperCube);
 
       useContextMenu(areBasicFeaturesEnabled);
 
@@ -66,6 +68,7 @@ export default function supernova(env: Galaxy) {
         rootElement,
         embed,
         reactRoot,
+        applyColumnWidths,
       });
 
       usePaginationTable({
@@ -84,6 +87,7 @@ export default function supernova(env: Galaxy) {
         rect,
         embed,
         reactRoot,
+        applyColumnWidths,
       });
 
       useCarbonTable({

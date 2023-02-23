@@ -1,17 +1,15 @@
-import React, { memo, useLayoutEffect } from 'react';
+import React, { memo } from 'react';
 import { VariableSizeList } from 'react-window';
 import TotalsCell from './TotalsCell';
 import { useContextSelector, TableContext } from '../context';
 import { TotalsProps } from './types';
+import useResetHeader from './hooks/use-reset-header';
 
 const Totals = (props: TotalsProps) => {
   const { rect, forwardRef, columnWidth, pageInfo, totals, rowHeight, columns } = props;
   const { layout, styling } = useContextSelector(TableContext, (value) => value.baseProps);
 
-  useLayoutEffect(() => {
-    forwardRef?.current?.resetAfterIndex(0, true);
-    forwardRef?.current?.scrollTo(0);
-  }, [layout, pageInfo, forwardRef, columnWidth]);
+  useResetHeader(forwardRef, layout, pageInfo, columnWidth);
 
   return (
     <VariableSizeList
@@ -20,16 +18,13 @@ const Totals = (props: TotalsProps) => {
       style={{
         overflow: 'hidden',
         background: styling.totals.background,
-        borderTop: totals.atBottom ? `1px solid ${styling.totals.borderTopColor}` : '0px',
-        // TODO: figure out properly when it should have a bottom border
-        borderBottom: totals.atTop ? `1px solid ${styling.totals.borderBottomColor}` : '0px',
         boxSizing: 'border-box',
       }}
       itemCount={layout.qHyperCube.qSize.qcx}
       itemSize={(index) => columnWidth[index]}
       height={rowHeight}
       width={rect.width}
-      itemData={{ totalsStyle: styling.totals, columns }}
+      itemData={{ totalsStyle: styling.totals, columns, totals }}
     >
       {TotalsCell}
     </VariableSizeList>

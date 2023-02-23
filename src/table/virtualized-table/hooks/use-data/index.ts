@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { PageInfo, Row, Column, TableLayout } from '../../../../types';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
-import { SetCellSize } from '../../types';
+import { GridState, SetCellSize } from '../../types';
 import useGetHyperCubeDataQueue from '../use-get-hypercube-data-queue';
 import useMutableProp from '../use-mutable-prop';
 import useOnPropsChange from '../use-on-props-change';
@@ -30,7 +30,8 @@ const useData = (
   visibleRowCount: number,
   visibleColumnCount: number,
   columns: Column[],
-  setCellSize: SetCellSize
+  setCellSize: SetCellSize,
+  gridState: React.MutableRefObject<GridState>
 ): UseData => {
   const mutableRowsInPage = useRef<Row[]>([]);
   const mutableSetCellSize = useMutableProp<SetCellSize>(setCellSize);
@@ -100,7 +101,9 @@ const useData = (
 
   useEffect(() => {
     // Run this hook everytime "rowsInPage" becomes stale
-    const qTop = pageInfo.page * pageInfo.rowsPerPage;
+    const rowStart = gridState.current.overscanRowStartIndex;
+    const columnStart = gridState.current.overscanColumnStartIndex;
+    const qTop = rowStart + pageInfo.page * pageInfo.rowsPerPage;
 
     // Ensure that the data request size is never over 10 000
     const qWidth = Math.min(100, layout.qHyperCube.qSize.qcx, visibleColumnCount + COLUMN_DATA_BUFFER_SIZE);
@@ -110,13 +113,12 @@ const useData = (
       setRowsInPage(memoizedToRows(layout.qHyperCube.qDataPages));
     };
 
-    // TODO use grid state
-    loadRows(0, qTop, qWidth, qHeight, onBeforeHandlePages);
+    loadRows(columnStart, qTop, qWidth, qHeight, onBeforeHandlePages);
 
     return () => {
       queue.clear();
     };
-  }, [layout, visibleRowCount, visibleColumnCount, pageInfo, queue, loadRows, memoizedToRows]);
+  }, [layout, visibleRowCount, visibleColumnCount, pageInfo, queue, loadRows, memoizedToRows, gridState]);
 
   return {
     rowsInPage,
