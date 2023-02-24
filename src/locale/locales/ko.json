@@ -16,8 +16,8 @@
   },
   "SNTable.MenuItem.Search": {
     "value": "검색",
-    "comment": "label for menu item to search in dimension.",
-    "version": "+fqjoaY7NnQcJ4AboIJThg=="
+    "comment": "label for menu item to search in field.",
+    "version": "+eDY6cVynDVMJOA38QhPgA=="
   },
   "SNTable.MenuItem.SelectAll": {
     "value": "모두 선택",
@@ -38,6 +38,11 @@
     "value": "사용 가능 항목 선택",
     "comment": "label for select possible items in field.",
     "version": "4siNdUI0Zifh5diBJNQquQ=="
+  },
+  "SNTable.MenuItem.Selections": {
+    "value": "선택",
+    "comment": "label for selections menu in field.",
+    "version": "3hLtXPt3fSypgwaD9Pr8cg=="
   },
   "SNTable.MenuItem.SortAscending": {
     "value": "오름차순으로 정렬",
