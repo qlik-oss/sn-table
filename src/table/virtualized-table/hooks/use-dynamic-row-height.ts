@@ -55,7 +55,7 @@ const useDynamicRowHeight = ({ bodyStyle, columnWidth, gridRef, rowHeight, layou
 
   const getCellSize = useCallback(
     (text: string, colIdx: number) => {
-      const width = measureText(text);
+      const width = measureText(text.trim());
       const cellWidth = subtractCellPaddingAndBorder(columnWidth[colIdx]);
       const estimatedLineCount = Math.min(maxLineCount, Math.ceil(width / cellWidth));
       const textHeight = Math.max(1, estimatedLineCount) * lineHeight;
