@@ -50,7 +50,7 @@ function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
               aria-sort={ariaSort}
             >
               <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled={areBasicFeaturesEnabled}>
-                <CellText>{column.label}</CellText>
+                <CellText fontSize={styling.head.fontSize}>{column.label}</CellText>
               </HeadCellContent>
               {areBasicFeaturesEnabled && <ColumnAdjuster column={column} isLastColumn={isLastColumn} />}
             </StyledHeadCell>

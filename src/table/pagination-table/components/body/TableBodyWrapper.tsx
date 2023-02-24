@@ -106,7 +106,7 @@ function TableBodyWrapper({
                     handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition)
                   }
                 >
-                  <CellText>{cell.qText}</CellText>
+                  <CellText fontSize={cellStyle.fontSize}>{cell.qText}</CellText>
                 </CellRenderer>
               )
             );

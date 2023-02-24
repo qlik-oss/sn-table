@@ -48,7 +48,7 @@ function TableTotals({ areBasicFeaturesEnabled }: TableTotalsProps) {
               removeTabAndFocusCell(cellCoord, rootElement, setFocusedCellCoord, keyboard);
             }}
           >
-            <CellText>{column.totalInfo}</CellText>
+            <CellText fontSize={styling.totals.fontSize}>{column.totalInfo}</CellText>
           </StyledTotalsCell>
         );
       })}
