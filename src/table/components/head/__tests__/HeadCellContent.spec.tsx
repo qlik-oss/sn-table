@@ -5,10 +5,10 @@ import useEvent from '@testing-library/user-event';
 import HeadCellContent from '../HeadCellContent';
 import { TableLayout, ChangeSortOrder, ExtendedSelectionAPI, Column } from '../../../../types';
 import TestWithProviders from '../../../../__test__/test-with-providers';
+import CellText from '../../CellText';
 
 describe('<HeadCellContent />', () => {
   let column: Column;
-  let columnIndex: number;
   let isActive: boolean;
   let layout: TableLayout;
   let changeSortOrder: ChangeSortOrder;
@@ -25,12 +25,9 @@ describe('<HeadCellContent />', () => {
         layout={layout}
         changeSortOrder={changeSortOrder}
       >
-        <HeadCellContent
-          column={column}
-          columnIndex={columnIndex}
-          isActive={isActive}
-          areBasicFeaturesEnabled={areBasicFeaturesEnabled}
-        />
+        <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled={areBasicFeaturesEnabled}>
+          <CellText>{column.label}</CellText>
+        </HeadCellContent>
       </TestWithProviders>
     );
 
@@ -44,8 +41,8 @@ describe('<HeadCellContent />', () => {
       isLocked: false,
       colIdx: 0,
       qReverseSort: false,
+      pageColIdx: 0,
     } as Column;
-    columnIndex = 0;
     layout = {
       qHyperCube: {
         qEffectiveInterColumnSortOrder: [0, 1],
