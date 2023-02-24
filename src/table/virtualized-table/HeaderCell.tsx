@@ -37,7 +37,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         alignItems: 'center',
         borderStyle: 'solid',
         borderWidth: isLastColumn ? '0px 0px 1px 0px' : '0px 1px 1px 0px',
-        padding: '4px 12px',
+        padding: '4px',
         justifyContent: column.align,
         boxSizing: 'border-box',
         cursor: 'default',
