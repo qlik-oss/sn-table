@@ -48,7 +48,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
       }}
     >
       <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled>
-        <CellText wordBreak lines={1}>
+        <CellText wordBreak lines={3}>
           {column.label}
         </CellText>
       </HeadCellContent>

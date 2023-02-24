@@ -43,7 +43,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   const { setCellSize, getRowHeight, rowMeta, estimatedRowHeight, maxLineCount } = useDynamicRowHeight({
     layout,
     pageInfo,
-    bodyStyle,
+    style: bodyStyle,
     rowHeight,
     columnWidth,
     gridRef,
