@@ -16,8 +16,8 @@
   },
   "SNTable.MenuItem.Search": {
     "value": "Поиск",
-    "comment": "label for menu item to search in dimension.",
-    "version": "+fqjoaY7NnQcJ4AboIJThg=="
+    "comment": "label for menu item to search in field.",
+    "version": "+eDY6cVynDVMJOA38QhPgA=="
   },
   "SNTable.MenuItem.SelectAll": {
     "value": "Выбрать все",
@@ -38,6 +38,11 @@
     "value": "Выбрать возможные",
     "comment": "label for select possible items in field.",
     "version": "4siNdUI0Zifh5diBJNQquQ=="
+  },
+  "SNTable.MenuItem.Selections": {
+    "value": "Выборки",
+    "comment": "label for selections menu in field.",
+    "version": "3hLtXPt3fSypgwaD9Pr8cg=="
   },
   "SNTable.MenuItem.SortAscending": {
     "value": "Сортировка по возрастанию",
