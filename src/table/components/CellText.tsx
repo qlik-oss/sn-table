@@ -1,7 +1,7 @@
 /* eslint-disable react/require-default-props */
 import React from 'react';
 import { StyledCellText, StyledCellTextWrapper } from './styles';
-import { LINE_HEIGHT } from '../styling-defaults';
+import { DEFAULT_FONT_SIZE, LINE_HEIGHT } from '../styling-defaults';
 
 interface CellTextProps {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ interface CellTextProps {
 }
 
 export default function CellText({ children, fontSize = '', wordBreak = false, lines = 3 }: CellTextProps) {
-  const size = fontSize ? parseInt(fontSize, 10) : 12;
+  const size = parseInt(fontSize || DEFAULT_FONT_SIZE, 10);
 
   const Text = (
     <StyledCellText component="span" className="sn-table-cell-text" wordBreak={wordBreak} lines={lines}>
