@@ -112,10 +112,10 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.16.17.tgz#c5a1a4bfe1b57f0c3e61b29883525c6da3e5c091"
   integrity sha512-y+EHuSchhL7FjHgvQL/0fnnFmO4T1bhvWANX6gcnqTjtnKWbTvUMCpGnv2+t+31d7RzyEAYAd4u2fnIhHL6N/Q==
 
-"@nebula.js/sn-table@1.22.0":
-  version "1.22.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/sn-table/-/sn-table-1.22.0.tgz#9e9e9c9d21bb7d48f4920aaa44653026e746e823"
-  integrity sha512-YupIEwlAK6xRfPQyChFRc04XQVDHFXc0ja0P80nby/pWwrJNUQ+wwqdNpBZgmYMJ+xCdF28th37RjGsUkb0BvQ==
+"@nebula.js/sn-table@1.23.0":
+  version "1.23.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/sn-table/-/sn-table-1.23.0.tgz#9dd8f1bae901099592a464b5b9fce3b8d77a3302"
+  integrity sha512-jZGt4jBWHJn4gGM3sE99NgY1Ti2+LtTsF/gQ5zXpKHpPJckVASVlMfLGWZVaMR3NVUKCEsQoesc+9L0t+i8naQ==
 
 "@nebula.js/stardust@3.1.3":
   version "3.1.3"
@@ -124,20 +124,20 @@
   dependencies:
     "@types/qlik-engineapi" "12.67.12"
 
-"@qlik/sdk@0.18.0":
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/@qlik/sdk/-/sdk-0.18.0.tgz#97bb4cef47167f68c9aac84135356328a86fcfe1"
-  integrity sha512-IWV+B9TGKj5RI5t5blhJ7Tt7/dOX4PBPFoiJ4i2PIKNWe6WyuRfs5mQa9tfNfFKZF5N//0qKComFjgAdb3IwRQ==
+"@qlik/sdk@0.19.1":
+  version "0.19.1"
+  resolved "https://registry.yarnpkg.com/@qlik/sdk/-/sdk-0.19.1.tgz#bfdf74856200d520f41bfa3a9e58ab043a2df42b"
+  integrity sha512-O2YPFYIU39OzHC4+sge7jPoUHykORXpVLJX2rj1VcLMKLxyVT+5GfLjN3ZpOsRqcEftE/81GBt5ihQypy4uolg==
   dependencies:
-    "@types/jsonwebtoken" "9.0.0"
+    "@types/jsonwebtoken" "9.0.1"
     enigma.js "2.10.0"
     jsonwebtoken "9.0.0"
-    ws "8.11.0"
+    ws "8.12.0"
 
-"@types/jsonwebtoken@9.0.0":
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-9.0.0.tgz#4db9bfaf276ef4fdc3608194fab8b8f2fd1c44f9"
-  integrity sha512-mM4TkDpA9oixqg1Fv2vVpOFyIVLJjm5x4k0V+K/rEsizfjD7Tk7LKk3GTtbB7KCfP0FEHQtsZqFxYA0+sijNVg==
+"@types/jsonwebtoken@9.0.1":
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-9.0.1.tgz#29b1369c4774200d6d6f63135bf3d1ba3ef997a4"
+  integrity sha512-c5ltxazpWabia/4UzhIoaDcIza4KViOQhdbjRlfcIGVnsE3c3brkz9Z+F/EeJIECOQP7W7US2hNE930cWWkPiw==
   dependencies:
     "@types/node" "*"
 
@@ -326,10 +326,10 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-vite@4.1.2:
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-4.1.2.tgz#6908882984e490c44c28e784a2c52de556f04b41"
-  integrity sha512-MWDb9Rfy3DI8omDQySbMK93nQqStwbsQWejXRY2EBzEWKmLAXWb1mkI9Yw2IJrc+oCvPCI1Os5xSSIBYY6DEAw==
+vite@4.1.4:
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-4.1.4.tgz#170d93bcff97e0ebc09764c053eebe130bfe6ca0"
+  integrity sha512-3knk/HsbSTKEin43zHu7jTwYWv81f8kgAL99G5NWBcA1LKvtvcVAC4JjBH1arBunO9kQka+1oGbrMKOjk4ZrBg==
   dependencies:
     esbuild "^0.16.14"
     postcss "^8.4.21"
@@ -338,10 +338,10 @@ vite@4.1.2:
   optionalDependencies:
     fsevents "~2.3.2"
 
-ws@8.11.0:
-  version "8.11.0"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-8.11.0.tgz#6a0d36b8edfd9f96d8b25683db2f8d7de6e8e143"
-  integrity sha512-HPG3wQd9sNQoT9xHyNCXoDUa+Xw/VevmY9FoHyQ+g+rrMn4j6FB4np7Z0OhdTgjx6MgQLK7jwSy1YecU1+4Asg==
+ws@8.12.0:
+  version "8.12.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.12.0.tgz#485074cc392689da78e1828a9ff23585e06cddd8"
+  integrity sha512-kU62emKIdKVeEIOIKVegvqpXMSTAMLJozpHZaJNDYqBjzlSYXQGviYwN1osDLJ9av68qHd4a2oSjd7yD4pacig==
 
 yallist@^4.0.0:
   version "4.0.0"
