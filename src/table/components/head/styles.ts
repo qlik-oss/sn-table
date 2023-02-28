@@ -27,7 +27,7 @@ export const StyledSortButton = styled(Button, {
     opacity: isActive ? 1 : 0,
     fontSize: DEFAULT_FONT_SIZE,
   },
-  '& .MuiButton-endIcon': {
+  '& .MuiButton-endIcon, .MuiButton-startIcon': {
     marginBottom: '2px',
   },
 }));

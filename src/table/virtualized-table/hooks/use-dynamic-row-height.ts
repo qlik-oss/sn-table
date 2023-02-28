@@ -38,6 +38,7 @@ const useDynamicRowHeight = ({
   gridRef,
   lineRef,
   columns,
+  boldText,
 }: Props) => {
   const rowMeta = useRef<RowMeta>({
     lastScrollToRatio: 0,
@@ -47,7 +48,7 @@ const useDynamicRowHeight = ({
     count: 0,
   });
   const [estimatedRowHeight, setEstimatedRowHeight] = useState(rowHeight);
-  const { measureText } = useMeasureText(style.fontSize, style.fontFamily);
+  const { measureText } = useMeasureText(style.fontSize, style.fontFamily, boldText);
   const lineHeight = parseInt(style.fontSize ?? COMMON_CELL_STYLING.fontSize, 10) * LINE_HEIGHT_MULTIPLIER;
 
   // Find a reasonable max line count to avoid issue where the react-window container DOM element gets too big
