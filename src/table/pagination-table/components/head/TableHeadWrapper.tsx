@@ -31,7 +31,7 @@ function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
           const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
           const ariaSort = isActive ? FullSortDirection[column.sortDirection] : undefined;
           const isLastColumn = columnIndex === columns.length - 1;
-          const className = `sn-table-head-cell sn-table-cell ${isLastCell ? 'sn-table-head-last-cell' : ''}`;
+          const className = `sn-table-head-cell sn-table-cell ${isLastColumn ? 'sn-table-head-last-cell' : ''}`;
 
           const widthStyle = {
             ...(areBasicFeaturesEnabled && {
