@@ -120,7 +120,7 @@ export interface ColumnWidth {
 export interface Column {
   id: string;
   isDim: boolean;
-  isMasterItem: boolean;
+  qLibraryId?: string;
   fieldId: string;
   isLocked: boolean;
   colIdx: number;

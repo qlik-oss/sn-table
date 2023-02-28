@@ -22,7 +22,6 @@ export const checkStateCountByKey = <T>(keys: (keyof T)[], obj: T): boolean => {
 };
 
 const useFieldSelection = (column: Column): UseFieldSelectionOutput => {
-  const isMenuVisible = column.isDim && !column.isMasterItem;
   const { app } = useContextSelector(TableContext, (value) => value.baseProps);
   const [fieldInstance, setFieldInstance] = useState<EngineAPI.IField | null>(null);
   const [selectionActionsEnabledStatus, setSelectionActionsEnabledStatus] = useState(
@@ -30,9 +29,9 @@ const useFieldSelection = (column: Column): UseFieldSelectionOutput => {
   );
 
   useEffect(() => {
-    if (!app || !app.getField || !column || !isMenuVisible) return;
+    if (!app || !app.getField || !column || !column.isDim) return;
     app.getField(column.fieldId).then(setFieldInstance);
-  }, [app, column, isMenuVisible]);
+  }, [app, column]);
 
   const resetSelectionActionsEnabledStatus = useCallback(
     () => setSelectionActionsEnabledStatus(SELECTION_ACTIONS_ENABLED_DEFAULT_STATUS),

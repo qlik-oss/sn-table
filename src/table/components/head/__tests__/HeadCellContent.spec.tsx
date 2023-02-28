@@ -71,15 +71,15 @@ describe('<HeadCellContent />', () => {
     });
   });
 
-  it('should not show the menu button when column is a master dimension', () => {
+  it('should show the menu button when column is a master dimension', () => {
     areBasicFeaturesEnabled = true;
     column = {
       ...column,
-      isMasterItem: true,
+      qLibraryId: 'someLibId',
     };
     const { baseElement } = renderTableHead();
     // TODO: add a proper title for the button
-    expect(baseElement.querySelector('#sn-table-head-menu-button')).not.toBeInTheDocument();
+    expect(baseElement.querySelector('#sn-table-head-menu-button')).toBeInTheDocument();
   });
 
   it('should show the menu button when the head cell is hovered', () => {
