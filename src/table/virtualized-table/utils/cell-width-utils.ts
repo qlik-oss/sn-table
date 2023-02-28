@@ -12,7 +12,7 @@ export const subtractCellPaddingAndBorder = (width: number) => width - AMPLIFIED
 export const subtractCellPaddingIconsAndBorder = (width: number, column: Column) => {
   let newWidth = width - AMPLIFIED_PADDING * 2 - BORDER_WIDTH - SORT_ICON_WIDTH;
   newWidth -= column.isLocked ? LOCK_ICON_WIDTH : 0;
-  newWidth -= column.isDim && !column.isMasterItem ? MENU_BUTTON_WIDTH : 0;
+  newWidth -= column.isDim ? MENU_BUTTON_WIDTH : 0;
 
   return newWidth;
 };
