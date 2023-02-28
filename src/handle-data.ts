@@ -71,6 +71,7 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
     qReverseSort,
     qApprMaxGlyphCount,
     columnWidth,
+    qLibraryId,
   } = info;
   const isHidden = qError?.qErrorCode === 7005;
   const isLocked = isDim && (info as ExtendedNxDimensionInfo).qLocked;
@@ -89,13 +90,13 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
       isLocked,
       fieldId,
       colIdx,
+      qLibraryId,
       pageColIdx,
       qApprMaxGlyphCount,
       qReverseSort,
       columnWidth,
       id: `col-${pageColIdx}`,
       label: qFallbackTitle,
-      qLibraryId: info.qLibraryId,
       align: !textAlign || textAlign.auto ? autoAlign : textAlign.align,
       stylingIDs: qAttrExprInfo.map((expr) => expr.id),
       // making sure that qSortIndicator is either A or D
