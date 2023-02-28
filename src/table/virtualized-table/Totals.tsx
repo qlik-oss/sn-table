@@ -20,6 +20,7 @@ const Totals = (props: TotalsProps) => {
     rowHeight,
     layout,
     pageInfo,
+    boldText: true,
   });
 
   useEffect(() => {

@@ -22,6 +22,7 @@ const Header = (props: HeaderProps) => {
     layout,
     pageInfo,
     columns,
+    boldText: true,
   });
 
   useEffect(() => {
