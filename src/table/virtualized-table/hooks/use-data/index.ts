@@ -51,7 +51,7 @@ const useData = (
 
   useOnPropsChange(() => {
     // Derive state (rowsInPage) from prop (layout)
-    setRowsInPage(memoizedToRows(layout.qHyperCube.qDataPages));
+    setRowsInPage(memoizedToRows(pageInfo.page === 0 ? layout.qHyperCube.qDataPages : []));
   }, [layout]);
 
   const getDataPages = (pages: EngineAPI.INxPage[]) => model.getHyperCubeData('/qHyperCubeDef', pages);
@@ -92,6 +92,7 @@ const useData = (
             qHeight: 1,
             qWidth,
           };
+
           queue.enqueue(page, onBeforeHandlePages);
         }
       }
@@ -101,24 +102,27 @@ const useData = (
 
   useEffect(() => {
     // Run this hook everytime "rowsInPage" becomes stale
+    const { qcx, qcy } = layout.qHyperCube.qSize;
     const rowStart = gridState.current.overscanRowStartIndex;
-    const columnStart = gridState.current.overscanColumnStartIndex;
+    const qLeft = gridState.current.overscanColumnStartIndex;
     const qTop = rowStart + pageInfo.page * pageInfo.rowsPerPage;
 
     // Ensure that the data request size is never over 10 000
-    const qWidth = Math.min(100, layout.qHyperCube.qSize.qcx, visibleColumnCount + COLUMN_DATA_BUFFER_SIZE);
-    const qHeight = Math.min(100, layout.qHyperCube.qSize.qcy, visibleRowCount + ROW_DATA_BUFFER_SIZE);
+    const remainingColumns = qcx - qLeft;
+    const remainingRowsOnPage = pageInfo.rowsPerPage - rowStart;
+    const qWidth = Math.min(100, remainingColumns, qcx, visibleColumnCount + COLUMN_DATA_BUFFER_SIZE);
+    const qHeight = Math.min(100, remainingRowsOnPage, qcy, visibleRowCount + ROW_DATA_BUFFER_SIZE);
 
     const onBeforeHandlePages = () => {
-      setRowsInPage(memoizedToRows(layout.qHyperCube.qDataPages));
+      setRowsInPage(memoizedToRows(pageInfo.page === 0 ? layout.qHyperCube.qDataPages : []));
     };
 
-    loadRows(columnStart, qTop, qWidth, qHeight, onBeforeHandlePages);
+    loadRows(qLeft, qTop, qWidth, qHeight, onBeforeHandlePages);
 
     return () => {
       queue.clear();
     };
-  }, [layout, visibleRowCount, visibleColumnCount, pageInfo, queue, loadRows, memoizedToRows, gridState]);
+  }, [layout, visibleRowCount, visibleColumnCount, pageInfo, queue, loadRows, memoizedToRows, gridState, rowCount]);
 
   return {
     rowsInPage,
