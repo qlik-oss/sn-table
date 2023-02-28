@@ -68,12 +68,16 @@ export const LockWrapper = styled(Box)({
 });
 
 // ---------- HeadCellMenu ----------
+export const HeadCellMenuWrapper = styled(Box, {
+  shouldForwardProp: (prop: string) => prop !== 'isVisible' && prop !== 'rightAligned',
+})(({ rightAligned }) => ({
+  ...(rightAligned ? { marginRight: 'auto' } : { marginLeft: 'auto' }),
+}));
 
 export const StyledMenuIconButton = styled(Button, {
   shouldForwardProp: (prop: string) => prop !== 'isVisible' && prop !== 'rightAligned',
-})(({ isVisible, rightAligned }) => ({
+})(({ isVisible }) => ({
   opacity: isVisible ? 1 : 0,
-  ...(rightAligned ? { marginRight: 'auto' } : { marginLeft: 'auto' }),
   '&:focus': {
     opacity: 1,
   },

@@ -11,7 +11,7 @@ import SelectExcluded from '@qlik-trial/sprout/icons/react/SelectExcluded';
 import useFieldSelection from '../../hooks/use-field-selection';
 import { useContextSelector, TableContext } from '../../context';
 import { HeadCellMenuProps, MenuItemGroup } from '../../types';
-import { StyledMenuIconButton } from './styles';
+import { HeadCellMenuWrapper, StyledMenuIconButton } from './styles';
 import { TableLayout } from '../../../types';
 import RecursiveMenuList from './MenuList/RecursiveMenuList';
 import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
@@ -145,10 +145,9 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
   );
 
   return menuItemGroups.length ? (
-    <>
+    <HeadCellMenuWrapper rightAligned={column.align === 'right'}>
       <StyledMenuIconButton
         isVisible={openListboxDropdown || openMenuDropdown}
-        rightAligned={column.align === 'right'}
         ref={anchorRef}
         size="small"
         tabIndex={tabIndex}
@@ -170,6 +169,6 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
         menuGroups={menuItemGroups}
         ariaLabel="sn-table-head-menu-button"
       />
-    </>
+    </HeadCellMenuWrapper>
   ) : null;
 }
