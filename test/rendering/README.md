@@ -51,66 +51,19 @@ To get the necessary Layout and HyperCubeData for a fixture file, you can find t
 
 ## Test cases description
 
-scenario_1.fix.js:
-one dimension
-
-scenario_2.fix.js:
-one dimension,
-the total amount of rows is less then or equal to 10
-
-scenario_3.fix.js:
-one dimension,
-one measure
-
-scenario_4.fix.js:
-one dimension,
-one measure,
-font size and color for header and body
-
-scenario_5.fix.js:
-one dimension,
-one desc sorted measure,
-Background and font coloring for a column
-
-scenario_6.fix.js:
-one center-aligned dimension,
-one right-aligned measure,
-
-scenario_7.fix.js:
-one desc sorted dimension,
-one measure
-
-scenario_8.fix.js:
-one desc sorted dimension,
-one measure,
-the displayed amount of rows is 10
-
-scenario_9.fix.js:
-one dimension,
-one measure,
-the hover font color and background color
-
-scenario_10.fix.js:
-one dimension,
-one measure,
-the hover font color and background color,
-font size and color for header and body
-
-scenario_11.fix.js:
-one dimension,
-one measure,
-the hover font color and background color,
-font size and color for header and body,
-Background and font coloring for a column
-
-scenario_12.fix.js:
-one dimension,
-one measure,
-font size and color for header and body
-scroll to the bottom of the table
-
-scenario_13.fix.js:
-one dimension,
-one measure,
-font size and color for header and body,
-show totals at the bottom
+| Test        | Dimensions | Measures | Other                                                                                                                         |
+| ----------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Scenario 1  | 1          | 0        |                                                                                                                               |
+| Scenario 2  | 1          | 0        | The total amount of rows is less then or equal to 10                                                                          |
+| Scenario 3  | 1          | 1        |                                                                                                                               |
+| Scenario 4  | 1          | 1        | Font size and color for header and body                                                                                       |
+| Scenario 5  | 1          | 1        | Desc sorted measure. Background and font coloring for a column                                                                |
+| Scenario 6  | 1          | 1        | Center-aligned dimension and right-aligned measure                                                                            |
+| Scenario 7  | 1          | 1        | Desc sorted dimension                                                                                                         |
+| Scenario 8  | 1          | 1        | Desc sorted dimension. The displayed amount of rows is 10                                                                     |
+| Scenario 9  | 1          | 1        | The hover font color and background color                                                                                     |
+| Scenario 10 | 1          | 1        | The hover font color and background color. Font size and color for header and body                                            |
+| Scenario 11 | 1          | 1        | The hover font color and background color. Font size and color for header and body. Background and font coloring for a column |
+| Scenario 12 | 1          | 1        | Font size and color for header and body. Scroll to the bottom of the table                                                    |
+| Scenario 13 | 1          | 1        | Font size and color for header and body. Show totals at the bottom                                                            |
+| Scenario 14 | 1          | 0        | 1M rows of data                                                                                                               |

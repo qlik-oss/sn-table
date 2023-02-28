@@ -1,14 +1,23 @@
 import { stardust } from '@nebula.js/stardust';
-import { VariableSizeGrid, VariableSizeList } from 'react-window';
-import { Column, ExtendedSelectionAPI, ExtendedTheme, ExtendedTranslator, PageInfo, TableLayout } from '../../../types';
+import { VariableSizeList } from 'react-window';
+import {
+  ApplyColumnWidths,
+  ChangeSortOrder,
+  Column,
+  ExtendedSelectionAPI,
+  ExtendedTheme,
+  ExtendedTranslator,
+  PageInfo,
+  Row,
+  TableData,
+  TableLayout,
+} from '../../../types';
 import { GeneratedStyling } from '../../types';
 
 export interface Totals {
   atBottom: boolean;
   atTop: boolean;
 }
-
-export type TotalsPosition = 'bottom' | 'noTotals' | 'top';
 
 export interface Rect {
   width: number;
@@ -19,6 +28,7 @@ export interface BodyStyle extends GeneratedStyling {
 }
 
 export interface VirtualTableRenderProps {
+  app: EngineAPI.IApp | undefined;
   selectionsAPI: ExtendedSelectionAPI;
   layout: TableLayout;
   model: EngineAPI.IGenericObject;
@@ -29,6 +39,9 @@ export interface VirtualTableRenderProps {
   rect: stardust.Rect;
   rootElement: HTMLElement;
   embed: stardust.Embed;
+  changeSortOrder: ChangeSortOrder;
+  tableData: TableData;
+  applyColumnWidths: ApplyColumnWidths;
 }
 
 export interface WrapperProps {
@@ -38,7 +51,6 @@ export interface WrapperProps {
 export interface TableProps {
   rect: stardust.Rect;
   pageInfo: PageInfo;
-  paginationNeeded: boolean;
 }
 
 export interface HeaderProps {
@@ -66,9 +78,36 @@ export interface BodyProps {
   pageInfo: PageInfo;
   columns: Column[];
   columnWidth: number[];
-  forwardRef: React.RefObject<VariableSizeGrid<any>>;
   innerForwardRef: React.RefObject<HTMLDivElement>;
   bodyStyle: BodyStyle;
   rowHeight: number;
   headerAndTotalsHeight: number;
+  syncHeight: (innerHeight: number, forceSync?: boolean) => void;
+}
+
+export interface BodyRef {
+  interpolatedScrollTo: (scrollTopRatio: number, scrollLeft: number) => void;
+}
+
+export interface RowMeta {
+  lastScrollToRatio: number;
+  resetAfterRowIndex: number;
+  heights: number[];
+  totalHeight: number;
+  count: number;
+}
+
+export interface ItemData {
+  rowsInPage: Row[];
+  columns: Column[];
+  bodyStyle: BodyStyle;
+  isHoverEnabled: boolean;
+  maxLineCount: number;
+}
+
+export type SetCellSize = (text: string, rowIdx: number, colIdx: number) => void;
+
+export interface GridState {
+  overscanColumnStartIndex: number;
+  overscanRowStartIndex: number;
 }

@@ -1,19 +1,5 @@
 import styled from '@mui/system/styled';
 import Box from '@mui/material/Box';
-import TableContainer from '@mui/material/TableContainer';
-import { PAGINATION_HEIGHT } from '../constants';
-
-// ---------- AnnounceWrapper ----------
-
-export const TableAnnouncer = styled('div')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: '1px',
-  overflow: 'hidden',
-  position: 'absolute',
-  whiteSpace: 'nowrap',
-  width: '1px',
-});
 
 // ---------- TableWrapper ----------
 
@@ -25,25 +11,25 @@ export const StyledTableWrapper = styled(Box, {
   background: background.tableColorFromTheme,
 }));
 
-export const StyledTableContainer = styled(TableContainer, {
-  shouldForwardProp: (prop: string) => prop !== 'fullHeight' && prop !== 'constraints',
-})(({ fullHeight, constraints }) => ({
-  height: fullHeight ? '100%' : `calc(100% - ${PAGINATION_HEIGHT + 1}px)`, // + 1 for top border
-  overflow: constraints.active ? 'hidden' : 'auto',
-  border: 'none',
-}));
-
 // ---------- CellText ----------
 
 export const StyledCellText = styled(Box, {
-  shouldForwardProp: (prop: string) => prop !== 'singleLine' && prop !== 'singleLine',
-})(({ style, singleLine }) => ({
-  ...style,
+  shouldForwardProp: (prop: string) => prop !== 'lines' && prop !== 'wordBreak',
+})(({ lines, wordBreak }) => ({
   lineHeight: 'calc(4/3)',
   fontSize: 'inherit',
-  ...(singleLine && {
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
+  ...(wordBreak && {
+    height: '100%',
     textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    wordBreak: 'break-all', // break-all as the line height logic does not account for word breaks at reasonable places like a white space
+    display: '-webkit-box', // -webkit-box, -webkit-line-clamp and -webkit-box-orient enables support for ellipsis on multiple lines
+    WebkitLineClamp: lines,
+    WebkitBoxOrient: 'vertical',
   }),
 }));
+
+export const StyledCellTextWrapper = styled(Box)({
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+});

@@ -1,47 +1,62 @@
 import React from 'react';
-import { render, waitFor, screen } from '@testing-library/react';
+import { render, waitFor, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { stardust } from '@nebula.js/stardust';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 import { TestableTable } from '../Table';
-import { ExtendedSelectionAPI, PageInfo, TableLayout } from '../../../types';
+import { ExtendedSelectionAPI, PageInfo, TableData, TableLayout } from '../../../types';
 import { generateDataPages, generateLayout } from '../../../__test__/generate-test-data';
 import TestWithProviders from '../../../__test__/test-with-providers';
+import { EMPTY_TABLE_DATA } from '../../context/TableContext';
+import { getColumns, getTotalPosition } from '../../../handle-data';
 
 describe('<Table />', () => {
-  let measureTextMock: jest.Mock<{ width: number }>;
   let rect: stardust.Rect;
   let layout: TableLayout;
   let pageInfo: PageInfo;
-  let paginationNeeded: boolean;
   let model: EngineAPI.IGenericObject;
   let selectionsAPI: ExtendedSelectionAPI;
   let isModal = false;
   let user: UserEvent;
   let constraints: stardust.Constraints;
+  let tableData: TableData;
+  let rootElement: HTMLElement;
+  const app = {} as EngineAPI.IApp;
   const dimensionCount = 2;
   const measureCount = 1;
   const rowCount = 5;
 
-  const renderTable = () =>
-    render(
-      <TestWithProviders selectionsAPI={selectionsAPI} model={model} layout={layout} constraints={constraints}>
-        <TestableTable pageInfo={pageInfo} rect={rect} paginationNeeded={paginationNeeded} />
-      </TestWithProviders>
+  const renderTable = async () => {
+    tableData = {
+      ...EMPTY_TABLE_DATA,
+      paginationNeeded: false,
+      columns: getColumns(layout),
+      totalsPosition: getTotalPosition(layout),
+    };
+
+    await act(() =>
+      render(
+        <TestWithProviders
+          app={app}
+          selectionsAPI={selectionsAPI}
+          model={model}
+          layout={layout}
+          constraints={constraints}
+          tableData={tableData}
+          rootElement={rootElement}
+          tableWidth={rect.width}
+        >
+          <TestableTable pageInfo={pageInfo} rect={rect} />
+        </TestWithProviders>
+      )
     );
+  };
 
   beforeEach(() => {
     user = userEvent.setup();
 
-    measureTextMock = jest.fn();
-    const context = {
-      measureText: measureTextMock,
-    } as unknown as CanvasRenderingContext2D;
-    jest.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(context);
-    measureTextMock.mockReturnValue({ width: 150 });
-
     layout = generateLayout(dimensionCount, measureCount, rowCount);
-
+    layout.qHyperCube.qEffectiveInterColumnSortOrder = [0, 1, 2];
     rect = {
       width: 750,
       height: 750,
@@ -52,8 +67,6 @@ describe('<Table />', () => {
       rowsPerPage: 20,
       rowsPerPageOptions: [],
     };
-
-    paginationNeeded = false;
 
     const dataPages = generateDataPages(rowCount, dimensionCount + measureCount);
     // Hack be able to tell the difference between dimension and measure values
@@ -90,14 +103,18 @@ describe('<Table />', () => {
     isModal = false;
 
     constraints = {};
+
+    rootElement = {
+      getBoundingClientRect: () => ({ height: rect.height }),
+    } as unknown as HTMLElement;
   });
 
   afterEach(() => jest.restoreAllMocks());
 
   it('should render', async () => {
-    renderTable();
+    await renderTable();
 
-    expect(screen.getByTestId('sticky-container')).toBeVisible();
+    await waitFor(() => expect(screen.getByTestId('sticky-container')).toBeVisible());
     await waitFor(() => expect(screen.getByText('title-0')).toBeVisible()); // A header value
     await waitFor(() => expect(screen.getByText('title-1')).toBeVisible()); // A header value
     await waitFor(() => expect(screen.getByText('dimension-c0-r0')).toBeVisible()); // A dimension value
@@ -109,7 +126,7 @@ describe('<Table />', () => {
     it('should be able to select a dimension cell', async () => {
       const cellText = 'dimension-c0-r0';
 
-      renderTable();
+      await renderTable();
 
       await waitFor(() => expect(screen.getByText(cellText)).toBeVisible());
 
@@ -123,7 +140,7 @@ describe('<Table />', () => {
       const dimCell0 = 'dimension-c0-r0';
       const dimCell1 = 'dimension-c0-r1';
 
-      renderTable();
+      await renderTable();
 
       await waitFor(() => expect(screen.getByText(dimCell0)).toBeVisible());
 
@@ -140,7 +157,7 @@ describe('<Table />', () => {
     it('should be able to select and de-select a dimension cell', async () => {
       const cellText = 'dimension-c0-r0';
 
-      renderTable();
+      await renderTable();
 
       await waitFor(() => expect(screen.getByText(cellText)).toBeVisible());
 
@@ -157,7 +174,7 @@ describe('<Table />', () => {
       jest.spyOn(selectionsAPI, 'begin');
       const cellText = 'measure-c2-r0';
 
-      renderTable();
+      await renderTable();
 
       await waitFor(() => expect(screen.getByText(cellText)).toBeVisible());
 
@@ -173,7 +190,7 @@ describe('<Table />', () => {
     it('when a dimension has selection/s all other columns should be excluded', async () => {
       const cellText = 'dimension-c0-r0';
 
-      renderTable();
+      await renderTable();
 
       await waitFor(() => expect(screen.getByText(cellText)).toBeVisible());
 
@@ -190,7 +207,7 @@ describe('<Table />', () => {
         jest.spyOn(selectionsAPI, 'begin');
         const cellText = 'dimension-c0-r0';
 
-        renderTable();
+        await renderTable();
 
         await waitFor(() => expect(screen.getByText(cellText)).toBeVisible());
 
@@ -205,7 +222,7 @@ describe('<Table />', () => {
         jest.spyOn(selectionsAPI, 'begin');
         const cellText = 'dimension-c0-r0';
 
-        renderTable();
+        await renderTable();
 
         await waitFor(() => expect(screen.getByText(cellText)).toBeVisible());
 
@@ -220,7 +237,7 @@ describe('<Table />', () => {
         jest.spyOn(selectionsAPI, 'begin');
         const cellText = 'dimension-c0-r0';
 
-        renderTable();
+        await renderTable();
 
         await waitFor(() => expect(screen.getByText(cellText)).toBeVisible());
 
@@ -250,7 +267,7 @@ describe('<Table />', () => {
 
     it('should render with totals at the top when total is in auto mode', async () => {
       layout.totals.show = true;
-      renderTable();
+      await renderTable();
 
       await waitFor(() => {
         const body = screen.getByText('dimension-c0-r0').parentNode as ParentNode;
@@ -263,7 +280,7 @@ describe('<Table />', () => {
 
     it('should render with totals at the top', async () => {
       layout.totals.show = false;
-      renderTable();
+      await renderTable();
 
       await waitFor(() => {
         const body = screen.getByText('dimension-c0-r0').parentNode as ParentNode;
@@ -277,7 +294,7 @@ describe('<Table />', () => {
     it('should render with totals at the bottom', async () => {
       layout.totals.show = false;
       layout.totals.position = 'bottom';
-      renderTable();
+      await renderTable();
 
       await waitFor(() => {
         const body = screen.getByText('dimension-c0-r0').parentNode as ParentNode;
@@ -291,9 +308,9 @@ describe('<Table />', () => {
     it('should render without totals', async () => {
       layout.totals.show = false;
       layout.totals.position = 'noTotals';
-      renderTable();
+      await renderTable();
 
-      expect(screen.getByTestId('sticky-container')).toBeVisible();
+      await waitFor(() => expect(screen.getByTestId('sticky-container')).toBeVisible());
       await waitFor(() => expect(screen.queryByText(layout.totals.label)).toBeNull());
       await waitFor(() => expect(screen.queryByText(totalRow.qText as string)).toBeNull());
     });

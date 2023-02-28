@@ -1,31 +1,28 @@
 import React from 'react';
-// import { getTotalInfo } from '../../../handle-data';
-import { TableLayout } from '../../types';
+import { Column } from '../../types';
 import { useContextSelector, TableContext } from '../context';
 import { GeneratedStyling } from '../types';
 import CellText from '../components/CellText';
+import { Totals } from './types';
 
 interface TotalsCellProps {
   index: number;
   style: React.CSSProperties;
   data: {
     totalsStyle: GeneratedStyling;
+    columns: Column[];
+    totals: Totals;
   };
-}
-
-function getTotalInfo(layout: TableLayout, colIdx: number) {
-  const numDims = layout.qHyperCube.qDimensionInfo.length;
-  if (colIdx >= numDims) return layout.qHyperCube.qGrandTotalRow[colIdx - numDims]?.qText;
-  if (colIdx === 0) return layout.totals?.label;
-  return '';
 }
 
 const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
   const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
   const {
     totalsStyle: { hoverColors, ...applicableStyling },
+    columns,
+    totals,
   } = data;
-  const label = getTotalInfo(layout, index);
+  const label = columns[index].totalInfo;
   const isLastColumn = layout.qHyperCube.qSize.qcx - 1 === index;
 
   return (
@@ -37,14 +34,20 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
         display: 'flex',
         alignItems: 'center',
         borderStyle: 'solid',
-        borderWidth: isLastColumn ? '0px' : '0px 1px 0px 0px',
+        borderLeftWidth: '0px',
+        borderRightWidth: isLastColumn ? '0px' : '1px',
+        borderTopWidth: totals.atBottom ? '1px' : '0px',
+        borderBottomWidth: totals.atTop ? '1px' : '0px',
         padding: '4px 12px',
         justifyContent: index === 0 ? 'left' : 'right',
         boxSizing: 'border-box',
         cursor: 'default',
+        fontWeight: 'bold',
       }}
     >
-      <CellText singleLine>{label}</CellText>
+      <CellText wordBreak lines={1}>
+        {label}
+      </CellText>
     </div>
   );
 };

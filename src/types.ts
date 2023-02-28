@@ -40,11 +40,14 @@ export interface ExtendedNxDimensionInfo extends Omit<EngineAPI.INxDimensionInfo
   textAlign: TextAlign;
   qAttrExprInfo: ExtendedNxAttrExprInfo[];
   qLibraryId: string;
+  columnWidth: ColumnWidth;
 }
 
 export interface ExtendedNxMeasureInfo extends EngineAPI.INxMeasureInfo {
   textAlign: TextAlign;
   qAttrExprInfo: ExtendedNxAttrExprInfo[];
+  qLibraryId: string;
+  columnWidth: ColumnWidth;
 }
 
 export interface HyperCube extends Omit<EngineAPI.IHyperCube, 'qDimensionInfo' | 'qMeasureInfo'> {
@@ -108,9 +111,17 @@ export interface Row {
 
 export type SortDirection = 'A' | 'D';
 
+export interface ColumnWidth {
+  type: string;
+  pixels?: number;
+  percentage?: number;
+}
+
 export interface Column {
   id: string;
   isDim: boolean;
+  isMasterItem: boolean;
+  fieldId: string;
   isLocked: boolean;
   colIdx: number;
   pageColIdx: number;
@@ -119,8 +130,9 @@ export interface Column {
   stylingIDs: string[];
   sortDirection: SortDirection;
   qReverseSort: boolean;
-  totalInfo?: string;
+  totalInfo: string;
   qApprMaxGlyphCount: number;
+  columnWidth: ColumnWidth;
 }
 
 export type TotalsPosition = { atTop: boolean; atBottom: boolean };
@@ -183,20 +195,10 @@ export type Announce = (arg0: AnnounceArgs) => void;
 
 export type ChangeSortOrder = (column: Column, sortOrder?: SortDirection) => Promise<void>;
 
+export type ApplyColumnWidths = (newColumnSize: ColumnWidth, column: Column) => void;
+
 export interface Galaxy {
   translator: ExtendedTranslator;
   carbon: boolean;
   flags: stardust.Flags;
-}
-
-export interface RenderWithCarbonArguments {
-  env: Galaxy;
-  rootElement: HTMLElement;
-  model?: EngineAPI.IGenericObject;
-  theme: ExtendedTheme;
-  selectionsAPI: ExtendedSelectionAPI;
-  app?: EngineAPI.IApp;
-  rect: stardust.Rect;
-  layout: TableLayout;
-  changeSortOrder?: ChangeSortOrder;
 }

@@ -4,6 +4,7 @@ import useMeasureText, { MeasureTextHook } from '../use-measure-text';
 import useColumnSize from '../use-column-size';
 import { Column } from '../../../../types';
 import { GeneratedStyling } from '../../../types';
+import { appendCellPaddingAndBorder } from '../../utils/cell-width-utils';
 
 jest.mock('../use-measure-text');
 
@@ -58,7 +59,7 @@ describe('useColumnSize', () => {
     (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValue(50);
     const { result } = renderHook(() => useColumnSize(rect, columns, headerStyle, bodyStyle));
 
-    expect(result.current.width).toEqual([1000, 50, 50]);
+    expect(result.current.width).toEqual([1000, 50, 50].map(appendCellPaddingAndBorder));
   });
 
   test('should use estimated width given it produces the largest value', () => {
@@ -68,7 +69,7 @@ describe('useColumnSize', () => {
     (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValue(25);
     const { result } = renderHook(() => useColumnSize(rect, columns, headerStyle, bodyStyle));
 
-    expect(result.current.width).toEqual([500, 400, 300]);
+    expect(result.current.width).toEqual([500, 400, 300].map(appendCellPaddingAndBorder));
   });
 
   test('should use measured text width given it produces the largest value', () => {
@@ -78,6 +79,6 @@ describe('useColumnSize', () => {
     (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValueOnce(300);
     const { result } = renderHook(() => useColumnSize(rect, columns, headerStyle, bodyStyle));
 
-    expect(result.current.width).toEqual([500, 400, 300]);
+    expect(result.current.width).toEqual([500, 400, 300].map(appendCellPaddingAndBorder));
   });
 });

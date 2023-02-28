@@ -15,9 +15,11 @@ describe('handle-data', () => {
     colIdx = 1;
     pageColIdx = 2;
 
-    const getExpectedInfo = (isDim: boolean, isLocked?: boolean, totals = '') => ({
+    const getExpectedInfo = (isDim: boolean, isMasterItem?: boolean, isLocked?: boolean, totals = '') => ({
       isDim,
+      isMasterItem: isMasterItem || false,
       label: `title-${colIdx}`,
+      fieldId: isDim ? `title-${colIdx}` : '',
       id: `col-${pageColIdx}`,
       align: isDim ? 'left' : 'right',
       stylingIDs: [] as string[],
@@ -65,13 +67,19 @@ describe('handle-data', () => {
     it('should return column info for dimension with isLocked', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qLocked = true;
       const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
+      expect(columnInfo).toEqual(getExpectedInfo(true, false, true));
+    });
+
+    it('should return column info for master dimension ', () => {
+      layout.qHyperCube.qDimensionInfo[colIdx].qLibraryId = '#someId';
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
       expect(columnInfo).toEqual(getExpectedInfo(true, true));
     });
 
     it('should return column info for measure', () => {
       colIdx = 3;
       const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
-      expect(columnInfo).toEqual(getExpectedInfo(false, false, '200'));
+      expect(columnInfo).toEqual(getExpectedInfo(false, false, false, '200'));
     });
   });
 
@@ -191,10 +199,10 @@ describe('handle-data', () => {
       expect(getTotalInfo(layout, 1, 3, 2)).toBe('');
     });
 
-    it('should not get any total measure value when qGrandTotalRow has no value', () => {
+    it('should return empty string as total measure value when qGrandTotalRow has no value', () => {
       layout.qHyperCube.qGrandTotalRow = [];
-      expect(getTotalInfo(layout, 2, 2, 2)).toBe(undefined);
-      expect(getTotalInfo(layout, 3, 3, 2)).toBe(undefined);
+      expect(getTotalInfo(layout, 2, 2, 2)).toBe('');
+      expect(getTotalInfo(layout, 3, 3, 2)).toBe('');
     });
 
     it('should return new total label value', () => {

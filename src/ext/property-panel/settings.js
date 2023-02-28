@@ -210,6 +210,7 @@ const getChartExploration = (env) =>
           ref: 'enableChartExploration',
         },
         visibilityToggler: {
+          show: (itemData) => itemData.enableChartExploration,
           component: 'buttongroup',
           translation: 'properties.ChartExploration.VisibilityOption',
           ref: 'chartExploration.menuVisibility',

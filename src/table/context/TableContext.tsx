@@ -3,7 +3,10 @@ import React, { useState, createContext, useMemo } from 'react';
 import { createSelectorProvider } from './createSelectorProvider';
 import { ContextValue, ContextProviderProps } from '../types';
 import useSelectionReducer from '../hooks/use-selection-reducer';
-import { Row } from '../../types';
+import useColumnWidths from '../hooks/use-column-widths';
+import useTableStyling from '../hooks/use-table-styling';
+import { TableData } from '../../types';
+import { DEFAULT_FOCUS_CELL_COORD } from '../constants';
 
 // In order to not have typing issues when using properties on the context,
 // the initial value for the context is casted to ContextValue.
@@ -13,12 +16,13 @@ export const TableContext = createContext<ContextValue>({} as ContextValue);
 
 const ProviderWithSelector = createSelectorProvider(TableContext);
 
-const EMPTY_PAGE_ROWS: Row[] = [];
+export const EMPTY_TABLE_DATA = { rows: [], columns: [], totalsPosition: {} } as unknown as TableData;
 
 export const TableContextProvider = ({
+  app,
   children,
+  tableData = EMPTY_TABLE_DATA, // Always use the same object to avoid triggers infinite loop in use-selection-reducer.ts
   selectionsAPI,
-  pageRows = EMPTY_PAGE_ROWS, // Always use the same array to avoid triggers infinite loop in use-selection-reducer.ts
   cellCoordMock,
   selectionDispatchMock,
   layout,
@@ -29,14 +33,49 @@ export const TableContextProvider = ({
   keyboard,
   rootElement,
   embed,
+  changeSortOrder,
+  applyColumnWidths,
+  tableWidth = 0,
 }: ContextProviderProps) => {
   const [headRowHeight, setHeadRowHeight] = useState(0);
-  const [focusedCellCoord, setFocusedCellCoord] = useState((cellCoordMock || [0, 0]) as [number, number]);
-  const [selectionState, selectionDispatch] = useSelectionReducer(pageRows, selectionsAPI);
+  const [focusedCellCoord, setFocusedCellCoord] = useState(
+    (cellCoordMock || DEFAULT_FOCUS_CELL_COORD) as [number, number]
+  );
+  const [selectionState, selectionDispatch] = useSelectionReducer(tableData.rows, selectionsAPI);
   const [hoverIndex, setHoverIndex] = useState(-1);
+  const styling = useTableStyling(layout, theme, tableData, rootElement);
+  const [columnWidths, setColumnWidths, setYScrollbarWidth] = useColumnWidths(tableData.columns, tableWidth, styling);
   const baseProps = useMemo(
-    () => ({ selectionsAPI, layout, model, translator, constraints, theme, keyboard, rootElement, embed }),
-    [selectionsAPI, layout, model, translator, constraints, theme.name(), keyboard.active, rootElement, embed] // eslint-disable-line react-hooks/exhaustive-deps
+    () => ({
+      app,
+      selectionsAPI,
+      layout,
+      model,
+      translator,
+      constraints,
+      theme,
+      keyboard,
+      rootElement,
+      embed,
+      changeSortOrder,
+      applyColumnWidths,
+      styling,
+    }),
+    [
+      app,
+      selectionsAPI,
+      layout,
+      model,
+      translator,
+      constraints,
+      theme.name(),
+      keyboard.active,
+      rootElement,
+      embed,
+      changeSortOrder,
+      applyColumnWidths,
+      styling,
+    ]
   );
 
   return (
@@ -50,7 +89,11 @@ export const TableContextProvider = ({
         selectionDispatch: selectionDispatchMock || selectionDispatch,
         hoverIndex,
         setHoverIndex,
+        columnWidths,
+        setColumnWidths,
         baseProps,
+        tableData,
+        setYScrollbarWidth,
       }}
     >
       {children}

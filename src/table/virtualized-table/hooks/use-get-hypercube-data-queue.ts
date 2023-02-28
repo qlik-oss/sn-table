@@ -1,9 +1,5 @@
 import { useMemo, useRef } from 'react';
 
-export interface AbortablePromise {
-  isCancelled: boolean;
-}
-
 const pageToKey = ({ qLeft, qTop, qWidth, qHeight }: EngineAPI.INxPage) => `${qLeft}-${qTop}-${qWidth}-${qHeight}`;
 
 const useGetHyperCubeDataQueue = (
@@ -13,10 +9,14 @@ const useGetHyperCubeDataQueue = (
   const queued = useRef(new Set<EngineAPI.INxPage>()); // Keep track of all unique pages that should be retrieved
   const ongoing = useRef(new Set<EngineAPI.INxPage[]>()); // Keep track of ongoing request. Should be aborted if page info or layout is changed
   const finished = useRef(new Set<string>()); // Keep track of all unqiue pages that have added to the queue
+  const mutableGetDataPages = useRef(getDataPages);
+  const mutableHandleDataPages = useRef(handleDataPages);
+  mutableGetDataPages.current = getDataPages;
+  mutableHandleDataPages.current = handleDataPages;
 
   const queue = useMemo(
     () => ({
-      enqueue: (page: EngineAPI.INxPage) => {
+      enqueue: (page: EngineAPI.INxPage, onBeforeHandlePages?: () => void) => {
         const key = pageToKey(page);
 
         if (finished.current.has(key)) {
@@ -24,6 +24,7 @@ const useGetHyperCubeDataQueue = (
         }
 
         queued.current.add(page);
+
         // Add to finished before it's actually finished. That makes it easier to check if the page should be retrieved or not
         // as otherwise all three sets (queued, ongoing and finished) have to be queried for presence.
         finished.current.add(key);
@@ -31,15 +32,19 @@ const useGetHyperCubeDataQueue = (
         if (queued.current.size === 1) {
           queueMicrotask(async () => {
             const qPages = Array.from(queued.current.values());
+            if (qPages.length === 0) {
+              return;
+            }
 
             queued.current.clear();
             ongoing.current.add(qPages);
 
             try {
-              const qDataPages = await getDataPages(qPages);
+              const qDataPages = await mutableGetDataPages.current(qPages);
 
               if (ongoing.current.has(qPages)) {
-                handleDataPages(qDataPages);
+                onBeforeHandlePages?.();
+                mutableHandleDataPages.current(qDataPages);
               }
             } catch (error) {
               // Could mean that it failed to retrieve or handle the data pages. Removed them from "finished" so they can be fetched again
@@ -58,7 +63,7 @@ const useGetHyperCubeDataQueue = (
         finished.current.clear();
       },
     }),
-    [getDataPages, handleDataPages]
+    []
   );
 
   return queue;

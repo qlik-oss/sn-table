@@ -34,7 +34,6 @@ describe('styling-utils', () => {
     getStyle: () => undefined,
     background: { isDark: false, color: '#323232' },
   } as unknown as ExtendedTheme;
-  // TODO: switch these to sprout color constants
   const defaultBorderColors = {
     borderBottomColor: COLORING.BORDER_LIGHT,
     borderTopColor: COLORING.BORDER_HEAVY,

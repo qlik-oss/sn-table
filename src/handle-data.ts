@@ -47,7 +47,7 @@ export function getTotalPosition(layout: TableLayout) {
  * Gets the totals text for a column
  */
 export function getTotalInfo(layout: TableLayout, colIdx: number, pageColIdx: number, numDims: number) {
-  if (colIdx >= numDims) return layout.qHyperCube.qGrandTotalRow[colIdx - numDims]?.qText;
+  if (colIdx >= numDims) return layout.qHyperCube.qGrandTotalRow[colIdx - numDims]?.qText ?? '';
   if (colIdx === 0 && pageColIdx === 0) return layout.totals.label;
   return '';
 }
@@ -62,19 +62,39 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
   const info = (isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims]) as
     | ExtendedNxMeasureInfo
     | ExtendedNxDimensionInfo;
-  const { qError, qFallbackTitle, textAlign, qAttrExprInfo, qSortIndicator, qReverseSort, qApprMaxGlyphCount } = info;
+  const {
+    qError,
+    qFallbackTitle,
+    textAlign,
+    qAttrExprInfo,
+    qSortIndicator,
+    qReverseSort,
+    qApprMaxGlyphCount,
+    columnWidth,
+  } = info;
   const isHidden = qError?.qErrorCode === 7005;
   const isLocked = isDim && (info as ExtendedNxDimensionInfo).qLocked;
+  const isMasterItem = !!info.qLibraryId;
   const autoAlign = isDim ? 'left' : 'right';
+
+  let fieldIndex = 0;
+  let fieldId = '';
+  if (isDim) {
+    fieldIndex = (info as ExtendedNxDimensionInfo).qGroupPos;
+    fieldId = (info as ExtendedNxDimensionInfo).qGroupFieldDefs[fieldIndex];
+  }
 
   return (
     !isHidden && {
       isDim,
+      isMasterItem,
       isLocked,
+      fieldId,
       colIdx,
       pageColIdx,
       qApprMaxGlyphCount,
       qReverseSort,
+      columnWidth,
       id: `col-${pageColIdx}`,
       label: qFallbackTitle,
       align: !textAlign || textAlign.auto ? autoAlign : textAlign.align,

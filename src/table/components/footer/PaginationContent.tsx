@@ -10,6 +10,7 @@ import { handleLastTab } from '../../utils/handle-key-press';
 import { PaginationContentProps } from '../../types';
 import { getFooterStyle } from '../../utils/styling-utils';
 import { useContextSelector, TableContext } from '../../context';
+import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 
 const icons: Record<string, typeof ArrowLeft> = {
   FirstPage: ArrowLeftStop,
@@ -39,7 +40,6 @@ export const shouldShow = (component: string, width: number) => {
 
 function PaginationContent({
   direction,
-  tableData,
   pageInfo,
   setPageInfo,
   footerContainer,
@@ -48,7 +48,7 @@ function PaginationContent({
   handleChangePage,
   announce,
 }: PaginationContentProps) {
-  const { totalRowCount, totalColumnCount, totalPages } = tableData;
+  const { totalRowCount, totalColumnCount, totalPages } = useContextSelector(TableContext, (value) => value.tableData);
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const { keyboard, translator, theme, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
   const footerStyle = useMemo(() => getFooterStyle(theme.background), [theme]);
@@ -107,7 +107,7 @@ function PaginationContent({
         tabIndex={tabIndex}
         onKeyDown={onKeyDown}
       >
-        <IconComponent height="12px" />
+        <IconComponent height={DEFAULT_FONT_SIZE} />
       </StyledButton>
     );
   };

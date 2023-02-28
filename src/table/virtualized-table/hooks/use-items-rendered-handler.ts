@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { PageInfo, TableLayout } from '../../../types';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../constants';
+import { GridState } from '../types';
 import { LoadData } from './use-data';
 import { ScrollDirection } from './use-scroll-direction';
 
@@ -23,6 +24,7 @@ export interface ItemsHandlerProps {
   horizontalScrollDirection: React.MutableRefObject<ScrollDirection>;
   rowCount: number;
   pageInfo: PageInfo;
+  gridState: React.MutableRefObject<GridState>;
 }
 
 const useItemsRendererHandler = ({
@@ -33,6 +35,7 @@ const useItemsRendererHandler = ({
   horizontalScrollDirection,
   rowCount,
   pageInfo,
+  gridState,
 }: ItemsHandlerProps) => {
   const handleItemsRendered = useCallback(
     ({
@@ -41,6 +44,9 @@ const useItemsRendererHandler = ({
       overscanRowStartIndex,
       overscanRowStopIndex,
     }: OnItemsRendered) => {
+      gridState.current.overscanColumnStartIndex = overscanColumnStartIndex;
+      gridState.current.overscanRowStartIndex = overscanRowStartIndex;
+
       if (overscanRowStartIndex === 0 && overscanColumnStartIndex === 0) {
         // This case should handled by the initial data load
         return;
@@ -89,6 +95,7 @@ const useItemsRendererHandler = ({
       horizontalScrollDirection,
       rowCount,
       layout.qHyperCube.qSize,
+      gridState,
     ]
   );
 

@@ -5,10 +5,10 @@ import useEvent from '@testing-library/user-event';
 import HeadCellContent from '../HeadCellContent';
 import { TableLayout, ChangeSortOrder, ExtendedSelectionAPI, Column } from '../../../../types';
 import TestWithProviders from '../../../../__test__/test-with-providers';
+import CellText from '../../CellText';
 
 describe('<HeadCellContent />', () => {
   let column: Column;
-  let columnIndex: number;
   let isActive: boolean;
   let layout: TableLayout;
   let changeSortOrder: ChangeSortOrder;
@@ -23,14 +23,11 @@ describe('<HeadCellContent />', () => {
         cellCoordMock={cellCoordMock}
         constraints={constraints}
         layout={layout}
+        changeSortOrder={changeSortOrder}
       >
-        <HeadCellContent
-          column={column}
-          columnIndex={columnIndex}
-          changeSortOrder={changeSortOrder}
-          isActive={isActive}
-          areBasicFeaturesEnabled={areBasicFeaturesEnabled}
-        />
+        <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled={areBasicFeaturesEnabled}>
+          <CellText>{column.label}</CellText>
+        </HeadCellContent>
       </TestWithProviders>
     );
 
@@ -44,8 +41,8 @@ describe('<HeadCellContent />', () => {
       isLocked: false,
       colIdx: 0,
       qReverseSort: false,
+      pageColIdx: 0,
     } as Column;
-    columnIndex = 0;
     layout = {
       qHyperCube: {
         qEffectiveInterColumnSortOrder: [0, 1],
@@ -72,6 +69,17 @@ describe('<HeadCellContent />', () => {
     waitFor(async () => {
       expect(baseElement.querySelector('#sn-table-head-menu-button')).toBeVisible();
     });
+  });
+
+  it('should not show the menu button when column is a master dimension', () => {
+    areBasicFeaturesEnabled = true;
+    column = {
+      ...column,
+      isMasterItem: true,
+    };
+    const { baseElement } = renderTableHead();
+    // TODO: add a proper title for the button
+    expect(baseElement.querySelector('#sn-table-head-menu-button')).not.toBeInTheDocument();
   });
 
   it('should show the menu button when the head cell is hovered', () => {

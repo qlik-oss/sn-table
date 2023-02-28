@@ -9,7 +9,7 @@ const getExploration = (env) =>
         columnHandler: {
           component: 'column-handler',
           search: true,
-          selectAll: true,
+          selectAll: false,
         },
       },
       classification: {

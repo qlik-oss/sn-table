@@ -1,28 +1,23 @@
 /* eslint jsx-a11y/no-static-element-interactions: 0 jsx-a11y/mouse-events-have-key-events: 0 */
 import React from 'react';
 import { areEqual } from 'react-window';
-import { Column, Row } from '../../types';
 import { useContextSelector, TableContext } from '../context';
 import useSelector from './hooks/use-selector';
 import EmptyCell from './EmptyCell';
 import CellText from '../components/CellText';
 import getCellStyle from './utils/get-cell-style';
-import { BodyStyle } from './types';
+import { ItemData } from './types';
+import { BORDER_WIDTH, PADDING_LEFT_RIGHT } from './constants';
 
 interface CellProps {
   columnIndex: number;
   rowIndex: number;
   style: React.CSSProperties;
-  data: {
-    rowsInPage: Row[];
-    columns: Column[];
-    bodyStyle: BodyStyle;
-    isHoverEnabled: boolean;
-  };
+  data: ItemData;
 }
 
 const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
-  const { rowsInPage, columns, bodyStyle, isHoverEnabled } = data;
+  const { rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount } = data;
   const cell = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
 
   const rowIsHovered = useContextSelector(TableContext, (value) => value.hoverIndex === rowIndex);
@@ -48,11 +43,11 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           display: 'flex',
           alignItems: 'center',
           borderWidth: '0px',
-          borderBottomWidth: cell.isLastRow ? '0px' : '1px',
-          borderRightWidth: cell.isLastColumn ? '0px' : '1px',
+          borderBottomWidth: cell.isLastRow ? '0px' : `${BORDER_WIDTH}px`,
+          borderRightWidth: cell.isLastColumn ? '0px' : `${BORDER_WIDTH}px`,
           borderStyle: 'solid',
           justifyContent: columns[columnIndex].align,
-          padding: '4px 12px',
+          padding: `4px ${PADDING_LEFT_RIGHT}px`,
           boxSizing: 'border-box',
           cursor: 'default',
         }}
@@ -62,7 +57,9 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         onMouseEnter={isHoverEnabled ? () => setHoverIndex(rowIndex) : undefined}
         onMouseLeave={isHoverEnabled ? () => setHoverIndex(-1) : undefined}
       >
-        <CellText singleLine>{cell.qText}</CellText>
+        <CellText wordBreak lines={maxLineCount}>
+          {cell.qText}
+        </CellText>
       </div>
     );
   }

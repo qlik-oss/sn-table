@@ -1,61 +1,7 @@
-import { stardust } from '@nebula.js/stardust';
-import { Cell, ExtendedSelectionAPI, Announce, Row } from '../../types';
-import { SelectionState, SelectPayload, SelectionActionTypes, SelectionDispatch } from '../types';
+import { Cell, Announce, Row } from '../../types';
+import { SelectionState, SelectPayload, SelectionActionTypes } from '../types';
 import { SelectionActions, SelectionStates, KeyCodes } from '../constants';
 import { isShiftArrow } from './handle-key-press';
-
-interface AddSelectionListenersArgs {
-  api: ExtendedSelectionAPI;
-  selectionDispatch: SelectionDispatch;
-  setShouldRefocus(): void;
-  keyboard: stardust.Keyboard;
-  tableWrapperRef: React.MutableRefObject<HTMLDivElement | null>;
-}
-
-/**
- * Adds callbacks to events on the selection api
- */
-export function addSelectionListeners({
-  api,
-  selectionDispatch,
-  setShouldRefocus,
-  keyboard,
-  tableWrapperRef,
-}: AddSelectionListenersArgs) {
-  const resetSelections = () => {
-    selectionDispatch({ type: SelectionActions.RESET });
-  };
-  const clearSelections = () => {
-    selectionDispatch({ type: SelectionActions.CLEAR });
-  };
-  const resetSelectionsAndSetupRefocus = () => {
-    if (tableWrapperRef.current?.contains(document.activeElement)) {
-      // if there is a focus in the chart,
-      // set shouldRefocus so that you should either
-      // focus or just set the tabstop, after data has reloaded.
-      setShouldRefocus();
-    } else if (keyboard.enabled) {
-      // if there is no focus on the chart,
-      // make sure you blur the table
-      // and focus the entire chart (table's parent element)
-      // @ts-ignore TODO: fix nebula api so that blur has the correct argument type
-      keyboard.blur?.(true);
-    }
-    resetSelections();
-  };
-
-  api.on('deactivated', resetSelections);
-  api.on('canceled', resetSelections);
-  api.on('confirmed', resetSelectionsAndSetupRefocus);
-  api.on('cleared', clearSelections);
-  // Return function called on unmount
-  return () => {
-    api.removeListener('deactivated', resetSelections);
-    api.removeListener('canceled', resetSelections);
-    api.removeListener('confirmed', resetSelectionsAndSetupRefocus);
-    api.removeListener('cleared', clearSelections);
-  };
-}
 
 /**
  * Gets the selection state of the given cell
@@ -171,7 +117,7 @@ export const getMultiSelectedRows = (
     newSelectedRows[cell.qElemNumber] = cell.rowIdx;
     // also add the next or previous cell to selectedRows, based on which arrow is pressed
     const idxShift = evt.key === KeyCodes.DOWN ? 1 : -1;
-    const nextCell = pageRows[cell.pageRowIdx + idxShift][`col-${cell.colIdx}`] as Cell;
+    const nextCell = pageRows[cell.pageRowIdx + idxShift][`col-${cell.pageColIdx}`] as Cell;
     newSelectedRows[nextCell.qElemNumber] = cell.rowIdx + idxShift;
     return newSelectedRows;
   }
@@ -181,7 +127,7 @@ export const getMultiSelectedRows = (
   const highestRowIdx = Math.max(firstCell.pageRowIdx, cell.pageRowIdx);
 
   for (let idx = lowestRowIdx; idx <= highestRowIdx; idx++) {
-    const selectedCell = pageRows[idx][`col-${firstCell.colIdx}`] as Cell;
+    const selectedCell = pageRows[idx][`col-${firstCell.pageColIdx}`] as Cell;
     newSelectedRows[selectedCell.qElemNumber] = selectedCell.rowIdx;
   }
 

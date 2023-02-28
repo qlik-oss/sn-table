@@ -1,4 +1,5 @@
 import { Column, Row } from '../../../../../types';
+import { SetCellSize } from '../../../types';
 
 const createRow = (
   prevRows: Row[],
@@ -7,24 +8,28 @@ const createRow = (
   qArea: EngineAPI.IRect,
   pageRowStartIdx: number,
   columns: Column[],
-  qSize: EngineAPI.ISize
+  qSize: EngineAPI.ISize,
+  setCellSize: SetCellSize
 ) => {
   const rowIdx = qArea.qTop + matrixRowIdx;
   const pageRowIdx = pageRowStartIdx + matrixRowIdx;
   const row: Row = prevRows[pageRowIdx] ?? { key: `row-${pageRowIdx}` };
 
   matrixRow.forEach((cell, matrixColIdx: number) => {
-    const colIdx = matrixColIdx + qArea.qLeft;
-    row[`col-${colIdx}`] = {
+    const pageColIdx = matrixColIdx + qArea.qLeft;
+    const { colIdx, isDim, isLocked, id } = columns[pageColIdx];
+    row[id] = {
       ...cell,
       rowIdx,
       colIdx,
-      isSelectable: columns[colIdx].isDim && !columns[colIdx].isLocked,
+      isSelectable: isDim && !isLocked,
       pageRowIdx,
-      pageColIdx: colIdx,
+      pageColIdx,
       isLastRow: rowIdx === qSize.qcy - 1,
-      isLastColumn: colIdx === qSize.qcx - 1,
+      isLastColumn: pageColIdx === qSize.qcx - 1,
     };
+
+    setCellSize(cell.qText ?? '', pageRowIdx, pageColIdx);
   });
 
   return {

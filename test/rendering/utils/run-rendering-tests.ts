@@ -8,13 +8,14 @@ import createNebulaRoutes from './routes';
 import createPlaywright from './playwright';
 
 const paths = { fixtures: path.join(__dirname, '../__fixtures__') };
+const port = 8000;
 
 const runRenderingTests = (theme: Object | Function, themeType: String, language: String) => {
   let nebulaServer;
   let playwright;
   let route;
 
-  test.beforeAll(async () => {
+  test.beforeAll(async ({}, workerInfo) => {
     nebulaServer = await serve({
       // the entry is equal to path.resolve(__dirname, '../../dist/sn-table.js'),
       // so before run the testing, yarn build should run first to generate /dist
@@ -29,7 +30,9 @@ const runRenderingTests = (theme: Object | Function, themeType: String, language
         },
       ],
       fixturePath: 'test/rendering/__fixtures__',
+      port: port + workerInfo.workerIndex,
     });
+
     route = createNebulaRoutes(nebulaServer.url);
   });
 
@@ -55,9 +58,9 @@ const runRenderingTests = (theme: Object | Function, themeType: String, language
       console.log({ renderUrl });
       // Open page in Nebula which renders fixture
       await playwright.open(renderUrl);
-      if (name === 'scenario_9' || name === 'scenario_10') await page.hover('text=Tampere');
-      if (name === 'scenario_11') await page.hover('text=Valley Solutions');
-      if (name === 'scenario_12') {
+      if (name.includes('scenario_9') || name.includes('scenario_10')) await page.hover('text=Tampere');
+      if (name.includes('scenario_11')) await page.hover('text=Valley Solutions');
+      if (name.includes('scenario_12')) {
         const element = page.locator('text=Zocalo');
         await element.scrollIntoViewIfNeeded();
       }

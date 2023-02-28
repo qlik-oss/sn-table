@@ -9,10 +9,40 @@
     "comment": "number of rows and columns announced by the screen reader. (tew 210929)",
     "version": "HKjzXNhL9hPs/kFY0XyjTQ=="
   },
+  "SNTable.MenuItem.ClearSelections": {
+    "value": "Wyczyść wybory",
+    "comment": "label for clearing all selected items in field.",
+    "version": "Yo9E0ACzgR/BZ6cK0qwRuw=="
+  },
   "SNTable.MenuItem.Search": {
     "value": "Wyszukaj",
-    "comment": "label for menu item to search in dimension.",
-    "version": "+fqjoaY7NnQcJ4AboIJThg=="
+    "comment": "label for menu item to search in field.",
+    "version": "+eDY6cVynDVMJOA38QhPgA=="
+  },
+  "SNTable.MenuItem.SelectAll": {
+    "value": "Wybierz wszystko",
+    "comment": "label for select all items in field.",
+    "version": "GPqFhWy49fk9/nI38sDOHg=="
+  },
+  "SNTable.MenuItem.SelectAlternative": {
+    "value": "Wybierz alternatywę",
+    "comment": "label for select alternative items in field.",
+    "version": "h99bbT3iYnLvT/SSC6av3g=="
+  },
+  "SNTable.MenuItem.SelectExcluded": {
+    "value": "Wybierz wykluczone",
+    "comment": "label for select excluded items in field.",
+    "version": "+cECm9pb6rl/3zo1a4NADw=="
+  },
+  "SNTable.MenuItem.SelectPossible": {
+    "value": "Wybierz możliwe",
+    "comment": "label for select possible items in field.",
+    "version": "4siNdUI0Zifh5diBJNQquQ=="
+  },
+  "SNTable.MenuItem.Selections": {
+    "value": "Wybory",
+    "comment": "label for selections menu in field.",
+    "version": "3hLtXPt3fSypgwaD9Pr8cg=="
   },
   "SNTable.MenuItem.SortAscending": {
     "value": "Sortuj rosnąco",

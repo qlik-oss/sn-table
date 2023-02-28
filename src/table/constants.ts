@@ -34,4 +34,19 @@ export enum FullSortDirection {
   D = 'descending',
 }
 
+export enum ColumnWidthTypes {
+  PIXELS = 'pixels',
+  PERCENTAGE = 'percentage',
+  HUG = 'hug',
+  FILL = 'fill',
+}
+
+export const MIN_COLUMN_WIDTH = 120;
+export const MAX_COLUMN_WIDTH = 7680;
+export const MAX_COLUMN_PERCENTAGE_WIDTH = 100;
+export const DEFAULT_COLUMN_PIXEL_WIDTH = 200;
+export const DEFAULT_COLUMN_PERCENTAGE_WIDTH = 20;
+
 export const PAGINATION_HEIGHT = 40;
+
+export const DEFAULT_FOCUS_CELL_COORD = [0, 0] as [number, number];

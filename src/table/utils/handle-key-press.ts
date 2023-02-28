@@ -134,8 +134,8 @@ export const handleHeadKeyDown = ({
   setFocusedCellCoord,
   isInteractionEnabled,
   areBasicFeaturesEnabled,
-  isLabelLast,
-}: HandleHeadKeyDownProps) => {
+}: // isLastColumn,
+HandleHeadKeyDownProps) => {
   if (!isInteractionEnabled) {
     preventDefaultBehavior(evt);
     return;

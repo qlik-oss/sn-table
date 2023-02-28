@@ -1,6 +1,7 @@
 import { act, renderHook, RenderHookResult, waitFor } from '@testing-library/react';
 import { Cell, Column, PageInfo, Row, TableLayout } from '../../../../types';
 import { generateDataPages, generateLayout } from '../../../../__test__/generate-test-data';
+import { GridState, SetCellSize } from '../../types';
 import useData, { UseData } from '../use-data';
 
 interface OverrideUseDataProps {
@@ -24,9 +25,13 @@ describe('useData', () => {
   let columns: Column[];
   let renderHookResult: RenderHookResult<UseData, unknown>;
   let doRenderHook: (renderWithProps?: OverrideUseDataProps) => Promise<void>;
+  let setCellSizeMock: jest.MockedFunction<SetCellSize>;
+  let gridState: React.MutableRefObject<GridState>;
 
   beforeEach(() => {
     layout = generateLayout(1, 1, 5);
+
+    gridState = { current: { overscanColumnStartIndex: 0, overscanRowStartIndex: 0 } };
 
     pageInfo = {
       page: 0,
@@ -42,7 +47,12 @@ describe('useData', () => {
       Promise.resolve(pages.map(generateDataPage))
     );
 
-    columns = [{ isDim: false, isLocked: false } as Column, { isDim: false, isLocked: false } as Column];
+    columns = [
+      { isDim: false, isLocked: false, id: 'col-0', colIdx: 0 } as Column,
+      { isDim: false, isLocked: false, id: 'col-1', colIdx: 1 } as Column,
+    ];
+
+    setCellSizeMock = jest.fn() as jest.MockedFunction<SetCellSize>;
 
     doRenderHook = (renderWithProps: OverrideUseDataProps = {}) => {
       return act(async () => {
@@ -54,7 +64,9 @@ describe('useData', () => {
             renderWithProps.rowCount ?? 20,
             renderWithProps.visibleRowCount ?? 1,
             renderWithProps.visibleColumnCount ?? 1,
-            renderWithProps.columns ?? columns
+            renderWithProps.columns ?? columns,
+            setCellSizeMock,
+            gridState
           )
         );
       });
@@ -293,6 +305,57 @@ describe('useData', () => {
       await waitFor(() => expect(result.current.rowsInPage).toEqual(expectedRows));
     });
 
+    test('should insert row data at correct index based on grid state', async () => {
+      gridState.current.overscanColumnStartIndex = 1;
+      gridState.current.overscanRowStartIndex = 2;
+      await doRenderHook();
+
+      const { result } = renderHookResult;
+
+      const expectedRow: Row = {
+        'col-1': {
+          colIdx: 1,
+          isLastRow: false,
+          isLastColumn: true,
+          isSelectable: false,
+          pageColIdx: 1,
+          pageRowIdx: 2,
+          qText: '0',
+          rowIdx: 2,
+        } as Cell,
+        key: 'row-2',
+      };
+
+      await waitFor(() =>
+        expect(result.current.rowsInPage[gridState.current.overscanRowStartIndex]).toEqual(expectedRow)
+      );
+    });
+
+    test('should set correct column index', async () => {
+      columns = [{ isDim: true, isLocked: false, id: 'col-0', colIdx: 3 } as Column];
+      await doRenderHook({ columns });
+
+      const { result } = renderHookResult;
+
+      const expectedRows: Row[] = [
+        {
+          'col-0': {
+            colIdx: 3,
+            isLastRow: false,
+            isLastColumn: false,
+            isSelectable: true,
+            pageColIdx: 0,
+            pageRowIdx: 0,
+            qText: '0',
+            rowIdx: 0,
+          } as Cell,
+          key: 'row-0',
+        },
+      ];
+
+      await waitFor(() => expect(result.current.rowsInPage).toEqual(expectedRows));
+    });
+
     test('should reset rowsInPage when pageInfo changes', async () => {
       await doRenderHook();
       const { rerender } = renderHookResult;
@@ -324,7 +387,7 @@ describe('useData', () => {
 
   describe('should set correct state for isSelectable', () => {
     test('when column is a dimension and not locked', async () => {
-      columns = [{ isDim: true, isLocked: false } as Column];
+      columns = [{ isDim: true, isLocked: false, id: 'col-0', colIdx: 0 } as Column];
       await doRenderHook({ columns });
 
       const { result } = renderHookResult;
@@ -333,7 +396,7 @@ describe('useData', () => {
     });
 
     test('when column is a dimension and is locked', async () => {
-      columns = [{ isDim: true, isLocked: true } as Column];
+      columns = [{ isDim: true, isLocked: true, id: 'col-0', colIdx: 0 } as Column];
       await doRenderHook({ columns });
 
       const { result } = renderHookResult;
@@ -342,7 +405,7 @@ describe('useData', () => {
     });
 
     test('when column is a measure', async () => {
-      columns = [{ isDim: false, isLocked: false } as Column];
+      columns = [{ isDim: false, isLocked: false, id: 'col-0', colIdx: 0 } as Column];
       await doRenderHook({ columns });
 
       const { result } = renderHookResult;
