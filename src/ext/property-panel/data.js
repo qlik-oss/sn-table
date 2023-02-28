@@ -227,7 +227,7 @@ const getPresentation = (env) => ({
   ...getColumnResize(env),
 });
 
-const getDimensionItems = {
+const dimensionItems = {
   libraryId: {
     type: 'string',
     component: 'library-item',
@@ -283,7 +283,7 @@ const getData = (env) =>
               field: {
                 type: 'items',
                 translation: 'Common.Field',
-                items: getDimensionItems,
+                items: dimensionItems,
               },
               presentation: {
                 type: 'items',
@@ -325,7 +325,7 @@ const getData = (env) =>
             ref: 'qHyperCubeDef.qDimensions',
             grouped: true,
             items: {
-              ...getDimensionItems,
+              ...dimensionItems,
               ...getPresentation(env),
             },
           },
