@@ -69,7 +69,7 @@ const useDynamicRowHeight = ({
 
   const getCellSize = useCallback(
     (text: string, colIdx: number) => {
-      const width = measureText(text);
+      const width = measureText(text.trim());
       const cellWidth = columns
         ? subtractCellPaddingIconsAndBorder(columnWidth[colIdx], columns[colIdx])
         : subtractCellPaddingAndBorder(columnWidth[colIdx]);
