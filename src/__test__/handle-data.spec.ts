@@ -15,9 +15,9 @@ describe('handle-data', () => {
     colIdx = 1;
     pageColIdx = 2;
 
-    const getExpectedInfo = (isDim: boolean, isMasterItem?: boolean, isLocked?: boolean, totals = '') => ({
+    const getExpectedInfo = (isDim: boolean, qLibraryId?: string, isLocked?: boolean, totals = '') => ({
       isDim,
-      isMasterItem: isMasterItem || false,
+      qLibraryId,
       label: `title-${colIdx}`,
       fieldId: isDim ? `title-${colIdx}` : '',
       id: `col-${pageColIdx}`,
@@ -67,19 +67,19 @@ describe('handle-data', () => {
     it('should return column info for dimension with isLocked', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qLocked = true;
       const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
-      expect(columnInfo).toEqual(getExpectedInfo(true, false, true));
+      expect(columnInfo).toEqual(getExpectedInfo(true, undefined, true));
     });
 
     it('should return column info for master dimension ', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qLibraryId = '#someId';
       const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
-      expect(columnInfo).toEqual(getExpectedInfo(true, true));
+      expect(columnInfo).toEqual(getExpectedInfo(true, '#someId'));
     });
 
     it('should return column info for measure', () => {
       colIdx = 3;
       const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
-      expect(columnInfo).toEqual(getExpectedInfo(false, false, false, '200'));
+      expect(columnInfo).toEqual(getExpectedInfo(false, undefined, false, '200'));
     });
   });
 

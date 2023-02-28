@@ -14,7 +14,6 @@ describe('useFieldSelection()', () => {
   beforeEach(() => {
     column = {
       isDim: true,
-      isMasterItem: false,
       fieldId: 'dim#01',
       label: 'dim#01',
     } as Column;

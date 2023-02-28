@@ -196,7 +196,6 @@ describe('<HeadCellMenu />', () => {
   it('should call `embed.__DO_NOT_USE__.popover()` once while trying to open listbox filter for a master dimension', async () => {
     column = {
       ...column,
-      isMasterItem: true,
       qLibraryId: 'someLibId',
     };
     renderTableHeadCellMenu();

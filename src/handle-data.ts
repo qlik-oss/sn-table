@@ -74,7 +74,6 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
   } = info;
   const isHidden = qError?.qErrorCode === 7005;
   const isLocked = isDim && (info as ExtendedNxDimensionInfo).qLocked;
-  const isMasterItem = !!info.qLibraryId;
   const autoAlign = isDim ? 'left' : 'right';
 
   let fieldIndex = 0;
@@ -87,7 +86,6 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
   return (
     !isHidden && {
       isDim,
-      isMasterItem,
       isLocked,
       fieldId,
       colIdx,
@@ -97,7 +95,7 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
       columnWidth,
       id: `col-${pageColIdx}`,
       label: qFallbackTitle,
-      qLibraryId: isMasterItem ? info.qLibraryId : undefined,
+      qLibraryId: info.qLibraryId,
       align: !textAlign || textAlign.auto ? autoAlign : textAlign.align,
       stylingIDs: qAttrExprInfo.map((expr) => expr.id),
       // making sure that qSortIndicator is either A or D
