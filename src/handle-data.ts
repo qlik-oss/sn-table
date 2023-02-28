@@ -97,6 +97,7 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
       columnWidth,
       id: `col-${pageColIdx}`,
       label: qFallbackTitle,
+      qLibraryId: isMasterItem ? info.qLibraryId : undefined,
       align: !textAlign || textAlign.auto ? autoAlign : textAlign.align,
       stylingIDs: qAttrExprInfo.map((expr) => expr.id),
       // making sure that qSortIndicator is either A or D

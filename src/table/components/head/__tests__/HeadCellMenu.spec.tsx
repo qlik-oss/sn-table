@@ -193,6 +193,28 @@ describe('<HeadCellMenu />', () => {
     );
   });
 
+  it('should call `embed.__DO_NOT_USE__.popover()` once while trying to open listbox filter for a master dimension', async () => {
+    column = {
+      ...column,
+      isMasterItem: true,
+      qLibraryId: 'someLibId',
+    };
+    renderTableHeadCellMenu();
+
+    fireEvent.click(screen.getByRole('button'));
+    await waitFor(() => {
+      expect(screen.queryByRole('menu')).toBeVisible();
+    });
+    fireEvent.click(screen.getByText('SNTable.MenuItem.Search'));
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(embed.__DO_NOT_USE__.popover).toHaveBeenCalledTimes(1);
+    expect(embed.__DO_NOT_USE__.popover).toHaveBeenCalledWith(
+      expect.any(HTMLDivElement),
+      { qLibraryId: column.qLibraryId, type: 'dimension' },
+      defaultListboxAnchorOpts
+    );
+  });
+
   it('should reflect correct `enabled` status of selection actions based', async () => {
     renderTableHeadCellMenu();
 

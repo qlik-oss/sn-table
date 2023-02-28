@@ -17,7 +17,7 @@ import RecursiveMenuList from './MenuList/RecursiveMenuList';
 import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 
 export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
-  const showSearchMenuItem = column.isDim && !column.isMasterItem;
+  const showSearchMenuItem = column.isDim;
   const anchorRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
@@ -31,9 +31,10 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
   } = useFieldSelection(column);
 
   const embedListbox = useCallback(() => {
+    const fieldId = column.isMasterItem ? { qLibraryId: column.qLibraryId, type: 'dimension' } : column.fieldId;
     // @ts-ignore TODO: no types for `__DO_NOT_USE__`, it will improve when it becomes stable
     // eslint-disable-next-line
-    embed.__DO_NOT_USE__.popover(listboxRef.current, column.fieldId, {
+    embed.__DO_NOT_USE__.popover(listboxRef.current, fieldId, {
       anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
       transformOrigin: { vertical: 'top', horizontal: 'left' },
     });
@@ -42,7 +43,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
     embed.on('fieldPopoverClose', () => {
       setOpenListboxDropdown(false);
     });
-  }, [embed, column.fieldId]);
+  }, [embed, column.fieldId, column.isMasterItem, column.qLibraryId]);
 
   useEffect(() => {
     if (!openMenuDropdown) resetSelectionActionsEnabledStatus();
