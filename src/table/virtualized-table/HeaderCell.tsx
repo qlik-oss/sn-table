@@ -41,7 +41,6 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         justifyContent: column.align,
         boxSizing: 'border-box',
         cursor: 'default',
-        fontWeight: 'bold',
         zIndex: columns.length - index,
         flexDirection,
         userSelect: 'none',
