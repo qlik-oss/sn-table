@@ -71,10 +71,10 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
     qReverseSort,
     qApprMaxGlyphCount,
     columnWidth,
+    qLibraryId,
   } = info;
   const isHidden = qError?.qErrorCode === 7005;
   const isLocked = isDim && (info as ExtendedNxDimensionInfo).qLocked;
-  const isMasterItem = !!info.qLibraryId;
   const autoAlign = isDim ? 'left' : 'right';
 
   let fieldIndex = 0;
@@ -87,10 +87,10 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
   return (
     !isHidden && {
       isDim,
-      isMasterItem,
       isLocked,
       fieldId,
       colIdx,
+      qLibraryId,
       pageColIdx,
       qApprMaxGlyphCount,
       qReverseSort,

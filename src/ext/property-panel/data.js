@@ -220,7 +220,14 @@ const getColumnResize = (env) =>
       }
     : {};
 
-const getDimensionItems = (env) => ({
+const getPresentation = (env) => ({
+  ...columnCommonHidden,
+  ...columnExpressionItems,
+  ...textAlignItems,
+  ...getColumnResize(env),
+});
+
+const dimensionItems = {
   libraryId: {
     type: 'string',
     component: 'library-item',
@@ -244,11 +251,7 @@ const getDimensionItems = (env) => ({
     translation: 'properties.dimensions.showNull',
     inverted: true,
   },
-  ...columnCommonHidden,
-  ...columnExpressionItems,
-  ...textAlignItems,
-  ...getColumnResize(env),
-});
+};
 
 const getMeasureItems = (env) => ({
   libraryId: {
@@ -263,11 +266,7 @@ const getMeasureItems = (env) => ({
     component: 'inline-measure',
     show: (itemData) => !itemData.qLibraryId,
   },
-  ...columnCommonHidden,
-  ...columnExpressionItems,
-  ...textAlignItems,
   totalsAggr: getTotalsAggr(env),
-  ...getColumnResize(env),
 });
 
 const getData = (env) =>
@@ -279,13 +278,35 @@ const getData = (env) =>
         items: {
           dimension: {
             type: 'items',
-            component: 'items',
-            items: getDimensionItems(env),
+            component: 'expandable-items',
+            items: {
+              field: {
+                type: 'items',
+                translation: 'Common.Field',
+                items: dimensionItems,
+              },
+              presentation: {
+                type: 'items',
+                translation: 'properties.presentation',
+                items: getPresentation(env),
+              },
+            },
           },
           measure: {
             type: 'items',
-            component: 'items',
-            items: getMeasureItems(env),
+            component: 'expandable-items',
+            items: {
+              field: {
+                type: 'items',
+                translation: 'Common.Field',
+                items: getMeasureItems(env),
+              },
+              presentation: {
+                type: 'items',
+                translation: 'properties.presentation',
+                items: getPresentation(env),
+              },
+            },
           },
         },
       }
@@ -303,14 +324,20 @@ const getData = (env) =>
             component: 'expandable-items',
             ref: 'qHyperCubeDef.qDimensions',
             grouped: true,
-            items: getDimensionItems(env),
+            items: {
+              ...dimensionItems,
+              ...getPresentation(env),
+            },
           },
           measures: {
             type: 'array',
             component: 'expandable-items',
             ref: 'qHyperCubeDef.qMeasures',
             grouped: true,
-            items: getMeasureItems(env),
+            items: {
+              ...getMeasureItems(env),
+              ...getPresentation(env),
+            },
           },
         },
       };

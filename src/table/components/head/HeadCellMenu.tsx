@@ -11,13 +11,13 @@ import SelectExcluded from '@qlik-trial/sprout/icons/react/SelectExcluded';
 import useFieldSelection from '../../hooks/use-field-selection';
 import { useContextSelector, TableContext } from '../../context';
 import { HeadCellMenuProps, MenuItemGroup } from '../../types';
-import { StyledMenuIconButton } from './styles';
+import { HeadCellMenuWrapper, StyledMenuIconButton } from './styles';
 import { TableLayout } from '../../../types';
 import RecursiveMenuList from './MenuList/RecursiveMenuList';
 import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 
 export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
-  const showSearchMenuItem = column.isDim && !column.isMasterItem;
+  const showSearchMenuItem = column.isDim;
   const anchorRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
@@ -31,9 +31,10 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
   } = useFieldSelection(column);
 
   const embedListbox = useCallback(() => {
+    const fieldId = column.qLibraryId ? { qLibraryId: column.qLibraryId, type: 'dimension' } : column.fieldId;
     // @ts-ignore TODO: no types for `__DO_NOT_USE__`, it will improve when it becomes stable
     // eslint-disable-next-line
-    embed.__DO_NOT_USE__.popover(listboxRef.current, column.fieldId, {
+    embed.__DO_NOT_USE__.popover(listboxRef.current, fieldId, {
       anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
       transformOrigin: { vertical: 'top', horizontal: 'left' },
     });
@@ -42,7 +43,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
     embed.on('fieldPopoverClose', () => {
       setOpenListboxDropdown(false);
     });
-  }, [embed, column.fieldId]);
+  }, [embed, column.fieldId, column.qLibraryId]);
 
   useEffect(() => {
     if (!openMenuDropdown) resetSelectionActionsEnabledStatus();
@@ -145,10 +146,9 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
   );
 
   return menuItemGroups.length ? (
-    <>
+    <HeadCellMenuWrapper rightAligned={column.align === 'right'}>
       <StyledMenuIconButton
         isVisible={openListboxDropdown || openMenuDropdown}
-        rightAligned={column.align === 'right'}
         ref={anchorRef}
         size="small"
         tabIndex={tabIndex}
@@ -170,6 +170,6 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
         menuGroups={menuItemGroups}
         ariaLabel="sn-table-head-menu-button"
       />
-    </>
+    </HeadCellMenuWrapper>
   ) : null;
 }

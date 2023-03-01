@@ -41,14 +41,13 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         justifyContent: column.align,
         boxSizing: 'border-box',
         cursor: 'default',
-        fontWeight: 'bold',
         zIndex: columns.length - index,
         flexDirection,
         userSelect: 'none',
       }}
     >
       <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled>
-        <CellText wordBreak lines={1}>
+        <CellText wordBreak lines={3}>
           {column.label}
         </CellText>
       </HeadCellContent>

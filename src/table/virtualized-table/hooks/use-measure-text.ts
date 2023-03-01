@@ -8,10 +8,14 @@ export interface MeasureTextHook {
 
 const MAGIC_DEFAULT_CHAR = 'M';
 
-export default function useMeasureText(fontSize: string | undefined, fontFamily: string | undefined): MeasureTextHook {
+export default function useMeasureText(
+  fontSize: string | undefined,
+  fontFamily: string | undefined,
+  boldText?: boolean
+): MeasureTextHook {
   const { estimateWidth, measureText } = useMemo((): MeasureTextHook => {
     const context = document.createElement('canvas').getContext('2d') as CanvasRenderingContext2D;
-    context.font = `${fontSize} ${fontFamily}`;
+    context.font = `${boldText ? '600' : ''} ${fontSize} ${fontFamily}`;
 
     const memoizedMeasureText = memoize(context.measureText.bind(context)) as (text: string) => TextMetrics;
 

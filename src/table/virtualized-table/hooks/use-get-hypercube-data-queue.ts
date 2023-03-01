@@ -1,4 +1,5 @@
 import { useMemo, useRef } from 'react';
+import useMutableProp from './use-mutable-prop';
 
 const pageToKey = ({ qLeft, qTop, qWidth, qHeight }: EngineAPI.INxPage) => `${qLeft}-${qTop}-${qWidth}-${qHeight}`;
 
@@ -9,10 +10,8 @@ const useGetHyperCubeDataQueue = (
   const queued = useRef(new Set<EngineAPI.INxPage>()); // Keep track of all unique pages that should be retrieved
   const ongoing = useRef(new Set<EngineAPI.INxPage[]>()); // Keep track of ongoing request. Should be aborted if page info or layout is changed
   const finished = useRef(new Set<string>()); // Keep track of all unqiue pages that have added to the queue
-  const mutableGetDataPages = useRef(getDataPages);
-  const mutableHandleDataPages = useRef(handleDataPages);
-  mutableGetDataPages.current = getDataPages;
-  mutableHandleDataPages.current = handleDataPages;
+  const mutableGetDataPages = useMutableProp(getDataPages);
+  const mutableHandleDataPages = useMutableProp(handleDataPages);
 
   const queue = useMemo(
     () => ({
@@ -63,7 +62,7 @@ const useGetHyperCubeDataQueue = (
         finished.current.clear();
       },
     }),
-    []
+    [] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   return queue;
