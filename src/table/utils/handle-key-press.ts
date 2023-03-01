@@ -12,7 +12,13 @@ import {
 } from './accessibility-utils';
 import copyCellValue from './copy-utils';
 import { handleNavigateTop } from './handle-scroll';
-import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownProps, SelectionDispatch } from '../types';
+import {
+  HandleWrapperKeyDownProps,
+  HandleHeadKeyDownProps,
+  HandleBodyKeyDownProps,
+  SelectionDispatch,
+  HandleBodyArrowProps,
+} from '../types';
 import { Cell } from '../../types';
 import { KeyCodes, SelectionActions } from '../constants';
 
@@ -118,6 +124,7 @@ export const focusBodyFromHead = (
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
 ) => {
   preventDefaultBehavior(evt);
+  // TODO: see if we need a fallback here, if there is a valid case where the tabstop has been removed already
   const cell = findCellWithTabStop(rootElement);
   const newCellCoord = getCellCoordFromCell(rootElement, cell);
   cell.focus();
@@ -152,7 +159,7 @@ HandleHeadKeyDownProps) => {
   switch (evt.key) {
     case KeyCodes.LEFT:
     case KeyCodes.RIGHT:
-      if (isLastHeadCell) {
+      if (evt.key === KeyCodes.RIGHT && isLastHeadCell) {
         focusBodyFromHead(evt, rootElement, setFocusedCellCoord);
       } else {
         moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, 'focusButton');
@@ -212,6 +219,68 @@ export const handleTotalKeyDown = (
   }
 };
 
+export const handleBodyArrow = ({
+  evt,
+  rootElement,
+  cell,
+  selectionDispatch,
+  isSelectionsEnabled,
+  setFocusedCellCoord,
+  announce,
+  totalsPosition,
+  isSelectionMode,
+  areBasicFeaturesEnabled,
+}: HandleBodyArrowProps) => {
+  const firstBodyRowIdx = totalsPosition.atTop ? 2 : 1;
+  const cellCoord: [number, number] = [cell.pageRowIdx + firstBodyRowIdx, cell.pageColIdx];
+  // Make sure you can't navigate to header (and totals) in selection mode
+  const allowedRows = {
+    top: isSelectionMode ? firstBodyRowIdx : 0,
+    bottom: isSelectionMode && totalsPosition.atBottom ? 1 : 0,
+  };
+  let focusType = 'focus';
+
+  switch (evt.key) {
+    case KeyCodes.UP:
+    case KeyCodes.DOWN: {
+      if (evt.key === KeyCodes.UP) {
+        handleNavigateTop([cell.pageRowIdx, cell.pageColIdx], rootElement);
+        if (cellCoord[0] === firstBodyRowIdx) focusType = 'focusButton';
+      }
+      const shouldRemoveTabStop = !(cellCoord[0] === firstBodyRowIdx && evt.key === KeyCodes.UP);
+      if (shouldRemoveTabStop) {
+        console.log('remove tab');
+        updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
+      }
+      const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, focusType, allowedRows);
+      // Shift + up/down arrow keys: select multiple values
+      if (shouldSelectMultiValues(areBasicFeaturesEnabled, isSelectionsEnabled, evt, cell)) {
+        selectionDispatch({
+          type: SelectionActions.SELECT_MULTI_ADD,
+          payload: { cell, evt, announce },
+        });
+      } else {
+        // When not selecting multiple we need to announce the selection state of the cell
+        announceSelectionState(announce, nextCell, isSelectionMode);
+      }
+      break;
+    }
+    case KeyCodes.LEFT:
+    case KeyCodes.RIGHT:
+      const shouldMoveToHeader = cellCoord[0] === firstBodyRowIdx && cellCoord[1] === 0 && evt.key === KeyCodes.LEFT;
+      if (shouldMoveToHeader) {
+        focusType = 'focusButton';
+      } else {
+        updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
+      }
+
+      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, focusType, allowedRows);
+      break;
+    default:
+      break;
+  }
+};
+
 /**
  * handles keydown events for the body cells (move focus, make selections tabbing to other elements)
  */
@@ -237,45 +306,23 @@ export const handleBodyKeyDown = ({
   if (shouldBubble(evt, isSelectionMode, keyboard.enabled, paginationNeeded)) return;
   preventDefaultBehavior(evt);
 
-  // Adjust the cellCoord depending on the totals position
-  const firstBodyRowIdx = totalsPosition.atTop ? 2 : 1;
-  const cellCoord: [number, number] = [cell.pageRowIdx + firstBodyRowIdx, cell.pageColIdx];
-  // Make sure you can't navigate to header (and totals) in selection mode
-  const allowedRows = {
-    top: isSelectionMode ? firstBodyRowIdx : 0,
-    bottom: isSelectionMode && totalsPosition.atBottom ? 1 : 0,
-  };
-  let focusType = 'focus';
-
   switch (evt.key) {
     case KeyCodes.UP:
-    case KeyCodes.DOWN: {
-      // TODO: break this out
-      if (evt.key === KeyCodes.UP) {
-        handleNavigateTop([cell.pageRowIdx, cell.pageColIdx], rootElement);
-        if (cellCoord[0] === 1) focusType = 'focusButton';
-      }
-      if (cellCoord[0] !== 1 || evt.key !== KeyCodes.UP) {
-        console.log('remove tab');
-        updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
-      }
-      const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, focusType, allowedRows);
-      // Shift + up/down arrow keys: select multiple values
-      if (shouldSelectMultiValues(areBasicFeaturesEnabled, isSelectionsEnabled, evt, cell)) {
-        selectionDispatch({
-          type: SelectionActions.SELECT_MULTI_ADD,
-          payload: { cell, evt, announce },
-        });
-      } else {
-        // When not selecting multiple we need to announce the selection state of the cell
-        announceSelectionState(announce, nextCell, isSelectionMode);
-      }
-      break;
-    }
+    case KeyCodes.DOWN:
     case KeyCodes.LEFT:
     case KeyCodes.RIGHT:
-      updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
-      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, focusType, allowedRows);
+      handleBodyArrow({
+        evt,
+        rootElement,
+        cell,
+        selectionDispatch,
+        isSelectionsEnabled,
+        setFocusedCellCoord,
+        announce,
+        totalsPosition,
+        isSelectionMode,
+        areBasicFeaturesEnabled,
+      });
       break;
     // Space bar: Selects value.
     case KeyCodes.SPACE:

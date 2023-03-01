@@ -156,6 +156,19 @@ export interface HandleHeadKeyDownProps {
   // isLabelLast: boolean;
 }
 
+export interface HandleBodyArrowProps {
+  evt: React.KeyboardEvent;
+  rootElement: HTMLElement;
+  cell: Cell;
+  selectionDispatch: SelectionDispatch;
+  isSelectionsEnabled: boolean;
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  announce: Announce;
+  totalsPosition: TotalsPosition;
+  isSelectionMode: boolean;
+  areBasicFeaturesEnabled: boolean;
+}
+
 export interface HandleBodyKeyDownProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;

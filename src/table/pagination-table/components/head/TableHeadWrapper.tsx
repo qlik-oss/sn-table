@@ -49,6 +49,7 @@ function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
               align={column.align}
               className={className}
               aria-sort={ariaSort}
+              tabIndex={-1}
             >
               <HeadCellContent
                 column={column}
