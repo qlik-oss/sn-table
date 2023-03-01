@@ -27,7 +27,7 @@ export const StyledSortButton = styled(Button, {
     opacity: isActive ? 1 : 0,
     fontSize: DEFAULT_FONT_SIZE,
   },
-  '& .MuiButton-endIcon': {
+  '& .MuiButton-endIcon, .MuiButton-startIcon': {
     marginBottom: '2px',
   },
 }));
@@ -68,12 +68,16 @@ export const LockWrapper = styled(Box)({
 });
 
 // ---------- HeadCellMenu ----------
+export const HeadCellMenuWrapper = styled(Box, {
+  shouldForwardProp: (prop: string) => prop !== 'isVisible' && prop !== 'rightAligned',
+})(({ rightAligned }) => ({
+  ...(rightAligned ? { marginRight: 'auto' } : { marginLeft: 'auto' }),
+}));
 
 export const StyledMenuIconButton = styled(Button, {
   shouldForwardProp: (prop: string) => prop !== 'isVisible' && prop !== 'rightAligned',
-})(({ isVisible, rightAligned }) => ({
+})(({ isVisible }) => ({
   opacity: isVisible ? 1 : 0,
-  ...(rightAligned ? { marginRight: 'auto' } : { marginLeft: 'auto' }),
   '&:focus': {
     opacity: 1,
   },
