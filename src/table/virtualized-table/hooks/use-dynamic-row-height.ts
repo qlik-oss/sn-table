@@ -49,7 +49,7 @@ const useDynamicRowHeight = ({
     heights: [],
     totalHeight: 0,
     count: 0,
-    measuredCells: new Map<string, number>(),
+    measuredCells: new Set<string>(),
   });
   const [estimatedRowHeight, setEstimatedRowHeight] = useState(rowHeight);
   const { measureText } = useMeasureText(style.fontSize, style.fontFamily, boldText);
@@ -83,8 +83,9 @@ const useDynamicRowHeight = ({
         return;
       }
 
+      rowMeta.current.measuredCells.add(key);
       const height = getCellSize(text, colIdx);
-      rowMeta.current.measuredCells.set(key, height);
+
       const alreadyMeasuredRowHeight = rowMeta.current.heights[rowIdx];
       const diff = height - alreadyMeasuredRowHeight;
 
