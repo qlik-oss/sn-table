@@ -37,7 +37,7 @@ const useData = (
   const mutableSetCellSize = useMutableProp<SetCellSize>(setCellSize);
   const memoizedToRows = useCallback(
     (qDataPages: EngineAPI.INxDataPage[], prevState?: Row[]) => {
-      const nextState = Array.isArray(prevState) ? [...prevState] : createEmptyState(rowCount);
+      const nextState = Array.isArray(prevState) ? prevState.slice(0, rowCount) : createEmptyState(rowCount);
 
       toRows(qDataPages, pageInfo, nextState, columns, layout, mutableSetCellSize.current);
 
@@ -103,7 +103,7 @@ const useData = (
   useEffect(() => {
     // Run this hook everytime "rowsInPage" becomes stale
     const { qcx, qcy } = layout.qHyperCube.qSize;
-    const rowStart = gridState.current.overscanRowStartIndex;
+    const rowStart = 0;
     const qLeft = gridState.current.overscanColumnStartIndex;
     const qTop = rowStart + pageInfo.page * pageInfo.rowsPerPage;
 

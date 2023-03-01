@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { VariableSizeList } from 'react-window';
 import Body from './Body';
 import FullSizeContainer from './FullSizeContainer';
@@ -16,7 +16,7 @@ import useScrollbarWidth from './hooks/use-scrollbar-width';
 import useDidUpdateEffect from '../hooks/use-did-update-effect';
 
 const Table = (props: TableProps) => {
-  const { rect, pageInfo } = props;
+  const { pageInfo, rect } = props;
   const { totalsPosition, columns, paginationNeeded } = useContextSelector(TableContext, (value) => value.tableData);
   const { layout, theme, styling } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
@@ -58,14 +58,14 @@ const Table = (props: TableProps) => {
     [containerHeight, headerAndTotalsHeight, stickyContainerRect.height]
   );
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (ref.current) {
       ref.current.scrollLeft = 0;
       ref.current.scrollTop = 0;
     }
-  }, [rowCount, columns.length]);
+  }, [rowCount, columns.length, pageInfo]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (ref.current) {
       ref.current.scrollTop = 0;
     }
@@ -108,7 +108,6 @@ const Table = (props: TableProps) => {
             rect={stickyContainerRect}
             pageInfo={pageInfo}
             columns={columns}
-            columnWidth={columnWidths}
             rowHeight={bodyRowHeight}
             headerAndTotalsHeight={headerAndTotalsHeight}
             syncHeight={syncHeight}

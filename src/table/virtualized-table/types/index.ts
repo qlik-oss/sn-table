@@ -77,7 +77,6 @@ export interface BodyProps {
   rect: Rect;
   pageInfo: PageInfo;
   columns: Column[];
-  columnWidth: number[];
   innerForwardRef: React.RefObject<HTMLDivElement>;
   bodyStyle: BodyStyle;
   rowHeight: number;
@@ -95,6 +94,7 @@ export interface RowMeta {
   heights: number[];
   totalHeight: number;
   count: number;
+  measuredCells: Map<string, number>;
 }
 
 export interface ItemData {
@@ -109,5 +109,7 @@ export type SetCellSize = (text: string, rowIdx: number, colIdx: number) => void
 
 export interface GridState {
   overscanColumnStartIndex: number;
+  overscanColumnStopIndex: number;
   overscanRowStartIndex: number;
+  overscanRowStopIndex: number;
 }
