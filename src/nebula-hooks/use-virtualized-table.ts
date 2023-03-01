@@ -30,6 +30,8 @@ interface UseVirtualizedTable {
   applyColumnWidths: ApplyColumnWidths;
 }
 
+const NO_TABLE_DATA = {} as TableData;
+
 const useVirtualizedTable = ({
   app,
   layout,
@@ -53,7 +55,7 @@ const useVirtualizedTable = ({
       return getVirtualScrollTableData(layout, constraints);
     }
 
-    return {} as TableData;
+    return NO_TABLE_DATA;
   }, [layout, constraints, shouldRender]);
 
   useEffect(() => {

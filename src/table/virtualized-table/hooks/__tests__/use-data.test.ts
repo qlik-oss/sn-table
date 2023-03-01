@@ -1,7 +1,8 @@
 import { act, renderHook, RenderHookResult, waitFor } from '@testing-library/react';
 import { Cell, Column, PageInfo, Row, TableLayout } from '../../../../types';
 import { generateDataPages, generateLayout } from '../../../../__test__/generate-test-data';
-import { GridState, SetCellSize } from '../../types';
+import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
+import { SetCellSize, GridState } from '../../types';
 import useData, { UseData } from '../use-data';
 
 interface OverrideUseDataProps {
@@ -15,10 +16,16 @@ interface OverrideUseDataProps {
 }
 
 function generateDataPage(page: EngineAPI.INxPage) {
-  return generateDataPages(1, 1, page.qLeft, page.qTop)[0];
+  return generateDataPages(page.qHeight, page.qWidth, page.qLeft, page.qTop)[0];
 }
 
 describe('useData', () => {
+  const QCY = 1000;
+  const QCX = 100;
+  const VISIBLE_ROW_COUNT = 1;
+  const VISIBLE_COLUMN_COUNT = 1;
+  const INIT_DATA_FETCH_HEIGHT = VISIBLE_ROW_COUNT + ROW_DATA_BUFFER_SIZE;
+  const INIT_DATA_FETCH_WIDTH = VISIBLE_COLUMN_COUNT + COLUMN_DATA_BUFFER_SIZE;
   let model: EngineAPI.IGenericObject;
   let layout: TableLayout;
   let pageInfo: PageInfo;
@@ -29,13 +36,18 @@ describe('useData', () => {
   let gridState: React.MutableRefObject<GridState>;
 
   beforeEach(() => {
-    layout = generateLayout(1, 1, 5);
+    layout = generateLayout(1, 1, QCY);
+    layout.qHyperCube.qSize.qcx = QCX;
+    layout.qHyperCube.qDataPages = generateDataPages(
+      INIT_DATA_FETCH_HEIGHT,
+      INIT_DATA_FETCH_WIDTH
+    ) as unknown as EngineAPI.INxDataPage[];
 
     gridState = { current: { overscanColumnStartIndex: 0, overscanRowStartIndex: 0 } };
 
     pageInfo = {
       page: 0,
-      rowsPerPage: 20,
+      rowsPerPage: QCY / 2,
       rowsPerPageOptions: [],
     };
 
@@ -47,10 +59,9 @@ describe('useData', () => {
       Promise.resolve(pages.map(generateDataPage))
     );
 
-    columns = [
-      { isDim: false, isLocked: false, id: 'col-0', colIdx: 0 } as Column,
-      { isDim: false, isLocked: false, id: 'col-1', colIdx: 1 } as Column,
-    ];
+    columns = Array(QCX)
+      .fill(undefined)
+      .map((_, colIdx) => ({ isDim: false, isLocked: false, id: `col-${colIdx}`, colIdx } as Column));
 
     setCellSizeMock = jest.fn() as jest.MockedFunction<SetCellSize>;
 
@@ -61,9 +72,9 @@ describe('useData', () => {
             renderWithProps.layout ?? layout,
             renderWithProps.model ?? model,
             renderWithProps.pageInfo ?? pageInfo,
-            renderWithProps.rowCount ?? 20,
-            renderWithProps.visibleRowCount ?? 1,
-            renderWithProps.visibleColumnCount ?? 1,
+            renderWithProps.rowCount ?? pageInfo.rowsPerPage,
+            renderWithProps.visibleRowCount ?? VISIBLE_ROW_COUNT,
+            renderWithProps.visibleColumnCount ?? VISIBLE_COLUMN_COUNT,
             renderWithProps.columns ?? columns,
             setCellSizeMock,
             gridState
@@ -79,92 +90,79 @@ describe('useData', () => {
 
   describe('loadRows', () => {
     test('should load rows', async () => {
+      const rowIdx = INIT_DATA_FETCH_HEIGHT; // row index for the last row from initial data fetch is (INIT_DATA_FETCH_HEIGHT - 1)
       await doRenderHook();
       const { result } = renderHookResult;
 
-      await act(async () => {
-        result.current.loadRows(0, 1, 1, 1);
-      });
+      // Verify that the row we and to load does not already exist
+      await waitFor(() => expect(result.current.rowsInPage).toHaveLength(pageInfo.rowsPerPage));
+      await waitFor(() => expect(result.current.rowsInPage[rowIdx]).toBeUndefined());
 
-      const expectedRows: Row[] = [
-        {
-          'col-0': {
-            // From initial data load
-            colIdx: 0,
-            isLastRow: false,
-            isLastColumn: false,
-            isSelectable: false,
-            pageColIdx: 0,
-            pageRowIdx: 0,
-            qText: '0',
-            rowIdx: 0,
-          } as Cell,
-          key: 'row-0',
-        },
-        {
-          'col-0': {
-            // From loadRows
-            colIdx: 0,
-            isLastRow: false,
-            isLastColumn: false,
-            isSelectable: false,
-            pageColIdx: 0,
-            pageRowIdx: 1,
-            qText: '0',
-            rowIdx: 1,
-          } as Cell,
-          key: 'row-1',
-        },
-      ];
-
-      await waitFor(() => expect(result.current.rowsInPage).toEqual(expectedRows));
-    });
-
-    test('should flag last row', async () => {
-      await doRenderHook();
-      const { result } = renderHookResult;
-
-      await act(async () => {
-        result.current.loadRows(0, 4, 1, 1);
-      });
+      await act(async () => result.current.loadRows(0, rowIdx, 2, 1));
 
       const expectedRow: Row = {
         'col-0': {
           colIdx: 0,
-          isLastRow: true,
           isLastColumn: false,
+          isLastRow: false,
           isSelectable: false,
           pageColIdx: 0,
-          pageRowIdx: 4,
+          pageRowIdx: rowIdx,
           qText: '0',
-          rowIdx: 4,
+          rowIdx,
         } as Cell,
-        key: 'row-4',
+        'col-1': {
+          colIdx: 1,
+          isLastColumn: false,
+          isLastRow: false,
+          isSelectable: false,
+          pageColIdx: 1,
+          pageRowIdx: rowIdx,
+          qText: '1',
+          rowIdx,
+        } as Cell,
+        key: `row-${rowIdx}`,
       };
 
-      await waitFor(() => expect(result.current.rowsInPage[4]).toEqual(expectedRow));
+      await waitFor(() => expect(result.current.rowsInPage[rowIdx]).toEqual(expectedRow));
     });
 
-    test('should not fetch duplicate data pages', async () => {
+    test('should flag last row in data set', async () => {
+      pageInfo.rowsPerPage = QCY;
+      const rowIdx = pageInfo.rowsPerPage - 1;
       await doRenderHook();
       const { result } = renderHookResult;
 
-      await act(async () => {
-        // Attempt to fetch the same page twice
-        result.current.loadRows(0, 1, 1, 1);
-        result.current.loadRows(0, 1, 1, 1);
-      });
+      // Verify that the row we and to load does not already exist
+      await waitFor(() => expect(result.current.rowsInPage[rowIdx]).toBeUndefined());
 
-      await waitFor(() =>
-        expect(model.getHyperCubeData).toHaveBeenLastCalledWith('/qHyperCubeDef', [
-          {
-            qLeft: 0,
-            qTop: 1,
-            qWidth: 1,
-            qHeight: 1,
-          },
-        ])
-      );
+      await act(async () => result.current.loadRows(0, rowIdx, 2, 1));
+
+      const expectedRow: Row = {
+        'col-0': {
+          colIdx: 0,
+          isLastColumn: false,
+          isLastRow: true,
+          isSelectable: false,
+          pageColIdx: 0,
+          pageRowIdx: rowIdx,
+          qText: '0',
+          rowIdx,
+        } as Cell,
+        'col-1': {
+          colIdx: 1,
+          isLastColumn: false,
+          isLastRow: true,
+          isSelectable: false,
+          pageColIdx: 1,
+          pageRowIdx: rowIdx,
+          qText: '1',
+          rowIdx,
+        } as Cell,
+        key: `row-${rowIdx}`,
+      };
+
+      await waitFor(() => expect(result.current.rowsInPage[rowIdx]).toEqual(expectedRow));
     });
 
     test('should not fetch row that is already loaded', async () => {
@@ -176,70 +174,61 @@ describe('useData', () => {
         result.current.loadRows(0, 0, 1, 1);
       });
 
-      await waitFor(() => expect(model.getHyperCubeData).toHaveBeenCalledTimes(1)); // Only 1 call from the init data load
+      await waitFor(() => expect(model.getHyperCubeData).toHaveBeenCalledTimes(0));
     });
   });
 
   describe('loadColumns', () => {
     test('should load columns', async () => {
+      const colIdx = INIT_DATA_FETCH_WIDTH;
       await doRenderHook();
       const { result } = renderHookResult;
 
+      // Verify that the column we and to load does not already exist
+      await waitFor(() => expect(result.current.rowsInPage[0][`col-${colIdx}`]).toBeUndefined());
+
       await act(async () => {
-        result.current.loadColumns(1, 0, 1, 1);
+        result.current.loadColumns(colIdx, 0, 1, 1);
       });
 
-      const expectedRows: Row[] = [
-        {
-          key: 'row-0',
-          'col-0': {
-            // From initial data load
-            colIdx: 0,
-            isLastRow: false,
-            isLastColumn: false,
-            isSelectable: false,
-            pageColIdx: 0,
-            pageRowIdx: 0,
-            qText: '0',
-            rowIdx: 0,
-          } as Cell,
-          'col-1': {
-            // From loadColumns
-            colIdx: 1,
-            isLastRow: false,
-            isLastColumn: true,
-            isSelectable: false,
-            pageColIdx: 1,
-            pageRowIdx: 0,
-            qText: '0',
-            rowIdx: 0,
-          } as Cell,
-        },
-      ];
+      const expectedCell = {
+        colIdx,
+        isLastRow: false,
+        isLastColumn: false,
+        isSelectable: false,
+        pageColIdx: colIdx,
+        pageRowIdx: 0,
+        qText: '0',
+        rowIdx: 0,
+      } as Cell;
 
-      await waitFor(() => expect(result.current.rowsInPage).toEqual(expectedRows));
+      await waitFor(() => expect(result.current.rowsInPage[0][`col-${colIdx}`]).toEqual(expectedCell));
     });
 
-    test('should not fetch duplicate data pages', async () => {
+    test('should flag last column', async () => {
+      const colIdx = QCX - 1;
       await doRenderHook();
       const { result } = renderHookResult;
 
+      // Verify that the column we and to load does not already exist
+      await waitFor(() => expect(result.current.rowsInPage[0][`col-${colIdx}`]).toBeUndefined());
+
       await act(async () => {
-        // Attempt to fetch the same page twice
-        result.current.loadColumns(1, 0, 1, 1);
-        result.current.loadColumns(1, 0, 1, 1);
+        result.current.loadColumns(colIdx, 0, 1, 1);
       });
 
-      await waitFor(() =>
-        expect(model.getHyperCubeData).toHaveBeenLastCalledWith('/qHyperCubeDef', [
-          {
-            qLeft: 1,
-            qTop: 0,
-            qWidth: 1,
-            qHeight: 1,
-          },
-        ])
-      );
+      const expectedCell = {
+        colIdx,
+        isLastRow: false,
+        isLastColumn: true,
+        isSelectable: false,
+        pageColIdx: colIdx,
+        pageRowIdx: 0,
+        qText: '0',
+        rowIdx: 0,
+      } as Cell;
+
+      await waitFor(() => expect(result.current.rowsInPage[0][`col-${colIdx}`]).toEqual(expectedCell));
     });
 
     test('should not fetch column that is already loaded', async () => {
@@ -251,32 +240,85 @@ describe('useData', () => {
         result.current.loadColumns(0, 0, 1, 1);
       });
 
-      await waitFor(() => expect(model.getHyperCubeData).toHaveBeenCalledTimes(1)); // Only 1 call from the init data load
+      await waitFor(() => expect(model.getHyperCubeData).toHaveBeenCalledTimes(0));
     });
   });
 
   describe('inital data load', () => {
+    test('should not load additional data given layout includes visible and buffer rows', async () => {
+      await doRenderHook();
+
+      await waitFor(() => expect(model.getHyperCubeData).toHaveBeenCalledTimes(0));
+    });
+
+    test('should load additional data given layout does not include visible and buffer rows', async () => {
+      layout.qHyperCube.qDataPages = generateDataPages(
+        INIT_DATA_FETCH_HEIGHT - 1,
+        INIT_DATA_FETCH_WIDTH
+      ) as unknown as EngineAPI.INxDataPage[];
+
+      await doRenderHook();
+
+      await waitFor(() =>
+        expect(model.getHyperCubeData).toHaveBeenNthCalledWith(1, '/qHyperCubeDef', [
+          { qHeight: 1, qLeft: 0, qTop: INIT_DATA_FETCH_HEIGHT - 1, qWidth: 6 },
+        ])
+      );
+    });
+
+    test('should derive data from layout updates', async () => {
+      await doRenderHook();
+
+      await waitFor(() => expect(renderHookResult.result.current.rowsInPage).toHaveLength(QCY / 2));
+
+      layout = generateLayout(1, 1, 10);
+      layout.qHyperCube.qSize.qcx = 10;
+      layout.qHyperCube.qDataPages = generateDataPages(10, 10) as unknown as EngineAPI.INxDataPage[];
+
+      pageInfo = {
+        page: 0,
+        rowsPerPage: 10,
+        rowsPerPageOptions: [],
+      };
+
+      const { rerender } = renderHookResult;
+
+      await act(() => rerender({ layout, pageInfo }));
+
+      await waitFor(() => expect(renderHookResult.result.current.rowsInPage).toHaveLength(10));
+    });
+
+    test('should handle when data can not be derived from the layout', async () => {
+      // This would be the case with an sn-table already created before this feature became available
+      layout.qHyperCube.qDataPages = [];
+
+      await doRenderHook();
+
+      // As the data cannot be derived, it needs to be fetched
+      await waitFor(() =>
+        expect(model.getHyperCubeData).toHaveBeenNthCalledWith(
+          1,
+          '/qHyperCubeDef',
+          Array(VISIBLE_ROW_COUNT + ROW_DATA_BUFFER_SIZE)
+            .fill(undefined)
+            .map((_, rowIdx) => ({ qHeight: 1, qLeft: 0, qTop: rowIdx, qWidth: 6 }))
+        )
+      );
+      await waitFor(() => expect(renderHookResult.result.current.rowsInPage).toHaveLength(pageInfo.rowsPerPage));
+    });
+
     test('should load initial data and update rowsInPage', async () => {
       await doRenderHook();
       const { result } = renderHookResult;
 
-      const expectedRows: Row[] = [
-        {
-          'col-0': {
-            colIdx: 0,
-            isLastRow: false,
-            isLastColumn: false,
-            isSelectable: false,
-            pageColIdx: 0,
-            pageRowIdx: 0,
-            qText: '0',
-            rowIdx: 0,
-          } as Cell,
-          key: 'row-0',
-        },
-      ];
-
-      await waitFor(() => expect(result.current.rowsInPage).toEqual(expectedRows));
+      await waitFor(() => {
+        Array(INIT_DATA_FETCH_HEIGHT)
+          .fill(undefined)
+          .forEach((_, rowIdx) => {
+            expect(result.current.rowsInPage[rowIdx]?.key).toEqual(`row-${rowIdx}`);
+          });
+      });
+      await waitFor(() => expect(result.current.rowsInPage[INIT_DATA_FETCH_HEIGHT]).toBeUndefined());
     });
 
     test('should insert row data at correct index based on current page', async () => {
@@ -286,108 +328,67 @@ describe('useData', () => {
 
       const { result } = renderHookResult;
 
-      const expectedRows: Row[] = [
-        {
-          'col-0': {
-            colIdx: 0,
-            isLastRow: false,
-            isLastColumn: false,
-            isSelectable: false,
-            pageColIdx: 0,
-            pageRowIdx: 0,
-            qText: '0',
-            rowIdx: 20,
-          } as Cell,
-          key: 'row-0',
-        },
-      ];
+      const expectedCell = {
+        colIdx: 0,
+        isLastRow: false,
+        isLastColumn: false,
+        isSelectable: false,
+        pageColIdx: 0,
+        pageRowIdx: 0,
+        qText: '0',
+        rowIdx: 500,
+      } as Cell;
 
-      await waitFor(() => expect(result.current.rowsInPage).toEqual(expectedRows));
+      await waitFor(() => expect(result.current.rowsInPage[0]['col-0']).toEqual(expectedCell));
+      await waitFor(() => {
+        Array(VISIBLE_ROW_COUNT + ROW_DATA_BUFFER_SIZE)
+          .fill(undefined)
+          .forEach((_, rowIdx) => {
+            expect(result.current.rowsInPage[rowIdx]?.key).toEqual(`row-${rowIdx}`);
+          });
+      });
     });
 
     test('should insert row data at correct index based on grid state', async () => {
-      gridState.current.overscanColumnStartIndex = 1;
-      gridState.current.overscanRowStartIndex = 2;
+      gridState.current.overscanColumnStartIndex = 50;
+      gridState.current.overscanRowStartIndex = 100;
       await doRenderHook();
 
       const { result } = renderHookResult;
 
-      const expectedRow: Row = {
-        'col-1': {
-          colIdx: 1,
-          isLastRow: false,
-          isLastColumn: true,
-          isSelectable: false,
-          pageColIdx: 1,
-          pageRowIdx: 2,
-          qText: '0',
-          rowIdx: 2,
-        } as Cell,
-        key: 'row-2',
-      };
-
       await waitFor(() =>
-        expect(result.current.rowsInPage[gridState.current.overscanRowStartIndex]).toEqual(expectedRow)
+        expect(result.current.rowsInPage[gridState.current.overscanRowStartIndex - 1]).toBeUndefined()
       );
+      await waitFor(() => {
+        Array(VISIBLE_ROW_COUNT + ROW_DATA_BUFFER_SIZE)
+          .fill(undefined)
+          .forEach((_, idx) => {
+            const rowIdx = gridState.current.overscanRowStartIndex + idx;
+            const row = result.current.rowsInPage[rowIdx] as Row;
+            expect(row.key).toEqual(`row-${rowIdx}`);
+            expect(row[`col-${gridState.current.overscanColumnStartIndex}`]).not.toBeUndefined();
+            expect(row[`col-${gridState.current.overscanColumnStartIndex - 1}`]).toBeUndefined();
+          });
+      });
     });
 
     test('should set correct column index', async () => {
-      columns = [{ isDim: true, isLocked: false, id: 'col-0', colIdx: 3 } as Column];
+      columns[0].colIdx = 3;
       await doRenderHook({ columns });
 
       const { result } = renderHookResult;
 
-      const expectedRows: Row[] = [
-        {
-          'col-0': {
-            colIdx: 3,
-            isLastRow: false,
-            isLastColumn: false,
-            isSelectable: true,
-            pageColIdx: 0,
-            pageRowIdx: 0,
-            qText: '0',
-            rowIdx: 0,
-          } as Cell,
-          key: 'row-0',
-        },
-      ];
-
-      await waitFor(() => expect(result.current.rowsInPage).toEqual(expectedRows));
-    });
-
-    test('should reset rowsInPage when pageInfo changes', async () => {
-      await doRenderHook();
-      const { rerender } = renderHookResult;
-
-      await waitFor(() => expect(model.getHyperCubeData).toHaveBeenCalledTimes(1));
-
-      pageInfo = { ...pageInfo, page: 1 };
-      await act(async () => {
-        rerender({ model, layout, pageInfo });
+      await waitFor(() => {
+        const cell = result.current.rowsInPage[0]['col-0'] as Cell;
+        expect(cell.colIdx).toEqual(columns[0].colIdx);
       });
-
-      await waitFor(() => expect(model.getHyperCubeData).toHaveBeenCalledTimes(2));
-    });
-
-    test('should reset rowsInPage when layout changes', async () => {
-      await doRenderHook();
-      const { rerender } = renderHookResult;
-
-      await waitFor(() => expect(model.getHyperCubeData).toHaveBeenCalledTimes(1));
-
-      layout = { ...layout };
-      await act(async () => {
-        rerender({ model, layout, pageInfo });
-      });
-
-      await waitFor(() => expect(model.getHyperCubeData).toHaveBeenCalledTimes(2));
     });
   });
 
   describe('should set correct state for isSelectable', () => {
     test('when column is a dimension and not locked', async () => {
-      columns = [{ isDim: true, isLocked: false, id: 'col-0', colIdx: 0 } as Column];
+      columns[0].isDim = true;
+      columns[0].isLocked = false;
       await doRenderHook({ columns });
 
       const { result } = renderHookResult;
@@ -396,7 +397,8 @@ describe('useData', () => {
     });
 
     test('when column is a dimension and is locked', async () => {
-      columns = [{ isDim: true, isLocked: true, id: 'col-0', colIdx: 0 } as Column];
+      columns[0].isDim = true;
+      columns[0].isLocked = true;
       await doRenderHook({ columns });
 
       const { result } = renderHookResult;
@@ -405,7 +407,8 @@ describe('useData', () => {
     });
 
     test('when column is a measure', async () => {
-      columns = [{ isDim: false, isLocked: false, id: 'col-0', colIdx: 0 } as Column];
+      columns[0].isDim = false;
+      columns[0].isLocked = false;
       await doRenderHook({ columns });
 
       const { result } = renderHookResult;

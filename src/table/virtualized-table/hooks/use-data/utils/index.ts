@@ -1,22 +1,22 @@
-import { Column, Row } from '../../../../../types';
+import { Cell, Column, PageInfo, Row, TableLayout } from '../../../../../types';
 import { SetCellSize } from '../../../types';
 
 const createRow = (
-  prevRows: Row[],
-  matrixRow: EngineAPI.INxCellRows,
-  matrixRowIdx: number,
+  rows: Row[],
+  cells: EngineAPI.INxCellRows,
+  cellRowIdx: number,
   qArea: EngineAPI.IRect,
   pageRowStartIdx: number,
   columns: Column[],
   qSize: EngineAPI.ISize,
   setCellSize: SetCellSize
 ) => {
-  const rowIdx = qArea.qTop + matrixRowIdx;
-  const pageRowIdx = pageRowStartIdx + matrixRowIdx;
-  const row: Row = prevRows[pageRowIdx] ?? { key: `row-${pageRowIdx}` };
+  const rowIdx = qArea.qTop + cellRowIdx;
+  const pageRowIdx = pageRowStartIdx + cellRowIdx;
+  const row: Row = rows[pageRowIdx] ?? { key: `row-${pageRowIdx}` };
 
-  matrixRow.forEach((cell, matrixColIdx: number) => {
-    const pageColIdx = matrixColIdx + qArea.qLeft;
+  cells.forEach((cell, cellColIdx: number) => {
+    const pageColIdx = cellColIdx + qArea.qLeft;
     const { colIdx, isDim, isLocked, id } = columns[pageColIdx];
     row[id] = {
       ...cell,
@@ -38,15 +38,16 @@ const createRow = (
   };
 };
 
-const isRowMissingData = (rows: Row[], x: number, y: number, width: number) => {
-  const targetRow = rows[y] as Row | undefined;
+const isRowMissingData = (rows: Row[], x: number, pageRowIdx: number, width: number, rowIdx: number) => {
+  const row = rows[pageRowIdx] as Row | undefined;
 
-  if (!targetRow) {
+  if (!row) {
     return true; // Row is not cached
   }
 
   for (let colIndex = x; colIndex < x + width; colIndex++) {
-    if (!targetRow[`col-${colIndex}`]) {
+    const cell = row[`col-${colIndex}`] as Cell | undefined;
+    if (cell?.rowIdx !== rowIdx) {
       return true; // Column is not cached
     }
   }
@@ -64,4 +65,33 @@ const isColumnMissingData = (rows: Row[], x: number, y: number, height: number) 
   return targetRows.some((row) => !row[`col-${x}`]);
 };
 
-export { createRow, isRowMissingData, isColumnMissingData };
+const toRows = (
+  qDataPages: EngineAPI.INxDataPage[],
+  pageInfo: PageInfo,
+  rows: Row[],
+  columns: Column[],
+  layout: TableLayout,
+  setCellSize: SetCellSize
+) => {
+  qDataPages.forEach((dataPage) => {
+    dataPage.qMatrix.forEach((cells, cellRowIdx) => {
+      const pageRowStartIdx = dataPage.qArea.qTop - pageInfo.page * pageInfo.rowsPerPage;
+      const { row, pageRowIdx } = createRow(
+        rows,
+        cells,
+        cellRowIdx,
+        dataPage.qArea,
+        pageRowStartIdx,
+        columns,
+        layout.qHyperCube.qSize,
+        setCellSize
+      );
+
+      rows[pageRowIdx] = row;
+    });
+  });
+};
+
+const createEmptyState = (rowCount: number) => Array(rowCount).fill(undefined);
+
+export { createRow, isRowMissingData, isColumnMissingData, toRows, createEmptyState };
