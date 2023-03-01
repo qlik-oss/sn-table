@@ -19,7 +19,6 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled, 
   const { startIcon, endIcon, lockIcon } = getHeadIcons(column);
   const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
   const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
-  const className = isLastColumn ? 'sn-table-head-last-element' : '';
 
   const handleSort = () => isInteractionEnabled && changeSortOrder(column);
   const onKeyDown = (evt: React.KeyboardEvent) =>
@@ -30,11 +29,10 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled, 
       setFocusedCellCoord,
       isInteractionEnabled,
       areBasicFeaturesEnabled,
-      // isLastColumn,
     });
 
   return (
-    <StyledHeadCellContent onKeyDown={onKeyDown} className={className}>
+    <StyledHeadCellContent onKeyDown={onKeyDown}>
       {lockIcon}
 
       <StyledSortButton
@@ -57,7 +55,7 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled, 
         )}
       </StyledSortButton>
 
-      {areBasicFeaturesEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} isLastColumn={isLastColumn} />}
+      {areBasicFeaturesEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
     </StyledHeadCellContent>
   );
 }

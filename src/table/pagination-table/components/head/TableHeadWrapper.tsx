@@ -31,7 +31,6 @@ function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
           const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
           const ariaSort = isActive ? FullSortDirection[column.sortDirection] : undefined;
           const isLastColumn = columnIndex === columns.length - 1;
-          const className = `sn-table-head-cell sn-table-cell ${isLastColumn ? 'sn-table-head-last-cell' : ''}`;
 
           const widthStyle = {
             ...(areBasicFeaturesEnabled && {
@@ -47,16 +46,11 @@ function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
               headerStyle={{ ...styling.head, ...widthStyle }}
               key={column.id}
               align={column.align}
-              className={className}
+              className="sn-table-head-cell sn-table-cell"
               aria-sort={ariaSort}
               tabIndex={-1}
             >
-              <HeadCellContent
-                column={column}
-                isActive={isActive}
-                areBasicFeaturesEnabled={areBasicFeaturesEnabled}
-                isLastColumn={isLastColumn}
-              >
+              <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled={areBasicFeaturesEnabled}>
                 <CellText fontSize={styling.head.fontSize}>{column.label}</CellText>
               </HeadCellContent>
               {areBasicFeaturesEnabled && <ColumnAdjuster column={column} isLastColumn={isLastColumn} />}

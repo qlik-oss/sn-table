@@ -268,13 +268,11 @@ export interface HeadCellContentProps {
   column: Column;
   isActive: boolean;
   areBasicFeaturesEnabled: boolean;
-  isLastColumn: boolean;
 }
 
 export interface HeadCellMenuProps {
   column: Column;
   tabIndex: number;
-  isLastColumn: boolean;
 }
 
 export type MenuItemGroup = HeadCellMenuItem[];

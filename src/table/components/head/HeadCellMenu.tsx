@@ -153,7 +153,6 @@ export default function HeadCellMenu({ column, tabIndex, isLastColumn }: HeadCel
         size="small"
         tabIndex={tabIndex}
         id="sn-table-head-menu-button"
-        className={isLastColumn ? 'sn-table-head-last-cell' : ''}
         aria-controls={openMenuDropdown ? 'sn-table-head-menu' : undefined}
         aria-expanded={openMenuDropdown ? 'true' : undefined}
         aria-haspopup="true"
