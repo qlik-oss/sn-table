@@ -16,7 +16,7 @@ import { TableLayout } from '../../../types';
 import RecursiveMenuList from './MenuList/RecursiveMenuList';
 import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 
-export default function HeadCellMenu({ column, tabIndex, isLastColumn }: HeadCellMenuProps) {
+export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
   const showSearchMenuItem = column.isDim && !column.isMasterItem;
   const anchorRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);

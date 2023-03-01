@@ -8,7 +8,7 @@ import { VisuallyHidden, StyledSortButton, StyledHeadCellContent } from './style
 import HeadCellMenu from './HeadCellMenu';
 import { handleHeadKeyDown } from '../../utils/handle-key-press';
 
-function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled, isLastColumn }: HeadCellContentProps) {
+function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }: HeadCellContentProps) {
   const { constraints, selectionsAPI, keyboard, translator, rootElement, changeSortOrder } = useContextSelector(
     TableContext,
     (value) => value.baseProps
