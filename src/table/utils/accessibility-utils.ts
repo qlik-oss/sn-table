@@ -108,6 +108,9 @@ export const getNextCellCoord = (
   return [nextRow, nextCol];
 };
 
+/**
+ * Resets and adds new focus to a table cell based which key is pressed
+ */
 export const moveFocus = (
   evt: React.KeyboardEvent,
   rootElement: HTMLElement,
@@ -121,7 +124,6 @@ export const moveFocus = (
 ) => {
   const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, allowedRows);
   const nextCell = getCellElement(rootElement, nextCellCoord);
-  // TODO: handle right on last head cell
   updateFocus({ focusType, cell: nextCell });
   setFocusedCellCoord(nextCellCoord);
 
