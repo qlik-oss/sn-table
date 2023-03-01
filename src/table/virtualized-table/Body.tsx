@@ -10,13 +10,13 @@ import { useContextSelector, TableContext } from '../context';
 import Cell from './Cell';
 import getCellItemKey from './utils/get-cell-item-key';
 import useDynamicRowHeight from './hooks/use-dynamic-row-height';
-import { getBodyHeight } from './utils/get-height';
+import getBodyHeight from './utils/get-body-height';
 
 const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   const {
     rect,
     columns,
-    columnWidth,
+    columnWidths,
     innerForwardRef,
     pageInfo,
     bodyStyle,
@@ -36,7 +36,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     layout,
     pageInfo,
     rect,
-    columnWidth,
+    columnWidths,
     rowHeight
   );
 
@@ -45,7 +45,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     pageInfo,
     style: bodyStyle,
     rowHeight,
-    columnWidth,
+    columnWidths,
     gridRef,
     rowCount,
   });
@@ -100,7 +100,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     if (!gridRef.current) return;
 
     gridRef.current.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: true });
-  }, [layout, pageInfo.page, gridRef, columnWidth, rowMeta, theme.name()]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [layout, pageInfo.page, gridRef, columnWidths, rowMeta, theme.name()]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useImperativeHandle(
     ref,
@@ -132,7 +132,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
       innerRef={innerForwardRef}
       style={{ overflow: 'hidden' }}
       columnCount={layout.qHyperCube.qSize.qcx}
-      columnWidth={(index) => columnWidth[index]}
+      columnWidth={(index) => columnWidths[index]}
       height={bodyHeight}
       rowCount={deferredRowCount}
       rowHeight={getRowHeight}

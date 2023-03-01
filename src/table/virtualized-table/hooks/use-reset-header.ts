@@ -6,11 +6,11 @@ const useResetHeader = (
   forwardRef: React.RefObject<VariableSizeList<any>>,
   layout: TableLayout,
   pageInfo: PageInfo,
-  columnWidth: number[]
+  columnWidths: number[]
 ) => {
   useLayoutEffect(() => {
     forwardRef?.current?.resetAfterIndex(0, true);
-  }, [layout, pageInfo, forwardRef, columnWidth]);
+  }, [layout, pageInfo, forwardRef, columnWidths]);
 };
 
 export default useResetHeader;
