@@ -80,7 +80,6 @@ const Table = (props: TableProps) => {
       rect={stickyContainerRect}
       pageInfo={pageInfo}
       columns={columns}
-      columnWidth={columnWidths}
       forwardRef={totalsRef}
       totals={totalsPosition}
       rowHeight={bodyRowHeight}
@@ -96,7 +95,6 @@ const Table = (props: TableProps) => {
             rect={stickyContainerRect}
             pageInfo={pageInfo}
             columns={columns}
-            columnWidth={columnWidths}
             forwardRef={headerRef}
             rowHeight={headerRowHeight}
           />

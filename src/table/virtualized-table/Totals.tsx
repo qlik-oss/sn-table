@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo } from 'react';
 import { VariableSizeList } from 'react-window';
 import TotalsCell from './TotalsCell';
 import { useContextSelector, TableContext } from '../context';
@@ -7,8 +7,9 @@ import useResetHeader from './hooks/use-reset-header';
 import useDynamicRowHeight from './hooks/use-dynamic-row-height';
 
 const Totals = (props: TotalsProps) => {
-  const { rect, forwardRef, columnWidth, pageInfo, totals, rowHeight, columns } = props;
+  const { rect, forwardRef, pageInfo, totals, rowHeight, columns } = props;
   const { layout, styling } = useContextSelector(TableContext, (value) => value.baseProps);
+  const columnWidth = useContextSelector(TableContext, (value) => value.columnWidths);
 
   useResetHeader(forwardRef, layout, pageInfo, columnWidth);
 
@@ -23,9 +24,7 @@ const Totals = (props: TotalsProps) => {
     boldText: true,
   });
 
-  useEffect(() => {
-    columns.forEach((col, idx) => setCellSize(col.totalInfo, 0, idx));
-  }, [columns, setCellSize]);
+  columns.forEach((col, idx) => setCellSize(col.totalInfo, 0, idx));
 
   return (
     <VariableSizeList

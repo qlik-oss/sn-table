@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo } from 'react';
 import { VariableSizeList } from 'react-window';
 import { HeaderProps } from './types';
 import HeaderCell from './HeaderCell';
@@ -8,8 +8,9 @@ import useDynamicRowHeight from './hooks/use-dynamic-row-height';
 import { PADDING_TOP_BOTTOM } from './constants';
 
 const Header = (props: HeaderProps) => {
-  const { rect, forwardRef, columns, columnWidth, pageInfo, headerStyle, rowHeight } = props;
+  const { rect, forwardRef, columns, pageInfo, headerStyle, rowHeight } = props;
   const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
+  const columnWidth = useContextSelector(TableContext, (value) => value.columnWidths);
 
   useResetHeader(forwardRef, layout, pageInfo, columnWidth);
 
@@ -25,9 +26,7 @@ const Header = (props: HeaderProps) => {
     boldText: true,
   });
 
-  useEffect(() => {
-    columns.forEach((col, idx) => setCellSize(col.label, 0, idx));
-  }, [columns, setCellSize]);
+  columns.forEach((col, idx) => setCellSize(col.label, 0, idx));
 
   return (
     <VariableSizeList

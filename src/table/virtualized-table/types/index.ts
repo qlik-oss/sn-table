@@ -58,7 +58,6 @@ export interface HeaderProps {
   pageInfo: PageInfo;
   forwardRef: React.RefObject<VariableSizeList<any>>;
   columns: Column[];
-  columnWidth: number[];
   headerStyle: GeneratedStyling;
   rowHeight: number;
 }
@@ -68,7 +67,6 @@ export interface TotalsProps {
   pageInfo: PageInfo;
   forwardRef: React.RefObject<VariableSizeList<any>>;
   columns: Column[];
-  columnWidth: number[];
   totals: Totals;
   rowHeight: number;
 }
@@ -94,7 +92,7 @@ export interface RowMeta {
   heights: number[];
   totalHeight: number;
   count: number;
-  measuredCells: Map<string, number>;
+  measuredCells: Set<string>;
 }
 
 export interface ItemData {
