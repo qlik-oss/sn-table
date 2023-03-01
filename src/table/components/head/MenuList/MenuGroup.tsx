@@ -27,9 +27,65 @@ export const interceptClickOnMenuItems = (menuGroups: MenuItemGroup[], cache: Su
 type SubMenusOpenStatusCache = Record<string, React.Dispatch<React.SetStateAction<boolean>>>;
 let subMenusOpenStatusCache: SubMenusOpenStatusCache = {};
 
-const MenuGroupItems = ({ id, onClick, itemTitle, icon, enabled, subMenus }: HeadCellMenuItem) => {
+const MenuGroupItems = ({ autoFocus, id, onClick, itemTitle, icon, enabled, subMenus }: HeadCellMenuItem) => {
   const [openMenu, setOpenMenu] = useState(false);
   const anchorRef = useRef<HTMLDivElement | null>(null);
+
+  const moveToNextFocusItem = (currentFocus: Element) => {
+    let nextItem = currentFocus.nextElementSibling as HTMLDivElement;
+    if (!nextItem) {
+      nextItem = currentFocus.parentElement?.children[0] as HTMLDivElement;
+    } else if (nextItem.tagName === 'HR') {
+      nextItem = moveToNextFocusItem(nextItem);
+    }
+    return nextItem;
+  };
+
+  const moveToPreviousFocusItem = (currentFocus: Element) => {
+    let previousItem = currentFocus.previousElementSibling as HTMLDivElement;
+    if (!previousItem) {
+      const menuItemAmount = currentFocus?.parentElement?.children.length;
+      (currentFocus?.parentElement?.children[(menuItemAmount as number) - 1] as HTMLDivElement).focus();
+    } else if (previousItem.tagName === 'HR') {
+      previousItem = moveToPreviousFocusItem(previousItem);
+    }
+    return previousItem;
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLLIElement>) => {
+    const { key } = event;
+
+    const currentFocus = document.activeElement as Element;
+
+    // The rest key are handled by handleKeyDown in MUIMenuList
+    if (key === 'ArrowDown') {
+      // Prevent scroll of the page
+      event.preventDefault();
+      // Stop triggering handleKeyDown in MUIMenuList
+      event.stopPropagation();
+      let nextFocusItem = moveToNextFocusItem(currentFocus);
+      while (nextFocusItem) {
+        if (nextFocusItem.ariaDisabled === 'true') {
+          nextFocusItem = moveToNextFocusItem(nextFocusItem);
+        } else {
+          nextFocusItem.focus();
+          break;
+        }
+      }
+    } else if (key === 'ArrowUp') {
+      event.preventDefault();
+      event.stopPropagation();
+      let nextFocusItem = moveToPreviousFocusItem(currentFocus);
+      while (nextFocusItem) {
+        if (nextFocusItem.ariaDisabled === 'true') {
+          nextFocusItem = moveToPreviousFocusItem(nextFocusItem);
+        } else {
+          nextFocusItem.focus();
+          break;
+        }
+      }
+    }
+  };
 
   const handleOnClick = (evt: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
     if (onClick) {
@@ -43,13 +99,15 @@ const MenuGroupItems = ({ id, onClick, itemTitle, icon, enabled, subMenus }: Hea
   };
 
   return (
-    <div key={id}>
+    <>
       <StyledMenuItem
         ref={subMenus ? anchorRef : null}
         key={id}
         className="sn-table-head-menu-item"
         onClick={handleOnClick}
         disabled={!enabled}
+        autoFocus={autoFocus}
+        onKeyDown={handleKeyDown}
       >
         <StyledMenuItemLabel>
           <StyledListItemIcon>{icon}</StyledListItemIcon>
@@ -68,7 +126,7 @@ const MenuGroupItems = ({ id, onClick, itemTitle, icon, enabled, subMenus }: Hea
           anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
         />
       )}
-    </div>
+    </>
   );
 };
 
