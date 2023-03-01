@@ -108,44 +108,6 @@ export const getNextCellCoord = (
   return [nextRow, nextCol];
 };
 
-// /**
-//  * Resets and adds new focus to a table cell based which key is pressed
-//  */
-// export const moveBodyFocus = (
-//   evt: React.KeyboardEvent,
-//   rootElement: HTMLElement,
-//   cellCoord: [number, number],
-//   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-//   allowedRows?: {
-//     top: number;
-//     bottom: number;
-//   }
-// ) => {
-//   updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
-//   const focusType = cellCoord[0] === 1 && evt.key === KeyCodes.UP ? 'focusButton' : 'focus';
-//   moveFocus();
-// };
-
-// /**
-//  * Resets and adds new focus to a table cell based which key is pressed
-//  */
-// export const moveHeaderFocus = (
-//   evt: React.KeyboardEvent,
-//   rootElement: HTMLElement,
-//   cellCoord: [number, number],
-//   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
-// ) => {
-//   // updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
-//   const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord);
-//   const nextCell = getCellElement(rootElement, nextCellCoord);
-//   const focusType = evt.key !== KeyCodes.DOWN ? 'focusButton' : 'focus';
-//   // TODO: handle right on last head cell
-//   updateFocus({ focusType, cell: nextCell });
-//   setFocusedCellCoord(nextCellCoord);
-
-//   return nextCell;
-// };
-
 export const moveFocus = (
   evt: React.KeyboardEvent,
   rootElement: HTMLElement,
