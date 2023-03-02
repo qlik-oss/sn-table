@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { memo, useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { VariableSizeList } from 'react-window';
 import Body from './Body';
 import FullSizeContainer from './FullSizeContainer';
@@ -58,14 +58,14 @@ const Table = (props: TableProps) => {
     [containerHeight, headerAndTotalsHeight, stickyContainerRect.height]
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (ref.current) {
       ref.current.scrollLeft = 0;
       ref.current.scrollTop = 0;
     }
   }, [rowCount, columns.length, pageInfo]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (ref.current) {
       ref.current.scrollTop = 0;
     }

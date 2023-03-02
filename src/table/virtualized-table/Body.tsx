@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
+import React, { memo, useMemo, useLayoutEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import { VariableSizeGrid } from 'react-window';
 import useData from './hooks/use-data';
 import { BodyProps, BodyRef, ItemData, GridState } from './types';
@@ -76,11 +76,11 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
 
   const bodyHeight = getBodyHeight(rect, headerAndTotalsHeight, rowCount, estimatedRowHeight);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     syncHeight(innerForwardRef.current?.clientHeight ?? 0, true);
   }, [rowCount, syncHeight, innerForwardRef]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     syncHeight(innerForwardRef.current?.clientHeight ?? 0, false);
 
     if (rowMeta.current.lastScrollToRatio === 1) {
@@ -92,13 +92,13 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
 
   useSelectionsEffect(rowsInPage);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!gridRef.current) return;
 
     gridRef.current.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: true });
   }, [layout, pageInfo.page, gridRef, columnWidth, rowMeta, theme.name()]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     gridRef.current?.scrollTo({ scrollTop: 0 });
   }, [columnWidth, rowCount, columns.length, pageInfo]);
 
