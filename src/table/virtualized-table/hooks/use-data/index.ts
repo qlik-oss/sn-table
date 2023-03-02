@@ -19,7 +19,6 @@ export interface UseData {
   rowsInPage: Row[];
   loadRows: LoadData;
   loadColumns: LoadData;
-  deferredRowCount: number;
 }
 
 const useData = (
@@ -128,7 +127,6 @@ const useData = (
     rowsInPage,
     loadRows,
     loadColumns,
-    deferredRowCount: rowsInPage.length,
   };
 };
 
