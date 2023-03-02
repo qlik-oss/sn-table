@@ -214,6 +214,10 @@ describe('handle-data', () => {
       layout.totals.label = '';
       expect(getTotalInfo(layout, 0, 0, 2)).toBe('');
     });
+
+    it('should return first dimension total value as Totals when colIdx is not 0', () => {
+      expect(getTotalInfo(layout, 1, 0, 2)).toBe('Totals');
+    });
   });
 
   describe('getTotalPosition:', () => {
