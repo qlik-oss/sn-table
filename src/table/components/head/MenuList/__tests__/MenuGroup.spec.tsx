@@ -60,7 +60,7 @@ describe('MenuGroup', () => {
       expect(screen.getByText('Menu#02')).toBeVisible();
     });
 
-    it('should render menu items with subMenu', () => {
+    it('should render menu items with subMenu with correct keyboard navigation', () => {
       menuGroup = [
         { id: 1, icon: <i />, itemTitle: 'Menu#01', enabled: true },
         {
