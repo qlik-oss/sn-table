@@ -38,9 +38,9 @@ const Table = (props: TableProps) => {
     columns,
     columnWidths,
     pageInfo,
+    totalsPosition,
     headerRef,
     totalsRef,
-    totalsPosition,
   });
   const tableRect = useMemo(() => toTableRect(rect, paginationNeeded), [rect, paginationNeeded]);
   const stickyContainerRect = useMemo(
