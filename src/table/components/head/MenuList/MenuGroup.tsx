@@ -105,6 +105,7 @@ const MenuGroupItems = ({ autoFocus, id, onClick, itemTitle, icon, enabled, subM
       <StyledMenuItem
         ref={subMenus ? anchorRef : null}
         key={id}
+        data-testid={`menu-item-${id}`}
         className="sn-table-head-menu-item"
         onClick={handleOnClick}
         disabled={!enabled}
@@ -133,7 +134,7 @@ const MenuGroupItems = ({ autoFocus, id, onClick, itemTitle, icon, enabled, subM
 };
 
 const MenuGroup = ({ menuGroup }: { menuGroup: HeadCellMenuItem[] }) => {
-  return menuGroup.map((groupItem) => <MenuGroupItems {...groupItem} />);
+  return menuGroup.map((groupItem) => <MenuGroupItems key={groupItem.id} {...groupItem} />);
 };
 
 export default MenuGroup;
