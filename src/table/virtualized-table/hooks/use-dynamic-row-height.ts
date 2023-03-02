@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
-import { Column, PageInfo, TableLayout } from '../../../types';
+import { Column, PageInfo } from '../../../types';
+import { TableContext, useContextSelector } from '../../context';
 import { COMMON_CELL_STYLING } from '../../styling-defaults';
 import { GeneratedStyling } from '../../types';
 import {
@@ -18,7 +19,6 @@ interface Props {
   rowHeight?: number;
   rowCount: number;
   columnWidths: number[];
-  layout: TableLayout;
   pageInfo: PageInfo;
   gridRef?: React.RefObject<VariableSizeGrid<any>>;
   lineRef?: React.RefObject<VariableSizeList<any>>;
@@ -32,7 +32,6 @@ const useDynamicRowHeight = ({
   style,
   columnWidths,
   rowHeight,
-  layout,
   pageInfo,
   rowCount,
   gridRef,
@@ -47,6 +46,7 @@ const useDynamicRowHeight = ({
     totalHeight: 0,
     count: 0,
   });
+  const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
   const [estimatedRowHeight, setEstimatedRowHeight] = useState(rowHeight || MIN_BODY_ROW_HEIGHT);
   const { measureText } = useMeasureText(style.fontSize, style.fontFamily, boldText);
   const lineHeight = parseInt(style.fontSize ?? COMMON_CELL_STYLING.fontSize, 10) * LINE_HEIGHT_MULTIPLIER;

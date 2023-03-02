@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { VariableSizeList } from 'react-window';
 import { Column, PageInfo, TotalsPosition } from '../../../types';
 import { TableContext, useContextSelector } from '../../context';
@@ -20,7 +19,7 @@ interface UseHeaderAndTotalsHeightProps {
 const getBodyRowHeight = ({ fontSize = COMMON_CELL_STYLING.fontSize }: GeneratedStyling) =>
   Math.max(MIN_BODY_ROW_HEIGHT, fontSizeToRowHeight(fontSize));
 
-const useHeaderAndTotalsHeight = ({
+const useHeights = ({
   columns,
   columnWidths,
   pageInfo,
@@ -28,14 +27,13 @@ const useHeaderAndTotalsHeight = ({
   totalsRef,
   totalsPosition,
 }: UseHeaderAndTotalsHeightProps) => {
-  const { layout, styling } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { styling } = useContextSelector(TableContext, (value) => value.baseProps);
 
   const headerHeight = useDynamicRowHeight({
     style: styling.head,
     columnWidths,
     lineRef: headerRef,
     rowCount: 1,
-    layout,
     pageInfo,
     boldText: true,
     columns,
@@ -46,17 +44,14 @@ const useHeaderAndTotalsHeight = ({
     columnWidths,
     lineRef: totalsRef,
     rowCount: 1,
-    layout,
     pageInfo,
     boldText: true,
   });
 
-  useEffect(() => {
-    columns.forEach((col, idx) => {
-      headerHeight.setCellSize(col.label, 0, idx);
-      totalsHeight.setCellSize(col.totalInfo, 0, idx);
-    });
-  }, [columns, headerHeight, totalsHeight]);
+  columns.forEach((col, idx) => {
+    headerHeight.setCellSize(col.label, 0, idx);
+    totalsHeight.setCellSize(col.totalInfo, 0, idx);
+  });
 
   const headerRowHeight = headerHeight.getRowHeight(0) + PADDING_TOP_BOTTOM * 2;
   const totalsRowHeight = totalsHeight.getRowHeight(0);
@@ -72,4 +67,4 @@ const useHeaderAndTotalsHeight = ({
   };
 };
 
-export default useHeaderAndTotalsHeight;
+export default useHeights;
