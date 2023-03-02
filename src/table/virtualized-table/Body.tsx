@@ -98,11 +98,8 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     gridRef.current.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: true });
   }, [layout, pageInfo.page, gridRef, columnWidth, rowMeta, theme.name()]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useLayoutEffect(() => {
-    gridRef.current?.scrollTo({ scrollTop: 0 });
-  }, [columnWidth, rowCount, columns.length, pageInfo]);
-
   useOnPropsChange(() => {
+    gridRef.current?.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: false });
     updateCellHeight(rowsInPage);
   }, [columnWidth]);
 

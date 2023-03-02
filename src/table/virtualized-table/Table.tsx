@@ -63,13 +63,13 @@ const Table = (props: TableProps) => {
       ref.current.scrollLeft = 0;
       ref.current.scrollTop = 0;
     }
-  }, [rowCount, columns.length, pageInfo]);
+  }, [columns.length]);
 
   useLayoutEffect(() => {
     if (ref.current) {
       ref.current.scrollTop = 0;
     }
-  }, [columnWidths]);
+  }, [columnWidths, pageInfo, rowCount]);
 
   useDidUpdateEffect(() => {
     setYScrollbarWidth(yScrollbarWidth);
