@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { Column } from '../../../types';
+import { VariableSizeList } from 'react-window';
+import { Column, PageInfo, TotalsPosition } from '../../../types';
 import { TableContext, useContextSelector } from '../../context';
 import { COMMON_CELL_STYLING } from '../../styling-defaults';
 import { GeneratedStyling } from '../../types';
@@ -10,10 +11,10 @@ import useDynamicRowHeight from './use-dynamic-row-height';
 interface UseHeaderAndTotalsHeightProps {
   columns: Column[];
   columnWidths: number[];
-  pageInfo: any;
-  headerRef: any;
-  totalsRef: any;
-  totalsPosition: any;
+  pageInfo: PageInfo;
+  totalsPosition: TotalsPosition;
+  headerRef: React.RefObject<VariableSizeList<any>>;
+  totalsRef: React.RefObject<VariableSizeList<any>>;
 }
 
 const getBodyRowHeight = ({ fontSize = COMMON_CELL_STYLING.fontSize }: GeneratedStyling) =>
