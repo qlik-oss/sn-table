@@ -31,23 +31,25 @@ const MenuGroupItems = ({ autoFocus, id, onClick, itemTitle, icon, enabled, subM
   const [openMenu, setOpenMenu] = useState(false);
   const anchorRef = useRef<HTMLDivElement | null>(null);
 
-  const moveToNextFocusItem = (currentFocus: Element) => {
-    let nextItem = currentFocus.nextElementSibling as HTMLDivElement;
+  const moveToNextFocusItem = (currentFocus: Element): Element | undefined => {
+    const nextItem = currentFocus.nextElementSibling;
     if (!nextItem) {
-      nextItem = currentFocus.parentElement?.children[0] as HTMLDivElement;
-    } else if (nextItem.tagName === 'HR') {
-      nextItem = moveToNextFocusItem(nextItem);
+      return currentFocus.parentElement?.children?.[0];
+    }
+    if (nextItem.tagName === 'HR') {
+      return moveToNextFocusItem(nextItem);
     }
     return nextItem;
   };
 
-  const moveToPreviousFocusItem = (currentFocus: Element) => {
-    let previousItem = currentFocus.previousElementSibling as HTMLDivElement;
+  const moveToPreviousFocusItem = (currentFocus: Element): Element | undefined => {
+    const previousItem = currentFocus.previousElementSibling;
     if (!previousItem) {
-      const menuItemAmount = currentFocus?.parentElement?.children.length;
-      (currentFocus?.parentElement?.children[(menuItemAmount as number) - 1] as HTMLDivElement).focus();
-    } else if (previousItem.tagName === 'HR') {
-      previousItem = moveToPreviousFocusItem(previousItem);
+      const menuItemAmount = currentFocus.parentElement?.children?.length as number;
+      return currentFocus.parentElement?.children?.[menuItemAmount - 1];
+    }
+    if (previousItem.tagName === 'HR') {
+      return moveToPreviousFocusItem(previousItem);
     }
     return previousItem;
   };
@@ -55,7 +57,7 @@ const MenuGroupItems = ({ autoFocus, id, onClick, itemTitle, icon, enabled, subM
   const handleKeyDown = (event: React.KeyboardEvent<HTMLLIElement>) => {
     const { key } = event;
 
-    const currentFocus = document.activeElement as Element;
+    const currentFocus = document.activeElement ?? (event.target as HTMLElement);
 
     // The rest key are handled by handleKeyDown in MUIMenuList
     if (key === 'ArrowDown') {
@@ -68,7 +70,7 @@ const MenuGroupItems = ({ autoFocus, id, onClick, itemTitle, icon, enabled, subM
         if (nextFocusItem.ariaDisabled === 'true') {
           nextFocusItem = moveToNextFocusItem(nextFocusItem);
         } else {
-          nextFocusItem.focus();
+          (nextFocusItem as HTMLElement).focus();
           break;
         }
       }
@@ -80,7 +82,7 @@ const MenuGroupItems = ({ autoFocus, id, onClick, itemTitle, icon, enabled, subM
         if (nextFocusItem.ariaDisabled === 'true') {
           nextFocusItem = moveToPreviousFocusItem(nextFocusItem);
         } else {
-          nextFocusItem.focus();
+          (nextFocusItem as HTMLElement).focus();
           break;
         }
       }

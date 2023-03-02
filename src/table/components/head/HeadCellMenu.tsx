@@ -86,68 +86,12 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
                     {
                       id: 1,
                       itemTitle: translator.get('SNTable.MenuItem.SelectAll'),
-                      // onClick: async () => {
-                      //   setOpenMenuDropdown(false);
-                      //   await fieldInstance?.selectAll();
-                      // },
+                      onClick: async () => {
+                        setOpenMenuDropdown(false);
+                        await fieldInstance?.selectAll();
+                      },
                       icon: <SelectAll />,
-                      enabled: true,
-                      subMenus: [
-                        [
-                          {
-                            id: 1,
-                            itemTitle: translator.get('SNTable.MenuItem.SelectAll'),
-                            onClick: async () => {
-                              setOpenMenuDropdown(false);
-                              await fieldInstance?.selectAll();
-                            },
-                            icon: <SelectAll />,
-                            enabled: selectionActionsEnabledStatus.canSelectAll,
-                          },
-                          {
-                            id: 2,
-                            itemTitle: translator.get('SNTable.MenuItem.SelectPossible'),
-                            onClick: async () => {
-                              setOpenMenuDropdown(false);
-                              await fieldInstance?.selectPossible();
-                            },
-                            icon: <SelectPossible />,
-                            enabled: selectionActionsEnabledStatus.canSelectPossible,
-                          },
-                          {
-                            id: 3,
-                            itemTitle: translator.get('SNTable.MenuItem.SelectAlternative'),
-                            onClick: async () => {
-                              setOpenMenuDropdown(false);
-                              await fieldInstance?.selectAlternative();
-                            },
-                            icon: <SelectAlternative />,
-                            enabled: selectionActionsEnabledStatus.canSelectAlternative,
-                          },
-                          {
-                            id: 4,
-                            itemTitle: translator.get('SNTable.MenuItem.SelectExcluded'),
-                            onClick: async () => {
-                              setOpenMenuDropdown(false);
-                              await fieldInstance?.selectExcluded();
-                            },
-                            icon: <SelectExcluded />,
-                            enabled: selectionActionsEnabledStatus.canSelectExcluded,
-                          },
-                        ],
-                        [
-                          {
-                            id: 1,
-                            itemTitle: translator.get('SNTable.MenuItem.ClearSelections'),
-                            onClick: async () => {
-                              setOpenMenuDropdown(false);
-                              await fieldInstance?.clear();
-                            },
-                            icon: <ClearSelections />,
-                            enabled: selectionActionsEnabledStatus.canClearSelections,
-                          },
-                        ],
-                      ],
+                      enabled: selectionActionsEnabledStatus.canSelectAll,
                     },
                     {
                       id: 2,
