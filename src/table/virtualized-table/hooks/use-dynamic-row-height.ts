@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
-import { Cell, Column, PageInfo, Row, TableLayout } from '../../../types';
+import { Column, PageInfo, Row, TableLayout } from '../../../types';
 import { COMMON_CELL_STYLING } from '../../styling-defaults';
 import { GeneratedStyling } from '../../types';
 import {
@@ -9,12 +9,12 @@ import {
   LINE_HEIGHT as LINE_HEIGHT_MULTIPLIER,
 } from '../../utils/styling-utils';
 import { subtractCellPaddingAndBorder, subtractCellPaddingIconsAndBorder } from '../utils/cell-width-utils';
-import { COLUMN_DATA_BUFFER_SIZE, MAX_NBR_LINES_OF_TEXT } from '../constants';
+import { MAX_NBR_LINES_OF_TEXT } from '../constants';
 import { BodyStyle, GridState, RowMeta } from '../types';
 import useMeasureText from './use-measure-text';
 import useOnPropsChange from './use-on-props-change';
 
-interface Props {
+export interface UseDynamicRowHeightProps {
   style: BodyStyle | GeneratedStyling;
   rowHeight: number;
   rowCount: number;
@@ -42,7 +42,7 @@ const useDynamicRowHeight = ({
   columns,
   boldText,
   gridState,
-}: Props) => {
+}: UseDynamicRowHeightProps) => {
   const rowMeta = useRef<RowMeta>({
     lastScrollToRatio: 0,
     resetAfterRowIndex: 0, // TODO find a way to implement this, it can potentially improve performance
@@ -104,7 +104,7 @@ const useDynamicRowHeight = ({
   );
 
   const getRowHeight = useCallback(
-    (index: number) => rowMeta.current.heights[index] ?? estimatedRowHeight,
+    (rowIdx: number) => rowMeta.current.heights[rowIdx] ?? estimatedRowHeight,
     [rowMeta, estimatedRowHeight]
   );
 
@@ -120,22 +120,16 @@ const useDynamicRowHeight = ({
   const updateCellHeight = (rows: Row[]) => {
     if (!gridState) return;
 
-    const { overscanRowStartIndex: rowStart, overscanRowStopIndex, overscanColumnStopIndex } = gridState.current;
-    // By including COLUMN_DATA_BUFFER_SIZE here, the likely hood of cells changing size once the user releases
-    // the column resizer should be reduced
-    const columnStop = Math.min(overscanColumnStopIndex + COLUMN_DATA_BUFFER_SIZE, layout.qHyperCube.qSize.qcx - 1);
+    const { overscanRowStartIndex: rowStart, overscanRowStopIndex } = gridState.current;
     const rowStop = Math.min(overscanRowStopIndex, layout.qHyperCube.qSize.qcy - 1);
 
     for (let rowIdx = rowStart; rowIdx <= rowStop; rowIdx++) {
-      const row = rows[rowIdx];
-      if (row) {
-        for (let colIdx = 0; colIdx <= columnStop; colIdx++) {
-          const cell = row[`col-${colIdx}`] as Cell;
-          if (cell) {
-            setCellSize(cell.qText ?? '', rowIdx, colIdx);
-          }
+      const row = rows[rowIdx] ?? {};
+      Object.values(row).forEach((cell) => {
+        if (typeof cell === 'object') {
+          setCellSize(cell.qText ?? '', rowIdx, cell.pageColIdx);
         }
-      }
+      });
     }
   };
 
