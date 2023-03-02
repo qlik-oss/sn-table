@@ -39,9 +39,6 @@ export default function supernova(env: Galaxy) {
       const rootElement = useElement();
       const reactRoot = useReactRoot(rootElement);
       const layout = useStaleLayout() as TableLayout;
-      layout.presentation = {
-        usePagination: false,
-      };
       const app = useApp();
       const model = useModel();
       const constraints = useConstraints();
