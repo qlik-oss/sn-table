@@ -16,7 +16,7 @@ import { TableLayout } from '../../../types';
 import RecursiveMenuList from './MenuList/RecursiveMenuList';
 import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 
-export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
+export default function HeadCellMenu({ column, tabIndex, isInteractionEnabled }: HeadCellMenuProps) {
   const showSearchMenuItem = column.isDim;
   const anchorRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
@@ -156,7 +156,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
         aria-controls={openMenuDropdown ? 'sn-table-head-menu' : undefined}
         aria-expanded={openMenuDropdown ? 'true' : undefined}
         aria-haspopup="true"
-        onClick={handleOpenDropdown}
+        onClick={isInteractionEnabled ? handleOpenDropdown : null}
       >
         <More height={DEFAULT_FONT_SIZE} />
       </StyledMenuIconButton>

@@ -35,7 +35,7 @@ describe('<HeadCellMenu />', () => {
     'SNTable.MenuItem.ClearSelections',
   ];
 
-  const renderTableHeadCellMenu = (cellCoordMock?: [number, number]) =>
+  const renderTableHeadCellMenu = (cellCoordMock?: [number, number], isInteractionEnabled = true) =>
     render(
       <TestWithProviders
         cellCoordMock={cellCoordMock}
@@ -44,7 +44,7 @@ describe('<HeadCellMenu />', () => {
         embed={embed}
         model={model}
       >
-        <HeadCellMenu column={column} tabIndex={0} />
+        <HeadCellMenu column={column} tabIndex={0} isInteractionEnabled={isInteractionEnabled} />
       </TestWithProviders>
     );
 

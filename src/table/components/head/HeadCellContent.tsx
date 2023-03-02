@@ -43,7 +43,9 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
         )}
       </StyledSortButton>
 
-      {areBasicFeaturesEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
+      {areBasicFeaturesEnabled && (
+        <HeadCellMenu column={column} tabIndex={tabIndex} isInteractionEnabled={isInteractionEnabled} />
+      )}
     </StyledHeadCellContent>
   );
 }

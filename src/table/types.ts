@@ -261,6 +261,7 @@ export interface HeadCellContentProps {
 export interface HeadCellMenuProps {
   column: Column;
   tabIndex: number;
+  isInteractionEnabled: boolean;
 }
 
 export type MenuItemGroup = HeadCellMenuItem[];
