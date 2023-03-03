@@ -9,16 +9,17 @@ import HeadCellMenu from './HeadCellMenu';
 import { handleHeadKeyDown } from '../../utils/handle-key-press';
 
 function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }: HeadCellContentProps) {
-  const { constraints, selectionsAPI, keyboard, translator, rootElement, changeSortOrder } = useContextSelector(
+  const { constraints, keyboard, translator, rootElement, changeSortOrder } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
+  const isInSelectionMode = useContextSelector(TableContext, (value) => value.selectionState.colIdx > -1);
 
   const { startIcon, endIcon, lockIcon } = getHeadIcons(column);
-  const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
-  const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
+  const isInteractionEnabled = !constraints.active && !isInSelectionMode;
+  const tabIndex = isInteractionEnabled && (!keyboard.enabled || keyboard.active) ? 0 : -1;
 
   const handleSort = () => isInteractionEnabled && changeSortOrder(column);
   const onKeyDown = (evt: React.KeyboardEvent) =>
