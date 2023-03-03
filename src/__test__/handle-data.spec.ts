@@ -205,17 +205,17 @@ describe('handle-data', () => {
       expect(getTotalInfo(layout, 3, 3, 2)).toBe('');
     });
 
-    it('should return new total label value', () => {
+    it('should return specified total label', () => {
       layout.totals.label = 'Whatever';
       expect(getTotalInfo(layout, 0, 0, 2)).toBe('Whatever');
     });
 
-    it('should return first dimension total value as empty when the label is set to empty', () => {
+    it('should return total label for first dimension as empty string when the label is set to empty string', () => {
       layout.totals.label = '';
       expect(getTotalInfo(layout, 0, 0, 2)).toBe('');
     });
 
-    it('should return first dimension total value as Totals when colIdx is not 0', () => {
+    it('should return first dimension total label when colIdx is not 0', () => {
       expect(getTotalInfo(layout, 1, 0, 2)).toBe('Totals');
     });
   });
