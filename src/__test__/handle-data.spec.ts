@@ -210,12 +210,12 @@ describe('handle-data', () => {
       expect(getTotalInfo(layout, 0, 0, 2)).toBe('Whatever');
     });
 
-    it('should return total label for first dimension as empty string when the label is set to empty string', () => {
+    it('should return total label for first dimension as empty string, when the label is set to empty string', () => {
       layout.totals.label = '';
       expect(getTotalInfo(layout, 0, 0, 2)).toBe('');
     });
 
-    it('should return first dimension total label when colIdx is not 0', () => {
+    it('should return total label for first dimension when colIdx is not 0', () => {
       expect(getTotalInfo(layout, 1, 0, 2)).toBe('Totals');
     });
   });
