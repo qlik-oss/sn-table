@@ -104,24 +104,22 @@ describe('<HeadCellContent />', () => {
     expect(changeSortOrder).toHaveBeenCalledWith(column);
   });
 
-  it('should not call changeSortOrder when clicking a header cell and constraints.active is true', () => {
+  it('should hide the sort button/head menu button when constraints.active is true in edit mode', () => {
     constraints = {
       active: true,
     };
     renderTableHead();
-    fireEvent.click(screen.getByText(column.label));
 
-    expect(changeSortOrder).not.toHaveBeenCalled();
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
-  it('should not call changeSortOrder when clicking a header cell and cells are selected', () => {
+  it('should hide the sort button/head menu button when clicking a header cell and cells are selected', () => {
     selectionsAPI = {
       isModal: () => true,
     } as ExtendedSelectionAPI;
     renderTableHead();
-    fireEvent.click(screen.getByText(column.label));
 
-    expect(changeSortOrder).not.toHaveBeenCalled();
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
   it('should show the lock icon only when the selections on dimensions are locked', () => {
