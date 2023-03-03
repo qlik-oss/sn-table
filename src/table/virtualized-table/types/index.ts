@@ -58,7 +58,7 @@ export interface HeaderProps {
   pageInfo: PageInfo;
   forwardRef: React.RefObject<VariableSizeList<any>>;
   columns: Column[];
-  columnWidth: number[];
+  columnWidths: number[];
   headerStyle: GeneratedStyling;
   rowHeight: number;
 }
@@ -68,7 +68,7 @@ export interface TotalsProps {
   pageInfo: PageInfo;
   forwardRef: React.RefObject<VariableSizeList<any>>;
   columns: Column[];
-  columnWidth: number[];
+  columnWidths: number[];
   totals: Totals;
   rowHeight: number;
 }
@@ -77,7 +77,7 @@ export interface BodyProps {
   rect: Rect;
   pageInfo: PageInfo;
   columns: Column[];
-  columnWidth: number[];
+  columnWidths: number[];
   innerForwardRef: React.RefObject<HTMLDivElement>;
   bodyStyle: BodyStyle;
   rowHeight: number;

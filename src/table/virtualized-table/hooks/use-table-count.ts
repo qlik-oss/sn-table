@@ -6,14 +6,14 @@ const useTableCount = (
   layout: TableLayout,
   pageInfo: PageInfo,
   rect: Rect,
-  columnWidth: number[],
+  columnWidths: number[],
   bodyRowHeight: number
 ) => {
   const rowCount = Math.min(pageInfo.rowsPerPage, layout.qHyperCube.qSize.qcy - pageInfo.page * pageInfo.rowsPerPage);
   const visibleRowCount = Math.min(rowCount, Math.ceil(rect.height / bodyRowHeight));
   const visibleColumnCount = useMemo(
     () =>
-      columnWidth.reduce(
+      columnWidths.reduce(
         (data, colWidth) => {
           if (data.width < rect.width) {
             data.width += colWidth;
@@ -24,7 +24,7 @@ const useTableCount = (
         },
         { count: 0, width: 0 }
       ),
-    [rect, columnWidth]
+    [rect, columnWidths]
   ).count;
 
   return {

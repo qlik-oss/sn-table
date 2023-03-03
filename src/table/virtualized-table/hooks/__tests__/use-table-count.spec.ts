@@ -8,7 +8,7 @@ describe('useTableCount', () => {
   let layout: TableLayout;
   let pageInfo: PageInfo;
   let rect: stardust.Rect;
-  let columnWidth: number[];
+  let columnWidths: number[];
 
   beforeEach(() => {
     layout = {
@@ -33,13 +33,13 @@ describe('useTableCount', () => {
       height: 10 * MIN_BODY_ROW_HEIGHT,
     };
 
-    columnWidth = [50, 150, 200];
+    columnWidths = [50, 150, 200];
   });
 
   describe('rowCount', () => {
     test('should be capped at max page size', () => {
       layout.qHyperCube.qSize.qcy = MAX_PAGE_SIZE * 2;
-      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth, MIN_BODY_ROW_HEIGHT));
+      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidths, MIN_BODY_ROW_HEIGHT));
 
       expect(result.current.rowCount).toEqual(MAX_PAGE_SIZE);
     });
@@ -49,7 +49,7 @@ describe('useTableCount', () => {
       layout.qHyperCube.qSize.qcy = MAX_PAGE_SIZE + expectedRowCount;
       pageInfo.page = 1;
 
-      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth, MIN_BODY_ROW_HEIGHT));
+      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidths, MIN_BODY_ROW_HEIGHT));
 
       expect(result.current.rowCount).toEqual(expectedRowCount);
     });
@@ -57,7 +57,7 @@ describe('useTableCount', () => {
     test('should return rowCount when number of data rows is less than max page size', () => {
       layout.qHyperCube.qSize.qcy = 2500;
 
-      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth, MIN_BODY_ROW_HEIGHT));
+      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidths, MIN_BODY_ROW_HEIGHT));
 
       expect(result.current.rowCount).toEqual(2500);
     });
@@ -69,7 +69,7 @@ describe('useTableCount', () => {
       layout.qHyperCube.qSize.qcy = expectedVisibleRowCount;
       rect.height = 20 * MIN_BODY_ROW_HEIGHT; // number of rows that can be rendered
 
-      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth, MIN_BODY_ROW_HEIGHT));
+      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidths, MIN_BODY_ROW_HEIGHT));
 
       expect(result.current.visibleRowCount).toEqual(expectedVisibleRowCount);
     });
@@ -79,7 +79,7 @@ describe('useTableCount', () => {
       layout.qHyperCube.qSize.qcy = 20 * MIN_BODY_ROW_HEIGHT; // number of rows
       rect.height = expectedVisibleRowCount * MIN_BODY_ROW_HEIGHT; // number of rows that can be rendered
 
-      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth, MIN_BODY_ROW_HEIGHT));
+      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidths, MIN_BODY_ROW_HEIGHT));
 
       expect(result.current.visibleRowCount).toEqual(expectedVisibleRowCount);
     });
@@ -87,23 +87,23 @@ describe('useTableCount', () => {
 
   describe('visibleColumnCount', () => {
     test('should handle when number of columns is less than the number of columns that can be rendered', () => {
-      columnWidth = [50, 50, 50, 50];
-      layout.qHyperCube.qSize.qcx = columnWidth.length;
-      rect.width = 50 * columnWidth.length + 50;
+      columnWidths = [50, 50, 50, 50];
+      layout.qHyperCube.qSize.qcx = columnWidths.length;
+      rect.width = 50 * columnWidths.length + 50;
 
-      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth, MIN_BODY_ROW_HEIGHT));
+      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidths, MIN_BODY_ROW_HEIGHT));
 
-      expect(result.current.visibleColumnCount).toEqual(columnWidth.length);
+      expect(result.current.visibleColumnCount).toEqual(columnWidths.length);
     });
 
     test('should handle when number of columns is more than the number of columns that can be rendered', () => {
-      columnWidth = [50, 50, 50, 50];
-      layout.qHyperCube.qSize.qcx = columnWidth.length;
-      rect.width = 50 * columnWidth.length - 50;
+      columnWidths = [50, 50, 50, 50];
+      layout.qHyperCube.qSize.qcx = columnWidths.length;
+      rect.width = 50 * columnWidths.length - 50;
 
-      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidth, MIN_BODY_ROW_HEIGHT));
+      const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidths, MIN_BODY_ROW_HEIGHT));
 
-      expect(result.current.visibleColumnCount).toEqual(columnWidth.length - 1);
+      expect(result.current.visibleColumnCount).toEqual(columnWidths.length - 1);
     });
   });
 });

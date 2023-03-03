@@ -11,9 +11,9 @@ import ScrollableContainer from './ScrollableContainer';
 import StickyContainer from './StickyContainer';
 import toTableRect, { toStickyContainerRect } from './utils/to-rect';
 import { useContextSelector, TableContext } from '../context';
-import getHeights from './utils/get-height';
 import useScrollbarWidth from './hooks/use-scrollbar-width';
 import useDidUpdateEffect from '../hooks/use-did-update-effect';
+import useHeights from './hooks/use-heights';
 
 const Table = (props: TableProps) => {
   const { rect, pageInfo } = props;
@@ -34,7 +34,14 @@ const Table = (props: TableProps) => {
     }),
     [layout, theme.name()] // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const { headerRowHeight, bodyRowHeight, headerAndTotalsHeight } = getHeights(styling.head, bodyStyle, totalsPosition);
+  const { headerRowHeight, totalsRowHeight, bodyRowHeight, headerAndTotalsHeight } = useHeights({
+    columns,
+    columnWidths,
+    pageInfo,
+    totalsPosition,
+    headerRef,
+    totalsRef,
+  });
   const tableRect = useMemo(() => toTableRect(rect, paginationNeeded), [rect, paginationNeeded]);
   const stickyContainerRect = useMemo(
     () => toStickyContainerRect(tableRect, xScrollbarWidth, yScrollbarWidth),
@@ -80,10 +87,10 @@ const Table = (props: TableProps) => {
       rect={stickyContainerRect}
       pageInfo={pageInfo}
       columns={columns}
-      columnWidth={columnWidths}
+      columnWidths={columnWidths}
       forwardRef={totalsRef}
       totals={totalsPosition}
-      rowHeight={bodyRowHeight}
+      rowHeight={totalsRowHeight}
     />
   );
 
@@ -96,7 +103,7 @@ const Table = (props: TableProps) => {
             rect={stickyContainerRect}
             pageInfo={pageInfo}
             columns={columns}
-            columnWidth={columnWidths}
+            columnWidths={columnWidths}
             forwardRef={headerRef}
             rowHeight={headerRowHeight}
           />
@@ -108,7 +115,7 @@ const Table = (props: TableProps) => {
             rect={stickyContainerRect}
             pageInfo={pageInfo}
             columns={columns}
-            columnWidth={columnWidths}
+            columnWidths={columnWidths}
             rowHeight={bodyRowHeight}
             headerAndTotalsHeight={headerAndTotalsHeight}
             syncHeight={syncHeight}
