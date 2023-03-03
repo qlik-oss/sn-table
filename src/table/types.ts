@@ -266,6 +266,7 @@ export interface HeadCellMenuProps {
 export type MenuItemGroup = HeadCellMenuItem[];
 
 export interface HeadCellMenuItem {
+  autoFocus?: boolean;
   id: number;
   icon: React.ReactElement;
   itemTitle: string;

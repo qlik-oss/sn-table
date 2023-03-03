@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import MenuGroup, { interceptClickOnMenuItems } from '../MenuGroup';
 import { HeadCellMenuItem, MenuItemGroup } from '../../../../types';
 
@@ -60,7 +60,7 @@ describe('MenuGroup', () => {
       expect(screen.getByText('Menu#02')).toBeVisible();
     });
 
-    it('should render menu items with subMenu', () => {
+    it('should render menu items with subMenu with correct keyboard navigation', () => {
       menuGroup = [
         { id: 1, icon: <i />, itemTitle: 'Menu#01', enabled: true },
         {
@@ -68,15 +68,50 @@ describe('MenuGroup', () => {
           icon: <i />,
           itemTitle: 'Menu#02',
           enabled: true,
-          subMenus: [[{ id: 1, icon: <i />, itemTitle: 'SubMenu#01', enabled: true }]],
+          subMenus: [
+            [
+              { id: 3, icon: <i />, itemTitle: 'SubMenu#01', enabled: true },
+              { id: 4, icon: <i />, itemTitle: 'SubMenu#02', enabled: true },
+            ],
+            [{ id: 5, icon: <i />, itemTitle: 'SubMenu#03', enabled: true }],
+          ],
         },
       ];
       renderer(menuGroup);
 
       expect(screen.getByText('Menu#01')).toBeVisible();
       expect(screen.getByText('Menu#02')).toBeVisible();
+
+      act(() => {
+        screen.getByTestId('menu-item-1').focus();
+      });
+      fireEvent.keyDown(screen.getByTestId('menu-item-1'), {
+        key: 'ArrowDown',
+      });
+      expect(screen.getByTestId('menu-item-2')).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('menu-item-2'), {
+        key: 'ArrowDown',
+      });
+      expect(screen.getByTestId('menu-item-1')).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('menu-item-1'), {
+        key: 'ArrowUp',
+      });
+      expect(screen.getByTestId('menu-item-2')).toHaveFocus();
+
       fireEvent.click(screen.getByText('Menu#02'));
       expect(screen.getByText('SubMenu#01')).toBeVisible();
+
+      fireEvent.keyDown(screen.getByTestId('menu-item-3'), { key: 'ArrowUp' });
+      expect(screen.getByTestId('menu-item-5')).toHaveFocus();
+
+      fireEvent.keyDown(screen.getByTestId('menu-item-5'), { key: 'ArrowUp' });
+      expect(screen.getByTestId('menu-item-4')).toHaveFocus();
+
+      fireEvent.keyDown(screen.getByTestId('menu-item-4'), { key: 'ArrowDown' });
+      expect(screen.getByTestId('menu-item-5')).toHaveFocus();
+
+      fireEvent.keyDown(screen.getByTestId('menu-item-5'), { key: 'ArrowDown' });
+      expect(screen.getByTestId('menu-item-3')).toHaveFocus();
     });
   });
 });

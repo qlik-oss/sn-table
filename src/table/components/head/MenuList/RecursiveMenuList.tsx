@@ -31,7 +31,6 @@ const RecursiveMenuList = ({
       open={open}
       anchorEl={anchorEl}
       onClose={onClose}
-      autoFocus={false}
       aria-labelledby={ariaLabel}
       {...(anchorOrigin ? { anchorOrigin } : {})}
       {...(transformOrigin ? { transformOrigin } : {})}

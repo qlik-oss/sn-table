@@ -10,8 +10,8 @@ import { useContextSelector, TableContext } from '../context';
 import Cell from './Cell';
 import getCellItemKey from './utils/get-cell-item-key';
 import useDynamicRowHeight from './hooks/use-dynamic-row-height';
-import { getBodyHeight } from './utils/get-height';
 import useOnPropsChange from './hooks/use-on-props-change';
+import getBodyHeight from './utils/get-body-height';
 
 const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   const { rect, columns, innerForwardRef, pageInfo, bodyStyle, rowHeight, headerAndTotalsHeight, syncHeight } = props;
@@ -23,24 +23,23 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     overscanRowStopIndex: 0,
   });
   const { layout, model, theme } = useContextSelector(TableContext, (value) => value.baseProps);
-  const columnWidth = useContextSelector(TableContext, (value) => value.columnWidths);
+  const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const isHoverEnabled = !!layout.components?.[0]?.content?.hoverEffect;
   const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
   const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(
     layout,
     pageInfo,
     rect,
-    columnWidth,
+    columnWidths,
     rowHeight
   );
 
   const { setCellSize, getRowHeight, rowMeta, estimatedRowHeight, maxLineCount, updateCellHeight } =
     useDynamicRowHeight({
-      layout,
       pageInfo,
       style: bodyStyle,
       rowHeight,
-      columnWidth,
+      columnWidths,
       gridRef,
       rowCount,
       gridState,
@@ -96,12 +95,12 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     if (!gridRef.current) return;
 
     gridRef.current.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: true });
-  }, [layout, pageInfo.page, gridRef, columnWidth, rowMeta, theme.name()]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [layout, pageInfo.page, gridRef, columnWidths, rowMeta, theme.name()]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useOnPropsChange(() => {
     gridRef.current?.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: false });
     updateCellHeight(rowsInPage);
-  }, [columnWidth]);
+  }, [columnWidths]);
 
   useImperativeHandle(
     ref,
@@ -133,7 +132,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
       innerRef={innerForwardRef}
       style={{ overflow: 'hidden' }}
       columnCount={layout.qHyperCube.qSize.qcx}
-      columnWidth={(index) => columnWidth[index]}
+      columnWidth={(index) => columnWidths[index]}
       height={bodyHeight}
       rowCount={rowCount}
       rowHeight={getRowHeight}

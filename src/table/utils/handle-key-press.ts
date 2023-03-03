@@ -13,6 +13,29 @@ const preventDefaultBehavior = (evt: React.KeyboardEvent) => {
   evt.preventDefault();
 };
 
+const getNextFocusItem = (currentFocus: Element): Element | undefined => {
+  const nextItem = currentFocus.nextElementSibling;
+  if (!nextItem) {
+    return currentFocus.parentElement?.children?.[0];
+  }
+  if (nextItem.tagName === 'HR') {
+    return getNextFocusItem(nextItem);
+  }
+  return nextItem;
+};
+
+const getPreviousFocusItem = (currentFocus: Element): Element | undefined => {
+  const previousItem = currentFocus.previousElementSibling;
+  if (!previousItem) {
+    const menuItemAmount = currentFocus.parentElement?.children?.length as number;
+    return currentFocus.parentElement?.children?.[menuItemAmount - 1];
+  }
+  if (previousItem.tagName === 'HR') {
+    return getPreviousFocusItem(previousItem);
+  }
+  return previousItem;
+};
+
 const isCtrlShift = (evt: React.KeyboardEvent) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
 
 const isArrowKey = (key: string) =>
@@ -143,6 +166,31 @@ export const handleHeadKeyDown = ({
     }
     default:
       break;
+  }
+};
+
+/**
+ * handles ArrowDown and ArrowUp events for the head cell menu (move focus)
+ */
+export const handleHeadCellMenuKeyDown = (event: React.KeyboardEvent<HTMLLIElement>) => {
+  const { key, target } = event;
+  const currentFocusItem = document.activeElement ?? (target as HTMLElement);
+  // The rest key are handled by handleKeyDown in MUIMenuList
+  if (key === 'ArrowDown' || key === 'ArrowUp') {
+    const getNewFocusItem = (currentItem: Element) =>
+      key === 'ArrowDown' ? getNextFocusItem(currentItem) : getPreviousFocusItem(currentItem);
+    // Prevent scroll of the page
+    // Stop triggering handleKeyDown in MUIMenuList
+    preventDefaultBehavior(event);
+    let newFocusItem = getNewFocusItem(currentFocusItem);
+    while (newFocusItem) {
+      if (newFocusItem.ariaDisabled === 'true') {
+        newFocusItem = getNewFocusItem(newFocusItem);
+      } else {
+        (newFocusItem as HTMLElement).focus();
+        break;
+      }
+    }
   }
 };
 

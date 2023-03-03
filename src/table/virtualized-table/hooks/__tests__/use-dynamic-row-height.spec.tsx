@@ -1,15 +1,19 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
+import React from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
 import { Column, PageInfo, Row, TableLayout } from '../../../../types';
 import { generateLayout } from '../../../../__test__/generate-test-data';
+import TestWithProviders from '../../../../__test__/test-with-providers';
 import { GeneratedStyling } from '../../../types';
 import { BodyStyle, GridState } from '../../types';
 import useDynamicRowHeight, { UseDynamicRowHeightProps } from '../use-dynamic-row-height';
 
+type HookWrapperProps = { children: JSX.Element };
+
 describe('useDynamicRowHeight', () => {
   let columns: Column[] | undefined;
   let style: BodyStyle | GeneratedStyling;
-  let columnWidth: number[];
+  let columnWidths: number[];
   let rowHeight: number;
   let layout: TableLayout;
   let pageInfo: PageInfo;
@@ -19,11 +23,12 @@ describe('useDynamicRowHeight', () => {
   let boldText: boolean | undefined;
   let gridState: React.MutableRefObject<GridState> | undefined;
   let props: UseDynamicRowHeightProps;
+  let wrapper: ({ children }: HookWrapperProps) => JSX.Element;
 
   beforeEach(() => {
     rowCount = 5;
     layout = generateLayout(1, 1, rowCount);
-    columnWidth = [120, 200];
+    columnWidths = [120, 200];
     rowHeight = 20;
     pageInfo = { page: 0, rowsPerPage: 10, rowsPerPageOptions: [] };
     style = { fontFamily: 'Arial', fontSize: '12px' } as GeneratedStyling;
@@ -39,20 +44,21 @@ describe('useDynamicRowHeight', () => {
     props = {
       columns,
       style,
-      columnWidth,
+      columnWidths,
       rowHeight,
       rowCount,
-      layout,
       pageInfo,
       gridRef,
       lineRef,
       boldText,
       gridState,
     };
+
+    wrapper = ({ children }: HookWrapperProps) => <TestWithProviders layout={layout}>{children}</TestWithProviders>;
   });
 
   test('should update row meta and row height when setCellSize is called', async () => {
-    const { result } = renderHook(() => useDynamicRowHeight(props));
+    const { result } = renderHook(() => useDynamicRowHeight(props), { wrapper });
 
     await waitFor(() => expect(result.current.rowMeta.current.totalHeight).toEqual(0));
     await waitFor(() => expect(result.current.estimatedRowHeight).toEqual(rowHeight));
@@ -72,7 +78,7 @@ describe('useDynamicRowHeight', () => {
 
   test('should updated an already measured rows height', async () => {
     const rowIdx = 0;
-    const { result } = renderHook(() => useDynamicRowHeight(props));
+    const { result } = renderHook(() => useDynamicRowHeight(props), { wrapper });
 
     act(() => result.current.setCellSize('123456789', rowIdx, 0));
 
@@ -81,7 +87,7 @@ describe('useDynamicRowHeight', () => {
 
     // Use a really long string on the next column
     const colIdx = 1;
-    act(() => result.current.setCellSize(Array(columnWidth[colIdx]).fill('A').join(''), rowIdx, colIdx));
+    act(() => result.current.setCellSize(Array(columnWidths[colIdx]).fill('A').join(''), rowIdx, colIdx));
 
     await waitFor(() => expect(result.current.rowMeta.current.count).toEqual(1));
     await waitFor(() => expect(result.current.rowMeta.current.heights).toEqual([41]));
@@ -92,7 +98,7 @@ describe('useDynamicRowHeight', () => {
   test('should ignore an already measured cells height', async () => {
     const rowIdx = 0;
     const colIdx = 0;
-    const { result } = renderHook(() => useDynamicRowHeight(props));
+    const { result } = renderHook(() => useDynamicRowHeight(props), { wrapper });
 
     act(() => result.current.setCellSize('123456789', rowIdx, colIdx));
 
@@ -102,7 +108,7 @@ describe('useDynamicRowHeight', () => {
     await waitFor(() => expect(result.current.getRowHeight(1)).toEqual(25));
 
     // Use a really long string on the same row and column index as before
-    act(() => result.current.setCellSize(Array(columnWidth[colIdx]).fill('A').join(''), rowIdx, colIdx));
+    act(() => result.current.setCellSize(Array(columnWidths[colIdx]).fill('A').join(''), rowIdx, colIdx));
 
     await waitFor(() => expect(result.current.rowMeta.current.count).toEqual(1));
     await waitFor(() => expect(result.current.rowMeta.current.heights).toEqual([25]));
@@ -126,7 +132,7 @@ describe('useDynamicRowHeight', () => {
       state.overscanRowStartIndex = 0;
       state.overscanRowStopIndex = rowCount;
 
-      const { result } = renderHook(() => useDynamicRowHeight(props));
+      const { result } = renderHook(() => useDynamicRowHeight(props), { wrapper });
 
       act(() => result.current.updateCellHeight(rows));
 
@@ -150,9 +156,9 @@ describe('useDynamicRowHeight', () => {
       state.overscanRowStopIndex = rowCount;
 
       const qcy = 2;
-      props.layout = generateLayout(1, 1, qcy);
+      layout = generateLayout(1, 1, qcy);
 
-      const { result } = renderHook(() => useDynamicRowHeight(props));
+      const { result } = renderHook(() => useDynamicRowHeight(props), { wrapper });
 
       act(() => result.current.updateCellHeight(rows));
 
@@ -173,7 +179,7 @@ describe('useDynamicRowHeight', () => {
 
       props.gridState = undefined;
 
-      const { result } = renderHook(() => useDynamicRowHeight(props));
+      const { result } = renderHook(() => useDynamicRowHeight(props), { wrapper });
 
       act(() => result.current.setCellSize('123456789', 0, 0));
       act(() => result.current.updateCellHeight(rows));
@@ -185,20 +191,21 @@ describe('useDynamicRowHeight', () => {
 
   describe('reset row meta', () => {
     test('should reset row meta when layout is updated', async () => {
-      const { result, rerender } = renderHook((p) => useDynamicRowHeight(p), { initialProps: props });
+      const { result, rerender } = renderHook((p) => useDynamicRowHeight(p), { initialProps: props, wrapper });
 
       await act(() => result.current.setCellSize('123456789', 0, 0));
 
       await waitFor(() => expect(result.current.rowMeta.current.count).toEqual(1));
       await act(() => {
-        rerender({ ...props, layout: { ...layout } });
+        layout = { ...layout };
+        rerender({ ...props });
       });
 
       await waitFor(() => expect(result.current.rowMeta.current.count).toEqual(0));
     });
 
     test('should reset row meta when page info is updated', async () => {
-      const { result, rerender } = renderHook((p) => useDynamicRowHeight(p), { initialProps: props });
+      const { result, rerender } = renderHook((p) => useDynamicRowHeight(p), { initialProps: props, wrapper });
 
       await act(() => result.current.setCellSize('123456789', 0, 0));
 
@@ -211,13 +218,13 @@ describe('useDynamicRowHeight', () => {
     });
 
     test('should reset row meta when column width is updated', async () => {
-      const { result, rerender } = renderHook((p) => useDynamicRowHeight(p), { initialProps: props });
+      const { result, rerender } = renderHook((p) => useDynamicRowHeight(p), { initialProps: props, wrapper });
 
       await act(() => result.current.setCellSize('123456789', 0, 0));
 
       await waitFor(() => expect(result.current.rowMeta.current.count).toEqual(1));
       await act(() => {
-        rerender({ ...props, columnWidth: [...columnWidth] });
+        rerender({ ...props, columnWidths: [...columnWidths] });
       });
 
       await waitFor(() => expect(result.current.rowMeta.current.count).toEqual(0));

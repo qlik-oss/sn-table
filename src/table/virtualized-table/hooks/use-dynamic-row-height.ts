@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
-import { Column, PageInfo, Row, TableLayout } from '../../../types';
+import { Column, PageInfo, Row } from '../../../types';
+import { TableContext, useContextSelector } from '../../context';
 import { COMMON_CELL_STYLING } from '../../styling-defaults';
 import { GeneratedStyling } from '../../types';
 import {
@@ -8,18 +9,17 @@ import {
   CELL_PADDING_HEIGHT,
   LINE_HEIGHT as LINE_HEIGHT_MULTIPLIER,
 } from '../../utils/styling-utils';
-import { subtractCellPaddingAndBorder, subtractCellPaddingIconsAndBorder } from '../utils/cell-width-utils';
-import { MAX_NBR_LINES_OF_TEXT } from '../constants';
+import { MAX_NBR_LINES_OF_TEXT, MIN_BODY_ROW_HEIGHT } from '../constants';
 import { BodyStyle, GridState, RowMeta } from '../types';
+import { subtractCellPaddingAndBorder, subtractCellPaddingIconsAndBorder } from '../utils/cell-width-utils';
 import useMeasureText from './use-measure-text';
 import useOnPropsChange from './use-on-props-change';
 
 export interface UseDynamicRowHeightProps {
   style: BodyStyle | GeneratedStyling;
-  rowHeight: number;
+  rowHeight?: number;
   rowCount: number;
-  columnWidth: number[];
-  layout: TableLayout;
+  columnWidths: number[];
   pageInfo: PageInfo;
   gridRef?: React.RefObject<VariableSizeGrid<any>>;
   lineRef?: React.RefObject<VariableSizeList<any>>;
@@ -32,9 +32,8 @@ const MAX_ELEMENT_DOM_SIZE = 15_000_000; // Guestimated max height value in px o
 
 const useDynamicRowHeight = ({
   style,
-  columnWidth,
+  columnWidths,
   rowHeight,
-  layout,
   pageInfo,
   rowCount,
   gridRef,
@@ -51,7 +50,8 @@ const useDynamicRowHeight = ({
     count: 0,
     measuredCells: new Set<string>(),
   });
-  const [estimatedRowHeight, setEstimatedRowHeight] = useState(rowHeight);
+  const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
+  const [estimatedRowHeight, setEstimatedRowHeight] = useState(rowHeight || MIN_BODY_ROW_HEIGHT);
   const { measureText } = useMeasureText(style.fontSize, style.fontFamily, boldText);
   const lineHeight = parseInt(style.fontSize ?? COMMON_CELL_STYLING.fontSize, 10) * LINE_HEIGHT_MULTIPLIER;
 
@@ -66,14 +66,14 @@ const useDynamicRowHeight = ({
     (text: string, colIdx: number) => {
       const width = measureText(text.trim());
       const cellWidth = columns
-        ? subtractCellPaddingIconsAndBorder(columnWidth[colIdx], columns[colIdx])
-        : subtractCellPaddingAndBorder(columnWidth[colIdx]);
+        ? subtractCellPaddingIconsAndBorder(columnWidths[colIdx], columns[colIdx])
+        : subtractCellPaddingAndBorder(columnWidths[colIdx]);
       const estimatedLineCount = Math.min(maxLineCount, Math.ceil(width / cellWidth));
       const textHeight = Math.max(1, estimatedLineCount) * lineHeight;
 
       return textHeight + CELL_PADDING_HEIGHT + CELL_BORDER_HEIGHT;
     },
-    [columnWidth, measureText, lineHeight, maxLineCount, columns]
+    [columnWidths, measureText, lineHeight, maxLineCount, columns]
   );
 
   const setCellSize = useCallback(

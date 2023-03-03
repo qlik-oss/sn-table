@@ -5,6 +5,7 @@ import ArrowRight from '@qlik-trial/sprout/icons/react/ArrowRight';
 import { HeadCellMenuItem, MenuItemGroup } from '../../../types';
 import { StyledMenuItem, StyledListItemIcon, StyledMenuItemLabel } from '../styles';
 import RecursiveMenuList from './RecursiveMenuList';
+import { handleHeadCellMenuKeyDown } from '../../../utils/handle-key-press';
 
 export const interceptClickOnMenuItems = (menuGroups: MenuItemGroup[], cache: SubMenusOpenStatusCache) => {
   const result = menuGroups.map((grp) => {
@@ -27,7 +28,7 @@ export const interceptClickOnMenuItems = (menuGroups: MenuItemGroup[], cache: Su
 type SubMenusOpenStatusCache = Record<string, React.Dispatch<React.SetStateAction<boolean>>>;
 let subMenusOpenStatusCache: SubMenusOpenStatusCache = {};
 
-const MenuGroupItems = ({ id, onClick, itemTitle, icon, enabled, subMenus }: HeadCellMenuItem) => {
+const MenuGroupItems = ({ autoFocus, id, onClick, itemTitle, icon, enabled, subMenus }: HeadCellMenuItem) => {
   const [openMenu, setOpenMenu] = useState(false);
   const anchorRef = useRef<HTMLDivElement | null>(null);
 
@@ -43,13 +44,16 @@ const MenuGroupItems = ({ id, onClick, itemTitle, icon, enabled, subMenus }: Hea
   };
 
   return (
-    <div key={id}>
+    <>
       <StyledMenuItem
         ref={subMenus ? anchorRef : null}
         key={id}
+        data-testid={`menu-item-${id}`}
         className="sn-table-head-menu-item"
         onClick={handleOnClick}
         disabled={!enabled}
+        autoFocus={autoFocus}
+        onKeyDown={handleHeadCellMenuKeyDown}
       >
         <StyledMenuItemLabel>
           <StyledListItemIcon>{icon}</StyledListItemIcon>
@@ -68,12 +72,12 @@ const MenuGroupItems = ({ id, onClick, itemTitle, icon, enabled, subMenus }: Hea
           anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
         />
       )}
-    </div>
+    </>
   );
 };
 
 const MenuGroup = ({ menuGroup }: { menuGroup: HeadCellMenuItem[] }) => {
-  return menuGroup.map((groupItem) => <MenuGroupItems {...groupItem} />);
+  return menuGroup.map((groupItem) => <MenuGroupItems key={groupItem.id} {...groupItem} />);
 };
 
 export default MenuGroup;
