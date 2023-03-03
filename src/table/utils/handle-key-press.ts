@@ -174,29 +174,20 @@ export const handleHeadKeyDown = ({
  */
 export const handleHeadCellMenuKeyDown = (event: React.KeyboardEvent<HTMLLIElement>) => {
   const { key, target } = event;
-  const currentFocus = document.activeElement ?? (target as HTMLElement);
+  const currentFocusItem = document.activeElement ?? (target as HTMLElement);
   // The rest key are handled by handleKeyDown in MUIMenuList
-  if (key === 'ArrowDown') {
+  if (key === 'ArrowDown' || key === 'ArrowUp') {
+    const getNewFocusItem = (currentItem: Element) =>
+      key === 'ArrowDown' ? getNextFocusItem(currentItem) : getPreviousFocusItem(currentItem);
     // Prevent scroll of the page
     // Stop triggering handleKeyDown in MUIMenuList
     preventDefaultBehavior(event);
-    let nextFocusItem = getNextFocusItem(currentFocus);
-    while (nextFocusItem) {
-      if (nextFocusItem.ariaDisabled === 'true') {
-        nextFocusItem = getNextFocusItem(nextFocusItem);
+    let newFocusItem = getNewFocusItem(currentFocusItem);
+    while (newFocusItem) {
+      if (newFocusItem.ariaDisabled === 'true') {
+        newFocusItem = getNewFocusItem(newFocusItem);
       } else {
-        (nextFocusItem as HTMLElement).focus();
-        break;
-      }
-    }
-  } else if (key === 'ArrowUp') {
-    preventDefaultBehavior(event);
-    let previousFocusItem = getPreviousFocusItem(currentFocus);
-    while (previousFocusItem) {
-      if (previousFocusItem.ariaDisabled === 'true') {
-        previousFocusItem = getPreviousFocusItem(previousFocusItem);
-      } else {
-        (previousFocusItem as HTMLElement).focus();
+        (newFocusItem as HTMLElement).focus();
         break;
       }
     }
