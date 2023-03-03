@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { VariableSizeList } from 'react-window';
 import { Column, PageInfo, TotalsPosition } from '../../../types';
 import { TableContext, useContextSelector } from '../../context';
@@ -48,10 +49,12 @@ const useHeights = ({
     boldText: true,
   });
 
-  columns.forEach((col, idx) => {
-    headerHeight.setCellSize(col.label, 0, idx);
-    totalsHeight.setCellSize(col.totalInfo, 0, idx);
-  });
+  useEffect(() => {
+    columns.forEach((col, idx) => {
+      headerHeight.setCellSize(col.label, 0, idx);
+      totalsHeight.setCellSize(col.totalInfo, 0, idx);
+    });
+  }, [columns, headerHeight, totalsHeight]);
 
   const headerRowHeight = headerHeight.getRowHeight(0) + PADDING_TOP_BOTTOM * 2;
   const totalsRowHeight = totalsHeight.getRowHeight(0);
