@@ -34,6 +34,7 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
         endIcon={endIcon}
         onClick={handleSort}
         tabIndex={tabIndex}
+        disabled={!isInteractionEnabled}
       >
         {children}
         {isFocusInHead && (
@@ -43,7 +44,7 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
         )}
       </StyledSortButton>
 
-      {areBasicFeaturesEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
+      {areBasicFeaturesEnabled && isInteractionEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
     </StyledHeadCellContent>
   );
 }

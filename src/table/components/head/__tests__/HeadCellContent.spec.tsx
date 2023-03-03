@@ -56,18 +56,67 @@ describe('<HeadCellContent />', () => {
       isModal: () => false,
     } as ExtendedSelectionAPI;
     areBasicFeaturesEnabled = false;
+    isActive = true;
   });
 
-  it('should show the menu button when the head cell is on focus', () => {
+  it('should show the sort icon when isActive is true', () => {
+    const { baseElement } = renderTableHead();
+
+    expect(baseElement.querySelector('.MuiButton-iconSizeSmall')).toBeVisible();
+  });
+
+  it('should show the sort icon when isActive is false but the cell is on focus', () => {
+    isActive = false;
+    const { baseElement } = renderTableHead();
+
+    const labelButton = screen.getByText(column.label);
+    const sortIcon = baseElement.querySelector('.MuiButton-iconSizeSmall > svg') as Element;
+    const style = window.getComputedStyle(sortIcon);
+    expect(style.opacity).toEqual('0');
+
+    labelButton.focus();
+    waitFor(async () => {
+      expect(sortIcon).toBeVisible();
+    });
+    labelButton.blur();
+    waitFor(async () => {
+      expect(sortIcon).not.toBeVisible();
+    });
+
+    useEvent.hover(sortIcon);
+    waitFor(async () => {
+      expect(sortIcon).toBeVisible();
+    });
+    useEvent.unhover(sortIcon);
+    waitFor(async () => {
+      expect(sortIcon).not.toBeVisible();
+    });
+  });
+
+  it('should show the menu button when the head cell is on focus or hovered', () => {
     areBasicFeaturesEnabled = true;
     const { baseElement } = renderTableHead();
 
     const labelButton = screen.getByText(column.label);
+    const menuButton = baseElement.querySelector('#sn-table-head-menu-button');
     // TODO: add a proper title for the button
-    expect(baseElement.querySelector('#sn-table-head-menu-button')).not.toBeVisible();
+    expect(menuButton).not.toBeVisible();
     labelButton.focus();
     waitFor(async () => {
-      expect(baseElement.querySelector('#sn-table-head-menu-button')).toBeVisible();
+      expect(menuButton).toBeVisible();
+    });
+    labelButton.blur();
+    waitFor(async () => {
+      expect(labelButton).not.toBeVisible();
+    });
+
+    useEvent.hover(labelButton);
+    waitFor(async () => {
+      expect(menuButton).toBeVisible();
+    });
+    useEvent.unhover(labelButton);
+    waitFor(async () => {
+      expect(menuButton).not.toBeVisible();
     });
   });
 
@@ -82,19 +131,56 @@ describe('<HeadCellContent />', () => {
     expect(baseElement.querySelector('#sn-table-head-menu-button')).toBeInTheDocument();
   });
 
-  it('should show the menu button when the head cell is hovered', () => {
-    areBasicFeaturesEnabled = true;
+  it('should make the head sort icon be invisible when constraints.active is true and even the focus is on the head cell', () => {
+    selectionsAPI = {
+      isModal: () => true,
+    } as ExtendedSelectionAPI;
     const { baseElement } = renderTableHead();
 
-    expect(baseElement.querySelector('#sn-table-head-menu-button')).not.toBeVisible();
-    useEvent.hover(baseElement);
+    const sortIcon = baseElement.querySelector('.MuiButton-iconSizeSmall');
+    expect(sortIcon).not.toBeVisible();
+    expect(sortIcon).toBeInTheDocument();
+
+    const labelButton = screen.getByText(column.label);
+    labelButton.focus();
     waitFor(async () => {
-      expect(baseElement.querySelector('#sn-table-head-menu-button')).toBeVisible();
+      expect(sortIcon).not.toBeVisible();
     });
-    useEvent.unhover(baseElement);
+  });
+
+  it('should make the head sort icon be invisible when cells are selected and even the focus is on the head cell', () => {
+    selectionsAPI = {
+      isModal: () => true,
+    } as ExtendedSelectionAPI;
+    const { baseElement } = renderTableHead();
+
+    const sortIcon = baseElement.querySelector('.MuiButton-iconSizeSmall');
+    expect(sortIcon).not.toBeVisible();
+    expect(sortIcon).toBeInTheDocument();
+
+    const labelButton = screen.getByText(column.label);
+    labelButton.focus();
     waitFor(async () => {
-      expect(baseElement.querySelector('#sn-table-head-menu-button')).not.toBeVisible();
+      expect(sortIcon).not.toBeVisible();
     });
+  });
+
+  it('should hide the head menu button when constraints.active is true', () => {
+    selectionsAPI = {
+      isModal: () => true,
+    } as ExtendedSelectionAPI;
+    const { baseElement } = renderTableHead();
+
+    expect(baseElement.querySelector('#sn-table-head-menu-button')).not.toBeInTheDocument();
+  });
+
+  it('should hide the head menu button when cells are selected', () => {
+    selectionsAPI = {
+      isModal: () => true,
+    } as ExtendedSelectionAPI;
+    const { baseElement } = renderTableHead();
+
+    expect(baseElement.querySelector('#sn-table-head-menu-button')).not.toBeInTheDocument();
   });
 
   it('should call changeSortOrder when clicking the head label', () => {
