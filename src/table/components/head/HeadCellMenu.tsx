@@ -7,6 +7,8 @@ import ClearSelections from '@qlik-trial/sprout/icons/react/ClearSelections';
 import SelectPossible from '@qlik-trial/sprout/icons/react/SelectPossible';
 import SelectAlternative from '@qlik-trial/sprout/icons/react/SelectAlternative';
 import SelectExcluded from '@qlik-trial/sprout/icons/react/SelectExcluded';
+import ColumnMove from '@qlik-trial/sprout/icons/react/ColumnMove';
+import ColumnSize from '@qlik-trial/sprout/icons/react/ColumnSize';
 
 import useFieldSelection from '../../hooks/use-field-selection';
 import { useContextSelector, TableContext } from '../../context';
@@ -55,6 +57,16 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
       updateSelectionActionsEnabledStatus(layout as TableLayout);
     }
     setOpenMenuDropdown(!openMenuDropdown);
+  };
+
+  const setFocusOnClosetColumnAdjuster = () => {
+    setTimeout(() => {
+      const adjusterHitArea = anchorRef.current
+        ?.closest('.sn-table-cell')
+        ?.querySelector('#adjuster-hit-area') as HTMLElement;
+      adjusterHitArea.setAttribute('tabIndex', '0');
+      adjusterHitArea.focus();
+    }, 0);
   };
 
   const menuItemGroups = useMemo<MenuItemGroup[]>(
@@ -137,6 +149,30 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
                     },
                   ],
                 ],
+              },
+            ],
+            [
+              {
+                id: 1,
+                itemTitle: translator.get('SNTable.MenuItem.ChangeColumnPosition'),
+                onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
+                  evt.stopPropagation();
+                  setOpenMenuDropdown(false);
+                },
+                icon: <ColumnMove />,
+                enabled: true,
+              },
+              {
+                id: 2,
+                itemTitle: translator.get('SNTable.MenuItem.AdjustColumnSize'),
+                onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
+                  evt.stopPropagation();
+                  evt.preventDefault();
+                  setOpenMenuDropdown(false);
+                  setFocusOnClosetColumnAdjuster();
+                },
+                icon: <ColumnSize />,
+                enabled: true,
               },
             ],
           ]

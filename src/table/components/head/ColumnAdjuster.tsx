@@ -56,13 +56,47 @@ const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
     document.addEventListener('mouseup', mouseUpHandler);
   };
 
+  const focusHeadMenuButton = (event: React.KeyboardEvent | React.FocusEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLDivElement;
+    target.setAttribute('tabIndex', '-1');
+    const headMenuButton = target
+      ?.closest('.sn-table-cell')
+      ?.querySelector('#sn-table-head-menu-button') as HTMLElement;
+    headMenuButton.focus();
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      const columnWidth = event.key === 'ArrowLeft' ? columnWidths[pageColIdx] - 5 : columnWidths[pageColIdx] + 5;
+      const adjustedWidth = Math.max(columnWidth, MIN_COLUMN_WIDTH);
+      const newColumnWidths = [...columnWidths];
+      newColumnWidths[pageColIdx] = adjustedWidth;
+      setColumnWidths(newColumnWidths);
+    } else if (event.key === 'Enter') {
+      event.stopPropagation();
+      event.preventDefault();
+      if (tempWidths.current.columnWidth !== tempWidths.current.initWidth) {
+        const newWidthData = { type: ColumnWidthTypes.PIXELS, pixels: tempWidths.current.columnWidth };
+        applyColumnWidths(newWidthData, column);
+      }
+      focusHeadMenuButton(event);
+    } else if (event.key === 'Escape') {
+      focusHeadMenuButton(event);
+    }
+  };
+
+  const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => focusHeadMenuButton(event);
+
   const handleDoubleClick = () => applyColumnWidths({ type: ColumnWidthTypes.HUG }, column);
 
   return (
     <AdjusterHitArea
+      id="adjuster-hit-area"
       isLastColumn={isLastColumn}
       key={`adjuster-${pageColIdx}`}
+      onKeyDown={handleKeyDown}
       onMouseDown={mouseDownHandler}
+      onBlur={handleBlur}
       onDoubleClick={handleDoubleClick}
       data-testid="sn-table-column-adjuster"
     >
