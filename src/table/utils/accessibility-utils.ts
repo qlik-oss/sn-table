@@ -162,7 +162,6 @@ export const resetFocus = ({
   announce,
   totalsPosition,
 }: HandleResetFocusProps) => {
-  console.log('reset focus');
   updateFocus({ focusType: 'removeTab', cell: findCellWithTabStop(rootElement) });
   // If you have selections ongoing, you want to stay on the same column
   const selectionCellCoord: [number, number] = [totalsPosition.atTop ? 2 : 1, focusedCellCoord[1]];

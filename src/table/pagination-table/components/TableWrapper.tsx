@@ -62,8 +62,6 @@ export default function TableWrapper(props: TableWrapperProps) {
     });
   };
 
-  console.log(focusedCellCoord);
-
   useFocusListener(tableWrapperRef, shouldRefocus, keyboard);
   useScrollListener(tableContainerRef, direction);
 
@@ -72,9 +70,7 @@ export default function TableWrapper(props: TableWrapperProps) {
     // make sure to blur or focus the cell corresponding to focusedCellCoord
     // when keyboard.focus() runs, keyboard.active is true
     // when keyboard.blur() runs, keyboard.active is false
-    const focusType = keyboard.active ? 'focusButton' : 'blur';
-    const cellCoord = keyboard.active ? ([0, 0] as [number, number]) : focusedCellCoord;
-    updateFocus({ focusType, cell: getCellElement(rootElement, cellCoord) });
+    updateFocus({ focusType: keyboard.active ? 'focus' : 'blur', cell: getCellElement(rootElement, focusedCellCoord) });
   }, [keyboard.active]);
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,

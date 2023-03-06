@@ -202,6 +202,7 @@ export const handleTotalKeyDown = (
   preventDefaultBehavior(evt);
 
   switch (evt.key) {
+    // TODO: fix keyboard move for totals
     case KeyCodes.LEFT:
     case KeyCodes.RIGHT:
     case KeyCodes.UP:
@@ -216,6 +217,17 @@ export const handleTotalKeyDown = (
     default:
       break;
   }
+};
+
+/**
+ * Gets the focus type for navigating the body.
+ * When you move to the header, it returns focusButton type
+ */
+const getFocusType = (cellCoord: [number, number], evt: React.KeyboardEvent<Element>, firstBodyRowIdx: number) => {
+  const upToHeader = evt.key === KeyCodes.UP && cellCoord[0] === firstBodyRowIdx;
+  const leftToHeader = evt.key === KeyCodes.LEFT && cellCoord[0] === firstBodyRowIdx && cellCoord[1] === 0;
+
+  return upToHeader || leftToHeader ? 'focusButton' : 'focus';
 };
 
 export const handleBodyArrow = ({
@@ -237,46 +249,29 @@ export const handleBodyArrow = ({
     top: isSelectionMode ? firstBodyRowIdx : 0,
     bottom: isSelectionMode && totalsPosition.atBottom ? 1 : 0,
   };
-  let focusType = 'focus';
+  const focusType = getFocusType(cellCoord, evt, firstBodyRowIdx);
 
-  switch (evt.key) {
-    case KeyCodes.UP:
-    case KeyCodes.DOWN: {
-      if (evt.key === KeyCodes.UP) {
-        handleNavigateTop([cell.pageRowIdx, cell.pageColIdx], rootElement);
-        if (cellCoord[0] === firstBodyRowIdx) focusType = 'focusButton';
-      }
-      const shouldRemoveTabStop = !(cellCoord[0] === firstBodyRowIdx && evt.key === KeyCodes.UP);
-      if (shouldRemoveTabStop) {
-        console.log('remove tab');
-        updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
-      }
-      const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, focusType, allowedRows);
-      // Shift + up/down arrow keys: select multiple values
-      if (shouldSelectMultiValues(areBasicFeaturesEnabled, isSelectionsEnabled, evt, cell)) {
-        selectionDispatch({
-          type: SelectionActions.SELECT_MULTI_ADD,
-          payload: { cell, evt, announce },
-        });
-      } else {
-        // When not selecting multiple we need to announce the selection state of the cell
-        announceSelectionState(announce, nextCell, isSelectionMode);
-      }
-      break;
+  if (focusType === 'focus') {
+    updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
+  }
+
+  const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, focusType, allowedRows);
+
+  if (evt.key === KeyCodes.UP || evt.key === KeyCodes.DOWN) {
+    if (evt.key === KeyCodes.UP) {
+      handleNavigateTop([cell.pageRowIdx, cell.pageColIdx], rootElement);
     }
-    case KeyCodes.LEFT:
-    case KeyCodes.RIGHT:
-      const shouldMoveToHeader = cellCoord[0] === firstBodyRowIdx && cellCoord[1] === 0 && evt.key === KeyCodes.LEFT;
-      if (shouldMoveToHeader) {
-        focusType = 'focusButton';
-      } else {
-        updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
-      }
 
-      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, focusType, allowedRows);
-      break;
-    default:
-      break;
+    // Shift + up/down arrow keys: select multiple values
+    if (shouldSelectMultiValues(areBasicFeaturesEnabled, isSelectionsEnabled, evt, cell)) {
+      selectionDispatch({
+        type: SelectionActions.SELECT_MULTI_ADD,
+        payload: { cell, evt, announce },
+      });
+    } else {
+      // When not selecting multiple we need to announce the selection state of the cell
+      announceSelectionState(announce, nextCell, isSelectionMode);
+    }
   }
 };
 
