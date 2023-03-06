@@ -65,7 +65,7 @@ describe('<HeadCellContent />', () => {
     expect(baseElement.querySelector('.MuiButton-iconSizeSmall')).toBeVisible();
   });
 
-  it('should show the sort icon when isActive is false but the cell is on focus', () => {
+  it('should show the sort icon when isActive is false but the cell is focused or hovered', () => {
     isActive = false;
     const { baseElement } = renderTableHead();
 
@@ -93,7 +93,7 @@ describe('<HeadCellContent />', () => {
     });
   });
 
-  it('should show the menu button when the head cell is on focus or hovered', () => {
+  it('should show the menu button when the head cell is focused or hovered', () => {
     areBasicFeaturesEnabled = true;
     const { baseElement } = renderTableHead();
 
@@ -131,7 +131,7 @@ describe('<HeadCellContent />', () => {
     expect(baseElement.querySelector('#sn-table-head-menu-button')).toBeInTheDocument();
   });
 
-  it('should make the head sort icon be invisible when constraints.active is true and even the focus is on the head cell', () => {
+  it('should hide the sort icon when constraints.active is true and focus is on the head cell', () => {
     selectionsAPI = {
       isModal: () => true,
     } as ExtendedSelectionAPI;
@@ -148,7 +148,7 @@ describe('<HeadCellContent />', () => {
     });
   });
 
-  it('should make the head sort icon be invisible when cells are selected and even the focus is on the head cell', () => {
+  it('should hide the sort icon when cells are selected and focus is on the head cell', () => {
     selectionsAPI = {
       isModal: () => true,
     } as ExtendedSelectionAPI;
