@@ -108,6 +108,14 @@ const useDynamicRowHeight = ({
     [rowMeta, estimatedRowHeight]
   );
 
+  /**
+   * Some user actions and events can trigger row heights to be invalidated
+   * - A column is re-sized
+   * - New layout (ex. due to property changes or outside selections)
+   * - Change of page (which would load new data)
+   * - Theme change (ex. fonts)
+   * - Container element is re-sized (object re-sized in Qlik Sense or browser window re-sized)
+   */
   useOnPropsChange(() => {
     rowMeta.current.lastScrollToRatio = 0;
     rowMeta.current.resetAfterRowIndex = 0;
