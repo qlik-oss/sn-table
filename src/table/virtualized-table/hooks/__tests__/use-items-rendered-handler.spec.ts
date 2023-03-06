@@ -28,7 +28,14 @@ describe('', () => {
       },
     } as TableLayout;
 
-    gridState = { current: { overscanColumnStartIndex: 0, overscanRowStartIndex: 0 } };
+    gridState = {
+      current: {
+        overscanColumnStartIndex: 0,
+        overscanRowStartIndex: 0,
+        overscanColumnStopIndex: 0,
+        overscanRowStopIndex: 0,
+      },
+    };
 
     loadRows = jest.fn();
     loadColumns = jest.fn();

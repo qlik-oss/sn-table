@@ -58,7 +58,6 @@ export interface HeaderProps {
   pageInfo: PageInfo;
   forwardRef: React.RefObject<VariableSizeList<any>>;
   columns: Column[];
-  columnWidth: number[];
   headerStyle: GeneratedStyling;
   rowHeight: number;
 }
@@ -68,7 +67,6 @@ export interface TotalsProps {
   pageInfo: PageInfo;
   forwardRef: React.RefObject<VariableSizeList<any>>;
   columns: Column[];
-  columnWidth: number[];
   totals: Totals;
   rowHeight: number;
 }
@@ -77,7 +75,6 @@ export interface BodyProps {
   rect: Rect;
   pageInfo: PageInfo;
   columns: Column[];
-  columnWidth: number[];
   innerForwardRef: React.RefObject<HTMLDivElement>;
   bodyStyle: BodyStyle;
   rowHeight: number;
@@ -95,6 +92,7 @@ export interface RowMeta {
   heights: number[];
   totalHeight: number;
   count: number;
+  measuredCells: Set<string>;
 }
 
 export interface ItemData {
@@ -109,5 +107,7 @@ export type SetCellSize = (text: string, rowIdx: number, colIdx: number) => void
 
 export interface GridState {
   overscanColumnStartIndex: number;
+  overscanColumnStopIndex: number;
   overscanRowStartIndex: number;
+  overscanRowStopIndex: number;
 }

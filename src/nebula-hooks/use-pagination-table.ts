@@ -1,7 +1,7 @@
 import { stardust, useEffect, useOptions, usePromise, useState } from '@nebula.js/stardust';
 import { Root } from 'react-dom/client';
 import manageData from '../handle-data';
-import { render } from '../table/Root';
+import { renderPaginationTable } from '../table/Root';
 import {
   ExtendedSelectionAPI,
   TableLayout,
@@ -84,7 +84,7 @@ const usePaginationTable = ({
 
     if (!isReadyToRender) return;
 
-    render(
+    renderPaginationTable(
       {
         app,
         model,

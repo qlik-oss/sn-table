@@ -251,6 +251,14 @@ const dimensionItems = {
     translation: 'properties.dimensions.showNull',
     inverted: true,
   },
+  numberFormatting: {
+    uses: 'measures.items.numberFormatting',
+  },
+  createMasterItemButton: {}, // To be filled by DataAssetsPanel in anlytics
+  divider: { uses: 'divider' },
+  dimensionLimits: {
+    uses: 'dimensions.items.dimensionLimits',
+  },
 };
 
 const getMeasureItems = (env) => ({
@@ -266,6 +274,11 @@ const getMeasureItems = (env) => ({
     component: 'inline-measure',
     show: (itemData) => !itemData.qLibraryId,
   },
+  numberFormatting: {
+    uses: 'measures.items.numberFormatting',
+  },
+  createMasterItemButton: {}, // To be filled by DataAssetsPanel in anlytics
+  divider: { uses: 'divider' },
   totalsAggr: getTotalsAggr(env),
 });
 

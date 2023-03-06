@@ -4,14 +4,22 @@ import { stardust } from '@nebula.js/stardust';
 
 import {
   focusSelectionToolbar,
-  announceSelectionState,
   moveFocus,
+  focusBodyFromHead,
   updateFocus,
-  findCellWithTabStop,
-  getCellCoordFromCell,
+  announceSelectionState,
 } from './accessibility-utils';
+import {
+  preventDefaultBehavior,
+  isCtrlShift,
+  isArrowKey,
+  isCtrlCmd,
+  shouldBubble,
+  shouldSelectMultiValues,
+  getFocusType,
+} from './keyboard-utils';
+import { findCellWithTabStop, getNextMenuItem, getPreviousMenuItem } from './get-element-utils';
 import copyCellValue from './copy-utils';
-import { handleNavigateTop } from './handle-scroll';
 import {
   HandleWrapperKeyDownProps,
   HandleHeadKeyDownProps,
@@ -19,56 +27,8 @@ import {
   SelectionDispatch,
   HandleBodyArrowProps,
 } from '../types';
-import { Cell } from '../../types';
 import { KeyCodes, SelectionActions } from '../constants';
-
-const preventDefaultBehavior = (evt: React.KeyboardEvent) => {
-  evt.stopPropagation();
-  evt.preventDefault();
-};
-
-const isCtrlShift = (evt: React.KeyboardEvent) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
-
-const isArrowKey = (key: string) =>
-  [KeyCodes.LEFT, KeyCodes.RIGHT, KeyCodes.UP, KeyCodes.DOWN].includes(key as KeyCodes);
-
-export const isShiftArrow = (evt: React.KeyboardEvent) => evt.shiftKey && isArrowKey(evt.key);
-
-/**
- * Checks if events caught by head, totals and body handles should bubble to the wrapper handler or default behavior
- */
-export const shouldBubble = (
-  evt: React.KeyboardEvent,
-  isSelectionMode = false,
-  keyboardEnabled = false,
-  paginationNeeded = true
-) => {
-  const bubbleWithoutShift = !evt.shiftKey && (paginationNeeded || !keyboardEnabled);
-  return (
-    // esc to blur object
-    (evt.key === KeyCodes.ESC && !isSelectionMode) ||
-    // default tab to pagination or tab to blur
-    (evt.key === KeyCodes.TAB && (bubbleWithoutShift || evt.shiftKey)) ||
-    // ctrl + shift + arrow to change page
-    ((evt.key === KeyCodes.LEFT || evt.key === KeyCodes.RIGHT) && isCtrlShift(evt))
-  );
-};
-
-/**
- * Checks if should select with shift + arrow.
- * When at the first/last row of the cell, shift + arrow up/down should not select anything
- */
-const shouldSelectMultiValues = (
-  areBasicFeaturesEnabled: boolean,
-  isSelectionsEnabled: boolean,
-  evt: React.KeyboardEvent,
-  cell: Cell
-) =>
-  evt.shiftKey &&
-  ((evt.key === KeyCodes.UP && cell.pageRowIdx !== 0) || (evt.key === KeyCodes.DOWN && !cell.isLastRow)) &&
-  areBasicFeaturesEnabled &&
-  isSelectionsEnabled &&
-  cell.isSelectable;
+import { handleNavigateTop } from './handle-scroll';
 
 /**
  * ----------- Key handlers -----------
@@ -118,19 +78,6 @@ export const handleWrapperKeyDown = ({
   }
 };
 
-export const focusBodyFromHead = (
-  evt: React.KeyboardEvent,
-  rootElement: HTMLElement,
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
-) => {
-  preventDefaultBehavior(evt);
-  // TODO: see if we need a fallback here, if there is a valid case where the tabstop has been removed already
-  const cell = findCellWithTabStop(rootElement);
-  const newCellCoord = getCellCoordFromCell(rootElement, cell);
-  cell.focus();
-  setFocusedCellCoord(newCellCoord);
-};
-
 /**
  * handles keydown events for the head cells (move focus, change sort order)
  */
@@ -169,7 +116,8 @@ export const handleHeadKeyDown = ({
       moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, 'focus');
       break;
     case KeyCodes.C:
-      areBasicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(evt);
+      areBasicFeaturesEnabled && isCtrlCmd(evt) && copyCellValue(evt);
+
       break;
     case KeyCodes.TAB:
       if (evt.shiftKey) break;
@@ -180,6 +128,31 @@ export const handleHeadKeyDown = ({
       break;
     default:
       break;
+  }
+};
+
+/**
+ * handles ArrowDown and ArrowUp events for the head cell menu (move focus)
+ */
+export const handleHeadCellMenuKeyDown = (event: React.KeyboardEvent<HTMLLIElement>) => {
+  const { key, target } = event;
+  const currentFocusItem = document.activeElement ?? (target as HTMLElement);
+  // The rest key are handled by handleKeyDown in MUIMenuList
+  if (key === 'ArrowDown' || key === 'ArrowUp') {
+    const getNewFocusItem = (currentItem: Element) =>
+      key === 'ArrowDown' ? getNextMenuItem(currentItem) : getPreviousMenuItem(currentItem);
+    // Prevent scroll of the page
+    // Stop triggering handleKeyDown in MUIMenuList
+    preventDefaultBehavior(event);
+    let newFocusItem = getNewFocusItem(currentFocusItem);
+    while (newFocusItem) {
+      if (newFocusItem.ariaDisabled === 'true') {
+        newFocusItem = getNewFocusItem(newFocusItem);
+      } else {
+        (newFocusItem as HTMLElement).focus();
+        break;
+      }
+    }
   }
 };
 
@@ -211,7 +184,7 @@ export const handleTotalKeyDown = (
       break;
     }
     case KeyCodes.C: {
-      areBasicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(evt);
+      areBasicFeaturesEnabled && isCtrlCmd(evt) && copyCellValue(evt);
       break;
     }
     default:
@@ -219,18 +192,7 @@ export const handleTotalKeyDown = (
   }
 };
 
-/**
- * Gets the focus type for navigating the body.
- * When you move to the header, it returns focusButton type
- */
-const getFocusType = (cellCoord: [number, number], evt: React.KeyboardEvent<Element>, firstBodyRowIdx: number) => {
-  const upToHeader = evt.key === KeyCodes.UP && cellCoord[0] === firstBodyRowIdx;
-  const leftToHeader = evt.key === KeyCodes.LEFT && cellCoord[0] === firstBodyRowIdx && cellCoord[1] === 0;
-
-  return upToHeader || leftToHeader ? 'focusButton' : 'focus';
-};
-
-export const handleBodyArrow = ({
+const handleBodyArrow = ({
   evt,
   rootElement,
   cell,
@@ -341,7 +303,7 @@ export const handleBodyKeyDown = ({
       focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
       break;
     case KeyCodes.C:
-      areBasicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(evt);
+      areBasicFeaturesEnabled && isCtrlCmd(evt) && copyCellValue(evt);
       break;
     default:
       break;

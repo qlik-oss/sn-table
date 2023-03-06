@@ -11,12 +11,12 @@ import ScrollableContainer from './ScrollableContainer';
 import StickyContainer from './StickyContainer';
 import toTableRect, { toStickyContainerRect } from './utils/to-rect';
 import { useContextSelector, TableContext } from '../context';
-import getHeights from './utils/get-height';
 import useScrollbarWidth from './hooks/use-scrollbar-width';
 import useDidUpdateEffect from '../hooks/use-did-update-effect';
+import useHeights from './hooks/use-heights';
 
 const Table = (props: TableProps) => {
-  const { rect, pageInfo } = props;
+  const { pageInfo, rect } = props;
   const { totalsPosition, columns, paginationNeeded } = useContextSelector(TableContext, (value) => value.tableData);
   const { layout, theme, styling } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
@@ -34,7 +34,14 @@ const Table = (props: TableProps) => {
     }),
     [layout, theme.name()] // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const { headerRowHeight, bodyRowHeight, headerAndTotalsHeight } = getHeights(styling.head, bodyStyle, totalsPosition);
+  const { headerRowHeight, totalsRowHeight, bodyRowHeight, headerAndTotalsHeight } = useHeights({
+    columns,
+    columnWidths,
+    pageInfo,
+    totalsPosition,
+    headerRef,
+    totalsRef,
+  });
   const tableRect = useMemo(() => toTableRect(rect, paginationNeeded), [rect, paginationNeeded]);
   const stickyContainerRect = useMemo(
     () => toStickyContainerRect(tableRect, xScrollbarWidth, yScrollbarWidth),
@@ -63,13 +70,13 @@ const Table = (props: TableProps) => {
       ref.current.scrollLeft = 0;
       ref.current.scrollTop = 0;
     }
-  }, [rowCount, columns.length]);
+  }, [columns.length]);
 
   useLayoutEffect(() => {
     if (ref.current) {
       ref.current.scrollTop = 0;
     }
-  }, [columnWidths]);
+  }, [columnWidths, pageInfo, rowCount]);
 
   useDidUpdateEffect(() => {
     setYScrollbarWidth(yScrollbarWidth);
@@ -80,10 +87,9 @@ const Table = (props: TableProps) => {
       rect={stickyContainerRect}
       pageInfo={pageInfo}
       columns={columns}
-      columnWidth={columnWidths}
       forwardRef={totalsRef}
       totals={totalsPosition}
-      rowHeight={bodyRowHeight}
+      rowHeight={totalsRowHeight}
     />
   );
 
@@ -96,7 +102,6 @@ const Table = (props: TableProps) => {
             rect={stickyContainerRect}
             pageInfo={pageInfo}
             columns={columns}
-            columnWidth={columnWidths}
             forwardRef={headerRef}
             rowHeight={headerRowHeight}
           />
@@ -108,7 +113,6 @@ const Table = (props: TableProps) => {
             rect={stickyContainerRect}
             pageInfo={pageInfo}
             columns={columns}
-            columnWidth={columnWidths}
             rowHeight={bodyRowHeight}
             headerAndTotalsHeight={headerAndTotalsHeight}
             syncHeight={syncHeight}

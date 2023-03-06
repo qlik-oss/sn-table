@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
-import { Column, PageInfo, TableLayout } from '../../../types';
+import { Column, PageInfo, Row } from '../../../types';
+import { TableContext, useContextSelector } from '../../context';
 import { COMMON_CELL_STYLING } from '../../styling-defaults';
 import { GeneratedStyling } from '../../types';
 import {
@@ -8,46 +9,49 @@ import {
   CELL_PADDING_HEIGHT,
   LINE_HEIGHT as LINE_HEIGHT_MULTIPLIER,
 } from '../../utils/styling-utils';
-import { MAX_NBR_LINES_OF_TEXT } from '../constants';
-import { BodyStyle, RowMeta } from '../types';
+import { MAX_NBR_LINES_OF_TEXT, MIN_BODY_ROW_HEIGHT } from '../constants';
+import { BodyStyle, GridState, RowMeta } from '../types';
 import { subtractCellPaddingAndBorder, subtractCellPaddingIconsAndBorder } from '../utils/cell-width-utils';
 import useMeasureText from './use-measure-text';
+import useOnPropsChange from './use-on-props-change';
 
-interface Props {
+export interface UseDynamicRowHeightProps {
   style: BodyStyle | GeneratedStyling;
-  rowHeight: number;
+  rowHeight?: number;
   rowCount: number;
-  columnWidth: number[];
-  layout: TableLayout;
+  columnWidths: number[];
   pageInfo: PageInfo;
   gridRef?: React.RefObject<VariableSizeGrid<any>>;
   lineRef?: React.RefObject<VariableSizeList<any>>;
   columns?: Column[];
   boldText?: boolean;
+  gridState?: React.MutableRefObject<GridState>;
 }
 
 const MAX_ELEMENT_DOM_SIZE = 15_000_000; // Guestimated max height value in px of a DOM element
 
 const useDynamicRowHeight = ({
   style,
-  columnWidth,
+  columnWidths,
   rowHeight,
-  layout,
   pageInfo,
   rowCount,
   gridRef,
   lineRef,
   columns,
   boldText,
-}: Props) => {
+  gridState,
+}: UseDynamicRowHeightProps) => {
   const rowMeta = useRef<RowMeta>({
     lastScrollToRatio: 0,
     resetAfterRowIndex: 0, // TODO find a way to implement this, it can potentially improve performance
     heights: [],
     totalHeight: 0,
     count: 0,
+    measuredCells: new Set<string>(),
   });
-  const [estimatedRowHeight, setEstimatedRowHeight] = useState(rowHeight);
+  const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
+  const [estimatedRowHeight, setEstimatedRowHeight] = useState(rowHeight || MIN_BODY_ROW_HEIGHT);
   const { measureText } = useMeasureText(style.fontSize, style.fontFamily, boldText);
   const lineHeight = parseInt(style.fontSize ?? COMMON_CELL_STYLING.fontSize, 10) * LINE_HEIGHT_MULTIPLIER;
 
@@ -58,33 +62,30 @@ const useDynamicRowHeight = ({
     Math.min(MAX_NBR_LINES_OF_TEXT, Math.round(maxCellHeightExcludingPadding / lineHeight))
   );
 
-  useEffect(() => {
-    rowMeta.current = {
-      lastScrollToRatio: 0,
-      resetAfterRowIndex: 0,
-      heights: [],
-      totalHeight: 0,
-      count: 0,
-    };
-  }, [columnWidth, layout, pageInfo]);
-
   const getCellSize = useCallback(
     (text: string, colIdx: number) => {
       const width = measureText(text.trim());
       const cellWidth = columns
-        ? subtractCellPaddingIconsAndBorder(columnWidth[colIdx], columns[colIdx])
-        : subtractCellPaddingAndBorder(columnWidth[colIdx]);
+        ? subtractCellPaddingIconsAndBorder(columnWidths[colIdx], columns[colIdx])
+        : subtractCellPaddingAndBorder(columnWidths[colIdx]);
       const estimatedLineCount = Math.min(maxLineCount, Math.ceil(width / cellWidth));
       const textHeight = Math.max(1, estimatedLineCount) * lineHeight;
 
       return textHeight + CELL_PADDING_HEIGHT + CELL_BORDER_HEIGHT;
     },
-    [columnWidth, measureText, lineHeight, maxLineCount, columns]
+    [columnWidths, measureText, lineHeight, maxLineCount, columns]
   );
 
   const setCellSize = useCallback(
     (text: string, rowIdx: number, colIdx: number) => {
+      const key = `${rowIdx}-${colIdx}`;
+      if (rowMeta.current.measuredCells.has(key)) {
+        return;
+      }
+
+      rowMeta.current.measuredCells.add(key);
       const height = getCellSize(text, colIdx);
+
       const alreadyMeasuredRowHeight = rowMeta.current.heights[rowIdx];
       const diff = height - alreadyMeasuredRowHeight;
 
@@ -103,9 +104,42 @@ const useDynamicRowHeight = ({
   );
 
   const getRowHeight = useCallback(
-    (index: number) => rowMeta.current.heights[index] ?? estimatedRowHeight,
+    (rowIdx: number) => rowMeta.current.heights[rowIdx] ?? estimatedRowHeight,
     [rowMeta, estimatedRowHeight]
   );
+
+  /**
+   * Some user actions and events can trigger row heights to be invalidated
+   * - A column is re-sized
+   * - New layout (ex. due to property changes or outside selections)
+   * - Change of page (which would load new data)
+   * - Theme change (ex. fonts)
+   * - Container element is re-sized (object re-sized in Qlik Sense or browser window re-sized)
+   */
+  useOnPropsChange(() => {
+    rowMeta.current.lastScrollToRatio = 0;
+    rowMeta.current.resetAfterRowIndex = 0;
+    rowMeta.current.heights = [];
+    rowMeta.current.totalHeight = 0;
+    rowMeta.current.count = 0;
+    rowMeta.current.measuredCells.clear();
+  }, [layout, pageInfo, getCellSize]);
+
+  const updateCellHeight = (rows: Row[]) => {
+    if (!gridState) return;
+
+    const { overscanRowStartIndex: rowStart, overscanRowStopIndex } = gridState.current;
+    const rowStop = Math.min(overscanRowStopIndex, layout.qHyperCube.qSize.qcy - 1);
+
+    for (let rowIdx = rowStart; rowIdx <= rowStop; rowIdx++) {
+      const row = rows[rowIdx] ?? {};
+      Object.values(row).forEach((cell) => {
+        if (typeof cell === 'object') {
+          setCellSize(cell.qText ?? '', rowIdx, cell.pageColIdx);
+        }
+      });
+    }
+  };
 
   // Reset the internal cache of react-window, otherwise the size of empty cells
   // would be cached and used on each render
@@ -115,7 +149,7 @@ const useDynamicRowHeight = ({
     lineRef.current.resetAfterIndex(rowMeta.current.resetAfterRowIndex, false);
   }
 
-  return { setCellSize, getRowHeight, rowMeta, estimatedRowHeight, maxLineCount };
+  return { setCellSize, getRowHeight, rowMeta, estimatedRowHeight, maxLineCount, updateCellHeight };
 };
 
 export default useDynamicRowHeight;

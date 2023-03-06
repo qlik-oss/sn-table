@@ -6,7 +6,7 @@ import { FullSortDirection } from '../../constants';
 import getHeadIcons from '../../utils/get-head-icons';
 import { VisuallyHidden, StyledSortButton, StyledHeadCellContent } from './styles';
 import HeadCellMenu from './HeadCellMenu';
-import { handleHeadKeyDown } from '../../utils/handle-key-press';
+import { handleHeadKeyDown } from '../../utils/handle-keyboard';
 
 function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }: HeadCellContentProps) {
   const { constraints, keyboard, translator, rootElement, changeSortOrder } = useContextSelector(
