@@ -1,5 +1,5 @@
 import { act, renderHook, RenderHookResult, waitFor } from '@testing-library/react';
-import { Cell, Column, PageInfo, Row, TableLayout } from '../../../../types';
+import { Cell, Column, ExtendedTheme, PageInfo, Row, TableLayout } from '../../../../types';
 import { generateDataPages, generateLayout } from '../../../../__test__/generate-test-data';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
 import { SetCellSize, GridState } from '../../types';
@@ -13,6 +13,7 @@ interface OverrideUseDataProps {
   visibleRowCount?: number;
   visibleColumnCount?: number;
   columns?: Column[];
+  initialDataPages?: EngineAPI.INxDataPage[];
 }
 
 function generateDataPage(page: EngineAPI.INxPage) {
@@ -34,11 +35,18 @@ describe('useData', () => {
   let doRenderHook: (renderWithProps?: OverrideUseDataProps) => Promise<void>;
   let setCellSizeMock: jest.MockedFunction<SetCellSize>;
   let gridState: React.MutableRefObject<GridState>;
+  let initialDataPages: EngineAPI.INxDataPage[];
+  const theme = {
+    getColorPickerColor: () => undefined,
+    name: () => undefined,
+    getStyle: () => undefined,
+    background: { isDark: false },
+  } as unknown as ExtendedTheme;
 
   beforeEach(() => {
     layout = generateLayout(1, 1, QCY);
     layout.qHyperCube.qSize.qcx = QCX;
-    layout.qHyperCube.qDataPages = generateDataPages(
+    initialDataPages = generateDataPages(
       INIT_DATA_FETCH_HEIGHT,
       INIT_DATA_FETCH_WIDTH
     ) as unknown as EngineAPI.INxDataPage[];
@@ -75,17 +83,19 @@ describe('useData', () => {
     doRenderHook = (renderWithProps: OverrideUseDataProps = {}) => {
       return act(async () => {
         renderHookResult = renderHook(() =>
-          useData(
-            renderWithProps.layout ?? layout,
-            renderWithProps.model ?? model,
-            renderWithProps.pageInfo ?? pageInfo,
-            renderWithProps.rowCount ?? pageInfo.rowsPerPage,
-            renderWithProps.visibleRowCount ?? VISIBLE_ROW_COUNT,
-            renderWithProps.visibleColumnCount ?? VISIBLE_COLUMN_COUNT,
-            renderWithProps.columns ?? columns,
-            setCellSizeMock,
-            gridState
-          )
+          useData({
+            layout: renderWithProps.layout ?? layout,
+            model: renderWithProps.model ?? model,
+            theme,
+            initialDataPages: renderWithProps.initialDataPages ?? initialDataPages,
+            pageInfo: renderWithProps.pageInfo ?? pageInfo,
+            rowCount: renderWithProps.rowCount ?? pageInfo.rowsPerPage,
+            visibleRowCount: renderWithProps.visibleRowCount ?? VISIBLE_ROW_COUNT,
+            visibleColumnCount: renderWithProps.visibleColumnCount ?? VISIBLE_COLUMN_COUNT,
+            columns: renderWithProps.columns ?? columns,
+            setCellSize: setCellSizeMock,
+            gridState,
+          })
         );
       });
     };
@@ -258,13 +268,13 @@ describe('useData', () => {
       await waitFor(() => expect(model.getHyperCubeData).toHaveBeenCalledTimes(0));
     });
 
-    test('should load additional data given layout does not include visible and buffer rows', async () => {
-      layout.qHyperCube.qDataPages = generateDataPages(
+    test('should load additional data given initial data pages does not include visible and buffer rows', async () => {
+      initialDataPages = generateDataPages(
         INIT_DATA_FETCH_HEIGHT - 1,
         INIT_DATA_FETCH_WIDTH
       ) as unknown as EngineAPI.INxDataPage[];
 
-      await doRenderHook();
+      await doRenderHook({ initialDataPages });
 
       await waitFor(() =>
         expect(model.getHyperCubeData).toHaveBeenNthCalledWith(1, '/qHyperCubeDef', [
@@ -273,14 +283,14 @@ describe('useData', () => {
       );
     });
 
-    test('should derive data from layout updates', async () => {
+    test('should derive data from init data pages updates', async () => {
       await doRenderHook();
 
       await waitFor(() => expect(renderHookResult.result.current.rowsInPage).toHaveLength(QCY / 2));
 
       layout = generateLayout(1, 1, 10);
       layout.qHyperCube.qSize.qcx = 10;
-      layout.qHyperCube.qDataPages = generateDataPages(10, 10) as unknown as EngineAPI.INxDataPage[];
+      initialDataPages = generateDataPages(10, 10) as unknown as EngineAPI.INxDataPage[];
 
       pageInfo = {
         page: 0,
@@ -290,16 +300,16 @@ describe('useData', () => {
 
       const { rerender } = renderHookResult;
 
-      await act(() => rerender({ layout, pageInfo }));
+      await act(() => rerender({ layout, pageInfo, initialDataPages }));
 
       await waitFor(() => expect(renderHookResult.result.current.rowsInPage).toHaveLength(10));
     });
 
-    test('should handle when data can not be derived from the layout', async () => {
+    test('should handle when data can not be derived from the initial data pages', async () => {
       // This would be the case with an sn-table already created before this feature became available
-      layout.qHyperCube.qDataPages = [];
+      initialDataPages = [];
 
-      await doRenderHook();
+      await doRenderHook({ initialDataPages });
 
       // As the data cannot be derived, it needs to be fetched
       await waitFor(() =>

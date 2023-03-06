@@ -42,6 +42,8 @@ export interface VirtualTableRenderProps {
   changeSortOrder: ChangeSortOrder;
   tableData: TableData;
   applyColumnWidths: ApplyColumnWidths;
+  setPage: stardust.SetStateFn<number>;
+  pageInfo: PageInfo;
 }
 
 export interface WrapperProps {

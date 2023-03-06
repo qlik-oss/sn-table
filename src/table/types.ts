@@ -119,6 +119,8 @@ export interface ContextValue {
   };
   tableData: TableData;
   setYScrollbarWidth: (width: number) => void;
+  pageInfo?: PageInfo;
+  setPage?: stardust.SetStateFn<number>;
 }
 
 export interface FooterStyle {
@@ -206,6 +208,8 @@ export interface ContextProviderProps {
   changeSortOrder: ChangeSortOrder;
   applyColumnWidths?: ApplyColumnWidths;
   tableWidth?: number;
+  pageInfo?: PageInfo;
+  setPage?: stardust.SetStateFn<number>;
 }
 
 export interface RenderProps {

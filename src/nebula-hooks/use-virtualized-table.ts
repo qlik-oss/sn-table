@@ -1,16 +1,16 @@
-import { stardust, useEffect, useMemo } from '@nebula.js/stardust';
+import { stardust, useEffect } from '@nebula.js/stardust';
 import { Root } from 'react-dom/client';
 import { renderVirtualizedTable } from '../table/Root';
-import getVirtualScrollTableData from '../table/virtualized-table/utils/get-table-data';
 import {
   ApplyColumnWidths,
   ChangeSortOrder,
   ExtendedSelectionAPI,
   ExtendedTheme,
   ExtendedTranslator,
-  TableData,
   TableLayout,
 } from '../types';
+import usePageInfo from './virtualized-table/use-page-info';
+import useTableData from './virtualized-table/use-table-data';
 
 interface UseVirtualizedTable {
   app: EngineAPI.IApp | undefined;
@@ -30,8 +30,6 @@ interface UseVirtualizedTable {
   applyColumnWidths: ApplyColumnWidths;
 }
 
-const NO_TABLE_DATA = {} as TableData;
-
 const useVirtualizedTable = ({
   app,
   layout,
@@ -50,16 +48,11 @@ const useVirtualizedTable = ({
   applyColumnWidths,
 }: UseVirtualizedTable) => {
   const shouldRender = areBasicFeaturesEnabled && layout.presentation?.usePagination === false;
-  const tableData = useMemo(() => {
-    if (shouldRender) {
-      return getVirtualScrollTableData(layout, constraints);
-    }
-
-    return NO_TABLE_DATA;
-  }, [layout, constraints, shouldRender]);
+  const { pageInfo, setPage } = usePageInfo(layout, shouldRender);
+  const { tableData, isLoading } = useTableData({ model, layout, constraints, shouldRender, pageInfo });
 
   useEffect(() => {
-    if (!shouldRender || !model || !changeSortOrder) return;
+    if (!shouldRender || !model || !changeSortOrder || !tableData || isLoading) return;
 
     renderVirtualizedTable(
       {
@@ -77,6 +70,8 @@ const useVirtualizedTable = ({
         changeSortOrder,
         tableData,
         applyColumnWidths,
+        setPage,
+        pageInfo,
       },
       reactRoot
     );
@@ -97,6 +92,9 @@ const useVirtualizedTable = ({
     reactRoot,
     tableData,
     applyColumnWidths,
+    setPage,
+    pageInfo,
+    isLoading,
   ]);
 };
 
