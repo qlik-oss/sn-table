@@ -22,7 +22,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     overscanColumnStopIndex: 0,
     overscanRowStopIndex: 0,
   });
-  const { layout, model, theme } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, model } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const isHoverEnabled = !!layout.components?.[0]?.content?.hoverEffect;
   const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
