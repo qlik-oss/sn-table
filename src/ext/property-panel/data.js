@@ -252,12 +252,12 @@ const dimensionItems = {
     inverted: true,
   },
   numberFormatting: {
-    uses: 'numberFormattingWithMasterLink',
+    uses: 'measures.items.numberFormatting',
   },
   createMasterItemButton: {}, // To be filled by DataAssetsPanel in anlytics
   divider: { uses: 'divider' },
   dimensionLimits: {
-    uses: 'dimensionLimits',
+    uses: 'dimensions.items.dimensionLimits',
   },
 };
 
@@ -275,7 +275,7 @@ const getMeasureItems = (env) => ({
     show: (itemData) => !itemData.qLibraryId,
   },
   numberFormatting: {
-    uses: 'numberFormattingWithMasterLink',
+    uses: 'measures.items.numberFormatting',
   },
   createMasterItemButton: {}, // To be filled by DataAssetsPanel in anlytics
   divider: { uses: 'divider' },
