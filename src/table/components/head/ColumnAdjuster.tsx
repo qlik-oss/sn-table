@@ -62,17 +62,21 @@ const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
     const headMenuButton = target
       ?.closest('.sn-table-cell')
       ?.querySelector('#sn-table-head-menu-button') as HTMLElement;
-    headMenuButton.focus();
+    headMenuButton?.focus();
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-      const columnWidth = event.key === 'ArrowLeft' ? columnWidths[pageColIdx] - 5 : columnWidths[pageColIdx] + 5;
+      const initWidth = columnWidths[pageColIdx];
+      tempWidths.current.initWidth = initWidth;
+      const columnWidth = event.key === 'ArrowLeft' ? initWidth - 5 : initWidth + 5;
       const adjustedWidth = Math.max(columnWidth, MIN_COLUMN_WIDTH);
+      tempWidths.current.columnWidth = adjustedWidth;
+
       const newColumnWidths = [...columnWidths];
       newColumnWidths[pageColIdx] = adjustedWidth;
       setColumnWidths(newColumnWidths);
-    } else if (event.key === 'Enter') {
+    } else if (event.key === ' ' || event.key === 'Enter') {
       event.stopPropagation();
       event.preventDefault();
       if (tempWidths.current.columnWidth !== tempWidths.current.initWidth) {
