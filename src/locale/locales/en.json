@@ -79,10 +79,6 @@
     "value": "Select excluded",
     "comment": "label for select excluded items in field."
   },
-  "SNTable.MenuItem.ChangeColumnPosition": {
-    "value": "Change column position",
-    "comment": "label for change column position menu in field."
-  },
   "SNTable.MenuItem.AdjustColumnSize": {
     "value": "Adjust column size",
     "comment": "label for adjust column size menu in field."

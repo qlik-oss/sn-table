@@ -8,7 +8,7 @@ import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownPro
 import { Cell } from '../../types';
 import { KeyCodes, SelectionActions } from '../constants';
 
-const preventDefaultBehavior = (evt: React.KeyboardEvent) => {
+export const preventDefaultBehavior = (evt: React.KeyboardEvent | MouseEvent) => {
   evt.stopPropagation();
   evt.preventDefault();
 };
