@@ -1,3 +1,7 @@
+const stripPx = (s) => {
+  return s.substring(0, s.indexOf('px'));
+};
+
 const stylingPanel = {
   type: 'items',
   items: [
@@ -28,7 +32,10 @@ const stylingPanel = {
                       width: 9,
                       min: 5,
                       max: 300,
-                      placeholder: '',
+                      defaultValue(item, data, args) {
+                        const currentTheme = args.theme.current();
+                        return stripPx(currentTheme.object?.straightTable?.header?.fontSize || currentTheme.fontSize);
+                      },
                       change(data) {
                         data.header.fontSize = !data.header.fontSize
                           ? data.header.fontSize
@@ -40,6 +47,10 @@ const stylingPanel = {
                       ref: 'header.fontColor',
                       type: 'object',
                       component: 'color-picker',
+                      defaultValue(item, data, args) {
+                        const currentTheme = args.theme.current();
+                        return { color: currentTheme.object?.straightTable?.header?.color || currentTheme.color };
+                      },
                       dualOutput: true,
                     },
                   },
@@ -66,7 +77,10 @@ const stylingPanel = {
                       width: 9,
                       min: 5,
                       max: 300,
-                      placeholder: '',
+                      defaultValue(item, data, args) {
+                        const currentTheme = args.theme.current();
+                        return stripPx(currentTheme.object?.straightTable?.content?.fontSize || currentTheme.fontSize);
+                      },
                       change(data) {
                         data.content.fontSize = !data.content.fontSize
                           ? data.content.fontSize
@@ -77,6 +91,10 @@ const stylingPanel = {
                       ref: 'content.fontColor',
                       type: 'object',
                       component: 'color-picker',
+                      defaultValue(item, data, args) {
+                        const currentTheme = args.theme.current();
+                        return { color: currentTheme.object?.straightTable?.content?.color || currentTheme.color };
+                      },
                       dualOutput: true,
                     },
                   },
