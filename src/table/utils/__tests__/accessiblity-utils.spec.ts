@@ -1,6 +1,7 @@
 import { stardust } from '@nebula.js/stardust';
 import React from 'react';
 import { Announce, TotalsPosition } from '../../../types';
+import { FocusTypes } from '../../constants';
 import * as accessibilityUtils from '../accessibility-utils';
 
 describe('handle-accessibility', () => {
@@ -30,9 +31,9 @@ describe('handle-accessibility', () => {
   afterEach(() => jest.clearAllMocks());
 
   describe('updateFocus', () => {
-    let focusType: string;
+    let focusType: FocusTypes;
     beforeEach(() => {
-      focusType = 'focus';
+      focusType = FocusTypes.FOCUS;
     });
 
     it('should focus cell and call setAttribute when focusType is focus', () => {
@@ -42,7 +43,7 @@ describe('handle-accessibility', () => {
     });
 
     it('should blur cell and call setAttribute when focusType is blur', () => {
-      focusType = 'blur';
+      focusType = FocusTypes.BLUR;
 
       accessibilityUtils.updateFocus({ focusType, cell });
       expect(cell?.blur).toHaveBeenCalledTimes(1);
@@ -50,7 +51,7 @@ describe('handle-accessibility', () => {
     });
 
     it('should call setAttribute when focusType is addTab', () => {
-      focusType = 'addTab';
+      focusType = FocusTypes.ADD_TAB;
 
       accessibilityUtils.updateFocus({ focusType, cell });
       expect(cell?.focus).not.toHaveBeenCalled();
@@ -58,7 +59,7 @@ describe('handle-accessibility', () => {
     });
 
     it('should call setAttribute when focusType is removeTab', () => {
-      focusType = 'removeTab';
+      focusType = FocusTypes.REMOVE_TAB;
 
       accessibilityUtils.updateFocus({ focusType, cell });
       expect(cell?.blur).not.toHaveBeenCalled();

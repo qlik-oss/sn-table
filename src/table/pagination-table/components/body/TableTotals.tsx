@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import TableRow from '@mui/material/TableRow';
 
 import { useContextSelector, TableContext } from '../../../context';
-import { handleTotalKeyDown } from '../../../utils/handle-key-press';
+import { handleTotalKeyDown } from '../../../utils/handle-keyboard';
 import { removeTabAndFocusCell } from '../../../utils/accessibility-utils';
 import { StyledTotalsCell } from './styles';
 import { TableTotalsProps } from '../../../types';

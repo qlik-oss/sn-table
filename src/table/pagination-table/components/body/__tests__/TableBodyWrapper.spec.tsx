@@ -4,7 +4,7 @@ import { generateDataPages, generateLayout } from '../../../../../__test__/gener
 import manageData from '../../../../../handle-data';
 import TableBodyWrapper from '../TableBodyWrapper';
 import * as getCellRenderer from '../../../utils/get-cell-renderer';
-import * as handleKeyPress from '../../../../utils/handle-key-press';
+import * as handleKeyPress from '../../../../utils/handle-keyboard';
 import * as handleClick from '../../../../utils/handle-click';
 import { TableData, PageInfo, Cell } from '../../../../../types';
 import TestWithProviders from '../../../../../__test__/test-with-providers';

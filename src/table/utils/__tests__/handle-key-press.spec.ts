@@ -9,7 +9,7 @@ import {
   handleTotalKeyDown,
   handleLastTab,
   handleBodyKeyUp,
-} from '../handle-key-press';
+} from '../handle-keyboard';
 import * as handleAccessibility from '../accessibility-utils';
 import * as handleScroll from '../handle-scroll';
 import * as handleCopy from '../copy-utils';

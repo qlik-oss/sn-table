@@ -29,6 +29,13 @@ export enum KeyCodes {
   C = 'c',
 }
 
+export enum FocusTypes {
+  FOCUS = 'focus',
+  BLUR = 'blur',
+  ADD_TAB = 'addTab',
+  REMOVE_TAB = 'removeTab',
+}
+
 export enum FullSortDirection {
   A = 'ascending',
   D = 'descending',
