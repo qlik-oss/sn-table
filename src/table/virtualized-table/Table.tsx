@@ -16,7 +16,7 @@ import useDidUpdateEffect from '../hooks/use-did-update-effect';
 import useHeights from './hooks/use-heights';
 
 const Table = (props: TableProps) => {
-  const { rect, pageInfo } = props;
+  const { pageInfo, rect } = props;
   const { totalsPosition, columns, paginationNeeded } = useContextSelector(TableContext, (value) => value.tableData);
   const { layout, theme, styling } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
@@ -70,13 +70,13 @@ const Table = (props: TableProps) => {
       ref.current.scrollLeft = 0;
       ref.current.scrollTop = 0;
     }
-  }, [rowCount, columns.length]);
+  }, [columns.length]);
 
   useLayoutEffect(() => {
     if (ref.current) {
       ref.current.scrollTop = 0;
     }
-  }, [columnWidths]);
+  }, [columnWidths, pageInfo, rowCount]);
 
   useDidUpdateEffect(() => {
     setYScrollbarWidth(yScrollbarWidth);
@@ -87,7 +87,6 @@ const Table = (props: TableProps) => {
       rect={stickyContainerRect}
       pageInfo={pageInfo}
       columns={columns}
-      columnWidths={columnWidths}
       forwardRef={totalsRef}
       totals={totalsPosition}
       rowHeight={totalsRowHeight}
@@ -103,7 +102,6 @@ const Table = (props: TableProps) => {
             rect={stickyContainerRect}
             pageInfo={pageInfo}
             columns={columns}
-            columnWidths={columnWidths}
             forwardRef={headerRef}
             rowHeight={headerRowHeight}
           />
@@ -115,7 +113,6 @@ const Table = (props: TableProps) => {
             rect={stickyContainerRect}
             pageInfo={pageInfo}
             columns={columns}
-            columnWidths={columnWidths}
             rowHeight={bodyRowHeight}
             headerAndTotalsHeight={headerAndTotalsHeight}
             syncHeight={syncHeight}

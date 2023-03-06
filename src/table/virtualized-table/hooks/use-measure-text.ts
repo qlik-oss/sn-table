@@ -23,7 +23,7 @@ export default function useMeasureText(
       measureText: (text) => memoizedMeasureText(text).width,
       estimateWidth: (length: number) => memoizedMeasureText(MAGIC_DEFAULT_CHAR).width * length,
     };
-  }, [fontSize, fontFamily]);
+  }, [fontSize, fontFamily, boldText]);
 
   return { estimateWidth, measureText };
 }
