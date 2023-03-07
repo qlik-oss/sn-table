@@ -7,9 +7,9 @@ import {
   DEFAULT_COLUMN_PERCENTAGE_WIDTH,
   MAX_COLUMN_WIDTH,
 } from '../constants';
-import useDidUpdateEffect from './use-did-update-effect';
 import useMeasureText from '../virtualized-table/hooks/use-measure-text';
 import { TableStyling } from '../types';
+import useOnPropsChange from '../virtualized-table/hooks/use-on-props-change';
 
 type GetHugWidth = (headLabel: string, totalsLabel: string, glyphCount: number) => number;
 
@@ -93,7 +93,7 @@ const useColumnWidths = (
 
   const [columnWidths, setColumnWidths] = useState(() => getColumnWidths(columns, tableWidth, getHugWidth));
 
-  useDidUpdateEffect(() => {
+  useOnPropsChange(() => {
     setColumnWidths(getColumnWidths(columns, tableWidth - yScrollbarWidth, getHugWidth));
   }, [columns, tableWidth, yScrollbarWidth]);
 

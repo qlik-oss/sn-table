@@ -2,8 +2,9 @@ import React, { MouseEvent } from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { Announce, Cell, TotalsPosition } from '../../types';
 import { SelectionDispatch } from '../types';
-import { SelectionActions } from '../constants';
-import { removeTabAndFocusCell, updateFocus, getCellElement } from './accessibility-utils';
+import { FocusTypes, SelectionActions } from '../constants';
+import { removeTabAndFocusCell, updateFocus } from './accessibility-utils';
+import { getCellElement } from './get-element-utils';
 
 export const handleClickToFocusBody = (
   cell: Cell,
@@ -28,7 +29,7 @@ export const handleClickToFocusHead = (
 
 export const handleMouseDownLabelToFocusHeadCell = (evt: MouseEvent, rootElement: HTMLElement, columnIndex: number) => {
   evt.preventDefault();
-  updateFocus({ focusType: 'focus', cell: getCellElement(rootElement, [0, columnIndex]) });
+  updateFocus({ focusType: FocusTypes.FOCUS, cell: getCellElement(rootElement, [0, columnIndex]) });
 };
 
 /**

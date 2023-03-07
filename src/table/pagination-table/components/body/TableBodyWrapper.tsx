@@ -3,7 +3,7 @@ import React, { useMemo, memo } from 'react';
 import getCellRenderer from '../../utils/get-cell-renderer';
 import { useContextSelector, TableContext } from '../../../context';
 import { StyledBodyRow, StyledBody } from './styles';
-import { handleBodyKeyDown, handleBodyKeyUp } from '../../../utils/handle-key-press';
+import { handleBodyKeyDown, handleBodyKeyUp } from '../../../utils/handle-keyboard';
 import { handleClickToFocusBody } from '../../../utils/handle-click';
 import { Cell } from '../../../../types';
 import { TableBodyWrapperProps } from '../../../types';

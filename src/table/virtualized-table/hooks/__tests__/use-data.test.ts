@@ -43,7 +43,14 @@ describe('useData', () => {
       INIT_DATA_FETCH_WIDTH
     ) as unknown as EngineAPI.INxDataPage[];
 
-    gridState = { current: { overscanColumnStartIndex: 0, overscanRowStartIndex: 0 } };
+    gridState = {
+      current: {
+        overscanColumnStartIndex: 0,
+        overscanRowStartIndex: 0,
+        overscanColumnStopIndex: 0,
+        overscanRowStopIndex: 0,
+      },
+    };
 
     pageInfo = {
       page: 0,
@@ -345,29 +352,6 @@ describe('useData', () => {
           .fill(undefined)
           .forEach((_, rowIdx) => {
             expect(result.current.rowsInPage[rowIdx]?.key).toEqual(`row-${rowIdx}`);
-          });
-      });
-    });
-
-    test('should insert row data at correct index based on grid state', async () => {
-      gridState.current.overscanColumnStartIndex = 50;
-      gridState.current.overscanRowStartIndex = 100;
-      await doRenderHook();
-
-      const { result } = renderHookResult;
-
-      await waitFor(() =>
-        expect(result.current.rowsInPage[gridState.current.overscanRowStartIndex - 1]).toBeUndefined()
-      );
-      await waitFor(() => {
-        Array(VISIBLE_ROW_COUNT + ROW_DATA_BUFFER_SIZE)
-          .fill(undefined)
-          .forEach((_, idx) => {
-            const rowIdx = gridState.current.overscanRowStartIndex + idx;
-            const row = result.current.rowsInPage[rowIdx] as Row;
-            expect(row.key).toEqual(`row-${rowIdx}`);
-            expect(row[`col-${gridState.current.overscanColumnStartIndex}`]).not.toBeUndefined();
-            expect(row[`col-${gridState.current.overscanColumnStartIndex - 1}`]).toBeUndefined();
           });
       });
     });

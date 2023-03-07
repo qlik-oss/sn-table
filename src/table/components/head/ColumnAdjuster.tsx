@@ -4,7 +4,7 @@ import { useContextSelector, TableContext } from '../../context';
 import { AdjusterHitArea, AdjusterHeadBorder, AdjusterBodyBorder } from './styles';
 import { ColumnWidthTypes, MIN_COLUMN_WIDTH, PAGINATION_HEIGHT, KeyCodes } from '../../constants';
 import { BORDER_WIDTH } from '../../styling-defaults';
-import { preventDefaultBehavior } from '../../utils/handle-key-press';
+import { preventDefaultBehavior } from '../../utils/keyboard-utils';
 
 /**
  * Component that is placed on top of column border.

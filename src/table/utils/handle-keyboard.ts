@@ -2,84 +2,19 @@ import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 
 import { focusSelectionToolbar, announceSelectionState, moveFocus } from './accessibility-utils';
+import {
+  preventDefaultBehavior,
+  isCtrlShift,
+  isArrowKey,
+  isCtrlCmd,
+  shouldBubble,
+  shouldSelectMultiValues,
+} from './keyboard-utils';
+import { getNextMenuItem, getPreviousMenuItem } from './get-element-utils';
 import copyCellValue from './copy-utils';
 import { handleNavigateTop } from './handle-scroll';
 import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownProps, SelectionDispatch } from '../types';
-import { Cell } from '../../types';
 import { KeyCodes, SelectionActions } from '../constants';
-
-export const preventDefaultBehavior = (evt: React.KeyboardEvent | MouseEvent) => {
-  evt.stopPropagation();
-  evt.preventDefault();
-};
-
-const getNextFocusItem = (currentFocus: Element): Element | undefined => {
-  const nextItem = currentFocus.nextElementSibling;
-  if (!nextItem) {
-    return currentFocus.parentElement?.children?.[0];
-  }
-  if (nextItem.tagName === 'HR') {
-    return getNextFocusItem(nextItem);
-  }
-  return nextItem;
-};
-
-const getPreviousFocusItem = (currentFocus: Element): Element | undefined => {
-  const previousItem = currentFocus.previousElementSibling;
-  if (!previousItem) {
-    const menuItemAmount = currentFocus.parentElement?.children?.length as number;
-    return currentFocus.parentElement?.children?.[menuItemAmount - 1];
-  }
-  if (previousItem.tagName === 'HR') {
-    return getPreviousFocusItem(previousItem);
-  }
-  return previousItem;
-};
-
-const isCtrlShift = (evt: React.KeyboardEvent) => evt.shiftKey && (evt.ctrlKey || evt.metaKey);
-
-const isArrowKey = (key: string) =>
-  [KeyCodes.LEFT, KeyCodes.RIGHT, KeyCodes.UP, KeyCodes.DOWN].includes(key as KeyCodes);
-
-export const isShiftArrow = (evt: React.KeyboardEvent) => evt.shiftKey && isArrowKey(evt.key);
-
-/**
- * Checks if events caught by head, totals and body handles should bubble to the wrapper handler or default behavior
- */
-export const shouldBubble = (
-  evt: React.KeyboardEvent,
-  isSelectionMode = false,
-  keyboardEnabled = false,
-  paginationNeeded = true
-) => {
-  const shouldGoToSelToolbar = keyboardEnabled && isSelectionMode;
-  const bubbleWithoutShift = !evt.shiftKey && (paginationNeeded || !shouldGoToSelToolbar);
-  const bubbleWithShift = evt.shiftKey && !shouldGoToSelToolbar;
-  return (
-    // esc to blur object
-    (evt.key === KeyCodes.ESC && !isSelectionMode) ||
-    // default tab to pagination or tab to blur
-    (evt.key === KeyCodes.TAB && (bubbleWithoutShift || bubbleWithShift)) ||
-    // ctrl + shift + arrow to change page
-    ((evt.key === KeyCodes.LEFT || evt.key === KeyCodes.RIGHT) && isCtrlShift(evt))
-  );
-};
-
-/**
- * Checks if should select with shift + arrow.
- * When at the first/last row of the cell, shift + arrow up/down should not select anything
- */
-const shouldSelectMultiValues = (
-  areBasicFeaturesEnabled: boolean,
-  isSelectionsEnabled: boolean,
-  evt: React.KeyboardEvent,
-  cell: Cell
-) =>
-  evt.shiftKey &&
-  ((evt.key === KeyCodes.UP && cell.pageRowIdx !== 0) || (evt.key === KeyCodes.DOWN && !cell.isLastRow)) &&
-  areBasicFeaturesEnabled &&
-  isSelectionsEnabled &&
-  cell.isSelectable;
 
 /**
  * ----------- Key handlers -----------
@@ -161,7 +96,7 @@ export const handleHeadKeyDown = ({
       changeSortOrder(column);
       break;
     case KeyCodes.C: {
-      areBasicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(evt);
+      areBasicFeaturesEnabled && isCtrlCmd(evt) && copyCellValue(evt);
       break;
     }
     default:
@@ -178,7 +113,7 @@ export const handleHeadCellMenuKeyDown = (event: React.KeyboardEvent<HTMLLIEleme
   // The rest key are handled by handleKeyDown in MUIMenuList
   if (key === 'ArrowDown' || key === 'ArrowUp') {
     const getNewFocusItem = (currentItem: Element) =>
-      key === 'ArrowDown' ? getNextFocusItem(currentItem) : getPreviousFocusItem(currentItem);
+      key === 'ArrowDown' ? getNextMenuItem(currentItem) : getPreviousMenuItem(currentItem);
     // Prevent scroll of the page
     // Stop triggering handleKeyDown in MUIMenuList
     preventDefaultBehavior(event);
@@ -221,7 +156,7 @@ export const handleTotalKeyDown = (
       break;
     }
     case KeyCodes.C: {
-      areBasicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(evt);
+      areBasicFeaturesEnabled && isCtrlCmd(evt) && copyCellValue(evt);
       break;
     }
     default:
@@ -307,7 +242,7 @@ export const handleBodyKeyDown = ({
       focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
       break;
     case KeyCodes.C:
-      areBasicFeaturesEnabled && (evt.ctrlKey || evt.metaKey) && copyCellValue(evt);
+      areBasicFeaturesEnabled && isCtrlCmd(evt) && copyCellValue(evt);
       break;
     default:
       break;

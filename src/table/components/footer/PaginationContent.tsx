@@ -6,7 +6,7 @@ import ArrowRight from '@qlik-trial/sprout/icons/react/ArrowRight';
 import ArrowRightStop from '@qlik-trial/sprout/icons/react/ArrowRightStop';
 
 import { StyledSelect, StyledButton, StyledTypography } from './styles';
-import { handleLastTab } from '../../utils/handle-key-press';
+import { handleLastTab } from '../../utils/handle-keyboard';
 import { PaginationContentProps } from '../../types';
 import { getFooterStyle } from '../../utils/styling-utils';
 import { useContextSelector, TableContext } from '../../context';

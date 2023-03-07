@@ -10,11 +10,13 @@ import PaginationContent from '../../components/footer/PaginationContent';
 import useDidUpdateEffect from '../../hooks/use-did-update-effect';
 import useFocusListener from '../../hooks/use-focus-listener';
 import useScrollListener from '../../hooks/use-scroll-listener';
-import { handleWrapperKeyDown } from '../../utils/handle-key-press';
-import { updateFocus, resetFocus, getCellElement } from '../../utils/accessibility-utils';
+import { handleWrapperKeyDown } from '../../utils/handle-keyboard';
+import { updateFocus, resetFocus } from '../../utils/accessibility-utils';
+import { getCellElement } from '../../utils/get-element-utils';
 import { TableWrapperProps } from '../../types';
 import { StyledTableWrapper } from '../../components/styles';
 import useScrollbarWidth from '../../virtualized-table/hooks/use-scrollbar-width';
+import { FocusTypes } from '../../constants';
 
 export default function TableWrapper(props: TableWrapperProps) {
   const { pageInfo, setPageInfo, direction, footerContainer, announce, areBasicFeaturesEnabled } = props;
@@ -74,7 +76,10 @@ export default function TableWrapper(props: TableWrapperProps) {
     // make sure to blur or focus the cell corresponding to focusedCellCoord
     // when keyboard.focus() runs, keyboard.active is true
     // when keyboard.blur() runs, keyboard.active is false
-    updateFocus({ focusType: keyboard.active ? 'focus' : 'blur', cell: getCellElement(rootElement, focusedCellCoord) });
+    updateFocus({
+      focusType: keyboard.active ? FocusTypes.FOCUS : FocusTypes.BLUR,
+      cell: getCellElement(rootElement, focusedCellCoord),
+    });
   }, [keyboard.active]);
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
