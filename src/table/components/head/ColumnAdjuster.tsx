@@ -78,6 +78,7 @@ const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
       focusHeadMenuButton(event);
     } else if (event.key === KeyCodes.ESC) {
       focusHeadMenuButton(event);
+      updateWidth(tempWidths.current.initWidth);
     }
   };
 
