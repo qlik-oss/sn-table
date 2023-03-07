@@ -289,9 +289,10 @@ const getData = (env) =>
         translation: 'Common.Data',
         component: 'data-assets-panel',
         items: {
-          dimension: {
-            type: 'items',
+          dimensions: {
+            type: 'array',
             component: 'expandable-items',
+            ref: 'qHyperCubeDef.qDimensions',
             items: {
               field: {
                 type: 'items',
@@ -305,9 +306,10 @@ const getData = (env) =>
               },
             },
           },
-          measure: {
-            type: 'items',
+          measures: {
+            type: 'array',
             component: 'expandable-items',
+            ref: 'qHyperCubeDef.qMeasures',
             items: {
               field: {
                 type: 'items',
