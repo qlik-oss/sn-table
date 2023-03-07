@@ -61,6 +61,36 @@ describe('settings', () => {
       });
     });
 
+    describe('headerFontSize/fontSize/headerFontColor/fontColor.defaultValue', () => {
+      const { headerFontSize, headerFontColor } = headerSection.items.headerFontItem.items.headerFontWrapper.items;
+      const { contentFontSize, contentFontColor } = contentSection.items.contentFontItem.items.contentFontWrapper.items;
+      let args;
+
+      beforeEach(() => {
+        args = {
+          theme: {
+            current: () => {
+              return { fontSize: '14px', color: '#4d4d4d' };
+            },
+          },
+        };
+      });
+
+      it('gets correct default font sizes', () => {
+        const hfs = headerFontSize.defaultValue({}, {}, args);
+        const cfs = contentFontSize.defaultValue({}, {}, args);
+        expect(hfs).toBe(14);
+        expect(cfs).toBe(14);
+      });
+
+      it('gets correct default font colors', () => {
+        const hfc = headerFontColor.defaultValue({}, {}, args);
+        const cfc = contentFontColor.defaultValue({}, {}, args);
+        expect(hfc).toStrictEqual({ color: '#4d4d4d' });
+        expect(cfc).toStrictEqual({ color: '#4d4d4d' });
+      });
+    });
+
     describe('hoverColor/hoverFontColor.show', () => {
       const hoverItems = hoverEffectSection.items.hoverEffectItem.items;
       let data;
