@@ -6,6 +6,31 @@ import { CellFocusProps, HandleResetFocusProps } from '../types';
 import { findCellWithTabStop, getCellElement, getNextCellCoord } from './get-element-utils';
 
 /**
+ * Add the tab stop for adjuster hit area and focus that
+ */
+export const setFocusOnClosetColumnAdjuster = (anchorRef: React.RefObject<HTMLDivElement>) => {
+  setTimeout(() => {
+    const adjusterHitArea = anchorRef.current
+      ?.closest('.sn-table-cell')
+      ?.querySelector('#adjuster-hit-area') as HTMLElement;
+    adjusterHitArea?.setAttribute('tabIndex', '0');
+    adjusterHitArea?.focus();
+  }, 0);
+};
+
+/**
+ * Removes the tab stop for adjuster hit area and focus the head menu button
+ */
+export const focusHeadMenuButton = (event: React.KeyboardEvent | React.FocusEvent<HTMLDivElement>) => {
+  const target = event.target as HTMLDivElement;
+  target.setAttribute('tabIndex', '-1');
+  const headMenuButton = target
+    ?.closest('.sn-table-cell')
+    ?.querySelector('#sn-table-head-menu-button') as HTMLButtonElement;
+  headMenuButton?.focus();
+};
+
+/**
  * Removes/adds tab stop and sometimes focus/blurs the cell, depending on focusType
  */
 export const updateFocus = ({ focusType, cell }: CellFocusProps) => {

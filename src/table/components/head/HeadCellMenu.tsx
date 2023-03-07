@@ -10,6 +10,7 @@ import SelectExcluded from '@qlik-trial/sprout/icons/react/SelectExcluded';
 import ColumnSize from '@qlik-trial/sprout/icons/react/ColumnSize';
 
 import useFieldSelection from '../../hooks/use-field-selection';
+import { setFocusOnClosetColumnAdjuster } from '../../utils/accessibility-utils';
 import { useContextSelector, TableContext } from '../../context';
 import { HeadCellMenuProps, MenuItemGroup } from '../../types';
 import { HeadCellMenuWrapper, StyledMenuIconButton } from './styles';
@@ -56,16 +57,6 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
       updateSelectionActionsEnabledStatus(layout as TableLayout);
     }
     setOpenMenuDropdown(!openMenuDropdown);
-  };
-
-  const setFocusOnClosetColumnAdjuster = () => {
-    setTimeout(() => {
-      const adjusterHitArea = anchorRef.current
-        ?.closest('.sn-table-cell')
-        ?.querySelector('#adjuster-hit-area') as HTMLElement;
-      adjusterHitArea?.setAttribute('tabIndex', '0');
-      adjusterHitArea?.focus();
-    }, 0);
   };
 
   const menuItemGroups = useMemo<MenuItemGroup[]>(
@@ -158,7 +149,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
                   evt.stopPropagation();
                   evt.preventDefault();
                   setOpenMenuDropdown(false);
-                  setFocusOnClosetColumnAdjuster();
+                  setFocusOnClosetColumnAdjuster(anchorRef);
                 },
                 icon: <ColumnSize />,
                 enabled: true,

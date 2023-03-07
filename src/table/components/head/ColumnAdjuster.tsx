@@ -5,6 +5,7 @@ import { AdjusterHitArea, AdjusterHeadBorder, AdjusterBodyBorder } from './style
 import { ColumnWidthTypes, MIN_COLUMN_WIDTH, PAGINATION_HEIGHT, KeyCodes } from '../../constants';
 import { BORDER_WIDTH } from '../../styling-defaults';
 import { preventDefaultBehavior } from '../../utils/keyboard-utils';
+import { focusHeadMenuButton } from '../../utils/accessibility-utils';
 
 /**
  * Component that is placed on top of column border.
@@ -61,15 +62,6 @@ const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
     };
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler);
-  };
-
-  const focusHeadMenuButton = (event: React.KeyboardEvent | React.FocusEvent<HTMLDivElement>) => {
-    const target = event.target as HTMLDivElement;
-    target.setAttribute('tabIndex', '-1');
-    const headMenuButton = target
-      ?.closest('.sn-table-cell')
-      ?.querySelector('#sn-table-head-menu-button') as HTMLButtonElement;
-    headMenuButton?.focus();
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
