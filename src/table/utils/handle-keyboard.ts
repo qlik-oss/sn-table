@@ -219,21 +219,20 @@ const handleBodyArrow = ({
 
   const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, focusType, allowedRows);
 
-  if (evt.key === KeyCodes.UP || evt.key === KeyCodes.DOWN) {
-    if (evt.key === KeyCodes.UP) {
-      handleNavigateTop([cell.pageRowIdx, cell.pageColIdx], rootElement);
-    }
+  if (!(evt.key === KeyCodes.UP || evt.key === KeyCodes.DOWN)) return;
 
-    // Shift + up/down arrow keys: select multiple values
-    if (shouldSelectMultiValues(areBasicFeaturesEnabled, isSelectionsEnabled, evt, cell)) {
-      selectionDispatch({
-        type: SelectionActions.SELECT_MULTI_ADD,
-        payload: { cell, evt, announce },
-      });
-    } else {
-      // When not selecting multiple we need to announce the selection state of the cell
-      announceSelectionState(announce, nextCell, isSelectionMode);
-    }
+  if (evt.key === KeyCodes.UP) {
+    handleNavigateTop([cell.pageRowIdx, cell.pageColIdx], rootElement);
+  }
+  // Shift + up/down arrow keys: select multiple values
+  if (shouldSelectMultiValues(areBasicFeaturesEnabled, isSelectionsEnabled, evt, cell)) {
+    selectionDispatch({
+      type: SelectionActions.SELECT_MULTI_ADD,
+      payload: { cell, evt, announce },
+    });
+  } else {
+    // When not selecting multiple we need to announce the selection state of the cell
+    announceSelectionState(announce, nextCell, isSelectionMode);
   }
 };
 
