@@ -10,9 +10,16 @@ describe('accessibility-utils', () => {
   let rootElement: HTMLElement;
   let focusedCellCoord: [number, number];
   let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  let button: HTMLButtonElement;
 
   beforeEach(() => {
-    cell = { focus: jest.fn(), blur: jest.fn(), setAttribute: jest.fn() } as unknown as HTMLTableCellElement;
+    button = { focus: jest.fn() } as unknown as HTMLButtonElement;
+    cell = {
+      focus: jest.fn(),
+      blur: jest.fn(),
+      setAttribute: jest.fn(),
+      querySelector: () => button,
+    } as unknown as HTMLTableCellElement;
     rootElement = {
       getElementsByClassName: () => [
         { getElementsByClassName: () => [cell] },
@@ -45,6 +52,13 @@ describe('accessibility-utils', () => {
       expect(cell?.setAttribute).toHaveBeenCalledWith('tabIndex', '0');
     });
 
+    it('should focus button when focusType is focusButton', () => {
+      focusType = FocusTypes.FOCUS_BUTTON;
+
+      accessibilityUtils.updateFocus({ focusType, cell });
+      expect(button?.focus).toHaveBeenCalledTimes(1);
+    });
+
     it('should blur cell and call setAttribute when focusType is blur', () => {
       focusType = FocusTypes.BLUR;
 
@@ -72,6 +86,15 @@ describe('accessibility-utils', () => {
     it('should early return and not throw error when cell is undefined', () => {
       cell = undefined;
       expect(() => accessibilityUtils.updateFocus({ focusType, cell })).not.toThrow();
+    });
+
+    it('should do nothing for invalid focusType', () => {
+      focusType = 'invalid' as FocusTypes;
+
+      accessibilityUtils.updateFocus({ focusType, cell });
+      expect(cell?.focus).not.toHaveBeenCalled();
+      expect(cell?.blur).not.toHaveBeenCalled();
+      expect(cell?.setAttribute).not.toHaveBeenCalled();
     });
   });
 

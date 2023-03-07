@@ -10,6 +10,7 @@ import {
   handleBodyKeyUp,
 } from '../handle-keyboard';
 import * as accessibilityUtils from '../accessibility-utils';
+import * as keyboardUtils from '../keyboard-utils';
 import * as handleScroll from '../handle-scroll';
 import * as handleCopy from '../copy-utils';
 import * as getElementUtils from '../get-element-utils';
@@ -415,9 +416,18 @@ describe('handle-keyboard', () => {
       paginationNeeded = true;
       totalsPosition = { atTop: false, atBottom: true };
       areBasicFeaturesEnabled = true;
-      jest.spyOn(accessibilityUtils, 'focusSelectionToolbar').mockImplementation(() => jest.fn());
-      jest.spyOn(accessibilityUtils, 'announceSelectionState').mockImplementation(() => jest.fn());
-      jest.spyOn(handleScroll, 'handleNavigateTop').mockImplementation(() => jest.fn());
+      jest.spyOn(accessibilityUtils, 'focusSelectionToolbar').mockImplementation(() => {});
+      jest.spyOn(accessibilityUtils, 'announceSelectionState').mockImplementation(() => {});
+      jest.spyOn(handleScroll, 'handleNavigateTop').mockImplementation(() => {});
+      jest.spyOn(keyboardUtils, 'bodyArrowHelper').mockImplementation(() => {});
+    });
+
+    it('should call bodyArrowHelper when arrow key is pressed', () => {
+      evt.key = KeyCodes.DOWN;
+      runHandleBodyKeyDown();
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(keyboardUtils.bodyArrowHelper).toHaveBeenCalledTimes(1);
     });
 
     it('when press space bar key and dimension, should select value for dimension', () => {
