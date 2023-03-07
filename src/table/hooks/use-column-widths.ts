@@ -95,7 +95,7 @@ const useColumnWidths = (
 
   useOnPropsChange(() => {
     setColumnWidths(getColumnWidths(columns, tableWidth - yScrollbarWidth, getHugWidth));
-  }, [columns, tableWidth, yScrollbarWidth]);
+  }, [columns, tableWidth, yScrollbarWidth, getHugWidth]);
 
   return [columnWidths, setColumnWidths, setYScrollbarWidth];
 };
