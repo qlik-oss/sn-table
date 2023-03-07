@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useLayoutEffect, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
+import React, { memo, useMemo, useLayoutEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import { VariableSizeGrid } from 'react-window';
 import useData from './hooks/use-data';
 import { BodyProps, BodyRef, ItemData, GridState } from './types';
@@ -10,26 +10,20 @@ import { useContextSelector, TableContext } from '../context';
 import Cell from './Cell';
 import getCellItemKey from './utils/get-cell-item-key';
 import useDynamicRowHeight from './hooks/use-dynamic-row-height';
+import useOnPropsChange from './hooks/use-on-props-change';
 import getBodyHeight from './utils/get-body-height';
 
 const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
-  const {
-    rect,
-    columns,
-    columnWidths,
-    innerForwardRef,
-    pageInfo,
-    bodyStyle,
-    rowHeight,
-    headerAndTotalsHeight,
-    syncHeight,
-  } = props;
+  const { rect, columns, innerForwardRef, pageInfo, bodyStyle, rowHeight, headerAndTotalsHeight, syncHeight } = props;
   const gridRef = useRef<VariableSizeGrid>(null);
   const gridState = useRef<GridState>({
     overscanColumnStartIndex: 0,
     overscanRowStartIndex: 0,
+    overscanColumnStopIndex: 0,
+    overscanRowStopIndex: 0,
   });
-  const { layout, model, theme } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, model } = useContextSelector(TableContext, (value) => value.baseProps);
+  const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const isHoverEnabled = !!layout.components?.[0]?.content?.hoverEffect;
   const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
   const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(
@@ -40,16 +34,18 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     rowHeight
   );
 
-  const { setCellSize, getRowHeight, rowMeta, estimatedRowHeight, maxLineCount } = useDynamicRowHeight({
-    pageInfo,
-    style: bodyStyle,
-    rowHeight,
-    columnWidths,
-    gridRef,
-    rowCount,
-  });
+  const { setCellSize, getRowHeight, rowMeta, estimatedRowHeight, maxLineCount, updateCellHeight } =
+    useDynamicRowHeight({
+      pageInfo,
+      style: bodyStyle,
+      rowHeight,
+      columnWidths,
+      gridRef,
+      rowCount,
+      gridState,
+    });
 
-  const { rowsInPage, deferredRowCount, loadRows, loadColumns } = useData(
+  const { rowsInPage, loadRows, loadColumns } = useData(
     layout,
     model as EngineAPI.IGenericObject,
     pageInfo,
@@ -67,7 +63,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     loadColumns,
     verticalScrollDirection,
     horizontalScrollDirection,
-    rowCount: deferredRowCount,
+    rowCount,
     pageInfo,
     gridState,
   });
@@ -77,29 +73,31 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     [rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount]
   );
 
-  const bodyHeight = getBodyHeight(rect, headerAndTotalsHeight, deferredRowCount, estimatedRowHeight);
+  const bodyHeight = getBodyHeight(rect, headerAndTotalsHeight, rowCount, estimatedRowHeight);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     syncHeight(innerForwardRef.current?.clientHeight ?? 0, true);
-  }, [deferredRowCount, syncHeight, innerForwardRef]);
+  }, [rowCount, syncHeight, innerForwardRef]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     syncHeight(innerForwardRef.current?.clientHeight ?? 0, false);
 
     if (rowMeta.current.lastScrollToRatio === 1) {
       // Hack to deal with the case when a user scrolls to the last row
       // and data has not yet finished loading
-      gridRef.current?.scrollToItem({ rowIndex: deferredRowCount - 1, align: 'start' });
+      gridRef.current?.scrollToItem({ rowIndex: rowCount - 1, align: 'start' });
     }
   });
 
   useSelectionsEffect(rowsInPage);
 
-  useLayoutEffect(() => {
-    if (!gridRef.current) return;
-
-    gridRef.current.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: true });
-  }, [layout, pageInfo.page, gridRef, columnWidths, rowMeta, theme.name()]); // eslint-disable-line react-hooks/exhaustive-deps
+  // React to when a user re-sizes a column by dragging a column corner. This hook will
+  // trigger both while the dragging is taking place and when a new column width is
+  // calculated based on the layout and/or container element size changes
+  useOnPropsChange(() => {
+    gridRef.current?.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: false });
+    updateCellHeight(rowsInPage);
+  }, [columnWidths]);
 
   useImperativeHandle(
     ref,
@@ -113,7 +111,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
           if (rowMeta.current.lastScrollToRatio === 1) {
             // Hack to ensure that the last row is scrolled to when row height is dynamic
             // and row has already been measured
-            gridRef.current?.scrollToItem({ rowIndex: deferredRowCount - 1, align: 'start' });
+            gridRef.current?.scrollToItem({ rowIndex: rowCount - 1, align: 'start' });
             gridRef.current?.scrollTo({ scrollLeft });
           } else {
             gridRef.current?.scrollTo({ scrollTop, scrollLeft });
@@ -121,7 +119,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
         },
       };
     },
-    [innerForwardRef, bodyHeight, rowMeta, deferredRowCount]
+    [innerForwardRef, bodyHeight, rowMeta, rowCount]
   );
 
   return (
@@ -133,7 +131,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
       columnCount={layout.qHyperCube.qSize.qcx}
       columnWidth={(index) => columnWidths[index]}
       height={bodyHeight}
-      rowCount={deferredRowCount}
+      rowCount={rowCount}
       rowHeight={getRowHeight}
       estimatedRowHeight={estimatedRowHeight}
       width={rect.width}

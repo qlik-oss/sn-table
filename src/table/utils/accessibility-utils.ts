@@ -1,16 +1,9 @@
 import { stardust } from '@nebula.js/stardust';
 import React from 'react';
 import { Announce } from '../../types';
-import { DEFAULT_FOCUS_CELL_COORD } from '../constants';
+import { DEFAULT_FOCUS_CELL_COORD, FocusTypes } from '../constants';
 import { CellFocusProps, HandleResetFocusProps } from '../types';
-
-export const getCellElement = (rootElement: HTMLElement, cellCoord: [number, number]) =>
-  rootElement.getElementsByClassName('sn-table-row')[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[
-    cellCoord[1]
-  ] as HTMLTableCellElement;
-
-export const findCellWithTabStop = (rootElement: HTMLElement) =>
-  rootElement.querySelector("td[tabindex='0'], th[tabindex='0']") as HTMLTableCellElement;
+import { findCellWithTabStop, getCellElement, getNextCellCoord } from './get-element-utils';
 
 /**
  * Removes/adds tab stop and sometimes focus/blurs the cell, depending on focusType
@@ -19,73 +12,23 @@ export const updateFocus = ({ focusType, cell }: CellFocusProps) => {
   if (!cell) return;
 
   switch (focusType) {
-    case 'focus':
+    case FocusTypes.FOCUS:
       cell.focus();
       cell.setAttribute('tabIndex', '0');
       break;
-    case 'blur':
+    case FocusTypes.BLUR:
       cell.blur();
       cell.setAttribute('tabIndex', '-1');
       break;
-    case 'addTab':
+    case FocusTypes.ADD_TAB:
       cell.setAttribute('tabIndex', '0');
       break;
-    case 'removeTab':
+    case FocusTypes.REMOVE_TAB:
       cell.setAttribute('tabIndex', '-1');
       break;
     default:
       break;
   }
-};
-
-/**
- * Calculates the next cell to focus
- */
-export const getNextCellCoord = (
-  evt: React.KeyboardEvent,
-  rootElement: HTMLElement,
-  cellCoord: [number, number],
-  allowedRows: {
-    top: number;
-    bottom: number;
-  } = { top: 0, bottom: 0 }
-): [number, number] => {
-  const rowCount = rootElement.getElementsByClassName('sn-table-row').length;
-  const columnCount = rootElement.getElementsByClassName('sn-table-head-cell').length;
-  let [nextRow, nextCol] = cellCoord;
-
-  switch (evt.key) {
-    case 'ArrowDown':
-      nextRow < rowCount - 1 - allowedRows.bottom && nextRow++;
-      break;
-    case 'ArrowUp':
-      nextRow > allowedRows.top && nextRow--;
-      break;
-    case 'ArrowRight':
-      // allowedRows.top greater than 0 means we are in selection mode
-      if (allowedRows.top > 0) break;
-      if (nextCol < columnCount - 1) {
-        nextCol++;
-      } else if (nextRow < rowCount - 1) {
-        nextRow++;
-        nextCol = 0;
-      }
-      break;
-    case 'ArrowLeft':
-      // allowedRows.top greater than 0 means we are in selection mode
-      if (allowedRows.top > 0) break;
-      if (nextCol > 0) {
-        nextCol--;
-      } else if (nextRow > 0) {
-        nextRow--;
-        nextCol = columnCount - 1;
-      }
-      break;
-    default:
-      break;
-  }
-
-  return [nextRow, nextCol];
 };
 
 /**
@@ -101,10 +44,10 @@ export const moveFocus = (
     bottom: number;
   }
 ) => {
-  updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
+  updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLTableCellElement });
   const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, allowedRows);
   const nextCell = getCellElement(rootElement, nextCellCoord);
-  updateFocus({ focusType: 'focus', cell: nextCell });
+  updateFocus({ focusType: FocusTypes.FOCUS, cell: nextCell });
   setFocusedCellCoord(nextCellCoord);
 
   return nextCell;
@@ -119,12 +62,12 @@ export const removeTabAndFocusCell = (
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
   keyboard: stardust.Keyboard
 ) => {
-  updateFocus({ focusType: 'removeTab', cell: findCellWithTabStop(rootElement) });
+  updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: findCellWithTabStop(rootElement) });
   setFocusedCellCoord(newCoord);
   if (keyboard.enabled && !keyboard.active) {
     keyboard.focus?.();
   } else {
-    updateFocus({ focusType: 'addTab', cell: getCellElement(rootElement, newCoord) });
+    updateFocus({ focusType: FocusTypes.ADD_TAB, cell: getCellElement(rootElement, newCoord) });
   }
 };
 
@@ -141,14 +84,14 @@ export const resetFocus = ({
   announce,
   totalsPosition,
 }: HandleResetFocusProps) => {
-  updateFocus({ focusType: 'removeTab', cell: findCellWithTabStop(rootElement) });
+  updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: findCellWithTabStop(rootElement) });
   // If you have selections ongoing, you want to stay on the same column
   const selectionCellCoord: [number, number] = [totalsPosition.atTop ? 2 : 1, focusedCellCoord[1]];
   const cellCoord: [number, number] = isSelectionMode ? selectionCellCoord : DEFAULT_FOCUS_CELL_COORD;
 
   if (!keyboard.enabled || keyboard.active) {
     // Only run this if updates come from inside table
-    const focusType = shouldRefocus.current ? 'focus' : 'addTab';
+    const focusType = shouldRefocus.current ? FocusTypes.FOCUS : FocusTypes.ADD_TAB;
     shouldRefocus.current = false;
     const cell = getCellElement(rootElement, cellCoord);
     updateFocus({ focusType, cell });

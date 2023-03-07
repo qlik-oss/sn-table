@@ -2,7 +2,7 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import TableTotals from '../TableTotals';
 import manageData from '../../../../../handle-data';
-import * as handleKeyPress from '../../../../utils/handle-key-press';
+import * as handleKeyPress from '../../../../utils/handle-keyboard';
 import * as handleAccessibility from '../../../../utils/accessibility-utils';
 import { generateDataPages, generateLayout } from '../../../../../__test__/generate-test-data';
 import { TableData, ExtendedSelectionAPI, PageInfo } from '../../../../../types';

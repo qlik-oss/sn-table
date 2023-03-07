@@ -1,16 +1,15 @@
 import React, { memo, useMemo, useState } from 'react';
-import { WrapperProps } from './types';
 import PaginationContent from '../components/footer/PaginationContent';
 import { StyledTableWrapper } from '../components/styles';
 import { PageInfo } from '../../types';
 import FooterWrapper from '../components/footer/FooterWrapper';
 import Table from './Table';
 import { MAX_PAGE_SIZE } from './constants';
-import useOnPropsChange from './hooks/use-on-props-change';
 import { TableContext, useContextSelector } from '../context';
+import useOnPropsChange from './hooks/use-on-props-change';
+import { WrapperProps } from './types';
 
-const Wrapper = (props: WrapperProps) => {
-  const { rect } = props;
+const Wrapper = ({ rect }: WrapperProps) => {
   const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const tableData = useContextSelector(TableContext, (value) => value.tableData);
   const { paginationNeeded, totalRowCount } = tableData;
@@ -25,8 +24,15 @@ const Wrapper = (props: WrapperProps) => {
     [pageSize, page]
   );
 
-  // Reset page on new layout
-  useOnPropsChange(() => setPage(0), [layout]);
+  useOnPropsChange(() => {
+    // Guard against new layout that contains fewer pages then previous layout
+    if (layout.qHyperCube.qSize.qcy <= pageSize) {
+      setPage(0);
+    } else {
+      const lastPage = Math.ceil(layout.qHyperCube.qSize.qcy / pageSize);
+      setPage((prevPage) => Math.min(prevPage, lastPage));
+    }
+  }, [layout]);
 
   return (
     <StyledTableWrapper data-testid="sn-table" background={theme.background} dir="ltr">

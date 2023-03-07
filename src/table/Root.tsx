@@ -13,7 +13,7 @@ import VirtualizedTable from './virtualized-table/Wrapper';
 import { VirtualTableRenderProps } from './virtualized-table/types';
 import { ApplyColumnWidths } from '../types';
 
-export function render(props: RenderProps, reactRoot?: ReactDom.Root) {
+export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.Root) {
   const {
     app,
     model,

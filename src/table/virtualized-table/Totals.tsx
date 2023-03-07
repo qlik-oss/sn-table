@@ -6,8 +6,9 @@ import { TotalsProps } from './types';
 import useResetHeader from './hooks/use-reset-header';
 
 const Totals = (props: TotalsProps) => {
-  const { rect, forwardRef, columnWidths, pageInfo, totals, rowHeight, columns } = props;
+  const { rect, forwardRef, pageInfo, totals, rowHeight, columns } = props;
   const { layout, styling } = useContextSelector(TableContext, (value) => value.baseProps);
+  const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
 
   useResetHeader(forwardRef, layout, pageInfo, columnWidths);
 

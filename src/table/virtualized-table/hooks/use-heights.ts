@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { VariableSizeList } from 'react-window';
 import { Column, PageInfo, TotalsPosition } from '../../../types';
 import { TableContext, useContextSelector } from '../../context';
@@ -8,7 +7,7 @@ import { fontSizeToRowHeight } from '../../utils/styling-utils';
 import { MIN_BODY_ROW_HEIGHT, PADDING_TOP_BOTTOM } from '../constants';
 import useDynamicRowHeight from './use-dynamic-row-height';
 
-interface UseHeaderAndTotalsHeightProps {
+interface UseHeightsProps {
   columns: Column[];
   columnWidths: number[];
   pageInfo: PageInfo;
@@ -20,14 +19,7 @@ interface UseHeaderAndTotalsHeightProps {
 const getBodyRowHeight = ({ fontSize = COMMON_CELL_STYLING.fontSize }: GeneratedStyling) =>
   Math.max(MIN_BODY_ROW_HEIGHT, fontSizeToRowHeight(fontSize));
 
-const useHeights = ({
-  columns,
-  columnWidths,
-  pageInfo,
-  headerRef,
-  totalsRef,
-  totalsPosition,
-}: UseHeaderAndTotalsHeightProps) => {
+const useHeights = ({ columns, columnWidths, pageInfo, headerRef, totalsRef, totalsPosition }: UseHeightsProps) => {
   const { styling } = useContextSelector(TableContext, (value) => value.baseProps);
 
   const headerHeight = useDynamicRowHeight({
@@ -49,12 +41,10 @@ const useHeights = ({
     boldText: true,
   });
 
-  useEffect(() => {
-    columns.forEach((col, idx) => {
-      headerHeight.setCellSize(col.label, 0, idx);
-      totalsHeight.setCellSize(col.totalInfo, 0, idx);
-    });
-  }, [columns, headerHeight, totalsHeight]);
+  columns.forEach((col, idx) => {
+    headerHeight.setCellSize(col.label, 0, idx);
+    totalsHeight.setCellSize(col.totalInfo, 0, idx);
+  });
 
   const headerRowHeight = headerHeight.getRowHeight(0) + PADDING_TOP_BOTTOM * 2;
   const totalsRowHeight = totalsHeight.getRowHeight(0);
