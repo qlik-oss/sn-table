@@ -1,5 +1,8 @@
 const stripPx = (s) => {
-  return s.substring(0, s.indexOf('px'));
+  if (s) {
+    return s.substring(0, s.indexOf('px'));
+  }
+  return s;
 };
 
 const stylingPanel = {
