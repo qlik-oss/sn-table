@@ -158,7 +158,6 @@ const getTotalsAggr = (env) => ({
       },
     },
   },
-  show: !env?.anything?.sense?.isUnsupportedFeature?.('totals'),
 });
 
 const getColumnResize = (env) =>

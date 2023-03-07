@@ -1,6 +1,9 @@
-import { shouldBubble } from '../keyboard-utils';
-
+import * as accessibilityUtils from '../accessibility-utils';
+import * as handleScroll from '../handle-scroll';
 import { KeyCodes } from '../../constants';
+import { shouldBubble, bodyArrowHelper } from '../keyboard-utils';
+import { Announce, Cell, TotalsPosition } from '../../../types';
+import { SelectionDispatch } from '../../types';
 
 describe('shouldBubble', () => {
   let evt: React.KeyboardEvent;
@@ -111,5 +114,144 @@ describe('shouldBubble', () => {
     evt.key = KeyCodes.LEFT;
     evt.shiftKey = true;
     expect(callShouldBubble()).toBe(false);
+  });
+});
+
+describe('handleBodyKeyDown', () => {
+  let evt: React.KeyboardEvent;
+  let rootElement: HTMLElement;
+  let cell: Cell;
+  let selectionDispatch: SelectionDispatch;
+  let isSelectionsEnabled: boolean;
+  let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  let announce: Announce;
+  let totalsPosition: TotalsPosition;
+  let isSelectionMode: boolean;
+  let areBasicFeaturesEnabled: boolean;
+
+  const runBodyArrowHelper = () =>
+    bodyArrowHelper({
+      evt,
+      rootElement,
+      cell,
+      selectionDispatch,
+      isSelectionsEnabled,
+      setFocusedCellCoord,
+      announce,
+      totalsPosition,
+      isSelectionMode,
+      areBasicFeaturesEnabled,
+    });
+
+  beforeEach(() => {
+    evt = {
+      key: KeyCodes.DOWN,
+    } as unknown as React.KeyboardEvent;
+    rootElement = {
+      getElementsByClassName: () => [
+        { getElementsByClassName: () => [{ focus: () => undefined, setAttribute: () => undefined }] },
+      ],
+    } as unknown as HTMLElement;
+    cell = { qElemNumber: 1, colIdx: 1, rowIdx: 1, isSelectable: true, isLastRow: false, pageRowIdx: 1 } as Cell;
+    selectionDispatch = jest.fn();
+    isSelectionsEnabled = true;
+    setFocusedCellCoord = jest.fn();
+    announce = jest.fn();
+    totalsPosition = { atTop: false, atBottom: true };
+    isSelectionMode = false;
+    areBasicFeaturesEnabled = true;
+    jest.spyOn(accessibilityUtils, 'focusSelectionToolbar').mockImplementation(() => {});
+    jest.spyOn(accessibilityUtils, 'announceSelectionState').mockImplementation(() => {});
+    jest.spyOn(accessibilityUtils, 'moveFocus').mockImplementation(() => ({} as HTMLTableCellElement));
+    jest.spyOn(accessibilityUtils, 'updateFocus').mockImplementation(() => {});
+    jest.spyOn(handleScroll, 'handleNavigateTop').mockImplementation(() => {});
+  });
+
+  afterEach(() => jest.clearAllMocks());
+
+  it('should call updateFocus, moveFocus and announceSelectionState on arrow down', () => {
+    runBodyArrowHelper();
+    expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
+    expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
+    expect(accessibilityUtils.announceSelectionState).toHaveBeenCalledTimes(1);
+    expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(0);
+  });
+
+  it('should call updateFocus, moveFocus, handleNavigateTop and announceSelectionState on arrow up', () => {
+    evt.key = KeyCodes.UP;
+
+    runBodyArrowHelper();
+    expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
+    expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
+    expect(accessibilityUtils.announceSelectionState).toHaveBeenCalledTimes(1);
+    expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call updateFocus and moveFocus on arrow left', () => {
+    evt.key = KeyCodes.LEFT;
+
+    runBodyArrowHelper();
+    expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
+    expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
+    expect(accessibilityUtils.announceSelectionState).toHaveBeenCalledTimes(0);
+    expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(0);
+  });
+
+  it('should call updateFocus and moveFocus on arrow right', () => {
+    evt.key = KeyCodes.RIGHT;
+
+    runBodyArrowHelper();
+    expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
+    expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
+    expect(accessibilityUtils.announceSelectionState).toHaveBeenCalledTimes(0);
+    expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(0);
+  });
+
+  it('should call updateFocus, moveFocus and selectionDispatch when press shift + arrow down key on body cell', () => {
+    evt.shiftKey = true;
+
+    runBodyArrowHelper();
+    expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
+    expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
+    expect(selectionDispatch).toHaveBeenCalledTimes(1);
+    expect(accessibilityUtils.announceSelectionState).toHaveBeenCalledTimes(0);
+    expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(0);
+  });
+
+  it('should call updateFocus, moveFocus and announceSelectionState but not selectionDispatch when press shift + arrow down key on last body cell', () => {
+    evt.shiftKey = true;
+    cell.isLastRow = true;
+
+    runBodyArrowHelper();
+    expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
+    expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
+    expect(selectionDispatch).toHaveBeenCalledTimes(0);
+    expect(accessibilityUtils.announceSelectionState).toHaveBeenCalledTimes(1);
+    expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(0);
+  });
+
+  it('should call updateFocus, moveFocus and selectionDispatch when press shift + arrow up on body cell', () => {
+    evt.key = KeyCodes.UP;
+    evt.shiftKey = true;
+
+    runBodyArrowHelper();
+    expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
+    expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
+    expect(selectionDispatch).toHaveBeenCalledTimes(1);
+    expect(accessibilityUtils.announceSelectionState).toHaveBeenCalledTimes(0);
+    expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call moveFocus and announceSelectionState but not selectionDispatch when press shift + arrow up key on first body cell', () => {
+    evt.key = KeyCodes.UP;
+    evt.shiftKey = true;
+    cell.pageRowIdx = 0;
+
+    runBodyArrowHelper();
+    expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(0);
+    expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
+    expect(selectionDispatch).toHaveBeenCalledTimes(0);
+    expect(accessibilityUtils.announceSelectionState).toHaveBeenCalledTimes(1);
+    expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(1);
   });
 });

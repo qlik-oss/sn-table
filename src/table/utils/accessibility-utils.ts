@@ -59,11 +59,9 @@ export const moveFocus = (
 };
 
 export const focusBodyFromHead = (
-  evt: React.KeyboardEvent,
   rootElement: HTMLElement,
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
 ) => {
-  // TODO: see if we need a fallback here, if there is a valid case where the tabstop has been removed already
   const cell = findCellWithTabStop(rootElement);
   const newCellCoord = getCellCoordFromCell(rootElement, cell);
   cell.focus();

@@ -81,18 +81,17 @@ export const handleHeadKeyDown = ({
   }
 
   // TODO: See if it bubbles correctly
-  // if (shouldBubble(evt)) return;
-  // preventDefaultBehavior(evt);
+  if (shouldBubble(evt)) return;
+  preventDefaultBehavior(evt);
 
   const target = evt.target as HTMLElement;
-  const headCells = rootElement.getElementsByClassName('sn-table-head-cell');
-  const isLastHeadCell = target.closest('.sn-table-cell') === headCells[headCells.length - 1];
+  const isLastHeadCell = !target.closest('.sn-table-cell')?.nextSibling;
 
   switch (evt.key) {
     case KeyCodes.LEFT:
     case KeyCodes.RIGHT:
       if (evt.key === KeyCodes.RIGHT && isLastHeadCell) {
-        focusBodyFromHead(evt, rootElement, setFocusedCellCoord);
+        focusBodyFromHead(rootElement, setFocusedCellCoord);
       } else {
         moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, 'focusButton');
       }
@@ -104,13 +103,6 @@ export const handleHeadKeyDown = ({
     case KeyCodes.C:
       areBasicFeaturesEnabled && isCtrlCmd(evt) && copyCellValue(evt);
 
-      break;
-    case KeyCodes.TAB:
-      if (evt.shiftKey) break;
-
-      if (isLastHeadCell && !target.classList.contains('sn-table-head-label')) {
-        focusBodyFromHead(evt, rootElement, setFocusedCellCoord);
-      }
       break;
     default:
       break;

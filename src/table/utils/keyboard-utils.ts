@@ -71,6 +71,10 @@ export const getFocusType = (
   return upToHeader || leftToHeader ? 'focusButton' : 'focus';
 };
 
+/**
+ * handles arrow key presses on the body
+ * moves to another cell for all arrows and select multiple values on up/down + shift
+ */
 export const bodyArrowHelper = ({
   evt,
   rootElement,
