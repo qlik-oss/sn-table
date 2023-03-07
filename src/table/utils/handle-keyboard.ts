@@ -2,33 +2,19 @@
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 
-import {
-  focusSelectionToolbar,
-  moveFocus,
-  focusBodyFromHead,
-  updateFocus,
-  announceSelectionState,
-} from './accessibility-utils';
+import { focusSelectionToolbar, moveFocus, focusBodyFromHead, updateFocus } from './accessibility-utils';
 import {
   preventDefaultBehavior,
   isCtrlShift,
   isArrowKey,
   isCtrlCmd,
   shouldBubble,
-  shouldSelectMultiValues,
-  getFocusType,
+  bodyArrowHelper,
 } from './keyboard-utils';
 import { findCellWithTabStop, getNextMenuItem, getPreviousMenuItem } from './get-element-utils';
 import copyCellValue from './copy-utils';
-import {
-  HandleWrapperKeyDownProps,
-  HandleHeadKeyDownProps,
-  HandleBodyKeyDownProps,
-  SelectionDispatch,
-  HandleBodyArrowProps,
-} from '../types';
+import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownProps, SelectionDispatch } from '../types';
 import { KeyCodes, SelectionActions } from '../constants';
-import { handleNavigateTop } from './handle-scroll';
 
 /**
  * ----------- Key handlers -----------
@@ -192,50 +178,6 @@ export const handleTotalKeyDown = (
   }
 };
 
-const handleBodyArrow = ({
-  evt,
-  rootElement,
-  cell,
-  selectionDispatch,
-  isSelectionsEnabled,
-  setFocusedCellCoord,
-  announce,
-  totalsPosition,
-  isSelectionMode,
-  areBasicFeaturesEnabled,
-}: HandleBodyArrowProps) => {
-  const firstBodyRowIdx = totalsPosition.atTop ? 2 : 1;
-  const cellCoord: [number, number] = [cell.pageRowIdx + firstBodyRowIdx, cell.pageColIdx];
-  // Make sure you can't navigate to header (and totals) in selection mode
-  const allowedRows = {
-    top: isSelectionMode ? firstBodyRowIdx : 0,
-    bottom: isSelectionMode && totalsPosition.atBottom ? 1 : 0,
-  };
-  const focusType = getFocusType(cellCoord, evt, firstBodyRowIdx);
-
-  if (focusType === 'focus') {
-    updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
-  }
-
-  const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, focusType, allowedRows);
-
-  if (!(evt.key === KeyCodes.UP || evt.key === KeyCodes.DOWN)) return;
-
-  if (evt.key === KeyCodes.UP) {
-    handleNavigateTop([cell.pageRowIdx, cell.pageColIdx], rootElement);
-  }
-  // Shift + up/down arrow keys: select multiple values
-  if (shouldSelectMultiValues(areBasicFeaturesEnabled, isSelectionsEnabled, evt, cell)) {
-    selectionDispatch({
-      type: SelectionActions.SELECT_MULTI_ADD,
-      payload: { cell, evt, announce },
-    });
-  } else {
-    // When not selecting multiple we need to announce the selection state of the cell
-    announceSelectionState(announce, nextCell, isSelectionMode);
-  }
-};
-
 /**
  * handles keydown events for the body cells (move focus, make selections tabbing to other elements)
  */
@@ -266,7 +208,7 @@ export const handleBodyKeyDown = ({
     case KeyCodes.DOWN:
     case KeyCodes.LEFT:
     case KeyCodes.RIGHT:
-      handleBodyArrow({
+      bodyArrowHelper({
         evt,
         rootElement,
         cell,

@@ -156,7 +156,7 @@ export interface HandleHeadKeyDownProps {
   // isLabelLast: boolean;
 }
 
-export interface HandleBodyArrowProps {
+export interface BodyArrowHelperProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;
   cell: Cell;

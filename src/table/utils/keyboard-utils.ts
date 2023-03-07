@@ -1,5 +1,8 @@
 import { Cell } from '../../types';
-import { KeyCodes } from '../constants';
+import { KeyCodes, SelectionActions } from '../constants';
+import { BodyArrowHelperProps } from '../types';
+import { announceSelectionState, moveFocus, updateFocus } from './accessibility-utils';
+import { handleNavigateTop } from './handle-scroll';
 
 export const preventDefaultBehavior = (evt: React.KeyboardEvent) => {
   evt.stopPropagation();
@@ -66,4 +69,48 @@ export const getFocusType = (
   const leftToHeader = evt.key === KeyCodes.LEFT && cellCoord[0] === firstBodyRowIdx && cellCoord[1] === 0;
 
   return upToHeader || leftToHeader ? 'focusButton' : 'focus';
+};
+
+export const bodyArrowHelper = ({
+  evt,
+  rootElement,
+  cell,
+  selectionDispatch,
+  isSelectionsEnabled,
+  setFocusedCellCoord,
+  announce,
+  totalsPosition,
+  isSelectionMode,
+  areBasicFeaturesEnabled,
+}: BodyArrowHelperProps) => {
+  const firstBodyRowIdx = totalsPosition.atTop ? 2 : 1;
+  const cellCoord: [number, number] = [cell.pageRowIdx + firstBodyRowIdx, cell.pageColIdx];
+  // Make sure you can't navigate to header (and totals) in selection mode
+  const allowedRows = {
+    top: isSelectionMode ? firstBodyRowIdx : 0,
+    bottom: isSelectionMode && totalsPosition.atBottom ? 1 : 0,
+  };
+  const focusType = getFocusType(cellCoord, evt, firstBodyRowIdx);
+
+  if (focusType === 'focus') {
+    updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
+  }
+
+  const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, focusType, allowedRows);
+
+  if (!(evt.key === KeyCodes.UP || evt.key === KeyCodes.DOWN)) return;
+
+  if (evt.key === KeyCodes.UP) {
+    handleNavigateTop([cell.pageRowIdx, cell.pageColIdx], rootElement);
+  }
+  // Shift + up/down arrow keys: select multiple values
+  if (shouldSelectMultiValues(areBasicFeaturesEnabled, isSelectionsEnabled, evt, cell)) {
+    selectionDispatch({
+      type: SelectionActions.SELECT_MULTI_ADD,
+      payload: { cell, evt, announce },
+    });
+  } else {
+    // When not selecting multiple we need to announce the selection state of the cell
+    announceSelectionState(announce, nextCell, isSelectionMode);
+  }
 };
