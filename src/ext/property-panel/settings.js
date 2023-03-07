@@ -1,10 +1,3 @@
-const stripPx = (s) => {
-  if (s) {
-    return s.substring(0, s.indexOf('px'));
-  }
-  return s;
-};
-
 const stylingPanel = {
   type: 'items',
   items: [
@@ -37,7 +30,10 @@ const stylingPanel = {
                       max: 300,
                       defaultValue(item, data, args) {
                         const currentTheme = args.theme.current();
-                        return stripPx(currentTheme.object?.straightTable?.header?.fontSize || currentTheme.fontSize);
+                        return parseInt(
+                          currentTheme.object?.straightTable?.header?.fontSize || currentTheme.fontSize,
+                          10
+                        );
                       },
                       change(data) {
                         data.header.fontSize = !data.header.fontSize
@@ -82,7 +78,10 @@ const stylingPanel = {
                       max: 300,
                       defaultValue(item, data, args) {
                         const currentTheme = args.theme.current();
-                        return stripPx(currentTheme.object?.straightTable?.content?.fontSize || currentTheme.fontSize);
+                        return parseInt(
+                          currentTheme.object?.straightTable?.content?.fontSize || currentTheme.fontSize,
+                          10
+                        );
                       },
                       change(data) {
                         data.content.fontSize = !data.content.fontSize
