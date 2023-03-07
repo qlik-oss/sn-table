@@ -1,7 +1,7 @@
 import { Cell, Announce, Row } from '../../types';
 import { SelectionState, SelectPayload, SelectionActionTypes } from '../types';
 import { SelectionActions, SelectionStates, KeyCodes } from '../constants';
-import { isShiftArrow } from './handle-key-press';
+import { isShiftArrow } from './keyboard-utils';
 
 /**
  * Gets the selection state of the given cell

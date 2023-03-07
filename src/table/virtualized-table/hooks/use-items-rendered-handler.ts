@@ -45,12 +45,9 @@ const useItemsRendererHandler = ({
       overscanRowStopIndex,
     }: OnItemsRendered) => {
       gridState.current.overscanColumnStartIndex = overscanColumnStartIndex;
+      gridState.current.overscanColumnStopIndex = overscanColumnStopIndex;
       gridState.current.overscanRowStartIndex = overscanRowStartIndex;
-
-      if (overscanRowStartIndex === 0 && overscanColumnStartIndex === 0) {
-        // This case should handled by the initial data load
-        return;
-      }
+      gridState.current.overscanRowStopIndex = overscanRowStopIndex;
 
       if (overscanRowStartIndex > rowCount) {
         // Safe guard against when a new page is loaded and the user have scrolled on the previously loaded page.

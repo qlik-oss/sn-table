@@ -8,6 +8,7 @@ import {
   getSelectionMouseHandlers,
 } from '../handle-click';
 import * as accessibilityUtils from '../accessibility-utils';
+import * as getElementUtils from '../get-element-utils';
 import { SelectionDispatch } from '../../types';
 import { SelectionActions } from '../../constants';
 
@@ -23,7 +24,7 @@ describe('handle-click', () => {
     setFocusedCellCoord = jest.fn();
     jest.spyOn(accessibilityUtils, 'removeTabAndFocusCell').mockImplementation(() => undefined);
     jest.spyOn(accessibilityUtils, 'updateFocus');
-    jest.spyOn(accessibilityUtils, 'getCellElement').mockImplementation(() => cellElement);
+    jest.spyOn(getElementUtils, 'getCellElement').mockImplementation(() => cellElement);
   });
 
   afterEach(() => jest.clearAllMocks());

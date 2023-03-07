@@ -5,7 +5,7 @@ import ArrowRight from '@qlik-trial/sprout/icons/react/ArrowRight';
 import { HeadCellMenuItem, MenuItemGroup } from '../../../types';
 import { StyledMenuItem, StyledListItemIcon, StyledMenuItemLabel } from '../styles';
 import RecursiveMenuList from './RecursiveMenuList';
-import { handleHeadCellMenuKeyDown } from '../../../utils/handle-key-press';
+import { handleHeadCellMenuKeyDown } from '../../../utils/handle-keyboard';
 
 export const interceptClickOnMenuItems = (menuGroups: MenuItemGroup[], cache: SubMenusOpenStatusCache) => {
   const result = menuGroups.map((grp) => {

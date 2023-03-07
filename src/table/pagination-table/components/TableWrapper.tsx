@@ -10,17 +10,20 @@ import PaginationContent from '../../components/footer/PaginationContent';
 import useDidUpdateEffect from '../../hooks/use-did-update-effect';
 import useFocusListener from '../../hooks/use-focus-listener';
 import useScrollListener from '../../hooks/use-scroll-listener';
-import { handleWrapperKeyDown } from '../../utils/handle-key-press';
-import { updateFocus, resetFocus, getCellElement } from '../../utils/accessibility-utils';
+import { handleWrapperKeyDown } from '../../utils/handle-keyboard';
+import { updateFocus, resetFocus } from '../../utils/accessibility-utils';
+import { getCellElement } from '../../utils/get-element-utils';
 import { TableWrapperProps } from '../../types';
 import { StyledTableWrapper } from '../../components/styles';
 import useScrollbarWidth from '../../virtualized-table/hooks/use-scrollbar-width';
+import { FocusTypes } from '../../constants';
 
 export default function TableWrapper(props: TableWrapperProps) {
   const { pageInfo, setPageInfo, direction, footerContainer, announce, areBasicFeaturesEnabled } = props;
+  const { page, rowsPerPage } = pageInfo;
+
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
     useContextSelector(TableContext, (value) => value.tableData);
-  const { page, rowsPerPage } = pageInfo;
   const { selectionsAPI, rootElement, keyboard, translator, theme, constraints } = useContextSelector(
     TableContext,
     (value) => value.baseProps
@@ -28,10 +31,13 @@ export default function TableWrapper(props: TableWrapperProps) {
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
+
+  const isSelectionMode = selectionsAPI.isModal();
+
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const tableWrapperRef = useRef<HTMLDivElement>(null);
-  const isSelectionMode = selectionsAPI.isModal();
+
   const { yScrollbarWidth } = useScrollbarWidth(tableContainerRef);
 
   const setShouldRefocus = useCallback(() => {
@@ -70,7 +76,10 @@ export default function TableWrapper(props: TableWrapperProps) {
     // make sure to blur or focus the cell corresponding to focusedCellCoord
     // when keyboard.focus() runs, keyboard.active is true
     // when keyboard.blur() runs, keyboard.active is false
-    updateFocus({ focusType: keyboard.active ? 'focus' : 'blur', cell: getCellElement(rootElement, focusedCellCoord) });
+    updateFocus({
+      focusType: keyboard.active ? FocusTypes.FOCUS : FocusTypes.BLUR,
+      cell: getCellElement(rootElement, focusedCellCoord),
+    });
   }, [keyboard.active]);
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,

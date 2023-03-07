@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { stardust, useEffect } from '@nebula.js/stardust';
-import { render } from '../table/Root';
+import { renderPaginationTable } from '../table/Root';
 import { RenderProps } from '../table/types';
 import {
   ChangeSortOrder,
@@ -38,7 +38,7 @@ const useCarbonTable = ({
 }: UseCarbonTable) => {
   useEffect(() => {
     if (env.carbon && changeSortOrder && theme && selectionsAPI) {
-      render({
+      renderPaginationTable({
         env,
         rootElement,
         model,
