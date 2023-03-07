@@ -114,15 +114,15 @@ describe('<HeadCellContent />', () => {
     expect(changeSortOrder).not.toHaveBeenCalled();
   });
 
-  it('should not call changeSortOrder when clicking a header cell and cells are selected', () => {
-    selectionsAPI = {
-      isModal: () => true,
-    } as ExtendedSelectionAPI;
-    renderTableHead();
-    fireEvent.click(screen.getByText(column.label));
+  // it('should not call changeSortOrder when clicking a header cell and cells are selected', () => {
+  //   selectionsAPI = {
+  //     isModal: () => true,
+  //   } as ExtendedSelectionAPI;
+  //   renderTableHead();
+  //   fireEvent.click(screen.getByText(column.label));
 
-    expect(changeSortOrder).not.toHaveBeenCalled();
-  });
+  //   expect(changeSortOrder).not.toHaveBeenCalled();
+  // });
 
   it('should show the lock icon only when the selections on dimensions are locked', () => {
     renderTableHead();

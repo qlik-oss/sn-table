@@ -4,7 +4,7 @@ import { Announce, TotalsPosition } from '../../../types';
 import { FocusTypes } from '../../constants';
 import * as accessibilityUtils from '../accessibility-utils';
 
-describe('handle-accessibility', () => {
+describe('accessibility-utils', () => {
   let cell: HTMLTableCellElement | undefined;
   let keyboard: stardust.Keyboard;
   let rootElement: HTMLElement;
@@ -14,7 +14,10 @@ describe('handle-accessibility', () => {
   beforeEach(() => {
     cell = { focus: jest.fn(), blur: jest.fn(), setAttribute: jest.fn() } as unknown as HTMLTableCellElement;
     rootElement = {
-      getElementsByClassName: () => [{ getElementsByClassName: () => [cell] }],
+      getElementsByClassName: () => [
+        { getElementsByClassName: () => [cell] },
+        { getElementsByClassName: () => [cell] },
+      ],
       querySelector: () => cell,
     } as unknown as HTMLDivElement;
     focusedCellCoord = [0, 0];
@@ -106,7 +109,7 @@ describe('handle-accessibility', () => {
 
       resetFocus();
       expect(cell?.setAttribute).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).toHaveBeenCalledWith([0, 0]);
+      expect(setFocusedCellCoord).toHaveBeenCalledWith([1, 0]);
       expect(cell?.focus).not.toHaveBeenCalled();
       expect(announce).not.toHaveBeenCalled();
     });
@@ -114,7 +117,7 @@ describe('handle-accessibility', () => {
     it('should set tabindex on the first cell and not focus', () => {
       resetFocus();
       expect(cell?.setAttribute).toHaveBeenCalledTimes(2);
-      expect(setFocusedCellCoord).toHaveBeenCalledWith([0, 0]);
+      expect(setFocusedCellCoord).toHaveBeenCalledWith([1, 0]);
       expect(cell?.focus).not.toHaveBeenCalled();
       expect(announce).not.toHaveBeenCalled();
     });
@@ -124,7 +127,7 @@ describe('handle-accessibility', () => {
 
       resetFocus();
       expect(cell?.setAttribute).toHaveBeenCalledTimes(2);
-      expect(setFocusedCellCoord).toHaveBeenCalledWith([0, 0]);
+      expect(setFocusedCellCoord).toHaveBeenCalledWith([1, 0]);
       expect(cell?.focus).toHaveBeenCalled();
       expect(announce).not.toHaveBeenCalled();
     });
