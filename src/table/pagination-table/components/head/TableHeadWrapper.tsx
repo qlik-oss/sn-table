@@ -19,8 +19,10 @@ function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
   const headRowRef = useRef<HTMLTableRowElement>(null);
 
   useEffect(() => {
-    headRowRef.current && setHeadRowHeight(headRowRef.current.getBoundingClientRect().height);
-  }, [headRowRef.current, styling.head.fontSize, headRowRef.current?.getBoundingClientRect().height]);
+    if (headRowRef.current) {
+      setHeadRowHeight(headRowRef.current.getBoundingClientRect().height);
+    }
+  }, [styling.head.fontSize, columnWidths, setHeadRowHeight]);
 
   return (
     <TableHead>
