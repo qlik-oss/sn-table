@@ -293,10 +293,6 @@ export interface TableBodyWrapperProps {
   areBasicFeaturesEnabled: boolean;
 }
 
-export interface TableTotalsProps {
-  areBasicFeaturesEnabled: boolean;
-}
-
 export interface PaginationContentProps {
   direction?: 'ltr' | 'rtl';
   rect: stardust.Rect;

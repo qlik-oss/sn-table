@@ -39,7 +39,8 @@ describe('<TableBodyWrapper />', () => {
       model,
       generateLayout(1, 1, 2, [], [{ qText: '100' }]),
       { top: 0, height: 100 } as unknown as PageInfo,
-      () => undefined
+      () => undefined,
+      true
     )) as TableData;
     tableFirstRow = tableData.rows[0]['col-0'] as Cell;
     tableSecondRow = tableData.rows[0]['col-1'] as Cell;

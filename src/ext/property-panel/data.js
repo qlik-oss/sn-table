@@ -158,7 +158,8 @@ const getTotalsAggr = (env) => ({
       },
     },
   },
-  show: !env?.anything?.sense?.isUnsupportedFeature?.('totals'),
+  show:
+    env.flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES') && !env?.anything?.sense?.isUnsupportedFeature?.('totals'),
 });
 
 const getColumnResize = (env) =>
