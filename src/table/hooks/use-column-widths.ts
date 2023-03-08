@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Column } from '../../types';
+import { Column, TotalsPosition } from '../../types';
 import {
   MIN_COLUMN_WIDTH,
   ColumnWidthTypes,
@@ -77,17 +77,30 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getHugWid
   return columnWidths;
 };
 
+const PADDING = 8 * 2 + 4 * 2;
+const ICON = 12 + 8 - 2;
+const MENU_BUTTON = 24;
+const FLEX_BOX_GAP = 4;
+const TOTALS_PADDING = 12 * 2;
+
 const useColumnWidths = (
   columns: Column[],
+  totalsPosition: TotalsPosition,
   tableWidth: number,
   { head, body }: TableStyling
 ): [number[], React.Dispatch<React.SetStateAction<number[]>>, React.Dispatch<React.SetStateAction<number>>] => {
+  const showTotals = totalsPosition.atBottom || totalsPosition.atTop;
   const measureHeadLabel = useMeasureText(head.fontSize, head.fontFamily).measureText;
   const { measureText, estimateWidth } = useMeasureText(body.fontSize, body.fontFamily);
   const getHugWidth = useMemo(
-    () => (headLabel: string, totalsLabel: string, glyphCount: number) =>
-      Math.max(measureHeadLabel(headLabel), measureText(totalsLabel), estimateWidth(glyphCount)),
-    [estimateWidth, measureHeadLabel, measureText]
+    () => (headLabel: string, totalsLabel: string, glyphCount: number) => {
+      return Math.max(
+        measureHeadLabel(headLabel) + PADDING + ICON + MENU_BUTTON + FLEX_BOX_GAP,
+        showTotals ? measureText(totalsLabel) + TOTALS_PADDING : 0,
+        estimateWidth(glyphCount)
+      );
+    },
+    [estimateWidth, measureHeadLabel, measureText, showTotals]
   );
   const [yScrollbarWidth, setYScrollbarWidth] = useState(0);
 
