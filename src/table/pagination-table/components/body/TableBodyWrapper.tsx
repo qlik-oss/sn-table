@@ -49,7 +49,7 @@ function TableBodyWrapper({
 
   useSelectionListener({ keyboard, selectionDispatch, selectionsAPI, setShouldRefocus, tableWrapperRef });
 
-  const totals = <TableTotals areBasicFeaturesEnabled={areBasicFeaturesEnabled} />;
+  const totals = areBasicFeaturesEnabled ? <TableTotals /> : undefined;
 
   return (
     <StyledBody lastRowBottomBorder={lastRowBottomBorder}>
@@ -68,7 +68,7 @@ function TableBodyWrapper({
             // So for each row, the cells are mapped according to column.id
             const cell = row[id] as Cell;
             const CellRenderer = columnRenderers[columnIndex];
-            const tabIndex = rowIndex === 0 && columnIndex === 0 && !keyboard.enabled ? 0 : -1;
+            const tabIndex = rowIndex === 0 && columnIndex === 0 && !totalsPosition.atTop && !keyboard.enabled ? 0 : -1;
             const handleKeyDown = (evt: React.KeyboardEvent) => {
               handleBodyKeyDown({
                 evt,

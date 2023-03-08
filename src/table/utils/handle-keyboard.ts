@@ -10,6 +10,7 @@ import {
   isCtrlCmd,
   shouldBubble,
   bodyArrowHelper,
+  getFocusType,
 } from './keyboard-utils';
 import { findCellWithTabStop, getNextMenuItem, getPreviousMenuItem } from './get-element-utils';
 import copyCellValue from './copy-utils';
@@ -142,8 +143,7 @@ export const handleTotalKeyDown = (
   rootElement: HTMLElement,
   cellCoord: [number, number],
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  isSelectionMode: boolean,
-  areBasicFeaturesEnabled: boolean
+  isSelectionMode: boolean
 ) => {
   if (isSelectionMode) {
     preventDefaultBehavior(evt);
@@ -158,11 +158,16 @@ export const handleTotalKeyDown = (
     case KeyCodes.RIGHT:
     case KeyCodes.UP:
     case KeyCodes.DOWN: {
-      // moveBodyFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
+      const focusType = getFocusType(cellCoord, evt);
+      if (focusType === 'focus') {
+        updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
+      }
+
+      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, focusType);
       break;
     }
     case KeyCodes.C: {
-      areBasicFeaturesEnabled && isCtrlCmd(evt) && copyCellValue(evt);
+      isCtrlCmd(evt) && copyCellValue(evt);
       break;
     }
     default:

@@ -5,10 +5,9 @@ import { useContextSelector, TableContext } from '../../../context';
 import { handleTotalKeyDown } from '../../../utils/handle-keyboard';
 import { removeTabAndFocusCell } from '../../../utils/accessibility-utils';
 import { StyledTotalsCell } from './styles';
-import { TableTotalsProps } from '../../../types';
 import CellText from '../../../components/CellText';
 
-function TableTotals({ areBasicFeaturesEnabled }: TableTotalsProps) {
+function TableTotals() {
   const {
     columns,
     totalsPosition: { atTop },
@@ -25,6 +24,7 @@ function TableTotals({ areBasicFeaturesEnabled }: TableTotalsProps) {
     <TableRow className="sn-table-row">
       {columns.map((column, columnIndex) => {
         const cellCoord: [number, number] = [atTop ? 1 : rows.length + 1, columnIndex];
+        const tabIndex = atTop && columnIndex === 0 ? 0 : -1;
         return (
           <StyledTotalsCell
             totalsStyle={styling.totals}
@@ -33,16 +33,9 @@ function TableTotals({ areBasicFeaturesEnabled }: TableTotalsProps) {
             key={column.id}
             align={column.align}
             className="sn-table-cell"
-            tabIndex={-1}
+            tabIndex={tabIndex}
             onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
-              handleTotalKeyDown(
-                e,
-                rootElement,
-                cellCoord,
-                setFocusedCellCoord,
-                selectionsAPI.isModal(),
-                areBasicFeaturesEnabled
-              );
+              handleTotalKeyDown(e, rootElement, cellCoord, setFocusedCellCoord, selectionsAPI.isModal());
             }}
             onMouseDown={() => {
               removeTabAndFocusCell(cellCoord, rootElement, setFocusedCellCoord, keyboard);

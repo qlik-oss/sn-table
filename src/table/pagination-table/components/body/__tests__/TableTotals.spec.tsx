@@ -13,14 +13,13 @@ describe('<TableTotals />', () => {
   const layout = generateLayout(1, 1, 2, [], [{ qText: '350' }]);
   let tableData: TableData;
   let selectionsAPI: ExtendedSelectionAPI;
-  let areBasicFeaturesEnabled: boolean;
 
   const renderTableTotals = (cellCoordMock?: [number, number]) =>
     render(
       <TestWithProviders selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock} tableData={tableData}>
         <table>
           <tbody>
-            <TableTotals areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
+            <TableTotals />
           </tbody>
         </table>
       </TestWithProviders>

@@ -44,7 +44,7 @@ export const shouldBubble = (
  * Checks if should select with shift + arrow.
  * When at the first/last row of the cell, shift + arrow up/down should not select anything
  */
-export const shouldSelectMultiValues = (
+const shouldSelectMultiValues = (
   areBasicFeaturesEnabled: boolean,
   isSelectionsEnabled: boolean,
   evt: React.KeyboardEvent,
@@ -60,13 +60,9 @@ export const shouldSelectMultiValues = (
  * Gets the focus type for navigating the body.
  * When you move to the header, it returns focusButton type
  */
-export const getFocusType = (
-  cellCoord: [number, number],
-  evt: React.KeyboardEvent<Element>,
-  firstBodyRowIdx: number
-) => {
-  const upToHeader = evt.key === KeyCodes.UP && cellCoord[0] === firstBodyRowIdx;
-  const leftToHeader = evt.key === KeyCodes.LEFT && cellCoord[0] === firstBodyRowIdx && cellCoord[1] === 0;
+export const getFocusType = (cellCoord: [number, number], evt: React.KeyboardEvent<Element>) => {
+  const upToHeader = evt.key === KeyCodes.UP && cellCoord[0] === 1;
+  const leftToHeader = evt.key === KeyCodes.LEFT && cellCoord[0] === 1 && cellCoord[1] === 0;
 
   return upToHeader || leftToHeader ? 'focusButton' : 'focus';
 };
@@ -94,7 +90,7 @@ export const bodyArrowHelper = ({
     top: isSelectionMode ? firstBodyRowIdx : 0,
     bottom: isSelectionMode && totalsPosition.atBottom ? 1 : 0,
   };
-  const focusType = getFocusType(cellCoord, evt, firstBodyRowIdx);
+  const focusType = getFocusType(cellCoord, evt);
 
   if (focusType === 'focus') {
     updateFocus({ focusType: 'removeTab', cell: evt.target as HTMLTableCellElement });
