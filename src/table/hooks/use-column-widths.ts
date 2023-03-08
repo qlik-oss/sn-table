@@ -13,6 +13,14 @@ import useOnPropsChange from '../virtualized-table/hooks/use-on-props-change';
 
 type GetHugWidth = (headLabel: string, totalsLabel: string, glyphCount: number) => number;
 
+const HEADER_CELL_BUTTON_PADDING = 8 * 2;
+const HEADER_CELL_PADDING = 4 * 2;
+const SORT_ICON = 12 + 8 - 2;
+const MENU_BUTTON = 24;
+const FLEX_BOX_GAP = 4;
+const ADJUSTED_HEADER_WIDTH = HEADER_CELL_BUTTON_PADDING + HEADER_CELL_PADDING + SORT_ICON + MENU_BUTTON + FLEX_BOX_GAP;
+const TOTALS_PADDING = 12 * 2;
+
 /**
  * Calculates column widths in pixels, based on column settings and the table width.
  * First, pixel values for the three independent types ('pixels', 'percentage', 'hug') are set.
@@ -77,12 +85,6 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getHugWid
   return columnWidths;
 };
 
-const PADDING = 8 * 2 + 4 * 2;
-const ICON = 12 + 8 - 2;
-const MENU_BUTTON = 24;
-const FLEX_BOX_GAP = 4;
-const TOTALS_PADDING = 12 * 2;
-
 const useColumnWidths = (
   columns: Column[],
   totalsPosition: TotalsPosition,
@@ -95,7 +97,7 @@ const useColumnWidths = (
   const getHugWidth = useMemo(
     () => (headLabel: string, totalsLabel: string, glyphCount: number) => {
       return Math.max(
-        measureHeadLabel(headLabel) + PADDING + ICON + MENU_BUTTON + FLEX_BOX_GAP,
+        measureHeadLabel(headLabel) + ADJUSTED_HEADER_WIDTH,
         showTotals ? measureText(totalsLabel) + TOTALS_PADDING : 0,
         estimateWidth(glyphCount)
       );
