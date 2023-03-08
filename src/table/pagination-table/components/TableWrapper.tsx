@@ -47,6 +47,7 @@ export default function TableWrapper(props: TableWrapperProps) {
   const handleChangePage = useCallback(
     (pageIdx: number) => {
       setPageInfo({ ...pageInfo, page: pageIdx });
+      tableContainerRef.current?.scrollTo(0, 0);
       announce({
         keys: [['SNTable.Pagination.PageStatusReport', (pageIdx + 1).toString(), totalPages.toString()]],
         politeness: 'assertive',
