@@ -19,8 +19,10 @@ function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
   const headRowRef = useRef<HTMLTableRowElement>(null);
 
   useEffect(() => {
-    headRowRef.current && setHeadRowHeight(headRowRef.current.getBoundingClientRect().height);
-  }, [headRowRef.current, styling.head.fontSize, headRowRef.current?.getBoundingClientRect().height]);
+    if (headRowRef.current) {
+      setHeadRowHeight(headRowRef.current.getBoundingClientRect().height);
+    }
+  }, [styling.head.fontSize, columnWidths, setHeadRowHeight]);
 
   return (
     <TableHead>
@@ -48,6 +50,7 @@ function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
               align={column.align}
               className="sn-table-head-cell sn-table-cell"
               aria-sort={ariaSort}
+              tabIndex={-1}
             >
               <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled={areBasicFeaturesEnabled}>
                 <CellText fontSize={styling.head.fontSize}>{column.label}</CellText>

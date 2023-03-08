@@ -6,6 +6,7 @@ export default function useContextMenu(areBasicFeaturesEnabled: boolean) {
   onContextMenu?.((menu: any, event: any) => {
     areBasicFeaturesEnabled &&
       event.target &&
+      event.target.closest('.sn-table-cell') &&
       menu.addItem({
         translation: 'contextMenu.copyCellValue',
         icon: 'lui-icon lui-icon--copy',
