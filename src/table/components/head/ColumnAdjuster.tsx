@@ -43,32 +43,35 @@ const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
     updateWidth(adjustedWidth);
   };
 
-  const mouseUpHandler = (evt: MouseEvent) => {
+  const mouseUpHandler = (evt: MouseEvent, adjuster: HTMLDivElement) => {
     preventDefaultBehavior(evt);
     document.removeEventListener('mousemove', mouseMoveHandler);
-    document.removeEventListener('mouseup', mouseUpHandler);
+    document.removeEventListener('mouseup', (event) => mouseUpHandler(event, adjuster));
 
     confirmWidth();
+    adjuster.blur();
   };
 
   const mouseDownHandler = (evt: React.MouseEvent) => {
     // evt.preventDefault();
     evt.stopPropagation();
+    const adjuster = evt.target as HTMLDivElement;
 
     tempWidths.current = {
       initX: evt.clientX,
       initWidth: columnWidths[pageColIdx],
       columnWidth: columnWidths[pageColIdx],
     };
+
     document.addEventListener('mousemove', mouseMoveHandler);
-    document.addEventListener('mouseup', mouseUpHandler);
+    document.addEventListener('mouseup', (event) => mouseUpHandler(event, adjuster));
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === KeyCodes.LEFT || event.key === KeyCodes.RIGHT) {
       const RESIZE_DISTANCE = 5;
-      const initWidth = columnWidths[pageColIdx];
-      const columnWidth = event.key === 'ArrowLeft' ? initWidth - RESIZE_DISTANCE : initWidth + RESIZE_DISTANCE;
+      const prevWidth = columnWidths[pageColIdx];
+      const columnWidth = event.key === KeyCodes.LEFT ? prevWidth - RESIZE_DISTANCE : prevWidth + RESIZE_DISTANCE;
       const adjustedWidth = Math.max(columnWidth, MIN_COLUMN_WIDTH);
 
       updateWidth(adjustedWidth);
@@ -78,6 +81,7 @@ const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
       focusHeadMenuButton(event);
     } else if (event.key === KeyCodes.ESC) {
       focusHeadMenuButton(event);
+      // reset it to the init value
       updateWidth(tempWidths.current.initWidth);
     }
   };

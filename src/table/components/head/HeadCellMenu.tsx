@@ -156,7 +156,22 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
               },
             ],
           ]
-        : []),
+        : [
+            [
+              {
+                id: 1,
+                itemTitle: translator.get('SNTable.MenuItem.AdjustColumnSize'),
+                onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
+                  evt.stopPropagation();
+                  evt.preventDefault();
+                  setOpenMenuDropdown(false);
+                  setFocusOnClosetColumnAdjuster(anchorRef);
+                },
+                icon: <ColumnSize />,
+                enabled: true,
+              },
+            ],
+          ]),
     ],
     [translator, showSearchMenuItem, fieldInstance, selectionActionsEnabledStatus, embedListbox]
   );

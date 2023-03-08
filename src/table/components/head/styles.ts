@@ -139,6 +139,9 @@ export const AdjusterHitArea = styled(Box, {
       background: '#177fe6',
     },
   },
+  '&&:focus-visible': {
+    outline: 'none',
+  },
 }));
 
 export const AdjusterHeadBorder = styled(Box)({
