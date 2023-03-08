@@ -25,6 +25,7 @@ const stylingPanel = {
                     headerFontSize: {
                       component: 'integer',
                       ref: 'header.fontSize',
+                      translation: 'properties.fontSize',
                       width: 9,
                       min: 5,
                       max: 300,
@@ -73,6 +74,7 @@ const stylingPanel = {
                     contentFontSize: {
                       component: 'integer',
                       ref: 'content.fontSize',
+                      translation: 'properties.fontSize',
                       width: 9,
                       min: 5,
                       max: 300,
