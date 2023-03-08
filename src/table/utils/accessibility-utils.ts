@@ -44,7 +44,7 @@ export const moveFocus = (
   rootElement: HTMLElement,
   cellCoord: [number, number],
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  focusType: string,
+  focusType: FocusTypes,
   allowedRows?: {
     top: number;
     bottom: number;
