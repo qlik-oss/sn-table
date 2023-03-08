@@ -18,7 +18,7 @@ const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
   const { rootElement, applyColumnWidths, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setColumnWidths = useContextSelector(TableContext, (value) => value.setColumnWidths);
-  const tempWidths = useRef({ columnWidth: 0, initX: 0, initWidth: 0 });
+  const tempWidths = useRef({ adjusterHitArea: {}, columnWidth: 0, initX: 0, initWidth: 0 });
   const borderHeight = rootElement.getBoundingClientRect().height - PAGINATION_HEIGHT + BORDER_WIDTH;
 
   if (!applyColumnWidths || constraints.active) return null;
@@ -43,28 +43,27 @@ const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
     updateWidth(adjustedWidth);
   };
 
-  const mouseUpHandler = (evt: MouseEvent, adjuster: HTMLDivElement) => {
+  const mouseUpHandler = (evt: MouseEvent) => {
     preventDefaultBehavior(evt);
     document.removeEventListener('mousemove', mouseMoveHandler);
-    document.removeEventListener('mouseup', (event) => mouseUpHandler(event, adjuster));
+    document.removeEventListener('mouseup', mouseUpHandler);
 
     confirmWidth();
-    adjuster.blur();
+    ((tempWidths.current.adjusterHitArea as HTMLDivElement).closest('#adjuster-hit-area') as HTMLDivElement).blur();
   };
 
   const mouseDownHandler = (evt: React.MouseEvent) => {
-    // evt.preventDefault();
     evt.stopPropagation();
-    const adjuster = evt.target as HTMLDivElement;
 
     tempWidths.current = {
+      adjusterHitArea: evt.target,
       initX: evt.clientX,
       initWidth: columnWidths[pageColIdx],
       columnWidth: columnWidths[pageColIdx],
     };
 
     document.addEventListener('mousemove', mouseMoveHandler);
-    document.addEventListener('mouseup', (event) => mouseUpHandler(event, adjuster));
+    document.addEventListener('mouseup', mouseUpHandler);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {

@@ -1,7 +1,7 @@
 import { Cell } from '../../types';
 import { KeyCodes } from '../constants';
 
-export const preventDefaultBehavior = (evt: React.KeyboardEvent | MouseEvent) => {
+export const preventDefaultBehavior = (evt: React.KeyboardEvent | MouseEvent | React.MouseEvent<HTMLLIElement>) => {
   evt.stopPropagation();
   evt.preventDefault();
 };
