@@ -15,7 +15,7 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
   );
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
-  const isInSelectionMode = useContextSelector(TableContext, (value) => value.selectionState.colIdx > -1);
+  const isInSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI.isModal());
 
   const { startIcon, endIcon, lockIcon } = getHeadIcons(column);
   const isInteractionEnabled = !constraints.active && !isInSelectionMode;
