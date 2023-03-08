@@ -153,7 +153,6 @@ export interface HandleHeadKeyDownProps {
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   isInteractionEnabled: boolean;
   areBasicFeaturesEnabled: boolean;
-  // isLabelLast: boolean;
 }
 
 export interface BodyArrowHelperProps {
