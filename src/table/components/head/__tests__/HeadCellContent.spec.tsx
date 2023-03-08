@@ -1,7 +1,7 @@
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
-import useEvent from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 import HeadCellContent from '../HeadCellContent';
 import { TableLayout, ChangeSortOrder, ExtendedSelectionAPI, Column } from '../../../../types';
 import TestWithProviders from '../../../../__test__/test-with-providers';
@@ -83,11 +83,11 @@ describe('<HeadCellContent />', () => {
       expect(sortIcon).not.toBeVisible();
     });
 
-    useEvent.hover(sortIcon);
+    userEvent.hover(sortIcon);
     waitFor(async () => {
       expect(sortIcon).toBeVisible();
     });
-    useEvent.unhover(sortIcon);
+    userEvent.unhover(sortIcon);
     waitFor(async () => {
       expect(sortIcon).not.toBeVisible();
     });
@@ -110,11 +110,11 @@ describe('<HeadCellContent />', () => {
       expect(labelButton).not.toBeVisible();
     });
 
-    useEvent.hover(labelButton);
+    userEvent.hover(labelButton);
     waitFor(async () => {
       expect(menuButton).toBeVisible();
     });
-    useEvent.unhover(labelButton);
+    userEvent.unhover(labelButton);
     waitFor(async () => {
       expect(menuButton).not.toBeVisible();
     });
