@@ -17,9 +17,7 @@ const usePageInfo = (layout: TableLayout, shouldRender: boolean) => {
   if (shouldRender) {
     // Guard against new layout that contains fewer pages then previous layout
     const lastPage = Math.floor(layout.qHyperCube.qSize.qcy / MAX_PAGE_SIZE);
-    if (layout.qHyperCube.qSize.qcy <= MAX_PAGE_SIZE) {
-      setPage(0);
-    } else if (lastPage < page) {
+    if (lastPage < page) {
       setPage(lastPage);
     }
   }
