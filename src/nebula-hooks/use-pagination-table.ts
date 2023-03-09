@@ -27,7 +27,7 @@ interface UsePaginationTable {
   keyboard: stardust.Keyboard;
   model?: EngineAPI.IGenericObject;
   app?: EngineAPI.IApp;
-  areBasicFeaturesEnabled?: boolean;
+  areBasicFeaturesEnabled: boolean;
   embed?: stardust.Embed;
   reactRoot: Root;
   applyColumnWidths: ApplyColumnWidths;
@@ -63,7 +63,7 @@ const usePaginationTable = ({
   const [pageInfo, setPageInfo] = useState(initialPageInfo);
   const [tableData] = usePromise(async () => {
     if (shouldRender) {
-      return manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo);
+      return manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo, areBasicFeaturesEnabled);
     }
 
     return null;

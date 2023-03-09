@@ -142,8 +142,7 @@ export const handleTotalKeyDown = (
   rootElement: HTMLElement,
   cellCoord: [number, number],
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  isSelectionMode: boolean,
-  areBasicFeaturesEnabled: boolean
+  isSelectionMode: boolean
 ) => {
   if (isSelectionMode) {
     preventDefaultBehavior(evt);
@@ -162,7 +161,7 @@ export const handleTotalKeyDown = (
       break;
     }
     case KeyCodes.C: {
-      areBasicFeaturesEnabled && isCtrlCmd(evt) && copyCellValue(evt);
+      isCtrlCmd(evt) && copyCellValue(evt);
       break;
     }
     default:

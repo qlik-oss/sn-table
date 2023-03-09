@@ -49,11 +49,9 @@ function TableBodyWrapper({
 
   useSelectionListener({ keyboard, selectionDispatch, selectionsAPI, setShouldRefocus, tableWrapperRef });
 
-  const totals = <TableTotals areBasicFeaturesEnabled={areBasicFeaturesEnabled} />;
-
   return (
     <StyledBody lastRowBottomBorder={lastRowBottomBorder}>
-      {totalsPosition.atTop ? totals : undefined}
+      {totalsPosition.atTop ? <TableTotals /> : undefined}
       {rows.map((row, rowIndex) => (
         <StyledBodyRow
           hoverColors={hoverColors}
@@ -114,7 +112,7 @@ function TableBodyWrapper({
           })}
         </StyledBodyRow>
       ))}
-      {totalsPosition.atBottom ? totals : undefined}
+      {totalsPosition.atBottom ? <TableTotals /> : undefined}
     </StyledBody>
   );
 }

@@ -305,7 +305,7 @@ describe('handle-keyboard', () => {
     });
 
     it('should move the focus from the current cell to the next when arrow key down is pressed on a total cell', () => {
-      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode, areBasicFeaturesEnabled);
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
@@ -314,7 +314,7 @@ describe('handle-keyboard', () => {
 
     it('should only call preventDefaultBehavior when isSelectionMode is true', () => {
       isSelectionMode = true;
-      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode, areBasicFeaturesEnabled);
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
@@ -322,7 +322,7 @@ describe('handle-keyboard', () => {
 
     it('should take the default case when the pressed key is not an arrow key', () => {
       evt.key = KeyCodes.ENTER;
-      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode, areBasicFeaturesEnabled);
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
@@ -331,14 +331,14 @@ describe('handle-keyboard', () => {
     it('should call copyCellValue on Total cell when the pressed keys are Ctrl and C keys', () => {
       evt.key = KeyCodes.C;
       evt.ctrlKey = true;
-      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode, areBasicFeaturesEnabled);
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(handleCopy.default).toHaveBeenCalled();
     });
 
     it('should call copyCellValue on Total cell when the pressed keys are Meta and C keys', async () => {
       evt.key = KeyCodes.C;
       evt.metaKey = true;
-      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode, areBasicFeaturesEnabled);
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(handleCopy.default).toHaveBeenCalled();
     });
 
@@ -346,7 +346,7 @@ describe('handle-keyboard', () => {
       evt.key = KeyCodes.C;
       evt.metaKey = true;
       areBasicFeaturesEnabled = false;
-      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode, areBasicFeaturesEnabled);
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(handleCopy.default).not.toHaveBeenCalled();
     });
   });
