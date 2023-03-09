@@ -16,7 +16,7 @@ import * as handleCopy from '../copy-utils';
 import * as getElementUtils from '../get-element-utils';
 import { Announce, Column, ExtendedSelectionAPI, Cell, TotalsPosition } from '../../../types';
 import { SelectionDispatch } from '../../types';
-import { KeyCodes } from '../../constants';
+import { FocusTypes, KeyCodes } from '../../constants';
 
 describe('handle-keyboard', () => {
   let areBasicFeaturesEnabled: boolean;
@@ -311,6 +311,13 @@ describe('handle-keyboard', () => {
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.moveFocus).toHaveBeenCalledWith(
+        evt,
+        rootElement,
+        cellCoord,
+        setFocusedCellCoord,
+        FocusTypes.FOCUS
+      );
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
     });
 
@@ -321,7 +328,13 @@ describe('handle-keyboard', () => {
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.moveFocus).toHaveBeenCalledWith(
+        evt,
+        rootElement,
+        cellCoord,
+        setFocusedCellCoord,
+        FocusTypes.FOCUS_BUTTON
+      );
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(0);
     });
 
