@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect } from 'react';
+import React, { useRef, useCallback, memo } from 'react';
 
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './body/TableBodyWrapper';
@@ -11,14 +11,13 @@ import useDidUpdateEffect from '../../hooks/use-did-update-effect';
 import useFocusListener from '../../hooks/use-focus-listener';
 import useScrollListener from '../../hooks/use-scroll-listener';
 import { handleWrapperKeyDown } from '../../utils/handle-keyboard';
-import { updateFocus, resetFocus } from '../../utils/accessibility-utils';
-import { getCellElement } from '../../utils/get-element-utils';
+import { resetFocus } from '../../utils/accessibility-utils';
 import { TableWrapperProps } from '../../types';
 import { StyledTableWrapper } from '../../components/styles';
 import useScrollbarWidth from '../../virtualized-table/hooks/use-scrollbar-width';
-import { FIRST_BODY_CELL_COORD, FIRST_HEADER_CELL_COORD, FocusTypes } from '../../constants';
+import useKeyboardActiveListener from '../../hooks/use-keyboard-active-listener';
 
-export default function TableWrapper(props: TableWrapperProps) {
+function TableWrapper(props: TableWrapperProps) {
   const { pageInfo, setPageInfo, direction, footerContainer, announce, areBasicFeaturesEnabled } = props;
   const { page, rowsPerPage } = pageInfo;
 
@@ -72,21 +71,7 @@ export default function TableWrapper(props: TableWrapperProps) {
 
   useFocusListener(tableWrapperRef, shouldRefocus, keyboard);
   useScrollListener(tableContainerRef, direction);
-  console.log('render wrapper', keyboard.active);
-
-  useEffect(() => {
-    console.log('useEffect');
-    // When nebula handles keyboard navigation and keyboard.active changes,
-    // make sure to focus the first cell or blur the focusedCellCoord
-    // when keyboard.focus() runs, keyboard.active is true
-    // when keyboard.blur() runs, keyboard.active is false
-    const firstCellCoord = isSelectionMode ? FIRST_BODY_CELL_COORD : FIRST_HEADER_CELL_COORD;
-    const focusType = isSelectionMode ? FocusTypes.FOCUS : FocusTypes.FOCUS_BUTTON;
-    updateFocus({
-      focusType: keyboard.active ? focusType : FocusTypes.BLUR,
-      cell: getCellElement(rootElement, keyboard.active ? firstCellCoord : focusedCellCoord),
-    });
-  }, [keyboard.active]);
+  useKeyboardActiveListener();
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
@@ -112,6 +97,7 @@ export default function TableWrapper(props: TableWrapperProps) {
     String(columns.length),
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
+  console.log('render wrapper');
   return (
     <StyledTableWrapper
       ref={tableWrapperRef}
@@ -143,3 +129,5 @@ export default function TableWrapper(props: TableWrapperProps) {
     </StyledTableWrapper>
   );
 }
+
+export default memo(TableWrapper);
