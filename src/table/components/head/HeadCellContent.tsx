@@ -19,7 +19,7 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
 
   const { startIcon, endIcon, lockIcon } = getHeadIcons(column);
   const isInteractionEnabled = !constraints.active && !isInSelectionMode;
-  const tabIndex = isInteractionEnabled && !keyboard.enabled ? 0 : -1;
+  const tabIndex = isInteractionEnabled && (!keyboard.enabled || keyboard.active) ? 0 : -1;
 
   const handleSort = () => isInteractionEnabled && changeSortOrder(column);
   const onKeyDown = (evt: React.KeyboardEvent) =>

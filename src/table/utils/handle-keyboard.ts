@@ -82,7 +82,7 @@ export const handleHeadKeyDown = ({
   }
 
   // TODO: See if it bubbles correctly
-  if (shouldBubble(evt)) return;
+  if (shouldBubble(evt) || evt.key === KeyCodes.SPACE || evt.key === KeyCodes.ENTER) return;
   preventDefaultBehavior(evt);
 
   const target = evt.target as HTMLElement;

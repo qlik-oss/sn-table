@@ -28,6 +28,8 @@ export default function TableWrapper(props: TableWrapperProps) {
     TableContext,
     (value) => value.baseProps
   );
+
+  // const keyboardActive = useContextSelector(TableContext, (value) => value.baseProps.keyboard.active);
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
@@ -71,14 +73,16 @@ export default function TableWrapper(props: TableWrapperProps) {
   useFocusListener(tableWrapperRef, shouldRefocus, keyboard);
   useScrollListener(tableContainerRef, direction);
 
+  console.log(keyboard.active);
   useDidUpdateEffect(() => {
+    console.log('inside');
     // When nebula handles keyboard navigation and keyboard.active changes,
     // make sure to blur or focus the cell corresponding to focusedCellCoord
     // when keyboard.focus() runs, keyboard.active is true
     // when keyboard.blur() runs, keyboard.active is false
     updateFocus({
-      focusType: keyboard.active ? FocusTypes.FOCUS : FocusTypes.BLUR,
-      cell: getCellElement(rootElement, focusedCellCoord),
+      focusType: keyboard.active ? FocusTypes.FOCUS_BUTTON : FocusTypes.BLUR,
+      cell: getCellElement(rootElement, keyboard.active ? [0, 0] : focusedCellCoord),
     });
   }, [keyboard.active]);
 
