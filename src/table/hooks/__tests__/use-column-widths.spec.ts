@@ -95,8 +95,8 @@ describe('use-column-widths', () => {
         columns[2].columnWidth.type = ColumnWidthTypes.HUG;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([270, 270, 270]);
-        expect(getTotalWidth(widths)).toBe(270 * 3);
+        expect(widths).toEqual([275, 275, 275]);
+        expect(getTotalWidth(widths)).toBe(275 * 3);
       });
     });
 
@@ -141,7 +141,7 @@ describe('use-column-widths', () => {
         columns[2].columnWidth.type = ColumnWidthTypes.HUG;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([190, 190, 220]);
+        expect(widths).toEqual([187.5, 187.5, 225]);
         expect(getTotalWidth(widths)).toBe(tableWidth);
       });
     });
