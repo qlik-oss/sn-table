@@ -29,6 +29,14 @@ export enum KeyCodes {
   C = 'c',
 }
 
+export enum FocusTypes {
+  FOCUS = 'focus',
+  FOCUS_BUTTON = 'focusButton',
+  BLUR = 'blur',
+  ADD_TAB = 'addTab',
+  REMOVE_TAB = 'removeTab',
+}
+
 export enum FullSortDirection {
   A = 'ascending',
   D = 'descending',
@@ -52,4 +60,4 @@ export const PAGINATION_HEIGHT = 40;
 export const INITIAL_DATA_FETCH_WIDTH = 50;
 export const INITIAL_DATA_FETCH_HEIGHT = 100;
 
-export const DEFAULT_FOCUS_CELL_COORD = [0, 0] as [number, number];
+export const DEFAULT_FOCUS_CELL_COORD = [1, 0] as [number, number];

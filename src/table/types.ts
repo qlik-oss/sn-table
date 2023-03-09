@@ -153,10 +153,21 @@ export interface HandleHeadKeyDownProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;
   cellCoord: [number, number];
-  column: Column;
-  changeSortOrder: ChangeSortOrder;
-  isInteractionEnabled: boolean;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  isInteractionEnabled: boolean;
+  areBasicFeaturesEnabled: boolean;
+}
+
+export interface BodyArrowHelperProps {
+  evt: React.KeyboardEvent;
+  rootElement: HTMLElement;
+  cell: Cell;
+  selectionDispatch: SelectionDispatch;
+  isSelectionsEnabled: boolean;
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  announce: Announce;
+  totalsPosition: TotalsPosition;
+  isSelectionMode: boolean;
   areBasicFeaturesEnabled: boolean;
 }
 

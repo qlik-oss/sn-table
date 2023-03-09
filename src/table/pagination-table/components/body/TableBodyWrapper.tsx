@@ -3,7 +3,7 @@ import React, { useMemo, memo } from 'react';
 import getCellRenderer from '../../utils/get-cell-renderer';
 import { useContextSelector, TableContext } from '../../../context';
 import { StyledBodyRow, StyledBody } from './styles';
-import { handleBodyKeyDown, handleBodyKeyUp } from '../../../utils/handle-key-press';
+import { handleBodyKeyDown, handleBodyKeyUp } from '../../../utils/handle-keyboard';
 import { handleClickToFocusBody } from '../../../utils/handle-click';
 import { Cell } from '../../../../types';
 import { TableBodyWrapperProps } from '../../../types';
@@ -54,7 +54,7 @@ function TableBodyWrapper({
   return (
     <StyledBody lastRowBottomBorder={lastRowBottomBorder}>
       {totalsPosition.atTop ? totals : undefined}
-      {rows.map((row) => (
+      {rows.map((row, rowIndex) => (
         <StyledBodyRow
           hoverColors={hoverColors}
           hover={hoverEffect}
@@ -68,6 +68,7 @@ function TableBodyWrapper({
             // So for each row, the cells are mapped according to column.id
             const cell = row[id] as Cell;
             const CellRenderer = columnRenderers[columnIndex];
+            const tabIndex = rowIndex === 0 && columnIndex === 0 && !keyboard.enabled ? 0 : -1;
             const handleKeyDown = (evt: React.KeyboardEvent) => {
               handleBodyKeyDown({
                 evt,
@@ -95,7 +96,7 @@ function TableBodyWrapper({
                   key={id}
                   align={align}
                   styling={cellStyle} // TODO see if we should rename this to cellStyle
-                  tabIndex={-1}
+                  tabIndex={tabIndex}
                   announce={announce}
                   areBasicFeaturesEnabled={areBasicFeaturesEnabled}
                   onKeyDown={handleKeyDown}

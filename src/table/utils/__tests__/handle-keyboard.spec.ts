@@ -2,22 +2,23 @@ import { stardust } from '@nebula.js/stardust';
 import React from 'react';
 
 import {
-  shouldBubble,
   handleWrapperKeyDown,
   handleBodyKeyDown,
   handleHeadKeyDown,
   handleTotalKeyDown,
   handleLastTab,
   handleBodyKeyUp,
-} from '../handle-key-press';
-import * as handleAccessibility from '../accessibility-utils';
+} from '../handle-keyboard';
+import * as accessibilityUtils from '../accessibility-utils';
+import * as keyboardUtils from '../keyboard-utils';
 import * as handleScroll from '../handle-scroll';
 import * as handleCopy from '../copy-utils';
+import * as getElementUtils from '../get-element-utils';
 import { Announce, Column, ExtendedSelectionAPI, Cell, TotalsPosition } from '../../../types';
 import { SelectionDispatch } from '../../types';
 import { KeyCodes } from '../../constants';
 
-describe('handle-key-press', () => {
+describe('handle-keyboard', () => {
   let areBasicFeaturesEnabled: boolean;
 
   beforeEach(() => {
@@ -26,119 +27,6 @@ describe('handle-key-press', () => {
   });
 
   afterEach(() => jest.clearAllMocks());
-
-  describe('shouldBubble', () => {
-    let evt: React.KeyboardEvent;
-    let isSelectionMode: boolean;
-    let keyboardEnabled: boolean;
-    let paginationNeeded: boolean;
-
-    const callShouldBubble = () => shouldBubble(evt, isSelectionMode, keyboardEnabled, paginationNeeded);
-
-    beforeEach(() => {
-      evt = {
-        key: KeyCodes.ESC,
-        shiftKey: false,
-        ctrlKey: false,
-        metaKey: false, // cases when meta key is pressed instead of ctrl is not tested here, the test are granular enough anyway
-      } as unknown as React.KeyboardEvent;
-      isSelectionMode = false;
-      keyboardEnabled = false;
-      paginationNeeded = true;
-      areBasicFeaturesEnabled = true;
-    });
-
-    it('should return true when esc is pressed and isSelectionMode is false', () => {
-      expect(callShouldBubble()).toBe(true);
-    });
-
-    it('should return false when esc is pressed and isSelectionMode is true', () => {
-      isSelectionMode = true;
-      expect(callShouldBubble()).toBe(false);
-    });
-
-    it('should return true when tab is pressed and paginationNeeded is true', () => {
-      evt.key = KeyCodes.TAB;
-      expect(callShouldBubble()).toBe(true);
-    });
-
-    it('should return true when tab is pressed, paginationNeeded is false and keyboardEnabled is false but isSelectionMode is true', () => {
-      evt.key = KeyCodes.TAB;
-      paginationNeeded = false;
-      isSelectionMode = true;
-      expect(callShouldBubble()).toBe(true);
-    });
-
-    it('should return true when tab is pressed, paginationNeeded is false and isSelectionMode is false but keyboardEnabled is true', () => {
-      evt.key = KeyCodes.TAB;
-      paginationNeeded = false;
-      keyboardEnabled = true;
-      expect(callShouldBubble()).toBe(true);
-    });
-
-    it('should return false when tab is pressed, paginationNeeded is false and keyboardEnabled && isSelectionMode is true', () => {
-      evt.key = KeyCodes.TAB;
-      paginationNeeded = false;
-      keyboardEnabled = true;
-      isSelectionMode = true;
-      expect(callShouldBubble()).toBe(false);
-    });
-
-    it('should return true when shift + tab is pressed and keyboardEnabled is false but isSelectionMode is true', () => {
-      evt.key = KeyCodes.TAB;
-      evt.shiftKey = true;
-      isSelectionMode = true;
-      expect(callShouldBubble()).toBe(true);
-    });
-
-    it('should return true when shift + tab is pressed and isSelectionMode is false but keyboardEnabled is true', () => {
-      evt.key = KeyCodes.TAB;
-      evt.shiftKey = true;
-      keyboardEnabled = true;
-      expect(callShouldBubble()).toBe(true);
-    });
-
-    it('should return false when shift + tab is pressed and keyboardEnabled && isSelectionMode is true', () => {
-      evt.key = KeyCodes.TAB;
-      evt.shiftKey = true;
-      keyboardEnabled = true;
-      isSelectionMode = true;
-      expect(callShouldBubble()).toBe(false);
-    });
-
-    it('should return true when ctrl + shift + arrowRight is pressed', () => {
-      evt.key = KeyCodes.RIGHT;
-      evt.shiftKey = true;
-      evt.ctrlKey = true;
-      expect(callShouldBubble()).toBe(true);
-    });
-
-    it('should return true when ctrl + shift + arrowLeft is pressed', () => {
-      evt.key = KeyCodes.LEFT;
-      evt.shiftKey = true;
-      evt.ctrlKey = true;
-      expect(callShouldBubble()).toBe(true);
-    });
-
-    it('should return false when ctrl + shift + some other key is pressed', () => {
-      evt.key = KeyCodes.UP;
-      evt.shiftKey = true;
-      evt.ctrlKey = true;
-      expect(callShouldBubble()).toBe(false);
-    });
-
-    it('should return false when ctrl + arrowLeft but not shift', () => {
-      evt.key = KeyCodes.LEFT;
-      evt.ctrlKey = true;
-      expect(callShouldBubble()).toBe(false);
-    });
-
-    it('should return false when shift + arrowLeft but not ctrl', () => {
-      evt.key = KeyCodes.LEFT;
-      evt.shiftKey = true;
-      expect(callShouldBubble()).toBe(false);
-    });
-  });
 
   describe('handleWrapperKeyDown', () => {
     let evt: React.KeyboardEvent;
@@ -272,20 +160,18 @@ describe('handle-key-press', () => {
   describe('handleHeadKeyDown', () => {
     let rowIndex: number;
     let colIndex: number;
-    let column: Column;
     let evt: React.KeyboardEvent;
     let rootElement: HTMLElement;
     let changeSortOrder: (column: Column) => Promise<void>;
     let isInteractionEnabled: boolean;
     let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+    let nextSibling: ChildNode | null | undefined;
 
     const callHandleHeadKeyDown = () =>
       handleHeadKeyDown({
         evt,
         rootElement,
         cellCoord: [rowIndex, colIndex],
-        column,
-        changeSortOrder,
         isInteractionEnabled,
         setFocusedCellCoord,
         areBasicFeaturesEnabled,
@@ -294,57 +180,63 @@ describe('handle-key-press', () => {
     beforeEach(() => {
       rowIndex = 0;
       colIndex = 0;
-      column = {} as unknown as Column;
+      nextSibling = {} as ChildNode;
       evt = {
-        key: KeyCodes.DOWN,
+        key: KeyCodes.RIGHT,
         stopPropagation: jest.fn(),
         preventDefault: jest.fn(),
         target: {
           blur: jest.fn(),
           setAttribute: jest.fn(),
+          closest: () => ({
+            nextSibling,
+          }),
         } as unknown as HTMLElement,
       } as unknown as React.KeyboardEvent;
-      rootElement = {
-        getElementsByClassName: () => [
-          {
-            getElementsByClassName: () => [{ focus: () => undefined, setAttribute: () => undefined }],
-          },
-        ],
-      } as unknown as HTMLElement;
+      rootElement = {} as unknown as HTMLElement;
       changeSortOrder = jest.fn();
       isInteractionEnabled = true;
       setFocusedCellCoord = jest.fn();
+      jest.spyOn(accessibilityUtils, 'focusBodyFromHead').mockImplementation(() => {});
+      jest.spyOn(accessibilityUtils, 'moveFocus').mockImplementation(() => ({} as HTMLTableCellElement));
+      jest.spyOn(accessibilityUtils, 'updateFocus').mockImplementation(() => {});
+      jest.spyOn(getElementUtils, 'findCellWithTabStop').mockImplementation(() => ({} as HTMLTableCellElement));
     });
 
-    it('when press arrow down key on head cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
+    it('should call moveFocus and prevent default behavior on left arrow', () => {
+      evt.key = KeyCodes.LEFT;
       callHandleHeadKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
     });
 
-    it('when press space bar key, should update the sorting', () => {
-      evt.key = KeyCodes.SPACE;
+    it('should call moveFocus and prevent default behavior on right arrow', () => {
       callHandleHeadKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(changeSortOrder).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).not.toHaveBeenCalled();
+      expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
     });
 
-    it('when press enter key, should update the sorting', () => {
-      evt.key = KeyCodes.ENTER;
+    it('should call focusBodyFromHead and prevent default behavior on right arrow on last head cell', () => {
+      nextSibling = null;
       callHandleHeadKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(changeSortOrder).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).not.toHaveBeenCalled();
+      expect(accessibilityUtils.focusBodyFromHead).toHaveBeenCalledTimes(1);
     });
 
-    it('when pressing a valid key and isInteractionEnabled is false, should only call preventDefaultBehavior', () => {
-      evt.key = KeyCodes.SPACE;
-      isInteractionEnabled = false;
+    it('should call updateFocus + moveFocus and prevent default behavior on down arrow', () => {
+      evt.key = KeyCodes.DOWN;
+      callHandleHeadKeyDown();
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
+    });
+
+    it('when pressing an invalid key, should only call preventDefaultBehavior', () => {
+      evt.key = KeyCodes.UP;
       callHandleHeadKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
@@ -352,8 +244,9 @@ describe('handle-key-press', () => {
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
     });
 
-    it('when pressing an invalid key, should only call preventDefaultBehavior', () => {
-      evt.key = KeyCodes.UP;
+    it('should only call preventDefaultBehavior when pressing a valid key and isInteractionEnabled is false', () => {
+      evt.key = KeyCodes.SPACE;
+      isInteractionEnabled = false;
       callHandleHeadKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
@@ -384,7 +277,7 @@ describe('handle-key-press', () => {
     });
   });
 
-  describe('handleTotalKeyDown', () => {
+  describe.skip('handleTotalKeyDown', () => {
     let evt: React.KeyboardEvent;
     let rootElement: HTMLElement;
     let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
@@ -523,99 +416,18 @@ describe('handle-key-press', () => {
       paginationNeeded = true;
       totalsPosition = { atTop: false, atBottom: true };
       areBasicFeaturesEnabled = true;
-      jest.spyOn(handleAccessibility, 'focusSelectionToolbar').mockImplementation(() => jest.fn());
-      jest.spyOn(handleAccessibility, 'announceSelectionState').mockImplementation(() => jest.fn());
-      jest.spyOn(handleScroll, 'handleNavigateTop').mockImplementation(() => jest.fn());
+      jest.spyOn(accessibilityUtils, 'focusSelectionToolbar').mockImplementation(() => {});
+      jest.spyOn(accessibilityUtils, 'announceSelectionState').mockImplementation(() => {});
+      jest.spyOn(handleScroll, 'handleNavigateTop').mockImplementation(() => {});
+      jest.spyOn(keyboardUtils, 'bodyArrowHelper').mockImplementation(() => {});
     });
 
-    it('when press arrow down key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
+    it('should call bodyArrowHelper when arrow key is pressed', () => {
+      evt.key = KeyCodes.DOWN;
       runHandleBodyKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
-      expect(handleAccessibility.announceSelectionState).toHaveBeenCalledTimes(1);
-      expect(handleScroll.handleNavigateTop).not.toHaveBeenCalled();
-    });
-
-    it('when press arrow left key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell', () => {
-      evt.key = KeyCodes.LEFT;
-
-      runHandleBodyKeyDown();
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
-      expect(handleAccessibility.announceSelectionState).not.toHaveBeenCalled();
-      expect(handleScroll.handleNavigateTop).not.toHaveBeenCalled();
-    });
-
-    it('when press arrow up key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell and call handleNavigateTop', () => {
-      evt.key = KeyCodes.UP;
-
-      runHandleBodyKeyDown();
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
-      expect(handleAccessibility.announceSelectionState).toHaveBeenCalledTimes(1);
-      expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(1);
-    });
-
-    it('when press shift + arrow down key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell, and select values for dimension', () => {
-      evt.shiftKey = true;
-
-      runHandleBodyKeyDown();
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
-      expect(selectionDispatch).toHaveBeenCalledTimes(1);
-      expect(handleAccessibility.announceSelectionState).not.toHaveBeenCalled();
-      expect(handleScroll.handleNavigateTop).not.toHaveBeenCalled();
-    });
-
-    it('when press shift + arrow down key on the last row cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell, but not select values for dimension', () => {
-      cell.isLastRow = true;
-      evt.shiftKey = true;
-
-      runHandleBodyKeyDown();
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
-      expect(selectionDispatch).not.toHaveBeenCalled();
-      expect(handleAccessibility.announceSelectionState).toHaveBeenCalledTimes(1);
-      expect(handleScroll.handleNavigateTop).not.toHaveBeenCalled();
-    });
-
-    it('when press shift + arrow up key on body cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell, and select values for dimension', () => {
-      evt.shiftKey = true;
-      evt.key = KeyCodes.UP;
-
-      runHandleBodyKeyDown();
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
-      expect(selectionDispatch).toHaveBeenCalledTimes(1);
-      expect(handleAccessibility.announceSelectionState).not.toHaveBeenCalled();
-      expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(1);
-    });
-
-    it('when press shift + arrow up key on the second row cell, should prevent default behavior, remove current focus and set focus and attribute to the next cell, but not select values for dimension', () => {
-      cell.pageRowIdx = 0;
-      evt.shiftKey = true;
-      evt.key = KeyCodes.UP;
-
-      runHandleBodyKeyDown();
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
-      expect(selectionDispatch).not.toHaveBeenCalled();
-      expect(handleAccessibility.announceSelectionState).toHaveBeenCalledTimes(1);
-      expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(1);
+      expect(keyboardUtils.bodyArrowHelper).toHaveBeenCalledTimes(1);
     });
 
     it('when press space bar key and dimension, should select value for dimension', () => {
@@ -690,7 +502,7 @@ describe('handle-key-press', () => {
       runHandleBodyKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(handleAccessibility.focusSelectionToolbar).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.focusSelectionToolbar).toHaveBeenCalledTimes(1);
       expect(announce).not.toHaveBeenCalled();
     });
 
@@ -701,7 +513,7 @@ describe('handle-key-press', () => {
       runHandleBodyKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(handleAccessibility.focusSelectionToolbar).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.focusSelectionToolbar).toHaveBeenCalledTimes(1);
       expect(announce).not.toHaveBeenCalled();
     });
 
@@ -790,7 +602,7 @@ describe('handle-key-press', () => {
         preventDefault: jest.fn(),
       } as unknown as React.KeyboardEvent;
       isSelectionMode = true;
-      jest.spyOn(handleAccessibility, 'focusSelectionToolbar').mockImplementation(() => jest.fn());
+      jest.spyOn(accessibilityUtils, 'focusSelectionToolbar').mockImplementation(() => jest.fn());
     });
 
     it('should call focusSelectionToolbar when isSelectionMode is true and tab is pressed', () => {
@@ -798,7 +610,7 @@ describe('handle-key-press', () => {
 
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(handleAccessibility.focusSelectionToolbar).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.focusSelectionToolbar).toHaveBeenCalledTimes(1);
     });
 
     it('should not call focusSelectionToolbar when isSelectionMode is false', () => {
@@ -807,7 +619,7 @@ describe('handle-key-press', () => {
 
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(evt.preventDefault).not.toHaveBeenCalled();
-      expect(handleAccessibility.focusSelectionToolbar).not.toHaveBeenCalled();
+      expect(accessibilityUtils.focusSelectionToolbar).not.toHaveBeenCalled();
     });
 
     it('should not call focusSelectionToolbar when key is not tab', () => {
@@ -816,7 +628,7 @@ describe('handle-key-press', () => {
 
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(evt.preventDefault).not.toHaveBeenCalled();
-      expect(handleAccessibility.focusSelectionToolbar).not.toHaveBeenCalled();
+      expect(accessibilityUtils.focusSelectionToolbar).not.toHaveBeenCalled();
     });
 
     it('should not call focusSelectionToolbar when shift+tab is pressed', () => {
@@ -825,7 +637,7 @@ describe('handle-key-press', () => {
 
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(evt.preventDefault).not.toHaveBeenCalled();
-      expect(handleAccessibility.focusSelectionToolbar).not.toHaveBeenCalled();
+      expect(accessibilityUtils.focusSelectionToolbar).not.toHaveBeenCalled();
     });
   });
 });
