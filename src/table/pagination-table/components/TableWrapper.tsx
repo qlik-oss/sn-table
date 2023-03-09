@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useEffect } from 'react';
 
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './body/TableBodyWrapper';
@@ -16,7 +16,7 @@ import { getCellElement } from '../../utils/get-element-utils';
 import { TableWrapperProps } from '../../types';
 import { StyledTableWrapper } from '../../components/styles';
 import useScrollbarWidth from '../../virtualized-table/hooks/use-scrollbar-width';
-import { FocusTypes } from '../../constants';
+import { FIRST_BODY_CELL_COORD, FIRST_HEADER_CELL_COORD, FocusTypes } from '../../constants';
 
 export default function TableWrapper(props: TableWrapperProps) {
   const { pageInfo, setPageInfo, direction, footerContainer, announce, areBasicFeaturesEnabled } = props;
@@ -72,17 +72,19 @@ export default function TableWrapper(props: TableWrapperProps) {
 
   useFocusListener(tableWrapperRef, shouldRefocus, keyboard);
   useScrollListener(tableContainerRef, direction);
+  console.log('render wrapper', keyboard.active);
 
-  console.log(keyboard.active);
-  useDidUpdateEffect(() => {
-    console.log('inside');
+  useEffect(() => {
+    console.log('useEffect');
     // When nebula handles keyboard navigation and keyboard.active changes,
-    // make sure to blur or focus the cell corresponding to focusedCellCoord
+    // make sure to focus the first cell or blur the focusedCellCoord
     // when keyboard.focus() runs, keyboard.active is true
     // when keyboard.blur() runs, keyboard.active is false
+    const firstCellCoord = isSelectionMode ? FIRST_BODY_CELL_COORD : FIRST_HEADER_CELL_COORD;
+    const focusType = isSelectionMode ? FocusTypes.FOCUS_BUTTON : FocusTypes.FOCUS;
     updateFocus({
-      focusType: keyboard.active ? FocusTypes.FOCUS_BUTTON : FocusTypes.BLUR,
-      cell: getCellElement(rootElement, keyboard.active ? [0, 0] : focusedCellCoord),
+      focusType: keyboard.active ? focusType : FocusTypes.BLUR,
+      cell: getCellElement(rootElement, keyboard.active ? firstCellCoord : focusedCellCoord),
     });
   }, [keyboard.active]);
 

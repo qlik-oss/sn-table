@@ -1,9 +1,11 @@
 import { stardust } from '@nebula.js/stardust';
 import React from 'react';
 import { Announce } from '../../types';
-import { DEFAULT_FOCUS_CELL_COORD, FocusTypes } from '../constants';
+import { FIRST_BODY_CELL_COORD, FocusTypes } from '../constants';
 import { CellFocusProps, HandleResetFocusProps } from '../types';
 import { findCellWithTabStop, getCellCoordFromCell, getCellElement, getNextCellCoord } from './get-element-utils';
+
+export const areTabstopsEnabled = (keyboard: stardust.Keyboard) => !keyboard.enabled || keyboard.active;
 
 /**
  * Removes/adds tab stop and sometimes focus/blurs the cell, depending on focusType
@@ -103,9 +105,9 @@ export const resetFocus = ({
   updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: findCellWithTabStop(rootElement) });
   // If you have selections ongoing, you want to stay on the same column
   const selectionCellCoord: [number, number] = [totalsPosition.atTop ? 2 : 1, focusedCellCoord[1]];
-  const cellCoord: [number, number] = isSelectionMode ? selectionCellCoord : DEFAULT_FOCUS_CELL_COORD;
+  const cellCoord: [number, number] = isSelectionMode ? selectionCellCoord : FIRST_BODY_CELL_COORD;
 
-  if (!keyboard.enabled || keyboard.active) {
+  if (areTabstopsEnabled(keyboard)) {
     // Only run this if updates come from inside table
     const focusType = shouldRefocus.current ? FocusTypes.FOCUS : FocusTypes.ADD_TAB;
     shouldRefocus.current = false;
