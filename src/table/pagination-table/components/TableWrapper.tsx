@@ -81,7 +81,7 @@ export default function TableWrapper(props: TableWrapperProps) {
     // when keyboard.focus() runs, keyboard.active is true
     // when keyboard.blur() runs, keyboard.active is false
     const firstCellCoord = isSelectionMode ? FIRST_BODY_CELL_COORD : FIRST_HEADER_CELL_COORD;
-    const focusType = isSelectionMode ? FocusTypes.FOCUS_BUTTON : FocusTypes.FOCUS;
+    const focusType = isSelectionMode ? FocusTypes.FOCUS : FocusTypes.FOCUS_BUTTON;
     updateFocus({
       focusType: keyboard.active ? focusType : FocusTypes.BLUR,
       cell: getCellElement(rootElement, keyboard.active ? firstCellCoord : focusedCellCoord),
