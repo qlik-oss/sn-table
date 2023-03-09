@@ -57,4 +57,7 @@ export const DEFAULT_COLUMN_PERCENTAGE_WIDTH = 20;
 
 export const PAGINATION_HEIGHT = 40;
 
+export const INITIAL_DATA_FETCH_WIDTH = 50;
+export const INITIAL_DATA_FETCH_HEIGHT = 100;
+
 export const DEFAULT_FOCUS_CELL_COORD = [1, 0] as [number, number];

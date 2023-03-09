@@ -22,8 +22,9 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     overscanColumnStopIndex: 0,
     overscanRowStopIndex: 0,
   });
-  const { layout, model } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, model, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
+  const initialDataPages = useContextSelector(TableContext, (value) => value.initialDataPages);
   const isHoverEnabled = !!layout.components?.[0]?.content?.hoverEffect;
   const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
   const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(
@@ -45,17 +46,19 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
       gridState,
     });
 
-  const { rowsInPage, loadRows, loadColumns } = useData(
+  const { rowsInPage, loadRows, loadColumns } = useData({
     layout,
-    model as EngineAPI.IGenericObject,
+    model: model as EngineAPI.IGenericObject,
+    theme,
+    initialDataPages,
     pageInfo,
     rowCount,
     visibleRowCount,
     visibleColumnCount,
     columns,
     setCellSize,
-    gridState
-  );
+    gridState,
+  });
 
   const handleItemsRendered = useItemsRendererHandler({
     layout,

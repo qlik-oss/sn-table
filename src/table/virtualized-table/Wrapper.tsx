@@ -1,38 +1,18 @@
-import React, { memo, useMemo, useState } from 'react';
+import React, { memo } from 'react';
+import { stardust } from '@nebula.js/stardust';
 import PaginationContent from '../components/footer/PaginationContent';
 import { StyledTableWrapper } from '../components/styles';
-import { PageInfo } from '../../types';
 import FooterWrapper from '../components/footer/FooterWrapper';
 import Table from './Table';
-import { MAX_PAGE_SIZE } from './constants';
 import { TableContext, useContextSelector } from '../context';
-import useOnPropsChange from './hooks/use-on-props-change';
 import { WrapperProps } from './types';
+import { PageInfo } from '../../types';
 
 const Wrapper = ({ rect }: WrapperProps) => {
-  const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
-  const tableData = useContextSelector(TableContext, (value) => value.tableData);
-  const { paginationNeeded, totalRowCount } = tableData;
-  const pageSize = Math.min(MAX_PAGE_SIZE, totalRowCount);
-  const [page, setPage] = useState(0);
-  const pageInfo = useMemo<PageInfo>(
-    () => ({
-      page,
-      rowsPerPage: pageSize,
-      rowsPerPageOptions: [],
-    }),
-    [pageSize, page]
-  );
-
-  useOnPropsChange(() => {
-    // Guard against new layout that contains fewer pages then previous layout
-    if (layout.qHyperCube.qSize.qcy <= pageSize) {
-      setPage(0);
-    } else {
-      const lastPage = Math.ceil(layout.qHyperCube.qSize.qcy / pageSize);
-      setPage((prevPage) => Math.min(prevPage, lastPage));
-    }
-  }, [layout]);
+  const { theme } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { paginationNeeded } = useContextSelector(TableContext, (value) => value.tableData);
+  const pageInfo = useContextSelector(TableContext, (value) => value.pageInfo) as PageInfo;
+  const setPage = useContextSelector(TableContext, (value) => value.setPage) as stardust.SetStateFn<number>;
 
   return (
     <StyledTableWrapper data-testid="sn-table" background={theme.background} dir="ltr">

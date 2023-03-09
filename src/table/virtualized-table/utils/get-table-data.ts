@@ -13,7 +13,7 @@ export default function getVirtualScrollTableData(layout: TableLayout, constrain
   return {
     totalsPosition,
     columns,
-    rows: [], // Not used by the virtual scroll table
+    rows: [], // Cannot be created here as it depends on data that is only available in the react components
     totalRowCount,
     totalColumnCount: layout.qHyperCube.qSize.qcx,
     totalPages: Math.ceil(totalRowCount / pageSize),
