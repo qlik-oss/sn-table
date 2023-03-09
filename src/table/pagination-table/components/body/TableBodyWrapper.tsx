@@ -51,7 +51,7 @@ function TableBodyWrapper({
 
   return (
     <StyledBody lastRowBottomBorder={lastRowBottomBorder}>
-      {areBasicFeaturesEnabled && totalsPosition.atTop ? <TableTotals /> : undefined}
+      {totalsPosition.atTop ? <TableTotals /> : undefined}
       {rows.map((row, rowIndex) => (
         <StyledBodyRow
           hoverColors={hoverColors}
@@ -110,7 +110,7 @@ function TableBodyWrapper({
           })}
         </StyledBodyRow>
       ))}
-      {areBasicFeaturesEnabled && totalsPosition.atBottom ? <TableTotals /> : undefined}
+      {totalsPosition.atBottom ? <TableTotals /> : undefined}
     </StyledBody>
   );
 }
