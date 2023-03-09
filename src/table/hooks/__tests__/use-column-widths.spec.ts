@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react';
-import { Column } from '../../../types';
+import { Column, TotalsPosition } from '../../../types';
 import { ColumnWidthTypes, MIN_COLUMN_WIDTH } from '../../constants';
 import { TableStyling } from '../../types';
 import useMeasureText, { MeasureTextHook } from '../../virtualized-table/hooks/use-measure-text';
@@ -15,6 +15,7 @@ describe('use-column-widths', () => {
   let columns: Column[];
   let tableWidth: number;
   let styling: TableStyling;
+  let totalsPosition: TotalsPosition;
 
   beforeEach(() => {
     mockedUseMeasureText = useMeasureText as jest.MockedFunction<typeof useMeasureText>;
@@ -46,6 +47,8 @@ describe('use-column-widths', () => {
       body: { fontFamily: 'Arial', fontSize: '12px' },
       head: { fontFamily: 'Arial', fontSize: '12px' },
     } as unknown as TableStyling;
+
+    totalsPosition = { atTop: true, atBottom: false };
   });
 
   afterEach(() => {
@@ -53,7 +56,8 @@ describe('use-column-widths', () => {
   });
 
   // only looking at the state not setState
-  const getColumnWidthsState = () => renderHook(() => useColumnWidths(columns, tableWidth, styling)).result.current[0];
+  const getColumnWidthsState = () =>
+    renderHook(() => useColumnWidths(columns, totalsPosition, tableWidth, styling)).result.current[0];
   const getTotalWidth = (widths: number[]) => widths.reduce((acc, w) => acc + w, 0);
 
   describe('getColumnWidths', () => {
@@ -91,8 +95,8 @@ describe('use-column-widths', () => {
         columns[2].columnWidth.type = ColumnWidthTypes.HUG;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([200, 200, 200]);
-        expect(getTotalWidth(widths)).toBe(200 * 3);
+        expect(widths).toEqual([275, 275, 275]);
+        expect(getTotalWidth(widths)).toBe(275 * 3);
       });
     });
 
@@ -137,7 +141,7 @@ describe('use-column-widths', () => {
         columns[2].columnWidth.type = ColumnWidthTypes.HUG;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([225, 225, 150]);
+        expect(widths).toEqual([187.5, 187.5, 225]);
         expect(getTotalWidth(widths)).toBe(tableWidth);
       });
     });

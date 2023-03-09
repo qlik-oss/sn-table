@@ -6,7 +6,7 @@ export interface MeasureTextHook {
   measureText: (text: string) => number;
 }
 
-const MAGIC_DEFAULT_CHAR = 'M';
+const MAGIC_DEFAULT_CHAR = 'N';
 
 export default function useMeasureText(
   fontSize: string | undefined,
