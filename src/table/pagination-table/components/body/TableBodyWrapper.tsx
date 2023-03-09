@@ -62,11 +62,9 @@ function TableBodyWrapper({
         >
           {columns.map((column, columnIndex) => {
             const { id, align } = column;
-            // Note that rows are not necessarily ordered in qColumnOrder.
-            // So for each row, the cells are mapped according to column.id
             const cell = row[id] as Cell;
             const CellRenderer = columnRenderers[columnIndex];
-            const tabIndex = rowIndex === 0 && columnIndex === 0 && !keyboard.enabled ? 0 : -1;
+            const tabIndex = rowIndex === 0 && columnIndex === 0 && !totalsPosition.atTop && !keyboard.enabled ? 0 : -1;
             const handleKeyDown = (evt: React.KeyboardEvent) => {
               handleBodyKeyDown({
                 evt,

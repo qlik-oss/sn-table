@@ -16,7 +16,7 @@ import {
   Row,
   ApplyColumnWidths,
 } from '../types';
-import { SelectionActions } from './constants';
+import { FocusTypes, SelectionActions } from './constants';
 
 interface Action<T = any> {
   type: T;
@@ -184,7 +184,7 @@ export interface HandleBodyKeyDownProps {
 }
 
 export interface CellFocusProps {
-  focusType: string;
+  focusType: FocusTypes;
   cell: HTMLTableCellElement | undefined;
 }
 

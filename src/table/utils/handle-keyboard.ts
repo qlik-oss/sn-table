@@ -10,11 +10,12 @@ import {
   isCtrlCmd,
   shouldBubble,
   bodyArrowHelper,
+  getFocusType,
 } from './keyboard-utils';
 import { findCellWithTabStop, getNextMenuItem, getPreviousMenuItem } from './get-element-utils';
 import copyCellValue from './copy-utils';
 import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownProps, SelectionDispatch } from '../types';
-import { KeyCodes, SelectionActions } from '../constants';
+import { FocusTypes, KeyCodes, SelectionActions } from '../constants';
 
 /**
  * ----------- Key handlers -----------
@@ -93,12 +94,12 @@ export const handleHeadKeyDown = ({
       if (evt.key === KeyCodes.RIGHT && isLastHeadCell) {
         focusBodyFromHead(rootElement, setFocusedCellCoord);
       } else {
-        moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, 'focusButton');
+        moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, FocusTypes.FOCUS_BUTTON);
       }
       break;
     case KeyCodes.DOWN:
-      updateFocus({ focusType: 'removeTab', cell: findCellWithTabStop(rootElement) });
-      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, 'focus');
+      updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: findCellWithTabStop(rootElement) });
+      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, FocusTypes.FOCUS);
       break;
     case KeyCodes.C:
       areBasicFeaturesEnabled && isCtrlCmd(evt) && copyCellValue(evt);
@@ -157,7 +158,12 @@ export const handleTotalKeyDown = (
     case KeyCodes.RIGHT:
     case KeyCodes.UP:
     case KeyCodes.DOWN: {
-      // moveBodyFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
+      const focusType = getFocusType(cellCoord, evt);
+      if (focusType === FocusTypes.FOCUS) {
+        updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLTableCellElement });
+      }
+
+      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, focusType);
       break;
     }
     case KeyCodes.C: {

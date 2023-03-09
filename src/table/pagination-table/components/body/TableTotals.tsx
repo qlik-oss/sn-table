@@ -24,6 +24,7 @@ function TableTotals() {
     <TableRow className="sn-table-row">
       {columns.map((column, columnIndex) => {
         const cellCoord: [number, number] = [atTop ? 1 : rows.length + 1, columnIndex];
+        const tabIndex = atTop && columnIndex === 0 ? 0 : -1;
         return (
           <StyledTotalsCell
             totalsStyle={styling.totals}
@@ -32,7 +33,7 @@ function TableTotals() {
             key={column.id}
             align={column.align}
             className="sn-table-cell"
-            tabIndex={-1}
+            tabIndex={tabIndex}
             onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
               handleTotalKeyDown(e, rootElement, cellCoord, setFocusedCellCoord, selectionsAPI.isModal());
             }}

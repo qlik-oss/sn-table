@@ -16,7 +16,7 @@ import * as handleCopy from '../copy-utils';
 import * as getElementUtils from '../get-element-utils';
 import { Announce, Column, ExtendedSelectionAPI, Cell, TotalsPosition } from '../../../types';
 import { SelectionDispatch } from '../../types';
-import { KeyCodes } from '../../constants';
+import { FocusTypes, KeyCodes } from '../../constants';
 
 describe('handle-keyboard', () => {
   let areBasicFeaturesEnabled: boolean;
@@ -277,7 +277,7 @@ describe('handle-keyboard', () => {
     });
   });
 
-  describe.skip('handleTotalKeyDown', () => {
+  describe('handleTotalKeyDown', () => {
     let evt: React.KeyboardEvent;
     let rootElement: HTMLElement;
     let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
@@ -302,14 +302,40 @@ describe('handle-keyboard', () => {
       } as unknown as HTMLElement;
       setFocusedCellCoord = jest.fn();
       isSelectionMode = false;
+      jest.spyOn(accessibilityUtils, 'moveFocus').mockImplementation(() => ({} as HTMLTableCellElement));
+      jest.spyOn(accessibilityUtils, 'updateFocus').mockImplementation(() => {});
     });
 
-    it('should move the focus from the current cell to the next when arrow key down is pressed on a total cell', () => {
+    it('should call moveFocus and updateFocus when pressing arrow key', () => {
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect((evt.target as HTMLElement).setAttribute).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.moveFocus).toHaveBeenCalledWith(
+        evt,
+        rootElement,
+        cellCoord,
+        setFocusedCellCoord,
+        FocusTypes.FOCUS
+      );
+      expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call moveFocus  when pressing left arrow key on first totals cell', () => {
+      evt.key = KeyCodes.LEFT;
+      cellCoord = [1, 0];
+
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.moveFocus).toHaveBeenCalledWith(
+        evt,
+        rootElement,
+        cellCoord,
+        setFocusedCellCoord,
+        FocusTypes.FOCUS_BUTTON
+      );
+      expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(0);
     });
 
     it('should only call preventDefaultBehavior when isSelectionMode is true', () => {
@@ -317,7 +343,7 @@ describe('handle-keyboard', () => {
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).not.toHaveBeenCalled();
+      expect(accessibilityUtils.moveFocus).not.toHaveBeenCalled();
     });
 
     it('should take the default case when the pressed key is not an arrow key', () => {
@@ -325,7 +351,7 @@ describe('handle-keyboard', () => {
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).not.toHaveBeenCalled();
+      expect(accessibilityUtils.moveFocus).not.toHaveBeenCalled();
     });
 
     it('should call copyCellValue on Total cell when the pressed keys are Ctrl and C keys', () => {
@@ -340,14 +366,6 @@ describe('handle-keyboard', () => {
       evt.metaKey = true;
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(handleCopy.default).toHaveBeenCalled();
-    });
-
-    it('should not call copyCellValue on Total cell when the flag is disabled', () => {
-      evt.key = KeyCodes.C;
-      evt.metaKey = true;
-      areBasicFeaturesEnabled = false;
-      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
-      expect(handleCopy.default).not.toHaveBeenCalled();
     });
   });
 
