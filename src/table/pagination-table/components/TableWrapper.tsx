@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useEffect } from 'react';
 
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './body/TableBodyWrapper';
@@ -44,10 +44,13 @@ export default function TableWrapper(props: TableWrapperProps) {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   }, [rootElement]);
 
+  useEffect(() => {
+    tableContainerRef.current?.scrollTo(0, 0);
+  }, [pageInfo]);
+
   const handleChangePage = useCallback(
     (pageIdx: number) => {
       setPageInfo({ ...pageInfo, page: pageIdx });
-      tableContainerRef.current?.scrollTo(0, 0);
       announce({
         keys: [['SNTable.Pagination.PageStatusReport', (pageIdx + 1).toString(), totalPages.toString()]],
         politeness: 'assertive',
@@ -127,7 +130,12 @@ export default function TableWrapper(props: TableWrapperProps) {
       >
         <StyledTable customWidth={areBasicFeaturesEnabled} stickyHeader aria-label={tableAriaLabel}>
           <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
-          <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
+          <TableBodyWrapper
+            {...props}
+            setShouldRefocus={setShouldRefocus}
+            tableWrapperRef={tableWrapperRef}
+            tableContainerRef={tableContainerRef}
+          />
         </StyledTable>
       </StyledTableContainer>
       {!constraints.active && (
