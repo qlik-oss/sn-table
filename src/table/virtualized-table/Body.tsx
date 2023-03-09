@@ -24,7 +24,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   });
   const { layout, model, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
-  const { initialDataPages } = useContextSelector(TableContext, (value) => value.tableData);
+  const initialDataPages = useContextSelector(TableContext, (value) => value.initialDataPages);
   const isHoverEnabled = !!layout.components?.[0]?.content?.hoverEffect;
   const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
   const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(

@@ -44,6 +44,7 @@ export interface VirtualTableRenderProps {
   applyColumnWidths: ApplyColumnWidths;
   setPage: stardust.SetStateFn<number>;
   pageInfo: PageInfo;
+  initialDataPages: EngineAPI.INxDataPage[];
 }
 
 export interface WrapperProps {

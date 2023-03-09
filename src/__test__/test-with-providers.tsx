@@ -34,6 +34,7 @@ interface ProviderProps {
   changeSortOrder?: ChangeSortOrder;
   applyColumnWidths?: ApplyColumnWidths;
   tableWidth?: number;
+  initialDataPages?: EngineAPI.INxDataPage[];
 }
 
 type HookWrapperProps = { children: JSX.Element };
@@ -68,6 +69,7 @@ const TestWithProviders = ({
   changeSortOrder = async () => {},
   applyColumnWidths = undefined,
   tableWidth = 0,
+  initialDataPages = undefined,
 }: ProviderProps) => {
   return (
     <ThemeProvider theme={muiSetup(direction)}>
@@ -88,6 +90,7 @@ const TestWithProviders = ({
         changeSortOrder={changeSortOrder}
         applyColumnWidths={applyColumnWidths}
         tableWidth={tableWidth}
+        initialDataPages={initialDataPages}
       >
         {children as JSX.Element}
       </TableContextProvider>

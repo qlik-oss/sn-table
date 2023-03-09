@@ -121,6 +121,7 @@ export interface ContextValue {
   setYScrollbarWidth: (width: number) => void;
   pageInfo?: PageInfo;
   setPage?: stardust.SetStateFn<number>;
+  initialDataPages?: EngineAPI.INxDataPage[];
 }
 
 export interface FooterStyle {
@@ -210,6 +211,7 @@ export interface ContextProviderProps {
   tableWidth?: number;
   pageInfo?: PageInfo;
   setPage?: stardust.SetStateFn<number>;
+  initialDataPages?: EngineAPI.INxDataPage[];
 }
 
 export interface RenderProps {

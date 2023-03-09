@@ -33,7 +33,6 @@ describe('<Table />', () => {
       paginationNeeded: false,
       columns: getColumns(layout),
       totalsPosition: getTotalPosition(layout),
-      initialDataPages,
     };
 
     await act(() =>
@@ -47,6 +46,7 @@ describe('<Table />', () => {
           tableData={tableData}
           rootElement={rootElement}
           tableWidth={rect.width}
+          initialDataPages={initialDataPages}
         >
           <TestableTable pageInfo={pageInfo} rect={rect} />
         </TestWithProviders>

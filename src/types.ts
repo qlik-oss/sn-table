@@ -145,7 +145,6 @@ export type TableData = {
   rows: Row[];
   columns: Column[];
   totalsPosition: TotalsPosition;
-  initialDataPages?: EngineAPI.INxDataPage[];
 };
 
 export interface PageInfo {
