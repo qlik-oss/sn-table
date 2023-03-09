@@ -116,6 +116,12 @@ export interface ContextValue {
     changeSortOrder: ChangeSortOrder;
     applyColumnWidths?: ApplyColumnWidths;
     styling: TableStyling;
+    direction?: Direction;
+    footerContainer?: HTMLElement;
+    rect: stardust.Rect;
+    announce: Announce;
+    areBasicFeaturesEnabled: boolean;
+    setPageInfo: SetPageInfo;
   };
   tableData: TableData;
   setYScrollbarWidth: (width: number) => void;
@@ -223,6 +229,12 @@ export interface ContextProviderProps {
   pageInfo?: PageInfo;
   setPage?: stardust.SetStateFn<number>;
   initialDataPages?: EngineAPI.INxDataPage[];
+  direction?: Direction;
+  footerContainer?: HTMLElement;
+  rect: stardust.Rect;
+  announce: Announce;
+  areBasicFeaturesEnabled: boolean;
+  setPageInfo: SetPageInfo;
 }
 
 export interface RenderProps {
@@ -254,25 +266,10 @@ export interface RenderProps {
   applyColumnWidths?: ApplyColumnWidths;
 }
 
-export interface TableWrapperProps {
-  direction?: Direction;
-  rect: stardust.Rect;
-  pageInfo: PageInfo;
-  setPageInfo: SetPageInfo;
-  footerContainer?: HTMLElement;
-  announce: Announce;
-  areBasicFeaturesEnabled: boolean;
-}
-
-export interface TableHeadWrapperProps {
-  areBasicFeaturesEnabled: boolean;
-}
-
 export interface HeadCellContentProps {
   children: JSX.Element;
   column: Column;
   isActive: boolean;
-  areBasicFeaturesEnabled: boolean;
 }
 
 export interface HeadCellMenuProps {
@@ -293,19 +290,11 @@ export interface HeadCellMenuItem {
 }
 
 export interface TableBodyWrapperProps {
-  announce: Announce;
   setShouldRefocus(): void;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | null>;
-  areBasicFeaturesEnabled: boolean;
 }
 
 export interface PaginationContentProps {
-  direction?: 'ltr' | 'rtl';
-  rect: stardust.Rect;
-  pageInfo: PageInfo;
-  setPageInfo: SetPageInfo;
-  footerContainer?: HTMLElement;
-  announce: Announce;
   isSelectionMode: boolean;
   handleChangePage(pageIdx: number): void;
 }

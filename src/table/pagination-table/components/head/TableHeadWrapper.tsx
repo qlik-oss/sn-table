@@ -3,7 +3,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
 import { useContextSelector, TableContext } from '../../../context';
-import { TableHeadWrapperProps } from '../../../types';
 import { DEFAULT_COLUMN_PIXEL_WIDTH, FullSortDirection } from '../../../constants';
 import HeadCellContent from '../../../components/head/HeadCellContent';
 import ColumnAdjuster from '../../../components/head/ColumnAdjuster';
@@ -11,9 +10,9 @@ import CellText from '../../../components/CellText';
 import { BORDER_WIDTH, PADDING } from '../../../styling-defaults';
 import { StyledHeadCell } from './styles';
 
-function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
+function TableHeadWrapper() {
   const { columns } = useContextSelector(TableContext, (value) => value.tableData);
-  const { layout, styling } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, styling, areBasicFeaturesEnabled } = useContextSelector(TableContext, (value) => value.baseProps);
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const headRowRef = useRef<HTMLTableRowElement>(null);
@@ -52,7 +51,7 @@ function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
               aria-sort={ariaSort}
               tabIndex={-1}
             >
-              <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled={areBasicFeaturesEnabled}>
+              <HeadCellContent column={column} isActive={isActive}>
                 <CellText fontSize={styling.head.fontSize}>{column.label}</CellText>
               </HeadCellContent>
               {areBasicFeaturesEnabled && <ColumnAdjuster column={column} isLastColumn={isLastColumn} />}

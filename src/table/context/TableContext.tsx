@@ -39,6 +39,11 @@ export const TableContextProvider = ({
   pageInfo,
   initialDataPages,
   tableWidth = 0,
+  footerContainer,
+  announce,
+  rect,
+  areBasicFeaturesEnabled,
+  setPageInfo,
 }: ContextProviderProps) => {
   const [headRowHeight, setHeadRowHeight] = useState(0);
   const [focusedCellCoord, setFocusedCellCoord] = useState(
@@ -68,6 +73,11 @@ export const TableContextProvider = ({
       changeSortOrder,
       applyColumnWidths,
       styling,
+      footerContainer,
+      announce,
+      rect,
+      areBasicFeaturesEnabled,
+      setPageInfo,
     }),
     [
       app,
@@ -83,6 +93,11 @@ export const TableContextProvider = ({
       changeSortOrder,
       applyColumnWidths,
       styling,
+      footerContainer,
+      announce,
+      rect,
+      areBasicFeaturesEnabled,
+      setPageInfo,
     ]
   );
 

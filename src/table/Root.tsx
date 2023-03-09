@@ -11,48 +11,25 @@ import muiSetup from './mui-setup';
 import { RenderProps, TableWrapperProps } from './types';
 import VirtualizedTable from './virtualized-table/Wrapper';
 import { VirtualTableRenderProps } from './virtualized-table/types';
-import { ApplyColumnWidths } from '../types';
+import { Announce, ApplyColumnWidths } from '../types';
 
 export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.Root) {
-  const {
-    app,
-    model,
-    direction,
-    selectionsAPI,
-    layout,
-    translator,
-    constraints,
-    theme,
-    keyboard,
-    rootElement,
-    embed,
-    changeSortOrder,
-    applyColumnWidths,
-    tableData,
-    ...wrapperProps
-  } = props;
-  const muiTheme = muiSetup(direction);
+  const muiTheme = muiSetup(props.direction);
 
   reactRoot?.render(
-    <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : undefined}>
+    <StyleSheetManager stylisPlugins={props.direction === 'rtl' ? [rtlPluginSc] : undefined}>
       <ThemeProvider theme={muiTheme}>
         <TableContextProvider
-          app={app}
-          model={model as EngineAPI.IGenericObject}
-          tableData={tableData}
-          selectionsAPI={selectionsAPI}
-          layout={layout}
-          translator={translator}
-          constraints={constraints}
-          theme={theme}
-          keyboard={keyboard}
-          rootElement={rootElement as HTMLElement}
-          embed={embed as stardust.Embed}
-          changeSortOrder={changeSortOrder}
-          applyColumnWidths={applyColumnWidths as ApplyColumnWidths}
+          {...props}
+          model={props.model as EngineAPI.IGenericObject}
+          rootElement={props.rootElement as HTMLElement}
+          embed={props.embed as stardust.Embed}
+          applyColumnWidths={props.applyColumnWidths as ApplyColumnWidths}
           tableWidth={props.rect.width}
+          announce={props.announce as Announce}
+          areBasicFeaturesEnabled={props.areBasicFeaturesEnabled as boolean}
         >
-          <TableWrapper {...(wrapperProps as TableWrapperProps)} />
+          <TableWrapper />
         </TableContextProvider>
       </ThemeProvider>
     </StyleSheetManager>

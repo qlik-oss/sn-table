@@ -8,11 +8,9 @@ import { VisuallyHidden, StyledSortButton, StyledHeadCellContent } from './style
 import HeadCellMenu from './HeadCellMenu';
 import { handleHeadKeyDown } from '../../utils/handle-keyboard';
 
-function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }: HeadCellContentProps) {
-  const { constraints, keyboard, translator, rootElement, changeSortOrder } = useContextSelector(
-    TableContext,
-    (value) => value.baseProps
-  );
+function HeadCellContent({ children, column, isActive }: HeadCellContentProps) {
+  const { constraints, keyboard, translator, rootElement, changeSortOrder, areBasicFeaturesEnabled } =
+    useContextSelector(TableContext, (value) => value.baseProps);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const isInSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI.isModal());

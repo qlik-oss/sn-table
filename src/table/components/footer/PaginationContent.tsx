@@ -11,6 +11,7 @@ import { PaginationContentProps } from '../../types';
 import { getFooterStyle } from '../../utils/styling-utils';
 import { useContextSelector, TableContext } from '../../context';
 import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
+import { PageInfo } from '../../../types';
 
 const icons: Record<string, typeof ArrowLeft> = {
   FirstPage: ArrowLeftStop,
@@ -38,19 +39,12 @@ export const shouldShow = (component: string, width: number) => {
   }
 };
 
-function PaginationContent({
-  direction,
-  pageInfo,
-  setPageInfo,
-  footerContainer,
-  isSelectionMode,
-  rect,
-  handleChangePage,
-  announce,
-}: PaginationContentProps) {
+function PaginationContent({ handleChangePage, isSelectionMode }: PaginationContentProps) {
   const { totalRowCount, totalColumnCount, totalPages } = useContextSelector(TableContext, (value) => value.tableData);
+  const { keyboard, translator, theme, constraints, direction, setPageInfo, footerContainer, rect, announce } =
+    useContextSelector(TableContext, (value) => value.baseProps);
+  const pageInfo = useContextSelector(TableContext, (value) => value.pageInfo) as PageInfo;
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
-  const { keyboard, translator, theme, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
   const footerStyle = useMemo(() => getFooterStyle(theme.background), [theme]);
   const onFirstPage = page === 0;
   const onLastPage = page >= totalPages - 1;

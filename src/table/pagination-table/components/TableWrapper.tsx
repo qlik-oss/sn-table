@@ -13,24 +13,32 @@ import useScrollListener from '../../hooks/use-scroll-listener';
 import { handleWrapperKeyDown } from '../../utils/handle-keyboard';
 import { updateFocus, resetFocus } from '../../utils/accessibility-utils';
 import { getCellElement } from '../../utils/get-element-utils';
-import { TableWrapperProps } from '../../types';
 import { StyledTableWrapper } from '../../components/styles';
 import useScrollbarWidth from '../../virtualized-table/hooks/use-scrollbar-width';
 import { FocusTypes } from '../../constants';
+import { PageInfo } from '../../../types';
 
-export default function TableWrapper(props: TableWrapperProps) {
-  const { pageInfo, setPageInfo, direction, footerContainer, announce, areBasicFeaturesEnabled } = props;
-  const { page, rowsPerPage } = pageInfo;
-
+export default function TableWrapper() {
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
     useContextSelector(TableContext, (value) => value.tableData);
-  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints } = useContextSelector(
-    TableContext,
-    (value) => value.baseProps
-  );
+  const {
+    selectionsAPI,
+    rootElement,
+    keyboard,
+    translator,
+    theme,
+    constraints,
+    setPageInfo,
+    direction,
+    footerContainer,
+    announce,
+    areBasicFeaturesEnabled,
+  } = useContextSelector(TableContext, (value) => value.baseProps);
+  const pageInfo = useContextSelector(TableContext, (value) => value.pageInfo) as PageInfo;
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
+  const { page, rowsPerPage } = pageInfo;
 
   const isSelectionMode = selectionsAPI.isModal();
 
@@ -125,13 +133,13 @@ export default function TableWrapper(props: TableWrapperProps) {
         data-testid="table-container"
       >
         <StyledTable customWidth={areBasicFeaturesEnabled} stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
-          <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
+          <TableHeadWrapper />
+          <TableBodyWrapper setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </StyledTable>
       </StyledTableContainer>
       {!constraints.active && (
         <FooterWrapper footerContainer={footerContainer} paginationNeeded={paginationNeeded}>
-          <PaginationContent {...props} handleChangePage={handleChangePage} isSelectionMode={isSelectionMode} />
+          <PaginationContent handleChangePage={handleChangePage} isSelectionMode={isSelectionMode} />
         </FooterWrapper>
       )}
     </StyledTableWrapper>
