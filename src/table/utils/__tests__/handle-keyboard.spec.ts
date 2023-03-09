@@ -343,7 +343,7 @@ describe('handle-keyboard', () => {
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).not.toHaveBeenCalled();
+      expect(accessibilityUtils.moveFocus).not.toHaveBeenCalled();
     });
 
     it('should take the default case when the pressed key is not an arrow key', () => {
@@ -351,7 +351,7 @@ describe('handle-keyboard', () => {
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).not.toHaveBeenCalled();
+      expect(accessibilityUtils.moveFocus).not.toHaveBeenCalled();
     });
 
     it('should call copyCellValue on Total cell when the pressed keys are Ctrl and C keys', () => {
