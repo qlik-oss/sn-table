@@ -3,7 +3,7 @@ import React from 'react';
 import { Announce } from '../../types';
 import { DEFAULT_FOCUS_CELL_COORD, FocusTypes } from '../constants';
 import { CellFocusProps, HandleResetFocusProps } from '../types';
-import { findCellWithTabStop, getCellElement, getNextCellCoord } from './get-element-utils';
+import { findCellWithTabStop, getCellCoordFromCell, getCellElement, getNextCellCoord } from './get-element-utils';
 
 /**
  * Add the tab stop for adjuster hit area and focus that
@@ -41,6 +41,11 @@ export const updateFocus = ({ focusType, cell }: CellFocusProps) => {
       cell.focus();
       cell.setAttribute('tabIndex', '0');
       break;
+    case FocusTypes.FOCUS_BUTTON:
+      // eslint-disable-next-line no-case-declarations
+      const button = cell.querySelector('.sn-table-head-label') as HTMLButtonElement;
+      button.focus();
+      break;
     case FocusTypes.BLUR:
       cell.blur();
       cell.setAttribute('tabIndex', '-1');
@@ -64,22 +69,33 @@ export const moveFocus = (
   rootElement: HTMLElement,
   cellCoord: [number, number],
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
+  focusType: string,
   allowedRows?: {
     top: number;
     bottom: number;
   }
 ) => {
-  updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLTableCellElement });
   const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, allowedRows);
   const nextCell = getCellElement(rootElement, nextCellCoord);
-  updateFocus({ focusType: FocusTypes.FOCUS, cell: nextCell });
+  updateFocus({ focusType, cell: nextCell });
   setFocusedCellCoord(nextCellCoord);
 
   return nextCell;
 };
 
+export const focusBodyFromHead = (
+  rootElement: HTMLElement,
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
+) => {
+  const cell = findCellWithTabStop(rootElement);
+  const newCellCoord = getCellCoordFromCell(rootElement, cell);
+  cell.focus();
+  setFocusedCellCoord(newCellCoord);
+};
+
 /**
- * Resets and adds new focus to the cell at position newCoord. no need for element.focus() since that is done natively
+ * Resets and adds new focus to the cell at position newCoord.
+ * No need for element.focus() since that is done natively when clicking.
  */
 export const removeTabAndFocusCell = (
   newCoord: [number, number],

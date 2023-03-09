@@ -80,3 +80,18 @@ export const getPreviousMenuItem = (currentFocus: Element): Element | undefined 
   }
   return previousItem;
 };
+
+export const getCellCoordFromCell = (rootElement: HTMLElement, cell: HTMLTableCellElement): [number, number] => {
+  const width = rootElement.getElementsByClassName('sn-table-head-cell').length;
+  const cells = rootElement.getElementsByClassName('sn-table-cell');
+
+  let cellIdx = 0;
+  for (let idx = 0; idx < cells.length; idx++) {
+    if (cells[idx] === cell) {
+      cellIdx = idx;
+      break;
+    }
+  }
+
+  return [Math.ceil(cellIdx / width), cellIdx % width];
+};

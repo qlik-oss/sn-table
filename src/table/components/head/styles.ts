@@ -10,14 +10,15 @@ import { BORDER_WIDTH, DEFAULT_FONT_SIZE, PADDING } from '../../styling-defaults
 // ---------- HeadCellContent ----------
 
 export const StyledSortButton = styled(Button, {
-  shouldForwardProp: (prop: string) => prop !== 'isActive' && prop !== 'textAlign',
-})(({ isActive, textAlign, theme }) => ({
+  shouldForwardProp: (prop: string) => prop !== 'isActive' && prop !== 'textAlign' && prop !== 'disabled',
+})(({ isActive, textAlign, disabled, theme }) => ({
   textAlign,
   height: 'auto',
   fontSize: 'inherit',
   padding: theme.spacing(0.5, 1),
   color: 'inherit',
   alignItems: 'flex-end',
+  cursor: disabled ? 'auto' : 'pointer',
   '&&:focus, &&:hover': {
     '& svg': {
       opacity: isActive ? 1 : 0.5,
@@ -27,8 +28,12 @@ export const StyledSortButton = styled(Button, {
     opacity: isActive ? 1 : 0,
     fontSize: DEFAULT_FONT_SIZE,
   },
+  '& .Mui-disabled': {
+    color: 'inherit',
+  },
   '& .MuiButton-endIcon, .MuiButton-startIcon': {
     marginBottom: '2px',
+    display: disabled ? 'none' : 'inherit',
   },
 }));
 

@@ -25,10 +25,17 @@ const stylingPanel = {
                     headerFontSize: {
                       component: 'integer',
                       ref: 'header.fontSize',
+                      translation: 'properties.fontSize',
                       width: 9,
                       min: 5,
                       max: 300,
-                      placeholder: '',
+                      defaultValue(item, data, args) {
+                        const currentTheme = args.theme.current();
+                        return parseInt(
+                          currentTheme.object?.straightTable?.header?.fontSize ?? currentTheme.fontSize,
+                          10
+                        );
+                      },
                       change(data) {
                         data.header.fontSize = !data.header.fontSize
                           ? data.header.fontSize
@@ -40,6 +47,10 @@ const stylingPanel = {
                       ref: 'header.fontColor',
                       type: 'object',
                       component: 'color-picker',
+                      defaultValue(item, data, args) {
+                        const currentTheme = args.theme.current();
+                        return { color: currentTheme.object?.straightTable?.header?.color ?? currentTheme.color };
+                      },
                       dualOutput: true,
                     },
                   },
@@ -63,10 +74,17 @@ const stylingPanel = {
                     contentFontSize: {
                       component: 'integer',
                       ref: 'content.fontSize',
+                      translation: 'properties.fontSize',
                       width: 9,
                       min: 5,
                       max: 300,
-                      placeholder: '',
+                      defaultValue(item, data, args) {
+                        const currentTheme = args.theme.current();
+                        return parseInt(
+                          currentTheme.object?.straightTable?.content?.fontSize ?? currentTheme.fontSize,
+                          10
+                        );
+                      },
                       change(data) {
                         data.content.fontSize = !data.content.fontSize
                           ? data.content.fontSize
@@ -77,6 +95,10 @@ const stylingPanel = {
                       ref: 'content.fontColor',
                       type: 'object',
                       component: 'color-picker',
+                      defaultValue(item, data, args) {
+                        const currentTheme = args.theme.current();
+                        return { color: currentTheme.object?.straightTable?.content?.color ?? currentTheme.color };
+                      },
                       dualOutput: true,
                     },
                   },
@@ -194,7 +216,8 @@ const getTotals = (env) => ({
       },
     },
   ],
-  show: !env?.anything?.sense?.isUnsupportedFeature?.('totals'),
+  show:
+    env.flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES') && !env?.anything?.sense?.isUnsupportedFeature?.('totals'),
 });
 
 const getChartExploration = (env) =>

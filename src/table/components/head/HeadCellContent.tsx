@@ -6,25 +6,38 @@ import { FullSortDirection } from '../../constants';
 import getHeadIcons from '../../utils/get-head-icons';
 import { VisuallyHidden, StyledSortButton, StyledHeadCellContent } from './styles';
 import HeadCellMenu from './HeadCellMenu';
+import { handleHeadKeyDown } from '../../utils/handle-keyboard';
 
 function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }: HeadCellContentProps) {
-  const { constraints, selectionsAPI, keyboard, translator, changeSortOrder } = useContextSelector(
+  const { constraints, keyboard, translator, rootElement, changeSortOrder } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );
+  const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
+  const isInSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI.isModal());
 
   const { startIcon, endIcon, lockIcon } = getHeadIcons(column);
-  const tabIndex = !keyboard.enabled ? 0 : -1;
-  const isInteractionEnabled = !constraints.active && !selectionsAPI.isModal();
+  const isInteractionEnabled = !constraints.active && !isInSelectionMode;
+  const tabIndex = isInteractionEnabled && !keyboard.enabled ? 0 : -1;
 
   const handleSort = () => isInteractionEnabled && changeSortOrder(column);
+  const onKeyDown = (evt: React.KeyboardEvent) =>
+    handleHeadKeyDown({
+      evt,
+      rootElement,
+      cellCoord: [0, column.pageColIdx],
+      setFocusedCellCoord,
+      isInteractionEnabled,
+      areBasicFeaturesEnabled,
+    });
 
   return (
-    <StyledHeadCellContent>
+    <StyledHeadCellContent onKeyDown={onKeyDown}>
       {lockIcon}
 
       <StyledSortButton
+        className="sn-table-head-label"
         isActive={isActive}
         textAlign={column.align}
         title={!constraints.passive ? FullSortDirection[column.sortDirection] : undefined} // passive: turn off tooltips.
@@ -34,6 +47,7 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
         endIcon={endIcon}
         onClick={handleSort}
         tabIndex={tabIndex}
+        disabled={!isInteractionEnabled}
       >
         {children}
         {isFocusInHead && (
@@ -43,7 +57,7 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
         )}
       </StyledSortButton>
 
-      {areBasicFeaturesEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
+      {areBasicFeaturesEnabled && isInteractionEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
     </StyledHeadCellContent>
   );
 }

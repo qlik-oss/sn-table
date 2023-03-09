@@ -1,18 +1,18 @@
+/* eslint-disable no-case-declarations */
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 
-import { focusSelectionToolbar, announceSelectionState, moveFocus } from './accessibility-utils';
+import { focusSelectionToolbar, moveFocus, focusBodyFromHead, updateFocus } from './accessibility-utils';
 import {
   preventDefaultBehavior,
   isCtrlShift,
   isArrowKey,
   isCtrlCmd,
   shouldBubble,
-  shouldSelectMultiValues,
+  bodyArrowHelper,
 } from './keyboard-utils';
-import { getNextMenuItem, getPreviousMenuItem } from './get-element-utils';
+import { findCellWithTabStop, getNextMenuItem, getPreviousMenuItem } from './get-element-utils';
 import copyCellValue from './copy-utils';
-import { handleNavigateTop } from './handle-scroll';
 import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownProps, SelectionDispatch } from '../types';
 import { KeyCodes, SelectionActions } from '../constants';
 
@@ -71,34 +71,39 @@ export const handleHeadKeyDown = ({
   evt,
   rootElement,
   cellCoord,
-  column,
-  changeSortOrder,
-  isInteractionEnabled,
   setFocusedCellCoord,
+  isInteractionEnabled,
   areBasicFeaturesEnabled,
 }: HandleHeadKeyDownProps) => {
   if (!isInteractionEnabled) {
     preventDefaultBehavior(evt);
     return;
   }
+
+  // TODO: See if it bubbles correctly
   if (shouldBubble(evt)) return;
   preventDefaultBehavior(evt);
+
+  const target = evt.target as HTMLElement;
+  const isLastHeadCell = !target.closest('.sn-table-cell')?.nextSibling;
 
   switch (evt.key) {
     case KeyCodes.LEFT:
     case KeyCodes.RIGHT:
+      if (evt.key === KeyCodes.RIGHT && isLastHeadCell) {
+        focusBodyFromHead(rootElement, setFocusedCellCoord);
+      } else {
+        moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, 'focusButton');
+      }
+      break;
     case KeyCodes.DOWN:
-      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
+      updateFocus({ focusType: 'removeTab', cell: findCellWithTabStop(rootElement) });
+      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, 'focus');
       break;
-    case KeyCodes.SPACE:
-    case KeyCodes.ENTER:
-      // Space bar / Enter: update the sorting
-      changeSortOrder(column);
-      break;
-    case KeyCodes.C: {
+    case KeyCodes.C:
       areBasicFeaturesEnabled && isCtrlCmd(evt) && copyCellValue(evt);
+
       break;
-    }
     default:
       break;
   }
@@ -137,8 +142,7 @@ export const handleTotalKeyDown = (
   rootElement: HTMLElement,
   cellCoord: [number, number],
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  isSelectionMode: boolean,
-  areBasicFeaturesEnabled: boolean
+  isSelectionMode: boolean
 ) => {
   if (isSelectionMode) {
     preventDefaultBehavior(evt);
@@ -148,15 +152,16 @@ export const handleTotalKeyDown = (
   preventDefaultBehavior(evt);
 
   switch (evt.key) {
+    // TODO: fix keyboard move for totals
     case KeyCodes.LEFT:
     case KeyCodes.RIGHT:
     case KeyCodes.UP:
     case KeyCodes.DOWN: {
-      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
+      // moveBodyFocus(evt, rootElement, cellCoord, setFocusedCellCoord);
       break;
     }
     case KeyCodes.C: {
-      areBasicFeaturesEnabled && isCtrlCmd(evt) && copyCellValue(evt);
+      isCtrlCmd(evt) && copyCellValue(evt);
       break;
     }
     default:
@@ -189,35 +194,23 @@ export const handleBodyKeyDown = ({
   if (shouldBubble(evt, isSelectionMode, keyboard.enabled, paginationNeeded)) return;
   preventDefaultBehavior(evt);
 
-  // Adjust the cellCoord depending on the totals position
-  const firstBodyRowIdx = totalsPosition.atTop ? 2 : 1;
-  const cellCoord: [number, number] = [cell.pageRowIdx + firstBodyRowIdx, cell.pageColIdx];
-  // Make sure you can't navigate to header (and totals) in selection mode
-  const allowedRows = {
-    top: isSelectionMode ? firstBodyRowIdx : 0,
-    bottom: isSelectionMode && totalsPosition.atBottom ? 1 : 0,
-  };
-
   switch (evt.key) {
     case KeyCodes.UP:
-    case KeyCodes.DOWN: {
-      evt.key === KeyCodes.UP && handleNavigateTop([cell.pageRowIdx, cell.pageColIdx], rootElement);
-      const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, allowedRows);
-      // Shift + up/down arrow keys: select multiple values
-      if (shouldSelectMultiValues(areBasicFeaturesEnabled, isSelectionsEnabled, evt, cell)) {
-        selectionDispatch({
-          type: SelectionActions.SELECT_MULTI_ADD,
-          payload: { cell, evt, announce },
-        });
-      } else {
-        // When not selecting multiple we need to announce the selection state of the cell
-        announceSelectionState(announce, nextCell, isSelectionMode);
-      }
-      break;
-    }
+    case KeyCodes.DOWN:
     case KeyCodes.LEFT:
     case KeyCodes.RIGHT:
-      moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, allowedRows);
+      bodyArrowHelper({
+        evt,
+        rootElement,
+        cell,
+        selectionDispatch,
+        isSelectionsEnabled,
+        setFocusedCellCoord,
+        announce,
+        totalsPosition,
+        isSelectionMode,
+        areBasicFeaturesEnabled,
+      });
       break;
     // Space bar: Selects value.
     case KeyCodes.SPACE:

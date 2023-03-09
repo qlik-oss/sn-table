@@ -31,6 +31,7 @@ export enum KeyCodes {
 
 export enum FocusTypes {
   FOCUS = 'focus',
+  FOCUS_BUTTON = 'focusButton',
   BLUR = 'blur',
   ADD_TAB = 'addTab',
   REMOVE_TAB = 'removeTab',
@@ -56,4 +57,4 @@ export const DEFAULT_COLUMN_PERCENTAGE_WIDTH = 20;
 
 export const PAGINATION_HEIGHT = 40;
 
-export const DEFAULT_FOCUS_CELL_COORD = [0, 0] as [number, number];
+export const DEFAULT_FOCUS_CELL_COORD = [1, 0] as [number, number];
