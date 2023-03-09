@@ -83,7 +83,7 @@ export const handleHeadKeyDown = ({
 
   // TODO: See if it bubbles correctly
   if (shouldBubble(evt)) return;
-  preventDefaultBehavior(evt);
+  evt.stopPropagation();
 
   const target = evt.target as HTMLElement;
   const isLastHeadCell = !target.closest('.sn-table-cell')?.nextSibling;
@@ -117,9 +117,9 @@ export const handleHeadCellMenuKeyDown = (event: React.KeyboardEvent<HTMLLIEleme
   const { key, target } = event;
   const currentFocusItem = document.activeElement ?? (target as HTMLElement);
   // The rest key are handled by handleKeyDown in MUIMenuList
-  if (key === 'ArrowDown' || key === 'ArrowUp') {
+  if (key === KeyCodes.DOWN || key === KeyCodes.UP) {
     const getNewFocusItem = (currentItem: Element) =>
-      key === 'ArrowDown' ? getNextMenuItem(currentItem) : getPreviousMenuItem(currentItem);
+      key === KeyCodes.DOWN ? getNextMenuItem(currentItem) : getPreviousMenuItem(currentItem);
     // Prevent scroll of the page
     // Stop triggering handleKeyDown in MUIMenuList
     preventDefaultBehavior(event);
