@@ -31,7 +31,7 @@ function TableTotals() {
             headRowHeight={headRowHeight}
             atTop={atTop}
             key={column.id}
-            align={column.align}
+            align={column.totalsCellTextAlign}
             className="sn-table-cell"
             tabIndex={tabIndex}
             onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {

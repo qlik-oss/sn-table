@@ -1,3 +1,4 @@
+import { autoAlign } from './table/utils/styling-utils';
 import {
   TableLayout,
   PageInfo,
@@ -7,6 +8,7 @@ import {
   ExtendedNxDimensionInfo,
   Column,
   TableData,
+  Align,
 } from './types';
 
 const MAX_CELLS = 10000;
@@ -48,7 +50,8 @@ export function getTotalPosition(layout: TableLayout, areBasicFeaturesEnabled = 
 }
 
 /**
- * Gets the totals text for a column
+ * Gets the totals label in the first column
+ * Gets the qText for each of the rest of columns
  */
 export function getTotalInfo(layout: TableLayout, colIdx: number, pageColIdx: number, numDims: number) {
   if (colIdx >= numDims) return layout.qHyperCube.qGrandTotalRow[colIdx - numDims]?.qText ?? '';
@@ -79,7 +82,11 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
   } = info;
   const isHidden = qError?.qErrorCode === 7005;
   const isLocked = isDim && (info as ExtendedNxDimensionInfo).qLocked;
-  const autoAlign = isDim ? 'left' : 'right';
+  const { qDimensionType } = info as ExtendedNxDimensionInfo;
+  const autoHeadCellTextAlign = qDimensionType === 'N' || qDimensionType === undefined ? 'right' : 'left';
+  const headCellTextAlign = !textAlign || textAlign.auto ? autoHeadCellTextAlign : textAlign.align;
+  const autoTotalsCellTextAlign = isDim ? 'left' : 'right';
+  const totalsCellTextAlign = !textAlign || textAlign.auto ? autoTotalsCellTextAlign : textAlign.align;
 
   let fieldIndex = 0;
   let fieldId = '';
@@ -101,7 +108,9 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
       columnWidth,
       id: `col-${pageColIdx}`,
       label: qFallbackTitle,
-      align: !textAlign || textAlign.auto ? autoAlign : textAlign.align,
+      headCellTextAlign,
+      totalsCellTextAlign,
+      textAlign: !textAlign || textAlign.auto ? 'auto' : textAlign.align,
       stylingIDs: qAttrExprInfo.map((expr) => expr.id),
       // making sure that qSortIndicator is either A or D
       sortDirection: qSortIndicator && qSortIndicator !== 'N' ? qSortIndicator : 'A',
@@ -168,6 +177,7 @@ export default async function manageData(
     columns.forEach((c, pageColIdx) => {
       row[c.id] = {
         ...r[pageColIdx],
+        align: (c.textAlign === 'auto' ? autoAlign(r[pageColIdx]) : c.textAlign) as Align,
         rowIdx: pageRowIdx + top,
         colIdx: c.colIdx,
         pageRowIdx,

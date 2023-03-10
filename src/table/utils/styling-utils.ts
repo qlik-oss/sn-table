@@ -311,3 +311,6 @@ export function getSelectionStyle(styling: CellStyle, cellSelectionState: Select
     ...selectionStyling,
   };
 }
+
+export const autoAlign = (cell: EngineAPI.INxCell) =>
+  (cell.qNum || cell.qNum === 0) && !Number.isNaN(+cell.qNum) ? 'right' : 'left';

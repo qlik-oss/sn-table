@@ -61,7 +61,7 @@ function TableBodyWrapper({
           className="sn-table-row"
         >
           {columns.map((column, columnIndex) => {
-            const { id, align } = column;
+            const { id } = column;
             const cell = row[id] as Cell;
             const CellRenderer = columnRenderers[columnIndex];
             const tabIndex = rowIndex === 0 && columnIndex === 0 && !totalsPosition.atTop && !keyboard.enabled ? 0 : -1;
@@ -90,7 +90,7 @@ function TableBodyWrapper({
                   cell={cell}
                   column={column}
                   key={id}
-                  align={align}
+                  align={cell.align}
                   styling={cellStyle} // TODO see if we should rename this to cellStyle
                   tabIndex={tabIndex}
                   announce={announce}

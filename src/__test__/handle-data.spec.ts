@@ -21,7 +21,6 @@ describe('handle-data', () => {
       label: `title-${colIdx}`,
       fieldId: isDim ? `title-${colIdx}` : '',
       id: `col-${pageColIdx}`,
-      align: isDim ? 'left' : 'right',
       stylingIDs: [] as string[],
       totalInfo: totals,
       sortDirection: 'A',
@@ -30,6 +29,9 @@ describe('handle-data', () => {
       isLocked,
       qApprMaxGlyphCount: 3,
       qReverseSort: false,
+      textAlign: 'auto',
+      totalsCellTextAlign: 'left',
+      headCellTextAlign: 'right',
     });
 
     it('should return column info for dimension', () => {
@@ -40,9 +42,20 @@ describe('handle-data', () => {
     it('should return column info for dimension with align center', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].textAlign = { auto: false, align: 'center' };
       const expected = getExpectedInfo(true);
-      expected.align = 'center';
+      expected.textAlign = 'center';
+      expected.headCellTextAlign = 'center';
+      expected.totalsCellTextAlign = 'center';
 
       const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
+      expect(columnInfo).toEqual(expected);
+    });
+
+    it('should return column info for dimension with head cell align right', () => {
+      layout.qHyperCube.qDimensionInfo[colIdx].qDimensionType = 'N';
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
+      const expected = getExpectedInfo(true);
+      expected.headCellTextAlign = 'right';
+
       expect(columnInfo).toEqual(expected);
     });
 
@@ -76,10 +89,13 @@ describe('handle-data', () => {
       expect(columnInfo).toEqual(getExpectedInfo(true, '#someId'));
     });
 
-    it('should return column info for measure', () => {
+    it('should return column info for measure with totals cell align right', () => {
       colIdx = 3;
       const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
-      expect(columnInfo).toEqual(getExpectedInfo(false, undefined, false, '200'));
+      const expected = getExpectedInfo(false, undefined, false, '200');
+      expected.totalsCellTextAlign = 'right';
+
+      expect(columnInfo).toEqual(expected);
     });
   });
 

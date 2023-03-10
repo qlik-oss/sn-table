@@ -22,7 +22,7 @@ describe('getHeadIcons', () => {
     column = {
       sortDirection: 'A',
       isLocked: false,
-      align: 'left',
+      headCellTextAlign: 'left',
     } as Column;
   });
 
@@ -39,14 +39,14 @@ describe('getHeadIcons', () => {
   });
 
   it('should return ascending as endIcon and no lock icon when sortDirection i A and align is right', () => {
-    column.align = 'right';
+    column.headCellTextAlign = 'right';
 
     const icons = getHeadIcons(column);
     expect(icons).toEqual({ startIcon: ascending, lockIcon: undefined });
   });
 
   it('should return descending as endIcon and no lock icon when sortDirection i D and align is right', () => {
-    column.align = 'right';
+    column.headCellTextAlign = 'right';
     column.sortDirection = 'D';
 
     const icons = getHeadIcons(column);

@@ -47,7 +47,7 @@ function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
             <StyledHeadCell
               headerStyle={{ ...styling.head, ...widthStyle }}
               key={column.id}
-              align={column.align}
+              align={column.headCellTextAlign}
               className="sn-table-head-cell sn-table-cell"
               aria-sort={ariaSort}
               tabIndex={-1}
