@@ -237,6 +237,9 @@ describe('accessibility-utils', () => {
           contains: () => containsRelatedTarget,
           querySelector: (identifier: string) => (identifier.slice(-1) === '1' ? announcement1 : announcement2),
         },
+        relatedTarget: {
+          closest: () => undefined,
+        },
       } as unknown as FocusEvent;
       shouldRefocus = { current: false };
       keyboard = { blur: jest.fn(), focus: jest.fn(), focusSelection: jest.fn(), enabled: true, active: false };
@@ -265,6 +268,13 @@ describe('accessibility-utils', () => {
 
     it('should not call blur when keyboard.enabled is false', () => {
       keyboard.enabled = false;
+
+      accessibilityUtils.handleFocusoutEvent(focusoutEvent, shouldRefocus, keyboard);
+      expect(keyboard.blur).not.toHaveBeenCalled();
+    });
+
+    it('should not call blur when relatedTarget is in the header menu', () => {
+      (focusoutEvent.relatedTarget as HTMLElement).closest = () => ({}); // .closest = () => {};
 
       accessibilityUtils.handleFocusoutEvent(focusoutEvent, shouldRefocus, keyboard);
       expect(keyboard.blur).not.toHaveBeenCalled();
