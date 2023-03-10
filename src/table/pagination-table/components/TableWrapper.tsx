@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, memo } from 'react';
+import React, { useRef, useCallback, useEffect, memo } from 'react';
 
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './body/TableBodyWrapper';
@@ -28,7 +28,6 @@ function TableWrapper(props: TableWrapperProps) {
     (value) => value.baseProps
   );
 
-  // const keyboardActive = useContextSelector(TableContext, (value) => value.baseProps.keyboard.active);
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
@@ -44,6 +43,10 @@ function TableWrapper(props: TableWrapperProps) {
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   }, [rootElement]);
+
+  useEffect(() => {
+    tableContainerRef.current?.scrollTo(0, 0);
+  }, [pageInfo, totalRowCount]);
 
   const handleChangePage = useCallback(
     (pageIdx: number) => {

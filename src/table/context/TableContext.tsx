@@ -35,6 +35,9 @@ export const TableContextProvider = ({
   embed,
   changeSortOrder,
   applyColumnWidths,
+  setPage,
+  pageInfo,
+  initialDataPages,
   tableWidth = 0,
 }: ContextProviderProps) => {
   const [headRowHeight, setHeadRowHeight] = useState(0);
@@ -99,6 +102,9 @@ export const TableContextProvider = ({
         baseProps,
         tableData,
         setYScrollbarWidth,
+        setPage,
+        pageInfo,
+        initialDataPages,
       }}
     >
       {children}

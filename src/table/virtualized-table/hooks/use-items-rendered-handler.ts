@@ -27,6 +27,13 @@ export interface ItemsHandlerProps {
   gridState: React.MutableRefObject<GridState>;
 }
 
+/**
+ * The callback function return by this hook is called when the range of items
+ * rendered by react-window changes.
+ *
+ * The main purpose of it, is to load data as the user scrolls. Where the "buffer" is
+ * there to avoid rendering empty cells while the user is scrolling.
+ */
 const useItemsRendererHandler = ({
   layout,
   loadRows,

@@ -21,12 +21,13 @@ describe('<Table />', () => {
   let constraints: stardust.Constraints;
   let tableData: TableData;
   let rootElement: HTMLElement;
+  let dataPages: EngineAPI.INxDataPage[];
   const app = {} as EngineAPI.IApp;
   const dimensionCount = 2;
   const measureCount = 1;
   const rowCount = 5;
 
-  const renderTable = async () => {
+  const renderTable = async (initialDataPages?: EngineAPI.INxDataPage[]) => {
     tableData = {
       ...EMPTY_TABLE_DATA,
       paginationNeeded: false,
@@ -45,6 +46,7 @@ describe('<Table />', () => {
           tableData={tableData}
           rootElement={rootElement}
           tableWidth={rect.width}
+          initialDataPages={initialDataPages}
         >
           <TestableTable pageInfo={pageInfo} rect={rect} />
         </TestWithProviders>
@@ -68,7 +70,7 @@ describe('<Table />', () => {
       rowsPerPageOptions: [],
     };
 
-    const dataPages = generateDataPages(rowCount, dimensionCount + measureCount);
+    dataPages = generateDataPages(rowCount, dimensionCount + measureCount) as unknown as EngineAPI.INxDataPage[];
     // Hack be able to tell the difference between dimension and measure values
     dataPages[0].qMatrix.forEach((row, rowIdx) => {
       row.forEach((cell, colIdx) => {
@@ -78,12 +80,12 @@ describe('<Table />', () => {
           cell.qText = `measure-c${colIdx}-r${rowIdx}`;
         }
 
-        cell.qElemNumber = rowIdx.toString();
+        cell.qElemNumber = rowIdx;
       });
     });
 
     model = {
-      getHyperCubeData: jest.fn() as jest.MockedFunction<() => Promise<EngineAPI.INxPivotPage[]>>,
+      getHyperCubeData: jest.fn() as jest.MockedFunction<() => Promise<EngineAPI.INxDataPage[]>>,
     } as unknown as EngineAPI.IGenericObject;
     (model.getHyperCubeData as jest.Mock).mockResolvedValue(dataPages);
 
@@ -111,8 +113,20 @@ describe('<Table />', () => {
 
   afterEach(() => jest.restoreAllMocks());
 
-  it('should render', async () => {
-    await renderTable();
+  it('should render without initial data pages', async () => {
+    await renderTable(undefined);
+
+    await waitFor(() => expect(screen.getByTestId('sticky-container')).toBeVisible());
+    await waitFor(() => expect(screen.getByText('title-0')).toBeVisible()); // A header value
+    await waitFor(() => expect(screen.getByText('title-1')).toBeVisible()); // A header value
+    await waitFor(() => expect(screen.getByText('dimension-c0-r0')).toBeVisible()); // A dimension value
+    await waitFor(() => expect(screen.getByText('dimension-c1-r0')).toBeVisible()); // A dimension value
+    await waitFor(() => expect(screen.getByText('measure-c2-r0')).toBeVisible()); // A measure value
+  });
+
+  it('should render with initial data pages', async () => {
+    (model.getHyperCubeData as jest.Mock).mockResolvedValue([]);
+    await renderTable(dataPages);
 
     await waitFor(() => expect(screen.getByTestId('sticky-container')).toBeVisible());
     await waitFor(() => expect(screen.getByText('title-0')).toBeVisible()); // A header value

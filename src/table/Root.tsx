@@ -75,6 +75,9 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
     changeSortOrder,
     tableData,
     applyColumnWidths,
+    setPage,
+    pageInfo,
+    initialDataPages,
   } = props;
   const muiTheme = muiSetup('ltr');
 
@@ -96,6 +99,9 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
           tableData={tableData}
           applyColumnWidths={applyColumnWidths}
           tableWidth={rect.width}
+          setPage={setPage}
+          pageInfo={pageInfo}
+          initialDataPages={initialDataPages}
         >
           <VirtualizedTable rect={rect} />
         </TableContextProvider>

@@ -59,6 +59,7 @@ describe('<TableWrapper />', () => {
     rect = {
       width: 750,
     } as unknown as stardust.Rect;
+    window.HTMLElement.prototype.scrollTo = jest.fn();
   });
 
   afterEach(() => jest.clearAllMocks());

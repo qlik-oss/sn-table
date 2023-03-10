@@ -4,7 +4,7 @@ import { BodyArrowHelperProps } from '../types';
 import { announceSelectionState, moveFocus, updateFocus } from './accessibility-utils';
 import { handleNavigateTop } from './handle-scroll';
 
-export const preventDefaultBehavior = (evt: React.KeyboardEvent) => {
+export const preventDefaultBehavior = (evt: React.KeyboardEvent | MouseEvent | React.MouseEvent<HTMLLIElement>) => {
   evt.stopPropagation();
   evt.preventDefault();
 };

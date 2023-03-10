@@ -115,7 +115,7 @@ describe('<HeadCellMenu />', () => {
     expect(element).not.toBeVisible();
   });
 
-  it('should not render head cell menu button when isDimension is false', () => {
+  it('should render head cell menu button when isDimension is false but the opacity is 0', () => {
     column = {
       ...column,
       isDim: false,
@@ -123,7 +123,8 @@ describe('<HeadCellMenu />', () => {
     renderTableHeadCellMenu();
 
     const element = screen.queryByRole('button');
-    expect(element).toBeNull();
+    expect(element).toBeInTheDocument();
+    expect(element).not.toBeVisible();
   });
 
   it('should render correct menu items', async () => {

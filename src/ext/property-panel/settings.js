@@ -4,6 +4,7 @@ const stylingPanel = {
     {
       component: 'styling-panel',
       chartTitle: 'Object.StraightTable',
+      subtitle: 'LayerStyleEditor.component.styling',
       translation: 'LayerStyleEditor.component.styling',
       ref: 'components',
       useGeneral: true,

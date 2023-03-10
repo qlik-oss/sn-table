@@ -8,9 +8,10 @@ import {
   ExtendedSelectionAPI,
   ExtendedTheme,
   ExtendedTranslator,
-  TableData,
   TableLayout,
 } from '../types';
+import useInitialDataPages from './virtualized-table/use-initial-data-pages';
+import usePageInfo from './virtualized-table/use-page-info';
 
 interface UseVirtualizedTable {
   app: EngineAPI.IApp | undefined;
@@ -30,8 +31,6 @@ interface UseVirtualizedTable {
   applyColumnWidths: ApplyColumnWidths;
 }
 
-const NO_TABLE_DATA = {} as TableData;
-
 const useVirtualizedTable = ({
   app,
   layout,
@@ -50,16 +49,12 @@ const useVirtualizedTable = ({
   applyColumnWidths,
 }: UseVirtualizedTable) => {
   const shouldRender = areBasicFeaturesEnabled && layout.presentation?.usePagination === false;
-  const tableData = useMemo(() => {
-    if (shouldRender) {
-      return getVirtualScrollTableData(layout, constraints);
-    }
-
-    return NO_TABLE_DATA;
-  }, [layout, constraints, shouldRender]);
+  const tableData = useMemo(() => getVirtualScrollTableData(layout, constraints), [layout, constraints]);
+  const { pageInfo, setPage } = usePageInfo(layout, shouldRender);
+  const { initialDataPages, isLoading } = useInitialDataPages({ model, layout, page: pageInfo.page, shouldRender });
 
   useEffect(() => {
-    if (!shouldRender || !model || !changeSortOrder) return;
+    if (!shouldRender || !model || !changeSortOrder || !initialDataPages || isLoading) return;
 
     renderVirtualizedTable(
       {
@@ -77,6 +72,9 @@ const useVirtualizedTable = ({
         changeSortOrder,
         tableData,
         applyColumnWidths,
+        setPage,
+        pageInfo,
+        initialDataPages,
       },
       reactRoot
     );
@@ -97,6 +95,10 @@ const useVirtualizedTable = ({
     reactRoot,
     tableData,
     applyColumnWidths,
+    setPage,
+    pageInfo,
+    isLoading,
+    initialDataPages,
   ]);
 };
 
