@@ -5,7 +5,7 @@ import { FIRST_BODY_CELL_COORD, FocusTypes } from '../constants';
 import { CellFocusProps, HandleResetFocusProps } from '../types';
 import { findCellWithTabStop, getCellCoordFromCell, getCellElement, getNextCellCoord } from './get-element-utils';
 
-export const areTabstopsEnabled = (keyboard: stardust.Keyboard) => !keyboard.enabled || keyboard.active;
+export const areTabStopsEnabled = (keyboard: stardust.Keyboard) => !keyboard.enabled || keyboard.active;
 
 /**
  * Removes/adds tab stop and sometimes focus/blurs the cell, depending on focusType
@@ -107,7 +107,7 @@ export const resetFocus = ({
   const selectionCellCoord: [number, number] = [totalsPosition.atTop ? 2 : 1, focusedCellCoord[1]];
   const cellCoord: [number, number] = isSelectionMode ? selectionCellCoord : FIRST_BODY_CELL_COORD;
 
-  if (areTabstopsEnabled(keyboard)) {
+  if (areTabStopsEnabled(keyboard)) {
     // Only run this if updates come from inside table
     const focusType = shouldRefocus.current ? FocusTypes.FOCUS : FocusTypes.ADD_TAB;
     shouldRefocus.current = false;

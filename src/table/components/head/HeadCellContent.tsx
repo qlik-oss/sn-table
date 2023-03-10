@@ -7,7 +7,7 @@ import getHeadIcons from '../../utils/get-head-icons';
 import { VisuallyHidden, StyledSortButton, StyledHeadCellContent } from './styles';
 import HeadCellMenu from './HeadCellMenu';
 import { handleHeadKeyDown } from '../../utils/handle-keyboard';
-import { areTabstopsEnabled } from '../../utils/accessibility-utils';
+import { areTabStopsEnabled } from '../../utils/accessibility-utils';
 
 function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }: HeadCellContentProps) {
   const { constraints, keyboard, translator, rootElement, changeSortOrder } = useContextSelector(
@@ -20,7 +20,7 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
 
   const { startIcon, endIcon, lockIcon } = getHeadIcons(column);
   const isInteractionEnabled = !constraints.active && !isInSelectionMode;
-  const tabIndex = isInteractionEnabled && areTabstopsEnabled(keyboard) ? 0 : -1;
+  const tabIndex = isInteractionEnabled && areTabStopsEnabled(keyboard) ? 0 : -1;
 
   const handleSort = () => isInteractionEnabled && changeSortOrder(column);
   const onKeyDown = (evt: React.KeyboardEvent) =>
