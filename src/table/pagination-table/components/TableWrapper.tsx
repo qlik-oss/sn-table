@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useEffect } from 'react';
 
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './body/TableBodyWrapper';
@@ -43,6 +43,10 @@ export default function TableWrapper(props: TableWrapperProps) {
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   }, [rootElement]);
+
+  useEffect(() => {
+    tableContainerRef.current?.scrollTo(0, 0);
+  }, [pageInfo, totalRowCount]);
 
   const handleChangePage = useCallback(
     (pageIdx: number) => {
