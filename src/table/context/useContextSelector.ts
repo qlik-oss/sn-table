@@ -1,4 +1,5 @@
-import { Context, useContext, useEffect, useMemo, useReducer, useRef } from 'react';
+import { Context, useContext, useEffect, useState } from 'react';
+import useMutableProp from '../virtualized-table/hooks/use-mutable-prop';
 import { getSelectorContext, SelectorContextType } from './createSelectorProvider';
 
 type Selector<TContext, TSelected> = (state: TContext) => TSelected;
@@ -6,30 +7,22 @@ type Selector<TContext, TSelected> = (state: TContext) => TSelected;
 export function useContextSelector<T, TSelected>(context: Context<T>, selector: Selector<T, TSelected>): TSelected {
   const accessorContext = getSelectorContext(context) as Context<SelectorContextType<T>>;
   const [accessor, listeners] = useContext(accessorContext);
-  const [, forceUpdate] = useReducer((dummy) => dummy + 1, 0);
-
-  const latestSelector = useRef(selector);
-  const latestSelectedState = useRef<any>();
-
   const currentValue = accessor();
 
   if (currentValue === undefined) {
     throw new Error('You must call useContextSelector inside a valid context.');
   }
 
-  const selectedState = useMemo(() => selector(currentValue), [currentValue, selector]);
-
-  useEffect(() => {
-    latestSelector.current = selector;
-    latestSelectedState.current = selectedState;
-  }, [currentValue, selectedState, selector]);
+  const [selectedState, setSelectedState] = useState(() => selector(currentValue));
+  const latestSelector = useMutableProp(selector);
+  const latestSelectedState = useMutableProp(selectedState);
 
   useEffect(() => {
     const listener = (nextValue: T) => {
       const newSelectedState = latestSelector.current && latestSelector.current(nextValue);
 
       if (newSelectedState !== latestSelectedState.current) {
-        forceUpdate();
+        setSelectedState(newSelectedState);
       }
     };
 
@@ -38,7 +31,7 @@ export function useContextSelector<T, TSelected>(context: Context<T>, selector: 
     return () => {
       listeners.delete(listener);
     };
-  }, [listeners]);
+  }, [latestSelectedState, latestSelector, listeners]);
 
   return selectedState;
 }
