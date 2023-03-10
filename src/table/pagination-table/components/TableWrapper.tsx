@@ -97,7 +97,6 @@ function TableWrapper(props: TableWrapperProps) {
     String(columns.length),
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
-  console.log('render wrapper');
   return (
     <StyledTableWrapper
       ref={tableWrapperRef}
