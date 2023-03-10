@@ -41,7 +41,7 @@ describe('<HeadCellContent />', () => {
     column = {
       id: '1',
       autoHeadCellTextAlign: 'left',
-      autoTotalsCellTextAlgin: 'left',
+      autoTotalsCellTextAlign: 'left',
       textAlign: {
         auto: true,
         align: 'left',

@@ -83,7 +83,7 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
   const isLocked = isDim && (info as ExtendedNxDimensionInfo).qLocked;
   const { qDimensionType } = info as ExtendedNxDimensionInfo;
   const autoHeadCellTextAlign = qDimensionType === 'N' || qDimensionType === undefined ? 'right' : 'left';
-  const autoTotalsCellTextAlgin = isDim ? 'left' : 'right';
+  const autoTotalsCellTextAlign = isDim ? 'left' : 'right';
 
   let fieldIndex = 0;
   let fieldId = '';
@@ -110,7 +110,7 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
       sortDirection: qSortIndicator && qSortIndicator !== 'N' ? qSortIndicator : 'A',
       totalInfo: getTotalInfo(layout, colIdx, pageColIdx, numDims),
       autoHeadCellTextAlign,
-      autoTotalsCellTextAlgin,
+      autoTotalsCellTextAlign,
       textAlign: {
         auto: !textAlign || textAlign.auto,
         align: textAlign?.align,
