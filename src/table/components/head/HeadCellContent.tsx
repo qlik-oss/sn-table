@@ -8,7 +8,7 @@ import { VisuallyHidden, StyledSortButton, StyledHeadCellContent } from './style
 import HeadCellMenu from './HeadCellMenu';
 import { handleHeadKeyDown } from '../../utils/handle-keyboard';
 
-function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }: HeadCellContentProps) {
+function HeadCellContent({ children, column, isActive, align, areBasicFeaturesEnabled }: HeadCellContentProps) {
   const { constraints, keyboard, translator, rootElement, changeSortOrder } = useContextSelector(
     TableContext,
     (value) => value.baseProps
@@ -17,7 +17,8 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const isInSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI.isModal());
 
-  const { startIcon, endIcon, lockIcon } = getHeadIcons(column);
+  const { sortDirection, pageColIdx } = column;
+  const { startIcon, endIcon, lockIcon } = getHeadIcons(column, align);
   const isInteractionEnabled = !constraints.active && !isInSelectionMode;
   const tabIndex = isInteractionEnabled && !keyboard.enabled ? 0 : -1;
 
@@ -26,7 +27,7 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
     handleHeadKeyDown({
       evt,
       rootElement,
-      cellCoord: [0, column.pageColIdx],
+      cellCoord: [0, pageColIdx],
       setFocusedCellCoord,
       isInteractionEnabled,
       areBasicFeaturesEnabled,
@@ -39,8 +40,8 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
       <StyledSortButton
         className="sn-table-head-label"
         isActive={isActive}
-        textAlign={column.align}
-        title={!constraints.passive ? FullSortDirection[column.sortDirection] : undefined} // passive: turn off tooltips.
+        textAlign={align}
+        title={!constraints.passive ? FullSortDirection[sortDirection] : undefined} // passive: turn off tooltips.
         color="inherit"
         size="small"
         startIcon={startIcon}
@@ -51,13 +52,15 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
       >
         {children}
         {isFocusInHead && (
-          <VisuallyHidden data-testid={`VHL-for-col-${column.pageColIdx}`}>
+          <VisuallyHidden data-testid={`VHL-for-col-${pageColIdx}`}>
             {translator.get('SNTable.SortLabel.PressSpaceToSort')}
           </VisuallyHidden>
         )}
       </StyledSortButton>
 
-      {areBasicFeaturesEnabled && isInteractionEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
+      {areBasicFeaturesEnabled && isInteractionEnabled && (
+        <HeadCellMenu column={column} tabIndex={tabIndex} align={align} />
+      )}
     </StyledHeadCellContent>
   );
 }

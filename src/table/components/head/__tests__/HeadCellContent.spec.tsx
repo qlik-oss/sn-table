@@ -3,13 +3,14 @@ import { stardust } from '@nebula.js/stardust';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import HeadCellContent from '../HeadCellContent';
-import { TableLayout, ChangeSortOrder, ExtendedSelectionAPI, Column } from '../../../../types';
+import { TableLayout, ChangeSortOrder, ExtendedSelectionAPI, Column, Align } from '../../../../types';
 import TestWithProviders from '../../../../__test__/test-with-providers';
 import CellText from '../../CellText';
 
 describe('<HeadCellContent />', () => {
   let column: Column;
   let isActive: boolean;
+  let align: Align;
   let layout: TableLayout;
   let changeSortOrder: ChangeSortOrder;
   let constraints: stardust.Constraints;
@@ -25,7 +26,12 @@ describe('<HeadCellContent />', () => {
         layout={layout}
         changeSortOrder={changeSortOrder}
       >
-        <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled={areBasicFeaturesEnabled}>
+        <HeadCellContent
+          column={column}
+          isActive={isActive}
+          align={align}
+          areBasicFeaturesEnabled={areBasicFeaturesEnabled}
+        >
           <CellText>{column.label}</CellText>
         </HeadCellContent>
       </TestWithProviders>
@@ -34,7 +40,12 @@ describe('<HeadCellContent />', () => {
   beforeEach(() => {
     column = {
       id: '1',
-      align: 'left',
+      autoHeadCellTextAlign: 'left',
+      autoTotalsCellTextAlgin: 'left',
+      textAlign: {
+        auto: true,
+        align: 'left',
+      },
       label: 'someDim',
       sortDirection: 'A',
       isDim: true,

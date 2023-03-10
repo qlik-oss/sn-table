@@ -2,7 +2,7 @@
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { render, fireEvent, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
-import { Column, TableLayout } from '../../../../types';
+import { Column, TableLayout, Align } from '../../../../types';
 import HeadCellMenu from '../HeadCellMenu';
 import TestWithProviders from '../../../../__test__/test-with-providers';
 import * as useFieldSelectionHook from '../../../hooks/use-field-selection';
@@ -18,6 +18,7 @@ describe('<HeadCellMenu />', () => {
   let embed: ExtendedEmbed;
   let layout: TableLayout;
   let column: Column;
+  let align: Align;
   let defaultListboxAnchorOpts: any;
   let fieldInstanceMock: EngineAPI.IField;
   let selectionActionsEnabledStatusMock: Record<string, boolean>;
@@ -44,7 +45,7 @@ describe('<HeadCellMenu />', () => {
         embed={embed}
         model={model}
       >
-        <HeadCellMenu column={column} tabIndex={0} />
+        <HeadCellMenu column={column} tabIndex={0} align={align} />
       </TestWithProviders>
     );
 

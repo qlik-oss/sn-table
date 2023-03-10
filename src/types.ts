@@ -1,9 +1,10 @@
 import { Direction } from '@mui/material';
 import { stardust } from '@nebula.js/stardust';
 
+export type Align = 'left' | 'center' | 'right';
 interface TextAlign {
   auto: boolean;
-  align: 'left' | 'center' | 'right';
+  align: Align;
 }
 
 // properties
@@ -95,6 +96,7 @@ export interface Cell {
   qText?: string;
   qAttrExps?: EngineAPI.INxAttributeExpressionValues;
   qElemNumber: number;
+  qNum?: number | string;
   rowIdx: number;
   colIdx: number;
   pageRowIdx: number;
@@ -126,7 +128,9 @@ export interface Column {
   colIdx: number;
   pageColIdx: number;
   label: string;
-  align: 'left' | 'center' | 'right';
+  autoHeadCellTextAlign: Align;
+  autoTotalsCellTextAlgin: Align;
+  textAlign: TextAlign;
   stylingIDs: string[];
   sortDirection: SortDirection;
   qReverseSort: boolean;

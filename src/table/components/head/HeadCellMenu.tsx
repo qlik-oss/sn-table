@@ -19,7 +19,7 @@ import { TableLayout } from '../../../types';
 import RecursiveMenuList from './MenuList/RecursiveMenuList';
 import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 
-export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
+export default function HeadCellMenu({ column, tabIndex, align }: HeadCellMenuProps) {
   const showSearchMenuItem = column.isDim;
   const anchorRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
@@ -162,7 +162,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
   );
 
   return menuItemGroups.length ? (
-    <HeadCellMenuWrapper rightAligned={column.align === 'right'}>
+    <HeadCellMenuWrapper rightAligned={align === 'right'}>
       <StyledMenuIconButton
         isVisible={openListboxDropdown || openMenuDropdown}
         ref={anchorRef}

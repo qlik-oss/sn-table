@@ -48,7 +48,8 @@ export function getTotalPosition(layout: TableLayout, areBasicFeaturesEnabled = 
 }
 
 /**
- * Gets the totals text for a column
+ * Gets the totals label in the first column
+ * Gets the qText for each of the rest of columns
  */
 export function getTotalInfo(layout: TableLayout, colIdx: number, pageColIdx: number, numDims: number) {
   if (colIdx >= numDims) return layout.qHyperCube.qGrandTotalRow[colIdx - numDims]?.qText ?? '';
@@ -66,6 +67,7 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
   const info = (isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims]) as
     | ExtendedNxMeasureInfo
     | ExtendedNxDimensionInfo;
+
   const {
     qError,
     qFallbackTitle,
@@ -79,7 +81,9 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
   } = info;
   const isHidden = qError?.qErrorCode === 7005;
   const isLocked = isDim && (info as ExtendedNxDimensionInfo).qLocked;
-  const autoAlign = isDim ? 'left' : 'right';
+  const { qDimensionType } = info as ExtendedNxDimensionInfo;
+  const autoHeadCellTextAlign = qDimensionType === 'N' || qDimensionType === undefined ? 'right' : 'left';
+  const autoTotalsCellTextAlgin = isDim ? 'left' : 'right';
 
   let fieldIndex = 0;
   let fieldId = '';
@@ -101,11 +105,16 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
       columnWidth,
       id: `col-${pageColIdx}`,
       label: qFallbackTitle,
-      align: !textAlign || textAlign.auto ? autoAlign : textAlign.align,
       stylingIDs: qAttrExprInfo.map((expr) => expr.id),
       // making sure that qSortIndicator is either A or D
       sortDirection: qSortIndicator && qSortIndicator !== 'N' ? qSortIndicator : 'A',
       totalInfo: getTotalInfo(layout, colIdx, pageColIdx, numDims),
+      autoHeadCellTextAlign,
+      autoTotalsCellTextAlgin,
+      textAlign: {
+        auto: !textAlign || textAlign.auto,
+        align: textAlign?.align,
+      },
     }
   );
 }

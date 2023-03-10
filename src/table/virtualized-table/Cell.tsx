@@ -8,6 +8,7 @@ import CellText from '../components/CellText';
 import getCellStyle from './utils/get-cell-style';
 import { ItemData } from './types';
 import { BORDER_WIDTH, PADDING_LEFT_RIGHT } from './constants';
+import { Cell as CellType } from '../../types';
 
 interface CellProps {
   columnIndex: number;
@@ -18,21 +19,19 @@ interface CellProps {
 
 const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
   const { rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount } = data;
-  const cell = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
+  const cell = rowsInPage[rowIndex]?.[`col-${columnIndex}`] as CellType;
 
   const rowIsHovered = useContextSelector(TableContext, (value) => value.hoverIndex === rowIndex);
   const setHoverIndex = useContextSelector(TableContext, (value) => value.setHoverIndex);
 
   const { handleMouseDown, handleMouseOver, handleMouseUp, cellSelectionState } = useSelector(cell);
 
+  const column = columns[columnIndex];
+  const autoAlign = () => (cell.qNum && !Number.isNaN(+cell.qNum) ? 'right' : 'left');
+  const align = column.textAlign.auto ? autoAlign() : column.textAlign.align;
+
   if (typeof cell === 'object') {
-    const cellStyle = getCellStyle(
-      cell,
-      columns[columnIndex],
-      isHoverEnabled && rowIsHovered,
-      cellSelectionState,
-      bodyStyle
-    );
+    const cellStyle = getCellStyle(cell, column, isHoverEnabled && rowIsHovered, cellSelectionState, bodyStyle);
 
     return (
       <div
@@ -46,7 +45,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           borderBottomWidth: cell.isLastRow ? '0px' : `${BORDER_WIDTH}px`,
           borderRightWidth: cell.isLastColumn ? '0px' : `${BORDER_WIDTH}px`,
           borderStyle: 'solid',
-          justifyContent: columns[columnIndex].align,
+          justifyContent: align,
           padding: `4px ${PADDING_LEFT_RIGHT}px`,
           boxSizing: 'border-box',
           cursor: 'default',

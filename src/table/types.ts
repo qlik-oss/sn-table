@@ -15,6 +15,7 @@ import {
   TotalsPosition,
   Row,
   ApplyColumnWidths,
+  Align,
 } from '../types';
 import { FocusTypes, SelectionActions } from './constants';
 
@@ -272,12 +273,14 @@ export interface HeadCellContentProps {
   children: JSX.Element;
   column: Column;
   isActive: boolean;
+  align: Align;
   areBasicFeaturesEnabled: boolean;
 }
 
 export interface HeadCellMenuProps {
   column: Column;
   tabIndex: number;
+  align: Align;
 }
 
 export type MenuItemGroup = HeadCellMenuItem[];

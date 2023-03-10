@@ -2,11 +2,11 @@ import React from 'react';
 import Lock from '@qlik-trial/sprout/icons/react/Lock';
 import Descending from '@qlik-trial/sprout/icons/react/Descending';
 import Ascending from '@qlik-trial/sprout/icons/react/Ascending';
-import { Column } from '../../types';
+import { Column, Align } from '../../types';
 import { DEFAULT_FONT_SIZE } from '../styling-defaults';
 import { LockWrapper } from '../components/head/styles';
 
-const getHeadIcons = ({ sortDirection, isLocked, align }: Column) => {
+const getHeadIcons = ({ sortDirection, isLocked }: Column, align: Align) => {
   const sortIcon =
     sortDirection === 'A' ? <Ascending height={DEFAULT_FONT_SIZE} /> : <Descending height={DEFAULT_FONT_SIZE} />;
   const lockIcon = isLocked ? (

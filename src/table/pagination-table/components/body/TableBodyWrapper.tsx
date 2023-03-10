@@ -61,8 +61,10 @@ function TableBodyWrapper({
           className="sn-table-row"
         >
           {columns.map((column, columnIndex) => {
-            const { id, align } = column;
+            const { id, textAlign } = column;
             const cell = row[id] as Cell;
+            const autoAlign = () => (cell.qNum && !Number.isNaN(+cell.qNum) ? 'right' : 'left');
+            const align = textAlign.auto ? autoAlign() : textAlign.align;
             const CellRenderer = columnRenderers[columnIndex];
             const tabIndex = rowIndex === 0 && columnIndex === 0 && !totalsPosition.atTop && !keyboard.enabled ? 0 : -1;
             const handleKeyDown = (evt: React.KeyboardEvent) => {

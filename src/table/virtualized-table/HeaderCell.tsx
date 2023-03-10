@@ -23,9 +23,11 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
 
   const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
   const column = columns[index];
+  const { colIdx, textAlign, autoHeadCellTextAlign, label } = column;
   const isLastColumn = columns.length - 1 === index;
-  const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
-  const flexDirection = column.align === 'right' ? 'row-reverse' : 'row';
+  const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === colIdx;
+  const align = textAlign.auto ? autoHeadCellTextAlign : textAlign.align;
+  const flexDirection = align === 'right' ? 'row-reverse' : 'row';
 
   return (
     <div
@@ -38,7 +40,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         borderStyle: 'solid',
         borderWidth: isLastColumn ? '0px 0px 1px 0px' : '0px 1px 1px 0px',
         padding: '4px',
-        justifyContent: column.align,
+        justifyContent: align,
         boxSizing: 'border-box',
         cursor: 'default',
         zIndex: columns.length - index,
@@ -46,9 +48,9 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         userSelect: 'none',
       }}
     >
-      <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled>
+      <HeadCellContent column={column} isActive={isActive} align={align} areBasicFeaturesEnabled>
         <CellText wordBreak lines={3}>
-          {column.label}
+          {label}
         </CellText>
       </HeadCellContent>
       <ColumnAdjuster column={column} isLastColumn={isLastColumn} />

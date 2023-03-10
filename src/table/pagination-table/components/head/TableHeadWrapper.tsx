@@ -28,11 +28,13 @@ function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
     <TableHead>
       <TableRow ref={headRowRef} className="sn-table-row">
         {columns.map((column, columnIndex) => {
+          const { id, label, colIdx, sortDirection, textAlign, autoHeadCellTextAlign } = column;
           // The first cell in the head is focusable in sequential keyboard navigation,
           // when nebula does not handle keyboard navigation
-          const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
-          const ariaSort = isActive ? FullSortDirection[column.sortDirection] : undefined;
+          const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === colIdx;
+          const ariaSort = isActive ? FullSortDirection[sortDirection] : undefined;
           const isLastColumn = columnIndex === columns.length - 1;
+          const align = textAlign.auto ? autoHeadCellTextAlign : textAlign.align;
 
           const widthStyle = {
             ...(areBasicFeaturesEnabled && {
@@ -46,14 +48,19 @@ function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
           return (
             <StyledHeadCell
               headerStyle={{ ...styling.head, ...widthStyle }}
-              key={column.id}
-              align={column.align}
+              key={id}
+              align={align}
               className="sn-table-head-cell sn-table-cell"
               aria-sort={ariaSort}
               tabIndex={-1}
             >
-              <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled={areBasicFeaturesEnabled}>
-                <CellText fontSize={styling.head.fontSize}>{column.label}</CellText>
+              <HeadCellContent
+                column={column}
+                isActive={isActive}
+                align={align}
+                areBasicFeaturesEnabled={areBasicFeaturesEnabled}
+              >
+                <CellText fontSize={styling.head.fontSize}>{label}</CellText>
               </HeadCellContent>
               {areBasicFeaturesEnabled && <ColumnAdjuster column={column} isLastColumn={isLastColumn} />}
             </StyledHeadCell>
