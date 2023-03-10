@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { FIRST_BODY_CELL_COORD, FIRST_HEADER_CELL_COORD, FocusTypes } from '../constants';
+import { FocusTypes } from '../constants';
 import { useContextSelector, TableContext } from '../context';
 import { updateFocus } from '../utils/accessibility-utils';
-import { findCellWithTabStop, getCellElement } from '../utils/get-element-utils';
+import { getCellElement } from '../utils/get-element-utils';
 
 /**
  * When nebula handles keyboard navigation (keyboard.enabled === true)
@@ -11,17 +11,15 @@ import { findCellWithTabStop, getCellElement } from '../utils/get-element-utils'
  * when keyboard.blur() runs, keyboard.active is set to false
  */
 const useKeyboardActiveListener = () => {
-  const { selectionsAPI, rootElement, keyboard } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { rootElement, keyboard } = useContextSelector(TableContext, (value) => value.baseProps);
+  const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
 
   useEffect(() => {
-    const isSelectionMode = selectionsAPI.isModal();
-    const firstCellCoord = isSelectionMode ? FIRST_BODY_CELL_COORD : FIRST_HEADER_CELL_COORD;
-    const cell = keyboard.active ? getCellElement(rootElement, firstCellCoord) : findCellWithTabStop(rootElement);
-    let focusType = isSelectionMode ? FocusTypes.FOCUS : FocusTypes.FOCUS_BUTTON;
+    let focusType = focusedCellCoord[0] > 0 ? FocusTypes.FOCUS : FocusTypes.FOCUS_BUTTON;
     focusType = keyboard.active ? focusType : FocusTypes.BLUR;
 
-    updateFocus({ focusType, cell });
-  }, [keyboard.active, selectionsAPI, rootElement]);
+    updateFocus({ focusType, cell: getCellElement(rootElement, focusedCellCoord) });
+  }, [keyboard.active, rootElement]);
 };
 
 export default useKeyboardActiveListener;
