@@ -14,7 +14,6 @@ import useSelectionListener from '../../../hooks/use-selection-listener';
 function TableBodyWrapper({
   setShouldRefocus,
   tableWrapperRef,
-  tableContainerRef,
   announce,
   areBasicFeaturesEnabled,
 }: TableBodyWrapperProps) {
@@ -48,14 +47,7 @@ function TableBodyWrapper({
   );
   const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
 
-  useSelectionListener({
-    keyboard,
-    selectionDispatch,
-    selectionsAPI,
-    setShouldRefocus,
-    tableContainerRef,
-    tableWrapperRef,
-  });
+  useSelectionListener({ keyboard, selectionDispatch, selectionsAPI, setShouldRefocus, tableWrapperRef });
 
   const totals = <TableTotals areBasicFeaturesEnabled={areBasicFeaturesEnabled} />;
 

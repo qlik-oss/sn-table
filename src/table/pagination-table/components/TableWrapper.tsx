@@ -46,7 +46,7 @@ export default function TableWrapper(props: TableWrapperProps) {
 
   useEffect(() => {
     tableContainerRef.current?.scrollTo(0, 0);
-  }, [pageInfo]);
+  }, [pageInfo, totalRowCount]);
 
   const handleChangePage = useCallback(
     (pageIdx: number) => {
@@ -130,12 +130,7 @@ export default function TableWrapper(props: TableWrapperProps) {
       >
         <StyledTable customWidth={areBasicFeaturesEnabled} stickyHeader aria-label={tableAriaLabel}>
           <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
-          <TableBodyWrapper
-            {...props}
-            setShouldRefocus={setShouldRefocus}
-            tableWrapperRef={tableWrapperRef}
-            tableContainerRef={tableContainerRef}
-          />
+          <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </StyledTable>
       </StyledTableContainer>
       {!constraints.active && (

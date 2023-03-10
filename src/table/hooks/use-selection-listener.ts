@@ -10,7 +10,6 @@ interface UseSelectionListenerProps {
   setShouldRefocus(): void;
   keyboard: stardust.Keyboard;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | null>;
-  tableContainerRef?: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 const useSelectionListener = ({
@@ -19,7 +18,6 @@ const useSelectionListener = ({
   setShouldRefocus,
   keyboard,
   tableWrapperRef,
-  tableContainerRef,
 }: UseSelectionListenerProps) => {
   useEffect(() => {
     const resetSelections = () => {
@@ -29,7 +27,6 @@ const useSelectionListener = ({
       selectionDispatch({ type: SelectionActions.CLEAR });
     };
     const resetSelectionsAndSetupRefocus = () => {
-      tableContainerRef?.current?.scrollTo(0, 0);
       if (tableWrapperRef.current?.contains(document.activeElement)) {
         // if there is a focus in the chart,
         // set shouldRefocus so that you should either
@@ -56,7 +53,7 @@ const useSelectionListener = ({
       selectionsAPI.removeListener('confirmed', resetSelectionsAndSetupRefocus);
       selectionsAPI.removeListener('cleared', clearSelections);
     };
-  }, [selectionsAPI, keyboard, selectionDispatch, setShouldRefocus, tableContainerRef, tableWrapperRef]);
+  }, [selectionsAPI, keyboard, selectionDispatch, setShouldRefocus, tableWrapperRef]);
 };
 
 export default useSelectionListener;

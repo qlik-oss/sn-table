@@ -290,7 +290,6 @@ export interface TableBodyWrapperProps {
   announce: Announce;
   setShouldRefocus(): void;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | null>;
-  tableContainerRef?: React.MutableRefObject<HTMLDivElement | null>;
   areBasicFeaturesEnabled: boolean;
 }
 
