@@ -26,16 +26,16 @@ const TOTALS_PADDING = 12 * 2;
 
 /**
  * Calculates column widths in pixels, based on column settings and the table width.
- * First, pixel values for the three independent types ('pixels', 'percentage', 'hug') are set.
- * Then the remaining width is divided equally between the 'fill' columns, if there is any
+ * First, pixel values for the three independent types ('pixels', 'percentage', 'fitToContent') are set.
+ * Then the remaining width is divided equally between the auto columns, if there are any
  * The widths are sorted in the order they will be displayed
  */
 export const getColumnWidths = (columns: Column[], tableWidth: number, getHugWidth: GetHugWidth) => {
   if (!columns?.length || tableWidth === 0) return [];
 
   const columnWidths: number[] = [];
-  const fillColumnIndexes: number[] = [];
-  let sumFillWidths = tableWidth;
+  const autoColumnIndexes: number[] = [];
+  let sumAutoWidths = tableWidth;
 
   columns.forEach((col, idx) => {
     if (col.columnWidth) {
@@ -49,7 +49,7 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getHugWid
 
       const addKnownWidth = () => {
         columnWidths[idx] = Math.min(MAX_COLUMN_WIDTH, Math.max(MIN_COLUMN_WIDTH, newWidth));
-        sumFillWidths -= columnWidths[idx];
+        sumAutoWidths -= columnWidths[idx];
       };
 
       switch (type) {
@@ -67,21 +67,21 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getHugWid
           break;
         case ColumnWidthTypes.AUTO:
           // stores the indexes of auto columns to loop over later
-          fillColumnIndexes.push(idx);
+          autoColumnIndexes.push(idx);
           break;
         default:
           throw new Error(`${type} is not a valid column width type`);
       }
     } else {
-      fillColumnIndexes.push(idx);
+      autoColumnIndexes.push(idx);
     }
   });
 
-  if (fillColumnIndexes.length) {
+  if (autoColumnIndexes.length) {
     // divides remaining width evenly between auto columns
-    const fillWidth = sumFillWidths / fillColumnIndexes.length;
-    fillColumnIndexes.forEach((fillIdx) => {
-      columnWidths[fillIdx] = Math.max(MIN_COLUMN_WIDTH, fillWidth);
+    const autoWidth = sumAutoWidths / autoColumnIndexes.length;
+    autoColumnIndexes.forEach((autoIdx) => {
+      columnWidths[autoIdx] = Math.max(MIN_COLUMN_WIDTH, autoWidth);
     });
   }
 
