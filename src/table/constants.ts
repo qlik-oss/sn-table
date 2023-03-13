@@ -45,8 +45,8 @@ export enum FullSortDirection {
 export enum ColumnWidthTypes {
   PIXELS = 'pixels',
   PERCENTAGE = 'percentage',
-  HUG = 'hug',
-  FILL = 'fill',
+  FIT_TO_CONTENT = 'fitToContent',
+  AUTO = 'auto',
 }
 
 export const MIN_COLUMN_WIDTH = 120;

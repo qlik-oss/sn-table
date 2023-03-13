@@ -29,17 +29,17 @@ describe('use-column-widths', () => {
       {
         label: 'col1',
         qApprMaxGlyphCount: 10,
-        columnWidth: { type: ColumnWidthTypes.FILL, pixels: 150, percentage: 50 },
+        columnWidth: { type: ColumnWidthTypes.AUTO, pixels: 150, percentage: 50 },
       } as Column,
       {
         label: 'col2',
         qApprMaxGlyphCount: 10,
-        columnWidth: { type: ColumnWidthTypes.FILL, pixels: 150, percentage: 50 },
+        columnWidth: { type: ColumnWidthTypes.AUTO, pixels: 150, percentage: 50 },
       } as Column,
       {
         label: 'col3',
         qApprMaxGlyphCount: 10,
-        columnWidth: { type: ColumnWidthTypes.FILL, pixels: 150, percentage: 50 },
+        columnWidth: { type: ColumnWidthTypes.AUTO, pixels: 150, percentage: 50 },
       } as Column,
     ];
     tableWidth = 600;
@@ -90,9 +90,9 @@ describe('use-column-widths', () => {
       it('should return equal sizes when all types are hug', () => {
         (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValue(200);
         (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValue(200);
-        columns[0].columnWidth.type = ColumnWidthTypes.HUG;
-        columns[1].columnWidth.type = ColumnWidthTypes.HUG;
-        columns[2].columnWidth.type = ColumnWidthTypes.HUG;
+        columns[0].columnWidth.type = ColumnWidthTypes.FIT_TO_CONTENT;
+        columns[1].columnWidth.type = ColumnWidthTypes.FIT_TO_CONTENT;
+        columns[2].columnWidth.type = ColumnWidthTypes.FIT_TO_CONTENT;
 
         const widths = getColumnWidthsState();
         expect(widths).toEqual([275, 275, 275]);
@@ -138,7 +138,7 @@ describe('use-column-widths', () => {
       it('should return one size for hug and equal sizes for two columns with fill', () => {
         (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValue(150);
         (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValue(150);
-        columns[2].columnWidth.type = ColumnWidthTypes.HUG;
+        columns[2].columnWidth.type = ColumnWidthTypes.FIT_TO_CONTENT;
 
         const widths = getColumnWidthsState();
         expect(widths).toEqual([187.5, 187.5, 225]);

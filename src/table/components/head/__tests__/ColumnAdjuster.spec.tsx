@@ -27,7 +27,7 @@ describe('<ColumnAdjuster />', () => {
         label: 'col1',
         pageColIdx: 0,
         qApprMaxGlyphCount: 10,
-        columnWidth: { type: ColumnWidthTypes.FILL },
+        columnWidth: { type: ColumnWidthTypes.AUTO },
       } as Column,
     ];
     column = columns[0];

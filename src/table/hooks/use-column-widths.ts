@@ -61,12 +61,12 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getHugWid
           newWidth = ((percentage || DEFAULT_COLUMN_PERCENTAGE_WIDTH) / 100) * tableWidth;
           addKnownWidth();
           break;
-        case ColumnWidthTypes.HUG:
+        case ColumnWidthTypes.FIT_TO_CONTENT:
           newWidth = getHugWidth(label, totalInfo, qApprMaxGlyphCount, col.isLocked);
           addKnownWidth();
           break;
-        case ColumnWidthTypes.FILL:
-          // stores the indexes of fill columns to loop over later
+        case ColumnWidthTypes.AUTO:
+          // stores the indexes of auto columns to loop over later
           fillColumnIndexes.push(idx);
           break;
         default:
@@ -78,7 +78,7 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getHugWid
   });
 
   if (fillColumnIndexes.length) {
-    // divides remaining width evenly between fill columns
+    // divides remaining width evenly between auto columns
     const fillWidth = sumFillWidths / fillColumnIndexes.length;
     fillColumnIndexes.forEach((fillIdx) => {
       columnWidths[fillIdx] = Math.max(MIN_COLUMN_WIDTH, fillWidth);

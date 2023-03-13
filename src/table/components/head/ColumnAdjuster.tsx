@@ -89,7 +89,7 @@ const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
   const handleFocus = () => {
     tempWidths.current.initWidth = columnWidths[pageColIdx];
   };
-  const handleDoubleClick = () => applyColumnWidths({ type: ColumnWidthTypes.HUG }, column);
+  const handleDoubleClick = () => applyColumnWidths({ type: ColumnWidthTypes.FIT_TO_CONTENT }, column);
 
   return (
     <AdjusterHitArea
