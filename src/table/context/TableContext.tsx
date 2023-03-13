@@ -41,9 +41,7 @@ export const TableContextProvider = ({
   tableWidth = 0,
 }: ContextProviderProps) => {
   const [headRowHeight, setHeadRowHeight] = useState(0);
-  const [focusedCellCoord, setFocusedCellCoord] = useState(
-    (cellCoordMock || FIRST_HEADER_CELL_COORD) as [number, number]
-  );
+  const [focusedCellCoord, setFocusedCellCoord] = useState<[number, number]>(cellCoordMock || FIRST_HEADER_CELL_COORD);
   const [selectionState, selectionDispatch] = useSelectionReducer(tableData.rows, selectionsAPI);
   const [hoverIndex, setHoverIndex] = useState(-1);
   const styling = useTableStyling(layout, theme, tableData, rootElement);
