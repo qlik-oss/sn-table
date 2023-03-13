@@ -165,7 +165,6 @@ export const handleFocusoutEvent = (
   const isInTable = targetElement.contains(evt.relatedTarget as Node);
   const isInHeadCellMenu = (evt.relatedTarget as HTMLElement).closest('.sn-table-head-menu');
   if (keyboard.enabled && !isInTable && !isInHeadCellMenu && !shouldRefocus.current) {
-    console.log('blurring');
     targetElement.querySelector('#sn-table-announcer--01')!.innerHTML = '';
     targetElement.querySelector('#sn-table-announcer--02')!.innerHTML = '';
     // Blur the table but not focus its parent element
