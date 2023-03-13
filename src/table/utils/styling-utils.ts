@@ -1,7 +1,15 @@
 import { stardust } from '@nebula.js/stardust';
 
 import { resolveToRGBAorRGB, isDarkColor, removeOpacity } from './color-utils';
-import { TableLayout, ExtendedTheme, HeaderStyling, ContentStyling, PaletteColor, BackgroundColors } from '../../types';
+import {
+  TableLayout,
+  ExtendedTheme,
+  HeaderStyling,
+  ContentStyling,
+  PaletteColor,
+  BackgroundColors,
+  Align,
+} from '../../types';
 import { GeneratedStyling, CellStyle, FooterStyle } from '../types';
 import { SelectionStates, PAGINATION_HEIGHT } from '../constants';
 import { SELECTION_STYLING, COLORING } from '../styling-defaults';
@@ -311,5 +319,9 @@ export function getSelectionStyle(styling: CellStyle, cellSelectionState: Select
   };
 }
 
-export const autoAlign = (cell: EngineAPI.INxCell) =>
-  (cell.qNum || cell.qNum === 0) && !Number.isNaN(+cell.qNum) ? 'right' : 'left';
+export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | 'auto') => {
+  if (textAlign === 'auto') {
+    return ((cell.qNum || cell.qNum === 0) && !Number.isNaN(+cell.qNum) ? 'right' : 'left') as Align;
+  }
+  return textAlign;
+};

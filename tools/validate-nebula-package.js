@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const validateScripts = (pkg) => {
-  if (pkg.scripts.build !== 'yarn run locale:generate && node ./tools/build.js --core --ext && shx cp assets/* dist') {
+  if (pkg.scripts.build !== 'yarn run locale:generate && node ./tools/build.js --core --ext') {
     throw new Error('package.json does not have correct build script');
   }
   if (pkg.scripts.prepublishOnly !== 'NODE_ENV=production yarn run build && yarn spec') {
@@ -50,7 +50,7 @@ const validateFiles = (pkg) => {
   ];
   // files
   const mustHaveFiles = ['dist', 'core', 'api-specifications', 'sn-table-ext'];
-  const allowedFiles = ['assets', ...mustHaveFiles];
+  const allowedFiles = [...mustHaveFiles];
   const missing = mustHaveFiles.filter((f) => (pkg.files || []).indexOf(f) === -1);
   if (missing.length) {
     throw new Error(`package.json is missing files: ${missing.join(', ')}`);

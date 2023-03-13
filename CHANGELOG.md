@@ -1,3 +1,15 @@
+# [1.25.0](https://github.com/qlik-oss/sn-table/compare/v1.24.0...v1.25.0) (2023-03-13)
+
+### Bug Fixes
+
+- always use align for totals ([#904](https://github.com/qlik-oss/sn-table/issues/904)) ([4b1b702](https://github.com/qlik-oss/sn-table/commit/4b1b702f5ec673c4e356fe2eebd5a1006dec9b65))
+- default tHead cell background to white ([#905](https://github.com/qlik-oss/sn-table/issues/905)) ([7945af8](https://github.com/qlik-oss/sn-table/commit/7945af814af54a9313f489a4475498cf98b24ce4))
+- text alignment should be based on numeric or not numeric ([#902](https://github.com/qlik-oss/sn-table/issues/902)) ([d5e2f30](https://github.com/qlik-oss/sn-table/commit/d5e2f30d17903917cc6c35a38aecffbfbc0c73e4))
+
+### Features
+
+- **a11y:** reintroduced keyboard navigation for keyboard.enabled ([#896](https://github.com/qlik-oss/sn-table/issues/896)) ([a42eede](https://github.com/qlik-oss/sn-table/commit/a42eede03affbb9f70a5c3d8107c7185f6c16bb5))
+
 # [1.24.0](https://github.com/qlik-oss/sn-table/compare/v1.23.0...v1.24.0) (2023-03-10)
 
 ### Bug Fixes

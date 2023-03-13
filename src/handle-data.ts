@@ -1,4 +1,4 @@
-import { autoAlign } from './table/utils/styling-utils';
+import { getBodyCellAlign } from './table/utils/styling-utils';
 import {
   TableLayout,
   PageInfo,
@@ -132,9 +132,6 @@ export const getColumns = (layout: TableLayout) => {
   return columnOrder.map((colIdx, pageColIdx) => getColumnInfo(layout, colIdx, pageColIdx)).filter(Boolean) as Column[];
 };
 
-const getBodyCellAlign = (c: Column, r: EngineAPI.INxCellRows, pageColIdx: number) =>
-  c.textAlign === 'auto' ? autoAlign(r[pageColIdx]) : c.textAlign;
-
 /**
  * Fetches the data for the given pageInfo. Returns rows and columns, sorted in the order they will be displayed,
  * and meta data for size etc. The column/row indexes used in engine are stored as col/rowIdx, while the index within
@@ -179,7 +176,7 @@ export default async function manageData(
     columns.forEach((c, pageColIdx) => {
       row[c.id] = {
         ...r[pageColIdx],
-        align: getBodyCellAlign(c, r, pageColIdx),
+        align: getBodyCellAlign(r[pageColIdx], c.textAlign),
         rowIdx: pageRowIdx + top,
         colIdx: c.colIdx,
         pageRowIdx,
