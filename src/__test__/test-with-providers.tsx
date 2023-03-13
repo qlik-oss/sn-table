@@ -10,6 +10,7 @@ import {
   ExtendedSelectionAPI,
   ExtendedTheme,
   ExtendedTranslator,
+  PageInfo,
   TableData,
   TableLayout,
 } from '../types';
@@ -35,6 +36,8 @@ interface ProviderProps {
   applyColumnWidths?: ApplyColumnWidths;
   tableWidth?: number;
   initialDataPages?: EngineAPI.INxDataPage[];
+  pageInfo?: PageInfo;
+  setPage?: stardust.SetStateFn<number>;
 }
 
 type HookWrapperProps = { children: JSX.Element };
@@ -70,6 +73,8 @@ const TestWithProviders = ({
   applyColumnWidths = undefined,
   tableWidth = 0,
   initialDataPages = undefined,
+  pageInfo = undefined,
+  setPage = undefined,
 }: ProviderProps) => {
   return (
     <ThemeProvider theme={muiSetup(direction)}>
@@ -91,6 +96,8 @@ const TestWithProviders = ({
         applyColumnWidths={applyColumnWidths}
         tableWidth={tableWidth}
         initialDataPages={initialDataPages}
+        setPage={setPage}
+        pageInfo={pageInfo}
       >
         {children as JSX.Element}
       </TableContextProvider>

@@ -2,7 +2,7 @@ import { Context, useContext, useEffect, useState } from 'react';
 import useMutableProp from '../virtualized-table/hooks/use-mutable-prop';
 import { getSelectorContext, SelectorContextType } from './createSelectorProvider';
 
-type Selector<TContext, TSelected> = (state: TContext) => TSelected;
+export type Selector<TContext, TSelected> = (state: TContext) => TSelected;
 
 export function useContextSelector<T, TSelected>(context: Context<T>, selector: Selector<T, TSelected>): TSelected {
   const accessorContext = getSelectorContext(context) as Context<SelectorContextType<T>>;
