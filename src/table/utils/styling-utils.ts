@@ -121,8 +121,7 @@ export function getHeaderStyle(
   // there is a header background color depending on the header font color
   // - When the table background color from the sense theme has opacity,
   // removing that.
-  const defaultBackground = isDarkColor(headerStyle.color) ? COLORING.WHITE : COLORING.DARK_MODE_BACKGROUND;
-  headerStyle.background = theme.background.isTransparent ? defaultBackground : removeOpacity(theme.background.color);
+  headerStyle.background = theme.background.isTransparent ? COLORING.WHITE : removeOpacity(theme.background.color);
 
   // When you set the header font color,
   // the sort label color should be same.
