@@ -1,9 +1,0 @@
-{
-  "name": "Straight table",
-  "version": "1.24.0",
-  "description": "Display several measure values for each dimension value. Show the totals for each measure. Sort columns and rows alphabetically or numerically. Change sorting during analysis. Chart exploration allows for adding and removing columns in analysis.",
-  "author": "QlikTech International AB",
-  "icon": "table",
-  "type": "visualization",
-  "supernova": true
-}
