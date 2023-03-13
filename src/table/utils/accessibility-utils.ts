@@ -162,8 +162,9 @@ export const handleFocusoutEvent = (
   keyboard: stardust.Keyboard
 ) => {
   const targetElement = evt.currentTarget as HTMLDivElement;
-  const isInTable = targetElement.contains(evt.relatedTarget as Node);
-  const isInHeadCellMenu = (evt.relatedTarget as HTMLElement).closest('.sn-table-head-menu');
+  const relatedTarget = evt.relatedTarget as HTMLElement;
+  const isInTable = targetElement.contains(relatedTarget);
+  const isInHeadCellMenu = relatedTarget?.closest('.sn-table-head-menu');
   if (keyboard.enabled && !isInTable && !isInHeadCellMenu && !shouldRefocus.current) {
     targetElement.querySelector('#sn-table-announcer--01')!.innerHTML = '';
     targetElement.querySelector('#sn-table-announcer--02')!.innerHTML = '';
