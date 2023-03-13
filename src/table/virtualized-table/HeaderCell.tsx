@@ -25,7 +25,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
   const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
   const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
-  const flexDirection = column.align === 'right' ? 'row-reverse' : 'row';
+  const flexDirection = column.headCellTextAlign === 'right' ? 'row-reverse' : 'row';
 
   return (
     <div
@@ -38,7 +38,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         borderStyle: 'solid',
         borderWidth: isLastColumn ? '0px 0px 1px 0px' : '0px 1px 1px 0px',
         padding: '4px',
-        justifyContent: column.align,
+        justifyContent: column.headCellTextAlign,
         boxSizing: 'border-box',
         cursor: 'default',
         zIndex: columns.length - index,

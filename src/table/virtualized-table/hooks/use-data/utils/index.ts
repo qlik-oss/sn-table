@@ -1,5 +1,9 @@
-import { Cell, Column, PageInfo, Row, TableLayout } from '../../../../../types';
+import { autoAlign } from '../../../../utils/styling-utils';
+import { Cell, Column, PageInfo, Row, TableLayout, Align } from '../../../../../types';
 import { SetCellSize } from '../../../types';
+
+const getBodyCellAlign = (textAlign: 'auto' | Align, cell: EngineAPI.INxCell) =>
+  textAlign === 'auto' ? autoAlign(cell) : textAlign;
 
 const createRow = (
   rows: Row[],
@@ -17,9 +21,11 @@ const createRow = (
 
   cells.forEach((cell, cellColIdx: number) => {
     const pageColIdx = cellColIdx + qArea.qLeft;
-    const { colIdx, isDim, isLocked, id } = columns[pageColIdx];
+    const { colIdx, isDim, isLocked, id, textAlign } = columns[pageColIdx];
+
     row[id] = {
       ...cell,
+      align: getBodyCellAlign(textAlign, cell),
       rowIdx,
       colIdx,
       isSelectable: isDim && !isLocked,

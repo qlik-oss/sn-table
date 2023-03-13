@@ -1,6 +1,8 @@
 import { Direction } from '@mui/material';
 import { stardust } from '@nebula.js/stardust';
 
+export type Align = 'left' | 'center' | 'right';
+
 interface TextAlign {
   auto: boolean;
   align: 'left' | 'center' | 'right';
@@ -93,6 +95,8 @@ export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, 'qH
 
 export interface Cell {
   qText?: string;
+  qNum?: number | string;
+  align: Align;
   qAttrExps?: EngineAPI.INxAttributeExpressionValues;
   qElemNumber: number;
   rowIdx: number;
@@ -126,7 +130,9 @@ export interface Column {
   colIdx: number;
   pageColIdx: number;
   label: string;
-  align: 'left' | 'center' | 'right';
+  headCellTextAlign: Align;
+  totalsCellTextAlign: Align;
+  textAlign: 'auto' | Align;
   stylingIDs: string[];
   sortDirection: SortDirection;
   qReverseSort: boolean;

@@ -6,7 +6,7 @@ import { Column } from '../../types';
 import { DEFAULT_FONT_SIZE } from '../styling-defaults';
 import { LockWrapper } from '../components/head/styles';
 
-const getHeadIcons = ({ sortDirection, isLocked, align }: Column) => {
+const getHeadIcons = ({ sortDirection, isLocked, headCellTextAlign }: Column) => {
   const sortIcon =
     sortDirection === 'A' ? <Ascending height={DEFAULT_FONT_SIZE} /> : <Descending height={DEFAULT_FONT_SIZE} />;
   const lockIcon = isLocked ? (
@@ -14,7 +14,7 @@ const getHeadIcons = ({ sortDirection, isLocked, align }: Column) => {
       <Lock height={DEFAULT_FONT_SIZE} data-testid="head-cell-lock-icon" />
     </LockWrapper>
   ) : undefined;
-  return align === 'right' ? { startIcon: sortIcon, lockIcon } : { endIcon: sortIcon, lockIcon };
+  return headCellTextAlign === 'right' ? { startIcon: sortIcon, lockIcon } : { endIcon: sortIcon, lockIcon };
 };
 
 export default getHeadIcons;
