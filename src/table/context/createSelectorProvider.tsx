@@ -1,5 +1,13 @@
-import React, { Context, createContext, FunctionComponent, ReactNode, useCallback, useMemo, useRef } from 'react';
-import useOnPropsChange from '../virtualized-table/hooks/use-on-props-change';
+import React, {
+  Context,
+  createContext,
+  FunctionComponent,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 
 const contextMap: Map<Context<any>, Context<any>> = new Map();
 
@@ -23,7 +31,7 @@ export function createSelectorProvider<T>(OriginalContext: Context<T>): Function
 
     const listeners = useRef<ContextListeners<T>>(new Set());
 
-    useOnPropsChange(() => {
+    useEffect(() => {
       contextValueRef.current = value;
 
       listeners.current.forEach((listener) => {
@@ -35,7 +43,7 @@ export function createSelectorProvider<T>(OriginalContext: Context<T>): Function
       return contextValueRef.current;
     }, [contextValueRef]);
 
-    const contextValue: SelectorContextType<T> = useMemo(() => [getContextValue, listeners.current], [contextValueRef]);
+    const contextValue: SelectorContextType<T> = useMemo(() => [getContextValue, listeners.current], [getContextValue]);
 
     return (
       <OriginalContext.Provider value={value}>
