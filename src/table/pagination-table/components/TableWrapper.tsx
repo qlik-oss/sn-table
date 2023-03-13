@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect } from 'react';
+import React, { useRef, useCallback, useEffect, memo } from 'react';
 
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './body/TableBodyWrapper';
@@ -11,14 +11,13 @@ import useDidUpdateEffect from '../../hooks/use-did-update-effect';
 import useFocusListener from '../../hooks/use-focus-listener';
 import useScrollListener from '../../hooks/use-scroll-listener';
 import { handleWrapperKeyDown } from '../../utils/handle-keyboard';
-import { updateFocus, resetFocus } from '../../utils/accessibility-utils';
-import { getCellElement } from '../../utils/get-element-utils';
+import { resetFocus } from '../../utils/accessibility-utils';
 import { TableWrapperProps } from '../../types';
 import { StyledTableWrapper } from '../../components/styles';
 import useScrollbarWidth from '../../virtualized-table/hooks/use-scrollbar-width';
-import { FocusTypes } from '../../constants';
+import useKeyboardActiveListener from '../../hooks/use-keyboard-active-listener';
 
-export default function TableWrapper(props: TableWrapperProps) {
+function TableWrapper(props: TableWrapperProps) {
   const { pageInfo, setPageInfo, direction, footerContainer, announce, areBasicFeaturesEnabled } = props;
   const { page, rowsPerPage } = pageInfo;
 
@@ -28,6 +27,7 @@ export default function TableWrapper(props: TableWrapperProps) {
     TableContext,
     (value) => value.baseProps
   );
+
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
@@ -74,17 +74,7 @@ export default function TableWrapper(props: TableWrapperProps) {
 
   useFocusListener(tableWrapperRef, shouldRefocus, keyboard);
   useScrollListener(tableContainerRef, direction);
-
-  useDidUpdateEffect(() => {
-    // When nebula handles keyboard navigation and keyboard.active changes,
-    // make sure to blur or focus the cell corresponding to focusedCellCoord
-    // when keyboard.focus() runs, keyboard.active is true
-    // when keyboard.blur() runs, keyboard.active is false
-    updateFocus({
-      focusType: keyboard.active ? FocusTypes.FOCUS : FocusTypes.BLUR,
-      cell: getCellElement(rootElement, focusedCellCoord),
-    });
-  }, [keyboard.active]);
+  useKeyboardActiveListener();
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
@@ -141,3 +131,5 @@ export default function TableWrapper(props: TableWrapperProps) {
     </StyledTableWrapper>
   );
 }
+
+export default memo(TableWrapper);

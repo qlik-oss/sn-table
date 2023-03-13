@@ -11,6 +11,7 @@ import { PaginationContentProps } from '../../types';
 import { getFooterStyle } from '../../utils/styling-utils';
 import { useContextSelector, TableContext } from '../../context';
 import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
+import { areTabStopsEnabled } from '../../utils/accessibility-utils';
 
 const icons: Record<string, typeof ArrowLeft> = {
   FirstPage: ArrowLeftStop,
@@ -58,7 +59,7 @@ function PaginationContent({
   // - When nebula handles keyboard navigation
   // and focus is somewhere inside the extension, or
   // - When nebula does not handle keyboard navigation
-  const tabIndex = !keyboard.enabled || keyboard.active ? 0 : -1;
+  const tabIndex = areTabStopsEnabled(keyboard) ? 0 : -1;
   const width = footerContainer ? footerContainer.getBoundingClientRect().width : rect.width;
   const showFirstAndLast = shouldShow('firstLast', width);
   const showRowsPerPage =

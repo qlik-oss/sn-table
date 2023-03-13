@@ -60,4 +60,5 @@ export const PAGINATION_HEIGHT = 40;
 export const INITIAL_DATA_FETCH_WIDTH = 50;
 export const INITIAL_DATA_FETCH_HEIGHT = 100;
 
-export const DEFAULT_FOCUS_CELL_COORD = [1, 0] as [number, number];
+export const FIRST_HEADER_CELL_COORD: [number, number] = [0, 0];
+export const FIRST_BODY_CELL_COORD: [number, number] = [1, 0];

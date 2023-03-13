@@ -328,6 +328,7 @@ describe('handle-keyboard', () => {
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
       expect(accessibilityUtils.moveFocus).toHaveBeenCalledWith(
         evt,
         rootElement,
