@@ -16,13 +16,16 @@ const createRow = (
   const pageRowIdx = pageRowStartIdx + cellRowIdx;
   const row: Row = rows[pageRowIdx] ?? { key: `row-${pageRowIdx}` };
 
+  const getBodyCellAlign = (textAlign: 'auto' | Align, cell: EngineAPI.INxCell) =>
+    textAlign === 'auto' ? autoAlign(cell) : textAlign;
+
   cells.forEach((cell, cellColIdx: number) => {
     const pageColIdx = cellColIdx + qArea.qLeft;
     const { colIdx, isDim, isLocked, id, textAlign } = columns[pageColIdx];
 
     row[id] = {
       ...cell,
-      align: (textAlign === 'auto' ? autoAlign(cell) : textAlign) as Align,
+      align: getBodyCellAlign(textAlign, cell),
       rowIdx,
       colIdx,
       isSelectable: isDim && !isLocked,

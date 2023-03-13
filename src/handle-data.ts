@@ -8,7 +8,6 @@ import {
   ExtendedNxDimensionInfo,
   Column,
   TableData,
-  Align,
 } from './types';
 
 const MAX_CELLS = 10000;
@@ -172,12 +171,15 @@ export default async function manageData(
     { qTop: top, qLeft: 0, qHeight: height, qWidth: totalColumnCount },
   ]);
 
+  const getBodyCellAlign = (c: Column, r: EngineAPI.INxCellRows, pageColIdx: number) =>
+    c.textAlign === 'auto' ? autoAlign(r[pageColIdx]) : c.textAlign;
+
   const rows = dataPages[0].qMatrix.map((r, pageRowIdx) => {
     const row: Row = { id: `row-${pageRowIdx}` };
     columns.forEach((c, pageColIdx) => {
       row[c.id] = {
         ...r[pageColIdx],
-        align: (c.textAlign === 'auto' ? autoAlign(r[pageColIdx]) : c.textAlign) as Align,
+        align: getBodyCellAlign(c, r, pageColIdx),
         rowIdx: pageRowIdx + top,
         colIdx: c.colIdx,
         pageRowIdx,

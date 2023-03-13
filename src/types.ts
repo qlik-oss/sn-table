@@ -132,7 +132,7 @@ export interface Column {
   label: string;
   headCellTextAlign: Align;
   totalsCellTextAlign: Align;
-  textAlign: string | Align;
+  textAlign: 'auto' | Align;
   stylingIDs: string[];
   sortDirection: SortDirection;
   qReverseSort: boolean;
