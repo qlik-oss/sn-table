@@ -46,7 +46,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           borderBottomWidth: cell.isLastRow ? '0px' : `${BORDER_WIDTH}px`,
           borderRightWidth: cell.isLastColumn ? '0px' : `${BORDER_WIDTH}px`,
           borderStyle: 'solid',
-          justifyContent: columns[columnIndex].align,
+          justifyContent: cell.align,
           padding: `4px ${PADDING_LEFT_RIGHT}px`,
           boxSizing: 'border-box',
           cursor: 'default',

@@ -162,7 +162,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
   );
 
   return menuItemGroups.length ? (
-    <HeadCellMenuWrapper rightAligned={column.align === 'right'}>
+    <HeadCellMenuWrapper rightAligned={column.headCellTextAlign === 'right'}>
       <StyledMenuIconButton
         isVisible={openListboxDropdown || openMenuDropdown}
         ref={anchorRef}

@@ -39,7 +39,7 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
       <StyledSortButton
         className="sn-table-head-label"
         isActive={isActive}
-        textAlign={column.align}
+        textAlign={column.headCellTextAlign}
         title={!constraints.passive ? FullSortDirection[column.sortDirection] : undefined} // passive: turn off tooltips.
         color="inherit"
         size="small"
