@@ -2,6 +2,9 @@ import { autoAlign } from '../../../../utils/styling-utils';
 import { Cell, Column, PageInfo, Row, TableLayout, Align } from '../../../../../types';
 import { SetCellSize } from '../../../types';
 
+const getBodyCellAlign = (textAlign: 'auto' | Align, cell: EngineAPI.INxCell) =>
+  textAlign === 'auto' ? autoAlign(cell) : textAlign;
+
 const createRow = (
   rows: Row[],
   cells: EngineAPI.INxCellRows,
@@ -15,9 +18,6 @@ const createRow = (
   const rowIdx = qArea.qTop + cellRowIdx;
   const pageRowIdx = pageRowStartIdx + cellRowIdx;
   const row: Row = rows[pageRowIdx] ?? { key: `row-${pageRowIdx}` };
-
-  const getBodyCellAlign = (textAlign: 'auto' | Align, cell: EngineAPI.INxCell) =>
-    textAlign === 'auto' ? autoAlign(cell) : textAlign;
 
   cells.forEach((cell, cellColIdx: number) => {
     const pageColIdx = cellColIdx + qArea.qLeft;

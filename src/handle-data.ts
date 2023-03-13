@@ -132,6 +132,9 @@ export const getColumns = (layout: TableLayout) => {
   return columnOrder.map((colIdx, pageColIdx) => getColumnInfo(layout, colIdx, pageColIdx)).filter(Boolean) as Column[];
 };
 
+const getBodyCellAlign = (c: Column, r: EngineAPI.INxCellRows, pageColIdx: number) =>
+  c.textAlign === 'auto' ? autoAlign(r[pageColIdx]) : c.textAlign;
+
 /**
  * Fetches the data for the given pageInfo. Returns rows and columns, sorted in the order they will be displayed,
  * and meta data for size etc. The column/row indexes used in engine are stored as col/rowIdx, while the index within
@@ -170,9 +173,6 @@ export default async function manageData(
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
     { qTop: top, qLeft: 0, qHeight: height, qWidth: totalColumnCount },
   ]);
-
-  const getBodyCellAlign = (c: Column, r: EngineAPI.INxCellRows, pageColIdx: number) =>
-    c.textAlign === 'auto' ? autoAlign(r[pageColIdx]) : c.textAlign;
 
   const rows = dataPages[0].qMatrix.map((r, pageRowIdx) => {
     const row: Row = { id: `row-${pageRowIdx}` };
