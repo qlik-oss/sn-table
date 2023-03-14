@@ -6,7 +6,7 @@ import { useContextSelector, TableContext } from '../context';
 import useResetHeader from './hooks/use-reset-header';
 
 const Header = (props: HeaderProps) => {
-  const { rect, forwardRef, columns, pageInfo, headerStyle, rowHeight } = props;
+  const { rect, forwardRef, columns, pageInfo, headerStyle, rowHeight, columResizeHandler } = props;
   const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
 
@@ -24,7 +24,7 @@ const Header = (props: HeaderProps) => {
       itemSize={(index) => columnWidths[index]}
       height={rowHeight}
       width={rect.width}
-      itemData={{ columns, headerStyle }}
+      itemData={{ columns, headerStyle, columResizeHandler }}
     >
       {HeaderCell}
     </VariableSizeList>

@@ -63,6 +63,7 @@ export interface HeaderProps {
   columns: Column[];
   headerStyle: GeneratedStyling;
   rowHeight: number;
+  columResizeHandler: () => void;
 }
 
 export interface TotalsProps {
@@ -87,6 +88,7 @@ export interface BodyProps {
 
 export interface BodyRef {
   interpolatedScrollTo: (scrollTopRatio: number, scrollLeft: number) => void;
+  resizeCells: () => void;
 }
 
 export interface RowMeta {

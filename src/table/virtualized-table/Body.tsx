@@ -35,7 +35,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     rowHeight
   );
 
-  const { setCellSize, getRowHeight, rowMeta, estimatedRowHeight, maxLineCount, updateCellHeight } =
+  const { setCellSize, getRowHeight, rowMeta, estimatedRowHeight, maxLineCount, resizeVisibleCells } =
     useDynamicRowHeight({
       pageInfo,
       style: bodyStyle,
@@ -99,7 +99,6 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   // calculated based on the layout and/or container element size changes
   useOnPropsChange(() => {
     gridRef.current?.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: false });
-    updateCellHeight(rowsInPage);
   }, [columnWidths]);
 
   useImperativeHandle(
@@ -120,9 +119,12 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
             gridRef.current?.scrollTo({ scrollTop, scrollLeft });
           }
         },
+        resizeCells: () => {
+          resizeVisibleCells(rowsInPage);
+        },
       };
     },
-    [innerForwardRef, bodyHeight, rowMeta, rowCount]
+    [innerForwardRef, bodyHeight, rowMeta, rowCount, resizeVisibleCells, rowsInPage]
   );
 
   return (

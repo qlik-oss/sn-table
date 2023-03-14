@@ -65,6 +65,14 @@ const Table = (props: TableProps) => {
     [containerHeight, headerAndTotalsHeight, stickyContainerRect.height]
   );
 
+  const columResizeHandler = useCallback(() => {
+    if (ref.current) {
+      ref.current.scrollTop = 0;
+    }
+
+    bodyRef.current?.resizeCells();
+  }, [ref]);
+
   useLayoutEffect(() => {
     if (ref.current) {
       ref.current.scrollLeft = 0;
@@ -76,7 +84,7 @@ const Table = (props: TableProps) => {
     if (ref.current) {
       ref.current.scrollTop = 0;
     }
-  }, [columnWidths, pageInfo, rowCount]);
+  }, [pageInfo, rowCount]);
 
   useDidUpdateEffect(() => {
     setYScrollbarWidth(yScrollbarWidth);
@@ -104,6 +112,7 @@ const Table = (props: TableProps) => {
             columns={columns}
             forwardRef={headerRef}
             rowHeight={headerRowHeight}
+            columResizeHandler={columResizeHandler}
           />
           {totalsPosition.atTop ? TotalsComponent : null}
           <Body
