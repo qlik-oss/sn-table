@@ -77,7 +77,7 @@ const properties = {
     label: 'Totals',
   },
   /**
-   * use pagination or continuous scroll. If undefined, defaults to using pagination
+   * Use pagination or continuous scroll. If undefined, defaults to using pagination
    * @type {boolean}
    */
   usePagination: false,
