@@ -29,17 +29,17 @@ describe('use-column-widths', () => {
       {
         label: 'col1',
         qApprMaxGlyphCount: 10,
-        columnWidth: { type: ColumnWidthTypes.FILL, pixels: 150, percentage: 50 },
+        columnWidth: { type: ColumnWidthTypes.AUTO, pixels: 150, percentage: 50 },
       } as Column,
       {
         label: 'col2',
         qApprMaxGlyphCount: 10,
-        columnWidth: { type: ColumnWidthTypes.FILL, pixels: 150, percentage: 50 },
+        columnWidth: { type: ColumnWidthTypes.AUTO, pixels: 150, percentage: 50 },
       } as Column,
       {
         label: 'col3',
         qApprMaxGlyphCount: 10,
-        columnWidth: { type: ColumnWidthTypes.FILL, pixels: 150, percentage: 50 },
+        columnWidth: { type: ColumnWidthTypes.AUTO, pixels: 150, percentage: 50 },
       } as Column,
     ];
     tableWidth = 600;
@@ -62,7 +62,7 @@ describe('use-column-widths', () => {
 
   describe('getColumnWidths', () => {
     describe('all have same type', () => {
-      it('should return equal sizes when all cols have fill type', () => {
+      it('should return equal sizes when all cols have auto type', () => {
         const widths = getColumnWidthsState();
         expect(widths).toEqual([200, 200, 200]);
       });
@@ -87,12 +87,12 @@ describe('use-column-widths', () => {
         expect(getTotalWidth(widths)).toBe(tableWidth * 0.75);
       });
 
-      it('should return equal sizes when all types are hug', () => {
+      it('should return equal sizes when all types are fitToContent', () => {
         (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValue(200);
         (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValue(200);
-        columns[0].columnWidth.type = ColumnWidthTypes.HUG;
-        columns[1].columnWidth.type = ColumnWidthTypes.HUG;
-        columns[2].columnWidth.type = ColumnWidthTypes.HUG;
+        columns[0].columnWidth.type = ColumnWidthTypes.FIT_TO_CONTENT;
+        columns[1].columnWidth.type = ColumnWidthTypes.FIT_TO_CONTENT;
+        columns[2].columnWidth.type = ColumnWidthTypes.FIT_TO_CONTENT;
 
         const widths = getColumnWidthsState();
         expect(widths).toEqual([275, 275, 275]);
@@ -101,7 +101,7 @@ describe('use-column-widths', () => {
     });
 
     describe('all do not have same type', () => {
-      it('should return one size for pixel value and equal sizes for two columns with fill', () => {
+      it('should return one size for pixel value and equal sizes for two columns with auto', () => {
         columns[0].columnWidth.type = ColumnWidthTypes.PIXELS;
 
         const widths = getColumnWidthsState();
@@ -109,7 +109,7 @@ describe('use-column-widths', () => {
         expect(getTotalWidth(widths)).toBe(tableWidth);
       });
 
-      it('should return one size for percentage and equal sizes for two columns with fill', () => {
+      it('should return one size for percentage and equal sizes for two columns with auto', () => {
         columns[1].columnWidth.type = ColumnWidthTypes.PERCENTAGE;
 
         const widths = getColumnWidthsState();
@@ -117,7 +117,7 @@ describe('use-column-widths', () => {
         expect(getTotalWidth(widths)).toBe(tableWidth);
       });
 
-      it('should return one MIN_COLUMN_WIDTH for small percentage and equal sizes for two columns with fill', () => {
+      it('should return one MIN_COLUMN_WIDTH for small percentage and equal sizes for two columns with auto', () => {
         columns[1].columnWidth.type = ColumnWidthTypes.PERCENTAGE;
         columns[1].columnWidth.percentage = 10;
 
@@ -126,7 +126,7 @@ describe('use-column-widths', () => {
         expect(getTotalWidth(widths)).toBe(tableWidth);
       });
 
-      it('should return one large column and equal sizes for two columns with fill, that areMIN_COLUMN_WIDTH', () => {
+      it('should return one large column and equal sizes for two columns with auto, that are MIN_COLUMN_WIDTH', () => {
         columns[1].columnWidth.type = ColumnWidthTypes.PERCENTAGE;
         columns[1].columnWidth.percentage = 100;
 
@@ -135,10 +135,10 @@ describe('use-column-widths', () => {
         expect(getTotalWidth(widths)).toBe(tableWidth + MIN_COLUMN_WIDTH * 2);
       });
 
-      it('should return one size for hug and equal sizes for two columns with fill', () => {
+      it('should return one size for fitToContent and equal sizes for two columns with auto', () => {
         (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValue(150);
         (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValue(150);
-        columns[2].columnWidth.type = ColumnWidthTypes.HUG;
+        columns[2].columnWidth.type = ColumnWidthTypes.FIT_TO_CONTENT;
 
         const widths = getColumnWidthsState();
         expect(widths).toEqual([187.5, 187.5, 225]);

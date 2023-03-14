@@ -12,7 +12,7 @@ import { TableStyling } from '../types';
 import useOnPropsChange from '../virtualized-table/hooks/use-on-props-change';
 import { BORDER_WIDTH } from '../styling-defaults';
 
-type GetHugWidth = (headLabel: string, totalsLabel: string, glyphCount: number, isLocked: boolean) => number;
+type GetFitToContentWidth = (headLabel: string, totalsLabel: string, glyphCount: number, isLocked: boolean) => number;
 
 const HEADER_CELL_BUTTON_PADDING = 8 * 2;
 const HEADER_CELL_PADDING = 4 * 2;
@@ -26,16 +26,16 @@ const TOTALS_PADDING = 12 * 2;
 
 /**
  * Calculates column widths in pixels, based on column settings and the table width.
- * First, pixel values for the three independent types ('pixels', 'percentage', 'hug') are set.
- * Then the remaining width is divided equally between the 'fill' columns, if there is any
+ * First, pixel values for the three independent types ('pixels', 'percentage', 'fitToContent') are set.
+ * Then the remaining width is divided equally between the auto columns, if there are any
  * The widths are sorted in the order they will be displayed
  */
-export const getColumnWidths = (columns: Column[], tableWidth: number, getHugWidth: GetHugWidth) => {
+export const getColumnWidths = (columns: Column[], tableWidth: number, getFitToContentWidth: GetFitToContentWidth) => {
   if (!columns?.length || tableWidth === 0) return [];
 
   const columnWidths: number[] = [];
-  const fillColumnIndexes: number[] = [];
-  let sumFillWidths = tableWidth;
+  const autoColumnIndexes: number[] = [];
+  let sumAutoWidths = tableWidth;
 
   columns.forEach((col, idx) => {
     if (col.columnWidth) {
@@ -49,7 +49,7 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getHugWid
 
       const addKnownWidth = () => {
         columnWidths[idx] = Math.min(MAX_COLUMN_WIDTH, Math.max(MIN_COLUMN_WIDTH, newWidth));
-        sumFillWidths -= columnWidths[idx];
+        sumAutoWidths -= columnWidths[idx];
       };
 
       switch (type) {
@@ -61,27 +61,27 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getHugWid
           newWidth = ((percentage || DEFAULT_COLUMN_PERCENTAGE_WIDTH) / 100) * tableWidth;
           addKnownWidth();
           break;
-        case ColumnWidthTypes.HUG:
-          newWidth = getHugWidth(label, totalInfo, qApprMaxGlyphCount, col.isLocked);
+        case ColumnWidthTypes.FIT_TO_CONTENT:
+          newWidth = getFitToContentWidth(label, totalInfo, qApprMaxGlyphCount, col.isLocked);
           addKnownWidth();
           break;
-        case ColumnWidthTypes.FILL:
-          // stores the indexes of fill columns to loop over later
-          fillColumnIndexes.push(idx);
+        case ColumnWidthTypes.AUTO:
+          // stores the indexes of auto columns to loop over later
+          autoColumnIndexes.push(idx);
           break;
         default:
           throw new Error(`${type} is not a valid column width type`);
       }
     } else {
-      fillColumnIndexes.push(idx);
+      autoColumnIndexes.push(idx);
     }
   });
 
-  if (fillColumnIndexes.length) {
-    // divides remaining width evenly between fill columns
-    const fillWidth = sumFillWidths / fillColumnIndexes.length;
-    fillColumnIndexes.forEach((fillIdx) => {
-      columnWidths[fillIdx] = Math.max(MIN_COLUMN_WIDTH, fillWidth);
+  if (autoColumnIndexes.length) {
+    // divides remaining width evenly between auto columns
+    const autoWidth = sumAutoWidths / autoColumnIndexes.length;
+    autoColumnIndexes.forEach((autoIdx) => {
+      columnWidths[autoIdx] = Math.max(MIN_COLUMN_WIDTH, autoWidth);
     });
   }
 
@@ -97,7 +97,7 @@ const useColumnWidths = (
   const showTotals = totalsPosition.atBottom || totalsPosition.atTop;
   const measureHeadLabel = useMeasureText(head.fontSize, head.fontFamily).measureText;
   const { measureText, estimateWidth } = useMeasureText(body.fontSize, body.fontFamily);
-  const getHugWidth = useMemo<GetHugWidth>(
+  const getFitToContentWidth = useMemo<GetFitToContentWidth>(
     () => (headLabel, totalsLabel, glyphCount, isLocked) => {
       const HEAD_LABEL_WIDTH = isLocked
         ? LOOK_BUTTON_AND_AUTO_MARGIN + ADJUSTED_HEADER_WIDTH + FLEX_BOX_GAP
@@ -112,11 +112,11 @@ const useColumnWidths = (
   );
   const [yScrollbarWidth, setYScrollbarWidth] = useState(0);
 
-  const [columnWidths, setColumnWidths] = useState(() => getColumnWidths(columns, tableWidth, getHugWidth));
+  const [columnWidths, setColumnWidths] = useState(() => getColumnWidths(columns, tableWidth, getFitToContentWidth));
 
   useOnPropsChange(() => {
-    setColumnWidths(getColumnWidths(columns, tableWidth - yScrollbarWidth, getHugWidth));
-  }, [columns, tableWidth, yScrollbarWidth, getHugWidth]);
+    setColumnWidths(getColumnWidths(columns, tableWidth - yScrollbarWidth, getFitToContentWidth));
+  }, [columns, tableWidth, yScrollbarWidth, getFitToContentWidth]);
 
   return [columnWidths, setColumnWidths, setYScrollbarWidth];
 };
