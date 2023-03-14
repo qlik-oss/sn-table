@@ -126,7 +126,7 @@ describe('use-column-widths', () => {
         expect(getTotalWidth(widths)).toBe(tableWidth);
       });
 
-      it('should return one large column and equal sizes for two columns with auto, that areMIN_COLUMN_WIDTH', () => {
+      it('should return one large column and equal sizes for two columns with auto, that are MIN_COLUMN_WIDTH', () => {
         columns[1].columnWidth.type = ColumnWidthTypes.PERCENTAGE;
         columns[1].columnWidth.percentage = 100;
 
