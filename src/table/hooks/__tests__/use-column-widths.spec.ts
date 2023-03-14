@@ -87,7 +87,7 @@ describe('use-column-widths', () => {
         expect(getTotalWidth(widths)).toBe(tableWidth * 0.75);
       });
 
-      it('should return equal sizes when all types are hug', () => {
+      it('should return equal sizes when all types are fitToContent', () => {
         (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValue(200);
         (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValue(200);
         columns[0].columnWidth.type = ColumnWidthTypes.FIT_TO_CONTENT;
@@ -135,7 +135,7 @@ describe('use-column-widths', () => {
         expect(getTotalWidth(widths)).toBe(tableWidth + MIN_COLUMN_WIDTH * 2);
       });
 
-      it('should return one size for hug and equal sizes for two columns with auto', () => {
+      it('should return one size for fitToContent and equal sizes for two columns with auto', () => {
         (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValue(150);
         (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValue(150);
         columns[2].columnWidth.type = ColumnWidthTypes.FIT_TO_CONTENT;

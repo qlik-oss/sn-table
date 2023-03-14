@@ -12,7 +12,7 @@ import { TableStyling } from '../types';
 import useOnPropsChange from '../virtualized-table/hooks/use-on-props-change';
 import { BORDER_WIDTH } from '../styling-defaults';
 
-type GetHugWidth = (headLabel: string, totalsLabel: string, glyphCount: number, isLocked: boolean) => number;
+type GetFitToContentWidth = (headLabel: string, totalsLabel: string, glyphCount: number, isLocked: boolean) => number;
 
 const HEADER_CELL_BUTTON_PADDING = 8 * 2;
 const HEADER_CELL_PADDING = 4 * 2;
@@ -30,7 +30,7 @@ const TOTALS_PADDING = 12 * 2;
  * Then the remaining width is divided equally between the auto columns, if there are any
  * The widths are sorted in the order they will be displayed
  */
-export const getColumnWidths = (columns: Column[], tableWidth: number, getHugWidth: GetHugWidth) => {
+export const getColumnWidths = (columns: Column[], tableWidth: number, getFitToContentWidth: GetFitToContentWidth) => {
   if (!columns?.length || tableWidth === 0) return [];
 
   const columnWidths: number[] = [];
@@ -62,7 +62,7 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getHugWid
           addKnownWidth();
           break;
         case ColumnWidthTypes.FIT_TO_CONTENT:
-          newWidth = getHugWidth(label, totalInfo, qApprMaxGlyphCount, col.isLocked);
+          newWidth = getFitToContentWidth(label, totalInfo, qApprMaxGlyphCount, col.isLocked);
           addKnownWidth();
           break;
         case ColumnWidthTypes.AUTO:
@@ -97,7 +97,7 @@ const useColumnWidths = (
   const showTotals = totalsPosition.atBottom || totalsPosition.atTop;
   const measureHeadLabel = useMeasureText(head.fontSize, head.fontFamily).measureText;
   const { measureText, estimateWidth } = useMeasureText(body.fontSize, body.fontFamily);
-  const getHugWidth = useMemo<GetHugWidth>(
+  const getFitToContentWidth = useMemo<GetFitToContentWidth>(
     () => (headLabel, totalsLabel, glyphCount, isLocked) => {
       const HEAD_LABEL_WIDTH = isLocked
         ? LOOK_BUTTON_AND_AUTO_MARGIN + ADJUSTED_HEADER_WIDTH + FLEX_BOX_GAP
@@ -112,11 +112,11 @@ const useColumnWidths = (
   );
   const [yScrollbarWidth, setYScrollbarWidth] = useState(0);
 
-  const [columnWidths, setColumnWidths] = useState(() => getColumnWidths(columns, tableWidth, getHugWidth));
+  const [columnWidths, setColumnWidths] = useState(() => getColumnWidths(columns, tableWidth, getFitToContentWidth));
 
   useOnPropsChange(() => {
-    setColumnWidths(getColumnWidths(columns, tableWidth - yScrollbarWidth, getHugWidth));
-  }, [columns, tableWidth, yScrollbarWidth, getHugWidth]);
+    setColumnWidths(getColumnWidths(columns, tableWidth - yScrollbarWidth, getFitToContentWidth));
+  }, [columns, tableWidth, yScrollbarWidth, getFitToContentWidth]);
 
   return [columnWidths, setColumnWidths, setYScrollbarWidth];
 };
