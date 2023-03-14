@@ -255,11 +255,11 @@ const getChartExploration = (env) =>
 
 const getUsePagination = ({ flags }) =>
   flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES') && {
-    ref: 'presentation.usePagination',
+    ref: 'usePagination',
     translation: 'properties.usePagination',
     type: 'boolean',
     component: 'checkbox',
-    defaultValue: true,
+    defaultValue: false,
   };
 
 const getSettings = (env) => ({

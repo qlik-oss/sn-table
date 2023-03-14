@@ -87,10 +87,8 @@ export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, 'qH
     position: 'top' | 'bottom' | 'noTotals';
     label: string;
   };
+  usePagination?: boolean;
   components?: Component[];
-  presentation?: {
-    usePagination?: boolean;
-  };
 }
 
 export interface Cell {

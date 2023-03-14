@@ -48,7 +48,7 @@ const useVirtualizedTable = ({
   reactRoot,
   applyColumnWidths,
 }: UseVirtualizedTable) => {
-  const shouldRender = areBasicFeaturesEnabled && layout.presentation?.usePagination === false;
+  const shouldRender = areBasicFeaturesEnabled && layout.usePagination === false;
   const tableData = useMemo(() => getVirtualScrollTableData(layout, constraints), [layout, constraints]);
   const { pageInfo, setPage } = usePageInfo(layout, shouldRender);
   const { initialDataPages, isLoading } = useInitialDataPages({ model, layout, page: pageInfo.page, shouldRender });
