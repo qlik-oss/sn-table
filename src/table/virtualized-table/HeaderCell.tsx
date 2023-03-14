@@ -12,6 +12,7 @@ interface HeaderCellProps {
   data: {
     columns: Column[];
     headerStyle: GeneratedStyling;
+    columResizeHandler: () => void;
   };
 }
 
@@ -19,6 +20,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
   const {
     columns,
     headerStyle: { ...applicableStyle },
+    columResizeHandler,
   } = data;
 
   const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
@@ -51,7 +53,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
           {column.label}
         </CellText>
       </HeadCellContent>
-      <ColumnAdjuster column={column} isLastColumn={isLastColumn} />
+      <ColumnAdjuster column={column} isLastColumn={isLastColumn} onColumnResize={columResizeHandler} />
     </div>
   );
 };

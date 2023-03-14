@@ -13,7 +13,7 @@ import { focusHeadMenuButton } from '../../utils/accessibility-utils';
  * When you start dragging, mouse move and mouse up listeners are added.
  * While dragging the current column is updated, and on mouse up all other columns are updated.
  */
-const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
+const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps) => {
   const { pageColIdx } = column;
   const { rootElement, applyColumnWidths, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
@@ -24,6 +24,7 @@ const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
   if (!applyColumnWidths || constraints.active) return null;
 
   const updateWidth = (adjustedWidth: number) => {
+    onColumnResize?.();
     tempWidths.current.columnWidth = adjustedWidth;
     const newColumnWidths = [...columnWidths];
     newColumnWidths[pageColIdx] = adjustedWidth;

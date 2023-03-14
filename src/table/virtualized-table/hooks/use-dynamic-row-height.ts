@@ -108,6 +108,15 @@ const useDynamicRowHeight = ({
     [rowMeta, estimatedRowHeight]
   );
 
+  const resetRowMeta = useCallback(() => {
+    rowMeta.current.lastScrollToRatio = 0;
+    rowMeta.current.resetAfterRowIndex = 0;
+    rowMeta.current.heights = [];
+    rowMeta.current.totalHeight = 0;
+    rowMeta.current.count = 0;
+    rowMeta.current.measuredCells.clear();
+  }, [rowMeta]);
+
   /**
    * Some user actions and events can trigger row heights to be invalidated
    * - A column is re-sized
@@ -117,16 +126,13 @@ const useDynamicRowHeight = ({
    * - Container element is re-sized (object re-sized in Qlik Sense or browser window re-sized)
    */
   useOnPropsChange(() => {
-    rowMeta.current.lastScrollToRatio = 0;
-    rowMeta.current.resetAfterRowIndex = 0;
-    rowMeta.current.heights = [];
-    rowMeta.current.totalHeight = 0;
-    rowMeta.current.count = 0;
-    rowMeta.current.measuredCells.clear();
-  }, [layout, pageInfo, getCellSize]);
+    resetRowMeta();
+  }, [layout, pageInfo]);
 
-  const updateCellHeight = (rows: Row[]) => {
+  const resizeVisibleCells = (rows: Row[]) => {
     if (!gridState) return;
+
+    resetRowMeta();
 
     const { overscanRowStartIndex: rowStart, overscanRowStopIndex } = gridState.current;
     const rowStop = Math.min(overscanRowStopIndex, layout.qHyperCube.qSize.qcy - 1);
@@ -149,7 +155,7 @@ const useDynamicRowHeight = ({
     lineRef.current.resetAfterIndex(rowMeta.current.resetAfterRowIndex, false);
   }
 
-  return { setCellSize, getRowHeight, rowMeta, estimatedRowHeight, maxLineCount, updateCellHeight };
+  return { setCellSize, getRowHeight, rowMeta, estimatedRowHeight, maxLineCount, resizeVisibleCells };
 };
 
 export default useDynamicRowHeight;

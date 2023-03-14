@@ -14,7 +14,7 @@ describe('useScrollHandler', () => {
   beforeEach(() => {
     listInstance = { scrollTo: () => {} } as unknown as VariableSizeList;
     listTotalsInstance = { scrollTo: () => {} } as unknown as VariableSizeList;
-    refHandler = { interpolatedScrollTo: () => {} } as BodyRef;
+    refHandler = { interpolatedScrollTo: () => {}, resizeCells: () => {} } as BodyRef;
 
     headerRef = { current: listInstance };
     totalsRef = { current: listTotalsInstance };

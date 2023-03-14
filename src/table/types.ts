@@ -313,6 +313,7 @@ export interface PaginationContentProps {
 export interface AdjusterProps {
   column: Column;
   isLastColumn: boolean;
+  onColumnResize?: () => void;
 }
 
 export interface FooterWrapperProps {
