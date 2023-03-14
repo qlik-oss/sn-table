@@ -100,6 +100,9 @@ export const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   padding: theme.spacing(1, 1.5),
   display: 'flex',
   justifyContent: 'space-between',
+  '&&:focus': {
+    boxShadow: 'rgb(23, 127, 230) 0px 0px 0px 2px',
+  },
 }));
 
 export const StyledMenuItemLabel = styled('div')(() => ({
