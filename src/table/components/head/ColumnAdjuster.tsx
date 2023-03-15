@@ -19,7 +19,7 @@ const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps)
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setColumnWidths = useContextSelector(TableContext, (value) => value.setColumnWidths);
   const tempWidths = useRef({ adjusterHitArea: {}, columnWidth: 0, initX: 0, initWidth: 0 });
-  const borderHeight = rootElement.getBoundingClientRect().height - PAGINATION_HEIGHT + BORDER_WIDTH;
+  const borderHeight = rootElement.getBoundingClientRect().height - PAGINATION_HEIGHT - BORDER_WIDTH;
 
   if (!applyColumnWidths || constraints.active) return null;
 
