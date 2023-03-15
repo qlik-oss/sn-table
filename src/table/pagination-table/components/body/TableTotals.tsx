@@ -25,7 +25,6 @@ function TableTotals() {
       {columns.map((column, columnIndex) => {
         const cellCoord: [number, number] = [atTop ? 1 : rows.length + 1, columnIndex];
         const tabIndex = atTop && columnIndex === 0 && !keyboard.enabled ? 0 : -1;
-        console.log(tabIndex);
 
         return (
           <StyledTotalsCell

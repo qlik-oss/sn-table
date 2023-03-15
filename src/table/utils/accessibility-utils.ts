@@ -144,8 +144,6 @@ export const resetFocus = ({
     const cell = getCellElement(rootElement, cellCoord);
     updateFocus({ focusType, cell });
 
-    console.log('resetting focus');
-
     if (isSelectionMode) {
       const hasSelectedClassName = cell?.classList?.contains('selected');
       announce({
