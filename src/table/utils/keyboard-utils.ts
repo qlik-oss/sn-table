@@ -25,40 +25,17 @@ export const isArrowKey = (key: string) =>
 
 export const isShiftArrow = (evt: React.KeyboardEvent) => evt.shiftKey && isArrowKey(evt.key);
 
-interface ShouldBubbleEarlyProps {
-  evt: React.KeyboardEvent;
-  isHeader?: boolean;
-  isBody?: Boolean;
-  isSelectionMode?: boolean;
-  paginationNeeded?: boolean;
-  keyboardEnabled?: boolean;
-}
-
 /**
  * Checks if events caught by head, totals and body handles should be early returned and bubble to tableWrapper/default behavior
+ * In the case of tab key there are cases where the tabs bubble and there are things done in the key handlers
  */
-export const shouldBubbleEarly = ({
-  evt,
-  isHeader,
-  isBody,
-  isSelectionMode,
-  paginationNeeded,
-  keyboardEnabled,
-}: ShouldBubbleEarlyProps) => {
-  const shouldGoToSelToolbar = keyboardEnabled && isSelectionMode;
-  const bubbleWithoutShift = isBody && !evt.shiftKey && (paginationNeeded || !shouldGoToSelToolbar);
-  const bubbleWithShift = isBody && evt.shiftKey && !shouldGoToSelToolbar;
-  return (
-    // esc to blur object
-    (evt.key === KeyCodes.ESC && !isSelectionMode) ||
-    // tab to move focus
-    (evt.key === KeyCodes.TAB && (bubbleWithShift || bubbleWithoutShift)) ||
-    // ctrl + shift + arrow to change page
-    ((evt.key === KeyCodes.LEFT || evt.key === KeyCodes.RIGHT) && isCtrlShift(evt)) ||
-    // space/enter should bubble to buttons in header
-    ((evt.key === KeyCodes.SPACE || evt.key === KeyCodes.ENTER) && isHeader)
-  );
-};
+export const shouldBubbleEarly = (evt: React.KeyboardEvent, isHeader = false, isSelectionMode = false) =>
+  // esc to blur object
+  (evt.key === KeyCodes.ESC && !isSelectionMode) ||
+  // ctrl + shift + arrow to change page
+  ((evt.key === KeyCodes.LEFT || evt.key === KeyCodes.RIGHT) && isCtrlShift(evt)) ||
+  // space/enter should bubble to buttons in header
+  ((evt.key === KeyCodes.SPACE || evt.key === KeyCodes.ENTER) && isHeader);
 
 /**
  * Checks if should select with shift + arrow.
@@ -156,13 +133,26 @@ export const headTabHelper = (
   }
 };
 
-export const bodyTabHelper = (
-  evt: React.KeyboardEvent<Element>,
-  rootElement: HTMLElement,
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  keyboard?: stardust.Keyboard
-) => {
-  if (keyboard) {
+interface BodyTabHelperProps {
+  evt: React.KeyboardEvent<Element>;
+  rootElement: HTMLElement;
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  keyboard?: stardust.Keyboard;
+  isSelectionMode?: boolean;
+  paginationNeeded?: boolean;
+}
+
+export const bodyTabHelper = ({
+  evt,
+  rootElement,
+  setFocusedCellCoord,
+  keyboard,
+  isSelectionMode,
+  paginationNeeded,
+}: BodyTabHelperProps) => {
+  const tabToToolbar = keyboard?.enabled && isSelectionMode && (evt.shiftKey || (!evt.shiftKey && !paginationNeeded));
+
+  if (tabToToolbar) {
     preventDefaultBehavior(evt);
     focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
   } else if (evt.shiftKey) {

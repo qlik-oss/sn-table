@@ -8,11 +8,10 @@ import { SelectionDispatch } from '../../types';
 describe('keyboard-utils', () => {
   describe('shouldBubbleEarly', () => {
     let evt: React.KeyboardEvent;
+    let isHeader: boolean;
     let isSelectionMode: boolean;
-    let keyboardEnabled: boolean;
-    let paginationNeeded: boolean;
 
-    const callShouldBubbleEarly = () => shouldBubbleEarly({ evt, isSelectionMode, keyboardEnabled, paginationNeeded });
+    const callShouldBubbleEarly = () => shouldBubbleEarly(evt, isHeader, isSelectionMode);
 
     beforeEach(() => {
       evt = {
@@ -22,8 +21,7 @@ describe('keyboard-utils', () => {
         metaKey: false, // cases when meta key is pressed instead of ctrl is not tested here, the test are granular enough anyway
       } as unknown as React.KeyboardEvent;
       isSelectionMode = false;
-      keyboardEnabled = false;
-      paginationNeeded = true;
+      isHeader = false;
     });
 
     it('should return true when esc is pressed and isSelectionMode is false', () => {
@@ -31,55 +29,6 @@ describe('keyboard-utils', () => {
     });
 
     it('should return false when esc is pressed and isSelectionMode is true', () => {
-      isSelectionMode = true;
-      expect(callShouldBubbleEarly()).toBe(false);
-    });
-
-    it('should return true when tab is pressed and paginationNeeded is true', () => {
-      evt.key = KeyCodes.TAB;
-      expect(callShouldBubbleEarly()).toBe(true);
-    });
-
-    it('should return true when tab is pressed, paginationNeeded is false and keyboardEnabled is false but isSelectionMode is true', () => {
-      evt.key = KeyCodes.TAB;
-      paginationNeeded = false;
-      isSelectionMode = true;
-      expect(callShouldBubbleEarly()).toBe(true);
-    });
-
-    it('should return true when tab is pressed, paginationNeeded is false and isSelectionMode is false but keyboardEnabled is true', () => {
-      evt.key = KeyCodes.TAB;
-      paginationNeeded = false;
-      keyboardEnabled = true;
-      expect(callShouldBubbleEarly()).toBe(true);
-    });
-
-    it('should return false when tab is pressed, paginationNeeded is false and keyboardEnabled && isSelectionMode is true', () => {
-      evt.key = KeyCodes.TAB;
-      paginationNeeded = false;
-      keyboardEnabled = true;
-      isSelectionMode = true;
-      expect(callShouldBubbleEarly()).toBe(false);
-    });
-
-    it('should return true when shift + tab is pressed and keyboardEnabled is false but isSelectionMode is true', () => {
-      evt.key = KeyCodes.TAB;
-      evt.shiftKey = true;
-      isSelectionMode = true;
-      expect(callShouldBubbleEarly()).toBe(true);
-    });
-
-    it('should return true when shift + tab is pressed and isSelectionMode is false but keyboardEnabled is true', () => {
-      evt.key = KeyCodes.TAB;
-      evt.shiftKey = true;
-      keyboardEnabled = true;
-      expect(callShouldBubbleEarly()).toBe(true);
-    });
-
-    it('should return false when shift + tab is pressed and keyboardEnabled && isSelectionMode is true', () => {
-      evt.key = KeyCodes.TAB;
-      evt.shiftKey = true;
-      keyboardEnabled = true;
       isSelectionMode = true;
       expect(callShouldBubbleEarly()).toBe(false);
     });

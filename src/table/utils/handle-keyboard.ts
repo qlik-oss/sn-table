@@ -20,7 +20,56 @@ import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownPro
 import { FocusTypes, KeyCodes, SelectionActions } from '../constants';
 
 /**
- * ----------- Key handlers -----------
+ * handles ArrowDown and ArrowUp events for the head cell menu (move focus)
+ */
+export const handleHeadCellMenuKeyDown = (event: React.KeyboardEvent<HTMLLIElement>) => {
+  const { key, target } = event;
+  const currentFocusItem = document.activeElement ?? (target as HTMLElement);
+  // The rest key are handled by handleKeyDown in MUIMenuList
+  if (key === 'ArrowDown' || key === 'ArrowUp') {
+    const getNewFocusItem = (currentItem: Element) =>
+      key === 'ArrowDown' ? getNextMenuItem(currentItem) : getPreviousMenuItem(currentItem);
+    // Prevent scroll of the page
+    // Stop triggering handleKeyDown in MUIMenuList
+    preventDefaultBehavior(event);
+    let newFocusItem = getNewFocusItem(currentFocusItem);
+    while (newFocusItem) {
+      if (newFocusItem.ariaDisabled === 'true') {
+        newFocusItem = getNewFocusItem(newFocusItem);
+      } else {
+        (newFocusItem as HTMLElement).focus();
+        break;
+      }
+    }
+  }
+};
+
+/**
+ * confirms selections when making multiple selections with shift + arrows and shit is released
+ */
+export const handleBodyKeyUp = (
+  evt: React.KeyboardEvent,
+  selectionDispatch: SelectionDispatch,
+  areBasicFeaturesEnabled: boolean
+) => {
+  areBasicFeaturesEnabled &&
+    evt.key === KeyCodes.SHIFT &&
+    selectionDispatch({ type: SelectionActions.SELECT_MULTI_END });
+};
+
+/**
+ * Manually focuses the selection toolbar if tabbing from the last focusable element
+ */
+export const handleLastTab = (evt: React.KeyboardEvent, isSelectionMode: boolean, keyboard: stardust.Keyboard) => {
+  if (isSelectionMode && evt.key === KeyCodes.TAB && !evt.shiftKey) {
+    // tab key: focus on the selection toolbar
+    preventDefaultBehavior(evt);
+    focusSelectionToolbar(evt.target as HTMLElement, keyboard, false);
+  }
+};
+
+/**
+ * ----------- Table key down handlers -----------
  * General pattern for handling keydown events:
  * 1. Event caught by inner handlers (head, totals or body)
  * 2. Check if they are disabled completely (in selection mode, on an excluded cell etc), then run preventDefaultBehavior and early return
@@ -83,7 +132,7 @@ export const handleHeadKeyDown = ({
     return;
   }
 
-  if (shouldBubbleEarly({ evt, isHeader: true })) return;
+  if (shouldBubbleEarly(evt, true)) return;
 
   const target = evt.target as HTMLElement;
   const isLastHeadCell = !target.closest('.sn-table-cell')?.nextSibling;
@@ -129,7 +178,7 @@ export const handleTotalKeyDown = (
     preventDefaultBehavior(evt);
     return;
   }
-  if (shouldBubbleEarly({ evt })) return;
+  if (shouldBubbleEarly(evt)) return;
 
   switch (evt.key) {
     case KeyCodes.LEFT:
@@ -146,7 +195,7 @@ export const handleTotalKeyDown = (
       break;
     }
     case KeyCodes.TAB:
-      bodyTabHelper(evt, rootElement, setFocusedCellCoord);
+      bodyTabHelper({ evt, rootElement, setFocusedCellCoord });
       break;
     case KeyCodes.C: {
       preventDefaultBehavior(evt);
@@ -180,8 +229,7 @@ export const handleBodyKeyDown = ({
     return;
   }
   const isSelectionMode = selectionsAPI.isModal();
-  if (shouldBubbleEarly({ evt, isBody: true, isSelectionMode, paginationNeeded, keyboardEnabled: keyboard.enabled }))
-    return;
+  if (shouldBubbleEarly(evt, false, isSelectionMode)) return;
 
   switch (evt.key) {
     // Arrows: move focus and select multiple with shift
@@ -226,7 +274,7 @@ export const handleBodyKeyDown = ({
       break;
     // Tab (+ shift): in selection mode and keyboard enabled, focus on selection toolbar
     case KeyCodes.TAB:
-      bodyTabHelper(evt, rootElement, setFocusedCellCoord, keyboard);
+      bodyTabHelper({ evt, rootElement, setFocusedCellCoord, keyboard, isSelectionMode, paginationNeeded });
       break;
     // Ctrl + c: copy cell value
     case KeyCodes.C:
@@ -235,54 +283,5 @@ export const handleBodyKeyDown = ({
       break;
     default:
       break;
-  }
-};
-
-/**
- * handles ArrowDown and ArrowUp events for the head cell menu (move focus)
- */
-export const handleHeadCellMenuKeyDown = (event: React.KeyboardEvent<HTMLLIElement>) => {
-  const { key, target } = event;
-  const currentFocusItem = document.activeElement ?? (target as HTMLElement);
-  // The rest key are handled by handleKeyDown in MUIMenuList
-  if (key === 'ArrowDown' || key === 'ArrowUp') {
-    const getNewFocusItem = (currentItem: Element) =>
-      key === 'ArrowDown' ? getNextMenuItem(currentItem) : getPreviousMenuItem(currentItem);
-    // Prevent scroll of the page
-    // Stop triggering handleKeyDown in MUIMenuList
-    preventDefaultBehavior(event);
-    let newFocusItem = getNewFocusItem(currentFocusItem);
-    while (newFocusItem) {
-      if (newFocusItem.ariaDisabled === 'true') {
-        newFocusItem = getNewFocusItem(newFocusItem);
-      } else {
-        (newFocusItem as HTMLElement).focus();
-        break;
-      }
-    }
-  }
-};
-
-/**
- * confirms selections when making multiple selections with shift + arrows and shit is released
- */
-export const handleBodyKeyUp = (
-  evt: React.KeyboardEvent,
-  selectionDispatch: SelectionDispatch,
-  areBasicFeaturesEnabled: boolean
-) => {
-  areBasicFeaturesEnabled &&
-    evt.key === KeyCodes.SHIFT &&
-    selectionDispatch({ type: SelectionActions.SELECT_MULTI_END });
-};
-
-/**
- * Manually focuses the selection toolbar if tabbing from the last focusable element
- */
-export const handleLastTab = (evt: React.KeyboardEvent, isSelectionMode: boolean, keyboard: stardust.Keyboard) => {
-  if (isSelectionMode && evt.key === KeyCodes.TAB && !evt.shiftKey) {
-    // tab key: focus on the selection toolbar
-    preventDefaultBehavior(evt);
-    focusSelectionToolbar(evt.target as HTMLElement, keyboard, false);
   }
 };

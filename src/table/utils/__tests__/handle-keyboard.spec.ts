@@ -235,11 +235,11 @@ describe('handle-keyboard', () => {
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
     });
 
-    it('when pressing an invalid key, should only call preventDefaultBehavior', () => {
+    it('when pressing an invalid key, should call nothing', () => {
       evt.key = KeyCodes.UP;
       callHandleHeadKeyDown();
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
+      expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(changeSortOrder).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
     });
@@ -350,8 +350,8 @@ describe('handle-keyboard', () => {
     it('should take the default case when the pressed key is not an arrow key', () => {
       evt.key = KeyCodes.ENTER;
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
+      expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(accessibilityUtils.moveFocusWithArrow).not.toHaveBeenCalled();
     });
 
@@ -558,11 +558,11 @@ describe('handle-keyboard', () => {
       expect(handleCopy.default).not.toHaveBeenCalled();
     });
 
-    it('when other keys are pressed, should only prevent default behavior', () => {
+    it('when other keys are pressed, should call nothing', () => {
       evt.key = 'A';
       runHandleBodyKeyDown();
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
+      expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect((evt.target as HTMLElement).blur).not.toHaveBeenCalled();
       expect((evt.target as HTMLElement).setAttribute).not.toHaveBeenCalled();
       expect(selectionsAPI.cancel).not.toHaveBeenCalled();
