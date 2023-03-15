@@ -85,12 +85,17 @@ export const moveFocus = (
   return nextCell;
 };
 
+/**
+ * Finds the cell with tab stops and focuses that cell.
+ * If no cells has focus, it focuses the first body cell instead
+ */
 export const focusBodyFromHead = (
   rootElement: HTMLElement,
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
 ) => {
-  const cell = findCellWithTabStop(rootElement);
-  const newCellCoord = getCellCoordFromCell(rootElement, cell);
+  let cell = findCellWithTabStop(rootElement);
+  const newCellCoord = cell ? getCellCoordFromCell(rootElement, cell) : FIRST_BODY_CELL_COORD;
+  cell = getCellElement(rootElement, FIRST_BODY_CELL_COORD);
   cell.focus();
   setFocusedCellCoord(newCellCoord);
 };
@@ -138,6 +143,8 @@ export const resetFocus = ({
     shouldRefocus.current = false;
     const cell = getCellElement(rootElement, cellCoord);
     updateFocus({ focusType, cell });
+
+    console.log('resetting focus');
 
     if (isSelectionMode) {
       const hasSelectedClassName = cell?.classList?.contains('selected');

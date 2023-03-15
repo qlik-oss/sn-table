@@ -44,6 +44,7 @@ function TableWrapper(props: TableWrapperProps) {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   }, [rootElement]);
 
+  console.log(focusedCellCoord);
   useEffect(() => {
     tableContainerRef.current?.scrollTo(0, 0);
   }, [pageInfo, totalRowCount]);

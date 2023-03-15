@@ -11,6 +11,7 @@ import {
   shouldBubble,
   bodyArrowHelper,
   getFocusType,
+  headTabHelper,
 } from './keyboard-utils';
 import { findCellWithTabStop, getNextMenuItem, getPreviousMenuItem } from './get-element-utils';
 import copyCellValue from './copy-utils';
@@ -82,8 +83,7 @@ export const handleHeadKeyDown = ({
   }
 
   // TODO: See if it bubbles correctly
-  if (shouldBubble(evt) || evt.key === KeyCodes.SPACE || evt.key === KeyCodes.ENTER) return;
-  preventDefaultBehavior(evt);
+  // if (shouldBubble(evt) || evt.key === KeyCodes.SPACE || evt.key === KeyCodes.ENTER) return;
 
   const target = evt.target as HTMLElement;
   const isLastHeadCell = !target.closest('.sn-table-cell')?.nextSibling;
@@ -91,6 +91,8 @@ export const handleHeadKeyDown = ({
   switch (evt.key) {
     case KeyCodes.LEFT:
     case KeyCodes.RIGHT:
+      preventDefaultBehavior(evt);
+
       if (evt.key === KeyCodes.RIGHT && isLastHeadCell) {
         focusBodyFromHead(rootElement, setFocusedCellCoord);
       } else {
@@ -98,12 +100,16 @@ export const handleHeadKeyDown = ({
       }
       break;
     case KeyCodes.DOWN:
+      preventDefaultBehavior(evt);
       updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: findCellWithTabStop(rootElement) });
       moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, FocusTypes.FOCUS);
       break;
     case KeyCodes.C:
+      preventDefaultBehavior(evt);
       areBasicFeaturesEnabled && isCtrlCmd(evt) && copyCellValue(evt);
-
+      break;
+    case KeyCodes.TAB:
+      headTabHelper(evt, rootElement, cellCoord, isLastHeadCell, setFocusedCellCoord);
       break;
     default:
       break;
@@ -238,7 +244,11 @@ export const handleBodyKeyDown = ({
       break;
     // Tab (+ shift): in selection mode and keyboard enabled, focus on selection toolbar
     case KeyCodes.TAB:
-      focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
+      if (isSelectionMode) {
+        focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
+      } else {
+        focusSelectionToolbar(rootElement, keyboard, true);
+      }
       break;
     case KeyCodes.C:
       areBasicFeaturesEnabled && isCtrlCmd(evt) && copyCellValue(evt);

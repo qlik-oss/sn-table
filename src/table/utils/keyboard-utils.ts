@@ -1,7 +1,7 @@
 import { Cell } from '../../types';
 import { FocusTypes, KeyCodes, SelectionActions } from '../constants';
 import { BodyArrowHelperProps } from '../types';
-import { announceSelectionState, moveFocus, updateFocus } from './accessibility-utils';
+import { announceSelectionState, focusBodyFromHead, moveFocus, updateFocus } from './accessibility-utils';
 import { handleNavigateTop } from './handle-scroll';
 
 export const preventDefaultBehavior = (evt: React.KeyboardEvent | MouseEvent | React.MouseEvent<HTMLLIElement>) => {
@@ -112,5 +112,25 @@ export const bodyArrowHelper = ({
   } else {
     // When not selecting multiple we need to announce the selection state of the cell
     announceSelectionState(announce, nextCell, isSelectionMode);
+  }
+};
+
+export const headTabHelper = (
+  evt: React.KeyboardEvent<Element>,
+  rootElement: HTMLElement,
+  cellCoord: [number, number],
+  isLastHeadCell: boolean,
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
+) => {
+  const isLabel = evt.target.classList.contains('sn-table-head-label');
+  if (isLabel && evt.shiftKey && cellCoord[1] > 0) {
+    setFocusedCellCoord([cellCoord[0], cellCoord[1] - 1]);
+  } else if (!isLabel && !evt.shiftKey) {
+    if (isLastHeadCell) {
+      preventDefaultBehavior(evt);
+      focusBodyFromHead(rootElement, setFocusedCellCoord);
+    } else {
+      setFocusedCellCoord([cellCoord[0], cellCoord[1] + 1]);
+    }
   }
 };

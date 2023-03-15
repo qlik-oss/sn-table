@@ -15,7 +15,7 @@ module.exports = {
     flags: {
       PS_18291_SN_TABLE_BASIC_FEATURES: true,
     },
-    keyboardNavigation: false,
+    keyboardNavigation: true,
     themes: [
       {
         id: 'Test',
