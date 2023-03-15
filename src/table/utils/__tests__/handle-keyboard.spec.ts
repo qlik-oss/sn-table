@@ -198,24 +198,24 @@ describe('handle-keyboard', () => {
       isInteractionEnabled = true;
       setFocusedCellCoord = jest.fn();
       jest.spyOn(accessibilityUtils, 'focusBodyFromHead').mockImplementation(() => {});
-      jest.spyOn(accessibilityUtils, 'moveFocus').mockImplementation(() => ({} as HTMLTableCellElement));
+      jest.spyOn(accessibilityUtils, 'moveFocusWithArrow').mockImplementation(() => ({} as HTMLTableCellElement));
       jest.spyOn(accessibilityUtils, 'updateFocus').mockImplementation(() => {});
       jest.spyOn(getElementUtils, 'findCellWithTabStop').mockImplementation(() => ({} as HTMLTableCellElement));
     });
 
-    it('should call moveFocus and prevent default behavior on left arrow', () => {
+    it('should call moveFocusWithArrow and prevent default behavior on left arrow', () => {
       evt.key = KeyCodes.LEFT;
       callHandleHeadKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledTimes(1);
     });
 
-    it('should call moveFocus and prevent default behavior on right arrow', () => {
+    it('should call moveFocusWithArrow and prevent default behavior on right arrow', () => {
       callHandleHeadKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledTimes(1);
     });
 
     it('should call focusBodyFromHead and prevent default behavior on right arrow on last head cell', () => {
@@ -226,12 +226,12 @@ describe('handle-keyboard', () => {
       expect(accessibilityUtils.focusBodyFromHead).toHaveBeenCalledTimes(1);
     });
 
-    it('should call updateFocus + moveFocus and prevent default behavior on down arrow', () => {
+    it('should call updateFocus + moveFocusWithArrow and prevent default behavior on down arrow', () => {
       evt.key = KeyCodes.DOWN;
       callHandleHeadKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledTimes(1);
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
     });
 
@@ -302,16 +302,16 @@ describe('handle-keyboard', () => {
       } as unknown as HTMLElement;
       setFocusedCellCoord = jest.fn();
       isSelectionMode = false;
-      jest.spyOn(accessibilityUtils, 'moveFocus').mockImplementation(() => ({} as HTMLTableCellElement));
+      jest.spyOn(accessibilityUtils, 'moveFocusWithArrow').mockImplementation(() => ({} as HTMLTableCellElement));
       jest.spyOn(accessibilityUtils, 'updateFocus').mockImplementation(() => {});
     });
 
-    it('should call moveFocus and updateFocus when pressing arrow key', () => {
+    it('should call moveFocusWithArrow and updateFocus when pressing arrow key', () => {
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocus).toHaveBeenCalledWith(
+      expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledWith(
         evt,
         rootElement,
         cellCoord,
@@ -321,15 +321,15 @@ describe('handle-keyboard', () => {
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
     });
 
-    it('should call moveFocus  when pressing left arrow key on first totals cell', () => {
+    it('should call moveFocusWithArrow  when pressing left arrow key on first totals cell', () => {
       evt.key = KeyCodes.LEFT;
       cellCoord = [1, 0];
 
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocus).toHaveBeenCalledWith(
+      expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledWith(
         evt,
         rootElement,
         cellCoord,
@@ -344,7 +344,7 @@ describe('handle-keyboard', () => {
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocus).not.toHaveBeenCalled();
+      expect(accessibilityUtils.moveFocusWithArrow).not.toHaveBeenCalled();
     });
 
     it('should take the default case when the pressed key is not an arrow key', () => {
@@ -352,7 +352,7 @@ describe('handle-keyboard', () => {
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocus).not.toHaveBeenCalled();
+      expect(accessibilityUtils.moveFocusWithArrow).not.toHaveBeenCalled();
     });
 
     it('should call copyCellValue on Total cell when the pressed keys are Ctrl and C keys', () => {

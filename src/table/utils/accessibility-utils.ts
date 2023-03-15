@@ -64,9 +64,9 @@ export const updateFocus = ({ focusType, cell }: CellFocusProps) => {
 };
 
 /**
- * Resets and adds new focus to a table cell based which key is pressed
+ * Resets and adds new focus to a table cell based which arrow key is pressed
  */
-export const moveFocus = (
+export const moveFocusWithArrow = (
   evt: React.KeyboardEvent,
   rootElement: HTMLElement,
   cellCoord: [number, number],
@@ -95,8 +95,8 @@ export const focusBodyFromHead = (
 ) => {
   let cell = findCellWithTabStop(rootElement);
   const newCellCoord = cell ? getCellCoordFromCell(rootElement, cell) : FIRST_BODY_CELL_COORD;
-  cell = getCellElement(rootElement, FIRST_BODY_CELL_COORD);
-  cell.focus();
+  cell = cell || getCellElement(rootElement, FIRST_BODY_CELL_COORD);
+  updateFocus({ cell, focusType: FocusTypes.FOCUS });
   setFocusedCellCoord(newCellCoord);
 };
 

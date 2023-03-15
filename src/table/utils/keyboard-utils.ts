@@ -1,7 +1,14 @@
+import { stardust } from '@nebula.js/stardust';
 import { Cell } from '../../types';
 import { FocusTypes, KeyCodes, SelectionActions } from '../constants';
 import { BodyArrowHelperProps } from '../types';
-import { announceSelectionState, focusBodyFromHead, moveFocus, updateFocus } from './accessibility-utils';
+import {
+  announceSelectionState,
+  focusBodyFromHead,
+  focusSelectionToolbar,
+  moveFocusWithArrow,
+  updateFocus,
+} from './accessibility-utils';
 import { handleNavigateTop } from './handle-scroll';
 
 export const preventDefaultBehavior = (evt: React.KeyboardEvent | MouseEvent | React.MouseEvent<HTMLLIElement>) => {
@@ -18,25 +25,38 @@ export const isArrowKey = (key: string) =>
 
 export const isShiftArrow = (evt: React.KeyboardEvent) => evt.shiftKey && isArrowKey(evt.key);
 
+interface ShouldBubbleEarlyProps {
+  evt: React.KeyboardEvent;
+  isHeader?: boolean;
+  isBody?: Boolean;
+  isSelectionMode?: boolean;
+  paginationNeeded?: boolean;
+  keyboardEnabled?: boolean;
+}
+
 /**
- * Checks if events caught by head, totals and body handles should bubble to the wrapper handler or default behavior
+ * Checks if events caught by head, totals and body handles should be early returned and bubble to tableWrapper/default behavior
  */
-export const shouldBubble = (
-  evt: React.KeyboardEvent,
-  isSelectionMode = false,
-  keyboardEnabled = false,
-  paginationNeeded = true
-) => {
+export const shouldBubbleEarly = ({
+  evt,
+  isHeader,
+  isBody,
+  isSelectionMode,
+  paginationNeeded,
+  keyboardEnabled,
+}: ShouldBubbleEarlyProps) => {
   const shouldGoToSelToolbar = keyboardEnabled && isSelectionMode;
-  const bubbleWithoutShift = !evt.shiftKey && (paginationNeeded || !shouldGoToSelToolbar);
-  const bubbleWithShift = evt.shiftKey && !shouldGoToSelToolbar;
+  const bubbleWithoutShift = isBody && !evt.shiftKey && (paginationNeeded || !shouldGoToSelToolbar);
+  const bubbleWithShift = isBody && evt.shiftKey && !shouldGoToSelToolbar;
   return (
     // esc to blur object
     (evt.key === KeyCodes.ESC && !isSelectionMode) ||
-    // default tab to pagination or tab to blur
-    (evt.key === KeyCodes.TAB && (bubbleWithoutShift || bubbleWithShift)) ||
+    // tab to move focus
+    (evt.key === KeyCodes.TAB && (bubbleWithShift || bubbleWithoutShift)) ||
     // ctrl + shift + arrow to change page
-    ((evt.key === KeyCodes.LEFT || evt.key === KeyCodes.RIGHT) && isCtrlShift(evt))
+    ((evt.key === KeyCodes.LEFT || evt.key === KeyCodes.RIGHT) && isCtrlShift(evt)) ||
+    // space/enter should bubble to buttons in header
+    ((evt.key === KeyCodes.SPACE || evt.key === KeyCodes.ENTER) && isHeader)
   );
 };
 
@@ -96,7 +116,7 @@ export const bodyArrowHelper = ({
     updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLTableCellElement });
   }
 
-  const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, focusType, allowedRows);
+  const nextCell = moveFocusWithArrow(evt, rootElement, cellCoord, setFocusedCellCoord, focusType, allowedRows);
 
   if (!(evt.key === KeyCodes.UP || evt.key === KeyCodes.DOWN)) return;
 
@@ -122,7 +142,8 @@ export const headTabHelper = (
   isLastHeadCell: boolean,
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
 ) => {
-  const isLabel = evt.target.classList.contains('sn-table-head-label');
+  const target = evt.target as HTMLTableCellElement;
+  const isLabel = target.classList.contains('sn-table-head-label');
   if (isLabel && evt.shiftKey && cellCoord[1] > 0) {
     setFocusedCellCoord([cellCoord[0], cellCoord[1] - 1]);
   } else if (!isLabel && !evt.shiftKey) {
@@ -132,5 +153,22 @@ export const headTabHelper = (
     } else {
       setFocusedCellCoord([cellCoord[0], cellCoord[1] + 1]);
     }
+  }
+};
+
+export const bodyTabHelper = (
+  evt: React.KeyboardEvent<Element>,
+  rootElement: HTMLElement,
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
+  keyboard?: stardust.Keyboard
+) => {
+  if (keyboard) {
+    preventDefaultBehavior(evt);
+    focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
+  } else if (evt.shiftKey) {
+    const headCells = rootElement.querySelectorAll('.sn-table-head-cell') as NodeListOf<HTMLTableCellElement>;
+    const lastIndex = headCells.length - 1;
+
+    setFocusedCellCoord([0, lastIndex] as [number, number]);
   }
 };
