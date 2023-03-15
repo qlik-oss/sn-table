@@ -69,6 +69,8 @@ const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps)
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === KeyCodes.LEFT || event.key === KeyCodes.RIGHT) {
+      event.preventDefault();
+
       const RESIZE_DISTANCE = 5;
       const prevWidth = columnWidths[pageColIdx];
       const columnWidth = event.key === KeyCodes.LEFT ? prevWidth - RESIZE_DISTANCE : prevWidth + RESIZE_DISTANCE;
