@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { useContextSelector, TableContext } from '../../context';
 import { HeadCellContentProps } from '../../types';
 import { FullSortDirection } from '../../constants';
 import getHeadIcons from '../../utils/get-head-icons';
-import { VisuallyHidden, StyledSortButton, StyledHeadCellContent } from './styles';
 import HeadCellMenu from './HeadCellMenu';
 import { handleHeadKeyDown } from '../../utils/handle-keyboard';
 import { areTabStopsEnabled } from '../../utils/accessibility-utils';
+import {
+  VisuallyHidden,
+  StyledSortButton,
+  StyledHeadCellContent,
+  StyledLockIcon,
+  StyledHeadCellMenuWrapper,
+} from './styles';
 
 function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }: HeadCellContentProps) {
   const { constraints, keyboard, translator, rootElement, changeSortOrder } = useContextSelector(
@@ -33,9 +39,16 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
       areBasicFeaturesEnabled,
     });
 
+  const headCellContentClassName = useMemo(() => {
+    let className = '';
+    if (!column.isDim || column.headCellTextAlign === 'right') className += 'reverse ';
+    if (column.headCellTextAlign === 'center') className += 'centered';
+    return className;
+  }, [column]);
+
   return (
-    <StyledHeadCellContent onKeyDown={onKeyDown}>
-      {lockIcon}
+    <StyledHeadCellContent onKeyDown={onKeyDown} isLocked={lockIcon} className={headCellContentClassName}>
+      {(lockIcon || column.headCellTextAlign === 'center') && <StyledLockIcon>{lockIcon}</StyledLockIcon>}
 
       <StyledSortButton
         className="sn-table-head-label"
@@ -58,7 +71,9 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
         )}
       </StyledSortButton>
 
-      {areBasicFeaturesEnabled && isInteractionEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
+      <StyledHeadCellMenuWrapper>
+        {areBasicFeaturesEnabled && isInteractionEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
+      </StyledHeadCellMenuWrapper>
     </StyledHeadCellContent>
   );
 }

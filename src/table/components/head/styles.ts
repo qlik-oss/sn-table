@@ -6,6 +6,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 
 import { BORDER_WIDTH, DEFAULT_FONT_SIZE, PADDING } from '../../styling-defaults';
+import { DEFAULT_COLUMN_ICON_WIDTH } from '../../constants';
 
 // ---------- HeadCellContent ----------
 
@@ -19,6 +20,7 @@ export const StyledSortButton = styled(Button, {
   color: 'inherit',
   alignItems: 'flex-end',
   cursor: disabled ? 'auto' : 'pointer',
+  justifySelf: textAlign,
   '&&:focus, &&:hover': {
     '& svg': {
       opacity: isActive ? 1 : 0.5,
@@ -49,23 +51,52 @@ export const VisuallyHidden = styled('span')({
   width: 1,
 });
 
-export const StyledHeadCellContent = styled(Box)(({ theme }) => ({
+export const StyledHeadCellContent = styled(Box, {
+  shouldForwardProp: (prop: string) => prop !== 'isLocked',
+})(({ theme, isLocked }) => ({
   width: '100%',
-  display: 'flex',
-  justifyContent: 'space-between',
-  flexDirection: 'inherit',
-  alignItems: 'flex-end',
+  display: 'grid',
+  gridTemplateColumns: isLocked
+    ? `${DEFAULT_COLUMN_ICON_WIDTH}px 2fr ${DEFAULT_COLUMN_ICON_WIDTH}px`
+    : `1fr ${DEFAULT_COLUMN_ICON_WIDTH}px`,
   gap: theme.spacing(0.5),
   fontSize: 'inherit',
   '&&:hover, &&:focus-within': {
     '& #sn-table-head-menu-button': { opacity: 1 },
   },
+  '&.reverse': {
+    gridAutoFlow: 'dense',
+    gridTemplateColumns: `${DEFAULT_COLUMN_ICON_WIDTH}px 1fr`,
+
+    '& > .sn-table-head-label': {
+      gridColumn: 2,
+    },
+
+    '& > div:last-child': {
+      gridColumn: 1,
+    },
+  },
+  '&.centered': {
+    gridTemplateColumns: `${DEFAULT_COLUMN_ICON_WIDTH}px 2fr ${DEFAULT_COLUMN_ICON_WIDTH}px`,
+  },
 }));
+
+export const StyledLockIcon = styled('div')({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+});
+
+export const StyledHeadCellMenuWrapper = styled('div')({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+});
 
 export const LockWrapper = styled(Box)({
   display: 'flex',
-  justifyContent: 'flex-end',
-  alignItems: 'flex-start',
+  justifyContent: 'center',
+  alignItems: 'center',
   width: '20px',
   height: '18px',
   flexShrink: 0,
