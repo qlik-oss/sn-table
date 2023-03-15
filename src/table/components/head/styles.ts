@@ -81,13 +81,7 @@ export const StyledHeadCellContent = styled(Box, {
   },
 }));
 
-export const StyledLockIcon = styled('div')({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-});
-
-export const StyledHeadCellMenuWrapper = styled('div')({
+export const StyledHeadCellIconWrapper = styled('div')({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',

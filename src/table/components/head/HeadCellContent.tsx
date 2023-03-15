@@ -7,13 +7,7 @@ import getHeadIcons from '../../utils/get-head-icons';
 import HeadCellMenu from './HeadCellMenu';
 import { handleHeadKeyDown } from '../../utils/handle-keyboard';
 import { areTabStopsEnabled } from '../../utils/accessibility-utils';
-import {
-  VisuallyHidden,
-  StyledSortButton,
-  StyledHeadCellContent,
-  StyledLockIcon,
-  StyledHeadCellMenuWrapper,
-} from './styles';
+import { VisuallyHidden, StyledSortButton, StyledHeadCellContent, StyledHeadCellIconWrapper } from './styles';
 
 function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }: HeadCellContentProps) {
   const { constraints, keyboard, translator, rootElement, changeSortOrder } = useContextSelector(
@@ -48,7 +42,9 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
 
   return (
     <StyledHeadCellContent onKeyDown={onKeyDown} isLocked={lockIcon} className={headCellContentClassName}>
-      {(lockIcon || column.headCellTextAlign === 'center') && <StyledLockIcon>{lockIcon}</StyledLockIcon>}
+      {(lockIcon || column.headCellTextAlign === 'center') && (
+        <StyledHeadCellIconWrapper>{lockIcon}</StyledHeadCellIconWrapper>
+      )}
 
       <StyledSortButton
         className="sn-table-head-label"
@@ -71,9 +67,9 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
         )}
       </StyledSortButton>
 
-      <StyledHeadCellMenuWrapper>
+      <StyledHeadCellIconWrapper>
         {areBasicFeaturesEnabled && isInteractionEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
-      </StyledHeadCellMenuWrapper>
+      </StyledHeadCellIconWrapper>
     </StyledHeadCellContent>
   );
 }
