@@ -18,6 +18,56 @@ import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownPro
 import { FocusTypes, KeyCodes, SelectionActions } from '../constants';
 
 /**
+ * handles ArrowDown and ArrowUp events for the head cell menu (move focus)
+ */
+export const handleHeadCellMenuKeyDown = (event: React.KeyboardEvent<HTMLLIElement>) => {
+  const { key, target } = event;
+  const currentFocusItem = document.activeElement ?? (target as HTMLElement);
+  // The rest key are handled by handleKeyDown in MUIMenuList
+  if (key === KeyCodes.DOWN || key === KeyCodes.UP) {
+    const getNewFocusItem = (currentItem: Element) =>
+      key === KeyCodes.DOWN ? getNextMenuItem(currentItem) : getPreviousMenuItem(currentItem);
+    // Prevent scroll of the page
+    // Stop triggering handleKeyDown in MUIMenuList
+    preventDefaultBehavior(event);
+    let newFocusItem = getNewFocusItem(currentFocusItem);
+    while (newFocusItem) {
+      if (newFocusItem.ariaDisabled === 'true') {
+        newFocusItem = getNewFocusItem(newFocusItem);
+      } else {
+        (newFocusItem as HTMLElement).focus();
+        break;
+      }
+    }
+  }
+};
+
+/**
+ * confirms selections when making multiple selections with shift + arrows and shit is released
+ */
+export const handleBodyKeyUp = (
+  evt: React.KeyboardEvent,
+  selectionDispatch: SelectionDispatch,
+  areBasicFeaturesEnabled: boolean
+) => {
+  areBasicFeaturesEnabled &&
+    evt.key === KeyCodes.SHIFT &&
+    selectionDispatch({ type: SelectionActions.SELECT_MULTI_END });
+};
+
+/**
+ * Manually focuses the selection toolbar if tabbing from the last focusable element
+ */
+export const handleLastTab = (evt: React.KeyboardEvent, isSelectionMode: boolean, keyboard: stardust.Keyboard) => {
+  if (isSelectionMode && evt.key === KeyCodes.TAB && !evt.shiftKey) {
+    // tab key: focus on the selection toolbar
+    preventDefaultBehavior(evt);
+    // @ts-ignore TODO: fix nebula api so that target has the correct argument type
+    focusSelectionToolbar(evt.target, keyboard, false);
+  }
+};
+
+/**
  * ----------- Key handlers -----------
  * General pattern for handling keydown events:
  * 1. Event caught by inner handlers (head, totals or body)
@@ -107,31 +157,6 @@ export const handleHeadKeyDown = ({
       break;
     default:
       break;
-  }
-};
-
-/**
- * handles ArrowDown and ArrowUp events for the head cell menu (move focus)
- */
-export const handleHeadCellMenuKeyDown = (event: React.KeyboardEvent<HTMLLIElement>) => {
-  const { key, target } = event;
-  const currentFocusItem = document.activeElement ?? (target as HTMLElement);
-  // The rest key are handled by handleKeyDown in MUIMenuList
-  if (key === 'ArrowDown' || key === 'ArrowUp') {
-    const getNewFocusItem = (currentItem: Element) =>
-      key === 'ArrowDown' ? getNextMenuItem(currentItem) : getPreviousMenuItem(currentItem);
-    // Prevent scroll of the page
-    // Stop triggering handleKeyDown in MUIMenuList
-    preventDefaultBehavior(event);
-    let newFocusItem = getNewFocusItem(currentFocusItem);
-    while (newFocusItem) {
-      if (newFocusItem.ariaDisabled === 'true') {
-        newFocusItem = getNewFocusItem(newFocusItem);
-      } else {
-        (newFocusItem as HTMLElement).focus();
-        break;
-      }
-    }
   }
 };
 
@@ -245,30 +270,5 @@ export const handleBodyKeyDown = ({
       break;
     default:
       break;
-  }
-};
-
-/**
- * confirms selections when making multiple selections with shift + arrows and shit is released
- */
-export const handleBodyKeyUp = (
-  evt: React.KeyboardEvent,
-  selectionDispatch: SelectionDispatch,
-  areBasicFeaturesEnabled: boolean
-) => {
-  areBasicFeaturesEnabled &&
-    evt.key === KeyCodes.SHIFT &&
-    selectionDispatch({ type: SelectionActions.SELECT_MULTI_END });
-};
-
-/**
- * Manually focuses the selection toolbar if tabbing from the last focusable element
- */
-export const handleLastTab = (evt: React.KeyboardEvent, isSelectionMode: boolean, keyboard: stardust.Keyboard) => {
-  if (isSelectionMode && evt.key === KeyCodes.TAB && !evt.shiftKey) {
-    // tab key: focus on the selection toolbar
-    preventDefaultBehavior(evt);
-    // @ts-ignore TODO: fix nebula api so that target has the correct argument type
-    focusSelectionToolbar(evt.target, keyboard, false);
   }
 };
