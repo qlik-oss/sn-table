@@ -1,8 +1,9 @@
 import { stardust } from '@nebula.js/stardust';
 import React from 'react';
 import { Announce, TotalsPosition } from '../../../types';
-import { FocusTypes } from '../../constants';
+import { FIRST_BODY_CELL_COORD, FocusTypes } from '../../constants';
 import * as accessibilityUtils from '../accessibility-utils';
+import * as getElementUtils from '../get-element-utils';
 
 describe('accessibility-utils', () => {
   let cell: HTMLTableCellElement | undefined;
@@ -364,6 +365,39 @@ describe('accessibility-utils', () => {
       accessibilityUtils.removeTabAndFocusCell(newCoord, rootElement, setFocusedCellCoord, keyboard);
       expect(setFocusedCellCoord).toHaveBeenCalledWith(newCoord);
       expect(keyboard.focus).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('focusBodyFromHead', () => {
+    let otherCell: HTMLTableCellElement;
+
+    beforeEach(() => {});
+
+    beforeEach(() => {
+      otherCell = { ...cell } as HTMLTableCellElement;
+      rootElement = {
+        getElementsByClassName: (className: string) =>
+          className === 'sn-table-cell' ? [otherCell, otherCell, otherCell, cell, otherCell, otherCell] : [cell, cell],
+      } as unknown as HTMLDivElement;
+      jest.spyOn(getElementUtils, 'findCellWithTabStop').mockImplementation(() => cell as HTMLTableCellElement);
+      jest.spyOn(getElementUtils, 'getCellElement').mockImplementation(() => cell as HTMLTableCellElement);
+    });
+
+    it('should call findCellWithTabStop and setFocusedCellCoord and setFocusedCellCoord with coord [2, 1] when cell with tabstop is found', () => {
+      accessibilityUtils.focusBodyFromHead(rootElement, setFocusedCellCoord);
+      expect(getElementUtils.findCellWithTabStop).toHaveBeenCalledTimes(1);
+      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
+      expect(setFocusedCellCoord).toHaveBeenCalledWith([2, 1]);
+    });
+
+    it('should call findCellWithTabStop, getCellElement and setFocusedCellCoord and setFocusedCellCoord with coord [2, 1] when cell with tabstop is found', () => {
+      cell = undefined;
+      accessibilityUtils.focusBodyFromHead(rootElement, setFocusedCellCoord);
+      expect(getElementUtils.findCellWithTabStop).toHaveBeenCalledTimes(1);
+      expect(getElementUtils.getCellElement).toHaveBeenCalledTimes(1);
+      expect(getElementUtils.getCellElement).toHaveBeenCalledWith(rootElement, FIRST_BODY_CELL_COORD);
+      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
+      expect(setFocusedCellCoord).toHaveBeenCalledWith(FIRST_BODY_CELL_COORD);
     });
   });
 });
