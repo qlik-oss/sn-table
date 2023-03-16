@@ -6,7 +6,10 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 
 import { BORDER_WIDTH, DEFAULT_FONT_SIZE, PADDING } from '../../styling-defaults';
-import { DEFAULT_COLUMN_ICON_WIDTH } from '../../constants';
+import {
+  DEFAULT_COLUMN_MENU_ICON_WIDTH as MENU_ICON_WIDTH,
+  DEFAULT_COLUMN_LOCK_ICON_WIDTH as LOCK_ICON_WIDTH,
+} from '../../constants';
 
 // ---------- HeadCellContent ----------
 
@@ -56,45 +59,53 @@ export const StyledHeadCellContent = styled(Box, {
 })(({ theme, isLocked }) => ({
   width: '100%',
   display: 'grid',
-  gridTemplateColumns: isLocked
-    ? `${DEFAULT_COLUMN_ICON_WIDTH}px 2fr ${DEFAULT_COLUMN_ICON_WIDTH}px`
-    : `1fr ${DEFAULT_COLUMN_ICON_WIDTH}px`,
+  flexDirection: 'inherit',
+  gridAutoFlow: 'dense',
   gap: theme.spacing(0.5),
   fontSize: 'inherit',
   '&&:hover, &&:focus-within': {
     '& #sn-table-head-menu-button': { opacity: 1 },
   },
-  '&.reverse': {
-    gridAutoFlow: 'dense',
-    gridTemplateColumns: `${DEFAULT_COLUMN_ICON_WIDTH}px 1fr`,
 
-    '& > .sn-table-head-label': {
-      gridColumn: 2,
-    },
+  '& > div:last-child': { alignSelf: 'flex-end' },
 
-    '& > div:last-child': {
-      gridColumn: 1,
-    },
+  '&.aligned-left': {
+    gridTemplateColumns: isLocked ? `${LOCK_ICON_WIDTH}px 2fr ${MENU_ICON_WIDTH}px` : `1fr ${MENU_ICON_WIDTH}px`,
   },
-  '&.centered': {
-    gridTemplateColumns: `${DEFAULT_COLUMN_ICON_WIDTH}px 2fr ${DEFAULT_COLUMN_ICON_WIDTH}px`,
+
+  '&.aligned-center': {
+    gridTemplateColumns: `${MENU_ICON_WIDTH}px 2fr ${MENU_ICON_WIDTH}px`,
+
+    '& > div:first-child': { gridColumn: 1 },
+    '& .sn-table-head-label': { gridColumn: 2 },
+    '& > div:last-child': { gridColumn: 3 },
+  },
+
+  '&.aligned-right': {
+    gridTemplateColumns: isLocked ? `${MENU_ICON_WIDTH}px 2fr ${LOCK_ICON_WIDTH}px` : `${MENU_ICON_WIDTH}px 1fr`,
+
+    '& > div:first-child': { gridColumn: isLocked ? 3 : 'unset' },
+    '& .sn-table-head-label': { gridColumn: 2 },
+    '& > div:last-child': { gridColumn: 1 },
   },
 }));
 
 export const StyledHeadCellIconWrapper = styled('div')({
   display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
+  alignSelf: 'center',
 });
 
 export const LockWrapper = styled(Box)({
   display: 'flex',
-  justifyContent: 'center',
   alignItems: 'center',
   width: '20px',
   height: '18px',
   flexShrink: 0,
   flexDirection: 'inherit',
+
+  '&.aligned-right': { justifyContent: 'flex-start' },
+  '&.aligned-center': { justifyContent: 'center' },
+  '&.aligned-left': { justifyContent: 'flex-end' },
 });
 
 // ---------- HeadCellMenu ----------

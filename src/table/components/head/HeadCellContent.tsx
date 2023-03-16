@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { useContextSelector, TableContext } from '../../context';
 import { HeadCellContentProps } from '../../types';
@@ -33,18 +33,13 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
       areBasicFeaturesEnabled,
     });
 
-  const headCellContentClassName = useMemo(() => {
-    let className = '';
-    if (!column.isDim || column.headCellTextAlign === 'right') className += 'reverse ';
-    if (column.headCellTextAlign === 'center') className += 'centered';
-    return className;
-  }, [column]);
-
   return (
-    <StyledHeadCellContent onKeyDown={onKeyDown} isLocked={lockIcon} className={headCellContentClassName}>
-      {(lockIcon || column.headCellTextAlign === 'center') && (
-        <StyledHeadCellIconWrapper>{lockIcon}</StyledHeadCellIconWrapper>
-      )}
+    <StyledHeadCellContent
+      onKeyDown={onKeyDown}
+      isLocked={Boolean(lockIcon)}
+      className={`aligned-${column.headCellTextAlign}`}
+    >
+      {lockIcon && <StyledHeadCellIconWrapper>{lockIcon}</StyledHeadCellIconWrapper>}
 
       <StyledSortButton
         className="sn-table-head-label"
@@ -67,9 +62,7 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
         )}
       </StyledSortButton>
 
-      <StyledHeadCellIconWrapper>
-        {areBasicFeaturesEnabled && isInteractionEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
-      </StyledHeadCellIconWrapper>
+      {areBasicFeaturesEnabled && isInteractionEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
     </StyledHeadCellContent>
   );
 }

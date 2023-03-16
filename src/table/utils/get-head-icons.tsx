@@ -10,7 +10,7 @@ const getHeadIcons = ({ sortDirection, isLocked, headCellTextAlign }: Column) =>
   const sortIcon =
     sortDirection === 'A' ? <Ascending height={DEFAULT_FONT_SIZE} /> : <Descending height={DEFAULT_FONT_SIZE} />;
   const lockIcon = isLocked ? (
-    <LockWrapper>
+    <LockWrapper className={`aligned-${headCellTextAlign}`}>
       <Lock height={DEFAULT_FONT_SIZE} data-testid="head-cell-lock-icon" />
     </LockWrapper>
   ) : undefined;
