@@ -33,14 +33,12 @@ describe('keyboard-utils', () => {
   afterEach(() => jest.clearAllMocks());
 
   describe('shouldBubbleEarly', () => {
-    let isHeader: boolean;
     let isSelectionMode: boolean;
 
-    const callShouldBubbleEarly = () => shouldBubbleEarly(evt, isHeader, isSelectionMode);
+    const callShouldBubbleEarly = () => shouldBubbleEarly(evt, isSelectionMode);
 
     beforeEach(() => {
       isSelectionMode = false;
-      isHeader = false;
     });
 
     it('should return true when esc is pressed and isSelectionMode is false', () => {

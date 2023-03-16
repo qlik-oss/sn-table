@@ -132,7 +132,7 @@ export const handleHeadKeyDown = ({
     return;
   }
 
-  if (shouldBubbleEarly(evt, true)) return;
+  if (shouldBubbleEarly(evt)) return;
 
   const target = evt.target as HTMLElement;
   const isLastHeadCell = !target.closest('.sn-table-cell')?.nextSibling;
@@ -229,7 +229,7 @@ export const handleBodyKeyDown = ({
     return;
   }
   const isSelectionMode = selectionsAPI.isModal();
-  if (shouldBubbleEarly(evt, false, isSelectionMode)) return;
+  if (shouldBubbleEarly(evt, isSelectionMode)) return;
 
   switch (evt.key) {
     // Arrows: move focus and select multiple with shift

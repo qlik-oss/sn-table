@@ -26,16 +26,13 @@ export const isArrowKey = (key: string) =>
 export const isShiftArrow = (evt: React.KeyboardEvent) => evt.shiftKey && isArrowKey(evt.key);
 
 /**
- * Checks if events caught by head, totals and body handles should be early returned and bubble to tableWrapper/default behavior
- * In the case of tab key there are cases where the tabs bubble and there are things done in the key handlers
+ * Checks if events caught by head, totals and body handles should be early returned and bubble to tableWrapper/default behavior.
  */
-export const shouldBubbleEarly = (evt: React.KeyboardEvent, isHeader = false, isSelectionMode = false) =>
+export const shouldBubbleEarly = (evt: React.KeyboardEvent, isSelectionMode = false) =>
   // esc to blur object
   (evt.key === KeyCodes.ESC && !isSelectionMode) ||
   // ctrl + shift + arrow to change page
-  ((evt.key === KeyCodes.LEFT || evt.key === KeyCodes.RIGHT) && isCtrlShift(evt)) ||
-  // space/enter should bubble to buttons in header
-  ((evt.key === KeyCodes.SPACE || evt.key === KeyCodes.ENTER) && isHeader);
+  ((evt.key === KeyCodes.LEFT || evt.key === KeyCodes.RIGHT) && isCtrlShift(evt));
 
 /**
  * Checks if should select with shift + arrow.
