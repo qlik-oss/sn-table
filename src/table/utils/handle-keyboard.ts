@@ -26,9 +26,9 @@ export const handleHeadCellMenuKeyDown = (event: React.KeyboardEvent<HTMLLIEleme
   const { key, target } = event;
   const currentFocusItem = document.activeElement ?? (target as HTMLElement);
   // The rest key are handled by handleKeyDown in MUIMenuList
-  if (key === 'ArrowDown' || key === 'ArrowUp') {
+  if (key === KeyCodes.DOWN || key === KeyCodes.UP) {
     const getNewFocusItem = (currentItem: Element) =>
-      key === 'ArrowDown' ? getNextMenuItem(currentItem) : getPreviousMenuItem(currentItem);
+      key === KeyCodes.DOWN ? getNextMenuItem(currentItem) : getPreviousMenuItem(currentItem);
     // Prevent scroll of the page
     // Stop triggering handleKeyDown in MUIMenuList
     preventDefaultBehavior(event);
@@ -117,7 +117,7 @@ export const handleWrapperKeyDown = ({
 };
 
 /**
- * handles keydown events for the head cells (move focus, change sort order)
+ * handles keydown events for the head cells (move focus, copy cell value)
  */
 export const handleHeadKeyDown = ({
   evt,
@@ -165,7 +165,7 @@ export const handleHeadKeyDown = ({
 };
 
 /**
- * handles keydown events for the totals cells (move focus)
+ * handles keydown events for the totals cells (move focus, copy cell, value)
  */
 export const handleTotalKeyDown = (
   evt: React.KeyboardEvent,
@@ -208,7 +208,7 @@ export const handleTotalKeyDown = (
 };
 
 /**
- * handles keydown events for the body cells (move focus, make selections tabbing to other elements)
+ * handles keydown events for the body cells (move focus, make selections, copy cell value)
  */
 export const handleBodyKeyDown = ({
   evt,

@@ -19,7 +19,7 @@ const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps)
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setColumnWidths = useContextSelector(TableContext, (value) => value.setColumnWidths);
   const tempWidths = useRef({ adjusterHitArea: {}, columnWidth: 0, initX: 0, initWidth: 0 });
-  const borderHeight = rootElement.getBoundingClientRect().height - PAGINATION_HEIGHT + BORDER_WIDTH;
+  const borderHeight = rootElement.getBoundingClientRect().height - PAGINATION_HEIGHT - BORDER_WIDTH;
 
   if (!applyColumnWidths || constraints.active) return null;
 
@@ -69,6 +69,8 @@ const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps)
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === KeyCodes.LEFT || event.key === KeyCodes.RIGHT) {
+      event.preventDefault();
+
       const RESIZE_DISTANCE = 5;
       const prevWidth = columnWidths[pageColIdx];
       const columnWidth = event.key === KeyCodes.LEFT ? prevWidth - RESIZE_DISTANCE : prevWidth + RESIZE_DISTANCE;
