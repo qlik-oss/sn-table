@@ -13,11 +13,12 @@ describe('<ColumnAdjuster />', () => {
   let rootElement: HTMLElement;
   let applyColumnWidths: ApplyColumnWidths | undefined;
   let constraints: stardust.Constraints;
+  let borderHeight: number;
 
   const renderAdjuster = () =>
     render(
       <TestWithProviders constraints={constraints} rootElement={rootElement} applyColumnWidths={applyColumnWidths}>
-        <ColumnAdjuster column={column} isLastColumn={isLastColumn} />
+        <ColumnAdjuster column={column} isLastColumn={isLastColumn} borderHeight={borderHeight} />
       </TestWithProviders>
     );
 

@@ -8,12 +8,13 @@ describe('<TableHeadWrapper />', () => {
   let tableData: TableData;
   let layout: TableLayout;
   let areBasicFeaturesEnabled: boolean;
+  let borderHeight: number;
 
   const renderTableHead = () =>
     render(
       <TestWithProviders layout={layout} tableData={tableData}>
         <table>
-          <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
+          <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} borderHeight={borderHeight} />
         </table>
       </TestWithProviders>
     );

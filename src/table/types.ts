@@ -266,6 +266,7 @@ export interface TableWrapperProps {
 
 export interface TableHeadWrapperProps {
   areBasicFeaturesEnabled: boolean;
+  borderHeight: number | undefined;
 }
 
 export interface HeadCellContentProps {
@@ -314,6 +315,7 @@ export interface AdjusterProps {
   column: Column;
   isLastColumn: boolean;
   onColumnResize?: () => void;
+  borderHeight?: number | undefined;
 }
 
 export interface FooterWrapperProps {

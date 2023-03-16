@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect, memo } from 'react';
+import React, { useRef, useCallback, useEffect, memo, useState } from 'react';
 
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './body/TableBodyWrapper';
@@ -37,6 +37,9 @@ function TableWrapper(props: TableWrapperProps) {
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const tableWrapperRef = useRef<HTMLDivElement>(null);
+  const paginationTableRef = useRef<HTMLTableElement>(null);
+
+  const [borderHeight, setBorderHeight] = useState<number>();
 
   const { yScrollbarWidth } = useScrollbarWidth(tableContainerRef);
 
@@ -47,6 +50,10 @@ function TableWrapper(props: TableWrapperProps) {
   useEffect(() => {
     tableContainerRef.current?.scrollTo(0, 0);
   }, [pageInfo, totalRowCount]);
+
+  useEffect(() => {
+    setBorderHeight(paginationTableRef.current?.getBoundingClientRect?.()?.height);
+  }, [paginationTableRef, rootElement, rows.length]);
 
   const handleChangePage = useCallback(
     (pageIdx: number) => {
@@ -118,8 +125,13 @@ function TableWrapper(props: TableWrapperProps) {
         role="application"
         data-testid="table-container"
       >
-        <StyledTable customWidth={areBasicFeaturesEnabled} stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
+        <StyledTable
+          ref={paginationTableRef}
+          customWidth={areBasicFeaturesEnabled}
+          stickyHeader
+          aria-label={tableAriaLabel}
+        >
+          <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} borderHeight={borderHeight} />
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </StyledTable>
       </StyledTableContainer>
