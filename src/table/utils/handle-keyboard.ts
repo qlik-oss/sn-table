@@ -153,7 +153,7 @@ export const handleHeadKeyDown = ({
       moveFocusWithArrow(evt, rootElement, cellCoord, setFocusedCellCoord, FocusTypes.FOCUS);
       break;
     case KeyCodes.TAB:
-      headTabHelper(evt, rootElement, cellCoord, isLastHeadCell, setFocusedCellCoord);
+      headTabHelper(evt, rootElement, cellCoord, setFocusedCellCoord, isLastHeadCell);
       break;
     case KeyCodes.C:
       preventDefaultBehavior(evt);

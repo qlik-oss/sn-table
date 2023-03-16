@@ -201,6 +201,7 @@ describe('handle-keyboard', () => {
       jest.spyOn(accessibilityUtils, 'moveFocusWithArrow').mockImplementation(() => ({} as HTMLTableCellElement));
       jest.spyOn(accessibilityUtils, 'updateFocus').mockImplementation(() => {});
       jest.spyOn(getElementUtils, 'findCellWithTabStop').mockImplementation(() => ({} as HTMLTableCellElement));
+      jest.spyOn(keyboardUtils, 'headTabHelper').mockImplementation(() => {});
     });
 
     it('should call moveFocusWithArrow and prevent default behavior on left arrow', () => {
@@ -275,6 +276,12 @@ describe('handle-keyboard', () => {
       callHandleHeadKeyDown();
       expect(handleCopy.default).not.toHaveBeenCalled();
     });
+
+    it('should call headTabHelper when the pressed key is tab', () => {
+      evt.key = KeyCodes.TAB;
+      callHandleHeadKeyDown();
+      expect(keyboardUtils.headTabHelper).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('handleTotalKeyDown', () => {
@@ -304,6 +311,7 @@ describe('handle-keyboard', () => {
       isSelectionMode = false;
       jest.spyOn(accessibilityUtils, 'moveFocusWithArrow').mockImplementation(() => ({} as HTMLTableCellElement));
       jest.spyOn(accessibilityUtils, 'updateFocus').mockImplementation(() => {});
+      jest.spyOn(keyboardUtils, 'bodyTabHelper').mockImplementation(() => {});
     });
 
     it('should call moveFocusWithArrow and updateFocus when pressing arrow key', () => {
@@ -367,6 +375,12 @@ describe('handle-keyboard', () => {
       evt.metaKey = true;
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(handleCopy.default).toHaveBeenCalled();
+    });
+
+    it('should call headTabHelper when the pressed key is tab', () => {
+      evt.key = KeyCodes.TAB;
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
+      expect(keyboardUtils.bodyTabHelper).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -439,6 +453,7 @@ describe('handle-keyboard', () => {
       jest.spyOn(accessibilityUtils, 'announceSelectionState').mockImplementation(() => {});
       jest.spyOn(handleScroll, 'handleNavigateTop').mockImplementation(() => {});
       jest.spyOn(keyboardUtils, 'bodyArrowHelper').mockImplementation(() => {});
+      jest.spyOn(keyboardUtils, 'bodyTabHelper').mockImplementation(() => {});
     });
 
     it('should call bodyArrowHelper when arrow key is pressed', () => {
@@ -514,26 +529,10 @@ describe('handle-keyboard', () => {
       expect(announce).toHaveBeenCalledWith({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
     });
 
-    it('when shift + tab is pressed and in selections mode, should prevent default and call focusSelectionToolbar', () => {
+    it('when tab is pressed, call bodyTabHelper', () => {
       evt.key = KeyCodes.TAB;
-      evt.shiftKey = true;
-      isModal = true;
       runHandleBodyKeyDown();
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.focusSelectionToolbar).toHaveBeenCalledTimes(1);
-      expect(announce).not.toHaveBeenCalled();
-    });
-
-    it('when tab is pressed, paginationNeeded is false and in selection mode, should prevent default and call focusSelectionToolbar', () => {
-      evt.key = KeyCodes.TAB;
-      isModal = true;
-      paginationNeeded = false;
-      runHandleBodyKeyDown();
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.focusSelectionToolbar).toHaveBeenCalledTimes(1);
-      expect(announce).not.toHaveBeenCalled();
+      expect(keyboardUtils.bodyTabHelper).toHaveBeenCalledTimes(1);
     });
 
     it('should call copyCellValue when the pressed keys are Ctrl and C keys', () => {

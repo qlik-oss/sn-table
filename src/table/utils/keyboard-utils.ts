@@ -112,12 +112,16 @@ export const bodyArrowHelper = ({
   }
 };
 
+/**
+ * Update the focusedCellCoord when tabbing in the header.
+ * If you tab on the menu in the last cell, go to the tabstop in the body
+ */
 export const headTabHelper = (
   evt: React.KeyboardEvent<Element>,
   rootElement: HTMLElement,
   cellCoord: [number, number],
-  isLastHeadCell: boolean,
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
+  isLastHeadCell: boolean
 ) => {
   const target = evt.target as HTMLTableCellElement;
   const isLabel = target.classList.contains('sn-table-head-label');
@@ -142,6 +146,10 @@ interface BodyTabHelperProps {
   paginationNeeded?: boolean;
 }
 
+/**
+ * Tab to the selection toolbar if it is next in the tabOrder.
+ * Otherwise, if it is shift + tab, go to the last header cell.
+ */
 export const bodyTabHelper = ({
   evt,
   rootElement,
