@@ -3,9 +3,7 @@ export default () => ({
   genericObjects: [
     {
       getLayout: {
-        presentation: {
-          usePagination: false
-        },
+        usePagination: false,
         qInfo: {
           qId: 'gBtsmvq',
           qType: 'sn-table',
