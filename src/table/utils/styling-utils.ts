@@ -92,9 +92,9 @@ export const getBaseStyling = (
   styleObj: HeaderStyling | ContentStyling | undefined,
   bottomSeparatingBorder = false
 ): GeneratedStyling => {
-  const fontFamily = theme.getStyle('object', `straightTable.${objetName}`, 'fontFamily');
-  const color = theme.getStyle('object', `straightTable.${objetName}`, 'color');
-  const fontSize = theme.getStyle('object', `straightTable.${objetName}`, 'fontSize');
+  const fontFamily = theme.getStyle('object', `straightTableV2.${objetName}`, 'fontFamily');
+  const color = theme.getStyle('object', `straightTableV2.${objetName}`, 'color');
+  const fontSize = theme.getStyle('object', `straightTableV2.${objetName}`, 'fontSize');
 
   const baseStyle: GeneratedStyling = {
     fontFamily,
@@ -160,8 +160,8 @@ export function getBodyStyle(
   const backgroundFromLayout = content?.hoverColor;
   const colorFromLayout = content?.hoverFontColor;
 
-  const backgroundFromTheme = theme.getStyle('object', '', 'straightTable.content.hover.backgroundColor');
-  const colorFromTheme = theme.getStyle('object', '', 'straightTable.content.hover.color');
+  const backgroundFromTheme = theme.getStyle('object', '', 'straightTableV2.content.hover.backgroundColor');
+  const colorFromTheme = theme.getStyle('object', '', 'straightTableV2.content.hover.color');
 
   // Cases when hoverEffect is true:
   // 1. There is no hover font color but a hover background color,

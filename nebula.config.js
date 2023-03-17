@@ -18,9 +18,20 @@ module.exports = {
     keyboardNavigation: false,
     themes: [
       {
+        id: 'sense styling',
+        theme: {
+          object: {
+            straightTableV2: {
+              fontSize: '12px',
+              color: '#404040',
+            },
+          },
+        },
+      },
+      {
         id: 'Test',
         theme: {
-          straightTable: {
+          straightTableV2: {
             header: {
               fontSize: '40px',
               color: 'chocolate',
@@ -42,7 +53,7 @@ module.exports = {
       {
         id: 'Test2',
         theme: {
-          straightTable: {
+          straightTableV2: {
             header: {
               fontSize: '20px',
               color: 'blue',
@@ -60,7 +71,7 @@ module.exports = {
       {
         id: 'Test3',
         theme: {
-          straightTable: {
+          straightTableV2: {
             header: {
               fontSize: '20px',
               color: 'rgba(0,0,0,0.87)',

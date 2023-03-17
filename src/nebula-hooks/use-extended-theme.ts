@@ -16,11 +16,11 @@ export const getBackgroundColors = (theme: ExtendedTheme, rootElement: HTMLEleme
   const qvPanelSheet = rootElement?.closest('.qv-panel-sheet');
   const sheetColorFromCSS = qvPanelSheet && window.getComputedStyle(qvPanelSheet).backgroundColor;
 
-  // tableColorFromTheme is undefined if nothing is set specifically for object.straightTable.backgroundColor
-  const tableColorFromTheme = theme.getStyle('', '', 'object.straightTable.backgroundColor');
+  // tableColorFromTheme is undefined if nothing is set specifically for object.straightTableV2.backgroundColor
+  const tableColorFromTheme = theme.getStyle('', '', 'object.straightTableV2.backgroundColor');
   // colorFromTheme traverses the theme tree until it finds a value for backgroundColor
   // it is undefined if there is no value
-  const colorFromTheme = theme.getStyle('object', 'straightTable', 'backgroundColor');
+  const colorFromTheme = theme.getStyle('object', 'straightTableV2', 'backgroundColor');
 
   const color = tableColorFromTheme || objectColorFromCSS || colorFromTheme;
   const isTransparent = isTransparentColor(color);

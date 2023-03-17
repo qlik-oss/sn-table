@@ -3,7 +3,7 @@ import { test } from '@playwright/test';
 import runRenderingTests from './utils/run-rendering-tests';
 
 const customTheme = {
-  straightTable: {
+  straightTableV2: {
     header: {
       fontSize: '20px',
       color: 'rgba(0,0,0,0.87)',

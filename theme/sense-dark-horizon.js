@@ -52,7 +52,7 @@ export default {
     filterpane: {
       backgroundColor: 'transparent',
     },
-    straightTable: {
+    straightTableV2: {
       header: {
         fontSize: '40px',
         color: 'chocolate',
