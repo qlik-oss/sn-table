@@ -18,6 +18,7 @@ export const StyledSortButton = styled(Button, {
 })(({ isActive, textAlign, disabled, theme }) => ({
   textAlign,
   height: 'auto',
+  maxWidth: '100%',
   fontSize: 'inherit',
   padding: theme.spacing(0.5, 1),
   color: 'inherit',
