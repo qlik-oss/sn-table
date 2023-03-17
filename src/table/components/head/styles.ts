@@ -6,10 +6,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 
 import { BORDER_WIDTH, DEFAULT_FONT_SIZE, PADDING } from '../../styling-defaults';
-import {
-  DEFAULT_COLUMN_MENU_ICON_WIDTH as MENU_ICON_WIDTH,
-  DEFAULT_COLUMN_LOCK_ICON_WIDTH as LOCK_ICON_WIDTH,
-} from '../../constants';
+import { MENU_ICON_WIDTH, LOCK_ICON_WIDTH } from '../../constants';
 
 // ---------- HeadCellContent ----------
 
