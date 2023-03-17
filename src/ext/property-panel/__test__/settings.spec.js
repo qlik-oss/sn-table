@@ -67,7 +67,7 @@ describe('settings', () => {
       let args;
       let themeJson;
       const object = {
-        straightTable: {
+        straightTableV2: {
           header: {
             fontSize: '16px',
             color: '#000000',
@@ -97,7 +97,7 @@ describe('settings', () => {
         expect(cfs).toBe(14);
       });
 
-      it('gets correct default font sizes with specific straightTable theming', () => {
+      it('gets correct default font sizes with specific straightTableV2 theming', () => {
         themeJson.object = object;
         const hfs = headerFontSize.defaultValue({}, {}, args);
         const cfs = contentFontSize.defaultValue({}, {}, args);
@@ -112,7 +112,7 @@ describe('settings', () => {
         expect(cfc).toStrictEqual({ color: '#4d4d4d' });
       });
 
-      it('gets correct default font colors with specific straightTable theming', () => {
+      it('gets correct default font colors with specific straightTableV2 theming', () => {
         themeJson.object = object;
         const hfc = headerFontColor.defaultValue({}, {}, args);
         const cfc = contentFontColor.defaultValue({}, {}, args);

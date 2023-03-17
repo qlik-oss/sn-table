@@ -33,7 +33,7 @@ const stylingPanel = {
                       defaultValue(item, data, args) {
                         const currentTheme = args.theme.current();
                         return parseInt(
-                          currentTheme.object?.straightTable?.header?.fontSize ?? currentTheme.fontSize,
+                          currentTheme.object?.straightTableV2?.header?.fontSize ?? currentTheme.fontSize,
                           10
                         );
                       },
@@ -50,7 +50,7 @@ const stylingPanel = {
                       component: 'color-picker',
                       defaultValue(item, data, args) {
                         const currentTheme = args.theme.current();
-                        return { color: currentTheme.object?.straightTable?.header?.color ?? currentTheme.color };
+                        return { color: currentTheme.object?.straightTableV2?.header?.color ?? currentTheme.color };
                       },
                       dualOutput: true,
                     },
@@ -82,7 +82,7 @@ const stylingPanel = {
                       defaultValue(item, data, args) {
                         const currentTheme = args.theme.current();
                         return parseInt(
-                          currentTheme.object?.straightTable?.content?.fontSize ?? currentTheme.fontSize,
+                          currentTheme.object?.straightTableV2?.content?.fontSize ?? currentTheme.fontSize,
                           10
                         );
                       },
@@ -98,7 +98,7 @@ const stylingPanel = {
                       component: 'color-picker',
                       defaultValue(item, data, args) {
                         const currentTheme = args.theme.current();
-                        return { color: currentTheme.object?.straightTable?.content?.color ?? currentTheme.color };
+                        return { color: currentTheme.object?.straightTableV2?.content?.color ?? currentTheme.color };
                       },
                       dualOutput: true,
                     },
