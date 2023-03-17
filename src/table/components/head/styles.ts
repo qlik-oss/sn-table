@@ -90,20 +90,19 @@ export const StyledHeadCellContent = styled(Box, {
 
 export const StyledHeadCellIconWrapper = styled('div')({
   display: 'flex',
-  alignSelf: 'center',
+  alignSelf: 'flex-end',
 });
 
 export const LockWrapper = styled(Box)({
   display: 'flex',
   alignItems: 'center',
   width: '20px',
-  height: '18px',
+  height: '24px',
   flexShrink: 0,
   flexDirection: 'inherit',
 
-  '&.aligned-right': { justifyContent: 'flex-start' },
-  '&.aligned-center': { justifyContent: 'center' },
-  '&.aligned-left': { justifyContent: 'flex-end' },
+  '&.aligned-right': { justifyContent: 'flex-start', alignItems: 'center' },
+  '&.aligned-center, &.aligned-left': { justifyContent: 'flex-end', alignItems: 'center' },
 });
 
 // ---------- HeadCellMenu ----------
@@ -111,6 +110,8 @@ export const HeadCellMenuWrapper = styled(Box, {
   shouldForwardProp: (prop: string) => prop !== 'isVisible' && prop !== 'rightAligned',
 })(({ rightAligned }) => ({
   ...(rightAligned ? { marginRight: 'auto' } : { marginLeft: 'auto' }),
+  height: '24px',
+  display: 'flex',
 }));
 
 export const StyledMenuIconButton = styled(Button, {
