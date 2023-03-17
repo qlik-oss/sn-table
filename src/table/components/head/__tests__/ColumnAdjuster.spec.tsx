@@ -14,11 +14,19 @@ describe('<ColumnAdjuster />', () => {
   let applyColumnWidths: ApplyColumnWidths | undefined;
   let constraints: stardust.Constraints;
   let borderHeight: number;
+  const headRef = {} as React.RefObject<HTMLHeadElement>;
+  const setHeadHeight = jest.fn();
 
   const renderAdjuster = () =>
     render(
       <TestWithProviders constraints={constraints} rootElement={rootElement} applyColumnWidths={applyColumnWidths}>
-        <ColumnAdjuster column={column} isLastColumn={isLastColumn} borderHeight={borderHeight} />
+        <ColumnAdjuster
+          column={column}
+          isLastColumn={isLastColumn}
+          borderHeight={borderHeight}
+          headRef={headRef}
+          setHeadHeight={setHeadHeight}
+        />
       </TestWithProviders>
     );
 

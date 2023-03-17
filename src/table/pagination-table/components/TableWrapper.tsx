@@ -39,7 +39,7 @@ function TableWrapper(props: TableWrapperProps) {
   const tableWrapperRef = useRef<HTMLDivElement>(null);
   const paginationTableRef = useRef<HTMLTableElement>(null);
 
-  const [headHeight, setHeadHeight] = useState<number>();
+  const [headHeight, setHeadHeight] = useState<number | undefined>();
   const [borderHeight, setBorderHeight] = useState<number>();
 
   const { yScrollbarWidth } = useScrollbarWidth(tableContainerRef);
@@ -118,6 +118,7 @@ function TableWrapper(props: TableWrapperProps) {
     >
       <AnnounceElements />
       <StyledTableContainer
+        ref={tableContainerRef}
         className="sn-table-container"
         fullHeight={footerContainer || constraints.active || !paginationNeeded} // the footerContainer always wants height: 100%
         constraints={constraints}

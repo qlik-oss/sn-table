@@ -317,8 +317,8 @@ export interface AdjusterProps {
   isLastColumn: boolean;
   onColumnResize?: () => void;
   borderHeight?: number | undefined;
-  headRef: React.RefObject<HTMLHeadElement>;
-  setHeadHeight: React.Dispatch<React.SetStateAction<number | undefined>>;
+  headRef?: React.RefObject<HTMLHeadElement>;
+  setHeadHeight?: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
 
 export interface FooterWrapperProps {

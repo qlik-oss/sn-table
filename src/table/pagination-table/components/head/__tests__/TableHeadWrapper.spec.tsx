@@ -9,12 +9,17 @@ describe('<TableHeadWrapper />', () => {
   let layout: TableLayout;
   let areBasicFeaturesEnabled: boolean;
   let borderHeight: number;
+  const setHeadHeight = jest.fn();
 
   const renderTableHead = () =>
     render(
       <TestWithProviders layout={layout} tableData={tableData}>
         <table>
-          <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} borderHeight={borderHeight} />
+          <TableHeadWrapper
+            setHeadHeight={setHeadHeight}
+            areBasicFeaturesEnabled={areBasicFeaturesEnabled}
+            borderHeight={borderHeight}
+          />
         </table>
       </TestWithProviders>
     );

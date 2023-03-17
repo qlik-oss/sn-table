@@ -44,7 +44,7 @@ const ColumnAdjuster = ({
   };
 
   const mouseMoveHandler = (evt: MouseEvent) => {
-    setHeadHeight(headRef.current.getBoundingClientRect?.()?.height);
+    if (setHeadHeight) setHeadHeight(headRef?.current?.getBoundingClientRect?.()?.height);
     const deltaWidth = evt.clientX - tempWidths.current.initX;
     const adjustedWidth = Math.max(tempWidths.current.initWidth + deltaWidth, MIN_COLUMN_WIDTH);
     updateWidth(adjustedWidth);
