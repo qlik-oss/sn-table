@@ -137,17 +137,12 @@ export const AdjusterHitArea = styled(Box, {
   width: `${isLastColumn ? PADDING : PADDING * 2 + BORDER_WIDTH}px`,
   justifyContent: isLastColumn ? 'flex-end' : 'center',
   marginLeft: '-4px',
-  '&&:hover': {
+  '&&:hover:not(:focus, :active)': {
     '& .sn-table-adjuster-head-border': {
       background: '#D9D9D9',
     },
   },
-  '&&:focus': {
-    '& .sn-table-adjuster-head-border, .sn-table-adjuster-body-border': {
-      background: '#177fe6',
-    },
-  },
-  '&&:active': {
+  '&&:focus, :active': {
     '& .sn-table-adjuster-head-border, .sn-table-adjuster-body-border': {
       background: '#177fe6',
     },
