@@ -265,6 +265,7 @@ export interface TableWrapperProps {
 }
 
 export interface TableHeadWrapperProps {
+  setHeadHeight: React.Dispatch<React.SetStateAction<number | undefined>>;
   areBasicFeaturesEnabled: boolean;
   borderHeight: number | undefined;
 }
@@ -316,6 +317,8 @@ export interface AdjusterProps {
   isLastColumn: boolean;
   onColumnResize?: () => void;
   borderHeight?: number | undefined;
+  headRef: React.RefObject<HTMLHeadElement>;
+  setHeadHeight: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
 
 export interface FooterWrapperProps {

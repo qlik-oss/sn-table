@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect, memo, useState } from 'react';
+import React, { useRef, useCallback, useEffect, memo, useState, useLayoutEffect } from 'react';
 
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './body/TableBodyWrapper';
@@ -39,6 +39,7 @@ function TableWrapper(props: TableWrapperProps) {
   const tableWrapperRef = useRef<HTMLDivElement>(null);
   const paginationTableRef = useRef<HTMLTableElement>(null);
 
+  const [headHeight, setHeadHeight] = useState<number>();
   const [borderHeight, setBorderHeight] = useState<number>();
 
   const { yScrollbarWidth } = useScrollbarWidth(tableContainerRef);
@@ -51,9 +52,9 @@ function TableWrapper(props: TableWrapperProps) {
     tableContainerRef.current?.scrollTo(0, 0);
   }, [pageInfo, totalRowCount]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setBorderHeight(paginationTableRef.current?.getBoundingClientRect?.()?.height);
-  }, [paginationTableRef, rootElement, rows.length]);
+  }, [rootElement, rows.length, headHeight]);
 
   const handleChangePage = useCallback(
     (pageIdx: number) => {
@@ -117,7 +118,6 @@ function TableWrapper(props: TableWrapperProps) {
     >
       <AnnounceElements />
       <StyledTableContainer
-        ref={tableContainerRef}
         className="sn-table-container"
         fullHeight={footerContainer || constraints.active || !paginationNeeded} // the footerContainer always wants height: 100%
         constraints={constraints}
@@ -131,7 +131,11 @@ function TableWrapper(props: TableWrapperProps) {
           stickyHeader
           aria-label={tableAriaLabel}
         >
-          <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} borderHeight={borderHeight} />
+          <TableHeadWrapper
+            setHeadHeight={setHeadHeight}
+            areBasicFeaturesEnabled={areBasicFeaturesEnabled}
+            borderHeight={borderHeight}
+          />
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </StyledTable>
       </StyledTableContainer>
