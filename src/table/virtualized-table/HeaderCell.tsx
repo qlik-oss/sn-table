@@ -36,7 +36,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         ...style,
         ...applicableStyle,
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-end',
         borderStyle: 'solid',
         borderWidth: isLastColumn ? '0px 0px 1px 0px' : '0px 1px 1px 0px',
         padding: '4px',
