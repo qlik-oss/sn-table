@@ -6,7 +6,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 
 import { BORDER_WIDTH, DEFAULT_FONT_SIZE, PADDING } from '../../styling-defaults';
-import { MENU_ICON_WIDTH, LOCK_ICON_WIDTH } from '../../constants';
+import { HEAD_ICON_WRAPPER_SIZE, LOCK_ICON_SIZE } from '../../constants';
 
 // ---------- HeadCellContent ----------
 
@@ -68,11 +68,13 @@ export const StyledHeadCellContent = styled(Box, {
   '& > div:last-child': { alignSelf: 'flex-end' },
 
   '&.aligned-left': {
-    gridTemplateColumns: isLocked ? `${LOCK_ICON_WIDTH}px 2fr ${MENU_ICON_WIDTH}px` : `1fr ${MENU_ICON_WIDTH}px`,
+    gridTemplateColumns: isLocked
+      ? `${LOCK_ICON_SIZE}px 2fr ${HEAD_ICON_WRAPPER_SIZE}px`
+      : `1fr ${HEAD_ICON_WRAPPER_SIZE}px`,
   },
 
   '&.aligned-center': {
-    gridTemplateColumns: `${MENU_ICON_WIDTH}px 2fr ${MENU_ICON_WIDTH}px`,
+    gridTemplateColumns: `${HEAD_ICON_WRAPPER_SIZE}px 2fr ${HEAD_ICON_WRAPPER_SIZE}px`,
 
     '& > div:first-child': { gridColumn: 1 },
     '& .sn-table-head-label': { gridColumn: 2 },
@@ -80,7 +82,9 @@ export const StyledHeadCellContent = styled(Box, {
   },
 
   '&.aligned-right': {
-    gridTemplateColumns: isLocked ? `${MENU_ICON_WIDTH}px 2fr ${LOCK_ICON_WIDTH}px` : `${MENU_ICON_WIDTH}px 1fr`,
+    gridTemplateColumns: isLocked
+      ? `${HEAD_ICON_WRAPPER_SIZE}px 2fr ${LOCK_ICON_SIZE}px`
+      : `${HEAD_ICON_WRAPPER_SIZE}px 1fr`,
 
     '& > div:first-child': { gridColumn: isLocked ? 3 : 'unset' },
     '& .sn-table-head-label': { gridColumn: 2 },
@@ -96,13 +100,13 @@ export const StyledHeadCellIconWrapper = styled('div')({
 export const LockWrapper = styled(Box)({
   display: 'flex',
   alignItems: 'center',
-  width: '20px',
-  height: '24px',
+  width: `${LOCK_ICON_SIZE}px`,
+  height: `${HEAD_ICON_WRAPPER_SIZE}px`,
   flexShrink: 0,
   flexDirection: 'inherit',
 
-  '&.aligned-right': { justifyContent: 'flex-start', alignItems: 'center' },
-  '&.aligned-center, &.aligned-left': { justifyContent: 'flex-end', alignItems: 'center' },
+  '&.aligned-right': { justifyContent: 'flex-start' },
+  '&.aligned-center, &.aligned-left': { justifyContent: 'flex-end' },
 });
 
 // ---------- HeadCellMenu ----------
@@ -110,7 +114,7 @@ export const HeadCellMenuWrapper = styled(Box, {
   shouldForwardProp: (prop: string) => prop !== 'isVisible' && prop !== 'rightAligned',
 })(({ rightAligned }) => ({
   ...(rightAligned ? { marginRight: 'auto' } : { marginLeft: 'auto' }),
-  height: '24px',
+  height: `${HEAD_ICON_WRAPPER_SIZE}px`,
   display: 'flex',
 }));
 
