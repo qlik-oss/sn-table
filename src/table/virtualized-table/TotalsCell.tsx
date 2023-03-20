@@ -17,6 +17,7 @@ interface TotalsCellProps {
 
 const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
   const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
+  const isBorderRight = useContextSelector(TableContext, (value) => value.isBorderRight);
   const {
     totalsStyle: { hoverColors, ...applicableStyling },
     columns,
@@ -25,6 +26,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
   const label = columns[index].totalInfo;
   const { totalsCellTextAlign } = columns[index];
   const isLastColumn = layout.qHyperCube.qSize.qcx - 1 === index;
+  const borderRightWidthInLastColum = isBorderRight ? '1px' : '0px';
 
   return (
     <div
@@ -36,7 +38,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
         alignItems: 'center',
         borderStyle: 'solid',
         borderLeftWidth: '0px',
-        borderRightWidth: isLastColumn ? '0px' : '1px',
+        borderRightWidth: isLastColumn ? borderRightWidthInLastColum : '1px',
         borderTopWidth: totals.atBottom ? '1px' : '0px',
         borderBottomWidth: totals.atTop ? '1px' : '0px',
         padding: '4px 12px',
