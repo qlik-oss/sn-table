@@ -11,7 +11,7 @@ import CellText from '../../../components/CellText';
 import { BORDER_WIDTH, PADDING } from '../../../styling-defaults';
 import { StyledHeadCell } from './styles';
 
-function TableHeadWrapper({ areBasicFeaturesEnabled, paginationTableRef }: TableHeadWrapperProps) {
+function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
   const { columns } = useContextSelector(TableContext, (value) => value.tableData);
   const { layout, styling } = useContextSelector(TableContext, (value) => value.baseProps);
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
@@ -55,9 +55,7 @@ function TableHeadWrapper({ areBasicFeaturesEnabled, paginationTableRef }: Table
               <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled={areBasicFeaturesEnabled}>
                 <CellText fontSize={styling.head.fontSize}>{column.label}</CellText>
               </HeadCellContent>
-              {areBasicFeaturesEnabled && (
-                <ColumnAdjuster column={column} isLastColumn={isLastColumn} paginationTableRef={paginationTableRef} />
-              )}
+              {areBasicFeaturesEnabled && <ColumnAdjuster column={column} isLastColumn={isLastColumn} />}
             </StyledHeadCell>
           );
         })}

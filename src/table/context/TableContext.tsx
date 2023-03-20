@@ -7,6 +7,7 @@ import useColumnWidths from '../hooks/use-column-widths';
 import useTableStyling from '../hooks/use-table-styling';
 import { TableData } from '../../types';
 import { FIRST_HEADER_CELL_COORD } from '../constants';
+import { getTableWidth } from '../utils/styling-utils';
 
 // In order to not have typing issues when using properties on the context,
 // the initial value for the context is casted to ContextValue.
@@ -51,7 +52,10 @@ export const TableContextProvider = ({
     tableWidth,
     styling
   );
-  const [isBorderRight, setBorderRight] = useState(false);
+  const isBorderRight = useMemo(
+    () => !!getTableWidth(columnWidths) && getTableWidth(columnWidths) < tableWidth,
+    [tableWidth, columnWidths]
+  );
   const baseProps = useMemo(
     () => ({
       app,
@@ -104,9 +108,7 @@ export const TableContextProvider = ({
         setPage,
         pageInfo,
         initialDataPages,
-        tableWidth,
         isBorderRight,
-        setBorderRight,
       }}
     >
       {children}

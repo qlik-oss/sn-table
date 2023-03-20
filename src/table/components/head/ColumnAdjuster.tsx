@@ -13,7 +13,7 @@ import { focusHeadMenuButton } from '../../utils/accessibility-utils';
  * When you start dragging, mouse move and mouse up listeners are added.
  * While dragging the current column is updated, and on mouse up all other columns are updated.
  */
-const ColumnAdjuster = ({ column, isLastColumn, onColumnResize, paginationTableRef }: AdjusterProps) => {
+const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps) => {
   const { pageColIdx } = column;
   const { rootElement, applyColumnWidths, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
@@ -21,16 +21,9 @@ const ColumnAdjuster = ({ column, isLastColumn, onColumnResize, paginationTableR
   const tempWidths = useRef({ adjusterHitArea: {}, columnWidth: 0, initX: 0, initWidth: 0 });
   const borderHeight = rootElement.getBoundingClientRect().height - PAGINATION_HEIGHT - BORDER_WIDTH;
 
-  const tableWidth = useContextSelector(TableContext, (value) => value.tableWidth);
-  const setBorderRight = useContextSelector(TableContext, (value) => value.setBorderRight);
-
   if (!applyColumnWidths || constraints.active) return null;
 
   const updateWidth = (adjustedWidth: number) => {
-    const columnsWidth = paginationTableRef?.current?.getBoundingClientRect?.()?.width;
-    if (columnsWidth && columnsWidth < tableWidth) setBorderRight(true);
-    else setBorderRight(false);
-
     onColumnResize?.();
     tempWidths.current.columnWidth = adjustedWidth;
     const newColumnWidths = [...columnWidths];

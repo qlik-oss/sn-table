@@ -23,7 +23,7 @@ function TableWrapper(props: TableWrapperProps) {
 
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
     useContextSelector(TableContext, (value) => value.tableData);
-  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints } = useContextSelector(
+  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints, styling } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );
@@ -38,7 +38,6 @@ function TableWrapper(props: TableWrapperProps) {
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const tableWrapperRef = useRef<HTMLDivElement>(null);
-  const paginationTableRef = useRef<HTMLTableElement>(null);
 
   const { yScrollbarWidth } = useScrollbarWidth(tableContainerRef);
 
@@ -121,13 +120,13 @@ function TableWrapper(props: TableWrapperProps) {
         data-testid="table-container"
       >
         <StyledTable
-          ref={paginationTableRef}
+          styling={styling}
           isBorderRight={isBorderRight}
           customWidth={areBasicFeaturesEnabled}
           stickyHeader
           aria-label={tableAriaLabel}
         >
-          <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} paginationTableRef={paginationTableRef} />
+          <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </StyledTable>
       </StyledTableContainer>

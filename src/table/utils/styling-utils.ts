@@ -18,6 +18,9 @@ export const LINE_HEIGHT = 4 / 3;
 export const CELL_PADDING_HEIGHT = 8;
 export const CELL_BORDER_HEIGHT = 1;
 
+export const getTableWidth = (columnWidths: number[]) =>
+  columnWidths && columnWidths.length > 0 && columnWidths.reduce((a, b) => a + b);
+
 export const fontSizeToRowHeight = (fontSize: string) =>
   parseInt(fontSize, 10) * LINE_HEIGHT + CELL_PADDING_HEIGHT + CELL_BORDER_HEIGHT;
 
