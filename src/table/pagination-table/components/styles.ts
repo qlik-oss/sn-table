@@ -2,7 +2,7 @@ import styled from '@mui/system/styled';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import { PAGINATION_HEIGHT } from '../../constants';
-import { BORDER_WIDTH } from '../../styling-defaults';
+import { BORDER_WIDTH, COLORING } from '../../styling-defaults';
 
 // ---------- AnnounceWrapper ----------
 
@@ -27,12 +27,15 @@ export const StyledTableContainer = styled(TableContainer, {
 }));
 
 export const StyledTable = styled(Table, {
-  shouldForwardProp: (prop: string) => prop !== 'customWidth',
-})(({ customWidth }) =>
+  shouldForwardProp: (prop: string) => prop !== 'customWidth' && prop !== 'isBorderRight',
+})(({ customWidth, isBorderRight }) =>
   customWidth
     ? {
         tableLayout: 'fixed',
         width: 'min-content',
+        borderWidth: isBorderRight && '0px 1px 0px 0px',
+        borderStyle: isBorderRight && 'solid',
+        borderColor: COLORING.BORDER_MEDIUM,
       }
     : {}
 );

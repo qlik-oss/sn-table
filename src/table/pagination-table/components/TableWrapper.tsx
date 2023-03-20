@@ -31,12 +31,14 @@ function TableWrapper(props: TableWrapperProps) {
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
+  const isBorderRight = useContextSelector(TableContext, (value) => value.isBorderRight);
 
   const isSelectionMode = selectionsAPI.isModal();
 
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const tableWrapperRef = useRef<HTMLDivElement>(null);
+  const paginationTableRef = useRef<HTMLTableElement>(null);
 
   const { yScrollbarWidth } = useScrollbarWidth(tableContainerRef);
 
@@ -118,8 +120,14 @@ function TableWrapper(props: TableWrapperProps) {
         role="application"
         data-testid="table-container"
       >
-        <StyledTable customWidth={areBasicFeaturesEnabled} stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
+        <StyledTable
+          ref={paginationTableRef}
+          isBorderRight={isBorderRight}
+          customWidth={areBasicFeaturesEnabled}
+          stickyHeader
+          aria-label={tableAriaLabel}
+        >
+          <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} paginationTableRef={paginationTableRef} />
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </StyledTable>
       </StyledTableContainer>

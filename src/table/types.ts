@@ -122,6 +122,9 @@ export interface ContextValue {
   pageInfo?: PageInfo;
   setPage?: stardust.SetStateFn<number>;
   initialDataPages?: EngineAPI.INxDataPage[];
+  tableWidth: number;
+  isBorderRight: boolean;
+  setBorderRight: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface FooterStyle {
@@ -266,6 +269,7 @@ export interface TableWrapperProps {
 
 export interface TableHeadWrapperProps {
   areBasicFeaturesEnabled: boolean;
+  paginationTableRef?: React.RefObject<HTMLTableElement>;
 }
 
 export interface HeadCellContentProps {
@@ -314,6 +318,7 @@ export interface AdjusterProps {
   column: Column;
   isLastColumn: boolean;
   onColumnResize?: () => void;
+  paginationTableRef?: React.RefObject<HTMLTableElement>;
 }
 
 export interface FooterWrapperProps {

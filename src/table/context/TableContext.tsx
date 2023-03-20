@@ -51,6 +51,7 @@ export const TableContextProvider = ({
     tableWidth,
     styling
   );
+  const [isBorderRight, setBorderRight] = useState(false);
   const baseProps = useMemo(
     () => ({
       app,
@@ -103,6 +104,9 @@ export const TableContextProvider = ({
         setPage,
         pageInfo,
         initialDataPages,
+        tableWidth,
+        isBorderRight,
+        setBorderRight,
       }}
     >
       {children}
