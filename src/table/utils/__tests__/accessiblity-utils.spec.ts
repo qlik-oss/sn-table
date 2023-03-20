@@ -371,8 +371,6 @@ describe('accessibility-utils', () => {
   describe('focusBodyFromHead', () => {
     let otherCell: HTMLTableCellElement;
 
-    beforeEach(() => {});
-
     beforeEach(() => {
       otherCell = { ...cell } as HTMLTableCellElement;
       rootElement = {

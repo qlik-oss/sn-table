@@ -3,7 +3,7 @@ import React from 'react';
 import { Announce } from '../../types';
 import { FIRST_BODY_CELL_COORD, FocusTypes } from '../constants';
 import { CellFocusProps, HandleResetFocusProps } from '../types';
-import { findCellWithTabStop, getCellCoordFromCell, getCellElement, getNextCellCoord } from './get-element-utils';
+import { findCellWithTabStop, getCellCoord, getCellElement, getNextCellCoord } from './get-element-utils';
 
 export const areTabStopsEnabled = (keyboard: stardust.Keyboard) => !keyboard.enabled || keyboard.active;
 
@@ -94,7 +94,7 @@ export const focusBodyFromHead = (
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
 ) => {
   let cell = findCellWithTabStop(rootElement);
-  const newCellCoord = cell ? getCellCoordFromCell(rootElement, cell) : FIRST_BODY_CELL_COORD;
+  const newCellCoord = cell ? getCellCoord(rootElement, cell) : FIRST_BODY_CELL_COORD;
   cell = cell || getCellElement(rootElement, FIRST_BODY_CELL_COORD);
   updateFocus({ cell, focusType: FocusTypes.FOCUS });
   setFocusedCellCoord(newCellCoord);
