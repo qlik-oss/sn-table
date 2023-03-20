@@ -24,12 +24,11 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
   } = data;
 
   const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
-  const isBorderRight = useContextSelector(TableContext, (value) => value.isBorderRight);
+  const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
   const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
   const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
   const flexDirection = column.headCellTextAlign === 'right' ? 'row-reverse' : 'row';
-  const borderWidthInLastColum = isBorderRight ? '0px 1px 1px 0px' : '0px 0px 1px 0px';
 
   return (
     <div
@@ -40,7 +39,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         display: 'flex',
         alignItems: 'center',
         borderStyle: 'solid',
-        borderWidth: isLastColumn ? borderWidthInLastColum : '0px 1px 1px 0px',
+        borderWidth: isLastColumn || !showRightBorder ? '0px 0px 1px 0px' : '0px 1px 1px 0px',
         padding: '4px',
         justifyContent: column.headCellTextAlign,
         boxSizing: 'border-box',

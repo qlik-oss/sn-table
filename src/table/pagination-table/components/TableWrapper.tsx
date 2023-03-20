@@ -31,7 +31,7 @@ function TableWrapper(props: TableWrapperProps) {
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
-  const isBorderRight = useContextSelector(TableContext, (value) => value.isBorderRight);
+  const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
 
   const isSelectionMode = selectionsAPI.isModal();
 
@@ -121,7 +121,7 @@ function TableWrapper(props: TableWrapperProps) {
       >
         <StyledTable
           styling={styling}
-          isBorderRight={isBorderRight}
+          showRightBorder={showRightBorder}
           customWidth={areBasicFeaturesEnabled}
           stickyHeader
           aria-label={tableAriaLabel}

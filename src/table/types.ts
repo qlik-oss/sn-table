@@ -122,7 +122,7 @@ export interface ContextValue {
   pageInfo?: PageInfo;
   setPage?: stardust.SetStateFn<number>;
   initialDataPages?: EngineAPI.INxDataPage[];
-  isBorderRight: boolean;
+  showRightBorder: boolean;
 }
 
 export interface FooterStyle {

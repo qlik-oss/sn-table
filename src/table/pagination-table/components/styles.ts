@@ -27,15 +27,13 @@ export const StyledTableContainer = styled(TableContainer, {
 }));
 
 export const StyledTable = styled(Table, {
-  shouldForwardProp: (prop: string) => prop !== 'customWidth' && prop !== 'isBorderRight' && prop !== 'styling',
-})(({ customWidth, isBorderRight, styling }) =>
+  shouldForwardProp: (prop: string) => prop !== 'customWidth' && prop !== 'showRightBorder' && prop !== 'styling',
+})(({ customWidth, showRightBorder, styling }) =>
   customWidth
     ? {
         tableLayout: 'fixed',
         width: 'min-content',
-        borderWidth: isBorderRight && '0px 1px 0px 0px',
-        borderStyle: isBorderRight && 'solid',
-        borderColor: isBorderRight && styling.body.borderRightColor,
+        borderRight: showRightBorder ? `1px solid ${styling.body.borderRightColor}` : undefined,
       }
     : {}
 );
