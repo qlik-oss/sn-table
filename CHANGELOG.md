@@ -1,20 +1,3 @@
-# [2.0.0](https://github.com/qlik-oss/sn-table/compare/v1.25.0...v2.0.0) (2023-03-20)
-
-### Bug Fixes
-
-- adjusting column size by keyboard also scrolls the table ([#918](https://github.com/qlik-oss/sn-table/issues/918)) ([92a0792](https://github.com/qlik-oss/sn-table/commit/92a0792fa9844c76444c6b4f3decdf52954a855c))
-- align header content to bottom ([#925](https://github.com/qlik-oss/sn-table/issues/925)) ([c5a0805](https://github.com/qlik-oss/sn-table/commit/c5a0805306590fa65547e0c6ce98bcf727fc601e))
-- head cell content left | center | right alignment ([#919](https://github.com/qlik-oss/sn-table/issues/919)) ([856b6c0](https://github.com/qlik-oss/sn-table/commit/856b6c08a50423d18006c18601b3416d7e8c8433))
-- hide focus indicator when not using keyboard ([#917](https://github.com/qlik-oss/sn-table/issues/917)) ([5f2cfae](https://github.com/qlik-oss/sn-table/commit/5f2cfae492668eebf374b91997692c489a57b127))
-- keyboard navigation tab handling ([#916](https://github.com/qlik-oss/sn-table/issues/916)) ([fc2658a](https://github.com/qlik-oss/sn-table/commit/fc2658a45339962a01cbe6f72e29cc0543073847))
-- scroll to infinity in firefox fixed ([#915](https://github.com/qlik-oss/sn-table/issues/915)) ([48b51e9](https://github.com/qlik-oss/sn-table/commit/48b51e94c3d2faf0c4adcfaf270e841532b8e98d))
-- scroll to top on resize ([#914](https://github.com/qlik-oss/sn-table/issues/914)) ([db3e7ff](https://github.com/qlik-oss/sn-table/commit/db3e7ffd58cbb7d4dba415808d6bdb6963a21c7f))
-- to have correct focus indication for head cell menu items ([#913](https://github.com/qlik-oss/sn-table/issues/913)) ([25ee2b2](https://github.com/qlik-oss/sn-table/commit/25ee2b2967a8799f9f5fa25732b2ffbdec90d649))
-
-### Features
-
-- use new theme entry ([#921](https://github.com/qlik-oss/sn-table/issues/921)) ([28e6c68](https://github.com/qlik-oss/sn-table/commit/28e6c68bd7d05e522de28f812478c94cf6f18d19))
-
 # [1.25.0](https://github.com/qlik-oss/sn-table/compare/v1.24.0...v1.25.0) (2023-03-13)
 
 ### Bug Fixes
