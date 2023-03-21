@@ -7,10 +7,10 @@ import useResetHeader from './hooks/use-reset-header';
 
 const Header = (props: HeaderProps) => {
   const { rect, forwardRef, columns, pageInfo, headerStyle, rowHeight, columResizeHandler } = props;
-  const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
 
-  useResetHeader(forwardRef, layout, pageInfo, columnWidths);
+  useResetHeader(forwardRef, layout, pageInfo, columnWidths, theme);
 
   return (
     <VariableSizeList

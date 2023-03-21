@@ -116,6 +116,7 @@ export interface ContextValue {
     changeSortOrder: ChangeSortOrder;
     applyColumnWidths?: ApplyColumnWidths;
     styling: TableStyling;
+    rect: stardust.Rect;
   };
   tableData: TableData;
   setYScrollbarWidth: (width: number) => void;
@@ -224,6 +225,7 @@ export interface ContextProviderProps {
   pageInfo?: PageInfo;
   setPage?: stardust.SetStateFn<number>;
   initialDataPages?: EngineAPI.INxDataPage[];
+  rect: stardust.Rect;
 }
 
 export interface RenderProps {

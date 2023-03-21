@@ -47,12 +47,7 @@ export interface VirtualTableRenderProps {
   initialDataPages: EngineAPI.INxDataPage[];
 }
 
-export interface WrapperProps {
-  rect: stardust.Rect;
-}
-
 export interface TableProps {
-  rect: stardust.Rect;
   pageInfo: PageInfo;
 }
 
@@ -97,7 +92,7 @@ export interface RowMeta {
   heights: number[];
   totalHeight: number;
   count: number;
-  measuredCells: Set<string>;
+  measuredCells: Map<string, [string, number, number]>;
 }
 
 export interface ItemData {

@@ -50,7 +50,7 @@ export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.R
           embed={embed as stardust.Embed}
           changeSortOrder={changeSortOrder}
           applyColumnWidths={applyColumnWidths as ApplyColumnWidths}
-          tableWidth={props.rect.width}
+          rect={props.rect}
         >
           <TableWrapper {...(wrapperProps as TableWrapperProps)} />
         </TableContextProvider>
@@ -102,8 +102,9 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
           setPage={setPage}
           pageInfo={pageInfo}
           initialDataPages={initialDataPages}
+          rect={rect}
         >
-          <VirtualizedTable rect={rect} />
+          <VirtualizedTable />
         </TableContextProvider>
       </ThemeProvider>
     </React.StrictMode>

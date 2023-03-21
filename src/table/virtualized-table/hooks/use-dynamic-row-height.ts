@@ -13,6 +13,7 @@ import { MAX_NBR_LINES_OF_TEXT, MIN_BODY_ROW_HEIGHT } from '../constants';
 import { BodyStyle, GridState, RowMeta } from '../types';
 import { subtractCellPaddingAndBorder, subtractCellPaddingIconsAndBorder } from '../utils/cell-width-utils';
 import useMeasureText from './use-measure-text';
+import useMutableProp from './use-mutable-prop';
 import useOnPropsChange from './use-on-props-change';
 
 export interface UseDynamicRowHeightProps {
@@ -48,9 +49,9 @@ const useDynamicRowHeight = ({
     heights: [],
     totalHeight: 0,
     count: 0,
-    measuredCells: new Set<string>(),
+    measuredCells: new Map<string, [string, number, number]>(),
   });
-  const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, rect } = useContextSelector(TableContext, (value) => value.baseProps);
   const [estimatedRowHeight, setEstimatedRowHeight] = useState(rowHeight || MIN_BODY_ROW_HEIGHT);
   const { measureText } = useMeasureText(style.fontSize, style.fontFamily, boldText);
   const lineHeight = parseInt(style.fontSize ?? COMMON_CELL_STYLING.fontSize, 10) * LINE_HEIGHT_MULTIPLIER;
@@ -77,13 +78,13 @@ const useDynamicRowHeight = ({
   );
 
   const setCellSize = useCallback(
-    (text: string, rowIdx: number, colIdx: number) => {
+    (text: string, rowIdx: number, colIdx: number, batchStateUpdate = false) => {
       const key = `${rowIdx}-${colIdx}`;
       if (rowMeta.current.measuredCells.has(key)) {
         return;
       }
 
-      rowMeta.current.measuredCells.add(key);
+      rowMeta.current.measuredCells.set(key, [text, rowIdx, colIdx]);
       const height = getCellSize(text, colIdx);
 
       const alreadyMeasuredRowHeight = rowMeta.current.heights[rowIdx];
@@ -98,7 +99,9 @@ const useDynamicRowHeight = ({
         rowMeta.current.heights[rowIdx] = height;
       }
 
-      setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
+      if (!batchStateUpdate) {
+        setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
+      }
     },
     [getCellSize]
   );
@@ -117,6 +120,22 @@ const useDynamicRowHeight = ({
     rowMeta.current.measuredCells.clear();
   }, [rowMeta]);
 
+  // Use "mutableSetCellSize" so that "resizeAllCells" is not recreated every time
+  // "columnWidths" changes will the user is actively re-sizing a column.
+  const mutableSetCellSize = useMutableProp(setCellSize);
+
+  // Allows cell sizes to be recalculated while a user is actively re-sizing a column
+  const resizeAllCells = useCallback(() => {
+    const copyOfMeasuredCells = new Map(rowMeta.current.measuredCells);
+    resetRowMeta();
+
+    copyOfMeasuredCells.forEach(([text, rowIdx, colIdx]) => {
+      mutableSetCellSize.current(text, rowIdx, colIdx, true);
+    });
+
+    setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
+  }, [resetRowMeta, mutableSetCellSize]);
+
   /**
    * Some user actions and events can trigger row heights to be invalidated
    * - A column is re-sized
@@ -129,6 +148,17 @@ const useDynamicRowHeight = ({
     resetRowMeta();
   }, [layout, pageInfo]);
 
+  /**
+   * When theme or container element changes. The data remains valid, in such case
+   * reset row meta and recompute row heights again.
+   *
+   * "measureText" is used as a way to detect changes in the theme.
+   */
+  useOnPropsChange(() => {
+    resizeAllCells();
+  }, [measureText, rect.width]);
+
+  // Allows cell sizes to be recalculated while a user is actively re-sizing a column
   const resizeVisibleCells = (rows: Row[]) => {
     if (!gridState) return;
 
@@ -155,7 +185,16 @@ const useDynamicRowHeight = ({
     lineRef.current.resetAfterIndex(rowMeta.current.resetAfterRowIndex, false);
   }
 
-  return { setCellSize, getRowHeight, rowMeta, estimatedRowHeight, maxLineCount, resizeVisibleCells };
+  return {
+    setCellSize,
+    getRowHeight,
+    rowMeta,
+    estimatedRowHeight,
+    maxLineCount,
+    resizeVisibleCells,
+    resizeAllCells,
+    resetRowMeta,
+  };
 };
 
 export default useDynamicRowHeight;
