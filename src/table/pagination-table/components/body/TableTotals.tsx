@@ -34,6 +34,7 @@ function TableTotals() {
             align={column.totalsCellTextAlign}
             className="sn-table-cell"
             tabIndex={tabIndex}
+            title={column.totalInfo}
             onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
               handleTotalKeyDown(e, rootElement, cellCoord, setFocusedCellCoord, selectionsAPI.isModal());
             }}

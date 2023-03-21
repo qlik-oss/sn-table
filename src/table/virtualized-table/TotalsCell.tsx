@@ -29,6 +29,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
   return (
     <div
       className="sn-table-cell"
+      title={label}
       style={{
         ...style,
         ...applicableStyling,

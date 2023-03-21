@@ -32,6 +32,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
   return (
     <div
       className="sn-table-cell"
+      title={column.label}
       style={{
         ...style,
         ...applicableStyle,

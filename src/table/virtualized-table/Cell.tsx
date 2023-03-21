@@ -56,6 +56,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         onMouseOver={handleMouseOver}
         onMouseEnter={isHoverEnabled ? () => setHoverIndex(rowIndex) : undefined}
         onMouseLeave={isHoverEnabled ? () => setHoverIndex(-1) : undefined}
+        title={cell.qText}
       >
         <CellText wordBreak lines={maxLineCount}>
           {cell.qText}

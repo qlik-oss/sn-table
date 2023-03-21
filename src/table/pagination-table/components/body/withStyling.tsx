@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { StyledBodyCell } from './styles';
 import { CellHOCProps } from '../../../types';
 
@@ -26,6 +26,7 @@ export default function withStyling(CellComponent: typeof StyledBodyCell) {
         align={align}
         tabIndex={tabIndex}
         className={`sn-table-cell ${selectedCellClass || ''}`}
+        title={(children as ReactElement).props.children}
         onKeyDown={onKeyDown}
         onMouseDown={onMouseDown}
         onKeyUp={onKeyUp}

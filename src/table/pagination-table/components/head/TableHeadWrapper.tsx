@@ -51,6 +51,7 @@ function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
               className="sn-table-head-cell sn-table-cell"
               aria-sort={ariaSort}
               tabIndex={-1}
+              title={column.label}
             >
               <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled={areBasicFeaturesEnabled}>
                 <CellText fontSize={styling.head.fontSize}>{column.label}</CellText>
