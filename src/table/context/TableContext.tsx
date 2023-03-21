@@ -7,7 +7,6 @@ import useColumnWidths from '../hooks/use-column-widths';
 import useTableStyling from '../hooks/use-table-styling';
 import { TableData } from '../../types';
 import { FIRST_HEADER_CELL_COORD } from '../constants';
-import { isBodyWidthLessThenContainerWidth } from '../utils/styling-utils';
 
 // In order to not have typing issues when using properties on the context,
 // the initial value for the context is casted to ContextValue.
@@ -46,15 +45,11 @@ export const TableContextProvider = ({
   const [selectionState, selectionDispatch] = useSelectionReducer(tableData.rows, selectionsAPI);
   const [hoverIndex, setHoverIndex] = useState(-1);
   const styling = useTableStyling(layout, theme, tableData, rootElement);
-  const [columnWidths, setColumnWidths, setYScrollbarWidth] = useColumnWidths(
+  const [columnWidths, setColumnWidths, setYScrollbarWidth, showRightBorder] = useColumnWidths(
     tableData.columns,
     tableData.totalsPosition,
     tableWidth,
     styling
-  );
-  const showRightBorder = useMemo(
-    () => isBodyWidthLessThenContainerWidth(columnWidths, tableWidth),
-    [columnWidths, tableWidth]
   );
   const baseProps = useMemo(
     () => ({

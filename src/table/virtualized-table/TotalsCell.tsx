@@ -37,7 +37,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
         alignItems: 'center',
         borderStyle: 'solid',
         borderLeftWidth: '0px',
-        borderRightWidth: isLastColumn || !showRightBorder ? '0px' : '1px',
+        borderRightWidth: isLastColumn && !showRightBorder ? '0px' : '1px',
         borderTopWidth: totals.atBottom ? '1px' : '0px',
         borderBottomWidth: totals.atTop ? '1px' : '0px',
         padding: '4px 12px',

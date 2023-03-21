@@ -39,7 +39,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         display: 'flex',
         alignItems: 'center',
         borderStyle: 'solid',
-        borderWidth: isLastColumn || !showRightBorder ? '0px 0px 1px 0px' : '0px 1px 1px 0px',
+        borderWidth: isLastColumn && !showRightBorder ? '0px 0px 1px 0px' : '0px 1px 1px 0px',
         padding: '4px',
         justifyContent: column.headCellTextAlign,
         boxSizing: 'border-box',
