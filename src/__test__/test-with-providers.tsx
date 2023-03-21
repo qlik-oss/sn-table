@@ -35,6 +35,8 @@ interface ProviderProps {
   applyColumnWidths?: ApplyColumnWidths;
   tableWidth?: number;
   initialDataPages?: EngineAPI.INxDataPage[];
+  columnWidthsMock?: number[];
+  setColumnWidthsMock?: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 type HookWrapperProps = { children: JSX.Element };
@@ -70,6 +72,8 @@ const TestWithProviders = ({
   applyColumnWidths = undefined,
   tableWidth = 0,
   initialDataPages = undefined,
+  columnWidthsMock,
+  setColumnWidthsMock,
 }: ProviderProps) => {
   return (
     <ThemeProvider theme={muiSetup(direction)}>
@@ -91,6 +95,8 @@ const TestWithProviders = ({
         applyColumnWidths={applyColumnWidths}
         tableWidth={tableWidth}
         initialDataPages={initialDataPages}
+        columnWidthsMock={columnWidthsMock}
+        setColumnWidthsMock={setColumnWidthsMock}
       >
         {children as JSX.Element}
       </TableContextProvider>

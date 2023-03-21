@@ -39,6 +39,8 @@ export const TableContextProvider = ({
   pageInfo,
   initialDataPages,
   tableWidth = 0,
+  columnWidthsMock,
+  setColumnWidthsMock,
 }: ContextProviderProps) => {
   const [headRowHeight, setHeadRowHeight] = useState(0);
   const [focusedCellCoord, setFocusedCellCoord] = useState<[number, number]>(cellCoordMock || FIRST_HEADER_CELL_COORD);
@@ -95,8 +97,8 @@ export const TableContextProvider = ({
         selectionDispatch: selectionDispatchMock || selectionDispatch,
         hoverIndex,
         setHoverIndex,
-        columnWidths,
-        setColumnWidths,
+        columnWidths: columnWidthsMock || columnWidths,
+        setColumnWidths: setColumnWidthsMock || setColumnWidths,
         baseProps,
         tableData,
         setYScrollbarWidth,

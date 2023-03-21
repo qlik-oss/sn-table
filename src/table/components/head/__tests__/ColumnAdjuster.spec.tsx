@@ -1,9 +1,9 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { stardust } from '@nebula.js/stardust';
 import ColumnAdjuster from '../ColumnAdjuster';
 import TestWithProviders from '../../../../__test__/test-with-providers';
-import { ColumnWidthTypes } from '../../../constants';
+import { ColumnWidthTypes, KeyCodes } from '../../../constants';
 import { ApplyColumnWidths, Column } from '../../../../types';
 
 describe('<ColumnAdjuster />', () => {
@@ -12,11 +12,19 @@ describe('<ColumnAdjuster />', () => {
   let isLastColumn: boolean;
   let rootElement: HTMLElement;
   let applyColumnWidths: ApplyColumnWidths | undefined;
+  let columnWidths: number[];
+  let setColumnWidths: React.Dispatch<React.SetStateAction<number[]>>;
   let constraints: stardust.Constraints;
 
   const renderAdjuster = () =>
     render(
-      <TestWithProviders constraints={constraints} rootElement={rootElement} applyColumnWidths={applyColumnWidths}>
+      <TestWithProviders
+        constraints={constraints}
+        rootElement={rootElement}
+        applyColumnWidths={applyColumnWidths}
+        columnWidthsMock={columnWidths}
+        setColumnWidthsMock={setColumnWidths}
+      >
         <ColumnAdjuster column={column} isLastColumn={isLastColumn} />
       </TestWithProviders>
     );
@@ -36,8 +44,12 @@ describe('<ColumnAdjuster />', () => {
       getBoundingClientRect: () => ({ height: 100 } as DOMRect),
     } as HTMLElement;
     applyColumnWidths = jest.fn();
+    columnWidths = [200, 200];
+    setColumnWidths = jest.fn();
     constraints = {};
   });
+
+  afterEach(() => jest.clearAllMocks());
 
   it('should return null when applyColumnWidths is undefined', () => {
     applyColumnWidths = undefined;
@@ -53,8 +65,56 @@ describe('<ColumnAdjuster />', () => {
     expect(screen.queryByTestId('sn-table-column-adjuster')).toBeNull();
   });
 
-  it('should render adjuster component', () => {
+  it('should change column width using keyboard', async () => {
     renderAdjuster();
-    expect(screen.queryByTestId('sn-table-column-adjuster')).toBeInTheDocument();
+    const columnAdjuster = screen.queryByTestId('sn-table-column-adjuster');
+    expect(columnAdjuster).toBeInTheDocument();
+
+    if (!columnAdjuster) return;
+
+    // fireEvent.keyDown(columnAdjuster, { key: KeyCodes.LEFT });
+    // fireEvent.keyDown(columnAdjuster, { key: KeyCodes.LEFT });
+    // await waitFor(() => {
+    //   expect(setColumnWidths).toHaveBeenNthCalledWith(1, [195, 200]);
+    // });
+
+    // fireEvent.keyDown(columnAdjuster, { key: KeyCodes.RIGHT });
+    fireEvent.keyDown(columnAdjuster, { key: KeyCodes.RIGHT });
+    await waitFor(() => {
+      expect(setColumnWidths).toHaveBeenNthCalledWith(1, [205, 200]);
+    });
+
+    fireEvent.keyDown(columnAdjuster, { key: KeyCodes.SPACE });
+    await waitFor(() => {
+      expect(applyColumnWidths).toHaveBeenNthCalledWith(1, { type: ColumnWidthTypes.PIXELS, pixels: 205 }, column);
+    });
+  });
+
+  it('should not change column width when confirming with the same column width and not when canceling ', async () => {
+    renderAdjuster();
+    const columnAdjuster = screen.queryByTestId('sn-table-column-adjuster');
+    expect(columnAdjuster).toBeInTheDocument();
+
+    if (!columnAdjuster) return;
+
+    // fireEvent.keyDown(columnAdjuster, { key: KeyCodes.RIGHT });
+    // await waitFor(() => {
+    //   expect(setColumnWidths).toHaveBeenNthCalledWith(1, [205, 200]);
+    // });
+
+    // fireEvent.keyDown(columnAdjuster, { key: KeyCodes.LEFT });
+    // await waitFor(() => {
+    //   expect(setColumnWidths).toHaveBeenNthCalledWith(2, [200, 200]);
+    // });
+
+    fireEvent.keyDown(columnAdjuster, { key: KeyCodes.SPACE });
+    await waitFor(() => {
+      expect(applyColumnWidths).toHaveBeenCalledTimes(0);
+    });
+
+    fireEvent.keyDown(columnAdjuster, { key: KeyCodes.ESC });
+    await waitFor(() => {
+      expect(applyColumnWidths).toHaveBeenCalledTimes(0);
+    });
   });
 });
