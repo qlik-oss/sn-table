@@ -2358,7 +2358,7 @@
     "@babel/runtime" "^7.20.1"
     prop-types "^15.8.1"
 
-"@mui/system@5.11.12", "@mui/system@^5.11.12":
+"@mui/system@^5.11.12":
   version "5.11.12"
   resolved "https://registry.yarnpkg.com/@mui/system/-/system-5.11.12.tgz#e7234c4e73e9af2b8e985fbed048d8b274338561"
   integrity sha512-sYjsXkiwKpZDC3aS6O/6KTjji0jGINLQcrD5EJ5NTkIDiLf19I4HJhnufgKqlTWNfoDBlRohuTf3TzfM06c4ug==

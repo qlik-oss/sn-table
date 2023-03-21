@@ -1,4 +1,4 @@
-import styled from '@mui/system/styled';
+import { styled } from '@mui/material/styles';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';

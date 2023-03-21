@@ -1,5 +1,5 @@
 /* eslint react/require-default-props: 0 */
-import { ThemeProvider } from '@mui/system';
+import { ThemeProvider } from '@mui/material/styles';
 import { stardust } from '@nebula.js/stardust';
 import React from 'react';
 import { TableContextProvider } from '../table/context';
