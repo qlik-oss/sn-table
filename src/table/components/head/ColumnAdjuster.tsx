@@ -1,9 +1,8 @@
 import React, { useRef } from 'react';
 import { AdjusterProps } from '../../types';
 import { useContextSelector, TableContext } from '../../context';
-import { AdjusterHitArea, AdjusterHeadBorder, AdjusterBodyBorder } from './styles';
-import { ColumnWidthTypes, MIN_COLUMN_WIDTH, PAGINATION_HEIGHT, KeyCodes } from '../../constants';
-import { BORDER_WIDTH } from '../../styling-defaults';
+import { AdjusterHitArea, AdjusterHeadBorder } from './styles';
+import { ColumnWidthTypes, MIN_COLUMN_WIDTH, KeyCodes } from '../../constants';
 import { preventDefaultBehavior } from '../../utils/keyboard-utils';
 import { focusHeadMenuButton } from '../../utils/accessibility-utils';
 
@@ -15,11 +14,10 @@ import { focusHeadMenuButton } from '../../utils/accessibility-utils';
  */
 const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps) => {
   const { pageColIdx } = column;
-  const { rootElement, applyColumnWidths, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { applyColumnWidths, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setColumnWidths = useContextSelector(TableContext, (value) => value.setColumnWidths);
   const tempWidths = useRef({ adjusterHitArea: {}, columnWidth: 0, initX: 0, initWidth: 0 });
-  const borderHeight = rootElement.getBoundingClientRect().height - PAGINATION_HEIGHT - BORDER_WIDTH;
 
   if (!applyColumnWidths || constraints.active) return null;
 
@@ -107,7 +105,6 @@ const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps)
       data-testid="sn-table-column-adjuster"
     >
       <AdjusterHeadBorder className="sn-table-adjuster-head-border" />
-      <AdjusterBodyBorder borderHeight={borderHeight} className="sn-table-adjuster-head-border" />
     </AdjusterHitArea>
   );
 };

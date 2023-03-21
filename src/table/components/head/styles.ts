@@ -176,13 +176,13 @@ export const AdjusterHitArea = styled(Box, {
   width: `${isLastColumn ? PADDING : PADDING * 2 + BORDER_WIDTH}px`,
   justifyContent: isLastColumn ? 'flex-end' : 'center',
   marginLeft: '-4px',
-  '&&:hover': {
+  '&&:hover:not(:focus, :active)': {
     '& .sn-table-adjuster-head-border': {
       background: '#D9D9D9',
     },
   },
   '&&:focus, :active': {
-    '& .sn-table-adjuster-head-border, .sn-table-adjuster-body-border': {
+    '& .sn-table-adjuster-head-border': {
       background: '#177fe6',
     },
   },
@@ -196,11 +196,3 @@ export const AdjusterHeadBorder = styled(Box)({
   height: '100%',
   width: '3px',
 });
-
-export const AdjusterBodyBorder = styled(Box, {
-  shouldForwardProp: (prop: string) => prop !== 'borderHeight',
-})(({ borderHeight }) => ({
-  position: 'absolute',
-  height: borderHeight,
-  width: '1px',
-}));
