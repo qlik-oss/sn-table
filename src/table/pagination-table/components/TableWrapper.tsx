@@ -23,7 +23,7 @@ function TableWrapper(props: TableWrapperProps) {
 
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
     useContextSelector(TableContext, (value) => value.tableData);
-  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints, styling } = useContextSelector(
+  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints, styling, rect } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );
@@ -132,7 +132,12 @@ function TableWrapper(props: TableWrapperProps) {
       </StyledTableContainer>
       {!constraints.active && (
         <FooterWrapper footerContainer={footerContainer} paginationNeeded={paginationNeeded}>
-          <PaginationContent {...props} handleChangePage={handleChangePage} isSelectionMode={isSelectionMode} />
+          <PaginationContent
+            {...props}
+            rect={rect}
+            handleChangePage={handleChangePage}
+            isSelectionMode={isSelectionMode}
+          />
         </FooterWrapper>
       )}
     </StyledTableWrapper>

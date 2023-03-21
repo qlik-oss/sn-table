@@ -38,7 +38,7 @@ export const TableContextProvider = ({
   setPage,
   pageInfo,
   initialDataPages,
-  tableWidth = 0,
+  rect,
 }: ContextProviderProps) => {
   const [headRowHeight, setHeadRowHeight] = useState(0);
   const [focusedCellCoord, setFocusedCellCoord] = useState<[number, number]>(cellCoordMock || FIRST_HEADER_CELL_COORD);
@@ -48,7 +48,7 @@ export const TableContextProvider = ({
   const [columnWidths, setColumnWidths, setYScrollbarWidth, showRightBorder] = useColumnWidths(
     tableData.columns,
     tableData.totalsPosition,
-    tableWidth,
+    rect.width,
     styling
   );
   const baseProps = useMemo(
@@ -66,6 +66,7 @@ export const TableContextProvider = ({
       changeSortOrder,
       applyColumnWidths,
       styling,
+      rect,
     }),
     [
       app,
@@ -81,6 +82,7 @@ export const TableContextProvider = ({
       changeSortOrder,
       applyColumnWidths,
       styling,
+      rect,
     ]
   );
 
