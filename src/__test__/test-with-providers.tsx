@@ -69,7 +69,7 @@ const TestWithProviders = ({
   rootElement = {} as HTMLElement,
   embed = {} as stardust.Embed,
   changeSortOrder = async () => {},
-  applyColumnWidths = undefined,
+  applyColumnWidths = () => {},
   tableWidth = 0,
   initialDataPages = undefined,
   columnWidthsMock,

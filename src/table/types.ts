@@ -114,7 +114,7 @@ export interface ContextValue {
     rootElement: HTMLElement;
     embed: stardust.Embed;
     changeSortOrder: ChangeSortOrder;
-    applyColumnWidths?: ApplyColumnWidths;
+    applyColumnWidths: ApplyColumnWidths;
     styling: TableStyling;
   };
   tableData: TableData;
@@ -218,7 +218,7 @@ export interface ContextProviderProps {
   rootElement: HTMLElement;
   embed: stardust.Embed;
   changeSortOrder: ChangeSortOrder;
-  applyColumnWidths?: ApplyColumnWidths;
+  applyColumnWidths: ApplyColumnWidths;
   tableWidth?: number;
   pageInfo?: PageInfo;
   setPage?: stardust.SetStateFn<number>;
