@@ -45,7 +45,7 @@ export const TableContextProvider = ({
   const [selectionState, selectionDispatch] = useSelectionReducer(tableData.rows, selectionsAPI);
   const [hoverIndex, setHoverIndex] = useState(-1);
   const styling = useTableStyling(layout, theme, tableData, rootElement);
-  const [columnWidths, setColumnWidths, setYScrollbarWidth] = useColumnWidths(
+  const [columnWidths, setColumnWidths, setYScrollbarWidth, showRightBorder] = useColumnWidths(
     tableData.columns,
     tableData.totalsPosition,
     tableWidth,
@@ -103,6 +103,7 @@ export const TableContextProvider = ({
         setPage,
         pageInfo,
         initialDataPages,
+        showRightBorder,
       }}
     >
       {children}

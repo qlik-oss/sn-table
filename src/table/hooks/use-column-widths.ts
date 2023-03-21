@@ -88,12 +88,20 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getFitToC
   return columnWidths;
 };
 
+const isBodyWidthLessThenContainerWidth = (columnWidths: number[], yScrollbarWidth: number, tableWidth: number) =>
+  columnWidths && columnWidths.length > 0 ? columnWidths.reduce((a, b) => a + b) + yScrollbarWidth < tableWidth : false;
+
 const useColumnWidths = (
   columns: Column[],
   totalsPosition: TotalsPosition,
   tableWidth: number,
   { head, body }: TableStyling
-): [number[], React.Dispatch<React.SetStateAction<number[]>>, React.Dispatch<React.SetStateAction<number>>] => {
+): [
+  number[],
+  React.Dispatch<React.SetStateAction<number[]>>,
+  React.Dispatch<React.SetStateAction<number>>,
+  boolean
+] => {
   const showTotals = totalsPosition.atBottom || totalsPosition.atTop;
   const measureHeadLabel = useMeasureText(head.fontSize, head.fontFamily).measureText;
   const { measureText, estimateWidth } = useMeasureText(body.fontSize, body.fontFamily);
@@ -118,7 +126,12 @@ const useColumnWidths = (
     setColumnWidths(getColumnWidths(columns, tableWidth - yScrollbarWidth, getFitToContentWidth));
   }, [columns, tableWidth, yScrollbarWidth, getFitToContentWidth]);
 
-  return [columnWidths, setColumnWidths, setYScrollbarWidth];
+  const showRightBorder = useMemo(
+    () => isBodyWidthLessThenContainerWidth(columnWidths, yScrollbarWidth, tableWidth),
+    [columnWidths, yScrollbarWidth, tableWidth]
+  );
+
+  return [columnWidths, setColumnWidths, setYScrollbarWidth, showRightBorder];
 };
 
 export default useColumnWidths;
