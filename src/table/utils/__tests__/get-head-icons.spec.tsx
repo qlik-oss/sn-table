@@ -12,7 +12,7 @@ describe('getHeadIcons', () => {
   const ascending = <Ascending height={DEFAULT_FONT_SIZE} />;
   const descending = <Descending height={DEFAULT_FONT_SIZE} />;
   const lock = (
-    <LockWrapper>
+    <LockWrapper className="aligned-left">
       <Lock height="12px" data-testid="head-cell-lock-icon" />
     </LockWrapper>
   );

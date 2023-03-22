@@ -6,6 +6,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 
 import { BORDER_WIDTH, DEFAULT_FONT_SIZE, PADDING } from '../../styling-defaults';
+import { HEAD_ICON_WRAPPER_SIZE, LOCK_ICON_SIZE } from '../../constants';
 
 // ---------- HeadCellContent ----------
 
@@ -14,11 +15,13 @@ export const StyledSortButton = styled(Button, {
 })(({ isActive, textAlign, disabled, theme }) => ({
   textAlign,
   height: 'auto',
+  maxWidth: '100%',
   fontSize: 'inherit',
   padding: theme.spacing(0.5, 1),
   color: 'inherit',
   alignItems: 'flex-end',
   cursor: disabled ? 'auto' : 'pointer',
+  justifySelf: textAlign,
   '&&:focus, &&:hover': {
     '& svg': {
       opacity: isActive ? 1 : 0.5,
@@ -49,27 +52,61 @@ export const VisuallyHidden = styled('span')({
   width: 1,
 });
 
-export const StyledHeadCellContent = styled(Box)(({ theme }) => ({
+export const StyledHeadCellContent = styled(Box, {
+  shouldForwardProp: (prop: string) => prop !== 'isLocked',
+})(({ theme, isLocked }) => ({
   width: '100%',
-  display: 'flex',
-  justifyContent: 'space-between',
+  display: 'grid',
   flexDirection: 'inherit',
-  alignItems: 'flex-end',
+  gridAutoFlow: 'dense',
   gap: theme.spacing(0.5),
   fontSize: 'inherit',
   '&&:hover, &&:focus-within': {
     '& #sn-table-head-menu-button': { opacity: 1 },
   },
+
+  '& > div:last-child': { alignSelf: 'flex-end' },
+
+  '&.aligned-left': {
+    gridTemplateColumns: isLocked
+      ? `${LOCK_ICON_SIZE}px 2fr ${HEAD_ICON_WRAPPER_SIZE}px`
+      : `1fr ${HEAD_ICON_WRAPPER_SIZE}px`,
+  },
+
+  '&.aligned-center': {
+    gridTemplateColumns: `${HEAD_ICON_WRAPPER_SIZE}px 2fr ${HEAD_ICON_WRAPPER_SIZE}px`,
+
+    '& > div:first-child': { gridColumn: 1 },
+    '& .sn-table-head-label': { gridColumn: 2 },
+    '& > div:last-child': { gridColumn: 3 },
+  },
+
+  '&.aligned-right': {
+    gridTemplateColumns: isLocked
+      ? `${HEAD_ICON_WRAPPER_SIZE}px 2fr ${LOCK_ICON_SIZE}px`
+      : `${HEAD_ICON_WRAPPER_SIZE}px 1fr`,
+
+    '& > div:first-child': { gridColumn: isLocked ? 3 : 'unset' },
+    '& .sn-table-head-label': { gridColumn: 2 },
+    '& > div:last-child': { gridColumn: 1 },
+  },
 }));
+
+export const StyledHeadCellIconWrapper = styled('div')({
+  display: 'flex',
+  alignSelf: 'flex-end',
+});
 
 export const LockWrapper = styled(Box)({
   display: 'flex',
-  justifyContent: 'flex-end',
-  alignItems: 'flex-start',
-  width: '20px',
-  height: '18px',
+  alignItems: 'center',
+  width: `${LOCK_ICON_SIZE}px`,
+  height: `${HEAD_ICON_WRAPPER_SIZE}px`,
   flexShrink: 0,
   flexDirection: 'inherit',
+
+  '&.aligned-right': { justifyContent: 'flex-start' },
+  '&.aligned-center, &.aligned-left': { justifyContent: 'flex-end' },
 });
 
 // ---------- HeadCellMenu ----------
@@ -77,6 +114,8 @@ export const HeadCellMenuWrapper = styled(Box, {
   shouldForwardProp: (prop: string) => prop !== 'isVisible' && prop !== 'rightAligned',
 })(({ rightAligned }) => ({
   ...(rightAligned ? { marginRight: 'auto' } : { marginLeft: 'auto' }),
+  height: `${HEAD_ICON_WRAPPER_SIZE}px`,
+  display: 'flex',
 }));
 
 export const StyledMenuIconButton = styled(Button, {
@@ -137,13 +176,13 @@ export const AdjusterHitArea = styled(Box, {
   width: `${isLastColumn ? PADDING : PADDING * 2 + BORDER_WIDTH}px`,
   justifyContent: isLastColumn ? 'flex-end' : 'center',
   marginLeft: '-4px',
-  '&&:hover': {
+  '&&:hover:not(:focus, :active)': {
     '& .sn-table-adjuster-head-border': {
       background: '#D9D9D9',
     },
   },
   '&&:focus, :active': {
-    '& .sn-table-adjuster-head-border, .sn-table-adjuster-body-border': {
+    '& .sn-table-adjuster-head-border': {
       background: '#177fe6',
     },
   },
@@ -157,11 +196,3 @@ export const AdjusterHeadBorder = styled(Box)({
   height: '100%',
   width: '3px',
 });
-
-export const AdjusterBodyBorder = styled(Box, {
-  shouldForwardProp: (prop: string) => prop !== 'borderHeight',
-})(({ borderHeight }) => ({
-  position: 'absolute',
-  height: borderHeight,
-  width: '1px',
-}));

@@ -45,7 +45,7 @@ describe('<Table />', () => {
           constraints={constraints}
           tableData={tableData}
           rootElement={rootElement}
-          tableWidth={rect.width}
+          rect={rect}
           initialDataPages={initialDataPages}
         >
           <TestableTable pageInfo={pageInfo} rect={rect} />

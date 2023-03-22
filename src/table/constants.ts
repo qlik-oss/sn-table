@@ -54,6 +54,8 @@ export const MAX_COLUMN_WIDTH = 7680;
 export const MAX_COLUMN_PERCENTAGE_WIDTH = 100;
 export const DEFAULT_COLUMN_PIXEL_WIDTH = 200;
 export const DEFAULT_COLUMN_PERCENTAGE_WIDTH = 20;
+export const HEAD_ICON_WRAPPER_SIZE = 24;
+export const LOCK_ICON_SIZE = 20;
 
 export const PAGINATION_HEIGHT = 40;
 

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { FocusTypes } from '../constants';
 import { useContextSelector, TableContext } from '../context';
 import { updateFocus } from '../utils/accessibility-utils';
-import { getCellElement } from '../utils/get-element-utils';
+import { getCellElement, findCellWithTabStop } from '../utils/get-element-utils';
 
 /**
  * When nebula handles keyboard navigation (keyboard.enabled === true)
@@ -17,8 +17,9 @@ const useKeyboardActiveListener = () => {
   useEffect(() => {
     let focusType = focusedCellCoord[0] > 0 ? FocusTypes.FOCUS : FocusTypes.FOCUS_BUTTON;
     focusType = keyboard.active ? focusType : FocusTypes.BLUR;
+    const cell = keyboard.active ? getCellElement(rootElement, focusedCellCoord) : findCellWithTabStop(rootElement);
 
-    updateFocus({ focusType, cell: getCellElement(rootElement, focusedCellCoord) });
+    updateFocus({ focusType, cell });
   }, [keyboard.active, rootElement]);
 };
 

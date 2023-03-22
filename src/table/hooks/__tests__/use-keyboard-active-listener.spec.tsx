@@ -26,15 +26,16 @@ describe('use-keyboard-active-listener', () => {
 
     jest.spyOn(accessibilityUtils, 'updateFocus').mockImplementation(() => {});
     jest.spyOn(getElementUtils, 'getCellElement').mockImplementation(() => ({} as HTMLTableCellElement));
+    jest.spyOn(getElementUtils, 'findCellWithTabStop').mockImplementation(() => ({} as HTMLTableCellElement));
   });
 
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
-  it('should call getCellElement and updateFocus with focusType blur when keyboard.active is false', () => {
+  it('should call findCellWithTabStop and updateFocus with focusType blur when keyboard.active is false', () => {
     renderUseKEyboardActiveListener();
-    expect(getElementUtils.getCellElement).toHaveBeenCalledWith(expect.anything(), FIRST_HEADER_CELL_COORD);
+    expect(getElementUtils.findCellWithTabStop).toHaveBeenCalledTimes(1);
     expect(accessibilityUtils.updateFocus).toHaveBeenCalledWith({
       focusType: FocusTypes.BLUR,
       cell: expect.anything(),

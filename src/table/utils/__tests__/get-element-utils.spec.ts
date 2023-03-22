@@ -1,4 +1,4 @@
-import { findCellWithTabStop, getCellCoordFromCell, getNextCellCoord } from '../get-element-utils';
+import { findCellWithTabStop, getNextCellCoord } from '../get-element-utils';
 
 describe('get-element-utils', () => {
   let cell: HTMLTableCellElement | undefined;
@@ -217,23 +217,6 @@ describe('get-element-utils', () => {
       const [nextRow, nextCol] = getNextCellCoord(evt, rootElement, [rowIndex, colIndex], allowedRows);
       expect(nextRow).toBe(1);
       expect(nextCol).toBe(1);
-    });
-  });
-
-  describe('getCellCoordFromCell', () => {
-    let otherCell: HTMLTableCellElement;
-
-    beforeEach(() => {
-      otherCell = { ...cell } as HTMLTableCellElement;
-      rootElement = {
-        getElementsByClassName: (className: string) =>
-          className === 'sn-table-cell' ? [otherCell, otherCell, otherCell, cell, otherCell, otherCell] : [cell, cell],
-      } as unknown as HTMLDivElement;
-    });
-
-    it('should return correct row and column index', () => {
-      const coord = getCellCoordFromCell(rootElement, cell as HTMLTableCellElement);
-      expect(coord).toEqual([2, 1]);
     });
   });
 });

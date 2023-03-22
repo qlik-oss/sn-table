@@ -38,17 +38,17 @@ export const TableContextProvider = ({
   setPage,
   pageInfo,
   initialDataPages,
-  tableWidth = 0,
+  rect,
 }: ContextProviderProps) => {
   const [headRowHeight, setHeadRowHeight] = useState(0);
   const [focusedCellCoord, setFocusedCellCoord] = useState<[number, number]>(cellCoordMock || FIRST_HEADER_CELL_COORD);
   const [selectionState, selectionDispatch] = useSelectionReducer(tableData.rows, selectionsAPI);
   const [hoverIndex, setHoverIndex] = useState(-1);
   const styling = useTableStyling(layout, theme, tableData, rootElement);
-  const [columnWidths, setColumnWidths, setYScrollbarWidth] = useColumnWidths(
+  const [columnWidths, setColumnWidths, setYScrollbarWidth, showRightBorder] = useColumnWidths(
     tableData.columns,
     tableData.totalsPosition,
-    tableWidth,
+    rect.width,
     styling
   );
   const baseProps = useMemo(
@@ -66,6 +66,7 @@ export const TableContextProvider = ({
       changeSortOrder,
       applyColumnWidths,
       styling,
+      rect,
     }),
     [
       app,
@@ -81,6 +82,7 @@ export const TableContextProvider = ({
       changeSortOrder,
       applyColumnWidths,
       styling,
+      rect,
     ]
   );
 
@@ -103,6 +105,7 @@ export const TableContextProvider = ({
         setPage,
         pageInfo,
         initialDataPages,
+        showRightBorder,
       }}
     >
       {children}

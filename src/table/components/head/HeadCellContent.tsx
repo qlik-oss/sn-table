@@ -4,10 +4,10 @@ import { useContextSelector, TableContext } from '../../context';
 import { HeadCellContentProps } from '../../types';
 import { FullSortDirection } from '../../constants';
 import getHeadIcons from '../../utils/get-head-icons';
-import { VisuallyHidden, StyledSortButton, StyledHeadCellContent } from './styles';
 import HeadCellMenu from './HeadCellMenu';
 import { handleHeadKeyDown } from '../../utils/handle-keyboard';
 import { areTabStopsEnabled } from '../../utils/accessibility-utils';
+import { VisuallyHidden, StyledSortButton, StyledHeadCellContent, StyledHeadCellIconWrapper } from './styles';
 
 function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }: HeadCellContentProps) {
   const { constraints, keyboard, translator, rootElement, changeSortOrder } = useContextSelector(
@@ -34,8 +34,12 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
     });
 
   return (
-    <StyledHeadCellContent onKeyDown={onKeyDown}>
-      {lockIcon}
+    <StyledHeadCellContent
+      onKeyDown={onKeyDown}
+      isLocked={Boolean(lockIcon)}
+      className={`aligned-${column.headCellTextAlign}`}
+    >
+      {lockIcon && <StyledHeadCellIconWrapper>{lockIcon}</StyledHeadCellIconWrapper>}
 
       <StyledSortButton
         className="sn-table-head-label"

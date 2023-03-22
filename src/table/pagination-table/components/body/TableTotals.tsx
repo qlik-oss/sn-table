@@ -3,7 +3,7 @@ import TableRow from '@mui/material/TableRow';
 
 import { useContextSelector, TableContext } from '../../../context';
 import { handleTotalKeyDown } from '../../../utils/handle-keyboard';
-import { areTabStopsEnabled, removeTabAndFocusCell } from '../../../utils/accessibility-utils';
+import { removeTabAndFocusCell } from '../../../utils/accessibility-utils';
 import { StyledTotalsCell } from './styles';
 import CellText from '../../../components/CellText';
 
@@ -24,7 +24,8 @@ function TableTotals() {
     <TableRow className="sn-table-row">
       {columns.map((column, columnIndex) => {
         const cellCoord: [number, number] = [atTop ? 1 : rows.length + 1, columnIndex];
-        const tabIndex = atTop && columnIndex === 0 && areTabStopsEnabled(keyboard) ? 0 : -1;
+        const tabIndex = atTop && columnIndex === 0 && !keyboard.enabled ? 0 : -1;
+
         return (
           <StyledTotalsCell
             totalsStyle={styling.totals}
