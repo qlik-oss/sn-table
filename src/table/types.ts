@@ -116,6 +116,7 @@ export interface ContextValue {
     changeSortOrder: ChangeSortOrder;
     applyColumnWidths?: ApplyColumnWidths;
     styling: TableStyling;
+    rect: stardust.Rect;
   };
   tableData: TableData;
   setYScrollbarWidth: (width: number) => void;
@@ -220,7 +221,7 @@ export interface ContextProviderProps {
   embed: stardust.Embed;
   changeSortOrder: ChangeSortOrder;
   applyColumnWidths?: ApplyColumnWidths;
-  tableWidth?: number;
+  rect: stardust.Rect;
   pageInfo?: PageInfo;
   setPage?: stardust.SetStateFn<number>;
   initialDataPages?: EngineAPI.INxDataPage[];
@@ -257,7 +258,6 @@ export interface RenderProps {
 
 export interface TableWrapperProps {
   direction?: Direction;
-  rect: stardust.Rect;
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
   footerContainer?: HTMLElement;
@@ -302,7 +302,6 @@ export interface TableBodyWrapperProps {
 
 export interface PaginationContentProps {
   direction?: 'ltr' | 'rtl';
-  rect: stardust.Rect;
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
   footerContainer?: HTMLElement;

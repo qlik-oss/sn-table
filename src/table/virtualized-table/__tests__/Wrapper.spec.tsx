@@ -33,8 +33,8 @@ describe('<Wrapper />', () => {
     };
 
     render(
-      <TestWithProviders layout={layout} tableData={tableData}>
-        <Wrapper rect={rect} />
+      <TestWithProviders layout={layout} tableData={tableData} rect={rect}>
+        <Wrapper />
       </TestWithProviders>
     );
   };
