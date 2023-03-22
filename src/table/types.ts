@@ -224,8 +224,6 @@ export interface ContextProviderProps {
   pageInfo?: PageInfo;
   setPage?: stardust.SetStateFn<number>;
   initialDataPages?: EngineAPI.INxDataPage[];
-  columnWidthsMock?: number[];
-  setColumnWidthsMock?: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 export interface RenderProps {

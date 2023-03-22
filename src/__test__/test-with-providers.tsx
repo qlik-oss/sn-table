@@ -34,8 +34,6 @@ interface ProviderProps {
   applyColumnWidths?: ApplyColumnWidths;
   initialDataPages?: EngineAPI.INxDataPage[];
   rect?: stardust.Rect;
-  columnWidthsMock?: number[];
-  setColumnWidthsMock?: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 type HookWrapperProps = { children: JSX.Element };
@@ -70,8 +68,6 @@ const TestWithProviders = ({
   applyColumnWidths = () => {},
   rect = { width: 0, height: 0, top: 0, left: 0 },
   initialDataPages = undefined,
-  columnWidthsMock,
-  setColumnWidthsMock,
 }: ProviderProps) => {
   return (
     <ThemeProvider theme={muiSetup(direction)}>
@@ -92,8 +88,6 @@ const TestWithProviders = ({
         applyColumnWidths={applyColumnWidths}
         rect={rect}
         initialDataPages={initialDataPages}
-        columnWidthsMock={columnWidthsMock}
-        setColumnWidthsMock={setColumnWidthsMock}
       >
         {children as JSX.Element}
       </TableContextProvider>
