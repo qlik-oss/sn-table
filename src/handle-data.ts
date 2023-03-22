@@ -90,7 +90,7 @@ export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | 'au
 /**
  * Gets all column info, returns false if hidden
  */
-export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: number): Column {
+export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: number): Column | false {
   const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIdx < numDims;
@@ -111,6 +111,7 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
   }
 
   const {
+    qError,
     qFallbackTitle,
     textAlign,
     qAttrExprInfo,
@@ -120,25 +121,28 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
     columnWidth,
     qLibraryId,
   } = info;
+  const isHidden = qError?.qErrorCode === 7005;
 
-  return {
-    isDim,
-    isLocked,
-    fieldId,
-    colIdx,
-    qLibraryId,
-    pageColIdx,
-    qApprMaxGlyphCount,
-    qReverseSort,
-    columnWidth,
-    id: `col-${pageColIdx}`,
-    label: qFallbackTitle,
-    stylingIDs: qAttrExprInfo.map((expr) => expr.id),
-    // making sure that qSortIndicator is either A or D
-    sortDirection: qSortIndicator && qSortIndicator !== 'N' ? qSortIndicator : 'A',
-    totalInfo: getTotalInfo(layout, colIdx, pageColIdx, numDims),
-    ...getAlignInfo(textAlign, qDimensionType, isDim),
-  };
+  return (
+    !isHidden && {
+      isDim,
+      isLocked,
+      fieldId,
+      colIdx,
+      qLibraryId,
+      pageColIdx,
+      qApprMaxGlyphCount,
+      qReverseSort,
+      columnWidth,
+      id: `col-${pageColIdx}`,
+      label: qFallbackTitle,
+      stylingIDs: qAttrExprInfo.map((expr) => expr.id),
+      // making sure that qSortIndicator is either A or D
+      sortDirection: qSortIndicator && qSortIndicator !== 'N' ? qSortIndicator : 'A',
+      totalInfo: getTotalInfo(layout, colIdx, pageColIdx, numDims),
+      ...getAlignInfo(textAlign, qDimensionType, isDim),
+    }
+  );
 }
 
 /**
@@ -149,16 +153,10 @@ export const getColumns = (layout: TableLayout) => {
   const {
     qHyperCube: { qColumnOrder, qDimensionInfo, qMeasureInfo },
   } = layout;
-  const numDims = qDimensionInfo.length;
-  const columnsLength = numDims + qMeasureInfo.length;
+  const columnsLength = qDimensionInfo.length + qMeasureInfo.length;
   const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
 
-  const visibleColumnsOrder = columnOrder.filter((colIdx) => {
-    const { qError } = colIdx < numDims ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims];
-    return qError?.qErrorCode !== 7005;
-  });
-
-  return visibleColumnsOrder.map((colIdx, pageColIdx) => getColumnInfo(layout, colIdx, pageColIdx));
+  return columnOrder.map((colIdx, pageColIdx) => getColumnInfo(layout, colIdx, pageColIdx)).filter(Boolean) as Column[];
 };
 
 /**
