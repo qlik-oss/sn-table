@@ -34,9 +34,9 @@ describe('<HeadCellContent />', () => {
   beforeEach(() => {
     column = {
       id: '1',
-      headCellTextAlign: 'left',
-      totalsCellTextAlign: 'left',
-      textAlign: 'left',
+      headTextAlign: 'left',
+      totalsTextAlign: 'left',
+      bodyTextAlign: 'left',
       label: 'someDim',
       sortDirection: 'A',
       isDim: true,

@@ -32,7 +32,7 @@ function TableTotals() {
             headRowHeight={headRowHeight}
             atTop={atTop}
             key={column.id}
-            align={column.totalsCellTextAlign}
+            align={column.totalsTextAlign}
             className="sn-table-cell"
             tabIndex={tabIndex}
             title={!constraints.passive ? column.totalInfo : undefined}

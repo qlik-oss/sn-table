@@ -37,14 +37,14 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
     <StyledHeadCellContent
       onKeyDown={onKeyDown}
       isLocked={Boolean(lockIcon)}
-      className={`aligned-${column.headCellTextAlign}`}
+      className={`aligned-${column.headTextAlign}`}
     >
       {lockIcon && <StyledHeadCellIconWrapper>{lockIcon}</StyledHeadCellIconWrapper>}
 
       <StyledSortButton
         className="sn-table-head-label"
         isActive={isActive}
-        textAlign={column.headCellTextAlign}
+        textAlign={column.headTextAlign}
         color="inherit"
         size="small"
         startIcon={startIcon}
