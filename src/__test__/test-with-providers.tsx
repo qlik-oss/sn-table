@@ -21,7 +21,6 @@ interface ProviderProps {
   selectionsAPI?: ExtendedSelectionAPI;
   tableData?: TableData;
   cellCoordMock?: [number, number];
-  selectionDispatchMock?: jest.Mock<any, any>;
   layout?: TableLayout;
   model?: EngineAPI.IGenericObject;
   translator?: ExtendedTranslator;
@@ -64,7 +63,6 @@ const TestWithProviders = ({
   } as unknown as ExtendedTheme,
   tableData = undefined,
   cellCoordMock = undefined,
-  selectionDispatchMock = undefined, // Can be used to avoid selectionDispatch infinite loop
   direction = 'ltr',
   rootElement = {} as HTMLElement,
   embed = {} as stardust.Embed,
@@ -88,7 +86,6 @@ const TestWithProviders = ({
         model={model}
         tableData={tableData}
         cellCoordMock={cellCoordMock}
-        selectionDispatchMock={selectionDispatchMock}
         rootElement={rootElement}
         embed={embed}
         changeSortOrder={changeSortOrder}

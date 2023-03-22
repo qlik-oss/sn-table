@@ -210,7 +210,6 @@ export interface ContextProviderProps {
   tableData?: TableData;
   selectionsAPI: ExtendedSelectionAPI;
   cellCoordMock?: [number, number];
-  selectionDispatchMock?: jest.Mock<any, any>;
   layout: TableLayout;
   model?: EngineAPI.IGenericObject;
   translator: ExtendedTranslator;

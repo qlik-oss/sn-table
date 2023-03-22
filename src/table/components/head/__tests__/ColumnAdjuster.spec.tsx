@@ -5,6 +5,7 @@ import ColumnAdjuster from '../ColumnAdjuster';
 import TestWithProviders from '../../../../__test__/test-with-providers';
 import { ColumnWidthTypes, KeyCodes } from '../../../constants';
 import { ApplyColumnWidths, Column } from '../../../../types';
+import * as useColumnWidths from '../../../hooks/use-column-widths';
 
 describe('<ColumnAdjuster />', () => {
   let columns: Column[];
@@ -13,16 +14,12 @@ describe('<ColumnAdjuster />', () => {
   let applyColumnWidths: ApplyColumnWidths | undefined;
   let columnWidths: number[];
   let setColumnWidths: React.Dispatch<React.SetStateAction<number[]>>;
+  let setYScrollbarWidth: React.Dispatch<React.SetStateAction<number>>;
   let constraints: stardust.Constraints;
 
   const renderAdjuster = () =>
     render(
-      <TestWithProviders
-        constraints={constraints}
-        applyColumnWidths={applyColumnWidths}
-        columnWidthsMock={columnWidths}
-        setColumnWidthsMock={setColumnWidths}
-      >
+      <TestWithProviders constraints={constraints} applyColumnWidths={applyColumnWidths}>
         <ColumnAdjuster column={column} isLastColumn={isLastColumn} />
       </TestWithProviders>
     );
@@ -48,6 +45,9 @@ describe('<ColumnAdjuster />', () => {
     columnWidths = [200, 200];
     setColumnWidths = jest.fn();
     constraints = {};
+    jest
+      .spyOn(useColumnWidths, 'default')
+      .mockImplementation(() => [columnWidths, setColumnWidths, setYScrollbarWidth, false]);
   });
 
   afterEach(() => jest.clearAllMocks());

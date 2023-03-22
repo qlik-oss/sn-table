@@ -24,7 +24,6 @@ export const TableContextProvider = ({
   tableData = EMPTY_TABLE_DATA, // Always use the same object to avoid triggers infinite loop in use-selection-reducer.ts
   selectionsAPI,
   cellCoordMock,
-  selectionDispatchMock,
   layout,
   model,
   translator,
@@ -96,7 +95,7 @@ export const TableContextProvider = ({
         focusedCellCoord,
         setFocusedCellCoord,
         selectionState,
-        selectionDispatch: selectionDispatchMock || selectionDispatch,
+        selectionDispatch,
         hoverIndex,
         setHoverIndex,
         columnWidths: columnWidthsMock || columnWidths,
