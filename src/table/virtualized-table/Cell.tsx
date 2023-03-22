@@ -22,6 +22,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
 
   const rowIsHovered = useContextSelector(TableContext, (value) => value.hoverIndex === rowIndex);
   const setHoverIndex = useContextSelector(TableContext, (value) => value.setHoverIndex);
+  const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
 
   const { handleMouseDown, handleMouseOver, handleMouseUp, cellSelectionState } = useSelector(cell);
 
@@ -44,7 +45,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           alignItems: 'center',
           borderWidth: '0px',
           borderBottomWidth: cell.isLastRow ? '0px' : `${BORDER_WIDTH}px`,
-          borderRightWidth: cell.isLastColumn ? '0px' : `${BORDER_WIDTH}px`,
+          borderRightWidth: cell.isLastColumn && !showRightBorder ? '0px' : `${BORDER_WIDTH}px`,
           borderStyle: 'solid',
           justifyContent: cell.align,
           padding: `4px ${PADDING_LEFT_RIGHT}px`,

@@ -252,9 +252,6 @@ const dimensionItems = {
     translation: 'properties.dimensions.showNull',
     inverted: true,
   },
-  numberFormatting: {
-    uses: 'measures.items.numberFormatting',
-  },
   createMasterItemButton: {}, // To be filled by DataAssetsPanel in anlytics
   divider: { uses: 'divider' },
   dimensionLimits: {

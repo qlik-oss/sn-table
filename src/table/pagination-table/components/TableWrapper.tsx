@@ -23,7 +23,7 @@ function TableWrapper(props: TableWrapperProps) {
 
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
     useContextSelector(TableContext, (value) => value.tableData);
-  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints } = useContextSelector(
+  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints, styling } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );
@@ -31,6 +31,7 @@ function TableWrapper(props: TableWrapperProps) {
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
+  const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
 
   const isSelectionMode = selectionsAPI.isModal();
 
@@ -118,7 +119,13 @@ function TableWrapper(props: TableWrapperProps) {
         role="application"
         data-testid="table-container"
       >
-        <StyledTable customWidth={areBasicFeaturesEnabled} stickyHeader aria-label={tableAriaLabel}>
+        <StyledTable
+          styling={styling}
+          showRightBorder={showRightBorder}
+          customWidth={areBasicFeaturesEnabled}
+          stickyHeader
+          aria-label={tableAriaLabel}
+        >
           <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </StyledTable>

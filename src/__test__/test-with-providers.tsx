@@ -33,8 +33,8 @@ interface ProviderProps {
   embed?: stardust.Embed;
   changeSortOrder?: ChangeSortOrder;
   applyColumnWidths?: ApplyColumnWidths;
-  tableWidth?: number;
   initialDataPages?: EngineAPI.INxDataPage[];
+  rect?: stardust.Rect;
   columnWidthsMock?: number[];
   setColumnWidthsMock?: React.Dispatch<React.SetStateAction<number[]>>;
 }
@@ -70,7 +70,7 @@ const TestWithProviders = ({
   embed = {} as stardust.Embed,
   changeSortOrder = async () => {},
   applyColumnWidths = () => {},
-  tableWidth = 0,
+  rect = { width: 0, height: 0, top: 0, left: 0 },
   initialDataPages = undefined,
   columnWidthsMock,
   setColumnWidthsMock,
@@ -93,7 +93,7 @@ const TestWithProviders = ({
         embed={embed}
         changeSortOrder={changeSortOrder}
         applyColumnWidths={applyColumnWidths}
-        tableWidth={tableWidth}
+        rect={rect}
         initialDataPages={initialDataPages}
         columnWidthsMock={columnWidthsMock}
         setColumnWidthsMock={setColumnWidthsMock}
