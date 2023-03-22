@@ -22,6 +22,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
 
   const rowIsHovered = useContextSelector(TableContext, (value) => value.hoverIndex === rowIndex);
   const setHoverIndex = useContextSelector(TableContext, (value) => value.setHoverIndex);
+  const { constraints } = useContextSelector(TableContext, (value) => value.baseProps);
 
   const { handleMouseDown, handleMouseOver, handleMouseUp, cellSelectionState } = useSelector(cell);
 
@@ -56,7 +57,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         onMouseOver={handleMouseOver}
         onMouseEnter={isHoverEnabled ? () => setHoverIndex(rowIndex) : undefined}
         onMouseLeave={isHoverEnabled ? () => setHoverIndex(-1) : undefined}
-        title={cell.qText}
+        title={!constraints.passive ? cell.qText : undefined}
       >
         <CellText wordBreak lines={maxLineCount}>
           {cell.qText}

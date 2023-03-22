@@ -13,7 +13,7 @@ import { StyledHeadCell } from './styles';
 
 function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
   const { columns } = useContextSelector(TableContext, (value) => value.tableData);
-  const { layout, styling } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, styling, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const headRowRef = useRef<HTMLTableRowElement>(null);
@@ -51,7 +51,7 @@ function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
               className="sn-table-head-cell sn-table-cell"
               aria-sort={ariaSort}
               tabIndex={-1}
-              title={column.label}
+              title={!constraints.passive ? column.label : undefined}
             >
               <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled={areBasicFeaturesEnabled}>
                 <CellText fontSize={styling.head.fontSize}>{column.label}</CellText>
