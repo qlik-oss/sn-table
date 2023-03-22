@@ -5,9 +5,9 @@ interface PageOptionsProps {
   page: number;
 }
 
-const MAX_PAGE_OPTIONS_LENGTH = 1000;
+export const MAX_PAGE_OPTIONS_LENGTH = 1000;
 
-const ELLIPSIS = '…';
+export const ELLIPSIS = '…';
 
 const PageOptions = ({ totalPages, page }: PageOptionsProps) => {
   const pageOptionsLength = Math.min(totalPages, MAX_PAGE_OPTIONS_LENGTH);
