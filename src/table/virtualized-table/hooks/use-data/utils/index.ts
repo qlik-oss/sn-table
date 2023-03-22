@@ -1,4 +1,4 @@
-import { getBodyCellAlign } from '../../../../utils/styling-utils';
+import { getBodyCellAlign } from '../../../../../handle-data';
 import { Cell, Column, PageInfo, Row, TableLayout } from '../../../../../types';
 import { SetCellSize } from '../../../types';
 
@@ -18,11 +18,11 @@ const createRow = (
 
   cells.forEach((cell, cellColIdx: number) => {
     const pageColIdx = cellColIdx + qArea.qLeft;
-    const { colIdx, isDim, isLocked, id, textAlign } = columns[pageColIdx];
+    const { colIdx, isDim, isLocked, id, bodyTextAlign } = columns[pageColIdx];
 
     row[id] = {
       ...cell,
-      align: getBodyCellAlign(cell, textAlign),
+      align: getBodyCellAlign(cell, bodyTextAlign),
       rowIdx,
       colIdx,
       isSelectable: isDim && !isLocked,

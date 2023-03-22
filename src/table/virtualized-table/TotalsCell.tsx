@@ -24,7 +24,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
     totals,
   } = data;
   const label = columns[index].totalInfo;
-  const { totalsCellTextAlign } = columns[index];
+  const { totalsTextAlign } = columns[index];
   const isLastColumn = layout.qHyperCube.qSize.qcx - 1 === index;
 
   return (
@@ -41,7 +41,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
         borderTopWidth: totals.atBottom ? '1px' : '0px',
         borderBottomWidth: totals.atTop ? '1px' : '0px',
         padding: '4px 12px',
-        justifyContent: totalsCellTextAlign,
+        justifyContent: totalsTextAlign,
         boxSizing: 'border-box',
         cursor: 'default',
         fontWeight: '600',
