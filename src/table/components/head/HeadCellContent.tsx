@@ -2,7 +2,6 @@ import React from 'react';
 
 import { useContextSelector, TableContext } from '../../context';
 import { HeadCellContentProps } from '../../types';
-import { FullSortDirection } from '../../constants';
 import getHeadIcons from '../../utils/get-head-icons';
 import HeadCellMenu from './HeadCellMenu';
 import { handleHeadKeyDown } from '../../utils/handle-keyboard';
@@ -33,6 +32,11 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
       areBasicFeaturesEnabled,
     });
 
+  const sortDirection = {
+    A: translator.get('SNTable.Header.Ascending'),
+    D: translator.get('SNTable.Header.Descending'),
+  };
+
   return (
     <StyledHeadCellContent
       onKeyDown={onKeyDown}
@@ -45,7 +49,7 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
         className="sn-table-head-label"
         isActive={isActive}
         textAlign={column.headCellTextAlign}
-        title={!constraints.passive ? FullSortDirection[column.sortDirection] : undefined} // passive: turn off tooltips.
+        title={!constraints.passive ? sortDirection[column.sortDirection] : undefined} // passive: turn off tooltips.
         color="inherit"
         size="small"
         startIcon={startIcon}
