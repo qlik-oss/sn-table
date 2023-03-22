@@ -41,7 +41,7 @@ describe('use-sorting', () => {
       expectedPatches = [
         {
           qPath: '/qHyperCubeDef/qInterColumnSortOrder',
-          qOp: 'Replace' as EngineAPI.NxPatchOpType,
+          qOp: 'Replace',
           qValue: '[1,0,2,3]',
         },
       ];
@@ -55,7 +55,7 @@ describe('use-sorting', () => {
       expectedPatches = [
         {
           qPath: '/qHyperCubeDef/qDimensions/0/qDef/qReverseSort',
-          qOp: 'Replace' as EngineAPI.NxPatchOpType,
+          qOp: 'Replace',
           qValue: 'true',
         },
       ];
@@ -71,7 +71,7 @@ describe('use-sorting', () => {
       expectedPatches = [
         {
           qPath: '/qHyperCubeDef/qMeasures/0/qDef/qReverseSort',
-          qOp: 'Replace' as EngineAPI.NxPatchOpType,
+          qOp: 'Replace',
           qValue: 'true',
         },
       ];
