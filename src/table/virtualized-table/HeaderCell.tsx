@@ -24,6 +24,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
   } = data;
 
   const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
+  const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
   const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
   const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
@@ -38,7 +39,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         display: 'flex',
         alignItems: 'flex-end',
         borderStyle: 'solid',
-        borderWidth: isLastColumn ? '0px 0px 1px 0px' : '0px 1px 1px 0px',
+        borderWidth: isLastColumn && !showRightBorder ? '0px 0px 1px 0px' : '0px 1px 1px 0px',
         padding: '4px',
         justifyContent: column.headCellTextAlign,
         boxSizing: 'border-box',
