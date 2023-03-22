@@ -23,7 +23,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
     columResizeHandler,
   } = data;
 
-  const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
   const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
@@ -33,6 +33,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
   return (
     <div
       className="sn-table-cell"
+      title={!constraints.passive ? column.label : undefined}
       style={{
         ...style,
         ...applicableStyle,
