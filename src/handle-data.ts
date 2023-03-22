@@ -67,24 +67,27 @@ export function getAlignInfo(
   textAlign: TextAlign,
   qDimensionType: EngineAPI.DimensionType | undefined,
   isDim: boolean
-) {
-  const autoHeadTextAlign = qDimensionType === 'N' || qDimensionType === undefined ? 'right' : 'left';
-  const autoTotalsTextAlign = isDim ? 'left' : 'right';
-  const headTextAlign: Align = !textAlign || textAlign.auto ? autoHeadTextAlign : textAlign.align;
-  const totalsTextAlign: Align = !textAlign || textAlign.auto ? autoTotalsTextAlign : textAlign.align;
-  const bodyTextAlign: Align | 'auto' = !textAlign || textAlign.auto ? 'auto' : textAlign.align;
+): { headTextAlign: Align; totalsTextAlign: Align; bodyTextAlign: Align | 'auto' } {
+  if (textAlign && !textAlign.auto) {
+    return { headTextAlign: textAlign.align, totalsTextAlign: textAlign.align, bodyTextAlign: textAlign.align };
+  }
 
-  return { headTextAlign, totalsTextAlign, bodyTextAlign };
+  return {
+    headTextAlign: qDimensionType === 'N' || qDimensionType === undefined ? 'right' : 'left',
+    totalsTextAlign: isDim ? 'left' : 'right',
+    bodyTextAlign: 'auto',
+  };
 }
 
 /**
  * Gets the correct text alignment for body cells, based on the text alignment info from the column and cell content
  */
 export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | 'auto') => {
-  if (textAlign === 'auto') {
-    return ((cell.qNum || cell.qNum === 0) && !Number.isNaN(+cell.qNum) ? 'right' : 'left') as Align;
+  if (textAlign !== 'auto') {
+    return textAlign;
   }
-  return textAlign;
+
+  return ((cell.qNum || cell.qNum === 0) && !Number.isNaN(+cell.qNum) ? 'right' : 'left') as Align;
 };
 
 /**
