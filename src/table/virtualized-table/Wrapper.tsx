@@ -8,7 +8,7 @@ import { TableContext, useContextSelector } from '../context';
 import { PageInfo } from '../../types';
 
 const Wrapper = () => {
-  const { theme, rect } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const { paginationNeeded } = useContextSelector(TableContext, (value) => value.tableData);
   const pageInfo = useContextSelector(TableContext, (value) => value.pageInfo) as PageInfo;
   const setPage = useContextSelector(TableContext, (value) => value.setPage) as stardust.SetStateFn<number>;
@@ -23,7 +23,6 @@ const Wrapper = () => {
             isSelectionMode={false}
             pageInfo={pageInfo}
             setPageInfo={() => {}}
-            rect={rect}
             announce={() => {}}
           />
         </FooterWrapper>

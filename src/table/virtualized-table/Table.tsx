@@ -74,19 +74,19 @@ const Table = (props: TableProps) => {
     resizeCells();
   }, [ref, resizeCells]);
 
-  const themeName = theme.name();
   useLayoutEffect(() => {
     if (ref.current) {
       ref.current.scrollLeft = 0;
       ref.current.scrollTop = 0;
     }
-  }, [columns.length, themeName]);
+  }, [columns.length]);
 
+  const themeName = theme.name();
   useLayoutEffect(() => {
     if (ref.current) {
       ref.current.scrollTop = 0;
     }
-  }, [pageInfo, rowCount]);
+  }, [pageInfo, rowCount, themeName]);
 
   useDidUpdateEffect(() => {
     setYScrollbarWidth(yScrollbarWidth);

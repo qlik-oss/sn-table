@@ -29,6 +29,7 @@ export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.R
     changeSortOrder,
     applyColumnWidths,
     tableData,
+    rect,
     ...wrapperProps
   } = props;
   const muiTheme = muiSetup(direction);
@@ -50,7 +51,7 @@ export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.R
           embed={embed as stardust.Embed}
           changeSortOrder={changeSortOrder}
           applyColumnWidths={applyColumnWidths as ApplyColumnWidths}
-          rect={props.rect}
+          rect={rect}
         >
           <TableWrapper {...(wrapperProps as TableWrapperProps)} />
         </TableContextProvider>
@@ -98,11 +99,10 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
           changeSortOrder={changeSortOrder}
           tableData={tableData}
           applyColumnWidths={applyColumnWidths}
-          tableWidth={rect.width}
+          rect={rect}
           setPage={setPage}
           pageInfo={pageInfo}
           initialDataPages={initialDataPages}
-          rect={rect}
         >
           <VirtualizedTable />
         </TableContextProvider>
