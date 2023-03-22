@@ -61,7 +61,7 @@ export function getTotalInfo(layout: TableLayout, colIdx: number, pageColIdx: nu
 
 /**
  * Gets the totals alignment for head, totals and body
- * bodyTextAlign is later used to determine independent call alignment for each body cell
+ * bodyTextAlign is later used to determine independent alignment for each body cell
  */
 export function getAlignInfo(
   textAlign: TextAlign,
@@ -90,7 +90,7 @@ export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | 'au
 /**
  * Gets all column info, returns false if hidden
  */
-export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: number): Column | false {
+export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: number): false | Column {
   const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIdx < numDims;
