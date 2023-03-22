@@ -12,6 +12,7 @@ import { getFooterStyle } from '../../utils/styling-utils';
 import { useContextSelector, TableContext } from '../../context';
 import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 import { areTabStopsEnabled } from '../../utils/accessibility-utils';
+import PageOptions from './PageOptions';
 
 const icons: Record<string, typeof ArrowLeft> = {
   FirstPage: ArrowLeftStop,
@@ -23,8 +24,6 @@ const icons: Record<string, typeof ArrowLeft> = {
   NextPageRTL: ArrowLeft,
   LastPageRTL: ArrowLeftStop,
 };
-
-const MAX_SELECT_PAGE_LENGTH = 1000;
 
 export const shouldShow = (component: string, width: number) => {
   switch (component) {
@@ -162,27 +161,7 @@ function PaginationContent({
     </>
   );
 
-  const pageOptionsLength = Math.min(totalPages, MAX_SELECT_PAGE_LENGTH);
-  const isOptionsCapped = pageOptionsLength < totalPages;
-  const endIndex =
-    isOptionsCapped && page > MAX_SELECT_PAGE_LENGTH / 2
-      ? Math.min(MAX_SELECT_PAGE_LENGTH / 2 + page, totalPages)
-      : Math.min(MAX_SELECT_PAGE_LENGTH, totalPages);
-  const startIndex =
-    isOptionsCapped && page > MAX_SELECT_PAGE_LENGTH / 2 ? Math.max(0, endIndex - MAX_SELECT_PAGE_LENGTH) : 0;
-
-  const pageOptions = (
-    <>
-      {Array.from(Array(pageOptionsLength).keys()).map((pageIdx) => {
-        const idx = pageIdx + startIndex;
-        return (
-          <option key={idx} value={idx}>
-            {idx + 1}
-          </option>
-        );
-      })}
-    </>
-  );
+  const pageOptions = <PageOptions totalPages={totalPages} page={page} />;
 
   return (
     <>
