@@ -41,7 +41,6 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
         className="sn-table-head-label"
         isActive={isActive}
         textAlign={column.headCellTextAlign}
-        title={!constraints.passive ? FullSortDirection[column.sortDirection] : undefined} // passive: turn off tooltips.
         color="inherit"
         size="small"
         startIcon={startIcon}
@@ -53,7 +52,7 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
         {children}
         {isFocusInHead && (
           <VisuallyHidden data-testid={`VHL-for-col-${column.pageColIdx}`}>
-            {translator.get('SNTable.SortLabel.PressSpaceToSort')}
+            {`${FullSortDirection[column.sortDirection]} ${translator.get('SNTable.SortLabel.PressSpaceToSort')}`}
           </VisuallyHidden>
         )}
       </StyledSortButton>
