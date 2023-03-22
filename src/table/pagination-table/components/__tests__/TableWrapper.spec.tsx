@@ -52,6 +52,7 @@ describe('<TableWrapper />', () => {
       rows: [{ qText: '1' }],
       columns: [{}] as Column[],
       totalsPosition: { atTop: false, atBottom: false },
+      totalPages: 2,
     } as unknown as TableData;
     pageInfo = { page: 0, rowsPerPage: 100, rowsPerPageOptions: [10, 25, 100] };
     setPageInfo = jest.fn();
