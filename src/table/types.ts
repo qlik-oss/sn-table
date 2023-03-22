@@ -302,7 +302,6 @@ export interface TableBodyWrapperProps {
 
 export interface PaginationContentProps {
   direction?: 'ltr' | 'rtl';
-  rect: stardust.Rect;
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
   footerContainer?: HTMLElement;

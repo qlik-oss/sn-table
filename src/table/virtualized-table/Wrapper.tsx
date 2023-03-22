@@ -23,7 +23,6 @@ const Wrapper = () => {
             isSelectionMode={false}
             pageInfo={pageInfo}
             setPageInfo={() => {}}
-            rect={rect}
             announce={() => {}}
           />
         </FooterWrapper>

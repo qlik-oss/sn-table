@@ -45,13 +45,15 @@ function PaginationContent({
   setPageInfo,
   footerContainer,
   isSelectionMode,
-  rect,
   handleChangePage,
   announce,
 }: PaginationContentProps) {
   const { totalRowCount, totalColumnCount, totalPages } = useContextSelector(TableContext, (value) => value.tableData);
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
-  const { keyboard, translator, theme, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { keyboard, translator, theme, constraints, rect } = useContextSelector(
+    TableContext,
+    (value) => value.baseProps
+  );
   const footerStyle = useMemo(() => getFooterStyle(theme.background), [theme]);
   const onFirstPage = page === 0;
   const onLastPage = page >= totalPages - 1;
