@@ -95,6 +95,7 @@ function TableBodyWrapper({
                   tabIndex={tabIndex}
                   announce={announce}
                   areBasicFeaturesEnabled={areBasicFeaturesEnabled}
+                  title={cell.qText}
                   onKeyDown={handleKeyDown}
                   onKeyUp={(evt: React.KeyboardEvent) =>
                     handleBodyKeyUp(evt, selectionDispatch, areBasicFeaturesEnabled)
