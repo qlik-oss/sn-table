@@ -1,5 +1,5 @@
 import { TableCell } from '@mui/material';
-import { styled } from '@mui/system';
+import { styled } from '@mui/material/styles';
 import { COMMON_CELL_STYLING } from '../../../styling-defaults';
 
 // eslint-disable-next-line import/prefer-default-export
