@@ -35,15 +35,9 @@ describe('<HeadCellMenu />', () => {
     'SNTable.MenuItem.ClearSelections',
   ];
 
-  const renderTableHeadCellMenu = (cellCoordMock?: [number, number]) =>
+  const renderTableHeadCellMenu = () =>
     render(
-      <TestWithProviders
-        cellCoordMock={cellCoordMock}
-        layout={layout}
-        direction={direction}
-        embed={embed}
-        model={model}
-      >
+      <TestWithProviders layout={layout} direction={direction} embed={embed} model={model}>
         <HeadCellMenu column={column} tabIndex={0} />
       </TestWithProviders>
     );
