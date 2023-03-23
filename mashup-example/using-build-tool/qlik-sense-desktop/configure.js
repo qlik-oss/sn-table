@@ -1,3 +1,5 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/extensions */
 import { embed } from '@nebula.js/stardust';
 // import table from '@nebula.js/sn-table';
 // To load local sn-table extension

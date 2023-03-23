@@ -40,7 +40,7 @@
     "build:watch": "yarn run locale:generate && node ./tools/build.js --mode development -w",
     "build:rn": "yarn run locale:generate && node ./tools/build.js --reactNative",
     "build:rn:dev": "yarn run locale:generate && ditto src ./react-native/dist && rm -rf ./react-native/dist/__test__ && mv ./react-native/dist/index.js ./react-native/dist/sn-table.js",
-    "lint": "eslint .",
+    "lint": "eslint --cache .",
     "format": "prettier --write .",
     "start": "nebula serve --build false --type sn-table",
     "sense": "nebula sense",
