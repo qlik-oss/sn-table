@@ -37,15 +37,14 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
     <StyledHeadCellContent
       onKeyDown={onKeyDown}
       isLocked={Boolean(lockIcon)}
-      className={`aligned-${column.headCellTextAlign}`}
+      className={`aligned-${column.headTextAlign}`}
     >
       {lockIcon && <StyledHeadCellIconWrapper>{lockIcon}</StyledHeadCellIconWrapper>}
 
       <StyledSortButton
         className="sn-table-head-label"
         isActive={isActive}
-        textAlign={column.headCellTextAlign}
-        title={!constraints.passive ? FullSortDirection[column.sortDirection] : undefined} // passive: turn off tooltips.
+        textAlign={column.headTextAlign}
         color="inherit"
         size="small"
         startIcon={startIcon}
@@ -57,7 +56,7 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
         {children}
         {isFocusInHead && (
           <VisuallyHidden data-testid={`VHL-for-col-${column.pageColIdx}`}>
-            {translator.get('SNTable.SortLabel.PressSpaceToSort')}
+            {`${FullSortDirection[column.sortDirection]} ${translator.get('SNTable.SortLabel.PressSpaceToSort')}`}
           </VisuallyHidden>
         )}
       </StyledSortButton>

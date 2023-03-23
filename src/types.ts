@@ -3,7 +3,7 @@ import { stardust } from '@nebula.js/stardust';
 
 export type Align = 'left' | 'center' | 'right';
 
-interface TextAlign {
+export interface TextAlign {
   auto: boolean;
   align: 'left' | 'center' | 'right';
 }
@@ -128,9 +128,9 @@ export interface Column {
   colIdx: number;
   pageColIdx: number;
   label: string;
-  headCellTextAlign: Align;
-  totalsCellTextAlign: Align;
-  textAlign: 'auto' | Align;
+  headTextAlign: Align;
+  totalsTextAlign: Align;
+  bodyTextAlign: 'auto' | Align;
   stylingIDs: string[];
   sortDirection: SortDirection;
   qReverseSort: boolean;

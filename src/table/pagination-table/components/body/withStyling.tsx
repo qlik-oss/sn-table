@@ -16,6 +16,7 @@ export default function withStyling(CellComponent: typeof StyledBodyCell) {
       onKeyUp,
       onMouseUp,
       onMouseOver,
+      title,
     } = props;
 
     return (
@@ -26,6 +27,7 @@ export default function withStyling(CellComponent: typeof StyledBodyCell) {
         align={align}
         tabIndex={tabIndex}
         className={`sn-table-cell ${selectedCellClass || ''}`}
+        title={title}
         onKeyDown={onKeyDown}
         onMouseDown={onMouseDown}
         onKeyUp={onKeyUp}

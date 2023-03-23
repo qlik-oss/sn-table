@@ -85,7 +85,6 @@
     "@mui/icons-material": "5.11.11",
     "@mui/material": "5.11.14",
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
-    "@mui/system": "5.11.14",
     "@nebula.js/cli": "3.3.0",
     "@nebula.js/cli-build": "3.1.3",
     "@nebula.js/cli-sense": "3.3.0",

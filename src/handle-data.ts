@@ -1,4 +1,3 @@
-import { getBodyCellAlign } from './table/utils/styling-utils';
 import {
   TableLayout,
   PageInfo,
@@ -8,6 +7,8 @@ import {
   ExtendedNxDimensionInfo,
   Column,
   TableData,
+  Align,
+  TextAlign,
 } from './types';
 
 const MAX_CELLS = 10000;
@@ -59,6 +60,37 @@ export function getTotalInfo(layout: TableLayout, colIdx: number, pageColIdx: nu
 }
 
 /**
+ * Gets the totals alignment for head, totals and body
+ * bodyTextAlign is later used to determine independent alignment for each body cell
+ */
+export function getAlignInfo(
+  textAlign: TextAlign,
+  qDimensionType: EngineAPI.DimensionType | undefined,
+  isDim: boolean
+): { headTextAlign: Align; totalsTextAlign: Align; bodyTextAlign: Align | 'auto' } {
+  if (textAlign && !textAlign.auto) {
+    return { headTextAlign: textAlign.align, totalsTextAlign: textAlign.align, bodyTextAlign: textAlign.align };
+  }
+
+  return {
+    headTextAlign: qDimensionType === 'N' || qDimensionType === undefined ? 'right' : 'left',
+    totalsTextAlign: isDim ? 'left' : 'right',
+    bodyTextAlign: 'auto',
+  };
+}
+
+/**
+ * Gets the correct text alignment for body cells, based on the text alignment info from the column and cell content
+ */
+export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | 'auto') => {
+  if (textAlign !== 'auto') {
+    return textAlign;
+  }
+
+  return ((cell.qNum || cell.qNum === 0) && !Number.isNaN(+cell.qNum) ? 'right' : 'left') as Align;
+};
+
+/**
  * Gets all column info, returns false if hidden
  */
 export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: number): false | Column {
@@ -68,6 +100,19 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
   const info = (isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims]) as
     | ExtendedNxMeasureInfo
     | ExtendedNxDimensionInfo;
+
+  let fieldIndex = 0;
+  let fieldId = '';
+  let isLocked = false;
+  let qDimensionType;
+  if (isDim) {
+    const dimInfo = info as ExtendedNxDimensionInfo;
+    fieldIndex = dimInfo.qGroupPos;
+    fieldId = dimInfo.qGroupFieldDefs[fieldIndex];
+    isLocked = dimInfo.qLocked;
+    ({ qDimensionType } = dimInfo);
+  }
+
   const {
     qError,
     qFallbackTitle,
@@ -80,19 +125,6 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
     qLibraryId,
   } = info;
   const isHidden = qError?.qErrorCode === 7005;
-  const isLocked = isDim && (info as ExtendedNxDimensionInfo).qLocked;
-  const { qDimensionType } = info as ExtendedNxDimensionInfo;
-  const autoHeadCellTextAlign = qDimensionType === 'N' || qDimensionType === undefined ? 'right' : 'left';
-  const headCellTextAlign = !textAlign || textAlign.auto ? autoHeadCellTextAlign : textAlign.align;
-  const autoTotalsCellTextAlign = isDim ? 'left' : 'right';
-  const totalsCellTextAlign = !textAlign || textAlign.auto ? autoTotalsCellTextAlign : textAlign.align;
-
-  let fieldIndex = 0;
-  let fieldId = '';
-  if (isDim) {
-    fieldIndex = (info as ExtendedNxDimensionInfo).qGroupPos;
-    fieldId = (info as ExtendedNxDimensionInfo).qGroupFieldDefs[fieldIndex];
-  }
 
   return (
     !isHidden && {
@@ -107,13 +139,11 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
       columnWidth,
       id: `col-${pageColIdx}`,
       label: qFallbackTitle,
-      headCellTextAlign,
-      totalsCellTextAlign,
-      textAlign: !textAlign || textAlign.auto ? 'auto' : textAlign.align,
       stylingIDs: qAttrExprInfo.map((expr) => expr.id),
       // making sure that qSortIndicator is either A or D
       sortDirection: qSortIndicator && qSortIndicator !== 'N' ? qSortIndicator : 'A',
       totalInfo: getTotalInfo(layout, colIdx, pageColIdx, numDims),
+      ...getAlignInfo(textAlign, qDimensionType, isDim),
     }
   );
 }
@@ -176,7 +206,7 @@ export default async function manageData(
     columns.forEach((c, pageColIdx) => {
       row[c.id] = {
         ...r[pageColIdx],
-        align: getBodyCellAlign(r[pageColIdx], c.textAlign),
+        align: getBodyCellAlign(r[pageColIdx], c.bodyTextAlign),
         rowIdx: pageRowIdx + top,
         colIdx: c.colIdx,
         pageRowIdx,

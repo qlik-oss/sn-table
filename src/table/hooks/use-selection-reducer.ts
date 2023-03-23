@@ -14,7 +14,7 @@ const useSelectionReducer = (
     pageRows,
     rows: {},
     colIdx: -1,
-    api: selectionsAPI as ExtendedSelectionAPI, // TODO: update nebula api with correct selection api type
+    api: selectionsAPI,
     isSelectMultiValues: false,
   });
 

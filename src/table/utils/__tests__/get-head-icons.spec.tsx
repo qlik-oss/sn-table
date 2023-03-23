@@ -8,7 +8,7 @@ import { Column } from '../../../types';
 import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 import { LockWrapper } from '../../components/head/styles';
 
-describe('getHeadIcons', () => {
+describe('get-head-icons', () => {
   const ascending = <Ascending height={DEFAULT_FONT_SIZE} />;
   const descending = <Descending height={DEFAULT_FONT_SIZE} />;
   const lock = (
@@ -22,7 +22,7 @@ describe('getHeadIcons', () => {
     column = {
       sortDirection: 'A',
       isLocked: false,
-      headCellTextAlign: 'left',
+      headTextAlign: 'left',
     } as Column;
   });
 
@@ -39,14 +39,14 @@ describe('getHeadIcons', () => {
   });
 
   it('should return ascending as endIcon and no lock icon when sortDirection i A and align is right', () => {
-    column.headCellTextAlign = 'right';
+    column.headTextAlign = 'right';
 
     const icons = getHeadIcons(column);
     expect(icons).toEqual({ startIcon: ascending, lockIcon: undefined });
   });
 
   it('should return descending as endIcon and no lock icon when sortDirection i D and align is right', () => {
-    column.headCellTextAlign = 'right';
+    column.headTextAlign = 'right';
     column.sortDirection = 'D';
 
     const icons = getHeadIcons(column);
