@@ -229,14 +229,14 @@ describe('<HeadCellContent />', () => {
   //   expect(handleKeyPress.handleHeadKeyDown).toHaveBeenCalledTimes(1);
   // });
 
-  // it('should call handleClickToFocusHead and handleMouseDownLabelToFocusHeadCell when clicking a header cell label', () => {
-  //   jest.spyOn(handleClick, 'handleClickToFocusHead').mockImplementation(() => jest.fn());
+  // it('should call handleMouseDownToFocusHead and handleMouseDownLabelToFocusHeadCell when clicking a header cell label', () => {
+  //   jest.spyOn(handleClick, 'handleMouseDownToFocusHead').mockImplementation(() => jest.fn());
   //   jest.spyOn(handleClick, 'handleMouseDownLabelToFocusHeadCell').mockImplementation(() => jest.fn());
 
   //   const { getByText } = renderTableHead();
   //   fireEvent.mouseDown(getByText(column.label));
 
-  //   expect(handleClick.handleClickToFocusHead).toHaveBeenCalledTimes(1);
+  //   expect(handleClick.handleMouseDownToFocusHead).toHaveBeenCalledTimes(1);
   //   expect(handleClick.handleMouseDownLabelToFocusHeadCell).toHaveBeenCalledTimes(1);
   // });
 

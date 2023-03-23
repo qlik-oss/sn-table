@@ -8,6 +8,7 @@ import HeadCellMenu from './HeadCellMenu';
 import { handleHeadKeyDown } from '../../utils/handle-keyboard';
 import { areTabStopsEnabled } from '../../utils/accessibility-utils';
 import { VisuallyHidden, StyledSortButton, StyledHeadCellContent, StyledHeadCellIconWrapper } from './styles';
+import { handleMouseDownToFocusHead } from '../../utils/handle-click';
 
 function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }: HeadCellContentProps) {
   const { constraints, keyboard, translator, rootElement, changeSortOrder } = useContextSelector(
@@ -23,7 +24,7 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
   const tabIndex = isInteractionEnabled && areTabStopsEnabled(keyboard) ? 0 : -1;
 
   const handleSort = () => isInteractionEnabled && changeSortOrder(column);
-  const onKeyDown = (evt: React.KeyboardEvent) =>
+  const handleKeyDown = (evt: React.KeyboardEvent) =>
     handleHeadKeyDown({
       evt,
       rootElement,
@@ -32,10 +33,13 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
       isInteractionEnabled,
       areBasicFeaturesEnabled,
     });
+  const handleMouseDown = () =>
+    handleMouseDownToFocusHead([0, column.pageColIdx], rootElement, setFocusedCellCoord, keyboard);
 
   return (
     <StyledHeadCellContent
-      onKeyDown={onKeyDown}
+      onKeyDown={handleKeyDown}
+      onMouseDown={handleMouseDown}
       isLocked={Boolean(lockIcon)}
       className={`aligned-${column.headTextAlign}`}
     >

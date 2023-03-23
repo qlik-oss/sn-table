@@ -4,7 +4,7 @@ import getCellRenderer from '../../utils/get-cell-renderer';
 import { useContextSelector, TableContext } from '../../../context';
 import { StyledBodyRow, StyledBody } from './styles';
 import { handleBodyKeyDown, handleBodyKeyUp } from '../../../utils/handle-keyboard';
-import { handleClickToFocusBody } from '../../../utils/handle-click';
+import { handleMouseDownToFocusBody } from '../../../utils/handle-click';
 import { Cell } from '../../../../types';
 import { TableBodyWrapperProps } from '../../../types';
 import TableTotals from './TableTotals';
@@ -101,7 +101,7 @@ function TableBodyWrapper({
                     handleBodyKeyUp(evt, selectionDispatch, areBasicFeaturesEnabled)
                   }
                   onMouseDown={() =>
-                    handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition)
+                    handleMouseDownToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition)
                   }
                 >
                   <CellText fontSize={cellStyle.fontSize}>{cell.qText}</CellText>

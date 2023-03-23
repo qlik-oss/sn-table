@@ -2,8 +2,8 @@ import { MouseEvent } from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { TotalsPosition, Cell, Announce } from '../../../types';
 import {
-  handleClickToFocusBody,
-  // handleClickToFocusHead,
+  handleMouseDownToFocusBody,
+  // handleMouseDownToFocusHead,
   // handleMouseDownLabelToFocusHeadCell,
   getSelectionMouseHandlers,
 } from '../handle-click';
@@ -29,7 +29,7 @@ describe('handle-click', () => {
 
   afterEach(() => jest.clearAllMocks());
 
-  describe('handleClickToFocusBody', () => {
+  describe('handleMouseDownToFocusBody', () => {
     let totalsPosition: TotalsPosition;
     const cell = {
       pageRowIdx: 0,
@@ -41,7 +41,7 @@ describe('handle-click', () => {
     });
 
     it('should call removeTabAndFocusCell with cellCoord [1,0]', () => {
-      handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition);
+      handleMouseDownToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition);
       expect(accessibilityUtils.removeTabAndFocusCell).toHaveBeenCalledWith(
         [1, 0],
         rootElement,
@@ -52,7 +52,7 @@ describe('handle-click', () => {
 
     it('should call removeTabAndFocusCell with cellCoord [2,0] when totals is on top', () => {
       totalsPosition.atTop = true;
-      handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition);
+      handleMouseDownToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition);
       expect(accessibilityUtils.removeTabAndFocusCell).toHaveBeenCalledWith(
         [2, 0],
         rootElement,
@@ -62,11 +62,11 @@ describe('handle-click', () => {
     });
   });
 
-  // describe('handleClickToFocusHead', () => {
+  // describe('handleMouseDownToFocusHead', () => {
   //   const columnIndex = 2;
 
   //   it('should call removeTabAndFocusCell with cellCoord [0,2]', () => {
-  //     handleClickToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard);
+  //     handleMouseDownToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard);
   //     expect(accessibilityUtils.removeTabAndFocusCell).toHaveBeenCalledWith(
   //       [0, 2],
   //       rootElement,
