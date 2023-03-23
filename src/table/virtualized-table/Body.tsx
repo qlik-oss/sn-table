@@ -94,7 +94,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
 
   useSelectionsEffect(rowsInPage);
 
-  // React to events that can possible invalidate cell width and/or height.
+  // React to events that can invalidate cell width and/or height.
   // If grid cache is not reset, any new cell width/height would not be applied by the grid,
   // producing strange cases where some text may not properly fit inside the cell.
   useOnPropsChange(() => {
