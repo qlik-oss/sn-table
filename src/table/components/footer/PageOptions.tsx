@@ -7,17 +7,15 @@ interface PageOptionsProps {
 
 export const MAX_PAGE_OPTIONS_LENGTH = 1000;
 
+export const HALF_MAX_LENGTH = MAX_PAGE_OPTIONS_LENGTH / 2;
+
 export const ELLIPSIS = '…';
 
 const PageOptions = ({ totalPages, page }: PageOptionsProps) => {
   const pageOptionsLength = Math.min(totalPages, MAX_PAGE_OPTIONS_LENGTH);
-  const tooManyPages = pageOptionsLength < totalPages;
-  const endPageIndex =
-    tooManyPages && page > MAX_PAGE_OPTIONS_LENGTH / 2
-      ? Math.min(MAX_PAGE_OPTIONS_LENGTH / 2 + page, totalPages)
-      : Math.min(MAX_PAGE_OPTIONS_LENGTH, totalPages);
-  const startPageIndex =
-    tooManyPages && page > MAX_PAGE_OPTIONS_LENGTH / 2 ? Math.max(0, endPageIndex - MAX_PAGE_OPTIONS_LENGTH) : 0;
+  const hasTooManyPages = pageOptionsLength < totalPages && page > HALF_MAX_LENGTH;
+  const endPageIndex = hasTooManyPages ? Math.min(HALF_MAX_LENGTH + page, totalPages) : pageOptionsLength;
+  const startPageIndex = hasTooManyPages ? Math.max(0, endPageIndex - MAX_PAGE_OPTIONS_LENGTH) : 0;
 
   const Options = Array.from(Array(pageOptionsLength).keys()).map((pageIdx) => {
     const idx = pageIdx + startPageIndex;

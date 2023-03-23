@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
-import PageOptions, { ELLIPSIS, MAX_PAGE_OPTIONS_LENGTH } from '../PageOptions';
+import PageOptions, { ELLIPSIS, HALF_MAX_LENGTH } from '../PageOptions';
 
 describe('PageOptions', () => {
   test('should render page options', () => {
@@ -27,7 +27,7 @@ describe('PageOptions', () => {
     });
 
     test('should render limited page options when selected page equal half max allowed length', () => {
-      render(<PageOptions totalPages={totalPages} page={MAX_PAGE_OPTIONS_LENGTH / 2} />);
+      render(<PageOptions totalPages={totalPages} page={HALF_MAX_LENGTH} />);
 
       expect(screen.getByText('1')).toBeVisible();
       expect(screen.getByText('1000')).toBeVisible();
@@ -37,7 +37,7 @@ describe('PageOptions', () => {
     });
 
     test('should render limited page options when selected page is more than half max allowed length', () => {
-      render(<PageOptions totalPages={totalPages} page={MAX_PAGE_OPTIONS_LENGTH / 2 + 1} />);
+      render(<PageOptions totalPages={totalPages} page={HALF_MAX_LENGTH + 1} />);
 
       expect(screen.queryByText('1')).not.toBeInTheDocument();
       expect(screen.getByText('2')).toBeVisible();
