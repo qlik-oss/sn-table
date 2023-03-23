@@ -12,6 +12,7 @@ import { getFooterStyle } from '../../utils/styling-utils';
 import { useContextSelector, TableContext } from '../../context';
 import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 import { areTabStopsEnabled } from '../../utils/accessibility-utils';
+import PageOptions from './PageOptions';
 
 const icons: Record<string, typeof ArrowLeft> = {
   FirstPage: ArrowLeftStop,
@@ -160,15 +161,7 @@ function PaginationContent({
     </>
   );
 
-  const pageOptions = (
-    <>
-      {Array.from(Array(totalPages).keys()).map((pageIdx, index) => (
-        <option key={pageIdx} value={index}>
-          {pageIdx + 1}
-        </option>
-      ))}
-    </>
-  );
+  const pageOptions = <PageOptions totalPages={totalPages} page={page} />;
 
   return (
     <>
