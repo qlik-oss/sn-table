@@ -12,6 +12,7 @@ import {
 } from './types';
 
 const MAX_CELLS = 10000;
+const HIDDEN_ERROR_CODE = 7005;
 
 /**
  * Calculates the highest amount of rows that can be shown given the amount of columns
@@ -93,7 +94,7 @@ export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | 'au
 /**
  * Gets all column info, returns false if hidden
  */
-export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: number): false | Column {
+export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: number): Column {
   const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIdx < numDims;
@@ -114,7 +115,6 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
   }
 
   const {
-    qError,
     qFallbackTitle,
     textAlign,
     qAttrExprInfo,
@@ -124,28 +124,25 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
     columnWidth,
     qLibraryId,
   } = info;
-  const isHidden = qError?.qErrorCode === 7005;
 
-  return (
-    !isHidden && {
-      isDim,
-      isLocked,
-      fieldId,
-      colIdx,
-      qLibraryId,
-      pageColIdx,
-      qApprMaxGlyphCount,
-      qReverseSort,
-      columnWidth,
-      id: `col-${pageColIdx}`,
-      label: qFallbackTitle,
-      stylingIDs: qAttrExprInfo.map((expr) => expr.id),
-      // making sure that qSortIndicator is either A or D
-      sortDirection: qSortIndicator && qSortIndicator !== 'N' ? qSortIndicator : 'A',
-      totalInfo: getTotalInfo(layout, colIdx, pageColIdx, numDims),
-      ...getAlignInfo(textAlign, qDimensionType, isDim),
-    }
-  );
+  return {
+    isDim,
+    isLocked,
+    fieldId,
+    colIdx,
+    qLibraryId,
+    pageColIdx,
+    qApprMaxGlyphCount,
+    qReverseSort,
+    columnWidth,
+    id: `col-${pageColIdx}`,
+    label: qFallbackTitle,
+    stylingIDs: qAttrExprInfo.map((expr) => expr.id),
+    // making sure that qSortIndicator is either A or D
+    sortDirection: qSortIndicator && qSortIndicator !== 'N' ? qSortIndicator : 'A',
+    totalInfo: getTotalInfo(layout, colIdx, pageColIdx, numDims),
+    ...getAlignInfo(textAlign, qDimensionType, isDim),
+  };
 }
 
 /**
@@ -156,10 +153,16 @@ export const getColumns = (layout: TableLayout) => {
   const {
     qHyperCube: { qColumnOrder, qDimensionInfo, qMeasureInfo },
   } = layout;
-  const columnsLength = qDimensionInfo.length + qMeasureInfo.length;
+  const numDims = qDimensionInfo.length;
+  const columnsLength = numDims + qMeasureInfo.length;
   const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
 
-  return columnOrder.map((colIdx, pageColIdx) => getColumnInfo(layout, colIdx, pageColIdx)).filter(Boolean) as Column[];
+  const visibleColumnsOrder = columnOrder.filter((colIdx) => {
+    const { qError } = colIdx < numDims ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims];
+    return qError?.qErrorCode !== HIDDEN_ERROR_CODE;
+  });
+
+  return visibleColumnsOrder.map((colIdx, pageColIdx) => getColumnInfo(layout, colIdx, pageColIdx));
 };
 
 /**
