@@ -1,41 +1,37 @@
 import { useMemo } from '@nebula.js/stardust';
-import { Column, HyperCube, SortDirection } from '../types';
+import { Column, HyperCube } from '../types';
 
 export const sortingFactory = (model: EngineAPI.IGenericObject | undefined, dimensionsLength: number) => {
   if (!model) return undefined;
 
-  return async (column: Column, newSortDirection?: SortDirection) => {
-    const { isDim, colIdx, sortDirection, qReverseSort } = column;
+  return async (column: Column) => {
+    const { isDim, colIdx, qReverseSort } = column;
     const idx = isDim ? colIdx : colIdx - dimensionsLength;
 
     // The sort order from the properties is needed since it contains hidden columns
     const properties = await model.getEffectiveProperties();
     const sortOrder = properties.qHyperCubeDef.qInterColumnSortOrder;
-    const topSortIdx = sortOrder[0];
+    const patches: EngineAPI.INxPatch[] = [];
 
-    if (colIdx !== topSortIdx) {
+    if (colIdx !== sortOrder[0]) {
+      // Reorder
       sortOrder.splice(sortOrder.indexOf(colIdx), 1);
       sortOrder.unshift(colIdx);
-    }
-
-    const patches = [
-      {
-        qPath: '/qHyperCubeDef/qInterColumnSortOrder',
-        qOp: 'Replace' as EngineAPI.NxPatchOpType,
-        qValue: `[${sortOrder.join(',')}]`,
-      },
-    ];
-
-    // Revers
-    if ((newSortDirection && newSortDirection !== sortDirection) || (!newSortDirection && colIdx === topSortIdx)) {
-      const qPath = `/qHyperCubeDef/${isDim ? 'qDimensions' : 'qMeasures'}/${idx}/qDef/qReverseSort`;
 
       patches.push({
-        qPath,
-        qOp: 'Replace' as EngineAPI.NxPatchOpType,
+        qPath: '/qHyperCubeDef/qInterColumnSortOrder',
+        qOp: 'Replace',
+        qValue: `[${sortOrder.join(',')}]`,
+      });
+    } else {
+      // Reverse
+      patches.push({
+        qPath: `/qHyperCubeDef/${isDim ? 'qDimensions' : 'qMeasures'}/${idx}/qDef/qReverseSort`,
+        qOp: 'Replace',
         qValue: (!qReverseSort).toString(),
       });
     }
+
     model.applyPatches(patches, true);
   };
 };
