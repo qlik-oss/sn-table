@@ -19,7 +19,7 @@ const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps)
   const setColumnWidths = useContextSelector(TableContext, (value) => value.setColumnWidths);
   const tempWidths = useRef({ adjusterHitArea: {}, columnWidth: 0, initX: 0, initWidth: 0 });
 
-  if (!applyColumnWidths || constraints.active) return null;
+  if (constraints.active) return null;
 
   const updateWidth = (adjustedWidth: number) => {
     onColumnResize?.();

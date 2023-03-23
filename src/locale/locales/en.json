@@ -7,11 +7,11 @@
     "value": "Use arrow keys to navigate in table cells and tab to move to pagination controls. For the full range of keyboard navigation, see the documentation.",
     "comment": "Instructions read by screen reader when first focusing inside the table. (tew 211130)"
   },
-  "SNTable.Header.Ascending": {
+  "SNTable.Accessibility.Ascending": {
     "value": "Ascending",
     "comment": "Tooltip showing that column is in ascending order."
   },
-  "SNTable.Header.Descending": {
+  "SNTable.Accessibility.Descending": {
     "value": "Descending",
     "comment": "Tooltip showing that column is in descending order."
   },

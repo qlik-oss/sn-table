@@ -29,9 +29,9 @@ describe('handle-data', () => {
       isLocked,
       qApprMaxGlyphCount: 3,
       qReverseSort: false,
-      textAlign: 'auto',
-      totalsCellTextAlign: 'left',
-      headCellTextAlign: 'right',
+      bodyTextAlign: 'auto',
+      totalsTextAlign: 'left',
+      headTextAlign: 'right',
     });
 
     it('should return column info for dimension', () => {
@@ -42,9 +42,9 @@ describe('handle-data', () => {
     it('should return column info for dimension with align center', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].textAlign = { auto: false, align: 'center' };
       const expected = getExpectedInfo(true);
-      expected.textAlign = 'center';
-      expected.headCellTextAlign = 'center';
-      expected.totalsCellTextAlign = 'center';
+      expected.bodyTextAlign = 'center';
+      expected.headTextAlign = 'center';
+      expected.totalsTextAlign = 'center';
 
       const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
       expect(columnInfo).toEqual(expected);
@@ -54,7 +54,7 @@ describe('handle-data', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qDimensionType = 'N';
       const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
       const expected = getExpectedInfo(true);
-      expected.headCellTextAlign = 'right';
+      expected.headTextAlign = 'right';
 
       expect(columnInfo).toEqual(expected);
     });
@@ -68,13 +68,6 @@ describe('handle-data', () => {
 
       const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
       expect(columnInfo).toEqual(expected);
-    });
-
-    it('should return false for hidden column', () => {
-      layout.qHyperCube.qDimensionInfo[colIdx].qError = { qErrorCode: 7005 };
-
-      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
-      expect(columnInfo).toBe(false);
     });
 
     it('should return column info for dimension with isLocked', () => {
@@ -93,7 +86,7 @@ describe('handle-data', () => {
       colIdx = 3;
       const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
       const expected = getExpectedInfo(false, undefined, false, '200');
-      expected.totalsCellTextAlign = 'right';
+      expected.totalsTextAlign = 'right';
 
       expect(columnInfo).toEqual(expected);
     });
@@ -118,7 +111,23 @@ describe('handle-data', () => {
       expect(columns[3].colIdx).toBe(3);
     });
 
-    // it('should return [0, 1, ... , number of columns] when length of qColumnOrder does not equal number of columns', () => {});
+    it('should return columns in defined column order when qColumnOrder is set, with hidden dimension removed', () => {
+      layout.qHyperCube.qDimensionInfo[0].qError = { qErrorCode: 7005 };
+
+      const columns = getColumns(layout);
+      expect(columns[0].colIdx).toBe(1);
+      expect(columns[1].colIdx).toBe(2);
+      expect(columns[2].colIdx).toBe(3);
+    });
+
+    it('should return columns in defined column order when qColumnOrder is set, with hidden dimension removed', () => {
+      layout.qHyperCube.qMeasureInfo[0].qError = { qErrorCode: 7005 };
+
+      const columns = getColumns(layout);
+      expect(columns[0].colIdx).toBe(1);
+      expect(columns[1].colIdx).toBe(0);
+      expect(columns[2].colIdx).toBe(3);
+    });
   });
 
   describe('manageData', () => {

@@ -1,4 +1,4 @@
-import styled from '@mui/system/styled';
+import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';

@@ -14,9 +14,9 @@ describe('<TableTotals />', () => {
   let tableData: TableData;
   let selectionsAPI: ExtendedSelectionAPI;
 
-  const renderTableTotals = (cellCoordMock?: [number, number]) =>
+  const renderTableTotals = () =>
     render(
-      <TestWithProviders selectionsAPI={selectionsAPI} cellCoordMock={cellCoordMock} tableData={tableData}>
+      <TestWithProviders selectionsAPI={selectionsAPI} tableData={tableData}>
         <table>
           <tbody>
             <TableTotals />

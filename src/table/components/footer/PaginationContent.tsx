@@ -12,6 +12,7 @@ import { getFooterStyle } from '../../utils/styling-utils';
 import { useContextSelector, TableContext } from '../../context';
 import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 import { areTabStopsEnabled } from '../../utils/accessibility-utils';
+import PageOptions from './PageOptions';
 
 const icons: Record<string, typeof ArrowLeft> = {
   FirstPage: ArrowLeftStop,
@@ -45,13 +46,15 @@ function PaginationContent({
   setPageInfo,
   footerContainer,
   isSelectionMode,
-  rect,
   handleChangePage,
   announce,
 }: PaginationContentProps) {
   const { totalRowCount, totalColumnCount, totalPages } = useContextSelector(TableContext, (value) => value.tableData);
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
-  const { keyboard, translator, theme, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { keyboard, translator, theme, constraints, rect } = useContextSelector(
+    TableContext,
+    (value) => value.baseProps
+  );
   const footerStyle = useMemo(() => getFooterStyle(theme.background), [theme]);
   const onFirstPage = page === 0;
   const onLastPage = page >= totalPages - 1;
@@ -158,15 +161,7 @@ function PaginationContent({
     </>
   );
 
-  const pageOptions = (
-    <>
-      {Array.from(Array(totalPages).keys()).map((pageIdx, index) => (
-        <option key={pageIdx} value={index}>
-          {pageIdx + 1}
-        </option>
-      ))}
-    </>
-  );
+  const pageOptions = <PageOptions totalPages={totalPages} page={page} />;
 
   return (
     <>

@@ -24,7 +24,6 @@ export const TableContextProvider = ({
   tableData = EMPTY_TABLE_DATA, // Always use the same object to avoid triggers infinite loop in use-selection-reducer.ts
   selectionsAPI,
   cellCoordMock,
-  selectionDispatchMock,
   layout,
   model,
   translator,
@@ -38,7 +37,7 @@ export const TableContextProvider = ({
   setPage,
   pageInfo,
   initialDataPages,
-  tableWidth = 0,
+  rect,
 }: ContextProviderProps) => {
   const [headRowHeight, setHeadRowHeight] = useState(0);
   const [focusedCellCoord, setFocusedCellCoord] = useState<[number, number]>(cellCoordMock || FIRST_HEADER_CELL_COORD);
@@ -48,7 +47,7 @@ export const TableContextProvider = ({
   const [columnWidths, setColumnWidths, setYScrollbarWidth, showRightBorder] = useColumnWidths(
     tableData.columns,
     tableData.totalsPosition,
-    tableWidth,
+    rect.width,
     styling
   );
   const baseProps = useMemo(
@@ -66,6 +65,7 @@ export const TableContextProvider = ({
       changeSortOrder,
       applyColumnWidths,
       styling,
+      rect,
     }),
     [
       app,
@@ -81,6 +81,7 @@ export const TableContextProvider = ({
       changeSortOrder,
       applyColumnWidths,
       styling,
+      rect,
     ]
   );
 
@@ -92,7 +93,7 @@ export const TableContextProvider = ({
         focusedCellCoord,
         setFocusedCellCoord,
         selectionState,
-        selectionDispatch: selectionDispatchMock || selectionDispatch,
+        selectionDispatch,
         hoverIndex,
         setHoverIndex,
         columnWidths,

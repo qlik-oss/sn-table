@@ -80,11 +80,12 @@ const Table = (props: TableProps) => {
     }
   }, [columns.length]);
 
+  const themeName = theme.name();
   useLayoutEffect(() => {
     if (ref.current) {
       ref.current.scrollTop = 0;
     }
-  }, [pageInfo, rowCount]);
+  }, [pageInfo, rowCount, themeName]);
 
   useDidUpdateEffect(() => {
     setYScrollbarWidth(yScrollbarWidth);

@@ -33,23 +33,22 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
     });
 
   const sortDirection = {
-    A: translator.get('SNTable.Header.Ascending'),
-    D: translator.get('SNTable.Header.Descending'),
+    A: translator.get('SNTable.Accessibility.Ascending'),
+    D: translator.get('SNTable.Accessibility.Descending'),
   };
 
   return (
     <StyledHeadCellContent
       onKeyDown={onKeyDown}
       isLocked={Boolean(lockIcon)}
-      className={`aligned-${column.headCellTextAlign}`}
+      className={`aligned-${column.headTextAlign}`}
     >
       {lockIcon && <StyledHeadCellIconWrapper>{lockIcon}</StyledHeadCellIconWrapper>}
 
       <StyledSortButton
         className="sn-table-head-label"
         isActive={isActive}
-        textAlign={column.headCellTextAlign}
-        title={!constraints.passive ? sortDirection[column.sortDirection] : undefined} // passive: turn off tooltips.
+        textAlign={column.headTextAlign}
         color="inherit"
         size="small"
         startIcon={startIcon}
@@ -61,7 +60,7 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
         {children}
         {isFocusInHead && (
           <VisuallyHidden data-testid={`VHL-for-col-${column.pageColIdx}`}>
-            {translator.get('SNTable.SortLabel.PressSpaceToSort')}
+            {`${sortDirection[column.sortDirection]} ${translator.get('SNTable.SortLabel.PressSpaceToSort')}`}
           </VisuallyHidden>
         )}
       </StyledSortButton>

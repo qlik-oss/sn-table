@@ -16,7 +16,7 @@ interface TotalsCellProps {
 }
 
 const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
-  const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
   const {
     totalsStyle: { hoverColors, ...applicableStyling },
@@ -24,12 +24,13 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
     totals,
   } = data;
   const label = columns[index].totalInfo;
-  const { totalsCellTextAlign } = columns[index];
+  const { totalsTextAlign } = columns[index];
   const isLastColumn = layout.qHyperCube.qSize.qcx - 1 === index;
 
   return (
     <div
       className="sn-table-cell"
+      title={!constraints.passive ? label : undefined}
       style={{
         ...style,
         ...applicableStyling,
@@ -41,7 +42,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
         borderTopWidth: totals.atBottom ? '1px' : '0px',
         borderBottomWidth: totals.atTop ? '1px' : '0px',
         padding: '4px 12px',
-        justifyContent: totalsCellTextAlign,
+        justifyContent: totalsTextAlign,
         boxSizing: 'border-box',
         cursor: 'default',
         fontWeight: '600',

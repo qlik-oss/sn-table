@@ -114,8 +114,9 @@ export interface ContextValue {
     rootElement: HTMLElement;
     embed: stardust.Embed;
     changeSortOrder: ChangeSortOrder;
-    applyColumnWidths?: ApplyColumnWidths;
+    applyColumnWidths: ApplyColumnWidths;
     styling: TableStyling;
+    rect: stardust.Rect;
   };
   tableData: TableData;
   setYScrollbarWidth: (width: number) => void;
@@ -209,7 +210,6 @@ export interface ContextProviderProps {
   tableData?: TableData;
   selectionsAPI: ExtendedSelectionAPI;
   cellCoordMock?: [number, number];
-  selectionDispatchMock?: jest.Mock<any, any>;
   layout: TableLayout;
   model?: EngineAPI.IGenericObject;
   translator: ExtendedTranslator;
@@ -219,8 +219,8 @@ export interface ContextProviderProps {
   rootElement: HTMLElement;
   embed: stardust.Embed;
   changeSortOrder: ChangeSortOrder;
-  applyColumnWidths?: ApplyColumnWidths;
-  tableWidth?: number;
+  applyColumnWidths: ApplyColumnWidths;
+  rect: stardust.Rect;
   pageInfo?: PageInfo;
   setPage?: stardust.SetStateFn<number>;
   initialDataPages?: EngineAPI.INxDataPage[];
@@ -257,7 +257,6 @@ export interface RenderProps {
 
 export interface TableWrapperProps {
   direction?: Direction;
-  rect: stardust.Rect;
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
   footerContainer?: HTMLElement;
@@ -302,7 +301,6 @@ export interface TableBodyWrapperProps {
 
 export interface PaginationContentProps {
   direction?: 'ltr' | 'rtl';
-  rect: stardust.Rect;
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
   footerContainer?: HTMLElement;
