@@ -6,3 +6,5 @@ src/table/mui-config.json
 src/locale/locales/*.json
 src/locale/*.json
 src/locale/*.md
+sn-table-ext
+test-report

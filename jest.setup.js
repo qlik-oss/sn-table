@@ -4,10 +4,10 @@ beforeEach(() => {
   const context = {
     measureText(text) {
       return {
-        width: text?.length ?? 0
-      }
+        width: text?.length ?? 0,
+      };
     },
-    set font(f) {}
+    set font(f) {},
   };
   jest.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(context);
 });
