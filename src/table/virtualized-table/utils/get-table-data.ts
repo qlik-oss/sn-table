@@ -1,7 +1,9 @@
 import { stardust } from '@nebula.js/stardust';
 import { getTotalPosition, getColumns } from '../../../handle-data';
-import { TableData, TableLayout } from '../../../types';
+import { Row, TableData, TableLayout } from '../../../types';
 import { MAX_PAGE_SIZE } from '../constants';
+
+const emptyArray: Row[] = [];
 
 export default function getVirtualScrollTableData(layout: TableLayout, constraints: stardust.Constraints): TableData {
   const totalsPosition = getTotalPosition(layout);
@@ -13,7 +15,7 @@ export default function getVirtualScrollTableData(layout: TableLayout, constrain
   return {
     totalsPosition,
     columns,
-    rows: [], // Cannot be created here as it depends on data that is only available in the react components
+    rows: emptyArray, // Cannot be created here as it depends on data that is only available in the react components
     totalRowCount,
     totalColumnCount: layout.qHyperCube.qSize.qcx,
     totalPages: Math.ceil(totalRowCount / pageSize),

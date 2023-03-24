@@ -81,7 +81,7 @@ const selectCell = (state: SelectionState, payload: SelectPayload): SelectionSta
   const { cell, announce, evt } = payload;
   let selectedRows: Record<string, number> = {};
 
-  if (colIdx === -1) api.begin(['/qHyperCubeDef']);
+  if (!api.isModal()) api.begin(['/qHyperCubeDef']);
   else if (colIdx === cell.colIdx) selectedRows = { ...rows };
   else return state;
 
@@ -138,13 +138,13 @@ export const getMultiSelectedRows = (
  * Updates the selection state but bot the backend when selecting multiple rows
  */
 const selectMultipleCells = (state: SelectionState, payload: SelectPayload): SelectionState => {
-  const { api, rows, colIdx, pageRows, firstCell } = state;
+  const { api, rows, pageRows, firstCell } = state;
   const { cell, announce, evt } = payload;
   let selectedRows: Record<string, number> = {};
 
   if (!firstCell && !('key' in evt && isShiftArrow(evt))) return state;
 
-  if (colIdx === -1) api.begin(['/qHyperCubeDef']);
+  if (!api.isModal()) api.begin(['/qHyperCubeDef']);
   else selectedRows = { ...rows };
 
   selectedRows = getMultiSelectedRows(pageRows, selectedRows, cell, evt, firstCell);
@@ -158,14 +158,14 @@ const selectMultipleCells = (state: SelectionState, payload: SelectPayload): Sel
  */
 const selectOnMouseDown = (
   state: SelectionState,
-  { cell, mouseupOutsideCallback }: { cell: Cell; mouseupOutsideCallback(): void }
+  { cell, mouseupCallback }: { cell: Cell; mouseupCallback(): void }
 ): SelectionState => {
-  if (mouseupOutsideCallback && (state.colIdx === -1 || state.colIdx === cell.colIdx)) {
-    document.addEventListener('mouseup', mouseupOutsideCallback);
+  if (mouseupCallback && (!state.api.isModal() || state.colIdx === cell.colIdx)) {
+    document.addEventListener('mouseup', mouseupCallback, { once: true });
     return {
       ...state,
       firstCell: cell,
-      mouseupOutsideCallback,
+      mouseupCallback,
     };
   }
 
@@ -176,9 +176,7 @@ const selectOnMouseDown = (
  * Ends selecting multiple rows by calling backend, for both keyup (shift) and mouseup
  */
 const endSelectMulti = (state: SelectionState): SelectionState => {
-  const { api, rows, colIdx, isSelectMultiValues, mouseupOutsideCallback } = state;
-  mouseupOutsideCallback && document.removeEventListener('mouseup', mouseupOutsideCallback);
-
+  const { api, rows, colIdx, isSelectMultiValues } = state;
   if (isSelectMultiValues) {
     api.select({
       method: 'selectHyperCubeCells',
@@ -186,7 +184,7 @@ const endSelectMulti = (state: SelectionState): SelectionState => {
     });
   }
 
-  return { ...state, isSelectMultiValues: false, firstCell: undefined, mouseupOutsideCallback: undefined };
+  return { ...state, isSelectMultiValues: false, firstCell: undefined, mouseupCallback: undefined };
 };
 
 /**

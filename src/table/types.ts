@@ -32,7 +32,7 @@ export interface SelectAction extends Action<SelectionActions.SELECT> {
   payload: SelectPayload;
 }
 export interface SelectMouseDownAction extends Action<SelectionActions.SELECT_MOUSE_DOWN> {
-  payload: { cell: Cell; mouseupOutsideCallback(): void };
+  payload: { cell: Cell; mouseupCallback(): void };
 }
 export interface SelectMouseUpAction extends Action<SelectionActions.SELECT_MOUSE_UP> {
   payload: SelectPayload;
@@ -66,7 +66,7 @@ export interface SelectionState {
   api: ExtendedSelectionAPI;
   isSelectMultiValues: boolean;
   firstCell?: Cell;
-  mouseupOutsideCallback?(): void;
+  mouseupCallback?(): void;
 }
 export interface GeneratedStyling {
   borderBottomColor: string;
@@ -224,6 +224,7 @@ export interface ContextProviderProps {
   pageInfo?: PageInfo;
   setPage?: stardust.SetStateFn<number>;
   initialDataPages?: EngineAPI.INxDataPage[];
+  isPagination?: boolean;
 }
 
 export interface RenderProps {

@@ -8,7 +8,8 @@ import useDidUpdateEffect from './use-did-update-effect';
 
 const useSelectionReducer = (
   pageRows: Row[],
-  selectionsAPI: ExtendedSelectionAPI
+  selectionsAPI: ExtendedSelectionAPI,
+  isPagination: boolean
 ): [SelectionState, SelectionDispatch] => {
   const [selectionState, selectionDispatch] = useReducer(reducer, {
     pageRows,
@@ -19,7 +20,9 @@ const useSelectionReducer = (
   });
 
   useDidUpdateEffect(() => {
-    selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows } });
+    if (isPagination) {
+      selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows } });
+    }
   }, [pageRows]);
 
   return [selectionState, selectionDispatch];
