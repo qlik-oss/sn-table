@@ -8,7 +8,8 @@ import useDidUpdateEffect from './use-did-update-effect';
 
 const useSelectionReducer = (
   pageRows: Row[],
-  selectionsAPI: ExtendedSelectionAPI
+  selectionsAPI: ExtendedSelectionAPI,
+  isPagination: Boolean
 ): [SelectionState, SelectionDispatch] => {
   const [selectionState, selectionDispatch] = useReducer(reducer, {
     pageRows,
@@ -18,8 +19,11 @@ const useSelectionReducer = (
     isSelectMultiValues: false,
   });
 
+  // Only update pageRows for pagination table from here, VT is doing it in a different hook
   useDidUpdateEffect(() => {
-    selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows } });
+    if (isPagination) {
+      selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows } });
+    }
   }, [pageRows]);
 
   return [selectionState, selectionDispatch];

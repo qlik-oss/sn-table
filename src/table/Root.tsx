@@ -38,6 +38,7 @@ export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.R
     <StyleSheetManager stylisPlugins={direction === 'rtl' ? [rtlPluginSc] : undefined}>
       <ThemeProvider theme={muiTheme}>
         <TableContextProvider
+          isPagination
           app={app}
           model={model as EngineAPI.IGenericObject}
           tableData={tableData}
