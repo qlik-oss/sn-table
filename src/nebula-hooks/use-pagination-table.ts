@@ -57,7 +57,7 @@ const usePaginationTable = ({
   reactRoot,
   applyColumnWidths,
 }: UsePaginationTable) => {
-  const shouldRender = !env.carbon && layout.usePagination !== false;
+  const shouldRender = !env.carbon && (layout.usePagination !== false || !areBasicFeaturesEnabled);
   const { direction, footerContainer } = useOptions() as UseOptions;
   const announce = useAnnounceAndTranslations(rootElement, translator);
   const [pageInfo, setPageInfo] = useState(initialPageInfo);
