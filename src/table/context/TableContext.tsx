@@ -38,11 +38,10 @@ export const TableContextProvider = ({
   pageInfo,
   initialDataPages,
   rect,
-  isPagination = false,
 }: ContextProviderProps) => {
   const [headRowHeight, setHeadRowHeight] = useState(0);
   const [focusedCellCoord, setFocusedCellCoord] = useState<[number, number]>(cellCoordMock || FIRST_HEADER_CELL_COORD);
-  const [selectionState, selectionDispatch] = useSelectionReducer(tableData.rows, selectionsAPI, isPagination);
+  const [selectionState, selectionDispatch] = useSelectionReducer(tableData.rows, selectionsAPI);
   const [hoverIndex, setHoverIndex] = useState(-1);
   const styling = useTableStyling(layout, theme, tableData, rootElement);
   const [columnWidths, setColumnWidths, setYScrollbarWidth, showRightBorder] = useColumnWidths(

@@ -3,13 +3,10 @@ import { useReducer } from 'react';
 import { ExtendedSelectionAPI, Row } from '../../types';
 import { SelectionDispatch, SelectionState } from '../types';
 import { reducer } from '../utils/selections-utils';
-import { SelectionActions } from '../constants';
-import useDidUpdateEffect from './use-did-update-effect';
 
 const useSelectionReducer = (
   pageRows: Row[],
-  selectionsAPI: ExtendedSelectionAPI,
-  isPagination: Boolean
+  selectionsAPI: ExtendedSelectionAPI
 ): [SelectionState, SelectionDispatch] => {
   const [selectionState, selectionDispatch] = useReducer(reducer, {
     pageRows,
@@ -18,13 +15,6 @@ const useSelectionReducer = (
     api: selectionsAPI,
     isSelectMultiValues: false,
   });
-
-  // Only update pageRows for pagination table from here, VT is doing it in a different hook
-  useDidUpdateEffect(() => {
-    if (isPagination) {
-      selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows } });
-    }
-  }, [pageRows]);
 
   return [selectionState, selectionDispatch];
 };

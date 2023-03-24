@@ -224,7 +224,6 @@ export interface ContextProviderProps {
   pageInfo?: PageInfo;
   setPage?: stardust.SetStateFn<number>;
   initialDataPages?: EngineAPI.INxDataPage[];
-  isPagination?: boolean;
 }
 
 export interface RenderProps {
