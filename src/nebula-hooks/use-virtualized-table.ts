@@ -12,6 +12,7 @@ import {
 } from '../types';
 import useInitialDataPages from './virtualized-table/use-initial-data-pages';
 import usePageInfo from './virtualized-table/use-page-info';
+import useWaitForFonts from './virtualized-table/use-wait-for-fonts';
 
 interface UseVirtualizedTable {
   app: EngineAPI.IApp | undefined;
@@ -52,9 +53,10 @@ const useVirtualizedTable = ({
   const tableData = useMemo(() => getVirtualScrollTableData(layout, constraints), [layout, constraints]);
   const { pageInfo, setPage } = usePageInfo(layout, shouldRender);
   const { initialDataPages, isLoading } = useInitialDataPages({ model, layout, page: pageInfo.page, shouldRender });
+  const isFontLoaded = useWaitForFonts(theme, layout);
 
   useEffect(() => {
-    if (!shouldRender || !model || !changeSortOrder || !initialDataPages || isLoading) return;
+    if (!shouldRender || !model || !changeSortOrder || !initialDataPages || isLoading || !isFontLoaded) return;
 
     renderVirtualizedTable(
       {
@@ -99,6 +101,7 @@ const useVirtualizedTable = ({
     pageInfo,
     isLoading,
     initialDataPages,
+    isFontLoaded,
   ]);
 };
 
