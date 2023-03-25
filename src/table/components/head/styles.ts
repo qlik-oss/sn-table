@@ -36,7 +36,7 @@ export const StyledSortButton = styled(Button, {
   },
   '& .MuiButton-endIcon, .MuiButton-startIcon': {
     marginBottom: '2px',
-    display: disabled ? 'none' : 'inherit',
+    visibility: disabled ? 'hidden' : 'visible',
   },
 }));
 

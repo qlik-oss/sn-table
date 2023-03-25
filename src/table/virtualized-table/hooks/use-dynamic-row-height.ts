@@ -11,7 +11,7 @@ import {
 } from '../../utils/styling-utils';
 import { MAX_NBR_LINES_OF_TEXT, MIN_BODY_ROW_HEIGHT } from '../constants';
 import { BodyStyle, GridState, RowMeta } from '../types';
-import { subtractCellPaddingAndBorder, subtractCellPaddingIconsAndBorder } from '../utils/cell-width-utils';
+import { getAdjustedCellWidth, getAdjustedHeadCellWidth } from '../utils/cell-width-utils';
 import useMeasureText from './use-measure-text';
 import useMutableProp from './use-mutable-prop';
 import useOnPropsChange from './use-on-props-change';
@@ -67,8 +67,8 @@ const useDynamicRowHeight = ({
     (text: string, colIdx: number) => {
       const width = measureText(text.trim());
       const cellWidth = columns
-        ? subtractCellPaddingIconsAndBorder(columnWidths[colIdx], columns[colIdx])
-        : subtractCellPaddingAndBorder(columnWidths[colIdx]);
+        ? getAdjustedHeadCellWidth(columnWidths[colIdx], columns[colIdx])
+        : getAdjustedCellWidth(columnWidths[colIdx]);
       const estimatedLineCount = Math.min(maxLineCount, Math.ceil(width / cellWidth));
       const textHeight = Math.max(1, estimatedLineCount) * lineHeight;
 
