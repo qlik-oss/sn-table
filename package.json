@@ -137,7 +137,7 @@
     "stylis": "3.5.4",
     "stylis-plugin-rtl-sc": "npm:stylis-plugin-rtl@1.1.0",
     "ts-jest": "29.0.5",
-    "typescript": "4.9.5",
+    "typescript": "5.0.2",
     "yargs": "17.7.1"
   },
   "peerDependencies": {
