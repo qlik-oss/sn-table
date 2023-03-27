@@ -17,6 +17,7 @@ export const StyledSortButton = styled(Button, {
   height: 'auto',
   maxWidth: '100%',
   fontSize: 'inherit',
+  fontFamily: 'inherit',
   padding: theme.spacing(0.5, 1),
   color: 'inherit',
   alignItems: 'flex-end',
@@ -61,6 +62,7 @@ export const StyledHeadCellContent = styled(Box, {
   gridAutoFlow: 'dense',
   gap: theme.spacing(0.5),
   fontSize: 'inherit',
+  fontFamily: 'inherit',
   '&&:hover, &&:focus-within': {
     '& #sn-table-head-menu-button': { opacity: 1 },
   },

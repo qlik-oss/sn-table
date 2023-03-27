@@ -16,6 +16,7 @@ import { TableWrapperProps } from '../../types';
 import { StyledTableWrapper } from '../../components/styles';
 import useScrollbarWidth from '../../virtualized-table/hooks/use-scrollbar-width';
 import useKeyboardActiveListener from '../../hooks/use-keyboard-active-listener';
+import { SelectionActions } from '../../constants';
 
 function TableWrapper(props: TableWrapperProps) {
   const { pageInfo, setPageInfo, direction, footerContainer, announce, areBasicFeaturesEnabled } = props;
@@ -32,6 +33,7 @@ function TableWrapper(props: TableWrapperProps) {
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
+  const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
 
   const isSelectionMode = selectionsAPI.isModal();
 
@@ -95,6 +97,10 @@ function TableWrapper(props: TableWrapperProps) {
   useDidUpdateEffect(() => {
     setYScrollbarWidth(yScrollbarWidth);
   }, [yScrollbarWidth]);
+
+  useDidUpdateEffect(() => {
+    selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows: rows } });
+  }, [rows]);
 
   const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
     String(rows.length + 1),
