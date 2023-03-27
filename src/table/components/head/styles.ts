@@ -17,6 +17,7 @@ export const StyledSortButton = styled(Button, {
   height: 'auto',
   maxWidth: '100%',
   fontSize: 'inherit',
+  fontFamily: 'inherit',
   padding: theme.spacing(0.5, 1),
   color: 'inherit',
   alignItems: 'flex-end',
