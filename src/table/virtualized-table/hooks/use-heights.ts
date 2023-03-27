@@ -57,6 +57,8 @@ const useHeights = ({ columns, columnWidths, pageInfo, headerRef, totalsRef, tot
     totalsRowHeight,
     bodyRowHeight,
     headerAndTotalsHeight,
+    resizeAllHeaderCells: headerHeight.resizeAllCells,
+    resizeAllTotalCells: totalsHeight.resizeAllCells,
   };
 };
 

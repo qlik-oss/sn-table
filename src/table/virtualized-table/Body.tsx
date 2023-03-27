@@ -94,12 +94,12 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
 
   useSelectionsEffect(rowsInPage);
 
-  // React to when a user re-sizes a column by dragging a column corner. This hook will
-  // trigger both while the dragging is taking place and when a new column width is
-  // calculated based on the layout and/or container element size changes
+  // React to events that can invalidate cell width and/or height.
+  // If grid cache is not reset, any new cell width/height would not be applied by the grid,
+  // producing strange cases where some text may not properly fit inside the cell.
   useOnPropsChange(() => {
     gridRef.current?.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: false });
-  }, [columnWidths]);
+  }, [layout, pageInfo, theme.name(), rect.width]);
 
   useImperativeHandle(
     ref,
@@ -120,6 +120,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
           }
         },
         resizeCells: () => {
+          gridRef.current?.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: false });
           resizeVisibleCells(rowsInPage);
         },
       };
