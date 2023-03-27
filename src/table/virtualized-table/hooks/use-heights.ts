@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { VariableSizeList } from 'react-window';
 import { Column, PageInfo, TotalsPosition } from '../../../types';
 import { TableContext, useContextSelector } from '../../context';
@@ -42,14 +41,6 @@ const useHeights = ({ columns, columnWidths, pageInfo, headerRef, totalsRef, tot
     boldText: true,
   });
 
-  const resizeAllHeaderCells = headerHeight.resizeAllCells;
-  const resizeAllTotalCells = totalsHeight.resizeAllCells;
-
-  const resizeCells = useCallback(() => {
-    resizeAllHeaderCells();
-    resizeAllTotalCells();
-  }, [resizeAllHeaderCells, resizeAllTotalCells]);
-
   columns.forEach((col, idx) => {
     headerHeight.setCellSize(col.label, 0, idx);
     totalsHeight.setCellSize(col.totalInfo, 0, idx);
@@ -66,7 +57,8 @@ const useHeights = ({ columns, columnWidths, pageInfo, headerRef, totalsRef, tot
     totalsRowHeight,
     bodyRowHeight,
     headerAndTotalsHeight,
-    resizeCells,
+    resizeAllHeaderCells: headerHeight.resizeAllCells,
+    resizeAllTotalCells: totalsHeight.resizeAllCells,
   };
 };
 

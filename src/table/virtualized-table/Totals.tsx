@@ -10,7 +10,7 @@ const Totals = (props: TotalsProps) => {
   const { layout, styling, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
 
-  useResetHeader(forwardRef, layout, pageInfo, columnWidths, theme);
+  useResetHeader(forwardRef, layout, pageInfo, columnWidths, theme.name());
 
   return (
     <VariableSizeList

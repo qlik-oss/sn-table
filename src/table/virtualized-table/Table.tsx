@@ -34,7 +34,14 @@ const Table = (props: TableProps) => {
     }),
     [layout, theme.name()] // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const { headerRowHeight, totalsRowHeight, bodyRowHeight, headerAndTotalsHeight, resizeCells } = useHeights({
+  const {
+    headerRowHeight,
+    totalsRowHeight,
+    bodyRowHeight,
+    headerAndTotalsHeight,
+    resizeAllHeaderCells,
+    resizeAllTotalCells,
+  } = useHeights({
     columns,
     columnWidths,
     pageInfo,
@@ -71,8 +78,9 @@ const Table = (props: TableProps) => {
     }
 
     bodyRef.current?.resizeCells();
-    resizeCells();
-  }, [ref, resizeCells]);
+    resizeAllHeaderCells();
+    resizeAllTotalCells();
+  }, [ref, resizeAllHeaderCells, resizeAllTotalCells]);
 
   useLayoutEffect(() => {
     if (ref.current) {
