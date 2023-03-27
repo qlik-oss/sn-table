@@ -257,6 +257,9 @@ const dimensionItems = {
   dimensionLimits: {
     uses: 'dimensions.items.dimensionLimits',
   },
+  showOthers: {
+    uses: 'dimensions.items.others',
+  },
 };
 
 const getMeasureItems = (env) => ({
