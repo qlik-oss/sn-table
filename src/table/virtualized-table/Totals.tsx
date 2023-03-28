@@ -25,7 +25,7 @@ const Totals = (props: TotalsProps) => {
       itemSize={(index) => columnWidths[index]}
       height={rowHeight}
       width={rect.width}
-      itemData={{ totalsStyle: styling.totals, columns, totals, columnWidths }}
+      itemData={{ totalsStyle: styling.totals, columns, totals }}
     >
       {TotalsCell}
     </VariableSizeList>

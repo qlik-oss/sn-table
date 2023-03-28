@@ -5,7 +5,6 @@ import { GeneratedStyling } from '../types';
 import HeadCellContent from '../components/head/HeadCellContent';
 import CellText from '../components/CellText';
 import ColumnAdjuster from '../components/head/ColumnAdjuster';
-import { getAdjustedHeadCellWidth } from './utils/cell-width-utils';
 
 interface HeaderCellProps {
   index: number;
@@ -14,14 +13,12 @@ interface HeaderCellProps {
     columns: Column[];
     headerStyle: GeneratedStyling;
     columResizeHandler: () => void;
-    columnWidths: number[];
   };
 }
 
 const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
   const {
     columns,
-    columnWidths,
     headerStyle: { ...applicableStyle },
     columResizeHandler,
   } = data;
@@ -54,7 +51,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
       }}
     >
       <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled>
-        <CellText wordBreak lines={3} width={getAdjustedHeadCellWidth(columnWidths[index], columns[index])}>
+        <CellText wordBreak lines={3}>
           {column.label}
         </CellText>
       </HeadCellContent>

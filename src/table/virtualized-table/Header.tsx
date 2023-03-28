@@ -24,7 +24,7 @@ const Header = (props: HeaderProps) => {
       itemSize={(index) => columnWidths[index]}
       height={rowHeight}
       width={rect.width}
-      itemData={{ columns, headerStyle, columResizeHandler, columnWidths }}
+      itemData={{ columns, headerStyle, columResizeHandler }}
     >
       {HeaderCell}
     </VariableSizeList>

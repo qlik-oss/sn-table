@@ -8,20 +8,13 @@ interface CellTextProps {
   fontSize?: string;
   wordBreak?: boolean;
   lines?: number;
-  width?: number;
 }
 
-export default function CellText({
-  children,
-  fontSize = '',
-  wordBreak = false,
-  lines = 3,
-  width = undefined,
-}: CellTextProps) {
+export default function CellText({ children, fontSize = '', wordBreak = false, lines = 3 }: CellTextProps) {
   const size = parseInt(fontSize || DEFAULT_FONT_SIZE, 10);
 
   const Text = (
-    <StyledCellText width={width} component="span" className="sn-table-cell-text" wordBreak={wordBreak} lines={lines}>
+    <StyledCellText component="span" className="sn-table-cell-text" wordBreak={wordBreak} lines={lines}>
       {children}
     </StyledCellText>
   );

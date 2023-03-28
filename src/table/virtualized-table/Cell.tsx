@@ -8,7 +8,6 @@ import CellText from '../components/CellText';
 import getCellStyle from './utils/get-cell-style';
 import { ItemData } from './types';
 import { BORDER_WIDTH, PADDING_LEFT_RIGHT } from './constants';
-import { getAdjustedCellWidth } from './utils/cell-width-utils';
 
 interface CellProps {
   columnIndex: number;
@@ -18,7 +17,7 @@ interface CellProps {
 }
 
 const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
-  const { rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount, columnWidths } = data;
+  const { rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount } = data;
   const cell = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
 
   const rowIsHovered = useContextSelector(TableContext, (value) => value.hoverIndex === rowIndex);
@@ -61,7 +60,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         onMouseLeave={isHoverEnabled ? () => setHoverIndex(-1) : undefined}
         title={!constraints.passive ? cell.qText : undefined}
       >
-        <CellText wordBreak lines={maxLineCount} width={getAdjustedCellWidth(columnWidths[columnIndex])}>
+        <CellText wordBreak lines={maxLineCount}>
           {cell.qText}
         </CellText>
       </div>
