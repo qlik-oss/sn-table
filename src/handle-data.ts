@@ -171,8 +171,11 @@ export const getColumns = (layout: TableLayout) => {
     const isHidden = qError?.qErrorCode === HIDDEN_ERROR_CODE;
 
     if (isDim) {
-      isHidden && hiddenDimCounter++;
-      selectionColIndexes[colIdx] = colIdx - hiddenDimCounter;
+      if (isHidden) {
+        hiddenDimCounter++;
+      } else {
+        selectionColIndexes[colIdx] = colIdx - hiddenDimCounter;
+      }
     }
 
     return !isHidden;

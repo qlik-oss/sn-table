@@ -201,7 +201,6 @@ const selectOnMouseUp = (state: SelectionState, payload: SelectPayload) =>
   endSelectMulti(!state.isSelectMultiValues && state.firstCell === payload.cell ? selectCell(state, payload) : state);
 
 export const reducer = (state: SelectionState, action: SelectionActionTypes): SelectionState => {
-  console.log(action.type);
   switch (action.type) {
     case SelectionActions.SELECT:
       return selectCell(state, action.payload);
