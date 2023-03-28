@@ -67,6 +67,7 @@ export const createCell = (rowIdx: number, colIdx = 0) =>
     colIdx,
     pageRowIdx: rowIdx,
     pageColIdx: colIdx,
+    selectionColIdx: colIdx,
   } as Cell);
 
 /**

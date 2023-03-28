@@ -86,7 +86,7 @@ describe('selections-utils', () => {
       });
 
       it('should return early when excluded columns', () => {
-        cell.colIdx = 2;
+        cell.selectionColIdx = 2;
 
         const newState = reducer(state, action);
         expect(newState).toBe(state);
@@ -425,7 +425,7 @@ describe('selections-utils', () => {
       isModal = true;
       cell = {
         qElemNumber: 1,
-        colIdx: 1,
+        selectionColIdx: 1,
       } as Cell;
 
       selectionState = {
@@ -454,7 +454,7 @@ describe('selections-utils', () => {
     });
 
     it('should return excluded when colIdx is not in selectionState', () => {
-      cell.colIdx = 2;
+      cell.selectionColIdx = 2;
 
       const cellState = getCellSelectionState(cell, selectionState);
       expect(cellState).toEqual(SelectionStates.EXCLUDED);

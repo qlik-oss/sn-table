@@ -18,7 +18,7 @@ const createRow = (
 
   cells.forEach((cell, cellColIdx: number) => {
     const pageColIdx = cellColIdx + qArea.qLeft;
-    const { colIdx, isDim, isLocked, id, bodyTextAlign } = columns[pageColIdx];
+    const { colIdx, isDim, isLocked, id, bodyTextAlign, selectionColIdx } = columns[pageColIdx];
 
     row[id] = {
       ...cell,
@@ -28,6 +28,7 @@ const createRow = (
       isSelectable: isDim && !isLocked,
       pageRowIdx,
       pageColIdx,
+      selectionColIdx,
       isLastRow: rowIdx === qSize.qcy - 1,
       isLastColumn: pageColIdx === qSize.qcx - 1,
     };

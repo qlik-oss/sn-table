@@ -94,7 +94,12 @@ export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | 'au
 /**
  * Gets all column info, returns false if hidden
  */
-export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: number): Column {
+export function getColumnInfo(
+  layout: TableLayout,
+  colIdx: number,
+  pageColIdx: number,
+  selectionColIdx: number | undefined
+): Column {
   const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIdx < numDims;
@@ -135,6 +140,7 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
     qApprMaxGlyphCount,
     qReverseSort,
     columnWidth,
+    selectionColIdx: selectionColIdx ?? -1,
     id: `col-${pageColIdx}`,
     label: qFallbackTitle,
     stylingIDs: qAttrExprInfo.map((expr) => expr.id),
@@ -156,13 +162,25 @@ export const getColumns = (layout: TableLayout) => {
   const numDims = qDimensionInfo.length;
   const columnsLength = numDims + qMeasureInfo.length;
   const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
+  const selectionColIndexes: Record<string, number> = {};
+  let hiddenDimCounter = 0;
 
   const visibleColumnsOrder = columnOrder.filter((colIdx) => {
-    const { qError } = colIdx < numDims ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims];
-    return qError?.qErrorCode !== HIDDEN_ERROR_CODE;
+    const isDim = colIdx < numDims;
+    const { qError } = isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims];
+    const isHidden = qError?.qErrorCode === HIDDEN_ERROR_CODE;
+
+    if (isDim) {
+      isHidden && hiddenDimCounter++;
+      selectionColIndexes[colIdx] = colIdx - hiddenDimCounter;
+    }
+
+    return !isHidden;
   });
 
-  return visibleColumnsOrder.map((colIdx, pageColIdx) => getColumnInfo(layout, colIdx, pageColIdx));
+  return visibleColumnsOrder.map((colIdx, pageColIdx) =>
+    getColumnInfo(layout, colIdx, pageColIdx, selectionColIndexes[colIdx])
+  );
 };
 
 /**
@@ -214,6 +232,7 @@ export default async function manageData(
         colIdx: c.colIdx,
         pageRowIdx,
         pageColIdx,
+        selectionColIdx: c.selectionColIdx,
         isSelectable: c.isDim && !c.isLocked,
         isLastRow: pageRowIdx === height - 1,
       };
