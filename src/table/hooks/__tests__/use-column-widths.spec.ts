@@ -22,6 +22,7 @@ describe('use-column-widths', () => {
     mockedMeasureText = {
       measureText: jest.fn() as jest.MockedFunction<(text: string) => number>,
       estimateWidth: jest.fn() as jest.MockedFunction<(length: number) => number>,
+      estimateLineCount: jest.fn() as jest.MockedFunction<(text: string, maxWidth: number) => number>,
     };
     mockedUseMeasureText.mockReturnValue(mockedMeasureText);
 
