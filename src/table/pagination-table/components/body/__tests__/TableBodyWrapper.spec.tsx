@@ -18,18 +18,12 @@ describe('<TableBodyWrapper />', () => {
   let tableData: TableData;
   let tableFirstRow: Cell;
   let tableSecondRow: Cell;
-  let areBasicFeaturesEnabled: boolean;
 
   const renderTableBody = () =>
     render(
       <TestWithProviders tableData={tableData}>
         <table>
-          <TableBodyWrapper
-            setShouldRefocus={setShouldRefocus}
-            tableWrapperRef={tableWrapperRef}
-            announce={announce}
-            areBasicFeaturesEnabled={areBasicFeaturesEnabled}
-          />
+          <TableBodyWrapper setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} announce={announce} />
         </table>
       </TestWithProviders>
     );
@@ -39,12 +33,10 @@ describe('<TableBodyWrapper />', () => {
       model,
       generateLayout(1, 1, 2, [], [{ qText: '100' }]),
       { top: 0, height: 100 } as unknown as PageInfo,
-      () => undefined,
-      true
+      () => undefined
     )) as TableData;
     tableFirstRow = tableData.rows[0]['col-0'] as Cell;
     tableSecondRow = tableData.rows[0]['col-1'] as Cell;
-    areBasicFeaturesEnabled = true;
     jest.spyOn(getCellRenderer, 'default');
   });
 

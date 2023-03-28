@@ -19,7 +19,6 @@ describe('<TableWrapper />', () => {
   let direction: 'ltr' | 'rtl';
   let announce: Announce;
   let layout: TableLayout;
-  let areBasicFeaturesEnabled: boolean;
 
   const renderTableWrapper = () =>
     render(
@@ -30,13 +29,7 @@ describe('<TableWrapper />', () => {
         tableData={tableData}
         rect={rect}
       >
-        <TableWrapper
-          pageInfo={pageInfo}
-          setPageInfo={setPageInfo}
-          direction={direction}
-          announce={announce}
-          areBasicFeaturesEnabled={areBasicFeaturesEnabled}
-        />
+        <TableWrapper pageInfo={pageInfo} setPageInfo={setPageInfo} direction={direction} announce={announce} />
       </TestWithProviders>
     );
 

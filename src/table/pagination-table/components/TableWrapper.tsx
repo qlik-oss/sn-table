@@ -19,7 +19,7 @@ import useKeyboardActiveListener from '../../hooks/use-keyboard-active-listener'
 import { SelectionActions } from '../../constants';
 
 function TableWrapper(props: TableWrapperProps) {
-  const { pageInfo, setPageInfo, direction, footerContainer, announce, areBasicFeaturesEnabled } = props;
+  const { pageInfo, setPageInfo, direction, footerContainer, announce } = props;
   const { page, rowsPerPage } = pageInfo;
 
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
@@ -125,14 +125,8 @@ function TableWrapper(props: TableWrapperProps) {
         role="application"
         data-testid="table-container"
       >
-        <StyledTable
-          styling={styling}
-          showRightBorder={showRightBorder}
-          customWidth={areBasicFeaturesEnabled}
-          stickyHeader
-          aria-label={tableAriaLabel}
-        >
-          <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
+        <StyledTable styling={styling} showRightBorder={showRightBorder} stickyHeader aria-label={tableAriaLabel}>
+          <TableHeadWrapper />
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </StyledTable>
       </StyledTableContainer>

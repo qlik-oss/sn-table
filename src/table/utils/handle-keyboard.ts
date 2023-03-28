@@ -47,14 +47,8 @@ export const handleHeadCellMenuKeyDown = (event: React.KeyboardEvent<HTMLLIEleme
 /**
  * confirms selections when making multiple selections with shift + arrows and shit is released
  */
-export const handleBodyKeyUp = (
-  evt: React.KeyboardEvent,
-  selectionDispatch: SelectionDispatch,
-  areBasicFeaturesEnabled: boolean
-) => {
-  areBasicFeaturesEnabled &&
-    evt.key === KeyCodes.SHIFT &&
-    selectionDispatch({ type: SelectionActions.SELECT_MULTI_END });
+export const handleBodyKeyUp = (evt: React.KeyboardEvent, selectionDispatch: SelectionDispatch) => {
+  evt.key === KeyCodes.SHIFT && selectionDispatch({ type: SelectionActions.SELECT_MULTI_END });
 };
 
 /**
@@ -125,7 +119,6 @@ export const handleHeadKeyDown = ({
   cellCoord,
   setFocusedCellCoord,
   isInteractionEnabled,
-  areBasicFeaturesEnabled,
 }: HandleHeadKeyDownProps) => {
   if (!isInteractionEnabled) {
     preventDefaultBehavior(evt);
@@ -157,7 +150,7 @@ export const handleHeadKeyDown = ({
       break;
     case KeyCodes.C:
       preventDefaultBehavior(evt);
-      areBasicFeaturesEnabled && isCtrlCmd(evt) && copyCellValue(evt);
+      isCtrlCmd(evt) && copyCellValue(evt);
       break;
     default:
       break;
@@ -222,7 +215,6 @@ export const handleBodyKeyDown = ({
   paginationNeeded,
   totalsPosition,
   selectionsAPI,
-  areBasicFeaturesEnabled,
 }: HandleBodyKeyDownProps) => {
   if ((evt.target as HTMLTableCellElement).classList.contains('excluded')) {
     preventDefaultBehavior(evt);
@@ -248,7 +240,6 @@ export const handleBodyKeyDown = ({
         announce,
         totalsPosition,
         isSelectionMode,
-        areBasicFeaturesEnabled,
       });
       break;
     // Space bar: Selects value.
@@ -279,7 +270,7 @@ export const handleBodyKeyDown = ({
     // Ctrl + c: copy cell value
     case KeyCodes.C:
       preventDefaultBehavior(evt);
-      areBasicFeaturesEnabled && isCtrlCmd(evt) && copyCellValue(evt);
+      isCtrlCmd(evt) && copyCellValue(evt);
       break;
     default:
       break;

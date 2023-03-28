@@ -9,6 +9,7 @@ describe('translations', () => {
     beforeEach(() => {
       translator = {
         get: () => 'SNTable.Accessibility.RowsAndColumns',
+        language: () => 'someLanguage',
         add: jest.fn(),
       };
     });

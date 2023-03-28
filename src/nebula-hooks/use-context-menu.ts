@@ -2,10 +2,9 @@
 import { onContextMenu } from '@nebula.js/stardust';
 import copyCellValue from '../table/utils/copy-utils';
 
-export default function useContextMenu(areBasicFeaturesEnabled: boolean) {
+export default function useContextMenu() {
   onContextMenu?.((menu: any, event: any) => {
-    areBasicFeaturesEnabled &&
-      event.target &&
+    event.target &&
       event.target.closest('.sn-table-cell') &&
       menu.addItem({
         translation: 'contextMenu.copyCellValue',

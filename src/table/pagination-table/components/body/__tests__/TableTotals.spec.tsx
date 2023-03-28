@@ -30,8 +30,7 @@ describe('<TableTotals />', () => {
       model,
       layout,
       { top: 0, height: 100 } as unknown as PageInfo,
-      () => undefined,
-      true
+      () => undefined
     )) as TableData;
   });
 
