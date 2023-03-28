@@ -83,31 +83,29 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
   const muiTheme = muiSetup('ltr');
 
   reactRoot?.render(
-    <React.StrictMode>
-      <ThemeProvider theme={muiTheme}>
-        <TableContextProvider
-          app={app}
-          selectionsAPI={selectionsAPI}
-          layout={layout}
-          model={model}
-          translator={translator}
-          constraints={constraints}
-          theme={theme}
-          keyboard={keyboard}
-          rootElement={rootElement}
-          embed={embed}
-          changeSortOrder={changeSortOrder}
-          tableData={tableData}
-          applyColumnWidths={applyColumnWidths}
-          rect={rect}
-          setPage={setPage}
-          pageInfo={pageInfo}
-          initialDataPages={initialDataPages}
-        >
-          <VirtualizedTable />
-        </TableContextProvider>
-      </ThemeProvider>
-    </React.StrictMode>
+    <ThemeProvider theme={muiTheme}>
+      <TableContextProvider
+        app={app}
+        selectionsAPI={selectionsAPI}
+        layout={layout}
+        model={model}
+        translator={translator}
+        constraints={constraints}
+        theme={theme}
+        keyboard={keyboard}
+        rootElement={rootElement}
+        embed={embed}
+        changeSortOrder={changeSortOrder}
+        tableData={tableData}
+        applyColumnWidths={applyColumnWidths}
+        rect={rect}
+        setPage={setPage}
+        pageInfo={pageInfo}
+        initialDataPages={initialDataPages}
+      >
+        <VirtualizedTable />
+      </TableContextProvider>
+    </ThemeProvider>
   );
 }
 export function teardown(reactRoot: ReactDom.Root) {
