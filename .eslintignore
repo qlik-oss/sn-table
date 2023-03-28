@@ -1,4 +1,3 @@
-
 dist
 coverage
 node_modules
@@ -6,3 +5,8 @@ src/table/mui-config.json
 src/locale/locales/*.json
 src/locale/*.json
 src/locale/*.md
+sn-table-ext
+test-report
+core/esm
+.yalc
+mashup-example

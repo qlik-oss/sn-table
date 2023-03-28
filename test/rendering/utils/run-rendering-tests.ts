@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import serve from '@nebula.js/cli-serve';
+import serve, { NebulaServer } from '@nebula.js/cli-serve';
 import { test, expect } from '@playwright/test';
 
 import events from './events';
@@ -11,11 +11,14 @@ const paths = { fixtures: path.join(__dirname, '../__fixtures__') };
 const port = 8000;
 
 const runRenderingTests = (theme: Object | Function, themeType: String, language: String) => {
-  let nebulaServer;
+  let nebulaServer: NebulaServer;
   let playwright;
-  let route;
+  let route: {
+    renderFixture: (fixturePath: string) => string;
+  };
 
-  test.beforeAll(async ({}, workerInfo) => {
+  // eslint-disable-next-line no-empty-pattern
+  test.beforeAll(async ({}, testInfo) => {
     nebulaServer = await serve({
       // the entry is equal to path.resolve(__dirname, '../../dist/sn-table.js'),
       // so before run the testing, yarn build should run first to generate /dist
@@ -30,7 +33,7 @@ const runRenderingTests = (theme: Object | Function, themeType: String, language
         },
       ],
       fixturePath: 'test/rendering/__fixtures__',
-      port: port + workerInfo.workerIndex,
+      port: port + testInfo.workerIndex,
     });
 
     route = createNebulaRoutes(nebulaServer.url);
@@ -54,7 +57,7 @@ const runRenderingTests = (theme: Object | Function, themeType: String, language
       playwright = createPlaywright(page);
       // Render chart based on testing fixture file
       // in Nebula serve using Enigma mocker
-      const renderUrl = await route.renderFixture(fixturePath);
+      const renderUrl = route.renderFixture(fixturePath);
       console.log({ renderUrl });
       // Open page in Nebula which renders fixture
       await playwright.open(renderUrl);
@@ -64,7 +67,7 @@ const runRenderingTests = (theme: Object | Function, themeType: String, language
         const element = page.locator('text=Zocalo');
         await element.scrollIntoViewIfNeeded();
       }
-      // Puppeteer Capture screenshot
+      // Playwright captures screenshot
       const img = await playwright.screenshot();
       // Compare screenshot with baseline image
       expect(img).toMatchSnapshot(`${name}.png`);
