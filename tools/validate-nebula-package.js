@@ -2,10 +2,10 @@ const fs = require('fs');
 const path = require('path');
 
 const validateScripts = (pkg) => {
-  if (pkg.scripts.build !== 'yarn run locale:generate && node ./tools/build.js --core --ext') {
+  if (pkg.scripts.build !== 'pnpm run locale:generate && node ./tools/build.js --core --ext') {
     throw new Error('package.json does not have correct build script');
   }
-  if (pkg.scripts.prepublishOnly !== 'NODE_ENV=production yarn run build && yarn spec') {
+  if (pkg.scripts.prepublishOnly !== 'NODE_ENV=production pnpm run build && pnpm spec') {
     throw new Error('package.json does not have correct prepublishOnly script');
   }
   if (pkg.scripts.prepack !== './tools/prepare-sn-pack.js') {

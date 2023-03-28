@@ -22,13 +22,13 @@ Visual regression testing flow:
 If you've updated the UI, you need to run the update screenshots script:
 
     # Install dependencies
-    yarn --frozen-lockfile
+    pnpm i --frozen-lockfile
 
     # Build nebula.js visualization
-    yarn build
+    pnpm build
 
     chmod 777 ./test/rendering/scripts/run-rendering-tests.sh
-    yarn test:local:update:screenshots
+    pnpm test:local:update:screenshots
 
 It will spin up a docker container with playwright and enable us to emulate our CI server for updating the reference screenshots. The `--update-snapshots` will generate new screenshots for you.
 

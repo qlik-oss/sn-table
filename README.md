@@ -59,13 +59,13 @@ Check full [examples](./mashup-example) of mashup usage for sn-table.
 Install all dependencies:
 
 ```sh
-yarn
+pnpm i
 ```
 
 Build a nebula.js visualization as a Qlik Sense extension:
 
 ```sh
-yarn build
+pnpm build
 ```
 
 Compress the generated 'sn-table-ext' folder into the 'application/zip' file format

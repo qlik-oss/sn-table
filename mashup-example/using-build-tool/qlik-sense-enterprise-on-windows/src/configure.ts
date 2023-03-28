@@ -32,7 +32,7 @@ const nuked = embed(app, {
   types: [
     {
       name: 'table',
-      load: () => Promise.resolve(table),
+      load: () => Promise.resolve(table as any),
     },
   ],
 });

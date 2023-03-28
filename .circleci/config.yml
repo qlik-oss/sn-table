@@ -7,24 +7,27 @@ defaults: &defaults
   # Available images https://hub.docker.com/r/circleci/node/tags/
 
 aliases:
-  - &restore_yarn_cache
-    name: Restore yarn cache
+  - &restore_pnpm_cache
+    name: Restore pnpm package Cache
     keys:
-      - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-      - yarn-packages-{{ .Branch }}
-      - yarn-packages-
-  - &save_yarn_cache
-    name: Save yarn cache
+      - pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
+  - &save_pnpm_cache
+    name: Save pnpm package cache
+    key: pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
     paths:
-      - ~/.cache/yarn
-    key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - node_modules
 
 jobs:
   install:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache: *restore_yarn_cache
+      - restore_cache: *restore_pnpm_cache
+      - run:
+          name: Install pnpm package manager
+          command: |
+            corepack enable
+            corepack prepare pnpm@latest-8 --activate
       - run:
           name: Setup github packages access
           command: |
@@ -35,8 +38,8 @@ jobs:
             //npm.pkg.github.com/:always-auth=true" >> ~/.npmrc
       - run:
           name: Install dependencies
-          command: yarn install --frozen-lockfile
-      - save_cache: *save_yarn_cache
+          command: pnpm i --frozen-lockfile
+      - save_cache: *save_pnpm_cache
 
       - store_artifacts:
           path: package.json
@@ -52,8 +55,13 @@ jobs:
       - attach_workspace:
           at: ~/table
       - run:
+          name: Install pnpm package manager
+          command: |
+            corepack enable
+            corepack prepare pnpm@latest-8 --activate
+      - run:
           name: Build
-          command: yarn run build
+          command: pnpm build
       - persist_to_workspace:
           root: ~/table
           paths:
@@ -70,11 +78,16 @@ jobs:
       - attach_workspace:
           at: ~/table
       - run:
+          name: Install pnpm package manager
+          command: |
+            corepack enable
+            corepack prepare pnpm@latest-8 --activate
+      - run:
           name: Install playwright
           command: npx playwright install
       - run:
           name: Run integration tests
-          command: yarn test:integration
+          command: pnpm test:integration
       - store_artifacts:
           path: test/integration/artifacts
       - store_artifacts:
@@ -88,11 +101,16 @@ jobs:
       - attach_workspace:
           at: ~/table
       - run:
+          name: Install pnpm package manager
+          command: |
+            corepack enable
+            corepack prepare pnpm@latest-8 --activate
+      - run:
           name: Install playwright
           command: npx playwright install
       - run:
           name: Run rendering tests
-          command: yarn test:rendering
+          command: pnpm test:rendering
       - store_artifacts:
           path: test/rendering/table.render.ts-snapshots
       - store_artifacts:
@@ -106,8 +124,13 @@ jobs:
       - attach_workspace:
           at: ~/table
       - run:
+          name: Install pnpm package manager
+          command: |
+            corepack enable
+            corepack prepare pnpm@latest-8 --activate
+      - run:
           name: Update spec
-          command: yarn run spec
+          command: pnpm run spec
 
   locale:
     <<: *defaults
@@ -115,8 +138,13 @@ jobs:
       - attach_workspace:
           at: ~/table
       - run:
+          name: Install pnpm package manager
+          command: |
+            corepack enable
+            corepack prepare pnpm@latest-8 --activate
+      - run:
           name: Verify locale
-          command: yarn run locale:verify
+          command: pnpm run locale:verify
 
   types:
     <<: *defaults
@@ -124,8 +152,13 @@ jobs:
       - attach_workspace:
           at: ~/table
       - run:
+          name: Install pnpm package manager
+          command: |
+            corepack enable
+            corepack prepare pnpm@latest-8 --activate
+      - run:
           name: Check types
-          command: yarn run types:check
+          command: pnpm run types:check
 
   lint:
     <<: *defaults
@@ -133,8 +166,13 @@ jobs:
       - attach_workspace:
           at: ~/table
       - run:
+          name: Install pnpm package manager
+          command: |
+            corepack enable
+            corepack prepare pnpm@latest-8 --activate
+      - run:
           name: Lint
-          command: yarn run lint
+          command: pnpm run lint
 
   unit-tests:
     <<: *defaults
@@ -142,12 +180,17 @@ jobs:
       - attach_workspace:
           at: ~/table
       - run:
+          name: Install pnpm package manager
+          command: |
+            corepack enable
+            corepack prepare pnpm@latest-8 --activate
+      - run:
           name: Run unit tests and publish to codeclimate
           command: |
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
             chmod +x ./cc-test-reporter
             ./cc-test-reporter before-build
-            yarn test:unit --runInBand --coverage --reporters=default --reporters=jest-junit
+            pnpm test:unit --runInBand --coverage --reporters=default --reporters=jest-junit
             ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
           environment:
             JEST_JUNIT_OUTPUT_DIR: ./coverage/junit/

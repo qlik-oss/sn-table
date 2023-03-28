@@ -5,4 +5,4 @@
 ## With Qlik Sense Desktop
 
 1. Copy the `Executive_Dashboard.qvf` app from `data/apps` into Qlik Sense Desktop.
-2. run `yarn install` and `yarn dev`.
+2. run `pnpm install` and `pnpm dev`.

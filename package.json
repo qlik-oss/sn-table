@@ -2,20 +2,11 @@
   "name": "@nebula.js/sn-table",
   "version": "2.0.0",
   "description": "Display several measure values for each dimension value. Show the totals for each measure. Sort columns and rows alphabetically or numerically. Change sorting during analysis. Chart exploration allows for adding and removing columns in analysis.",
-  "license": "MIT",
-  "author": "QlikTech International AB",
-  "qext": {
-    "name": "Straight table",
-    "icon": "table"
-  },
   "keywords": [
     "qlik",
     "nebula",
     "stardust"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "bugs": {
     "url": "https://github.com/qlik-oss/sn-table/issues"
   },
@@ -23,51 +14,49 @@
     "type": "git",
     "url": "https://github.com/qlik-oss/sn-table.git"
   },
+  "license": "MIT",
+  "author": "QlikTech International AB",
+  "main": "dist/sn-table.js",
   "files": [
     "dist",
     "api-specifications",
     "core",
     "sn-table-ext"
   ],
-  "engines": {
-    "node": ">=16"
-  },
-  "main": "dist/sn-table.js",
-  "systemjs": "dist/sn-table.systemjs.js",
   "scripts": {
-    "build": "yarn run locale:generate && node ./tools/build.js --core --ext",
-    "build:dev": "yarn run locale:generate && node ./tools/build.js --core --ext --mode development",
-    "build:watch": "yarn run locale:generate && node ./tools/build.js --mode development -w",
-    "build:rn": "yarn run locale:generate && node ./tools/build.js --reactNative",
-    "build:rn:dev": "yarn run locale:generate && ditto src ./react-native/dist && rm -rf ./react-native/dist/__test__ && mv ./react-native/dist/index.js ./react-native/dist/sn-table.js",
-    "lint": "eslint --cache .",
-    "format": "prettier --write .",
-    "start": "nebula serve --build false --type sn-table",
-    "sense": "nebula sense",
-    "types:check": "tsc --noEmit",
+    "build": "pnpm locale:generate && node ./tools/build.js --core --ext",
+    "build:dev": "pnpm locale:generate && node ./tools/build.js --core --ext --mode development",
+    "build:rn": "pnpm locale:generate && node ./tools/build.js --reactNative",
+    "build:rn:dev": "pnpm locale:generate && ditto src ./react-native/dist && rm -rf ./react-native/dist/__test__ && mv ./react-native/dist/index.js ./react-native/dist/sn-table.js",
+    "build:watch": "pnpm locale:generate && node ./tools/build.js --mode development -w",
     "copy:ext": "node ./tools/copy-ext.js",
-    "locale:verify": "node src/locale/tools/verify-translations.ts",
+    "format": "prettier --write .",
+    "lint": "eslint --cache .",
     "locale:generate": "node src/locale/scripts/generate-all.mjs",
-    "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
-    "test:unit": "jest",
-    "test:rendering": "playwright test",
-    "test:integration": "playwright test --config=test/integration/integration.config.ts",
-    "test:local:rendering": "./test/rendering/scripts/run-rendering-tests.sh",
-    "test:local:integration": "./test/integration/scripts/run-integration-tests.sh",
-    "test:local:update:screenshots": "./test/rendering/scripts/run-rendering-tests.sh '--update-snapshots'",
-    "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
+    "locale:verify": "node src/locale/tools/verify-translations.ts",
     "prepack": "./tools/prepare-sn-pack.js",
     "prepare": "husky install",
-    "preversion": "yarn build",
-    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && yarn spec && git add api-specifications CHANGELOG.md"
+    "prepublishOnly": "NODE_ENV=production pnpm build && pnpm spec",
+    "sense": "nebula sense",
+    "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
+    "start": "nebula serve --build false --type sn-table",
+    "test:integration": "playwright test --config=test/integration/integration.config.ts",
+    "test:local:integration": "./test/integration/scripts/run-integration-tests.sh",
+    "test:local:rendering": "./test/rendering/scripts/run-rendering-tests.sh",
+    "test:local:update:screenshots": "./test/rendering/scripts/run-rendering-tests.sh '--update-snapshots'",
+    "test:rendering": "playwright test",
+    "test:unit": "jest",
+    "types:check": "tsc --noEmit",
+    "preversion": "pnpm build",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && pnpm spec && git add api-specifications CHANGELOG.md"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "bash -c 'yarn lint'",
-      "bash -c 'yarn types:check'"
+      "bash -c 'pnpm lint'",
+      "bash -c 'pnpm types:check'"
     ],
     "*.{json,css,md}": [
-      "yarn format"
+      "pnpm format"
     ]
   },
   "devDependencies": {
@@ -99,9 +88,12 @@
     "@testing-library/react-hooks": "8.0.1",
     "@testing-library/user-event": "14.4.3",
     "@types/jest": "29.5.0",
+    "@types/node": "18.15.11",
     "@types/react": "18.0.30",
+    "@types/react-dom": "18.0.11",
     "@types/react-native": "0.71.5",
     "@types/react-window": "1.8.5",
+    "@types/testing-library__jest-dom": "5.14.5",
     "@typescript-eslint/eslint-plugin": "5.57.0",
     "@typescript-eslint/parser": "5.57.0",
     "conventional-changelog-cli": "2.2.2",
@@ -124,6 +116,7 @@
     "jest-junit": "15.0.0",
     "lint-staged": "13.2.0",
     "prettier": "2.8.7",
+    "prettier-plugin-packagejson": "2.4.3",
     "prop-types": "15.8.1",
     "qlik-chart-modules": "0.52.0",
     "qlik-modifiers": "0.9.1",
@@ -136,14 +129,25 @@
     "styled-components": "5.3.9",
     "stylis": "3.5.4",
     "stylis-plugin-rtl-sc": "npm:stylis-plugin-rtl@1.1.0",
-    "ts-jest": "29.0.5",
     "typescript": "5.0.2",
     "yargs": "17.7.1"
   },
   "peerDependencies": {
     "@nebula.js/stardust": ">=3.3.0"
   },
-  "resolutions": {
+  "engines": {
+    "node": ">=16",
+    "pnpm": ">=8"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "overrides": {
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
-  }
+  },
+  "qext": {
+    "name": "Straight table",
+    "icon": "table"
+  },
+  "systemjs": "dist/sn-table.systemjs.js"
 }

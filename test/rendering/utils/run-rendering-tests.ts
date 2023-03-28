@@ -21,7 +21,7 @@ const runRenderingTests = (theme: Object | Function, themeType: String, language
   test.beforeAll(async ({}, testInfo) => {
     nebulaServer = await serve({
       // the entry is equal to path.resolve(__dirname, '../../dist/sn-table.js'),
-      // so before run the testing, yarn build should run first to generate /dist
+      // so before run the testing, pnpm build should run first to generate /dist
       entry: path.resolve(__dirname, '../../../'),
       type: 'sn-table',
       open: false,
