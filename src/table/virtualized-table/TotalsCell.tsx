@@ -4,6 +4,7 @@ import { useContextSelector, TableContext } from '../context';
 import { GeneratedStyling } from '../types';
 import CellText from '../components/CellText';
 import { Totals } from './types';
+import { getAdjustedCellWidth } from './utils/cell-width-utils';
 
 interface TotalsCellProps {
   index: number;
@@ -12,6 +13,7 @@ interface TotalsCellProps {
     totalsStyle: GeneratedStyling;
     columns: Column[];
     totals: Totals;
+    columnWidths: number[];
   };
 }
 
@@ -22,6 +24,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
     totalsStyle: { hoverColors, ...applicableStyling },
     columns,
     totals,
+    columnWidths,
   } = data;
   const label = columns[index].totalInfo;
   const { totalsTextAlign } = columns[index];
@@ -48,7 +51,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
         fontWeight: '600',
       }}
     >
-      <CellText wordBreak lines={3}>
+      <CellText wordBreak lines={3} width={getAdjustedCellWidth(columnWidths[index])}>
         {label}
       </CellText>
     </div>

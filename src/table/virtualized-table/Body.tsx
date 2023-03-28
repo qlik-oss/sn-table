@@ -72,8 +72,8 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   });
 
   const itemData = useMemo<ItemData>(
-    () => ({ rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount }),
-    [rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount]
+    () => ({ rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount, columnWidths }),
+    [rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount, columnWidths]
   );
 
   const bodyHeight = getBodyHeight(rect, headerAndTotalsHeight, rowCount, estimatedRowHeight);

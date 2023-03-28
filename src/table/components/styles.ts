@@ -14,10 +14,11 @@ export const StyledTableWrapper = styled(Box, {
 // ---------- CellText ----------
 
 export const StyledCellText = styled(Box, {
-  shouldForwardProp: (prop: string) => prop !== 'lines' && prop !== 'wordBreak',
-})(({ lines, wordBreak }) => ({
+  shouldForwardProp: (prop: string) => prop !== 'lines' && prop !== 'wordBreak' && prop !== 'width',
+})(({ lines, wordBreak, width }) => ({
   lineHeight: 'calc(4/3)',
   fontSize: 'inherit',
+  ...(width && { width: `${width}px` }),
   ...(wordBreak && {
     height: '100%',
     textOverflow: 'ellipsis',

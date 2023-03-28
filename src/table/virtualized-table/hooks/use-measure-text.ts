@@ -30,7 +30,7 @@ export default function useMeasureText(
 
         for (let index = 1; index <= text.length; index++) {
           const chars = text.slice(startIndex, index);
-          const { width } = memoizedMeasureText(chars);
+          const width = +memoizedMeasureText(chars).width.toFixed(2);
 
           if (width > maxWidth) {
             lineCount += 1;
