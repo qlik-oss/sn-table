@@ -16,9 +16,9 @@ import useDidUpdateEffect from '../hooks/use-did-update-effect';
 import useHeights from './hooks/use-heights';
 
 const Table = (props: TableProps) => {
-  const { pageInfo, rect } = props;
+  const { pageInfo } = props;
   const { totalsPosition, columns, paginationNeeded } = useContextSelector(TableContext, (value) => value.tableData);
-  const { layout, theme, styling } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, theme, styling, rect } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
   const ref = useRef<HTMLDivElement>(null);
@@ -34,7 +34,14 @@ const Table = (props: TableProps) => {
     }),
     [layout, theme.name()] // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const { headerRowHeight, totalsRowHeight, bodyRowHeight, headerAndTotalsHeight } = useHeights({
+  const {
+    headerRowHeight,
+    totalsRowHeight,
+    bodyRowHeight,
+    headerAndTotalsHeight,
+    resizeAllHeaderCells,
+    resizeAllTotalCells,
+  } = useHeights({
     columns,
     columnWidths,
     pageInfo,
@@ -71,7 +78,9 @@ const Table = (props: TableProps) => {
     }
 
     bodyRef.current?.resizeCells();
-  }, [ref]);
+    resizeAllHeaderCells();
+    resizeAllTotalCells();
+  }, [ref, resizeAllHeaderCells, resizeAllTotalCells]);
 
   useLayoutEffect(() => {
     if (ref.current) {

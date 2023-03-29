@@ -10,11 +10,12 @@ export default async function connect({ url, webIntegrationId, appId }) {
     host: url.replace(/^https?:\/\//, '').replace(/\/?/, ''),
   });
 
-  if (!authInstance.isAuthenticated()) {
+  if (!(await authInstance.isAuthenticated())) {
     authInstance.authenticate();
-  } else {
-    const url = await authInstance.generateWebsocketUrl(appId);
-    const enigmaGlobal = await enigma.create({ schema, url }).open();
-    return enigmaGlobal.openDoc(appId);
+    return undefined;
   }
+
+  const generatedURL = await authInstance.generateWebsocketUrl(appId);
+  const enigmaGlobal = await enigma.create({ schema, url: generatedURL }).open();
+  return enigmaGlobal.openDoc(appId);
 }

@@ -13,6 +13,7 @@ import {
   ApplyColumnWidths,
 } from '../types';
 import useAnnounceAndTranslations from './use-announce-and-translations';
+import useWaitForFonts from './virtualized-table/use-wait-for-fonts';
 
 interface UsePaginationTable {
   env: Galaxy;
@@ -57,7 +58,7 @@ const usePaginationTable = ({
   reactRoot,
   applyColumnWidths,
 }: UsePaginationTable) => {
-  const shouldRender = !env.carbon && layout.usePagination !== false;
+  const shouldRender = !env.carbon && (layout.usePagination !== false || !areBasicFeaturesEnabled);
   const { direction, footerContainer } = useOptions() as UseOptions;
   const announce = useAnnounceAndTranslations(rootElement, translator);
   const [pageInfo, setPageInfo] = useState(initialPageInfo);
@@ -68,6 +69,7 @@ const usePaginationTable = ({
 
     return null;
   }, [layout, pageInfo, model, constraints, shouldRender]);
+  const isFontLoaded = useWaitForFonts(theme, layout, shouldRender);
 
   useEffect(() => {
     const isReadyToRender =
@@ -80,6 +82,7 @@ const usePaginationTable = ({
       changeSortOrder &&
       theme &&
       selectionsAPI &&
+      isFontLoaded &&
       embed;
 
     if (!isReadyToRender) return;
@@ -132,6 +135,7 @@ const usePaginationTable = ({
     rect,
     footerContainer,
     areBasicFeaturesEnabled,
+    isFontLoaded,
   ]);
 };
 

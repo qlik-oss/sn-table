@@ -48,7 +48,7 @@ describe('<Table />', () => {
           rect={rect}
           initialDataPages={initialDataPages}
         >
-          <TestableTable pageInfo={pageInfo} rect={rect} />
+          <TestableTable pageInfo={pageInfo} />
         </TestWithProviders>
       )
     );
