@@ -56,5 +56,11 @@ describe('useMeasureText', () => {
       expect(result.current.estimateLineCount('12', 0.5, false)).toBe(3);
       expect(result.current.estimateLineCount('123', 0.5, false)).toBe(3);
     });
+
+    test('should not line break numeric cells', () => {
+      const { result } = renderHook(() => useMeasureText('13px', 'font'));
+
+      expect(result.current.estimateLineCount('123', 1, true)).toBe(1);
+    });
   });
 });

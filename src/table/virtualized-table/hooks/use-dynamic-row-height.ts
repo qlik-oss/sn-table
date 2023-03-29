@@ -1,6 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
-import { isNumericCell } from '../../../handle-data';
 import { Column, PageInfo, Row } from '../../../types';
 import { TableContext, useContextSelector } from '../../context';
 import { COMMON_CELL_STYLING } from '../../styling-defaults';
@@ -171,7 +170,7 @@ const useDynamicRowHeight = ({
       const row = rows[rowIdx] ?? {};
       Object.values(row).forEach((cell) => {
         if (typeof cell === 'object') {
-          setCellSize(cell.qText ?? '', rowIdx, cell.pageColIdx, isNumericCell(cell));
+          setCellSize(cell.qText ?? '', rowIdx, cell.pageColIdx, cell.isNumeric);
         }
       });
     }
