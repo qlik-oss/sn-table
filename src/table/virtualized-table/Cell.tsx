@@ -43,7 +43,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           ...style,
           ...cellStyle,
           display: 'flex',
-          alignItems: 'center',
+          alignItems: 'start',
           borderWidth: '0px',
           borderBottomWidth: cell.isLastRow ? '0px' : `${BORDER_WIDTH}px`,
           borderRightWidth: cell.isLastColumn && !showRightBorder ? '0px' : `${BORDER_WIDTH}px`,
@@ -60,7 +60,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         onMouseLeave={isHoverEnabled ? () => setHoverIndex(-1) : undefined}
         title={!constraints.passive ? cell.qText : undefined}
       >
-        <CellText wordBreak lines={maxLineCount}>
+        <CellText wordBreak={!cell.isNumeric} lines={maxLineCount}>
           {cell.qText}
         </CellText>
       </div>

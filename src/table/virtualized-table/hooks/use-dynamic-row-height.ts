@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
+import { isNumericCell } from '../../../handle-data';
 import { Column, PageInfo, Row } from '../../../types';
 import { TableContext, useContextSelector } from '../../context';
 import { COMMON_CELL_STYLING } from '../../styling-defaults';
@@ -49,7 +50,7 @@ const useDynamicRowHeight = ({
     heights: [],
     totalHeight: 0,
     count: 0,
-    measuredCells: new Map<string, [string, number, number]>(),
+    measuredCells: new Map<string, [string, number, number, boolean]>(),
   });
   const { layout, rect } = useContextSelector(TableContext, (value) => value.baseProps);
   const [estimatedRowHeight, setEstimatedRowHeight] = useState(rowHeight || MIN_BODY_ROW_HEIGHT);
@@ -64,11 +65,11 @@ const useDynamicRowHeight = ({
   );
 
   const getCellSize = useCallback(
-    (text: string, colIdx: number) => {
+    (text: string, colIdx: number, isNumeric: boolean) => {
       const cellWidth = columns
         ? getAdjustedHeadCellWidth(columnWidths[colIdx], columns[colIdx])
         : getAdjustedCellWidth(columnWidths[colIdx]);
-      const estimatedLineCount = Math.min(maxLineCount, estimateLineCount(text.trim(), cellWidth));
+      const estimatedLineCount = Math.min(maxLineCount, estimateLineCount(text.trim(), cellWidth, isNumeric));
       const textHeight = Math.max(1, estimatedLineCount) * lineHeight;
 
       return textHeight + CELL_PADDING_HEIGHT + CELL_BORDER_HEIGHT;
@@ -77,14 +78,14 @@ const useDynamicRowHeight = ({
   );
 
   const setCellSize = useCallback(
-    (text: string, rowIdx: number, colIdx: number, batchStateUpdate = false) => {
+    (text: string, rowIdx: number, colIdx: number, isNumeric = false, batchStateUpdate = false) => {
       const key = `${rowIdx}-${colIdx}`;
       if (rowMeta.current.measuredCells.has(key)) {
         return;
       }
 
-      rowMeta.current.measuredCells.set(key, [text, rowIdx, colIdx]);
-      const height = getCellSize(text, colIdx);
+      rowMeta.current.measuredCells.set(key, [text, rowIdx, colIdx, isNumeric]);
+      const height = getCellSize(text, colIdx, isNumeric);
 
       const alreadyMeasuredRowHeight = rowMeta.current.heights[rowIdx];
       const diff = height - alreadyMeasuredRowHeight;
@@ -128,8 +129,8 @@ const useDynamicRowHeight = ({
     const copyOfMeasuredCells = new Map(rowMeta.current.measuredCells);
     resetRowMeta();
 
-    copyOfMeasuredCells.forEach(([text, rowIdx, colIdx]) => {
-      mutableSetCellSize.current(text, rowIdx, colIdx, true);
+    copyOfMeasuredCells.forEach(([text, rowIdx, colIdx, isNumeric]) => {
+      mutableSetCellSize.current(text, rowIdx, colIdx, isNumeric, true);
     });
 
     setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
@@ -170,7 +171,7 @@ const useDynamicRowHeight = ({
       const row = rows[rowIdx] ?? {};
       Object.values(row).forEach((cell) => {
         if (typeof cell === 'object') {
-          setCellSize(cell.qText ?? '', rowIdx, cell.pageColIdx);
+          setCellSize(cell.qText ?? '', rowIdx, cell.pageColIdx, isNumericCell(cell));
         }
       });
     }

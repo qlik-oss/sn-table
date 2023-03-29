@@ -43,7 +43,7 @@ const useHeights = ({ columns, columnWidths, pageInfo, headerRef, totalsRef, tot
 
   columns.forEach((col, idx) => {
     headerHeight.setCellSize(col.label, 0, idx);
-    totalsHeight.setCellSize(col.totalInfo, 0, idx);
+    totalsHeight.setCellSize(col.totalInfo, 0, idx, !Number.isNaN(+col.totalInfo));
   });
 
   const headerRowHeight = headerHeight.getRowHeight(0) + PADDING_TOP_BOTTOM * 2;

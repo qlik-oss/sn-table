@@ -26,6 +26,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
   const label = columns[index].totalInfo;
   const { totalsTextAlign } = columns[index];
   const isLastColumn = layout.qHyperCube.qSize.qcx - 1 === index;
+  const isNumeric = !Number.isNaN(+label);
 
   return (
     <div
@@ -35,7 +36,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
         ...style,
         ...applicableStyling,
         display: 'flex',
-        alignItems: 'center',
+        alignItems: totals.atTop ? 'end' : 'start',
         borderStyle: 'solid',
         borderLeftWidth: '0px',
         borderRightWidth: isLastColumn && !showRightBorder ? '0px' : '1px',
@@ -48,7 +49,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
         fontWeight: '600',
       }}
     >
-      <CellText wordBreak lines={3}>
+      <CellText wordBreak={!isNumeric} lines={3}>
         {label}
       </CellText>
     </div>

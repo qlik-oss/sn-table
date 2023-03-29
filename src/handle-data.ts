@@ -9,10 +9,14 @@ import {
   TableData,
   Align,
   TextAlign,
+  Cell,
 } from './types';
 
 const MAX_CELLS = 10000;
 const HIDDEN_ERROR_CODE = 7005;
+
+export const isNumericCell = (cell: EngineAPI.INxCell | Cell) =>
+  !!((cell.qNum || cell.qNum === 0) && !Number.isNaN(+cell.qNum));
 
 /**
  * Calculates the highest amount of rows that can be shown given the amount of columns
@@ -88,7 +92,7 @@ export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | 'au
     return textAlign;
   }
 
-  return ((cell.qNum || cell.qNum === 0) && !Number.isNaN(+cell.qNum) ? 'right' : 'left') as Align;
+  return isNumericCell(cell) ? 'right' : 'left';
 };
 
 /**
