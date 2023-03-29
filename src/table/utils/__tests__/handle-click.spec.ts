@@ -142,9 +142,8 @@ describe('handle-click', () => {
     });
 
     describe('handleMouseUp', () => {
-      it('should call selectionDispatch with type SELECT_MOUSE_UP when evt.button is 0 and cell.isSelectable is false', () => {
+      it('should call selectionDispatch with type SELECT_MOUSE_UP when evt.button is 0', () => {
         evt.button = 0;
-        cell.isSelectable = false;
         const { handleMouseUp } = getHandlers();
         handleMouseUp(evt);
 
@@ -161,27 +160,6 @@ describe('handle-click', () => {
         handleMouseUp(evt);
 
         expect(selectionDispatch).toHaveBeenCalledTimes(0);
-      });
-
-      it('should call selectionDispatch with type SELECT when cell.isSelectable is true', () => {
-        evt.button = 0;
-        const { handleMouseUp } = getHandlers();
-        handleMouseUp(evt);
-
-        expect(selectionDispatch).toHaveBeenCalledTimes(1);
-        expect(selectionDispatch).toHaveBeenCalledWith({
-          type: SelectionActions.SELECT,
-          payload: { cell, evt, announce },
-        });
-      });
-
-      it('should call selectionDispatch when cell.isSelectable is false', () => {
-        evt.button = 0;
-        cell.isSelectable = false;
-        const { handleMouseUp } = getHandlers();
-        handleMouseUp(evt);
-
-        expect(selectionDispatch).toHaveBeenCalledTimes(1);
       });
     });
   });

@@ -58,11 +58,7 @@ export const getSelectionMouseHandlers = (
 
   const handleMouseUp = (evt: React.MouseEvent) => {
     if (evt.button === 0) {
-      if (cell.isSelectable) {
-        selectionDispatch({ type: SelectionActions.SELECT, payload: { cell, evt, announce } });
-      } else {
-        selectionDispatch({ type: SelectionActions.SELECT_MOUSE_UP, payload: { cell, evt, announce } });
-      }
+      selectionDispatch({ type: SelectionActions.SELECT_MOUSE_UP, payload: { cell, evt, announce } });
     }
   };
 
