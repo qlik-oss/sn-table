@@ -50,7 +50,7 @@ const useHeights = ({ columns, columnWidths, pageInfo, headerRef, totalsRef, tot
   const totalsRowHeight = totalsHeight.getRowHeight(0);
   const bodyRowHeight = getBodyRowHeight(styling.body);
   const headerAndTotalsHeight =
-    totalsPosition.atTop || totalsPosition.atBottom ? headerRowHeight + bodyRowHeight : headerRowHeight;
+    totalsPosition.atTop || totalsPosition.atBottom ? headerRowHeight + totalsRowHeight : headerRowHeight;
 
   return {
     headerRowHeight,

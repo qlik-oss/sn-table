@@ -10,19 +10,15 @@ import {
 import useMeasureText from '../virtualized-table/hooks/use-measure-text';
 import { TableStyling } from '../types';
 import useOnPropsChange from '../virtualized-table/hooks/use-on-props-change';
-import { BORDER_WIDTH } from '../styling-defaults';
+import {
+  ADJUSTED_HEADER_WIDTH,
+  BORDER_WIDTH,
+  FLEX_BOX_GAP,
+  LOOK_BUTTON_AND_AUTO_MARGIN,
+  TOTALS_PADDING,
+} from '../styling-defaults';
 
 type GetFitToContentWidth = (headLabel: string, totalsLabel: string, glyphCount: number, isLocked: boolean) => number;
-
-const HEADER_CELL_BUTTON_PADDING = 8 * 2;
-const HEADER_CELL_PADDING = 4 * 2;
-const SORT_ICON = 12 + 8 + 2;
-const MENU_BUTTON = 24;
-const FLEX_BOX_GAP = 4;
-const LOOK_BUTTON_AND_AUTO_MARGIN = 20 + 4;
-const ADJUSTED_HEADER_WIDTH =
-  HEADER_CELL_BUTTON_PADDING + HEADER_CELL_PADDING + SORT_ICON + MENU_BUTTON + FLEX_BOX_GAP + BORDER_WIDTH;
-const TOTALS_PADDING = 12 * 2;
 
 /**
  * Calculates column widths in pixels, based on column settings and the table width.
@@ -103,8 +99,9 @@ const useColumnWidths = (
   boolean
 ] => {
   const showTotals = totalsPosition.atBottom || totalsPosition.atTop;
-  const measureHeadLabel = useMeasureText(head.fontSize, head.fontFamily).measureText;
-  const { measureText, estimateWidth } = useMeasureText(body.fontSize, body.fontFamily);
+  const measureHeadLabel = useMeasureText(head.fontSize, head.fontFamily, true).measureText;
+  const measureTotalLabel = useMeasureText(body.fontSize, body.fontFamily, true).measureText;
+  const { estimateWidth } = useMeasureText(body.fontSize, body.fontFamily);
   const getFitToContentWidth = useMemo<GetFitToContentWidth>(
     () => (headLabel, totalsLabel, glyphCount, isLocked) => {
       const HEAD_LABEL_WIDTH = isLocked
@@ -112,11 +109,11 @@ const useColumnWidths = (
         : ADJUSTED_HEADER_WIDTH;
       return Math.max(
         measureHeadLabel(headLabel) + HEAD_LABEL_WIDTH,
-        showTotals ? measureText(totalsLabel) + TOTALS_PADDING + BORDER_WIDTH : 0,
+        showTotals ? measureTotalLabel(totalsLabel) + TOTALS_PADDING + BORDER_WIDTH : 0,
         estimateWidth(glyphCount)
       );
     },
-    [estimateWidth, measureHeadLabel, measureText, showTotals]
+    [estimateWidth, measureHeadLabel, measureTotalLabel, showTotals]
   );
   const [yScrollbarWidth, setYScrollbarWidth] = useState(0);
 

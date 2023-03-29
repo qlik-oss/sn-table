@@ -53,7 +53,7 @@ const useDynamicRowHeight = ({
   });
   const { layout, rect } = useContextSelector(TableContext, (value) => value.baseProps);
   const [estimatedRowHeight, setEstimatedRowHeight] = useState(rowHeight || MIN_BODY_ROW_HEIGHT);
-  const { measureText } = useMeasureText(style.fontSize, style.fontFamily, boldText);
+  const { measureText, estimateLineCount } = useMeasureText(style.fontSize, style.fontFamily, boldText);
   const lineHeight = parseInt(style.fontSize ?? COMMON_CELL_STYLING.fontSize, 10) * LINE_HEIGHT_MULTIPLIER;
 
   // Find a reasonable max line count to avoid issue where the react-window container DOM element gets too big
@@ -65,16 +65,15 @@ const useDynamicRowHeight = ({
 
   const getCellSize = useCallback(
     (text: string, colIdx: number) => {
-      const width = measureText(text.trim());
       const cellWidth = columns
         ? getAdjustedHeadCellWidth(columnWidths[colIdx], columns[colIdx])
         : getAdjustedCellWidth(columnWidths[colIdx]);
-      const estimatedLineCount = Math.min(maxLineCount, Math.ceil(width / cellWidth));
+      const estimatedLineCount = Math.min(maxLineCount, estimateLineCount(text.trim(), cellWidth));
       const textHeight = Math.max(1, estimatedLineCount) * lineHeight;
 
       return textHeight + CELL_PADDING_HEIGHT + CELL_BORDER_HEIGHT;
     },
-    [columnWidths, measureText, lineHeight, maxLineCount, columns]
+    [columnWidths, lineHeight, maxLineCount, columns, estimateLineCount]
   );
 
   const setCellSize = useCallback(

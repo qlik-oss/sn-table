@@ -22,6 +22,7 @@ describe('use-column-widths', () => {
     mockedMeasureText = {
       measureText: jest.fn() as jest.MockedFunction<(text: string) => number>,
       estimateWidth: jest.fn() as jest.MockedFunction<(length: number) => number>,
+      estimateLineCount: jest.fn() as jest.MockedFunction<(text: string, maxWidth: number) => number>,
     };
     mockedUseMeasureText.mockReturnValue(mockedMeasureText);
 
@@ -95,8 +96,8 @@ describe('use-column-widths', () => {
         columns[2].columnWidth.type = ColumnWidthTypes.FIT_TO_CONTENT;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([275, 275, 275]);
-        expect(getTotalWidth(widths)).toBe(275 * 3);
+        expect(widths).toEqual([271, 271, 271]);
+        expect(getTotalWidth(widths)).toBe(271 * 3);
       });
     });
 
@@ -141,7 +142,7 @@ describe('use-column-widths', () => {
         columns[2].columnWidth.type = ColumnWidthTypes.FIT_TO_CONTENT;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([187.5, 187.5, 225]);
+        expect(widths).toEqual([189.5, 189.5, 221]);
         expect(getTotalWidth(widths)).toBe(tableWidth);
       });
     });
