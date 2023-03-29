@@ -91,7 +91,6 @@ describe('keyboard-utils', () => {
     let announce: Announce;
     let totalsPosition: TotalsPosition;
     let isSelectionMode: boolean;
-    let areBasicFeaturesEnabled: boolean;
 
     const runBodyArrowHelper = () =>
       bodyArrowHelper({
@@ -104,7 +103,6 @@ describe('keyboard-utils', () => {
         announce,
         totalsPosition,
         isSelectionMode,
-        areBasicFeaturesEnabled,
       });
 
     beforeEach(() => {
@@ -115,7 +113,6 @@ describe('keyboard-utils', () => {
       announce = jest.fn();
       totalsPosition = { atTop: false, atBottom: true };
       isSelectionMode = false;
-      areBasicFeaturesEnabled = true;
       jest.spyOn(accessibilityUtils, 'announceSelectionState').mockImplementation(() => {});
       jest.spyOn(accessibilityUtils, 'moveFocusWithArrow').mockImplementation(() => ({} as HTMLTableCellElement));
       jest.spyOn(accessibilityUtils, 'updateFocus').mockImplementation(() => {});

@@ -7,13 +7,12 @@ import TestWithProviders from '../../../../../__test__/test-with-providers';
 describe('<TableHeadWrapper />', () => {
   let tableData: TableData;
   let layout: TableLayout;
-  let areBasicFeaturesEnabled: boolean;
 
   const renderTableHead = () =>
     render(
       <TestWithProviders layout={layout} tableData={tableData}>
         <table>
-          <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
+          <TableHeadWrapper />
         </table>
       </TestWithProviders>
     );
@@ -41,7 +40,6 @@ describe('<TableHeadWrapper />', () => {
         qEffectiveInterColumnSortOrder: [0, 1],
       },
     } as TableLayout;
-    areBasicFeaturesEnabled = false;
   });
 
   it('should render table head', () => {

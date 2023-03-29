@@ -92,10 +92,8 @@ describe('handle-click', () => {
     let announce: Announce;
     let onMouseDown: React.MouseEventHandler<HTMLTableCellElement> | undefined;
     let selectionDispatch: SelectionDispatch;
-    let areBasicFeaturesEnabled: boolean;
 
-    const getHandlers = () =>
-      getSelectionMouseHandlers(cell, announce, onMouseDown, selectionDispatch, areBasicFeaturesEnabled);
+    const getHandlers = () => getSelectionMouseHandlers(cell, announce, onMouseDown, selectionDispatch);
 
     beforeEach(() => {
       cell = {
@@ -104,21 +102,9 @@ describe('handle-click', () => {
       announce = jest.fn();
       onMouseDown = jest.fn();
       selectionDispatch = jest.fn();
-      areBasicFeaturesEnabled = true;
     });
 
     afterEach(() => jest.clearAllMocks());
-
-    it('should not call selectionDispatch for down nor over when basic features flag is disabled', () => {
-      areBasicFeaturesEnabled = false;
-      const { handleMouseDown, handleMouseOver } = getHandlers();
-      handleMouseDown(evt);
-      handleMouseOver(evt);
-
-      expect(selectionDispatch).toHaveBeenCalledTimes(0);
-      // Still should call onMouseDown attached at the body level
-      expect(onMouseDown).toHaveBeenCalledTimes(1);
-    });
 
     describe('handleMouseDown', () => {
       it('should call selectionDispatch when isSelectable is true', () => {
@@ -156,7 +142,7 @@ describe('handle-click', () => {
     });
 
     describe('handleMouseUp', () => {
-      it('should call selectionDispatch with type SELECT_MOUSE_UP when evt.button is 0 and flag is true', () => {
+      it('should call selectionDispatch with type SELECT_MOUSE_UP when evt.button is 0', () => {
         evt.button = 0;
         const { handleMouseUp } = getHandlers();
         handleMouseUp(evt);
@@ -170,29 +156,6 @@ describe('handle-click', () => {
 
       it('should not call selectionDispatch when evt.button is not 0', () => {
         evt.buttons = 1;
-        const { handleMouseUp } = getHandlers();
-        handleMouseUp(evt);
-
-        expect(selectionDispatch).toHaveBeenCalledTimes(0);
-      });
-
-      it('should call selectionDispatch with type SELECT when cell.isSelectable is true and flag is false', () => {
-        evt.button = 0;
-        areBasicFeaturesEnabled = false;
-        const { handleMouseUp } = getHandlers();
-        handleMouseUp(evt);
-
-        expect(selectionDispatch).toHaveBeenCalledTimes(1);
-        expect(selectionDispatch).toHaveBeenCalledWith({
-          type: SelectionActions.SELECT,
-          payload: { cell, evt, announce },
-        });
-      });
-
-      it('should not call selectionDispatch when cell.isSelectable is false and flag is false', () => {
-        evt.button = 0;
-        areBasicFeaturesEnabled = false;
-        cell.isSelectable = false;
         const { handleMouseUp } = getHandlers();
         handleMouseUp(evt);
 
