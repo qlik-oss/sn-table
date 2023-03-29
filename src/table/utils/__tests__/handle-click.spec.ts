@@ -1,21 +1,16 @@
 import { MouseEvent } from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { TotalsPosition, Cell, Announce } from '../../../types';
-import {
-  handleMouseDownToFocusBody,
-  // handleMouseDownToFocusHead,
-  // handleMouseDownLabelToFocusHeadCell,
-  getSelectionMouseHandlers,
-} from '../handle-click';
+import { handleMouseDownToFocusBody, handleMouseDownToFocusHead, getSelectionMouseHandlers } from '../handle-click';
 import * as accessibilityUtils from '../accessibility-utils';
 import * as getElementUtils from '../get-element-utils';
 import { SelectionDispatch } from '../../types';
 import { SelectionActions } from '../../constants';
 
 describe('handle-click', () => {
-  const keyboard = {} as unknown as stardust.Keyboard;
   const rootElement = {} as unknown as HTMLDivElement;
   const cellElement = { focus: () => undefined, setAttribute: () => undefined } as unknown as HTMLTableCellElement;
+  let keyboard = {} as unknown as stardust.Keyboard;
   let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   let evt: MouseEvent;
 
@@ -23,7 +18,7 @@ describe('handle-click', () => {
     evt = { preventDefault: jest.fn() } as unknown as MouseEvent;
     setFocusedCellCoord = jest.fn();
     jest.spyOn(accessibilityUtils, 'removeTabAndFocusCell').mockImplementation(() => undefined);
-    jest.spyOn(accessibilityUtils, 'updateFocus');
+    jest.spyOn(accessibilityUtils, 'updateFocus').mockImplementation(() => {});
     jest.spyOn(getElementUtils, 'getCellElement').mockImplementation(() => cellElement);
   });
 
@@ -62,30 +57,39 @@ describe('handle-click', () => {
     });
   });
 
-  // describe('handleMouseDownToFocusHead', () => {
-  //   const columnIndex = 2;
+  describe('handleMouseDownToFocusHead', () => {
+    const newCoord = [0, 2] as [number, number];
 
-  //   it('should call removeTabAndFocusCell with cellCoord [0,2]', () => {
-  //     handleMouseDownToFocusHead(columnIndex, rootElement, setFocusedCellCoord, keyboard);
-  //     expect(accessibilityUtils.removeTabAndFocusCell).toHaveBeenCalledWith(
-  //       [0, 2],
-  //       rootElement,
-  //       setFocusedCellCoord,
-  //       keyboard
-  //     );
-  //   });
-  // });
+    beforeEach(() => {
+      keyboard = {
+        enabled: true,
+        active: false,
+        focus: jest.fn(),
+      };
+    });
 
-  // describe('handleMouseDownLabelToFocusHeadCell', () => {
-  //   const columnIndex = 1;
+    it('should call keyboard.focus when enabled is true and active is false', () => {
+      handleMouseDownToFocusHead(newCoord, rootElement, setFocusedCellCoord, keyboard);
+      expect(keyboard.focus).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(0);
+    });
 
-  //   it('should call updateFocus and getCellElement with head cell at given column', () => {
-  //     handleMouseDownLabelToFocusHeadCell(evt, rootElement, columnIndex);
-  //     expect(evt.preventDefault).toHaveBeenCalled();
-  //     expect(accessibilityUtils.getCellElement).toHaveBeenCalledWith(rootElement, [0, 1]);
-  //     expect(accessibilityUtils.updateFocus).toHaveBeenCalledWith({ focusType: 'focus', cell: cellElement });
-  //   });
-  // });
+    it('should call updateFocus when enabled is true but active is also true', () => {
+      keyboard.active = true;
+
+      handleMouseDownToFocusHead(newCoord, rootElement, setFocusedCellCoord, keyboard);
+      expect(keyboard.focus).toHaveBeenCalledTimes(0);
+      expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call updateFocus when enabled is false', () => {
+      keyboard.enabled = false;
+
+      handleMouseDownToFocusHead(newCoord, rootElement, setFocusedCellCoord, keyboard);
+      expect(keyboard.focus).toHaveBeenCalledTimes(0);
+      expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
+    });
+  });
 
   describe('getSelectionMouseHandlers', () => {
     let cell: Cell;

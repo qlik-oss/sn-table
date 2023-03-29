@@ -220,45 +220,21 @@ describe('<HeadCellContent />', () => {
     expect(screen.queryByTestId('head-cell-lock-icon')).toBeTruthy();
   });
 
-  // it('should call handleHeadKeyDown when keyDown on a header cell', () => {
-  //   jest.spyOn(handleKeyPress, 'handleHeadKeyDown').mockImplementation(() => jest.fn());
+  it('should render the visually hidden text instead of `aria-label` and has correct `scope` properly', () => {
+    const { getByTestId } = renderTableHead();
 
-  //   const { getByText } = renderTableHead();
-  //   fireEvent.keyDown(getByText(tableData.columns[0].label));
+    // check label
+    const tableColumnSortLabel = getByTestId('VHL-for-col-0');
+    expect(tableColumnSortLabel).toHaveTextContent('SNTable.SortLabel.PressSpaceToSort');
+  });
 
-  //   expect(handleKeyPress.handleHeadKeyDown).toHaveBeenCalledTimes(1);
-  // });
+  it('should not render visually hidden text while you are out of table header', () => {
+    const { queryByTestId } = renderTableHead([1, 1]);
 
-  // it('should call handleMouseDownToFocusHead and handleMouseDownLabelToFocusHeadCell when clicking a header cell label', () => {
-  //   jest.spyOn(handleClick, 'handleMouseDownToFocusHead').mockImplementation(() => jest.fn());
-  //   jest.spyOn(handleClick, 'handleMouseDownLabelToFocusHeadCell').mockImplementation(() => jest.fn());
+    const firstColHiddenLabel = queryByTestId('VHL-for-col-0');
+    const secondColHiddenLabel = queryByTestId('VHL-for-col-1');
 
-  //   const { getByText } = renderTableHead();
-  //   fireEvent.mouseDown(getByText(column.label));
-
-  //   expect(handleClick.handleMouseDownToFocusHead).toHaveBeenCalledTimes(1);
-  //   expect(handleClick.handleMouseDownLabelToFocusHeadCell).toHaveBeenCalledTimes(1);
-  // });
-
-  // it('should render the visually hidden text instead of `aria-label` and has correct `scope` properly', () => {
-  //   const { getByText, getByTestId } = renderTableHead();
-
-  //   // check scope
-  //   const tableColumn = getByText(column.label).closest('th');
-  //   expect(tableColumn?.getAttribute('scope')).toBe('col');
-
-  //   // check label
-  //   const tableColumnSortLabel = getByTestId('VHL-for-col-0');
-  //   expect(tableColumnSortLabel).toHaveTextContent('SNTable.SortLabel.PressSpaceToSort');
-  // });
-
-  // it('should not render visually hidden text while you are out of table header', () => {
-  //   const { queryByTestId } = renderTableHead([1, 1]);
-
-  //   const firstColHiddenLabel = queryByTestId('VHL-for-col-0');
-  //   const secondColHiddenLabel = queryByTestId('VHL-for-col-1');
-
-  //   expect(firstColHiddenLabel).toBeNull();
-  //   expect(secondColHiddenLabel).toBeNull();
-  // });
+    expect(firstColHiddenLabel).toBeNull();
+    expect(secondColHiddenLabel).toBeNull();
+  });
 });
