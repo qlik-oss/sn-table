@@ -170,6 +170,8 @@ export const getColumns = (layout: TableLayout) => {
     const { qError } = isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims];
     const isHidden = qError?.qErrorCode === HIDDEN_ERROR_CODE;
 
+    // Every visible dimension needs a column index adjusted for hidden columns.
+    // Since this is only relevant for selections, no need to add an index for measures
     if (isDim) {
       if (isHidden) {
         hiddenDimCounter++;
@@ -189,7 +191,8 @@ export const getColumns = (layout: TableLayout) => {
 /**
  * Fetches the data for the given pageInfo. Returns rows and columns, sorted in the order they will be displayed,
  * and meta data for size etc. The column/row indexes used in engine are stored as col/rowIdx, while the index within
- * the displayed page is stored as pageRow/ColIdx
+ * the displayed page is stored as pageRow/ColIdx.
+ * For dimension cells, there is a selectionColIdx used for calling the selection API
  */
 export default async function manageData(
   model: EngineAPI.IGenericObject,
