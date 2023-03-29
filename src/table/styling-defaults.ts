@@ -57,3 +57,13 @@ export const COMMON_CELL_STYLING = {
     borderRightWidth: '0px',
   },
 };
+
+const HEADER_CELL_BUTTON_PADDING = 8 * 2;
+const HEADER_CELL_PADDING = 4 * 2;
+const SORT_ICON = 12 + 8 - 2;
+const MENU_BUTTON = 24;
+export const FLEX_BOX_GAP = 4;
+export const LOOK_BUTTON_AND_AUTO_MARGIN = 20 + 4;
+export const ADJUSTED_HEADER_WIDTH =
+  HEADER_CELL_BUTTON_PADDING + HEADER_CELL_PADDING + SORT_ICON + MENU_BUTTON + FLEX_BOX_GAP + BORDER_WIDTH;
+export const TOTALS_PADDING = 12 * 2;
