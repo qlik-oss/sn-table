@@ -161,7 +161,7 @@ const getTotalsAggr = (env) => ({
   show: !env?.anything?.sense?.isUnsupportedFeature?.('totals'),
 });
 
-const getColumnResize = () => ({
+const getColumnResize = {
   type: {
     type: 'string',
     component: 'dropdown',
@@ -215,14 +215,14 @@ const getColumnResize = () => ({
           : Math.max(1, Math.min(MAX_COLUMN_PERCENTAGE_WIDTH, data.qDef.columnWidth.percentage));
     },
   },
-});
+};
 
-const getPresentation = () => ({
+const getPresentation = {
   ...columnCommonHidden,
   ...columnExpressionItems,
   ...textAlignItems,
-  ...getColumnResize(),
-});
+  ...getColumnResize,
+};
 
 const dimensionItems = {
   libraryId: {
@@ -299,7 +299,7 @@ const getData = (env) =>
               presentation: {
                 type: 'items',
                 translation: 'properties.presentation',
-                items: getPresentation(),
+                items: getPresentation,
               },
             },
           },
@@ -316,7 +316,7 @@ const getData = (env) =>
               presentation: {
                 type: 'items',
                 translation: 'properties.presentation',
-                items: getPresentation(),
+                items: getPresentation,
               },
             },
           },
@@ -338,7 +338,7 @@ const getData = (env) =>
             grouped: true,
             items: {
               ...dimensionItems,
-              ...getPresentation(),
+              ...getPresentation,
             },
           },
           measures: {
@@ -348,7 +348,7 @@ const getData = (env) =>
             grouped: true,
             items: {
               ...getMeasureItems(env),
-              ...getPresentation(),
+              ...getPresentation,
             },
           },
         },
