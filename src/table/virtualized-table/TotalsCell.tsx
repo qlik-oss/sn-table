@@ -4,6 +4,7 @@ import { useContextSelector, TableContext } from '../context';
 import { GeneratedStyling } from '../types';
 import CellText from '../components/CellText';
 import { Totals } from './types';
+import { isNumeric } from '../utils/is-numeric';
 
 interface TotalsCellProps {
   index: number;
@@ -26,7 +27,6 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
   const label = columns[index].totalInfo;
   const { totalsTextAlign } = columns[index];
   const isLastColumn = layout.qHyperCube.qSize.qcx - 1 === index;
-  const isNumeric = !Number.isNaN(+label);
 
   return (
     <div
@@ -49,7 +49,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
         fontWeight: '600',
       }}
     >
-      <CellText wordBreak={!isNumeric} lines={3}>
+      <CellText wordBreak={!isNumeric(label)} lines={3}>
         {label}
       </CellText>
     </div>

@@ -5,7 +5,7 @@ import { MAX_NBR_LINES_OF_TEXT } from '../constants';
 export interface MeasureTextHook {
   estimateWidth: (length: number) => number;
   measureText: (text: string) => number;
-  estimateLineCount: (text: string, maxWidth: number, isNumeric: boolean) => number;
+  estimateLineCount: (text: string, maxWidth: number, isNumeric?: boolean) => number;
 }
 
 const MAGIC_DEFAULT_CHAR = 'N';
@@ -24,7 +24,7 @@ export default function useMeasureText(
     return {
       measureText: (text) => memoizedMeasureText(text).width,
       estimateWidth: (length: number) => memoizedMeasureText(MAGIC_DEFAULT_CHAR).width * length,
-      estimateLineCount: (text: string, maxWidth: number, isNumeric: boolean) => {
+      estimateLineCount: (text: string, maxWidth: number, isNumeric = false) => {
         let lineCount = 1;
         let startIndex = 0;
 

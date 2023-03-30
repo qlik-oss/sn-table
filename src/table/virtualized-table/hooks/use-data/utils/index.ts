@@ -1,5 +1,6 @@
-import { getBodyCellAlign, isNumericCell } from '../../../../../handle-data';
+import { getBodyCellAlign } from '../../../../../handle-data';
 import { Cell, Column, PageInfo, Row, TableLayout } from '../../../../../types';
+import { isNumericCell } from '../../../../utils/is-numeric';
 import { SetCellSize } from '../../../types';
 
 const createRow = (
