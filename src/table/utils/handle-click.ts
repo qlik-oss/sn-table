@@ -19,11 +19,16 @@ export const handleMouseDownToFocusBody = (
 };
 
 export const handleMouseDownToFocusHead = (
+  evt: React.MouseEvent,
   newCoord: [number, number],
   rootElement: HTMLElement,
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  keyboard: stardust.Keyboard
+  keyboard: stardust.Keyboard,
+  isInteractionEnabled: boolean
 ) => {
+  evt.preventDefault();
+  if (!isInteractionEnabled) return;
+
   setFocusedCellCoord(newCoord);
   if (keyboard.enabled && !keyboard.active) {
     keyboard.focus?.();

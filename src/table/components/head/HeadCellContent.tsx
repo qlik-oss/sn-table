@@ -5,43 +5,20 @@ import { HeadCellContentProps } from '../../types';
 import { FullSortDirection } from '../../constants';
 import getHeadIcons from '../../utils/get-head-icons';
 import HeadCellMenu from './HeadCellMenu';
-import { handleHeadKeyDown } from '../../utils/handle-keyboard';
 import { areTabStopsEnabled } from '../../utils/accessibility-utils';
 import { VisuallyHidden, StyledSortButton, StyledHeadCellContent, StyledHeadCellIconWrapper } from './styles';
-import { handleMouseDownToFocusHead } from '../../utils/handle-click';
 
-function HeadCellContent({ children, column, isActive }: HeadCellContentProps) {
-  const { constraints, keyboard, translator, rootElement, changeSortOrder } = useContextSelector(
-    TableContext,
-    (value) => value.baseProps
-  );
-  const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
+function HeadCellContent({ children, column, isActive, isInteractionEnabled }: HeadCellContentProps) {
+  const { keyboard, translator, changeSortOrder } = useContextSelector(TableContext, (value) => value.baseProps);
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
-  const isInSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI.isModal());
 
   const { startIcon, endIcon, lockIcon } = getHeadIcons(column);
-  const isInteractionEnabled = !constraints.active && !isInSelectionMode;
   const tabIndex = isInteractionEnabled && areTabStopsEnabled(keyboard) ? 0 : -1;
 
   const handleSort = () => isInteractionEnabled && changeSortOrder(column);
-  const handleKeyDown = (evt: React.KeyboardEvent) =>
-    handleHeadKeyDown({
-      evt,
-      rootElement,
-      cellCoord: [0, column.pageColIdx],
-      setFocusedCellCoord,
-      isInteractionEnabled,
-    });
-  const handleMouseDown = () =>
-    handleMouseDownToFocusHead([0, column.pageColIdx], rootElement, setFocusedCellCoord, keyboard);
 
   return (
-    <StyledHeadCellContent
-      onKeyDown={handleKeyDown}
-      onMouseDown={handleMouseDown}
-      isLocked={Boolean(lockIcon)}
-      className={`aligned-${column.headTextAlign}`}
-    >
+    <StyledHeadCellContent isLocked={Boolean(lockIcon)} className={`aligned-${column.headTextAlign}`}>
       {lockIcon && <StyledHeadCellIconWrapper>{lockIcon}</StyledHeadCellIconWrapper>}
 
       <StyledSortButton

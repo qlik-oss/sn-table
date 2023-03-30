@@ -59,6 +59,10 @@ describe('handle-click', () => {
 
   describe('handleMouseDownToFocusHead', () => {
     const newCoord = [0, 2] as [number, number];
+    let isInteractionEnabled: boolean;
+
+    const callHandleMouseDown = () =>
+      handleMouseDownToFocusHead(evt, newCoord, rootElement, setFocusedCellCoord, keyboard, isInteractionEnabled);
 
     beforeEach(() => {
       keyboard = {
@@ -66,10 +70,11 @@ describe('handle-click', () => {
         active: false,
         focus: jest.fn(),
       };
+      isInteractionEnabled = true;
     });
 
     it('should call keyboard.focus when enabled is true and active is false', () => {
-      handleMouseDownToFocusHead(newCoord, rootElement, setFocusedCellCoord, keyboard);
+      callHandleMouseDown();
       expect(keyboard.focus).toHaveBeenCalledTimes(1);
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(0);
     });
@@ -77,7 +82,7 @@ describe('handle-click', () => {
     it('should call updateFocus when enabled is true but active is also true', () => {
       keyboard.active = true;
 
-      handleMouseDownToFocusHead(newCoord, rootElement, setFocusedCellCoord, keyboard);
+      callHandleMouseDown();
       expect(keyboard.focus).toHaveBeenCalledTimes(0);
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
     });
@@ -85,9 +90,17 @@ describe('handle-click', () => {
     it('should call updateFocus when enabled is false', () => {
       keyboard.enabled = false;
 
-      handleMouseDownToFocusHead(newCoord, rootElement, setFocusedCellCoord, keyboard);
+      callHandleMouseDown();
       expect(keyboard.focus).toHaveBeenCalledTimes(0);
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
+    });
+
+    it('should early return when isInteraction', () => {
+      isInteractionEnabled = false;
+
+      callHandleMouseDown();
+      expect(keyboard.focus).toHaveBeenCalledTimes(0);
+      expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(0);
     });
   });
 

@@ -263,6 +263,7 @@ export interface HeadCellContentProps {
   children: JSX.Element;
   column: Column;
   isActive: boolean;
+  isInteractionEnabled: boolean;
 }
 
 export interface HeadCellMenuProps {

@@ -9,13 +9,21 @@ import ColumnAdjuster from '../../../components/head/ColumnAdjuster';
 import CellText from '../../../components/CellText';
 import { BORDER_WIDTH, PADDING } from '../../../styling-defaults';
 import { StyledHeadCell } from './styles';
+import { handleHeadKeyDown } from '../../../utils/handle-keyboard';
+import { handleMouseDownToFocusHead } from '../../../utils/handle-click';
 
 function TableHeadWrapper() {
   const { columns } = useContextSelector(TableContext, (value) => value.tableData);
-  const { layout, styling, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, styling, constraints, rootElement, keyboard } = useContextSelector(
+    TableContext,
+    (value) => value.baseProps
+  );
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
+  const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
+  const isInSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI.isModal());
   const headRowRef = useRef<HTMLTableRowElement>(null);
+  const isInteractionEnabled = !constraints.active && !isInSelectionMode;
 
   useEffect(() => {
     if (headRowRef.current) {
@@ -27,11 +35,29 @@ function TableHeadWrapper() {
     <TableHead>
       <TableRow ref={headRowRef} className="sn-table-row">
         {columns.map((column, columnIndex) => {
-          // The first cell in the head is focusable in sequential keyboard navigation,
-          // when nebula does not handle keyboard navigation
           const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
           const ariaSort = isActive ? FullSortDirection[column.sortDirection] : undefined;
           const isLastColumn = columnIndex === columns.length - 1;
+          const cellCoord = [0, column.pageColIdx] as [number, number];
+
+          const handleKeyDown = (evt: React.KeyboardEvent) =>
+            handleHeadKeyDown({
+              evt,
+              rootElement,
+              cellCoord,
+              setFocusedCellCoord,
+              isInteractionEnabled,
+            });
+
+          const handleMouseDown = (evt: React.MouseEvent) =>
+            handleMouseDownToFocusHead(
+              evt,
+              cellCoord,
+              rootElement,
+              setFocusedCellCoord,
+              keyboard,
+              isInteractionEnabled
+            );
 
           const widthStyle = {
             width:
@@ -42,15 +68,18 @@ function TableHeadWrapper() {
 
           return (
             <StyledHeadCell
-              headerStyle={{ ...styling.head, ...widthStyle }}
+              headerStyle={styling.head}
+              style={widthStyle} // add by style to reduce number of classes created by mui
               key={column.id}
               align={column.headTextAlign}
               className="sn-table-head-cell sn-table-cell"
               aria-sort={ariaSort}
               tabIndex={-1}
               title={!constraints.passive ? column.label : undefined}
+              onKeyDown={handleKeyDown}
+              onMouseDown={handleMouseDown}
             >
-              <HeadCellContent column={column} isActive={isActive}>
+              <HeadCellContent column={column} isActive={isActive} isInteractionEnabled={isInteractionEnabled}>
                 <CellText fontSize={styling.head.fontSize}>{column.label}</CellText>
               </HeadCellContent>
               <ColumnAdjuster column={column} isLastColumn={isLastColumn} />
