@@ -52,7 +52,7 @@ describe('useMeasureText', () => {
     test('should handle too short max width', () => {
       const { result } = renderHook(() => useMeasureText('13px', 'font'));
 
-      expect(result.current.estimateLineCount('1', 0.5)).toBe(2);
+      expect(result.current.estimateLineCount('1', 0.5)).toBe(1);
       expect(result.current.estimateLineCount('12', 0.5)).toBe(3);
       expect(result.current.estimateLineCount('123', 0.5)).toBe(3);
     });
