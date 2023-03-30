@@ -195,6 +195,9 @@ export const handleTotalKeyDown = (
       isCtrlCmd(evt) && copyCellValue(evt);
       break;
     }
+    case KeyCodes.SPACE:
+      evt.preventDefault();
+      break;
     default:
       break;
   }
