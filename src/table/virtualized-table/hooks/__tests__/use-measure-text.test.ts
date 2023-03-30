@@ -41,6 +41,7 @@ describe('useMeasureText', () => {
       const { result } = renderHook(() => useMeasureText('13px', 'font'));
 
       expect(result.current.estimateLineCount('1234567', 2)).toBe(3);
+      expect(result.current.estimateLineCount('123456789ABCDEF', 2)).toBe(3);
     });
 
     test('should handle empty strings', () => {
@@ -55,6 +56,12 @@ describe('useMeasureText', () => {
       expect(result.current.estimateLineCount('1', 0.5)).toBe(1);
       expect(result.current.estimateLineCount('12', 0.5)).toBe(3);
       expect(result.current.estimateLineCount('123', 0.5)).toBe(3);
+    });
+
+    test('should get line count when text is shorten then max width', () => {
+      const { result } = renderHook(() => useMeasureText('13px', 'font'));
+
+      expect(result.current.estimateLineCount('1', 5)).toBe(1);
     });
   });
 });
