@@ -1,7 +1,7 @@
 import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { Announce, Cell, TotalsPosition } from '../../types';
-import { SelectionDispatch } from '../types';
+import { HandleHeadMouseDownProps, SelectionDispatch } from '../types';
 import { FocusTypes, SelectionActions } from '../constants';
 import { removeTabAndFocusCell, updateFocus } from './accessibility-utils';
 import { getCellElement } from './get-element-utils';
@@ -18,22 +18,22 @@ export const handleMouseDownToFocusBody = (
   removeTabAndFocusCell([adjustedRowIdx, pageColIdx], rootElement, setFocusedCellCoord, keyboard);
 };
 
-export const handleMouseDownToFocusHead = (
-  evt: React.MouseEvent,
-  newCoord: [number, number],
-  rootElement: HTMLElement,
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  keyboard: stardust.Keyboard,
-  isInteractionEnabled: boolean
-) => {
+export const handleMouseDownToFocusHead = ({
+  evt,
+  rootElement,
+  cellCoord,
+  setFocusedCellCoord,
+  keyboard,
+  isInteractionEnabled,
+}: HandleHeadMouseDownProps) => {
   evt.preventDefault();
   if (!isInteractionEnabled) return;
 
-  setFocusedCellCoord(newCoord);
+  setFocusedCellCoord(cellCoord);
   if (keyboard.enabled && !keyboard.active) {
     keyboard.focus?.();
   } else {
-    updateFocus({ focusType: FocusTypes.FOCUS_BUTTON, cell: getCellElement(rootElement, newCoord) });
+    updateFocus({ focusType: FocusTypes.FOCUS_BUTTON, cell: getCellElement(rootElement, cellCoord) });
   }
 };
 

@@ -50,14 +50,14 @@ function TableHeadWrapper() {
             });
 
           const handleMouseDown = (evt: React.MouseEvent) =>
-            handleMouseDownToFocusHead(
+            handleMouseDownToFocusHead({
               evt,
-              cellCoord,
               rootElement,
+              cellCoord,
               setFocusedCellCoord,
               keyboard,
-              isInteractionEnabled
-            );
+              isInteractionEnabled,
+            });
 
           const widthStyle = {
             width:

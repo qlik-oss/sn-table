@@ -159,6 +159,15 @@ export interface HandleHeadKeyDownProps {
   isInteractionEnabled: boolean;
 }
 
+export interface HandleHeadMouseDownProps {
+  evt: React.MouseEvent;
+  rootElement: HTMLElement;
+  cellCoord: [number, number];
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  keyboard: stardust.Keyboard;
+  isInteractionEnabled: boolean;
+}
+
 export interface BodyArrowHelperProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;

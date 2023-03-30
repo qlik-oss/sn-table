@@ -58,11 +58,11 @@ describe('handle-click', () => {
   });
 
   describe('handleMouseDownToFocusHead', () => {
-    const newCoord = [0, 2] as [number, number];
+    const cellCoord = [0, 2] as [number, number];
     let isInteractionEnabled: boolean;
 
     const callHandleMouseDown = () =>
-      handleMouseDownToFocusHead(evt, newCoord, rootElement, setFocusedCellCoord, keyboard, isInteractionEnabled);
+      handleMouseDownToFocusHead({ evt, cellCoord, rootElement, setFocusedCellCoord, keyboard, isInteractionEnabled });
 
     beforeEach(() => {
       keyboard = {
