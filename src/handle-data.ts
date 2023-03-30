@@ -52,7 +52,8 @@ export function getTotalPosition(layout: TableLayout) {
  */
 export function getTotalInfo(layout: TableLayout, colIdx: number, pageColIdx: number, numDims: number) {
   if (colIdx >= numDims) return layout.qHyperCube.qGrandTotalRow[colIdx - numDims]?.qText ?? '';
-  return pageColIdx === 0 ? layout.totals.label ?? '' : '';
+  if (pageColIdx === 0) return layout.totals.label ?? '';
+  return '';
 }
 
 /**
