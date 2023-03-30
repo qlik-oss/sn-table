@@ -25,7 +25,7 @@ export function getHighestPossibleRpp(width: number, rowsPerPageOptions: number[
 /**
  * Get the position of the totals
  */
-export function getTotalPosition(layout: TableLayout, areBasicFeaturesEnabled = true) {
+export function getTotalPosition(layout: TableLayout) {
   const [hasDimension, hasMeasure, hasGrandTotal, isTotalModeAuto, position] = [
     layout.qHyperCube.qDimensionInfo.length > 0,
     layout.qHyperCube.qMeasureInfo.length > 0,
@@ -34,11 +34,7 @@ export function getTotalPosition(layout: TableLayout, areBasicFeaturesEnabled = 
     layout.totals.position,
   ];
 
-  if (
-    areBasicFeaturesEnabled &&
-    hasGrandTotal &&
-    ((hasDimension && hasMeasure) || (!isTotalModeAuto && !hasDimension))
-  ) {
+  if (hasGrandTotal && ((hasDimension && hasMeasure) || (!isTotalModeAuto && !hasDimension))) {
     if (isTotalModeAuto || position === 'top') {
       return { atTop: true, atBottom: false };
     }
@@ -174,8 +170,7 @@ export default async function manageData(
   model: EngineAPI.IGenericObject,
   layout: TableLayout,
   pageInfo: PageInfo,
-  setPageInfo: SetPageInfo,
-  areBasicFeaturesEnabled: boolean
+  setPageInfo: SetPageInfo
 ): Promise<TableData | null> {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const totalColumnCount = layout.qHyperCube.qSize.qcx;
@@ -197,7 +192,7 @@ export default async function manageData(
   }
 
   const paginationNeeded = totalRowCount > 10; // TODO: This might not be true if you have > 1000 columns
-  const totalsPosition = getTotalPosition(layout, areBasicFeaturesEnabled);
+  const totalsPosition = getTotalPosition(layout);
   const columns = getColumns(layout);
 
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [

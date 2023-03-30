@@ -3,7 +3,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
 import { useContextSelector, TableContext } from '../../../context';
-import { TableHeadWrapperProps } from '../../../types';
 import { DEFAULT_COLUMN_PIXEL_WIDTH, FullSortDirection } from '../../../constants';
 import HeadCellContent from '../../../components/head/HeadCellContent';
 import ColumnAdjuster from '../../../components/head/ColumnAdjuster';
@@ -11,7 +10,7 @@ import CellText from '../../../components/CellText';
 import { BORDER_WIDTH, PADDING } from '../../../styling-defaults';
 import { StyledHeadCell } from './styles';
 
-function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
+function TableHeadWrapper() {
   const { columns } = useContextSelector(TableContext, (value) => value.tableData);
   const { layout, styling, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
@@ -35,12 +34,10 @@ function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
           const isLastColumn = columnIndex === columns.length - 1;
 
           const widthStyle = {
-            ...(areBasicFeaturesEnabled && {
-              width:
-                (columnWidths[columnIndex] || DEFAULT_COLUMN_PIXEL_WIDTH) -
-                (isLastColumn ? PADDING * 2 : PADDING * 2 + BORDER_WIDTH),
-              zIndex: columns.length - columnIndex,
-            }),
+            width:
+              (columnWidths[columnIndex] || DEFAULT_COLUMN_PIXEL_WIDTH) -
+              (isLastColumn ? PADDING * 2 : PADDING * 2 + BORDER_WIDTH),
+            zIndex: columns.length - columnIndex,
           };
 
           return (
@@ -53,10 +50,10 @@ function TableHeadWrapper({ areBasicFeaturesEnabled }: TableHeadWrapperProps) {
               tabIndex={-1}
               title={!constraints.passive ? column.label : undefined}
             >
-              <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled={areBasicFeaturesEnabled}>
+              <HeadCellContent column={column} isActive={isActive}>
                 <CellText fontSize={styling.head.fontSize}>{column.label}</CellText>
               </HeadCellContent>
-              {areBasicFeaturesEnabled && <ColumnAdjuster column={column} isLastColumn={isLastColumn} />}
+              <ColumnAdjuster column={column} isLastColumn={isLastColumn} />
             </StyledHeadCell>
           );
         })}

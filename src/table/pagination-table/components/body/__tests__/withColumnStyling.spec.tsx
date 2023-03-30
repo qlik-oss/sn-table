@@ -13,7 +13,6 @@ describe('withColumnStyling', () => {
   let styling: CellStyle;
   let column: Column;
   let announce: Announce;
-  let areBasicFeaturesEnabled: boolean;
 
   beforeEach(() => {
     HOC = withColumnStyling.default((props: CellHOCProps) => <TableCell>{props.children}</TableCell>);
@@ -38,13 +37,7 @@ describe('withColumnStyling', () => {
       <table>
         <tbody>
           <tr>
-            <HOC
-              cell={cell}
-              column={column}
-              styling={styling}
-              announce={announce}
-              areBasicFeaturesEnabled={areBasicFeaturesEnabled}
-            >
+            <HOC cell={cell} column={column} styling={styling} announce={announce}>
               someValue
             </HOC>
           </tr>

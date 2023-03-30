@@ -50,7 +50,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         userSelect: 'none',
       }}
     >
-      <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled>
+      <HeadCellContent column={column} isActive={isActive}>
         <CellText wordBreak lines={3}>
           {column.label}
         </CellText>

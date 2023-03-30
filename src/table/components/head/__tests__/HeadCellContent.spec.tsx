@@ -14,7 +14,6 @@ describe('<HeadCellContent />', () => {
   let changeSortOrder: ChangeSortOrder;
   let constraints: stardust.Constraints;
   let selectionsAPI: ExtendedSelectionAPI;
-  let areBasicFeaturesEnabled: boolean;
 
   const renderTableHead = (cellCoordMock?: [number, number]) =>
     render(
@@ -25,7 +24,7 @@ describe('<HeadCellContent />', () => {
         layout={layout}
         changeSortOrder={changeSortOrder}
       >
-        <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled={areBasicFeaturesEnabled}>
+        <HeadCellContent column={column} isActive={isActive}>
           <CellText>{column.label}</CellText>
         </HeadCellContent>
       </TestWithProviders>
@@ -57,7 +56,6 @@ describe('<HeadCellContent />', () => {
     selectionsAPI = {
       isModal: () => false,
     } as ExtendedSelectionAPI;
-    areBasicFeaturesEnabled = false;
     isActive = true;
   });
 
@@ -96,7 +94,6 @@ describe('<HeadCellContent />', () => {
   });
 
   it('should show the menu button when the head cell is focused or hovered', () => {
-    areBasicFeaturesEnabled = true;
     const { baseElement } = renderTableHead();
 
     const labelButton = screen.getByText(column.label);
@@ -123,7 +120,6 @@ describe('<HeadCellContent />', () => {
   });
 
   it('should show the menu button when column is a master dimension', () => {
-    areBasicFeaturesEnabled = true;
     column = {
       ...column,
       qLibraryId: 'someLibId',

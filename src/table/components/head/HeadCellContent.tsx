@@ -10,7 +10,7 @@ import { areTabStopsEnabled } from '../../utils/accessibility-utils';
 import { VisuallyHidden, StyledSortButton, StyledHeadCellContent, StyledHeadCellIconWrapper } from './styles';
 import { handleMouseDownToFocusHead } from '../../utils/handle-click';
 
-function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }: HeadCellContentProps) {
+function HeadCellContent({ children, column, isActive }: HeadCellContentProps) {
   const { constraints, keyboard, translator, rootElement, changeSortOrder } = useContextSelector(
     TableContext,
     (value) => value.baseProps
@@ -31,7 +31,6 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
       cellCoord: [0, column.pageColIdx],
       setFocusedCellCoord,
       isInteractionEnabled,
-      areBasicFeaturesEnabled,
     });
   const handleMouseDown = () =>
     handleMouseDownToFocusHead([0, column.pageColIdx], rootElement, setFocusedCellCoord, keyboard);
@@ -65,7 +64,7 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
         )}
       </StyledSortButton>
 
-      {areBasicFeaturesEnabled && isInteractionEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
+      {isInteractionEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
     </StyledHeadCellContent>
   );
 }

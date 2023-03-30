@@ -25,8 +25,7 @@ export default function useSelector(datum: Cell | string) {
       datum as Cell,
       NOOP_ANNOUNCE,
       onMouseDown,
-      selectionDispatch,
-      true
+      selectionDispatch
     );
 
     return {

@@ -28,7 +28,6 @@ import useCarbonTable from './nebula-hooks/use-carbon-table';
 import useApplyColumnWidths from './nebula-hooks/use-apply-column-widths';
 
 export default function supernova(env: Galaxy) {
-  const areBasicFeaturesEnabled = env.flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES');
   return {
     qae: {
       properties: { initial: properties },
@@ -51,10 +50,9 @@ export default function supernova(env: Galaxy) {
       const changeSortOrder = useSorting(model, layout.qHyperCube);
       const applyColumnWidths = useApplyColumnWidths(model, layout.qHyperCube);
 
-      useContextMenu(areBasicFeaturesEnabled);
+      useContextMenu();
 
       useVirtualizedTable({
-        areBasicFeaturesEnabled,
         app,
         layout,
         model,
@@ -73,7 +71,6 @@ export default function supernova(env: Galaxy) {
 
       usePaginationTable({
         env,
-        areBasicFeaturesEnabled,
         app,
         model,
         rootElement,

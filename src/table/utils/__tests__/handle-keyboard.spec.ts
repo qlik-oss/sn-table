@@ -19,10 +19,7 @@ import { SelectionDispatch } from '../../types';
 import { FocusTypes, KeyCodes } from '../../constants';
 
 describe('handle-keyboard', () => {
-  let areBasicFeaturesEnabled: boolean;
-
   beforeEach(() => {
-    areBasicFeaturesEnabled = true;
     jest.spyOn(handleCopy, 'default').mockImplementation(() => new Promise(() => {}));
   });
 
@@ -174,7 +171,6 @@ describe('handle-keyboard', () => {
         cellCoord: [rowIndex, colIndex],
         isInteractionEnabled,
         setFocusedCellCoord,
-        areBasicFeaturesEnabled,
       });
 
     beforeEach(() => {
@@ -267,14 +263,6 @@ describe('handle-keyboard', () => {
       evt.metaKey = true;
       callHandleHeadKeyDown();
       expect(handleCopy.default).toHaveBeenCalled();
-    });
-
-    it('should not call copyCellValue on Head cell when the flag is disabled', () => {
-      evt.key = KeyCodes.C;
-      evt.metaKey = true;
-      areBasicFeaturesEnabled = false;
-      callHandleHeadKeyDown();
-      expect(handleCopy.default).not.toHaveBeenCalled();
     });
 
     it('should call headTabHelper when the pressed key is tab', () => {
@@ -412,7 +400,6 @@ describe('handle-keyboard', () => {
         keyboard,
         paginationNeeded,
         totalsPosition,
-        areBasicFeaturesEnabled,
       });
 
     beforeEach(() => {
@@ -448,7 +435,6 @@ describe('handle-keyboard', () => {
       announce = jest.fn();
       paginationNeeded = true;
       totalsPosition = { atTop: false, atBottom: true };
-      areBasicFeaturesEnabled = true;
       jest.spyOn(accessibilityUtils, 'focusSelectionToolbar').mockImplementation(() => {});
       jest.spyOn(accessibilityUtils, 'announceSelectionState').mockImplementation(() => {});
       jest.spyOn(handleScroll, 'handleNavigateTop').mockImplementation(() => {});
@@ -549,14 +535,6 @@ describe('handle-keyboard', () => {
       expect(handleCopy.default).toHaveBeenCalled();
     });
 
-    it('should not call copyCellValue when the flag is disabled', () => {
-      evt.key = KeyCodes.C;
-      evt.metaKey = true;
-      areBasicFeaturesEnabled = false;
-      runHandleBodyKeyDown();
-      expect(handleCopy.default).not.toHaveBeenCalled();
-    });
-
     it('when other keys are pressed, should call nothing', () => {
       evt.key = 'A';
       runHandleBodyKeyDown();
@@ -592,7 +570,7 @@ describe('handle-keyboard', () => {
     });
 
     it('when the shift key is pressed, should run selectionDispatch', () => {
-      handleBodyKeyUp(evt, selectionDispatch, areBasicFeaturesEnabled);
+      handleBodyKeyUp(evt, selectionDispatch);
 
       expect(selectionDispatch).toHaveBeenCalledTimes(1);
     });
@@ -600,7 +578,7 @@ describe('handle-keyboard', () => {
     it('when other keys are pressed, should not do anything', () => {
       evt.key = 'Control';
 
-      handleBodyKeyUp(evt, selectionDispatch, areBasicFeaturesEnabled);
+      handleBodyKeyUp(evt, selectionDispatch);
 
       expect(selectionDispatch).not.toHaveBeenCalled();
     });
