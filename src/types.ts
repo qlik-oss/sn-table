@@ -104,6 +104,7 @@ export interface Cell {
   isSelectable: boolean;
   isLastRow: boolean;
   isLastColumn?: boolean;
+  isNumeric?: boolean;
 }
 
 export interface Row {

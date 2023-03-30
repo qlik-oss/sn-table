@@ -1,3 +1,4 @@
+import { isNumericCell } from './table/utils/is-numeric';
 import {
   TableLayout,
   PageInfo,
@@ -84,7 +85,7 @@ export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | 'au
     return textAlign;
   }
 
-  return ((cell.qNum || cell.qNum === 0) && !Number.isNaN(+cell.qNum) ? 'right' : 'left') as Align;
+  return isNumericCell(cell) ? 'right' : 'left';
 };
 
 /**

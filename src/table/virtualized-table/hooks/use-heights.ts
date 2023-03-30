@@ -3,6 +3,7 @@ import { Column, PageInfo, TotalsPosition } from '../../../types';
 import { TableContext, useContextSelector } from '../../context';
 import { COMMON_CELL_STYLING } from '../../styling-defaults';
 import { GeneratedStyling } from '../../types';
+import { isNumeric } from '../../utils/is-numeric';
 import { fontSizeToRowHeight } from '../../utils/styling-utils';
 import { MIN_BODY_ROW_HEIGHT, PADDING_TOP_BOTTOM } from '../constants';
 import useDynamicRowHeight from './use-dynamic-row-height';
@@ -43,7 +44,7 @@ const useHeights = ({ columns, columnWidths, pageInfo, headerRef, totalsRef, tot
 
   columns.forEach((col, idx) => {
     headerHeight.setCellSize(col.label, 0, idx);
-    totalsHeight.setCellSize(col.totalInfo, 0, idx);
+    totalsHeight.setCellSize(col.totalInfo, 0, idx, isNumeric(col.totalInfo));
   });
 
   const headerRowHeight = headerHeight.getRowHeight(0) + PADDING_TOP_BOTTOM * 2;

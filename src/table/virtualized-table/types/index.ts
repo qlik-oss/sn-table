@@ -92,7 +92,7 @@ export interface RowMeta {
   heights: number[];
   totalHeight: number;
   count: number;
-  measuredCells: Map<string, [string, number, number]>;
+  measuredCells: Map<string, [string, number, number, boolean]>;
 }
 
 export interface ItemData {
@@ -103,7 +103,13 @@ export interface ItemData {
   maxLineCount: number;
 }
 
-export type SetCellSize = (text: string, rowIdx: number, colIdx: number) => void;
+export type SetCellSize = (
+  text: string,
+  rowIdx: number,
+  colIdx: number,
+  isNumeric?: boolean,
+  batchStateUpdate?: boolean
+) => void;
 
 export interface GridState {
   overscanColumnStartIndex: number;

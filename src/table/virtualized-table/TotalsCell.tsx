@@ -4,6 +4,7 @@ import { useContextSelector, TableContext } from '../context';
 import { GeneratedStyling } from '../types';
 import CellText from '../components/CellText';
 import { Totals } from './types';
+import { isNumeric } from '../utils/is-numeric';
 
 interface TotalsCellProps {
   index: number;
@@ -35,7 +36,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
         ...style,
         ...applicableStyling,
         display: 'flex',
-        alignItems: 'center',
+        alignItems: totals.atTop ? 'end' : 'start',
         borderStyle: 'solid',
         borderLeftWidth: '0px',
         borderRightWidth: isLastColumn && !showRightBorder ? '0px' : '1px',
@@ -48,7 +49,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
         fontWeight: '600',
       }}
     >
-      <CellText wordBreak lines={3}>
+      <CellText wordBreak={!isNumeric(label)} lines={3}>
         {label}
       </CellText>
     </div>
