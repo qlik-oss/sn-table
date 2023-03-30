@@ -26,8 +26,6 @@ const properties = {
     qMeasures: [],
     /** @type {number[]} */
     qColumnOrder: [],
-    /** @type {number[]} */
-    columnWidths: [],
     qInitialDataFetch: [{ qWidth: 50, qHeight: 100 }],
   },
   /**
@@ -57,7 +55,7 @@ const properties = {
   footnote: '',
   /**
    * totals settings
-   * @type {object}
+   * @type {object=}
    */
   totals: {
     /**
@@ -78,7 +76,7 @@ const properties = {
   },
   /**
    * Use pagination or continuous scroll. If undefined, defaults to using pagination
-   * @type {boolean}
+   * @type {boolean=}
    */
   usePagination: false,
   /**
@@ -141,7 +139,7 @@ const properties = {
  * @typedef {object} ColumnWidth
  * @property {('auto' | 'FitToContent' | 'pixels' | 'percentage')} type - Defines how the column width is set. `auto` calculates the width(s) so the total table width equals the chart width. `fitToContent` calculates a width based on the cells' content. `pixels` uses a specified pixel value. `percentage` sets the column width to specified percentage of the chart width
  * @property {number=} pixels - Is used (and mandatory) if type is `pixels`
- * @property {number=} percentage - Is used (and mandatory) if type is `pixels`
+ * @property {number=} percentage - Is used (and mandatory) if type is `percentage`
  */
 
 /**
