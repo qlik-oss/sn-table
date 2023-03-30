@@ -2,10 +2,18 @@ import { useMemo } from 'react';
 import { memoize } from 'qlik-chart-modules';
 import { MAX_NBR_LINES_OF_TEXT } from '../constants';
 
+type EstimateLineCountProps = {
+  text: string;
+  maxWidth: number;
+  isNumeric?: boolean;
+};
+
+export type EstimateLineCount = ({ text, maxWidth, isNumeric }: EstimateLineCountProps) => number;
+
 export interface MeasureTextHook {
   estimateWidth: (length: number) => number;
   measureText: (text: string) => number;
-  estimateLineCount: (text: string, maxWidth: number, isNumeric?: boolean) => number;
+  estimateLineCount: ({ text, maxWidth, isNumeric }: EstimateLineCountProps) => number;
 }
 
 const MAGIC_DEFAULT_CHAR = 'N';
@@ -54,32 +62,36 @@ export default function useMeasureText(
 
     const fixedMeasureText = (text: string) => +memoizedMeasureText(text).width.toFixed(2);
 
+    const toKey = ({ text, maxWidth, isNumeric }: EstimateLineCountProps) => `${text}-${maxWidth}-${isNumeric}`;
+
+    const memoizedEstimateLineCount = memoize(({ text, maxWidth, isNumeric = false }: EstimateLineCountProps) => {
+      if (isNumeric) {
+        return 1;
+      }
+
+      if (text.length <= 1) {
+        return 1;
+      }
+
+      if (fixedMeasureText(text) <= maxWidth) {
+        return 1;
+      }
+
+      let lineCount = 1;
+      let nextLine = getNextLine(text, maxWidth, fixedMeasureText);
+
+      while (nextLine !== null && lineCount < MAX_NBR_LINES_OF_TEXT) {
+        lineCount += 1;
+        nextLine = getNextLine(nextLine, maxWidth, fixedMeasureText);
+      }
+
+      return lineCount;
+    }, toKey) as EstimateLineCount;
+
     return {
       measureText: (text) => memoizedMeasureText(text).width,
       estimateWidth: (length: number) => memoizedMeasureText(MAGIC_DEFAULT_CHAR).width * length,
-      estimateLineCount: (text: string, maxWidth: number, isNumeric = false) => {
-        if (isNumeric) {
-          return 1;
-        }
-
-        if (text.length <= 1) {
-          return 1;
-        }
-
-        if (fixedMeasureText(text) <= maxWidth) {
-          return 1;
-        }
-
-        let lineCount = 1;
-        let nextLine = getNextLine(text, maxWidth, fixedMeasureText);
-
-        while (nextLine !== null && lineCount < MAX_NBR_LINES_OF_TEXT) {
-          lineCount += 1;
-          nextLine = getNextLine(nextLine, maxWidth, fixedMeasureText);
-        }
-
-        return lineCount;
-      },
+      estimateLineCount: memoizedEstimateLineCount,
     };
   }, [fontSize, fontFamily, boldText]);
 

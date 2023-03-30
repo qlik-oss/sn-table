@@ -68,7 +68,10 @@ const useDynamicRowHeight = ({
       const cellWidth = columns
         ? getAdjustedHeadCellWidth(columnWidths[colIdx], columns[colIdx])
         : getAdjustedCellWidth(columnWidths[colIdx]);
-      const estimatedLineCount = Math.min(maxLineCount, estimateLineCount(text.trim(), cellWidth, isNumeric));
+      const estimatedLineCount = Math.min(
+        maxLineCount,
+        estimateLineCount({ text: text.trim(), maxWidth: cellWidth, isNumeric })
+      );
       const textHeight = Math.max(1, estimatedLineCount) * lineHeight;
 
       return textHeight + CELL_PADDING_HEIGHT + CELL_BORDER_HEIGHT;

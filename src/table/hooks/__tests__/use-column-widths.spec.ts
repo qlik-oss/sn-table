@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react';
 import { Column, TotalsPosition } from '../../../types';
 import { ColumnWidthTypes, MIN_COLUMN_WIDTH } from '../../constants';
 import { TableStyling } from '../../types';
-import useMeasureText, { MeasureTextHook } from '../../virtualized-table/hooks/use-measure-text';
+import useMeasureText, { EstimateLineCount, MeasureTextHook } from '../../virtualized-table/hooks/use-measure-text';
 import useColumnWidths from '../use-column-widths';
 
 jest.mock('../../virtualized-table/hooks/use-measure-text');
@@ -22,7 +22,7 @@ describe('use-column-widths', () => {
     mockedMeasureText = {
       measureText: jest.fn() as jest.MockedFunction<(text: string) => number>,
       estimateWidth: jest.fn() as jest.MockedFunction<(length: number) => number>,
-      estimateLineCount: jest.fn() as jest.MockedFunction<(text: string, maxWidth: number) => number>,
+      estimateLineCount: jest.fn() as jest.MockedFunction<EstimateLineCount>,
     };
     mockedUseMeasureText.mockReturnValue(mockedMeasureText);
 
