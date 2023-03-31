@@ -6,7 +6,7 @@ module.exports = {
   glob: ['./src/qae/object-properties.js'],
   package: path.resolve(__dirname, '../package.json'),
   api: {
-    stability: 'experimental',
+    stability: 'stable',
     properties: {
       'x-qlik-visibility': 'public',
     },
