@@ -13,7 +13,6 @@ import {
   ApplyColumnWidths,
 } from '../types';
 import useAnnounceAndTranslations from './use-announce-and-translations';
-import useWaitForFonts from './virtualized-table/use-wait-for-fonts';
 
 interface UsePaginationTable {
   env: Galaxy;
@@ -31,6 +30,7 @@ interface UsePaginationTable {
   embed?: stardust.Embed;
   reactRoot: Root;
   applyColumnWidths: ApplyColumnWidths;
+  isFontLoaded: boolean;
 }
 
 const initialPageInfo = {
@@ -55,6 +55,7 @@ const usePaginationTable = ({
   embed,
   reactRoot,
   applyColumnWidths,
+  isFontLoaded,
 }: UsePaginationTable) => {
   const shouldRender = !env.carbon && layout.usePagination !== false;
   const { direction, footerContainer } = useOptions() as UseOptions;
@@ -67,7 +68,6 @@ const usePaginationTable = ({
 
     return null;
   }, [layout, pageInfo, model, constraints, shouldRender]);
-  const isFontLoaded = useWaitForFonts(theme, layout, shouldRender);
 
   useEffect(() => {
     const isReadyToRender =
