@@ -18,7 +18,6 @@ const Totals = (props: TotalsProps) => {
       layout="horizontal"
       style={{
         overflow: 'hidden',
-        background: styling.totals.background,
         boxSizing: 'border-box',
       }}
       itemCount={layout.qHyperCube.qSize.qcx}
