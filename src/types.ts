@@ -30,7 +30,6 @@ export interface QHyperCubeDef extends Omit<EngineAPI.IHyperCubeDef, 'qDimension
   qDimensions: DimensionProperties[];
   qMeasures: MeasureProperties;
   qColumnOrder: number[];
-  columnWidths: number[];
 }
 
 // Layout
