@@ -12,7 +12,6 @@ import {
 } from '../types';
 import useInitialDataPages from './virtualized-table/use-initial-data-pages';
 import usePageInfo from './virtualized-table/use-page-info';
-import useWaitForFonts from './virtualized-table/use-wait-for-fonts';
 
 interface UseVirtualizedTable {
   app: EngineAPI.IApp | undefined;
@@ -29,6 +28,7 @@ interface UseVirtualizedTable {
   changeSortOrder: ChangeSortOrder | undefined;
   reactRoot: Root;
   applyColumnWidths: ApplyColumnWidths;
+  isFontLoaded: boolean;
 }
 
 const useVirtualizedTable = ({
@@ -46,12 +46,12 @@ const useVirtualizedTable = ({
   embed,
   reactRoot,
   applyColumnWidths,
+  isFontLoaded,
 }: UseVirtualizedTable) => {
   const shouldRender = layout.usePagination === false;
   const tableData = useMemo(() => getVirtualScrollTableData(layout, constraints), [layout, constraints]);
   const { pageInfo, setPage } = usePageInfo(layout, shouldRender);
   const { initialDataPages, isLoading } = useInitialDataPages({ model, layout, page: pageInfo.page, shouldRender });
-  const isFontLoaded = useWaitForFonts(theme, layout, shouldRender);
 
   useEffect(() => {
     if (!shouldRender || !model || !changeSortOrder || !initialDataPages || isLoading || !isFontLoaded) return;
