@@ -13,7 +13,7 @@ export type EstimateLineCount = ({ text, maxWidth, isNumeric }: EstimateLineCoun
 export interface MeasureTextHook {
   estimateWidth: (length: number) => number;
   measureText: (text: string) => number;
-  estimateLineCount: ({ text, maxWidth, isNumeric }: EstimateLineCountProps) => number;
+  estimateLineCount: EstimateLineCount;
 }
 
 const MAGIC_DEFAULT_CHAR = 'N';
