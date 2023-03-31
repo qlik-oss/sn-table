@@ -370,6 +370,12 @@ describe('handle-keyboard', () => {
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(keyboardUtils.bodyTabHelper).toHaveBeenCalledTimes(1);
     });
+
+    it('should call preventDefault when the pressed key is Space', () => {
+      evt.key = KeyCodes.SPACE;
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('handleBodyKeyDown', () => {
