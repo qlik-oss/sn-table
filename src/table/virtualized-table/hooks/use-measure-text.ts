@@ -22,7 +22,7 @@ function getNextLine(text: string, maxWidth: number, fixedMeasureText: (text: st
   let left = 0;
   let right = text.length;
 
-  if (fixedMeasureText(text) < maxWidth) {
+  if (fixedMeasureText(text) <= maxWidth) {
     return null;
   }
 
