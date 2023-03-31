@@ -67,3 +67,4 @@ To get the necessary Layout and HyperCubeData for a fixture file, you can find t
 | Scenario 12 | 1          | 1        | Font size and color for header and body. Scroll to the bottom of the table                                                    |
 | Scenario 13 | 1          | 1        | Font size and color for header and body. Show totals at the bottom                                                            |
 | Scenario 14 | 1          | 0        | 1M rows of data                                                                                                               |
+| Scenario 15 | 3          | 1        | Line breaks                                                                                                                   |
