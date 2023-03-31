@@ -22,6 +22,10 @@ function getNextLine(text: string, maxWidth: number, fixedMeasureText: (text: st
   let left = 0;
   let right = text.length;
 
+  if (fixedMeasureText(text) < maxWidth) {
+    return null;
+  }
+
   while (left <= right) {
     const m = Math.floor((left + right) / 2);
     const chunk = text.slice(0, m);
