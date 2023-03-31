@@ -22,6 +22,8 @@ export default function CellText({ children, fontSize = '', wordBreak = false, l
   return wordBreak ? (
     <>{Text}</>
   ) : (
-    <StyledCellTextWrapper maxHeight={size * LINE_HEIGHT * lines}>{Text}</StyledCellTextWrapper>
+    <StyledCellTextWrapper minHeight={size * LINE_HEIGHT} maxHeight={size * LINE_HEIGHT * lines}>
+      {Text}
+    </StyledCellTextWrapper>
   );
 }
