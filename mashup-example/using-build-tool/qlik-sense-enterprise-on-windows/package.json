@@ -24,7 +24,7 @@
   "devDependencies": {
     "@types/enigma.js": "2.2.2",
     "@types/qlik-engineapi": "12.67.12",
-    "typescript": "5.0.2",
+    "typescript": "5.0.3",
     "vite": "4.2.1"
   }
 }
