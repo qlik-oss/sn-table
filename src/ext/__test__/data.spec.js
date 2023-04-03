@@ -1,4 +1,5 @@
 import { indexAdded, indexRemoved, min, getDescription } from '../data';
+import ext from '..';
 
 describe('data', () => {
   const mockFlags = {
@@ -65,6 +66,57 @@ describe('data', () => {
     it('should call translator', () => {
       getDescription(env);
       expect(env.translator.get).toHaveBeenCalledWith('Visualizations.Descriptions.Column');
+    });
+  });
+
+  describe('data', () => {
+    const { data } = ext(env);
+    let hcHandler;
+
+    beforeEach(() => {
+      hcHandler = {
+        hcProperties: {
+          qColumnOrder: [0, 1],
+        },
+        getDimensions: () => [{}],
+        getMeasures: () => [{}],
+      };
+    });
+
+    describe('measure', () => {
+      const { measures } = data;
+
+      describe('add', () => {
+        it('should update qColumnOrder', () => {
+          measures.add(null, null, hcHandler);
+          expect(hcHandler.hcProperties.qColumnOrder).toEqual([0, 2, 1]);
+        });
+      });
+
+      describe('remove', () => {
+        it('should update qColumnOrder', () => {
+          measures.remove(null, null, hcHandler, 1);
+          expect(hcHandler.hcProperties.qColumnOrder).toEqual([0]);
+        });
+      });
+    });
+
+    describe('dimensions', () => {
+      const { dimensions } = data;
+
+      describe('add', () => {
+        it('should update qColumnOrder', () => {
+          dimensions.add(null, null, hcHandler);
+          expect(hcHandler.hcProperties.qColumnOrder).toEqual([1, 2, 0]);
+        });
+      });
+
+      describe('remove', () => {
+        it('should update qColumnOrder', () => {
+          dimensions.remove(null, null, hcHandler, 1);
+          expect(hcHandler.hcProperties.qColumnOrder).toEqual([0]);
+        });
+      });
     });
   });
 });
