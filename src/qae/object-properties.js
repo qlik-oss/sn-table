@@ -26,6 +26,7 @@ const properties = {
     qMeasures: [],
     /** @type {number[]} */
     qColumnOrder: [],
+    columnWidths: [],
     qInitialDataFetch: [{ qWidth: 50, qHeight: 100 }],
   },
   /**
