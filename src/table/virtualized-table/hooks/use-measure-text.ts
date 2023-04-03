@@ -22,6 +22,10 @@ function getNextLine(text: string, maxWidth: number, fixedMeasureText: (text: st
   let left = 0;
   let right = text.length;
 
+  if (text.length <= 1) {
+    return null;
+  }
+
   if (fixedMeasureText(text) <= maxWidth) {
     return null;
   }
@@ -73,21 +77,13 @@ export default function useMeasureText(
         return 1;
       }
 
-      if (text.length <= 1) {
-        return 1;
-      }
+      let lineCount = 0;
+      let nextLine: string | null = text;
 
-      if (fixedMeasureText(text) <= maxWidth) {
-        return 1;
-      }
-
-      let lineCount = 1;
-      let nextLine = getNextLine(text, maxWidth, fixedMeasureText);
-
-      while (nextLine !== null && lineCount < MAX_NBR_LINES_OF_TEXT) {
+      do {
         lineCount += 1;
         nextLine = getNextLine(nextLine, maxWidth, fixedMeasureText);
-      }
+      } while (nextLine !== null && lineCount < MAX_NBR_LINES_OF_TEXT);
 
       return lineCount;
     }, toKey) as EstimateLineCount;
