@@ -55,6 +55,7 @@ export interface HyperCube extends Omit<EngineAPI.IHyperCube, 'qDimensionInfo' |
   qColumnOrder: number[];
   qDimensionInfo: ExtendedNxDimensionInfo[];
   qMeasureInfo: ExtendedNxMeasureInfo[];
+  columnWidths?: number[];
 }
 
 export interface PaletteColor {

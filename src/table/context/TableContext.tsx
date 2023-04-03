@@ -45,6 +45,7 @@ export const TableContextProvider = ({
   const [hoverIndex, setHoverIndex] = useState(-1);
   const styling = useTableStyling(layout, theme, tableData, rootElement);
   const [columnWidths, setColumnWidths, setYScrollbarWidth, showRightBorder] = useColumnWidths(
+    layout.qHyperCube.columnWidths,
     tableData.columns,
     tableData.totalsPosition,
     rect.width,

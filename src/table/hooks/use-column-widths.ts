@@ -26,7 +26,12 @@ type GetFitToContentWidth = (headLabel: string, totalsLabel: string, glyphCount:
  * Then the remaining width is divided equally between the auto columns, if there are any
  * The widths are sorted in the order they will be displayed
  */
-export const getColumnWidths = (columns: Column[], tableWidth: number, getFitToContentWidth: GetFitToContentWidth) => {
+export const getColumnWidths = (
+  qHyperCubeColumnWidths: number[] | undefined,
+  columns: Column[],
+  tableWidth: number,
+  getFitToContentWidth: GetFitToContentWidth
+) => {
   if (!columns?.length || tableWidth === 0) return [];
 
   const columnWidths: number[] = [];
@@ -78,6 +83,9 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getFitToC
     const autoWidth = sumAutoWidths / autoColumnIndexes.length;
     autoColumnIndexes.forEach((autoIdx) => {
       columnWidths[autoIdx] = Math.max(MIN_COLUMN_WIDTH, autoWidth);
+      if (Array.isArray(qHyperCubeColumnWidths) && qHyperCubeColumnWidths[autoIdx] !== -1) {
+        columnWidths[autoIdx] = qHyperCubeColumnWidths[autoIdx];
+      }
     });
   }
 
@@ -88,6 +96,7 @@ const isBodyWidthLessThenContainerWidth = (columnWidths: number[], yScrollbarWid
   columnWidths && columnWidths.length > 0 ? columnWidths.reduce((a, b) => a + b) + yScrollbarWidth < tableWidth : false;
 
 const useColumnWidths = (
+  qHyperCubeColumnWidths: number[] | undefined,
   columns: Column[],
   totalsPosition: TotalsPosition,
   tableWidth: number,
@@ -117,10 +126,14 @@ const useColumnWidths = (
   );
   const [yScrollbarWidth, setYScrollbarWidth] = useState(0);
 
-  const [columnWidths, setColumnWidths] = useState(() => getColumnWidths(columns, tableWidth, getFitToContentWidth));
+  const [columnWidths, setColumnWidths] = useState(() =>
+    getColumnWidths(qHyperCubeColumnWidths, columns, tableWidth, getFitToContentWidth)
+  );
 
   useOnPropsChange(() => {
-    setColumnWidths(getColumnWidths(columns, tableWidth - yScrollbarWidth, getFitToContentWidth));
+    setColumnWidths(
+      getColumnWidths(qHyperCubeColumnWidths, columns, tableWidth - yScrollbarWidth, getFitToContentWidth)
+    );
   }, [columns, tableWidth, yScrollbarWidth, getFitToContentWidth]);
 
   const showRightBorder = useMemo(
