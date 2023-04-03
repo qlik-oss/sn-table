@@ -1,14 +1,12 @@
 import { usePromise } from '@nebula.js/stardust';
-import { getBodyStyle, getHeaderStyle } from '../../table/utils/styling-utils';
-import { ExtendedTheme, TableLayout } from '../../types';
+import { getBodyStyle, getHeaderStyle } from '../table/utils/styling-utils';
+import { ExtendedTheme, TableLayout } from '../types';
 
-const useWaitForFonts = (theme: ExtendedTheme, layout: TableLayout, shouldRender: boolean) => {
+const useWaitForFonts = (theme: ExtendedTheme, layout: TableLayout) => {
   const { fontSize: headerFontSize, fontFamily: headerFontFamily } = getHeaderStyle(layout, theme, false);
   const { fontSize, fontFamily } = getBodyStyle(layout, theme);
 
   const [isFontLoaded, error] = usePromise(async () => {
-    if (!shouldRender) return false;
-
     await document.fonts.load(`600 ${headerFontSize} ${headerFontFamily}`);
     await document.fonts.load(`${fontSize} ${fontFamily}`);
 

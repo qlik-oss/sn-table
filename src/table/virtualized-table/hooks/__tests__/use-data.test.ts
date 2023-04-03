@@ -127,6 +127,7 @@ describe('useData', () => {
           pageRowIdx: rowIdx,
           qText: '0',
           rowIdx,
+          isNumeric: false,
         } as Cell,
         'col-1': {
           colIdx: 1,
@@ -137,6 +138,7 @@ describe('useData', () => {
           pageRowIdx: rowIdx,
           qText: '1',
           rowIdx,
+          isNumeric: false,
         } as Cell,
         key: `row-${rowIdx}`,
       };
@@ -165,6 +167,7 @@ describe('useData', () => {
           pageRowIdx: rowIdx,
           qText: '0',
           rowIdx,
+          isNumeric: false,
         } as Cell,
         'col-1': {
           colIdx: 1,
@@ -175,6 +178,7 @@ describe('useData', () => {
           pageRowIdx: rowIdx,
           qText: '1',
           rowIdx,
+          isNumeric: false,
         } as Cell,
         key: `row-${rowIdx}`,
       };
@@ -217,6 +221,7 @@ describe('useData', () => {
         pageRowIdx: 0,
         qText: '0',
         rowIdx: 0,
+        isNumeric: false,
       } as Cell;
 
       await waitFor(() => expect(result.current.rowsInPage[0][`col-${colIdx}`]).toEqual(expectedCell));
@@ -243,6 +248,7 @@ describe('useData', () => {
         pageRowIdx: 0,
         qText: '0',
         rowIdx: 0,
+        isNumeric: false,
       } as Cell;
 
       await waitFor(() => expect(result.current.rowsInPage[0][`col-${colIdx}`]).toEqual(expectedCell));
@@ -354,6 +360,7 @@ describe('useData', () => {
         pageRowIdx: 0,
         qText: '0',
         rowIdx: 500,
+        isNumeric: false,
       } as Cell;
 
       await waitFor(() => expect(result.current.rowsInPage[0]['col-0']).toEqual(expectedCell));

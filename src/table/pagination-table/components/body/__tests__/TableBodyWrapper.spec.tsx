@@ -18,18 +18,12 @@ describe('<TableBodyWrapper />', () => {
   let tableData: TableData;
   let tableFirstRow: Cell;
   let tableSecondRow: Cell;
-  let areBasicFeaturesEnabled: boolean;
 
   const renderTableBody = () =>
     render(
       <TestWithProviders tableData={tableData}>
         <table>
-          <TableBodyWrapper
-            setShouldRefocus={setShouldRefocus}
-            tableWrapperRef={tableWrapperRef}
-            announce={announce}
-            areBasicFeaturesEnabled={areBasicFeaturesEnabled}
-          />
+          <TableBodyWrapper setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} announce={announce} />
         </table>
       </TestWithProviders>
     );
@@ -39,12 +33,10 @@ describe('<TableBodyWrapper />', () => {
       model,
       generateLayout(1, 1, 2, [], [{ qText: '100' }]),
       { top: 0, height: 100 } as unknown as PageInfo,
-      () => undefined,
-      true
+      () => undefined
     )) as TableData;
     tableFirstRow = tableData.rows[0]['col-0'] as Cell;
     tableSecondRow = tableData.rows[0]['col-1'] as Cell;
-    areBasicFeaturesEnabled = true;
     jest.spyOn(getCellRenderer, 'default');
   });
 
@@ -81,13 +73,13 @@ describe('<TableBodyWrapper />', () => {
     expect(handleKeyPress.handleBodyKeyDown).toHaveBeenCalledTimes(1);
   });
 
-  it('should call handleClickToFocusBody on mouseDown', () => {
-    jest.spyOn(handleClick, 'handleClickToFocusBody').mockImplementation();
+  it('should call handleMouseDownToFocusBody on mouseDown', () => {
+    jest.spyOn(handleClick, 'handleMouseDownToFocusBody').mockImplementation();
 
     const { getByText } = renderTableBody();
     fireEvent.mouseDown(getByText(tableFirstRow.qText as string));
 
-    expect(handleClick.handleClickToFocusBody).toHaveBeenCalledTimes(1);
+    expect(handleClick.handleMouseDownToFocusBody).toHaveBeenCalledTimes(1);
   });
 
   it('should call handleBodyKeyUp on key up', () => {

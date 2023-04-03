@@ -77,7 +77,6 @@ describe('data', () => {
       hcHandler = {
         hcProperties: {
           qColumnOrder: [0, 1],
-          columnWidths: [1, 1],
         },
         getDimensions: () => [{}],
         getMeasures: () => [{}],
@@ -88,16 +87,16 @@ describe('data', () => {
       const { measures } = data;
 
       describe('add', () => {
-        it('should update columnWidths', () => {
+        it('should update qColumnOrder', () => {
           measures.add(null, null, hcHandler);
-          expect(hcHandler.hcProperties.columnWidths).toEqual([1, 1, -1]);
+          expect(hcHandler.hcProperties.qColumnOrder).toEqual([0, 2, 1]);
         });
       });
 
       describe('remove', () => {
-        it('should update columnWidths', () => {
+        it('should update qColumnOrder', () => {
           measures.remove(null, null, hcHandler, 1);
-          expect(hcHandler.hcProperties.columnWidths).toEqual([1]);
+          expect(hcHandler.hcProperties.qColumnOrder).toEqual([0]);
         });
       });
     });
@@ -106,16 +105,16 @@ describe('data', () => {
       const { dimensions } = data;
 
       describe('add', () => {
-        it('should update columnWidths', () => {
+        it('should update qColumnOrder', () => {
           dimensions.add(null, null, hcHandler);
-          expect(hcHandler.hcProperties.columnWidths).toEqual([-1, 1, 1]);
+          expect(hcHandler.hcProperties.qColumnOrder).toEqual([1, 2, 0]);
         });
       });
 
       describe('remove', () => {
-        it('should update columnWidths', () => {
+        it('should update qColumnOrder', () => {
           dimensions.remove(null, null, hcHandler, 1);
-          expect(hcHandler.hcProperties.columnWidths).toEqual([1]);
+          expect(hcHandler.hcProperties.qColumnOrder).toEqual([0]);
         });
       });
     });

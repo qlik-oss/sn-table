@@ -15,7 +15,6 @@ describe('withSelections', () => {
   let styling: CellStyle;
   let announce: Announce;
   let column: Column;
-  let areBasicFeaturesEnabled: boolean;
 
   const renderWithSelections = () =>
     render(
@@ -23,13 +22,7 @@ describe('withSelections', () => {
         <table>
           <tbody>
             <tr>
-              <HOC
-                cell={cell}
-                styling={styling}
-                announce={announce}
-                column={column}
-                areBasicFeaturesEnabled={areBasicFeaturesEnabled}
-              >
+              <HOC cell={cell} styling={styling} announce={announce} column={column}>
                 {value}
               </HOC>
             </tr>
@@ -45,7 +38,6 @@ describe('withSelections', () => {
     } as unknown as Cell;
     styling = {} as unknown as CellStyle;
     announce = () => undefined as unknown as Announce;
-    areBasicFeaturesEnabled = true;
   });
 
   afterEach(() => jest.clearAllMocks());

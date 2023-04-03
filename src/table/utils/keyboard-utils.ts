@@ -38,15 +38,9 @@ export const shouldBubbleEarly = (evt: React.KeyboardEvent, isSelectionMode = fa
  * Checks if should select with shift + arrow.
  * When at the first/last row of the cell, shift + arrow up/down should not select anything
  */
-const shouldSelectMultiValues = (
-  areBasicFeaturesEnabled: boolean,
-  isSelectionsEnabled: boolean,
-  evt: React.KeyboardEvent,
-  cell: Cell
-) =>
+const shouldSelectMultiValues = (isSelectionsEnabled: boolean, evt: React.KeyboardEvent, cell: Cell) =>
   evt.shiftKey &&
   ((evt.key === KeyCodes.UP && cell.pageRowIdx !== 0) || (evt.key === KeyCodes.DOWN && !cell.isLastRow)) &&
-  areBasicFeaturesEnabled &&
   isSelectionsEnabled &&
   cell.isSelectable;
 
@@ -75,7 +69,6 @@ export const bodyArrowHelper = ({
   announce,
   totalsPosition,
   isSelectionMode,
-  areBasicFeaturesEnabled,
 }: BodyArrowHelperProps) => {
   const firstBodyRowIdx = totalsPosition.atTop ? 2 : 1;
   const cellCoord: [number, number] = [cell.pageRowIdx + firstBodyRowIdx, cell.pageColIdx];
@@ -98,7 +91,7 @@ export const bodyArrowHelper = ({
     handleNavigateTop([cell.pageRowIdx, cell.pageColIdx], rootElement);
   }
   // Shift + up/down arrow keys: select multiple values
-  if (shouldSelectMultiValues(areBasicFeaturesEnabled, isSelectionsEnabled, evt, cell)) {
+  if (shouldSelectMultiValues(isSelectionsEnabled, evt, cell)) {
     selectionDispatch({
       type: SelectionActions.SELECT_MULTI_ADD,
       payload: { cell, evt, announce },

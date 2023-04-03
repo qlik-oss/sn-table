@@ -12,9 +12,7 @@ module.exports = {
     replacementStrings,
   },
   serve: {
-    flags: {
-      PS_18291_SN_TABLE_BASIC_FEATURES: true,
-    },
+    flags: {},
     keyboardNavigation: false,
     themes: [
       {

@@ -26,9 +26,9 @@ import useVirtualizedTable from './nebula-hooks/use-virtualized-table';
 import usePaginationTable from './nebula-hooks/use-pagination-table';
 import useCarbonTable from './nebula-hooks/use-carbon-table';
 import useApplyColumnWidths from './nebula-hooks/use-apply-column-widths';
+import useWaitForFonts from './nebula-hooks/use-wait-for-fonts';
 
 export default function supernova(env: Galaxy) {
-  const areBasicFeaturesEnabled = env.flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES');
   return {
     qae: {
       properties: { initial: properties },
@@ -50,11 +50,11 @@ export default function supernova(env: Galaxy) {
       const embed = useEmbed();
       const changeSortOrder = useSorting(model, layout.qHyperCube);
       const applyColumnWidths = useApplyColumnWidths(model, layout.qHyperCube);
+      const isFontLoaded = useWaitForFonts(theme, layout);
 
-      useContextMenu(areBasicFeaturesEnabled);
+      useContextMenu();
 
       useVirtualizedTable({
-        areBasicFeaturesEnabled,
         app,
         layout,
         model,
@@ -69,11 +69,11 @@ export default function supernova(env: Galaxy) {
         embed,
         reactRoot,
         applyColumnWidths,
+        isFontLoaded,
       });
 
       usePaginationTable({
         env,
-        areBasicFeaturesEnabled,
         app,
         model,
         rootElement,
@@ -88,6 +88,7 @@ export default function supernova(env: Galaxy) {
         embed,
         reactRoot,
         applyColumnWidths,
+        isFontLoaded,
       });
 
       useCarbonTable({

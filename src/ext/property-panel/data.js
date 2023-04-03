@@ -158,75 +158,71 @@ const getTotalsAggr = (env) => ({
       },
     },
   },
-  show:
-    env.flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES') && !env?.anything?.sense?.isUnsupportedFeature?.('totals'),
+  show: !env?.anything?.sense?.isUnsupportedFeature?.('totals'),
 });
 
-const getColumnResize = (env) =>
-  env.flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES')
-    ? {
-        type: {
-          type: 'string',
-          component: 'dropdown',
-          ref: 'qDef.columnWidth.type',
-          translation: 'Object.Table.Column.Width',
-          options: [
-            {
-              value: ColumnWidthTypes.AUTO,
-              translation: 'Common.Auto',
-            },
-            {
-              value: ColumnWidthTypes.FIT_TO_CONTENT,
-              translation: 'Object.Table.Column.FitToContent',
-            },
-            {
-              value: ColumnWidthTypes.PIXELS,
-              translation: 'Object.Table.Column.Pixels',
-            },
-            {
-              value: ColumnWidthTypes.PERCENTAGE,
-              translation: 'Object.Table.Column.Percentage',
-            },
-          ],
-          defaultValue: ColumnWidthTypes.AUTO,
-        },
-        sizePixels: {
-          ref: 'qDef.columnWidth.pixels',
-          translation: 'Object.Table.Column.Pixels',
-          type: 'number',
-          expression: 'optional',
-          defaultValue: 200,
-          show: (data) => data.qDef.columnWidth?.type === ColumnWidthTypes.PIXELS,
-          change(data) {
-            data.qDef.columnWidth.pixels =
-              data.qDef.columnWidth.pixels === undefined
-                ? data.qDef.columnWidth.pixels
-                : Math.max(1, Math.min(MAX_COLUMN_WIDTH, data.qDef.columnWidth.pixels));
-          },
-        },
-        sizePercentage: {
-          ref: 'qDef.columnWidth.percentage',
-          translation: 'Object.Table.Column.Percentage',
-          type: 'number',
-          expression: 'optional',
-          defaultValue: 20,
-          show: (data) => data.qDef.columnWidth?.type === ColumnWidthTypes.PERCENTAGE,
-          change(data) {
-            data.qDef.columnWidth.percentage =
-              data.qDef.columnWidth.percentage === undefined
-                ? data.qDef.columnWidth.percentage
-                : Math.max(1, Math.min(MAX_COLUMN_PERCENTAGE_WIDTH, data.qDef.columnWidth.percentage));
-          },
-        },
-      }
-    : {};
+const getColumnResize = {
+  type: {
+    type: 'string',
+    component: 'dropdown',
+    ref: 'qDef.columnWidth.type',
+    translation: 'Object.Table.Column.Width',
+    options: [
+      {
+        value: ColumnWidthTypes.AUTO,
+        translation: 'Common.Auto',
+      },
+      {
+        value: ColumnWidthTypes.FIT_TO_CONTENT,
+        translation: 'Object.Table.Column.FitToContent',
+      },
+      {
+        value: ColumnWidthTypes.PIXELS,
+        translation: 'Object.Table.Column.Pixels',
+      },
+      {
+        value: ColumnWidthTypes.PERCENTAGE,
+        translation: 'Object.Table.Column.Percentage',
+      },
+    ],
+    defaultValue: ColumnWidthTypes.AUTO,
+  },
+  sizePixels: {
+    ref: 'qDef.columnWidth.pixels',
+    translation: 'Object.Table.Column.Pixels',
+    type: 'number',
+    expression: 'optional',
+    defaultValue: 200,
+    show: (data) => data.qDef.columnWidth?.type === ColumnWidthTypes.PIXELS,
+    change(data) {
+      data.qDef.columnWidth.pixels =
+        data.qDef.columnWidth.pixels === undefined
+          ? data.qDef.columnWidth.pixels
+          : Math.max(1, Math.min(MAX_COLUMN_WIDTH, data.qDef.columnWidth.pixels));
+    },
+  },
+  sizePercentage: {
+    ref: 'qDef.columnWidth.percentage',
+    translation: 'Object.Table.Column.Percentage',
+    type: 'number',
+    expression: 'optional',
+    defaultValue: 20,
+    show: (data) => data.qDef.columnWidth?.type === ColumnWidthTypes.PERCENTAGE,
+    change(data) {
+      data.qDef.columnWidth.percentage =
+        data.qDef.columnWidth.percentage === undefined
+          ? data.qDef.columnWidth.percentage
+          : Math.max(1, Math.min(MAX_COLUMN_PERCENTAGE_WIDTH, data.qDef.columnWidth.percentage));
+    },
+  },
+};
 
-const getPresentation = (env) => ({
+const getPresentation = {
   ...columnCommonHidden,
   ...columnExpressionItems,
   ...textAlignItems,
-  ...getColumnResize(env),
-});
+  ...getColumnResize,
+};
 
 const dimensionItems = {
   libraryId: {
@@ -303,7 +299,7 @@ const getData = (env) =>
               presentation: {
                 type: 'items',
                 translation: 'properties.presentation',
-                items: getPresentation(env),
+                items: getPresentation,
               },
             },
           },
@@ -320,7 +316,7 @@ const getData = (env) =>
               presentation: {
                 type: 'items',
                 translation: 'properties.presentation',
-                items: getPresentation(env),
+                items: getPresentation,
               },
             },
           },
@@ -342,7 +338,7 @@ const getData = (env) =>
             grouped: true,
             items: {
               ...dimensionItems,
-              ...getPresentation(env),
+              ...getPresentation,
             },
           },
           measures: {
@@ -352,7 +348,7 @@ const getData = (env) =>
             grouped: true,
             items: {
               ...getMeasureItems(env),
-              ...getPresentation(env),
+              ...getPresentation,
             },
           },
         },

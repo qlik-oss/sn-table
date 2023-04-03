@@ -153,8 +153,7 @@ describe('handle-data', () => {
         model,
         layout,
         pageInfo,
-        setPageInfo,
-        true
+        setPageInfo
       )) as TableData;
 
       const firstColCell = rows[0]['col-0'] as Cell;
@@ -182,7 +181,7 @@ describe('handle-data', () => {
 
     it('should return null and call setPageInfo when page is > 0 and page * rowsPerPage >= qcy', async () => {
       layout.qHyperCube.qSize.qcy = 100;
-      const tableData = await manageData(model, layout, pageInfo, setPageInfo, true);
+      const tableData = await manageData(model, layout, pageInfo, setPageInfo);
 
       expect(tableData).toBeNull();
       expect(setPageInfo).toHaveBeenCalledWith({ ...pageInfo, page: 0 });
@@ -191,7 +190,7 @@ describe('handle-data', () => {
     it('should return null and call setPageInfo with rowsPerPage 25 when height * width > 10000 and width is 120', async () => {
       pageInfo = { ...pageInfo, page: 0 };
       layout = generateLayout(60, 60, 1100);
-      const tableData = await manageData(model, layout, pageInfo, setPageInfo, true);
+      const tableData = await manageData(model, layout, pageInfo, setPageInfo);
 
       expect(tableData).toBeNull();
       expect(setPageInfo).toHaveBeenCalledWith({ ...pageInfo, rowsPerPage: 25 });
@@ -200,7 +199,7 @@ describe('handle-data', () => {
     it('should return null and call setPageInfo with rowsPerPage 4 when height * width > 10000 and width is 2200', async () => {
       pageInfo = { ...pageInfo, page: 0 };
       layout = generateLayout(1100, 1100, 100);
-      const tableData = await manageData(model, layout, pageInfo, setPageInfo, true);
+      const tableData = await manageData(model, layout, pageInfo, setPageInfo);
 
       expect(tableData).toBeNull();
       expect(setPageInfo).toHaveBeenCalledWith({ ...pageInfo, rowsPerPage: 4 });
@@ -209,7 +208,7 @@ describe('handle-data', () => {
     it('should return null and call setPageInfo with rowsPerPage 4 when width > 10000', async () => {
       pageInfo = { ...pageInfo, page: 0 };
       layout = generateLayout(6000, 6000, 100);
-      const tableData = await manageData(model, layout, pageInfo, setPageInfo, true);
+      const tableData = await manageData(model, layout, pageInfo, setPageInfo);
 
       expect(tableData).toBeNull();
       expect(setPageInfo).toHaveBeenCalledWith({ ...pageInfo, rowsPerPage: 0 });

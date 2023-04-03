@@ -13,7 +13,6 @@ import {
   ApplyColumnWidths,
 } from '../types';
 import useAnnounceAndTranslations from './use-announce-and-translations';
-import useWaitForFonts from './virtualized-table/use-wait-for-fonts';
 
 interface UsePaginationTable {
   env: Galaxy;
@@ -28,10 +27,10 @@ interface UsePaginationTable {
   keyboard: stardust.Keyboard;
   model?: EngineAPI.IGenericObject;
   app?: EngineAPI.IApp;
-  areBasicFeaturesEnabled: boolean;
   embed?: stardust.Embed;
   reactRoot: Root;
   applyColumnWidths: ApplyColumnWidths;
+  isFontLoaded: boolean;
 }
 
 const initialPageInfo = {
@@ -53,23 +52,22 @@ const usePaginationTable = ({
   changeSortOrder,
   keyboard,
   rect,
-  areBasicFeaturesEnabled,
   embed,
   reactRoot,
   applyColumnWidths,
+  isFontLoaded,
 }: UsePaginationTable) => {
-  const shouldRender = !env.carbon && (layout.usePagination !== false || !areBasicFeaturesEnabled);
+  const shouldRender = !env.carbon && layout.usePagination !== false;
   const { direction, footerContainer } = useOptions() as UseOptions;
   const announce = useAnnounceAndTranslations(rootElement, translator);
   const [pageInfo, setPageInfo] = useState(initialPageInfo);
   const [tableData] = usePromise(async () => {
     if (shouldRender) {
-      return manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo, areBasicFeaturesEnabled);
+      return manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo);
     }
 
     return null;
   }, [layout, pageInfo, model, constraints, shouldRender]);
-  const isFontLoaded = useWaitForFonts(theme, layout, shouldRender);
 
   useEffect(() => {
     const isReadyToRender =
@@ -106,7 +104,6 @@ const usePaginationTable = ({
         rect,
         footerContainer,
         announce,
-        areBasicFeaturesEnabled,
         embed,
         applyColumnWidths,
       },
@@ -134,7 +131,6 @@ const usePaginationTable = ({
     translator,
     rect,
     footerContainer,
-    areBasicFeaturesEnabled,
     isFontLoaded,
   ]);
 };

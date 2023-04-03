@@ -25,9 +25,11 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
 
   const { layout, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
+  const isInSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI.isModal());
   const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
   const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
+  const isInteractionEnabled = !constraints.active && !isInSelectionMode;
   const flexDirection = column.headTextAlign === 'right' ? 'row-reverse' : 'row';
 
   return (
@@ -50,7 +52,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         userSelect: 'none',
       }}
     >
-      <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled>
+      <HeadCellContent column={column} isActive={isActive} isInteractionEnabled={isInteractionEnabled}>
         <CellText wordBreak lines={3}>
           {column.label}
         </CellText>

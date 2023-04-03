@@ -1,3 +1,4 @@
+import { isNumericCell } from './table/utils/is-numeric';
 import {
   TableLayout,
   PageInfo,
@@ -25,7 +26,7 @@ export function getHighestPossibleRpp(width: number, rowsPerPageOptions: number[
 /**
  * Get the position of the totals
  */
-export function getTotalPosition(layout: TableLayout, areBasicFeaturesEnabled = true) {
+export function getTotalPosition(layout: TableLayout) {
   const [hasDimension, hasMeasure, hasGrandTotal, isTotalModeAuto, position] = [
     layout.qHyperCube.qDimensionInfo.length > 0,
     layout.qHyperCube.qMeasureInfo.length > 0,
@@ -34,11 +35,7 @@ export function getTotalPosition(layout: TableLayout, areBasicFeaturesEnabled = 
     layout.totals.position,
   ];
 
-  if (
-    areBasicFeaturesEnabled &&
-    hasGrandTotal &&
-    ((hasDimension && hasMeasure) || (!isTotalModeAuto && !hasDimension))
-  ) {
+  if (hasGrandTotal && ((hasDimension && hasMeasure) || (!isTotalModeAuto && !hasDimension))) {
     if (isTotalModeAuto || position === 'top') {
       return { atTop: true, atBottom: false };
     }
@@ -56,7 +53,7 @@ export function getTotalPosition(layout: TableLayout, areBasicFeaturesEnabled = 
  */
 export function getTotalInfo(layout: TableLayout, colIdx: number, pageColIdx: number, numDims: number) {
   if (colIdx >= numDims) return layout.qHyperCube.qGrandTotalRow[colIdx - numDims]?.qText ?? '';
-  if (pageColIdx === 0) return layout.totals.label;
+  if (pageColIdx === 0) return layout.totals.label ?? '';
   return '';
 }
 
@@ -88,7 +85,7 @@ export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | 'au
     return textAlign;
   }
 
-  return ((cell.qNum || cell.qNum === 0) && !Number.isNaN(+cell.qNum) ? 'right' : 'left') as Align;
+  return isNumericCell(cell) ? 'right' : 'left';
 };
 
 /**
@@ -198,8 +195,7 @@ export default async function manageData(
   model: EngineAPI.IGenericObject,
   layout: TableLayout,
   pageInfo: PageInfo,
-  setPageInfo: SetPageInfo,
-  areBasicFeaturesEnabled: boolean
+  setPageInfo: SetPageInfo
 ): Promise<TableData | null> {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const totalColumnCount = layout.qHyperCube.qSize.qcx;
@@ -221,7 +217,7 @@ export default async function manageData(
   }
 
   const paginationNeeded = totalRowCount > 10; // TODO: This might not be true if you have > 1000 columns
-  const totalsPosition = getTotalPosition(layout, areBasicFeaturesEnabled);
+  const totalsPosition = getTotalPosition(layout);
   const columns = getColumns(layout);
 
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [

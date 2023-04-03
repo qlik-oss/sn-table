@@ -157,7 +157,15 @@ export interface HandleHeadKeyDownProps {
   cellCoord: [number, number];
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   isInteractionEnabled: boolean;
-  areBasicFeaturesEnabled: boolean;
+}
+
+export interface HandleHeadMouseDownProps {
+  evt: React.MouseEvent;
+  rootElement: HTMLElement;
+  cellCoord: [number, number];
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  keyboard: stardust.Keyboard;
+  isInteractionEnabled: boolean;
 }
 
 export interface BodyArrowHelperProps {
@@ -170,7 +178,6 @@ export interface BodyArrowHelperProps {
   announce: Announce;
   totalsPosition: TotalsPosition;
   isSelectionMode: boolean;
-  areBasicFeaturesEnabled: boolean;
 }
 
 export interface HandleBodyKeyDownProps {
@@ -185,7 +192,6 @@ export interface HandleBodyKeyDownProps {
   totalsPosition: TotalsPosition;
   paginationNeeded: boolean;
   selectionsAPI: ExtendedSelectionAPI;
-  areBasicFeaturesEnabled: boolean;
 }
 
 export interface CellFocusProps {
@@ -250,7 +256,6 @@ export interface RenderProps {
     setPageInfo: SetPageInfo
   ): Promise<TableData | null>;
   app?: EngineAPI.IApp;
-  areBasicFeaturesEnabled?: boolean;
   embed?: stardust.Embed;
   applyColumnWidths?: ApplyColumnWidths;
 }
@@ -261,18 +266,13 @@ export interface TableWrapperProps {
   setPageInfo: SetPageInfo;
   footerContainer?: HTMLElement;
   announce: Announce;
-  areBasicFeaturesEnabled: boolean;
-}
-
-export interface TableHeadWrapperProps {
-  areBasicFeaturesEnabled: boolean;
 }
 
 export interface HeadCellContentProps {
   children: JSX.Element;
   column: Column;
   isActive: boolean;
-  areBasicFeaturesEnabled: boolean;
+  isInteractionEnabled: boolean;
 }
 
 export interface HeadCellMenuProps {
@@ -296,7 +296,6 @@ export interface TableBodyWrapperProps {
   announce: Announce;
   setShouldRefocus(): void;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | null>;
-  areBasicFeaturesEnabled: boolean;
 }
 
 export interface PaginationContentProps {
@@ -326,7 +325,6 @@ export interface CellHOCProps extends TableCellProps {
   cell: Cell;
   column: Column;
   announce: Announce;
-  areBasicFeaturesEnabled: boolean;
 }
 
 export type CellHOC = (props: CellHOCProps) => JSX.Element;
