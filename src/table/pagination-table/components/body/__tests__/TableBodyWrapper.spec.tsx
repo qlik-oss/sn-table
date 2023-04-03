@@ -73,13 +73,13 @@ describe('<TableBodyWrapper />', () => {
     expect(handleKeyPress.handleBodyKeyDown).toHaveBeenCalledTimes(1);
   });
 
-  it('should call handleClickToFocusBody on mouseDown', () => {
-    jest.spyOn(handleClick, 'handleClickToFocusBody').mockImplementation();
+  it('should call handleMouseDownToFocusBody on mouseDown', () => {
+    jest.spyOn(handleClick, 'handleMouseDownToFocusBody').mockImplementation();
 
     const { getByText } = renderTableBody();
     fireEvent.mouseDown(getByText(tableFirstRow.qText as string));
 
-    expect(handleClick.handleClickToFocusBody).toHaveBeenCalledTimes(1);
+    expect(handleClick.handleMouseDownToFocusBody).toHaveBeenCalledTimes(1);
   });
 
   it('should call handleBodyKeyUp on key up', () => {

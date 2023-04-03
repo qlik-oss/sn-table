@@ -1,12 +1,12 @@
-import React, { MouseEvent } from 'react';
+import React from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { Announce, Cell, TotalsPosition } from '../../types';
-import { SelectionDispatch } from '../types';
+import { HandleHeadMouseDownProps, SelectionDispatch } from '../types';
 import { FocusTypes, SelectionActions } from '../constants';
 import { removeTabAndFocusCell, updateFocus } from './accessibility-utils';
 import { getCellElement } from './get-element-utils';
 
-export const handleClickToFocusBody = (
+export const handleMouseDownToFocusBody = (
   cell: Cell,
   rootElement: HTMLElement,
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
@@ -18,18 +18,23 @@ export const handleClickToFocusBody = (
   removeTabAndFocusCell([adjustedRowIdx, pageColIdx], rootElement, setFocusedCellCoord, keyboard);
 };
 
-export const handleClickToFocusHead = (
-  columnIndex: number,
-  rootElement: HTMLElement,
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  keyboard: stardust.Keyboard
-) => {
-  removeTabAndFocusCell([0, columnIndex], rootElement, setFocusedCellCoord, keyboard);
-};
-
-export const handleMouseDownLabelToFocusHeadCell = (evt: MouseEvent, rootElement: HTMLElement, columnIndex: number) => {
+export const handleMouseDownToFocusHead = ({
+  evt,
+  rootElement,
+  cellCoord,
+  setFocusedCellCoord,
+  keyboard,
+  isInteractionEnabled,
+}: HandleHeadMouseDownProps) => {
   evt.preventDefault();
-  updateFocus({ focusType: FocusTypes.FOCUS, cell: getCellElement(rootElement, [0, columnIndex]) });
+  if (!isInteractionEnabled) return;
+
+  setFocusedCellCoord(cellCoord);
+  if (keyboard.enabled && !keyboard.active) {
+    keyboard.focus?.();
+  } else {
+    updateFocus({ focusType: FocusTypes.FOCUS_BUTTON, cell: getCellElement(rootElement, cellCoord) });
+  }
 };
 
 /**
@@ -42,7 +47,7 @@ export const getSelectionMouseHandlers = (
   selectionDispatch: SelectionDispatch
 ) => {
   const handleMouseDown = (evt: React.MouseEvent) => {
-    // run handleClickToFocusBody
+    // run handleMouseDownToFocusBody
     onMouseDown?.(evt as React.MouseEvent<HTMLTableCellElement>);
     // only need to check isSelectable here. once you are holding you want to be able to drag outside the current column
     if (cell.isSelectable) {
