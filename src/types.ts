@@ -100,6 +100,7 @@ export interface Cell {
   colIdx: number;
   pageRowIdx: number;
   pageColIdx: number;
+  selectionColIdx: number;
   isSelectable: boolean;
   isLastRow: boolean;
   isLastColumn?: boolean;
@@ -127,6 +128,7 @@ export interface Column {
   isLocked: boolean;
   colIdx: number;
   pageColIdx: number;
+  selectionColIdx: number;
   label: string;
   headTextAlign: Align;
   totalsTextAlign: Align;

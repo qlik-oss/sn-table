@@ -91,7 +91,12 @@ export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | 'au
 /**
  * Gets all column info, returns false if hidden
  */
-export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: number): Column {
+export function getColumnInfo(
+  layout: TableLayout,
+  colIdx: number,
+  pageColIdx: number,
+  selectionColIdx: number | undefined
+): Column {
   const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIdx < numDims;
@@ -132,6 +137,7 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
     qApprMaxGlyphCount,
     qReverseSort,
     columnWidth,
+    selectionColIdx: selectionColIdx ?? -1,
     id: `col-${pageColIdx}`,
     label: qFallbackTitle,
     stylingIDs: qAttrExprInfo.map((expr) => expr.id),
@@ -153,19 +159,37 @@ export const getColumns = (layout: TableLayout) => {
   const numDims = qDimensionInfo.length;
   const columnsLength = numDims + qMeasureInfo.length;
   const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
+  const selectionColIndexes: Record<string, number> = {};
+  let hiddenDimCounter = 0;
 
   const visibleColumnsOrder = columnOrder.filter((colIdx) => {
-    const { qError } = colIdx < numDims ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims];
-    return qError?.qErrorCode !== HIDDEN_ERROR_CODE;
+    const isDim = colIdx < numDims;
+    const { qError } = isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims];
+    const isHidden = qError?.qErrorCode === HIDDEN_ERROR_CODE;
+
+    // Every visible dimension needs a column index adjusted for hidden columns.
+    // Since this is only relevant for selections, no need to add an index for measures
+    if (isDim) {
+      if (isHidden) {
+        hiddenDimCounter++;
+      } else {
+        selectionColIndexes[colIdx] = colIdx - hiddenDimCounter;
+      }
+    }
+
+    return !isHidden;
   });
 
-  return visibleColumnsOrder.map((colIdx, pageColIdx) => getColumnInfo(layout, colIdx, pageColIdx));
+  return visibleColumnsOrder.map((colIdx, pageColIdx) =>
+    getColumnInfo(layout, colIdx, pageColIdx, selectionColIndexes[colIdx])
+  );
 };
 
 /**
  * Fetches the data for the given pageInfo. Returns rows and columns, sorted in the order they will be displayed,
  * and meta data for size etc. The column/row indexes used in engine are stored as col/rowIdx, while the index within
- * the displayed page is stored as pageRow/ColIdx
+ * the displayed page is stored as pageRow/ColIdx.
+ * For dimension cells, there is a selectionColIdx used for calling the selection API
  */
 export default async function manageData(
   model: EngineAPI.IGenericObject,
@@ -210,6 +234,7 @@ export default async function manageData(
         colIdx: c.colIdx,
         pageRowIdx,
         pageColIdx,
+        selectionColIdx: c.selectionColIdx,
         isSelectable: c.isDim && !c.isLocked,
         isLastRow: pageRowIdx === height - 1,
       };
