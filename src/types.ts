@@ -11,24 +11,26 @@ export interface TextAlign {
 // properties
 interface InlineDimensionDef extends EngineAPI.INxInlineDimensionDef {
   textAlign: TextAlign;
+  columnWidth?: ColumnWidth;
 }
 interface InlineMeasureDef extends EngineAPI.INxInlineMeasureDef {
   textAlign: TextAlign;
+  columnWidth?: ColumnWidth;
 }
 interface AttributeExpressionProperties extends EngineAPI.INxAttrExprDef {
   id: 'cellForegroundColor' | 'cellBackgroundColor';
 }
-interface DimensionProperties extends Omit<EngineAPI.INxDimension, 'qDef' | 'qAttributeExpressions'> {
+export interface DimensionProperty extends Omit<EngineAPI.INxDimension, 'qDef' | 'qAttributeExpressions'> {
   qDef: InlineDimensionDef;
   qAttributeExpressions: AttributeExpressionProperties[];
 }
-interface MeasureProperties extends Omit<EngineAPI.INxMeasure, 'qDef' | 'qAttributeExpressions'> {
+export interface MeasureProperty extends Omit<EngineAPI.INxMeasure, 'qDef' | 'qAttributeExpressions'> {
   qDef: InlineMeasureDef;
   qAttributeExpressions: AttributeExpressionProperties[];
 }
 export interface QHyperCubeDef extends Omit<EngineAPI.IHyperCubeDef, 'qDimensions' | 'qMeasures'> {
-  qDimensions: DimensionProperties[];
-  qMeasures: MeasureProperties;
+  qDimensions: DimensionProperty[];
+  qMeasures: MeasureProperty[];
   qColumnOrder: number[];
 }
 
@@ -207,4 +209,14 @@ export interface Galaxy {
   translator: ExtendedTranslator;
   carbon: boolean;
   flags: stardust.Flags;
+}
+
+export interface ExportFormat {
+  data: unknown[];
+  properties: EngineAPI.IGenericHyperCubeProperties;
+}
+
+export interface PropTree {
+  qChildren: unknown[];
+  qProperty: EngineAPI.IGenericHyperCubeProperties;
 }

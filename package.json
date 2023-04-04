@@ -138,7 +138,8 @@
     "stylis-plugin-rtl-sc": "npm:stylis-plugin-rtl@1.1.0",
     "ts-jest": "29.1.0",
     "typescript": "5.0.3",
-    "yargs": "17.7.1"
+    "yargs": "17.7.1",
+    "qlik-object-conversion": "0.16.0"
   },
   "peerDependencies": {
     "@nebula.js/stardust": ">=3.3.0"
