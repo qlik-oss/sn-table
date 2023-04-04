@@ -3,9 +3,9 @@
   "info": {
     "name": "@nebula.js/sn-table:properties",
     "description": "Table generic object definition",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "license": "MIT",
-    "stability": "experimental",
+    "stability": "stable",
     "x-qlik-visibility": "public"
   },
   "entries": {
@@ -55,12 +55,6 @@
           ],
           "kind": "object",
           "entries": {
-            "columnWidths": {
-              "kind": "array",
-              "items": {
-                "type": "number"
-              }
-            },
             "qColumnOrder": {
               "kind": "array",
               "items": {
@@ -121,6 +115,7 @@
         },
         "totals": {
           "description": "totals settings",
+          "optional": true,
           "kind": "object",
           "entries": {
             "label": {
@@ -151,7 +146,7 @@
               "type": "string"
             },
             "show": {
-              "description": "Determines if the way totals row is showing is handle automatically, if `true` the `position` prop will be ignored",
+              "description": "If set to true, the display of the totals row will be handled automatically, and the `position` prop will be ignored.",
               "optional": true,
               "defaultValue": true,
               "type": "boolean"
@@ -160,6 +155,7 @@
         },
         "usePagination": {
           "description": "Use pagination or continuous scroll. If undefined, defaults to using pagination",
+          "optional": true,
           "defaultValue": false,
           "type": "boolean"
         },
@@ -230,7 +226,7 @@
           "type": "number"
         },
         "percentage": {
-          "description": "Is used (and mandatory) if type is `pixels`",
+          "description": "Is used (and mandatory) if type is `percentage`",
           "optional": true,
           "type": "number"
         }
