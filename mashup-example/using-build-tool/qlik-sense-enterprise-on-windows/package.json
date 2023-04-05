@@ -1,18 +1,18 @@
 {
   "name": "table-mashup",
-  "private": true,
   "version": "0.1.0",
-  "author": {
-    "name": "",
-    "email": ""
-  },
+  "private": true,
   "keywords": [
     "qlik",
     "nebula"
   ],
+  "author": {
+    "name": "",
+    "email": ""
+  },
   "scripts": {
-    "dev": "vite",
     "build": "vite build",
+    "dev": "vite",
     "preview": "vite preview",
     "types:check": "tsc --noEmit"
   },
