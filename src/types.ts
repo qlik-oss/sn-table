@@ -28,7 +28,7 @@ interface MeasureProperties extends Omit<EngineAPI.INxMeasure, 'qDef' | 'qAttrib
 }
 export interface QHyperCubeDef extends Omit<EngineAPI.IHyperCubeDef, 'qDimensions' | 'qMeasures'> {
   qDimensions: DimensionProperties[];
-  qMeasures: MeasureProperties;
+  qMeasures: MeasureProperties[];
   qColumnOrder: number[];
 }
 
@@ -207,4 +207,14 @@ export interface Galaxy {
   translator: ExtendedTranslator;
   carbon: boolean;
   flags: stardust.Flags;
+}
+
+export interface ExportFormat {
+  data: unknown[];
+  properties: EngineAPI.IGenericHyperCubeProperties;
+}
+
+export interface PropTree {
+  qChildren: unknown[];
+  qProperty: EngineAPI.IGenericHyperCubeProperties;
 }

@@ -127,6 +127,7 @@
     "prop-types": "15.8.1",
     "qlik-chart-modules": "0.52.0",
     "qlik-modifiers": "0.9.1",
+    "qlik-object-conversion": "0.16.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.71.5",
