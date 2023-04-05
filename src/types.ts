@@ -11,9 +11,11 @@ export interface TextAlign {
 // properties
 interface InlineDimensionDef extends EngineAPI.INxInlineDimensionDef {
   textAlign: TextAlign;
+  columnWidth: ColumnWidth;
 }
 interface InlineMeasureDef extends EngineAPI.INxInlineMeasureDef {
   textAlign: TextAlign;
+  columnWidth: ColumnWidth;
 }
 interface AttributeExpressionProperties extends EngineAPI.INxAttrExprDef {
   id: 'cellForegroundColor' | 'cellBackgroundColor';
