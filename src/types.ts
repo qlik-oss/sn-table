@@ -11,26 +11,24 @@ export interface TextAlign {
 // properties
 interface InlineDimensionDef extends EngineAPI.INxInlineDimensionDef {
   textAlign: TextAlign;
-  columnWidth?: ColumnWidth;
 }
 interface InlineMeasureDef extends EngineAPI.INxInlineMeasureDef {
   textAlign: TextAlign;
-  columnWidth?: ColumnWidth;
 }
 interface AttributeExpressionProperties extends EngineAPI.INxAttrExprDef {
   id: 'cellForegroundColor' | 'cellBackgroundColor';
 }
-export interface DimensionProperty extends Omit<EngineAPI.INxDimension, 'qDef' | 'qAttributeExpressions'> {
+interface DimensionProperties extends Omit<EngineAPI.INxDimension, 'qDef' | 'qAttributeExpressions'> {
   qDef: InlineDimensionDef;
   qAttributeExpressions: AttributeExpressionProperties[];
 }
-export interface MeasureProperty extends Omit<EngineAPI.INxMeasure, 'qDef' | 'qAttributeExpressions'> {
+interface MeasureProperties extends Omit<EngineAPI.INxMeasure, 'qDef' | 'qAttributeExpressions'> {
   qDef: InlineMeasureDef;
   qAttributeExpressions: AttributeExpressionProperties[];
 }
 export interface QHyperCubeDef extends Omit<EngineAPI.IHyperCubeDef, 'qDimensions' | 'qMeasures'> {
-  qDimensions: DimensionProperty[];
-  qMeasures: MeasureProperty[];
+  qDimensions: DimensionProperties[];
+  qMeasures: MeasureProperties[];
   qColumnOrder: number[];
 }
 
