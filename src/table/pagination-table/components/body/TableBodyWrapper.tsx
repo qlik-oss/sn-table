@@ -4,7 +4,7 @@ import getCellRenderer from '../../utils/get-cell-renderer';
 import { useContextSelector, TableContext } from '../../../context';
 import { StyledBodyRow, StyledBody } from './styles';
 import { handleBodyKeyDown, handleBodyKeyUp } from '../../../utils/handle-keyboard';
-import { handleMouseDownToFocusBody } from '../../../utils/handle-click';
+import { handleMouseDownToFocusBody } from '../../../utils/handle-mouse';
 import { Cell } from '../../../../types';
 import { TableBodyWrapperProps } from '../../../types';
 import TableTotals from './TableTotals';
@@ -40,9 +40,10 @@ function TableBodyWrapper({ setShouldRefocus, tableWrapperRef, announce }: Table
       ),
     [columnsStylingIDsJSON, isSelectionsEnabled]
   );
-  const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
 
   useSelectionListener({ keyboard, selectionDispatch, selectionsAPI, setShouldRefocus, tableWrapperRef });
+
+  const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
 
   return (
     <StyledBody lastRowBottomBorder={lastRowBottomBorder}>

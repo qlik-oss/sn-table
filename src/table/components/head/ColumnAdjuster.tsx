@@ -17,7 +17,7 @@ const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps)
   const { applyColumnWidths, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setColumnWidths = useContextSelector(TableContext, (value) => value.setColumnWidths);
-  const tempWidths = useRef({ adjusterHitArea: {}, columnWidth: 0, initX: 0, initWidth: 0 });
+  const tempWidths = useRef({ columnWidth: 0, initX: 0, initWidth: 0 });
 
   if (constraints.active) return null;
 
@@ -48,14 +48,12 @@ const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps)
     document.removeEventListener('mouseup', mouseUpHandler);
 
     confirmWidth();
-    ((tempWidths.current.adjusterHitArea as HTMLDivElement).closest('#adjuster-hit-area') as HTMLDivElement).blur();
   };
 
   const mouseDownHandler = (evt: React.MouseEvent) => {
     evt.stopPropagation();
 
     tempWidths.current = {
-      adjusterHitArea: evt.target,
       initX: evt.clientX,
       initWidth: columnWidths[pageColIdx],
       columnWidth: columnWidths[pageColIdx],
@@ -67,7 +65,7 @@ const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps)
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === KeyCodes.LEFT || event.key === KeyCodes.RIGHT) {
-      event.preventDefault();
+      preventDefaultBehavior(event);
 
       const RESIZE_DISTANCE = 5;
       const prevWidth = columnWidths[pageColIdx];

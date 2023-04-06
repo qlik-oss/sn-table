@@ -20,12 +20,12 @@ import RecursiveMenuList from './MenuList/RecursiveMenuList';
 import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 
 export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
+  const { translator, embed, model } = useContextSelector(TableContext, (value) => value.baseProps);
   const showSearchMenuItem = column.isDim;
   const anchorRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
   const [openListboxDropdown, setOpenListboxDropdown] = useState(false);
-  const { translator, embed, model } = useContextSelector(TableContext, (value) => value.baseProps);
   const {
     fieldInstance,
     selectionActionsEnabledStatus,
@@ -47,18 +47,6 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
       setOpenListboxDropdown(false);
     });
   }, [embed, column.fieldId, column.qLibraryId]);
-
-  useEffect(() => {
-    if (!openMenuDropdown) resetSelectionActionsEnabledStatus();
-  }, [openMenuDropdown, resetSelectionActionsEnabledStatus]);
-
-  const handleOpenDropdown = async () => {
-    if (!openMenuDropdown && model) {
-      const layout = await model.getLayout();
-      updateSelectionActionsEnabledStatus(layout as TableLayout);
-    }
-    setOpenMenuDropdown(!openMenuDropdown);
-  };
 
   const menuItemGroups = useMemo<MenuItemGroup[]>(
     () => [
@@ -160,6 +148,18 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
     ],
     [translator, showSearchMenuItem, fieldInstance, selectionActionsEnabledStatus, embedListbox]
   );
+
+  useEffect(() => {
+    if (!openMenuDropdown) resetSelectionActionsEnabledStatus();
+  }, [openMenuDropdown, resetSelectionActionsEnabledStatus]);
+
+  const handleOpenDropdown = async () => {
+    if (!openMenuDropdown && model) {
+      const layout = await model.getLayout();
+      updateSelectionActionsEnabledStatus(layout as TableLayout);
+    }
+    setOpenMenuDropdown(!openMenuDropdown);
+  };
 
   return menuItemGroups.length ? (
     <HeadCellMenuWrapper rightAligned={column.headTextAlign === 'right'}>

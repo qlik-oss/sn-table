@@ -8,5 +8,3 @@ export function mount(rootElement) {
 export function render({ rootElement, ...data }) {
   rootElement.renderComponent(data);
 }
-
-export function teardown() {}

@@ -60,7 +60,7 @@ export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.R
   );
 }
 
-export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot?: ReactDom.Root) {
+export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot: ReactDom.Root) {
   const {
     app,
     selectionsAPI,
@@ -82,7 +82,7 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
   } = props;
   const muiTheme = muiSetup('ltr');
 
-  reactRoot?.render(
+  reactRoot.render(
     <React.StrictMode>
       <ThemeProvider theme={muiTheme}>
         <TableContextProvider
@@ -109,9 +109,6 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
       </ThemeProvider>
     </React.StrictMode>
   );
-}
-export function teardown(reactRoot: ReactDom.Root) {
-  reactRoot.unmount();
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

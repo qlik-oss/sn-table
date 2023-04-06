@@ -1,7 +1,7 @@
 import { Cell } from '../../../types';
 import { SelectionStates } from '../../constants';
 import { TableContext, useContextSelector } from '../../context';
-import { getSelectionMouseHandlers } from '../../utils/handle-click';
+import { getSelectionMouseHandlers } from '../../utils/handle-mouse';
 import { getCellSelectionState } from '../../utils/selections-utils';
 
 const NOOP_ANNOUNCE = () => {};
