@@ -2,8 +2,39 @@ import conversion from 'qlik-object-conversion';
 import { setValue } from 'qlik-chart-modules';
 
 import data from '../../qae/data';
-import { ExportFormat, PropTree } from '../../types';
+import { ExportFormat, PropTree, DimensionProperties, MeasureProperties } from '../../types';
 import { ColumnWidthTypes } from '../../table/constants';
+
+export const getColumnInfo = (
+  columnInfo: DimensionProperties[] | MeasureProperties[],
+  index: number,
+  columnWidths: number[] | undefined
+) => {
+  const column = columnInfo[index];
+
+  // For converting  "table to sn-table",  -1 -> fitToContent and the rest -> pixels
+  if (columnWidths && columnWidths.length > 0) {
+    const columnWidth = columnWidths[index];
+
+    return {
+      ...column,
+      qDef: {
+        ...column.qDef,
+        columnWidth:
+          columnWidth === -1
+            ? {
+                type: ColumnWidthTypes.FIT_TO_CONTENT,
+              }
+            : {
+                type: ColumnWidthTypes.PIXELS,
+                pixels: columnWidth,
+              },
+      },
+    };
+  }
+
+  return column;
+};
 
 const importProperties = (
   exportFormat: ExportFormat,
@@ -21,71 +52,29 @@ const importProperties = (
     },
     hypercubePath,
   });
-
   const {
     qHyperCubeDef: { qColumnOrder, columnWidths },
   } = propertyTree.qProperty;
-
   let {
     qHyperCubeDef: { qDimensions, qMeasures },
   } = propertyTree.qProperty;
-
   const numDims = qDimensions.length;
   const columnsLength = numDims + qMeasures.length;
   const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
 
   qDimensions = columnOrder
     .filter((colIdx: number) => colIdx < numDims)
-    .map((measureIdx: number) => {
-      const { columnWidth } = qDimensions[measureIdx].qDef;
-
-      if (
-        (!columnWidth || columnWidth.type === ColumnWidthTypes.AUTO) &&
-        Array.isArray(columnWidths) &&
-        columnWidths[measureIdx] !== -1
-      ) {
-        return {
-          ...qDimensions[measureIdx],
-          qDef: {
-            ...qDimensions[measureIdx].qDef,
-            columnWidth: {
-              type: ColumnWidthTypes.PIXELS,
-              pixels: columnWidths[measureIdx],
-            },
-          },
-        };
-      }
-
-      return qDimensions[measureIdx];
-    });
+    .map((dimensionIdx: number) => getColumnInfo(qDimensions, dimensionIdx, columnWidths));
 
   qMeasures = columnOrder
     .filter((colIdx: number) => colIdx >= numDims)
     .map((colIdx: number) => {
       const measureIdx = colIdx - numDims;
-      const { columnWidth } = qMeasures[measureIdx].qDef;
 
-      if (
-        (!columnWidth || columnWidth.type === ColumnWidthTypes.AUTO || columnWidth.type === ColumnWidthTypes.PIXELS) &&
-        Array.isArray(columnWidths) &&
-        columnWidths[colIdx] !== -1
-      ) {
-        return {
-          ...qMeasures[measureIdx],
-          qDef: {
-            ...qMeasures[measureIdx].qDef,
-            columnWidth: {
-              type: ColumnWidthTypes.PIXELS,
-              pixels: columnWidths[colIdx],
-            },
-          },
-        };
-      }
-
-      return qMeasures[measureIdx];
+      return getColumnInfo(qMeasures, measureIdx, columnWidths);
     });
 
-  if (Array.isArray(columnWidths) && !columnWidths.every((columnWidth) => columnWidth === -1)) {
+  if (columnWidths && columnWidths.length > 0) {
     setValue(propertyTree, 'qProperty.qHyperCubeDef.qDimensions', qDimensions);
     setValue(propertyTree, 'qProperty.qHyperCubeDef.qMeasures', qMeasures);
   }

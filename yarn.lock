@@ -11201,7 +11201,7 @@ q@^1.5.1:
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha512-kV/CThkXo6xyFEZUugw/+pIOywXcDbFYgSct5cT3gqlbkBE1SJdwy6UQoZvodiWF/ckQLZyDE/Bu1M6gVu5lVw==
 
-qlik-chart-modules@^0.54.0:
+qlik-chart-modules@0.54.0:
   version "0.54.0"
   resolved "https://registry.yarnpkg.com/qlik-chart-modules/-/qlik-chart-modules-0.54.0.tgz#8aad18f62bb2571deb506232efb1464adb704b5e"
   integrity sha512-HGFJ/WyR06njIWJR89fkutD4qugSc/yqcsTd/fFTga54W0t/AwAiUheoVXC7E6eZgCC06tfI4jRdrFhwLVog8w==
