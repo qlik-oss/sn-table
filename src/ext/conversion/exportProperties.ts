@@ -3,12 +3,8 @@ import { setValue } from 'qlik-chart-modules';
 
 import { DimensionProperties, ExportFormat, MeasureProperties, PropTree } from '../../types';
 
-export const getColumnWidth = (
-  colIdx: number,
-  numDims: number,
-  qDimensions: DimensionProperties[],
-  qMeasures: MeasureProperties[]
-) => {
+export const getColumnWidth = (colIdx: number, qDimensions: DimensionProperties[], qMeasures: MeasureProperties[]) => {
+  const numDims = qDimensions.length;
   const isDim = colIdx < numDims;
   const info = isDim ? qDimensions[colIdx] : qMeasures[colIdx - numDims];
 
@@ -18,7 +14,7 @@ export const getColumnWidth = (
   return columnWidth?.type === 'pixels' ? columnWidth.pixels : -1;
 };
 
-const exportProperties = (propertyTree: PropTree, hyperCubePath: string): ExportFormat => {
+const exportProperties = (propertyTree: PropTree, hyperCubePath?: string): ExportFormat => {
   const expFormat = conversion.hypercube.exportProperties({
     propertyTree,
     hyperCubePath,
@@ -26,10 +22,9 @@ const exportProperties = (propertyTree: PropTree, hyperCubePath: string): Export
   const {
     qHyperCubeDef: { qColumnOrder, qDimensions, qMeasures },
   } = expFormat.properties;
-  const numDims = qDimensions.length;
-  const columnsLength = numDims + qMeasures.length;
+  const columnsLength = qDimensions.length + qMeasures.length;
   const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
-  const columnWidths = columnOrder.map((colIdx: number) => getColumnWidth(colIdx, numDims, qDimensions, qMeasures));
+  const columnWidths = columnOrder.map((colIdx: number) => getColumnWidth(colIdx, qDimensions, qMeasures));
   const qHyperCubeDef = {
     ...expFormat.properties.qHyperCubeDef,
     columnWidths,

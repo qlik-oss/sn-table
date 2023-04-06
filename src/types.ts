@@ -5,7 +5,7 @@ export type Align = 'left' | 'center' | 'right';
 
 export interface TextAlign {
   auto: boolean;
-  align: 'left' | 'center' | 'right';
+  align: Align;
 }
 
 // properties
@@ -13,7 +13,7 @@ interface InlineDimensionDef extends EngineAPI.INxInlineDimensionDef {
   textAlign: TextAlign;
   columnWidth: ColumnWidth;
 }
-interface InlineMeasureDef extends EngineAPI.INxInlineMeasureDef {
+interface InlineMeasureDef extends Omit<EngineAPI.INxInlineMeasureDef, 'qDef'> {
   textAlign: TextAlign;
   columnWidth: ColumnWidth;
 }
@@ -115,9 +115,10 @@ export interface Row {
 }
 
 export type SortDirection = 'A' | 'D';
+export type ColumnWidthType = 'auto' | 'fitToContent' | 'pixels' | 'percentage';
 
 export interface ColumnWidth {
-  type: string;
+  type: ColumnWidthType;
   pixels?: number;
   percentage?: number;
 }

@@ -7,14 +7,17 @@ import { ColumnWidthTypes } from '../../table/constants';
 
 export const getColumnInfo = (
   columnInfo: DimensionProperties[] | MeasureProperties[],
-  index: number,
-  columnWidths: number[] | undefined
+  colIdx: number,
+  columnWidths: unknown,
+  numDims?: number
 ) => {
+  let index = colIdx;
+  if (numDims) index = colIdx - numDims;
   const column = columnInfo[index];
 
   // For converting  "table to sn-table",  -1 -> fitToContent and the rest -> pixels
-  if (columnWidths && columnWidths.length > 0) {
-    const columnWidth = columnWidths[index];
+  if (Array.isArray(columnWidths) && columnWidths.length > 0) {
+    const columnWidth = columnWidths[colIdx];
 
     return {
       ...column,
@@ -40,7 +43,7 @@ const importProperties = (
   exportFormat: ExportFormat,
   initialProperties: EngineAPI.IGenericHyperCubeProperties,
   extension: any,
-  hypercubePath: string
+  hypercubePath?: string
 ): PropTree => {
   const propertyTree = conversion.hypercube.importProperties({
     exportFormat,
@@ -51,6 +54,7 @@ const importProperties = (
       defaultMeasure: extension.getDefaultMeasureProperties(),
     },
     hypercubePath,
+    extension,
   });
   const {
     qHyperCubeDef: { qColumnOrder, columnWidths },
@@ -64,17 +68,13 @@ const importProperties = (
 
   qDimensions = columnOrder
     .filter((colIdx: number) => colIdx < numDims)
-    .map((dimensionIdx: number) => getColumnInfo(qDimensions, dimensionIdx, columnWidths));
+    .map((colIdx: number) => getColumnInfo(qDimensions, colIdx, columnWidths));
 
   qMeasures = columnOrder
     .filter((colIdx: number) => colIdx >= numDims)
-    .map((colIdx: number) => {
-      const measureIdx = colIdx - numDims;
+    .map((colIdx: number) => getColumnInfo(qMeasures, colIdx, columnWidths, numDims));
 
-      return getColumnInfo(qMeasures, measureIdx, columnWidths);
-    });
-
-  if (columnWidths && columnWidths.length > 0) {
+  if (Array.isArray(columnWidths) && columnWidths.length > 0) {
     setValue(propertyTree, 'qProperty.qHyperCubeDef.qDimensions', qDimensions);
     setValue(propertyTree, 'qProperty.qHyperCubeDef.qMeasures', qMeasures);
   }
