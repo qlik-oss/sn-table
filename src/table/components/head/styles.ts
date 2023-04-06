@@ -183,7 +183,7 @@ export const AdjusterHitArea = styled(Box, {
       background: '#D9D9D9',
     },
   },
-  '&&:focus-visible, :active': {
+  '&&:focus, :active': {
     '& .sn-table-adjuster-head-border': {
       background: '#177fe6',
     },
