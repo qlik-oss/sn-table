@@ -15,6 +15,10 @@ import getBodyHeight from './utils/get-body-height';
 
 const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   const { rect, columns, innerForwardRef, pageInfo, bodyStyle, rowHeight, headerAndTotalsHeight, syncHeight } = props;
+  const { layout, model, theme } = useContextSelector(TableContext, (value) => value.baseProps);
+  const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
+  const initialDataPages = useContextSelector(TableContext, (value) => value.initialDataPages);
+
   const gridRef = useRef<VariableSizeGrid>(null);
   const gridState = useRef<GridState>({
     overscanColumnStartIndex: 0,
@@ -22,9 +26,6 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     overscanColumnStopIndex: 0,
     overscanRowStopIndex: 0,
   });
-  const { layout, model, theme } = useContextSelector(TableContext, (value) => value.baseProps);
-  const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
-  const initialDataPages = useContextSelector(TableContext, (value) => value.initialDataPages);
   const isHoverEnabled = !!layout.components?.[0]?.content?.hoverEffect;
   const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
   const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(

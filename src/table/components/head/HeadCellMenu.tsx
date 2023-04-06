@@ -149,10 +149,6 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
     [translator, showSearchMenuItem, fieldInstance, selectionActionsEnabledStatus, embedListbox]
   );
 
-  useEffect(() => {
-    if (!openMenuDropdown) resetSelectionActionsEnabledStatus();
-  }, [openMenuDropdown, resetSelectionActionsEnabledStatus]);
-
   const handleOpenDropdown = async () => {
     if (!openMenuDropdown && model) {
       const layout = await model.getLayout();
@@ -160,6 +156,10 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
     }
     setOpenMenuDropdown(!openMenuDropdown);
   };
+
+  useEffect(() => {
+    if (!openMenuDropdown) resetSelectionActionsEnabledStatus();
+  }, [openMenuDropdown, resetSelectionActionsEnabledStatus]);
 
   return menuItemGroups.length ? (
     <HeadCellMenuWrapper rightAligned={column.headTextAlign === 'right'}>

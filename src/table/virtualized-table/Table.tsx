@@ -55,8 +55,8 @@ const Table = (props: TableProps) => {
     [tableRect, xScrollbarWidth, yScrollbarWidth]
   );
   const { rowCount } = useTableCount(layout, pageInfo, stickyContainerRect, columnWidths, bodyRowHeight);
-  const containerWidth = columnWidths.reduce((prev, curr) => prev + curr, 0);
   const [containerHeight, setContainerHeight] = useState(rowCount * bodyRowHeight + headerAndTotalsHeight); // Based on single line height, which is going to be out-of-sync when rows have multiple lines
+  const containerWidth = columnWidths.reduce((prev, curr) => prev + curr, 0);
   const scrollHandler = useScrollHandler(headerRef, totalsRef, bodyRef);
 
   const syncHeight = useCallback(

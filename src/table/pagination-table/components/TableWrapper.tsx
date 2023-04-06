@@ -28,20 +28,51 @@ function TableWrapper(props: TableWrapperProps) {
     TableContext,
     (value) => value.baseProps
   );
-
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
 
-  const isSelectionMode = selectionsAPI.isModal();
-
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const tableWrapperRef = useRef<HTMLDivElement>(null);
 
   const { yScrollbarWidth } = useScrollbarWidth(tableContainerRef);
+  const isSelectionMode = selectionsAPI.isModal();
+  const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
+    String(rows.length + 1),
+    String(columns.length),
+  ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
+
+  const setShouldRefocus = useCallback(() => {
+    shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
+  }, [rootElement]);
+
+  const handleChangePage = useCallback(
+    (pageIdx: number) => {
+      setPageInfo({ ...pageInfo, page: pageIdx });
+      announce({
+        keys: [['SNTable.Pagination.PageStatusReport', (pageIdx + 1).toString(), totalPages.toString()]],
+        politeness: 'assertive',
+      });
+    },
+    [pageInfo, setPageInfo, totalPages, announce]
+  );
+
+  const handleKeyDown = (evt: React.KeyboardEvent) => {
+    handleWrapperKeyDown({
+      evt,
+      totalRowCount,
+      page,
+      rowsPerPage,
+      handleChangePage,
+      setShouldRefocus,
+      keyboard,
+      isSelectionMode,
+    });
+  };
+
   useFocusListener(tableWrapperRef, shouldRefocus, keyboard);
   useScrollListener(tableContainerRef, direction);
   useKeyboardActiveListener();
@@ -72,39 +103,6 @@ function TableWrapper(props: TableWrapperProps) {
   useDidUpdateEffect(() => {
     selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows: rows } });
   }, [rows]);
-
-  const setShouldRefocus = useCallback(() => {
-    shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
-  }, [rootElement]);
-
-  const handleChangePage = useCallback(
-    (pageIdx: number) => {
-      setPageInfo({ ...pageInfo, page: pageIdx });
-      announce({
-        keys: [['SNTable.Pagination.PageStatusReport', (pageIdx + 1).toString(), totalPages.toString()]],
-        politeness: 'assertive',
-      });
-    },
-    [pageInfo, setPageInfo, totalPages, announce]
-  );
-
-  const handleKeyDown = (evt: React.KeyboardEvent) => {
-    handleWrapperKeyDown({
-      evt,
-      totalRowCount,
-      page,
-      rowsPerPage,
-      handleChangePage,
-      setShouldRefocus,
-      keyboard,
-      isSelectionMode,
-    });
-  };
-
-  const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
-    String(rows.length + 1),
-    String(columns.length),
-  ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
   return (
     <StyledTableWrapper

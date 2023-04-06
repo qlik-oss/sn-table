@@ -18,12 +18,13 @@ interface CellProps {
 
 const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
   const { rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount } = data;
-  const cell = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
 
   const rowIsHovered = useContextSelector(TableContext, (value) => value.hoverIndex === rowIndex);
   const setHoverIndex = useContextSelector(TableContext, (value) => value.setHoverIndex);
   const { constraints } = useContextSelector(TableContext, (value) => value.baseProps);
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
+
+  const cell = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
 
   const { handleMouseDown, handleMouseOver, handleMouseUp, cellSelectionState } = useSelector(cell);
 

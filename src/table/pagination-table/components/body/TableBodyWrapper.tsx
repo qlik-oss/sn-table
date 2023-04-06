@@ -40,10 +40,9 @@ function TableBodyWrapper({ setShouldRefocus, tableWrapperRef, announce }: Table
       ),
     [columnsStylingIDsJSON, isSelectionsEnabled]
   );
+  const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
 
   useSelectionListener({ keyboard, selectionDispatch, selectionsAPI, setShouldRefocus, tableWrapperRef });
-
-  const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
 
   return (
     <StyledBody lastRowBottomBorder={lastRowBottomBorder}>
