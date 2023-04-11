@@ -17,7 +17,7 @@
   },
   "SNTable.Pagination.SelectPage": {
     "value": "Select page",
-    "comment": "Label for the dropdown to select a page."
+    "comment": "Label for the dropdown to select a page. (tew 230411)"
   },
   "SNTable.Pagination.FirstPage": {
     "value": "Go to the first page",
