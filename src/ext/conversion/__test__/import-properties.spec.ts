@@ -34,6 +34,21 @@ describe('importProperties', () => {
       },
       qAttributeExpressions: [],
     },
+    {
+      qDef: {
+        qDef: '',
+        textAlign: {
+          auto: true,
+          align: 'left' as Align,
+        },
+        columnWidth: {
+          type: 'FitToContent' as ColumnWidthType,
+          pixels: 200,
+          percentage: 20,
+        },
+      },
+      qAttributeExpressions: [],
+    },
   ];
 
   describe('getColumnInfo', () => {
@@ -55,16 +70,6 @@ describe('importProperties', () => {
 
       newColumnInfo = getColumnInfo(qMeasures, 1, columnWidths, 1);
       expect(newColumnInfo.qDef.columnWidth).toEqual({ pixels: 20, type: 'pixels' });
-    });
-
-    it('should get the correct columnInfo given columnWidths with -1 and pixels', () => {
-      const columnWidths = [400, -1];
-      let newColumnInfo = getColumnInfo(qDimensions, index, columnWidths);
-
-      expect(newColumnInfo.qDef.columnWidth).toEqual({ pixels: 400, type: 'pixels' });
-
-      newColumnInfo = getColumnInfo(qMeasures, 1, columnWidths, 1);
-      expect(newColumnInfo.qDef.columnWidth).toEqual({ type: 'fitToContent' });
     });
 
     it('should get the correct columnInfo given columnWidths with empty array', () => {
@@ -95,13 +100,26 @@ describe('importProperties', () => {
       expect(measures).toEqual(qMeasures);
     });
 
-    it('should get correct dimensions and measures when no qColumnOrder', () => {
+    it('should get correct dimensions and measures when no qColumnOrder provided', () => {
       const qColumnOrder = [] as number[];
-      const columnWidths = [400, -1];
+      const columnWidths = [400, -1, 300];
 
       const { dimensions, measures } = getMultiColumnInfo(qDimensions, qMeasures, qColumnOrder, columnWidths);
       expect(dimensions[0].qDef.columnWidth).toEqual({ pixels: 400, type: 'pixels' });
       expect(measures[0].qDef.columnWidth).toEqual({
+        type: 'fitToContent',
+      });
+      expect(measures[1].qDef.columnWidth).toEqual({ pixels: 300, type: 'pixels' });
+    });
+
+    it('should get correct dimensions and measures', () => {
+      const qColumnOrder = [2, 0, 1];
+      const columnWidths = [400, -1, 300];
+
+      const { dimensions, measures } = getMultiColumnInfo(qDimensions, qMeasures, qColumnOrder, columnWidths);
+      expect(dimensions[0].qDef.columnWidth).toEqual({ pixels: 400, type: 'pixels' });
+      expect(measures[0].qDef.columnWidth).toEqual({ pixels: 300, type: 'pixels' });
+      expect(measures[1].qDef.columnWidth).toEqual({
         type: 'fitToContent',
       });
     });
@@ -115,15 +133,15 @@ describe('importProperties', () => {
           measures: qMeasures,
           excludedDimensions: [],
           excludedMeasures: [],
-          interColumnSortOrder: [0, 1],
+          interColumnSortOrder: [0, 1, 2],
         },
       ],
       properties: {
         qHyperCubeDef: {
           qDimensions: [],
           qMeasures: [],
-          qColumnOrder: [0, 1],
-          columnWidths: [300, -1],
+          qColumnOrder: [0, 1, 2],
+          columnWidths: [300, -1, 400],
         },
       },
     } as unknown as ExportFormat;
@@ -147,6 +165,10 @@ describe('importProperties', () => {
       });
       expect(propertyTree.qProperty.qHyperCubeDef.qMeasures[0].qDef.columnWidth).toEqual({
         type: 'fitToContent',
+      });
+      expect(propertyTree.qProperty.qHyperCubeDef.qMeasures[1].qDef.columnWidth).toEqual({
+        pixels: 400,
+        type: 'pixels',
       });
     });
   });

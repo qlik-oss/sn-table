@@ -78,6 +78,12 @@ describe('exportProperties', () => {
       const columnWidths = getColumnWidths(qDimensions, qMeasures);
       expect(columnWidths).toEqual([-1, 200, -1]);
     });
+
+    it('should get correct columnWidths when qColumnOrder provided', () => {
+      const qColumnOrder = [1, 2, 0];
+      const columnWidths = getColumnWidths(qDimensions, qMeasures, qColumnOrder);
+      expect(columnWidths).toEqual([200, -1, -1]);
+    });
   });
 
   describe('exportProperties', () => {
