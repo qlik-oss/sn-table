@@ -112,10 +112,10 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.17.12.tgz#3a11d13e9a5b0c05db88991b234d8baba1f96487"
   integrity sha512-JOOxw49BVZx2/5tW3FqkdjSD/5gXYeVGPDcB0lvap0gLQshkh1Nyel1QazC+wNxus3xPlsYAgqU1BUmrmCvWtw==
 
-"@nebula.js/sn-table@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/sn-table/-/sn-table-2.0.0.tgz#f524c78333938b4223bfbcd870cc236d7663b3ea"
-  integrity sha512-3Jp4w3Y4P/T/46bO88yG/DHB4dCLF+sDBi1T3gzwMwIMpK96qHx6wt0Sv7yXYPB1+Z1VGwjix1Rtf6uILeBJKw==
+"@nebula.js/sn-table@2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/sn-table/-/sn-table-2.1.0.tgz#29c85e87114f740dd233fe820b36c5dc84ec1b86"
+  integrity sha512-ijMh275rgNgyvuFUdhGqEKz5dZoQnGldU14inPJikfnmay2NBT+X/w+WQD/P6NChem4dCntIibIaFBYpSnuTdw==
 
 "@nebula.js/stardust@3.3.0":
   version "3.3.0"
@@ -124,15 +124,15 @@
   dependencies:
     "@types/qlik-engineapi" "12.67.12"
 
-"@qlik/sdk@0.19.1":
-  version "0.19.1"
-  resolved "https://registry.yarnpkg.com/@qlik/sdk/-/sdk-0.19.1.tgz#bfdf74856200d520f41bfa3a9e58ab043a2df42b"
-  integrity sha512-O2YPFYIU39OzHC4+sge7jPoUHykORXpVLJX2rj1VcLMKLxyVT+5GfLjN3ZpOsRqcEftE/81GBt5ihQypy4uolg==
+"@qlik/sdk@0.20.1":
+  version "0.20.1"
+  resolved "https://registry.yarnpkg.com/@qlik/sdk/-/sdk-0.20.1.tgz#86200354ca8109799f36e6bc6b9447a224d61e74"
+  integrity sha512-gOo5AX+oy5dB6D4ZpmHsFH1RfQ0cKA6WqUf50mtzWQGRrXY2lAMlipYTstTpi27C6uJUaOvZCq/TuM1gMRSULw==
   dependencies:
     "@types/jsonwebtoken" "9.0.1"
-    enigma.js "2.10.0"
+    enigma.js "2.11.0"
     jsonwebtoken "9.0.0"
-    ws "8.12.0"
+    ws "8.13.0"
 
 "@types/jsonwebtoken@9.0.1":
   version "9.0.1"
@@ -162,11 +162,6 @@ ecdsa-sig-formatter@1.0.11:
   integrity sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==
   dependencies:
     safe-buffer "^5.0.1"
-
-enigma.js@2.10.0:
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/enigma.js/-/enigma.js-2.10.0.tgz#12816dd71aec957a17cca081a63c343c9a655f80"
-  integrity sha512-eoVslcv1OtIcOtHP/WwFeemeIIXNJomlv6Obfk6jY7wPBm8/fAPCKB1Gvlyt4bpFgtMssJQ0f+Vq6vt4IgYlmA==
 
 enigma.js@2.11.0:
   version "2.11.0"
@@ -343,10 +338,10 @@ vite@4.2.1:
   optionalDependencies:
     fsevents "~2.3.2"
 
-ws@8.12.0:
-  version "8.12.0"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-8.12.0.tgz#485074cc392689da78e1828a9ff23585e06cddd8"
-  integrity sha512-kU62emKIdKVeEIOIKVegvqpXMSTAMLJozpHZaJNDYqBjzlSYXQGviYwN1osDLJ9av68qHd4a2oSjd7yD4pacig==
+ws@8.13.0:
+  version "8.13.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.13.0.tgz#9a9fb92f93cf41512a0735c8f4dd09b8a1211cd0"
+  integrity sha512-x9vcZYTrFPC7aSIbj7sRCYo7L/Xb8Iy+pW0ng0wt2vCJv7M9HOMy0UoN3rr+IFC7hb7vXoqS+P9ktyLLLhO+LA==
 
 yallist@^4.0.0:
   version "4.0.0"
