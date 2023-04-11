@@ -112,10 +112,10 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.17.12.tgz#3a11d13e9a5b0c05db88991b234d8baba1f96487"
   integrity sha512-JOOxw49BVZx2/5tW3FqkdjSD/5gXYeVGPDcB0lvap0gLQshkh1Nyel1QazC+wNxus3xPlsYAgqU1BUmrmCvWtw==
 
-"@nebula.js/sn-table@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/sn-table/-/sn-table-2.0.0.tgz#f524c78333938b4223bfbcd870cc236d7663b3ea"
-  integrity sha512-3Jp4w3Y4P/T/46bO88yG/DHB4dCLF+sDBi1T3gzwMwIMpK96qHx6wt0Sv7yXYPB1+Z1VGwjix1Rtf6uILeBJKw==
+"@nebula.js/sn-table@2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/sn-table/-/sn-table-2.1.0.tgz#29c85e87114f740dd233fe820b36c5dc84ec1b86"
+  integrity sha512-ijMh275rgNgyvuFUdhGqEKz5dZoQnGldU14inPJikfnmay2NBT+X/w+WQD/P6NChem4dCntIibIaFBYpSnuTdw==
 
 "@nebula.js/stardust@3.3.0":
   version "3.3.0"
@@ -241,10 +241,10 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-typescript@5.0.3:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.0.3.tgz#fe976f0c826a88d0a382007681cbb2da44afdedf"
-  integrity sha512-xv8mOEDnigb/tN9PSMTwSEqAnUvkoXMQlicOb0IUVDBSQCgBSaAAROUZYy2IcUy5qU6XajK5jjjO7TMWqBTKZA==
+typescript@5.0.4:
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.0.4.tgz#b217fd20119bd61a94d4011274e0ab369058da3b"
+  integrity sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==
 
 vite@4.2.1:
   version "4.2.1"
