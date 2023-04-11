@@ -14,6 +14,18 @@ export const getColumnWidth = (colIdx: number, qDimensions: DimensionProperties[
   return columnWidth?.type === 'pixels' ? columnWidth.pixels : -1;
 };
 
+export const getColumnWidths = (
+  qDimensions: DimensionProperties[],
+  qMeasures: MeasureProperties[],
+  qColumnOrder?: number[]
+) => {
+  const columnsLength = qDimensions.length + qMeasures.length;
+  const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
+  const columnWidths = columnOrder.map((colIdx: number) => getColumnWidth(colIdx, qDimensions, qMeasures));
+
+  return columnWidths;
+};
+
 const exportProperties = (propertyTree: PropTree, hyperCubePath?: string): ExportFormat => {
   const expFormat = conversion.hypercube.exportProperties({
     propertyTree,
@@ -22,14 +34,14 @@ const exportProperties = (propertyTree: PropTree, hyperCubePath?: string): Expor
   const {
     qHyperCubeDef: { qColumnOrder, qDimensions, qMeasures },
   } = expFormat.properties;
-  const columnsLength = qDimensions.length + qMeasures.length;
-  const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
-  const columnWidths = columnOrder.map((colIdx: number) => getColumnWidth(colIdx, qDimensions, qMeasures));
+  const columnWidths = getColumnWidths(qDimensions, qMeasures, qColumnOrder);
   const qHyperCubeDef = {
     ...expFormat.properties.qHyperCubeDef,
     columnWidths,
   };
+
   setValue(expFormat, 'properties.qHyperCubeDef', qHyperCubeDef);
+
   conversion.quarantineProperty(expFormat.properties, 'qHyperCubeDef.columnWidths', 'straightTableColumnWidths');
 
   return expFormat;

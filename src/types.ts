@@ -13,7 +13,7 @@ interface InlineDimensionDef extends EngineAPI.INxInlineDimensionDef {
   textAlign: TextAlign;
   columnWidth: ColumnWidth;
 }
-interface InlineMeasureDef extends Omit<EngineAPI.INxInlineMeasureDef, 'qDef'> {
+interface InlineMeasureDef extends EngineAPI.INxInlineMeasureDef {
   textAlign: TextAlign;
   columnWidth: ColumnWidth;
 }
@@ -219,5 +219,5 @@ export interface ExportFormat {
 
 export interface PropTree {
   qChildren: unknown[];
-  qProperty: EngineAPI.IGenericHyperCubeProperties;
+  qProperty: { qHyperCubeDef: QHyperCubeDef };
 }

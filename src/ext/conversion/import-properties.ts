@@ -8,35 +8,50 @@ import { ColumnWidthTypes } from '../../table/constants';
 export const getColumnInfo = (
   columnInfo: DimensionProperties[] | MeasureProperties[],
   colIdx: number,
-  columnWidths: unknown,
+  columnWidths?: number[],
   numDims?: number
 ) => {
   let index = colIdx;
   if (numDims) index = colIdx - numDims;
-  const column = columnInfo[index];
+  const column = JSON.parse(JSON.stringify(columnInfo[index]));
 
   // For converting  "table to sn-table",  -1 -> fitToContent and the rest -> pixels
   if (Array.isArray(columnWidths) && columnWidths.length > 0) {
     const columnWidth = columnWidths[colIdx];
 
-    return {
-      ...column,
-      qDef: {
-        ...column.qDef,
-        columnWidth:
-          columnWidth === -1
-            ? {
-                type: ColumnWidthTypes.FIT_TO_CONTENT,
-              }
-            : {
-                type: ColumnWidthTypes.PIXELS,
-                pixels: columnWidth,
-              },
-      },
-    };
+    column.qDef.columnWidth =
+      columnWidth === -1
+        ? {
+            type: ColumnWidthTypes.FIT_TO_CONTENT,
+          }
+        : {
+            type: ColumnWidthTypes.PIXELS,
+            pixels: columnWidth,
+          };
   }
 
   return column;
+};
+
+export const getMultiColumnInfo = (
+  qDimensions: DimensionProperties[],
+  qMeasures: MeasureProperties[],
+  qColumnOrder?: number[],
+  columnWidths?: number[]
+) => {
+  const numDims = qDimensions.length;
+  const columnsLength = numDims + qMeasures.length;
+  const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
+
+  const dimensions = columnOrder
+    .filter((colIdx: number) => colIdx < numDims)
+    .map((colIdx: number) => getColumnInfo(qDimensions, colIdx, columnWidths));
+
+  const measures = columnOrder
+    .filter((colIdx: number) => colIdx >= numDims)
+    .map((colIdx: number) => getColumnInfo(qMeasures, colIdx, columnWidths, numDims));
+
+  return { dimensions, measures };
 };
 
 const importProperties = (
@@ -57,26 +72,13 @@ const importProperties = (
     extension,
   });
   const {
-    qHyperCubeDef: { qColumnOrder, columnWidths },
+    qHyperCubeDef: { qDimensions, qMeasures, qColumnOrder, columnWidths },
   } = propertyTree.qProperty;
-  let {
-    qHyperCubeDef: { qDimensions, qMeasures },
-  } = propertyTree.qProperty;
-  const numDims = qDimensions.length;
-  const columnsLength = numDims + qMeasures.length;
-  const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
-
-  qDimensions = columnOrder
-    .filter((colIdx: number) => colIdx < numDims)
-    .map((colIdx: number) => getColumnInfo(qDimensions, colIdx, columnWidths));
-
-  qMeasures = columnOrder
-    .filter((colIdx: number) => colIdx >= numDims)
-    .map((colIdx: number) => getColumnInfo(qMeasures, colIdx, columnWidths, numDims));
+  const { dimensions, measures } = getMultiColumnInfo(qDimensions, qMeasures, qColumnOrder, columnWidths);
 
   if (Array.isArray(columnWidths) && columnWidths.length > 0) {
-    setValue(propertyTree, 'qProperty.qHyperCubeDef.qDimensions', qDimensions);
-    setValue(propertyTree, 'qProperty.qHyperCubeDef.qMeasures', qMeasures);
+    setValue(propertyTree, 'qProperty.qHyperCubeDef.qDimensions', dimensions);
+    setValue(propertyTree, 'qProperty.qHyperCubeDef.qMeasures', measures);
   }
 
   conversion.conditionalShow.unquarantine(propertyTree.qProperty);
