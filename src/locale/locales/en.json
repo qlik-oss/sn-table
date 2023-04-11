@@ -9,11 +9,11 @@
   },
   "SNTable.Accessibility.Ascending": {
     "value": "Ascending",
-    "comment": "Tooltip showing that column is in ascending order."
+    "comment": "Tooltip showing that column is in ascending order. (tew 230411)"
   },
   "SNTable.Accessibility.Descending": {
     "value": "Descending",
-    "comment": "Tooltip showing that column is in descending order."
+    "comment": "Tooltip showing that column is in descending order. (tew 230411)"
   },
   "SNTable.Pagination.RowsPerPage": {
     "value": "Rows per page",
