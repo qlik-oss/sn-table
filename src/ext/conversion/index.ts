@@ -1,4 +1,4 @@
-import importProperties from './importProperties';
-import exportProperties from './exportProperties';
+import importProperties from './import-properties';
+import exportProperties from './export-properties';
 
 export { importProperties, exportProperties };

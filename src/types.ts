@@ -5,24 +5,26 @@ export type Align = 'left' | 'center' | 'right';
 
 export interface TextAlign {
   auto: boolean;
-  align: 'left' | 'center' | 'right';
+  align: Align;
 }
 
 // properties
 interface InlineDimensionDef extends EngineAPI.INxInlineDimensionDef {
   textAlign: TextAlign;
+  columnWidth: ColumnWidth;
 }
 interface InlineMeasureDef extends EngineAPI.INxInlineMeasureDef {
   textAlign: TextAlign;
+  columnWidth: ColumnWidth;
 }
 interface AttributeExpressionProperties extends EngineAPI.INxAttrExprDef {
   id: 'cellForegroundColor' | 'cellBackgroundColor';
 }
-interface DimensionProperties extends Omit<EngineAPI.INxDimension, 'qDef' | 'qAttributeExpressions'> {
+export interface DimensionProperties extends Omit<EngineAPI.INxDimension, 'qDef' | 'qAttributeExpressions'> {
   qDef: InlineDimensionDef;
   qAttributeExpressions: AttributeExpressionProperties[];
 }
-interface MeasureProperties extends Omit<EngineAPI.INxMeasure, 'qDef' | 'qAttributeExpressions'> {
+export interface MeasureProperties extends Omit<EngineAPI.INxMeasure, 'qDef' | 'qAttributeExpressions'> {
   qDef: InlineMeasureDef;
   qAttributeExpressions: AttributeExpressionProperties[];
 }
@@ -113,9 +115,10 @@ export interface Row {
 }
 
 export type SortDirection = 'A' | 'D';
+export type ColumnWidthType = 'auto' | 'fitToContent' | 'pixels' | 'percentage';
 
 export interface ColumnWidth {
-  type: string;
+  type: ColumnWidthType;
   pixels?: number;
   percentage?: number;
 }
@@ -216,5 +219,5 @@ export interface ExportFormat {
 
 export interface PropTree {
   qChildren: unknown[];
-  qProperty: EngineAPI.IGenericHyperCubeProperties;
+  qProperty: { qHyperCubeDef: QHyperCubeDef };
 }
