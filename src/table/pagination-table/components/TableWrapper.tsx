@@ -28,28 +28,26 @@ function TableWrapper(props: TableWrapperProps) {
     TableContext,
     (value) => value.baseProps
   );
-
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
 
-  const isSelectionMode = selectionsAPI.isModal();
-
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const tableWrapperRef = useRef<HTMLDivElement>(null);
 
   const { yScrollbarWidth } = useScrollbarWidth(tableContainerRef);
+  const isSelectionMode = selectionsAPI.isModal();
+  const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
+    String(rows.length + 1),
+    String(columns.length),
+  ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   }, [rootElement]);
-
-  useEffect(() => {
-    tableContainerRef.current?.scrollTo(0, 0);
-  }, [pageInfo, totalRowCount]);
 
   const handleChangePage = useCallback(
     (pageIdx: number) => {
@@ -79,6 +77,10 @@ function TableWrapper(props: TableWrapperProps) {
   useScrollListener(tableContainerRef, direction);
   useKeyboardActiveListener();
 
+  useEffect(() => {
+    tableContainerRef.current?.scrollTo(0, 0);
+  }, [pageInfo, totalRowCount]);
+
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
   useDidUpdateEffect(() => {
@@ -101,11 +103,6 @@ function TableWrapper(props: TableWrapperProps) {
   useDidUpdateEffect(() => {
     selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows: rows } });
   }, [rows]);
-
-  const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
-    String(rows.length + 1),
-    String(columns.length),
-  ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
   return (
     <StyledTableWrapper

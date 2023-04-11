@@ -5,7 +5,7 @@ import manageData from '../../../../../handle-data';
 import TableBodyWrapper from '../TableBodyWrapper';
 import * as getCellRenderer from '../../../utils/get-cell-renderer';
 import * as handleKeyPress from '../../../../utils/handle-keyboard';
-import * as handleClick from '../../../../utils/handle-click';
+import * as handleClick from '../../../../utils/handle-mouse';
 import { TableData, PageInfo, Cell } from '../../../../../types';
 import TestWithProviders from '../../../../../__test__/test-with-providers';
 

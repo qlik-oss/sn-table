@@ -1,13 +1,13 @@
 import { MouseEvent } from 'react';
 import { stardust } from '@nebula.js/stardust';
 import { TotalsPosition, Cell, Announce } from '../../../types';
-import { handleMouseDownToFocusBody, handleMouseDownToFocusHead, getSelectionMouseHandlers } from '../handle-click';
+import { handleMouseDownToFocusBody, handleMouseDownToFocusHead, getSelectionMouseHandlers } from '../handle-mouse';
 import * as accessibilityUtils from '../accessibility-utils';
 import * as getElementUtils from '../get-element-utils';
 import { SelectionDispatch } from '../../types';
 import { SelectionActions } from '../../constants';
 
-describe('handle-click', () => {
+describe('handle-mouse', () => {
   const rootElement = {} as unknown as HTMLDivElement;
   const cellElement = { focus: () => undefined, setAttribute: () => undefined } as unknown as HTMLTableCellElement;
   let keyboard = {} as unknown as stardust.Keyboard;

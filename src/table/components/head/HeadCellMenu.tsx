@@ -20,12 +20,12 @@ import RecursiveMenuList from './MenuList/RecursiveMenuList';
 import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 
 export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
-  const showSearchMenuItem = column.isDim;
+  const { isDim, qLibraryId, fieldId, headTextAlign } = column;
+  const { translator, embed, model } = useContextSelector(TableContext, (value) => value.baseProps);
   const anchorRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
   const [openListboxDropdown, setOpenListboxDropdown] = useState(false);
-  const { translator, embed, model } = useContextSelector(TableContext, (value) => value.baseProps);
   const {
     fieldInstance,
     selectionActionsEnabledStatus,
@@ -34,10 +34,10 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
   } = useFieldSelection(column);
 
   const embedListbox = useCallback(() => {
-    const fieldId = column.qLibraryId ? { qLibraryId: column.qLibraryId, type: 'dimension' } : column.fieldId;
+    const id = qLibraryId ? { qLibraryId, type: 'dimension' } : fieldId;
     // @ts-ignore TODO: no types for `__DO_NOT_USE__`, it will improve when it becomes stable
     // eslint-disable-next-line
-    embed.__DO_NOT_USE__.popover(listboxRef.current, fieldId, {
+    embed.__DO_NOT_USE__.popover(listboxRef.current, id, {
       anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
       transformOrigin: { vertical: 'top', horizontal: 'left' },
     });
@@ -46,23 +46,11 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
     embed.on('fieldPopoverClose', () => {
       setOpenListboxDropdown(false);
     });
-  }, [embed, column.fieldId, column.qLibraryId]);
-
-  useEffect(() => {
-    if (!openMenuDropdown) resetSelectionActionsEnabledStatus();
-  }, [openMenuDropdown, resetSelectionActionsEnabledStatus]);
-
-  const handleOpenDropdown = async () => {
-    if (!openMenuDropdown && model) {
-      const layout = await model.getLayout();
-      updateSelectionActionsEnabledStatus(layout as TableLayout);
-    }
-    setOpenMenuDropdown(!openMenuDropdown);
-  };
+  }, [embed, fieldId, qLibraryId]);
 
   const menuItemGroups = useMemo<MenuItemGroup[]>(
     () => [
-      ...(showSearchMenuItem
+      ...(isDim
         ? [
             [
               {
@@ -158,11 +146,23 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
         },
       ],
     ],
-    [translator, showSearchMenuItem, fieldInstance, selectionActionsEnabledStatus, embedListbox]
+    [translator, isDim, fieldInstance, selectionActionsEnabledStatus, embedListbox]
   );
 
+  const handleOpenDropdown = async () => {
+    if (!openMenuDropdown && model) {
+      const layout = await model.getLayout();
+      updateSelectionActionsEnabledStatus(layout as TableLayout);
+    }
+    setOpenMenuDropdown(!openMenuDropdown);
+  };
+
+  useEffect(() => {
+    if (!openMenuDropdown) resetSelectionActionsEnabledStatus();
+  }, [openMenuDropdown, resetSelectionActionsEnabledStatus]);
+
   return menuItemGroups.length ? (
-    <HeadCellMenuWrapper rightAligned={column.headTextAlign === 'right'}>
+    <HeadCellMenuWrapper rightAligned={headTextAlign === 'right'}>
       <StyledMenuIconButton
         isVisible={openListboxDropdown || openMenuDropdown}
         ref={anchorRef}

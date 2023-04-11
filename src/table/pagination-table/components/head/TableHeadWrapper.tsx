@@ -10,7 +10,7 @@ import CellText from '../../../components/CellText';
 import { BORDER_WIDTH, PADDING } from '../../../styling-defaults';
 import { StyledHeadCell } from './styles';
 import { handleHeadKeyDown } from '../../../utils/handle-keyboard';
-import { handleMouseDownToFocusHead } from '../../../utils/handle-click';
+import { handleMouseDownToFocusHead } from '../../../utils/handle-mouse';
 
 function TableHeadWrapper() {
   const { columns } = useContextSelector(TableContext, (value) => value.tableData);
