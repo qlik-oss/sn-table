@@ -100,7 +100,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   // producing strange cases where some text may not properly fit inside the cell.
   useOnPropsChange(() => {
     gridRef.current?.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: false });
-  }, [layout, pageInfo, theme.name(), rect.width]);
+  }, [layout, pageInfo, theme.name(), rect.width, columnWidths]);
 
   useImperativeHandle(
     ref,
