@@ -62,6 +62,13 @@ describe('use-column-widths', () => {
   const getTotalWidth = (widths: number[]) => widths.reduce((acc, w) => acc + w, 0);
 
   describe('getColumnWidths', () => {
+    it('should early return when there are no columns', () => {
+      columns = [];
+
+      const widths = getColumnWidthsState();
+      expect(widths).toEqual([]);
+    });
+
     describe('all have same type', () => {
       it('should return equal sizes when all cols have auto type', () => {
         const widths = getColumnWidthsState();

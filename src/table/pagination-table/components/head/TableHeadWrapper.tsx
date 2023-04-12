@@ -3,7 +3,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
 import { useContextSelector, TableContext } from '../../../context';
-import { DEFAULT_COLUMN_PIXEL_WIDTH, FullSortDirection } from '../../../constants';
+import { FullSortDirection } from '../../../constants';
 import HeadCellContent from '../../../components/head/HeadCellContent';
 import ColumnAdjuster from '../../../components/head/ColumnAdjuster';
 import CellText from '../../../components/CellText';
@@ -60,9 +60,7 @@ function TableHeadWrapper() {
             });
 
           const widthStyle = {
-            width:
-              (columnWidths[columnIndex] || DEFAULT_COLUMN_PIXEL_WIDTH) -
-              (isLastColumn ? PADDING * 2 : PADDING * 2 + BORDER_WIDTH),
+            width: columnWidths[columnIndex] - (isLastColumn ? PADDING * 2 : PADDING * 2 + BORDER_WIDTH),
             zIndex: columns.length - columnIndex,
           };
 
