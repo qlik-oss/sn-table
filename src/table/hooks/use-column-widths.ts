@@ -27,7 +27,7 @@ type GetFitToContentWidth = (headLabel: string, totalsLabel: string, glyphCount:
  * The widths are sorted in the order they will be displayed
  */
 export const getColumnWidths = (columns: Column[], tableWidth: number, getFitToContentWidth: GetFitToContentWidth) => {
-  if (!columns?.length || tableWidth === 0) return [];
+  if (!columns?.length) return [];
 
   const columnWidths: number[] = [];
   const autoColumnIndexes: number[] = [];
