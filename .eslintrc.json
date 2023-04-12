@@ -28,10 +28,10 @@
     "react-hooks/rules-of-hooks": 2,
     "react-hooks/exhaustive-deps": 1,
     "import/no-extraneous-dependencies": [2, { "devDependencies": true }],
-    "prefer-destructuring": ["error", { "object": true, "array": false }],
+    "prefer-destructuring": [2, { "object": true, "array": false }],
     "no-param-reassign": [2, { "props": false }],
     "import/extensions": [
-      "error",
+      2,
       "ignorePackages",
       {
         "js": "never",
@@ -41,14 +41,14 @@
       }
     ],
     "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
-    "@typescript-eslint/ban-ts-comment": ["error", { "ts-ignore": "allow-with-description" }],
-    "no-shadow": "off",
-    "@typescript-eslint/no-shadow": ["error"],
-    "@typescript-eslint/no-unused-expressions": ["warn", { "allowShortCircuit": true, "allowTernary": true }]
+    "@typescript-eslint/ban-ts-comment": [2, { "ts-ignore": "allow-with-description" }],
+    "no-shadow": 0,
+    "@typescript-eslint/no-shadow": 2,
+    "@typescript-eslint/no-unused-expressions": [1, { "allowShortCircuit": true, "allowTernary": true }]
   },
   "overrides": [
     {
-      "files": ["**/*.spec.{js,jsx}"],
+      "files": ["**/*.spec.{js,jsx}", "jest.setup.js"],
       "env": {
         "browser": false,
         "node": true,
@@ -61,11 +61,11 @@
       },
       "plugins": ["jest", "react"],
       "rules": {
-        "jest/no-disabled-tests": "warn",
-        "jest/no-focused-tests": "error",
-        "jest/no-identical-title": "error",
-        "jest/prefer-to-have-length": "warn",
-        "jest/valid-expect": "error"
+        "jest/no-disabled-tests": 1,
+        "jest/no-focused-tests": 2,
+        "jest/no-identical-title": 2,
+        "jest/prefer-to-have-length": 1,
+        "jest/valid-expect": 2
       }
     }
   ]

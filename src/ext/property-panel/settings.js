@@ -33,7 +33,7 @@ const stylingPanel = {
                       defaultValue(item, data, args) {
                         const currentTheme = args.theme.current();
                         return parseInt(
-                          currentTheme.object?.straightTable?.header?.fontSize ?? currentTheme.fontSize,
+                          currentTheme.object?.straightTableV2?.header?.fontSize ?? currentTheme.fontSize,
                           10
                         );
                       },
@@ -50,7 +50,7 @@ const stylingPanel = {
                       component: 'color-picker',
                       defaultValue(item, data, args) {
                         const currentTheme = args.theme.current();
-                        return { color: currentTheme.object?.straightTable?.header?.color ?? currentTheme.color };
+                        return { color: currentTheme.object?.straightTableV2?.header?.color ?? currentTheme.color };
                       },
                       dualOutput: true,
                     },
@@ -82,7 +82,7 @@ const stylingPanel = {
                       defaultValue(item, data, args) {
                         const currentTheme = args.theme.current();
                         return parseInt(
-                          currentTheme.object?.straightTable?.content?.fontSize ?? currentTheme.fontSize,
+                          currentTheme.object?.straightTableV2?.content?.fontSize ?? currentTheme.fontSize,
                           10
                         );
                       },
@@ -98,7 +98,7 @@ const stylingPanel = {
                       component: 'color-picker',
                       defaultValue(item, data, args) {
                         const currentTheme = args.theme.current();
-                        return { color: currentTheme.object?.straightTable?.content?.color ?? currentTheme.color };
+                        return { color: currentTheme.object?.straightTableV2?.content?.color ?? currentTheme.color };
                       },
                       dualOutput: true,
                     },
@@ -217,8 +217,7 @@ const getTotals = (env) => ({
       },
     },
   ],
-  show:
-    env.flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES') && !env?.anything?.sense?.isUnsupportedFeature?.('totals'),
+  show: !env?.anything?.sense?.isUnsupportedFeature?.('totals'),
 });
 
 const getChartExploration = (env) =>
@@ -253,14 +252,13 @@ const getChartExploration = (env) =>
     },
   };
 
-const getUsePagination = ({ flags }) =>
-  flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES') && {
-    ref: 'presentation.usePagination',
-    translation: 'properties.usePagination',
-    type: 'boolean',
-    component: 'checkbox',
-    defaultValue: true,
-  };
+const getUsePagination = () => ({
+  ref: 'usePagination',
+  translation: 'properties.usePagination',
+  type: 'boolean',
+  component: 'checkbox',
+  defaultValue: false,
+});
 
 const getSettings = (env) => ({
   uses: 'settings',
@@ -269,7 +267,7 @@ const getSettings = (env) => ({
       grouped: true,
       type: 'items',
       translation: 'properties.presentation',
-      items: [stylingPanel, getTotals(env), getUsePagination(env)],
+      items: [stylingPanel, getTotals(env), getUsePagination()],
     },
     ...getChartExploration(env),
   },

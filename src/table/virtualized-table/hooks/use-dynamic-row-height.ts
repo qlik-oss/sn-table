@@ -11,8 +11,9 @@ import {
 } from '../../utils/styling-utils';
 import { MAX_NBR_LINES_OF_TEXT, MIN_BODY_ROW_HEIGHT } from '../constants';
 import { BodyStyle, GridState, RowMeta } from '../types';
-import { subtractCellPaddingAndBorder, subtractCellPaddingIconsAndBorder } from '../utils/cell-width-utils';
+import { getAdjustedCellWidth, getAdjustedHeadCellWidth } from '../utils/cell-width-utils';
 import useMeasureText from './use-measure-text';
+import useMutableProp from './use-mutable-prop';
 import useOnPropsChange from './use-on-props-change';
 
 export interface UseDynamicRowHeightProps {
@@ -48,11 +49,11 @@ const useDynamicRowHeight = ({
     heights: [],
     totalHeight: 0,
     count: 0,
-    measuredCells: new Set<string>(),
+    measuredCells: new Map<string, [string, number, number, boolean]>(),
   });
-  const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, rect } = useContextSelector(TableContext, (value) => value.baseProps);
   const [estimatedRowHeight, setEstimatedRowHeight] = useState(rowHeight || MIN_BODY_ROW_HEIGHT);
-  const { measureText } = useMeasureText(style.fontSize, style.fontFamily, boldText);
+  const { measureText, estimateLineCount } = useMeasureText(style.fontSize, style.fontFamily, boldText);
   const lineHeight = parseInt(style.fontSize ?? COMMON_CELL_STYLING.fontSize, 10) * LINE_HEIGHT_MULTIPLIER;
 
   // Find a reasonable max line count to avoid issue where the react-window container DOM element gets too big
@@ -63,28 +64,30 @@ const useDynamicRowHeight = ({
   );
 
   const getCellSize = useCallback(
-    (text: string, colIdx: number) => {
-      const width = measureText(text.trim());
+    (text: string, colIdx: number, isNumeric: boolean) => {
       const cellWidth = columns
-        ? subtractCellPaddingIconsAndBorder(columnWidths[colIdx], columns[colIdx])
-        : subtractCellPaddingAndBorder(columnWidths[colIdx]);
-      const estimatedLineCount = Math.min(maxLineCount, Math.ceil(width / cellWidth));
+        ? getAdjustedHeadCellWidth(columnWidths[colIdx], columns[colIdx])
+        : getAdjustedCellWidth(columnWidths[colIdx]);
+      const estimatedLineCount = Math.min(
+        maxLineCount,
+        estimateLineCount({ text: text.trim(), maxWidth: cellWidth, isNumeric })
+      );
       const textHeight = Math.max(1, estimatedLineCount) * lineHeight;
 
       return textHeight + CELL_PADDING_HEIGHT + CELL_BORDER_HEIGHT;
     },
-    [columnWidths, measureText, lineHeight, maxLineCount, columns]
+    [columnWidths, lineHeight, maxLineCount, columns, estimateLineCount]
   );
 
   const setCellSize = useCallback(
-    (text: string, rowIdx: number, colIdx: number) => {
+    (text: string, rowIdx: number, colIdx: number, isNumeric = false, batchStateUpdate = false) => {
       const key = `${rowIdx}-${colIdx}`;
       if (rowMeta.current.measuredCells.has(key)) {
         return;
       }
 
-      rowMeta.current.measuredCells.add(key);
-      const height = getCellSize(text, colIdx);
+      rowMeta.current.measuredCells.set(key, [text, rowIdx, colIdx, isNumeric]);
+      const height = getCellSize(text, colIdx, isNumeric);
 
       const alreadyMeasuredRowHeight = rowMeta.current.heights[rowIdx];
       const diff = height - alreadyMeasuredRowHeight;
@@ -98,7 +101,9 @@ const useDynamicRowHeight = ({
         rowMeta.current.heights[rowIdx] = height;
       }
 
-      setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
+      if (!batchStateUpdate) {
+        setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
+      }
     },
     [getCellSize]
   );
@@ -107,6 +112,31 @@ const useDynamicRowHeight = ({
     (rowIdx: number) => rowMeta.current.heights[rowIdx] ?? estimatedRowHeight,
     [rowMeta, estimatedRowHeight]
   );
+
+  const resetRowMeta = useCallback(() => {
+    rowMeta.current.lastScrollToRatio = 0;
+    rowMeta.current.resetAfterRowIndex = 0;
+    rowMeta.current.heights = [];
+    rowMeta.current.totalHeight = 0;
+    rowMeta.current.count = 0;
+    rowMeta.current.measuredCells.clear();
+  }, [rowMeta]);
+
+  // Use "mutableSetCellSize" so that "resizeAllCells" is not recreated every time
+  // "columnWidths" changes will the user is actively re-sizing a column.
+  const mutableSetCellSize = useMutableProp(setCellSize);
+
+  // Allows cell sizes to be recalculated while a user is actively re-sizing a column
+  const resizeAllCells = useCallback(() => {
+    const copyOfMeasuredCells = new Map(rowMeta.current.measuredCells);
+    resetRowMeta();
+
+    copyOfMeasuredCells.forEach(([text, rowIdx, colIdx, isNumeric]) => {
+      mutableSetCellSize.current(text, rowIdx, colIdx, isNumeric, true);
+    });
+
+    setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
+  }, [resetRowMeta, mutableSetCellSize]);
 
   /**
    * Some user actions and events can trigger row heights to be invalidated
@@ -117,16 +147,24 @@ const useDynamicRowHeight = ({
    * - Container element is re-sized (object re-sized in Qlik Sense or browser window re-sized)
    */
   useOnPropsChange(() => {
-    rowMeta.current.lastScrollToRatio = 0;
-    rowMeta.current.resetAfterRowIndex = 0;
-    rowMeta.current.heights = [];
-    rowMeta.current.totalHeight = 0;
-    rowMeta.current.count = 0;
-    rowMeta.current.measuredCells.clear();
-  }, [layout, pageInfo, getCellSize]);
+    resetRowMeta();
+  }, [layout, pageInfo]);
 
-  const updateCellHeight = (rows: Row[]) => {
+  /**
+   * When theme or container element changes. The data remains valid, in such case
+   * reset row meta and recompute row heights again.
+   *
+   * "measureText" is used as a way to detect changes in the theme.
+   */
+  useOnPropsChange(() => {
+    resizeAllCells();
+  }, [measureText, rect.width]);
+
+  // Allows cell sizes to be recalculated while a user is actively re-sizing a column
+  const resizeVisibleCells = (rows: Row[]) => {
     if (!gridState) return;
+
+    resetRowMeta();
 
     const { overscanRowStartIndex: rowStart, overscanRowStopIndex } = gridState.current;
     const rowStop = Math.min(overscanRowStopIndex, layout.qHyperCube.qSize.qcy - 1);
@@ -135,7 +173,7 @@ const useDynamicRowHeight = ({
       const row = rows[rowIdx] ?? {};
       Object.values(row).forEach((cell) => {
         if (typeof cell === 'object') {
-          setCellSize(cell.qText ?? '', rowIdx, cell.pageColIdx);
+          setCellSize(cell.qText ?? '', rowIdx, cell.pageColIdx, cell.isNumeric);
         }
       });
     }
@@ -149,7 +187,16 @@ const useDynamicRowHeight = ({
     lineRef.current.resetAfterIndex(rowMeta.current.resetAfterRowIndex, false);
   }
 
-  return { setCellSize, getRowHeight, rowMeta, estimatedRowHeight, maxLineCount, updateCellHeight };
+  return {
+    setCellSize,
+    getRowHeight,
+    rowMeta,
+    estimatedRowHeight,
+    maxLineCount,
+    resizeVisibleCells,
+    resizeAllCells,
+    resetRowMeta,
+  };
 };
 
 export default useDynamicRowHeight;

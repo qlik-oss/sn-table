@@ -3,9 +3,9 @@
   "info": {
     "name": "@nebula.js/sn-table:properties",
     "description": "Table generic object definition",
-    "version": "1.23.0",
+    "version": "2.1.0",
     "license": "MIT",
-    "stability": "experimental",
+    "stability": "stable",
     "x-qlik-visibility": "public"
   },
   "entries": {
@@ -55,12 +55,6 @@
           ],
           "kind": "object",
           "entries": {
-            "columnWidths": {
-              "kind": "array",
-              "items": {
-                "type": "number"
-              }
-            },
             "qColumnOrder": {
               "kind": "array",
               "items": {
@@ -121,6 +115,7 @@
         },
         "totals": {
           "description": "totals settings",
+          "optional": true,
           "kind": "object",
           "entries": {
             "label": {
@@ -151,12 +146,18 @@
               "type": "string"
             },
             "show": {
-              "description": "Determines if the way totals row is showing is handle automatically, if `true` the `position` prop will be ignored",
+              "description": "If set to true, the display of the totals row will be handled automatically, and the `position` prop will be ignored.",
               "optional": true,
               "defaultValue": true,
               "type": "boolean"
             }
           }
+        },
+        "usePagination": {
+          "description": "Use pagination or continuous scroll. If undefined, defaults to using pagination",
+          "optional": true,
+          "defaultValue": false,
+          "type": "boolean"
         },
         "version": {
           "description": "Current version of this generic object definition",
@@ -189,6 +190,45 @@
             }
           ],
           "type": "string"
+        }
+      }
+    },
+    "ColumnWidth": {
+      "description": "Column width info",
+      "kind": "object",
+      "entries": {
+        "type": {
+          "description": "Defines how the column width is set. `auto` calculates the width(s) so the total table width equals the chart width. `fitToContent` calculates a width based on the cells' content. `pixels` uses a specified pixel value. `percentage` sets the column width to specified percentage of the chart width",
+          "kind": "union",
+          "items": [
+            {
+              "kind": "literal",
+              "value": "'auto'"
+            },
+            {
+              "kind": "literal",
+              "value": "'FitToContent'"
+            },
+            {
+              "kind": "literal",
+              "value": "'pixels'"
+            },
+            {
+              "kind": "literal",
+              "value": "'percentage'"
+            }
+          ],
+          "type": "string"
+        },
+        "pixels": {
+          "description": "Is used (and mandatory) if type is `pixels`",
+          "optional": true,
+          "type": "number"
+        },
+        "percentage": {
+          "description": "Is used (and mandatory) if type is `percentage`",
+          "optional": true,
+          "type": "number"
         }
       }
     },
@@ -240,7 +280,7 @@
           "type": "#/definitions/PaletteColor"
         },
         "padding": {
-          "description": "Defaults to `7px 14px`",
+          "description": "Css setting for the cell padding, defaults to `4px 12px`",
           "optional": true,
           "type": "string"
         }
@@ -294,6 +334,10 @@
         "textAlign": {
           "optional": true,
           "type": "#/definitions/TextAlign"
+        },
+        "columnWidth": {
+          "optional": true,
+          "type": "#/definitions/ColumnWidth"
         }
       }
     },
@@ -309,6 +353,10 @@
         "textAlign": {
           "optional": true,
           "type": "#/definitions/TextAlign"
+        },
+        "columnWidth": {
+          "optional": true,
+          "type": "#/definitions/ColumnWidth"
         }
       }
     },

@@ -47,12 +47,7 @@ export interface VirtualTableRenderProps {
   initialDataPages: EngineAPI.INxDataPage[];
 }
 
-export interface WrapperProps {
-  rect: stardust.Rect;
-}
-
 export interface TableProps {
-  rect: stardust.Rect;
   pageInfo: PageInfo;
 }
 
@@ -63,6 +58,7 @@ export interface HeaderProps {
   columns: Column[];
   headerStyle: GeneratedStyling;
   rowHeight: number;
+  columResizeHandler: () => void;
 }
 
 export interface TotalsProps {
@@ -87,6 +83,7 @@ export interface BodyProps {
 
 export interface BodyRef {
   interpolatedScrollTo: (scrollTopRatio: number, scrollLeft: number) => void;
+  resizeCells: () => void;
 }
 
 export interface RowMeta {
@@ -95,7 +92,7 @@ export interface RowMeta {
   heights: number[];
   totalHeight: number;
   count: number;
-  measuredCells: Set<string>;
+  measuredCells: Map<string, [string, number, number, boolean]>;
 }
 
 export interface ItemData {
@@ -106,7 +103,13 @@ export interface ItemData {
   maxLineCount: number;
 }
 
-export type SetCellSize = (text: string, rowIdx: number, colIdx: number) => void;
+export type SetCellSize = (
+  text: string,
+  rowIdx: number,
+  colIdx: number,
+  isNumeric?: boolean,
+  batchStateUpdate?: boolean
+) => void;
 
 export interface GridState {
   overscanColumnStartIndex: number;

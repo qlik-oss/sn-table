@@ -7,6 +7,14 @@
     "value": "Use arrow keys to navigate in table cells and tab to move to pagination controls. For the full range of keyboard navigation, see the documentation.",
     "comment": "Instructions read by screen reader when first focusing inside the table. (tew 211130)"
   },
+  "SNTable.Accessibility.Ascending": {
+    "value": "Ascending",
+    "comment": "Tooltip showing that column is in ascending order. (tew 230411)"
+  },
+  "SNTable.Accessibility.Descending": {
+    "value": "Descending",
+    "comment": "Tooltip showing that column is in descending order. (tew 230411)"
+  },
   "SNTable.Pagination.RowsPerPage": {
     "value": "Rows per page",
     "comment": "label for the rows per page dropdown. (tew 210929)"
@@ -17,7 +25,7 @@
   },
   "SNTable.Pagination.SelectPage": {
     "value": "Select page",
-    "comment": "Label for the dropdown to select a page."
+    "comment": "Label for the dropdown to select a page. (tew 230411)"
   },
   "SNTable.Pagination.FirstPage": {
     "value": "Go to the first page",
@@ -53,35 +61,35 @@
   },
   "SNTable.MenuItem.Search": {
     "value": "Search",
-    "comment": "label for menu item to search in field."
+    "comment": "label for menu item to search in field. (tew 230411)"
   },
   "SNTable.MenuItem.Selections": {
     "value": "Selections",
-    "comment": "label for selections menu in field."
+    "comment": "label for selections menu in field. (tew 230411)"
   },
   "SNTable.MenuItem.SelectAll": {
     "value": "Select all",
-    "comment": "label for select all items in field."
+    "comment": "label for select all items in field. (tew 230411)"
   },
   "SNTable.MenuItem.ClearSelections": {
     "value": "Clear selections",
-    "comment": "label for clearing all selected items in field."
+    "comment": "label for clearing all selected items in field. (tew 230411)"
   },
   "SNTable.MenuItem.SelectPossible": {
     "value": "Select possible",
-    "comment": "label for select possible items in field."
+    "comment": "label for select possible items in field. (tew 230411)"
   },
   "SNTable.MenuItem.SelectAlternative": {
     "value": "Select alternative",
-    "comment": "label for select alternative items in field."
+    "comment": "label for select alternative items in field. (tew 230411)"
   },
   "SNTable.MenuItem.SelectExcluded": {
     "value": "Select excluded",
-    "comment": "label for select excluded items in field."
+    "comment": "label for select excluded items in field. (tew 230411)"
   },
   "SNTable.MenuItem.AdjustColumnSize": {
     "value": "Adjust column size",
-    "comment": "label for adjust column size menu in field."
+    "comment": "label for adjust column size menu in field. (tew 230411)"
   },
   "SNTable.MenuItem.SortAscending": {
     "value": "Sort ascending",

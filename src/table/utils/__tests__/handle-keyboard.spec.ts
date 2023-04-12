@@ -19,10 +19,7 @@ import { SelectionDispatch } from '../../types';
 import { FocusTypes, KeyCodes } from '../../constants';
 
 describe('handle-keyboard', () => {
-  let areBasicFeaturesEnabled: boolean;
-
   beforeEach(() => {
-    areBasicFeaturesEnabled = true;
     jest.spyOn(handleCopy, 'default').mockImplementation(() => new Promise(() => {}));
   });
 
@@ -174,7 +171,6 @@ describe('handle-keyboard', () => {
         cellCoord: [rowIndex, colIndex],
         isInteractionEnabled,
         setFocusedCellCoord,
-        areBasicFeaturesEnabled,
       });
 
     beforeEach(() => {
@@ -198,24 +194,25 @@ describe('handle-keyboard', () => {
       isInteractionEnabled = true;
       setFocusedCellCoord = jest.fn();
       jest.spyOn(accessibilityUtils, 'focusBodyFromHead').mockImplementation(() => {});
-      jest.spyOn(accessibilityUtils, 'moveFocus').mockImplementation(() => ({} as HTMLTableCellElement));
+      jest.spyOn(accessibilityUtils, 'moveFocusWithArrow').mockImplementation(() => ({} as HTMLTableCellElement));
       jest.spyOn(accessibilityUtils, 'updateFocus').mockImplementation(() => {});
       jest.spyOn(getElementUtils, 'findCellWithTabStop').mockImplementation(() => ({} as HTMLTableCellElement));
+      jest.spyOn(keyboardUtils, 'headTabHelper').mockImplementation(() => {});
     });
 
-    it('should call moveFocus and prevent default behavior on left arrow', () => {
+    it('should call moveFocusWithArrow and prevent default behavior on left arrow', () => {
       evt.key = KeyCodes.LEFT;
       callHandleHeadKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledTimes(1);
     });
 
-    it('should call moveFocus and prevent default behavior on right arrow', () => {
+    it('should call moveFocusWithArrow and prevent default behavior on right arrow', () => {
       callHandleHeadKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledTimes(1);
     });
 
     it('should call focusBodyFromHead and prevent default behavior on right arrow on last head cell', () => {
@@ -226,20 +223,20 @@ describe('handle-keyboard', () => {
       expect(accessibilityUtils.focusBodyFromHead).toHaveBeenCalledTimes(1);
     });
 
-    it('should call updateFocus + moveFocus and prevent default behavior on down arrow', () => {
+    it('should call updateFocus + moveFocusWithArrow and prevent default behavior on down arrow', () => {
       evt.key = KeyCodes.DOWN;
       callHandleHeadKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledTimes(1);
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
     });
 
-    it('when pressing an invalid key, should only call preventDefaultBehavior', () => {
+    it('when pressing an invalid key, should call nothing', () => {
       evt.key = KeyCodes.UP;
       callHandleHeadKeyDown();
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
+      expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(changeSortOrder).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
     });
@@ -268,12 +265,10 @@ describe('handle-keyboard', () => {
       expect(handleCopy.default).toHaveBeenCalled();
     });
 
-    it('should not call copyCellValue on Head cell when the flag is disabled', () => {
-      evt.key = KeyCodes.C;
-      evt.metaKey = true;
-      areBasicFeaturesEnabled = false;
+    it('should call headTabHelper when the pressed key is tab', () => {
+      evt.key = KeyCodes.TAB;
       callHandleHeadKeyDown();
-      expect(handleCopy.default).not.toHaveBeenCalled();
+      expect(keyboardUtils.headTabHelper).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -302,16 +297,17 @@ describe('handle-keyboard', () => {
       } as unknown as HTMLElement;
       setFocusedCellCoord = jest.fn();
       isSelectionMode = false;
-      jest.spyOn(accessibilityUtils, 'moveFocus').mockImplementation(() => ({} as HTMLTableCellElement));
+      jest.spyOn(accessibilityUtils, 'moveFocusWithArrow').mockImplementation(() => ({} as HTMLTableCellElement));
       jest.spyOn(accessibilityUtils, 'updateFocus').mockImplementation(() => {});
+      jest.spyOn(keyboardUtils, 'bodyTabHelper').mockImplementation(() => {});
     });
 
-    it('should call moveFocus and updateFocus when pressing arrow key', () => {
+    it('should call moveFocusWithArrow and updateFocus when pressing arrow key', () => {
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocus).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocus).toHaveBeenCalledWith(
+      expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledWith(
         evt,
         rootElement,
         cellCoord,
@@ -321,14 +317,15 @@ describe('handle-keyboard', () => {
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
     });
 
-    it('should call moveFocus  when pressing left arrow key on first totals cell', () => {
+    it('should call moveFocusWithArrow  when pressing left arrow key on first totals cell', () => {
       evt.key = KeyCodes.LEFT;
       cellCoord = [1, 0];
 
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocus).toHaveBeenCalledWith(
+      expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledTimes(1);
+      expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledWith(
         evt,
         rootElement,
         cellCoord,
@@ -343,15 +340,15 @@ describe('handle-keyboard', () => {
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocus).not.toHaveBeenCalled();
+      expect(accessibilityUtils.moveFocusWithArrow).not.toHaveBeenCalled();
     });
 
     it('should take the default case when the pressed key is not an arrow key', () => {
       evt.key = KeyCodes.ENTER;
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocus).not.toHaveBeenCalled();
+      expect(evt.preventDefault).not.toHaveBeenCalled();
+      expect(evt.stopPropagation).not.toHaveBeenCalled();
+      expect(accessibilityUtils.moveFocusWithArrow).not.toHaveBeenCalled();
     });
 
     it('should call copyCellValue on Total cell when the pressed keys are Ctrl and C keys', () => {
@@ -366,6 +363,18 @@ describe('handle-keyboard', () => {
       evt.metaKey = true;
       handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
       expect(handleCopy.default).toHaveBeenCalled();
+    });
+
+    it('should call headTabHelper when the pressed key is tab', () => {
+      evt.key = KeyCodes.TAB;
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
+      expect(keyboardUtils.bodyTabHelper).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call preventDefault when the pressed key is Space', () => {
+      evt.key = KeyCodes.SPACE;
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
+      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -397,7 +406,6 @@ describe('handle-keyboard', () => {
         keyboard,
         paginationNeeded,
         totalsPosition,
-        areBasicFeaturesEnabled,
       });
 
     beforeEach(() => {
@@ -433,11 +441,11 @@ describe('handle-keyboard', () => {
       announce = jest.fn();
       paginationNeeded = true;
       totalsPosition = { atTop: false, atBottom: true };
-      areBasicFeaturesEnabled = true;
       jest.spyOn(accessibilityUtils, 'focusSelectionToolbar').mockImplementation(() => {});
       jest.spyOn(accessibilityUtils, 'announceSelectionState').mockImplementation(() => {});
       jest.spyOn(handleScroll, 'handleNavigateTop').mockImplementation(() => {});
       jest.spyOn(keyboardUtils, 'bodyArrowHelper').mockImplementation(() => {});
+      jest.spyOn(keyboardUtils, 'bodyTabHelper').mockImplementation(() => {});
     });
 
     it('should call bodyArrowHelper when arrow key is pressed', () => {
@@ -513,26 +521,10 @@ describe('handle-keyboard', () => {
       expect(announce).toHaveBeenCalledWith({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
     });
 
-    it('when shift + tab is pressed and in selections mode, should prevent default and call focusSelectionToolbar', () => {
+    it('when tab is pressed, call bodyTabHelper', () => {
       evt.key = KeyCodes.TAB;
-      evt.shiftKey = true;
-      isModal = true;
       runHandleBodyKeyDown();
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.focusSelectionToolbar).toHaveBeenCalledTimes(1);
-      expect(announce).not.toHaveBeenCalled();
-    });
-
-    it('when tab is pressed, paginationNeeded is false and in selection mode, should prevent default and call focusSelectionToolbar', () => {
-      evt.key = KeyCodes.TAB;
-      isModal = true;
-      paginationNeeded = false;
-      runHandleBodyKeyDown();
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.focusSelectionToolbar).toHaveBeenCalledTimes(1);
-      expect(announce).not.toHaveBeenCalled();
+      expect(keyboardUtils.bodyTabHelper).toHaveBeenCalledTimes(1);
     });
 
     it('should call copyCellValue when the pressed keys are Ctrl and C keys', () => {
@@ -549,19 +541,11 @@ describe('handle-keyboard', () => {
       expect(handleCopy.default).toHaveBeenCalled();
     });
 
-    it('should not call copyCellValue when the flag is disabled', () => {
-      evt.key = KeyCodes.C;
-      evt.metaKey = true;
-      areBasicFeaturesEnabled = false;
-      runHandleBodyKeyDown();
-      expect(handleCopy.default).not.toHaveBeenCalled();
-    });
-
-    it('when other keys are pressed, should only prevent default behavior', () => {
+    it('when other keys are pressed, should call nothing', () => {
       evt.key = 'A';
       runHandleBodyKeyDown();
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
+      expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect((evt.target as HTMLElement).blur).not.toHaveBeenCalled();
       expect((evt.target as HTMLElement).setAttribute).not.toHaveBeenCalled();
       expect(selectionsAPI.cancel).not.toHaveBeenCalled();
@@ -592,7 +576,7 @@ describe('handle-keyboard', () => {
     });
 
     it('when the shift key is pressed, should run selectionDispatch', () => {
-      handleBodyKeyUp(evt, selectionDispatch, areBasicFeaturesEnabled);
+      handleBodyKeyUp(evt, selectionDispatch);
 
       expect(selectionDispatch).toHaveBeenCalledTimes(1);
     });
@@ -600,7 +584,7 @@ describe('handle-keyboard', () => {
     it('when other keys are pressed, should not do anything', () => {
       evt.key = 'Control';
 
-      handleBodyKeyUp(evt, selectionDispatch, areBasicFeaturesEnabled);
+      handleBodyKeyUp(evt, selectionDispatch);
 
       expect(selectionDispatch).not.toHaveBeenCalled();
     });

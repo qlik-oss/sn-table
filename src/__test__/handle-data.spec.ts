@@ -8,7 +8,7 @@ describe('handle-data', () => {
   let pageColIdx: number;
 
   beforeEach(() => {
-    layout = generateLayout(2, 2, 200, [1, 2, 0, 3], [{ qText: '-' }, { qText: '200' }]);
+    layout = generateLayout(2, 2, 200, [0, 2, 1, 3], [{ qText: '-' }, { qText: '200' }]);
   });
 
   describe('getColumnInfo', () => {
@@ -21,7 +21,6 @@ describe('handle-data', () => {
       label: `title-${colIdx}`,
       fieldId: isDim ? `title-${colIdx}` : '',
       id: `col-${pageColIdx}`,
-      align: isDim ? 'left' : 'right',
       stylingIDs: [] as string[],
       totalInfo: totals,
       sortDirection: 'A',
@@ -30,19 +29,34 @@ describe('handle-data', () => {
       isLocked,
       qApprMaxGlyphCount: 3,
       qReverseSort: false,
+      bodyTextAlign: 'auto',
+      totalsTextAlign: 'left',
+      headTextAlign: 'right',
+      selectionColIdx: isDim ? colIdx : -1,
     });
 
     it('should return column info for dimension', () => {
-      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
       expect(columnInfo).toEqual(getExpectedInfo(true));
     });
 
     it('should return column info for dimension with align center', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].textAlign = { auto: false, align: 'center' };
       const expected = getExpectedInfo(true);
-      expected.align = 'center';
+      expected.bodyTextAlign = 'center';
+      expected.headTextAlign = 'center';
+      expected.totalsTextAlign = 'center';
 
-      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
+      expect(columnInfo).toEqual(expected);
+    });
+
+    it('should return column info for dimension with head cell align right', () => {
+      layout.qHyperCube.qDimensionInfo[colIdx].qDimensionType = 'N';
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
+      const expected = getExpectedInfo(true);
+      expected.headTextAlign = 'right';
+
       expect(columnInfo).toEqual(expected);
     });
 
@@ -53,33 +67,29 @@ describe('handle-data', () => {
       const expected = getExpectedInfo(true);
       expected.stylingIDs = ['someId'];
 
-      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
       expect(columnInfo).toEqual(expected);
-    });
-
-    it('should return false for hidden column', () => {
-      layout.qHyperCube.qDimensionInfo[colIdx].qError = { qErrorCode: 7005 };
-
-      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
-      expect(columnInfo).toBe(false);
     });
 
     it('should return column info for dimension with isLocked', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qLocked = true;
-      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
       expect(columnInfo).toEqual(getExpectedInfo(true, undefined, true));
     });
 
     it('should return column info for master dimension ', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qLibraryId = '#someId';
-      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
       expect(columnInfo).toEqual(getExpectedInfo(true, '#someId'));
     });
 
-    it('should return column info for measure', () => {
+    it('should return column info for measure with totals cell align right', () => {
       colIdx = 3;
-      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx);
-      expect(columnInfo).toEqual(getExpectedInfo(false, undefined, false, '200'));
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, undefined);
+      const expected = getExpectedInfo(false, undefined, false, '200');
+      expected.totalsTextAlign = 'right';
+
+      expect(columnInfo).toEqual(expected);
     });
   });
 
@@ -96,13 +106,35 @@ describe('handle-data', () => {
 
     it('should return columns in defined column order when qColumnOrder is set', () => {
       const columns = getColumns(layout);
-      expect(columns[0].colIdx).toBe(1);
+      expect(columns[0].colIdx).toBe(0);
       expect(columns[1].colIdx).toBe(2);
-      expect(columns[2].colIdx).toBe(0);
+      expect(columns[2].colIdx).toBe(1);
       expect(columns[3].colIdx).toBe(3);
     });
 
-    // it('should return [0, 1, ... , number of columns] when length of qColumnOrder does not equal number of columns', () => {});
+    it('should return columns in defined column order when qColumnOrder is set, with hidden dimension removed', () => {
+      layout.qHyperCube.qDimensionInfo[0].qError = { qErrorCode: 7005 };
+
+      const columns = getColumns(layout);
+      expect(columns[0].colIdx).toBe(2);
+      expect(columns[0].selectionColIdx).toBe(-1);
+      expect(columns[1].colIdx).toBe(1);
+      expect(columns[1].selectionColIdx).toBe(0);
+      expect(columns[2].colIdx).toBe(3);
+      expect(columns[2].selectionColIdx).toBe(-1);
+    });
+
+    it('should return columns in defined column order when qColumnOrder is set, with hidden measure removed', () => {
+      layout.qHyperCube.qMeasureInfo[0].qError = { qErrorCode: 7005 };
+
+      const columns = getColumns(layout);
+      expect(columns[0].colIdx).toBe(0);
+      expect(columns[0].selectionColIdx).toBe(0);
+      expect(columns[1].colIdx).toBe(1);
+      expect(columns[1].selectionColIdx).toBe(1);
+      expect(columns[2].colIdx).toBe(3);
+      expect(columns[2].selectionColIdx).toBe(-1);
+    });
   });
 
   describe('manageData', () => {
@@ -121,8 +153,7 @@ describe('handle-data', () => {
         model,
         layout,
         pageInfo,
-        setPageInfo,
-        true
+        setPageInfo
       )) as TableData;
 
       const firstColCell = rows[0]['col-0'] as Cell;
@@ -134,7 +165,7 @@ describe('handle-data', () => {
       expect(rows).toHaveLength(100);
       expect(firstColCell.qText).toBe('0');
       expect(firstColCell.rowIdx).toBe(100);
-      expect(firstColCell.colIdx).toBe(1);
+      expect(firstColCell.colIdx).toBe(0);
       expect(firstColCell.pageRowIdx).toBe(0);
       expect(firstColCell.pageColIdx).toBe(0);
       expect(secondColCell.qText).toBe('1');
@@ -150,7 +181,7 @@ describe('handle-data', () => {
 
     it('should return null and call setPageInfo when page is > 0 and page * rowsPerPage >= qcy', async () => {
       layout.qHyperCube.qSize.qcy = 100;
-      const tableData = await manageData(model, layout, pageInfo, setPageInfo, true);
+      const tableData = await manageData(model, layout, pageInfo, setPageInfo);
 
       expect(tableData).toBeNull();
       expect(setPageInfo).toHaveBeenCalledWith({ ...pageInfo, page: 0 });
@@ -159,7 +190,7 @@ describe('handle-data', () => {
     it('should return null and call setPageInfo with rowsPerPage 25 when height * width > 10000 and width is 120', async () => {
       pageInfo = { ...pageInfo, page: 0 };
       layout = generateLayout(60, 60, 1100);
-      const tableData = await manageData(model, layout, pageInfo, setPageInfo, true);
+      const tableData = await manageData(model, layout, pageInfo, setPageInfo);
 
       expect(tableData).toBeNull();
       expect(setPageInfo).toHaveBeenCalledWith({ ...pageInfo, rowsPerPage: 25 });
@@ -168,7 +199,7 @@ describe('handle-data', () => {
     it('should return null and call setPageInfo with rowsPerPage 4 when height * width > 10000 and width is 2200', async () => {
       pageInfo = { ...pageInfo, page: 0 };
       layout = generateLayout(1100, 1100, 100);
-      const tableData = await manageData(model, layout, pageInfo, setPageInfo, true);
+      const tableData = await manageData(model, layout, pageInfo, setPageInfo);
 
       expect(tableData).toBeNull();
       expect(setPageInfo).toHaveBeenCalledWith({ ...pageInfo, rowsPerPage: 4 });
@@ -177,7 +208,7 @@ describe('handle-data', () => {
     it('should return null and call setPageInfo with rowsPerPage 4 when width > 10000', async () => {
       pageInfo = { ...pageInfo, page: 0 };
       layout = generateLayout(6000, 6000, 100);
-      const tableData = await manageData(model, layout, pageInfo, setPageInfo, true);
+      const tableData = await manageData(model, layout, pageInfo, setPageInfo);
 
       expect(tableData).toBeNull();
       expect(setPageInfo).toHaveBeenCalledWith({ ...pageInfo, rowsPerPage: 0 });

@@ -4,19 +4,14 @@ import getCellRenderer from '../../utils/get-cell-renderer';
 import { useContextSelector, TableContext } from '../../../context';
 import { StyledBodyRow, StyledBody } from './styles';
 import { handleBodyKeyDown, handleBodyKeyUp } from '../../../utils/handle-keyboard';
-import { handleClickToFocusBody } from '../../../utils/handle-click';
+import { handleMouseDownToFocusBody } from '../../../utils/handle-mouse';
 import { Cell } from '../../../../types';
 import { TableBodyWrapperProps } from '../../../types';
 import TableTotals from './TableTotals';
 import CellText from '../../../components/CellText';
 import useSelectionListener from '../../../hooks/use-selection-listener';
 
-function TableBodyWrapper({
-  setShouldRefocus,
-  tableWrapperRef,
-  announce,
-  areBasicFeaturesEnabled,
-}: TableBodyWrapperProps) {
+function TableBodyWrapper({ setShouldRefocus, tableWrapperRef, announce }: TableBodyWrapperProps) {
   const { rows, columns, paginationNeeded, totalsPosition } = useContextSelector(
     TableContext,
     (value) => value.tableData
@@ -61,7 +56,7 @@ function TableBodyWrapper({
           className="sn-table-row"
         >
           {columns.map((column, columnIndex) => {
-            const { id, align } = column;
+            const { id } = column;
             const cell = row[id] as Cell;
             const CellRenderer = columnRenderers[columnIndex];
             const tabIndex = rowIndex === 0 && columnIndex === 0 && !totalsPosition.atTop && !keyboard.enabled ? 0 : -1;
@@ -78,7 +73,6 @@ function TableBodyWrapper({
                 keyboard,
                 paginationNeeded,
                 totalsPosition,
-                areBasicFeaturesEnabled,
               });
             };
 
@@ -90,17 +84,15 @@ function TableBodyWrapper({
                   cell={cell}
                   column={column}
                   key={id}
-                  align={align}
+                  align={cell.align}
                   styling={cellStyle} // TODO see if we should rename this to cellStyle
                   tabIndex={tabIndex}
                   announce={announce}
-                  areBasicFeaturesEnabled={areBasicFeaturesEnabled}
+                  title={!constraints.passive ? cell.qText : undefined}
                   onKeyDown={handleKeyDown}
-                  onKeyUp={(evt: React.KeyboardEvent) =>
-                    handleBodyKeyUp(evt, selectionDispatch, areBasicFeaturesEnabled)
-                  }
+                  onKeyUp={(evt: React.KeyboardEvent) => handleBodyKeyUp(evt, selectionDispatch)}
                   onMouseDown={() =>
-                    handleClickToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition)
+                    handleMouseDownToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition)
                   }
                 >
                   <CellText fontSize={cellStyle.fontSize}>{cell.qText}</CellText>

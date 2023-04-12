@@ -124,8 +124,8 @@ jobs:
       - attach_workspace:
           at: ~/table
       - run:
-            name: Check types
-            command: yarn run types:check
+          name: Check types
+          command: yarn run types:check
 
   lint:
     <<: *defaults

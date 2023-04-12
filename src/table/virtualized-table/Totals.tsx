@@ -7,10 +7,10 @@ import useResetHeader from './hooks/use-reset-header';
 
 const Totals = (props: TotalsProps) => {
   const { rect, forwardRef, pageInfo, totals, rowHeight, columns } = props;
-  const { layout, styling } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, styling, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
 
-  useResetHeader(forwardRef, layout, pageInfo, columnWidths);
+  useResetHeader(forwardRef, layout, pageInfo, columnWidths, theme.name());
 
   return (
     <VariableSizeList
@@ -18,7 +18,6 @@ const Totals = (props: TotalsProps) => {
       layout="horizontal"
       style={{
         overflow: 'hidden',
-        background: styling.totals.background,
         boxSizing: 'border-box',
       }}
       itemCount={layout.qHyperCube.qSize.qcx}

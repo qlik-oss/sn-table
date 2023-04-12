@@ -126,7 +126,7 @@ const useData = ({
      * - Layout change (layout)
      */
     const { qcx, qcy } = layout.qHyperCube.qSize;
-    const rowStart = 0;
+    const rowStart = gridState.current.overscanRowStartIndex;
     const qLeft = gridState.current.overscanColumnStartIndex;
     const qTop = rowStart + pageInfo.page * pageInfo.rowsPerPage;
 

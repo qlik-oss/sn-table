@@ -18,7 +18,7 @@ export interface UseFieldSelectionOutput {
 }
 
 export const checkStateCountByKey = <T>(keys: (keyof T)[], obj: T): boolean => {
-  return keys.some((key) => obj[key] > 0);
+  return keys.some((key) => (obj[key] as number) > 0);
 };
 
 const useFieldSelection = (column: Column): UseFieldSelectionOutput => {

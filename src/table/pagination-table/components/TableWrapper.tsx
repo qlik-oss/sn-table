@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect } from 'react';
+import React, { useRef, useCallback, useEffect, memo } from 'react';
 
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './body/TableBodyWrapper';
@@ -11,42 +11,43 @@ import useDidUpdateEffect from '../../hooks/use-did-update-effect';
 import useFocusListener from '../../hooks/use-focus-listener';
 import useScrollListener from '../../hooks/use-scroll-listener';
 import { handleWrapperKeyDown } from '../../utils/handle-keyboard';
-import { updateFocus, resetFocus } from '../../utils/accessibility-utils';
-import { getCellElement } from '../../utils/get-element-utils';
+import { resetFocus } from '../../utils/accessibility-utils';
 import { TableWrapperProps } from '../../types';
 import { StyledTableWrapper } from '../../components/styles';
 import useScrollbarWidth from '../../virtualized-table/hooks/use-scrollbar-width';
-import { FocusTypes } from '../../constants';
+import useKeyboardActiveListener from '../../hooks/use-keyboard-active-listener';
+import { SelectionActions } from '../../constants';
 
-export default function TableWrapper(props: TableWrapperProps) {
-  const { pageInfo, setPageInfo, direction, footerContainer, announce, areBasicFeaturesEnabled } = props;
+function TableWrapper(props: TableWrapperProps) {
+  const { pageInfo, setPageInfo, direction, footerContainer, announce } = props;
   const { page, rowsPerPage } = pageInfo;
 
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
     useContextSelector(TableContext, (value) => value.tableData);
-  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints } = useContextSelector(
+  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints, styling } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
-
-  const isSelectionMode = selectionsAPI.isModal();
+  const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
+  const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
 
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const tableWrapperRef = useRef<HTMLDivElement>(null);
 
   const { yScrollbarWidth } = useScrollbarWidth(tableContainerRef);
+  const isSelectionMode = selectionsAPI.isModal();
+  const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
+    String(rows.length + 1),
+    String(columns.length),
+  ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   }, [rootElement]);
-
-  useEffect(() => {
-    tableContainerRef.current?.scrollTo(0, 0);
-  }, [pageInfo, totalRowCount]);
 
   const handleChangePage = useCallback(
     (pageIdx: number) => {
@@ -74,17 +75,11 @@ export default function TableWrapper(props: TableWrapperProps) {
 
   useFocusListener(tableWrapperRef, shouldRefocus, keyboard);
   useScrollListener(tableContainerRef, direction);
+  useKeyboardActiveListener();
 
-  useDidUpdateEffect(() => {
-    // When nebula handles keyboard navigation and keyboard.active changes,
-    // make sure to blur or focus the cell corresponding to focusedCellCoord
-    // when keyboard.focus() runs, keyboard.active is true
-    // when keyboard.blur() runs, keyboard.active is false
-    updateFocus({
-      focusType: keyboard.active ? FocusTypes.FOCUS : FocusTypes.BLUR,
-      cell: getCellElement(rootElement, focusedCellCoord),
-    });
-  }, [keyboard.active]);
+  useEffect(() => {
+    tableContainerRef.current?.scrollTo(0, 0);
+  }, [pageInfo, totalRowCount]);
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
@@ -105,10 +100,9 @@ export default function TableWrapper(props: TableWrapperProps) {
     setYScrollbarWidth(yScrollbarWidth);
   }, [yScrollbarWidth]);
 
-  const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
-    String(rows.length + 1),
-    String(columns.length),
-  ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
+  useDidUpdateEffect(() => {
+    selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows: rows } });
+  }, [rows]);
 
   return (
     <StyledTableWrapper
@@ -128,8 +122,8 @@ export default function TableWrapper(props: TableWrapperProps) {
         role="application"
         data-testid="table-container"
       >
-        <StyledTable customWidth={areBasicFeaturesEnabled} stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper areBasicFeaturesEnabled={areBasicFeaturesEnabled} />
+        <StyledTable styling={styling} showRightBorder={showRightBorder} stickyHeader aria-label={tableAriaLabel}>
+          <TableHeadWrapper />
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </StyledTable>
       </StyledTableContainer>
@@ -141,3 +135,5 @@ export default function TableWrapper(props: TableWrapperProps) {
     </StyledTableWrapper>
   );
 }
+
+export default memo(TableWrapper);

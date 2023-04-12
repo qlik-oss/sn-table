@@ -4,6 +4,7 @@ import { useContextSelector, TableContext } from '../context';
 import { GeneratedStyling } from '../types';
 import CellText from '../components/CellText';
 import { Totals } from './types';
+import { isNumeric } from '../utils/is-numeric';
 
 interface TotalsCellProps {
   index: number;
@@ -16,36 +17,39 @@ interface TotalsCellProps {
 }
 
 const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
-  const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
+  const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
   const {
     totalsStyle: { hoverColors, ...applicableStyling },
     columns,
     totals,
   } = data;
   const label = columns[index].totalInfo;
+  const { totalsTextAlign } = columns[index];
   const isLastColumn = layout.qHyperCube.qSize.qcx - 1 === index;
 
   return (
     <div
       className="sn-table-cell"
+      title={!constraints.passive ? label : undefined}
       style={{
         ...style,
         ...applicableStyling,
         display: 'flex',
-        alignItems: 'center',
+        alignItems: totals.atTop ? 'end' : 'start',
         borderStyle: 'solid',
         borderLeftWidth: '0px',
-        borderRightWidth: isLastColumn ? '0px' : '1px',
+        borderRightWidth: isLastColumn && !showRightBorder ? '0px' : '1px',
         borderTopWidth: totals.atBottom ? '1px' : '0px',
         borderBottomWidth: totals.atTop ? '1px' : '0px',
         padding: '4px 12px',
-        justifyContent: index === 0 ? 'left' : 'right',
+        justifyContent: totalsTextAlign,
         boxSizing: 'border-box',
         cursor: 'default',
         fontWeight: '600',
       }}
     >
-      <CellText wordBreak lines={3}>
+      <CellText wordBreak={!isNumeric(label)} lines={3}>
         {label}
       </CellText>
     </div>

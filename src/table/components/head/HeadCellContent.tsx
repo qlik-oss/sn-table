@@ -2,45 +2,33 @@ import React from 'react';
 
 import { useContextSelector, TableContext } from '../../context';
 import { HeadCellContentProps } from '../../types';
-import { FullSortDirection } from '../../constants';
 import getHeadIcons from '../../utils/get-head-icons';
-import { VisuallyHidden, StyledSortButton, StyledHeadCellContent } from './styles';
 import HeadCellMenu from './HeadCellMenu';
-import { handleHeadKeyDown } from '../../utils/handle-keyboard';
+import { areTabStopsEnabled } from '../../utils/accessibility-utils';
+import { VisuallyHidden, StyledSortButton, StyledHeadCellContent, StyledHeadCellIconWrapper } from './styles';
 
-function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }: HeadCellContentProps) {
-  const { constraints, keyboard, translator, rootElement, changeSortOrder } = useContextSelector(
-    TableContext,
-    (value) => value.baseProps
-  );
-  const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
+function HeadCellContent({ children, column, isActive, isInteractionEnabled }: HeadCellContentProps) {
+  const { keyboard, translator, changeSortOrder } = useContextSelector(TableContext, (value) => value.baseProps);
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
-  const isInSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI.isModal());
 
   const { startIcon, endIcon, lockIcon } = getHeadIcons(column);
-  const isInteractionEnabled = !constraints.active && !isInSelectionMode;
-  const tabIndex = isInteractionEnabled && !keyboard.enabled ? 0 : -1;
+  const tabIndex = isInteractionEnabled && areTabStopsEnabled(keyboard) ? 0 : -1;
 
   const handleSort = () => isInteractionEnabled && changeSortOrder(column);
-  const onKeyDown = (evt: React.KeyboardEvent) =>
-    handleHeadKeyDown({
-      evt,
-      rootElement,
-      cellCoord: [0, column.pageColIdx],
-      setFocusedCellCoord,
-      isInteractionEnabled,
-      areBasicFeaturesEnabled,
-    });
+
+  const sortDirection = {
+    A: translator.get('SNTable.Accessibility.Ascending'),
+    D: translator.get('SNTable.Accessibility.Descending'),
+  };
 
   return (
-    <StyledHeadCellContent onKeyDown={onKeyDown}>
-      {lockIcon}
+    <StyledHeadCellContent isLocked={Boolean(lockIcon)} className={`aligned-${column.headTextAlign}`}>
+      {lockIcon && <StyledHeadCellIconWrapper>{lockIcon}</StyledHeadCellIconWrapper>}
 
       <StyledSortButton
         className="sn-table-head-label"
         isActive={isActive}
-        textAlign={column.align}
-        title={!constraints.passive ? FullSortDirection[column.sortDirection] : undefined} // passive: turn off tooltips.
+        textAlign={column.headTextAlign}
         color="inherit"
         size="small"
         startIcon={startIcon}
@@ -52,12 +40,12 @@ function HeadCellContent({ children, column, isActive, areBasicFeaturesEnabled }
         {children}
         {isFocusInHead && (
           <VisuallyHidden data-testid={`VHL-for-col-${column.pageColIdx}`}>
-            {translator.get('SNTable.SortLabel.PressSpaceToSort')}
+            {`${sortDirection[column.sortDirection]} ${translator.get('SNTable.SortLabel.PressSpaceToSort')}`}
           </VisuallyHidden>
         )}
       </StyledSortButton>
 
-      {areBasicFeaturesEnabled && isInteractionEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
+      {isInteractionEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
     </StyledHeadCellContent>
   );
 }

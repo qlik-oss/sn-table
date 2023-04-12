@@ -15,6 +15,10 @@ import getBodyHeight from './utils/get-body-height';
 
 const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   const { rect, columns, innerForwardRef, pageInfo, bodyStyle, rowHeight, headerAndTotalsHeight, syncHeight } = props;
+  const { layout, model, theme } = useContextSelector(TableContext, (value) => value.baseProps);
+  const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
+  const initialDataPages = useContextSelector(TableContext, (value) => value.initialDataPages);
+
   const gridRef = useRef<VariableSizeGrid>(null);
   const gridState = useRef<GridState>({
     overscanColumnStartIndex: 0,
@@ -22,9 +26,6 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     overscanColumnStopIndex: 0,
     overscanRowStopIndex: 0,
   });
-  const { layout, model, theme } = useContextSelector(TableContext, (value) => value.baseProps);
-  const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
-  const initialDataPages = useContextSelector(TableContext, (value) => value.initialDataPages);
   const isHoverEnabled = !!layout.components?.[0]?.content?.hoverEffect;
   const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
   const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(
@@ -35,7 +36,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     rowHeight
   );
 
-  const { setCellSize, getRowHeight, rowMeta, estimatedRowHeight, maxLineCount, updateCellHeight } =
+  const { setCellSize, getRowHeight, rowMeta, estimatedRowHeight, maxLineCount, resizeVisibleCells } =
     useDynamicRowHeight({
       pageInfo,
       style: bodyStyle,
@@ -94,13 +95,12 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
 
   useSelectionsEffect(rowsInPage);
 
-  // React to when a user re-sizes a column by dragging a column corner. This hook will
-  // trigger both while the dragging is taking place and when a new column width is
-  // calculated based on the layout and/or container element size changes
+  // React to events that can invalidate cell width and/or height.
+  // If grid cache is not reset, any new cell width/height would not be applied by the grid,
+  // producing strange cases where some text may not properly fit inside the cell.
   useOnPropsChange(() => {
     gridRef.current?.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: false });
-    updateCellHeight(rowsInPage);
-  }, [columnWidths]);
+  }, [layout, pageInfo, theme.name(), rect.width]);
 
   useImperativeHandle(
     ref,
@@ -120,9 +120,13 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
             gridRef.current?.scrollTo({ scrollTop, scrollLeft });
           }
         },
+        resizeCells: () => {
+          gridRef.current?.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: false });
+          resizeVisibleCells(rowsInPage);
+        },
       };
     },
-    [innerForwardRef, bodyHeight, rowMeta, rowCount]
+    [innerForwardRef, bodyHeight, rowMeta, rowCount, resizeVisibleCells, rowsInPage]
   );
 
   return (

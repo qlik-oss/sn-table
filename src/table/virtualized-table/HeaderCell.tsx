@@ -12,6 +12,7 @@ interface HeaderCellProps {
   data: {
     columns: Column[];
     headerStyle: GeneratedStyling;
+    columResizeHandler: () => void;
   };
 }
 
@@ -19,26 +20,31 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
   const {
     columns,
     headerStyle: { ...applicableStyle },
+    columResizeHandler,
   } = data;
 
-  const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
+  const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
+  const isInSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI.isModal());
   const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
   const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
-  const flexDirection = column.align === 'right' ? 'row-reverse' : 'row';
+  const isInteractionEnabled = !constraints.active && !isInSelectionMode;
+  const flexDirection = column.headTextAlign === 'right' ? 'row-reverse' : 'row';
 
   return (
     <div
       className="sn-table-cell"
+      title={!constraints.passive ? column.label : undefined}
       style={{
         ...style,
         ...applicableStyle,
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-end',
         borderStyle: 'solid',
-        borderWidth: isLastColumn ? '0px 0px 1px 0px' : '0px 1px 1px 0px',
+        borderWidth: isLastColumn && !showRightBorder ? '0px 0px 1px 0px' : '0px 1px 1px 0px',
         padding: '4px',
-        justifyContent: column.align,
+        justifyContent: column.headTextAlign,
         boxSizing: 'border-box',
         cursor: 'default',
         zIndex: columns.length - index,
@@ -46,12 +52,12 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         userSelect: 'none',
       }}
     >
-      <HeadCellContent column={column} isActive={isActive} areBasicFeaturesEnabled>
+      <HeadCellContent column={column} isActive={isActive} isInteractionEnabled={isInteractionEnabled}>
         <CellText wordBreak lines={3}>
           {column.label}
         </CellText>
       </HeadCellContent>
-      <ColumnAdjuster column={column} isLastColumn={isLastColumn} />
+      <ColumnAdjuster column={column} isLastColumn={isLastColumn} onColumnResize={columResizeHandler} />
     </div>
   );
 };

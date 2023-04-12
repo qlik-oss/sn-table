@@ -16,9 +16,9 @@ import useDidUpdateEffect from '../hooks/use-did-update-effect';
 import useHeights from './hooks/use-heights';
 
 const Table = (props: TableProps) => {
-  const { pageInfo, rect } = props;
+  const { pageInfo } = props;
   const { totalsPosition, columns, paginationNeeded } = useContextSelector(TableContext, (value) => value.tableData);
-  const { layout, theme, styling } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, theme, styling, rect } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
   const ref = useRef<HTMLDivElement>(null);
@@ -34,7 +34,14 @@ const Table = (props: TableProps) => {
     }),
     [layout, theme.name()] // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const { headerRowHeight, totalsRowHeight, bodyRowHeight, headerAndTotalsHeight } = useHeights({
+  const {
+    headerRowHeight,
+    totalsRowHeight,
+    bodyRowHeight,
+    headerAndTotalsHeight,
+    resizeAllHeaderCells,
+    resizeAllTotalCells,
+  } = useHeights({
     columns,
     columnWidths,
     pageInfo,
@@ -48,8 +55,8 @@ const Table = (props: TableProps) => {
     [tableRect, xScrollbarWidth, yScrollbarWidth]
   );
   const { rowCount } = useTableCount(layout, pageInfo, stickyContainerRect, columnWidths, bodyRowHeight);
-  const containerWidth = columnWidths.reduce((prev, curr) => prev + curr, 0);
   const [containerHeight, setContainerHeight] = useState(rowCount * bodyRowHeight + headerAndTotalsHeight); // Based on single line height, which is going to be out-of-sync when rows have multiple lines
+  const containerWidth = columnWidths.reduce((prev, curr) => prev + curr, 0);
   const scrollHandler = useScrollHandler(headerRef, totalsRef, bodyRef);
 
   const syncHeight = useCallback(
@@ -65,6 +72,16 @@ const Table = (props: TableProps) => {
     [containerHeight, headerAndTotalsHeight, stickyContainerRect.height]
   );
 
+  const columResizeHandler = useCallback(() => {
+    if (ref.current) {
+      ref.current.scrollTop = 0;
+    }
+
+    bodyRef.current?.resizeCells();
+    resizeAllHeaderCells();
+    resizeAllTotalCells();
+  }, [ref, resizeAllHeaderCells, resizeAllTotalCells]);
+
   useLayoutEffect(() => {
     if (ref.current) {
       ref.current.scrollLeft = 0;
@@ -72,11 +89,12 @@ const Table = (props: TableProps) => {
     }
   }, [columns.length]);
 
+  const themeName = theme.name();
   useLayoutEffect(() => {
     if (ref.current) {
       ref.current.scrollTop = 0;
     }
-  }, [columnWidths, pageInfo, rowCount]);
+  }, [pageInfo, rowCount, themeName]);
 
   useDidUpdateEffect(() => {
     setYScrollbarWidth(yScrollbarWidth);
@@ -104,6 +122,7 @@ const Table = (props: TableProps) => {
             columns={columns}
             forwardRef={headerRef}
             rowHeight={headerRowHeight}
+            columResizeHandler={columResizeHandler}
           />
           {totalsPosition.atTop ? TotalsComponent : null}
           <Body

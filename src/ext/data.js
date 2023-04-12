@@ -37,18 +37,14 @@ export default function getData(env) {
       max: 1000,
       description: () => getDescription(env),
       add(measure, data, hcHandler) {
-        const { qColumnOrder, columnWidths } = hcHandler.hcProperties;
+        const { qColumnOrder } = hcHandler.hcProperties;
         const ix = hcHandler.getDimensions().length + hcHandler.getMeasures().length - 1;
-
         indexAdded(qColumnOrder, ix);
-
-        columnWidths.splice(qColumnOrder[ix], 0, -1); // -1 is auto
       },
       remove(measure, data, hcHandler, idx) {
-        const { qColumnOrder, columnWidths } = hcHandler.hcProperties;
+        const { qColumnOrder } = hcHandler.hcProperties;
         const columnIx = (hcHandler.hcProperties.qDimensions ? hcHandler.hcProperties.qDimensions.length : 0) + idx;
         indexRemoved(qColumnOrder, columnIx);
-        columnWidths.splice(columnIx, 1);
       },
     },
     dimensions: {
@@ -56,18 +52,16 @@ export default function getData(env) {
       max: 1000,
       description: () => getDescription(env),
       add(dimension, data, hcHandler) {
-        const { qColumnOrder, columnWidths } = hcHandler.hcProperties;
+        const { qColumnOrder } = hcHandler.hcProperties;
         const ix = hcHandler.getDimensions().length - 1;
         indexAdded(qColumnOrder, ix);
-        columnWidths.splice(ix, 0, -1); // -1 is auto
 
         return dimension;
       },
       remove(dimension, data, hcHandler, idx) {
         if (dimension?.isAlternative) return;
-        const { qColumnOrder, columnWidths } = hcHandler.hcProperties;
+        const { qColumnOrder } = hcHandler.hcProperties;
         indexRemoved(qColumnOrder, idx);
-        columnWidths.splice(qColumnOrder[idx], 1);
       },
     },
   };

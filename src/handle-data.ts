@@ -1,3 +1,4 @@
+import { isNumericCell } from './table/utils/is-numeric';
 import {
   TableLayout,
   PageInfo,
@@ -7,9 +8,12 @@ import {
   ExtendedNxDimensionInfo,
   Column,
   TableData,
+  Align,
+  TextAlign,
 } from './types';
 
 const MAX_CELLS = 10000;
+const HIDDEN_ERROR_CODE = 7005;
 
 /**
  * Calculates the highest amount of rows that can be shown given the amount of columns
@@ -22,7 +26,7 @@ export function getHighestPossibleRpp(width: number, rowsPerPageOptions: number[
 /**
  * Get the position of the totals
  */
-export function getTotalPosition(layout: TableLayout, areBasicFeaturesEnabled = true) {
+export function getTotalPosition(layout: TableLayout) {
   const [hasDimension, hasMeasure, hasGrandTotal, isTotalModeAuto, position] = [
     layout.qHyperCube.qDimensionInfo.length > 0,
     layout.qHyperCube.qMeasureInfo.length > 0,
@@ -31,11 +35,7 @@ export function getTotalPosition(layout: TableLayout, areBasicFeaturesEnabled = 
     layout.totals.position,
   ];
 
-  if (
-    areBasicFeaturesEnabled &&
-    hasGrandTotal &&
-    ((hasDimension && hasMeasure) || (!isTotalModeAuto && !hasDimension))
-  ) {
+  if (hasGrandTotal && ((hasDimension && hasMeasure) || (!isTotalModeAuto && !hasDimension))) {
     if (isTotalModeAuto || position === 'top') {
       return { atTop: true, atBottom: false };
     }
@@ -48,26 +48,75 @@ export function getTotalPosition(layout: TableLayout, areBasicFeaturesEnabled = 
 }
 
 /**
- * Gets the totals text for a column
+ * Gets the totals label in the first column
+ * Gets the qText for each of the rest of columns
  */
 export function getTotalInfo(layout: TableLayout, colIdx: number, pageColIdx: number, numDims: number) {
   if (colIdx >= numDims) return layout.qHyperCube.qGrandTotalRow[colIdx - numDims]?.qText ?? '';
-  if (pageColIdx === 0) return layout.totals.label;
+  if (pageColIdx === 0) return layout.totals.label ?? '';
   return '';
 }
 
 /**
+ * Gets the totals alignment for head, totals and body
+ * bodyTextAlign is later used to determine independent alignment for each body cell
+ */
+export function getAlignInfo(
+  textAlign: TextAlign,
+  qDimensionType: EngineAPI.DimensionType | undefined,
+  isDim: boolean
+): { headTextAlign: Align; totalsTextAlign: Align; bodyTextAlign: Align | 'auto' } {
+  if (textAlign && !textAlign.auto) {
+    return { headTextAlign: textAlign.align, totalsTextAlign: textAlign.align, bodyTextAlign: textAlign.align };
+  }
+
+  return {
+    headTextAlign: qDimensionType === 'N' || qDimensionType === undefined ? 'right' : 'left',
+    totalsTextAlign: isDim ? 'left' : 'right',
+    bodyTextAlign: 'auto',
+  };
+}
+
+/**
+ * Gets the correct text alignment for body cells, based on the text alignment info from the column and cell content
+ */
+export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | 'auto') => {
+  if (textAlign !== 'auto') {
+    return textAlign;
+  }
+
+  return isNumericCell(cell) ? 'right' : 'left';
+};
+
+/**
  * Gets all column info, returns false if hidden
  */
-export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: number): false | Column {
+export function getColumnInfo(
+  layout: TableLayout,
+  colIdx: number,
+  pageColIdx: number,
+  selectionColIdx: number | undefined
+): Column {
   const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIdx < numDims;
   const info = (isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims]) as
     | ExtendedNxMeasureInfo
     | ExtendedNxDimensionInfo;
+
+  let fieldIndex = 0;
+  let fieldId = '';
+  let isLocked = false;
+  let qDimensionType;
+  if (isDim) {
+    const dimInfo = info as ExtendedNxDimensionInfo;
+    fieldIndex = dimInfo.qGroupPos;
+    fieldId = dimInfo.qGroupFieldDefs[fieldIndex];
+    isLocked = dimInfo.qLocked;
+    ({ qDimensionType } = dimInfo);
+  }
+
   const {
-    qError,
     qFallbackTitle,
     textAlign,
     qAttrExprInfo,
@@ -77,37 +126,26 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
     columnWidth,
     qLibraryId,
   } = info;
-  const isHidden = qError?.qErrorCode === 7005;
-  const isLocked = isDim && (info as ExtendedNxDimensionInfo).qLocked;
-  const autoAlign = isDim ? 'left' : 'right';
 
-  let fieldIndex = 0;
-  let fieldId = '';
-  if (isDim) {
-    fieldIndex = (info as ExtendedNxDimensionInfo).qGroupPos;
-    fieldId = (info as ExtendedNxDimensionInfo).qGroupFieldDefs[fieldIndex];
-  }
-
-  return (
-    !isHidden && {
-      isDim,
-      isLocked,
-      fieldId,
-      colIdx,
-      qLibraryId,
-      pageColIdx,
-      qApprMaxGlyphCount,
-      qReverseSort,
-      columnWidth,
-      id: `col-${pageColIdx}`,
-      label: qFallbackTitle,
-      align: !textAlign || textAlign.auto ? autoAlign : textAlign.align,
-      stylingIDs: qAttrExprInfo.map((expr) => expr.id),
-      // making sure that qSortIndicator is either A or D
-      sortDirection: qSortIndicator && qSortIndicator !== 'N' ? qSortIndicator : 'A',
-      totalInfo: getTotalInfo(layout, colIdx, pageColIdx, numDims),
-    }
-  );
+  return {
+    isDim,
+    isLocked,
+    fieldId,
+    colIdx,
+    qLibraryId,
+    pageColIdx,
+    qApprMaxGlyphCount,
+    qReverseSort,
+    columnWidth,
+    selectionColIdx: selectionColIdx ?? -1,
+    id: `col-${pageColIdx}`,
+    label: qFallbackTitle,
+    stylingIDs: qAttrExprInfo.map((expr) => expr.id),
+    // making sure that qSortIndicator is either A or D
+    sortDirection: qSortIndicator && qSortIndicator !== 'N' ? qSortIndicator : 'A',
+    totalInfo: getTotalInfo(layout, colIdx, pageColIdx, numDims),
+    ...getAlignInfo(textAlign, qDimensionType, isDim),
+  };
 }
 
 /**
@@ -118,23 +156,46 @@ export const getColumns = (layout: TableLayout) => {
   const {
     qHyperCube: { qColumnOrder, qDimensionInfo, qMeasureInfo },
   } = layout;
-  const columnsLength = qDimensionInfo.length + qMeasureInfo.length;
+  const numDims = qDimensionInfo.length;
+  const columnsLength = numDims + qMeasureInfo.length;
   const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
+  const selectionColIndexes: Record<string, number> = {};
+  let hiddenDimCounter = 0;
 
-  return columnOrder.map((colIdx, pageColIdx) => getColumnInfo(layout, colIdx, pageColIdx)).filter(Boolean) as Column[];
+  const visibleColumnsOrder = columnOrder.filter((colIdx) => {
+    const isDim = colIdx < numDims;
+    const { qError } = isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims];
+    const isHidden = qError?.qErrorCode === HIDDEN_ERROR_CODE;
+
+    // Every visible dimension needs a column index adjusted for hidden columns.
+    // Since this is only relevant for selections, no need to add an index for measures
+    if (isDim) {
+      if (isHidden) {
+        hiddenDimCounter++;
+      } else {
+        selectionColIndexes[colIdx] = colIdx - hiddenDimCounter;
+      }
+    }
+
+    return !isHidden;
+  });
+
+  return visibleColumnsOrder.map((colIdx, pageColIdx) =>
+    getColumnInfo(layout, colIdx, pageColIdx, selectionColIndexes[colIdx])
+  );
 };
 
 /**
  * Fetches the data for the given pageInfo. Returns rows and columns, sorted in the order they will be displayed,
  * and meta data for size etc. The column/row indexes used in engine are stored as col/rowIdx, while the index within
- * the displayed page is stored as pageRow/ColIdx
+ * the displayed page is stored as pageRow/ColIdx.
+ * For dimension cells, there is a selectionColIdx used for calling the selection API
  */
 export default async function manageData(
   model: EngineAPI.IGenericObject,
   layout: TableLayout,
   pageInfo: PageInfo,
-  setPageInfo: SetPageInfo,
-  areBasicFeaturesEnabled: boolean
+  setPageInfo: SetPageInfo
 ): Promise<TableData | null> {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const totalColumnCount = layout.qHyperCube.qSize.qcx;
@@ -156,7 +217,7 @@ export default async function manageData(
   }
 
   const paginationNeeded = totalRowCount > 10; // TODO: This might not be true if you have > 1000 columns
-  const totalsPosition = getTotalPosition(layout, areBasicFeaturesEnabled);
+  const totalsPosition = getTotalPosition(layout);
   const columns = getColumns(layout);
 
   const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
@@ -168,10 +229,12 @@ export default async function manageData(
     columns.forEach((c, pageColIdx) => {
       row[c.id] = {
         ...r[pageColIdx],
+        align: getBodyCellAlign(r[pageColIdx], c.bodyTextAlign),
         rowIdx: pageRowIdx + top,
         colIdx: c.colIdx,
         pageRowIdx,
         pageColIdx,
+        selectionColIdx: c.selectionColIdx,
         isSelectable: c.isDim && !c.isLocked,
         isLastRow: pageRowIdx === height - 1,
       };

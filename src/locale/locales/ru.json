@@ -9,6 +9,11 @@
     "comment": "number of rows and columns announced by the screen reader. (tew 210929)",
     "version": "HKjzXNhL9hPs/kFY0XyjTQ=="
   },
+  "SNTable.MenuItem.AdjustColumnSize": {
+    "value": "Настроить размер столбца",
+    "comment": "label for adjust column size menu in field.",
+    "version": "9awMNkdwTJDfuwd8V42e9g=="
+  },
   "SNTable.MenuItem.ClearSelections": {
     "value": "Очистить выбранные",
     "comment": "label for clearing all selected items in field.",

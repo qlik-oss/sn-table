@@ -26,8 +26,6 @@ const properties = {
     qMeasures: [],
     /** @type {number[]} */
     qColumnOrder: [],
-    /** @type {number[]} */
-    columnWidths: [],
     qInitialDataFetch: [{ qWidth: 50, qHeight: 100 }],
   },
   /**
@@ -57,11 +55,11 @@ const properties = {
   footnote: '',
   /**
    * totals settings
-   * @type {object}
+   * @type {object=}
    */
   totals: {
     /**
-     * Determines if the way totals row is showing is handle automatically, if `true` the `position` prop will be ignored
+     * If set to true, the display of the totals row will be handled automatically, and the `position` prop will be ignored.
      * @type {boolean=}
      */
     show: true,
@@ -76,6 +74,11 @@ const properties = {
      */
     label: 'Totals',
   },
+  /**
+   * Use pagination or continuous scroll. If undefined, defaults to using pagination
+   * @type {boolean=}
+   */
+  usePagination: false,
   /**
    * Holds general styling
    * @type {?Component[]}
@@ -104,6 +107,7 @@ const properties = {
  * @typedef {object} InlineDimensionDef
  * @extends NxInlineDimensionDef
  * @property {TextAlign=} textAlign
+ * @property {ColumnWidth=} columnWidth
  */
 
 /**
@@ -111,6 +115,7 @@ const properties = {
  * @typedef {object} InlineMeasureDef
  * @extends NxInlineMeasureDef
  * @property {TextAlign=} textAlign
+ * @property {ColumnWidth=} columnWidth
  */
 
 /**
@@ -127,6 +132,14 @@ const properties = {
  * @extends NxInlineDimensionDef
  * @property {boolean} auto - If true, sets the alignment based on the type of column (left for dimension, right for measure)
  * @property {('left'|'center'|'right')} align - Is used (and mandatory) if `auto` is false
+ */
+
+/**
+ * Column width info
+ * @typedef {object} ColumnWidth
+ * @property {('auto' | 'FitToContent' | 'pixels' | 'percentage')} type - Defines how the column width is set. `auto` calculates the width(s) so the total table width equals the chart width. `fitToContent` calculates a width based on the cells' content. `pixels` uses a specified pixel value. `percentage` sets the column width to specified percentage of the chart width
+ * @property {number=} pixels - Is used (and mandatory) if type is `pixels`
+ * @property {number=} percentage - Is used (and mandatory) if type is `percentage`
  */
 
 /**
@@ -147,7 +160,7 @@ const properties = {
  * @property {boolean=} hoverEffect - Toggles hover effect
  * @property {PaletteColor=} hoverColor - Background hover color. Uses `#f4f4f4` if no hover colors are set, is transparent if only `hoverFontColor` is set
  * @property {PaletteColor=} hoverFontColor - When only `hoverColor` is set, this is adjusted to either `#f4f4f4` or `#ffffff` for optimal contrast
- * @property {string=} padding - Defaults to `7px 14px`
+ * @property {string=} padding - Css setting for the cell padding, defaults to `4px 12px`
  */
 
 /**

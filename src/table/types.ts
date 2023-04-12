@@ -114,14 +114,16 @@ export interface ContextValue {
     rootElement: HTMLElement;
     embed: stardust.Embed;
     changeSortOrder: ChangeSortOrder;
-    applyColumnWidths?: ApplyColumnWidths;
+    applyColumnWidths: ApplyColumnWidths;
     styling: TableStyling;
+    rect: stardust.Rect;
   };
   tableData: TableData;
   setYScrollbarWidth: (width: number) => void;
   pageInfo?: PageInfo;
   setPage?: stardust.SetStateFn<number>;
   initialDataPages?: EngineAPI.INxDataPage[];
+  showRightBorder: boolean;
 }
 
 export interface FooterStyle {
@@ -155,7 +157,15 @@ export interface HandleHeadKeyDownProps {
   cellCoord: [number, number];
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   isInteractionEnabled: boolean;
-  areBasicFeaturesEnabled: boolean;
+}
+
+export interface HandleHeadMouseDownProps {
+  evt: React.MouseEvent;
+  rootElement: HTMLElement;
+  cellCoord: [number, number];
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  keyboard: stardust.Keyboard;
+  isInteractionEnabled: boolean;
 }
 
 export interface BodyArrowHelperProps {
@@ -168,7 +178,6 @@ export interface BodyArrowHelperProps {
   announce: Announce;
   totalsPosition: TotalsPosition;
   isSelectionMode: boolean;
-  areBasicFeaturesEnabled: boolean;
 }
 
 export interface HandleBodyKeyDownProps {
@@ -183,7 +192,6 @@ export interface HandleBodyKeyDownProps {
   totalsPosition: TotalsPosition;
   paginationNeeded: boolean;
   selectionsAPI: ExtendedSelectionAPI;
-  areBasicFeaturesEnabled: boolean;
 }
 
 export interface CellFocusProps {
@@ -208,7 +216,6 @@ export interface ContextProviderProps {
   tableData?: TableData;
   selectionsAPI: ExtendedSelectionAPI;
   cellCoordMock?: [number, number];
-  selectionDispatchMock?: jest.Mock<any, any>;
   layout: TableLayout;
   model?: EngineAPI.IGenericObject;
   translator: ExtendedTranslator;
@@ -218,8 +225,8 @@ export interface ContextProviderProps {
   rootElement: HTMLElement;
   embed: stardust.Embed;
   changeSortOrder: ChangeSortOrder;
-  applyColumnWidths?: ApplyColumnWidths;
-  tableWidth?: number;
+  applyColumnWidths: ApplyColumnWidths;
+  rect: stardust.Rect;
   pageInfo?: PageInfo;
   setPage?: stardust.SetStateFn<number>;
   initialDataPages?: EngineAPI.INxDataPage[];
@@ -249,30 +256,23 @@ export interface RenderProps {
     setPageInfo: SetPageInfo
   ): Promise<TableData | null>;
   app?: EngineAPI.IApp;
-  areBasicFeaturesEnabled?: boolean;
   embed?: stardust.Embed;
   applyColumnWidths?: ApplyColumnWidths;
 }
 
 export interface TableWrapperProps {
   direction?: Direction;
-  rect: stardust.Rect;
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
   footerContainer?: HTMLElement;
   announce: Announce;
-  areBasicFeaturesEnabled: boolean;
-}
-
-export interface TableHeadWrapperProps {
-  areBasicFeaturesEnabled: boolean;
 }
 
 export interface HeadCellContentProps {
   children: JSX.Element;
   column: Column;
   isActive: boolean;
-  areBasicFeaturesEnabled: boolean;
+  isInteractionEnabled: boolean;
 }
 
 export interface HeadCellMenuProps {
@@ -296,12 +296,10 @@ export interface TableBodyWrapperProps {
   announce: Announce;
   setShouldRefocus(): void;
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | null>;
-  areBasicFeaturesEnabled: boolean;
 }
 
 export interface PaginationContentProps {
   direction?: 'ltr' | 'rtl';
-  rect: stardust.Rect;
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
   footerContainer?: HTMLElement;
@@ -313,6 +311,7 @@ export interface PaginationContentProps {
 export interface AdjusterProps {
   column: Column;
   isLastColumn: boolean;
+  onColumnResize?: () => void;
 }
 
 export interface FooterWrapperProps {
@@ -326,7 +325,6 @@ export interface CellHOCProps extends TableCellProps {
   cell: Cell;
   column: Column;
   announce: Announce;
-  areBasicFeaturesEnabled: boolean;
 }
 
 export type CellHOC = (props: CellHOCProps) => JSX.Element;

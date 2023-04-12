@@ -1,3 +1,4 @@
+import { stardust } from '@nebula.js/stardust';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import React from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
@@ -24,6 +25,7 @@ describe('useDynamicRowHeight', () => {
   let gridState: React.MutableRefObject<GridState> | undefined;
   let props: UseDynamicRowHeightProps;
   let wrapper: ({ children }: HookWrapperProps) => JSX.Element;
+  let rect: stardust.Rect;
 
   beforeEach(() => {
     rowCount = 5;
@@ -40,6 +42,7 @@ describe('useDynamicRowHeight', () => {
         overscanRowStopIndex: 0,
       },
     };
+    rect = { width: 100, height: 200, left: 0, top: 0 };
 
     props = {
       columns,
@@ -54,7 +57,11 @@ describe('useDynamicRowHeight', () => {
       gridState,
     };
 
-    wrapper = ({ children }: HookWrapperProps) => <TestWithProviders layout={layout}>{children}</TestWithProviders>;
+    wrapper = ({ children }: HookWrapperProps) => (
+      <TestWithProviders layout={layout} rect={rect}>
+        {children}
+      </TestWithProviders>
+    );
   });
 
   test('should update row meta and row height when setCellSize is called', async () => {
@@ -118,7 +125,7 @@ describe('useDynamicRowHeight', () => {
     await waitFor(() => expect(result.current.getRowHeight(1)).toEqual(25));
   });
 
-  describe('updateCellHeight', () => {
+  describe('resizeVisibleCells', () => {
     test('should update cell size for rendered rows', async () => {
       const rows = Array(rowCount)
         .fill(undefined)
@@ -134,7 +141,7 @@ describe('useDynamicRowHeight', () => {
 
       const { result } = renderHook(() => useDynamicRowHeight(props), { wrapper });
 
-      act(() => result.current.updateCellHeight(rows));
+      act(() => result.current.resizeVisibleCells(rows));
 
       await waitFor(() => expect(result.current.rowMeta.current.count).toEqual(rows.length));
       await waitFor(() => expect(result.current.rowMeta.current.heights).toEqual(Array(rowCount).fill(25)));
@@ -160,7 +167,7 @@ describe('useDynamicRowHeight', () => {
 
       const { result } = renderHook(() => useDynamicRowHeight(props), { wrapper });
 
-      act(() => result.current.updateCellHeight(rows));
+      act(() => result.current.resizeVisibleCells(rows));
 
       await waitFor(() => expect(result.current.rowMeta.current.count).toEqual(qcy));
       await waitFor(() => expect(result.current.rowMeta.current.heights).toEqual(Array(qcy).fill(25)));
@@ -182,7 +189,7 @@ describe('useDynamicRowHeight', () => {
       const { result } = renderHook(() => useDynamicRowHeight(props), { wrapper });
 
       act(() => result.current.setCellSize('123456789', 0, 0));
-      act(() => result.current.updateCellHeight(rows));
+      act(() => result.current.resizeVisibleCells(rows));
 
       await waitFor(() => expect(result.current.rowMeta.current.count).toEqual(1));
       await waitFor(() => expect(result.current.rowMeta.current.heights).toEqual([25]));
@@ -216,18 +223,36 @@ describe('useDynamicRowHeight', () => {
 
       await waitFor(() => expect(result.current.rowMeta.current.count).toEqual(0));
     });
+  });
 
-    test('should reset row meta when column width is updated', async () => {
+  describe('resize all cells', () => {
+    test('should resize all cells when width is updated', async () => {
       const { result, rerender } = renderHook((p) => useDynamicRowHeight(p), { initialProps: props, wrapper });
 
       await act(() => result.current.setCellSize('123456789', 0, 0));
 
       await waitFor(() => expect(result.current.rowMeta.current.count).toEqual(1));
       await act(() => {
-        rerender({ ...props, columnWidths: [...columnWidths] });
+        rect = { ...rect };
+        rerender({ ...props });
       });
 
-      await waitFor(() => expect(result.current.rowMeta.current.count).toEqual(0));
+      await waitFor(() => expect(result.current.rowMeta.current.count).toEqual(1));
+    });
+
+    test('should resize all cells when style is updated', async () => {
+      const { result, rerender } = renderHook((p) => useDynamicRowHeight(p), { initialProps: props, wrapper });
+
+      await act(() => result.current.setCellSize('123456789', 0, 0));
+
+      await waitFor(() => expect(result.current.rowMeta.current.count).toEqual(1));
+
+      await act(() => {
+        props.style = { ...style, fontSize: '20px' };
+        rerender({ ...props });
+      });
+
+      await waitFor(() => expect(result.current.rowMeta.current.count).toEqual(1));
     });
   });
 });

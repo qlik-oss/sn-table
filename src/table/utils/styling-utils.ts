@@ -84,9 +84,9 @@ export const getBaseStyling = (
   styleObj: HeaderStyling | ContentStyling | undefined,
   bottomSeparatingBorder = false
 ): GeneratedStyling => {
-  const fontFamily = theme.getStyle('object', `straightTable.${objetName}`, 'fontFamily');
-  const color = theme.getStyle('object', `straightTable.${objetName}`, 'color');
-  const fontSize = theme.getStyle('object', `straightTable.${objetName}`, 'fontSize');
+  const fontFamily = theme.getStyle('object', `straightTableV2.${objetName}`, 'fontFamily');
+  const color = theme.getStyle('object', `straightTableV2.${objetName}`, 'color');
+  const fontSize = theme.getStyle('object', `straightTableV2.${objetName}`, 'fontSize');
 
   const baseStyle: GeneratedStyling = {
     fontFamily,
@@ -121,8 +121,7 @@ export function getHeaderStyle(
   // there is a header background color depending on the header font color
   // - When the table background color from the sense theme has opacity,
   // removing that.
-  const defaultBackground = isDarkColor(headerStyle.color) ? COLORING.WHITE : COLORING.DARK_MODE_BACKGROUND;
-  headerStyle.background = theme.background.isTransparent ? defaultBackground : removeOpacity(theme.background.color);
+  headerStyle.background = theme.background.isTransparent ? COLORING.WHITE : removeOpacity(theme.background.color);
 
   // When you set the header font color,
   // the sort label color should be same.
@@ -153,8 +152,8 @@ export function getBodyStyle(
   const backgroundFromLayout = content?.hoverColor;
   const colorFromLayout = content?.hoverFontColor;
 
-  const backgroundFromTheme = theme.getStyle('object', '', 'straightTable.content.hover.backgroundColor');
-  const colorFromTheme = theme.getStyle('object', '', 'straightTable.content.hover.color');
+  const backgroundFromTheme = theme.getStyle('object', '', 'straightTableV2.content.hover.backgroundColor');
+  const colorFromTheme = theme.getStyle('object', '', 'straightTableV2.content.hover.color');
 
   // Cases when hoverEffect is true:
   // 1. There is no hover font color but a hover background color,

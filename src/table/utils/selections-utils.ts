@@ -10,7 +10,7 @@ export const getCellSelectionState = (cell: Cell, selectionState: SelectionState
   const { colIdx, rows, api } = selectionState;
   let cellState = SelectionStates.INACTIVE;
   if (api.isModal()) {
-    if (colIdx !== cell.colIdx) {
+    if (colIdx !== cell.selectionColIdx) {
       cellState = SelectionStates.EXCLUDED;
     } else if (rows[cell.qElemNumber] !== undefined) {
       cellState = SelectionStates.SELECTED;
@@ -82,7 +82,7 @@ const selectCell = (state: SelectionState, payload: SelectPayload): SelectionSta
   let selectedRows: Record<string, number> = {};
 
   if (colIdx === -1) api.begin(['/qHyperCubeDef']);
-  else if (colIdx === cell.colIdx) selectedRows = { ...rows };
+  else if (colIdx === cell.selectionColIdx) selectedRows = { ...rows };
   else return state;
 
   selectedRows = getSelectedRows(selectedRows, cell, evt);
@@ -92,9 +92,9 @@ const selectCell = (state: SelectionState, payload: SelectPayload): SelectionSta
   if (Object.keys(selectedRows).length) {
     api.select({
       method: 'selectHyperCubeCells',
-      params: ['/qHyperCubeDef', Object.values(selectedRows), [cell.colIdx]],
+      params: ['/qHyperCubeDef', Object.values(selectedRows), [cell.selectionColIdx]],
     });
-    return { ...state, rows: selectedRows, colIdx: cell.colIdx };
+    return { ...state, rows: selectedRows, colIdx: cell.selectionColIdx };
   }
 
   api.cancel();
@@ -150,7 +150,12 @@ const selectMultipleCells = (state: SelectionState, payload: SelectPayload): Sel
   selectedRows = getMultiSelectedRows(pageRows, selectedRows, cell, evt, firstCell);
   announceSelectionStatus(announce, rows, selectedRows);
 
-  return { ...state, rows: selectedRows, colIdx: firstCell?.colIdx ?? cell.colIdx, isSelectMultiValues: true };
+  return {
+    ...state,
+    rows: selectedRows,
+    colIdx: firstCell?.selectionColIdx ?? cell.selectionColIdx,
+    isSelectMultiValues: true,
+  };
 };
 
 /**
@@ -160,7 +165,7 @@ const selectOnMouseDown = (
   state: SelectionState,
   { cell, mouseupOutsideCallback }: { cell: Cell; mouseupOutsideCallback(): void }
 ): SelectionState => {
-  if (mouseupOutsideCallback && (state.colIdx === -1 || state.colIdx === cell.colIdx)) {
+  if (mouseupOutsideCallback && (state.colIdx === -1 || state.colIdx === cell.selectionColIdx)) {
     document.addEventListener('mouseup', mouseupOutsideCallback);
     return {
       ...state,

@@ -1,5 +1,6 @@
 import getPropertyPanelDefinition from './property-panel';
 import getData from './data';
+import { importProperties, exportProperties } from './conversion';
 
 const getExploration = (env) =>
   env.flags.isEnabled('PS_18291_TABLE_EXPLORATION') && {
@@ -25,11 +26,13 @@ export default function ext(env) {
     ...getExploration(env),
     data: getData(env),
     support: {
-      export: true,
+      export: false,
       exportData: true,
       snapshot: true,
       viewData: false,
       exploration: true,
     },
+    importProperties,
+    exportProperties,
   };
 }

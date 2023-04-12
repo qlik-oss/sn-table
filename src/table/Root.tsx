@@ -29,6 +29,7 @@ export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.R
     changeSortOrder,
     applyColumnWidths,
     tableData,
+    rect,
     ...wrapperProps
   } = props;
   const muiTheme = muiSetup(direction);
@@ -50,7 +51,7 @@ export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.R
           embed={embed as stardust.Embed}
           changeSortOrder={changeSortOrder}
           applyColumnWidths={applyColumnWidths as ApplyColumnWidths}
-          tableWidth={props.rect.width}
+          rect={rect}
         >
           <TableWrapper {...(wrapperProps as TableWrapperProps)} />
         </TableContextProvider>
@@ -59,7 +60,7 @@ export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.R
   );
 }
 
-export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot?: ReactDom.Root) {
+export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot: ReactDom.Root) {
   const {
     app,
     selectionsAPI,
@@ -81,7 +82,7 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
   } = props;
   const muiTheme = muiSetup('ltr');
 
-  reactRoot?.render(
+  reactRoot.render(
     <React.StrictMode>
       <ThemeProvider theme={muiTheme}>
         <TableContextProvider
@@ -98,19 +99,16 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
           changeSortOrder={changeSortOrder}
           tableData={tableData}
           applyColumnWidths={applyColumnWidths}
-          tableWidth={rect.width}
+          rect={rect}
           setPage={setPage}
           pageInfo={pageInfo}
           initialDataPages={initialDataPages}
         >
-          <VirtualizedTable rect={rect} />
+          <VirtualizedTable />
         </TableContextProvider>
       </ThemeProvider>
     </React.StrictMode>
   );
-}
-export function teardown(reactRoot: ReactDom.Root) {
-  reactRoot.unmount();
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

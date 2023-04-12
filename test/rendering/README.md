@@ -4,7 +4,7 @@
 
 Nebula development serve uses [mocked Qlik core engine (Enigma mocker)](https://github.com/qlik-oss/nebula.js/blob/master/apis/enigma-mocker/README.md) to render the sn-table based on the [testing fixture files](https://github.com/qlik-oss/nebula.js/tree/master/commands/serve/docs).
 
-Testing cases use [Playwright](https://playwright.dev/) to capture screenshots of those rendered charts and matches against baseline to ensure our charts look as intended.
+Testing cases use [Playwright](https://playwright.dev/) to capture screenshots of those rendered charts and match them against each baseline to ensure our charts look as intended.
 
 Visual regression testing flow:
 
@@ -13,9 +13,9 @@ Visual regression testing flow:
 3. Create test case per testing fixture file
 4. Render a chart based on testing fixture file in Nebula serve using Enigma mocker
 5. Capture screenshot by Playwright
-6. Compare screenshot with baseline image
+6. Compare the screenshot with a baseline image
 
-> Note: To capture same screenshot on the same operating system both locally and on a CI server, we use the Playwright Docker image to run the tests in a preconfigured environment. More info can be found [here](https://playwright.dev/docs/docker).
+> Note: To capture same screenshot on the same operating system both locally and on a CI server, we use the Playwright Docker image to run the tests in a pre-configured environment. More info can be found [here](https://playwright.dev/docs/docker).
 
 ## Updating snapshots
 
@@ -67,3 +67,4 @@ To get the necessary Layout and HyperCubeData for a fixture file, you can find t
 | Scenario 12 | 1          | 1        | Font size and color for header and body. Scroll to the bottom of the table                                                    |
 | Scenario 13 | 1          | 1        | Font size and color for header and body. Show totals at the bottom                                                            |
 | Scenario 14 | 1          | 0        | 1M rows of data                                                                                                               |
+| Scenario 15 | 3          | 1        | Line breaks                                                                                                                   |

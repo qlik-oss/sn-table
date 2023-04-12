@@ -1,4 +1,6 @@
+import { getBodyCellAlign } from '../../../../../handle-data';
 import { Cell, Column, PageInfo, Row, TableLayout } from '../../../../../types';
+import { isNumericCell } from '../../../../utils/is-numeric';
 import { SetCellSize } from '../../../types';
 
 const createRow = (
@@ -17,19 +19,24 @@ const createRow = (
 
   cells.forEach((cell, cellColIdx: number) => {
     const pageColIdx = cellColIdx + qArea.qLeft;
-    const { colIdx, isDim, isLocked, id } = columns[pageColIdx];
+    const { colIdx, isDim, isLocked, id, bodyTextAlign, selectionColIdx } = columns[pageColIdx];
+    const isNumeric = isNumericCell(cell);
+
     row[id] = {
       ...cell,
+      align: getBodyCellAlign(cell, bodyTextAlign),
       rowIdx,
       colIdx,
       isSelectable: isDim && !isLocked,
       pageRowIdx,
       pageColIdx,
+      selectionColIdx,
       isLastRow: rowIdx === qSize.qcy - 1,
       isLastColumn: pageColIdx === qSize.qcx - 1,
+      isNumeric,
     };
 
-    setCellSize(cell.qText ?? '', pageRowIdx, pageColIdx);
+    setCellSize(cell.qText ?? '', pageRowIdx, pageColIdx, isNumeric);
   });
 
   return {

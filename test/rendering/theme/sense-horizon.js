@@ -34,7 +34,7 @@ module.exports = (type) => ({
         fontVariant: 'regular',
       },
     },
-    straightTable: {
+    straightTableV2: {
       header: {
         fontSize: '25px',
         color: 'chocolate',

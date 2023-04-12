@@ -18,10 +18,13 @@ interface CellProps {
 
 const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
   const { rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount } = data;
-  const cell = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
 
   const rowIsHovered = useContextSelector(TableContext, (value) => value.hoverIndex === rowIndex);
   const setHoverIndex = useContextSelector(TableContext, (value) => value.setHoverIndex);
+  const { constraints } = useContextSelector(TableContext, (value) => value.baseProps);
+  const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
+
+  const cell = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
 
   const { handleMouseDown, handleMouseOver, handleMouseUp, cellSelectionState } = useSelector(cell);
 
@@ -41,12 +44,12 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
           ...style,
           ...cellStyle,
           display: 'flex',
-          alignItems: 'center',
+          alignItems: 'start',
           borderWidth: '0px',
           borderBottomWidth: cell.isLastRow ? '0px' : `${BORDER_WIDTH}px`,
-          borderRightWidth: cell.isLastColumn ? '0px' : `${BORDER_WIDTH}px`,
+          borderRightWidth: cell.isLastColumn && !showRightBorder ? '0px' : `${BORDER_WIDTH}px`,
           borderStyle: 'solid',
-          justifyContent: columns[columnIndex].align,
+          justifyContent: cell.align,
           padding: `4px ${PADDING_LEFT_RIGHT}px`,
           boxSizing: 'border-box',
           cursor: 'default',
@@ -56,8 +59,9 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         onMouseOver={handleMouseOver}
         onMouseEnter={isHoverEnabled ? () => setHoverIndex(rowIndex) : undefined}
         onMouseLeave={isHoverEnabled ? () => setHoverIndex(-1) : undefined}
+        title={!constraints.passive ? cell.qText : undefined}
       >
-        <CellText wordBreak lines={maxLineCount}>
+        <CellText wordBreak={!cell.isNumeric} lines={maxLineCount}>
           {cell.qText}
         </CellText>
       </div>

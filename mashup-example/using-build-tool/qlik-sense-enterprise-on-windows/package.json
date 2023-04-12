@@ -17,14 +17,14 @@
     "types:check": "tsc --noEmit"
   },
   "dependencies": {
-    "@nebula.js/sn-table": "1.23.0",
-    "@nebula.js/stardust": "3.2.2",
-    "enigma.js": "2.10.0"
+    "@nebula.js/sn-table": "2.1.0",
+    "@nebula.js/stardust": "3.3.0",
+    "enigma.js": "2.11.0"
   },
   "devDependencies": {
     "@types/enigma.js": "2.2.2",
     "@types/qlik-engineapi": "12.67.12",
-    "typescript": "4.9.5",
-    "vite": "4.1.4"
+    "typescript": "5.0.4",
+    "vite": "4.2.1"
   }
 }

@@ -26,9 +26,9 @@ interface UseVirtualizedTable {
   rootElement: HTMLElement;
   embed: stardust.Embed;
   changeSortOrder: ChangeSortOrder | undefined;
-  areBasicFeaturesEnabled: boolean;
   reactRoot: Root;
   applyColumnWidths: ApplyColumnWidths;
+  isFontLoaded: boolean;
 }
 
 const useVirtualizedTable = ({
@@ -42,19 +42,19 @@ const useVirtualizedTable = ({
   constraints,
   selectionsAPI,
   changeSortOrder,
-  areBasicFeaturesEnabled,
   rootElement,
   embed,
   reactRoot,
   applyColumnWidths,
+  isFontLoaded,
 }: UseVirtualizedTable) => {
-  const shouldRender = areBasicFeaturesEnabled && layout.presentation?.usePagination === false;
+  const shouldRender = layout.usePagination === false;
   const tableData = useMemo(() => getVirtualScrollTableData(layout, constraints), [layout, constraints]);
   const { pageInfo, setPage } = usePageInfo(layout, shouldRender);
   const { initialDataPages, isLoading } = useInitialDataPages({ model, layout, page: pageInfo.page, shouldRender });
 
   useEffect(() => {
-    if (!shouldRender || !model || !changeSortOrder || !initialDataPages || isLoading) return;
+    if (!shouldRender || !model || !changeSortOrder || !initialDataPages || isLoading || !isFontLoaded) return;
 
     renderVirtualizedTable(
       {
@@ -99,6 +99,7 @@ const useVirtualizedTable = ({
     pageInfo,
     isLoading,
     initialDataPages,
+    isFontLoaded,
   ]);
 };
 

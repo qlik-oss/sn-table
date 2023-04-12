@@ -2,7 +2,6 @@
 import {
   useElement,
   useStaleLayout,
-  useEffect,
   useModel,
   useConstraints,
   useTranslator,
@@ -16,19 +15,18 @@ import {
 import properties from './qae/object-properties';
 import data from './qae/data';
 import ext from './ext';
-import { teardown } from './table/Root';
 import useReactRoot from './nebula-hooks/use-react-root';
 import useSorting from './nebula-hooks/use-sorting';
 import useExtendedTheme from './nebula-hooks/use-extended-theme';
-import useContextMenu from './nebula-hooks/use-context-menu';
 import { Galaxy, TableLayout, ExtendedTranslator, ExtendedSelectionAPI } from './types';
 import useVirtualizedTable from './nebula-hooks/use-virtualized-table';
 import usePaginationTable from './nebula-hooks/use-pagination-table';
 import useCarbonTable from './nebula-hooks/use-carbon-table';
 import useApplyColumnWidths from './nebula-hooks/use-apply-column-widths';
+import useWaitForFonts from './nebula-hooks/use-wait-for-fonts';
+import extendContextMenu from './extend-context-menu';
 
 export default function supernova(env: Galaxy) {
-  const areBasicFeaturesEnabled = env.flags.isEnabled('PS_18291_SN_TABLE_BASIC_FEATURES');
   return {
     qae: {
       properties: { initial: properties },
@@ -46,15 +44,15 @@ export default function supernova(env: Galaxy) {
       const selectionsAPI = useSelections() as ExtendedSelectionAPI;
       const keyboard = useKeyboard();
       const rect = useRect();
-      const theme = useExtendedTheme(rootElement);
       const embed = useEmbed();
+      const theme = useExtendedTheme(rootElement);
       const changeSortOrder = useSorting(model, layout.qHyperCube);
       const applyColumnWidths = useApplyColumnWidths(model, layout.qHyperCube);
+      const isFontLoaded = useWaitForFonts(theme, layout);
 
-      useContextMenu(areBasicFeaturesEnabled);
+      extendContextMenu();
 
       useVirtualizedTable({
-        areBasicFeaturesEnabled,
         app,
         layout,
         model,
@@ -69,11 +67,11 @@ export default function supernova(env: Galaxy) {
         embed,
         reactRoot,
         applyColumnWidths,
+        isFontLoaded,
       });
 
       usePaginationTable({
         env,
-        areBasicFeaturesEnabled,
         app,
         model,
         rootElement,
@@ -88,6 +86,7 @@ export default function supernova(env: Galaxy) {
         embed,
         reactRoot,
         applyColumnWidths,
+        isFontLoaded,
       });
 
       useCarbonTable({
@@ -102,13 +101,6 @@ export default function supernova(env: Galaxy) {
         changeSortOrder,
         translator,
       });
-
-      useEffect(
-        () => () => {
-          reactRoot && teardown(reactRoot);
-        },
-        [reactRoot]
-      );
     },
   };
 }

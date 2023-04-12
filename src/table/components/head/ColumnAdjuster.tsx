@@ -1,9 +1,8 @@
 import React, { useRef } from 'react';
 import { AdjusterProps } from '../../types';
 import { useContextSelector, TableContext } from '../../context';
-import { AdjusterHitArea, AdjusterHeadBorder, AdjusterBodyBorder } from './styles';
-import { ColumnWidthTypes, MIN_COLUMN_WIDTH, PAGINATION_HEIGHT, KeyCodes } from '../../constants';
-import { BORDER_WIDTH } from '../../styling-defaults';
+import { AdjusterHitArea, AdjusterHeadBorder } from './styles';
+import { ColumnWidthTypes, MIN_COLUMN_WIDTH, KeyCodes } from '../../constants';
 import { preventDefaultBehavior } from '../../utils/keyboard-utils';
 import { focusHeadMenuButton } from '../../utils/accessibility-utils';
 
@@ -13,17 +12,17 @@ import { focusHeadMenuButton } from '../../utils/accessibility-utils';
  * When you start dragging, mouse move and mouse up listeners are added.
  * While dragging the current column is updated, and on mouse up all other columns are updated.
  */
-const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
+const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps) => {
   const { pageColIdx } = column;
-  const { rootElement, applyColumnWidths, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { applyColumnWidths, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setColumnWidths = useContextSelector(TableContext, (value) => value.setColumnWidths);
-  const tempWidths = useRef({ adjusterHitArea: {}, columnWidth: 0, initX: 0, initWidth: 0 });
-  const borderHeight = rootElement.getBoundingClientRect().height - PAGINATION_HEIGHT + BORDER_WIDTH;
+  const tempWidths = useRef({ columnWidth: 0, initX: 0, initWidth: 0 });
 
-  if (!applyColumnWidths || constraints.active) return null;
+  if (constraints.active) return null;
 
   const updateWidth = (adjustedWidth: number) => {
+    onColumnResize?.();
     tempWidths.current.columnWidth = adjustedWidth;
     const newColumnWidths = [...columnWidths];
     newColumnWidths[pageColIdx] = adjustedWidth;
@@ -49,14 +48,12 @@ const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
     document.removeEventListener('mouseup', mouseUpHandler);
 
     confirmWidth();
-    ((tempWidths.current.adjusterHitArea as HTMLDivElement).closest('#adjuster-hit-area') as HTMLDivElement).blur();
   };
 
   const mouseDownHandler = (evt: React.MouseEvent) => {
     evt.stopPropagation();
 
     tempWidths.current = {
-      adjusterHitArea: evt.target,
       initX: evt.clientX,
       initWidth: columnWidths[pageColIdx],
       columnWidth: columnWidths[pageColIdx],
@@ -68,6 +65,7 @@ const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === KeyCodes.LEFT || event.key === KeyCodes.RIGHT) {
+      preventDefaultBehavior(event);
       const RESIZE_DISTANCE = 5;
       const prevWidth = columnWidths[pageColIdx];
       const columnWidth = event.key === KeyCodes.LEFT ? prevWidth - RESIZE_DISTANCE : prevWidth + RESIZE_DISTANCE;
@@ -76,12 +74,14 @@ const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
       updateWidth(adjustedWidth);
     } else if (event.key === KeyCodes.SPACE || event.key === KeyCodes.ENTER) {
       preventDefaultBehavior(event);
+      focusHeadMenuButton(event);
+
       confirmWidth();
-      focusHeadMenuButton(event);
     } else if (event.key === KeyCodes.ESC) {
+      preventDefaultBehavior(event);
       focusHeadMenuButton(event);
-      // reset it to the init value
-      updateWidth(tempWidths.current.initWidth);
+
+      updateWidth(tempWidths.current.initWidth); // reset width to the initial value
     }
   };
 
@@ -89,7 +89,7 @@ const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
   const handleFocus = () => {
     tempWidths.current.initWidth = columnWidths[pageColIdx];
   };
-  const handleDoubleClick = () => applyColumnWidths({ type: ColumnWidthTypes.HUG }, column);
+  const handleDoubleClick = () => applyColumnWidths({ type: ColumnWidthTypes.FIT_TO_CONTENT }, column);
 
   return (
     <AdjusterHitArea
@@ -104,7 +104,6 @@ const ColumnAdjuster = ({ column, isLastColumn }: AdjusterProps) => {
       data-testid="sn-table-column-adjuster"
     >
       <AdjusterHeadBorder className="sn-table-adjuster-head-border" />
-      <AdjusterBodyBorder borderHeight={borderHeight} className="sn-table-adjuster-head-border" />
     </AdjusterHitArea>
   );
 };

@@ -1,9 +1,11 @@
 import { stardust } from '@nebula.js/stardust';
 import React from 'react';
 import { Announce } from '../../types';
-import { DEFAULT_FOCUS_CELL_COORD, FocusTypes } from '../constants';
+import { FIRST_BODY_CELL_COORD, FocusTypes } from '../constants';
 import { CellFocusProps, HandleResetFocusProps } from '../types';
-import { findCellWithTabStop, getCellCoordFromCell, getCellElement, getNextCellCoord } from './get-element-utils';
+import { findCellWithTabStop, getCellCoord, getCellElement, getNextCellCoord } from './get-element-utils';
+
+export const areTabStopsEnabled = (keyboard: stardust.Keyboard) => !keyboard.enabled || keyboard.active;
 
 /**
  * Add the tab stop for adjuster hit area and focus that
@@ -62,9 +64,9 @@ export const updateFocus = ({ focusType, cell }: CellFocusProps) => {
 };
 
 /**
- * Resets and adds new focus to a table cell based which key is pressed
+ * Resets and adds new focus to a table cell based which arrow key is pressed
  */
-export const moveFocus = (
+export const moveFocusWithArrow = (
   evt: React.KeyboardEvent,
   rootElement: HTMLElement,
   cellCoord: [number, number],
@@ -83,13 +85,18 @@ export const moveFocus = (
   return nextCell;
 };
 
+/**
+ * Finds the cell with tab stops and focuses that cell.
+ * If no cells has focus, it focuses the first body cell instead
+ */
 export const focusBodyFromHead = (
   rootElement: HTMLElement,
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
 ) => {
-  const cell = findCellWithTabStop(rootElement);
-  const newCellCoord = getCellCoordFromCell(rootElement, cell);
-  cell.focus();
+  let cell = findCellWithTabStop(rootElement);
+  const newCellCoord = cell ? getCellCoord(rootElement, cell) : FIRST_BODY_CELL_COORD;
+  cell = cell || getCellElement(rootElement, FIRST_BODY_CELL_COORD);
+  updateFocus({ cell, focusType: FocusTypes.FOCUS });
   setFocusedCellCoord(newCellCoord);
 };
 
@@ -128,9 +135,9 @@ export const resetFocus = ({
   updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: findCellWithTabStop(rootElement) });
   // If you have selections ongoing, you want to stay on the same column
   const selectionCellCoord: [number, number] = [totalsPosition.atTop ? 2 : 1, focusedCellCoord[1]];
-  const cellCoord: [number, number] = isSelectionMode ? selectionCellCoord : DEFAULT_FOCUS_CELL_COORD;
+  const cellCoord: [number, number] = isSelectionMode ? selectionCellCoord : FIRST_BODY_CELL_COORD;
 
-  if (!keyboard.enabled || keyboard.active) {
+  if (areTabStopsEnabled(keyboard)) {
     // Only run this if updates come from inside table
     const focusType = shouldRefocus.current ? FocusTypes.FOCUS : FocusTypes.ADD_TAB;
     shouldRefocus.current = false;
@@ -152,7 +159,7 @@ export const resetFocus = ({
 };
 
 /**
- * When focus is no longer in the table, resets the announcer and calls keyboard.blur
+ * When focus is no longer in the table or head cell menu, resets the announcer and calls keyboard.blur
  */
 export const handleFocusoutEvent = (
   evt: FocusEvent,
@@ -160,7 +167,10 @@ export const handleFocusoutEvent = (
   keyboard: stardust.Keyboard
 ) => {
   const targetElement = evt.currentTarget as HTMLDivElement;
-  if (keyboard.enabled && !targetElement.contains(evt.relatedTarget as Node) && !shouldRefocus.current) {
+  const relatedTarget = evt.relatedTarget as HTMLElement;
+  const isInTable = targetElement.contains(relatedTarget);
+  const isInHeadCellMenu = relatedTarget?.closest('.sn-table-head-menu');
+  if (keyboard.enabled && !isInTable && !isInHeadCellMenu && !shouldRefocus.current) {
     targetElement.querySelector('#sn-table-announcer--01')!.innerHTML = '';
     targetElement.querySelector('#sn-table-announcer--02')!.innerHTML = '';
     // Blur the table but not focus its parent element

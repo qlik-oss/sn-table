@@ -1,34 +1,37 @@
 import { Direction } from '@mui/material';
 import { stardust } from '@nebula.js/stardust';
 
-interface TextAlign {
+export type Align = 'left' | 'center' | 'right';
+
+export interface TextAlign {
   auto: boolean;
-  align: 'left' | 'center' | 'right';
+  align: Align;
 }
 
 // properties
 interface InlineDimensionDef extends EngineAPI.INxInlineDimensionDef {
   textAlign: TextAlign;
+  columnWidth: ColumnWidth;
 }
 interface InlineMeasureDef extends EngineAPI.INxInlineMeasureDef {
   textAlign: TextAlign;
+  columnWidth: ColumnWidth;
 }
 interface AttributeExpressionProperties extends EngineAPI.INxAttrExprDef {
   id: 'cellForegroundColor' | 'cellBackgroundColor';
 }
-interface DimensionProperties extends Omit<EngineAPI.INxDimension, 'qDef' | 'qAttributeExpressions'> {
+export interface DimensionProperties extends Omit<EngineAPI.INxDimension, 'qDef' | 'qAttributeExpressions'> {
   qDef: InlineDimensionDef;
   qAttributeExpressions: AttributeExpressionProperties[];
 }
-interface MeasureProperties extends Omit<EngineAPI.INxMeasure, 'qDef' | 'qAttributeExpressions'> {
+export interface MeasureProperties extends Omit<EngineAPI.INxMeasure, 'qDef' | 'qAttributeExpressions'> {
   qDef: InlineMeasureDef;
   qAttributeExpressions: AttributeExpressionProperties[];
 }
 export interface QHyperCubeDef extends Omit<EngineAPI.IHyperCubeDef, 'qDimensions' | 'qMeasures'> {
   qDimensions: DimensionProperties[];
-  qMeasures: MeasureProperties;
+  qMeasures: MeasureProperties[];
   qColumnOrder: number[];
-  columnWidths: number[];
 }
 
 // Layout
@@ -85,23 +88,25 @@ export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, 'qH
     position: 'top' | 'bottom' | 'noTotals';
     label: string;
   };
+  usePagination?: boolean;
   components?: Component[];
-  presentation?: {
-    usePagination?: boolean;
-  };
 }
 
 export interface Cell {
   qText?: string;
+  qNum?: number | string;
+  align: Align;
   qAttrExps?: EngineAPI.INxAttributeExpressionValues;
   qElemNumber: number;
   rowIdx: number;
   colIdx: number;
   pageRowIdx: number;
   pageColIdx: number;
+  selectionColIdx: number;
   isSelectable: boolean;
   isLastRow: boolean;
   isLastColumn?: boolean;
+  isNumeric?: boolean;
 }
 
 export interface Row {
@@ -110,9 +115,10 @@ export interface Row {
 }
 
 export type SortDirection = 'A' | 'D';
+export type ColumnWidthType = 'auto' | 'fitToContent' | 'pixels' | 'percentage';
 
 export interface ColumnWidth {
-  type: string;
+  type: ColumnWidthType;
   pixels?: number;
   percentage?: number;
 }
@@ -125,8 +131,11 @@ export interface Column {
   isLocked: boolean;
   colIdx: number;
   pageColIdx: number;
+  selectionColIdx: number;
   label: string;
-  align: 'left' | 'center' | 'right';
+  headTextAlign: Align;
+  totalsTextAlign: Align;
+  bodyTextAlign: 'auto' | Align;
   stylingIDs: string[];
   sortDirection: SortDirection;
   qReverseSort: boolean;
@@ -201,4 +210,14 @@ export interface Galaxy {
   translator: ExtendedTranslator;
   carbon: boolean;
   flags: stardust.Flags;
+}
+
+export interface ExportFormat {
+  data: unknown[];
+  properties: EngineAPI.IGenericHyperCubeProperties;
+}
+
+export interface PropTree {
+  qChildren: unknown[];
+  qProperty: { qHyperCubeDef: QHyperCubeDef };
 }

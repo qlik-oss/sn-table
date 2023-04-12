@@ -19,19 +19,17 @@ describe('<TableWrapper />', () => {
   let direction: 'ltr' | 'rtl';
   let announce: Announce;
   let layout: TableLayout;
-  let areBasicFeaturesEnabled: boolean;
 
   const renderTableWrapper = () =>
     render(
-      <TestWithProviders layout={layout} constraints={constraints} rootElement={rootElement} tableData={tableData}>
-        <TableWrapper
-          pageInfo={pageInfo}
-          setPageInfo={setPageInfo}
-          rect={rect}
-          direction={direction}
-          announce={announce}
-          areBasicFeaturesEnabled={areBasicFeaturesEnabled}
-        />
+      <TestWithProviders
+        layout={layout}
+        constraints={constraints}
+        rootElement={rootElement}
+        tableData={tableData}
+        rect={rect}
+      >
+        <TableWrapper pageInfo={pageInfo} setPageInfo={setPageInfo} direction={direction} announce={announce} />
       </TestWithProviders>
     );
 
@@ -47,6 +45,7 @@ describe('<TableWrapper />', () => {
       rows: [{ qText: '1' }],
       columns: [{}] as Column[],
       totalsPosition: { atTop: false, atBottom: false },
+      totalPages: 2,
     } as unknown as TableData;
     pageInfo = { page: 0, rowsPerPage: 100, rowsPerPageOptions: [10, 25, 100] };
     setPageInfo = jest.fn();

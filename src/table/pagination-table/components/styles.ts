@@ -1,4 +1,4 @@
-import styled from '@mui/system/styled';
+import { styled } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import { PAGINATION_HEIGHT } from '../../constants';
@@ -27,12 +27,9 @@ export const StyledTableContainer = styled(TableContainer, {
 }));
 
 export const StyledTable = styled(Table, {
-  shouldForwardProp: (prop: string) => prop !== 'customWidth',
-})(({ customWidth }) =>
-  customWidth
-    ? {
-        tableLayout: 'fixed',
-        width: 'min-content',
-      }
-    : {}
-);
+  shouldForwardProp: (prop: string) => prop !== 'showRightBorder' && prop !== 'styling',
+})(({ showRightBorder, styling }) => ({
+  tableLayout: 'fixed',
+  width: 'min-content',
+  borderRight: showRightBorder ? `1px solid ${styling.body.borderRightColor}` : undefined,
+}));

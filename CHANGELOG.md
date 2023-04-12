@@ -1,3 +1,114 @@
+# [2.1.0](https://github.com/qlik-oss/sn-table/compare/v2.0.0...v2.1.0) (2023-04-04)
+
+### Bug Fixes
+
+- `PS_18291_SN_TABLE_BASIC_FEATURES` off-boarding ([#956](https://github.com/qlik-oss/sn-table/issues/956)) ([a00a284](https://github.com/qlik-oss/sn-table/commit/a00a28462cba15da0746e8e50c86cea35b74225a))
+- add tooltips to table cells ([#929](https://github.com/qlik-oss/sn-table/issues/929)) ([3dd7ea3](https://github.com/qlik-oss/sn-table/commit/3dd7ea337d27debf5924f4560d597849f896a00e))
+- cell height on container or theme change ([#935](https://github.com/qlik-oss/sn-table/issues/935)) ([38b2079](https://github.com/qlik-oss/sn-table/commit/38b207922bcba447e6f81346c0e38a1a0f87a8b3))
+- click to focus head ([#943](https://github.com/qlik-oss/sn-table/issues/943)) ([fb3b389](https://github.com/qlik-oss/sn-table/commit/fb3b389484c59933827b43db3c182bf6748536cc))
+- column adjust body style when focus and active ([#926](https://github.com/qlik-oss/sn-table/issues/926)) ([8ec049b](https://github.com/qlik-oss/sn-table/commit/8ec049b184b827b003b3b47db8949c354a299d4d))
+- consistent header cell width ([#947](https://github.com/qlik-oss/sn-table/issues/947)) ([fe39b63](https://github.com/qlik-oss/sn-table/commit/fe39b63415b05b5ef74c7a32dbb6d978bb7cc7f6))
+- dimensions no longer have measure number formatting ([#928](https://github.com/qlik-oss/sn-table/issues/928)) ([dde586c](https://github.com/qlik-oss/sn-table/commit/dde586c1aae61df51bf80379e8a8d9e59f620e17))
+- empty cell height ([#967](https://github.com/qlik-oss/sn-table/issues/967)) ([2877473](https://github.com/qlik-oss/sn-table/commit/287747306485058a971d1198a300bc237af4787a))
+- empty totals label in VT mode ([#962](https://github.com/qlik-oss/sn-table/issues/962)) ([7788af0](https://github.com/qlik-oss/sn-table/commit/7788af02a5381f1b3edcc989ae456ef4316a39d2))
+- head cell width ([#946](https://github.com/qlik-oss/sn-table/issues/946)) ([ea2dc39](https://github.com/qlik-oss/sn-table/commit/ea2dc3928e69a695bec0466b019e91f4d8c04192))
+- header font family ([#951](https://github.com/qlik-oss/sn-table/issues/951)) ([3e07a73](https://github.com/qlik-oss/sn-table/commit/3e07a7363a1e486d40e0bf857860695631415de3))
+- improve measure text ([#953](https://github.com/qlik-oss/sn-table/issues/953)) ([5974c5a](https://github.com/qlik-oss/sn-table/commit/5974c5afcfd33d0809857549b5c86267bfadee22))
+- move pageRows update to TableWrapper ([#944](https://github.com/qlik-oss/sn-table/issues/944)) ([87146c1](https://github.com/qlik-oss/sn-table/commit/87146c1d25b73534c164d4f94f911d0f551c315f))
+- no word break for numeric cells ([#959](https://github.com/qlik-oss/sn-table/issues/959)) ([c16c480](https://github.com/qlik-oss/sn-table/commit/c16c480ffc4f3779211cc17a7ca8b63a28e159bb))
+- pressing space scrolls doen on totals row ([#960](https://github.com/qlik-oss/sn-table/issues/960)) ([df47d8c](https://github.com/qlik-oss/sn-table/commit/df47d8c634edf97cea859eeac44aafbec67bef47))
+- remove columnWidths in object properties ([#970](https://github.com/qlik-oss/sn-table/issues/970)) ([acd171e](https://github.com/qlik-oss/sn-table/commit/acd171e2de4c5d10c532b4654faa60c242f16300))
+- remove hidden columns before getting column info ([#937](https://github.com/qlik-oss/sn-table/issues/937)) ([0aa1276](https://github.com/qlik-oss/sn-table/commit/0aa1276c5a6accab3c044b98af0675e05bd1005f))
+- reset scroll position on theme change ([#932](https://github.com/qlik-oss/sn-table/issues/932)) ([6b77a95](https://github.com/qlik-oss/sn-table/commit/6b77a95bee534df7da8bc645e430a15a6c359108))
+- show pagination table when flag is off ([#945](https://github.com/qlik-oss/sn-table/issues/945)) ([10cf434](https://github.com/qlik-oss/sn-table/commit/10cf4344fb9ce52a65f833854818f23e4949ed24))
+- show right border when table is smaller than object ([#924](https://github.com/qlik-oss/sn-table/issues/924)) ([9cbc8c7](https://github.com/qlik-oss/sn-table/commit/9cbc8c70044c1269cdb67e988e73d9dead3c60d1))
+- slow loading with many pages ([#934](https://github.com/qlik-oss/sn-table/issues/934)) ([5347740](https://github.com/qlik-oss/sn-table/commit/53477407a538ddb2debe3e5ae14d700c758bca4e))
+- totals background ([#965](https://github.com/qlik-oss/sn-table/issues/965)) ([e839974](https://github.com/qlik-oss/sn-table/commit/e83997493869739b028cc0b75b095d291e6cf390))
+- totals row height when docked at bottom ([#958](https://github.com/qlik-oss/sn-table/issues/958)) ([96a826b](https://github.com/qlik-oss/sn-table/commit/96a826bfe44537696f57ee9c4c68d202d6605435))
+- update API spec ([#968](https://github.com/qlik-oss/sn-table/issues/968)) ([9ae4f3a](https://github.com/qlik-oss/sn-table/commit/9ae4f3acabe3b6fe786c4f8be593b3a3d3023f98))
+- use adjusted column idx for selections ([#955](https://github.com/qlik-oss/sn-table/issues/955)) ([d4602e1](https://github.com/qlik-oss/sn-table/commit/d4602e1557879a29854ec72dd25b01ca00f8c50f))
+- wait for fonts ([#966](https://github.com/qlik-oss/sn-table/issues/966)) ([1f24b04](https://github.com/qlik-oss/sn-table/commit/1f24b0463339039301662e67d9c2b0c8e85a5645))
+- wait for fonts to load ([#950](https://github.com/qlik-oss/sn-table/issues/950)) ([54252a3](https://github.com/qlik-oss/sn-table/commit/54252a3680f892f59ea802e0b5c5d8a5861d7ea5))
+
+### Features
+
+- add show others checkbox ([#952](https://github.com/qlik-oss/sn-table/issues/952)) ([0ac8263](https://github.com/qlik-oss/sn-table/commit/0ac826331ff9b64804f7e128043726f70ea8c481))
+- update api spec ([#963](https://github.com/qlik-oss/sn-table/issues/963)) ([0e5589e](https://github.com/qlik-oss/sn-table/commit/0e5589e8bf7b16274ea7ffc55651f80c5abfbfc2))
+
+### Performance Improvements
+
+- measure text ([#961](https://github.com/qlik-oss/sn-table/issues/961)) ([417729f](https://github.com/qlik-oss/sn-table/commit/417729fafe50e2902a2c78e22b5e3c09f05ca5c4))
+
+# [2.0.0](https://github.com/qlik-oss/sn-table/compare/v1.25.0...v2.0.0) (2023-03-20)
+
+### Bug Fixes
+
+- adjusting column size by keyboard also scrolls the table ([#918](https://github.com/qlik-oss/sn-table/issues/918)) ([92a0792](https://github.com/qlik-oss/sn-table/commit/92a0792fa9844c76444c6b4f3decdf52954a855c))
+- align header content to bottom ([#925](https://github.com/qlik-oss/sn-table/issues/925)) ([c5a0805](https://github.com/qlik-oss/sn-table/commit/c5a0805306590fa65547e0c6ce98bcf727fc601e))
+- head cell content left | center | right alignment ([#919](https://github.com/qlik-oss/sn-table/issues/919)) ([856b6c0](https://github.com/qlik-oss/sn-table/commit/856b6c08a50423d18006c18601b3416d7e8c8433))
+- hide focus indicator when not using keyboard ([#917](https://github.com/qlik-oss/sn-table/issues/917)) ([5f2cfae](https://github.com/qlik-oss/sn-table/commit/5f2cfae492668eebf374b91997692c489a57b127))
+- keyboard navigation tab handling ([#916](https://github.com/qlik-oss/sn-table/issues/916)) ([fc2658a](https://github.com/qlik-oss/sn-table/commit/fc2658a45339962a01cbe6f72e29cc0543073847))
+- scroll to infinity in firefox fixed ([#915](https://github.com/qlik-oss/sn-table/issues/915)) ([48b51e9](https://github.com/qlik-oss/sn-table/commit/48b51e94c3d2faf0c4adcfaf270e841532b8e98d))
+- scroll to top on resize ([#914](https://github.com/qlik-oss/sn-table/issues/914)) ([db3e7ff](https://github.com/qlik-oss/sn-table/commit/db3e7ffd58cbb7d4dba415808d6bdb6963a21c7f))
+- to have correct focus indication for head cell menu items ([#913](https://github.com/qlik-oss/sn-table/issues/913)) ([25ee2b2](https://github.com/qlik-oss/sn-table/commit/25ee2b2967a8799f9f5fa25732b2ffbdec90d649))
+
+### Features
+
+- use new theme entry ([#921](https://github.com/qlik-oss/sn-table/issues/921)) ([28e6c68](https://github.com/qlik-oss/sn-table/commit/28e6c68bd7d05e522de28f812478c94cf6f18d19))
+
+### Reverts
+
+- Revert "chore(release): v2.0.0" ([491542b](https://github.com/qlik-oss/sn-table/commit/491542b6d7c361feb095445a7f82b55f503c7e20))
+
+# [1.25.0](https://github.com/qlik-oss/sn-table/compare/v1.24.0...v1.25.0) (2023-03-13)
+
+### Bug Fixes
+
+- always use align for totals ([#904](https://github.com/qlik-oss/sn-table/issues/904)) ([4b1b702](https://github.com/qlik-oss/sn-table/commit/4b1b702f5ec673c4e356fe2eebd5a1006dec9b65))
+- default tHead cell background to white ([#905](https://github.com/qlik-oss/sn-table/issues/905)) ([7945af8](https://github.com/qlik-oss/sn-table/commit/7945af814af54a9313f489a4475498cf98b24ce4))
+- text alignment should be based on numeric or not numeric ([#902](https://github.com/qlik-oss/sn-table/issues/902)) ([d5e2f30](https://github.com/qlik-oss/sn-table/commit/d5e2f30d17903917cc6c35a38aecffbfbc0c73e4))
+
+### Features
+
+- **a11y:** reintroduced keyboard navigation for keyboard.enabled ([#896](https://github.com/qlik-oss/sn-table/issues/896)) ([a42eede](https://github.com/qlik-oss/sn-table/commit/a42eede03affbb9f70a5c3d8107c7185f6c16bb5))
+
+# [1.24.0](https://github.com/qlik-oss/sn-table/compare/v1.23.0...v1.24.0) (2023-03-10)
+
+### Bug Fixes
+
+- add default value font size ([#888](https://github.com/qlik-oss/sn-table/issues/888)) ([2b9d368](https://github.com/qlik-oss/sn-table/commit/2b9d368c77dd8af3d93b97bd67a39ed8fafcb1ef))
+- change definition ([#884](https://github.com/qlik-oss/sn-table/issues/884)) ([60cb060](https://github.com/qlik-oss/sn-table/commit/60cb060716bee55d7d0363d42f5334a181d71cc1))
+- column width huc calculation ([#894](https://github.com/qlik-oss/sn-table/issues/894)) ([0d4d4ba](https://github.com/qlik-oss/sn-table/commit/0d4d4ba994c0176e489c433548a37eb9a404f4b0))
+- column widths effect deps ([#891](https://github.com/qlik-oss/sn-table/issues/891)) ([448bc2b](https://github.com/qlik-oss/sn-table/commit/448bc2b8c304581aad9873689d845748f14c2c64))
+- copy cell only on cells ([#881](https://github.com/qlik-oss/sn-table/issues/881)) ([d5f9f49](https://github.com/qlik-oss/sn-table/commit/d5f9f495f18b142e3d4d22d2d60a7594e13a7a03))
+- default props was not populated properly ([#889](https://github.com/qlik-oss/sn-table/issues/889)) ([3acdadc](https://github.com/qlik-oss/sn-table/commit/3acdadc7e88a8ed3c91d7103388b4a27aa4b9da7))
+- detect scrollbar size logic ([#861](https://github.com/qlik-oss/sn-table/issues/861)) ([017b957](https://github.com/qlik-oss/sn-table/commit/017b9571c2811a34841de198ce58cc7322a7df37))
+- empty cells on initial render ([#862](https://github.com/qlik-oss/sn-table/issues/862)) ([aeaac76](https://github.com/qlik-oss/sn-table/commit/aeaac7605ae4af9402ea5ca8876d163199065584))
+- initial data pages ([#887](https://github.com/qlik-oss/sn-table/issues/887)) ([0972168](https://github.com/qlik-oss/sn-table/commit/0972168a8c4c5437515119cf618ed3663b4440d3))
+- move header and totals row heights to table level ([#875](https://github.com/qlik-oss/sn-table/issues/875)) ([b243b46](https://github.com/qlik-oss/sn-table/commit/b243b463dcd34dd0f2486b5b56ddfccdb188b8b4))
+- put totals behind flag ([#893](https://github.com/qlik-oss/sn-table/issues/893)) ([2704d52](https://github.com/qlik-oss/sn-table/commit/2704d5229a58f5bd5461130ece7ea40ccedfe6b3))
+- remove white space before measuring cell ([#866](https://github.com/qlik-oss/sn-table/issues/866)) ([b0c4d70](https://github.com/qlik-oss/sn-table/commit/b0c4d7090872cfea7778a6369fc8c2f0905b0310))
+- scroll to top when page changes ([#895](https://github.com/qlik-oss/sn-table/issues/895)) ([81a066b](https://github.com/qlik-oss/sn-table/commit/81a066bbf5190ccfa2d4cc6c4061329f8f842ad3))
+- scrollbar when not needed ([#855](https://github.com/qlik-oss/sn-table/issues/855)) ([6ef4186](https://github.com/qlik-oss/sn-table/commit/6ef4186c310e369dca60c6f57316f941fa403453))
+- styling label missing ([#897](https://github.com/qlik-oss/sn-table/issues/897)) ([5c2a175](https://github.com/qlik-oss/sn-table/commit/5c2a1756c6bb5fd9d8fda079aa4606afc85b27ae))
+- totals in virtual scroll respect column alignment ([#899](https://github.com/qlik-oss/sn-table/issues/899)) ([59b6294](https://github.com/qlik-oss/sn-table/commit/59b62944cbce5d2063dce073acbea90d3898a106))
+- totals label on first col ([#877](https://github.com/qlik-oss/sn-table/issues/877)) ([6d07ad3](https://github.com/qlik-oss/sn-table/commit/6d07ad34c8ce46b50fa015e2066ecefc545a0843))
+- update cell height on column resize ([#873](https://github.com/qlik-oss/sn-table/issues/873)) ([e617c2c](https://github.com/qlik-oss/sn-table/commit/e617c2c8e07a557946bbc31bfc986d9330edb218))
+- white space before totals ([#890](https://github.com/qlik-oss/sn-table/issues/890)) ([f14a9f0](https://github.com/qlik-oss/sn-table/commit/f14a9f08157cd1ba4ed7e53cbe9937f10adb262f))
+
+### Features
+
+- **a11y:** make keyboard navigation work for head cell menu ([#874](https://github.com/qlik-oss/sn-table/issues/874)) ([b22ef88](https://github.com/qlik-oss/sn-table/commit/b22ef88b91542e0c34445186125fe8312947dd38))
+- add accordion to side property panel ([#871](https://github.com/qlik-oss/sn-table/issues/871)) ([f66e63c](https://github.com/qlik-oss/sn-table/commit/f66e63c2bfb718dab429e1cd58935dd0c57b064d))
+- add number formatting and limits ([#880](https://github.com/qlik-oss/sn-table/issues/880)) ([773b707](https://github.com/qlik-oss/sn-table/commit/773b707aeeadcac50e437731b7dae43f26a73d27))
+- column resize for virtual scroll ([#860](https://github.com/qlik-oss/sn-table/issues/860)) ([85a7144](https://github.com/qlik-oss/sn-table/commit/85a71448fa4b6f29023fd762230faa50b492ad89))
+- dynamic row height for header and totals ([#869](https://github.com/qlik-oss/sn-table/issues/869)) ([0b7d207](https://github.com/qlik-oss/sn-table/commit/0b7d2076ca35574ee56127485c28b96d9979b853))
+- hide the head sort icons and head cell menu buttons when they are not needed ([#882](https://github.com/qlik-oss/sn-table/issues/882)) ([752dc40](https://github.com/qlik-oss/sn-table/commit/752dc4038ffb9bc2a6241b947ad4d86dcc2d0b89))
+- keyboard navigation for new headers ([#832](https://github.com/qlik-oss/sn-table/issues/832)) ([1f6c543](https://github.com/qlik-oss/sn-table/commit/1f6c5431f767148bc13bfd198abf535bdfb2bfd0))
+- keyboard navigation for totals ([#892](https://github.com/qlik-oss/sn-table/issues/892)) ([2eaab71](https://github.com/qlik-oss/sn-table/commit/2eaab71647c92247b67fa20fd8a1ccdd01de130b))
+- listbox for master dims ([#870](https://github.com/qlik-oss/sn-table/issues/870)) ([dca0662](https://github.com/qlik-oss/sn-table/commit/dca06622699481a7fe80d916a8b77d37063f1420))
+- use keyboard to resize column ([#886](https://github.com/qlik-oss/sn-table/issues/886)) ([efd9bb9](https://github.com/qlik-oss/sn-table/commit/efd9bb9e382da56e064899e85c1ee8e2f8c57058))
+
 # [1.23.0](https://github.com/qlik-oss/sn-table/compare/v1.22.0...v1.23.0) (2023-02-20)
 
 ### Bug Fixes

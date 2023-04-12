@@ -1,7 +1,14 @@
+import { stardust } from '@nebula.js/stardust';
 import { Cell } from '../../types';
 import { FocusTypes, KeyCodes, SelectionActions } from '../constants';
 import { BodyArrowHelperProps } from '../types';
-import { announceSelectionState, moveFocus, updateFocus } from './accessibility-utils';
+import {
+  announceSelectionState,
+  focusBodyFromHead,
+  focusSelectionToolbar,
+  moveFocusWithArrow,
+  updateFocus,
+} from './accessibility-utils';
 import { handleNavigateTop } from './handle-scroll';
 
 export const preventDefaultBehavior = (evt: React.KeyboardEvent | MouseEvent | React.MouseEvent<HTMLLIElement>) => {
@@ -19,40 +26,21 @@ export const isArrowKey = (key: string) =>
 export const isShiftArrow = (evt: React.KeyboardEvent) => evt.shiftKey && isArrowKey(evt.key);
 
 /**
- * Checks if events caught by head, totals and body handles should bubble to the wrapper handler or default behavior
+ * Checks if events caught by head, totals and body handles should be early returned and bubble to tableWrapper/default behavior.
  */
-export const shouldBubble = (
-  evt: React.KeyboardEvent,
-  isSelectionMode = false,
-  keyboardEnabled = false,
-  paginationNeeded = true
-) => {
-  const shouldGoToSelToolbar = keyboardEnabled && isSelectionMode;
-  const bubbleWithoutShift = !evt.shiftKey && (paginationNeeded || !shouldGoToSelToolbar);
-  const bubbleWithShift = evt.shiftKey && !shouldGoToSelToolbar;
-  return (
-    // esc to blur object
-    (evt.key === KeyCodes.ESC && !isSelectionMode) ||
-    // default tab to pagination or tab to blur
-    (evt.key === KeyCodes.TAB && (bubbleWithoutShift || bubbleWithShift)) ||
-    // ctrl + shift + arrow to change page
-    ((evt.key === KeyCodes.LEFT || evt.key === KeyCodes.RIGHT) && isCtrlShift(evt))
-  );
-};
+export const shouldBubbleEarly = (evt: React.KeyboardEvent, isSelectionMode = false) =>
+  // esc to blur object
+  (evt.key === KeyCodes.ESC && !isSelectionMode) ||
+  // ctrl + shift + arrow to change page
+  ((evt.key === KeyCodes.LEFT || evt.key === KeyCodes.RIGHT) && isCtrlShift(evt));
 
 /**
  * Checks if should select with shift + arrow.
  * When at the first/last row of the cell, shift + arrow up/down should not select anything
  */
-const shouldSelectMultiValues = (
-  areBasicFeaturesEnabled: boolean,
-  isSelectionsEnabled: boolean,
-  evt: React.KeyboardEvent,
-  cell: Cell
-) =>
+const shouldSelectMultiValues = (isSelectionsEnabled: boolean, evt: React.KeyboardEvent, cell: Cell) =>
   evt.shiftKey &&
   ((evt.key === KeyCodes.UP && cell.pageRowIdx !== 0) || (evt.key === KeyCodes.DOWN && !cell.isLastRow)) &&
-  areBasicFeaturesEnabled &&
   isSelectionsEnabled &&
   cell.isSelectable;
 
@@ -81,7 +69,6 @@ export const bodyArrowHelper = ({
   announce,
   totalsPosition,
   isSelectionMode,
-  areBasicFeaturesEnabled,
 }: BodyArrowHelperProps) => {
   const firstBodyRowIdx = totalsPosition.atTop ? 2 : 1;
   const cellCoord: [number, number] = [cell.pageRowIdx + firstBodyRowIdx, cell.pageColIdx];
@@ -96,7 +83,7 @@ export const bodyArrowHelper = ({
     updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLTableCellElement });
   }
 
-  const nextCell = moveFocus(evt, rootElement, cellCoord, setFocusedCellCoord, focusType, allowedRows);
+  const nextCell = moveFocusWithArrow(evt, rootElement, cellCoord, setFocusedCellCoord, focusType, allowedRows);
 
   if (!(evt.key === KeyCodes.UP || evt.key === KeyCodes.DOWN)) return;
 
@@ -104,7 +91,7 @@ export const bodyArrowHelper = ({
     handleNavigateTop([cell.pageRowIdx, cell.pageColIdx], rootElement);
   }
   // Shift + up/down arrow keys: select multiple values
-  if (shouldSelectMultiValues(areBasicFeaturesEnabled, isSelectionsEnabled, evt, cell)) {
+  if (shouldSelectMultiValues(isSelectionsEnabled, evt, cell)) {
     selectionDispatch({
       type: SelectionActions.SELECT_MULTI_ADD,
       payload: { cell, evt, announce },
@@ -112,5 +99,64 @@ export const bodyArrowHelper = ({
   } else {
     // When not selecting multiple we need to announce the selection state of the cell
     announceSelectionState(announce, nextCell, isSelectionMode);
+  }
+};
+
+/**
+ * Update the focusedCellCoord when tabbing in the header.
+ * If you tab on the menu in the last cell, go to the tabstop in the body
+ */
+export const headTabHelper = (
+  evt: React.KeyboardEvent<Element>,
+  rootElement: HTMLElement,
+  cellCoord: [number, number],
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
+  isLastHeadCell: boolean
+) => {
+  const target = evt.target as HTMLTableCellElement;
+  const isLabel = target.classList.contains('sn-table-head-label');
+  if (isLabel && evt.shiftKey && cellCoord[1] > 0) {
+    setFocusedCellCoord([cellCoord[0], cellCoord[1] - 1]);
+  } else if (!isLabel && !evt.shiftKey) {
+    if (isLastHeadCell) {
+      preventDefaultBehavior(evt);
+      focusBodyFromHead(rootElement, setFocusedCellCoord);
+    } else {
+      setFocusedCellCoord([cellCoord[0], cellCoord[1] + 1]);
+    }
+  }
+};
+
+interface BodyTabHelperProps {
+  evt: React.KeyboardEvent<Element>;
+  rootElement: HTMLElement;
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  keyboard?: stardust.Keyboard;
+  isSelectionMode?: boolean;
+  paginationNeeded?: boolean;
+}
+
+/**
+ * Tab to the selection toolbar if it is next in the tabOrder.
+ * Otherwise, if it is shift + tab, go to the last header cell.
+ */
+export const bodyTabHelper = ({
+  evt,
+  rootElement,
+  setFocusedCellCoord,
+  keyboard,
+  isSelectionMode,
+  paginationNeeded,
+}: BodyTabHelperProps) => {
+  const tabToToolbar = keyboard?.enabled && isSelectionMode && (evt.shiftKey || (!evt.shiftKey && !paginationNeeded));
+
+  if (tabToToolbar) {
+    preventDefaultBehavior(evt);
+    focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
+  } else if (evt.shiftKey) {
+    const headCells = rootElement.querySelectorAll('.sn-table-head-cell') as NodeListOf<HTMLTableCellElement>;
+    const lastIndex = headCells.length - 1;
+
+    setFocusedCellCoord([0, lastIndex] as [number, number]);
   }
 };

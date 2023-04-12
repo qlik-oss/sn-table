@@ -1,5 +1,5 @@
 /* eslint react/require-default-props: 0 */
-import { ThemeProvider } from '@mui/system';
+import { ThemeProvider } from '@mui/material/styles';
 import { stardust } from '@nebula.js/stardust';
 import React from 'react';
 import { TableContextProvider } from '../table/context';
@@ -22,7 +22,6 @@ interface ProviderProps {
   selectionsAPI?: ExtendedSelectionAPI;
   tableData?: TableData;
   cellCoordMock?: [number, number];
-  selectionDispatchMock?: jest.Mock<any, any>;
   layout?: TableLayout;
   model?: EngineAPI.IGenericObject;
   translator?: ExtendedTranslator;
@@ -34,10 +33,10 @@ interface ProviderProps {
   embed?: stardust.Embed;
   changeSortOrder?: ChangeSortOrder;
   applyColumnWidths?: ApplyColumnWidths;
-  tableWidth?: number;
   initialDataPages?: EngineAPI.INxDataPage[];
   pageInfo?: PageInfo;
   setPage?: stardust.SetStateFn<number>;
+  rect?: stardust.Rect;
 }
 
 type HookWrapperProps = { children: JSX.Element };
@@ -65,13 +64,12 @@ const TestWithProviders = ({
   } as unknown as ExtendedTheme,
   tableData = undefined,
   cellCoordMock = undefined,
-  selectionDispatchMock = undefined, // Can be used to avoid selectionDispatch infinite loop
   direction = 'ltr',
   rootElement = {} as HTMLElement,
   embed = {} as stardust.Embed,
   changeSortOrder = async () => {},
-  applyColumnWidths = undefined,
-  tableWidth = 0,
+  applyColumnWidths = () => {},
+  rect = { width: 0, height: 0, top: 0, left: 0 },
   initialDataPages = undefined,
   pageInfo = undefined,
   setPage = undefined,
@@ -89,12 +87,11 @@ const TestWithProviders = ({
         model={model}
         tableData={tableData}
         cellCoordMock={cellCoordMock}
-        selectionDispatchMock={selectionDispatchMock}
         rootElement={rootElement}
         embed={embed}
         changeSortOrder={changeSortOrder}
         applyColumnWidths={applyColumnWidths}
-        tableWidth={tableWidth}
+        rect={rect}
         initialDataPages={initialDataPages}
         setPage={setPage}
         pageInfo={pageInfo}

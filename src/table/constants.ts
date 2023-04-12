@@ -45,8 +45,8 @@ export enum FullSortDirection {
 export enum ColumnWidthTypes {
   PIXELS = 'pixels',
   PERCENTAGE = 'percentage',
-  HUG = 'hug',
-  FILL = 'fill',
+  FIT_TO_CONTENT = 'fitToContent',
+  AUTO = 'auto',
 }
 
 export const MIN_COLUMN_WIDTH = 120;
@@ -54,10 +54,13 @@ export const MAX_COLUMN_WIDTH = 7680;
 export const MAX_COLUMN_PERCENTAGE_WIDTH = 100;
 export const DEFAULT_COLUMN_PIXEL_WIDTH = 200;
 export const DEFAULT_COLUMN_PERCENTAGE_WIDTH = 20;
+export const HEAD_ICON_WRAPPER_SIZE = 24;
+export const LOCK_ICON_SIZE = 20;
 
 export const PAGINATION_HEIGHT = 40;
 
 export const INITIAL_DATA_FETCH_WIDTH = 50;
 export const INITIAL_DATA_FETCH_HEIGHT = 100;
 
-export const DEFAULT_FOCUS_CELL_COORD = [1, 0] as [number, number];
+export const FIRST_HEADER_CELL_COORD: [number, number] = [0, 0];
+export const FIRST_BODY_CELL_COORD: [number, number] = [1, 0];

@@ -3,9 +3,7 @@ export default () => ({
   genericObjects: [
     {
       getLayout: {
-        presentation: {
-          usePagination: true
-        },
+        usePagination: true,
         qInfo: {
           qId: 'TCRrNS',
           qType: 'sn-table',
@@ -160,7 +158,7 @@ export default () => ({
             ],
             [
               {
-                qText: 'Ben and Jerry\'s',
+                qText: "Ben and Jerry's",
                 qNum: 'NaN',
                 qElemNumber: 0,
                 qState: 'O',

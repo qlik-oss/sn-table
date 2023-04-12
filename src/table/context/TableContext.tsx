@@ -6,7 +6,7 @@ import useSelectionReducer from '../hooks/use-selection-reducer';
 import useColumnWidths from '../hooks/use-column-widths';
 import useTableStyling from '../hooks/use-table-styling';
 import { TableData } from '../../types';
-import { DEFAULT_FOCUS_CELL_COORD } from '../constants';
+import { FIRST_HEADER_CELL_COORD } from '../constants';
 
 // In order to not have typing issues when using properties on the context,
 // the initial value for the context is casted to ContextValue.
@@ -24,7 +24,6 @@ export const TableContextProvider = ({
   tableData = EMPTY_TABLE_DATA, // Always use the same object to avoid triggers infinite loop in use-selection-reducer.ts
   selectionsAPI,
   cellCoordMock,
-  selectionDispatchMock,
   layout,
   model,
   translator,
@@ -38,19 +37,17 @@ export const TableContextProvider = ({
   setPage,
   pageInfo,
   initialDataPages,
-  tableWidth = 0,
+  rect,
 }: ContextProviderProps) => {
   const [headRowHeight, setHeadRowHeight] = useState(0);
-  const [focusedCellCoord, setFocusedCellCoord] = useState(
-    (cellCoordMock || DEFAULT_FOCUS_CELL_COORD) as [number, number]
-  );
+  const [focusedCellCoord, setFocusedCellCoord] = useState<[number, number]>(cellCoordMock || FIRST_HEADER_CELL_COORD);
   const [selectionState, selectionDispatch] = useSelectionReducer(tableData.rows, selectionsAPI);
   const [hoverIndex, setHoverIndex] = useState(-1);
   const styling = useTableStyling(layout, theme, tableData, rootElement);
-  const [columnWidths, setColumnWidths, setYScrollbarWidth] = useColumnWidths(
+  const [columnWidths, setColumnWidths, setYScrollbarWidth, showRightBorder] = useColumnWidths(
     tableData.columns,
     tableData.totalsPosition,
-    tableWidth,
+    rect.width,
     styling
   );
   const baseProps = useMemo(
@@ -68,6 +65,7 @@ export const TableContextProvider = ({
       changeSortOrder,
       applyColumnWidths,
       styling,
+      rect,
     }),
     [
       app,
@@ -83,6 +81,7 @@ export const TableContextProvider = ({
       changeSortOrder,
       applyColumnWidths,
       styling,
+      rect,
     ]
   );
 
@@ -94,7 +93,7 @@ export const TableContextProvider = ({
         focusedCellCoord,
         setFocusedCellCoord,
         selectionState,
-        selectionDispatch: selectionDispatchMock || selectionDispatch,
+        selectionDispatch,
         hoverIndex,
         setHoverIndex,
         columnWidths,
@@ -105,6 +104,7 @@ export const TableContextProvider = ({
         setPage,
         pageInfo,
         initialDataPages,
+        showRightBorder,
       }}
     >
       {children}
