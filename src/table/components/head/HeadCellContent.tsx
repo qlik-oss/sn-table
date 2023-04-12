@@ -2,7 +2,6 @@ import React from 'react';
 
 import { useContextSelector, TableContext } from '../../context';
 import { HeadCellContentProps } from '../../types';
-import { FullSortDirection } from '../../constants';
 import getHeadIcons from '../../utils/get-head-icons';
 import HeadCellMenu from './HeadCellMenu';
 import { areTabStopsEnabled } from '../../utils/accessibility-utils';
@@ -16,6 +15,11 @@ function HeadCellContent({ children, column, isActive, isInteractionEnabled }: H
   const tabIndex = isInteractionEnabled && areTabStopsEnabled(keyboard) ? 0 : -1;
 
   const handleSort = () => isInteractionEnabled && changeSortOrder(column);
+
+  const sortDirection = {
+    A: translator.get('SNTable.Accessibility.Ascending'),
+    D: translator.get('SNTable.Accessibility.Descending'),
+  };
 
   return (
     <StyledHeadCellContent isLocked={Boolean(lockIcon)} className={`aligned-${column.headTextAlign}`}>
@@ -36,7 +40,7 @@ function HeadCellContent({ children, column, isActive, isInteractionEnabled }: H
         {children}
         {isFocusInHead && (
           <VisuallyHidden data-testid={`VHL-for-col-${column.pageColIdx}`}>
-            {`${FullSortDirection[column.sortDirection]} ${translator.get('SNTable.SortLabel.PressSpaceToSort')}`}
+            {`${sortDirection[column.sortDirection]} ${translator.get('SNTable.SortLabel.PressSpaceToSort')}`}
           </VisuallyHidden>
         )}
       </StyledSortButton>
