@@ -1,3 +1,17 @@
+# [2.2.0](https://github.com/qlik-oss/sn-table/compare/v2.1.0...v2.2.0) (2023-04-12)
+
+### Bug Fixes
+
+- add signatures for strings ([#980](https://github.com/qlik-oss/sn-table/issues/980)) ([5b494cf](https://github.com/qlik-oss/sn-table/commit/5b494cfedab5d574f98b5788340e24e7141998e8))
+- add translations to ascending and descending ([#939](https://github.com/qlik-oss/sn-table/issues/939)) ([22d934d](https://github.com/qlik-oss/sn-table/commit/22d934db73f3a808cf99f9e734b5d15dea8c17c6))
+- adjuster keyboard issues ([#977](https://github.com/qlik-oss/sn-table/issues/977)) ([32083e6](https://github.com/qlik-oss/sn-table/commit/32083e6d978f98a3a33f0296a4ef6f009a8ced81))
+- remove sanity check for rect.width === 0 ([#981](https://github.com/qlik-oss/sn-table/issues/981)) ([f99b1a0](https://github.com/qlik-oss/sn-table/commit/f99b1a03b7fd662981477e88a2f1a842eab30b71))
+
+### Features
+
+- mapping column widths for chart conversion ([#974](https://github.com/qlik-oss/sn-table/issues/974)) ([769df30](https://github.com/qlik-oss/sn-table/commit/769df3020aaf8a96dcaf02732adbf3674c58326b))
+- restores all qCalcCondition for chart conversion ([#972](https://github.com/qlik-oss/sn-table/issues/972)) ([6057fad](https://github.com/qlik-oss/sn-table/commit/6057fad0305c674139c8cc114a1f0f19a91608a6))
+
 # [2.1.0](https://github.com/qlik-oss/sn-table/compare/v2.0.0...v2.1.0) (2023-04-04)
 
 ### Bug Fixes
