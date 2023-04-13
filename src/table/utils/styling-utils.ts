@@ -76,6 +76,11 @@ const getLastRowBottomBorder = (fontSize: string | undefined, rowsLength?: numbe
 };
 
 /**
+ * finding the correct styling object inside component
+ */
+const getStylingComponent = (layout: TableLayout) => layout.components?.find((c) => c.key === 'theme');
+
+/**
  * Gets base styling for either header or body taking table theme settings into account
  */
 export const getBaseStyling = (
@@ -113,7 +118,7 @@ export function getHeaderStyle(
   theme: ExtendedTheme,
   bottomSeparatingBorder: boolean
 ): GeneratedStyling {
-  const header = layout.components?.[0]?.header;
+  const header = getStylingComponent(layout)?.header;
   const headerStyle = getBaseStyling('header', theme, header, bottomSeparatingBorder);
 
   // To avoid seeing the table body through the table head:
@@ -142,7 +147,7 @@ export function getBodyStyle(
   rowsLength?: number,
   rootElement?: HTMLElement
 ): GeneratedStyling {
-  const content = layout.components?.[0]?.content;
+  const content = getStylingComponent(layout)?.content;
   const contentStyle = getBaseStyling('content', theme, content);
   contentStyle.background = theme.background.color;
 
@@ -229,7 +234,7 @@ export const getFooterStyle = (background: BackgroundColors): FooterStyle => {
  * Gets complete styling for the totals cells. Based on the body style but with the background and borders from header
  */
 export function getTotalsStyle(layout: TableLayout, theme: ExtendedTheme, totalsAtTop: boolean) {
-  const content = layout.components?.[0]?.content;
+  const content = getStylingComponent(layout)?.content;
   const contentStyle = getBaseStyling('content', theme, content);
   const { borderBottomColor, borderTopColor, background } = getHeaderStyle(layout, theme, totalsAtTop);
   return { ...contentStyle, borderBottomColor, background, borderTopColor };
