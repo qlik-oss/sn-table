@@ -8,7 +8,6 @@ const stylingPanel = {
       translation: 'LayerStyleEditor.component.styling',
       ref: 'components',
       useGeneral: true,
-      key: 'theme',
       defaultValue: [],
       items: {
         headerSection: {
@@ -18,7 +17,7 @@ const stylingPanel = {
             headerFontItem: {
               component: 'items',
               ref: 'components',
-              key: 'general',
+              key: 'theme',
               items: {
                 headerFontWrapper: {
                   component: 'inline-wrapper',
@@ -67,7 +66,7 @@ const stylingPanel = {
             contentFontItem: {
               component: 'items',
               ref: 'components',
-              key: 'general',
+              key: 'theme',
               items: {
                 contentFontWrapper: {
                   component: 'inline-wrapper',
@@ -115,7 +114,7 @@ const stylingPanel = {
             hoverEffectItem: {
               component: 'items',
               ref: 'components',
-              key: 'general',
+              key: 'theme',
               items: {
                 hoverEffectSwitch: {
                   ref: 'content.hoverEffect',

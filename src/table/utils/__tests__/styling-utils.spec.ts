@@ -225,6 +225,7 @@ describe('styling-utils', () => {
       layout = {
         components: [
           {
+            key: 'theme',
             header: {
               fontColor: '#444444',
               fontSize: 44,
@@ -249,6 +250,7 @@ describe('styling-utils', () => {
       layout = {
         components: [
           {
+            key: 'theme',
             header: {
               fontColor: '#444444',
             },
@@ -285,6 +287,7 @@ describe('styling-utils', () => {
       layout = {
         components: [
           {
+            key: 'theme',
             content: {
               fontSize: 22,
               fontColor: {
