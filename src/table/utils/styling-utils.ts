@@ -75,6 +75,9 @@ const getLastRowBottomBorder = (fontSize: string | undefined, rowsLength?: numbe
   return '0px';
 };
 
+/**
+ * finding the correct styling object inside component
+ */
 const getStylingComponent = (layout: TableLayout) => layout.components?.find((c) => c.key === 'theme');
 
 /**
