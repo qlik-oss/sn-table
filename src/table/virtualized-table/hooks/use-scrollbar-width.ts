@@ -3,7 +3,6 @@ import { useContextSelector, TableContext } from '../../context';
 
 const useScrollbarWidth = (ref: React.RefObject<HTMLDivElement>) => {
   const { layout } = useContextSelector(TableContext, (value) => value.baseProps);
-  const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const [xScrollbarWidth, setXScrollbarWidth] = useState(0);
   const [yScrollbarWidth, setYScrollbarWidth] = useState(0);
 
@@ -15,7 +14,7 @@ const useScrollbarWidth = (ref: React.RefObject<HTMLDivElement>) => {
       setYScrollbarWidth(widthDiff);
       setXScrollbarWidth(heightDiff);
     }
-  }, [ref, layout, columnWidths]);
+  }, [ref, layout]);
 
   return { xScrollbarWidth, yScrollbarWidth };
 };
