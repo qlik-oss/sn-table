@@ -3,7 +3,7 @@
   "info": {
     "name": "@nebula.js/sn-table:properties",
     "description": "Table generic object definition",
-    "version": "2.2.0",
+    "version": "2.2.1",
     "license": "MIT",
     "stability": "stable",
     "x-qlik-visibility": "public"

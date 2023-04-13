@@ -1,3 +1,10 @@
+## [2.2.1](https://github.com/qlik-oss/sn-table/compare/v2.2.0...v2.2.1) (2023-04-13)
+
+### Bug Fixes
+
+- header and body out of sync ([#982](https://github.com/qlik-oss/sn-table/issues/982)) ([00fdbe5](https://github.com/qlik-oss/sn-table/commit/00fdbe59ddc8252d34587c20180cfa682234a7b6))
+- jumpy column width ([#983](https://github.com/qlik-oss/sn-table/issues/983)) ([45b9caf](https://github.com/qlik-oss/sn-table/commit/45b9cafe51a47a48e25025eeceba261b8cece5b0))
+
 # [2.2.0](https://github.com/qlik-oss/sn-table/compare/v2.1.0...v2.2.0) (2023-04-12)
 
 ### Bug Fixes
