@@ -1,3 +1,10 @@
+## [2.2.2](https://github.com/qlik-oss/sn-table/compare/v2.2.1...v2.2.2) (2023-04-17)
+
+### Bug Fixes
+
+- default value for pixels ([#987](https://github.com/qlik-oss/sn-table/issues/987)) ([a395d06](https://github.com/qlik-oss/sn-table/commit/a395d06ca3a28bc7938fa57a6667fd5890b234f9))
+- use the correct styling key ([#984](https://github.com/qlik-oss/sn-table/issues/984)) ([7639edf](https://github.com/qlik-oss/sn-table/commit/7639edfb8e9eaaa28b0621c412bc931f8b2d3bc6))
+
 ## [2.2.1](https://github.com/qlik-oss/sn-table/compare/v2.2.0...v2.2.1) (2023-04-13)
 
 ### Bug Fixes
