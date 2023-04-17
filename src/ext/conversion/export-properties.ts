@@ -2,8 +2,9 @@ import conversion from 'qlik-object-conversion';
 import { setValue } from 'qlik-chart-modules';
 
 import { DimensionProperties, ExportFormat, MeasureProperties, PropTree } from '../../types';
+import { DEFAULT_COLUMN_PIXEL_WIDTH } from '../../table/constants';
 
-export const getColumnWidth = (colIdx: number, qDimensions: DimensionProperties[], qMeasures: MeasureProperties[]) => {
+const getColumnWidth = (colIdx: number, qDimensions: DimensionProperties[], qMeasures: MeasureProperties[]) => {
   const numDims = qDimensions.length;
   const isDim = colIdx < numDims;
   const info = isDim ? qDimensions[colIdx] : qMeasures[colIdx - numDims];
@@ -11,7 +12,7 @@ export const getColumnWidth = (colIdx: number, qDimensions: DimensionProperties[
   const { columnWidth } = info.qDef;
 
   // For converting "sn-table to table", columnWidth is -1 unless the width type is pixels.
-  return columnWidth?.type === 'pixels' ? columnWidth.pixels : -1;
+  return columnWidth?.type === 'pixels' ? columnWidth.pixels ?? DEFAULT_COLUMN_PIXEL_WIDTH : -1;
 };
 
 export const getColumnWidths = (
