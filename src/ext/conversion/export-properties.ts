@@ -4,7 +4,7 @@ import { setValue } from 'qlik-chart-modules';
 import { DimensionProperties, ExportFormat, MeasureProperties, PropTree } from '../../types';
 import { DEFAULT_COLUMN_PIXEL_WIDTH } from '../../table/constants';
 
-export const getColumnWidth = (colIdx: number, qDimensions: DimensionProperties[], qMeasures: MeasureProperties[]) => {
+const getColumnWidth = (colIdx: number, qDimensions: DimensionProperties[], qMeasures: MeasureProperties[]) => {
   const numDims = qDimensions.length;
   const isDim = colIdx < numDims;
   const info = isDim ? qDimensions[colIdx] : qMeasures[colIdx - numDims];
