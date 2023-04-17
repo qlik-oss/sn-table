@@ -4,8 +4,12 @@ const config: PlaywrightTestConfig = {
   use: {
     // Run the browser in headless mode
     // headless: false,
-    // Record trace for each test, but remove it from successful test runs.
-    trace: 'retain-on-failure',
+    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    trace: process.env.CI ? 'on-first-retry' : 'retain-on-failure',
+    // Capture screenshot after each test failure.
+    screenshot: 'only-on-failure',
+    // Record video only when retrying a test for the first time.
+    video: process.env.CI ? 'on-first-retry' : 'retain-on-failure',
   },
   // Look for test files in the "test/rendering" directory, relative to this configuration file
   testDir: 'test/rendering',
@@ -24,26 +28,26 @@ const config: PlaywrightTestConfig = {
   // Forbid test.only on CI
   forbidOnly: !!process.env.CI,
   // The maximum number of retry attempts per test, two retries on CI
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 1 : 0,
   // Limit the number of workers
-  workers: 2,
+  workers: 6,
   // Multiple "projects" can run your tests in multiple browsers and configurations
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    // {
-    //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
-    // },
-    // {
-    //   name: 'webkit',
-    //   use: { ...devices['Desktop Safari'] },
-    // },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
   ],
   expect: {
-    toMatchSnapshot: { threshold: 0.1 },
+    toHaveScreenshot: { maxDiffPixels: 10 },
   },
 };
 

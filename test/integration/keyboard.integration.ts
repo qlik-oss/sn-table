@@ -18,8 +18,8 @@ test.describe('Tests served by: fixture-file rendering by Nebula', () => {
 
   const environment = new NebulaFixture(senseHorizon('light'), 'light', 'en-EN');
 
-  test.beforeAll(async ({ browser }) => {
-    await environment.setup();
+  test.beforeAll(async ({ browser }, testInfo) => {
+    await environment.setup(testInfo);
     page = await browser.newPage();
     snTable = new SnTable(page);
   });
@@ -31,9 +31,10 @@ test.describe('Tests served by: fixture-file rendering by Nebula', () => {
     await snTable.clickOnCellByText(table, expectations.before.clickOnCell);
   });
 
-  test.afterAll(async () => {
+  test.afterAll(async ({ browser }) => {
     await environment.teardown();
     await page.close();
+    await browser.close();
   });
 
   test('navigate cells using @arrows', async () => {

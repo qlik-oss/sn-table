@@ -43,8 +43,9 @@ const runRenderingTests = (theme: Object | Function, themeType: String, language
 
   test.afterEach(({ page }) => events.removeListeners(page));
 
-  test.afterAll(async () => {
-    nebulaServer.close();
+  test.afterAll(async ({ page }) => {
+    await page.close();
+    await nebulaServer.close();
   });
 
   // Iterate testing fixture files
@@ -67,10 +68,8 @@ const runRenderingTests = (theme: Object | Function, themeType: String, language
         const element = page.locator('text=Zocalo');
         await element.scrollIntoViewIfNeeded();
       }
-      // Playwright captures screenshot
-      const img = await playwright.screenshot();
-      // Compare screenshot with baseline image
-      expect(img).toMatchSnapshot(`${name}.png`);
+      // Playwright captures screenshot and compares screenshot with baseline image
+      await expect(page).toHaveScreenshot(`${name}.png`);
     });
   });
 };

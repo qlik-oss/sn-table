@@ -1,5 +1,7 @@
 import path from 'path';
+import { TestInfo } from '@playwright/test';
 import serve, { NebulaServer } from '@nebula.js/cli-serve';
+
 import createNebulaRoutes from '../../rendering/utils/routes';
 
 type Route = {
@@ -25,7 +27,7 @@ class NebulaFixture {
     this.language = language;
   }
 
-  async setup() {
+  async setup(testInfo: TestInfo) {
     this.nebulaServer = await serve({
       // the entry is equal to path.resolve(__dirname, '../../dist/sn-table.js'),
       // so before run the testing, yarn build should run first to generate /dist
@@ -40,6 +42,7 @@ class NebulaFixture {
         },
       ],
       fixturePath: 'test/integration/__fixtures__',
+      port: 8000 + testInfo.workerIndex,
     });
     this.route = createNebulaRoutes(this.nebulaServer.url) as unknown as Route;
   }
