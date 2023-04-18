@@ -17,6 +17,17 @@ test.describe('Tests served by: fixture-file rendering by Nebula', () => {
   let expectation: Collection;
 
   const environment = new NebulaFixture(senseHorizon('light'), 'light', 'en-EN');
+  const focusedText = () => page.locator('*:focus').innerText();
+  const isSVG = async () => {
+    const index = (await page.locator('*:focus').innerHTML()).match(/svg/)?.index;
+    if (index && index > 0) return true;
+    return false;
+  };
+  const isOption = async () => {
+    const index = (await page.locator('*:focus').innerHTML()).match(/option/)?.index;
+    if (index && index > 0) return true;
+    return false;
+  };
 
   test.beforeAll(async ({ browser }, testInfo) => {
     await environment.setup(testInfo);
@@ -26,9 +37,8 @@ test.describe('Tests served by: fixture-file rendering by Nebula', () => {
 
   test.beforeEach(async () => {
     await environment.renderFixture('html-ascii-reference.fix.js');
-    await page.goto(environment.getRenderUrl());
-    table = page.locator(snTable.selectors.chart);
-    await snTable.clickOnCellByText(table, expectations.before.clickOnCell);
+    await page.goto(environment.getRenderUrl(), { waitUntil: 'networkidle' });
+    await page.waitForSelector('[data-testid="sn-table"] .sn-table-cell-text');
   });
 
   test.afterAll(async ({ browser }) => {
@@ -37,7 +47,58 @@ test.describe('Tests served by: fixture-file rendering by Nebula', () => {
     await browser.close();
   });
 
+  test('navigate cells using tab', async () => {
+    await page.locator('body').press('Tab');
+    expect(await focusedText()).toBe(`Character
+Ascending Press space to sort on this column`);
+
+    await page.keyboard.press('Tab');
+    expect(await isSVG()).toBeTruthy();
+
+    await page.keyboard.press('Tab');
+    expect(await focusedText()).toBe(`Entity Name
+Ascending Press space to sort on this column`);
+
+    await page.keyboard.press('Tab');
+    expect(await isSVG()).toBeTruthy();
+
+    await page.keyboard.press('Tab');
+    expect(await focusedText()).toBe(`Description
+Ascending Press space to sort on this column`);
+
+    await page.keyboard.press('Tab');
+    expect(await isSVG()).toBeTruthy();
+
+    await page.keyboard.press('Tab');
+    expect(await focusedText()).toBe('­');
+
+    await page.keyboard.press('Tab');
+    expect(await isOption()).toBeTruthy();
+
+    await page.keyboard.press('Tab');
+    expect(await isOption()).toBeTruthy();
+
+    await page.keyboard.press('Tab');
+    expect(await isSVG()).toBeTruthy();
+
+    await page.keyboard.press('Tab');
+    expect(await isSVG()).toBeTruthy();
+
+    await page.keyboard.press('Tab');
+    expect(await isSVG()).toBeTruthy();
+
+    await page.keyboard.press('Tab');
+    expect(await isSVG()).toBeTruthy();
+
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+    expect(await focusedText()).toBe('Character');
+  });
+
   test('navigate cells using @arrows', async () => {
+    table = page.locator(snTable.selectors.chart);
+    await snTable.clickOnCellByText(table, expectations.before.clickOnCell);
+
     await test.step('Define expectations', async () => {
       expectation = expectations.navigateWithArrows;
     });
