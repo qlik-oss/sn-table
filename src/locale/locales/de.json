@@ -1,4 +1,14 @@
 {
+  "SNTable.Accessibility.Ascending": {
+    "value": "Aufsteigend",
+    "comment": "Tooltip showing that column is in ascending order. (tew 230411)",
+    "version": "pzaCJbp56ZfIKkvOiwLLAw=="
+  },
+  "SNTable.Accessibility.Descending": {
+    "value": "Absteigend",
+    "comment": "Tooltip showing that column is in descending order. (tew 230411)",
+    "version": "YKKchv03VWxWB+sZEj5CWQ=="
+  },
   "SNTable.Accessibility.NavigationInstructions": {
     "value": "Verwenden Sie die Pfeiltasten, um in den Tabellenzellen zu navigieren, und die Tabulatortaste, um zu den Paginierungssteuerungen zu wechseln. Alle Angaben zur Tastaturnavigation finden Sie in der Dokumentation.",
     "comment": "Instructions read by screen reader when first focusing inside the table. (tew 211130)",
@@ -11,43 +21,43 @@
   },
   "SNTable.MenuItem.AdjustColumnSize": {
     "value": "Spaltengröße anpassen",
-    "comment": "label for adjust column size menu in field.",
-    "version": "9awMNkdwTJDfuwd8V42e9g=="
+    "comment": "label for adjust column size menu in field. (tew 230411)",
+    "version": "cazeI83TxjT1S9TB/jDl2g=="
   },
   "SNTable.MenuItem.ClearSelections": {
     "value": "Auswahl löschen",
-    "comment": "label for clearing all selected items in field.",
-    "version": "Yo9E0ACzgR/BZ6cK0qwRuw=="
+    "comment": "label for clearing all selected items in field. (tew 230411)",
+    "version": "0ShfyMZ1vmQIolPkZpe+Lg=="
   },
   "SNTable.MenuItem.Search": {
     "value": "Suchen",
-    "comment": "label for menu item to search in field.",
-    "version": "+eDY6cVynDVMJOA38QhPgA=="
+    "comment": "label for menu item to search in field. (tew 230411)",
+    "version": "4hsJfdIfcQEmU/eVRgfN3w=="
   },
   "SNTable.MenuItem.SelectAll": {
     "value": "Alle auswählen",
-    "comment": "label for select all items in field.",
-    "version": "GPqFhWy49fk9/nI38sDOHg=="
+    "comment": "label for select all items in field. (tew 230411)",
+    "version": "fB/W0v2Kef7V3Fx0MBL7wQ=="
   },
   "SNTable.MenuItem.SelectAlternative": {
     "value": "Alternative Werte auswählen",
-    "comment": "label for select alternative items in field.",
-    "version": "h99bbT3iYnLvT/SSC6av3g=="
+    "comment": "label for select alternative items in field. (tew 230411)",
+    "version": "koIIyXBzKhypDNOaWZH3sA=="
   },
   "SNTable.MenuItem.SelectExcluded": {
     "value": "Ausgeschlossene Werte auswählen",
-    "comment": "label for select excluded items in field.",
-    "version": "+cECm9pb6rl/3zo1a4NADw=="
+    "comment": "label for select excluded items in field. (tew 230411)",
+    "version": "PsqM+dOdScQGNNfVnXG/Ag=="
   },
   "SNTable.MenuItem.SelectPossible": {
     "value": "Wählbare Werte auswählen",
-    "comment": "label for select possible items in field.",
-    "version": "4siNdUI0Zifh5diBJNQquQ=="
+    "comment": "label for select possible items in field. (tew 230411)",
+    "version": "Dj82SB0re1gwa5sn4xHGTg=="
   },
   "SNTable.MenuItem.Selections": {
     "value": "Auswahlen",
-    "comment": "label for selections menu in field.",
-    "version": "3hLtXPt3fSypgwaD9Pr8cg=="
+    "comment": "label for selections menu in field. (tew 230411)",
+    "version": "KE12AF0HAQjOLLj2WLvgQg=="
   },
   "SNTable.MenuItem.SortAscending": {
     "value": "Sortierung in aufsteigender Reihenfolge",
@@ -101,8 +111,8 @@
   },
   "SNTable.Pagination.SelectPage": {
     "value": "Seite auswählen",
-    "comment": "Label for the dropdown to select a page.",
-    "version": "306b2wiIN019EPnVvTBSjA=="
+    "comment": "Label for the dropdown to select a page. (tew 230411)",
+    "version": "rGCuUAFX86UuAXmkOs27zw=="
   },
   "SNTable.SelectionLabel.DeselectedValue": {
     "value": "Die Werteauswahl ist aufgehoben.",
