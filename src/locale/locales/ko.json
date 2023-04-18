@@ -1,4 +1,14 @@
 {
+  "SNTable.Accessibility.Ascending": {
+    "value": "오름차순",
+    "comment": "Tooltip showing that column is in ascending order. (tew 230411)",
+    "version": "pzaCJbp56ZfIKkvOiwLLAw=="
+  },
+  "SNTable.Accessibility.Descending": {
+    "value": "내림차순",
+    "comment": "Tooltip showing that column is in descending order. (tew 230411)",
+    "version": "YKKchv03VWxWB+sZEj5CWQ=="
+  },
   "SNTable.Accessibility.NavigationInstructions": {
     "value": "화살표 키를 사용하여 테이블 셀을 탐색하고 탭을 사용하여 페이지 매김 컨트롤로 이동합니다. 전체 키보드 탐색 범위는 설명서를 참조하십시오.",
     "comment": "Instructions read by screen reader when first focusing inside the table. (tew 211130)",
@@ -11,43 +21,43 @@
   },
   "SNTable.MenuItem.AdjustColumnSize": {
     "value": "열 크기 조정",
-    "comment": "label for adjust column size menu in field.",
-    "version": "9awMNkdwTJDfuwd8V42e9g=="
+    "comment": "label for adjust column size menu in field. (tew 230411)",
+    "version": "cazeI83TxjT1S9TB/jDl2g=="
   },
   "SNTable.MenuItem.ClearSelections": {
     "value": "선택 지우기",
-    "comment": "label for clearing all selected items in field.",
-    "version": "Yo9E0ACzgR/BZ6cK0qwRuw=="
+    "comment": "label for clearing all selected items in field. (tew 230411)",
+    "version": "0ShfyMZ1vmQIolPkZpe+Lg=="
   },
   "SNTable.MenuItem.Search": {
     "value": "검색",
-    "comment": "label for menu item to search in field.",
-    "version": "+eDY6cVynDVMJOA38QhPgA=="
+    "comment": "label for menu item to search in field. (tew 230411)",
+    "version": "4hsJfdIfcQEmU/eVRgfN3w=="
   },
   "SNTable.MenuItem.SelectAll": {
     "value": "모두 선택",
-    "comment": "label for select all items in field.",
-    "version": "GPqFhWy49fk9/nI38sDOHg=="
+    "comment": "label for select all items in field. (tew 230411)",
+    "version": "fB/W0v2Kef7V3Fx0MBL7wQ=="
   },
   "SNTable.MenuItem.SelectAlternative": {
     "value": "대안 선택",
-    "comment": "label for select alternative items in field.",
-    "version": "h99bbT3iYnLvT/SSC6av3g=="
+    "comment": "label for select alternative items in field. (tew 230411)",
+    "version": "koIIyXBzKhypDNOaWZH3sA=="
   },
   "SNTable.MenuItem.SelectExcluded": {
     "value": "제외 항목 선택",
-    "comment": "label for select excluded items in field.",
-    "version": "+cECm9pb6rl/3zo1a4NADw=="
+    "comment": "label for select excluded items in field. (tew 230411)",
+    "version": "PsqM+dOdScQGNNfVnXG/Ag=="
   },
   "SNTable.MenuItem.SelectPossible": {
     "value": "사용 가능 항목 선택",
-    "comment": "label for select possible items in field.",
-    "version": "4siNdUI0Zifh5diBJNQquQ=="
+    "comment": "label for select possible items in field. (tew 230411)",
+    "version": "Dj82SB0re1gwa5sn4xHGTg=="
   },
   "SNTable.MenuItem.Selections": {
     "value": "선택",
-    "comment": "label for selections menu in field.",
-    "version": "3hLtXPt3fSypgwaD9Pr8cg=="
+    "comment": "label for selections menu in field. (tew 230411)",
+    "version": "KE12AF0HAQjOLLj2WLvgQg=="
   },
   "SNTable.MenuItem.SortAscending": {
     "value": "오름차순으로 정렬",
@@ -101,8 +111,8 @@
   },
   "SNTable.Pagination.SelectPage": {
     "value": "페이지 선택",
-    "comment": "Label for the dropdown to select a page.",
-    "version": "306b2wiIN019EPnVvTBSjA=="
+    "comment": "Label for the dropdown to select a page. (tew 230411)",
+    "version": "rGCuUAFX86UuAXmkOs27zw=="
   },
   "SNTable.SelectionLabel.DeselectedValue": {
     "value": "값이 선택 취소되었습니다.",
