@@ -126,6 +126,9 @@ export default () => ({
         showDetailsExpression: false,
         components: [
           {
+            key: 'general',
+          },
+          {
             key: 'theme',
             content: {
               fontSize: null,
