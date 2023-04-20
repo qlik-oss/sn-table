@@ -78,7 +78,7 @@ const getLastRowBottomBorder = (fontSize: string | undefined, rowsLength?: numbe
 /**
  * finding the correct styling object inside component
  */
-const getStylingComponent = (layout: TableLayout) => layout.components?.find((c) => c.key === 'theme');
+export const getStylingComponent = (layout: TableLayout) => layout.components?.find((c) => c.key === 'theme');
 
 /**
  * Gets base styling for either header or body taking table theme settings into account

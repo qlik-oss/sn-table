@@ -12,6 +12,7 @@ import getCellItemKey from './utils/get-cell-item-key';
 import useDynamicRowHeight from './hooks/use-dynamic-row-height';
 import useOnPropsChange from './hooks/use-on-props-change';
 import getBodyHeight from './utils/get-body-height';
+import { getStylingComponent } from '../utils/styling-utils';
 
 const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   const { rect, columns, innerForwardRef, pageInfo, bodyStyle, rowHeight, headerAndTotalsHeight, syncHeight } = props;
@@ -26,7 +27,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     overscanColumnStopIndex: 0,
     overscanRowStopIndex: 0,
   });
-  const isHoverEnabled = !!layout.components?.[0]?.content?.hoverEffect;
+  const isHoverEnabled = !!getStylingComponent(layout)?.content?.hoverEffect;
   const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
   const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(
     layout,
