@@ -83,6 +83,8 @@ describe('exportProperties', () => {
         qHyperCubeDef: {
           qDimensions,
           qMeasures,
+          qColumnOrder: [0, 2, 1],
+          columnOrder: [0, 1],
         },
       },
     } as unknown as PropTree;
@@ -92,5 +94,14 @@ describe('exportProperties', () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     expect(expFormat.properties.qHyperCubeDef.columnWidths).toEqual([-1, 200, 200, -1]);
+    expect(
+      expFormat.properties.qLayoutExclude.quarantine.straightTableColumnWidths['qHyperCubeDef.columnWidths']
+    ).toEqual([-1, 200, 200, -1]);
+    expect(
+      expFormat.properties.qLayoutExclude.quarantine.straightTableColumnOrder['qHyperCubeDef.qColumnOrder']
+    ).toEqual([0, 2, 1]);
+    expect(
+      expFormat.properties.qLayoutExclude.quarantine.straightTableColumnOrder['qHyperCubeDef.columnOrder']
+    ).toEqual([0, 1]);
   });
 });

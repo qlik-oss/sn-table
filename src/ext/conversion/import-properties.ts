@@ -82,6 +82,7 @@ const importProperties = (
   }
 
   conversion.conditionalShow.unquarantine(propertyTree.qProperty);
+  conversion.unquarantineProperty(propertyTree.qProperty, 'straightTableColumnOrder');
 
   return propertyTree;
 };
