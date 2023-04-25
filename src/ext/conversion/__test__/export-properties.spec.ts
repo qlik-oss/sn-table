@@ -84,7 +84,7 @@ describe('exportProperties', () => {
           qDimensions,
           qMeasures,
           qColumnOrder: [0, 2, 1],
-          columnOrder: [0, 1],
+          columnOrder: [0, 2, 1],
         },
       },
     } as unknown as PropTree;
@@ -102,6 +102,6 @@ describe('exportProperties', () => {
     ).toEqual([0, 2, 1]);
     expect(
       expFormat.properties.qLayoutExclude.quarantine.straightTableColumnOrder['qHyperCubeDef.columnOrder']
-    ).toEqual([0, 1]);
+    ).toEqual([0, 2, 1]);
   });
 });
