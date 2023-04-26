@@ -1,3 +1,10 @@
+## [2.2.3](https://github.com/qlik-oss/sn-table/compare/v2.2.2...v2.2.3) (2023-04-26)
+
+### Bug Fixes
+
+- hover colors ([#992](https://github.com/qlik-oss/sn-table/issues/992)) ([c0e6d80](https://github.com/qlik-oss/sn-table/commit/c0e6d80551d5fb5345e76be2483c3757745cc34a))
+- quaratine and unquarantine column order ([#994](https://github.com/qlik-oss/sn-table/issues/994)) ([2301ad9](https://github.com/qlik-oss/sn-table/commit/2301ad9695bcd0b429e12a9252d81db2f4c76f2b))
+
 ## [2.2.2](https://github.com/qlik-oss/sn-table/compare/v2.2.1...v2.2.2) (2023-04-17)
 
 ### Bug Fixes
