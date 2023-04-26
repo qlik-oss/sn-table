@@ -171,5 +171,17 @@ describe('importProperties', () => {
         type: 'pixels',
       });
     });
+
+    it('should unquaratine column order correctly', () => {
+      exportFormat.properties.qLayoutExclude = {
+        quarantine: {
+          straightTableColumnOrder: {
+            'qHyperCubeDef.qColumnOrder': [0, 2, 1],
+          },
+        },
+      };
+      const propertyTree = importProperties(exportFormat, initialProperties, extension, hypercubePath);
+      expect(propertyTree.qProperty.qHyperCubeDef.qColumnOrder).toEqual([0, 2, 1]);
+    });
   });
 });
