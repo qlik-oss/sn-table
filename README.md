@@ -58,7 +58,7 @@ Check full [examples](./mashup-example) of mashup usage for sn-table.
 
 NOTE: at this point sn-table uses a package that require internal Qlik access. This means that external users cannot run `yarn` to install.
 The package in question will soon be public and thus enable all users to install and build.
-Meanwhile, you can go back and use v1.21.0, which was the last version that works for everyone.
+Until then, external users can revert to using version 1.21.0, which is the last version that works for everyone.
 
 Install all dependencies:
 
