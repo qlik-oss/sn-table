@@ -56,9 +56,9 @@ Check full [examples](./mashup-example) of mashup usage for sn-table.
 
 ### Building and adding the sn-table extension to Qlik Sense
 
-NOTE: at this point there is a package used that require internal Qlik access. This means that external users cannot run `yarn` to install.
+NOTE: at this point sn-table uses a package that require internal Qlik access. This means that external users cannot run `yarn` to install.
 The package in question will soon be public and thus enable all users to install and build.
-Meanwhile, the last version not using this package was v1.21.0, so that should work fine for everyone
+Meanwhile, you can go back and use v1.21.0, which was the last version that works for everyone.
 
 Install all dependencies:
 
