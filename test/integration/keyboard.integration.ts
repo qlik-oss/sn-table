@@ -16,7 +16,7 @@ test.describe('Tests served by: fixture-file rendering by Nebula', () => {
   let snTable: SnTable;
   let expectation: Collection;
 
-  const environment = new NebulaFixture(senseHorizon('light'), 'light', 'en-EN');
+  const environment = new NebulaFixture(senseHorizon('light'), 'light', 'en-EN', false);
 
   test.beforeAll(async ({ browser }, testInfo) => {
     await environment.setup(testInfo);

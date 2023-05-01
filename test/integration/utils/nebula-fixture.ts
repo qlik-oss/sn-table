@@ -15,16 +15,19 @@ class NebulaFixture {
 
   public language;
 
+  public keyboardNavigation;
+
   public renderUrl: string | undefined;
 
   public nebulaServer: NebulaServer | undefined;
 
   public route: Route | undefined;
 
-  constructor(theme: Object | Function, themeType: String, language: String) {
+  constructor(theme: Object | Function, themeType: String, language: String, keyboardNavigation: boolean) {
     this.theme = theme;
     this.themeType = themeType;
     this.language = language;
+    this.keyboardNavigation = keyboardNavigation;
   }
 
   async setup(testInfo: TestInfo) {
@@ -48,7 +51,7 @@ class NebulaFixture {
   }
 
   async renderFixture(fileName: string) {
-    const fixturePath = `./${fileName}&theme=${this.themeType}&language=${this.language}`;
+    const fixturePath = `./${fileName}&theme=${this.themeType}&language=${this.language}&keyboardNavigation=${this.keyboardNavigation}`;
     this.renderUrl = await this.route?.renderFixture(fixturePath);
     return this.getRenderUrl();
   }
