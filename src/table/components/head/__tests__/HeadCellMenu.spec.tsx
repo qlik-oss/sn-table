@@ -46,6 +46,8 @@ describe('<HeadCellMenu />', () => {
     embed = {
       field: jest.fn().mockResolvedValueOnce({ mount: jest.fn(), unmount: jest.fn() }),
       render: jest.fn(),
+      create: jest.fn(),
+      generateProperties: jest.fn(),
       selections: jest.fn(),
       context: jest.fn(),
       getRegisteredTypes: jest.fn(),
