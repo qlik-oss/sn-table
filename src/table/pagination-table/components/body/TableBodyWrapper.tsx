@@ -10,6 +10,7 @@ import { TableBodyWrapperProps } from '../../../types';
 import TableTotals from './TableTotals';
 import CellText from '../../../components/CellText';
 import useSelectionListener from '../../../hooks/use-selection-listener';
+import { getStylingComponent } from '../../../utils/styling-utils';
 
 function TableBodyWrapper({ setShouldRefocus, tableWrapperRef, announce }: TableBodyWrapperProps) {
   const { rows, columns, paginationNeeded, totalsPosition } = useContextSelector(
@@ -40,7 +41,7 @@ function TableBodyWrapper({ setShouldRefocus, tableWrapperRef, announce }: Table
       ),
     [columnsStylingIDsJSON, isSelectionsEnabled]
   );
-  const hoverEffect = layout.components?.[0]?.content?.hoverEffect;
+  const hoverEffect = !!getStylingComponent(layout)?.content?.hoverEffect;
 
   useSelectionListener({ keyboard, selectionDispatch, selectionsAPI, setShouldRefocus, tableWrapperRef });
 

@@ -44,6 +44,8 @@ const exportProperties = (propertyTree: PropTree, hyperCubePath?: string): Expor
   setValue(expFormat, 'properties.qHyperCubeDef', qHyperCubeDef);
 
   conversion.quarantineProperty(expFormat.properties, 'qHyperCubeDef.columnWidths', 'straightTableColumnWidths');
+  conversion.quarantineProperty(expFormat.properties, 'qHyperCubeDef.qColumnOrder', 'straightTableColumnOrder');
+  conversion.quarantineProperty(expFormat.properties, 'qHyperCubeDef.columnOrder', 'straightTableColumnOrder');
 
   return expFormat;
 };

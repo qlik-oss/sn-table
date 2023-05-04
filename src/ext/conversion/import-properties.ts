@@ -71,6 +71,7 @@ const importProperties = (
     hypercubePath,
     extension,
   });
+  conversion.unquarantineProperty(propertyTree.qProperty, 'straightTableColumnOrder');
   const {
     qHyperCubeDef: { qDimensions, qMeasures, qColumnOrder, columnWidths },
   } = propertyTree.qProperty;
