@@ -9,10 +9,6 @@
     {
       "depTypeList": ["engines"],
       "enabled": false
-    },
-    {
-      "matchPackageNames": ["@nebula.js/cli-build"],
-      "allowedVersions": "3.0.3"
     }
   ]
 }
