@@ -34,6 +34,9 @@ jobs:
             //npm.pkg.github.com/:_authToken=$GITHUB_TOKEN
             //npm.pkg.github.com/:always-auth=true" >> ~/.npmrc
       - run:
+          name: Check duplicated packages
+          command: npx yarn-deduplicate --list --fail
+      - run:
           name: Install dependencies
           command: yarn install --frozen-lockfile
       - save_cache: *save_yarn_cache
