@@ -30,7 +30,8 @@
     "sn-table-ext"
   ],
   "engines": {
-    "node": ">=16"
+    "node": ">=16",
+    "yarn": "^1.0.0"
   },
   "main": "dist/sn-table.js",
   "systemjs": "dist/sn-table.systemjs.js",
