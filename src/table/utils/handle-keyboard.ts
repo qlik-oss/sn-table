@@ -54,7 +54,7 @@ export const handleBodyKeyUp = (evt: React.KeyboardEvent, selectionDispatch: Sel
 /**
  * Manually focuses the selection toolbar if tabbing from the last focusable element
  */
-export const handleLastTab = (evt: React.KeyboardEvent, isSelectionMode: boolean, keyboard: stardust.Keyboard) => {
+export const handleLastTab = (evt: React.KeyboardEvent, keyboard: stardust.Keyboard, isSelectionMode?: boolean) => {
   if (isSelectionMode && evt.key === KeyCodes.TAB && !evt.shiftKey) {
     // tab key: focus on the selection toolbar
     preventDefaultBehavior(evt);
@@ -165,7 +165,7 @@ export const handleTotalKeyDown = (
   rootElement: HTMLElement,
   cellCoord: [number, number],
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  isSelectionMode: boolean
+  isSelectionMode?: boolean
 ) => {
   if (isSelectionMode) {
     preventDefaultBehavior(evt);

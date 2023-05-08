@@ -19,7 +19,7 @@ interface UseDataProps {
   layout: TableLayout;
   model: EngineAPI.IGenericObject;
   theme: ExtendedTheme;
-  initialDataPages: EngineAPI.INxDataPage[] | undefined;
+  initialDataPages?: EngineAPI.INxDataPage[];
   pageInfo: PageInfo;
   rowCount: number;
   visibleRowCount: number;

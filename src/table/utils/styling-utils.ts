@@ -20,8 +20,7 @@ export const fontSizeToRowHeight = (fontSize: string) =>
 /**
  * Determines if a palette color is set or not. Both index !== -1 and color !== null must be true for it to be set
  */
-export const isPaletteColorSet = (prop: PaletteColor | undefined): boolean =>
-  !!prop && (prop.color !== null || prop.index > -1);
+export const isPaletteColorSet = (prop?: PaletteColor): boolean => !!prop && (prop.color !== null || prop.index > -1);
 
 /**
  * Gets color from color picker. Defaults to default color if resolved color is invalid
@@ -65,7 +64,7 @@ export const getBorderColors = (isBackgroundDark: boolean, bottomSeparatingBorde
 /**
  * Get border widths for body. adds a bottom border if the rendered rows height is estimated to be greater than the container height
  */
-const getLastRowBottomBorder = (fontSize: string | undefined, rowsLength?: number, rootElement?: HTMLElement) => {
+const getLastRowBottomBorder = (fontSize?: string, rowsLength?: number, rootElement?: HTMLElement) => {
   if (fontSize && rowsLength && rootElement) {
     const rowHeight = fontSizeToRowHeight(fontSize);
     // multiply with number of rows plus header and totals. Compare if greater than container
@@ -86,7 +85,7 @@ export const getStylingComponent = (layout: TableLayout) => layout.components?.f
 export const getBaseStyling = (
   objetName: string,
   theme: ExtendedTheme,
-  styleObj: HeaderStyling | ContentStyling | undefined,
+  styleObj?: HeaderStyling | ContentStyling,
   bottomSeparatingBorder = false
 ): GeneratedStyling => {
   const fontFamily = theme.getStyle('object', `straightTableV2.${objetName}`, 'fontFamily');
@@ -265,8 +264,8 @@ export function getTotalsStyle(layout: TableLayout, theme: ExtendedTheme, totals
  */
 export function getColumnStyle(
   styling: CellStyle,
-  qAttrExps: EngineAPI.INxAttributeExpressionValues | undefined,
-  stylingIDs: string[]
+  stylingIDs: string[],
+  qAttrExps?: EngineAPI.INxAttributeExpressionValues
 ): CellStyle {
   const columnColors: Record<string, string> = {};
   qAttrExps?.qValues.forEach((val, i) => {

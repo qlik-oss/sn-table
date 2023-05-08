@@ -110,7 +110,7 @@ describe('handle-mouse', () => {
     let onMouseDown: React.MouseEventHandler<HTMLTableCellElement> | undefined;
     let selectionDispatch: SelectionDispatch;
 
-    const getHandlers = () => getSelectionMouseHandlers(cell, announce, onMouseDown, selectionDispatch);
+    const getHandlers = () => getSelectionMouseHandlers(cell, announce, selectionDispatch, onMouseDown);
 
     beforeEach(() => {
       cell = {

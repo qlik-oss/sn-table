@@ -46,8 +46,8 @@ export default function supernova(env: Galaxy) {
       const rect = useRect();
       const embed = useEmbed();
       const theme = useExtendedTheme(rootElement);
-      const changeSortOrder = useSorting(model, layout.qHyperCube);
-      const applyColumnWidths = useApplyColumnWidths(model, layout.qHyperCube);
+      const changeSortOrder = useSorting(layout.qHyperCube, model);
+      const applyColumnWidths = useApplyColumnWidths(layout.qHyperCube, model);
       const isFontLoaded = useWaitForFonts(theme, layout);
 
       extendContextMenu();

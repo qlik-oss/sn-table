@@ -16,7 +16,7 @@ import useAnnounceAndTranslations from './use-announce-and-translations';
 
 interface UsePaginationTable {
   env: Galaxy;
-  selectionsAPI: ExtendedSelectionAPI | undefined;
+  selectionsAPI?: ExtendedSelectionAPI;
   rootElement: HTMLElement;
   layout: TableLayout;
   changeSortOrder?: ChangeSortOrder;

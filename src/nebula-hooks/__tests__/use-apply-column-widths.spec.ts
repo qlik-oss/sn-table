@@ -28,7 +28,7 @@ describe('applyColumnWidths', () => {
       pixels: 200,
     };
 
-    applyColumnWidths = applyColumnWidthsFactory(model, qHyperCube);
+    applyColumnWidths = applyColumnWidthsFactory(qHyperCube, model);
   });
 
   afterEach(() => jest.clearAllMocks());

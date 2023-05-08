@@ -9,7 +9,7 @@ import { isShiftArrow } from './keyboard-utils';
 export const getCellSelectionState = (cell: Cell, selectionState: SelectionState): SelectionStates => {
   const { colIdx, rows, api } = selectionState;
   let cellState = SelectionStates.INACTIVE;
-  if (api.isModal()) {
+  if (api?.isModal()) {
     if (colIdx !== cell.selectionColIdx) {
       cellState = SelectionStates.EXCLUDED;
     } else if (rows[cell.qElemNumber] !== undefined) {
@@ -81,7 +81,7 @@ const selectCell = (state: SelectionState, payload: SelectPayload): SelectionSta
   const { cell, announce, evt } = payload;
   let selectedRows: Record<string, number> = {};
 
-  if (colIdx === -1) api.begin(['/qHyperCubeDef']);
+  if (colIdx === -1) api?.begin(['/qHyperCubeDef']);
   else if (colIdx === cell.selectionColIdx) selectedRows = { ...rows };
   else return state;
 
@@ -90,14 +90,14 @@ const selectCell = (state: SelectionState, payload: SelectPayload): SelectionSta
 
   // only send a select call if there are rows selected, otherwise cancel selections
   if (Object.keys(selectedRows).length) {
-    api.select({
+    api?.select({
       method: 'selectHyperCubeCells',
       params: ['/qHyperCubeDef', Object.values(selectedRows), [cell.selectionColIdx]],
     });
     return { ...state, rows: selectedRows, colIdx: cell.selectionColIdx };
   }
 
-  api.cancel();
+  api?.cancel();
   return { ...state, rows: selectedRows, colIdx: -1 };
 };
 
@@ -144,7 +144,7 @@ const selectMultipleCells = (state: SelectionState, payload: SelectPayload): Sel
 
   if (!firstCell && !('key' in evt && isShiftArrow(evt))) return state;
 
-  if (colIdx === -1) api.begin(['/qHyperCubeDef']);
+  if (colIdx === -1) api?.begin(['/qHyperCubeDef']);
   else selectedRows = { ...rows };
 
   selectedRows = getMultiSelectedRows(pageRows, selectedRows, cell, evt, firstCell);
@@ -185,7 +185,7 @@ const endSelectMulti = (state: SelectionState): SelectionState => {
   mouseupOutsideCallback && document.removeEventListener('mouseup', mouseupOutsideCallback);
 
   if (isSelectMultiValues) {
-    api.select({
+    api?.select({
       method: 'selectHyperCubeCells',
       params: ['/qHyperCubeDef', Object.values(rows), [colIdx]],
     });
@@ -213,7 +213,7 @@ export const reducer = (state: SelectionState, action: SelectionActionTypes): Se
     case SelectionActions.SELECT_MULTI_END:
       return endSelectMulti(state);
     case SelectionActions.RESET:
-      return state.api.isModal() ? state : { ...state, rows: {}, colIdx: -1 };
+      return state.api?.isModal() ? state : { ...state, rows: {}, colIdx: -1 };
     case SelectionActions.CLEAR:
       return Object.keys(state.rows).length ? { ...state, rows: {} } : state;
     case SelectionActions.UPDATE_PAGE_ROWS:

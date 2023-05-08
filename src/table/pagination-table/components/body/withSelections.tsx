@@ -16,8 +16,8 @@ export default function withSelections(CellComponent: CellHOC) {
     const { handleMouseDown, handleMouseOver, handleMouseUp } = getSelectionMouseHandlers(
       cell,
       announce,
-      onMouseDown,
-      selectionDispatch
+      selectionDispatch,
+      onMouseDown
     );
 
     const selectionStyling = getSelectionStyle(styling, cellSelectionState);

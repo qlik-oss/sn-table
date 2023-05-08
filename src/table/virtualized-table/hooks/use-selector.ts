@@ -22,8 +22,8 @@ export default function useSelector(datum: Cell | string) {
     const { handleMouseDown, handleMouseOver, handleMouseUp } = getSelectionMouseHandlers(
       datum as Cell,
       NOOP_ANNOUNCE,
-      onMouseDown,
-      selectionDispatch
+      selectionDispatch,
+      onMouseDown
     );
 
     return {

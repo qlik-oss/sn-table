@@ -57,11 +57,7 @@ function getNextLine(text: string, maxWidth: number, fixedMeasureText: (text: st
   return null;
 }
 
-export default function useMeasureText(
-  fontSize: string | undefined,
-  fontFamily: string | undefined,
-  boldText?: boolean
-): MeasureTextHook {
+export default function useMeasureText(fontSize?: string, fontFamily?: string, boldText?: boolean): MeasureTextHook {
   const { estimateWidth, measureText, estimateLineCount } = useMemo((): MeasureTextHook => {
     const context = document.createElement('canvas').getContext('2d') as CanvasRenderingContext2D;
     context.font = `${boldText ? '600' : ''} ${fontSize} ${fontFamily}`;

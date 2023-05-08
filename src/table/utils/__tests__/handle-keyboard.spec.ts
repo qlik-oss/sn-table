@@ -608,7 +608,7 @@ describe('handle-keyboard', () => {
     });
 
     it('should call focusSelectionToolbar when isSelectionMode is true and tab is pressed', () => {
-      handleLastTab(evt, isSelectionMode, keyboard);
+      handleLastTab(evt, keyboard, isSelectionMode);
 
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
@@ -617,7 +617,7 @@ describe('handle-keyboard', () => {
 
     it('should not call focusSelectionToolbar when isSelectionMode is false', () => {
       isSelectionMode = false;
-      handleLastTab(evt, isSelectionMode, keyboard);
+      handleLastTab(evt, keyboard, isSelectionMode);
 
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(evt.preventDefault).not.toHaveBeenCalled();
@@ -626,7 +626,7 @@ describe('handle-keyboard', () => {
 
     it('should not call focusSelectionToolbar when key is not tab', () => {
       evt.key = 'someKey';
-      handleLastTab(evt, isSelectionMode, keyboard);
+      handleLastTab(evt, keyboard, isSelectionMode);
 
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(evt.preventDefault).not.toHaveBeenCalled();
@@ -635,7 +635,7 @@ describe('handle-keyboard', () => {
 
     it('should not call focusSelectionToolbar when shift+tab is pressed', () => {
       evt.shiftKey = true;
-      handleLastTab(evt, isSelectionMode, keyboard);
+      handleLastTab(evt, keyboard, isSelectionMode);
 
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(evt.preventDefault).not.toHaveBeenCalled();

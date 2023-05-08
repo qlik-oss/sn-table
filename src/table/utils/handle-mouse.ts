@@ -43,8 +43,8 @@ export const handleMouseDownToFocusHead = ({
 export const getSelectionMouseHandlers = (
   cell: Cell,
   announce: Announce,
-  onMouseDown: React.MouseEventHandler<HTMLTableCellElement> | undefined,
-  selectionDispatch: SelectionDispatch
+  selectionDispatch: SelectionDispatch,
+  onMouseDown?: React.MouseEventHandler<HTMLTableCellElement>
 ) => {
   const handleMouseDown = (evt: React.MouseEvent) => {
     // run handleMouseDownToFocusBody

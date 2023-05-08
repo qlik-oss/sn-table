@@ -63,7 +63,7 @@ export interface SelectionState {
   pageRows: Row[];
   rows: Record<string, number>;
   colIdx: number;
-  api: ExtendedSelectionAPI | undefined;
+  api?: ExtendedSelectionAPI;
   isSelectMultiValues: boolean;
   firstCell?: Cell;
   mouseupOutsideCallback?(): void;
@@ -103,8 +103,8 @@ export interface ContextValue {
   columnWidths: number[];
   setColumnWidths: React.Dispatch<React.SetStateAction<number[]>>;
   baseProps: {
-    app: EngineAPI.IApp | undefined;
-    selectionsAPI: ExtendedSelectionAPI | undefined;
+    app?: EngineAPI.IApp;
+    selectionsAPI?: ExtendedSelectionAPI;
     layout: TableLayout;
     model?: EngineAPI.IGenericObject;
     translator: ExtendedTranslator;
@@ -135,7 +135,7 @@ export interface FooterStyle {
 }
 
 export interface CellStyle {
-  background: string | undefined; // This is always set but could be undefined in the theme
+  background?: string; // This is always set but could be undefined in the theme
   color: string;
   selectedCellClass?: string;
 }
@@ -148,7 +148,7 @@ export interface HandleWrapperKeyDownProps {
   handleChangePage(pageIdx: number): void;
   setShouldRefocus(): void;
   keyboard: stardust.Keyboard;
-  isSelectionMode: boolean;
+  isSelectionMode?: boolean;
 }
 
 export interface HandleHeadKeyDownProps {
@@ -177,7 +177,7 @@ export interface BodyArrowHelperProps {
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   announce: Announce;
   totalsPosition: TotalsPosition;
-  isSelectionMode: boolean | undefined;
+  isSelectionMode?: boolean;
 }
 
 export interface HandleBodyKeyDownProps {
@@ -191,19 +191,19 @@ export interface HandleBodyKeyDownProps {
   keyboard: stardust.Keyboard;
   totalsPosition: TotalsPosition;
   paginationNeeded: boolean;
-  selectionsAPI: ExtendedSelectionAPI | undefined;
+  selectionsAPI?: ExtendedSelectionAPI;
 }
 
 export interface CellFocusProps {
   focusType: FocusTypes;
-  cell: HTMLTableCellElement | undefined;
+  cell?: HTMLTableCellElement;
 }
 
 export interface HandleResetFocusProps {
   focusedCellCoord: [number, number];
   rootElement: HTMLElement;
   shouldRefocus: React.MutableRefObject<boolean>;
-  isSelectionMode: boolean;
+  isSelectionMode?: boolean;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   keyboard: stardust.Keyboard;
   announce: Announce;
@@ -214,7 +214,7 @@ export interface ContextProviderProps {
   children: JSX.Element;
   app?: EngineAPI.IApp;
   tableData?: TableData;
-  selectionsAPI: ExtendedSelectionAPI | undefined;
+  selectionsAPI?: ExtendedSelectionAPI;
   cellCoordMock?: [number, number];
   layout: TableLayout;
   model?: EngineAPI.IGenericObject;
@@ -234,7 +234,7 @@ export interface ContextProviderProps {
 
 export interface RenderProps {
   direction?: Direction;
-  selectionsAPI: ExtendedSelectionAPI | undefined;
+  selectionsAPI?: ExtendedSelectionAPI;
   rootElement?: HTMLElement;
   layout: TableLayout;
   changeSortOrder: ChangeSortOrder;
@@ -250,7 +250,7 @@ export interface RenderProps {
   announce?: Announce;
   model?: EngineAPI.IGenericObject;
   manageData?(
-    model: EngineAPI.IGenericObject | undefined,
+    model: EngineAPI.IGenericObject,
     layout: TableLayout,
     pageInfo: PageInfo,
     setPageInfo: SetPageInfo
@@ -304,7 +304,7 @@ export interface PaginationContentProps {
   setPageInfo: SetPageInfo;
   footerContainer?: HTMLElement;
   announce: Announce;
-  isSelectionMode: boolean;
+  isSelectionMode?: boolean;
   handleChangePage(pageIdx: number): void;
 }
 
