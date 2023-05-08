@@ -1,6 +1,16 @@
 import manageData, { getColumns, getColumnInfo, getTotalInfo, getTotalPosition } from '../handle-data';
 import { generateDataPages, generateLayout } from './generate-test-data';
-import { TableLayout, PageInfo, SetPageInfo, TableData, Cell, ExtendedNxAttrExprInfo, TotalsPosition } from '../types';
+import {
+  TableLayout,
+  PageInfo,
+  SetPageInfo,
+  TableData,
+  Cell,
+  ExtendedNxAttrExprInfo,
+  TotalsPosition,
+  ViewService,
+  LayoutService,
+} from '../types';
 
 describe('handle-data', () => {
   let layout: TableLayout;
@@ -141,11 +151,27 @@ describe('handle-data', () => {
     let model: EngineAPI.IGenericObject;
     let pageInfo: PageInfo;
     let setPageInfo: SetPageInfo;
+    let viewService: ViewService;
+    let layoutService: LayoutService;
 
     beforeEach(() => {
       pageInfo = { page: 1, rowsPerPage: 100, rowsPerPageOptions: [10, 25, 100] };
       model = { getHyperCubeData: async () => generateDataPages(100, 4) } as unknown as EngineAPI.IGenericObject;
       setPageInfo = jest.fn();
+      viewService = {
+        gridRowStartIndex: 0,
+        gridHeight: 100,
+        gridColumnStartIndex: 0,
+        gridWidth: 4,
+      };
+      layoutService = {
+        isSnapshot: false,
+        size: {
+          x: 100,
+          y: 200,
+        },
+        layout,
+      };
     });
 
     it('should return size, rows and columns correctly formatted', async () => {
@@ -153,7 +179,9 @@ describe('handle-data', () => {
         model,
         layout,
         pageInfo,
-        setPageInfo
+        setPageInfo,
+        viewService,
+        layoutService
       )) as TableData;
 
       const firstColCell = rows[0]['col-0'] as Cell;
@@ -181,7 +209,7 @@ describe('handle-data', () => {
 
     it('should return null and call setPageInfo when page is > 0 and page * rowsPerPage >= qcy', async () => {
       layout.qHyperCube.qSize.qcy = 100;
-      const tableData = await manageData(model, layout, pageInfo, setPageInfo);
+      const tableData = await manageData(model, layout, pageInfo, setPageInfo, viewService, layoutService);
 
       expect(tableData).toBeNull();
       expect(setPageInfo).toHaveBeenCalledWith({ ...pageInfo, page: 0 });
@@ -190,7 +218,7 @@ describe('handle-data', () => {
     it('should return null and call setPageInfo with rowsPerPage 25 when height * width > 10000 and width is 120', async () => {
       pageInfo = { ...pageInfo, page: 0 };
       layout = generateLayout(60, 60, 1100);
-      const tableData = await manageData(model, layout, pageInfo, setPageInfo);
+      const tableData = await manageData(model, layout, pageInfo, setPageInfo, viewService, layoutService);
 
       expect(tableData).toBeNull();
       expect(setPageInfo).toHaveBeenCalledWith({ ...pageInfo, rowsPerPage: 25 });
@@ -199,7 +227,7 @@ describe('handle-data', () => {
     it('should return null and call setPageInfo with rowsPerPage 4 when height * width > 10000 and width is 2200', async () => {
       pageInfo = { ...pageInfo, page: 0 };
       layout = generateLayout(1100, 1100, 100);
-      const tableData = await manageData(model, layout, pageInfo, setPageInfo);
+      const tableData = await manageData(model, layout, pageInfo, setPageInfo, viewService, layoutService);
 
       expect(tableData).toBeNull();
       expect(setPageInfo).toHaveBeenCalledWith({ ...pageInfo, rowsPerPage: 4 });
@@ -208,7 +236,7 @@ describe('handle-data', () => {
     it('should return null and call setPageInfo with rowsPerPage 4 when width > 10000', async () => {
       pageInfo = { ...pageInfo, page: 0 };
       layout = generateLayout(6000, 6000, 100);
-      const tableData = await manageData(model, layout, pageInfo, setPageInfo);
+      const tableData = await manageData(model, layout, pageInfo, setPageInfo, viewService, layoutService);
 
       expect(tableData).toBeNull();
       expect(setPageInfo).toHaveBeenCalledWith({ ...pageInfo, rowsPerPage: 0 });

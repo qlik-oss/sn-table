@@ -3,6 +3,25 @@ import { stardust } from '@nebula.js/stardust';
 
 export type Align = 'left' | 'center' | 'right';
 
+type Size = {
+  w: number;
+  h: number;
+};
+export interface ViewService {
+  gridColumnStartIndex: number;
+  gridRowStartIndex: number;
+  gridWidth: number;
+  gridHeight: number;
+}
+export interface SnapshotData {
+  content?: {
+    qDataPages?: EngineAPI.INxDataPage[];
+  };
+  object: {
+    size: Size;
+  };
+}
+
 export interface TextAlign {
   auto: boolean;
   align: Align;
@@ -90,6 +109,21 @@ export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, 'qH
   };
   usePagination?: boolean;
   components?: Component[];
+  snapshotData?: SnapshotData;
+}
+export interface Point {
+  x: number;
+  y: number;
+}
+export interface LayoutService {
+  layout: TableLayout;
+  isSnapshot: boolean;
+  size: Point;
+}
+
+export interface SnapshotLayout extends EngineAPI.IGenericObjectLayout {
+  title?: string;
+  snapshotData?: SnapshotData;
 }
 
 export interface Cell {
