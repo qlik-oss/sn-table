@@ -23,9 +23,9 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
     columResizeHandler,
   } = data;
 
-  const { layout, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, selectionsAPI, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
-  const isInSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI.isModal());
+  const isInSelectionMode = selectionsAPI?.isModal();
   const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
   const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;

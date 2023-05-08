@@ -223,7 +223,7 @@ export const handleBodyKeyDown = ({
     preventDefaultBehavior(evt);
     return;
   }
-  const isSelectionMode = selectionsAPI.isModal();
+  const isSelectionMode = selectionsAPI?.isModal();
   if (shouldBubbleEarly(evt, isSelectionMode)) return;
 
   switch (evt.key) {
@@ -256,14 +256,14 @@ export const handleBodyKeyDown = ({
     case KeyCodes.ENTER:
       preventDefaultBehavior(evt);
       if (isSelectionMode) {
-        selectionsAPI.confirm();
+        selectionsAPI?.confirm();
         announce({ keys: ['SNTable.SelectionLabel.SelectionsConfirmed'] });
       }
       break;
     // Esc: Cancels selections. If no selections, do nothing and handleWrapperKeyDown should catch it
     case KeyCodes.ESC:
       preventDefaultBehavior(evt);
-      selectionsAPI.cancel();
+      selectionsAPI?.cancel();
       announce({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
       break;
     // Tab (+ shift): in selection mode and keyboard enabled, focus on selection toolbar

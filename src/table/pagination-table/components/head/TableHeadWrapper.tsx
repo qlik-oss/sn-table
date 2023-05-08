@@ -14,14 +14,14 @@ import { handleMouseDownToFocusHead } from '../../../utils/handle-mouse';
 
 function TableHeadWrapper() {
   const { columns } = useContextSelector(TableContext, (value) => value.tableData);
-  const { layout, styling, constraints, rootElement, keyboard } = useContextSelector(
+  const { layout, selectionsAPI, styling, constraints, rootElement, keyboard } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
-  const isInSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI.isModal());
+  const isInSelectionMode = selectionsAPI?.isModal();
   const headRowRef = useRef<HTMLTableRowElement>(null);
   const isInteractionEnabled = !constraints.active && !isInSelectionMode;
 

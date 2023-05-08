@@ -15,7 +15,7 @@ import usePageInfo from './virtualized-table/use-page-info';
 
 interface UseVirtualizedTable {
   app: EngineAPI.IApp | undefined;
-  selectionsAPI: ExtendedSelectionAPI;
+  selectionsAPI: ExtendedSelectionAPI | undefined;
   layout: TableLayout;
   model: EngineAPI.IGenericObject | undefined;
   translator: ExtendedTranslator;

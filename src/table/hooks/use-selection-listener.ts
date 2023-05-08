@@ -5,7 +5,7 @@ import { SelectionActions } from '../constants';
 import { SelectionDispatch } from '../types';
 
 interface UseSelectionListenerProps {
-  selectionsAPI: ExtendedSelectionAPI;
+  selectionsAPI: ExtendedSelectionAPI | undefined;
   selectionDispatch: SelectionDispatch;
   setShouldRefocus(): void;
   keyboard: stardust.Keyboard;
@@ -42,16 +42,16 @@ const useSelectionListener = ({
       resetSelections();
     };
 
-    selectionsAPI.on('deactivated', resetSelections);
-    selectionsAPI.on('canceled', resetSelections);
-    selectionsAPI.on('confirmed', resetSelectionsAndSetupRefocus);
-    selectionsAPI.on('cleared', clearSelections);
+    selectionsAPI?.on('deactivated', resetSelections);
+    selectionsAPI?.on('canceled', resetSelections);
+    selectionsAPI?.on('confirmed', resetSelectionsAndSetupRefocus);
+    selectionsAPI?.on('cleared', clearSelections);
     // Return function called on unmount
     return () => {
-      selectionsAPI.removeListener('deactivated', resetSelections);
-      selectionsAPI.removeListener('canceled', resetSelections);
-      selectionsAPI.removeListener('confirmed', resetSelectionsAndSetupRefocus);
-      selectionsAPI.removeListener('cleared', clearSelections);
+      selectionsAPI?.removeListener('deactivated', resetSelections);
+      selectionsAPI?.removeListener('canceled', resetSelections);
+      selectionsAPI?.removeListener('confirmed', resetSelectionsAndSetupRefocus);
+      selectionsAPI?.removeListener('cleared', clearSelections);
     };
   }, [selectionsAPI, keyboard, selectionDispatch, setShouldRefocus, tableWrapperRef]);
 };

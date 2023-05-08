@@ -63,7 +63,7 @@ export interface SelectionState {
   pageRows: Row[];
   rows: Record<string, number>;
   colIdx: number;
-  api: ExtendedSelectionAPI;
+  api: ExtendedSelectionAPI | undefined;
   isSelectMultiValues: boolean;
   firstCell?: Cell;
   mouseupOutsideCallback?(): void;
@@ -104,7 +104,7 @@ export interface ContextValue {
   setColumnWidths: React.Dispatch<React.SetStateAction<number[]>>;
   baseProps: {
     app: EngineAPI.IApp | undefined;
-    selectionsAPI: ExtendedSelectionAPI;
+    selectionsAPI: ExtendedSelectionAPI | undefined;
     layout: TableLayout;
     model?: EngineAPI.IGenericObject;
     translator: ExtendedTranslator;
@@ -177,7 +177,7 @@ export interface BodyArrowHelperProps {
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   announce: Announce;
   totalsPosition: TotalsPosition;
-  isSelectionMode: boolean;
+  isSelectionMode: boolean | undefined;
 }
 
 export interface HandleBodyKeyDownProps {
@@ -191,7 +191,7 @@ export interface HandleBodyKeyDownProps {
   keyboard: stardust.Keyboard;
   totalsPosition: TotalsPosition;
   paginationNeeded: boolean;
-  selectionsAPI: ExtendedSelectionAPI;
+  selectionsAPI: ExtendedSelectionAPI | undefined;
 }
 
 export interface CellFocusProps {
@@ -214,7 +214,7 @@ export interface ContextProviderProps {
   children: JSX.Element;
   app?: EngineAPI.IApp;
   tableData?: TableData;
-  selectionsAPI: ExtendedSelectionAPI;
+  selectionsAPI: ExtendedSelectionAPI | undefined;
   cellCoordMock?: [number, number];
   layout: TableLayout;
   model?: EngineAPI.IGenericObject;
@@ -234,7 +234,7 @@ export interface ContextProviderProps {
 
 export interface RenderProps {
   direction?: Direction;
-  selectionsAPI: ExtendedSelectionAPI;
+  selectionsAPI: ExtendedSelectionAPI | undefined;
   rootElement?: HTMLElement;
   layout: TableLayout;
   changeSortOrder: ChangeSortOrder;

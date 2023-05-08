@@ -41,7 +41,7 @@ export default function supernova(env: Galaxy) {
       const model = useModel();
       const constraints = useConstraints();
       const translator = useTranslator() as ExtendedTranslator;
-      const selectionsAPI = useSelections() as ExtendedSelectionAPI;
+      const selectionsAPI = useSelections() as ExtendedSelectionAPI | undefined;
       const keyboard = useKeyboard();
       const rect = useRect();
       const embed = useEmbed();

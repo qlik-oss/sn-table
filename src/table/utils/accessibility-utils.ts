@@ -201,7 +201,7 @@ export const focusSelectionToolbar = (element: HTMLElement, keyboard: stardust.K
 export const announceSelectionState = (
   announce: Announce,
   nextCell: HTMLTableCellElement,
-  isSelectionMode: boolean
+  isSelectionMode: boolean | undefined
 ) => {
   if (isSelectionMode) {
     const hasActiveClassName = nextCell.classList.contains('selected');
