@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDom from 'react-dom/client';
 import { StyleSheetManager } from 'styled-components';
 import { ThemeProvider } from '@mui/material/styles';
-import { stardust } from '@nebula.js/stardust';
 import rtlPluginSc from 'stylis-plugin-rtl-sc';
 
 import TableWrapper from './pagination-table/components/TableWrapper';
@@ -48,7 +47,7 @@ export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.R
           theme={theme}
           keyboard={keyboard}
           rootElement={rootElement as HTMLElement}
-          embed={embed as stardust.Embed}
+          embed={embed}
           changeSortOrder={changeSortOrder}
           applyColumnWidths={applyColumnWidths as ApplyColumnWidths}
           rect={rect}

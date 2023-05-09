@@ -256,7 +256,7 @@ export interface RenderProps {
     setPageInfo: SetPageInfo
   ): Promise<TableData | null>;
   app?: EngineAPI.IApp;
-  embed?: stardust.Embed;
+  embed: stardust.Embed;
   applyColumnWidths?: ApplyColumnWidths;
 }
 

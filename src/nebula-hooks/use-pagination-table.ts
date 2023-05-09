@@ -27,7 +27,7 @@ interface UsePaginationTable {
   keyboard: stardust.Keyboard;
   model?: EngineAPI.IGenericObject;
   app?: EngineAPI.IApp;
-  embed?: stardust.Embed;
+  embed: stardust.Embed;
   reactRoot: Root;
   applyColumnWidths: ApplyColumnWidths;
   isFontLoaded: boolean;
