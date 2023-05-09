@@ -8,14 +8,22 @@ type Size = {
   h: number;
 };
 export interface ViewService {
-  gridColumnStartIndex: number;
-  gridRowStartIndex: number;
-  gridWidth: number;
-  gridHeight: number;
+  qLeft: number;
+  qTop: number;
+  qWidth: number;
+  qHeight: number;
+  scrollTop: number;
+  scrollLeft: number;
 }
 export interface SnapshotData {
   content?: {
     qDataPages?: EngineAPI.INxDataPage[];
+    qLeft: number;
+    qTop: number;
+    qWidth: number;
+    qHeight: number;
+    scrollTop: number;
+    scrollLeft: number;
   };
   object: {
     size: Size;

@@ -19,7 +19,7 @@ import useKeyboardActiveListener from '../../hooks/use-keyboard-active-listener'
 import { SelectionActions } from '../../constants';
 
 function TableWrapper(props: TableWrapperProps) {
-  const { pageInfo, setPageInfo, direction, footerContainer, announce } = props;
+  const { pageInfo, setPageInfo, direction, footerContainer, announce, viewService, layoutService } = props;
   const { page, rowsPerPage } = pageInfo;
 
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
@@ -78,8 +78,10 @@ function TableWrapper(props: TableWrapperProps) {
   useKeyboardActiveListener();
 
   useEffect(() => {
-    tableContainerRef.current?.scrollTo(0, 0);
-  }, [pageInfo, totalRowCount]);
+    const left = layoutService.isSnapshot ? viewService.scrollLeft : 0;
+    const top = layoutService.isSnapshot ? viewService.scrollTop : 0;
+    tableContainerRef.current?.scrollTo(left, top);
+  }, [pageInfo, totalRowCount, layoutService, viewService]);
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
@@ -104,6 +106,11 @@ function TableWrapper(props: TableWrapperProps) {
     selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows: rows } });
   }, [rows]);
 
+  const onScroll = (event: React.SyntheticEvent) => {
+    viewService.scrollLeft = event.currentTarget.scrollLeft;
+    viewService.scrollTop = event.currentTarget.scrollTop;
+  };
+
   return (
     <StyledTableWrapper
       ref={tableWrapperRef}
@@ -121,6 +128,7 @@ function TableWrapper(props: TableWrapperProps) {
         tabIndex={-1}
         role="application"
         data-testid="table-container"
+        onScroll={onScroll}
       >
         <StyledTable styling={styling} showRightBorder={showRightBorder} stickyHeader aria-label={tableAriaLabel}>
           <TableHeadWrapper />

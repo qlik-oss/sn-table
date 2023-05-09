@@ -230,10 +230,10 @@ export default async function manageData(
         { qTop: top, qLeft: 0, qHeight: height, qWidth: totalColumnCount },
       ]);
   if (viewService && !layoutService?.isSnapshot) {
-    viewService.gridRowStartIndex = top;
-    viewService.gridHeight = height;
-    viewService.gridColumnStartIndex = 0;
-    viewService.gridWidth = totalColumnCount;
+    viewService.qTop = top;
+    viewService.qHeight = height;
+    viewService.qLeft = 0;
+    viewService.qWidth = totalColumnCount;
   }
 
   const rows =

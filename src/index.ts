@@ -47,7 +47,7 @@ export default function supernova(env: Galaxy) {
       const selectionsAPI = useSelections() as ExtendedSelectionAPI;
       const keyboard = useKeyboard();
       let rect = useRect();
-      const viewService = useViewService();
+      const viewService = useViewService(layout);
       const layoutService = useLayoutService(layout);
       const embed = useEmbed();
       const theme = useExtendedTheme(rootElement);

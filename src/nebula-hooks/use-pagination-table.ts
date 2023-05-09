@@ -112,6 +112,8 @@ const usePaginationTable = ({
         announce,
         embed,
         applyColumnWidths,
+        viewService,
+        layoutService,
       },
       reactRoot
     );

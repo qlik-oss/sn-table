@@ -6,7 +6,16 @@ import TableBodyWrapper from '../body/TableBodyWrapper';
 import TableHeadWrapper from '../head/TableHeadWrapper';
 import * as handleKeyPress from '../../../utils/handle-keyboard';
 import * as handleScroll from '../../../utils/handle-scroll';
-import { TableLayout, TableData, PageInfo, SetPageInfo, Announce, Column } from '../../../../types';
+import {
+  TableLayout,
+  TableData,
+  PageInfo,
+  SetPageInfo,
+  Announce,
+  Column,
+  ViewService,
+  LayoutService,
+} from '../../../../types';
 import TestWithProviders from '../../../../__test__/test-with-providers';
 
 describe('<TableWrapper />', () => {
@@ -19,6 +28,8 @@ describe('<TableWrapper />', () => {
   let direction: 'ltr' | 'rtl';
   let announce: Announce;
   let layout: TableLayout;
+  let viewService: ViewService;
+  let layoutService: LayoutService;
 
   const renderTableWrapper = () =>
     render(
@@ -29,7 +40,14 @@ describe('<TableWrapper />', () => {
         tableData={tableData}
         rect={rect}
       >
-        <TableWrapper pageInfo={pageInfo} setPageInfo={setPageInfo} direction={direction} announce={announce} />
+        <TableWrapper
+          pageInfo={pageInfo}
+          setPageInfo={setPageInfo}
+          direction={direction}
+          announce={announce}
+          viewService={viewService}
+          layoutService={layoutService}
+        />
       </TestWithProviders>
     );
 
@@ -50,6 +68,11 @@ describe('<TableWrapper />', () => {
     pageInfo = { page: 0, rowsPerPage: 100, rowsPerPageOptions: [10, 25, 100] };
     setPageInfo = jest.fn();
     constraints = {};
+    layoutService = {
+      layout,
+      isSnapshot: false,
+      size: { x: 75, y: 200 },
+    };
     rootElement = {
       getElementsByClassName: () => [],
       getElementsByTagName: () => [{ clientHeight: {}, contains: jest.fn() }],

@@ -159,10 +159,12 @@ describe('handle-data', () => {
       model = { getHyperCubeData: async () => generateDataPages(100, 4) } as unknown as EngineAPI.IGenericObject;
       setPageInfo = jest.fn();
       viewService = {
-        gridRowStartIndex: 0,
-        gridHeight: 100,
-        gridColumnStartIndex: 0,
-        gridWidth: 4,
+        qTop: 0,
+        qHeight: 100,
+        qLeft: 0,
+        qWidth: 4,
+        scrollTop: 0,
+        scrollLeft: 0,
       };
       layoutService = {
         isSnapshot: false,

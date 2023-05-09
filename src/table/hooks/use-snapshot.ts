@@ -24,15 +24,21 @@ const useSnapshot = ({ layoutService, viewService, rect, model }: UseSnapshotPro
       if ((model as EngineAPI.IGenericObject)?.getHyperCubeData) {
         const dataPages = await (model as EngineAPI.IGenericObject).getHyperCubeData('/qHyperCubeDef', [
           {
-            qLeft: viewService.gridColumnStartIndex,
-            qTop: viewService.gridRowStartIndex,
-            qWidth: viewService.gridWidth,
-            qHeight: viewService.gridHeight,
+            qLeft: viewService.qLeft,
+            qTop: viewService.qTop,
+            qWidth: viewService.qWidth,
+            qHeight: viewService.qHeight,
           },
         ]);
 
         copyOfLayout.snapshotData.content = {
           qDataPages: dataPages,
+          qLeft: viewService.qLeft,
+          qTop: viewService.qTop,
+          qWidth: viewService.qWidth,
+          qHeight: viewService.qHeight,
+          scrollTop: viewService.scrollTop,
+          scrollLeft: viewService.scrollLeft,
         };
       }
 
