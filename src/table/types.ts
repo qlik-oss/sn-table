@@ -63,7 +63,7 @@ export interface SelectionState {
   pageRows: Row[];
   rows: Record<string, number>;
   colIdx: number;
-  api?: ExtendedSelectionAPI;
+  api: ExtendedSelectionAPI | undefined;
   isSelectMultiValues: boolean;
   firstCell?: Cell;
   mouseupOutsideCallback?(): void;
@@ -103,10 +103,10 @@ export interface ContextValue {
   columnWidths: number[];
   setColumnWidths: React.Dispatch<React.SetStateAction<number[]>>;
   baseProps: {
-    app?: EngineAPI.IApp;
-    selectionsAPI?: ExtendedSelectionAPI;
+    app: EngineAPI.IApp | undefined;
+    selectionsAPI: ExtendedSelectionAPI | undefined;
     layout: TableLayout;
-    model?: EngineAPI.IGenericObject;
+    model: EngineAPI.IGenericObject | undefined;
     translator: ExtendedTranslator;
     constraints: stardust.Constraints;
     theme: ExtendedTheme;
@@ -135,7 +135,7 @@ export interface FooterStyle {
 }
 
 export interface CellStyle {
-  background?: string; // This is always set but could be undefined in the theme
+  background: string | undefined; // This is always set but could be undefined in the theme
   color: string;
   selectedCellClass?: string;
 }
@@ -148,7 +148,7 @@ export interface HandleWrapperKeyDownProps {
   handleChangePage(pageIdx: number): void;
   setShouldRefocus(): void;
   keyboard: stardust.Keyboard;
-  isSelectionMode?: boolean;
+  isSelectionMode: boolean | undefined;
 }
 
 export interface HandleHeadKeyDownProps {
@@ -177,7 +177,7 @@ export interface BodyArrowHelperProps {
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   announce: Announce;
   totalsPosition: TotalsPosition;
-  isSelectionMode?: boolean;
+  isSelectionMode: boolean | undefined;
 }
 
 export interface HandleBodyKeyDownProps {
@@ -191,19 +191,19 @@ export interface HandleBodyKeyDownProps {
   keyboard: stardust.Keyboard;
   totalsPosition: TotalsPosition;
   paginationNeeded: boolean;
-  selectionsAPI?: ExtendedSelectionAPI;
+  selectionsAPI: ExtendedSelectionAPI | undefined;
 }
 
 export interface CellFocusProps {
   focusType: FocusTypes;
-  cell?: HTMLTableCellElement;
+  cell: HTMLTableCellElement | undefined;
 }
 
 export interface HandleResetFocusProps {
   focusedCellCoord: [number, number];
   rootElement: HTMLElement;
   shouldRefocus: React.MutableRefObject<boolean>;
-  isSelectionMode?: boolean;
+  isSelectionMode: boolean | undefined;
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   keyboard: stardust.Keyboard;
   announce: Announce;
@@ -212,12 +212,12 @@ export interface HandleResetFocusProps {
 
 export interface ContextProviderProps {
   children: JSX.Element;
-  app?: EngineAPI.IApp;
-  tableData?: TableData;
-  selectionsAPI?: ExtendedSelectionAPI;
+  app: EngineAPI.IApp | undefined;
+  tableData: TableData;
+  selectionsAPI: ExtendedSelectionAPI | undefined;
   cellCoordMock?: [number, number];
   layout: TableLayout;
-  model?: EngineAPI.IGenericObject;
+  model: EngineAPI.IGenericObject;
   translator: ExtendedTranslator;
   constraints: stardust.Constraints;
   theme: ExtendedTheme;
@@ -233,32 +233,32 @@ export interface ContextProviderProps {
 }
 
 export interface RenderProps {
-  direction?: Direction;
-  selectionsAPI?: ExtendedSelectionAPI;
-  rootElement?: HTMLElement;
+  direction: Direction | undefined;
+  selectionsAPI: ExtendedSelectionAPI | undefined;
+  rootElement: HTMLElement;
   layout: TableLayout;
   changeSortOrder: ChangeSortOrder;
   rect: stardust.Rect;
-  tableData?: TableData;
-  pageInfo?: PageInfo;
-  setPageInfo?: SetPageInfo;
+  tableData: TableData;
+  pageInfo: PageInfo;
+  setPageInfo: SetPageInfo;
   constraints: stardust.Constraints;
   translator: ExtendedTranslator;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
-  footerContainer?: HTMLElement;
-  announce?: Announce;
-  model?: EngineAPI.IGenericObject;
-  app?: EngineAPI.IApp;
+  footerContainer: HTMLElement | undefined;
+  announce: Announce;
+  model: EngineAPI.IGenericObject;
+  app: EngineAPI.IApp;
   embed: stardust.Embed;
-  applyColumnWidths?: ApplyColumnWidths;
+  applyColumnWidths: ApplyColumnWidths;
 }
 
 export interface TableWrapperProps {
   direction?: Direction;
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
-  footerContainer?: HTMLElement;
+  footerContainer: HTMLElement | undefined;
   announce: Announce;
 }
 
@@ -298,7 +298,7 @@ export interface PaginationContentProps {
   setPageInfo: SetPageInfo;
   footerContainer?: HTMLElement;
   announce: Announce;
-  isSelectionMode?: boolean;
+  isSelectionMode: boolean | undefined;
   handleChangePage(pageIdx: number): void;
 }
 

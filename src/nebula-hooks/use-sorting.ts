@@ -1,7 +1,7 @@
 import { useMemo } from '@nebula.js/stardust';
 import { Column, HyperCube } from '../types';
 
-export const sortingFactory = (dimensionsLength: number, model?: EngineAPI.IGenericObject) => {
+export const sortingFactory = (dimensionsLength: number, model: EngineAPI.IGenericObject | undefined) => {
   if (!model) return undefined;
 
   return async (column: Column) => {
@@ -36,7 +36,7 @@ export const sortingFactory = (dimensionsLength: number, model?: EngineAPI.IGene
   };
 };
 
-const useSorting = (hyperCube: HyperCube, model?: EngineAPI.IGenericObject) =>
+const useSorting = (hyperCube: HyperCube, model: EngineAPI.IGenericObject | undefined) =>
   useMemo(() => sortingFactory(hyperCube.qDimensionInfo.length, model), [hyperCube.qDimensionInfo.length, model]);
 
 export default useSorting;

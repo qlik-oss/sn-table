@@ -7,8 +7,8 @@ export default function withColumnStyling(CellComponent: CellHOC) {
     const { cell, column, styling } = props;
 
     const columnStyling = useMemo(
-      () => getColumnStyle(styling, column.stylingIDs, cell.qAttrExps),
-      [styling, column.stylingIDs, cell.qAttrExps]
+      () => getColumnStyle(styling, cell.qAttrExps, column.stylingIDs),
+      [styling, cell.qAttrExps, column.stylingIDs]
     );
 
     return <CellComponent {...props} styling={columnStyling} />;

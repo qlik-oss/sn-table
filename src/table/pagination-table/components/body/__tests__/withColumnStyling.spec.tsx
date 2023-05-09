@@ -46,6 +46,6 @@ describe('withColumnStyling', () => {
     );
 
     expect(queryByText('someValue')).toBeVisible();
-    expect(stylingUtils.getColumnStyle).toHaveBeenCalledWith(styling, column.stylingIDs, cell.qAttrExps);
+    expect(stylingUtils.getColumnStyle).toHaveBeenCalledWith(styling, cell.qAttrExps, column.stylingIDs);
   });
 });

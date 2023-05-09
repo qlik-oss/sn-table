@@ -4,7 +4,7 @@ import { MAX_PAGE_SIZE } from '../../table/virtualized-table/constants';
 import { TableLayout } from '../../types';
 
 interface UseInitialDataPagesProps {
-  model?: EngineAPI.IGenericObject;
+  model: EngineAPI.IGenericObject | undefined;
   layout: TableLayout;
   shouldRender: boolean;
   page: number;

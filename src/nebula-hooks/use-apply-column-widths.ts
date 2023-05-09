@@ -2,7 +2,7 @@ import { useMemo } from '@nebula.js/stardust';
 import { HyperCube, ApplyColumnWidths } from '../types';
 
 export const applyColumnWidthsFactory =
-  (qHyperCube: HyperCube, model?: EngineAPI.IGenericObject): ApplyColumnWidths =>
+  (qHyperCube: HyperCube, model: EngineAPI.IGenericObject | undefined): ApplyColumnWidths =>
   (newColumnWidth, { isDim, colIdx }) => {
     const index = isDim ? colIdx : colIdx - qHyperCube.qDimensionInfo.length;
     const qPath = `/qHyperCubeDef/${isDim ? 'qDimensions' : 'qMeasures'}/${index}/qDef/columnWidth`;
@@ -23,7 +23,7 @@ export const applyColumnWidthsFactory =
     model?.applyPatches([patch], true);
   };
 
-const useApplyColumnWidths = (hyperCube: HyperCube, model?: EngineAPI.IGenericObject) =>
+const useApplyColumnWidths = (hyperCube: HyperCube, model: EngineAPI.IGenericObject | undefined) =>
   useMemo(() => applyColumnWidthsFactory(hyperCube, model), [hyperCube, model]);
 
 export default useApplyColumnWidths;

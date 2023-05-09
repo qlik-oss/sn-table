@@ -63,8 +63,8 @@ export function getTotalInfo(layout: TableLayout, colIdx: number, pageColIdx: nu
  */
 export function getAlignInfo(
   textAlign: TextAlign,
-  isDim: boolean,
-  qDimensionType?: EngineAPI.DimensionType
+  qDimensionType: EngineAPI.DimensionType | undefined,
+  isDim: boolean
 ): { headTextAlign: Align; totalsTextAlign: Align; bodyTextAlign: Align | 'auto' } {
   if (textAlign && !textAlign.auto) {
     return { headTextAlign: textAlign.align, totalsTextAlign: textAlign.align, bodyTextAlign: textAlign.align };
@@ -95,7 +95,7 @@ export function getColumnInfo(
   layout: TableLayout,
   colIdx: number,
   pageColIdx: number,
-  selectionColIdx?: number
+  selectionColIdx: number | undefined
 ): Column {
   const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
@@ -144,7 +144,7 @@ export function getColumnInfo(
     // making sure that qSortIndicator is either A or D
     sortDirection: qSortIndicator && qSortIndicator !== 'N' ? qSortIndicator : 'A',
     totalInfo: getTotalInfo(layout, colIdx, pageColIdx, numDims),
-    ...getAlignInfo(textAlign, isDim, qDimensionType),
+    ...getAlignInfo(textAlign, qDimensionType, isDim),
   };
 }
 

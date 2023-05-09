@@ -7,10 +7,9 @@ import rtlPluginSc from 'stylis-plugin-rtl-sc';
 import TableWrapper from './pagination-table/components/TableWrapper';
 import { TableContextProvider } from './context';
 import muiSetup from './mui-setup';
-import { RenderProps, TableWrapperProps } from './types';
+import { RenderProps } from './types';
 import VirtualizedTable from './virtualized-table/Wrapper';
 import { VirtualTableRenderProps } from './virtualized-table/types';
-import { ApplyColumnWidths } from '../types';
 
 export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.Root) {
   const {
@@ -38,7 +37,7 @@ export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.R
       <ThemeProvider theme={muiTheme}>
         <TableContextProvider
           app={app}
-          model={model as EngineAPI.IGenericObject}
+          model={model}
           tableData={tableData}
           selectionsAPI={selectionsAPI}
           layout={layout}
@@ -49,10 +48,10 @@ export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.R
           rootElement={rootElement as HTMLElement}
           embed={embed}
           changeSortOrder={changeSortOrder}
-          applyColumnWidths={applyColumnWidths as ApplyColumnWidths}
+          applyColumnWidths={applyColumnWidths}
           rect={rect}
         >
-          <TableWrapper {...(wrapperProps as TableWrapperProps)} />
+          <TableWrapper {...wrapperProps} />
         </TableContextProvider>
       </ThemeProvider>
     </StyleSheetManager>

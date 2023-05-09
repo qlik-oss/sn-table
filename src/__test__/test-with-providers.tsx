@@ -59,7 +59,7 @@ const TestWithProviders = ({
     getStyle: () => undefined,
     background: { isDark: false },
   } as unknown as ExtendedTheme,
-  tableData = undefined,
+  tableData = {} as TableData,
   cellCoordMock = undefined,
   direction = 'ltr',
   rootElement = {} as HTMLElement,

@@ -14,10 +14,10 @@ export default function withSelections(CellComponent: CellHOC) {
     const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
 
     const { handleMouseDown, handleMouseOver, handleMouseUp } = getSelectionMouseHandlers(
+      onMouseDown,
       cell,
-      announce,
       selectionDispatch,
-      onMouseDown
+      announce
     );
 
     const selectionStyling = getSelectionStyle(styling, cellSelectionState);

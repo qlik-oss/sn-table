@@ -41,10 +41,10 @@ export const handleMouseDownToFocusHead = ({
  * gets all relevant mouse handlers for making selections, including dragging to select multiple rows
  */
 export const getSelectionMouseHandlers = (
+  onMouseDown: React.MouseEventHandler<HTMLTableCellElement> | undefined,
   cell: Cell,
-  announce: Announce,
   selectionDispatch: SelectionDispatch,
-  onMouseDown?: React.MouseEventHandler<HTMLTableCellElement>
+  announce: Announce
 ) => {
   const handleMouseDown = (evt: React.MouseEvent) => {
     // run handleMouseDownToFocusBody

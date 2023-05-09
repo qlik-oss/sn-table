@@ -14,10 +14,10 @@ import useInitialDataPages from './virtualized-table/use-initial-data-pages';
 import usePageInfo from './virtualized-table/use-page-info';
 
 interface UseVirtualizedTable {
-  app?: EngineAPI.IApp;
-  selectionsAPI?: ExtendedSelectionAPI;
+  app: EngineAPI.IApp | undefined;
+  selectionsAPI: ExtendedSelectionAPI | undefined;
   layout: TableLayout;
-  model?: EngineAPI.IGenericObject;
+  model: EngineAPI.IGenericObject | undefined;
   translator: ExtendedTranslator;
   constraints: stardust.Constraints;
   theme: ExtendedTheme;
@@ -25,7 +25,7 @@ interface UseVirtualizedTable {
   rect: stardust.Rect;
   rootElement: HTMLElement;
   embed: stardust.Embed;
-  changeSortOrder?: ChangeSortOrder;
+  changeSortOrder: ChangeSortOrder | undefined;
   reactRoot: Root;
   applyColumnWidths: ApplyColumnWidths;
   isFontLoaded: boolean;

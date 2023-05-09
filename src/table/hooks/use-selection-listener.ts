@@ -5,7 +5,7 @@ import { SelectionActions } from '../constants';
 import { SelectionDispatch } from '../types';
 
 interface UseSelectionListenerProps {
-  selectionsAPI?: ExtendedSelectionAPI;
+  selectionsAPI: ExtendedSelectionAPI | undefined;
   selectionDispatch: SelectionDispatch;
   setShouldRefocus(): void;
   keyboard: stardust.Keyboard;

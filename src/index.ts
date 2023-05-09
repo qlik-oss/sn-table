@@ -37,16 +37,16 @@ export default function supernova(env: Galaxy) {
       const rootElement = useElement();
       const reactRoot = useReactRoot(rootElement);
       const layout = useStaleLayout() as TableLayout;
-      const app = useApp();
-      const model = useModel();
+      const app = useApp(); // undefined when taking snapshot
+      const model = useModel(); // undefined when taking snapshot
       const constraints = useConstraints();
       const translator = useTranslator() as ExtendedTranslator;
-      const selectionsAPI = useSelections() as ExtendedSelectionAPI | undefined;
+      const selectionsAPI = useSelections() as ExtendedSelectionAPI | undefined; // undefined when taking snapshot
       const keyboard = useKeyboard();
       const rect = useRect();
       const embed = useEmbed();
       const theme = useExtendedTheme(rootElement);
-      const changeSortOrder = useSorting(layout.qHyperCube, model);
+      const changeSortOrder = useSorting(layout.qHyperCube, model); // undefined when taking snapshot
       const applyColumnWidths = useApplyColumnWidths(layout.qHyperCube, model);
       const isFontLoaded = useWaitForFonts(theme, layout);
 

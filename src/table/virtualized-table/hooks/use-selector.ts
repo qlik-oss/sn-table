@@ -20,10 +20,10 @@ export default function useSelector(datum: Cell | string) {
 
   if (hasData && isSelectionsEnabled) {
     const { handleMouseDown, handleMouseOver, handleMouseUp } = getSelectionMouseHandlers(
+      onMouseDown,
       datum as Cell,
-      NOOP_ANNOUNCE,
       selectionDispatch,
-      onMouseDown
+      NOOP_ANNOUNCE
     );
 
     return {
