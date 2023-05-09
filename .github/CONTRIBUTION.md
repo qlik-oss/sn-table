@@ -68,7 +68,7 @@ You can skip git commit hooks with:
 
 Yarn v1 does not support package deduplication natively. yarn-deduplicate is used to cleans up yarn.lock by removing duplicates:
 
-      npx yarn-deduplicate yarn.lock
+      yarn deduplicate-packages
 
 ## Releasing
 
