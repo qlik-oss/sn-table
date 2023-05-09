@@ -249,12 +249,6 @@ export interface RenderProps {
   footerContainer?: HTMLElement;
   announce?: Announce;
   model?: EngineAPI.IGenericObject;
-  manageData?(
-    model: EngineAPI.IGenericObject,
-    layout: TableLayout,
-    pageInfo: PageInfo,
-    setPageInfo: SetPageInfo
-  ): Promise<TableData | null>;
   app?: EngineAPI.IApp;
   embed: stardust.Embed;
   applyColumnWidths?: ApplyColumnWidths;
