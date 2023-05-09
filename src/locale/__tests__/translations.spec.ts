@@ -10,7 +10,6 @@ describe('translations', () => {
       translator = {
         get: () => 'SNTable.Accessibility.RowsAndColumns',
         add: jest.fn(),
-        language: () => '',
       };
     });
 
