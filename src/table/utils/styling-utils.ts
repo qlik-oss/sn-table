@@ -86,7 +86,7 @@ export const getStylingComponent = (layout: TableLayout) => layout.components?.f
 export const getBaseStyling = (
   objetName: string,
   theme: ExtendedTheme,
-  styleObj?: HeaderStyling | ContentStyling,
+  styleObj: HeaderStyling | ContentStyling | undefined,
   bottomSeparatingBorder = false
 ): GeneratedStyling => {
   const fontFamily = theme.getStyle('object', `straightTableV2.${objetName}`, 'fontFamily');
