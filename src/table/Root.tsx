@@ -53,7 +53,7 @@ export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.R
           applyColumnWidths={applyColumnWidths as ApplyColumnWidths}
           rect={rect}
         >
-          <TableWrapper {...(wrapperProps as TableWrapperProps)} />
+          <TableWrapper {...(wrapperProps as TableWrapperProps)} direction={direction} />
         </TableContextProvider>
       </ThemeProvider>
     </StyleSheetManager>
