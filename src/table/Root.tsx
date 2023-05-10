@@ -45,13 +45,13 @@ export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.R
           constraints={constraints}
           theme={theme}
           keyboard={keyboard}
-          rootElement={rootElement as HTMLElement}
+          rootElement={rootElement}
           embed={embed}
           changeSortOrder={changeSortOrder}
           applyColumnWidths={applyColumnWidths}
           rect={rect}
         >
-          <TableWrapper {...wrapperProps} />
+          <TableWrapper {...wrapperProps} direction={direction} />
         </TableContextProvider>
       </ThemeProvider>
     </StyleSheetManager>

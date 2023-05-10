@@ -255,7 +255,7 @@ export interface RenderProps {
 }
 
 export interface TableWrapperProps {
-  direction?: Direction;
+  direction: Direction | undefined;
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
   footerContainer: HTMLElement | undefined;
