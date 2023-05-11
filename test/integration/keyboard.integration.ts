@@ -7,6 +7,7 @@ import NebulaFixture from './utils/nebula-fixture';
 
 import SnTable from './page-object-model/sn-table';
 import expectations from './expectations/keyboard.expectations';
+import { focusedText, isOption, isSVG } from './keyboard-test-setup';
 import { navigateWithArrowsMsg } from './utils/custom-error-messages';
 import { Collection } from './types';
 
@@ -17,17 +18,6 @@ test.describe('Tests served by: fixture-file rendering by Nebula', () => {
   let expectation: Collection;
 
   const environment = new NebulaFixture(senseHorizon('light'), 'light', 'en-EN');
-  const focusedText = () => page.locator('*:focus').innerText();
-  const isSVG = async () => {
-    const index = (await page.locator('*:focus').innerHTML()).match(/svg/)?.index;
-    if (index && index > 0) return true;
-    return false;
-  };
-  const isOption = async () => {
-    const index = (await page.locator('*:focus').innerHTML()).match(/option/)?.index;
-    if (index && index > 0) return true;
-    return false;
-  };
 
   test.beforeAll(async ({ browser }, testInfo) => {
     await environment.setup(testInfo);
@@ -48,51 +38,51 @@ test.describe('Tests served by: fixture-file rendering by Nebula', () => {
   });
 
   test('navigate cells using tab', async () => {
-    await page.locator('body').press('Tab');
-    expect(await focusedText()).toBe(`Character
+    await page.locator('body').press('Tab'); // Moving to a head cell button
+    expect(await focusedText(page)).toBe(`Character
 Ascending Press space to sort on this column`);
 
-    await page.keyboard.press('Tab');
-    expect(await isSVG()).toBeTruthy();
+    await page.keyboard.press('Tab'); // Moving to a head menu button
+    expect(await isSVG(page)).toBeTruthy();
 
-    await page.keyboard.press('Tab');
-    expect(await focusedText()).toBe(`Entity Name
+    await page.keyboard.press('Tab'); // Moving to a head cell button
+    expect(await focusedText(page)).toBe(`Entity Name
 Ascending Press space to sort on this column`);
 
-    await page.keyboard.press('Tab');
-    expect(await isSVG()).toBeTruthy();
+    await page.keyboard.press('Tab'); // Moving to a head menu button
+    expect(await isSVG(page)).toBeTruthy();
 
-    await page.keyboard.press('Tab');
-    expect(await focusedText()).toBe(`Description
+    await page.keyboard.press('Tab'); // Moving to a head cell button
+    expect(await focusedText(page)).toBe(`Description
 Ascending Press space to sort on this column`);
 
-    await page.keyboard.press('Tab');
-    expect(await isSVG()).toBeTruthy();
+    await page.keyboard.press('Tab'); // Moving to a head menu button
+    expect(await isSVG(page)).toBeTruthy();
 
-    await page.keyboard.press('Tab');
-    expect(await focusedText()).toBe('­');
+    await page.keyboard.press('Tab'); // Moving to a table cell
+    expect(await focusedText(page)).toBe('­');
 
-    await page.keyboard.press('Tab');
-    expect(await isOption()).toBeTruthy();
+    await page.keyboard.press('Tab'); // Moving to a pagination control select option (rows per page)
+    expect(await isOption(page)).toBeTruthy();
 
-    await page.keyboard.press('Tab');
-    expect(await isOption()).toBeTruthy();
+    await page.keyboard.press('Tab'); // Moving to a pagination control select option (select page)
+    expect(await isOption(page)).toBeTruthy();
 
-    await page.keyboard.press('Tab');
-    expect(await isSVG()).toBeTruthy();
+    await page.keyboard.press('Tab'); // Moving to a pagination action button (go to the first page)
+    expect(await isSVG(page)).toBeTruthy();
 
-    await page.keyboard.press('Tab');
-    expect(await isSVG()).toBeTruthy();
+    await page.keyboard.press('Tab'); // Moving to a pagination action button (go to the previous page)
+    expect(await isSVG(page)).toBeTruthy();
 
-    await page.keyboard.press('Tab');
-    expect(await isSVG()).toBeTruthy();
+    await page.keyboard.press('Tab'); // Moving to a pagination action button (go to the next page)
+    expect(await isSVG(page)).toBeTruthy();
 
-    await page.keyboard.press('Tab');
-    expect(await isSVG()).toBeTruthy();
+    await page.keyboard.press('Tab'); // Moving to a pagination action button (go to the last page)
+    expect(await isSVG(page)).toBeTruthy();
 
-    await page.keyboard.press('Tab');
-    await page.keyboard.press('Tab');
-    expect(await focusedText()).toBe('Character');
+    await page.keyboard.press('Tab'); // Moving to an address bar
+    await page.keyboard.press('Tab'); // Moving to a head cell button
+    expect(await focusedText(page)).toBe('Character');
   });
 
   test('navigate cells using @arrows', async () => {
