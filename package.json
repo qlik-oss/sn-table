@@ -50,6 +50,7 @@
     "locale:verify": "node src/locale/tools/verify-translations.ts",
     "locale:generate": "node src/locale/scripts/generate-all.mjs",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
+    "deduplicate-packages": "yarn-deduplicate yarn.lock",
     "test:unit": "jest",
     "test:rendering": "playwright test",
     "test:integration": "playwright test --config=test/integration/integration.config.ts",
@@ -69,7 +70,8 @@
     ],
     "*.{json,css,md}": [
       "yarn format"
-    ]
+    ],
+    "yarn.lock": "yarn deduplicate-packages --list --fail"
   },
   "devDependencies": {
     "@babel/core": "7.21.8",
@@ -140,7 +142,8 @@
     "stylis-plugin-rtl-sc": "npm:stylis-plugin-rtl@1.1.0",
     "ts-jest": "29.1.0",
     "typescript": "5.0.4",
-    "yargs": "17.7.2"
+    "yargs": "17.7.2",
+    "yarn-deduplicate": "6.0.1"
   },
   "peerDependencies": {
     "@nebula.js/stardust": ">=3.3.0"

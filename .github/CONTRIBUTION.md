@@ -64,6 +64,12 @@ You can skip git commit hooks with:
 
     git commit -m "commit message" --no-verify
 
+## Deduplicate packages
+
+Yarn v1 does not support package deduplication natively. yarn-deduplicate is used to cleans up yarn.lock by removing duplicates:
+
+      yarn deduplicate-packages
+
 ## Releasing
 
 Currently only admins are able to create a release, since you have to **commit and push straight to main branch** for the release script to run on Circle CI.
