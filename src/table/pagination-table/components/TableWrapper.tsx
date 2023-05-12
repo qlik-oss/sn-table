@@ -24,7 +24,7 @@ function TableWrapper(props: TableWrapperProps) {
 
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
     useContextSelector(TableContext, (value) => value.tableData);
-  const { rootElement, keyboard, translator, theme, constraints, styling } = useContextSelector(
+  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints, styling } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );
@@ -33,13 +33,13 @@ function TableWrapper(props: TableWrapperProps) {
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
-  const isSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI?.isModal());
 
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const tableWrapperRef = useRef<HTMLDivElement>(null);
 
   const { yScrollbarWidth } = useScrollbarWidth(tableContainerRef);
+  const isSelectionMode = selectionsAPI?.isModal();
 
   const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
     String(rows.length + 1),
