@@ -81,7 +81,7 @@ function TableWrapper(props: TableWrapperProps) {
     const left = layoutService.isSnapshot ? layoutService.layout.snapshotData?.content?.scrollLeft || 0 : 0;
     const top = 0;
     tableContainerRef.current?.scrollTo(left, top);
-  }, [pageInfo, totalRowCount, layoutService, viewService]);
+  }, [pageInfo, totalRowCount, layoutService]);
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
