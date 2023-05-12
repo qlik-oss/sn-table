@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-param-reassign */
-import { onTakeSnapshot, type stardust } from '@nebula.js/stardust';
+import { onTakeSnapshot } from '@nebula.js/stardust';
 import type { LayoutService, ViewService, SnapshotLayout, HyperCube } from '../../types';
 import findVisibleRows from '../utils/find-visible-rows';
 import { getTotalPosition } from '../../handle-data';
@@ -8,7 +8,6 @@ import { getTotalPosition } from '../../handle-data';
 interface UseSnapshotProps {
   layoutService: LayoutService;
   viewService: ViewService;
-  rect: stardust.Rect;
   model: EngineAPI.IGenericObject | undefined;
   rootElement: HTMLElement;
 }

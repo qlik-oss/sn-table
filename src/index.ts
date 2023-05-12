@@ -108,7 +108,7 @@ export default function supernova(env: Galaxy) {
         changeSortOrder,
         translator,
       });
-      useSnapshot({ layoutService, viewService, rect, model, rootElement });
+      useSnapshot({ layoutService, viewService, model, rootElement });
     },
   };
 }
