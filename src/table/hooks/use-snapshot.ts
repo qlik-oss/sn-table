@@ -1,66 +1,55 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-param-reassign */
 import { onTakeSnapshot, type stardust } from '@nebula.js/stardust';
-import type { LayoutService, ViewService, SnapshotLayout } from '../../types';
+import type { LayoutService, ViewService, SnapshotLayout, HyperCube } from '../../types';
+import findVisibleRows from '../utils/find-visible-rows';
+import { getTotalPosition } from '../../handle-data';
 
 interface UseSnapshotProps {
   layoutService: LayoutService;
   viewService: ViewService;
   rect: stardust.Rect;
   model: EngineAPI.IGenericObject | undefined;
+  rootElement: HTMLElement;
 }
 
-const useSnapshot = ({ layoutService, viewService, rect, model }: UseSnapshotProps): stardust.Rect => {
-  onTakeSnapshot(async (copyOfLayout: SnapshotLayout) => {
-    if (!copyOfLayout.snapshotData) {
-      return copyOfLayout;
+const useSnapshot = ({ layoutService, viewService, model, rootElement }: UseSnapshotProps) => {
+  onTakeSnapshot(async (snapshotLayout: SnapshotLayout) => {
+    if (!snapshotLayout.snapshotData) {
+      return snapshotLayout;
     }
 
     if (!model) {
-      return copyOfLayout;
+      return snapshotLayout;
     }
 
-    if (!copyOfLayout.snapshotData.content) {
+    if (!snapshotLayout.snapshotData.content) {
       if ((model as EngineAPI.IGenericObject)?.getHyperCubeData) {
-        const dataPages = await (model as EngineAPI.IGenericObject).getHyperCubeData('/qHyperCubeDef', [
-          {
-            qLeft: viewService.qLeft,
-            qTop: viewService.qTop,
-            qWidth: viewService.qWidth,
-            qHeight: viewService.qHeight,
-          },
-        ]);
-
-        copyOfLayout.snapshotData.content = {
-          qDataPages: dataPages,
-          qLeft: viewService.qLeft,
-          qTop: viewService.qTop,
-          qWidth: viewService.qWidth,
-          qHeight: viewService.qHeight,
-          scrollTop: viewService.scrollTop,
+        if (!snapshotLayout.qHyperCube) {
+          snapshotLayout.qHyperCube = {} as HyperCube;
+        }
+        const totalsPosition = getTotalPosition(layoutService.layout);
+        const { visibleRowStartIndex = -1, visibleRowEndIndex = -2 } = findVisibleRows(rootElement, totalsPosition);
+        snapshotLayout.qHyperCube.qDataPages = await (model as EngineAPI.IGenericObject).getHyperCubeData(
+          '/qHyperCubeDef',
+          [
+            {
+              qLeft: viewService.qLeft,
+              qTop: viewService.qTop + visibleRowStartIndex,
+              qWidth: viewService.qWidth,
+              qHeight: visibleRowEndIndex - visibleRowStartIndex + 1,
+            },
+          ]
+        );
+        snapshotLayout.snapshotData.content = {
           scrollLeft: viewService.scrollLeft,
         };
       }
-
-      copyOfLayout.snapshotData.object.size.w = rect.width;
-      copyOfLayout.snapshotData.object.size.h = rect.height;
-
-      return copyOfLayout;
+      return snapshotLayout;
     }
 
-    return copyOfLayout;
+    return snapshotLayout;
   });
-
-  if (layoutService.layout.snapshotData?.content) {
-    return {
-      left: rect.left,
-      top: rect.top,
-      width: layoutService.layout.snapshotData.object.size.w,
-      height: layoutService.layout.snapshotData.object.size.h,
-    };
-  }
-
-  return rect;
 };
 
 export default useSnapshot;

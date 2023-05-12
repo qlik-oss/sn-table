@@ -31,6 +31,7 @@ export default function ext(env) {
       snapshot: true,
       viewData: false,
       exploration: true,
+      cssScaling: true,
     },
     importProperties,
     exportProperties,

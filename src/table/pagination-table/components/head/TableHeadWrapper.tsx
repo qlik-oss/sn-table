@@ -33,7 +33,7 @@ function TableHeadWrapper() {
 
   return (
     <TableHead>
-      <TableRow ref={headRowRef} className="sn-table-row">
+      <TableRow ref={headRowRef} className="sn-table-row sn-table-head-row">
         {columns.map((column, columnIndex) => {
           const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
           const ariaSort = isActive ? FullSortDirection[column.sortDirection] : undefined;

@@ -1,7 +1,7 @@
 import { useMemo } from '@nebula.js/stardust';
 import createViewService from '../../services/view-service';
-import type { TableLayout, ViewService } from '../../types';
+import type { ViewService } from '../../types';
 
-const useViewService = (layout: TableLayout): ViewService => useMemo(() => createViewService(layout), [layout]);
+const useViewService = (): ViewService => useMemo(() => createViewService(), []);
 
 export default useViewService;

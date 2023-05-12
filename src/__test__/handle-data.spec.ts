@@ -163,7 +163,6 @@ describe('handle-data', () => {
         qHeight: 100,
         qLeft: 0,
         qWidth: 4,
-        scrollTop: 0,
         scrollLeft: 0,
       };
       layoutService = {

@@ -225,7 +225,7 @@ export default async function manageData(
   const columns = getColumns(layout);
 
   const dataPages = layoutService?.isSnapshot
-    ? layout.snapshotData?.content?.qDataPages
+    ? layout.qHyperCube.qDataPages
     : await model.getHyperCubeData('/qHyperCubeDef', [
         { qTop: top, qLeft: 0, qHeight: height, qWidth: totalColumnCount },
       ]);

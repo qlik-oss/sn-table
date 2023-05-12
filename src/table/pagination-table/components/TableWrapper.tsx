@@ -78,8 +78,8 @@ function TableWrapper(props: TableWrapperProps) {
   useKeyboardActiveListener();
 
   useEffect(() => {
-    const left = layoutService.isSnapshot ? viewService.scrollLeft : 0;
-    const top = layoutService.isSnapshot ? viewService.scrollTop : 0;
+    const left = layoutService.isSnapshot ? layoutService.layout.snapshotData?.content?.scrollLeft || 0 : 0;
+    const top = 0;
     tableContainerRef.current?.scrollTo(left, top);
   }, [pageInfo, totalRowCount, layoutService, viewService]);
 
@@ -108,7 +108,6 @@ function TableWrapper(props: TableWrapperProps) {
 
   const onScroll = (event: React.SyntheticEvent) => {
     viewService.scrollLeft = event.currentTarget.scrollLeft;
-    viewService.scrollTop = event.currentTarget.scrollTop;
   };
 
   return (

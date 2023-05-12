@@ -46,8 +46,8 @@ export default function supernova(env: Galaxy) {
       const translator = useTranslator() as ExtendedTranslator;
       const selectionsAPI = useSelections() as ExtendedSelectionAPI;
       const keyboard = useKeyboard();
-      let rect = useRect();
-      const viewService = useViewService(layout);
+      const rect = useRect();
+      const viewService = useViewService();
       const layoutService = useLayoutService(layout);
       const embed = useEmbed();
       const theme = useExtendedTheme(rootElement);
@@ -108,7 +108,7 @@ export default function supernova(env: Galaxy) {
         changeSortOrder,
         translator,
       });
-      rect = useSnapshot({ layoutService, viewService, rect, model });
+      useSnapshot({ layoutService, viewService, rect, model, rootElement });
     },
   };
 }

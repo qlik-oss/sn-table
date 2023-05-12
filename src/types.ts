@@ -12,17 +12,10 @@ export interface ViewService {
   qTop: number;
   qWidth: number;
   qHeight: number;
-  scrollTop: number;
   scrollLeft: number;
 }
 export interface SnapshotData {
   content?: {
-    qDataPages?: EngineAPI.INxDataPage[];
-    qLeft: number;
-    qTop: number;
-    qWidth: number;
-    qHeight: number;
-    scrollTop: number;
     scrollLeft: number;
   };
   object: {
@@ -131,6 +124,7 @@ export interface LayoutService {
 
 export interface SnapshotLayout extends EngineAPI.IGenericObjectLayout {
   title?: string;
+  qHyperCube?: HyperCube;
   snapshotData?: SnapshotData;
 }
 

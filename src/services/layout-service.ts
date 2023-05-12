@@ -5,10 +5,10 @@ const MAX_COLUMN_COUNT = 1000;
 const createLayoutService = (layout: TableLayout): LayoutService => {
   const { snapshotData } = layout;
   const isSnapshot = !!snapshotData;
-  const snapshotDataPage = snapshotData?.content?.qDataPages?.[0]?.qArea ?? { qWidth: 0, qHeight: 0 };
+  const snapshotDataPage = isSnapshot ? layout.qHyperCube.qDataPages?.[0]?.qArea : undefined;
   const size = {
-    x: isSnapshot ? snapshotDataPage.qWidth : Math.min(layout.qHyperCube.qSize.qcx, MAX_COLUMN_COUNT),
-    y: isSnapshot ? snapshotDataPage.qHeight : layout.qHyperCube.qSize.qcy,
+    x: snapshotDataPage?.qWidth ?? Math.min(layout.qHyperCube.qSize.qcx, MAX_COLUMN_COUNT),
+    y: snapshotDataPage?.qHeight ?? layout.qHyperCube.qSize.qcy,
   };
 
   return {
