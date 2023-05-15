@@ -21,7 +21,7 @@ function TableTotals() {
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
 
   return (
-    <TableRow className="sn-table-row">
+    <TableRow className="sn-table-row sn-table-totals-row">
       {columns.map((column, columnIndex) => {
         const cellCoord: [number, number] = [atTop ? 1 : rows.length + 1, columnIndex];
         const tabIndex = atTop && columnIndex === 0 && !keyboard.enabled ? 0 : -1;

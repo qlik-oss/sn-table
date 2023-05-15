@@ -25,6 +25,8 @@ import useCarbonTable from './nebula-hooks/use-carbon-table';
 import useApplyColumnWidths from './nebula-hooks/use-apply-column-widths';
 import useWaitForFonts from './nebula-hooks/use-wait-for-fonts';
 import extendContextMenu from './extend-context-menu';
+import useViewService from './table/hooks/use-view-service';
+import useSnapshot from './table/hooks/use-snapshot';
 
 export default function supernova(env: Galaxy) {
   return {
@@ -44,6 +46,7 @@ export default function supernova(env: Galaxy) {
       const selectionsAPI = useSelections() as ExtendedSelectionAPI | undefined; // undefined when taking snapshot
       const keyboard = useKeyboard();
       const rect = useRect();
+      const viewService = useViewService();
       const embed = useEmbed();
       const theme = useExtendedTheme(rootElement);
       const changeSortOrder = useSorting(layout.qHyperCube, model); // undefined when taking snapshot
@@ -87,6 +90,7 @@ export default function supernova(env: Galaxy) {
         reactRoot,
         applyColumnWidths,
         isFontLoaded,
+        viewService,
       });
 
       useCarbonTable({
@@ -101,6 +105,7 @@ export default function supernova(env: Galaxy) {
         changeSortOrder,
         translator,
       });
+      useSnapshot({ layout, viewService, model, rootElement });
     },
   };
 }

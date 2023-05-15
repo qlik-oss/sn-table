@@ -15,6 +15,7 @@ import {
   TotalsPosition,
   Row,
   ApplyColumnWidths,
+  ViewService,
 } from '../types';
 import { FocusTypes, SelectionActions } from './constants';
 
@@ -252,6 +253,7 @@ export interface RenderProps {
   app: EngineAPI.IApp;
   embed: stardust.Embed;
   applyColumnWidths: ApplyColumnWidths;
+  viewService: ViewService;
 }
 
 export interface TableWrapperProps {
@@ -260,6 +262,7 @@ export interface TableWrapperProps {
   setPageInfo: SetPageInfo;
   footerContainer: HTMLElement | undefined;
   announce: Announce;
+  viewService: ViewService;
 }
 
 export interface HeadCellContentProps {

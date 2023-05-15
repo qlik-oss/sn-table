@@ -10,6 +10,7 @@ import {
   TableData,
   Align,
   TextAlign,
+  ViewService,
 } from './types';
 
 const MAX_CELLS = 10000;
@@ -195,7 +196,8 @@ export default async function manageData(
   model: EngineAPI.IGenericObject,
   layout: TableLayout,
   pageInfo: PageInfo,
-  setPageInfo: SetPageInfo
+  setPageInfo: SetPageInfo,
+  viewService?: ViewService
 ): Promise<TableData | null> {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const totalColumnCount = layout.qHyperCube.qSize.qcx;
@@ -220,27 +222,37 @@ export default async function manageData(
   const totalsPosition = getTotalPosition(layout);
   const columns = getColumns(layout);
 
-  const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [
-    { qTop: top, qLeft: 0, qHeight: height, qWidth: totalColumnCount },
-  ]);
+  const isSnapshot = !!layout.snapshotData;
+  const dataPages = isSnapshot
+    ? layout.qHyperCube.qDataPages
+    : await model.getHyperCubeData('/qHyperCubeDef', [
+        { qTop: top, qLeft: 0, qHeight: height, qWidth: totalColumnCount },
+      ]);
+  if (viewService && !isSnapshot) {
+    viewService.qTop = top;
+    viewService.qHeight = height;
+    viewService.qLeft = 0;
+    viewService.qWidth = totalColumnCount;
+  }
 
-  const rows = dataPages[0].qMatrix.map((r, pageRowIdx) => {
-    const row: Row = { id: `row-${pageRowIdx}` };
-    columns.forEach((c, pageColIdx) => {
-      row[c.id] = {
-        ...r[pageColIdx],
-        align: getBodyCellAlign(r[pageColIdx], c.bodyTextAlign),
-        rowIdx: pageRowIdx + top,
-        colIdx: c.colIdx,
-        pageRowIdx,
-        pageColIdx,
-        selectionColIdx: c.selectionColIdx,
-        isSelectable: c.isDim && !c.isLocked,
-        isLastRow: pageRowIdx === height - 1,
-      };
-    });
-    return row;
-  });
+  const rows =
+    dataPages?.[0].qMatrix.map((r, pageRowIdx) => {
+      const row: Row = { id: `row-${pageRowIdx}` };
+      columns.forEach((c, pageColIdx) => {
+        row[c.id] = {
+          ...r[pageColIdx],
+          align: getBodyCellAlign(r[pageColIdx], c.bodyTextAlign),
+          rowIdx: pageRowIdx + top,
+          colIdx: c.colIdx,
+          pageRowIdx,
+          pageColIdx,
+          selectionColIdx: c.selectionColIdx,
+          isSelectable: c.isDim && !c.isLocked,
+          isLastRow: pageRowIdx === height - 1,
+        };
+      });
+      return row;
+    }) || [];
 
   return { totalColumnCount, totalRowCount, totalPages, paginationNeeded, totalsPosition, columns, rows };
 }

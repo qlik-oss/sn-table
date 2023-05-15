@@ -19,12 +19,12 @@ import useKeyboardActiveListener from '../../hooks/use-keyboard-active-listener'
 import { SelectionActions } from '../../constants';
 
 function TableWrapper(props: TableWrapperProps) {
-  const { pageInfo, setPageInfo, direction, footerContainer, announce } = props;
+  const { pageInfo, setPageInfo, direction, footerContainer, announce, viewService } = props;
   const { page, rowsPerPage } = pageInfo;
 
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
     useContextSelector(TableContext, (value) => value.tableData);
-  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints, styling } = useContextSelector(
+  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints, styling, layout } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );
@@ -45,6 +45,8 @@ function TableWrapper(props: TableWrapperProps) {
     String(rows.length + 1),
     String(columns.length),
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
+
+  const scrollLeft = layout.snapshotData?.content?.scrollLeft || 0;
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
@@ -75,12 +77,12 @@ function TableWrapper(props: TableWrapperProps) {
   };
 
   useFocusListener(tableWrapperRef, shouldRefocus, keyboard);
-  useScrollListener(tableContainerRef, direction);
+  useScrollListener(tableContainerRef, direction, viewService);
   useKeyboardActiveListener();
 
   useEffect(() => {
-    tableContainerRef.current?.scrollTo(0, 0);
-  }, [pageInfo, totalRowCount]);
+    tableContainerRef.current?.scrollTo(scrollLeft, 0);
+  }, [pageInfo, totalRowCount, scrollLeft]);
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.

@@ -54,7 +54,7 @@ function TableBodyWrapper({ setShouldRefocus, tableWrapperRef, announce }: Table
           hover={hoverEffect}
           tabIndex={-1}
           key={row.id}
-          className="sn-table-row"
+          className="sn-table-row sn-table-data-row"
         >
           {columns.map((column, columnIndex) => {
             const { id } = column;
