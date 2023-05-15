@@ -3,10 +3,6 @@ import { stardust } from '@nebula.js/stardust';
 
 export type Align = 'left' | 'center' | 'right';
 
-type Size = {
-  w: number;
-  h: number;
-};
 export interface ViewService {
   qLeft: number;
   qTop: number;
@@ -17,9 +13,6 @@ export interface ViewService {
 export interface SnapshotData {
   content?: {
     scrollLeft: number;
-  };
-  object: {
-    size: Size;
   };
 }
 
@@ -116,14 +109,7 @@ export interface Point {
   x: number;
   y: number;
 }
-export interface LayoutService {
-  layout: TableLayout;
-  isSnapshot: boolean;
-  size: Point;
-}
-
 export interface SnapshotLayout extends EngineAPI.IGenericObjectLayout {
-  title?: string;
   qHyperCube?: HyperCube;
   snapshotData?: SnapshotData;
 }

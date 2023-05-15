@@ -19,7 +19,7 @@ const findEndIndex = (rows: HTMLCollectionOf<Element>, min: number, max: number)
       return i;
     }
   }
-  return -2;
+  return -1;
 };
 
 const findVisibleRows = (rootElement: HTMLElement, totalsPosition: TotalsPosition) => {
@@ -28,8 +28,7 @@ const findVisibleRows = (rootElement: HTMLElement, totalsPosition: TotalsPositio
   const tableContainerRect = tableContainer?.getBoundingClientRect() || {};
   const headRow = rootElement.getElementsByClassName('sn-table-head-row')[0];
   const headRowRect = headRow?.getBoundingClientRect() || { height: 0 };
-  const hasTotalsRow = totalsPosition.atTop || totalsPosition.atBottom;
-  const totalsRow = hasTotalsRow ? rootElement.getElementsByClassName('sn-table-totals-row')[0] : undefined;
+  const totalsRow = rootElement.getElementsByClassName('sn-table-totals-row')[0];
   const totalsRowRec = totalsRow?.getBoundingClientRect() || { height: 0 };
   const dataRows = rootElement.getElementsByClassName('sn-table-data-row');
   const yMin = tableContainerRect.y + headRowRect.height + (totalsPosition.atTop ? totalsRowRec.height : 0);

@@ -11,7 +11,6 @@ import {
   Align,
   TextAlign,
   ViewService,
-  LayoutService,
 } from './types';
 
 const MAX_CELLS = 10000;
@@ -198,8 +197,7 @@ export default async function manageData(
   layout: TableLayout,
   pageInfo: PageInfo,
   setPageInfo: SetPageInfo,
-  viewService?: ViewService,
-  layoutService?: LayoutService
+  viewService?: ViewService
 ): Promise<TableData | null> {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const totalColumnCount = layout.qHyperCube.qSize.qcx;
@@ -224,12 +222,13 @@ export default async function manageData(
   const totalsPosition = getTotalPosition(layout);
   const columns = getColumns(layout);
 
-  const dataPages = layoutService?.isSnapshot
+  const isSnapshot = !!layout.snapshotData;
+  const dataPages = isSnapshot
     ? layout.qHyperCube.qDataPages
     : await model.getHyperCubeData('/qHyperCubeDef', [
         { qTop: top, qLeft: 0, qHeight: height, qWidth: totalColumnCount },
       ]);
-  if (viewService && !layoutService?.isSnapshot) {
+  if (viewService && !isSnapshot) {
     viewService.qTop = top;
     viewService.qHeight = height;
     viewService.qLeft = 0;

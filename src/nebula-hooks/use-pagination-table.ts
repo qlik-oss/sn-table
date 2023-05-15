@@ -12,7 +12,6 @@ import {
   Galaxy,
   ApplyColumnWidths,
   ViewService,
-  LayoutService,
 } from '../types';
 import useAnnounceAndTranslations from './use-announce-and-translations';
 
@@ -34,7 +33,6 @@ interface UsePaginationTable {
   applyColumnWidths: ApplyColumnWidths;
   isFontLoaded: boolean;
   viewService: ViewService;
-  layoutService: LayoutService;
 }
 
 const initialPageInfo = {
@@ -61,7 +59,6 @@ const usePaginationTable = ({
   applyColumnWidths,
   isFontLoaded,
   viewService,
-  layoutService,
 }: UsePaginationTable) => {
   const shouldRender = !env.carbon && layout.usePagination !== false;
   const { direction, footerContainer } = useOptions() as UseOptions;
@@ -69,7 +66,7 @@ const usePaginationTable = ({
   const [pageInfo, setPageInfo] = useState(initialPageInfo);
   const [tableData] = usePromise(async () => {
     if (shouldRender) {
-      return manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo, viewService, layoutService);
+      return manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo, viewService);
     }
 
     return null;
@@ -113,7 +110,6 @@ const usePaginationTable = ({
         embed,
         applyColumnWidths,
         viewService,
-        layoutService,
       },
       reactRoot
     );

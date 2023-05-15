@@ -19,12 +19,12 @@ import useKeyboardActiveListener from '../../hooks/use-keyboard-active-listener'
 import { SelectionActions } from '../../constants';
 
 function TableWrapper(props: TableWrapperProps) {
-  const { pageInfo, setPageInfo, direction, footerContainer, announce, viewService, layoutService } = props;
+  const { pageInfo, setPageInfo, direction, footerContainer, announce, viewService } = props;
   const { page, rowsPerPage } = pageInfo;
 
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
     useContextSelector(TableContext, (value) => value.tableData);
-  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints, styling } = useContextSelector(
+  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints, styling, layout } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );
@@ -46,7 +46,7 @@ function TableWrapper(props: TableWrapperProps) {
     String(columns.length),
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
-  const scrollLeft = layoutService.isSnapshot ? layoutService.layout.snapshotData?.content?.scrollLeft || 0 : 0;
+  const scrollLeft = layout.snapshotData?.content?.scrollLeft || 0;
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
@@ -77,7 +77,7 @@ function TableWrapper(props: TableWrapperProps) {
   };
 
   useFocusListener(tableWrapperRef, shouldRefocus, keyboard);
-  useScrollListener(tableContainerRef, direction);
+  useScrollListener(tableContainerRef, direction, viewService);
   useKeyboardActiveListener();
 
   useEffect(() => {
@@ -107,10 +107,6 @@ function TableWrapper(props: TableWrapperProps) {
     selectionDispatch({ type: SelectionActions.UPDATE_PAGE_ROWS, payload: { pageRows: rows } });
   }, [rows]);
 
-  const onScroll = (event: React.SyntheticEvent) => {
-    viewService.scrollLeft = event.currentTarget.scrollLeft;
-  };
-
   return (
     <StyledTableWrapper
       ref={tableWrapperRef}
@@ -128,7 +124,6 @@ function TableWrapper(props: TableWrapperProps) {
         tabIndex={-1}
         role="application"
         data-testid="table-container"
-        onScroll={onScroll}
       >
         <StyledTable styling={styling} showRightBorder={showRightBorder} stickyHeader aria-label={tableAriaLabel}>
           <TableHeadWrapper />
