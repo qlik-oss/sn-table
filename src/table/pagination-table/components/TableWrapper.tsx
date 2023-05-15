@@ -45,6 +45,8 @@ function TableWrapper(props: TableWrapperProps) {
     String(columns.length),
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
+  const scrollLeft = layoutService.isSnapshot ? layoutService.layout.snapshotData?.content?.scrollLeft || 0 : 0;
+
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
   }, [rootElement]);
@@ -78,10 +80,8 @@ function TableWrapper(props: TableWrapperProps) {
   useKeyboardActiveListener();
 
   useEffect(() => {
-    const left = layoutService.isSnapshot ? layoutService.layout.snapshotData?.content?.scrollLeft || 0 : 0;
-    const top = 0;
-    tableContainerRef.current?.scrollTo(left, top);
-  }, [pageInfo, totalRowCount, layoutService]);
+    tableContainerRef.current?.scrollTo(scrollLeft, 0);
+  }, [pageInfo, totalRowCount, scrollLeft]);
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
