@@ -86,7 +86,7 @@ function PaginationContent({
   const handleSelectPage = (event: SelectChangeEvent<number>) => handleChangePage(+event.target.value);
 
   const handleLastButtonTab = keyboard.enabled
-    ? (event: React.KeyboardEvent) => handleLastTab(event, isSelectionMode, keyboard)
+    ? (event: React.KeyboardEvent) => handleLastTab(event, keyboard, isSelectionMode)
     : null;
 
   const getButton = (

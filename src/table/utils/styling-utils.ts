@@ -269,7 +269,7 @@ export function getColumnStyle(
   stylingIDs: string[]
 ): CellStyle {
   const columnColors: Record<string, string> = {};
-  qAttrExps?.qValues.forEach((val, i) => {
+  qAttrExps?.qValues?.forEach((val, i) => {
     const resolvedColor = val.qText && resolveToRGBAorRGB(val.qText);
     if (resolvedColor && resolvedColor !== 'none') {
       columnColors[stylingIDs[i]] = resolvedColor;

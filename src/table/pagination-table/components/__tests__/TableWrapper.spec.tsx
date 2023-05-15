@@ -30,6 +30,7 @@ describe('<TableWrapper />', () => {
   let layout: TableLayout;
   let viewService: ViewService;
   let layoutService: LayoutService;
+  let footerContainer: HTMLElement | undefined;
 
   const renderTableWrapper = () =>
     render(
@@ -47,6 +48,7 @@ describe('<TableWrapper />', () => {
           announce={announce}
           viewService={viewService}
           layoutService={layoutService}
+          footerContainer={footerContainer}
         />
       </TestWithProviders>
     );

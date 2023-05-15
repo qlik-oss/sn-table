@@ -226,8 +226,8 @@ export interface ExtendedTheme extends stardust.Theme {
 }
 
 export interface UseOptions {
-  direction?: Direction;
-  footerContainer?: HTMLElement;
+  direction: Direction | undefined;
+  footerContainer: HTMLElement | undefined;
 }
 
 export interface AnnounceArgs {

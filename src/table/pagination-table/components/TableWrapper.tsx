@@ -39,7 +39,8 @@ function TableWrapper(props: TableWrapperProps) {
   const tableWrapperRef = useRef<HTMLDivElement>(null);
 
   const { yScrollbarWidth } = useScrollbarWidth(tableContainerRef);
-  const isSelectionMode = selectionsAPI.isModal();
+  const isSelectionMode = selectionsAPI?.isModal();
+
   const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
     String(rows.length + 1),
     String(columns.length),

@@ -18,18 +18,18 @@ import useAnnounceAndTranslations from './use-announce-and-translations';
 
 interface UsePaginationTable {
   env: Galaxy;
-  selectionsAPI: ExtendedSelectionAPI;
+  selectionsAPI: ExtendedSelectionAPI | undefined;
   rootElement: HTMLElement;
   layout: TableLayout;
-  changeSortOrder?: ChangeSortOrder;
+  changeSortOrder: ChangeSortOrder | undefined;
   rect: stardust.Rect;
   constraints: stardust.Constraints;
   translator: ExtendedTranslator;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
-  model?: EngineAPI.IGenericObject;
-  app?: EngineAPI.IApp;
-  embed?: stardust.Embed;
+  model: EngineAPI.IGenericObject | undefined;
+  app: EngineAPI.IApp | undefined;
+  embed: stardust.Embed;
   reactRoot: Root;
   applyColumnWidths: ApplyColumnWidths;
   isFontLoaded: boolean;
