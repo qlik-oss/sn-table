@@ -2,7 +2,7 @@
 import { ThemeProvider } from '@mui/material/styles';
 import { stardust } from '@nebula.js/stardust';
 import React from 'react';
-import { TableContextProvider } from '../table/context';
+import { TableContextProvider, EMPTY_TABLE_DATA } from '../table/context';
 import muiSetup from '../table/mui-setup';
 import {
   ApplyColumnWidths,
@@ -59,7 +59,7 @@ const TestWithProviders = ({
     getStyle: () => undefined,
     background: { isDark: false },
   } as unknown as ExtendedTheme,
-  tableData = undefined,
+  tableData = EMPTY_TABLE_DATA,
   cellCoordMock = undefined,
   direction = 'ltr',
   rootElement = {} as HTMLElement,

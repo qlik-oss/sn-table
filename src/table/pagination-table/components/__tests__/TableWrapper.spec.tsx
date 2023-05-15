@@ -19,6 +19,7 @@ describe('<TableWrapper />', () => {
   let direction: 'ltr' | 'rtl';
   let announce: Announce;
   let layout: TableLayout;
+  let footerContainer: HTMLElement | undefined;
 
   const renderTableWrapper = () =>
     render(
@@ -29,7 +30,13 @@ describe('<TableWrapper />', () => {
         tableData={tableData}
         rect={rect}
       >
-        <TableWrapper pageInfo={pageInfo} setPageInfo={setPageInfo} direction={direction} announce={announce} />
+        <TableWrapper
+          pageInfo={pageInfo}
+          setPageInfo={setPageInfo}
+          direction={direction}
+          announce={announce}
+          footerContainer={footerContainer}
+        />
       </TestWithProviders>
     );
 

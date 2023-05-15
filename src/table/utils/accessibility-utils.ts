@@ -198,11 +198,7 @@ export const focusSelectionToolbar = (element: HTMLElement, keyboard: stardust.K
 /**
  * Updates the announcer with current cell selection state
  */
-export const announceSelectionState = (
-  announce: Announce,
-  nextCell: HTMLTableCellElement,
-  isSelectionMode: boolean
-) => {
+export const announceSelectionState = (announce: Announce, nextCell: HTMLTableCellElement, isSelectionMode = false) => {
   if (isSelectionMode) {
     const hasActiveClassName = nextCell.classList.contains('selected');
     hasActiveClassName

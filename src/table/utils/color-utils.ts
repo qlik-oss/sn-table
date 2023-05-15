@@ -52,7 +52,7 @@ export function resolveToRGBAorRGB(input: string): string {
 /**
  * Determines if color is dark or bright by estimating the perceived brightness
  */
-export function isDarkColor(color: string | undefined | null): boolean {
+export function isDarkColor(color: string | null | undefined): boolean {
   if (color == null) return false;
 
   const rgba = resolveToRGBAorRGB(color);

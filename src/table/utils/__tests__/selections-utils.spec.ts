@@ -70,18 +70,18 @@ describe('selections-utils', () => {
 
         const newState = reducer(state, action);
         expect(newState).toEqual({ ...state, rows: { [cell.qElemNumber]: cell.rowIdx }, colIdx: cell.colIdx });
-        expect(state.api.begin).toHaveBeenCalledTimes(1);
-        expect(state.api.select).toHaveBeenCalledWith({ method: 'selectHyperCubeCells', params });
-        expect(state.api.cancel).not.toHaveBeenCalled();
+        expect(state.api?.begin).toHaveBeenCalledTimes(1);
+        expect(state.api?.select).toHaveBeenCalledWith({ method: 'selectHyperCubeCells', params });
+        expect(state.api?.cancel).not.toHaveBeenCalled();
         expect(action.payload.announce).toHaveBeenCalledTimes(1);
       });
 
       it('should not call begin but call cancel and announce when same qElemNumber (resulting in empty selectedCells)', () => {
         const newState = reducer(state, action);
         expect(newState).toEqual({ ...state, rows: {}, colIdx: -1 });
-        expect(state.api.begin).not.toHaveBeenCalled();
-        expect(state.api.select).not.toHaveBeenCalled();
-        expect(state.api.cancel).toHaveBeenCalledWith();
+        expect(state.api?.begin).not.toHaveBeenCalled();
+        expect(state.api?.select).not.toHaveBeenCalled();
+        expect(state.api?.cancel).toHaveBeenCalledWith();
         expect(action.payload.announce).toHaveBeenCalledTimes(1);
       });
 
@@ -91,9 +91,9 @@ describe('selections-utils', () => {
         const newState = reducer(state, action);
         expect(newState).toBe(state);
 
-        expect(state.api.begin).not.toHaveBeenCalled();
-        expect(state.api.cancel).not.toHaveBeenCalled();
-        expect(state.api.select).not.toHaveBeenCalled();
+        expect(state.api?.begin).not.toHaveBeenCalled();
+        expect(state.api?.cancel).not.toHaveBeenCalled();
+        expect(state.api?.select).not.toHaveBeenCalled();
         expect(action.payload.announce).not.toHaveBeenCalled();
       });
     });
@@ -201,7 +201,7 @@ describe('selections-utils', () => {
         } as SelectMultiAddAction;
         const newState = reducer(state, action);
         expect(newState).toEqual({ ...state, colIdx: cell.colIdx, rows: { '1': 1, '2': 2 } });
-        expect(state.api.begin).toHaveBeenCalledTimes(1);
+        expect(state.api?.begin).toHaveBeenCalledTimes(1);
         expect(announce).toHaveBeenCalledTimes(1);
       });
 
@@ -214,7 +214,7 @@ describe('selections-utils', () => {
         } as SelectMultiAddAction;
         const newState = reducer(state, action);
         expect(newState).toEqual({ ...state, colIdx: cell.colIdx, rows: { '1': 1, '2': 2 } });
-        expect(state.api.begin).toHaveBeenCalledTimes(0);
+        expect(state.api?.begin).toHaveBeenCalledTimes(0);
         expect(announce).toHaveBeenCalledTimes(1);
       });
 
@@ -225,7 +225,7 @@ describe('selections-utils', () => {
 
         const newState = reducer(state, action);
         expect(newState).toEqual({ ...state, isSelectMultiValues: false });
-        expect(state.api.select).toHaveBeenCalledWith({ method: 'selectHyperCubeCells', params });
+        expect(state.api?.select).toHaveBeenCalledWith({ method: 'selectHyperCubeCells', params });
       });
 
       it('should not call select when type is selectMultiEnd but isSelectMultiValues is false', () => {
@@ -234,7 +234,7 @@ describe('selections-utils', () => {
 
         const newState = reducer(state, action);
         expect(newState).toEqual({ ...state, isSelectMultiValues: false });
-        expect(state.api.select).not.toHaveBeenCalled();
+        expect(state.api?.select).not.toHaveBeenCalled();
       });
     });
 
@@ -253,7 +253,7 @@ describe('selections-utils', () => {
 
       it('should return state unchanged when the app is in selection modal state and action.type is reset', () => {
         const action = { type: SelectionActions.RESET } as ResetAction;
-        state.api.isModal = () => true;
+        (state.api as ExtendedSelectionAPI).isModal = () => true;
         const newState = reducer(state, action);
         expect(newState).toBe(state);
       });

@@ -37,7 +37,7 @@ function TableTotals() {
             tabIndex={tabIndex}
             title={!constraints.passive ? column.totalInfo : undefined}
             onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
-              handleTotalKeyDown(e, rootElement, cellCoord, setFocusedCellCoord, selectionsAPI.isModal());
+              handleTotalKeyDown(e, rootElement, cellCoord, setFocusedCellCoord, selectionsAPI?.isModal());
             }}
             onMouseDown={() => {
               removeTabAndFocusCell(cellCoord, rootElement, setFocusedCellCoord, keyboard);

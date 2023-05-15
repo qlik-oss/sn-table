@@ -16,7 +16,7 @@ interface UseCarbonTable {
   rootElement: HTMLElement;
   model?: EngineAPI.IGenericObject;
   theme: ExtendedTheme;
-  selectionsAPI: ExtendedSelectionAPI;
+  selectionsAPI?: ExtendedSelectionAPI;
   app?: EngineAPI.IApp;
   rect: stardust.Rect;
   layout: TableLayout;

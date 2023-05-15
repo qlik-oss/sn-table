@@ -21,9 +21,10 @@ function TableHeadWrapper() {
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
-  const isInSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI.isModal());
+  const isSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI?.isModal());
+
   const headRowRef = useRef<HTMLTableRowElement>(null);
-  const isInteractionEnabled = !constraints.active && !isInSelectionMode;
+  const isInteractionEnabled = !constraints.active && !isSelectionMode;
 
   useEffect(() => {
     if (headRowRef.current) {

@@ -6,7 +6,7 @@ describe('use-sorting', () => {
   describe('sortingFactory', () => {
     it('should return undefined when model is undefined', async () => {
       const model = undefined;
-      const changeSortOrder = sortingFactory(model, 0);
+      const changeSortOrder = sortingFactory(0, model);
       expect(changeSortOrder).toBeUndefined();
     });
   });
@@ -32,7 +32,7 @@ describe('use-sorting', () => {
             } as unknown as HyperCube,
           }),
       } as unknown as EngineAPI.IGenericObject;
-      changeSortOrder = sortingFactory(model, layout.qHyperCube.qDimensionInfo.length) as ChangeSortOrder;
+      changeSortOrder = sortingFactory(layout.qHyperCube.qDimensionInfo.length, model) as ChangeSortOrder;
     });
 
     afterEach(() => jest.clearAllMocks());

@@ -8,9 +8,7 @@ import useColumnWidths from '../use-column-widths';
 jest.mock('../../virtualized-table/hooks/use-measure-text');
 
 describe('use-column-widths', () => {
-  let mockedUseMeasureText: jest.MockedFunction<
-    (size: string | undefined, fam: string | undefined, boldText?: boolean) => MeasureTextHook
-  >;
+  let mockedUseMeasureText: jest.MockedFunction<(size?: string, fam?: string, boldText?: boolean) => MeasureTextHook>;
   let mockedMeasureText: MeasureTextHook;
   let columns: Column[];
   let tableWidth: number;

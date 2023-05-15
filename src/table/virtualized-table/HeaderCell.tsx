@@ -24,12 +24,13 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
   } = data;
 
   const { layout, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
+  const isSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI?.isModal());
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
-  const isInSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI.isModal());
+
   const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
   const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
-  const isInteractionEnabled = !constraints.active && !isInSelectionMode;
+  const isInteractionEnabled = !constraints.active && !isSelectionMode;
   const flexDirection = column.headTextAlign === 'right' ? 'row-reverse' : 'row';
 
   return (
