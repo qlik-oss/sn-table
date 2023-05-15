@@ -8,6 +8,7 @@ describe('translations', () => {
     let translator: stardust.Translator;
     beforeEach(() => {
       translator = {
+        language: jest.fn(),
         get: () => 'SNTable.Accessibility.RowsAndColumns',
         add: jest.fn(),
       };
