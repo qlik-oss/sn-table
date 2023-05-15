@@ -12,8 +12,12 @@ interface UseSnapshotProps {
 
 const useSnapshot = ({ layout, viewService, model, rootElement }: UseSnapshotProps) => {
   onTakeSnapshot(async (snapshotLayout: SnapshotLayout) => {
-    if (!snapshotLayout.snapshotData || !model || snapshotLayout.snapshotData.content) {
+    if (!model) {
       return snapshotLayout;
+    }
+
+    if (!snapshotLayout.snapshotData || snapshotLayout.snapshotData.content) {
+      snapshotLayout.snapshotData = {};
     }
 
     if ((model as EngineAPI.IGenericObject).getHyperCubeData) {

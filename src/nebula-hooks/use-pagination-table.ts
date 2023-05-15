@@ -73,18 +73,7 @@ const usePaginationTable = ({
   }, [layout, pageInfo, model, constraints, shouldRender]);
 
   useEffect(() => {
-    const isReadyToRender =
-      shouldRender &&
-      reactRoot &&
-      model &&
-      app &&
-      layout &&
-      tableData &&
-      changeSortOrder &&
-      theme &&
-      selectionsAPI &&
-      isFontLoaded &&
-      embed;
+    const isReadyToRender = shouldRender && tableData;
 
     if (!isReadyToRender) return;
 

@@ -114,7 +114,7 @@ export interface ContextValue {
     keyboard: stardust.Keyboard;
     rootElement: HTMLElement;
     embed: stardust.Embed;
-    changeSortOrder: ChangeSortOrder;
+    changeSortOrder: ChangeSortOrder | undefined;
     applyColumnWidths: ApplyColumnWidths;
     styling: TableStyling;
     rect: stardust.Rect;
@@ -218,14 +218,14 @@ export interface ContextProviderProps {
   selectionsAPI: ExtendedSelectionAPI | undefined;
   cellCoordMock?: [number, number];
   layout: TableLayout;
-  model: EngineAPI.IGenericObject;
+  model: EngineAPI.IGenericObject | undefined;
   translator: ExtendedTranslator;
   constraints: stardust.Constraints;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
   rootElement: HTMLElement;
   embed: stardust.Embed;
-  changeSortOrder: ChangeSortOrder;
+  changeSortOrder: ChangeSortOrder | undefined;
   applyColumnWidths: ApplyColumnWidths;
   rect: stardust.Rect;
   pageInfo?: PageInfo;
@@ -238,7 +238,7 @@ export interface RenderProps {
   selectionsAPI: ExtendedSelectionAPI | undefined;
   rootElement: HTMLElement;
   layout: TableLayout;
-  changeSortOrder: ChangeSortOrder;
+  changeSortOrder: ChangeSortOrder | undefined;
   rect: stardust.Rect;
   tableData: TableData;
   pageInfo: PageInfo;
@@ -249,8 +249,8 @@ export interface RenderProps {
   keyboard: stardust.Keyboard;
   footerContainer: HTMLElement | undefined;
   announce: Announce;
-  model: EngineAPI.IGenericObject;
-  app: EngineAPI.IApp;
+  model: EngineAPI.IGenericObject | undefined;
+  app: EngineAPI.IApp | undefined;
   embed: stardust.Embed;
   applyColumnWidths: ApplyColumnWidths;
   viewService: ViewService;
