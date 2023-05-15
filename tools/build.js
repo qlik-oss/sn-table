@@ -12,6 +12,7 @@ const rnSnTablePackage = require('../react-native/package.json');
 const args = yargs(process.argv.slice(2)).argv;
 const buildExt = args.ext;
 const buildCore = args.core;
+const buildSystemJS = args.systemjs;
 const mode = args.mode || 'production';
 const watch = args.w;
 const sourcemap = mode !== 'production';
@@ -30,6 +31,10 @@ const buildExtension = async () => {
 
 if (buildCore) {
   buildArgs.core = 'core';
+}
+
+if (buildSystemJS === 'false') {
+  buildArgs.systemjs = false;
 }
 
 if (mode === 'production') {
