@@ -19,6 +19,7 @@ const Header = (props: HeaderProps) => {
       style={{
         overflow: 'hidden',
         boxSizing: 'border-box',
+        willChange: 'auto',
       }}
       itemCount={layout.qHyperCube.qSize.qcx}
       itemSize={(index) => columnWidths[index]}
