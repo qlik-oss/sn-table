@@ -26,7 +26,7 @@ export default function ext(env) {
     ...getExploration(env),
     data: getData(env),
     support: {
-      export: false,
+      export: true,
       exportData: true,
       snapshot: true,
       viewData: false,

@@ -19,7 +19,7 @@ import useKeyboardActiveListener from '../../hooks/use-keyboard-active-listener'
 import { SelectionActions } from '../../constants';
 
 function TableWrapper(props: TableWrapperProps) {
-  const { pageInfo, setPageInfo, direction, footerContainer, announce, viewService } = props;
+  const { pageInfo, setPageInfo, direction, footerContainer, announce, viewService, viewState } = props;
   const { page, rowsPerPage } = pageInfo;
 
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
@@ -46,7 +46,7 @@ function TableWrapper(props: TableWrapperProps) {
     String(columns.length),
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
-  const scrollLeft = layout.snapshotData?.content?.scrollLeft || 0;
+  const scrollLeft = layout.snapshotData?.content?.scrollLeft ?? (viewState?.scrollLeft || 0);
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);

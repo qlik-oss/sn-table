@@ -211,7 +211,14 @@ export interface ExtendedTheme extends stardust.Theme {
   background: BackgroundColors;
 }
 
+export interface ViewState {
+  scrollLeft: number;
+  qTop: number;
+  qHeight: number;
+}
+
 export interface UseOptions {
+  viewState: ViewState;
   direction: Direction | undefined;
   footerContainer: HTMLElement | undefined;
 }

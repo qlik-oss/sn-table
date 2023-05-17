@@ -1,4 +1,5 @@
-import { onTakeSnapshot } from '@nebula.js/stardust';
+// @ts-ignore ignore useImperativeHandle
+import { onTakeSnapshot, useImperativeHandle } from '@nebula.js/stardust';
 import type { TableLayout, ViewService, SnapshotLayout, HyperCube } from '../../types';
 import findVisibleRows from '../utils/find-visible-rows';
 import { getTotalPosition } from '../../handle-data';
@@ -39,6 +40,20 @@ const useSnapshot = ({ layout, viewService, model, rootElement }: UseSnapshotPro
     }
     return snapshotLayout;
   });
+  useImperativeHandle(
+    () => ({
+      getViewState() {
+        const totalsPosition = getTotalPosition(layout);
+        const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findVisibleRows(rootElement, totalsPosition);
+        return {
+          scrollLeft: viewService.scrollLeft,
+          qTop: viewService.qTop + visibleRowStartIndex,
+          qHeight: visibleRowEndIndex < 0 ? 0 : visibleRowEndIndex - visibleRowStartIndex + 1,
+        };
+      },
+    }),
+    []
+  );
 };
 
 export default useSnapshot;
