@@ -64,7 +64,7 @@ const usePaginationTable = ({
   const { viewState, direction, footerContainer } = useOptions() as UseOptions;
   const announce = useAnnounceAndTranslations(rootElement, translator);
   const tmpPageInfo =
-    layout.snapshotData || viewState.rowsPerPage
+    layout.snapshotData || viewState?.rowsPerPage
       ? {
           page: viewService.page || initialPageInfo.page,
           rowsPerPage: viewService.rowsPerPage || initialPageInfo.rowsPerPage,
