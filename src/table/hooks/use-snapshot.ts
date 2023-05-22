@@ -36,6 +36,8 @@ const useSnapshot = ({ layout, viewService, model, rootElement }: UseSnapshotPro
       );
       snapshotLayout.snapshotData.content = {
         scrollLeft: viewService.scrollLeft,
+        rowsPerPage: viewService.rowsPerPage,
+        page: viewService.page,
       };
     }
     return snapshotLayout;
@@ -47,8 +49,10 @@ const useSnapshot = ({ layout, viewService, model, rootElement }: UseSnapshotPro
         const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findVisibleRows(rootElement, totalsPosition);
         return {
           scrollLeft: viewService.scrollLeft,
-          qTop: viewService.qTop + visibleRowStartIndex,
-          qHeight: visibleRowEndIndex < 0 ? 0 : visibleRowEndIndex - visibleRowStartIndex + 1,
+          visibleTop: viewService.qTop + visibleRowStartIndex,
+          visibleHeight: visibleRowEndIndex < 0 ? 0 : visibleRowEndIndex - visibleRowStartIndex + 1,
+          rowsPerPage: viewService.rowsPerPage,
+          page: viewService.page,
         };
       },
     }),

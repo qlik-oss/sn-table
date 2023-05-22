@@ -11,7 +11,6 @@ import {
   Align,
   TextAlign,
   ViewService,
-  ViewState,
 } from './types';
 
 const MAX_CELLS = 10000;
@@ -198,16 +197,15 @@ export default async function manageData(
   layout: TableLayout,
   pageInfo: PageInfo,
   setPageInfo: SetPageInfo,
-  viewService?: ViewService,
-  viewState?: ViewState
+  viewService?: ViewService
 ): Promise<TableData | null> {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const totalColumnCount = layout.qHyperCube.qSize.qcx;
   const totalRowCount = layout.qHyperCube.qSize.qcy;
   const totalPages = Math.ceil(totalRowCount / rowsPerPage);
 
-  const top = viewState?.qTop ?? page * rowsPerPage;
-  const height = viewState?.qHeight ?? Math.min(rowsPerPage, totalRowCount - top);
+  const top = viewService?.visibleTop ?? page * rowsPerPage;
+  const height = viewService?.visibleHeight ?? Math.min(rowsPerPage, totalRowCount - top);
   // When the number of rows is reduced (e.g. confirming selections),
   // you can end up still being on a page that doesn't exist anymore, then go back to the first page and rerender
   if (page > 0 && top >= totalRowCount && pageInfo) {
@@ -235,6 +233,8 @@ export default async function manageData(
     viewService.qHeight = height;
     viewService.qLeft = 0;
     viewService.qWidth = totalColumnCount;
+    viewService.rowsPerPage = pageInfo.rowsPerPage;
+    viewService.page = pageInfo.page;
   }
 
   const rows =
