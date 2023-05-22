@@ -14,6 +14,20 @@ import useOnPropsChange from './hooks/use-on-props-change';
 import getBodyHeight from './utils/get-body-height';
 import { getStylingComponent } from '../utils/styling-utils';
 
+const listStyle: React.CSSProperties = {
+  overflow: 'hidden',
+  /**
+   * "will-change" is by default "transform" in react-window. This disables that default value,
+   * as there was issues with rendering border when the width of the react-window "list" was
+   * a floating point number.
+   *
+   * If performance issues arrise when scrolling, this may need to be change back the "transform"
+   * again to resolve those performance issues, but the issue with rendering border will need to
+   * be fixed in some other way.
+   */
+  willChange: 'auto',
+};
+
 const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   const { rect, columns, innerForwardRef, pageInfo, bodyStyle, rowHeight, headerAndTotalsHeight, syncHeight } = props;
   const { layout, model, theme } = useContextSelector(TableContext, (value) => value.baseProps);
@@ -135,7 +149,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
       data-key="body"
       ref={gridRef}
       innerRef={innerForwardRef}
-      style={{ overflow: 'hidden', willChange: 'auto' }}
+      style={listStyle}
       columnCount={layout.qHyperCube.qSize.qcx}
       columnWidth={(index) => columnWidths[index]}
       height={bodyHeight}

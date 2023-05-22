@@ -5,6 +5,21 @@ import { useContextSelector, TableContext } from '../context';
 import { TotalsProps } from './types';
 import useResetHeader from './hooks/use-reset-header';
 
+const listStyle: React.CSSProperties = {
+  overflow: 'hidden',
+  boxSizing: 'border-box',
+  /**
+   * "will-change" is by default "transform" in react-window. This disables that default value,
+   * as there was issues with rendering border when the width of the react-window "list" was
+   * a floating point number.
+   *
+   * If performance issues arrise when scrolling, this may need to be change back the "transform"
+   * again to resolve those performance issues, but the issue with rendering border will need to
+   * be fixed in some other way.
+   */
+  willChange: 'auto',
+};
+
 const Totals = (props: TotalsProps) => {
   const { rect, forwardRef, pageInfo, totals, rowHeight, columns } = props;
   const { layout, styling, theme } = useContextSelector(TableContext, (value) => value.baseProps);
@@ -16,11 +31,7 @@ const Totals = (props: TotalsProps) => {
     <VariableSizeList
       ref={forwardRef}
       layout="horizontal"
-      style={{
-        overflow: 'hidden',
-        boxSizing: 'border-box',
-        willChange: 'auto',
-      }}
+      style={listStyle}
       itemCount={layout.qHyperCube.qSize.qcx}
       itemSize={(index) => columnWidths[index]}
       height={rowHeight}
