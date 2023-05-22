@@ -16,6 +16,7 @@ const listStyle: React.CSSProperties = {
    * If performance issues arrise when scrolling, this may need to be change back the "transform"
    * again to resolve those performance issues, but the issue with rendering border will need to
    * be fixed in some other way.
+   *
    */
   willChange: 'auto',
 };
