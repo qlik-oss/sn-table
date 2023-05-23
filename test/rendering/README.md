@@ -51,20 +51,239 @@ To get the necessary Layout and HyperCubeData for a fixture file, you can find t
 
 ## Test cases description
 
-| Test        | Dimensions | Measures | Other                                                                                                                         |
-| ----------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| Scenario 1  | 1          | 0        |                                                                                                                               |
-| Scenario 2  | 1          | 0        | The total amount of rows is less then or equal to 10                                                                          |
-| Scenario 3  | 1          | 1        |                                                                                                                               |
-| Scenario 4  | 1          | 1        | Font size and color for header and body                                                                                       |
-| Scenario 5  | 1          | 1        | Desc sorted measure. Background and font coloring for a column                                                                |
-| Scenario 6  | 1          | 1        | Center-aligned dimension and right-aligned measure                                                                            |
-| Scenario 7  | 1          | 1        | Desc sorted dimension                                                                                                         |
-| Scenario 8  | 1          | 1        | Desc sorted dimension. The displayed amount of rows is 10                                                                     |
-| Scenario 9  | 1          | 1        | The hover font color and background color                                                                                     |
-| Scenario 10 | 1          | 1        | The hover font color and background color. Font size and color for header and body                                            |
-| Scenario 11 | 1          | 1        | The hover font color and background color. Font size and color for header and body. Background and font coloring for a column |
-| Scenario 12 | 1          | 1        | Font size and color for header and body. Scroll to the bottom of the table                                                    |
-| Scenario 13 | 1          | 1        | Font size and color for header and body. Show totals at the bottom                                                            |
-| Scenario 14 | 1          | 0        | 1M rows of data                                                                                                               |
-| Scenario 15 | 3          | 1        | Line breaks                                                                                                                   |
+### Scenario 1 (Default properties value)
+
+    Data:
+      Columns:
+        Product (Dimension), Inventory Amount (Measure), Sales Quantity (Measure), Sum([Sales Price]) (Measure), Sum([CostPrice]) (Measure)
+
+### Scenario 2
+
+    Data:
+      Columns:
+        Product (Dimension), Inventory Amount (Measure), Sales Quantity (Measure), Sum([Sales Price]) (Measure), Sum([CostPrice]) (Measure)
+        Product:
+          Field:
+            Include null values:
+              false
+          Presentation:
+            Background color expression:
+              if(Sum([Sales Quantity]\*([Sales Price]- [CostPrice])) > 0, '#ff0000', '#00ff00')
+            Text color expression:
+              if(Sum([Sales Quantity]\*([Sales Price]- [CostPrice])) > 0, 'orange', 'purple')
+            Text alignment:
+              Custom
+              Right
+            Column width:
+              Fit to content
+        Inventory Amount:
+          Presentation:
+            Background color expression:
+              if(Sum(StockOH\*CostPrice) < 200, '#ff0000', '#00ff00')
+        Sales Quantity:
+          Presentation:
+            Text color expression:
+              if(Sum([Sales Quantity]) < 400, '#ff0000', '#00ff00')
+    Sorting:
+      Product:
+        Sorting:
+          Custom
+        Sort numerically:
+          Descending
+        Sort alphabetically:
+          Descending
+    Appearance:
+      General:
+        Show titles: false
+      Presentation:
+        Styling:
+          Chart:
+            Header:
+              Font size: 22
+              Font color: #70ba6e
+          Content:
+            Font size: 10
+            Font color: #65d3da
+            Row hover: On
+        Totals:
+          Custom
+          Position: Bottom
+
+### Scenario 3
+
+    Data:
+      Columns:
+        Product (Dimension), Inventory Amount (Measure), Sales Quantity (Measure), Sum([Sales Price]) (Measure), Sum([CostPrice]) (Measure)
+        Product:
+          Presentation:
+            Background color expression:
+              if(Sum([Sales Quantity]\*([Sales Price]- [CostPrice])) > 0, '#ff0000', '#00ff00')
+            Text color expression:
+              if(Sum([Sales Quantity]\*([Sales Price]- [CostPrice])) > 0, 'orange', 'purple')
+            Text alignment:
+              Custom
+              Center
+            Column width:
+              Pixels:
+                200
+        Inventory Amount:
+          Presentation:
+            Background color expression:
+              if(Sum(StockOH\*CostPrice) < 200, '#ff0000', '#00ff00')
+        Sales Quantity:
+          Presentation:
+            Text color expression:
+              if(Sum([Sales Quantity]) < 400, '#ff0000', '#00ff00')
+      Sorting: (change order)
+        Inventory Amount
+        Product
+        …
+    Appearance
+      Presentation:
+        Styling:
+          Chart:
+            Header:
+              Font size: 10
+              Font color: #70ba6e
+            Content:
+              Font size: 8
+              Font color: #65d3da
+            Row hover: On
+              Row hover color: #a54343 (dark color)
+      Totals:
+        Custom
+        Position: None
+
+### Scenario 4
+
+    Data:
+      Columns (change orders):
+        Inventory Amount (Measure), Product (Dimension), Sales Quantity (Measure), Sum([Sales Price]) (Measure), Sum([CostPrice]) (Measure)
+      Inventory Amount:
+        Presentation:
+          Background color expression:
+            if(Sum(StockOH\*CostPrice) < 200, '#ff0000', '#00ff00')
+          Text alignment:
+            Custom
+            Left
+          Column width:
+            Percentage:
+              50
+      Product:
+        Presentation:
+          Background color expression:
+            if(Sum([Sales Quantity]\*([Sales Price]- [CostPrice])) > 0, '#ff0000', '#00ff00')
+          Text color expression:
+            if(Sum([Sales Quantity]\*([Sales Price]- [CostPrice])) > 0, 'orange', 'purple')
+      Sales Quantity:
+        Presentation:
+          Text color expression:
+            if(Sum([Sales Quantity]) < 400, '#ff0000', '#00ff00')
+    Appearance:
+      Presentation:
+        Styling:
+          Chart:
+            Header:
+              Font size: 15
+              Font color: #70ba6e
+            Content:
+              Font size: 12
+              Font color: #65d3da
+            Row hover: On
+              Row hover color: #cbe989 (light color)
+      Totals: Custom
+        Position: Top
+        Totals label: Totals label
+
+### Scenario 5
+
+    Data:
+      Columns:
+        Product (Dimension), Inventory Amount (Measure), Sales Quantity (Measure), Sum([Sales Price]) (Measure), Sum([CostPrice]) (Measure)
+        Product:
+          Presentation:
+            Background color expression:
+              if(Sum([Sales Quantity]\*([Sales Price]- [CostPrice])) > 0, '#ff0000', '#00ff00')
+            Text color expression:
+              if(Sum([Sales Quantity]\*([Sales Price]- [CostPrice])) > 0, 'orange', 'purple')
+            Column width:
+              Pixels:
+                120
+        Inventory Amount:
+          Presentation:
+            Background color expression:
+              if(Sum(StockOH\*CostPrice) < 200, '#ff0000', '#00ff00')
+            Column width:
+              Pixels:
+                120
+        Sales Quantity:
+          Presentation:
+            Text color expression:
+              if(Sum([Sales Quantity]) < 400, '#ff0000', '#00ff00')
+            Column width:
+              Pixels:
+                120
+        Sum([Sales Price]):
+          Presentation:
+            Column width:
+              Pixels:
+                120
+        Sum([CostPrice]):
+          Presentation:
+            Show column if:
+              0
+            Appearance:
+              Presentation:
+                Styling:
+                  Chart:
+                    Header:
+                      Font size: 22
+                      Font color: #578b60
+                    Content:
+                      Font size: 22
+                      Font color: #a54343
+                    Row hover: On
+                      Row hover color: #709113
+                      Row hover Font color: #65d3da
+                Totals: Custom
+                  Position: Top
+                  Totals label:
+
+### Scenario 6
+
+Only for table pagination (less than 100 rows per page hides the pagination footer)
+
+    Data:
+      Columns:
+        Region (Dimension), Budget (Measure), # of Customers (Measure)
+    Appearance:
+      Presentation:
+        Styling:
+          General:
+            Title:
+              font-size: 20px
+              font-family: "Bradley Hand”
+              color: rgb(139, 139, 139)
+              font-weight: bold
+              font-style: italic
+              text-decoration: underline
+            Subtitle:
+              font-size: 15px
+              font-family: "Arial Black"
+              color: rgb(112, 186, 110)
+              font-weight: bold
+              font-style: italic;
+              text-decoration: underline
+            Footnote:
+              font-size: 15px
+              font-family: "Arial"
+              color: rgb(112, 186, 110)
+              font-weight: bold
+              font-style: italic
+              text-decoration: underline
+
+### Scenario 7
+
+Only for table virtualization (more than 250k rows trigger the pagination footer)
+
+Set layout as Scenario 5 and update qHyperCube.qSize.qcy to be 1_000_000.

@@ -61,11 +61,17 @@ const runRenderingTests = (theme: Object | Function, themeType: String, language
       console.log({ renderUrl });
       // Open page in Nebula which renders fixture
       await playwright.open(renderUrl);
-      if (name.includes('scenario_9') || name.includes('scenario_10')) await page.hover('text=Tampere');
-      if (name.includes('scenario_11')) await page.hover('text=Valley Solutions');
-      if (name.includes('scenario_12')) {
-        const element = page.locator('text=Zocalo');
-        await element.scrollIntoViewIfNeeded();
+      if (name.includes('scenario_2')) {
+        await page.hover('text=Washington Strawberry Drink');
+      }
+      if (name.includes('scenario_3')) {
+        await page.hover('text=Big Time Turkey TV Dinner');
+      }
+      if (name.includes('scenario_4')) {
+        await page.hover('text=Washington Strawberry Drink');
+      }
+      if (name.includes('scenario_5')) {
+        await page.hover('text=American Beef Bolo');
       }
       // Playwright captures screenshot
       const img = await playwright.screenshot();
