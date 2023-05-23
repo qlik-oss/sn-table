@@ -14,7 +14,7 @@ import useOnPropsChange from './hooks/use-on-props-change';
 import getBodyHeight from './utils/get-body-height';
 import { getStylingComponent } from '../utils/styling-utils';
 
-const listStyle: React.CSSProperties = {
+const grdiStyle: React.CSSProperties = {
   overflow: 'hidden',
   /**
    * "will-change" is by default "transform" in react-window. This disables that default value,
@@ -149,7 +149,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
       data-key="body"
       ref={gridRef}
       innerRef={innerForwardRef}
-      style={listStyle}
+      style={grdiStyle}
       columnCount={layout.qHyperCube.qSize.qcx}
       columnWidth={(index) => columnWidths[index]}
       height={bodyHeight}
