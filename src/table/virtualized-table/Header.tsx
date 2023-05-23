@@ -5,7 +5,7 @@ import HeaderCell from './HeaderCell';
 import { useContextSelector, TableContext } from '../context';
 import useResetHeader from './hooks/use-reset-header';
 
-const listStyle: React.CSSProperties = {
+export const listStyle: React.CSSProperties = {
   overflow: 'hidden',
   boxSizing: 'border-box',
   /**
