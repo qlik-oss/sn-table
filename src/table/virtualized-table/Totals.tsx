@@ -4,6 +4,7 @@ import TotalsCell from './TotalsCell';
 import { useContextSelector, TableContext } from '../context';
 import { TotalsProps } from './types';
 import useResetHeader from './hooks/use-reset-header';
+import { listStyle } from './Header';
 
 const Totals = (props: TotalsProps) => {
   const { rect, forwardRef, pageInfo, totals, rowHeight, columns } = props;
@@ -16,10 +17,7 @@ const Totals = (props: TotalsProps) => {
     <VariableSizeList
       ref={forwardRef}
       layout="horizontal"
-      style={{
-        overflow: 'hidden',
-        boxSizing: 'border-box',
-      }}
+      style={listStyle}
       itemCount={layout.qHyperCube.qSize.qcx}
       itemSize={(index) => columnWidths[index]}
       height={rowHeight}
