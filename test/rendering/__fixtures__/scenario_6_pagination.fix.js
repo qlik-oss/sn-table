@@ -127,11 +127,11 @@ export default () => ({
                   colors: [
                     {
                       color: '#ecc43d',
-                      index: 6,
+                      index: -1,
                     },
                     {
                       color: '#578b60',
-                      index: 10,
+                      index: -1,
                     },
                   ],
                   breakTypes: [false],
@@ -201,7 +201,7 @@ export default () => ({
                 fontStyle: ['', 'bold', 'italic', 'underline'],
                 fontSize: '15pxpx',
                 color: {
-                  index: 9,
+                  index: -1,
                   color: '#70ba6e',
                 },
                 fontFamily: 'Arial Black, sans-serif',
@@ -210,7 +210,7 @@ export default () => ({
                 fontStyle: ['italic', 'bold', 'underline'],
                 fontSize: '15pxpx',
                 color: {
-                  index: 9,
+                  index: -1,
                   color: '#70ba6e',
                 },
                 fontFamily: 'Arial, sans-serif',

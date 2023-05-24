@@ -337,19 +337,19 @@ export default () => ({
             header: {
               fontSize: 10,
               fontColor: {
-                index: 10,
+                index: -1,
                 color: '#578b60',
               },
             },
             content: {
               fontSize: 8,
               fontColor: {
-                index: 3,
+                index: -1,
                 color: '#a54343',
               },
               hoverEffect: true,
               hoverColor: {
-                index: 3,
+                index: -1,
                 color: '#a54343',
               },
             },
