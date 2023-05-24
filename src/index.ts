@@ -10,7 +10,6 @@ import {
   useRect,
   useApp,
   useEmbed,
-  useOptions,
 } from '@nebula.js/stardust';
 
 import properties from './qae/object-properties';
@@ -19,7 +18,7 @@ import ext from './ext';
 import useReactRoot from './nebula-hooks/use-react-root';
 import useSorting from './nebula-hooks/use-sorting';
 import useExtendedTheme from './nebula-hooks/use-extended-theme';
-import { Galaxy, TableLayout, ExtendedTranslator, ExtendedSelectionAPI, UseOptions } from './types';
+import { Galaxy, TableLayout, ExtendedTranslator, ExtendedSelectionAPI } from './types';
 import useVirtualizedTable from './nebula-hooks/use-virtualized-table';
 import usePaginationTable from './nebula-hooks/use-pagination-table';
 import useCarbonTable from './nebula-hooks/use-carbon-table';
@@ -47,8 +46,7 @@ export default function supernova(env: Galaxy) {
       const selectionsAPI = useSelections() as ExtendedSelectionAPI | undefined; // undefined when taking snapshot
       const keyboard = useKeyboard();
       const rect = useRect();
-      const { viewState } = useOptions() as UseOptions;
-      const viewService = useViewService(viewState, layout.snapshotData);
+      const viewService = useViewService(layout.snapshotData);
       const embed = useEmbed();
       const theme = useExtendedTheme(rootElement);
       const changeSortOrder = useSorting(layout.qHyperCube, model); // undefined when taking snapshot

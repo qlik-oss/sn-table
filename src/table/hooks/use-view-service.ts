@@ -1,5 +1,5 @@
-import { useMemo } from '@nebula.js/stardust';
-import type { SnapshotData, ViewService, ViewState } from '../../types';
+import { useMemo, useOptions } from '@nebula.js/stardust';
+import type { SnapshotData, ViewService, ViewState, UseOptions } from '../../types';
 
 const createViewService = (viewState: ViewState, snapshotData?: SnapshotData): ViewService => {
   return {
@@ -9,13 +9,15 @@ const createViewService = (viewState: ViewState, snapshotData?: SnapshotData): V
     qHeight: 0,
     visibleTop: viewState?.visibleTop,
     visibleHeight: viewState?.visibleHeight,
-    scrollLeft: snapshotData?.content?.scrollLeft ?? (viewState?.scrollLeft || 0),
+    scrollLeft: snapshotData?.content?.scrollLeft ?? viewState?.scrollLeft ?? 0,
     rowsPerPage: snapshotData?.content?.rowsPerPage ?? viewState?.rowsPerPage,
     page: snapshotData?.content?.page ?? viewState?.page,
   };
 };
 
-const useViewService = (viewState: ViewState, snapshotData?: SnapshotData): ViewService =>
-  useMemo(() => createViewService(viewState, snapshotData), [viewState, snapshotData]);
+const useViewService = (snapshotData?: SnapshotData): ViewService => {
+  const { viewState } = useOptions() as UseOptions;
+  return useMemo(() => createViewService(viewState, snapshotData), [viewState, snapshotData]);
+};
 
 export default useViewService;

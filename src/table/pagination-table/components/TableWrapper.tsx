@@ -119,7 +119,7 @@ function TableWrapper(props: TableWrapperProps) {
       <StyledTableContainer
         ref={tableContainerRef}
         className="sn-table-container"
-        fullHeight={footerContainer || !paginationNeeded} // the footerContainer always wants height: 100%
+        fullHeight={footerContainer || constraints.active || !paginationNeeded} // the footerContainer always wants height: 100%
         constraints={constraints}
         tabIndex={-1}
         role="application"
