@@ -250,7 +250,7 @@ export interface RenderProps {
   footerContainer: HTMLElement | undefined;
   announce: Announce;
   model: EngineAPI.IGenericObject;
-  app: EngineAPI.IApp;
+  app?: EngineAPI.IApp;
   embed: stardust.Embed;
   applyColumnWidths: ApplyColumnWidths;
   viewService: ViewService;

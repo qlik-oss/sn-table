@@ -8,11 +8,17 @@ export interface ViewService {
   qTop: number;
   qWidth: number;
   qHeight: number;
+  visibleTop?: number;
+  visibleHeight?: number;
   scrollLeft: number;
+  rowsPerPage?: number;
+  page?: number;
 }
 export interface SnapshotData {
   content?: {
     scrollLeft: number;
+    rowsPerPage?: number;
+    page?: number;
   };
 }
 
@@ -211,7 +217,16 @@ export interface ExtendedTheme extends stardust.Theme {
   background: BackgroundColors;
 }
 
+export interface ViewState {
+  scrollLeft: number;
+  visibleTop: number;
+  visibleHeight: number;
+  rowsPerPage?: number;
+  page?: number;
+}
+
 export interface UseOptions {
+  viewState: ViewState;
   direction: Direction | undefined;
   footerContainer: HTMLElement | undefined;
 }

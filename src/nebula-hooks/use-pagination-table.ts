@@ -61,9 +61,17 @@ const usePaginationTable = ({
   viewService,
 }: UsePaginationTable) => {
   const shouldRender = !env.carbon && layout.usePagination !== false;
-  const { direction, footerContainer } = useOptions() as UseOptions;
+  const { viewState, direction, footerContainer } = useOptions() as UseOptions;
   const announce = useAnnounceAndTranslations(rootElement, translator);
-  const [pageInfo, setPageInfo] = useState(initialPageInfo);
+  const tmpPageInfo =
+    layout.snapshotData || viewState?.rowsPerPage
+      ? {
+          page: viewService.page || initialPageInfo.page,
+          rowsPerPage: viewService.rowsPerPage || initialPageInfo.rowsPerPage,
+          rowsPerPageOptions: initialPageInfo.rowsPerPageOptions,
+        }
+      : initialPageInfo;
+  const [pageInfo, setPageInfo] = useState(tmpPageInfo);
   const [tableData] = usePromise(async () => {
     if (shouldRender) {
       return manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo, viewService);
@@ -73,18 +81,19 @@ const usePaginationTable = ({
   }, [layout, pageInfo, model, constraints, shouldRender]);
 
   useEffect(() => {
-    const isReadyToRender =
+    const isReadyToRender = !!(
       shouldRender &&
       reactRoot &&
       model &&
-      app &&
+      (layout.snapshotData || app) &&
       layout &&
       tableData &&
       changeSortOrder &&
       theme &&
       selectionsAPI &&
       isFontLoaded &&
-      embed;
+      embed
+    );
 
     if (!isReadyToRender) return;
 

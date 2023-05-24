@@ -204,8 +204,8 @@ export default async function manageData(
   const totalRowCount = layout.qHyperCube.qSize.qcy;
   const totalPages = Math.ceil(totalRowCount / rowsPerPage);
 
-  const top = page * rowsPerPage;
-  const height = Math.min(rowsPerPage, totalRowCount - top);
+  const top = viewService?.visibleTop ?? page * rowsPerPage;
+  const height = viewService?.visibleHeight ?? Math.min(rowsPerPage, totalRowCount - top);
   // When the number of rows is reduced (e.g. confirming selections),
   // you can end up still being on a page that doesn't exist anymore, then go back to the first page and rerender
   if (page > 0 && top >= totalRowCount && pageInfo) {
@@ -233,6 +233,8 @@ export default async function manageData(
     viewService.qHeight = height;
     viewService.qLeft = 0;
     viewService.qWidth = totalColumnCount;
+    viewService.rowsPerPage = pageInfo.rowsPerPage;
+    viewService.page = pageInfo.page;
   }
 
   const rows =

@@ -46,7 +46,7 @@ export default function supernova(env: Galaxy) {
       const selectionsAPI = useSelections() as ExtendedSelectionAPI | undefined; // undefined when taking snapshot
       const keyboard = useKeyboard();
       const rect = useRect();
-      const viewService = useViewService();
+      const viewService = useViewService(layout.snapshotData);
       const embed = useEmbed();
       const theme = useExtendedTheme(rootElement);
       const changeSortOrder = useSorting(layout.qHyperCube, model); // undefined when taking snapshot
