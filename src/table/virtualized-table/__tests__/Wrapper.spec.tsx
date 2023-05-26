@@ -4,14 +4,14 @@ import { stardust } from '@nebula.js/stardust';
 import Wrapper from '../Wrapper';
 import { TableData, TableLayout } from '../../../types';
 import { TestableTable } from '../Table';
-import FooterWrapper from '../../components/footer/FooterWrapper';
+import FooterWrapper from '../../components/FooterWrapper';
 import TestWithProviders from '../../../__test__/test-with-providers';
 import { getColumns, getTotalPosition } from '../../../handle-data';
 import { EMPTY_TABLE_DATA } from '../../context/TableContext';
 import { generateLayout } from '../../../__test__/generate-test-data';
 
 jest.mock('../Table');
-jest.mock('../../components/footer/FooterWrapper');
+jest.mock('../../components/FooterWrapper');
 
 describe('<Wrapper />', () => {
   let rect: stardust.Rect;

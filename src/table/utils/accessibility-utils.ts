@@ -5,7 +5,8 @@ import { FIRST_BODY_CELL_COORD, FocusTypes } from '../constants';
 import { CellFocusProps, HandleResetFocusProps } from '../types';
 import { findCellWithTabStop, getCellCoord, getCellElement, getNextCellCoord } from './get-element-utils';
 
-export const areTabStopsEnabled = (keyboard: stardust.Keyboard) => !keyboard.enabled || keyboard.active;
+export const areTabStopsEnabled = (keyboard: stardust.Keyboard | undefined) =>
+  keyboard && (!keyboard.enabled || keyboard.active);
 
 /**
  * Add the tab stop for adjuster hit area and focus that

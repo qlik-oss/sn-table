@@ -15,7 +15,11 @@ import {
   TotalsPosition,
   Row,
   ApplyColumnWidths,
+<<<<<<< Updated upstream
   ViewService,
+=======
+  BackgroundColors,
+>>>>>>> Stashed changes
 } from '../types';
 import { FocusTypes, SelectionActions } from './constants';
 
@@ -257,7 +261,7 @@ export interface RenderProps {
 }
 
 export interface TableWrapperProps {
-  direction: Direction | undefined;
+  direction?: Direction;
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
   footerContainer: HTMLElement | undefined;
@@ -300,9 +304,20 @@ export interface PaginationContentProps {
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
   footerContainer?: HTMLElement;
+<<<<<<< Updated upstream
   announce: Announce;
   isSelectionMode: boolean | undefined;
+=======
+  announce?: Announce;
+  isSelectionMode: boolean;
+>>>>>>> Stashed changes
   handleChangePage(pageIdx: number): void;
+  tableData: TableData;
+  keyboard?: stardust.Keyboard;
+  translator: ExtendedTranslator;
+  background: BackgroundColors;
+  constraints: stardust.Constraints;
+  rect: stardust.Rect;
 }
 
 export interface AdjusterProps {
@@ -311,11 +326,9 @@ export interface AdjusterProps {
   onColumnResize?: () => void;
 }
 
-export interface FooterWrapperProps {
-  children: JSX.Element;
-  footerContainer?: HTMLElement;
-  withoutBorders?: boolean;
-  paginationNeeded?: boolean;
+export interface FooterWrapperProps extends TableWrapperProps {
+  handleChangePage(page: number): void;
+  isSelectionMode: boolean;
 }
 export interface CellHOCProps extends TableCellProps {
   styling: CellStyle;

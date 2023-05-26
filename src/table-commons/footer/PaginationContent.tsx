@@ -6,12 +6,11 @@ import ArrowRight from '@qlik-trial/sprout/icons/react/ArrowRight';
 import ArrowRightStop from '@qlik-trial/sprout/icons/react/ArrowRightStop';
 
 import { StyledSelect, StyledButton, StyledTypography } from './styles';
-import { handleLastTab } from '../../utils/handle-keyboard';
-import { PaginationContentProps } from '../../types';
-import { getFooterStyle } from '../../utils/styling-utils';
-import { useContextSelector, TableContext } from '../../context';
-import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
-import { areTabStopsEnabled } from '../../utils/accessibility-utils';
+import { handleLastTab } from '../../table/utils/handle-keyboard';
+import { PaginationContentProps } from '../../table/types';
+import { getFooterStyle } from '../../table/utils/styling-utils';
+import { DEFAULT_FONT_SIZE } from '../../table/styling-defaults';
+import { areTabStopsEnabled } from '../../table/utils/accessibility-utils';
 import PageOptions from './PageOptions';
 
 const icons: Record<string, typeof ArrowLeft> = {
@@ -45,17 +44,19 @@ function PaginationContent({
   pageInfo,
   setPageInfo,
   footerContainer,
+  announce,
   isSelectionMode,
   handleChangePage,
-  announce,
+  tableData,
+  keyboard,
+  translator,
+  background,
+  constraints,
+  rect,
 }: PaginationContentProps) {
-  const { totalRowCount, totalColumnCount, totalPages } = useContextSelector(TableContext, (value) => value.tableData);
+  const { totalRowCount, totalColumnCount, totalPages } = tableData;
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
-  const { keyboard, translator, theme, constraints, rect } = useContextSelector(
-    TableContext,
-    (value) => value.baseProps
-  );
-  const footerStyle = useMemo(() => getFooterStyle(theme.background), [theme]);
+  const footerStyle = useMemo(() => getFooterStyle(background), [background]);
   const onFirstPage = page === 0;
   const onLastPage = page >= totalPages - 1;
   // The elements can be focused in sequential keyboard navigation:
@@ -66,18 +67,16 @@ function PaginationContent({
   const width = footerContainer ? footerContainer.getBoundingClientRect().width : rect.width;
   const showFirstAndLast = shouldShow('firstLast', width);
   const showRowsPerPage =
-    !!pageInfo.rowsPerPageOptions.length &&
-    !isSelectionMode &&
-    shouldShow('rppOptions', width) &&
-    totalColumnCount <= 100;
+    !!rowsPerPageOptions.length && !isSelectionMode && shouldShow('rppOptions', width) && totalColumnCount <= 100;
   const displayedRowsText = translator.get('SNTable.Pagination.DisplayedRowsLabel', [
     `${page * rowsPerPage + 1} - ${Math.min((page + 1) * rowsPerPage, totalRowCount)}`,
     totalRowCount.toString(),
   ]);
 
+  // TODO: put in table only wrapper, since it is only needed for the paginated table
   const handleChangeRowsPerPage = (event: SelectChangeEvent<number>) => {
     setPageInfo({ ...pageInfo, page: 0, rowsPerPage: +event.target.value });
-    announce({
+    announce?.({
       keys: [['SNTable.Pagination.RowsPerPageChange', event.target.value.toString()]],
       politeness: 'assertive',
     });
@@ -85,8 +84,13 @@ function PaginationContent({
 
   const handleSelectPage = (event: SelectChangeEvent<number>) => handleChangePage(+event.target.value);
 
+<<<<<<< Updated upstream:src/table/components/footer/PaginationContent.tsx
   const handleLastButtonTab = keyboard.enabled
     ? (event: React.KeyboardEvent) => handleLastTab(event, keyboard, isSelectionMode)
+=======
+  const handleLastButtonTab = keyboard?.enabled
+    ? (event: React.KeyboardEvent) => handleLastTab(event, isSelectionMode, keyboard)
+>>>>>>> Stashed changes:src/table-commons/footer/PaginationContent.tsx
     : null;
 
   const getButton = (

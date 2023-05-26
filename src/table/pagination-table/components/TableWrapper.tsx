@@ -3,10 +3,9 @@ import React, { useRef, useCallback, useEffect, memo } from 'react';
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './body/TableBodyWrapper';
 import TableHeadWrapper from './head/TableHeadWrapper';
-import FooterWrapper from '../../components/footer/FooterWrapper';
+import FooterWrapper from '../../components/FooterWrapper';
 import { useContextSelector, TableContext } from '../../context';
 import { StyledTableContainer, StyledTable } from './styles';
-import PaginationContent from '../../components/footer/PaginationContent';
 import useDidUpdateEffect from '../../hooks/use-did-update-effect';
 import useFocusListener from '../../hooks/use-focus-listener';
 import useScrollListener from '../../hooks/use-scroll-listener';
@@ -22,8 +21,8 @@ function TableWrapper(props: TableWrapperProps) {
   const { pageInfo, setPageInfo, direction, footerContainer, announce, viewService } = props;
   const { page, rowsPerPage } = pageInfo;
 
-  const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
-    useContextSelector(TableContext, (value) => value.tableData);
+  const tableData = useContextSelector(TableContext, (value) => value.tableData);
+  const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } = tableData;
   const { selectionsAPI, rootElement, keyboard, translator, theme, constraints, styling } = useContextSelector(
     TableContext,
     (value) => value.baseProps
@@ -131,9 +130,7 @@ function TableWrapper(props: TableWrapperProps) {
         </StyledTable>
       </StyledTableContainer>
       {!constraints.active && (
-        <FooterWrapper footerContainer={footerContainer} paginationNeeded={paginationNeeded}>
-          <PaginationContent {...props} handleChangePage={handleChangePage} isSelectionMode={isSelectionMode} />
-        </FooterWrapper>
+        <FooterWrapper {...props} handleChangePage={handleChangePage} isSelectionMode={isSelectionMode} />
       )}
     </StyledTableWrapper>
   );

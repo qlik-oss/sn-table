@@ -3,9 +3,8 @@ import { render, fireEvent } from '@testing-library/react';
 import { stardust } from '@nebula.js/stardust';
 
 import PaginationContent from '../PaginationContent';
-import * as handleAccessibility from '../../../utils/accessibility-utils';
-import { Announce, PageInfo, SetPageInfo, TableData } from '../../../../types';
-import TestWithProviders from '../../../../__test__/test-with-providers';
+import * as handleAccessibility from '../../../table/utils/accessibility-utils';
+import { Announce, BackgroundColors, ExtendedTranslator, PageInfo, SetPageInfo, TableData } from '../../../types';
 
 describe('<PaginationContent />', () => {
   const keyboard = { enabled: true, active: false };
@@ -19,20 +18,27 @@ describe('<PaginationContent />', () => {
   let isSelectionMode: boolean;
   let footerContainer: HTMLElement;
   let announce: Announce;
+  let translator: ExtendedTranslator;
+  let background: BackgroundColors;
+  let constraints: stardust.Constraints;
 
   const renderPagination = () =>
     render(
-      <TestWithProviders keyboard={keyboard} tableData={tableData} rect={rect}>
-        <PaginationContent
-          direction={direction}
-          pageInfo={pageInfo}
-          setPageInfo={setPageInfo}
-          footerContainer={footerContainer}
-          isSelectionMode={isSelectionMode}
-          handleChangePage={handleChangePage}
-          announce={announce}
-        />
-      </TestWithProviders>
+      <PaginationContent
+        direction={direction}
+        pageInfo={pageInfo}
+        setPageInfo={setPageInfo}
+        footerContainer={footerContainer}
+        isSelectionMode={isSelectionMode}
+        handleChangePage={handleChangePage}
+        announce={announce}
+        keyboard={keyboard}
+        tableData={tableData}
+        rect={rect}
+        translator={translator}
+        background={background}
+        constraints={constraints}
+      />
     );
 
   beforeEach(() => {
@@ -61,6 +67,9 @@ describe('<PaginationContent />', () => {
     isSelectionMode = false;
     announce = jest.fn();
     jest.spyOn(handleAccessibility, 'focusSelectionToolbar').mockImplementation(() => jest.fn());
+    background = { color: '#ffffff' } as BackgroundColors;
+    translator = { get: (s: string) => s } as unknown as ExtendedTranslator;
+    constraints = {};
   });
 
   afterEach(() => jest.clearAllMocks());

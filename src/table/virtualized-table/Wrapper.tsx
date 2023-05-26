@@ -1,8 +1,7 @@
 import React, { memo } from 'react';
 import { stardust } from '@nebula.js/stardust';
-import PaginationContent from '../components/footer/PaginationContent';
 import { StyledTableWrapper } from '../components/styles';
-import FooterWrapper from '../components/footer/FooterWrapper';
+import FooterWrapper from '../components/FooterWrapper';
 import Table from './Table';
 import { TableContext, useContextSelector } from '../context';
 import { PageInfo } from '../../types';
@@ -17,15 +16,13 @@ const Wrapper = () => {
     <StyledTableWrapper data-testid="sn-table" background={theme.background} dir="ltr">
       <Table pageInfo={pageInfo} />
       {paginationNeeded && (
-        <FooterWrapper>
-          <PaginationContent
-            handleChangePage={(currentPage) => setPage(currentPage)}
-            isSelectionMode={false}
-            pageInfo={pageInfo}
-            setPageInfo={() => {}}
-            announce={() => {}}
-          />
-        </FooterWrapper>
+        <FooterWrapper
+          handleChangePage={(currentPage: number) => setPage(currentPage)}
+          isSelectionMode={false}
+          pageInfo={pageInfo}
+          setPageInfo={() => {}}
+          announce={() => {}}
+        />
       )}
     </StyledTableWrapper>
   );
