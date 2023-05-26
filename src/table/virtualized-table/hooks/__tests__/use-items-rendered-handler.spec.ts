@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react';
-import { PageInfo, TableLayout } from '../../../../types';
+import { PageInfo, TableLayout, ViewService } from '../../../../types';
 import { COLUMN_DATA_BUFFER_SIZE, MAX_PAGE_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
 import { GridState } from '../../types';
 import { LoadData } from '../use-data';
@@ -17,6 +17,7 @@ describe('', () => {
   let itemsHandlerProps: ItemsHandlerProps;
   let onItemsRendered: OnItemsRendered;
   let gridState: React.MutableRefObject<GridState>;
+  let viewService: ViewService;
 
   beforeEach(() => {
     layout = {
@@ -39,6 +40,7 @@ describe('', () => {
 
     loadRows = jest.fn();
     loadColumns = jest.fn();
+    viewService = { qLeft: 0, qTop: 0, qWidth: 1, qHeight: 1, scrollLeft: 0 };
 
     verticalScrollDirection = { current: ScrollDirection.None };
     horizontalScrollDirection = { current: ScrollDirection.None };
@@ -54,6 +56,7 @@ describe('', () => {
       rowCount,
       pageInfo,
       gridState,
+      viewService,
     };
 
     onItemsRendered = {

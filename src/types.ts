@@ -10,15 +10,23 @@ export interface ViewService {
   qHeight: number;
   visibleTop?: number;
   visibleHeight?: number;
+  scrollTopRatio?: number;
   scrollLeft: number;
   rowsPerPage?: number;
   page?: number;
+}
+
+export interface Size {
+  width: number;
+  height: number;
 }
 export interface SnapshotData {
   content?: {
     scrollLeft: number;
     rowsPerPage?: number;
     page?: number;
+    scrollTopRatio?: number;
+    size: Size;
   };
 }
 
@@ -219,6 +227,7 @@ export interface ExtendedTheme extends stardust.Theme {
 
 export interface ViewState {
   scrollLeft: number;
+  scrollTopRatio?: number;
   visibleTop: number;
   visibleHeight: number;
   rowsPerPage?: number;
@@ -229,6 +238,7 @@ export interface UseOptions {
   viewState: ViewState;
   direction: Direction | undefined;
   footerContainer: HTMLElement | undefined;
+  freeResize?: boolean;
 }
 
 export interface AnnounceArgs {

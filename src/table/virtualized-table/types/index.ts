@@ -11,6 +11,7 @@ import {
   Row,
   TableData,
   TableLayout,
+  ViewService,
 } from '../../../types';
 import { GeneratedStyling } from '../../types';
 
@@ -45,10 +46,12 @@ export interface VirtualTableRenderProps {
   setPage: stardust.SetStateFn<number>;
   pageInfo: PageInfo;
   initialDataPages: EngineAPI.INxDataPage[];
+  viewService: ViewService;
 }
 
 export interface TableProps {
   pageInfo: PageInfo;
+  viewService: ViewService;
 }
 
 export interface HeaderProps {
@@ -59,6 +62,7 @@ export interface HeaderProps {
   headerStyle: GeneratedStyling;
   rowHeight: number;
   columResizeHandler: () => void;
+  viewService: ViewService;
 }
 
 export interface TotalsProps {
@@ -68,6 +72,7 @@ export interface TotalsProps {
   columns: Column[];
   totals: Totals;
   rowHeight: number;
+  viewService: ViewService;
 }
 
 export interface BodyProps {
@@ -79,6 +84,7 @@ export interface BodyProps {
   rowHeight: number;
   headerAndTotalsHeight: number;
   syncHeight: (innerHeight: number, forceSync?: boolean) => void;
+  viewService: ViewService;
 }
 
 export interface BodyRef {

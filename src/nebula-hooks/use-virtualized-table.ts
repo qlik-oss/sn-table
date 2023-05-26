@@ -9,6 +9,7 @@ import {
   ExtendedTheme,
   ExtendedTranslator,
   TableLayout,
+  ViewService,
 } from '../types';
 import useInitialDataPages from './virtualized-table/use-initial-data-pages';
 import usePageInfo from './virtualized-table/use-page-info';
@@ -29,6 +30,7 @@ interface UseVirtualizedTable {
   reactRoot: Root;
   applyColumnWidths: ApplyColumnWidths;
   isFontLoaded: boolean;
+  viewService: ViewService;
 }
 
 const useVirtualizedTable = ({
@@ -47,6 +49,7 @@ const useVirtualizedTable = ({
   reactRoot,
   applyColumnWidths,
   isFontLoaded,
+  viewService,
 }: UseVirtualizedTable) => {
   const shouldRender = layout.usePagination === false;
   const tableData = useMemo(() => getVirtualScrollTableData(layout, constraints), [layout, constraints]);
@@ -75,6 +78,7 @@ const useVirtualizedTable = ({
         setPage,
         pageInfo,
         initialDataPages,
+        viewService,
       },
       reactRoot
     );

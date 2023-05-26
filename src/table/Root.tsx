@@ -77,6 +77,7 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
     setPage,
     pageInfo,
     initialDataPages,
+    viewService,
   } = props;
   const muiTheme = muiSetup('ltr');
 
@@ -102,7 +103,7 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
           pageInfo={pageInfo}
           initialDataPages={initialDataPages}
         >
-          <VirtualizedTable />
+          <VirtualizedTable viewService={viewService} />
         </TableContextProvider>
       </ThemeProvider>
     </React.StrictMode>

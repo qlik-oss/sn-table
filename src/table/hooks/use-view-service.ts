@@ -10,6 +10,7 @@ const createViewService = (viewState: ViewState, snapshotData?: SnapshotData): V
     visibleTop: viewState?.visibleTop,
     visibleHeight: viewState?.visibleHeight,
     scrollLeft: snapshotData?.content?.scrollLeft ?? viewState?.scrollLeft ?? 0,
+    scrollTopRatio: snapshotData?.content?.scrollTopRatio ?? viewState?.scrollTopRatio,
     rowsPerPage: snapshotData?.content?.rowsPerPage ?? viewState?.rowsPerPage,
     page: snapshotData?.content?.page ?? viewState?.page,
   };

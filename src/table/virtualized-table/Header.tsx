@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { VariableSizeList } from 'react-window';
 import { HeaderProps } from './types';
 import HeaderCell from './HeaderCell';
@@ -21,11 +21,17 @@ export const listStyle: React.CSSProperties = {
 };
 
 const Header = (props: HeaderProps) => {
-  const { rect, forwardRef, columns, pageInfo, headerStyle, rowHeight, columResizeHandler } = props;
+  const { rect, forwardRef, columns, pageInfo, headerStyle, rowHeight, columResizeHandler, viewService } = props;
   const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
 
   useResetHeader(forwardRef, layout, pageInfo, columnWidths, theme.name());
+
+  const scrollLeft = layout.snapshotData ? viewService.scrollLeft : 0;
+
+  useEffect(() => {
+    forwardRef.current?.scrollTo(scrollLeft);
+  }, [forwardRef, scrollLeft]);
 
   return (
     <VariableSizeList

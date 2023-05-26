@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { stardust } from '@nebula.js/stardust';
 import Wrapper from '../Wrapper';
-import { TableData, TableLayout } from '../../../types';
+import { TableData, TableLayout, ViewService } from '../../../types';
 import { TestableTable } from '../Table';
 import FooterWrapper from '../../components/footer/FooterWrapper';
 import TestWithProviders from '../../../__test__/test-with-providers';
@@ -18,6 +18,7 @@ describe('<Wrapper />', () => {
   let layout: TableLayout;
   let tableData: TableData;
   let paginationNeeded: boolean;
+  let viewService: ViewService;
 
   const renderWrapper = () => {
     const mockTable = TestableTable as jest.MockedFunction<typeof TestableTable>;
@@ -34,7 +35,7 @@ describe('<Wrapper />', () => {
 
     render(
       <TestWithProviders layout={layout} tableData={tableData} rect={rect}>
-        <Wrapper />
+        <Wrapper viewService={viewService} />
       </TestWithProviders>
     );
   };
