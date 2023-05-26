@@ -2,6 +2,7 @@ import { renderHook } from '@testing-library/react';
 import { VariableSizeList } from 'react-window';
 import { BodyRef } from '../../types';
 import useScrollHandler from '../use-scroll-handler';
+import { ViewService } from '../../../../types';
 
 describe('useScrollHandler', () => {
   let headerRef: React.RefObject<VariableSizeList<any>>;
@@ -10,6 +11,7 @@ describe('useScrollHandler', () => {
   let listInstance: VariableSizeList;
   let listTotalsInstance: VariableSizeList;
   let refHandler: BodyRef;
+  let viewService: ViewService;
 
   beforeEach(() => {
     listInstance = { scrollTo: () => {} } as unknown as VariableSizeList;
@@ -19,6 +21,7 @@ describe('useScrollHandler', () => {
     headerRef = { current: listInstance };
     totalsRef = { current: listTotalsInstance };
     bodyRef = { current: refHandler };
+    viewService = { qLeft: 0, qTop: 0, qWidth: 1, qHeight: 1, scrollLeft: 0 };
   });
 
   afterEach(() => {
@@ -30,7 +33,7 @@ describe('useScrollHandler', () => {
     const totalsScrollToSpy = jest.spyOn(listTotalsInstance, 'scrollTo');
     const bodyScrollToSpy = jest.spyOn(refHandler, 'interpolatedScrollTo');
 
-    const { result } = renderHook(() => useScrollHandler(headerRef, totalsRef, bodyRef));
+    const { result } = renderHook(() => useScrollHandler(headerRef, totalsRef, bodyRef, viewService));
 
     const event = {
       currentTarget: { scrollLeft: 1, scrollTop: 5, scrollHeight: 20, clientHeight: 10 },

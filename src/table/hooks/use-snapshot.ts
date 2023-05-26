@@ -1,5 +1,5 @@
 // @ts-ignore ignore useImperativeHandle
-import { onTakeSnapshot, useImperativeHandle } from '@nebula.js/stardust';
+import { onTakeSnapshot, useImperativeHandle, stardust } from '@nebula.js/stardust';
 import type { TableLayout, ViewService, SnapshotLayout, HyperCube } from '../../types';
 import findVisibleRows from '../utils/find-visible-rows';
 import { getTotalPosition } from '../../handle-data';
@@ -9,18 +9,27 @@ interface UseSnapshotProps {
   viewService: ViewService;
   model: EngineAPI.IGenericObject | undefined;
   rootElement: HTMLElement;
+  contentRect: stardust.Rect;
 }
 
-const useSnapshot = ({ layout, viewService, model, rootElement }: UseSnapshotProps) => {
+const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: UseSnapshotProps) => {
   const getViewState = () => {
-    const totalsPosition = getTotalPosition(layout);
-    const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findVisibleRows(rootElement, totalsPosition);
+    if (layout.usePagination) {
+      const totalsPosition = getTotalPosition(layout);
+      const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findVisibleRows(rootElement, totalsPosition);
+      return {
+        scrollLeft: viewService.scrollLeft,
+        visibleTop: viewService.qTop + visibleRowStartIndex,
+        visibleHeight: visibleRowEndIndex < 0 ? 0 : visibleRowEndIndex - visibleRowStartIndex + 1,
+        rowsPerPage: viewService.rowsPerPage,
+        page: viewService.page,
+      };
+    }
     return {
       scrollLeft: viewService.scrollLeft,
-      visibleTop: viewService.qTop + visibleRowStartIndex,
-      visibleHeight: visibleRowEndIndex < 0 ? 0 : visibleRowEndIndex - visibleRowStartIndex + 1,
-      rowsPerPage: viewService.rowsPerPage,
-      page: viewService.page,
+      visibleTop: viewService.visibleTop,
+      visibleHeight: viewService.visibleHeight,
+      scrollTopRatio: viewService.scrollTopRatio,
     };
   };
 
@@ -33,7 +42,7 @@ const useSnapshot = ({ layout, viewService, model, rootElement }: UseSnapshotPro
       if (!snapshotLayout.qHyperCube) {
         snapshotLayout.qHyperCube = {} as HyperCube;
       }
-      const { scrollLeft, visibleTop, visibleHeight, rowsPerPage, page } = getViewState();
+      const { scrollLeft, scrollTopRatio, visibleTop = 0, visibleHeight = 0, rowsPerPage, page } = getViewState();
       snapshotLayout.qHyperCube.qDataPages = await (model as EngineAPI.IGenericObject).getHyperCubeData(
         '/qHyperCubeDef',
         [
@@ -49,6 +58,8 @@ const useSnapshot = ({ layout, viewService, model, rootElement }: UseSnapshotPro
         scrollLeft,
         rowsPerPage,
         page,
+        scrollTopRatio,
+        size: { width: contentRect.width, height: contentRect.height },
       };
     }
     return snapshotLayout;

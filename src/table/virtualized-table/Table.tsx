@@ -16,7 +16,7 @@ import useDidUpdateEffect from '../hooks/use-did-update-effect';
 import useHeights from './hooks/use-heights';
 
 const Table = (props: TableProps) => {
-  const { pageInfo } = props;
+  const { pageInfo, viewService } = props;
   const { totalsPosition, columns, paginationNeeded } = useContextSelector(TableContext, (value) => value.tableData);
   const { layout, theme, styling, rect } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
@@ -57,7 +57,7 @@ const Table = (props: TableProps) => {
   const { rowCount } = useTableCount(layout, pageInfo, stickyContainerRect, columnWidths, bodyRowHeight);
   const [containerHeight, setContainerHeight] = useState(rowCount * bodyRowHeight + headerAndTotalsHeight); // Based on single line height, which is going to be out-of-sync when rows have multiple lines
   const containerWidth = columnWidths.reduce((prev, curr) => prev + curr, 0);
-  const scrollHandler = useScrollHandler(headerRef, totalsRef, bodyRef);
+  const scrollHandler = useScrollHandler(headerRef, totalsRef, bodyRef, viewService);
 
   const syncHeight = useCallback(
     (innerHeight: number, forceSync = false) => {
@@ -108,6 +108,7 @@ const Table = (props: TableProps) => {
       forwardRef={totalsRef}
       totals={totalsPosition}
       rowHeight={totalsRowHeight}
+      viewService={viewService}
     />
   );
 
@@ -123,6 +124,7 @@ const Table = (props: TableProps) => {
             forwardRef={headerRef}
             rowHeight={headerRowHeight}
             columResizeHandler={columResizeHandler}
+            viewService={viewService}
           />
           {totalsPosition.atTop ? TotalsComponent : null}
           <Body
@@ -135,6 +137,7 @@ const Table = (props: TableProps) => {
             rowHeight={bodyRowHeight}
             headerAndTotalsHeight={headerAndTotalsHeight}
             syncHeight={syncHeight}
+            viewService={viewService}
           />
           {totalsPosition.atBottom ? TotalsComponent : null}
         </StickyContainer>
