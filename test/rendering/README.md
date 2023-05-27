@@ -49,6 +49,25 @@ To get the necessary Layout and HyperCubeData for a fixture file, you can find t
 - Add a new baseline image following the steps [above](#updating-snapshots).
 - add a new test case description [below](#test-cases-description).
 
+### Covered feature list
+
+- Table virtualization (more than 250k rows trigger the pagination footer)
+- Table pagination (less than 100 rows hide the pagination footer)
+- Sorting
+  - Interactive sorting - ASC/DESC sort dimension/measure
+  - Column sorting - the order in which dimensions and measures are added to the table / Drag the dimensions and measures to change the column sorting priority order under Columns
+  - Row sorting - the first added dimension or measure, numeric values descending, text values ascending / Drag the dimensions and measures to change the row sorting order under Sorting
+  - Internal sorting - click the item you want to change and click the button to switch to Custom sorting under Sorting
+- Column width (Auto, Fit to content, Pixels, Percentage)
+- Hide column
+- Background color, font color, and font size
+- Hovering background color and hovering font color
+- Column background color and font color with expression
+- Text alignment (Auto, Left, Center, Right)
+- Totals (label name, whether to display the totals and their placement)
+- Head menu (search, selections, adjust column size)
+- Title, subtitle, and footnote
+
 ## Test cases description
 
 ### Scenario 1 (Default properties value)
