@@ -15,11 +15,8 @@ import {
   TotalsPosition,
   Row,
   ApplyColumnWidths,
-<<<<<<< Updated upstream
   ViewService,
-=======
   BackgroundColors,
->>>>>>> Stashed changes
 } from '../types';
 import { FocusTypes, SelectionActions } from './constants';
 
@@ -264,7 +261,7 @@ export interface TableWrapperProps {
   direction?: Direction;
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
-  footerContainer: HTMLElement | undefined;
+  footerContainer?: HTMLElement;
   announce: Announce;
   viewService: ViewService;
 }
@@ -304,13 +301,8 @@ export interface PaginationContentProps {
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
   footerContainer?: HTMLElement;
-<<<<<<< Updated upstream
-  announce: Announce;
-  isSelectionMode: boolean | undefined;
-=======
   announce?: Announce;
   isSelectionMode: boolean;
->>>>>>> Stashed changes
   handleChangePage(pageIdx: number): void;
   tableData: TableData;
   keyboard?: stardust.Keyboard;
@@ -326,7 +318,7 @@ export interface AdjusterProps {
   onColumnResize?: () => void;
 }
 
-export interface FooterWrapperProps extends TableWrapperProps {
+export interface FooterWrapperProps extends Omit<TableWrapperProps, 'viewService'> {
   handleChangePage(page: number): void;
   isSelectionMode: boolean;
 }

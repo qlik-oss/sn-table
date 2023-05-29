@@ -23,6 +23,7 @@ const StyledFooterWrapper = styled(Box, {
 }));
 
 export default function FooterWrapper(props: FooterWrapperProps) {
+  const { footerContainer } = props;
   const {
     keyboard,
     translator,
@@ -45,8 +46,8 @@ export default function FooterWrapper(props: FooterWrapperProps) {
     />
   );
 
-  if (props.footerContainer) {
-    return ReactDOM.createPortal(paginationContent, props.footerContainer);
+  if (footerContainer) {
+    return ReactDOM.createPortal(paginationContent, footerContainer);
   }
 
   return tableData.paginationNeeded ? (

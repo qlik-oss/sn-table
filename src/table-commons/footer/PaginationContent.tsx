@@ -84,13 +84,8 @@ function PaginationContent({
 
   const handleSelectPage = (event: SelectChangeEvent<number>) => handleChangePage(+event.target.value);
 
-<<<<<<< Updated upstream:src/table/components/footer/PaginationContent.tsx
-  const handleLastButtonTab = keyboard.enabled
-    ? (event: React.KeyboardEvent) => handleLastTab(event, keyboard, isSelectionMode)
-=======
   const handleLastButtonTab = keyboard?.enabled
-    ? (event: React.KeyboardEvent) => handleLastTab(event, isSelectionMode, keyboard)
->>>>>>> Stashed changes:src/table-commons/footer/PaginationContent.tsx
+    ? (event: React.KeyboardEvent) => handleLastTab(event, keyboard, isSelectionMode)
     : null;
 
   const getButton = (

@@ -1,11 +1,10 @@
-import { stardust } from '@nebula.js/stardust';
-
 import registerLocale from '../src/index';
 import all from '../all.json';
+import { ExtendedTranslator } from '../../types';
 
 describe('translations', () => {
   describe('registerLocale', () => {
-    let translator: stardust.Translator;
+    let translator: ExtendedTranslator;
     beforeEach(() => {
       translator = {
         language: jest.fn(),
