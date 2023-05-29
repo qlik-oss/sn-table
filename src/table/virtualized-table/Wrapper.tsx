@@ -5,14 +5,9 @@ import { StyledTableWrapper } from '../components/styles';
 import FooterWrapper from '../components/footer/FooterWrapper';
 import Table from './Table';
 import { TableContext, useContextSelector } from '../context';
-import { PageInfo, ViewService } from '../../types';
+import { PageInfo } from '../../types';
 
-interface WrapperProps {
-  viewService: ViewService;
-}
-
-const Wrapper = (props: WrapperProps) => {
-  const { viewService } = props;
+const Wrapper = () => {
   const { theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const { paginationNeeded } = useContextSelector(TableContext, (value) => value.tableData);
   const pageInfo = useContextSelector(TableContext, (value) => value.pageInfo) as PageInfo;
@@ -20,7 +15,7 @@ const Wrapper = (props: WrapperProps) => {
 
   return (
     <StyledTableWrapper data-testid="sn-table" background={theme.background} dir="ltr">
-      <Table pageInfo={pageInfo} viewService={viewService} />
+      <Table pageInfo={pageInfo} />
       {paginationNeeded && (
         <FooterWrapper>
           <PaginationContent

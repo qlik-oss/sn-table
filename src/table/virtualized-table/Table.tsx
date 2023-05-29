@@ -16,9 +16,9 @@ import useDidUpdateEffect from '../hooks/use-did-update-effect';
 import useHeights from './hooks/use-heights';
 
 const Table = (props: TableProps) => {
-  const { pageInfo, viewService } = props;
+  const { pageInfo } = props;
   const { totalsPosition, columns, paginationNeeded } = useContextSelector(TableContext, (value) => value.tableData);
-  const { layout, theme, styling, rect } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, theme, styling, rect, viewService } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
   const ref = useRef<HTMLDivElement>(null);
@@ -124,7 +124,6 @@ const Table = (props: TableProps) => {
             forwardRef={headerRef}
             rowHeight={headerRowHeight}
             columResizeHandler={columResizeHandler}
-            viewService={viewService}
           />
           {totalsPosition.atTop ? TotalsComponent : null}
           <Body
