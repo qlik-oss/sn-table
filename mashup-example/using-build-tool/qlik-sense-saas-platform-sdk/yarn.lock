@@ -124,10 +124,10 @@
   dependencies:
     "@types/qlik-engineapi" "12.67.12"
 
-"@qlik/sdk@0.21.1":
-  version "0.21.1"
-  resolved "https://registry.yarnpkg.com/@qlik/sdk/-/sdk-0.21.1.tgz#e0ecdc3ea160885957b1d7dcdbea823883635254"
-  integrity sha512-WLl6hHvtP/G3+/QB7uPDu2h99wS+su58sIQH8zT/7e8mv5h5ZPSQl0/xJf27gt96txdFby6MfF/dCbgoRUG7Bg==
+"@qlik/sdk@0.22.0":
+  version "0.22.0"
+  resolved "https://registry.yarnpkg.com/@qlik/sdk/-/sdk-0.22.0.tgz#39de68cc5e861093dffa0e4edf956d2ef86645ab"
+  integrity sha512-vjxgoNFPH3pUgurtzp+PT/sK4IwQ8WN64enD87H4xOe8RDANqJk+U1G4Tu73BURdqlfcwxoW4509eARq+vJV0g==
   dependencies:
     "@types/jsonwebtoken" "9.0.1"
     enigma.js "2.11.0"
@@ -288,10 +288,10 @@ source-map-js@^1.0.2:
   resolved "https://registry.yarnpkg.com/source-map-js/-/source-map-js-1.0.2.tgz#adbc361d9c62df380125e7f161f71c826f1e490c"
   integrity sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==
 
-vite@4.3.8:
-  version "4.3.8"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-4.3.8.tgz#70cd6a294ab52d7fb8f37f5bc63d117dd19e9918"
-  integrity sha512-uYB8PwN7hbMrf4j1xzGDk/lqjsZvCDbt/JC5dyfxc19Pg8kRm14LinK/uq+HSLNswZEoKmweGdtpbnxRtrAXiQ==
+vite@4.3.9:
+  version "4.3.9"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-4.3.9.tgz#db896200c0b1aa13b37cdc35c9e99ee2fdd5f96d"
+  integrity sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==
   dependencies:
     esbuild "^0.17.5"
     postcss "^8.4.23"
