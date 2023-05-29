@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { stardust } from '@nebula.js/stardust';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 import { TestableTable } from '../Table';
-import { ExtendedSelectionAPI, PageInfo, TableData, TableLayout, ViewService } from '../../../types';
+import { ExtendedSelectionAPI, PageInfo, TableData, TableLayout } from '../../../types';
 import { generateDataPages, generateLayout } from '../../../__test__/generate-test-data';
 import TestWithProviders from '../../../__test__/test-with-providers';
 import { EMPTY_TABLE_DATA } from '../../context/TableContext';
@@ -22,7 +22,6 @@ describe('<Table />', () => {
   let tableData: TableData;
   let rootElement: HTMLElement;
   let dataPages: EngineAPI.INxDataPage[];
-  let viewService: ViewService;
   const app = {} as EngineAPI.IApp;
   const dimensionCount = 2;
   const measureCount = 1;
@@ -49,7 +48,7 @@ describe('<Table />', () => {
           rect={rect}
           initialDataPages={initialDataPages}
         >
-          <TestableTable pageInfo={pageInfo} viewService={viewService} />
+          <TestableTable pageInfo={pageInfo} />
         </TestWithProviders>
       )
     );
@@ -110,7 +109,6 @@ describe('<Table />', () => {
     rootElement = {
       getBoundingClientRect: () => ({ height: rect.height }),
     } as unknown as HTMLElement;
-    viewService = { qLeft: 0, qTop: 0, qWidth: 1, qHeight: 1, scrollLeft: 0 };
   });
 
   afterEach(() => jest.restoreAllMocks());

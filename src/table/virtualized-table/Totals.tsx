@@ -7,8 +7,8 @@ import useResetHeader from './hooks/use-reset-header';
 import { listStyle } from './Header';
 
 const Totals = (props: TotalsProps) => {
-  const { rect, forwardRef, pageInfo, totals, rowHeight, columns, viewService } = props;
-  const { layout, styling, theme } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { rect, forwardRef, pageInfo, totals, rowHeight, columns } = props;
+  const { layout, styling, theme, viewService } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
 
   useResetHeader(forwardRef, layout, pageInfo, columnWidths, theme.name());

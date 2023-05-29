@@ -21,8 +21,8 @@ export const listStyle: React.CSSProperties = {
 };
 
 const Header = (props: HeaderProps) => {
-  const { rect, forwardRef, columns, pageInfo, headerStyle, rowHeight, columResizeHandler, viewService } = props;
-  const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { rect, forwardRef, columns, pageInfo, headerStyle, rowHeight, columResizeHandler } = props;
+  const { layout, theme, viewService } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
 
   useResetHeader(forwardRef, layout, pageInfo, columnWidths, theme.name());

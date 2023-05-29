@@ -28,6 +28,7 @@ export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.R
     applyColumnWidths,
     tableData,
     rect,
+    viewService,
     ...wrapperProps
   } = props;
   const muiTheme = muiSetup(direction);
@@ -50,8 +51,9 @@ export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.R
           changeSortOrder={changeSortOrder}
           applyColumnWidths={applyColumnWidths}
           rect={rect}
+          viewService={viewService}
         >
-          <TableWrapper {...wrapperProps} direction={direction} />
+          <TableWrapper {...wrapperProps} direction={direction} viewService={viewService} />
         </TableContextProvider>
       </ThemeProvider>
     </StyleSheetManager>
@@ -102,8 +104,9 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
           setPage={setPage}
           pageInfo={pageInfo}
           initialDataPages={initialDataPages}
+          viewService={viewService}
         >
-          <VirtualizedTable viewService={viewService} />
+          <VirtualizedTable />
         </TableContextProvider>
       </ThemeProvider>
     </React.StrictMode>
