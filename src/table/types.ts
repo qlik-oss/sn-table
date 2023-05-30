@@ -264,7 +264,6 @@ export interface TableWrapperProps {
   setPageInfo: SetPageInfo;
   footerContainer: HTMLElement | undefined;
   announce: Announce;
-  viewService: ViewService;
 }
 
 export interface HeadCellContentProps {
