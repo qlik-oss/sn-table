@@ -30,6 +30,8 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
       visibleTop: viewService.visibleTop,
       visibleHeight: viewService.visibleHeight,
       scrollTopRatio: viewService.scrollTopRatio,
+      rowsPerPage: viewService.rowsPerPage,
+      page: viewService.page,
     };
   };
 

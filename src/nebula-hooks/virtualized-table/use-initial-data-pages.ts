@@ -1,13 +1,14 @@
 import { usePromise } from '@nebula.js/stardust';
 import { INITIAL_DATA_FETCH_HEIGHT, INITIAL_DATA_FETCH_WIDTH } from '../../table/constants';
 import { MAX_PAGE_SIZE } from '../../table/virtualized-table/constants';
-import { TableLayout } from '../../types';
+import { TableLayout, ViewService } from '../../types';
 
 interface UseInitialDataPagesProps {
   model: EngineAPI.IGenericObject | undefined;
   layout: TableLayout;
   shouldRender: boolean;
   page: number;
+  viewService: ViewService;
 }
 
 type Result = {
@@ -21,20 +22,24 @@ type Result = {
 const fetchInitialDataPages = async (
   model: EngineAPI.IGenericObject,
   layout: TableLayout,
-  page: number
+  page: number,
+  viewService: ViewService
 ): Promise<Result> => {
   let { qDataPages } = layout.qHyperCube;
   if (page !== 0 || qDataPages === undefined || qDataPages.length === 0) {
-    const qTop = page * Math.min(MAX_PAGE_SIZE, layout.qHyperCube.qSize.qcy);
+    const qTop = viewService?.visibleTop ?? page * Math.min(MAX_PAGE_SIZE, layout.qHyperCube.qSize.qcy);
 
-    qDataPages = await model.getHyperCubeData('/qHyperCubeDef', [
-      {
-        qLeft: 0,
-        qTop,
-        qWidth: INITIAL_DATA_FETCH_WIDTH,
-        qHeight: INITIAL_DATA_FETCH_HEIGHT,
-      },
-    ]);
+    const isSnapshot = !!layout.snapshotData;
+    qDataPages = isSnapshot
+      ? layout.qHyperCube.qDataPages
+      : await model.getHyperCubeData('/qHyperCubeDef', [
+          {
+            qLeft: 0,
+            qTop,
+            qWidth: INITIAL_DATA_FETCH_WIDTH,
+            qHeight: INITIAL_DATA_FETCH_HEIGHT,
+          },
+        ]);
   }
 
   return {
@@ -46,10 +51,10 @@ const fetchInitialDataPages = async (
   };
 };
 
-const useInitialDataPages = ({ model, layout, shouldRender, page }: UseInitialDataPagesProps) => {
+const useInitialDataPages = ({ model, layout, shouldRender, page, viewService }: UseInitialDataPagesProps) => {
   const [result] = usePromise(async () => {
     if (shouldRender && model) {
-      return fetchInitialDataPages(model, layout, page);
+      return fetchInitialDataPages(model, layout, page, viewService);
     }
 
     return undefined;
