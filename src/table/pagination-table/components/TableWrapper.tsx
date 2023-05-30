@@ -19,15 +19,13 @@ import useKeyboardActiveListener from '../../hooks/use-keyboard-active-listener'
 import { SelectionActions } from '../../constants';
 
 function TableWrapper(props: TableWrapperProps) {
-  const { pageInfo, setPageInfo, direction, footerContainer, announce, viewService } = props;
+  const { pageInfo, setPageInfo, direction, footerContainer, announce } = props;
   const { page, rowsPerPage } = pageInfo;
 
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
     useContextSelector(TableContext, (value) => value.tableData);
-  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints, styling } = useContextSelector(
-    TableContext,
-    (value) => value.baseProps
-  );
+  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints, styling, viewService } =
+    useContextSelector(TableContext, (value) => value.baseProps);
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);

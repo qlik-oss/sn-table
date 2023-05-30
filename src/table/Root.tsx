@@ -53,7 +53,7 @@ export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.R
           rect={rect}
           viewService={viewService}
         >
-          <TableWrapper {...wrapperProps} direction={direction} viewService={viewService} />
+          <TableWrapper {...wrapperProps} direction={direction} />
         </TableContextProvider>
       </ThemeProvider>
     </StyleSheetManager>
