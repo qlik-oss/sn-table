@@ -72,6 +72,8 @@ const useItemsRendererHandler = ({
       viewService.qWidth = qWidth;
       viewService.visibleTop = qTop;
       viewService.visibleHeight = qHeight;
+      viewService.page = pageInfo.page;
+      viewService.rowsPerPage = pageInfo.rowsPerPage;
 
       // Load data for visible grid and buffer grid
       if (verticalScrollDirection.current === ScrollDirection.Down) {

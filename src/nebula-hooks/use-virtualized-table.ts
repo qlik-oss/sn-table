@@ -53,8 +53,14 @@ const useVirtualizedTable = ({
 }: UseVirtualizedTable) => {
   const shouldRender = layout.usePagination === false;
   const tableData = useMemo(() => getVirtualScrollTableData(layout, constraints), [layout, constraints]);
-  const { pageInfo, setPage } = usePageInfo(layout, shouldRender);
-  const { initialDataPages, isLoading } = useInitialDataPages({ model, layout, page: pageInfo.page, shouldRender });
+  const { pageInfo, setPage } = usePageInfo(layout, shouldRender, viewService);
+  const { initialDataPages, isLoading } = useInitialDataPages({
+    model,
+    layout,
+    page: pageInfo.page,
+    shouldRender,
+    viewService,
+  });
 
   useEffect(() => {
     if (!shouldRender || !model || !changeSortOrder || !initialDataPages || isLoading || !isFontLoaded) return;

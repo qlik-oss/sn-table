@@ -1,9 +1,11 @@
-import { useMemo, useState } from '@nebula.js/stardust';
+import { useMemo, useState, useOptions } from '@nebula.js/stardust';
 import { MAX_PAGE_SIZE } from '../../table/virtualized-table/constants';
-import { PageInfo, TableLayout } from '../../types';
+import { PageInfo, TableLayout, ViewService, UseOptions } from '../../types';
 
-const usePageInfo = (layout: TableLayout, shouldRender: boolean) => {
-  const [page, setPage] = useState(0);
+const usePageInfo = (layout: TableLayout, shouldRender: boolean, viewService: ViewService) => {
+  const { viewState } = useOptions() as UseOptions;
+  const tmpPage = layout.snapshotData || viewState?.rowsPerPage ? viewService.page || 0 : 0;
+  const [page, setPage] = useState(tmpPage);
   const pageSize = Math.min(MAX_PAGE_SIZE, layout.qHyperCube.qSize.qcy);
   const pageInfo = useMemo<PageInfo>(
     () => ({
