@@ -248,6 +248,9 @@ const getChartExploration = (env) =>
           ],
         },
       },
+      // straight table that has chart exploration enabled and is placed inside a container
+      // should not show Chart exploration in the property panel
+      show: (itemData) => !itemData.insideContainer,
     },
   };
 
