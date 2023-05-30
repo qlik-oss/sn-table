@@ -18,7 +18,7 @@ describe('<Table />', () => {
   let selectionsAPI: ExtendedSelectionAPI;
   let isModal = false;
   let user: UserEvent;
-  let constraints: stardust.Constraints;
+  let interactions: stardust.Interactions;
   let tableData: TableData;
   let rootElement: HTMLElement;
   let dataPages: EngineAPI.INxDataPage[];
@@ -42,7 +42,7 @@ describe('<Table />', () => {
           selectionsAPI={selectionsAPI}
           model={model}
           layout={layout}
-          constraints={constraints}
+          interactions={interactions}
           tableData={tableData}
           rootElement={rootElement}
           rect={rect}
@@ -104,7 +104,7 @@ describe('<Table />', () => {
 
     isModal = false;
 
-    constraints = {};
+    interactions = {};
 
     rootElement = {
       getBoundingClientRect: () => ({ height: rect.height }),
@@ -214,10 +214,10 @@ describe('<Table />', () => {
       await waitFor(() => expect(screen.getByText('measure-c2-r0').parentNode).toHaveClass('excluded'));
     });
 
-    describe('constraints', () => {
-      it('should not be able to select a cell with "active" and "select" constraints', async () => {
-        constraints.active = true;
-        constraints.select = true;
+    describe('interactions', () => {
+      it('should not be able to select a cell when "active" and "select" interactions are disabled', async () => {
+        interactions.active = false;
+        interactions.select = false;
         jest.spyOn(selectionsAPI, 'begin');
         const cellText = 'dimension-c0-r0';
 
@@ -231,8 +231,8 @@ describe('<Table />', () => {
         await waitFor(() => expect(selectionsAPI.begin).not.toHaveBeenCalled());
       });
 
-      it('should not be able to select a cell with "active" constraints', async () => {
-        constraints.active = true;
+      it('should not be able to select a cell when "active" interaction is disabled', async () => {
+        interactions.active = false;
         jest.spyOn(selectionsAPI, 'begin');
         const cellText = 'dimension-c0-r0';
 
@@ -246,8 +246,8 @@ describe('<Table />', () => {
         await waitFor(() => expect(selectionsAPI.begin).not.toHaveBeenCalled());
       });
 
-      it('should not be able to select a cell with "select" constraints', async () => {
-        constraints.select = true;
+      it('should not be able to select a cell when "select" interaction is disabled', async () => {
+        interactions.select = false;
         jest.spyOn(selectionsAPI, 'begin');
         const cellText = 'dimension-c0-r0';
 

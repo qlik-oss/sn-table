@@ -23,11 +23,6 @@ const nuked = embed(app, {
   context: {
     theme: 'light',
     language: 'en-US',
-    constraints: {
-      active: false,
-      passive: false,
-      select: false,
-    },
   },
   types: [
     {

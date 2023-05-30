@@ -15,11 +15,11 @@ describe('<ColumnAdjuster />', () => {
   let columnWidths: number[];
   let setColumnWidths: React.Dispatch<React.SetStateAction<number[]>>;
   let setYScrollbarWidth: React.Dispatch<React.SetStateAction<number>>;
-  let constraints: stardust.Constraints;
+  let interactions: stardust.Interactions;
 
   const renderAdjuster = () =>
     render(
-      <TestWithProviders constraints={constraints} applyColumnWidths={applyColumnWidths}>
+      <TestWithProviders interactions={interactions} applyColumnWidths={applyColumnWidths}>
         <ColumnAdjuster column={column} isLastColumn={isLastColumn} />
       </TestWithProviders>
     );
@@ -44,7 +44,7 @@ describe('<ColumnAdjuster />', () => {
     applyColumnWidths = jest.fn();
     columnWidths = [200, 200];
     setColumnWidths = jest.fn();
-    constraints = {};
+    interactions = {};
     jest
       .spyOn(useColumnWidths, 'default')
       .mockImplementation(() => [columnWidths, setColumnWidths, setYScrollbarWidth, false]);
@@ -52,14 +52,14 @@ describe('<ColumnAdjuster />', () => {
 
   afterEach(() => jest.clearAllMocks());
 
-  it('should return null when  constraints.active is true', () => {
-    constraints.active = true;
+  it('should return null when interactions.active is false', () => {
+    interactions.active = false;
 
     renderAdjuster();
     expect(screen.queryByTestId('sn-table-column-adjuster')).toBeNull();
   });
 
-  it('should render when constraints.active is not true', () => {
+  it('should render when interactions.active is not false', () => {
     renderAdjuster();
     expect(screen.queryByTestId('sn-table-column-adjuster')).toBeInTheDocument();
   });
