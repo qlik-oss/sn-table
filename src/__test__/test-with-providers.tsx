@@ -42,7 +42,11 @@ const TestWithProviders = ({
   children,
   app = { getField: () => Promise.resolve({}) } as unknown as EngineAPI.IApp,
   layout = generateLayout(1, 1, 5),
-  interactions = {} as stardust.Interactions,
+  interactions = {
+    active: true,
+    passive: true,
+    select: true,
+  } as stardust.Interactions,
   selectionsAPI = {
     isModal: () => false,
     on: () => undefined,

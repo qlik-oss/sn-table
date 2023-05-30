@@ -44,7 +44,11 @@ describe('<ColumnAdjuster />', () => {
     applyColumnWidths = jest.fn();
     columnWidths = [200, 200];
     setColumnWidths = jest.fn();
-    interactions = {};
+    interactions = {
+      active: true,
+      passive: true,
+      select: true,
+    };
     jest
       .spyOn(useColumnWidths, 'default')
       .mockImplementation(() => [columnWidths, setColumnWidths, setYScrollbarWidth, false]);

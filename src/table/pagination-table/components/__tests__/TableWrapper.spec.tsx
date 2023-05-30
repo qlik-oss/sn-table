@@ -58,7 +58,11 @@ describe('<TableWrapper />', () => {
     } as unknown as TableData;
     pageInfo = { page: 0, rowsPerPage: 100, rowsPerPageOptions: [10, 25, 100] };
     setPageInfo = jest.fn();
-    interactions = {};
+    interactions = {
+      active: true,
+      passive: true,
+      select: true,
+    };
     rootElement = {
       getElementsByClassName: () => [],
       getElementsByTagName: () => [{ clientHeight: {}, contains: jest.fn() }],

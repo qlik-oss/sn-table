@@ -104,7 +104,11 @@ describe('<Table />', () => {
 
     isModal = false;
 
-    interactions = {};
+    interactions = {
+      active: true,
+      passive: true,
+      select: true,
+    };
 
     rootElement = {
       getBoundingClientRect: () => ({ height: rect.height }),
