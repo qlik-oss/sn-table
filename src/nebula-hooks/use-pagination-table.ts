@@ -66,14 +66,16 @@ const usePaginationTable = ({
   const [pageInfo, setPageInfo] = useState(initialPageInfo);
   const [tableData] = usePromise(async () => {
     if (shouldRender) {
-      return manageData(model as EngineAPI.IGenericObject, layout, pageInfo, setPageInfo, viewService);
+      return manageData(model, layout, pageInfo, setPageInfo, viewService);
     }
 
     return null;
   }, [layout, pageInfo, model, constraints, shouldRender]);
 
   useEffect(() => {
-    const isReadyToRender = shouldRender && tableData;
+    // model and changeSortOrder is undefined when taking snapshot, but they must be defined in order to render other cases
+    const isReadyToRender =
+      shouldRender && isFontLoaded && tableData && ((model && changeSortOrder) || !!layout.snapshotData);
 
     if (!isReadyToRender) return;
 

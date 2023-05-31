@@ -193,7 +193,7 @@ export const getColumns = (layout: TableLayout) => {
  * For dimension cells, there is a selectionColIdx used for calling the selection API
  */
 export default async function manageData(
-  model: EngineAPI.IGenericObject,
+  model: EngineAPI.IGenericObject | undefined,
   layout: TableLayout,
   pageInfo: PageInfo,
   setPageInfo: SetPageInfo,
@@ -225,7 +225,7 @@ export default async function manageData(
   const isSnapshot = !!layout.snapshotData;
   const dataPages = isSnapshot
     ? layout.qHyperCube.qDataPages
-    : await model.getHyperCubeData('/qHyperCubeDef', [
+    : await model?.getHyperCubeData('/qHyperCubeDef', [
         { qTop: top, qLeft: 0, qHeight: height, qWidth: totalColumnCount },
       ]);
   if (viewService && !isSnapshot) {
