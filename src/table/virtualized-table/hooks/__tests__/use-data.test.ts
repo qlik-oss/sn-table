@@ -319,13 +319,9 @@ describe('useData', () => {
 
       // As the data cannot be derived, it needs to be fetched
       await waitFor(() =>
-        expect(model.getHyperCubeData).toHaveBeenNthCalledWith(
-          1,
-          '/qHyperCubeDef',
-          Array(VISIBLE_ROW_COUNT + ROW_DATA_BUFFER_SIZE)
-            .fill(undefined)
-            .map((_, rowIdx) => ({ qHeight: 1, qLeft: 0, qTop: rowIdx, qWidth: 6 }))
-        )
+        expect(model.getHyperCubeData).toHaveBeenNthCalledWith(1, '/qHyperCubeDef', [
+          { qHeight: 26, qLeft: 0, qTop: 0, qWidth: 6 },
+        ])
       );
       await waitFor(() => expect(renderHookResult.result.current.rowsInPage).toHaveLength(pageInfo.rowsPerPage));
     });
