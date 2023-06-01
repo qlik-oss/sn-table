@@ -112,15 +112,16 @@ describe('<HeadCellMenu />', () => {
     jest.resetAllMocks();
   });
 
-  it('should render head cell menu button but the opacity is 0', () => {
+  it('should render head cell menu button but the opacity is 0, and the menu is not opened', () => {
     renderTableHeadCellMenu();
 
     const element = screen.getByRole('button');
     expect(element).toBeInTheDocument();
     expect(element).not.toBeVisible();
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 
-  it('should render all menu items when column is dimension', async () => {
+  it('should open menu and render all menu items when column is dimension', async () => {
     renderTableHeadCellMenu();
     await openMenu();
 
@@ -131,7 +132,7 @@ describe('<HeadCellMenu />', () => {
     );
   });
 
-  it('should not render selection items when when column is measure', async () => {
+  it('should open menu but not render selection items when when column is measure', async () => {
     column = { ...column, isDim: false };
     renderTableHeadCellMenu();
     await openMenu();
@@ -141,7 +142,7 @@ describe('<HeadCellMenu />', () => {
     expect(screen.queryByText('SNTable.MenuItem.AdjustColumnSize')).toBeVisible();
   });
 
-  it('should not render selection items when when column is dimension but selections is disabled ', async () => {
+  it('should open menu but not render selection items when when column is dimension, but selections is disabled ', async () => {
     constraints = { select: true };
     renderTableHeadCellMenu();
     await openMenu();
@@ -149,16 +150,6 @@ describe('<HeadCellMenu />', () => {
     expect(screen.queryByText('SNTable.MenuItem.Search')).toBeNull();
     expect(screen.queryByText('SNTable.MenuItem.Selections')).toBeNull();
     expect(screen.queryByText('SNTable.MenuItem.AdjustColumnSize')).toBeVisible();
-  });
-
-  it('should open the menu only when the button is clicked', async () => {
-    renderTableHeadCellMenu();
-
-    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button'));
-    await waitFor(() => {
-      expect(screen.queryByRole('menu')).toBeVisible();
-    });
   });
 
   it('should close the menu when listbox is about to mount', async () => {
