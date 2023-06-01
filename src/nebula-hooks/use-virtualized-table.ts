@@ -1,4 +1,4 @@
-import { stardust, useEffect, useMemo, useOptions } from '@nebula.js/stardust';
+import { stardust, useEffect, useMemo } from '@nebula.js/stardust';
 import { Root } from 'react-dom/client';
 import { renderVirtualizedTable } from '../table/Root';
 import getVirtualScrollTableData from '../table/virtualized-table/utils/get-table-data';
@@ -9,11 +9,11 @@ import {
   ExtendedTheme,
   ExtendedTranslator,
   TableLayout,
-  UseOptions,
   ViewService,
 } from '../types';
 import useInitialDataPages from './virtualized-table/use-initial-data-pages';
 import usePageInfo from './virtualized-table/use-page-info';
+import isPrinting from '../is-printing';
 
 interface UseVirtualizedTable {
   app: EngineAPI.IApp | undefined;
@@ -52,9 +52,8 @@ const useVirtualizedTable = ({
   isFontLoaded,
   viewService,
 }: UseVirtualizedTable) => {
-  const { viewState } = useOptions() as UseOptions;
-  const isPrinting = layout.snapshotData || viewState?.visibleHeight !== undefined;
-  const shouldRender = layout.usePagination === false && !isPrinting;
+  const isPrintingMode = isPrinting(layout, viewService);
+  const shouldRender = layout.usePagination === false && !isPrintingMode;
   const tableData = useMemo(() => getVirtualScrollTableData(layout, constraints), [layout, constraints]);
   const { pageInfo, setPage } = usePageInfo(layout, shouldRender, viewService);
   const { initialDataPages, isLoading } = useInitialDataPages({

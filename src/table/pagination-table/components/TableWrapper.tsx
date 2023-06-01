@@ -17,6 +17,7 @@ import { StyledTableWrapper } from '../../components/styles';
 import useScrollbarWidth from '../../virtualized-table/hooks/use-scrollbar-width';
 import useKeyboardActiveListener from '../../hooks/use-keyboard-active-listener';
 import { SelectionActions } from '../../constants';
+import isPrinting from '../../../is-printing';
 
 function TableWrapper(props: TableWrapperProps) {
   const { pageInfo, setPageInfo, direction, footerContainer, announce } = props;
@@ -44,8 +45,8 @@ function TableWrapper(props: TableWrapperProps) {
     String(columns.length),
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
-  const isPrinting = layout.snapshotData || viewService.viewState?.visibleHeight;
-  const scrollLeft = isPrinting ? viewService.scrollLeft : 0;
+  const isPrintingMode = isPrinting(layout, viewService);
+  const scrollLeft = isPrintingMode ? viewService.scrollLeft : 0;
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);

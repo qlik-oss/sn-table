@@ -14,6 +14,7 @@ import {
   ViewService,
 } from '../types';
 import useAnnounceAndTranslations from './use-announce-and-translations';
+import isPrinting from '../is-printing';
 
 interface UsePaginationTable {
   env: Galaxy;
@@ -60,11 +61,11 @@ const usePaginationTable = ({
   isFontLoaded,
   viewService,
 }: UsePaginationTable) => {
-  const { viewState, direction, footerContainer } = useOptions() as UseOptions;
-  const isPrinting = layout.snapshotData || viewState?.visibleHeight !== undefined;
-  const shouldRender = !env.carbon && (layout.usePagination !== false || isPrinting);
+  const { direction, footerContainer } = useOptions() as UseOptions;
+  const isPrintingMode = isPrinting(layout, viewService);
+  const shouldRender = !env.carbon && (layout.usePagination !== false || isPrintingMode);
   const announce = useAnnounceAndTranslations(rootElement, translator);
-  const tmpPageInfo = isPrinting
+  const tmpPageInfo = isPrintingMode
     ? {
         page: viewService.page || initialPageInfo.page,
         rowsPerPage: viewService.rowsPerPage || initialPageInfo.rowsPerPage,
