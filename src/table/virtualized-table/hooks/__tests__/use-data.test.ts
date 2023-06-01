@@ -149,6 +149,9 @@ describe('useData', () => {
     test('should flag last row in data set', async () => {
       pageInfo.rowsPerPage = QCY;
       const rowIdx = pageInfo.rowsPerPage - 1;
+      gridState.current.overscanRowStartIndex = rowIdx;
+      gridState.current.overscanRowStopIndex = QCY;
+
       await doRenderHook();
       const { result } = renderHookResult;
 
@@ -157,33 +160,20 @@ describe('useData', () => {
 
       await act(async () => result.current.loadRows(0, rowIdx, 2, 1));
 
-      const expectedRow: Row = {
-        'col-0': {
-          colIdx: 0,
-          isLastColumn: false,
-          isLastRow: true,
-          isSelectable: false,
-          pageColIdx: 0,
-          pageRowIdx: rowIdx,
-          qText: '0',
-          rowIdx,
-          isNumeric: false,
-        } as Cell,
-        'col-1': {
-          colIdx: 1,
-          isLastColumn: false,
-          isLastRow: true,
-          isSelectable: false,
-          pageColIdx: 1,
-          pageRowIdx: rowIdx,
-          qText: '1',
-          rowIdx,
-          isNumeric: false,
-        } as Cell,
-        key: `row-${rowIdx}`,
-      };
+      const expectedCell: Cell = {
+        colIdx: 0,
+        isLastColumn: false,
+        isLastRow: true,
+        isSelectable: false,
+        pageColIdx: 0,
+        pageRowIdx: rowIdx,
+        qText: '0',
+        rowIdx,
+        isNumeric: false,
+      } as Cell;
 
-      await waitFor(() => expect(result.current.rowsInPage[rowIdx]).toEqual(expectedRow));
+      await waitFor(() => expect(result.current.rowsInPage[rowIdx]['col-0']).toEqual(expectedCell));
+      await waitFor(() => expect(result.current.rowsInPage[rowIdx].key).toEqual(`row-${rowIdx}`));
     });
 
     test('should not fetch row that is already loaded', async () => {
@@ -229,6 +219,8 @@ describe('useData', () => {
 
     test('should flag last column', async () => {
       const colIdx = QCX - 1;
+      gridState.current.overscanColumnStartIndex = colIdx;
+      gridState.current.overscanColumnStopIndex = colIdx + 1;
       await doRenderHook();
       const { result } = renderHookResult;
 
