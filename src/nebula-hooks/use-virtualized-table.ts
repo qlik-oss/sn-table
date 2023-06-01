@@ -9,9 +9,11 @@ import {
   ExtendedTheme,
   ExtendedTranslator,
   TableLayout,
+  ViewService,
 } from '../types';
 import useInitialDataPages from './virtualized-table/use-initial-data-pages';
 import usePageInfo from './virtualized-table/use-page-info';
+import isPrinting from '../is-printing';
 
 interface UseVirtualizedTable {
   app: EngineAPI.IApp | undefined;
@@ -29,6 +31,7 @@ interface UseVirtualizedTable {
   reactRoot: Root;
   applyColumnWidths: ApplyColumnWidths;
   isFontLoaded: boolean;
+  viewService: ViewService;
 }
 
 const useVirtualizedTable = ({
@@ -47,8 +50,10 @@ const useVirtualizedTable = ({
   reactRoot,
   applyColumnWidths,
   isFontLoaded,
+  viewService,
 }: UseVirtualizedTable) => {
-  const shouldRender = layout.usePagination === false;
+  const isPrintingMode = isPrinting(layout, viewService);
+  const shouldRender = layout.usePagination === false && !isPrintingMode;
   const tableData = useMemo(() => getVirtualScrollTableData(layout, constraints), [layout, constraints]);
   const { pageInfo, setPage } = usePageInfo(layout, shouldRender);
   const { initialDataPages, isLoading } = useInitialDataPages({ model, layout, page: pageInfo.page, shouldRender });
@@ -75,6 +80,7 @@ const useVirtualizedTable = ({
         setPage,
         pageInfo,
         initialDataPages,
+        viewService,
       },
       reactRoot
     );

@@ -30,7 +30,7 @@ const grdiStyle: React.CSSProperties = {
 
 const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   const { rect, columns, innerForwardRef, pageInfo, bodyStyle, rowHeight, headerAndTotalsHeight, syncHeight } = props;
-  const { layout, model, theme } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, model, theme, viewService } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const initialDataPages = useContextSelector(TableContext, (value) => value.initialDataPages);
 
@@ -85,6 +85,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     rowCount,
     pageInfo,
     gridState,
+    viewService,
   });
 
   const itemData = useMemo<ItemData>(
@@ -161,6 +162,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
       onItemsRendered={handleItemsRendered}
       onScroll={scrollHandler}
       itemKey={getCellItemKey}
+      className="sn-table-body"
     >
       {Cell}
     </VariableSizeGrid>

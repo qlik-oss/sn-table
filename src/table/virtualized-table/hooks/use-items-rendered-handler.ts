@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { PageInfo, TableLayout } from '../../../types';
+import { PageInfo, TableLayout, ViewService } from '../../../types';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../constants';
 import { GridState } from '../types';
 import { LoadData } from './use-data';
@@ -25,6 +25,7 @@ export interface ItemsHandlerProps {
   rowCount: number;
   pageInfo: PageInfo;
   gridState: React.MutableRefObject<GridState>;
+  viewService: ViewService;
 }
 
 /**
@@ -43,6 +44,7 @@ const useItemsRendererHandler = ({
   rowCount,
   pageInfo,
   gridState,
+  viewService,
 }: ItemsHandlerProps) => {
   const handleItemsRendered = useCallback(
     ({
@@ -50,6 +52,10 @@ const useItemsRendererHandler = ({
       overscanColumnStopIndex,
       overscanRowStartIndex,
       overscanRowStopIndex,
+      visibleColumnStartIndex,
+      visibleColumnStopIndex,
+      visibleRowStartIndex,
+      visibleRowStopIndex,
     }: OnItemsRendered) => {
       gridState.current.overscanColumnStartIndex = overscanColumnStartIndex;
       gridState.current.overscanColumnStopIndex = overscanColumnStopIndex;
@@ -66,6 +72,12 @@ const useItemsRendererHandler = ({
       const qTop = overscanRowStartIndex + pageInfo.page * pageInfo.rowsPerPage;
       const qWidth = overscanColumnStopIndex - overscanColumnStartIndex + 1;
       const qHeight = overscanRowStopIndex - overscanRowStartIndex + 1;
+      viewService.visibleLeft = visibleColumnStartIndex;
+      viewService.visibleWidth = visibleColumnStopIndex - visibleColumnStartIndex + 1;
+      viewService.visibleTop = visibleRowStartIndex + pageInfo.page * pageInfo.rowsPerPage;
+      viewService.visibleHeight = visibleRowStopIndex - visibleRowStartIndex + 1;
+      viewService.page = pageInfo.page;
+      viewService.rowsPerPage = pageInfo.rowsPerPage;
 
       // Load data for visible grid and buffer grid
       if (verticalScrollDirection.current === ScrollDirection.Down) {

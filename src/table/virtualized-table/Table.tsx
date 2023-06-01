@@ -18,7 +18,7 @@ import useHeights from './hooks/use-heights';
 const Table = (props: TableProps) => {
   const { pageInfo } = props;
   const { totalsPosition, columns, paginationNeeded } = useContextSelector(TableContext, (value) => value.tableData);
-  const { layout, theme, styling, rect } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, theme, styling, rect, viewService } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
   const ref = useRef<HTMLDivElement>(null);
@@ -57,7 +57,7 @@ const Table = (props: TableProps) => {
   const { rowCount } = useTableCount(layout, pageInfo, stickyContainerRect, columnWidths, bodyRowHeight);
   const [containerHeight, setContainerHeight] = useState(rowCount * bodyRowHeight + headerAndTotalsHeight); // Based on single line height, which is going to be out-of-sync when rows have multiple lines
   const containerWidth = columnWidths.reduce((prev, curr) => prev + curr, 0);
-  const scrollHandler = useScrollHandler(headerRef, totalsRef, bodyRef);
+  const scrollHandler = useScrollHandler(headerRef, totalsRef, bodyRef, viewService);
 
   const syncHeight = useCallback(
     (innerHeight: number, forceSync = false) => {

@@ -6,7 +6,7 @@ import TableBodyWrapper from '../body/TableBodyWrapper';
 import TableHeadWrapper from '../head/TableHeadWrapper';
 import * as handleKeyPress from '../../../utils/handle-keyboard';
 import * as handleScroll from '../../../utils/handle-scroll';
-import { TableLayout, TableData, PageInfo, SetPageInfo, Announce, Column, ViewService } from '../../../../types';
+import { TableLayout, TableData, PageInfo, SetPageInfo, Announce, Column } from '../../../../types';
 import TestWithProviders from '../../../../__test__/test-with-providers';
 
 describe('<TableWrapper />', () => {
@@ -19,7 +19,6 @@ describe('<TableWrapper />', () => {
   let direction: 'ltr' | 'rtl';
   let announce: Announce;
   let layout: TableLayout;
-  let viewService: ViewService;
   let footerContainer: HTMLElement | undefined;
 
   const renderTableWrapper = () =>
@@ -36,7 +35,6 @@ describe('<TableWrapper />', () => {
           setPageInfo={setPageInfo}
           direction={direction}
           announce={announce}
-          viewService={viewService}
           footerContainer={footerContainer}
         />
       </TestWithProviders>
@@ -68,13 +66,6 @@ describe('<TableWrapper />', () => {
       width: 750,
     } as unknown as stardust.Rect;
     window.HTMLElement.prototype.scrollTo = jest.fn();
-    viewService = {
-      scrollLeft: 0,
-      qLeft: 0,
-      qTop: 0,
-      qWidth: 1,
-      qHeight: 100,
-    };
   });
 
   afterEach(() => jest.clearAllMocks());

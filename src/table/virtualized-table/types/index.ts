@@ -11,6 +11,7 @@ import {
   Row,
   TableData,
   TableLayout,
+  ViewService,
 } from '../../../types';
 import { GeneratedStyling } from '../../types';
 
@@ -45,6 +46,7 @@ export interface VirtualTableRenderProps {
   setPage: stardust.SetStateFn<number>;
   pageInfo: PageInfo;
   initialDataPages: EngineAPI.INxDataPage[];
+  viewService: ViewService;
 }
 
 export interface TableProps {

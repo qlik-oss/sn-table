@@ -118,6 +118,7 @@ export interface ContextValue {
     applyColumnWidths: ApplyColumnWidths;
     styling: TableStyling;
     rect: stardust.Rect;
+    viewService: ViewService;
   };
   tableData: TableData;
   setYScrollbarWidth: (width: number) => void;
@@ -231,6 +232,7 @@ export interface ContextProviderProps {
   pageInfo?: PageInfo;
   setPage?: stardust.SetStateFn<number>;
   initialDataPages?: EngineAPI.INxDataPage[];
+  viewService: ViewService;
 }
 
 export interface RenderProps {
@@ -262,7 +264,6 @@ export interface TableWrapperProps {
   setPageInfo: SetPageInfo;
   footerContainer: HTMLElement | undefined;
   announce: Announce;
-  viewService: ViewService;
 }
 
 export interface HeadCellContentProps {
