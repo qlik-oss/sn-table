@@ -24,7 +24,7 @@ function TableWrapper(props: TableWrapperProps) {
 
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
     useContextSelector(TableContext, (value) => value.tableData);
-  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints, styling, viewService } =
+  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints, styling, viewService, layout } =
     useContextSelector(TableContext, (value) => value.baseProps);
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
@@ -44,7 +44,8 @@ function TableWrapper(props: TableWrapperProps) {
     String(columns.length),
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
-  const { scrollLeft } = viewService;
+  const isPrinting = layout.snapshotData || viewService.viewState?.visibleHeight;
+  const scrollLeft = isPrinting ? viewService.scrollLeft : 0;
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);

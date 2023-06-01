@@ -108,7 +108,6 @@ const Table = (props: TableProps) => {
       forwardRef={totalsRef}
       totals={totalsPosition}
       rowHeight={totalsRowHeight}
-      viewService={viewService}
     />
   );
 

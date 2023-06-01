@@ -14,6 +14,7 @@ export interface ViewService {
   scrollLeft: number;
   rowsPerPage?: number;
   page?: number;
+  viewState?: ViewState;
 }
 
 export interface Size {

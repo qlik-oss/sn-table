@@ -52,7 +52,7 @@ export default function supernova(env: Galaxy) {
         layout?.snapshotData?.content && !freeResize
           ? { ...contentRect, ...layout.snapshotData.content.size }
           : contentRect;
-      const viewService = useViewService(layout.snapshotData);
+      const viewService = useViewService(layout);
       const embed = useEmbed();
       const theme = useExtendedTheme(rootElement);
       const changeSortOrder = useSorting(layout.qHyperCube, model); // undefined when taking snapshot

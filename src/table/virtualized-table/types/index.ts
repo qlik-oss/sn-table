@@ -70,7 +70,6 @@ export interface TotalsProps {
   columns: Column[];
   totals: Totals;
   rowHeight: number;
-  viewService: ViewService;
 }
 
 export interface BodyProps {

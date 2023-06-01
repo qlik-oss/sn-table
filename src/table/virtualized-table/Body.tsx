@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { memo, useMemo, useLayoutEffect, useRef, useImperativeHandle, forwardRef, useEffect } from 'react';
+import React, { memo, useMemo, useLayoutEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import { VariableSizeGrid } from 'react-window';
 import useData from './hooks/use-data';
 import { BodyProps, BodyRef, ItemData, GridState } from './types';
@@ -106,20 +105,6 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
 
   const bodyHeight = getBodyHeight(rect, headerAndTotalsHeight, rowCount, estimatedRowHeight);
 
-  const interpolatedScrollTo = (scrollTopRatio: number, scrollLeft: number) => {
-    const innerHeight = (innerForwardRef.current?.clientHeight ?? bodyHeight) - bodyHeight;
-    const scrollTop = Math.round(innerHeight * scrollTopRatio);
-    rowMeta.current.lastScrollToRatio = scrollTopRatio;
-    if (rowMeta.current.lastScrollToRatio === 1) {
-      // Hack to ensure that the last row is scrolled to when row height is dynamic
-      // and row has already been measured
-      gridRef.current?.scrollToItem({ rowIndex: rowCount - 1, align: 'start' });
-      gridRef.current?.scrollTo({ scrollLeft });
-    } else {
-      gridRef.current?.scrollTo({ scrollTop, scrollLeft });
-    }
-  };
-
   useLayoutEffect(() => {
     syncHeight(innerForwardRef.current?.clientHeight ?? 0, true);
   }, [rowCount, syncHeight, innerForwardRef]);
@@ -147,7 +132,20 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     ref,
     () => {
       return {
-        interpolatedScrollTo,
+        interpolatedScrollTo: (scrollTopRatio: number, scrollLeft: number) => {
+          const innerHeight = (innerForwardRef.current?.clientHeight ?? bodyHeight) - bodyHeight;
+          const scrollTop = Math.round(innerHeight * scrollTopRatio);
+          rowMeta.current.lastScrollToRatio = scrollTopRatio;
+
+          if (rowMeta.current.lastScrollToRatio === 1) {
+            // Hack to ensure that the last row is scrolled to when row height is dynamic
+            // and row has already been measured
+            gridRef.current?.scrollToItem({ rowIndex: rowCount - 1, align: 'start' });
+            gridRef.current?.scrollTo({ scrollLeft });
+          } else {
+            gridRef.current?.scrollTo({ scrollTop, scrollLeft });
+          }
+        },
         resizeCells: () => {
           gridRef.current?.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: false });
           resizeVisibleCells(rowsInPage);
@@ -156,13 +154,6 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     },
     [innerForwardRef, bodyHeight, rowMeta, rowCount, resizeVisibleCells, rowsInPage]
   );
-
-  const scrollLeft = layout.snapshotData ? viewService.scrollLeft : 0;
-  const scrollTopRatio = layout.snapshotData ? viewService.scrollTopRatio || 0 : 0;
-
-  useEffect(() => {
-    interpolatedScrollTo(scrollTopRatio, scrollLeft);
-  }, [scrollTopRatio, scrollLeft]);
 
   return (
     <VariableSizeGrid

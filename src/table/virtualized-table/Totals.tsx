@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo } from 'react';
 import { VariableSizeList } from 'react-window';
 import TotalsCell from './TotalsCell';
 import { useContextSelector, TableContext } from '../context';
@@ -8,16 +8,10 @@ import { listStyle } from './Header';
 
 const Totals = (props: TotalsProps) => {
   const { rect, forwardRef, pageInfo, totals, rowHeight, columns } = props;
-  const { layout, styling, theme, viewService } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, styling, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
 
   useResetHeader(forwardRef, layout, pageInfo, columnWidths, theme.name());
-
-  const scrollLeft = layout.snapshotData ? viewService.scrollLeft : 0;
-
-  useEffect(() => {
-    forwardRef.current?.scrollTo(scrollLeft);
-  }, [forwardRef, scrollLeft]);
 
   return (
     <VariableSizeList

@@ -60,17 +60,17 @@ const usePaginationTable = ({
   isFontLoaded,
   viewService,
 }: UsePaginationTable) => {
-  const shouldRender = !env.carbon && layout.usePagination !== false;
   const { viewState, direction, footerContainer } = useOptions() as UseOptions;
+  const isPrinting = layout.snapshotData || viewState?.visibleHeight !== undefined;
+  const shouldRender = !env.carbon && (layout.usePagination !== false || isPrinting);
   const announce = useAnnounceAndTranslations(rootElement, translator);
-  const tmpPageInfo =
-    layout.snapshotData || viewState?.rowsPerPage
-      ? {
-          page: viewService.page || initialPageInfo.page,
-          rowsPerPage: viewService.rowsPerPage || initialPageInfo.rowsPerPage,
-          rowsPerPageOptions: initialPageInfo.rowsPerPageOptions,
-        }
-      : initialPageInfo;
+  const tmpPageInfo = isPrinting
+    ? {
+        page: viewService.page || initialPageInfo.page,
+        rowsPerPage: viewService.rowsPerPage || initialPageInfo.rowsPerPage,
+        rowsPerPageOptions: initialPageInfo.rowsPerPageOptions,
+      }
+    : initialPageInfo;
   const [pageInfo, setPageInfo] = useState(tmpPageInfo);
   const [tableData] = usePromise(async () => {
     if (shouldRender) {
