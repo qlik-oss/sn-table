@@ -52,10 +52,10 @@ const useItemsRendererHandler = ({
       overscanColumnStopIndex,
       overscanRowStartIndex,
       overscanRowStopIndex,
-      visibleRowStartIndex,
-      visibleRowStopIndex,
       visibleColumnStartIndex,
       visibleColumnStopIndex,
+      visibleRowStartIndex,
+      visibleRowStopIndex,
     }: OnItemsRendered) => {
       gridState.current.overscanColumnStartIndex = overscanColumnStartIndex;
       gridState.current.overscanColumnStopIndex = overscanColumnStopIndex;
@@ -78,17 +78,6 @@ const useItemsRendererHandler = ({
       viewService.visibleHeight = visibleRowStopIndex - visibleRowStartIndex + 1;
       viewService.page = pageInfo.page;
       viewService.rowsPerPage = pageInfo.rowsPerPage;
-      console.log(
-        '*****',
-        overscanColumnStartIndex,
-        overscanColumnStopIndex,
-        overscanRowStartIndex,
-        overscanRowStopIndex,
-        visibleRowStartIndex,
-        visibleRowStopIndex,
-        visibleColumnStartIndex,
-        visibleColumnStopIndex
-      );
 
       // Load data for visible grid and buffer grid
       if (verticalScrollDirection.current === ScrollDirection.Down) {

@@ -172,6 +172,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
       onItemsRendered={handleItemsRendered}
       onScroll={scrollHandler}
       itemKey={getCellItemKey}
+      className="sn-table-body"
     >
       {Cell}
     </VariableSizeGrid>

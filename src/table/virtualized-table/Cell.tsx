@@ -37,6 +37,8 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
       bodyStyle
     );
 
+    const cellId = { rowindex: rowIndex, columnindex: columnIndex };
+
     return (
       <div
         className={`sn-table-cell ${cellSelectionState}`}
@@ -60,6 +62,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         onMouseEnter={isHoverEnabled ? () => setHoverIndex(rowIndex) : undefined}
         onMouseLeave={isHoverEnabled ? () => setHoverIndex(-1) : undefined}
         title={!constraints.passive ? cell.qText : undefined}
+        {...cellId}
       >
         <CellText wordBreak={!cell.isNumeric} lines={maxLineCount}>
           {cell.qText}

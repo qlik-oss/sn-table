@@ -1,7 +1,7 @@
 // @ts-ignore ignore useImperativeHandle
 import { onTakeSnapshot, useImperativeHandle, stardust } from '@nebula.js/stardust';
 import type { TableLayout, ViewService, SnapshotLayout, HyperCube } from '../../types';
-import findVisibleRows from '../utils/find-visible-rows';
+import { findPaginationVisibleRows, findVirtualizedVisibleRows } from '../utils/find-visible-rows';
 import { getTotalPosition } from '../../handle-data';
 
 interface UseSnapshotProps {
@@ -16,7 +16,10 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
   const getViewState = () => {
     if (layout.usePagination) {
       const totalsPosition = getTotalPosition(layout);
-      const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findVisibleRows(rootElement, totalsPosition);
+      const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findPaginationVisibleRows(
+        rootElement,
+        totalsPosition
+      );
       return {
         scrollLeft: viewService.scrollLeft,
         visibleTop: viewService.qTop + visibleRowStartIndex,
@@ -25,12 +28,14 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
         page: viewService.page,
       };
     }
+    const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findVirtualizedVisibleRows(rootElement, viewService);
+
     return {
       scrollLeft: viewService.scrollLeft,
       visibleLeft: viewService.visibleLeft,
       visibleWidth: viewService.visibleWidth,
-      visibleTop: viewService.visibleTop,
-      visibleHeight: viewService.visibleHeight,
+      visibleTop: visibleRowStartIndex,
+      visibleHeight: visibleRowEndIndex < 0 ? 0 : visibleRowEndIndex - visibleRowStartIndex + 1,
       scrollTopRatio: viewService.scrollTopRatio,
       rowsPerPage: viewService.rowsPerPage,
       page: viewService.page,
