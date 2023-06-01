@@ -231,8 +231,6 @@ export default async function manageData(
   if (viewService && !isSnapshot) {
     viewService.qTop = top;
     viewService.qHeight = height;
-    viewService.qLeft = 0;
-    viewService.qWidth = totalColumnCount;
     viewService.rowsPerPage = pageInfo.rowsPerPage;
     viewService.page = pageInfo.page;
   }

@@ -27,6 +27,8 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
     }
     return {
       scrollLeft: viewService.scrollLeft,
+      visibleLeft: viewService.visibleLeft,
+      visibleWidth: viewService.visibleWidth,
       visibleTop: viewService.visibleTop,
       visibleHeight: viewService.visibleHeight,
       scrollTopRatio: viewService.scrollTopRatio,
@@ -44,23 +46,28 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
       if (!snapshotLayout.qHyperCube) {
         snapshotLayout.qHyperCube = {} as HyperCube;
       }
-      const { scrollLeft, scrollTopRatio, visibleTop = 0, visibleHeight = 0, rowsPerPage, page } = getViewState();
+      const { scrollLeft, scrollTopRatio, visibleLeft, visibleWidth, visibleTop, visibleHeight, rowsPerPage, page } =
+        getViewState();
       snapshotLayout.qHyperCube.qDataPages = await (model as EngineAPI.IGenericObject).getHyperCubeData(
         '/qHyperCubeDef',
         [
           {
-            qLeft: viewService.qLeft,
-            qTop: visibleTop,
-            qWidth: viewService.qWidth,
-            qHeight: visibleHeight,
+            qLeft: 0,
+            qTop: visibleTop ?? 0,
+            qWidth: layout.qHyperCube.qSize.qcx,
+            qHeight: visibleHeight ?? 0,
           },
         ]
       );
       snapshotLayout.snapshotData.content = {
         scrollLeft,
+        scrollTopRatio,
+        visibleLeft,
+        visibleWidth,
+        visibleTop,
+        visibleHeight,
         rowsPerPage,
         page,
-        scrollTopRatio,
         size: { width: contentRect.width, height: contentRect.height },
       };
     }

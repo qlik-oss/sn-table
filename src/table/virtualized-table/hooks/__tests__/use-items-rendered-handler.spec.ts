@@ -40,7 +40,7 @@ describe('', () => {
 
     loadRows = jest.fn();
     loadColumns = jest.fn();
-    viewService = { qLeft: 0, qTop: 0, qWidth: 1, qHeight: 1, scrollLeft: 0 };
+    viewService = { qTop: 0, qHeight: 1, scrollLeft: 0 };
 
     verticalScrollDirection = { current: ScrollDirection.None };
     horizontalScrollDirection = { current: ScrollDirection.None };

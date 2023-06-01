@@ -4,14 +4,14 @@ import { stardust } from '@nebula.js/stardust';
 export type Align = 'left' | 'center' | 'right';
 
 export interface ViewService {
-  qLeft: number;
   qTop: number;
-  qWidth: number;
   qHeight: number;
+  visibleLeft?: number;
+  visibleWidth?: number;
   visibleTop?: number;
   visibleHeight?: number;
   scrollTopRatio?: number;
-  scrollLeft: number;
+  scrollLeft?: number;
   rowsPerPage?: number;
   page?: number;
   viewState?: ViewState;
@@ -23,7 +23,11 @@ export interface Size {
 }
 export interface SnapshotData {
   content?: {
-    scrollLeft: number;
+    scrollLeft?: number;
+    visibleLeft?: number;
+    visibleWidth?: number;
+    visibleTop?: number;
+    visibleHeight?: number;
     rowsPerPage?: number;
     page?: number;
     scrollTopRatio?: number;

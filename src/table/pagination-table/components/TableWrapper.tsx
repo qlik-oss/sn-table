@@ -46,7 +46,7 @@ function TableWrapper(props: TableWrapperProps) {
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
   const isPrintingMode = isPrinting(layout, viewService);
-  const scrollLeft = isPrintingMode ? viewService.scrollLeft : 0;
+  const scrollLeft = isPrintingMode ? viewService.scrollLeft ?? 0 : 0;
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);

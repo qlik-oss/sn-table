@@ -3,12 +3,10 @@ import type { SnapshotData, ViewService, ViewState, UseOptions, TableLayout } fr
 
 const createViewService = (viewState: ViewState, snapshotData?: SnapshotData): ViewService => {
   return {
-    qLeft: 0,
     qTop: 0,
-    qWidth: 0,
     qHeight: 0,
-    visibleTop: viewState?.visibleTop,
-    visibleHeight: viewState?.visibleHeight,
+    visibleTop: snapshotData?.content?.visibleTop ?? viewState?.visibleTop,
+    visibleHeight: snapshotData?.content?.visibleHeight ?? viewState?.visibleHeight,
     scrollLeft: snapshotData?.content?.scrollLeft ?? viewState?.scrollLeft ?? 0,
     scrollTopRatio: snapshotData?.content?.scrollTopRatio ?? viewState?.scrollTopRatio,
     rowsPerPage: snapshotData?.content?.rowsPerPage ?? viewState?.rowsPerPage,

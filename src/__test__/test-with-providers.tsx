@@ -70,7 +70,7 @@ const TestWithProviders = ({
   applyColumnWidths = () => {},
   rect = { width: 0, height: 0, top: 0, left: 0 },
   initialDataPages = undefined,
-  viewService = { qLeft: 0, qTop: 0, qWidth: 1, qHeight: 1, scrollLeft: 0 },
+  viewService = { qTop: 0, qHeight: 1, scrollLeft: 0 },
 }: ProviderProps) => {
   return (
     <ThemeProvider theme={muiSetup(direction)}>
