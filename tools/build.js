@@ -6,8 +6,6 @@ const fs = require('fs-extra');
 const path = require('path');
 const build = require('@nebula.js/cli-build');
 const sense = require('@nebula.js/cli-sense');
-const snTablePackage = require('../package.json');
-const rnSnTablePackage = require('../react-native/package.json');
 
 const args = yargs(process.argv.slice(2)).argv;
 const buildExt = args.ext;
@@ -51,16 +49,6 @@ if (reactNative) {
   buildArgs.reactNative = true;
 }
 
-// this function will sync packages.
-const configureReactNative = () => {
-  // cleanup old build
-  const reactNativeFolder = './react-native';
-  fs.removeSync(path.resolve(process.cwd(), `${reactNativeFolder}/dist`));
-  rnSnTablePackage.version = snTablePackage.version;
-  rnSnTablePackage.peerDependencies = { ...rnSnTablePackage.peerDependencies, ...snTablePackage.peerDependencies };
-  fs.writeFileSync(`${reactNativeFolder}/package.json`, JSON.stringify(rnSnTablePackage, null, 2));
-};
-
 const main = async () => {
   console.log('---> BUILDING SUPERNOVA');
 
@@ -72,11 +60,6 @@ const main = async () => {
         event.code === 'BUNDLE_END' && buildExtension();
       });
     }
-  }
-
-  if (reactNative) {
-    configureReactNative();
-    await build(buildArgs);
   }
 };
 
