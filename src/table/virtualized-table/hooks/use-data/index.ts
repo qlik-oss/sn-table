@@ -70,7 +70,7 @@ const useData = ({
 
   // The queue takes a EngineAPI.INxPage object as items and adds them to a queue and
   // exists to prevent the same page from being fetched more than once.
-  const queue = useGetHyperCubeDataQueue(getDataPages, handleDataPages);
+  const queue = useGetHyperCubeDataQueue(getDataPages, handleDataPages, gridState, pageInfo);
 
   const loadColumns: LoadData = useCallback(
     (qLeft, qTop, qWidth, qHeight) => {

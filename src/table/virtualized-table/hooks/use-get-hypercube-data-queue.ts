@@ -1,12 +1,16 @@
 import { useMemo, useRef } from 'react';
 import useMutableProp from './use-mutable-prop';
-import mergePages from '../utils/merge-pages';
+import mergeAllPages from '../utils/merge-pages';
+import { GridState } from '../types';
+import { PageInfo } from '../../../types';
 
 const pageToKey = ({ qLeft, qTop, qWidth, qHeight }: EngineAPI.INxPage) => `${qLeft}-${qTop}-${qWidth}-${qHeight}`;
 
 const useGetHyperCubeDataQueue = (
   getDataPages: (qPages: EngineAPI.INxPage[]) => Promise<EngineAPI.INxDataPage[]>,
-  handleDataPages: (qDataPages: EngineAPI.INxDataPage[]) => void
+  handleDataPages: (qDataPages: EngineAPI.INxDataPage[]) => void,
+  gridState: React.MutableRefObject<GridState>,
+  pageInfo: PageInfo
 ) => {
   const queued = useRef(new Set<EngineAPI.INxPage>()); // Keep track of all unique pages that should be retrieved
   const ongoing = useRef(new Set<EngineAPI.INxPage[]>()); // Keep track of ongoing request. Should be aborted if page info or layout is changed
@@ -38,9 +42,9 @@ const useGetHyperCubeDataQueue = (
 
             queued.current.clear();
             ongoing.current.add(qPages);
+            const [mergedPages, stalePages] = mergeAllPages(qPages, gridState, pageInfo);
 
             try {
-              const mergedPages = mergePages(qPages);
               const qDataPages = await mutableGetDataPages.current(mergedPages);
 
               if (ongoing.current.has(qPages)) {
@@ -53,6 +57,9 @@ const useGetHyperCubeDataQueue = (
               });
             } finally {
               ongoing.current.delete(qPages);
+              stalePages.forEach((p) => {
+                finished.current.delete(pageToKey(p));
+              });
             }
           }, 75);
         }
@@ -63,7 +70,7 @@ const useGetHyperCubeDataQueue = (
         finished.current.clear();
       },
     }),
-    [] // eslint-disable-line react-hooks/exhaustive-deps
+    [pageInfo] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   return queue;

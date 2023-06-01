@@ -55,8 +55,8 @@ describe('useData', () => {
       current: {
         overscanColumnStartIndex: 0,
         overscanRowStartIndex: 0,
-        overscanColumnStopIndex: 0,
-        overscanRowStopIndex: 0,
+        overscanColumnStopIndex: VISIBLE_COLUMN_COUNT,
+        overscanRowStopIndex: VISIBLE_COLUMN_COUNT,
       },
     };
 
