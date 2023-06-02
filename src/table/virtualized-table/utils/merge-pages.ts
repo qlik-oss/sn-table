@@ -8,16 +8,19 @@ const isPageStale = (gridState: React.MutableRefObject<GridState>, pageInfo: Pag
   const colEndIndex = gridState.current.overscanColumnStopIndex + COLUMN_DATA_BUFFER_SIZE;
   const rowStartIndex = pageRowStart + gridState.current.overscanRowStartIndex - ROW_DATA_BUFFER_SIZE;
   const rowEndIndex = pageRowStart + gridState.current.overscanRowStopIndex + ROW_DATA_BUFFER_SIZE;
+  const { qLeft, qTop, qWidth, qHeight } = qPage;
 
-  return (
-    qPage.qTop < rowStartIndex ||
-    qPage.qTop > rowEndIndex ||
-    qPage.qTop + qPage.qHeight < rowStartIndex ||
-    qPage.qTop + qPage.qHeight > rowEndIndex ||
-    qPage.qLeft < colStartIndex ||
-    qPage.qLeft > colEndIndex ||
-    qPage.qLeft + qPage.qWidth < colStartIndex ||
-    qPage.qLeft + qPage.qWidth > colEndIndex
+  // The page is considered stale if both "points" from by the qPage, are outside the rectangle
+  // formed by the gridState + buffer.
+  return !(
+    qLeft >= colStartIndex &&
+    qLeft <= colEndIndex &&
+    qTop >= rowStartIndex &&
+    qTop <= rowEndIndex &&
+    qLeft + qWidth >= colStartIndex &&
+    qLeft + qWidth <= colEndIndex &&
+    qTop + qHeight >= rowStartIndex &&
+    qTop + qHeight <= rowEndIndex
   );
 };
 
