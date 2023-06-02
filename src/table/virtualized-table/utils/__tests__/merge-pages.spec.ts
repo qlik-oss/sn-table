@@ -24,116 +24,15 @@ describe('mergePages', () => {
     };
   });
 
-  describe('merge rows', () => {
-    test('should merge pages', () => {
-      const qPages: EngineAPI.INxPage[] = [
-        { qLeft: 0, qTop: 0, qHeight: 1, qWidth: 1 },
-        { qLeft: 0, qTop: 1, qHeight: 1, qWidth: 1 },
-      ];
-      const [mergedPages] = mergeAllPages(qPages, gridState, pageInfo);
+  test('should merge pages', () => {
+    const qPages: EngineAPI.INxPage[] = [
+      { qLeft: 0, qTop: 0, qHeight: 1, qWidth: 1 },
+      { qLeft: 0, qTop: 1, qHeight: 1, qWidth: 1 },
+      { qLeft: 1, qTop: 1, qHeight: 1, qWidth: 2 },
+    ];
+    const [mergedPages] = mergeAllPages(qPages, gridState, pageInfo);
 
-      expect(mergedPages).toEqual([{ qLeft: 0, qTop: 0, qHeight: 2, qWidth: 1 }]);
-    });
-
-    test('should handle merging some pages but not others', () => {
-      const qPages: EngineAPI.INxPage[] = [
-        { qLeft: 0, qTop: 0, qHeight: 1, qWidth: 1 },
-        { qLeft: 0, qTop: 1, qHeight: 1, qWidth: 1 },
-        { qLeft: 0, qTop: 4, qHeight: 1, qWidth: 1 },
-      ];
-      const [mergedPages] = mergeAllPages(qPages, gridState, pageInfo);
-
-      expect(mergedPages).toEqual([
-        { qLeft: 0, qTop: 0, qHeight: 2, qWidth: 1 },
-        { qLeft: 0, qTop: 4, qHeight: 1, qWidth: 1 },
-      ]);
-    });
-
-    test('should not merge pages when the pages are not next to each other', () => {
-      const qPages: EngineAPI.INxPage[] = [
-        { qLeft: 0, qTop: 0, qHeight: 1, qWidth: 1 },
-        { qLeft: 0, qTop: 2, qHeight: 1, qWidth: 1 },
-      ];
-      const [mergedPages] = mergeAllPages(qPages, gridState, pageInfo);
-
-      expect(mergedPages).toEqual(qPages);
-    });
-
-    test('should not merge pages when the qLeft does not match', () => {
-      const qPages: EngineAPI.INxPage[] = [
-        { qLeft: 0, qTop: 0, qHeight: 1, qWidth: 1 },
-        { qLeft: 1, qTop: 1, qHeight: 1, qWidth: 1 },
-      ];
-      const [mergedPages] = mergeAllPages(qPages, gridState, pageInfo);
-
-      expect(mergedPages).toEqual(qPages);
-    });
-
-    test('should not merge pages when the qWidth does not match', () => {
-      const qPages: EngineAPI.INxPage[] = [
-        { qLeft: 0, qTop: 0, qHeight: 1, qWidth: 1 },
-        { qLeft: 0, qTop: 1, qHeight: 1, qWidth: 2 },
-      ];
-      const [mergedPages] = mergeAllPages(qPages, gridState, pageInfo);
-
-      expect(mergedPages).toEqual(qPages);
-    });
-  });
-
-  describe('merge columns', () => {
-    test('should merge pages', () => {
-      const qPages: EngineAPI.INxPage[] = [
-        { qLeft: 0, qTop: 0, qHeight: 1, qWidth: 1 },
-        { qLeft: 1, qTop: 0, qHeight: 1, qWidth: 1 },
-      ];
-      const [mergedPages] = mergeAllPages(qPages, gridState, pageInfo);
-
-      expect(mergedPages).toEqual([{ qLeft: 0, qTop: 0, qHeight: 1, qWidth: 2 }]);
-    });
-
-    test('should handle merging some pages but not others', () => {
-      const qPages: EngineAPI.INxPage[] = [
-        { qLeft: 0, qTop: 0, qHeight: 1, qWidth: 1 },
-        { qLeft: 1, qTop: 0, qHeight: 1, qWidth: 1 },
-        { qLeft: 4, qTop: 0, qHeight: 1, qWidth: 1 },
-      ];
-      const [mergedPages] = mergeAllPages(qPages, gridState, pageInfo);
-
-      expect(mergedPages).toEqual([
-        { qLeft: 0, qTop: 0, qHeight: 1, qWidth: 2 },
-        { qLeft: 4, qTop: 0, qHeight: 1, qWidth: 1 },
-      ]);
-    });
-
-    test('should not merge pages when the pages are not next to each other', () => {
-      const qPages: EngineAPI.INxPage[] = [
-        { qLeft: 0, qTop: 0, qHeight: 1, qWidth: 1 },
-        { qLeft: 2, qTop: 0, qHeight: 1, qWidth: 1 },
-      ];
-      const [mergedPages] = mergeAllPages(qPages, gridState, pageInfo);
-
-      expect(mergedPages).toEqual(qPages);
-    });
-
-    test('should not merge pages when the Qtop does not match', () => {
-      const qPages: EngineAPI.INxPage[] = [
-        { qLeft: 0, qTop: 0, qHeight: 1, qWidth: 1 },
-        { qLeft: 1, qTop: 1, qHeight: 1, qWidth: 1 },
-      ];
-      const [mergedPages] = mergeAllPages(qPages, gridState, pageInfo);
-
-      expect(mergedPages).toEqual(qPages);
-    });
-
-    test('should not merge pages when the qHeight does not match', () => {
-      const qPages: EngineAPI.INxPage[] = [
-        { qLeft: 0, qTop: 0, qHeight: 1, qWidth: 1 },
-        { qLeft: 1, qTop: 0, qHeight: 2, qWidth: 1 },
-      ];
-      const [mergedPages] = mergeAllPages(qPages, gridState, pageInfo);
-
-      expect(mergedPages).toEqual(qPages);
-    });
+    expect(mergedPages).toEqual([{ qLeft: 0, qTop: 0, qHeight: 2, qWidth: 3 }]);
   });
 
   describe('stale pages', () => {
@@ -141,7 +40,7 @@ describe('mergePages', () => {
       gridState.current.overscanColumnStartIndex = 100;
       gridState.current.overscanColumnStopIndex = 200;
 
-      const qPages: EngineAPI.INxPage[] = [{ qLeft: 99 - COLUMN_DATA_BUFFER_SIZE, qTop: 0, qHeight: 1, qWidth: 1 }];
+      const qPages: EngineAPI.INxPage[] = [{ qLeft: 98 - COLUMN_DATA_BUFFER_SIZE, qTop: 0, qHeight: 1, qWidth: 1 }];
 
       const [, stalePages] = mergeAllPages(qPages, gridState, pageInfo);
       expect(stalePages).toEqual(qPages);

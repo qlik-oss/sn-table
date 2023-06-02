@@ -2,18 +2,6 @@ import { PageInfo } from '../../../types';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../constants';
 import { GridState } from '../types';
 
-const canMergeRows = (prevPage: EngineAPI.INxPage | undefined, qPage: EngineAPI.INxPage) =>
-  prevPage !== undefined &&
-  prevPage.qTop + prevPage.qHeight === qPage.qTop &&
-  prevPage.qLeft === qPage.qLeft &&
-  prevPage.qWidth === qPage.qWidth;
-
-const canMergeColumns = (prevPage: EngineAPI.INxPage | undefined, qPage: EngineAPI.INxPage) =>
-  prevPage !== undefined &&
-  prevPage.qLeft + prevPage.qWidth === qPage.qLeft &&
-  prevPage.qTop === qPage.qTop &&
-  prevPage.qHeight === qPage.qHeight;
-
 const isPageStale = (gridState: React.MutableRefObject<GridState>, pageInfo: PageInfo, qPage: EngineAPI.INxPage) => {
   const pageRowStart = pageInfo.page * pageInfo.rowsPerPage;
   const colStartIndex = gridState.current.overscanColumnStartIndex - COLUMN_DATA_BUFFER_SIZE;
@@ -21,17 +9,16 @@ const isPageStale = (gridState: React.MutableRefObject<GridState>, pageInfo: Pag
   const rowStartIndex = pageRowStart + gridState.current.overscanRowStartIndex - ROW_DATA_BUFFER_SIZE;
   const rowEndIndex = pageRowStart + gridState.current.overscanRowStopIndex + ROW_DATA_BUFFER_SIZE;
 
-  // qWidth and qHeight is assumed to always be 1. So that is ignored in this check.
-  if (
-    qPage.qLeft >= colStartIndex &&
-    qPage.qLeft <= colEndIndex &&
-    qPage.qTop >= rowStartIndex &&
-    qPage.qTop <= rowEndIndex
-  ) {
-    return false;
-  }
-
-  return true;
+  return (
+    qPage.qTop < rowStartIndex ||
+    qPage.qTop > rowEndIndex ||
+    qPage.qTop + qPage.qHeight < rowStartIndex ||
+    qPage.qTop + qPage.qHeight > rowEndIndex ||
+    qPage.qLeft < colStartIndex ||
+    qPage.qLeft > colEndIndex ||
+    qPage.qLeft + qPage.qWidth < colStartIndex ||
+    qPage.qLeft + qPage.qWidth > colEndIndex
+  );
 };
 
 /**
@@ -46,22 +33,33 @@ const mergeAllPages = (
   gridState: React.MutableRefObject<GridState>,
   pageInfo: PageInfo
 ) => {
-  const mergedPages: EngineAPI.INxPage[] = [];
   const stalePages: EngineAPI.INxPage[] = [];
+  const filterdPages: EngineAPI.INxPage[] = [];
 
   qPages.forEach((qPage) => {
-    const prevPage = mergedPages[mergedPages.length - 1];
-
     if (isPageStale(gridState, pageInfo, qPage)) {
       stalePages.push(qPage);
-    } else if (canMergeRows(prevPage, qPage)) {
-      prevPage.qHeight += qPage.qHeight;
-    } else if (canMergeColumns(prevPage, qPage)) {
-      prevPage.qWidth += qPage.qWidth;
     } else {
-      mergedPages.push({ ...qPage });
+      filterdPages.push({ ...qPage });
     }
   });
+
+  const mergedPages = filterdPages.reduce((tempMergedPages: EngineAPI.INxPage[], qPage) => {
+    const [mergedPage] = tempMergedPages;
+    if (mergedPage === undefined) {
+      tempMergedPages.push({ ...qPage });
+    } else {
+      const maxX = Math.max(qPage.qLeft + qPage.qWidth, mergedPage.qLeft + mergedPage.qWidth);
+      mergedPage.qLeft = Math.min(qPage.qLeft, mergedPage.qLeft);
+      mergedPage.qWidth = maxX - mergedPage.qLeft;
+
+      const maxY = Math.max(qPage.qTop + qPage.qHeight, mergedPage.qTop + mergedPage.qHeight);
+      mergedPage.qTop = Math.min(qPage.qTop, mergedPage.qTop);
+      mergedPage.qHeight = maxY - mergedPage.qTop;
+    }
+
+    return tempMergedPages;
+  }, []);
 
   return [mergedPages, stalePages];
 };

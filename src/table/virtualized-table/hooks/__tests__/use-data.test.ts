@@ -107,11 +107,13 @@ describe('useData', () => {
 
   describe('loadRows', () => {
     test('should load rows', async () => {
+      gridState.current.overscanColumnStopIndex = INIT_DATA_FETCH_WIDTH;
+      gridState.current.overscanRowStopIndex = INIT_DATA_FETCH_HEIGHT;
       const rowIdx = INIT_DATA_FETCH_HEIGHT; // row index for the last row from initial data fetch is (INIT_DATA_FETCH_HEIGHT - 1)
       await doRenderHook();
       const { result } = renderHookResult;
 
-      // Verify that the row we and to load does not already exist
+      // Verify that the row we want to load does not already exist
       await waitFor(() => expect(result.current.rowsInPage).toHaveLength(pageInfo.rowsPerPage));
       await waitFor(() => expect(result.current.rowsInPage[rowIdx]).toBeUndefined());
 
@@ -191,6 +193,8 @@ describe('useData', () => {
 
   describe('loadColumns', () => {
     test('should load columns', async () => {
+      gridState.current.overscanColumnStopIndex = INIT_DATA_FETCH_WIDTH;
+      gridState.current.overscanRowStopIndex = INIT_DATA_FETCH_HEIGHT;
       const colIdx = INIT_DATA_FETCH_WIDTH;
       await doRenderHook();
       const { result } = renderHookResult;
