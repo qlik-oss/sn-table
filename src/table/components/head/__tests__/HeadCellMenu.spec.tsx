@@ -25,7 +25,7 @@ describe('<HeadCellMenu />', () => {
   let updateSelectionActionsEnabledStatusMock: jest.Mock<any, any>;
   let model: EngineAPI.IGenericObject;
   let useFieldSelectionHookResult: useFieldSelectionHook.UseFieldSelectionOutput;
-  let constraints: stardust.Constraints;
+  let interactions: stardust.Interactions;
   const direction: 'ltr' | 'rtl' = 'ltr';
   const menuLabels = [
     'SNTable.MenuItem.Search',
@@ -38,7 +38,7 @@ describe('<HeadCellMenu />', () => {
 
   const renderTableHeadCellMenu = () =>
     render(
-      <TestWithProviders layout={layout} direction={direction} embed={embed} model={model} constraints={constraints}>
+      <TestWithProviders layout={layout} direction={direction} embed={embed} model={model} interactions={interactions}>
         <HeadCellMenu column={column} tabIndex={0} />
       </TestWithProviders>
     );
@@ -105,7 +105,9 @@ describe('<HeadCellMenu />', () => {
     model = {
       getLayout: jest.fn().mockResolvedValue(null),
     } as unknown as EngineAPI.IGenericObject;
-    constraints = {};
+    interactions = {
+      select: true,
+    };
   });
 
   afterEach(() => {
@@ -143,7 +145,7 @@ describe('<HeadCellMenu />', () => {
   });
 
   it('should open menu but not render selection items when when column is dimension, but selections is disabled ', async () => {
-    constraints = { select: true };
+    interactions.select = false;
     renderTableHeadCellMenu();
     await openMenu();
 

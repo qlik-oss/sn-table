@@ -21,7 +21,7 @@ import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 
 export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
   const { isDim, qLibraryId, fieldId, headTextAlign } = column;
-  const { translator, embed, model, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { translator, embed, model, interactions } = useContextSelector(TableContext, (value) => value.baseProps);
   const anchorRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
@@ -50,7 +50,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
 
   const menuItemGroups = useMemo<MenuItemGroup[]>(
     () => [
-      ...(isDim && !constraints.select
+      ...(isDim && interactions.select
         ? [
             [
               {
