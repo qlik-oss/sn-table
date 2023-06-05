@@ -49,7 +49,7 @@ const getFristCellOfRow = (rowIndex: number, cells?: NodeListOf<Element>) => {
   return undefined;
 };
 
-const shouldCellBeIn = (cellRect: DOMRect, min: number, max: number) => {
+const shouldIncludeRowWithCell = (cellRect: DOMRect, min: number, max: number) => {
   if (!cellRect) return false;
   const center = cellRect.y + cellRect.height / 2;
   return center >= min && center <= max;
@@ -64,26 +64,27 @@ export function findVirtualizedVisibleRows(rootElement: HTMLElement, viewService
   const offset = page * rowsPerPage;
   const visibleTopInPage = visibleTop - offset;
   const visibleBottomInPage = visibleTopInPage + visibleHeight - 1;
-  const r0c0Cell = getFristCellOfRow(visibleTopInPage, cells);
-  const r0c0CellRect = r0c0Cell?.getBoundingClientRect();
-  if (!r0c0Cell || !r0c0CellRect) return {};
+  const topLeftCell = getFristCellOfRow(visibleTopInPage, cells);
+  const topLeftCellRect = topLeftCell?.getBoundingClientRect();
+  if (!topLeftCell || !topLeftCellRect) return {};
   const bodyYMin = bodyRect.y;
   if (1 - scrollTopRatio < EPSILON) {
     // The last data row is visible, then the priority start from the bottom row
-    const r0c0CellShouldBeIn = r0c0CellRect.y >= bodyYMin - 4;
+    const shouldIncludeTopRow = topLeftCellRect.y >= bodyYMin - 4;
     return {
-      visibleRowStartIndex: visibleTopInPage + (r0c0CellShouldBeIn ? 0 : 1) + offset,
+      visibleRowStartIndex: visibleTopInPage + (shouldIncludeTopRow ? 0 : 1) + offset,
       visibleRowEndIndex: visibleBottomInPage + offset,
     };
   }
   const bodyYMax = bodyRect.y + bodyRect.height;
   const visibleRowStartIndex =
-    (shouldCellBeIn(r0c0CellRect, bodyYMin, bodyYMax) ? visibleTopInPage : visibleTopInPage + 1) + offset;
+    (shouldIncludeRowWithCell(topLeftCellRect, bodyYMin, bodyYMax) ? visibleTopInPage : visibleTopInPage + 1) + offset;
   let visibleRowEndIndex = visibleBottomInPage + offset;
-  const rNc0Cell = getFristCellOfRow(visibleBottomInPage, cells);
-  const rNc0CellRect = rNc0Cell?.getBoundingClientRect();
-  if (rNc0Cell && rNc0CellRect) {
-    if (!shouldCellBeIn(rNc0CellRect, bodyYMin, bodyYMax)) visibleRowEndIndex = visibleBottomInPage - 1 + offset;
+  const bottomLeftCell = getFristCellOfRow(visibleBottomInPage, cells);
+  const bottomLeftCellRect = bottomLeftCell?.getBoundingClientRect();
+  if (bottomLeftCell && bottomLeftCellRect) {
+    if (!shouldIncludeRowWithCell(bottomLeftCellRect, bodyYMin, bodyYMax))
+      visibleRowEndIndex = visibleBottomInPage - 1 + offset;
   }
   return { visibleRowStartIndex, visibleRowEndIndex };
 }
