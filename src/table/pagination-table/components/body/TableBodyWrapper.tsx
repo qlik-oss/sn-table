@@ -29,9 +29,7 @@ function TableBodyWrapper({ setShouldRefocus, tableWrapperRef, announce }: Table
   } = useContextSelector(TableContext, (value) => value.baseProps);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
-  // interactions.active: false - turn off interactions that affect the state of the visual
-  // representation including selection, zoom, scroll, etc.
-  // interactions.select: false - turn off selections.
+  // Both active and select conditions need to be true to make selections. See stardust API for more info
   const isSelectionsEnabled = !!interactions.active && !!interactions.select;
   const columnsStylingIDsJSON = JSON.stringify(columns.map((column) => column.stylingIDs));
   const columnRenderers = useMemo(

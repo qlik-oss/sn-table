@@ -46,7 +46,7 @@ const TestWithProviders = ({
     active: true,
     passive: true,
     select: true,
-  } as stardust.Interactions,
+  },
   selectionsAPI = {
     isModal: () => false,
     on: () => undefined,
