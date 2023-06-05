@@ -13,7 +13,7 @@ function TableTotals() {
     totalsPosition: { atTop },
     rows,
   } = useContextSelector(TableContext, (value) => value.tableData);
-  const { rootElement, selectionsAPI, keyboard, styling, constraints } = useContextSelector(
+  const { rootElement, selectionsAPI, keyboard, styling, interactions } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );
@@ -35,7 +35,7 @@ function TableTotals() {
             align={column.totalsTextAlign}
             className="sn-table-cell"
             tabIndex={tabIndex}
-            title={!constraints.passive ? column.totalInfo : undefined}
+            title={interactions.passive ? column.totalInfo : undefined}
             onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
               handleTotalKeyDown(e, rootElement, cellCoord, setFocusedCellCoord, selectionsAPI?.isModal());
             }}

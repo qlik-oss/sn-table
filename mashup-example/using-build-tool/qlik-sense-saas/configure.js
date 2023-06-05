@@ -5,7 +5,7 @@ const n = embed.createConfiguration({
   context: {
     theme: 'light',
     language: 'en-US',
-    constraints: {
+    interactions: {
       active: false, // do not allow interactions
     },
   },

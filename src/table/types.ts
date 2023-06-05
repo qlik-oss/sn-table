@@ -109,7 +109,7 @@ export interface ContextValue {
     layout: TableLayout;
     model: EngineAPI.IGenericObject | undefined;
     translator: ExtendedTranslator;
-    constraints: stardust.Constraints;
+    interactions: stardust.Interactions;
     theme: ExtendedTheme;
     keyboard: stardust.Keyboard;
     rootElement: HTMLElement;
@@ -220,7 +220,7 @@ export interface ContextProviderProps {
   layout: TableLayout;
   model: EngineAPI.IGenericObject;
   translator: ExtendedTranslator;
-  constraints: stardust.Constraints;
+  interactions: stardust.Interactions;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
   rootElement: HTMLElement;
@@ -243,7 +243,7 @@ export interface RenderProps {
   tableData: TableData;
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
-  constraints: stardust.Constraints;
+  interactions: stardust.Interactions;
   translator: ExtendedTranslator;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
