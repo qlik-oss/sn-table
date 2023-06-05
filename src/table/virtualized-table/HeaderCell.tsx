@@ -23,20 +23,20 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
     columResizeHandler,
   } = data;
 
-  const { layout, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, interactions } = useContextSelector(TableContext, (value) => value.baseProps);
   const isSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI?.isModal());
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
 
   const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
   const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
-  const isInteractionEnabled = !constraints.active && !isSelectionMode;
+  const isInteractionEnabled = !!interactions.active && !isSelectionMode;
   const flexDirection = column.headTextAlign === 'right' ? 'row-reverse' : 'row';
 
   return (
     <div
       className="sn-table-cell"
-      title={!constraints.passive ? column.label : undefined}
+      title={interactions.passive ? column.label : undefined}
       style={{
         ...style,
         ...applicableStyle,

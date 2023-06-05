@@ -14,12 +14,12 @@ import { focusHeadMenuButton } from '../../utils/accessibility-utils';
  */
 const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps) => {
   const { pageColIdx } = column;
-  const { applyColumnWidths, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { applyColumnWidths, interactions } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setColumnWidths = useContextSelector(TableContext, (value) => value.setColumnWidths);
   const tempWidths = useRef({ columnWidth: 0, initX: 0, initWidth: 0 });
 
-  if (constraints.active) return null;
+  if (!interactions.active) return null;
 
   const updateWidth = (adjustedWidth: number) => {
     onColumnResize?.();
