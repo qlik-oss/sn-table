@@ -34,7 +34,7 @@ export interface VirtualTableRenderProps {
   layout: TableLayout;
   model: EngineAPI.IGenericObject;
   translator: ExtendedTranslator;
-  constraints: stardust.Constraints;
+  interactions: stardust.Interactions;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
   rect: stardust.Rect;

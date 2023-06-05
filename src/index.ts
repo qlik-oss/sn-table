@@ -3,7 +3,6 @@ import {
   useElement,
   useStaleLayout,
   useModel,
-  useConstraints,
   useTranslator,
   useSelections,
   useKeyboard,
@@ -11,6 +10,7 @@ import {
   useApp,
   useEmbed,
   useOptions,
+  useInteractionState,
 } from '@nebula.js/stardust';
 
 import properties from './qae/object-properties';
@@ -42,7 +42,7 @@ export default function supernova(env: Galaxy) {
       const layout = useStaleLayout() as TableLayout;
       const app = useApp(); // undefined when taking snapshot
       const model = useModel(); // undefined when taking snapshot
-      const constraints = useConstraints();
+      const interactions = useInteractionState();
       const translator = useTranslator() as ExtendedTranslator;
       const selectionsAPI = useSelections() as ExtendedSelectionAPI | undefined; // undefined when taking snapshot
       const keyboard = useKeyboard();
@@ -69,7 +69,7 @@ export default function supernova(env: Galaxy) {
         theme,
         keyboard,
         translator,
-        constraints,
+        interactions,
         selectionsAPI,
         changeSortOrder,
         rootElement,
@@ -86,7 +86,7 @@ export default function supernova(env: Galaxy) {
         model,
         rootElement,
         layout,
-        constraints,
+        interactions,
         translator,
         selectionsAPI,
         theme,

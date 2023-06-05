@@ -13,7 +13,7 @@ describe('<TableWrapper />', () => {
   let tableData: TableData;
   let pageInfo: PageInfo;
   let setPageInfo: SetPageInfo;
-  let constraints: stardust.Constraints;
+  let interactions: stardust.Interactions;
   let rootElement: HTMLElement;
   let rect: stardust.Rect;
   let direction: 'ltr' | 'rtl';
@@ -25,7 +25,7 @@ describe('<TableWrapper />', () => {
     render(
       <TestWithProviders
         layout={layout}
-        constraints={constraints}
+        interactions={interactions}
         rootElement={rootElement}
         tableData={tableData}
         rect={rect}
@@ -56,7 +56,11 @@ describe('<TableWrapper />', () => {
     } as unknown as TableData;
     pageInfo = { page: 0, rowsPerPage: 100, rowsPerPageOptions: [10, 25, 100] };
     setPageInfo = jest.fn();
-    constraints = {};
+    interactions = {
+      active: true,
+      passive: true,
+      select: true,
+    };
     rootElement = {
       getElementsByClassName: () => [],
       getElementsByTagName: () => [{ clientHeight: {}, contains: jest.fn() }],
@@ -82,8 +86,8 @@ describe('<TableWrapper />', () => {
     expect(getByText('SNTable.Pagination.DisplayedRowsLabel')).toBeVisible();
   });
 
-  it('should not render pagination when constraints.active is true', () => {
-    constraints.active = true;
+  it('should not render pagination when interactions.active is false', () => {
+    interactions.active = false;
     const { getByLabelText, queryByText, getByTestId } = renderTableWrapper();
 
     expect(

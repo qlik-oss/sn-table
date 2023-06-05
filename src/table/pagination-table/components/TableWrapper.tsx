@@ -25,7 +25,7 @@ function TableWrapper(props: TableWrapperProps) {
 
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
     useContextSelector(TableContext, (value) => value.tableData);
-  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints, styling, viewService, layout } =
+  const { selectionsAPI, rootElement, keyboard, translator, theme, interactions, styling, viewService, layout } =
     useContextSelector(TableContext, (value) => value.baseProps);
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
@@ -119,8 +119,8 @@ function TableWrapper(props: TableWrapperProps) {
       <StyledTableContainer
         ref={tableContainerRef}
         className="sn-table-container"
-        fullHeight={footerContainer || constraints.active || !paginationNeeded} // the footerContainer always wants height: 100%
-        constraints={constraints}
+        fullHeight={footerContainer || !interactions.active || !paginationNeeded} // the footerContainer always wants height: 100%
+        interactions={interactions}
         tabIndex={-1}
         role="application"
         data-testid="table-container"
@@ -130,7 +130,7 @@ function TableWrapper(props: TableWrapperProps) {
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </StyledTable>
       </StyledTableContainer>
-      {!constraints.active && (
+      {interactions.active && (
         <FooterWrapper footerContainer={footerContainer} paginationNeeded={paginationNeeded}>
           <PaginationContent {...props} handleChangePage={handleChangePage} isSelectionMode={isSelectionMode} />
         </FooterWrapper>

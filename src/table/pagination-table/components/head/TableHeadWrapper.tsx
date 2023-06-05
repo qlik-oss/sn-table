@@ -14,7 +14,7 @@ import { handleMouseDownToFocusHead } from '../../../utils/handle-mouse';
 
 function TableHeadWrapper() {
   const { columns } = useContextSelector(TableContext, (value) => value.tableData);
-  const { layout, styling, constraints, rootElement, keyboard } = useContextSelector(
+  const { layout, styling, interactions, rootElement, keyboard } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );
@@ -24,7 +24,7 @@ function TableHeadWrapper() {
   const isSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI?.isModal());
 
   const headRowRef = useRef<HTMLTableRowElement>(null);
-  const isInteractionEnabled = !constraints.active && !isSelectionMode;
+  const isInteractionEnabled = !!interactions.active && !isSelectionMode;
 
   useEffect(() => {
     if (headRowRef.current) {
@@ -74,7 +74,7 @@ function TableHeadWrapper() {
               className="sn-table-head-cell sn-table-cell"
               aria-sort={ariaSort}
               tabIndex={-1}
-              title={!constraints.passive ? column.label : undefined}
+              title={interactions.passive ? column.label : undefined}
               onKeyDown={handleKeyDown}
               onMouseDown={handleMouseDown}
             >

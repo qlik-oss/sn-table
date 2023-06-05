@@ -23,7 +23,7 @@ interface UsePaginationTable {
   layout: TableLayout;
   changeSortOrder: ChangeSortOrder | undefined;
   rect: stardust.Rect;
-  constraints: stardust.Constraints;
+  interactions: stardust.Interactions;
   translator: ExtendedTranslator;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
@@ -47,7 +47,7 @@ const usePaginationTable = ({
   model,
   rootElement,
   layout,
-  constraints,
+  interactions,
   translator,
   selectionsAPI,
   theme,
@@ -78,7 +78,7 @@ const usePaginationTable = ({
     }
 
     return null;
-  }, [layout, pageInfo, model, constraints, shouldRender]);
+  }, [layout, pageInfo, model, interactions, shouldRender]);
 
   useEffect(() => {
     const isReadyToRender = !!(
@@ -107,7 +107,7 @@ const usePaginationTable = ({
         direction,
         pageInfo,
         setPageInfo,
-        constraints,
+        interactions,
         translator,
         selectionsAPI,
         theme,
@@ -127,7 +127,7 @@ const usePaginationTable = ({
     model,
     reactRoot,
     tableData,
-    constraints,
+    interactions,
     direction,
     theme.name(),
     keyboard.active,

@@ -17,7 +17,7 @@ interface TotalsCellProps {
 }
 
 const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
-  const { layout, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, interactions } = useContextSelector(TableContext, (value) => value.baseProps);
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
   const {
     totalsStyle: { hoverColors, ...applicableStyling },
@@ -31,7 +31,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
   return (
     <div
       className="sn-table-cell"
-      title={!constraints.passive ? label : undefined}
+      title={interactions.passive ? label : undefined}
       style={{
         ...style,
         ...applicableStyling,

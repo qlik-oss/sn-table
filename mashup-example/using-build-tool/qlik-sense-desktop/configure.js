@@ -25,15 +25,6 @@ const nuked = embed.createConfiguration({
     theme: 'myTheme',
     language: 'en-US',
     keyboardNavigation: true,
-    constraints: {
-      // active: true - turn off interactions that affect the state
-      // of the visual representation including selection, zoom, scroll, etc.
-      active: false,
-      // select: true - turn off selections.
-      select: false,
-      // passive: true - turn off interactions like tooltips.
-      passive: false,
-    },
   },
 });
 
