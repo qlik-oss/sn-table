@@ -1,5 +1,6 @@
 import { useMemo, useRef } from 'react';
 import useMutableProp from './use-mutable-prop';
+import mergePages from '../utils/merge-pages';
 
 const pageToKey = ({ qLeft, qTop, qWidth, qHeight }: EngineAPI.INxPage) => `${qLeft}-${qTop}-${qWidth}-${qHeight}`;
 
@@ -29,7 +30,7 @@ const useGetHyperCubeDataQueue = (
         finished.current.add(key);
 
         if (queued.current.size === 1) {
-          queueMicrotask(async () => {
+          setTimeout(async () => {
             const qPages = Array.from(queued.current.values());
             if (qPages.length === 0) {
               return;
@@ -39,7 +40,8 @@ const useGetHyperCubeDataQueue = (
             ongoing.current.add(qPages);
 
             try {
-              const qDataPages = await mutableGetDataPages.current(qPages);
+              const mergedPages = mergePages(qPages);
+              const qDataPages = await mutableGetDataPages.current(mergedPages);
 
               if (ongoing.current.has(qPages)) {
                 mutableHandleDataPages.current(qDataPages);
@@ -52,7 +54,7 @@ const useGetHyperCubeDataQueue = (
             } finally {
               ongoing.current.delete(qPages);
             }
-          });
+          }, 75);
         }
       },
       clear: () => {
