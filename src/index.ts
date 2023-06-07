@@ -53,7 +53,6 @@ export default function supernova(env: Galaxy) {
           : contentRect;
       const viewService = useViewService(layout);
       const embed = useEmbed();
-      const viewService = useViewService(layout.snapshotData);
       const theme = useExtendedTheme(rootElement);
       const changeSortOrder = useSorting(layout.qHyperCube, model); // undefined when taking snapshot
       const applyColumnWidths = useApplyColumnWidths(layout.qHyperCube, model);
@@ -61,7 +60,7 @@ export default function supernova(env: Galaxy) {
 
       extendContextMenu();
 
-      useSnapshot({ layout, viewService, model, rootElement });
+      useSnapshot({ layout, viewService, model, rootElement, contentRect });
 
       useVirtualizedTable({
         app,
@@ -101,8 +100,6 @@ export default function supernova(env: Galaxy) {
         isFontLoaded,
         viewService,
       });
-
-      useSnapshot({ layout, viewService, model, rootElement, contentRect });
     },
   };
 }
