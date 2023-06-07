@@ -5,6 +5,19 @@ type Rect = {
   y: number;
   height: number;
 };
+
+const rowIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+const createRects = (scrollTop: number) => {
+  const rects: Array<Rect> = [];
+  rowIndices.forEach((item, i) => {
+    const y = i > 0 ? rects[i - 1].y + rects[i - 1].height : scrollTop;
+    const height = 20 + i * 5;
+    rects[i] = { y, height };
+  });
+  return rects;
+};
+
 describe('find-visible-rows', () => {
   describe('findPaginationVisibleRows', () => {
     let rootElement: HTMLElement;
@@ -16,15 +29,9 @@ describe('find-visible-rows', () => {
     let tableContainerRect: Rect;
     let headRowRect: Rect;
     let totalsRowRec: Rect;
-    const rowIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     const createElements = (scrollTop: number) => {
-      const rowRects: Array<Rect> = [];
-      rowIndices.forEach((item, i) => {
-        const y = i ? rowRects[i - 1].y + rowRects[i - 1].height : scrollTop;
-        const height = 20 + i * 5;
-        rowRects[i] = { y, height };
-      });
+      const rowRects = createRects(scrollTop);
       dataRows = rowRects.map((rect) => ({ getBoundingClientRect: (): Rect => rect }));
 
       rootElement = {
@@ -204,7 +211,6 @@ describe('find-visible-rows', () => {
     let bodyRect: Rect;
     let cells: { getAttribute: () => string; getBoundingClientRect: () => Rect }[];
     let viewService: ViewService;
-    const rowIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     const createCell = (rect: Rect, index: number) => {
       return {
         getAttribute: () => index.toString(),
@@ -212,13 +218,8 @@ describe('find-visible-rows', () => {
       };
     };
     const createElements = (scrollTop: number) => {
-      const rowRects: Array<Rect> = [];
-      rowIndices.forEach((item, i) => {
-        const y = i ? rowRects[i - 1].y + rowRects[i - 1].height : scrollTop;
-        const height = 20 + i * 5;
-        rowRects[i] = { y, height };
-      });
-      cells = rowRects.map((rect, index) => createCell(rect, index));
+      const cellRects = createRects(scrollTop);
+      cells = cellRects.map((rect, index) => createCell(rect, index));
       tableBody = {
         getBoundingClientRect: (): Rect => bodyRect,
         querySelectorAll: () => cells,
@@ -262,7 +263,7 @@ describe('find-visible-rows', () => {
         expect(visibleRowEndIndex).toEqual(10);
       });
 
-      it('should return correct visible row indices when less than 80% of the first row is visible', () => {
+      it('should return correct visible row indices when more than 4px in the top of the first row is not visible', () => {
         createElements(-10);
         const { visibleRowStartIndex, visibleRowEndIndex } = findVirtualizedVisibleRows(rootElement, viewService);
         expect(visibleRowStartIndex).toEqual(1);
