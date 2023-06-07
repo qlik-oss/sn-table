@@ -12,6 +12,7 @@ import {
   ExtendedTranslator,
   TableData,
   TableLayout,
+  ViewService,
 } from '../types';
 import { generateLayout } from './generate-test-data';
 
@@ -34,6 +35,7 @@ interface ProviderProps {
   applyColumnWidths?: ApplyColumnWidths;
   initialDataPages?: EngineAPI.INxDataPage[];
   rect?: stardust.Rect;
+  viewService?: ViewService;
 }
 
 type HookWrapperProps = { children: JSX.Element };
@@ -72,6 +74,7 @@ const TestWithProviders = ({
   applyColumnWidths = () => {},
   rect = { width: 0, height: 0, top: 0, left: 0 },
   initialDataPages = undefined,
+  viewService = { qTop: 0, qHeight: 1, scrollLeft: 0 },
 }: ProviderProps) => {
   return (
     <ThemeProvider theme={muiSetup(direction)}>
@@ -92,6 +95,7 @@ const TestWithProviders = ({
         applyColumnWidths={applyColumnWidths}
         rect={rect}
         initialDataPages={initialDataPages}
+        viewService={viewService}
       >
         {children as JSX.Element}
       </TableContextProvider>

@@ -159,8 +159,6 @@ describe('handle-data', () => {
       viewService = {
         qTop: 0,
         qHeight: 100,
-        qLeft: 0,
-        qWidth: 4,
         scrollLeft: 0,
       };
     });

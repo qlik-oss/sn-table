@@ -1,16 +1,20 @@
 import { useCallback } from 'react';
 import { VariableSizeList } from 'react-window';
 import { BodyRef } from '../types';
+import { ViewService } from '../../../types';
 
 const useScrollHandler = (
   headerRef: React.RefObject<VariableSizeList<any>>,
   totalsRef: React.RefObject<VariableSizeList<any>>,
-  bodyRef: React.RefObject<BodyRef>
+  bodyRef: React.RefObject<BodyRef>,
+  viewService: ViewService
 ) => {
   return useCallback(
     (event: React.SyntheticEvent) => {
       const { scrollHeight, clientHeight, scrollTop, scrollLeft } = event.currentTarget;
       const ratio = Math.max(0, Math.min(1, scrollTop / (scrollHeight - clientHeight)));
+      viewService.scrollTopRatio = ratio;
+      viewService.scrollLeft = scrollLeft;
 
       bodyRef.current?.interpolatedScrollTo(Number.isNaN(ratio) ? 0 : ratio, scrollLeft);
 

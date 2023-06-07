@@ -38,6 +38,7 @@ export const TableContextProvider = ({
   pageInfo,
   initialDataPages,
   rect,
+  viewService,
 }: ContextProviderProps) => {
   const [headRowHeight, setHeadRowHeight] = useState(0);
   const [focusedCellCoord, setFocusedCellCoord] = useState<[number, number]>(cellCoordMock || FIRST_HEADER_CELL_COORD);
@@ -66,6 +67,7 @@ export const TableContextProvider = ({
       applyColumnWidths,
       styling,
       rect,
+      viewService,
     }),
     [
       app,
@@ -82,6 +84,7 @@ export const TableContextProvider = ({
       applyColumnWidths,
       styling,
       rect,
+      viewService,
     ]
   );
 

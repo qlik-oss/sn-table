@@ -1,4 +1,6 @@
-import { TotalsPosition } from '../../types';
+import { TotalsPosition, ViewService } from '../../types';
+
+const EPSILON = 0.001;
 
 const findStartIndex = (rows: HTMLCollectionOf<Element>, min: number, max: number): number => {
   for (let i = 0; i < rows.length; i++) {
@@ -22,7 +24,7 @@ const findEndIndex = (rows: HTMLCollectionOf<Element>, min: number, max: number)
   return -1;
 };
 
-const findVisibleRows = (rootElement: HTMLElement, totalsPosition: TotalsPosition) => {
+export function findPaginationVisibleRows(rootElement: HTMLElement, totalsPosition: TotalsPosition) {
   const tableContainer = rootElement.getElementsByClassName('sn-table-container')[0];
   if (!tableContainer) return {};
   const tableContainerRect = tableContainer?.getBoundingClientRect() || {};
@@ -36,6 +38,53 @@ const findVisibleRows = (rootElement: HTMLElement, totalsPosition: TotalsPositio
   const visibleRowStartIndex = findStartIndex(dataRows, yMin, yMax);
   const visibleRowEndIndex = findEndIndex(dataRows, yMin, yMax);
   return { visibleRowStartIndex, visibleRowEndIndex };
+}
+
+const getFristCellOfRow = (rowIndex: number, cells?: NodeListOf<Element>) => {
+  if (!cells) return undefined;
+  for (let i = 0; i < cells.length; i++) {
+    const strIdx = cells[i].getAttribute('rowindex');
+    if (strIdx && parseInt(strIdx, 10) === rowIndex) return cells[i];
+  }
+  return undefined;
 };
 
-export default findVisibleRows;
+const shouldIncludeRowWithCell = (cellRect: DOMRect, min: number, max: number) => {
+  if (!cellRect) return false;
+  const center = cellRect.y + cellRect.height / 2;
+  return center >= min && center <= max;
+};
+
+export function findVirtualizedVisibleRows(rootElement: HTMLElement, viewService: ViewService) {
+  const tableBody = rootElement.querySelector('.sn-table-body');
+  const bodyRect = tableBody?.getBoundingClientRect();
+  const cells = tableBody?.querySelectorAll('.sn-table-body .sn-table-cell');
+  if (!cells || !bodyRect) return {};
+  const { scrollTopRatio = 0, visibleTop = 0, visibleHeight = 0, page = 0, rowsPerPage = 0 } = viewService;
+  const offset = page * rowsPerPage;
+  const visibleTopInPage = visibleTop - offset;
+  const visibleBottomInPage = visibleTopInPage + visibleHeight - 1;
+  const topLeftCell = getFristCellOfRow(visibleTopInPage, cells);
+  const topLeftCellRect = topLeftCell?.getBoundingClientRect();
+  if (!topLeftCell || !topLeftCellRect) return {};
+  const bodyYMin = bodyRect.y;
+  if (1 - scrollTopRatio < EPSILON) {
+    // The last data row is visible, then the priority start from the bottom row
+    const shouldIncludeTopRow = topLeftCellRect.y >= bodyYMin - 4;
+    return {
+      visibleRowStartIndex: visibleTopInPage + (shouldIncludeTopRow ? 0 : 1) + offset,
+      visibleRowEndIndex: visibleBottomInPage + offset,
+    };
+  }
+  const bodyYMax = bodyRect.y + bodyRect.height;
+  const visibleRowStartIndex =
+    (shouldIncludeRowWithCell(topLeftCellRect, bodyYMin, bodyYMax) ? visibleTopInPage : visibleTopInPage + 1) + offset;
+  let visibleRowEndIndex = visibleBottomInPage + offset;
+  const bottomLeftCell = getFristCellOfRow(visibleBottomInPage, cells);
+  const bottomLeftCellRect = bottomLeftCell?.getBoundingClientRect();
+  if (bottomLeftCell && bottomLeftCellRect) {
+    if (!shouldIncludeRowWithCell(bottomLeftCellRect, bodyYMin, bodyYMax))
+      visibleRowEndIndex = visibleBottomInPage - 1 + offset;
+  }
+  return { visibleRowStartIndex, visibleRowEndIndex };
+}

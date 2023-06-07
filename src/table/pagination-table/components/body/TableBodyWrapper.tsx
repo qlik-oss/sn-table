@@ -53,6 +53,7 @@ function TableBodyWrapper({ setShouldRefocus, tableWrapperRef, announce }: Table
           tabIndex={-1}
           key={row.id}
           className="sn-table-row sn-table-data-row"
+          rowindex={rowIndex}
         >
           {columns.map((column, columnIndex) => {
             const { id } = column;

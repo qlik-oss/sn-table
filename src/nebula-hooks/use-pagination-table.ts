@@ -14,6 +14,7 @@ import {
   ViewService,
 } from '../types';
 import useAnnounceAndTranslations from './use-announce-and-translations';
+import isPrinting from '../is-printing';
 
 interface UsePaginationTable {
   env: Galaxy;
@@ -42,7 +43,6 @@ const initialPageInfo = {
 };
 
 const usePaginationTable = ({
-  env,
   app,
   model,
   rootElement,
@@ -60,17 +60,17 @@ const usePaginationTable = ({
   isFontLoaded,
   viewService,
 }: UsePaginationTable) => {
-  const shouldRender = !env.carbon && layout.usePagination !== false;
-  const { viewState, direction, footerContainer } = useOptions() as UseOptions;
+  const { direction, footerContainer } = useOptions() as UseOptions;
+  const isPrintingMode = isPrinting(layout, viewService);
+  const shouldRender = layout.usePagination !== false || isPrintingMode;
   const announce = useAnnounceAndTranslations(rootElement, translator);
-  const tmpPageInfo =
-    layout.snapshotData || viewState?.rowsPerPage
-      ? {
-          page: viewService.page || initialPageInfo.page,
-          rowsPerPage: viewService.rowsPerPage || initialPageInfo.rowsPerPage,
-          rowsPerPageOptions: initialPageInfo.rowsPerPageOptions,
-        }
-      : initialPageInfo;
+  const tmpPageInfo = isPrintingMode
+    ? {
+        page: viewService.page || initialPageInfo.page,
+        rowsPerPage: viewService.rowsPerPage || initialPageInfo.rowsPerPage,
+        rowsPerPageOptions: initialPageInfo.rowsPerPageOptions,
+      }
+    : initialPageInfo;
   const [pageInfo, setPageInfo] = useState(tmpPageInfo);
   const [tableData] = usePromise(async () => {
     if (shouldRender) {

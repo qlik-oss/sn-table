@@ -69,7 +69,7 @@ const isColumnMissingData = (rows: Row[], x: number, y: number, height: number) 
     return true; // Rows are not cached
   }
 
-  return targetRows.some((row) => !row[`col-${x}`]);
+  return targetRows.some((row) => !row?.[`col-${x}`]);
 };
 
 const toRows = (
