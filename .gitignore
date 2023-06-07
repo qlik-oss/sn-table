@@ -30,7 +30,6 @@ test/integration/artifacts
 test/integration/test-report
 test/integration/state.json
 #pack files
-*.tgz
 build
 
 # editor directories and files
