@@ -19,7 +19,7 @@ export function renderPaginationTable(props: RenderProps, reactRoot: ReactDom.Ro
     selectionsAPI,
     layout,
     translator,
-    constraints,
+    interactions,
     theme,
     keyboard,
     rootElement,
@@ -42,7 +42,7 @@ export function renderPaginationTable(props: RenderProps, reactRoot: ReactDom.Ro
           selectionsAPI={selectionsAPI}
           layout={layout}
           translator={translator}
-          constraints={constraints}
+          interactions={interactions}
           theme={theme}
           keyboard={keyboard}
           rootElement={rootElement}
@@ -65,7 +65,7 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
     layout,
     model,
     translator,
-    constraints,
+    interactions,
     theme,
     keyboard,
     rect,
@@ -89,7 +89,7 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
           layout={layout}
           model={model}
           translator={translator}
-          constraints={constraints}
+          interactions={interactions}
           theme={theme}
           keyboard={keyboard}
           rootElement={rootElement}

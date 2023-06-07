@@ -22,17 +22,15 @@ function TableBodyWrapper({ setShouldRefocus, tableWrapperRef, announce }: Table
     rootElement,
     keyboard,
     layout,
-    constraints,
+    interactions,
     styling: {
       body: { hoverColors, lastRowBottomBorder, ...cellStyle },
     },
   } = useContextSelector(TableContext, (value) => value.baseProps);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
-  // constraints.active: true - turn off interactions that affect the state of the visual
-  // representation including selection, zoom, scroll, etc.
-  // constraints.select: true - turn off selections.
-  const isSelectionsEnabled = !constraints.active && !constraints.select;
+  // Both active and select conditions need to be true to make selections. See stardust API for more info
+  const isSelectionsEnabled = !!interactions.active && !!interactions.select;
   const columnsStylingIDsJSON = JSON.stringify(columns.map((column) => column.stylingIDs));
   const columnRenderers = useMemo(
     () =>
@@ -89,7 +87,7 @@ function TableBodyWrapper({ setShouldRefocus, tableWrapperRef, announce }: Table
                   styling={cellStyle} // TODO see if we should rename this to cellStyle
                   tabIndex={tabIndex}
                   announce={announce}
-                  title={!constraints.passive ? cell.qText : undefined}
+                  title={interactions.passive ? cell.qText : undefined}
                   onKeyDown={handleKeyDown}
                   onKeyUp={(evt: React.KeyboardEvent) => handleBodyKeyUp(evt, selectionDispatch)}
                   onMouseDown={() =>

@@ -19,7 +19,7 @@ interface UseVirtualizedTable {
   layout: TableLayout;
   model: EngineAPI.IGenericObject | undefined;
   translator: ExtendedTranslator;
-  constraints: stardust.Constraints;
+  interactions: stardust.Interactions;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
   rect: stardust.Rect;
@@ -39,7 +39,7 @@ const useVirtualizedTable = ({
   theme,
   keyboard,
   translator,
-  constraints,
+  interactions,
   selectionsAPI,
   changeSortOrder,
   rootElement,
@@ -49,7 +49,7 @@ const useVirtualizedTable = ({
   isFontLoaded,
 }: UseVirtualizedTable) => {
   const shouldRender = layout.usePagination === false;
-  const tableData = useMemo(() => getVirtualScrollTableData(layout, constraints), [layout, constraints]);
+  const tableData = useMemo(() => getVirtualScrollTableData(layout, interactions), [layout, interactions]);
   const { pageInfo, setPage } = usePageInfo(layout, shouldRender);
   const { initialDataPages, isLoading } = useInitialDataPages({ model, layout, page: pageInfo.page, shouldRender });
 
@@ -65,7 +65,7 @@ const useVirtualizedTable = ({
         theme,
         keyboard,
         translator,
-        constraints,
+        interactions,
         selectionsAPI,
         rootElement,
         embed,
@@ -86,7 +86,7 @@ const useVirtualizedTable = ({
     theme.name(),
     keyboard.active,
     translator,
-    constraints,
+    interactions,
     selectionsAPI,
     changeSortOrder,
     shouldRender,

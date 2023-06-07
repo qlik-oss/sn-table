@@ -51,7 +51,7 @@ function PaginationContent({
 }: PaginationContentProps) {
   const { totalRowCount, totalColumnCount, totalPages } = useContextSelector(TableContext, (value) => value.tableData);
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
-  const { keyboard, translator, theme, constraints, rect } = useContextSelector(
+  const { keyboard, translator, theme, interactions, rect } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );
@@ -107,7 +107,7 @@ function PaginationContent({
         onClick={!disabledCondition ? () => handleChangePage(pageNumber) : null}
         aria-disabled={disabledCondition}
         aria-label={translator.get(`SNTable.Pagination.${type}`)}
-        title={!constraints.passive ? translator.get(`SNTable.Pagination.${type}`) : undefined}
+        title={interactions.passive ? translator.get(`SNTable.Pagination.${type}`) : undefined}
         tabIndex={tabIndex}
         onKeyDown={onKeyDown}
       >

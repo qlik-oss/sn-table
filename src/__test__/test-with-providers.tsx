@@ -24,7 +24,7 @@ interface ProviderProps {
   layout?: TableLayout;
   model?: EngineAPI.IGenericObject;
   translator?: ExtendedTranslator;
-  constraints?: stardust.Constraints;
+  interactions?: stardust.Interactions;
   theme?: ExtendedTheme;
   keyboard?: stardust.Keyboard;
   direction?: 'ltr' | 'rtl';
@@ -42,7 +42,11 @@ const TestWithProviders = ({
   children,
   app = { getField: () => Promise.resolve({}) } as unknown as EngineAPI.IApp,
   layout = generateLayout(1, 1, 5),
-  constraints = {} as stardust.Constraints,
+  interactions = {
+    active: true,
+    passive: true,
+    select: true,
+  },
   selectionsAPI = {
     isModal: () => false,
     on: () => undefined,
@@ -76,7 +80,7 @@ const TestWithProviders = ({
         selectionsAPI={selectionsAPI}
         layout={layout}
         translator={translator}
-        constraints={constraints}
+        interactions={interactions}
         theme={theme}
         keyboard={keyboard}
         model={model}
