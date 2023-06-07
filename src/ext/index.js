@@ -26,9 +26,9 @@ export default function ext(env) {
     ...getExploration(env),
     data: getData(env),
     support: {
-      export: true,
+      export: env.flags.isEnabled('PS-20907_TABLE_DOWNLOAD'),
       exportData: true,
-      snapshot: true,
+      snapshot: env.flags.isEnabled('PS-20907_TABLE_DOWNLOAD'),
       viewData: false,
       exploration: true,
       cssScaling: true,

@@ -60,7 +60,9 @@ export default function supernova(env: Galaxy) {
 
       extendContextMenu();
 
-      useSnapshot({ layout, viewService, model, rootElement, contentRect });
+      if (env.flags.isEnabled('PS-20907_TABLE_DOWNLOAD')) {
+        useSnapshot({ layout, viewService, model, rootElement, contentRect });
+      }
 
       useVirtualizedTable({
         app,
