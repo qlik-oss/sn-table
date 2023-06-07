@@ -11,7 +11,7 @@ import { RenderProps } from './types';
 import VirtualizedTable from './virtualized-table/Wrapper';
 import { VirtualTableRenderProps } from './virtualized-table/types';
 
-export function renderPaginationTable(props: RenderProps, reactRoot?: ReactDom.Root) {
+export function renderPaginationTable(props: RenderProps, reactRoot: ReactDom.Root) {
   const {
     app,
     model,
@@ -111,9 +111,4 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
       </ThemeProvider>
     </React.StrictMode>
   );
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function mount(rootElement: HTMLElement) {
-  /* noop in web */
 }

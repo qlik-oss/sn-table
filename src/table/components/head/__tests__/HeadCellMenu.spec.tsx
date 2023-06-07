@@ -25,6 +25,7 @@ describe('<HeadCellMenu />', () => {
   let updateSelectionActionsEnabledStatusMock: jest.Mock<any, any>;
   let model: EngineAPI.IGenericObject;
   let useFieldSelectionHookResult: useFieldSelectionHook.UseFieldSelectionOutput;
+  let interactions: stardust.Interactions;
   const direction: 'ltr' | 'rtl' = 'ltr';
   const menuLabels = [
     'SNTable.MenuItem.Search',
@@ -37,10 +38,17 @@ describe('<HeadCellMenu />', () => {
 
   const renderTableHeadCellMenu = () =>
     render(
-      <TestWithProviders layout={layout} direction={direction} embed={embed} model={model}>
+      <TestWithProviders layout={layout} direction={direction} embed={embed} model={model} interactions={interactions}>
         <HeadCellMenu column={column} tabIndex={0} />
       </TestWithProviders>
     );
+
+  const openMenu = async () => {
+    fireEvent.click(screen.getByRole('button'));
+    await waitFor(() => {
+      expect(screen.queryByRole('menu')).toBeVisible();
+    });
+  };
 
   beforeEach(() => {
     embed = {
@@ -97,53 +105,53 @@ describe('<HeadCellMenu />', () => {
     model = {
       getLayout: jest.fn().mockResolvedValue(null),
     } as unknown as EngineAPI.IGenericObject;
+    interactions = {
+      select: true,
+    };
   });
 
   afterEach(() => {
     jest.resetAllMocks();
   });
 
-  it('should render head cell menu button but the opacity is 0', () => {
+  it('should render head cell menu button but the opacity is 0, and the menu is not opened', () => {
     renderTableHeadCellMenu();
 
     const element = screen.getByRole('button');
     expect(element).toBeInTheDocument();
     expect(element).not.toBeVisible();
-  });
-
-  it('should render head cell menu button when isDimension is false but the opacity is 0', () => {
-    column = {
-      ...column,
-      isDim: false,
-    } as Column;
-    renderTableHeadCellMenu();
-
-    const element = screen.queryByRole('button');
-    expect(element).toBeInTheDocument();
-    expect(element).not.toBeVisible();
-  });
-
-  it('should render correct menu items', async () => {
-    renderTableHeadCellMenu();
-
-    fireEvent.click(screen.getByRole('button'));
-    await waitFor(() => {
-      expect(screen.queryByRole('menu')).toBeVisible();
-    });
-
-    ['SNTable.MenuItem.Search', 'SNTable.MenuItem.Selections'].forEach((actionLabel) => {
-      expect(screen.queryByText(actionLabel)).toBeVisible();
-    });
-  });
-
-  it('should open the menu only when the button is clicked', async () => {
-    renderTableHeadCellMenu();
-
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button'));
-    await waitFor(() => {
-      expect(screen.queryByRole('menu')).toBeVisible();
-    });
+  });
+
+  it('should open menu and render all menu items when column is dimension', async () => {
+    renderTableHeadCellMenu();
+    await openMenu();
+
+    ['SNTable.MenuItem.Search', 'SNTable.MenuItem.Selections', 'SNTable.MenuItem.AdjustColumnSize'].forEach(
+      (actionLabel) => {
+        expect(screen.queryByText(actionLabel)).toBeVisible();
+      }
+    );
+  });
+
+  it('should open menu but not render selection items when when column is measure', async () => {
+    column = { ...column, isDim: false };
+    renderTableHeadCellMenu();
+    await openMenu();
+
+    expect(screen.queryByText('SNTable.MenuItem.Search')).toBeNull();
+    expect(screen.queryByText('SNTable.MenuItem.Selections')).toBeNull();
+    expect(screen.queryByText('SNTable.MenuItem.AdjustColumnSize')).toBeVisible();
+  });
+
+  it('should open menu but not render selection items when when column is dimension, but selections is disabled ', async () => {
+    interactions.select = false;
+    renderTableHeadCellMenu();
+    await openMenu();
+
+    expect(screen.queryByText('SNTable.MenuItem.Search')).toBeNull();
+    expect(screen.queryByText('SNTable.MenuItem.Selections')).toBeNull();
+    expect(screen.queryByText('SNTable.MenuItem.AdjustColumnSize')).toBeVisible();
   });
 
   it('should close the menu when listbox is about to mount', async () => {

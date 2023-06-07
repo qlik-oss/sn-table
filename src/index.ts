@@ -22,7 +22,6 @@ import useExtendedTheme from './nebula-hooks/use-extended-theme';
 import { Galaxy, TableLayout, ExtendedTranslator, ExtendedSelectionAPI, UseOptions } from './types';
 import useVirtualizedTable from './nebula-hooks/use-virtualized-table';
 import usePaginationTable from './nebula-hooks/use-pagination-table';
-import useCarbonTable from './nebula-hooks/use-carbon-table';
 import useApplyColumnWidths from './nebula-hooks/use-apply-column-widths';
 import useWaitForFonts from './nebula-hooks/use-wait-for-fonts';
 import extendContextMenu from './extend-context-menu';
@@ -54,12 +53,15 @@ export default function supernova(env: Galaxy) {
           : contentRect;
       const viewService = useViewService(layout);
       const embed = useEmbed();
+      const viewService = useViewService(layout.snapshotData);
       const theme = useExtendedTheme(rootElement);
       const changeSortOrder = useSorting(layout.qHyperCube, model); // undefined when taking snapshot
       const applyColumnWidths = useApplyColumnWidths(layout.qHyperCube, model);
       const isFontLoaded = useWaitForFonts(theme, layout);
 
       extendContextMenu();
+
+      useSnapshot({ layout, viewService, model, rootElement });
 
       useVirtualizedTable({
         app,
@@ -100,18 +102,6 @@ export default function supernova(env: Galaxy) {
         viewService,
       });
 
-      useCarbonTable({
-        env,
-        rootElement,
-        model,
-        theme,
-        selectionsAPI,
-        app,
-        rect,
-        layout,
-        changeSortOrder,
-        translator,
-      });
       useSnapshot({ layout, viewService, model, rootElement, contentRect });
     },
   };
