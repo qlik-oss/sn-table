@@ -29,7 +29,7 @@ yarn
     chmod 777 ./test/rendering/scripts/run-rendering-tests.sh
     yarn test:rendering:local
 
-If the test fail, you can try to rerun them. Sometimes you need to stop the docker container
+If the tests fail, you can try to rerun them. Sometimes you need to stop the docker container
 using
 
     docker stop sn-table-playwright
