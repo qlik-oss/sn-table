@@ -1,3 +1,5 @@
+## [2.3.1](https://github.com/qlik-oss/sn-table/compare/v2.3.0...v2.3.1) (2023-06-09)
+
 # [2.3.0](https://github.com/qlik-oss/sn-table/compare/v2.2.3...v2.3.0) (2023-06-07)
 
 ### Bug Fixes
