@@ -209,12 +209,12 @@ export default () => ({
             content: {
               hoverEffect: true,
               hoverColor: {
-                index: 14,
-                color: '#65d3da',
+                index: -1,
+                color: '#5fdad3',
               },
               hoverFontColor: {
-                index: 5,
-                color: '#ec983d',
+                index: -1,
+                color: '#ec6738',
               },
             },
           },

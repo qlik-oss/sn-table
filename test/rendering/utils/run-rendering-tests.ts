@@ -62,6 +62,16 @@ const runRenderingTests = (theme: Object | Function, themeType: String, language
       // Open page in Nebula which renders fixture
       await playwright.open(renderUrl);
 
+      if (name.includes('scenario_1')) {
+        await page.hover('text=American Beef Bologna');
+      } else if (name.includes('scenario_2')) {
+        await page.hover('text=Washington Strawberry Drink');
+      } else if (name.includes('scenario_3')) {
+        await page.hover('text=Africa');
+      } else {
+        await page.hover('text=Better Fancy Canned Sardines');
+      }
+
       // Playwright captures screenshot
       const img = await playwright.screenshot();
       // Compare screenshot with baseline image
