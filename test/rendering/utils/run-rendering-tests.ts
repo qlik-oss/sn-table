@@ -61,12 +61,7 @@ const runRenderingTests = (theme: Object | Function, themeType: String, language
       console.log({ renderUrl });
       // Open page in Nebula which renders fixture
       await playwright.open(renderUrl);
-      if (name.includes('scenario_9') || name.includes('scenario_10')) await page.hover('text=Tampere');
-      if (name.includes('scenario_11')) await page.hover('text=Valley Solutions');
-      if (name.includes('scenario_12')) {
-        const element = page.locator('text=Zocalo');
-        await element.scrollIntoViewIfNeeded();
-      }
+
       // Playwright captures screenshot
       const img = await playwright.screenshot();
       // Compare screenshot with baseline image

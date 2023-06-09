@@ -1,5 +1,5 @@
-module.exports = (type) => ({
-  type, // added to make Nebula load the dark material UI theme
+module.exports = () => ({
+  _inherit: true,
   _variables: {
     '@myColorLight': '#FFFFFF',
     '@myColorDark': '#404040',
@@ -15,8 +15,9 @@ module.exports = (type) => ({
   },
   fontFamily: 'Source Sans Pro, sans-serif',
   fontSize: '12px',
+  _cards: true,
   color: '@myColorDark',
-  backgroundColor: 'rgba(200,200,200,0.3)',
+  backgroundColor: '#FFFFFF',
   object: {
     title: {
       main: {
@@ -34,23 +35,93 @@ module.exports = (type) => ({
         fontVariant: 'regular',
       },
     },
-    straightTableV2: {
+    grid: {
+      line: {
+        highContrast: {
+          color: '@B80',
+        },
+        major: {
+          color: '@B90',
+        },
+        minor: {
+          color: '@B90',
+        },
+      },
+    },
+    filterpane: {
+      backgroundColor: 'transparent',
+    },
+    straightTable: {
       header: {
-        fontSize: '25px',
-        color: 'chocolate',
-        fontFamily: 'Source Sans Pro',
+        color: '@myColorDark',
       },
       content: {
-        fontSize: '16px',
-        color: 'magenta',
-        fontFamily: 'Source Sans Pro',
-        hover: {
-          backgroundColor: 'black',
-          color: 'red',
+        color: '@myColorDark',
+      },
+    },
+    lineChart: {
+      title: {
+        main: {
+          color: '@myColorDark',
+        },
+      },
+    },
+    treemap: {
+      branch: {
+        backgroundColor: '@B95',
+      },
+    },
+    waterfallChart: {
+      shape: {
+        positiveValue: {
+          fill: '#83AF9B',
+        },
+        negativeValue: {
+          fill: '#AC4D58',
+        },
+        subtotal: {
+          fill: '#b0afae',
         },
       },
     },
   },
+  dataColors: {
+    primaryColor: '#006580',
+    othersColor: '#a5a5a5',
+    errorColor: '#ff4444',
+    nullColor: '#d2d2d2',
+    selectionColor: '#52cc52',
+  },
+  scales: [
+    {
+      name: 'Sequential Gradient',
+      translation: 'properties.colorScheme.sequential',
+      type: 'gradient',
+      propertyValue: 'sg',
+      scale: ['#006580', '#C4CFDA'],
+    },
+    {
+      name: 'Sequential Classes',
+      translation: 'properties.colorScheme.sequentialC',
+      propertyValue: 'sc',
+      type: 'class',
+      scale: ['#006580', '#C4CFDA'],
+    },
+    {
+      name: 'Diverging gradient',
+      translation: 'properties.colorScheme.diverging',
+      propertyValue: 'dg',
+      type: 'gradient',
+      scale: ['#006580', '#C4CFDA', '#87205D'],
+    },
+    {
+      name: 'Diverging Classes',
+      translation: 'properties.colorScheme.divergingC',
+      propertyValue: 'dc',
+      type: 'class',
+      scale: ['#006580', '#C4CFDA', '#87205D'],
+    },
+  ],
   palettes: {
     data: [
       {

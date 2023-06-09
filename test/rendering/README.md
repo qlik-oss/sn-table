@@ -52,6 +52,8 @@ Therefor, start by trying to change the existing fixtures before adding a new on
 To get the necessary Layout and HyperCubeData for a fixture files, you can find the app used in the rendering case in [data/apps](../../data/apps).
 Each chart on the "straight table rendering testing" sheet, maps to a fixture.
 
+- Update an existing chart or add a new chart to the app. Note that there needs to be two charts with the same settings,
+  except one has to be in pagination mode.
 - Update or add a new testing fixture file in [test/rendering/fixtures](./__fixtures__)
 - Check the test case in [run-rendering-tests](`./utils/run-rendering-tests.ts`) to make sure it works
 - Update or add new baseline image(s) following the steps [above](#updating-snapshots).
@@ -77,6 +79,6 @@ Each chart on the "straight table rendering testing" sheet, maps to a fixture.
 | Test       | Tested features                                                                                                                                                                  |
 | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Scenario 1 | Default values with chart title, subtitle and footer                                                                                                                             |
-| Scenario 2 | Content and header styling (using palette colors), text alignment, column width (all four different types), column coloring, default hover coloring totals placed at the bottoms |
+| Scenario 2 | Content and header styling (using palette colors), text alignment, column width (all four different types), column coloring, default hover coloring, totals placed at the bottom |
 | Scenario 3 | Small data set, content and header styling (custom colors), hover background color, minimum column width, totals hidden                                                          |
 | Scenario 4 | Big data set (hacked by setting qHyperCube.qSize.qcy to 1_000_000), reordered columns, hidden column, sorting, custom totals label,                                              |
