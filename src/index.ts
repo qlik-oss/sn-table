@@ -60,7 +60,7 @@ export default function supernova(env: Galaxy) {
 
       extendContextMenu();
 
-      if (env.flags.isEnabled('PS-20907_TABLE_DOWNLOAD')) {
+      if (env.flags.isEnabled('PS_20907_TABLE_DOWNLOAD')) {
         useSnapshot({ layout, viewService, model, rootElement, contentRect });
       }
 
