@@ -1,3 +1,23 @@
+# [2.3.0](https://github.com/qlik-oss/sn-table/compare/v2.2.3...v2.3.0) (2023-06-07)
+
+### Bug Fixes
+
+- chart exploration should not be in the property panel when straight table is inside container ([#1016](https://github.com/qlik-oss/sn-table/issues/1016)) ([0a15544](https://github.com/qlik-oss/sn-table/commit/0a155446f5f7faad09f1459463618941e3acb43f))
+- hide selection menu options when selections are disabled ([#1020](https://github.com/qlik-oss/sn-table/issues/1020)) ([c0ddc1b](https://github.com/qlik-oss/sn-table/commit/c0ddc1be22c8789bc7a6a2ae5a06d0bedb969aa5))
+- **pagination-table:** miss direction in table wrapper ([#1003](https://github.com/qlik-oss/sn-table/issues/1003)) ([be92c43](https://github.com/qlik-oss/sn-table/commit/be92c4338bf45e9fc98cf210a70722c1c4cf543e))
+- QB-19034 Straight table - horizontal borders disappear for certain font sizes ([#1008](https://github.com/qlik-oss/sn-table/issues/1008)) ([478d993](https://github.com/qlik-oss/sn-table/commit/478d993ef7b4904c075c4ca88cfbcb5c2c4ea41a))
+- selectionsAPI type ([#1002](https://github.com/qlik-oss/sn-table/issues/1002)) ([907c067](https://github.com/qlik-oss/sn-table/commit/907c0678a81c8606ce72f9b2ad74417575b3e2aa))
+
+### Features
+
+- support download as image/pdf ([#1009](https://github.com/qlik-oss/sn-table/issues/1009)) ([069176f](https://github.com/qlik-oss/sn-table/commit/069176f7fe5e177614285b6f23ba7d5e2f4bf413))
+- support snapshot and printing for virtualized table ([#1022](https://github.com/qlik-oss/sn-table/issues/1022)) ([97fa555](https://github.com/qlik-oss/sn-table/commit/97fa555920c7ebc96b24bf1423ad702e52c45015))
+- support taking a snapshot ([#1001](https://github.com/qlik-oss/sn-table/issues/1001)) ([6e28ac6](https://github.com/qlik-oss/sn-table/commit/6e28ac6c82c963f69422c0eef6d1c0456c223741))
+
+### Performance Improvements
+
+- throttle page fetch ([#1018](https://github.com/qlik-oss/sn-table/issues/1018)) ([085e3e4](https://github.com/qlik-oss/sn-table/commit/085e3e4e352b2a9aee54df77a54f106ade5c6559))
+
 ## [2.2.3](https://github.com/qlik-oss/sn-table/compare/v2.2.2...v2.2.3) (2023-04-26)
 
 ### Bug Fixes

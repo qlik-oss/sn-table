@@ -4,21 +4,34 @@ import { stardust } from '@nebula.js/stardust';
 export type Align = 'left' | 'center' | 'right';
 
 export interface ViewService {
-  qLeft: number;
+  scrollLeft?: number;
+  scrollTopRatio?: number;
   qTop: number;
-  qWidth: number;
   qHeight: number;
+  visibleLeft?: number;
+  visibleWidth?: number;
   visibleTop?: number;
   visibleHeight?: number;
-  scrollLeft: number;
   rowsPerPage?: number;
   page?: number;
+  viewState?: ViewState;
+}
+
+export interface Size {
+  width: number;
+  height: number;
 }
 export interface SnapshotData {
   content?: {
-    scrollLeft: number;
+    scrollLeft?: number;
+    scrollTopRatio?: number;
+    visibleLeft?: number;
+    visibleWidth?: number;
+    visibleTop?: number;
+    visibleHeight?: number;
     rowsPerPage?: number;
     page?: number;
+    size: Size;
   };
 }
 
@@ -219,6 +232,7 @@ export interface ExtendedTheme extends stardust.Theme {
 
 export interface ViewState {
   scrollLeft: number;
+  scrollTopRatio?: number;
   visibleTop: number;
   visibleHeight: number;
   rowsPerPage?: number;
@@ -229,6 +243,7 @@ export interface UseOptions {
   viewState: ViewState;
   direction: Direction | undefined;
   footerContainer: HTMLElement | undefined;
+  freeResize?: boolean;
 }
 
 export interface AnnounceArgs {

@@ -17,17 +17,16 @@ import { StyledTableWrapper } from '../../components/styles';
 import useScrollbarWidth from '../../virtualized-table/hooks/use-scrollbar-width';
 import useKeyboardActiveListener from '../../hooks/use-keyboard-active-listener';
 import { SelectionActions } from '../../constants';
+import isPrinting from '../../../is-printing';
 
 function TableWrapper(props: TableWrapperProps) {
-  const { pageInfo, setPageInfo, direction, footerContainer, announce, viewService } = props;
+  const { pageInfo, setPageInfo, direction, footerContainer, announce } = props;
   const { page, rowsPerPage } = pageInfo;
 
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
     useContextSelector(TableContext, (value) => value.tableData);
-  const { selectionsAPI, rootElement, keyboard, translator, theme, interactions, styling } = useContextSelector(
-    TableContext,
-    (value) => value.baseProps
-  );
+  const { selectionsAPI, rootElement, keyboard, translator, theme, interactions, styling, viewService, layout } =
+    useContextSelector(TableContext, (value) => value.baseProps);
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
@@ -46,7 +45,8 @@ function TableWrapper(props: TableWrapperProps) {
     String(columns.length),
   ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
 
-  const { scrollLeft } = viewService;
+  const isPrintingMode = isPrinting(layout, viewService);
+  const scrollLeft = isPrintingMode ? viewService.scrollLeft ?? 0 : 0;
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);

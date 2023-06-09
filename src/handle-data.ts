@@ -208,12 +208,12 @@ export default async function manageData(
   const height = viewService?.visibleHeight ?? Math.min(rowsPerPage, totalRowCount - top);
   // When the number of rows is reduced (e.g. confirming selections),
   // you can end up still being on a page that doesn't exist anymore, then go back to the first page and rerender
-  if (page > 0 && top >= totalRowCount && pageInfo) {
+  if (page > 0 && top >= totalRowCount) {
     setPageInfo({ ...pageInfo, page: 0 });
     return null;
   }
   // If the number of cells exceeds 10k then we need to lower the rows per page to the maximum possible value and rerender
-  if (height * totalColumnCount > MAX_CELLS && pageInfo) {
+  if (height * totalColumnCount > MAX_CELLS) {
     setPageInfo({ ...pageInfo, rowsPerPage: getHighestPossibleRpp(totalColumnCount, rowsPerPageOptions), page: 0 });
     return null;
   }
@@ -231,8 +231,6 @@ export default async function manageData(
   if (viewService && !isSnapshot) {
     viewService.qTop = top;
     viewService.qHeight = height;
-    viewService.qLeft = 0;
-    viewService.qWidth = totalColumnCount;
     viewService.rowsPerPage = pageInfo.rowsPerPage;
     viewService.page = pageInfo.page;
   }

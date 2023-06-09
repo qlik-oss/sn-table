@@ -2,13 +2,8 @@
 import { useMemo, useEffect } from '@nebula.js/stardust';
 import { createRoot } from 'react-dom/client';
 
-import { mount } from '../table/Root';
-
 const useReactRoot = (rootElement: HTMLElement) => {
-  const reactRoot = useMemo(() => {
-    mount(rootElement);
-    return createRoot(rootElement);
-  }, [rootElement]);
+  const reactRoot = useMemo(() => createRoot(rootElement), [rootElement]);
 
   useEffect(() => () => reactRoot.unmount(), [reactRoot]);
 
