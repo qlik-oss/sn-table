@@ -5,6 +5,7 @@ const createViewService = (viewState: ViewState, snapshotData?: SnapshotData): V
   return {
     qTop: 0,
     qHeight: 0,
+    rowPartialHeight: snapshotData?.content?.rowPartialHeight ?? 0,
     visibleTop: snapshotData?.content?.visibleTop ?? viewState?.visibleTop,
     visibleHeight: snapshotData?.content?.visibleHeight ?? viewState?.visibleHeight,
     scrollLeft: snapshotData?.content?.scrollLeft ?? viewState?.scrollLeft ?? 0,

@@ -4,6 +4,7 @@ import { stardust } from '@nebula.js/stardust';
 export type Align = 'left' | 'center' | 'right';
 
 export interface ViewService {
+  rowPartialHeight?: number;
   scrollLeft?: number;
   scrollTopRatio?: number;
   qTop: number;
@@ -23,6 +24,7 @@ export interface Size {
 }
 export interface SnapshotData {
   content?: {
+    rowPartialHeight?: number;
     scrollLeft?: number;
     scrollTopRatio?: number;
     visibleLeft?: number;
@@ -231,6 +233,7 @@ export interface ExtendedTheme extends stardust.Theme {
 }
 
 export interface ViewState {
+  rowPartialHeight: number;
   scrollLeft: number;
   scrollTopRatio?: number;
   visibleTop: number;

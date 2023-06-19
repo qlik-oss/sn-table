@@ -1,5 +1,10 @@
 import { TotalsPosition, ViewService } from '../../../types';
-import { findPaginationVisibleRows, findVirtualizedVisibleRows } from '../find-visible-rows';
+import { findPaginationVisibleRows, findVirtualizedVisibleRows, getPartialTopScrollHeight } from '../find-visible-rows';
+
+type RowRect = {
+  top: number;
+  bottom: number;
+};
 
 type Rect = {
   y: number;
@@ -9,11 +14,12 @@ type Rect = {
 const rowIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const createRects = (scrollTop: number) => {
-  const rects: Array<Rect> = [];
-  rowIndices.forEach((item, i) => {
-    const y = i > 0 ? rects[i - 1].y + rects[i - 1].height : scrollTop;
-    const height = 20 + i * 5;
-    rects[i] = { y, height };
+  const rects: Array<RowRect> = [];
+  rowIndices.forEach((i) => {
+    // The previous row bottom value is the top value of the next row
+    const top = i > 0 ? rects[i - 1].bottom : scrollTop;
+    const bottom = top + 20;
+    rects[i] = { top, bottom };
   });
   return rects;
 };
@@ -32,7 +38,7 @@ describe('find-visible-rows', () => {
 
     const createElements = (scrollTop: number) => {
       const rowRects = createRects(scrollTop);
-      dataRows = rowRects.map((rect) => ({ getBoundingClientRect: (): Rect => rect }));
+      dataRows = rowRects.map((rect) => ({ getBoundingClientRect: (): RowRect => rect }));
 
       rootElement = {
         getElementsByClassName: (className: string) => {
@@ -48,7 +54,7 @@ describe('find-visible-rows', () => {
     };
 
     beforeEach(() => {
-      tableContainerRect = { y: 0, height: 300 };
+      tableContainerRect = { y: 0, height: 200 };
       headRowRect = { y: 0, height: 50 };
     });
 
@@ -62,42 +68,28 @@ describe('find-visible-rows', () => {
         createElements(50);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
         expect(visibleRowStartIndex).toEqual(0);
-        expect(visibleRowEndIndex).toEqual(6);
+        expect(visibleRowEndIndex).toEqual(7);
       });
 
-      it('should return correct visible row indices when 50% of the first row is visible', () => {
+      it('should return correct visible row indices when the first row is partially visible', () => {
         createElements(40);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
         expect(visibleRowStartIndex).toEqual(0);
-        expect(visibleRowEndIndex).toEqual(6);
-      });
-
-      it('should return correct visible row indices when less than 50% of the first row is visible', () => {
-        createElements(39);
-        const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
-        expect(visibleRowStartIndex).toEqual(1);
-        expect(visibleRowEndIndex).toEqual(6);
+        expect(visibleRowEndIndex).toEqual(7);
       });
 
       it('should return correct visible row indices when the whole last row is visible', () => {
-        createElements(-125);
+        createElements(-100);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
-        expect(visibleRowStartIndex).toEqual(6);
-        expect(visibleRowEndIndex).toEqual(9);
+        expect(visibleRowStartIndex).toEqual(7);
+        expect(visibleRowEndIndex).toEqual(10);
       });
 
-      it('should return correct visible row indices when 50% of the last row is visible', () => {
-        createElements(-92.5);
+      it('should return correct visible row indices when the last row is partially visible', () => {
+        createElements(-90);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
-        expect(visibleRowStartIndex).toEqual(5);
-        expect(visibleRowEndIndex).toEqual(9);
-      });
-
-      it('should return correct visible row indices when  lest than 50% of the last row is visible', () => {
-        createElements(-91.5);
-        const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
-        expect(visibleRowStartIndex).toEqual(5);
-        expect(visibleRowEndIndex).toEqual(8);
+        expect(visibleRowStartIndex).toEqual(7);
+        expect(visibleRowEndIndex).toEqual(10);
       });
     });
 
@@ -115,39 +107,25 @@ describe('find-visible-rows', () => {
         expect(visibleRowEndIndex).toEqual(6);
       });
 
-      it('should return correct visible row indices when 50% of the first row is visible', () => {
+      it('should return correct visible row indices when the first row is visible partially', () => {
         createElements(40);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
         expect(visibleRowStartIndex).toEqual(0);
         expect(visibleRowEndIndex).toEqual(6);
       });
 
-      it('should return correct visible row indices when less than 50% of the first row is visible', () => {
-        createElements(39);
-        const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
-        expect(visibleRowStartIndex).toEqual(1);
-        expect(visibleRowEndIndex).toEqual(6);
-      });
-
       it('should return correct visible row indices when the whole last row is visible', () => {
-        createElements(-145);
+        createElements(-100);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
-        expect(visibleRowStartIndex).toEqual(6);
-        expect(visibleRowEndIndex).toEqual(9);
+        expect(visibleRowStartIndex).toEqual(7);
+        expect(visibleRowEndIndex).toEqual(10);
       });
 
-      it('should return correct visible row indices when 50% of the last row is visible', () => {
-        createElements(-112.5);
+      it('should return correct visible row indices when the last row is visible partially', () => {
+        createElements(-90);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
-        expect(visibleRowStartIndex).toEqual(5);
-        expect(visibleRowEndIndex).toEqual(9);
-      });
-
-      it('should return correct visible row indices when  lest than 50% of the last row is visible', () => {
-        createElements(-111.5);
-        const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
-        expect(visibleRowStartIndex).toEqual(5);
-        expect(visibleRowEndIndex).toEqual(8);
+        expect(visibleRowStartIndex).toEqual(7);
+        expect(visibleRowEndIndex).toEqual(10);
       });
     });
 
@@ -165,39 +143,61 @@ describe('find-visible-rows', () => {
         expect(visibleRowEndIndex).toEqual(6);
       });
 
-      it('should return correct visible row indices when 50% of the first row is visible', () => {
+      it('should return correct visible row indices when the first row is visible partially', () => {
         createElements(60);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
         expect(visibleRowStartIndex).toEqual(0);
         expect(visibleRowEndIndex).toEqual(6);
       });
 
-      it('should return correct visible row indices when less than 50% of the first row is visible', () => {
-        createElements(59);
-        const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
-        expect(visibleRowStartIndex).toEqual(1);
-        expect(visibleRowEndIndex).toEqual(6);
-      });
-
       it('should return correct visible row indices when the whole last row is visible', () => {
-        createElements(-125);
+        createElements(-100);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
-        expect(visibleRowStartIndex).toEqual(6);
-        expect(visibleRowEndIndex).toEqual(9);
+        expect(visibleRowStartIndex).toEqual(8);
+        expect(visibleRowEndIndex).toEqual(10);
       });
 
-      it('should return correct visible row indices when 50% of the last row is visible', () => {
-        createElements(-92.5);
+      it('should return correct visible row indices when the last row is partially visible', () => {
+        createElements(-90);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
-        expect(visibleRowStartIndex).toEqual(5);
-        expect(visibleRowEndIndex).toEqual(9);
+        expect(visibleRowStartIndex).toEqual(8);
+        expect(visibleRowEndIndex).toEqual(10);
+      });
+    });
+
+    describe('getPartialTopScrollHeight', () => {
+      it('should return a partial height when there is a valid rowRect', () => {
+        const rows = [
+          { getBoundingClientRect: () => ({ top: 100 }) },
+          { getBoundingClientRect: () => ({ top: 200 }) },
+        ] as unknown as HTMLCollectionOf<Element>;
+        const tableBodyRect = { top: 400, bottom: 400 };
+        const partialHeight = getPartialTopScrollHeight(rows, tableBodyRect, 1);
+        expect(partialHeight).toBe(200);
       });
 
-      it('should return correct visible row indices when  lest than 50% of the last row is visible', () => {
-        createElements(-91.5);
-        const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
-        expect(visibleRowStartIndex).toEqual(5);
-        expect(visibleRowEndIndex).toEqual(8);
+      it('it should return zero when rowRect top and table body top are equal', () => {
+        const rows = [
+          { getBoundingClientRect: () => ({ top: 100 }) },
+          { getBoundingClientRect: () => ({ top: 200 }) },
+        ] as unknown as HTMLCollectionOf<Element>;
+        const tableBodyRect = { top: 200, bottom: 400 };
+        const partialHeight = getPartialTopScrollHeight(rows, tableBodyRect, 1);
+        expect(partialHeight).toBe(0);
+      });
+
+      it('it should return zero when the row index is invalid', () => {
+        const rows = [{ getBoundingClientRect: () => ({ top: 100 }) }] as unknown as HTMLCollectionOf<Element>;
+        const tableBodyRect = { top: 400, bottom: 400 };
+        const partialHeight = getPartialTopScrollHeight(rows, tableBodyRect, -1);
+        expect(partialHeight).toBe(0);
+      });
+
+      it('should return zero when the rows are undefined', () => {
+        const rows = [] as unknown as HTMLCollectionOf<Element>;
+        const tableBodyRect = { top: 400, bottom: 400 };
+        const partialHeight = getPartialTopScrollHeight(rows, tableBodyRect, 1);
+        expect(partialHeight).toBe(0);
       });
     });
   });
@@ -211,6 +211,15 @@ describe('find-visible-rows', () => {
     let bodyRect: Rect;
     let cells: { getAttribute: () => string; getBoundingClientRect: () => Rect }[];
     let viewService: ViewService;
+    const createNewRects = (scrollTop: number) => {
+      const rects: Array<Rect> = [];
+      rowIndices.forEach((item, i) => {
+        const y = i > 0 ? rects[i - 1].y + rects[i - 1].height : scrollTop;
+        const height = 20 + i * 5;
+        rects[i] = { y, height };
+      });
+      return rects;
+    };
     const createCell = (rect: Rect, index: number) => {
       return {
         getAttribute: () => index.toString(),
@@ -218,7 +227,7 @@ describe('find-visible-rows', () => {
       };
     };
     const createElements = (scrollTop: number) => {
-      const cellRects = createRects(scrollTop);
+      const cellRects = createNewRects(scrollTop);
       cells = cellRects.map((rect, index) => createCell(rect, index));
       tableBody = {
         getBoundingClientRect: (): Rect => bodyRect,
@@ -256,7 +265,7 @@ describe('find-visible-rows', () => {
         expect(visibleRowEndIndex).toEqual(10);
       });
 
-      it('should return correct visible row indices when most of the first row is visible', () => {
+      it('should return correct visible row indices when the first row is partially visible', () => {
         createElements(-4);
         const { visibleRowStartIndex, visibleRowEndIndex } = findVirtualizedVisibleRows(rootElement, viewService);
         expect(visibleRowStartIndex).toEqual(0);
@@ -292,34 +301,11 @@ describe('find-visible-rows', () => {
         expect(visibleRowEndIndex).toEqual(10);
       });
 
-      it('should return correct visible row indices when more than 50% of the first row is visible and more than 50% of the last row is visible', () => {
+      it('should return correct visible row indices when the first row the last row are partially visible', () => {
         createElements(-9);
         const { visibleRowStartIndex, visibleRowEndIndex } = findVirtualizedVisibleRows(rootElement, viewService);
         expect(visibleRowStartIndex).toEqual(0);
         expect(visibleRowEndIndex).toEqual(10);
-      });
-
-      it('should return correct visible row indices when less than 50% of the first row is visible and more than 50% of the last row is visible', () => {
-        createElements(-11);
-        const { visibleRowStartIndex, visibleRowEndIndex } = findVirtualizedVisibleRows(rootElement, viewService);
-        expect(visibleRowStartIndex).toEqual(1);
-        expect(visibleRowEndIndex).toEqual(10);
-      });
-
-      it('should return correct visible row indices when more than 50% of the first row is visible and less than 50% of the last row is visible', () => {
-        bodyRect.height = 450;
-        createElements(-9);
-        const { visibleRowStartIndex, visibleRowEndIndex } = findVirtualizedVisibleRows(rootElement, viewService);
-        expect(visibleRowStartIndex).toEqual(0);
-        expect(visibleRowEndIndex).toEqual(9);
-      });
-
-      it('should return correct visible row indices when less than 50% of the first row is visible and less than 50% of the last row is visible', () => {
-        bodyRect.height = 448;
-        createElements(-11);
-        const { visibleRowStartIndex, visibleRowEndIndex } = findVirtualizedVisibleRows(rootElement, viewService);
-        expect(visibleRowStartIndex).toEqual(1);
-        expect(visibleRowEndIndex).toEqual(9);
       });
     });
   });

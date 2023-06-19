@@ -28,7 +28,7 @@ function TableHeadWrapper() {
 
   useEffect(() => {
     if (headRowRef.current) {
-      setHeadRowHeight(headRowRef.current.getBoundingClientRect().height);
+      setHeadRowHeight(headRowRef.current.clientHeight);
     }
   }, [styling.head.fontSize, columnWidths, setHeadRowHeight]);
 
