@@ -145,18 +145,17 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
     ...getAlignInfo(textAlign, qDimensionType, isDim),
   };
 }
-
 /**
- * Gets the column order and generates the column info.
- * Hidden columns are filtered out.
+ * Returns the column order for visible columns only.
+ * Also returns an array of visible column indexes. where the measures have an independent column count, so the first measure has index 0
+ * THis is used for selections for dimensions and total values for measure
  */
-export const getColumns = (layout: TableLayout) => {
-  const {
-    qHyperCube: { qColumnOrder, qDimensionInfo, qMeasureInfo },
-  } = layout;
+const getVisibleColumnOrder = (
+  columnOrder: number[],
+  qDimensionInfo: ExtendedNxDimensionInfo[],
+  qMeasureInfo: ExtendedNxMeasureInfo[]
+) => {
   const numDims = qDimensionInfo.length;
-  const columnsLength = numDims + qMeasureInfo.length;
-  const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
   const visibleColumnIndexes: number[] = [];
   let hiddenDimCounter = 0;
   let hiddenMsrCounter = 0;
@@ -166,9 +165,6 @@ export const getColumns = (layout: TableLayout) => {
     const { qError } = isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims];
     const isHidden = qError?.qErrorCode === HIDDEN_ERROR_CODE;
 
-    // Every visible dimension and measure needs to know what their index is, excluding hidden fields.
-    // For measures, index 0 is the first measure and it is used for getting the total value.
-    // For dimensions, it is used for making selections
     if (isHidden) {
       isDim ? hiddenDimCounter++ : hiddenMsrCounter++;
     } else {
@@ -177,6 +173,26 @@ export const getColumns = (layout: TableLayout) => {
 
     return !isHidden;
   });
+
+  return { visibleColumnsOrder, visibleColumnIndexes };
+};
+
+/**
+ * Gets the column order and generates the column info for visible columns.
+ */
+export const getColumns = (layout: TableLayout) => {
+  const {
+    qHyperCube: { qColumnOrder, qDimensionInfo, qMeasureInfo },
+  } = layout;
+
+  const columnsLength = qDimensionInfo.length + qMeasureInfo.length;
+  const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
+
+  const { visibleColumnsOrder, visibleColumnIndexes } = getVisibleColumnOrder(
+    columnOrder,
+    qDimensionInfo,
+    qMeasureInfo
+  );
 
   return visibleColumnsOrder.map((colIdx, pageColIdx) =>
     getColumnInfo(layout, colIdx, pageColIdx, visibleColumnIndexes[colIdx])
