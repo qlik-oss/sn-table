@@ -94,7 +94,7 @@ describe('handle-data', () => {
 
     it('should return column info for measure with totals cell align right', () => {
       colIdx = 3;
-      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, undefined);
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, 1); // colIdx 3 is the second index for measure
       const expected = getExpectedInfo(false, undefined, false, '200');
       expected.totalsTextAlign = 'right';
 
@@ -233,39 +233,39 @@ describe('handle-data', () => {
 
   describe('getTotalInfo:', () => {
     it('should show all the measures cells total values', () => {
-      expect(getTotalInfo(layout, 2, 2, 2)).toBe('-');
-      expect(getTotalInfo(layout, 3, 3, 2)).toBe('200');
+      expect(getTotalInfo(layout, false, 2, 0)).toBe('-');
+      expect(getTotalInfo(layout, false, 3, 1)).toBe('200');
     });
 
     it('should show Totals label for the first dimension and empty for the other dimensions', () => {
-      expect(getTotalInfo(layout, 0, 0, 2)).toBe('Totals');
-      expect(getTotalInfo(layout, 1, 1, 2)).toBe('');
+      expect(getTotalInfo(layout, true, 0, 2)).toBe('Totals');
+      expect(getTotalInfo(layout, true, 1, 2)).toBe('');
     });
 
     it('should not show Totals label if the dimension is in another column order than 0', () => {
-      expect(getTotalInfo(layout, 0, 2, 2)).toBe('');
-      expect(getTotalInfo(layout, 1, 3, 2)).toBe('');
+      expect(getTotalInfo(layout, true, 1, 1)).toBe('');
+      expect(getTotalInfo(layout, true, 2, 2)).toBe('');
     });
 
     it('should return empty string as total measure value when qGrandTotalRow has no value', () => {
       layout.qHyperCube.qGrandTotalRow = [];
-      expect(getTotalInfo(layout, 2, 2, 2)).toBe('');
-      expect(getTotalInfo(layout, 3, 3, 2)).toBe('');
+      expect(getTotalInfo(layout, false, 2, 0)).toBe('');
+      expect(getTotalInfo(layout, false, 3, 1)).toBe('');
     });
 
     it('should return specified total label', () => {
       layout.totals.label = 'Whatever';
-      expect(getTotalInfo(layout, 0, 0, 2)).toBe('Whatever');
+      expect(getTotalInfo(layout, true, 0, 0)).toBe('Whatever');
     });
 
     it('should return total label for first dimension as empty string, when the label is set to empty string', () => {
       layout.totals.label = '';
-      expect(getTotalInfo(layout, 0, 0, 2)).toBe('');
+      expect(getTotalInfo(layout, true, 0, 0)).toBe('');
     });
 
-    it('should return total label for first dimension when colIdx is not 0', () => {
-      expect(getTotalInfo(layout, 1, 0, 2)).toBe('Totals');
-    });
+    // it('should return total label for first dimension when colIdx is not 0', () => {
+    //   expect(getTotalInfo(layout, 1, 0, 2)).toBe('Totals');
+    // });
   });
 
   describe('getTotalPosition:', () => {

@@ -1,14 +1,14 @@
 import { isNumericCell } from './table/utils/is-numeric';
 import {
-  TableLayout,
-  PageInfo,
-  SetPageInfo,
-  Row,
-  ExtendedNxMeasureInfo,
-  ExtendedNxDimensionInfo,
-  Column,
-  TableData,
   Align,
+  Column,
+  ExtendedNxDimensionInfo,
+  ExtendedNxMeasureInfo,
+  PageInfo,
+  Row,
+  SetPageInfo,
+  TableData,
+  TableLayout,
   TextAlign,
   ViewService,
 } from './types';
@@ -49,11 +49,11 @@ export function getTotalPosition(layout: TableLayout) {
 }
 
 /**
- * Gets the totals label in the first column
- * Gets the qText for each of the rest of columns
+ * Gets the totals label for the first column
+ * Gets the qText for measures
  */
-export function getTotalInfo(layout: TableLayout, colIdx: number, pageColIdx: number, numDims: number) {
-  if (colIdx >= numDims) return layout.qHyperCube.qGrandTotalRow[colIdx - numDims]?.qText ?? '';
+export function getTotalInfo(layout: TableLayout, isDim: boolean, pageColIdx: number, visibleColIdx: number) {
+  if (!isDim) return layout.qHyperCube.qGrandTotalRow[visibleColIdx]?.qText ?? '';
   if (pageColIdx === 0) return layout.totals.label ?? '';
   return '';
 }
@@ -90,14 +90,9 @@ export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | 'au
 };
 
 /**
- * Gets all column info, returns false if hidden
+ * Gets all column info.
  */
-export function getColumnInfo(
-  layout: TableLayout,
-  colIdx: number,
-  pageColIdx: number,
-  selectionColIdx: number | undefined
-): Column {
+export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: number, visibleColIdx: number): Column {
   const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIdx < numDims;
@@ -108,12 +103,14 @@ export function getColumnInfo(
   let fieldIndex = 0;
   let fieldId = '';
   let isLocked = false;
+  let selectionColIdx = -1;
   let qDimensionType;
   if (isDim) {
     const dimInfo = info as ExtendedNxDimensionInfo;
     fieldIndex = dimInfo.qGroupPos;
     fieldId = dimInfo.qGroupFieldDefs[fieldIndex];
     isLocked = dimInfo.qLocked;
+    selectionColIdx = visibleColIdx;
     ({ qDimensionType } = dimInfo);
   }
 
@@ -138,13 +135,13 @@ export function getColumnInfo(
     qApprMaxGlyphCount,
     qReverseSort,
     columnWidth,
-    selectionColIdx: selectionColIdx ?? -1,
+    selectionColIdx,
     id: `col-${pageColIdx}`,
     label: qFallbackTitle,
     stylingIDs: qAttrExprInfo.map((expr) => expr.id),
     // making sure that qSortIndicator is either A or D
     sortDirection: qSortIndicator && qSortIndicator !== 'N' ? qSortIndicator : 'A',
-    totalInfo: getTotalInfo(layout, colIdx, pageColIdx, numDims),
+    totalInfo: getTotalInfo(layout, isDim, pageColIdx, visibleColIdx),
     ...getAlignInfo(textAlign, qDimensionType, isDim),
   };
 }
@@ -160,32 +157,31 @@ export const getColumns = (layout: TableLayout) => {
   const numDims = qDimensionInfo.length;
   const columnsLength = numDims + qMeasureInfo.length;
   const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
-  const selectionColIndexes: Record<string, number> = {};
+  const visibleColumnIndexes: number[] = [];
   let hiddenDimCounter = 0;
+  let hiddenMsrCounter = 0;
 
   const visibleColumnsOrder = columnOrder.filter((colIdx) => {
     const isDim = colIdx < numDims;
     const { qError } = isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims];
     const isHidden = qError?.qErrorCode === HIDDEN_ERROR_CODE;
 
-    // Every visible dimension needs a column index adjusted for hidden columns.
-    // Since this is only relevant for selections, no need to add an index for measures
-    if (isDim) {
-      if (isHidden) {
-        hiddenDimCounter++;
-      } else {
-        selectionColIndexes[colIdx] = colIdx - hiddenDimCounter;
-      }
+    // Every visible dimension and measure needs to know what their index is, excluding hidden fields.
+    // For measures, index 0 is the first measure and it is used for getting the total value.
+    // For dimensions, it is used for making selections
+    if (isHidden) {
+      isDim ? hiddenDimCounter++ : hiddenMsrCounter++;
+    } else {
+      visibleColumnIndexes[colIdx] = isDim ? colIdx - hiddenDimCounter : colIdx - numDims - hiddenMsrCounter;
     }
 
     return !isHidden;
   });
 
   return visibleColumnsOrder.map((colIdx, pageColIdx) =>
-    getColumnInfo(layout, colIdx, pageColIdx, selectionColIndexes[colIdx])
+    getColumnInfo(layout, colIdx, pageColIdx, visibleColumnIndexes[colIdx])
   );
 };
-
 /**
  * Fetches the data for the given pageInfo. Returns rows and columns, sorted in the order they will be displayed,
  * and meta data for size etc. The column/row indexes used in engine are stored as col/rowIdx, while the index within
