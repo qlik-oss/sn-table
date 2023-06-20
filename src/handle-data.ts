@@ -49,8 +49,7 @@ export function getTotalPosition(layout: TableLayout) {
 }
 
 /**
- * Gets the totals label for the first column
- * Gets the qText for measures
+ * Gets the totals label for the first column, empty string for other dimensions and the totals value for measures
  */
 export function getTotalInfo(layout: TableLayout, isDim: boolean, pageColIdx: number, visibleColIdx: number) {
   if (!isDim) return layout.qHyperCube.qGrandTotalRow[visibleColIdx]?.qText ?? '';
@@ -147,8 +146,9 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
 }
 /**
  * Returns the column order for visible columns only.
- * Also returns an array of visible column indexes. where the measures have an independent column count, so the first measure has index 0
- * THis is used for selections for dimensions and total values for measure
+ * Also returns an array of visible column indexes. where the measures have an independent column count,
+ * so both first measure and dimension has index 0.
+ * THis is used for selections for dimensions and total values for measures
  */
 const getVisibleColumnOrder = (
   columnOrder: number[],
