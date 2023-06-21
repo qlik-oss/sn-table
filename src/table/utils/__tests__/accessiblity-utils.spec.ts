@@ -295,11 +295,17 @@ describe('accessibility-utils', () => {
       last = false;
     });
 
-    it('should call parentElement.focus when clientConfirmButton exists', () => {
+    it('should call parentElement.focus when clientConfirmButton exists in object', () => {
       accessibilityUtils.focusSelectionToolbar(element, keyboard, last);
       expect(parentElement?.focus).toHaveBeenCalledTimes(1);
       expect(keyboard.focusSelection).not.toHaveBeenCalled();
     });
+
+    // it('should call parentElement.focus when clientConfirmButton does not exists in object, but in the document', () => {
+    //   accessibilityUtils.focusSelectionToolbar(element, keyboard, last);
+    //   expect(parentElement?.focus).toHaveBeenCalledTimes(1);
+    //   expect(keyboard.focusSelection).not.toHaveBeenCalled();
+    // });
 
     it("should call keyboard.focusSelection when clientConfirmButton doesn't exist", () => {
       parentElement = null;
