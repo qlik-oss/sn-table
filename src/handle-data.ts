@@ -1,14 +1,14 @@
 import { isNumericCell } from './table/utils/is-numeric';
 import {
-  TableLayout,
-  PageInfo,
-  SetPageInfo,
-  Row,
-  ExtendedNxMeasureInfo,
-  ExtendedNxDimensionInfo,
-  Column,
-  TableData,
   Align,
+  Column,
+  ExtendedNxDimensionInfo,
+  ExtendedNxMeasureInfo,
+  PageInfo,
+  Row,
+  SetPageInfo,
+  TableData,
+  TableLayout,
   TextAlign,
   ViewService,
 } from './types';
@@ -49,11 +49,10 @@ export function getTotalPosition(layout: TableLayout) {
 }
 
 /**
- * Gets the totals label in the first column
- * Gets the qText for each of the rest of columns
+ * Gets the totals label for the first column, empty string for other dimensions and the totals value for measures
  */
-export function getTotalInfo(layout: TableLayout, colIdx: number, pageColIdx: number, numDims: number) {
-  if (colIdx >= numDims) return layout.qHyperCube.qGrandTotalRow[colIdx - numDims]?.qText ?? '';
+export function getTotalInfo(layout: TableLayout, isDim: boolean, pageColIdx: number, visibleColIdx: number) {
+  if (!isDim) return layout.qHyperCube.qGrandTotalRow[visibleColIdx]?.qText ?? '';
   if (pageColIdx === 0) return layout.totals.label ?? '';
   return '';
 }
@@ -90,14 +89,9 @@ export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | 'au
 };
 
 /**
- * Gets all column info, returns false if hidden
+ * Gets all column info.
  */
-export function getColumnInfo(
-  layout: TableLayout,
-  colIdx: number,
-  pageColIdx: number,
-  selectionColIdx: number | undefined
-): Column {
+export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: number, visibleColIdx: number): Column {
   const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIdx < numDims;
@@ -108,12 +102,14 @@ export function getColumnInfo(
   let fieldIndex = 0;
   let fieldId = '';
   let isLocked = false;
+  let selectionColIdx = -1;
   let qDimensionType;
   if (isDim) {
     const dimInfo = info as ExtendedNxDimensionInfo;
     fieldIndex = dimInfo.qGroupPos;
     fieldId = dimInfo.qGroupFieldDefs[fieldIndex];
     isLocked = dimInfo.qLocked;
+    selectionColIdx = visibleColIdx;
     ({ qDimensionType } = dimInfo);
   }
 
@@ -138,54 +134,70 @@ export function getColumnInfo(
     qApprMaxGlyphCount,
     qReverseSort,
     columnWidth,
-    selectionColIdx: selectionColIdx ?? -1,
+    selectionColIdx,
     id: `col-${pageColIdx}`,
     label: qFallbackTitle,
     stylingIDs: qAttrExprInfo.map((expr) => expr.id),
     // making sure that qSortIndicator is either A or D
     sortDirection: qSortIndicator && qSortIndicator !== 'N' ? qSortIndicator : 'A',
-    totalInfo: getTotalInfo(layout, colIdx, pageColIdx, numDims),
+    totalInfo: getTotalInfo(layout, isDim, pageColIdx, visibleColIdx),
     ...getAlignInfo(textAlign, qDimensionType, isDim),
   };
 }
-
 /**
- * Gets the column order and generates the column info.
- * Hidden columns are filtered out.
+ * Returns the column order for visible columns only.
+ * Also returns an array of visible column indexes. where the measures have an independent column count,
+ * so both first measure and dimension has index 0.
+ * THis is used for selections for dimensions and total values for measures
  */
-export const getColumns = (layout: TableLayout) => {
-  const {
-    qHyperCube: { qColumnOrder, qDimensionInfo, qMeasureInfo },
-  } = layout;
+const getVisibleColumnOrder = (
+  columnOrder: number[],
+  qDimensionInfo: ExtendedNxDimensionInfo[],
+  qMeasureInfo: ExtendedNxMeasureInfo[]
+) => {
   const numDims = qDimensionInfo.length;
-  const columnsLength = numDims + qMeasureInfo.length;
-  const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
-  const selectionColIndexes: Record<string, number> = {};
+  const visibleColumnIndexes: number[] = [];
   let hiddenDimCounter = 0;
+  let hiddenMsrCounter = 0;
 
   const visibleColumnsOrder = columnOrder.filter((colIdx) => {
     const isDim = colIdx < numDims;
     const { qError } = isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims];
     const isHidden = qError?.qErrorCode === HIDDEN_ERROR_CODE;
 
-    // Every visible dimension needs a column index adjusted for hidden columns.
-    // Since this is only relevant for selections, no need to add an index for measures
-    if (isDim) {
-      if (isHidden) {
-        hiddenDimCounter++;
-      } else {
-        selectionColIndexes[colIdx] = colIdx - hiddenDimCounter;
-      }
+    if (isHidden) {
+      isDim ? hiddenDimCounter++ : hiddenMsrCounter++;
+    } else {
+      visibleColumnIndexes[colIdx] = isDim ? colIdx - hiddenDimCounter : colIdx - numDims - hiddenMsrCounter;
     }
 
     return !isHidden;
   });
 
-  return visibleColumnsOrder.map((colIdx, pageColIdx) =>
-    getColumnInfo(layout, colIdx, pageColIdx, selectionColIndexes[colIdx])
-  );
+  return { visibleColumnsOrder, visibleColumnIndexes };
 };
 
+/**
+ * Gets the column order and generates the column info for visible columns.
+ */
+export const getColumns = (layout: TableLayout) => {
+  const {
+    qHyperCube: { qColumnOrder, qDimensionInfo, qMeasureInfo },
+  } = layout;
+
+  const columnsLength = qDimensionInfo.length + qMeasureInfo.length;
+  const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
+
+  const { visibleColumnsOrder, visibleColumnIndexes } = getVisibleColumnOrder(
+    columnOrder,
+    qDimensionInfo,
+    qMeasureInfo
+  );
+
+  return visibleColumnsOrder.map((colIdx, pageColIdx) =>
+    getColumnInfo(layout, colIdx, pageColIdx, visibleColumnIndexes[colIdx])
+  );
+};
 /**
  * Fetches the data for the given pageInfo. Returns rows and columns, sorted in the order they will be displayed,
  * and meta data for size etc. The column/row indexes used in engine are stored as col/rowIdx, while the index within
