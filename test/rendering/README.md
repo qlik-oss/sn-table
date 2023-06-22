@@ -80,9 +80,9 @@ Each chart on the "straight table rendering testing" sheet, maps to a fixture.
 
 ### Test cases description
 
-| Test       | Tested features                                                                                                                                                                  |
-| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Scenario 1 | Default values with chart title, subtitle and footer                                                                                                                             |
-| Scenario 2 | Content and header styling (using palette colors), text alignment, column width (all four different types), column coloring, default hover coloring, totals placed at the bottom |
-| Scenario 3 | Small data set, content and header styling (custom colors), hover background color, minimum column width, totals hidden                                                          |
-| Scenario 4 | Big data set (hacked by setting qHyperCube.qSize.qcy to 1_000_000), reordered columns, hidden column, sorting, custom totals label,                                              |
+| Fixture name | Tested features                                                                                                                                                                  |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Default      | Default values with chart title, subtitle and footer                                                                                                                             |
+| Styled       | Content and header styling (using palette colors), text alignment, column width (all four different types), column coloring, default hover coloring, totals placed at the bottom |
+| Small data   | Small data set, content and header styling (custom colors), hover background color, minimum column width, totals hidden                                                          |
+| Big data     | Big data set (hacked by setting qHyperCube.qSize.qcy to 1_000_000), reordered columns, hidden column, sorting, custom totals label,                                              |
