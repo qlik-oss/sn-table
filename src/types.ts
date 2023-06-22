@@ -235,6 +235,8 @@ export interface ViewState {
   scrollTopRatio?: number;
   visibleTop: number;
   visibleHeight: number;
+  visibleLeft?: number;
+  visibleWidth?: number;
   rowsPerPage?: number;
   page?: number;
 }
