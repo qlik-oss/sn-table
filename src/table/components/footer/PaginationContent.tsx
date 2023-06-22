@@ -49,7 +49,6 @@ function PaginationContent({
   handleChangePage,
   announce,
 }: PaginationContentProps) {
-  console.log(isSelectionMode);
   const { totalRowCount, totalColumnCount, totalPages } = useContextSelector(TableContext, (value) => value.tableData);
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const { keyboard, translator, theme, interactions, rect } = useContextSelector(
