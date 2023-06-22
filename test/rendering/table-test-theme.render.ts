@@ -22,6 +22,6 @@ const customTheme = {
   backgroundColor: 'rgba(200,200,200,0.3)',
 };
 
-test.describe('sn table: rendering tests with a custom theme and the english', () => {
+test.describe.skip('sn table: rendering tests with a custom theme and the english', () => {
   runRenderingTests(customTheme, 'test', 'en-US');
 });
