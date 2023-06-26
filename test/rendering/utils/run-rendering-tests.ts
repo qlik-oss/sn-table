@@ -62,11 +62,11 @@ const runRenderingTests = (theme: Object | Function, themeType: String, language
       // Open page in Nebula which renders fixture
       await playwright.open(renderUrl);
 
-      if (name.includes('scenario_1')) {
+      if (name.includes('default')) {
         await page.hover('text=American Beef Bologna');
-      } else if (name.includes('scenario_2')) {
+      } else if (name.includes('styled')) {
         await page.hover('text=Washington Strawberry Drink');
-      } else if (name.includes('scenario_3')) {
+      } else if (name.includes('small_data')) {
         await page.hover('text=Africa');
       } else {
         await page.hover('text=Better Fancy Canned Sardines');
