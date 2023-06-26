@@ -14,6 +14,7 @@ interface UseSnapshotProps {
 
 const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: UseSnapshotProps) => {
   const getViewState = () => {
+    if (viewService.viewState) return viewService.viewState;
     if (layout.usePagination) {
       const totalsPosition = getTotalPosition(layout);
       const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findPaginationVisibleRows(
