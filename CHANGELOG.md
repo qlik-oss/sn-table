@@ -1,3 +1,15 @@
+## [2.3.2](https://github.com/qlik-oss/sn-table/compare/v2.3.1...v2.3.2) (2023-06-29)
+
+### Bug Fixes
+
+- fix chart monitoring ([#1032](https://github.com/qlik-oss/sn-table/issues/1032)) ([9d38239](https://github.com/qlik-oss/sn-table/commit/9d38239820494f7e5f760ff6054e6506cf872f6a))
+- make sure selection menu is focused ([#1030](https://github.com/qlik-oss/sn-table/issues/1030)) ([70fdfb8](https://github.com/qlik-oss/sn-table/commit/70fdfb852ed2845fb69c52555311f7980f2645eb))
+- make totals values correct for all cases ([#1029](https://github.com/qlik-oss/sn-table/issues/1029)) ([a6e5bf5](https://github.com/qlik-oss/sn-table/commit/a6e5bf55111e7ecf52cb0718acce489ebe492283))
+
+### Reverts
+
+- Revert "test: update readme" ([bc69e04](https://github.com/qlik-oss/sn-table/commit/bc69e0455584da8ab61a40bd9043cbfe64054072))
+
 ## [2.3.1](https://github.com/qlik-oss/sn-table/compare/v2.3.0...v2.3.1) (2023-06-09)
 
 # [2.3.0](https://github.com/qlik-oss/sn-table/compare/v2.2.3...v2.3.0) (2023-06-07)
