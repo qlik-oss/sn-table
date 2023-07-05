@@ -14,9 +14,11 @@ interface UseSnapshotProps {
 }
 
 const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: UseSnapshotProps) => {
-  const totalRowCount = layout.qHyperCube.qSize.qcy;
-  const visualRowsPerPage = viewService.rowsPerPage || initialPageInfo.rowsPerPage;
   const getVisibleHeight = (visibleRowEndIndex: number, visibleRowStartIndex: number) => {
+    if (visibleRowEndIndex < 0) return 0;
+
+    const totalRowCount = layout.qHyperCube.qSize.qcy;
+    const visualRowsPerPage = viewService.rowsPerPage || initialPageInfo.rowsPerPage;
     return Math.min(totalRowCount, visualRowsPerPage, visibleRowEndIndex - visibleRowStartIndex + 4);
   };
 
@@ -32,7 +34,7 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
       return {
         scrollLeft: viewService.scrollLeft,
         visibleTop: viewService.qTop + visibleRowStartIndex,
-        visibleHeight: visibleRowEndIndex < 0 ? 0 : getVisibleHeight(visibleRowEndIndex, visibleRowStartIndex),
+        visibleHeight: getVisibleHeight(visibleRowEndIndex, visibleRowStartIndex),
         rowsPerPage: viewService.rowsPerPage,
         page: viewService.page,
       };
@@ -44,7 +46,7 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
       visibleLeft: viewService.visibleLeft,
       visibleWidth: viewService.visibleWidth,
       visibleTop: visibleRowStartIndex,
-      visibleHeight: visibleRowEndIndex < 0 ? 0 : getVisibleHeight(visibleRowEndIndex, visibleRowStartIndex),
+      visibleHeight: getVisibleHeight(visibleRowEndIndex, visibleRowStartIndex),
       scrollTopRatio: viewService.scrollTopRatio,
       rowsPerPage: viewService.rowsPerPage,
       page: viewService.page,
