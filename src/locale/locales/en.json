@@ -17,7 +17,7 @@
   },
   "SNTable.Accessibility.ColumnOptions": {
     "value": "Column options",
-    "comment": "label for the button in the header to open the column menu"
+    "comment": "aria label for the button in the header that opens the column menu"
   },
   "SNTable.Pagination.RowsPerPage": {
     "value": "Rows per page",
