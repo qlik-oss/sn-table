@@ -14,6 +14,17 @@ interface UseSnapshotProps {
 }
 
 const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: UseSnapshotProps) => {
+  const totalRowCount = layout.qHyperCube.qSize.qcy;
+  const paginationNeeded = totalRowCount > 10;
+  const visualRowsPerPage = viewService.rowsPerPage || initialPageInfo.rowsPerPage;
+  const getVisibleHeight = (visibleRowEndIndex: any, visibleRowStartIndex: any) => {
+    const rowsRendered = visibleRowEndIndex - visibleRowStartIndex + 1;
+
+    return paginationNeeded && rowsRendered < visualRowsPerPage
+      ? visibleRowEndIndex - visibleRowStartIndex + 4
+      : rowsRendered;
+  };
+
   const getViewState = () => {
     if (viewService.viewState) return viewService.viewState;
     if (layout.usePagination) {
@@ -23,20 +34,10 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
         totalsPosition
       );
 
-      const totalRowCount = layout.qHyperCube.qSize.qcy;
-      const paginationNeeded = totalRowCount > 10;
-      const rowsPerPage = viewService.rowsPerPage || initialPageInfo.rowsPerPage;
-      const rowsRendered = visibleRowEndIndex - visibleRowStartIndex + 1;
-      const getVisibleHeight = () => {
-        return paginationNeeded && rowsRendered < rowsPerPage
-          ? visibleRowEndIndex - visibleRowStartIndex + 4 // Temp:is considered to avoid ratio change to remove empty space at the bottom
-          : rowsRendered;
-      };
-
       return {
         scrollLeft: viewService.scrollLeft,
         visibleTop: viewService.qTop + visibleRowStartIndex,
-        visibleHeight: visibleRowEndIndex < 0 ? 0 : getVisibleHeight(),
+        visibleHeight: visibleRowEndIndex < 0 ? 0 : getVisibleHeight(visibleRowEndIndex, visibleRowStartIndex),
         rowsPerPage: viewService.rowsPerPage,
         page: viewService.page,
       };
@@ -48,7 +49,7 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
       visibleLeft: viewService.visibleLeft,
       visibleWidth: viewService.visibleWidth,
       visibleTop: visibleRowStartIndex,
-      visibleHeight: visibleRowEndIndex < 0 ? 0 : visibleRowEndIndex - visibleRowStartIndex + 1,
+      visibleHeight: visibleRowEndIndex < 0 ? 0 : getVisibleHeight(visibleRowEndIndex, visibleRowStartIndex),
       scrollTopRatio: viewService.scrollTopRatio,
       rowsPerPage: viewService.rowsPerPage,
       page: viewService.page,
