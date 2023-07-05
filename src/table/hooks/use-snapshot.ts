@@ -16,7 +16,7 @@ interface UseSnapshotProps {
 const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: UseSnapshotProps) => {
   const totalRowCount = layout.qHyperCube.qSize.qcy;
   const visualRowsPerPage = viewService.rowsPerPage || initialPageInfo.rowsPerPage;
-  const getVisibleHeight = (visibleRowEndIndex: any, visibleRowStartIndex: any) => {
+  const getVisibleHeight = (visibleRowEndIndex: number, visibleRowStartIndex: number) => {
     return Math.min(totalRowCount, visualRowsPerPage, visibleRowEndIndex - visibleRowStartIndex + 4);
   };
 
