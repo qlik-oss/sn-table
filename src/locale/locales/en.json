@@ -15,6 +15,10 @@
     "value": "Descending",
     "comment": "Tooltip showing that column is in descending order. (tew 230411)"
   },
+  "SNTable.Accessibility.ColumnOptions": {
+    "value": "Column options",
+    "comment": "Ara label for the button in the header to open the column menu"
+  },
   "SNTable.Pagination.RowsPerPage": {
     "value": "Rows per page",
     "comment": "label for the rows per page dropdown. (tew 210929)"

@@ -173,6 +173,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
         aria-expanded={openMenuDropdown ? 'true' : undefined}
         aria-haspopup="true"
         onClick={handleOpenDropdown}
+        aria-label={translator.get('SNTable.Accessibility.ColumnOptions')}
       >
         <More height={DEFAULT_FONT_SIZE} />
       </StyledMenuIconButton>
