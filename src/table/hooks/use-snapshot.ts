@@ -13,7 +13,7 @@ interface UseSnapshotProps {
   contentRect: stardust.Rect;
 }
 
-const getVisibleHeight = (
+export const getVisibleHeight = (
   visibleRowEndIndex: number,
   visibleRowStartIndex: number,
   layout: TableLayout,
@@ -26,7 +26,7 @@ const getVisibleHeight = (
   return Math.min(totalRowCount, visualRowsPerPage, visibleRowEndIndex - visibleRowStartIndex + 4);
 };
 
-const getViewState = (layout: TableLayout, viewService: ViewService, rootElement: HTMLElement) => {
+export const getViewState = (layout: TableLayout, viewService: ViewService, rootElement: HTMLElement) => {
   if (viewService.viewState) return viewService.viewState;
   if (layout.usePagination) {
     const totalsPosition = getTotalPosition(layout);
