@@ -13,6 +13,8 @@ interface UseSnapshotProps {
   contentRect: stardust.Rect;
 }
 
+const EXTRA_ROWS = 3;
+
 export const getVisibleHeight = (
   visibleRowEndIndex: number,
   visibleRowStartIndex: number,
@@ -23,7 +25,8 @@ export const getVisibleHeight = (
 
   const totalRowCount = layout.qHyperCube.qSize.qcy;
   const visualRowsPerPage = viewService.rowsPerPage || initialPageInfo.rowsPerPage;
-  return Math.min(totalRowCount, visualRowsPerPage, visibleRowEndIndex - visibleRowStartIndex + 4);
+  // EXTRA_ROWS will be added to the visualHeight when the pagination footer is displayed and rows per page is heighr
+  return Math.min(totalRowCount, visualRowsPerPage, visibleRowEndIndex - visibleRowStartIndex + 1 + EXTRA_ROWS);
 };
 
 export const getViewState = (layout: TableLayout, viewService: ViewService, rootElement: HTMLElement) => {
