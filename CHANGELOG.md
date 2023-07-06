@@ -1,3 +1,9 @@
+## [2.3.3](https://github.com/qlik-oss/sn-table/compare/v2.3.2...v2.3.3) (2023-07-06)
+
+### Bug Fixes
+
+- add aria-label for head menu button ([#1036](https://github.com/qlik-oss/sn-table/issues/1036)) ([556c195](https://github.com/qlik-oss/sn-table/commit/556c195a12e06993593f031a0c7a6d9bc891e10c))
+
 ## [2.3.2](https://github.com/qlik-oss/sn-table/compare/v2.3.1...v2.3.2) (2023-06-29)
 
 ### Bug Fixes
