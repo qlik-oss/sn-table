@@ -17,7 +17,7 @@
   },
   "SNTable.Accessibility.ColumnOptions": {
     "value": "Column options",
-    "comment": "aria label for the button in the header that opens the column menu"
+    "comment": "aria label for the button in the header that opens the column menu (buy 230705)"
   },
   "SNTable.Pagination.RowsPerPage": {
     "value": "Rows per page",
