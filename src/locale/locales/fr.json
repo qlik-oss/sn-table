@@ -4,6 +4,11 @@
     "comment": "Tooltip showing that column is in ascending order. (tew 230411)",
     "version": "pzaCJbp56ZfIKkvOiwLLAw=="
   },
+  "SNTable.Accessibility.ColumnOptions": {
+    "value": "Options de colonne",
+    "comment": "aria label for the button in the header that opens the column menu (buy 230705)",
+    "version": "5dZfsGOWJ50iDc9axBC/Zw=="
+  },
   "SNTable.Accessibility.Descending": {
     "value": "Décroissant",
     "comment": "Tooltip showing that column is in descending order. (tew 230411)",
