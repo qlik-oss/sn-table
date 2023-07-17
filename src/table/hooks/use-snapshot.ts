@@ -25,12 +25,13 @@ export const getVisibleHeight = (
 
   const totalRowCount = layout.qHyperCube.qSize.qcy;
   const visualRowsPerPage = viewService.rowsPerPage || initialPageInfo.rowsPerPage;
-  // EXTRA_ROWS will be added to the visualHeight when the pagination footer is displayed and rows per page is heighr
+  // EXTRA_ROWS will be added to the visualHeight when the pagination footer is displayed and the table can be scrolled
   return Math.min(totalRowCount, visualRowsPerPage, visibleRowEndIndex - visibleRowStartIndex + 1 + EXTRA_ROWS);
 };
 
 export const getViewState = (layout: TableLayout, viewService: ViewService, rootElement: HTMLElement) => {
   if (viewService.viewState) return viewService.viewState;
+
   if (layout.usePagination) {
     const totalsPosition = getTotalPosition(layout);
     const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findPaginationVisibleRows(
@@ -46,6 +47,7 @@ export const getViewState = (layout: TableLayout, viewService: ViewService, root
       page: viewService.page,
     };
   }
+
   const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findVirtualizedVisibleRows(rootElement, viewService);
 
   return {
@@ -97,6 +99,7 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
     }
     return snapshotLayout;
   });
+
   useImperativeHandle(
     () => ({
       getViewState,
