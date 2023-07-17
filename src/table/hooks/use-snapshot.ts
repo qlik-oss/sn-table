@@ -3,6 +3,7 @@ import { onTakeSnapshot, useImperativeHandle, stardust } from '@nebula.js/stardu
 import type { TableLayout, ViewService, SnapshotLayout, HyperCube } from '../../types';
 import { findPaginationVisibleRows, findVirtualizedVisibleRows } from '../utils/find-visible-rows';
 import { getTotalPosition } from '../../handle-data';
+import { initialPageInfo } from '../../nebula-hooks/use-pagination-table';
 
 interface UseSnapshotProps {
   layout: TableLayout;
@@ -12,37 +13,56 @@ interface UseSnapshotProps {
   contentRect: stardust.Rect;
 }
 
-const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: UseSnapshotProps) => {
-  const getViewState = () => {
-    if (viewService.viewState) return viewService.viewState;
-    if (layout.usePagination) {
-      const totalsPosition = getTotalPosition(layout);
-      const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findPaginationVisibleRows(
-        rootElement,
-        totalsPosition
-      );
-      return {
-        scrollLeft: viewService.scrollLeft,
-        visibleTop: viewService.qTop + visibleRowStartIndex,
-        visibleHeight: visibleRowEndIndex < 0 ? 0 : visibleRowEndIndex - visibleRowStartIndex + 1,
-        rowsPerPage: viewService.rowsPerPage,
-        page: viewService.page,
-      };
-    }
-    const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findVirtualizedVisibleRows(rootElement, viewService);
+const EXTRA_ROWS = 3;
+
+export const getVisibleHeight = (
+  visibleRowEndIndex: number,
+  visibleRowStartIndex: number,
+  layout: TableLayout,
+  viewService: ViewService
+) => {
+  if (visibleRowEndIndex < 0) return 0;
+
+  const totalRowCount = layout.qHyperCube.qSize.qcy;
+  const visualRowsPerPage = viewService.rowsPerPage || initialPageInfo.rowsPerPage;
+  // EXTRA_ROWS will be added to the visualHeight when the pagination footer is displayed and the table can be scrolled
+  return Math.min(totalRowCount, visualRowsPerPage, visibleRowEndIndex - visibleRowStartIndex + 1 + EXTRA_ROWS);
+};
+
+export const getViewState = (layout: TableLayout, viewService: ViewService, rootElement: HTMLElement) => {
+  if (viewService.viewState) return viewService.viewState;
+
+  if (layout.usePagination) {
+    const totalsPosition = getTotalPosition(layout);
+    const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findPaginationVisibleRows(
+      rootElement,
+      totalsPosition
+    );
 
     return {
       scrollLeft: viewService.scrollLeft,
-      visibleLeft: viewService.visibleLeft,
-      visibleWidth: viewService.visibleWidth,
-      visibleTop: visibleRowStartIndex,
-      visibleHeight: visibleRowEndIndex < 0 ? 0 : visibleRowEndIndex - visibleRowStartIndex + 1,
-      scrollTopRatio: viewService.scrollTopRatio,
+      visibleTop: viewService.qTop + visibleRowStartIndex,
+      visibleHeight: getVisibleHeight(visibleRowEndIndex, visibleRowStartIndex, layout, viewService),
       rowsPerPage: viewService.rowsPerPage,
       page: viewService.page,
     };
-  };
+  }
 
+  const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findVirtualizedVisibleRows(rootElement, viewService);
+
+  return {
+    scrollLeft: viewService.scrollLeft,
+    visibleLeft: viewService.visibleLeft,
+    visibleWidth: viewService.visibleWidth,
+    visibleTop: visibleRowStartIndex,
+    visibleHeight: getVisibleHeight(visibleRowEndIndex, visibleRowStartIndex, layout, viewService),
+    scrollTopRatio: viewService.scrollTopRatio,
+    rowsPerPage: viewService.rowsPerPage,
+    page: viewService.page,
+  };
+};
+
+const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: UseSnapshotProps) => {
   onTakeSnapshot(async (snapshotLayout: SnapshotLayout) => {
     if (!snapshotLayout.snapshotData || !model || snapshotLayout.snapshotData.content) {
       return snapshotLayout;
@@ -53,7 +73,7 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
         snapshotLayout.qHyperCube = {} as HyperCube;
       }
       const { scrollLeft, scrollTopRatio, visibleLeft, visibleWidth, visibleTop, visibleHeight, rowsPerPage, page } =
-        getViewState();
+        getViewState(layout, viewService, rootElement);
       snapshotLayout.qHyperCube.qDataPages = await (model as EngineAPI.IGenericObject).getHyperCubeData(
         '/qHyperCubeDef',
         [
@@ -79,6 +99,7 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
     }
     return snapshotLayout;
   });
+
   useImperativeHandle(
     () => ({
       getViewState,

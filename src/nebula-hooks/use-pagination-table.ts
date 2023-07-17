@@ -36,7 +36,7 @@ interface UsePaginationTable {
   viewService: ViewService;
 }
 
-const initialPageInfo = {
+export const initialPageInfo = {
   page: 0,
   rowsPerPage: 100,
   rowsPerPageOptions: [10, 25, 100],
