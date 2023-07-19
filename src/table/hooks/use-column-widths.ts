@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useOnPropsChange } from '@qlik-oss/nebula-table-utils/lib/hooks';
 import { Column, TotalsPosition } from '../../types';
 import {
   MIN_COLUMN_WIDTH,
@@ -9,7 +10,6 @@ import {
 } from '../constants';
 import useMeasureText from '../virtualized-table/hooks/use-measure-text';
 import { TableStyling } from '../types';
-import useOnPropsChange from '../virtualized-table/hooks/use-on-props-change';
 import {
   ADJUSTED_HEADER_WIDTH,
   BORDER_WIDTH,

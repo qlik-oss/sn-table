@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
+import { useOnPropsChange } from '@qlik-oss/nebula-table-utils/lib/hooks';
 import { Column, PageInfo, Row } from '../../../types';
 import { TableContext, useContextSelector } from '../../context';
 import { COMMON_CELL_STYLING } from '../../styling-defaults';
@@ -14,7 +15,6 @@ import { BodyStyle, GridState, RowMeta } from '../types';
 import { getAdjustedCellWidth, getAdjustedHeadCellWidth } from '../utils/cell-width-utils';
 import useMeasureText from './use-measure-text';
 import useMutableProp from './use-mutable-prop';
-import useOnPropsChange from './use-on-props-change';
 
 export interface UseDynamicRowHeightProps {
   style: BodyStyle | GeneratedStyling;
