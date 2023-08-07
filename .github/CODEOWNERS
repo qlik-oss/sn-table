@@ -1,0 +1,8 @@
+* @qlik-oss/v-a
+
+# For all translation files except English file
+
+/src/locale/locales/\*.json @qlik-oss/globalization
+
+#for english file set to tech writers from product-content-media
+/src/locale/locales/en.json @qlik-oss/product-content-media-docs-team
