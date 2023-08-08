@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useContextSelector, TableContext } from '../context';
-import { Column } from '../../types';
+import { Column, TableLayout } from '../../types';
 
 const SELECTION_ACTIONS_ENABLED_DEFAULT_STATUS: Record<string, boolean> = {
   canSelectAll: false,
@@ -14,7 +14,7 @@ export interface UseFieldSelectionOutput {
   fieldInstance: EngineAPI.IField | null;
   selectionActionsEnabledStatus: Record<string, boolean>;
   resetSelectionActionsEnabledStatus: () => void;
-  updateSelectionActionsEnabledStatus: () => void;
+  updateSelectionActionsEnabledStatus: (layout: TableLayout) => void;
 }
 
 export const checkStateCountByKey = <T>(keys: (keyof T)[], obj: T): boolean => {
@@ -22,7 +22,7 @@ export const checkStateCountByKey = <T>(keys: (keyof T)[], obj: T): boolean => {
 };
 
 const useFieldSelection = (column: Column): UseFieldSelectionOutput => {
-  const { app, layout } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { app } = useContextSelector(TableContext, (value) => value.baseProps);
   const [fieldInstance, setFieldInstance] = useState<EngineAPI.IField | null>(null);
   const [selectionActionsEnabledStatus, setSelectionActionsEnabledStatus] = useState(
     SELECTION_ACTIONS_ENABLED_DEFAULT_STATUS
@@ -30,14 +30,14 @@ const useFieldSelection = (column: Column): UseFieldSelectionOutput => {
 
   useEffect(() => {
     if (!app || !app.getField || !column || !column.isDim) return;
-    app.getField(column.fieldId, layout.qStateName).then(setFieldInstance);
-  }, [app, column, layout.qStateName]);
+    app.getField(column.fieldId).then(setFieldInstance);
+  }, [app, column]);
 
   const resetSelectionActionsEnabledStatus = useCallback(
     () => setSelectionActionsEnabledStatus(SELECTION_ACTIONS_ENABLED_DEFAULT_STATUS),
     []
   );
-  const updateSelectionActionsEnabledStatus = () => {
+  const updateSelectionActionsEnabledStatus = (layout: TableLayout) => {
     const dimInfo = layout.qHyperCube.qDimensionInfo.find((dim) => dim.qFallbackTitle === column.label);
     if (!dimInfo) return;
     setSelectionActionsEnabledStatus({

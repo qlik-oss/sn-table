@@ -15,15 +15,13 @@ import { setFocusOnClosetColumnAdjuster } from '../../utils/accessibility-utils'
 import { useContextSelector, TableContext } from '../../context';
 import { HeadCellMenuProps, MenuItemGroup } from '../../types';
 import { HeadCellMenuWrapper, StyledMenuIconButton } from './styles';
+import { TableLayout } from '../../../types';
 import RecursiveMenuList from './MenuList/RecursiveMenuList';
 import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 
 export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
   const { isDim, qLibraryId, fieldId, headTextAlign } = column;
-  const { translator, embed, model, interactions, layout } = useContextSelector(
-    TableContext,
-    (value) => value.baseProps
-  );
+  const { translator, embed, model, interactions } = useContextSelector(TableContext, (value) => value.baseProps);
   const anchorRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
@@ -42,14 +40,13 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
     embed.__DO_NOT_USE__.popover(listboxRef.current, id, {
       anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
       transformOrigin: { vertical: 'top', horizontal: 'left' },
-      stateName: layout.qStateName,
     });
 
     // @ts-ignore TODO: no types for popover related api until it becomes stable
     embed.on('fieldPopoverClose', () => {
       setOpenListboxDropdown(false);
     });
-  }, [embed, fieldId, qLibraryId, layout.qStateName]);
+  }, [embed, fieldId, qLibraryId]);
 
   const menuItemGroups = useMemo<MenuItemGroup[]>(
     () => [
@@ -152,9 +149,10 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
     [translator, isDim, fieldInstance, selectionActionsEnabledStatus, embedListbox]
   );
 
-  const handleOpenDropdown = () => {
+  const handleOpenDropdown = async () => {
     if (!openMenuDropdown && model) {
-      updateSelectionActionsEnabledStatus();
+      const layout = await model.getLayout();
+      updateSelectionActionsEnabledStatus(layout as TableLayout);
     }
     setOpenMenuDropdown(!openMenuDropdown);
   };
