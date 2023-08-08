@@ -1,5 +1,6 @@
 import React, { memo, useMemo, useLayoutEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import { VariableSizeGrid } from 'react-window';
+import { useOnPropsChange } from '@qlik-oss/nebula-table-utils/lib/hooks';
 import useData from './hooks/use-data';
 import { BodyProps, BodyRef, ItemData, GridState } from './types';
 import useScrollDirection from './hooks/use-scroll-direction';
@@ -10,7 +11,6 @@ import { useContextSelector, TableContext } from '../context';
 import Cell from './Cell';
 import getCellItemKey from './utils/get-cell-item-key';
 import useDynamicRowHeight from './hooks/use-dynamic-row-height';
-import useOnPropsChange from './hooks/use-on-props-change';
 import getBodyHeight from './utils/get-body-height';
 import { getStylingComponent } from '../utils/styling-utils';
 
