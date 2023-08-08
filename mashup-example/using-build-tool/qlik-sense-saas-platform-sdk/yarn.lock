@@ -117,12 +117,12 @@
   resolved "https://registry.yarnpkg.com/@nebula.js/sn-table/-/sn-table-2.2.3.tgz#d514352763a35bfeeb18c227ede0970b4a2fc2ce"
   integrity sha512-zTqGtlJWZ+JoeDXsg4100uCQ2nQdLBzLk27SPx2NqsBn0Y51HGIQsToTADO7ZG1jog8JC2dXEjXhEcIMRP9xVw==
 
-"@nebula.js/stardust@3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-3.3.0.tgz#8705317fa655049432e04c296e98b9dc85c1ca78"
-  integrity sha512-BSKQJLzbT6NZB4ceE9KXWPjScZ73GwRjfpi8W4qcKgFrM6gOV68nXkdnGOrqA/OEzQPE1esXKX9/wqr+7/mOlQ==
+"@nebula.js/stardust@4.3.0":
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-4.3.0.tgz#83164ca3f6d66e396576a34d50d1194cf72f8e17"
+  integrity sha512-K+DEFvxs0dRz5LL1iBCpeNo0F4srbyKQ0o9PFMbIF1wQOYOYDb8pEprIu2hp7S5zS6f1aZz+GA0n0mQDbpgIsA==
   dependencies:
-    "@types/qlik-engineapi" "12.67.12"
+    "@types/qlik-engineapi" "12.67.13"
 
 "@qlik/sdk@0.22.0":
   version "0.22.0"
@@ -146,10 +146,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.9.tgz#02d013de7058cea16d36168ef2fc653464cfbad4"
   integrity sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==
 
-"@types/qlik-engineapi@12.67.12":
-  version "12.67.12"
-  resolved "https://registry.yarnpkg.com/@types/qlik-engineapi/-/qlik-engineapi-12.67.12.tgz#454966501cc48f5cd5092b3f4022c8a82ab681fa"
-  integrity sha512-b5F9+pikUXCahd8phenSZfTddQXlmnw+VMPPtuOB6J3GNNEZG/o0dYFOMeAo1VuFgLaD3R/Ew/+dn4QG7cpPNw==
+"@types/qlik-engineapi@12.67.13":
+  version "12.67.13"
+  resolved "https://registry.yarnpkg.com/@types/qlik-engineapi/-/qlik-engineapi-12.67.13.tgz#f222f48547d4eacc4965323d5f625c1c0c26d6ec"
+  integrity sha512-k+a8phqjBD2qyqC8kmiK+X0mNfXl7gxhTvjvet4Z3E9PQhvh61Ho6eCc1n+q59ZSOWwhrlpYsm9fBtPkQNsfVQ==
 
 buffer-equal-constant-time@1.0.1:
   version "1.0.1"
