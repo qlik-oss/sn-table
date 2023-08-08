@@ -21,6 +21,16 @@ export const checkStateCountByKey = <T>(keys: (keyof T)[], obj: T): boolean => {
   return keys.some((key) => (obj[key] as number) > 0);
 };
 
+export const getListBoxSessionObject = (qLibraryId: string, qStateName = '$') => ({
+  qInfo: {
+    qType: 'tableListbox',
+  },
+  qListObjectDef: {
+    qLibraryId,
+    qStateName,
+  },
+});
+
 const useFieldSelection = (column: Column): UseFieldSelectionOutput => {
   const { app, layout } = useContextSelector(TableContext, (value) => value.baseProps);
   const [fieldInstance, setFieldInstance] = useState<EngineAPI.IField | null>(null);
@@ -30,7 +40,18 @@ const useFieldSelection = (column: Column): UseFieldSelectionOutput => {
 
   useEffect(() => {
     if (!app || !app.getField || !column || !column.isDim) return;
-    app.getField(column.fieldId, layout.qStateName).then(setFieldInstance);
+    const { qLibraryId, fieldId } = column;
+    qLibraryId
+      ? app.createSessionObject(getListBoxSessionObject(qLibraryId, layout.qStateName)).then((listboxSessionObject) =>
+          setFieldInstance({
+            selectAll: () => listboxSessionObject.selectListObjectAll('/qListObjectDef'),
+            clear: () => listboxSessionObject.clearSelections('/qListObjectDef').then((result) => result),
+            selectPossible: () => listboxSessionObject.selectListObjectPossible('/qListObjectDef'),
+            selectAlternative: () => listboxSessionObject.selectListObjectAlternative('/qListObjectDef'),
+            selectExcluded: () => listboxSessionObject.selectListObjectExcluded('/qListObjectDef'),
+          } as EngineAPI.IField)
+        )
+      : app.getField(fieldId, layout.qStateName).then(setFieldInstance);
   }, [app, column, layout.qStateName]);
 
   const resetSelectionActionsEnabledStatus = useCallback(
