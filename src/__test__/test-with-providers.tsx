@@ -42,7 +42,10 @@ type HookWrapperProps = { children: JSX.Element };
 
 const TestWithProviders = ({
   children,
-  app = { getField: () => Promise.resolve({}) } as unknown as EngineAPI.IApp,
+  app = {
+    getField: () => Promise.resolve({}),
+    createSessionObject: () => Promise.resolve({}),
+  } as unknown as EngineAPI.IApp,
   layout = generateLayout(1, 1, 5),
   interactions = {
     active: true,
