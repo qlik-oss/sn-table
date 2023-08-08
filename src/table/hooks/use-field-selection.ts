@@ -22,7 +22,7 @@ export const checkStateCountByKey = <T>(keys: (keyof T)[], obj: T): boolean => {
 };
 
 const useFieldSelection = (column: Column): UseFieldSelectionOutput => {
-  const { app } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { app, layout } = useContextSelector(TableContext, (value) => value.baseProps);
   const [fieldInstance, setFieldInstance] = useState<EngineAPI.IField | null>(null);
   const [selectionActionsEnabledStatus, setSelectionActionsEnabledStatus] = useState(
     SELECTION_ACTIONS_ENABLED_DEFAULT_STATUS
@@ -30,15 +30,15 @@ const useFieldSelection = (column: Column): UseFieldSelectionOutput => {
 
   useEffect(() => {
     if (!app || !app.getField || !column || !column.isDim) return;
-    app.getField(column.fieldId).then(setFieldInstance);
-  }, [app, column]);
+    app.getField(column.fieldId, layout.qStateName).then(setFieldInstance);
+  }, [app, column, layout.qStateName]);
 
   const resetSelectionActionsEnabledStatus = useCallback(
     () => setSelectionActionsEnabledStatus(SELECTION_ACTIONS_ENABLED_DEFAULT_STATUS),
     []
   );
-  const updateSelectionActionsEnabledStatus = (layout: TableLayout) => {
-    const dimInfo = layout.qHyperCube.qDimensionInfo.find((dim) => dim.qFallbackTitle === column.label);
+  const updateSelectionActionsEnabledStatus = (latestLayout: TableLayout) => {
+    const dimInfo = latestLayout.qHyperCube.qDimensionInfo.find((dim) => dim.qFallbackTitle === column.label);
     if (!dimInfo) return;
     setSelectionActionsEnabledStatus({
       canSelectAll: checkStateCountByKey(['qOption', 'qAlternative', 'qExcluded', 'qDeselected'], dimInfo.qStateCounts),
