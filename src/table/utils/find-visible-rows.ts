@@ -2,24 +2,36 @@ import { TotalsPosition, ViewService } from '../../types';
 
 const EPSILON = 0.001;
 
-const findStartIndex = (rows: HTMLCollectionOf<Element>, min: number, max: number): number => {
+export const getPartialTopScrollHeight = (
+  rows: HTMLCollectionOf<Element> | undefined,
+  tableBodyRect: { top: number; bottom: number },
+  index: number
+): number => {
+  if (!rows || rows.length === 0 || index < 0) return 0;
+  const rowRect = rows[index].getBoundingClientRect();
+  return Math.max(tableBodyRect.top - rowRect.top, 0);
+};
+
+const findStartIndex = (
+  rows: HTMLCollectionOf<Element> | undefined,
+  tableBodyRect: { top: number; bottom: number }
+): number => {
+  if (!rows) return -1;
   for (let i = 0; i < rows.length; i++) {
     const rowRect = rows[i].getBoundingClientRect();
-    const center = rowRect.y + rowRect.height / 2;
-    if (center >= min && center <= max) {
-      return i;
-    }
+    if (rowRect.bottom > tableBodyRect.top) return i;
   }
   return -1;
 };
 
-const findEndIndex = (rows: HTMLCollectionOf<Element>, min: number, max: number): number => {
+const findEndIndex = (
+  rows: HTMLCollectionOf<Element> | undefined,
+  tableBodyRect: { top: number; bottom: number }
+): number => {
+  if (!rows) return -1;
   for (let i = rows.length - 1; i > -1; i--) {
     const rowRect = rows[i].getBoundingClientRect();
-    const center = rowRect.y + rowRect.height / 2;
-    if (center >= min && center <= max) {
-      return i;
-    }
+    if (tableBodyRect.bottom > rowRect.top) return i;
   }
   return -1;
 };
@@ -33,14 +45,20 @@ export function findPaginationVisibleRows(rootElement: HTMLElement, totalsPositi
   const totalsRow = rootElement.getElementsByClassName('sn-table-totals-row')[0];
   const totalsRowRec = totalsRow?.getBoundingClientRect() || { height: 0 };
   const dataRows = rootElement.getElementsByClassName('sn-table-data-row');
-  const yMin = tableContainerRect.y + headRowRect.height + (totalsPosition.atTop ? totalsRowRec.height : 0);
-  const yMax = tableContainerRect.y + tableContainerRect.height - (totalsPosition.atBottom ? totalsRowRec.height : 0);
-  const visibleRowStartIndex = findStartIndex(dataRows, yMin, yMax);
-  const visibleRowEndIndex = findEndIndex(dataRows, yMin, yMax);
-  return { visibleRowStartIndex, visibleRowEndIndex };
+  const tableBodyMinY = tableContainerRect.y + headRowRect.height + (totalsPosition.atTop ? totalsRowRec.height : 0);
+  const tableBodyMaxY =
+    tableContainerRect.y + tableContainerRect.height - (totalsPosition.atBottom ? totalsRowRec.height : 0);
+  const tableBodyRect = {
+    top: tableBodyMinY,
+    bottom: tableBodyMaxY,
+  };
+  const visibleRowStartIndex = findStartIndex(dataRows, tableBodyRect);
+  const visibleRowEndIndex = findEndIndex(dataRows, tableBodyRect);
+  const rowPartialHeight = getPartialTopScrollHeight(dataRows, tableBodyRect, visibleRowStartIndex);
+  return { visibleRowStartIndex, visibleRowEndIndex, rowPartialHeight };
 }
 
-const getFristCellOfRow = (rowIndex: number, cells?: NodeListOf<Element>) => {
+const getFirstCellOfRow = (rowIndex: number, cells?: NodeListOf<Element>) => {
   if (!cells) return undefined;
   for (let i = 0; i < cells.length; i++) {
     const strIdx = cells[i].getAttribute('rowindex');
@@ -64,7 +82,7 @@ export function findVirtualizedVisibleRows(rootElement: HTMLElement, viewService
   const offset = page * rowsPerPage;
   const visibleTopInPage = visibleTop - offset;
   const visibleBottomInPage = visibleTopInPage + visibleHeight - 1;
-  const topLeftCell = getFristCellOfRow(visibleTopInPage, cells);
+  const topLeftCell = getFirstCellOfRow(visibleTopInPage, cells);
   const topLeftCellRect = topLeftCell?.getBoundingClientRect();
   if (!topLeftCell || !topLeftCellRect) return {};
   const bodyYMin = bodyRect.y;
@@ -80,7 +98,7 @@ export function findVirtualizedVisibleRows(rootElement: HTMLElement, viewService
   const visibleRowStartIndex =
     (shouldIncludeRowWithCell(topLeftCellRect, bodyYMin, bodyYMax) ? visibleTopInPage : visibleTopInPage + 1) + offset;
   let visibleRowEndIndex = visibleBottomInPage + offset;
-  const bottomLeftCell = getFristCellOfRow(visibleBottomInPage, cells);
+  const bottomLeftCell = getFirstCellOfRow(visibleBottomInPage, cells);
   const bottomLeftCellRect = bottomLeftCell?.getBoundingClientRect();
   if (bottomLeftCell && bottomLeftCellRect) {
     if (!shouldIncludeRowWithCell(bottomLeftCellRect, bodyYMin, bodyYMax))

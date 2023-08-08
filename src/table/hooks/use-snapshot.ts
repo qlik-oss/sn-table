@@ -34,12 +34,14 @@ export const getViewState = (layout: TableLayout, viewService: ViewService, root
 
   if (layout.usePagination) {
     const totalsPosition = getTotalPosition(layout);
-    const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findPaginationVisibleRows(
-      rootElement,
-      totalsPosition
-    );
+    const {
+      visibleRowStartIndex = -1,
+      visibleRowEndIndex = -1,
+      rowPartialHeight,
+    } = findPaginationVisibleRows(rootElement, totalsPosition);
 
     return {
+      rowPartialHeight,
       scrollLeft: viewService.scrollLeft,
       visibleTop: viewService.qTop + visibleRowStartIndex,
       visibleHeight: getVisibleHeight(visibleRowEndIndex, visibleRowStartIndex, layout, viewService),
@@ -47,7 +49,6 @@ export const getViewState = (layout: TableLayout, viewService: ViewService, root
       page: viewService.page,
     };
   }
-
   const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findVirtualizedVisibleRows(rootElement, viewService);
 
   return {
@@ -72,8 +73,17 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
       if (!snapshotLayout.qHyperCube) {
         snapshotLayout.qHyperCube = {} as HyperCube;
       }
-      const { scrollLeft, scrollTopRatio, visibleLeft, visibleWidth, visibleTop, visibleHeight, rowsPerPage, page } =
-        getViewState(layout, viewService, rootElement);
+      const {
+        rowPartialHeight,
+        scrollLeft,
+        scrollTopRatio,
+        visibleLeft,
+        visibleWidth,
+        visibleTop,
+        visibleHeight,
+        rowsPerPage,
+        page,
+      } = getViewState(layout, viewService, rootElement);
       snapshotLayout.qHyperCube.qDataPages = await (model as EngineAPI.IGenericObject).getHyperCubeData(
         '/qHyperCubeDef',
         [
@@ -86,6 +96,7 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
         ]
       );
       snapshotLayout.snapshotData.content = {
+        rowPartialHeight,
         scrollLeft,
         scrollTopRatio,
         visibleLeft,

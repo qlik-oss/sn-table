@@ -49,6 +49,7 @@ function TableWrapper(props: TableWrapperProps) {
 
   const isPrintingMode = isPrinting(layout, viewService);
   const scrollLeft = isPrintingMode ? viewService.scrollLeft ?? 0 : 0;
+  const scrollTopPartially = isPrintingMode ? viewService.rowPartialHeight ?? 0 : 0;
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
@@ -83,8 +84,12 @@ function TableWrapper(props: TableWrapperProps) {
   useKeyboardActiveListener();
 
   useEffect(() => {
-    tableContainerRef.current?.scrollTo(scrollLeft, 0);
-  }, [pageInfo, totalRowCount, scrollLeft]);
+    const element = tableContainerRef.current;
+    if (element) {
+      element.scrollLeft = scrollLeft;
+      element.scrollTop = scrollTopPartially;
+    }
+  }, [pageInfo, totalRowCount, scrollLeft, scrollTopPartially]);
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
