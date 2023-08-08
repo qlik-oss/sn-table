@@ -41,17 +41,19 @@ const useFieldSelection = (column: Column): UseFieldSelectionOutput => {
   useEffect(() => {
     if (!app || !app.getField || !column || !column.isDim) return;
     const { qLibraryId, fieldId } = column;
-    qLibraryId
-      ? app.createSessionObject(getListBoxSessionObject(qLibraryId, layout.qStateName)).then((listboxSessionObject) =>
-          setFieldInstance({
-            selectAll: () => listboxSessionObject.selectListObjectAll('/qListObjectDef'),
-            clear: () => listboxSessionObject.clearSelections('/qListObjectDef').then((result) => result),
-            selectPossible: () => listboxSessionObject.selectListObjectPossible('/qListObjectDef'),
-            selectAlternative: () => listboxSessionObject.selectListObjectAlternative('/qListObjectDef'),
-            selectExcluded: () => listboxSessionObject.selectListObjectExcluded('/qListObjectDef'),
-          } as EngineAPI.IField)
-        )
-      : app.getField(fieldId, layout.qStateName).then(setFieldInstance);
+    if (qLibraryId) {
+      app.createSessionObject(getListBoxSessionObject(qLibraryId, layout.qStateName)).then((listboxSessionObject) =>
+        setFieldInstance({
+          selectAll: () => listboxSessionObject.selectListObjectAll('/qListObjectDef'),
+          clear: () => listboxSessionObject.clearSelections('/qListObjectDef').then((result) => result),
+          selectPossible: () => listboxSessionObject.selectListObjectPossible('/qListObjectDef'),
+          selectAlternative: () => listboxSessionObject.selectListObjectAlternative('/qListObjectDef'),
+          selectExcluded: () => listboxSessionObject.selectListObjectExcluded('/qListObjectDef'),
+        } as EngineAPI.IField)
+      );
+    } else {
+      app.getField(fieldId, layout.qStateName).then(setFieldInstance);
+    }
   }, [app, column, layout.qStateName]);
 
   const resetSelectionActionsEnabledStatus = useCallback(
