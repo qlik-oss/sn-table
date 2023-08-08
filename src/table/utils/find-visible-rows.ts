@@ -9,9 +9,7 @@ export const getPartialTopScrollHeight = (
 ): number => {
   if (!rows || rows.length === 0 || index < 0) return 0;
   const rowRect = rows[index].getBoundingClientRect();
-  if (rowRect.top === tableBodyRect.top) return 0;
-  const partialHeight = tableBodyRect.top - rowRect.top;
-  return partialHeight > 0 ? partialHeight : 0;
+  return Math.max(tableBodyRect.top - rowRect.top, 0);
 };
 
 const findStartIndex = (
@@ -91,7 +89,6 @@ export function findVirtualizedVisibleRows(rootElement: HTMLElement, viewService
   if (1 - scrollTopRatio < EPSILON) {
     // The last data row is visible, then the priority start from the bottom row
     const shouldIncludeTopRow = topLeftCellRect.y >= bodyYMin - 4;
-    console.log('value: ', visibleTopInPage + (shouldIncludeTopRow ? 0 : 1) + offset);
     return {
       visibleRowStartIndex: visibleTopInPage + (shouldIncludeTopRow ? 0 : 1) + offset,
       visibleRowEndIndex: visibleBottomInPage + offset,
