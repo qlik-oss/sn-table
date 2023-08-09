@@ -45,7 +45,7 @@ const useFieldSelection = (column: Column, openMenuDropdown: boolean): UseFieldS
     if (qLibraryId) {
       const key = `${app.id}-${qLibraryId}`;
       if (modelStore.get(key)) {
-        setFieldInstance(modelStore.get(key));
+        setFieldInstance(modelStore.get(key) as EngineAPI.IField);
       } else {
         app.createSessionObject(getListBoxSessionObject(qLibraryId, layout.qStateName)).then((listboxSessionObject) => {
           const newFieldInstance = {

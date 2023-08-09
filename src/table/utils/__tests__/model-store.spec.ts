@@ -1,6 +1,6 @@
 import modelStore from '../model-store';
 
-describe('use-model-store', () => {
+describe('model-store', () => {
   test('should not return value when nothing in store', () => {
     expect(modelStore.get('fakeId')).toEqual(undefined);
   });
