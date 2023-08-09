@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useContextSelector, TableContext } from '../context';
 import { Column, TableLayout } from '../../types';
+import modelStore from './use-model-store';
 
 const SELECTION_ACTIONS_ENABLED_DEFAULT_STATUS: Record<string, boolean> = {
   canSelectAll: false,
@@ -31,7 +32,7 @@ export const getListBoxSessionObject = (qLibraryId: string, qStateName = '$') =>
   },
 });
 
-const useFieldSelection = (column: Column): UseFieldSelectionOutput => {
+const useFieldSelection = (column: Column, openMenuDropdown: boolean): UseFieldSelectionOutput => {
   const { app, layout } = useContextSelector(TableContext, (value) => value.baseProps);
   const [fieldInstance, setFieldInstance] = useState<EngineAPI.IField | null>(null);
   const [selectionActionsEnabledStatus, setSelectionActionsEnabledStatus] = useState(
@@ -39,22 +40,29 @@ const useFieldSelection = (column: Column): UseFieldSelectionOutput => {
   );
 
   useEffect(() => {
-    if (!app || !app.getField || !column || !column.isDim) return;
+    if (!app || !app.getField || !column || !column.isDim || !openMenuDropdown) return;
     const { qLibraryId, fieldId } = column;
     if (qLibraryId) {
-      app.createSessionObject(getListBoxSessionObject(qLibraryId, layout.qStateName)).then((listboxSessionObject) =>
-        setFieldInstance({
-          selectAll: () => listboxSessionObject.selectListObjectAll('/qListObjectDef'),
-          clear: () => listboxSessionObject.clearSelections('/qListObjectDef').then((result) => result),
-          selectPossible: () => listboxSessionObject.selectListObjectPossible('/qListObjectDef'),
-          selectAlternative: () => listboxSessionObject.selectListObjectAlternative('/qListObjectDef'),
-          selectExcluded: () => listboxSessionObject.selectListObjectExcluded('/qListObjectDef'),
-        } as EngineAPI.IField)
-      );
+      const key = `${app.id}-${qLibraryId}`;
+      if (modelStore.get(key)) {
+        setFieldInstance(modelStore.get(key));
+      } else {
+        app.createSessionObject(getListBoxSessionObject(qLibraryId, layout.qStateName)).then((listboxSessionObject) => {
+          const newFieldInstance = {
+            selectAll: () => listboxSessionObject.selectListObjectAll('/qListObjectDef'),
+            clear: () => listboxSessionObject.clearSelections('/qListObjectDef').then((result) => result),
+            selectPossible: () => listboxSessionObject.selectListObjectPossible('/qListObjectDef'),
+            selectAlternative: () => listboxSessionObject.selectListObjectAlternative('/qListObjectDef'),
+            selectExcluded: () => listboxSessionObject.selectListObjectExcluded('/qListObjectDef'),
+          } as EngineAPI.IField;
+          setFieldInstance(newFieldInstance);
+          modelStore.set(key, newFieldInstance);
+        });
+      }
     } else {
       app.getField(fieldId, layout.qStateName).then(setFieldInstance);
     }
-  }, [app, column, layout.qStateName]);
+  }, [app, column, layout.qStateName, openMenuDropdown]);
 
   const resetSelectionActionsEnabledStatus = useCallback(
     () => setSelectionActionsEnabledStatus(SELECTION_ACTIONS_ENABLED_DEFAULT_STATUS),

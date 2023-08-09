@@ -9,7 +9,7 @@ describe('useFieldSelection()', () => {
   let appMock: EngineAPI.IApp;
 
   const wrapper = ({ children }: any) => <TestWithProviders app={appMock}>{children}</TestWithProviders>;
-  const getFieldSelectionResult = () => renderHook(() => useFieldSelection(column), { wrapper });
+  const getFieldSelectionResult = () => renderHook(() => useFieldSelection(column, true), { wrapper });
 
   beforeEach(() => {
     column = {

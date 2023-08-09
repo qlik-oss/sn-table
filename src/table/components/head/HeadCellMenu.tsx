@@ -34,7 +34,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
     selectionActionsEnabledStatus,
     resetSelectionActionsEnabledStatus,
     updateSelectionActionsEnabledStatus,
-  } = useFieldSelection(column);
+  } = useFieldSelection(column, openMenuDropdown);
 
   const embedListbox = useCallback(() => {
     const id = qLibraryId ? { qLibraryId, type: 'dimension' } : fieldId;
