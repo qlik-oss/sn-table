@@ -19,6 +19,7 @@ describe('useFieldSelection()', () => {
     } as Column;
     appMock = {
       getField: jest.fn().mockResolvedValue(null),
+      createSessionObject: jest.fn().mockResolvedValue({}),
     } as unknown as EngineAPI.IApp;
   });
 
@@ -60,6 +61,22 @@ describe('useFieldSelection()', () => {
         canSelectAlternative: false,
         canSelectExcluded: false,
       });
+      expect(appMock.getField).toHaveBeenCalled();
+    });
+
+    it('should create session object when master dimension', async () => {
+      const state = { qOption: 1 } as EngineAPI.INxStateCounts;
+      column.qLibraryId = 'fakeLibraryId';
+      await waitFor(() => {
+        expect(triggerHook(state)).toMatchObject({
+          canSelectAll: true,
+          canClearSelections: false,
+          canSelectPossible: true,
+          canSelectAlternative: false,
+          canSelectExcluded: false,
+        });
+      });
+      expect(appMock.createSessionObject).toHaveBeenCalled();
     });
 
     it('`canSelectAll` and `canSelectPossible` and should be true after calling `updateSelectionActionsEnabledStatus` with `qOptions`', async () => {
@@ -153,7 +170,7 @@ describe('useFieldSelection()', () => {
       });
     });
 
-    it('shoud reset state after calling `resetSelectionActionsEnabledStatus`', async () => {
+    it('should reset state after calling `resetSelectionActionsEnabledStatus`', async () => {
       const { result } = getFieldSelectionResult();
       const mockLayout = {
         qHyperCube: {
