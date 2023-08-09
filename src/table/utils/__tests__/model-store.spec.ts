@@ -1,4 +1,4 @@
-import modelStore from '../use-model-store';
+import modelStore from '../model-store';
 
 describe('use-model-store', () => {
   test('should not return value when nothing in store', () => {

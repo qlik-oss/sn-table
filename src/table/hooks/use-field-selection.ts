@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useContextSelector, TableContext } from '../context';
 import { Column, TableLayout } from '../../types';
-import modelStore from './use-model-store';
+import modelStore from '../utils/model-store';
 
 const SELECTION_ACTIONS_ENABLED_DEFAULT_STATUS: Record<string, boolean> = {
   canSelectAll: false,
