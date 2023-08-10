@@ -1,3 +1,14 @@
+# [2.4.0](https://github.com/qlik-oss/sn-table/compare/v2.3.3...v2.4.0) (2023-08-10)
+
+### Bug Fixes
+
+- introduce alternate state in listbox popup ([#1047](https://github.com/qlik-oss/sn-table/issues/1047)) ([a6a287f](https://github.com/qlik-oss/sn-table/commit/a6a287feca6270298304956fa40769880f371674))
+
+### Features
+
+- show a snapshot with the exact scroll position ([#1028](https://github.com/qlik-oss/sn-table/issues/1028)) ([1689184](https://github.com/qlik-oss/sn-table/commit/1689184a084cb6570b2fabbd20099ee4f4ac6eae))
+- VIZ-2624-set-size-to-table-snapshot ([#1035](https://github.com/qlik-oss/sn-table/issues/1035)) ([91c531a](https://github.com/qlik-oss/sn-table/commit/91c531a8d36870aa5175ae20d76ea63f5dea09b8))
+
 ## [2.3.3](https://github.com/qlik-oss/sn-table/compare/v2.3.2...v2.3.3) (2023-07-06)
 
 ### Bug Fixes
