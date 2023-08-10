@@ -141,7 +141,7 @@
     "yarn-deduplicate": "6.0.2"
   },
   "peerDependencies": {
-    "@nebula.js/stardust": ">=3.3.0"
+    "@nebula.js/stardust": ">=4.3.0"
   },
   "resolutions": {
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
