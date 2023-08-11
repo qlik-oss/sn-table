@@ -92,6 +92,10 @@ export interface TableStyling {
   totals: GeneratedStyling;
 }
 
+export interface ExtendedApp extends EngineAPI.IApp {
+  id?: string;
+}
+
 export interface ContextValue {
   headRowHeight: number;
   setHeadRowHeight: React.Dispatch<React.SetStateAction<number>>;
@@ -104,7 +108,7 @@ export interface ContextValue {
   columnWidths: number[];
   setColumnWidths: React.Dispatch<React.SetStateAction<number[]>>;
   baseProps: {
-    app: EngineAPI.IApp | undefined;
+    app: ExtendedApp | undefined;
     selectionsAPI: ExtendedSelectionAPI | undefined;
     layout: TableLayout;
     model: EngineAPI.IGenericObject | undefined;
