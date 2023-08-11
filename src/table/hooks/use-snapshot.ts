@@ -113,7 +113,7 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
 
   useImperativeHandle(
     () => ({
-      getViewState,
+      getViewState: () => getViewState(layout, viewService, rootElement),
     }),
     []
   );
