@@ -38,7 +38,7 @@ describe('useSelectionListener', () => {
     );
 
     const expects: Promise<void>[] = [];
-    listenerNames.forEach(async (name, index) => {
+    listenerNames.forEach((name, index) => {
       expects.push(waitFor(() => expect(selectionsAPI.on).toHaveBeenNthCalledWith(index + 1, name, expect.anything())));
     });
 
@@ -59,7 +59,7 @@ describe('useSelectionListener', () => {
     );
 
     const expects: Promise<void>[] = [];
-    callbacks.forEach(async (cb) => {
+    callbacks.forEach((cb) => {
       cb();
       expects.push(waitFor(() => expect(selectionDispatch).toHaveBeenCalledWith({ type: SelectionActions.RESET })));
     });

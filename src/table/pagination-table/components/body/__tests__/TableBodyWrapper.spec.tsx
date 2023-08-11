@@ -50,7 +50,7 @@ describe('<TableBodyWrapper />', () => {
     expect(queryByText(tableSecondRow.qText as string)).toBeVisible();
     expect(queryByText(tableFirstRow.qText as string)).toBeVisible();
     expect(queryByText(tableSecondRow.qText as string)).toBeVisible();
-    expect(queryByText(tableData.columns[0].totalInfo as string)).toBeNull();
+    expect(queryByText(tableData.columns[0].totalInfo)).toBeNull();
   });
 
   it('should render table with totals', () => {
@@ -61,7 +61,7 @@ describe('<TableBodyWrapper />', () => {
     expect(queryByText(tableSecondRow.qText as string)).toBeVisible();
     expect(queryByText(tableFirstRow.qText as string)).toBeVisible();
     expect(queryByText(tableSecondRow.qText as string)).toBeVisible();
-    expect(queryByText(tableData.columns[0].totalInfo as string)).toBeVisible();
+    expect(queryByText(tableData.columns[0].totalInfo)).toBeVisible();
   });
 
   it('should call handleBodyKeyDown on key down', () => {

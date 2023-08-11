@@ -269,9 +269,15 @@ export interface Galaxy {
   flags: stardust.Flags;
 }
 
+type ExtendedGenericHyperCubeProperties = EngineAPI.IGenericHyperCubeProperties & {
+  qHyperCubeDef: {
+    columnWidths?: number[];
+  };
+};
+
 export interface ExportFormat {
   data: unknown[];
-  properties: EngineAPI.IGenericHyperCubeProperties;
+  properties: ExtendedGenericHyperCubeProperties;
 }
 
 export interface PropTree {

@@ -1,10 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo } from '@nebula.js/stardust';
 
 import registerLocale from '../locale/src';
 import { AnnounceArgs, ExtendedTranslator, Announce } from '../types';
 
-// eslint-disable-next-line no-shadow
 enum AnnouncerElements {
   FIRST = 'first-announcer-element',
   SECOND = 'second-announcer-element',

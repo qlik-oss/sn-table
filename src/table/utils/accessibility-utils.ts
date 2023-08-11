@@ -175,7 +175,6 @@ export const handleFocusoutEvent = (
     targetElement.querySelector('#sn-table-announcer--02')!.innerHTML = '';
     // Blur the table but not focus its parent element
     // when keyboard.active is false, this has no effect
-    // @ts-ignore TODO: fix nebula api so that blur has the correct argument type
     keyboard.blur?.(false);
   }
 };
@@ -191,7 +190,6 @@ export const focusSelectionToolbar = (element: HTMLElement, keyboard: stardust.K
     clientConfirmButton.focus();
     return;
   }
-  // @ts-ignore TODO: fix nebula api so that blur has the correct argument type
   keyboard.focusSelection?.(last);
 };
 

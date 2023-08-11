@@ -120,28 +120,26 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
 
   useImperativeHandle(
     ref,
-    () => {
-      return {
-        interpolatedScrollTo: (scrollTopRatio: number, scrollLeft: number) => {
-          const innerHeight = (innerForwardRef.current?.clientHeight ?? bodyHeight) - bodyHeight;
-          const scrollTop = Math.round(innerHeight * scrollTopRatio);
-          rowMeta.current.lastScrollToRatio = scrollTopRatio;
+    () => ({
+      interpolatedScrollTo: (scrollTopRatio: number, scrollLeft: number) => {
+        const innerHeight = (innerForwardRef.current?.clientHeight ?? bodyHeight) - bodyHeight;
+        const scrollTop = Math.round(innerHeight * scrollTopRatio);
+        rowMeta.current.lastScrollToRatio = scrollTopRatio;
 
-          if (rowMeta.current.lastScrollToRatio === 1) {
-            // Hack to ensure that the last row is scrolled to when row height is dynamic
-            // and row has already been measured
-            gridRef.current?.scrollToItem({ rowIndex: rowCount - 1, align: 'start' });
-            gridRef.current?.scrollTo({ scrollLeft });
-          } else {
-            gridRef.current?.scrollTo({ scrollTop, scrollLeft });
-          }
-        },
-        resizeCells: () => {
-          gridRef.current?.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: false });
-          resizeVisibleCells(rowsInPage);
-        },
-      };
-    },
+        if (rowMeta.current.lastScrollToRatio === 1) {
+          // Hack to ensure that the last row is scrolled to when row height is dynamic
+          // and row has already been measured
+          gridRef.current?.scrollToItem({ rowIndex: rowCount - 1, align: 'start' });
+          gridRef.current?.scrollTo({ scrollLeft });
+        } else {
+          gridRef.current?.scrollTo({ scrollTop, scrollLeft });
+        }
+      },
+      resizeCells: () => {
+        gridRef.current?.resetAfterIndices({ columnIndex: 0, rowIndex: 0, shouldForceUpdate: false });
+        resizeVisibleCells(rowsInPage);
+      },
+    }),
     [innerForwardRef, bodyHeight, rowMeta, rowCount, resizeVisibleCells, rowsInPage]
   );
 

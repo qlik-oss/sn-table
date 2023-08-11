@@ -41,9 +41,9 @@ export interface SelectMouseUpAction extends Action<SelectionActions.SELECT_MOUS
 export interface SelectMultiAddAction extends Action<SelectionActions.SELECT_MULTI_ADD> {
   payload: SelectPayload;
 }
-export interface SelectMultiEndAction extends Action<SelectionActions.SELECT_MULTI_END> {}
-export interface ResetAction extends Action<SelectionActions.RESET> {}
-export interface ClearAction extends Action<SelectionActions.CLEAR> {}
+export type SelectMultiEndAction = Action<SelectionActions.SELECT_MULTI_END>;
+export type ResetAction = Action<SelectionActions.RESET>;
+export type ClearAction = Action<SelectionActions.CLEAR>;
 export interface UpdatePageRowsAction extends Action<SelectionActions.UPDATE_PAGE_ROWS> {
   payload: { pageRows: Row[] };
 }

@@ -6,7 +6,7 @@ import { LoadData } from '../use-data';
 import useItemsRendererHandler, { ItemsHandlerProps, OnItemsRendered } from '../use-items-rendered-handler';
 import { ScrollDirection } from '../use-scroll-direction';
 
-describe('', () => {
+describe('use-items-rendered-handler', () => {
   let layout: TableLayout;
   let loadRows: jest.Mock<LoadData>;
   let loadColumns: jest.Mock<LoadData>;

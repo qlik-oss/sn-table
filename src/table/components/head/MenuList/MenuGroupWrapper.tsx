@@ -8,13 +8,12 @@ interface MenuItemsProps {
   itemGroups: MenuItemGroup[];
 }
 
-const MenuGroupWrapper = ({ itemGroups }: MenuItemsProps) => {
-  return itemGroups.map((group, index) => [
+const MenuGroupWrapper = ({ itemGroups }: MenuItemsProps) =>
+  itemGroups.map((group, index) => [
     MenuGroup({ menuGroup: group }),
     index < itemGroups.length - 1 ? (
       <StyledDivider data-testid="group-divider" variant="middle" key="divider" />
     ) : undefined,
   ]);
-};
 
 export default MenuGroupWrapper;

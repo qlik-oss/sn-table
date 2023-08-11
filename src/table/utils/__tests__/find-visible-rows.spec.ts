@@ -176,7 +176,7 @@ describe('find-visible-rows', () => {
         expect(partialHeight).toBe(200);
       });
 
-      it('it should return zero when rowRect top and table body top are equal', () => {
+      it('should return zero when rowRect top and table body top are equal', () => {
         const rows = [
           { getBoundingClientRect: () => ({ top: 100 }) },
           { getBoundingClientRect: () => ({ top: 200 }) },
@@ -186,7 +186,7 @@ describe('find-visible-rows', () => {
         expect(partialHeight).toBe(0);
       });
 
-      it('it should return zero when the row index is invalid', () => {
+      it('should return zero when the row index is invalid', () => {
         const rows = [{ getBoundingClientRect: () => ({ top: 100 }) }] as unknown as HTMLCollectionOf<Element>;
         const tableBodyRect = { top: 400, bottom: 400 };
         const partialHeight = getPartialTopScrollHeight(rows, tableBodyRect, -1);
@@ -220,12 +220,10 @@ describe('find-visible-rows', () => {
       });
       return rects;
     };
-    const createCell = (rect: Rect, index: number) => {
-      return {
-        getAttribute: () => index.toString(),
-        getBoundingClientRect: () => rect,
-      };
-    };
+    const createCell = (rect: Rect, index: number) => ({
+      getAttribute: () => index.toString(),
+      getBoundingClientRect: () => rect,
+    });
     const createElements = (scrollTop: number) => {
       const cellRects = createNewRects(scrollTop);
       cells = cellRects.map((rect, index) => createCell(rect, index));
@@ -234,9 +232,7 @@ describe('find-visible-rows', () => {
         querySelectorAll: () => cells,
       };
       rootElement = {
-        querySelector: () => {
-          return tableBody;
-        },
+        querySelector: () => tableBody,
       } as unknown as HTMLDivElement;
     };
 

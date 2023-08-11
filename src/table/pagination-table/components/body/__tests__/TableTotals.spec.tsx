@@ -38,21 +38,21 @@ describe('<TableTotals />', () => {
 
   it('should show the total row when table totals', () => {
     const { queryByText } = renderTableTotals();
-    expect(queryByText(tableData.columns[0].totalInfo as string)).toBeVisible();
-    expect(queryByText(tableData.columns[1].totalInfo as string)).toBeVisible();
+    expect(queryByText(tableData.columns[0].totalInfo)).toBeVisible();
+    expect(queryByText(tableData.columns[1].totalInfo)).toBeVisible();
   });
 
   it('should call handleTotalKeyDown when keyDown on a total cell', () => {
     jest.spyOn(handleKeyPress, 'handleTotalKeyDown').mockImplementation(() => jest.fn());
     const { getByText } = renderTableTotals();
-    fireEvent.keyDown(getByText(tableData.columns[0].totalInfo as string));
+    fireEvent.keyDown(getByText(tableData.columns[0].totalInfo));
     expect(handleKeyPress.handleTotalKeyDown).toHaveBeenCalledTimes(1);
   });
 
   it('should call removeAndFocus when clicking a total cell', () => {
     jest.spyOn(handleAccessibility, 'removeTabAndFocusCell').mockImplementation(() => jest.fn());
     const { getByText } = renderTableTotals();
-    fireEvent.mouseDown(getByText(tableData.columns[0].totalInfo as string));
+    fireEvent.mouseDown(getByText(tableData.columns[0].totalInfo));
     expect(handleAccessibility.removeTabAndFocusCell).toHaveBeenCalledTimes(1);
   });
 });

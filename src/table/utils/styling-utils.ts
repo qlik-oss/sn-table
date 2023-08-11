@@ -212,8 +212,8 @@ export function getBodyStyle(
   };
 }
 
-export const getFooterStyle = (background: BackgroundColors): FooterStyle => {
-  return background.isDark
+export const getFooterStyle = (background: BackgroundColors): FooterStyle =>
+  background.isDark
     ? {
         background: background.color,
         borderColor: COLORING.DARK_MODE_BORDER,
@@ -228,7 +228,6 @@ export const getFooterStyle = (background: BackgroundColors): FooterStyle => {
         color: COLORING.TEXT,
         disabledColor: COLORING.DISABLED,
       };
-};
 
 /**
  * Gets complete styling for the totals cells. Based on the body style but with the background and borders from header

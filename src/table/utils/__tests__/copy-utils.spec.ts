@@ -1,6 +1,6 @@
 import copyCellValue from '../copy-utils';
 
-describe('copyCellValue: ', () => {
+describe('copyCellValue:', () => {
   let evt: {
     target: HTMLElement;
   };
@@ -11,13 +11,11 @@ describe('copyCellValue: ', () => {
     contains: (className: string) => className === elementClass,
   };
 
-  const closest = () => {
-    return {
-      querySelector: () => ({
-        textContent: 'textFromClosest',
-      }),
-    };
-  };
+  const closest = () => ({
+    querySelector: () => ({
+      textContent: 'textFromClosest',
+    }),
+  });
 
   beforeEach(() => {
     elementClass = '';

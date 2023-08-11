@@ -8,8 +8,8 @@ const useScrollHandler = (
   totalsRef: React.RefObject<VariableSizeList<any>>,
   bodyRef: React.RefObject<BodyRef>,
   viewService: ViewService
-) => {
-  return useCallback(
+) =>
+  useCallback(
     (event: React.SyntheticEvent) => {
       const { scrollHeight, clientHeight, scrollTop, scrollLeft } = event.currentTarget;
       const ratio = Math.max(0, Math.min(1, scrollTop / (scrollHeight - clientHeight)));
@@ -24,6 +24,5 @@ const useScrollHandler = (
     },
     [headerRef, totalsRef, bodyRef]
   );
-};
 
 export default useScrollHandler;

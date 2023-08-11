@@ -19,7 +19,7 @@ import useKeyboardActiveListener from '../../hooks/use-keyboard-active-listener'
 import { SelectionActions } from '../../constants';
 import isPrinting from '../../../is-printing';
 
-function TableWrapper(props: TableWrapperProps) {
+const TableWrapper = (props: TableWrapperProps) => {
   const { pageInfo, setPageInfo, direction, footerContainer, announce } = props;
   const { page, rowsPerPage } = pageInfo;
 
@@ -144,6 +144,6 @@ function TableWrapper(props: TableWrapperProps) {
       )}
     </StyledTableWrapper>
   );
-}
+};
 
 export default memo(TableWrapper);

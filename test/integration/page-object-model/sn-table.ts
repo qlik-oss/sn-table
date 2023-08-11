@@ -14,7 +14,7 @@ const selectors: Collection = {
   focused: 'th[tabindex="0"], td[tabindex="0"]',
 };
 
-const textToDelete: string = '\nPress space to sort on this column';
+const textToDelete = '\nPress space to sort on this column';
 
 class SnTable {
   readonly page: Page;

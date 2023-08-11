@@ -83,7 +83,7 @@ describe('<ColumnAdjuster />', () => {
     });
   });
 
-  it('should not change column width when confirming with the same column width and not when canceling ', async () => {
+  it('should not change column width when confirming with the same column width and not when canceling', async () => {
     renderAdjuster();
     const columnAdjuster = screen.queryByTestId('sn-table-column-adjuster') as HTMLElement;
 

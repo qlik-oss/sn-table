@@ -57,7 +57,7 @@ const main = async () => {
     buildExtension();
     if (watch) {
       watcher.on('event', (event) => {
-        event.code === 'BUNDLE_END' && buildExtension();
+        if (event.code === 'BUNDLE_END') buildExtension();
       });
     }
   }

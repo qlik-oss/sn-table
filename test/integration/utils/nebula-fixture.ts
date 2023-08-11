@@ -19,7 +19,7 @@ class NebulaFixture {
 
   public route: Route | undefined;
 
-  constructor(theme: Object | Function, themeType: String, language: String) {
+  constructor(theme: object, themeType: string, language: string) {
     this.theme = theme;
     this.themeType = themeType;
     this.language = language;

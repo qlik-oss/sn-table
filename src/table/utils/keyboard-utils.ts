@@ -154,7 +154,7 @@ export const bodyTabHelper = ({
     preventDefaultBehavior(evt);
     focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
   } else if (evt.shiftKey) {
-    const headCells = rootElement.querySelectorAll('.sn-table-head-cell') as NodeListOf<HTMLTableCellElement>;
+    const headCells = rootElement.querySelectorAll('.sn-table-head-cell');
     const lastIndex = headCells.length - 1;
 
     setFocusedCellCoord([0, lastIndex] as [number, number]);

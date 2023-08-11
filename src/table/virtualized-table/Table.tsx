@@ -32,7 +32,7 @@ const Table = (props: TableProps) => {
       ...styling.body,
       background: theme.background.color ?? 'transparent',
     }),
-    [layout, theme.name()] // eslint-disable-line react-hooks/exhaustive-deps
+    [layout, theme.name()]
   );
   const {
     headerRowHeight,

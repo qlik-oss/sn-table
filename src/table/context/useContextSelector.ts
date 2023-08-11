@@ -6,7 +6,7 @@ type Selector<TContext, TSelected> = (state: TContext) => TSelected;
 export function useContextSelector<T, TSelected>(context: Context<T>, selector: Selector<T, TSelected>): TSelected {
   const accessorContext = getSelectorContext(context) as Context<SelectorContextType<T>>;
   const [accessor, listeners] = useContext(accessorContext);
-  const [, forceUpdate] = useReducer((dummy) => dummy + 1, 0);
+  const [, forceUpdate] = useReducer((dummy: number) => dummy + 1, 0);
 
   const latestSelector = useRef(selector);
   const latestSelectedState = useRef<any>();

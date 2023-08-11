@@ -31,6 +31,7 @@ const getCellStyle = (
       // TODO: proper typing for each styling (header, totals, body)
       color: showHoverEffect ? hoverColors?.color : withColumnStyle.color,
       background: `${SELECTION_STYLING.EXCLUDED_BACKGROUND}, ${
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         showHoverEffect ? hoverColors?.background : withColumnStyle.background
       }`,
     };

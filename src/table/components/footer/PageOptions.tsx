@@ -42,6 +42,7 @@ const PageOptions = ({ totalPages, page }: PageOptionsProps) => {
     );
   }
 
+  // eslint-disable-next-line react/jsx-no-useless-fragment
   return <>{Options}</>;
 };
 

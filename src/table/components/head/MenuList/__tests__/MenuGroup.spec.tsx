@@ -45,7 +45,7 @@ describe('MenuGroup', () => {
     let menuGroup: HeadCellMenuItem[];
 
     const renderer = (group: HeadCellMenuItem[]) => {
-      // @ts-ignore calling like component here for test, but it's being called as function where it's been used
+      // @ts-expect-error calling like component here for test, but it's being called as function where it's been used
       render(<MenuGroup menuGroup={group} />);
     };
 

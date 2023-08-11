@@ -10,7 +10,7 @@ interface CellTextProps {
   lines?: number;
 }
 
-export default function CellText({ children, fontSize = '', wordBreak = false, lines = 3 }: CellTextProps) {
+const CellText = ({ children, fontSize = '', wordBreak = false, lines = 3 }: CellTextProps): JSX.Element => {
   const size = parseInt(fontSize || DEFAULT_FONT_SIZE, 10);
 
   const Text = (
@@ -20,10 +20,12 @@ export default function CellText({ children, fontSize = '', wordBreak = false, l
   );
 
   return wordBreak ? (
-    <>{Text}</>
+    Text
   ) : (
     <StyledCellTextWrapper minHeight={size * LINE_HEIGHT} maxHeight={size * LINE_HEIGHT * lines}>
       {Text}
     </StyledCellTextWrapper>
   );
-}
+};
+
+export default CellText;
