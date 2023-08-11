@@ -1,5 +1,6 @@
 import getPropertyPanelDefinition from './property-panel';
 import getData from './data';
+// eslint-disable-next-line import/no-unresolved, import/extensions
 import { importProperties, exportProperties } from './conversion';
 
 const getExploration = (env) =>

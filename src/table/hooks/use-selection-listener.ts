@@ -36,7 +36,6 @@ const useSelectionListener = ({
         // if there is no focus on the chart,
         // make sure you blur the table
         // and focus the entire chart (table's parent element)
-        // @ts-ignore TODO: fix nebula api so that blur has the correct argument type
         keyboard.blur?.(true);
       }
       resetSelections();

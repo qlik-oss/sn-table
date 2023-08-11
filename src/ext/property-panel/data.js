@@ -1,4 +1,5 @@
 import Modifiers from 'qlik-modifiers';
+// eslint-disable-next-line import/no-unresolved, import/extensions
 import { ColumnWidthTypes, MAX_COLUMN_PERCENTAGE_WIDTH, MAX_COLUMN_WIDTH } from '../../table/constants';
 
 const columnCommonHidden = {

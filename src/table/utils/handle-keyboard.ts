@@ -102,7 +102,6 @@ export const handleWrapperKeyDown = ({
     // its parent element when nebula handles keyboard navigation
     // and not in selection mode
     preventDefaultBehavior(evt);
-    // @ts-ignore TODO: fix nebula api so that blur has the correct argument type
     keyboard.blur?.(true);
   } else if (isArrowKey(evt.key)) {
     // Arrow key events should never bubble out of the table

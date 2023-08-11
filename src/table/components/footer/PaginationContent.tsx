@@ -40,7 +40,7 @@ export const shouldShow = (component: string, width: number) => {
   }
 };
 
-function PaginationContent({
+const PaginationContent = ({
   direction,
   pageInfo,
   setPageInfo,
@@ -48,7 +48,7 @@ function PaginationContent({
   isSelectionMode,
   handleChangePage,
   announce,
-}: PaginationContentProps) {
+}: PaginationContentProps) => {
   const { totalRowCount, totalColumnCount, totalPages } = useContextSelector(TableContext, (value) => value.tableData);
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const { keyboard, translator, theme, interactions, rect } = useContextSelector(
@@ -174,6 +174,6 @@ function PaginationContent({
       {showFirstAndLast && getButton(onLastPage, totalPages - 1, 'LastPage', handleLastButtonTab)}
     </>
   );
-}
+};
 
 export default memo(PaginationContent);

@@ -144,7 +144,7 @@ describe('<HeadCellMenu />', () => {
     expect(screen.queryByText('SNTable.MenuItem.AdjustColumnSize')).toBeVisible();
   });
 
-  it('should open menu but not render selection items when when column is dimension, but selections is disabled ', async () => {
+  it('should open menu but not render selection items when when column is dimension, but selections is disabled', async () => {
     interactions.select = false;
     renderTableHeadCellMenu();
     await openMenu();
@@ -264,36 +264,41 @@ describe('<HeadCellMenu />', () => {
       fireEvent.click(screen.getByText(`SNTable.MenuItem.${targetAction}`));
     };
 
-    afterEach(async () => {
+    const testEnd = async () => {
       expect(updateSelectionActionsEnabledStatusMock).toHaveBeenCalledTimes(1);
       fireEvent.click(document);
       await waitForElementToBeRemoved(() => screen.queryByRole('menu'));
       expect(screen.queryByRole('menu')).not.toBeInTheDocument();
-    });
+    };
 
     it('should be able to call "Select All" once when it is enabled', async () => {
       await handleBeforeEachAction('SelectAll');
       expect(fieldInstanceMock.selectAll).toHaveBeenCalledTimes(1);
+      await testEnd();
     });
 
     it('should be able to call "Clear Selection" all once when it is enabled', async () => {
       await handleBeforeEachAction('ClearSelections');
       expect(fieldInstanceMock.clear).toHaveBeenCalledTimes(1);
+      await testEnd();
     });
 
     it('should be able to call "Select Possible" all once when it is enabled', async () => {
       await handleBeforeEachAction('SelectPossible');
       expect(fieldInstanceMock.selectPossible).toHaveBeenCalledTimes(1);
+      await testEnd();
     });
 
     it('should be able to call "Select Alternative" all once when it is enabled', async () => {
       await handleBeforeEachAction('SelectAlternative');
       expect(fieldInstanceMock.selectAlternative).toHaveBeenCalledTimes(1);
+      await testEnd();
     });
 
     it('should be able to call "Select Excluded" all once when it is enabled', async () => {
       await handleBeforeEachAction('SelectExcluded');
       expect(fieldInstanceMock.selectExcluded).toHaveBeenCalledTimes(1);
+      await testEnd();
     });
   });
 });

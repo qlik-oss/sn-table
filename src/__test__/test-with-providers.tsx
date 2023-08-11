@@ -75,33 +75,31 @@ const TestWithProviders = ({
   rect = { width: 0, height: 0, top: 0, left: 0 },
   initialDataPages = undefined,
   viewService = { qTop: 0, qHeight: 1, scrollLeft: 0 },
-}: ProviderProps) => {
-  return (
-    <ThemeProvider theme={muiSetup(direction)}>
-      <TableContextProvider
-        app={app}
-        selectionsAPI={selectionsAPI}
-        layout={layout}
-        translator={translator}
-        interactions={interactions}
-        theme={theme}
-        keyboard={keyboard}
-        model={model}
-        tableData={tableData}
-        cellCoordMock={cellCoordMock}
-        rootElement={rootElement}
-        embed={embed}
-        changeSortOrder={changeSortOrder}
-        applyColumnWidths={applyColumnWidths}
-        rect={rect}
-        initialDataPages={initialDataPages}
-        viewService={viewService}
-      >
-        {children as JSX.Element}
-      </TableContextProvider>
-    </ThemeProvider>
-  );
-};
+}: ProviderProps) => (
+  <ThemeProvider theme={muiSetup(direction)}>
+    <TableContextProvider
+      app={app}
+      selectionsAPI={selectionsAPI}
+      layout={layout}
+      translator={translator}
+      interactions={interactions}
+      theme={theme}
+      keyboard={keyboard}
+      model={model}
+      tableData={tableData}
+      cellCoordMock={cellCoordMock}
+      rootElement={rootElement}
+      embed={embed}
+      changeSortOrder={changeSortOrder}
+      applyColumnWidths={applyColumnWidths}
+      rect={rect}
+      initialDataPages={initialDataPages}
+      viewService={viewService}
+    >
+      {children as JSX.Element}
+    </TableContextProvider>
+  </ThemeProvider>
+);
 
 export const wrapper = ({ children }: HookWrapperProps) => <TestWithProviders>{children}</TestWithProviders>;
 

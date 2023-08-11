@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef } from 'react';
 
 export default function useDidUpdateEffect(effect: () => void, deps: React.DependencyList) {

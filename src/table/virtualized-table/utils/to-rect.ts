@@ -11,11 +11,9 @@ const toTableRect = (rect: stardust.Rect, paginationNeeded: boolean): Rect => {
   };
 };
 
-export const toStickyContainerRect = (rect: Rect, xScrollbarWidth: number, yScrollbarWidth: number) => {
-  return {
-    width: rect.width - yScrollbarWidth,
-    height: rect.height - xScrollbarWidth,
-  };
-};
+export const toStickyContainerRect = (rect: Rect, xScrollbarWidth: number, yScrollbarWidth: number) => ({
+  width: rect.width - yScrollbarWidth,
+  height: rect.height - xScrollbarWidth,
+});
 
 export default toTableRect;

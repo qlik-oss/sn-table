@@ -1,6 +1,6 @@
 import { Collection, Key } from '../types';
 
-function getStep(key: Key, times: number = 1): Collection {
+function getStep(key: Key, times = 1): Collection {
   return { key, times };
 }
 

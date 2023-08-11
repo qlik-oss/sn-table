@@ -56,7 +56,7 @@ describe('use-snapshot', () => {
       expect(result).toBe(9);
     });
 
-    it('should return 0 when visibleRowEndIndex < 0 ', async () => {
+    it('should return 0 when visibleRowEndIndex < 0', async () => {
       visibleRowEndIndex = -1;
       layout = generateLayout(dimensionCount, measureCount, rowCount);
 

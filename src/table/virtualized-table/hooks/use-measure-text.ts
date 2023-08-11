@@ -64,7 +64,7 @@ export default function useMeasureText(
 ): MeasureTextHook {
   const { estimateWidth, measureText, estimateLineCount } = useMemo((): MeasureTextHook => {
     const context = document.createElement('canvas').getContext('2d') as CanvasRenderingContext2D;
-    context.font = `${boldText ? '600' : ''} ${fontSize} ${fontFamily}`;
+    context.font = `${boldText ? '600' : ''} ${fontSize || ''} ${fontFamily}`;
 
     const memoizedMeasureText = memoize(context.measureText.bind(context)) as (text: string) => TextMetrics;
 

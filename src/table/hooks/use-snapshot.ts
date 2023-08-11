@@ -1,4 +1,3 @@
-// @ts-ignore ignore useImperativeHandle
 import { onTakeSnapshot, useImperativeHandle, stardust } from '@nebula.js/stardust';
 import type { TableLayout, ViewService, SnapshotLayout, HyperCube } from '../../types';
 import { findPaginationVisibleRows, findVirtualizedVisibleRows } from '../utils/find-visible-rows';
@@ -69,7 +68,7 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
       return snapshotLayout;
     }
 
-    if ((model as EngineAPI.IGenericObject).getHyperCubeData) {
+    if (model.getHyperCubeData) {
       if (!snapshotLayout.qHyperCube) {
         snapshotLayout.qHyperCube = {} as HyperCube;
       }
@@ -84,17 +83,14 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
         rowsPerPage,
         page,
       } = getViewState(layout, viewService, rootElement);
-      snapshotLayout.qHyperCube.qDataPages = await (model as EngineAPI.IGenericObject).getHyperCubeData(
-        '/qHyperCubeDef',
-        [
-          {
-            qLeft: 0,
-            qTop: visibleTop ?? 0,
-            qWidth: layout.qHyperCube.qSize.qcx,
-            qHeight: visibleHeight ?? 0,
-          },
-        ]
-      );
+      snapshotLayout.qHyperCube.qDataPages = await model.getHyperCubeData('/qHyperCubeDef', [
+        {
+          qLeft: 0,
+          qTop: visibleTop ?? 0,
+          qWidth: layout.qHyperCube.qSize.qcx,
+          qHeight: visibleHeight ?? 0,
+        },
+      ]);
       snapshotLayout.snapshotData.content = {
         rowPartialHeight,
         scrollLeft,

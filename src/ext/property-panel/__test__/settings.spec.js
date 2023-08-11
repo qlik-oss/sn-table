@@ -83,9 +83,7 @@ describe('settings', () => {
         themeJson = { fontSize: '14px', color: '#4d4d4d' };
         args = {
           theme: {
-            current: () => {
-              return themeJson;
-            },
+            current: () => themeJson,
           },
         };
       });

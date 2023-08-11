@@ -12,7 +12,7 @@ import CellText from '../../../components/CellText';
 import useSelectionListener from '../../../hooks/use-selection-listener';
 import { getStylingComponent } from '../../../utils/styling-utils';
 
-function TableBodyWrapper({ setShouldRefocus, tableWrapperRef, announce }: TableBodyWrapperProps) {
+const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: TableBodyWrapperProps) => {
   const { rows, columns, paginationNeeded, totalsPosition } = useContextSelector(
     TableContext,
     (value) => value.tableData
@@ -105,6 +105,6 @@ function TableBodyWrapper({ setShouldRefocus, tableWrapperRef, announce }: Table
       {totalsPosition.atBottom ? <TableTotals /> : undefined}
     </StyledBody>
   );
-}
+};
 
 export default memo(TableBodyWrapper);

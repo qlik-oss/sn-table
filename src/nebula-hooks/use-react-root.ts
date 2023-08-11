@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo, useEffect } from '@nebula.js/stardust';
 import { createRoot } from 'react-dom/client';
 

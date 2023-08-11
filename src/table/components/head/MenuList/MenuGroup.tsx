@@ -8,8 +8,8 @@ import RecursiveMenuList from './RecursiveMenuList';
 import { handleHeadCellMenuKeyDown } from '../../../utils/handle-keyboard';
 
 export const interceptClickOnMenuItems = (menuGroups: MenuItemGroup[], cache: SubMenusOpenStatusCache) => {
-  const result = menuGroups.map((grp) => {
-    return grp.map(({ onClick, ...restProps }) => ({
+  const result = menuGroups.map((grp) =>
+    grp.map(({ onClick, ...restProps }) => ({
       ...restProps,
       ...(onClick
         ? {
@@ -20,8 +20,8 @@ export const interceptClickOnMenuItems = (menuGroups: MenuItemGroup[], cache: Su
             },
           }
         : {}),
-    }));
-  });
+    }))
+  );
   return result;
 };
 
@@ -76,8 +76,7 @@ const MenuGroupItems = ({ autoFocus, id, onClick, itemTitle, icon, enabled, subM
   );
 };
 
-const MenuGroup = ({ menuGroup }: { menuGroup: HeadCellMenuItem[] }) => {
-  return menuGroup.map((groupItem) => <MenuGroupItems key={groupItem.id} {...groupItem} />);
-};
+const MenuGroup = ({ menuGroup }: { menuGroup: HeadCellMenuItem[] }) =>
+  menuGroup.map((groupItem) => <MenuGroupItems key={groupItem.id} {...groupItem} />);
 
 export default MenuGroup;

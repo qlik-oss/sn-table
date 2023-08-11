@@ -12,7 +12,7 @@ import { StyledHeadCell } from './styles';
 import { handleHeadKeyDown } from '../../../utils/handle-keyboard';
 import { handleMouseDownToFocusHead } from '../../../utils/handle-mouse';
 
-function TableHeadWrapper() {
+const TableHeadWrapper = () => {
   const { columns } = useContextSelector(TableContext, (value) => value.tableData);
   const { layout, styling, interactions, rootElement, keyboard } = useContextSelector(
     TableContext,
@@ -88,6 +88,6 @@ function TableHeadWrapper() {
       </TableRow>
     </TableHead>
   );
-}
+};
 
 export default memo(TableHeadWrapper);

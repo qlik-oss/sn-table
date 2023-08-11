@@ -5,7 +5,7 @@ import MenuGroupWrapper from '../MenuGroupWrapper';
 
 describe('<MenuGroupWrapper />', () => {
   const renderer = (itemGroups: MenuItemGroup[]) => {
-    // @ts-ignore calling like component here for test, but it's being called as function where it's been used
+    // @ts-expect-error calling like component here for test, but it's being called as function where it's been used
     render(<MenuGroupWrapper itemGroups={itemGroups} />);
   };
 
@@ -15,7 +15,7 @@ describe('<MenuGroupWrapper />', () => {
     expect(screen.queryByTestId('group-divider')).not.toBeInTheDocument();
   });
 
-  it('should render menu group without divider', () => {
+  it('should render menu group without divider2', () => {
     renderer([
       [{ id: 1, icon: <i />, itemTitle: 'Menu#01', enabled: true }],
       [{ id: 2, icon: <i />, itemTitle: 'Menu#02', enabled: true }],

@@ -7,7 +7,7 @@ import HeadCellMenu from './HeadCellMenu';
 import { areTabStopsEnabled } from '../../utils/accessibility-utils';
 import { VisuallyHidden, StyledSortButton, StyledHeadCellContent, StyledHeadCellIconWrapper } from './styles';
 
-function HeadCellContent({ children, column, isActive, isInteractionEnabled }: HeadCellContentProps) {
+const HeadCellContent = ({ children, column, isActive, isInteractionEnabled }: HeadCellContentProps) => {
   const { keyboard, translator, changeSortOrder } = useContextSelector(TableContext, (value) => value.baseProps);
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
 
@@ -48,6 +48,6 @@ function HeadCellContent({ children, column, isActive, isInteractionEnabled }: H
       {isInteractionEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
     </StyledHeadCellContent>
   );
-}
+};
 
 export default HeadCellContent;

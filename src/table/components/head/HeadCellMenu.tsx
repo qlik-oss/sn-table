@@ -19,7 +19,7 @@ import { TableLayout } from '../../../types';
 import RecursiveMenuList from './MenuList/RecursiveMenuList';
 import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 
-export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
+const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
   const { isDim, qLibraryId, fieldId, headTextAlign } = column;
   const { translator, embed, model, interactions, layout } = useContextSelector(
     TableContext,
@@ -38,7 +38,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
 
   const embedListbox = useCallback(() => {
     const id = qLibraryId ? { qLibraryId, type: 'dimension' } : fieldId;
-    // @ts-ignore TODO: no types for `__DO_NOT_USE__`, it will improve when it becomes stable
+    // @ts-expect-error TODO: no types for `__DO_NOT_USE__`, it will improve when it becomes stable
     // eslint-disable-next-line
     embed.__DO_NOT_USE__.popover(listboxRef.current, id, {
       anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
@@ -46,7 +46,7 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
       stateName: layout.qStateName,
     });
 
-    // @ts-ignore TODO: no types for popover related api until it becomes stable
+    // @ts-expect-error TODO: no types for popover related api until it becomes stable
     embed.on('fieldPopoverClose', () => {
       setOpenListboxDropdown(false);
     });
@@ -193,4 +193,6 @@ export default function HeadCellMenu({ column, tabIndex }: HeadCellMenuProps) {
       />
     </HeadCellMenuWrapper>
   ) : null;
-}
+};
+
+export default HeadCellMenu;

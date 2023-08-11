@@ -42,7 +42,7 @@ describe('useFieldSelection()', () => {
   });
 
   describe('enabledStates', () => {
-    const triggerHook = (qStateCounts: EngineAPI.INxStateCounts, qFallbackTitle: string = 'dim#01') => {
+    const triggerHook = (qStateCounts: EngineAPI.INxStateCounts, qFallbackTitle = 'dim#01') => {
       const { result } = getFieldSelectionResult();
       const mockLayout = {
         qHyperCube: { qDimensionInfo: [{ qFallbackTitle, qStateCounts }] },
@@ -127,7 +127,7 @@ describe('useFieldSelection()', () => {
       });
     });
 
-    it('`canSelectAll`, `canSelectAlternative` and `canSelectExcluded` should be true after calling `updateSelectionActionsEnabledStatus` with `qAlternative`', async () => {
+    it('`canSelectAll`, `canSelectAlternative` and `canSelectExcluded` should be true after calling `updateSelectionActionsEnabledStatus` with `qAlternative`2', async () => {
       const state = { qAlternative: 1 } as EngineAPI.INxStateCounts;
       await waitFor(() => {
         expect(triggerHook(state)).toMatchObject({

@@ -3,14 +3,13 @@ import path from 'path';
 import serve, { NebulaServer } from '@nebula.js/cli-serve';
 import { test, expect } from '@playwright/test';
 
-import events from './events';
 import createNebulaRoutes from './routes';
 import createPlaywright from './playwright';
 
 const paths = { fixtures: path.join(__dirname, '../__fixtures__') };
 const port = 8000;
 
-const runRenderingTests = (theme: Object | Function, themeType: String, language: String) => {
+const runRenderingTests = (theme: object, themeType: string, language: string) => {
   let nebulaServer: NebulaServer;
   let playwright;
   let route: {
@@ -38,10 +37,6 @@ const runRenderingTests = (theme: Object | Function, themeType: String, language
 
     route = createNebulaRoutes(nebulaServer.url);
   });
-
-  test.beforeEach(({ page }) => events.addListeners(page));
-
-  test.afterEach(({ page }) => events.removeListeners(page));
 
   test.afterAll(async () => {
     nebulaServer.close();

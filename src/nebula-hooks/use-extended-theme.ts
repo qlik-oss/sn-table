@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo, useTheme } from '@nebula.js/stardust';
 import { isDarkColor, isTransparentColor } from '../table/utils/color-utils';
 import { ExtendedTheme, BackgroundColors } from '../types';

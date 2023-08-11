@@ -80,8 +80,8 @@ describe('useData', () => {
 
     setCellSizeMock = jest.fn() as jest.MockedFunction<SetCellSize>;
 
-    doRenderHook = (renderWithProps: OverrideUseDataProps = {}) => {
-      return act(async () => {
+    doRenderHook = (renderWithProps: OverrideUseDataProps = {}) =>
+      act(async () => {
         renderHookResult = renderHook(() =>
           useData({
             layout: renderWithProps.layout ?? layout,
@@ -98,7 +98,6 @@ describe('useData', () => {
           })
         );
       });
-    };
   });
 
   afterEach(() => {
@@ -283,6 +282,7 @@ describe('useData', () => {
       await doRenderHook({ initialDataPages });
 
       await waitFor(() =>
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         expect(model.getHyperCubeData).toHaveBeenNthCalledWith(1, '/qHyperCubeDef', [
           { qHeight: 1, qLeft: 0, qTop: INIT_DATA_FETCH_HEIGHT - 1, qWidth: 6 },
         ])

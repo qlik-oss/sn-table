@@ -17,9 +17,8 @@ export interface UseFieldSelectionOutput {
   updateSelectionActionsEnabledStatus: (layout: TableLayout) => void;
 }
 
-export const checkStateCountByKey = <T>(keys: (keyof T)[], obj: T): boolean => {
-  return keys.some((key) => (obj[key] as number) > 0);
-};
+export const checkStateCountByKey = <T>(keys: (keyof T)[], obj: T): boolean =>
+  keys.some((key) => (obj[key] as number) > 0);
 
 const useFieldSelection = (column: Column): UseFieldSelectionOutput => {
   const { app, layout } = useContextSelector(TableContext, (value) => value.baseProps);

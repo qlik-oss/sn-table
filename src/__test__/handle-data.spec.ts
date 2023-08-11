@@ -86,7 +86,7 @@ describe('handle-data', () => {
       expect(columnInfo).toEqual(getExpectedInfo(true, undefined, true));
     });
 
-    it('should return column info for master dimension ', () => {
+    it('should return column info for master dimension', () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qLibraryId = '#someId';
       const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
       expect(columnInfo).toEqual(getExpectedInfo(true, '#someId'));

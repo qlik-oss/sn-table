@@ -7,7 +7,7 @@ import { removeTabAndFocusCell } from '../../../utils/accessibility-utils';
 import { StyledTotalsCell } from './styles';
 import CellText from '../../../components/CellText';
 
-function TableTotals() {
+const TableTotals = () => {
   const {
     columns,
     totalsPosition: { atTop },
@@ -49,6 +49,6 @@ function TableTotals() {
       })}
     </TableRow>
   );
-}
+};
 
 export default memo(TableTotals);

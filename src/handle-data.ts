@@ -95,9 +95,7 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
   const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIdx < numDims;
-  const info = (isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims]) as
-    | ExtendedNxMeasureInfo
-    | ExtendedNxDimensionInfo;
+  const info = isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims];
 
   let fieldIndex = 0;
   let fieldId = '';

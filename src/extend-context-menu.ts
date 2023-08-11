@@ -1,4 +1,4 @@
-// @ts-ignore  TODO: remove tag when onContextMenu is declared in nebula/stardust
+// @ts-expect-error  TODO: remove tag when onContextMenu is declared in nebula/stardust
 import { onContextMenu } from '@nebula.js/stardust';
 import copyCellValue from './table/utils/copy-utils';
 

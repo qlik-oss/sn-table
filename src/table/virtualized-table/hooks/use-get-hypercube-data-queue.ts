@@ -30,6 +30,7 @@ const useGetHyperCubeDataQueue = (
         finished.current.add(key);
 
         if (queued.current.size === 1) {
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
           setTimeout(async () => {
             const qPages = Array.from(queued.current.values());
             if (qPages.length === 0) {
@@ -63,7 +64,7 @@ const useGetHyperCubeDataQueue = (
         finished.current.clear();
       },
     }),
-    [] // eslint-disable-line react-hooks/exhaustive-deps
+    []
   );
 
   return queue;
