@@ -1,3 +1,9 @@
+# [2.5.0](https://github.com/qlik-oss/sn-table/compare/v2.4.0...v2.5.0) (2023-08-14)
+
+### Bug Fixes
+
+- make selection in master dimension ([#1049](https://github.com/qlik-oss/sn-table/issues/1049)) ([b87ae67](https://github.com/qlik-oss/sn-table/commit/b87ae67c2a42a33fec0128eebc19304a3ec8f76e))
+
 # [2.4.0](https://github.com/qlik-oss/sn-table/compare/v2.3.3...v2.4.0) (2023-08-10)
 
 ### Bug Fixes
