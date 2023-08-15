@@ -8,7 +8,7 @@ jest.mock('@nebula.js/stardust', () => ({
 }));
 
 describe('use-snapshot', () => {
-  describe.only('useSnapshot', () => {
+  describe('useSnapshot', () => {
     let layout: TableLayout;
     let viewService: ViewService;
     let rootElement: HTMLElement;
