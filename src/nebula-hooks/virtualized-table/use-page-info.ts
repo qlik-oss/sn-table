@@ -1,6 +1,6 @@
-import { useMemo, useState } from '@nebula.js/stardust';
-import { MAX_PAGE_SIZE } from '../../table/virtualized-table/constants';
-import { PageInfo, TableLayout } from '../../types';
+import { useMemo, useState } from "@nebula.js/stardust";
+import { MAX_PAGE_SIZE } from "../../table/virtualized-table/constants";
+import { PageInfo, TableLayout } from "../../types";
 
 const usePageInfo = (layout: TableLayout, shouldRender: boolean) => {
   const [page, setPage] = useState(0);

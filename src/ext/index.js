@@ -1,21 +1,21 @@
-import getPropertyPanelDefinition from './property-panel';
-import getData from './data';
+import getData from "./data";
+import getPropertyPanelDefinition from "./property-panel";
 // eslint-disable-next-line import/no-unresolved, import/extensions
-import { importProperties, exportProperties } from './conversion';
+import { exportProperties, importProperties } from "./conversion";
 
 const getExploration = (env) =>
-  env.flags.isEnabled('PS_18291_TABLE_EXPLORATION') && {
+  env.flags.isEnabled("PS_18291_TABLE_EXPLORATION") && {
     exploration: {
-      component: 'items',
+      component: "items",
       items: {
         columnHandler: {
-          component: 'column-handler',
+          component: "column-handler",
           search: true,
           selectAll: false,
         },
       },
       classification: {
-        tags: ['exploration'],
+        tags: ["exploration"],
         exclusive: true,
       },
     },
@@ -27,9 +27,9 @@ export default function ext(env) {
     ...getExploration(env),
     data: getData(env),
     support: {
-      export: env.flags.isEnabled('PS_20907_TABLE_DOWNLOAD'),
+      export: env.flags.isEnabled("PS_20907_TABLE_DOWNLOAD"),
       exportData: true,
-      snapshot: env.flags.isEnabled('PS_20907_TABLE_DOWNLOAD'),
+      snapshot: env.flags.isEnabled("PS_20907_TABLE_DOWNLOAD"),
       viewData: false,
       exploration: true,
       cssScaling: true,

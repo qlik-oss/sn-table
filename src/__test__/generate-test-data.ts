@@ -1,4 +1,4 @@
-import { HyperCube, TableLayout, Cell, Row } from '../types';
+import { Cell, HyperCube, Row, TableLayout } from "../types";
 
 export function generateDataPages(height: number, width: number, qLeft = 0, qTop = 0) {
   const qMatrix: Record<string, string>[][] = [];
@@ -26,7 +26,7 @@ export function generateLayout(
   const createField = (idx: number) => ({
     qFallbackTitle: `title-${idx}`,
     qAttrExprInfo: [],
-    qSortIndicator: 'A',
+    qSortIndicator: "A",
     qReverseSort: false,
     qApprMaxGlyphCount: 3,
     qGroupPos: 0,
@@ -36,8 +36,8 @@ export function generateLayout(
   const qMeasureInfo = [];
   const totals = {
     show: false,
-    position: 'noTotals',
-    label: 'Totals',
+    position: "noTotals",
+    label: "Totals",
   };
 
   for (let dim = 0; dim < nDims; dim++) {

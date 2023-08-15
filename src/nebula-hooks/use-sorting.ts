@@ -1,5 +1,5 @@
-import { useMemo } from '@nebula.js/stardust';
-import { Column, HyperCube } from '../types';
+import { useMemo } from "@nebula.js/stardust";
+import { Column, HyperCube } from "../types";
 
 export const sortingFactory = (dimensionsLength: number, model: EngineAPI.IGenericObject | undefined) => {
   if (!model) return undefined;
@@ -19,15 +19,15 @@ export const sortingFactory = (dimensionsLength: number, model: EngineAPI.IGener
       sortOrder.unshift(colIdx);
 
       patches.push({
-        qPath: '/qHyperCubeDef/qInterColumnSortOrder',
-        qOp: 'Replace',
-        qValue: `[${sortOrder.join(',')}]`,
+        qPath: "/qHyperCubeDef/qInterColumnSortOrder",
+        qOp: "Replace",
+        qValue: `[${sortOrder.join(",")}]`,
       });
     } else {
       // Reverse
       patches.push({
-        qPath: `/qHyperCubeDef/${isDim ? 'qDimensions' : 'qMeasures'}/${idx}/qDef/qReverseSort`,
-        qOp: 'Replace',
+        qPath: `/qHyperCubeDef/${isDim ? "qDimensions" : "qMeasures"}/${idx}/qDef/qReverseSort`,
+        qOp: "Replace",
         qValue: (!qReverseSort).toString(),
       });
     }

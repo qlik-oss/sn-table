@@ -1,23 +1,23 @@
-import { PlaywrightTestConfig, devices } from '@playwright/test';
+import { PlaywrightTestConfig, devices } from "@playwright/test";
 
 const config: PlaywrightTestConfig = {
   use: {
     // Run the browser in headless mode
     // headless: false,
     // Record trace for each test, but remove it from successful test runs.
-    trace: 'retain-on-failure',
+    trace: "retain-on-failure",
   },
   // Look for test files in the "test/rendering" directory, relative to this configuration file
-  testDir: 'test/rendering',
+  testDir: "test/rendering",
   testMatch: /.*\.render\.ts/,
-  outputDir: './test/rendering/artifacts/',
+  outputDir: "./test/rendering/artifacts/",
   reporter: [
-    ['list'],
+    ["list"],
     [
-      'html',
+      "html",
       {
-        outputFolder: './test/rendering/test-report',
-        open: process.env.CI ? 'never' : 'on-failure',
+        outputFolder: "./test/rendering/test-report",
+        open: process.env.CI ? "never" : "on-failure",
       },
     ],
   ],
@@ -30,16 +30,16 @@ const config: PlaywrightTestConfig = {
   // Multiple "projects" can run your tests in multiple browsers and configurations
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
     },
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
     },
     {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
     },
   ],
   expect: {

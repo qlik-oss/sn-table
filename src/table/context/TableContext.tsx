@@ -1,12 +1,12 @@
-import React, { useState, createContext, useMemo } from 'react';
+import React, { createContext, useMemo, useState } from "react";
 
-import { createSelectorProvider } from './createSelectorProvider';
-import { ContextValue, ContextProviderProps } from '../types';
-import useSelectionReducer from '../hooks/use-selection-reducer';
-import useColumnWidths from '../hooks/use-column-widths';
-import useTableStyling from '../hooks/use-table-styling';
-import { TableData } from '../../types';
-import { FIRST_HEADER_CELL_COORD } from '../constants';
+import { TableData } from "../../types";
+import { FIRST_HEADER_CELL_COORD } from "../constants";
+import useColumnWidths from "../hooks/use-column-widths";
+import useSelectionReducer from "../hooks/use-selection-reducer";
+import useTableStyling from "../hooks/use-table-styling";
+import { ContextProviderProps, ContextValue } from "../types";
+import { createSelectorProvider } from "./createSelectorProvider";
 
 // In order to not have typing issues when using properties on the context,
 // the initial value for the context is casted to ContextValue.

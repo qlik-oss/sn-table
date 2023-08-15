@@ -1,8 +1,8 @@
-import { onTakeSnapshot, useImperativeHandle, stardust } from '@nebula.js/stardust';
-import type { TableLayout, ViewService, SnapshotLayout, HyperCube } from '../../types';
-import { findPaginationVisibleRows, findVirtualizedVisibleRows } from '../utils/find-visible-rows';
-import { getTotalPosition } from '../../handle-data';
-import { initialPageInfo } from '../../nebula-hooks/use-pagination-table';
+import { onTakeSnapshot, stardust, useImperativeHandle } from "@nebula.js/stardust";
+import { getTotalPosition } from "../../handle-data";
+import { initialPageInfo } from "../../nebula-hooks/use-pagination-table";
+import type { HyperCube, SnapshotLayout, TableLayout, ViewService } from "../../types";
+import { findPaginationVisibleRows, findVirtualizedVisibleRows } from "../utils/find-visible-rows";
 
 interface UseSnapshotProps {
   layout: TableLayout;
@@ -83,7 +83,7 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
         rowsPerPage,
         page,
       } = getViewState(layout, viewService, rootElement);
-      snapshotLayout.qHyperCube.qDataPages = await model.getHyperCubeData('/qHyperCubeDef', [
+      snapshotLayout.qHyperCube.qDataPages = await model.getHyperCubeData("/qHyperCubeDef", [
         {
           qLeft: 0,
           qTop: visibleTop ?? 0,

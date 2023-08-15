@@ -7,7 +7,7 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-} from 'react';
+} from "react";
 
 const contextMap: Map<Context<any>, Context<any>> = new Map();
 

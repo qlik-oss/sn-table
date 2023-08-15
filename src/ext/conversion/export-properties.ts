@@ -1,8 +1,8 @@
-import conversion from 'qlik-object-conversion';
-import { setValue } from 'qlik-chart-modules';
+import { setValue } from "qlik-chart-modules";
+import conversion from "qlik-object-conversion";
 
-import { DimensionProperties, ExportFormat, MeasureProperties, PropTree } from '../../types';
-import { DEFAULT_COLUMN_PIXEL_WIDTH } from '../../table/constants';
+import { DEFAULT_COLUMN_PIXEL_WIDTH } from "../../table/constants";
+import { DimensionProperties, ExportFormat, MeasureProperties, PropTree } from "../../types";
 
 const getColumnWidth = (colIdx: number, qDimensions: DimensionProperties[], qMeasures: MeasureProperties[]) => {
   const numDims = qDimensions.length;
@@ -12,7 +12,7 @@ const getColumnWidth = (colIdx: number, qDimensions: DimensionProperties[], qMea
   const { columnWidth } = info.qDef;
 
   // For converting "sn-table to table", columnWidth is -1 unless the width type is pixels.
-  return columnWidth?.type === 'pixels' ? columnWidth.pixels ?? DEFAULT_COLUMN_PIXEL_WIDTH : -1;
+  return columnWidth?.type === "pixels" ? columnWidth.pixels ?? DEFAULT_COLUMN_PIXEL_WIDTH : -1;
 };
 
 export const getColumnWidths = (
@@ -41,11 +41,11 @@ const exportProperties = (propertyTree: PropTree, hyperCubePath?: string): Expor
     columnWidths,
   };
 
-  setValue(expFormat, 'properties.qHyperCubeDef', qHyperCubeDef);
+  setValue(expFormat, "properties.qHyperCubeDef", qHyperCubeDef);
 
-  conversion.quarantineProperty(expFormat.properties, 'qHyperCubeDef.columnWidths', 'straightTableColumnWidths');
-  conversion.quarantineProperty(expFormat.properties, 'qHyperCubeDef.qColumnOrder', 'straightTableColumnOrder');
-  conversion.quarantineProperty(expFormat.properties, 'qHyperCubeDef.columnOrder', 'straightTableColumnOrder');
+  conversion.quarantineProperty(expFormat.properties, "qHyperCubeDef.columnWidths", "straightTableColumnWidths");
+  conversion.quarantineProperty(expFormat.properties, "qHyperCubeDef.qColumnOrder", "straightTableColumnOrder");
+  conversion.quarantineProperty(expFormat.properties, "qHyperCubeDef.columnOrder", "straightTableColumnOrder");
 
   return expFormat;
 };

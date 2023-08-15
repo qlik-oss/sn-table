@@ -1,6 +1,6 @@
-import { QHyperCubeDef, Component } from '../types';
+import { Component, QHyperCubeDef } from "../types";
 
-declare module 'object-properties' {
+declare module "object-properties" {
   declare const properties: {
     version: string;
     qHyperCubeDef: QHyperCubeDef;
@@ -11,7 +11,7 @@ declare module 'object-properties' {
     footnote?: string;
     totals: {
       show?: boolean;
-      position?: 'top' | 'bottom' | 'noTotals';
+      position?: "top" | "bottom" | "noTotals";
       label?: string;
     };
     components?: Component[];

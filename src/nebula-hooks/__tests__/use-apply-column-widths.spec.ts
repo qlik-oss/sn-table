@@ -1,11 +1,11 @@
-import { ColumnWidthTypes } from '../../table/constants';
-import { ApplyColumnWidths, Column, ColumnWidth, HyperCube } from '../../types';
-import { generateLayout } from '../../__test__/generate-test-data';
-import { applyColumnWidthsFactory } from '../use-apply-column-widths';
+import { generateLayout } from "../../__test__/generate-test-data";
+import { ColumnWidthTypes } from "../../table/constants";
+import { ApplyColumnWidths, Column, ColumnWidth, HyperCube } from "../../types";
+import { applyColumnWidthsFactory } from "../use-apply-column-widths";
 
-describe('applyColumnWidths', () => {
-  const dimPath = '/qHyperCubeDef/qDimensions/0/qDef/columnWidth';
-  const meaPath = '/qHyperCubeDef/qMeasures/0/qDef/columnWidth';
+describe("applyColumnWidths", () => {
+  const dimPath = "/qHyperCubeDef/qDimensions/0/qDef/columnWidth";
+  const meaPath = "/qHyperCubeDef/qMeasures/0/qDef/columnWidth";
   const oldColumnWidth = { type: ColumnWidthTypes.PERCENTAGE, percentage: 20 };
   let model: EngineAPI.IGenericObject;
   let qHyperCube: HyperCube;
@@ -33,41 +33,41 @@ describe('applyColumnWidths', () => {
 
   afterEach(() => jest.clearAllMocks());
 
-  it('should call applyPatches with qOp Add for dimension', () => {
+  it("should call applyPatches with qOp Add for dimension", () => {
     applyColumnWidths(newColumnWidth, column);
     expect(model.applyPatches).toHaveBeenCalledWith(
-      [{ qPath: dimPath, qOp: 'Add', qValue: JSON.stringify(newColumnWidth) }],
+      [{ qPath: dimPath, qOp: "Add", qValue: JSON.stringify(newColumnWidth) }],
       true
     );
   });
 
-  it('should call applyPatches with qOp Replace for dimension', () => {
+  it("should call applyPatches with qOp Replace for dimension", () => {
     qHyperCube.qDimensionInfo[0].columnWidth = oldColumnWidth;
 
     applyColumnWidths(newColumnWidth, column);
     expect(model.applyPatches).toHaveBeenCalledWith(
-      [{ qPath: dimPath, qOp: 'Replace', qValue: JSON.stringify({ ...oldColumnWidth, ...newColumnWidth }) }],
+      [{ qPath: dimPath, qOp: "Replace", qValue: JSON.stringify({ ...oldColumnWidth, ...newColumnWidth }) }],
       true
     );
   });
 
-  it('should call applyPatches with qOp Add for measure', () => {
+  it("should call applyPatches with qOp Add for measure", () => {
     column = { isDim: false, colIdx: 1 } as unknown as Column;
 
     applyColumnWidths(newColumnWidth, column);
     expect(model.applyPatches).toHaveBeenCalledWith(
-      [{ qPath: meaPath, qOp: 'Add', qValue: JSON.stringify(newColumnWidth) }],
+      [{ qPath: meaPath, qOp: "Add", qValue: JSON.stringify(newColumnWidth) }],
       true
     );
   });
 
-  it('should call applyPatches with qOp Replace for measure', () => {
+  it("should call applyPatches with qOp Replace for measure", () => {
     column = { isDim: false, colIdx: 1 } as unknown as Column;
     qHyperCube.qMeasureInfo[0].columnWidth = { type: ColumnWidthTypes.PERCENTAGE, percentage: 20 };
 
     applyColumnWidths(newColumnWidth, column);
     expect(model.applyPatches).toHaveBeenCalledWith(
-      [{ qPath: meaPath, qOp: 'Replace', qValue: JSON.stringify({ ...oldColumnWidth, ...newColumnWidth }) }],
+      [{ qPath: meaPath, qOp: "Replace", qValue: JSON.stringify({ ...oldColumnWidth, ...newColumnWidth }) }],
       true
     );
   });

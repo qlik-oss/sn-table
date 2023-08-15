@@ -1,17 +1,17 @@
-import { renderHook } from '@testing-library/react';
-import useScrollDirection, { ScrollDirection } from '../use-scroll-direction';
+import { renderHook } from "@testing-library/react";
+import useScrollDirection, { ScrollDirection } from "../use-scroll-direction";
 
-describe('useScrollDirection', () => {
+describe("useScrollDirection", () => {
   beforeEach(() => {});
 
-  test('should initiate with none as scroll direction', () => {
+  test("should initiate with none as scroll direction", () => {
     const { result } = renderHook(() => useScrollDirection());
 
     expect(result.current.verticalScrollDirection.current).toEqual(ScrollDirection.None);
     expect(result.current.horizontalScrollDirection.current).toEqual(ScrollDirection.None);
   });
 
-  test('should handle when a user scrolls DOWN', () => {
+  test("should handle when a user scrolls DOWN", () => {
     const { result } = renderHook(() => useScrollDirection());
 
     result.current.scrollHandler({ scrollTop: 250, scrollLeft: 0 });
@@ -20,7 +20,7 @@ describe('useScrollDirection', () => {
     expect(result.current.horizontalScrollDirection.current).toEqual(ScrollDirection.None);
   });
 
-  test('should handle when a user scrolls UP', () => {
+  test("should handle when a user scrolls UP", () => {
     const { result } = renderHook(() => useScrollDirection());
 
     result.current.scrollHandler({ scrollTop: 250, scrollLeft: 0 });
@@ -30,7 +30,7 @@ describe('useScrollDirection', () => {
     expect(result.current.horizontalScrollDirection.current).toEqual(ScrollDirection.None);
   });
 
-  test('should handle when a user scrolls RIGHT', () => {
+  test("should handle when a user scrolls RIGHT", () => {
     const { result } = renderHook(() => useScrollDirection());
 
     result.current.scrollHandler({ scrollTop: 0, scrollLeft: 100 });
@@ -39,7 +39,7 @@ describe('useScrollDirection', () => {
     expect(result.current.horizontalScrollDirection.current).toEqual(ScrollDirection.Right);
   });
 
-  test('should handle when a user scrolls LEFT', () => {
+  test("should handle when a user scrolls LEFT", () => {
     const { result } = renderHook(() => useScrollDirection());
 
     result.current.scrollHandler({ scrollTop: 0, scrollLeft: 100 });
@@ -49,7 +49,7 @@ describe('useScrollDirection', () => {
     expect(result.current.horizontalScrollDirection.current).toEqual(ScrollDirection.Left);
   });
 
-  test('should handle when a user scrolls both vertically and horizontally', () => {
+  test("should handle when a user scrolls both vertically and horizontally", () => {
     const { result } = renderHook(() => useScrollDirection());
 
     result.current.scrollHandler({ scrollTop: 200, scrollLeft: 100 });

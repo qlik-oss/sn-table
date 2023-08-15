@@ -1,14 +1,14 @@
-import * as stardust from '@nebula.js/stardust';
-import { TableLayout, ViewService } from '../../../types';
-import * as snapshotWrapper from '../use-snapshot';
+import * as stardust from "@nebula.js/stardust";
+import { TableLayout, ViewService } from "../../../types";
+import * as snapshotWrapper from "../use-snapshot";
 
-jest.mock('@nebula.js/stardust', () => ({
+jest.mock("@nebula.js/stardust", () => ({
   onTakeSnapshot: jest.fn(),
   useImperativeHandle: jest.fn(),
 }));
 
-describe('use-snapshot', () => {
-  describe('useSnapshot', () => {
+describe("use-snapshot", () => {
+  describe("useSnapshot", () => {
     let layout: TableLayout;
     let viewService: ViewService;
     let rootElement: HTMLElement;
@@ -27,7 +27,7 @@ describe('use-snapshot', () => {
         qTop: 0,
         qHeight: 100,
       };
-      rootElement = document.createElement('p');
+      rootElement = document.createElement("p");
       model = undefined;
       contentRect = { top: 0, left: 0, width: 100, height: 100 };
     });
@@ -36,7 +36,7 @@ describe('use-snapshot', () => {
       jest.resetAllMocks();
     });
 
-    it('useImperativeHandle should run correct getViewState', async () => {
+    it("useImperativeHandle should run correct getViewState", async () => {
       snapshotWrapper.default({ layout, viewService, model, rootElement, contentRect });
       const { getViewState } = (stardust.useImperativeHandle as jest.Mock).mock.calls[0][0]();
       const result = getViewState();

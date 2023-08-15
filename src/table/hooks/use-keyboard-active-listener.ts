@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
-import { FocusTypes } from '../constants';
-import { useContextSelector, TableContext } from '../context';
-import { updateFocus } from '../utils/accessibility-utils';
-import { getCellElement, findCellWithTabStop } from '../utils/get-element-utils';
+import { useEffect } from "react";
+import { FocusTypes } from "../constants";
+import { TableContext, useContextSelector } from "../context";
+import { updateFocus } from "../utils/accessibility-utils";
+import { findCellWithTabStop, getCellElement } from "../utils/get-element-utils";
 
 /**
  * When nebula handles keyboard navigation (keyboard.enabled === true)

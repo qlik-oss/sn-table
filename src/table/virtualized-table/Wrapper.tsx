@@ -1,11 +1,11 @@
-import React, { memo } from 'react';
-import { stardust } from '@nebula.js/stardust';
-import PaginationContent from '../components/footer/PaginationContent';
-import { StyledTableWrapper } from '../components/styles';
-import FooterWrapper from '../components/footer/FooterWrapper';
-import Table from './Table';
-import { TableContext, useContextSelector } from '../context';
-import { PageInfo } from '../../types';
+import { stardust } from "@nebula.js/stardust";
+import React, { memo } from "react";
+import { PageInfo } from "../../types";
+import FooterWrapper from "../components/footer/FooterWrapper";
+import PaginationContent from "../components/footer/PaginationContent";
+import { StyledTableWrapper } from "../components/styles";
+import { TableContext, useContextSelector } from "../context";
+import Table from "./Table";
 
 const Wrapper = () => {
   const { theme } = useContextSelector(TableContext, (value) => value.baseProps);

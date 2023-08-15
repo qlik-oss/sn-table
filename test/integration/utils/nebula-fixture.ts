@@ -1,6 +1,6 @@
-import path from 'path';
-import serve, { NebulaServer } from '@nebula.js/cli-serve';
-import createNebulaRoutes from '../../rendering/utils/routes';
+import serve, { NebulaServer } from "@nebula.js/cli-serve";
+import path from "path";
+import createNebulaRoutes from "../../rendering/utils/routes";
 
 type Route = {
   renderFixture: (path: string) => Promise<string>;
@@ -29,8 +29,8 @@ class NebulaFixture {
     this.nebulaServer = await serve({
       // the entry is equal to path.resolve(__dirname, '../../dist/sn-table.js'),
       // so before run the testing, yarn build should run first to generate /dist
-      entry: path.resolve(__dirname, '../../../'),
-      type: 'sn-table',
+      entry: path.resolve(__dirname, "../../../"),
+      type: "sn-table",
       open: false,
       build: false,
       themes: [
@@ -39,7 +39,7 @@ class NebulaFixture {
           theme: this.theme,
         },
       ],
-      fixturePath: 'test/integration/__fixtures__',
+      fixturePath: "test/integration/__fixtures__",
     });
     this.route = createNebulaRoutes(this.nebulaServer.url) as unknown as Route;
   }

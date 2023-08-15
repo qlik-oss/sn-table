@@ -1,7 +1,7 @@
-import { Cell, Announce, Row } from '../../types';
-import { SelectionState, SelectPayload, SelectionActionTypes } from '../types';
-import { SelectionActions, SelectionStates, KeyCodes } from '../constants';
-import { isShiftArrow } from './keyboard-utils';
+import { Announce, Cell, Row } from "../../types";
+import { KeyCodes, SelectionActions, SelectionStates } from "../constants";
+import { SelectPayload, SelectionActionTypes, SelectionState } from "../types";
+import { isShiftArrow } from "./keyboard-utils";
 
 /**
  * Gets the selection state of the given cell
@@ -34,14 +34,14 @@ export const announceSelectionStatus = (
   const isAddition = rowsLength >= Object.keys(oldRows).length;
 
   if (rowsLength) {
-    const changeStatus = isAddition ? 'SNTable.SelectionLabel.SelectedValue' : 'SNTable.SelectionLabel.DeselectedValue';
+    const changeStatus = isAddition ? "SNTable.SelectionLabel.SelectedValue" : "SNTable.SelectionLabel.DeselectedValue";
     const amountStatus =
       rowsLength === 1
-        ? 'SNTable.SelectionLabel.OneSelectedValue'
-        : ['SNTable.SelectionLabel.SelectedValues', rowsLength.toString()];
+        ? "SNTable.SelectionLabel.OneSelectedValue"
+        : ["SNTable.SelectionLabel.SelectedValues", rowsLength.toString()];
     announce({ keys: [changeStatus, amountStatus] });
   } else {
-    announce({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
+    announce({ keys: ["SNTable.SelectionLabel.ExitedSelectionMode"] });
   }
 };
 
@@ -81,7 +81,7 @@ const selectCell = (state: SelectionState, payload: SelectPayload): SelectionSta
   const { cell, announce, evt } = payload;
   let selectedRows: Record<string, number> = {};
 
-  if (colIdx === -1) api?.begin(['/qHyperCubeDef']);
+  if (colIdx === -1) api?.begin(["/qHyperCubeDef"]);
   else if (colIdx === cell.selectionColIdx) selectedRows = { ...rows };
   else return state;
 
@@ -91,8 +91,8 @@ const selectCell = (state: SelectionState, payload: SelectPayload): SelectionSta
   // only send a select call if there are rows selected, otherwise cancel selections
   if (Object.keys(selectedRows).length) {
     api?.select({
-      method: 'selectHyperCubeCells',
-      params: ['/qHyperCubeDef', Object.values(selectedRows), [cell.selectionColIdx]],
+      method: "selectHyperCubeCells",
+      params: ["/qHyperCubeDef", Object.values(selectedRows), [cell.selectionColIdx]],
     });
     return { ...state, rows: selectedRows, colIdx: cell.selectionColIdx };
   }
@@ -113,7 +113,7 @@ export const getMultiSelectedRows = (
 ): Record<string, number> => {
   const newSelectedRows = { ...selectedRows };
 
-  if ('key' in evt && isShiftArrow(evt)) {
+  if ("key" in evt && isShiftArrow(evt)) {
     newSelectedRows[cell.qElemNumber] = cell.rowIdx;
     // also add the next or previous cell to selectedRows, based on which arrow is pressed
     const idxShift = evt.key === KeyCodes.DOWN ? 1 : -1;
@@ -142,9 +142,9 @@ const selectMultipleCells = (state: SelectionState, payload: SelectPayload): Sel
   const { cell, announce, evt } = payload;
   let selectedRows: Record<string, number> = {};
 
-  if (!firstCell && !('key' in evt && isShiftArrow(evt))) return state;
+  if (!firstCell && !("key" in evt && isShiftArrow(evt))) return state;
 
-  if (colIdx === -1) api?.begin(['/qHyperCubeDef']);
+  if (colIdx === -1) api?.begin(["/qHyperCubeDef"]);
   else selectedRows = { ...rows };
 
   selectedRows = getMultiSelectedRows(pageRows, selectedRows, cell, evt, firstCell);
@@ -166,7 +166,7 @@ const selectOnMouseDown = (
   { cell, mouseupOutsideCallback }: { cell: Cell; mouseupOutsideCallback(): void }
 ): SelectionState => {
   if (mouseupOutsideCallback && (state.colIdx === -1 || state.colIdx === cell.selectionColIdx)) {
-    document.addEventListener('mouseup', mouseupOutsideCallback);
+    document.addEventListener("mouseup", mouseupOutsideCallback);
     return {
       ...state,
       firstCell: cell,
@@ -182,12 +182,12 @@ const selectOnMouseDown = (
  */
 const endSelectMulti = (state: SelectionState): SelectionState => {
   const { api, rows, colIdx, isSelectMultiValues, mouseupOutsideCallback } = state;
-  mouseupOutsideCallback && document.removeEventListener('mouseup', mouseupOutsideCallback);
+  mouseupOutsideCallback && document.removeEventListener("mouseup", mouseupOutsideCallback);
 
   if (isSelectMultiValues) {
     api?.select({
-      method: 'selectHyperCubeCells',
-      params: ['/qHyperCubeDef', Object.values(rows), [colIdx]],
+      method: "selectHyperCubeCells",
+      params: ["/qHyperCubeDef", Object.values(rows), [colIdx]],
     });
   }
 
@@ -219,6 +219,6 @@ export const reducer = (state: SelectionState, action: SelectionActionTypes): Se
     case SelectionActions.UPDATE_PAGE_ROWS:
       return { ...state, pageRows: action.payload.pageRows };
     default:
-      throw new Error('reducer called with invalid action type');
+      throw new Error("reducer called with invalid action type");
   }
 };

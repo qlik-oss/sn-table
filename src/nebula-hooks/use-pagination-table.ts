@@ -1,20 +1,20 @@
-import { stardust, useEffect, useOptions, usePromise, useState } from '@nebula.js/stardust';
-import { Root } from 'react-dom/client';
-import manageData from '../handle-data';
-import { renderPaginationTable } from '../table/Root';
+import { stardust, useEffect, useOptions, usePromise, useState } from "@nebula.js/stardust";
+import { Root } from "react-dom/client";
+import manageData from "../handle-data";
+import isPrinting from "../is-printing";
+import { renderPaginationTable } from "../table/Root";
 import {
-  ExtendedSelectionAPI,
-  TableLayout,
-  ChangeSortOrder,
-  ExtendedTranslator,
-  ExtendedTheme,
-  UseOptions,
-  Galaxy,
   ApplyColumnWidths,
+  ChangeSortOrder,
+  ExtendedSelectionAPI,
+  ExtendedTheme,
+  ExtendedTranslator,
+  Galaxy,
+  TableLayout,
+  UseOptions,
   ViewService,
-} from '../types';
-import useAnnounceAndTranslations from './use-announce-and-translations';
-import isPrinting from '../is-printing';
+} from "../types";
+import useAnnounceAndTranslations from "./use-announce-and-translations";
 
 interface UsePaginationTable {
   env: Galaxy;

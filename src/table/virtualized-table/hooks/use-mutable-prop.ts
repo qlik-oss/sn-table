@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef } from "react";
 
 const useMutableProp = <T>(value: T) => {
   const mutableRef = useRef<T>(value);

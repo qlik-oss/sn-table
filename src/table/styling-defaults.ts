@@ -1,6 +1,6 @@
-import { Palette } from '@mui/material';
-import { createV5ThemeOptions, COLORS } from '@qlik-trial/sprout/theme';
-import { SelectionStates } from './constants';
+import { Palette } from "@mui/material";
+import { COLORS, createV5ThemeOptions } from "@qlik-trial/sprout/theme";
+import { SelectionStates } from "./constants";
 
 const palette = createV5ThemeOptions().palette as Palette;
 
@@ -30,31 +30,31 @@ export const SELECTION_STYLING = {
     background: COLORS.GREYSCALE_100,
   },
   EXCLUDED_BACKGROUND:
-    'repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px)',
+    "repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px)",
 };
 
 export const PADDING = 4;
 export const BORDER_WIDTH = 1;
 export const LINE_HEIGHT = 4 / 3;
-export const DEFAULT_FONT_SIZE = '12px';
+export const DEFAULT_FONT_SIZE = "12px";
 
 export const COMMON_CELL_STYLING = {
-  height: 'auto',
+  height: "auto",
   fontSize: DEFAULT_FONT_SIZE,
-  lineHeight: 'unset',
+  lineHeight: "unset",
   padding: `${PADDING}px`,
-  borderStyle: 'solid',
-  borderWidth: '0px 1px 1px 0px',
-  userSelect: 'none',
-  outline: 'none',
-  '&:focus-visible': {
-    boxShadow: '0 0 0 2px #177fe6 inset, 0 0 0 3px #fff inset',
+  borderStyle: "solid",
+  borderWidth: "0px 1px 1px 0px",
+  userSelect: "none",
+  outline: "none",
+  "&:focus-visible": {
+    boxShadow: "0 0 0 2px #177fe6 inset, 0 0 0 3px #fff inset",
   },
-  '&:focus:not(:focus-visible)': {
-    boxShadow: 'none',
+  "&:focus:not(:focus-visible)": {
+    boxShadow: "none",
   },
-  '&:last-child': {
-    borderRightWidth: '0px',
+  "&:last-child": {
+    borderRightWidth: "0px",
   },
 };
 

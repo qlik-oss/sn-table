@@ -1,6 +1,6 @@
-import { useMemo, useTheme } from '@nebula.js/stardust';
-import { isDarkColor, isTransparentColor } from '../table/utils/color-utils';
-import { ExtendedTheme, BackgroundColors } from '../types';
+import { useMemo, useTheme } from "@nebula.js/stardust";
+import { isDarkColor, isTransparentColor } from "../table/utils/color-utils";
+import { BackgroundColors, ExtendedTheme } from "../types";
 
 /**
  * The colors in the table can depend on background colors set on table, object and sheet level.
@@ -9,24 +9,24 @@ import { ExtendedTheme, BackgroundColors } from '../types';
  * If the result for object/table background is transparent, the sheet css color is used
  */
 export const getBackgroundColors = (theme: ExtendedTheme, rootElement: HTMLElement): BackgroundColors => {
-  const qvInnerObject = rootElement?.closest('.qv-object .qv-inner-object');
+  const qvInnerObject = rootElement?.closest(".qv-object .qv-inner-object");
   const objectColorFromCSS = qvInnerObject && window.getComputedStyle(qvInnerObject).backgroundColor;
 
-  const qvPanelSheet = rootElement?.closest('.qv-panel-sheet');
+  const qvPanelSheet = rootElement?.closest(".qv-panel-sheet");
   const sheetColorFromCSS = qvPanelSheet && window.getComputedStyle(qvPanelSheet).backgroundColor;
 
   // tableColorFromTheme is undefined if nothing is set specifically for object.straightTableV2.backgroundColor
-  const tableColorFromTheme = theme.getStyle('', '', 'object.straightTableV2.backgroundColor');
+  const tableColorFromTheme = theme.getStyle("", "", "object.straightTableV2.backgroundColor");
   // colorFromTheme traverses the theme tree until it finds a value for backgroundColor
   // it is undefined if there is no value
-  const colorFromTheme = theme.getStyle('object', 'straightTableV2', 'backgroundColor');
+  const colorFromTheme = theme.getStyle("object", "straightTableV2", "backgroundColor");
 
   const color = tableColorFromTheme || objectColorFromCSS || colorFromTheme;
   const isTransparent = isTransparentColor(color);
   const isDark = isDarkColor(isTransparent ? sheetColorFromCSS : color);
 
   return {
-    tableColorFromTheme: tableColorFromTheme || 'inherit',
+    tableColorFromTheme: tableColorFromTheme || "inherit",
     color,
     isDark,
     isTransparent,

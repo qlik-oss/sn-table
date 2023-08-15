@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
-import { getBodyStyle, getHeaderStyle, getTotalsStyle } from '../utils/styling-utils';
-import { ExtendedTheme, TableData, TableLayout } from '../../types';
+import { useMemo } from "react";
+import { ExtendedTheme, TableData, TableLayout } from "../../types";
+import { getBodyStyle, getHeaderStyle, getTotalsStyle } from "../utils/styling-utils";
 
 const useTableStyling = (layout: TableLayout, theme: ExtendedTheme, tableData: TableData, rootElement: HTMLElement) => {
   const styling = useMemo(() => {

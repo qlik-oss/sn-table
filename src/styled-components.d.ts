@@ -1,4 +1,4 @@
-declare module 'styled-components' {
+declare module "styled-components" {
   export type StylisPlugin = (context: number, content: string) => string | void;
 
   export interface StyleSheetManagerProps {

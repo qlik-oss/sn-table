@@ -1,7 +1,8 @@
-import { stardust, useEffect, useMemo } from '@nebula.js/stardust';
-import { Root } from 'react-dom/client';
-import { renderVirtualizedTable } from '../table/Root';
-import getVirtualScrollTableData from '../table/virtualized-table/utils/get-table-data';
+import { stardust, useEffect, useMemo } from "@nebula.js/stardust";
+import { Root } from "react-dom/client";
+import isPrinting from "../is-printing";
+import { renderVirtualizedTable } from "../table/Root";
+import getVirtualScrollTableData from "../table/virtualized-table/utils/get-table-data";
 import {
   ApplyColumnWidths,
   ChangeSortOrder,
@@ -10,10 +11,9 @@ import {
   ExtendedTranslator,
   TableLayout,
   ViewService,
-} from '../types';
-import useInitialDataPages from './virtualized-table/use-initial-data-pages';
-import usePageInfo from './virtualized-table/use-page-info';
-import isPrinting from '../is-printing';
+} from "../types";
+import useInitialDataPages from "./virtualized-table/use-initial-data-pages";
+import usePageInfo from "./virtualized-table/use-page-info";
 
 interface UseVirtualizedTable {
   app: EngineAPI.IApp | undefined;

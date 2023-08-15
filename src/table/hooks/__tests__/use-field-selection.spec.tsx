@@ -1,10 +1,10 @@
-import React from 'react';
-import { renderHook, act, waitFor } from '@testing-library/react';
-import { Column, TableLayout } from '../../../types';
-import useFieldSelection from '../use-field-selection';
-import TestWithProviders from '../../../__test__/test-with-providers';
+import { act, renderHook, waitFor } from "@testing-library/react";
+import React from "react";
+import TestWithProviders from "../../../__test__/test-with-providers";
+import { Column, TableLayout } from "../../../types";
+import useFieldSelection from "../use-field-selection";
 
-describe('useFieldSelection()', () => {
+describe("useFieldSelection()", () => {
   let column: Column;
   let appMock: EngineAPI.IApp;
 
@@ -14,8 +14,8 @@ describe('useFieldSelection()', () => {
   beforeEach(() => {
     column = {
       isDim: true,
-      fieldId: 'dim#01',
-      label: 'dim#01',
+      fieldId: "dim#01",
+      label: "dim#01",
     } as Column;
     appMock = {
       getField: jest.fn().mockResolvedValue(null),
@@ -23,7 +23,7 @@ describe('useFieldSelection()', () => {
     } as unknown as EngineAPI.IApp;
   });
 
-  it('should return default state', () => {
+  it("should return default state", () => {
     const {
       result: { current: output },
     } = getFieldSelectionResult();
@@ -42,8 +42,8 @@ describe('useFieldSelection()', () => {
     });
   });
 
-  describe('enabledStates', () => {
-    const triggerHook = (qStateCounts: EngineAPI.INxStateCounts, qFallbackTitle = 'dim#01') => {
+  describe("enabledStates", () => {
+    const triggerHook = (qStateCounts: EngineAPI.INxStateCounts, qFallbackTitle = "dim#01") => {
       const { result } = getFieldSelectionResult();
       const mockLayout = {
         qHyperCube: { qDimensionInfo: [{ qFallbackTitle, qStateCounts }] },
@@ -52,9 +52,9 @@ describe('useFieldSelection()', () => {
       return result.current.selectionActionsEnabledStatus;
     };
 
-    it('should return if it could not find dim after calling `updateSelectionActionsEnabledStatus` with anything', () => {
+    it("should return if it could not find dim after calling `updateSelectionActionsEnabledStatus` with anything", () => {
       const state = { qOption: 1, qAlternative: 1, qDeselected: 1 } as EngineAPI.INxStateCounts;
-      expect(triggerHook(state, 'someRandomDim')).toMatchObject({
+      expect(triggerHook(state, "someRandomDim")).toMatchObject({
         canSelectAll: false,
         canClearSelections: false,
         canSelectPossible: false,
@@ -64,9 +64,9 @@ describe('useFieldSelection()', () => {
       expect(appMock.getField).toHaveBeenCalled();
     });
 
-    it('should create session object when master dimension', async () => {
+    it("should create session object when master dimension", async () => {
       const state = { qOption: 1 } as EngineAPI.INxStateCounts;
-      column.qLibraryId = 'fakeLibraryId';
+      column.qLibraryId = "fakeLibraryId";
       await waitFor(() => {
         expect(triggerHook(state)).toMatchObject({
           canSelectAll: true,
@@ -79,7 +79,7 @@ describe('useFieldSelection()', () => {
       expect(appMock.createSessionObject).toHaveBeenCalled();
     });
 
-    it('`canSelectAll` and `canSelectPossible` and should be true after calling `updateSelectionActionsEnabledStatus` with `qOptions`', async () => {
+    it("`canSelectAll` and `canSelectPossible` and should be true after calling `updateSelectionActionsEnabledStatus` with `qOptions`", async () => {
       const state = { qOption: 1 } as EngineAPI.INxStateCounts;
       await waitFor(() => {
         expect(triggerHook(state)).toMatchObject({
@@ -92,7 +92,7 @@ describe('useFieldSelection()', () => {
       });
     });
 
-    it('`canSelectAll`, `canSelectAlternative` and `canSelectExcluded` should be true after calling `updateSelectionActionsEnabledStatus` with `qAlternative`', async () => {
+    it("`canSelectAll`, `canSelectAlternative` and `canSelectExcluded` should be true after calling `updateSelectionActionsEnabledStatus` with `qAlternative`", async () => {
       const state = { qAlternative: 1 } as EngineAPI.INxStateCounts;
       await waitFor(() => {
         expect(triggerHook(state)).toMatchObject({
@@ -105,7 +105,7 @@ describe('useFieldSelection()', () => {
       });
     });
 
-    it('`canSelectAll` should be true after calling `updateSelectionActionsEnabledStatus` with `qDeselected`', async () => {
+    it("`canSelectAll` should be true after calling `updateSelectionActionsEnabledStatus` with `qDeselected`", async () => {
       const state = { qDeselected: 1 } as EngineAPI.INxStateCounts;
       await waitFor(() => {
         expect(triggerHook(state)).toMatchObject({
@@ -118,7 +118,7 @@ describe('useFieldSelection()', () => {
       });
     });
 
-    it('`canClearSelections` should be true after calling `updateSelectionActionsEnabledStatus` with `qSelected`', async () => {
+    it("`canClearSelections` should be true after calling `updateSelectionActionsEnabledStatus` with `qSelected`", async () => {
       const state = { qSelected: 1 } as EngineAPI.INxStateCounts;
       await waitFor(() => {
         expect(triggerHook(state)).toMatchObject({
@@ -131,7 +131,7 @@ describe('useFieldSelection()', () => {
       });
     });
 
-    it('`canSelectAll` and `canSelectPossible` should be true after calling `updateSelectionActionsEnabledStatus` with `qOption`', async () => {
+    it("`canSelectAll` and `canSelectPossible` should be true after calling `updateSelectionActionsEnabledStatus` with `qOption`", async () => {
       const state = { qOption: 1 } as EngineAPI.INxStateCounts;
       await waitFor(() => {
         expect(triggerHook(state)).toMatchObject({
@@ -144,7 +144,7 @@ describe('useFieldSelection()', () => {
       });
     });
 
-    it('`canSelectAll`, `canSelectAlternative` and `canSelectExcluded` should be true after calling `updateSelectionActionsEnabledStatus` with `qAlternative`2', async () => {
+    it("`canSelectAll`, `canSelectAlternative` and `canSelectExcluded` should be true after calling `updateSelectionActionsEnabledStatus` with `qAlternative`2", async () => {
       const state = { qAlternative: 1 } as EngineAPI.INxStateCounts;
       await waitFor(() => {
         expect(triggerHook(state)).toMatchObject({
@@ -157,7 +157,7 @@ describe('useFieldSelection()', () => {
       });
     });
 
-    it('`canSelectAll` and `canSelectExcluded` should be true after calling `updateSelectionActionsEnabledStatus` with `qExcluded`', async () => {
+    it("`canSelectAll` and `canSelectExcluded` should be true after calling `updateSelectionActionsEnabledStatus` with `qExcluded`", async () => {
       const state = { qExcluded: 1 } as EngineAPI.INxStateCounts;
       await waitFor(() => {
         expect(triggerHook(state)).toMatchObject({
@@ -170,11 +170,11 @@ describe('useFieldSelection()', () => {
       });
     });
 
-    it('should reset state after calling `resetSelectionActionsEnabledStatus`', async () => {
+    it("should reset state after calling `resetSelectionActionsEnabledStatus`", async () => {
       const { result } = getFieldSelectionResult();
       const mockLayout = {
         qHyperCube: {
-          qDimensionInfo: [{ qFallbackTitle: 'dim#01', qStateCounts: { qExcluded: 1 } }],
+          qDimensionInfo: [{ qFallbackTitle: "dim#01", qStateCounts: { qExcluded: 1 } }],
         },
       } as TableLayout;
       act(() => result.current.updateSelectionActionsEnabledStatus(mockLayout));

@@ -1,13 +1,13 @@
-import React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { stardust } from '@nebula.js/stardust';
-import ColumnAdjuster from '../ColumnAdjuster';
-import TestWithProviders from '../../../../__test__/test-with-providers';
-import { ColumnWidthTypes, KeyCodes } from '../../../constants';
-import { ApplyColumnWidths, Column } from '../../../../types';
-import * as useColumnWidths from '../../../hooks/use-column-widths';
+import { stardust } from "@nebula.js/stardust";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import React from "react";
+import TestWithProviders from "../../../../__test__/test-with-providers";
+import { ApplyColumnWidths, Column } from "../../../../types";
+import { ColumnWidthTypes, KeyCodes } from "../../../constants";
+import * as useColumnWidths from "../../../hooks/use-column-widths";
+import ColumnAdjuster from "../ColumnAdjuster";
 
-describe('<ColumnAdjuster />', () => {
+describe("<ColumnAdjuster />", () => {
   let columns: Column[];
   let column: Column;
   let isLastColumn: boolean;
@@ -27,13 +27,13 @@ describe('<ColumnAdjuster />', () => {
   beforeEach(() => {
     columns = [
       {
-        label: 'col1',
+        label: "col1",
         pageColIdx: 0,
         qApprMaxGlyphCount: 10,
         columnWidth: { type: ColumnWidthTypes.AUTO },
       } as Column,
       {
-        label: 'col2',
+        label: "col2",
         pageColIdx: 1,
         qApprMaxGlyphCount: 10,
         columnWidth: { type: ColumnWidthTypes.AUTO },
@@ -50,27 +50,27 @@ describe('<ColumnAdjuster />', () => {
       select: true,
     };
     jest
-      .spyOn(useColumnWidths, 'default')
+      .spyOn(useColumnWidths, "default")
       .mockImplementation(() => [columnWidths, setColumnWidths, setYScrollbarWidth, false]);
   });
 
   afterEach(() => jest.clearAllMocks());
 
-  it('should return null when interactions.active is false', () => {
+  it("should return null when interactions.active is false", () => {
     interactions.active = false;
 
     renderAdjuster();
-    expect(screen.queryByTestId('sn-table-column-adjuster')).toBeNull();
+    expect(screen.queryByTestId("sn-table-column-adjuster")).toBeNull();
   });
 
-  it('should render when interactions.active is not false', () => {
+  it("should render when interactions.active is not false", () => {
     renderAdjuster();
-    expect(screen.queryByTestId('sn-table-column-adjuster')).toBeInTheDocument();
+    expect(screen.queryByTestId("sn-table-column-adjuster")).toBeInTheDocument();
   });
 
-  it('should change column width using keyboard', async () => {
+  it("should change column width using keyboard", async () => {
     renderAdjuster();
-    const columnAdjuster = screen.queryByTestId('sn-table-column-adjuster') as HTMLElement;
+    const columnAdjuster = screen.queryByTestId("sn-table-column-adjuster") as HTMLElement;
 
     fireEvent.keyDown(columnAdjuster, { key: KeyCodes.RIGHT });
     await waitFor(() => {
@@ -83,9 +83,9 @@ describe('<ColumnAdjuster />', () => {
     });
   });
 
-  it('should not change column width when confirming with the same column width and not when canceling', async () => {
+  it("should not change column width when confirming with the same column width and not when canceling", async () => {
     renderAdjuster();
-    const columnAdjuster = screen.queryByTestId('sn-table-column-adjuster') as HTMLElement;
+    const columnAdjuster = screen.queryByTestId("sn-table-column-adjuster") as HTMLElement;
 
     fireEvent.keyDown(columnAdjuster, { key: KeyCodes.SPACE });
     await waitFor(() => {
@@ -98,9 +98,9 @@ describe('<ColumnAdjuster />', () => {
     });
   });
 
-  it('should change column width using mouse', async () => {
+  it("should change column width using mouse", async () => {
     renderAdjuster();
-    const columnAdjuster = screen.queryByTestId('sn-table-column-adjuster') as HTMLElement;
+    const columnAdjuster = screen.queryByTestId("sn-table-column-adjuster") as HTMLElement;
     const coord = {
       clientX: 0,
       clientY: 0,
@@ -119,9 +119,9 @@ describe('<ColumnAdjuster />', () => {
     });
   });
 
-  it('should not change column width using mouse when mouse is not moved', async () => {
+  it("should not change column width using mouse when mouse is not moved", async () => {
     renderAdjuster();
-    const columnAdjuster = screen.queryByTestId('sn-table-column-adjuster') as HTMLElement;
+    const columnAdjuster = screen.queryByTestId("sn-table-column-adjuster") as HTMLElement;
 
     fireEvent.mouseDown(columnAdjuster);
     fireEvent.mouseUp(columnAdjuster);
@@ -130,9 +130,9 @@ describe('<ColumnAdjuster />', () => {
     });
   });
 
-  it('should call applyColumnWidths with type fitToContent on double click', async () => {
+  it("should call applyColumnWidths with type fitToContent on double click", async () => {
     renderAdjuster();
-    const columnAdjuster = screen.queryByTestId('sn-table-column-adjuster') as HTMLElement;
+    const columnAdjuster = screen.queryByTestId("sn-table-column-adjuster") as HTMLElement;
 
     fireEvent.doubleClick(columnAdjuster);
     await waitFor(() => {

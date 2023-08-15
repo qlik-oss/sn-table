@@ -1,10 +1,10 @@
-import React from 'react';
-import { Column } from '../../types';
-import { useContextSelector, TableContext } from '../context';
-import { GeneratedStyling } from '../types';
-import HeadCellContent from '../components/head/HeadCellContent';
-import CellText from '../components/CellText';
-import ColumnAdjuster from '../components/head/ColumnAdjuster';
+import React from "react";
+import { Column } from "../../types";
+import CellText from "../components/CellText";
+import ColumnAdjuster from "../components/head/ColumnAdjuster";
+import HeadCellContent from "../components/head/HeadCellContent";
+import { TableContext, useContextSelector } from "../context";
+import { GeneratedStyling } from "../types";
 
 interface HeaderCellProps {
   index: number;
@@ -31,7 +31,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
   const isLastColumn = columns.length - 1 === index;
   const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
   const isInteractionEnabled = !!interactions.active && !isSelectionMode;
-  const flexDirection = column.headTextAlign === 'right' ? 'row-reverse' : 'row';
+  const flexDirection = column.headTextAlign === "right" ? "row-reverse" : "row";
 
   return (
     <div
@@ -40,17 +40,17 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
       style={{
         ...style,
         ...applicableStyle,
-        display: 'flex',
-        alignItems: 'flex-end',
-        borderStyle: 'solid',
-        borderWidth: isLastColumn && !showRightBorder ? '0px 0px 1px 0px' : '0px 1px 1px 0px',
-        padding: '4px',
+        display: "flex",
+        alignItems: "flex-end",
+        borderStyle: "solid",
+        borderWidth: isLastColumn && !showRightBorder ? "0px 0px 1px 0px" : "0px 1px 1px 0px",
+        padding: "4px",
         justifyContent: column.headTextAlign,
-        boxSizing: 'border-box',
-        cursor: 'default',
+        boxSizing: "border-box",
+        cursor: "default",
         zIndex: columns.length - index,
         flexDirection,
-        userSelect: 'none',
+        userSelect: "none",
       }}
     >
       <HeadCellContent column={column} isActive={isActive} isInteractionEnabled={isInteractionEnabled}>

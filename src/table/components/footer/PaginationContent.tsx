@@ -1,18 +1,18 @@
-import React, { memo, useMemo } from 'react';
-import { SelectChangeEvent } from '@mui/material/Select';
-import ArrowLeft from '@qlik-trial/sprout/icons/react/ArrowLeft';
-import ArrowLeftStop from '@qlik-trial/sprout/icons/react/ArrowLeftStop';
-import ArrowRight from '@qlik-trial/sprout/icons/react/ArrowRight';
-import ArrowRightStop from '@qlik-trial/sprout/icons/react/ArrowRightStop';
+import { SelectChangeEvent } from "@mui/material/Select";
+import ArrowLeft from "@qlik-trial/sprout/icons/react/ArrowLeft";
+import ArrowLeftStop from "@qlik-trial/sprout/icons/react/ArrowLeftStop";
+import ArrowRight from "@qlik-trial/sprout/icons/react/ArrowRight";
+import ArrowRightStop from "@qlik-trial/sprout/icons/react/ArrowRightStop";
+import React, { memo, useMemo } from "react";
 
-import { StyledSelect, StyledButton, StyledTypography } from './styles';
-import { handleLastTab } from '../../utils/handle-keyboard';
-import { PaginationContentProps } from '../../types';
-import { getFooterStyle } from '../../utils/styling-utils';
-import { useContextSelector, TableContext } from '../../context';
-import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
-import { areTabStopsEnabled } from '../../utils/accessibility-utils';
-import PageOptions from './PageOptions';
+import { TableContext, useContextSelector } from "../../context";
+import { DEFAULT_FONT_SIZE } from "../../styling-defaults";
+import { PaginationContentProps } from "../../types";
+import { areTabStopsEnabled } from "../../utils/accessibility-utils";
+import { handleLastTab } from "../../utils/handle-keyboard";
+import { getFooterStyle } from "../../utils/styling-utils";
+import PageOptions from "./PageOptions";
+import { StyledButton, StyledSelect, StyledTypography } from "./styles";
 
 const icons: Record<string, typeof ArrowLeft> = {
   FirstPage: ArrowLeftStop,
@@ -27,13 +27,13 @@ const icons: Record<string, typeof ArrowLeft> = {
 
 export const shouldShow = (component: string, width: number) => {
   switch (component) {
-    case 'selectPage':
+    case "selectPage":
       return width > 700;
-    case 'rppOptions':
+    case "rppOptions":
       return width > 550;
-    case 'firstLast':
+    case "firstLast":
       return width > 350;
-    case 'displayedRows':
+    case "displayedRows":
       return width > 250;
     default:
       return false;
@@ -64,13 +64,13 @@ const PaginationContent = ({
   // - When nebula does not handle keyboard navigation
   const tabIndex = areTabStopsEnabled(keyboard) ? 0 : -1;
   const width = footerContainer ? footerContainer.getBoundingClientRect().width : rect.width;
-  const showFirstAndLast = shouldShow('firstLast', width);
+  const showFirstAndLast = shouldShow("firstLast", width);
   const showRowsPerPage =
     !!pageInfo.rowsPerPageOptions.length &&
     !isSelectionMode &&
-    shouldShow('rppOptions', width) &&
+    shouldShow("rppOptions", width) &&
     totalColumnCount <= 100;
-  const displayedRowsText = translator.get('SNTable.Pagination.DisplayedRowsLabel', [
+  const displayedRowsText = translator.get("SNTable.Pagination.DisplayedRowsLabel", [
     `${page * rowsPerPage + 1} - ${Math.min((page + 1) * rowsPerPage, totalRowCount)}`,
     totalRowCount.toString(),
   ]);
@@ -78,8 +78,8 @@ const PaginationContent = ({
   const handleChangeRowsPerPage = (event: SelectChangeEvent<number>) => {
     setPageInfo({ ...pageInfo, page: 0, rowsPerPage: +event.target.value });
     announce({
-      keys: [['SNTable.Pagination.RowsPerPageChange', event.target.value.toString()]],
-      politeness: 'assertive',
+      keys: [["SNTable.Pagination.RowsPerPageChange", event.target.value.toString()]],
+      politeness: "assertive",
     });
   };
 
@@ -95,7 +95,7 @@ const PaginationContent = ({
     type: string,
     onKeyDown: ((event: React.KeyboardEvent) => void) | null
   ) => {
-    const iconType = `${type}${direction === 'rtl' ? 'RTL' : ''}`;
+    const iconType = `${type}${direction === "rtl" ? "RTL" : ""}`;
     const IconComponent = icons[iconType];
 
     return (
@@ -128,7 +128,7 @@ const PaginationContent = ({
     const inputProps = {
       tabIndex,
       id,
-      'data-testid': id,
+      "data-testid": id,
     };
 
     return (
@@ -165,13 +165,13 @@ const PaginationContent = ({
 
   return (
     <>
-      {showRowsPerPage && getDropdown('RowsPerPage', rowsPerPage, rppOptions, handleChangeRowsPerPage)}
-      {shouldShow('selectPage', width) && getDropdown('SelectPage', page, pageOptions, handleSelectPage)}
-      {shouldShow('displayedRows', width) && <StyledTypography variant="caption">{displayedRowsText}</StyledTypography>}
-      {showFirstAndLast && getButton(onFirstPage, 0, 'FirstPage', null)}
-      {getButton(onFirstPage, page - 1, 'PreviousPage', null)}
-      {getButton(onLastPage, page + 1, 'NextPage', !showFirstAndLast ? handleLastButtonTab : null)}
-      {showFirstAndLast && getButton(onLastPage, totalPages - 1, 'LastPage', handleLastButtonTab)}
+      {showRowsPerPage && getDropdown("RowsPerPage", rowsPerPage, rppOptions, handleChangeRowsPerPage)}
+      {shouldShow("selectPage", width) && getDropdown("SelectPage", page, pageOptions, handleSelectPage)}
+      {shouldShow("displayedRows", width) && <StyledTypography variant="caption">{displayedRowsText}</StyledTypography>}
+      {showFirstAndLast && getButton(onFirstPage, 0, "FirstPage", null)}
+      {getButton(onFirstPage, page - 1, "PreviousPage", null)}
+      {getButton(onLastPage, page + 1, "NextPage", !showFirstAndLast ? handleLastButtonTab : null)}
+      {showFirstAndLast && getButton(onLastPage, totalPages - 1, "LastPage", handleLastButtonTab)}
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { isNumericCell } from './table/utils/is-numeric';
+import { isNumericCell } from "./table/utils/is-numeric";
 import {
   Align,
   Column,
@@ -11,7 +11,7 @@ import {
   TableLayout,
   TextAlign,
   ViewService,
-} from './types';
+} from "./types";
 
 const MAX_CELLS = 10000;
 const HIDDEN_ERROR_CODE = 7005;
@@ -37,10 +37,10 @@ export function getTotalPosition(layout: TableLayout) {
   ];
 
   if (hasGrandTotal && ((hasDimension && hasMeasure) || (!isTotalModeAuto && !hasDimension))) {
-    if (isTotalModeAuto || position === 'top') {
+    if (isTotalModeAuto || position === "top") {
       return { atTop: true, atBottom: false };
     }
-    if (!isTotalModeAuto && position === 'bottom') {
+    if (!isTotalModeAuto && position === "bottom") {
       return { atTop: false, atBottom: true };
     }
   }
@@ -52,9 +52,9 @@ export function getTotalPosition(layout: TableLayout) {
  * Gets the totals label for the first column, empty string for other dimensions and the totals value for measures
  */
 export function getTotalInfo(layout: TableLayout, isDim: boolean, pageColIdx: number, visibleColIdx: number) {
-  if (!isDim) return layout.qHyperCube.qGrandTotalRow[visibleColIdx]?.qText ?? '';
-  if (pageColIdx === 0) return layout.totals.label ?? '';
-  return '';
+  if (!isDim) return layout.qHyperCube.qGrandTotalRow[visibleColIdx]?.qText ?? "";
+  if (pageColIdx === 0) return layout.totals.label ?? "";
+  return "";
 }
 
 /**
@@ -65,27 +65,27 @@ export function getAlignInfo(
   textAlign: TextAlign,
   qDimensionType: EngineAPI.DimensionType | undefined,
   isDim: boolean
-): { headTextAlign: Align; totalsTextAlign: Align; bodyTextAlign: Align | 'auto' } {
+): { headTextAlign: Align; totalsTextAlign: Align; bodyTextAlign: Align | "auto" } {
   if (textAlign && !textAlign.auto) {
     return { headTextAlign: textAlign.align, totalsTextAlign: textAlign.align, bodyTextAlign: textAlign.align };
   }
 
   return {
-    headTextAlign: qDimensionType === 'N' || qDimensionType === undefined ? 'right' : 'left',
-    totalsTextAlign: isDim ? 'left' : 'right',
-    bodyTextAlign: 'auto',
+    headTextAlign: qDimensionType === "N" || qDimensionType === undefined ? "right" : "left",
+    totalsTextAlign: isDim ? "left" : "right",
+    bodyTextAlign: "auto",
   };
 }
 
 /**
  * Gets the correct text alignment for body cells, based on the text alignment info from the column and cell content
  */
-export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | 'auto') => {
-  if (textAlign !== 'auto') {
+export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | "auto") => {
+  if (textAlign !== "auto") {
     return textAlign;
   }
 
-  return isNumericCell(cell) ? 'right' : 'left';
+  return isNumericCell(cell) ? "right" : "left";
 };
 
 /**
@@ -98,7 +98,7 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
   const info = isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims];
 
   let fieldIndex = 0;
-  let fieldId = '';
+  let fieldId = "";
   let isLocked = false;
   let selectionColIdx = -1;
   let qDimensionType;
@@ -137,7 +137,7 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
     label: qFallbackTitle,
     stylingIDs: qAttrExprInfo.map((expr) => expr.id),
     // making sure that qSortIndicator is either A or D
-    sortDirection: qSortIndicator && qSortIndicator !== 'N' ? qSortIndicator : 'A',
+    sortDirection: qSortIndicator && qSortIndicator !== "N" ? qSortIndicator : "A",
     totalInfo: getTotalInfo(layout, isDim, pageColIdx, visibleColIdx),
     ...getAlignInfo(textAlign, qDimensionType, isDim),
   };
@@ -235,7 +235,7 @@ export default async function manageData(
   const isSnapshot = !!layout.snapshotData;
   const dataPages = isSnapshot
     ? layout.qHyperCube.qDataPages
-    : await model.getHyperCubeData('/qHyperCubeDef', [
+    : await model.getHyperCubeData("/qHyperCubeDef", [
         { qTop: top, qLeft: 0, qHeight: height, qWidth: totalColumnCount },
       ]);
   if (viewService && !isSnapshot) {

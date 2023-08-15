@@ -1,7 +1,7 @@
-import { getBodyCellAlign } from '../../../../../handle-data';
-import { Cell, Column, PageInfo, Row, TableLayout } from '../../../../../types';
-import { isNumericCell } from '../../../../utils/is-numeric';
-import { SetCellSize } from '../../../types';
+import { getBodyCellAlign } from "../../../../../handle-data";
+import { Cell, Column, PageInfo, Row, TableLayout } from "../../../../../types";
+import { isNumericCell } from "../../../../utils/is-numeric";
+import { SetCellSize } from "../../../types";
 
 const createRow = (
   rows: Row[],
@@ -36,7 +36,7 @@ const createRow = (
       isNumeric,
     };
 
-    setCellSize(cell.qText ?? '', pageRowIdx, pageColIdx, isNumeric);
+    setCellSize(cell.qText ?? "", pageRowIdx, pageColIdx, isNumeric);
   });
 
   return {

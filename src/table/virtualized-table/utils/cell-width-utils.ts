@@ -1,6 +1,6 @@
-import { Column } from '../../../types';
-import { ADJUSTED_HEADER_WIDTH, LOOK_BUTTON_AND_AUTO_MARGIN } from '../../styling-defaults';
-import { BORDER_WIDTH, PADDING_LEFT_RIGHT } from '../constants';
+import { Column } from "../../../types";
+import { ADJUSTED_HEADER_WIDTH, LOOK_BUTTON_AND_AUTO_MARGIN } from "../../styling-defaults";
+import { BORDER_WIDTH, PADDING_LEFT_RIGHT } from "../constants";
 
 export const getAdjustedCellWidth = (width: number) => width - PADDING_LEFT_RIGHT * 2 - BORDER_WIDTH;
 

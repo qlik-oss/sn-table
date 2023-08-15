@@ -2,20 +2,11 @@
   "name": "@nebula.js/sn-table",
   "version": "2.5.0",
   "description": "Display several measure values for each dimension value. Show the totals for each measure. Sort columns and rows alphabetically or numerically. Change sorting during analysis. Chart exploration allows for adding and removing columns in analysis.",
-  "license": "MIT",
-  "author": "QlikTech International AB",
-  "qext": {
-    "name": "Straight table",
-    "icon": "table"
-  },
   "keywords": [
     "qlik",
     "nebula",
     "stardust"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "bugs": {
     "url": "https://github.com/qlik-oss/sn-table/issues"
   },
@@ -23,41 +14,38 @@
     "type": "git",
     "url": "https://github.com/qlik-oss/sn-table.git"
   },
+  "license": "MIT",
+  "author": "QlikTech International AB",
+  "main": "dist/sn-table.js",
   "files": [
     "dist",
     "api-specifications",
     "core",
     "sn-table-ext"
   ],
-  "engines": {
-    "node": ">=16",
-    "yarn": "^1.0.0"
-  },
-  "main": "dist/sn-table.js",
-  "systemjs": "dist/sn-table.systemjs.js",
   "scripts": {
     "build": "yarn run locale:generate && node ./tools/build.js --core --ext",
     "build:dev": "yarn run locale:generate && node ./tools/build.js --ext --mode development --systemjs false",
     "build:watch": "yarn run locale:generate && node ./tools/build.js --mode development -w",
-    "lint": "eslint --cache .",
-    "format": "prettier --write .",
-    "start": "nebula serve --build false --type sn-table",
-    "sense": "nebula sense",
-    "types:check": "tsc --noEmit",
     "copy:ext": "node ./tools/copy-ext.js",
-    "locale:verify": "node src/locale/tools/verify-translations.ts",
-    "locale:generate": "node src/locale/scripts/generate-all.mjs",
-    "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
     "deduplicate-packages": "yarn-deduplicate yarn.lock",
-    "test:unit": "jest",
+    "format": "prettier --write .",
+    "lint": "eslint --cache .",
+    "locale:generate": "node src/locale/scripts/generate-all.mjs",
+    "locale:verify": "node src/locale/tools/verify-translations.ts",
+    "prepack": "./tools/prepare-sn-pack.js",
+    "prepare": "husky install",
+    "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
+    "sense": "nebula sense",
+    "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
+    "start": "nebula serve --build false --type sn-table",
+    "test:integration": "playwright test --config=test/integration/integration.config.ts",
+    "test:integration:local": "./test/integration/scripts/run-integration-tests.sh",
     "test:rendering": "playwright test",
     "test:rendering:local": "./test/rendering/scripts/run-rendering-tests.sh",
     "test:rendering:update-screenshots": "./test/rendering/scripts/run-rendering-tests.sh '--update-snapshots'",
-    "test:integration": "playwright test --config=test/integration/integration.config.ts",
-    "test:integration:local": "./test/integration/scripts/run-integration-tests.sh",
-    "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
-    "prepack": "./tools/prepare-sn-pack.js",
-    "prepare": "husky install",
+    "test:unit": "jest",
+    "types:check": "tsc --noEmit",
     "preversion": "yarn build",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s && yarn spec && git add api-specifications CHANGELOG.md"
   },
@@ -71,15 +59,16 @@
     ],
     "yarn.lock": "yarn deduplicate-packages --list --fail"
   },
+  "prettier": "@qlik/prettier-config",
   "eslintConfig": {
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    },
     "extends": [
       "@qlik/eslint-config/react",
       "@qlik/eslint-config/jest",
       "@qlik/eslint-config/playwright"
     ],
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    },
     "rules": {
       "no-param-reassign": [
         2,
@@ -95,13 +84,22 @@
           "allowTernary": true
         }
       ],
-      "@typescript-eslint/unbound-method": 0,
-      "@typescript-eslint/restrict-template-expressions": 0
+      "@typescript-eslint/restrict-template-expressions": 0,
+      "@typescript-eslint/unbound-method": 0
     },
     "root": true
   },
+  "resolutions": {
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
+  },
   "devDependencies": {
     "@babel/core": "7.22.1",
+    "@babel/eslint-parser": "7.21.8",
+    "@babel/preset-env": "7.22.2",
+    "@babel/preset-react": "7.22.3",
+    "@babel/preset-typescript": "7.21.5",
+    "@commitlint/cli": "17.6.3",
+    "@commitlint/config-conventional": "17.6.3",
     "@material-ui/core": "4.12.4",
     "@material-ui/icons": "4.11.3",
     "@material-ui/lab": "4.0.0-alpha.61",
@@ -109,15 +107,6 @@
     "@mui/icons-material": "5.11.16",
     "@mui/material": "5.13.2",
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
-    "react": "18.2.0",
-    "react-window": "1.8.9",
-    "react-dom": "18.2.0",
-    "@babel/eslint-parser": "7.21.8",
-    "@babel/preset-env": "7.22.2",
-    "@babel/preset-react": "7.22.3",
-    "@babel/preset-typescript": "7.21.5",
-    "@commitlint/cli": "17.6.3",
-    "@commitlint/config-conventional": "17.6.3",
     "@nebula.js/cli": "4.1.0",
     "@nebula.js/cli-build": "4.1.0",
     "@nebula.js/cli-sense": "4.1.0",
@@ -126,6 +115,7 @@
     "@qlik-oss/nebula-table-utils": "1.1.0",
     "@qlik-trial/sprout": "2.45.6",
     "@qlik/eslint-config": "0.4.12",
+    "@qlik/prettier-config": "0.3.0",
     "@rollup/plugin-typescript": "11.1.1",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
@@ -151,6 +141,9 @@
     "qlik-chart-modules": "0.54.0",
     "qlik-modifiers": "0.9.1",
     "qlik-object-conversion": "0.16.2",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-window": "1.8.9",
     "scriptappy-from-jsdoc": "0.7.0",
     "shx": "0.3.4",
     "styled-components": "5.3.11",
@@ -164,7 +157,16 @@
   "peerDependencies": {
     "@nebula.js/stardust": ">=4.3.0"
   },
-  "resolutions": {
-    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
-  }
+  "engines": {
+    "node": ">=16",
+    "yarn": "^1.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "qext": {
+    "name": "Straight table",
+    "icon": "table"
+  },
+  "systemjs": "dist/sn-table.systemjs.js"
 }

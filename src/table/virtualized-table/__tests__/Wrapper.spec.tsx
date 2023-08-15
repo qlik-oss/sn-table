@@ -1,19 +1,19 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { stardust } from '@nebula.js/stardust';
-import Wrapper from '../Wrapper';
-import { TableData, TableLayout } from '../../../types';
-import { TestableTable } from '../Table';
-import FooterWrapper from '../../components/footer/FooterWrapper';
-import TestWithProviders from '../../../__test__/test-with-providers';
-import { getColumns, getTotalPosition } from '../../../handle-data';
-import { EMPTY_TABLE_DATA } from '../../context/TableContext';
-import { generateLayout } from '../../../__test__/generate-test-data';
+import { stardust } from "@nebula.js/stardust";
+import { render, screen } from "@testing-library/react";
+import React from "react";
+import { generateLayout } from "../../../__test__/generate-test-data";
+import TestWithProviders from "../../../__test__/test-with-providers";
+import { getColumns, getTotalPosition } from "../../../handle-data";
+import { TableData, TableLayout } from "../../../types";
+import FooterWrapper from "../../components/footer/FooterWrapper";
+import { EMPTY_TABLE_DATA } from "../../context/TableContext";
+import { TestableTable } from "../Table";
+import Wrapper from "../Wrapper";
 
-jest.mock('../Table');
-jest.mock('../../components/footer/FooterWrapper');
+jest.mock("../Table");
+jest.mock("../../components/footer/FooterWrapper");
 
-describe('<Wrapper />', () => {
+describe("<Wrapper />", () => {
   let rect: stardust.Rect;
   let layout: TableLayout;
   let tableData: TableData;
@@ -48,19 +48,19 @@ describe('<Wrapper />', () => {
 
   afterEach(() => jest.restoreAllMocks());
 
-  it('should not render table with pagination', () => {
+  it("should not render table with pagination", () => {
     paginationNeeded = false;
     renderWrapper();
 
-    expect(screen.getByTestId('table-container')).toBeVisible();
-    expect(screen.queryByTestId('footer-wrapper')).toBeNull();
+    expect(screen.getByTestId("table-container")).toBeVisible();
+    expect(screen.queryByTestId("footer-wrapper")).toBeNull();
   });
 
-  it('should render table with pagination', () => {
+  it("should render table with pagination", () => {
     paginationNeeded = true;
     renderWrapper();
 
-    expect(screen.getByTestId('table-container')).toBeVisible();
-    expect(screen.getByTestId('footer-wrapper')).toBeVisible();
+    expect(screen.getByTestId("table-container")).toBeVisible();
+    expect(screen.getByTestId("footer-wrapper")).toBeVisible();
   });
 });

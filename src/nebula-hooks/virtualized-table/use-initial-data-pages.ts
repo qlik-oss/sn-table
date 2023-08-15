@@ -1,7 +1,7 @@
-import { usePromise } from '@nebula.js/stardust';
-import { INITIAL_DATA_FETCH_HEIGHT, INITIAL_DATA_FETCH_WIDTH } from '../../table/constants';
-import { MAX_PAGE_SIZE } from '../../table/virtualized-table/constants';
-import { TableLayout } from '../../types';
+import { usePromise } from "@nebula.js/stardust";
+import { INITIAL_DATA_FETCH_HEIGHT, INITIAL_DATA_FETCH_WIDTH } from "../../table/constants";
+import { MAX_PAGE_SIZE } from "../../table/virtualized-table/constants";
+import { TableLayout } from "../../types";
 
 interface UseInitialDataPagesProps {
   model: EngineAPI.IGenericObject | undefined;
@@ -27,7 +27,7 @@ const fetchInitialDataPages = async (
   if (page !== 0 || qDataPages === undefined || qDataPages.length === 0) {
     const qTop = page * Math.min(MAX_PAGE_SIZE, layout.qHyperCube.qSize.qcy);
 
-    qDataPages = await model.getHyperCubeData('/qHyperCubeDef', [
+    qDataPages = await model.getHyperCubeData("/qHyperCubeDef", [
       {
         qLeft: 0,
         qTop,

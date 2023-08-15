@@ -1,5 +1,5 @@
-import { TotalsPosition, ViewService } from '../../../types';
-import { findPaginationVisibleRows, findVirtualizedVisibleRows, getPartialTopScrollHeight } from '../find-visible-rows';
+import { TotalsPosition, ViewService } from "../../../types";
+import { findPaginationVisibleRows, findVirtualizedVisibleRows, getPartialTopScrollHeight } from "../find-visible-rows";
 
 type RowRect = {
   top: number;
@@ -24,8 +24,8 @@ const createRects = (scrollTop: number) => {
   return rects;
 };
 
-describe('find-visible-rows', () => {
-  describe('findPaginationVisibleRows', () => {
+describe("find-visible-rows", () => {
+  describe("findPaginationVisibleRows", () => {
     let rootElement: HTMLElement;
     let totalsPosition: TotalsPosition;
     let tableContainer;
@@ -44,10 +44,10 @@ describe('find-visible-rows', () => {
         getElementsByClassName: (className: string) => {
           tableContainer = { getBoundingClientRect: (): Rect => tableContainerRect };
           headRow = { getBoundingClientRect: (): Rect => headRowRect };
-          if (className === 'sn-table-totals-row') return [totalsRow];
-          if (className === 'sn-table-container') return [tableContainer];
-          if (className === 'sn-table-head-row') return [headRow];
-          if (className === 'sn-table-data-row') return dataRows;
+          if (className === "sn-table-totals-row") return [totalsRow];
+          if (className === "sn-table-container") return [tableContainer];
+          if (className === "sn-table-head-row") return [headRow];
+          if (className === "sn-table-data-row") return dataRows;
           return undefined;
         },
       } as unknown as HTMLDivElement;
@@ -58,34 +58,34 @@ describe('find-visible-rows', () => {
       headRowRect = { y: 0, height: 50 };
     });
 
-    describe('no total row', () => {
+    describe("no total row", () => {
       beforeEach(() => {
         totalsPosition = { atTop: false, atBottom: false };
         totalsRow = undefined;
       });
 
-      it('should return correct visible row indices when the whole first row is visible', () => {
+      it("should return correct visible row indices when the whole first row is visible", () => {
         createElements(50);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
         expect(visibleRowStartIndex).toEqual(0);
         expect(visibleRowEndIndex).toEqual(7);
       });
 
-      it('should return correct visible row indices when the first row is partially visible', () => {
+      it("should return correct visible row indices when the first row is partially visible", () => {
         createElements(40);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
         expect(visibleRowStartIndex).toEqual(0);
         expect(visibleRowEndIndex).toEqual(7);
       });
 
-      it('should return correct visible row indices when the whole last row is visible', () => {
+      it("should return correct visible row indices when the whole last row is visible", () => {
         createElements(-100);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
         expect(visibleRowStartIndex).toEqual(7);
         expect(visibleRowEndIndex).toEqual(10);
       });
 
-      it('should return correct visible row indices when the last row is partially visible', () => {
+      it("should return correct visible row indices when the last row is partially visible", () => {
         createElements(-90);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
         expect(visibleRowStartIndex).toEqual(7);
@@ -93,35 +93,35 @@ describe('find-visible-rows', () => {
       });
     });
 
-    describe('total row at bottom', () => {
+    describe("total row at bottom", () => {
       beforeEach(() => {
         totalsRowRec = { y: 280, height: 20 };
         totalsRow = { getBoundingClientRect: (): Rect => totalsRowRec };
         totalsPosition = { atTop: false, atBottom: true };
       });
 
-      it('should return correct visible row indices when the whole first row is visible', () => {
+      it("should return correct visible row indices when the whole first row is visible", () => {
         createElements(50);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
         expect(visibleRowStartIndex).toEqual(0);
         expect(visibleRowEndIndex).toEqual(6);
       });
 
-      it('should return correct visible row indices when the first row is visible partially', () => {
+      it("should return correct visible row indices when the first row is visible partially", () => {
         createElements(40);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
         expect(visibleRowStartIndex).toEqual(0);
         expect(visibleRowEndIndex).toEqual(6);
       });
 
-      it('should return correct visible row indices when the whole last row is visible', () => {
+      it("should return correct visible row indices when the whole last row is visible", () => {
         createElements(-100);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
         expect(visibleRowStartIndex).toEqual(7);
         expect(visibleRowEndIndex).toEqual(10);
       });
 
-      it('should return correct visible row indices when the last row is visible partially', () => {
+      it("should return correct visible row indices when the last row is visible partially", () => {
         createElements(-90);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
         expect(visibleRowStartIndex).toEqual(7);
@@ -129,35 +129,35 @@ describe('find-visible-rows', () => {
       });
     });
 
-    describe('total row at top', () => {
+    describe("total row at top", () => {
       beforeEach(() => {
         totalsRowRec = { y: 50, height: 20 };
         totalsRow = { getBoundingClientRect: (): Rect => totalsRowRec };
         totalsPosition = { atTop: true, atBottom: false };
       });
 
-      it('should return correct visible row indices when the whole first row is visible', () => {
+      it("should return correct visible row indices when the whole first row is visible", () => {
         createElements(70);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
         expect(visibleRowStartIndex).toEqual(0);
         expect(visibleRowEndIndex).toEqual(6);
       });
 
-      it('should return correct visible row indices when the first row is visible partially', () => {
+      it("should return correct visible row indices when the first row is visible partially", () => {
         createElements(60);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
         expect(visibleRowStartIndex).toEqual(0);
         expect(visibleRowEndIndex).toEqual(6);
       });
 
-      it('should return correct visible row indices when the whole last row is visible', () => {
+      it("should return correct visible row indices when the whole last row is visible", () => {
         createElements(-100);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
         expect(visibleRowStartIndex).toEqual(8);
         expect(visibleRowEndIndex).toEqual(10);
       });
 
-      it('should return correct visible row indices when the last row is partially visible', () => {
+      it("should return correct visible row indices when the last row is partially visible", () => {
         createElements(-90);
         const { visibleRowStartIndex, visibleRowEndIndex } = findPaginationVisibleRows(rootElement, totalsPosition);
         expect(visibleRowStartIndex).toEqual(8);
@@ -165,8 +165,8 @@ describe('find-visible-rows', () => {
       });
     });
 
-    describe('getPartialTopScrollHeight', () => {
-      it('should return a partial height when there is a valid rowRect', () => {
+    describe("getPartialTopScrollHeight", () => {
+      it("should return a partial height when there is a valid rowRect", () => {
         const rows = [
           { getBoundingClientRect: () => ({ top: 100 }) },
           { getBoundingClientRect: () => ({ top: 200 }) },
@@ -176,7 +176,7 @@ describe('find-visible-rows', () => {
         expect(partialHeight).toBe(200);
       });
 
-      it('should return zero when rowRect top and table body top are equal', () => {
+      it("should return zero when rowRect top and table body top are equal", () => {
         const rows = [
           { getBoundingClientRect: () => ({ top: 100 }) },
           { getBoundingClientRect: () => ({ top: 200 }) },
@@ -186,14 +186,14 @@ describe('find-visible-rows', () => {
         expect(partialHeight).toBe(0);
       });
 
-      it('should return zero when the row index is invalid', () => {
+      it("should return zero when the row index is invalid", () => {
         const rows = [{ getBoundingClientRect: () => ({ top: 100 }) }] as unknown as HTMLCollectionOf<Element>;
         const tableBodyRect = { top: 400, bottom: 400 };
         const partialHeight = getPartialTopScrollHeight(rows, tableBodyRect, -1);
         expect(partialHeight).toBe(0);
       });
 
-      it('should return zero when the rows are undefined', () => {
+      it("should return zero when the rows are undefined", () => {
         const rows = [] as unknown as HTMLCollectionOf<Element>;
         const tableBodyRect = { top: 400, bottom: 400 };
         const partialHeight = getPartialTopScrollHeight(rows, tableBodyRect, 1);
@@ -202,7 +202,7 @@ describe('find-visible-rows', () => {
     });
   });
 
-  describe('findVirtualizedVisibleRows', () => {
+  describe("findVirtualizedVisibleRows", () => {
     let rootElement: HTMLElement;
     let tableBody: {
       getBoundingClientRect?: () => Rect;
@@ -240,7 +240,7 @@ describe('find-visible-rows', () => {
       bodyRect = { y: 0, height: 495 };
     });
 
-    describe('scrollTopRatio = 1', () => {
+    describe("scrollTopRatio = 1", () => {
       beforeEach(() => {
         tableBody = {};
         viewService = {
@@ -254,21 +254,21 @@ describe('find-visible-rows', () => {
         };
       });
 
-      it('should return correct visible row indices when the whole first row is visible', () => {
+      it("should return correct visible row indices when the whole first row is visible", () => {
         createElements(0);
         const { visibleRowStartIndex, visibleRowEndIndex } = findVirtualizedVisibleRows(rootElement, viewService);
         expect(visibleRowStartIndex).toEqual(0);
         expect(visibleRowEndIndex).toEqual(10);
       });
 
-      it('should return correct visible row indices when the first row is partially visible', () => {
+      it("should return correct visible row indices when the first row is partially visible", () => {
         createElements(-4);
         const { visibleRowStartIndex, visibleRowEndIndex } = findVirtualizedVisibleRows(rootElement, viewService);
         expect(visibleRowStartIndex).toEqual(0);
         expect(visibleRowEndIndex).toEqual(10);
       });
 
-      it('should return correct visible row indices when more than 4px in the top of the first row is not visible', () => {
+      it("should return correct visible row indices when more than 4px in the top of the first row is not visible", () => {
         createElements(-10);
         const { visibleRowStartIndex, visibleRowEndIndex } = findVirtualizedVisibleRows(rootElement, viewService);
         expect(visibleRowStartIndex).toEqual(1);
@@ -276,7 +276,7 @@ describe('find-visible-rows', () => {
       });
     });
 
-    describe('scrollTopRatio < 1', () => {
+    describe("scrollTopRatio < 1", () => {
       beforeEach(() => {
         tableBody = {};
         viewService = {
@@ -290,14 +290,14 @@ describe('find-visible-rows', () => {
         };
       });
 
-      it('should return correct visible row indices when the whole first row and the whole last row are visible', () => {
+      it("should return correct visible row indices when the whole first row and the whole last row are visible", () => {
         createElements(0);
         const { visibleRowStartIndex, visibleRowEndIndex } = findVirtualizedVisibleRows(rootElement, viewService);
         expect(visibleRowStartIndex).toEqual(0);
         expect(visibleRowEndIndex).toEqual(10);
       });
 
-      it('should return correct visible row indices when the first row the last row are partially visible', () => {
+      it("should return correct visible row indices when the first row the last row are partially visible", () => {
         createElements(-9);
         const { visibleRowStartIndex, visibleRowEndIndex } = findVirtualizedVisibleRows(rootElement, viewService);
         expect(visibleRowStartIndex).toEqual(0);
