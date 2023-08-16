@@ -53,7 +53,8 @@ const useVirtualizedTable = ({
   viewService,
 }: UseVirtualizedTable) => {
   const isPrintingMode = isPrinting(layout, viewService);
-  const shouldRender = layout.usePagination === false && !isPrintingMode;
+  // const shouldRender = layout.usePagination === false && !isPrintingMode;
+  const shouldRender = layout.usePagination === false;
   const tableData = useMemo(() => getVirtualScrollTableData(layout, interactions), [layout, interactions]);
   const { pageInfo, setPage } = usePageInfo(layout, shouldRender);
   const { initialDataPages, isLoading } = useInitialDataPages({ model, layout, page: pageInfo.page, shouldRender });

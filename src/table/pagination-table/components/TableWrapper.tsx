@@ -49,7 +49,9 @@ const TableWrapper = (props: TableWrapperProps) => {
 
   const isPrintingMode = isPrinting(layout, viewService);
   const scrollLeft = isPrintingMode ? viewService.scrollLeft ?? 0 : 0;
-  const scrollTopPartially = isPrintingMode ? viewService.rowPartialHeight ?? 0 : 0;
+  // const scrollTopPartially = isPrintingMode ? viewService.rowPartialHeight ?? 0 : 0;
+  const scrollTopPartially = viewService.rowPartialHeight ?? 0;
+  console.log('scrollTopPartially: ', scrollTopPartially);
 
   const setShouldRefocus = useCallback(() => {
     shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);

@@ -36,7 +36,7 @@ export const getViewState = (layout: TableLayout, viewService: ViewService, root
     const {
       visibleRowStartIndex = -1,
       visibleRowEndIndex = -1,
-      rowPartialHeight,
+      rowPartialHeight = 0,
     } = findPaginationVisibleRows(rootElement, totalsPosition);
 
     return {
@@ -48,9 +48,15 @@ export const getViewState = (layout: TableLayout, viewService: ViewService, root
       page: viewService.page,
     };
   }
-  const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findVirtualizedVisibleRows(rootElement, viewService);
+  const {
+    visibleRowStartIndex = -1,
+    visibleRowEndIndex = -1,
+    // TODO ---> rename it later to scrollTopHeight
+    rowPartialHeight = 0,
+  } = findVirtualizedVisibleRows(rootElement, viewService);
 
   return {
+    rowPartialHeight,
     scrollLeft: viewService.scrollLeft,
     visibleLeft: viewService.visibleLeft,
     visibleWidth: viewService.visibleWidth,

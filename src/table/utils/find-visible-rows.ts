@@ -75,34 +75,59 @@ const shouldIncludeRowWithCell = (cellRect: DOMRect, min: number, max: number) =
 
 export function findVirtualizedVisibleRows(rootElement: HTMLElement, viewService: ViewService) {
   const tableBody = rootElement.querySelector('.sn-table-body');
+  console.log('tableBody', tableBody);
   const bodyRect = tableBody?.getBoundingClientRect();
+  console.log('bodyRect: ', bodyRect);
   const cells = tableBody?.querySelectorAll('.sn-table-body .sn-table-cell');
+  console.log('cells: ', cells);
   if (!cells || !bodyRect) return {};
   const { scrollTopRatio = 0, visibleTop = 0, visibleHeight = 0, page = 0, rowsPerPage = 0 } = viewService;
   const offset = page * rowsPerPage;
   const visibleTopInPage = visibleTop - offset;
   const visibleBottomInPage = visibleTopInPage + visibleHeight - 1;
   const topLeftCell = getFirstCellOfRow(visibleTopInPage, cells);
+  console.log('topLeftCell:', topLeftCell);
+
   const topLeftCellRect = topLeftCell?.getBoundingClientRect();
+  console.log('visibleTopInPage: ', visibleTopInPage);
+  console.log('visibleBottomInPage: ', visibleBottomInPage);
+  console.log('topLeftCellRect: ', topLeftCellRect);
   if (!topLeftCell || !topLeftCellRect) return {};
-  const bodyYMin = bodyRect.y;
+
+  const tableBodyRect = {
+    bodyYMin: bodyRect.y,
+    bodyYMax: bodyRect.y + bodyRect.height,
+  };
+
+  console.log('tableBodyRect', tableBodyRect);
   if (1 - scrollTopRatio < EPSILON) {
     // The last data row is visible, then the priority start from the bottom row
-    const shouldIncludeTopRow = topLeftCellRect.y >= bodyYMin - 4;
+    const shouldIncludeTopRow = topLeftCellRect.y >= tableBodyRect.bodyYMin - 4;
+    console.log('visibleRowStartIndex EPSILON: ', visibleTopInPage + (shouldIncludeTopRow ? 0 : 1) + offset);
+    console.log('visibleRowEndIndex: EPSILON', visibleBottomInPage + offset);
     return {
       visibleRowStartIndex: visibleTopInPage + (shouldIncludeTopRow ? 0 : 1) + offset,
       visibleRowEndIndex: visibleBottomInPage + offset,
     };
   }
-  const bodyYMax = bodyRect.y + bodyRect.height;
   const visibleRowStartIndex =
-    (shouldIncludeRowWithCell(topLeftCellRect, bodyYMin, bodyYMax) ? visibleTopInPage : visibleTopInPage + 1) + offset;
+    (shouldIncludeRowWithCell(topLeftCellRect, tableBodyRect.bodyYMin, tableBodyRect.bodyYMax)
+      ? visibleTopInPage
+      : visibleTopInPage + 1) + offset;
   let visibleRowEndIndex = visibleBottomInPage + offset;
   const bottomLeftCell = getFirstCellOfRow(visibleBottomInPage, cells);
   const bottomLeftCellRect = bottomLeftCell?.getBoundingClientRect();
   if (bottomLeftCell && bottomLeftCellRect) {
-    if (!shouldIncludeRowWithCell(bottomLeftCellRect, bodyYMin, bodyYMax))
+    if (!shouldIncludeRowWithCell(bottomLeftCellRect, tableBodyRect.bodyYMin, tableBodyRect.bodyYMax))
       visibleRowEndIndex = visibleBottomInPage - 1 + offset;
   }
-  return { visibleRowStartIndex, visibleRowEndIndex };
+
+  const firstCellRect = cells[0]?.getBoundingClientRect();
+  console.log('firstCellRect: ', firstCellRect);
+  // bodyTop - firstCellTop
+  const rowPartialHeight = tableBodyRect.bodyYMin - firstCellRect.top;
+  console.log('rowPartialHeight: ', rowPartialHeight);
+  console.log('visibleRowStartIndex: ', visibleRowStartIndex);
+  console.log('visibleRowEndIndex: ', visibleRowEndIndex);
+  return { visibleRowStartIndex, visibleRowEndIndex, rowPartialHeight };
 }
