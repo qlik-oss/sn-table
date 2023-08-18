@@ -1,3 +1,10 @@
+# [2.6.0](https://github.com/qlik-oss/sn-table/compare/v2.5.0...v2.6.0) (2023-08-16)
+
+### Bug Fixes
+
+- fix missing parameter ([#1051](https://github.com/qlik-oss/sn-table/issues/1051)) ([abde883](https://github.com/qlik-oss/sn-table/commit/abde88342b9c26eff9702c88120610ad06f5602e))
+- unexpected focused test ([#1054](https://github.com/qlik-oss/sn-table/issues/1054)) ([cf940f7](https://github.com/qlik-oss/sn-table/commit/cf940f7c86924915833822909a19efd87196a1aa))
+
 # [2.5.0](https://github.com/qlik-oss/sn-table/compare/v2.4.0...v2.5.0) (2023-08-14)
 
 ### Bug Fixes
