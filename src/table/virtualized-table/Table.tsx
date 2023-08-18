@@ -48,6 +48,8 @@ const Table = (props: TableProps) => {
     totalsPosition,
     headerRef,
     totalsRef,
+    isSnapshot: !!layout.snapshotData,
+    viewService,
   });
   const tableRect = useMemo(() => toTableRect(rect, paginationNeeded), [rect, paginationNeeded]);
   const stickyContainerRect = useMemo(

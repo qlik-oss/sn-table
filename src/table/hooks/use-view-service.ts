@@ -12,6 +12,7 @@ const createViewService = (viewState: ViewState, snapshotData?: SnapshotData): V
   rowsPerPage: snapshotData?.content?.rowsPerPage ?? viewState?.rowsPerPage,
   page: snapshotData?.content?.page ?? viewState?.page,
   viewState,
+  estimatedRowHeight: snapshotData?.content?.estimatedRowHeight ?? 0,
 });
 
 const useViewService = (layout: TableLayout): ViewService => {

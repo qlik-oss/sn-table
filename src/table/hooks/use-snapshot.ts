@@ -102,6 +102,7 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
         rowsPerPage,
         page,
         size: { width: contentRect.width, height: contentRect.height },
+        estimatedRowHeight: viewService.estimatedRowHeight,
       };
     }
     return snapshotLayout;
