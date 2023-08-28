@@ -46,6 +46,17 @@ describe('useDynamicRowHeight', () => {
     };
     rect = { width: 100, height: 200, left: 0, top: 0 };
 
+    viewService = {
+      scrollTopRatio: 0.9,
+      visibleTop: 0,
+      visibleHeight: 11,
+      page: 0,
+      rowsPerPage: 100,
+      qTop: 0,
+      qHeight: 100,
+      estimatedRowHeight: 25,
+    };
+
     props = {
       columns,
       style,
