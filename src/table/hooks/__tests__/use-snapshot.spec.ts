@@ -114,7 +114,6 @@ describe('use-snapshot', () => {
         scrollTopRatio: 1,
         rowsPerPage: 100,
         page: 0,
-        estimatedRowHeight: 25,
       });
     });
 
@@ -136,7 +135,6 @@ describe('use-snapshot', () => {
         visibleHeight: 0,
         rowsPerPage: 100,
         page: 0,
-        estimatedRowHeight: 25,
       });
     });
   });
