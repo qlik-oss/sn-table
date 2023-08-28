@@ -41,7 +41,7 @@ export function createSelectorProvider<T>(OriginalContext: Context<T>): Function
 
     const getContextValue: ContextAccessor<T> = useCallback(() => contextValueRef.current, [contextValueRef]);
 
-    const contextValue: SelectorContextType<T> = useMemo(() => [getContextValue, listeners.current], [contextValueRef]);
+    const contextValue: SelectorContextType<T> = useMemo(() => [getContextValue, listeners.current], [getContextValue]);
 
     return (
       <OriginalContext.Provider value={value}>

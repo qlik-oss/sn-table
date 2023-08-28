@@ -9,5 +9,6 @@ export default function useDidUpdateEffect(effect: () => void, deps: React.Depen
     } else {
       didMountRef.current = true;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 }

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { stardust, useEffect, useOptions, usePromise, useState } from '@nebula.js/stardust';
 import { Root } from 'react-dom/client';
 import manageData from '../handle-data';

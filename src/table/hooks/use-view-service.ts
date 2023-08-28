@@ -18,6 +18,7 @@ const useViewService = (layout: TableLayout): ViewService => {
   const { viewState } = useOptions() as UseOptions;
   return useMemo(
     () => createViewService(viewState, layout.snapshotData),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [viewState, layout.snapshotData, layout.usePagination]
   );
 };

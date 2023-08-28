@@ -5,7 +5,6 @@ import MenuGroupWrapper from '../MenuGroupWrapper';
 
 describe('<MenuGroupWrapper />', () => {
   const renderer = (itemGroups: MenuItemGroup[]) => {
-    // @ts-expect-error calling like component here for test, but it's being called as function where it's been used
     render(<MenuGroupWrapper itemGroups={itemGroups} />);
   };
 

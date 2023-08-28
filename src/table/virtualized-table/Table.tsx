@@ -32,7 +32,7 @@ const Table = (props: TableProps) => {
       ...styling.body,
       background: theme.background.color ?? 'transparent',
     }),
-    [layout, theme.name()]
+    [theme.background.color, styling]
   );
   const {
     headerRowHeight,
