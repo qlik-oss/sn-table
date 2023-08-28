@@ -77,7 +77,7 @@ const TestWithProviders = ({
   applyColumnWidths = () => {},
   rect = { width: 0, height: 0, top: 0, left: 0 },
   initialDataPages = undefined,
-  viewService = { qTop: 0, qHeight: 1, scrollLeft: 0 },
+  viewService = { qTop: 0, qHeight: 1, scrollLeft: 0, estimatedRowHeight: 25 },
 }: ProviderProps) => (
   <ThemeProvider theme={muiSetup(direction)}>
     <TableContextProvider

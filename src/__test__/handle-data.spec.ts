@@ -160,6 +160,7 @@ describe('handle-data', () => {
         qTop: 0,
         qHeight: 100,
         scrollLeft: 0,
+        estimatedRowHeight: 25,
       };
     });
 

@@ -60,6 +60,8 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
       gridRef,
       rowCount,
       gridState,
+      isSnapshot: !!layout.snapshotData,
+      viewService,
     });
 
   const { rowsInPage, loadRows, loadColumns } = useData({

@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
 import { useOnPropsChange } from '@qlik-oss/nebula-table-utils/lib/hooks';
-import { Column, PageInfo, Row } from '../../../types';
+import { Column, PageInfo, Row, ViewService } from '../../../types';
 import { TableContext, useContextSelector } from '../../context';
 import { COMMON_CELL_STYLING } from '../../styling-defaults';
 import { GeneratedStyling } from '../../types';
@@ -27,6 +27,8 @@ export interface UseDynamicRowHeightProps {
   columns?: Column[];
   boldText?: boolean;
   gridState?: React.MutableRefObject<GridState>;
+  isSnapshot: boolean;
+  viewService: ViewService;
 }
 
 const MAX_ELEMENT_DOM_SIZE = 15_000_000; // Guestimated max height value in px of a DOM element
@@ -42,6 +44,8 @@ const useDynamicRowHeight = ({
   columns,
   boldText,
   gridState,
+  isSnapshot,
+  viewService,
 }: UseDynamicRowHeightProps) => {
   const rowMeta = useRef<RowMeta>({
     lastScrollToRatio: 0,
@@ -101,7 +105,7 @@ const useDynamicRowHeight = ({
         rowMeta.current.heights[rowIdx] = height;
       }
 
-      if (!batchStateUpdate) {
+      if (!batchStateUpdate && !isSnapshot ) {
         setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
       }
     },
@@ -135,7 +139,9 @@ const useDynamicRowHeight = ({
       mutableSetCellSize.current(text, rowIdx, colIdx, isNumeric, true);
     });
 
+    if(!isSnapshot){
     setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
+    }
   }, [resetRowMeta, mutableSetCellSize]);
 
   /**
@@ -187,6 +193,8 @@ const useDynamicRowHeight = ({
     lineRef.current.resetAfterIndex(rowMeta.current.resetAfterRowIndex, false);
   }
 
+  viewService.estimatedRowHeight = estimatedRowHeight;
+  
   return {
     setCellSize,
     getRowHeight,

@@ -2,7 +2,7 @@ import { stardust } from '@nebula.js/stardust';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import React from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
-import { Column, PageInfo, Row, TableLayout } from '../../../../types';
+import { Column, PageInfo, Row, TableLayout, ViewService } from '../../../../types';
 import { generateLayout } from '../../../../__test__/generate-test-data';
 import TestWithProviders from '../../../../__test__/test-with-providers';
 import { GeneratedStyling } from '../../../types';
@@ -24,6 +24,8 @@ describe('useDynamicRowHeight', () => {
   let boldText: boolean | undefined;
   let gridState: React.MutableRefObject<GridState> | undefined;
   let props: UseDynamicRowHeightProps;
+  let isSnapshot: boolean;
+  let viewService: ViewService;
   let wrapper: ({ children }: HookWrapperProps) => JSX.Element;
   let rect: stardust.Rect;
 
@@ -55,6 +57,8 @@ describe('useDynamicRowHeight', () => {
       lineRef,
       boldText,
       gridState,
+      isSnapshot,
+      viewService,
     };
 
     wrapper = ({ children }: HookWrapperProps) => (

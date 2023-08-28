@@ -16,6 +16,7 @@ export interface ViewService {
   rowsPerPage?: number;
   page?: number;
   viewState?: ViewState;
+  estimatedRowHeight: number;
 }
 
 export interface Size {
@@ -34,6 +35,7 @@ export interface SnapshotData {
     rowsPerPage?: number;
     page?: number;
     size: Size;
+    estimatedRowHeight: number;
   };
 }
 
