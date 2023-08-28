@@ -25,7 +25,7 @@ describe('use-snapshot', () => {
         rowsPerPage: 100,
         qTop: 0,
         qHeight: 100,
-        estimatedRowHeight: 25,
+        estimatedRowHeight: 25
       };
       rowCount = 50;
     });
@@ -53,7 +53,7 @@ describe('use-snapshot', () => {
     it('should add extra rows when row count is larger than rowsPerPage', async () => {
       visibleRowEndIndex = 5;
       layout = generateLayout(dimensionCount, measureCount, rowCount);
-      viewService = { ...viewService, visibleHeight: 6, rowsPerPage: 10};
+      viewService = { ...viewService, visibleHeight: 6, rowsPerPage: 10 };
 
       const result = getVisibleHeight(visibleRowEndIndex, visibleRowStartIndex, layout, viewService);
       expect(result).toBe(9);
