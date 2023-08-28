@@ -62,7 +62,7 @@ const usePaginationTable = ({
 }: UsePaginationTable) => {
   const { direction, footerContainer } = useOptions() as UseOptions;
   const isPrintingMode = isPrinting(layout, viewService);
-  const shouldRender = layout.usePagination !== false;
+  const shouldRender = layout.usePagination !== false || isPrintingMode;
   const announce = useAnnounceAndTranslations(rootElement, translator);
   const tmpPageInfo = isPrintingMode
     ? {
