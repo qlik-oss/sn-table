@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, createContext, useMemo } from 'react';
 
 import { createSelectorProvider } from './createSelectorProvider';

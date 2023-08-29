@@ -22,7 +22,7 @@ const useScrollHandler = (
 
       totalsRef.current?.scrollTo(scrollLeft);
     },
-    [headerRef, totalsRef, bodyRef]
+    [viewService, bodyRef, headerRef, totalsRef]
   );
 
 export default useScrollHandler;
