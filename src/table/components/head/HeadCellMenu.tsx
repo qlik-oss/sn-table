@@ -150,7 +150,7 @@ const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
         },
       ],
     ],
-    [translator, isDim, fieldInstance, selectionActionsEnabledStatus, embedListbox]
+    [isDim, interactions.select, translator, selectionActionsEnabledStatus, embedListbox, fieldInstance]
   );
 
   const handleOpenDropdown = async () => {

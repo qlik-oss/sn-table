@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { stardust, useEffect, useMemo } from '@nebula.js/stardust';
 import { Root } from 'react-dom/client';
 import { renderVirtualizedTable } from '../table/Root';
