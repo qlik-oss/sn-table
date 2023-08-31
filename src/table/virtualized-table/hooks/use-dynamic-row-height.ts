@@ -109,7 +109,7 @@ const useDynamicRowHeight = ({
         setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
       }
     },
-    [getCellSize]
+    [getCellSize, isSnapshot]
   );
 
   const getRowHeight = useCallback(
@@ -142,7 +142,7 @@ const useDynamicRowHeight = ({
   if(!isSnapshot){
       setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
   };
-  }, [resetRowMeta, mutableSetCellSize]);
+  }, [resetRowMeta, isSnapshot, mutableSetCellSize]);
 
   /**
    * Some user actions and events can trigger row heights to be invalidated
