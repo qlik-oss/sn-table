@@ -86,7 +86,7 @@ const useDynamicRowHeight = ({
   const setCellSize = useCallback(
     (text: string, rowIdx: number, colIdx: number, isNumeric = false, batchStateUpdate = false) => {
       const key = `${rowIdx}-${colIdx}`;
-      if (rowMeta.current.measuredCells.has(key) || !isSnapshot) {
+      if (rowMeta.current.measuredCells.has(key)) {
         return;
       }
 
@@ -105,7 +105,7 @@ const useDynamicRowHeight = ({
         rowMeta.current.heights[rowIdx] = height;
       }
 
-      if (!batchStateUpdate) {
+      if (!batchStateUpdate && !isSnapshot) {
         setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
       }
     },
