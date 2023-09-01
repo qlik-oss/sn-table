@@ -26,6 +26,7 @@ describe('use-snapshot', () => {
         rowsPerPage: 100,
         qTop: 0,
         qHeight: 100,
+        estimatedRowHeight: 25,
       };
       rootElement = document.createElement('p');
       model = undefined;

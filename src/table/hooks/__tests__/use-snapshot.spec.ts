@@ -25,6 +25,7 @@ describe('use-snapshot', () => {
         rowsPerPage: 100,
         qTop: 0,
         qHeight: 100,
+        estimatedRowHeight: 25
       };
       rowCount = 50;
     });
@@ -83,6 +84,7 @@ describe('use-snapshot', () => {
         rowsPerPage: 100,
         qTop: 0,
         qHeight: 100,
+        estimatedRowHeight: 25,
       };
       rootElement = document.createElement('p');
       jest.spyOn(visibleRowsUtils, 'findVirtualizedVisibleRows').mockReturnValue({});
