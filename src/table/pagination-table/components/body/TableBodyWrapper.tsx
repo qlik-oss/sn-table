@@ -22,6 +22,7 @@ const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: Table
     rootElement,
     keyboard,
     layout,
+    viewService,
     interactions,
     styling: {
       body: { hoverColors, lastRowBottomBorder, ...cellStyle },
@@ -42,10 +43,11 @@ const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: Table
   const hoverEffect = !!getStylingComponent(layout)?.content?.hoverEffect;
 
   useSelectionListener({ keyboard, selectionDispatch, selectionsAPI, setShouldRefocus, tableWrapperRef });
+  const showTotals = (totalsPosition.atTop || totalsPosition.atBottom)  && viewService.viewState?.showTotals !== false;
 
   return (
     <StyledBody lastRowBottomBorder={lastRowBottomBorder}>
-      {totalsPosition.atTop ? <TableTotals /> : undefined}
+      {totalsPosition.atTop && viewService.viewState?.showTotals !== false ? <TableTotals /> : undefined}
       {rows.map((row, rowIndex) => (
         <StyledBodyRow
           hoverColors={hoverColors}
@@ -59,7 +61,7 @@ const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: Table
             const { id } = column;
             const cell = row[id] as Cell;
             const CellRenderer = columnRenderers[columnIndex];
-            const tabIndex = rowIndex === 0 && columnIndex === 0 && !totalsPosition.atTop && !keyboard.enabled ? 0 : -1;
+            const tabIndex = rowIndex === 0 && columnIndex === 0 && !showTotals && !keyboard.enabled ? 0 : -1;
             const handleKeyDown = (evt: React.KeyboardEvent) => {
               handleBodyKeyDown({
                 evt,
@@ -95,14 +97,14 @@ const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: Table
                     handleMouseDownToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition)
                   }
                 >
-                  <CellText fontSize={cellStyle.fontSize}>{cell.qText}</CellText>
+                  <CellText fontSize={cellStyle.fontSize} lines={viewService.viewState?.maxLineCount || 3}>{cell.qText}</CellText>
                 </CellRenderer>
               )
             );
           })}
         </StyledBodyRow>
       ))}
-      {totalsPosition.atBottom ? <TableTotals /> : undefined}
+      {totalsPosition.atBottom && viewService.viewState?.showTotals !== false ? <TableTotals /> : undefined}
     </StyledBody>
   );
 };

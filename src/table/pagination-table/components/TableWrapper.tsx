@@ -133,7 +133,7 @@ const TableWrapper = (props: TableWrapperProps) => {
         data-testid="table-container"
       >
         <StyledTable styling={styling} showRightBorder={showRightBorder} stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper />
+          {viewService.viewState?.showHeader !== false ? <TableHeadWrapper /> : undefined}
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </StyledTable>
       </StyledTableContainer>

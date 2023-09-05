@@ -29,6 +29,7 @@ export interface UseDynamicRowHeightProps {
   gridState?: React.MutableRefObject<GridState>;
   isSnapshot: boolean;
   viewService: ViewService;
+  maxNbrLines?: number;
 }
 
 const MAX_ELEMENT_DOM_SIZE = 15_000_000; // Guestimated max height value in px of a DOM element
@@ -46,6 +47,7 @@ const useDynamicRowHeight = ({
   gridState,
   isSnapshot,
   viewService, 
+  maxNbrLines = MAX_NBR_LINES_OF_TEXT,
 }: UseDynamicRowHeightProps) => {
   const rowMeta = useRef<RowMeta>({
     lastScrollToRatio: 0,
@@ -64,7 +66,7 @@ const useDynamicRowHeight = ({
   const maxCellHeightExcludingPadding = MAX_ELEMENT_DOM_SIZE / rowCount - CELL_PADDING_HEIGHT - CELL_BORDER_HEIGHT;
   const maxLineCount = Math.max(
     0,
-    Math.min(MAX_NBR_LINES_OF_TEXT, Math.round(maxCellHeightExcludingPadding / lineHeight))
+    Math.min(maxNbrLines, Math.round(maxCellHeightExcludingPadding / lineHeight))
   );
 
   const getCellSize = useCallback(

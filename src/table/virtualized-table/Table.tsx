@@ -117,7 +117,7 @@ const Table = (props: TableProps) => {
     <ScrollableContainer ref={ref} width={tableRect.width} height={tableRect.height} onScroll={scrollHandler}>
       <FullSizeContainer width={containerWidth} height={containerHeight}>
         <StickyContainer rect={stickyContainerRect}>
-          <Header
+        {viewService.viewState?.showHeader === false ? null : <Header
             headerStyle={styling.head}
             rect={stickyContainerRect}
             pageInfo={pageInfo}
@@ -125,8 +125,8 @@ const Table = (props: TableProps) => {
             forwardRef={headerRef}
             rowHeight={headerRowHeight}
             columResizeHandler={columResizeHandler}
-          />
-          {totalsPosition.atTop ? TotalsComponent : null}
+          />}
+          {(totalsPosition.atTop && viewService.viewState?.showTotals !== false) ? TotalsComponent : null}
           <Body
             ref={bodyRef}
             innerForwardRef={innerForwardRef}
@@ -138,7 +138,7 @@ const Table = (props: TableProps) => {
             headerAndTotalsHeight={headerAndTotalsHeight}
             syncHeight={syncHeight}
           />
-          {totalsPosition.atBottom ? TotalsComponent : null}
+          {(totalsPosition.atBottom && viewService.viewState?.showTotals !== false) ? TotalsComponent : null}
         </StickyContainer>
       </FullSizeContainer>
     </ScrollableContainer>

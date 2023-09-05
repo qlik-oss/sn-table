@@ -3,6 +3,7 @@ import type { TableLayout, ViewService, SnapshotLayout, HyperCube } from '../../
 import { findPaginationVisibleRows, findVirtualizedVisibleRows } from '../utils/find-visible-rows';
 import { getTotalPosition } from '../../handle-data';
 import { initialPageInfo } from '../../nebula-hooks/use-pagination-table';
+import renderAsPagination from '../../render-as-pagination';
 
 interface UseSnapshotProps {
   layout: TableLayout;
@@ -11,8 +12,6 @@ interface UseSnapshotProps {
   rootElement: HTMLElement;
   contentRect: stardust.Rect;
 }
-
-const EXTRA_ROWS = 3;
 
 export const getVisibleHeight = (
   visibleRowEndIndex: number,
@@ -25,13 +24,14 @@ export const getVisibleHeight = (
   const totalRowCount = layout.qHyperCube.qSize.qcy;
   const visualRowsPerPage = viewService.rowsPerPage || initialPageInfo.rowsPerPage;
   // EXTRA_ROWS will be added to the visualHeight when the pagination footer is displayed and the table can be scrolled
+  const EXTRA_ROWS = viewService.viewState?.isMultiPage ? 0 : 3;
   return Math.min(totalRowCount, visualRowsPerPage, visibleRowEndIndex - visibleRowStartIndex + 1 + EXTRA_ROWS);
 };
 
 export const getViewState = (layout: TableLayout, viewService: ViewService, rootElement: HTMLElement) => {
-  if (viewService.viewState) return viewService.viewState;
+  if (viewService.viewState && !viewService.viewState.isMultiPage) return viewService.viewState;
 
-  if (layout.usePagination) {
+  if (renderAsPagination(layout, viewService)) {
     const totalsPosition = getTotalPosition(layout);
     const {
       visibleRowStartIndex = -1,
@@ -112,7 +112,7 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
     () => ({
       getViewState: () => getViewState(layout, viewService, rootElement),
     }),
-    []
+    [layout, viewService, rootElement]
   );
 };
 
