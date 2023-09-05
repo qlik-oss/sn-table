@@ -32,7 +32,7 @@ export const getViewState = (layout: TableLayout, viewService: ViewService, root
   if (viewService.viewState && !viewService.viewState.isMultiPage) return viewService.viewState;
 
   if (renderAsPagination(layout, viewService)) {
-    const totalsPosition = getTotalPosition(layout);
+    const totalsPosition = getTotalPosition(layout, viewService);
     const {
       visibleRowStartIndex = -1,
       visibleRowEndIndex = -1,

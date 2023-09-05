@@ -27,7 +27,9 @@ export function getHighestPossibleRpp(width: number, rowsPerPageOptions: number[
 /**
  * Get the position of the totals
  */
-export function getTotalPosition(layout: TableLayout) {
+export function getTotalPosition(layout: TableLayout, viewService?: ViewService) {
+  // For multi-page pdf the totals row may not be needed from the second pdf page
+  if (viewService?.viewState?.showTotals === false) return { atTop: false, atBottom: false };
   const [hasDimension, hasMeasure, hasGrandTotal, isTotalModeAuto, position] = [
     layout.qHyperCube.qDimensionInfo.length > 0,
     layout.qHyperCube.qMeasureInfo.length > 0,
@@ -229,7 +231,7 @@ export default async function manageData(
   }
 
   const paginationNeeded = totalRowCount > 10; // TODO: This might not be true if you have > 1000 columns
-  const totalsPosition = getTotalPosition(layout);
+  const totalsPosition = getTotalPosition(layout, viewService);
   const columns = getColumns(layout);
 
   const isSnapshot = !!layout.snapshotData;

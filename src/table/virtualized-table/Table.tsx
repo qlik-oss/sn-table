@@ -126,7 +126,7 @@ const Table = (props: TableProps) => {
             rowHeight={headerRowHeight}
             columResizeHandler={columResizeHandler}
           />}
-          {(totalsPosition.atTop && viewService.viewState?.showTotals !== false) ? TotalsComponent : null}
+          {totalsPosition.atTop ? TotalsComponent : null}
           <Body
             ref={bodyRef}
             innerForwardRef={innerForwardRef}
@@ -138,7 +138,7 @@ const Table = (props: TableProps) => {
             headerAndTotalsHeight={headerAndTotalsHeight}
             syncHeight={syncHeight}
           />
-          {(totalsPosition.atBottom && viewService.viewState?.showTotals !== false) ? TotalsComponent : null}
+          {totalsPosition.atBottom ? TotalsComponent : null}
         </StickyContainer>
       </FullSizeContainer>
     </ScrollableContainer>

@@ -43,11 +43,10 @@ const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: Table
   const hoverEffect = !!getStylingComponent(layout)?.content?.hoverEffect;
 
   useSelectionListener({ keyboard, selectionDispatch, selectionsAPI, setShouldRefocus, tableWrapperRef });
-  const showTotals = (totalsPosition.atTop || totalsPosition.atBottom)  && viewService.viewState?.showTotals !== false;
 
   return (
     <StyledBody lastRowBottomBorder={lastRowBottomBorder}>
-      {totalsPosition.atTop && viewService.viewState?.showTotals !== false ? <TableTotals /> : undefined}
+      {totalsPosition.atTop ? <TableTotals /> : undefined}
       {rows.map((row, rowIndex) => (
         <StyledBodyRow
           hoverColors={hoverColors}
@@ -61,7 +60,7 @@ const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: Table
             const { id } = column;
             const cell = row[id] as Cell;
             const CellRenderer = columnRenderers[columnIndex];
-            const tabIndex = rowIndex === 0 && columnIndex === 0 && !showTotals && !keyboard.enabled ? 0 : -1;
+            const tabIndex = rowIndex === 0 && columnIndex === 0 && !totalsPosition.atTop && !keyboard.enabled ? 0 : -1;
             const handleKeyDown = (evt: React.KeyboardEvent) => {
               handleBodyKeyDown({
                 evt,
@@ -104,7 +103,7 @@ const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: Table
           })}
         </StyledBodyRow>
       ))}
-      {totalsPosition.atBottom && viewService.viewState?.showTotals !== false ? <TableTotals /> : undefined}
+      {totalsPosition.atBottom ? <TableTotals /> : undefined}
     </StyledBody>
   );
 };
