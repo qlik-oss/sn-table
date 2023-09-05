@@ -14,6 +14,7 @@ import {
 } from '../types';
 import useInitialDataPages from './virtualized-table/use-initial-data-pages';
 import usePageInfo from './virtualized-table/use-page-info';
+import isPrinting from '../is-printing';
 
 interface UseVirtualizedTable {
   app: EngineAPI.IApp | undefined;
@@ -52,7 +53,8 @@ const useVirtualizedTable = ({
   isFontLoaded,
   viewService,
 }: UseVirtualizedTable) => {
-  const shouldRender = layout.usePagination === false;
+  const isPrintingMode = isPrinting(layout, viewService);
+  const shouldRender = layout.usePagination === false && !isPrintingMode;
   const tableData = useMemo(() => getVirtualScrollTableData(layout, interactions), [layout, interactions]);
   const { pageInfo, setPage } = usePageInfo(layout, shouldRender);
   const { initialDataPages, isLoading } = useInitialDataPages({ model, layout, page: pageInfo.page, shouldRender });
