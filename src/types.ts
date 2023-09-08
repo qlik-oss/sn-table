@@ -247,8 +247,8 @@ export interface ViewState {
   isMultiPage?: boolean;
   maxLineCount?: number;
   usePagination?: boolean;
-  showTotals?: boolean;
-  showHeader?: boolean;
+  skipTotals?: boolean;
+  skipHeader?: boolean;
 }
 
 export interface UseOptions {

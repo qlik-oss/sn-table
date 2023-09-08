@@ -117,7 +117,7 @@ const Table = (props: TableProps) => {
     <ScrollableContainer ref={ref} width={tableRect.width} height={tableRect.height} onScroll={scrollHandler}>
       <FullSizeContainer width={containerWidth} height={containerHeight}>
         <StickyContainer rect={stickyContainerRect}>
-        {viewService.viewState?.showHeader === false ? null : <Header
+          {viewService.viewState?.skipHeader === true ? null : <Header
             headerStyle={styling.head}
             rect={stickyContainerRect}
             pageInfo={pageInfo}

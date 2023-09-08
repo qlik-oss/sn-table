@@ -9,6 +9,7 @@ import {
   ExtendedNxAttrExprInfo,
   TotalsPosition,
   ViewService,
+  ViewState,
 } from '../types';
 
 describe('handle-data', () => {
@@ -267,9 +268,27 @@ describe('handle-data', () => {
 
   describe('getTotalPosition:', () => {
     let expectedPosition: TotalsPosition;
-
+    let viewService: ViewService;
+    
     beforeEach(() => {
       expectedPosition = { atBottom: false, atTop: false };
+      viewService = { viewState: { skipTotals: true } as ViewState } as ViewService;
+    });
+
+    describe('When viewService?.viewState?.skipTotals is true', () => {
+      it('should not show totals at top when the position is set to top', () => {
+        layout.totals.position = 'top';
+        expect(getTotalPosition(layout, viewService)).toEqual(expectedPosition);
+      });
+
+      it('should not show totals at bottom when the position is set to bottom', () => {
+        layout.totals.position = 'bottom';
+        expect(getTotalPosition(layout, viewService)).toEqual(expectedPosition);
+      });
+
+      it('should not show totals when the position is set to none', () => {
+        expect(getTotalPosition(layout, viewService)).toEqual(expectedPosition);
+      });
     });
 
     describe('When total auto mode is off', () => {

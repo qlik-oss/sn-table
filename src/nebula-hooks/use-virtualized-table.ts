@@ -57,7 +57,7 @@ const useVirtualizedTable = ({
   const tableData = useMemo(() => getVirtualScrollTableData(layout, interactions, viewService), [layout, interactions, viewService]);
   const { pageInfo, setPage } = usePageInfo(layout, shouldRender);
   const { initialDataPages, isLoading } = useInitialDataPages({ model, layout, page: pageInfo.page, shouldRender });
-  
+
   useEffect(() => {
     if (!shouldRender || !model || !changeSortOrder || !initialDataPages || isLoading || !isFontLoaded) return;
 
