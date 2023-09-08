@@ -246,7 +246,7 @@ export interface ViewState {
   page?: number;
   isMultiPage?: boolean;
   maxLineCount?: number;
-  tableType?: number;
+  usePagination?: boolean;
   showTotals?: boolean;
   showHeader?: boolean;
 }
