@@ -275,18 +275,16 @@ describe('handle-data', () => {
       viewService = { viewState: { skipTotals: true } as ViewState } as ViewService;
     });
 
-    describe('When viewService?.viewState?.skipTotals is true', () => {
-      it('should not show totals at top when the position is set to top', () => {
+    describe('When viewService?.viewState?.skipTotals is set', () => {
+      it('should not show totals at top when the position is set to top but viewService?.viewState?.skipTotals = true', () => {
         layout.totals.position = 'top';
         expect(getTotalPosition(layout, viewService)).toEqual(expectedPosition);
       });
 
-      it('should not show totals at bottom when the position is set to bottom', () => {
-        layout.totals.position = 'bottom';
-        expect(getTotalPosition(layout, viewService)).toEqual(expectedPosition);
-      });
-
-      it('should not show totals when the position is set to none', () => {
+      it('should show totals at top when the position is set to top and viewService?.viewState?.skipTotals is falsy', () => {
+        layout.totals.position = 'top';
+        expectedPosition.atTop = true;
+        if(viewService.viewState) viewService.viewState.skipTotals = false;
         expect(getTotalPosition(layout, viewService)).toEqual(expectedPosition);
       });
     });
