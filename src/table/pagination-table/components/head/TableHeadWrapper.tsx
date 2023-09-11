@@ -14,7 +14,7 @@ import { handleMouseDownToFocusHead } from '../../../utils/handle-mouse';
 
 const TableHeadWrapper = () => {
   const { columns } = useContextSelector(TableContext, (value) => value.tableData);
-  const { layout, styling, interactions, rootElement, keyboard } = useContextSelector(
+  const { layout, styling, interactions, rootElement, keyboard, viewService } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );
@@ -31,6 +31,8 @@ const TableHeadWrapper = () => {
       setHeadRowHeight(headRowRef.current.clientHeight);
     }
   }, [styling.head.fontSize, columnWidths, setHeadRowHeight]);
+
+  if (viewService.viewState?.skipHeader) return null;
 
   return (
     <TableHead>

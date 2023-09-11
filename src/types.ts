@@ -244,6 +244,11 @@ export interface ViewState {
   visibleWidth?: number;
   rowsPerPage?: number;
   page?: number;
+  isMultiPage?: boolean;
+  maxLineCount?: number;
+  usePagination?: boolean;
+  skipTotals?: boolean;
+  skipHeader?: boolean;
 }
 
 export interface UseOptions {

@@ -6,7 +6,7 @@ import TableBodyWrapper from '../TableBodyWrapper';
 import * as getCellRenderer from '../../../utils/get-cell-renderer';
 import * as handleKeyPress from '../../../../utils/handle-keyboard';
 import * as handleClick from '../../../../utils/handle-mouse';
-import { TableData, PageInfo, Cell } from '../../../../../types';
+import { TableData, PageInfo, Cell, ViewService } from '../../../../../types';
 import TestWithProviders from '../../../../../__test__/test-with-providers';
 
 describe('<TableBodyWrapper />', () => {
@@ -18,6 +18,7 @@ describe('<TableBodyWrapper />', () => {
   let tableData: TableData;
   let tableFirstRow: Cell;
   let tableSecondRow: Cell;
+  let viewService: ViewService;
 
   const renderTableBody = () =>
     render(
@@ -29,11 +30,13 @@ describe('<TableBodyWrapper />', () => {
     );
 
   beforeEach(async () => {
+    viewService = {} as ViewService;
     tableData = (await manageData(
       model,
       generateLayout(1, 1, 2, [], [{ qText: '100' }]),
       { top: 0, height: 100 } as unknown as PageInfo,
-      () => undefined
+      () => undefined,
+      viewService
     )) as TableData;
     tableFirstRow = tableData.rows[0]['col-0'] as Cell;
     tableSecondRow = tableData.rows[0]['col-1'] as Cell;

@@ -5,12 +5,13 @@ import manageData from '../../../../../handle-data';
 import * as handleKeyPress from '../../../../utils/handle-keyboard';
 import * as handleAccessibility from '../../../../utils/accessibility-utils';
 import { generateDataPages, generateLayout } from '../../../../../__test__/generate-test-data';
-import { TableData, ExtendedSelectionAPI, PageInfo } from '../../../../../types';
+import { TableData, ExtendedSelectionAPI, PageInfo, ViewService } from '../../../../../types';
 import TestWithProviders from '../../../../../__test__/test-with-providers';
 
 describe('<TableTotals />', () => {
   const model = { getHyperCubeData: async () => generateDataPages(2, 2) } as unknown as EngineAPI.IGenericObject;
   const layout = generateLayout(1, 1, 2, [], [{ qText: '350' }]);
+  let viewService: ViewService;
   let tableData: TableData;
   let selectionsAPI: ExtendedSelectionAPI;
 
@@ -26,11 +27,13 @@ describe('<TableTotals />', () => {
     );
 
   beforeEach(async () => {
+    viewService = {} as ViewService;
     tableData = (await manageData(
       model,
       layout,
       { top: 0, height: 100 } as unknown as PageInfo,
-      () => undefined
+      () => undefined,
+      viewService
     )) as TableData;
   });
 

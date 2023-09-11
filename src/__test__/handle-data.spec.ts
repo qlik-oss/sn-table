@@ -9,6 +9,7 @@ import {
   ExtendedNxAttrExprInfo,
   TotalsPosition,
   ViewService,
+  ViewState,
 } from '../types';
 
 describe('handle-data', () => {
@@ -267,45 +268,62 @@ describe('handle-data', () => {
 
   describe('getTotalPosition:', () => {
     let expectedPosition: TotalsPosition;
-
+    let viewService: ViewService;
+    
     beforeEach(() => {
       expectedPosition = { atBottom: false, atTop: false };
+      viewService = {} as ViewService;
+    });
+
+    describe('When viewService?.viewState?.skipTotals is set', () => {
+      it('should not show totals at top when the position is set to top but viewService?.viewState?.skipTotals = true', () => {
+        layout.totals.position = 'top';
+        viewService.viewState = { skipTotals: true } as ViewState;
+        expect(getTotalPosition(layout, viewService)).toEqual(expectedPosition);
+      });
+
+      it('should show totals at top when the position is set to top and viewService?.viewState?.skipTotals is falsy', () => {
+        layout.totals.position = 'top';
+        expectedPosition.atTop = true;
+        viewService.viewState = { skipTotals: false } as ViewState;
+        expect(getTotalPosition(layout, viewService)).toEqual(expectedPosition);
+      });
     });
 
     describe('When total auto mode is off', () => {
       it('should show totals at top when the position is set to top', () => {
         layout.totals.position = 'top';
         expectedPosition.atTop = true;
-        expect(getTotalPosition(layout)).toEqual(expectedPosition);
+        expect(getTotalPosition(layout, viewService)).toEqual(expectedPosition);
       });
 
       it('should show totals at bottom when the position is set to bottom', () => {
         layout.totals.position = 'bottom';
         expectedPosition.atBottom = true;
-        expect(getTotalPosition(layout)).toEqual(expectedPosition);
+        expect(getTotalPosition(layout, viewService)).toEqual(expectedPosition);
       });
 
       it('should not show totals when the position is set to none', () => {
-        expect(getTotalPosition(layout)).toEqual(expectedPosition);
+        expect(getTotalPosition(layout, viewService)).toEqual(expectedPosition);
       });
 
       it('should not show totals when position is set to top but there is no grandTotal', () => {
         layout.totals.position = 'top';
         layout.qHyperCube.qGrandTotalRow.length = 0;
-        expect(getTotalPosition(layout)).toEqual(expectedPosition);
+        expect(getTotalPosition(layout, viewService)).toEqual(expectedPosition);
       });
 
       it('should not show totals when position is set to top but table has only dimensions', () => {
         layout.totals.position = 'top';
         layout.qHyperCube.qMeasureInfo.length = 0;
-        expect(getTotalPosition(layout)).toEqual(expectedPosition);
+        expect(getTotalPosition(layout, viewService)).toEqual(expectedPosition);
       });
 
       it('should show totals when table has only measure', () => {
         layout.qHyperCube.qDimensionInfo.length = 0;
         layout.totals.position = 'top';
         expectedPosition.atTop = true;
-        expect(getTotalPosition(layout)).toEqual(expectedPosition);
+        expect(getTotalPosition(layout, viewService)).toEqual(expectedPosition);
       });
     });
 
@@ -314,13 +332,13 @@ describe('handle-data', () => {
         layout.totals.show = true;
         layout.totals.position = 'noTotals';
         expectedPosition.atTop = true;
-        expect(getTotalPosition(layout)).toEqual(expectedPosition);
+        expect(getTotalPosition(layout, viewService)).toEqual(expectedPosition);
       });
 
       it('should not show totals when table has only measures', () => {
         layout.totals.show = true;
         layout.qHyperCube.qDimensionInfo.length = 0;
-        expect(getTotalPosition(layout)).toEqual(expectedPosition);
+        expect(getTotalPosition(layout, viewService)).toEqual(expectedPosition);
       });
     });
   });
