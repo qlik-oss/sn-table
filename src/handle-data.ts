@@ -29,7 +29,7 @@ export function getHighestPossibleRpp(width: number, rowsPerPageOptions: number[
  */
 export function getTotalPosition(layout: TableLayout, viewService?: ViewService) {
   // For multi-page pdf the totals row may not be needed from the second pdf page
-  if (viewService?.viewState?.skipTotals === true) return { atTop: false, atBottom: false };
+  if (viewService?.viewState?.skipTotals) return { atTop: false, atBottom: false };
   const [hasDimension, hasMeasure, hasGrandTotal, isTotalModeAuto, position] = [
     layout.qHyperCube.qDimensionInfo.length > 0,
     layout.qHyperCube.qMeasureInfo.length > 0,

@@ -96,7 +96,7 @@ const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: Table
                     handleMouseDownToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition)
                   }
                 >
-                  <CellText fontSize={cellStyle.fontSize} lines={viewService.viewState?.maxLineCount || 3}>{cell.qText}</CellText>
+                  <CellText fontSize={cellStyle.fontSize} lines={viewService.viewState?.maxLineCount}>{cell.qText}</CellText>
                 </CellRenderer>
               )
             );

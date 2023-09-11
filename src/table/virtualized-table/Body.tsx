@@ -33,7 +33,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   const { layout, model, theme, viewService } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const initialDataPages = useContextSelector(TableContext, (value) => value.initialDataPages);
-  const maxNbrLines = viewService.viewState?.maxLineCount || undefined;
+  const maxNbrLines = viewService.viewState?.maxLineCount;
 
   const gridRef = useRef<VariableSizeGrid>(null);
   const gridState = useRef<GridState>({

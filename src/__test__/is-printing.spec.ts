@@ -24,7 +24,7 @@ describe('is-printing', () => {
     expect(isPrinting(layout, viewService)).toEqual(true);
   });
 
-  it('should return true if layout.snapshotData is falsy and viewService.viewState.visibleHeight is falsy', () => {
+  it('should return false if layout.snapshotData is falsy and viewService.viewState.visibleHeight is falsy', () => {
     expect(isPrinting(layout, viewService)).toEqual(false);
   });
 });
