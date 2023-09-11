@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { stardust } from '@nebula.js/stardust';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 import { TestableTable } from '../Table';
-import { ExtendedSelectionAPI, PageInfo, TableData, TableLayout } from '../../../types';
+import { ExtendedSelectionAPI, PageInfo, TableData, TableLayout, ViewService } from '../../../types';
 import { generateDataPages, generateLayout } from '../../../__test__/generate-test-data';
 import TestWithProviders from '../../../__test__/test-with-providers';
 import { EMPTY_TABLE_DATA } from '../../context/TableContext';
@@ -13,6 +13,7 @@ import { getColumns, getTotalPosition } from '../../../handle-data';
 describe('<Table />', () => {
   let rect: stardust.Rect;
   let layout: TableLayout;
+  let viewService: ViewService;
   let pageInfo: PageInfo;
   let model: EngineAPI.IGenericObject;
   let selectionsAPI: ExtendedSelectionAPI;
@@ -32,7 +33,7 @@ describe('<Table />', () => {
       ...EMPTY_TABLE_DATA,
       paginationNeeded: false,
       columns: getColumns(layout),
-      totalsPosition: getTotalPosition(layout),
+      totalsPosition: getTotalPosition(layout, viewService),
     };
 
     await act(() =>
@@ -58,6 +59,7 @@ describe('<Table />', () => {
     user = userEvent.setup();
 
     layout = generateLayout(dimensionCount, measureCount, rowCount);
+    viewService = {} as ViewService;
     layout.qHyperCube.qEffectiveInterColumnSortOrder = [0, 1, 2];
     rect = {
       width: 750,
