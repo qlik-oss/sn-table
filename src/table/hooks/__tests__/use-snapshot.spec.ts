@@ -41,6 +41,7 @@ describe('use-snapshot', () => {
         scrollTopRatio: 6,
         rowsPerPage: 7,
         page: 0,
+        totalsPosition: undefined,
       });
     });
 

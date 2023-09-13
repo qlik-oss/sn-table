@@ -6,9 +6,9 @@ import { TableLayout, ViewService } from '../../types';
 
 const getViewState = (layout: TableLayout, viewService: ViewService, rootElement: HTMLElement) => {
     if (viewService.viewState && !viewService.viewState.isMultiPage) return viewService.viewState;
-  
+    let totalsPosition;
     if (renderAsPagination(layout, viewService)) {
-      const totalsPosition = getTotalPosition(layout, viewService);
+      totalsPosition = getTotalPosition(layout, viewService);
       const {
         visibleRowStartIndex = -1,
         visibleRowEndIndex = -1,
@@ -22,10 +22,13 @@ const getViewState = (layout: TableLayout, viewService: ViewService, rootElement
         visibleHeight: getVisibleHeight(visibleRowEndIndex, visibleRowStartIndex, layout, viewService),
         rowsPerPage: viewService.rowsPerPage,
         page: viewService.page,
+        totalsPosition: viewService.viewState?.isMultiPage ? totalsPosition : undefined,
       };
     }
     const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findVirtualizedVisibleRows(rootElement, viewService);
-  
+    if (viewService.viewState?.isMultiPage) {
+      totalsPosition = getTotalPosition(layout, viewService);
+    }
     return {
       scrollLeft: viewService.scrollLeft,
       visibleLeft: viewService.visibleLeft,
@@ -35,6 +38,7 @@ const getViewState = (layout: TableLayout, viewService: ViewService, rootElement
       scrollTopRatio: viewService.scrollTopRatio,
       rowsPerPage: viewService.rowsPerPage,
       page: viewService.page,
+      totalsPosition: viewService.viewState?.isMultiPage ? totalsPosition : undefined,
     };
 };
   
