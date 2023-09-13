@@ -5,8 +5,8 @@ import AnnounceElements from '../AnnounceElements';
 describe('<AnnounceElements />', () => {
   it('should render the Announce component properly', () => {
     const result = render(<AnnounceElements />);
-    const firstAnnounceElement = result.container.querySelector('#sn-table-announcer--01');
-    const secondAnnounceElement = result.container.querySelector('#sn-table-announcer--02');
+    const firstAnnounceElement = result.container.querySelector('.sn-table-announcer-1');
+    const secondAnnounceElement = result.container.querySelector('.sn-table-announcer-2');
 
     expect(firstAnnounceElement).toBeVisible();
     expect(secondAnnounceElement).toBeVisible();

@@ -93,7 +93,7 @@ const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps)
 
   return (
     <AdjusterHitArea
-      id="adjuster-hit-area"
+      className="sn-table-adjuster-hit-area"
       isLastColumn={isLastColumn}
       key={`adjuster-${pageColIdx}`}
       onKeyDown={handleKeyDown}
