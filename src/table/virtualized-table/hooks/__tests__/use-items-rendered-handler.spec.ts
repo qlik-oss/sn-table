@@ -40,7 +40,7 @@ describe("use-items-rendered-handler", () => {
 
     loadRows = jest.fn();
     loadColumns = jest.fn();
-    viewService = { qTop: 0, qHeight: 1, scrollLeft: 0 };
+    viewService = { qTop: 0, qHeight: 1, scrollLeft: 0, estimatedRowHeight: 25 };
 
     verticalScrollDirection = { current: ScrollDirection.None };
     horizontalScrollDirection = { current: ScrollDirection.None };

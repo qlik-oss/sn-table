@@ -104,14 +104,16 @@ const useItemsRendererHandler = ({
       }
     },
     [
-      pageInfo,
-      loadRows,
-      loadColumns,
+      gridState,
+      rowCount,
+      pageInfo.page,
+      pageInfo.rowsPerPage,
+      viewService,
       verticalScrollDirection,
       horizontalScrollDirection,
-      rowCount,
-      layout.qHyperCube.qSize,
-      gridState,
+      loadRows,
+      layout.qHyperCube.qSize.qcx,
+      loadColumns,
     ]
   );
 

@@ -50,6 +50,7 @@ const useAnnounceAndTranslations = (rootElement: HTMLElement, translator: Extend
   useMemo(() => {
     registerLocale(translator);
     return () => announcementFactory(rootElement, translator);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rootElement, translator.language()]);
 
 export default useAnnounceAndTranslations;

@@ -12,12 +12,14 @@ const createViewService = (viewState: ViewState, snapshotData?: SnapshotData): V
   rowsPerPage: snapshotData?.content?.rowsPerPage ?? viewState?.rowsPerPage,
   page: snapshotData?.content?.page ?? viewState?.page,
   viewState,
+  estimatedRowHeight: snapshotData?.content?.estimatedRowHeight ?? 0,
 });
 
 const useViewService = (layout: TableLayout): ViewService => {
   const { viewState } = useOptions() as UseOptions;
   return useMemo(
     () => createViewService(viewState, layout.snapshotData),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [viewState, layout.snapshotData, layout.usePagination]
   );
 };

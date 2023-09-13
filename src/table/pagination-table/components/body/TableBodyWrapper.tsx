@@ -22,6 +22,7 @@ const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: Table
     rootElement,
     keyboard,
     layout,
+    viewService,
     interactions,
     styling: {
       body: { hoverColors, lastRowBottomBorder, ...cellStyle },
@@ -95,7 +96,9 @@ const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: Table
                     handleMouseDownToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition)
                   }
                 >
-                  <CellText fontSize={cellStyle.fontSize}>{cell.qText}</CellText>
+                  <CellText fontSize={cellStyle.fontSize} lines={viewService.viewState?.maxLineCount}>
+                    {cell.qText}
+                  </CellText>
                 </CellRenderer>
               )
             );

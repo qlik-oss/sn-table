@@ -4,7 +4,7 @@ import React from "react";
 import { generateLayout } from "../../../__test__/generate-test-data";
 import TestWithProviders from "../../../__test__/test-with-providers";
 import { getColumns, getTotalPosition } from "../../../handle-data";
-import { TableData, TableLayout } from "../../../types";
+import { TableData, TableLayout, ViewService } from "../../../types";
 import FooterWrapper from "../../components/footer/FooterWrapper";
 import { EMPTY_TABLE_DATA } from "../../context/TableContext";
 import { TestableTable } from "../Table";
@@ -16,6 +16,7 @@ jest.mock("../../components/footer/FooterWrapper");
 describe("<Wrapper />", () => {
   let rect: stardust.Rect;
   let layout: TableLayout;
+  let viewService: ViewService;
   let tableData: TableData;
   let paginationNeeded: boolean;
 
@@ -29,7 +30,7 @@ describe("<Wrapper />", () => {
       ...EMPTY_TABLE_DATA,
       paginationNeeded,
       columns: getColumns(layout),
-      totalsPosition: getTotalPosition(layout),
+      totalsPosition: getTotalPosition(layout, viewService),
     };
 
     render(
@@ -41,6 +42,7 @@ describe("<Wrapper />", () => {
 
   beforeEach(() => {
     layout = generateLayout(5, 5, 20);
+    viewService = {} as ViewService;
     rect = {
       width: 750,
     } as unknown as stardust.Rect;

@@ -27,7 +27,9 @@ export function getHighestPossibleRpp(width: number, rowsPerPageOptions: number[
 /**
  * Get the position of the totals
  */
-export function getTotalPosition(layout: TableLayout) {
+export function getTotalPosition(layout: TableLayout, viewService: ViewService) {
+  // For multi-page pdf the totals row may not be needed from the second pdf page
+  if (viewService.viewState?.skipTotals) return { atTop: false, atBottom: false };
   const [hasDimension, hasMeasure, hasGrandTotal, isTotalModeAuto, position] = [
     layout.qHyperCube.qDimensionInfo.length > 0,
     layout.qHyperCube.qMeasureInfo.length > 0,
@@ -207,15 +209,15 @@ export default async function manageData(
   layout: TableLayout,
   pageInfo: PageInfo,
   setPageInfo: SetPageInfo,
-  viewService?: ViewService
+  viewService: ViewService
 ): Promise<TableData | null> {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const totalColumnCount = layout.qHyperCube.qSize.qcx;
   const totalRowCount = layout.qHyperCube.qSize.qcy;
   const totalPages = Math.ceil(totalRowCount / rowsPerPage);
 
-  const top = viewService?.visibleTop ?? page * rowsPerPage;
-  const height = viewService?.visibleHeight ?? Math.min(rowsPerPage, totalRowCount - top);
+  const top = viewService.visibleTop ?? page * rowsPerPage;
+  const height = viewService.visibleHeight ?? Math.min(rowsPerPage, totalRowCount - top);
   // When the number of rows is reduced (e.g. confirming selections),
   // you can end up still being on a page that doesn't exist anymore, then go back to the first page and rerender
   if (page > 0 && top >= totalRowCount) {
@@ -229,7 +231,7 @@ export default async function manageData(
   }
 
   const paginationNeeded = totalRowCount > 10; // TODO: This might not be true if you have > 1000 columns
-  const totalsPosition = getTotalPosition(layout);
+  const totalsPosition = getTotalPosition(layout, viewService);
   const columns = getColumns(layout);
 
   const isSnapshot = !!layout.snapshotData;

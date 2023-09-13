@@ -64,7 +64,7 @@ const useGetHyperCubeDataQueue = (
         finished.current.clear();
       },
     }),
-    []
+    [mutableGetDataPages, mutableHandleDataPages]
   );
 
   return queue;

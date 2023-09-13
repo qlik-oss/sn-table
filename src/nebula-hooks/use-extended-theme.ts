@@ -38,6 +38,7 @@ const useExtendedTheme = (rootElement: HTMLElement): ExtendedTheme => {
   const nebulaTheme = useTheme() as ExtendedTheme;
   return useMemo(
     () => ({ ...nebulaTheme, background: getBackgroundColors(nebulaTheme, rootElement) } as ExtendedTheme),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [nebulaTheme.name(), rootElement]
   );
 };

@@ -251,6 +251,7 @@ describe("find-visible-rows", () => {
           rowsPerPage: 100,
           qTop: 0,
           qHeight: 100,
+          estimatedRowHeight: 25,
         };
       });
 
@@ -287,6 +288,7 @@ describe("find-visible-rows", () => {
           rowsPerPage: 100,
           qTop: 0,
           qHeight: 100,
+          estimatedRowHeight: 25,
         };
       });
 

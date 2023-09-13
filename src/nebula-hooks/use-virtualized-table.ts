@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { stardust, useEffect, useMemo } from "@nebula.js/stardust";
 import { Root } from "react-dom/client";
-import isPrinting from "../is-printing";
+import renderAsPagination from "../render-as-pagination";
 import { renderVirtualizedTable } from "../table/Root";
 import getVirtualScrollTableData from "../table/virtualized-table/utils/get-table-data";
 import {
@@ -52,9 +53,11 @@ const useVirtualizedTable = ({
   isFontLoaded,
   viewService,
 }: UseVirtualizedTable) => {
-  const isPrintingMode = isPrinting(layout, viewService);
-  const shouldRender = layout.usePagination === false && !isPrintingMode;
-  const tableData = useMemo(() => getVirtualScrollTableData(layout, interactions), [layout, interactions]);
+  const shouldRender = !renderAsPagination(layout, viewService);
+  const tableData = useMemo(
+    () => getVirtualScrollTableData(layout, interactions, viewService),
+    [layout, interactions, viewService]
+  );
   const { pageInfo, setPage } = usePageInfo(layout, shouldRender);
   const { initialDataPages, isLoading } = useInitialDataPages({ model, layout, page: pageInfo.page, shouldRender });
 

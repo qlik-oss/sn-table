@@ -101,4 +101,4 @@ const toRows = (
 
 const createEmptyState = (rowCount: number) => Array(rowCount).fill(undefined);
 
-export { createRow, isRowMissingData, isColumnMissingData, toRows, createEmptyState };
+export { createEmptyState, createRow, isColumnMissingData, isRowMissingData, toRows };

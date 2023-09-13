@@ -32,7 +32,7 @@ const Table = (props: TableProps) => {
       ...styling.body,
       background: theme.background.color ?? "transparent",
     }),
-    [layout, theme.name()]
+    [theme.background.color, styling]
   );
   const {
     headerRowHeight,
@@ -48,6 +48,8 @@ const Table = (props: TableProps) => {
     totalsPosition,
     headerRef,
     totalsRef,
+    isSnapshot: !!layout.snapshotData,
+    viewService,
   });
   const tableRect = useMemo(() => toTableRect(rect, paginationNeeded), [rect, paginationNeeded]);
   const stickyContainerRect = useMemo(
@@ -115,15 +117,17 @@ const Table = (props: TableProps) => {
     <ScrollableContainer ref={ref} width={tableRect.width} height={tableRect.height} onScroll={scrollHandler}>
       <FullSizeContainer width={containerWidth} height={containerHeight}>
         <StickyContainer rect={stickyContainerRect}>
-          <Header
-            headerStyle={styling.head}
-            rect={stickyContainerRect}
-            pageInfo={pageInfo}
-            columns={columns}
-            forwardRef={headerRef}
-            rowHeight={headerRowHeight}
-            columResizeHandler={columResizeHandler}
-          />
+          {viewService.viewState?.skipHeader ? null : (
+            <Header
+              headerStyle={styling.head}
+              rect={stickyContainerRect}
+              pageInfo={pageInfo}
+              columns={columns}
+              forwardRef={headerRef}
+              rowHeight={headerRowHeight}
+              columResizeHandler={columResizeHandler}
+            />
+          )}
           {totalsPosition.atTop ? TotalsComponent : null}
           <Body
             ref={bodyRef}

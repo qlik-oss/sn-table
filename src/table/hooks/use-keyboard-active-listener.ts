@@ -20,6 +20,7 @@ const useKeyboardActiveListener = () => {
     const cell = keyboard.active ? getCellElement(rootElement, focusedCellCoord) : findCellWithTabStop(rootElement);
 
     updateFocus({ focusType, cell });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [keyboard.active, rootElement]);
 };
 

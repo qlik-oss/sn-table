@@ -6,13 +6,14 @@ import React from "react";
 import { generateDataPages, generateLayout } from "../../../__test__/generate-test-data";
 import TestWithProviders from "../../../__test__/test-with-providers";
 import { getColumns, getTotalPosition } from "../../../handle-data";
-import { ExtendedSelectionAPI, PageInfo, TableData, TableLayout } from "../../../types";
+import { ExtendedSelectionAPI, PageInfo, TableData, TableLayout, ViewService } from "../../../types";
 import { EMPTY_TABLE_DATA } from "../../context/TableContext";
 import { TestableTable } from "../Table";
 
 describe("<Table />", () => {
   let rect: stardust.Rect;
   let layout: TableLayout;
+  let viewService: ViewService;
   let pageInfo: PageInfo;
   let model: EngineAPI.IGenericObject;
   let selectionsAPI: ExtendedSelectionAPI;
@@ -32,7 +33,7 @@ describe("<Table />", () => {
       ...EMPTY_TABLE_DATA,
       paginationNeeded: false,
       columns: getColumns(layout),
-      totalsPosition: getTotalPosition(layout),
+      totalsPosition: getTotalPosition(layout, viewService),
     };
 
     await act(() =>
@@ -58,6 +59,7 @@ describe("<Table />", () => {
     user = userEvent.setup();
 
     layout = generateLayout(dimensionCount, measureCount, rowCount);
+    viewService = {} as ViewService;
     layout.qHyperCube.qEffectiveInterColumnSortOrder = [0, 1, 2];
     rect = {
       width: 750,

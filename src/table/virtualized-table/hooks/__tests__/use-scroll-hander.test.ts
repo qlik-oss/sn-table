@@ -21,7 +21,7 @@ describe("useScrollHandler", () => {
     headerRef = { current: listInstance };
     totalsRef = { current: listTotalsInstance };
     bodyRef = { current: refHandler };
-    viewService = { qTop: 0, qHeight: 1, scrollLeft: 0 };
+    viewService = { qTop: 0, qHeight: 1, scrollLeft: 0, estimatedRowHeight: 25 };
   });
 
   afterEach(() => {

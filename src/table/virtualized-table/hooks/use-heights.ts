@@ -1,5 +1,5 @@
 import { VariableSizeList } from "react-window";
-import { Column, PageInfo, TotalsPosition } from "../../../types";
+import { Column, PageInfo, TotalsPosition, ViewService } from "../../../types";
 import { TableContext, useContextSelector } from "../../context";
 import { COMMON_CELL_STYLING } from "../../styling-defaults";
 import { GeneratedStyling } from "../../types";
@@ -15,12 +15,23 @@ interface UseHeightsProps {
   totalsPosition: TotalsPosition;
   headerRef: React.RefObject<VariableSizeList<any>>;
   totalsRef: React.RefObject<VariableSizeList<any>>;
+  isSnapshot: boolean;
+  viewService: ViewService;
 }
 
 const getBodyRowHeight = ({ fontSize = COMMON_CELL_STYLING.fontSize }: GeneratedStyling) =>
   Math.max(MIN_BODY_ROW_HEIGHT, fontSizeToRowHeight(fontSize));
 
-const useHeights = ({ columns, columnWidths, pageInfo, headerRef, totalsRef, totalsPosition }: UseHeightsProps) => {
+const useHeights = ({
+  columns,
+  columnWidths,
+  pageInfo,
+  headerRef,
+  totalsRef,
+  totalsPosition,
+  isSnapshot,
+  viewService,
+}: UseHeightsProps) => {
   const { styling } = useContextSelector(TableContext, (value) => value.baseProps);
 
   const headerHeight = useDynamicRowHeight({
@@ -31,6 +42,8 @@ const useHeights = ({ columns, columnWidths, pageInfo, headerRef, totalsRef, tot
     pageInfo,
     boldText: true,
     columns,
+    isSnapshot,
+    viewService,
   });
 
   const totalsHeight = useDynamicRowHeight({
@@ -40,6 +53,8 @@ const useHeights = ({ columns, columnWidths, pageInfo, headerRef, totalsRef, tot
     rowCount: 1,
     pageInfo,
     boldText: true,
+    isSnapshot,
+    viewService,
   });
 
   columns.forEach((col, idx) => {
@@ -49,7 +64,7 @@ const useHeights = ({ columns, columnWidths, pageInfo, headerRef, totalsRef, tot
 
   const headerRowHeight = headerHeight.getRowHeight(0) + PADDING_TOP_BOTTOM * 2;
   const totalsRowHeight = totalsHeight.getRowHeight(0);
-  const bodyRowHeight = getBodyRowHeight(styling.body);
+  const bodyRowHeight = isSnapshot ? viewService.estimatedRowHeight : getBodyRowHeight(styling.body);
   const headerAndTotalsHeight =
     totalsPosition.atTop || totalsPosition.atBottom ? headerRowHeight + totalsRowHeight : headerRowHeight;
 

@@ -3,7 +3,7 @@ import React from "react";
 import { generateDataPages, generateLayout } from "../../../../../__test__/generate-test-data";
 import TestWithProviders from "../../../../../__test__/test-with-providers";
 import manageData from "../../../../../handle-data";
-import { Cell, PageInfo, TableData } from "../../../../../types";
+import { Cell, PageInfo, TableData, ViewService } from "../../../../../types";
 import * as handleKeyPress from "../../../../utils/handle-keyboard";
 import * as handleClick from "../../../../utils/handle-mouse";
 import * as getCellRenderer from "../../../utils/get-cell-renderer";
@@ -18,6 +18,7 @@ describe("<TableBodyWrapper />", () => {
   let tableData: TableData;
   let tableFirstRow: Cell;
   let tableSecondRow: Cell;
+  let viewService: ViewService;
 
   const renderTableBody = () =>
     render(
@@ -29,11 +30,13 @@ describe("<TableBodyWrapper />", () => {
     );
 
   beforeEach(async () => {
+    viewService = {} as ViewService;
     tableData = (await manageData(
       model,
       generateLayout(1, 1, 2, [], [{ qText: "100" }]),
       { top: 0, height: 100 } as unknown as PageInfo,
-      () => undefined
+      () => undefined,
+      viewService
     )) as TableData;
     tableFirstRow = tableData.rows[0]["col-0"] as Cell;
     tableSecondRow = tableData.rows[0]["col-1"] as Cell;

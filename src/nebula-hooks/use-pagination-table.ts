@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { stardust, useEffect, useOptions, usePromise, useState } from "@nebula.js/stardust";
 import { Root } from "react-dom/client";
 import manageData from "../handle-data";
 import isPrinting from "../is-printing";
+import renderAsPagination from "../render-as-pagination";
 import { renderPaginationTable } from "../table/Root";
 import {
   ApplyColumnWidths,
@@ -62,7 +64,7 @@ const usePaginationTable = ({
 }: UsePaginationTable) => {
   const { direction, footerContainer } = useOptions() as UseOptions;
   const isPrintingMode = isPrinting(layout, viewService);
-  const shouldRender = layout.usePagination !== false || isPrintingMode;
+  const shouldRender = renderAsPagination(layout, viewService);
   const announce = useAnnounceAndTranslations(rootElement, translator);
   const tmpPageInfo = isPrintingMode
     ? {

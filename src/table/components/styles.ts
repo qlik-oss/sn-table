@@ -18,7 +18,7 @@ export const StyledCellText = styled(Box, {
 })(({ lines, wordBreak }) => ({
   lineHeight: "calc(4/3)",
   fontSize: "inherit",
-  ...(wordBreak && {
+  ...((wordBreak || lines === 1) && {
     height: "100%",
     textOverflow: "ellipsis",
     overflow: "hidden",

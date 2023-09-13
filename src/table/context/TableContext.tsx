@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useMemo, useState } from "react";
 
 import { TableData } from "../../types";

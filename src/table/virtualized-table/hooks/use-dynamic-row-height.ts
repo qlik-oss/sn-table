@@ -1,7 +1,7 @@
 import { useOnPropsChange } from "@qlik-oss/nebula-table-utils/lib/hooks";
 import { useCallback, useRef, useState } from "react";
 import { VariableSizeGrid, VariableSizeList } from "react-window";
-import { Column, PageInfo, Row } from "../../../types";
+import { Column, PageInfo, Row, ViewService } from "../../../types";
 import { TableContext, useContextSelector } from "../../context";
 import { COMMON_CELL_STYLING } from "../../styling-defaults";
 import { GeneratedStyling } from "../../types";
@@ -27,6 +27,9 @@ export interface UseDynamicRowHeightProps {
   columns?: Column[];
   boldText?: boolean;
   gridState?: React.MutableRefObject<GridState>;
+  isSnapshot: boolean;
+  viewService: ViewService;
+  maxNbrLines?: number;
 }
 
 const MAX_ELEMENT_DOM_SIZE = 15_000_000; // Guestimated max height value in px of a DOM element
@@ -42,6 +45,9 @@ const useDynamicRowHeight = ({
   columns,
   boldText,
   gridState,
+  isSnapshot,
+  viewService,
+  maxNbrLines = MAX_NBR_LINES_OF_TEXT,
 }: UseDynamicRowHeightProps) => {
   const rowMeta = useRef<RowMeta>({
     lastScrollToRatio: 0,
@@ -58,10 +64,7 @@ const useDynamicRowHeight = ({
 
   // Find a reasonable max line count to avoid issue where the react-window container DOM element gets too big
   const maxCellHeightExcludingPadding = MAX_ELEMENT_DOM_SIZE / rowCount - CELL_PADDING_HEIGHT - CELL_BORDER_HEIGHT;
-  const maxLineCount = Math.max(
-    0,
-    Math.min(MAX_NBR_LINES_OF_TEXT, Math.round(maxCellHeightExcludingPadding / lineHeight))
-  );
+  const maxLineCount = Math.max(0, Math.min(maxNbrLines, Math.round(maxCellHeightExcludingPadding / lineHeight)));
 
   const getCellSize = useCallback(
     (text: string, colIdx: number, isNumeric: boolean) => {
@@ -101,11 +104,11 @@ const useDynamicRowHeight = ({
         rowMeta.current.heights[rowIdx] = height;
       }
 
-      if (!batchStateUpdate) {
+      if (!batchStateUpdate && !isSnapshot) {
         setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
       }
     },
-    [getCellSize]
+    [getCellSize, isSnapshot]
   );
 
   const getRowHeight = useCallback(
@@ -135,8 +138,10 @@ const useDynamicRowHeight = ({
       mutableSetCellSize.current(text, rowIdx, colIdx, isNumeric, true);
     });
 
-    setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
-  }, [resetRowMeta, mutableSetCellSize]);
+    if (!isSnapshot) {
+      setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
+    }
+  }, [resetRowMeta, isSnapshot, mutableSetCellSize]);
 
   /**
    * Some user actions and events can trigger row heights to be invalidated
@@ -186,6 +191,8 @@ const useDynamicRowHeight = ({
   } else if (lineRef?.current) {
     lineRef.current.resetAfterIndex(rowMeta.current.resetAfterRowIndex, false);
   }
+
+  viewService.estimatedRowHeight = estimatedRowHeight;
 
   return {
     setCellSize,
