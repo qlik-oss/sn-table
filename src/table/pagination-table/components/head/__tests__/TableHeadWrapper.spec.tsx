@@ -39,7 +39,6 @@ describe('<TableHeadWrapper />', () => {
       qHyperCube: {
         qEffectiveInterColumnSortOrder: [0, 1],
       },
-      qInfo: { qId: '12345' },
     } as TableLayout;
   });
 
@@ -66,7 +65,11 @@ describe('<TableHeadWrapper />', () => {
       totalsPosition: { atTop: false, atBottom: false },
       rows: [{ qText: '1' }],
     } as unknown as TableData;
-    layout.qHyperCube.qEffectiveInterColumnSortOrder = [1, 0];
+    layout = {
+      qHyperCube: {
+        qEffectiveInterColumnSortOrder: [1, 0],
+      },
+    } as TableLayout;
 
     const { getByText } = renderTableHead();
     const firstColQuery = getByText(tableData.columns[0].label).closest('th') as HTMLTableCellElement;

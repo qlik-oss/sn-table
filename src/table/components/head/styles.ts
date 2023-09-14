@@ -64,7 +64,7 @@ export const StyledHeadCellContent = styled(Box, {
   fontSize: 'inherit',
   fontFamily: 'inherit',
   '&&:hover, &&:focus-within': {
-    '& .sn-table-head-menu-button': { opacity: 1 },
+    '& #sn-table-head-menu-button': { opacity: 1 },
   },
 
   '& > div:last-child': { alignSelf: 'flex-end' },

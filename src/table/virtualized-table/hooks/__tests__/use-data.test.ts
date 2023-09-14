@@ -76,7 +76,7 @@ describe('useData', () => {
 
     columns = Array(QCX)
       .fill(undefined)
-      .map((_, colIdx) => ({ isDim: false, isLocked: false, id: `col-${colIdx}`, colIdx }) as Column);
+      .map((_, colIdx) => ({ isDim: false, isLocked: false, id: `col-${colIdx}`, colIdx } as Column));
 
     setCellSizeMock = jest.fn() as jest.MockedFunction<SetCellSize>;
 

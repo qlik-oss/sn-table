@@ -12,29 +12,26 @@ interface RecursiveMenuListProps {
   menuGroups: MenuItemGroup[];
   transformOrigin?: PopoverOrigin; // eslint-disable-line react/require-default-props
   anchorOrigin?: PopoverOrigin; // eslint-disable-line react/require-default-props
-  buttonId?: string; // eslint-disable-line react/require-default-props
-  menuId?: string; // eslint-disable-line react/require-default-props
+  ariaLabel?: string; // eslint-disable-line react/require-default-props
 }
 
 const RecursiveMenuList = ({
   anchorEl,
   open,
   onClose,
+  ariaLabel,
   menuGroups,
   transformOrigin,
   anchorOrigin,
-  buttonId,
-  menuId,
 }: RecursiveMenuListProps) => {
   if (!menuGroups.length) return null;
   return (
     <Menu
       className="sn-table-head-menu"
-      id={menuId}
       open={open}
       anchorEl={anchorEl}
       onClose={onClose}
-      aria-labelledby={buttonId}
+      aria-labelledby={ariaLabel}
       {...(anchorOrigin ? { anchorOrigin } : {})}
       {...(transformOrigin ? { transformOrigin } : {})}
     >

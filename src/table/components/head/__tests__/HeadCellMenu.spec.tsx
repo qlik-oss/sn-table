@@ -68,7 +68,6 @@ describe('<HeadCellMenu />', () => {
       qHyperCube: {
         qDimensionInfo: [{ qFallbackTitle: 'someTitle' }],
       },
-      qInfo: { qId: '12345' },
     } as TableLayout;
     column = {
       colIdx: 0,

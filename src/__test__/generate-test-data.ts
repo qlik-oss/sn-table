@@ -58,8 +58,8 @@ export function generateLayout(
     } as unknown as HyperCube,
     totals,
     qInfo: {
-      qId: '12345',
-    },
+      qId: '12345'
+    }
   } as TableLayout;
 }
 
@@ -71,7 +71,7 @@ export const createCell = (rowIdx: number, colIdx = 0) =>
     pageRowIdx: rowIdx,
     pageColIdx: colIdx,
     selectionColIdx: colIdx,
-  }) as Cell;
+  } as Cell);
 
 /**
  * creates a simplified Rows[] with one column. Used to create the pageRows that is in the selection state

@@ -34,7 +34,7 @@ describe('getViewState', () => {
   });
 
   it('should return viewService.viewState if viewService.viewState.isMultiPage is falsy', async () => {
-    viewService.viewState = { visibleTop: 10, visibleHeight: 20 } as ViewState;
+    viewService.viewState = {visibleTop: 10, visibleHeight: 20} as ViewState;
     const res = getViewState(layout, viewService, rootElement);
     expect(res).toEqual(viewService.viewState);
     expect(renderAsPagination.default).toHaveBeenCalledTimes(0);
@@ -42,6 +42,7 @@ describe('getViewState', () => {
     expect(visibleRowsUtils.findPaginationVisibleRows).toHaveBeenCalledTimes(0);
     expect(visibleRowsUtils.findVirtualizedVisibleRows).toHaveBeenCalledTimes(0);
   });
+
 
   it('should run correct functions in virtualized table mode', async () => {
     getViewState(layout, viewService, rootElement);
