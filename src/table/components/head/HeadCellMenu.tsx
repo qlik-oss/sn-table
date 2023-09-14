@@ -166,8 +166,8 @@ const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
   }, [openMenuDropdown, resetSelectionActionsEnabledStatus]);
 
   const chartId = layout.qInfo.qId as string;
-  const buttonId = `sn-table-head-menu-button-${pageColIdx}-${chartId}`;
   const menuId = `sn-table-head-menu-${pageColIdx}-${chartId}`;
+  const buttonId = `sn-table-head-menu-button-${pageColIdx}-${chartId}`;
 
   return menuItemGroups.length ? (
     <HeadCellMenuWrapper rightAligned={headTextAlign === 'right'}>
