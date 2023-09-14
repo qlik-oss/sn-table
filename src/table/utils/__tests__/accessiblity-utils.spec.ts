@@ -296,7 +296,7 @@ describe('accessibility-utils', () => {
       } as unknown as HTMLElement;
       jest
         .spyOn(document, 'querySelector')
-        .mockImplementation(() => ({ parentElement: parentElementFromDocument } as unknown as Element));
+        .mockImplementation(() => ({ parentElement: parentElementFromDocument }) as unknown as Element);
       last = false;
     });
 

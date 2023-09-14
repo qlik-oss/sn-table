@@ -40,6 +40,7 @@ describe('<HeadCellContent />', () => {
       qHyperCube: {
         qEffectiveInterColumnSortOrder: [0, 1],
       },
+      qInfo: { qId: '12345' },
     } as TableLayout;
     changeSortOrder = jest.fn() as ChangeSortOrder;
     isActive = true;
@@ -84,7 +85,7 @@ describe('<HeadCellContent />', () => {
     const { baseElement } = renderTableHead();
 
     const labelButton = screen.getByText(column.label);
-    const menuButton = baseElement.querySelector('#sn-table-head-menu-button');
+    const menuButton = baseElement.querySelector('.sn-table-head-menu-button');
     // TODO: add a proper title for the button
     expect(menuButton).not.toBeVisible();
     labelButton.focus();
@@ -113,7 +114,7 @@ describe('<HeadCellContent />', () => {
     };
     const { baseElement } = renderTableHead();
     // TODO: add a proper title for the button
-    expect(baseElement.querySelector('#sn-table-head-menu-button')).toBeInTheDocument();
+    expect(baseElement.querySelector('.sn-table-head-menu-button')).toBeInTheDocument();
   });
 
   it('should hide the sort icon when isInteractionEnabled is false and focus is within the head cell', () => {
@@ -135,7 +136,7 @@ describe('<HeadCellContent />', () => {
     isInteractionEnabled = false;
     const { baseElement } = renderTableHead();
 
-    expect(baseElement.querySelector('#sn-table-head-menu-button')).not.toBeInTheDocument();
+    expect(baseElement.querySelector('.sn-table-head-menu-button')).not.toBeInTheDocument();
   });
 
   it('should call changeSortOrder when clicking the head label', () => {

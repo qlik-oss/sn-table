@@ -130,7 +130,7 @@ const PaginationContent = ({
       tabIndex,
       id,
       'data-testid': id,
-      'aria-labelledby': labelId
+      'aria-labelledby': labelId,
     };
 
     return (

@@ -22,7 +22,7 @@ describe('getVisibleHeight', () => {
       rowsPerPage: 100,
       qTop: 0,
       qHeight: 100,
-      estimatedRowHeight: 25
+      estimatedRowHeight: 25,
     };
     rowCount = 50;
   });
@@ -64,4 +64,3 @@ describe('getVisibleHeight', () => {
     expect(result).toBe(0);
   });
 });
-

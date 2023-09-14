@@ -152,7 +152,7 @@ describe('getBackgroundColors', () => {
         backgroundColor: selector.classList.contains('.qv-panel-sheet')
           ? qvPanelSheetBackgroundColor
           : qvInnerObjectBackgroundColor,
-      } as CSSStyleDeclaration);
+      }) as CSSStyleDeclaration;
 
     beforeEach(() => {
       valueWithLightBackgroundColor = {

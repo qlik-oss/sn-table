@@ -269,7 +269,7 @@ describe('handle-data', () => {
   describe('getTotalPosition:', () => {
     let expectedPosition: TotalsPosition;
     let viewService: ViewService;
-    
+
     beforeEach(() => {
       expectedPosition = { atBottom: false, atTop: false };
       viewService = {} as ViewService;

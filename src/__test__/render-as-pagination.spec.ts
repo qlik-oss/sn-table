@@ -11,10 +11,9 @@ describe('handle-data', () => {
     viewService = {
       qTop: 0,
       qHeight: 100,
-      viewState: {usePagination: undefined} as ViewState,
+      viewState: { usePagination: undefined } as ViewState,
     } as ViewService;
     jest.spyOn(isPrinting, 'default').mockReturnValue(true);
-
   });
 
   afterEach(() => {
@@ -23,13 +22,13 @@ describe('handle-data', () => {
 
   describe('viewService.viewState.usePagination is explicitly set', () => {
     it('should return true if viewService.viewState?.usePagination = true', () => {
-      if(viewService.viewState) viewService.viewState.usePagination = true;
+      if (viewService.viewState) viewService.viewState.usePagination = true;
       expect(renderAsPagination(layout, viewService)).toEqual(true);
       expect(isPrinting.default).toHaveBeenCalledTimes(0);
     });
-  
+
     it('should return false if viewService.viewState?.usePagination = false', () => {
-      if(viewService.viewState) viewService.viewState.usePagination = false;
+      if (viewService.viewState) viewService.viewState.usePagination = false;
       expect(renderAsPagination(layout, viewService)).toEqual(false);
       expect(isPrinting.default).toHaveBeenCalledTimes(0);
     });
@@ -41,7 +40,7 @@ describe('handle-data', () => {
       expect(renderAsPagination(layout, viewService)).toEqual(true);
       expect(isPrinting.default).toHaveBeenCalledTimes(0);
     });
-  
+
     it('should return true if layout.usePagination = undefined', () => {
       expect(renderAsPagination(layout, viewService)).toEqual(true);
       expect(isPrinting.default).toHaveBeenCalledTimes(0);
