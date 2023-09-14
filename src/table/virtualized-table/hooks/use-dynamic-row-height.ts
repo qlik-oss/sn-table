@@ -32,7 +32,7 @@ export interface UseDynamicRowHeightProps {
   maxNbrLines?: number;
 }
 
-const MAX_ELEMENT_DOM_SIZE = 15_000_000; // Guestimated max height value in px of a DOM element
+const MAX_ELEMENT_DOM_SIZE = 8_000_000; // Guestimated max height value in px of a DOM element
 
 const useDynamicRowHeight = ({
   style,
@@ -46,7 +46,7 @@ const useDynamicRowHeight = ({
   boldText,
   gridState,
   isSnapshot,
-  viewService, 
+  viewService,
   maxNbrLines = MAX_NBR_LINES_OF_TEXT,
 }: UseDynamicRowHeightProps) => {
   const rowMeta = useRef<RowMeta>({
