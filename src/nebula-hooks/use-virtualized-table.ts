@@ -54,10 +54,7 @@ const useVirtualizedTable = ({
   viewService,
 }: UseVirtualizedTable) => {
   const shouldRender = !renderAsPagination(layout, viewService);
-  const tableData = useMemo(
-    () => getVirtualScrollTableData(layout, interactions, viewService),
-    [layout, interactions, viewService]
-  );
+  const tableData = useMemo(() => getVirtualScrollTableData(layout, interactions, viewService), [layout, interactions, viewService]);
   const { pageInfo, setPage } = usePageInfo(layout, shouldRender);
   const { initialDataPages, isLoading } = useInitialDataPages({ model, layout, page: pageInfo.page, shouldRender });
 

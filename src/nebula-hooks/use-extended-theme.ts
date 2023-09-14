@@ -37,7 +37,7 @@ const useExtendedTheme = (rootElement: HTMLElement): ExtendedTheme => {
   // TODO: add name method to stardust.Theme
   const nebulaTheme = useTheme() as ExtendedTheme;
   return useMemo(
-    () => ({ ...nebulaTheme, background: getBackgroundColors(nebulaTheme, rootElement) }) as ExtendedTheme,
+    () => ({ ...nebulaTheme, background: getBackgroundColors(nebulaTheme, rootElement) } as ExtendedTheme),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [nebulaTheme.name(), rootElement]
   );
