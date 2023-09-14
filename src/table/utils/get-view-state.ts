@@ -2,18 +2,18 @@ import { findPaginationVisibleRows, findVirtualizedVisibleRows } from './find-vi
 import getVisibleHeight from './get-visible-height';
 import { getTotalPosition } from '../../handle-data';
 import renderAsPagination from '../../render-as-pagination';
-import { TableLayout, ViewService } from '../../types';
+import { TableLayout, TotalsPosition, ViewService } from '../../types';
 
 const getViewState = (layout: TableLayout, viewService: ViewService, rootElement: HTMLElement) => {
-    if (viewService.viewState && !viewService.viewState.isMultiPage) return viewService.viewState;
-    let totalsPosition;
-    if (renderAsPagination(layout, viewService)) {
-      totalsPosition = getTotalPosition(layout, viewService);
+  if (viewService.viewState && !viewService.viewState.isMultiPage) return viewService.viewState;
+    const isPagination = renderAsPagination(layout, viewService);
+    const totalsPosition = (isPagination || viewService.viewState?.isMultiPage) ? getTotalPosition(layout, viewService) : undefined;
+    if (isPagination) {
       const {
         visibleRowStartIndex = -1,
         visibleRowEndIndex = -1,
         rowPartialHeight,
-      } = findPaginationVisibleRows(rootElement, totalsPosition);
+      } = findPaginationVisibleRows(rootElement, totalsPosition as TotalsPosition);
   
       return {
         rowPartialHeight,
@@ -26,9 +26,6 @@ const getViewState = (layout: TableLayout, viewService: ViewService, rootElement
       };
     }
     const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findVirtualizedVisibleRows(rootElement, viewService);
-    if (viewService.viewState?.isMultiPage) {
-      totalsPosition = getTotalPosition(layout, viewService);
-    }
     return {
       scrollLeft: viewService.scrollLeft,
       visibleLeft: viewService.visibleLeft,
