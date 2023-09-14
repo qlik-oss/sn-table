@@ -57,6 +57,9 @@ export function generateLayout(
       qDataPages: [],
     } as unknown as HyperCube,
     totals,
+    qInfo: {
+      qId: '12345'
+    }
   } as TableLayout;
 }
 
