@@ -22,7 +22,7 @@ const getViewState = (layout: TableLayout, viewService: ViewService, rootElement
         visibleHeight: getVisibleHeight(visibleRowEndIndex, visibleRowStartIndex, layout, viewService),
         rowsPerPage: viewService.rowsPerPage,
         page: viewService.page,
-        totalsPosition: viewService.viewState?.isMultiPage ? totalsPosition : undefined,
+        totalsPosition,
       };
     }
     const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findVirtualizedVisibleRows(rootElement, viewService);
@@ -35,7 +35,7 @@ const getViewState = (layout: TableLayout, viewService: ViewService, rootElement
       scrollTopRatio: viewService.scrollTopRatio,
       rowsPerPage: viewService.rowsPerPage,
       page: viewService.page,
-      totalsPosition: viewService.viewState?.isMultiPage ? totalsPosition : undefined,
+      totalsPosition,
     };
 };
   

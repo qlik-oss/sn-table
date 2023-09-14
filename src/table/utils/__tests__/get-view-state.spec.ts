@@ -83,6 +83,7 @@ describe('getViewState', () => {
       visibleHeight: 0,
       rowsPerPage: 100,
       page: 0,
+      totalsPosition: { atTop: false, atBottom: false},
     });
   });
 });
