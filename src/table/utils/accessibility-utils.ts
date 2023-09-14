@@ -14,7 +14,7 @@ export const setFocusOnClosetColumnAdjuster = (anchorRef: React.RefObject<HTMLDi
   setTimeout(() => {
     const adjusterHitArea = anchorRef.current
       ?.closest('.sn-table-cell')
-      ?.querySelector('#adjuster-hit-area') as HTMLElement;
+      ?.querySelector('.sn-table-adjuster-hit-area') as HTMLElement;
     adjusterHitArea?.setAttribute('tabIndex', '0');
     adjusterHitArea?.focus();
   }, 0);
@@ -171,8 +171,8 @@ export const handleFocusoutEvent = (
   const isInTable = targetElement.contains(relatedTarget);
   const isInHeadCellMenu = relatedTarget?.closest('.sn-table-head-menu');
   if (keyboard.enabled && !isInTable && !isInHeadCellMenu && !shouldRefocus.current) {
-    targetElement.querySelector('#sn-table-announcer--01')!.innerHTML = '';
-    targetElement.querySelector('#sn-table-announcer--02')!.innerHTML = '';
+    targetElement.querySelector('.sn-table-announcer-1')!.innerHTML = '';
+    targetElement.querySelector('.sn-table-announcer-2')!.innerHTML = '';
     // Blur the table but not focus its parent element
     // when keyboard.active is false, this has no effect
     keyboard.blur?.(false);

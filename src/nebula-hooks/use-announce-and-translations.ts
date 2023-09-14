@@ -28,15 +28,15 @@ export const announcementFactory = (
       })
       .join(' ');
 
-    const announceElement01 = rootElement.querySelector('#sn-table-announcer--01') as Element;
-    const announceElement02 = rootElement.querySelector('#sn-table-announcer--02') as Element;
+    const announceElement1 = rootElement.querySelector('.sn-table-announcer-1') as Element;
+    const announceElement2 = rootElement.querySelector('.sn-table-announcer-2') as Element;
 
     let announceElement: Element;
     if (previousAnnouncementElement === AnnouncerElements.FIRST) {
-      announceElement = announceElement02;
+      announceElement = announceElement2;
       previousAnnouncementElement = AnnouncerElements.SECOND;
     } else {
-      announceElement = announceElement01;
+      announceElement = announceElement1;
       previousAnnouncementElement = AnnouncerElements.FIRST;
     }
 

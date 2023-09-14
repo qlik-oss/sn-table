@@ -51,7 +51,7 @@ const PaginationContent = ({
 }: PaginationContentProps) => {
   const { totalRowCount, totalColumnCount, totalPages } = useContextSelector(TableContext, (value) => value.tableData);
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
-  const { keyboard, translator, theme, interactions, rect } = useContextSelector(
+  const { keyboard, translator, theme, interactions, rect, layout } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );
@@ -74,6 +74,7 @@ const PaginationContent = ({
     `${page * rowsPerPage + 1} - ${Math.min((page + 1) * rowsPerPage, totalRowCount)}`,
     totalRowCount.toString(),
   ]);
+  const chartId = layout.qInfo.qId as string;
 
   const handleChangeRowsPerPage = (event: SelectChangeEvent<number>) => {
     setPageInfo({ ...pageInfo, page: 0, rowsPerPage: +event.target.value });
@@ -124,11 +125,12 @@ const PaginationContent = ({
   ) => {
     const label = translator.get(`SNTable.Pagination.${name}`);
     const id = `${name}-dropdown`;
-    const labelId = `${id}-label`;
+    const labelId = `${id}-label-${chartId}`;
     const inputProps = {
       tabIndex,
       id,
       'data-testid': id,
+      'aria-labelledby': labelId
     };
 
     return (
@@ -143,7 +145,6 @@ const PaginationContent = ({
           value={value}
           onChange={handleChange}
           inputProps={inputProps}
-          aria-labelledby={labelId}
         >
           {options}
         </StyledSelect>

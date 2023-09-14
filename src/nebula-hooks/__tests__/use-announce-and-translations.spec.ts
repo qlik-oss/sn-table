@@ -12,14 +12,14 @@ describe('announcementFactory', () => {
 
   beforeEach(() => {
     announcerElement01 = global.document.createElement('div');
-    announcerElement01.setAttribute('id', '#sn-table-announcer--01');
+    announcerElement01.setAttribute('class', '.sn-table-announcer-1');
     announcerElement02 = global.document.createElement('div');
-    announcerElement02.setAttribute('id', '#sn-table-announcer--02');
+    announcerElement02.setAttribute('class', '.sn-table-announcer-2');
 
     rootElement = {
       querySelector: (query: string) => {
-        if (query === '#sn-table-announcer--01') return announcerElement01;
-        if (query === '#sn-table-announcer--02') return announcerElement02;
+        if (query === '.sn-table-announcer-1') return announcerElement01;
+        if (query === '.sn-table-announcer-2') return announcerElement02;
         return announcerElement01;
       },
     } as HTMLElement;
