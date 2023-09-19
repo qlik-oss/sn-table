@@ -112,6 +112,7 @@ describe('<HeadCellContent />', () => {
       ...column,
       qLibraryId: 'someLibId',
     };
+
     const { baseElement } = renderTableHead();
     // TODO: add a proper title for the button
     expect(baseElement.querySelector('.sn-table-head-menu-button')).toBeInTheDocument();
