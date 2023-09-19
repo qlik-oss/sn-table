@@ -124,13 +124,14 @@ const PaginationContent = ({
     handleChange: (event: SelectChangeEvent<number>) => void
   ) => {
     const label = translator.get(`SNTable.Pagination.${name}`);
-    const id = `${name}-dropdown`;
-    const labelId = `${id}-label-${chartId}`;
+    const baseId = `${name}-dropdown`;
+    const labelId = `${baseId}-label-${chartId}`;
+    const id = `${baseId}-${chartId}`;
     const inputProps = {
       tabIndex,
       id,
-      'data-testid': id,
-      'aria-labelledby': labelId
+      'data-testid': baseId,
+      'aria-labelledby': labelId,
     };
 
     return (

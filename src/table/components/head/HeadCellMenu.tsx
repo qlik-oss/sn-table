@@ -20,7 +20,7 @@ import RecursiveMenuList from './MenuList/RecursiveMenuList';
 import { DEFAULT_FONT_SIZE } from '../../styling-defaults';
 
 const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
-  const { isDim, qLibraryId, fieldId, headTextAlign } = column;
+  const { isDim, qLibraryId, fieldId, headTextAlign, pageColIdx } = column;
   const { translator, embed, model, interactions, layout } = useContextSelector(
     TableContext,
     (value) => value.baseProps
@@ -165,6 +165,10 @@ const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
     if (!openMenuDropdown) resetSelectionActionsEnabledStatus();
   }, [openMenuDropdown, resetSelectionActionsEnabledStatus]);
 
+  const chartId = layout.qInfo.qId as string;
+  const buttonId = `sn-table-head-menu-button-${pageColIdx}-${chartId}`;
+  const menuId = `sn-table-head-menu-${pageColIdx}-${chartId}`;
+
   return menuItemGroups.length ? (
     <HeadCellMenuWrapper rightAligned={headTextAlign === 'right'}>
       <StyledMenuIconButton
@@ -172,8 +176,9 @@ const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
         ref={anchorRef}
         size="small"
         tabIndex={tabIndex}
-        id="sn-table-head-menu-button"
-        aria-controls={openMenuDropdown ? 'sn-table-head-menu' : undefined}
+        className ='sn-table-head-menu-button'
+        id={buttonId}
+        aria-controls={openMenuDropdown ? menuId : undefined}
         aria-expanded={openMenuDropdown ? 'true' : undefined}
         aria-haspopup="true"
         onClick={handleOpenDropdown}
@@ -189,7 +194,8 @@ const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
         anchorEl={anchorRef.current}
         onClose={() => setOpenMenuDropdown(false)}
         menuGroups={menuItemGroups}
-        ariaLabel="sn-table-head-menu-button"
+        buttonId={buttonId}
+        menuId={menuId}
       />
     </HeadCellMenuWrapper>
   ) : null;
