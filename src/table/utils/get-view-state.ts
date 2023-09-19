@@ -2,7 +2,7 @@ import { findPaginationVisibleRows, findVirtualizedVisibleRows } from './find-vi
 import getVisibleHeight from './get-visible-height';
 import { getTotalPosition } from '../../handle-data';
 import renderAsPagination from '../../render-as-pagination';
-import { TableLayout, TotalsPosition, ViewService } from '../../types';
+import { TableLayout, ViewService } from '../../types';
 
 const getViewState = (layout: TableLayout, viewService: ViewService, rootElement: HTMLElement) => {
   if (viewService.viewState && !viewService.viewState.isMultiPage) return viewService.viewState;
@@ -12,7 +12,7 @@ const getViewState = (layout: TableLayout, viewService: ViewService, rootElement
       visibleRowStartIndex = -1,
       visibleRowEndIndex = -1,
       rowPartialHeight,
-    } = findPaginationVisibleRows(rootElement, totalsPosition as TotalsPosition);
+    } = findPaginationVisibleRows(rootElement, totalsPosition);
 
     return {
       rowPartialHeight,
