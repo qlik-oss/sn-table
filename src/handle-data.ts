@@ -55,6 +55,7 @@ export function getTotalPosition(layout: TableLayout, viewService: ViewService) 
  */
 export function getTotalInfo(layout: TableLayout, isDim: boolean, pageColIdx: number, visibleColIdx: number) {
   if (!isDim) return layout.qHyperCube.qGrandTotalRow[visibleColIdx]?.qText ?? '';
+
   if (pageColIdx === 0) return layout.totals.label ?? '';
   return '';
 }
