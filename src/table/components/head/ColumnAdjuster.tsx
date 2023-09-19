@@ -1,9 +1,9 @@
 import React, { useRef } from 'react';
+import { preventDefaultBehavior } from "@qlik/nebula-table-utils/lib/utils";
 import { AdjusterProps } from '../../types';
 import { useContextSelector, TableContext } from '../../context';
 import { AdjusterHitArea, AdjusterHeadBorder } from './styles';
 import { ColumnWidthTypes, MIN_COLUMN_WIDTH, KeyCodes } from '../../constants';
-import { preventDefaultBehavior } from '../../utils/keyboard-utils';
 import { focusHeadMenuButton } from '../../utils/accessibility-utils';
 
 /**

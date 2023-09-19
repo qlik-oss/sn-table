@@ -8,9 +8,8 @@ import SelectPossible from '@qlik-trial/sprout/icons/react/SelectPossible';
 import SelectAlternative from '@qlik-trial/sprout/icons/react/SelectAlternative';
 import SelectExcluded from '@qlik-trial/sprout/icons/react/SelectExcluded';
 import ColumnSize from '@qlik-trial/sprout/icons/react/ColumnSize';
-
+import { preventDefaultBehavior } from "@qlik/nebula-table-utils/lib/utils";
 import useFieldSelection from '../../hooks/use-field-selection';
-import { preventDefaultBehavior } from '../../utils/keyboard-utils';
 import { setFocusOnClosetColumnAdjuster } from '../../utils/accessibility-utils';
 import { useContextSelector, TableContext } from '../../context';
 import { HeadCellMenuProps, MenuItemGroup } from '../../types';

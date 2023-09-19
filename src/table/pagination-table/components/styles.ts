@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
-import { PAGINATION_HEIGHT } from '../../constants';
+import { PAGINATION_HEIGHT } from "@qlik/nebula-table-utils/lib/components/PaginationFooter";
 import { BORDER_WIDTH } from '../../styling-defaults';
 
 // ---------- AnnounceWrapper ----------

@@ -1,10 +1,11 @@
 import { stardust } from '@nebula.js/stardust';
-
-import { resolveToRGBAorRGB, isDarkColor, removeOpacity } from './color-utils';
+import { isDarkColor, COLORING } from "@qlik/nebula-table-utils/lib/utils";
+import { PAGINATION_HEIGHT } from "@qlik/nebula-table-utils/lib/components/PaginationFooter";
+import { resolveToRGBAorRGB, removeOpacity } from './color-utils';
 import { TableLayout, ExtendedTheme, HeaderStyling, ContentStyling, PaletteColor, BackgroundColors } from '../../types';
 import { GeneratedStyling, CellStyle, FooterStyle } from '../types';
-import { SelectionStates, PAGINATION_HEIGHT } from '../constants';
-import { SELECTION_STYLING, COLORING } from '../styling-defaults';
+import { SelectionStates } from '../constants';
+import { SELECTION_STYLING } from '../styling-defaults';
 
 export const LINE_HEIGHT = 4 / 3;
 export const CELL_PADDING_HEIGHT = 8;
