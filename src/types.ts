@@ -213,13 +213,6 @@ export interface BodyColors {
   borderColor: string;
 }
 
-export interface BackgroundColors {
-  tableColorFromTheme: string;
-  color?: string;
-  isDark: boolean;
-  isTransparent: boolean;
-}
-
 export interface ExtendedSelectionAPI extends stardust.ObjectSelections {
   on(eventType: string, callback: () => void): void;
   removeListener(eventType: string, callback: () => void): void;
@@ -227,11 +220,6 @@ export interface ExtendedSelectionAPI extends stardust.ObjectSelections {
 
 export interface ExtendedTranslator extends stardust.Translator {
   language(): string;
-}
-
-export interface ExtendedTheme extends stardust.Theme {
-  name(): string;
-  background: BackgroundColors;
 }
 
 export interface ViewState {

@@ -1,11 +1,11 @@
 import { stardust } from "@nebula.js/stardust";
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
 import { VariableSizeList } from "react-window";
 import {
   ApplyColumnWidths,
   ChangeSortOrder,
   Column,
   ExtendedSelectionAPI,
-  ExtendedTheme,
   ExtendedTranslator,
   PageInfo,
   Row,

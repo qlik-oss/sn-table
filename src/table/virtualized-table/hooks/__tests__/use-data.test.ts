@@ -1,6 +1,7 @@
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
 import { act, renderHook, RenderHookResult, waitFor } from "@testing-library/react";
 import { generateDataPages, generateLayout } from "../../../../__test__/generate-test-data";
-import { Cell, Column, ExtendedTheme, PageInfo, Row, TableLayout } from "../../../../types";
+import { Cell, Column, PageInfo, Row, TableLayout } from "../../../../types";
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from "../../constants";
 import { GridState, SetCellSize } from "../../types";
 import useData, { UseData } from "../use-data";

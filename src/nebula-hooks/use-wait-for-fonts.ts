@@ -1,6 +1,7 @@
 import { usePromise } from "@nebula.js/stardust";
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
 import { getBodyStyle, getHeaderStyle } from "../table/utils/styling-utils";
-import { ExtendedTheme, TableLayout } from "../types";
+import { TableLayout } from "../types";
 
 const useWaitForFonts = (theme: ExtendedTheme, layout: TableLayout) => {
   const { fontSize: headerFontSize, fontFamily: headerFontFamily } = getHeaderStyle(layout, theme, false);

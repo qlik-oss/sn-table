@@ -1,10 +1,11 @@
 import { stardust } from "@nebula.js/stardust";
 import { PAGINATION_HEIGHT } from "@qlik/nebula-table-utils/lib/constants";
 import { COLORING, isDarkColor } from "@qlik/nebula-table-utils/lib/utils";
-import { BackgroundColors, ContentStyling, ExtendedTheme, HeaderStyling, PaletteColor, TableLayout } from "../../types";
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
+import { ContentStyling, HeaderStyling, PaletteColor, TableLayout } from "../../types";
 import { SelectionStates } from "../constants";
 import { SELECTION_STYLING } from "../styling-defaults";
-import { CellStyle, FooterStyle, GeneratedStyling } from "../types";
+import { CellStyle, GeneratedStyling } from "../types";
 import { removeOpacity, resolveToRGBAorRGB } from "./color-utils";
 
 export const LINE_HEIGHT = 4 / 3;
@@ -212,23 +213,6 @@ export function getBodyStyle(
     },
   };
 }
-
-export const getFooterStyle = (background: BackgroundColors): FooterStyle =>
-  background.isDark
-    ? {
-        background: background.color,
-        borderColor: COLORING.DARK_MODE_BORDER,
-        color: COLORING.DARK_MODE_TEXT,
-        disabledColor: COLORING.DARK_MODE_DISABLED,
-        // the icon needs a specific color to override it in dark mode
-        iconColor: COLORING.DARK_MODE_TEXT,
-      }
-    : {
-        background: background.color,
-        borderColor: COLORING.BORDER_MEDIUM,
-        color: COLORING.TEXT,
-        disabledColor: COLORING.DISABLED,
-      };
 
 /**
  * Gets complete styling for the totals cells. Based on the body style but with the background and borders from header

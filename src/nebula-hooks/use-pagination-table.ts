@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { stardust, useEffect, useOptions, usePromise, useState } from "@nebula.js/stardust";
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
 import { Root } from "react-dom/client";
 import manageData from "../handle-data";
 import isPrinting from "../is-printing";
@@ -9,7 +10,6 @@ import {
   ApplyColumnWidths,
   ChangeSortOrder,
   ExtendedSelectionAPI,
-  ExtendedTheme,
   ExtendedTranslator,
   Galaxy,
   TableLayout,

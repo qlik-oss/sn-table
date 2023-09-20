@@ -1,5 +1,6 @@
 import { Direction, TableCellProps } from "@mui/material";
 import { stardust } from "@nebula.js/stardust";
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
 import {
   Announce,
   ApplyColumnWidths,
@@ -7,7 +8,6 @@ import {
   ChangeSortOrder,
   Column,
   ExtendedSelectionAPI,
-  ExtendedTheme,
   ExtendedTranslator,
   PageInfo,
   Row,
@@ -130,14 +130,6 @@ export interface ContextValue {
   setPage?: stardust.SetStateFn<number>;
   initialDataPages?: EngineAPI.INxDataPage[];
   showRightBorder: boolean;
-}
-
-export interface FooterStyle {
-  borderColor: string;
-  color: string;
-  disabledColor: string;
-  iconColor?: string;
-  background?: string;
 }
 
 export interface CellStyle {

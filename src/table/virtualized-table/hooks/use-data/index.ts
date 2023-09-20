@@ -1,6 +1,7 @@
 import { useOnPropsChange } from "@qlik/nebula-table-utils/lib/hooks";
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Column, ExtendedTheme, PageInfo, Row, TableLayout } from "../../../../types";
+import { Column, PageInfo, Row, TableLayout } from "../../../../types";
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from "../../constants";
 import { GridState, SetCellSize } from "../../types";
 import useGetHyperCubeDataQueue from "../use-get-hypercube-data-queue";

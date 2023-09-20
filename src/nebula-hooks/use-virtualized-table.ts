@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { stardust, useEffect, useMemo } from "@nebula.js/stardust";
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
 import { Root } from "react-dom/client";
 import renderAsPagination from "../render-as-pagination";
 import { renderVirtualizedTable } from "../table/Root";
@@ -8,7 +9,6 @@ import {
   ApplyColumnWidths,
   ChangeSortOrder,
   ExtendedSelectionAPI,
-  ExtendedTheme,
   ExtendedTranslator,
   TableLayout,
   ViewService,

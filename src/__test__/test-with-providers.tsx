@@ -1,6 +1,7 @@
 /* eslint react/require-default-props: 0 */
 import { ThemeProvider } from "@mui/material/styles";
 import { stardust } from "@nebula.js/stardust";
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
 import React from "react";
 import { EMPTY_TABLE_DATA, TableContextProvider } from "../table/context";
 import muiSetup from "../table/mui-setup";
@@ -8,7 +9,6 @@ import {
   ApplyColumnWidths,
   ChangeSortOrder,
   ExtendedSelectionAPI,
-  ExtendedTheme,
   ExtendedTranslator,
   TableData,
   TableLayout,
