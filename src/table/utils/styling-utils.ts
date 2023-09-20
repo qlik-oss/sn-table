@@ -1,5 +1,5 @@
 import { stardust } from "@nebula.js/stardust";
-import { PAGINATION_HEIGHT } from "@qlik/nebula-table-utils/lib/components/PaginationFooter";
+import { PAGINATION_HEIGHT } from "@qlik/nebula-table-utils/lib/constants";
 import { COLORING, isDarkColor } from "@qlik/nebula-table-utils/lib/utils";
 import { BackgroundColors, ContentStyling, ExtendedTheme, HeaderStyling, PaletteColor, TableLayout } from "../../types";
 import { SelectionStates } from "../constants";
