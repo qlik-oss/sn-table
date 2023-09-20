@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { preventDefaultBehavior } from "@qlik/nebula-table-utils/lib/utils";
+import { preventDefaultBehavior } from '@qlik/nebula-table-utils/lib/utils';
 import { AdjusterProps } from '../../types';
 import { useContextSelector, TableContext } from '../../context';
 import { AdjusterHitArea, AdjusterHeadBorder } from './styles';

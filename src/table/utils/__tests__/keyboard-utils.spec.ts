@@ -1,10 +1,16 @@
 import { stardust } from '@nebula.js/stardust';
+import { focusSelectionToolbar } from '@qlik/nebula-table-utils/lib/utils';
 import * as accessibilityUtils from '../accessibility-utils';
 import * as handleScroll from '../handle-scroll';
 import { KeyCodes } from '../../constants';
 import { shouldBubbleEarly, bodyArrowHelper, bodyTabHelper, headTabHelper } from '../keyboard-utils';
 import { Announce, Cell, TotalsPosition } from '../../../types';
 import { SelectionDispatch } from '../../types';
+
+jest.mock('@qlik/nebula-table-utils/lib/utils', () => ({
+  focusSelectionToolbar: jest.fn(),
+  preventDefaultBehavior: jest.fn(),
+}));
 
 describe('keyboard-utils', () => {
   let evt: React.KeyboardEvent;
@@ -114,7 +120,7 @@ describe('keyboard-utils', () => {
       totalsPosition = { atTop: false, atBottom: true };
       isSelectionMode = false;
       jest.spyOn(accessibilityUtils, 'announceSelectionState').mockImplementation(() => {});
-      jest.spyOn(accessibilityUtils, 'moveFocusWithArrow').mockImplementation(() => ({} as HTMLTableCellElement));
+      jest.spyOn(accessibilityUtils, 'moveFocusWithArrow').mockImplementation(() => ({}) as HTMLTableCellElement);
       jest.spyOn(accessibilityUtils, 'updateFocus').mockImplementation(() => {});
       jest.spyOn(handleScroll, 'handleNavigateTop').mockImplementation(() => {});
     });
@@ -217,13 +223,12 @@ describe('keyboard-utils', () => {
     beforeEach(() => {
       isSelectionMode = false;
       paginationNeeded = true;
-      jest.spyOn(accessibilityUtils, 'focusSelectionToolbar').mockImplementation(() => {});
     });
 
     it('should do nothing when no shift key and keyboard is undefined', () => {
       callBodyTabHelper();
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(0);
-      expect(accessibilityUtils.focusSelectionToolbar).toHaveBeenCalledTimes(0);
+      expect(focusSelectionToolbar).toHaveBeenCalledTimes(0);
     });
 
     it('should do nothing when keyboard.enabled is true, shift key is not pressed and isSelectionMode is false', () => {
@@ -231,7 +236,7 @@ describe('keyboard-utils', () => {
 
       callBodyTabHelper();
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(0);
-      expect(accessibilityUtils.focusSelectionToolbar).toHaveBeenCalledTimes(0);
+      expect(focusSelectionToolbar).toHaveBeenCalledTimes(0);
     });
 
     it('should call focusSelectionToolbar when shift key is pressed, keyboard.enabled is true and is in selection mode', () => {
@@ -241,7 +246,7 @@ describe('keyboard-utils', () => {
 
       callBodyTabHelper();
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(0);
-      expect(accessibilityUtils.focusSelectionToolbar).toHaveBeenCalledTimes(1);
+      expect(focusSelectionToolbar).toHaveBeenCalledTimes(1);
     });
 
     it('should call focusSelectionToolbar when shift key is not pressed, keyboard.enabled is true, is in selection mode and there is no pagination', () => {
@@ -251,7 +256,7 @@ describe('keyboard-utils', () => {
 
       callBodyTabHelper();
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(0);
-      expect(accessibilityUtils.focusSelectionToolbar).toHaveBeenCalledTimes(1);
+      expect(focusSelectionToolbar).toHaveBeenCalledTimes(1);
     });
 
     it('should call setFocusedCellCoord when shift key is pressed and keyboard is undefined', () => {
@@ -259,7 +264,7 @@ describe('keyboard-utils', () => {
 
       callBodyTabHelper();
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.focusSelectionToolbar).toHaveBeenCalledTimes(0);
+      expect(focusSelectionToolbar).toHaveBeenCalledTimes(0);
     });
   });
 

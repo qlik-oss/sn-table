@@ -13,7 +13,7 @@ import {
   useInteractionState,
   stardust,
 } from '@nebula.js/stardust';
-import { useExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks";
+import { useExtendedTheme } from '@qlik/nebula-table-utils/lib/hooks';
 import properties from './qae/object-properties';
 import data from './qae/data';
 import ext from './ext';
@@ -28,8 +28,10 @@ import extendContextMenu from './extend-context-menu';
 import useViewService from './table/hooks/use-view-service';
 import useSnapshot from './table/hooks/use-snapshot';
 
-const chartBackgroundResolver = (theme: stardust.Theme) => theme.getStyle('', '', 'object.straightTableV2.backgroundColor');
-const objectBackgroundResolver = (theme: stardust.Theme) => theme.getStyle('object', 'straightTableV2', 'backgroundColor')
+const chartBackgroundResolver = (theme: stardust.Theme) =>
+  theme.getStyle('', '', 'object.straightTableV2.backgroundColor');
+const objectBackgroundResolver = (theme: stardust.Theme) =>
+  theme.getStyle('object', 'straightTableV2', 'backgroundColor');
 
 export default function supernova(env: Galaxy) {
   return {

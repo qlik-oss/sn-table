@@ -22,7 +22,16 @@ interface UseHeightsProps {
 const getBodyRowHeight = ({ fontSize = COMMON_CELL_STYLING.fontSize }: GeneratedStyling) =>
   Math.max(MIN_BODY_ROW_HEIGHT, fontSizeToRowHeight(fontSize));
 
-const useHeights = ({ columns, columnWidths, pageInfo, headerRef, totalsRef, totalsPosition, isSnapshot, viewService }: UseHeightsProps) => {
+const useHeights = ({
+  columns,
+  columnWidths,
+  pageInfo,
+  headerRef,
+  totalsRef,
+  totalsPosition,
+  isSnapshot,
+  viewService,
+}: UseHeightsProps) => {
   const { styling } = useContextSelector(TableContext, (value) => value.baseProps);
 
   const headerHeight = useDynamicRowHeight({

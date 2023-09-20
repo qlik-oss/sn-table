@@ -1,14 +1,20 @@
 import React, { memo } from 'react';
 import { stardust } from '@nebula.js/stardust';
-import { PaginationFooter } from "@qlik/nebula-table-utils/lib/components";
+import { PaginationFooter } from '@qlik/nebula-table-utils/lib/components';
 import { StyledTableWrapper } from '../components/styles';
 import Table from './Table';
 import { TableContext, useContextSelector } from '../context';
 import { PageInfo } from '../../types';
 
 const Wrapper = () => {
-  const { theme, keyboard, translator, interactions, rect, layout } = useContextSelector(TableContext, (value) => value.baseProps);
-  const { paginationNeeded,totalRowCount, totalColumnCount, totalPages } = useContextSelector(TableContext, (value) => value.tableData);
+  const { theme, keyboard, translator, interactions, rect, layout } = useContextSelector(
+    TableContext,
+    (value) => value.baseProps
+  );
+  const { paginationNeeded, totalRowCount, totalColumnCount, totalPages } = useContextSelector(
+    TableContext,
+    (value) => value.tableData
+  );
   const pageInfo = useContextSelector(TableContext, (value) => value.pageInfo) as PageInfo;
   const setPage = useContextSelector(TableContext, (value) => value.setPage) as stardust.SetStateFn<number>;
 

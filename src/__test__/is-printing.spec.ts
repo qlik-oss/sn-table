@@ -10,9 +10,8 @@ describe('is-printing', () => {
     viewService = {
       qTop: 0,
       qHeight: 100,
-      viewState: {visibleHeight: 0} as ViewState,
+      viewState: { visibleHeight: 0 } as ViewState,
     } as ViewService;
-
   });
   it('should return true if layout.snapshotData is truthy', () => {
     layout.snapshotData = {} as SnapshotData;
@@ -20,7 +19,7 @@ describe('is-printing', () => {
   });
 
   it('should return true if layout.snapshotData is falsy but viewService.viewState.visibleHeight is truthy', () => {
-    if(viewService.viewState) viewService.viewState.visibleHeight = 1;
+    if (viewService.viewState) viewService.viewState.visibleHeight = 1;
     expect(isPrinting(layout, viewService)).toEqual(true);
   });
 

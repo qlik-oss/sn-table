@@ -1,6 +1,6 @@
 import { stardust } from '@nebula.js/stardust';
-import { isDarkColor, COLORING } from "@qlik/nebula-table-utils/lib/utils";
-import { PAGINATION_HEIGHT } from "@qlik/nebula-table-utils/lib/components/PaginationFooter";
+import { isDarkColor, COLORING } from '@qlik/nebula-table-utils/lib/utils';
+import { PAGINATION_HEIGHT } from '@qlik/nebula-table-utils/lib/components/PaginationFooter';
 import { resolveToRGBAorRGB, removeOpacity } from './color-utils';
 import { TableLayout, ExtendedTheme, HeaderStyling, ContentStyling, PaletteColor, BackgroundColors } from '../../types';
 import { GeneratedStyling, CellStyle, FooterStyle } from '../types';

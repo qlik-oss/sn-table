@@ -1,5 +1,5 @@
 import { stardust } from '@nebula.js/stardust';
-import { PAGINATION_HEIGHT } from "@qlik/nebula-table-utils/lib/components/PaginationFooter";
+import { PAGINATION_HEIGHT } from '@qlik/nebula-table-utils/lib/components/PaginationFooter';
 import { Rect } from '../types';
 
 const BORDER_WIDTH = 1;

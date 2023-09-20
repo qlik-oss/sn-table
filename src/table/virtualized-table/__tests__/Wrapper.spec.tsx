@@ -4,31 +4,29 @@ import { stardust } from '@nebula.js/stardust';
 import Wrapper from '../Wrapper';
 import { TableData, TableLayout, ViewService } from '../../../types';
 import { TestableTable } from '../Table';
-import FooterWrapper from '../../components/footer/FooterWrapper';
 import TestWithProviders from '../../../__test__/test-with-providers';
 import { getColumns, getTotalPosition } from '../../../handle-data';
 import { EMPTY_TABLE_DATA } from '../../context/TableContext';
 import { generateLayout } from '../../../__test__/generate-test-data';
 
 jest.mock('../Table');
-jest.mock('../../components/footer/FooterWrapper');
+jest.mock('@qlik/nebula-table-utils/lib/components', () => ({
+  PaginationFooter: jest.fn().mockReturnValue(<div data-testid="footer-wrapper" />),
+}));
 
 describe('<Wrapper />', () => {
   let rect: stardust.Rect;
   let layout: TableLayout;
   let viewService: ViewService;
   let tableData: TableData;
-  let paginationNeeded: boolean;
 
   const renderWrapper = () => {
     const mockTable = TestableTable as jest.MockedFunction<typeof TestableTable>;
     mockTable.mockReturnValue(<div data-testid="table-container" />);
-    const mockFooterWrapper = FooterWrapper as jest.MockedFunction<typeof FooterWrapper>;
-    mockFooterWrapper.mockReturnValue(<div data-testid="footer-wrapper" />);
 
     tableData = {
       ...EMPTY_TABLE_DATA,
-      paginationNeeded,
+      paginationNeeded: true,
       columns: getColumns(layout),
       totalsPosition: getTotalPosition(layout, viewService),
     };
@@ -50,16 +48,7 @@ describe('<Wrapper />', () => {
 
   afterEach(() => jest.restoreAllMocks());
 
-  it('should not render table with pagination', () => {
-    paginationNeeded = false;
-    renderWrapper();
-
-    expect(screen.getByTestId('table-container')).toBeVisible();
-    expect(screen.queryByTestId('footer-wrapper')).toBeNull();
-  });
-
   it('should render table with pagination', () => {
-    paginationNeeded = true;
     renderWrapper();
 
     expect(screen.getByTestId('table-container')).toBeVisible();

@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
-import { useOnPropsChange } from '@qlik-oss/nebula-table-utils/lib/hooks';
+import { useOnPropsChange } from '@qlik/nebula-table-utils/lib/hooks';
 import { Column, PageInfo, Row, ViewService } from '../../../types';
 import { TableContext, useContextSelector } from '../../context';
 import { COMMON_CELL_STYLING } from '../../styling-defaults';
@@ -64,10 +64,7 @@ const useDynamicRowHeight = ({
 
   // Find a reasonable max line count to avoid issue where the react-window container DOM element gets too big
   const maxCellHeightExcludingPadding = MAX_ELEMENT_DOM_SIZE / rowCount - CELL_PADDING_HEIGHT - CELL_BORDER_HEIGHT;
-  const maxLineCount = Math.max(
-    0,
-    Math.min(maxNbrLines, Math.round(maxCellHeightExcludingPadding / lineHeight))
-  );
+  const maxLineCount = Math.max(0, Math.min(maxNbrLines, Math.round(maxCellHeightExcludingPadding / lineHeight)));
 
   const getCellSize = useCallback(
     (text: string, colIdx: number, isNumeric: boolean) => {
@@ -141,9 +138,9 @@ const useDynamicRowHeight = ({
       mutableSetCellSize.current(text, rowIdx, colIdx, isNumeric, true);
     });
 
-  if(!isSnapshot){
+    if (!isSnapshot) {
       setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
-  };
+    }
   }, [resetRowMeta, isSnapshot, mutableSetCellSize]);
 
   /**

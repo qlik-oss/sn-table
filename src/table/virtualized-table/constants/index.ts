@@ -2,7 +2,7 @@ const MIN_BODY_ROW_HEIGHT = 24;
 
 const MIN_HEADER_HEIGHT = 32;
 
-const MAX_PAGE_SIZE = 25;
+const MAX_PAGE_SIZE = 250_000;
 
 const ROW_DATA_BUFFER_SIZE = 25;
 

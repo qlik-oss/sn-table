@@ -123,7 +123,7 @@
     "@nebula.js/cli-sense": "4.4.0",
     "@nebula.js/cli-serve": "4.4.0",
     "@playwright/test": "1.37.1",
-    "@qlik-oss/nebula-table-utils": "1.1.0",
+    "@qlik/nebula-table-utils": "2.2.0",
     "@qlik-trial/sprout": "2.45.6",
     "@qlik/eslint-config": "0.4.15",
     "@rollup/plugin-typescript": "11.1.2",

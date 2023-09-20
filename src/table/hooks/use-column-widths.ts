@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useOnPropsChange } from '@qlik-oss/nebula-table-utils/lib/hooks';
+import { useOnPropsChange } from '@qlik/nebula-table-utils/lib/hooks';
 import { Column, TotalsPosition } from '../../types';
 import {
   MIN_COLUMN_WIDTH,
@@ -96,7 +96,7 @@ const useColumnWidths = (
   number[],
   React.Dispatch<React.SetStateAction<number[]>>,
   React.Dispatch<React.SetStateAction<number>>,
-  boolean
+  boolean,
 ] => {
   const showTotals = totalsPosition.atBottom || totalsPosition.atTop;
   const measureHeadLabel = useMeasureText(head.fontSize, head.fontFamily, true).measureText;

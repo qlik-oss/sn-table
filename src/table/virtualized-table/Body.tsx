@@ -1,6 +1,6 @@
 import React, { memo, useMemo, useLayoutEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import { VariableSizeGrid } from 'react-window';
-import { useOnPropsChange } from '@qlik-oss/nebula-table-utils/lib/hooks';
+import { useOnPropsChange } from '@qlik/nebula-table-utils/lib/hooks';
 import useData from './hooks/use-data';
 import { BodyProps, BodyRef, ItemData, GridState } from './types';
 import useScrollDirection from './hooks/use-scroll-direction';

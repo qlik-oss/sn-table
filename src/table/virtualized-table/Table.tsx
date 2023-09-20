@@ -117,15 +117,17 @@ const Table = (props: TableProps) => {
     <ScrollableContainer ref={ref} width={tableRect.width} height={tableRect.height} onScroll={scrollHandler}>
       <FullSizeContainer width={containerWidth} height={containerHeight}>
         <StickyContainer rect={stickyContainerRect}>
-          {viewService.viewState?.skipHeader ? null : <Header
-            headerStyle={styling.head}
-            rect={stickyContainerRect}
-            pageInfo={pageInfo}
-            columns={columns}
-            forwardRef={headerRef}
-            rowHeight={headerRowHeight}
-            columResizeHandler={columResizeHandler}
-          />}
+          {viewService.viewState?.skipHeader ? null : (
+            <Header
+              headerStyle={styling.head}
+              rect={stickyContainerRect}
+              pageInfo={pageInfo}
+              columns={columns}
+              forwardRef={headerRef}
+              rowHeight={headerRowHeight}
+              columResizeHandler={columResizeHandler}
+            />
+          )}
           {totalsPosition.atTop ? TotalsComponent : null}
           <Body
             ref={bodyRef}

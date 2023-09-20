@@ -1,3 +1,4 @@
+import { COLORING } from '@qlik/nebula-table-utils/lib/utils';
 import {
   getColor,
   getBaseStyling,
@@ -10,7 +11,7 @@ import {
 import { ExtendedTheme, PaletteColor, HeaderStyling, ContentStyling, TableLayout } from '../../../types';
 import { CellStyle } from '../../types';
 import { SelectionStates } from '../../constants';
-import { COLORING, SELECTION_STYLING } from '../../styling-defaults';
+import { SELECTION_STYLING } from '../../styling-defaults';
 
 describe('styling-utils', () => {
   let resolvedColor: string;

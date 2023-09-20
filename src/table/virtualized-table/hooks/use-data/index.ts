@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useOnPropsChange } from '@qlik-oss/nebula-table-utils/lib/hooks';
+import { useOnPropsChange } from '@qlik/nebula-table-utils/lib/hooks';
 import { PageInfo, Row, Column, TableLayout, ExtendedTheme } from '../../../../types';
 import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
 import { GridState, SetCellSize } from '../../types';

@@ -1,5 +1,5 @@
 import React, { useRef, useCallback, useEffect, memo } from 'react';
-import { PaginationFooter } from "@qlik/nebula-table-utils/lib/components";
+import { PaginationFooter } from '@qlik/nebula-table-utils/lib/components';
 import AnnounceElements from './AnnounceElements';
 import TableBodyWrapper from './body/TableBodyWrapper';
 import TableHeadWrapper from './head/TableHeadWrapper';
@@ -23,10 +23,8 @@ const TableWrapper = (props: TableWrapperProps) => {
 
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
     useContextSelector(TableContext, (value) => value.tableData);
-  const { rootElement, keyboard, translator, theme, interactions, styling, viewService, layout, rect } = useContextSelector(
-    TableContext,
-    (value) => value.baseProps
-  );
+  const { rootElement, keyboard, translator, theme, interactions, styling, viewService, layout, rect } =
+    useContextSelector(TableContext, (value) => value.baseProps);
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
@@ -64,13 +62,16 @@ const TableWrapper = (props: TableWrapperProps) => {
     [pageInfo, setPageInfo, totalPages, announce]
   );
 
-  const handleChangeRowsPerPage = useCallback((newRowsPerPage: number) => {
-    setPageInfo({ ...pageInfo, page: 0, rowsPerPage: newRowsPerPage });
-    announce({
-      keys: [['SNTable.Pagination.RowsPerPageChange', newRowsPerPage.toString()]],
-      politeness: 'assertive',
-    });
-  }, [announce, pageInfo, setPageInfo]);
+  const handleChangeRowsPerPage = useCallback(
+    (newRowsPerPage: number) => {
+      setPageInfo({ ...pageInfo, page: 0, rowsPerPage: newRowsPerPage });
+      announce({
+        keys: [['SNTable.Pagination.RowsPerPageChange', newRowsPerPage.toString()]],
+        politeness: 'assertive',
+      });
+    },
+    [announce, pageInfo, setPageInfo]
+  );
 
   const handleKeyDown = (evt: React.KeyboardEvent) => {
     handleWrapperKeyDown({

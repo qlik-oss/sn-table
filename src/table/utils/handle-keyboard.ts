@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 import React from 'react';
-import { preventDefaultBehavior } from "@qlik/nebula-table-utils/lib/utils";
+import { preventDefaultBehavior } from '@qlik/nebula-table-utils/lib/utils';
 import { moveFocusWithArrow, focusBodyFromHead, updateFocus } from './accessibility-utils';
 import {
   isCtrlShift,
