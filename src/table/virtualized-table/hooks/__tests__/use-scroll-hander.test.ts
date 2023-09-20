@@ -1,10 +1,10 @@
-import { renderHook } from '@testing-library/react';
-import { VariableSizeList } from 'react-window';
-import { BodyRef } from '../../types';
-import useScrollHandler from '../use-scroll-handler';
-import { ViewService } from '../../../../types';
+import { renderHook } from "@testing-library/react";
+import { VariableSizeList } from "react-window";
+import { ViewService } from "../../../../types";
+import { BodyRef } from "../../types";
+import useScrollHandler from "../use-scroll-handler";
 
-describe('useScrollHandler', () => {
+describe("useScrollHandler", () => {
   let headerRef: React.RefObject<VariableSizeList<any>>;
   let bodyRef: React.RefObject<BodyRef>;
   let totalsRef: React.RefObject<VariableSizeList<any>>;
@@ -28,10 +28,10 @@ describe('useScrollHandler', () => {
     jest.restoreAllMocks();
   });
 
-  test('should scroll body, header and totals', () => {
-    const headerScrollToSpy = jest.spyOn(listInstance, 'scrollTo');
-    const totalsScrollToSpy = jest.spyOn(listTotalsInstance, 'scrollTo');
-    const bodyScrollToSpy = jest.spyOn(refHandler, 'interpolatedScrollTo');
+  test("should scroll body, header and totals", () => {
+    const headerScrollToSpy = jest.spyOn(listInstance, "scrollTo");
+    const totalsScrollToSpy = jest.spyOn(listTotalsInstance, "scrollTo");
+    const bodyScrollToSpy = jest.spyOn(refHandler, "interpolatedScrollTo");
 
     const { result } = renderHook(() => useScrollHandler(headerRef, totalsRef, bodyRef, viewService));
 

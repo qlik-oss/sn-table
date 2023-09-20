@@ -1,20 +1,20 @@
-import { useCallback, useRef, useState } from 'react';
-import { VariableSizeGrid, VariableSizeList } from 'react-window';
-import { useOnPropsChange } from '@qlik/nebula-table-utils/lib/hooks';
-import { Column, PageInfo, Row, ViewService } from '../../../types';
-import { TableContext, useContextSelector } from '../../context';
-import { COMMON_CELL_STYLING } from '../../styling-defaults';
-import { GeneratedStyling } from '../../types';
+import { useOnPropsChange } from "@qlik/nebula-table-utils/lib/hooks";
+import { useCallback, useRef, useState } from "react";
+import { VariableSizeGrid, VariableSizeList } from "react-window";
+import { Column, PageInfo, Row, ViewService } from "../../../types";
+import { TableContext, useContextSelector } from "../../context";
+import { COMMON_CELL_STYLING } from "../../styling-defaults";
+import { GeneratedStyling } from "../../types";
 import {
   CELL_BORDER_HEIGHT,
   CELL_PADDING_HEIGHT,
   LINE_HEIGHT as LINE_HEIGHT_MULTIPLIER,
-} from '../../utils/styling-utils';
-import { MAX_NBR_LINES_OF_TEXT, MIN_BODY_ROW_HEIGHT } from '../constants';
-import { BodyStyle, GridState, RowMeta } from '../types';
-import { getAdjustedCellWidth, getAdjustedHeadCellWidth } from '../utils/cell-width-utils';
-import useMeasureText from './use-measure-text';
-import useMutableProp from './use-mutable-prop';
+} from "../../utils/styling-utils";
+import { MAX_NBR_LINES_OF_TEXT, MIN_BODY_ROW_HEIGHT } from "../constants";
+import { BodyStyle, GridState, RowMeta } from "../types";
+import { getAdjustedCellWidth, getAdjustedHeadCellWidth } from "../utils/cell-width-utils";
+import useMeasureText from "./use-measure-text";
+import useMutableProp from "./use-mutable-prop";
 
 export interface UseDynamicRowHeightProps {
   style: BodyStyle | GeneratedStyling;
@@ -177,8 +177,8 @@ const useDynamicRowHeight = ({
     for (let rowIdx = rowStart; rowIdx <= rowStop; rowIdx++) {
       const row = rows[rowIdx] ?? {};
       Object.values(row).forEach((cell) => {
-        if (typeof cell === 'object') {
-          setCellSize(cell.qText ?? '', rowIdx, cell.pageColIdx, cell.isNumeric);
+        if (typeof cell === "object") {
+          setCellSize(cell.qText ?? "", rowIdx, cell.pageColIdx, cell.isNumeric);
         }
       });
     }

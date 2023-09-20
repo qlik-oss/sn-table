@@ -1,31 +1,31 @@
 const stylingPanel = {
-  type: 'items',
+  type: "items",
   items: [
     {
-      component: 'styling-panel',
-      chartTitle: 'Object.StraightTable',
-      subtitle: 'LayerStyleEditor.component.styling',
-      translation: 'LayerStyleEditor.component.styling',
-      ref: 'components',
+      component: "styling-panel",
+      chartTitle: "Object.StraightTable",
+      subtitle: "LayerStyleEditor.component.styling",
+      translation: "LayerStyleEditor.component.styling",
+      ref: "components",
       useGeneral: true,
       defaultValue: [],
       items: {
         headerSection: {
-          translation: 'properties.Header',
-          component: 'panel-section',
+          translation: "properties.Header",
+          component: "panel-section",
           items: {
             headerFontItem: {
-              component: 'items',
-              ref: 'components',
-              key: 'theme',
+              component: "items",
+              ref: "components",
+              key: "theme",
               items: {
                 headerFontWrapper: {
-                  component: 'inline-wrapper',
+                  component: "inline-wrapper",
                   items: {
                     headerFontSize: {
-                      component: 'integer',
-                      ref: 'header.fontSize',
-                      translation: 'properties.fontSize',
+                      component: "integer",
+                      ref: "header.fontSize",
+                      translation: "properties.fontSize",
                       width: 9,
                       min: 5,
                       max: 300,
@@ -44,9 +44,9 @@ const stylingPanel = {
                     },
                     headerFontColor: {
                       show: true,
-                      ref: 'header.fontColor',
-                      type: 'object',
-                      component: 'color-picker',
+                      ref: "header.fontColor",
+                      type: "object",
+                      component: "color-picker",
                       defaultValue(item, data, args) {
                         const currentTheme = args.theme.current();
                         return { color: currentTheme.object?.straightTableV2?.header?.color ?? currentTheme.color };
@@ -60,21 +60,21 @@ const stylingPanel = {
           },
         },
         contentSection: {
-          component: 'panel-section',
-          translation: 'properties.Content',
+          component: "panel-section",
+          translation: "properties.Content",
           items: {
             contentFontItem: {
-              component: 'items',
-              ref: 'components',
-              key: 'theme',
+              component: "items",
+              ref: "components",
+              key: "theme",
               items: {
                 contentFontWrapper: {
-                  component: 'inline-wrapper',
+                  component: "inline-wrapper",
                   items: {
                     contentFontSize: {
-                      component: 'integer',
-                      ref: 'content.fontSize',
-                      translation: 'properties.fontSize',
+                      component: "integer",
+                      ref: "content.fontSize",
+                      translation: "properties.fontSize",
                       width: 9,
                       min: 5,
                       max: 300,
@@ -92,9 +92,9 @@ const stylingPanel = {
                       },
                     },
                     contentFontColor: {
-                      ref: 'content.fontColor',
-                      type: 'object',
-                      component: 'color-picker',
+                      ref: "content.fontColor",
+                      type: "object",
+                      component: "color-picker",
                       defaultValue(item, data, args) {
                         const currentTheme = args.theme.current();
                         return { color: currentTheme.object?.straightTableV2?.content?.color ?? currentTheme.color };
@@ -108,27 +108,27 @@ const stylingPanel = {
           },
         },
         hoverEffectSection: {
-          translation: 'properties.RowHover',
-          component: 'panel-section',
+          translation: "properties.RowHover",
+          component: "panel-section",
           items: {
             hoverEffectItem: {
-              component: 'items',
-              ref: 'components',
-              key: 'theme',
+              component: "items",
+              ref: "components",
+              key: "theme",
               items: {
                 hoverEffectSwitch: {
-                  ref: 'content.hoverEffect',
-                  translation: 'ThemeStyleEditor.style.hoverEffect',
-                  type: 'boolean',
-                  component: 'switch',
+                  ref: "content.hoverEffect",
+                  translation: "ThemeStyleEditor.style.hoverEffect",
+                  type: "boolean",
+                  component: "switch",
                   options: [
                     {
                       value: true,
-                      translation: 'properties.on',
+                      translation: "properties.on",
                     },
                     {
                       value: false,
-                      translation: 'properties.off',
+                      translation: "properties.off",
                     },
                   ],
                   defaultValue: false,
@@ -137,20 +137,20 @@ const stylingPanel = {
                   show(data) {
                     return data?.content?.hoverEffect;
                   },
-                  ref: 'content.hoverColor',
-                  translation: 'ThemeStyleEditor.style.hoverStyle',
-                  type: 'object',
-                  component: 'color-picker',
+                  ref: "content.hoverColor",
+                  translation: "ThemeStyleEditor.style.hoverStyle",
+                  type: "object",
+                  component: "color-picker",
                   dualOutput: true,
                 },
                 hoverEffectFontColorItem: {
                   show(data) {
                     return data?.content?.hoverEffect;
                   },
-                  ref: 'content.hoverFontColor',
-                  translation: 'ThemeStyleEditor.style.hoverFontStyle',
-                  type: 'object',
-                  component: 'color-picker',
+                  ref: "content.hoverFontColor",
+                  translation: "ThemeStyleEditor.style.hoverFontStyle",
+                  type: "object",
+                  component: "color-picker",
                   dualOutput: true,
                 },
               },
@@ -163,87 +163,87 @@ const stylingPanel = {
 };
 
 const getTotals = (env) => ({
-  type: 'items',
+  type: "items",
   items: [
     {
-      ref: 'totals.show',
-      type: 'boolean',
-      translation: 'properties.totals',
-      component: 'switch',
+      ref: "totals.show",
+      type: "boolean",
+      translation: "properties.totals",
+      component: "switch",
       options: [
         {
           value: true,
-          translation: 'Common.Auto',
+          translation: "Common.Auto",
         },
         {
           value: false,
-          translation: 'Common.Custom',
+          translation: "Common.Custom",
         },
       ],
       defaultValue: true,
     },
     {
-      ref: 'totals.position',
-      translation: 'Common.Position',
-      type: 'string',
-      component: 'dropdown',
+      ref: "totals.position",
+      translation: "Common.Position",
+      type: "string",
+      component: "dropdown",
       options: [
         {
-          value: 'noTotals',
-          translation: 'Common.None',
+          value: "noTotals",
+          translation: "Common.None",
         },
         {
-          value: 'top',
-          translation: 'Common.Top',
+          value: "top",
+          translation: "Common.Top",
         },
         {
-          value: 'bottom',
-          translation: 'Common.Bottom',
+          value: "bottom",
+          translation: "Common.Bottom",
         },
       ],
-      defaultValue: 'noTotals',
+      defaultValue: "noTotals",
       show(data) {
         return !data.totals.show;
       },
     },
     {
-      ref: 'totals.label',
-      translation: 'properties.totals.label',
-      type: 'string',
-      expression: 'optional',
+      ref: "totals.label",
+      translation: "properties.totals.label",
+      type: "string",
+      expression: "optional",
       defaultValue() {
-        return env.translator.get('Object.Table.Totals');
+        return env.translator.get("Object.Table.Totals");
       },
     },
   ],
-  show: !env?.anything?.sense?.isUnsupportedFeature?.('totals'),
+  show: !env?.anything?.sense?.isUnsupportedFeature?.("totals"),
 });
 
 const getChartExploration = (env) =>
-  env.flags.isEnabled('PS_18291_TABLE_EXPLORATION') && {
+  env.flags.isEnabled("PS_18291_TABLE_EXPLORATION") && {
     chartExploration: {
-      type: 'items',
-      translation: 'properties.chartExploration',
+      type: "items",
+      translation: "properties.chartExploration",
       items: {
         chartExplorationToggler: {
-          type: 'items',
-          component: 'chart-exploration-toggler',
-          translation: 'properties.enableChartExploration',
-          ref: 'enableChartExploration',
+          type: "items",
+          component: "chart-exploration-toggler",
+          translation: "properties.enableChartExploration",
+          ref: "enableChartExploration",
         },
         visibilityToggler: {
           show: (itemData) => itemData.enableChartExploration,
-          component: 'buttongroup',
-          translation: 'properties.ChartExploration.VisibilityOption',
-          ref: 'chartExploration.menuVisibility',
+          component: "buttongroup",
+          translation: "properties.ChartExploration.VisibilityOption",
+          ref: "chartExploration.menuVisibility",
           options: [
             {
-              value: 'auto',
-              translation: 'Common.Auto',
+              value: "auto",
+              translation: "Common.Auto",
             },
             {
-              value: 'minimized',
-              translation: 'properties.ChartExploration.Minimized',
+              value: "minimized",
+              translation: "properties.ChartExploration.Minimized",
             },
           ],
         },
@@ -255,20 +255,20 @@ const getChartExploration = (env) =>
   };
 
 const getUsePagination = () => ({
-  ref: 'usePagination',
-  translation: 'properties.usePagination',
-  type: 'boolean',
-  component: 'checkbox',
+  ref: "usePagination",
+  translation: "properties.usePagination",
+  type: "boolean",
+  component: "checkbox",
   defaultValue: false,
 });
 
 const getSettings = (env) => ({
-  uses: 'settings',
+  uses: "settings",
   items: {
     presentation: {
       grouped: true,
-      type: 'items',
-      translation: 'properties.presentation',
+      type: "items",
+      translation: "properties.presentation",
       items: [stylingPanel, getTotals(env), getUsePagination()],
     },
     ...getChartExploration(env),

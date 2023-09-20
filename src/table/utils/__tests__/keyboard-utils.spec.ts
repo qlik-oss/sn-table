@@ -1,18 +1,18 @@
-import { stardust } from '@nebula.js/stardust';
-import { focusSelectionToolbar } from '@qlik/nebula-table-utils/lib/utils';
-import * as accessibilityUtils from '../accessibility-utils';
-import * as handleScroll from '../handle-scroll';
-import { KeyCodes } from '../../constants';
-import { shouldBubbleEarly, bodyArrowHelper, bodyTabHelper, headTabHelper } from '../keyboard-utils';
-import { Announce, Cell, TotalsPosition } from '../../../types';
-import { SelectionDispatch } from '../../types';
+import { stardust } from "@nebula.js/stardust";
+import { focusSelectionToolbar } from "@qlik/nebula-table-utils/lib/utils";
+import { Announce, Cell, TotalsPosition } from "../../../types";
+import { KeyCodes } from "../../constants";
+import { SelectionDispatch } from "../../types";
+import * as accessibilityUtils from "../accessibility-utils";
+import * as handleScroll from "../handle-scroll";
+import { bodyArrowHelper, bodyTabHelper, headTabHelper, shouldBubbleEarly } from "../keyboard-utils";
 
-jest.mock('@qlik/nebula-table-utils/lib/utils', () => ({
+jest.mock("@qlik/nebula-table-utils/lib/utils", () => ({
   focusSelectionToolbar: jest.fn(),
   preventDefaultBehavior: jest.fn(),
 }));
 
-describe('keyboard-utils', () => {
+describe("keyboard-utils", () => {
   let evt: React.KeyboardEvent;
   let rootElement: HTMLElement;
   let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
@@ -38,7 +38,7 @@ describe('keyboard-utils', () => {
 
   afterEach(() => jest.clearAllMocks());
 
-  describe('shouldBubbleEarly', () => {
+  describe("shouldBubbleEarly", () => {
     let isSelectionMode: boolean;
 
     const callShouldBubbleEarly = () => shouldBubbleEarly(evt, isSelectionMode);
@@ -47,50 +47,50 @@ describe('keyboard-utils', () => {
       isSelectionMode = false;
     });
 
-    it('should return true when esc is pressed and isSelectionMode is false', () => {
+    it("should return true when esc is pressed and isSelectionMode is false", () => {
       expect(callShouldBubbleEarly()).toBe(true);
     });
 
-    it('should return false when esc is pressed and isSelectionMode is true', () => {
+    it("should return false when esc is pressed and isSelectionMode is true", () => {
       isSelectionMode = true;
       expect(callShouldBubbleEarly()).toBe(false);
     });
 
-    it('should return true when ctrl + shift + arrowRight is pressed', () => {
+    it("should return true when ctrl + shift + arrowRight is pressed", () => {
       evt.key = KeyCodes.RIGHT;
       evt.shiftKey = true;
       evt.ctrlKey = true;
       expect(callShouldBubbleEarly()).toBe(true);
     });
 
-    it('should return true when ctrl + shift + arrowLeft is pressed', () => {
+    it("should return true when ctrl + shift + arrowLeft is pressed", () => {
       evt.key = KeyCodes.LEFT;
       evt.shiftKey = true;
       evt.ctrlKey = true;
       expect(callShouldBubbleEarly()).toBe(true);
     });
 
-    it('should return false when ctrl + shift + some other key is pressed', () => {
+    it("should return false when ctrl + shift + some other key is pressed", () => {
       evt.key = KeyCodes.UP;
       evt.shiftKey = true;
       evt.ctrlKey = true;
       expect(callShouldBubbleEarly()).toBe(false);
     });
 
-    it('should return false when ctrl + arrowLeft but not shift', () => {
+    it("should return false when ctrl + arrowLeft but not shift", () => {
       evt.key = KeyCodes.LEFT;
       evt.ctrlKey = true;
       expect(callShouldBubbleEarly()).toBe(false);
     });
 
-    it('should return false when shift + arrowLeft but not ctrl', () => {
+    it("should return false when shift + arrowLeft but not ctrl", () => {
       evt.key = KeyCodes.LEFT;
       evt.shiftKey = true;
       expect(callShouldBubbleEarly()).toBe(false);
     });
   });
 
-  describe('BodyArrowHelper', () => {
+  describe("BodyArrowHelper", () => {
     let cell: Cell;
     let selectionDispatch: SelectionDispatch;
     let isSelectionsEnabled: boolean;
@@ -119,13 +119,13 @@ describe('keyboard-utils', () => {
       announce = jest.fn();
       totalsPosition = { atTop: false, atBottom: true };
       isSelectionMode = false;
-      jest.spyOn(accessibilityUtils, 'announceSelectionState').mockImplementation(() => {});
-      jest.spyOn(accessibilityUtils, 'moveFocusWithArrow').mockImplementation(() => ({}) as HTMLTableCellElement);
-      jest.spyOn(accessibilityUtils, 'updateFocus').mockImplementation(() => {});
-      jest.spyOn(handleScroll, 'handleNavigateTop').mockImplementation(() => {});
+      jest.spyOn(accessibilityUtils, "announceSelectionState").mockImplementation(() => {});
+      jest.spyOn(accessibilityUtils, "moveFocusWithArrow").mockImplementation(() => ({} as HTMLTableCellElement));
+      jest.spyOn(accessibilityUtils, "updateFocus").mockImplementation(() => {});
+      jest.spyOn(handleScroll, "handleNavigateTop").mockImplementation(() => {});
     });
 
-    it('should call updateFocus, moveFocusWithArrow and announceSelectionState on arrow down', () => {
+    it("should call updateFocus, moveFocusWithArrow and announceSelectionState on arrow down", () => {
       runBodyArrowHelper();
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
       expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledTimes(1);
@@ -133,7 +133,7 @@ describe('keyboard-utils', () => {
       expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(0);
     });
 
-    it('should call updateFocus, moveFocusWithArrow, handleNavigateTop and announceSelectionState on arrow up', () => {
+    it("should call updateFocus, moveFocusWithArrow, handleNavigateTop and announceSelectionState on arrow up", () => {
       evt.key = KeyCodes.UP;
 
       runBodyArrowHelper();
@@ -143,7 +143,7 @@ describe('keyboard-utils', () => {
       expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(1);
     });
 
-    it('should call updateFocus and moveFocusWithArrow on arrow left', () => {
+    it("should call updateFocus and moveFocusWithArrow on arrow left", () => {
       evt.key = KeyCodes.LEFT;
 
       runBodyArrowHelper();
@@ -153,7 +153,7 @@ describe('keyboard-utils', () => {
       expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(0);
     });
 
-    it('should call updateFocus and moveFocusWithArrow on arrow right', () => {
+    it("should call updateFocus and moveFocusWithArrow on arrow right", () => {
       evt.key = KeyCodes.RIGHT;
 
       runBodyArrowHelper();
@@ -163,7 +163,7 @@ describe('keyboard-utils', () => {
       expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(0);
     });
 
-    it('should call updateFocus, moveFocusWithArrow and selectionDispatch when press shift + arrow down key on body cell', () => {
+    it("should call updateFocus, moveFocusWithArrow and selectionDispatch when press shift + arrow down key on body cell", () => {
       evt.shiftKey = true;
 
       runBodyArrowHelper();
@@ -174,7 +174,7 @@ describe('keyboard-utils', () => {
       expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(0);
     });
 
-    it('should call updateFocus, moveFocusWithArrow and announceSelectionState but not selectionDispatch when press shift + arrow down key on last body cell', () => {
+    it("should call updateFocus, moveFocusWithArrow and announceSelectionState but not selectionDispatch when press shift + arrow down key on last body cell", () => {
       evt.shiftKey = true;
       cell.isLastRow = true;
 
@@ -186,7 +186,7 @@ describe('keyboard-utils', () => {
       expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(0);
     });
 
-    it('should call updateFocus, moveFocusWithArrow and selectionDispatch when press shift + arrow up on body cell', () => {
+    it("should call updateFocus, moveFocusWithArrow and selectionDispatch when press shift + arrow up on body cell", () => {
       evt.key = KeyCodes.UP;
       evt.shiftKey = true;
 
@@ -198,7 +198,7 @@ describe('keyboard-utils', () => {
       expect(handleScroll.handleNavigateTop).toHaveBeenCalledTimes(1);
     });
 
-    it('should call moveFocusWithArrow and announceSelectionState but not selectionDispatch when press shift + arrow up key on first body cell', () => {
+    it("should call moveFocusWithArrow and announceSelectionState but not selectionDispatch when press shift + arrow up key on first body cell", () => {
       evt.key = KeyCodes.UP;
       evt.shiftKey = true;
       cell.pageRowIdx = 0;
@@ -212,7 +212,7 @@ describe('keyboard-utils', () => {
     });
   });
 
-  describe('bodyTabHelper', () => {
+  describe("bodyTabHelper", () => {
     let keyboard: stardust.Keyboard;
     let isSelectionMode: boolean;
     let paginationNeeded: boolean;
@@ -225,13 +225,13 @@ describe('keyboard-utils', () => {
       paginationNeeded = true;
     });
 
-    it('should do nothing when no shift key and keyboard is undefined', () => {
+    it("should do nothing when no shift key and keyboard is undefined", () => {
       callBodyTabHelper();
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(0);
       expect(focusSelectionToolbar).toHaveBeenCalledTimes(0);
     });
 
-    it('should do nothing when keyboard.enabled is true, shift key is not pressed and isSelectionMode is false', () => {
+    it("should do nothing when keyboard.enabled is true, shift key is not pressed and isSelectionMode is false", () => {
       keyboard = { enabled: true } as stardust.Keyboard;
 
       callBodyTabHelper();
@@ -239,7 +239,7 @@ describe('keyboard-utils', () => {
       expect(focusSelectionToolbar).toHaveBeenCalledTimes(0);
     });
 
-    it('should call focusSelectionToolbar when shift key is pressed, keyboard.enabled is true and is in selection mode', () => {
+    it("should call focusSelectionToolbar when shift key is pressed, keyboard.enabled is true and is in selection mode", () => {
       evt.shiftKey = true;
       keyboard = { enabled: true } as stardust.Keyboard;
       isSelectionMode = true;
@@ -249,7 +249,7 @@ describe('keyboard-utils', () => {
       expect(focusSelectionToolbar).toHaveBeenCalledTimes(1);
     });
 
-    it('should call focusSelectionToolbar when shift key is not pressed, keyboard.enabled is true, is in selection mode and there is no pagination', () => {
+    it("should call focusSelectionToolbar when shift key is not pressed, keyboard.enabled is true, is in selection mode and there is no pagination", () => {
       paginationNeeded = false;
       keyboard = { enabled: true } as stardust.Keyboard;
       isSelectionMode = true;
@@ -259,7 +259,7 @@ describe('keyboard-utils', () => {
       expect(focusSelectionToolbar).toHaveBeenCalledTimes(1);
     });
 
-    it('should call setFocusedCellCoord when shift key is pressed and keyboard is undefined', () => {
+    it("should call setFocusedCellCoord when shift key is pressed and keyboard is undefined", () => {
       evt.shiftKey = true;
 
       callBodyTabHelper();
@@ -268,7 +268,7 @@ describe('keyboard-utils', () => {
     });
   });
 
-  describe('headTabHelper', () => {
+  describe("headTabHelper", () => {
     let containsLabelClass: boolean;
     let cellCoord: [number, number];
     let isLastHeadCell: boolean;
@@ -284,10 +284,10 @@ describe('keyboard-utils', () => {
         },
       } as unknown as React.KeyboardEvent;
       cellCoord = [0, 2];
-      jest.spyOn(accessibilityUtils, 'focusBodyFromHead').mockImplementation(() => {});
+      jest.spyOn(accessibilityUtils, "focusBodyFromHead").mockImplementation(() => {});
     });
 
-    it('should set focusedCellCoord to the prev column when pressing shift, isLabel is true and you are not on the first column', () => {
+    it("should set focusedCellCoord to the prev column when pressing shift, isLabel is true and you are not on the first column", () => {
       evt.shiftKey = true;
 
       callHeadTabHelper();
@@ -296,7 +296,7 @@ describe('keyboard-utils', () => {
       expect(accessibilityUtils.focusBodyFromHead).toHaveBeenCalledTimes(0);
     });
 
-    it('should not set focusedCellCoord when pressing shift, isLabel is true but you are on the first column', () => {
+    it("should not set focusedCellCoord when pressing shift, isLabel is true but you are on the first column", () => {
       evt.shiftKey = true;
       cellCoord = [0, 0];
 
@@ -305,7 +305,7 @@ describe('keyboard-utils', () => {
       expect(accessibilityUtils.focusBodyFromHead).toHaveBeenCalledTimes(0);
     });
 
-    it('should set focusedCellCoord to the next column when not pressing shift, isLabel is false and you are not on the last column', () => {
+    it("should set focusedCellCoord to the next column when not pressing shift, isLabel is false and you are not on the last column", () => {
       containsLabelClass = false;
 
       callHeadTabHelper();
@@ -314,7 +314,7 @@ describe('keyboard-utils', () => {
       expect(accessibilityUtils.focusBodyFromHead).toHaveBeenCalledTimes(0);
     });
 
-    it('should call focusBodyFromHead when not pressing shift, isLabel is false and you are not on the last column', () => {
+    it("should call focusBodyFromHead when not pressing shift, isLabel is false and you are not on the last column", () => {
       containsLabelClass = false;
       isLastHeadCell = true;
 

@@ -1,10 +1,10 @@
-import React from 'react';
-import { stardust } from '@nebula.js/stardust';
-import { Announce, Cell, TotalsPosition } from '../../types';
-import { HandleHeadMouseDownProps, SelectionDispatch } from '../types';
-import { FocusTypes, SelectionActions } from '../constants';
-import { removeTabAndFocusCell, updateFocus } from './accessibility-utils';
-import { getCellElement } from './get-element-utils';
+import { stardust } from "@nebula.js/stardust";
+import React from "react";
+import { Announce, Cell, TotalsPosition } from "../../types";
+import { FocusTypes, SelectionActions } from "../constants";
+import { HandleHeadMouseDownProps, SelectionDispatch } from "../types";
+import { removeTabAndFocusCell, updateFocus } from "./accessibility-utils";
+import { getCellElement } from "./get-element-utils";
 
 export const handleMouseDownToFocusBody = (
   cell: Cell,

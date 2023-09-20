@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from "react";
 
 export default function useDidUpdateEffect(effect: () => void, deps: React.DependencyList) {
   const didMountRef = useRef(false);

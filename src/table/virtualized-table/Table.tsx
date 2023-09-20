@@ -1,19 +1,19 @@
-import React, { memo, useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { VariableSizeList } from 'react-window';
-import Body from './Body';
-import FullSizeContainer from './FullSizeContainer';
-import Header from './Header';
-import { TableProps, BodyStyle, BodyRef } from './types';
-import useScrollHandler from './hooks/use-scroll-handler';
-import Totals from './Totals';
-import useTableCount from './hooks/use-table-count';
-import ScrollableContainer from './ScrollableContainer';
-import StickyContainer from './StickyContainer';
-import toTableRect, { toStickyContainerRect } from './utils/to-rect';
-import { useContextSelector, TableContext } from '../context';
-import useScrollbarWidth from './hooks/use-scrollbar-width';
-import useDidUpdateEffect from '../hooks/use-did-update-effect';
-import useHeights from './hooks/use-heights';
+import React, { memo, useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { VariableSizeList } from "react-window";
+import { TableContext, useContextSelector } from "../context";
+import useDidUpdateEffect from "../hooks/use-did-update-effect";
+import Body from "./Body";
+import FullSizeContainer from "./FullSizeContainer";
+import Header from "./Header";
+import ScrollableContainer from "./ScrollableContainer";
+import StickyContainer from "./StickyContainer";
+import Totals from "./Totals";
+import useHeights from "./hooks/use-heights";
+import useScrollHandler from "./hooks/use-scroll-handler";
+import useScrollbarWidth from "./hooks/use-scrollbar-width";
+import useTableCount from "./hooks/use-table-count";
+import { BodyRef, BodyStyle, TableProps } from "./types";
+import toTableRect, { toStickyContainerRect } from "./utils/to-rect";
 
 const Table = (props: TableProps) => {
   const { pageInfo } = props;
@@ -30,7 +30,7 @@ const Table = (props: TableProps) => {
   const bodyStyle = useMemo<BodyStyle>(
     () => ({
       ...styling.body,
-      background: theme.background.color ?? 'transparent',
+      background: theme.background.color ?? "transparent",
     }),
     [theme.background.color, styling]
   );

@@ -1,9 +1,9 @@
-import { Cell, Column } from '../../../types';
-import { SelectionStates } from '../../constants';
-import { SELECTION_STYLING } from '../../styling-defaults';
-import { CellStyle } from '../../types';
-import { getColumnStyle } from '../../utils/styling-utils';
-import { BodyStyle } from '../types';
+import { Cell, Column } from "../../../types";
+import { SelectionStates } from "../../constants";
+import { SELECTION_STYLING } from "../../styling-defaults";
+import { CellStyle } from "../../types";
+import { getColumnStyle } from "../../utils/styling-utils";
+import { BodyStyle } from "../types";
 
 const getCellStyle = (
   cell: Cell,

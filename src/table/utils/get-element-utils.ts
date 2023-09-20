@@ -1,4 +1,4 @@
-import { KeyCodes } from '../constants';
+import { KeyCodes } from "../constants";
 
 /**
  * Calculates the next cell to focus
@@ -12,8 +12,8 @@ export const getNextCellCoord = (
     bottom: number;
   } = { top: 0, bottom: 0 }
 ): [number, number] => {
-  const rowCount = rootElement.getElementsByClassName('sn-table-row').length;
-  const columnCount = rootElement.getElementsByClassName('sn-table-head-cell').length;
+  const rowCount = rootElement.getElementsByClassName("sn-table-row").length;
+  const columnCount = rootElement.getElementsByClassName("sn-table-head-cell").length;
   let [nextRow, nextCol] = cellCoord;
 
   switch (evt.key) {
@@ -51,7 +51,7 @@ export const getNextCellCoord = (
 };
 
 export const getCellElement = (rootElement: HTMLElement, cellCoord: [number, number]) =>
-  rootElement.getElementsByClassName('sn-table-row')[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[
+  rootElement.getElementsByClassName("sn-table-row")[cellCoord[0]]?.getElementsByClassName("sn-table-cell")[
     cellCoord[1]
   ] as HTMLTableCellElement;
 
@@ -63,7 +63,7 @@ export const getNextMenuItem = (currentFocus: Element): Element | undefined => {
   if (!nextItem) {
     return currentFocus.parentElement?.children?.[0];
   }
-  if (nextItem.tagName === 'HR') {
+  if (nextItem.tagName === "HR") {
     return getNextMenuItem(nextItem);
   }
   return nextItem;
@@ -75,15 +75,15 @@ export const getPreviousMenuItem = (currentFocus: Element): Element | undefined 
     const menuItemAmount = currentFocus.parentElement?.children?.length as number;
     return currentFocus.parentElement?.children?.[menuItemAmount - 1];
   }
-  if (previousItem.tagName === 'HR') {
+  if (previousItem.tagName === "HR") {
     return getPreviousMenuItem(previousItem);
   }
   return previousItem;
 };
 
 export const getCellCoord = (rootElement: HTMLElement, cell: HTMLTableCellElement): [number, number] => {
-  const width = rootElement.getElementsByClassName('sn-table-head-cell').length;
-  const cells = rootElement.getElementsByClassName('sn-table-cell');
+  const width = rootElement.getElementsByClassName("sn-table-head-cell").length;
+  const cells = rootElement.getElementsByClassName("sn-table-cell");
 
   let cellIdx = 0;
   for (let idx = 0; idx < cells.length; idx++) {

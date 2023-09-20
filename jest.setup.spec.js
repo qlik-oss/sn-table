@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom';
+import "@testing-library/jest-dom";
 
 beforeEach(() => {
   const context = {
@@ -8,5 +8,5 @@ beforeEach(() => {
       };
     },
   };
-  jest.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(context);
+  jest.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(context);
 });

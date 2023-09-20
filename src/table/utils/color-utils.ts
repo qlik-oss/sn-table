@@ -1,8 +1,8 @@
 /* eslint-disable no-cond-assign */
-import cssColors from './css-colors';
+import cssColors from "./css-colors";
 
 const getChunksFromString = (st: string, chunkSize: number): RegExpMatchArray =>
-  st.match(new RegExp(`.{${chunkSize}}`, 'g')) as RegExpMatchArray;
+  st.match(new RegExp(`.{${chunkSize}}`, "g")) as RegExpMatchArray;
 
 const convertHexUnitTo256 = (hexStr: string): number => parseInt(hexStr.repeat(2 / hexStr.length), 16);
 
@@ -10,7 +10,7 @@ const hexToRGBAorRGB = (hex: string): string => {
   const chunkSize = Math.floor((hex.length - 1) / 3);
   const hexArr = getChunksFromString(hex.slice(1), chunkSize);
   const [r, g, b, a] = hexArr.map(convertHexUnitTo256);
-  return typeof a !== 'undefined' ? `rgba(${r},${g},${b},${a / 255})` : `rgb(${r},${g},${b})`;
+  return typeof a !== "undefined" ? `rgba(${r},${g},${b},${a / 255})` : `rgb(${r},${g},${b})`;
 };
 
 /**
@@ -41,12 +41,12 @@ export function resolveToRGBAorRGB(input: string): string {
   // css color
   const color = input && cssColors[input.toLowerCase()];
   if (color) {
-    return typeof color.a !== 'undefined'
+    return typeof color.a !== "undefined"
       ? `rgba(${color.r},${color.g},${color.b},${color.a})`
       : `rgb(${color.r},${color.g},${color.b})`;
   }
   // invalid
-  return 'none';
+  return "none";
 }
 
 /**

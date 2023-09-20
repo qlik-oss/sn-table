@@ -1,5 +1,5 @@
-import { initialPageInfo } from '../../nebula-hooks/use-pagination-table';
-import { TableLayout, ViewService } from '../../types';
+import { initialPageInfo } from "../../nebula-hooks/use-pagination-table";
+import { TableLayout, ViewService } from "../../types";
 
 const getVisibleHeight = (
   visibleRowEndIndex: number,

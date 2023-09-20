@@ -1,21 +1,21 @@
-import React, { memo, useMemo, useLayoutEffect, useRef, useImperativeHandle, forwardRef } from 'react';
-import { VariableSizeGrid } from 'react-window';
-import { useOnPropsChange } from '@qlik/nebula-table-utils/lib/hooks';
-import useData from './hooks/use-data';
-import { BodyProps, BodyRef, ItemData, GridState } from './types';
-import useScrollDirection from './hooks/use-scroll-direction';
-import useTableCount from './hooks/use-table-count';
-import useItemsRendererHandler from './hooks/use-items-rendered-handler';
-import useSelectionsEffect from './hooks/use-selections-effect';
-import { useContextSelector, TableContext } from '../context';
-import Cell from './Cell';
-import getCellItemKey from './utils/get-cell-item-key';
-import useDynamicRowHeight from './hooks/use-dynamic-row-height';
-import getBodyHeight from './utils/get-body-height';
-import { getStylingComponent } from '../utils/styling-utils';
+import { useOnPropsChange } from "@qlik/nebula-table-utils/lib/hooks";
+import React, { forwardRef, memo, useImperativeHandle, useLayoutEffect, useMemo, useRef } from "react";
+import { VariableSizeGrid } from "react-window";
+import { TableContext, useContextSelector } from "../context";
+import { getStylingComponent } from "../utils/styling-utils";
+import Cell from "./Cell";
+import useData from "./hooks/use-data";
+import useDynamicRowHeight from "./hooks/use-dynamic-row-height";
+import useItemsRendererHandler from "./hooks/use-items-rendered-handler";
+import useScrollDirection from "./hooks/use-scroll-direction";
+import useSelectionsEffect from "./hooks/use-selections-effect";
+import useTableCount from "./hooks/use-table-count";
+import { BodyProps, BodyRef, GridState, ItemData } from "./types";
+import getBodyHeight from "./utils/get-body-height";
+import getCellItemKey from "./utils/get-cell-item-key";
 
 const grdiStyle: React.CSSProperties = {
-  overflow: 'hidden',
+  overflow: "hidden",
   /**
    * "will-change" is by default "transform" in react-window. This disables that default value,
    * as there was issues with rendering border when the width of the react-window "list" was
@@ -25,7 +25,7 @@ const grdiStyle: React.CSSProperties = {
    * again to resolve those performance issues, but the issue with rendering border will need to
    * be fixed in some other way.
    */
-  willChange: 'auto',
+  willChange: "auto",
 };
 
 const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
@@ -109,7 +109,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     if (rowMeta.current.lastScrollToRatio === 1) {
       // Hack to deal with the case when a user scrolls to the last row
       // and data has not yet finished loading
-      gridRef.current?.scrollToItem({ rowIndex: rowCount - 1, align: 'start' });
+      gridRef.current?.scrollToItem({ rowIndex: rowCount - 1, align: "start" });
     }
   });
 
@@ -133,7 +133,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
         if (rowMeta.current.lastScrollToRatio === 1) {
           // Hack to ensure that the last row is scrolled to when row height is dynamic
           // and row has already been measured
-          gridRef.current?.scrollToItem({ rowIndex: rowCount - 1, align: 'start' });
+          gridRef.current?.scrollToItem({ rowIndex: rowCount - 1, align: "start" });
           gridRef.current?.scrollTo({ scrollLeft });
         } else {
           gridRef.current?.scrollTo({ scrollTop, scrollLeft });

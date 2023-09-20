@@ -1,11 +1,11 @@
-import { stardust } from '@nebula.js/stardust';
-import { isDarkColor, COLORING } from '@qlik/nebula-table-utils/lib/utils';
-import { PAGINATION_HEIGHT } from '@qlik/nebula-table-utils/lib/components/PaginationFooter';
-import { resolveToRGBAorRGB, removeOpacity } from './color-utils';
-import { TableLayout, ExtendedTheme, HeaderStyling, ContentStyling, PaletteColor, BackgroundColors } from '../../types';
-import { GeneratedStyling, CellStyle, FooterStyle } from '../types';
-import { SelectionStates } from '../constants';
-import { SELECTION_STYLING } from '../styling-defaults';
+import { stardust } from "@nebula.js/stardust";
+import { PAGINATION_HEIGHT } from "@qlik/nebula-table-utils/lib/components/PaginationFooter";
+import { COLORING, isDarkColor } from "@qlik/nebula-table-utils/lib/utils";
+import { BackgroundColors, ContentStyling, ExtendedTheme, HeaderStyling, PaletteColor, TableLayout } from "../../types";
+import { SelectionStates } from "../constants";
+import { SELECTION_STYLING } from "../styling-defaults";
+import { CellStyle, FooterStyle, GeneratedStyling } from "../types";
+import { removeOpacity, resolveToRGBAorRGB } from "./color-utils";
 
 export const LINE_HEIGHT = 4 / 3;
 export const CELL_PADDING_HEIGHT = 8;
@@ -30,7 +30,7 @@ export const isPaletteColorSet = (prop: PaletteColor | undefined): boolean =>
 export function getColor(defaultColor: string, theme: stardust.Theme, color = {}): string {
   const resolvedColor = theme.getColorPickerColor(color);
 
-  return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
+  return !resolvedColor || resolvedColor === "none" ? defaultColor : resolvedColor;
 }
 
 /**
@@ -71,15 +71,15 @@ const getLastRowBottomBorder = (fontSize: string | undefined, rowsLength?: numbe
     const rowHeight = fontSizeToRowHeight(fontSize);
     // multiply with number of rows plus header and totals. Compare if greater than container
     const showBottomBorder = rowHeight * (rowsLength + 2) < rootElement.clientHeight - PAGINATION_HEIGHT;
-    return showBottomBorder ? '1px' : '0px';
+    return showBottomBorder ? "1px" : "0px";
   }
-  return '0px';
+  return "0px";
 };
 
 /**
  * finding the correct styling object inside component
  */
-export const getStylingComponent = (layout: TableLayout) => layout.components?.find((c) => c.key === 'theme');
+export const getStylingComponent = (layout: TableLayout) => layout.components?.find((c) => c.key === "theme");
 
 /**
  * Gets base styling for either header or body taking table theme settings into account
@@ -90,9 +90,9 @@ export const getBaseStyling = (
   styleObj: HeaderStyling | ContentStyling | undefined,
   bottomSeparatingBorder = false
 ): GeneratedStyling => {
-  const fontFamily = theme.getStyle('object', `straightTableV2.${objetName}`, 'fontFamily');
-  const color = theme.getStyle('object', `straightTableV2.${objetName}`, 'color');
-  const fontSize = theme.getStyle('object', `straightTableV2.${objetName}`, 'fontSize');
+  const fontFamily = theme.getStyle("object", `straightTableV2.${objetName}`, "fontFamily");
+  const color = theme.getStyle("object", `straightTableV2.${objetName}`, "color");
+  const fontSize = theme.getStyle("object", `straightTableV2.${objetName}`, "fontSize");
 
   const baseStyle: GeneratedStyling = {
     fontFamily,
@@ -100,7 +100,7 @@ export const getBaseStyling = (
       ? getColor(COLORING.TEXT, theme, styleObj?.fontColor)
       : color || COLORING.TEXT,
     fontSize: (styleObj?.fontSize && `${styleObj.fontSize}px`) || fontSize,
-    padding: styleObj && 'padding' in styleObj ? styleObj?.padding : undefined,
+    padding: styleObj && "padding" in styleObj ? styleObj?.padding : undefined,
     ...getBorderColors(theme.background.isDark, bottomSeparatingBorder),
   };
   // Remove all undefined and null values
@@ -120,7 +120,7 @@ export function getHeaderStyle(
   bottomSeparatingBorder: boolean
 ): GeneratedStyling {
   const header = getStylingComponent(layout)?.header;
-  const headerStyle = getBaseStyling('header', theme, header, bottomSeparatingBorder);
+  const headerStyle = getBaseStyling("header", theme, header, bottomSeparatingBorder);
 
   // To avoid seeing the table body through the table head:
   // - When the table background color from the sense theme is transparent,
@@ -149,7 +149,7 @@ export function getBodyStyle(
   rootElement?: HTMLElement
 ): GeneratedStyling {
   const content = getStylingComponent(layout)?.content;
-  const contentStyle = getBaseStyling('content', theme, content);
+  const contentStyle = getBaseStyling("content", theme, content);
   contentStyle.background = theme.background.color;
 
   const lastRowBottomBorder = getLastRowBottomBorder(contentStyle?.fontSize, rowsLength, rootElement);
@@ -158,8 +158,8 @@ export function getBodyStyle(
   const backgroundFromLayout = content?.hoverColor;
   const colorFromLayout = content?.hoverFontColor;
 
-  const backgroundFromTheme = theme.getStyle('object', '', 'straightTableV2.content.hover.backgroundColor');
-  const colorFromTheme = theme.getStyle('object', '', 'straightTableV2.content.hover.color');
+  const backgroundFromTheme = theme.getStyle("object", "", "straightTableV2.content.hover.backgroundColor");
+  const colorFromTheme = theme.getStyle("object", "", "straightTableV2.content.hover.color");
 
   // Cases when hoverEffect is true:
   // 1. There is no hover font color but a hover background color,
@@ -190,7 +190,7 @@ export function getBodyStyle(
     // case 1 or 4
     background = backgroundFromTheme;
   } else if (isColorSet) {
-    background = ''; // case 3
+    background = ""; // case 3
   } else {
     background = COLORING.HOVER; // case 2
   }
@@ -201,7 +201,7 @@ export function getBodyStyle(
         theme,
         isPaletteColorSet(colorFromLayout) ? colorFromLayout : colorFromTheme
       ) // case 1 or 3 or 4
-    : ''; // case 2;
+    : ""; // case 2;
 
   return {
     ...contentStyle,
@@ -235,7 +235,7 @@ export const getFooterStyle = (background: BackgroundColors): FooterStyle =>
  */
 export function getTotalsStyle(layout: TableLayout, theme: ExtendedTheme, totalsAtTop: boolean) {
   const content = getStylingComponent(layout)?.content;
-  const contentStyle = getBaseStyling('content', theme, content);
+  const contentStyle = getBaseStyling("content", theme, content);
   const { borderBottomColor, borderTopColor, background } = getHeaderStyle(layout, theme, totalsAtTop);
   return { ...contentStyle, borderBottomColor, background, borderTopColor };
 }
@@ -271,7 +271,7 @@ export function getColumnStyle(
   const columnColors: Record<string, string> = {};
   qAttrExps?.qValues?.forEach((val, i) => {
     const resolvedColor = val.qText && resolveToRGBAorRGB(val.qText);
-    if (resolvedColor && resolvedColor !== 'none') {
+    if (resolvedColor && resolvedColor !== "none") {
       columnColors[stylingIDs[i]] = resolvedColor;
     }
   });

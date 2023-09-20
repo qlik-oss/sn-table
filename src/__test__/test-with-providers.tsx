@@ -1,9 +1,9 @@
 /* eslint react/require-default-props: 0 */
-import { ThemeProvider } from '@mui/material/styles';
-import { stardust } from '@nebula.js/stardust';
-import React from 'react';
-import { TableContextProvider, EMPTY_TABLE_DATA } from '../table/context';
-import muiSetup from '../table/mui-setup';
+import { ThemeProvider } from "@mui/material/styles";
+import { stardust } from "@nebula.js/stardust";
+import React from "react";
+import { EMPTY_TABLE_DATA, TableContextProvider } from "../table/context";
+import muiSetup from "../table/mui-setup";
 import {
   ApplyColumnWidths,
   ChangeSortOrder,
@@ -13,8 +13,8 @@ import {
   TableData,
   TableLayout,
   ViewService,
-} from '../types';
-import { generateLayout } from './generate-test-data';
+} from "../types";
+import { generateLayout } from "./generate-test-data";
 
 interface ProviderProps {
   app?: EngineAPI.IApp;
@@ -28,7 +28,7 @@ interface ProviderProps {
   interactions?: stardust.Interactions;
   theme?: ExtendedTheme;
   keyboard?: stardust.Keyboard;
-  direction?: 'ltr' | 'rtl';
+  direction?: "ltr" | "rtl";
   rootElement?: HTMLElement;
   embed?: stardust.Embed;
   changeSortOrder?: ChangeSortOrder;
@@ -70,7 +70,7 @@ const TestWithProviders = ({
   } as unknown as ExtendedTheme,
   tableData = EMPTY_TABLE_DATA,
   cellCoordMock = undefined,
-  direction = 'ltr',
+  direction = "ltr",
   rootElement = {} as HTMLElement,
   embed = {} as stardust.Embed,
   changeSortOrder = async () => {},

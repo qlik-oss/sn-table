@@ -1,37 +1,37 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
-  useElement,
-  useStaleLayout,
-  useModel,
-  useTranslator,
-  useSelections,
-  useKeyboard,
-  useRect,
-  useApp,
-  useEmbed,
-  useOptions,
-  useInteractionState,
   stardust,
-} from '@nebula.js/stardust';
-import { useExtendedTheme } from '@qlik/nebula-table-utils/lib/hooks';
-import properties from './qae/object-properties';
-import data from './qae/data';
-import ext from './ext';
-import useReactRoot from './nebula-hooks/use-react-root';
-import useSorting from './nebula-hooks/use-sorting';
-import { Galaxy, TableLayout, ExtendedTranslator, ExtendedSelectionAPI, UseOptions } from './types';
-import useVirtualizedTable from './nebula-hooks/use-virtualized-table';
-import usePaginationTable from './nebula-hooks/use-pagination-table';
-import useApplyColumnWidths from './nebula-hooks/use-apply-column-widths';
-import useWaitForFonts from './nebula-hooks/use-wait-for-fonts';
-import extendContextMenu from './extend-context-menu';
-import useViewService from './table/hooks/use-view-service';
-import useSnapshot from './table/hooks/use-snapshot';
+  useApp,
+  useElement,
+  useEmbed,
+  useInteractionState,
+  useKeyboard,
+  useModel,
+  useOptions,
+  useRect,
+  useSelections,
+  useStaleLayout,
+  useTranslator,
+} from "@nebula.js/stardust";
+import { useExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks";
+import ext from "./ext";
+import extendContextMenu from "./extend-context-menu";
+import useApplyColumnWidths from "./nebula-hooks/use-apply-column-widths";
+import usePaginationTable from "./nebula-hooks/use-pagination-table";
+import useReactRoot from "./nebula-hooks/use-react-root";
+import useSorting from "./nebula-hooks/use-sorting";
+import useVirtualizedTable from "./nebula-hooks/use-virtualized-table";
+import useWaitForFonts from "./nebula-hooks/use-wait-for-fonts";
+import data from "./qae/data";
+import properties from "./qae/object-properties";
+import useSnapshot from "./table/hooks/use-snapshot";
+import useViewService from "./table/hooks/use-view-service";
+import { ExtendedSelectionAPI, ExtendedTranslator, Galaxy, TableLayout, UseOptions } from "./types";
 
 const chartBackgroundResolver = (theme: stardust.Theme) =>
-  theme.getStyle('', '', 'object.straightTableV2.backgroundColor');
+  theme.getStyle("", "", "object.straightTableV2.backgroundColor");
 const objectBackgroundResolver = (theme: stardust.Theme) =>
-  theme.getStyle('object', 'straightTableV2', 'backgroundColor');
+  theme.getStyle("object", "straightTableV2", "backgroundColor");
 
 export default function supernova(env: Galaxy) {
   return {
@@ -65,7 +65,7 @@ export default function supernova(env: Galaxy) {
 
       extendContextMenu();
 
-      if (env.flags.isEnabled('PS_20907_TABLE_DOWNLOAD')) {
+      if (env.flags.isEnabled("PS_20907_TABLE_DOWNLOAD")) {
         useSnapshot({ layout, viewService, model, rootElement, contentRect });
       }
 

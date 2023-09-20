@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-import { handleHorizontalScroll } from '../utils/handle-scroll';
-import { ViewService } from '../../types';
+import { useEffect } from "react";
+import { ViewService } from "../../types";
+import { handleHorizontalScroll } from "../utils/handle-scroll";
 
 const useScrollListener = (
   tableContainerRef: React.MutableRefObject<HTMLDivElement | null>,
@@ -12,18 +12,18 @@ const useScrollListener = (
     if (!memoedContainer) return undefined;
 
     const horizontalScrollCallback = (evt: WheelEvent) =>
-      handleHorizontalScroll(evt, direction === 'rtl', memoedContainer);
+      handleHorizontalScroll(evt, direction === "rtl", memoedContainer);
 
     const scrollCallback = (evt: Event) => {
       viewService.scrollLeft = (evt.currentTarget as Element)?.scrollLeft || 0;
     };
 
-    memoedContainer.addEventListener('wheel', horizontalScrollCallback);
-    memoedContainer.addEventListener('scroll', scrollCallback);
+    memoedContainer.addEventListener("wheel", horizontalScrollCallback);
+    memoedContainer.addEventListener("scroll", scrollCallback);
 
     return () => {
-      memoedContainer.removeEventListener('wheel', horizontalScrollCallback);
-      memoedContainer.removeEventListener('scroll', scrollCallback);
+      memoedContainer.removeEventListener("wheel", horizontalScrollCallback);
+      memoedContainer.removeEventListener("scroll", scrollCallback);
     };
   }, [tableContainerRef, direction, viewService]);
 };

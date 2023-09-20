@@ -1,6 +1,6 @@
-import React from 'react';
-import { StyledBodyCell } from './styles';
-import { CellHOCProps } from '../../../types';
+import React from "react";
+import { CellHOCProps } from "../../../types";
+import { StyledBodyCell } from "./styles";
 
 export default function withStyling(CellComponent: typeof StyledBodyCell) {
   const HOC = (props: CellHOCProps) => {
@@ -26,7 +26,7 @@ export default function withStyling(CellComponent: typeof StyledBodyCell) {
         scope={scope}
         align={align}
         tabIndex={tabIndex}
-        className={`sn-table-cell ${selectedCellClass || ''}`}
+        className={`sn-table-cell ${selectedCellClass || ""}`}
         title={title}
         onKeyDown={onKeyDown}
         onMouseDown={onMouseDown}

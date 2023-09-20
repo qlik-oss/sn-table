@@ -1,5 +1,5 @@
-import { Cell } from '../../../types';
-import { ItemData } from '../types';
+import { Cell } from "../../../types";
+import { ItemData } from "../types";
 
 interface Props {
   rowIndex: number;

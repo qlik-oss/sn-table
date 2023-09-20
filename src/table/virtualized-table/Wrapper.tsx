@@ -1,10 +1,10 @@
-import React, { memo } from 'react';
-import { stardust } from '@nebula.js/stardust';
-import { PaginationFooter } from '@qlik/nebula-table-utils/lib/components';
-import { StyledTableWrapper } from '../components/styles';
-import Table from './Table';
-import { TableContext, useContextSelector } from '../context';
-import { PageInfo } from '../../types';
+import { stardust } from "@nebula.js/stardust";
+import { PaginationFooter } from "@qlik/nebula-table-utils/lib/components";
+import React, { memo } from "react";
+import { PageInfo } from "../../types";
+import { StyledTableWrapper } from "../components/styles";
+import { TableContext, useContextSelector } from "../context";
+import Table from "./Table";
 
 const Wrapper = () => {
   const { theme, keyboard, translator, interactions, rect, layout } = useContextSelector(

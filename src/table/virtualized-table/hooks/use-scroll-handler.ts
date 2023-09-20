@@ -1,7 +1,7 @@
-import { useCallback } from 'react';
-import { VariableSizeList } from 'react-window';
-import { BodyRef } from '../types';
-import { ViewService } from '../../../types';
+import { useCallback } from "react";
+import { VariableSizeList } from "react-window";
+import { ViewService } from "../../../types";
+import { BodyRef } from "../types";
 
 const useScrollHandler = (
   headerRef: React.RefObject<VariableSizeList<any>>,

@@ -1,16 +1,16 @@
-import { Align, ColumnWidthType, PropTree } from '../../../types';
-import exportProperties, { getColumnWidths } from '../export-properties';
+import { Align, ColumnWidthType, PropTree } from "../../../types";
+import exportProperties, { getColumnWidths } from "../export-properties";
 
-describe('exportProperties', () => {
+describe("exportProperties", () => {
   const qDimensions = [
     {
       qDef: {
         textAlign: {
           auto: true,
-          align: 'left' as Align,
+          align: "left" as Align,
         },
         columnWidth: {
-          type: 'auto' as ColumnWidthType,
+          type: "auto" as ColumnWidthType,
           pixels: 200,
           percentage: 20,
         },
@@ -21,10 +21,10 @@ describe('exportProperties', () => {
       qDef: {
         textAlign: {
           auto: true,
-          align: 'left' as Align,
+          align: "left" as Align,
         },
         columnWidth: {
-          type: 'pixels' as ColumnWidthType,
+          type: "pixels" as ColumnWidthType,
         },
       },
       qAttributeExpressions: [],
@@ -33,13 +33,13 @@ describe('exportProperties', () => {
   const qMeasures = [
     {
       qDef: {
-        qDef: '',
+        qDef: "",
         textAlign: {
           auto: true,
-          align: 'left' as Align,
+          align: "left" as Align,
         },
         columnWidth: {
-          type: 'pixels' as ColumnWidthType,
+          type: "pixels" as ColumnWidthType,
           pixels: 200,
           percentage: 20,
         },
@@ -48,13 +48,13 @@ describe('exportProperties', () => {
     },
     {
       qDef: {
-        qDef: '',
+        qDef: "",
         textAlign: {
           auto: true,
-          align: 'left' as Align,
+          align: "left" as Align,
         },
         columnWidth: {
-          type: 'FitToContent' as ColumnWidthType,
+          type: "FitToContent" as ColumnWidthType,
           pixels: 200,
           percentage: 20,
         },
@@ -63,20 +63,20 @@ describe('exportProperties', () => {
     },
   ];
 
-  describe('getColumnWidths', () => {
-    it('should get correct columnWidths when no qColumnOrder provided', () => {
+  describe("getColumnWidths", () => {
+    it("should get correct columnWidths when no qColumnOrder provided", () => {
       const columnWidths = getColumnWidths(qDimensions, qMeasures);
       expect(columnWidths).toEqual([-1, 200, 200, -1]);
     });
 
-    it('should get correct columnWidths when qColumnOrder provided', () => {
+    it("should get correct columnWidths when qColumnOrder provided", () => {
       const qColumnOrder = [1, 2, 0, 3];
       const columnWidths = getColumnWidths(qDimensions, qMeasures, qColumnOrder);
       expect(columnWidths).toEqual([200, 200, -1, -1]);
     });
   });
 
-  describe('exportProperties', () => {
+  describe("exportProperties", () => {
     const propertyTree = {
       qChildren: [],
       qProperty: {
@@ -90,17 +90,17 @@ describe('exportProperties', () => {
     } as unknown as PropTree;
     const hyperCubePath = undefined;
 
-    it('test', () => {
+    it("test", () => {
       const expFormat = exportProperties(propertyTree, hyperCubePath);
       expect(expFormat.properties.qHyperCubeDef.columnWidths).toEqual([-1, 200, 200, -1]);
       expect(
-        expFormat.properties.qLayoutExclude.quarantine.straightTableColumnWidths['qHyperCubeDef.columnWidths']
+        expFormat.properties.qLayoutExclude.quarantine.straightTableColumnWidths["qHyperCubeDef.columnWidths"]
       ).toEqual([-1, 200, 200, -1]);
       expect(
-        expFormat.properties.qLayoutExclude.quarantine.straightTableColumnOrder['qHyperCubeDef.qColumnOrder']
+        expFormat.properties.qLayoutExclude.quarantine.straightTableColumnOrder["qHyperCubeDef.qColumnOrder"]
       ).toEqual([0, 2, 1]);
       expect(
-        expFormat.properties.qLayoutExclude.quarantine.straightTableColumnOrder['qHyperCubeDef.columnOrder']
+        expFormat.properties.qLayoutExclude.quarantine.straightTableColumnOrder["qHyperCubeDef.columnOrder"]
       ).toEqual([0, 2, 1]);
     });
   });

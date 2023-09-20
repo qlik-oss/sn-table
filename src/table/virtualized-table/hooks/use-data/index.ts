@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useOnPropsChange } from '@qlik/nebula-table-utils/lib/hooks';
-import { PageInfo, Row, Column, TableLayout, ExtendedTheme } from '../../../../types';
-import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
-import { GridState, SetCellSize } from '../../types';
-import useGetHyperCubeDataQueue from '../use-get-hypercube-data-queue';
-import useMutableProp from '../use-mutable-prop';
-import { createEmptyState, isColumnMissingData, isRowMissingData, toRows } from './utils';
+import { useOnPropsChange } from "@qlik/nebula-table-utils/lib/hooks";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Column, ExtendedTheme, PageInfo, Row, TableLayout } from "../../../../types";
+import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from "../../constants";
+import { GridState, SetCellSize } from "../../types";
+import useGetHyperCubeDataQueue from "../use-get-hypercube-data-queue";
+import useMutableProp from "../use-mutable-prop";
+import { createEmptyState, isColumnMissingData, isRowMissingData, toRows } from "./utils";
 
 export type LoadData = (left: number, top: number, width: number, height: number) => void;
 
@@ -63,7 +63,7 @@ const useData = ({
     setRowsInPage(memoizedToRows(initialDataPages ?? []));
   }, [initialDataPages]);
 
-  const getDataPages = (pages: EngineAPI.INxPage[]) => model.getHyperCubeData('/qHyperCubeDef', pages);
+  const getDataPages = (pages: EngineAPI.INxPage[]) => model.getHyperCubeData("/qHyperCubeDef", pages);
 
   const handleDataPages = (dataPages: EngineAPI.INxDataPage[]) =>
     setRowsInPage((prevState) => memoizedToRows(dataPages, prevState));

@@ -1,15 +1,15 @@
-import * as stardust from '@nebula.js/stardust';
-import { TableLayout, ViewService } from '../../../types';
-import * as snapshotWrapper from '../use-snapshot';
-import * as getViewStateWrapper from '../../utils/get-view-state';
+import * as stardust from "@nebula.js/stardust";
+import { TableLayout, ViewService } from "../../../types";
+import * as getViewStateWrapper from "../../utils/get-view-state";
+import * as snapshotWrapper from "../use-snapshot";
 
-jest.mock('@nebula.js/stardust', () => ({
+jest.mock("@nebula.js/stardust", () => ({
   onTakeSnapshot: jest.fn(),
   useImperativeHandle: jest.fn(),
 }));
 
-describe('use-snapshot', () => {
-  describe('useSnapshot', () => {
+describe("use-snapshot", () => {
+  describe("useSnapshot", () => {
     let layout: TableLayout;
     let viewService: ViewService;
     let rootElement: HTMLElement;
@@ -29,10 +29,10 @@ describe('use-snapshot', () => {
         qHeight: 100,
         estimatedRowHeight: 25,
       };
-      rootElement = document.createElement('p');
+      rootElement = document.createElement("p");
       model = undefined;
       contentRect = { top: 0, left: 0, width: 100, height: 100 };
-      jest.spyOn(getViewStateWrapper, 'default').mockReturnValue({
+      jest.spyOn(getViewStateWrapper, "default").mockReturnValue({
         scrollLeft: 1,
         visibleLeft: 2,
         visibleWidth: 3,
@@ -41,6 +41,7 @@ describe('use-snapshot', () => {
         scrollTopRatio: 6,
         rowsPerPage: 7,
         page: 0,
+        totalsPosition: { atTop: false, atBottom: false },
       });
     });
 
@@ -48,7 +49,7 @@ describe('use-snapshot', () => {
       jest.resetAllMocks();
     });
 
-    it('useImperativeHandle should run correct getViewState', async () => {
+    it("useImperativeHandle should run correct getViewState", async () => {
       snapshotWrapper.default({ layout, viewService, model, rootElement, contentRect });
       const { getViewState } = (stardust.useImperativeHandle as jest.Mock).mock.calls[0][0]();
       const result = getViewState();
@@ -63,6 +64,7 @@ describe('use-snapshot', () => {
         scrollTopRatio: 6,
         rowsPerPage: 7,
         page: 0,
+        totalsPosition: { atTop: false, atBottom: false },
       });
     });
   });

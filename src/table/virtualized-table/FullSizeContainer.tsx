@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface FullSizeContainerProps {
   width: number;
@@ -10,7 +10,7 @@ const FullSizeContainer = ({ width, height, children }: FullSizeContainerProps):
   <div
     data-key="full-size-container"
     style={{
-      display: 'block',
+      display: "block",
       width,
       height,
     }}

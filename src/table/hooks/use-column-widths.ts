@@ -1,22 +1,22 @@
-import { useState, useMemo } from 'react';
-import { useOnPropsChange } from '@qlik/nebula-table-utils/lib/hooks';
-import { Column, TotalsPosition } from '../../types';
+import { useOnPropsChange } from "@qlik/nebula-table-utils/lib/hooks";
+import { useMemo, useState } from "react";
+import { Column, TotalsPosition } from "../../types";
 import {
-  MIN_COLUMN_WIDTH,
   ColumnWidthTypes,
-  DEFAULT_COLUMN_PIXEL_WIDTH,
   DEFAULT_COLUMN_PERCENTAGE_WIDTH,
+  DEFAULT_COLUMN_PIXEL_WIDTH,
   MAX_COLUMN_WIDTH,
-} from '../constants';
-import useMeasureText from '../virtualized-table/hooks/use-measure-text';
-import { TableStyling } from '../types';
+  MIN_COLUMN_WIDTH,
+} from "../constants";
 import {
   ADJUSTED_HEADER_WIDTH,
   BORDER_WIDTH,
   FLEX_BOX_GAP,
   LOOK_BUTTON_AND_AUTO_MARGIN,
   TOTALS_PADDING,
-} from '../styling-defaults';
+} from "../styling-defaults";
+import { TableStyling } from "../types";
+import useMeasureText from "../virtualized-table/hooks/use-measure-text";
 
 type GetFitToContentWidth = (headLabel: string, totalsLabel: string, glyphCount: number, isLocked: boolean) => number;
 
@@ -96,7 +96,7 @@ const useColumnWidths = (
   number[],
   React.Dispatch<React.SetStateAction<number[]>>,
   React.Dispatch<React.SetStateAction<number>>,
-  boolean,
+  boolean
 ] => {
   const showTotals = totalsPosition.atBottom || totalsPosition.atTop;
   const measureHeadLabel = useMeasureText(head.fontSize, head.fontFamily, true).measureText;

@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { stardust, useEffect, useMemo } from '@nebula.js/stardust';
-import { Root } from 'react-dom/client';
-import { renderVirtualizedTable } from '../table/Root';
-import getVirtualScrollTableData from '../table/virtualized-table/utils/get-table-data';
+import { stardust, useEffect, useMemo } from "@nebula.js/stardust";
+import { Root } from "react-dom/client";
+import renderAsPagination from "../render-as-pagination";
+import { renderVirtualizedTable } from "../table/Root";
+import getVirtualScrollTableData from "../table/virtualized-table/utils/get-table-data";
 import {
   ApplyColumnWidths,
   ChangeSortOrder,
@@ -11,10 +12,9 @@ import {
   ExtendedTranslator,
   TableLayout,
   ViewService,
-} from '../types';
-import useInitialDataPages from './virtualized-table/use-initial-data-pages';
-import usePageInfo from './virtualized-table/use-page-info';
-import renderAsPagination from '../render-as-pagination';
+} from "../types";
+import useInitialDataPages from "./virtualized-table/use-initial-data-pages";
+import usePageInfo from "./virtualized-table/use-page-info";
 
 interface UseVirtualizedTable {
   app: EngineAPI.IApp | undefined;

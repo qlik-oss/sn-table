@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { Collection } from '../types';
+import { Collection } from "../types";
 
 function navigateWithArrowsMsg(step: Collection): string {
   return `

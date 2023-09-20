@@ -1,9 +1,9 @@
 ---
 name: User story
 about: user story checklist template
-title: 'US: '
+title: "US: "
 labels: US
-assignees: ''
+assignees: ""
 ---
 
 <!---

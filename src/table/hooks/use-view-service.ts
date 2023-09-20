@@ -1,5 +1,5 @@
-import { useMemo, useOptions } from '@nebula.js/stardust';
-import type { SnapshotData, ViewService, ViewState, UseOptions, TableLayout } from '../../types';
+import { useMemo, useOptions } from "@nebula.js/stardust";
+import type { SnapshotData, TableLayout, UseOptions, ViewService, ViewState } from "../../types";
 
 const createViewService = (viewState: ViewState, snapshotData?: SnapshotData): ViewService => ({
   qTop: 0,

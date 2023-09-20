@@ -1,5 +1,5 @@
-import { TableLayout, ViewService } from './types';
-import isPrinting from './is-printing';
+import isPrinting from "./is-printing";
+import { TableLayout, ViewService } from "./types";
 
 const renderAsPagination = (layout: TableLayout, viewService: ViewService) => {
   // For multi-page download, viewService.viewState?.usePagination will override layout.usePagination

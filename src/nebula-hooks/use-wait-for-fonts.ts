@@ -1,6 +1,6 @@
-import { usePromise } from '@nebula.js/stardust';
-import { getBodyStyle, getHeaderStyle } from '../table/utils/styling-utils';
-import { ExtendedTheme, TableLayout } from '../types';
+import { usePromise } from "@nebula.js/stardust";
+import { getBodyStyle, getHeaderStyle } from "../table/utils/styling-utils";
+import { ExtendedTheme, TableLayout } from "../types";
 
 const useWaitForFonts = (theme: ExtendedTheme, layout: TableLayout) => {
   const { fontSize: headerFontSize, fontFamily: headerFontFamily } = getHeaderStyle(layout, theme, false);
@@ -17,7 +17,7 @@ const useWaitForFonts = (theme: ExtendedTheme, layout: TableLayout) => {
   // log the error and continue rendering the table
   if (error) {
     // eslint-disable-next-line no-console
-    console.warn('Failed to load font:', error);
+    console.warn("Failed to load font:", error);
     return true;
   }
 

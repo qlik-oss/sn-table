@@ -1,12 +1,12 @@
-import fs from 'fs';
-import path from 'path';
-import serve, { NebulaServer } from '@nebula.js/cli-serve';
-import { test, expect } from '@playwright/test';
+import serve, { NebulaServer } from "@nebula.js/cli-serve";
+import { expect, test } from "@playwright/test";
+import fs from "fs";
+import path from "path";
 
-import createNebulaRoutes from './routes';
-import createPlaywright from './playwright';
+import createPlaywright from "./playwright";
+import createNebulaRoutes from "./routes";
 
-const paths = { fixtures: path.join(__dirname, '../__fixtures__') };
+const paths = { fixtures: path.join(__dirname, "../__fixtures__") };
 const port = 8000;
 
 const runRenderingTests = (theme: object, themeType: string, language: string) => {
@@ -21,8 +21,8 @@ const runRenderingTests = (theme: object, themeType: string, language: string) =
     nebulaServer = await serve({
       // the entry is equal to path.resolve(__dirname, '../../dist/sn-table.js'),
       // so before run the testing, yarn build should run first to generate /dist
-      entry: path.resolve(__dirname, '../../../'),
-      type: 'sn-table',
+      entry: path.resolve(__dirname, "../../../"),
+      type: "sn-table",
       open: false,
       build: false,
       themes: [
@@ -31,7 +31,7 @@ const runRenderingTests = (theme: object, themeType: string, language: string) =
           theme,
         },
       ],
-      fixturePath: 'test/rendering/__fixtures__',
+      fixturePath: "test/rendering/__fixtures__",
       port: port + testInfo.workerIndex,
     });
 
@@ -44,7 +44,7 @@ const runRenderingTests = (theme: object, themeType: string, language: string) =
 
   // Iterate testing fixture files
   fs.readdirSync(paths.fixtures).forEach((file) => {
-    const name = file.replace('.fix.js', '');
+    const name = file.replace(".fix.js", "");
     const fixturePath = `./${file}&theme=${themeType}&language=${language}`;
 
     // Create test case per testing fixture file
@@ -57,14 +57,14 @@ const runRenderingTests = (theme: object, themeType: string, language: string) =
       // Open page in Nebula which renders fixture
       await playwright.open(renderUrl);
 
-      if (name.includes('default')) {
-        await page.hover('text=American Beef Bologna');
-      } else if (name.includes('styled')) {
-        await page.hover('text=Washington Strawberry Drink');
-      } else if (name.includes('small_data')) {
-        await page.hover('text=Africa');
+      if (name.includes("default")) {
+        await page.hover("text=American Beef Bologna");
+      } else if (name.includes("styled")) {
+        await page.hover("text=Washington Strawberry Drink");
+      } else if (name.includes("small_data")) {
+        await page.hover("text=Africa");
       } else {
-        await page.hover('text=Better Fancy Canned Sardines');
+        await page.hover("text=Better Fancy Canned Sardines");
       }
 
       // Playwright captures screenshot

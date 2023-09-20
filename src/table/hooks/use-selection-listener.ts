@@ -1,8 +1,8 @@
-import { stardust } from '@nebula.js/stardust';
-import { useEffect } from 'react';
-import { ExtendedSelectionAPI } from '../../types';
-import { SelectionActions } from '../constants';
-import { SelectionDispatch } from '../types';
+import { stardust } from "@nebula.js/stardust";
+import { useEffect } from "react";
+import { ExtendedSelectionAPI } from "../../types";
+import { SelectionActions } from "../constants";
+import { SelectionDispatch } from "../types";
 
 interface UseSelectionListenerProps {
   selectionsAPI: ExtendedSelectionAPI | undefined;
@@ -41,16 +41,16 @@ const useSelectionListener = ({
       resetSelections();
     };
 
-    selectionsAPI?.on('deactivated', resetSelections);
-    selectionsAPI?.on('canceled', resetSelections);
-    selectionsAPI?.on('confirmed', resetSelectionsAndSetupRefocus);
-    selectionsAPI?.on('cleared', clearSelections);
+    selectionsAPI?.on("deactivated", resetSelections);
+    selectionsAPI?.on("canceled", resetSelections);
+    selectionsAPI?.on("confirmed", resetSelectionsAndSetupRefocus);
+    selectionsAPI?.on("cleared", clearSelections);
     // Return function called on unmount
     return () => {
-      selectionsAPI?.removeListener('deactivated', resetSelections);
-      selectionsAPI?.removeListener('canceled', resetSelections);
-      selectionsAPI?.removeListener('confirmed', resetSelectionsAndSetupRefocus);
-      selectionsAPI?.removeListener('cleared', clearSelections);
+      selectionsAPI?.removeListener("deactivated", resetSelections);
+      selectionsAPI?.removeListener("canceled", resetSelections);
+      selectionsAPI?.removeListener("confirmed", resetSelectionsAndSetupRefocus);
+      selectionsAPI?.removeListener("cleared", clearSelections);
     };
   }, [selectionsAPI, keyboard, selectionDispatch, setShouldRefocus, tableWrapperRef]);
 };

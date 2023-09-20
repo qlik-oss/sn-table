@@ -1,5 +1,5 @@
-import { stardust } from '@nebula.js/stardust';
-import { VariableSizeList } from 'react-window';
+import { stardust } from "@nebula.js/stardust";
+import { VariableSizeList } from "react-window";
 import {
   ApplyColumnWidths,
   ChangeSortOrder,
@@ -12,8 +12,8 @@ import {
   TableData,
   TableLayout,
   ViewService,
-} from '../../../types';
-import { GeneratedStyling } from '../../types';
+} from "../../../types";
+import { GeneratedStyling } from "../../types";
 
 export interface Totals {
   atBottom: boolean;

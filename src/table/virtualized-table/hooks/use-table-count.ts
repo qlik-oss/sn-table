@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
-import { PageInfo, TableLayout } from '../../../types';
-import { Rect } from '../types';
+import { useMemo } from "react";
+import { PageInfo, TableLayout } from "../../../types";
+import { Rect } from "../types";
 
 const useTableCount = (
   layout: TableLayout,
