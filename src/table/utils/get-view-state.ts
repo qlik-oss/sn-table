@@ -1,8 +1,8 @@
-import { findPaginationVisibleRows, findVirtualizedVisibleRows } from './find-visible-rows';
-import getVisibleHeight from './get-visible-height';
-import { getTotalPosition } from '../../handle-data';
-import renderAsPagination from '../../render-as-pagination';
-import { TableLayout, ViewService } from '../../types';
+import { getTotalPosition } from "../../handle-data";
+import renderAsPagination from "../../render-as-pagination";
+import { TableLayout, ViewService } from "../../types";
+import { findPaginationVisibleRows, findVirtualizedVisibleRows } from "./find-visible-rows";
+import getVisibleHeight from "./get-visible-height";
 
 const getViewState = (layout: TableLayout, viewService: ViewService, rootElement: HTMLElement) => {
   if (viewService.viewState && !viewService.viewState.isMultiPage) return viewService.viewState;
@@ -37,5 +37,5 @@ const getViewState = (layout: TableLayout, viewService: ViewService, rootElement
     totalsPosition,
   };
 };
-  
+
 export default getViewState;

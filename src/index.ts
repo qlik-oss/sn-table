@@ -1,32 +1,32 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
-  useElement,
-  useStaleLayout,
-  useModel,
-  useTranslator,
-  useSelections,
-  useKeyboard,
-  useRect,
   useApp,
+  useElement,
   useEmbed,
-  useOptions,
   useInteractionState,
-} from '@nebula.js/stardust';
+  useKeyboard,
+  useModel,
+  useOptions,
+  useRect,
+  useSelections,
+  useStaleLayout,
+  useTranslator,
+} from "@nebula.js/stardust";
 
-import properties from './qae/object-properties';
-import data from './qae/data';
-import ext from './ext';
-import useReactRoot from './nebula-hooks/use-react-root';
-import useSorting from './nebula-hooks/use-sorting';
-import useExtendedTheme from './nebula-hooks/use-extended-theme';
-import { Galaxy, TableLayout, ExtendedTranslator, ExtendedSelectionAPI, UseOptions } from './types';
-import useVirtualizedTable from './nebula-hooks/use-virtualized-table';
-import usePaginationTable from './nebula-hooks/use-pagination-table';
-import useApplyColumnWidths from './nebula-hooks/use-apply-column-widths';
-import useWaitForFonts from './nebula-hooks/use-wait-for-fonts';
-import extendContextMenu from './extend-context-menu';
-import useViewService from './table/hooks/use-view-service';
-import useSnapshot from './table/hooks/use-snapshot';
+import ext from "./ext";
+import extendContextMenu from "./extend-context-menu";
+import useApplyColumnWidths from "./nebula-hooks/use-apply-column-widths";
+import useExtendedTheme from "./nebula-hooks/use-extended-theme";
+import usePaginationTable from "./nebula-hooks/use-pagination-table";
+import useReactRoot from "./nebula-hooks/use-react-root";
+import useSorting from "./nebula-hooks/use-sorting";
+import useVirtualizedTable from "./nebula-hooks/use-virtualized-table";
+import useWaitForFonts from "./nebula-hooks/use-wait-for-fonts";
+import data from "./qae/data";
+import properties from "./qae/object-properties";
+import useSnapshot from "./table/hooks/use-snapshot";
+import useViewService from "./table/hooks/use-view-service";
+import { ExtendedSelectionAPI, ExtendedTranslator, Galaxy, TableLayout, UseOptions } from "./types";
 
 export default function supernova(env: Galaxy) {
   return {
@@ -60,7 +60,7 @@ export default function supernova(env: Galaxy) {
 
       extendContextMenu();
 
-      if (env.flags.isEnabled('PS_20907_TABLE_DOWNLOAD')) {
+      if (env.flags.isEnabled("PS_20907_TABLE_DOWNLOAD")) {
         useSnapshot({ layout, viewService, model, rootElement, contentRect });
       }
 

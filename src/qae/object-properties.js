@@ -42,17 +42,17 @@ const properties = {
    * Visualization title
    * @type {(string|StringExpression)=}
    */
-  title: '',
+  title: "",
   /**
    * Visualization subtitle
    * @type {(string|StringExpression)=}
    */
-  subtitle: '',
+  subtitle: "",
   /**
    * Visualization footnote
    * @type {(string|StringExpression)=}
    */
-  footnote: '',
+  footnote: "",
   /**
    * totals settings
    * @type {object=}
@@ -67,12 +67,12 @@ const properties = {
      * The position of the totals row, hiding it if set to `noTotals`
      * @type {('top'|'bottom'|'noTotals')=}
      */
-    position: 'noTotals',
+    position: "noTotals",
     /**
      * The label of the totals row, shown in the leftmost column
      * @type {string=}
      */
-    label: 'Totals',
+    label: "Totals",
   },
   /**
    * Use pagination or continuous scroll. If undefined, defaults to using pagination

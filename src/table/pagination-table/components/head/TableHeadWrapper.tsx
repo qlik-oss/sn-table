@@ -1,16 +1,16 @@
-import React, { memo, useEffect, useRef } from 'react';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import React, { memo, useEffect, useRef } from "react";
 
-import { useContextSelector, TableContext } from '../../../context';
-import { FullSortDirection } from '../../../constants';
-import HeadCellContent from '../../../components/head/HeadCellContent';
-import ColumnAdjuster from '../../../components/head/ColumnAdjuster';
-import CellText from '../../../components/CellText';
-import { BORDER_WIDTH, PADDING } from '../../../styling-defaults';
-import { StyledHeadCell } from './styles';
-import { handleHeadKeyDown } from '../../../utils/handle-keyboard';
-import { handleMouseDownToFocusHead } from '../../../utils/handle-mouse';
+import CellText from "../../../components/CellText";
+import ColumnAdjuster from "../../../components/head/ColumnAdjuster";
+import HeadCellContent from "../../../components/head/HeadCellContent";
+import { FullSortDirection } from "../../../constants";
+import { TableContext, useContextSelector } from "../../../context";
+import { BORDER_WIDTH, PADDING } from "../../../styling-defaults";
+import { handleHeadKeyDown } from "../../../utils/handle-keyboard";
+import { handleMouseDownToFocusHead } from "../../../utils/handle-mouse";
+import { StyledHeadCell } from "./styles";
 
 const TableHeadWrapper = () => {
   const { columns } = useContextSelector(TableContext, (value) => value.tableData);

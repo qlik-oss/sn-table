@@ -1,23 +1,23 @@
-import React, { useRef, useCallback, useEffect, memo } from 'react';
+import React, { memo, useCallback, useEffect, useRef } from "react";
 
-import AnnounceElements from './AnnounceElements';
-import TableBodyWrapper from './body/TableBodyWrapper';
-import TableHeadWrapper from './head/TableHeadWrapper';
-import FooterWrapper from '../../components/footer/FooterWrapper';
-import { useContextSelector, TableContext } from '../../context';
-import { StyledTableContainer, StyledTable } from './styles';
-import PaginationContent from '../../components/footer/PaginationContent';
-import useDidUpdateEffect from '../../hooks/use-did-update-effect';
-import useFocusListener from '../../hooks/use-focus-listener';
-import useScrollListener from '../../hooks/use-scroll-listener';
-import { handleWrapperKeyDown } from '../../utils/handle-keyboard';
-import { resetFocus } from '../../utils/accessibility-utils';
-import { TableWrapperProps } from '../../types';
-import { StyledTableWrapper } from '../../components/styles';
-import useScrollbarWidth from '../../virtualized-table/hooks/use-scrollbar-width';
-import useKeyboardActiveListener from '../../hooks/use-keyboard-active-listener';
-import { SelectionActions } from '../../constants';
-import isPrinting from '../../../is-printing';
+import isPrinting from "../../../is-printing";
+import FooterWrapper from "../../components/footer/FooterWrapper";
+import PaginationContent from "../../components/footer/PaginationContent";
+import { StyledTableWrapper } from "../../components/styles";
+import { SelectionActions } from "../../constants";
+import { TableContext, useContextSelector } from "../../context";
+import useDidUpdateEffect from "../../hooks/use-did-update-effect";
+import useFocusListener from "../../hooks/use-focus-listener";
+import useKeyboardActiveListener from "../../hooks/use-keyboard-active-listener";
+import useScrollListener from "../../hooks/use-scroll-listener";
+import { TableWrapperProps } from "../../types";
+import { resetFocus } from "../../utils/accessibility-utils";
+import { handleWrapperKeyDown } from "../../utils/handle-keyboard";
+import useScrollbarWidth from "../../virtualized-table/hooks/use-scrollbar-width";
+import AnnounceElements from "./AnnounceElements";
+import TableBodyWrapper from "./body/TableBodyWrapper";
+import TableHeadWrapper from "./head/TableHeadWrapper";
+import { StyledTable, StyledTableContainer } from "./styles";
 
 const TableWrapper = (props: TableWrapperProps) => {
   const { pageInfo, setPageInfo, direction, footerContainer, announce } = props;
@@ -42,25 +42,25 @@ const TableWrapper = (props: TableWrapperProps) => {
 
   const { yScrollbarWidth } = useScrollbarWidth(tableContainerRef);
 
-  const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
+  const tableAriaLabel = `${translator.get("SNTable.Accessibility.RowsAndColumns", [
     String(rows.length + 1),
     String(columns.length),
-  ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
+  ])} ${translator.get("SNTable.Accessibility.NavigationInstructions")}`;
 
   const isPrintingMode = isPrinting(layout, viewService);
   const scrollLeft = isPrintingMode ? viewService.scrollLeft ?? 0 : 0;
   const scrollTopPartially = isPrintingMode ? viewService.rowPartialHeight ?? 0 : 0;
 
   const setShouldRefocus = useCallback(() => {
-    shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
+    shouldRefocus.current = rootElement.getElementsByTagName("table")[0].contains(document.activeElement);
   }, [rootElement]);
 
   const handleChangePage = useCallback(
     (pageIdx: number) => {
       setPageInfo({ ...pageInfo, page: pageIdx });
       announce({
-        keys: [['SNTable.Pagination.PageStatusReport', (pageIdx + 1).toString(), totalPages.toString()]],
-        politeness: 'assertive',
+        keys: [["SNTable.Pagination.PageStatusReport", (pageIdx + 1).toString(), totalPages.toString()]],
+        politeness: "assertive",
       });
     },
     [pageInfo, setPageInfo, totalPages, announce]

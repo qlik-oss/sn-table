@@ -1,16 +1,16 @@
-import React, { useMemo, memo } from 'react';
+import React, { memo, useMemo } from "react";
 
-import getCellRenderer from '../../utils/get-cell-renderer';
-import { useContextSelector, TableContext } from '../../../context';
-import { StyledBodyRow, StyledBody } from './styles';
-import { handleBodyKeyDown, handleBodyKeyUp } from '../../../utils/handle-keyboard';
-import { handleMouseDownToFocusBody } from '../../../utils/handle-mouse';
-import { Cell } from '../../../../types';
-import { TableBodyWrapperProps } from '../../../types';
-import TableTotals from './TableTotals';
-import CellText from '../../../components/CellText';
-import useSelectionListener from '../../../hooks/use-selection-listener';
-import { getStylingComponent } from '../../../utils/styling-utils';
+import { Cell } from "../../../../types";
+import CellText from "../../../components/CellText";
+import { TableContext, useContextSelector } from "../../../context";
+import useSelectionListener from "../../../hooks/use-selection-listener";
+import { TableBodyWrapperProps } from "../../../types";
+import { handleBodyKeyDown, handleBodyKeyUp } from "../../../utils/handle-keyboard";
+import { handleMouseDownToFocusBody } from "../../../utils/handle-mouse";
+import { getStylingComponent } from "../../../utils/styling-utils";
+import getCellRenderer from "../../utils/get-cell-renderer";
+import TableTotals from "./TableTotals";
+import { StyledBody, StyledBodyRow } from "./styles";
 
 const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: TableBodyWrapperProps) => {
   const { rows, columns, paginationNeeded, totalsPosition } = useContextSelector(
@@ -80,8 +80,8 @@ const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: Table
             return (
               CellRenderer && (
                 <CellRenderer
-                  scope={columnIndex === 0 ? 'row' : null}
-                  component={columnIndex === 0 ? 'th' : null}
+                  scope={columnIndex === 0 ? "row" : null}
+                  component={columnIndex === 0 ? "th" : null}
                   cell={cell}
                   column={column}
                   key={id}
@@ -96,7 +96,9 @@ const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: Table
                     handleMouseDownToFocusBody(cell, rootElement, setFocusedCellCoord, keyboard, totalsPosition)
                   }
                 >
-                  <CellText fontSize={cellStyle.fontSize} lines={viewService.viewState?.maxLineCount}>{cell.qText}</CellText>
+                  <CellText fontSize={cellStyle.fontSize} lines={viewService.viewState?.maxLineCount}>
+                    {cell.qText}
+                  </CellText>
                 </CellRenderer>
               )
             );

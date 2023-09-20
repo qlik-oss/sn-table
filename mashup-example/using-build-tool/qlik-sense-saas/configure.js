@@ -1,17 +1,17 @@
-import { embed } from '@nebula.js/stardust';
-import table from '@nebula.js/sn-table';
+import table from "@nebula.js/sn-table";
+import { embed } from "@nebula.js/stardust";
 
 const n = embed.createConfiguration({
   context: {
-    theme: 'light',
-    language: 'en-US',
+    theme: "light",
+    language: "en-US",
     interactions: {
       active: false, // do not allow interactions
     },
   },
   types: [
     {
-      name: 'table',
+      name: "table",
       load: () => Promise.resolve(table),
     },
   ],

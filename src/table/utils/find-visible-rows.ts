@@ -1,4 +1,4 @@
-import { TotalsPosition, ViewService } from '../../types';
+import { TotalsPosition, ViewService } from "../../types";
 
 const EPSILON = 0.001;
 
@@ -37,14 +37,14 @@ const findEndIndex = (
 };
 
 export function findPaginationVisibleRows(rootElement: HTMLElement, totalsPosition: TotalsPosition) {
-  const tableContainer = rootElement.getElementsByClassName('sn-table-container')[0];
+  const tableContainer = rootElement.getElementsByClassName("sn-table-container")[0];
   if (!tableContainer) return {};
   const tableContainerRect = tableContainer?.getBoundingClientRect() || {};
-  const headRow = rootElement.getElementsByClassName('sn-table-head-row')[0];
+  const headRow = rootElement.getElementsByClassName("sn-table-head-row")[0];
   const headRowRect = headRow?.getBoundingClientRect() || { height: 0 };
-  const totalsRow = rootElement.getElementsByClassName('sn-table-totals-row')[0];
+  const totalsRow = rootElement.getElementsByClassName("sn-table-totals-row")[0];
   const totalsRowRec = totalsRow?.getBoundingClientRect() || { height: 0 };
-  const dataRows = rootElement.getElementsByClassName('sn-table-data-row');
+  const dataRows = rootElement.getElementsByClassName("sn-table-data-row");
   const tableBodyMinY = tableContainerRect.y + headRowRect.height + (totalsPosition.atTop ? totalsRowRec.height : 0);
   const tableBodyMaxY =
     tableContainerRect.y + tableContainerRect.height - (totalsPosition.atBottom ? totalsRowRec.height : 0);
@@ -61,7 +61,7 @@ export function findPaginationVisibleRows(rootElement: HTMLElement, totalsPositi
 const getFirstCellOfRow = (rowIndex: number, cells?: NodeListOf<Element>) => {
   if (!cells) return undefined;
   for (let i = 0; i < cells.length; i++) {
-    const strIdx = cells[i].getAttribute('rowindex');
+    const strIdx = cells[i].getAttribute("rowindex");
     if (strIdx && parseInt(strIdx, 10) === rowIndex) return cells[i];
   }
   return undefined;
@@ -74,9 +74,9 @@ const shouldIncludeRowWithCell = (cellRect: DOMRect, min: number, max: number) =
 };
 
 export function findVirtualizedVisibleRows(rootElement: HTMLElement, viewService: ViewService) {
-  const tableBody = rootElement.querySelector('.sn-table-body');
+  const tableBody = rootElement.querySelector(".sn-table-body");
   const bodyRect = tableBody?.getBoundingClientRect();
-  const cells = tableBody?.querySelectorAll('.sn-table-body .sn-table-cell');
+  const cells = tableBody?.querySelectorAll(".sn-table-body .sn-table-cell");
   if (!cells || !bodyRect) return {};
   const { scrollTopRatio = 0, visibleTop = 0, visibleHeight = 0, page = 0, rowsPerPage = 0 } = viewService;
   const offset = page * rowsPerPage;

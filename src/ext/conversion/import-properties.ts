@@ -1,9 +1,9 @@
-import conversion from 'qlik-object-conversion';
-import { setValue } from 'qlik-chart-modules';
+import { setValue } from "qlik-chart-modules";
+import conversion from "qlik-object-conversion";
 
-import data from '../../qae/data';
-import { ExportFormat, PropTree, DimensionProperties, MeasureProperties } from '../../types';
-import { ColumnWidthTypes } from '../../table/constants';
+import data from "../../qae/data";
+import { ColumnWidthTypes } from "../../table/constants";
+import { DimensionProperties, ExportFormat, MeasureProperties, PropTree } from "../../types";
 
 export const getColumnInfo = (
   columnInfo: DimensionProperties[] | MeasureProperties[],
@@ -71,15 +71,15 @@ const importProperties = (
     hypercubePath,
     extension,
   });
-  conversion.unquarantineProperty(propertyTree.qProperty, 'straightTableColumnOrder');
+  conversion.unquarantineProperty(propertyTree.qProperty, "straightTableColumnOrder");
   const {
     qHyperCubeDef: { qDimensions, qMeasures, qColumnOrder, columnWidths },
   } = propertyTree.qProperty;
   const { dimensions, measures } = getMultiColumnInfo(qDimensions, qMeasures, qColumnOrder, columnWidths);
 
   if (Array.isArray(columnWidths) && columnWidths.length > 0) {
-    setValue(propertyTree, 'qProperty.qHyperCubeDef.qDimensions', dimensions);
-    setValue(propertyTree, 'qProperty.qHyperCubeDef.qMeasures', measures);
+    setValue(propertyTree, "qProperty.qHyperCubeDef.qDimensions", dimensions);
+    setValue(propertyTree, "qProperty.qHyperCubeDef.qMeasures", measures);
   }
 
   conversion.conditionalShow.unquarantine(propertyTree.qProperty);

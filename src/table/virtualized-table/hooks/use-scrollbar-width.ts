@@ -1,5 +1,5 @@
-import { useLayoutEffect, useState } from 'react';
-import { useContextSelector, TableContext } from '../../context';
+import { useLayoutEffect, useState } from "react";
+import { TableContext, useContextSelector } from "../../context";
 
 const useScrollbarWidth = (ref: React.RefObject<HTMLDivElement>) => {
   const { layout, rect, theme } = useContextSelector(TableContext, (value) => value.baseProps);

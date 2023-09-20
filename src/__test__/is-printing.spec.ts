@@ -1,7 +1,7 @@
-import isPrinting from '../is-printing';
-import { SnapshotData, TableLayout, ViewService, ViewState } from '../types';
+import isPrinting from "../is-printing";
+import { SnapshotData, TableLayout, ViewService, ViewState } from "../types";
 
-describe('is-printing', () => {
+describe("is-printing", () => {
   let layout: TableLayout;
   let viewService: ViewService;
 
@@ -10,21 +10,20 @@ describe('is-printing', () => {
     viewService = {
       qTop: 0,
       qHeight: 100,
-      viewState: {visibleHeight: 0} as ViewState,
+      viewState: { visibleHeight: 0 } as ViewState,
     } as ViewService;
-
   });
-  it('should return true if layout.snapshotData is truthy', () => {
+  it("should return true if layout.snapshotData is truthy", () => {
     layout.snapshotData = {} as SnapshotData;
     expect(isPrinting(layout, viewService)).toEqual(true);
   });
 
-  it('should return true if layout.snapshotData is falsy but viewService.viewState.visibleHeight is truthy', () => {
-    if(viewService.viewState) viewService.viewState.visibleHeight = 1;
+  it("should return true if layout.snapshotData is falsy but viewService.viewState.visibleHeight is truthy", () => {
+    if (viewService.viewState) viewService.viewState.visibleHeight = 1;
     expect(isPrinting(layout, viewService)).toEqual(true);
   });
 
-  it('should return false if layout.snapshotData is falsy and viewService.viewState.visibleHeight is falsy', () => {
+  it("should return false if layout.snapshotData is falsy and viewService.viewState.visibleHeight is falsy", () => {
     expect(isPrinting(layout, viewService)).toEqual(false);
   });
 });

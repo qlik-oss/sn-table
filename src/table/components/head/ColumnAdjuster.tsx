@@ -1,10 +1,10 @@
-import React, { useRef } from 'react';
-import { AdjusterProps } from '../../types';
-import { useContextSelector, TableContext } from '../../context';
-import { AdjusterHitArea, AdjusterHeadBorder } from './styles';
-import { ColumnWidthTypes, MIN_COLUMN_WIDTH, KeyCodes } from '../../constants';
-import { preventDefaultBehavior } from '../../utils/keyboard-utils';
-import { focusHeadMenuButton } from '../../utils/accessibility-utils';
+import React, { useRef } from "react";
+import { ColumnWidthTypes, KeyCodes, MIN_COLUMN_WIDTH } from "../../constants";
+import { TableContext, useContextSelector } from "../../context";
+import { AdjusterProps } from "../../types";
+import { focusHeadMenuButton } from "../../utils/accessibility-utils";
+import { preventDefaultBehavior } from "../../utils/keyboard-utils";
+import { AdjusterHeadBorder, AdjusterHitArea } from "./styles";
 
 /**
  * Component that is placed on top of column border.
@@ -44,8 +44,8 @@ const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps)
 
   const mouseUpHandler = (evt: MouseEvent) => {
     preventDefaultBehavior(evt);
-    document.removeEventListener('mousemove', mouseMoveHandler);
-    document.removeEventListener('mouseup', mouseUpHandler);
+    document.removeEventListener("mousemove", mouseMoveHandler);
+    document.removeEventListener("mouseup", mouseUpHandler);
 
     confirmWidth();
   };
@@ -59,8 +59,8 @@ const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps)
       columnWidth: columnWidths[pageColIdx],
     };
 
-    document.addEventListener('mousemove', mouseMoveHandler);
-    document.addEventListener('mouseup', mouseUpHandler);
+    document.addEventListener("mousemove", mouseMoveHandler);
+    document.addEventListener("mouseup", mouseUpHandler);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {

@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
-import { memoize } from 'qlik-chart-modules';
-import { MAX_NBR_LINES_OF_TEXT } from '../constants';
+import { memoize } from "qlik-chart-modules";
+import { useMemo } from "react";
+import { MAX_NBR_LINES_OF_TEXT } from "../constants";
 
 type EstimateLineCountProps = {
   text: string;
@@ -16,7 +16,7 @@ export interface MeasureTextHook {
   estimateLineCount: EstimateLineCount;
 }
 
-const MAGIC_DEFAULT_CHAR = 'N';
+const MAGIC_DEFAULT_CHAR = "N";
 
 function getNextLine(text: string, maxWidth: number, fixedMeasureText: (text: string) => number) {
   let left = 0;
@@ -63,8 +63,8 @@ export default function useMeasureText(
   boldText?: boolean
 ): MeasureTextHook {
   const { estimateWidth, measureText, estimateLineCount } = useMemo((): MeasureTextHook => {
-    const context = document.createElement('canvas').getContext('2d') as CanvasRenderingContext2D;
-    context.font = `${boldText ? '600' : ''} ${fontSize || ''} ${fontFamily}`;
+    const context = document.createElement("canvas").getContext("2d") as CanvasRenderingContext2D;
+    context.font = `${boldText ? "600" : ""} ${fontSize || ""} ${fontFamily}`;
 
     const memoizedMeasureText = memoize(context.measureText.bind(context)) as (text: string) => TextMetrics;
 

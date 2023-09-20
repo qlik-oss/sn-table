@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface PageOptionsProps {
   totalPages: number;
@@ -9,7 +9,7 @@ export const MAX_PAGE_OPTIONS_LENGTH = 1000;
 
 export const HALF_MAX_LENGTH = MAX_PAGE_OPTIONS_LENGTH / 2;
 
-export const ELLIPSIS = '…';
+export const ELLIPSIS = "…";
 
 const PageOptions = ({ totalPages, page }: PageOptionsProps) => {
   const pageOptionsLength = Math.min(totalPages, MAX_PAGE_OPTIONS_LENGTH);

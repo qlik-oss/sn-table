@@ -1,9 +1,13 @@
-import { stardust } from '@nebula.js/stardust';
-import { getTotalPosition, getColumns } from '../../../handle-data';
-import { TableData, TableLayout, ViewService } from '../../../types';
-import { MAX_PAGE_SIZE } from '../constants';
+import { stardust } from "@nebula.js/stardust";
+import { getColumns, getTotalPosition } from "../../../handle-data";
+import { TableData, TableLayout, ViewService } from "../../../types";
+import { MAX_PAGE_SIZE } from "../constants";
 
-export default function getVirtualScrollTableData(layout: TableLayout, interactions: stardust.Interactions, viewService: ViewService): TableData {
+export default function getVirtualScrollTableData(
+  layout: TableLayout,
+  interactions: stardust.Interactions,
+  viewService: ViewService
+): TableData {
   const totalsPosition = getTotalPosition(layout, viewService);
   const columns = getColumns(layout);
   const totalRowCount = layout.qHyperCube.qSize.qcy;

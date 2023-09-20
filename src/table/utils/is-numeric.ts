@@ -1,4 +1,4 @@
-import { Cell } from '../../types';
+import { Cell } from "../../types";
 
 export const isNumeric = (val: string | number) => !Number.isNaN(+val);
 

@@ -1,6 +1,6 @@
-import { onTakeSnapshot, useImperativeHandle, stardust } from '@nebula.js/stardust';
-import type { TableLayout, ViewService, SnapshotLayout, HyperCube } from '../../types';
-import getViewState from '../utils/get-view-state';
+import { onTakeSnapshot, stardust, useImperativeHandle } from "@nebula.js/stardust";
+import type { HyperCube, SnapshotLayout, TableLayout, ViewService } from "../../types";
+import getViewState from "../utils/get-view-state";
 
 interface UseSnapshotProps {
   layout: TableLayout;
@@ -31,7 +31,7 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
         rowsPerPage,
         page,
       } = getViewState(layout, viewService, rootElement);
-      snapshotLayout.qHyperCube.qDataPages = await model.getHyperCubeData('/qHyperCubeDef', [
+      snapshotLayout.qHyperCube.qDataPages = await model.getHyperCubeData("/qHyperCubeDef", [
         {
           qLeft: 0,
           qTop: visibleTop ?? 0,

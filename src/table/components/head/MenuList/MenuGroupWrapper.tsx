@@ -1,8 +1,8 @@
 /* eslint-disable import/no-cycle */
-import React from 'react';
-import { MenuItemGroup } from '../../../types';
-import { StyledDivider } from '../styles';
-import MenuGroup from './MenuGroup';
+import React from "react";
+import { MenuItemGroup } from "../../../types";
+import { StyledDivider } from "../styles";
+import MenuGroup from "./MenuGroup";
 
 interface MenuItemsProps {
   itemGroups: MenuItemGroup[];

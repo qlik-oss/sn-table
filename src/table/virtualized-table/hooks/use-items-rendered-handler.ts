@@ -1,9 +1,9 @@
-import { useCallback } from 'react';
-import { PageInfo, TableLayout, ViewService } from '../../../types';
-import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../constants';
-import { GridState } from '../types';
-import { LoadData } from './use-data';
-import { ScrollDirection } from './use-scroll-direction';
+import { useCallback } from "react";
+import { PageInfo, TableLayout, ViewService } from "../../../types";
+import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from "../constants";
+import { GridState } from "../types";
+import { LoadData } from "./use-data";
+import { ScrollDirection } from "./use-scroll-direction";
 
 export interface OnItemsRendered {
   overscanColumnStartIndex: number;

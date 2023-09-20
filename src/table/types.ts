@@ -1,7 +1,8 @@
-import { Direction, TableCellProps } from '@mui/material';
-import { stardust } from '@nebula.js/stardust';
+import { Direction, TableCellProps } from "@mui/material";
+import { stardust } from "@nebula.js/stardust";
 import {
   Announce,
+  ApplyColumnWidths,
   Cell,
   ChangeSortOrder,
   Column,
@@ -9,15 +10,14 @@ import {
   ExtendedTheme,
   ExtendedTranslator,
   PageInfo,
+  Row,
   SetPageInfo,
   TableData,
   TableLayout,
   TotalsPosition,
-  Row,
-  ApplyColumnWidths,
   ViewService,
-} from '../types';
-import { FocusTypes, SelectionActions } from './constants';
+} from "../types";
+import { FocusTypes, SelectionActions } from "./constants";
 
 interface Action<T = any> {
   type: T;
@@ -301,7 +301,7 @@ export interface TableBodyWrapperProps {
 }
 
 export interface PaginationContentProps {
-  direction?: 'ltr' | 'rtl';
+  direction?: "ltr" | "rtl";
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
   footerContainer?: HTMLElement;

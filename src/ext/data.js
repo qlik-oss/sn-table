@@ -27,7 +27,7 @@ export function min(nDimsOrMeas) {
 }
 
 export function getDescription(env) {
-  return env.translator.get('Visualizations.Descriptions.Column');
+  return env.translator.get("Visualizations.Descriptions.Column");
 }
 
 export default function getData(env) {

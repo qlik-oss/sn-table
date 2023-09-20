@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
-import { useContextSelector, TableContext } from '../../context';
-import { HeadCellContentProps } from '../../types';
-import getHeadIcons from '../../utils/get-head-icons';
-import HeadCellMenu from './HeadCellMenu';
-import { areTabStopsEnabled } from '../../utils/accessibility-utils';
-import { VisuallyHidden, StyledSortButton, StyledHeadCellContent, StyledHeadCellIconWrapper } from './styles';
+import { TableContext, useContextSelector } from "../../context";
+import { HeadCellContentProps } from "../../types";
+import { areTabStopsEnabled } from "../../utils/accessibility-utils";
+import getHeadIcons from "../../utils/get-head-icons";
+import HeadCellMenu from "./HeadCellMenu";
+import { StyledHeadCellContent, StyledHeadCellIconWrapper, StyledSortButton, VisuallyHidden } from "./styles";
 
 const HeadCellContent = ({ children, column, isActive, isInteractionEnabled }: HeadCellContentProps) => {
   const { keyboard, translator, changeSortOrder } = useContextSelector(TableContext, (value) => value.baseProps);
@@ -17,8 +17,8 @@ const HeadCellContent = ({ children, column, isActive, isInteractionEnabled }: H
   const handleSort = () => isInteractionEnabled && changeSortOrder(column);
 
   const sortDirection = {
-    A: translator.get('SNTable.Accessibility.Ascending'),
-    D: translator.get('SNTable.Accessibility.Descending'),
+    A: translator.get("SNTable.Accessibility.Ascending"),
+    D: translator.get("SNTable.Accessibility.Descending"),
   };
 
   return (
@@ -40,7 +40,7 @@ const HeadCellContent = ({ children, column, isActive, isInteractionEnabled }: H
         {children}
         {isFocusInHead && (
           <VisuallyHidden data-testid={`VHL-for-col-${column.pageColIdx}`}>
-            {`${sortDirection[column.sortDirection]} ${translator.get('SNTable.SortLabel.PressSpaceToSort')}`}
+            {`${sortDirection[column.sortDirection]} ${translator.get("SNTable.SortLabel.PressSpaceToSort")}`}
           </VisuallyHidden>
         )}
       </StyledSortButton>

@@ -1,6 +1,6 @@
-import { useMemo, useRef } from 'react';
-import useMutableProp from './use-mutable-prop';
-import mergePages from '../utils/merge-pages';
+import { useMemo, useRef } from "react";
+import mergePages from "../utils/merge-pages";
+import useMutableProp from "./use-mutable-prop";
 
 const pageToKey = ({ qLeft, qTop, qWidth, qHeight }: EngineAPI.INxPage) => `${qLeft}-${qTop}-${qWidth}-${qHeight}`;
 

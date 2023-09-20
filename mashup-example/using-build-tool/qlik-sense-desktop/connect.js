@@ -1,8 +1,8 @@
-import enigma from 'enigma.js';
+import enigma from "enigma.js";
 
 export default function connect() {
   const loadSchema = () =>
-    fetch('https://unpkg.com/enigma.js/schemas/12.34.11.json').then((response) => response.json());
+    fetch("https://unpkg.com/enigma.js/schemas/12.34.11.json").then((response) => response.json());
 
   const createConnection = () =>
     loadSchema().then((schema) =>
@@ -12,7 +12,7 @@ export default function connect() {
           url: `ws://localhost:9076/app/${Date.now()}`,
         })
         .open()
-        .then((qix) => qix.openDoc('/apps/Executive_Dashboard.qvf'))
+        .then((qix) => qix.openDoc("/apps/Executive_Dashboard.qvf"))
     );
 
   return createConnection();

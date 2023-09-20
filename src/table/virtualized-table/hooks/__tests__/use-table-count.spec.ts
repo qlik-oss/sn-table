@@ -1,10 +1,10 @@
-import { stardust } from '@nebula.js/stardust';
-import { renderHook } from '@testing-library/react';
-import { PageInfo, TableLayout } from '../../../../types';
-import { MIN_BODY_ROW_HEIGHT, MAX_PAGE_SIZE } from '../../constants';
-import useTableCount from '../use-table-count';
+import { stardust } from "@nebula.js/stardust";
+import { renderHook } from "@testing-library/react";
+import { PageInfo, TableLayout } from "../../../../types";
+import { MAX_PAGE_SIZE, MIN_BODY_ROW_HEIGHT } from "../../constants";
+import useTableCount from "../use-table-count";
 
-describe('useTableCount', () => {
+describe("useTableCount", () => {
   let layout: TableLayout;
   let pageInfo: PageInfo;
   let rect: stardust.Rect;
@@ -36,15 +36,15 @@ describe('useTableCount', () => {
     columnWidths = [50, 150, 200];
   });
 
-  describe('rowCount', () => {
-    test('should be capped at max page size', () => {
+  describe("rowCount", () => {
+    test("should be capped at max page size", () => {
       layout.qHyperCube.qSize.qcy = MAX_PAGE_SIZE * 2;
       const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidths, MIN_BODY_ROW_HEIGHT));
 
       expect(result.current.rowCount).toEqual(MAX_PAGE_SIZE);
     });
 
-    test('should return rowCount for current page', () => {
+    test("should return rowCount for current page", () => {
       const expectedRowCount = 100;
       layout.qHyperCube.qSize.qcy = MAX_PAGE_SIZE + expectedRowCount;
       pageInfo.page = 1;
@@ -54,7 +54,7 @@ describe('useTableCount', () => {
       expect(result.current.rowCount).toEqual(expectedRowCount);
     });
 
-    test('should return rowCount when number of data rows is less than max page size', () => {
+    test("should return rowCount when number of data rows is less than max page size", () => {
       layout.qHyperCube.qSize.qcy = 2500;
 
       const { result } = renderHook(() => useTableCount(layout, pageInfo, rect, columnWidths, MIN_BODY_ROW_HEIGHT));
@@ -63,8 +63,8 @@ describe('useTableCount', () => {
     });
   });
 
-  describe('visibleRowCount', () => {
-    test('should handle when number of rows is less than the number of rows that can be rendered', () => {
+  describe("visibleRowCount", () => {
+    test("should handle when number of rows is less than the number of rows that can be rendered", () => {
       const expectedVisibleRowCount = 10;
       layout.qHyperCube.qSize.qcy = expectedVisibleRowCount;
       rect.height = 20 * MIN_BODY_ROW_HEIGHT; // number of rows that can be rendered
@@ -74,7 +74,7 @@ describe('useTableCount', () => {
       expect(result.current.visibleRowCount).toEqual(expectedVisibleRowCount);
     });
 
-    test('should handle when number of rows is more than the number of rows that can be rendered', () => {
+    test("should handle when number of rows is more than the number of rows that can be rendered", () => {
       const expectedVisibleRowCount = 10;
       layout.qHyperCube.qSize.qcy = 20 * MIN_BODY_ROW_HEIGHT; // number of rows
       rect.height = expectedVisibleRowCount * MIN_BODY_ROW_HEIGHT; // number of rows that can be rendered
@@ -85,8 +85,8 @@ describe('useTableCount', () => {
     });
   });
 
-  describe('visibleColumnCount', () => {
-    test('should handle when number of columns is less than the number of columns that can be rendered', () => {
+  describe("visibleColumnCount", () => {
+    test("should handle when number of columns is less than the number of columns that can be rendered", () => {
       columnWidths = [50, 50, 50, 50];
       layout.qHyperCube.qSize.qcx = columnWidths.length;
       rect.width = 50 * columnWidths.length + 50;
@@ -96,7 +96,7 @@ describe('useTableCount', () => {
       expect(result.current.visibleColumnCount).toEqual(columnWidths.length);
     });
 
-    test('should handle when number of columns is more than the number of columns that can be rendered', () => {
+    test("should handle when number of columns is more than the number of columns that can be rendered", () => {
       columnWidths = [50, 50, 50, 50];
       layout.qHyperCube.qSize.qcx = columnWidths.length;
       rect.width = 50 * columnWidths.length - 50;

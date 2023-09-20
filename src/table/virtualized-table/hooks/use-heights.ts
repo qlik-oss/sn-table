@@ -1,12 +1,12 @@
-import { VariableSizeList } from 'react-window';
-import { Column, PageInfo, TotalsPosition, ViewService } from '../../../types';
-import { TableContext, useContextSelector } from '../../context';
-import { COMMON_CELL_STYLING } from '../../styling-defaults';
-import { GeneratedStyling } from '../../types';
-import { isNumeric } from '../../utils/is-numeric';
-import { fontSizeToRowHeight } from '../../utils/styling-utils';
-import { MIN_BODY_ROW_HEIGHT, PADDING_TOP_BOTTOM } from '../constants';
-import useDynamicRowHeight from './use-dynamic-row-height';
+import { VariableSizeList } from "react-window";
+import { Column, PageInfo, TotalsPosition, ViewService } from "../../../types";
+import { TableContext, useContextSelector } from "../../context";
+import { COMMON_CELL_STYLING } from "../../styling-defaults";
+import { GeneratedStyling } from "../../types";
+import { isNumeric } from "../../utils/is-numeric";
+import { fontSizeToRowHeight } from "../../utils/styling-utils";
+import { MIN_BODY_ROW_HEIGHT, PADDING_TOP_BOTTOM } from "../constants";
+import useDynamicRowHeight from "./use-dynamic-row-height";
 
 interface UseHeightsProps {
   columns: Column[];
@@ -22,7 +22,16 @@ interface UseHeightsProps {
 const getBodyRowHeight = ({ fontSize = COMMON_CELL_STYLING.fontSize }: GeneratedStyling) =>
   Math.max(MIN_BODY_ROW_HEIGHT, fontSizeToRowHeight(fontSize));
 
-const useHeights = ({ columns, columnWidths, pageInfo, headerRef, totalsRef, totalsPosition, isSnapshot, viewService }: UseHeightsProps) => {
+const useHeights = ({
+  columns,
+  columnWidths,
+  pageInfo,
+  headerRef,
+  totalsRef,
+  totalsPosition,
+  isSnapshot,
+  viewService,
+}: UseHeightsProps) => {
   const { styling } = useContextSelector(TableContext, (value) => value.baseProps);
 
   const headerHeight = useDynamicRowHeight({

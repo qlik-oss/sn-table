@@ -1,15 +1,15 @@
-import { stardust } from '@nebula.js/stardust';
-import { Cell } from '../../types';
-import { FocusTypes, KeyCodes, SelectionActions } from '../constants';
-import { BodyArrowHelperProps } from '../types';
+import { stardust } from "@nebula.js/stardust";
+import { Cell } from "../../types";
+import { FocusTypes, KeyCodes, SelectionActions } from "../constants";
+import { BodyArrowHelperProps } from "../types";
 import {
   announceSelectionState,
   focusBodyFromHead,
   focusSelectionToolbar,
   moveFocusWithArrow,
   updateFocus,
-} from './accessibility-utils';
-import { handleNavigateTop } from './handle-scroll';
+} from "./accessibility-utils";
+import { handleNavigateTop } from "./handle-scroll";
 
 export const preventDefaultBehavior = (evt: React.KeyboardEvent | MouseEvent | React.MouseEvent<HTMLLIElement>) => {
   evt.stopPropagation();
@@ -114,7 +114,7 @@ export const headTabHelper = (
   isLastHeadCell: boolean
 ) => {
   const target = evt.target as HTMLTableCellElement;
-  const isLabel = target.classList.contains('sn-table-head-label');
+  const isLabel = target.classList.contains("sn-table-head-label");
   if (isLabel && evt.shiftKey && cellCoord[1] > 0) {
     setFocusedCellCoord([cellCoord[0], cellCoord[1] - 1]);
   } else if (!isLabel && !evt.shiftKey) {
@@ -154,7 +154,7 @@ export const bodyTabHelper = ({
     preventDefaultBehavior(evt);
     focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
   } else if (evt.shiftKey) {
-    const headCells = rootElement.querySelectorAll('.sn-table-head-cell');
+    const headCells = rootElement.querySelectorAll(".sn-table-head-cell");
     const lastIndex = headCells.length - 1;
 
     setFocusedCellCoord([0, lastIndex] as [number, number]);

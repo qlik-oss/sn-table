@@ -1,13 +1,13 @@
-import React from 'react';
-import { render } from '@testing-library/react';
-import TableCell from '@mui/material/TableCell';
+import TableCell from "@mui/material/TableCell";
+import { render } from "@testing-library/react";
+import React from "react";
 
-import * as withColumnStyling from '../withColumnStyling';
-import * as stylingUtils from '../../../../utils/styling-utils';
-import { Cell, Column, Announce } from '../../../../../types';
-import { CellStyle, CellHOCProps } from '../../../../types';
+import { Announce, Cell, Column } from "../../../../../types";
+import { CellHOCProps, CellStyle } from "../../../../types";
+import * as stylingUtils from "../../../../utils/styling-utils";
+import * as withColumnStyling from "../withColumnStyling";
 
-describe('withColumnStyling', () => {
+describe("withColumnStyling", () => {
   let HOC: (props: CellHOCProps) => JSX.Element;
   let cell: Cell;
   let styling: CellStyle;
@@ -16,7 +16,7 @@ describe('withColumnStyling', () => {
 
   beforeEach(() => {
     HOC = withColumnStyling.default((props: CellHOCProps) => <TableCell>{props.children}</TableCell>);
-    jest.spyOn(stylingUtils, 'getColumnStyle');
+    jest.spyOn(stylingUtils, "getColumnStyle");
 
     styling = {} as unknown as CellStyle;
     cell = {
@@ -32,7 +32,7 @@ describe('withColumnStyling', () => {
 
   afterEach(() => jest.clearAllMocks());
 
-  it('should render table head', () => {
+  it("should render table head", () => {
     const { queryByText } = render(
       <table>
         <tbody>
@@ -45,7 +45,7 @@ describe('withColumnStyling', () => {
       </table>
     );
 
-    expect(queryByText('someValue')).toBeVisible();
+    expect(queryByText("someValue")).toBeVisible();
     expect(stylingUtils.getColumnStyle).toHaveBeenCalledWith(styling, cell.qAttrExps, column.stylingIDs);
   });
 });

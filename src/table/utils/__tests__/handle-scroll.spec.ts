@@ -1,7 +1,7 @@
-import { handleHorizontalScroll, handleNavigateTop } from '../handle-scroll';
+import { handleHorizontalScroll, handleNavigateTop } from "../handle-scroll";
 
-describe('handle-scroll', () => {
-  describe('handleHorizontalScroll', () => {
+describe("handle-scroll", () => {
+  describe("handleHorizontalScroll", () => {
     let evt: WheelEvent;
     let memoedContainer: HTMLDivElement;
     let isRTL: boolean;
@@ -20,14 +20,14 @@ describe('handle-scroll', () => {
       isRTL = true;
     });
 
-    it('should run preventDefault when the scrollbar is at its leftmost place and is scrolled left in LTR direction', () => {
+    it("should run preventDefault when the scrollbar is at its leftmost place and is scrolled left in LTR direction", () => {
       isRTL = false;
       handleHorizontalScroll(evt, isRTL, memoedContainer);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
     });
 
-    it('should run preventDefault when the scrollbar is at its rightmost place and is scrolled right in LTR direction', () => {
+    it("should run preventDefault when the scrollbar is at its rightmost place and is scrolled right in LTR direction", () => {
       evt = {
         ...evt,
         deltaX: 1,
@@ -42,7 +42,7 @@ describe('handle-scroll', () => {
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
     });
 
-    it('should not run preventDefault when the scrollbar is not at its leftmost place or the rightmost place in LTR direction', () => {
+    it("should not run preventDefault when the scrollbar is not at its leftmost place or the rightmost place in LTR direction", () => {
       isRTL = false;
       memoedContainer = {
         ...memoedContainer,
@@ -53,7 +53,7 @@ describe('handle-scroll', () => {
       expect(evt.preventDefault).not.toHaveBeenCalled();
     });
 
-    it('should early return when the it does not scroll horizontally', () => {
+    it("should early return when the it does not scroll horizontally", () => {
       isRTL = false;
       evt = {
         ...evt,
@@ -66,7 +66,7 @@ describe('handle-scroll', () => {
       expect(evt.preventDefault).not.toHaveBeenCalled();
     });
 
-    it('should run preventDefault when the scrollbar is at its leftmost place and is scrolled left in RTL direction', () => {
+    it("should run preventDefault when the scrollbar is at its leftmost place and is scrolled left in RTL direction", () => {
       evt = {
         ...evt,
         deltaX: -1,
@@ -80,7 +80,7 @@ describe('handle-scroll', () => {
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
     });
 
-    it('should run preventDefault when the scrollbar is at its rightmost place and and is scrolled right in RTL direction', () => {
+    it("should run preventDefault when the scrollbar is at its rightmost place and and is scrolled right in RTL direction", () => {
       evt = {
         ...evt,
         deltaX: 1,
@@ -94,7 +94,7 @@ describe('handle-scroll', () => {
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
     });
 
-    it('should not run preventDefault when the scrollbar is not at its leftmost place or the rightmost place in RTL direction', () => {
+    it("should not run preventDefault when the scrollbar is not at its leftmost place or the rightmost place in RTL direction", () => {
       evt = {
         ...evt,
         deltaX: -10,
@@ -109,7 +109,7 @@ describe('handle-scroll', () => {
     });
   });
 
-  describe('handleNavigateTop', () => {
+  describe("handleNavigateTop", () => {
     let rowHeight: number;
     let scrollTo: () => void;
     let cellCoord: number[];
@@ -124,32 +124,32 @@ describe('handle-scroll', () => {
       } as unknown as HTMLDivElement;
     });
 
-    it('should not do anything when rootElement is not setup yet', () => {
+    it("should not do anything when rootElement is not setup yet", () => {
       handleNavigateTop(cellCoord, rootElement);
       expect(scrollTo).not.toHaveBeenCalled();
     });
 
-    it('should the scrollbar is at its top when you reach the top two rows', () => {
+    it("should the scrollbar is at its top when you reach the top two rows", () => {
       cellCoord = [1, 0];
       rootElement = {
         getElementsByClassName: () => [{ scrollTo }],
       } as unknown as HTMLDivElement;
 
       handleNavigateTop(cellCoord, rootElement);
-      expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'auto' });
+      expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "auto" });
     });
 
-    it('should scroll upwards automatically if it detects the cursor gets behind <TableHead />', () => {
+    it("should scroll upwards automatically if it detects the cursor gets behind <TableHead />", () => {
       const SCROLL_TOP_IDX = 7;
       cellCoord = [8, 0];
 
       rootElement = {
         getElementsByClassName: (query: string) => {
-          if (query === 'sn-table-container') {
+          if (query === "sn-table-container") {
             return [{ scrollTo, scrollTop: SCROLL_TOP_IDX * rowHeight }];
           }
 
-          if (query === 'sn-table-head-cell') {
+          if (query === "sn-table-head-cell") {
             return [{ offsetHeight: 128 }];
           }
 
@@ -169,7 +169,7 @@ describe('handle-scroll', () => {
 
       handleNavigateTop(cellCoord, rootElement);
       expect(scrollTo).toHaveBeenCalledTimes(1);
-      expect(scrollTo).toHaveBeenCalledWith({ top: targetOffsetTop, behavior: 'auto' });
+      expect(scrollTo).toHaveBeenCalledWith({ top: targetOffsetTop, behavior: "auto" });
     });
   });
 });

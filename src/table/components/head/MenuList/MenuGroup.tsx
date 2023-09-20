@@ -1,11 +1,11 @@
 /* eslint-disable import/no-cycle */
-import React, { useState, useRef } from 'react';
-import Typography from '@mui/material/Typography';
-import ArrowRight from '@qlik-trial/sprout/icons/react/ArrowRight';
-import { HeadCellMenuItem, MenuItemGroup } from '../../../types';
-import { StyledMenuItem, StyledListItemIcon, StyledMenuItemLabel } from '../styles';
-import RecursiveMenuList from './RecursiveMenuList';
-import { handleHeadCellMenuKeyDown } from '../../../utils/handle-keyboard';
+import Typography from "@mui/material/Typography";
+import ArrowRight from "@qlik-trial/sprout/icons/react/ArrowRight";
+import React, { useRef, useState } from "react";
+import { HeadCellMenuItem, MenuItemGroup } from "../../../types";
+import { handleHeadCellMenuKeyDown } from "../../../utils/handle-keyboard";
+import { StyledListItemIcon, StyledMenuItem, StyledMenuItemLabel } from "../styles";
+import RecursiveMenuList from "./RecursiveMenuList";
 
 export const interceptClickOnMenuItems = (menuGroups: MenuItemGroup[], cache: SubMenusOpenStatusCache) => {
   const result = menuGroups.map((grp) =>
@@ -68,8 +68,8 @@ const MenuGroupItems = ({ autoFocus, id, onClick, itemTitle, icon, enabled, subM
           open={openMenu}
           onClose={() => setOpenMenu(false)}
           menuGroups={interceptClickOnMenuItems(subMenus, subMenusOpenStatusCache)}
-          transformOrigin={{ horizontal: 'left', vertical: 'top' }}
-          anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+          transformOrigin={{ horizontal: "left", vertical: "top" }}
+          anchorOrigin={{ horizontal: "right", vertical: "top" }}
         />
       )}
     </>
