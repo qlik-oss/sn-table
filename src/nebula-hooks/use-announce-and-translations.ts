@@ -1,7 +1,7 @@
-import { useMemo } from "@nebula.js/stardust";
+import { stardust, useMemo } from "@nebula.js/stardust";
 
 import registerLocale from "../locale/src";
-import { Announce, AnnounceArgs, ExtendedTranslator } from "../types";
+import { Announce, AnnounceArgs } from "../types";
 
 enum AnnouncerElements {
   FIRST = "first-announcer-element",
@@ -11,7 +11,7 @@ enum AnnouncerElements {
 /* creates the function for announcement */
 export const announcementFactory = (
   rootElement: HTMLElement,
-  translator: ExtendedTranslator,
+  translator: stardust.Translator,
   prevAnnounceEl?: string
 ): Announce => {
   let previousAnnouncementElement = prevAnnounceEl || null;
@@ -46,7 +46,7 @@ export const announcementFactory = (
   };
 };
 
-const useAnnounceAndTranslations = (rootElement: HTMLElement, translator: ExtendedTranslator) =>
+const useAnnounceAndTranslations = (rootElement: HTMLElement, translator: stardust.Translator) =>
   useMemo(() => {
     registerLocale(translator);
     return () => announcementFactory(rootElement, translator);

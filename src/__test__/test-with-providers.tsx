@@ -9,7 +9,6 @@ import {
   ApplyColumnWidths,
   ChangeSortOrder,
   ExtendedSelectionAPI,
-  ExtendedTranslator,
   TableData,
   TableLayout,
   ViewService,
@@ -24,7 +23,7 @@ interface ProviderProps {
   cellCoordMock?: [number, number];
   layout?: TableLayout;
   model?: EngineAPI.IGenericObject;
-  translator?: ExtendedTranslator;
+  translator?: stardust.Translator;
   interactions?: stardust.Interactions;
   theme?: ExtendedTheme;
   keyboard?: stardust.Keyboard;
@@ -61,7 +60,7 @@ const TestWithProviders = ({
     getHyperCubeData: () => Promise.resolve(),
   } as unknown as EngineAPI.IGenericObject,
   keyboard = {} as stardust.Keyboard,
-  translator = { get: (s: string) => s } as unknown as ExtendedTranslator,
+  translator = { get: (s: string) => s } as unknown as stardust.Translator,
   theme = {
     getColorPickerColor: () => undefined,
     name: () => undefined,

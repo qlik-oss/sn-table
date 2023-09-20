@@ -6,7 +6,6 @@ import {
   ChangeSortOrder,
   Column,
   ExtendedSelectionAPI,
-  ExtendedTranslator,
   PageInfo,
   Row,
   TableData,
@@ -33,7 +32,7 @@ export interface VirtualTableRenderProps {
   selectionsAPI: ExtendedSelectionAPI | undefined;
   layout: TableLayout;
   model: EngineAPI.IGenericObject;
-  translator: ExtendedTranslator;
+  translator: stardust.Translator;
   interactions: stardust.Interactions;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;

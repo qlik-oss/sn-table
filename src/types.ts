@@ -218,10 +218,6 @@ export interface ExtendedSelectionAPI extends stardust.ObjectSelections {
   removeListener(eventType: string, callback: () => void): void;
 }
 
-export interface ExtendedTranslator extends stardust.Translator {
-  language(): string;
-}
-
 export interface ViewState {
   rowPartialHeight: number;
   scrollLeft: number;
@@ -259,7 +255,7 @@ export type ChangeSortOrder = (column: Column, sortOrder?: SortDirection) => Pro
 export type ApplyColumnWidths = (newColumnSize: ColumnWidth, column: Column) => void;
 
 export interface Galaxy {
-  translator: ExtendedTranslator;
+  translator: stardust.Translator;
   carbon: boolean;
   flags: stardust.Flags;
 }

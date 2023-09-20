@@ -10,7 +10,6 @@ import {
   ApplyColumnWidths,
   ChangeSortOrder,
   ExtendedSelectionAPI,
-  ExtendedTranslator,
   Galaxy,
   TableLayout,
   UseOptions,
@@ -26,7 +25,7 @@ interface UsePaginationTable {
   changeSortOrder: ChangeSortOrder | undefined;
   rect: stardust.Rect;
   interactions: stardust.Interactions;
-  translator: ExtendedTranslator;
+  translator: stardust.Translator;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
   model: EngineAPI.IGenericObject | undefined;

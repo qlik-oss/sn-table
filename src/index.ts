@@ -26,7 +26,7 @@ import data from "./qae/data";
 import properties from "./qae/object-properties";
 import useSnapshot from "./table/hooks/use-snapshot";
 import useViewService from "./table/hooks/use-view-service";
-import { ExtendedSelectionAPI, ExtendedTranslator, Galaxy, TableLayout, UseOptions } from "./types";
+import { ExtendedSelectionAPI, Galaxy, TableLayout, UseOptions } from "./types";
 
 const chartBackgroundResolver = (theme: stardust.Theme) =>
   theme.getStyle("", "", "object.straightTableV2.backgroundColor");
@@ -47,7 +47,7 @@ export default function supernova(env: Galaxy) {
       const app = useApp(); // undefined when taking snapshot
       const model = useModel(); // undefined when taking snapshot
       const interactions = useInteractionState();
-      const translator = useTranslator() as ExtendedTranslator;
+      const translator = useTranslator();
       const selectionsAPI = useSelections() as ExtendedSelectionAPI | undefined; // undefined when taking snapshot
       const keyboard = useKeyboard();
       const { freeResize } = useOptions() as UseOptions;

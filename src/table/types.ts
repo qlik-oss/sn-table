@@ -8,7 +8,6 @@ import {
   ChangeSortOrder,
   Column,
   ExtendedSelectionAPI,
-  ExtendedTranslator,
   PageInfo,
   Row,
   SetPageInfo,
@@ -112,7 +111,7 @@ export interface ContextValue {
     selectionsAPI: ExtendedSelectionAPI | undefined;
     layout: TableLayout;
     model: EngineAPI.IGenericObject | undefined;
-    translator: ExtendedTranslator;
+    translator: stardust.Translator;
     interactions: stardust.Interactions;
     theme: ExtendedTheme;
     keyboard: stardust.Keyboard;
@@ -216,7 +215,7 @@ export interface ContextProviderProps {
   cellCoordMock?: [number, number];
   layout: TableLayout;
   model: EngineAPI.IGenericObject;
-  translator: ExtendedTranslator;
+  translator: stardust.Translator;
   interactions: stardust.Interactions;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
@@ -242,7 +241,7 @@ export interface RenderProps {
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
   interactions: stardust.Interactions;
-  translator: ExtendedTranslator;
+  translator: stardust.Translator;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
   footerContainer: HTMLElement | undefined;
