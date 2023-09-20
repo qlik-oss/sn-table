@@ -113,7 +113,7 @@
     "@nebula.js/cli-serve": "4.4.0",
     "@playwright/test": "1.37.1",
     "@qlik-oss/nebula-table-utils": "1.1.0",
-    "@qlik-trial/sprout": "2.45.6",
+    "@qlik-trial/sprout": "3.7.1",
     "@qlik/eslint-config": "0.4.15",
     "@qlik/prettier-config": "0.3.0",
     "@rollup/plugin-typescript": "11.1.2",
