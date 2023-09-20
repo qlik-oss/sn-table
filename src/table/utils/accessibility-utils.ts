@@ -28,7 +28,7 @@ export const focusHeadMenuButton = (event: React.KeyboardEvent | React.FocusEven
   target.setAttribute("tabIndex", "-1");
   const headMenuButton = target
     ?.closest(".sn-table-cell")
-    ?.querySelector("#sn-table-head-menu-button") as HTMLButtonElement;
+    ?.querySelector(".sn-table-head-menu-button") as HTMLButtonElement;
   headMenuButton?.focus();
 };
 

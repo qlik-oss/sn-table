@@ -45,7 +45,7 @@ describe("getViewState", () => {
 
   it("should run correct functions in virtualized table mode", async () => {
     getViewState(layout, viewService, rootElement);
-    expect(handleData.getTotalPosition).toHaveBeenCalledTimes(0);
+    expect(handleData.getTotalPosition).toHaveBeenCalledTimes(1);
     expect(visibleRowsUtils.findPaginationVisibleRows).toHaveBeenCalledTimes(0);
     expect(visibleRowsUtils.findVirtualizedVisibleRows).toHaveBeenCalledTimes(1);
   });
@@ -61,6 +61,7 @@ describe("getViewState", () => {
       scrollTopRatio: 1,
       rowsPerPage: 100,
       page: 0,
+      totalsPosition: { atTop: false, atBottom: false },
     });
   });
 
@@ -82,6 +83,7 @@ describe("getViewState", () => {
       visibleHeight: 0,
       rowsPerPage: 100,
       page: 0,
+      totalsPosition: { atTop: false, atBottom: false },
     });
   });
 });
