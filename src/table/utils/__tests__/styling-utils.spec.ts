@@ -1,5 +1,5 @@
-import { COLORING } from "@qlik/nebula-table-utils/lib/utils";
 import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
+import { COLORING } from "@qlik/nebula-table-utils/lib/utils";
 import { ContentStyling, HeaderStyling, PaletteColor, TableLayout } from "../../../types";
 import { SelectionStates } from "../../constants";
 import { SELECTION_STYLING } from "../../styling-defaults";
