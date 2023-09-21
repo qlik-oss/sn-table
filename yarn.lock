@@ -1979,12 +1979,10 @@
   resolved "https://npm.pkg.github.com/download/@qlik-oss/nebula-table-utils/1.1.0/b15b009f0d76f2a59d93059c7b72f5ee937fee40#b15b009f0d76f2a59d93059c7b72f5ee937fee40"
   integrity sha512-8llQv/JOORozLJA2Whx1B8yNzpsQf47GeaXS2lOzUcKPVXXH1W9x6VHM5s3lXBhW5+kBBFgsxUIJsUumUwwJmQ==
 
-"@qlik-trial/sprout@2.45.6":
-  version "2.45.6"
-  resolved "https://npm.pkg.github.com/download/@qlik-trial/sprout/2.45.6/f62fa8066cf7ac6ddb3b1f0f1e3cdd65933d060a#f62fa8066cf7ac6ddb3b1f0f1e3cdd65933d060a"
-  integrity sha512-gfWyEtpuCwRo87XfMUERPpiB8fh9PhL3dvkLiZw/UgiLNP9kMVwACK+m6WlxqVjkYVEcqOz35cX8Vi7RNGD3zg==
-  optionalDependencies:
-    "@swc/core-linux-x64-gnu" "1.3.32"
+"@qlik-trial/sprout@3.7.1":
+  version "3.7.1"
+  resolved "https://npm.pkg.github.com/download/@qlik-trial/sprout/3.7.1/f6262b519d0b594c27aeeac379eee55c88339371#f6262b519d0b594c27aeeac379eee55c88339371"
+  integrity sha512-fU2PVwxckLzqyb0nXlmueuZfFquDcz1Gp1zjeTdZmaHT+3PAuTcyuuWDHJNyffU7rwNBy56G1uGroDZOnuR2/g==
 
 "@qlik/eslint-config@0.4.15":
   version "0.4.15"
@@ -2127,11 +2125,6 @@
   integrity sha512-SwUDyjWnah1AaNl7kxsa7cfLhlTYoiyhDAIgyh+El30YvXs/o7OLXpYH88Zdhyx9JExKrmHDJ+10bwIcY80Jmw==
   dependencies:
     "@sinonjs/commons" "^2.0.0"
-
-"@swc/core-linux-x64-gnu@1.3.32":
-  version "1.3.32"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-gnu/-/core-linux-x64-gnu-1.3.32.tgz#2ea5e17d13a70e6a13742282cf30e92e4074f4c5"
-  integrity sha512-ecqtSWX4NBrs7Ji2VX3fDWeqUfrbLlYqBuufAziCM27xMxwlAVgmyGQk4FYgoQ3SAUAu3XFH87+3Q7uWm2X7xg==
 
 "@testing-library/dom@^9.0.0":
   version "9.0.0"
