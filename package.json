@@ -1,6 +1,6 @@
 {
   "name": "@nebula.js/sn-table",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "Display several measure values for each dimension value. Show the totals for each measure. Sort columns and rows alphabetically or numerically. Change sorting during analysis. Chart exploration allows for adding and removing columns in analysis.",
   "keywords": [
     "qlik",

@@ -1,3 +1,18 @@
+# [2.7.0](https://github.com/qlik-oss/sn-table/compare/v2.6.0...v2.7.0) (2023-09-21)
+
+### Bug Fixes
+
+- big table dont render properly ([#1064](https://github.com/qlik-oss/sn-table/issues/1064)) ([5c66288](https://github.com/qlik-oss/sn-table/commit/5c66288aa511d425b1974f741eb54d8e452d467f))
+- do not use virtualized table to render snapshot/pdf ([#1061](https://github.com/qlik-oss/sn-table/issues/1061)) ([c94d4a5](https://github.com/qlik-oss/sn-table/commit/c94d4a53f689b07ecd77e1bc28128be7e632519c))
+- easy id fixes ([#1062](https://github.com/qlik-oss/sn-table/issues/1062)) ([b6a5027](https://github.com/qlik-oss/sn-table/commit/b6a50274fcf5fae9eb61c4e78dbe5b78d4b7480c))
+- use unique ids for header menu and dropdown ([#1065](https://github.com/qlik-oss/sn-table/issues/1065)) ([5378fd9](https://github.com/qlik-oss/sn-table/commit/5378fd93d0fea6084b20b23c46908dfa9a2da03d))
+
+### Features
+
+- support multi-page pdf by rendering rows as a single-line row ([#1060](https://github.com/qlik-oss/sn-table/issues/1060)) ([d260136](https://github.com/qlik-oss/sn-table/commit/d260136e07edd15083ce7b052c7325c82cdc3b65))
+- support showing Totals row in the first page or last page only ([#1063](https://github.com/qlik-oss/sn-table/issues/1063)) ([55bc04d](https://github.com/qlik-oss/sn-table/commit/55bc04d373ddbc326c8a18373bbaca052264a596))
+- VIZ-2626-renders virtual table for snapshot ([#1055](https://github.com/qlik-oss/sn-table/issues/1055)) ([5538a6e](https://github.com/qlik-oss/sn-table/commit/5538a6ebbf45eb53526ee944a3fa6576678a1df0))
+
 # [2.6.0](https://github.com/qlik-oss/sn-table/compare/v2.5.0...v2.6.0) (2023-08-16)
 
 ### Bug Fixes
