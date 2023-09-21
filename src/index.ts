@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
-  stardust,
   useApp,
   useElement,
   useEmbed,
@@ -27,11 +26,7 @@ import properties from "./qae/object-properties";
 import useSnapshot from "./table/hooks/use-snapshot";
 import useViewService from "./table/hooks/use-view-service";
 import { ExtendedSelectionAPI, Galaxy, TableLayout, UseOptions } from "./types";
-
-const chartBackgroundResolver = (theme: stardust.Theme) =>
-  theme.getStyle("", "", "object.straightTableV2.backgroundColor");
-const objectBackgroundResolver = (theme: stardust.Theme) =>
-  theme.getStyle("object", "straightTableV2", "backgroundColor");
+import { chartBackgroundResolver, objectBackgroundResolver } from "./utils/theme-background-resolver";
 
 export default function supernova(env: Galaxy) {
   return {
