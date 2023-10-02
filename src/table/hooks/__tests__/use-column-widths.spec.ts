@@ -1,14 +1,19 @@
+import {
+  useMeasureText,
+  type EstimateLineCount,
+  type MeasureTextHook,
+  type UseMeasureTextProps,
+} from "@qlik/nebula-table-utils/lib/hooks";
 import { renderHook } from "@testing-library/react";
 import { Column, TotalsPosition } from "../../../types";
 import { ColumnWidthTypes, MIN_COLUMN_WIDTH } from "../../constants";
 import { TableStyling } from "../../types";
-import useMeasureText, { EstimateLineCount, MeasureTextHook } from "../../virtualized-table/hooks/use-measure-text";
 import useColumnWidths from "../use-column-widths";
 
-jest.mock("../../virtualized-table/hooks/use-measure-text");
+jest.mock("@qlik/nebula-table-utils/lib/hooks");
 
 describe("use-column-widths", () => {
-  let mockedUseMeasureText: jest.MockedFunction<(size?: string, fam?: string, boldText?: boolean) => MeasureTextHook>;
+  let mockedUseMeasureText: jest.MockedFunction<(props: UseMeasureTextProps) => MeasureTextHook>;
   let mockedMeasureText: MeasureTextHook;
   let columns: Column[];
   let tableWidth: number;

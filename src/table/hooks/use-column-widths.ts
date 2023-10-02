@@ -1,4 +1,4 @@
-import { useOnPropsChange } from "@qlik/nebula-table-utils/lib/hooks";
+import { useMeasureText, useOnPropsChange } from "@qlik/nebula-table-utils/lib/hooks";
 import { useMemo, useState } from "react";
 import { Column, TotalsPosition } from "../../types";
 import {
@@ -16,7 +16,7 @@ import {
   TOTALS_PADDING,
 } from "../styling-defaults";
 import { TableStyling } from "../types";
-import useMeasureText from "../virtualized-table/hooks/use-measure-text";
+import { MAX_NBR_LINES_OF_TEXT } from "../virtualized-table/constants";
 
 type GetFitToContentWidth = (headLabel: string, totalsLabel: string, glyphCount: number, isLocked: boolean) => number;
 
@@ -99,9 +99,18 @@ const useColumnWidths = (
   boolean
 ] => {
   const showTotals = totalsPosition.atBottom || totalsPosition.atTop;
-  const measureHeadLabel = useMeasureText(head.fontSize, head.fontFamily, true).measureText;
-  const measureTotalLabel = useMeasureText(body.fontSize, body.fontFamily, true).measureText;
-  const { estimateWidth } = useMeasureText(body.fontSize, body.fontFamily);
+  const measureHeadLabel = useMeasureText({
+    ...head,
+    bold: true,
+    maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT,
+  }).measureText;
+  const measureTotalLabel = useMeasureText({
+    ...body,
+    bold: true,
+    maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT,
+  }).measureText;
+  const { estimateWidth } = useMeasureText({ ...head, bold: false, maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT });
+
   const getFitToContentWidth = useMemo<GetFitToContentWidth>(
     () => (headLabel, totalsLabel, glyphCount, isLocked) => {
       const HEAD_LABEL_WIDTH = isLocked
