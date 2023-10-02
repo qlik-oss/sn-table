@@ -1,4 +1,4 @@
-import { useOnPropsChange } from "@qlik/nebula-table-utils/lib/hooks";
+import { useMeasureText, useOnPropsChange } from "@qlik/nebula-table-utils/lib/hooks";
 import { useCallback, useRef, useState } from "react";
 import { VariableSizeGrid, VariableSizeList } from "react-window";
 import { Column, PageInfo, Row, ViewService } from "../../../types";
@@ -13,7 +13,6 @@ import {
 import { MAX_NBR_LINES_OF_TEXT, MIN_BODY_ROW_HEIGHT } from "../constants";
 import { BodyStyle, GridState, RowMeta } from "../types";
 import { getAdjustedCellWidth, getAdjustedHeadCellWidth } from "../utils/cell-width-utils";
-import useMeasureText from "./use-measure-text";
 import useMutableProp from "./use-mutable-prop";
 
 export interface UseDynamicRowHeightProps {
@@ -59,7 +58,7 @@ const useDynamicRowHeight = ({
   });
   const { layout, rect } = useContextSelector(TableContext, (value) => value.baseProps);
   const [estimatedRowHeight, setEstimatedRowHeight] = useState(rowHeight || MIN_BODY_ROW_HEIGHT);
-  const { measureText, estimateLineCount } = useMeasureText(style.fontSize, style.fontFamily, boldText);
+  const { measureText, estimateLineCount } = useMeasureText({ ...style, bold: boldText });
   const lineHeight = parseInt(style.fontSize ?? COMMON_CELL_STYLING.fontSize, 10) * LINE_HEIGHT_MULTIPLIER;
 
   // Find a reasonable max line count to avoid issue where the react-window container DOM element gets too big
