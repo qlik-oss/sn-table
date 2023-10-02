@@ -1,9 +1,9 @@
+import { preventDefaultBehavior } from "@qlik/nebula-table-utils/lib/utils";
 import React, { useRef } from "react";
 import { ColumnWidthTypes, KeyCodes, MIN_COLUMN_WIDTH } from "../../constants";
 import { TableContext, useContextSelector } from "../../context";
 import { AdjusterProps } from "../../types";
 import { focusHeadMenuButton } from "../../utils/accessibility-utils";
-import { preventDefaultBehavior } from "../../utils/keyboard-utils";
 import { AdjusterHeadBorder, AdjusterHitArea } from "./styles";
 
 /**

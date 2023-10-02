@@ -11,7 +11,6 @@ import {
   handleBodyKeyDown,
   handleBodyKeyUp,
   handleHeadKeyDown,
-  handleLastTab,
   handleTotalKeyDown,
   handleWrapperKeyDown,
 } from "../handle-keyboard";
@@ -441,7 +440,6 @@ describe("handle-keyboard", () => {
       announce = jest.fn();
       paginationNeeded = true;
       totalsPosition = { atTop: false, atBottom: true };
-      jest.spyOn(accessibilityUtils, "focusSelectionToolbar").mockImplementation(() => {});
       jest.spyOn(accessibilityUtils, "announceSelectionState").mockImplementation(() => {});
       jest.spyOn(handleScroll, "handleNavigateTop").mockImplementation(() => {});
       jest.spyOn(keyboardUtils, "bodyArrowHelper").mockImplementation(() => {});
@@ -587,59 +585,6 @@ describe("handle-keyboard", () => {
       handleBodyKeyUp(evt, selectionDispatch);
 
       expect(selectionDispatch).not.toHaveBeenCalled();
-    });
-  });
-
-  describe("handleLastTab", () => {
-    let evt: React.KeyboardEvent;
-    let isSelectionMode: boolean;
-    const keyboard = {} as unknown as stardust.Keyboard;
-
-    beforeEach(() => {
-      evt = {
-        key: KeyCodes.TAB,
-        shiftKey: false,
-        target: {} as HTMLElement,
-        stopPropagation: jest.fn(),
-        preventDefault: jest.fn(),
-      } as unknown as React.KeyboardEvent;
-      isSelectionMode = true;
-      jest.spyOn(accessibilityUtils, "focusSelectionToolbar").mockImplementation(() => jest.fn());
-    });
-
-    it("should call focusSelectionToolbar when isSelectionMode is true and tab is pressed", () => {
-      handleLastTab(evt, keyboard, isSelectionMode);
-
-      expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect(evt.preventDefault).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.focusSelectionToolbar).toHaveBeenCalledTimes(1);
-    });
-
-    it("should not call focusSelectionToolbar when isSelectionMode is false", () => {
-      isSelectionMode = false;
-      handleLastTab(evt, keyboard, isSelectionMode);
-
-      expect(evt.stopPropagation).not.toHaveBeenCalled();
-      expect(evt.preventDefault).not.toHaveBeenCalled();
-      expect(accessibilityUtils.focusSelectionToolbar).not.toHaveBeenCalled();
-    });
-
-    it("should not call focusSelectionToolbar when key is not tab", () => {
-      evt.key = "someKey";
-      handleLastTab(evt, keyboard, isSelectionMode);
-
-      expect(evt.stopPropagation).not.toHaveBeenCalled();
-      expect(evt.preventDefault).not.toHaveBeenCalled();
-      expect(accessibilityUtils.focusSelectionToolbar).not.toHaveBeenCalled();
-    });
-
-    it("should not call focusSelectionToolbar when shift+tab is pressed", () => {
-      evt.shiftKey = true;
-      handleLastTab(evt, keyboard, isSelectionMode);
-
-      expect(evt.stopPropagation).not.toHaveBeenCalled();
-      expect(evt.preventDefault).not.toHaveBeenCalled();
-      expect(accessibilityUtils.focusSelectionToolbar).not.toHaveBeenCalled();
     });
   });
 });

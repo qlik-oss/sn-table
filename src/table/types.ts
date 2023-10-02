@@ -1,5 +1,6 @@
 import { Direction, TableCellProps } from "@mui/material";
 import { stardust } from "@nebula.js/stardust";
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
 import {
   Announce,
   ApplyColumnWidths,
@@ -7,8 +8,6 @@ import {
   ChangeSortOrder,
   Column,
   ExtendedSelectionAPI,
-  ExtendedTheme,
-  ExtendedTranslator,
   PageInfo,
   Row,
   SetPageInfo,
@@ -112,7 +111,7 @@ export interface ContextValue {
     selectionsAPI: ExtendedSelectionAPI | undefined;
     layout: TableLayout;
     model: EngineAPI.IGenericObject | undefined;
-    translator: ExtendedTranslator;
+    translator: stardust.Translator;
     interactions: stardust.Interactions;
     theme: ExtendedTheme;
     keyboard: stardust.Keyboard;
@@ -130,14 +129,6 @@ export interface ContextValue {
   setPage?: stardust.SetStateFn<number>;
   initialDataPages?: EngineAPI.INxDataPage[];
   showRightBorder: boolean;
-}
-
-export interface FooterStyle {
-  borderColor: string;
-  color: string;
-  disabledColor: string;
-  iconColor?: string;
-  background?: string;
 }
 
 export interface CellStyle {
@@ -224,7 +215,7 @@ export interface ContextProviderProps {
   cellCoordMock?: [number, number];
   layout: TableLayout;
   model: EngineAPI.IGenericObject;
-  translator: ExtendedTranslator;
+  translator: stardust.Translator;
   interactions: stardust.Interactions;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
@@ -250,7 +241,7 @@ export interface RenderProps {
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
   interactions: stardust.Interactions;
-  translator: ExtendedTranslator;
+  translator: stardust.Translator;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
   footerContainer: HTMLElement | undefined;

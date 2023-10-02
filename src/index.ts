@@ -12,11 +12,10 @@ import {
   useStaleLayout,
   useTranslator,
 } from "@nebula.js/stardust";
-
+import { useExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks";
 import ext from "./ext";
 import extendContextMenu from "./extend-context-menu";
 import useApplyColumnWidths from "./nebula-hooks/use-apply-column-widths";
-import useExtendedTheme from "./nebula-hooks/use-extended-theme";
 import usePaginationTable from "./nebula-hooks/use-pagination-table";
 import useReactRoot from "./nebula-hooks/use-react-root";
 import useSorting from "./nebula-hooks/use-sorting";
@@ -26,7 +25,8 @@ import data from "./qae/data";
 import properties from "./qae/object-properties";
 import useSnapshot from "./table/hooks/use-snapshot";
 import useViewService from "./table/hooks/use-view-service";
-import { ExtendedSelectionAPI, ExtendedTranslator, Galaxy, TableLayout, UseOptions } from "./types";
+import { ExtendedSelectionAPI, Galaxy, TableLayout, UseOptions } from "./types";
+import { chartBackgroundResolver, objectBackgroundResolver } from "./utils/theme-background-resolver";
 
 export default function supernova(env: Galaxy) {
   return {
@@ -42,7 +42,7 @@ export default function supernova(env: Galaxy) {
       const app = useApp(); // undefined when taking snapshot
       const model = useModel(); // undefined when taking snapshot
       const interactions = useInteractionState();
-      const translator = useTranslator() as ExtendedTranslator;
+      const translator = useTranslator();
       const selectionsAPI = useSelections() as ExtendedSelectionAPI | undefined; // undefined when taking snapshot
       const keyboard = useKeyboard();
       const { freeResize } = useOptions() as UseOptions;
@@ -53,7 +53,7 @@ export default function supernova(env: Galaxy) {
           : contentRect;
       const viewService = useViewService(layout);
       const embed = useEmbed();
-      const theme = useExtendedTheme(rootElement);
+      const theme = useExtendedTheme(rootElement, chartBackgroundResolver, objectBackgroundResolver);
       const changeSortOrder = useSorting(layout.qHyperCube, model); // undefined when taking snapshot
       const applyColumnWidths = useApplyColumnWidths(layout.qHyperCube, model);
       const isFontLoaded = useWaitForFonts(theme, layout);

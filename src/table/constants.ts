@@ -57,8 +57,6 @@ export const DEFAULT_COLUMN_PERCENTAGE_WIDTH = 20;
 export const HEAD_ICON_WRAPPER_SIZE = 24;
 export const LOCK_ICON_SIZE = 20;
 
-export const PAGINATION_HEIGHT = 40;
-
 export const INITIAL_DATA_FETCH_WIDTH = 50;
 export const INITIAL_DATA_FETCH_HEIGHT = 100;
 

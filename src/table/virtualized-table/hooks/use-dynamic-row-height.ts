@@ -1,4 +1,4 @@
-import { useOnPropsChange } from "@qlik-oss/nebula-table-utils/lib/hooks";
+import { useOnPropsChange } from "@qlik/nebula-table-utils/lib/hooks";
 import { useCallback, useRef, useState } from "react";
 import { VariableSizeGrid, VariableSizeList } from "react-window";
 import { Column, PageInfo, Row, ViewService } from "../../../types";

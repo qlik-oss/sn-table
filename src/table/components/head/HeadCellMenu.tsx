@@ -7,15 +7,14 @@ import SelectAlternative from "@qlik-trial/sprout/icons/react/SelectAlternative"
 import SelectExcluded from "@qlik-trial/sprout/icons/react/SelectExcluded";
 import SelectPossible from "@qlik-trial/sprout/icons/react/SelectPossible";
 import Selection from "@qlik-trial/sprout/icons/react/Selection";
+import { preventDefaultBehavior } from "@qlik/nebula-table-utils/lib/utils";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-
 import { TableLayout } from "../../../types";
 import { TableContext, useContextSelector } from "../../context";
 import useFieldSelection from "../../hooks/use-field-selection";
 import { DEFAULT_FONT_SIZE } from "../../styling-defaults";
 import { HeadCellMenuProps, MenuItemGroup } from "../../types";
 import { setFocusOnClosetColumnAdjuster } from "../../utils/accessibility-utils";
-import { preventDefaultBehavior } from "../../utils/keyboard-utils";
 import RecursiveMenuList from "./MenuList/RecursiveMenuList";
 import { HeadCellMenuWrapper, StyledMenuIconButton } from "./styles";
 

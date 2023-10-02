@@ -282,45 +282,6 @@ describe("accessibility-utils", () => {
     });
   });
 
-  describe("focusSelectionToolbar", () => {
-    let element: HTMLElement;
-    let parentElement: HTMLElement | null;
-    let parentElementFromDocument: HTMLElement | null;
-    let last: boolean;
-
-    beforeEach(() => {
-      parentElement = { focus: jest.fn() } as unknown as HTMLElement;
-      parentElementFromDocument = { focus: jest.fn() } as unknown as HTMLElement;
-      element = {
-        closest: () => ({ querySelector: () => ({ parentElement }) }),
-      } as unknown as HTMLElement;
-      jest
-        .spyOn(document, "querySelector")
-        .mockImplementation(() => ({ parentElement: parentElementFromDocument } as unknown as Element));
-      last = false;
-    });
-
-    it("should call parentElement.focus when clientConfirmButton exists in object", () => {
-      accessibilityUtils.focusSelectionToolbar(element, keyboard, last);
-      expect(parentElement?.focus).toHaveBeenCalledTimes(1);
-      expect(keyboard.focusSelection).not.toHaveBeenCalled();
-    });
-
-    it("should call parentElement.focus when clientConfirmButton does not exists in object, but in the document", () => {
-      parentElement = null;
-      accessibilityUtils.focusSelectionToolbar(element, keyboard, last);
-      expect(parentElementFromDocument?.focus).toHaveBeenCalledTimes(1);
-      expect(keyboard.focusSelection).not.toHaveBeenCalled();
-    });
-
-    it("should call keyboard.focusSelection when clientConfirmButton doesn't exist", () => {
-      parentElement = null;
-      parentElementFromDocument = null;
-      accessibilityUtils.focusSelectionToolbar(element, keyboard, last);
-      expect(keyboard.focusSelection).toHaveBeenCalledWith(false);
-    });
-  });
-
   describe("announceSelectionState", () => {
     let isSelected: boolean;
     let announce: Announce;

@@ -1,12 +1,11 @@
 import { stardust } from "@nebula.js/stardust";
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
 import { VariableSizeList } from "react-window";
 import {
   ApplyColumnWidths,
   ChangeSortOrder,
   Column,
   ExtendedSelectionAPI,
-  ExtendedTheme,
-  ExtendedTranslator,
   PageInfo,
   Row,
   TableData,
@@ -33,7 +32,7 @@ export interface VirtualTableRenderProps {
   selectionsAPI: ExtendedSelectionAPI | undefined;
   layout: TableLayout;
   model: EngineAPI.IGenericObject;
-  translator: ExtendedTranslator;
+  translator: stardust.Translator;
   interactions: stardust.Interactions;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;

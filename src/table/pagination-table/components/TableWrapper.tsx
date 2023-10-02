@@ -1,8 +1,6 @@
+import { PaginationFooter } from "@qlik/nebula-table-utils/lib/components";
 import React, { memo, useCallback, useEffect, useRef } from "react";
-
 import isPrinting from "../../../is-printing";
-import FooterWrapper from "../../components/footer/FooterWrapper";
-import PaginationContent from "../../components/footer/PaginationContent";
 import { StyledTableWrapper } from "../../components/styles";
 import { SelectionActions } from "../../constants";
 import { TableContext, useContextSelector } from "../../context";
@@ -25,10 +23,8 @@ const TableWrapper = (props: TableWrapperProps) => {
 
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
     useContextSelector(TableContext, (value) => value.tableData);
-  const { rootElement, keyboard, translator, theme, interactions, styling, viewService, layout } = useContextSelector(
-    TableContext,
-    (value) => value.baseProps
-  );
+  const { rootElement, keyboard, translator, theme, interactions, styling, viewService, layout, rect } =
+    useContextSelector(TableContext, (value) => value.baseProps);
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
@@ -64,6 +60,17 @@ const TableWrapper = (props: TableWrapperProps) => {
       });
     },
     [pageInfo, setPageInfo, totalPages, announce]
+  );
+
+  const handleChangeRowsPerPage = useCallback(
+    (newRowsPerPage: number) => {
+      setPageInfo({ ...pageInfo, page: 0, rowsPerPage: newRowsPerPage });
+      announce({
+        keys: [["SNTable.Pagination.RowsPerPageChange", newRowsPerPage.toString()]],
+        politeness: "assertive",
+      });
+    },
+    [announce, pageInfo, setPageInfo]
   );
 
   const handleKeyDown = (evt: React.KeyboardEvent) => {
@@ -137,11 +144,23 @@ const TableWrapper = (props: TableWrapperProps) => {
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </StyledTable>
       </StyledTableContainer>
-      {interactions.active && (
-        <FooterWrapper footerContainer={footerContainer} paginationNeeded={paginationNeeded}>
-          <PaginationContent {...props} handleChangePage={handleChangePage} isSelectionMode={isSelectionMode} />
-        </FooterWrapper>
-      )}
+      <PaginationFooter
+        footerContainer={footerContainer}
+        pageInfo={pageInfo}
+        paginationNeeded={paginationNeeded}
+        theme={theme}
+        totalRowCount={totalRowCount}
+        totalColumnCount={totalColumnCount}
+        totalPages={totalPages}
+        keyboard={keyboard}
+        translator={translator}
+        interactions={interactions}
+        rect={rect}
+        layout={layout as unknown as EngineAPI.IGenericHyperCubeLayout}
+        handleChangePage={handleChangePage}
+        handleChangeRowsPerPage={handleChangeRowsPerPage}
+        isSelectionMode={isSelectionMode}
+      />
     </StyledTableWrapper>
   );
 };

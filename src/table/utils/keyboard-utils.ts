@@ -1,20 +1,10 @@
 import { stardust } from "@nebula.js/stardust";
+import { focusSelectionToolbar, preventDefaultBehavior } from "@qlik/nebula-table-utils/lib/utils";
 import { Cell } from "../../types";
 import { FocusTypes, KeyCodes, SelectionActions } from "../constants";
 import { BodyArrowHelperProps } from "../types";
-import {
-  announceSelectionState,
-  focusBodyFromHead,
-  focusSelectionToolbar,
-  moveFocusWithArrow,
-  updateFocus,
-} from "./accessibility-utils";
+import { announceSelectionState, focusBodyFromHead, moveFocusWithArrow, updateFocus } from "./accessibility-utils";
 import { handleNavigateTop } from "./handle-scroll";
-
-export const preventDefaultBehavior = (evt: React.KeyboardEvent | MouseEvent | React.MouseEvent<HTMLLIElement>) => {
-  evt.stopPropagation();
-  evt.preventDefault();
-};
 
 export const isCtrlCmd = (evt: React.KeyboardEvent) => evt.ctrlKey || evt.metaKey;
 

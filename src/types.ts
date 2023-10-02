@@ -213,25 +213,9 @@ export interface BodyColors {
   borderColor: string;
 }
 
-export interface BackgroundColors {
-  tableColorFromTheme: string;
-  color?: string;
-  isDark: boolean;
-  isTransparent: boolean;
-}
-
 export interface ExtendedSelectionAPI extends stardust.ObjectSelections {
   on(eventType: string, callback: () => void): void;
   removeListener(eventType: string, callback: () => void): void;
-}
-
-export interface ExtendedTranslator extends stardust.Translator {
-  language(): string;
-}
-
-export interface ExtendedTheme extends stardust.Theme {
-  name(): string;
-  background: BackgroundColors;
 }
 
 export interface ViewState {
@@ -271,7 +255,7 @@ export type ChangeSortOrder = (column: Column, sortOrder?: SortDirection) => Pro
 export type ApplyColumnWidths = (newColumnSize: ColumnWidth, column: Column) => void;
 
 export interface Galaxy {
-  translator: ExtendedTranslator;
+  translator: stardust.Translator;
   carbon: boolean;
   flags: stardust.Flags;
 }

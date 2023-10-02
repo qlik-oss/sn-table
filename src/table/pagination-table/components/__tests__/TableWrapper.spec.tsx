@@ -83,7 +83,7 @@ describe("<TableWrapper />", () => {
     expect(getByTestId("table-container").getAttribute("tabindex")).toBe("-1");
     expect(getByTestId("table-container").getAttribute("role")).toBe("application");
     // Just checking that the pagination has rendered, we do more thorough checking in the PaginationContent tests
-    expect(getByText("SNTable.Pagination.DisplayedRowsLabel")).toBeVisible();
+    expect(getByText("NebulaTableUtils.Pagination.DisplayedRowsLabel")).toBeVisible();
   });
 
   it("should not render pagination when interactions.active is false", () => {
@@ -95,14 +95,14 @@ describe("<TableWrapper />", () => {
     ).toBeVisible();
     expect(getByTestId("table-container").getAttribute("tabindex")).toBe("-1");
     expect(getByTestId("table-container").getAttribute("role")).toBe("application");
-    expect(queryByText("SNTable.Pagination.DisplayedRowsLabel")).toBeNull();
+    expect(queryByText("NebulaTableUtils.Pagination.DisplayedRowsLabel")).toBeNull();
   });
 
   it("should call handleWrapperKeyDown when press control key on the table", () => {
     jest.spyOn(handleKeyPress, "handleWrapperKeyDown").mockImplementation(() => jest.fn());
     const { getByLabelText } = renderTableWrapper();
 
-    fireEvent.keyDown(getByLabelText("SNTable.Pagination.RowsPerPage:"), {
+    fireEvent.keyDown(getByLabelText("NebulaTableUtils.Pagination.RowsPerPage:"), {
       key: "Control",
       code: "ControlLeft",
     });

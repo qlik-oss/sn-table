@@ -1,18 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { stardust, useEffect, useMemo } from "@nebula.js/stardust";
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
 import { Root } from "react-dom/client";
 import renderAsPagination from "../render-as-pagination";
 import { renderVirtualizedTable } from "../table/Root";
 import getVirtualScrollTableData from "../table/virtualized-table/utils/get-table-data";
-import {
-  ApplyColumnWidths,
-  ChangeSortOrder,
-  ExtendedSelectionAPI,
-  ExtendedTheme,
-  ExtendedTranslator,
-  TableLayout,
-  ViewService,
-} from "../types";
+import { ApplyColumnWidths, ChangeSortOrder, ExtendedSelectionAPI, TableLayout, ViewService } from "../types";
 import useInitialDataPages from "./virtualized-table/use-initial-data-pages";
 import usePageInfo from "./virtualized-table/use-page-info";
 
@@ -21,7 +14,7 @@ interface UseVirtualizedTable {
   selectionsAPI: ExtendedSelectionAPI | undefined;
   layout: TableLayout;
   model: EngineAPI.IGenericObject | undefined;
-  translator: ExtendedTranslator;
+  translator: stardust.Translator;
   interactions: stardust.Interactions;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;

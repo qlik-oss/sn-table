@@ -1,10 +1,9 @@
 /* eslint-disable no-case-declarations */
-import { stardust } from "@nebula.js/stardust";
+import { preventDefaultBehavior } from "@qlik/nebula-table-utils/lib/utils";
 import React from "react";
-
 import { FocusTypes, KeyCodes, SelectionActions } from "../constants";
 import { HandleBodyKeyDownProps, HandleHeadKeyDownProps, HandleWrapperKeyDownProps, SelectionDispatch } from "../types";
-import { focusBodyFromHead, focusSelectionToolbar, moveFocusWithArrow, updateFocus } from "./accessibility-utils";
+import { focusBodyFromHead, moveFocusWithArrow, updateFocus } from "./accessibility-utils";
 import copyCellValue from "./copy-utils";
 import { findCellWithTabStop, getNextMenuItem, getPreviousMenuItem } from "./get-element-utils";
 import {
@@ -15,7 +14,6 @@ import {
   isArrowKey,
   isCtrlCmd,
   isCtrlShift,
-  preventDefaultBehavior,
   shouldBubbleEarly,
 } from "./keyboard-utils";
 
@@ -49,17 +47,6 @@ export const handleHeadCellMenuKeyDown = (event: React.KeyboardEvent<HTMLLIEleme
  */
 export const handleBodyKeyUp = (evt: React.KeyboardEvent, selectionDispatch: SelectionDispatch) => {
   evt.key === KeyCodes.SHIFT && selectionDispatch({ type: SelectionActions.SELECT_MULTI_END });
-};
-
-/**
- * Manually focuses the selection toolbar if tabbing from the last focusable element
- */
-export const handleLastTab = (evt: React.KeyboardEvent, keyboard: stardust.Keyboard, isSelectionMode = false) => {
-  if (isSelectionMode && evt.key === KeyCodes.TAB && !evt.shiftKey) {
-    // tab key: focus on the selection toolbar
-    preventDefaultBehavior(evt);
-    focusSelectionToolbar(evt.target as HTMLElement, keyboard, false);
-  }
 };
 
 /**

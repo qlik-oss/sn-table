@@ -1,5 +1,6 @@
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
 import { useMemo } from "react";
-import { ExtendedTheme, TableData, TableLayout } from "../../types";
+import { TableData, TableLayout } from "../../types";
 import { getBodyStyle, getHeaderStyle, getTotalsStyle } from "../utils/styling-utils";
 
 const useTableStyling = (layout: TableLayout, theme: ExtendedTheme, tableData: TableData, rootElement: HTMLElement) => {

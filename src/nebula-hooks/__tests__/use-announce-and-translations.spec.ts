@@ -1,9 +1,10 @@
-import { Announce, ExtendedTranslator } from "../../types";
+import { stardust } from "@nebula.js/stardust";
+import { Announce } from "../../types";
 import { announcementFactory } from "../use-announce-and-translations";
 
 describe("announcementFactory", () => {
   let rootElement: HTMLElement;
-  let translator: ExtendedTranslator;
+  let translator: stardust.Translator;
   let announcer: Announce;
   let announcerElement01: HTMLElement;
   let announcerElement02: HTMLElement;
@@ -23,7 +24,7 @@ describe("announcementFactory", () => {
         return announcerElement01;
       },
     } as HTMLElement;
-    translator = { get: (key) => key } as ExtendedTranslator;
+    translator = { get: (key) => key } as stardust.Translator;
     previousAnnouncementElement = "";
     junkChar = " ­";
   });
