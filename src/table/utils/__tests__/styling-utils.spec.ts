@@ -242,7 +242,7 @@ describe("styling-utils", () => {
 
       const resultStyling = getHeaderStyle(layout, theme, false);
       expect(resultStyling).toEqual({
-        background: "#323232",
+        background: "rgb(50, 50, 50)",
         color: COLORING.TEXT,
         ...defaultBorderColors,
       });
@@ -263,7 +263,7 @@ describe("styling-utils", () => {
       const resultStyling = getHeaderStyle(layout, theme, false);
       expect(resultStyling).toEqual({
         color: COLORING.TEXT,
-        background: "#323232",
+        background: "rgb(50, 50, 50)",
         ...defaultBorderColors,
       });
     });
@@ -273,7 +273,7 @@ describe("styling-utils", () => {
       expect(resultStyling).toEqual({
         color: COLORING.TEXT,
         fontSize: "44px",
-        background: "#323232",
+        background: "rgb(50, 50, 50)",
         ...defaultBorderColors,
       });
     });
@@ -406,8 +406,8 @@ describe("styling-utils", () => {
 
     it("should return styling with both new fontColor and background when selected", () => {
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingIDs);
-      expect(columnStyle.background).toBe("rgb(221,221,221)");
-      expect(columnStyle.color).toBe("rgb(17,17,17)");
+      expect(columnStyle.background).toBe("rgb(221, 221, 221)");
+      expect(columnStyle.color).toBe("rgb(17, 17, 17)");
     });
     it("should return styling with new fontColor", () => {
       qAttrExps.qValues = [qAttrExps.qValues[1]];
@@ -415,14 +415,14 @@ describe("styling-utils", () => {
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingIDs);
       expect(columnStyle.background).toBe("someBgColor");
-      expect(columnStyle.color).toBe("rgb(17,17,17)");
+      expect(columnStyle.color).toBe("rgb(17, 17, 17)");
     });
     it("should return styling with background and automatic font color", () => {
       qAttrExps.qValues = [qAttrExps.qValues[0]];
       stylingIDs = [stylingIDs[0]];
 
       const columnStyle = getColumnStyle(styling, qAttrExps, stylingIDs);
-      expect(columnStyle.background).toBe("rgb(221,221,221)");
+      expect(columnStyle.background).toBe("rgb(221, 221, 221)");
       expect(columnStyle.color).toBe(COLORING.TEXT);
     });
     it("should return styling unchanged when no qText", () => {

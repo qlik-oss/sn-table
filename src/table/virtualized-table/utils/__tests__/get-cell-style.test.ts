@@ -102,7 +102,7 @@ describe("getCellStyle", () => {
         cellSelectionState: SelectionStates.INACTIVE,
       });
 
-      expect(s).toEqual({ ...borderColors, color: "rgb(0,128,0)", background: "rgb(128,0,0)" });
+      expect(s).toEqual({ ...borderColors, color: "rgb(0, 128, 0)", background: "rgb(128, 0, 0)" });
     });
 
     test("with column styling and selection state is SELECTED", () => {
@@ -131,9 +131,9 @@ describe("getCellStyle", () => {
 
       expect(s).toEqual({
         ...borderColors,
-        color: "rgb(0,128,0)",
+        color: "rgb(0, 128, 0)",
         background:
-          "repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px), rgb(128,0,0)",
+          "repeating-linear-gradient(-45deg, rgba(200,200,200,0.08), rgba(200,200,200,0.08) 2px, rgba(200,200,200,0.3) 2.5px, rgba(200,200,200,0.08) 3px, rgba(200,200,200,0.08) 5px), rgb(128, 0, 0)",
       });
     });
   });

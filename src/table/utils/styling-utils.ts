@@ -1,12 +1,11 @@
 import { stardust } from "@nebula.js/stardust";
 import { PAGINATION_HEIGHT } from "@qlik/nebula-table-utils/lib/constants";
 import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
-import { COLORING, isDarkColor } from "@qlik/nebula-table-utils/lib/utils";
+import { COLORING, isDarkColor, removeOpacity, toRGB } from "@qlik/nebula-table-utils/lib/utils";
 import { ContentStyling, HeaderStyling, PaletteColor, TableLayout } from "../../types";
 import { SelectionStates } from "../constants";
 import { SELECTION_STYLING } from "../styling-defaults";
 import { CellStyle, GeneratedStyling } from "../types";
-import { removeOpacity, resolveToRGBAorRGB } from "./color-utils";
 
 export const LINE_HEIGHT = 4 / 3;
 export const CELL_PADDING_HEIGHT = 8;
@@ -254,7 +253,7 @@ export function getColumnStyle(
 ): CellStyle {
   const columnColors: Record<string, string> = {};
   qAttrExps?.qValues?.forEach((val, i) => {
-    const resolvedColor = val.qText && resolveToRGBAorRGB(val.qText);
+    const resolvedColor = val.qText && toRGB(val.qText);
     if (resolvedColor && resolvedColor !== "none") {
       columnColors[stylingIDs[i]] = resolvedColor;
     }
