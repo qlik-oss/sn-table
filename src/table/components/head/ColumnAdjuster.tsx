@@ -21,8 +21,10 @@ const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps)
 
   if (!interactions.active) return null;
 
-  const updateWidth = (adjustedWidth: number) => {
+  const updateWidth = (deltaWidth: number) => {
     onColumnResize?.();
+
+    const adjustedWidth = Math.max(tempWidths.current.initWidth + deltaWidth, MIN_COLUMN_WIDTH);
     tempWidths.current.columnWidth = adjustedWidth;
     const newColumnWidths = [...columnWidths];
     newColumnWidths[pageColIdx] = adjustedWidth;
@@ -38,19 +40,51 @@ const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps)
 
   const mouseMoveHandler = (evt: MouseEvent) => {
     const deltaWidth = evt.clientX - tempWidths.current.initX;
-    const adjustedWidth = Math.max(tempWidths.current.initWidth + deltaWidth, MIN_COLUMN_WIDTH);
-    updateWidth(adjustedWidth);
+    updateWidth(deltaWidth);
+  };
+
+  const touchMoveHandler = (evt: TouchEvent) => {
+    console.log("move");
+    if (evt.touches.length !== 1) return;
+    const deltaWidth = evt.touches[0].clientX - tempWidths.current.initX;
+    updateWidth(deltaWidth);
   };
 
   const mouseUpHandler = (evt: MouseEvent) => {
+    console.log("end");
     preventDefaultBehavior(evt);
-    document.removeEventListener("mousemove", mouseMoveHandler);
-    document.removeEventListener("mouseup", mouseUpHandler);
+    document.addEventListener("mousemove", mouseMoveHandler);
+    document.addEventListener("mouseup", mouseUpHandler);
 
     confirmWidth();
   };
 
-  const mouseDownHandler = (evt: React.MouseEvent) => {
+  const touchEndHandler = (evt: TouchEvent) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    document.removeEventListener("touchmove", touchMoveHandler);
+    document.removeEventListener("touchend", touchEndHandler);
+
+    confirmWidth();
+  };
+
+  const touchStartHandler = (evt: TouchEvent) => {
+    if (evt.touches.length !== 1) return;
+
+    evt.stopPropagation();
+
+    tempWidths.current = {
+      initX: evt.touches[0].clientX,
+      initWidth: columnWidths[pageColIdx],
+      columnWidth: columnWidths[pageColIdx],
+    };
+
+    document.addEventListener("touchmove", touchMoveHandler);
+    document.addEventListener("touchend", touchEndHandler);
+  };
+
+  const mouseDownHandler = (evt: MouseEvent) => {
+    console.log("start");
     evt.stopPropagation();
 
     tempWidths.current = {
@@ -98,6 +132,7 @@ const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps)
       key={`adjuster-${pageColIdx}`}
       onKeyDown={handleKeyDown}
       onMouseDown={mouseDownHandler}
+      onTouchStart={touchStartHandler}
       onBlur={handleBlur}
       onFocus={handleFocus}
       onDoubleClick={handleDoubleClick}
