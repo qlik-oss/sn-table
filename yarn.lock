@@ -2101,7 +2101,7 @@
     estree-walker "^2.0.2"
     picomatch "^2.3.1"
 
-"@scriptappy/from-jsdoc@^0.19.0":
+"@scriptappy/from-jsdoc@0.19.0":
   version "0.19.0"
   resolved "https://registry.yarnpkg.com/@scriptappy/from-jsdoc/-/from-jsdoc-0.19.0.tgz#89e3561ab1be607d3f0b37c9d8f6baa5a3c306db"
   integrity sha512-CZJREGTcOyywKOZ02kibuS5JeZ8YF5ju5sYYBFszpJc9OYu6+EQBENdy9cdInAye/b0E+ZlfqXY/50ve1RTY7w==

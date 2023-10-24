@@ -117,7 +117,7 @@
     "@qlik/nebula-table-utils": "2.5.0",
     "@qlik/prettier-config": "0.3.0",
     "@rollup/plugin-typescript": "11.1.2",
-    "@scriptappy/from-jsdoc": "^0.19.0",
+    "@scriptappy/from-jsdoc": "0.19.0",
     "@testing-library/jest-dom": "6.1.2",
     "@testing-library/react": "14.0.0",
     "@testing-library/react-hooks": "8.0.1",
