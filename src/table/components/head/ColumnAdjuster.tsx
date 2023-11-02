@@ -68,8 +68,6 @@ const ColumnAdjuster = ({ column, isLastColumn, onColumnResize }: AdjusterProps)
 
   // ----- Touch -----
   const touchMoveHandler = (evt: TouchEvent) => {
-    if (evt.touches.length !== 1) return;
-
     const deltaWidth = evt.touches[0].clientX - tempWidths.current.initX;
     updateWidth(deltaWidth);
   };

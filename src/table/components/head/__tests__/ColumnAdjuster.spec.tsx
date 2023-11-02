@@ -164,4 +164,25 @@ describe("<ColumnAdjuster />", () => {
       expect(applyColumnWidths).toHaveBeenNthCalledWith(1, { type: ColumnWidthTypes.PIXELS, pixels: 300 }, column);
     });
   });
+
+  it("should mot change column width using touch and there are more than one touch", async () => {
+    renderAdjuster();
+    const columnAdjuster = screen.queryByTestId("sn-table-column-adjuster") as HTMLElement;
+    const options = {
+      touches: [
+        {
+          clientX: 0,
+          clientY: 0,
+        },
+        {},
+      ],
+    };
+
+    fireEvent.touchStart(columnAdjuster, options);
+    options.touches[0].clientX = 100;
+    fireEvent.touchMove(columnAdjuster, options);
+    await waitFor(() => {
+      expect(setColumnWidths).not.toHaveBeenCalled();
+    });
+  });
 });
