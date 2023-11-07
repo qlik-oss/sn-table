@@ -75,7 +75,7 @@ const TableHeadWrapper = ({ isNewHeadCellMenuEnabled }: TableWrapperProps) => {
           return (
             <StyledHeadCell
               headerStyle={styling.head}
-              style={{ ...widthStyle, ...(isNewHeadCellMenuEnabled ? { padding: "0px", cursor: "pointer" } : {}) }} // add by style to reduce number of classes created by mui
+              style={{ ...widthStyle, ...(isNewHeadCellMenuEnabled ? { cursor: "pointer" } : {}) }} // add by style to reduce number of classes created by mui
               key={column.id}
               align={column.headTextAlign}
               className="sn-table-head-cell sn-table-cell"
