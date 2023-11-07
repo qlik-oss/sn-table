@@ -94,7 +94,7 @@ export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | "au
  * Gets all column info.
  */
 export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: number, visibleColIdx: number): Column {
-  const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
+  const { qDimensionInfo, qMeasureInfo, qEffectiveInterColumnSortOrder } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIdx < numDims;
   const info = isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims];
@@ -112,6 +112,10 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
     selectionColIdx = visibleColIdx;
     ({ qDimensionType } = dimInfo);
   }
+
+  // TODO:
+  // check about hidden columns and why we need to get it from properties
+  const isActivelySorted = colIdx === qEffectiveInterColumnSortOrder[0];
 
   const {
     qFallbackTitle,
@@ -135,6 +139,7 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
     qReverseSort,
     columnWidth,
     selectionColIdx,
+    isActivelySorted,
     id: `col-${pageColIdx}`,
     label: qFallbackTitle,
     stylingIDs: qAttrExprInfo.map((expr) => expr.id),

@@ -177,6 +177,7 @@ export interface Column {
   colIdx: number;
   pageColIdx: number;
   selectionColIdx: number;
+  isActivelySorted: boolean;
   label: string;
   headTextAlign: Align;
   totalsTextAlign: Align;
@@ -250,7 +251,7 @@ export interface AnnounceArgs {
 
 export type Announce = (arg0: AnnounceArgs) => void;
 
-export type ChangeSortOrder = (column: Column, sortOrder?: SortDirection) => Promise<void>;
+export type ChangeSortOrder = (column: Column, sortOrder: SortDirection) => Promise<void>;
 
 export type ApplyColumnWidths = (newColumnSize: ColumnWidth, column: Column) => void;
 

@@ -36,7 +36,7 @@ export const StyledSortButton = styled(Button, {
     },
   },
   "& svg": {
-    opacity: isActive && !isNewHeadCellMenuEnabled ? 1 : 0,
+    opacity: isActive ? 1 : 0,
     fontSize: DEFAULT_FONT_SIZE,
   },
   "& .Mui-disabled": {

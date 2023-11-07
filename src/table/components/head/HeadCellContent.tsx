@@ -36,7 +36,7 @@ const HeadCellContent = ({
   const { startIcon, endIcon, lockIcon } = getHeadIcons(column);
   const tabIndex = isInteractionEnabled && areTabStopsEnabled(keyboard) ? 0 : -1;
 
-  const handleSort = () => isInteractionEnabled && changeSortOrder(column);
+  const handleSort = () => isInteractionEnabled && changeSortOrder(column, column.sortDirection);
 
   const sortDirection = {
     A: translator.get("SNTable.Accessibility.Ascending"),
@@ -67,7 +67,7 @@ const HeadCellContent = ({
         endIcon={endIcon}
         tabIndex={tabIndex}
         disabled={!isInteractionEnabled}
-        onClick={!isInteractionEnabled ? handleSort : () => {}}
+        onClick={!isNewHeadCellMenuEnabled ? handleSort : () => {}}
         isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
       >
         {children}

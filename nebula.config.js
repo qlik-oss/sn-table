@@ -12,7 +12,9 @@ module.exports = {
     replacementStrings,
   },
   serve: {
-    flags: {},
+    flags: {
+      HEAD_CELL_MENU_TEST_FLAG: true,
+    },
     keyboardNavigation: false,
     themes: [
       {
