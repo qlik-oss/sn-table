@@ -9,10 +9,16 @@ import { HEAD_ICON_WRAPPER_SIZE, LOCK_ICON_SIZE } from "../../constants";
 import { BORDER_WIDTH, DEFAULT_FONT_SIZE, PADDING } from "../../styling-defaults";
 
 // ---------- HeadCellContent ----------
+export const AbsolutelyStyledRefAnchor = styled("div")({
+  position: "absolute",
+  left: 0,
+  bottom: 0,
+});
 
 export const StyledSortButton = styled(Button, {
-  shouldForwardProp: (prop: string) => prop !== "isActive" && prop !== "textAlign" && prop !== "disabled",
-})(({ isActive, textAlign, disabled, theme }) => ({
+  shouldForwardProp: (prop: string) =>
+    !["isActive", "textAlign", "disabled", "isNewHeadCellMenuEnabled"].includes(prop),
+})(({ isActive, textAlign, disabled, theme, isNewHeadCellMenuEnabled }) => ({
   textAlign,
   height: "auto",
   maxWidth: "100%",
@@ -24,12 +30,13 @@ export const StyledSortButton = styled(Button, {
   cursor: disabled ? "auto" : "pointer",
   justifySelf: textAlign,
   "&&:focus, &&:hover": {
+    ...(isNewHeadCellMenuEnabled && { background: "transparent" }),
     "& svg": {
-      opacity: isActive ? 1 : 0.5,
+      ...(!isNewHeadCellMenuEnabled && { opacity: isActive ? 1 : 0.5 }),
     },
   },
   "& svg": {
-    opacity: isActive ? 1 : 0,
+    opacity: isActive && !isNewHeadCellMenuEnabled ? 1 : 0,
     fontSize: DEFAULT_FONT_SIZE,
   },
   "& .Mui-disabled": {
@@ -65,6 +72,7 @@ export const StyledHeadCellContent = styled(Box, {
   fontFamily: "inherit",
   "&&:hover, &&:focus-within": {
     "& .sn-table-head-menu-button": { opacity: 1 },
+    "& #nebula-table-utils-head-menu-button": { opacity: 1 },
   },
 
   "& > div:last-child": { alignSelf: "flex-end" },

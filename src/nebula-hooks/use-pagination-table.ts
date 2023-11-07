@@ -18,6 +18,7 @@ import {
 import useAnnounceAndTranslations from "./use-announce-and-translations";
 
 interface UsePaginationTable {
+  isNewHeadCellMenuEnabled: boolean;
   env: Galaxy;
   selectionsAPI: ExtendedSelectionAPI | undefined;
   rootElement: HTMLElement;
@@ -44,6 +45,7 @@ export const initialPageInfo = {
 };
 
 const usePaginationTable = ({
+  isNewHeadCellMenuEnabled,
   app,
   model,
   rootElement,
@@ -120,6 +122,7 @@ const usePaginationTable = ({
         embed,
         applyColumnWidths,
         viewService,
+        isNewHeadCellMenuEnabled,
       },
       reactRoot
     );
@@ -146,6 +149,7 @@ const usePaginationTable = ({
     rect,
     footerContainer,
     isFontLoaded,
+    isNewHeadCellMenuEnabled,
   ]);
 };
 

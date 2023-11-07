@@ -251,6 +251,7 @@ export interface RenderProps {
   embed: stardust.Embed;
   applyColumnWidths: ApplyColumnWidths;
   viewService: ViewService;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface TableWrapperProps {
@@ -259,13 +260,15 @@ export interface TableWrapperProps {
   setPageInfo: SetPageInfo;
   footerContainer: HTMLElement | undefined;
   announce: Announce;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface HeadCellContentProps {
   children: JSX.Element;
   column: Column;
-  isActive: boolean;
+  isSorted: boolean;
   isInteractionEnabled: boolean;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface HeadCellMenuProps {

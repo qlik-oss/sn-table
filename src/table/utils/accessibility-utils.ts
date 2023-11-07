@@ -26,9 +26,9 @@ export const setFocusOnClosetColumnAdjuster = (anchorRef: React.RefObject<HTMLDi
 export const focusHeadMenuButton = (event: React.KeyboardEvent | React.FocusEvent<HTMLDivElement>) => {
   const target = event.target as HTMLDivElement;
   target.setAttribute("tabIndex", "-1");
-  const headMenuButton = target
-    ?.closest(".sn-table-cell")
-    ?.querySelector(".sn-table-head-menu-button") as HTMLButtonElement;
+  const baseElement = target?.closest(".sn-table-cell");
+  const headMenuButton = (baseElement?.querySelector(".sn-table-head-menu-button") ||
+    baseElement?.querySelector("#nebula-table-utils-head-menu-button")) as HTMLButtonElement;
   headMenuButton?.focus();
 };
 

@@ -12,7 +12,11 @@ import { handleHeadKeyDown } from "../../../utils/handle-keyboard";
 import { handleMouseDownToFocusHead } from "../../../utils/handle-mouse";
 import { StyledHeadCell } from "./styles";
 
-const TableHeadWrapper = () => {
+interface TableWrapperProps {
+  isNewHeadCellMenuEnabled: boolean;
+}
+
+const TableHeadWrapper = ({ isNewHeadCellMenuEnabled }: TableWrapperProps) => {
   const { columns } = useContextSelector(TableContext, (value) => value.tableData);
   const { layout, styling, interactions, rootElement, keyboard, viewService } = useContextSelector(
     TableContext,
@@ -38,8 +42,9 @@ const TableHeadWrapper = () => {
     <TableHead>
       <TableRow ref={headRowRef} className="sn-table-row sn-table-head-row">
         {columns.map((column, columnIndex) => {
-          const isActive = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
-          const ariaSort = isActive ? FullSortDirection[column.sortDirection] : undefined;
+          const isSorted = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
+          const ariaSort = isSorted ? FullSortDirection[column.sortDirection] : undefined;
+
           const isLastColumn = columnIndex === columns.length - 1;
           const cellCoord = [0, column.pageColIdx] as [number, number];
 
@@ -70,7 +75,7 @@ const TableHeadWrapper = () => {
           return (
             <StyledHeadCell
               headerStyle={styling.head}
-              style={widthStyle} // add by style to reduce number of classes created by mui
+              style={{ ...widthStyle, ...(isNewHeadCellMenuEnabled ? { padding: "0px", cursor: "pointer" } : {}) }} // add by style to reduce number of classes created by mui
               key={column.id}
               align={column.headTextAlign}
               className="sn-table-head-cell sn-table-cell"
@@ -80,7 +85,12 @@ const TableHeadWrapper = () => {
               onKeyDown={handleKeyDown}
               onMouseDown={handleMouseDown}
             >
-              <HeadCellContent column={column} isActive={isActive} isInteractionEnabled={isInteractionEnabled}>
+              <HeadCellContent
+                column={column}
+                isSorted={isSorted}
+                isInteractionEnabled={isInteractionEnabled}
+                isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
+              >
                 <CellText fontSize={styling.head.fontSize}>{column.label}</CellText>
               </HeadCellContent>
               <ColumnAdjuster column={column} isLastColumn={isLastColumn} />
