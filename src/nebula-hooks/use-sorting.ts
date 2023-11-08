@@ -1,7 +1,11 @@
 import { useMemo } from "@nebula.js/stardust";
 import { Column, HyperCube, SortDirection } from "../types";
 
-export const sortingFactory = (dimensionsLength: number, model: EngineAPI.IGenericObject | undefined) => {
+export const sortingFactory = (
+  dimensionsLength: number,
+  model: EngineAPI.IGenericObject | undefined,
+  isNewHeadCellMenuEnabled: boolean
+) => {
   if (!model) return undefined;
 
   return async (column: Column, newSortDirection: SortDirection) => {
@@ -14,20 +18,25 @@ export const sortingFactory = (dimensionsLength: number, model: EngineAPI.IGener
     const patches: EngineAPI.INxPatch[] = [];
     const topSortIdx = sortOrder[0];
 
+    // Reorder
     if (colIdx !== topSortIdx) {
-      // Reorder
       sortOrder.splice(sortOrder.indexOf(colIdx), 1);
       sortOrder.unshift(colIdx);
+
+      patches.push({
+        qPath: "/qHyperCubeDef/qInterColumnSortOrder",
+        qOp: "Replace",
+        qValue: `[${sortOrder.join(",")}]`,
+      });
     }
 
-    patches.push({
-      qPath: "/qHyperCubeDef/qInterColumnSortOrder",
-      qOp: "Replace",
-      qValue: `[${sortOrder.join(",")}]`,
-    });
-
     // Reverse
-    if ((newSortDirection && newSortDirection !== sortDirection) || (!newSortDirection && colIdx === topSortIdx)) {
+    if (
+      (isNewHeadCellMenuEnabled &&
+        ((newSortDirection && newSortDirection !== sortDirection) || (!newSortDirection && colIdx === topSortIdx))) ||
+      // if flag is not enabled -> we only want to reverse if colIdx is eql to topSortedIdx
+      (!isNewHeadCellMenuEnabled && colIdx == topSortIdx)
+    ) {
       const qPath = `/qHyperCubeDef/${isDim ? "qDimensions" : "qMeasures"}/${idx}/qDef/qReverseSort`;
 
       patches.push({
@@ -41,7 +50,14 @@ export const sortingFactory = (dimensionsLength: number, model: EngineAPI.IGener
   };
 };
 
-const useSorting = (hyperCube: HyperCube, model: EngineAPI.IGenericObject | undefined) =>
-  useMemo(() => sortingFactory(hyperCube.qDimensionInfo.length, model), [hyperCube.qDimensionInfo.length, model]);
+const useSorting = (
+  hyperCube: HyperCube,
+  model: EngineAPI.IGenericObject | undefined,
+  isNewHeadCellMenuEnabled: boolean
+) =>
+  useMemo(
+    () => sortingFactory(hyperCube.qDimensionInfo.length, model, isNewHeadCellMenuEnabled),
+    [hyperCube.qDimensionInfo.length, model, isNewHeadCellMenuEnabled]
+  );
 
 export default useSorting;

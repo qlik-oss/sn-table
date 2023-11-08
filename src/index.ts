@@ -54,10 +54,10 @@ export default function supernova(env: Galaxy) {
       const viewService = useViewService(layout);
       const embed = useEmbed();
       const theme = useExtendedTheme(rootElement, chartBackgroundResolver, objectBackgroundResolver);
-      const changeSortOrder = useSorting(layout.qHyperCube, model); // undefined when taking snapshot
+      const isNewHeadCellMenuEnabled = env.flags.isEnabled("HEAD_CELL_MENU_TEST_FLAG");
+      const changeSortOrder = useSorting(layout.qHyperCube, model, isNewHeadCellMenuEnabled); // undefined when taking snapshot
       const applyColumnWidths = useApplyColumnWidths(layout.qHyperCube, model);
       const isFontLoaded = useWaitForFonts(theme, layout);
-      const isNewHeadCellMenuEnabled = env.flags.isEnabled("HEAD_CELL_MENU_TEST_FLAG");
 
       extendContextMenu();
 
