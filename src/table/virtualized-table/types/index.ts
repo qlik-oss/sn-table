@@ -51,7 +51,6 @@ export interface VirtualTableRenderProps {
 
 export interface TableProps {
   pageInfo: PageInfo;
-  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface HeaderProps {
@@ -62,7 +61,6 @@ export interface HeaderProps {
   headerStyle: GeneratedStyling;
   rowHeight: number;
   columResizeHandler: () => void;
-  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface TotalsProps {

@@ -12,11 +12,7 @@ import { handleHeadKeyDown } from "../../../utils/handle-keyboard";
 import { handleMouseDownToFocusHead } from "../../../utils/handle-mouse";
 import { StyledHeadCell } from "./styles";
 
-interface TableWrapperProps {
-  isNewHeadCellMenuEnabled: boolean;
-}
-
-const TableHeadWrapper = ({ isNewHeadCellMenuEnabled }: TableWrapperProps) => {
+const TableHeadWrapper = () => {
   const { columns } = useContextSelector(TableContext, (value) => value.tableData);
   const { layout, styling, interactions, rootElement, keyboard, viewService } = useContextSelector(
     TableContext,
@@ -26,6 +22,10 @@ const TableHeadWrapper = ({ isNewHeadCellMenuEnabled }: TableWrapperProps) => {
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const isSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI?.isModal());
+  const isNewHeadCellMenuEnabled = useContextSelector(
+    TableContext,
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled
+  );
 
   const headRowRef = useRef<HTMLTableRowElement>(null);
   const isInteractionEnabled = !!interactions.active && !isSelectionMode;
@@ -85,12 +85,7 @@ const TableHeadWrapper = ({ isNewHeadCellMenuEnabled }: TableWrapperProps) => {
               onKeyDown={handleKeyDown}
               onMouseDown={handleMouseDown}
             >
-              <HeadCellContent
-                column={column}
-                isSorted={isSorted}
-                isInteractionEnabled={isInteractionEnabled}
-                isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
-              >
+              <HeadCellContent column={column} isSorted={isSorted} isInteractionEnabled={isInteractionEnabled}>
                 <CellText fontSize={styling.head.fontSize}>{column.label}</CellText>
               </HeadCellContent>
               <ColumnAdjuster column={column} isLastColumn={isLastColumn} />

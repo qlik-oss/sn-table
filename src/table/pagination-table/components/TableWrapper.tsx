@@ -18,7 +18,7 @@ import TableHeadWrapper from "./head/TableHeadWrapper";
 import { StyledTable, StyledTableContainer } from "./styles";
 
 const TableWrapper = (props: TableWrapperProps) => {
-  const { pageInfo, setPageInfo, direction, footerContainer, announce, isNewHeadCellMenuEnabled } = props;
+  const { pageInfo, setPageInfo, direction, footerContainer, announce } = props;
   const { page, rowsPerPage } = pageInfo;
 
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
@@ -140,7 +140,7 @@ const TableWrapper = (props: TableWrapperProps) => {
         data-testid="table-container"
       >
         <StyledTable styling={styling} showRightBorder={showRightBorder} stickyHeader aria-label={tableAriaLabel}>
-          <TableHeadWrapper isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled} />
+          <TableHeadWrapper />
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </StyledTable>
       </StyledTableContainer>

@@ -129,6 +129,11 @@ export interface ContextValue {
   setPage?: stardust.SetStateFn<number>;
   initialDataPages?: EngineAPI.INxDataPage[];
   showRightBorder: boolean;
+  featureFlags: Record<keyof typeof AvaliableFlags, boolean>;
+}
+
+export enum AvaliableFlags {
+  isNewHeadCellMenuEnabled,
 }
 
 export interface CellStyle {
@@ -228,6 +233,7 @@ export interface ContextProviderProps {
   setPage?: stardust.SetStateFn<number>;
   initialDataPages?: EngineAPI.INxDataPage[];
   viewService: ViewService;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface RenderProps {
@@ -260,7 +266,6 @@ export interface TableWrapperProps {
   setPageInfo: SetPageInfo;
   footerContainer: HTMLElement | undefined;
   announce: Announce;
-  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface HeadCellContentProps {
@@ -268,7 +273,6 @@ export interface HeadCellContentProps {
   column: Column;
   isSorted: boolean;
   isInteractionEnabled: boolean;
-  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface HeadCellMenuProps {
