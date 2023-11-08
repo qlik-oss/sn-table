@@ -37,10 +37,8 @@ export const sortingFactory = (
       // if flag is not enabled -> we only want to reverse if colIdx is eql to topSortedIdx
       (!isNewHeadCellMenuEnabled && colIdx == topSortIdx)
     ) {
-      const qPath = `/qHyperCubeDef/${isDim ? "qDimensions" : "qMeasures"}/${idx}/qDef/qReverseSort`;
-
       patches.push({
-        qPath,
+        qPath: `/qHyperCubeDef/${isDim ? "qDimensions" : "qMeasures"}/${idx}/qDef/qReverseSort`,
         qOp: "Replace",
         qValue: (!qReverseSort).toString(),
       });
