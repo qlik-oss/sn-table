@@ -46,10 +46,12 @@ export interface VirtualTableRenderProps {
   pageInfo: PageInfo;
   initialDataPages: EngineAPI.INxDataPage[];
   viewService: ViewService;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface TableProps {
   pageInfo: PageInfo;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface HeaderProps {
@@ -60,6 +62,7 @@ export interface HeaderProps {
   headerStyle: GeneratedStyling;
   rowHeight: number;
   columResizeHandler: () => void;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface TotalsProps {

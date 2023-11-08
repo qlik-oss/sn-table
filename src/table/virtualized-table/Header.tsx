@@ -21,7 +21,8 @@ export const listStyle: React.CSSProperties = {
 };
 
 const Header = (props: HeaderProps) => {
-  const { rect, forwardRef, columns, pageInfo, headerStyle, rowHeight, columResizeHandler } = props;
+  const { rect, forwardRef, columns, pageInfo, headerStyle, rowHeight, columResizeHandler, isNewHeadCellMenuEnabled } =
+    props;
   const { layout, theme } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
 
@@ -36,7 +37,7 @@ const Header = (props: HeaderProps) => {
       itemSize={(index) => columnWidths[index]}
       height={rowHeight}
       width={rect.width}
-      itemData={{ columns, headerStyle, columResizeHandler }}
+      itemData={{ columns, headerStyle, columResizeHandler, isNewHeadCellMenuEnabled }}
     >
       {HeaderCell}
     </VariableSizeList>

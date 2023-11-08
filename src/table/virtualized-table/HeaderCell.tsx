@@ -13,6 +13,7 @@ interface HeaderCellProps {
     columns: Column[];
     headerStyle: GeneratedStyling;
     columResizeHandler: () => void;
+    isNewHeadCellMenuEnabled: boolean;
   };
 }
 
@@ -21,6 +22,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
     columns,
     headerStyle: { ...applicableStyle },
     columResizeHandler,
+    isNewHeadCellMenuEnabled,
   } = data;
 
   const { layout, interactions } = useContextSelector(TableContext, (value) => value.baseProps);
@@ -53,7 +55,12 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
         userSelect: "none",
       }}
     >
-      <HeadCellContent column={column} isActive={isActive} isInteractionEnabled={isInteractionEnabled}>
+      <HeadCellContent
+        column={column}
+        isSorted={isActive}
+        isInteractionEnabled={isInteractionEnabled}
+        isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
+      >
         <CellText wordBreak lines={3}>
           {column.label}
         </CellText>

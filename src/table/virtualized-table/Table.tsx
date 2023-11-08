@@ -16,7 +16,7 @@ import { BodyRef, BodyStyle, TableProps } from "./types";
 import toTableRect, { toStickyContainerRect } from "./utils/to-rect";
 
 const Table = (props: TableProps) => {
-  const { pageInfo } = props;
+  const { pageInfo, isNewHeadCellMenuEnabled } = props;
   const { totalsPosition, columns, paginationNeeded } = useContextSelector(TableContext, (value) => value.tableData);
   const { layout, theme, styling, rect, viewService } = useContextSelector(TableContext, (value) => value.baseProps);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
@@ -126,6 +126,7 @@ const Table = (props: TableProps) => {
               forwardRef={headerRef}
               rowHeight={headerRowHeight}
               columResizeHandler={columResizeHandler}
+              isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
             />
           )}
           {totalsPosition.atTop ? TotalsComponent : null}

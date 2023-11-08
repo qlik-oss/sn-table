@@ -66,6 +66,7 @@ export default function supernova(env: Galaxy) {
       }
 
       useVirtualizedTable({
+        isNewHeadCellMenuEnabled,
         app,
         layout,
         model,

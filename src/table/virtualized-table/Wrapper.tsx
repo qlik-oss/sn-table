@@ -6,7 +6,11 @@ import { StyledTableWrapper } from "../components/styles";
 import { TableContext, useContextSelector } from "../context";
 import Table from "./Table";
 
-const Wrapper = () => {
+interface WrapperProps {
+  isNewHeadCellMenuEnabled: boolean;
+}
+
+const Wrapper = ({ isNewHeadCellMenuEnabled }: WrapperProps) => {
   const { theme, keyboard, translator, interactions, rect, layout } = useContextSelector(
     TableContext,
     (value) => value.baseProps
@@ -20,7 +24,7 @@ const Wrapper = () => {
 
   return (
     <StyledTableWrapper data-testid="sn-table" background={theme.background} dir="ltr">
-      <Table pageInfo={pageInfo} />
+      <Table pageInfo={pageInfo} isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled} />
       <PaginationFooter
         paginationNeeded={paginationNeeded}
         handleChangePage={(currentPage) => setPage(currentPage)}

@@ -80,6 +80,7 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
     pageInfo,
     initialDataPages,
     viewService,
+    isNewHeadCellMenuEnabled,
   } = props;
   const muiTheme = muiSetup("ltr");
 
@@ -106,7 +107,7 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
           initialDataPages={initialDataPages}
           viewService={viewService}
         >
-          <VirtualizedTable />
+          <VirtualizedTable isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled} />
         </TableContextProvider>
       </ThemeProvider>
     </React.StrictMode>
