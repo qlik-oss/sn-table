@@ -168,6 +168,7 @@ export const NebulaListBox = styled("div")(({ theme }) => ({
 export const AdjusterHitArea = styled(Box, {
   shouldForwardProp: (prop: string) => prop !== "isLastColumn",
 })(({ isLastColumn }) => ({
+  touchAction: "none",
   display: "flex",
   position: "absolute",
   height: "100%",
@@ -178,12 +179,13 @@ export const AdjusterHitArea = styled(Box, {
   width: `${isLastColumn ? PADDING : PADDING * 2 + BORDER_WIDTH}px`,
   justifyContent: isLastColumn ? "flex-end" : "center",
   marginLeft: "-4px",
-  "&&:hover:not(:focus, :active)": {
-    "& .sn-table-adjuster-head-border": {
-      background: "#D9D9D9",
+  "&:hover:not(:focus, :active) .sn-table-adjuster-head-border": {
+    background: "#D9D9D9",
+    "@media (hover: none)": {
+      background: "none",
     },
   },
-  "&&:focus-visible, :active": {
+  "&:focus-visible, :active": {
     outline: "none",
     "& .sn-table-adjuster-head-border": {
       background: "#177fe6",

@@ -101,19 +101,19 @@ describe("<ColumnAdjuster />", () => {
   it("should change column width using mouse", async () => {
     renderAdjuster();
     const columnAdjuster = screen.queryByTestId("sn-table-column-adjuster") as HTMLElement;
-    const coord = {
+    const options = {
       clientX: 0,
       clientY: 0,
     };
 
-    fireEvent.mouseDown(columnAdjuster, coord);
-    coord.clientX = 100;
-    fireEvent.mouseMove(columnAdjuster, coord);
+    fireEvent.mouseDown(columnAdjuster, options);
+    options.clientX = 100;
+    fireEvent.mouseMove(columnAdjuster, options);
     await waitFor(() => {
       expect(setColumnWidths).toHaveBeenNthCalledWith(1, [300, 200]);
     });
 
-    fireEvent.mouseUp(columnAdjuster, coord);
+    fireEvent.mouseUp(columnAdjuster, options);
     await waitFor(() => {
       expect(applyColumnWidths).toHaveBeenNthCalledWith(1, { type: ColumnWidthTypes.PIXELS, pixels: 300 }, column);
     });
@@ -137,6 +137,52 @@ describe("<ColumnAdjuster />", () => {
     fireEvent.doubleClick(columnAdjuster);
     await waitFor(() => {
       expect(applyColumnWidths).toHaveBeenNthCalledWith(1, { type: ColumnWidthTypes.FIT_TO_CONTENT }, column);
+    });
+  });
+
+  it("should change column width using touch", async () => {
+    renderAdjuster();
+    const columnAdjuster = screen.queryByTestId("sn-table-column-adjuster") as HTMLElement;
+    const options = {
+      touches: [
+        {
+          clientX: 0,
+          clientY: 0,
+        },
+      ],
+    };
+
+    fireEvent.touchStart(columnAdjuster, options);
+    options.touches[0].clientX = 100;
+    fireEvent.touchMove(columnAdjuster, options);
+    await waitFor(() => {
+      expect(setColumnWidths).toHaveBeenNthCalledWith(1, [300, 200]);
+    });
+
+    fireEvent.touchEnd(columnAdjuster, options);
+    await waitFor(() => {
+      expect(applyColumnWidths).toHaveBeenNthCalledWith(1, { type: ColumnWidthTypes.PIXELS, pixels: 300 }, column);
+    });
+  });
+
+  it("should mot change column width using touch and there are more than one touch", async () => {
+    renderAdjuster();
+    const columnAdjuster = screen.queryByTestId("sn-table-column-adjuster") as HTMLElement;
+    const options = {
+      touches: [
+        {
+          clientX: 0,
+          clientY: 0,
+        },
+        {},
+      ],
+    };
+
+    fireEvent.touchStart(columnAdjuster, options);
+    options.touches[0].clientX = 100;
+    fireEvent.touchMove(columnAdjuster, options);
+    await waitFor(() => {
+      expect(setColumnWidths).not.toHaveBeenCalled();
     });
   });
 });
