@@ -5,7 +5,6 @@ import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-exten
 import React from "react";
 import { EMPTY_TABLE_DATA, TableContextProvider } from "../table/context";
 import muiSetup from "../table/mui-setup";
-import { AvaliableFlags } from "../table/types";
 import {
   ApplyColumnWidths,
   ChangeSortOrder,

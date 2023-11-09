@@ -35,7 +35,7 @@ export const sortingFactory = (
       (isNewHeadCellMenuEnabled &&
         ((newSortDirection && newSortDirection !== sortDirection) || (!newSortDirection && colIdx === topSortIdx))) ||
       // if flag is not enabled -> we only want to reverse if colIdx is eql to topSortedIdx
-      (!isNewHeadCellMenuEnabled && colIdx == topSortIdx)
+      (!isNewHeadCellMenuEnabled && colIdx === topSortIdx)
     ) {
       patches.push({
         qPath: `/qHyperCubeDef/${isDim ? "qDimensions" : "qMeasures"}/${idx}/qDef/qReverseSort`,

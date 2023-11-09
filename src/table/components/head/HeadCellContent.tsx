@@ -7,7 +7,7 @@ import { HeadCellContentProps } from "../../types";
 import { areTabStopsEnabled, setFocusOnClosetColumnAdjuster } from "../../utils/accessibility-utils";
 import getHeadIcons from "../../utils/get-head-icons";
 import { handleHeadCellMenuKeyDown } from "../../utils/handle-keyboard";
-import { default as OldHeadCellMenu } from "./HeadCellMenu";
+import OldHeadCellMenu from "./HeadCellMenu";
 import {
   AbsolutelyStyledRefAnchor,
   StyledHeadCellContent,
@@ -98,7 +98,7 @@ const HeadCellContent = ({ children, column, isSorted, isInteractionEnabled }: H
               searchRelatedArgs={{ embed, listboxRef }}
               selectionRelatedArgs={{ app, model }}
               adjustHeaderSizeRelatedArgs={{ setFocusOnClosetHeaderAdjuster: setFocusOnClosetColumnAdjuster }}
-              shouldShowMenuIcon={true}
+              shouldShowMenuIcon
             />
             <AbsolutelyStyledRefAnchor ref={listboxRef} />
             <AbsolutelyStyledRefAnchor ref={anchorRef} />

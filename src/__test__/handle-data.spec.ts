@@ -60,7 +60,7 @@ describe("handle-data", () => {
     });
 
     it("should return column info with actively sorted status as true", () => {
-      layout = layout = generateLayout(2, 2, 200, [0, 2, 1, 3], [{ qText: "-" }, { qText: "200" }], [1]);
+      layout = generateLayout(2, 2, 200, [0, 2, 1, 3], [{ qText: "-" }, { qText: "200" }], [1]);
       const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
       expect(columnInfo).toEqual(getExpectedInfo({ isDim: true, isActivelySorted: true }));
     });
