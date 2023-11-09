@@ -21,7 +21,8 @@ export function generateLayout(
   nMeas: number,
   nRows: number,
   qColumnOrder: number[] = [],
-  qGrandTotalRow: Record<string, string>[] = []
+  qGrandTotalRow: Record<string, string>[] = [],
+  qEffectiveInterColumnSortOrder: number[] = [0]
 ): TableLayout {
   const createField = (idx: number) => ({
     qFallbackTitle: `title-${idx}`,
@@ -55,6 +56,7 @@ export function generateLayout(
       qColumnOrder,
       qSize: { qcx: nDims + nMeas, qcy: nRows },
       qDataPages: [],
+      qEffectiveInterColumnSortOrder,
     } as unknown as HyperCube,
     totals,
     qInfo: {

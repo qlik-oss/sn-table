@@ -8,7 +8,7 @@ import HeadCellContent from "../HeadCellContent";
 
 describe("<HeadCellContent />", () => {
   let column: Column;
-  let isActive: boolean;
+  let isSorted: boolean;
   let isInteractionEnabled: boolean;
   let layout: TableLayout;
   let changeSortOrder: ChangeSortOrder;
@@ -16,7 +16,7 @@ describe("<HeadCellContent />", () => {
   const renderTableHead = (cellCoordMock?: [number, number]) =>
     render(
       <TestWithProviders cellCoordMock={cellCoordMock} layout={layout} changeSortOrder={changeSortOrder}>
-        <HeadCellContent column={column} isActive={isActive} isInteractionEnabled={isInteractionEnabled}>
+        <HeadCellContent column={column} isSorted={isSorted} isInteractionEnabled={isInteractionEnabled}>
           <CellText>{column.label}</CellText>
         </HeadCellContent>
       </TestWithProviders>
@@ -43,18 +43,18 @@ describe("<HeadCellContent />", () => {
       qInfo: { qId: "12345" },
     } as TableLayout;
     changeSortOrder = jest.fn() as ChangeSortOrder;
-    isActive = true;
+    isSorted = true;
     isInteractionEnabled = true;
   });
 
-  it("should show the sort icon when isActive is true", () => {
+  it("should show the sort icon when isSorted is true", () => {
     const { baseElement } = renderTableHead();
 
     expect(baseElement.querySelector(".MuiButton-iconSizeSmall")).toBeVisible();
   });
 
-  it("should show the sort icon when isActive is false but the cell is focused or hovered", () => {
-    isActive = false;
+  it("should show the sort icon when isSorted is false but the cell is focused or hovered", () => {
+    isSorted = false;
     const { baseElement } = renderTableHead();
 
     const labelButton = screen.getByText(column.label);
@@ -144,7 +144,7 @@ describe("<HeadCellContent />", () => {
     renderTableHead();
     fireEvent.click(screen.getByText(column.label));
 
-    expect(changeSortOrder).toHaveBeenCalledWith(column);
+    expect(changeSortOrder).toHaveBeenCalledWith(column, "A");
   });
 
   it("should not call changeSortOrder when clicking a header cell and isInteractionEnabled is false", () => {
