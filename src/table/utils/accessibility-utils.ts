@@ -23,7 +23,7 @@ export const setFocusOnClosetColumnAdjuster = (anchorRef: React.RefObject<HTMLDi
 /**
  * Removes the tab stop for adjuster hit area and focus the head menu button
  */
-export const focusHeadMenuButton = (event: React.KeyboardEvent | React.FocusEvent<HTMLDivElement>) => {
+export const focusHeadMenuButton = (event: React.KeyboardEvent | React.FocusEvent) => {
   const target = event.target as HTMLDivElement;
   target.setAttribute("tabIndex", "-1");
   const headMenuButton = target

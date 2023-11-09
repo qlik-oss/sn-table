@@ -1,12 +1,13 @@
+import { ColumnWidth } from "@qlik/nebula-table-utils/lib/components/ColumnAdjuster";
+import { ColumnWidthType } from "@qlik/nebula-table-utils/lib/constants";
 import { generateLayout } from "../../__test__/generate-test-data";
-import { ColumnWidthTypes } from "../../table/constants";
-import { ApplyColumnWidths, Column, ColumnWidth, HyperCube } from "../../types";
+import { ApplyColumnWidths, Column, HyperCube } from "../../types";
 import { applyColumnWidthsFactory } from "../use-apply-column-widths";
 
 describe("applyColumnWidths", () => {
   const dimPath = "/qHyperCubeDef/qDimensions/0/qDef/columnWidth";
   const meaPath = "/qHyperCubeDef/qMeasures/0/qDef/columnWidth";
-  const oldColumnWidth = { type: ColumnWidthTypes.PERCENTAGE, percentage: 20 };
+  const oldColumnWidth = { type: ColumnWidthType.Percentage, percentage: 20 };
   let model: EngineAPI.IGenericObject;
   let qHyperCube: HyperCube;
   let newColumnWidth: ColumnWidth;
@@ -24,7 +25,7 @@ describe("applyColumnWidths", () => {
       colIdx: 0,
     } as unknown as Column;
     newColumnWidth = {
-      type: ColumnWidthTypes.PIXELS,
+      type: ColumnWidthType.Pixels,
       pixels: 200,
     };
 
@@ -63,7 +64,7 @@ describe("applyColumnWidths", () => {
 
   it("should call applyPatches with qOp Replace for measure", () => {
     column = { isDim: false, colIdx: 1 } as unknown as Column;
-    qHyperCube.qMeasureInfo[0].columnWidth = { type: ColumnWidthTypes.PERCENTAGE, percentage: 20 };
+    qHyperCube.qMeasureInfo[0].columnWidth = { type: ColumnWidthType.Percentage, percentage: 20 };
 
     applyColumnWidths(newColumnWidth, column);
     expect(model.applyPatches).toHaveBeenCalledWith(

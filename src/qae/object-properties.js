@@ -88,8 +88,7 @@ const properties = {
 
 /**
  * Extends `NxDimension`, see Engine API: `NxDimension`
- * @name DimensionProperties
- * @type object
+ * @typedef {object} DimensionProperties
  * @extends NxDimension
  * @property {InlineDimensionDef} qDef
  * @property {AttributeExpressionProperties[]} qAttributeExpressions
@@ -97,8 +96,7 @@ const properties = {
 
 /**
  * Extends `NxMeasure`, see Engine API: `NxMeasure`
- * @name MeasureProperties
- * @type object
+ * @typedef {object} MeasureProperties
  * @extends NxMeasure
  * @property {InlineMeasureDef} qDef
  * @property {AttributeExpressionProperties[]} qAttributeExpressions
@@ -106,8 +104,7 @@ const properties = {
 
 /**
  * Extends `NxInlineDimensionDef`, see Engine API: `NxInlineDimensionDef`.
- * @name InlineDimensionDef
- * @type object
+ * @typedef {object} InlineDimensionDef
  * @extends NxInlineDimensionDef
  * @property {TextAlign=} textAlign
  * @property {ColumnWidth=} columnWidth
@@ -115,8 +112,7 @@ const properties = {
 
 /**
  * Extends `NxInlineMeasureDef`, see Engine API: `NxInlineMeasureDef`.
- * @name InlineMeasureDef
- * @type object
+ * @typedef {object} InlineMeasureDef
  * @extends NxInlineMeasureDef
  * @property {TextAlign=} textAlign
  * @property {ColumnWidth=} columnWidth
@@ -125,16 +121,14 @@ const properties = {
 /**
  * Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`.
  * Column specific styling overrides general styling, that is defined in `components`.
- * @name AttributeExpressionProperties
- * @type object
+ * @typedef {object} AttributeExpressionProperties
  * @extends NxAttrExprDef - expression resolving into a valid color
  * @property {('cellForegroundColor'|'cellBackgroundColor')} id - specifying what the color applies to
  */
 
 /**
  * Holds text alignment for a specific column.
- * @name TextAlign
- * @type object
+ * @typedef {object} TextAlign
  * @extends NxInlineDimensionDef
  * @property {boolean} auto - If true, sets the alignment based on the type of column (left for dimension, right for measure)
  * @property {('left'|'center'|'right')} align - Is used (and mandatory) if `auto` is false
@@ -142,8 +136,7 @@ const properties = {
 
 /**
  * Column width info
- * @name ColumnWidth
- * @type object
+ * @typedef {object} ColumnWidth
  * @property {('auto' | 'FitToContent' | 'pixels' | 'percentage')} type - Defines how the column width is set. `auto` calculates the width(s) so the total table width equals the chart width. `fitToContent` calculates a width based on the cells' content. `pixels` uses a specified pixel value. `percentage` sets the column width to specified percentage of the chart width
  * @property {number=} pixels - Is used (and mandatory) if type is `pixels`
  * @property {number=} percentage - Is used (and mandatory) if type is `percentage`
@@ -153,8 +146,7 @@ const properties = {
  * General styling for all columns.
  * Split up into header and content (body) styling.
  * If any property is not set, default values specific for each property is used.
- * @name Component
- * @type object
+ * @typedef {object} Component
  * @property {string} key - This should be set to `theme`
  * @property {ContentStyling=} content
  * @property {HeaderStyling=} header
@@ -162,8 +154,7 @@ const properties = {
 
 /**
  * Holds properties for font size, font color and hover styling.
- * @name ContentStyling
- * @type object
+ * @typedef {object} ContentStyling
  * @property {number=} fontSize - Defaults to `14`
  * @property {PaletteColor=} fontColor - Defaults to `#404040`
  * @property {boolean=} hoverEffect - Toggles hover effect
@@ -174,16 +165,14 @@ const properties = {
 
 /**
  * Holds properties for font size and color.
- * @name HeaderStyling
- * @type object
+ * @typedef {object} HeaderStyling
  * @property {number=} fontSize - Defaults to `14`
  * @property {PaletteColor=} fontColor - Defaults to `#404040`
  */
 
 /**
  * Color information structure. Holds the actual color and index in palette
- * @name PaletteColor
- * @type object
+ * @typedef {object} PaletteColor
  * @property {string} color - Color as hex string (mandatory if index: -1)
  * @property {number} index - Index in palette
  */

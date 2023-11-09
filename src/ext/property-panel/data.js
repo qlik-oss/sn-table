@@ -1,6 +1,6 @@
 import Modifiers from "qlik-modifiers";
 // eslint-disable-next-line import/no-unresolved, import/extensions
-import { ColumnWidthTypes, MAX_COLUMN_PERCENTAGE_WIDTH, MAX_COLUMN_WIDTH } from "../../table/constants";
+import { ColumnWidthType, ColumnWidthValues } from "@qlik/nebula-table-utils/lib/constants";
 
 const columnCommonHidden = {
   autoSort: {
@@ -170,23 +170,23 @@ const getColumnResize = {
     translation: "Object.Table.Column.Width",
     options: [
       {
-        value: ColumnWidthTypes.AUTO,
+        value: ColumnWidthType.Auto,
         translation: "Common.Auto",
       },
       {
-        value: ColumnWidthTypes.FIT_TO_CONTENT,
+        value: ColumnWidthType.FitToContent,
         translation: "Object.Table.Column.FitToContent",
       },
       {
-        value: ColumnWidthTypes.PIXELS,
+        value: ColumnWidthType.Pixels,
         translation: "Object.Table.Column.Pixels",
       },
       {
-        value: ColumnWidthTypes.PERCENTAGE,
+        value: ColumnWidthType.percentage,
         translation: "Object.Table.Column.Percentage",
       },
     ],
-    defaultValue: ColumnWidthTypes.AUTO,
+    defaultValue: ColumnWidthType.auto,
   },
   sizePixels: {
     ref: "qDef.columnWidth.pixels",
@@ -194,12 +194,12 @@ const getColumnResize = {
     type: "number",
     expression: "optional",
     defaultValue: 200,
-    show: (data) => data.qDef.columnWidth?.type === ColumnWidthTypes.PIXELS,
+    show: (data) => data.qDef.columnWidth?.type === ColumnWidthType.Pixels,
     change(data) {
       data.qDef.columnWidth.pixels =
         data.qDef.columnWidth.pixels === undefined
           ? data.qDef.columnWidth.pixels
-          : Math.max(1, Math.min(MAX_COLUMN_WIDTH, data.qDef.columnWidth.pixels));
+          : Math.max(1, Math.min(ColumnWidthValues.PixelsMax, data.qDef.columnWidth.pixels));
     },
   },
   sizePercentage: {
@@ -208,12 +208,12 @@ const getColumnResize = {
     type: "number",
     expression: "optional",
     defaultValue: 20,
-    show: (data) => data.qDef.columnWidth?.type === ColumnWidthTypes.PERCENTAGE,
+    show: (data) => data.qDef.columnWidth?.type === ColumnWidthType.Percentage,
     change(data) {
       data.qDef.columnWidth.percentage =
         data.qDef.columnWidth.percentage === undefined
           ? data.qDef.columnWidth.percentage
-          : Math.max(1, Math.min(MAX_COLUMN_PERCENTAGE_WIDTH, data.qDef.columnWidth.percentage));
+          : Math.max(1, Math.min(ColumnWidthValues.PixelsMax, data.qDef.columnWidth.percentage));
     },
   },
 };
@@ -249,7 +249,7 @@ const dimensionItems = {
     translation: "properties.dimensions.showNull",
     inverted: true,
   },
-  createMasterItemButton: {}, // To be filled by DataAssetsPanel in anlytics
+  createMasterItemButton: {}, // To be filled by DataAssetsPanel in analytics
   divider: { uses: "divider" },
   dimensionLimits: {
     uses: "dimensions.items.dimensionLimits",
@@ -275,7 +275,7 @@ const getMeasureItems = (env) => ({
   numberFormatting: {
     uses: "measures.items.numberFormatting",
   },
-  createMasterItemButton: {}, // To be filled by DataAssetsPanel in anlytics
+  createMasterItemButton: {}, // To be filled by DataAssetsPanel in analytics
   divider: { uses: "divider" },
   totalsAggr: getTotalsAggr(env),
 });

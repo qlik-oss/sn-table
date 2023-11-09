@@ -1,4 +1,5 @@
-import { Align, ColumnWidthType, PropTree } from "../../../types";
+import { ColumnWidthType } from "@qlik/nebula-table-utils/lib/constants";
+import { Align, PropTree } from "../../../types";
 import exportProperties, { getColumnWidths } from "../export-properties";
 
 describe("exportProperties", () => {

@@ -1,5 +1,6 @@
 import { Direction } from "@mui/material";
 import { stardust } from "@nebula.js/stardust";
+import { ColumnWidth } from "@qlik/nebula-table-utils/lib/components/ColumnAdjuster";
 
 export type Align = "left" | "center" | "right";
 
@@ -160,13 +161,6 @@ export interface Row {
 }
 
 export type SortDirection = "A" | "D";
-export type ColumnWidthType = "auto" | "fitToContent" | "pixels" | "percentage";
-
-export interface ColumnWidth {
-  type: ColumnWidthType;
-  pixels?: number;
-  percentage?: number;
-}
 
 export interface Column {
   id: string;
