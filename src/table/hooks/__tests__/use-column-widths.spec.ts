@@ -130,20 +130,20 @@ describe("use-column-widths", () => {
 
       it("should return one MIN_COLUMN_WIDTH for small percentage and equal sizes for two columns with auto", () => {
         columns[1].columnWidth.type = ColumnWidthType.Percentage;
-        columns[1].columnWidth.percentage = 10;
+        columns[1].columnWidth.percentage = 1;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([240, ColumnWidthValues.PixelsMin, 240]);
+        expect(widths).toEqual([285, ColumnWidthValues.PixelsMin, 285]);
         expect(getTotalWidth(widths)).toBe(tableWidth);
       });
 
       it("should return one large column and equal sizes for two columns with auto, that are MIN_COLUMN_WIDTH", () => {
         columns[1].columnWidth.type = ColumnWidthType.Percentage;
-        columns[1].columnWidth.percentage = 150;
+        columns[1].columnWidth.percentage = 100;
 
         const widths = getColumnWidthsState();
-        // expect(widths).toEqual([ColumnWidthValues.PixelsMin, 900, ColumnWidthValues.PixelsMin]);
-        expect(getTotalWidth(widths)).toBe(tableWidth * 1.5 + ColumnWidthValues.PixelsMin * 2);
+        expect(widths).toEqual([ColumnWidthValues.PixelsMin, 600, ColumnWidthValues.PixelsMin]);
+        expect(getTotalWidth(widths)).toBe(tableWidth + ColumnWidthValues.PixelsMin * 2);
       });
 
       it("should return one size for fitToContent and equal sizes for two columns with auto", () => {

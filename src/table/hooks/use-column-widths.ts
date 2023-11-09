@@ -71,7 +71,7 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getFitToC
     // divides remaining width evenly between auto columns
     const autoWidth = sumAutoWidths / autoColumnIndexes.length;
     autoColumnIndexes.forEach((autoIdx) => {
-      columnWidths[autoIdx] = Math.max(ColumnWidthValues.AutoMin, autoWidth);
+      columnWidths[autoIdx] = Math.max(ColumnWidthValues.PixelsMin, autoWidth);
     });
   }
 
