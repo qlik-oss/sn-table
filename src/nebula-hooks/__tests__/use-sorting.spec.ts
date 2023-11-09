@@ -6,7 +6,7 @@ describe("use-sorting", () => {
   describe("sortingFactory", () => {
     it("should return undefined when model is undefined", async () => {
       const model = undefined;
-      const changeSortOrder = sortingFactory(0, model);
+      const changeSortOrder = sortingFactory(0, model, false);
       expect(changeSortOrder).toBeUndefined();
     });
   });
@@ -16,7 +16,7 @@ describe("use-sorting", () => {
     let column: Column;
     let layout: TableLayout;
     let model: EngineAPI.IGenericObject;
-    let changeSortOrder: (column: Column, sortDirection?: SortDirection) => Promise<void>;
+    let changeSortOrder: (column: Column, sortDirection: SortDirection) => Promise<void>;
     let expectedPatches: EngineAPI.INxPatch[];
 
     beforeEach(() => {
@@ -32,7 +32,7 @@ describe("use-sorting", () => {
             } as unknown as HyperCube,
           }),
       } as unknown as EngineAPI.IGenericObject;
-      changeSortOrder = sortingFactory(layout.qHyperCube.qDimensionInfo.length, model) as ChangeSortOrder;
+      changeSortOrder = sortingFactory(layout.qHyperCube.qDimensionInfo.length, model, false) as ChangeSortOrder;
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -46,7 +46,7 @@ describe("use-sorting", () => {
         },
       ];
 
-      await changeSortOrder(column);
+      await changeSortOrder(column, "A");
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });
 
@@ -60,7 +60,7 @@ describe("use-sorting", () => {
         },
       ];
 
-      await changeSortOrder(column);
+      await changeSortOrder(column, "A");
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });
 
@@ -76,7 +76,7 @@ describe("use-sorting", () => {
         },
       ];
 
-      await changeSortOrder(column);
+      await changeSortOrder(column, "A");
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });
   });
