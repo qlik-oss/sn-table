@@ -75,7 +75,7 @@ const TableHeadWrapper = () => {
           return (
             <StyledHeadCell
               headerStyle={styling.head}
-              style={{ ...widthStyle, ...(isNewHeadCellMenuEnabled ? { cursor: "pointer" } : {}) }} // add by style to reduce number of classes created by mui
+              style={widthStyle} // add by style to reduce number of classes created by mui
               key={column.id}
               align={column.headTextAlign}
               className="sn-table-head-cell sn-table-cell"
@@ -84,6 +84,7 @@ const TableHeadWrapper = () => {
               title={interactions.passive ? column.label : undefined}
               onKeyDown={handleKeyDown}
               onMouseDown={handleMouseDown}
+              isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
             >
               <HeadCellContent column={column} isSorted={isSorted} isInteractionEnabled={isInteractionEnabled}>
                 <CellText fontSize={styling.head.fontSize}>{column.label}</CellText>
