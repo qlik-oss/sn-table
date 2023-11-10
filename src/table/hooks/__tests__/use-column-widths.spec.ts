@@ -133,7 +133,7 @@ describe("use-column-widths", () => {
         columns[1].columnWidth.percentage = 1;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([285, ColumnWidthValues.PixelsMin, 285]);
+        expect(widths).toEqual([240, ColumnWidthValues.PixelsMinTable, 240]);
         expect(getTotalWidth(widths)).toBe(tableWidth);
       });
 
@@ -142,8 +142,8 @@ describe("use-column-widths", () => {
         columns[1].columnWidth.percentage = 100;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([ColumnWidthValues.PixelsMin, 600, ColumnWidthValues.PixelsMin]);
-        expect(getTotalWidth(widths)).toBe(tableWidth + ColumnWidthValues.PixelsMin * 2);
+        expect(widths).toEqual([ColumnWidthValues.PixelsMinTable, 600, ColumnWidthValues.PixelsMinTable]);
+        expect(getTotalWidth(widths)).toBe(tableWidth + ColumnWidthValues.PixelsMinTable * 2);
       });
 
       it("should return one size for fitToContent and equal sizes for two columns with auto", () => {

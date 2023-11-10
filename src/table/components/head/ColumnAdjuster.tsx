@@ -32,6 +32,7 @@ const ColumnAdjusterWrapper = ({ column, isLastColumn, onColumnResize }: Adjuste
 
   const handleBlur = (event: React.FocusEvent | React.KeyboardEvent) => focusHeadMenuButton(event);
 
+  // TODO: Pass the new header flag here so we can adjust the min width accordingly
   return (
     <ColumnAdjuster
       columnWidth={columnWidths[pageColIdx]}

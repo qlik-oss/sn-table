@@ -38,7 +38,7 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getFitToC
       let newWidth = 0;
 
       const addKnownWidth = () => {
-        columnWidths[idx] = Math.min(ColumnWidthValues.PixelsMax, Math.max(ColumnWidthValues.PixelsMin, newWidth));
+        columnWidths[idx] = Math.min(ColumnWidthValues.PixelsMax, Math.max(ColumnWidthValues.PixelsMinTable, newWidth));
         sumAutoWidths -= columnWidths[idx];
       };
 
@@ -71,7 +71,7 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getFitToC
     // divides remaining width evenly between auto columns
     const autoWidth = sumAutoWidths / autoColumnIndexes.length;
     autoColumnIndexes.forEach((autoIdx) => {
-      columnWidths[autoIdx] = Math.max(ColumnWidthValues.PixelsMin, autoWidth);
+      columnWidths[autoIdx] = Math.max(ColumnWidthValues.PixelsMinTable, autoWidth);
     });
   }
 
