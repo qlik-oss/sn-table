@@ -271,7 +271,6 @@ export interface TableWrapperProps {
 export interface HeadCellContentProps {
   children: JSX.Element;
   column: Column;
-  isSorted: boolean;
   isInteractionEnabled: boolean;
 }
 

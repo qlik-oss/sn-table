@@ -42,8 +42,7 @@ const TableHeadWrapper = () => {
     <TableHead>
       <TableRow ref={headRowRef} className="sn-table-row sn-table-head-row">
         {columns.map((column, columnIndex) => {
-          const isSorted = layout.qHyperCube.qEffectiveInterColumnSortOrder[0] === column.colIdx;
-          const ariaSort = isSorted ? FullSortDirection[column.sortDirection] : undefined;
+          const ariaSort = column.isActivelySorted ? FullSortDirection[column.sortDirection] : undefined;
 
           const isLastColumn = columnIndex === columns.length - 1;
           const cellCoord = [0, column.pageColIdx] as [number, number];
@@ -86,7 +85,7 @@ const TableHeadWrapper = () => {
               onMouseDown={handleMouseDown}
               isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
             >
-              <HeadCellContent column={column} isSorted={isSorted} isInteractionEnabled={isInteractionEnabled}>
+              <HeadCellContent column={column} isInteractionEnabled={isInteractionEnabled}>
                 <CellText fontSize={styling.head.fontSize}>{column.label}</CellText>
               </HeadCellContent>
               <ColumnAdjuster column={column} isLastColumn={isLastColumn} />

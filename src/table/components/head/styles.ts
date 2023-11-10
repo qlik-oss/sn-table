@@ -17,8 +17,8 @@ export const AbsolutelyStyledRefAnchor = styled("div")({
 
 export const StyledSortButton = styled(Button, {
   shouldForwardProp: (prop: string) =>
-    !["isActive", "textAlign", "disabled", "isNewHeadCellMenuEnabled"].includes(prop),
-})(({ isActive, textAlign, disabled, theme, isNewHeadCellMenuEnabled }) => ({
+    !["isActivelySorted", "textAlign", "disabled", "isNewHeadCellMenuEnabled"].includes(prop),
+})(({ isActivelySorted, textAlign, disabled, theme, isNewHeadCellMenuEnabled }) => ({
   textAlign,
   height: "auto",
   maxWidth: "100%",
@@ -32,11 +32,11 @@ export const StyledSortButton = styled(Button, {
   "&&:focus, &&:hover": {
     ...(isNewHeadCellMenuEnabled && { background: "transparent" }),
     "& svg": {
-      ...(!isNewHeadCellMenuEnabled && { opacity: isActive ? 1 : 0.5 }),
+      ...(!isNewHeadCellMenuEnabled && { opacity: isActivelySorted ? 1 : 0.5 }),
     },
   },
   "& svg": {
-    opacity: isActive ? 1 : 0,
+    opacity: isActivelySorted ? 1 : 0,
     fontSize: DEFAULT_FONT_SIZE,
   },
   "& .Mui-disabled": {

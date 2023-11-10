@@ -16,7 +16,7 @@ import {
   VisuallyHidden,
 } from "./styles";
 
-const HeadCellContent = ({ children, column, isSorted, isInteractionEnabled }: HeadCellContentProps) => {
+const HeadCellContent = ({ children, column, isInteractionEnabled }: HeadCellContentProps) => {
   const { keyboard, translator, changeSortOrder, interactions, embed, app, model } = useContextSelector(
     TableContext,
     (value) => value.baseProps
@@ -57,7 +57,7 @@ const HeadCellContent = ({ children, column, isSorted, isInteractionEnabled }: H
 
       <StyledSortButton
         className="sn-table-head-label"
-        isActive={isSorted}
+        isActivelySorted={column.isActivelySorted}
         textAlign={column.headTextAlign}
         color="inherit"
         size="small"
