@@ -93,11 +93,18 @@ export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | "au
 /**
  * Gets all column info.
  */
-export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: number, visibleColIdx: number): Column {
-  const { qDimensionInfo, qMeasureInfo, qEffectiveInterColumnSortOrder } = layout.qHyperCube;
+export function getColumnInfo(
+  layout: TableLayout,
+  colIdx: number,
+  pageColIdx: number,
+  visibleColIdx: number,
+  qEffectiveInterColumnSortOrder: number[]
+): Column {
+  const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIdx < numDims;
   const info = isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims];
+  const isActivelySorted = colIdx === qEffectiveInterColumnSortOrder[0];
 
   let fieldIndex = 0;
   let fieldId = "";
@@ -112,10 +119,6 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
     selectionColIdx = visibleColIdx;
     ({ qDimensionType } = dimInfo);
   }
-
-  // TODO:
-  // check about hidden columns and why we need to get it from properties
-  const isActivelySorted = colIdx === qEffectiveInterColumnSortOrder[0];
 
   const {
     qFallbackTitle,
@@ -182,14 +185,20 @@ const getVisibleColumnOrder = (
   return { visibleColumnsOrder, visibleColumnIndexes };
 };
 
+export const getQEffectiveInterColumnSortOrder = async (model: EngineAPI.IGenericObject): Promise<number[]> => {
+  const properties = await model.getEffectiveProperties();
+  return properties.qHyperCubeDef.qInterColumnSortOrder;
+};
+
 /**
  * Gets the column order and generates the column info for visible columns.
  */
-export const getColumns = (layout: TableLayout) => {
+export const getColumns = async (layout: TableLayout, model: EngineAPI.IGenericObject) => {
   const {
     qHyperCube: { qColumnOrder, qDimensionInfo, qMeasureInfo },
   } = layout;
 
+  const qEffectiveInterColumnSortOrder = await getQEffectiveInterColumnSortOrder(model);
   const columnsLength = qDimensionInfo.length + qMeasureInfo.length;
   const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
 
@@ -200,7 +209,7 @@ export const getColumns = (layout: TableLayout) => {
   );
 
   return visibleColumnsOrder.map((colIdx, pageColIdx) =>
-    getColumnInfo(layout, colIdx, pageColIdx, visibleColumnIndexes[colIdx])
+    getColumnInfo(layout, colIdx, pageColIdx, visibleColumnIndexes[colIdx], qEffectiveInterColumnSortOrder)
   );
 };
 /**
@@ -237,7 +246,7 @@ export default async function manageData(
 
   const paginationNeeded = totalRowCount > 10; // TODO: This might not be true if you have > 1000 columns
   const totalsPosition = getTotalPosition(layout, viewService);
-  const columns = getColumns(layout);
+  const columns = await getColumns(layout, model);
 
   const isSnapshot = !!layout.snapshotData;
   const dataPages = isSnapshot

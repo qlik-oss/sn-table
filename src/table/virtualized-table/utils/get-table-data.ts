@@ -1,15 +1,16 @@
 import { stardust } from "@nebula.js/stardust";
-import { getColumns, getTotalPosition } from "../../../handle-data";
+import { getColumns, getQEffectiveInterColumnSortOrder, getTotalPosition } from "../../../handle-data";
 import { TableData, TableLayout, ViewService } from "../../../types";
 import { MAX_PAGE_SIZE } from "../constants";
 
-export default function getVirtualScrollTableData(
+export default async function getVirtualScrollTableData(
+  model: EngineAPI.IGenericObject,
   layout: TableLayout,
   interactions: stardust.Interactions,
   viewService: ViewService
-): TableData {
+): Promise<TableData | null> {
   const totalsPosition = getTotalPosition(layout, viewService);
-  const columns = getColumns(layout);
+  const columns = await getColumns(layout, model);
   const totalRowCount = layout.qHyperCube.qSize.qcy;
   const pageSize = Math.min(MAX_PAGE_SIZE, totalRowCount);
   const paginationNeeded = totalRowCount > MAX_PAGE_SIZE && !!interactions.active;

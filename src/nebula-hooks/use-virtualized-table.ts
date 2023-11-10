@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { stardust, useEffect, useMemo } from "@nebula.js/stardust";
+import { stardust, useEffect, usePromise } from "@nebula.js/stardust";
 import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
 import { Root } from "react-dom/client";
 import renderAsPagination from "../render-as-pagination";
@@ -49,15 +49,19 @@ const useVirtualizedTable = ({
   isNewHeadCellMenuEnabled,
 }: UseVirtualizedTable) => {
   const shouldRender = !renderAsPagination(layout, viewService);
-  const tableData = useMemo(
-    () => getVirtualScrollTableData(layout, interactions, viewService),
-    [layout, interactions, viewService]
-  );
+  const [tableData] = usePromise(async () => {
+    if (shouldRender) {
+      return getVirtualScrollTableData(model as EngineAPI.IGenericObject, layout, interactions, viewService);
+    }
+
+    return null;
+  }, [layout, interactions, viewService]);
   const { pageInfo, setPage } = usePageInfo(layout, shouldRender);
   const { initialDataPages, isLoading } = useInitialDataPages({ model, layout, page: pageInfo.page, shouldRender });
 
   useEffect(() => {
-    if (!shouldRender || !model || !changeSortOrder || !initialDataPages || isLoading || !isFontLoaded) return;
+    if (!shouldRender || !model || !changeSortOrder || !initialDataPages || isLoading || !isFontLoaded || !tableData)
+      return;
 
     renderVirtualizedTable(
       {
