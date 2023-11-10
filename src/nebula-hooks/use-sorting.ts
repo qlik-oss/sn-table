@@ -9,14 +9,13 @@ export const sortingFactory = (
   if (!model) return undefined;
 
   return async (column: Column, newSortDirection?: SortDirection) => {
-    const { isDim, colIdx, qReverseSort, sortDirection } = column;
+    const { isDim, colIdx, qReverseSort, sortDirection, isActivelySorted } = column;
     const idx = isDim ? colIdx : colIdx - dimensionsLength;
 
     // The sort order from the properties is needed since it contains hidden columns
     const properties = await model.getEffectiveProperties();
     const sortOrder = properties.qHyperCubeDef.qInterColumnSortOrder;
     const patches: EngineAPI.INxPatch[] = [];
-    const isActivelySorted = colIdx === sortOrder[0];
     const shouldReverseSortOrder =
       (newSortDirection && newSortDirection !== sortDirection) || (!newSortDirection && isActivelySorted);
 
