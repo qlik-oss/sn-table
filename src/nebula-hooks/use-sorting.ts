@@ -16,10 +16,12 @@ export const sortingFactory = (
     const properties = await model.getEffectiveProperties();
     const sortOrder = properties.qHyperCubeDef.qInterColumnSortOrder;
     const patches: EngineAPI.INxPatch[] = [];
-    const topSortIdx = sortOrder[0];
+    const isActivelySorted = colIdx === sortOrder[0];
+    const shouldReverseSortOrder =
+      (newSortDirection && newSortDirection !== sortDirection) || (!newSortDirection && isActivelySorted);
 
     // Reorder
-    if (colIdx !== topSortIdx) {
+    if (!isActivelySorted) {
       sortOrder.splice(sortOrder.indexOf(colIdx), 1);
       sortOrder.unshift(colIdx);
 
@@ -31,12 +33,8 @@ export const sortingFactory = (
     }
 
     // Reverse
-    if (
-      (isNewHeadCellMenuEnabled &&
-        ((newSortDirection && newSortDirection !== sortDirection) || (!newSortDirection && colIdx === topSortIdx))) ||
-      // if flag is not enabled -> we only want to reverse if colIdx is eql to topSortedIdx
-      (!isNewHeadCellMenuEnabled && colIdx === topSortIdx)
-    ) {
+    // if flag is not enabled -> we only want to reverse column if it is the ActivelySortedColumn
+    if ((isNewHeadCellMenuEnabled && shouldReverseSortOrder) || (!isNewHeadCellMenuEnabled && isActivelySorted)) {
       patches.push({
         qPath: `/qHyperCubeDef/${isDim ? "qDimensions" : "qMeasures"}/${idx}/qDef/qReverseSort`,
         qOp: "Replace",
