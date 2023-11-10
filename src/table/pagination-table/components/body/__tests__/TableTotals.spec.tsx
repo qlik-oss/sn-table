@@ -9,7 +9,10 @@ import * as handleKeyPress from "../../../../utils/handle-keyboard";
 import TableTotals from "../TableTotals";
 
 describe("<TableTotals />", () => {
-  const model = { getHyperCubeData: async () => generateDataPages(2, 2) } as unknown as EngineAPI.IGenericObject;
+  const model = {
+    getHyperCubeData: async () => generateDataPages(2, 2),
+    getEffectiveProperties: async () => Promise.resolve({ qHyperCubeDef: { qInterColumnSortOrder: [0, 1] } }),
+  } as unknown as EngineAPI.IGenericObject;
   const layout = generateLayout(1, 1, 2, [], [{ qText: "350" }]);
   let viewService: ViewService;
   let tableData: TableData;

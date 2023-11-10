@@ -14,7 +14,7 @@ import { StyledHeadCell } from "./styles";
 
 const TableHeadWrapper = () => {
   const { columns } = useContextSelector(TableContext, (value) => value.tableData);
-  const { layout, styling, interactions, rootElement, keyboard, viewService } = useContextSelector(
+  const { styling, interactions, rootElement, keyboard, viewService } = useContextSelector(
     TableContext,
     (value) => value.baseProps
   );

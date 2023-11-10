@@ -19,15 +19,18 @@ describe("<Wrapper />", () => {
   let layout: TableLayout;
   let viewService: ViewService;
   let tableData: TableData;
+  let model: EngineAPI.IGenericObject;
 
-  const renderWrapper = () => {
+  const renderWrapper = async () => {
     const mockTable = TestableTable as jest.MockedFunction<typeof TestableTable>;
     mockTable.mockReturnValue(<div data-testid="table-container" />);
+
+    const columns = await getColumns(layout, model);
 
     tableData = {
       ...EMPTY_TABLE_DATA,
       paginationNeeded: true,
-      columns: getColumns(layout),
+      columns,
       totalsPosition: getTotalPosition(layout, viewService),
     };
 
@@ -44,12 +47,15 @@ describe("<Wrapper />", () => {
     rect = {
       width: 750,
     } as unknown as stardust.Rect;
+    model = {
+      getEffectiveProperties: async () => Promise.resolve({ qHyperCubeDef: { qInterColumnSortOrder: [0] } }),
+    } as unknown as EngineAPI.IGenericObject;
   });
 
   afterEach(() => jest.restoreAllMocks());
 
-  it("should render table with pagination", () => {
-    renderWrapper();
+  it("should render table with pagination", async () => {
+    await renderWrapper();
 
     expect(screen.getByTestId("table-container")).toBeVisible();
     expect(screen.getByTestId("footer-wrapper")).toBeVisible();

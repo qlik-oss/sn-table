@@ -50,11 +50,11 @@ describe("use-sorting", () => {
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });
 
-    it("should call apply patches with patch for qReverseSort for dimension", async () => {
-      column.colIdx = 0;
+    it("should call apply patches with patch for qReverseSort for dimension if isActivelySorted is true", async () => {
+      column.isActivelySorted = true;
       expectedPatches = [
         {
-          qPath: "/qHyperCubeDef/qDimensions/0/qDef/qReverseSort",
+          qPath: "/qHyperCubeDef/qDimensions/1/qDef/qReverseSort",
           qOp: "Replace",
           qValue: "true",
         },
@@ -65,9 +65,8 @@ describe("use-sorting", () => {
     });
 
     it("should call apply patches with another patch for qReverseSort for measure", async () => {
-      column = { isDim: false, colIdx: 2, qReverseSort: false } as Column;
+      column = { isDim: false, colIdx: 2, qReverseSort: false, isActivelySorted: true } as Column;
       originalOrder = [2, 0, 1, 3];
-      expectedPatches[0].qValue = "[2,0,1,3]";
       expectedPatches = [
         {
           qPath: "/qHyperCubeDef/qMeasures/0/qDef/qReverseSort",

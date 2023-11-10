@@ -13,7 +13,10 @@ describe("<TableBodyWrapper />", () => {
   const setShouldRefocus = () => undefined;
   const tableWrapperRef = {} as React.MutableRefObject<HTMLDivElement | null>;
   const announce = () => undefined;
-  const model = { getHyperCubeData: async () => generateDataPages(2, 2) } as unknown as EngineAPI.IGenericObject;
+  const model = {
+    getHyperCubeData: async () => generateDataPages(2, 2),
+    getEffectiveProperties: async () => Promise.resolve({ qHyperCubeDef: { qInterColumnSortOrder: [0, 1] } }),
+  } as unknown as EngineAPI.IGenericObject;
 
   let tableData: TableData;
   let tableFirstRow: Cell;

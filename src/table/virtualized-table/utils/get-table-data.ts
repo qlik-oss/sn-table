@@ -1,5 +1,5 @@
 import { stardust } from "@nebula.js/stardust";
-import { getColumns, getQEffectiveInterColumnSortOrder, getTotalPosition } from "../../../handle-data";
+import { getColumns, getTotalPosition } from "../../../handle-data";
 import { TableData, TableLayout, ViewService } from "../../../types";
 import { MAX_PAGE_SIZE } from "../constants";
 

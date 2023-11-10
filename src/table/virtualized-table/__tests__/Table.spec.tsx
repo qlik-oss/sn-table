@@ -32,7 +32,7 @@ describe("<Table />", () => {
     tableData = {
       ...EMPTY_TABLE_DATA,
       paginationNeeded: false,
-      columns: getColumns(layout),
+      columns: await getColumns(layout, model),
       totalsPosition: getTotalPosition(layout, viewService),
     };
 
@@ -88,6 +88,7 @@ describe("<Table />", () => {
 
     model = {
       getHyperCubeData: jest.fn() as jest.MockedFunction<() => Promise<EngineAPI.INxDataPage[]>>,
+      getEffectiveProperties: async () => Promise.resolve({ qHyperCubeDef: { qInterColumnSortOrder: [0] } }),
     } as unknown as EngineAPI.IGenericObject;
     (model.getHyperCubeData as jest.Mock).mockResolvedValue(dataPages);
 
