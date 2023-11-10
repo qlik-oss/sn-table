@@ -143,7 +143,7 @@ describe("<HeadCellContent />", () => {
     renderTableHead();
     fireEvent.click(screen.getByText(column.label));
 
-    expect(changeSortOrder).toHaveBeenCalledWith(column, "A");
+    expect(changeSortOrder).toHaveBeenCalledWith(column);
   });
 
   it("should not call changeSortOrder when clicking a header cell and isInteractionEnabled is false", () => {

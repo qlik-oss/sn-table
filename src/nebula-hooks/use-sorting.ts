@@ -8,7 +8,7 @@ export const sortingFactory = (
 ) => {
   if (!model) return undefined;
 
-  return async (column: Column, newSortDirection: SortDirection) => {
+  return async (column: Column, newSortDirection?: SortDirection) => {
     const { isDim, colIdx, qReverseSort, sortDirection } = column;
     const idx = isDim ? colIdx : colIdx - dimensionsLength;
 

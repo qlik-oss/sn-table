@@ -16,7 +16,7 @@ describe("use-sorting", () => {
     let column: Column;
     let layout: TableLayout;
     let model: EngineAPI.IGenericObject;
-    let changeSortOrder: (column: Column, sortDirection: SortDirection) => Promise<void>;
+    let changeSortOrder: (column: Column, sortDirection?: SortDirection) => Promise<void>;
     let expectedPatches: EngineAPI.INxPatch[];
 
     beforeEach(() => {
@@ -46,7 +46,7 @@ describe("use-sorting", () => {
         },
       ];
 
-      await changeSortOrder(column, "A");
+      await changeSortOrder(column);
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });
 
@@ -60,7 +60,7 @@ describe("use-sorting", () => {
         },
       ];
 
-      await changeSortOrder(column, "A");
+      await changeSortOrder(column);
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });
 
@@ -76,7 +76,7 @@ describe("use-sorting", () => {
         },
       ];
 
-      await changeSortOrder(column, "A");
+      await changeSortOrder(column);
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });
   });

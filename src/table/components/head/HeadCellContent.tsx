@@ -34,7 +34,7 @@ const HeadCellContent = ({ children, column, isInteractionEnabled }: HeadCellCon
   const { startIcon, endIcon, lockIcon } = getHeadIcons(column);
   const tabIndex = isInteractionEnabled && areTabStopsEnabled(keyboard) ? 0 : -1;
 
-  const handleSort = () => isInteractionEnabled && changeSortOrder(column, column.sortDirection);
+  const handleSort = () => isInteractionEnabled && changeSortOrder(column);
 
   const sortDirection = {
     A: translator.get("SNTable.Accessibility.Ascending"),
