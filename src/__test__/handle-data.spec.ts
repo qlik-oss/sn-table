@@ -24,16 +24,9 @@ describe("handle-data", () => {
   let layout: TableLayout;
   let colIdx: number;
   let pageColIdx: number;
-  let qEffectiveInterColumnSortOrder: number[];
-  let model: EngineAPI.IGenericObject;
 
   beforeEach(() => {
     layout = generateLayout(2, 2, 200, [0, 2, 1, 3], [{ qText: "-" }, { qText: "200" }], [0]);
-    qEffectiveInterColumnSortOrder = [0, 1, 2];
-    model = {
-      getEffectiveProperties: async () =>
-        Promise.resolve({ qHyperCubeDef: { qInterColumnSortOrder: qEffectiveInterColumnSortOrder } }),
-    } as unknown as EngineAPI.IGenericObject;
   });
 
   afterEach(() => {
@@ -66,7 +59,7 @@ describe("handle-data", () => {
     });
 
     it("should return column info for dimension", () => {
-      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx, qEffectiveInterColumnSortOrder);
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
       expect(columnInfo).toEqual(getExpectedInfo({ isDim: true }));
     });
 
@@ -77,13 +70,13 @@ describe("handle-data", () => {
       expected.headTextAlign = "center";
       expected.totalsTextAlign = "center";
 
-      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx, qEffectiveInterColumnSortOrder);
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
       expect(columnInfo).toEqual(expected);
     });
 
     it("should return column info for dimension with head cell align right", () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qDimensionType = "N";
-      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx, qEffectiveInterColumnSortOrder);
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
       const expected = getExpectedInfo({ isDim: true });
       expected.headTextAlign = "right";
 
@@ -97,25 +90,25 @@ describe("handle-data", () => {
       const expected = getExpectedInfo({ isDim: true });
       expected.stylingIDs = ["someId"];
 
-      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx, qEffectiveInterColumnSortOrder);
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
       expect(columnInfo).toEqual(expected);
     });
 
     it("should return column info for dimension with isLocked", () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qLocked = true;
-      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx, qEffectiveInterColumnSortOrder);
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
       expect(columnInfo).toEqual(getExpectedInfo({ isDim: true, qLibraryId: undefined, isLocked: true }));
     });
 
     it("should return column info for master dimension", () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qLibraryId = "#someId";
-      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx, qEffectiveInterColumnSortOrder);
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
       expect(columnInfo).toEqual(getExpectedInfo({ isDim: true, qLibraryId: "#someId" }));
     });
 
     it("should return column info for measure with totals cell align right", () => {
       colIdx = 3;
-      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, 1, qEffectiveInterColumnSortOrder); // colIdx 3 is the second index for measure
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, 1); // colIdx 3 is the second index for measure
       const expected = getExpectedInfo({ isDim: false, qLibraryId: undefined, isLocked: false, totals: "200" });
       expected.totalsTextAlign = "right";
 
@@ -125,34 +118,34 @@ describe("handle-data", () => {
     it("should return column info with actively sorted status as true", () => {
       colIdx = 0;
       layout = generateLayout(2, 2, 200, [0, 2, 1, 3], [{ qText: "-" }, { qText: "200" }], [0]);
-      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx, qEffectiveInterColumnSortOrder);
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
       expect(columnInfo).toEqual(getExpectedInfo({ isDim: true, isActivelySorted: true }));
     });
   });
 
   describe("getColumns", () => {
-    it("should return columns in default order when length of qColumnOrder does not equal number of columns", async () => {
+    it("should return columns in default order when length of qColumnOrder does not equal number of columns", () => {
       layout.qHyperCube.qColumnOrder = [];
 
-      const columns = await getColumns(layout, model);
+      const columns = getColumns(layout);
       expect(columns[0].colIdx).toBe(0);
       expect(columns[1].colIdx).toBe(1);
       expect(columns[2].colIdx).toBe(2);
       expect(columns[3].colIdx).toBe(3);
     });
 
-    it("should return columns in defined column order when qColumnOrder is set", async () => {
-      const columns = await getColumns(layout, model);
+    it("should return columns in defined column order when qColumnOrder is set", () => {
+      const columns = getColumns(layout);
       expect(columns[0].colIdx).toBe(0);
       expect(columns[1].colIdx).toBe(2);
       expect(columns[2].colIdx).toBe(1);
       expect(columns[3].colIdx).toBe(3);
     });
 
-    it("should return columns in defined column order when qColumnOrder is set, with hidden dimension removed", async () => {
+    it("should return columns in defined column order when qColumnOrder is set, with hidden dimension removed", () => {
       layout.qHyperCube.qDimensionInfo[0].qError = { qErrorCode: 7005 };
 
-      const columns = await getColumns(layout, model);
+      const columns = getColumns(layout);
       expect(columns[0].colIdx).toBe(2);
       expect(columns[0].selectionColIdx).toBe(-1);
       expect(columns[1].colIdx).toBe(1);
@@ -161,10 +154,10 @@ describe("handle-data", () => {
       expect(columns[2].selectionColIdx).toBe(-1);
     });
 
-    it("should return columns in defined column order when qColumnOrder is set, with hidden measure removed", async () => {
+    it("should return columns in defined column order when qColumnOrder is set, with hidden measure removed", () => {
       layout.qHyperCube.qMeasureInfo[0].qError = { qErrorCode: 7005 };
 
-      const columns = await getColumns(layout, model);
+      const columns = getColumns(layout);
       expect(columns[0].colIdx).toBe(0);
       expect(columns[0].selectionColIdx).toBe(0);
       expect(columns[1].colIdx).toBe(1);
@@ -175,6 +168,7 @@ describe("handle-data", () => {
   });
 
   describe("manageData", () => {
+    let model: EngineAPI.IGenericObject;
     let pageInfo: PageInfo;
     let setPageInfo: SetPageInfo;
     let viewService: ViewService;
@@ -183,8 +177,6 @@ describe("handle-data", () => {
       pageInfo = { page: 1, rowsPerPage: 100, rowsPerPageOptions: [10, 25, 100] };
       model = {
         getHyperCubeData: async () => generateDataPages(100, 4),
-        getEffectiveProperties: async () =>
-          Promise.resolve({ qHyperCubeDef: { qInterColumnSortOrder: qEffectiveInterColumnSortOrder } }),
       } as unknown as EngineAPI.IGenericObject;
       setPageInfo = jest.fn();
       viewService = {
