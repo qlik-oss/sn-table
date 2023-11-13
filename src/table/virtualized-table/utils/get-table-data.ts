@@ -3,14 +3,13 @@ import { getColumns, getTotalPosition } from "../../../handle-data";
 import { TableData, TableLayout, ViewService } from "../../../types";
 import { MAX_PAGE_SIZE } from "../constants";
 
-export default async function getVirtualScrollTableData(
-  model: EngineAPI.IGenericObject,
+export default function getVirtualScrollTableData(
   layout: TableLayout,
   interactions: stardust.Interactions,
   viewService: ViewService
-): Promise<TableData | null> {
+): TableData {
   const totalsPosition = getTotalPosition(layout, viewService);
-  const columns = await getColumns(layout, model);
+  const columns = getColumns(layout);
   const totalRowCount = layout.qHyperCube.qSize.qcy;
   const pageSize = Math.min(MAX_PAGE_SIZE, totalRowCount);
   const paginationNeeded = totalRowCount > MAX_PAGE_SIZE && !!interactions.active;
