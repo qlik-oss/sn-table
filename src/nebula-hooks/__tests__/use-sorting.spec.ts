@@ -78,5 +78,34 @@ describe("use-sorting", () => {
       await changeSortOrder(column);
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });
+
+    it("should call apply patch reversing the current direction if isNewHeadCellMenuEnabled flag is off and newSortDirection is not the same", async () => {
+      column.isActivelySorted = true;
+      expectedPatches = [
+        {
+          qOp: "Replace",
+          qPath: "/qHyperCubeDef/qDimensions/1/qDef/qReverseSort",
+          qValue: "true",
+        },
+      ];
+
+      await changeSortOrder(column, "D");
+      expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
+    });
+
+    it("should call apply patch reversing the current direction if isNewHeadCellMenuEnabled flag is on and calling the sort on same column", async () => {
+      changeSortOrder = sortingFactory(layout.qHyperCube.qDimensionInfo.length, model, true) as ChangeSortOrder;
+      column.isActivelySorted = true;
+      expectedPatches = [
+        {
+          qOp: "Replace",
+          qPath: "/qHyperCubeDef/qDimensions/1/qDef/qReverseSort",
+          qValue: "true",
+        },
+      ];
+
+      await changeSortOrder(column, "D");
+      expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
+    });
   });
 });
