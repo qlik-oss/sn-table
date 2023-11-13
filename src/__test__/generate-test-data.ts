@@ -22,7 +22,7 @@ export function generateLayout(
   nRows: number,
   qColumnOrder: number[] = [],
   qGrandTotalRow: Record<string, string>[] = [],
-  qEffectiveInterColumnSortOrder: number[] = [0]
+  qEffectiveInterColumnSortOrder: number[] = Array.from(Array(nDims + nMeas).keys())
 ): TableLayout {
   const createField = (idx: number) => ({
     qFallbackTitle: `title-${idx}`,
