@@ -1,4 +1,5 @@
 import { stardust } from "@nebula.js/stardust";
+import { HEAD_CELL_MENU_BUTTON_CLASS } from "@qlik/nebula-table-utils/lib/constants";
 import React from "react";
 import { Announce } from "../../types";
 import { FIRST_BODY_CELL_COORD, FocusTypes } from "../constants";
@@ -28,7 +29,7 @@ export const focusHeadMenuButton = (event: React.KeyboardEvent | React.FocusEven
   target.setAttribute("tabIndex", "-1");
   const baseElement = target?.closest(".sn-table-cell");
   const headMenuButton = (baseElement?.querySelector(".sn-table-head-menu-button") ||
-    baseElement?.querySelector("#nebula-table-utils-head-menu-button")) as HTMLButtonElement;
+    baseElement?.querySelector(`.${HEAD_CELL_MENU_BUTTON_CLASS}`)) as HTMLButtonElement;
   headMenuButton?.focus();
 };
 
