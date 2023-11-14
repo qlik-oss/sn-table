@@ -26,6 +26,7 @@ interface UseVirtualizedTable {
   applyColumnWidths: ApplyColumnWidths;
   isFontLoaded: boolean;
   viewService: ViewService;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 const useVirtualizedTable = ({
@@ -45,6 +46,7 @@ const useVirtualizedTable = ({
   applyColumnWidths,
   isFontLoaded,
   viewService,
+  isNewHeadCellMenuEnabled,
 }: UseVirtualizedTable) => {
   const shouldRender = !renderAsPagination(layout, viewService);
   const tableData = useMemo(
@@ -77,6 +79,7 @@ const useVirtualizedTable = ({
         pageInfo,
         initialDataPages,
         viewService,
+        isNewHeadCellMenuEnabled,
       },
       reactRoot
     );
@@ -102,6 +105,7 @@ const useVirtualizedTable = ({
     isLoading,
     initialDataPages,
     isFontLoaded,
+    isNewHeadCellMenuEnabled,
   ]);
 };
 

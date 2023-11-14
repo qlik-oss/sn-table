@@ -94,10 +94,15 @@ export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | "au
  * Gets all column info.
  */
 export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: number, visibleColIdx: number): Column {
-  const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
+  const { qDimensionInfo, qMeasureInfo, qEffectiveInterColumnSortOrder } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIdx < numDims;
   const info = isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims];
+
+  // using model.getInterColumnSortOrder causes issues in rendering tests
+  // model does not contains `getInterColumnSortOrder()` method in rendering test
+  // that is the reason why using `qEffectiveInterColumnSortOrder` from layout instead
+  const isActivelySorted = colIdx === qEffectiveInterColumnSortOrder[0];
 
   let fieldIndex = 0;
   let fieldId = "";
@@ -135,6 +140,7 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
     qReverseSort,
     columnWidth,
     selectionColIdx,
+    isActivelySorted,
     id: `col-${pageColIdx}`,
     label: qFallbackTitle,
     stylingIDs: qAttrExprInfo.map((expr) => expr.id),
@@ -184,7 +190,6 @@ export const getColumns = (layout: TableLayout) => {
   const {
     qHyperCube: { qColumnOrder, qDimensionInfo, qMeasureInfo },
   } = layout;
-
   const columnsLength = qDimensionInfo.length + qMeasureInfo.length;
   const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
 

@@ -12,20 +12,32 @@ import {
 } from "../types";
 import { generateDataPages, generateLayout } from "./generate-test-data";
 
+type ExpectedInfo = {
+  isDim: boolean;
+  qLibraryId?: string;
+  isLocked?: boolean;
+  totals?: string;
+  isActivelySorted?: boolean;
+};
+
 describe("handle-data", () => {
   let layout: TableLayout;
   let colIdx: number;
   let pageColIdx: number;
 
   beforeEach(() => {
-    layout = generateLayout(2, 2, 200, [0, 2, 1, 3], [{ qText: "-" }, { qText: "200" }]);
+    layout = generateLayout(2, 2, 200, [0, 2, 1, 3], [{ qText: "-" }, { qText: "200" }], [0]);
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   describe("getColumnInfo", () => {
     colIdx = 1;
     pageColIdx = 2;
 
-    const getExpectedInfo = (isDim: boolean, qLibraryId?: string, isLocked?: boolean, totals = "") => ({
+    const getExpectedInfo = ({ isDim, qLibraryId, isLocked, totals = "", isActivelySorted = false }: ExpectedInfo) => ({
       isDim,
       qLibraryId,
       label: `title-${colIdx}`,
@@ -43,16 +55,17 @@ describe("handle-data", () => {
       totalsTextAlign: "left",
       headTextAlign: "right",
       selectionColIdx: isDim ? colIdx : -1,
+      isActivelySorted,
     });
 
     it("should return column info for dimension", () => {
       const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
-      expect(columnInfo).toEqual(getExpectedInfo(true));
+      expect(columnInfo).toEqual(getExpectedInfo({ isDim: true }));
     });
 
     it("should return column info for dimension with align center", () => {
       layout.qHyperCube.qDimensionInfo[colIdx].textAlign = { auto: false, align: "center" };
-      const expected = getExpectedInfo(true);
+      const expected = getExpectedInfo({ isDim: true });
       expected.bodyTextAlign = "center";
       expected.headTextAlign = "center";
       expected.totalsTextAlign = "center";
@@ -64,7 +77,7 @@ describe("handle-data", () => {
     it("should return column info for dimension with head cell align right", () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qDimensionType = "N";
       const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
-      const expected = getExpectedInfo(true);
+      const expected = getExpectedInfo({ isDim: true });
       expected.headTextAlign = "right";
 
       expect(columnInfo).toEqual(expected);
@@ -74,7 +87,7 @@ describe("handle-data", () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qAttrExprInfo = [
         { id: "someId" },
       ] as unknown as ExtendedNxAttrExprInfo[];
-      const expected = getExpectedInfo(true);
+      const expected = getExpectedInfo({ isDim: true });
       expected.stylingIDs = ["someId"];
 
       const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
@@ -84,22 +97,29 @@ describe("handle-data", () => {
     it("should return column info for dimension with isLocked", () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qLocked = true;
       const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
-      expect(columnInfo).toEqual(getExpectedInfo(true, undefined, true));
+      expect(columnInfo).toEqual(getExpectedInfo({ isDim: true, qLibraryId: undefined, isLocked: true }));
     });
 
     it("should return column info for master dimension", () => {
       layout.qHyperCube.qDimensionInfo[colIdx].qLibraryId = "#someId";
       const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
-      expect(columnInfo).toEqual(getExpectedInfo(true, "#someId"));
+      expect(columnInfo).toEqual(getExpectedInfo({ isDim: true, qLibraryId: "#someId" }));
     });
 
     it("should return column info for measure with totals cell align right", () => {
       colIdx = 3;
       const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, 1); // colIdx 3 is the second index for measure
-      const expected = getExpectedInfo(false, undefined, false, "200");
+      const expected = getExpectedInfo({ isDim: false, qLibraryId: undefined, isLocked: false, totals: "200" });
       expected.totalsTextAlign = "right";
 
       expect(columnInfo).toEqual(expected);
+    });
+
+    it("should return column info with actively sorted status as true", () => {
+      colIdx = 0;
+      layout = generateLayout(2, 2, 200, [0, 2, 1, 3], [{ qText: "-" }, { qText: "200" }], [0]);
+      const columnInfo = getColumnInfo(layout, colIdx, pageColIdx, colIdx);
+      expect(columnInfo).toEqual(getExpectedInfo({ isDim: true, isActivelySorted: true }));
     });
   });
 
@@ -155,7 +175,9 @@ describe("handle-data", () => {
 
     beforeEach(() => {
       pageInfo = { page: 1, rowsPerPage: 100, rowsPerPageOptions: [10, 25, 100] };
-      model = { getHyperCubeData: async () => generateDataPages(100, 4) } as unknown as EngineAPI.IGenericObject;
+      model = {
+        getHyperCubeData: async () => generateDataPages(100, 4),
+      } as unknown as EngineAPI.IGenericObject;
       setPageInfo = jest.fn();
       viewService = {
         qTop: 0,
