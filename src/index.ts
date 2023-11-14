@@ -87,7 +87,6 @@ export default function supernova(env: Galaxy) {
 
       usePaginationTable({
         isNewHeadCellMenuEnabled,
-        env, // TODO: this is not used!
         app,
         model,
         rootElement,
