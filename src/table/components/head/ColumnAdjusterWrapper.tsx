@@ -14,6 +14,7 @@ import { focusHeadMenuButton } from "../../utils/accessibility-utils";
 const ColumnAdjusterWrapper = ({ column, isLastColumn, onColumnResize }: AdjusterProps) => {
   const { pageColIdx } = column;
   const { applyColumnWidths, interactions } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { isNewHeadCellMenuEnabled } = useContextSelector(TableContext, (value) => value.featureFlags);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setColumnWidths = useContextSelector(TableContext, (value) => value.setColumnWidths);
 
@@ -38,6 +39,7 @@ const ColumnAdjusterWrapper = ({ column, isLastColumn, onColumnResize }: Adjuste
       columnWidth={columnWidths[pageColIdx]}
       isLastColumn={isLastColumn}
       keyValue={`adjuster-${pageColIdx}`}
+      isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
       updateWidthCallback={updateWidth}
       confirmWidthCallback={confirmWidth}
       handleBlur={handleBlur}

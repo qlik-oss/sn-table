@@ -4,7 +4,7 @@ import { render, screen } from "@testing-library/react";
 import React from "react";
 import TestWithProviders from "../../../../__test__/test-with-providers";
 import { Column } from "../../../../types";
-import ColumnAdjuster from "../ColumnAdjuster";
+import ColumnAdjusterWrapper from "../ColumnAdjusterWrapper";
 
 describe("<ColumnAdjuster />", () => {
   let columns: Column[];
@@ -13,7 +13,7 @@ describe("<ColumnAdjuster />", () => {
   const renderAdjuster = () => {
     render(
       <TestWithProviders interactions={interactions}>
-        <ColumnAdjuster column={columns[0]} isLastColumn={false} />
+        <ColumnAdjusterWrapper column={columns[0]} isLastColumn={false} />
       </TestWithProviders>
     );
     return screen.queryByTestId(COLUMN_ADJUSTER_CLASS) as HTMLElement;

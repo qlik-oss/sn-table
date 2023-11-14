@@ -1,7 +1,7 @@
 import React from "react";
 import { Column } from "../../types";
 import CellText from "../components/CellText";
-import ColumnAdjuster from "../components/head/ColumnAdjuster";
+import ColumnAdjusterWrapper from "../components/head/ColumnAdjusterWrapper";
 import HeadCellContent from "../components/head/HeadCellContent";
 import { TableContext, useContextSelector } from "../context";
 import { GeneratedStyling } from "../types";
@@ -57,7 +57,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
           {column.label}
         </CellText>
       </HeadCellContent>
-      <ColumnAdjuster column={column} isLastColumn={isLastColumn} onColumnResize={columResizeHandler} />
+      <ColumnAdjusterWrapper column={column} isLastColumn={isLastColumn} onColumnResize={columResizeHandler} />
     </div>
   );
 };
