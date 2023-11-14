@@ -1,20 +1,26 @@
 import { useMemo } from "@nebula.js/stardust";
-import { Column, HyperCube } from "../types";
+import { Column, HyperCube, SortDirection } from "../types";
 
-export const sortingFactory = (dimensionsLength: number, model: EngineAPI.IGenericObject | undefined) => {
+export const sortingFactory = (
+  dimensionsLength: number,
+  model: EngineAPI.IGenericObject | undefined,
+  isNewHeadCellMenuEnabled: boolean
+) => {
   if (!model) return undefined;
 
-  return async (column: Column) => {
-    const { isDim, colIdx, qReverseSort } = column;
+  return async (column: Column, newSortDirection?: SortDirection) => {
+    const { isDim, colIdx, qReverseSort, sortDirection, isActivelySorted } = column;
     const idx = isDim ? colIdx : colIdx - dimensionsLength;
 
     // The sort order from the properties is needed since it contains hidden columns
     const properties = await model.getEffectiveProperties();
     const sortOrder = properties.qHyperCubeDef.qInterColumnSortOrder;
     const patches: EngineAPI.INxPatch[] = [];
+    const shouldReverseSortOrder =
+      (newSortDirection && newSortDirection !== sortDirection) || (!newSortDirection && isActivelySorted);
 
-    if (colIdx !== sortOrder[0]) {
-      // Reorder
+    // Reorder
+    if (!isActivelySorted) {
       sortOrder.splice(sortOrder.indexOf(colIdx), 1);
       sortOrder.unshift(colIdx);
 
@@ -23,8 +29,11 @@ export const sortingFactory = (dimensionsLength: number, model: EngineAPI.IGener
         qOp: "Replace",
         qValue: `[${sortOrder.join(",")}]`,
       });
-    } else {
-      // Reverse
+    }
+
+    // Reverse
+    // if flag is not enabled -> we only want to reverse column if it is the ActivelySortedColumn
+    if ((isNewHeadCellMenuEnabled && shouldReverseSortOrder) || (!isNewHeadCellMenuEnabled && isActivelySorted)) {
       patches.push({
         qPath: `/qHyperCubeDef/${isDim ? "qDimensions" : "qMeasures"}/${idx}/qDef/qReverseSort`,
         qOp: "Replace",
@@ -36,7 +45,14 @@ export const sortingFactory = (dimensionsLength: number, model: EngineAPI.IGener
   };
 };
 
-const useSorting = (hyperCube: HyperCube, model: EngineAPI.IGenericObject | undefined) =>
-  useMemo(() => sortingFactory(hyperCube.qDimensionInfo.length, model), [hyperCube.qDimensionInfo.length, model]);
+const useSorting = (
+  hyperCube: HyperCube,
+  model: EngineAPI.IGenericObject | undefined,
+  isNewHeadCellMenuEnabled: boolean
+) =>
+  useMemo(
+    () => sortingFactory(hyperCube.qDimensionInfo.length, model, isNewHeadCellMenuEnabled),
+    [hyperCube.qDimensionInfo.length, model, isNewHeadCellMenuEnabled]
+  );
 
 export default useSorting;

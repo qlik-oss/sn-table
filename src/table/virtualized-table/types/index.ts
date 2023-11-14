@@ -46,6 +46,7 @@ export interface VirtualTableRenderProps {
   pageInfo: PageInfo;
   initialDataPages: EngineAPI.INxDataPage[];
   viewService: ViewService;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface TableProps {

@@ -35,6 +35,7 @@ interface ProviderProps {
   initialDataPages?: EngineAPI.INxDataPage[];
   rect?: stardust.Rect;
   viewService?: ViewService;
+  isNewHeadCellMenuEnabled?: boolean;
 }
 
 type HookWrapperProps = { children: JSX.Element };
@@ -77,6 +78,7 @@ const TestWithProviders = ({
   rect = { width: 0, height: 0, top: 0, left: 0 },
   initialDataPages = undefined,
   viewService = { qTop: 0, qHeight: 1, scrollLeft: 0, estimatedRowHeight: 25 },
+  isNewHeadCellMenuEnabled = false,
 }: ProviderProps) => (
   <ThemeProvider theme={muiSetup(direction)}>
     <TableContextProvider
@@ -97,6 +99,7 @@ const TestWithProviders = ({
       rect={rect}
       initialDataPages={initialDataPages}
       viewService={viewService}
+      isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
     >
       {children as JSX.Element}
     </TableContextProvider>

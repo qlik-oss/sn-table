@@ -177,6 +177,7 @@ export interface Column {
   colIdx: number;
   pageColIdx: number;
   selectionColIdx: number;
+  isActivelySorted: boolean;
   label: string;
   headTextAlign: Align;
   totalsTextAlign: Align;
