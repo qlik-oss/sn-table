@@ -10,7 +10,6 @@ import {
   ApplyColumnWidths,
   ChangeSortOrder,
   ExtendedSelectionAPI,
-  Galaxy,
   TableLayout,
   UseOptions,
   ViewService,
@@ -19,7 +18,6 @@ import useAnnounceAndTranslations from "./use-announce-and-translations";
 
 interface UsePaginationTable {
   isNewHeadCellMenuEnabled: boolean;
-  env: Galaxy;
   selectionsAPI: ExtendedSelectionAPI | undefined;
   rootElement: HTMLElement;
   layout: TableLayout;
