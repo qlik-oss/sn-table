@@ -72,7 +72,6 @@ export const StyledHeadCellContent = styled(Box, {
   fontFamily: "inherit",
   "&&:hover, &&:focus-within": {
     "& .sn-table-head-menu-button": { opacity: 1 },
-    "& #nebula-table-utils-head-menu-button": { opacity: 1 },
   },
 
   "& > div:last-child": { alignSelf: "flex-end" },
