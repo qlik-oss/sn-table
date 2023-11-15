@@ -70,11 +70,10 @@ export const StyledHeadCellContent = styled(Box, {
   gap: theme.spacing(0.5),
   fontSize: "inherit",
   fontFamily: "inherit",
+  alignItems: "end",
   "&&:hover, &&:focus-within": {
     "& .sn-table-head-menu-button": { opacity: 1 },
   },
-
-  "& > div:last-child": { alignSelf: "flex-end" },
 
   "&.aligned-left": {
     gridTemplateColumns: isLocked
