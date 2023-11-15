@@ -61,8 +61,8 @@ export const VisuallyHidden = styled("span")({
 });
 
 export const StyledHeadCellContent = styled(Box, {
-  shouldForwardProp: (prop: string) => prop !== "isLocked",
-})(({ theme, isLocked }) => ({
+  shouldForwardProp: (prop: string) => prop !== "isLocked" && prop !== "isNewHeadCellMenuEnabled",
+})(({ theme, isLocked, isNewHeadCellMenuEnabled }) => ({
   width: "100%",
   display: "grid",
   flexDirection: "inherit",
@@ -70,10 +70,13 @@ export const StyledHeadCellContent = styled(Box, {
   gap: theme.spacing(0.5),
   fontSize: "inherit",
   fontFamily: "inherit",
-  alignItems: "end",
+  ...(isNewHeadCellMenuEnabled && { alignItems: "end" }),
+
   "&&:hover, &&:focus-within": {
     "& .sn-table-head-menu-button": { opacity: 1 },
   },
+
+  "& > div:last-child": { alignSelf: "flex-end" },
 
   "&.aligned-left": {
     gridTemplateColumns: isLocked

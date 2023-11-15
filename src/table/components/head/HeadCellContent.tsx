@@ -49,9 +49,10 @@ const HeadCellContent = ({ children, column, isInteractionEnabled }: HeadCellCon
 
   return (
     <StyledHeadCellContent
+      onClick={handleOpenMenu}
       isLocked={Boolean(lockIcon)}
       className={`aligned-${column.headTextAlign}`}
-      onClick={handleOpenMenu}
+      isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
     >
       {lockIcon && <StyledHeadCellIconWrapper>{lockIcon}</StyledHeadCellIconWrapper>}
 
