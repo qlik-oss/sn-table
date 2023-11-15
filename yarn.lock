@@ -1951,10 +1951,10 @@
     eslint-plugin-vitest "0.3.9"
     svelte-eslint-parser "0.33.1"
 
-"@qlik/nebula-table-utils@2.5.0":
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/@qlik/nebula-table-utils/-/nebula-table-utils-2.5.0.tgz#1a4ee7890e9678186a082038dd3ba30ead562c03"
-  integrity sha512-lqcxvl3Q0QEXOqkoUPX/fsQQy8JXF/eYuSTr5sGBb3pgm3zsFwxANIGEObJwc02EU8y+MywDaSBbDCoJsf3ZOg==
+"@qlik/nebula-table-utils@^2.6.1":
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/@qlik/nebula-table-utils/-/nebula-table-utils-2.6.1.tgz#17dff936e7cd1d54c087b108785d86eae9e708db"
+  integrity sha512-Pn77HwCECSQaGIkXmbYaBHNb4GTxZWjcwB0qIIs+VivOJJ2ANJ/4XAJN4hFCQPnSCX19xb6w0PvEFNhJB3+trg==
 
 "@qlik/prettier-config@0.4.1":
   version "0.4.1"
