@@ -32,7 +32,7 @@ const Table = (props: TableProps) => {
       ...styling.body,
       background: theme.background.color ?? "transparent",
     }),
-    [theme.background.color, styling]
+    [theme.background.color, styling],
   );
   const {
     headerRowHeight,
@@ -54,7 +54,7 @@ const Table = (props: TableProps) => {
   const tableRect = useMemo(() => toTableRect(rect, paginationNeeded), [rect, paginationNeeded]);
   const stickyContainerRect = useMemo(
     () => toStickyContainerRect(tableRect, xScrollbarWidth, yScrollbarWidth),
-    [tableRect, xScrollbarWidth, yScrollbarWidth]
+    [tableRect, xScrollbarWidth, yScrollbarWidth],
   );
   const { rowCount } = useTableCount(layout, pageInfo, stickyContainerRect, columnWidths, bodyRowHeight);
   const [containerHeight, setContainerHeight] = useState(rowCount * bodyRowHeight + headerAndTotalsHeight); // Based on single line height, which is going to be out-of-sync when rows have multiple lines
@@ -71,7 +71,7 @@ const Table = (props: TableProps) => {
         setContainerHeight(newHeight);
       }
     },
-    [containerHeight, headerAndTotalsHeight, stickyContainerRect.height]
+    [containerHeight, headerAndTotalsHeight, stickyContainerRect.height],
   );
 
   const columResizeHandler = useCallback(() => {

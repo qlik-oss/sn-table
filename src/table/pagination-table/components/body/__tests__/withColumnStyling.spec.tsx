@@ -42,7 +42,7 @@ describe("withColumnStyling", () => {
             </HOC>
           </tr>
         </tbody>
-      </table>
+      </table>,
     );
 
     expect(queryByText("someValue")).toBeVisible();

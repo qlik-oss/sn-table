@@ -49,7 +49,7 @@ describe("useData", () => {
     layout.qHyperCube.qSize.qcx = QCX;
     initialDataPages = generateDataPages(
       INIT_DATA_FETCH_HEIGHT,
-      INIT_DATA_FETCH_WIDTH
+      INIT_DATA_FETCH_WIDTH,
     ) as unknown as EngineAPI.INxDataPage[];
 
     gridState = {
@@ -72,12 +72,12 @@ describe("useData", () => {
     } as unknown as EngineAPI.IGenericObject;
 
     (model.getHyperCubeData as jest.Mock).mockImplementation((path, pages: EngineAPI.INxPage[]) =>
-      Promise.resolve(pages.map(generateDataPage))
+      Promise.resolve(pages.map(generateDataPage)),
     );
 
     columns = Array(QCX)
       .fill(undefined)
-      .map((_, colIdx) => ({ isDim: false, isLocked: false, id: `col-${colIdx}`, colIdx } as Column));
+      .map((_, colIdx) => ({ isDim: false, isLocked: false, id: `col-${colIdx}`, colIdx }) as Column);
 
     setCellSizeMock = jest.fn() as jest.MockedFunction<SetCellSize>;
 
@@ -96,7 +96,7 @@ describe("useData", () => {
             columns: renderWithProps.columns ?? columns,
             setCellSize: setCellSizeMock,
             gridState,
-          })
+          }),
         );
       });
   });
@@ -277,7 +277,7 @@ describe("useData", () => {
     test("should load additional data given initial data pages does not include visible and buffer rows", async () => {
       initialDataPages = generateDataPages(
         INIT_DATA_FETCH_HEIGHT - 1,
-        INIT_DATA_FETCH_WIDTH
+        INIT_DATA_FETCH_WIDTH,
       ) as unknown as EngineAPI.INxDataPage[];
 
       await doRenderHook({ initialDataPages });
@@ -286,7 +286,7 @@ describe("useData", () => {
         // eslint-disable-next-line @typescript-eslint/unbound-method
         expect(model.getHyperCubeData).toHaveBeenNthCalledWith(1, "/qHyperCubeDef", [
           { qHeight: 1, qLeft: 0, qTop: INIT_DATA_FETCH_HEIGHT - 1, qWidth: 6 },
-        ])
+        ]),
       );
     });
 
@@ -322,7 +322,7 @@ describe("useData", () => {
       await waitFor(() =>
         expect(model.getHyperCubeData).toHaveBeenNthCalledWith(1, "/qHyperCubeDef", [
           { qHeight: 26, qLeft: 0, qTop: 0, qWidth: 6 },
-        ])
+        ]),
       );
       await waitFor(() => expect(renderHookResult.result.current.rowsInPage).toHaveLength(pageInfo.rowsPerPage));
     });

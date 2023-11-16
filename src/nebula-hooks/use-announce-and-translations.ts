@@ -12,7 +12,7 @@ enum AnnouncerElements {
 export const announcementFactory = (
   rootElement: HTMLElement,
   translator: stardust.Translator,
-  prevAnnounceEl?: string
+  prevAnnounceEl?: string,
 ): Announce => {
   let previousAnnouncementElement = prevAnnounceEl || null;
 

@@ -23,7 +23,7 @@ describe("<TableTotals />", () => {
             <TableTotals />
           </tbody>
         </table>
-      </TestWithProviders>
+      </TestWithProviders>,
     );
 
   beforeEach(async () => {
@@ -33,7 +33,7 @@ describe("<TableTotals />", () => {
       layout,
       { top: 0, height: 100 } as unknown as PageInfo,
       () => undefined,
-      viewService
+      viewService,
     )) as TableData;
   });
 

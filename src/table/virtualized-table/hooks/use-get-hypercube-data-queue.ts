@@ -6,7 +6,7 @@ const pageToKey = ({ qLeft, qTop, qWidth, qHeight }: EngineAPI.INxPage) => `${qL
 
 const useGetHyperCubeDataQueue = (
   getDataPages: (qPages: EngineAPI.INxPage[]) => Promise<EngineAPI.INxDataPage[]>,
-  handleDataPages: (qDataPages: EngineAPI.INxDataPage[]) => void
+  handleDataPages: (qDataPages: EngineAPI.INxDataPage[]) => void,
 ) => {
   const queued = useRef(new Set<EngineAPI.INxPage>()); // Keep track of all unique pages that should be retrieved
   const ongoing = useRef(new Set<EngineAPI.INxPage[]>()); // Keep track of ongoing request. Should be aborted if page info or layout is changed
@@ -64,7 +64,7 @@ const useGetHyperCubeDataQueue = (
         finished.current.clear();
       },
     }),
-    [mutableGetDataPages, mutableHandleDataPages]
+    [mutableGetDataPages, mutableHandleDataPages],
   );
 
   return queue;

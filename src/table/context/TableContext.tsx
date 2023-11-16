@@ -51,7 +51,7 @@ export const TableContextProvider = ({
     tableData.columns,
     tableData.totalsPosition,
     rect.width,
-    styling
+    styling,
   );
   const featureFlags = { isNewHeadCellMenuEnabled };
   const baseProps = useMemo(
@@ -88,7 +88,7 @@ export const TableContextProvider = ({
       styling,
       rect,
       viewService,
-    ]
+    ],
   );
 
   return (

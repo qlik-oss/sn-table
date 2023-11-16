@@ -101,7 +101,7 @@ export const headTabHelper = (
   rootElement: HTMLElement,
   cellCoord: [number, number],
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  isLastHeadCell: boolean
+  isLastHeadCell: boolean,
 ) => {
   const target = evt.target as HTMLTableCellElement;
   const isLabel = target.classList.contains("sn-table-head-label");

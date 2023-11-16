@@ -7,7 +7,7 @@ const useScrollHandler = (
   headerRef: React.RefObject<VariableSizeList<any>>,
   totalsRef: React.RefObject<VariableSizeList<any>>,
   bodyRef: React.RefObject<BodyRef>,
-  viewService: ViewService
+  viewService: ViewService,
 ) =>
   useCallback(
     (event: React.SyntheticEvent) => {
@@ -22,7 +22,7 @@ const useScrollHandler = (
 
       totalsRef.current?.scrollTo(scrollLeft);
     },
-    [viewService, bodyRef, headerRef, totalsRef]
+    [viewService, bodyRef, headerRef, totalsRef],
   );
 
 export default useScrollHandler;

@@ -60,7 +60,7 @@ const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: U
     () => ({
       getViewState: () => getViewState(layout, viewService, rootElement),
     }),
-    [layout, viewService, rootElement]
+    [layout, viewService, rootElement],
   );
 };
 

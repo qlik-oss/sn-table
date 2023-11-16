@@ -122,7 +122,7 @@ const usePaginationTable = ({
         viewService,
         isNewHeadCellMenuEnabled,
       },
-      reactRoot
+      reactRoot,
     );
   }, [
     app,

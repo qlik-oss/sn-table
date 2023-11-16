@@ -158,7 +158,7 @@ describe("use-items-rendered-handler", () => {
         0,
         onItemsRendered.overscanRowStartIndex - ROW_DATA_BUFFER_SIZE,
         11,
-        11 + ROW_DATA_BUFFER_SIZE
+        11 + ROW_DATA_BUFFER_SIZE,
       );
     });
 
@@ -187,7 +187,7 @@ describe("use-items-rendered-handler", () => {
         onItemsRendered.overscanColumnStartIndex,
         0,
         11 + COLUMN_DATA_BUFFER_SIZE,
-        11
+        11,
       );
     });
 
@@ -216,7 +216,7 @@ describe("use-items-rendered-handler", () => {
         onItemsRendered.overscanColumnStartIndex - COLUMN_DATA_BUFFER_SIZE,
         0,
         11 + COLUMN_DATA_BUFFER_SIZE,
-        11
+        11,
       );
     });
 

@@ -34,7 +34,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
       columns[columnIndex],
       isHoverEnabled && rowIsHovered,
       cellSelectionState,
-      bodyStyle
+      bodyStyle,
     );
 
     const cellId = { rowindex: rowIndex, columnindex: columnIndex };

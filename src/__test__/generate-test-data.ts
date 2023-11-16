@@ -22,7 +22,7 @@ export function generateLayout(
   nRows: number,
   qColumnOrder: number[] = [],
   qGrandTotalRow: Record<string, string>[] = [],
-  qEffectiveInterColumnSortOrder: number[] = Array.from(Array(nDims + nMeas).keys())
+  qEffectiveInterColumnSortOrder: number[] = Array.from(Array(nDims + nMeas).keys()),
 ): TableLayout {
   const createField = (idx: number) => ({
     qFallbackTitle: `title-${idx}`,
@@ -73,7 +73,7 @@ export const createCell = (rowIdx: number, colIdx = 0) =>
     pageRowIdx: rowIdx,
     pageColIdx: colIdx,
     selectionColIdx: colIdx,
-  } as Cell);
+  }) as Cell;
 
 /**
  * creates a simplified Rows[] with one column. Used to create the pageRows that is in the selection state

@@ -42,7 +42,7 @@ const useScrollDirection = () => {
       prevScrollTop.current = scrollTop;
       prevScrollLeft.current = scrollLeft;
     },
-    [prevScrollTop, prevScrollLeft, verticalScrollDirection, horizontalScrollDirection]
+    [prevScrollTop, prevScrollLeft, verticalScrollDirection, horizontalScrollDirection],
   );
 
   return {

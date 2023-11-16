@@ -5,7 +5,7 @@ import { handleFocusoutEvent } from "../utils/accessibility-utils";
 const useFocusListener = (
   tableWrapperRef: React.MutableRefObject<HTMLDivElement | null>,
   shouldRefocus: React.MutableRefObject<boolean>,
-  keyboard: stardust.Keyboard
+  keyboard: stardust.Keyboard,
 ) => {
   useEffect(() => {
     const memoedWrapper = tableWrapperRef.current;

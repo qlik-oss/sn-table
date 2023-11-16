@@ -33,7 +33,7 @@ const stylingPanel = {
                         const currentTheme = args.theme.current();
                         return parseInt(
                           currentTheme.object?.straightTableV2?.header?.fontSize ?? currentTheme.fontSize,
-                          10
+                          10,
                         );
                       },
                       change(data) {
@@ -82,7 +82,7 @@ const stylingPanel = {
                         const currentTheme = args.theme.current();
                         return parseInt(
                           currentTheme.object?.straightTableV2?.content?.fontSize ?? currentTheme.fontSize,
-                          10
+                          10,
                         );
                       },
                       change(data) {

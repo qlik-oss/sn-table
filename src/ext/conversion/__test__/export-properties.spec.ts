@@ -94,13 +94,13 @@ describe("exportProperties", () => {
       const expFormat = exportProperties(propertyTree, hyperCubePath);
       expect(expFormat.properties.qHyperCubeDef.columnWidths).toEqual([-1, 200, 200, -1]);
       expect(
-        expFormat.properties.qLayoutExclude.quarantine.straightTableColumnWidths["qHyperCubeDef.columnWidths"]
+        expFormat.properties.qLayoutExclude.quarantine.straightTableColumnWidths["qHyperCubeDef.columnWidths"],
       ).toEqual([-1, 200, 200, -1]);
       expect(
-        expFormat.properties.qLayoutExclude.quarantine.straightTableColumnOrder["qHyperCubeDef.qColumnOrder"]
+        expFormat.properties.qLayoutExclude.quarantine.straightTableColumnOrder["qHyperCubeDef.qColumnOrder"],
       ).toEqual([0, 2, 1]);
       expect(
-        expFormat.properties.qLayoutExclude.quarantine.straightTableColumnOrder["qHyperCubeDef.columnOrder"]
+        expFormat.properties.qLayoutExclude.quarantine.straightTableColumnOrder["qHyperCubeDef.columnOrder"],
       ).toEqual([0, 2, 1]);
     });
   });

@@ -4,7 +4,7 @@ import { Column, HyperCube, SortDirection } from "../types";
 export const sortingFactory = (
   dimensionsLength: number,
   model: EngineAPI.IGenericObject | undefined,
-  isNewHeadCellMenuEnabled: boolean
+  isNewHeadCellMenuEnabled: boolean,
 ) => {
   if (!model) return undefined;
 
@@ -48,11 +48,11 @@ export const sortingFactory = (
 const useSorting = (
   hyperCube: HyperCube,
   model: EngineAPI.IGenericObject | undefined,
-  isNewHeadCellMenuEnabled: boolean
+  isNewHeadCellMenuEnabled: boolean,
 ) =>
   useMemo(
     () => sortingFactory(hyperCube.qDimensionInfo.length, model, isNewHeadCellMenuEnabled),
-    [hyperCube.qDimensionInfo.length, model, isNewHeadCellMenuEnabled]
+    [hyperCube.qDimensionInfo.length, model, isNewHeadCellMenuEnabled],
   );
 
 export default useSorting;
