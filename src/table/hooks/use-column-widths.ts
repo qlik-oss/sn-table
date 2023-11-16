@@ -1,13 +1,7 @@
+import { ColumnWidthType, ColumnWidthValues } from "@qlik/nebula-table-utils/lib/constants";
 import { useMeasureText, useOnPropsChange } from "@qlik/nebula-table-utils/lib/hooks";
 import { useMemo, useState } from "react";
 import { Column, TotalsPosition } from "../../types";
-import {
-  ColumnWidthTypes,
-  DEFAULT_COLUMN_PERCENTAGE_WIDTH,
-  DEFAULT_COLUMN_PIXEL_WIDTH,
-  MAX_COLUMN_WIDTH,
-  MIN_COLUMN_WIDTH,
-} from "../constants";
 import {
   ADJUSTED_HEADER_WIDTH,
   BORDER_WIDTH,
@@ -44,24 +38,24 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getFitToC
       let newWidth = 0;
 
       const addKnownWidth = () => {
-        columnWidths[idx] = Math.min(MAX_COLUMN_WIDTH, Math.max(MIN_COLUMN_WIDTH, newWidth));
+        columnWidths[idx] = Math.min(ColumnWidthValues.PixelsMax, Math.max(ColumnWidthValues.PixelsMinTable, newWidth));
         sumAutoWidths -= columnWidths[idx];
       };
 
       switch (type) {
-        case ColumnWidthTypes.PIXELS:
-          newWidth = pixels || DEFAULT_COLUMN_PIXEL_WIDTH;
+        case ColumnWidthType.Pixels:
+          newWidth = pixels || ColumnWidthValues.PixelsDefault;
           addKnownWidth();
           break;
-        case ColumnWidthTypes.PERCENTAGE:
-          newWidth = ((percentage || DEFAULT_COLUMN_PERCENTAGE_WIDTH) / 100) * tableWidth;
+        case ColumnWidthType.Percentage:
+          newWidth = ((percentage || ColumnWidthValues.PercentageDefault) / 100) * tableWidth;
           addKnownWidth();
           break;
-        case ColumnWidthTypes.FIT_TO_CONTENT:
+        case ColumnWidthType.FitToContent:
           newWidth = getFitToContentWidth(label, totalInfo, qApprMaxGlyphCount, col.isLocked);
           addKnownWidth();
           break;
-        case ColumnWidthTypes.AUTO:
+        case ColumnWidthType.Auto:
           // stores the indexes of auto columns to loop over later
           autoColumnIndexes.push(idx);
           break;
@@ -77,7 +71,7 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getFitToC
     // divides remaining width evenly between auto columns
     const autoWidth = sumAutoWidths / autoColumnIndexes.length;
     autoColumnIndexes.forEach((autoIdx) => {
-      columnWidths[autoIdx] = Math.max(MIN_COLUMN_WIDTH, autoWidth);
+      columnWidths[autoIdx] = Math.max(ColumnWidthValues.PixelsMinTable, autoWidth);
     });
   }
 

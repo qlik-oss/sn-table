@@ -1,7 +1,7 @@
 import { setValue } from "qlik-chart-modules";
 import conversion from "qlik-object-conversion";
 
-import { DEFAULT_COLUMN_PIXEL_WIDTH } from "../../table/constants";
+import { ColumnWidthValues } from "@qlik/nebula-table-utils/lib/constants";
 import { DimensionProperties, ExportFormat, MeasureProperties, PropTree } from "../../types";
 
 const getColumnWidth = (colIdx: number, qDimensions: DimensionProperties[], qMeasures: MeasureProperties[]) => {
@@ -12,7 +12,7 @@ const getColumnWidth = (colIdx: number, qDimensions: DimensionProperties[], qMea
   const { columnWidth } = info.qDef;
 
   // For converting "sn-table to table", columnWidth is -1 unless the width type is pixels.
-  return columnWidth?.type === "pixels" ? columnWidth.pixels ?? DEFAULT_COLUMN_PIXEL_WIDTH : -1;
+  return columnWidth?.type === "pixels" ? columnWidth.pixels ?? ColumnWidthValues.PixelsDefault : -1;
 };
 
 export const getColumnWidths = (

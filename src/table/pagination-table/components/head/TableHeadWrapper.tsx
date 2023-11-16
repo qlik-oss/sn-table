@@ -3,7 +3,7 @@ import TableRow from "@mui/material/TableRow";
 import React, { memo, useEffect, useRef } from "react";
 
 import CellText from "../../../components/CellText";
-import ColumnAdjuster from "../../../components/head/ColumnAdjuster";
+import ColumnAdjusterWrapper from "../../../components/head/ColumnAdjusterWrapper";
 import HeadCellContent from "../../../components/head/HeadCellContent";
 import { FullSortDirection } from "../../../constants";
 import { TableContext, useContextSelector } from "../../../context";
@@ -88,7 +88,7 @@ const TableHeadWrapper = () => {
               <HeadCellContent column={column} isInteractionEnabled={isInteractionEnabled}>
                 <CellText fontSize={styling.head.fontSize}>{column.label}</CellText>
               </HeadCellContent>
-              <ColumnAdjuster column={column} isLastColumn={isLastColumn} />
+              <ColumnAdjusterWrapper column={column} isLastColumn={isLastColumn} />
             </StyledHeadCell>
           );
         })}

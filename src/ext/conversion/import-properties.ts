@@ -1,8 +1,7 @@
+import { ColumnWidthType } from "@qlik/nebula-table-utils/lib/constants";
 import { setValue } from "qlik-chart-modules";
 import conversion from "qlik-object-conversion";
-
 import data from "../../qae/data";
-import { ColumnWidthTypes } from "../../table/constants";
 import { DimensionProperties, ExportFormat, MeasureProperties, PropTree } from "../../types";
 
 export const getColumnInfo = (
@@ -22,10 +21,10 @@ export const getColumnInfo = (
     column.qDef.columnWidth =
       columnWidth === -1
         ? {
-            type: ColumnWidthTypes.FIT_TO_CONTENT,
+            type: ColumnWidthType.FitToContent,
           }
         : {
-            type: ColumnWidthTypes.PIXELS,
+            type: ColumnWidthType.Pixels,
             pixels: columnWidth,
           };
   }
