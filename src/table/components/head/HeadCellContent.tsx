@@ -57,12 +57,13 @@ const HeadCellContent = ({ children, column, isInteractionEnabled }: HeadCellCon
 
   return (
     <StyledHeadCellContent
+      onClick={handleOpenMenu}
       isLocked={Boolean(lockIcon)}
       className={`aligned-${column.headTextAlign}`}
-      onClick={handleOpenMenu}
       background={open ? activeBackground : background}
       hoverBackground={hoverBackground}
       interactions={interactions}
+      isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
     >
       {lockIcon && <StyledHeadCellIconWrapper>{lockIcon}</StyledHeadCellIconWrapper>}
 

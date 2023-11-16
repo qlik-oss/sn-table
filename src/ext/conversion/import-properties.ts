@@ -1,15 +1,14 @@
+import { ColumnWidthType } from "@qlik/nebula-table-utils/lib/constants";
 import { setValue } from "qlik-chart-modules";
 import conversion from "qlik-object-conversion";
-
 import data from "../../qae/data";
-import { ColumnWidthTypes } from "../../table/constants";
 import { DimensionProperties, ExportFormat, MeasureProperties, PropTree } from "../../types";
 
 export const getColumnInfo = (
   columnInfo: DimensionProperties[] | MeasureProperties[],
   colIdx: number,
   columnWidths?: number[],
-  numDims?: number
+  numDims?: number,
 ) => {
   let index = colIdx;
   if (numDims) index = colIdx - numDims;
@@ -22,10 +21,10 @@ export const getColumnInfo = (
     column.qDef.columnWidth =
       columnWidth === -1
         ? {
-            type: ColumnWidthTypes.FIT_TO_CONTENT,
+            type: ColumnWidthType.FitToContent,
           }
         : {
-            type: ColumnWidthTypes.PIXELS,
+            type: ColumnWidthType.Pixels,
             pixels: columnWidth,
           };
   }
@@ -37,7 +36,7 @@ export const getMultiColumnInfo = (
   qDimensions: DimensionProperties[],
   qMeasures: MeasureProperties[],
   qColumnOrder?: number[],
-  columnWidths?: number[]
+  columnWidths?: number[],
 ) => {
   const numDims = qDimensions.length;
   const columnsLength = numDims + qMeasures.length;
@@ -58,7 +57,7 @@ const importProperties = (
   exportFormat: ExportFormat,
   initialProperties: EngineAPI.IGenericHyperCubeProperties,
   extension: any,
-  hypercubePath?: string
+  hypercubePath?: string,
 ): PropTree => {
   const propertyTree = conversion.hypercube.importProperties({
     exportFormat,

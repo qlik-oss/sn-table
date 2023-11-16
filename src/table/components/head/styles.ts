@@ -6,7 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { styled } from "@mui/material/styles";
 
 import { HEAD_ICON_WRAPPER_SIZE, LOCK_ICON_SIZE } from "../../constants";
-import { BORDER_WIDTH, DEFAULT_FONT_SIZE, PADDING } from "../../styling-defaults";
+import { DEFAULT_FONT_SIZE } from "../../styling-defaults";
 
 // ---------- HeadCellContent ----------
 export const AbsolutelyStyledRefAnchor = styled("div")({
@@ -61,8 +61,9 @@ export const VisuallyHidden = styled("span")({
 });
 
 export const StyledHeadCellContent = styled(Box, {
-  shouldForwardProp: (prop: string) => !["interactions", "isLocked", "hoverBackground", "background"].includes(prop),
-})(({ theme, isLocked, hoverBackground, background, interactions }) => ({
+  shouldForwardProp: (prop: string) =>
+    !["isNewHeadCellMenuEnabled", "interactions", "isLocked", "hoverBackground", "background"].includes(prop),
+})(({ theme, isLocked, hoverBackground, background, interactions, isNewHeadCellMenuEnabled }) => ({
   width: "100%",
   height: "100%",
   padding: "4px",
@@ -74,6 +75,8 @@ export const StyledHeadCellContent = styled(Box, {
   fontSize: "inherit",
   fontFamily: "inherit",
   background,
+  ...(isNewHeadCellMenuEnabled && { alignItems: "end" }),
+
   "&&:hover": {
     background: interactions.active ? hoverBackground : background,
   },
@@ -177,39 +180,3 @@ export const NebulaListBox = styled("div")(({ theme }) => ({
   boxSizing: "border-box",
   background: theme.palette.common.white,
 }));
-
-// ---------- ColumnAdjuster ----------
-
-export const AdjusterHitArea = styled(Box, {
-  shouldForwardProp: (prop: string) => prop !== "isLastColumn",
-})(({ isLastColumn }) => ({
-  touchAction: "none",
-  display: "flex",
-  position: "absolute",
-  height: "100%",
-  top: 0,
-  left: `100%`,
-  cursor: "col-resize",
-  // last column padding, other double padding + border
-  width: `${isLastColumn ? PADDING : PADDING * 2 + BORDER_WIDTH}px`,
-  justifyContent: isLastColumn ? "flex-end" : "center",
-  marginLeft: "-4px",
-  "&:hover:not(:focus, :active) .sn-table-adjuster-head-border": {
-    background: "#D9D9D9",
-    "@media (hover: none)": {
-      background: "none",
-    },
-  },
-  "&:focus-visible, :active": {
-    outline: "none",
-    "& .sn-table-adjuster-head-border": {
-      background: "#177fe6",
-    },
-  },
-}));
-
-export const AdjusterHeadBorder = styled(Box)({
-  position: "absolute",
-  height: "100%",
-  width: "3px",
-});

@@ -120,7 +120,7 @@ describe("keyboard-utils", () => {
       totalsPosition = { atTop: false, atBottom: true };
       isSelectionMode = false;
       jest.spyOn(accessibilityUtils, "announceSelectionState").mockImplementation(() => {});
-      jest.spyOn(accessibilityUtils, "moveFocusWithArrow").mockImplementation(() => ({} as HTMLTableCellElement));
+      jest.spyOn(accessibilityUtils, "moveFocusWithArrow").mockImplementation(() => ({}) as HTMLTableCellElement);
       jest.spyOn(accessibilityUtils, "updateFocus").mockImplementation(() => {});
       jest.spyOn(handleScroll, "handleNavigateTop").mockImplementation(() => {});
     });

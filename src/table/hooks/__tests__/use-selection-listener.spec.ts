@@ -34,7 +34,7 @@ describe("useSelectionListener", () => {
 
   it("should call api.on and api removeListener for all listeners", async () => {
     renderHook(() =>
-      useSelectionListener({ selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef })
+      useSelectionListener({ selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef }),
     );
 
     const expects: Promise<void>[] = [];
@@ -55,7 +55,7 @@ describe("useSelectionListener", () => {
     } as unknown as ExtendedSelectionAPI;
 
     renderHook(() =>
-      useSelectionListener({ selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef })
+      useSelectionListener({ selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef }),
     );
 
     const expects: Promise<void>[] = [];
@@ -81,7 +81,7 @@ describe("useSelectionListener", () => {
     } as unknown as ExtendedSelectionAPI;
 
     renderHook(() =>
-      useSelectionListener({ selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef })
+      useSelectionListener({ selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef }),
     );
 
     confirmCallback();
@@ -101,7 +101,7 @@ describe("useSelectionListener", () => {
     } as unknown as ExtendedSelectionAPI;
 
     renderHook(() =>
-      useSelectionListener({ selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef })
+      useSelectionListener({ selectionsAPI, selectionDispatch, setShouldRefocus, keyboard, tableWrapperRef }),
     );
 
     confirmCallback();

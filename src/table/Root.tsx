@@ -57,7 +57,7 @@ export function renderPaginationTable(props: RenderProps, reactRoot: ReactDom.Ro
           <TableWrapper {...wrapperProps} direction={direction} />
         </TableContextProvider>
       </ThemeProvider>
-    </StyleSheetManager>
+    </StyleSheetManager>,
   );
 }
 
@@ -112,6 +112,6 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
           <VirtualizedTable />
         </TableContextProvider>
       </ThemeProvider>
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 }

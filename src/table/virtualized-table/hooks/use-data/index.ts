@@ -55,7 +55,7 @@ const useData = ({
 
       return nextState;
     },
-    [rowCount, pageInfo, columns, layout, mutableSetCellSize]
+    [rowCount, pageInfo, columns, layout, mutableSetCellSize],
   );
   const [rowsInPage, setRowsInPage] = useState<Row[]>(() => memoizedToRows(initialDataPages ?? []));
 
@@ -88,7 +88,7 @@ const useData = ({
         }
       }
     },
-    [mutableRowsInPage, queue]
+    [mutableRowsInPage, queue],
   );
 
   const loadRows: LoadData = useCallback(
@@ -107,7 +107,7 @@ const useData = ({
         }
       }
     },
-    [mutableRowsInPage, queue, pageInfo]
+    [mutableRowsInPage, queue, pageInfo],
   );
 
   const themeName = theme.name();

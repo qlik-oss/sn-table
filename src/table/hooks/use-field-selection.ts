@@ -35,7 +35,7 @@ const useFieldSelection = (column: Column, openMenuDropdown: boolean): UseFieldS
   const { app, layout } = useContextSelector(TableContext, (value) => value.baseProps);
   const [fieldInstance, setFieldInstance] = useState<EngineAPI.IField | null>(null);
   const [selectionActionsEnabledStatus, setSelectionActionsEnabledStatus] = useState(
-    SELECTION_ACTIONS_ENABLED_DEFAULT_STATUS
+    SELECTION_ACTIONS_ENABLED_DEFAULT_STATUS,
   );
 
   useEffect(() => {
@@ -65,7 +65,7 @@ const useFieldSelection = (column: Column, openMenuDropdown: boolean): UseFieldS
 
   const resetSelectionActionsEnabledStatus = useCallback(
     () => setSelectionActionsEnabledStatus(SELECTION_ACTIONS_ENABLED_DEFAULT_STATUS),
-    []
+    [],
   );
   const updateSelectionActionsEnabledStatus = (latestLayout: TableLayout) => {
     const dimInfo = latestLayout.qHyperCube.qDimensionInfo.find((dim) => dim.qFallbackTitle === column.label);

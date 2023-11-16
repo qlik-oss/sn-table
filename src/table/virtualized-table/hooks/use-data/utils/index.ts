@@ -11,7 +11,7 @@ const createRow = (
   pageRowStartIdx: number,
   columns: Column[],
   qSize: EngineAPI.ISize,
-  setCellSize: SetCellSize
+  setCellSize: SetCellSize,
 ) => {
   const rowIdx = qArea.qTop + cellRowIdx;
   const pageRowIdx = pageRowStartIdx + cellRowIdx;
@@ -78,7 +78,7 @@ const toRows = (
   rows: Row[],
   columns: Column[],
   layout: TableLayout,
-  setCellSize: SetCellSize
+  setCellSize: SetCellSize,
 ) => {
   qDataPages.forEach((dataPage) => {
     dataPage.qMatrix.forEach((cells, cellRowIdx) => {
@@ -91,7 +91,7 @@ const toRows = (
         pageRowStartIdx,
         columns,
         layout.qHyperCube.qSize,
-        setCellSize
+        setCellSize,
       );
 
       rows[pageRowIdx] = row;

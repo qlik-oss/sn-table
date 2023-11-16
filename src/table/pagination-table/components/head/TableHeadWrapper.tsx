@@ -3,7 +3,7 @@ import TableRow from "@mui/material/TableRow";
 import React, { memo, useEffect, useRef } from "react";
 
 import CellText from "../../../components/CellText";
-import ColumnAdjuster from "../../../components/head/ColumnAdjuster";
+import ColumnAdjusterWrapper from "../../../components/head/ColumnAdjusterWrapper";
 import HeadCellContent from "../../../components/head/HeadCellContent";
 import { FullSortDirection } from "../../../constants";
 import { TableContext, useContextSelector } from "../../../context";
@@ -16,7 +16,7 @@ const TableHeadWrapper = () => {
   const { columns } = useContextSelector(TableContext, (value) => value.tableData);
   const { styling, interactions, rootElement, keyboard, viewService } = useContextSelector(
     TableContext,
-    (value) => value.baseProps
+    (value) => value.baseProps,
   );
   const setHeadRowHeight = useContextSelector(TableContext, (value) => value.setHeadRowHeight);
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
@@ -24,7 +24,7 @@ const TableHeadWrapper = () => {
   const isSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI?.isModal());
   const isNewHeadCellMenuEnabled = useContextSelector(
     TableContext,
-    (value) => value.featureFlags.isNewHeadCellMenuEnabled
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled,
   );
 
   const headRowRef = useRef<HTMLTableRowElement>(null);
@@ -88,7 +88,7 @@ const TableHeadWrapper = () => {
               <HeadCellContent column={column} isInteractionEnabled={isInteractionEnabled}>
                 <CellText fontSize={styling.head.fontSize}>{column.label}</CellText>
               </HeadCellContent>
-              <ColumnAdjuster column={column} isLastColumn={isLastColumn} />
+              <ColumnAdjusterWrapper column={column} isLastColumn={isLastColumn} />
             </StyledHeadCell>
           );
         })}

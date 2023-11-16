@@ -57,7 +57,7 @@ describe("getCellStyle", () => {
         column ?? ({ stylingIDs: [] } as unknown as Column),
         isHoveringOnRow ?? false,
         cellSelectionState ?? SelectionStates.INACTIVE,
-        bodyStyle
+        bodyStyle,
       );
   });
 

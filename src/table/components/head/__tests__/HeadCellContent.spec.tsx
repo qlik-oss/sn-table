@@ -18,7 +18,7 @@ describe("<HeadCellContent />", () => {
         <HeadCellContent column={column} isInteractionEnabled={isInteractionEnabled}>
           <CellText>{column.label}</CellText>
         </HeadCellContent>
-      </TestWithProviders>
+      </TestWithProviders>,
     );
 
   beforeEach(() => {

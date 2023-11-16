@@ -1,3 +1,4 @@
+import { ColumnWidthType, ColumnWidthValues } from "@qlik/nebula-table-utils/lib/constants";
 import {
   useMeasureText,
   type EstimateLineCount,
@@ -6,7 +7,6 @@ import {
 } from "@qlik/nebula-table-utils/lib/hooks";
 import { renderHook } from "@testing-library/react";
 import { Column, TotalsPosition } from "../../../types";
-import { ColumnWidthTypes, MIN_COLUMN_WIDTH } from "../../constants";
 import { TableStyling } from "../../types";
 import useColumnWidths from "../use-column-widths";
 
@@ -33,17 +33,17 @@ describe("use-column-widths", () => {
       {
         label: "col1",
         qApprMaxGlyphCount: 10,
-        columnWidth: { type: ColumnWidthTypes.AUTO, pixels: 150, percentage: 50 },
+        columnWidth: { type: ColumnWidthType.Auto, pixels: 150, percentage: 50 },
       } as Column,
       {
         label: "col2",
         qApprMaxGlyphCount: 10,
-        columnWidth: { type: ColumnWidthTypes.AUTO, pixels: 150, percentage: 50 },
+        columnWidth: { type: ColumnWidthType.Auto, pixels: 150, percentage: 50 },
       } as Column,
       {
         label: "col3",
         qApprMaxGlyphCount: 10,
-        columnWidth: { type: ColumnWidthTypes.AUTO, pixels: 150, percentage: 50 },
+        columnWidth: { type: ColumnWidthType.Auto, pixels: 150, percentage: 50 },
       } as Column,
     ];
     tableWidth = 600;
@@ -79,9 +79,9 @@ describe("use-column-widths", () => {
       });
 
       it("should return equal sizes for all when all types are percentage", () => {
-        columns[0].columnWidth.type = ColumnWidthTypes.PERCENTAGE;
-        columns[1].columnWidth.type = ColumnWidthTypes.PERCENTAGE;
-        columns[2].columnWidth.type = ColumnWidthTypes.PERCENTAGE;
+        columns[0].columnWidth.type = ColumnWidthType.Percentage;
+        columns[1].columnWidth.type = ColumnWidthType.Percentage;
+        columns[2].columnWidth.type = ColumnWidthType.Percentage;
 
         const widths = getColumnWidthsState();
         expect(widths).toEqual([300, 300, 300]);
@@ -89,9 +89,9 @@ describe("use-column-widths", () => {
       });
 
       it("should return equal sizes for all when all types are pixels", () => {
-        columns[0].columnWidth.type = ColumnWidthTypes.PIXELS;
-        columns[1].columnWidth.type = ColumnWidthTypes.PIXELS;
-        columns[2].columnWidth.type = ColumnWidthTypes.PIXELS;
+        columns[0].columnWidth.type = ColumnWidthType.Pixels;
+        columns[1].columnWidth.type = ColumnWidthType.Pixels;
+        columns[2].columnWidth.type = ColumnWidthType.Pixels;
 
         const widths = getColumnWidthsState();
         expect(widths).toEqual([150, 150, 150]);
@@ -101,9 +101,9 @@ describe("use-column-widths", () => {
       it("should return equal sizes when all types are fitToContent", () => {
         (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValue(200);
         (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValue(200);
-        columns[0].columnWidth.type = ColumnWidthTypes.FIT_TO_CONTENT;
-        columns[1].columnWidth.type = ColumnWidthTypes.FIT_TO_CONTENT;
-        columns[2].columnWidth.type = ColumnWidthTypes.FIT_TO_CONTENT;
+        columns[0].columnWidth.type = ColumnWidthType.FitToContent;
+        columns[1].columnWidth.type = ColumnWidthType.FitToContent;
+        columns[2].columnWidth.type = ColumnWidthType.FitToContent;
 
         const widths = getColumnWidthsState();
         expect(widths).toEqual([271, 271, 271]);
@@ -113,7 +113,7 @@ describe("use-column-widths", () => {
 
     describe("all do not have same type", () => {
       it("should return one size for pixel value and equal sizes for two columns with auto", () => {
-        columns[0].columnWidth.type = ColumnWidthTypes.PIXELS;
+        columns[0].columnWidth.type = ColumnWidthType.Pixels;
 
         const widths = getColumnWidthsState();
         expect(widths).toEqual([150, 225, 225]);
@@ -121,7 +121,7 @@ describe("use-column-widths", () => {
       });
 
       it("should return one size for percentage and equal sizes for two columns with auto", () => {
-        columns[1].columnWidth.type = ColumnWidthTypes.PERCENTAGE;
+        columns[1].columnWidth.type = ColumnWidthType.Percentage;
 
         const widths = getColumnWidthsState();
         expect(widths).toEqual([150, 300, 150]);
@@ -129,27 +129,27 @@ describe("use-column-widths", () => {
       });
 
       it("should return one MIN_COLUMN_WIDTH for small percentage and equal sizes for two columns with auto", () => {
-        columns[1].columnWidth.type = ColumnWidthTypes.PERCENTAGE;
-        columns[1].columnWidth.percentage = 10;
+        columns[1].columnWidth.type = ColumnWidthType.Percentage;
+        columns[1].columnWidth.percentage = 1;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([240, MIN_COLUMN_WIDTH, 240]);
+        expect(widths).toEqual([240, ColumnWidthValues.PixelsMinTable, 240]);
         expect(getTotalWidth(widths)).toBe(tableWidth);
       });
 
       it("should return one large column and equal sizes for two columns with auto, that are MIN_COLUMN_WIDTH", () => {
-        columns[1].columnWidth.type = ColumnWidthTypes.PERCENTAGE;
+        columns[1].columnWidth.type = ColumnWidthType.Percentage;
         columns[1].columnWidth.percentage = 100;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([MIN_COLUMN_WIDTH, 600, MIN_COLUMN_WIDTH]);
-        expect(getTotalWidth(widths)).toBe(tableWidth + MIN_COLUMN_WIDTH * 2);
+        expect(widths).toEqual([ColumnWidthValues.PixelsMinTable, 600, ColumnWidthValues.PixelsMinTable]);
+        expect(getTotalWidth(widths)).toBe(tableWidth + ColumnWidthValues.PixelsMinTable * 2);
       });
 
       it("should return one size for fitToContent and equal sizes for two columns with auto", () => {
         (mockedMeasureText.estimateWidth as jest.MockedFunction<(length: number) => number>).mockReturnValue(150);
         (mockedMeasureText.measureText as jest.MockedFunction<(text: string) => number>).mockReturnValue(150);
-        columns[2].columnWidth.type = ColumnWidthTypes.FIT_TO_CONTENT;
+        columns[2].columnWidth.type = ColumnWidthType.FitToContent;
 
         const widths = getColumnWidthsState();
         expect(widths).toEqual([189.5, 189.5, 221]);

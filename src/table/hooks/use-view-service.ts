@@ -20,7 +20,7 @@ const useViewService = (layout: TableLayout): ViewService => {
   return useMemo(
     () => createViewService(viewState, layout.snapshotData),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [viewState, layout.snapshotData, layout.usePagination]
+    [viewState, layout.snapshotData, layout.usePagination],
   );
 };
 

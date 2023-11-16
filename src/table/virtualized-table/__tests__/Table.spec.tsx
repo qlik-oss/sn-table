@@ -50,8 +50,8 @@ describe("<Table />", () => {
           initialDataPages={initialDataPages}
         >
           <TestableTable pageInfo={pageInfo} />
-        </TestWithProviders>
-      )
+        </TestWithProviders>,
+      ),
     );
   };
 
