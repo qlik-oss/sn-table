@@ -40,7 +40,7 @@ describe("<HeadCellMenu />", () => {
     render(
       <TestWithProviders layout={layout} direction={direction} embed={embed} model={model} interactions={interactions}>
         <HeadCellMenu column={column} tabIndex={0} />
-      </TestWithProviders>
+      </TestWithProviders>,
     );
 
   const openMenu = async () => {
@@ -131,7 +131,7 @@ describe("<HeadCellMenu />", () => {
     ["SNTable.MenuItem.Search", "SNTable.MenuItem.Selections", "SNTable.MenuItem.AdjustColumnSize"].forEach(
       (actionLabel) => {
         expect(screen.queryByText(actionLabel)).toBeVisible();
-      }
+      },
     );
   });
 
@@ -195,7 +195,7 @@ describe("<HeadCellMenu />", () => {
     expect(embed.__DO_NOT_USE__.popover).toHaveBeenCalledWith(
       expect.any(HTMLDivElement),
       column.fieldId,
-      defaultListboxAnchorOpts
+      defaultListboxAnchorOpts,
     );
   });
 
@@ -216,7 +216,7 @@ describe("<HeadCellMenu />", () => {
     expect(embed.__DO_NOT_USE__.popover).toHaveBeenCalledWith(
       expect.any(HTMLDivElement),
       { qLibraryId: column.qLibraryId, type: "dimension" },
-      defaultListboxAnchorOpts
+      defaultListboxAnchorOpts,
     );
   });
 

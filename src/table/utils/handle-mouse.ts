@@ -11,7 +11,7 @@ export const handleMouseDownToFocusBody = (
   rootElement: HTMLElement,
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
   keyboard: stardust.Keyboard,
-  totalsPosition: TotalsPosition
+  totalsPosition: TotalsPosition,
 ) => {
   const { pageRowIdx, pageColIdx } = cell;
   const adjustedRowIdx = totalsPosition.atTop ? pageRowIdx + 2 : pageRowIdx + 1;
@@ -44,7 +44,7 @@ export const getSelectionMouseHandlers = (
   onMouseDown: React.MouseEventHandler<HTMLTableCellElement> | undefined,
   cell: Cell,
   selectionDispatch: SelectionDispatch,
-  announce: Announce
+  announce: Announce,
 ) => {
   const handleMouseDown = (evt: React.MouseEvent) => {
     // run handleMouseDownToFocusBody

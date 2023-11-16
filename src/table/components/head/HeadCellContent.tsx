@@ -19,12 +19,12 @@ import {
 const HeadCellContent = ({ children, column, isInteractionEnabled }: HeadCellContentProps) => {
   const { keyboard, translator, changeSortOrder, interactions, embed, app, model } = useContextSelector(
     TableContext,
-    (value) => value.baseProps
+    (value) => value.baseProps,
   );
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const isNewHeadCellMenuEnabled = useContextSelector(
     TableContext,
-    (value) => value.featureFlags.isNewHeadCellMenuEnabled
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled,
   );
 
   const [open, setOpen] = useState(false);
@@ -49,9 +49,10 @@ const HeadCellContent = ({ children, column, isInteractionEnabled }: HeadCellCon
 
   return (
     <StyledHeadCellContent
+      onClick={handleOpenMenu}
       isLocked={Boolean(lockIcon)}
       className={`aligned-${column.headTextAlign}`}
-      onClick={handleOpenMenu}
+      isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
     >
       {lockIcon && <StyledHeadCellIconWrapper>{lockIcon}</StyledHeadCellIconWrapper>}
 

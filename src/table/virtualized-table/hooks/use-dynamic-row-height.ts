@@ -72,13 +72,13 @@ const useDynamicRowHeight = ({
         : getAdjustedCellWidth(columnWidths[colIdx]);
       const estimatedLineCount = Math.min(
         maxLineCount,
-        estimateLineCount({ text: text.trim(), maxWidth: cellWidth, isNumeric })
+        estimateLineCount({ text: text.trim(), maxWidth: cellWidth, isNumeric }),
       );
       const textHeight = Math.max(1, estimatedLineCount) * lineHeight;
 
       return textHeight + CELL_PADDING_HEIGHT + CELL_BORDER_HEIGHT;
     },
-    [columnWidths, lineHeight, maxLineCount, columns, estimateLineCount]
+    [columnWidths, lineHeight, maxLineCount, columns, estimateLineCount],
   );
 
   const setCellSize = useCallback(
@@ -107,12 +107,12 @@ const useDynamicRowHeight = ({
         setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
       }
     },
-    [getCellSize, isSnapshot]
+    [getCellSize, isSnapshot],
   );
 
   const getRowHeight = useCallback(
     (rowIdx: number) => rowMeta.current.heights[rowIdx] ?? estimatedRowHeight,
-    [rowMeta, estimatedRowHeight]
+    [rowMeta, estimatedRowHeight],
   );
 
   const resetRowMeta = useCallback(() => {

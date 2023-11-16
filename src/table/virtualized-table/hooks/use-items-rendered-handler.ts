@@ -114,7 +114,7 @@ const useItemsRendererHandler = ({
       loadRows,
       layout.qHyperCube.qSize.qcx,
       loadColumns,
-    ]
+    ],
   );
 
   return handleItemsRendered;

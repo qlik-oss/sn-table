@@ -28,7 +28,7 @@ export const getCellSelectionState = (cell: Cell, selectionState: SelectionState
 export const announceSelectionStatus = (
   announce: Announce,
   oldRows: Record<string, number>,
-  newRows: Record<string, number>
+  newRows: Record<string, number>,
 ) => {
   const rowsLength = Object.keys(newRows).length;
   const isAddition = rowsLength >= Object.keys(oldRows).length;
@@ -51,7 +51,7 @@ export const announceSelectionStatus = (
 export const getSelectedRows = (
   selectedRows: Record<string, number>,
   cell: Cell,
-  evt: React.KeyboardEvent | React.MouseEvent
+  evt: React.KeyboardEvent | React.MouseEvent,
 ): Record<string, number> => {
   const { qElemNumber, rowIdx } = cell;
 
@@ -109,7 +109,7 @@ export const getMultiSelectedRows = (
   selectedRows: Record<string, number>,
   cell: Cell,
   evt: React.KeyboardEvent | React.MouseEvent,
-  firstCell?: Cell
+  firstCell?: Cell,
 ): Record<string, number> => {
   const newSelectedRows = { ...selectedRows };
 
@@ -163,7 +163,7 @@ const selectMultipleCells = (state: SelectionState, payload: SelectPayload): Sel
  */
 const selectOnMouseDown = (
   state: SelectionState,
-  { cell, mouseupOutsideCallback }: { cell: Cell; mouseupOutsideCallback(): void }
+  { cell, mouseupOutsideCallback }: { cell: Cell; mouseupOutsideCallback(): void },
 ): SelectionState => {
   if (mouseupOutsideCallback && (state.colIdx === -1 || state.colIdx === cell.selectionColIdx)) {
     document.addEventListener("mouseup", mouseupOutsideCallback);

@@ -37,7 +37,7 @@ describe("<TableWrapper />", () => {
           announce={announce}
           footerContainer={footerContainer}
         />
-      </TestWithProviders>
+      </TestWithProviders>,
     );
 
   beforeEach(() => {
@@ -78,7 +78,7 @@ describe("<TableWrapper />", () => {
     const { getByLabelText, getByText, getByTestId } = renderTableWrapper();
 
     expect(
-      getByLabelText(`${"SNTable.Accessibility.RowsAndColumns"} ${"SNTable.Accessibility.NavigationInstructions"}`)
+      getByLabelText(`${"SNTable.Accessibility.RowsAndColumns"} ${"SNTable.Accessibility.NavigationInstructions"}`),
     ).toBeVisible();
     expect(getByTestId("table-container").getAttribute("tabindex")).toBe("-1");
     expect(getByTestId("table-container").getAttribute("role")).toBe("application");
@@ -91,7 +91,7 @@ describe("<TableWrapper />", () => {
     const { getByLabelText, queryByText, getByTestId } = renderTableWrapper();
 
     expect(
-      getByLabelText(`${"SNTable.Accessibility.RowsAndColumns"} ${"SNTable.Accessibility.NavigationInstructions"}`)
+      getByLabelText(`${"SNTable.Accessibility.RowsAndColumns"} ${"SNTable.Accessibility.NavigationInstructions"}`),
     ).toBeVisible();
     expect(getByTestId("table-container").getAttribute("tabindex")).toBe("-1");
     expect(getByTestId("table-container").getAttribute("role")).toBe("application");

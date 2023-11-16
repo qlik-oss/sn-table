@@ -66,7 +66,7 @@ export function getTotalInfo(layout: TableLayout, isDim: boolean, pageColIdx: nu
 export function getAlignInfo(
   textAlign: TextAlign,
   qDimensionType: EngineAPI.DimensionType | undefined,
-  isDim: boolean
+  isDim: boolean,
 ): { headTextAlign: Align; totalsTextAlign: Align; bodyTextAlign: Align | "auto" } {
   if (textAlign && !textAlign.auto) {
     return { headTextAlign: textAlign.align, totalsTextAlign: textAlign.align, bodyTextAlign: textAlign.align };
@@ -159,7 +159,7 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
 const getVisibleColumnOrder = (
   columnOrder: number[],
   qDimensionInfo: ExtendedNxDimensionInfo[],
-  qMeasureInfo: ExtendedNxMeasureInfo[]
+  qMeasureInfo: ExtendedNxMeasureInfo[],
 ) => {
   const numDims = qDimensionInfo.length;
   const visibleColumnIndexes: number[] = [];
@@ -196,11 +196,11 @@ export const getColumns = (layout: TableLayout) => {
   const { visibleColumnsOrder, visibleColumnIndexes } = getVisibleColumnOrder(
     columnOrder,
     qDimensionInfo,
-    qMeasureInfo
+    qMeasureInfo,
   );
 
   return visibleColumnsOrder.map((colIdx, pageColIdx) =>
-    getColumnInfo(layout, colIdx, pageColIdx, visibleColumnIndexes[colIdx])
+    getColumnInfo(layout, colIdx, pageColIdx, visibleColumnIndexes[colIdx]),
   );
 };
 /**
@@ -214,7 +214,7 @@ export default async function manageData(
   layout: TableLayout,
   pageInfo: PageInfo,
   setPageInfo: SetPageInfo,
-  viewService: ViewService
+  viewService: ViewService,
 ): Promise<TableData | null> {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const totalColumnCount = layout.qHyperCube.qSize.qcx;

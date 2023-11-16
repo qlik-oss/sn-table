@@ -15,7 +15,7 @@ const TableTotals = () => {
   } = useContextSelector(TableContext, (value) => value.tableData);
   const { rootElement, selectionsAPI, keyboard, styling, interactions } = useContextSelector(
     TableContext,
-    (value) => value.baseProps
+    (value) => value.baseProps,
   );
   const headRowHeight = useContextSelector(TableContext, (value) => value.headRowHeight);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);

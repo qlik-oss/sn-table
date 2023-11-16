@@ -10,7 +10,7 @@ export const getNextCellCoord = (
   allowedRows: {
     top: number;
     bottom: number;
-  } = { top: 0, bottom: 0 }
+  } = { top: 0, bottom: 0 },
 ): [number, number] => {
   const rowCount = rootElement.getElementsByClassName("sn-table-row").length;
   const columnCount = rootElement.getElementsByClassName("sn-table-head-cell").length;

@@ -11,7 +11,7 @@ const usePageInfo = (layout: TableLayout, shouldRender: boolean) => {
       rowsPerPage: pageSize,
       rowsPerPageOptions: [],
     }),
-    [pageSize, page]
+    [pageSize, page],
   );
 
   if (shouldRender) {

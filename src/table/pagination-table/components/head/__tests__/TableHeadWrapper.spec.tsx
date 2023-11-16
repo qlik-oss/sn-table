@@ -14,7 +14,7 @@ describe("<TableHeadWrapper />", () => {
         <table>
           <TableHeadWrapper />
         </table>
-      </TestWithProviders>
+      </TestWithProviders>,
     );
 
   beforeEach(() => {

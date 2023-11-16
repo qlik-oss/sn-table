@@ -41,7 +41,7 @@ describe("handle-mouse", () => {
         [1, 0],
         rootElement,
         setFocusedCellCoord,
-        keyboard
+        keyboard,
       );
     });
 
@@ -52,7 +52,7 @@ describe("handle-mouse", () => {
         [2, 0],
         rootElement,
         setFocusedCellCoord,
-        keyboard
+        keyboard,
       );
     });
   });

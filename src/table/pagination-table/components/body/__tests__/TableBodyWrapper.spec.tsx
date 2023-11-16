@@ -26,7 +26,7 @@ describe("<TableBodyWrapper />", () => {
         <table>
           <TableBodyWrapper setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} announce={announce} />
         </table>
-      </TestWithProviders>
+      </TestWithProviders>,
     );
 
   beforeEach(async () => {
@@ -36,7 +36,7 @@ describe("<TableBodyWrapper />", () => {
       generateLayout(1, 1, 2, [], [{ qText: "100" }]),
       { top: 0, height: 100 } as unknown as PageInfo,
       () => undefined,
-      viewService
+      viewService,
     )) as TableData;
     tableFirstRow = tableData.rows[0]["col-0"] as Cell;
     tableSecondRow = tableData.rows[0]["col-1"] as Cell;

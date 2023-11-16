@@ -193,7 +193,7 @@ describe("handle-data", () => {
         layout,
         pageInfo,
         setPageInfo,
-        viewService
+        viewService,
       )) as TableData;
 
       const firstColCell = rows[0]["col-0"] as Cell;

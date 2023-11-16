@@ -20,7 +20,7 @@ export const interceptClickOnMenuItems = (menuGroups: MenuItemGroup[], cache: Su
             },
           }
         : {}),
-    }))
+    })),
   );
   return result;
 };

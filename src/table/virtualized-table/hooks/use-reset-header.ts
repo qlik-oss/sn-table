@@ -7,7 +7,7 @@ const useResetHeader = (
   layout: TableLayout,
   pageInfo: PageInfo,
   columnWidths: number[],
-  themeName: string
+  themeName: string,
 ) => {
   useLayoutEffect(() => {
     forwardRef?.current?.resetAfterIndex(0, true);

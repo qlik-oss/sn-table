@@ -76,7 +76,7 @@ export const moveFocusWithArrow = (
   allowedRows?: {
     top: number;
     bottom: number;
-  }
+  },
 ) => {
   const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, allowedRows);
   const nextCell = getCellElement(rootElement, nextCellCoord);
@@ -92,7 +92,7 @@ export const moveFocusWithArrow = (
  */
 export const focusBodyFromHead = (
   rootElement: HTMLElement,
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
 ) => {
   let cell = findCellWithTabStop(rootElement);
   const newCellCoord = cell ? getCellCoord(rootElement, cell) : FIRST_BODY_CELL_COORD;
@@ -109,7 +109,7 @@ export const removeTabAndFocusCell = (
   newCoord: [number, number],
   rootElement: HTMLElement,
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  keyboard: stardust.Keyboard
+  keyboard: stardust.Keyboard,
 ) => {
   updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: findCellWithTabStop(rootElement) });
   setFocusedCellCoord(newCoord);
@@ -165,7 +165,7 @@ export const resetFocus = ({
 export const handleFocusoutEvent = (
   evt: FocusEvent,
   shouldRefocus: React.MutableRefObject<boolean>,
-  keyboard: stardust.Keyboard
+  keyboard: stardust.Keyboard,
 ) => {
   const targetElement = evt.currentTarget as HTMLDivElement;
   const relatedTarget = evt.relatedTarget as HTMLElement;

@@ -12,7 +12,7 @@ export default function connect() {
           url: `ws://localhost:9076/app/${Date.now()}`,
         })
         .open()
-        .then((qix) => qix.openDoc("/apps/Executive_Dashboard.qvf"))
+        .then((qix) => qix.openDoc("/apps/Executive_Dashboard.qvf")),
     );
 
   return createConnection();

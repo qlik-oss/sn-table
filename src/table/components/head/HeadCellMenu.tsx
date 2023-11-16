@@ -22,7 +22,7 @@ const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
   const { isDim, qLibraryId, fieldId, headTextAlign, pageColIdx } = column;
   const { translator, embed, model, interactions, layout } = useContextSelector(
     TableContext,
-    (value) => value.baseProps
+    (value) => value.baseProps,
   );
   const anchorRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
@@ -149,7 +149,7 @@ const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
         },
       ],
     ],
-    [isDim, interactions.select, translator, selectionActionsEnabledStatus, embedListbox, fieldInstance]
+    [isDim, interactions.select, translator, selectionActionsEnabledStatus, embedListbox, fieldInstance],
   );
 
   const handleOpenDropdown = async () => {

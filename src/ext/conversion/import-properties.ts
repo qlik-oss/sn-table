@@ -8,7 +8,7 @@ export const getColumnInfo = (
   columnInfo: DimensionProperties[] | MeasureProperties[],
   colIdx: number,
   columnWidths?: number[],
-  numDims?: number
+  numDims?: number,
 ) => {
   let index = colIdx;
   if (numDims) index = colIdx - numDims;
@@ -36,7 +36,7 @@ export const getMultiColumnInfo = (
   qDimensions: DimensionProperties[],
   qMeasures: MeasureProperties[],
   qColumnOrder?: number[],
-  columnWidths?: number[]
+  columnWidths?: number[],
 ) => {
   const numDims = qDimensions.length;
   const columnsLength = numDims + qMeasures.length;
@@ -57,7 +57,7 @@ const importProperties = (
   exportFormat: ExportFormat,
   initialProperties: EngineAPI.IGenericHyperCubeProperties,
   extension: any,
-  hypercubePath?: string
+  hypercubePath?: string,
 ): PropTree => {
   const propertyTree = conversion.hypercube.importProperties({
     exportFormat,
