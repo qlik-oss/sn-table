@@ -21,7 +21,7 @@ describe("<ColumnAdjuster />", () => {
     render(
       <TestWithProviders interactions={interactions} applyColumnWidths={applyColumnWidths}>
         <ColumnAdjuster column={column} isLastColumn={isLastColumn} />
-      </TestWithProviders>
+      </TestWithProviders>,
     );
 
   beforeEach(() => {

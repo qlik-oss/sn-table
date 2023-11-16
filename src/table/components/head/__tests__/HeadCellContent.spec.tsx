@@ -8,7 +8,6 @@ import HeadCellContent from "../HeadCellContent";
 
 describe("<HeadCellContent />", () => {
   let column: Column;
-  let isActive: boolean;
   let isInteractionEnabled: boolean;
   let layout: TableLayout;
   let changeSortOrder: ChangeSortOrder;
@@ -16,10 +15,10 @@ describe("<HeadCellContent />", () => {
   const renderTableHead = (cellCoordMock?: [number, number]) =>
     render(
       <TestWithProviders cellCoordMock={cellCoordMock} layout={layout} changeSortOrder={changeSortOrder}>
-        <HeadCellContent column={column} isActive={isActive} isInteractionEnabled={isInteractionEnabled}>
+        <HeadCellContent column={column} isInteractionEnabled={isInteractionEnabled}>
           <CellText>{column.label}</CellText>
         </HeadCellContent>
-      </TestWithProviders>
+      </TestWithProviders>,
     );
 
   beforeEach(() => {
@@ -35,6 +34,7 @@ describe("<HeadCellContent />", () => {
       colIdx: 0,
       qReverseSort: false,
       pageColIdx: 0,
+      isActivelySorted: true,
     } as Column;
     layout = {
       qHyperCube: {
@@ -43,18 +43,17 @@ describe("<HeadCellContent />", () => {
       qInfo: { qId: "12345" },
     } as TableLayout;
     changeSortOrder = jest.fn() as ChangeSortOrder;
-    isActive = true;
     isInteractionEnabled = true;
   });
 
-  it("should show the sort icon when isActive is true", () => {
+  it("should show the sort icon when isActivelySorted is true", () => {
     const { baseElement } = renderTableHead();
 
     expect(baseElement.querySelector(".MuiButton-iconSizeSmall")).toBeVisible();
   });
 
-  it("should show the sort icon when isActive is false but the cell is focused or hovered", () => {
-    isActive = false;
+  it("should show the sort icon when isActivelySorted is false but the cell is focused or hovered", () => {
+    column.isActivelySorted = false;
     const { baseElement } = renderTableHead();
 
     const labelButton = screen.getByText(column.label);

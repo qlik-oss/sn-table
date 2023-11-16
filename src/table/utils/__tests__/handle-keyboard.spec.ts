@@ -193,9 +193,9 @@ describe("handle-keyboard", () => {
       isInteractionEnabled = true;
       setFocusedCellCoord = jest.fn();
       jest.spyOn(accessibilityUtils, "focusBodyFromHead").mockImplementation(() => {});
-      jest.spyOn(accessibilityUtils, "moveFocusWithArrow").mockImplementation(() => ({} as HTMLTableCellElement));
+      jest.spyOn(accessibilityUtils, "moveFocusWithArrow").mockImplementation(() => ({}) as HTMLTableCellElement);
       jest.spyOn(accessibilityUtils, "updateFocus").mockImplementation(() => {});
-      jest.spyOn(getElementUtils, "findCellWithTabStop").mockImplementation(() => ({} as HTMLTableCellElement));
+      jest.spyOn(getElementUtils, "findCellWithTabStop").mockImplementation(() => ({}) as HTMLTableCellElement);
       jest.spyOn(keyboardUtils, "headTabHelper").mockImplementation(() => {});
     });
 
@@ -296,7 +296,7 @@ describe("handle-keyboard", () => {
       } as unknown as HTMLElement;
       setFocusedCellCoord = jest.fn();
       isSelectionMode = false;
-      jest.spyOn(accessibilityUtils, "moveFocusWithArrow").mockImplementation(() => ({} as HTMLTableCellElement));
+      jest.spyOn(accessibilityUtils, "moveFocusWithArrow").mockImplementation(() => ({}) as HTMLTableCellElement);
       jest.spyOn(accessibilityUtils, "updateFocus").mockImplementation(() => {});
       jest.spyOn(keyboardUtils, "bodyTabHelper").mockImplementation(() => {});
     });
@@ -311,7 +311,7 @@ describe("handle-keyboard", () => {
         rootElement,
         cellCoord,
         setFocusedCellCoord,
-        FocusTypes.FOCUS
+        FocusTypes.FOCUS,
       );
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
     });
@@ -329,7 +329,7 @@ describe("handle-keyboard", () => {
         rootElement,
         cellCoord,
         setFocusedCellCoord,
-        FocusTypes.FOCUS_BUTTON
+        FocusTypes.FOCUS_BUTTON,
       );
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(0);
     });

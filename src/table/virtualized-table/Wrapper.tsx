@@ -9,11 +9,11 @@ import Table from "./Table";
 const Wrapper = () => {
   const { theme, keyboard, translator, interactions, rect, layout } = useContextSelector(
     TableContext,
-    (value) => value.baseProps
+    (value) => value.baseProps,
   );
   const { paginationNeeded, totalRowCount, totalColumnCount, totalPages } = useContextSelector(
     TableContext,
-    (value) => value.tableData
+    (value) => value.tableData,
   );
   const pageInfo = useContextSelector(TableContext, (value) => value.pageInfo) as PageInfo;
   const setPage = useContextSelector(TableContext, (value) => value.setPage) as stardust.SetStateFn<number>;

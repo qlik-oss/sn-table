@@ -40,6 +40,7 @@ export const TableContextProvider = ({
   initialDataPages,
   rect,
   viewService,
+  isNewHeadCellMenuEnabled,
 }: ContextProviderProps) => {
   const [headRowHeight, setHeadRowHeight] = useState(0);
   const [focusedCellCoord, setFocusedCellCoord] = useState<[number, number]>(cellCoordMock || FIRST_HEADER_CELL_COORD);
@@ -50,8 +51,9 @@ export const TableContextProvider = ({
     tableData.columns,
     tableData.totalsPosition,
     rect.width,
-    styling
+    styling,
   );
+  const featureFlags = { isNewHeadCellMenuEnabled };
   const baseProps = useMemo(
     () => ({
       app,
@@ -86,7 +88,7 @@ export const TableContextProvider = ({
       styling,
       rect,
       viewService,
-    ]
+    ],
   );
 
   return (
@@ -109,6 +111,7 @@ export const TableContextProvider = ({
         pageInfo,
         initialDataPages,
         showRightBorder,
+        featureFlags,
       }}
     >
       {children}

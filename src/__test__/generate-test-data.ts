@@ -21,7 +21,8 @@ export function generateLayout(
   nMeas: number,
   nRows: number,
   qColumnOrder: number[] = [],
-  qGrandTotalRow: Record<string, string>[] = []
+  qGrandTotalRow: Record<string, string>[] = [],
+  qEffectiveInterColumnSortOrder: number[] = Array.from(Array(nDims + nMeas).keys()),
 ): TableLayout {
   const createField = (idx: number) => ({
     qFallbackTitle: `title-${idx}`,
@@ -55,6 +56,7 @@ export function generateLayout(
       qColumnOrder,
       qSize: { qcx: nDims + nMeas, qcy: nRows },
       qDataPages: [],
+      qEffectiveInterColumnSortOrder,
     } as unknown as HyperCube,
     totals,
     qInfo: {
@@ -71,7 +73,7 @@ export const createCell = (rowIdx: number, colIdx = 0) =>
     pageRowIdx: rowIdx,
     pageColIdx: colIdx,
     selectionColIdx: colIdx,
-  } as Cell);
+  }) as Cell;
 
 /**
  * creates a simplified Rows[] with one column. Used to create the pageRows that is in the selection state

@@ -14,7 +14,7 @@ describe("<TableHeadWrapper />", () => {
         <table>
           <TableHeadWrapper />
         </table>
-      </TestWithProviders>
+      </TestWithProviders>,
     );
 
   beforeEach(() => {
@@ -29,6 +29,7 @@ describe("<TableHeadWrapper />", () => {
           isLocked: false,
           colIdx: 0,
           qReverseSort: false,
+          isActivelySorted: true,
         },
         { id: 2, align: "right", label: "someMsr", sortDirection: "D", isDim: false, colIdx: 1, qReverseSort: false },
       ],
@@ -57,11 +58,11 @@ describe("<TableHeadWrapper />", () => {
     expect(secondColumn.getAttribute("aria-sort")).toBeNull();
   });
 
-  it("should change`aria-sort` when you sort by second column", () => {
+  it("should change`aria-sort` when second column is isActivelySorted", () => {
     tableData = {
       columns: [
-        { ...tableData.columns[0], sortDirection: "D" },
-        { ...tableData.columns[1], sortDirection: "A" },
+        { ...tableData.columns[0], sortDirection: "D", isActivelySorted: false },
+        { ...tableData.columns[1], sortDirection: "A", isActivelySorted: true },
       ],
       totalsPosition: { atTop: false, atBottom: false },
       rows: [{ qText: "1" }],

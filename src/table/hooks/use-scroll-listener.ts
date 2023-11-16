@@ -5,7 +5,7 @@ import { handleHorizontalScroll } from "../utils/handle-scroll";
 const useScrollListener = (
   tableContainerRef: React.MutableRefObject<HTMLDivElement | null>,
   direction: string | undefined,
-  viewService: ViewService
+  viewService: ViewService,
 ) => {
   useEffect(() => {
     const memoedContainer = tableContainerRef.current;

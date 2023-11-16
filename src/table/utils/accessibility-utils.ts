@@ -1,4 +1,5 @@
 import { stardust } from "@nebula.js/stardust";
+import { HEAD_CELL_MENU_BUTTON_CLASS } from "@qlik/nebula-table-utils/lib/constants";
 import React from "react";
 import { Announce } from "../../types";
 import { FIRST_BODY_CELL_COORD, FocusTypes } from "../constants";
@@ -26,9 +27,9 @@ export const setFocusOnClosetColumnAdjuster = (anchorRef: React.RefObject<HTMLDi
 export const focusHeadMenuButton = (event: React.KeyboardEvent | React.FocusEvent<HTMLDivElement>) => {
   const target = event.target as HTMLDivElement;
   target.setAttribute("tabIndex", "-1");
-  const headMenuButton = target
-    ?.closest(".sn-table-cell")
-    ?.querySelector(".sn-table-head-menu-button") as HTMLButtonElement;
+  const baseElement = target?.closest(".sn-table-cell");
+  const headMenuButton = (baseElement?.querySelector(".sn-table-head-menu-button") ||
+    baseElement?.querySelector(`.${HEAD_CELL_MENU_BUTTON_CLASS}`)) as HTMLButtonElement;
   headMenuButton?.focus();
 };
 
@@ -75,7 +76,7 @@ export const moveFocusWithArrow = (
   allowedRows?: {
     top: number;
     bottom: number;
-  }
+  },
 ) => {
   const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, allowedRows);
   const nextCell = getCellElement(rootElement, nextCellCoord);
@@ -91,7 +92,7 @@ export const moveFocusWithArrow = (
  */
 export const focusBodyFromHead = (
   rootElement: HTMLElement,
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
 ) => {
   let cell = findCellWithTabStop(rootElement);
   const newCellCoord = cell ? getCellCoord(rootElement, cell) : FIRST_BODY_CELL_COORD;
@@ -108,7 +109,7 @@ export const removeTabAndFocusCell = (
   newCoord: [number, number],
   rootElement: HTMLElement,
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  keyboard: stardust.Keyboard
+  keyboard: stardust.Keyboard,
 ) => {
   updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: findCellWithTabStop(rootElement) });
   setFocusedCellCoord(newCoord);
@@ -164,7 +165,7 @@ export const resetFocus = ({
 export const handleFocusoutEvent = (
   evt: FocusEvent,
   shouldRefocus: React.MutableRefObject<boolean>,
-  keyboard: stardust.Keyboard
+  keyboard: stardust.Keyboard,
 ) => {
   const targetElement = evt.currentTarget as HTMLDivElement;
   const relatedTarget = evt.relatedTarget as HTMLElement;

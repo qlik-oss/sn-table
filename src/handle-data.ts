@@ -66,7 +66,7 @@ export function getTotalInfo(layout: TableLayout, isDim: boolean, pageColIdx: nu
 export function getAlignInfo(
   textAlign: TextAlign,
   qDimensionType: EngineAPI.DimensionType | undefined,
-  isDim: boolean
+  isDim: boolean,
 ): { headTextAlign: Align; totalsTextAlign: Align; bodyTextAlign: Align | "auto" } {
   if (textAlign && !textAlign.auto) {
     return { headTextAlign: textAlign.align, totalsTextAlign: textAlign.align, bodyTextAlign: textAlign.align };
@@ -94,10 +94,15 @@ export const getBodyCellAlign = (cell: EngineAPI.INxCell, textAlign: Align | "au
  * Gets all column info.
  */
 export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: number, visibleColIdx: number): Column {
-  const { qDimensionInfo, qMeasureInfo } = layout.qHyperCube;
+  const { qDimensionInfo, qMeasureInfo, qEffectiveInterColumnSortOrder } = layout.qHyperCube;
   const numDims = qDimensionInfo.length;
   const isDim = colIdx < numDims;
   const info = isDim ? qDimensionInfo[colIdx] : qMeasureInfo[colIdx - numDims];
+
+  // using model.getInterColumnSortOrder causes issues in rendering tests
+  // model does not contains `getInterColumnSortOrder()` method in rendering test
+  // that is the reason why using `qEffectiveInterColumnSortOrder` from layout instead
+  const isActivelySorted = colIdx === qEffectiveInterColumnSortOrder[0];
 
   let fieldIndex = 0;
   let fieldId = "";
@@ -135,6 +140,7 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
     qReverseSort,
     columnWidth,
     selectionColIdx,
+    isActivelySorted,
     id: `col-${pageColIdx}`,
     label: qFallbackTitle,
     stylingIDs: qAttrExprInfo.map((expr) => expr.id),
@@ -153,7 +159,7 @@ export function getColumnInfo(layout: TableLayout, colIdx: number, pageColIdx: n
 const getVisibleColumnOrder = (
   columnOrder: number[],
   qDimensionInfo: ExtendedNxDimensionInfo[],
-  qMeasureInfo: ExtendedNxMeasureInfo[]
+  qMeasureInfo: ExtendedNxMeasureInfo[],
 ) => {
   const numDims = qDimensionInfo.length;
   const visibleColumnIndexes: number[] = [];
@@ -184,18 +190,17 @@ export const getColumns = (layout: TableLayout) => {
   const {
     qHyperCube: { qColumnOrder, qDimensionInfo, qMeasureInfo },
   } = layout;
-
   const columnsLength = qDimensionInfo.length + qMeasureInfo.length;
   const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());
 
   const { visibleColumnsOrder, visibleColumnIndexes } = getVisibleColumnOrder(
     columnOrder,
     qDimensionInfo,
-    qMeasureInfo
+    qMeasureInfo,
   );
 
   return visibleColumnsOrder.map((colIdx, pageColIdx) =>
-    getColumnInfo(layout, colIdx, pageColIdx, visibleColumnIndexes[colIdx])
+    getColumnInfo(layout, colIdx, pageColIdx, visibleColumnIndexes[colIdx]),
   );
 };
 /**
@@ -209,7 +214,7 @@ export default async function manageData(
   layout: TableLayout,
   pageInfo: PageInfo,
   setPageInfo: SetPageInfo,
-  viewService: ViewService
+  viewService: ViewService,
 ): Promise<TableData | null> {
   const { page, rowsPerPage, rowsPerPageOptions } = pageInfo;
   const totalColumnCount = layout.qHyperCube.qSize.qcx;

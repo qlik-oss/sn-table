@@ -10,7 +10,7 @@ const getCellStyle = (
   column: Column,
   showHoverEffect: boolean,
   cellSelectionState: SelectionStates,
-  bodyStyle: BodyStyle
+  bodyStyle: BodyStyle,
 ): BodyStyle => {
   const { hoverColors, lastRowBottomBorder, ...styling } = bodyStyle;
 

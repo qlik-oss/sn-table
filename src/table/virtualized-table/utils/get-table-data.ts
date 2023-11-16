@@ -6,7 +6,7 @@ import { MAX_PAGE_SIZE } from "../constants";
 export default function getVirtualScrollTableData(
   layout: TableLayout,
   interactions: stardust.Interactions,
-  viewService: ViewService
+  viewService: ViewService,
 ): TableData {
   const totalsPosition = getTotalPosition(layout, viewService);
   const columns = getColumns(layout);

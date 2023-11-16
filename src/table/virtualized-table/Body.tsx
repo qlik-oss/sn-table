@@ -49,7 +49,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     pageInfo,
     rect,
     columnWidths,
-    rowHeight
+    rowHeight,
   );
 
   const { setCellSize, getRowHeight, rowMeta, estimatedRowHeight, maxLineCount, resizeVisibleCells } =
@@ -94,7 +94,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
 
   const itemData = useMemo<ItemData>(
     () => ({ rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount }),
-    [rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount]
+    [rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount],
   );
 
   const bodyHeight = getBodyHeight(rect, headerAndTotalsHeight, rowCount, estimatedRowHeight);
@@ -144,7 +144,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
         resizeVisibleCells(rowsInPage);
       },
     }),
-    [innerForwardRef, bodyHeight, rowMeta, rowCount, resizeVisibleCells, rowsInPage]
+    [innerForwardRef, bodyHeight, rowMeta, rowCount, resizeVisibleCells, rowsInPage],
   );
 
   return (

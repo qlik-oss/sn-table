@@ -91,12 +91,12 @@ const useColumnWidths = (
   columns: Column[],
   totalsPosition: TotalsPosition,
   tableWidth: number,
-  { head, body }: TableStyling
+  { head, body }: TableStyling,
 ): [
   number[],
   React.Dispatch<React.SetStateAction<number[]>>,
   React.Dispatch<React.SetStateAction<number>>,
-  boolean
+  boolean,
 ] => {
   const showTotals = totalsPosition.atBottom || totalsPosition.atTop;
   const measureHeadLabel = useMeasureText({
@@ -119,10 +119,10 @@ const useColumnWidths = (
       return Math.max(
         measureHeadLabel(headLabel) + HEAD_LABEL_WIDTH,
         showTotals ? measureTotalLabel(totalsLabel) + TOTALS_PADDING + BORDER_WIDTH : 0,
-        estimateWidth(glyphCount)
+        estimateWidth(glyphCount),
       );
     },
-    [estimateWidth, measureHeadLabel, measureTotalLabel, showTotals]
+    [estimateWidth, measureHeadLabel, measureTotalLabel, showTotals],
   );
   const [yScrollbarWidth, setYScrollbarWidth] = useState(0);
 
@@ -134,7 +134,7 @@ const useColumnWidths = (
 
   const showRightBorder = useMemo(
     () => isBodyWidthLessThenContainerWidth(columnWidths, yScrollbarWidth, tableWidth),
-    [columnWidths, yScrollbarWidth, tableWidth]
+    [columnWidths, yScrollbarWidth, tableWidth],
   );
 
   return [columnWidths, setColumnWidths, setYScrollbarWidth, showRightBorder];

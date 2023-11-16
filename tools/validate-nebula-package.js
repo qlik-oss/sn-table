@@ -26,7 +26,7 @@ const validatePackageJsonContent = (pkg) => {
 
   if (/--native/.test(pkg.scripts.build)) {
     throw new Error(
-      "package.json build script is not allowed to use '--native' for a chart that is not a known native chart in Qlik Sense"
+      "package.json build script is not allowed to use '--native' for a chart that is not a known native chart in Qlik Sense",
     );
   }
 

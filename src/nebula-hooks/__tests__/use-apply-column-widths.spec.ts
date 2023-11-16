@@ -37,7 +37,7 @@ describe("applyColumnWidths", () => {
     applyColumnWidths(newColumnWidth, column);
     expect(model.applyPatches).toHaveBeenCalledWith(
       [{ qPath: dimPath, qOp: "Add", qValue: JSON.stringify(newColumnWidth) }],
-      true
+      true,
     );
   });
 
@@ -47,7 +47,7 @@ describe("applyColumnWidths", () => {
     applyColumnWidths(newColumnWidth, column);
     expect(model.applyPatches).toHaveBeenCalledWith(
       [{ qPath: dimPath, qOp: "Replace", qValue: JSON.stringify({ ...oldColumnWidth, ...newColumnWidth }) }],
-      true
+      true,
     );
   });
 
@@ -57,7 +57,7 @@ describe("applyColumnWidths", () => {
     applyColumnWidths(newColumnWidth, column);
     expect(model.applyPatches).toHaveBeenCalledWith(
       [{ qPath: meaPath, qOp: "Add", qValue: JSON.stringify(newColumnWidth) }],
-      true
+      true,
     );
   });
 
@@ -68,7 +68,7 @@ describe("applyColumnWidths", () => {
     applyColumnWidths(newColumnWidth, column);
     expect(model.applyPatches).toHaveBeenCalledWith(
       [{ qPath: meaPath, qOp: "Replace", qValue: JSON.stringify({ ...oldColumnWidth, ...newColumnWidth }) }],
-      true
+      true,
     );
   });
 });

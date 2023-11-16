@@ -5,7 +5,7 @@ const getVisibleHeight = (
   visibleRowEndIndex: number,
   visibleRowStartIndex: number,
   layout: TableLayout,
-  viewService: ViewService
+  viewService: ViewService,
 ) => {
   if (visibleRowEndIndex < 0) return 0;
 

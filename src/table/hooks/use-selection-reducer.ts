@@ -6,7 +6,7 @@ import { reducer } from "../utils/selections-utils";
 
 const useSelectionReducer = (
   pageRows: Row[],
-  selectionsAPI: ExtendedSelectionAPI | undefined
+  selectionsAPI: ExtendedSelectionAPI | undefined,
 ): [SelectionState, SelectionDispatch] => {
   const [selectionState, selectionDispatch] = useReducer(reducer, {
     pageRows,

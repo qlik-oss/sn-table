@@ -28,7 +28,7 @@ describe("withSelections", () => {
             </tr>
           </tbody>
         </table>
-      </TestWithProviders>
+      </TestWithProviders>,
     );
 
   beforeEach(() => {

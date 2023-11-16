@@ -5,7 +5,7 @@ const EPSILON = 0.001;
 export const getPartialTopScrollHeight = (
   rows: HTMLCollectionOf<Element> | undefined,
   tableBodyRect: { top: number; bottom: number },
-  index: number
+  index: number,
 ): number => {
   if (!rows || rows.length === 0 || index < 0) return 0;
   const rowRect = rows[index].getBoundingClientRect();
@@ -14,7 +14,7 @@ export const getPartialTopScrollHeight = (
 
 const findStartIndex = (
   rows: HTMLCollectionOf<Element> | undefined,
-  tableBodyRect: { top: number; bottom: number }
+  tableBodyRect: { top: number; bottom: number },
 ): number => {
   if (!rows) return -1;
   for (let i = 0; i < rows.length; i++) {
@@ -26,7 +26,7 @@ const findStartIndex = (
 
 const findEndIndex = (
   rows: HTMLCollectionOf<Element> | undefined,
-  tableBodyRect: { top: number; bottom: number }
+  tableBodyRect: { top: number; bottom: number },
 ): number => {
   if (!rows) return -1;
   for (let i = rows.length - 1; i > -1; i--) {

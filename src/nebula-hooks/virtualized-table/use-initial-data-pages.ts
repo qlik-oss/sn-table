@@ -21,7 +21,7 @@ type Result = {
 const fetchInitialDataPages = async (
   model: EngineAPI.IGenericObject,
   layout: TableLayout,
-  page: number
+  page: number,
 ): Promise<Result> => {
   let { qDataPages } = layout.qHyperCube;
   if (page !== 0 || qDataPages === undefined || qDataPages.length === 0) {

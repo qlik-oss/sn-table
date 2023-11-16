@@ -10,7 +10,6 @@ import {
   ApplyColumnWidths,
   ChangeSortOrder,
   ExtendedSelectionAPI,
-  Galaxy,
   TableLayout,
   UseOptions,
   ViewService,
@@ -18,7 +17,7 @@ import {
 import useAnnounceAndTranslations from "./use-announce-and-translations";
 
 interface UsePaginationTable {
-  env: Galaxy;
+  isNewHeadCellMenuEnabled: boolean;
   selectionsAPI: ExtendedSelectionAPI | undefined;
   rootElement: HTMLElement;
   layout: TableLayout;
@@ -44,6 +43,7 @@ export const initialPageInfo = {
 };
 
 const usePaginationTable = ({
+  isNewHeadCellMenuEnabled,
   app,
   model,
   rootElement,
@@ -120,8 +120,9 @@ const usePaginationTable = ({
         embed,
         applyColumnWidths,
         viewService,
+        isNewHeadCellMenuEnabled,
       },
-      reactRoot
+      reactRoot,
     );
   }, [
     app,
@@ -146,6 +147,7 @@ const usePaginationTable = ({
     rect,
     footerContainer,
     isFontLoaded,
+    isNewHeadCellMenuEnabled,
   ]);
 };
 

@@ -18,7 +18,7 @@ const getColumnWidth = (colIdx: number, qDimensions: DimensionProperties[], qMea
 export const getColumnWidths = (
   qDimensions: DimensionProperties[],
   qMeasures: MeasureProperties[],
-  qColumnOrder?: number[]
+  qColumnOrder?: number[],
 ) => {
   const columnsLength = qDimensions.length + qMeasures.length;
   const columnOrder = qColumnOrder?.length === columnsLength ? qColumnOrder : Array.from(Array(columnsLength).keys());

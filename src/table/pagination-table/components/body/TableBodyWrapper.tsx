@@ -15,7 +15,7 @@ import { StyledBody, StyledBodyRow } from "./styles";
 const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: TableBodyWrapperProps) => {
   const { rows, columns, paginationNeeded, totalsPosition } = useContextSelector(
     TableContext,
-    (value) => value.tableData
+    (value) => value.tableData,
   );
   const {
     selectionsAPI,
@@ -36,9 +36,9 @@ const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: Table
   const columnRenderers = useMemo(
     () =>
       JSON.parse(columnsStylingIDsJSON).map((stylingIDs: string[]) =>
-        getCellRenderer(!!stylingIDs.length, isSelectionsEnabled)
+        getCellRenderer(!!stylingIDs.length, isSelectionsEnabled),
       ),
-    [columnsStylingIDsJSON, isSelectionsEnabled]
+    [columnsStylingIDsJSON, isSelectionsEnabled],
   );
   const hoverEffect = !!getStylingComponent(layout)?.content?.hoverEffect;
 

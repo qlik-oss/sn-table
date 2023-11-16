@@ -46,6 +46,7 @@ export interface VirtualTableRenderProps {
   pageInfo: PageInfo;
   initialDataPages: EngineAPI.INxDataPage[];
   viewService: ViewService;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface TableProps {
@@ -109,7 +110,7 @@ export type SetCellSize = (
   rowIdx: number,
   colIdx: number,
   isNumeric?: boolean,
-  batchStateUpdate?: boolean
+  batchStateUpdate?: boolean,
 ) => void;
 
 export interface GridState {

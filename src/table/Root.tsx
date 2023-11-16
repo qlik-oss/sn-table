@@ -52,11 +52,12 @@ export function renderPaginationTable(props: RenderProps, reactRoot: ReactDom.Ro
           applyColumnWidths={applyColumnWidths}
           rect={rect}
           viewService={viewService}
+          isNewHeadCellMenuEnabled={wrapperProps.isNewHeadCellMenuEnabled}
         >
           <TableWrapper {...wrapperProps} direction={direction} />
         </TableContextProvider>
       </ThemeProvider>
-    </StyleSheetManager>
+    </StyleSheetManager>,
   );
 }
 
@@ -80,6 +81,7 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
     pageInfo,
     initialDataPages,
     viewService,
+    isNewHeadCellMenuEnabled,
   } = props;
   const muiTheme = muiSetup("ltr");
 
@@ -105,10 +107,11 @@ export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot
           pageInfo={pageInfo}
           initialDataPages={initialDataPages}
           viewService={viewService}
+          isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
         >
           <VirtualizedTable />
         </TableContextProvider>
       </ThemeProvider>
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 }
