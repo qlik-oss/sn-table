@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Collection = { [key: string]: any };
 export type Key =
   | "ArrowUp"

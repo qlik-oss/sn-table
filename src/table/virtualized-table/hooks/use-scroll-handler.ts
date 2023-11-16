@@ -4,8 +4,8 @@ import { ViewService } from "../../../types";
 import { BodyRef } from "../types";
 
 const useScrollHandler = (
-  headerRef: React.RefObject<VariableSizeList<any>>,
-  totalsRef: React.RefObject<VariableSizeList<any>>,
+  headerRef: React.RefObject<VariableSizeList<unknown>>,
+  totalsRef: React.RefObject<VariableSizeList<unknown>>,
   bodyRef: React.RefObject<BodyRef>,
   viewService: ViewService,
 ) =>

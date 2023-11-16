@@ -1,6 +1,6 @@
 import { stardust } from "@nebula.js/stardust";
 import { renderHook } from "@testing-library/react";
-import React from "react";
+import React, { ReactNode } from "react";
 import TestWithProviders from "../../../__test__/test-with-providers";
 import { FIRST_HEADER_CELL_COORD, FocusTypes } from "../../constants";
 import * as accessibilityUtils from "../../utils/accessibility-utils";
@@ -11,7 +11,7 @@ describe("use-keyboard-active-listener", () => {
   let keyboard: stardust.Keyboard;
   let focusedCellCoord: [number, number];
 
-  const wrapper = ({ children }: any) => (
+  const wrapper = ({ children }: { children: ReactNode }) => (
     <TestWithProviders cellCoordMock={focusedCellCoord} keyboard={keyboard}>
       {children}
     </TestWithProviders>

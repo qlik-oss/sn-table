@@ -56,6 +56,7 @@ export interface TableProps {
 export interface HeaderProps {
   rect: Rect;
   pageInfo: PageInfo;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   forwardRef: React.RefObject<VariableSizeList<any>>;
   columns: Column[];
   headerStyle: GeneratedStyling;
@@ -66,6 +67,7 @@ export interface HeaderProps {
 export interface TotalsProps {
   rect: Rect;
   pageInfo: PageInfo;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   forwardRef: React.RefObject<VariableSizeList<any>>;
   columns: Column[];
   totals: Totals;

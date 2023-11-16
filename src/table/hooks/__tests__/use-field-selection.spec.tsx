@@ -1,5 +1,5 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
-import React from "react";
+import React, { ReactNode } from "react";
 import TestWithProviders from "../../../__test__/test-with-providers";
 import { Column, TableLayout } from "../../../types";
 import useFieldSelection from "../use-field-selection";
@@ -8,7 +8,9 @@ describe("useFieldSelection()", () => {
   let column: Column;
   let appMock: EngineAPI.IApp;
 
-  const wrapper = ({ children }: any) => <TestWithProviders app={appMock}>{children}</TestWithProviders>;
+  const wrapper = ({ children }: { children: ReactNode }) => (
+    <TestWithProviders app={appMock}>{children}</TestWithProviders>
+  );
   const getFieldSelectionResult = () => renderHook(() => useFieldSelection(column, true), { wrapper });
 
   beforeEach(() => {

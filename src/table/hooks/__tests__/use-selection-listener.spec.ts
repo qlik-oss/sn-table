@@ -7,8 +7,8 @@ import useSelectionListener from "../use-selection-listener";
 describe("useSelectionListener", () => {
   const listenerNames = ["deactivated", "canceled", "confirmed", "cleared"];
   let selectionsAPI: ExtendedSelectionAPI;
-  let selectionDispatch: jest.Mock<any, any>;
-  let setShouldRefocus: jest.Mock<any, any>;
+  let selectionDispatch: jest.Mock<unknown, unknown[]>;
+  let setShouldRefocus: jest.Mock<unknown, unknown[]>;
   let keyboard: stardust.Keyboard;
   let containsActiveElement: boolean;
   let tableWrapperRef: React.MutableRefObject<HTMLDivElement>;

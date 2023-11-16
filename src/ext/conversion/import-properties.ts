@@ -57,6 +57,7 @@ export const getMultiColumnInfo = (
 const importProperties = (
   exportFormat: ExportFormat,
   initialProperties: EngineAPI.IGenericHyperCubeProperties,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extension: any,
   hypercubePath?: string,
 ): PropTree => {

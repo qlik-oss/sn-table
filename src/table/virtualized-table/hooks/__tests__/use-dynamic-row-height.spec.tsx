@@ -19,8 +19,8 @@ describe("useDynamicRowHeight", () => {
   let layout: TableLayout;
   let pageInfo: PageInfo;
   let rowCount: number;
-  let gridRef: React.RefObject<VariableSizeGrid<any>> | undefined;
-  let lineRef: React.RefObject<VariableSizeList<any>> | undefined;
+  let gridRef: React.RefObject<VariableSizeGrid<unknown>> | undefined;
+  let lineRef: React.RefObject<VariableSizeList<unknown>> | undefined;
   let boldText: boolean | undefined;
   let gridState: React.MutableRefObject<GridState> | undefined;
   let props: UseDynamicRowHeightProps;

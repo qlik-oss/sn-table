@@ -1,4 +1,4 @@
-const copyCellValue = async (evt: any) => {
+const copyCellValue = async (evt: React.MouseEvent | React.KeyboardEvent) => {
   let target = evt.target as HTMLElement;
 
   if (!target.classList.contains("sn-table-cell")) {

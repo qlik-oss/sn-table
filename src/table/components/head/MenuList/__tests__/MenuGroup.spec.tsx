@@ -1,12 +1,12 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
 import { HeadCellMenuItem, MenuItemGroup } from "../../../../types";
-import MenuGroup, { interceptClickOnMenuItems } from "../MenuGroup";
+import MenuGroup, { SubMenusOpenStatusCache, interceptClickOnMenuItems } from "../MenuGroup";
 
 describe("MenuGroup", () => {
   describe("interceptClickOnMenuItems", () => {
     let menuGroups: MenuItemGroup[];
-    let cache: Record<string, any>;
+    let cache: SubMenusOpenStatusCache;
 
     it("should return proper values per menu", () => {
       menuGroups = [

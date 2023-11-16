@@ -6,7 +6,7 @@ import RecursiveMenuList from "../RecursiveMenuList";
 
 describe("<RecursiveMenuList />", () => {
   let menuGroups: MenuItemGroup[];
-  let menuGroupWrapperMock: jest.Mock<any, any>;
+  let menuGroupWrapperMock: jest.Mock;
   let anchorEl: HTMLDivElement;
 
   beforeEach(() => {

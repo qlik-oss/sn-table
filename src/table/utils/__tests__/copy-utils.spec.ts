@@ -1,9 +1,7 @@
 import copyCellValue from "../copy-utils";
 
 describe("copyCellValue:", () => {
-  let evt: {
-    target: HTMLElement;
-  };
+  let evt: React.MouseEvent;
   let writeMock: (arg: string) => void;
   let elementClass: string;
 
@@ -27,7 +25,7 @@ describe("copyCellValue:", () => {
         }),
         classList,
       } as unknown as HTMLElement,
-    };
+    } as unknown as React.MouseEvent;
     jest.spyOn(console, "log");
     writeMock = jest.fn();
     Object.assign(navigator, {
@@ -59,7 +57,7 @@ describe("copyCellValue:", () => {
         querySelector: () => undefined,
         classList,
       } as unknown as HTMLElement,
-    };
+    } as unknown as React.MouseEvent;
     elementClass = "sn-table-cell";
     await copyCellValue(evt);
 
@@ -81,7 +79,7 @@ describe("copyCellValue:", () => {
         }),
         classList,
       } as unknown as HTMLElement,
-    };
+    } as unknown as React.MouseEvent;
     elementClass = "sn-table-cell";
 
     await copyCellValue(evt);

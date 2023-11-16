@@ -206,7 +206,7 @@ describe("find-visible-rows", () => {
     let rootElement: HTMLElement;
     let tableBody: {
       getBoundingClientRect?: () => Rect;
-      querySelectorAll?: () => any;
+      querySelectorAll?: () => unknown;
     };
     let bodyRect: Rect;
     let cells: { getAttribute: () => string; getBoundingClientRect: () => Rect }[];

@@ -9,6 +9,7 @@ import React, {
   useRef,
 } from "react";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const contextMap: Map<Context<any>, Context<any>> = new Map();
 
 interface ProviderProps<T> {

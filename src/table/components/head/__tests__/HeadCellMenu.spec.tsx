@@ -18,11 +18,11 @@ describe("<HeadCellMenu />", () => {
   let embed: ExtendedEmbed;
   let layout: TableLayout;
   let column: Column;
-  let defaultListboxAnchorOpts: any;
+  let defaultListboxAnchorOpts: unknown;
   let fieldInstanceMock: EngineAPI.IField;
   let selectionActionsEnabledStatusMock: Record<string, boolean>;
-  let resetSelectionActionsEnabledStatusMock: jest.Mock<any, any>;
-  let updateSelectionActionsEnabledStatusMock: jest.Mock<any, any>;
+  let resetSelectionActionsEnabledStatusMock: jest.Mock<unknown, unknown[]>;
+  let updateSelectionActionsEnabledStatusMock: jest.Mock<unknown, unknown[]>;
   let model: EngineAPI.IGenericObject;
   let useFieldSelectionHookResult: useFieldSelectionHook.UseFieldSelectionOutput;
   let interactions: stardust.Interactions;

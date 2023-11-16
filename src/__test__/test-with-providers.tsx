@@ -2,7 +2,7 @@
 import { ThemeProvider } from "@mui/material/styles";
 import { stardust } from "@nebula.js/stardust";
 import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
-import React from "react";
+import React, { ReactNode } from "react";
 import { EMPTY_TABLE_DATA, TableContextProvider } from "../table/context";
 import muiSetup from "../table/mui-setup";
 import {
@@ -17,7 +17,7 @@ import { generateLayout } from "./generate-test-data";
 
 interface ProviderProps {
   app?: EngineAPI.IApp;
-  children?: JSX.Element;
+  children?: ReactNode;
   selectionsAPI?: ExtendedSelectionAPI;
   tableData?: TableData;
   cellCoordMock?: [number, number];

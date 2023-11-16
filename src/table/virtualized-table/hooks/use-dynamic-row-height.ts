@@ -21,8 +21,8 @@ export interface UseDynamicRowHeightProps {
   rowCount: number;
   columnWidths: number[];
   pageInfo: PageInfo;
-  gridRef?: React.RefObject<VariableSizeGrid<any>>;
-  lineRef?: React.RefObject<VariableSizeList<any>>;
+  gridRef?: React.RefObject<VariableSizeGrid<unknown>>;
+  lineRef?: React.RefObject<VariableSizeList<unknown>>;
   columns?: Column[];
   boldText?: boolean;
   gridState?: React.MutableRefObject<GridState>;

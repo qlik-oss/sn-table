@@ -5,9 +5,9 @@ import { BodyRef } from "../../types";
 import useScrollHandler from "../use-scroll-handler";
 
 describe("useScrollHandler", () => {
-  let headerRef: React.RefObject<VariableSizeList<any>>;
+  let headerRef: React.RefObject<VariableSizeList<unknown>>;
   let bodyRef: React.RefObject<BodyRef>;
-  let totalsRef: React.RefObject<VariableSizeList<any>>;
+  let totalsRef: React.RefObject<VariableSizeList<unknown>>;
   let listInstance: VariableSizeList;
   let listTotalsInstance: VariableSizeList;
   let refHandler: BodyRef;

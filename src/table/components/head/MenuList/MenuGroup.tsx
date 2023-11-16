@@ -25,7 +25,7 @@ export const interceptClickOnMenuItems = (menuGroups: MenuItemGroup[], cache: Su
   return result;
 };
 
-type SubMenusOpenStatusCache = Record<string, React.Dispatch<React.SetStateAction<boolean>>>;
+export type SubMenusOpenStatusCache = Record<string, React.Dispatch<React.SetStateAction<boolean>>>;
 let subMenusOpenStatusCache: SubMenusOpenStatusCache = {};
 
 const MenuGroupItems = ({ autoFocus, id, onClick, itemTitle, icon, enabled, subMenus }: HeadCellMenuItem) => {

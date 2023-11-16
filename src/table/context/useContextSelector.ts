@@ -9,7 +9,7 @@ export function useContextSelector<T, TSelected>(context: Context<T>, selector: 
   const [, forceUpdate] = useReducer((dummy: number) => dummy + 1, 0);
 
   const latestSelector = useRef(selector);
-  const latestSelectedState = useRef<any>();
+  const latestSelectedState = useRef<unknown>();
 
   const currentValue = accessor();
 

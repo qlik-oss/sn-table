@@ -45,7 +45,7 @@ describe("selections-utils", () => {
 
     describe("select", () => {
       let action: SelectAction;
-      let announce: jest.Mock<any, any>;
+      let announce: jest.Mock<unknown, unknown[]>;
 
       beforeEach(() => {
         announce = jest.fn();
@@ -101,7 +101,7 @@ describe("selections-utils", () => {
     describe("select multiple", () => {
       const mouseupOutsideCallback = () => {};
       let evt: React.KeyboardEvent | React.MouseEvent;
-      let announce: jest.Mock<any, any>;
+      let announce: jest.Mock<unknown, unknown[]>;
 
       beforeEach(() => {
         state.pageRows = createPageRows(4, 1);

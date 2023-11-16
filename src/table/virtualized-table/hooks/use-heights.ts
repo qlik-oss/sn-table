@@ -13,8 +13,8 @@ interface UseHeightsProps {
   columnWidths: number[];
   pageInfo: PageInfo;
   totalsPosition: TotalsPosition;
-  headerRef: React.RefObject<VariableSizeList<any>>;
-  totalsRef: React.RefObject<VariableSizeList<any>>;
+  headerRef: React.RefObject<VariableSizeList<unknown>>;
+  totalsRef: React.RefObject<VariableSizeList<unknown>>;
   isSnapshot: boolean;
   viewService: ViewService;
 }

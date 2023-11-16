@@ -18,7 +18,7 @@ import {
 } from "../types";
 import { FocusTypes, SelectionActions } from "./constants";
 
-interface Action<T = any> {
+interface Action<T = unknown> {
   type: T;
 }
 
