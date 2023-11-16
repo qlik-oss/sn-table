@@ -1,7 +1,7 @@
 import { stardust } from "@nebula.js/stardust";
 import { PAGINATION_HEIGHT } from "@qlik/nebula-table-utils/lib/constants";
 import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
-import { COLORING, isDarkColor, removeOpacity, toRGB } from "@qlik/nebula-table-utils/lib/utils";
+import { COLORING, getHoverColor, isDarkColor, removeOpacity, toRGB } from "@qlik/nebula-table-utils/lib/utils";
 import { ContentStyling, HeaderStyling, PaletteColor, TableLayout } from "../../types";
 import { SelectionStates } from "../constants";
 import { SELECTION_STYLING } from "../styling-defaults";
@@ -10,6 +10,20 @@ import { CellStyle, GeneratedStyling } from "../types";
 export const LINE_HEIGHT = 4 / 3;
 export const CELL_PADDING_HEIGHT = 8;
 export const CELL_BORDER_HEIGHT = 1;
+
+// TODO: maybe shared repo?
+const HEADER_MENU_COLOR_MODIFIER = {
+  hover: {
+    darker: 0.15,
+    brighter: 0.3,
+    opacity: 0.03,
+  },
+  active: {
+    darker: 0.3,
+    brighter: 0.5,
+    opacity: 0.05,
+  },
+};
 
 export const fontSizeToRowHeight = (fontSize: string) =>
   parseInt(fontSize, 10) * LINE_HEIGHT + CELL_PADDING_HEIGHT + CELL_BORDER_HEIGHT;
@@ -128,6 +142,17 @@ export function getHeaderStyle(
   // - When the table background color from the sense theme has opacity,
   // removing that.
   headerStyle.background = theme.background.isTransparent ? COLORING.WHITE : removeOpacity(theme.background.color);
+
+  // TODO: HERE -> add hovering and active bg color
+  // TODO: behind flag
+  headerStyle.hoverBackground = getHoverColor(
+    headerStyle.background ?? COLORING.WHITE,
+    HEADER_MENU_COLOR_MODIFIER.hover
+  );
+  headerStyle.activeBackground = getHoverColor(
+    headerStyle.background ?? COLORING.WHITE,
+    HEADER_MENU_COLOR_MODIFIER.active
+  );
 
   // When you set the header font color,
   // the sort label color should be same.

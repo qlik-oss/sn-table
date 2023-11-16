@@ -61,15 +61,23 @@ export const VisuallyHidden = styled("span")({
 });
 
 export const StyledHeadCellContent = styled(Box, {
-  shouldForwardProp: (prop: string) => prop !== "isLocked",
-})(({ theme, isLocked }) => ({
+  shouldForwardProp: (prop: string) => !["interactions", "isLocked", "hoverBackground", "background"].includes(prop),
+})(({ theme, isLocked, hoverBackground, background, interactions }) => ({
   width: "100%",
+  height: "100%",
+  padding: "4px",
+  boxSizing: "border-box",
   display: "grid",
   flexDirection: "inherit",
   gridAutoFlow: "dense",
   gap: theme.spacing(0.5),
   fontSize: "inherit",
   fontFamily: "inherit",
+  background,
+  "&&:hover": {
+    background: interactions.active ? hoverBackground : background,
+  },
+
   "&&:hover, &&:focus-within": {
     "& .sn-table-head-menu-button": { opacity: 1 },
   },

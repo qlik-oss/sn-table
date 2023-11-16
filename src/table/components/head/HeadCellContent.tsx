@@ -17,10 +17,18 @@ import {
 } from "./styles";
 
 const HeadCellContent = ({ children, column, isInteractionEnabled }: HeadCellContentProps) => {
-  const { keyboard, translator, changeSortOrder, interactions, embed, app, model } = useContextSelector(
-    TableContext,
-    (value) => value.baseProps
-  );
+  const {
+    keyboard,
+    translator,
+    changeSortOrder,
+    interactions,
+    embed,
+    app,
+    model,
+    styling: {
+      head: { activeBackground, background, hoverBackground },
+    },
+  } = useContextSelector(TableContext, (value) => value.baseProps);
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const isNewHeadCellMenuEnabled = useContextSelector(
     TableContext,
@@ -52,6 +60,9 @@ const HeadCellContent = ({ children, column, isInteractionEnabled }: HeadCellCon
       isLocked={Boolean(lockIcon)}
       className={`aligned-${column.headTextAlign}`}
       onClick={handleOpenMenu}
+      background={open ? activeBackground : background}
+      hoverBackground={hoverBackground}
+      interactions={interactions}
     >
       {lockIcon && <StyledHeadCellIconWrapper>{lockIcon}</StyledHeadCellIconWrapper>}
 

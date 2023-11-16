@@ -79,6 +79,8 @@ export interface GeneratedStyling {
   color?: string;
   fontSize?: string; // following the theme format so this should always be a string
   background?: string;
+  hoverBackground?: string;
+  activeBackground?: string;
   hoverColors?: {
     background: string;
     color: string;
