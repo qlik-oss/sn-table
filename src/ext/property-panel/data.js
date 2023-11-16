@@ -213,7 +213,7 @@ const getColumnResize = {
       data.qDef.columnWidth.percentage =
         data.qDef.columnWidth.percentage === undefined
           ? data.qDef.columnWidth.percentage
-          : Math.max(1, Math.min(ColumnWidthValues.PixelsMax, data.qDef.columnWidth.percentage));
+          : Math.max(1, Math.min(ColumnWidthValues.PercentageMax, data.qDef.columnWidth.percentage));
     },
   },
 };
