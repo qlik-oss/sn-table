@@ -15,10 +15,10 @@ describe("<HeadCellContent />", () => {
   const renderTableHead = (cellCoordMock?: [number, number]) =>
     render(
       <TestWithProviders cellCoordMock={cellCoordMock} layout={layout} changeSortOrder={changeSortOrder}>
-        <HeadCellContent column={column} isInteractionEnabled={isInteractionEnabled}>
+        <HeadCellContent column={column} isInteractionEnabled={isInteractionEnabled} open={false} setOpen={jest.fn()}>
           <CellText>{column.label}</CellText>
         </HeadCellContent>
-      </TestWithProviders>,
+      </TestWithProviders>
     );
 
   beforeEach(() => {
