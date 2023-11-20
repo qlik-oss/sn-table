@@ -5,7 +5,7 @@ import { COLORING, getHoverColor, isDarkColor, removeOpacity, toRGB } from "@qli
 import { ContentStyling, HeaderStyling, PaletteColor, TableLayout } from "../../types";
 import { SelectionStates } from "../constants";
 import { SELECTION_STYLING } from "../styling-defaults";
-import { CellStyle, GeneratedStyling } from "../types";
+import { CellStyle, FeatureFlags, GeneratedStyling } from "../types";
 
 export const LINE_HEIGHT = 4 / 3;
 export const CELL_PADDING_HEIGHT = 8;
@@ -131,7 +131,8 @@ export const getBaseStyling = (
 export function getHeaderStyle(
   layout: TableLayout,
   theme: ExtendedTheme,
-  bottomSeparatingBorder: boolean
+  bottomSeparatingBorder: boolean,
+  featureFlags?: FeatureFlags
 ): GeneratedStyling {
   const header = getStylingComponent(layout)?.header;
   const headerStyle = getBaseStyling("header", theme, header, bottomSeparatingBorder);
@@ -143,15 +144,16 @@ export function getHeaderStyle(
   // removing that.
   headerStyle.background = theme.background.isTransparent ? COLORING.WHITE : removeOpacity(theme.background.color);
 
-  // TODO: put this behind flag
-  headerStyle.hoverBackground = getHoverColor(
-    headerStyle.background ?? COLORING.WHITE,
-    HEADER_MENU_COLOR_MODIFIER.hover
-  );
-  headerStyle.activeBackground = getHoverColor(
-    headerStyle.background ?? COLORING.WHITE,
-    HEADER_MENU_COLOR_MODIFIER.active
-  );
+  if (featureFlags?.isNewHeadCellMenuEnabled) {
+    headerStyle.hoverBackground = getHoverColor(
+      headerStyle.background ?? COLORING.WHITE,
+      HEADER_MENU_COLOR_MODIFIER.hover
+    );
+    headerStyle.activeBackground = getHoverColor(
+      headerStyle.background ?? COLORING.WHITE,
+      HEADER_MENU_COLOR_MODIFIER.active
+    );
+  }
 
   // When you set the header font color,
   // the sort label color should be same.
