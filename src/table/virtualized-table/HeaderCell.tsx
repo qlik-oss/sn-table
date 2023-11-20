@@ -19,55 +19,19 @@ interface HeaderCellProps {
 
 export const StyledHeadCell = styled("div", {
   shouldForwardProp: (prop) =>
-    ![
-      "isNewHeadCellMenuEnabled",
-      "interactions",
-      "hoverBackground",
-      "background",
-      "zIndex",
-      "flexDirection",
-      "justifyContent",
-      "isLastColumn",
-      "showRightBorder",
-      "applicableStyle",
-    ].includes(prop as string),
-})(
-  ({
-    isNewHeadCellMenuEnabled,
-    interactions,
-    hoverBackground,
-    background,
-    zIndex,
-    flexDirection,
-    justifyContent,
-    isLastColumn,
-    showRightBorder,
-    applicableStyle,
-  }) => ({
-    ...(isNewHeadCellMenuEnabled && { cursor: "pointer" }),
-    ...applicableStyle,
-    display: "flex",
-    alignItems: "flex-end",
-    borderStyle: "solid",
-    borderWidth: isLastColumn && !showRightBorder ? "0px 0px 1px 0px" : "0px 1px 1px 0px",
-    padding: "4px",
-    boxSizing: "border-box",
-    cursor: "pointer",
-    userSelect: "none",
-    zIndex,
-    flexDirection,
-    justifyContent,
-    background,
+    prop != "interactions" &&
+    prop != "hoverBackground" &&
+    prop != "background" &&
+    prop != "applicableStyle" &&
+    prop != "isNewHeadCellMenuEnabled",
+})(({ isNewHeadCellMenuEnabled, interactions, hoverBackground, background, applicableStyle }) => ({
+  ...applicableStyle,
+  ...(isNewHeadCellMenuEnabled && { background }),
 
-    "&:focus": {
-      boxShadow: "none",
-    },
-
-    "&&:hover": {
-      background: interactions.active ? hoverBackground : background,
-    },
-  })
-);
+  "&&:hover": {
+    ...(isNewHeadCellMenuEnabled && { background: interactions.active ? hoverBackground : background }),
+  },
+}));
 
 const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
   const [open, setOpen] = useState(false);
@@ -86,6 +50,10 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
   } = useContextSelector(TableContext, (value) => value.baseProps);
   const isSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI?.isModal());
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
+  const isNewHeadCellMenuEnabled = useContextSelector(
+    TableContext,
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled
+  );
 
   const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
@@ -99,16 +67,25 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
       className="sn-table-cell"
       title={interactions.passive ? column.label : undefined}
       onClick={handleOpenMenu}
-      style={style}
       applicableStyle={applicableStyle}
+      style={{
+        ...style,
+        ...(isNewHeadCellMenuEnabled ? { cursor: "pointer" } : { cursor: "default" }),
+        display: "flex",
+        alignItems: "flex-end",
+        borderStyle: "solid",
+        borderWidth: isLastColumn && !showRightBorder ? "0px 0px 1px 0px" : "0px 1px 1px 0px",
+        padding: "4px",
+        justifyContent: column.headTextAlign,
+        boxSizing: "border-box",
+        zIndex: columns.length - index,
+        flexDirection,
+        userSelect: "none",
+      }}
       interactions={interactions}
-      background={open ? activeBackground : background}
       hoverBackground={hoverBackground}
-      zIndex={columns.length - index}
-      flexDirection={flexDirection}
-      justifyContent={column.headTextAlign}
-      isLastColumn={isLastColumn}
-      showRightBorder={showRightBorder}
+      background={open ? activeBackground : background}
+      isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
     >
       <HeadCellContent column={column} isInteractionEnabled={isInteractionEnabled} open={open} setOpen={setOpen}>
         <CellText wordBreak lines={3}>

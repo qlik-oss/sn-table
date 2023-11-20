@@ -17,7 +17,7 @@ export const AbsolutelyStyledRefAnchor = styled("div")({
 
 export const StyledSortButton = styled(Button, {
   shouldForwardProp: (prop) =>
-    !["isActivelySorted", "textAlign", "disabled", "isNewHeadCellMenuEnabled"].includes(prop as string),
+    prop != "isActivelySorted" && prop != "textAlign" && prop != "disabled" && prop != "isNewHeadCellMenuEnabled",
 })(({ isActivelySorted, textAlign, disabled, theme, isNewHeadCellMenuEnabled }) => ({
   textAlign,
   height: "auto",
@@ -61,10 +61,9 @@ export const VisuallyHidden = styled("span")({
 });
 
 export const StyledHeadCellContent = styled(Box, {
-  shouldForwardProp: (prop) => prop != "isNewHeadCellMenuEnabled" && prop != "isLocked",
+  shouldForwardProp: (prop) => prop != "isLocked" && prop != "isNewHeadCellMenuEnabled",
 })(({ theme, isLocked, isNewHeadCellMenuEnabled }) => ({
   width: "100%",
-  boxSizing: "border-box",
   display: "grid",
   flexDirection: "inherit",
   gridAutoFlow: "dense",
