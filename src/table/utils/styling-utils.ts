@@ -143,6 +143,7 @@ export function getHeaderStyle(
   // removing that.
   headerStyle.background = theme.background.isTransparent ? COLORING.WHITE : removeOpacity(theme.background.color);
 
+  // TODO: put this behind flag
   headerStyle.hoverBackground = getHoverColor(
     headerStyle.background ?? COLORING.WHITE,
     HEADER_MENU_COLOR_MODIFIER.hover

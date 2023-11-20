@@ -271,6 +271,8 @@ export interface TableWrapperProps {
 }
 
 export interface HeadCellContentProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   children: JSX.Element;
   column: Column;
   isInteractionEnabled: boolean;

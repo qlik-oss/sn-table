@@ -65,8 +65,6 @@ export const StyledHeadCellContent = styled(Box, {
     !["isNewHeadCellMenuEnabled", "interactions", "isLocked", "hoverBackground", "background"].includes(prop),
 })(({ theme, isLocked, hoverBackground, background, interactions, isNewHeadCellMenuEnabled }) => ({
   width: "100%",
-  height: "100%",
-  padding: "4px",
   boxSizing: "border-box",
   display: "grid",
   flexDirection: "inherit",
@@ -75,11 +73,8 @@ export const StyledHeadCellContent = styled(Box, {
   fontSize: "inherit",
   fontFamily: "inherit",
   background,
+  overflow: "hidden",
   ...(isNewHeadCellMenuEnabled && { alignItems: "end" }),
-
-  "&&:hover": {
-    background: interactions.active ? hoverBackground : background,
-  },
 
   "&&:hover, &&:focus-within": {
     "& .sn-table-head-menu-button": { opacity: 1 },
