@@ -18,7 +18,7 @@ interface HeaderCellProps {
 }
 
 export const StyledHeadCell = styled("div", {
-  shouldForwardProp: (prop: string) =>
+  shouldForwardProp: (prop) =>
     ![
       "isNewHeadCellMenuEnabled",
       "interactions",
@@ -30,7 +30,7 @@ export const StyledHeadCell = styled("div", {
       "isLastColumn",
       "showRightBorder",
       "applicableStyle",
-    ].includes(prop),
+    ].includes(prop as string),
 })(
   ({
     isNewHeadCellMenuEnabled,

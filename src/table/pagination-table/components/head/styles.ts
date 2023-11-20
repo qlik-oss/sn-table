@@ -4,8 +4,10 @@ import { COMMON_CELL_STYLING } from "../../../styling-defaults";
 
 // eslint-disable-next-line import/prefer-default-export
 export const StyledHeadCell = styled(TableCell, {
-  shouldForwardProp: (prop: string) =>
-    !["headerStyle", "isNewHeadCellMenuEnabled", "interactions", "hoverBackground", "background"].includes(prop),
+  shouldForwardProp: (prop) =>
+    !["headerStyle", "isNewHeadCellMenuEnabled", "interactions", "hoverBackground", "background"].includes(
+      prop as string
+    ),
 })(({ headerStyle, isNewHeadCellMenuEnabled, interactions, hoverBackground, background }) => ({
   ...COMMON_CELL_STYLING,
   ...headerStyle,

@@ -4,7 +4,7 @@ import { styled } from "@mui/material/styles";
 // ---------- TableWrapper ----------
 
 export const StyledTableWrapper = styled(Box, {
-  shouldForwardProp: (prop: string) => prop !== "background",
+  shouldForwardProp: (prop) => prop !== "background",
 })(({ background }) => ({
   height: "100%",
   // TODO: see if we really need this or if we can use background.color
@@ -14,7 +14,7 @@ export const StyledTableWrapper = styled(Box, {
 // ---------- CellText ----------
 
 export const StyledCellText = styled(Box, {
-  shouldForwardProp: (prop: string) => prop !== "lines" && prop !== "wordBreak",
+  shouldForwardProp: (prop) => prop !== "lines" && prop !== "wordBreak",
 })(({ lines, wordBreak }) => ({
   lineHeight: "calc(4/3)",
   fontSize: "inherit",

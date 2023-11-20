@@ -19,7 +19,7 @@ export const TableAnnouncer = styled("div")({
 // ---------- TableWrapper ----------
 
 export const StyledTableContainer = styled(TableContainer, {
-  shouldForwardProp: (prop: string) => prop !== "fullHeight" && prop !== "interactions",
+  shouldForwardProp: (prop) => prop !== "fullHeight" && prop !== "interactions",
 })(({ fullHeight, interactions }) => ({
   height: fullHeight ? "100%" : `calc(100% - ${PAGINATION_HEIGHT + BORDER_WIDTH}px)`,
   overflow: interactions.active ? "auto" : "hidden",
@@ -27,7 +27,7 @@ export const StyledTableContainer = styled(TableContainer, {
 }));
 
 export const StyledTable = styled(Table, {
-  shouldForwardProp: (prop: string) => prop !== "showRightBorder" && prop !== "styling",
+  shouldForwardProp: (prop) => prop !== "showRightBorder" && prop !== "styling",
 })(({ showRightBorder, styling }) => ({
   tableLayout: "fixed",
   width: "min-content",
