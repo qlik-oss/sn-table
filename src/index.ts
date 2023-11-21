@@ -21,8 +21,7 @@ import useReactRoot from "./nebula-hooks/use-react-root";
 import useSorting from "./nebula-hooks/use-sorting";
 import useVirtualizedTable from "./nebula-hooks/use-virtualized-table";
 import useWaitForFonts from "./nebula-hooks/use-wait-for-fonts";
-import data from "./qae/data";
-import properties from "./qae/object-properties";
+import qae from "./qae";
 import useSnapshot from "./table/hooks/use-snapshot";
 import useViewService from "./table/hooks/use-view-service";
 import { ExtendedSelectionAPI, Galaxy, TableLayout, UseOptions } from "./types";
@@ -30,10 +29,7 @@ import { chartBackgroundResolver, objectBackgroundResolver } from "./utils/theme
 
 export default function supernova(env: Galaxy) {
   return {
-    qae: {
-      properties: { initial: properties },
-      data: data(),
-    },
+    qae: qae(),
     ext: ext(env),
     component() {
       const rootElement = useElement();
