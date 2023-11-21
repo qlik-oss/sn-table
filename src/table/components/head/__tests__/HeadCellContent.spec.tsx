@@ -11,17 +11,21 @@ describe("<HeadCellContent />", () => {
   let isInteractionEnabled: boolean;
   let layout: TableLayout;
   let changeSortOrder: ChangeSortOrder;
+  let open: boolean;
+  let setOpenMock: jest.Mock<any, any>;
 
   const renderTableHead = (cellCoordMock?: [number, number]) =>
     render(
       <TestWithProviders cellCoordMock={cellCoordMock} layout={layout} changeSortOrder={changeSortOrder}>
-        <HeadCellContent column={column} isInteractionEnabled={isInteractionEnabled} open={false} setOpen={jest.fn()}>
+        <HeadCellContent column={column} isInteractionEnabled={isInteractionEnabled} open={open} setOpen={setOpenMock}>
           <CellText>{column.label}</CellText>
         </HeadCellContent>
       </TestWithProviders>
     );
 
   beforeEach(() => {
+    open = false;
+    setOpenMock = jest.fn();
     column = {
       id: "1",
       headTextAlign: "left",
