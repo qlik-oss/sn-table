@@ -277,6 +277,18 @@ describe("styling-utils", () => {
         ...defaultBorderColors,
       });
     });
+
+    it("should return `hoverBackground` and `activeBackground` if the `isNewHeadCellMenuEnabled` flag is turned on", () => {
+      const resultStyling = getHeaderStyle(layout, theme, false, { isNewHeadCellMenuEnabled: true });
+      expect(resultStyling).toEqual({
+        color: COLORING.TEXT,
+        fontSize: "44px",
+        background: "rgb(50, 50, 50)",
+        activeBackground: "rgb(70, 70, 70)",
+        hoverBackground: "rgb(62, 62, 62)",
+        ...defaultBorderColors,
+      });
+    });
   });
 
   describe("getBodyStyle", () => {
