@@ -8,7 +8,7 @@ import { COMMON_CELL_STYLING } from "../../../styling-defaults";
 // ---------- TableBodyWrapper ----------
 
 export const StyledBody = styled(TableBody, {
-  shouldForwardProp: (prop) => prop !== "lastRowBottomBorder",
+  shouldForwardProp: (prop: string) => prop !== "lastRowBottomBorder",
 })(({ lastRowBottomBorder }) => ({
   "& tr:last-child": {
     "& td, th": {
@@ -18,7 +18,7 @@ export const StyledBody = styled(TableBody, {
 }));
 
 export const StyledBodyRow = styled(TableRow, {
-  shouldForwardProp: (prop) => prop !== "hoverColors" && prop !== "hover",
+  shouldForwardProp: (prop: string) => prop !== "hoverColors" && prop !== "hover",
 })(({ hover, hoverColors }) => ({
   "&&:hover": {
     background: "none",
@@ -31,7 +31,7 @@ export const StyledBodyRow = styled(TableRow, {
 }));
 
 export const StyledBodyCell = styled(TableCell, {
-  shouldForwardProp: (prop) => prop !== "cellStyle",
+  shouldForwardProp: (prop: string) => prop !== "cellStyle",
 })(({ cellStyle, theme }) => ({
   ...COMMON_CELL_STYLING,
   ...cellStyle,
@@ -41,7 +41,7 @@ export const StyledBodyCell = styled(TableCell, {
 // ---------- TableTotals ----------
 
 export const StyledTotalsCell = styled(TableCell, {
-  shouldForwardProp: (prop) => prop !== "atTop" && prop !== "headRowHeight" && prop !== "totalsStyle",
+  shouldForwardProp: (prop: string) => prop !== "atTop" && prop !== "headRowHeight" && prop !== "totalsStyle",
 })(({ totalsStyle, atTop, headRowHeight, theme }) => ({
   ...COMMON_CELL_STYLING,
   ...totalsStyle,

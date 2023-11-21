@@ -16,7 +16,7 @@ export const AbsolutelyStyledRefAnchor = styled("div")({
 });
 
 export const StyledSortButton = styled(Button, {
-  shouldForwardProp: (prop) =>
+  shouldForwardProp: (prop: string) =>
     prop !== "isActivelySorted" && prop !== "textAlign" && prop !== "disabled" && prop !== "isNewHeadCellMenuEnabled",
 })(({ isActivelySorted, textAlign, disabled, theme, isNewHeadCellMenuEnabled }) => ({
   textAlign,
@@ -61,7 +61,7 @@ export const VisuallyHidden = styled("span")({
 });
 
 export const StyledHeadCellContent = styled(Box, {
-  shouldForwardProp: (prop) => prop !== "isLocked" && prop !== "isNewHeadCellMenuEnabled",
+  shouldForwardProp: (prop: string) => prop !== "isLocked" && prop !== "isNewHeadCellMenuEnabled",
 })(({ theme, isLocked, isNewHeadCellMenuEnabled }) => ({
   width: "100%",
   display: "grid",
@@ -122,7 +122,7 @@ export const LockWrapper = styled(Box)({
 
 // ---------- HeadCellMenu ----------
 export const HeadCellMenuWrapper = styled(Box, {
-  shouldForwardProp: (prop) => prop !== "isVisible" && prop !== "rightAligned",
+  shouldForwardProp: (prop: string) => prop !== "isVisible" && prop !== "rightAligned",
 })(({ rightAligned }) => ({
   ...(rightAligned ? { marginRight: "auto" } : { marginLeft: "auto" }),
   height: `${HEAD_ICON_WRAPPER_SIZE}px`,
@@ -130,7 +130,7 @@ export const HeadCellMenuWrapper = styled(Box, {
 }));
 
 export const StyledMenuIconButton = styled(Button, {
-  shouldForwardProp: (prop) => prop !== "isVisible" && prop !== "rightAligned",
+  shouldForwardProp: (prop: string) => prop !== "isVisible" && prop !== "rightAligned",
 })(({ isVisible }) => ({
   opacity: isVisible ? 1 : 0,
   "&:focus": {

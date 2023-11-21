@@ -18,7 +18,7 @@ interface HeaderCellProps {
 }
 
 export const StyledHeadCell = styled("div", {
-  shouldForwardProp: (prop) =>
+  shouldForwardProp: (prop: string) =>
     prop !== "interactions" &&
     prop !== "hoverBackground" &&
     prop !== "background" &&
