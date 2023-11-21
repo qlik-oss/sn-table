@@ -268,5 +268,5 @@ export interface ExportFormat {
 
 export interface PropTree {
   qChildren: unknown[];
-  qProperty: { qHyperCubeDef: QHyperCubeDef };
+  qProperty: { qHyperCubeDef: QHyperCubeDef; usePagination?: boolean; totals?: { show: boolean } };
 }

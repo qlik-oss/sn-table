@@ -10,7 +10,7 @@ const importViewDataProperties = ({
   hypercubePath,
 }: ImportProperties): PropTree => {
   const propertyTree = importProperties({ exportFormat, initialProperties, extension, hypercubePath });
-  setValue(propertyTree, "qProperty.totals.show", true);
+  setValue(propertyTree, "qProperty.totals.show", false);
   setValue(propertyTree, "qProperty.usePagination", true);
   return propertyTree;
 };
