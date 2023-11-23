@@ -59,6 +59,7 @@ export type ImportProperties = {
   extension?: any;
   hypercubePath?: string;
   defaultPropertyValues?: any;
+  convertToViewData?: boolean;
 };
 
 const importProperties = ({
@@ -67,6 +68,7 @@ const importProperties = ({
   extension,
   hypercubePath,
   defaultPropertyValues,
+  convertToViewData,
 }: ImportProperties): PropTree => {
   const propertyTree = conversion.hypercube.importProperties({
     exportFormat,
@@ -85,6 +87,11 @@ const importProperties = ({
   if (Array.isArray(columnWidths) && columnWidths.length > 0) {
     setValue(propertyTree, "qProperty.qHyperCubeDef.qDimensions", dimensions);
     setValue(propertyTree, "qProperty.qHyperCubeDef.qMeasures", measures);
+  }
+
+  if (convertToViewData) {
+    setValue(propertyTree, "qProperty.totals.show", false);
+    setValue(propertyTree, "qProperty.usePagination", true);
   }
 
   conversion.conditionalShow.unquarantine(propertyTree.qProperty);

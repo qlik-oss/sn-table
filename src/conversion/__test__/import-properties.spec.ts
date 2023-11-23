@@ -184,5 +184,11 @@ describe("importProperties", () => {
       const propertyTree = importProperties({ exportFormat, initialProperties, extension, hypercubePath });
       expect(propertyTree.qProperty.qHyperCubeDef.qColumnOrder).toEqual([0, 2, 1]);
     });
+
+    it("should add view data properties when converting to view data table", () => {
+      const propertyTree = importProperties({ exportFormat, initialProperties, convertToViewData: true });
+      expect(propertyTree.qProperty.totals?.show).toEqual(false);
+      expect(propertyTree.qProperty.usePagination).toEqual(true);
+    });
   });
 });
