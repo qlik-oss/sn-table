@@ -15,7 +15,7 @@ const TableTotals = () => {
   } = useContextSelector(TableContext, (value) => value.tableData);
   const { rootElement, selectionsAPI, keyboard, styling, interactions } = useContextSelector(
     TableContext,
-    (value) => value.baseProps,
+    (value) => value.baseProps
   );
   const headRowHeight = useContextSelector(TableContext, (value) => value.headRowHeight);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
@@ -24,7 +24,7 @@ const TableTotals = () => {
     <TableRow className="sn-table-row sn-table-totals-row">
       {columns.map((column, columnIndex) => {
         const cellCoord: [number, number] = [atTop ? 1 : rows.length + 1, columnIndex];
-        const tabIndex = atTop && columnIndex === 0 && !keyboard.enabled ? 0 : -1;
+        // const tabIndex = atTop && columnIndex === 0 && !keyboard.enabled ? 0 : -1;
 
         return (
           <StyledTotalsCell
@@ -34,7 +34,8 @@ const TableTotals = () => {
             key={column.id}
             align={column.totalsTextAlign}
             className="sn-table-cell"
-            tabIndex={tabIndex}
+            // tabIndex={tabIndex}
+            tabIndex={-1}
             title={interactions.passive ? column.totalInfo : undefined}
             onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
               handleTotalKeyDown(e, rootElement, cellCoord, setFocusedCellCoord, selectionsAPI?.isModal());

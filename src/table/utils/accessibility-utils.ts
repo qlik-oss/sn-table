@@ -80,6 +80,9 @@ export const moveFocusWithArrow = (
 ) => {
   const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, allowedRows);
   const nextCell = getCellElement(rootElement, nextCellCoord);
+  if (focusType === FocusTypes.FOCUS) {
+    updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLTableCellElement });
+  }
   updateFocus({ focusType, cell: nextCell });
   setFocusedCellCoord(nextCellCoord);
 

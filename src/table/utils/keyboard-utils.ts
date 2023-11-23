@@ -39,10 +39,11 @@ const shouldSelectMultiValues = (isSelectionsEnabled: boolean, evt: React.Keyboa
  * When you move to the header, it returns focusButton type
  */
 export const getFocusType = (cellCoord: [number, number], evt: React.KeyboardEvent<Element>): FocusTypes => {
-  const upToHeader = evt.key === KeyCodes.UP && cellCoord[0] === 1;
-  const leftToHeader = evt.key === KeyCodes.LEFT && cellCoord[0] === 1 && cellCoord[1] === 0;
+  // const upToHeader = evt.key === KeyCodes.UP && cellCoord[0] === 1;
+  // const leftToHeader = evt.key === KeyCodes.LEFT && cellCoord[0] === 1 && cellCoord[1] === 0;
 
-  return upToHeader || leftToHeader ? FocusTypes.FOCUS_BUTTON : FocusTypes.FOCUS;
+  // return upToHeader || leftToHeader ? FocusTypes.FOCUS_BUTTON : FocusTypes.FOCUS;
+  return FocusTypes.FOCUS;
 };
 
 /**
@@ -101,7 +102,7 @@ export const headTabHelper = (
   rootElement: HTMLElement,
   cellCoord: [number, number],
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  isLastHeadCell: boolean,
+  isLastHeadCell: boolean
 ) => {
   const target = evt.target as HTMLTableCellElement;
   const isLabel = target.classList.contains("sn-table-head-label");

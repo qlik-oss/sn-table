@@ -123,7 +123,7 @@ export const handleHeadKeyDown = ({
       if (evt.key === KeyCodes.RIGHT && isLastHeadCell) {
         focusBodyFromHead(rootElement, setFocusedCellCoord);
       } else {
-        moveFocusWithArrow(evt, rootElement, cellCoord, setFocusedCellCoord, FocusTypes.FOCUS_BUTTON);
+        moveFocusWithArrow(evt, rootElement, cellCoord, setFocusedCellCoord, FocusTypes.FOCUS);
       }
       break;
     case KeyCodes.DOWN:
