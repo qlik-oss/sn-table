@@ -31,6 +31,10 @@ const TableWrapper = (props: TableWrapperProps) => {
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
   const isSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI?.isModal());
+  const isNewHeadCellMenuEnabled = useContextSelector(
+    TableContext,
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled
+  );
 
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef<HTMLDivElement>(null);
@@ -59,7 +63,7 @@ const TableWrapper = (props: TableWrapperProps) => {
         politeness: "assertive",
       });
     },
-    [pageInfo, setPageInfo, totalPages, announce],
+    [pageInfo, setPageInfo, totalPages, announce]
   );
 
   const handleChangeRowsPerPage = useCallback(
@@ -70,7 +74,7 @@ const TableWrapper = (props: TableWrapperProps) => {
         politeness: "assertive",
       });
     },
-    [announce, pageInfo, setPageInfo],
+    [announce, pageInfo, setPageInfo]
   );
 
   const handleKeyDown = (evt: React.KeyboardEvent) => {
@@ -88,7 +92,7 @@ const TableWrapper = (props: TableWrapperProps) => {
 
   useFocusListener(tableWrapperRef, shouldRefocus, keyboard);
   useScrollListener(tableContainerRef, direction, viewService);
-  useKeyboardActiveListener();
+  !isNewHeadCellMenuEnabled && useKeyboardActiveListener();
 
   useEffect(() => {
     const element = tableContainerRef.current;

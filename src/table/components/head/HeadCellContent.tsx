@@ -55,13 +55,14 @@ const HeadCellContent = ({ children, column, isInteractionEnabled, open, setOpen
 
       <StyledSortButton
         className="sn-table-head-label"
-        isActivelySorted={column.isActivelySorted}
+        // isActivelySorted={column.isActivelySorted}
         textAlign={column.headTextAlign}
         color="inherit"
         size="small"
         startIcon={startIcon}
         endIcon={endIcon}
-        tabIndex={tabIndex}
+        tabIndex={-1}
+        // tabIndex={tabIndex}
         disabled={!isInteractionEnabled}
         onClick={!isNewHeadCellMenuEnabled ? handleSort : () => {}}
         isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
@@ -80,7 +81,8 @@ const HeadCellContent = ({ children, column, isInteractionEnabled, open, setOpen
             <HeadCellMenu
               headerData={column}
               translator={translator}
-              tabIndex={tabIndex}
+              tabIndex={-1}
+              // tabIndex={tabIndex}
               anchorRef={anchorRef}
               handleHeadCellMenuKeyDown={handleHeadCellMenuKeyDown}
               menuAvailabilityFlags={{

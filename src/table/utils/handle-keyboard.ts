@@ -151,7 +151,7 @@ export const handleTotalKeyDown = (
   rootElement: HTMLElement,
   cellCoord: [number, number],
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  isSelectionMode = false,
+  isSelectionMode = false
 ) => {
   if (isSelectionMode) {
     preventDefaultBehavior(evt);
