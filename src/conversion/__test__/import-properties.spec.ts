@@ -186,7 +186,7 @@ describe("importProperties", () => {
     });
 
     it("should add view data properties when converting to view data table", () => {
-      const propertyTree = importProperties({ exportFormat, initialProperties, convertToViewData: true });
+      const propertyTree = importProperties({ exportFormat, initialProperties, viewDataMode: true });
       expect(propertyTree.qProperty.totals?.show).toEqual(false);
       expect(propertyTree.qProperty.usePagination).toEqual(true);
     });

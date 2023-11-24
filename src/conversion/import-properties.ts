@@ -59,7 +59,7 @@ export type ImportProperties = {
   extension?: any;
   hypercubePath?: string;
   defaultPropertyValues?: any;
-  convertToViewData?: boolean;
+  viewDataMode?: boolean;
 };
 
 const importProperties = ({
@@ -68,7 +68,7 @@ const importProperties = ({
   extension,
   hypercubePath,
   defaultPropertyValues,
-  convertToViewData,
+  viewDataMode,
 }: ImportProperties): PropTree => {
   const propertyTree = conversion.hypercube.importProperties({
     exportFormat,
@@ -89,7 +89,7 @@ const importProperties = ({
     setValue(propertyTree, "qProperty.qHyperCubeDef.qMeasures", measures);
   }
 
-  if (convertToViewData) {
+  if (viewDataMode) {
     setValue(propertyTree, "qProperty.totals.show", false);
     setValue(propertyTree, "qProperty.usePagination", true);
   }
