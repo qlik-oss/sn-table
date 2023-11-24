@@ -98,8 +98,13 @@ export const focusBodyFromHead = (
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
 ) => {
   let cell = findCellWithTabStop(rootElement);
-  const newCellCoord = cell ? getCellCoord(rootElement, cell) : FIRST_BODY_CELL_COORD;
-  cell = cell || getCellElement(rootElement, FIRST_BODY_CELL_COORD);
+  if (cell) {
+    updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell });
+  }
+  // const newCellCoord = cell ? getCellCoord(rootElement, cell) : FIRST_BODY_CELL_COORD;
+  const newCellCoord = FIRST_BODY_CELL_COORD;
+  // cell = cell || getCellElement(rootElement, FIRST_BODY_CELL_COORD);
+  cell = getCellElement(rootElement, FIRST_BODY_CELL_COORD);
   updateFocus({ cell, focusType: FocusTypes.FOCUS });
   setFocusedCellCoord(newCellCoord);
 };
