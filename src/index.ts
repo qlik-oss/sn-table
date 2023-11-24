@@ -29,7 +29,7 @@ import { chartBackgroundResolver, objectBackgroundResolver } from "./utils/theme
 
 export default function supernova(env: Galaxy) {
   return {
-    qae: qae(),
+    qae,
     ext: ext(env),
     component() {
       const rootElement = useElement();
