@@ -70,7 +70,7 @@ export const StyledHeadCellContent = styled(Box, {
   gap: theme.spacing(0.5),
   fontSize: "inherit",
   fontFamily: "inherit",
-  ...(isNewHeadCellMenuEnabled && { alignItems: "end" }),
+  ...(isNewHeadCellMenuEnabled && { alignItems: "end", overflow: "hidden" }),
 
   "&&:hover, &&:focus-within": {
     "& .sn-table-head-menu-button": { opacity: 1 },

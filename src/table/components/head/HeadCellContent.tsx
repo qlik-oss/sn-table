@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 
 import HeadCellMenu, { MenuAvailabilityFlags } from "@qlik/nebula-table-utils/lib/components/HeadCellMenu";
 import { SortDirection } from "../../../types";
@@ -16,18 +16,17 @@ import {
   VisuallyHidden,
 } from "./styles";
 
-const HeadCellContent = ({ children, column, isInteractionEnabled }: HeadCellContentProps) => {
+const HeadCellContent = ({ children, column, isInteractionEnabled, open, setOpen }: HeadCellContentProps) => {
   const { keyboard, translator, changeSortOrder, interactions, embed, app, model } = useContextSelector(
     TableContext,
-    (value) => value.baseProps,
+    (value) => value.baseProps
   );
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const isNewHeadCellMenuEnabled = useContextSelector(
     TableContext,
-    (value) => value.featureFlags.isNewHeadCellMenuEnabled,
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled
   );
 
-  const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
 
@@ -41,7 +40,6 @@ const HeadCellContent = ({ children, column, isInteractionEnabled }: HeadCellCon
     D: translator.get("SNTable.Accessibility.Descending"),
   };
 
-  const handleOpenMenu = () => setOpen(true);
   const sortFromMenu = (evt: React.MouseEvent, newSortDirection: SortDirection) => {
     evt.stopPropagation();
     return changeSortOrder(column, newSortDirection);
@@ -49,7 +47,6 @@ const HeadCellContent = ({ children, column, isInteractionEnabled }: HeadCellCon
 
   return (
     <StyledHeadCellContent
-      onClick={handleOpenMenu}
       isLocked={Boolean(lockIcon)}
       className={`aligned-${column.headTextAlign}`}
       isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}

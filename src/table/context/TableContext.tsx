@@ -42,18 +42,18 @@ export const TableContextProvider = ({
   viewService,
   isNewHeadCellMenuEnabled,
 }: ContextProviderProps) => {
+  const featureFlags = { isNewHeadCellMenuEnabled };
   const [headRowHeight, setHeadRowHeight] = useState(0);
   const [focusedCellCoord, setFocusedCellCoord] = useState<[number, number]>(cellCoordMock || FIRST_HEADER_CELL_COORD);
   const [selectionState, selectionDispatch] = useSelectionReducer(tableData.rows, selectionsAPI);
   const [hoverIndex, setHoverIndex] = useState(-1);
-  const styling = useTableStyling(layout, theme, tableData, rootElement);
+  const styling = useTableStyling(layout, theme, tableData, rootElement, featureFlags);
   const [columnWidths, setColumnWidths, setYScrollbarWidth, showRightBorder] = useColumnWidths(
     tableData.columns,
     tableData.totalsPosition,
     rect.width,
-    styling,
+    styling
   );
-  const featureFlags = { isNewHeadCellMenuEnabled };
   const baseProps = useMemo(
     () => ({
       app,
@@ -88,7 +88,7 @@ export const TableContextProvider = ({
       styling,
       rect,
       viewService,
-    ],
+    ]
   );
 
   return (

@@ -79,6 +79,8 @@ export interface GeneratedStyling {
   color?: string;
   fontSize?: string; // following the theme format so this should always be a string
   background?: string;
+  hoverBackground?: string;
+  activeBackground?: string;
   hoverColors?: {
     background: string;
     color: string;
@@ -129,8 +131,10 @@ export interface ContextValue {
   setPage?: stardust.SetStateFn<number>;
   initialDataPages?: EngineAPI.INxDataPage[];
   showRightBorder: boolean;
-  featureFlags: Record<keyof typeof AvaliableFlags, boolean>;
+  featureFlags: FeatureFlags;
 }
+
+export type FeatureFlags = Record<keyof typeof AvaliableFlags, boolean>;
 
 export enum AvaliableFlags {
   isNewHeadCellMenuEnabled,
@@ -269,6 +273,8 @@ export interface TableWrapperProps {
 }
 
 export interface HeadCellContentProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   children: JSX.Element;
   column: Column;
   isInteractionEnabled: boolean;
