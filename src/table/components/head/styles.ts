@@ -133,6 +133,7 @@ export const StyledMenuIconButton = styled(Button, {
   shouldForwardProp: (prop: string) => prop !== "isVisible" && prop !== "rightAligned",
 })(({ isVisible }) => ({
   opacity: isVisible ? 1 : 0,
+  // TODO: button should not have focus now
   "&:focus": {
     opacity: 1,
   },
@@ -150,6 +151,7 @@ export const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   padding: theme.spacing(1, 1.5),
   display: "flex",
   justifyContent: "space-between",
+  // TODO: button should not have focus now
   "&&:focus": {
     boxShadow: "rgb(23, 127, 230) 0px 0px 0px 2px",
   },

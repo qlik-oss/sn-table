@@ -105,6 +105,7 @@ export const handleHeadKeyDown = ({
   cellCoord,
   setFocusedCellCoord,
   isInteractionEnabled,
+  handleOpenMenu,
 }: HandleHeadKeyDownProps) => {
   if (!isInteractionEnabled) {
     preventDefaultBehavior(evt);
@@ -137,6 +138,10 @@ export const handleHeadKeyDown = ({
     case KeyCodes.C:
       preventDefaultBehavior(evt);
       isCtrlCmd(evt) && copyCellValue(evt);
+      break;
+    case KeyCodes.ENTER:
+    case KeyCodes.SPACE:
+      handleOpenMenu();
       break;
     default:
       break;

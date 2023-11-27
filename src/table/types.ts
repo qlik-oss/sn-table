@@ -163,6 +163,7 @@ export interface HandleHeadKeyDownProps {
   cellCoord: [number, number];
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   isInteractionEnabled: boolean;
+  handleOpenMenu: () => void;
 }
 
 export interface HandleHeadMouseDownProps {

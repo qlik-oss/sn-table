@@ -52,6 +52,7 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
       cellCoord,
       setFocusedCellCoord,
       isInteractionEnabled,
+      handleOpenMenu,
     });
 
   const handleMouseDown = (evt: React.MouseEvent) =>
