@@ -17,7 +17,7 @@ export const AbsolutelyStyledRefAnchor = styled("div")({
 
 export const StyledSortButton = styled(Button, {
   shouldForwardProp: (prop: string) =>
-    prop !== "isActivelySorted" && prop !== "textAlign" && prop !== "disabled" && prop !== "isNewHeadCellMenuEnabled",
+    !["isActivelySorted", "textAlign", "disabled", "isNewHeadCellMenuEnabled"].includes(prop),
 })(({ isActivelySorted, textAlign, disabled, theme, isNewHeadCellMenuEnabled }) => ({
   textAlign,
   height: "auto",
