@@ -93,7 +93,6 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
       hoverBackground={hoverBackground}
       interactions={interactions}
       onClick={handleOpenMenu}
-      data-testid="hallo"
     >
       <HeadCellContent column={column} isInteractionEnabled={isInteractionEnabled} open={open} setOpen={setOpen}>
         <CellText fontSize={styling.head.fontSize}>{column.label}</CellText>
