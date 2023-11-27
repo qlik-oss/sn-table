@@ -55,7 +55,7 @@ const HeadCellContent = ({ children, column, isInteractionEnabled, open, setOpen
 
       <StyledSortButton
         className="sn-table-head-label"
-        // isActivelySorted={column.isActivelySorted}
+        isActivelySorted={column.isActivelySorted}
         textAlign={column.headTextAlign}
         color="inherit"
         size="small"

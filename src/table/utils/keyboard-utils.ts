@@ -111,12 +111,6 @@ export const headTabHelper = (
   } else if (!isLabel && !evt.shiftKey) {
     if (isLastHeadCell) {
       // *literally should do nothing!*
-      // preventDefaultBehavior(evt);
-      // TODO:
-      // this happens when you tab in last cell in head row
-      // should remove focus from cell (evt.target)
-      // it will automatically move tab to pagination since it has the tabl index of 0
-      // focusBodyFromHead(rootElement, setFocusedCellCoord);
     } else {
       setFocusedCellCoord([cellCoord[0], cellCoord[1] + 1]);
     }

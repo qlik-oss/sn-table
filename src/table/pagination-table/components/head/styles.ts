@@ -17,17 +17,9 @@ export const StyledHeadCell = styled(TableCell, {
   ...(isNewHeadCellMenuEnabled && { cursor: "pointer", background }),
   pointer: "cursor",
   verticalAlign: "bottom",
-  // border: "1px dashed springgreen",
-
-  // "&:focus": {
-  //   boxShadow: "none",
-  // },
 
   "&&:focus": {
     ...(!isNewHeadCellMenuEnabled && { boxShadow: "0 0 0 2px #177fe6 inset, 0 0 0 3px #fff inset" }),
-    // "& svg": {
-    //   ...(!isNewHeadCellMenuEnabled && { opacity: isActivelySorted ? 1 : 0.5 }),
-    // },
   },
 
   "&&:hover": {
