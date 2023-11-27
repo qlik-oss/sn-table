@@ -163,7 +163,8 @@ export interface HandleHeadKeyDownProps {
   cellCoord: [number, number];
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   isInteractionEnabled: boolean;
-  handleOpenMenu: () => void;
+  handleOpenMenu?: () => void;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface HandleHeadMouseDownProps {
@@ -185,6 +186,7 @@ export interface BodyArrowHelperProps {
   announce: Announce;
   totalsPosition: TotalsPosition;
   isSelectionMode: boolean | undefined;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface HandleBodyKeyDownProps {
@@ -199,6 +201,7 @@ export interface HandleBodyKeyDownProps {
   totalsPosition: TotalsPosition;
   paginationNeeded: boolean;
   selectionsAPI: ExtendedSelectionAPI | undefined;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface CellFocusProps {

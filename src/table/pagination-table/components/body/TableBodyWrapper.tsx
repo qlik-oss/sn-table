@@ -30,6 +30,10 @@ const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: Table
   } = useContextSelector(TableContext, (value) => value.baseProps);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
+  const isNewHeadCellMenuEnabled = useContextSelector(
+    TableContext,
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled
+  );
   // Both active and select conditions need to be true to make selections. See stardust API for more info
   const isSelectionsEnabled = !!interactions.active && !!interactions.select;
   const columnsStylingIDsJSON = JSON.stringify(columns.map((column) => column.stylingIDs));
@@ -74,6 +78,7 @@ const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: Table
                 keyboard,
                 paginationNeeded,
                 totalsPosition,
+                isNewHeadCellMenuEnabled,
               });
             };
 

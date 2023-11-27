@@ -22,7 +22,7 @@ const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
   const { isDim, qLibraryId, fieldId, headTextAlign, pageColIdx } = column;
   const { translator, embed, model, interactions, layout } = useContextSelector(
     TableContext,
-    (value) => value.baseProps,
+    (value) => value.baseProps
   );
   const anchorRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
@@ -34,6 +34,10 @@ const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
     resetSelectionActionsEnabledStatus,
     updateSelectionActionsEnabledStatus,
   } = useFieldSelection(column, openMenuDropdown);
+  const isNewHeadCellMenuEnabled = useContextSelector(
+    TableContext,
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled
+  );
 
   const embedListbox = useCallback(() => {
     const id = qLibraryId ? { qLibraryId, type: "dimension" } : fieldId;
@@ -149,7 +153,7 @@ const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
         },
       ],
     ],
-    [isDim, interactions.select, translator, selectionActionsEnabledStatus, embedListbox, fieldInstance],
+    [isDim, interactions.select, translator, selectionActionsEnabledStatus, embedListbox, fieldInstance]
   );
 
   const handleOpenDropdown = async () => {
@@ -182,6 +186,7 @@ const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
         aria-haspopup="true"
         onClick={handleOpenDropdown}
         aria-label={translator.get("SNTable.Accessibility.ColumnOptions")}
+        isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
       >
         <More height={DEFAULT_FONT_SIZE} />
       </StyledMenuIconButton>

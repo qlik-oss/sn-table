@@ -22,7 +22,9 @@ export const StyledHeadCell = styled(TableCell, {
     ...(!isNewHeadCellMenuEnabled && { boxShadow: "0 0 0 2px #177fe6 inset, 0 0 0 3px #fff inset" }),
   },
 
-  "&&:hover": {
-    ...(isNewHeadCellMenuEnabled && { background: interactions.active ? hoverBackground : background }),
-  },
+  ...(isNewHeadCellMenuEnabled && {
+    "&&:hover": {
+      background: interactions.active ? hoverBackground : background,
+    },
+  }),
 }));

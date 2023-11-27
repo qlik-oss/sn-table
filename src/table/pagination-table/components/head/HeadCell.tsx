@@ -53,6 +53,7 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
       setFocusedCellCoord,
       isInteractionEnabled,
       handleOpenMenu,
+      isNewHeadCellMenuEnabled,
     });
 
   const handleMouseDown = (evt: React.MouseEvent) =>
@@ -73,7 +74,9 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
   const handleOpenMenu = () => setOpen(true);
 
   // const tabIndex = isInteractionEnabled && areTabStopsEnabled(keyboard) ? 0 : -1;
-  const tabIndex = column.colIdx == 0 && isInteractionEnabled && areTabStopsEnabled(keyboard) ? 0 : -1;
+  // const tabIndex = column.colIdx == 0 && isInteractionEnabled && areTabStopsEnabled(keyboard) ? 0 : -1;
+  const newHeadCellRelatedLogic = isNewHeadCellMenuEnabled ? column.colIdx == 0 : true;
+  const tabIndex = newHeadCellRelatedLogic && isInteractionEnabled && areTabStopsEnabled(keyboard) ? 0 : -1;
 
   return (
     <StyledHeadCell
@@ -84,7 +87,6 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
       className="sn-table-head-cell sn-table-cell"
       aria-sort={ariaSort}
       tabIndex={tabIndex}
-      isActivelySorted={column.isActivelySorted}
       title={interactions.passive ? column.label : undefined}
       onKeyDown={handleKeyDown}
       onMouseDown={handleMouseDown}
@@ -93,6 +95,7 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
       hoverBackground={hoverBackground}
       interactions={interactions}
       onClick={handleOpenMenu}
+      {...(isNewHeadCellMenuEnabled && { isActivelySorted: column.isActivelySorted })}
     >
       <HeadCellContent column={column} isInteractionEnabled={isInteractionEnabled} open={open} setOpen={setOpen}>
         <CellText fontSize={styling.head.fontSize}>{column.label}</CellText>

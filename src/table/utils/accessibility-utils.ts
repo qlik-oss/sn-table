@@ -73,6 +73,7 @@ export const moveFocusWithArrow = (
   cellCoord: [number, number],
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
   focusType: FocusTypes,
+  isNewHeadCellMenuEnabled: boolean,
   allowedRows?: {
     top: number;
     bottom: number;
@@ -80,7 +81,7 @@ export const moveFocusWithArrow = (
 ) => {
   const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, allowedRows);
   const nextCell = getCellElement(rootElement, nextCellCoord);
-  if (focusType === FocusTypes.FOCUS) {
+  if (isNewHeadCellMenuEnabled && focusType === FocusTypes.FOCUS) {
     updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLTableCellElement });
   }
   updateFocus({ focusType, cell: nextCell });
@@ -95,15 +96,19 @@ export const moveFocusWithArrow = (
  */
 export const focusBodyFromHead = (
   rootElement: HTMLElement,
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
+  isNewHeadCellMenuEnabled: boolean
 ) => {
   let cell = findCellWithTabStop(rootElement);
-  if (cell) {
+  let newCellCoord = undefined;
+
+  if (isNewHeadCellMenuEnabled && cell) {
     updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell });
+    newCellCoord = FIRST_BODY_CELL_COORD;
+  } else {
+    newCellCoord = cell ? getCellCoord(rootElement, cell) : FIRST_BODY_CELL_COORD;
+    cell = cell || getCellElement(rootElement, FIRST_BODY_CELL_COORD);
   }
-  // const newCellCoord = cell ? getCellCoord(rootElement, cell) : FIRST_BODY_CELL_COORD;
-  const newCellCoord = FIRST_BODY_CELL_COORD;
-  // cell = cell || getCellElement(rootElement, FIRST_BODY_CELL_COORD);
   cell = getCellElement(rootElement, FIRST_BODY_CELL_COORD);
   updateFocus({ cell, focusType: FocusTypes.FOCUS });
   setFocusedCellCoord(newCellCoord);

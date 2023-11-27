@@ -106,6 +106,7 @@ export const handleHeadKeyDown = ({
   setFocusedCellCoord,
   isInteractionEnabled,
   handleOpenMenu,
+  isNewHeadCellMenuEnabled,
 }: HandleHeadKeyDownProps) => {
   if (!isInteractionEnabled) {
     preventDefaultBehavior(evt);
@@ -122,26 +123,33 @@ export const handleHeadKeyDown = ({
     case KeyCodes.RIGHT:
       preventDefaultBehavior(evt);
       if (evt.key === KeyCodes.RIGHT && isLastHeadCell) {
-        focusBodyFromHead(rootElement, setFocusedCellCoord);
+        focusBodyFromHead(rootElement, setFocusedCellCoord, isNewHeadCellMenuEnabled);
       } else {
-        moveFocusWithArrow(evt, rootElement, cellCoord, setFocusedCellCoord, FocusTypes.FOCUS);
+        moveFocusWithArrow(
+          evt,
+          rootElement,
+          cellCoord,
+          setFocusedCellCoord,
+          isNewHeadCellMenuEnabled ? FocusTypes.FOCUS : FocusTypes.FOCUS_BUTTON,
+          isNewHeadCellMenuEnabled
+        );
       }
       break;
     case KeyCodes.DOWN:
       preventDefaultBehavior(evt);
       updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: findCellWithTabStop(rootElement) });
-      moveFocusWithArrow(evt, rootElement, cellCoord, setFocusedCellCoord, FocusTypes.FOCUS);
+      moveFocusWithArrow(evt, rootElement, cellCoord, setFocusedCellCoord, FocusTypes.FOCUS, isNewHeadCellMenuEnabled);
       break;
     case KeyCodes.TAB:
-      headTabHelper(evt, rootElement, cellCoord, setFocusedCellCoord, isLastHeadCell);
+      headTabHelper(evt, rootElement, cellCoord, setFocusedCellCoord, isLastHeadCell, isNewHeadCellMenuEnabled);
       break;
     case KeyCodes.C:
       preventDefaultBehavior(evt);
       isCtrlCmd(evt) && copyCellValue(evt);
       break;
-    case KeyCodes.ENTER:
-    case KeyCodes.SPACE:
-      handleOpenMenu();
+    case isNewHeadCellMenuEnabled && KeyCodes.ENTER:
+    case isNewHeadCellMenuEnabled && KeyCodes.SPACE:
+      handleOpenMenu && handleOpenMenu();
       break;
     default:
       break;
@@ -156,7 +164,8 @@ export const handleTotalKeyDown = (
   rootElement: HTMLElement,
   cellCoord: [number, number],
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  isSelectionMode = false
+  isSelectionMode = false,
+  isNewHeadCellMenuEnabled: boolean
 ) => {
   if (isSelectionMode) {
     preventDefaultBehavior(evt);
@@ -170,12 +179,12 @@ export const handleTotalKeyDown = (
     case KeyCodes.UP:
     case KeyCodes.DOWN: {
       preventDefaultBehavior(evt);
-      const focusType = getFocusType(cellCoord, evt);
+      const focusType = getFocusType(cellCoord, evt, isNewHeadCellMenuEnabled);
       if (focusType === FocusTypes.FOCUS) {
         updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLTableCellElement });
       }
 
-      moveFocusWithArrow(evt, rootElement, cellCoord, setFocusedCellCoord, focusType);
+      moveFocusWithArrow(evt, rootElement, cellCoord, setFocusedCellCoord, focusType, isNewHeadCellMenuEnabled);
       break;
     }
     case KeyCodes.TAB:
@@ -209,6 +218,7 @@ export const handleBodyKeyDown = ({
   paginationNeeded,
   totalsPosition,
   selectionsAPI,
+  isNewHeadCellMenuEnabled,
 }: HandleBodyKeyDownProps) => {
   if ((evt.target as HTMLTableCellElement).classList.contains("excluded")) {
     preventDefaultBehavior(evt);
@@ -234,6 +244,7 @@ export const handleBodyKeyDown = ({
         announce,
         totalsPosition,
         isSelectionMode,
+        isNewHeadCellMenuEnabled,
       });
       break;
     // Space bar: Selects value.
