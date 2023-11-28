@@ -59,7 +59,7 @@ const TableWrapper = (props: TableWrapperProps) => {
         politeness: "assertive",
       });
     },
-    [pageInfo, setPageInfo, totalPages, announce],
+    [pageInfo, setPageInfo, totalPages, announce]
   );
 
   const handleChangeRowsPerPage = useCallback(
@@ -70,7 +70,7 @@ const TableWrapper = (props: TableWrapperProps) => {
         politeness: "assertive",
       });
     },
-    [announce, pageInfo, setPageInfo],
+    [announce, pageInfo, setPageInfo]
   );
 
   const handleKeyDown = (evt: React.KeyboardEvent) => {
