@@ -1,5 +1,5 @@
 import { stardust } from "@nebula.js/stardust";
-import { HEAD_CELL_MENU_BUTTON_CLASS } from "@qlik/nebula-table-utils/lib/constants";
+import { COLUMN_ADJUSTER_CLASS, HEAD_CELL_MENU_BUTTON_CLASS } from "@qlik/nebula-table-utils/lib/constants";
 import React from "react";
 import { Announce } from "../../types";
 import { FIRST_BODY_CELL_COORD, FocusTypes } from "../constants";
@@ -15,7 +15,7 @@ export const setFocusOnClosetColumnAdjuster = (anchorRef: React.RefObject<HTMLDi
   setTimeout(() => {
     const adjusterHitArea = anchorRef.current
       ?.closest(".sn-table-cell")
-      ?.querySelector(".sn-table-adjuster-hit-area") as HTMLElement;
+      ?.querySelector(`.${COLUMN_ADJUSTER_CLASS}`) as HTMLElement;
     adjusterHitArea?.setAttribute("tabIndex", "0");
     adjusterHitArea?.focus();
   }, 0);
@@ -76,7 +76,7 @@ export const moveFocusWithArrow = (
   allowedRows?: {
     top: number;
     bottom: number;
-  },
+  }
 ) => {
   const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, allowedRows);
   const nextCell = getCellElement(rootElement, nextCellCoord);
@@ -92,7 +92,7 @@ export const moveFocusWithArrow = (
  */
 export const focusBodyFromHead = (
   rootElement: HTMLElement,
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>
 ) => {
   let cell = findCellWithTabStop(rootElement);
   const newCellCoord = cell ? getCellCoord(rootElement, cell) : FIRST_BODY_CELL_COORD;
@@ -109,7 +109,7 @@ export const removeTabAndFocusCell = (
   newCoord: [number, number],
   rootElement: HTMLElement,
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  keyboard: stardust.Keyboard,
+  keyboard: stardust.Keyboard
 ) => {
   updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: findCellWithTabStop(rootElement) });
   setFocusedCellCoord(newCoord);
@@ -165,7 +165,7 @@ export const resetFocus = ({
 export const handleFocusoutEvent = (
   evt: FocusEvent,
   shouldRefocus: React.MutableRefObject<boolean>,
-  keyboard: stardust.Keyboard,
+  keyboard: stardust.Keyboard
 ) => {
   const targetElement = evt.currentTarget as HTMLDivElement;
   const relatedTarget = evt.relatedTarget as HTMLElement;

@@ -90,7 +90,8 @@
     "root": true
   },
   "resolutions": {
-    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
+    "rollup": "npm:rollup@3.29.4"
   },
   "devDependencies": {
     "@babel/core": "7.23.3",
