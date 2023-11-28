@@ -105,11 +105,11 @@ export const focusBodyFromHead = (
   if (isNewHeadCellMenuEnabled && cell) {
     updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell });
     newCellCoord = FIRST_BODY_CELL_COORD;
+    cell = getCellElement(rootElement, FIRST_BODY_CELL_COORD);
   } else {
     newCellCoord = cell ? getCellCoord(rootElement, cell) : FIRST_BODY_CELL_COORD;
     cell = cell || getCellElement(rootElement, FIRST_BODY_CELL_COORD);
   }
-  cell = getCellElement(rootElement, FIRST_BODY_CELL_COORD);
   updateFocus({ cell, focusType: FocusTypes.FOCUS });
   setFocusedCellCoord(newCellCoord);
 };
