@@ -30,7 +30,7 @@ export const StyledSortButton = styled(Button, {
   cursor: disabled ? "auto" : "pointer",
   justifySelf: textAlign,
   "&&:focus, &&:hover": {
-    ...(isNewHeadCellMenuEnabled && { background: "transparent" }),
+    ...(isNewHeadCellMenuEnabled && { background: "transparent", boxShadow: "none" }),
     "& svg": {
       ...(!isNewHeadCellMenuEnabled && { opacity: isActivelySorted ? 1 : 0.5 }),
     },

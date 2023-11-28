@@ -1,5 +1,5 @@
 import { stardust } from "@nebula.js/stardust";
-import { HEAD_CELL_MENU_BUTTON_CLASS } from "@qlik/nebula-table-utils/lib/constants";
+import { COLUMN_ADJUSTER_CLASS, HEAD_CELL_MENU_BUTTON_CLASS } from "@qlik/nebula-table-utils/lib/constants";
 import React from "react";
 import { Announce } from "../../types";
 import { FIRST_BODY_CELL_COORD, FocusTypes } from "../constants";
@@ -15,7 +15,7 @@ export const setFocusOnClosetColumnAdjuster = (anchorRef: React.RefObject<HTMLDi
   setTimeout(() => {
     const adjusterHitArea = anchorRef.current
       ?.closest(".sn-table-cell")
-      ?.querySelector(".sn-table-adjuster-hit-area") as HTMLElement;
+      ?.querySelector(`.${COLUMN_ADJUSTER_CLASS}`) as HTMLElement;
     adjusterHitArea?.setAttribute("tabIndex", "0");
     adjusterHitArea?.focus();
   }, 0);
@@ -24,13 +24,24 @@ export const setFocusOnClosetColumnAdjuster = (anchorRef: React.RefObject<HTMLDi
 /**
  * Removes the tab stop for adjuster hit area and focus the head menu button
  */
-export const focusHeadMenuButton = (event: React.KeyboardEvent | React.FocusEvent) => {
+export const focusBackToHeadCell = (
+  event: React.KeyboardEvent | React.FocusEvent,
+  isNewHeadCellMenuEnabled: boolean
+) => {
   const target = event.target as HTMLDivElement;
   target.setAttribute("tabIndex", "-1");
   const baseElement = target?.closest(".sn-table-cell");
-  const headMenuButton = (baseElement?.querySelector(".sn-table-head-menu-button") ||
-    baseElement?.querySelector(`.${HEAD_CELL_MENU_BUTTON_CLASS}`)) as HTMLButtonElement;
-  headMenuButton?.focus();
+  baseElement?.setAttribute("tabIndex", "-1");
+
+  let targetElementToFocus = null;
+  if (isNewHeadCellMenuEnabled) {
+    targetElementToFocus = baseElement as HTMLDivElement;
+    targetElementToFocus?.setAttribute("tabIndex", "0");
+  } else {
+    targetElementToFocus = baseElement?.querySelector(".sn-table-head-menu-button") as HTMLButtonElement;
+  }
+
+  targetElementToFocus?.focus();
 };
 
 /**

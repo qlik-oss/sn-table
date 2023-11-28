@@ -3,7 +3,7 @@ import { ColumnWidth } from "@qlik/nebula-table-utils/lib/components/ColumnAdjus
 import React from "react";
 import { TableContext, useContextSelector } from "../../context";
 import { AdjusterProps } from "../../types";
-import { focusHeadMenuButton } from "../../utils/accessibility-utils";
+import { focusBackToHeadCell } from "../../utils/accessibility-utils";
 
 /**
  * Component that is placed on top of column border.
@@ -14,7 +14,10 @@ import { focusHeadMenuButton } from "../../utils/accessibility-utils";
 const ColumnAdjusterWrapper = ({ column, isLastColumn, onColumnResize }: AdjusterProps) => {
   const { pageColIdx } = column;
   const { applyColumnWidths, interactions } = useContextSelector(TableContext, (value) => value.baseProps);
-  const { isNewHeadCellMenuEnabled } = useContextSelector(TableContext, (value) => value.featureFlags);
+  const isNewHeadCellMenuEnabled = useContextSelector(
+    TableContext,
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled
+  );
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const setColumnWidths = useContextSelector(TableContext, (value) => value.setColumnWidths);
 
@@ -32,7 +35,8 @@ const ColumnAdjusterWrapper = ({ column, isLastColumn, onColumnResize }: Adjuste
   };
 
   // TODO: it should focus on complete cell not only button
-  const handleBlur = (event: React.FocusEvent | React.KeyboardEvent) => focusHeadMenuButton(event);
+  const handleBlur = (event: React.FocusEvent | React.KeyboardEvent) =>
+    focusBackToHeadCell(event, isNewHeadCellMenuEnabled);
 
   // TODO: Pass the new header flag here so we can adjust the min width accordingly
   return (
