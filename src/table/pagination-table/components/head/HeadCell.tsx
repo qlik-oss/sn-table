@@ -75,7 +75,7 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
 
   // const tabIndex = isInteractionEnabled && areTabStopsEnabled(keyboard) ? 0 : -1;
   // const tabIndex = column.colIdx == 0 && isInteractionEnabled && areTabStopsEnabled(keyboard) ? 0 : -1;
-  const newHeadCellRelatedLogic = isNewHeadCellMenuEnabled ? column.colIdx == 0 : true;
+  const newHeadCellRelatedLogic = isNewHeadCellMenuEnabled ? column.colIdx == 0 : false;
   const tabIndex = newHeadCellRelatedLogic && isInteractionEnabled && areTabStopsEnabled(keyboard) ? 0 : -1;
 
   return (
