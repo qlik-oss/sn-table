@@ -1,3 +1,15 @@
+# [2.8.0](https://github.com/qlik-oss/sn-table/compare/v2.7.0...v2.8.0) (2023-11-29)
+
+### Bug Fixes
+
+- add touch listeners for ColumnAdjuster ([#1083](https://github.com/qlik-oss/sn-table/issues/1083)) ([7164e52](https://github.com/qlik-oss/sn-table/commit/7164e52e7ff98969f12081afa81af0b02985d879))
+- miss while trying to find col adjuster hit area ([#1097](https://github.com/qlik-oss/sn-table/issues/1097)) ([bc78289](https://github.com/qlik-oss/sn-table/commit/bc782890fe9aedaeec4961ce52bf03fba15b19d4))
+
+### Features
+
+- `<HeadCellMenu />` from shared lib ([#1084](https://github.com/qlik-oss/sn-table/issues/1084)) ([b826b29](https://github.com/qlik-oss/sn-table/commit/b826b2980da9fe53c927872f4a2650125c1aff96))
+- new `<HeadCellMenu />` bg color on hover/active state ([#1092](https://github.com/qlik-oss/sn-table/issues/1092)) ([d390cff](https://github.com/qlik-oss/sn-table/commit/d390cff822a24609c73cccb89ee3fabf7b4c7332))
+
 # [2.7.0](https://github.com/qlik-oss/sn-table/compare/v2.6.0...v2.7.0) (2023-09-21)
 
 ### Bug Fixes
