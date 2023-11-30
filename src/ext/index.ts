@@ -1,0 +1,22 @@
+import exploration from "../exploration/exploration";
+import { exportProperties, importProperties } from "./conversion";
+import getData from "./data";
+import getPropertyPanelDefinition from "./property-panel";
+
+export default function ext(env: any) {
+  return {
+    definition: getPropertyPanelDefinition(env),
+    exploration,
+    data: getData(env),
+    support: {
+      export: env.flags.isEnabled("PS_20907_TABLE_DOWNLOAD"),
+      exportData: true,
+      snapshot: env.flags.isEnabled("PS_20907_TABLE_DOWNLOAD"),
+      viewData: false,
+      exploration: true,
+      cssScaling: true,
+    },
+    importProperties,
+    exportProperties,
+  };
+}
