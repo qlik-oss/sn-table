@@ -15,7 +15,7 @@ const useKeyboardActiveListener = () => {
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const isNewHeadCellMenuEnabled = useContextSelector(
     TableContext,
-    (value) => value.featureFlags.isNewHeadCellMenuEnabled
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled,
   );
 
   useEffect(() => {

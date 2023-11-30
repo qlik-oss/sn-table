@@ -11,12 +11,22 @@ describe("use-keyboard-active-listener", () => {
   let keyboard: stardust.Keyboard;
   let focusedCellCoord: [number, number];
 
-  const wrapper = ({ children }: any) => (
-    <TestWithProviders cellCoordMock={focusedCellCoord} keyboard={keyboard}>
+  const Wrapper = ({ children, isNewHeadCellMenuEnabled = false }: any) => (
+    <TestWithProviders
+      cellCoordMock={focusedCellCoord}
+      keyboard={keyboard}
+      isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
+    >
       {children}
     </TestWithProviders>
   );
-  const renderUseKEyboardActiveListener = () => renderHook(useKeyboardActiveListener, { wrapper });
+
+  const renderUseKEyboardActiveListener = (isNewHeadCellMenuEnabled: boolean = false) =>
+    renderHook(useKeyboardActiveListener, {
+      wrapper: ({ children }: any) => {
+        return <Wrapper isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}>{children}</Wrapper>;
+      },
+    });
 
   beforeEach(() => {
     keyboard = {
@@ -62,6 +72,13 @@ describe("use-keyboard-active-listener", () => {
     expect(accessibilityUtils.updateFocus).toHaveBeenCalledWith({
       focusType: FocusTypes.FOCUS,
       cell: expect.anything(),
+    });
+  });
+
+  describe("when isNewHeadCellMenuEnabled flag is true:", () => {
+    it("should do nothing when new head cell menu is toggeled on", () => {
+      renderUseKEyboardActiveListener(true);
+      expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(0);
     });
   });
 });
