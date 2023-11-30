@@ -105,17 +105,18 @@ const TableWrapper = (props: TableWrapperProps) => {
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
   useDidUpdateEffect(() => {
-    resetFocus({
-      focusedCellCoord,
-      rootElement,
-      shouldRefocus,
-      setFocusedCellCoord,
-      isSelectionMode,
-      keyboard,
-      announce,
-      totalsPosition,
-    });
-  }, [rows.length, totalRowCount, totalColumnCount, page]);
+    !isNewHeadCellMenuEnabled &&
+      resetFocus({
+        focusedCellCoord,
+        rootElement,
+        shouldRefocus,
+        setFocusedCellCoord,
+        isSelectionMode,
+        keyboard,
+        announce,
+        totalsPosition,
+      });
+  }, [rows.length, totalRowCount, totalColumnCount, page, isNewHeadCellMenuEnabled]);
 
   useDidUpdateEffect(() => {
     setYScrollbarWidth(yScrollbarWidth);
