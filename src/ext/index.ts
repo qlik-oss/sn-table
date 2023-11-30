@@ -1,5 +1,5 @@
+import { exportProperties, importProperties } from "../conversion";
 import exploration from "../exploration/exploration";
-import { exportProperties, importProperties } from "./conversion";
 import getData from "./data";
 import getPropertyPanelDefinition from "./property-panel";
 
@@ -16,7 +16,15 @@ export default function ext(env: any) {
       exploration: true,
       cssScaling: true,
     },
-    importProperties,
-    exportProperties,
+    importProperties(exportFormat: any, initialProperties: any, extension: any, hypercubePath: string) {
+      const defaultPropertyValues = {
+        defaultDimension: extension.getDefaultDimensionProperties(),
+        defaultMeasure: extension.getDefaultMeasureProperties(),
+      };
+      return importProperties({ exportFormat, initialProperties, extension, hypercubePath, defaultPropertyValues });
+    },
+    exportProperties(propertyTree: any, hyperCubePath: string) {
+      return exportProperties({ propertyTree, hyperCubePath });
+    },
   };
 }

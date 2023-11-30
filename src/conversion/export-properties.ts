@@ -2,7 +2,7 @@ import { setValue } from "qlik-chart-modules";
 import conversion from "qlik-object-conversion";
 
 import { ColumnWidthValues } from "@qlik/nebula-table-utils/lib/constants";
-import { DimensionProperties, ExportFormat, MeasureProperties, PropTree } from "../../types";
+import { DimensionProperties, ExportFormat, MeasureProperties, PropTree } from "../types";
 
 const getColumnWidth = (colIdx: number, qDimensions: DimensionProperties[], qMeasures: MeasureProperties[]) => {
   const numDims = qDimensions.length;
@@ -27,7 +27,12 @@ export const getColumnWidths = (
   return columnWidths;
 };
 
-const exportProperties = (propertyTree: PropTree, hyperCubePath?: string): ExportFormat => {
+type ExportProperties = {
+  propertyTree: PropTree;
+  hyperCubePath?: string;
+};
+
+const exportProperties = ({ propertyTree, hyperCubePath }: ExportProperties): ExportFormat => {
   const expFormat = conversion.hypercube.exportProperties({
     propertyTree,
     hyperCubePath,

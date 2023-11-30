@@ -1,3 +1,9 @@
+# [2.9.0](https://github.com/qlik-oss/sn-table/compare/v2.8.0...v2.9.0) (2023-11-30)
+
+### Features
+
+- import view data properties ([#1095](https://github.com/qlik-oss/sn-table/issues/1095)) ([0118bfa](https://github.com/qlik-oss/sn-table/commit/0118bfadb35fc96fef169e7500fd8f2f8d6ce3c5))
+
 # [2.8.0](https://github.com/qlik-oss/sn-table/compare/v2.7.0...v2.8.0) (2023-11-29)
 
 ### Bug Fixes

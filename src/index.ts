@@ -21,7 +21,7 @@ import useReactRoot from "./nebula-hooks/use-react-root";
 import useSorting from "./nebula-hooks/use-sorting";
 import useVirtualizedTable from "./nebula-hooks/use-virtualized-table";
 import useWaitForFonts from "./nebula-hooks/use-wait-for-fonts";
-import qae from "./qae/qae";
+import qae from "./qae";
 import useSnapshot from "./table/hooks/use-snapshot";
 import useViewService from "./table/hooks/use-view-service";
 import { ExtendedSelectionAPI, Galaxy, TableLayout, UseOptions } from "./types";

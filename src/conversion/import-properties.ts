@@ -1,8 +1,8 @@
 import { ColumnWidthType } from "@qlik/nebula-table-utils/lib/constants";
 import { setValue } from "qlik-chart-modules";
 import conversion from "qlik-object-conversion";
-import data from "../../qae/data";
-import { DimensionProperties, ExportFormat, MeasureProperties, PropTree } from "../../types";
+import data from "../qae/data";
+import { DimensionProperties, ExportFormat, MeasureProperties, PropTree } from "../types";
 
 export const getColumnInfo = (
   columnInfo: DimensionProperties[] | MeasureProperties[],
@@ -53,20 +53,28 @@ export const getMultiColumnInfo = (
   return { dimensions, measures };
 };
 
-const importProperties = (
-  exportFormat: ExportFormat,
-  initialProperties: EngineAPI.IGenericHyperCubeProperties,
-  extension: any,
-  hypercubePath?: string,
-): PropTree => {
+export type ImportProperties = {
+  exportFormat: ExportFormat;
+  initialProperties: EngineAPI.IGenericHyperCubeProperties;
+  extension?: any;
+  hypercubePath?: string;
+  defaultPropertyValues?: any;
+  viewDataMode?: boolean;
+};
+
+const importProperties = ({
+  exportFormat,
+  initialProperties,
+  extension,
+  hypercubePath,
+  defaultPropertyValues,
+  viewDataMode,
+}: ImportProperties): PropTree => {
   const propertyTree = conversion.hypercube.importProperties({
     exportFormat,
     initialProperties,
     dataDefinition: data().targets[0],
-    defaultPropertyValues: {
-      defaultDimension: extension.getDefaultDimensionProperties(),
-      defaultMeasure: extension.getDefaultMeasureProperties(),
-    },
+    defaultPropertyValues,
     hypercubePath,
     extension,
   });
@@ -79,6 +87,11 @@ const importProperties = (
   if (Array.isArray(columnWidths) && columnWidths.length > 0) {
     setValue(propertyTree, "qProperty.qHyperCubeDef.qDimensions", dimensions);
     setValue(propertyTree, "qProperty.qHyperCubeDef.qMeasures", measures);
+  }
+
+  if (viewDataMode) {
+    setValue(propertyTree, "qProperty.totals.show", false);
+    setValue(propertyTree, "qProperty.usePagination", true);
   }
 
   conversion.conditionalShow.unquarantine(propertyTree.qProperty);
