@@ -1,5 +1,5 @@
-import ext from "..";
 import { getDescription, indexAdded, indexRemoved, min } from "../data";
+import ext from "../index.ts";
 
 describe("data", () => {
   const mockFlags = {
