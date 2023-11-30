@@ -97,6 +97,7 @@ describe("keyboard-utils", () => {
     let announce: Announce;
     let totalsPosition: TotalsPosition;
     let isSelectionMode: boolean;
+    let isNewHeadCellMenuEnabled: boolean
 
     const runBodyArrowHelper = () =>
       bodyArrowHelper({
@@ -109,6 +110,7 @@ describe("keyboard-utils", () => {
         announce,
         totalsPosition,
         isSelectionMode,
+        isNewHeadCellMenuEnabled
       });
 
     beforeEach(() => {
@@ -272,8 +274,9 @@ describe("keyboard-utils", () => {
     let containsLabelClass: boolean;
     let cellCoord: [number, number];
     let isLastHeadCell: boolean;
+    let isNewHeadCellMenuEnabled: boolean
 
-    const callHeadTabHelper = () => headTabHelper(evt, rootElement, cellCoord, setFocusedCellCoord, isLastHeadCell);
+    const callHeadTabHelper = () => headTabHelper(evt, rootElement, cellCoord, setFocusedCellCoord, isLastHeadCell,isNewHeadCellMenuEnabled);
 
     beforeEach(() => {
       containsLabelClass = true;

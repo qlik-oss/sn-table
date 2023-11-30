@@ -162,6 +162,7 @@ describe("handle-keyboard", () => {
     let isInteractionEnabled: boolean;
     let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
     let nextSibling: ChildNode | null | undefined;
+    let isNewHeadCellMenuEnabled: boolean
 
     const callHandleHeadKeyDown = () =>
       handleHeadKeyDown({
@@ -170,6 +171,7 @@ describe("handle-keyboard", () => {
         cellCoord: [rowIndex, colIndex],
         isInteractionEnabled,
         setFocusedCellCoord,
+        isNewHeadCellMenuEnabled
       });
 
     beforeEach(() => {
@@ -391,6 +393,7 @@ describe("handle-keyboard", () => {
     let announce: Announce;
     let paginationNeeded: boolean;
     let totalsPosition: TotalsPosition;
+    let isNewHeadCellMenuEnabled: boolean;
 
     const runHandleBodyKeyDown = () =>
       handleBodyKeyDown({
@@ -405,6 +408,7 @@ describe("handle-keyboard", () => {
         keyboard,
         paginationNeeded,
         totalsPosition,
+        isNewHeadCellMenuEnabled
       });
 
     beforeEach(() => {
