@@ -1,9 +1,10 @@
 import { exportProperties, importProperties } from "../conversion";
 import exploration from "../exploration/exploration";
+import { ExportFormat, Galaxy, PropTree } from "../types";
 import getData from "./data";
 import getPropertyPanelDefinition from "./property-panel";
 
-export default function ext(env: any) {
+export default function ext(env: Galaxy) {
   return {
     definition: getPropertyPanelDefinition(env),
     exploration,
@@ -16,14 +17,19 @@ export default function ext(env: any) {
       exploration: true,
       cssScaling: true,
     },
-    importProperties(exportFormat: any, initialProperties: any, extension: any, hypercubePath: string) {
+    importProperties(
+      exportFormat: ExportFormat,
+      initialProperties: EngineAPI.IGenericHyperCubeProperties,
+      extension: any,
+      hypercubePath: string,
+    ) {
       const defaultPropertyValues = {
         defaultDimension: extension.getDefaultDimensionProperties(),
         defaultMeasure: extension.getDefaultMeasureProperties(),
       };
       return importProperties({ exportFormat, initialProperties, extension, hypercubePath, defaultPropertyValues });
     },
-    exportProperties(propertyTree: any, hyperCubePath: string) {
+    exportProperties(propertyTree: PropTree, hyperCubePath: string) {
       return exportProperties({ propertyTree, hyperCubePath });
     },
   };
