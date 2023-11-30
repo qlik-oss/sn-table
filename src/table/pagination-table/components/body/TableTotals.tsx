@@ -46,8 +46,8 @@ const TableTotals = () => {
                 rootElement,
                 cellCoord,
                 setFocusedCellCoord,
-                selectionsAPI?.isModal(),
-                isNewHeadCellMenuEnabled
+                isNewHeadCellMenuEnabled,
+                selectionsAPI?.isModal()
               );
             }}
             onMouseDown={() => {

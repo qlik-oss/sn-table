@@ -9,9 +9,8 @@ export const StyledHeadCell = styled(TableCell, {
     prop !== "isNewHeadCellMenuEnabled" &&
     prop !== "interactions" &&
     prop !== "hoverBackground" &&
-    prop !== "background" &&
-    prop !== "isActivelySorted",
-})(({ headerStyle, isNewHeadCellMenuEnabled, interactions, hoverBackground, background, isActivelySorted }) => ({
+    prop !== "background",
+})(({ headerStyle, isNewHeadCellMenuEnabled, interactions, hoverBackground, background }) => ({
   ...COMMON_CELL_STYLING,
   ...headerStyle,
   ...(isNewHeadCellMenuEnabled && { cursor: "pointer", background }),
@@ -19,7 +18,10 @@ export const StyledHeadCell = styled(TableCell, {
   verticalAlign: "bottom",
 
   "&&:focus": {
-    ...(!isNewHeadCellMenuEnabled && { boxShadow: "0 0 0 2px #177fe6 inset, 0 0 0 3px #fff inset" }),
+    ...(!isNewHeadCellMenuEnabled && {
+      boxShadow: "0 0 0 2px #177fe6 inset, 0 0 0 3px #fff inset",
+    }),
+    ...(isNewHeadCellMenuEnabled && { background: interactions.active ? hoverBackground : background }),
   },
 
   ...(isNewHeadCellMenuEnabled && {

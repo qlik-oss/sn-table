@@ -92,7 +92,7 @@ const TableWrapper = (props: TableWrapperProps) => {
 
   useFocusListener(tableWrapperRef, shouldRefocus, keyboard);
   useScrollListener(tableContainerRef, direction, viewService);
-  !isNewHeadCellMenuEnabled && useKeyboardActiveListener();
+  useKeyboardActiveListener();
 
   useEffect(() => {
     const element = tableContainerRef.current;

@@ -1,5 +1,5 @@
 import { stardust } from "@nebula.js/stardust";
-import { COLUMN_ADJUSTER_CLASS, HEAD_CELL_MENU_BUTTON_CLASS } from "@qlik/nebula-table-utils/lib/constants";
+import { COLUMN_ADJUSTER_CLASS } from "@qlik/nebula-table-utils/lib/constants";
 import React from "react";
 import { Announce } from "../../types";
 import { FIRST_BODY_CELL_COORD, FocusTypes } from "../constants";
@@ -111,7 +111,7 @@ export const focusBodyFromHead = (
   isNewHeadCellMenuEnabled: boolean
 ) => {
   let cell = findCellWithTabStop(rootElement);
-  let newCellCoord = undefined;
+  let newCellCoord;
 
   if (isNewHeadCellMenuEnabled && cell) {
     updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell });
