@@ -1,5 +1,5 @@
 import { ColumnWidthType } from "@qlik/nebula-table-utils/lib/constants";
-import { Align, ExportFormat } from "../../../types";
+import { Align, ExportFormat } from "../../types";
 import importProperties, { getColumnInfo, getMultiColumnInfo } from "../import-properties";
 
 describe("importProperties", () => {
@@ -159,7 +159,7 @@ describe("importProperties", () => {
     const hypercubePath = undefined;
 
     it("should get the correct importProperties", () => {
-      const propertyTree = importProperties(exportFormat, initialProperties, extension, hypercubePath);
+      const propertyTree = importProperties({ exportFormat, initialProperties, extension, hypercubePath });
       expect(propertyTree.qProperty.qHyperCubeDef.qDimensions[0].qDef.columnWidth).toEqual({
         pixels: 300,
         type: "pixels",
@@ -181,8 +181,14 @@ describe("importProperties", () => {
           },
         },
       };
-      const propertyTree = importProperties(exportFormat, initialProperties, extension, hypercubePath);
+      const propertyTree = importProperties({ exportFormat, initialProperties, extension, hypercubePath });
       expect(propertyTree.qProperty.qHyperCubeDef.qColumnOrder).toEqual([0, 2, 1]);
+    });
+
+    it("should add view data properties when converting to view data table", () => {
+      const propertyTree = importProperties({ exportFormat, initialProperties, viewDataMode: true });
+      expect(propertyTree.qProperty.totals?.show).toEqual(false);
+      expect(propertyTree.qProperty.usePagination).toEqual(true);
     });
   });
 });

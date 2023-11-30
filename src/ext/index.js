@@ -1,7 +1,7 @@
 import getData from "./data";
 import getPropertyPanelDefinition from "./property-panel";
 // eslint-disable-next-line import/no-unresolved, import/extensions
-import { exportProperties, importProperties } from "./conversion";
+import { exportProperties, importProperties } from "../conversion";
 
 const getExploration = (env) =>
   env.flags.isEnabled("PS_18291_TABLE_EXPLORATION") && {
@@ -34,7 +34,15 @@ export default function ext(env) {
       exploration: true,
       cssScaling: true,
     },
-    importProperties,
-    exportProperties,
+    importProperties(exportFormat, initialProperties, extension, hypercubePath) {
+      const defaultPropertyValues = {
+        defaultDimension: extension.getDefaultDimensionProperties(),
+        defaultMeasure: extension.getDefaultMeasureProperties(),
+      };
+      return importProperties({ exportFormat, initialProperties, extension, hypercubePath, defaultPropertyValues });
+    },
+    exportProperties(propertyTree, hyperCubePath) {
+      return exportProperties({ propertyTree, hyperCubePath });
+    },
   };
 }

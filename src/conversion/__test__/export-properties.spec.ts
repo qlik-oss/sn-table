@@ -1,5 +1,5 @@
 import { ColumnWidthType } from "@qlik/nebula-table-utils/lib/constants";
-import { Align, PropTree } from "../../../types";
+import { Align, PropTree } from "../../types";
 import exportProperties, { getColumnWidths } from "../export-properties";
 
 describe("exportProperties", () => {
@@ -92,7 +92,7 @@ describe("exportProperties", () => {
     const hyperCubePath = undefined;
 
     it("test", () => {
-      const expFormat = exportProperties(propertyTree, hyperCubePath);
+      const expFormat = exportProperties({ propertyTree, hyperCubePath });
       expect(expFormat.properties.qHyperCubeDef.columnWidths).toEqual([-1, 200, 200, -1]);
       expect(
         expFormat.properties.qLayoutExclude.quarantine.straightTableColumnWidths["qHyperCubeDef.columnWidths"],
