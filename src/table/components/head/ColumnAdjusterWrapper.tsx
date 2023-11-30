@@ -34,7 +34,6 @@ const ColumnAdjusterWrapper = ({ column, isLastColumn, onColumnResize }: Adjuste
     applyColumnWidths(newWidthData, column);
   };
 
-  // TODO: it should focus on complete cell not only button
   const handleBlur = (event: React.FocusEvent | React.KeyboardEvent) =>
     focusBackToHeadCell(event, isNewHeadCellMenuEnabled);
 
