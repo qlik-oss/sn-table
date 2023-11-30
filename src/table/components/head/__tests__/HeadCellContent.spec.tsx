@@ -20,7 +20,7 @@ describe("<HeadCellContent />", () => {
         <HeadCellContent column={column} isInteractionEnabled={isInteractionEnabled} open={open} setOpen={setOpenMock}>
           <CellText>{column.label}</CellText>
         </HeadCellContent>
-      </TestWithProviders>
+      </TestWithProviders>,
     );
 
   beforeEach(() => {

@@ -34,7 +34,7 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const isNewHeadCellMenuEnabled = useContextSelector(
     TableContext,
-    (value) => value.featureFlags.isNewHeadCellMenuEnabled
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled,
   );
 
   const isInteractionEnabled = !!interactions.active && !isSelectionMode;

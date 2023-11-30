@@ -19,12 +19,12 @@ import {
 const HeadCellContent = ({ children, column, isInteractionEnabled, open, setOpen }: HeadCellContentProps) => {
   const { keyboard, translator, changeSortOrder, interactions, embed, app, model } = useContextSelector(
     TableContext,
-    (value) => value.baseProps
+    (value) => value.baseProps,
   );
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
   const isNewHeadCellMenuEnabled = useContextSelector(
     TableContext,
-    (value) => value.featureFlags.isNewHeadCellMenuEnabled
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled,
   );
 
   const anchorRef = useRef<HTMLDivElement>(null);

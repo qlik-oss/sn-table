@@ -30,6 +30,7 @@
     "copy:ext": "node ./tools/copy-ext.js",
     "deduplicate-packages": "yarn-deduplicate yarn.lock",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "lint": "eslint --cache .",
     "locale:generate": "node src/locale/scripts/generate-all.mjs",
     "locale:verify": "node src/locale/tools/verify-translations.ts",
