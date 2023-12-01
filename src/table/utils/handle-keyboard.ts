@@ -131,7 +131,7 @@ export const handleHeadKeyDown = ({
           cellCoord,
           setFocusedCellCoord,
           isNewHeadCellMenuEnabled ? FocusTypes.FOCUS : FocusTypes.FOCUS_BUTTON,
-          isNewHeadCellMenuEnabled
+          isNewHeadCellMenuEnabled,
         );
       }
       break;
@@ -165,7 +165,7 @@ export const handleTotalKeyDown = (
   cellCoord: [number, number],
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
   isNewHeadCellMenuEnabled: boolean,
-  isSelectionMode = false
+  isSelectionMode = false,
 ) => {
   if (isSelectionMode) {
     preventDefaultBehavior(evt);

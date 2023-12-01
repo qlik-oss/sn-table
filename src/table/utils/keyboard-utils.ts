@@ -41,7 +41,7 @@ const shouldSelectMultiValues = (isSelectionsEnabled: boolean, evt: React.Keyboa
 export const getFocusType = (
   cellCoord: [number, number],
   evt: React.KeyboardEvent<Element>,
-  isNewHeadCellMenuEnabled: boolean
+  isNewHeadCellMenuEnabled: boolean,
 ): FocusTypes => {
   if (isNewHeadCellMenuEnabled) {
     return FocusTypes.FOCUS;
@@ -89,7 +89,7 @@ export const bodyArrowHelper = ({
     setFocusedCellCoord,
     focusType,
     isNewHeadCellMenuEnabled,
-    allowedRows
+    allowedRows,
   );
 
   if (!(evt.key === KeyCodes.UP || evt.key === KeyCodes.DOWN)) return;
@@ -119,7 +119,7 @@ export const headTabHelper = (
   cellCoord: [number, number],
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
   isLastHeadCell: boolean,
-  isNewHeadCellMenuEnabled: boolean
+  isNewHeadCellMenuEnabled: boolean,
 ) => {
   const target = evt.target as HTMLTableCellElement;
   const isLabel = target.classList.contains("sn-table-head-label");

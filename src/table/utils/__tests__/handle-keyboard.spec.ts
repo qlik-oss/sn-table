@@ -162,7 +162,8 @@ describe("handle-keyboard", () => {
     let isInteractionEnabled: boolean;
     let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
     let nextSibling: ChildNode | null | undefined;
-    let isNewHeadCellMenuEnabled: boolean
+    let isNewHeadCellMenuEnabled: boolean;
+    let handleOpenMenu: () => void;
 
     const callHandleHeadKeyDown = () =>
       handleHeadKeyDown({
@@ -171,7 +172,8 @@ describe("handle-keyboard", () => {
         cellCoord: [rowIndex, colIndex],
         isInteractionEnabled,
         setFocusedCellCoord,
-        isNewHeadCellMenuEnabled
+        isNewHeadCellMenuEnabled,
+        handleOpenMenu,
       });
 
     beforeEach(() => {
@@ -194,6 +196,8 @@ describe("handle-keyboard", () => {
       changeSortOrder = jest.fn();
       isInteractionEnabled = true;
       setFocusedCellCoord = jest.fn();
+      isNewHeadCellMenuEnabled = false;
+      handleOpenMenu = jest.fn();
       jest.spyOn(accessibilityUtils, "focusBodyFromHead").mockImplementation(() => {});
       jest.spyOn(accessibilityUtils, "moveFocusWithArrow").mockImplementation(() => ({}) as HTMLTableCellElement);
       jest.spyOn(accessibilityUtils, "updateFocus").mockImplementation(() => {});
@@ -271,6 +275,37 @@ describe("handle-keyboard", () => {
       callHandleHeadKeyDown();
       expect(keyboardUtils.headTabHelper).toHaveBeenCalledTimes(1);
     });
+
+    describe("when isNewHeadCellMenuEnabled flag is true:", () => {
+      beforeEach(() => {
+        isNewHeadCellMenuEnabled = true;
+      });
+
+      it("should call handleOpenMenu when the pressed key is enter", () => {
+        evt.key = KeyCodes.ENTER;
+        callHandleHeadKeyDown();
+        expect(handleOpenMenu).toHaveBeenCalledTimes(1);
+      });
+
+      it("should call handleOpenMenu when the pressed key is enter", () => {
+        evt.key = KeyCodes.SPACE;
+        callHandleHeadKeyDown();
+        expect(handleOpenMenu).toHaveBeenCalledTimes(1);
+      });
+
+      it("should call moveFocusWithArrow and passing focus type as FOCUS when key code is not RIGHT", () => {
+        evt.key = KeyCodes.LEFT;
+        callHandleHeadKeyDown();
+        expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledWith(
+          evt,
+          rootElement,
+          [0, 0],
+          setFocusedCellCoord,
+          FocusTypes.FOCUS,
+          isNewHeadCellMenuEnabled,
+        );
+      });
+    });
   });
 
   describe("handleTotalKeyDown", () => {
@@ -279,6 +314,7 @@ describe("handle-keyboard", () => {
     let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
     let cellCoord: [number, number];
     let isSelectionMode: boolean;
+    let isNewHeadCellMenuEnabled: boolean;
 
     beforeEach(() => {
       evt = {
@@ -298,6 +334,7 @@ describe("handle-keyboard", () => {
       } as unknown as HTMLElement;
       setFocusedCellCoord = jest.fn();
       isSelectionMode = false;
+      isNewHeadCellMenuEnabled = false;
       jest.spyOn(accessibilityUtils, "moveFocusWithArrow").mockImplementation(() => ({}) as HTMLTableCellElement);
       jest.spyOn(accessibilityUtils, "updateFocus").mockImplementation(() => {});
       jest.spyOn(keyboardUtils, "bodyTabHelper").mockImplementation(() => {});
@@ -314,6 +351,7 @@ describe("handle-keyboard", () => {
         cellCoord,
         setFocusedCellCoord,
         FocusTypes.FOCUS,
+        isNewHeadCellMenuEnabled,
       );
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
     });
@@ -332,13 +370,14 @@ describe("handle-keyboard", () => {
         cellCoord,
         setFocusedCellCoord,
         FocusTypes.FOCUS_BUTTON,
+        isNewHeadCellMenuEnabled,
       );
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(0);
     });
 
     it("should only call preventDefaultBehavior when isSelectionMode is true", () => {
       isSelectionMode = true;
-      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, false, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(accessibilityUtils.moveFocusWithArrow).not.toHaveBeenCalled();
@@ -346,7 +385,7 @@ describe("handle-keyboard", () => {
 
     it("should take the default case when the pressed key is not an arrow key", () => {
       evt.key = KeyCodes.ENTER;
-      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, false, isSelectionMode);
       expect(evt.preventDefault).not.toHaveBeenCalled();
       expect(evt.stopPropagation).not.toHaveBeenCalled();
       expect(accessibilityUtils.moveFocusWithArrow).not.toHaveBeenCalled();
@@ -355,26 +394,26 @@ describe("handle-keyboard", () => {
     it("should call copyCellValue on Total cell when the pressed keys are Ctrl and C keys", () => {
       evt.key = KeyCodes.C;
       evt.ctrlKey = true;
-      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, false, isSelectionMode);
       expect(handleCopy.default).toHaveBeenCalled();
     });
 
     it("should call copyCellValue on Total cell when the pressed keys are Meta and C keys", async () => {
       evt.key = KeyCodes.C;
       evt.metaKey = true;
-      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, false, isSelectionMode);
       expect(handleCopy.default).toHaveBeenCalled();
     });
 
     it("should call headTabHelper when the pressed key is tab", () => {
       evt.key = KeyCodes.TAB;
-      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, false, isSelectionMode);
       expect(keyboardUtils.bodyTabHelper).toHaveBeenCalledTimes(1);
     });
 
     it("should call preventDefault when the pressed key is Space", () => {
       evt.key = KeyCodes.SPACE;
-      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, isSelectionMode);
+      handleTotalKeyDown(evt, rootElement, cellCoord, setFocusedCellCoord, false, isSelectionMode);
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
     });
   });
@@ -408,7 +447,7 @@ describe("handle-keyboard", () => {
         keyboard,
         paginationNeeded,
         totalsPosition,
-        isNewHeadCellMenuEnabled
+        isNewHeadCellMenuEnabled,
       });
 
     beforeEach(() => {
