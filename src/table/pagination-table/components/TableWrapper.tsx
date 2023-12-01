@@ -33,7 +33,7 @@ const TableWrapper = (props: TableWrapperProps) => {
   const isSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI?.isModal());
   const isNewHeadCellMenuEnabled = useContextSelector(
     TableContext,
-    (value) => value.featureFlags.isNewHeadCellMenuEnabled
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled,
   );
 
   const shouldRefocus = useRef(false);
@@ -63,7 +63,7 @@ const TableWrapper = (props: TableWrapperProps) => {
         politeness: "assertive",
       });
     },
-    [pageInfo, setPageInfo, totalPages, announce]
+    [pageInfo, setPageInfo, totalPages, announce],
   );
 
   const handleChangeRowsPerPage = useCallback(
@@ -74,7 +74,7 @@ const TableWrapper = (props: TableWrapperProps) => {
         politeness: "assertive",
       });
     },
-    [announce, pageInfo, setPageInfo]
+    [announce, pageInfo, setPageInfo],
   );
 
   const handleKeyDown = (evt: React.KeyboardEvent) => {

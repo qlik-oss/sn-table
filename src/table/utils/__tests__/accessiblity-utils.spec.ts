@@ -348,7 +348,7 @@ describe("accessibility-utils", () => {
 
     beforeEach(() => {
       otherCell = { ...cell } as HTMLTableCellElement;
-      isNewHeadCellMenuEnabled = false
+      isNewHeadCellMenuEnabled = false;
       rootElement = {
         getElementsByClassName: (className: string) =>
           className === "sn-table-cell" ? [otherCell, otherCell, otherCell, cell, otherCell, otherCell] : [cell, cell],
@@ -372,6 +372,31 @@ describe("accessibility-utils", () => {
       expect(getElementUtils.getCellElement).toHaveBeenCalledWith(rootElement, FIRST_BODY_CELL_COORD);
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledWith(FIRST_BODY_CELL_COORD);
+    });
+
+    describe("when isNewHeadCellMenuEnabled flag is true:", () => {
+      beforeEach(() => {
+        isNewHeadCellMenuEnabled = true;
+      });
+
+      it("should remove focus from head cell before jumping into the body cell", () => {
+        const dummyUpdateFocus = jest.fn();
+        accessibilityUtils.focusBodyFromHead(
+          rootElement,
+          setFocusedCellCoord,
+          isNewHeadCellMenuEnabled,
+          dummyUpdateFocus,
+        );
+        expect(getElementUtils.findCellWithTabStop).toHaveBeenCalledTimes(1);
+        expect(getElementUtils.getCellElement).toHaveBeenCalledTimes(1);
+        expect(getElementUtils.getCellElement).toHaveBeenCalledWith(rootElement, FIRST_BODY_CELL_COORD);
+        expect(dummyUpdateFocus).toHaveBeenCalledTimes(2);
+        expect(dummyUpdateFocus).toHaveBeenNthCalledWith(1, { focusType: FocusTypes.REMOVE_TAB, cell });
+        expect(dummyUpdateFocus).toHaveBeenNthCalledWith(2, { focusType: FocusTypes.FOCUS, cell });
+
+        expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
+        expect(setFocusedCellCoord).toHaveBeenCalledWith(FIRST_BODY_CELL_COORD);
+      });
     });
   });
 });

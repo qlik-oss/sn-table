@@ -26,7 +26,7 @@ export const setFocusOnClosetColumnAdjuster = (anchorRef: React.RefObject<HTMLDi
  */
 export const focusBackToHeadCell = (
   event: React.KeyboardEvent | React.FocusEvent,
-  isNewHeadCellMenuEnabled: boolean
+  isNewHeadCellMenuEnabled: boolean,
 ) => {
   const target = event.target as HTMLDivElement;
   target.setAttribute("tabIndex", "-1");
@@ -88,7 +88,7 @@ export const moveFocusWithArrow = (
   allowedRows?: {
     top: number;
     bottom: number;
-  }
+  },
 ) => {
   const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, allowedRows);
   const nextCell = getCellElement(rootElement, nextCellCoord);
@@ -108,20 +108,21 @@ export const moveFocusWithArrow = (
 export const focusBodyFromHead = (
   rootElement: HTMLElement,
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  isNewHeadCellMenuEnabled: boolean
+  isNewHeadCellMenuEnabled: boolean,
+  updateFocusInjected = updateFocus, // this is for test purposes
 ) => {
   let cell = findCellWithTabStop(rootElement);
   let newCellCoord;
 
   if (isNewHeadCellMenuEnabled && cell) {
-    updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell });
+    updateFocusInjected({ focusType: FocusTypes.REMOVE_TAB, cell });
     newCellCoord = FIRST_BODY_CELL_COORD;
     cell = getCellElement(rootElement, FIRST_BODY_CELL_COORD);
   } else {
     newCellCoord = cell ? getCellCoord(rootElement, cell) : FIRST_BODY_CELL_COORD;
     cell = cell || getCellElement(rootElement, FIRST_BODY_CELL_COORD);
   }
-  updateFocus({ cell, focusType: FocusTypes.FOCUS });
+  updateFocusInjected({ cell, focusType: FocusTypes.FOCUS });
   setFocusedCellCoord(newCellCoord);
 };
 
@@ -133,7 +134,7 @@ export const removeTabAndFocusCell = (
   newCoord: [number, number],
   rootElement: HTMLElement,
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  keyboard: stardust.Keyboard
+  keyboard: stardust.Keyboard,
 ) => {
   updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: findCellWithTabStop(rootElement) });
   setFocusedCellCoord(newCoord);
@@ -189,7 +190,7 @@ export const resetFocus = ({
 export const handleFocusoutEvent = (
   evt: FocusEvent,
   shouldRefocus: React.MutableRefObject<boolean>,
-  keyboard: stardust.Keyboard
+  keyboard: stardust.Keyboard,
 ) => {
   const targetElement = evt.currentTarget as HTMLDivElement;
   const relatedTarget = evt.relatedTarget as HTMLElement;
