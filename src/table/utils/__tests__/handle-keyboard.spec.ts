@@ -287,7 +287,7 @@ describe("handle-keyboard", () => {
         expect(handleOpenMenu).toHaveBeenCalledTimes(1);
       });
 
-      it("should call handleOpenMenu when the pressed key is enter", () => {
+      it("should call handleOpenMenu when the pressed key is space", () => {
         evt.key = KeyCodes.SPACE;
         callHandleHeadKeyDown();
         expect(handleOpenMenu).toHaveBeenCalledTimes(1);

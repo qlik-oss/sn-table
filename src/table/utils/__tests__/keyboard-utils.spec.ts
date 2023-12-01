@@ -40,12 +40,10 @@ describe("keyboard-utils", () => {
 
   describe("getFocusType", () => {
     let cellCoord: [number, number];
-    let evt: React.KeyboardEvent<Element>;
     let isNewHeadCellMenuEnabled: boolean;
 
     beforeEach(() => {
       cellCoord = [0, 0];
-      evt = { ...evt };
       isNewHeadCellMenuEnabled = false;
     });
 

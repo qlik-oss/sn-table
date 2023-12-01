@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import { generateDataPages, generateLayout } from "../../../../../__test__/generate-test-data";
 import TestWithProviders from "../../../../../__test__/test-with-providers";
@@ -15,7 +15,7 @@ describe("<TableTotals />", () => {
   let tableData: TableData;
   let selectionsAPI: ExtendedSelectionAPI;
 
-  const renderTableTotals = (isNewHeadCellMenuEnabled: boolean = false) =>
+  const renderTableTotals = (isNewHeadCellMenuEnabled = false) =>
     render(
       <TestWithProviders
         selectionsAPI={selectionsAPI}

@@ -17,19 +17,19 @@ describe("<HeadCellContent />", () => {
   let setOpenMock: jest.Mock<any, any>;
   let model: EngineAPI.IGenericObject;
 
-  const renderTableHead = (cellCoordMock?: [number, number], isNewHeadCellMenuEnabled: boolean = false) =>
+  const renderTableHead = (cellCoordMock?: [number, number], isNewHeadCellMenuEnabled = false) =>
     render(
       <TestWithProviders
         cellCoordMock={cellCoordMock}
         layout={layout}
-        model={model as EngineAPI.IGenericObject}
+        model={model}
         changeSortOrder={changeSortOrder}
         isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
       >
         <HeadCellContent column={column} isInteractionEnabled={isInteractionEnabled} open={open} setOpen={setOpenMock}>
           <CellText>{column.label}</CellText>
         </HeadCellContent>
-      </TestWithProviders>
+      </TestWithProviders>,
     );
 
   beforeEach(() => {

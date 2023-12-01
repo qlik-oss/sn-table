@@ -408,12 +408,11 @@ describe("accessibility-utils", () => {
   describe("moveFocusWithArrow", () => {
     let evt: React.KeyboardEvent;
     let targetCell: HTMLTableCellElement;
-    let rootElement: HTMLDivElement;
     let cellCoords: [number, number];
     let focusType: FocusTypes;
     let isNewHeadCellMenuEnabled: boolean;
-    let dummyUpdateFocus = jest.fn();
     let dummyCell: HTMLTableCellElement;
+    const dummyUpdateFocus = jest.fn();
 
     const triggerFunction = () => {
       accessibilityUtils.moveFocusWithArrow(

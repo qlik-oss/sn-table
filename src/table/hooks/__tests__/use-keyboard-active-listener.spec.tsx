@@ -21,11 +21,9 @@ describe("use-keyboard-active-listener", () => {
     </TestWithProviders>
   );
 
-  const renderUseKEyboardActiveListener = (isNewHeadCellMenuEnabled: boolean = false) =>
+  const renderUseKEyboardActiveListener = (isNewHeadCellMenuEnabled = false) =>
     renderHook(useKeyboardActiveListener, {
-      wrapper: ({ children }: any) => {
-        return <Wrapper isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}>{children}</Wrapper>;
-      },
+      wrapper: ({ children }: any) => <Wrapper isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}>{children}</Wrapper>,
     });
 
   beforeEach(() => {
