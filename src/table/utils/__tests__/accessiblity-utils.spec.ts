@@ -41,6 +41,69 @@ describe("accessibility-utils", () => {
 
   afterEach(() => jest.clearAllMocks());
 
+  describe("focusBackToHeadCell", () => {
+    let evt: React.KeyboardEvent;
+    let eventCell: HTMLTableCellElement;
+    let targetCell: HTMLTableCellElement;
+    let baseElement: HTMLTableCellElement;
+    let isNewHeadCellMenuEnabled: boolean;
+
+    const triggerFunction = () => {
+      accessibilityUtils.focusBackToHeadCell(evt, isNewHeadCellMenuEnabled);
+    };
+
+    beforeEach(() => {
+      targetCell = {
+        focus: jest.fn(),
+      } as unknown as HTMLTableCellElement;
+      baseElement = {
+        setAttribute: jest.fn(),
+        querySelector: jest.fn().mockReturnValue(targetCell),
+        focus: jest.fn(),
+      } as unknown as HTMLTableCellElement;
+      eventCell = {
+        key: "the cell that evt triggered",
+        closest: jest.fn().mockReturnValue(baseElement),
+        setAttribute: jest.fn(),
+      } as unknown as HTMLTableCellElement;
+      evt = {
+        target: eventCell,
+      } as unknown as React.KeyboardEvent;
+      rootElement = {
+        getElementsByClassName: () => [cell, cell],
+      } as unknown as HTMLDivElement;
+    });
+
+    it("should reset the cells tab index that event has been triggered on", () => {
+      triggerFunction();
+      expect(eventCell.setAttribute).toHaveBeenCalledTimes(1);
+      expect(eventCell.setAttribute).toHaveBeenCalledWith("tabIndex", "-1");
+    });
+
+    it("should focus on the closest sn table cell of the column adjuster", () => {
+      triggerFunction();
+      expect(eventCell.closest).toHaveBeenCalledTimes(1);
+      expect(baseElement.querySelector).toHaveBeenCalledTimes(1);
+      expect(baseElement.querySelector).toHaveBeenCalledWith(".sn-table-head-menu-button");
+      expect(targetCell.focus).toHaveBeenCalledTimes(1);
+    });
+
+    describe("when isNewHeadCellMenuEnabled flag is true:", () => {
+      beforeEach(() => {
+        isNewHeadCellMenuEnabled = true;
+      });
+
+      it("should focus on the closest New Head Cell menu of the column adjuster", () => {
+        triggerFunction();
+        expect(eventCell.closest).toHaveBeenCalledTimes(1);
+        expect(baseElement.querySelector).toHaveBeenCalledTimes(0);
+        expect(baseElement.setAttribute).toHaveBeenCalledTimes(1);
+        expect(baseElement.setAttribute).toHaveBeenCalledWith("tabIndex", "0");
+        expect(baseElement.focus).toHaveBeenCalledTimes(1);
+      });
+    });
+  });
+
   describe("updateFocus", () => {
     let focusType: FocusTypes;
     beforeEach(() => {
@@ -339,6 +402,70 @@ describe("accessibility-utils", () => {
       accessibilityUtils.removeTabAndFocusCell(newCoord, rootElement, setFocusedCellCoord, keyboard);
       expect(setFocusedCellCoord).toHaveBeenCalledWith(newCoord);
       expect(keyboard.focus).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("moveFocusWithArrow", () => {
+    let evt: React.KeyboardEvent;
+    let targetCell: HTMLTableCellElement;
+    let rootElement: HTMLDivElement;
+    let cellCoords: [number, number];
+    let focusType: FocusTypes;
+    let isNewHeadCellMenuEnabled: boolean;
+    let dummyUpdateFocus = jest.fn();
+    let dummyCell: HTMLTableCellElement;
+
+    const triggerFunction = () => {
+      accessibilityUtils.moveFocusWithArrow(
+        evt,
+        rootElement,
+        cellCoords,
+        setFocusedCellCoord,
+        focusType,
+        isNewHeadCellMenuEnabled,
+        undefined,
+        dummyUpdateFocus,
+      );
+    };
+
+    beforeEach(() => {
+      targetCell = { key: "the cell that evt triggered" } as unknown as HTMLTableCellElement;
+      evt = {
+        target: targetCell,
+      } as unknown as React.KeyboardEvent;
+      focusType = FocusTypes.FOCUS;
+      rootElement = {
+        getElementsByClassName: () => [cell, cell],
+      } as unknown as HTMLDivElement;
+      cellCoords = [0, 0];
+      dummyCell = { ...cell } as HTMLTableCellElement;
+    });
+
+    it("should move focus to first body cell", () => {
+      jest.spyOn(getElementUtils, "getNextCellCoord").mockReturnValue([1, 0]);
+      jest.spyOn(getElementUtils, "getCellElement").mockReturnValue(dummyCell);
+      triggerFunction();
+
+      expect(dummyUpdateFocus).toHaveBeenCalledTimes(1);
+      expect(dummyUpdateFocus).toHaveBeenCalledWith({ focusType, cell: dummyCell });
+      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
+      expect(setFocusedCellCoord).toHaveBeenCalledWith([1, 0]);
+    });
+
+    describe("when isNewHeadCellMenuEnabled flag is true:", () => {
+      beforeEach(() => {
+        isNewHeadCellMenuEnabled = true;
+      });
+
+      test("should reset the focus on head cell and move focus on table body", () => {
+        jest.spyOn(getElementUtils, "getNextCellCoord").mockReturnValue([1, 0]);
+        jest.spyOn(getElementUtils, "getCellElement").mockReturnValue(dummyCell);
+        triggerFunction();
+
+        expect(dummyUpdateFocus).toHaveBeenCalledTimes(2);
+        expect(dummyUpdateFocus).toHaveBeenNthCalledWith(1, { focusType: FocusTypes.REMOVE_TAB, cell: targetCell });
+        expect(dummyUpdateFocus).toHaveBeenNthCalledWith(2, { focusType, cell: dummyCell });
+      });
     });
   });
 

@@ -31,7 +31,6 @@ export const focusBackToHeadCell = (
   const target = event.target as HTMLDivElement;
   target.setAttribute("tabIndex", "-1");
   const baseElement = target?.closest(".sn-table-cell");
-  baseElement?.setAttribute("tabIndex", "-1");
 
   let targetElementToFocus = null;
   if (isNewHeadCellMenuEnabled) {
@@ -89,13 +88,14 @@ export const moveFocusWithArrow = (
     top: number;
     bottom: number;
   },
+  updateFocusInjected = updateFocus,
 ) => {
   const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, allowedRows);
   const nextCell = getCellElement(rootElement, nextCellCoord);
   if (isNewHeadCellMenuEnabled && focusType === FocusTypes.FOCUS) {
-    updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLTableCellElement });
+    updateFocusInjected({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLTableCellElement });
   }
-  updateFocus({ focusType, cell: nextCell });
+  updateFocusInjected({ focusType, cell: nextCell });
   setFocusedCellCoord(nextCellCoord);
 
   return nextCell;
@@ -115,10 +115,14 @@ export const focusBodyFromHead = (
   let newCellCoord;
 
   if (isNewHeadCellMenuEnabled && cell) {
+    // if flag is on, tabstop might be removed from head cells and
+    // always FIRST_BODY_CELL_COORD might be focused
     updateFocusInjected({ focusType: FocusTypes.REMOVE_TAB, cell });
     newCellCoord = FIRST_BODY_CELL_COORD;
     cell = getCellElement(rootElement, FIRST_BODY_CELL_COORD);
   } else {
+    // if flag is off, tab stop should be where it was before in body
+    // in case it's first time navigating to body, it should focus FIRST_BODY_CELL_COORD
     newCellCoord = cell ? getCellCoord(rootElement, cell) : FIRST_BODY_CELL_COORD;
     cell = cell || getCellElement(rootElement, FIRST_BODY_CELL_COORD);
   }
