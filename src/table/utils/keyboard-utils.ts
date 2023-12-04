@@ -82,7 +82,7 @@ export const bodyArrowHelper = ({
     updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLTableCellElement });
   }
 
-  const nextCell = moveFocusWithArrow(
+  const nextCell = moveFocusWithArrow({
     evt,
     rootElement,
     cellCoord,
@@ -90,7 +90,7 @@ export const bodyArrowHelper = ({
     focusType,
     isNewHeadCellMenuEnabled,
     allowedRows,
-  );
+  });
 
   if (!(evt.key === KeyCodes.UP || evt.key === KeyCodes.DOWN)) return;
 

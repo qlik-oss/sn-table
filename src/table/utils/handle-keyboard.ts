@@ -125,20 +125,27 @@ export const handleHeadKeyDown = ({
       if (evt.key === KeyCodes.RIGHT && isLastHeadCell) {
         focusBodyFromHead(rootElement, setFocusedCellCoord, isNewHeadCellMenuEnabled);
       } else {
-        moveFocusWithArrow(
+        moveFocusWithArrow({
           evt,
           rootElement,
           cellCoord,
           setFocusedCellCoord,
-          isNewHeadCellMenuEnabled ? FocusTypes.FOCUS : FocusTypes.FOCUS_BUTTON,
+          focusType: isNewHeadCellMenuEnabled ? FocusTypes.FOCUS : FocusTypes.FOCUS_BUTTON,
           isNewHeadCellMenuEnabled,
-        );
+        });
       }
       break;
     case KeyCodes.DOWN:
       preventDefaultBehavior(evt);
       updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: findCellWithTabStop(rootElement) });
-      moveFocusWithArrow(evt, rootElement, cellCoord, setFocusedCellCoord, FocusTypes.FOCUS, isNewHeadCellMenuEnabled);
+      moveFocusWithArrow({
+        evt,
+        rootElement,
+        cellCoord,
+        setFocusedCellCoord,
+        focusType: FocusTypes.FOCUS,
+        isNewHeadCellMenuEnabled,
+      });
       break;
     case KeyCodes.TAB:
       headTabHelper(evt, rootElement, cellCoord, setFocusedCellCoord, isLastHeadCell, isNewHeadCellMenuEnabled);
@@ -184,7 +191,7 @@ export const handleTotalKeyDown = (
         updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLTableCellElement });
       }
 
-      moveFocusWithArrow(evt, rootElement, cellCoord, setFocusedCellCoord, focusType, isNewHeadCellMenuEnabled);
+      moveFocusWithArrow({ evt, rootElement, cellCoord, setFocusedCellCoord, focusType, isNewHeadCellMenuEnabled });
       break;
     }
     case KeyCodes.TAB:

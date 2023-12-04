@@ -209,6 +209,20 @@ export interface CellFocusProps {
   cell: HTMLTableCellElement | undefined;
 }
 
+export interface MoveFocusWithArrowProps {
+  evt: React.KeyboardEvent;
+  rootElement: HTMLElement;
+  cellCoord: [number, number];
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  focusType: FocusTypes;
+  isNewHeadCellMenuEnabled: boolean;
+  updateFocusInjected?: ({ focusType, cell }: CellFocusProps) => void;
+  allowedRows?: {
+    top: number;
+    bottom: number;
+  };
+}
+
 export interface HandleResetFocusProps {
   focusedCellCoord: [number, number];
   rootElement: HTMLElement;

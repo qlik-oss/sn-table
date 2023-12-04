@@ -415,16 +415,15 @@ describe("accessibility-utils", () => {
     const dummyUpdateFocus = jest.fn();
 
     const triggerFunction = () => {
-      accessibilityUtils.moveFocusWithArrow(
+      accessibilityUtils.moveFocusWithArrow({
         evt,
         rootElement,
-        cellCoords,
+        cellCoord: cellCoords,
         setFocusedCellCoord,
         focusType,
         isNewHeadCellMenuEnabled,
-        undefined,
-        dummyUpdateFocus,
-      );
+        updateFocusInjected: dummyUpdateFocus,
+      });
     };
 
     beforeEach(() => {

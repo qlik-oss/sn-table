@@ -296,14 +296,14 @@ describe("handle-keyboard", () => {
       it("should call moveFocusWithArrow and passing focus type as FOCUS when key code is not RIGHT", () => {
         evt.key = KeyCodes.LEFT;
         callHandleHeadKeyDown();
-        expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledWith(
+        expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledWith({
           evt,
           rootElement,
-          [0, 0],
+          cellCoord: [0, 0],
           setFocusedCellCoord,
-          FocusTypes.FOCUS,
+          focusType: FocusTypes.FOCUS,
           isNewHeadCellMenuEnabled,
-        );
+        });
       });
     });
   });
@@ -345,14 +345,14 @@ describe("handle-keyboard", () => {
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledWith(
+      expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledWith({
         evt,
         rootElement,
         cellCoord,
         setFocusedCellCoord,
-        FocusTypes.FOCUS,
+        focusType: FocusTypes.FOCUS,
         isNewHeadCellMenuEnabled,
-      );
+      });
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
     });
 
@@ -364,14 +364,14 @@ describe("handle-keyboard", () => {
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
       expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledTimes(1);
-      expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledWith(
+      expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledWith({
         evt,
         rootElement,
         cellCoord,
         setFocusedCellCoord,
-        FocusTypes.FOCUS_BUTTON,
+        focusType: FocusTypes.FOCUS_BUTTON,
         isNewHeadCellMenuEnabled,
-      );
+      });
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(0);
     });
 

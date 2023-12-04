@@ -3,7 +3,7 @@ import { COLUMN_ADJUSTER_CLASS } from "@qlik/nebula-table-utils/lib/constants";
 import React from "react";
 import { Announce } from "../../types";
 import { FIRST_BODY_CELL_COORD, FocusTypes } from "../constants";
-import { CellFocusProps, HandleResetFocusProps } from "../types";
+import { CellFocusProps, HandleResetFocusProps, MoveFocusWithArrowProps } from "../types";
 import { findCellWithTabStop, getCellCoord, getCellElement, getNextCellCoord } from "./get-element-utils";
 
 export const areTabStopsEnabled = (keyboard: stardust.Keyboard) => !keyboard.enabled || keyboard.active;
@@ -77,19 +77,16 @@ export const updateFocus = ({ focusType, cell }: CellFocusProps) => {
 /**
  * Resets and adds new focus to a table cell based which arrow key is pressed
  */
-export const moveFocusWithArrow = (
-  evt: React.KeyboardEvent,
-  rootElement: HTMLElement,
-  cellCoord: [number, number],
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  focusType: FocusTypes,
-  isNewHeadCellMenuEnabled: boolean,
-  allowedRows?: {
-    top: number;
-    bottom: number;
-  },
+export const moveFocusWithArrow = ({
+  evt,
+  rootElement,
+  cellCoord,
+  setFocusedCellCoord,
+  focusType,
+  isNewHeadCellMenuEnabled,
   updateFocusInjected = updateFocus,
-) => {
+  allowedRows,
+}: MoveFocusWithArrowProps) => {
   const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, allowedRows);
   const nextCell = getCellElement(rootElement, nextCellCoord);
   if (isNewHeadCellMenuEnabled && focusType === FocusTypes.FOCUS) {
