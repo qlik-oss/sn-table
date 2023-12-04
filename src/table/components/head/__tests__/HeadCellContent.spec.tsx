@@ -197,7 +197,7 @@ describe("<HeadCellContent />", () => {
   });
 
   describe("when isNewHeadCellMenuEnabled flag is true:", () => {
-    it("should not show the ... menu icon, it might show the hamburger menu icon", () => {
+    it("should not show the ... menu icon, instead, should show the hamburger menu icon form new head cell menu", () => {
       const { baseElement } = renderTableHead(undefined, true);
       const menuButton = baseElement.querySelector(".sn-table-head-menu-button");
       const hamburgerMenuIcon = screen.getByTestId(HEAD_CELL_MENU_BUTTON_CLASS);
@@ -220,7 +220,7 @@ describe("<HeadCellContent />", () => {
       expect(changeSortOrder).not.toHaveBeenCalled();
     });
 
-    it("should not exists a tab stop for SortButton", () => {
+    it("should not have a tab stop for SortButton", () => {
       const { baseElement } = renderTableHead(undefined, true);
 
       expect(baseElement.querySelector(".sn-table-head-label")).toHaveAttribute("tabIndex", "-1");

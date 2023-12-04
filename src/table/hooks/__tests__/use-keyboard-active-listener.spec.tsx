@@ -21,7 +21,7 @@ describe("use-keyboard-active-listener", () => {
     </TestWithProviders>
   );
 
-  const renderUseKEyboardActiveListener = (isNewHeadCellMenuEnabled = false) =>
+  const renderUseKeyboardActiveListener = (isNewHeadCellMenuEnabled = false) =>
     renderHook(useKeyboardActiveListener, {
       wrapper: ({ children }: any) => <Wrapper isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}>{children}</Wrapper>,
     });
@@ -42,7 +42,7 @@ describe("use-keyboard-active-listener", () => {
   });
 
   it("should call findCellWithTabStop and updateFocus with focusType blur when keyboard.active is false", () => {
-    renderUseKEyboardActiveListener();
+    renderUseKeyboardActiveListener();
     expect(getElementUtils.findCellWithTabStop).toHaveBeenCalledTimes(1);
     expect(accessibilityUtils.updateFocus).toHaveBeenCalledWith({
       focusType: FocusTypes.BLUR,
@@ -53,7 +53,7 @@ describe("use-keyboard-active-listener", () => {
   it("should call getCellElement with [0, 0] and updateFocus with focusType focusButton when keyboard.active is true", () => {
     keyboard.active = true;
 
-    renderUseKEyboardActiveListener();
+    renderUseKeyboardActiveListener();
     expect(getElementUtils.getCellElement).toHaveBeenCalledWith(expect.anything(), FIRST_HEADER_CELL_COORD);
     expect(accessibilityUtils.updateFocus).toHaveBeenCalledWith({
       focusType: FocusTypes.FOCUS_BUTTON,
@@ -65,7 +65,7 @@ describe("use-keyboard-active-listener", () => {
     keyboard.active = true;
     focusedCellCoord = [2, 0];
 
-    renderUseKEyboardActiveListener();
+    renderUseKeyboardActiveListener();
     expect(getElementUtils.getCellElement).toHaveBeenCalledWith(expect.anything(), focusedCellCoord);
     expect(accessibilityUtils.updateFocus).toHaveBeenCalledWith({
       focusType: FocusTypes.FOCUS,
@@ -75,7 +75,7 @@ describe("use-keyboard-active-listener", () => {
 
   describe("when isNewHeadCellMenuEnabled flag is true:", () => {
     it("should do nothing when new head cell menu is toggeled on", () => {
-      renderUseKEyboardActiveListener(true);
+      renderUseKeyboardActiveListener(true);
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(0);
     });
   });
