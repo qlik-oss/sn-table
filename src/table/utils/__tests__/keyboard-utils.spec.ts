@@ -312,14 +312,11 @@ describe("keyboard-utils", () => {
     let containsLabelClass: boolean;
     let cellCoord: [number, number];
     let isLastHeadCell: boolean;
-    let isNewHeadCellMenuEnabled: boolean;
 
-    const callHeadTabHelper = () =>
-      headTabHelper(evt, rootElement, cellCoord, setFocusedCellCoord, isLastHeadCell, isNewHeadCellMenuEnabled);
+    const callHeadTabHelper = () => headTabHelper(evt, rootElement, cellCoord, setFocusedCellCoord, isLastHeadCell);
 
     beforeEach(() => {
       containsLabelClass = true;
-      isNewHeadCellMenuEnabled = false;
       evt = {
         ...evt,
         target: {
@@ -367,10 +364,6 @@ describe("keyboard-utils", () => {
     });
 
     describe("when isNewHeadCellMenuEnabled flag is true:", () => {
-      beforeEach(() => {
-        isNewHeadCellMenuEnabled = true;
-      });
-
       it("should not call preventDefault and focusBodyFromHead", () => {
         containsLabelClass = false;
         isLastHeadCell = true;

@@ -147,8 +147,8 @@ export const handleHeadKeyDown = ({
         isNewHeadCellMenuEnabled,
       });
       break;
-    case KeyCodes.TAB:
-      headTabHelper(evt, rootElement, cellCoord, setFocusedCellCoord, isLastHeadCell, isNewHeadCellMenuEnabled);
+    case !isNewHeadCellMenuEnabled && KeyCodes.TAB:
+      headTabHelper(evt, rootElement, cellCoord, setFocusedCellCoord, isLastHeadCell);
       break;
     case KeyCodes.C:
       preventDefaultBehavior(evt);

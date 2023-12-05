@@ -119,7 +119,6 @@ export const headTabHelper = (
   cellCoord: [number, number],
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
   isLastHeadCell: boolean,
-  isNewHeadCellMenuEnabled: boolean,
 ) => {
   const target = evt.target as HTMLTableCellElement;
   const isLabel = target.classList.contains("sn-table-head-label");
@@ -127,12 +126,8 @@ export const headTabHelper = (
     setFocusedCellCoord([cellCoord[0], cellCoord[1] - 1]);
   } else if (!isLabel && !evt.shiftKey) {
     if (isLastHeadCell) {
-      if (!isNewHeadCellMenuEnabled) {
-        preventDefaultBehavior(evt);
-        focusBodyFromHead(rootElement, setFocusedCellCoord);
-      } else {
-        // *literally should do nothing!*
-      }
+      preventDefaultBehavior(evt);
+      focusBodyFromHead(rootElement, setFocusedCellCoord);
     } else {
       setFocusedCellCoord([cellCoord[0], cellCoord[1] + 1]);
     }

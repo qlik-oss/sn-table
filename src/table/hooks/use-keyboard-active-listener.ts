@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useOnPropsChange } from "@qlik/nebula-table-utils/lib/hooks";
 import { FocusTypes } from "../constants";
 import { TableContext, useContextSelector } from "../context";
 import { updateFocus } from "../utils/accessibility-utils";
@@ -18,10 +18,9 @@ const useKeyboardActiveListener = () => {
     (value) => value.featureFlags.isNewHeadCellMenuEnabled,
   );
 
-  useEffect(() => {
-    let focusType = focusedCellCoord[0] > 0 ? FocusTypes.FOCUS : FocusTypes.FOCUS_BUTTON;
+  useOnPropsChange(() => {
+    let focusType = isNewHeadCellMenuEnabled || focusedCellCoord[0] > 0 ? FocusTypes.FOCUS : FocusTypes.FOCUS_BUTTON;
     focusType = keyboard.active ? focusType : FocusTypes.BLUR;
-    focusType = isNewHeadCellMenuEnabled ? FocusTypes.FOCUS : focusType;
     const cell = keyboard.active ? getCellElement(rootElement, focusedCellCoord) : findCellWithTabStop(rootElement);
 
     updateFocus({ focusType, cell });
