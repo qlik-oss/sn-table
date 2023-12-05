@@ -129,7 +129,7 @@ export const headTabHelper = (
     if (isLastHeadCell) {
       if (!isNewHeadCellMenuEnabled) {
         preventDefaultBehavior(evt);
-        focusBodyFromHead(rootElement, setFocusedCellCoord, isNewHeadCellMenuEnabled);
+        focusBodyFromHead(rootElement, setFocusedCellCoord);
       } else {
         // *literally should do nothing!*
       }

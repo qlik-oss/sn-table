@@ -471,11 +471,9 @@ describe("accessibility-utils", () => {
 
   describe("focusBodyFromHead", () => {
     let otherCell: HTMLTableCellElement;
-    let isNewHeadCellMenuEnabled: boolean;
 
     beforeEach(() => {
       otherCell = { ...cell } as HTMLTableCellElement;
-      isNewHeadCellMenuEnabled = false;
       rootElement = {
         getElementsByClassName: (className: string) =>
           className === "sn-table-cell" ? [otherCell, otherCell, otherCell, cell, otherCell, otherCell] : [cell, cell],
@@ -485,7 +483,7 @@ describe("accessibility-utils", () => {
     });
 
     it("should call findCellWithTabStop and setFocusedCellCoord and setFocusedCellCoord with coord [2, 1] when cell with tabstop is found", () => {
-      accessibilityUtils.focusBodyFromHead(rootElement, setFocusedCellCoord, isNewHeadCellMenuEnabled);
+      accessibilityUtils.focusBodyFromHead(rootElement, setFocusedCellCoord);
       expect(getElementUtils.findCellWithTabStop).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledWith([2, 1]);
@@ -493,7 +491,7 @@ describe("accessibility-utils", () => {
 
     it("should call findCellWithTabStop, getCellElement and setFocusedCellCoord and setFocusedCellCoord with coord [2, 1] when cell with tabstop is found", () => {
       cell = undefined;
-      accessibilityUtils.focusBodyFromHead(rootElement, setFocusedCellCoord, isNewHeadCellMenuEnabled);
+      accessibilityUtils.focusBodyFromHead(rootElement, setFocusedCellCoord);
       expect(getElementUtils.findCellWithTabStop).toHaveBeenCalledTimes(1);
       expect(getElementUtils.getCellElement).toHaveBeenCalledTimes(1);
       expect(getElementUtils.getCellElement).toHaveBeenCalledWith(rootElement, FIRST_BODY_CELL_COORD);
@@ -502,18 +500,9 @@ describe("accessibility-utils", () => {
     });
 
     describe("when isNewHeadCellMenuEnabled flag is true:", () => {
-      beforeEach(() => {
-        isNewHeadCellMenuEnabled = true;
-      });
-
       it("should remove focus from head cell before jumping into the body cell", () => {
         const dummyUpdateFocus = jest.fn();
-        accessibilityUtils.focusBodyFromHead(
-          rootElement,
-          setFocusedCellCoord,
-          isNewHeadCellMenuEnabled,
-          dummyUpdateFocus,
-        );
+        accessibilityUtils.focusBodyFromHead(rootElement, setFocusedCellCoord, dummyUpdateFocus);
         expect(getElementUtils.findCellWithTabStop).toHaveBeenCalledTimes(1);
         expect(getElementUtils.getCellElement).toHaveBeenCalledTimes(1);
         expect(getElementUtils.getCellElement).toHaveBeenCalledWith(rootElement, FIRST_BODY_CELL_COORD);

@@ -105,24 +105,11 @@ export const moveFocusWithArrow = ({
 export const focusBodyFromHead = (
   rootElement: HTMLElement,
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  isNewHeadCellMenuEnabled: boolean,
   updateFocusInjected = updateFocus, // this is for test purposes
 ) => {
   let cell = findCellWithTabStop(rootElement);
-  let newCellCoord;
-
-  if (isNewHeadCellMenuEnabled && cell) {
-    // if flag is on, tabstop might be removed from head cells and
-    // always FIRST_BODY_CELL_COORD might be focused
-    updateFocusInjected({ focusType: FocusTypes.REMOVE_TAB, cell });
-    newCellCoord = FIRST_BODY_CELL_COORD;
-    cell = getCellElement(rootElement, FIRST_BODY_CELL_COORD);
-  } else {
-    // if flag is off, tab stop should be where it was before in body
-    // in case it's first time navigating to body, it should focus FIRST_BODY_CELL_COORD
-    newCellCoord = cell ? getCellCoord(rootElement, cell) : FIRST_BODY_CELL_COORD;
-    cell = cell || getCellElement(rootElement, FIRST_BODY_CELL_COORD);
-  }
+  const newCellCoord = cell ? getCellCoord(rootElement, cell) : FIRST_BODY_CELL_COORD;
+  cell = cell || getCellElement(rootElement, FIRST_BODY_CELL_COORD);
   updateFocusInjected({ cell, focusType: FocusTypes.FOCUS });
   setFocusedCellCoord(newCellCoord);
 };

@@ -122,8 +122,8 @@ export const handleHeadKeyDown = ({
     case KeyCodes.LEFT:
     case KeyCodes.RIGHT:
       preventDefaultBehavior(evt);
-      if (evt.key === KeyCodes.RIGHT && isLastHeadCell) {
-        focusBodyFromHead(rootElement, setFocusedCellCoord, isNewHeadCellMenuEnabled);
+      if (evt.key === KeyCodes.RIGHT && isLastHeadCell && !isNewHeadCellMenuEnabled) {
+        focusBodyFromHead(rootElement, setFocusedCellCoord);
       } else {
         moveFocusWithArrow({
           evt,
