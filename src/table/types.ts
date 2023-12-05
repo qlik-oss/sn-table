@@ -232,6 +232,7 @@ export interface HandleResetFocusProps {
   keyboard: stardust.Keyboard;
   announce: Announce;
   totalsPosition: TotalsPosition;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface ContextProviderProps {

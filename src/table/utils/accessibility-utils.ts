@@ -2,7 +2,7 @@ import { stardust } from "@nebula.js/stardust";
 import { COLUMN_ADJUSTER_CLASS } from "@qlik/nebula-table-utils/lib/constants";
 import React from "react";
 import { Announce } from "../../types";
-import { FIRST_BODY_CELL_COORD, FocusTypes } from "../constants";
+import { FIRST_BODY_CELL_COORD, FIRST_HEADER_CELL_COORD, FocusTypes } from "../constants";
 import { CellFocusProps, HandleResetFocusProps, MoveFocusWithArrowProps } from "../types";
 import { findCellWithTabStop, getCellCoord, getCellElement, getNextCellCoord } from "./get-element-utils";
 
@@ -158,11 +158,15 @@ export const resetFocus = ({
   keyboard,
   announce,
   totalsPosition,
+  isNewHeadCellMenuEnabled,
 }: HandleResetFocusProps) => {
   updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: findCellWithTabStop(rootElement) });
   // If you have selections ongoing, you want to stay on the same column
   const selectionCellCoord: [number, number] = [totalsPosition.atTop ? 2 : 1, focusedCellCoord[1]];
-  const cellCoord: [number, number] = isSelectionMode ? selectionCellCoord : FIRST_BODY_CELL_COORD;
+  const defaultCellCoords: [number, number] = isNewHeadCellMenuEnabled
+    ? FIRST_HEADER_CELL_COORD
+    : FIRST_BODY_CELL_COORD;
+  const cellCoord: [number, number] = isSelectionMode ? selectionCellCoord : defaultCellCoords;
 
   if (areTabStopsEnabled(keyboard)) {
     // Only run this if updates come from inside table

@@ -167,6 +167,7 @@ describe("accessibility-utils", () => {
     let isSelectionMode: boolean;
     let announce: Announce;
     let totalsPosition: TotalsPosition;
+    let isNewHeadCellMenuEnabled: boolean;
 
     const resetFocus = () =>
       accessibilityUtils.resetFocus({
@@ -178,6 +179,7 @@ describe("accessibility-utils", () => {
         keyboard,
         announce,
         totalsPosition,
+        isNewHeadCellMenuEnabled,
       });
 
     beforeEach(() => {
