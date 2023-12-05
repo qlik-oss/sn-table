@@ -19,10 +19,9 @@ const useKeyboardActiveListener = () => {
   );
 
   useEffect(() => {
-    if (isNewHeadCellMenuEnabled) return;
-
     let focusType = focusedCellCoord[0] > 0 ? FocusTypes.FOCUS : FocusTypes.FOCUS_BUTTON;
     focusType = keyboard.active ? focusType : FocusTypes.BLUR;
+    focusType = isNewHeadCellMenuEnabled ? FocusTypes.FOCUS : focusType;
     const cell = keyboard.active ? getCellElement(rootElement, focusedCellCoord) : findCellWithTabStop(rootElement);
 
     updateFocus({ focusType, cell });
