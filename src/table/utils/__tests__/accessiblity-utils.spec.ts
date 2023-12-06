@@ -281,6 +281,19 @@ describe("accessibility-utils", () => {
         keys: ["#something,", "SNTable.SelectionLabel.SelectedValue"],
       });
     });
+
+    describe("when isNewHeadCellMenuEnabled flag is true:", () => {
+      beforeEach(() => {
+        isNewHeadCellMenuEnabled = true;
+      });
+
+      test("should reset focus on first head cell if not in selection mode", () => {
+        resetFocus();
+
+        expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
+        expect(setFocusedCellCoord).toHaveBeenCalledWith([0, 0]);
+      });
+    });
   });
 
   describe("handleFocusoutEvent", () => {

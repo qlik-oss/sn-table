@@ -287,6 +287,12 @@ describe("handle-keyboard", () => {
         expect(handleOpenMenu).toHaveBeenCalledTimes(1);
       });
 
+      it("should not call handleTabHelper when the pressed key is tab", () => {
+        evt.key = KeyCodes.TAB;
+        callHandleHeadKeyDown();
+        expect(keyboardUtils.headTabHelper).toHaveBeenCalledTimes(0);
+      });
+
       it("should call handleOpenMenu when the pressed key is space", () => {
         evt.key = KeyCodes.SPACE;
         callHandleHeadKeyDown();

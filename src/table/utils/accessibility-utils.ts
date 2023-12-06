@@ -84,7 +84,7 @@ export const moveFocusWithArrow = ({
   setFocusedCellCoord,
   focusType,
   isNewHeadCellMenuEnabled,
-  updateFocusInjected = updateFocus,
+  updateFocusInjected = updateFocus, // this is for test purposes
   allowedRows,
 }: MoveFocusWithArrowProps) => {
   const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, allowedRows);
