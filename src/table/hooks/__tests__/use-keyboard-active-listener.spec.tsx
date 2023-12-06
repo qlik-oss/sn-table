@@ -41,8 +41,16 @@ describe("use-keyboard-active-listener", () => {
     jest.restoreAllMocks();
   });
 
+  /**
+   * since we are using useOnPropsChange
+   * the functions we expect to be called
+   * will not be triggered at first render
+   * that is why we use rerender() in below tests
+   */
   it("should call findCellWithTabStop and updateFocus with focusType blur when keyboard.active is false", () => {
-    renderUseKeyboardActiveListener();
+    const { rerender } = renderUseKeyboardActiveListener();
+    rerender();
+
     expect(getElementUtils.findCellWithTabStop).toHaveBeenCalledTimes(1);
     expect(accessibilityUtils.updateFocus).toHaveBeenCalledWith({
       focusType: FocusTypes.BLUR,
@@ -52,8 +60,9 @@ describe("use-keyboard-active-listener", () => {
 
   it("should call getCellElement with [0, 0] and updateFocus with focusType focusButton when keyboard.active is true", () => {
     keyboard.active = true;
+    const { rerender } = renderUseKeyboardActiveListener();
+    rerender();
 
-    renderUseKeyboardActiveListener();
     expect(getElementUtils.getCellElement).toHaveBeenCalledWith(expect.anything(), FIRST_HEADER_CELL_COORD);
     expect(accessibilityUtils.updateFocus).toHaveBeenCalledWith({
       focusType: FocusTypes.FOCUS_BUTTON,
@@ -65,7 +74,9 @@ describe("use-keyboard-active-listener", () => {
     keyboard.active = true;
     focusedCellCoord = [2, 0];
 
-    renderUseKeyboardActiveListener();
+    const { rerender } = renderUseKeyboardActiveListener();
+    rerender();
+
     expect(getElementUtils.getCellElement).toHaveBeenCalledWith(expect.anything(), focusedCellCoord);
     expect(accessibilityUtils.updateFocus).toHaveBeenCalledWith({
       focusType: FocusTypes.FOCUS,
@@ -74,9 +85,16 @@ describe("use-keyboard-active-listener", () => {
   });
 
   describe("when isNewHeadCellMenuEnabled flag is true:", () => {
-    it("should do nothing when new head cell menu is toggeled on", () => {
-      renderUseKeyboardActiveListener(true);
-      expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(0);
+    it("should call updateFocus with focus type even if focusedCellCoord[0] is 0", () => {
+      keyboard.active = true;
+      focusedCellCoord = [0, 0];
+      const { rerender } = renderUseKeyboardActiveListener(true);
+      rerender();
+
+      expect(accessibilityUtils.updateFocus).toHaveBeenCalledWith({
+        focusType: FocusTypes.FOCUS,
+        cell: expect.anything(),
+      });
     });
   });
 });

@@ -498,21 +498,5 @@ describe("accessibility-utils", () => {
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
       expect(setFocusedCellCoord).toHaveBeenCalledWith(FIRST_BODY_CELL_COORD);
     });
-
-    describe("when isNewHeadCellMenuEnabled flag is true:", () => {
-      it("should remove focus from head cell before jumping into the body cell", () => {
-        const dummyUpdateFocus = jest.fn();
-        accessibilityUtils.focusBodyFromHead(rootElement, setFocusedCellCoord, dummyUpdateFocus);
-        expect(getElementUtils.findCellWithTabStop).toHaveBeenCalledTimes(1);
-        expect(getElementUtils.getCellElement).toHaveBeenCalledTimes(1);
-        expect(getElementUtils.getCellElement).toHaveBeenCalledWith(rootElement, FIRST_BODY_CELL_COORD);
-        expect(dummyUpdateFocus).toHaveBeenCalledTimes(2);
-        expect(dummyUpdateFocus).toHaveBeenNthCalledWith(1, { focusType: FocusTypes.REMOVE_TAB, cell });
-        expect(dummyUpdateFocus).toHaveBeenNthCalledWith(2, { focusType: FocusTypes.FOCUS, cell });
-
-        expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
-        expect(setFocusedCellCoord).toHaveBeenCalledWith(FIRST_BODY_CELL_COORD);
-      });
-    });
   });
 });

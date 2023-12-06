@@ -362,16 +362,5 @@ describe("keyboard-utils", () => {
       expect(setFocusedCellCoord).toHaveBeenCalledTimes(0);
       expect(accessibilityUtils.focusBodyFromHead).toHaveBeenCalledTimes(1);
     });
-
-    describe("when isNewHeadCellMenuEnabled flag is true:", () => {
-      it("should not call preventDefault and focusBodyFromHead", () => {
-        containsLabelClass = false;
-        isLastHeadCell = true;
-        callHeadTabHelper();
-
-        expect(evt.preventDefault).toHaveBeenCalledTimes(0);
-        expect(accessibilityUtils.focusBodyFromHead).toHaveBeenCalledTimes(0);
-      });
-    });
   });
 });
