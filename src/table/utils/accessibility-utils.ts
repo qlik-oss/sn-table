@@ -100,12 +100,11 @@ export const moveFocusWithArrow = ({
 export const focusBodyFromHead = (
   rootElement: HTMLElement,
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  updateFocusInjected = updateFocus, // this is for test purposes
 ) => {
   let cell = findCellWithTabStop(rootElement);
   const newCellCoord = cell ? getCellCoord(rootElement, cell) : FIRST_BODY_CELL_COORD;
   cell = cell || getCellElement(rootElement, FIRST_BODY_CELL_COORD);
-  updateFocusInjected({ cell, focusType: FocusTypes.FOCUS });
+  updateFocus({ cell, focusType: FocusTypes.FOCUS });
   setFocusedCellCoord(newCellCoord);
 };
 
