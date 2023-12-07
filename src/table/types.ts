@@ -215,7 +215,6 @@ export interface MoveFocusWithArrowProps {
   cellCoord: [number, number];
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   focusType: FocusTypes;
-  isNewHeadCellMenuEnabled: boolean;
   updateFocusInjected?: ({ focusType, cell }: CellFocusProps) => void;
   allowedRows?: {
     top: number;

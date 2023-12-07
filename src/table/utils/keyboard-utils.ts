@@ -88,7 +88,6 @@ export const bodyArrowHelper = ({
     cellCoord,
     setFocusedCellCoord,
     focusType,
-    isNewHeadCellMenuEnabled,
     allowedRows,
   });
 

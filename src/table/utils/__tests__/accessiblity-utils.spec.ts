@@ -420,68 +420,6 @@ describe("accessibility-utils", () => {
     });
   });
 
-  describe("moveFocusWithArrow", () => {
-    let evt: React.KeyboardEvent;
-    let targetCell: HTMLTableCellElement;
-    let cellCoords: [number, number];
-    let focusType: FocusTypes;
-    let isNewHeadCellMenuEnabled: boolean;
-    let dummyCell: HTMLTableCellElement;
-    const dummyUpdateFocus = jest.fn();
-
-    const triggerFunction = () => {
-      accessibilityUtils.moveFocusWithArrow({
-        evt,
-        rootElement,
-        cellCoord: cellCoords,
-        setFocusedCellCoord,
-        focusType,
-        isNewHeadCellMenuEnabled,
-        updateFocusInjected: dummyUpdateFocus,
-      });
-    };
-
-    beforeEach(() => {
-      targetCell = { key: "the cell that evt triggered" } as unknown as HTMLTableCellElement;
-      evt = {
-        target: targetCell,
-      } as unknown as React.KeyboardEvent;
-      focusType = FocusTypes.FOCUS;
-      rootElement = {
-        getElementsByClassName: () => [cell, cell],
-      } as unknown as HTMLDivElement;
-      cellCoords = [0, 0];
-      dummyCell = { ...cell } as HTMLTableCellElement;
-    });
-
-    it("should move focus to first body cell", () => {
-      jest.spyOn(getElementUtils, "getNextCellCoord").mockReturnValue([1, 0]);
-      jest.spyOn(getElementUtils, "getCellElement").mockReturnValue(dummyCell);
-      triggerFunction();
-
-      expect(dummyUpdateFocus).toHaveBeenCalledTimes(1);
-      expect(dummyUpdateFocus).toHaveBeenCalledWith({ focusType, cell: dummyCell });
-      expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
-      expect(setFocusedCellCoord).toHaveBeenCalledWith([1, 0]);
-    });
-
-    describe("when isNewHeadCellMenuEnabled flag is true:", () => {
-      beforeEach(() => {
-        isNewHeadCellMenuEnabled = true;
-      });
-
-      test("should reset the focus on head cell and move focus on table body", () => {
-        jest.spyOn(getElementUtils, "getNextCellCoord").mockReturnValue([1, 0]);
-        jest.spyOn(getElementUtils, "getCellElement").mockReturnValue(dummyCell);
-        triggerFunction();
-
-        expect(dummyUpdateFocus).toHaveBeenCalledTimes(2);
-        expect(dummyUpdateFocus).toHaveBeenNthCalledWith(1, { focusType: FocusTypes.REMOVE_TAB, cell: targetCell });
-        expect(dummyUpdateFocus).toHaveBeenNthCalledWith(2, { focusType, cell: dummyCell });
-      });
-    });
-  });
-
   describe("focusBodyFromHead", () => {
     let otherCell: HTMLTableCellElement;
 

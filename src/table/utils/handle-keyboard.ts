@@ -125,13 +125,15 @@ export const handleHeadKeyDown = ({
       if (evt.key === KeyCodes.RIGHT && isLastHeadCell && !isNewHeadCellMenuEnabled) {
         focusBodyFromHead(rootElement, setFocusedCellCoord);
       } else {
+        if (isNewHeadCellMenuEnabled) {
+          updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLTableCellElement });
+        }
         moveFocusWithArrow({
           evt,
           rootElement,
           cellCoord,
           setFocusedCellCoord,
           focusType: isNewHeadCellMenuEnabled ? FocusTypes.FOCUS : FocusTypes.FOCUS_BUTTON,
-          isNewHeadCellMenuEnabled,
         });
       }
       break;
@@ -144,7 +146,6 @@ export const handleHeadKeyDown = ({
         cellCoord,
         setFocusedCellCoord,
         focusType: FocusTypes.FOCUS,
-        isNewHeadCellMenuEnabled,
       });
       break;
     case !isNewHeadCellMenuEnabled && KeyCodes.TAB:
@@ -191,7 +192,7 @@ export const handleTotalKeyDown = (
         updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLTableCellElement });
       }
 
-      moveFocusWithArrow({ evt, rootElement, cellCoord, setFocusedCellCoord, focusType, isNewHeadCellMenuEnabled });
+      moveFocusWithArrow({ evt, rootElement, cellCoord, setFocusedCellCoord, focusType });
       break;
     }
     case KeyCodes.TAB:

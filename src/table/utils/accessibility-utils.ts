@@ -83,16 +83,11 @@ export const moveFocusWithArrow = ({
   cellCoord,
   setFocusedCellCoord,
   focusType,
-  isNewHeadCellMenuEnabled,
-  updateFocusInjected = updateFocus, // this is for test purposes
   allowedRows,
 }: MoveFocusWithArrowProps) => {
   const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, allowedRows);
   const nextCell = getCellElement(rootElement, nextCellCoord);
-  if (isNewHeadCellMenuEnabled && focusType === FocusTypes.FOCUS) {
-    updateFocusInjected({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLTableCellElement });
-  }
-  updateFocusInjected({ focusType, cell: nextCell });
+  updateFocus({ focusType, cell: nextCell });
   setFocusedCellCoord(nextCellCoord);
 
   return nextCell;

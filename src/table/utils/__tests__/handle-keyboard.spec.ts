@@ -299,16 +299,20 @@ describe("handle-keyboard", () => {
         expect(handleOpenMenu).toHaveBeenCalledTimes(1);
       });
 
-      it("should call moveFocusWithArrow and passing focus type as FOCUS when key code is not RIGHT", () => {
+      it("should reset focus on event target cell and call moveFocusWithArrow and passing focus type as FOCUS when key code is RIGHT or LEFT", () => {
         evt.key = KeyCodes.LEFT;
         callHandleHeadKeyDown();
+        expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
+        expect(accessibilityUtils.updateFocus).toHaveBeenCalledWith({
+          focusType: FocusTypes.REMOVE_TAB,
+          cell: evt.target,
+        });
         expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledWith({
           evt,
           rootElement,
           cellCoord: [0, 0],
           setFocusedCellCoord,
           focusType: FocusTypes.FOCUS,
-          isNewHeadCellMenuEnabled,
         });
       });
     });
@@ -320,7 +324,6 @@ describe("handle-keyboard", () => {
     let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
     let cellCoord: [number, number];
     let isSelectionMode: boolean;
-    let isNewHeadCellMenuEnabled: boolean;
 
     beforeEach(() => {
       evt = {
@@ -340,7 +343,6 @@ describe("handle-keyboard", () => {
       } as unknown as HTMLElement;
       setFocusedCellCoord = jest.fn();
       isSelectionMode = false;
-      isNewHeadCellMenuEnabled = false;
       jest.spyOn(accessibilityUtils, "moveFocusWithArrow").mockImplementation(() => ({}) as HTMLTableCellElement);
       jest.spyOn(accessibilityUtils, "updateFocus").mockImplementation(() => {});
       jest.spyOn(keyboardUtils, "bodyTabHelper").mockImplementation(() => {});
@@ -357,7 +359,6 @@ describe("handle-keyboard", () => {
         cellCoord,
         setFocusedCellCoord,
         focusType: FocusTypes.FOCUS,
-        isNewHeadCellMenuEnabled,
       });
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
     });
@@ -376,7 +377,6 @@ describe("handle-keyboard", () => {
         cellCoord,
         setFocusedCellCoord,
         focusType: FocusTypes.FOCUS_BUTTON,
-        isNewHeadCellMenuEnabled,
       });
       expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(0);
     });
