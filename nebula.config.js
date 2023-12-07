@@ -13,7 +13,7 @@ module.exports = {
   },
   serve: {
     flags: {
-      HEAD_CELL_MENU_TEST_FLAG: false,
+      HEAD_CELL_MENU_TEST_FLAG: true,
     },
     keyboardNavigation: false,
     themes: [
