@@ -9,6 +9,7 @@ import { BORDER_WIDTH, PADDING } from "../../../styling-defaults";
 import { areTabStopsEnabled } from "../../../utils/accessibility-utils";
 import { handleHeadKeyDown } from "../../../utils/handle-keyboard";
 import { handleMouseDownToFocusHead } from "../../../utils/handle-mouse";
+import { isFirstHeaderCell } from "../../../utils/keyboard-utils";
 import { StyledHeadCell } from "./styles";
 
 interface HeadCellProps {
@@ -33,9 +34,10 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
   const columnWidths = useContextSelector(TableContext, (value) => value.columnWidths);
   const isSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI?.isModal());
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
+  const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const isNewHeadCellMenuEnabled = useContextSelector(
     TableContext,
-    (value) => value.featureFlags.isNewHeadCellMenuEnabled
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled,
   );
 
   const isInteractionEnabled = !!interactions.active && !isSelectionMode;
@@ -74,7 +76,13 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
   const handleOpenMenu = () => setOpen(true);
 
   const newHeadCellRelatedLogic = isNewHeadCellMenuEnabled ? column.colIdx === 0 : false;
-  const tabIndex = newHeadCellRelatedLogic && isInteractionEnabled && areTabStopsEnabled(keyboard) ? 0 : -1;
+  const tabIndex =
+    newHeadCellRelatedLogic &&
+    isFirstHeaderCell(focusedCellCoord) &&
+    isInteractionEnabled &&
+    areTabStopsEnabled(keyboard)
+      ? 0
+      : -1;
 
   return (
     <StyledHeadCell

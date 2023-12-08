@@ -1,7 +1,7 @@
 import { stardust } from "@nebula.js/stardust";
 import { focusSelectionToolbar, preventDefaultBehavior } from "@qlik/nebula-table-utils/lib/utils";
 import { Cell } from "../../types";
-import { FocusTypes, KeyCodes, SelectionActions } from "../constants";
+import { FIRST_HEADER_CELL_COORD, FocusTypes, KeyCodes, SelectionActions } from "../constants";
 import { BodyArrowHelperProps } from "../types";
 import { announceSelectionState, focusBodyFromHead, moveFocusWithArrow, updateFocus } from "./accessibility-utils";
 import { handleNavigateTop } from "./handle-scroll";
@@ -14,6 +14,9 @@ export const isArrowKey = (key: string) =>
   [KeyCodes.LEFT, KeyCodes.RIGHT, KeyCodes.UP, KeyCodes.DOWN].includes(key as KeyCodes);
 
 export const isShiftArrow = (evt: React.KeyboardEvent) => evt.shiftKey && isArrowKey(evt.key);
+
+export const isFirstHeaderCell = (coord: [number, number]) =>
+  coord[0] === FIRST_HEADER_CELL_COORD[0] && coord[1] === FIRST_HEADER_CELL_COORD[1];
 
 /**
  * Checks if events caught by head, totals and body handles should be early returned and bubble to tableWrapper/default behavior.
@@ -140,6 +143,7 @@ interface BodyTabHelperProps {
   keyboard?: stardust.Keyboard;
   isSelectionMode?: boolean;
   paginationNeeded?: boolean;
+  isNewHeadCellMenuEnabled?: boolean;
 }
 
 /**
@@ -153,13 +157,14 @@ export const bodyTabHelper = ({
   keyboard,
   isSelectionMode,
   paginationNeeded,
+  isNewHeadCellMenuEnabled,
 }: BodyTabHelperProps) => {
   const tabToToolbar = keyboard?.enabled && isSelectionMode && (evt.shiftKey || (!evt.shiftKey && !paginationNeeded));
 
   if (tabToToolbar) {
     preventDefaultBehavior(evt);
     focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
-  } else if (evt.shiftKey) {
+  } else if (evt.shiftKey && !isNewHeadCellMenuEnabled) {
     const headCells = rootElement.querySelectorAll(".sn-table-head-cell");
     const lastIndex = headCells.length - 1;
 
