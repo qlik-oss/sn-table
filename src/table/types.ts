@@ -163,6 +163,8 @@ export interface HandleHeadKeyDownProps {
   cellCoord: [number, number];
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   isInteractionEnabled: boolean;
+  handleOpenMenu?: () => void;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface HandleHeadMouseDownProps {
@@ -184,6 +186,7 @@ export interface BodyArrowHelperProps {
   announce: Announce;
   totalsPosition: TotalsPosition;
   isSelectionMode: boolean | undefined;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface HandleBodyKeyDownProps {
@@ -198,11 +201,24 @@ export interface HandleBodyKeyDownProps {
   totalsPosition: TotalsPosition;
   paginationNeeded: boolean;
   selectionsAPI: ExtendedSelectionAPI | undefined;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface CellFocusProps {
   focusType: FocusTypes;
   cell: HTMLTableCellElement | undefined;
+}
+
+export interface MoveFocusWithArrowProps {
+  evt: React.KeyboardEvent;
+  rootElement: HTMLElement;
+  cellCoord: [number, number];
+  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  focusType: FocusTypes;
+  allowedRows?: {
+    top: number;
+    bottom: number;
+  };
 }
 
 export interface HandleResetFocusProps {
@@ -214,6 +230,7 @@ export interface HandleResetFocusProps {
   keyboard: stardust.Keyboard;
   announce: Announce;
   totalsPosition: TotalsPosition;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface ContextProviderProps {

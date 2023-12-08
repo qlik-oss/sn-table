@@ -17,11 +17,14 @@ export const StyledHeadCell = styled(TableCell, {
   pointer: "cursor",
   verticalAlign: "bottom",
 
-  "&:focus": {
-    boxShadow: "none",
-  },
-
-  "&&:hover": {
+  "&&:focus-visible": {
+    ...(!isNewHeadCellMenuEnabled && { boxShadow: "none" }),
     ...(isNewHeadCellMenuEnabled && { background: interactions.active ? hoverBackground : background }),
   },
+
+  ...(isNewHeadCellMenuEnabled && {
+    "&&:hover": {
+      background: interactions.active ? hoverBackground : background,
+    },
+  }),
 }));

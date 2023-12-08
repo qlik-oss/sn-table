@@ -15,10 +15,14 @@ const TableTotals = () => {
   } = useContextSelector(TableContext, (value) => value.tableData);
   const { rootElement, selectionsAPI, keyboard, styling, interactions } = useContextSelector(
     TableContext,
-    (value) => value.baseProps,
+    (value) => value.baseProps
   );
   const headRowHeight = useContextSelector(TableContext, (value) => value.headRowHeight);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
+  const isNewHeadCellMenuEnabled = useContextSelector(
+    TableContext,
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled
+  );
 
   return (
     <TableRow className="sn-table-row sn-table-totals-row">
@@ -34,10 +38,17 @@ const TableTotals = () => {
             key={column.id}
             align={column.totalsTextAlign}
             className="sn-table-cell"
-            tabIndex={tabIndex}
+            tabIndex={isNewHeadCellMenuEnabled ? -1 : tabIndex}
             title={interactions.passive ? column.totalInfo : undefined}
             onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
-              handleTotalKeyDown(e, rootElement, cellCoord, setFocusedCellCoord, selectionsAPI?.isModal());
+              handleTotalKeyDown(
+                e,
+                rootElement,
+                cellCoord,
+                setFocusedCellCoord,
+                isNewHeadCellMenuEnabled,
+                selectionsAPI?.isModal()
+              );
             }}
             onMouseDown={() => {
               removeTabAndFocusCell(cellCoord, rootElement, setFocusedCellCoord, keyboard);

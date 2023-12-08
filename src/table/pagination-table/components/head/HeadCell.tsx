@@ -6,6 +6,7 @@ import HeadCellContent from "../../../components/head/HeadCellContent";
 import { FullSortDirection } from "../../../constants";
 import { TableContext, useContextSelector } from "../../../context";
 import { BORDER_WIDTH, PADDING } from "../../../styling-defaults";
+import { areTabStopsEnabled } from "../../../utils/accessibility-utils";
 import { handleHeadKeyDown } from "../../../utils/handle-keyboard";
 import { handleMouseDownToFocusHead } from "../../../utils/handle-mouse";
 import { StyledHeadCell } from "./styles";
@@ -51,6 +52,8 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
       cellCoord,
       setFocusedCellCoord,
       isInteractionEnabled,
+      handleOpenMenu,
+      isNewHeadCellMenuEnabled,
     });
 
   const handleMouseDown = (evt: React.MouseEvent) =>
@@ -70,6 +73,9 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
 
   const handleOpenMenu = () => setOpen(true);
 
+  const newHeadCellRelatedLogic = isNewHeadCellMenuEnabled ? column.colIdx === 0 : false;
+  const tabIndex = newHeadCellRelatedLogic && isInteractionEnabled && areTabStopsEnabled(keyboard) ? 0 : -1;
+
   return (
     <StyledHeadCell
       headerStyle={styling.head}
@@ -78,7 +84,7 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
       align={column.headTextAlign}
       className="sn-table-head-cell sn-table-cell"
       aria-sort={ariaSort}
-      tabIndex={-1}
+      tabIndex={tabIndex}
       title={interactions.passive ? column.label : undefined}
       onKeyDown={handleKeyDown}
       onMouseDown={handleMouseDown}

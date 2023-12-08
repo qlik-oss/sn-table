@@ -61,7 +61,7 @@ const HeadCellContent = ({ children, column, isInteractionEnabled, open, setOpen
         size="small"
         startIcon={startIcon}
         endIcon={endIcon}
-        tabIndex={tabIndex}
+        tabIndex={isNewHeadCellMenuEnabled ? -1 : tabIndex}
         disabled={!isInteractionEnabled}
         onClick={!isNewHeadCellMenuEnabled ? handleSort : () => {}}
         isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
@@ -80,7 +80,7 @@ const HeadCellContent = ({ children, column, isInteractionEnabled, open, setOpen
             <HeadCellMenu
               headerData={column}
               translator={translator}
-              tabIndex={tabIndex}
+              tabIndex={-1}
               anchorRef={anchorRef}
               handleHeadCellMenuKeyDown={handleHeadCellMenuKeyDown}
               menuAvailabilityFlags={{
