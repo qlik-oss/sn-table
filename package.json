@@ -156,7 +156,7 @@
     "yarn-deduplicate": "6.0.2"
   },
   "peerDependencies": {
-    "@nebula.js/stardust": ">=4.9.0"
+    "@nebula.js/stardust": "^4.6.2"
   },
   "engines": {
     "node": ">=16",

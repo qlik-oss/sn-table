@@ -41,6 +41,7 @@ test.describe("Tests served by: fixture-file rendering by Nebula", () => {
       expectation = expectations.navigateWithArrows;
     });
     for await (const step of expectation.steps) {
+      // eslint-disable-next-line playwright/valid-title
       await test.step(step.description, async () => {
         await snTable.pressKeys(step.keys);
       });
