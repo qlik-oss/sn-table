@@ -39,6 +39,7 @@
     "sense": "nebula sense",
     "spec": "npx @scriptappy/cli from-jsdoc -c ./spec-configs/props.conf.js",
     "start": "nebula serve --build false --type sn-table",
+    "start:mfe": "nebula serve --mfe --build false --type sn-table",
     "test:integration": "playwright test --config=test/integration/integration.config.ts",
     "test:integration:local": "./test/integration/scripts/run-integration-tests.sh",
     "test:rendering": "playwright test",
