@@ -11,12 +11,29 @@ describe("use-keyboard-active-listener", () => {
   let keyboard: stardust.Keyboard;
   let focusedCellCoord: [number, number];
 
-  const wrapper = ({ children }: any) => (
-    <TestWithProviders cellCoordMock={focusedCellCoord} keyboard={keyboard}>
+  const Wrapper = ({ children, isNewHeadCellMenuEnabled = false }: any) => (
+    <TestWithProviders
+      cellCoordMock={focusedCellCoord}
+      keyboard={keyboard}
+      isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
+    >
       {children}
     </TestWithProviders>
   );
-  const renderUseKEyboardActiveListener = () => renderHook(useKeyboardActiveListener, { wrapper });
+
+  const renderUseKeyboardActiveListener = (isNewHeadCellMenuEnabled = false) => {
+    const { rerender } = renderHook(useKeyboardActiveListener, {
+      wrapper: ({ children }: any) => <Wrapper isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}>{children}</Wrapper>,
+    });
+
+    /**
+     * since we are using useOnPropsChange
+     * the functions we expect to be called
+     * will not be triggered at first render
+     * that is why we use rerender() in below tests
+     */
+    rerender();
+  };
 
   beforeEach(() => {
     keyboard = {
@@ -34,7 +51,8 @@ describe("use-keyboard-active-listener", () => {
   });
 
   it("should call findCellWithTabStop and updateFocus with focusType blur when keyboard.active is false", () => {
-    renderUseKEyboardActiveListener();
+    renderUseKeyboardActiveListener();
+
     expect(getElementUtils.findCellWithTabStop).toHaveBeenCalledTimes(1);
     expect(accessibilityUtils.updateFocus).toHaveBeenCalledWith({
       focusType: FocusTypes.BLUR,
@@ -44,8 +62,8 @@ describe("use-keyboard-active-listener", () => {
 
   it("should call getCellElement with [0, 0] and updateFocus with focusType focusButton when keyboard.active is true", () => {
     keyboard.active = true;
+    renderUseKeyboardActiveListener();
 
-    renderUseKEyboardActiveListener();
     expect(getElementUtils.getCellElement).toHaveBeenCalledWith(expect.anything(), FIRST_HEADER_CELL_COORD);
     expect(accessibilityUtils.updateFocus).toHaveBeenCalledWith({
       focusType: FocusTypes.FOCUS_BUTTON,
@@ -57,11 +75,25 @@ describe("use-keyboard-active-listener", () => {
     keyboard.active = true;
     focusedCellCoord = [2, 0];
 
-    renderUseKEyboardActiveListener();
+    renderUseKeyboardActiveListener();
+
     expect(getElementUtils.getCellElement).toHaveBeenCalledWith(expect.anything(), focusedCellCoord);
     expect(accessibilityUtils.updateFocus).toHaveBeenCalledWith({
       focusType: FocusTypes.FOCUS,
       cell: expect.anything(),
+    });
+  });
+
+  describe("when isNewHeadCellMenuEnabled flag is true:", () => {
+    it("should call updateFocus with focus type even if focusedCellCoord[0] is 0", () => {
+      keyboard.active = true;
+      focusedCellCoord = [0, 0];
+      renderUseKeyboardActiveListener(true);
+
+      expect(accessibilityUtils.updateFocus).toHaveBeenCalledWith({
+        focusType: FocusTypes.FOCUS,
+        cell: expect.anything(),
+      });
     });
   });
 });

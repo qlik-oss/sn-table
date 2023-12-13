@@ -41,6 +41,69 @@ describe("accessibility-utils", () => {
 
   afterEach(() => jest.clearAllMocks());
 
+  describe("focusBackToHeadCell", () => {
+    let evt: React.KeyboardEvent;
+    let eventCell: HTMLTableCellElement;
+    let targetCell: HTMLTableCellElement;
+    let baseElement: HTMLTableCellElement;
+    let isNewHeadCellMenuEnabled: boolean;
+
+    const triggerFunction = () => {
+      accessibilityUtils.focusBackToHeadCell(evt, isNewHeadCellMenuEnabled);
+    };
+
+    beforeEach(() => {
+      targetCell = {
+        focus: jest.fn(),
+      } as unknown as HTMLTableCellElement;
+      baseElement = {
+        setAttribute: jest.fn(),
+        querySelector: jest.fn().mockReturnValue(targetCell),
+        focus: jest.fn(),
+      } as unknown as HTMLTableCellElement;
+      eventCell = {
+        key: "the cell that evt triggered",
+        closest: jest.fn().mockReturnValue(baseElement),
+        setAttribute: jest.fn(),
+      } as unknown as HTMLTableCellElement;
+      evt = {
+        target: eventCell,
+      } as unknown as React.KeyboardEvent;
+      rootElement = {
+        getElementsByClassName: () => [cell, cell],
+      } as unknown as HTMLDivElement;
+    });
+
+    it("should reset the cells tab index that event has been triggered on", () => {
+      triggerFunction();
+      expect(eventCell.setAttribute).toHaveBeenCalledTimes(1);
+      expect(eventCell.setAttribute).toHaveBeenCalledWith("tabIndex", "-1");
+    });
+
+    it("should focus on the closest sn table cell of the column adjuster", () => {
+      triggerFunction();
+      expect(eventCell.closest).toHaveBeenCalledTimes(1);
+      expect(baseElement.querySelector).toHaveBeenCalledTimes(1);
+      expect(baseElement.querySelector).toHaveBeenCalledWith(".sn-table-head-menu-button");
+      expect(targetCell.focus).toHaveBeenCalledTimes(1);
+    });
+
+    describe("when isNewHeadCellMenuEnabled flag is true:", () => {
+      beforeEach(() => {
+        isNewHeadCellMenuEnabled = true;
+      });
+
+      it("should focus on the closest New Head Cell menu of the column adjuster", () => {
+        triggerFunction();
+        expect(eventCell.closest).toHaveBeenCalledTimes(1);
+        expect(baseElement.querySelector).toHaveBeenCalledTimes(0);
+        expect(baseElement.setAttribute).toHaveBeenCalledTimes(1);
+        expect(baseElement.setAttribute).toHaveBeenCalledWith("tabIndex", "0");
+        expect(baseElement.focus).toHaveBeenCalledTimes(1);
+      });
+    });
+  });
+
   describe("updateFocus", () => {
     let focusType: FocusTypes;
     beforeEach(() => {
@@ -104,6 +167,7 @@ describe("accessibility-utils", () => {
     let isSelectionMode: boolean;
     let announce: Announce;
     let totalsPosition: TotalsPosition;
+    let isNewHeadCellMenuEnabled: boolean;
 
     const resetFocus = () =>
       accessibilityUtils.resetFocus({
@@ -115,6 +179,7 @@ describe("accessibility-utils", () => {
         keyboard,
         announce,
         totalsPosition,
+        isNewHeadCellMenuEnabled,
       });
 
     beforeEach(() => {
@@ -214,6 +279,19 @@ describe("accessibility-utils", () => {
       resetFocus();
       expect(announce).toHaveBeenCalledWith({
         keys: ["#something,", "SNTable.SelectionLabel.SelectedValue"],
+      });
+    });
+
+    describe("when isNewHeadCellMenuEnabled flag is true:", () => {
+      beforeEach(() => {
+        isNewHeadCellMenuEnabled = true;
+      });
+
+      test("should reset focus on first head cell if not in selection mode", () => {
+        resetFocus();
+
+        expect(setFocusedCellCoord).toHaveBeenCalledTimes(1);
+        expect(setFocusedCellCoord).toHaveBeenCalledWith([0, 0]);
       });
     });
   });

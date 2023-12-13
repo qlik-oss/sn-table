@@ -31,6 +31,10 @@ const TableWrapper = (props: TableWrapperProps) => {
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
   const isSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI?.isModal());
+  const isNewHeadCellMenuEnabled = useContextSelector(
+    TableContext,
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled,
+  );
 
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef<HTMLDivElement>(null);
@@ -110,8 +114,9 @@ const TableWrapper = (props: TableWrapperProps) => {
       keyboard,
       announce,
       totalsPosition,
+      isNewHeadCellMenuEnabled,
     });
-  }, [rows.length, totalRowCount, totalColumnCount, page]);
+  }, [rows.length, totalRowCount, totalColumnCount, page, isNewHeadCellMenuEnabled]);
 
   useDidUpdateEffect(() => {
     setYScrollbarWidth(yScrollbarWidth);

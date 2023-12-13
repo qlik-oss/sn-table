@@ -1,11 +1,11 @@
 import { stardust } from "@nebula.js/stardust";
 import { focusSelectionToolbar } from "@qlik/nebula-table-utils/lib/utils";
 import { Announce, Cell, TotalsPosition } from "../../../types";
-import { KeyCodes } from "../../constants";
+import { FocusTypes, KeyCodes } from "../../constants";
 import { SelectionDispatch } from "../../types";
 import * as accessibilityUtils from "../accessibility-utils";
 import * as handleScroll from "../handle-scroll";
-import { bodyArrowHelper, bodyTabHelper, headTabHelper, shouldBubbleEarly } from "../keyboard-utils";
+import { bodyArrowHelper, bodyTabHelper, getFocusType, headTabHelper, shouldBubbleEarly } from "../keyboard-utils";
 
 jest.mock("@qlik/nebula-table-utils/lib/utils", () => ({
   focusSelectionToolbar: jest.fn(),
@@ -25,7 +25,7 @@ describe("keyboard-utils", () => {
       metaKey: false, // cases when meta key is pressed instead of ctrl is not tested here, the test are granular enough anyway
       target: {} as HTMLElement,
       stopPropagation: () => {},
-      preventDefault: () => {},
+      preventDefault: jest.fn(),
     } as unknown as React.KeyboardEvent;
     rootElement = {
       querySelectorAll: () => [{}, {}],
@@ -37,6 +37,44 @@ describe("keyboard-utils", () => {
   });
 
   afterEach(() => jest.clearAllMocks());
+
+  describe("getFocusType", () => {
+    let cellCoord: [number, number];
+    let isNewHeadCellMenuEnabled: boolean;
+
+    beforeEach(() => {
+      cellCoord = [0, 0];
+      isNewHeadCellMenuEnabled = false;
+    });
+
+    it("should return FOCUS_BUTTON because keycode on event is up and there is more cell above", () => {
+      cellCoord = [1, 0];
+      evt.key = KeyCodes.UP;
+      expect(getFocusType(cellCoord, evt, isNewHeadCellMenuEnabled)).toBe(FocusTypes.FOCUS_BUTTON);
+    });
+
+    it("should return FOCUS_BUTTON because keycode on event is left and there is more row above", () => {
+      cellCoord = [1, 0];
+      evt.key = KeyCodes.LEFT;
+      expect(getFocusType(cellCoord, evt, isNewHeadCellMenuEnabled)).toBe(FocusTypes.FOCUS_BUTTON);
+    });
+
+    it("should return FOCUS because keycode on event is not up or left", () => {
+      cellCoord = [1, 0];
+      evt.key = KeyCodes.RIGHT;
+      expect(getFocusType(cellCoord, evt, isNewHeadCellMenuEnabled)).toBe(FocusTypes.FOCUS);
+    });
+
+    describe("when isNewHeadCellMenuEnabled flag is true:", () => {
+      beforeEach(() => {
+        isNewHeadCellMenuEnabled = true;
+      });
+
+      it("should return FOCUS", () => {
+        expect(getFocusType(cellCoord, evt, isNewHeadCellMenuEnabled)).toBe(FocusTypes.FOCUS);
+      });
+    });
+  });
 
   describe("shouldBubbleEarly", () => {
     let isSelectionMode: boolean;
@@ -97,6 +135,7 @@ describe("keyboard-utils", () => {
     let announce: Announce;
     let totalsPosition: TotalsPosition;
     let isSelectionMode: boolean;
+    let isNewHeadCellMenuEnabled: boolean;
 
     const runBodyArrowHelper = () =>
       bodyArrowHelper({
@@ -109,6 +148,7 @@ describe("keyboard-utils", () => {
         announce,
         totalsPosition,
         isSelectionMode,
+        isNewHeadCellMenuEnabled,
       });
 
     beforeEach(() => {

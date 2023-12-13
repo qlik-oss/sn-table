@@ -30,7 +30,7 @@ export const StyledSortButton = styled(Button, {
   cursor: disabled ? "auto" : "pointer",
   justifySelf: textAlign,
   "&&:focus, &&:hover": {
-    ...(isNewHeadCellMenuEnabled && { background: "transparent" }),
+    ...(isNewHeadCellMenuEnabled && { background: "transparent", boxShadow: "none" }),
     "& svg": {
       ...(!isNewHeadCellMenuEnabled && { opacity: isActivelySorted ? 1 : 0.5 }),
     },
@@ -130,12 +130,15 @@ export const HeadCellMenuWrapper = styled(Box, {
 }));
 
 export const StyledMenuIconButton = styled(Button, {
-  shouldForwardProp: (prop: string) => prop !== "isVisible" && prop !== "rightAligned",
-})(({ isVisible }) => ({
+  shouldForwardProp: (prop: string) => prop !== "isVisible" && prop !== "isNewHeadCellMenuEnabled",
+})(({ isVisible, isNewHeadCellMenuEnabled }) => ({
   opacity: isVisible ? 1 : 0,
-  "&:focus": {
-    opacity: 1,
-  },
+
+  ...(!isNewHeadCellMenuEnabled && {
+    "&:focus": {
+      opacity: 1,
+    },
+  }),
 }));
 
 export const StyledDivider = styled(Divider)(({ theme }) => ({
@@ -150,6 +153,7 @@ export const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   padding: theme.spacing(1, 1.5),
   display: "flex",
   justifyContent: "space-between",
+
   "&&:focus": {
     boxShadow: "rgb(23, 127, 230) 0px 0px 0px 2px",
   },

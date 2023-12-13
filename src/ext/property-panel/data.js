@@ -182,7 +182,7 @@ const getColumnResize = {
         translation: "Object.Table.Column.Pixels",
       },
       {
-        value: ColumnWidthType.percentage,
+        value: ColumnWidthType.Percentage,
         translation: "Object.Table.Column.Percentage",
       },
     ],

@@ -1,9 +1,9 @@
 import { stardust } from "@nebula.js/stardust";
-import { COLUMN_ADJUSTER_CLASS, HEAD_CELL_MENU_BUTTON_CLASS } from "@qlik/nebula-table-utils/lib/constants";
+import { COLUMN_ADJUSTER_CLASS } from "@qlik/nebula-table-utils/lib/constants";
 import React from "react";
 import { Announce } from "../../types";
-import { FIRST_BODY_CELL_COORD, FocusTypes } from "../constants";
-import { CellFocusProps, HandleResetFocusProps } from "../types";
+import { FIRST_BODY_CELL_COORD, FIRST_HEADER_CELL_COORD, FocusTypes } from "../constants";
+import { CellFocusProps, HandleResetFocusProps, MoveFocusWithArrowProps } from "../types";
 import { findCellWithTabStop, getCellCoord, getCellElement, getNextCellCoord } from "./get-element-utils";
 
 export const areTabStopsEnabled = (keyboard: stardust.Keyboard) => !keyboard.enabled || keyboard.active;
@@ -24,13 +24,23 @@ export const setFocusOnClosetColumnAdjuster = (anchorRef: React.RefObject<HTMLDi
 /**
  * Removes the tab stop for adjuster hit area and focus the head menu button
  */
-export const focusHeadMenuButton = (event: React.KeyboardEvent | React.FocusEvent) => {
+export const focusBackToHeadCell = (
+  event: React.KeyboardEvent | React.FocusEvent,
+  isNewHeadCellMenuEnabled: boolean,
+) => {
   const target = event.target as HTMLDivElement;
   target.setAttribute("tabIndex", "-1");
   const baseElement = target?.closest(".sn-table-cell");
-  const headMenuButton = (baseElement?.querySelector(".sn-table-head-menu-button") ||
-    baseElement?.querySelector(`.${HEAD_CELL_MENU_BUTTON_CLASS}`)) as HTMLButtonElement;
-  headMenuButton?.focus();
+
+  let targetElementToFocus = null;
+  if (isNewHeadCellMenuEnabled) {
+    targetElementToFocus = baseElement as HTMLDivElement;
+    targetElementToFocus?.setAttribute("tabIndex", "0");
+  } else {
+    targetElementToFocus = baseElement?.querySelector(".sn-table-head-menu-button") as HTMLButtonElement;
+  }
+
+  targetElementToFocus?.focus();
 };
 
 /**
@@ -67,17 +77,14 @@ export const updateFocus = ({ focusType, cell }: CellFocusProps) => {
 /**
  * Resets and adds new focus to a table cell based which arrow key is pressed
  */
-export const moveFocusWithArrow = (
-  evt: React.KeyboardEvent,
-  rootElement: HTMLElement,
-  cellCoord: [number, number],
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  focusType: FocusTypes,
-  allowedRows?: {
-    top: number;
-    bottom: number;
-  },
-) => {
+export const moveFocusWithArrow = ({
+  evt,
+  rootElement,
+  cellCoord,
+  setFocusedCellCoord,
+  focusType,
+  allowedRows,
+}: MoveFocusWithArrowProps) => {
   const nextCellCoord = getNextCellCoord(evt, rootElement, cellCoord, allowedRows);
   const nextCell = getCellElement(rootElement, nextCellCoord);
   updateFocus({ focusType, cell: nextCell });
@@ -132,11 +139,15 @@ export const resetFocus = ({
   keyboard,
   announce,
   totalsPosition,
+  isNewHeadCellMenuEnabled,
 }: HandleResetFocusProps) => {
   updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: findCellWithTabStop(rootElement) });
   // If you have selections ongoing, you want to stay on the same column
   const selectionCellCoord: [number, number] = [totalsPosition.atTop ? 2 : 1, focusedCellCoord[1]];
-  const cellCoord: [number, number] = isSelectionMode ? selectionCellCoord : FIRST_BODY_CELL_COORD;
+  const defaultCellCoords: [number, number] = isNewHeadCellMenuEnabled
+    ? FIRST_HEADER_CELL_COORD
+    : FIRST_BODY_CELL_COORD;
+  const cellCoord: [number, number] = isSelectionMode ? selectionCellCoord : defaultCellCoords;
 
   if (areTabStopsEnabled(keyboard)) {
     // Only run this if updates come from inside table

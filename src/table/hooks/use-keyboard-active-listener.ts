@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useOnPropsChange } from "@qlik/nebula-table-utils/lib/hooks";
 import { FocusTypes } from "../constants";
 import { TableContext, useContextSelector } from "../context";
 import { updateFocus } from "../utils/accessibility-utils";
@@ -13,15 +13,19 @@ import { findCellWithTabStop, getCellElement } from "../utils/get-element-utils"
 const useKeyboardActiveListener = () => {
   const { rootElement, keyboard } = useContextSelector(TableContext, (value) => value.baseProps);
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
+  const isNewHeadCellMenuEnabled = useContextSelector(
+    TableContext,
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled,
+  );
 
-  useEffect(() => {
-    let focusType = focusedCellCoord[0] > 0 ? FocusTypes.FOCUS : FocusTypes.FOCUS_BUTTON;
+  useOnPropsChange(() => {
+    let focusType = isNewHeadCellMenuEnabled || focusedCellCoord[0] > 0 ? FocusTypes.FOCUS : FocusTypes.FOCUS_BUTTON;
     focusType = keyboard.active ? focusType : FocusTypes.BLUR;
     const cell = keyboard.active ? getCellElement(rootElement, focusedCellCoord) : findCellWithTabStop(rootElement);
 
     updateFocus({ focusType, cell });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [keyboard.active, rootElement]);
+  }, [keyboard.active, rootElement, isNewHeadCellMenuEnabled]);
 };
 
 export default useKeyboardActiveListener;
