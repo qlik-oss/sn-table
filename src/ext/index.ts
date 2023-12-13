@@ -1,7 +1,7 @@
 import { exportProperties, importProperties } from "../conversion";
+import getData from "../data/data";
 import exploration from "../exploration/exploration";
 import { ExportFormat, Galaxy, PropTree } from "../types";
-import getData from "./data";
 import getPropertyPanelDefinition from "./property-panel";
 
 export default function ext(env: Galaxy) {

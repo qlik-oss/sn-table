@@ -1,4 +1,4 @@
-import { getDescription, indexAdded, indexRemoved, min } from "../data";
+import { getDescription, indexAdded, indexRemoved, min } from "../../data/data";
 import ext from "../index.ts";
 
 describe("data", () => {

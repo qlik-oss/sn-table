@@ -1,12 +1,20 @@
 import { exportProperties, importProperties } from "../conversion";
+import data from "../data/data";
 import exploration from "../exploration/exploration";
-import data from "./data";
+import { Galaxy } from "../types";
 import properties from "./object-properties";
 
-export default {
+export default (env: Galaxy) => ({
   properties: { initial: properties },
-  data: data(),
+  data: {
+    targets: [
+      {
+        path: "/qHyperCubeDef",
+        ...data(env),
+      },
+    ],
+  },
   importProperties,
   exportProperties,
   exploration,
-};
+});
