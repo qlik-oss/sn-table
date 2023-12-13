@@ -138,6 +138,14 @@ jobs:
       - run:
           name: Lint
           command: yarn run lint
+  format:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/table
+      - run:
+          name: Format check
+          command: yarn run format:check
 
   unit-tests:
     <<: *defaults
@@ -242,6 +250,9 @@ workflows:
           requires:
             - build
       - lint:
+          requires:
+            - build
+      - format:
           requires:
             - build
       - types:
