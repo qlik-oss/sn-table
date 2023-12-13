@@ -14,7 +14,7 @@ describe("<ColumnAdjuster />", () => {
     render(
       <TestWithProviders interactions={interactions}>
         <ColumnAdjusterWrapper column={columns[0]} isLastColumn={false} />
-      </TestWithProviders>
+      </TestWithProviders>,
     );
     return screen.queryByTestId(COLUMN_ADJUSTER_CLASS) as HTMLElement;
   };

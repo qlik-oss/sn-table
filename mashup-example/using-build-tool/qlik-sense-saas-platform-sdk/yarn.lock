@@ -112,17 +112,17 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.18.20.tgz#786c5f41f043b07afb1af37683d7c33668858f6d"
   integrity sha512-kTdfRcSiDfQca/y9QIkng02avJ+NCaQvrMejlsB3RRv5sE9rRoeBPISaZpKxHELzRxZyLvNts1P27W3wV+8geQ==
 
-"@nebula.js/sn-table@2.7.0":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/sn-table/-/sn-table-2.7.0.tgz#e02375ff906104cffff5fdb957cc8fc73273309a"
-  integrity sha512-k6+xBzJUiWj6eG+WyW+rDvor+aG0lPsIlLnCl8/CooUAGqYOXwgzfv4YqOXfcRquYcgJQYkp8KATy3wtyprxJw==
+"@nebula.js/sn-table@2.9.0":
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/sn-table/-/sn-table-2.9.0.tgz#7620213e1ad82c07d378885c9e8ac93870c2e7f4"
+  integrity sha512-tCwj2JPoYwinjWE5G6ZFHUHxI554kM4sUq/ep5Y34Jy+69cq7L0rCLP6rfdbL+cZ3+K0P2MNomV9FhKu3iKbAg==
 
-"@nebula.js/stardust@4.6.2":
-  version "4.6.2"
-  resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-4.6.2.tgz#96846dfaa5e28206876bbadc48926e7c5db041e7"
-  integrity sha512-mmd565pMlohCT+/bdlyrz9fC9owFGVLaZwil4uya+5aSiYTgMANqzYoiKhXA0lWlwLHcHw4JPlKtOCQOJb3K1g==
+"@nebula.js/stardust@4.9.0":
+  version "4.9.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-4.9.0.tgz#d3f1e171d684d3a8e8b73a4f316d188ca45e8e7d"
+  integrity sha512-4ASnZI8KLBxT3cBrvctQyQQZZmYuyV5zMErYRDR9si9CDa/toHuvzVRvX/IKOWbw3QNX3eiStcF8JWR5NRZLug==
   dependencies:
-    "@types/qlik-engineapi" "12.67.15"
+    "@types/qlik-engineapi" "12.67.16"
 
 "@qlik/sdk@0.25.0":
   version "0.25.0"
@@ -146,10 +146,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.9.tgz#02d013de7058cea16d36168ef2fc653464cfbad4"
   integrity sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==
 
-"@types/qlik-engineapi@12.67.15":
-  version "12.67.15"
-  resolved "https://registry.yarnpkg.com/@types/qlik-engineapi/-/qlik-engineapi-12.67.15.tgz#ff28a286c7c6f8520323b7981bf7c7f756fe6aaa"
-  integrity sha512-y+uAO2gbz1LQJZIl2pEf4OLzr1Xdurs6thsES+O+8Vbar/RtKxdvOVCASpOXp4JHaXw0VhjZyr/zAs/qdtvBzg==
+"@types/qlik-engineapi@12.67.16":
+  version "12.67.16"
+  resolved "https://registry.yarnpkg.com/@types/qlik-engineapi/-/qlik-engineapi-12.67.16.tgz#3c4d3c6282275cfd7ce2efb393098bb6d0a82caf"
+  integrity sha512-NiwMX6zrV162lRcupTdrgoT2YtKZy97zJ70rRGLdJTWcaMOWUgAhM1ufzhmp3ir1KlNArI4Ds8ojfxA80SpwKQ==
 
 buffer-equal-constant-time@1.0.1:
   version "1.0.1"

@@ -9,7 +9,7 @@ const useTableStyling = (
   theme: ExtendedTheme,
   tableData: TableData,
   rootElement: HTMLElement,
-  featureFlags: FeatureFlags
+  featureFlags: FeatureFlags,
 ) => {
   const styling = useMemo(() => {
     const totalsAtTop = tableData.totalsPosition.atTop;

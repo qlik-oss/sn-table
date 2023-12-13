@@ -52,7 +52,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
   const isNewHeadCellMenuEnabled = useContextSelector(
     TableContext,
-    (value) => value.featureFlags.isNewHeadCellMenuEnabled
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled,
   );
 
   const column = columns[index];

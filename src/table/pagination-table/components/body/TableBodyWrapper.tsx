@@ -15,7 +15,7 @@ import { StyledBody, StyledBodyRow } from "./styles";
 const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: TableBodyWrapperProps) => {
   const { rows, columns, paginationNeeded, totalsPosition } = useContextSelector(
     TableContext,
-    (value) => value.tableData
+    (value) => value.tableData,
   );
   const {
     selectionsAPI,
@@ -32,7 +32,7 @@ const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: Table
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
   const isNewHeadCellMenuEnabled = useContextSelector(
     TableContext,
-    (value) => value.featureFlags.isNewHeadCellMenuEnabled
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled,
   );
   // Both active and select conditions need to be true to make selections. See stardust API for more info
   const isSelectionsEnabled = !!interactions.active && !!interactions.select;
@@ -40,9 +40,9 @@ const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: Table
   const columnRenderers = useMemo(
     () =>
       JSON.parse(columnsStylingIDsJSON).map((stylingIDs: string[]) =>
-        getCellRenderer(!!stylingIDs.length, isSelectionsEnabled)
+        getCellRenderer(!!stylingIDs.length, isSelectionsEnabled),
       ),
-    [columnsStylingIDsJSON, isSelectionsEnabled]
+    [columnsStylingIDsJSON, isSelectionsEnabled],
   );
   const hoverEffect = !!getStylingComponent(layout)?.content?.hoverEffect;
 

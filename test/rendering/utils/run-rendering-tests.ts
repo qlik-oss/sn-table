@@ -1,3 +1,4 @@
+/* eslint-disable playwright/no-conditional-in-test */
 import serve, { NebulaServer } from "@nebula.js/cli-serve";
 import { expect, test } from "@playwright/test";
 import fs from "fs";
@@ -48,11 +49,13 @@ const runRenderingTests = (theme: object, themeType: string, language: string) =
     const fixturePath = `./${file}&theme=${themeType}&language=${language}`;
 
     // Create test case per testing fixture file
+    // eslint-disable-next-line playwright/valid-title
     test(name, async ({ page }) => {
       playwright = createPlaywright(page);
       // Render chart based on testing fixture file
       // in Nebula serve using Enigma mocker
       const renderUrl = route.renderFixture(fixturePath);
+      // eslint-disable-next-line no-console
       console.log({ renderUrl });
       // Open page in Nebula which renders fixture
       await playwright.open(renderUrl);
