@@ -102,7 +102,7 @@ export const getBaseStyling = (
   objetName: string,
   theme: ExtendedTheme,
   styleObj: HeaderStyling | ContentStyling | undefined,
-  bottomSeparatingBorder = false
+  bottomSeparatingBorder = false,
 ): GeneratedStyling => {
   const fontFamily = theme.getStyle("object", `straightTableV2.${objetName}`, "fontFamily");
   const color = theme.getStyle("object", `straightTableV2.${objetName}`, "color");
@@ -132,7 +132,7 @@ export function getHeaderStyle(
   layout: TableLayout,
   theme: ExtendedTheme,
   bottomSeparatingBorder: boolean,
-  featureFlags?: FeatureFlags
+  featureFlags?: FeatureFlags,
 ): GeneratedStyling {
   const header = getStylingComponent(layout)?.header;
   const headerStyle = getBaseStyling("header", theme, header, bottomSeparatingBorder);
@@ -147,11 +147,11 @@ export function getHeaderStyle(
   if (featureFlags?.isNewHeadCellMenuEnabled) {
     headerStyle.hoverBackground = getHoverColor(
       headerStyle.background ?? COLORING.WHITE,
-      HEADER_MENU_COLOR_MODIFIER.hover
+      HEADER_MENU_COLOR_MODIFIER.hover,
     );
     headerStyle.activeBackground = getHoverColor(
       headerStyle.background ?? COLORING.WHITE,
-      HEADER_MENU_COLOR_MODIFIER.active
+      HEADER_MENU_COLOR_MODIFIER.active,
     );
   }
 
@@ -172,7 +172,7 @@ export function getBodyStyle(
   layout: TableLayout,
   theme: ExtendedTheme,
   rowsLength?: number,
-  rootElement?: HTMLElement
+  rootElement?: HTMLElement,
 ): GeneratedStyling {
   const content = getStylingComponent(layout)?.content;
   const contentStyle = getBaseStyling("content", theme, content);
@@ -225,7 +225,7 @@ export function getBodyStyle(
     ? getColor(
         getAutoFontColor(background),
         theme,
-        isPaletteColorSet(colorFromLayout) ? colorFromLayout : colorFromTheme
+        isPaletteColorSet(colorFromLayout) ? colorFromLayout : colorFromTheme,
       ) // case 1 or 3 or 4
     : ""; // case 2;
 
@@ -275,7 +275,7 @@ export function getTotalsStyle(layout: TableLayout, theme: ExtendedTheme, totals
 export function getColumnStyle(
   styling: CellStyle,
   qAttrExps: EngineAPI.INxAttributeExpressionValues | undefined,
-  stylingIDs: string[]
+  stylingIDs: string[],
 ): CellStyle {
   const columnColors: Record<string, string> = {};
   qAttrExps?.qValues?.forEach((val, i) => {
