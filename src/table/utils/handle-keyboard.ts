@@ -196,7 +196,7 @@ export const handleTotalKeyDown = (
       break;
     }
     case KeyCodes.TAB:
-      bodyTabHelper({ evt, rootElement, setFocusedCellCoord });
+      bodyTabHelper({ evt, rootElement, setFocusedCellCoord, isNewHeadCellMenuEnabled });
       break;
     case KeyCodes.C: {
       preventDefaultBehavior(evt);
@@ -278,7 +278,15 @@ export const handleBodyKeyDown = ({
       break;
     // Tab (+ shift): in selection mode and keyboard enabled, focus on selection toolbar
     case KeyCodes.TAB:
-      bodyTabHelper({ evt, rootElement, setFocusedCellCoord, keyboard, isSelectionMode, paginationNeeded });
+      bodyTabHelper({
+        evt,
+        rootElement,
+        setFocusedCellCoord,
+        keyboard,
+        isSelectionMode,
+        paginationNeeded,
+        isNewHeadCellMenuEnabled,
+      });
       break;
     // Ctrl + c: copy cell value
     case KeyCodes.C:

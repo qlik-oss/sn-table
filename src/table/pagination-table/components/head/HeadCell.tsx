@@ -6,7 +6,6 @@ import HeadCellContent from "../../../components/head/HeadCellContent";
 import { FullSortDirection } from "../../../constants";
 import { TableContext, useContextSelector } from "../../../context";
 import { BORDER_WIDTH, PADDING } from "../../../styling-defaults";
-import { areTabStopsEnabled } from "../../../utils/accessibility-utils";
 import { handleHeadKeyDown } from "../../../utils/handle-keyboard";
 import { handleMouseDownToFocusHead } from "../../../utils/handle-mouse";
 import { StyledHeadCell } from "./styles";
@@ -36,6 +35,10 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
   const isNewHeadCellMenuEnabled = useContextSelector(
     TableContext,
     (value) => value.featureFlags.isNewHeadCellMenuEnabled,
+  );
+  const isThisCellFocused = useContextSelector(
+    TableContext,
+    ({ focusedCellCoord: [x, y] }) => x === 0 && y === columnIndex,
   );
 
   const isInteractionEnabled = !!interactions.active && !isSelectionMode;
@@ -74,7 +77,7 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
   const handleOpenMenu = () => setOpen(true);
 
   const newHeadCellRelatedLogic = isNewHeadCellMenuEnabled ? column.colIdx === 0 : false;
-  const tabIndex = newHeadCellRelatedLogic && isInteractionEnabled && areTabStopsEnabled(keyboard) ? 0 : -1;
+  const tabIndex = newHeadCellRelatedLogic && !keyboard.enabled && isThisCellFocused && isInteractionEnabled ? 0 : -1;
 
   return (
     <StyledHeadCell

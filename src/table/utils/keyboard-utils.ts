@@ -140,6 +140,7 @@ interface BodyTabHelperProps {
   keyboard?: stardust.Keyboard;
   isSelectionMode?: boolean;
   paginationNeeded?: boolean;
+  isNewHeadCellMenuEnabled?: boolean;
 }
 
 /**
@@ -153,13 +154,14 @@ export const bodyTabHelper = ({
   keyboard,
   isSelectionMode,
   paginationNeeded,
+  isNewHeadCellMenuEnabled,
 }: BodyTabHelperProps) => {
   const tabToToolbar = keyboard?.enabled && isSelectionMode && (evt.shiftKey || (!evt.shiftKey && !paginationNeeded));
 
   if (tabToToolbar) {
     preventDefaultBehavior(evt);
     focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
-  } else if (evt.shiftKey) {
+  } else if (evt.shiftKey && !isNewHeadCellMenuEnabled) {
     const headCells = rootElement.querySelectorAll(".sn-table-head-cell");
     const lastIndex = headCells.length - 1;
 
