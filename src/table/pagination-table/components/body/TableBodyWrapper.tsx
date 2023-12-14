@@ -64,7 +64,14 @@ const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: Table
             const { id } = column;
             const cell = row[id] as Cell;
             const CellRenderer = columnRenderers[columnIndex];
-            const tabIndex = rowIndex === 0 && columnIndex === 0 && !totalsPosition.atTop && !keyboard.enabled ? 0 : -1;
+            const tabIndex =
+              !isNewHeadCellMenuEnabled &&
+              rowIndex === 0 &&
+              columnIndex === 0 &&
+              !totalsPosition.atTop &&
+              !keyboard.enabled
+                ? 0
+                : -1;
             const handleKeyDown = (evt: React.KeyboardEvent) => {
               handleBodyKeyDown({
                 evt,
