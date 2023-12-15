@@ -1,3 +1,11 @@
+## [2.9.1](https://github.com/qlik-oss/sn-table/compare/v2.9.0...v2.9.1) (2023-12-15)
+
+### Bug Fixes
+
+- correct focus on table when keyboard navigation and NewHeadCell is turned on ([#1107](https://github.com/qlik-oss/sn-table/issues/1107)) ([23db950](https://github.com/qlik-oss/sn-table/commit/23db950d49534de29eaa2f736598dd1888ae4e23))
+- new `<HeadCellMenu />` a11y adaptation ([#1096](https://github.com/qlik-oss/sn-table/issues/1096)) ([f6f2d03](https://github.com/qlik-oss/sn-table/commit/f6f2d037ee85cb346b06a1adb8474e9c5b75ae1e))
+- use capital Percentage while accessing column size enum value ([#1109](https://github.com/qlik-oss/sn-table/issues/1109)) ([c18b5e2](https://github.com/qlik-oss/sn-table/commit/c18b5e2ef5fb1899e6ea0d97e2eecf794c02b881))
+
 # [2.9.0](https://github.com/qlik-oss/sn-table/compare/v2.8.0...v2.9.0) (2023-11-30)
 
 ### Features
