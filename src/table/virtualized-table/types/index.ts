@@ -103,6 +103,7 @@ export interface ItemData {
   bodyStyle: BodyStyle;
   isHoverEnabled: boolean;
   maxLineCount: number;
+  showImageArray: any;
 }
 
 export type SetCellSize = (

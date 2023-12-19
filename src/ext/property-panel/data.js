@@ -48,6 +48,14 @@ const columnExpressionItems = {
       },
     ],
   },
+  imageUrlBoolean: {
+    type: "boolean",
+    component: "checkbox",
+    ref: "qDef.imageurlBool",
+    translation: "Represent as image",
+    defaultValue: false,
+    tid: "imageUrl",
+  },
 };
 
 const textAlignItems = {

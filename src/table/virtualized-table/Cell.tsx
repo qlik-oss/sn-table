@@ -17,7 +17,7 @@ interface CellProps {
 }
 
 const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
-  const { rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount } = data;
+  const { rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount, showImageArray } = data;
 
   const rowIsHovered = useContextSelector(TableContext, (value) => value.hoverIndex === rowIndex);
   const setHoverIndex = useContextSelector(TableContext, (value) => value.setHoverIndex);
@@ -25,7 +25,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
 
   const cell = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
-
+  const showImage = showImageArray[columnIndex].imageurlBool;
   const { handleMouseDown, handleMouseOver, handleMouseUp, cellSelectionState } = useSelector(cell);
 
   if (typeof cell === "object") {
@@ -64,7 +64,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
         title={interactions.passive ? cell.qText : undefined}
         {...cellId}
       >
-        <CellText wordBreak={!cell.isNumeric} lines={maxLineCount}>
+        <CellText wordBreak={!cell.isNumeric} lines={maxLineCount} image={showImage}>
           {cell.qText}
         </CellText>
       </div>

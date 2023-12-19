@@ -14,7 +14,7 @@ import { BodyProps, BodyRef, GridState, ItemData } from "./types";
 import getBodyHeight from "./utils/get-body-height";
 import getCellItemKey from "./utils/get-cell-item-key";
 
-const grdiStyle: React.CSSProperties = {
+const gridStyle: React.CSSProperties = {
   overflow: "hidden",
   /**
    * "will-change" is by default "transform" in react-window. This disables that default value,
@@ -43,6 +43,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
     overscanRowStopIndex: 0,
   });
   const isHoverEnabled = !!getStylingComponent(layout)?.content?.hoverEffect;
+  const showImageArray = layout?.qHyperCube?.qDimensionInfo;
   const { scrollHandler, verticalScrollDirection, horizontalScrollDirection } = useScrollDirection();
   const { rowCount, visibleRowCount, visibleColumnCount } = useTableCount(
     layout,
@@ -93,8 +94,8 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
   });
 
   const itemData = useMemo<ItemData>(
-    () => ({ rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount }),
-    [rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount],
+    () => ({ rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount, showImageArray }),
+    [rowsInPage, columns, bodyStyle, isHoverEnabled, maxLineCount, showImageArray],
   );
 
   const bodyHeight = getBodyHeight(rect, headerAndTotalsHeight, rowCount, estimatedRowHeight);
@@ -152,7 +153,7 @@ const Body = forwardRef<BodyRef, BodyProps>((props, ref) => {
       data-key="body"
       ref={gridRef}
       innerRef={innerForwardRef}
-      style={grdiStyle}
+      style={gridStyle}
       columnCount={layout.qHyperCube.qSize.qcx}
       columnWidth={(index) => columnWidths[index]}
       height={bodyHeight}

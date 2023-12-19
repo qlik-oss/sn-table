@@ -81,6 +81,7 @@ export interface ExtendedNxDimensionInfo extends Omit<EngineAPI.INxDimensionInfo
   qAttrExprInfo: ExtendedNxAttrExprInfo[];
   qLibraryId: string;
   columnWidth: ColumnWidth;
+  imageurlBool: boolean;
 }
 
 export interface ExtendedNxMeasureInfo extends EngineAPI.INxMeasureInfo {
