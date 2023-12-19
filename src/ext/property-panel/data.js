@@ -49,12 +49,59 @@ const columnExpressionItems = {
     ],
   },
   imageUrlBoolean: {
-    type: "boolean",
-    component: "checkbox",
+    type: 'string',
+    component: 'dropdown',
+    translation: 'Object.Table.Representation',
     ref: "qDef.imageurlBool",
-    translation: "Represent as image",
-    defaultValue: false,
     tid: "imageUrl",
+    defaultValue: 'Text',
+    options() {
+      const options = [
+        {
+          value: 'Text',
+          translation: 'Object.Table.Representation.Text',
+        },
+        {
+          value: 'Image',
+          translation: 'Object.Table.Representation.Image',
+        },
+      ];
+    return options;
+    },
+  },
+  imageSize: {
+    ref: 'qDef.representation.imageSize',
+    translation: 'Object.Table.Representation.Image.Size',
+    type: 'string',
+    component: 'dropdown',
+    defaultValue: 'fitHeight',
+    options: [
+      {
+        value: 'alwaysFit',
+        translation: 'properties.backgroundImage.sizeAlwaysFit',
+      },
+      {
+        value: 'fitWidth',
+        translation: 'properties.backgroundImage.sizeFitWidth',
+      },
+      {
+        value: 'fitHeight',
+        translation: 'properties.backgroundImage.sizeFitHeight',
+      },
+      {
+        value: 'fill',
+        translation: 'properties.backgroundImage.sizeStretch',
+      },
+    ],
+    show: (data) => data.qDef.imageurlBool === "Image",
+  },
+  imagePosition: {
+    ref: 'qDef.representation.imagePosition',
+    translation: 'Common.Position',
+    type: 'string',
+    component: 'align-matrix',
+    defaultValue: 'topCenter',
+    show: (data) => data.qDef.imageurlBool === "Image",
   },
 };
 

@@ -25,7 +25,7 @@ const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
 
   const cell = rowsInPage[rowIndex]?.[`col-${columnIndex}`];
-  const showImage = showImageArray[columnIndex].imageurlBool;
+  const showImage = showImageArray[columnIndex].imageurlBool === "Image";
   const { handleMouseDown, handleMouseOver, handleMouseUp, cellSelectionState } = useSelector(cell);
 
   if (typeof cell === "object") {
