@@ -17,7 +17,7 @@
     "types:check": "tsc --noEmit"
   },
   "dependencies": {
-    "@nebula.js/sn-table": "2.9.0",
+    "@nebula.js/sn-table": "2.9.1",
     "@nebula.js/stardust": "4.9.0",
     "enigma.js": "2.12.0"
   },
