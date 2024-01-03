@@ -149,7 +149,7 @@
     "react-dom": "18.2.0",
     "react-window": "1.8.10",
     "shx": "0.3.4",
-    "styled-components": "5.3.11",
+    "styled-components": "6.1.6",
     "stylis": "3.5.4",
     "stylis-plugin-rtl-sc": "npm:stylis-plugin-rtl@1.1.0",
     "ts-jest": "29.1.1",
