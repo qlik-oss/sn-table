@@ -31,7 +31,7 @@
     "deduplicate-packages": "yarn-deduplicate yarn.lock",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "lint": "eslint --cache .",
+    "lint": "eslint --cache --max-warnings=49 .",
     "locale:generate": "node src/locale/scripts/generate-all.mjs",
     "locale:verify": "node src/locale/tools/verify-translations.ts",
     "prepack": "./tools/prepare-sn-pack.js",
