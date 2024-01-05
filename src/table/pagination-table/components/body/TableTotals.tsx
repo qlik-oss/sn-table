@@ -41,7 +41,7 @@ const TableTotals = () => {
             className="sn-table-cell"
             tabIndex={isNewHeadCellMenuEnabled ? -1 : tabIndex}
             title={interactions.passive ? column.totalInfo : undefined}
-            onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
+            onKeyDown={(e: React.KeyboardEvent) => {
               handleTotalKeyDown(
                 e,
                 rootElement,

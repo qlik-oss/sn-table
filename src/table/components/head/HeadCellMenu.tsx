@@ -24,7 +24,7 @@ const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
     TableContext,
     (value) => value.baseProps,
   );
-  const anchorRef = useRef<HTMLElement>(null);
+  const anchorRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
   const [openListboxDropdown, setOpenListboxDropdown] = useState(false);

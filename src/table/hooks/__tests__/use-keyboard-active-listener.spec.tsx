@@ -42,8 +42,8 @@ describe("use-keyboard-active-listener", () => {
     focusedCellCoord = FIRST_HEADER_CELL_COORD;
 
     jest.spyOn(accessibilityUtils, "updateFocus").mockImplementation(() => {});
-    jest.spyOn(getElementUtils, "getCellElement").mockImplementation(() => ({}) as HTMLTableCellElement);
-    jest.spyOn(getElementUtils, "findCellWithTabStop").mockImplementation(() => ({}) as HTMLTableCellElement);
+    jest.spyOn(getElementUtils, "getCellElement").mockImplementation(() => ({}) as HTMLElement);
+    jest.spyOn(getElementUtils, "findCellWithTabStop").mockImplementation(() => ({}) as HTMLElement);
   });
 
   afterEach(() => {
