@@ -3,6 +3,7 @@ import React, { memo } from "react";
 
 import CellText from "../../../components/CellText";
 import { TableContext, useContextSelector } from "../../../context";
+import { FocusedCellCoord } from "../../../types";
 import { removeTabAndFocusCell } from "../../../utils/accessibility-utils";
 import { handleTotalKeyDown } from "../../../utils/handle-keyboard";
 import { StyledTotalsCell } from "./styles";
@@ -27,7 +28,7 @@ const TableTotals = () => {
   return (
     <TableRow className="sn-table-row sn-table-totals-row">
       {columns.map((column, columnIndex) => {
-        const cellCoord: [number, number] = [atTop ? 1 : rows.length + 1, columnIndex];
+        const cellCoord: FocusedCellCoord = [atTop ? 1 : rows.length + 1, columnIndex];
         const tabIndex = atTop && columnIndex === 0 && !keyboard.enabled ? 0 : -1;
 
         return (

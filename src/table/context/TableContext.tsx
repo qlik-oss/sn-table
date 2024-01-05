@@ -6,7 +6,7 @@ import { FIRST_HEADER_CELL_COORD } from "../constants";
 import useColumnWidths from "../hooks/use-column-widths";
 import useSelectionReducer from "../hooks/use-selection-reducer";
 import useTableStyling from "../hooks/use-table-styling";
-import { ContextProviderProps, ContextValue } from "../types";
+import { ContextProviderProps, ContextValue, FocusedCellCoord } from "../types";
 import { createSelectorProvider } from "./createSelectorProvider";
 
 // In order to not have typing issues when using properties on the context,
@@ -44,7 +44,7 @@ export const TableContextProvider = ({
 }: ContextProviderProps) => {
   const featureFlags = { isNewHeadCellMenuEnabled };
   const [headRowHeight, setHeadRowHeight] = useState(0);
-  const [focusedCellCoord, setFocusedCellCoord] = useState<[number, number]>(cellCoordMock || FIRST_HEADER_CELL_COORD);
+  const [focusedCellCoord, setFocusedCellCoord] = useState<FocusedCellCoord>(cellCoordMock || FIRST_HEADER_CELL_COORD);
   const [selectionState, selectionDispatch] = useSelectionReducer(tableData.rows, selectionsAPI);
   const [hoverIndex, setHoverIndex] = useState(-1);
   const styling = useTableStyling(layout, theme, tableData, rootElement, featureFlags);

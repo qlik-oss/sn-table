@@ -2,7 +2,14 @@
 import { preventDefaultBehavior } from "@qlik/nebula-table-utils/lib/utils";
 import React from "react";
 import { FocusTypes, KeyCodes, SelectionActions } from "../constants";
-import { HandleBodyKeyDownProps, HandleHeadKeyDownProps, HandleWrapperKeyDownProps, SelectionDispatch } from "../types";
+import {
+  FocusedCellCoord,
+  HandleBodyKeyDownProps,
+  HandleHeadKeyDownProps,
+  HandleWrapperKeyDownProps,
+  SelectionDispatch,
+  SetFocusedCellCoord,
+} from "../types";
 import { focusBodyFromHead, moveFocusWithArrow, updateFocus } from "./accessibility-utils";
 import copyCellValue from "./copy-utils";
 import { findCellWithTabStop, getNextMenuItem, getPreviousMenuItem } from "./get-element-utils";
@@ -20,10 +27,9 @@ import {
 /**
  * handles ArrowDown and ArrowUp events for the head cell menu (move focus)
  */
-export const handleHeadCellMenuKeyDown = (event: React.KeyboardEvent<HTMLLIElement>) => {
-  const { key, target } = event;
-  const currentFocusItem = document.activeElement ?? (target as HTMLElement);
-  // The rest key are handled by handleKeyDown in MUIMenuList
+export const handleHeadCellMenuKeyDown = (event: React.KeyboardEvent) => {
+  const { key, currentTarget } = event;
+  const currentFocusItem = document.activeElement ?? (currentTarget as Element); // The rest key are handled by handleKeyDown in MUIMenuList
   if (key === KeyCodes.DOWN || key === KeyCodes.UP) {
     const getNewFocusItem = (currentItem: Element) =>
       key === KeyCodes.DOWN ? getNextMenuItem(currentItem) : getPreviousMenuItem(currentItem);
@@ -170,8 +176,8 @@ export const handleHeadKeyDown = ({
 export const handleTotalKeyDown = (
   evt: React.KeyboardEvent,
   rootElement: HTMLElement,
-  cellCoord: [number, number],
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
+  cellCoord: FocusedCellCoord,
+  setFocusedCellCoord: SetFocusedCellCoord,
   isNewHeadCellMenuEnabled: boolean,
   isSelectionMode = false,
 ) => {
@@ -189,7 +195,7 @@ export const handleTotalKeyDown = (
       preventDefaultBehavior(evt);
       const focusType = getFocusType(cellCoord, evt, isNewHeadCellMenuEnabled);
       if (focusType === FocusTypes.FOCUS) {
-        updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLTableCellElement });
+        updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLElement });
       }
 
       moveFocusWithArrow({ evt, rootElement, cellCoord, setFocusedCellCoord, focusType });
@@ -228,7 +234,7 @@ export const handleBodyKeyDown = ({
   selectionsAPI,
   isNewHeadCellMenuEnabled,
 }: HandleBodyKeyDownProps) => {
-  if ((evt.target as HTMLTableCellElement).classList.contains("excluded")) {
+  if ((evt.target as HTMLElement).classList.contains("excluded")) {
     preventDefaultBehavior(evt);
     return;
   }

@@ -14,7 +14,7 @@ import { TableContext, useContextSelector } from "../../context";
 import useFieldSelection from "../../hooks/use-field-selection";
 import { DEFAULT_FONT_SIZE } from "../../styling-defaults";
 import { HeadCellMenuProps, MenuItemGroup } from "../../types";
-import { setFocusOnClosetColumnAdjuster } from "../../utils/accessibility-utils";
+import { setFocusOnColumnAdjuster } from "../../utils/accessibility-utils";
 import RecursiveMenuList from "./MenuList/RecursiveMenuList";
 import { HeadCellMenuWrapper, StyledMenuIconButton } from "./styles";
 
@@ -24,7 +24,7 @@ const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
     TableContext,
     (value) => value.baseProps,
   );
-  const anchorRef = useRef<HTMLDivElement>(null);
+  const anchorRef = useRef<HTMLElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
   const [openMenuDropdown, setOpenMenuDropdown] = useState(false);
   const [openListboxDropdown, setOpenListboxDropdown] = useState(false);
@@ -63,7 +63,7 @@ const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
               {
                 id: 1,
                 itemTitle: translator.get("SNTable.MenuItem.Search"),
-                onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
+                onClick: (evt: React.MouseEvent) => {
                   evt.stopPropagation();
                   setOpenMenuDropdown(false);
                   setOpenListboxDropdown(true);
@@ -143,10 +143,10 @@ const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
         {
           id: 1,
           itemTitle: translator.get("SNTable.MenuItem.AdjustColumnSize"),
-          onClick: (evt: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+          onClick: (evt: React.MouseEvent) => {
             preventDefaultBehavior(evt);
             setOpenMenuDropdown(false);
-            setFocusOnClosetColumnAdjuster(anchorRef);
+            setFocusOnColumnAdjuster(anchorRef);
           },
           icon: <ColumnSize />,
           enabled: true,

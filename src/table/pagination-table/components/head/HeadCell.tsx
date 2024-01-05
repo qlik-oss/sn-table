@@ -6,6 +6,7 @@ import HeadCellContent from "../../../components/head/HeadCellContent";
 import { FullSortDirection } from "../../../constants";
 import { TableContext, useContextSelector } from "../../../context";
 import { BORDER_WIDTH, PADDING } from "../../../styling-defaults";
+import { FocusedCellCoord } from "../../../types";
 import { handleHeadKeyDown } from "../../../utils/handle-keyboard";
 import { handleMouseDownToFocusHead } from "../../../utils/handle-mouse";
 import { StyledHeadCell } from "./styles";
@@ -46,7 +47,7 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
   const ariaSort = column.isActivelySorted ? FullSortDirection[column.sortDirection] : undefined;
 
   const isLastColumn = columnIndex === columnsLength - 1;
-  const cellCoord = [0, column.pageColIdx] as [number, number];
+  const cellCoord = [0, column.pageColIdx] as FocusedCellCoord;
 
   const handleKeyDown = (evt: React.KeyboardEvent) =>
     handleHeadKeyDown({

@@ -3,7 +3,13 @@ import { COLUMN_ADJUSTER_CLASS } from "@qlik/nebula-table-utils/lib/constants";
 import React from "react";
 import { Announce } from "../../types";
 import { FIRST_BODY_CELL_COORD, FIRST_HEADER_CELL_COORD, FocusTypes } from "../constants";
-import { CellFocusProps, HandleResetFocusProps, MoveFocusWithArrowProps } from "../types";
+import {
+  CellFocusProps,
+  FocusedCellCoord,
+  HandleResetFocusProps,
+  MoveFocusWithArrowProps,
+  SetFocusedCellCoord,
+} from "../types";
 import { findCellWithTabStop, getCellCoord, getCellElement, getNextCellCoord } from "./get-element-utils";
 
 export const areTabStopsEnabled = (keyboard: stardust.Keyboard) => !keyboard.enabled || keyboard.active;
@@ -11,36 +17,32 @@ export const areTabStopsEnabled = (keyboard: stardust.Keyboard) => !keyboard.ena
 /**
  * Add the tab stop for adjuster hit area and focus that
  */
-export const setFocusOnClosetColumnAdjuster = (anchorRef: React.RefObject<HTMLDivElement>) => {
+export const setFocusOnColumnAdjuster = (anchorRef: React.RefObject<HTMLElement>) => {
   setTimeout(() => {
     const adjusterHitArea = anchorRef.current
       ?.closest(".sn-table-cell")
       ?.querySelector(`.${COLUMN_ADJUSTER_CLASS}`) as HTMLElement;
-    adjusterHitArea?.setAttribute("tabIndex", "0");
-    adjusterHitArea?.focus();
+    adjusterHitArea.setAttribute("tabIndex", "0");
+    adjusterHitArea.focus();
   }, 0);
 };
 
 /**
  * Removes the tab stop for adjuster hit area and focus the head menu button
  */
-export const focusBackToHeadCell = (
-  event: React.KeyboardEvent | React.FocusEvent,
-  isNewHeadCellMenuEnabled: boolean,
-) => {
-  const target = event.target as HTMLDivElement;
-  target.setAttribute("tabIndex", "-1");
-  const baseElement = target?.closest(".sn-table-cell");
+export const focusBackToHeadCell = (currentTarget: EventTarget & Element, isNewHeadCellMenuEnabled: boolean) => {
+  currentTarget.setAttribute("tabIndex", "-1");
+  const cellElement = currentTarget.closest(".sn-table-cell") as HTMLElement;
 
   let targetElementToFocus = null;
   if (isNewHeadCellMenuEnabled) {
-    targetElementToFocus = baseElement as HTMLDivElement;
-    targetElementToFocus?.setAttribute("tabIndex", "0");
+    targetElementToFocus = cellElement;
+    targetElementToFocus.setAttribute("tabIndex", "0");
   } else {
-    targetElementToFocus = baseElement?.querySelector(".sn-table-head-menu-button") as HTMLButtonElement;
+    targetElementToFocus = cellElement.querySelector(".sn-table-head-menu-button") as HTMLElement;
   }
 
-  targetElementToFocus?.focus();
+  targetElementToFocus.focus();
 };
 
 /**
@@ -56,7 +58,7 @@ export const updateFocus = ({ focusType, cell }: CellFocusProps) => {
       break;
     case FocusTypes.FOCUS_BUTTON:
       // eslint-disable-next-line no-case-declarations
-      const button = cell.querySelector(".sn-table-head-label") as HTMLButtonElement;
+      const button = cell.querySelector(".sn-table-head-label") as HTMLElement;
       button.focus();
       break;
     case FocusTypes.BLUR:
@@ -97,10 +99,7 @@ export const moveFocusWithArrow = ({
  * Finds the cell with tab stops and focuses that cell.
  * If no cells has focus, it focuses the first body cell instead
  */
-export const focusBodyFromHead = (
-  rootElement: HTMLElement,
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-) => {
+export const focusBodyFromHead = (rootElement: HTMLElement, setFocusedCellCoord: SetFocusedCellCoord) => {
   let cell = findCellWithTabStop(rootElement);
   const newCellCoord = cell ? getCellCoord(rootElement, cell) : FIRST_BODY_CELL_COORD;
   cell = cell || getCellElement(rootElement, FIRST_BODY_CELL_COORD);
@@ -113,9 +112,9 @@ export const focusBodyFromHead = (
  * No need for element.focus() since that is done natively when clicking.
  */
 export const removeTabAndFocusCell = (
-  newCoord: [number, number],
+  newCoord: FocusedCellCoord,
   rootElement: HTMLElement,
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
+  setFocusedCellCoord: SetFocusedCellCoord,
   keyboard: stardust.Keyboard,
 ) => {
   updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: findCellWithTabStop(rootElement) });
@@ -143,11 +142,11 @@ export const resetFocus = ({
 }: HandleResetFocusProps) => {
   updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: findCellWithTabStop(rootElement) });
   // If you have selections ongoing, you want to stay on the same column
-  const selectionCellCoord: [number, number] = [totalsPosition.atTop ? 2 : 1, focusedCellCoord[1]];
-  const defaultCellCoords: [number, number] = isNewHeadCellMenuEnabled
+  const selectionCellCoord: FocusedCellCoord = [totalsPosition.atTop ? 2 : 1, focusedCellCoord[1]];
+  const defaultCellCoords: FocusedCellCoord = isNewHeadCellMenuEnabled
     ? FIRST_HEADER_CELL_COORD
     : FIRST_BODY_CELL_COORD;
-  const cellCoord: [number, number] = isSelectionMode ? selectionCellCoord : defaultCellCoords;
+  const cellCoord = isSelectionMode ? selectionCellCoord : defaultCellCoords;
 
   if (areTabStopsEnabled(keyboard)) {
     // Only run this if updates come from inside table
@@ -178,8 +177,8 @@ export const handleFocusoutEvent = (
   shouldRefocus: React.MutableRefObject<boolean>,
   keyboard: stardust.Keyboard,
 ) => {
-  const targetElement = evt.currentTarget as HTMLDivElement;
-  const relatedTarget = evt.relatedTarget as HTMLElement;
+  const targetElement = evt.currentTarget as HTMLElement;
+  const relatedTarget = evt.relatedTarget as HTMLElement | null;
   const isInTable = targetElement.contains(relatedTarget);
   const isInHeadCellMenu = relatedTarget?.closest(".sn-table-head-menu");
   if (keyboard.enabled && !isInTable && !isInHeadCellMenu && !shouldRefocus.current) {
@@ -194,7 +193,7 @@ export const handleFocusoutEvent = (
 /**
  * Updates the announcer with current cell selection state
  */
-export const announceSelectionState = (announce: Announce, nextCell: HTMLTableCellElement, isSelectionMode = false) => {
+export const announceSelectionState = (announce: Announce, nextCell: HTMLElement, isSelectionMode = false) => {
   if (isSelectionMode) {
     const hasActiveClassName = nextCell.classList.contains("selected");
     hasActiveClassName

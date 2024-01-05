@@ -97,11 +97,14 @@ export interface ExtendedApp extends EngineAPI.IApp {
   id?: string;
 }
 
+export type FocusedCellCoord = [number, number];
+export type SetFocusedCellCoord = React.Dispatch<React.SetStateAction<FocusedCellCoord>>;
+
 export interface ContextValue {
   headRowHeight: number;
   setHeadRowHeight: React.Dispatch<React.SetStateAction<number>>;
-  focusedCellCoord: [number, number];
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  focusedCellCoord: FocusedCellCoord;
+  setFocusedCellCoord: SetFocusedCellCoord;
   selectionState: SelectionState;
   selectionDispatch: SelectionDispatch;
   hoverIndex: number;
@@ -160,8 +163,8 @@ export interface HandleWrapperKeyDownProps {
 export interface HandleHeadKeyDownProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;
-  cellCoord: [number, number];
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  cellCoord: FocusedCellCoord;
+  setFocusedCellCoord: SetFocusedCellCoord;
   isInteractionEnabled: boolean;
   handleOpenMenu?: () => void;
   isNewHeadCellMenuEnabled: boolean;
@@ -170,8 +173,8 @@ export interface HandleHeadKeyDownProps {
 export interface HandleHeadMouseDownProps {
   evt: React.MouseEvent;
   rootElement: HTMLElement;
-  cellCoord: [number, number];
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  cellCoord: FocusedCellCoord;
+  setFocusedCellCoord: SetFocusedCellCoord;
   keyboard: stardust.Keyboard;
   isInteractionEnabled: boolean;
 }
@@ -182,7 +185,7 @@ export interface BodyArrowHelperProps {
   cell: Cell;
   selectionDispatch: SelectionDispatch;
   isSelectionsEnabled: boolean;
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  setFocusedCellCoord: SetFocusedCellCoord;
   announce: Announce;
   totalsPosition: TotalsPosition;
   isSelectionMode: boolean | undefined;
@@ -195,7 +198,7 @@ export interface HandleBodyKeyDownProps {
   cell: Cell;
   selectionDispatch: SelectionDispatch;
   isSelectionsEnabled: boolean;
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  setFocusedCellCoord: SetFocusedCellCoord;
   announce: Announce;
   keyboard: stardust.Keyboard;
   totalsPosition: TotalsPosition;
@@ -206,14 +209,14 @@ export interface HandleBodyKeyDownProps {
 
 export interface CellFocusProps {
   focusType: FocusTypes;
-  cell: HTMLTableCellElement | undefined;
+  cell: HTMLElement | undefined;
 }
 
 export interface MoveFocusWithArrowProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;
-  cellCoord: [number, number];
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  cellCoord: FocusedCellCoord;
+  setFocusedCellCoord: SetFocusedCellCoord;
   focusType: FocusTypes;
   allowedRows?: {
     top: number;
@@ -222,11 +225,11 @@ export interface MoveFocusWithArrowProps {
 }
 
 export interface HandleResetFocusProps {
-  focusedCellCoord: [number, number];
+  focusedCellCoord: FocusedCellCoord;
   rootElement: HTMLElement;
   shouldRefocus: React.MutableRefObject<boolean>;
   isSelectionMode: boolean | undefined;
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  setFocusedCellCoord: SetFocusedCellCoord;
   keyboard: stardust.Keyboard;
   announce: Announce;
   totalsPosition: TotalsPosition;
@@ -238,7 +241,7 @@ export interface ContextProviderProps {
   app: EngineAPI.IApp | undefined;
   tableData: TableData;
   selectionsAPI: ExtendedSelectionAPI | undefined;
-  cellCoordMock?: [number, number];
+  cellCoordMock?: FocusedCellCoord;
   layout: TableLayout;
   model: EngineAPI.IGenericObject;
   translator: stardust.Translator;
@@ -310,7 +313,7 @@ export interface HeadCellMenuItem {
   icon: React.ReactElement;
   itemTitle: string;
   enabled: boolean;
-  onClick?: (evt: React.MouseEvent<HTMLLIElement>) => void;
+  onClick?: (evt: React.MouseEvent) => void;
   subMenus?: MenuItemGroup[];
 }
 

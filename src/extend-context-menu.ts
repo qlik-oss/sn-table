@@ -3,9 +3,9 @@ import { onContextMenu } from "@nebula.js/stardust";
 import copyCellValue from "./table/utils/copy-utils";
 
 export default function extendContextMenu() {
-  onContextMenu?.((menu: any, event: any) => {
-    event.target &&
-      event.target.closest(".sn-table-cell") &&
+  onContextMenu?.((menu: any, event: Event) => {
+    const target = event.target as HTMLElement;
+    target?.closest(".sn-table-cell") &&
       menu.addItem({
         translation: "contextMenu.copyCellValue",
         icon: "lui-icon lui-icon--copy",

@@ -42,14 +42,14 @@ describe("accessibility-utils", () => {
   afterEach(() => jest.clearAllMocks());
 
   describe("focusBackToHeadCell", () => {
-    let evt: React.KeyboardEvent;
+    let currentTarget: EventTarget & Element;
     let eventCell: HTMLTableCellElement;
     let targetCell: HTMLTableCellElement;
     let baseElement: HTMLTableCellElement;
     let isNewHeadCellMenuEnabled: boolean;
 
     const triggerFunction = () => {
-      accessibilityUtils.focusBackToHeadCell(evt, isNewHeadCellMenuEnabled);
+      accessibilityUtils.focusBackToHeadCell(currentTarget, isNewHeadCellMenuEnabled);
     };
 
     beforeEach(() => {
@@ -66,9 +66,7 @@ describe("accessibility-utils", () => {
         closest: jest.fn().mockReturnValue(baseElement),
         setAttribute: jest.fn(),
       } as unknown as HTMLTableCellElement;
-      evt = {
-        target: eventCell,
-      } as unknown as React.KeyboardEvent;
+      currentTarget = eventCell;
       rootElement = {
         getElementsByClassName: () => [cell, cell],
       } as unknown as HTMLDivElement;
