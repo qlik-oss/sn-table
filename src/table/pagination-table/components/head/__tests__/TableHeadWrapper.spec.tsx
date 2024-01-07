@@ -50,8 +50,8 @@ describe("<TableHeadWrapper />", () => {
     expect(queryByText(tableData.columns[0].label)).toBeVisible();
     expect(queryByText(tableData.columns[1].label)).toBeVisible();
 
-    const firstColumn = getByText(tableData.columns[0].label).closest("th") as HTMLTableCellElement;
-    const secondColumn = getByText(tableData.columns[1].label).closest("th") as HTMLTableCellElement;
+    const firstColumn = getByText(tableData.columns[0].label).closest("th") as HTMLElement;
+    const secondColumn = getByText(tableData.columns[1].label).closest("th") as HTMLElement;
     expect(firstColumn.getAttribute("scope")).toBe("col");
     expect(secondColumn.getAttribute("scope")).toBe("col");
     expect(firstColumn.getAttribute("aria-sort")).toBe("ascending");
@@ -70,8 +70,8 @@ describe("<TableHeadWrapper />", () => {
     layout.qHyperCube.qEffectiveInterColumnSortOrder = [1, 0];
 
     const { getByText } = renderTableHead();
-    const firstColQuery = getByText(tableData.columns[0].label).closest("th") as HTMLTableCellElement;
-    const secondColQuery = getByText(tableData.columns[1].label).closest("th") as HTMLTableCellElement;
+    const firstColQuery = getByText(tableData.columns[0].label).closest("th") as HTMLElement;
+    const secondColQuery = getByText(tableData.columns[1].label).closest("th") as HTMLElement;
 
     expect(firstColQuery.getAttribute("aria-sort")).toBeNull();
     expect(secondColQuery.getAttribute("aria-sort")).toBe("ascending");

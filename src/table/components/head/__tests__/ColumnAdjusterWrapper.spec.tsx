@@ -16,7 +16,7 @@ describe("<ColumnAdjuster />", () => {
         <ColumnAdjusterWrapper column={columns[0]} isLastColumn={false} />
       </TestWithProviders>,
     );
-    return screen.queryByTestId(COLUMN_ADJUSTER_CLASS) as HTMLElement;
+    return screen.queryByTestId(COLUMN_ADJUSTER_CLASS);
   };
 
   beforeEach(() => {

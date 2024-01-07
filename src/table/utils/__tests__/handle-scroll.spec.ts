@@ -113,7 +113,7 @@ describe("handle-scroll", () => {
     let rowHeight: number;
     let scrollTo: () => void;
     let cellCoord: number[];
-    let rootElement: HTMLDivElement;
+    let rootElement: HTMLElement;
 
     beforeEach(() => {
       rowHeight = 100;
@@ -121,7 +121,7 @@ describe("handle-scroll", () => {
       cellCoord = [0, 0];
       rootElement = {
         getElementsByClassName: () => [{}],
-      } as unknown as HTMLDivElement;
+      } as unknown as HTMLElement;
     });
 
     it("should not do anything when rootElement is not setup yet", () => {
@@ -133,7 +133,7 @@ describe("handle-scroll", () => {
       cellCoord = [1, 0];
       rootElement = {
         getElementsByClassName: () => [{ scrollTo }],
-      } as unknown as HTMLDivElement;
+      } as unknown as HTMLElement;
 
       handleNavigateTop(cellCoord, rootElement);
       expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "auto" });
@@ -162,7 +162,7 @@ describe("handle-scroll", () => {
             return { getElementsByClassName: () => [rowCell] };
           });
         },
-      } as unknown as HTMLDivElement;
+      } as unknown as HTMLElement;
       // targetOffsetTop = tableContainer.current.scrollTop - cell.offsetHeight - tableHead.offsetHeight;
       // 700 - 100 - 128 = 472 => so our scrollTo function is called with 472
       const targetOffsetTop = 472;

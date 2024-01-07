@@ -21,9 +21,9 @@ export const setFocusOnColumnAdjuster = (anchorRef: React.RefObject<HTMLElement>
   setTimeout(() => {
     const adjusterHitArea = anchorRef.current
       ?.closest(".sn-table-cell")
-      ?.querySelector(`.${COLUMN_ADJUSTER_CLASS}`) as HTMLElement;
-    adjusterHitArea.setAttribute("tabIndex", "0");
-    adjusterHitArea.focus();
+      ?.querySelector<HTMLElement>(`.${COLUMN_ADJUSTER_CLASS}`);
+    adjusterHitArea?.setAttribute("tabIndex", "0");
+    adjusterHitArea?.focus();
   }, 0);
 };
 
@@ -32,17 +32,17 @@ export const setFocusOnColumnAdjuster = (anchorRef: React.RefObject<HTMLElement>
  */
 export const focusBackToHeadCell = (currentTarget: EventTarget & Element, isNewHeadCellMenuEnabled: boolean) => {
   currentTarget.setAttribute("tabIndex", "-1");
-  const cellElement = currentTarget.closest(".sn-table-cell") as HTMLElement;
+  const cellElement = currentTarget.closest<HTMLElement>(".sn-table-cell");
 
   let targetElementToFocus = null;
   if (isNewHeadCellMenuEnabled) {
     targetElementToFocus = cellElement;
-    targetElementToFocus.setAttribute("tabIndex", "0");
+    targetElementToFocus?.setAttribute("tabIndex", "0");
   } else {
-    targetElementToFocus = cellElement.querySelector(".sn-table-head-menu-button") as HTMLElement;
+    targetElementToFocus = cellElement?.querySelector<HTMLElement>(".sn-table-head-menu-button");
   }
 
-  targetElementToFocus.focus();
+  targetElementToFocus?.focus();
 };
 
 /**
@@ -58,8 +58,8 @@ export const updateFocus = ({ focusType, cell }: CellFocusProps) => {
       break;
     case FocusTypes.FOCUS_BUTTON:
       // eslint-disable-next-line no-case-declarations
-      const button = cell.querySelector(".sn-table-head-label") as HTMLElement;
-      button.focus();
+      const button = cell.querySelector<HTMLElement>(".sn-table-head-label");
+      button?.focus();
       break;
     case FocusTypes.BLUR:
       cell.blur();

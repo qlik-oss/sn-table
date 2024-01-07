@@ -266,7 +266,7 @@ describe("accessibility-utils", () => {
       const tmpCell = global.document.createElement("td");
       tmpCell?.classList.add("selected");
 
-      cell = { ...cell, classList: tmpCell?.classList, textContent: "#something" } as HTMLTableCellElement;
+      cell = { ...cell, classList: tmpCell?.classList, textContent: "#something" } as HTMLElement;
       const row = { getElementsByClassName: () => [cell, cell] };
       rootElement = {
         getElementsByClassName: () => [row, row],

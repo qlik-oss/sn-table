@@ -199,9 +199,9 @@ describe("handle-keyboard", () => {
       isNewHeadCellMenuEnabled = false;
       handleOpenMenu = jest.fn();
       jest.spyOn(accessibilityUtils, "focusBodyFromHead").mockImplementation(() => {});
-      jest.spyOn(accessibilityUtils, "moveFocusWithArrow").mockImplementation(() => ({}) as HTMLTableCellElement);
+      jest.spyOn(accessibilityUtils, "moveFocusWithArrow").mockImplementation(() => ({}) as HTMLElement);
       jest.spyOn(accessibilityUtils, "updateFocus").mockImplementation(() => {});
-      jest.spyOn(getElementUtils, "findCellWithTabStop").mockImplementation(() => ({}) as HTMLTableCellElement);
+      jest.spyOn(getElementUtils, "findCellWithTabStop").mockImplementation(() => ({}) as HTMLElement);
       jest.spyOn(keyboardUtils, "headTabHelper").mockImplementation(() => {});
     });
 
@@ -333,7 +333,7 @@ describe("handle-keyboard", () => {
         target: {
           blur: jest.fn(),
           setAttribute: jest.fn(),
-        } as unknown as HTMLElement,
+        },
       } as unknown as React.KeyboardEvent;
       cellCoord = [1, 1];
       rootElement = {
@@ -343,7 +343,7 @@ describe("handle-keyboard", () => {
       } as unknown as HTMLElement;
       setFocusedCellCoord = jest.fn();
       isSelectionMode = false;
-      jest.spyOn(accessibilityUtils, "moveFocusWithArrow").mockImplementation(() => ({}) as HTMLTableCellElement);
+      jest.spyOn(accessibilityUtils, "moveFocusWithArrow").mockImplementation(() => ({}) as HTMLElement);
       jest.spyOn(accessibilityUtils, "updateFocus").mockImplementation(() => {});
       jest.spyOn(keyboardUtils, "bodyTabHelper").mockImplementation(() => {});
     });
@@ -469,7 +469,7 @@ describe("handle-keyboard", () => {
           classList: {
             contains: () => isExcluded,
           },
-        } as unknown as HTMLElement,
+        },
       } as unknown as React.KeyboardEvent;
       rootElement = {
         getElementsByClassName: () => [

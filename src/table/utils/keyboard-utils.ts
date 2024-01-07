@@ -165,6 +165,6 @@ export const bodyTabHelper = ({
     const headCells = rootElement.querySelectorAll(".sn-table-head-cell");
     const lastIndex = headCells.length - 1;
 
-    setFocusedCellCoord([0, lastIndex] as FocusedCellCoord);
+    setFocusedCellCoord([0, lastIndex]);
   }
 };

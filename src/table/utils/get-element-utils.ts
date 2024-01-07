@@ -57,7 +57,7 @@ export const getCellElement = (rootElement: HTMLElement, cellCoord: FocusedCellC
   ] as HTMLElement;
 
 export const findCellWithTabStop = (rootElement: HTMLElement) =>
-  rootElement.querySelector("td[tabindex='0'], th[tabindex='0']") as HTMLElement;
+  rootElement.querySelector<HTMLElement>("td[tabindex='0'], th[tabindex='0']");
 
 export const getNextMenuItem = (currentFocus: Element): Element | undefined => {
   const nextItem = currentFocus.nextElementSibling;

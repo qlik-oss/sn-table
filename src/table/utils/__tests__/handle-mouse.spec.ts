@@ -7,8 +7,8 @@ import * as getElementUtils from "../get-element-utils";
 import { getSelectionMouseHandlers, handleMouseDownToFocusBody, handleMouseDownToFocusHead } from "../handle-mouse";
 
 describe("handle-mouse", () => {
-  const rootElement = {} as unknown as HTMLDivElement;
-  const cellElement = { focus: () => undefined, setAttribute: () => undefined } as unknown as HTMLTableCellElement;
+  const rootElement = {} as HTMLElement;
+  const cellElement = { focus: () => undefined, setAttribute: () => undefined } as unknown as HTMLElement;
   let keyboard = {} as unknown as stardust.Keyboard;
   let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   let evt: React.MouseEvent;

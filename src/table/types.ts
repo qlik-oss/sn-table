@@ -209,7 +209,7 @@ export interface HandleBodyKeyDownProps {
 
 export interface CellFocusProps {
   focusType: FocusTypes;
-  cell: HTMLElement | undefined;
+  cell: HTMLElement | null | undefined;
 }
 
 export interface MoveFocusWithArrowProps {

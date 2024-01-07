@@ -132,7 +132,7 @@ export const handleHeadKeyDown = ({
         focusBodyFromHead(rootElement, setFocusedCellCoord);
       } else {
         if (isNewHeadCellMenuEnabled) {
-          updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLTableCellElement });
+          updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLElement });
         }
         moveFocusWithArrow({
           evt,

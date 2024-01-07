@@ -1,15 +1,15 @@
 import { findCellWithTabStop, getNextCellCoord } from "../get-element-utils";
 
 describe("get-element-utils", () => {
-  let cell: HTMLTableCellElement | undefined;
+  let cell: HTMLElement | undefined;
   let rootElement: HTMLElement;
 
   beforeEach(() => {
-    cell = { focus: jest.fn(), blur: jest.fn(), setAttribute: jest.fn() } as unknown as HTMLTableCellElement;
+    cell = { focus: jest.fn(), blur: jest.fn(), setAttribute: jest.fn() } as unknown as HTMLElement;
     rootElement = {
       getElementsByClassName: () => [{ getElementsByClassName: () => [cell] }],
       querySelector: () => cell,
-    } as unknown as HTMLDivElement;
+    } as unknown as HTMLElement;
   });
 
   afterEach(() => jest.clearAllMocks());
@@ -27,30 +27,30 @@ describe("get-element-utils", () => {
           if ((cell?.tagName === "TD" || cell?.tagName === "TH") && cell?.getAttribute("tabIndex") === "0") return cell;
           return null;
         },
-      } as unknown as HTMLDivElement;
+      } as unknown as HTMLElement;
     });
 
     it("should return active td element", () => {
-      cell = elementCreator("td", "0") as HTMLTableCellElement;
+      cell = elementCreator("td", "0");
 
       const cellElement = findCellWithTabStop(rootElement);
 
       expect(cellElement).not.toBeNull();
-      expect(cellElement.tagName).toBe("TD");
-      expect(cellElement.getAttribute("tabIndex")).toBe("0");
+      expect(cellElement?.tagName).toBe("TD");
+      expect(cellElement?.getAttribute("tabIndex")).toBe("0");
     });
 
     it("should return active th element", () => {
-      cell = elementCreator("th", "0") as HTMLTableCellElement;
+      cell = elementCreator("th", "0");
       const cellElement = findCellWithTabStop(rootElement);
 
       expect(cellElement).not.toBeNull();
-      expect(cellElement.tagName).toBe("TH");
-      expect(cellElement.getAttribute("tabIndex")).toBe("0");
+      expect(cellElement?.tagName).toBe("TH");
+      expect(cellElement?.getAttribute("tabIndex")).toBe("0");
     });
 
     it("should return null", () => {
-      cell = elementCreator("div", "-1") as HTMLTableCellElement;
+      cell = elementCreator("div", "-1");
       const cellElement = findCellWithTabStop(rootElement);
       expect(cellElement).toBeNull();
     });
