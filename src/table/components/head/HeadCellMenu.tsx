@@ -14,7 +14,7 @@ import { TableContext, useContextSelector } from "../../context";
 import useFieldSelection from "../../hooks/use-field-selection";
 import { DEFAULT_FONT_SIZE } from "../../styling-defaults";
 import { HeadCellMenuProps, MenuItemGroup } from "../../types";
-import { setFocusOnClosetColumnAdjuster } from "../../utils/accessibility-utils";
+import { setFocusOnColumnAdjuster } from "../../utils/accessibility-utils";
 import RecursiveMenuList from "./MenuList/RecursiveMenuList";
 import { HeadCellMenuWrapper, StyledMenuIconButton } from "./styles";
 
@@ -146,7 +146,7 @@ const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
           onClick: (evt: React.MouseEvent) => {
             preventDefaultBehavior(evt);
             setOpenMenuDropdown(false);
-            setFocusOnClosetColumnAdjuster(anchorRef);
+            setFocusOnColumnAdjuster(anchorRef);
           },
           icon: <ColumnSize />,
           enabled: true,

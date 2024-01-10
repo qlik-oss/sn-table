@@ -24,7 +24,7 @@ export interface UseDynamicRowHeightProps {
   gridRef?: React.RefObject<VariableSizeGrid<any>>;
   lineRef?: React.RefObject<VariableSizeList<any>>;
   columns?: Column[];
-  boldText?: boolean;
+  fontWeight?: string;
   gridState?: React.MutableRefObject<GridState>;
   isSnapshot: boolean;
   viewService: ViewService;
@@ -42,7 +42,7 @@ const useDynamicRowHeight = ({
   gridRef,
   lineRef,
   columns,
-  boldText,
+  fontWeight,
   gridState,
   isSnapshot,
   viewService,
@@ -58,7 +58,7 @@ const useDynamicRowHeight = ({
   });
   const { layout, rect } = useContextSelector(TableContext, (value) => value.baseProps);
   const [estimatedRowHeight, setEstimatedRowHeight] = useState(rowHeight || MIN_BODY_ROW_HEIGHT);
-  const { measureText, estimateLineCount } = useMeasureText({ ...style, bold: boldText });
+  const { measureText, estimateLineCount } = useMeasureText({ ...style, fontWeight });
   const lineHeight = parseInt(style.fontSize ?? COMMON_CELL_STYLING.fontSize, 10) * LINE_HEIGHT_MULTIPLIER;
 
   // Find a reasonable max line count to avoid issue where the react-window container DOM element gets too big

@@ -17,7 +17,7 @@ export const areTabStopsEnabled = (keyboard: stardust.Keyboard) => !keyboard.ena
 /**
  * Add the tab stop for adjuster hit area and focus that
  */
-export const setFocusOnClosetColumnAdjuster = (anchorRef: React.RefObject<HTMLElement>) => {
+export const setFocusOnColumnAdjuster = (anchorRef: React.RefObject<HTMLDivElement>) => {
   setTimeout(() => {
     const adjusterHitArea = anchorRef.current
       ?.closest(".sn-table-cell")
