@@ -3,7 +3,7 @@ import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/material/styles";
 
-import { COMMON_CELL_STYLING } from "../../../styling-defaults";
+import { BOLD_FONT_WEIGHT, COMMON_CELL_STYLING } from "../../../styling-defaults";
 
 // ---------- TableBodyWrapper ----------
 
@@ -45,7 +45,7 @@ export const StyledTotalsCell = styled(TableCell, {
 })(({ totalsStyle, atTop, headRowHeight, theme }) => ({
   ...COMMON_CELL_STYLING,
   ...totalsStyle,
-  fontWeight: "600",
+  fontWeight: BOLD_FONT_WEIGHT,
   position: "sticky",
   padding: theme.spacing(0.5, 1.5),
   borderWidth: atTop ? "0px 1px 1px 0px" : "1px 1px 1px 0px",
