@@ -40,7 +40,7 @@ const useHeights = ({
     lineRef: headerRef,
     rowCount: 1,
     pageInfo,
-    boldText: true,
+    fontWeight: "600",
     columns,
     isSnapshot,
     viewService,
@@ -52,7 +52,7 @@ const useHeights = ({
     lineRef: totalsRef,
     rowCount: 1,
     pageInfo,
-    boldText: true,
+    fontWeight: "600",
     isSnapshot,
     viewService,
   });

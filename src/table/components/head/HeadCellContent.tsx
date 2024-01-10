@@ -4,7 +4,7 @@ import HeadCellMenu, { MenuAvailabilityFlags } from "@qlik/nebula-table-utils/li
 import { SortDirection } from "../../../types";
 import { TableContext, useContextSelector } from "../../context";
 import { HeadCellContentProps } from "../../types";
-import { areTabStopsEnabled, setFocusOnClosetColumnAdjuster } from "../../utils/accessibility-utils";
+import { areTabStopsEnabled, setFocusOnColumnAdjuster } from "../../utils/accessibility-utils";
 import getHeadIcons from "../../utils/get-head-icons";
 import { handleHeadCellMenuKeyDown } from "../../utils/handle-keyboard";
 import OldHeadCellMenu from "./HeadCellMenu";
@@ -94,7 +94,9 @@ const HeadCellContent = ({ children, column, isInteractionEnabled, open, setOpen
               sortRelatedArgs={{ sortFromMenu }}
               searchRelatedArgs={{ embed, listboxRef }}
               selectionRelatedArgs={{ app, model }}
-              adjustHeaderSizeRelatedArgs={{ setFocusOnClosetHeaderAdjuster: setFocusOnClosetColumnAdjuster }}
+              adjustHeaderSizeRelatedArgs={{
+                setFocusOnColumnAdjuster,
+              }}
               shouldShowMenuIcon
             />
             <AbsolutelyStyledRefAnchor ref={listboxRef} />

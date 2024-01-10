@@ -13,7 +13,9 @@ import useColumnWidths from "../use-column-widths";
 jest.mock("@qlik/nebula-table-utils/lib/hooks");
 
 describe("use-column-widths", () => {
-  let mockedUseMeasureText: jest.MockedFunction<(props: UseMeasureTextProps) => MeasureTextHook>;
+  let mockedUseMeasureText: jest.MockedFunction<
+    (props: UseMeasureTextProps, options?: { maxNbrLinesOfText?: number }) => MeasureTextHook
+  >;
   let mockedMeasureText: MeasureTextHook;
   let columns: Column[];
   let tableWidth: number;

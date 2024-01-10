@@ -93,17 +93,21 @@ const useColumnWidths = (
   boolean,
 ] => {
   const showTotals = totalsPosition.atBottom || totalsPosition.atTop;
-  const measureHeadLabel = useMeasureText({
-    ...head,
-    bold: true,
-    maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT,
-  }).measureText;
-  const measureTotalLabel = useMeasureText({
-    ...body,
-    bold: true,
-    maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT,
-  }).measureText;
-  const { estimateWidth } = useMeasureText({ ...head, bold: false, maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT });
+  const measureHeadLabel = useMeasureText(
+    {
+      ...head,
+      fontWeight: "600",
+    },
+    { maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT },
+  ).measureText;
+  const measureTotalLabel = useMeasureText(
+    {
+      ...body,
+      fontWeight: "600",
+    },
+    { maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT },
+  ).measureText;
+  const { estimateWidth } = useMeasureText(head, { maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT });
 
   const getFitToContentWidth = useMemo<GetFitToContentWidth>(
     () => (headLabel, totalsLabel, glyphCount, isLocked) => {
