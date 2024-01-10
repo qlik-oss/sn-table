@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Column, TotalsPosition } from "../../types";
 import {
   ADJUSTED_HEADER_WIDTH,
+  BOLD_FONT_WEIGHT,
   BORDER_WIDTH,
   FLEX_BOX_GAP,
   LOOK_BUTTON_AND_AUTO_MARGIN,
@@ -93,17 +94,21 @@ const useColumnWidths = (
   boolean,
 ] => {
   const showTotals = totalsPosition.atBottom || totalsPosition.atTop;
-  const measureHeadLabel = useMeasureText({
-    ...head,
-    bold: true,
-    maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT,
-  }).measureText;
-  const measureTotalLabel = useMeasureText({
-    ...body,
-    bold: true,
-    maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT,
-  }).measureText;
-  const { estimateWidth } = useMeasureText({ ...head, bold: false, maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT });
+  const measureHeadLabel = useMeasureText(
+    {
+      ...head,
+      fontWeight: BOLD_FONT_WEIGHT,
+    },
+    { maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT },
+  ).measureText;
+  const measureTotalLabel = useMeasureText(
+    {
+      ...body,
+      fontWeight: BOLD_FONT_WEIGHT,
+    },
+    { maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT },
+  ).measureText;
+  const { estimateWidth } = useMeasureText(head, { maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT });
 
   const getFitToContentWidth = useMemo<GetFitToContentWidth>(
     () => (headLabel, totalsLabel, glyphCount, isLocked) => {

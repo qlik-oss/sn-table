@@ -1,7 +1,7 @@
 import { VariableSizeList } from "react-window";
 import { Column, PageInfo, TotalsPosition, ViewService } from "../../../types";
 import { TableContext, useContextSelector } from "../../context";
-import { COMMON_CELL_STYLING } from "../../styling-defaults";
+import { BOLD_FONT_WEIGHT, COMMON_CELL_STYLING } from "../../styling-defaults";
 import { GeneratedStyling } from "../../types";
 import { isNumeric } from "../../utils/is-numeric";
 import { fontSizeToRowHeight } from "../../utils/styling-utils";
@@ -40,7 +40,7 @@ const useHeights = ({
     lineRef: headerRef,
     rowCount: 1,
     pageInfo,
-    boldText: true,
+    fontWeight: BOLD_FONT_WEIGHT,
     columns,
     isSnapshot,
     viewService,
@@ -52,7 +52,7 @@ const useHeights = ({
     lineRef: totalsRef,
     rowCount: 1,
     pageInfo,
-    boldText: true,
+    fontWeight: BOLD_FONT_WEIGHT,
     isSnapshot,
     viewService,
   });
