@@ -94,9 +94,7 @@ const HeadCellContent = ({ children, column, isInteractionEnabled, open, setOpen
               sortRelatedArgs={{ sortFromMenu }}
               searchRelatedArgs={{ embed, listboxRef }}
               selectionRelatedArgs={{ app, model }}
-              adjustHeaderSizeRelatedArgs={{
-                setFocusOnColumnAdjuster,
-              }}
+              adjustHeaderSizeRelatedArgs={{ setFocusOnColumnAdjuster }}
               shouldShowMenuIcon
             />
             <AbsolutelyStyledRefAnchor ref={listboxRef} />
