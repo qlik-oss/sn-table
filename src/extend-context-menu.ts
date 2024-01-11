@@ -4,7 +4,7 @@ import copyCellValue from "./table/utils/copy-utils";
 
 export default function extendContextMenu() {
   onContextMenu?.((menu: any, event: Event) => {
-    const target = event.target as HTMLElement;
+    const target = event.target as HTMLElement | null;
     target?.closest(".sn-table-cell") &&
       menu.addItem({
         translation: "contextMenu.copyCellValue",

@@ -29,7 +29,7 @@ import {
  */
 export const handleHeadCellMenuKeyDown = (event: React.KeyboardEvent) => {
   const { key, currentTarget } = event;
-  const currentFocusItem = document.activeElement ?? (currentTarget as Element); // The rest key are handled by handleKeyDown in MUIMenuList
+  const currentFocusItem = document.activeElement ?? currentTarget; // The rest key are handled by handleKeyDown in MUIMenuList
   if (key === KeyCodes.DOWN || key === KeyCodes.UP) {
     const getNewFocusItem = (currentItem: Element) =>
       key === KeyCodes.DOWN ? getNextMenuItem(currentItem) : getPreviousMenuItem(currentItem);

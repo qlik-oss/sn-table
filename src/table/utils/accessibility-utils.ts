@@ -100,7 +100,7 @@ export const moveFocusWithArrow = ({
  * If no cells has focus, it focuses the first body cell instead
  */
 export const focusBodyFromHead = (rootElement: HTMLElement, setFocusedCellCoord: SetFocusedCellCoord) => {
-  let cell = findCellWithTabStop(rootElement);
+  let cell: HTMLElement | null | undefined = findCellWithTabStop(rootElement);
   const newCellCoord = cell ? getCellCoord(rootElement, cell) : FIRST_BODY_CELL_COORD;
   cell = cell || getCellElement(rootElement, FIRST_BODY_CELL_COORD);
   updateFocus({ cell, focusType: FocusTypes.FOCUS });
@@ -159,7 +159,7 @@ export const resetFocus = ({
       const hasSelectedClassName = cell?.classList?.contains("selected");
       announce({
         keys: [
-          `${cell.textContent},`,
+          `${cell?.textContent},`,
           hasSelectedClassName ? "SNTable.SelectionLabel.SelectedValue" : "SNTable.SelectionLabel.NotSelectedValue",
         ],
       });
@@ -177,13 +177,17 @@ export const handleFocusoutEvent = (
   shouldRefocus: React.MutableRefObject<boolean>,
   keyboard: stardust.Keyboard,
 ) => {
-  const targetElement = evt.currentTarget as HTMLElement;
+  const targetElement = evt.currentTarget as HTMLElement | null;
   const relatedTarget = evt.relatedTarget as HTMLElement | null;
-  const isInTable = targetElement.contains(relatedTarget);
+  const isInTable = !!targetElement?.contains(relatedTarget);
   const isInHeadCellMenu = relatedTarget?.closest(".sn-table-head-menu");
-  if (keyboard.enabled && !isInTable && !isInHeadCellMenu && !shouldRefocus.current) {
-    targetElement.querySelector(".sn-table-announcer-1")!.innerHTML = "";
-    targetElement.querySelector(".sn-table-announcer-2")!.innerHTML = "";
+  if (keyboard.enabled && !isInTable && !isInHeadCellMenu && !shouldRefocus.current && targetElement) {
+    const firstAnnouncer = targetElement.querySelector(".sn-table-announcer-1");
+    const secondAnnouncer = targetElement.querySelector(".sn-table-announcer-2");
+    if (firstAnnouncer && secondAnnouncer) {
+      firstAnnouncer.innerHTML = "";
+      secondAnnouncer.innerHTML = "";
+    }
     // Blur the table but not focus its parent element
     // when keyboard.active is false, this has no effect
     keyboard.blur?.(false);
@@ -193,8 +197,12 @@ export const handleFocusoutEvent = (
 /**
  * Updates the announcer with current cell selection state
  */
-export const announceSelectionState = (announce: Announce, nextCell: HTMLElement, isSelectionMode = false) => {
-  if (isSelectionMode) {
+export const announceSelectionState = (
+  announce: Announce,
+  nextCell: HTMLElement | undefined,
+  isSelectionMode = false,
+) => {
+  if (isSelectionMode && nextCell) {
     const hasActiveClassName = nextCell.classList.contains("selected");
     hasActiveClassName
       ? announce({ keys: ["SNTable.SelectionLabel.SelectedValue"] })

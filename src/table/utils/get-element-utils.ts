@@ -54,7 +54,7 @@ export const getNextCellCoord = (
 export const getCellElement = (rootElement: HTMLElement, cellCoord: FocusedCellCoord) =>
   rootElement.getElementsByClassName("sn-table-row")[cellCoord[0]]?.getElementsByClassName("sn-table-cell")[
     cellCoord[1]
-  ] as HTMLElement;
+  ] as HTMLElement | undefined;
 
 export const findCellWithTabStop = (rootElement: HTMLElement) =>
   rootElement.querySelector<HTMLElement>("td[tabindex='0'], th[tabindex='0']");
