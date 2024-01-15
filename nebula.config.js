@@ -13,7 +13,7 @@ module.exports = {
   },
   serve: {
     flags: {
-      HEAD_CELL_MENU_TEST_FLAG: false,
+      CLIENT_IM_5716_TABLE_COL_WIDTH: false,
     },
     keyboardNavigation: false,
     themes: [
