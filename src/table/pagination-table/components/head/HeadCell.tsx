@@ -39,9 +39,11 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
     TableContext,
     ({ focusedCellCoord: [x, y] }) => x === 0 && y === columnIndex,
   );
-  const { open, setOpen, handleOpenMenu, setIsAdjustingWidth } = useHeadCellDim({ interactions, columnsData: columns });
-
   const isInteractionEnabled = !!interactions.active && !isSelectionMode;
+  const { open, setOpen, handleOpenMenu, setIsAdjustingWidth } = useHeadCellDim({
+    isInteractionEnabled,
+    columnsData: columns,
+  });
 
   const ariaSort = column.isActivelySorted ? FullSortDirection[column.sortDirection] : undefined;
 

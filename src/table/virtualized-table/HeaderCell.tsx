@@ -53,11 +53,14 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
     TableContext,
     (value) => value.featureFlags.isNewHeadCellMenuEnabled,
   );
-  const { open, setOpen, handleOpenMenu, setIsAdjustingWidth } = useHeadCellDim({ interactions, columnsData: columns });
+  const isInteractionEnabled = !!interactions.active && !isSelectionMode;
+  const { open, setOpen, handleOpenMenu, setIsAdjustingWidth } = useHeadCellDim({
+    isInteractionEnabled,
+    columnsData: columns,
+  });
 
   const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
-  const isInteractionEnabled = !!interactions.active && !isSelectionMode;
   const flexDirection = column.headTextAlign === "right" ? "row-reverse" : "row";
 
   return (
