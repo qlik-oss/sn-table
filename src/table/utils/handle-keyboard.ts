@@ -157,7 +157,7 @@ export const handleHeadKeyDown = ({
       break;
     case isNewHeadCellMenuEnabled && KeyCodes.ENTER:
     case isNewHeadCellMenuEnabled && KeyCodes.SPACE:
-      handleOpenMenu && handleOpenMenu();
+      handleOpenMenu && handleOpenMenu(evt);
       break;
     default:
       break;

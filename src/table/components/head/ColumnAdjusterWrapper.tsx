@@ -11,7 +11,7 @@ import { focusBackToHeadCell } from "../../utils/accessibility-utils";
  * When you start dragging, mouse move and mouse up listeners are added.
  * While dragging the current column is updated, and on mouse up all other columns are updated.
  */
-const ColumnAdjusterWrapper = ({ column, isLastColumn, onColumnResize }: AdjusterProps) => {
+const ColumnAdjusterWrapper = ({ column, isLastColumn, onColumnResize, setIsAdjustingWidth }: AdjusterProps) => {
   const { pageColIdx } = column;
   const { applyColumnWidths, interactions } = useContextSelector(TableContext, (value) => value.baseProps);
   const isNewHeadCellMenuEnabled = useContextSelector(
@@ -47,6 +47,7 @@ const ColumnAdjusterWrapper = ({ column, isLastColumn, onColumnResize }: Adjuste
       updateWidthCallback={updateWidth}
       confirmWidthCallback={confirmWidth}
       handleBlur={handleBlur}
+      setIsAdjustingWidth={setIsAdjustingWidth}
     />
   );
 };
