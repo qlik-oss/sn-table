@@ -53,6 +53,7 @@ export const TableContextProvider = ({
     tableData.totalsPosition,
     rect.width,
     styling,
+    isNewHeadCellMenuEnabled,
   );
   const baseProps = useMemo(
     () => ({
