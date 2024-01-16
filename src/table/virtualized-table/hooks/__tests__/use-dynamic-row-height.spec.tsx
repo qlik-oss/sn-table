@@ -215,10 +215,10 @@ describe("useDynamicRowHeight", () => {
     test("should reset row meta when layout is updated", async () => {
       const { result, rerender } = renderHook((p) => useDynamicRowHeight(p), { initialProps: props, wrapper });
 
-      await act(() => result.current.setCellSize("123456789", 0, 0));
+      act(() => result.current.setCellSize("123456789", 0, 0));
 
       await waitFor(() => expect(result.current.rowMeta.current.count).toEqual(1));
-      await act(() => {
+      act(() => {
         layout = { ...layout };
         rerender({ ...props });
       });
@@ -229,10 +229,10 @@ describe("useDynamicRowHeight", () => {
     test("should reset row meta when page info is updated", async () => {
       const { result, rerender } = renderHook((p) => useDynamicRowHeight(p), { initialProps: props, wrapper });
 
-      await act(() => result.current.setCellSize("123456789", 0, 0));
+      act(() => result.current.setCellSize("123456789", 0, 0));
 
       await waitFor(() => expect(result.current.rowMeta.current.count).toEqual(1));
-      await act(() => {
+      act(() => {
         rerender({ ...props, pageInfo: { ...pageInfo } });
       });
 
@@ -244,10 +244,10 @@ describe("useDynamicRowHeight", () => {
     test("should resize all cells when width is updated", async () => {
       const { result, rerender } = renderHook((p) => useDynamicRowHeight(p), { initialProps: props, wrapper });
 
-      await act(() => result.current.setCellSize("123456789", 0, 0));
+      act(() => result.current.setCellSize("123456789", 0, 0));
 
       await waitFor(() => expect(result.current.rowMeta.current.count).toEqual(1));
-      await act(() => {
+      act(() => {
         rect = { ...rect };
         rerender({ ...props });
       });
@@ -258,11 +258,11 @@ describe("useDynamicRowHeight", () => {
     test("should resize all cells when style is updated", async () => {
       const { result, rerender } = renderHook((p) => useDynamicRowHeight(p), { initialProps: props, wrapper });
 
-      await act(() => result.current.setCellSize("123456789", 0, 0));
+      act(() => result.current.setCellSize("123456789", 0, 0));
 
       await waitFor(() => expect(result.current.rowMeta.current.count).toEqual(1));
 
-      await act(() => {
+      act(() => {
         props.style = { ...style, fontSize: "20px" };
         rerender({ ...props });
       });
