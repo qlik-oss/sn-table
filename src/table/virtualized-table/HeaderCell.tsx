@@ -5,7 +5,7 @@ import CellText from "../components/CellText";
 import ColumnAdjusterWrapper from "../components/head/ColumnAdjusterWrapper";
 import HeadCellContent from "../components/head/HeadCellContent";
 import { TableContext, useContextSelector } from "../context";
-import { useHeadCellDim } from "../hooks/use-head-cell-dim";
+import { useHeadCellState } from "../hooks/use-head-cell-state";
 import { GeneratedStyling } from "../types";
 
 interface HeaderCellProps {
@@ -54,7 +54,7 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
     (value) => value.featureFlags.isNewHeadCellMenuEnabled,
   );
   const isInteractionEnabled = !!interactions.active && !isSelectionMode;
-  const { open, setOpen, handleOpenMenu, setIsAdjustingWidth } = useHeadCellDim({
+  const { open, setOpen, handleOpenMenu, setIsAdjustingWidth } = useHeadCellState({
     isInteractionEnabled,
     columnsData: columns,
   });

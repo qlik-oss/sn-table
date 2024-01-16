@@ -2,9 +2,9 @@ import { COLUMN_ADJUSTER_CLASS } from "@qlik/nebula-table-utils/lib/constants";
 import { renderHook } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import { Column } from "../../../types";
-import { useHeadCellDim } from "../use-head-cell-dim";
+import { useHeadCellState } from "../use-head-cell-state";
 
-describe("UseHeadCellDim", () => {
+describe("useHeadCellState", () => {
   let isInteractionEnabled: boolean;
   let evt: React.KeyboardEvent;
   let columnsData: Column[];
@@ -15,7 +15,7 @@ describe("UseHeadCellDim", () => {
     columnsData = {} as Column[];
   });
 
-  const renderer = () => renderHook(() => useHeadCellDim({ isInteractionEnabled, columnsData })).result;
+  const renderer = () => renderHook(() => useHeadCellState({ isInteractionEnabled, columnsData })).result;
 
   test("should return initial open state as false", () => {
     const result = renderer();

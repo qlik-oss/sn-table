@@ -5,7 +5,7 @@ import ColumnAdjusterWrapper from "../../../components/head/ColumnAdjusterWrappe
 import HeadCellContent from "../../../components/head/HeadCellContent";
 import { FullSortDirection } from "../../../constants";
 import { TableContext, useContextSelector } from "../../../context";
-import { useHeadCellDim } from "../../../hooks/use-head-cell-dim";
+import { useHeadCellState } from "../../../hooks/use-head-cell-state";
 import { BORDER_WIDTH, PADDING } from "../../../styling-defaults";
 import { handleHeadKeyDown } from "../../../utils/handle-keyboard";
 import { handleMouseDownToFocusHead } from "../../../utils/handle-mouse";
@@ -40,7 +40,7 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
     ({ focusedCellCoord: [x, y] }) => x === 0 && y === columnIndex,
   );
   const isInteractionEnabled = !!interactions.active && !isSelectionMode;
-  const { open, setOpen, handleOpenMenu, setIsAdjustingWidth } = useHeadCellDim({
+  const { open, setOpen, handleOpenMenu, setIsAdjustingWidth } = useHeadCellState({
     isInteractionEnabled,
     columnsData: columns,
   });

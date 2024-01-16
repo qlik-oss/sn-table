@@ -3,12 +3,12 @@ import { Column } from "../../types";
 import isEventFromColumnAdjuster from "../utils/is-event-from-column-adjuster";
 import useIsAdjustingWidth from "./use-is-adjusting-width";
 
-interface UseHeadCellDim {
+interface UseHeadCellState {
   isInteractionEnabled: boolean;
   columnsData: Column[];
 }
 
-export const useHeadCellDim = ({ isInteractionEnabled, columnsData }: UseHeadCellDim) => {
+export const useHeadCellState = ({ isInteractionEnabled, columnsData }: UseHeadCellState) => {
   const [open, setOpen] = useState(false);
   const { isAdjustingWidth, setIsAdjustingWidth } = useIsAdjustingWidth([columnsData]);
 
