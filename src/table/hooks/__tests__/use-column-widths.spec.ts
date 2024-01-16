@@ -62,8 +62,9 @@ describe("use-column-widths", () => {
   });
 
   // only looking at the state not setState
-  const getColumnWidthsState = () =>
-    renderHook(() => useColumnWidths(columns, totalsPosition, tableWidth, styling)).result.current[0];
+  const getColumnWidthsState = (isNewHeadCellMenuEnabled = true) =>
+    renderHook(() => useColumnWidths(columns, totalsPosition, tableWidth, styling, isNewHeadCellMenuEnabled)).result
+      .current[0];
   const getTotalWidth = (widths: number[]) => widths.reduce((acc, w) => acc + w, 0);
 
   describe("getColumnWidths", () => {
@@ -135,8 +136,12 @@ describe("use-column-widths", () => {
         columns[1].columnWidth.percentage = 1;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([240, ColumnWidthValues.PixelsMinTable, 240]);
+        expect(widths).toEqual([285, ColumnWidthValues.PixelsMin, 285]);
         expect(getTotalWidth(widths)).toBe(tableWidth);
+
+        // TODO Remove when flag isNewHeadCellMenuEnabled is removed
+        const widthsWithOutFlag = getColumnWidthsState(false);
+        expect(widthsWithOutFlag).toEqual([240, ColumnWidthValues.PixelsMinTable, 240]);
       });
 
       it("should return one large column and equal sizes for two columns with auto, that are MIN_COLUMN_WIDTH", () => {
@@ -144,8 +149,12 @@ describe("use-column-widths", () => {
         columns[1].columnWidth.percentage = 100;
 
         const widths = getColumnWidthsState();
-        expect(widths).toEqual([ColumnWidthValues.PixelsMinTable, 600, ColumnWidthValues.PixelsMinTable]);
-        expect(getTotalWidth(widths)).toBe(tableWidth + ColumnWidthValues.PixelsMinTable * 2);
+        expect(widths).toEqual([ColumnWidthValues.PixelsMin, 600, ColumnWidthValues.PixelsMin]);
+        expect(getTotalWidth(widths)).toBe(tableWidth + ColumnWidthValues.PixelsMin * 2);
+
+        // TODO Remove when flag isNewHeadCellMenuEnabled is removed
+        const widthsWithOutFlag = getColumnWidthsState(false);
+        expect(widthsWithOutFlag).toEqual([ColumnWidthValues.PixelsMinTable, 600, ColumnWidthValues.PixelsMinTable]);
       });
 
       it("should return one size for fitToContent and equal sizes for two columns with auto", () => {
