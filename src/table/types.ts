@@ -163,7 +163,7 @@ export interface HandleHeadKeyDownProps {
   cellCoord: [number, number];
   setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
   isInteractionEnabled: boolean;
-  handleOpenMenu?: () => void;
+  handleOpenMenu?: (evt: React.KeyboardEvent) => void;
   isNewHeadCellMenuEnabled: boolean;
 }
 
@@ -334,6 +334,7 @@ export interface AdjusterProps {
   column: Column;
   isLastColumn: boolean;
   onColumnResize?: () => void;
+  setIsAdjustingWidth: (isAdjusting: boolean) => void;
 }
 
 export interface FooterWrapperProps {
