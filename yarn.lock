@@ -2046,10 +2046,10 @@
     eslint-plugin-vitest "0.3.20"
     svelte-eslint-parser "0.33.1"
 
-"@qlik/nebula-table-utils@2.6.7":
-  version "2.6.7"
-  resolved "https://registry.yarnpkg.com/@qlik/nebula-table-utils/-/nebula-table-utils-2.6.7.tgz#b78091ad0d6b717da78b0216239b4adaa973c377"
-  integrity sha512-PW1R2IuxzW/RFx883gcPxhSWYHJwZxtXxuUJCXJZHqpjisS9izz9Wi+bBqEU6eNi2o/xeq/NQ7V2/qtbZxIZHQ==
+"@qlik/nebula-table-utils@2.6.8":
+  version "2.6.8"
+  resolved "https://registry.yarnpkg.com/@qlik/nebula-table-utils/-/nebula-table-utils-2.6.8.tgz#942518b3550f28a69d1e20ab58cb15cc03525bff"
+  integrity sha512-6otaV7wX90bx+XfQ7m2trwAadh78HMV/EwoXQ8+lFkUUyATF9kv+5pyEgdIvQP0socsLSVcPB8QEzpgLNZUqOQ==
 
 "@qlik/prettier-config@0.4.5":
   version "0.4.5"
@@ -5475,9 +5475,9 @@ flatted@^3.2.9:
   integrity sha512-36yxDn5H7OFZQla0/jFJmbIKTdZAQHngCedGxiMmpNfEZM0sdEeT+WczLQrjK6D7o2aiyLYDnkw0R3JK0Qv1RQ==
 
 follow-redirects@^1.0.0:
-  version "1.15.5"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.5.tgz#54d4d6d062c0fa7d9d17feb008461550e3ba8020"
-  integrity sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw==
+  version "1.15.4"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.4.tgz#cdc7d308bf6493126b17ea2191ea0ccf3e535adf"
+  integrity sha512-Cr4D/5wlrb0z9dgERpUL3LrmPKVDsETIJhaCMeDfuFYcqa5bldGV6wBsAN6X/vxlXQtFBMrXdXxdL8CbDTGniw==
 
 for-each@^0.3.3:
   version "0.3.3"

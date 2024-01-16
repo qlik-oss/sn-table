@@ -13,7 +13,7 @@ describe("<ColumnAdjuster />", () => {
   const renderAdjuster = () => {
     render(
       <TestWithProviders interactions={interactions}>
-        <ColumnAdjusterWrapper column={columns[0]} isLastColumn={false} />
+        <ColumnAdjusterWrapper column={columns[0]} isLastColumn={false} setIsAdjustingWidth={jest.fn()} />
       </TestWithProviders>,
     );
     return screen.queryByTestId(COLUMN_ADJUSTER_CLASS) as HTMLElement;

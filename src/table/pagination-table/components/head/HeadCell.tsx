@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { Column } from "../../../../types";
 import CellText from "../../../components/CellText";
 import ColumnAdjusterWrapper from "../../../components/head/ColumnAdjusterWrapper";
 import HeadCellContent from "../../../components/head/HeadCellContent";
 import { FullSortDirection } from "../../../constants";
 import { TableContext, useContextSelector } from "../../../context";
+import { useHeadCellState } from "../../../hooks/use-head-cell-state";
 import { BORDER_WIDTH, PADDING } from "../../../styling-defaults";
 import { handleHeadKeyDown } from "../../../utils/handle-keyboard";
 import { handleMouseDownToFocusHead } from "../../../utils/handle-mouse";
@@ -17,8 +18,6 @@ interface HeadCellProps {
 }
 
 const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
-  const [open, setOpen] = useState(false);
-
   const {
     styling,
     interactions,
@@ -40,8 +39,11 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
     TableContext,
     ({ focusedCellCoord: [x, y] }) => x === 0 && y === columnIndex,
   );
-
   const isInteractionEnabled = !!interactions.active && !isSelectionMode;
+  const { open, setOpen, handleOpenMenu, setIsAdjustingWidth } = useHeadCellState({
+    isInteractionEnabled,
+    columnsData: columns,
+  });
 
   const ariaSort = column.isActivelySorted ? FullSortDirection[column.sortDirection] : undefined;
 
@@ -74,8 +76,6 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
     zIndex: columns.length - columnIndex,
   };
 
-  const handleOpenMenu = () => setOpen(true);
-
   const newHeadCellRelatedLogic = isNewHeadCellMenuEnabled ? column.colIdx === 0 : false;
   const tabIndex = newHeadCellRelatedLogic && !keyboard.enabled && isThisCellFocused && isInteractionEnabled ? 0 : -1;
 
@@ -100,7 +100,7 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
       <HeadCellContent column={column} isInteractionEnabled={isInteractionEnabled} open={open} setOpen={setOpen}>
         <CellText fontSize={styling.head.fontSize}>{column.label}</CellText>
       </HeadCellContent>
-      <ColumnAdjusterWrapper column={column} isLastColumn={isLastColumn} />
+      <ColumnAdjusterWrapper column={column} isLastColumn={isLastColumn} setIsAdjustingWidth={setIsAdjustingWidth} />
     </StyledHeadCell>
   );
 };

@@ -4,7 +4,7 @@ const playwright = (page: Page) => ({
   async open(url: string) {
     // eslint-disable-next-line playwright/no-networkidle
     await page.goto(url, { waitUntil: "networkidle" });
-    await page.waitForSelector('[data-testid="sn-table"] .sn-table-cell-text');
+    await page.waitForSelector('[data-testid="sn-table"]');
   },
   async screenshot() {
     return page.screenshot();

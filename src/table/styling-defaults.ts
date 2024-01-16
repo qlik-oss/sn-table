@@ -23,6 +23,7 @@ export const PADDING = 4;
 export const BORDER_WIDTH = 1;
 export const LINE_HEIGHT = 4 / 3;
 export const DEFAULT_FONT_SIZE = "12px";
+export const BOLD_FONT_WEIGHT = "600";
 
 export const COMMON_CELL_STYLING = {
   height: "auto",

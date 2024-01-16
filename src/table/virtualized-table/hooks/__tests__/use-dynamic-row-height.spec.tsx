@@ -21,7 +21,6 @@ describe("useDynamicRowHeight", () => {
   let rowCount: number;
   let gridRef: React.RefObject<VariableSizeGrid<any>> | undefined;
   let lineRef: React.RefObject<VariableSizeList<any>> | undefined;
-  let boldText: boolean | undefined;
   let gridState: React.MutableRefObject<GridState> | undefined;
   let props: UseDynamicRowHeightProps;
   let isSnapshot: boolean;
@@ -66,7 +65,6 @@ describe("useDynamicRowHeight", () => {
       pageInfo,
       gridRef,
       lineRef,
-      boldText,
       gridState,
       isSnapshot,
       viewService,

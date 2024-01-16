@@ -2,6 +2,7 @@ import React from "react";
 import { Column } from "../../types";
 import CellText from "../components/CellText";
 import { TableContext, useContextSelector } from "../context";
+import { BOLD_FONT_WEIGHT } from "../styling-defaults";
 import { GeneratedStyling } from "../types";
 import { isNumeric } from "../utils/is-numeric";
 import { Totals } from "./types";
@@ -46,7 +47,7 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
         justifyContent: totalsTextAlign,
         boxSizing: "border-box",
         cursor: "default",
-        fontWeight: "600",
+        fontWeight: BOLD_FONT_WEIGHT,
       }}
     >
       <CellText wordBreak={!isNumeric(label)} lines={3}>

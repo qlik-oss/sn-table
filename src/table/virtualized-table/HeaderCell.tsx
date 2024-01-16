@@ -1,10 +1,11 @@
 import { styled } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import { Column } from "../../types";
 import CellText from "../components/CellText";
 import ColumnAdjusterWrapper from "../components/head/ColumnAdjusterWrapper";
 import HeadCellContent from "../components/head/HeadCellContent";
 import { TableContext, useContextSelector } from "../context";
+import { useHeadCellState } from "../hooks/use-head-cell-state";
 import { GeneratedStyling } from "../types";
 
 interface HeaderCellProps {
@@ -34,8 +35,6 @@ export const StyledHeadCell = styled("div", {
 }));
 
 const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
-  const [open, setOpen] = useState(false);
-
   const {
     columns,
     headerStyle: { ...applicableStyle },
@@ -54,13 +53,15 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
     TableContext,
     (value) => value.featureFlags.isNewHeadCellMenuEnabled,
   );
+  const isInteractionEnabled = !!interactions.active && !isSelectionMode;
+  const { open, setOpen, handleOpenMenu, setIsAdjustingWidth } = useHeadCellState({
+    isInteractionEnabled,
+    columnsData: columns,
+  });
 
   const column = columns[index];
   const isLastColumn = columns.length - 1 === index;
-  const isInteractionEnabled = !!interactions.active && !isSelectionMode;
   const flexDirection = column.headTextAlign === "right" ? "row-reverse" : "row";
-
-  const handleOpenMenu = () => setOpen(true);
 
   return (
     <StyledHeadCell
@@ -92,7 +93,12 @@ const HeaderCell = ({ index, style, data }: HeaderCellProps) => {
           {column.label}
         </CellText>
       </HeadCellContent>
-      <ColumnAdjusterWrapper column={column} isLastColumn={isLastColumn} onColumnResize={columResizeHandler} />
+      <ColumnAdjusterWrapper
+        column={column}
+        isLastColumn={isLastColumn}
+        onColumnResize={columResizeHandler}
+        setIsAdjustingWidth={setIsAdjustingWidth}
+      />
     </StyledHeadCell>
   );
 };

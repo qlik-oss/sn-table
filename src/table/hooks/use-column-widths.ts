@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Column, TotalsPosition } from "../../types";
 import {
   ADJUSTED_HEADER_WIDTH,
+  BOLD_FONT_WEIGHT,
   BORDER_WIDTH,
   FLEX_BOX_GAP,
   LOOK_BUTTON_AND_AUTO_MARGIN,
@@ -20,11 +21,17 @@ type GetFitToContentWidth = (headLabel: string, totalsLabel: string, glyphCount:
  * Then the remaining width is divided equally between the auto columns, if there are any
  * The widths are sorted in the order they will be displayed
  */
-export const getColumnWidths = (columns: Column[], tableWidth: number, getFitToContentWidth: GetFitToContentWidth) => {
+export const getColumnWidths = (
+  columns: Column[],
+  tableWidth: number,
+  getFitToContentWidth: GetFitToContentWidth,
+  isNewHeadCellMenuEnabled: boolean,
+) => {
   if (!columns?.length) return [];
 
   const columnWidths: number[] = [];
   const autoColumnIndexes: number[] = [];
+  const pixelsMinTable = isNewHeadCellMenuEnabled ? ColumnWidthValues.PixelsMin : ColumnWidthValues.PixelsMinTable;
   let sumAutoWidths = tableWidth;
 
   columns.forEach((col, idx) => {
@@ -38,7 +45,7 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getFitToC
       let newWidth = 0;
 
       const addKnownWidth = () => {
-        columnWidths[idx] = Math.min(ColumnWidthValues.PixelsMax, Math.max(ColumnWidthValues.PixelsMinTable, newWidth));
+        columnWidths[idx] = Math.min(ColumnWidthValues.PixelsMax, Math.max(pixelsMinTable, newWidth));
         sumAutoWidths -= columnWidths[idx];
       };
 
@@ -71,7 +78,7 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getFitToC
     // divides remaining width evenly between auto columns
     const autoWidth = sumAutoWidths / autoColumnIndexes.length;
     autoColumnIndexes.forEach((autoIdx) => {
-      columnWidths[autoIdx] = Math.max(ColumnWidthValues.PixelsMinTable, autoWidth);
+      columnWidths[autoIdx] = Math.max(pixelsMinTable, autoWidth);
     });
   }
 
@@ -86,6 +93,7 @@ const useColumnWidths = (
   totalsPosition: TotalsPosition,
   tableWidth: number,
   { head, body }: TableStyling,
+  isNewHeadCellMenuEnabled: boolean,
 ): [
   number[],
   React.Dispatch<React.SetStateAction<number[]>>,
@@ -93,17 +101,21 @@ const useColumnWidths = (
   boolean,
 ] => {
   const showTotals = totalsPosition.atBottom || totalsPosition.atTop;
-  const measureHeadLabel = useMeasureText({
-    ...head,
-    bold: true,
-    maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT,
-  }).measureText;
-  const measureTotalLabel = useMeasureText({
-    ...body,
-    bold: true,
-    maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT,
-  }).measureText;
-  const { estimateWidth } = useMeasureText({ ...head, bold: false, maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT });
+  const measureHeadLabel = useMeasureText(
+    {
+      ...head,
+      fontWeight: BOLD_FONT_WEIGHT,
+    },
+    { maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT },
+  ).measureText;
+  const measureTotalLabel = useMeasureText(
+    {
+      ...body,
+      fontWeight: BOLD_FONT_WEIGHT,
+    },
+    { maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT },
+  ).measureText;
+  const { estimateWidth } = useMeasureText(head, { maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT });
 
   const getFitToContentWidth = useMemo<GetFitToContentWidth>(
     () => (headLabel, totalsLabel, glyphCount, isLocked) => {
@@ -120,10 +132,14 @@ const useColumnWidths = (
   );
   const [yScrollbarWidth, setYScrollbarWidth] = useState(0);
 
-  const [columnWidths, setColumnWidths] = useState(() => getColumnWidths(columns, tableWidth, getFitToContentWidth));
+  const [columnWidths, setColumnWidths] = useState(() =>
+    getColumnWidths(columns, tableWidth, getFitToContentWidth, isNewHeadCellMenuEnabled),
+  );
 
   useOnPropsChange(() => {
-    setColumnWidths(getColumnWidths(columns, tableWidth - yScrollbarWidth, getFitToContentWidth));
+    setColumnWidths(
+      getColumnWidths(columns, tableWidth - yScrollbarWidth, getFitToContentWidth, isNewHeadCellMenuEnabled),
+    );
   }, [columns, tableWidth, yScrollbarWidth, getFitToContentWidth]);
 
   const showRightBorder = useMemo(
