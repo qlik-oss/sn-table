@@ -5,3 +5,4 @@ dist/
 *.html
 sn-table-ext
 test-report
+pnpm-lock.yaml
