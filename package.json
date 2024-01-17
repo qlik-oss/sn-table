@@ -24,11 +24,10 @@
     "sn-table-ext"
   ],
   "scripts": {
-    "build": "yarn run locale:generate && node ./tools/build.js --core --ext",
-    "build:dev": "yarn run locale:generate && node ./tools/build.js --ext --mode development --systemjs false",
-    "build:watch": "yarn run locale:generate && node ./tools/build.js --mode development -w",
+    "build": "pnpm run locale:generate && node ./tools/build.js --core --ext",
+    "build:dev": "pnpm run locale:generate && node ./tools/build.js --ext --mode development --systemjs false",
+    "build:watch": "pnpm run locale:generate && node ./tools/build.js --mode development -w",
     "copy:ext": "node ./tools/copy-ext.js",
-    "deduplicate-packages": "yarn-deduplicate yarn.lock",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint --cache --max-warnings=49 .",
@@ -36,7 +35,7 @@
     "locale:verify": "node src/locale/tools/verify-translations.ts",
     "prepack": "./tools/prepare-sn-pack.js",
     "prepare": "husky install",
-    "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
+    "prepublishOnly": "NODE_ENV=production pnpm run build && pnpm spec",
     "sense": "nebula sense",
     "spec": "npx @scriptappy/cli from-jsdoc -c ./spec-configs/props.conf.js",
     "start": "nebula serve --build false --type sn-table",
@@ -48,18 +47,17 @@
     "test:rendering:update-screenshots": "./test/rendering/scripts/run-rendering-tests.sh '--update-snapshots'",
     "test:unit": "jest",
     "types:check": "tsc --noEmit",
-    "preversion": "yarn build",
-    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && yarn spec && git add api-specifications CHANGELOG.md"
+    "preversion": "pnpm build",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && pnpm spec && git add api-specifications CHANGELOG.md"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "bash -c 'yarn lint'",
-      "bash -c 'yarn types:check'"
+      "bash -c 'pnpm lint'",
+      "bash -c 'pnpm types:check'"
     ],
     "*.{json,css,md}": [
-      "yarn format"
-    ],
-    "yarn.lock": "yarn deduplicate-packages --list --fail"
+      "pnpm format"
+    ]
   },
   "prettier": "@qlik/prettier-config",
   "eslintConfig": {
@@ -155,15 +153,13 @@
     "stylis-plugin-rtl-sc": "npm:stylis-plugin-rtl@1.1.0",
     "ts-jest": "29.1.1",
     "typescript": "5.3.3",
-    "yargs": "17.7.2",
-    "yarn-deduplicate": "6.0.2"
+    "yargs": "17.7.2"
   },
   "peerDependencies": {
     "@nebula.js/stardust": "^4.6.2"
   },
   "engines": {
-    "node": ">=16",
-    "yarn": "^1.0.0"
+    "node": ">=16"
   },
   "publishConfig": {
     "access": "public"
