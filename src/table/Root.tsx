@@ -1,6 +1,6 @@
 import { ThemeProvider } from "@mui/material/styles";
 import React from "react";
-import ReactDom from "react-dom/client";
+import type { Root } from "react-dom/client";
 import { StyleSheetManager } from "styled-components";
 import rtlPluginSc from "stylis-plugin-rtl-sc";
 
@@ -11,7 +11,7 @@ import { RenderProps } from "./types";
 import VirtualizedTable from "./virtualized-table/Wrapper";
 import { VirtualTableRenderProps } from "./virtualized-table/types";
 
-export function renderPaginationTable(props: RenderProps, reactRoot: ReactDom.Root) {
+export function renderPaginationTable(props: RenderProps, reactRoot: Root) {
   const {
     app,
     model,
@@ -61,7 +61,7 @@ export function renderPaginationTable(props: RenderProps, reactRoot: ReactDom.Ro
   );
 }
 
-export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot: ReactDom.Root) {
+export function renderVirtualizedTable(props: VirtualTableRenderProps, reactRoot: Root) {
   const {
     app,
     selectionsAPI,

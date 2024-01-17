@@ -20,14 +20,14 @@ Visual regression testing flow:
 To capture get the same result both locally and on a CI server, we use the Playwright Docker image to run the tests in a pre-configured linux environment. More info can be found [here](https://playwright.dev/docs/docker).
 
 To run the tests locally: # Install dependencies
-yarn
+pnpm install
 
     # Build nebula.js visualization
-    yarn build
+    pnpm build
 
     # setup docker and run the tests
     chmod 777 ./test/rendering/scripts/run-rendering-tests.sh
-    yarn test:rendering:local
+    pnpm test:rendering:local
 
 If the tests fail, you can try to rerun them. Sometimes you need to stop the docker container
 using
@@ -40,7 +40,7 @@ and start it again
 
 If you've updated the UI, you need to run the update screenshots script. You start the docker container and run
 
-    yarn test:rendering:update-screenshots
+    pnpm test:rendering:update-screenshots
 
 It runs playwright with the `--update-snapshots` and generates new screenshots for you.
 
