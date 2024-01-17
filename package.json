@@ -24,7 +24,7 @@
     "sn-table-ext"
   ],
   "scripts": {
-    "build": "node ./tools/build.js --core --ext",
+    "build": "pnpm run locale:generate && node ./tools/build.js --core --ext",
     "build:dev": "pnpm run locale:generate && node ./tools/build.js --ext --mode development --systemjs false",
     "build:watch": "pnpm run locale:generate && node ./tools/build.js --mode development -w",
     "copy:ext": "node ./tools/copy-ext.js",
