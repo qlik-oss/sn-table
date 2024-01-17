@@ -126,7 +126,6 @@
     "@typescript-eslint/parser": "5.62.0",
     "conventional-changelog-cli": "4.1.0",
     "eslint": "8.56.0",
-    "eslint-plugin-jest": "27.6.0",
     "globby": "14.0.0",
     "husky": "8.0.3",
     "jest": "29.7.0",
@@ -146,6 +145,7 @@
     "stylis": "3.5.4",
     "stylis-plugin-rtl-sc": "npm:stylis-plugin-rtl@1.1.0",
     "ts-jest": "29.1.1",
+    "tslib": "2.6.2",
     "typescript": "5.3.3"
   },
   "peerDependencies": {

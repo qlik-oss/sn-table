@@ -11,7 +11,7 @@ overrides:
 dependencies:
   '@nebula.js/stardust':
     specifier: ^4.6.2
-    version: 4.6.2
+    version: 4.9.0
 
 devDependencies:
   '@babel/core':
@@ -79,13 +79,13 @@ devDependencies:
     version: 0.6.6(eslint@8.56.0)(jest@29.7.0)(svelte@4.2.8)(typescript@5.3.3)
   '@qlik/nebula-table-utils':
     specifier: 2.6.8
-    version: 2.6.8(@emotion/react@11.11.3)(@emotion/styled@11.11.0)(@mui/material@5.15.2)(@mui/styled-engine-sc@6.0.0-alpha.12)(@nebula.js/stardust@4.6.2)(@qlik-trial/sprout@3.7.1)(qlik-chart-modules@0.59.0)(react-dom@18.2.0)(react@18.2.0)
+    version: 2.6.8(@emotion/react@11.11.3)(@emotion/styled@11.11.0)(@mui/material@5.15.2)(@mui/styled-engine-sc@6.0.0-alpha.12)(@nebula.js/stardust@4.9.0)(@qlik-trial/sprout@3.7.1)(qlik-chart-modules@0.59.0)(react-dom@18.2.0)(react@18.2.0)
   '@qlik/prettier-config':
     specifier: 0.4.5
     version: 0.4.5(prettier@3.1.1)(svelte@4.2.8)(typescript@5.3.3)
   '@rollup/plugin-typescript':
     specifier: 11.1.5
-    version: 11.1.5(rollup@3.29.4)(typescript@5.3.3)
+    version: 11.1.5(rollup@3.29.4)(tslib@2.6.2)(typescript@5.3.3)
   '@scriptappy/from-jsdoc':
     specifier: 0.19.0
     version: 0.19.0
@@ -125,9 +125,6 @@ devDependencies:
   eslint:
     specifier: 8.56.0
     version: 8.56.0
-  eslint-plugin-jest:
-    specifier: 27.6.0
-    version: 27.6.0(@typescript-eslint/eslint-plugin@5.62.0)(eslint@8.56.0)(jest@29.7.0)(typescript@5.3.3)
   globby:
     specifier: 14.0.0
     version: 14.0.0
@@ -185,6 +182,9 @@ devDependencies:
   ts-jest:
     specifier: 29.1.1
     version: 29.1.1(@babel/core@7.23.7)(jest@29.7.0)(typescript@5.3.3)
+  tslib:
+    specifier: 2.6.2
+    version: 2.6.2
   typescript:
     specifier: 5.3.3
     version: 5.3.3
@@ -3755,16 +3755,10 @@ packages:
       yargs: 17.7.2
     dev: true
 
-  /@nebula.js/stardust@4.6.2:
-    resolution: {integrity: sha512-mmd565pMlohCT+/bdlyrz9fC9owFGVLaZwil4uya+5aSiYTgMANqzYoiKhXA0lWlwLHcHw4JPlKtOCQOJb3K1g==}
-    dependencies:
-      '@types/qlik-engineapi': 12.67.15
-
   /@nebula.js/stardust@4.9.0:
     resolution: {integrity: sha512-4ASnZI8KLBxT3cBrvctQyQQZZmYuyV5zMErYRDR9si9CDa/toHuvzVRvX/IKOWbw3QNX3eiStcF8JWR5NRZLug==}
     dependencies:
       '@types/qlik-engineapi': 12.67.16
-    dev: true
 
   /@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3:
     resolution: {integrity: sha512-s88O1aVtXftvp5bCPB7WnmXc5IwOZZ7YPuwNPt+GtOOXpPvad1LfbmjYv+qII7zP6RU2QGnqve27dnLycEnyEQ==}
@@ -3879,7 +3873,7 @@ packages:
       - vitest
     dev: true
 
-  /@qlik/nebula-table-utils@2.6.8(@emotion/react@11.11.3)(@emotion/styled@11.11.0)(@mui/material@5.15.2)(@mui/styled-engine-sc@6.0.0-alpha.12)(@nebula.js/stardust@4.6.2)(@qlik-trial/sprout@3.7.1)(qlik-chart-modules@0.59.0)(react-dom@18.2.0)(react@18.2.0):
+  /@qlik/nebula-table-utils@2.6.8(@emotion/react@11.11.3)(@emotion/styled@11.11.0)(@mui/material@5.15.2)(@mui/styled-engine-sc@6.0.0-alpha.12)(@nebula.js/stardust@4.9.0)(@qlik-trial/sprout@3.7.1)(qlik-chart-modules@0.59.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-6otaV7wX90bx+XfQ7m2trwAadh78HMV/EwoXQ8+lFkUUyATF9kv+5pyEgdIvQP0socsLSVcPB8QEzpgLNZUqOQ==}
     engines: {node: '>=18.16.0', npm: '>=9'}
     peerDependencies:
@@ -3897,7 +3891,7 @@ packages:
       '@emotion/styled': 11.11.0(@emotion/react@11.11.3)(@types/react@18.2.46)(react@18.2.0)
       '@mui/material': 5.15.2(@emotion/react@11.11.3)(@emotion/styled@11.11.0)(@types/react@18.2.46)(react-dom@18.2.0)(react@18.2.0)(styled-components@6.1.6)
       '@mui/styled-engine-sc': 6.0.0-alpha.12(styled-components@6.1.6)
-      '@nebula.js/stardust': 4.6.2
+      '@nebula.js/stardust': 4.9.0
       '@qlik-trial/sprout': 3.7.1(@emotion/react@11.11.3)(@emotion/styled@11.11.0)(@material-ui/core@4.12.4)(@material-ui/icons@4.11.3)(@material-ui/lab@4.0.0-alpha.61)(@material-ui/styles@4.11.5)(@mui/lab@5.0.0-alpha.160)(@mui/material@5.15.2)(@mui/x-date-pickers@5.0.20)(react-dom@18.2.0)(react@18.2.0)
       qlik-chart-modules: 0.59.0
       react: 18.2.0
@@ -4032,7 +4026,7 @@ packages:
       terser: 5.26.0
     dev: true
 
-  /@rollup/plugin-typescript@11.1.5(rollup@3.29.4)(typescript@5.3.3):
+  /@rollup/plugin-typescript@11.1.5(rollup@3.29.4)(tslib@2.6.2)(typescript@5.3.3):
     resolution: {integrity: sha512-rnMHrGBB0IUEv69Q8/JGRD/n4/n6b3nfpufUu26axhUcboUzv/twfZU8fIBbTOphRAe0v8EyxzeDpKXqGHfyDA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -4048,6 +4042,7 @@ packages:
       '@rollup/pluginutils': 5.1.0(rollup@3.29.4)
       resolve: 1.22.8
       rollup: 3.29.4
+      tslib: 2.6.2
       typescript: 5.3.3
     dev: true
 
@@ -4441,12 +4436,8 @@ packages:
     resolution: {integrity: sha512-ga8y9v9uyeiLdpKddhxYQkxNDrfvuPrlFb0N1qnZZByvcElJaXthF1UhvCh9TLWJBEHeNtdnbysW7Y6Uq8CVng==}
     dev: true
 
-  /@types/qlik-engineapi@12.67.15:
-    resolution: {integrity: sha512-y+uAO2gbz1LQJZIl2pEf4OLzr1Xdurs6thsES+O+8Vbar/RtKxdvOVCASpOXp4JHaXw0VhjZyr/zAs/qdtvBzg==}
-
   /@types/qlik-engineapi@12.67.16:
     resolution: {integrity: sha512-NiwMX6zrV162lRcupTdrgoT2YtKZy97zJ70rRGLdJTWcaMOWUgAhM1ufzhmp3ir1KlNArI4Ds8ojfxA80SpwKQ==}
-    dev: true
 
   /@types/qs@6.9.11:
     resolution: {integrity: sha512-oGk0gmhnEJK4Yyk+oI7EfXsLayXatCWPHary1MtcmbAifkobT9cM9yutG/hZKIseOU0MqbIwQ/u2nn/Gb+ltuQ==}
@@ -7124,28 +7115,6 @@ packages:
       - eslint-import-resolver-typescript
       - eslint-import-resolver-webpack
       - supports-color
-    dev: true
-
-  /eslint-plugin-jest@27.6.0(@typescript-eslint/eslint-plugin@5.62.0)(eslint@8.56.0)(jest@29.7.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-MTlusnnDMChbElsszJvrwD1dN3x6nZl//s4JD23BxB6MgR66TZlL064su24xEIS3VACfAoHV1vgyMgPw8nkdng==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    peerDependencies:
-      '@typescript-eslint/eslint-plugin': ^5.0.0 || ^6.0.0
-      eslint: ^7.0.0 || ^8.0.0
-      jest: '*'
-    peerDependenciesMeta:
-      '@typescript-eslint/eslint-plugin':
-        optional: true
-      jest:
-        optional: true
-    dependencies:
-      '@typescript-eslint/eslint-plugin': 5.62.0(@typescript-eslint/parser@5.62.0)(eslint@8.56.0)(typescript@5.3.3)
-      '@typescript-eslint/utils': 5.62.0(eslint@8.56.0)(typescript@5.3.3)
-      eslint: 8.56.0
-      jest: 29.7.0(@types/node@20.11.5)
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
     dev: true
 
   /eslint-plugin-jest@27.6.0(@typescript-eslint/eslint-plugin@6.16.0)(eslint@8.56.0)(jest@29.7.0)(typescript@5.3.3):
