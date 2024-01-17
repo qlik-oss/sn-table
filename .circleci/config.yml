@@ -91,6 +91,9 @@ jobs:
           name: Install playwright
           command: npx playwright install
       - run:
+          name: Install pnpm
+          command: npm install -g pnpm
+      - run:
           name: Run rendering tests
           command: pnpm test:rendering
       - store_artifacts:
