@@ -17,7 +17,7 @@ aliases:
     name: Save pnpm cache
     paths:
       - node_modules
-    key: pnpm-packages-{{ .Branch }}-{{ checksum pnpm-lock.yaml }}
+    key: pnpm-packages-{{ .Branch }}-{{ checksum "pnpm-lock.yaml" }}
 
 jobs:
   install:
