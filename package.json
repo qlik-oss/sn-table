@@ -93,7 +93,7 @@
   },
   "resolutions": {
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
-    "rollup": "npm:rollup@3.29.4"
+    "rollup": "npm:rollup@4.9.5"
   },
   "devDependencies": {
     "@babel/core": "7.23.7",
