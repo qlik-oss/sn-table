@@ -3,7 +3,7 @@ const path = require("path");
 module.exports = {
   testEnvironment: "jest-environment-jsdom",
   testRegex: "src/.+\\.(test|spec)\\.[jt]sx?$",
-  setupFilesAfterEnv: ["./jest.setup.spec.js"],
+  setupFilesAfterEnv: ["./jest/setup.ts"],
   modulePathIgnorePatterns: ["<rootDir>/mashup-example"],
   transformIgnorePatterns: [
     /* if config file is under '~/packages/lib-a/' */
