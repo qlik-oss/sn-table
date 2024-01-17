@@ -1,6 +1,6 @@
-import { PageInfo } from '../../../types';
-import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../constants';
-import { GridState } from '../types';
+import { PageInfo } from "../../../types";
+import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from "../constants";
+import { GridState } from "../types";
 
 const isPageStale = (gridState: React.MutableRefObject<GridState>, pageInfo: PageInfo, qPage: EngineAPI.INxPage) => {
   const pageRowStart = pageInfo.page * pageInfo.rowsPerPage;
@@ -12,15 +12,12 @@ const isPageStale = (gridState: React.MutableRefObject<GridState>, pageInfo: Pag
 
   // The page is considered stale if both "points" from by the qPage, are outside the rectangle
   // formed by the gridState + buffer.
-  return !(
-    qLeft >= colStartIndex &&
-    qLeft <= colEndIndex &&
-    qTop >= rowStartIndex &&
-    qTop <= rowEndIndex &&
-    qLeft + qWidth >= colStartIndex &&
-    qLeft + qWidth <= colEndIndex &&
-    qTop + qHeight >= rowStartIndex &&
-    qTop + qHeight <= rowEndIndex
+  return (
+    (qLeft < colStartIndex || qLeft > colEndIndex || qTop < rowStartIndex || qTop > rowEndIndex) &&
+    (qLeft + qWidth < colStartIndex ||
+      qLeft + qWidth > colEndIndex ||
+      qTop + qHeight < rowStartIndex ||
+      qTop + qHeight > rowEndIndex)
   );
 };
 
@@ -34,7 +31,7 @@ const isPageStale = (gridState: React.MutableRefObject<GridState>, pageInfo: Pag
 const mergeAllPages = (
   qPages: EngineAPI.INxPage[],
   gridState: React.MutableRefObject<GridState>,
-  pageInfo: PageInfo
+  pageInfo: PageInfo,
 ) => {
   const stalePages: EngineAPI.INxPage[] = [];
   const filterdPages: EngineAPI.INxPage[] = [];
