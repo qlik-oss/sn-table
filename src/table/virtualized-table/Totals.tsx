@@ -1,10 +1,10 @@
-import React, { memo } from 'react';
-import { VariableSizeList } from 'react-window';
-import TotalsCell from './TotalsCell';
-import { useContextSelector, TableContext } from '../context';
-import { TotalsProps } from './types';
-import useResetHeader from './hooks/use-reset-header';
-import { listStyle } from './Header';
+import React, { memo } from "react";
+import { VariableSizeList } from "react-window";
+import { TableContext, useContextSelector } from "../context";
+import { listStyle } from "./Header";
+import TotalsCell from "./TotalsCell";
+import useResetHeader from "./hooks/use-reset-header";
+import { TotalsProps } from "./types";
 
 const Totals = (props: TotalsProps) => {
   const { rect, forwardRef, pageInfo, totals, rowHeight, columns } = props;

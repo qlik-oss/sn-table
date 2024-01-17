@@ -1,19 +1,19 @@
-import { PlaywrightTestConfig, devices } from '@playwright/test';
+import { PlaywrightTestConfig, devices } from "@playwright/test";
 
 const config: PlaywrightTestConfig = {
   use: {
-    trace: 'retain-on-failure',
+    trace: "retain-on-failure",
   },
-  testDir: './',
+  testDir: "./",
   testMatch: /.*\.integration\.ts/,
-  outputDir: './artifacts/',
+  outputDir: "./artifacts/",
   reporter: [
-    ['list'],
+    ["list"],
     [
-      'html',
+      "html",
       {
-        outputFolder: './test-report',
-        open: process.env.CI ? 'never' : 'on-failure',
+        outputFolder: "./test-report",
+        open: process.env.CI ? "never" : "on-failure",
       },
     ],
   ],
@@ -22,8 +22,8 @@ const config: PlaywrightTestConfig = {
   workers: 1,
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
     },
   ],
   expect: {

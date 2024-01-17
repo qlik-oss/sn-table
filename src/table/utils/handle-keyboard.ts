@@ -1,31 +1,35 @@
 /* eslint-disable no-case-declarations */
-import React from 'react';
-import { stardust } from '@nebula.js/stardust';
-
-import { focusSelectionToolbar, moveFocusWithArrow, focusBodyFromHead, updateFocus } from './accessibility-utils';
+import { preventDefaultBehavior } from "@qlik/nebula-table-utils/lib/utils";
+import React from "react";
+import { FocusTypes, KeyCodes, SelectionActions } from "../constants";
 import {
-  preventDefaultBehavior,
-  isCtrlShift,
-  isArrowKey,
-  isCtrlCmd,
-  shouldBubbleEarly,
+  FocusedCellCoord,
+  HandleBodyKeyDownProps,
+  HandleHeadKeyDownProps,
+  HandleWrapperKeyDownProps,
+  SelectionDispatch,
+  SetFocusedCellCoord,
+} from "../types";
+import { focusBodyFromHead, moveFocusWithArrow, updateFocus } from "./accessibility-utils";
+import copyCellValue from "./copy-utils";
+import { findCellWithTabStop, getNextMenuItem, getPreviousMenuItem } from "./get-element-utils";
+import {
   bodyArrowHelper,
+  bodyTabHelper,
   getFocusType,
   headTabHelper,
-  bodyTabHelper,
-} from './keyboard-utils';
-import { findCellWithTabStop, getNextMenuItem, getPreviousMenuItem } from './get-element-utils';
-import copyCellValue from './copy-utils';
-import { HandleWrapperKeyDownProps, HandleHeadKeyDownProps, HandleBodyKeyDownProps, SelectionDispatch } from '../types';
-import { FocusTypes, KeyCodes, SelectionActions } from '../constants';
+  isArrowKey,
+  isCtrlCmd,
+  isCtrlShift,
+  shouldBubbleEarly,
+} from "./keyboard-utils";
 
 /**
  * handles ArrowDown and ArrowUp events for the head cell menu (move focus)
  */
-export const handleHeadCellMenuKeyDown = (event: React.KeyboardEvent<HTMLLIElement>) => {
-  const { key, target } = event;
-  const currentFocusItem = document.activeElement ?? (target as HTMLElement);
-  // The rest key are handled by handleKeyDown in MUIMenuList
+export const handleHeadCellMenuKeyDown = (event: React.KeyboardEvent) => {
+  const { key, currentTarget } = event;
+  const currentFocusItem = document.activeElement ?? currentTarget; // The rest key are handled by handleKeyDown in MUIMenuList
   if (key === KeyCodes.DOWN || key === KeyCodes.UP) {
     const getNewFocusItem = (currentItem: Element) =>
       key === KeyCodes.DOWN ? getNextMenuItem(currentItem) : getPreviousMenuItem(currentItem);
@@ -34,7 +38,7 @@ export const handleHeadCellMenuKeyDown = (event: React.KeyboardEvent<HTMLLIEleme
     preventDefaultBehavior(event);
     let newFocusItem = getNewFocusItem(currentFocusItem);
     while (newFocusItem) {
-      if (newFocusItem.ariaDisabled === 'true') {
+      if (newFocusItem.ariaDisabled === "true") {
         newFocusItem = getNewFocusItem(newFocusItem);
       } else {
         (newFocusItem as HTMLElement).focus();
@@ -49,17 +53,6 @@ export const handleHeadCellMenuKeyDown = (event: React.KeyboardEvent<HTMLLIEleme
  */
 export const handleBodyKeyUp = (evt: React.KeyboardEvent, selectionDispatch: SelectionDispatch) => {
   evt.key === KeyCodes.SHIFT && selectionDispatch({ type: SelectionActions.SELECT_MULTI_END });
-};
-
-/**
- * Manually focuses the selection toolbar if tabbing from the last focusable element
- */
-export const handleLastTab = (evt: React.KeyboardEvent, keyboard: stardust.Keyboard, isSelectionMode = false) => {
-  if (isSelectionMode && evt.key === KeyCodes.TAB && !evt.shiftKey) {
-    // tab key: focus on the selection toolbar
-    preventDefaultBehavior(evt);
-    focusSelectionToolbar(evt.target as HTMLElement, keyboard, false);
-  }
 };
 
 /**
@@ -102,7 +95,6 @@ export const handleWrapperKeyDown = ({
     // its parent element when nebula handles keyboard navigation
     // and not in selection mode
     preventDefaultBehavior(evt);
-    // @ts-ignore TODO: fix nebula api so that blur has the correct argument type
     keyboard.blur?.(true);
   } else if (isArrowKey(evt.key)) {
     // Arrow key events should never bubble out of the table
@@ -119,6 +111,8 @@ export const handleHeadKeyDown = ({
   cellCoord,
   setFocusedCellCoord,
   isInteractionEnabled,
+  handleOpenMenu,
+  isNewHeadCellMenuEnabled,
 }: HandleHeadKeyDownProps) => {
   if (!isInteractionEnabled) {
     preventDefaultBehavior(evt);
@@ -128,29 +122,48 @@ export const handleHeadKeyDown = ({
   if (shouldBubbleEarly(evt)) return;
 
   const target = evt.target as HTMLElement;
-  const isLastHeadCell = !target.closest('.sn-table-cell')?.nextSibling;
+  const isLastHeadCell = !target.closest(".sn-table-cell")?.nextSibling;
 
   switch (evt.key) {
     case KeyCodes.LEFT:
     case KeyCodes.RIGHT:
       preventDefaultBehavior(evt);
-      if (evt.key === KeyCodes.RIGHT && isLastHeadCell) {
+      if (evt.key === KeyCodes.RIGHT && isLastHeadCell && !isNewHeadCellMenuEnabled) {
         focusBodyFromHead(rootElement, setFocusedCellCoord);
       } else {
-        moveFocusWithArrow(evt, rootElement, cellCoord, setFocusedCellCoord, FocusTypes.FOCUS_BUTTON);
+        if (isNewHeadCellMenuEnabled) {
+          updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLElement });
+        }
+        moveFocusWithArrow({
+          evt,
+          rootElement,
+          cellCoord,
+          setFocusedCellCoord,
+          focusType: isNewHeadCellMenuEnabled ? FocusTypes.FOCUS : FocusTypes.FOCUS_BUTTON,
+        });
       }
       break;
     case KeyCodes.DOWN:
       preventDefaultBehavior(evt);
       updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: findCellWithTabStop(rootElement) });
-      moveFocusWithArrow(evt, rootElement, cellCoord, setFocusedCellCoord, FocusTypes.FOCUS);
+      moveFocusWithArrow({
+        evt,
+        rootElement,
+        cellCoord,
+        setFocusedCellCoord,
+        focusType: FocusTypes.FOCUS,
+      });
       break;
-    case KeyCodes.TAB:
+    case !isNewHeadCellMenuEnabled && KeyCodes.TAB:
       headTabHelper(evt, rootElement, cellCoord, setFocusedCellCoord, isLastHeadCell);
       break;
     case KeyCodes.C:
       preventDefaultBehavior(evt);
       isCtrlCmd(evt) && copyCellValue(evt);
+      break;
+    case isNewHeadCellMenuEnabled && KeyCodes.ENTER:
+    case isNewHeadCellMenuEnabled && KeyCodes.SPACE:
+      handleOpenMenu && handleOpenMenu(evt);
       break;
     default:
       break;
@@ -163,9 +176,10 @@ export const handleHeadKeyDown = ({
 export const handleTotalKeyDown = (
   evt: React.KeyboardEvent,
   rootElement: HTMLElement,
-  cellCoord: [number, number],
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  isSelectionMode = false
+  cellCoord: FocusedCellCoord,
+  setFocusedCellCoord: SetFocusedCellCoord,
+  isNewHeadCellMenuEnabled: boolean,
+  isSelectionMode = false,
 ) => {
   if (isSelectionMode) {
     preventDefaultBehavior(evt);
@@ -179,16 +193,16 @@ export const handleTotalKeyDown = (
     case KeyCodes.UP:
     case KeyCodes.DOWN: {
       preventDefaultBehavior(evt);
-      const focusType = getFocusType(cellCoord, evt);
+      const focusType = getFocusType(cellCoord, evt, isNewHeadCellMenuEnabled);
       if (focusType === FocusTypes.FOCUS) {
-        updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLTableCellElement });
+        updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLElement });
       }
 
-      moveFocusWithArrow(evt, rootElement, cellCoord, setFocusedCellCoord, focusType);
+      moveFocusWithArrow({ evt, rootElement, cellCoord, setFocusedCellCoord, focusType });
       break;
     }
     case KeyCodes.TAB:
-      bodyTabHelper({ evt, rootElement, setFocusedCellCoord });
+      bodyTabHelper({ evt, rootElement, setFocusedCellCoord, isNewHeadCellMenuEnabled });
       break;
     case KeyCodes.C: {
       preventDefaultBehavior(evt);
@@ -218,8 +232,9 @@ export const handleBodyKeyDown = ({
   paginationNeeded,
   totalsPosition,
   selectionsAPI,
+  isNewHeadCellMenuEnabled,
 }: HandleBodyKeyDownProps) => {
-  if ((evt.target as HTMLTableCellElement).classList.contains('excluded')) {
+  if ((evt.target as HTMLElement).classList.contains("excluded")) {
     preventDefaultBehavior(evt);
     return;
   }
@@ -243,6 +258,7 @@ export const handleBodyKeyDown = ({
         announce,
         totalsPosition,
         isSelectionMode,
+        isNewHeadCellMenuEnabled,
       });
       break;
     // Space bar: Selects value.
@@ -257,18 +273,26 @@ export const handleBodyKeyDown = ({
       preventDefaultBehavior(evt);
       if (isSelectionMode) {
         selectionsAPI?.confirm();
-        announce({ keys: ['SNTable.SelectionLabel.SelectionsConfirmed'] });
+        announce({ keys: ["SNTable.SelectionLabel.SelectionsConfirmed"] });
       }
       break;
     // Esc: Cancels selections. If no selections, do nothing and handleWrapperKeyDown should catch it
     case KeyCodes.ESC:
       preventDefaultBehavior(evt);
       selectionsAPI?.cancel();
-      announce({ keys: ['SNTable.SelectionLabel.ExitedSelectionMode'] });
+      announce({ keys: ["SNTable.SelectionLabel.ExitedSelectionMode"] });
       break;
     // Tab (+ shift): in selection mode and keyboard enabled, focus on selection toolbar
     case KeyCodes.TAB:
-      bodyTabHelper({ evt, rootElement, setFocusedCellCoord, keyboard, isSelectionMode, paginationNeeded });
+      bodyTabHelper({
+        evt,
+        rootElement,
+        setFocusedCellCoord,
+        keyboard,
+        isSelectionMode,
+        paginationNeeded,
+        isNewHeadCellMenuEnabled,
+      });
       break;
     // Ctrl + c: copy cell value
     case KeyCodes.C:

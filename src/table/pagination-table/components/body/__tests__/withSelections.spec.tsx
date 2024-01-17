@@ -1,14 +1,14 @@
-import React from 'react';
-import { render } from '@testing-library/react';
-import TableCell from '@mui/material/TableCell';
+import TableCell from "@mui/material/TableCell";
+import { render } from "@testing-library/react";
+import React from "react";
 
-import withSelections from '../withSelections';
-import { Announce, ExtendedSelectionAPI, Cell, Column } from '../../../../../types';
-import { CellStyle, CellHOCProps } from '../../../../types';
-import TestWithProviders from '../../../../../__test__/test-with-providers';
+import TestWithProviders from "../../../../../__test__/test-with-providers";
+import { Announce, Cell, Column, ExtendedSelectionAPI } from "../../../../../types";
+import { CellHOCProps, CellStyle } from "../../../../types";
+import withSelections from "../withSelections";
 
-describe('withSelections', () => {
-  const value = '100';
+describe("withSelections", () => {
+  const value = "100";
   const selectionsAPI = { isModal: () => false } as unknown as ExtendedSelectionAPI;
   let HOC: (props: CellHOCProps) => JSX.Element;
   let cell: Cell;
@@ -28,7 +28,7 @@ describe('withSelections', () => {
             </tr>
           </tbody>
         </table>
-      </TestWithProviders>
+      </TestWithProviders>,
     );
 
   beforeEach(() => {
@@ -42,7 +42,7 @@ describe('withSelections', () => {
 
   afterEach(() => jest.clearAllMocks());
 
-  it('should render a mocked component with the passed value', () => {
+  it("should render a mocked component with the passed value", () => {
     const { queryByText } = renderWithSelections();
 
     expect(queryByText(value)).toBeVisible();

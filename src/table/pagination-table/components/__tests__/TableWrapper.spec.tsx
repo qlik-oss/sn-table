@@ -1,32 +1,31 @@
-import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import { stardust } from '@nebula.js/stardust';
-import TableWrapper from '../TableWrapper';
-import TableBodyWrapper from '../body/TableBodyWrapper';
-import TableHeadWrapper from '../head/TableHeadWrapper';
-import * as handleKeyPress from '../../../utils/handle-keyboard';
-import * as handleScroll from '../../../utils/handle-scroll';
-import { TableLayout, TableData, PageInfo, SetPageInfo, Announce, Column, ViewService } from '../../../../types';
-import TestWithProviders from '../../../../__test__/test-with-providers';
+import { stardust } from "@nebula.js/stardust";
+import { fireEvent, render } from "@testing-library/react";
+import React from "react";
+import TestWithProviders from "../../../../__test__/test-with-providers";
+import { Announce, Column, PageInfo, SetPageInfo, TableData, TableLayout } from "../../../../types";
+import * as handleKeyPress from "../../../utils/handle-keyboard";
+import * as handleScroll from "../../../utils/handle-scroll";
+import TableWrapper from "../TableWrapper";
+import TableBodyWrapper from "../body/TableBodyWrapper";
+import TableHeadWrapper from "../head/TableHeadWrapper";
 
-describe('<TableWrapper />', () => {
+describe("<TableWrapper />", () => {
   let tableData: TableData;
   let pageInfo: PageInfo;
   let setPageInfo: SetPageInfo;
-  let constraints: stardust.Constraints;
+  let interactions: stardust.Interactions;
   let rootElement: HTMLElement;
   let rect: stardust.Rect;
-  let direction: 'ltr' | 'rtl';
+  let direction: "ltr" | "rtl";
   let announce: Announce;
   let layout: TableLayout;
-  let viewService: ViewService;
   let footerContainer: HTMLElement | undefined;
 
   const renderTableWrapper = () =>
     render(
       <TestWithProviders
         layout={layout}
-        constraints={constraints}
+        interactions={interactions}
         rootElement={rootElement}
         tableData={tableData}
         rect={rect}
@@ -36,29 +35,32 @@ describe('<TableWrapper />', () => {
           setPageInfo={setPageInfo}
           direction={direction}
           announce={announce}
-          viewService={viewService}
           footerContainer={footerContainer}
         />
-      </TestWithProviders>
+      </TestWithProviders>,
     );
 
   beforeEach(() => {
     // When wrapping a component in memo, the actual functional component is stored on type
-    jest.spyOn(TableHeadWrapper, 'type').mockImplementation(() => <thead />);
-    jest.spyOn(TableBodyWrapper, 'type').mockImplementation(() => <thead />);
+    jest.spyOn(TableHeadWrapper, "type").mockImplementation(() => <thead />);
+    jest.spyOn(TableBodyWrapper, "type").mockImplementation(() => <thead />);
 
     tableData = {
       totalRowCount: 200,
       totalColumnCount: 10,
       paginationNeeded: true,
-      rows: [{ qText: '1' }],
+      rows: [{ qText: "1" }],
       columns: [{}] as Column[],
       totalsPosition: { atTop: false, atBottom: false },
       totalPages: 2,
     } as unknown as TableData;
     pageInfo = { page: 0, rowsPerPage: 100, rowsPerPageOptions: [10, 25, 100] };
     setPageInfo = jest.fn();
-    constraints = {};
+    interactions = {
+      active: true,
+      passive: true,
+      select: true,
+    };
     rootElement = {
       getElementsByClassName: () => [],
       getElementsByTagName: () => [{ clientHeight: {}, contains: jest.fn() }],
@@ -68,57 +70,50 @@ describe('<TableWrapper />', () => {
       width: 750,
     } as unknown as stardust.Rect;
     window.HTMLElement.prototype.scrollTo = jest.fn();
-    viewService = {
-      scrollLeft: 0,
-      qLeft: 0,
-      qTop: 0,
-      qWidth: 1,
-      qHeight: 100,
-    };
   });
 
   afterEach(() => jest.clearAllMocks());
 
-  it('should render table with pagination', () => {
+  it("should render table with pagination", () => {
     const { getByLabelText, getByText, getByTestId } = renderTableWrapper();
 
     expect(
-      getByLabelText(`${'SNTable.Accessibility.RowsAndColumns'} ${'SNTable.Accessibility.NavigationInstructions'}`)
+      getByLabelText(`${"SNTable.Accessibility.RowsAndColumns"} ${"SNTable.Accessibility.NavigationInstructions"}`),
     ).toBeVisible();
-    expect(getByTestId('table-container').getAttribute('tabindex')).toBe('-1');
-    expect(getByTestId('table-container').getAttribute('role')).toBe('application');
+    expect(getByTestId("table-container").getAttribute("tabindex")).toBe("-1");
+    expect(getByTestId("table-container").getAttribute("role")).toBe("application");
     // Just checking that the pagination has rendered, we do more thorough checking in the PaginationContent tests
-    expect(getByText('SNTable.Pagination.DisplayedRowsLabel')).toBeVisible();
+    expect(getByText("NebulaTableUtils.Pagination.DisplayedRowsLabel")).toBeVisible();
   });
 
-  it('should not render pagination when constraints.active is true', () => {
-    constraints.active = true;
+  it("should not render pagination when interactions.active is false", () => {
+    interactions.active = false;
     const { getByLabelText, queryByText, getByTestId } = renderTableWrapper();
 
     expect(
-      getByLabelText(`${'SNTable.Accessibility.RowsAndColumns'} ${'SNTable.Accessibility.NavigationInstructions'}`)
+      getByLabelText(`${"SNTable.Accessibility.RowsAndColumns"} ${"SNTable.Accessibility.NavigationInstructions"}`),
     ).toBeVisible();
-    expect(getByTestId('table-container').getAttribute('tabindex')).toBe('-1');
-    expect(getByTestId('table-container').getAttribute('role')).toBe('application');
-    expect(queryByText('SNTable.Pagination.DisplayedRowsLabel')).toBeNull();
+    expect(getByTestId("table-container").getAttribute("tabindex")).toBe("-1");
+    expect(getByTestId("table-container").getAttribute("role")).toBe("application");
+    expect(queryByText("NebulaTableUtils.Pagination.DisplayedRowsLabel")).toBeNull();
   });
 
-  it('should call handleWrapperKeyDown when press control key on the table', () => {
-    jest.spyOn(handleKeyPress, 'handleWrapperKeyDown').mockImplementation(() => jest.fn());
+  it("should call handleWrapperKeyDown when press control key on the table", () => {
+    jest.spyOn(handleKeyPress, "handleWrapperKeyDown").mockImplementation(() => jest.fn());
     const { getByLabelText } = renderTableWrapper();
 
-    fireEvent.keyDown(getByLabelText('SNTable.Pagination.RowsPerPage:'), {
-      key: 'Control',
-      code: 'ControlLeft',
+    fireEvent.keyDown(getByLabelText("NebulaTableUtils.Pagination.RowsPerPage:"), {
+      key: "Control",
+      code: "ControlLeft",
     });
     expect(handleKeyPress.handleWrapperKeyDown).toHaveBeenCalledTimes(1);
   });
 
-  it('should call handleHorizontalScroll when scroll on the table', () => {
-    jest.spyOn(handleScroll, 'handleHorizontalScroll').mockImplementation(() => jest.fn());
+  it("should call handleHorizontalScroll when scroll on the table", () => {
+    jest.spyOn(handleScroll, "handleHorizontalScroll").mockImplementation(() => jest.fn());
     const { getByTestId } = renderTableWrapper();
 
-    fireEvent.wheel(getByTestId('table-container'), { deltaX: 100 });
+    fireEvent.wheel(getByTestId("table-container"), { deltaX: 100 });
     expect(handleScroll.handleHorizontalScroll).toHaveBeenCalledTimes(1);
   });
 });

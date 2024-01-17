@@ -1,22 +1,17 @@
-import { useState, useMemo } from 'react';
-import { Column, TotalsPosition } from '../../types';
-import {
-  MIN_COLUMN_WIDTH,
-  ColumnWidthTypes,
-  DEFAULT_COLUMN_PIXEL_WIDTH,
-  DEFAULT_COLUMN_PERCENTAGE_WIDTH,
-  MAX_COLUMN_WIDTH,
-} from '../constants';
-import useMeasureText from '../virtualized-table/hooks/use-measure-text';
-import { TableStyling } from '../types';
-import useOnPropsChange from '../virtualized-table/hooks/use-on-props-change';
+import { ColumnWidthType, ColumnWidthValues } from "@qlik/nebula-table-utils/lib/constants";
+import { useMeasureText, useOnPropsChange } from "@qlik/nebula-table-utils/lib/hooks";
+import { useMemo, useState } from "react";
+import { Column, TotalsPosition } from "../../types";
 import {
   ADJUSTED_HEADER_WIDTH,
+  BOLD_FONT_WEIGHT,
   BORDER_WIDTH,
   FLEX_BOX_GAP,
   LOOK_BUTTON_AND_AUTO_MARGIN,
   TOTALS_PADDING,
-} from '../styling-defaults';
+} from "../styling-defaults";
+import { TableStyling } from "../types";
+import { MAX_NBR_LINES_OF_TEXT } from "../virtualized-table/constants";
 
 type GetFitToContentWidth = (headLabel: string, totalsLabel: string, glyphCount: number, isLocked: boolean) => number;
 
@@ -26,11 +21,17 @@ type GetFitToContentWidth = (headLabel: string, totalsLabel: string, glyphCount:
  * Then the remaining width is divided equally between the auto columns, if there are any
  * The widths are sorted in the order they will be displayed
  */
-export const getColumnWidths = (columns: Column[], tableWidth: number, getFitToContentWidth: GetFitToContentWidth) => {
+export const getColumnWidths = (
+  columns: Column[],
+  tableWidth: number,
+  getFitToContentWidth: GetFitToContentWidth,
+  isNewHeadCellMenuEnabled: boolean,
+) => {
   if (!columns?.length) return [];
 
   const columnWidths: number[] = [];
   const autoColumnIndexes: number[] = [];
+  const pixelsMinTable = isNewHeadCellMenuEnabled ? ColumnWidthValues.PixelsMin : ColumnWidthValues.PixelsMinTable;
   let sumAutoWidths = tableWidth;
 
   columns.forEach((col, idx) => {
@@ -44,24 +45,24 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getFitToC
       let newWidth = 0;
 
       const addKnownWidth = () => {
-        columnWidths[idx] = Math.min(MAX_COLUMN_WIDTH, Math.max(MIN_COLUMN_WIDTH, newWidth));
+        columnWidths[idx] = Math.min(ColumnWidthValues.PixelsMax, Math.max(pixelsMinTable, newWidth));
         sumAutoWidths -= columnWidths[idx];
       };
 
       switch (type) {
-        case ColumnWidthTypes.PIXELS:
-          newWidth = pixels || DEFAULT_COLUMN_PIXEL_WIDTH;
+        case ColumnWidthType.Pixels:
+          newWidth = pixels || ColumnWidthValues.PixelsDefault;
           addKnownWidth();
           break;
-        case ColumnWidthTypes.PERCENTAGE:
-          newWidth = ((percentage || DEFAULT_COLUMN_PERCENTAGE_WIDTH) / 100) * tableWidth;
+        case ColumnWidthType.Percentage:
+          newWidth = ((percentage || ColumnWidthValues.PercentageDefault) / 100) * tableWidth;
           addKnownWidth();
           break;
-        case ColumnWidthTypes.FIT_TO_CONTENT:
+        case ColumnWidthType.FitToContent:
           newWidth = getFitToContentWidth(label, totalInfo, qApprMaxGlyphCount, col.isLocked);
           addKnownWidth();
           break;
-        case ColumnWidthTypes.AUTO:
+        case ColumnWidthType.Auto:
           // stores the indexes of auto columns to loop over later
           autoColumnIndexes.push(idx);
           break;
@@ -77,7 +78,7 @@ export const getColumnWidths = (columns: Column[], tableWidth: number, getFitToC
     // divides remaining width evenly between auto columns
     const autoWidth = sumAutoWidths / autoColumnIndexes.length;
     autoColumnIndexes.forEach((autoIdx) => {
-      columnWidths[autoIdx] = Math.max(MIN_COLUMN_WIDTH, autoWidth);
+      columnWidths[autoIdx] = Math.max(pixelsMinTable, autoWidth);
     });
   }
 
@@ -91,17 +92,31 @@ const useColumnWidths = (
   columns: Column[],
   totalsPosition: TotalsPosition,
   tableWidth: number,
-  { head, body }: TableStyling
+  { head, body }: TableStyling,
+  isNewHeadCellMenuEnabled: boolean,
 ): [
   number[],
   React.Dispatch<React.SetStateAction<number[]>>,
   React.Dispatch<React.SetStateAction<number>>,
-  boolean
+  boolean,
 ] => {
   const showTotals = totalsPosition.atBottom || totalsPosition.atTop;
-  const measureHeadLabel = useMeasureText(head.fontSize, head.fontFamily, true).measureText;
-  const measureTotalLabel = useMeasureText(body.fontSize, body.fontFamily, true).measureText;
-  const { estimateWidth } = useMeasureText(body.fontSize, body.fontFamily);
+  const measureHeadLabel = useMeasureText(
+    {
+      ...head,
+      fontWeight: BOLD_FONT_WEIGHT,
+    },
+    { maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT },
+  ).measureText;
+  const measureTotalLabel = useMeasureText(
+    {
+      ...body,
+      fontWeight: BOLD_FONT_WEIGHT,
+    },
+    { maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT },
+  ).measureText;
+  const { estimateWidth } = useMeasureText(head, { maxNbrLinesOfText: MAX_NBR_LINES_OF_TEXT });
+
   const getFitToContentWidth = useMemo<GetFitToContentWidth>(
     () => (headLabel, totalsLabel, glyphCount, isLocked) => {
       const HEAD_LABEL_WIDTH = isLocked
@@ -110,22 +125,26 @@ const useColumnWidths = (
       return Math.max(
         measureHeadLabel(headLabel) + HEAD_LABEL_WIDTH,
         showTotals ? measureTotalLabel(totalsLabel) + TOTALS_PADDING + BORDER_WIDTH : 0,
-        estimateWidth(glyphCount)
+        estimateWidth(glyphCount),
       );
     },
-    [estimateWidth, measureHeadLabel, measureTotalLabel, showTotals]
+    [estimateWidth, measureHeadLabel, measureTotalLabel, showTotals],
   );
   const [yScrollbarWidth, setYScrollbarWidth] = useState(0);
 
-  const [columnWidths, setColumnWidths] = useState(() => getColumnWidths(columns, tableWidth, getFitToContentWidth));
+  const [columnWidths, setColumnWidths] = useState(() =>
+    getColumnWidths(columns, tableWidth, getFitToContentWidth, isNewHeadCellMenuEnabled),
+  );
 
   useOnPropsChange(() => {
-    setColumnWidths(getColumnWidths(columns, tableWidth - yScrollbarWidth, getFitToContentWidth));
+    setColumnWidths(
+      getColumnWidths(columns, tableWidth - yScrollbarWidth, getFitToContentWidth, isNewHeadCellMenuEnabled),
+    );
   }, [columns, tableWidth, yScrollbarWidth, getFitToContentWidth]);
 
   const showRightBorder = useMemo(
     () => isBodyWidthLessThenContainerWidth(columnWidths, yScrollbarWidth, tableWidth),
-    [columnWidths, yScrollbarWidth, tableWidth]
+    [columnWidths, yScrollbarWidth, tableWidth],
   );
 
   return [columnWidths, setColumnWidths, setYScrollbarWidth, showRightBorder];

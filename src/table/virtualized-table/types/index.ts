@@ -1,18 +1,18 @@
-import { stardust } from '@nebula.js/stardust';
-import { VariableSizeList } from 'react-window';
+import { stardust } from "@nebula.js/stardust";
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
+import { VariableSizeList } from "react-window";
 import {
   ApplyColumnWidths,
   ChangeSortOrder,
   Column,
   ExtendedSelectionAPI,
-  ExtendedTheme,
-  ExtendedTranslator,
   PageInfo,
   Row,
   TableData,
   TableLayout,
-} from '../../../types';
-import { GeneratedStyling } from '../../types';
+  ViewService,
+} from "../../../types";
+import { GeneratedStyling } from "../../types";
 
 export interface Totals {
   atBottom: boolean;
@@ -32,8 +32,8 @@ export interface VirtualTableRenderProps {
   selectionsAPI: ExtendedSelectionAPI | undefined;
   layout: TableLayout;
   model: EngineAPI.IGenericObject;
-  translator: ExtendedTranslator;
-  constraints: stardust.Constraints;
+  translator: stardust.Translator;
+  interactions: stardust.Interactions;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
   rect: stardust.Rect;
@@ -45,6 +45,8 @@ export interface VirtualTableRenderProps {
   setPage: stardust.SetStateFn<number>;
   pageInfo: PageInfo;
   initialDataPages: EngineAPI.INxDataPage[];
+  viewService: ViewService;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface TableProps {
@@ -108,7 +110,7 @@ export type SetCellSize = (
   rowIdx: number,
   colIdx: number,
   isNumeric?: boolean,
-  batchStateUpdate?: boolean
+  batchStateUpdate?: boolean,
 ) => void;
 
 export interface GridState {

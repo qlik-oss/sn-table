@@ -1,11 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { PageInfo, Row, Column, TableLayout, ExtendedTheme } from '../../../../types';
-import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
-import { GridState, SetCellSize } from '../../types';
-import useGetHyperCubeDataQueue from '../use-get-hypercube-data-queue';
-import useMutableProp from '../use-mutable-prop';
-import useOnPropsChange from '../use-on-props-change';
-import { createEmptyState, isColumnMissingData, isRowMissingData, toRows } from './utils';
+import { useOnPropsChange } from "@qlik/nebula-table-utils/lib/hooks";
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Column, PageInfo, Row, TableLayout } from "../../../../types";
+import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from "../../constants";
+import { GridState, SetCellSize } from "../../types";
+import useGetHyperCubeDataQueue from "../use-get-hypercube-data-queue";
+import useMutableProp from "../use-mutable-prop";
+import { createEmptyState, isColumnMissingData, isRowMissingData, toRows } from "./utils";
 
 export type LoadData = (left: number, top: number, width: number, height: number) => void;
 
@@ -54,7 +55,7 @@ const useData = ({
 
       return nextState;
     },
-    [rowCount, pageInfo, columns, layout, mutableSetCellSize]
+    [rowCount, pageInfo, columns, layout, mutableSetCellSize],
   );
   const [rowsInPage, setRowsInPage] = useState<Row[]>(() => memoizedToRows(initialDataPages ?? []));
 
@@ -63,7 +64,7 @@ const useData = ({
     setRowsInPage(memoizedToRows(initialDataPages ?? []));
   }, [initialDataPages]);
 
-  const getDataPages = (pages: EngineAPI.INxPage[]) => model.getHyperCubeData('/qHyperCubeDef', pages);
+  const getDataPages = (pages: EngineAPI.INxPage[]) => model.getHyperCubeData("/qHyperCubeDef", pages);
 
   const handleDataPages = (dataPages: EngineAPI.INxDataPage[]) =>
     setRowsInPage((prevState) => memoizedToRows(dataPages, prevState));
@@ -87,7 +88,7 @@ const useData = ({
         }
       }
     },
-    [mutableRowsInPage, queue]
+    [mutableRowsInPage, queue],
   );
 
   const loadRows: LoadData = useCallback(
@@ -106,7 +107,7 @@ const useData = ({
         }
       }
     },
-    [mutableRowsInPage, queue, pageInfo]
+    [mutableRowsInPage, queue, pageInfo],
   );
 
   const themeName = theme.name();

@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from "react";
 
 export default function useDidUpdateEffect(effect: () => void, deps: React.DependencyList) {
   const didMountRef = useRef(false);
@@ -10,5 +9,6 @@ export default function useDidUpdateEffect(effect: () => void, deps: React.Depen
     } else {
       didMountRef.current = true;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 }

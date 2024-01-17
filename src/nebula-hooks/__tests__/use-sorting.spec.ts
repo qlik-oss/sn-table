@@ -1,17 +1,17 @@
-import { sortingFactory } from '../use-sorting';
-import { generateLayout } from '../../__test__/generate-test-data';
-import { Column, TableLayout, HyperCube, SortDirection, ChangeSortOrder } from '../../types';
+import { generateLayout } from "../../__test__/generate-test-data";
+import { ChangeSortOrder, Column, HyperCube, SortDirection, TableLayout } from "../../types";
+import { sortingFactory } from "../use-sorting";
 
-describe('use-sorting', () => {
-  describe('sortingFactory', () => {
-    it('should return undefined when model is undefined', async () => {
+describe("use-sorting", () => {
+  describe("sortingFactory", () => {
+    it("should return undefined when model is undefined", async () => {
       const model = undefined;
-      const changeSortOrder = sortingFactory(0, model);
+      const changeSortOrder = sortingFactory(0, model, false);
       expect(changeSortOrder).toBeUndefined();
     });
   });
 
-  describe('changeSortOrder', () => {
+  describe("changeSortOrder", () => {
     let originalOrder: number[];
     let column: Column;
     let layout: TableLayout;
@@ -22,7 +22,7 @@ describe('use-sorting', () => {
     beforeEach(() => {
       originalOrder = [0, 1, 2, 3];
       layout = generateLayout(2, 2, 2);
-      column = { isDim: true, colIdx: 1, qReverseSort: false, sortDirection: 'A' } as Column;
+      column = { isDim: true, colIdx: 1, qReverseSort: false, sortDirection: "A" } as Column;
       model = {
         applyPatches: jest.fn(),
         getEffectiveProperties: async () =>
@@ -32,17 +32,17 @@ describe('use-sorting', () => {
             } as unknown as HyperCube,
           }),
       } as unknown as EngineAPI.IGenericObject;
-      changeSortOrder = sortingFactory(layout.qHyperCube.qDimensionInfo.length, model) as ChangeSortOrder;
+      changeSortOrder = sortingFactory(layout.qHyperCube.qDimensionInfo.length, model, false) as ChangeSortOrder;
     });
 
     afterEach(() => jest.clearAllMocks());
 
-    it('should call apply patches with patch for second dimension first in sort order', async () => {
+    it("should call apply patches with patch for second dimension first in sort order", async () => {
       expectedPatches = [
         {
-          qPath: '/qHyperCubeDef/qInterColumnSortOrder',
-          qOp: 'Replace',
-          qValue: '[1,0,2,3]',
+          qPath: "/qHyperCubeDef/qInterColumnSortOrder",
+          qOp: "Replace",
+          qValue: "[1,0,2,3]",
         },
       ];
 
@@ -50,13 +50,13 @@ describe('use-sorting', () => {
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });
 
-    it('should call apply patches with patch for qReverseSort for dimension', async () => {
-      column.colIdx = 0;
+    it("should call apply patches with patch for qReverseSort for dimension if isActivelySorted is true", async () => {
+      column.isActivelySorted = true;
       expectedPatches = [
         {
-          qPath: '/qHyperCubeDef/qDimensions/0/qDef/qReverseSort',
-          qOp: 'Replace',
-          qValue: 'true',
+          qPath: "/qHyperCubeDef/qDimensions/1/qDef/qReverseSort",
+          qOp: "Replace",
+          qValue: "true",
         },
       ];
 
@@ -64,19 +64,47 @@ describe('use-sorting', () => {
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });
 
-    it('should call apply patches with another patch for qReverseSort for measure', async () => {
-      column = { isDim: false, colIdx: 2, qReverseSort: false } as Column;
+    it("should call apply patches with another patch for qReverseSort for measure", async () => {
+      column = { isDim: false, colIdx: 2, qReverseSort: false, isActivelySorted: true } as Column;
       originalOrder = [2, 0, 1, 3];
-      expectedPatches[0].qValue = '[2,0,1,3]';
       expectedPatches = [
         {
-          qPath: '/qHyperCubeDef/qMeasures/0/qDef/qReverseSort',
-          qOp: 'Replace',
-          qValue: 'true',
+          qPath: "/qHyperCubeDef/qMeasures/0/qDef/qReverseSort",
+          qOp: "Replace",
+          qValue: "true",
         },
       ];
 
       await changeSortOrder(column);
+      expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
+    });
+
+    it("should call apply patch reversing the current direction if isNewHeadCellMenuEnabled flag is off and newSortDirection is not the same", async () => {
+      column.isActivelySorted = true;
+      expectedPatches = [
+        {
+          qOp: "Replace",
+          qPath: "/qHyperCubeDef/qDimensions/1/qDef/qReverseSort",
+          qValue: "true",
+        },
+      ];
+
+      await changeSortOrder(column, "D");
+      expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
+    });
+
+    it("should call apply patch reversing the current direction if isNewHeadCellMenuEnabled flag is on and calling the sort on same column", async () => {
+      changeSortOrder = sortingFactory(layout.qHyperCube.qDimensionInfo.length, model, true) as ChangeSortOrder;
+      column.isActivelySorted = true;
+      expectedPatches = [
+        {
+          qOp: "Replace",
+          qPath: "/qHyperCubeDef/qDimensions/1/qDef/qReverseSort",
+          qValue: "true",
+        },
+      ];
+
+      await changeSortOrder(column, "D");
       expect(model.applyPatches).toHaveBeenCalledWith(expectedPatches, true);
     });
   });

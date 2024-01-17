@@ -1,22 +1,22 @@
-import { useMemo } from '@nebula.js/stardust';
-import { HyperCube, ApplyColumnWidths } from '../types';
+import { useMemo } from "@nebula.js/stardust";
+import { ApplyColumnWidths, HyperCube } from "../types";
 
 export const applyColumnWidthsFactory =
   (qHyperCube: HyperCube, model: EngineAPI.IGenericObject | undefined): ApplyColumnWidths =>
   (newColumnWidth, { isDim, colIdx }) => {
     const index = isDim ? colIdx : colIdx - qHyperCube.qDimensionInfo.length;
-    const qPath = `/qHyperCubeDef/${isDim ? 'qDimensions' : 'qMeasures'}/${index}/qDef/columnWidth`;
-    const oldColumnWidth = qHyperCube[isDim ? 'qDimensionInfo' : 'qMeasureInfo'][index].columnWidth;
+    const qPath = `/qHyperCubeDef/${isDim ? "qDimensions" : "qMeasures"}/${index}/qDef/columnWidth`;
+    const oldColumnWidth = qHyperCube[isDim ? "qDimensionInfo" : "qMeasureInfo"][index].columnWidth;
 
     const patch = oldColumnWidth
       ? {
           qPath,
-          qOp: 'Replace' as EngineAPI.NxPatchOpType,
+          qOp: "Replace" as EngineAPI.NxPatchOpType,
           qValue: JSON.stringify({ ...oldColumnWidth, ...newColumnWidth }),
         }
       : {
           qPath,
-          qOp: 'Add' as EngineAPI.NxPatchOpType,
+          qOp: "Add" as EngineAPI.NxPatchOpType,
           qValue: JSON.stringify(newColumnWidth),
         };
 

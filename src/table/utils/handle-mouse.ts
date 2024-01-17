@@ -1,17 +1,17 @@
-import React from 'react';
-import { stardust } from '@nebula.js/stardust';
-import { Announce, Cell, TotalsPosition } from '../../types';
-import { HandleHeadMouseDownProps, SelectionDispatch } from '../types';
-import { FocusTypes, SelectionActions } from '../constants';
-import { removeTabAndFocusCell, updateFocus } from './accessibility-utils';
-import { getCellElement } from './get-element-utils';
+import { stardust } from "@nebula.js/stardust";
+import React from "react";
+import { Announce, Cell, TotalsPosition } from "../../types";
+import { FocusTypes, SelectionActions } from "../constants";
+import { HandleHeadMouseDownProps, SelectionDispatch, SetFocusedCellCoord } from "../types";
+import { removeTabAndFocusCell, updateFocus } from "./accessibility-utils";
+import { getCellElement } from "./get-element-utils";
 
 export const handleMouseDownToFocusBody = (
   cell: Cell,
   rootElement: HTMLElement,
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
+  setFocusedCellCoord: SetFocusedCellCoord,
   keyboard: stardust.Keyboard,
-  totalsPosition: TotalsPosition
+  totalsPosition: TotalsPosition,
 ) => {
   const { pageRowIdx, pageColIdx } = cell;
   const adjustedRowIdx = totalsPosition.atTop ? pageRowIdx + 2 : pageRowIdx + 1;
@@ -41,14 +41,14 @@ export const handleMouseDownToFocusHead = ({
  * gets all relevant mouse handlers for making selections, including dragging to select multiple rows
  */
 export const getSelectionMouseHandlers = (
-  onMouseDown: React.MouseEventHandler<HTMLTableCellElement> | undefined,
+  onMouseDown: React.MouseEventHandler | undefined,
   cell: Cell,
   selectionDispatch: SelectionDispatch,
-  announce: Announce
+  announce: Announce,
 ) => {
   const handleMouseDown = (evt: React.MouseEvent) => {
     // run handleMouseDownToFocusBody
-    onMouseDown?.(evt as React.MouseEvent<HTMLTableCellElement>);
+    onMouseDown?.(evt);
     // only need to check isSelectable here. once you are holding you want to be able to drag outside the current column
     if (cell.isSelectable) {
       const mouseupOutsideCallback = () => selectionDispatch({ type: SelectionActions.SELECT_MULTI_END });

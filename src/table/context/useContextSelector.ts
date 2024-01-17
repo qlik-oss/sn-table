@@ -1,12 +1,12 @@
-import { Context, useContext, useEffect, useMemo, useReducer, useRef } from 'react';
-import { getSelectorContext, SelectorContextType } from './createSelectorProvider';
+import { Context, useContext, useEffect, useMemo, useReducer, useRef } from "react";
+import { SelectorContextType, getSelectorContext } from "./createSelectorProvider";
 
 type Selector<TContext, TSelected> = (state: TContext) => TSelected;
 
 export function useContextSelector<T, TSelected>(context: Context<T>, selector: Selector<T, TSelected>): TSelected {
   const accessorContext = getSelectorContext(context) as Context<SelectorContextType<T>>;
   const [accessor, listeners] = useContext(accessorContext);
-  const [, forceUpdate] = useReducer((dummy) => dummy + 1, 0);
+  const [, forceUpdate] = useReducer((dummy: number) => dummy + 1, 0);
 
   const latestSelector = useRef(selector);
   const latestSelectedState = useRef<any>();
@@ -14,7 +14,7 @@ export function useContextSelector<T, TSelected>(context: Context<T>, selector: 
   const currentValue = accessor();
 
   if (currentValue === undefined) {
-    throw new Error('You must call useContextSelector inside a valid context.');
+    throw new Error("You must call useContextSelector inside a valid context.");
   }
 
   const selectedState = useMemo(() => selector(currentValue), [currentValue, selector]);

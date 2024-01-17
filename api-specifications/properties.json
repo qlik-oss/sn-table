@@ -1,9 +1,9 @@
 {
-  "scriptappy": "1.0.0",
+  "scriptappy": "1.1.0",
   "info": {
     "name": "@nebula.js/sn-table:properties",
     "description": "Table generic object definition",
-    "version": "2.2.3",
+    "version": "2.9.1",
     "license": "MIT",
     "stability": "stable",
     "x-qlik-visibility": "public"
@@ -17,34 +17,9 @@
       ],
       "kind": "object",
       "entries": {
-        "components": {
-          "description": "Holds general styling",
-          "nullable": true,
-          "kind": "array",
-          "items": {
-            "type": "#/definitions/Component"
-          }
-        },
-        "enableChartExploration": {
-          "description": "Show chart exploration option in context menu",
-          "optional": true,
-          "defaultValue": false,
-          "type": "boolean"
-        },
-        "footnote": {
-          "description": "Visualization footnote",
-          "optional": true,
-          "defaultValue": "",
-          "kind": "union",
-          "items": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "StringExpression"
-            }
-          ],
-          "type": "any"
+        "version": {
+          "description": "Current version of this generic object definition",
+          "type": "string"
         },
         "qHyperCubeDef": {
           "description": "Extends HyperCubeDef, see Engine API: HyperCubeDef",
@@ -55,12 +30,6 @@
           ],
           "kind": "object",
           "entries": {
-            "qColumnOrder": {
-              "kind": "array",
-              "items": {
-                "type": "number"
-              }
-            },
             "qDimensions": {
               "description": "The maximum amount of dimensions is 1000",
               "kind": "array",
@@ -74,6 +43,12 @@
               "items": {
                 "type": "#/definitions/MeasureProperties"
               }
+            },
+            "qColumnOrder": {
+              "kind": "array",
+              "items": {
+                "type": "number"
+              }
             }
           }
         },
@@ -83,20 +58,11 @@
           "defaultValue": true,
           "type": "boolean"
         },
-        "subtitle": {
-          "description": "Visualization subtitle",
+        "enableChartExploration": {
+          "description": "Show chart exploration option in context menu",
           "optional": true,
-          "defaultValue": "",
-          "kind": "union",
-          "items": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "StringExpression"
-            }
-          ],
-          "type": "any"
+          "defaultValue": false,
+          "type": "boolean"
         },
         "title": {
           "description": "Visualization title",
@@ -110,19 +76,45 @@
             {
               "type": "StringExpression"
             }
-          ],
-          "type": "any"
+          ]
+        },
+        "subtitle": {
+          "description": "Visualization subtitle",
+          "optional": true,
+          "defaultValue": "",
+          "kind": "union",
+          "items": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "StringExpression"
+            }
+          ]
+        },
+        "footnote": {
+          "description": "Visualization footnote",
+          "optional": true,
+          "defaultValue": "",
+          "kind": "union",
+          "items": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "StringExpression"
+            }
+          ]
         },
         "totals": {
           "description": "totals settings",
           "optional": true,
-          "kind": "object",
           "entries": {
-            "label": {
-              "description": "The label of the totals row, shown in the leftmost column",
+            "show": {
+              "description": "If set to true, the display of the totals row will be handled automatically, and the `position` prop will be ignored.",
               "optional": true,
-              "defaultValue": "Totals",
-              "type": "string"
+              "defaultValue": true,
+              "type": "boolean"
             },
             "position": {
               "description": "The position of the totals row, hiding it if set to `noTotals`",
@@ -142,16 +134,16 @@
                   "kind": "literal",
                   "value": "'noTotals'"
                 }
-              ],
-              "type": "string"
+              ]
             },
-            "show": {
-              "description": "If set to true, the display of the totals row will be handled automatically, and the `position` prop will be ignored.",
+            "label": {
+              "description": "The label of the totals row, shown in the leftmost column",
               "optional": true,
-              "defaultValue": true,
-              "type": "boolean"
+              "defaultValue": "Totals",
+              "type": "string"
             }
-          }
+          },
+          "kind": "object"
         },
         "usePagination": {
           "description": "Use pagination or continuous scroll. If undefined, defaults to using pagination",
@@ -159,14 +151,96 @@
           "defaultValue": false,
           "type": "boolean"
         },
-        "version": {
-          "description": "Current version of this generic object definition",
-          "type": "string"
+        "components": {
+          "description": "Holds general styling",
+          "nullable": true,
+          "kind": "array",
+          "items": {
+            "type": "#/definitions/Component"
+          }
         }
       }
     }
   },
   "definitions": {
+    "DimensionProperties": {
+      "description": "Extends `NxDimension`, see Engine API: `NxDimension`",
+      "extends": [
+        {
+          "type": "NxDimension"
+        }
+      ],
+      "kind": "object",
+      "entries": {
+        "qDef": {
+          "type": "#/definitions/InlineDimensionDef"
+        },
+        "qAttributeExpressions": {
+          "kind": "array",
+          "items": {
+            "type": "#/definitions/AttributeExpressionProperties"
+          }
+        }
+      }
+    },
+    "MeasureProperties": {
+      "description": "Extends `NxMeasure`, see Engine API: `NxMeasure`",
+      "extends": [
+        {
+          "type": "NxMeasure"
+        }
+      ],
+      "kind": "object",
+      "entries": {
+        "qDef": {
+          "type": "#/definitions/InlineMeasureDef"
+        },
+        "qAttributeExpressions": {
+          "kind": "array",
+          "items": {
+            "type": "#/definitions/AttributeExpressionProperties"
+          }
+        }
+      }
+    },
+    "InlineDimensionDef": {
+      "description": "Extends `NxInlineDimensionDef`, see Engine API: `NxInlineDimensionDef`.",
+      "extends": [
+        {
+          "type": "NxInlineDimensionDef"
+        }
+      ],
+      "kind": "object",
+      "entries": {
+        "textAlign": {
+          "optional": true,
+          "type": "#/definitions/TextAlign"
+        },
+        "columnWidth": {
+          "optional": true,
+          "type": "#/definitions/ColumnWidth"
+        }
+      }
+    },
+    "InlineMeasureDef": {
+      "description": "Extends `NxInlineMeasureDef`, see Engine API: `NxInlineMeasureDef`.",
+      "extends": [
+        {
+          "type": "NxInlineMeasureDef"
+        }
+      ],
+      "kind": "object",
+      "entries": {
+        "textAlign": {
+          "optional": true,
+          "type": "#/definitions/TextAlign"
+        },
+        "columnWidth": {
+          "optional": true,
+          "type": "#/definitions/ColumnWidth"
+        }
+      }
+    },
     "AttributeExpressionProperties": {
       "description": "Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`.\nColumn specific styling overrides general styling, that is defined in `components`.",
       "extends": [
@@ -188,8 +262,40 @@
               "kind": "literal",
               "value": "'cellBackgroundColor'"
             }
-          ],
-          "type": "string"
+          ]
+        }
+      }
+    },
+    "TextAlign": {
+      "description": "Holds text alignment for a specific column.",
+      "extends": [
+        {
+          "type": "NxInlineDimensionDef"
+        }
+      ],
+      "kind": "object",
+      "entries": {
+        "auto": {
+          "description": "If true, sets the alignment based on the type of column (left for dimension, right for measure)",
+          "type": "boolean"
+        },
+        "align": {
+          "description": "Is used (and mandatory) if `auto` is false",
+          "kind": "union",
+          "items": [
+            {
+              "kind": "literal",
+              "value": "'left'"
+            },
+            {
+              "kind": "literal",
+              "value": "'center'"
+            },
+            {
+              "kind": "literal",
+              "value": "'right'"
+            }
+          ]
         }
       }
     },
@@ -217,8 +323,7 @@
               "kind": "literal",
               "value": "'percentage'"
             }
-          ],
-          "type": "string"
+          ]
         },
         "pixels": {
           "description": "Is used (and mandatory) if type is `pixels`",
@@ -286,26 +391,6 @@
         }
       }
     },
-    "DimensionProperties": {
-      "description": "Extends `NxDimension`, see Engine API: `NxDimension`",
-      "extends": [
-        {
-          "type": "NxDimension"
-        }
-      ],
-      "kind": "object",
-      "entries": {
-        "qDef": {
-          "type": "#/definitions/InlineDimensionDef"
-        },
-        "qAttributeExpressions": {
-          "kind": "array",
-          "items": {
-            "type": "#/definitions/AttributeExpressionProperties"
-          }
-        }
-      }
-    },
     "HeaderStyling": {
       "description": "Holds properties for font size and color.",
       "kind": "object",
@@ -322,64 +407,6 @@
         }
       }
     },
-    "InlineDimensionDef": {
-      "description": "Extends `NxInlineDimensionDef`, see Engine API: `NxInlineDimensionDef`.",
-      "extends": [
-        {
-          "type": "NxInlineDimensionDef"
-        }
-      ],
-      "kind": "object",
-      "entries": {
-        "textAlign": {
-          "optional": true,
-          "type": "#/definitions/TextAlign"
-        },
-        "columnWidth": {
-          "optional": true,
-          "type": "#/definitions/ColumnWidth"
-        }
-      }
-    },
-    "InlineMeasureDef": {
-      "description": "Extends `NxInlineMeasureDef`, see Engine API: `NxInlineMeasureDef`.",
-      "extends": [
-        {
-          "type": "NxInlineMeasureDef"
-        }
-      ],
-      "kind": "object",
-      "entries": {
-        "textAlign": {
-          "optional": true,
-          "type": "#/definitions/TextAlign"
-        },
-        "columnWidth": {
-          "optional": true,
-          "type": "#/definitions/ColumnWidth"
-        }
-      }
-    },
-    "MeasureProperties": {
-      "description": "Extends `NxMeasure`, see Engine API: `NxMeasure`",
-      "extends": [
-        {
-          "type": "NxMeasure"
-        }
-      ],
-      "kind": "object",
-      "entries": {
-        "qDef": {
-          "type": "#/definitions/InlineMeasureDef"
-        },
-        "qAttributeExpressions": {
-          "kind": "array",
-          "items": {
-            "type": "#/definitions/AttributeExpressionProperties"
-          }
-        }
-      }
-    },
     "PaletteColor": {
       "description": "Color information structure. Holds the actual color and index in palette",
       "kind": "object",
@@ -391,40 +418,6 @@
         "index": {
           "description": "Index in palette",
           "type": "number"
-        }
-      }
-    },
-    "TextAlign": {
-      "description": "Holds text alignment for a specific column.",
-      "extends": [
-        {
-          "type": "NxInlineDimensionDef"
-        }
-      ],
-      "kind": "object",
-      "entries": {
-        "auto": {
-          "description": "If true, sets the alignment based on the type of column (left for dimension, right for measure)",
-          "type": "boolean"
-        },
-        "align": {
-          "description": "Is used (and mandatory) if `auto` is false",
-          "kind": "union",
-          "items": [
-            {
-              "kind": "literal",
-              "value": "'left'"
-            },
-            {
-              "kind": "literal",
-              "value": "'center'"
-            },
-            {
-              "kind": "literal",
-              "value": "'right'"
-            }
-          ],
-          "type": "string"
         }
       }
     }

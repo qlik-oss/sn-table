@@ -1,24 +1,42 @@
-import { Direction } from '@mui/material';
-import { stardust } from '@nebula.js/stardust';
+import { Direction } from "@mui/material";
+import { stardust } from "@nebula.js/stardust";
+import { ColumnWidth } from "@qlik/nebula-table-utils/lib/components/ColumnAdjuster";
 
-export type Align = 'left' | 'center' | 'right';
+export type Align = "left" | "center" | "right";
 
 export interface ViewService {
-  qLeft: number;
+  rowPartialHeight?: number;
+  scrollLeft?: number;
+  scrollTopRatio?: number;
   qTop: number;
-  qWidth: number;
   qHeight: number;
+  visibleLeft?: number;
+  visibleWidth?: number;
   visibleTop?: number;
   visibleHeight?: number;
-  scrollLeft: number;
   rowsPerPage?: number;
   page?: number;
+  viewState?: ViewState;
+  estimatedRowHeight: number;
+}
+
+export interface Size {
+  width: number;
+  height: number;
 }
 export interface SnapshotData {
   content?: {
-    scrollLeft: number;
+    rowPartialHeight?: number;
+    scrollLeft?: number;
+    scrollTopRatio?: number;
+    visibleLeft?: number;
+    visibleWidth?: number;
+    visibleTop?: number;
+    visibleHeight?: number;
     rowsPerPage?: number;
     page?: number;
+    size: Size;
+    estimatedRowHeight: number;
   };
 }
 
@@ -37,17 +55,17 @@ interface InlineMeasureDef extends EngineAPI.INxInlineMeasureDef {
   columnWidth: ColumnWidth;
 }
 interface AttributeExpressionProperties extends EngineAPI.INxAttrExprDef {
-  id: 'cellForegroundColor' | 'cellBackgroundColor';
+  id: "cellForegroundColor" | "cellBackgroundColor";
 }
-export interface DimensionProperties extends Omit<EngineAPI.INxDimension, 'qDef' | 'qAttributeExpressions'> {
+export interface DimensionProperties extends Omit<EngineAPI.INxDimension, "qDef" | "qAttributeExpressions"> {
   qDef: InlineDimensionDef;
   qAttributeExpressions: AttributeExpressionProperties[];
 }
-export interface MeasureProperties extends Omit<EngineAPI.INxMeasure, 'qDef' | 'qAttributeExpressions'> {
+export interface MeasureProperties extends Omit<EngineAPI.INxMeasure, "qDef" | "qAttributeExpressions"> {
   qDef: InlineMeasureDef;
   qAttributeExpressions: AttributeExpressionProperties[];
 }
-export interface QHyperCubeDef extends Omit<EngineAPI.IHyperCubeDef, 'qDimensions' | 'qMeasures'> {
+export interface QHyperCubeDef extends Omit<EngineAPI.IHyperCubeDef, "qDimensions" | "qMeasures"> {
   qDimensions: DimensionProperties[];
   qMeasures: MeasureProperties[];
   qColumnOrder: number[];
@@ -58,7 +76,7 @@ export interface ExtendedNxAttrExprInfo extends EngineAPI.INxAttrExprInfo {
   id: string;
 }
 
-export interface ExtendedNxDimensionInfo extends Omit<EngineAPI.INxDimensionInfo, 'qAttrExprInfo'> {
+export interface ExtendedNxDimensionInfo extends Omit<EngineAPI.INxDimensionInfo, "qAttrExprInfo"> {
   textAlign: TextAlign;
   qAttrExprInfo: ExtendedNxAttrExprInfo[];
   qLibraryId: string;
@@ -72,7 +90,7 @@ export interface ExtendedNxMeasureInfo extends EngineAPI.INxMeasureInfo {
   columnWidth: ColumnWidth;
 }
 
-export interface HyperCube extends Omit<EngineAPI.IHyperCube, 'qDimensionInfo' | 'qMeasureInfo'> {
+export interface HyperCube extends Omit<EngineAPI.IHyperCube, "qDimensionInfo" | "qMeasureInfo"> {
   qColumnOrder: number[];
   qDimensionInfo: ExtendedNxDimensionInfo[];
   qMeasureInfo: ExtendedNxMeasureInfo[];
@@ -100,11 +118,11 @@ export interface Component {
   header?: HeaderStyling;
 }
 
-export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, 'qHyperCube'> {
+export interface TableLayout extends Omit<EngineAPI.IGenericHyperCubeLayout, "qHyperCube"> {
   qHyperCube: HyperCube;
   totals: {
     show: boolean;
-    position: 'top' | 'bottom' | 'noTotals';
+    position: "top" | "bottom" | "noTotals";
     label: string;
   };
   usePagination?: boolean;
@@ -142,14 +160,7 @@ export interface Row {
   [key: string]: Cell | string;
 }
 
-export type SortDirection = 'A' | 'D';
-export type ColumnWidthType = 'auto' | 'fitToContent' | 'pixels' | 'percentage';
-
-export interface ColumnWidth {
-  type: ColumnWidthType;
-  pixels?: number;
-  percentage?: number;
-}
+export type SortDirection = "A" | "D";
 
 export interface Column {
   id: string;
@@ -160,10 +171,11 @@ export interface Column {
   colIdx: number;
   pageColIdx: number;
   selectionColIdx: number;
+  isActivelySorted: boolean;
   label: string;
   headTextAlign: Align;
   totalsTextAlign: Align;
-  bodyTextAlign: 'auto' | Align;
+  bodyTextAlign: "auto" | Align;
   stylingIDs: string[];
   sortDirection: SortDirection;
   qReverseSort: boolean;
@@ -196,45 +208,39 @@ export interface BodyColors {
   borderColor: string;
 }
 
-export interface BackgroundColors {
-  tableColorFromTheme: string;
-  color?: string;
-  isDark: boolean;
-  isTransparent: boolean;
-}
-
 export interface ExtendedSelectionAPI extends stardust.ObjectSelections {
   on(eventType: string, callback: () => void): void;
   removeListener(eventType: string, callback: () => void): void;
 }
 
-export interface ExtendedTranslator extends stardust.Translator {
-  language(): string;
-}
-
-export interface ExtendedTheme extends stardust.Theme {
-  name(): string;
-  background: BackgroundColors;
-}
-
 export interface ViewState {
+  rowPartialHeight: number;
   scrollLeft: number;
+  scrollTopRatio?: number;
   visibleTop: number;
   visibleHeight: number;
+  visibleLeft?: number;
+  visibleWidth?: number;
   rowsPerPage?: number;
   page?: number;
+  isMultiPage?: boolean;
+  maxLineCount?: number;
+  usePagination?: boolean;
+  skipTotals?: boolean;
+  skipHeader?: boolean;
 }
 
 export interface UseOptions {
   viewState: ViewState;
   direction: Direction | undefined;
   footerContainer: HTMLElement | undefined;
+  freeResize?: boolean;
 }
 
 export interface AnnounceArgs {
   keys: Array<string | Array<string>>;
   shouldBeAtomic?: boolean;
-  politeness?: 'polite' | 'assertive' | 'off';
+  politeness?: "polite" | "assertive" | "off";
 }
 
 export type Announce = (arg0: AnnounceArgs) => void;
@@ -244,17 +250,23 @@ export type ChangeSortOrder = (column: Column, sortOrder?: SortDirection) => Pro
 export type ApplyColumnWidths = (newColumnSize: ColumnWidth, column: Column) => void;
 
 export interface Galaxy {
-  translator: ExtendedTranslator;
+  translator: stardust.Translator;
   carbon: boolean;
   flags: stardust.Flags;
 }
 
+type ExtendedGenericHyperCubeProperties = EngineAPI.IGenericHyperCubeProperties & {
+  qHyperCubeDef: {
+    columnWidths?: number[];
+  };
+};
+
 export interface ExportFormat {
   data: unknown[];
-  properties: EngineAPI.IGenericHyperCubeProperties;
+  properties: ExtendedGenericHyperCubeProperties;
 }
 
 export interface PropTree {
   qChildren: unknown[];
-  qProperty: { qHyperCubeDef: QHyperCubeDef };
+  qProperty: { qHyperCubeDef: QHyperCubeDef; usePagination?: boolean; totals?: { show: boolean } };
 }

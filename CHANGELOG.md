@@ -1,3 +1,108 @@
+## [2.9.1](https://github.com/qlik-oss/sn-table/compare/v2.9.0...v2.9.1) (2023-12-15)
+
+### Bug Fixes
+
+- correct focus on table when keyboard navigation and NewHeadCell is turned on ([#1107](https://github.com/qlik-oss/sn-table/issues/1107)) ([23db950](https://github.com/qlik-oss/sn-table/commit/23db950d49534de29eaa2f736598dd1888ae4e23))
+- new `<HeadCellMenu />` a11y adaptation ([#1096](https://github.com/qlik-oss/sn-table/issues/1096)) ([f6f2d03](https://github.com/qlik-oss/sn-table/commit/f6f2d037ee85cb346b06a1adb8474e9c5b75ae1e))
+- use capital Percentage while accessing column size enum value ([#1109](https://github.com/qlik-oss/sn-table/issues/1109)) ([c18b5e2](https://github.com/qlik-oss/sn-table/commit/c18b5e2ef5fb1899e6ea0d97e2eecf794c02b881))
+
+# [2.9.0](https://github.com/qlik-oss/sn-table/compare/v2.8.0...v2.9.0) (2023-11-30)
+
+### Features
+
+- import view data properties ([#1095](https://github.com/qlik-oss/sn-table/issues/1095)) ([0118bfa](https://github.com/qlik-oss/sn-table/commit/0118bfadb35fc96fef169e7500fd8f2f8d6ce3c5))
+
+# [2.8.0](https://github.com/qlik-oss/sn-table/compare/v2.7.0...v2.8.0) (2023-11-29)
+
+### Bug Fixes
+
+- add touch listeners for ColumnAdjuster ([#1083](https://github.com/qlik-oss/sn-table/issues/1083)) ([7164e52](https://github.com/qlik-oss/sn-table/commit/7164e52e7ff98969f12081afa81af0b02985d879))
+- miss while trying to find col adjuster hit area ([#1097](https://github.com/qlik-oss/sn-table/issues/1097)) ([bc78289](https://github.com/qlik-oss/sn-table/commit/bc782890fe9aedaeec4961ce52bf03fba15b19d4))
+
+### Features
+
+- `<HeadCellMenu />` from shared lib ([#1084](https://github.com/qlik-oss/sn-table/issues/1084)) ([b826b29](https://github.com/qlik-oss/sn-table/commit/b826b2980da9fe53c927872f4a2650125c1aff96))
+- new `<HeadCellMenu />` bg color on hover/active state ([#1092](https://github.com/qlik-oss/sn-table/issues/1092)) ([d390cff](https://github.com/qlik-oss/sn-table/commit/d390cff822a24609c73cccb89ee3fabf7b4c7332))
+
+# [2.7.0](https://github.com/qlik-oss/sn-table/compare/v2.6.0...v2.7.0) (2023-09-21)
+
+### Bug Fixes
+
+- big table dont render properly ([#1064](https://github.com/qlik-oss/sn-table/issues/1064)) ([5c66288](https://github.com/qlik-oss/sn-table/commit/5c66288aa511d425b1974f741eb54d8e452d467f))
+- do not use virtualized table to render snapshot/pdf ([#1061](https://github.com/qlik-oss/sn-table/issues/1061)) ([c94d4a5](https://github.com/qlik-oss/sn-table/commit/c94d4a53f689b07ecd77e1bc28128be7e632519c))
+- easy id fixes ([#1062](https://github.com/qlik-oss/sn-table/issues/1062)) ([b6a5027](https://github.com/qlik-oss/sn-table/commit/b6a50274fcf5fae9eb61c4e78dbe5b78d4b7480c))
+- use unique ids for header menu and dropdown ([#1065](https://github.com/qlik-oss/sn-table/issues/1065)) ([5378fd9](https://github.com/qlik-oss/sn-table/commit/5378fd93d0fea6084b20b23c46908dfa9a2da03d))
+
+### Features
+
+- support multi-page pdf by rendering rows as a single-line row ([#1060](https://github.com/qlik-oss/sn-table/issues/1060)) ([d260136](https://github.com/qlik-oss/sn-table/commit/d260136e07edd15083ce7b052c7325c82cdc3b65))
+- support showing Totals row in the first page or last page only ([#1063](https://github.com/qlik-oss/sn-table/issues/1063)) ([55bc04d](https://github.com/qlik-oss/sn-table/commit/55bc04d373ddbc326c8a18373bbaca052264a596))
+- VIZ-2626-renders virtual table for snapshot ([#1055](https://github.com/qlik-oss/sn-table/issues/1055)) ([5538a6e](https://github.com/qlik-oss/sn-table/commit/5538a6ebbf45eb53526ee944a3fa6576678a1df0))
+
+# [2.6.0](https://github.com/qlik-oss/sn-table/compare/v2.5.0...v2.6.0) (2023-08-16)
+
+### Bug Fixes
+
+- fix missing parameter ([#1051](https://github.com/qlik-oss/sn-table/issues/1051)) ([abde883](https://github.com/qlik-oss/sn-table/commit/abde88342b9c26eff9702c88120610ad06f5602e))
+- unexpected focused test ([#1054](https://github.com/qlik-oss/sn-table/issues/1054)) ([cf940f7](https://github.com/qlik-oss/sn-table/commit/cf940f7c86924915833822909a19efd87196a1aa))
+
+# [2.5.0](https://github.com/qlik-oss/sn-table/compare/v2.4.0...v2.5.0) (2023-08-14)
+
+### Bug Fixes
+
+- make selection in master dimension ([#1049](https://github.com/qlik-oss/sn-table/issues/1049)) ([b87ae67](https://github.com/qlik-oss/sn-table/commit/b87ae67c2a42a33fec0128eebc19304a3ec8f76e))
+
+# [2.4.0](https://github.com/qlik-oss/sn-table/compare/v2.3.3...v2.4.0) (2023-08-10)
+
+### Bug Fixes
+
+- introduce alternate state in listbox popup ([#1047](https://github.com/qlik-oss/sn-table/issues/1047)) ([a6a287f](https://github.com/qlik-oss/sn-table/commit/a6a287feca6270298304956fa40769880f371674))
+
+### Features
+
+- show a snapshot with the exact scroll position ([#1028](https://github.com/qlik-oss/sn-table/issues/1028)) ([1689184](https://github.com/qlik-oss/sn-table/commit/1689184a084cb6570b2fabbd20099ee4f4ac6eae))
+- VIZ-2624-set-size-to-table-snapshot ([#1035](https://github.com/qlik-oss/sn-table/issues/1035)) ([91c531a](https://github.com/qlik-oss/sn-table/commit/91c531a8d36870aa5175ae20d76ea63f5dea09b8))
+
+## [2.3.3](https://github.com/qlik-oss/sn-table/compare/v2.3.2...v2.3.3) (2023-07-06)
+
+### Bug Fixes
+
+- add aria-label for head menu button ([#1036](https://github.com/qlik-oss/sn-table/issues/1036)) ([556c195](https://github.com/qlik-oss/sn-table/commit/556c195a12e06993593f031a0c7a6d9bc891e10c))
+
+## [2.3.2](https://github.com/qlik-oss/sn-table/compare/v2.3.1...v2.3.2) (2023-06-29)
+
+### Bug Fixes
+
+- fix chart monitoring ([#1032](https://github.com/qlik-oss/sn-table/issues/1032)) ([9d38239](https://github.com/qlik-oss/sn-table/commit/9d38239820494f7e5f760ff6054e6506cf872f6a))
+- make sure selection menu is focused ([#1030](https://github.com/qlik-oss/sn-table/issues/1030)) ([70fdfb8](https://github.com/qlik-oss/sn-table/commit/70fdfb852ed2845fb69c52555311f7980f2645eb))
+- make totals values correct for all cases ([#1029](https://github.com/qlik-oss/sn-table/issues/1029)) ([a6e5bf5](https://github.com/qlik-oss/sn-table/commit/a6e5bf55111e7ecf52cb0718acce489ebe492283))
+
+### Reverts
+
+- Revert "test: update readme" ([bc69e04](https://github.com/qlik-oss/sn-table/commit/bc69e0455584da8ab61a40bd9043cbfe64054072))
+
+## [2.3.1](https://github.com/qlik-oss/sn-table/compare/v2.3.0...v2.3.1) (2023-06-09)
+
+# [2.3.0](https://github.com/qlik-oss/sn-table/compare/v2.2.3...v2.3.0) (2023-06-07)
+
+### Bug Fixes
+
+- chart exploration should not be in the property panel when straight table is inside container ([#1016](https://github.com/qlik-oss/sn-table/issues/1016)) ([0a15544](https://github.com/qlik-oss/sn-table/commit/0a155446f5f7faad09f1459463618941e3acb43f))
+- hide selection menu options when selections are disabled ([#1020](https://github.com/qlik-oss/sn-table/issues/1020)) ([c0ddc1b](https://github.com/qlik-oss/sn-table/commit/c0ddc1be22c8789bc7a6a2ae5a06d0bedb969aa5))
+- **pagination-table:** miss direction in table wrapper ([#1003](https://github.com/qlik-oss/sn-table/issues/1003)) ([be92c43](https://github.com/qlik-oss/sn-table/commit/be92c4338bf45e9fc98cf210a70722c1c4cf543e))
+- QB-19034 Straight table - horizontal borders disappear for certain font sizes ([#1008](https://github.com/qlik-oss/sn-table/issues/1008)) ([478d993](https://github.com/qlik-oss/sn-table/commit/478d993ef7b4904c075c4ca88cfbcb5c2c4ea41a))
+- selectionsAPI type ([#1002](https://github.com/qlik-oss/sn-table/issues/1002)) ([907c067](https://github.com/qlik-oss/sn-table/commit/907c0678a81c8606ce72f9b2ad74417575b3e2aa))
+
+### Features
+
+- support download as image/pdf ([#1009](https://github.com/qlik-oss/sn-table/issues/1009)) ([069176f](https://github.com/qlik-oss/sn-table/commit/069176f7fe5e177614285b6f23ba7d5e2f4bf413))
+- support snapshot and printing for virtualized table ([#1022](https://github.com/qlik-oss/sn-table/issues/1022)) ([97fa555](https://github.com/qlik-oss/sn-table/commit/97fa555920c7ebc96b24bf1423ad702e52c45015))
+- support taking a snapshot ([#1001](https://github.com/qlik-oss/sn-table/issues/1001)) ([6e28ac6](https://github.com/qlik-oss/sn-table/commit/6e28ac6c82c963f69422c0eef6d1c0456c223741))
+
+### Performance Improvements
+
+- throttle page fetch ([#1018](https://github.com/qlik-oss/sn-table/issues/1018)) ([085e3e4](https://github.com/qlik-oss/sn-table/commit/085e3e4e352b2a9aee54df77a54f106ade5c6559))
+
 ## [2.2.3](https://github.com/qlik-oss/sn-table/compare/v2.2.2...v2.2.3) (2023-04-26)
 
 ### Bug Fixes

@@ -1,48 +1,58 @@
 /* eslint react/require-default-props: 0 */
-import { ThemeProvider } from '@mui/material/styles';
-import { stardust } from '@nebula.js/stardust';
-import React from 'react';
-import { TableContextProvider, EMPTY_TABLE_DATA } from '../table/context';
-import muiSetup from '../table/mui-setup';
+import { ThemeProvider } from "@mui/material/styles";
+import { stardust } from "@nebula.js/stardust";
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
+import React from "react";
+import { EMPTY_TABLE_DATA, TableContextProvider } from "../table/context";
+import muiSetup from "../table/mui-setup";
+import { FocusedCellCoord } from "../table/types";
 import {
   ApplyColumnWidths,
   ChangeSortOrder,
   ExtendedSelectionAPI,
-  ExtendedTheme,
-  ExtendedTranslator,
   TableData,
   TableLayout,
-} from '../types';
-import { generateLayout } from './generate-test-data';
+  ViewService,
+} from "../types";
+import { generateLayout } from "./generate-test-data";
 
 interface ProviderProps {
   app?: EngineAPI.IApp;
   children?: JSX.Element;
   selectionsAPI?: ExtendedSelectionAPI;
   tableData?: TableData;
-  cellCoordMock?: [number, number];
+  cellCoordMock?: FocusedCellCoord;
   layout?: TableLayout;
   model?: EngineAPI.IGenericObject;
-  translator?: ExtendedTranslator;
-  constraints?: stardust.Constraints;
+  translator?: stardust.Translator;
+  interactions?: stardust.Interactions;
   theme?: ExtendedTheme;
   keyboard?: stardust.Keyboard;
-  direction?: 'ltr' | 'rtl';
+  direction?: "ltr" | "rtl";
   rootElement?: HTMLElement;
   embed?: stardust.Embed;
   changeSortOrder?: ChangeSortOrder;
   applyColumnWidths?: ApplyColumnWidths;
   initialDataPages?: EngineAPI.INxDataPage[];
   rect?: stardust.Rect;
+  viewService?: ViewService;
+  isNewHeadCellMenuEnabled?: boolean;
 }
 
 type HookWrapperProps = { children: JSX.Element };
 
 const TestWithProviders = ({
   children,
-  app = { getField: () => Promise.resolve({}) } as unknown as EngineAPI.IApp,
+  app = {
+    getField: () => Promise.resolve({}),
+    createSessionObject: () => Promise.resolve({}),
+  } as unknown as EngineAPI.IApp,
   layout = generateLayout(1, 1, 5),
-  constraints = {} as stardust.Constraints,
+  interactions = {
+    active: true,
+    passive: true,
+    select: true,
+  },
   selectionsAPI = {
     isModal: () => false,
     on: () => undefined,
@@ -52,7 +62,7 @@ const TestWithProviders = ({
     getHyperCubeData: () => Promise.resolve(),
   } as unknown as EngineAPI.IGenericObject,
   keyboard = {} as stardust.Keyboard,
-  translator = { get: (s: string) => s } as unknown as ExtendedTranslator,
+  translator = { get: (s: string) => s } as unknown as stardust.Translator,
   theme = {
     getColorPickerColor: () => undefined,
     name: () => undefined,
@@ -61,39 +71,41 @@ const TestWithProviders = ({
   } as unknown as ExtendedTheme,
   tableData = EMPTY_TABLE_DATA,
   cellCoordMock = undefined,
-  direction = 'ltr',
+  direction = "ltr",
   rootElement = {} as HTMLElement,
   embed = {} as stardust.Embed,
   changeSortOrder = async () => {},
   applyColumnWidths = () => {},
   rect = { width: 0, height: 0, top: 0, left: 0 },
   initialDataPages = undefined,
-}: ProviderProps) => {
-  return (
-    <ThemeProvider theme={muiSetup(direction)}>
-      <TableContextProvider
-        app={app}
-        selectionsAPI={selectionsAPI}
-        layout={layout}
-        translator={translator}
-        constraints={constraints}
-        theme={theme}
-        keyboard={keyboard}
-        model={model}
-        tableData={tableData}
-        cellCoordMock={cellCoordMock}
-        rootElement={rootElement}
-        embed={embed}
-        changeSortOrder={changeSortOrder}
-        applyColumnWidths={applyColumnWidths}
-        rect={rect}
-        initialDataPages={initialDataPages}
-      >
-        {children as JSX.Element}
-      </TableContextProvider>
-    </ThemeProvider>
-  );
-};
+  viewService = { qTop: 0, qHeight: 1, scrollLeft: 0, estimatedRowHeight: 25 },
+  isNewHeadCellMenuEnabled = false,
+}: ProviderProps) => (
+  <ThemeProvider theme={muiSetup(direction)}>
+    <TableContextProvider
+      app={app}
+      selectionsAPI={selectionsAPI}
+      layout={layout}
+      translator={translator}
+      interactions={interactions}
+      theme={theme}
+      keyboard={keyboard}
+      model={model}
+      tableData={tableData}
+      cellCoordMock={cellCoordMock}
+      rootElement={rootElement}
+      embed={embed}
+      changeSortOrder={changeSortOrder}
+      applyColumnWidths={applyColumnWidths}
+      rect={rect}
+      initialDataPages={initialDataPages}
+      viewService={viewService}
+      isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
+    >
+      {children as JSX.Element}
+    </TableContextProvider>
+  </ThemeProvider>
+);
 
 export const wrapper = ({ children }: HookWrapperProps) => <TestWithProviders>{children}</TestWithProviders>;
 

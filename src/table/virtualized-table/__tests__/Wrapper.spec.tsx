@@ -1,46 +1,46 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { stardust } from '@nebula.js/stardust';
-import Wrapper from '../Wrapper';
-import { TableData, TableLayout } from '../../../types';
-import { TestableTable } from '../Table';
-import FooterWrapper from '../../components/footer/FooterWrapper';
-import TestWithProviders from '../../../__test__/test-with-providers';
-import { getColumns, getTotalPosition } from '../../../handle-data';
-import { EMPTY_TABLE_DATA } from '../../context/TableContext';
-import { generateLayout } from '../../../__test__/generate-test-data';
+import { stardust } from "@nebula.js/stardust";
+import { render, screen } from "@testing-library/react";
+import React from "react";
+import { generateLayout } from "../../../__test__/generate-test-data";
+import TestWithProviders from "../../../__test__/test-with-providers";
+import { getColumns, getTotalPosition } from "../../../handle-data";
+import { TableData, TableLayout, ViewService } from "../../../types";
+import { EMPTY_TABLE_DATA } from "../../context/TableContext";
+import { TestableTable } from "../Table";
+import Wrapper from "../Wrapper";
 
-jest.mock('../Table');
-jest.mock('../../components/footer/FooterWrapper');
+jest.mock("../Table");
+jest.mock("@qlik/nebula-table-utils/lib/components", () => ({
+  PaginationFooter: jest.fn().mockReturnValue(<div data-testid="footer-wrapper" />),
+}));
 
-describe('<Wrapper />', () => {
+describe("<Wrapper />", () => {
   let rect: stardust.Rect;
   let layout: TableLayout;
+  let viewService: ViewService;
   let tableData: TableData;
-  let paginationNeeded: boolean;
 
   const renderWrapper = () => {
     const mockTable = TestableTable as jest.MockedFunction<typeof TestableTable>;
     mockTable.mockReturnValue(<div data-testid="table-container" />);
-    const mockFooterWrapper = FooterWrapper as jest.MockedFunction<typeof FooterWrapper>;
-    mockFooterWrapper.mockReturnValue(<div data-testid="footer-wrapper" />);
 
     tableData = {
       ...EMPTY_TABLE_DATA,
-      paginationNeeded,
+      paginationNeeded: true,
       columns: getColumns(layout),
-      totalsPosition: getTotalPosition(layout),
+      totalsPosition: getTotalPosition(layout, viewService),
     };
 
     render(
       <TestWithProviders layout={layout} tableData={tableData} rect={rect}>
         <Wrapper />
-      </TestWithProviders>
+      </TestWithProviders>,
     );
   };
 
   beforeEach(() => {
     layout = generateLayout(5, 5, 20);
+    viewService = {} as ViewService;
     rect = {
       width: 750,
     } as unknown as stardust.Rect;
@@ -48,19 +48,10 @@ describe('<Wrapper />', () => {
 
   afterEach(() => jest.restoreAllMocks());
 
-  it('should not render table with pagination', () => {
-    paginationNeeded = false;
+  it("should render table with pagination", () => {
     renderWrapper();
 
-    expect(screen.getByTestId('table-container')).toBeVisible();
-    expect(screen.queryByTestId('footer-wrapper')).toBeNull();
-  });
-
-  it('should render table with pagination', () => {
-    paginationNeeded = true;
-    renderWrapper();
-
-    expect(screen.getByTestId('table-container')).toBeVisible();
-    expect(screen.getByTestId('footer-wrapper')).toBeVisible();
+    expect(screen.getByTestId("table-container")).toBeVisible();
+    expect(screen.getByTestId("footer-wrapper")).toBeVisible();
   });
 });

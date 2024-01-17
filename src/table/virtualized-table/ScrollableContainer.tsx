@@ -1,5 +1,5 @@
-import React from 'react';
-import { useContextSelector, TableContext } from '../context';
+import React from "react";
+import { TableContext, useContextSelector } from "../context";
 
 interface ScrollableContainerProps {
   children: (JSX.Element | null)[] | JSX.Element;
@@ -10,14 +10,14 @@ interface ScrollableContainerProps {
 
 const ScrollableContainer = React.forwardRef<HTMLDivElement, ScrollableContainerProps>((props, ref) => {
   const { children, width, height, onScroll } = props;
-  const { constraints } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { interactions } = useContextSelector(TableContext, (value) => value.baseProps);
 
   return (
     <div
       data-testid="scrollable-container"
       ref={ref}
       style={{
-        overflow: constraints.active ? 'hidden' : 'auto',
+        overflow: interactions.active ? "auto" : "hidden",
         width,
         height,
       }}

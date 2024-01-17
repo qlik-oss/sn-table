@@ -1,8 +1,8 @@
-import { useMemo, useRef } from 'react';
-import useMutableProp from './use-mutable-prop';
-import mergeAllPages from '../utils/merge-pages';
-import { GridState } from '../types';
-import { PageInfo } from '../../../types';
+import { useMemo, useRef } from "react";
+import { PageInfo } from "../../../types";
+import { GridState } from "../types";
+import mergeAllPages from "../utils/merge-pages";
+import useMutableProp from "./use-mutable-prop";
 
 const pageToKey = ({ qLeft, qTop, qWidth, qHeight }: EngineAPI.INxPage) => `${qLeft}-${qTop}-${qWidth}-${qHeight}`;
 
@@ -10,7 +10,7 @@ const useGetHyperCubeDataQueue = (
   getDataPages: (qPages: EngineAPI.INxPage[]) => Promise<EngineAPI.INxDataPage[]>,
   handleDataPages: (qDataPages: EngineAPI.INxDataPage[]) => void,
   gridState: React.MutableRefObject<GridState>,
-  pageInfo: PageInfo
+  pageInfo: PageInfo,
 ) => {
   const queued = useRef(new Set<EngineAPI.INxPage>()); // Keep track of all unique pages that should be retrieved
   const ongoing = useRef(new Set<EngineAPI.INxPage[]>()); // Keep track of ongoing request. Should be aborted if page info or layout is changed
@@ -34,6 +34,7 @@ const useGetHyperCubeDataQueue = (
         finished.current.add(key);
 
         if (queued.current.size === 1) {
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
           setTimeout(async () => {
             const qPages = Array.from(queued.current.values());
             if (qPages.length === 0) {
@@ -70,7 +71,7 @@ const useGetHyperCubeDataQueue = (
         finished.current.clear();
       },
     }),
-    [pageInfo] // eslint-disable-line react-hooks/exhaustive-deps
+    [pageInfo], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   return queue;

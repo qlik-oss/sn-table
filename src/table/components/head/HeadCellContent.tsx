@@ -1,15 +1,34 @@
-import React from 'react';
+import React, { useRef } from "react";
 
-import { useContextSelector, TableContext } from '../../context';
-import { HeadCellContentProps } from '../../types';
-import getHeadIcons from '../../utils/get-head-icons';
-import HeadCellMenu from './HeadCellMenu';
-import { areTabStopsEnabled } from '../../utils/accessibility-utils';
-import { VisuallyHidden, StyledSortButton, StyledHeadCellContent, StyledHeadCellIconWrapper } from './styles';
+import HeadCellMenu, { MenuAvailabilityFlags } from "@qlik/nebula-table-utils/lib/components/HeadCellMenu";
+import { SortDirection } from "../../../types";
+import { TableContext, useContextSelector } from "../../context";
+import { HeadCellContentProps } from "../../types";
+import { areTabStopsEnabled, setFocusOnColumnAdjuster } from "../../utils/accessibility-utils";
+import getHeadIcons from "../../utils/get-head-icons";
+import { handleHeadCellMenuKeyDown } from "../../utils/handle-keyboard";
+import OldHeadCellMenu from "./HeadCellMenu";
+import {
+  AbsolutelyStyledRefAnchor,
+  StyledHeadCellContent,
+  StyledHeadCellIconWrapper,
+  StyledSortButton,
+  VisuallyHidden,
+} from "./styles";
 
-function HeadCellContent({ children, column, isActive, isInteractionEnabled }: HeadCellContentProps) {
-  const { keyboard, translator, changeSortOrder } = useContextSelector(TableContext, (value) => value.baseProps);
+const HeadCellContent = ({ children, column, isInteractionEnabled, open, setOpen }: HeadCellContentProps) => {
+  const { keyboard, translator, changeSortOrder, interactions, embed, app, model } = useContextSelector(
+    TableContext,
+    (value) => value.baseProps,
+  );
   const isFocusInHead = useContextSelector(TableContext, (value) => value.focusedCellCoord[0] === 0);
+  const isNewHeadCellMenuEnabled = useContextSelector(
+    TableContext,
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled,
+  );
+
+  const anchorRef = useRef<HTMLDivElement>(null);
+  const listboxRef = useRef<HTMLDivElement>(null);
 
   const { startIcon, endIcon, lockIcon } = getHeadIcons(column);
   const tabIndex = isInteractionEnabled && areTabStopsEnabled(keyboard) ? 0 : -1;
@@ -17,37 +36,75 @@ function HeadCellContent({ children, column, isActive, isInteractionEnabled }: H
   const handleSort = () => isInteractionEnabled && changeSortOrder(column);
 
   const sortDirection = {
-    A: translator.get('SNTable.Accessibility.Ascending'),
-    D: translator.get('SNTable.Accessibility.Descending'),
+    A: translator.get("SNTable.Accessibility.Ascending"),
+    D: translator.get("SNTable.Accessibility.Descending"),
+  };
+
+  const sortFromMenu = (evt: React.MouseEvent, newSortDirection: SortDirection) => {
+    evt.stopPropagation();
+    return changeSortOrder(column, newSortDirection);
   };
 
   return (
-    <StyledHeadCellContent isLocked={Boolean(lockIcon)} className={`aligned-${column.headTextAlign}`}>
+    <StyledHeadCellContent
+      isLocked={Boolean(lockIcon)}
+      className={`aligned-${column.headTextAlign}`}
+      isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
+    >
       {lockIcon && <StyledHeadCellIconWrapper>{lockIcon}</StyledHeadCellIconWrapper>}
 
       <StyledSortButton
         className="sn-table-head-label"
-        isActive={isActive}
+        isActivelySorted={column.isActivelySorted}
         textAlign={column.headTextAlign}
         color="inherit"
         size="small"
         startIcon={startIcon}
         endIcon={endIcon}
-        onClick={handleSort}
-        tabIndex={tabIndex}
+        tabIndex={isNewHeadCellMenuEnabled ? -1 : tabIndex}
         disabled={!isInteractionEnabled}
+        onClick={!isNewHeadCellMenuEnabled ? handleSort : () => {}}
+        isNewHeadCellMenuEnabled={isNewHeadCellMenuEnabled}
       >
         {children}
         {isFocusInHead && (
           <VisuallyHidden data-testid={`VHL-for-col-${column.pageColIdx}`}>
-            {`${sortDirection[column.sortDirection]} ${translator.get('SNTable.SortLabel.PressSpaceToSort')}`}
+            {`${sortDirection[column.sortDirection]} ${translator.get("SNTable.SortLabel.PressSpaceToSort")}`}
           </VisuallyHidden>
         )}
       </StyledSortButton>
 
-      {isInteractionEnabled && <HeadCellMenu column={column} tabIndex={tabIndex} />}
+      {isInteractionEnabled &&
+        (isNewHeadCellMenuEnabled ? (
+          <>
+            <HeadCellMenu
+              headerData={column}
+              translator={translator}
+              anchorRef={anchorRef}
+              handleHeadCellMenuKeyDown={handleHeadCellMenuKeyDown}
+              menuAvailabilityFlags={{
+                [MenuAvailabilityFlags.SORTING]: true,
+                [MenuAvailabilityFlags.SEARCHING]: true,
+                [MenuAvailabilityFlags.SELECTIONS]: true,
+                [MenuAvailabilityFlags.ADJUST_HEADER_SIZE]: true,
+              }}
+              open={open}
+              setOpen={setOpen}
+              interactions={interactions}
+              sortRelatedArgs={{ sortFromMenu }}
+              searchRelatedArgs={{ embed, listboxRef }}
+              selectionRelatedArgs={{ app, model }}
+              adjustHeaderSizeRelatedArgs={{ setFocusOnColumnAdjuster }}
+              shouldShowMenuIcon
+            />
+            <AbsolutelyStyledRefAnchor ref={listboxRef} />
+            <AbsolutelyStyledRefAnchor ref={anchorRef} />
+          </>
+        ) : (
+          <OldHeadCellMenu column={column} tabIndex={tabIndex} />
+        ))}
     </StyledHeadCellContent>
   );
-}
+};
 
 export default HeadCellContent;

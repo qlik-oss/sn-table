@@ -1,9 +1,9 @@
-import { stardust } from '@nebula.js/stardust';
-import { useEffect } from 'react';
-import { Row } from '../../../types';
-import { SelectionActions } from '../../constants';
-import { TableContext, useContextSelector } from '../../context';
-import useSelectionListener from '../../hooks/use-selection-listener';
+import { stardust } from "@nebula.js/stardust";
+import { useEffect } from "react";
+import { Row } from "../../../types";
+import { SelectionActions } from "../../constants";
+import { TableContext, useContextSelector } from "../../context";
+import useSelectionListener from "../../hooks/use-selection-listener";
 
 const keyboard = { enabled: false } as stardust.Keyboard; // TODO No keyboard navigation support
 const setShouldRefocus = () => {}; // TODO No focus support

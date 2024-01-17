@@ -1,4 +1,5 @@
 .cache/
+.husky/
 dist/
 .DS_Store
 *.html

@@ -1,9 +1,9 @@
-import { PageInfo } from '../../../../types';
-import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
-import { GridState } from '../../types';
-import mergeAllPages from '../merge-pages';
+import { PageInfo } from "../../../../types";
+import { COLUMN_DATA_BUFFER_SIZE, ROW_DATA_BUFFER_SIZE } from "../../constants";
+import { GridState } from "../../types";
+import mergeAllPages from "../merge-pages";
 
-describe('mergePages', () => {
+describe("mergePages", () => {
   let gridState: React.MutableRefObject<GridState>;
   let pageInfo: PageInfo;
 
@@ -24,7 +24,7 @@ describe('mergePages', () => {
     };
   });
 
-  test('should merge pages', () => {
+  test("should merge pages", () => {
     const qPages: EngineAPI.INxPage[] = [
       { qLeft: 0, qTop: 0, qHeight: 1, qWidth: 1 },
       { qLeft: 0, qTop: 1, qHeight: 1, qWidth: 1 },
@@ -35,8 +35,8 @@ describe('mergePages', () => {
     expect(mergedPages).toEqual([{ qLeft: 0, qTop: 0, qHeight: 2, qWidth: 3 }]);
   });
 
-  describe('stale pages', () => {
-    test('should consider qPage stale given that is qLeft is less than grid column start index', () => {
+  describe("stale pages", () => {
+    test("should consider qPage stale given that is qLeft is less than grid column start index", () => {
       gridState.current.overscanColumnStartIndex = 100;
       gridState.current.overscanColumnStopIndex = 200;
 
@@ -46,7 +46,7 @@ describe('mergePages', () => {
       expect(stalePages).toEqual(qPages);
     });
 
-    test('should consider qPage stale given that is qLeft is larger than grid column end index', () => {
+    test("should consider qPage stale given that is qLeft is larger than grid column end index", () => {
       gridState.current.overscanColumnStartIndex = 100;
       gridState.current.overscanColumnStopIndex = 200;
 
@@ -56,7 +56,7 @@ describe('mergePages', () => {
       expect(stalePages).toEqual(qPages);
     });
 
-    test('should consider qPage stale given that is qTop is less than grid row start index', () => {
+    test("should consider qPage stale given that is qTop is less than grid row start index", () => {
       gridState.current.overscanRowStartIndex = 100;
       gridState.current.overscanRowStopIndex = 200;
 
@@ -66,7 +66,7 @@ describe('mergePages', () => {
       expect(stalePages).toEqual(qPages);
     });
 
-    test('should consider qPage stale given that is qTop is less than grid row start index and the current active page', () => {
+    test("should consider qPage stale given that is qTop is less than grid row start index and the current active page", () => {
       gridState.current.overscanRowStartIndex = 100;
       gridState.current.overscanRowStopIndex = 200;
       pageInfo.page = 1;
@@ -79,7 +79,7 @@ describe('mergePages', () => {
       expect(stalePages).toEqual(qPages);
     });
 
-    test('should consider qPage stale given that is qTop is larger than grid row end index', () => {
+    test("should consider qPage stale given that is qTop is larger than grid row end index", () => {
       gridState.current.overscanRowStartIndex = 100;
       gridState.current.overscanRowStopIndex = 200;
 
@@ -89,7 +89,7 @@ describe('mergePages', () => {
       expect(stalePages).toEqual(qPages);
     });
 
-    test('should consider qPage stale given that is qTop is larger than grid row end index and the current active page', () => {
+    test("should consider qPage stale given that is qTop is larger than grid row end index and the current active page", () => {
       gridState.current.overscanRowStartIndex = 100;
       gridState.current.overscanRowStopIndex = 200;
       pageInfo.page = 1;

@@ -1,25 +1,21 @@
-import { stardust, useEffect, useMemo } from '@nebula.js/stardust';
-import { Root } from 'react-dom/client';
-import { renderVirtualizedTable } from '../table/Root';
-import getVirtualScrollTableData from '../table/virtualized-table/utils/get-table-data';
-import {
-  ApplyColumnWidths,
-  ChangeSortOrder,
-  ExtendedSelectionAPI,
-  ExtendedTheme,
-  ExtendedTranslator,
-  TableLayout,
-} from '../types';
-import useInitialDataPages from './virtualized-table/use-initial-data-pages';
-import usePageInfo from './virtualized-table/use-page-info';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { stardust, useEffect, useMemo } from "@nebula.js/stardust";
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
+import { Root } from "react-dom/client";
+import renderAsPagination from "../render-as-pagination";
+import { renderVirtualizedTable } from "../table/Root";
+import getVirtualScrollTableData from "../table/virtualized-table/utils/get-table-data";
+import { ApplyColumnWidths, ChangeSortOrder, ExtendedSelectionAPI, TableLayout, ViewService } from "../types";
+import useInitialDataPages from "./virtualized-table/use-initial-data-pages";
+import usePageInfo from "./virtualized-table/use-page-info";
 
 interface UseVirtualizedTable {
   app: EngineAPI.IApp | undefined;
   selectionsAPI: ExtendedSelectionAPI | undefined;
   layout: TableLayout;
   model: EngineAPI.IGenericObject | undefined;
-  translator: ExtendedTranslator;
-  constraints: stardust.Constraints;
+  translator: stardust.Translator;
+  interactions: stardust.Interactions;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
   rect: stardust.Rect;
@@ -29,6 +25,8 @@ interface UseVirtualizedTable {
   reactRoot: Root;
   applyColumnWidths: ApplyColumnWidths;
   isFontLoaded: boolean;
+  viewService: ViewService;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 const useVirtualizedTable = ({
@@ -39,7 +37,7 @@ const useVirtualizedTable = ({
   theme,
   keyboard,
   translator,
-  constraints,
+  interactions,
   selectionsAPI,
   changeSortOrder,
   rootElement,
@@ -47,9 +45,14 @@ const useVirtualizedTable = ({
   reactRoot,
   applyColumnWidths,
   isFontLoaded,
+  viewService,
+  isNewHeadCellMenuEnabled,
 }: UseVirtualizedTable) => {
-  const shouldRender = layout.usePagination === false;
-  const tableData = useMemo(() => getVirtualScrollTableData(layout, constraints), [layout, constraints]);
+  const shouldRender = !renderAsPagination(layout, viewService);
+  const tableData = useMemo(
+    () => getVirtualScrollTableData(layout, interactions, viewService),
+    [layout, interactions, viewService],
+  );
   const { pageInfo, setPage } = usePageInfo(layout, shouldRender);
   const { initialDataPages, isLoading } = useInitialDataPages({ model, layout, page: pageInfo.page, shouldRender });
 
@@ -65,7 +68,7 @@ const useVirtualizedTable = ({
         theme,
         keyboard,
         translator,
-        constraints,
+        interactions,
         selectionsAPI,
         rootElement,
         embed,
@@ -75,8 +78,10 @@ const useVirtualizedTable = ({
         setPage,
         pageInfo,
         initialDataPages,
+        viewService,
+        isNewHeadCellMenuEnabled,
       },
-      reactRoot
+      reactRoot,
     );
   }, [
     app,
@@ -86,7 +91,7 @@ const useVirtualizedTable = ({
     theme.name(),
     keyboard.active,
     translator,
-    constraints,
+    interactions,
     selectionsAPI,
     changeSortOrder,
     shouldRender,
@@ -100,6 +105,7 @@ const useVirtualizedTable = ({
     isLoading,
     initialDataPages,
     isFontLoaded,
+    isNewHeadCellMenuEnabled,
   ]);
 };
 

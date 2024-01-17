@@ -1,12 +1,12 @@
-import { renderHook } from '@testing-library/react';
-import { PageInfo, TableLayout } from '../../../../types';
-import { COLUMN_DATA_BUFFER_SIZE, MAX_PAGE_SIZE, ROW_DATA_BUFFER_SIZE } from '../../constants';
-import { GridState } from '../../types';
-import { LoadData } from '../use-data';
-import useItemsRendererHandler, { ItemsHandlerProps, OnItemsRendered } from '../use-items-rendered-handler';
-import { ScrollDirection } from '../use-scroll-direction';
+import { renderHook } from "@testing-library/react";
+import { PageInfo, TableLayout, ViewService } from "../../../../types";
+import { COLUMN_DATA_BUFFER_SIZE, MAX_PAGE_SIZE, ROW_DATA_BUFFER_SIZE } from "../../constants";
+import { GridState } from "../../types";
+import { LoadData } from "../use-data";
+import useItemsRendererHandler, { ItemsHandlerProps, OnItemsRendered } from "../use-items-rendered-handler";
+import { ScrollDirection } from "../use-scroll-direction";
 
-describe('', () => {
+describe("use-items-rendered-handler", () => {
   let layout: TableLayout;
   let loadRows: jest.Mock<LoadData>;
   let loadColumns: jest.Mock<LoadData>;
@@ -17,6 +17,7 @@ describe('', () => {
   let itemsHandlerProps: ItemsHandlerProps;
   let onItemsRendered: OnItemsRendered;
   let gridState: React.MutableRefObject<GridState>;
+  let viewService: ViewService;
 
   beforeEach(() => {
     layout = {
@@ -39,6 +40,7 @@ describe('', () => {
 
     loadRows = jest.fn();
     loadColumns = jest.fn();
+    viewService = { qTop: 0, qHeight: 1, scrollLeft: 0, estimatedRowHeight: 25 };
 
     verticalScrollDirection = { current: ScrollDirection.None };
     horizontalScrollDirection = { current: ScrollDirection.None };
@@ -54,6 +56,7 @@ describe('', () => {
       rowCount,
       pageInfo,
       gridState,
+      viewService,
     };
 
     onItemsRendered = {
@@ -72,7 +75,7 @@ describe('', () => {
     jest.restoreAllMocks();
   });
 
-  test('should not fetch data when at start position', () => {
+  test("should not fetch data when at start position", () => {
     onItemsRendered.overscanRowStartIndex = 0;
     onItemsRendered.overscanColumnStartIndex = 0;
     const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
@@ -83,7 +86,7 @@ describe('', () => {
     expect(loadColumns).toHaveBeenCalledTimes(0);
   });
 
-  test('should update grid state', () => {
+  test("should update grid state", () => {
     onItemsRendered.overscanRowStartIndex = 1;
     onItemsRendered.overscanColumnStartIndex = 2;
     const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
@@ -94,7 +97,7 @@ describe('', () => {
     expect(gridState.current.overscanColumnStartIndex).toBe(2);
   });
 
-  test('should not fetch data when row start index is larger than row count', () => {
+  test("should not fetch data when row start index is larger than row count", () => {
     onItemsRendered.overscanRowStartIndex = 1000;
     rowCount = 10;
     const { result } = renderHook(() => useItemsRendererHandler(itemsHandlerProps));
@@ -105,7 +108,7 @@ describe('', () => {
     expect(loadColumns).toHaveBeenCalledTimes(0);
   });
 
-  test('should not fetch data scroll direction is not set', () => {
+  test("should not fetch data scroll direction is not set", () => {
     verticalScrollDirection.current = ScrollDirection.None;
     horizontalScrollDirection.current = ScrollDirection.None;
     onItemsRendered.overscanRowStartIndex = 1;
@@ -118,8 +121,8 @@ describe('', () => {
     expect(loadColumns).toHaveBeenCalledTimes(0);
   });
 
-  describe('ScrollDirection.Down', () => {
-    test('should load rows with buffer', () => {
+  describe("ScrollDirection.Down", () => {
+    test("should load rows with buffer", () => {
       verticalScrollDirection.current = ScrollDirection.Down;
       onItemsRendered.overscanRowStartIndex = 100;
       onItemsRendered.overscanRowStopIndex = onItemsRendered.overscanRowStartIndex + 10;
@@ -130,7 +133,7 @@ describe('', () => {
       expect(loadRows).toHaveBeenCalledWith(0, onItemsRendered.overscanRowStartIndex, 11, 11 + ROW_DATA_BUFFER_SIZE);
     });
 
-    test('should not call load rows with too large height', () => {
+    test("should not call load rows with too large height", () => {
       verticalScrollDirection.current = ScrollDirection.Down;
       onItemsRendered.overscanRowStartIndex = rowCount - ROW_DATA_BUFFER_SIZE - 9; // 200 - 25 - 9 = 166
       onItemsRendered.overscanRowStopIndex = onItemsRendered.overscanRowStartIndex + 10; // 166 + 10 = 176
@@ -142,8 +145,8 @@ describe('', () => {
     });
   });
 
-  describe('ScrollDirection.Up', () => {
-    test('should load rows with buffer', () => {
+  describe("ScrollDirection.Up", () => {
+    test("should load rows with buffer", () => {
       verticalScrollDirection.current = ScrollDirection.Up;
       onItemsRendered.overscanRowStartIndex = 100;
       onItemsRendered.overscanRowStopIndex = onItemsRendered.overscanRowStartIndex + 10;
@@ -155,11 +158,11 @@ describe('', () => {
         0,
         onItemsRendered.overscanRowStartIndex - ROW_DATA_BUFFER_SIZE,
         11,
-        11 + ROW_DATA_BUFFER_SIZE
+        11 + ROW_DATA_BUFFER_SIZE,
       );
     });
 
-    test('should not call load rows with a qTop value of less than 0', () => {
+    test("should not call load rows with a qTop value of less than 0", () => {
       verticalScrollDirection.current = ScrollDirection.Up;
       onItemsRendered.overscanRowStartIndex = ROW_DATA_BUFFER_SIZE - 1;
       onItemsRendered.overscanRowStopIndex = onItemsRendered.overscanRowStartIndex + 10;
@@ -171,8 +174,8 @@ describe('', () => {
     });
   });
 
-  describe('ScrollDirection.Right', () => {
-    test('should load columns with buffer', () => {
+  describe("ScrollDirection.Right", () => {
+    test("should load columns with buffer", () => {
       horizontalScrollDirection.current = ScrollDirection.Right;
       onItemsRendered.overscanColumnStartIndex = 50;
       onItemsRendered.overscanColumnStopIndex = onItemsRendered.overscanColumnStartIndex + 10;
@@ -184,11 +187,11 @@ describe('', () => {
         onItemsRendered.overscanColumnStartIndex,
         0,
         11 + COLUMN_DATA_BUFFER_SIZE,
-        11
+        11,
       );
     });
 
-    test('should not call load columns with too large width', () => {
+    test("should not call load columns with too large width", () => {
       horizontalScrollDirection.current = ScrollDirection.Right;
       onItemsRendered.overscanColumnStartIndex = layout.qHyperCube.qSize.qcx - COLUMN_DATA_BUFFER_SIZE - 9; // 86
       onItemsRendered.overscanColumnStopIndex = onItemsRendered.overscanColumnStartIndex + 10; // 96
@@ -200,8 +203,8 @@ describe('', () => {
     });
   });
 
-  describe('ScrollDirection.Left', () => {
-    test('should load columns with buffer', () => {
+  describe("ScrollDirection.Left", () => {
+    test("should load columns with buffer", () => {
       horizontalScrollDirection.current = ScrollDirection.Left;
       onItemsRendered.overscanColumnStartIndex = 50;
       onItemsRendered.overscanColumnStopIndex = onItemsRendered.overscanColumnStartIndex + 10;
@@ -213,11 +216,11 @@ describe('', () => {
         onItemsRendered.overscanColumnStartIndex - COLUMN_DATA_BUFFER_SIZE,
         0,
         11 + COLUMN_DATA_BUFFER_SIZE,
-        11
+        11,
       );
     });
 
-    test('should not call load columns with a qLeft value of less than 0', () => {
+    test("should not call load columns with a qLeft value of less than 0", () => {
       horizontalScrollDirection.current = ScrollDirection.Left;
       onItemsRendered.overscanColumnStartIndex = COLUMN_DATA_BUFFER_SIZE - 1;
       onItemsRendered.overscanColumnStopIndex = onItemsRendered.overscanColumnStartIndex + 10;

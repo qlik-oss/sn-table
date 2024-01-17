@@ -7,7 +7,7 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-} from 'react';
+} from "react";
 
 const contextMap: Map<Context<any>, Context<any>> = new Map();
 
@@ -39,11 +39,9 @@ export function createSelectorProvider<T>(OriginalContext: Context<T>): Function
       });
     }, [value]);
 
-    const getContextValue: ContextAccessor<T> = useCallback(() => {
-      return contextValueRef.current;
-    }, [contextValueRef]);
+    const getContextValue: ContextAccessor<T> = useCallback(() => contextValueRef.current, [contextValueRef]);
 
-    const contextValue: SelectorContextType<T> = useMemo(() => [getContextValue, listeners.current], [contextValueRef]);
+    const contextValue: SelectorContextType<T> = useMemo(() => [getContextValue, listeners.current], [getContextValue]);
 
     return (
       <OriginalContext.Provider value={value}>

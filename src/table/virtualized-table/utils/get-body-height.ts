@@ -1,10 +1,10 @@
-import { Rect } from '../types';
+import { Rect } from "../types";
 
 const getBodyHeight = (
   rect: Rect,
   headerAndTotalsHeight: number,
   deferredRowCount: number,
-  estimatedRowHeight: number
+  estimatedRowHeight: number,
 ) => {
   let { height: bodyHeight } = rect;
   bodyHeight -= headerAndTotalsHeight;

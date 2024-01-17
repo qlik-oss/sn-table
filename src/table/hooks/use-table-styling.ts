@@ -1,12 +1,20 @@
-import { useMemo } from 'react';
-import { getBodyStyle, getHeaderStyle, getTotalsStyle } from '../utils/styling-utils';
-import { ExtendedTheme, TableData, TableLayout } from '../../types';
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
+import { useMemo } from "react";
+import { TableData, TableLayout } from "../../types";
+import { FeatureFlags } from "../types";
+import { getBodyStyle, getHeaderStyle, getTotalsStyle } from "../utils/styling-utils";
 
-const useTableStyling = (layout: TableLayout, theme: ExtendedTheme, tableData: TableData, rootElement: HTMLElement) => {
+const useTableStyling = (
+  layout: TableLayout,
+  theme: ExtendedTheme,
+  tableData: TableData,
+  rootElement: HTMLElement,
+  featureFlags: FeatureFlags,
+) => {
   const styling = useMemo(() => {
     const totalsAtTop = tableData.totalsPosition.atTop;
     const body = getBodyStyle(layout, theme, tableData.rows.length, rootElement);
-    const head = getHeaderStyle(layout, theme, !totalsAtTop);
+    const head = getHeaderStyle(layout, theme, !totalsAtTop, featureFlags);
     const totals = getTotalsStyle(layout, theme, totalsAtTop);
 
     return { body, head, totals };

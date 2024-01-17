@@ -1,7 +1,7 @@
-import { getBodyCellAlign } from '../../../../../handle-data';
-import { Cell, Column, PageInfo, Row, TableLayout } from '../../../../../types';
-import { isNumericCell } from '../../../../utils/is-numeric';
-import { SetCellSize } from '../../../types';
+import { getBodyCellAlign } from "../../../../../handle-data";
+import { Cell, Column, PageInfo, Row, TableLayout } from "../../../../../types";
+import { isNumericCell } from "../../../../utils/is-numeric";
+import { SetCellSize } from "../../../types";
 
 const createRow = (
   rows: Row[],
@@ -11,7 +11,7 @@ const createRow = (
   pageRowStartIdx: number,
   columns: Column[],
   qSize: EngineAPI.ISize,
-  setCellSize: SetCellSize
+  setCellSize: SetCellSize,
 ) => {
   const rowIdx = qArea.qTop + cellRowIdx;
   const pageRowIdx = pageRowStartIdx + cellRowIdx;
@@ -36,7 +36,7 @@ const createRow = (
       isNumeric,
     };
 
-    setCellSize(cell.qText ?? '', pageRowIdx, pageColIdx, isNumeric);
+    setCellSize(cell.qText ?? "", pageRowIdx, pageColIdx, isNumeric);
   });
 
   return {
@@ -69,7 +69,7 @@ const isColumnMissingData = (rows: Row[], x: number, y: number, height: number) 
     return true; // Rows are not cached
   }
 
-  return targetRows.some((row) => !row[`col-${x}`]);
+  return targetRows.some((row) => !row?.[`col-${x}`]);
 };
 
 const toRows = (
@@ -78,7 +78,7 @@ const toRows = (
   rows: Row[],
   columns: Column[],
   layout: TableLayout,
-  setCellSize: SetCellSize
+  setCellSize: SetCellSize,
 ) => {
   qDataPages.forEach((dataPage) => {
     dataPage.qMatrix.forEach((cells, cellRowIdx) => {
@@ -91,7 +91,7 @@ const toRows = (
         pageRowStartIdx,
         columns,
         layout.qHyperCube.qSize,
-        setCellSize
+        setCellSize,
       );
 
       rows[pageRowIdx] = row;
@@ -101,4 +101,4 @@ const toRows = (
 
 const createEmptyState = (rowCount: number) => Array(rowCount).fill(undefined);
 
-export { createRow, isRowMissingData, isColumnMissingData, toRows, createEmptyState };
+export { createEmptyState, createRow, isColumnMissingData, isRowMissingData, toRows };

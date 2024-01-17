@@ -1,27 +1,27 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const all = require('../all.json');
+const all = require("../all.json");
 
 const languages = [
-  'en-US',
-  'it-IT',
-  'zh-CN',
-  'zh-TW',
-  'ko-KR',
-  'de-DE',
-  'sv-SE',
-  'es-ES',
-  'pt-BR',
-  'ja-JP',
-  'fr-FR',
-  'nl-NL',
-  'tr-TR',
-  'pl-PL',
-  'ru-RU',
+  "en-US",
+  "it-IT",
+  "zh-CN",
+  "zh-TW",
+  "ko-KR",
+  "de-DE",
+  "sv-SE",
+  "es-ES",
+  "pt-BR",
+  "ja-JP",
+  "fr-FR",
+  "nl-NL",
+  "tr-TR",
+  "pl-PL",
+  "ru-RU",
 ];
 
 Object.keys(all).forEach((key) => {
   const supportLanguagesForString = Object.keys(all[key].locale);
-  if (supportLanguagesForString.indexOf('en-US') === -1)
+  if (supportLanguagesForString.indexOf("en-US") === -1)
     // en-US must exist
     throw new Error(`String '${all[key].id}' is missing value for 'en-US'`);
 

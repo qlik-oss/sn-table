@@ -1,20 +1,21 @@
-import getPropertyPanelDefinition from './property-panel';
-import getData from './data';
-import { importProperties, exportProperties } from './conversion';
+import getData from "./data";
+import getPropertyPanelDefinition from "./property-panel";
+// eslint-disable-next-line import/no-unresolved, import/extensions
+import { exportProperties, importProperties } from "../conversion";
 
 const getExploration = (env) =>
-  env.flags.isEnabled('PS_18291_TABLE_EXPLORATION') && {
+  env.flags.isEnabled("PS_18291_TABLE_EXPLORATION") && {
     exploration: {
-      component: 'items',
+      component: "items",
       items: {
         columnHandler: {
-          component: 'column-handler',
+          component: "column-handler",
           search: true,
           selectAll: false,
         },
       },
       classification: {
-        tags: ['exploration'],
+        tags: ["exploration"],
         exclusive: true,
       },
     },
@@ -26,14 +27,22 @@ export default function ext(env) {
     ...getExploration(env),
     data: getData(env),
     support: {
-      export: true,
+      export: env.flags.isEnabled("PS_20907_TABLE_DOWNLOAD"),
       exportData: true,
-      snapshot: true,
+      snapshot: env.flags.isEnabled("PS_20907_TABLE_DOWNLOAD"),
       viewData: false,
       exploration: true,
       cssScaling: true,
     },
-    importProperties,
-    exportProperties,
+    importProperties(exportFormat, initialProperties, extension, hypercubePath) {
+      const defaultPropertyValues = {
+        defaultDimension: extension.getDefaultDimensionProperties(),
+        defaultMeasure: extension.getDefaultMeasureProperties(),
+      };
+      return importProperties({ exportFormat, initialProperties, extension, hypercubePath, defaultPropertyValues });
+    },
+    exportProperties(propertyTree, hyperCubePath) {
+      return exportProperties({ propertyTree, hyperCubePath });
+    },
   };
 }

@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-await-in-loop */
-import { Locator, Page } from '@playwright/test';
-import { Collection, Key } from '../types';
+import { Locator, Page } from "@playwright/test";
+import { Collection, Key } from "../types";
 
 type KeyPress = {
   key: Key;
@@ -9,12 +9,12 @@ type KeyPress = {
 };
 
 const selectors: Collection = {
-  chart: '#chart-container',
+  chart: "#chart-container",
   text: (text: string): string => `text=${text}`,
   focused: 'th[tabindex="0"], td[tabindex="0"]',
 };
 
-const textToDelete: string = '\nPress space to sort on this column';
+const textToDelete = "\nPress space to sort on this column";
 
 class SnTable {
   readonly page: Page;
@@ -29,8 +29,8 @@ class SnTable {
   async getSelectedColumn(parent?: string): Promise<Collection> {
     const loc: Locator = this.page.locator(selectors.header.selected(parent));
     await loc.isVisible();
-    const innerText: string = await this.getInnerTextAndReplace(loc, textToDelete, '');
-    const sort: string = (await loc.getAttribute('aria-sort')) as string;
+    const innerText: string = await this.getInnerTextAndReplace(loc, textToDelete, "");
+    const sort: string = (await loc.getAttribute("aria-sort")) as string;
     return { innerText, sort };
   }
 
@@ -38,13 +38,13 @@ class SnTable {
     let parentLocator: Locator;
     let childLocator: Locator;
 
-    if (typeof parent === 'string') {
+    if (typeof parent === "string") {
       parentLocator = this.page.locator(parent);
     } else {
       parentLocator = parent;
     }
 
-    if (typeof child === 'string') {
+    if (typeof child === "string") {
       childLocator = parentLocator.locator(child);
     } else {
       childLocator = child;
@@ -54,7 +54,7 @@ class SnTable {
     const lenght: number = await childLocator.count();
     for (let i = 0; i < lenght; i++) {
       const element: Locator = childLocator.nth(i);
-      const innerText: string = await this.getInnerTextAndReplace(element, textToDelete, '');
+      const innerText: string = await this.getInnerTextAndReplace(element, textToDelete, "");
       workArray.push(innerText);
     }
     return workArray;
@@ -85,7 +85,7 @@ class SnTable {
   async getFocusedCellsText(loc: Locator): Promise<string> {
     const cell = loc.locator(selectors.focused);
     await cell.first().isVisible();
-    return this.getInnerTextAndReplace(cell, textToDelete, '');
+    return this.getInnerTextAndReplace(cell, textToDelete, "");
   }
 
   async getSelectedCellsText(loc: Locator): Promise<string[]> {

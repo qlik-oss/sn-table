@@ -1,20 +1,10 @@
-import { stardust } from '@nebula.js/stardust';
-import { Cell } from '../../types';
-import { FocusTypes, KeyCodes, SelectionActions } from '../constants';
-import { BodyArrowHelperProps } from '../types';
-import {
-  announceSelectionState,
-  focusBodyFromHead,
-  focusSelectionToolbar,
-  moveFocusWithArrow,
-  updateFocus,
-} from './accessibility-utils';
-import { handleNavigateTop } from './handle-scroll';
-
-export const preventDefaultBehavior = (evt: React.KeyboardEvent | MouseEvent | React.MouseEvent<HTMLLIElement>) => {
-  evt.stopPropagation();
-  evt.preventDefault();
-};
+import { stardust } from "@nebula.js/stardust";
+import { focusSelectionToolbar, preventDefaultBehavior } from "@qlik/nebula-table-utils/lib/utils";
+import { Cell } from "../../types";
+import { FocusTypes, KeyCodes, SelectionActions } from "../constants";
+import { BodyArrowHelperProps, FocusedCellCoord, SetFocusedCellCoord } from "../types";
+import { announceSelectionState, focusBodyFromHead, moveFocusWithArrow, updateFocus } from "./accessibility-utils";
+import { handleNavigateTop } from "./handle-scroll";
 
 export const isCtrlCmd = (evt: React.KeyboardEvent) => evt.ctrlKey || evt.metaKey;
 
@@ -48,7 +38,15 @@ const shouldSelectMultiValues = (isSelectionsEnabled: boolean, evt: React.Keyboa
  * Gets the focus type for navigating the body.
  * When you move to the header, it returns focusButton type
  */
-export const getFocusType = (cellCoord: [number, number], evt: React.KeyboardEvent<Element>): FocusTypes => {
+export const getFocusType = (
+  cellCoord: FocusedCellCoord,
+  evt: React.KeyboardEvent,
+  isNewHeadCellMenuEnabled: boolean,
+): FocusTypes => {
+  if (isNewHeadCellMenuEnabled) {
+    return FocusTypes.FOCUS;
+  }
+
   const upToHeader = evt.key === KeyCodes.UP && cellCoord[0] === 1;
   const leftToHeader = evt.key === KeyCodes.LEFT && cellCoord[0] === 1 && cellCoord[1] === 0;
 
@@ -69,21 +67,29 @@ export const bodyArrowHelper = ({
   announce,
   totalsPosition,
   isSelectionMode,
+  isNewHeadCellMenuEnabled,
 }: BodyArrowHelperProps) => {
   const firstBodyRowIdx = totalsPosition.atTop ? 2 : 1;
-  const cellCoord: [number, number] = [cell.pageRowIdx + firstBodyRowIdx, cell.pageColIdx];
+  const cellCoord: FocusedCellCoord = [cell.pageRowIdx + firstBodyRowIdx, cell.pageColIdx];
   // Make sure you can't navigate to header (and totals) in selection mode
   const allowedRows = {
     top: isSelectionMode ? firstBodyRowIdx : 0,
     bottom: isSelectionMode && totalsPosition.atBottom ? 1 : 0,
   };
-  const focusType = getFocusType(cellCoord, evt);
+  const focusType = getFocusType(cellCoord, evt, isNewHeadCellMenuEnabled);
 
   if (focusType === FocusTypes.FOCUS) {
-    updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLTableCellElement });
+    updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLElement });
   }
 
-  const nextCell = moveFocusWithArrow(evt, rootElement, cellCoord, setFocusedCellCoord, focusType, allowedRows);
+  const nextCell = moveFocusWithArrow({
+    evt,
+    rootElement,
+    cellCoord,
+    setFocusedCellCoord,
+    focusType,
+    allowedRows,
+  });
 
   if (!(evt.key === KeyCodes.UP || evt.key === KeyCodes.DOWN)) return;
 
@@ -107,14 +113,14 @@ export const bodyArrowHelper = ({
  * If you tab on the menu in the last cell, go to the tabstop in the body
  */
 export const headTabHelper = (
-  evt: React.KeyboardEvent<Element>,
+  evt: React.KeyboardEvent,
   rootElement: HTMLElement,
-  cellCoord: [number, number],
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>,
-  isLastHeadCell: boolean
+  cellCoord: FocusedCellCoord,
+  setFocusedCellCoord: SetFocusedCellCoord,
+  isLastHeadCell: boolean,
 ) => {
-  const target = evt.target as HTMLTableCellElement;
-  const isLabel = target.classList.contains('sn-table-head-label');
+  const target = evt.target as HTMLElement;
+  const isLabel = target.classList.contains("sn-table-head-label");
   if (isLabel && evt.shiftKey && cellCoord[1] > 0) {
     setFocusedCellCoord([cellCoord[0], cellCoord[1] - 1]);
   } else if (!isLabel && !evt.shiftKey) {
@@ -128,12 +134,13 @@ export const headTabHelper = (
 };
 
 interface BodyTabHelperProps {
-  evt: React.KeyboardEvent<Element>;
+  evt: React.KeyboardEvent;
   rootElement: HTMLElement;
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  setFocusedCellCoord: SetFocusedCellCoord;
   keyboard?: stardust.Keyboard;
   isSelectionMode?: boolean;
   paginationNeeded?: boolean;
+  isNewHeadCellMenuEnabled?: boolean;
 }
 
 /**
@@ -147,16 +154,17 @@ export const bodyTabHelper = ({
   keyboard,
   isSelectionMode,
   paginationNeeded,
+  isNewHeadCellMenuEnabled,
 }: BodyTabHelperProps) => {
   const tabToToolbar = keyboard?.enabled && isSelectionMode && (evt.shiftKey || (!evt.shiftKey && !paginationNeeded));
 
   if (tabToToolbar) {
     preventDefaultBehavior(evt);
     focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
-  } else if (evt.shiftKey) {
-    const headCells = rootElement.querySelectorAll('.sn-table-head-cell') as NodeListOf<HTMLTableCellElement>;
+  } else if (evt.shiftKey && !isNewHeadCellMenuEnabled) {
+    const headCells = rootElement.querySelectorAll(".sn-table-head-cell");
     const lastIndex = headCells.length - 1;
 
-    setFocusedCellCoord([0, lastIndex] as [number, number]);
+    setFocusedCellCoord([0, lastIndex]);
   }
 };

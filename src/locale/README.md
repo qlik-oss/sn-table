@@ -6,13 +6,13 @@ Registers a string in multiple locales
 
 ```js
 translator.add({
-  id: 'company.hello_user',
+  id: "company.hello_user",
   locale: {
-    'en-US': 'Hello {0}',
-    'sv-SE': 'Hej {0}',
+    "en-US": "Hello {0}",
+    "sv-SE": "Hej {0}",
   },
 });
-translator.get('company.hello_user', ['John']); // Hello John
+translator.get("company.hello_user", ["John"]); // Hello John
 ```
 
 ## Command
@@ -20,7 +20,7 @@ translator.get('company.hello_user', ['John']); // Hello John
 Generate all.json
 
 ```sh
-yarn  locale:generate
+yarn locale:generate
 ```
 
 verify locale

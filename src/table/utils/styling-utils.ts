@@ -1,14 +1,29 @@
-import { stardust } from '@nebula.js/stardust';
-
-import { resolveToRGBAorRGB, isDarkColor, removeOpacity } from './color-utils';
-import { TableLayout, ExtendedTheme, HeaderStyling, ContentStyling, PaletteColor, BackgroundColors } from '../../types';
-import { GeneratedStyling, CellStyle, FooterStyle } from '../types';
-import { SelectionStates, PAGINATION_HEIGHT } from '../constants';
-import { SELECTION_STYLING, COLORING } from '../styling-defaults';
+import { stardust } from "@nebula.js/stardust";
+import { PAGINATION_HEIGHT } from "@qlik/nebula-table-utils/lib/constants";
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
+import { COLORING, getHoverColor, isDarkColor, removeOpacity, toRGB } from "@qlik/nebula-table-utils/lib/utils";
+import { ContentStyling, HeaderStyling, PaletteColor, TableLayout } from "../../types";
+import { SelectionStates } from "../constants";
+import { SELECTION_STYLING } from "../styling-defaults";
+import { CellStyle, FeatureFlags, GeneratedStyling } from "../types";
 
 export const LINE_HEIGHT = 4 / 3;
 export const CELL_PADDING_HEIGHT = 8;
 export const CELL_BORDER_HEIGHT = 1;
+
+// TODO: maybe shared repo?
+const HEADER_MENU_COLOR_MODIFIER = {
+  hover: {
+    darker: 0.15,
+    brighter: 0.3,
+    opacity: 0.03,
+  },
+  active: {
+    darker: 0.3,
+    brighter: 0.5,
+    opacity: 0.05,
+  },
+};
 
 export const fontSizeToRowHeight = (fontSize: string) =>
   parseInt(fontSize, 10) * LINE_HEIGHT + CELL_PADDING_HEIGHT + CELL_BORDER_HEIGHT;
@@ -29,7 +44,7 @@ export const isPaletteColorSet = (prop: PaletteColor | undefined): boolean =>
 export function getColor(defaultColor: string, theme: stardust.Theme, color = {}): string {
   const resolvedColor = theme.getColorPickerColor(color);
 
-  return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
+  return !resolvedColor || resolvedColor === "none" ? defaultColor : resolvedColor;
 }
 
 /**
@@ -70,15 +85,15 @@ const getLastRowBottomBorder = (fontSize: string | undefined, rowsLength?: numbe
     const rowHeight = fontSizeToRowHeight(fontSize);
     // multiply with number of rows plus header and totals. Compare if greater than container
     const showBottomBorder = rowHeight * (rowsLength + 2) < rootElement.clientHeight - PAGINATION_HEIGHT;
-    return showBottomBorder ? '1px' : '0px';
+    return showBottomBorder ? "1px" : "0px";
   }
-  return '0px';
+  return "0px";
 };
 
 /**
  * finding the correct styling object inside component
  */
-export const getStylingComponent = (layout: TableLayout) => layout.components?.find((c) => c.key === 'theme');
+export const getStylingComponent = (layout: TableLayout) => layout.components?.find((c) => c.key === "theme");
 
 /**
  * Gets base styling for either header or body taking table theme settings into account
@@ -87,11 +102,11 @@ export const getBaseStyling = (
   objetName: string,
   theme: ExtendedTheme,
   styleObj: HeaderStyling | ContentStyling | undefined,
-  bottomSeparatingBorder = false
+  bottomSeparatingBorder = false,
 ): GeneratedStyling => {
-  const fontFamily = theme.getStyle('object', `straightTableV2.${objetName}`, 'fontFamily');
-  const color = theme.getStyle('object', `straightTableV2.${objetName}`, 'color');
-  const fontSize = theme.getStyle('object', `straightTableV2.${objetName}`, 'fontSize');
+  const fontFamily = theme.getStyle("object", `straightTableV2.${objetName}`, "fontFamily");
+  const color = theme.getStyle("object", `straightTableV2.${objetName}`, "color");
+  const fontSize = theme.getStyle("object", `straightTableV2.${objetName}`, "fontSize");
 
   const baseStyle: GeneratedStyling = {
     fontFamily,
@@ -99,7 +114,7 @@ export const getBaseStyling = (
       ? getColor(COLORING.TEXT, theme, styleObj?.fontColor)
       : color || COLORING.TEXT,
     fontSize: (styleObj?.fontSize && `${styleObj.fontSize}px`) || fontSize,
-    padding: styleObj && 'padding' in styleObj ? styleObj?.padding : undefined,
+    padding: styleObj && "padding" in styleObj ? styleObj?.padding : undefined,
     ...getBorderColors(theme.background.isDark, bottomSeparatingBorder),
   };
   // Remove all undefined and null values
@@ -116,10 +131,11 @@ export const getBaseStyling = (
 export function getHeaderStyle(
   layout: TableLayout,
   theme: ExtendedTheme,
-  bottomSeparatingBorder: boolean
+  bottomSeparatingBorder: boolean,
+  featureFlags?: FeatureFlags,
 ): GeneratedStyling {
   const header = getStylingComponent(layout)?.header;
-  const headerStyle = getBaseStyling('header', theme, header, bottomSeparatingBorder);
+  const headerStyle = getBaseStyling("header", theme, header, bottomSeparatingBorder);
 
   // To avoid seeing the table body through the table head:
   // - When the table background color from the sense theme is transparent,
@@ -127,6 +143,17 @@ export function getHeaderStyle(
   // - When the table background color from the sense theme has opacity,
   // removing that.
   headerStyle.background = theme.background.isTransparent ? COLORING.WHITE : removeOpacity(theme.background.color);
+
+  if (featureFlags?.isNewHeadCellMenuEnabled) {
+    headerStyle.hoverBackground = getHoverColor(
+      headerStyle.background ?? COLORING.WHITE,
+      HEADER_MENU_COLOR_MODIFIER.hover,
+    );
+    headerStyle.activeBackground = getHoverColor(
+      headerStyle.background ?? COLORING.WHITE,
+      HEADER_MENU_COLOR_MODIFIER.active,
+    );
+  }
 
   // When you set the header font color,
   // the sort label color should be same.
@@ -145,10 +172,10 @@ export function getBodyStyle(
   layout: TableLayout,
   theme: ExtendedTheme,
   rowsLength?: number,
-  rootElement?: HTMLElement
+  rootElement?: HTMLElement,
 ): GeneratedStyling {
   const content = getStylingComponent(layout)?.content;
-  const contentStyle = getBaseStyling('content', theme, content);
+  const contentStyle = getBaseStyling("content", theme, content);
   contentStyle.background = theme.background.color;
 
   const lastRowBottomBorder = getLastRowBottomBorder(contentStyle?.fontSize, rowsLength, rootElement);
@@ -157,8 +184,8 @@ export function getBodyStyle(
   const backgroundFromLayout = content?.hoverColor;
   const colorFromLayout = content?.hoverFontColor;
 
-  const backgroundFromTheme = theme.getStyle('object', '', 'straightTableV2.content.hover.backgroundColor');
-  const colorFromTheme = theme.getStyle('object', '', 'straightTableV2.content.hover.color');
+  const backgroundFromTheme = theme.getStyle("object", "", "straightTableV2.content.hover.backgroundColor");
+  const colorFromTheme = theme.getStyle("object", "", "straightTableV2.content.hover.color");
 
   // Cases when hoverEffect is true:
   // 1. There is no hover font color but a hover background color,
@@ -189,7 +216,7 @@ export function getBodyStyle(
     // case 1 or 4
     background = backgroundFromTheme;
   } else if (isColorSet) {
-    background = ''; // case 3
+    background = ""; // case 3
   } else {
     background = COLORING.HOVER; // case 2
   }
@@ -198,9 +225,9 @@ export function getBodyStyle(
     ? getColor(
         getAutoFontColor(background),
         theme,
-        isPaletteColorSet(colorFromLayout) ? colorFromLayout : colorFromTheme
+        isPaletteColorSet(colorFromLayout) ? colorFromLayout : colorFromTheme,
       ) // case 1 or 3 or 4
-    : ''; // case 2;
+    : ""; // case 2;
 
   return {
     ...contentStyle,
@@ -212,30 +239,12 @@ export function getBodyStyle(
   };
 }
 
-export const getFooterStyle = (background: BackgroundColors): FooterStyle => {
-  return background.isDark
-    ? {
-        background: background.color,
-        borderColor: COLORING.DARK_MODE_BORDER,
-        color: COLORING.DARK_MODE_TEXT,
-        disabledColor: COLORING.DARK_MODE_DISABLED,
-        // the icon needs a specific color to override it in dark mode
-        iconColor: COLORING.DARK_MODE_TEXT,
-      }
-    : {
-        background: background.color,
-        borderColor: COLORING.BORDER_MEDIUM,
-        color: COLORING.TEXT,
-        disabledColor: COLORING.DISABLED,
-      };
-};
-
 /**
  * Gets complete styling for the totals cells. Based on the body style but with the background and borders from header
  */
 export function getTotalsStyle(layout: TableLayout, theme: ExtendedTheme, totalsAtTop: boolean) {
   const content = getStylingComponent(layout)?.content;
-  const contentStyle = getBaseStyling('content', theme, content);
+  const contentStyle = getBaseStyling("content", theme, content);
   const { borderBottomColor, borderTopColor, background } = getHeaderStyle(layout, theme, totalsAtTop);
   return { ...contentStyle, borderBottomColor, background, borderTopColor };
 }
@@ -266,12 +275,12 @@ export function getTotalsStyle(layout: TableLayout, theme: ExtendedTheme, totals
 export function getColumnStyle(
   styling: CellStyle,
   qAttrExps: EngineAPI.INxAttributeExpressionValues | undefined,
-  stylingIDs: string[]
+  stylingIDs: string[],
 ): CellStyle {
   const columnColors: Record<string, string> = {};
   qAttrExps?.qValues?.forEach((val, i) => {
-    const resolvedColor = val.qText && resolveToRGBAorRGB(val.qText);
-    if (resolvedColor && resolvedColor !== 'none') {
+    const resolvedColor = val.qText && toRGB(val.qText);
+    if (resolvedColor && resolvedColor !== "none") {
       columnColors[stylingIDs[i]] = resolvedColor;
     }
   });

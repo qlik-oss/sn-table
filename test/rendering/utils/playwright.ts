@@ -1,9 +1,10 @@
-import { Page } from '@playwright/test';
+import { Page } from "@playwright/test";
 
 const playwright = (page: Page) => ({
   async open(url: string) {
-    await page.goto(url, { waitUntil: 'networkidle' });
-    await page.waitForSelector('[data-testid="sn-table"] .sn-table-cell-text');
+    // eslint-disable-next-line playwright/no-networkidle
+    await page.goto(url, { waitUntil: "networkidle" });
+    await page.waitForSelector('[data-testid="sn-table"]');
   },
   async screenshot() {
     return page.screenshot();

@@ -1,4 +1,5 @@
-import { KeyCodes } from '../constants';
+import { KeyCodes } from "../constants";
+import { FocusedCellCoord } from "../types";
 
 /**
  * Calculates the next cell to focus
@@ -6,14 +7,14 @@ import { KeyCodes } from '../constants';
 export const getNextCellCoord = (
   evt: React.KeyboardEvent,
   rootElement: HTMLElement,
-  cellCoord: [number, number],
+  cellCoord: FocusedCellCoord,
   allowedRows: {
     top: number;
     bottom: number;
-  } = { top: 0, bottom: 0 }
-): [number, number] => {
-  const rowCount = rootElement.getElementsByClassName('sn-table-row').length;
-  const columnCount = rootElement.getElementsByClassName('sn-table-head-cell').length;
+  } = { top: 0, bottom: 0 },
+): FocusedCellCoord => {
+  const rowCount = rootElement.getElementsByClassName("sn-table-row").length;
+  const columnCount = rootElement.getElementsByClassName("sn-table-head-cell").length;
   let [nextRow, nextCol] = cellCoord;
 
   switch (evt.key) {
@@ -50,20 +51,20 @@ export const getNextCellCoord = (
   return [nextRow, nextCol];
 };
 
-export const getCellElement = (rootElement: HTMLElement, cellCoord: [number, number]) =>
-  rootElement.getElementsByClassName('sn-table-row')[cellCoord[0]]?.getElementsByClassName('sn-table-cell')[
+export const getCellElement = (rootElement: HTMLElement, cellCoord: FocusedCellCoord) =>
+  rootElement.getElementsByClassName("sn-table-row")[cellCoord[0]]?.getElementsByClassName("sn-table-cell")[
     cellCoord[1]
-  ] as HTMLTableCellElement;
+  ] as HTMLElement | undefined;
 
 export const findCellWithTabStop = (rootElement: HTMLElement) =>
-  rootElement.querySelector("td[tabindex='0'], th[tabindex='0']") as HTMLTableCellElement;
+  rootElement.querySelector<HTMLElement>("td[tabindex='0'], th[tabindex='0']");
 
 export const getNextMenuItem = (currentFocus: Element): Element | undefined => {
   const nextItem = currentFocus.nextElementSibling;
   if (!nextItem) {
     return currentFocus.parentElement?.children?.[0];
   }
-  if (nextItem.tagName === 'HR') {
+  if (nextItem.tagName === "HR") {
     return getNextMenuItem(nextItem);
   }
   return nextItem;
@@ -75,15 +76,15 @@ export const getPreviousMenuItem = (currentFocus: Element): Element | undefined 
     const menuItemAmount = currentFocus.parentElement?.children?.length as number;
     return currentFocus.parentElement?.children?.[menuItemAmount - 1];
   }
-  if (previousItem.tagName === 'HR') {
+  if (previousItem.tagName === "HR") {
     return getPreviousMenuItem(previousItem);
   }
   return previousItem;
 };
 
-export const getCellCoord = (rootElement: HTMLElement, cell: HTMLTableCellElement): [number, number] => {
-  const width = rootElement.getElementsByClassName('sn-table-head-cell').length;
-  const cells = rootElement.getElementsByClassName('sn-table-cell');
+export const getCellCoord = (rootElement: HTMLElement, cell: HTMLElement): FocusedCellCoord => {
+  const width = rootElement.getElementsByClassName("sn-table-head-cell").length;
+  const cells = rootElement.getElementsByClassName("sn-table-cell");
 
   let cellIdx = 0;
   for (let idx = 0; idx < cells.length; idx++) {

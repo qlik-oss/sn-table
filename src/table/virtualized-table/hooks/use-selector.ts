@@ -1,29 +1,29 @@
-import { Cell } from '../../../types';
-import { SelectionStates } from '../../constants';
-import { TableContext, useContextSelector } from '../../context';
-import { getSelectionMouseHandlers } from '../../utils/handle-mouse';
-import { getCellSelectionState } from '../../utils/selections-utils';
+import { Cell } from "../../../types";
+import { SelectionStates } from "../../constants";
+import { TableContext, useContextSelector } from "../../context";
+import { getSelectionMouseHandlers } from "../../utils/handle-mouse";
+import { getCellSelectionState } from "../../utils/selections-utils";
 
 const NOOP_ANNOUNCE = () => {};
 
-const onMouseDown = (e: React.MouseEvent<HTMLTableCellElement>) => e.preventDefault();
+const onMouseDown = (e: React.MouseEvent) => e.preventDefault();
 
 export default function useSelector(datum: Cell | string) {
-  const { constraints } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { interactions } = useContextSelector(TableContext, (value) => value.baseProps);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
-  const hasData = typeof datum === 'object';
+  const hasData = typeof datum === "object";
   const cellSelectionState = useContextSelector(TableContext, (value) =>
-    hasData ? getCellSelectionState(datum as Cell, value.selectionState) : SelectionStates.INACTIVE
+    hasData ? getCellSelectionState(datum, value.selectionState) : SelectionStates.INACTIVE,
   );
 
-  const isSelectionsEnabled = !constraints.active && !constraints.select;
+  const isSelectionsEnabled = interactions.active && interactions.select;
 
   if (hasData && isSelectionsEnabled) {
     const { handleMouseDown, handleMouseOver, handleMouseUp } = getSelectionMouseHandlers(
       onMouseDown,
-      datum as Cell,
+      datum,
       selectionDispatch,
-      NOOP_ANNOUNCE
+      NOOP_ANNOUNCE,
     );
 
     return {

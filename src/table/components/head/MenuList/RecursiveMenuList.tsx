@@ -1,37 +1,40 @@
 /* eslint-disable import/no-cycle */
-import React from 'react';
-import Menu from '@mui/material/Menu';
-import { PopoverOrigin } from '@mui/material';
-import { MenuItemGroup } from '../../../types';
-import MenuGroupWrapper from './MenuGroupWrapper';
+import { PopoverOrigin } from "@mui/material";
+import Menu from "@mui/material/Menu";
+import React from "react";
+import { MenuItemGroup } from "../../../types";
+import MenuGroupWrapper from "./MenuGroupWrapper";
 
 interface RecursiveMenuListProps {
   open: boolean;
-  anchorEl: HTMLDivElement | null;
+  anchorEl: HTMLElement | null;
   onClose: () => void;
   menuGroups: MenuItemGroup[];
   transformOrigin?: PopoverOrigin; // eslint-disable-line react/require-default-props
   anchorOrigin?: PopoverOrigin; // eslint-disable-line react/require-default-props
-  ariaLabel?: string; // eslint-disable-line react/require-default-props
+  buttonId?: string; // eslint-disable-line react/require-default-props
+  menuId?: string; // eslint-disable-line react/require-default-props
 }
 
 const RecursiveMenuList = ({
   anchorEl,
   open,
   onClose,
-  ariaLabel,
   menuGroups,
   transformOrigin,
   anchorOrigin,
+  buttonId,
+  menuId,
 }: RecursiveMenuListProps) => {
   if (!menuGroups.length) return null;
   return (
     <Menu
       className="sn-table-head-menu"
+      id={menuId}
       open={open}
       anchorEl={anchorEl}
       onClose={onClose}
-      aria-labelledby={ariaLabel}
+      aria-labelledby={buttonId}
       {...(anchorOrigin ? { anchorOrigin } : {})}
       {...(transformOrigin ? { transformOrigin } : {})}
     >

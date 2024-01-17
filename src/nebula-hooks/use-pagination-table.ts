@@ -1,29 +1,30 @@
-import { stardust, useEffect, useOptions, usePromise, useState } from '@nebula.js/stardust';
-import { Root } from 'react-dom/client';
-import manageData from '../handle-data';
-import { renderPaginationTable } from '../table/Root';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { stardust, useEffect, useOptions, usePromise, useState } from "@nebula.js/stardust";
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
+import { Root } from "react-dom/client";
+import manageData from "../handle-data";
+import isPrinting from "../is-printing";
+import renderAsPagination from "../render-as-pagination";
+import { renderPaginationTable } from "../table/Root";
 import {
+  ApplyColumnWidths,
+  ChangeSortOrder,
   ExtendedSelectionAPI,
   TableLayout,
-  ChangeSortOrder,
-  ExtendedTranslator,
-  ExtendedTheme,
   UseOptions,
-  Galaxy,
-  ApplyColumnWidths,
   ViewService,
-} from '../types';
-import useAnnounceAndTranslations from './use-announce-and-translations';
+} from "../types";
+import useAnnounceAndTranslations from "./use-announce-and-translations";
 
 interface UsePaginationTable {
-  env: Galaxy;
+  isNewHeadCellMenuEnabled: boolean;
   selectionsAPI: ExtendedSelectionAPI | undefined;
   rootElement: HTMLElement;
   layout: TableLayout;
   changeSortOrder: ChangeSortOrder | undefined;
   rect: stardust.Rect;
-  constraints: stardust.Constraints;
-  translator: ExtendedTranslator;
+  interactions: stardust.Interactions;
+  translator: stardust.Translator;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
   model: EngineAPI.IGenericObject | undefined;
@@ -35,19 +36,19 @@ interface UsePaginationTable {
   viewService: ViewService;
 }
 
-const initialPageInfo = {
+export const initialPageInfo = {
   page: 0,
   rowsPerPage: 100,
   rowsPerPageOptions: [10, 25, 100],
 };
 
 const usePaginationTable = ({
-  env,
+  isNewHeadCellMenuEnabled,
   app,
   model,
   rootElement,
   layout,
-  constraints,
+  interactions,
   translator,
   selectionsAPI,
   theme,
@@ -60,17 +61,17 @@ const usePaginationTable = ({
   isFontLoaded,
   viewService,
 }: UsePaginationTable) => {
-  const shouldRender = !env.carbon && layout.usePagination !== false;
-  const { viewState, direction, footerContainer } = useOptions() as UseOptions;
+  const { direction, footerContainer } = useOptions() as UseOptions;
+  const isPrintingMode = isPrinting(layout, viewService);
+  const shouldRender = renderAsPagination(layout, viewService);
   const announce = useAnnounceAndTranslations(rootElement, translator);
-  const tmpPageInfo =
-    layout.snapshotData || viewState?.rowsPerPage
-      ? {
-          page: viewService.page || initialPageInfo.page,
-          rowsPerPage: viewService.rowsPerPage || initialPageInfo.rowsPerPage,
-          rowsPerPageOptions: initialPageInfo.rowsPerPageOptions,
-        }
-      : initialPageInfo;
+  const tmpPageInfo = isPrintingMode
+    ? {
+        page: viewService.page || initialPageInfo.page,
+        rowsPerPage: viewService.rowsPerPage || initialPageInfo.rowsPerPage,
+        rowsPerPageOptions: initialPageInfo.rowsPerPageOptions,
+      }
+    : initialPageInfo;
   const [pageInfo, setPageInfo] = useState(tmpPageInfo);
   const [tableData] = usePromise(async () => {
     if (shouldRender) {
@@ -78,7 +79,7 @@ const usePaginationTable = ({
     }
 
     return null;
-  }, [layout, pageInfo, model, constraints, shouldRender]);
+  }, [layout, pageInfo, model, interactions, shouldRender]);
 
   useEffect(() => {
     const isReadyToRender = !!(
@@ -107,7 +108,7 @@ const usePaginationTable = ({
         direction,
         pageInfo,
         setPageInfo,
-        constraints,
+        interactions,
         translator,
         selectionsAPI,
         theme,
@@ -119,15 +120,16 @@ const usePaginationTable = ({
         embed,
         applyColumnWidths,
         viewService,
+        isNewHeadCellMenuEnabled,
       },
-      reactRoot
+      reactRoot,
     );
   }, [
     app,
     model,
     reactRoot,
     tableData,
-    constraints,
+    interactions,
     direction,
     theme.name(),
     keyboard.active,
@@ -145,6 +147,7 @@ const usePaginationTable = ({
     rect,
     footerContainer,
     isFontLoaded,
+    isNewHeadCellMenuEnabled,
   ]);
 };
 

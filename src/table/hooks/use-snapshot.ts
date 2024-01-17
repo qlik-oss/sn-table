@@ -1,63 +1,66 @@
-// @ts-ignore ignore useImperativeHandle
-import { onTakeSnapshot, useImperativeHandle } from '@nebula.js/stardust';
-import type { TableLayout, ViewService, SnapshotLayout, HyperCube } from '../../types';
-import findVisibleRows from '../utils/find-visible-rows';
-import { getTotalPosition } from '../../handle-data';
+import { onTakeSnapshot, stardust, useImperativeHandle } from "@nebula.js/stardust";
+import type { HyperCube, SnapshotLayout, TableLayout, ViewService } from "../../types";
+import getViewState from "../utils/get-view-state";
 
 interface UseSnapshotProps {
   layout: TableLayout;
   viewService: ViewService;
   model: EngineAPI.IGenericObject | undefined;
   rootElement: HTMLElement;
+  contentRect: stardust.Rect;
 }
 
-const useSnapshot = ({ layout, viewService, model, rootElement }: UseSnapshotProps) => {
-  const getViewState = () => {
-    const totalsPosition = getTotalPosition(layout);
-    const { visibleRowStartIndex = -1, visibleRowEndIndex = -1 } = findVisibleRows(rootElement, totalsPosition);
-    return {
-      scrollLeft: viewService.scrollLeft,
-      visibleTop: viewService.qTop + visibleRowStartIndex,
-      visibleHeight: visibleRowEndIndex < 0 ? 0 : visibleRowEndIndex - visibleRowStartIndex + 1,
-      rowsPerPage: viewService.rowsPerPage,
-      page: viewService.page,
-    };
-  };
-
+const useSnapshot = ({ layout, viewService, model, rootElement, contentRect }: UseSnapshotProps) => {
   onTakeSnapshot(async (snapshotLayout: SnapshotLayout) => {
     if (!snapshotLayout.snapshotData || !model || snapshotLayout.snapshotData.content) {
       return snapshotLayout;
     }
 
-    if ((model as EngineAPI.IGenericObject).getHyperCubeData) {
+    if (model.getHyperCubeData) {
       if (!snapshotLayout.qHyperCube) {
         snapshotLayout.qHyperCube = {} as HyperCube;
       }
-      const { scrollLeft, visibleTop, visibleHeight, rowsPerPage, page } = getViewState();
-      snapshotLayout.qHyperCube.qDataPages = await (model as EngineAPI.IGenericObject).getHyperCubeData(
-        '/qHyperCubeDef',
-        [
-          {
-            qLeft: viewService.qLeft,
-            qTop: visibleTop,
-            qWidth: viewService.qWidth,
-            qHeight: visibleHeight,
-          },
-        ]
-      );
-      snapshotLayout.snapshotData.content = {
+      const {
+        rowPartialHeight,
         scrollLeft,
+        scrollTopRatio,
+        visibleLeft,
+        visibleWidth,
+        visibleTop,
+        visibleHeight,
         rowsPerPage,
         page,
+      } = getViewState(layout, viewService, rootElement);
+      snapshotLayout.qHyperCube.qDataPages = await model.getHyperCubeData("/qHyperCubeDef", [
+        {
+          qLeft: 0,
+          qTop: visibleTop ?? 0,
+          qWidth: layout.qHyperCube.qSize.qcx,
+          qHeight: visibleHeight ?? 0,
+        },
+      ]);
+      snapshotLayout.snapshotData.content = {
+        rowPartialHeight,
+        scrollLeft,
+        scrollTopRatio,
+        visibleLeft,
+        visibleWidth,
+        visibleTop,
+        visibleHeight,
+        rowsPerPage,
+        page,
+        size: { width: contentRect.width, height: contentRect.height },
+        estimatedRowHeight: viewService.estimatedRowHeight,
       };
     }
     return snapshotLayout;
   });
+
   useImperativeHandle(
     () => ({
-      getViewState,
+      getViewState: () => getViewState(layout, viewService, rootElement),
     }),
-    []
+    [layout, viewService, rootElement],
   );
 };
 

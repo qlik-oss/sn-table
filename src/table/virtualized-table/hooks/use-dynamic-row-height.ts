@@ -1,20 +1,19 @@
-import { useCallback, useRef, useState } from 'react';
-import { VariableSizeGrid, VariableSizeList } from 'react-window';
-import { Column, PageInfo, Row } from '../../../types';
-import { TableContext, useContextSelector } from '../../context';
-import { COMMON_CELL_STYLING } from '../../styling-defaults';
-import { GeneratedStyling } from '../../types';
+import { useMeasureText, useOnPropsChange } from "@qlik/nebula-table-utils/lib/hooks";
+import { useCallback, useRef, useState } from "react";
+import { VariableSizeGrid, VariableSizeList } from "react-window";
+import { Column, PageInfo, Row, ViewService } from "../../../types";
+import { TableContext, useContextSelector } from "../../context";
+import { COMMON_CELL_STYLING } from "../../styling-defaults";
+import { GeneratedStyling } from "../../types";
 import {
   CELL_BORDER_HEIGHT,
   CELL_PADDING_HEIGHT,
   LINE_HEIGHT as LINE_HEIGHT_MULTIPLIER,
-} from '../../utils/styling-utils';
-import { MAX_NBR_LINES_OF_TEXT, MIN_BODY_ROW_HEIGHT } from '../constants';
-import { BodyStyle, GridState, RowMeta } from '../types';
-import { getAdjustedCellWidth, getAdjustedHeadCellWidth } from '../utils/cell-width-utils';
-import useMeasureText from './use-measure-text';
-import useMutableProp from './use-mutable-prop';
-import useOnPropsChange from './use-on-props-change';
+} from "../../utils/styling-utils";
+import { MAX_NBR_LINES_OF_TEXT, MIN_BODY_ROW_HEIGHT } from "../constants";
+import { BodyStyle, GridState, RowMeta } from "../types";
+import { getAdjustedCellWidth, getAdjustedHeadCellWidth } from "../utils/cell-width-utils";
+import useMutableProp from "./use-mutable-prop";
 
 export interface UseDynamicRowHeightProps {
   style: BodyStyle | GeneratedStyling;
@@ -25,11 +24,14 @@ export interface UseDynamicRowHeightProps {
   gridRef?: React.RefObject<VariableSizeGrid<any>>;
   lineRef?: React.RefObject<VariableSizeList<any>>;
   columns?: Column[];
-  boldText?: boolean;
+  fontWeight?: string;
   gridState?: React.MutableRefObject<GridState>;
+  isSnapshot: boolean;
+  viewService: ViewService;
+  maxNbrLines?: number;
 }
 
-const MAX_ELEMENT_DOM_SIZE = 15_000_000; // Guestimated max height value in px of a DOM element
+const MAX_ELEMENT_DOM_SIZE = 8_000_000; // Guestimated max height value in px of a DOM element
 
 const useDynamicRowHeight = ({
   style,
@@ -40,8 +42,11 @@ const useDynamicRowHeight = ({
   gridRef,
   lineRef,
   columns,
-  boldText,
+  fontWeight,
   gridState,
+  isSnapshot,
+  viewService,
+  maxNbrLines = MAX_NBR_LINES_OF_TEXT,
 }: UseDynamicRowHeightProps) => {
   const rowMeta = useRef<RowMeta>({
     lastScrollToRatio: 0,
@@ -53,15 +58,12 @@ const useDynamicRowHeight = ({
   });
   const { layout, rect } = useContextSelector(TableContext, (value) => value.baseProps);
   const [estimatedRowHeight, setEstimatedRowHeight] = useState(rowHeight || MIN_BODY_ROW_HEIGHT);
-  const { measureText, estimateLineCount } = useMeasureText(style.fontSize, style.fontFamily, boldText);
+  const { measureText, estimateLineCount } = useMeasureText({ ...style, fontWeight });
   const lineHeight = parseInt(style.fontSize ?? COMMON_CELL_STYLING.fontSize, 10) * LINE_HEIGHT_MULTIPLIER;
 
   // Find a reasonable max line count to avoid issue where the react-window container DOM element gets too big
   const maxCellHeightExcludingPadding = MAX_ELEMENT_DOM_SIZE / rowCount - CELL_PADDING_HEIGHT - CELL_BORDER_HEIGHT;
-  const maxLineCount = Math.max(
-    0,
-    Math.min(MAX_NBR_LINES_OF_TEXT, Math.round(maxCellHeightExcludingPadding / lineHeight))
-  );
+  const maxLineCount = Math.max(0, Math.min(maxNbrLines, Math.round(maxCellHeightExcludingPadding / lineHeight)));
 
   const getCellSize = useCallback(
     (text: string, colIdx: number, isNumeric: boolean) => {
@@ -70,13 +72,13 @@ const useDynamicRowHeight = ({
         : getAdjustedCellWidth(columnWidths[colIdx]);
       const estimatedLineCount = Math.min(
         maxLineCount,
-        estimateLineCount({ text: text.trim(), maxWidth: cellWidth, isNumeric })
+        estimateLineCount({ text: text.trim(), maxWidth: cellWidth, isNumeric }),
       );
       const textHeight = Math.max(1, estimatedLineCount) * lineHeight;
 
       return textHeight + CELL_PADDING_HEIGHT + CELL_BORDER_HEIGHT;
     },
-    [columnWidths, lineHeight, maxLineCount, columns, estimateLineCount]
+    [columnWidths, lineHeight, maxLineCount, columns, estimateLineCount],
   );
 
   const setCellSize = useCallback(
@@ -101,16 +103,16 @@ const useDynamicRowHeight = ({
         rowMeta.current.heights[rowIdx] = height;
       }
 
-      if (!batchStateUpdate) {
+      if (!batchStateUpdate && !isSnapshot) {
         setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
       }
     },
-    [getCellSize]
+    [getCellSize, isSnapshot],
   );
 
   const getRowHeight = useCallback(
     (rowIdx: number) => rowMeta.current.heights[rowIdx] ?? estimatedRowHeight,
-    [rowMeta, estimatedRowHeight]
+    [rowMeta, estimatedRowHeight],
   );
 
   const resetRowMeta = useCallback(() => {
@@ -135,8 +137,10 @@ const useDynamicRowHeight = ({
       mutableSetCellSize.current(text, rowIdx, colIdx, isNumeric, true);
     });
 
-    setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
-  }, [resetRowMeta, mutableSetCellSize]);
+    if (!isSnapshot) {
+      setEstimatedRowHeight(rowMeta.current.totalHeight / rowMeta.current.count);
+    }
+  }, [resetRowMeta, isSnapshot, mutableSetCellSize]);
 
   /**
    * Some user actions and events can trigger row heights to be invalidated
@@ -172,8 +176,8 @@ const useDynamicRowHeight = ({
     for (let rowIdx = rowStart; rowIdx <= rowStop; rowIdx++) {
       const row = rows[rowIdx] ?? {};
       Object.values(row).forEach((cell) => {
-        if (typeof cell === 'object') {
-          setCellSize(cell.qText ?? '', rowIdx, cell.pageColIdx, cell.isNumeric);
+        if (typeof cell === "object") {
+          setCellSize(cell.qText ?? "", rowIdx, cell.pageColIdx, cell.isNumeric);
         }
       });
     }
@@ -186,6 +190,8 @@ const useDynamicRowHeight = ({
   } else if (lineRef?.current) {
     lineRef.current.resetAfterIndex(rowMeta.current.resetAfterRowIndex, false);
   }
+
+  viewService.estimatedRowHeight = estimatedRowHeight;
 
   return {
     setCellSize,

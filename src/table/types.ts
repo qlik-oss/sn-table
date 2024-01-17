@@ -1,23 +1,22 @@
-import { Direction, TableCellProps } from '@mui/material';
-import { stardust } from '@nebula.js/stardust';
+import { Direction, TableCellProps } from "@mui/material";
+import { stardust } from "@nebula.js/stardust";
+import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-extended-theme/types";
 import {
   Announce,
+  ApplyColumnWidths,
   Cell,
   ChangeSortOrder,
   Column,
   ExtendedSelectionAPI,
-  ExtendedTheme,
-  ExtendedTranslator,
   PageInfo,
+  Row,
   SetPageInfo,
   TableData,
   TableLayout,
   TotalsPosition,
-  Row,
-  ApplyColumnWidths,
   ViewService,
-} from '../types';
-import { FocusTypes, SelectionActions } from './constants';
+} from "../types";
+import { FocusTypes, SelectionActions } from "./constants";
 
 interface Action<T = any> {
   type: T;
@@ -41,9 +40,9 @@ export interface SelectMouseUpAction extends Action<SelectionActions.SELECT_MOUS
 export interface SelectMultiAddAction extends Action<SelectionActions.SELECT_MULTI_ADD> {
   payload: SelectPayload;
 }
-export interface SelectMultiEndAction extends Action<SelectionActions.SELECT_MULTI_END> {}
-export interface ResetAction extends Action<SelectionActions.RESET> {}
-export interface ClearAction extends Action<SelectionActions.CLEAR> {}
+export type SelectMultiEndAction = Action<SelectionActions.SELECT_MULTI_END>;
+export type ResetAction = Action<SelectionActions.RESET>;
+export type ClearAction = Action<SelectionActions.CLEAR>;
 export interface UpdatePageRowsAction extends Action<SelectionActions.UPDATE_PAGE_ROWS> {
   payload: { pageRows: Row[] };
 }
@@ -80,6 +79,8 @@ export interface GeneratedStyling {
   color?: string;
   fontSize?: string; // following the theme format so this should always be a string
   background?: string;
+  hoverBackground?: string;
+  activeBackground?: string;
   hoverColors?: {
     background: string;
     color: string;
@@ -92,11 +93,18 @@ export interface TableStyling {
   totals: GeneratedStyling;
 }
 
+export interface ExtendedApp extends EngineAPI.IApp {
+  id?: string;
+}
+
+export type FocusedCellCoord = [number, number];
+export type SetFocusedCellCoord = React.Dispatch<React.SetStateAction<FocusedCellCoord>>;
+
 export interface ContextValue {
   headRowHeight: number;
   setHeadRowHeight: React.Dispatch<React.SetStateAction<number>>;
-  focusedCellCoord: [number, number];
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  focusedCellCoord: FocusedCellCoord;
+  setFocusedCellCoord: SetFocusedCellCoord;
   selectionState: SelectionState;
   selectionDispatch: SelectionDispatch;
   hoverIndex: number;
@@ -104,12 +112,12 @@ export interface ContextValue {
   columnWidths: number[];
   setColumnWidths: React.Dispatch<React.SetStateAction<number[]>>;
   baseProps: {
-    app: EngineAPI.IApp | undefined;
+    app: ExtendedApp | undefined;
     selectionsAPI: ExtendedSelectionAPI | undefined;
     layout: TableLayout;
     model: EngineAPI.IGenericObject | undefined;
-    translator: ExtendedTranslator;
-    constraints: stardust.Constraints;
+    translator: stardust.Translator;
+    interactions: stardust.Interactions;
     theme: ExtendedTheme;
     keyboard: stardust.Keyboard;
     rootElement: HTMLElement;
@@ -118,6 +126,7 @@ export interface ContextValue {
     applyColumnWidths: ApplyColumnWidths;
     styling: TableStyling;
     rect: stardust.Rect;
+    viewService: ViewService;
   };
   tableData: TableData;
   setYScrollbarWidth: (width: number) => void;
@@ -125,14 +134,13 @@ export interface ContextValue {
   setPage?: stardust.SetStateFn<number>;
   initialDataPages?: EngineAPI.INxDataPage[];
   showRightBorder: boolean;
+  featureFlags: FeatureFlags;
 }
 
-export interface FooterStyle {
-  borderColor: string;
-  color: string;
-  disabledColor: string;
-  iconColor?: string;
-  background?: string;
+export type FeatureFlags = Record<keyof typeof AvaliableFlags, boolean>;
+
+export enum AvaliableFlags {
+  isNewHeadCellMenuEnabled,
 }
 
 export interface CellStyle {
@@ -155,16 +163,18 @@ export interface HandleWrapperKeyDownProps {
 export interface HandleHeadKeyDownProps {
   evt: React.KeyboardEvent;
   rootElement: HTMLElement;
-  cellCoord: [number, number];
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  cellCoord: FocusedCellCoord;
+  setFocusedCellCoord: SetFocusedCellCoord;
   isInteractionEnabled: boolean;
+  handleOpenMenu?: (evt: React.KeyboardEvent) => void;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface HandleHeadMouseDownProps {
   evt: React.MouseEvent;
   rootElement: HTMLElement;
-  cellCoord: [number, number];
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  cellCoord: FocusedCellCoord;
+  setFocusedCellCoord: SetFocusedCellCoord;
   keyboard: stardust.Keyboard;
   isInteractionEnabled: boolean;
 }
@@ -175,10 +185,11 @@ export interface BodyArrowHelperProps {
   cell: Cell;
   selectionDispatch: SelectionDispatch;
   isSelectionsEnabled: boolean;
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  setFocusedCellCoord: SetFocusedCellCoord;
   announce: Announce;
   totalsPosition: TotalsPosition;
   isSelectionMode: boolean | undefined;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface HandleBodyKeyDownProps {
@@ -187,28 +198,42 @@ export interface HandleBodyKeyDownProps {
   cell: Cell;
   selectionDispatch: SelectionDispatch;
   isSelectionsEnabled: boolean;
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  setFocusedCellCoord: SetFocusedCellCoord;
   announce: Announce;
   keyboard: stardust.Keyboard;
   totalsPosition: TotalsPosition;
   paginationNeeded: boolean;
   selectionsAPI: ExtendedSelectionAPI | undefined;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface CellFocusProps {
   focusType: FocusTypes;
-  cell: HTMLTableCellElement | undefined;
+  cell: HTMLElement | null | undefined;
+}
+
+export interface MoveFocusWithArrowProps {
+  evt: React.KeyboardEvent;
+  rootElement: HTMLElement;
+  cellCoord: FocusedCellCoord;
+  setFocusedCellCoord: SetFocusedCellCoord;
+  focusType: FocusTypes;
+  allowedRows?: {
+    top: number;
+    bottom: number;
+  };
 }
 
 export interface HandleResetFocusProps {
-  focusedCellCoord: [number, number];
+  focusedCellCoord: FocusedCellCoord;
   rootElement: HTMLElement;
   shouldRefocus: React.MutableRefObject<boolean>;
   isSelectionMode: boolean | undefined;
-  setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
+  setFocusedCellCoord: SetFocusedCellCoord;
   keyboard: stardust.Keyboard;
   announce: Announce;
   totalsPosition: TotalsPosition;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface ContextProviderProps {
@@ -216,11 +241,11 @@ export interface ContextProviderProps {
   app: EngineAPI.IApp | undefined;
   tableData: TableData;
   selectionsAPI: ExtendedSelectionAPI | undefined;
-  cellCoordMock?: [number, number];
+  cellCoordMock?: FocusedCellCoord;
   layout: TableLayout;
   model: EngineAPI.IGenericObject;
-  translator: ExtendedTranslator;
-  constraints: stardust.Constraints;
+  translator: stardust.Translator;
+  interactions: stardust.Interactions;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
   rootElement: HTMLElement;
@@ -231,6 +256,8 @@ export interface ContextProviderProps {
   pageInfo?: PageInfo;
   setPage?: stardust.SetStateFn<number>;
   initialDataPages?: EngineAPI.INxDataPage[];
+  viewService: ViewService;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface RenderProps {
@@ -243,8 +270,8 @@ export interface RenderProps {
   tableData: TableData;
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
-  constraints: stardust.Constraints;
-  translator: ExtendedTranslator;
+  interactions: stardust.Interactions;
+  translator: stardust.Translator;
   theme: ExtendedTheme;
   keyboard: stardust.Keyboard;
   footerContainer: HTMLElement | undefined;
@@ -254,6 +281,7 @@ export interface RenderProps {
   embed: stardust.Embed;
   applyColumnWidths: ApplyColumnWidths;
   viewService: ViewService;
+  isNewHeadCellMenuEnabled: boolean;
 }
 
 export interface TableWrapperProps {
@@ -262,13 +290,13 @@ export interface TableWrapperProps {
   setPageInfo: SetPageInfo;
   footerContainer: HTMLElement | undefined;
   announce: Announce;
-  viewService: ViewService;
 }
 
 export interface HeadCellContentProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   children: JSX.Element;
   column: Column;
-  isActive: boolean;
   isInteractionEnabled: boolean;
 }
 
@@ -285,7 +313,7 @@ export interface HeadCellMenuItem {
   icon: React.ReactElement;
   itemTitle: string;
   enabled: boolean;
-  onClick?: (evt: React.MouseEvent<HTMLLIElement>) => void;
+  onClick?: (evt: React.MouseEvent) => void;
   subMenus?: MenuItemGroup[];
 }
 
@@ -296,7 +324,7 @@ export interface TableBodyWrapperProps {
 }
 
 export interface PaginationContentProps {
-  direction?: 'ltr' | 'rtl';
+  direction?: "ltr" | "rtl";
   pageInfo: PageInfo;
   setPageInfo: SetPageInfo;
   footerContainer?: HTMLElement;
@@ -309,6 +337,7 @@ export interface AdjusterProps {
   column: Column;
   isLastColumn: boolean;
   onColumnResize?: () => void;
+  setIsAdjustingWidth: (isAdjusting: boolean) => void;
 }
 
 export interface FooterWrapperProps {

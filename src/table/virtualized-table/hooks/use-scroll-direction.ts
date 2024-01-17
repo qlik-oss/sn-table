@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef } from "react";
 
 interface OnScroll {
   scrollLeft: number;
@@ -6,11 +6,11 @@ interface OnScroll {
 }
 
 export enum ScrollDirection {
-  Left = 'Left',
-  Right = 'Right',
-  Up = 'Up',
-  Down = 'Down',
-  None = 'None', // If the user is not scrolling in any direction, use this value
+  Left = "Left",
+  Right = "Right",
+  Up = "Up",
+  Down = "Down",
+  None = "None", // If the user is not scrolling in any direction, use this value
 }
 
 const useScrollDirection = () => {
@@ -42,7 +42,7 @@ const useScrollDirection = () => {
       prevScrollTop.current = scrollTop;
       prevScrollLeft.current = scrollLeft;
     },
-    [prevScrollTop, prevScrollLeft, verticalScrollDirection, horizontalScrollDirection]
+    [prevScrollTop, prevScrollLeft, verticalScrollDirection, horizontalScrollDirection],
   );
 
   return {

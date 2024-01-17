@@ -1,10 +1,11 @@
-import React from 'react';
-import { Column } from '../../types';
-import { useContextSelector, TableContext } from '../context';
-import { GeneratedStyling } from '../types';
-import CellText from '../components/CellText';
-import { Totals } from './types';
-import { isNumeric } from '../utils/is-numeric';
+import React from "react";
+import { Column } from "../../types";
+import CellText from "../components/CellText";
+import { TableContext, useContextSelector } from "../context";
+import { BOLD_FONT_WEIGHT } from "../styling-defaults";
+import { GeneratedStyling } from "../types";
+import { isNumeric } from "../utils/is-numeric";
+import { Totals } from "./types";
 
 interface TotalsCellProps {
   index: number;
@@ -17,7 +18,7 @@ interface TotalsCellProps {
 }
 
 const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
-  const { layout, constraints } = useContextSelector(TableContext, (value) => value.baseProps);
+  const { layout, interactions } = useContextSelector(TableContext, (value) => value.baseProps);
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
   const {
     totalsStyle: { hoverColors, ...applicableStyling },
@@ -31,22 +32,22 @@ const TotalsCell = ({ index, style, data }: TotalsCellProps) => {
   return (
     <div
       className="sn-table-cell"
-      title={!constraints.passive ? label : undefined}
+      title={interactions.passive ? label : undefined}
       style={{
         ...style,
         ...applicableStyling,
-        display: 'flex',
-        alignItems: totals.atTop ? 'end' : 'start',
-        borderStyle: 'solid',
-        borderLeftWidth: '0px',
-        borderRightWidth: isLastColumn && !showRightBorder ? '0px' : '1px',
-        borderTopWidth: totals.atBottom ? '1px' : '0px',
-        borderBottomWidth: totals.atTop ? '1px' : '0px',
-        padding: '4px 12px',
+        display: "flex",
+        alignItems: totals.atTop ? "end" : "start",
+        borderStyle: "solid",
+        borderLeftWidth: "0px",
+        borderRightWidth: isLastColumn && !showRightBorder ? "0px" : "1px",
+        borderTopWidth: totals.atBottom ? "1px" : "0px",
+        borderBottomWidth: totals.atTop ? "1px" : "0px",
+        padding: "4px 12px",
         justifyContent: totalsTextAlign,
-        boxSizing: 'border-box',
-        cursor: 'default',
-        fontWeight: '600',
+        boxSizing: "border-box",
+        cursor: "default",
+        fontWeight: BOLD_FONT_WEIGHT,
       }}
     >
       <CellText wordBreak={!isNumeric(label)} lines={3}>

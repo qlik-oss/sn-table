@@ -9,6 +9,10 @@
     {
       "depTypeList": ["engines"],
       "enabled": false
+    },
+    {
+      "enabled": false,
+      "matchDepTypes": ["peerDependencies"]
     }
   ]
 }

@@ -1,66 +1,80 @@
-import React, { useRef, useCallback, useEffect, memo } from 'react';
+import { PaginationFooter } from "@qlik/nebula-table-utils/lib/components";
+import React, { memo, useCallback, useEffect, useRef } from "react";
+import isPrinting from "../../../is-printing";
+import { StyledTableWrapper } from "../../components/styles";
+import { SelectionActions } from "../../constants";
+import { TableContext, useContextSelector } from "../../context";
+import useDidUpdateEffect from "../../hooks/use-did-update-effect";
+import useFocusListener from "../../hooks/use-focus-listener";
+import useKeyboardActiveListener from "../../hooks/use-keyboard-active-listener";
+import useScrollListener from "../../hooks/use-scroll-listener";
+import { TableWrapperProps } from "../../types";
+import { resetFocus } from "../../utils/accessibility-utils";
+import { handleWrapperKeyDown } from "../../utils/handle-keyboard";
+import useScrollbarWidth from "../../virtualized-table/hooks/use-scrollbar-width";
+import AnnounceElements from "./AnnounceElements";
+import TableBodyWrapper from "./body/TableBodyWrapper";
+import TableHeadWrapper from "./head/TableHeadWrapper";
+import { StyledTable, StyledTableContainer } from "./styles";
 
-import AnnounceElements from './AnnounceElements';
-import TableBodyWrapper from './body/TableBodyWrapper';
-import TableHeadWrapper from './head/TableHeadWrapper';
-import FooterWrapper from '../../components/footer/FooterWrapper';
-import { useContextSelector, TableContext } from '../../context';
-import { StyledTableContainer, StyledTable } from './styles';
-import PaginationContent from '../../components/footer/PaginationContent';
-import useDidUpdateEffect from '../../hooks/use-did-update-effect';
-import useFocusListener from '../../hooks/use-focus-listener';
-import useScrollListener from '../../hooks/use-scroll-listener';
-import { handleWrapperKeyDown } from '../../utils/handle-keyboard';
-import { resetFocus } from '../../utils/accessibility-utils';
-import { TableWrapperProps } from '../../types';
-import { StyledTableWrapper } from '../../components/styles';
-import useScrollbarWidth from '../../virtualized-table/hooks/use-scrollbar-width';
-import useKeyboardActiveListener from '../../hooks/use-keyboard-active-listener';
-import { SelectionActions } from '../../constants';
-
-function TableWrapper(props: TableWrapperProps) {
-  const { pageInfo, setPageInfo, direction, footerContainer, announce, viewService } = props;
+const TableWrapper = (props: TableWrapperProps) => {
+  const { pageInfo, setPageInfo, direction, footerContainer, announce } = props;
   const { page, rowsPerPage } = pageInfo;
 
   const { totalColumnCount, totalRowCount, totalPages, paginationNeeded, rows, columns, totalsPosition } =
     useContextSelector(TableContext, (value) => value.tableData);
-  const { selectionsAPI, rootElement, keyboard, translator, theme, constraints, styling } = useContextSelector(
-    TableContext,
-    (value) => value.baseProps
-  );
+  const { rootElement, keyboard, translator, theme, interactions, styling, viewService, layout, rect } =
+    useContextSelector(TableContext, (value) => value.baseProps);
   const focusedCellCoord = useContextSelector(TableContext, (value) => value.focusedCellCoord);
   const setFocusedCellCoord = useContextSelector(TableContext, (value) => value.setFocusedCellCoord);
   const setYScrollbarWidth = useContextSelector(TableContext, (value) => value.setYScrollbarWidth);
   const showRightBorder = useContextSelector(TableContext, (value) => value.showRightBorder);
   const selectionDispatch = useContextSelector(TableContext, (value) => value.selectionDispatch);
+  const isSelectionMode = useContextSelector(TableContext, (value) => value.baseProps.selectionsAPI?.isModal());
+  const isNewHeadCellMenuEnabled = useContextSelector(
+    TableContext,
+    (value) => value.featureFlags.isNewHeadCellMenuEnabled,
+  );
 
   const shouldRefocus = useRef(false);
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const tableWrapperRef = useRef<HTMLDivElement>(null);
 
   const { yScrollbarWidth } = useScrollbarWidth(tableContainerRef);
-  const isSelectionMode = selectionsAPI?.isModal();
 
-  const tableAriaLabel = `${translator.get('SNTable.Accessibility.RowsAndColumns', [
+  const tableAriaLabel = `${translator.get("SNTable.Accessibility.RowsAndColumns", [
     String(rows.length + 1),
     String(columns.length),
-  ])} ${translator.get('SNTable.Accessibility.NavigationInstructions')}`;
+  ])} ${translator.get("SNTable.Accessibility.NavigationInstructions")}`;
 
-  const { scrollLeft } = viewService;
+  const isPrintingMode = isPrinting(layout, viewService);
+  const scrollLeft = isPrintingMode ? viewService.scrollLeft ?? 0 : 0;
+  const scrollTopPartially = isPrintingMode ? viewService.rowPartialHeight ?? 0 : 0;
 
   const setShouldRefocus = useCallback(() => {
-    shouldRefocus.current = rootElement.getElementsByTagName('table')[0].contains(document.activeElement);
+    shouldRefocus.current = rootElement.getElementsByTagName("table")[0].contains(document.activeElement);
   }, [rootElement]);
 
   const handleChangePage = useCallback(
     (pageIdx: number) => {
       setPageInfo({ ...pageInfo, page: pageIdx });
       announce({
-        keys: [['SNTable.Pagination.PageStatusReport', (pageIdx + 1).toString(), totalPages.toString()]],
-        politeness: 'assertive',
+        keys: [["SNTable.Pagination.PageStatusReport", (pageIdx + 1).toString(), totalPages.toString()]],
+        politeness: "assertive",
       });
     },
-    [pageInfo, setPageInfo, totalPages, announce]
+    [pageInfo, setPageInfo, totalPages, announce],
+  );
+
+  const handleChangeRowsPerPage = useCallback(
+    (newRowsPerPage: number) => {
+      setPageInfo({ ...pageInfo, page: 0, rowsPerPage: newRowsPerPage });
+      announce({
+        keys: [["SNTable.Pagination.RowsPerPageChange", newRowsPerPage.toString()]],
+        politeness: "assertive",
+      });
+    },
+    [announce, pageInfo, setPageInfo],
   );
 
   const handleKeyDown = (evt: React.KeyboardEvent) => {
@@ -81,8 +95,12 @@ function TableWrapper(props: TableWrapperProps) {
   useKeyboardActiveListener();
 
   useEffect(() => {
-    tableContainerRef.current?.scrollTo(scrollLeft, 0);
-  }, [pageInfo, totalRowCount, scrollLeft]);
+    const element = tableContainerRef.current;
+    if (element) {
+      element.scrollLeft = scrollLeft;
+      element.scrollTop = scrollTopPartially;
+    }
+  }, [pageInfo, totalRowCount, scrollLeft, scrollTopPartially]);
 
   // Except for first render, whenever the size of the data (number of rows per page, rows, columns) or page changes,
   // reset tabindex to first cell. If some cell had focus, focus the first cell as well.
@@ -96,8 +114,9 @@ function TableWrapper(props: TableWrapperProps) {
       keyboard,
       announce,
       totalsPosition,
+      isNewHeadCellMenuEnabled,
     });
-  }, [rows.length, totalRowCount, totalColumnCount, page]);
+  }, [rows.length, totalRowCount, totalColumnCount, page, isNewHeadCellMenuEnabled]);
 
   useDidUpdateEffect(() => {
     setYScrollbarWidth(yScrollbarWidth);
@@ -119,8 +138,8 @@ function TableWrapper(props: TableWrapperProps) {
       <StyledTableContainer
         ref={tableContainerRef}
         className="sn-table-container"
-        fullHeight={footerContainer || constraints.active || !paginationNeeded} // the footerContainer always wants height: 100%
-        constraints={constraints}
+        fullHeight={footerContainer || !interactions.active || !paginationNeeded} // the footerContainer always wants height: 100%
+        interactions={interactions}
         tabIndex={-1}
         role="application"
         data-testid="table-container"
@@ -130,13 +149,25 @@ function TableWrapper(props: TableWrapperProps) {
           <TableBodyWrapper {...props} setShouldRefocus={setShouldRefocus} tableWrapperRef={tableWrapperRef} />
         </StyledTable>
       </StyledTableContainer>
-      {!constraints.active && (
-        <FooterWrapper footerContainer={footerContainer} paginationNeeded={paginationNeeded}>
-          <PaginationContent {...props} handleChangePage={handleChangePage} isSelectionMode={isSelectionMode} />
-        </FooterWrapper>
-      )}
+      <PaginationFooter
+        footerContainer={footerContainer}
+        pageInfo={pageInfo}
+        paginationNeeded={paginationNeeded}
+        theme={theme}
+        totalRowCount={totalRowCount}
+        totalColumnCount={totalColumnCount}
+        totalPages={totalPages}
+        keyboard={keyboard}
+        translator={translator}
+        interactions={interactions}
+        rect={rect}
+        layout={layout as unknown as EngineAPI.IGenericHyperCubeLayout}
+        handleChangePage={handleChangePage}
+        handleChangeRowsPerPage={handleChangeRowsPerPage}
+        isSelectionMode={isSelectionMode}
+      />
     </StyledTableWrapper>
   );
-}
+};
 
 export default memo(TableWrapper);

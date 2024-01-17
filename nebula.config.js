@@ -1,9 +1,9 @@
-const path = require('path');
+const path = require("path");
 
-const { version } = require(path.resolve(__dirname, './package.json')); // eslint-disable-line
+const { version } = require(path.resolve(__dirname, "./package.json")); // eslint-disable-line
 
 const replacementStrings = {
-  'process.env.PACKAGE_VERSION': JSON.stringify(version),
+  "process.env.PACKAGE_VERSION": JSON.stringify(version),
 };
 
 module.exports = {
@@ -12,80 +12,82 @@ module.exports = {
     replacementStrings,
   },
   serve: {
-    flags: {},
+    flags: {
+      CLIENT_IM_5716_TABLE_COL_WIDTH: true,
+    },
     keyboardNavigation: false,
     themes: [
       {
-        id: 'sense styling',
+        id: "sense styling",
         theme: {
           object: {
             straightTableV2: {
-              fontSize: '12px',
-              color: '#404040',
+              fontSize: "12px",
+              color: "#404040",
             },
           },
         },
       },
       {
-        id: 'Test',
+        id: "Test",
         theme: {
           straightTableV2: {
             header: {
-              fontSize: '40px',
-              color: 'chocolate',
-              fontFamily: 'sans-serif',
+              fontSize: "40px",
+              color: "chocolate",
+              fontFamily: "sans-serif",
             },
             content: {
-              fontSize: '16px',
-              color: 'magenta',
-              fontFamily: 'sans-serif',
+              fontSize: "16px",
+              color: "magenta",
+              fontFamily: "sans-serif",
               hover: {
-                backgroundColor: 'black',
-                color: 'red',
+                backgroundColor: "black",
+                color: "red",
               },
             },
           },
-          backgroundColor: '#32a852',
+          backgroundColor: "#32a852",
         },
       },
       {
-        id: 'Test2',
+        id: "Test2",
         theme: {
           straightTableV2: {
             header: {
-              fontSize: '20px',
-              color: 'blue',
-              fontFamily: 'sans-serif',
+              fontSize: "20px",
+              color: "blue",
+              fontFamily: "sans-serif",
             },
             content: {
-              fontSize: '16px',
-              color: '#232323',
-              fontFamily: 'sans-serif',
+              fontSize: "16px",
+              color: "#232323",
+              fontFamily: "sans-serif",
             },
           },
-          backgroundColor: 'cyan',
+          backgroundColor: "cyan",
         },
       },
       {
-        id: 'Test3',
+        id: "Test3",
         theme: {
           straightTableV2: {
             header: {
-              fontSize: '20px',
-              color: 'rgba(0,0,0,0.87)',
-              fontFamily: 'sans-serif',
+              fontSize: "20px",
+              color: "rgba(0,0,0,0.87)",
+              fontFamily: "sans-serif",
             },
             content: {
-              fontSize: '16px',
-              color: 'rgba(57, 49, 222, 0.87)',
-              fontFamily: 'sans-serif',
+              fontSize: "16px",
+              color: "rgba(57, 49, 222, 0.87)",
+              fontFamily: "sans-serif",
               hover: {
-                backgroundColor: 'rgba(121,222,49,0.7)',
-                color: 'rgba(171,205,239,0.5)',
+                backgroundColor: "rgba(121,222,49,0.7)",
+                color: "rgba(171,205,239,0.5)",
               },
             },
           },
-          backgroundColor: 'rgba(200,200,200,0.3)',
+          backgroundColor: "rgba(200,200,200,0.3)",
         },
       },
     ],

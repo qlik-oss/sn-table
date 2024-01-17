@@ -1,13 +1,13 @@
-import React, { memo } from 'react';
-import { VariableSizeList } from 'react-window';
-import { HeaderProps } from './types';
-import HeaderCell from './HeaderCell';
-import { useContextSelector, TableContext } from '../context';
-import useResetHeader from './hooks/use-reset-header';
+import React, { memo } from "react";
+import { VariableSizeList } from "react-window";
+import { TableContext, useContextSelector } from "../context";
+import HeaderCell from "./HeaderCell";
+import useResetHeader from "./hooks/use-reset-header";
+import { HeaderProps } from "./types";
 
 export const listStyle: React.CSSProperties = {
-  overflow: 'hidden',
-  boxSizing: 'border-box',
+  overflow: "hidden",
+  boxSizing: "border-box",
   /**
    * "will-change" is by default "transform" in react-window. This disables that default value,
    * as there was issues with rendering border when the width of the react-window "list" was
@@ -17,7 +17,7 @@ export const listStyle: React.CSSProperties = {
    * again to resolve those performance issues, but the issue with rendering border will need to
    * be fixed in some other way.
    */
-  willChange: 'auto',
+  willChange: "auto",
 };
 
 const Header = (props: HeaderProps) => {

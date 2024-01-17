@@ -1,16 +1,16 @@
-import { Cell, Column } from '../../../types';
-import { SelectionStates } from '../../constants';
-import { SELECTION_STYLING } from '../../styling-defaults';
-import { CellStyle } from '../../types';
-import { getColumnStyle } from '../../utils/styling-utils';
-import { BodyStyle } from '../types';
+import { Cell, Column } from "../../../types";
+import { SelectionStates } from "../../constants";
+import { SELECTION_STYLING } from "../../styling-defaults";
+import { CellStyle } from "../../types";
+import { getColumnStyle } from "../../utils/styling-utils";
+import { BodyStyle } from "../types";
 
 const getCellStyle = (
   cell: Cell,
   column: Column,
   showHoverEffect: boolean,
   cellSelectionState: SelectionStates,
-  bodyStyle: BodyStyle
+  bodyStyle: BodyStyle,
 ): BodyStyle => {
   const { hoverColors, lastRowBottomBorder, ...styling } = bodyStyle;
 
@@ -31,6 +31,7 @@ const getCellStyle = (
       // TODO: proper typing for each styling (header, totals, body)
       color: showHoverEffect ? hoverColors?.color : withColumnStyle.color,
       background: `${SELECTION_STYLING.EXCLUDED_BACKGROUND}, ${
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         showHoverEffect ? hoverColors?.background : withColumnStyle.background
       }`,
     };
