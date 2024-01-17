@@ -50,7 +50,7 @@ describe("find-visible-rows", () => {
           if (className === "sn-table-data-row") return dataRows;
           return undefined;
         },
-      } as unknown as HTMLDivElement;
+      } as unknown as HTMLElement;
     };
 
     beforeEach(() => {
@@ -233,7 +233,7 @@ describe("find-visible-rows", () => {
       };
       rootElement = {
         querySelector: () => tableBody,
-      } as unknown as HTMLDivElement;
+      } as unknown as HTMLElement;
     };
 
     beforeEach(() => {

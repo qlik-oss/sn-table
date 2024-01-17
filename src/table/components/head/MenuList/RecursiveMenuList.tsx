@@ -7,7 +7,7 @@ import MenuGroupWrapper from "./MenuGroupWrapper";
 
 interface RecursiveMenuListProps {
   open: boolean;
-  anchorEl: HTMLDivElement | null;
+  anchorEl: HTMLElement | null;
   onClose: () => void;
   menuGroups: MenuItemGroup[];
   transformOrigin?: PopoverOrigin; // eslint-disable-line react/require-default-props

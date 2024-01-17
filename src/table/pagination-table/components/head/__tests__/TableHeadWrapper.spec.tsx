@@ -50,12 +50,12 @@ describe("<TableHeadWrapper />", () => {
     expect(queryByText(tableData.columns[0].label)).toBeVisible();
     expect(queryByText(tableData.columns[1].label)).toBeVisible();
 
-    const firstColumn = getByText(tableData.columns[0].label).closest("th") as HTMLTableCellElement;
-    const secondColumn = getByText(tableData.columns[1].label).closest("th") as HTMLTableCellElement;
-    expect(firstColumn.getAttribute("scope")).toBe("col");
-    expect(secondColumn.getAttribute("scope")).toBe("col");
-    expect(firstColumn.getAttribute("aria-sort")).toBe("ascending");
-    expect(secondColumn.getAttribute("aria-sort")).toBeNull();
+    const firstColumn = getByText(tableData.columns[0].label).closest<HTMLElement>("th");
+    const secondColumn = getByText(tableData.columns[1].label).closest<HTMLElement>("th");
+    expect(firstColumn?.getAttribute("scope")).toBe("col");
+    expect(secondColumn?.getAttribute("scope")).toBe("col");
+    expect(firstColumn?.getAttribute("aria-sort")).toBe("ascending");
+    expect(secondColumn?.getAttribute("aria-sort")).toBeNull();
   });
 
   it("should change`aria-sort` when second column is isActivelySorted", () => {
@@ -70,10 +70,10 @@ describe("<TableHeadWrapper />", () => {
     layout.qHyperCube.qEffectiveInterColumnSortOrder = [1, 0];
 
     const { getByText } = renderTableHead();
-    const firstColQuery = getByText(tableData.columns[0].label).closest("th") as HTMLTableCellElement;
-    const secondColQuery = getByText(tableData.columns[1].label).closest("th") as HTMLTableCellElement;
+    const firstColQuery = getByText(tableData.columns[0].label).closest<HTMLElement>("th");
+    const secondColQuery = getByText(tableData.columns[1].label).closest<HTMLElement>("th");
 
-    expect(firstColQuery.getAttribute("aria-sort")).toBeNull();
-    expect(secondColQuery.getAttribute("aria-sort")).toBe("ascending");
+    expect(firstColQuery?.getAttribute("aria-sort")).toBeNull();
+    expect(secondColQuery?.getAttribute("aria-sort")).toBe("ascending");
   });
 });

@@ -1,5 +1,4 @@
 import { stardust } from "@nebula.js/stardust";
-import { MouseEvent } from "react";
 import { Announce, Cell, TotalsPosition } from "../../../types";
 import { SelectionActions } from "../../constants";
 import { SelectionDispatch } from "../../types";
@@ -8,14 +7,14 @@ import * as getElementUtils from "../get-element-utils";
 import { getSelectionMouseHandlers, handleMouseDownToFocusBody, handleMouseDownToFocusHead } from "../handle-mouse";
 
 describe("handle-mouse", () => {
-  const rootElement = {} as unknown as HTMLDivElement;
-  const cellElement = { focus: () => undefined, setAttribute: () => undefined } as unknown as HTMLTableCellElement;
+  const rootElement = {} as HTMLElement;
+  const cellElement = { focus: () => undefined, setAttribute: () => undefined } as unknown as HTMLElement;
   let keyboard = {} as unknown as stardust.Keyboard;
   let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
-  let evt: MouseEvent;
+  let evt: React.MouseEvent;
 
   beforeEach(() => {
-    evt = { preventDefault: jest.fn() } as unknown as MouseEvent;
+    evt = { preventDefault: jest.fn() } as unknown as React.MouseEvent;
     setFocusedCellCoord = jest.fn();
     jest.spyOn(accessibilityUtils, "removeTabAndFocusCell").mockImplementation(() => undefined);
     jest.spyOn(accessibilityUtils, "updateFocus").mockImplementation(() => {});
@@ -107,7 +106,7 @@ describe("handle-mouse", () => {
   describe("getSelectionMouseHandlers", () => {
     let cell: Cell;
     let announce: Announce;
-    let onMouseDown: React.MouseEventHandler<HTMLTableCellElement> | undefined;
+    let onMouseDown: React.MouseEventHandler | undefined;
     let selectionDispatch: SelectionDispatch;
 
     const getHandlers = () => getSelectionMouseHandlers(onMouseDown, cell, selectionDispatch, announce);

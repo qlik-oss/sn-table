@@ -5,6 +5,7 @@ import type { ExtendedTheme } from "@qlik/nebula-table-utils/lib/hooks/use-exten
 import React from "react";
 import { EMPTY_TABLE_DATA, TableContextProvider } from "../table/context";
 import muiSetup from "../table/mui-setup";
+import { FocusedCellCoord } from "../table/types";
 import {
   ApplyColumnWidths,
   ChangeSortOrder,
@@ -20,7 +21,7 @@ interface ProviderProps {
   children?: JSX.Element;
   selectionsAPI?: ExtendedSelectionAPI;
   tableData?: TableData;
-  cellCoordMock?: [number, number];
+  cellCoordMock?: FocusedCellCoord;
   layout?: TableLayout;
   model?: EngineAPI.IGenericObject;
   translator?: stardust.Translator;

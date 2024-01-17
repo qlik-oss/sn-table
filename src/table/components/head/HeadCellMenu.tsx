@@ -63,7 +63,7 @@ const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
               {
                 id: 1,
                 itemTitle: translator.get("SNTable.MenuItem.Search"),
-                onClick: (evt: React.MouseEvent<HTMLLIElement>) => {
+                onClick: (evt: React.MouseEvent) => {
                   evt.stopPropagation();
                   setOpenMenuDropdown(false);
                   setOpenListboxDropdown(true);
@@ -143,7 +143,7 @@ const HeadCellMenu = ({ column, tabIndex }: HeadCellMenuProps) => {
         {
           id: 1,
           itemTitle: translator.get("SNTable.MenuItem.AdjustColumnSize"),
-          onClick: (evt: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+          onClick: (evt: React.MouseEvent) => {
             preventDefaultBehavior(evt);
             setOpenMenuDropdown(false);
             setFocusOnColumnAdjuster(anchorRef);

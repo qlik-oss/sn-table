@@ -6,28 +6,28 @@ import * as accessibilityUtils from "../accessibility-utils";
 import * as getElementUtils from "../get-element-utils";
 
 describe("accessibility-utils", () => {
-  let cell: HTMLTableCellElement | undefined;
+  let cell: HTMLElement | undefined;
   let keyboard: stardust.Keyboard;
   let rootElement: HTMLElement;
   let focusedCellCoord: [number, number];
   let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
-  let button: HTMLButtonElement;
+  let button: HTMLElement;
 
   beforeEach(() => {
-    button = { focus: jest.fn() } as unknown as HTMLButtonElement;
+    button = { focus: jest.fn() } as unknown as HTMLElement;
     cell = {
       focus: jest.fn(),
       blur: jest.fn(),
       setAttribute: jest.fn(),
       querySelector: () => button,
-    } as unknown as HTMLTableCellElement;
+    } as unknown as HTMLElement;
     rootElement = {
       getElementsByClassName: () => [
         { getElementsByClassName: () => [cell] },
         { getElementsByClassName: () => [cell] },
       ],
       querySelector: () => cell,
-    } as unknown as HTMLDivElement;
+    } as unknown as HTMLElement;
     focusedCellCoord = [0, 0];
     setFocusedCellCoord = jest.fn();
     keyboard = {
@@ -42,36 +42,34 @@ describe("accessibility-utils", () => {
   afterEach(() => jest.clearAllMocks());
 
   describe("focusBackToHeadCell", () => {
-    let evt: React.KeyboardEvent;
-    let eventCell: HTMLTableCellElement;
-    let targetCell: HTMLTableCellElement;
-    let baseElement: HTMLTableCellElement;
+    let currentTarget: EventTarget & Element;
+    let eventCell: HTMLElement;
+    let targetCell: HTMLElement;
+    let baseElement: HTMLElement;
     let isNewHeadCellMenuEnabled: boolean;
 
     const triggerFunction = () => {
-      accessibilityUtils.focusBackToHeadCell(evt, isNewHeadCellMenuEnabled);
+      accessibilityUtils.focusBackToHeadCell(currentTarget, isNewHeadCellMenuEnabled);
     };
 
     beforeEach(() => {
       targetCell = {
         focus: jest.fn(),
-      } as unknown as HTMLTableCellElement;
+      } as unknown as HTMLElement;
       baseElement = {
         setAttribute: jest.fn(),
         querySelector: jest.fn().mockReturnValue(targetCell),
         focus: jest.fn(),
-      } as unknown as HTMLTableCellElement;
+      } as unknown as HTMLElement;
       eventCell = {
         key: "the cell that evt triggered",
         closest: jest.fn().mockReturnValue(baseElement),
         setAttribute: jest.fn(),
-      } as unknown as HTMLTableCellElement;
-      evt = {
-        target: eventCell,
-      } as unknown as React.KeyboardEvent;
+      } as unknown as HTMLElement;
+      currentTarget = eventCell;
       rootElement = {
         getElementsByClassName: () => [cell, cell],
-      } as unknown as HTMLDivElement;
+      } as unknown as HTMLElement;
     });
 
     it("should reset the cells tab index that event has been triggered on", () => {
@@ -250,7 +248,7 @@ describe("accessibility-utils", () => {
     });
 
     it("should announce cell content and selection status for non selected first cell after focusing on it", () => {
-      cell = { ...cell, textContent: "#something" } as HTMLTableCellElement;
+      cell = { ...cell, textContent: "#something" } as HTMLElement;
       const row = { getElementsByClassName: () => [cell, cell] };
       rootElement = {
         getElementsByClassName: () => [row, row],
@@ -268,7 +266,7 @@ describe("accessibility-utils", () => {
       const tmpCell = global.document.createElement("td");
       tmpCell?.classList.add("selected");
 
-      cell = { ...cell, classList: tmpCell?.classList, textContent: "#something" } as HTMLTableCellElement;
+      cell = { ...cell, classList: tmpCell?.classList, textContent: "#something" } as HTMLElement;
       const row = { getElementsByClassName: () => [cell, cell] };
       rootElement = {
         getElementsByClassName: () => [row, row],
@@ -363,7 +361,7 @@ describe("accessibility-utils", () => {
   describe("announceSelectionState", () => {
     let isSelected: boolean;
     let announce: Announce;
-    let nextCell: HTMLTableCellElement;
+    let nextCell: HTMLElement;
     let isSelectionMode: boolean;
 
     beforeEach(() => {
@@ -373,7 +371,7 @@ describe("accessibility-utils", () => {
         classList: {
           contains: () => isSelected,
         },
-      } as unknown as HTMLTableCellElement;
+      } as unknown as HTMLElement;
       isSelectionMode = false;
     });
 
@@ -421,16 +419,16 @@ describe("accessibility-utils", () => {
   });
 
   describe("focusBodyFromHead", () => {
-    let otherCell: HTMLTableCellElement;
+    let otherCell: HTMLElement;
 
     beforeEach(() => {
-      otherCell = { ...cell } as HTMLTableCellElement;
+      otherCell = { ...cell } as HTMLElement;
       rootElement = {
         getElementsByClassName: (className: string) =>
           className === "sn-table-cell" ? [otherCell, otherCell, otherCell, cell, otherCell, otherCell] : [cell, cell],
-      } as unknown as HTMLDivElement;
-      jest.spyOn(getElementUtils, "findCellWithTabStop").mockImplementation(() => cell as HTMLTableCellElement);
-      jest.spyOn(getElementUtils, "getCellElement").mockImplementation(() => cell as HTMLTableCellElement);
+      } as unknown as HTMLElement;
+      jest.spyOn(getElementUtils, "findCellWithTabStop").mockImplementation(() => cell as HTMLElement);
+      jest.spyOn(getElementUtils, "getCellElement").mockImplementation(() => cell as HTMLElement);
     });
 
     it("should call findCellWithTabStop and setFocusedCellCoord and setFocusedCellCoord with coord [2, 1] when cell with tabstop is found", () => {

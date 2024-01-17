@@ -6,7 +6,7 @@ import { getCellSelectionState } from "../../utils/selections-utils";
 
 const NOOP_ANNOUNCE = () => {};
 
-const onMouseDown = (e: React.MouseEvent<HTMLTableCellElement>) => e.preventDefault();
+const onMouseDown = (e: React.MouseEvent) => e.preventDefault();
 
 export default function useSelector(datum: Cell | string) {
   const { interactions } = useContextSelector(TableContext, (value) => value.baseProps);

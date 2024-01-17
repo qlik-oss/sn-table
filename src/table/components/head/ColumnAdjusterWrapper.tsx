@@ -35,7 +35,7 @@ const ColumnAdjusterWrapper = ({ column, isLastColumn, onColumnResize, setIsAdju
   };
 
   const handleBlur = (event: React.FocusEvent | React.KeyboardEvent) =>
-    focusBackToHeadCell(event, isNewHeadCellMenuEnabled);
+    focusBackToHeadCell(event.currentTarget, isNewHeadCellMenuEnabled);
 
   // TODO: Pass the new header flag here so we can adjust the min width accordingly
   return (

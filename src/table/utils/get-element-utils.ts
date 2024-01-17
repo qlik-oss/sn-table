@@ -1,4 +1,5 @@
 import { KeyCodes } from "../constants";
+import { FocusedCellCoord } from "../types";
 
 /**
  * Calculates the next cell to focus
@@ -6,12 +7,12 @@ import { KeyCodes } from "../constants";
 export const getNextCellCoord = (
   evt: React.KeyboardEvent,
   rootElement: HTMLElement,
-  cellCoord: [number, number],
+  cellCoord: FocusedCellCoord,
   allowedRows: {
     top: number;
     bottom: number;
   } = { top: 0, bottom: 0 },
-): [number, number] => {
+): FocusedCellCoord => {
   const rowCount = rootElement.getElementsByClassName("sn-table-row").length;
   const columnCount = rootElement.getElementsByClassName("sn-table-head-cell").length;
   let [nextRow, nextCol] = cellCoord;
@@ -50,13 +51,13 @@ export const getNextCellCoord = (
   return [nextRow, nextCol];
 };
 
-export const getCellElement = (rootElement: HTMLElement, cellCoord: [number, number]) =>
+export const getCellElement = (rootElement: HTMLElement, cellCoord: FocusedCellCoord) =>
   rootElement.getElementsByClassName("sn-table-row")[cellCoord[0]]?.getElementsByClassName("sn-table-cell")[
     cellCoord[1]
-  ] as HTMLTableCellElement;
+  ] as HTMLElement | undefined;
 
 export const findCellWithTabStop = (rootElement: HTMLElement) =>
-  rootElement.querySelector("td[tabindex='0'], th[tabindex='0']") as HTMLTableCellElement;
+  rootElement.querySelector<HTMLElement>("td[tabindex='0'], th[tabindex='0']");
 
 export const getNextMenuItem = (currentFocus: Element): Element | undefined => {
   const nextItem = currentFocus.nextElementSibling;
@@ -81,7 +82,7 @@ export const getPreviousMenuItem = (currentFocus: Element): Element | undefined 
   return previousItem;
 };
 
-export const getCellCoord = (rootElement: HTMLElement, cell: HTMLTableCellElement): [number, number] => {
+export const getCellCoord = (rootElement: HTMLElement, cell: HTMLElement): FocusedCellCoord => {
   const width = rootElement.getElementsByClassName("sn-table-head-cell").length;
   const cells = rootElement.getElementsByClassName("sn-table-cell");
 
