@@ -4,9 +4,9 @@
 
 There are two simple ways of testing your changes. Either run the nebula development server or build the extension and add it to Qlik Sense
 
-1. Install dependencies with `yarn`
-1. Transpile code with `yarn build` (or `yarn build:watch`)
-1. Run it using nebula development server with `yarn start`
+1. Install dependencies with `pnpm install`
+1. Transpile code with `pnpm build` (or `pnpm build:watch`)
+1. Run it using nebula development server with `pnpm start`
    - The development server needs to connect to and communicate with the Qlik Associative Engine running within any of Qlik's product offerings.
    - For the Saas Edition of Qlik Sense, you can add your webIntegrationId and pointing the engine URL to your tenant following [Nebula serve configuration file](https://qlik.dev/libraries-and-tools/nebulajs/nebula-serve#configuration-file) or the introduction page of `http://localhost:8000` when you run the development server.
 1. Or, Upload the /dist folder as an extension on [Qlik Sense Enterprise for Windows](https://help.qlik.com/en-US/sense-developer/November2021/Subsystems/Extensions/Content/Sense_Extensions/Howtos/deploy-extensions.htm) or [Qlik Sense SaaS](https://help.qlik.com/en-US/cloud-services/Subsystems/Hub/Content/Sense_Hub/Admin/mc-extensions.htm)
@@ -15,7 +15,7 @@ There are two simple ways of testing your changes. Either run the nebula develop
 
 Run API spec generating and verification with:
 
-    yarn spec
+    pnpm spec
 
 It verifies the [table object properties](../src/object-properties.js) (a JSDoc file) and generates a [Scriptappy](https://github.com/qlik-oss/scriptappy) definition documentation (an API spec) from that file.
 
@@ -27,20 +27,20 @@ It verifies the [table object properties](../src/object-properties.js) (a JSDoc 
 
 Run unit tests with:
 
-    yarn test:unit
+    pnpm test:unit
 
 ### Rendering test
 
 Run rendering tests with:
 
     # Install dependencies
-    yarn --frozen-lockfile
+    pnpm install --frozen-lockfile
 
     # Build nebula.js visualization
-    yarn build
+    pnpm build
 
     chmod 777 ./test/rendering/scripts/run-rendering-tests.sh
-    yarn test:local:rendering
+    pnpm test:local:rendering
 
 Look into [overview and guide](../test/rendering/README.md) to learn more about the rendering test
 
@@ -48,13 +48,13 @@ Look into [overview and guide](../test/rendering/README.md) to learn more about 
 
 Run lint with:
 
-    yarn lint
+    pnpm lint
 
 ## Type checking
 
 Run type checking with:
 
-    yarn types:check
+    pnpm types:check
 
 ## Git hooks
 
@@ -63,12 +63,6 @@ When you commit, linting your commit message and linting, type/formatting checki
 You can skip git commit hooks with:
 
     git commit -m "commit message" --no-verify
-
-## Deduplicate packages
-
-Yarn v1 does not support package deduplication natively. yarn-deduplicate is used to cleans up yarn.lock by removing duplicates:
-
-      yarn deduplicate-packages
 
 ## Releasing
 
@@ -84,7 +78,7 @@ A release consists of the following:
 ### Step-By-Step
 
 1. Check out main and run `git pull`.
-1. Run `git clean -dfx && yarn` to make sure dependencies are up-to-date.
+1. Run `git clean -dfx && pnpm install` to make sure dependencies are up-to-date.
 1. Run `npm version [major | minor | patch] -m "chore(release): v%s"`. Use a [semVer string based on conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) since last release. Ex: `npm version patch -m "chore(release): v%s"`.
 1. Run `git push && git push --tags` to push commit and tag.
 1. Make sure all checks pass, then Circle CI automatically publishes to NPM.
