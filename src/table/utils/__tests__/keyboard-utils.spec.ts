@@ -13,7 +13,7 @@ jest.mock("@qlik/nebula-table-utils/lib/utils", () => ({
 }));
 
 describe("keyboard-utils", () => {
-  let evt: React.KeyboardEvent;
+  let evt: React.KeyboardEvent<HTMLElement>;
   let rootElement: HTMLElement;
   let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
 
@@ -23,10 +23,10 @@ describe("keyboard-utils", () => {
       shiftKey: false,
       ctrlKey: false,
       metaKey: false, // cases when meta key is pressed instead of ctrl is not tested here, the test are granular enough anyway
-      target: {} as HTMLElement,
+      currentTarget: {} as HTMLElement,
       stopPropagation: () => {},
       preventDefault: jest.fn(),
-    } as unknown as React.KeyboardEvent;
+    } as unknown as React.KeyboardEvent<HTMLElement>;
     rootElement = {
       querySelectorAll: () => [{}, {}],
       getElementsByClassName: () => [
@@ -319,10 +319,10 @@ describe("keyboard-utils", () => {
       containsLabelClass = true;
       evt = {
         ...evt,
-        target: {
+        currentTarget: {
           classList: { contains: () => containsLabelClass },
         },
-      } as unknown as React.KeyboardEvent;
+      } as unknown as React.KeyboardEvent<HTMLElement>;
       cellCoord = [0, 2];
       jest.spyOn(accessibilityUtils, "focusBodyFromHead").mockImplementation(() => {});
     });

@@ -121,8 +121,7 @@ export const handleHeadKeyDown = ({
 
   if (shouldBubbleEarly(evt)) return;
 
-  const target = evt.target as HTMLElement;
-  const isLastHeadCell = !target.closest(".sn-table-cell")?.nextSibling;
+  const isLastHeadCell = !evt.currentTarget.closest(".sn-table-cell")?.nextSibling;
 
   switch (evt.key) {
     case KeyCodes.LEFT:
@@ -132,7 +131,7 @@ export const handleHeadKeyDown = ({
         focusBodyFromHead(rootElement, setFocusedCellCoord);
       } else {
         if (isNewHeadCellMenuEnabled) {
-          updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLElement });
+          updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.currentTarget });
         }
         moveFocusWithArrow({
           evt,
@@ -159,7 +158,7 @@ export const handleHeadKeyDown = ({
       break;
     case KeyCodes.C:
       preventDefaultBehavior(evt);
-      isCtrlCmd(evt) && copyCellValue(evt);
+      isCtrlCmd(evt) && copyCellValue(evt.currentTarget);
       break;
     case isNewHeadCellMenuEnabled && KeyCodes.ENTER:
     case isNewHeadCellMenuEnabled && KeyCodes.SPACE:
@@ -174,7 +173,7 @@ export const handleHeadKeyDown = ({
  * handles keydown events for the totals cells (move focus, copy cell, value)
  */
 export const handleTotalKeyDown = (
-  evt: React.KeyboardEvent,
+  evt: React.KeyboardEvent<HTMLElement>,
   rootElement: HTMLElement,
   cellCoord: FocusedCellCoord,
   setFocusedCellCoord: SetFocusedCellCoord,
@@ -195,7 +194,7 @@ export const handleTotalKeyDown = (
       preventDefaultBehavior(evt);
       const focusType = getFocusType(cellCoord, evt, isNewHeadCellMenuEnabled);
       if (focusType === FocusTypes.FOCUS) {
-        updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLElement });
+        updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.currentTarget });
       }
 
       moveFocusWithArrow({ evt, rootElement, cellCoord, setFocusedCellCoord, focusType });
@@ -206,7 +205,7 @@ export const handleTotalKeyDown = (
       break;
     case KeyCodes.C: {
       preventDefaultBehavior(evt);
-      isCtrlCmd(evt) && copyCellValue(evt);
+      isCtrlCmd(evt) && copyCellValue(evt.currentTarget);
       break;
     }
     case KeyCodes.SPACE:
@@ -234,7 +233,7 @@ export const handleBodyKeyDown = ({
   selectionsAPI,
   isNewHeadCellMenuEnabled,
 }: HandleBodyKeyDownProps) => {
-  if ((evt.target as HTMLElement).classList.contains("excluded")) {
+  if (evt.currentTarget.classList.contains("excluded")) {
     preventDefaultBehavior(evt);
     return;
   }
@@ -297,7 +296,7 @@ export const handleBodyKeyDown = ({
     // Ctrl + c: copy cell value
     case KeyCodes.C:
       preventDefaultBehavior(evt);
-      isCtrlCmd(evt) && copyCellValue(evt);
+      isCtrlCmd(evt) && copyCellValue(evt.currentTarget);
       break;
     default:
       break;

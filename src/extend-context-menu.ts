@@ -5,13 +5,14 @@ import copyCellValue from "./table/utils/copy-utils";
 export default function extendContextMenu() {
   onContextMenu?.((menu: any, event: Event) => {
     const target = event.target as HTMLElement | null;
-    target?.closest(".sn-table-cell") &&
+    const cellElement = target?.closest<HTMLElement>(".sn-table-cell");
+    cellElement &&
       menu.addItem({
         translation: "contextMenu.copyCellValue",
         icon: "lui-icon lui-icon--copy",
         tid: "copy-cell-context-item",
         select: async () => {
-          copyCellValue(event);
+          copyCellValue(cellElement);
         },
       });
   });

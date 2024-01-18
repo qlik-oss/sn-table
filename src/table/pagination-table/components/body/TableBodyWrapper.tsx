@@ -72,7 +72,7 @@ const TableBodyWrapper = ({ setShouldRefocus, tableWrapperRef, announce }: Table
               !keyboard.enabled
                 ? 0
                 : -1;
-            const handleKeyDown = (evt: React.KeyboardEvent) => {
+            const handleKeyDown = (evt: React.KeyboardEvent<HTMLElement>) => {
               handleBodyKeyDown({
                 evt,
                 rootElement,
