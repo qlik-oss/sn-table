@@ -51,7 +51,7 @@ const HeadCell = ({ column, columnIndex, columnsLength }: HeadCellProps) => {
   const isLastColumn = columnIndex === columnsLength - 1;
   const cellCoord = [0, column.pageColIdx] as FocusedCellCoord;
 
-  const handleKeyDown = (evt: React.KeyboardEvent) =>
+  const handleKeyDown = (evt: React.KeyboardEvent<HTMLElement>) =>
     handleHeadKeyDown({
       evt,
       rootElement,

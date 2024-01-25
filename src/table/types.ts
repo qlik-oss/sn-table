@@ -161,7 +161,7 @@ export interface HandleWrapperKeyDownProps {
 }
 
 export interface HandleHeadKeyDownProps {
-  evt: React.KeyboardEvent;
+  evt: React.KeyboardEvent<HTMLElement>;
   rootElement: HTMLElement;
   cellCoord: FocusedCellCoord;
   setFocusedCellCoord: SetFocusedCellCoord;
@@ -180,7 +180,7 @@ export interface HandleHeadMouseDownProps {
 }
 
 export interface BodyArrowHelperProps {
-  evt: React.KeyboardEvent;
+  evt: React.KeyboardEvent<HTMLElement>;
   rootElement: HTMLElement;
   cell: Cell;
   selectionDispatch: SelectionDispatch;
@@ -193,7 +193,7 @@ export interface BodyArrowHelperProps {
 }
 
 export interface HandleBodyKeyDownProps {
-  evt: React.KeyboardEvent;
+  evt: React.KeyboardEvent<HTMLElement>;
   rootElement: HTMLElement;
   cell: Cell;
   selectionDispatch: SelectionDispatch;
@@ -213,7 +213,7 @@ export interface CellFocusProps {
 }
 
 export interface MoveFocusWithArrowProps {
-  evt: React.KeyboardEvent;
+  evt: React.KeyboardEvent<HTMLElement>;
   rootElement: HTMLElement;
   cellCoord: FocusedCellCoord;
   setFocusedCellCoord: SetFocusedCellCoord;
@@ -356,3 +356,5 @@ export interface CellHOCProps extends TableCellProps {
 export type CellHOC = (props: CellHOCProps) => JSX.Element;
 
 export type EstimateWidth = (column: Column) => number;
+
+export type EventCurrentTarget = HTMLElement & EventTarget;

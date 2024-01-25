@@ -79,7 +79,7 @@ export const bodyArrowHelper = ({
   const focusType = getFocusType(cellCoord, evt, isNewHeadCellMenuEnabled);
 
   if (focusType === FocusTypes.FOCUS) {
-    updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.target as HTMLElement });
+    updateFocus({ focusType: FocusTypes.REMOVE_TAB, cell: evt.currentTarget });
   }
 
   const nextCell = moveFocusWithArrow({
@@ -113,14 +113,13 @@ export const bodyArrowHelper = ({
  * If you tab on the menu in the last cell, go to the tabstop in the body
  */
 export const headTabHelper = (
-  evt: React.KeyboardEvent,
+  evt: React.KeyboardEvent<HTMLElement>,
   rootElement: HTMLElement,
   cellCoord: FocusedCellCoord,
   setFocusedCellCoord: SetFocusedCellCoord,
   isLastHeadCell: boolean,
 ) => {
-  const target = evt.target as HTMLElement;
-  const isLabel = target.classList.contains("sn-table-head-label");
+  const isLabel = evt.currentTarget.classList.contains("sn-table-head-label");
   if (isLabel && evt.shiftKey && cellCoord[1] > 0) {
     setFocusedCellCoord([cellCoord[0], cellCoord[1] - 1]);
   } else if (!isLabel && !evt.shiftKey) {
@@ -134,7 +133,7 @@ export const headTabHelper = (
 };
 
 interface BodyTabHelperProps {
-  evt: React.KeyboardEvent;
+  evt: React.KeyboardEvent<HTMLElement>;
   rootElement: HTMLElement;
   setFocusedCellCoord: SetFocusedCellCoord;
   keyboard?: stardust.Keyboard;
@@ -160,7 +159,7 @@ export const bodyTabHelper = ({
 
   if (tabToToolbar) {
     preventDefaultBehavior(evt);
-    focusSelectionToolbar(evt.target as HTMLElement, keyboard, evt.shiftKey);
+    focusSelectionToolbar(evt.currentTarget, keyboard, evt.shiftKey);
   } else if (evt.shiftKey && !isNewHeadCellMenuEnabled) {
     const headCells = rootElement.querySelectorAll(".sn-table-head-cell");
     const lastIndex = headCells.length - 1;

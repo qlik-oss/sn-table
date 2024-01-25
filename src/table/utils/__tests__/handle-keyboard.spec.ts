@@ -25,7 +25,7 @@ describe("handle-keyboard", () => {
   afterEach(() => jest.clearAllMocks());
 
   describe("handleWrapperKeyDown", () => {
-    let evt: React.KeyboardEvent;
+    let evt: React.KeyboardEvent<HTMLElement>;
     let totalRowCount: number;
     let page: number;
     let rowsPerPage: number;
@@ -54,7 +54,7 @@ describe("handle-keyboard", () => {
         key: KeyCodes.RIGHT,
         stopPropagation: jest.fn(),
         preventDefault: jest.fn(),
-      } as unknown as React.KeyboardEvent;
+      } as unknown as React.KeyboardEvent<HTMLElement>;
       handleChangePage = jest.fn();
       setShouldRefocus = jest.fn();
       keyboard = { enabled: false, active: false, blur: jest.fn(), focus: jest.fn() };
@@ -121,7 +121,7 @@ describe("handle-keyboard", () => {
         key: KeyCodes.ESC,
         stopPropagation: jest.fn(),
         preventDefault: jest.fn(),
-      } as unknown as React.KeyboardEvent;
+      } as unknown as React.KeyboardEvent<HTMLElement>;
       keyboard.enabled = true;
       callHandleWrapperKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
@@ -134,7 +134,7 @@ describe("handle-keyboard", () => {
         key: KeyCodes.ESC,
         stopPropagation: jest.fn(),
         preventDefault: jest.fn(),
-      } as unknown as React.KeyboardEvent;
+      } as unknown as React.KeyboardEvent<HTMLElement>;
       keyboard.enabled = true;
       isSelectionMode = true;
       callHandleWrapperKeyDown();
@@ -156,7 +156,7 @@ describe("handle-keyboard", () => {
   describe("handleHeadKeyDown", () => {
     let rowIndex: number;
     let colIndex: number;
-    let evt: React.KeyboardEvent;
+    let evt: React.KeyboardEvent<HTMLElement>;
     let rootElement: HTMLElement;
     let changeSortOrder: (column: Column) => Promise<void>;
     let isInteractionEnabled: boolean;
@@ -184,14 +184,14 @@ describe("handle-keyboard", () => {
         key: KeyCodes.RIGHT,
         stopPropagation: jest.fn(),
         preventDefault: jest.fn(),
-        target: {
+        currentTarget: {
           blur: jest.fn(),
           setAttribute: jest.fn(),
           closest: () => ({
             nextSibling,
           }),
         } as unknown as HTMLElement,
-      } as unknown as React.KeyboardEvent;
+      } as unknown as React.KeyboardEvent<HTMLElement>;
       rootElement = {} as unknown as HTMLElement;
       changeSortOrder = jest.fn();
       isInteractionEnabled = true;
@@ -305,7 +305,7 @@ describe("handle-keyboard", () => {
         expect(accessibilityUtils.updateFocus).toHaveBeenCalledTimes(1);
         expect(accessibilityUtils.updateFocus).toHaveBeenCalledWith({
           focusType: FocusTypes.REMOVE_TAB,
-          cell: evt.target,
+          cell: evt.currentTarget,
         });
         expect(accessibilityUtils.moveFocusWithArrow).toHaveBeenCalledWith({
           evt,
@@ -319,7 +319,7 @@ describe("handle-keyboard", () => {
   });
 
   describe("handleTotalKeyDown", () => {
-    let evt: React.KeyboardEvent;
+    let evt: React.KeyboardEvent<HTMLElement>;
     let rootElement: HTMLElement;
     let setFocusedCellCoord: React.Dispatch<React.SetStateAction<[number, number]>>;
     let cellCoord: [number, number];
@@ -330,11 +330,11 @@ describe("handle-keyboard", () => {
         key: KeyCodes.DOWN,
         stopPropagation: jest.fn(),
         preventDefault: jest.fn(),
-        target: {
+        currentTarget: {
           blur: jest.fn(),
           setAttribute: jest.fn(),
         },
-      } as unknown as React.KeyboardEvent;
+      } as unknown as React.KeyboardEvent<HTMLElement>;
       cellCoord = [1, 1];
       rootElement = {
         getElementsByClassName: () => [
@@ -427,7 +427,7 @@ describe("handle-keyboard", () => {
   describe("handleBodyKeyDown", () => {
     let isModal: boolean;
     let isExcluded: boolean;
-    let evt: React.KeyboardEvent;
+    let evt: React.KeyboardEvent<HTMLElement>;
     let rootElement: HTMLElement;
     let selectionsAPI: ExtendedSelectionAPI;
     let cell: Cell;
@@ -463,14 +463,14 @@ describe("handle-keyboard", () => {
         key: KeyCodes.DOWN,
         stopPropagation: jest.fn(),
         preventDefault: jest.fn(),
-        target: {
+        currentTarget: {
           blur: jest.fn(),
           setAttribute: jest.fn(),
           classList: {
             contains: () => isExcluded,
           },
         },
-      } as unknown as React.KeyboardEvent;
+      } as unknown as React.KeyboardEvent<HTMLElement>;
       rootElement = {
         getElementsByClassName: () => [
           { getElementsByClassName: () => [{ focus: () => undefined, setAttribute: () => undefined }] },
@@ -593,8 +593,8 @@ describe("handle-keyboard", () => {
       runHandleBodyKeyDown();
       expect(evt.preventDefault).not.toHaveBeenCalled();
       expect(evt.stopPropagation).not.toHaveBeenCalled();
-      expect((evt.target as HTMLElement).blur).not.toHaveBeenCalled();
-      expect((evt.target as HTMLElement).setAttribute).not.toHaveBeenCalled();
+      expect(evt.currentTarget.blur).not.toHaveBeenCalled();
+      expect(evt.currentTarget.setAttribute).not.toHaveBeenCalled();
       expect(selectionsAPI.cancel).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
     });
@@ -604,8 +604,8 @@ describe("handle-keyboard", () => {
       runHandleBodyKeyDown();
       expect(evt.preventDefault).toHaveBeenCalledTimes(1);
       expect(evt.stopPropagation).toHaveBeenCalledTimes(1);
-      expect((evt.target as HTMLElement).blur).not.toHaveBeenCalled();
-      expect((evt.target as HTMLElement).setAttribute).not.toHaveBeenCalled();
+      expect(evt.currentTarget.blur).not.toHaveBeenCalled();
+      expect(evt.currentTarget.setAttribute).not.toHaveBeenCalled();
       expect(selectionsAPI.cancel).not.toHaveBeenCalled();
       expect(setFocusedCellCoord).not.toHaveBeenCalled();
     });

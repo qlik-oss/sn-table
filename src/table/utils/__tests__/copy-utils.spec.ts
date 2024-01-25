@@ -1,31 +1,15 @@
 import copyCellValue from "../copy-utils";
 
 describe("copyCellValue:", () => {
-  let evt: Event;
+  let cellElement: HTMLElement;
   let writeMock: (arg: string) => void;
-  let elementClass: string;
-
-  const classList = {
-    contains: (className: string) => className === elementClass,
-  };
-
-  const closest = () => ({
-    querySelector: () => ({
-      textContent: "textFromClosest",
-    }),
-  });
 
   beforeEach(() => {
-    elementClass = "";
-    evt = {
-      target: {
-        closest,
-        querySelector: () => ({
-          textContent: "text",
-        }),
-        classList,
-      },
-    } as unknown as Event;
+    cellElement = {
+      querySelector: () => ({
+        textContent: "text",
+      }),
+    } as unknown as HTMLElement;
     jest.spyOn(console, "log");
     writeMock = jest.fn();
     Object.assign(navigator, {
@@ -36,30 +20,17 @@ describe("copyCellValue:", () => {
   afterEach(() => jest.clearAllMocks());
 
   it("should call clipboard.writeText but not console log for a table cell", async () => {
-    elementClass = "sn-table-cell";
-    await copyCellValue(evt);
+    await copyCellValue(cellElement);
     expect(global.console.log).toHaveBeenCalledTimes(0);
     expect(writeMock).toHaveBeenCalledTimes(1);
     expect(writeMock).toHaveBeenCalledWith("text");
   });
 
-  it("should call clipboard.writeText but not console log for a non-table cell", async () => {
-    elementClass = "";
-    await copyCellValue(evt);
-    expect(global.console.log).toHaveBeenCalledTimes(0);
-    expect(writeMock).toHaveBeenCalledTimes(1);
-    expect(writeMock).toHaveBeenCalledWith("textFromClosest");
-  });
-
   it("should not call clipboard.writeText nor console log when value is not defined", async () => {
-    evt = {
-      target: {
-        querySelector: () => undefined,
-        classList,
-      },
-    } as unknown as Event;
-    elementClass = "sn-table-cell";
-    await copyCellValue(evt);
+    cellElement = {
+      querySelector: () => undefined,
+    } as unknown as HTMLElement;
+    await copyCellValue(cellElement);
 
     expect(global.console.log).toHaveBeenCalledTimes(0);
     expect(writeMock).toHaveBeenCalledTimes(0);
@@ -72,17 +43,8 @@ describe("copyCellValue:", () => {
     Object.assign(navigator, {
       clipboard: { writeText: writeMock },
     });
-    evt = {
-      target: {
-        querySelector: () => ({
-          textContent: "text",
-        }),
-        classList,
-      },
-    } as unknown as Event;
-    elementClass = "sn-table-cell";
 
-    await copyCellValue(evt);
+    await copyCellValue(cellElement);
     expect(writeMock).toHaveBeenCalledTimes(1);
     expect(global.console.log).toHaveBeenCalledTimes(1);
   });
