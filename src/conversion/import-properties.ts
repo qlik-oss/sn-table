@@ -14,18 +14,18 @@ export const getColumnInfo = (
   if (numDims) index = colIdx - numDims;
   const column = JSON.parse(JSON.stringify(columnInfo[index]));
 
-  // For converting  "table to sn-table",  -1 -> fitToContent and the rest -> pixels
+  // for old columnWidth format, positive numbers correspond to a pixel value, otherwise fit to content
   if (Array.isArray(columnWidths) && columnWidths.length > 0) {
     const columnWidth = columnWidths[colIdx];
 
     column.qDef.columnWidth =
-      columnWidth === -1
+      typeof columnWidth === "number" && columnWidth > 0
         ? {
-            type: ColumnWidthType.FitToContent,
-          }
-        : {
             type: ColumnWidthType.Pixels,
             pixels: columnWidth,
+          }
+        : {
+            type: ColumnWidthType.FitToContent,
           };
   }
 
