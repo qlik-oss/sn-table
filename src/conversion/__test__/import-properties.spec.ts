@@ -55,7 +55,7 @@ describe("importProperties", () => {
   describe("getColumnInfo", () => {
     const index = 0;
 
-    test("should get the correct columnInfo given columnWidths with -1", () => {
+    it("should get the correct columnInfo given columnWidths with -1", () => {
       const columnWidths = [-1, -1];
       let newColumnInfo = getColumnInfo(qDimensions, index, columnWidths);
       expect(newColumnInfo.qDef.columnWidth).toEqual({ type: "fitToContent" });
@@ -64,7 +64,7 @@ describe("importProperties", () => {
       expect(newColumnInfo.qDef.columnWidth).toEqual({ type: "fitToContent" });
     });
 
-    test("should get the correct columnInfo given columnWidths with pixels", () => {
+    it("should get the correct columnInfo given columnWidths with pixels", () => {
       const columnWidths = [300, 20];
       let newColumnInfo = getColumnInfo(qDimensions, index, columnWidths);
       expect(newColumnInfo.qDef.columnWidth).toEqual({ pixels: 300, type: "pixels" });
@@ -73,7 +73,7 @@ describe("importProperties", () => {
       expect(newColumnInfo.qDef.columnWidth).toEqual({ pixels: 20, type: "pixels" });
     });
 
-    test("should get the correct columnInfo given columnWidths with empty array", () => {
+    it("should get the correct columnInfo given columnWidths with empty array", () => {
       const columnWidths = [] as number[];
       let newColumnInfo = getColumnInfo(qDimensions, 0, columnWidths);
       expect(newColumnInfo.qDef.columnWidth).toEqual({
@@ -92,7 +92,7 @@ describe("importProperties", () => {
   });
 
   describe("getMultiColumnInfo", () => {
-    test("should get correct dimensions and measures when no qColumnOrder or columnWidths provided", () => {
+    it("should get correct dimensions and measures when no qColumnOrder or columnWidths provided", () => {
       const qColumnOrder = [] as number[];
       const columnWidths = [] as number[];
 
@@ -101,7 +101,7 @@ describe("importProperties", () => {
       expect(measures).toEqual(qMeasures);
     });
 
-    test("should get correct columnWidth values when no qColumnOrder provided", () => {
+    it("should get correct columnWidth values when no qColumnOrder provided", () => {
       const qColumnOrder = [] as number[];
       const columnWidths = [400, -1, 300];
 
@@ -111,7 +111,7 @@ describe("importProperties", () => {
       expect(measures[1].qDef.columnWidth).toEqual({ pixels: 300, type: "pixels" });
     });
 
-    test("should get correct columnWidth values when qColumnOrder is provided", () => {
+    it("should get correct columnWidth values when qColumnOrder is provided", () => {
       const qColumnOrder = [2, 0, 1];
       const columnWidths = [400, -1, 300];
 
@@ -121,7 +121,7 @@ describe("importProperties", () => {
       expect(measures[1].qDef.columnWidth).toEqual({ type: "fitToContent" });
     });
 
-    test("should get correct columnWidth values incorrect width values are provided", () => {
+    it("should get correct columnWidth values incorrect width values are provided", () => {
       const qColumnOrder = [] as number[];
       const columnWidths = [null, [200], [null, null]] as unknown as number[];
 
@@ -164,7 +164,7 @@ describe("importProperties", () => {
     };
     const hypercubePath = undefined;
 
-    test("should get the correct importProperties", () => {
+    it("should get the correct importProperties", () => {
       const propertyTree = importProperties({ exportFormat, initialProperties, extension, hypercubePath });
       expect(propertyTree.qProperty.qHyperCubeDef.qDimensions[0].qDef.columnWidth).toEqual({
         pixels: 300,
@@ -179,7 +179,7 @@ describe("importProperties", () => {
       });
     });
 
-    test("should unquaratine column order correctly", () => {
+    it("should unquaratine column order correctly", () => {
       exportFormat.properties.qLayoutExclude = {
         quarantine: {
           straightTableColumnOrder: {
@@ -191,7 +191,7 @@ describe("importProperties", () => {
       expect(propertyTree.qProperty.qHyperCubeDef.qColumnOrder).toEqual([0, 2, 1]);
     });
 
-    test("should add view data properties when converting to view data table", () => {
+    it("should add view data properties when converting to view data table", () => {
       const propertyTree = importProperties({ exportFormat, initialProperties, viewDataMode: true });
       expect(propertyTree.qProperty.totals?.show).toEqual(false);
       expect(propertyTree.qProperty.usePagination).toEqual(true);
