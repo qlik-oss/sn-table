@@ -27,6 +27,7 @@ import useViewService from "./table/hooks/use-view-service";
 import { ExtendedSelectionAPI, Galaxy, TableLayout, UseOptions } from "./types";
 import { chartBackgroundResolver, objectBackgroundResolver } from "./utils/theme-background-resolver";
 
+// Test
 export default function supernova(env: Galaxy) {
   return {
     qae,
